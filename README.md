@@ -111,6 +111,20 @@ ninja check      # verify every decompiled function
 `ninja` ends with `BYTE-IDENTICAL`, and `ninja check` reports `0 mismatch`. To make a disc from the build,
 see [`make iso`](#step-3-build).
 
+### Building in a container
+
+If you would rather not install anything but Docker, [`docker/`](docker/Dockerfile) has a pinned Ubuntu
+environment with every tool in it. Clone the repository, add your disc as in step 3, then run this from
+the repository root:
+
+```sh
+docker build -t dw4-decomp docker/
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/work dw4-decomp \
+    sh -c 'python3 tools/download_tools.py && python3 configure.py && ninja && ninja check'
+```
+
+The image holds tools only. Your repository and disc stay on your machine, mounted while it runs.
+
 ## Installation
 
 ### Linux

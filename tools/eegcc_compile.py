@@ -47,9 +47,16 @@ def fix_symtab_info(path):
 
 def assembler_env():
     """`ee-as` copies an expanded macro with an overlapping memcpy, which glibc's SSSE3 version gets
-    wrong at some alignments (finding #3897). Turn that version off, and give every allocation its own
-    mapping so the alignment does not depend on the C library either."""
-    return dict(os.environ, GLIBC_TUNABLES="glibc.cpu.hwcaps=-SSSE3:glibc.malloc.mmap_threshold=0")
+    wrong at some alignments (finding #3897). Turn the vector versions off, so the choice does not
+    depend on the CPU, and give every allocation its own mapping, so the alignment does not depend on
+    the C library. DW4_EE_AS_SHIM names a library that makes the copy itself safe (docker/)."""
+    env = dict(os.environ, GLIBC_TUNABLES="glibc.cpu.hwcaps=-SSSE3,-SSE2:glibc.malloc.mmap_threshold=0")
+    shim = os.environ.get("DW4_EE_AS_SHIM")
+    if shim:
+        if not os.path.exists(shim):
+            raise SystemExit("eegcc_compile: DW4_EE_AS_SHIM names a missing file: " + shim)
+        env["LD_PRELOAD"] = shim
+    return env
 
 
 def main(argv):
