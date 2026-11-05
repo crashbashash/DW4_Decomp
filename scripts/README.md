@@ -24,7 +24,7 @@ regression tests live in `testing/` and native checks in `port/tools/`.
 | Packed string chunks | [seed_names_string_chunks.py](seed_names_string_chunks.py) names twelve verified [allocation/coalescing operations](../docs/engine/string-chunks.md) |
 | Model and texture evidence | [livedump.py](livedump.py), [extract_live_models.py](extract_live_models.py), [name_live_models.py](name_live_models.py), [capture_scene.py](capture_scene.py), [camera_match.py](camera_match.py) |
 | GS and rendering analysis | [gsdump.py](gsdump.py), `gs_*.py`, [pack_inline_tex.py](pack_inline_tex.py), [pack_lights.py](pack_lights.py) |
-| Save-format and item-ID probes | [ps2mc_extract.py](ps2mc_extract.py), [probe_items.py](probe_items.py), [probe_items2.py](probe_items2.py), [save_probe.py](save_probe.py), [diff_story.py](diff_story.py), [dump_story_all.py](dump_story_all.py); [save format](../docs/systems/save-format.md) |
+| Save-format and item-ID probes | [ps2mc_extract.py](ps2mc_extract.py), [probe_items.py](probe_items.py), [probe_items2.py](probe_items2.py), [save_probe.py](save_probe.py), [diff_story.py](diff_story.py); [save format](../docs/systems/save-format.md) |
 
 Offline regression checks, without a running emulator:
 
@@ -38,6 +38,5 @@ A contributor's own game data stays in `../local/`.
 
 Story comparison accepts extracted 81920-byte USA savedata with no extra package.
 Memory-card images use the existing optional `ps2mc` reader; no standalone save
-editor is required. Both commands inspect the first mirrored block without
-writing to their inputs. `dump_story_all.py --directory DIR before after` uses
-explicit progression order; its no-file default retains the historical checkpoint inventory.
+editor is required. The command inspects the first mirrored block without
+writing to its inputs.

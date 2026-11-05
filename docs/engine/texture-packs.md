@@ -14,7 +14,7 @@ image data. Reading only the object pack is why an earlier pass concluded the pa
 pack" (finding [#465](../findings/findings-0251-0500.md#f465), refuted by [#467](../findings/findings-0251-0500.md#f467)) — the search was in the wrong entry.
 
 Everything below is reproducible offline; nothing needs a load replay, a RAM dump or the loader
-decompiled. The live PNG dump (`testing/verify_texture_pack.py`) is the ground truth that pins it.
+decompiled. A live PNG dump was the ground truth that pinned it.
 
 ## The records are serialised igObjects
 

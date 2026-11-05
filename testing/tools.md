@@ -41,9 +41,6 @@ the (expensive) analysis is paid once.
 ## Project-specific tools (written for this analysis)
 
 
-`scripts/gs_ordered_probe.py` replays the scoped opening-ring GS pipeline offline, preserving
-primitive boundaries and ordinary/additive draw order.
-
 ### `lua_dump.py` — Lua 4.0.1 chunk disassembler
 Parses standard Lua 4.0.1 bytecode and prints the header, per-function proto,
 string constants, number constants, locals and a decoded disassembly
@@ -108,11 +105,8 @@ Flags, flag-folder bytes and counters are taken from the first mirrored block.
 
 ```sh
 python3 scripts/diff_story.py before.savedata after.savedata
-python3 scripts/dump_story_all.py --directory /path/to/saves before.savedata after.savedata
 ```
 
-The summary command reports the supplied progression order. With no filenames,
-it retains the dated checkpoint order and reports missing private saves explicitly.
 Input files are never modified; malformed payloads and missing card entries fail
 with a diagnostic. `python3 testing/test_story_state.py` checks this behavior offline.
 

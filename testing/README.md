@@ -15,7 +15,6 @@ Index: [documentation hub](../docs/README.md).
 | File | Topic |
 |---|---|
 | `tools.md` | Ghidra pipeline, project tooling, dynamic-testing helpers, disassembly |
-| `verify_texture_pack.py` | Ground-truth check that finding [#472](../docs/findings/findings-0251-0500.md#f472)'s pool-order rule decodes all 26 textures of NDMW.AFS entry 625 against the live PNGs |
 | `verify_models_offline.py` | Ground-truth check that the offline model extractor (findings [#477](../docs/findings/findings-0251-0500.md#f477)/#478) reproduces the live game's models from a saved EE RAM dump — 450 of NDMW.AFS entry 621's 549 attributes byte-identical, none unresolvable, and 383 of the 386 live-named models named identically |
 | `texture-pack-groundtruth.tsv` | The 25 live-located texture buffers of entry 625 (name, size, palette/grid offset, `C`, dim) |
 | `texture-pack-625-layout.tsv` | The complete derived 54-row pool layout of entry 625 (mirrors `docs/engine/texture-pack-625-layout.tsv`) |
