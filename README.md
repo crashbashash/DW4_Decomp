@@ -46,19 +46,68 @@ The matching build produces the following artifact:
 This repo does not include the game or the compilers. You need your own copy of the game; the
 compilers are fetched from their public releases by `tools/download_tools.py`.
 
-## Quick Start (for Ubuntu)
+## Quick Start
 
-1. Install prerequisites:
-   `sudo apt install -y binutils-mipsel-linux-gnu ninja-build git python3`
-   (and `sudo dpkg --add-architecture i386 && sudo apt update && sudo apt install -y libc6:i386` for the
-   32-bit Sony EE GCC).
-2. Clone the repo: `git clone https://github.com/crashbashash/DW4_Decomp.git && cd DW4_Decomp`
-3. Download the compilers and the loader: `python3 tools/download_tools.py` (fetched from their public
-   releases into the gitignored `local/` and checked by SHA-256).
-4. Copy your *Digimon World 4* (USA, `SLUS-20836`) disc image into `orig/SLUS-20836/`
-   (any name ending in `.iso`).
-5. `python3 configure.py` (extracts and verifies `SLUS_208.36` from the disc image), then `ninja` to
-   relink and compare, or `ninja check` / `make check` to verify every decompiled function.
+This builds the decompilation; the native port has its own [setup](port/docs/README.md#setting-up-a-machine-from-a-disc-image).
+You need an x86-64 Linux machine and your own *Digimon World 4* (USA, `SLUS-20836`) disc image.
+
+**1. Install the prerequisites** for your distribution. The Sony EE GCC is a 32-bit program, so each
+list includes the 32-bit C library.
+
+Ubuntu:
+
+```sh
+sudo dpkg --add-architecture i386
+sudo apt update
+sudo apt install -y binutils-mipsel-linux-gnu ninja-build make git python3 libc6:i386
+```
+
+Fedora has no `mipsel-linux-gnu` binutils package, so build it from source (`mips64-linux-gnu` does not
+work here):
+
+```sh
+sudo dnf install -y gcc make texinfo ninja-build git python3 glibc.i686 tar xz
+curl -LO https://ftpmirror.gnu.org/binutils/binutils-2.44.tar.xz
+tar xf binutils-2.44.tar.xz
+cd binutils-2.44
+./configure --target=mipsel-linux-gnu --prefix="$HOME/.local" --disable-nls
+make -j"$(nproc)" && make install
+cd ..
+export PATH="$HOME/.local/bin:$PATH"     # add this to your shell profile as well
+```
+
+Arch: enable the `[multilib]` repository in `/etc/pacman.conf`, then install the binutils package from
+the AUR (`makepkg` checks its signature, so import the key it names or add `--skippgpcheck`):
+
+```sh
+sudo pacman -Syu --needed base-devel git ninja python lib32-glibc
+git clone https://aur.archlinux.org/mipsel-linux-gnu-binutils.git
+cd mipsel-linux-gnu-binutils
+makepkg -si
+cd ..
+```
+
+**2. Get the code and the compilers.** They are fetched from their public releases into the gitignored
+`local/` and checked by SHA-256.
+
+```sh
+git clone https://github.com/crashbashash/DW4_Decomp.git
+cd DW4_Decomp
+python3 tools/download_tools.py
+```
+
+**3. Add your disc image** to `orig/SLUS-20836/` (any name ending in `.iso`).
+
+**4. Build and verify.** `configure.py` extracts and checks `SLUS_208.36` from the disc image.
+
+```sh
+python3 configure.py
+ninja            # relink the executable and compare it with retail
+ninja check      # verify every decompiled function
+```
+
+`ninja` ends with `BYTE-IDENTICAL`, and `ninja check` reports `0 mismatch`. To make a disc from the build,
+see [`make iso`](#step-3-build).
 
 ## Installation
 
@@ -70,8 +119,9 @@ The build needs `mipsel-linux-gnu` binutils, Python 3, ninja (or GNU make) and t
 [wibo](https://github.com/decompals/wibo) Windows-binary loader (the Metrowerks compiler is a
 Windows executable; Wine dies on its FLEXlm license check).
 
+Install them as in the [Quick Start](#quick-start), then fetch the toolchains:
+
 ```
-sudo apt install -y binutils-mipsel-linux-gnu ninja-build build-essential git python3
 python3 tools/download_tools.py
 ```
 
@@ -138,7 +188,13 @@ make report               # coverage only
 make objs                 # compile objects, verify nothing
 make symbols              # regenerate config/SLUS-20836/symbols.txt
 make asm                  # regenerate asm/ (generated from your executable, never committed)
+make iso                  # optional: a disc image with the built executable (see below)
 ```
+
+`make iso` is a publishing step, not part of the build or CI. It relinks, then writes the executable
+into a copy of your disc at `build/SLUS-20836/SLUS-20836.iso`; your disc is only read. It uses the disc
+in `orig/SLUS-20836/`, or `make iso DISC=<path>` for one elsewhere. The result boots in an emulator, and
+it is game data, so it stays in `build/` and is never committed.
 
 The full list of variables, with the default first:
 
