@@ -1,5 +1,8 @@
 # Digimon World 4 — matching decompilation and native port
 
+**This is a work in progress:** the decompilation is incomplete and the native port is not yet playable
+from start to finish.
+
 This repository contains both the matching PS2 recovery and the native PC port,
 plus analysis tools, tests and reference evidence that support those two goals. The matching
 build remains at the repository root; the native build lives in `port/`.
@@ -29,14 +32,13 @@ Run commands from the repository root. Game data and toolchains are never commit
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->
 
-- This repo contains a **matching decompilation** of *Digimon World 4* (USA, `SLUS-20836`) — an
-  ELF32 MIPS R5900 (PS2 Emotion Engine) binary. Every matched function is verified byte-identical to
-  retail with the original compiler, and `PROGRESS.md` (regenerated on every push) says how far it
-  has got.
+- This repo contains a **work-in-progress matching decompilation** of *Digimon World 4* (USA,
+  `SLUS-20836`) — an ELF32 MIPS R5900 (PS2 Emotion Engine) binary. Every matched function is verified
+  byte-identical to retail with the original compiler; the table above shows how much is done.
+- Code that is not decompiled yet is linked from your own retail executable. That is why the build
+  comes out byte-identical to retail today: it does not mean the decompilation is finished.
 - Naming and documentation of the source code and data structures are in progress; `PROGRESS.md`
-  carries the current counts (this line used to quote them, and had already drifted from the
-  generated report by the time anyone checked). The engine's own class names come from the binary's
-  `__RTTI__` records.
+  carries the current counts. The engine's own class names come from the binary's `__RTTI__` records.
 
 The matching build produces the following artifact:
 
