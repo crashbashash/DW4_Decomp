@@ -100,7 +100,7 @@ rather than guessed.
 
 ```sh
 make                                   # build/dw4asset
-make check                             # tools/crosscheck.sh (C vs ../scripts)
+make check                             # tools/crosscheck.sh (C vs ../scripts); DW4_LIVEDUMP adds the steps that read a RAM dump
 
 ./build/dw4asset afs   /path/NDMW.AFS
 ./build/dw4asset igb   /path/NDMW.IGB
@@ -1540,7 +1540,6 @@ view-space `z`, as the VU1 does), interpolates it **affinely** in screen space l
 colour, and blends.  `--fog` overrides, `--no-fog` turns it off.  On the goblin-pass capture at
 `--blur 1.2` the whole-frame mean `|Δ|` falls **14.70 → 10.96** (wall 13.83 → 11.80, barrel
 12.17 → 8.28, crate 16.71 → 14.36, character 23.13 → 21.89), which is the ship criterion;
-`tools/verify_fog.py` pins it (and skips without the dump/capture artifacts), and
 `tools/verify_render.py` asserts the default actually applies (a scene render differs from
 `--no-fog`) while its shading/modulate checks run with `--no-fog`.
 

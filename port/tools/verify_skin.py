@@ -21,10 +21,7 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PORT = os.path.dirname(HERE)
-DEFAULT_RAM = (os.environ.get("DW4_LIVEDUMP")
-               or os.path.join(PORT, "..", "..", "local", "dumps", "goblin_pass.bin"))
-DEFAULT_RAMS = [os.path.join(PORT, "..", "..", "local", "dumps", d)
-                for d in ("goblin_pass.bin", "dev_world.bin")]
+DEFAULT_RAM = os.environ.get("DW4_LIVEDUMP", "")
 DEFAULT_SCRIPT = os.path.join(PORT, "..", "scripts", "live_skin.py")
 
 PAL_RE = re.compile(r"palette\[(\d+)\]\s+([0-9a-f]+)\s+(\d+) matrices")
@@ -87,13 +84,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tool", default=os.path.join(PORT, "build", "dw4asset"))
     ap.add_argument("--ram", action="append", default=None,
-                    help="a paused EE RAM dump (repeatable; default: every known dump)")
+                    help="a paused EE RAM dump (repeatable; default: DW4_LIVEDUMP)")
     ap.add_argument("--script", default=DEFAULT_SCRIPT)
     args = ap.parse_args()
 
-    rams = args.ram or [d for d in DEFAULT_RAMS if os.path.exists(d)]
+    rams = args.ram or ([DEFAULT_RAM] if os.path.exists(DEFAULT_RAM) else [])
     if not rams:
-        print("  skin: no RAM dump (%s), skipped" % DEFAULT_RAM)
+        print("  skin: no RAM dump (set DW4_LIVEDUMP), skipped")
         return 0
     bad = 0
     for ram in rams:

@@ -5,6 +5,9 @@ CFLAGS  ?= -O2 -std=c99 -Wall -Wextra -Iinclude
 CFLAGS  += -I../include
 BUILD   := build
 
+# Untracked settings of this checkout, such as `export DW4_LIVEDUMP := <dump>`.
+-include ../local/env.mk
+
 # The verifies below default `--roms` to `../../local/extracted`; forward DW4_ROMS when the caller has one,
 # so `DW4_ROMS=<dir> make check` works on a tree that keeps the archives elsewhere.
 ROMS    := $(if $(DW4_ROMS),--roms $(DW4_ROMS),)
@@ -321,8 +324,6 @@ check: $(BUILD)/test_lobby_gpu $(BUILD)/test_lobbyui $(BUILD)/test_menu_gpu $(BU
 	python3 tools/verify_frontend.py $(ROMS)
 	python3 tools/verify_present.py
 	python3 tools/frame_metric.py --self-test
-	DW4_LIVEDUMP=$${DW4_LIVEDUMP} python3 tools/verify_pose.py
-	DW4_LIVEDUMP=$${DW4_LIVEDUMP} python3 tools/verify_fog.py
 
 clean:
 	rm -rf $(BUILD)

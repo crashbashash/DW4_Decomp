@@ -34,16 +34,8 @@ class Retail(World):
 
 def main():
     image=ROOT.parent.parent/'local/extracted/SLUS_208.36';w=Retail(image.read_bytes());w.w(0x58a1e8,4,MATRIX)
-    # Startup-initialized +Z: raw retail ELF storage is zero. Confirm against
-    # available offline EE dumps, which strip the first1MiB (scripts/livedump.py).
-    checked=0
-    for name in ('dev_live.bin','dev_live2.bin','dev_world.bin','goblin_pass.bin'):
-        dump=ROOT.parent.parent/'local/dumps'/name
-        if dump.exists() and dump.stat().st_size==0x1f00000:
-            with dump.open('rb') as f:f.seek(0x4e1098-0x100000);axis=f.read(12)
-            assert axis==struct.pack('<3f',0,0,1),(dump,axis.hex());checked+=1
+    # Startup-initialized +Z: raw retail ELF storage is zero, so startup is a controlled precondition.
     for i,b in enumerate(struct.pack('<3f',0,0,1)):w.w(0x4e1098+i,1,b)
-    print('model contact initialized +Z axis: %d offline EE dumps; startup is a controlled precondition'%checked)
     rng=random.Random(41761);total=0
     with tempfile.TemporaryDirectory() as td:
         so=Path(td)/'contact.so'

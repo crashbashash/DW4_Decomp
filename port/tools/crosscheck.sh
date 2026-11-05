@@ -202,7 +202,7 @@ python3 "$port/tools/verify_models.py" --tool "$tool" --afs "$roms/NDMW.AFS" \
 
 echo "== the skinning path (runtime blend stream + matrix palette, C vs Python)"
 python3 "$port/tools/verify_skin.py" --tool "$tool" \
-    --ram "${DW4_LIVEDUMP:-$port/../../local/dumps/goblin_pass.bin}" \
+    ${DW4_LIVEDUMP:+--ram "$DW4_LIVEDUMP"} \
     --script "$port/../scripts/live_skin.py" | sed 's/^/   /'
 
 check_entry 621

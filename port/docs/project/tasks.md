@@ -475,7 +475,7 @@ Findings [#594](../../../docs/findings/findings-0501-0750.md#f594)–[#599](../.
 - Shape0 is not drawn in that frame (0/354 UVs in the draw union): the visible draw is Skin0Shape1+2,
   so the character TSV row carries ids `5485,5882`.
 - Port: `--pose-select 0` (identity map) `--pose-palette 0x1b753b0 --pose-count 24` lands the character
-  metric box at 22.8–23.9, pinned by `port/tools/verify_pose.py` (skips without the dump/artifacts).
+  metric box at 22.8–23.9.
 - The player is `P_susanoo_Skin0Shape0/1/2` in `NDMW.AFS:861` (`common/p_susanoo.igb`; `m_`/`q_`/
   `s_susanoo.igb` = 845/877/893), reached through node 0x016de170 -> `igLod` -> three `igActor` LODs ->
   `igAppearance._skin` -> `igSkin._skinnedGraph` (`igBlendMatrixSelect` 0x01667468); the port resolves
@@ -581,8 +581,7 @@ Owning documents: [lighting](../../../docs/engine/p2-lighting.md),
   +0x514, `_fogDensity` +0x518, `_fogMode` +0x51c, `_fogColor` +0x520, `_fogNear` +0x530, `_fogFar`
   +0x534). Port: `dw4_render_game_fog()` in `render.c`, `F` per vertex from view-space `z`, interpolated
   affinely, applied by default on the scene path (`--fog` overrides, `--no-fog` drops); the blend is
-  gated on `mode != OFF` so `--no-fog` is byte-identical to the pre-fog frame; `port/tools/verify_fog.py`
-  pins the metric.
+  gated on `mode != OFF` so `--no-fog` is byte-identical to the pre-fog frame.
 - **Frame metric.** The reference `real-goblin-pass.png` is 640×480 (the 448-line framebuffer scaled by
   480/448); `port/tools/frame_metric.py` rescales it ([#573](../../../docs/findings/findings-0501-0750.md#f573)). With fog at `--blur 1.2`: whole 10.96,
   floor 9.19, wall 11.80, barrel 8.28, crate 14.36, character 21.89 (from 14.70 / 9.36 / 13.83 / 12.17 /
