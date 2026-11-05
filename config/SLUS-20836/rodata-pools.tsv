@@ -1,0 +1,14 @@
+# Constant pools and static data an EE GCC object keeps in its own .rodata — read by tools/jumptables.py.
+# A jump table is found by scanning the retail code; the literal pool of a Sony-built function is not, so the
+# reviewed pools are listed here and written into config/SLUS-20836/jumptables.txt beside the tables.
+# <fn_va> <rodata_va> <words>   (hex)
+0011ba40 004d2e68 0020
+00121cf0 004d3bb0 002c
+00120808 004d3a50 000e
+0011f9e0 004d3978 000c
+0011b3e8 004d2ce8 0054
+0011acc0 004d2b58 0064
+0011c640 004d2fe0 0038
+00120a40 004d3aa0 001e
+00122d90 004d3cb8 0015
+0011f198 004d3538 000c

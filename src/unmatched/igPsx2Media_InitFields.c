@@ -1,0 +1,54 @@
+#include "dw4/reflected.h"
+int FUN_002b9540();
+int FUN_002ba690();
+int FUN_002cfe50();
+int igMetaObject_CreateFields();
+void *igMetaObject_GetFieldAt();
+int igMetaObject_GetFieldCount();
+int igMetaObject_NameFields();
+int igUnsignedCharMetaField_GetDefaultDescriptor();
+extern int DAT_004c1d50[4];
+extern int DAT_004c1d70[4];
+extern int DAT_004c1d90[4];
+extern int DAT_004c1db0[4];
+extern void * DAT_00586cf8[4];
+void igPsx2Media_InitFields(void) {
+    void *temp_s0;
+    int temp_s1;
+    void *temp_s2;
+    igRawRefMetaField *t5;
+
+    temp_s0 = (void *)DAT_00586cf8[0];
+    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    igMetaObject_CreateFields(temp_s0, &DAT_004c1d50[0], 8);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
+    ((igMemoryRefMetaField *)temp_s2)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)temp_s2)->_resetMethod = 3;
+    ((igMemoryRefMetaField *)temp_s2)->_destruct = 1;
+    ((igMemoryRefMetaField *)temp_s2)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)temp_s2)->_releaseOnReset = 1;
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002cfe50();
+    ((igObjectRefMetaField *)temp_s2)->_construct = 1;
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002ba690();
+    ((igObjectRefMetaField *)temp_s2)->_construct = 1;
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
+    ((igMemoryRefMetaField *)temp_s2)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)temp_s2)->_resetMethod = 3;
+    ((igMemoryRefMetaField *)temp_s2)->_destruct = 1;
+    ((igMemoryRefMetaField *)temp_s2)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)temp_s2)->_releaseOnReset = 1;
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
+    ((igMemoryRefMetaField *)temp_s2)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)temp_s2)->_resetMethod = 3;
+    ((igMemoryRefMetaField *)temp_s2)->_destruct = 1;
+    ((igMemoryRefMetaField *)temp_s2)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)temp_s2)->_releaseOnReset = 1;
+    t5 = (igRawRefMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5);
+    t5->_resetMethod = 3;
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002b9540();
+    ((igObjectRefMetaField *)temp_s2)->_construct = 1;
+    igMetaObject_NameFields(temp_s0, &DAT_004c1d70[0], &DAT_004c1d90[0], &DAT_004c1db0[0], temp_s1);
+}

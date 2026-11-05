@@ -1,0 +1,30 @@
+/* 0x0044e570 igMouseCursor_Register: registers class igMouseCursor with the object system, derived from igObject.
+ * The igMetaObject_RegisterClass arguments are laid out per
+ * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
+extern char igObject_GetMetaObject_ParentAccessor[];
+extern char igObject_Register[];
+extern char igMouseCursor_GetVTable[];
+extern char thunk_igMouseCursor_GetMetaObject[];
+extern char g_igMouseCursor_callbackList_004d0230[];
+extern char s_igMouseCursor_className_0051e018[];
+extern char g_igMouseCursor_metaObject_0058c320[];
+int igMetaObject_RegisterClass();
+int GpFlag_SetOnce_0044b860();
+int igMouseCursor_InitFields();
+
+void igMouseCursor_Register(void) {
+    GpFlag_SetOnce_0044b860();
+    igMetaObject_RegisterClass(
+        0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
+        g_igMouseCursor_metaObject_0058c320,   /* published MetaObject slot */
+        igObject_Register,                     /* base class registrar */
+        igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
+        thunk_igMouseCursor_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
+        s_igMouseCursor_className_0051e018,    /* class name */
+        0x14,                                  /* instance size */
+        igMouseCursor_GetVTable,               /* vtable getter */
+        &igMouseCursor_InitFields,             /* field adder */
+        0,                                     /* extra callback item */
+        g_igMouseCursor_callbackList_004d0230  /* callback list */
+    );
+}

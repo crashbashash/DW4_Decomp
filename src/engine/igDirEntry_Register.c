@@ -1,0 +1,29 @@
+/* 0x002c7910 igDirEntry_Register: registers class igDirEntry with the object system, derived from igNamedObject.
+ * The igMetaObject_RegisterClass arguments are laid out per
+ * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
+extern char igNamedObject_GetPublishedMetaObject_0014a6e0[];
+extern char igNamedObject_Register[];
+extern char igDirEntry_GetVTable[];
+extern char thunk_igDirEntry_GetMetaObject[];
+extern char s_igDirEntry_className_004f8358[];
+extern char g_igDirEntry_metaObject_00586710[];
+int FUN_002b5d50();
+int igMetaObject_RegisterClass();
+int igDirEntry_InitFields();
+
+void igDirEntry_Register(void) {
+    FUN_002b5d50();
+    igMetaObject_RegisterClass(
+        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
+        g_igDirEntry_metaObject_00586710,              /* published MetaObject slot */
+        igNamedObject_Register,                        /* base class registrar */
+        igNamedObject_GetPublishedMetaObject_0014a6e0, /* base class MetaObject accessor */
+        thunk_igDirEntry_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
+        s_igDirEntry_className_004f8358,               /* class name */
+        0x1C,                                          /* instance size */
+        igDirEntry_GetVTable,                          /* vtable getter */
+        &igDirEntry_InitFields,                        /* field adder */
+        0,                                             /* extra callback item */
+        0                                              /* callback list */
+    );
+}

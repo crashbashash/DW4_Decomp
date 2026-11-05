@@ -1,0 +1,3 @@
+AFS entry 479  |  dngq3b2e  |  quest 3 stage 2 (n_dorumon)
+A file's numeric prefix is its chunk index in that pack entry.
+45 chunks

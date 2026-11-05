@@ -1,0 +1,13 @@
+/* 0x001a22b0 - igEnbayaAnimationSource_GetVTable. temporary stack object as a union (byte index folds into the load), alternate compiler -O3 Verified byte-identical by tools/verify.py. */
+int igObject_InitHeader();
+extern int DAT_005291e0[4];
+extern void * DAT_00586dc8[4];
+union U { int vt; int w[12]; void *p[12]; char b[48]; };
+int igEnbayaAnimationSource_GetVTable(void) {
+    union U u;
+
+    igObject_InitHeader(u.b);
+    u.w[0] = (int)(&DAT_005291e0[0]);
+    return *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+}
+

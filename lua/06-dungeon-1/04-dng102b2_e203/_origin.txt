@@ -1,0 +1,3 @@
+AFS entry 203  |  dng102b2  |  block 2 (security gate)
+A file's numeric prefix is its chunk index in that pack entry.
+52 chunks

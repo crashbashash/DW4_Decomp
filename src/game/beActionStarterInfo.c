@@ -1,0 +1,13 @@
+/* src/game/beActionStarterInfo.c — the beActionStarterInfo methods
+ *
+ * One translation unit: 1 functions, in retail address order.  Folded
+ * from the per-function units by tools/merge_units.py; the matching build
+ * splits a function back out with tools/units.py, so `make check` still
+ * verifies one function at a time. */
+
+extern int g_beActionStarterInfo_metaObject_00589e20[4];
+/* 0x0036ef40 */
+int Gap__Bec__beActionStarterInfo__vfunc_20(void)
+{
+    return g_beActionStarterInfo_metaObject_00589e20[0];
+}

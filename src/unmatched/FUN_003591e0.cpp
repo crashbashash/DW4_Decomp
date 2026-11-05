@@ -1,0 +1,15 @@
+/* 0x003591e0 - FUN_003591e0. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+extern "C" {
+int Memory_GetAllocatorBySelector(int);
+int igMetaObject_Create(int);
+extern int DAT_00587040[4];
+extern int DAT_00589090[4];
+int FUN_003591e0(void);
+}
+
+int FUN_003591e0(void) {
+    if (DAT_00589090[0] == 0) {
+        DAT_00589090[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(DAT_00587040[0]));
+    }
+    return DAT_00589090[0];
+}

@@ -1,0 +1,50 @@
+# Semantic method names recovered from the binaries' own assert/log strings.
+#
+# This is the one place the game still spells a *method* name: the assert and log
+# messages are `Class::method(...)` strings with a code xref from the function that
+# logs them, so the containing function is that method (a merged region that logs
+# two names is named for the public one and noted).  Everything else in the binary
+# is stripped of method names, so this list is short by nature — the vtable slot
+# convention (`Class::vfunc_N`, see docs/engine/rtti-and-vtables.md) covers the
+# rest.
+#
+# Recovered by matching `data/strings.json` entries whose text starts with a
+# `Class::method` against the function containing each of their `PARAM` xrefs.
+#
+# <va>	<name>	<module>
+0x00246620	igLuaState_RunString	engine
+0x00246680	igLuaState_RunFile	engine
+0x002466f0	igLuaState_RunBuffer	engine
+# references both `igObject::internalRelease` and `igObject::release` — the merged
+# release path.
+0x002e0200	igObject_Release	engine
+# the 1,608-byte body; a second function (0x2e25a0, 264 B) shares the assert and is
+# left unnamed rather than guessing which is which.
+0x002e95e0	igIGBFile_ReadFile	engine
+0x00311d10	igArenaMemoryPool_DisplayOutstandingAllocationsBlock	engine
+0x003125d0	igArenaMemoryPool_CheckHeap	engine
+0x003149a0	igArenaMemoryPool_Trim	engine
+0x00314b50	igArenaMemoryPool_TrimArenaBlock	engine
+0x0031eec0	igArenaMemoryPool_SetPoolOptionFlags	engine
+# logs `free`, `realloc` and `memoryOperation` — the shared operation body.
+0x0031f480	igArenaMemoryPool_MemoryOperation	engine
+0x00324840	igMallocMemoryPool_Dump	engine
+0x00326410	igPageMemoryPool_MemoryOperation	engine
+0x00326e30	igPageMemoryPool_GetBlockSize	engine
+0x0033bd30	igMovieRenderer_InitializeDrawing	movie
+#
+# --- the `p2` PS2/EE renderer backend (finding #491, docs/engine/p2-renderer.md) ---
+#
+# Two more of the same kind: the message names the function it is in.
+#   0x1f8050  its own trace, "p2readGSPrivRegister(%d)\n", with the register argument -- and the
+#             function does touch the `gs` MMIO block (tools/platform_map.py), so it reads the GS.
+#   0x20c270  the error "Unsupported texture format in p2LoadTexture: %d\n" raised by the texture
+#             upload path, so the containing function IS p2LoadTexture.
+#
+# Left unnamed on purpose: 0x1fb710's only identifying string, `p2lighting`, is a *log tag* -- it is
+# passed as a0 to 0x20dfd0 together with a 3-float payload built from s4+112..120, i.e. an event
+# name, not the function's own name.  0x207210 / 0x2082f0 carry `swapbuffers*Predicate` /
+# `textureLoaded*Predicate`, which are registry names for *other* functions; the ones here register
+# them.  Both stay hypotheses in finding #491 until the registration site is read.
+0x001f8050	p2readGSPrivRegister	engine
+0x0020c270	p2LoadTexture	engine

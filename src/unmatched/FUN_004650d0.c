@@ -1,0 +1,42 @@
+int FUN_00192f50();
+int FUN_004578c0();
+int Matrix44_GetTranslation();
+extern int DAT_004e1078[4];
+extern int DAT_004e1098[4];
+extern int DAT_0058cd60[4];
+extern int DAT_0058cd68[4];
+extern int DAT_0058cd78[4];
+typedef struct Ev { int id; void *obj; int data; } Ev;
+typedef struct Tg { char pad[92]; float f92; float f96; float f100; float f104; float f108; float f112; } Tg;
+typedef struct Mx { float m[16]; } Mx;
+typedef struct Ob { char pad[8]; Tg *f8; Mx mat; } Ob;
+void FUN_004650d0(Ob *arg0) {
+    Ev e3;
+    Ev e2;
+    Ev e1;
+    float v[3];
+    Tg *temp_s0;
+
+    temp_s0 = arg0->f8;
+    Matrix44_GetTranslation(&arg0->mat, v);
+    temp_s0->f92 = v[0];
+    temp_s0->f96 = v[1];
+    temp_s0->f100 = v[2];
+    e1.id = 2;
+    e1.obj = arg0;
+    e1.data = DAT_0058cd60[0];
+    FUN_004578c0(temp_s0, &e1);
+    FUN_00192f50((char *)temp_s0 + 0x68, &DAT_004e1098[0], &arg0->mat);
+    temp_s0->f104 = -temp_s0->f104;
+    temp_s0->f108 = -temp_s0->f108;
+    temp_s0->f112 = -temp_s0->f112;
+    e2.id = 2;
+    e2.obj = arg0;
+    e2.data = DAT_0058cd68[0];
+    FUN_004578c0(temp_s0, &e2);
+    FUN_00192f50((char *)temp_s0 + 0x80, &DAT_004e1078[0], &arg0->mat);
+    e3.id = 2;
+    e3.obj = arg0;
+    e3.data = DAT_0058cd78[0];
+    FUN_004578c0(temp_s0, &e3);
+}

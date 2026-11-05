@@ -1,0 +1,3 @@
+AFS entry 510  |  dngq4b2e  |  quest 4 stage 2 easy
+A file's numeric prefix is its chunk index in that pack entry.
+67 chunks

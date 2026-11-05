@@ -1,0 +1,31 @@
+struct Obj { int *vt; int w[15]; };
+int igObject_InitHeader(struct Obj *);
+int FUN_00150fb0(int *, int);
+int FUN_0018fa00(int *, int);
+int FUN_00194490(int *, int);
+int FUN_001958f0(int *, int);
+int FUN_0019e340(int *, int);
+int FUN_0019e3c0(int *, int);
+extern int DAT_00528cf0[4];
+extern void * DAT_00586dc8[4];
+int igIntersectTraversal_GetVTable(void) {
+    struct Obj obj;
+    int t;
+    igObject_InitHeader(&obj);
+    obj.w[6] = 0;
+    obj.vt = &DAT_00528cf0[0];
+    obj.w[7] = 0;
+    obj.w[8] = 0;
+    obj.w[9] = 0;
+    obj.w[12] = 0;
+    obj.w[13] = 0;
+    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    obj.vt = &DAT_00528cf0[0];
+    FUN_0019e3c0(&obj.w[13], -1);
+    FUN_0018fa00(&obj.w[12], -1);
+    FUN_0019e340(&obj.w[9], -1);
+    FUN_001958f0(&obj.w[8], -1);
+    FUN_00150fb0(&obj.w[7], -1);
+    FUN_00194490((int *)&obj, 0);
+    return t;
+}

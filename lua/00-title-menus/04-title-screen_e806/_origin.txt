@@ -1,0 +1,3 @@
+AFS entry 806  |  title-screen  |  Title screen (AM_TITLE)
+A file's numeric prefix is its chunk index in that pack entry.
+10 chunks

@@ -1,0 +1,15 @@
+/* Grow a list's capacity (minimum 4, doubling below 1024, then +1024) until it holds
+ * `count` elements, reserve it, and record the new element count; 0x002d6790, 120 bytes. */
+#include "dw4/reflected.h"
+
+void List_Reserve(igDataList *list, int capacity);
+
+void List_Resize(igDataList *list, int count)
+{
+    int capacity = list->_capacity > 4 ? list->_capacity : 4;
+    while (capacity < count) {
+        capacity = capacity < 1024 ? capacity * 2 : capacity + 1024;
+    }
+    List_Reserve(list, capacity);
+    list->_count = count;
+}

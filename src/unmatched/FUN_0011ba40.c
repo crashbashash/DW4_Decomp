@@ -1,0 +1,95 @@
+/* FUN_0011ba40 -- fdlibm __ieee754_atan2(y, x): quadrant-correct arctangent.
+ * Evidence: the special-case ladder on the high/low words of both arguments (NaN test, x == 1.0
+ * shortcut to atan, y == 0, x == 0, x or y infinite), the k = (iy - ix) >> 20 exponent-gap split at
+ * +-60, and the final switch on m = 2*sign(x) + sign(y) giving z, -z, pi - (z - pi_lo) or
+ * (z - pi_lo) - pi. The literals are the pooled doubles at 0x4d2e68..0x4d2ee8. */
+#include "dw4/ieee_words.h"
+
+extern double FUN_00121cf0(double);     /* atan */
+extern double FUN_00122538(double);     /* fabs */
+
+#define tiny 1.0e-300
+#define zero 0.0
+#define pi_o_4 7.8539816339744827900E-01
+#define pi_o_2 1.5707963267948965580E+00
+#define pi 3.1415926535897931160E+00
+#define pi_lo 1.2246467991473531772E-16
+
+double FUN_0011ba40(double y, double x)
+{
+    int hz;
+    double z;
+    int k, m, hx, hy, ix, iy;
+    unsigned lx, ly;
+
+    EXTRACT_WORDS(hx, lx, x);
+    ix = hx & 0x7fffffff;
+    EXTRACT_WORDS(hy, ly, y);
+    iy = hy & 0x7fffffff;
+    if (((ix | ((lx | -lx) >> 31)) > 0x7ff00000) || ((iy | ((ly | -ly) >> 31)) > 0x7ff00000))
+        return x + y;
+    if ((hx - 0x3ff00000 | lx) == 0)
+        return FUN_00121cf0(y);
+    m = ((hy >> 31) & 1) | ((hx >> 30) & 2);
+
+    if ((iy | ly) == 0) {
+        switch (m) {
+        case 0:
+        case 1:
+            return y;
+        case 2:
+            return pi + tiny;
+        case 3:
+            return -pi - tiny;
+        }
+    }
+    if ((ix | lx) == 0)
+        return (hy < 0) ? -pi_o_2 - tiny : pi_o_2 + tiny;
+    if (ix == 0x7ff00000) {
+        if (iy == 0x7ff00000) {
+            switch (m) {
+            case 0:
+                return pi_o_4 + tiny;
+            case 1:
+                return -pi_o_4 - tiny;
+            case 2:
+                return 3.0 * pi_o_4 + tiny;
+            case 3:
+                return -3.0 * pi_o_4 - tiny;
+            }
+        } else {
+            switch (m) {
+            case 0:
+                return zero;
+            case 1:
+                return -zero;
+            case 2:
+                return pi + tiny;
+            case 3:
+                return -pi - tiny;
+            }
+        }
+    }
+    if (iy == 0x7ff00000)
+        return (hy < 0) ? -pi_o_2 - tiny : pi_o_2 + tiny;
+
+    k = (iy - ix) >> 20;
+    if (k > 60)
+        z = pi_o_2 + 0.5 * pi_lo;
+    else if (hx < 0 && k < -60)
+        z = 0.0;
+    else
+        z = FUN_00121cf0(FUN_00122538(y / x));
+    switch (m) {
+    case 0:
+        return z;
+    case 1:
+        GET_HIGH_WORD(hz, z);
+        SET_HIGH_WORD(z, hz ^ 0x80000000);
+        return z;
+    case 2:
+        return pi - (z - pi_lo);
+    default:
+        return (z - pi_lo) - pi;
+    }
+}

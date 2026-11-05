@@ -1,0 +1,23 @@
+if be:MATisPlayer() == 1 then
+    be:sd("MODELCTRL", "g_ddamagefloor", 2, "SETLABEL", "SQ_WAIT/ON")
+    be:sd("MODELCTRL", "g_ddamagefloor", 7, "SETLABEL", "SQ_WAIT/ON")
+    be:sd("MODELCTRL", "g_ddamagefloor", 1, "SETLABEL", "SQ_WAIT/ON", 60)
+    be:sd("MODELCTRL", "g_ddamagefloor", 3, "SETLABEL", "SQ_WAIT/ON", 60)
+    be:sd("MODELCTRL", "g_ddamagefloor", 6, "SETLABEL", "SQ_WAIT/ON", 60)
+    be:sd("MODELCTRL", "g_ddamagefloor", 8, "SETLABEL", "SQ_WAIT/ON", 60)
+    be:sd("MODELCTRL", "g_ddamagefloor", 0, "SETLABEL", "SQ_WAIT/ON", 120)
+    be:sd("MODELCTRL", "g_ddamagefloor", 4, "SETLABEL", "SQ_WAIT/ON", 120)
+    be:sd("MODELCTRL", "g_ddamagefloor", 5, "SETLABEL", "SQ_WAIT/ON", 120)
+    be:sd("MODELCTRL", "g_ddamagefloor", 9, "SETLABEL", "SQ_WAIT/ON", 120)
+else
+    be:sd("MODELCTRL", "g_ddamagefloor", 2, "SETLABEL", "SQ_WAIT/OFF")
+    be:sd("MODELCTRL", "g_ddamagefloor", 7, "SETLABEL", "SQ_WAIT/OFF")
+    be:sd("MODELCTRL", "g_ddamagefloor", 1, "SETLABEL", "SQ_WAIT/OFF", 60)
+    be:sd("MODELCTRL", "g_ddamagefloor", 3, "SETLABEL", "SQ_WAIT/OFF", 60)
+    be:sd("MODELCTRL", "g_ddamagefloor", 6, "SETLABEL", "SQ_WAIT/OFF", 60)
+    be:sd("MODELCTRL", "g_ddamagefloor", 8, "SETLABEL", "SQ_WAIT/OFF", 60)
+    be:sd("MODELCTRL", "g_ddamagefloor", 0, "SETLABEL", "SQ_WAIT/OFF", 120)
+    be:sd("MODELCTRL", "g_ddamagefloor", 4, "SETLABEL", "SQ_WAIT/OFF", 120)
+    be:sd("MODELCTRL", "g_ddamagefloor", 5, "SETLABEL", "SQ_WAIT/OFF", 120)
+    be:sd("MODELCTRL", "g_ddamagefloor", 9, "SETLABEL", "SQ_WAIT/OFF", 120)
+end

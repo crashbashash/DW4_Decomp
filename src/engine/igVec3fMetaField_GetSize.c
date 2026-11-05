@@ -1,0 +1,7 @@
+/* 0x0018e460
+ * igMetaField slot +0x64 (GetSize): the byte size of one field value.  A Vec3f is
+ * three 32-bit floats, 12 bytes.  The field constructor 0x2fc630 stores this
+ * result as the field's `_size` (+0x14); finding #368. */
+int igVec3fMetaField_GetSize(void) {
+    return 0xC;
+}

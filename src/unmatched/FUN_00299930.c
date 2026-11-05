@@ -1,0 +1,20 @@
+/* 0x00299930 — FUN_00299930. m2c draft + mechanical fixups, then verified
+ * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
+ * The SHAPE matched; the C types are a guess. */
+void *FUN_00299f68();
+
+int FUN_00299930(int arg0, int arg1, int arg2) {
+    int (*temp_v0_2)(int, int, int);
+    int var_v1;
+    void *temp_v0;
+
+    temp_v0 = (void *)(FUN_00299f68());
+    var_v1 = 0;
+    if (temp_v0 != 0) {
+        temp_v0_2 = (int (*)(int, int, int))(*(int *)((char *)(temp_v0) + 8));
+        if (temp_v0_2 != 0) {
+            var_v1 = (int)(temp_v0_2(arg0, arg1, arg2));
+        }
+    }
+    return var_v1;
+}

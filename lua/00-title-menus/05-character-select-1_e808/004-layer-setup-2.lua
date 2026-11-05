@@ -1,0 +1,8 @@
+be:DMsetSD("CAMERA", nil, -1, "SETDEMOCAMERA", "entry", 0)
+be:DMchkSD("CAMERA", nil, -1, "ISDEMOCAMERA", "!=0")
+be:DMsetSD("CAMERA", nil, -1, "SETBOXCAMERA", 0)
+be:DMrun()
+be:sd("SUBWND", nil, 0, "GENERATE", "CARD/I<0>", 10)
+funcFirstLayerSet()
+be:sd("SWITCHCTRL", nil, -1, "ALLON")
+be:sd("STAGECTL", nil, -1, "PADINPUT", "ENABLE", 30)

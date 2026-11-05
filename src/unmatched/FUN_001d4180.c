@@ -1,0 +1,66 @@
+/* 0x001d4180 — FUN_001d4180. m2c draft + mechanical fixups, then verified
+ * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
+ * The SHAPE matched; the C types are a guess. */
+int FUN_00131390(int);
+int FUN_001315d0(int);
+int FUN_00131c60(int);
+int FUN_001325a0(int);
+int FUN_00132810(int);
+int FUN_001341b0(int);
+int FUN_00135e20(int);
+int FUN_001384a0(int);
+int FUN_00139370(int);
+int FUN_00139600(int);
+int FUN_00139ed0(int);
+int FUN_0013b270(int);
+int FUN_0013b490(int);
+int Memory_GetAllocatorBySelector(int);
+extern int DAT_005627e0[4];
+extern int DAT_005627e8[4];
+extern int DAT_005627f0[4];
+extern int DAT_005627f8[4];
+extern int DAT_00562800[4];
+extern int DAT_00562808[4];
+extern int DAT_00562810[4];
+extern int DAT_00562818[4];
+extern int DAT_00562820[4];
+extern int DAT_00562828[4];
+extern int DAT_00562830[4];
+extern int DAT_00562838[4];
+extern int DAT_00562840[4];
+extern int DAT_00562848[4];
+extern int DAT_00562850[4];
+extern int DAT_00562858[4];
+extern int DAT_00562860[4];
+extern int DAT_00562868[4];
+extern int DAT_00562870[4];
+extern int DAT_00562878[4];
+extern int DAT_00562880[4];
+extern int DAT_005628d0[4];
+extern int DAT_005628d8[4];
+extern int DAT_00587038[4];
+void FUN_001d4180(void) {
+    DAT_005628d8[0] = FUN_00132810(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005627e8[0] = FUN_00131390(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005627f0[0] = FUN_00131390(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005627f8[0] = FUN_00131390(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562800[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562808[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562810[0] = FUN_00139600(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562818[0] = FUN_00139600(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562820[0] = FUN_00135e20(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562838[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562840[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562848[0] = FUN_00139370(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562850[0] = FUN_001384a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562858[0] = FUN_001325a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562860[0] = FUN_001325a0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562868[0] = FUN_00131c60(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562870[0] = FUN_00131c60(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562878[0] = FUN_001315d0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562880[0] = FUN_001315d0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562828[0] = FUN_0013b490(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_00562830[0] = FUN_0013b270(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005628d0[0] = FUN_0013b270(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+    DAT_005627e0[0] = FUN_001341b0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
+}

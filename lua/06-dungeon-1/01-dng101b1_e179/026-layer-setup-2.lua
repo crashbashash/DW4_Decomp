@@ -1,0 +1,22 @@
+funcPlayerStatusSet()
+if be:PLAYERgetPos() == 0 then
+    be:DMsetSD("SOUND", nil, -1, "BGMSTOP")
+    be:DMsetSD("SOUND", nil, -1, "PLAY", "AM_DUNGE")
+    be:DMsetSD("CAMERA", nil, -1, "SETDEMOCAMERA", "entry")
+    be:DMchkSD("CAMERA", nil, -1, "ISDEMOCAMERA", "==0")
+    be:DMsetSD("PLAYER", nil, -1, "SQ_DEMOWALK", 15)
+    be:DMsetSD("PLAYER", nil, -1, "SQ_DEMOWAIT", 60)
+    be:DMsetSD("SOUND", nil, -1, "PLAY", "DG_CAVE1", 120)
+    be:DMchkSD("CAMERA", nil, -1, "ISDEMOCAMERA", "!=0")
+    be:DMsetSD("CAMERA", nil, -1, "SETBOXCAMERA")
+    be:DMsetSD("PLAYER", nil, -1, "SQ_WAIT")
+    be:DMrun()
+else
+    be:sd("SOUND", nil, -1, "PLAY", "AM_DUNGE")
+    be:sd("SOUND", nil, -1, "PLAY", "DG_CAVE1")
+    be:sd("PLAYER", nil, -1, "SQ_DEMOWALK", 15)
+    be:sd("PLAYER", nil, -1, "SQ_WAIT", 60)
+end
+be:sd("SWITCHCTRL", nil, -1, "ALLON")
+funcFirstLayerSet()
+be:sd("MODELCTRL", "i_fadewn01", 0, "SQ_BLIN30", 5)

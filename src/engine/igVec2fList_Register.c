@@ -1,0 +1,30 @@
+/* 0x0018a3b0 igVec2fList_Register: static-init registration of igVec2fList (an igDataList of 2-component float vector elements)
+ * with the object system.  The igMetaObject_RegisterClass arguments are laid out per
+ * docs/engine/reflection-metadata.md section 1 (finding #358); names from data/reflection.json.
+ * FUN_00186a40 is the set-once latch every registrar of this group calls first
+ * (a gp byte flag guards a few shared one-time registrations). */
+extern char igDataList_GetPublishedMetaObject[];
+extern char igVec2fList_GetVTable[];
+extern char thunk_igVec2fList_GetMetaObject[];
+extern char igDataList_Register[];
+extern char s_igVec2fList_className_004e0ce8[];
+extern char g_igVec2fList_metaObject_005610c8[];
+int FUN_00186a40();
+int igMetaObject_RegisterClass();
+extern int igVec2fList_InitFields_0018a430[4];
+void igVec2fList_Register(void) {
+    FUN_00186a40();
+    igMetaObject_RegisterClass(
+        0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
+        g_igVec2fList_metaObject_005610c8,   /* published MetaObject slot */
+        igDataList_Register,                 /* base class registrar (igDataList) */
+        igDataList_GetPublishedMetaObject,   /* base class MetaObject accessor */
+        thunk_igVec2fList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
+        s_igVec2fList_className_004e0ce8,    /* class name */
+        0x14,                                /* instance size */
+        igVec2fList_GetVTable,               /* vtable getter */
+        &igVec2fList_InitFields_0018a430[0], /* field adder (class InitFields) */
+        0,                                   /* extra callback item */
+        0                                    /* callback list */
+    );
+}

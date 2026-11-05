@@ -1,0 +1,34 @@
+int FUN_00131bc0();
+int FUN_00196a50();
+int FUN_0019de50();
+int FUN_0019ded0();
+int FUN_0019df50();
+int igObject_InitHeader();
+extern int DAT_0052a9b0[4];
+extern void * DAT_00586dc8[4];
+union U { int vt; char b[64]; };
+int igAnimation_GetVTable(void) {
+    union U u;
+    int temp_s;
+    char *p104;
+    char *p100;
+    char *p96;
+    igObject_InitHeader(u.b);
+    u.vt = (int)&DAT_0052a9b0[0];
+    *(int *)&u.b[8] = 0;
+    p96 = &u.b[16];
+    *(int *)p96 = 0;
+    p100 = &u.b[20];
+    *(int *)p100 = 0;
+    p104 = &u.b[24];
+    *(int *)p104 = 0;
+    *(int *)&u.b[56] = 0;
+    temp_s = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    u.vt = (int)&DAT_0052a9b0[0];
+    FUN_00196a50(&u.b[56], -1);
+    FUN_0019de50(p104, -1);
+    FUN_0019ded0(p100, -1);
+    FUN_0019df50(p96, -1);
+    FUN_00131bc0(u.b, 0);
+    return temp_s;
+}

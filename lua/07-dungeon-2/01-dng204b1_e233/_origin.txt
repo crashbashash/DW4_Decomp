@@ -1,0 +1,3 @@
+AFS entry 233  |  dng204b1  |  block 1 (entrance)
+A file's numeric prefix is its chunk index in that pack entry.
+57 chunks

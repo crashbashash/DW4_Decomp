@@ -1,0 +1,3 @@
+be:CFLclear()
+local_4("shcard00", "shcard01", "shcard02", "shcard03", "shcard04", "shcard05", "shcard06", "shcard07", "shcard08", "shcard09", "shcard10", "shcard11", "shcard12", "shcard13", "shcard14", "shcard15", "shcard16", "shcard17", "shcard18", "shcard19", "shcard20", "shcard21", "shcard22", "shcard23", "shcard24", "shcard25", "shcard26", "shcard27", "shcard28", "shcard29", "shcard30", "shcard31", "shcard32", "shcard33", "shcard34", "shcard35", "shcard36", "shcard37", "shcard38", "shcard39", "shcard40", "shcard41", "shcard42", "shcard43", "shcard44", "shcard45", "shcard46", "shcard47", "shcard48", "shcard49", "shcard50", "DBIS11")
+local_5("FontTree", "DBBase", "shbase")

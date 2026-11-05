@@ -1,0 +1,14 @@
+# Curated body-derived buffer service names; finding #891.
+# Owner search uses allocator slot340 membership; size336 and free264 are
+# corroborated by the allocation/duplicate/free call chains and retail oracles.
+# Slot240's semantics remain unresolved: FUN_002ed5a0 is intentionally unnamed.
+# <va> <name> <module> (tab-separated)
+0x002ed460	Memory_FreeBuffer	engine
+0x002ed4b0	Memory_FreeBufferAlias_002ed4b0	engine
+0x002ed4c0	Memory_FreeBufferWithAllocator	engine
+0x002ed4e0	Memory_GetBufferSize	engine
+0x002ed520	Memory_FindBufferOwner	engine
+0x002ed530	Memory_DuplicateBuffer	engine
+0x002ed5c0	Memory_FreeBufferAlias_002ed5c0	engine
+0x002ed5d0	Memory_FreeOwnedBufferUnchecked	engine
+0x00300b00	igObject_VisitFields	engine

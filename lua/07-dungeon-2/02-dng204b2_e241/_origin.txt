@@ -1,0 +1,3 @@
+AFS entry 241  |  dng204b2  |  block 1 (e_minotaru, e_skulgrey)
+A file's numeric prefix is its chunk index in that pack entry.
+76 chunks

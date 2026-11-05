@@ -1,0 +1,21 @@
+/* 0x00157a50 — FUN_00157a50. m2c draft + mechanical fixups, then verified
+ * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
+ * The SHAPE matched; the C types are a guess. */
+extern "C" {
+int FUN_00159f70(...);
+void FUN_00157a50(void **arg0, void **arg1);
+}
+class DW4VC_152_2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual int vX(int, int); };
+void FUN_00157a50(void **arg0, void **arg1) {
+    void **var_s0;
+
+    var_s0 = (void **)(arg1);
+    if (var_s0 == 0) {
+        var_s0 = (void **)(arg0);
+    }
+    if (FUN_00159f70(*(int *)((char *)(var_s0) + 44)) != 0) {
+        ((DW4VC_152_2 *)(arg0))->vX((int)(var_s0), (int)(1));
+        return;
+    }
+    ((DW4VC_152_2 *)(arg0))->vX((int)(var_s0), (int)(0));
+}

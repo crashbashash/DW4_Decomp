@@ -1,0 +1,10 @@
+# SDK functions whose own name appears in a string they reference -- the PS2 SDK
+# convention is to report errors as "sceXxx: ...", so a function whose only string
+# is its own name in an error path *is* that function. Recovered by
+# scripts/seed_names_sdk_strings.py (finding #377); see docs/engine/platform-boundary.md.
+0x0011a170	sceMcUdCheckNewCard	sdk
+0x00225540	sceMtapPortOpen	sdk
+0x002255b0	sceMtapPortClose	sdk
+0x00225620	sceMtapGetConnection	sdk
+0x00225690	sceMtapChangeThreadPriority	sdk
+0x00225700	sceMtapGetModVersion	sdk

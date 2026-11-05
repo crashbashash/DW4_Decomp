@@ -1,0 +1,17 @@
+# NDMW.AFS entry 861 (`common/p_susanoo.igb`, the player Susanoomon's model pack) -- every
+# geometry attribute the offline chain resolves, by the same rule as entry 621 (findings
+# #477/#478): `igGeometryAttr1_5._vertexArray` (an id) -> `igVertexArray1_1`, whose `_vdata`
+# block lists this array's streams and whose `_numVerts` is the count; a stream block's
+# `_memSize` is its content size exactly (12*_numVerts positions, 8*_numVerts UVs) and the
+# pool is laid out 4-byte aligned.  `_stripLengths` gives the primitive lengths, validated by
+# sum == _numVerts.  This pack is the second alignment the chain finder must handle: its
+# records start at an ODD file offset (the first record is at +0x260f), while the stage packs
+# start at 2-mod-4, so `igb_inst.find_chains` scans every offset rather than stepping by two
+# (finding #536).
+# columns: vertexArray  primType  numPrims  numVerts  vdata  numLengths  stream ids  name
+# scripts/verify_models_layout.py re-derives every row from the pack.
+# The three shapes are the three actor LODs of the player (beModelCtrlNode2 -> igLod ->
+# three igActor), not body parts; the live names are P_susanoo_Skin0Shape0/1/2.
+5480	4	1	354	5656	1	6464,6465	P_susanoo_Skin0Shape0
+5560	4	1	2018	5596	1	40,31,5660	P_susanoo_Skin0Shape2
+252	4	1	3580	251	1	39,6822,6536	P_susanoo_Skin0Shape1

@@ -1,0 +1,20 @@
+be:MDLsetDMGTurn(0)
+if be:MDLgetRamNo() == 0 and be:FLGisOn(186) == 0 then
+    be:sd("MODELCTRL", local_1, local_0, "SQ_WAIT", 0)
+    be:MDLsetSeq("SQ_SWON")
+    be:FLGset(186, 1)
+    be:sd("MODELCTRL", "g_dbarrierw2", 1, "SQ_POWEROF", 30)
+    be:sd("MODELCTRL", "g_dbarrierw3", 1, "SQ_POWEROF", 30)
+    be:sd("MODELCTRL", "g_dbarrierp", 2, "SQ_POWEROF", 30)
+    be:sd("MODELCTRL", "g_dbarrierp", 3, "SQ_POWEROF", 30)
+    be:sd("HITLANDMODEL", "barrierwall02", 0, "OFFHIT", 30)
+elseif be:MDLgetRamNo() == 1 and be:FLGisOn(187) == 0 then
+    be:sd("MODELCTRL", local_1, local_0, "SQ_WAIT", 0)
+    be:MDLsetSeq("SQ_SWON")
+    be:FLGset(187, 1)
+    be:sd("MODELCTRL", "g_dbarrierw2", 0, "SQ_POWEROF", 30)
+    be:sd("MODELCTRL", "g_dbarrierw3", 0, "SQ_POWEROF", 30)
+    be:sd("MODELCTRL", "g_dbarrierp", 0, "SQ_POWEROF", 30)
+    be:sd("MODELCTRL", "g_dbarrierp", 1, "SQ_POWEROF", 30)
+    be:sd("HITLANDMODEL", "barrierwall01", 0, "OFFHIT", 30)
+end

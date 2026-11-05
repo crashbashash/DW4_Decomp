@@ -1,0 +1,1539 @@
+[
+  {
+    "id": 0,
+    "name": "SYSisJoinPlayer",
+    "descriptor": 401664,
+    "subcount": 1,
+    "value": 521,
+    "stub": 3606512,
+    "real": 3611760,
+    "calls": [
+      3611760,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 1,
+    "name": "SYSgetPlayerName",
+    "descriptor": 459009,
+    "subcount": 1,
+    "value": 525,
+    "stub": 3606552,
+    "real": 3611808,
+    "calls": [
+      3611808,
+      2347120
+    ]
+  },
+  {
+    "id": 2,
+    "name": "SYSgetPlayerNinzu",
+    "descriptor": 720898,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3606584,
+    "real": 3612016,
+    "calls": [
+      3612016,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 3,
+    "name": "SYSgetWeaponName",
+    "descriptor": 885251,
+    "subcount": 2,
+    "value": 525,
+    "stub": 3606624,
+    "real": 3611856,
+    "calls": [
+      3611856,
+      2347120
+    ]
+  },
+  {
+    "id": 4,
+    "name": "SYSgetRandom",
+    "descriptor": 229636,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3606664,
+    "real": 3612432,
+    "calls": [
+      3612432,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 5,
+    "name": "SYSgetDifficulty",
+    "descriptor": 524293,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3606704,
+    "real": 3612064,
+    "calls": [
+      3612064,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 6,
+    "name": "SYSsetDifficulty",
+    "descriptor": 336134,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3606744,
+    "real": 3612112,
+    "calls": [
+      3612112
+    ]
+  },
+  {
+    "id": 7,
+    "name": "SYSgetCameraMode",
+    "descriptor": 778247,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3606760,
+    "real": 3612176,
+    "calls": [
+      3612176,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 8,
+    "name": "SYSgetLightMode",
+    "descriptor": 147464,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3606800,
+    "real": 3612272,
+    "calls": [
+      3612272,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 9,
+    "name": "SYSgetArea",
+    "descriptor": 106505,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3606840,
+    "real": 3612368,
+    "calls": [
+      3612368,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 10,
+    "name": "SYSgetCountry",
+    "descriptor": 507914,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3606880,
+    "real": 3612384,
+    "calls": [
+      3612384,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 11,
+    "name": "SYSgetTarget",
+    "descriptor": 851979,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3606920,
+    "real": 3612400,
+    "calls": [
+      3612400,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 12,
+    "name": "SYSgetIsPackOnly",
+    "descriptor": 163852,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3606960,
+    "real": 3612416,
+    "calls": [
+      3612416,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 13,
+    "name": "SYSsetGateStage",
+    "descriptor": 860685,
+    "subcount": 2,
+    "value": 527,
+    "stub": 3607000,
+    "real": 3612512,
+    "calls": [
+      3612512
+    ]
+  },
+  {
+    "id": 14,
+    "name": "SYSgetGateStageName",
+    "descriptor": 589838,
+    "subcount": 0,
+    "value": 525,
+    "stub": 3607024,
+    "real": 3612912,
+    "calls": [
+      3612912,
+      2347120
+    ]
+  },
+  {
+    "id": 15,
+    "name": "SYSgetGateStageNo",
+    "descriptor": 712719,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3607056,
+    "real": 3613008,
+    "calls": [
+      3613008,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 16,
+    "name": "SYSctlDeviceFolder",
+    "descriptor": 583184,
+    "subcount": 6,
+    "value": 521,
+    "stub": 3607096,
+    "real": 3613104,
+    "calls": [
+      3613104,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 17,
+    "name": "SYSctlDiskFolder",
+    "descriptor": 640017,
+    "subcount": 4,
+    "value": 521,
+    "stub": 3607152,
+    "real": 3613376,
+    "calls": [
+      3613376,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 18,
+    "name": "SYSctlFlagFolder",
+    "descriptor": 729618,
+    "subcount": 2,
+    "value": 521,
+    "stub": 3607200,
+    "real": 3613632,
+    "calls": [
+      3613632,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 19,
+    "name": "SYSgetPlayerLevel",
+    "descriptor": 467219,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3607240,
+    "real": 3614096,
+    "calls": [
+      3614096,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 20,
+    "name": "SYSgetPlayerDigimon",
+    "descriptor": 557332,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3607280,
+    "real": 3614144,
+    "calls": [
+      3614144,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 21,
+    "name": "SYSisGetShinkaDigimon",
+    "descriptor": 82453,
+    "subcount": 2,
+    "value": 521,
+    "stub": 3607320,
+    "real": 3614192,
+    "calls": [
+      3614192,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 22,
+    "name": "SYSctlCardFolder",
+    "descriptor": 123414,
+    "subcount": 2,
+    "value": 517,
+    "stub": 3607360,
+    "real": 3614272,
+    "calls": [
+      3614272,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 23,
+    "name": "SYSctlBit",
+    "descriptor": 688919,
+    "subcount": 3,
+    "value": 517,
+    "stub": 3607400,
+    "real": 3613856,
+    "calls": [
+      3613856,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 24,
+    "name": "SYSctlShinka",
+    "descriptor": 869144,
+    "subcount": 3,
+    "value": 517,
+    "stub": 3607448,
+    "real": 3614672,
+    "calls": [
+      3614672,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 25,
+    "name": "SYSctlPlayer",
+    "descriptor": 74777,
+    "subcount": 4,
+    "value": 517,
+    "stub": 3607496,
+    "real": 3615088,
+    "calls": [
+      3615088,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 26,
+    "name": "CFLclear",
+    "descriptor": 737306,
+    "subcount": 0,
+    "value": 527,
+    "stub": 3607544,
+    "real": 3615280,
+    "calls": [
+      3615280
+    ]
+  },
+  {
+    "id": 27,
+    "name": "CFLsetName",
+    "descriptor": 213275,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3607560,
+    "real": 3615568,
+    "calls": [
+      3615568
+    ]
+  },
+  {
+    "id": 28,
+    "name": "CFLgetFolderName",
+    "descriptor": 761884,
+    "subcount": 0,
+    "value": 525,
+    "stub": 3607576,
+    "real": 3615968,
+    "calls": [
+      3615968,
+      2347120
+    ]
+  },
+  {
+    "id": 29,
+    "name": "sd",
+    "descriptor": 9501,
+    "subcount": 5,
+    "value": 527,
+    "stub": 3607608,
+    "real": 3616752,
+    "calls": [
+      3616752
+    ]
+  },
+  {
+    "id": 30,
+    "name": "sd",
+    "descriptor": 9246,
+    "subcount": 4,
+    "value": 527,
+    "stub": 3607640,
+    "real": 3616864,
+    "calls": [
+      3616864
+    ]
+  },
+  {
+    "id": 31,
+    "name": "sd",
+    "descriptor": 9759,
+    "subcount": 6,
+    "value": 527,
+    "stub": 3607672,
+    "real": 3616928,
+    "calls": [
+      3616928
+    ]
+  },
+  {
+    "id": 32,
+    "name": "sd",
+    "descriptor": 9504,
+    "subcount": 5,
+    "value": 527,
+    "stub": 3607712,
+    "real": 3617056,
+    "calls": [
+      3617056
+    ]
+  },
+  {
+    "id": 33,
+    "name": "MATisPlayer",
+    "descriptor": 253985,
+    "subcount": 0,
+    "value": 521,
+    "stub": 3607744,
+    "real": 3617120,
+    "calls": [
+      3617120,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 34,
+    "name": "MATisAllPlayer",
+    "descriptor": 671778,
+    "subcount": 0,
+    "value": 521,
+    "stub": 3607784,
+    "real": 3617152,
+    "calls": [
+      3617152,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 35,
+    "name": "MATgetPlayerNo",
+    "descriptor": 679971,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3607824,
+    "real": 3617184,
+    "calls": [
+      3617184,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 36,
+    "name": "MATisRidePlayer",
+    "descriptor": 270628,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3607864,
+    "real": 3617216,
+    "calls": [
+      3617216,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 37,
+    "name": "MATisRideOffPlayer",
+    "descriptor": 647461,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3607904,
+    "real": 3617264,
+    "calls": [
+      3617264,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 38,
+    "name": "MATgetPlayerMatStat",
+    "descriptor": 327974,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3607944,
+    "real": 3617312,
+    "calls": [
+      3617312,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 39,
+    "name": "MATsetRun",
+    "descriptor": 295,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3607984,
+    "real": 3617360,
+    "calls": [
+      3617360
+    ]
+  },
+  {
+    "id": 40,
+    "name": "DMsetSD",
+    "descriptor": 796200,
+    "subcount": 6,
+    "value": 527,
+    "stub": 3608000,
+    "real": 3617408,
+    "calls": [
+      3617408
+    ]
+  },
+  {
+    "id": 41,
+    "name": "DMsetSD",
+    "descriptor": 795945,
+    "subcount": 5,
+    "value": 527,
+    "stub": 3608040,
+    "real": 3617488,
+    "calls": [
+      3617488
+    ]
+  },
+  {
+    "id": 42,
+    "name": "DMsetSD",
+    "descriptor": 795946,
+    "subcount": 5,
+    "value": 527,
+    "stub": 3608072,
+    "real": 3617552,
+    "calls": [
+      3617552
+    ]
+  },
+  {
+    "id": 43,
+    "name": "DMsetSD",
+    "descriptor": 795691,
+    "subcount": 4,
+    "value": 527,
+    "stub": 3608104,
+    "real": 3617616,
+    "calls": [
+      3617616
+    ]
+  },
+  {
+    "id": 44,
+    "name": "DMchkSD",
+    "descriptor": 443948,
+    "subcount": 6,
+    "value": 527,
+    "stub": 3608136,
+    "real": 3617680,
+    "calls": [
+      3617680
+    ]
+  },
+  {
+    "id": 45,
+    "name": "DMchkSD",
+    "descriptor": 443693,
+    "subcount": 5,
+    "value": 527,
+    "stub": 3608176,
+    "real": 3617968,
+    "calls": [
+      3617968
+    ]
+  },
+  {
+    "id": 46,
+    "name": "DMswtSD",
+    "descriptor": 746798,
+    "subcount": 5,
+    "value": 527,
+    "stub": 3608208,
+    "real": 3618336,
+    "calls": [
+      3618336
+    ]
+  },
+  {
+    "id": 47,
+    "name": "DMswtSD",
+    "descriptor": 746543,
+    "subcount": 4,
+    "value": 527,
+    "stub": 3608240,
+    "real": 3618400,
+    "calls": [
+      3618400
+    ]
+  },
+  {
+    "id": 48,
+    "name": "DMswtEnd",
+    "descriptor": 598064,
+    "subcount": 0,
+    "value": 527,
+    "stub": 3608272,
+    "real": 3618464,
+    "calls": [
+      3618464
+    ]
+  },
+  {
+    "id": 49,
+    "name": "DMcase",
+    "descriptor": 835889,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3608288,
+    "real": 3618496,
+    "calls": [
+      3618496
+    ]
+  },
+  {
+    "id": 50,
+    "name": "DMsetLua",
+    "descriptor": 827698,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3608304,
+    "real": 3618240,
+    "calls": [
+      3618240
+    ]
+  },
+  {
+    "id": 51,
+    "name": "DMmsgBox",
+    "descriptor": 696883,
+    "subcount": 2,
+    "value": 527,
+    "stub": 3608320,
+    "real": 3618288,
+    "calls": [
+      3618288
+    ]
+  },
+  {
+    "id": 52,
+    "name": "DMrun",
+    "descriptor": 188468,
+    "subcount": 0,
+    "value": 527,
+    "stub": 3608344,
+    "real": 3618544,
+    "calls": [
+      3618544
+    ]
+  },
+  {
+    "id": 53,
+    "name": "DMgetCount",
+    "descriptor": 802869,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3608360,
+    "real": 3618576,
+    "calls": [
+      3618576,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 54,
+    "name": "FLGisOn",
+    "descriptor": 704822,
+    "subcount": 1,
+    "value": 521,
+    "stub": 3608400,
+    "real": 3618736,
+    "calls": [
+      3618736,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 55,
+    "name": "FLGset",
+    "descriptor": 811575,
+    "subcount": 2,
+    "value": 527,
+    "stub": 3608440,
+    "real": 3618880,
+    "calls": [
+      3618880
+    ]
+  },
+  {
+    "id": 56,
+    "name": "FLGflip",
+    "descriptor": 540984,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3608464,
+    "real": 3619040,
+    "calls": [
+      3619040
+    ]
+  },
+  {
+    "id": 57,
+    "name": "COUNTERset",
+    "descriptor": 246329,
+    "subcount": 2,
+    "value": 527,
+    "stub": 3608480,
+    "real": 3619312,
+    "calls": [
+      3619312
+    ]
+  },
+  {
+    "id": 58,
+    "name": "COUNTERget",
+    "descriptor": 844090,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3608504,
+    "real": 3619488,
+    "calls": [
+      3619488,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 59,
+    "name": "MDLgetInfoName",
+    "descriptor": 360507,
+    "subcount": 0,
+    "value": 525,
+    "stub": 3608544,
+    "real": 3619632,
+    "calls": [
+      3619632,
+      2347120
+    ]
+  },
+  {
+    "id": 60,
+    "name": "MDLgetRamNo",
+    "descriptor": 368700,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3608576,
+    "real": 3619616,
+    "calls": [
+      3619616,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 61,
+    "name": "MDLgetRecNo",
+    "descriptor": 114749,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3608616,
+    "real": 3621584,
+    "calls": [
+      3621584,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 62,
+    "name": "MDLgetMHp",
+    "descriptor": 131134,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3608656,
+    "real": 3620096,
+    "calls": [
+      3620096,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 63,
+    "name": "MDLgetHp",
+    "descriptor": 753727,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3608696,
+    "real": 3620112,
+    "calls": [
+      3620112,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 64,
+    "name": "MDLgetPosStr",
+    "descriptor": 99136,
+    "subcount": 3,
+    "value": 525,
+    "stub": 3608736,
+    "real": 3619648,
+    "calls": [
+      3619648,
+      2347120
+    ]
+  },
+  {
+    "id": 65,
+    "name": "MDLgetRotStr",
+    "descriptor": 320321,
+    "subcount": 3,
+    "value": 525,
+    "stub": 3608776,
+    "real": 3619856,
+    "calls": [
+      3619856,
+      2347120
+    ]
+  },
+  {
+    "id": 66,
+    "name": "MDLaddHp",
+    "descriptor": 385346,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3608816,
+    "real": 3620128,
+    "calls": [
+      3620128
+    ]
+  },
+  {
+    "id": 67,
+    "name": "MDLsetSeq",
+    "descriptor": 57667,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3608832,
+    "real": 3620176,
+    "calls": [
+      3620176
+    ]
+  },
+  {
+    "id": 68,
+    "name": "MDLsetSD",
+    "descriptor": 279108,
+    "subcount": 2,
+    "value": 527,
+    "stub": 3608848,
+    "real": 3620240,
+    "calls": [
+      3620240
+    ]
+  },
+  {
+    "id": 69,
+    "name": "MDLisLive",
+    "descriptor": 16965,
+    "subcount": 2,
+    "value": 521,
+    "stub": 3608872,
+    "real": 3620304,
+    "calls": [
+      3620304,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 70,
+    "name": "MDLgetBulletKind",
+    "descriptor": 663622,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3608912,
+    "real": 3620480,
+    "calls": [
+      3620480,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 71,
+    "name": "MDLgetBulletName",
+    "descriptor": 303175,
+    "subcount": 0,
+    "value": 525,
+    "stub": 3608952,
+    "real": 3620496,
+    "calls": [
+      3620496,
+      2347120
+    ]
+  },
+  {
+    "id": 72,
+    "name": "MDLgetBulletBoxNo",
+    "descriptor": 417864,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3608984,
+    "real": 3620576,
+    "calls": [
+      3620576,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 73,
+    "name": "MDLdspDamage",
+    "descriptor": 631113,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3609024,
+    "real": 3621120,
+    "calls": [
+      3621120
+    ]
+  },
+  {
+    "id": 74,
+    "name": "MDLdspDamageP",
+    "descriptor": 90442,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3609040,
+    "real": 3621152,
+    "calls": [
+      3621152
+    ]
+  },
+  {
+    "id": 75,
+    "name": "MDLdspExp",
+    "descriptor": 819531,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3609056,
+    "real": 3621184,
+    "calls": [
+      3621184
+    ]
+  },
+  {
+    "id": 76,
+    "name": "MDLsetDMGTurn",
+    "descriptor": 180556,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3609072,
+    "real": 3621216,
+    "calls": [
+      3621216
+    ]
+  },
+  {
+    "id": 77,
+    "name": "MDLisCallName",
+    "descriptor": 41293,
+    "subcount": 1,
+    "value": 521,
+    "stub": 3609088,
+    "real": 3621248,
+    "calls": [
+      3621248,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 78,
+    "name": "MDLsetWorldPosTarget",
+    "descriptor": 615246,
+    "subcount": 3,
+    "value": 527,
+    "stub": 3609128,
+    "real": 3621328,
+    "calls": [
+      3621328
+    ]
+  },
+  {
+    "id": 79,
+    "name": "MDLsetWorldPosTarget",
+    "descriptor": 614735,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3609152,
+    "real": 3621376,
+    "calls": [
+      3621376
+    ]
+  },
+  {
+    "id": 80,
+    "name": "MDLgetKyoriSquare",
+    "descriptor": 607056,
+    "subcount": 3,
+    "value": 523,
+    "stub": 3609168,
+    "real": 3621472,
+    "calls": [
+      3621472,
+      2294424,
+      2388880
+    ]
+  },
+  {
+    "id": 81,
+    "name": "MDLisSeqName",
+    "descriptor": 172369,
+    "subcount": 1,
+    "value": 521,
+    "stub": 3609216,
+    "real": 3621600,
+    "calls": [
+      3621600,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 82,
+    "name": "MDLisStatus",
+    "descriptor": 574290,
+    "subcount": 3,
+    "value": 521,
+    "stub": 3609256,
+    "real": 3621904,
+    "calls": [
+      3621904,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 83,
+    "name": "BLTisPlayerBullet",
+    "descriptor": 32851,
+    "subcount": 0,
+    "value": 521,
+    "stub": 3609304,
+    "real": 3622912,
+    "calls": [
+      3622912,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 84,
+    "name": "BLTgetShootRamNo",
+    "descriptor": 237652,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3609344,
+    "real": 3623040,
+    "calls": [
+      3623040,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 85,
+    "name": "BLTisHitCheck",
+    "descriptor": 532565,
+    "subcount": 0,
+    "value": 521,
+    "stub": 3609384,
+    "real": 3623056,
+    "calls": [
+      3623056,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 86,
+    "name": "BLTgetDamageValue",
+    "descriptor": 65878,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3609424,
+    "real": 3623488,
+    "calls": [
+      3623488,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 87,
+    "name": "BLTgetDamageRank",
+    "descriptor": 156247,
+    "subcount": 2,
+    "value": 517,
+    "stub": 3609464,
+    "real": 3623856,
+    "calls": [
+      3623856,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 88,
+    "name": "BLTisCritical",
+    "descriptor": 409688,
+    "subcount": 0,
+    "value": 521,
+    "stub": 3609504,
+    "real": 3623328,
+    "calls": [
+      3623328,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 89,
+    "name": "BLTgetStunTime",
+    "descriptor": 352857,
+    "subcount": 2,
+    "value": 517,
+    "stub": 3609544,
+    "real": 3624192,
+    "calls": [
+      3624192,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 90,
+    "name": "BLTgetPoisonTime",
+    "descriptor": 565594,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3609584,
+    "real": 3624416,
+    "calls": [
+      3624416,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 91,
+    "name": "BLTgetSleepTime",
+    "descriptor": 548955,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3609624,
+    "real": 3624704,
+    "calls": [
+      3624704,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 92,
+    "name": "BLTgetBindTime",
+    "descriptor": 139356,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3609664,
+    "real": 3624976,
+    "calls": [
+      3624976,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 93,
+    "name": "BLTgetAttackDownTime",
+    "descriptor": 876893,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3609704,
+    "real": 3625248,
+    "calls": [
+      3625248,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 94,
+    "name": "BLTgetPowerDownTime",
+    "descriptor": 516446,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3609744,
+    "real": 3625536,
+    "calls": [
+      3625536,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 95,
+    "name": "BLTcalcSkillUp",
+    "descriptor": 500319,
+    "subcount": 2,
+    "value": 527,
+    "stub": 3609784,
+    "real": 3625824,
+    "calls": [
+      3625824
+    ]
+  },
+  {
+    "id": 96,
+    "name": "BLTcalcEXPUp",
+    "descriptor": 491616,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3609808,
+    "real": 3626000,
+    "calls": [
+      3626000,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 97,
+    "name": "BLTgetAttributeStr",
+    "descriptor": 483425,
+    "subcount": 0,
+    "value": 525,
+    "stub": 3609848,
+    "real": 3624128,
+    "calls": [
+      3624128,
+      2347120
+    ]
+  },
+  {
+    "id": 98,
+    "name": "BLPisHitCheck",
+    "descriptor": 450658,
+    "subcount": 0,
+    "value": 521,
+    "stub": 3609880,
+    "real": 3626144,
+    "calls": [
+      3626144,
+      1049232,
+      2388880
+    ]
+  },
+  {
+    "id": 99,
+    "name": "BLPgetDamageValue",
+    "descriptor": 475235,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3609920,
+    "real": 3626304,
+    "calls": [
+      3626304,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 100,
+    "name": "BLPgetAttackZokusei",
+    "descriptor": 434276,
+    "subcount": 0,
+    "value": 525,
+    "stub": 3609960,
+    "real": 3626640,
+    "calls": [
+      3626640,
+      2347120
+    ]
+  },
+  {
+    "id": 101,
+    "name": "BLPgetDamageRank",
+    "descriptor": 426597,
+    "subcount": 2,
+    "value": 517,
+    "stub": 3609992,
+    "real": 3626800,
+    "calls": [
+      3626800,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 102,
+    "name": "BLPgetStunTime",
+    "descriptor": 393830,
+    "subcount": 2,
+    "value": 517,
+    "stub": 3610032,
+    "real": 3627056,
+    "calls": [
+      3627056,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 103,
+    "name": "BLPgetPoisonTime",
+    "descriptor": 196967,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3610072,
+    "real": 3627392,
+    "calls": [
+      3627392,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 104,
+    "name": "BLPgetSleepTime",
+    "descriptor": 344168,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3610112,
+    "real": 3627568,
+    "calls": [
+      3627568,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 105,
+    "name": "BLPgetBindTime",
+    "descriptor": 376937,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3610152,
+    "real": 3627728,
+    "calls": [
+      3627728,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 106,
+    "name": "BLPgetAttackDownTime",
+    "descriptor": 49514,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3610192,
+    "real": 3627888,
+    "calls": [
+      3627888,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 107,
+    "name": "BLPgetPowerDownTime",
+    "descriptor": 786795,
+    "subcount": 1,
+    "value": 517,
+    "stub": 3610232,
+    "real": 3628080,
+    "calls": [
+      3628080,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 108,
+    "name": "BLPcalcKoukaMagic",
+    "descriptor": 24684,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3610272,
+    "real": 3628272,
+    "calls": [
+      3628272,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 109,
+    "name": "TXTgetCallNo",
+    "descriptor": 311405,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3610312,
+    "real": 3622896,
+    "calls": [
+      3622896,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 110,
+    "name": "PLAYERgetPos",
+    "descriptor": 655470,
+    "subcount": 0,
+    "value": 517,
+    "stub": 3610352,
+    "real": 3622048,
+    "calls": [
+      3622048,
+      2297032,
+      2388880
+    ]
+  },
+  {
+    "id": 111,
+    "name": "PLAYERgetDataStr",
+    "descriptor": 295791,
+    "subcount": 3,
+    "value": 525,
+    "stub": 3610392,
+    "real": 3622112,
+    "calls": [
+      3622112,
+      2347120
+    ]
+  },
+  {
+    "id": 112,
+    "name": "PLAYERgetPosStr",
+    "descriptor": 287856,
+    "subcount": 4,
+    "value": 525,
+    "stub": 3610432,
+    "real": 3622432,
+    "calls": [
+      3622432,
+      2347120
+    ]
+  },
+  {
+    "id": 113,
+    "name": "LISsetDifficultMax",
+    "descriptor": 221553,
+    "subcount": 1,
+    "value": 527,
+    "stub": 3610480,
+    "real": 3628432,
+    "calls": [
+      3628432
+    ]
+  },
+  {
+    "id": 114,
+    "name": "MsgBox",
+    "descriptor": 262770,
+    "subcount": 2,
+    "value": 527,
+    "stub": 3610496,
+    "real": 3622704,
+    "calls": [
+      3622704
+    ]
+  },
+  {
+    "id": 115,
+    "name": "ShutDown",
+    "descriptor": 622707,
+    "subcount": 0,
+    "value": 527,
+    "stub": 3610520,
+    "real": 3622720,
+    "calls": [
+      3622720,
+      2385824
+    ]
+  }
+]

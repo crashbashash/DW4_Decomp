@@ -1,0 +1,3 @@
+AFS entry 265  |  dng205b3  |  block 2 (e_anomalo, e_mecha1/2)
+A file's numeric prefix is its chunk index in that pack entry.
+91 chunks

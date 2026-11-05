@@ -1,0 +1,3 @@
+AFS entry 802  |  bandai-logo  |  Bandai logo + rating splash (stagis09)
+A file's numeric prefix is its chunk index in that pack entry.
+8 chunks

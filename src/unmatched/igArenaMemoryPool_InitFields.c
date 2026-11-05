@@ -1,0 +1,65 @@
+#include "dw4/reflected.h"
+int FUN_002ba690();
+int FUN_002c57c0();
+int FUN_002dc7a0();
+int FUN_002ea4b0();
+int FUN_0030e9b0();
+int FUN_0030ec10(void*, unsigned long long);
+int FUN_0030eda0();
+int igMetaObject_CreateFields();
+void *igMetaObject_GetFieldAt();
+int igMetaObject_GetFieldCount();
+int igMetaObject_NameFields();
+extern int DAT_004c1810[4];
+extern int DAT_004c1860[4];
+extern int DAT_004c18b0[4];
+extern int DAT_004c1900[4];
+extern int DAT_004c2368[4];
+extern int DAT_004c2370[4];
+extern void * DAT_00586a88[4];
+extern int DAT_005871f8[4];
+int FUN_002cd9f0();
+int FUN_002cda50();
+int thunk_igMemoryPool_GetMetaObject();
+
+void igArenaMemoryPool_InitFields(void) {
+    int temp_s1;
+    void *temp_s0;
+    void *sp4C;
+    void *sp48;
+    void *temp_a0;
+    void *temp_a0_2;
+    void *temp_s2;
+    void *temp_s2_2;
+    void *temp_s2_3;
+    void *temp_s2_4;
+    void *temp_v0;
+
+    temp_s0 = (void *)(DAT_00586a88[0]);
+    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    igMetaObject_CreateFields(temp_s0, &DAT_004c1810[0], 0x12);
+    temp_v0 = igMetaObject_GetFieldAt(temp_s0, temp_s1);
+    ((igRawRefMetaField *)temp_v0)->_resetMethod = 3;
+    ((igRawRefMetaField *)temp_v0)->_persistent = 0;
+    FUN_0030ec10(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5), 0xFFFFFFFFFFFFFFFFULL);
+    FUN_0030eda0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8), 8);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002c57c0();
+    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB));
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_002ba690();
+    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC), -1);
+    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD));
+    temp_a0 = (void *)(temp_s2_3);
+    sp4C = (void *)DAT_005871f8[0];
+    FUN_002dc7a0(temp_a0, &sp4C);
+    ((igEnumMetaField *)temp_s2_3)->_getMetaEnumFunction = (int)(&FUN_002cda50);
+    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE));
+    temp_a0_2 = (void *)(temp_s2_4);
+    sp48 = (void *)DAT_004c2368[0];
+    FUN_002dc7a0(temp_a0_2, &sp48);
+    ((igEnumMetaField *)temp_s2_4)->_getMetaEnumFunction = (int)(&FUN_002cd9f0);
+    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xF), DAT_004c2370[0]);
+    FUN_0030e9b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11), 0x10);
+    igMetaObject_NameFields(temp_s0, &DAT_004c1860[0], &DAT_004c18b0[0], &DAT_004c1900[0], temp_s1);
+    ((igMetaObject *)(DAT_00586a88[0]))->_writeProxy = (int)(&thunk_igMemoryPool_GetMetaObject);
+}

@@ -1,0 +1,291 @@
+# Reviewed function extents that correct the Ghidra dump — consumed by tools/split.py.
+#
+# The dump's sizes for some Sony-built (EE GCC) functions run into the next function (24-byte
+# functions recorded as 32) or stop short of the closing `jr ra` + delay slot. A row's size is the
+# extent the retail bytes show (the EE GCC 2.96 object of the matching C source, or the body walk in
+# tools/split.py `_sweep_extent`, checked against the retail bytes by tools/verify.py). split.py
+# accepts a row only when it never cuts into another function: a growth must stop at the next
+# function; a plain shrink must leave nothing but zero words (alignment nops) before the next
+# function. Two reviewed keywords in the fourth column go further (docs/engine/function-inventory.md):
+#
+#   cut    the shrink leaves code behind — the dump glued a second function onto this one. The
+#          remainder is claimed by a promotion rule (a `j`/`jal` target, a referenced start or a framed
+#          body); split.py refuses the run if nothing claims it, so a cut never orphans code.
+#   merge  the function at <va> takes <size> and the row's name, absorbing every dump function that
+#          starts inside that extent (Ghidra split one 40-byte leaf into a `thunk_` and a fragment).
+#
+# <va>	<size>	<function>	[cut|merge]
+#
+# --- EE GCC sizes verified by the matching C source (tools/verify.py) ---------------------------
+0x00262900	52	FUN_00262900
+0x00263980	32	FUN_00263980
+0x00265ba0	24	FUN_00265ba0
+0x00267130	24	FUN_00267130
+0x00267210	24	FUN_00267210
+0x00267258	24	FUN_00267258
+0x00267270	24	FUN_00267270
+0x002672a0	24	FUN_002672a0
+0x002672b8	24	FUN_002672b8
+0x002672d0	24	FUN_002672d0
+0x002672e8	24	FUN_002672e8
+0x00267330	24	FUN_00267330
+0x00267348	24	FUN_00267348
+0x00267498	24	FUN_00267498
+0x0026c3c8	76	FUN_0026c3c8
+0x0026d1e8	56	FUN_0026d1e8
+0x0026ec78	152	FUN_0026ec78
+0x00273a90	196	FUN_00273a90
+0x002740a0	420	FUN_002740a0
+0x00275520	196	FUN_00275520
+0x0027dd70	408	FUN_0027dd70
+0x0028d7f0	120	FUN_0028d7f0
+0x002944f0	120	FUN_002944f0
+0x00295658	128	FUN_00295658
+0x002963e8	80	FUN_002963e8
+0x00296888	24	FUN_00296888
+0x00297ee8	44	FUN_00297ee8
+0x00298028	152	FUN_00298028
+0x00298bf0	24	FUN_00298bf0
+0x00298c08	24	FUN_00298c08
+0x00298c20	24	FUN_00298c20
+0x00298c38	24	FUN_00298c38
+0x0029cd18	60	FUN_0029cd18
+0x002a9bc8	136	FUN_002a9bc8
+0x002b3490	124	FUN_002b3490
+0x002b3808	76	FUN_002b3808
+0x0011acc0	1828	FUN_0011acc0
+0x0011b3e8	1624	FUN_0011b3e8
+0x0011ba40	828	FUN_0011ba40
+0x0011c220	1052	FUN_0011c220
+0x0011c640	1544	FUN_0011c640
+0x00120a40	1384	FUN_00120a40
+0x00121cf0	1224	FUN_00121cf0
+0x00122d90	652	FUN_00122d90
+0x001253e8	756	FUN_001253e8
+0x0012bfe0	568	FUN_0012bfe0
+0x0012c248	556	FUN_0012c248
+
+# --- epilogues the dump stopped short of: the `ld`/`lwc1` restores, `jr ra` and its delay slot
+# --- lie after the recorded end (inventory audit, 160 asm bodies in the EE GCC blocks; the
+# --- extent is the body walk's, every added word is the function's own epilogue) -------------
+0x0010c970	360	FUN_0010c970
+0x00114780	112	FUN_00114780
+0x00117c78	320	FUN_00117c78
+0x0011bd80	1180	FUN_0011bd80
+0x0011cc48	432	FUN_0011cc48
+0x0011dd48	1464	FUN_0011dd48
+0x0011e620	1060	FUN_0011e620
+0x0011ea48	928	FUN_0011ea48
+0x0011f478	228	FUN_0011f478
+0x0011f560	944	FUN_0011f560
+0x0011fcb8	2892	FUN_0011fcb8
+0x001210f8	2148	FUN_001210f8
+0x001221b8	524	FUN_001221b8
+0x00122590	532	FUN_00122590
+0x00124e10	276	FUN_00124e10
+0x001258b0	992	FUN_001258b0
+0x00126028	340	FUN_00126028
+0x001263a8	600	FUN_001263a8
+0x00126d28	204	FUN_00126d28
+0x00127ec8	208	FUN_00127ec8
+0x00128130	388	FUN_00128130
+0x001290d0	1440	FUN_001290d0
+0x001296a8	380	FUN_001296a8
+0x00129a30	216	FUN_00129a30
+0x0012c5d0	392	FUN_0012c5d0
+0x0022f1e0	1404	FUN_0022f1e0
+0x002303b0	188	unpack_d
+0x00230790	644	__muldf3
+0x0025bc40	908	FUN_0025bc40
+0x0025d540	748	FUN_0025d540
+0x0025e4b8	232	FUN_0025e4b8
+0x0025e668	288	FUN_0025e668
+0x00260f88	652	FUN_00260f88
+0x002623f8	276	FUN_002623f8
+0x00262748	344	FUN_00262748
+0x00263060	360	FUN_00263060
+0x00263548	508	FUN_00263548
+0x002662f8	664	FUN_002662f8
+0x002666b0	868	FUN_002666b0
+0x00266d20	164	FUN_00266d20
+0x002679d0	444	FUN_002679d0
+0x0026a330	1016	FUN_0026a330
+0x0026b008	280	FUN_0026b008
+0x0026be50	292	FUN_0026be50
+0x0026bf90	756	FUN_0026bf90
+0x0026c468	252	FUN_0026c468
+0x0026dd70	740	FUN_0026dd70
+0x0026e058	1028	FUN_0026e058
+0x0026ffb0	116	FUN_0026ffb0
+0x002702e8	188	FUN_002702e8
+0x002703a8	204	FUN_002703a8
+0x00270740	188	FUN_00270740
+0x00270ae8	188	FUN_00270ae8
+0x00270ba8	188	FUN_00270ba8
+0x00270c68	188	FUN_00270c68
+0x00270ea8	188	FUN_00270ea8
+0x00270f70	264	FUN_00270f70
+0x00271078	188	FUN_00271078
+0x00271138	204	FUN_00271138
+0x00271208	192	FUN_00271208
+0x002729e8	876	FUN_002729e8
+0x00273338	408	FUN_00273338
+0x002736b8	240	FUN_002736b8
+0x00274928	392	FUN_00274928
+0x00274f10	380	FUN_00274f10
+0x00275090	328	FUN_00275090
+0x00275740	440	FUN_00275740
+0x00275cc0	400	FUN_00275cc0
+0x00276d18	128	FUN_00276d18
+0x00277658	100	FUN_00277658
+0x00277b00	196	FUN_00277b00
+0x002780a8	156	FUN_002780a8
+0x00278288	392	FUN_00278288
+0x00278588	132	FUN_00278588
+0x002787c8	256	FUN_002787c8
+0x00279218	188	FUN_00279218
+0x002792d8	760	FUN_002792d8
+0x00279b00	716	FUN_00279b00
+0x0027a2e8	928	FUN_0027a2e8
+0x0027b548	116	FUN_0027b548
+0x0027bb68	192	FUN_0027bb68
+0x0027bea0	116	FUN_0027bea0
+0x0027c418	452	FUN_0027c418
+0x0027c648	232	FUN_0027c648
+0x0027c9f8	116	FUN_0027c9f8
+0x00280b98	392	FUN_00280b98
+0x00281bb8	320	FUN_00281bb8
+0x00282ab8	360	FUN_00282ab8
+0x00282c20	236	FUN_00282c20
+0x002846c0	592	FUN_002846c0
+0x00285c78	532	FUN_00285c78
+0x00285e98	172	FUN_00285e98
+0x00289d08	1368	FUN_00289d08
+0x0028a260	1784	FUN_0028a260
+0x0028b918	260	FUN_0028b918
+0x0028ba20	1124	FUN_0028ba20
+0x0028be88	2156	FUN_0028be88
+0x0028c6f8	3176	FUN_0028c6f8
+0x0028dd10	256	FUN_0028dd10
+0x0028e4d0	1340	FUN_0028e4d0
+0x0028f100	496	FUN_0028f100
+0x0028f4a8	1720	FUN_0028f4a8
+0x0028fb60	620	FUN_0028fb60
+0x0028fdd0	1440	FUN_0028fdd0
+0x00290898	344	FUN_00290898
+0x00290ca8	116	FUN_00290ca8
+0x00291d30	208	FUN_00291d30
+0x00291f10	356	FUN_00291f10
+0x00292078	1812	FUN_00292078
+0x00292ba8	916	FUN_00292ba8
+0x00293230	452	FUN_00293230
+0x00295010	616	FUN_00295010
+0x002955d0	136	FUN_002955d0
+0x00296a40	340	FUN_00296a40
+0x00296b98	156	FUN_00296b98
+0x00298468	332	FUN_00298468
+0x00298618	168	FUN_00298618
+0x00298ec0	192	FUN_00298ec0
+0x00299068	168	FUN_00299068
+0x0029b990	616	FUN_0029b990
+0x0029c0b8	412	FUN_0029c0b8
+0x0029de88	332	FUN_0029de88
+0x002a0d10	200	FUN_002a0d10
+0x002a1380	720	FUN_002a1380
+0x002a17f8	376	FUN_002a17f8
+0x002a1b50	472	FUN_002a1b50
+0x002a2048	400	FUN_002a2048
+0x002a3628	220	FUN_002a3628
+0x002a3cb8	576	FUN_002a3cb8
+0x002a3ef8	444	FUN_002a3ef8
+0x002a4468	712	FUN_002a4468
+0x002a49b8	164	FUN_002a49b8
+0x002a4c60	856	FUN_002a4c60
+0x002a5248	644	FUN_002a5248
+0x002a5740	244	FUN_002a5740
+0x002a5838	532	FUN_002a5838
+0x002a6048	440	FUN_002a6048
+0x002a6368	264	FUN_002a6368
+0x002a68e8	684	FUN_002a68e8
+0x002a6b98	776	FUN_002a6b98
+0x002a7610	348	FUN_002a7610
+0x002a8a30	252	FUN_002a8a30
+0x002a9ef8	328	FUN_002a9ef8
+0x002aa050	532	FUN_002aa050
+0x002ab810	100	FUN_002ab810
+0x002aced8	356	FUN_002aced8
+0x002adf78	148	FUN_002adf78
+0x002ae728	120	FUN_002ae728
+0x002af998	116	FUN_002af998
+0x002afa10	236	FUN_002afa10
+0x002b0608	1128	FUN_002b0608
+0x002b19f0	240	FUN_002b19f0
+0x002b4c98	304	FUN_002b4c98
+0x002b54f8	124	FUN_002b54f8
+0x002b5578	124	FUN_002b5578
+0x002b55f8	124	FUN_002b55f8
+0x002b5678	124	FUN_002b5678
+
+# --- two functions under one symbol: the head keeps the bytes up to its own return or tail call,
+# --- the second function is promoted by the rule its evidence satisfies --------------------------
+0x00109c88	292	FUN_00109c88	cut
+# tail-call wrapper; the dump swallowed the first word of the framed body after it
+0x00129c88	20	FUN_00129c88	cut
+0x0012c858	116	FUN_0012c858	cut
+# span reaches the referenced leaf at 0x155490
+0x00155340	332	FUN_00155340	cut
+# span reaches the referenced leaf at 0x159a70
+0x00159320	1872	FUN_00159320	cut
+0x00169e30	8	FUN_00169e30	cut
+# wrapper tail-calls the framed body at 0x17c8a0 (near-miss-shapes-extents.md)
+0x0017c880	20	FUN_0017c880	cut
+# jump-table growth reached the referenced 16-byte wrapper at 0x1b68b0 (DAT_001b68b0 in FUN_001a44d0)
+0x001b4c40	7276	FUN_001b4c40	cut
+# wrapper tail-calls the framed body at the j target
+0x00260d48	28	FUN_00260d48	cut
+# the 8-byte getter at 0x267490 (jal target of FUN_0026c3c8) is its own function
+0x00267438	88	FUN_00267438	cut
+0x00269878	92	FUN_00269878	cut
+0x00297f30	20	FUN_00297f30	cut
+0x002980c0	100	FUN_002980c0	cut
+0x00299110	84	FUN_00299110	cut
+0x002997c0	20	FUN_002997c0	cut
+0x0029b6d0	20	FUN_0029b6d0	cut
+0x002a1110	20	FUN_002a1110	cut
+0x002a3730	20	FUN_002a3730	cut
+0x002b2ee8	20	FUN_002b2ee8	cut
+0x002b3300	20	FUN_002b3300	cut
+0x002b4210	20	FUN_002b4210	cut
+# data/function-extents.json span reaches the vtable-referenced leaf at 0x2d3f60
+0x002d3d30	548	FUN_002d3d30	cut
+# span reaches the referenced leaf at 0x2efc40
+0x002efb50	240	Gap::Core::igMemoryFile::vfunc_23	cut
+# 8-byte `j` wrapper; the referenced 12-byte leaf at 0x453a30 is its own function
+0x00453a20	8	FUN_00453a20	cut
+# span reaches the referenced leaves at 0x465870/0x465880
+0x004657b0	188	FUN_004657b0	cut
+
+# the head ends in a `j` to a leaf body (no frame) that follows it under the same symbol; the body is a
+# separate function the wrapper tail-calls (rule 3 claims it)
+0x002612c0	20	FUN_002612c0	cut
+0x002854b0	28	FUN_002854b0	cut
+0x0028abc0	144	FUN_0028abc0	cut
+0x00293788	80	FUN_00293788	cut
+0x00294838	100	FUN_00294838	cut
+0x002948b8	100	FUN_002948b8	cut
+0x00294938	100	FUN_00294938	cut
+0x002ad2e0	76	FUN_002ad2e0	cut
+0x002ad3e0	132	FUN_002ad3e0	cut
+0x002b3530	24	FUN_002b3530	cut
+0x002b4630	20	FUN_002b4630	cut
+0x002ed1c0	20	Memory_AllocateBufferViaSharedTail	cut
+
+# --- one function under two symbols: `thunk_FUN_002fe2ac` (`b 0x2fe2ac; nop`) and `FUN_002fe2ac` are the
+# --- entry and the loop of one 40-byte list-search leaf starting at 0x2fe290 (finding #390) ----------
+0x002fe290	44	FUN_002fe290	merge
+
+# --- the dump's extent ran into the next function (a layout unit was truncated) ------------------
+0x00108078	272	FUN_00108078
+# FUN_001e6130 is a block of an earlier function (its `j 0x1e5fe0` lands inside FUN_001e5f00, finding in
+# the archived note `near-miss-shapes-extents.md`); the dump's extent ran over FUN_001e6230. Ends at its own `j` + delay slot.
+0x001e6130	248	FUN_001e6130

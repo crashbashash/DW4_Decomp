@@ -1,0 +1,3 @@
+AFS entry 536  |  item-change-blackwargreymon  |  Item change NPC (n_bwargrey)
+A file's numeric prefix is its chunk index in that pack entry.
+66 chunks

@@ -1,0 +1,3 @@
+AFS entry 621  |  stag0102-valley-crossroads  |  Leads to dng102b1
+A file's numeric prefix is its chunk index in that pack entry.
+34 chunks

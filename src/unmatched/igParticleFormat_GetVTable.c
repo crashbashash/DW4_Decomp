@@ -1,0 +1,11 @@
+/* stack-object GetVTable accessor; verified by tools/verify.py. */
+int igObject_InitHeader(void *);
+extern int DAT_00526fc0[4];
+extern void * DAT_00586dc8[4];
+struct Obj { int *vt; char pad[44]; };
+int igParticleFormat_GetVTable(void) {
+    struct Obj obj;
+    igObject_InitHeader(&obj);
+    obj.vt = &DAT_00526fc0[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+}

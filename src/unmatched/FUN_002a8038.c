@@ -1,0 +1,15 @@
+/* 0x002a8038 — FUN_002a8038 (80 bytes). Runs FUN_002a8088 under the FUN_002a0e70/FUN_002a0e88 guard and returns its result. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+void FUN_002a0e70();
+void FUN_002a0e88();
+int FUN_002a8088();
+
+/* FUN_002a8088 under the FUN_002a0e70/FUN_002a0e88 guard. */
+int FUN_002a8038(void *player, int arg) {
+    char guard[16];
+    int result;
+
+    FUN_002a0e70(guard);
+    result = FUN_002a8088(player, arg);
+    FUN_002a0e88(guard);
+    return result;
+}

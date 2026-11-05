@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Generate bounded arrival schedule from pack 820's original Lua 4 bytecode."""
+import argparse
+import hashlib
+import re
+import struct
+import sys
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT.parent / 'scripts'))
+import lua_dump
+import lua_decompile
+
+def generate(afs):
+    with afs.open('rb') as f:
+        f.seek(8 + 820 * 8)
+        offset, size = struct.unpack('<II', f.read(8))
+        f.seek(offset)
+        blob = f.read(size)
+    # Lua 4 MAXARG_S = (((1 << SIZE_U) - 1) >> 1), not 1 << 25.
+    # Keep the correction local: rebuilding the whole cleaned corpus is separate.
+    lua_decompile.MAXARG_S = ((1 << 26) - 1) >> 1
+    pos = 0
+    sources = []
+    fades = []
+    entry_delays = []
+    guide_routes = []
+    def visit(fn):
+        if 'WPos' in fn['kstr']:
+            # Read the literal tables directly; the prose decompiler loses
+            # these locals and cannot establish waypoint coordinates.
+            tables = []
+            for i, ins in enumerate(fn['code']):
+                if lua_dump.OPCODES[ins & 63] != 'OP_CREATETABLE':
+                    continue
+                values = []
+                for item in fn['code'][i+1:]:
+                    op = lua_dump.OPCODES[item & 63]
+                    if op == 'OP_SETLIST':
+                        tables.append(values)
+                        break
+                    assert op == 'OP_PUSHINT', 'waypoint table is no longer literal'
+                    values.append((item >> 6)-lua_decompile.MAXARG_S)
+            if tables[3] == [2]:  # MDLgetRamNo is one-based: guide instance 1.
+                assert tables[4] == [1, 4]
+                assert len(tables[0]) == len(tables[1]) == len(tables[2]) == 3
+                # HP 100 initializes to 1; the first WPos call increments to 2.
+                guide_routes.append(tuple(axis[1] for axis in tables[:3]))
+        if 'SQ_BLIN60' in fn['kstr']:
+            fades.append(lua_decompile.decompile_function_source(fn))
+        if 'SQ_WALK03' in fn['kstr'] and 'ISDEMOCAMERA' in fn['kstr']:
+            sources.append(lua_decompile.decompile_function_source(fn))
+            # The prose decompiler misassigns this local. Read its initializer
+            # directly: PUSHNIL, PUSHINT delay, PUSHINT 0/3/1, FORPREP.
+            for i, ins in enumerate(fn['code'][:-5]):
+                following = fn['code'][i+1:i+6]
+                if (lua_dump.OPCODES[ins & 63] == 'OP_PUSHNIL' and
+                    [lua_dump.OPCODES[x & 63] for x in following] ==
+                    ['OP_PUSHINT']*4 + ['OP_FORPREP'] and
+                    [(x >> 6)-lua_decompile.MAXARG_S for x in following[1:4]] == [0,3,1]):
+                    entry_delays.append((following[0] >> 6)-lua_decompile.MAXARG_S)
+        for child in fn['kproto']:
+            visit(child)
+    while True:
+        pos = blob.find(b'\x1bLua', pos)
+        if pos < 0:
+            break
+        _, fn, cursor = lua_dump.parse_chunk(blob, pos)
+        visit(fn)
+        pos = cursor.pos
+    assert len(sources) == 1 and len(fades) == 1
+    assert entry_delays == [180], entry_delays
+    assert len(guide_routes) == 1, guide_routes
+    fade = re.search(r'"i_fadewn01", 0, "SQ_BLIN60", (\d+)\)', fades[0])
+    assert fade and fade[1] == '5', 'arrival fade delay changed'
+    source = sources[0]
+    assert re.search(r'funcCloseMessage[^\n]*\n\s*be:DMsetSD\("MODELCTRL", "n_digilff", 2, "ONCTRL"\)\n\s*be:DMsetSD\("MODELCTRL", "n_digilff", 2, "SQ_WALKON"\)', source), 'guide departure ordering changed'
+    beep = re.search(r'funcCloseMessage[^\n]*\n\s*be:DMsetSD\("SOUND", nil, -1, "PLAY", "([^"]+)"\)\n\s*be:DMsetSD[^\n]*"SQ_DELAY01"', source)
+    assert beep and beep[1] == 'mlBEEP01', 'terminal beep ordering changed'
+    talks = re.findall(r'be:DMsetSD\("MODELCTRL", "(n_digilf[fm])", \d+, "(SQ_TALK|SQ_WAIT02)", (\d+)\)', source)
+    assert len(talks) == 10, talks
+    male = re.search(r'"n_digilfm", \d+, "SQ_WALK03", (\d+)', source)
+    relocation = re.findall(r'"MOVETRANS", "V<(?:240,40,-150|258.187,40,174)>/V<[^>]+>", (\d+)', source)
+    restore = re.search(r'"SETBOXCAMERA", (\d+)', source)
+    assert male and len(relocation) == 2 and relocation[0] == relocation[1] and restore
+    # Preserve the complete final handoff, including ordering and shared delay.
+    tail = source[source.rfind("\n", 0, source.index('"WN01/SET"')):]
+    expected = [
+        ('LAYERCTL', 'SWITCH', 'WN01/SET'), ('LAYERCTL', 'SWITCH', 'WN00/SET'),
+        ('CAMERA', 'SETBOXCAMERA', None), ('MODELCTRL', 'ONCTRL', None),
+        ('PLAYER', 'SQ_WAIT', None), ('MATCTRL', 'RESTART', None),
+    ]
+    commands = re.findall(r'be:DMsetSD\("(\w+)", nil, -1, "(\w+)"(?:, "([^"\n]+)")?, (\d+)\)', tail)
+    assert [(manager, action, argument or None) for manager, action, argument, _ in commands[:6]] == expected, commands
+    assert all(int(delay) == int(restore[1]) for *_, delay in commands[:6]), commands
+    lines = ['/* Generated by tools/gen_lobby_arrival.py from NDMW 820 Lua 4.',
+             f' * Pack SHA256: {hashlib.sha256(blob).hexdigest()} */',
+             f'enum {{ LOBBY_MALE_WALK_DELAY = {male[1]}, LOBBY_RELOCATE_DELAY = {relocation[0]},',
+             f'       LOBBY_RESTORE_DELAY = {restore[1]}, LOBBY_FADE_DELAY = {fade[1]},',
+             f'       LOBBY_PLAYER_ENTRY_DELAY = {entry_delays[0]} }};',
+             f'static const char lobby_terminal_cue[] = "{beep[1]}";',
+             'static const float lobby_guide_departure_target[3] = { ' + ', '.join(map(str, guide_routes[0])) + ' };',
+             'static const struct { unsigned actor, tick; int motion; } lobby_opening[] = {']
+    for actor, action, delay in talks:
+        lines.append(f'    {{ {0 if actor == "n_digilfm" else 1}, {delay}, {2 if action == "SQ_TALK" else 1} }},')
+    return '\n'.join(lines + ['};', ''])
+
+if __name__ == '__main__':
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--afs', type=Path, default=ROOT.parent.parent / 'local/extracted/NDMW.AFS')
+    ap.add_argument('--check', action='store_true')
+    args = ap.parse_args()
+    result = generate(args.afs)
+    target = ROOT / 'src/lobby_arrival.h'
+    if args.check:
+        assert target.read_text() == result, 'arrival schedule differs; regenerate'
+    else:
+        target.write_text(result)
+    print('lobby arrival: original-bytecode schedule verified' if args.check else 'lobby arrival: generated')

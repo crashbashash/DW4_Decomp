@@ -1,0 +1,812 @@
+{
+ "descriptors": [
+  {
+   "va": 4725792,
+   "name": "PsIIlibgraph",
+   "version": "2800",
+   "span": 64,
+   "mmio_bases": [],
+   "code_entries": [],
+   "data_ptrs": [],
+   "run": null
+  },
+  {
+   "va": 4725856,
+   "name": "PsIIlibdma",
+   "version": "2800",
+   "span": 352,
+   "mmio_bases": [
+    {
+     "va": 4725872,
+     "value": 268468224,
+     "name": "D0_CHCR/VIF0"
+    },
+    {
+     "va": 4725876,
+     "value": 268472320,
+     "name": "D1_CHCR/VIF1"
+    },
+    {
+     "va": 4725880,
+     "value": 268476416,
+     "name": "D2_CHCR/GIF"
+    },
+    {
+     "va": 4725884,
+     "value": 268480512,
+     "name": "D3_CHCR/fromIPU"
+    },
+    {
+     "va": 4725888,
+     "value": 268481536,
+     "name": "D4_CHCR/toIPU"
+    },
+    {
+     "va": 4725892,
+     "value": 268484608,
+     "name": "D5_CHCR/SIF0"
+    },
+    {
+     "va": 4725896,
+     "value": 268485632,
+     "name": "D6_CHCR/SIF1"
+    },
+    {
+     "va": 4725900,
+     "value": 268486656,
+     "name": "D7_CHCR/SIF2"
+    },
+    {
+     "va": 4725904,
+     "value": 268488704,
+     "name": "D8_CHCR/SPR0"
+    },
+    {
+     "va": 4725908,
+     "value": 268489728,
+     "name": "D9_CHCR/SPR1"
+    }
+   ],
+   "code_entries": [
+    {
+     "va": 4725912,
+     "value": 1066104,
+     "symbol": "FUN_00104478",
+     "entry_point": true
+    },
+    {
+     "va": 4725916,
+     "value": 1066376,
+     "symbol": "FUN_00104588",
+     "entry_point": true
+    },
+    {
+     "va": 4725920,
+     "value": 1066768,
+     "symbol": "FUN_00104710",
+     "entry_point": true
+    },
+    {
+     "va": 4725924,
+     "value": 1067128,
+     "symbol": "FUN_00104878",
+     "entry_point": true
+    },
+    {
+     "va": 4725928,
+     "value": 1067632,
+     "symbol": "FUN_00104a70",
+     "entry_point": true
+    },
+    {
+     "va": 4725932,
+     "value": 1067968,
+     "symbol": "FUN_00104bc0",
+     "entry_point": true
+    },
+    {
+     "va": 4725936,
+     "value": 1068424,
+     "symbol": "FUN_00104d88",
+     "entry_point": true
+    },
+    {
+     "va": 4725940,
+     "value": 1068848,
+     "symbol": "FUN_00104f30",
+     "entry_point": true
+    },
+    {
+     "va": 4725944,
+     "value": 1066224,
+     "symbol": "FUN_001044f0",
+     "entry_point": true
+    },
+    {
+     "va": 4725948,
+     "value": 1066560,
+     "symbol": "FUN_00104640",
+     "entry_point": true
+    },
+    {
+     "va": 4725952,
+     "value": 1066944,
+     "symbol": "FUN_001047c0",
+     "entry_point": true
+    },
+    {
+     "va": 4725956,
+     "value": 1067376,
+     "symbol": "FUN_00104970",
+     "entry_point": true
+    },
+    {
+     "va": 4725960,
+     "value": 1067792,
+     "symbol": "FUN_00104b10",
+     "entry_point": true
+    },
+    {
+     "va": 4725964,
+     "value": 1068192,
+     "symbol": "FUN_00104ca0",
+     "entry_point": true
+    },
+    {
+     "va": 4725968,
+     "value": 1068640,
+     "symbol": "FUN_00104e60",
+     "entry_point": true
+    },
+    {
+     "va": 4725972,
+     "value": 1069136,
+     "symbol": "FUN_00105050",
+     "entry_point": true
+    }
+   ],
+   "data_ptrs": [],
+   "run": [
+    {
+     "va": 4725912,
+     "value": 1066104,
+     "symbol": "FUN_00104478",
+     "entry_point": true
+    },
+    {
+     "va": 4725916,
+     "value": 1066376,
+     "symbol": "FUN_00104588",
+     "entry_point": true
+    },
+    {
+     "va": 4725920,
+     "value": 1066768,
+     "symbol": "FUN_00104710",
+     "entry_point": true
+    },
+    {
+     "va": 4725924,
+     "value": 1067128,
+     "symbol": "FUN_00104878",
+     "entry_point": true
+    },
+    {
+     "va": 4725928,
+     "value": 1067632,
+     "symbol": "FUN_00104a70",
+     "entry_point": true
+    },
+    {
+     "va": 4725932,
+     "value": 1067968,
+     "symbol": "FUN_00104bc0",
+     "entry_point": true
+    },
+    {
+     "va": 4725936,
+     "value": 1068424,
+     "symbol": "FUN_00104d88",
+     "entry_point": true
+    },
+    {
+     "va": 4725940,
+     "value": 1068848,
+     "symbol": "FUN_00104f30",
+     "entry_point": true
+    },
+    {
+     "va": 4725944,
+     "value": 1066224,
+     "symbol": "FUN_001044f0",
+     "entry_point": true
+    },
+    {
+     "va": 4725948,
+     "value": 1066560,
+     "symbol": "FUN_00104640",
+     "entry_point": true
+    },
+    {
+     "va": 4725952,
+     "value": 1066944,
+     "symbol": "FUN_001047c0",
+     "entry_point": true
+    },
+    {
+     "va": 4725956,
+     "value": 1067376,
+     "symbol": "FUN_00104970",
+     "entry_point": true
+    },
+    {
+     "va": 4725960,
+     "value": 1067792,
+     "symbol": "FUN_00104b10",
+     "entry_point": true
+    },
+    {
+     "va": 4725964,
+     "value": 1068192,
+     "symbol": "FUN_00104ca0",
+     "entry_point": true
+    },
+    {
+     "va": 4725968,
+     "value": 1068640,
+     "symbol": "FUN_00104e60",
+     "entry_point": true
+    },
+    {
+     "va": 4725972,
+     "value": 1069136,
+     "symbol": "FUN_00105050",
+     "entry_point": true
+    }
+   ]
+  },
+  {
+   "va": 4726208,
+   "name": "PsIIlibipu",
+   "version": "2800",
+   "span": 128,
+   "mmio_bases": [],
+   "code_entries": [],
+   "data_ptrs": [],
+   "run": null
+  },
+  {
+   "va": 4726336,
+   "name": "PsIIlibkernl",
+   "version": "2800",
+   "span": 5888,
+   "mmio_bases": [
+    {
+     "va": 4726676,
+     "value": 268435476,
+     "name": "mmio"
+    },
+    {
+     "va": 4726940,
+     "value": 268435465,
+     "name": "mmio"
+    },
+    {
+     "va": 4727040,
+     "value": 268435515,
+     "name": "mmio"
+    },
+    {
+     "va": 4727104,
+     "value": 268435475,
+     "name": "mmio"
+    },
+    {
+     "va": 4727176,
+     "value": 268435481,
+     "name": "mmio"
+    },
+    {
+     "va": 4727564,
+     "value": 268435456,
+     "name": "mmio"
+    },
+    {
+     "va": 4727580,
+     "value": 268443648,
+     "name": "mmio"
+    },
+    {
+     "va": 4727596,
+     "value": 268451840,
+     "name": "mmio"
+    },
+    {
+     "va": 4727612,
+     "value": 268460032,
+     "name": "mmio"
+    },
+    {
+     "va": 4727628,
+     "value": 268468224,
+     "name": "D0_CHCR/VIF0"
+    },
+    {
+     "va": 4727644,
+     "value": 268476416,
+     "name": "D2_CHCR/GIF"
+    },
+    {
+     "va": 4727660,
+     "value": 268484608,
+     "name": "D5_CHCR/SIF0"
+    },
+    {
+     "va": 4727676,
+     "value": 268492800,
+     "name": "mmio"
+    },
+    {
+     "va": 4728308,
+     "value": 268435461,
+     "name": "mmio"
+    },
+    {
+     "va": 4728776,
+     "value": 268435458,
+     "name": "mmio"
+    },
+    {
+     "va": 4728924,
+     "value": 268435459,
+     "name": "mmio"
+    },
+    {
+     "va": 4729004,
+     "value": 268435459,
+     "name": "mmio"
+    },
+    {
+     "va": 4729096,
+     "value": 268435459,
+     "name": "mmio"
+    },
+    {
+     "va": 4729576,
+     "value": 268435463,
+     "name": "mmio"
+    },
+    {
+     "va": 4730488,
+     "value": 268435462,
+     "name": "mmio"
+    },
+    {
+     "va": 4730644,
+     "value": 268435502,
+     "name": "mmio"
+    },
+    {
+     "va": 4730664,
+     "value": 268435469,
+     "name": "mmio"
+    },
+    {
+     "va": 4731140,
+     "value": 268435459,
+     "name": "mmio"
+    },
+    {
+     "va": 4731244,
+     "value": 268435461,
+     "name": "mmio"
+    },
+    {
+     "va": 4731496,
+     "value": 268435460,
+     "name": "mmio"
+    },
+    {
+     "va": 4731672,
+     "value": 268435460,
+     "name": "mmio"
+    },
+    {
+     "va": 4731776,
+     "value": 268435460,
+     "name": "mmio"
+    }
+   ],
+   "code_entries": [],
+   "data_ptrs": [
+    {
+     "va": 4726544,
+     "value": 5056136,
+     "string": "...."
+    },
+    {
+     "va": 4726564,
+     "value": 5056144,
+     "string": "...."
+    },
+    {
+     "va": 4727484,
+     "value": 1129728
+    },
+    {
+     "va": 4727712,
+     "value": 4718615
+    },
+    {
+     "va": 4727716,
+     "value": 4719637
+    },
+    {
+     "va": 4727756,
+     "value": 1048576
+    },
+    {
+     "va": 4728168,
+     "value": 4727528
+    },
+    {
+     "va": 4728172,
+     "value": 4727736
+    },
+    {
+     "va": 4728176,
+     "value": 4728024
+    },
+    {
+     "va": 4728312,
+     "value": 4657189
+    },
+    {
+     "va": 4730380,
+     "value": 5312545,
+     "string": "eNDMWStatusSelectE0"
+    },
+    {
+     "va": 4730420,
+     "value": 5314593,
+     "string": "playerList"
+    },
+    {
+     "va": 4730780,
+     "value": 5275681
+    },
+    {
+     "va": 4731248,
+     "value": 5255203
+    },
+    {
+     "va": 4731616,
+     "value": 5445656
+    }
+   ],
+   "run": null
+  },
+  {
+   "va": 4732224,
+   "name": "PsIIlibcdvd",
+   "version": "2800",
+   "span": 7096,
+   "mmio_bases": [],
+   "code_entries": [],
+   "data_ptrs": [],
+   "run": null
+  },
+  {
+   "va": 4739320,
+   "name": "PsIIlibpad",
+   "version": "2800",
+   "span": 80,
+   "mmio_bases": [],
+   "code_entries": [],
+   "data_ptrs": [
+    {
+     "va": 4739344,
+     "value": 5057144,
+     "string": "DISCONNECT"
+    },
+    {
+     "va": 4739348,
+     "value": 5057136
+    },
+    {
+     "va": 4739352,
+     "value": 5057120,
+     "string": "FINDCTP1"
+    },
+    {
+     "va": 4739356,
+     "value": 5057136
+    },
+    {
+     "va": 4739360,
+     "value": 5057136
+    },
+    {
+     "va": 4739364,
+     "value": 5057112,
+     "string": "EXECCMD"
+    },
+    {
+     "va": 4739368,
+     "value": 5057104,
+     "string": "STABLE"
+    },
+    {
+     "va": 4739372,
+     "value": 5057096,
+     "string": "ERROR"
+    },
+    {
+     "va": 4739376,
+     "value": 5057176,
+     "string": "COMPLETE"
+    },
+    {
+     "va": 4739380,
+     "value": 5057168,
+     "string": "FAILED"
+    },
+    {
+     "va": 4739384,
+     "value": 5057160,
+     "string": "BUSY"
+    }
+   ],
+   "run": null
+  },
+  {
+   "va": 4739400,
+   "name": "PsIIlibsdr",
+   "version": "2800",
+   "span": 56,
+   "mmio_bases": [],
+   "code_entries": [],
+   "data_ptrs": [],
+   "run": null
+  },
+  {
+   "va": 4739456,
+   "name": "PsIIlibmc",
+   "version": "2810",
+   "span": 1024,
+   "mmio_bases": [],
+   "code_entries": [],
+   "data_ptrs": [
+    {
+     "va": 4739492,
+     "value": 4739488
+    },
+    {
+     "va": 4739496,
+     "value": 4739492
+    },
+    {
+     "va": 4739508,
+     "value": 4739988
+    },
+    {
+     "va": 4739512,
+     "value": 4740076
+    },
+    {
+     "va": 4739516,
+     "value": 4740164
+    },
+    {
+     "va": 4739556,
+     "value": 5062264
+    },
+    {
+     "va": 4740256,
+     "value": 4739504
+    },
+    {
+     "va": 4740280,
+     "value": 4740272
+    },
+    {
+     "va": 4740284,
+     "value": 4740272
+    },
+    {
+     "va": 4740288,
+     "value": 4740280
+    },
+    {
+     "va": 4740292,
+     "value": 4740280
+    },
+    {
+     "va": 4740296,
+     "value": 4740288
+    },
+    {
+     "va": 4740300,
+     "value": 4740288
+    },
+    {
+     "va": 4740304,
+     "value": 4740296
+    },
+    {
+     "va": 4740308,
+     "value": 4740296
+    },
+    {
+     "va": 4740312,
+     "value": 4740304
+    },
+    {
+     "va": 4740316,
+     "value": 4740304
+    },
+    {
+     "va": 4740320,
+     "value": 4740312
+    },
+    {
+     "va": 4740324,
+     "value": 4740312
+    },
+    {
+     "va": 4740328,
+     "value": 4740320
+    },
+    {
+     "va": 4740332,
+     "value": 4740320
+    },
+    {
+     "va": 4740336,
+     "value": 4740328
+    },
+    {
+     "va": 4740340,
+     "value": 4740328
+    },
+    {
+     "va": 4740344,
+     "value": 4740336
+    },
+    {
+     "va": 4740348,
+     "value": 4740336
+    },
+    {
+     "va": 4740352,
+     "value": 4740344
+    },
+    {
+     "va": 4740356,
+     "value": 4740344
+    },
+    {
+     "va": 4740360,
+     "value": 4740352
+    },
+    {
+     "va": 4740364,
+     "value": 4740352
+    },
+    {
+     "va": 4740368,
+     "value": 4740360
+    },
+    {
+     "va": 4740372,
+     "value": 4740360
+    },
+    {
+     "va": 4740376,
+     "value": 4740368
+    },
+    {
+     "va": 4740380,
+     "value": 4740368
+    },
+    {
+     "va": 4740384,
+     "value": 4740376
+    },
+    {
+     "va": 4740388,
+     "value": 4740376
+    },
+    {
+     "va": 4740392,
+     "value": 4740384
+    },
+    {
+     "va": 4740396,
+     "value": 4740384
+    },
+    {
+     "va": 4740400,
+     "value": 4740392
+    },
+    {
+     "va": 4740404,
+     "value": 4740392
+    },
+    {
+     "va": 4740408,
+     "value": 4740400
+    },
+    {
+     "va": 4740412,
+     "value": 4740400
+    },
+    {
+     "va": 4740416,
+     "value": 4740408
+    },
+    {
+     "va": 4740420,
+     "value": 4740408
+    },
+    {
+     "va": 4740424,
+     "value": 4740416
+    },
+    {
+     "va": 4740428,
+     "value": 4740416
+    },
+    {
+     "va": 4740432,
+     "value": 4740424
+    },
+    {
+     "va": 4740436,
+     "value": 4740424
+    },
+    {
+     "va": 4740440,
+     "value": 4740432
+    },
+    {
+     "va": 4740444,
+     "value": 4740432
+    },
+    {
+     "va": 4740448,
+     "value": 4740440
+    },
+    {
+     "va": 4740452,
+     "value": 4740440
+    },
+    {
+     "va": 4740456,
+     "value": 4740448
+    },
+    {
+     "va": 4740460,
+     "value": 4740448
+    },
+    {
+     "va": 4740464,
+     "value": 4740456
+    },
+    {
+     "va": 4740468,
+     "value": 4740456
+    },
+    {
+     "va": 4740472,
+     "value": 4740464
+    },
+    {
+     "va": 4740476,
+     "value": 4740464
+    }
+   ],
+   "run": null
+  }
+ ]
+}

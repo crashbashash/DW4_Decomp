@@ -1,0 +1,15 @@
+/* 0x0027af28 — FUN_0027af28 (68 bytes). PS2RNA_GetStartSmpl by its message string: not implemented; reports
+   "PS2RNA_GetStartSmpl: not implemented" (FUN_002659a0) while the library is active (not mode 1 with no
+   entries) and returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+extern void FUN_002659a0(const char *format, ...);
+extern int DAT_004b1dc0;
+extern int DAT_004b1dc8;
+extern const char s_PS2RNA_GetStartSmpl_not_implemented_004f1960[];
+
+int FUN_0027af28(void) {
+    if (DAT_004b1dc8 == 1 && DAT_004b1dc0 <= 0) {
+        return 0;
+    }
+    FUN_002659a0(s_PS2RNA_GetStartSmpl_not_implemented_004f1960);
+    return 0;
+}

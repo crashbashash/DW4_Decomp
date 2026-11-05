@@ -1,0 +1,6 @@
+mswk66008 = "POINTFONT00/font00/I<58>"
+mswk66024 = "POINTFONT00/font01/I<58>"
+mswk66040 = "POINTFONT00/font02/I<58>"
+mswk66056 = "POINTFONT00/font03/I<58>"
+mswk66072 = "POINTFONT00/font04/I<59>"
+PintmessOpen("V<192,55,128>/V<0,0,0>", mswk66008, mswk66024, mswk66040, mswk66056, mswk66072)

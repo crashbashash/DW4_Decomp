@@ -1,0 +1,10 @@
+/* 0x0023c400: published MetaObject accessor of Gap::Core::igCollisionGroupList.
+ * A 12-byte leaf (lui/lw) that returns the class handle slot g_igCollisionGroupList_metaObject_0056dcd8,
+ * the "published MetaObject slot" passed to igMetaObject_RegisterClass in
+ * src/engine/igCollisionGroupList_Register.c; the same shape as igObjectList_GetPublishedMetaObject
+ * (rule `published-accessor`, docs/engine/naming.md). The slot is read through the
+ * array extern so the load stays absolute. */
+extern int g_igCollisionGroupList_metaObject_0056dcd8[4];
+int Gap__Core__igCollisionGroupList__vfunc_22(void) {
+    return g_igCollisionGroupList_metaObject_0056dcd8[0];
+}

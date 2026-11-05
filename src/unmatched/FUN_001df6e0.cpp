@@ -1,0 +1,67 @@
+struct O {
+    virtual void d0();
+    virtual void d1();
+    virtual void d2();
+    virtual void d3();
+    virtual void d4();
+    virtual void d5();
+    virtual void d6();
+    virtual void d7();
+    virtual void d8();
+    virtual void d9();
+    virtual void d10();
+    virtual void d11();
+    virtual void d12();
+    virtual void d13();
+    virtual void d14();
+    virtual void d15();
+    virtual void d16();
+    virtual void d17();
+    virtual void d18();
+    virtual void d19();
+    virtual void d20();
+    virtual void d21();
+    virtual void d22();
+    virtual void d23();
+    virtual void d24();
+    virtual void d25();
+    virtual void d26();
+    virtual void d27();
+    virtual void d28();
+    virtual void d29();
+    virtual void d30();
+    virtual void d31();
+    virtual void d32();
+    virtual void d33();
+    virtual void d34();
+    virtual void d35();
+    virtual void d36();
+    virtual int a();
+    virtual void e0();
+    virtual void e1();
+    virtual void e2();
+    virtual void e3();
+    virtual void e4();
+    virtual void e5();
+    virtual void e6();
+    virtual void e7();
+    virtual void e8();
+    virtual void e9();
+    virtual void e10();
+    virtual void e11();
+    virtual void e12();
+    virtual void e13();
+    virtual void e14();
+    virtual void e15();
+    virtual long long b(int);
+    char pad[76];
+    long long f80;
+};
+extern "C" long long FUN_001df6e0(O *o) {
+    int r = o->a();
+    long long v = 0;
+    if (r != 0) {
+        v = o->b(0);
+    }
+    return o->f80 + v;
+}

@@ -1,0 +1,32 @@
+# NDMW.AFS entry 625 -- each texture's igImage/palette pairing, following the id->class
+# table rule (finding #476): `_pClut` ranks among the ids of its class; that rank names
+# the igClut record, whose `_pData` is the palette block.
+# The 26 RGB decodes this reproduces are checked pixel-for-pixel against the live dump by
+# `../testing/verify_texture_pack.py`; this file is the offline fixture the port diffs.
+# name	width	height	image_id	palette_id	grid_off	palette_off
+BJGR01.png	64	64	157	134	0x01f910	0x01bd0c
+FD01BJ03.png	64	32	139	86	0x01c50c	0x00ed08
+FD01BJ05.png	64	64	94	111	0x00f108	0x015108
+FD01BJ07.png	64	64	117	52	0x015908	0x00c008
+FD01BJ09.png	64	64	129	84	0x01a908	0x00e908
+FD02BJ07.png	32	32	58	80	0x00c408	0x00dd08
+FD02BJ15.png	64	64	146	147	0x01d110	0x01e110
+FD04BJ06.png	32	32	115	79	0x015508	0x00d908
+P10G00n.png	128	64	163	21	0x021910	0x002c08
+P10G00s.png	128	64	31	177	0x007808	0x02bd10
+P10G02n.png	64	64	160	26	0x020910	0x003008
+P12G00n.png	256	128	168	27	0x023910	0x003408
+P12G00s.png	128	128	29	175	0x003808	0x02b910
+P12W00.png	64	64	34	32	0x009c08	0x009808
+T1BJ13a1.png	64	32	83	74	0x00e108	0x00cd08
+TA01BJ10.png	128	64	179	189	0x02c110	0x030510
+TA01BJ11.png	128	128	107	49	0x011108	0x00bc08
+TA01BJ13.png	64	32	42	135	0x00b408	0x01c10c
+TA01BJ16.png	64	32	97	133	0x010108	0x01b90c
+TA01BJ17.png	64	32	155	36	0x01f110	0x00ac08
+TA01BJ18.png	64	32	102	37	0x010908	0x00b008
+TA01GM07.png	128	64	186	187	0x02e110	0x030110
+TA01SP99.png	128	128	124	150	0x016908	0x01e510
+TA02BJ10.png	32	32	73	153	0x00c908	0x01ed10
+TA02BJ16.png	64	32	78	152	0x00d108	0x01e910
+sfZ0SY10.png	16	16	69	140	0x00c808	0x01cd0c

@@ -1,0 +1,6 @@
+be:sd("MODELCTRL", "g_flislandz04", 0, "SQ_SWON")
+be:DMchkSD("MODELCTRL", "g_flislandz04", 0, "ISSEQNAME", "SQ_SWON", "==0")
+be:DMchkSD("MODELCTRL", "g_flislandz04", 0, "ISSEQNAME", "SQ_SWON", "!=0")
+be:DMsetSD("HITLANDMODEL", "hitflislandz04", 0, "OFFHIT")
+be:DMsetSD("MODELCTRL", "g_dbossgate", 0, "SQ_POWERON")
+be:DMrun()

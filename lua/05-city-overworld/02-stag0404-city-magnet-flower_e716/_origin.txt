@@ -1,0 +1,3 @@
+AFS entry 716  |  stag0404-city-magnet-flower  |  Magnet-flower puzzle (g_magnetflore)
+A file's numeric prefix is its chunk index in that pack entry.
+32 chunks

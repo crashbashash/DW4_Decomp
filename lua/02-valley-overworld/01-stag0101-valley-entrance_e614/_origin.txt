@@ -1,0 +1,3 @@
+AFS entry 614  |  stag0101-valley-entrance  |  Leads to dungeon 1 (dng101b1) + Goblimon fortress (stagGF01)
+A file's numeric prefix is its chunk index in that pack entry.
+44 chunks

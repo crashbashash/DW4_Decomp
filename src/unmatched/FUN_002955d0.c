@@ -1,0 +1,19 @@
+/* 0x002955d0 — FUN_002955d0. m2c draft + mechanical fixups, then verified
+ * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
+ * The SHAPE matched; the C types are a guess. */
+int FUN_00295658();
+int FUN_002968c0();
+int FUN_0029a320();
+extern int DAT_004f3758[4];
+extern int DAT_004f3788[4];
+void FUN_002955d0(int arg0, int arg1) {
+    if (FUN_002968c0() == 0) {
+        FUN_0029a320(&DAT_004f3758[0]);
+        return;
+    }
+    if (arg1 == 0) {
+        FUN_0029a320(&DAT_004f3788[0]);
+        return;
+    }
+    FUN_00295658(arg0, arg1, 0, -1);
+}

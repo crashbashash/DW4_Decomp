@@ -1,0 +1,3 @@
+AFS entry 457  |  dngq2b2e  |  quest 2 stage 2 easy (mummy puzzle)
+A file's numeric prefix is its chunk index in that pack entry.
+45 chunks

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Blocks a commit message that contains host-identifying details (docs/host-details-policy.md).
+root=$(git rev-parse --show-toplevel) || exit 1
+exec python3 "$root/scripts/check_host_details.py" --msg "$1"

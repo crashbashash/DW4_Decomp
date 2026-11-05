@@ -1,0 +1,8 @@
+funcOpenMessage("talk", "n_digilff", "fWt")
+funcOneMessage(mswk61733)
+funcOneMessage(mswk61734)
+funcOneMessage(mswk61735)
+funcOneMessage(mswk61736)
+funcOneMessage(mswk61737)
+funcCloseMessage("talk", "n_digilff", "fWt")
+be:DMrun()

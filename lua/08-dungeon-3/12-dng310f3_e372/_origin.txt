@@ -1,0 +1,3 @@
+AFS entry 372  |  dng310f3  |  final area 3 -> boss stagBS03
+A file's numeric prefix is its chunk index in that pack entry.
+81 chunks

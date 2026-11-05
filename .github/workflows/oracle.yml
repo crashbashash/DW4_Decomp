@@ -1,0 +1,242 @@
+# The byte oracle, run on every push by a private self-hosted runner.
+#
+# `make check` and `make link` need the retail ELF and the proprietary compiler, so the hosted
+# runners cannot prove anything about the bytes (see progress.yml). This workflow runs the gates
+# a change's author runs before reporting it (CONTRIBUTING.md) on a runner labelled `dw4-oracle` that
+# holds those private inputs outside the checkout, so every pushed commit gets a verdict from a
+# machine the pusher does not control. What the runner is, what it proves and what it cannot:
+# docs/engine/oracle-runner.md.
+#
+# Private inputs never enter the repository. The runner's own `.env` file (outside Git) sets
+#   DW4_LOCAL_TOOLS  absolute path of the tools folder the repo's `local` link points to
+#   DW4_ROMS         absolute path of the folder the repo's `roms` link points to
+#   DW4_BUILD_LOCK   a lock file shared with the machine's interactive builds
+# The values are masked from the log and are never written anywhere in this file.
+#
+# Triggers: every push to every branch, plus a manual run. There is deliberately no
+# `pull_request` trigger: the repository is public and the runner is self-hosted, and a
+# pull request from a fork would run the fork's workflow file on this machine. This trigger
+# list must never grow a `pull_request` entry.
+#
+# The progress workflow's bot commit cannot start a run here: it is pushed with the default
+# GITHUB_TOKEN, which never triggers workflows, and its message carries `[skip ci]`, which
+# GitHub honours for `on: push` (the bot commits in the history show no runs at all).
+name: oracle
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      fresh:
+        description: "Ignore the build cache (make check-fresh / link-fresh), as before a milestone"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# One oracle run at a time; a queued run waits for the current one instead of cancelling it,
+# so every pushed commit keeps its own verdict.
+concurrency:
+  group: oracle
+  cancel-in-progress: false
+
+defaults:
+  run:
+    # bash with pipefail: a `make … | tee log` pipeline fails when make fails.
+    shell: bash
+
+jobs:
+  oracle:
+    runs-on: [self-hosted, dw4-oracle]
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          # The checkout keeps build/ between runs so tools/buildcache.py only recompiles what
+          # changed (the cache is keyed by content, as in a developer's clone). Everything else
+          # that is not tracked is removed below. No step needs git credentials afterwards, so
+          # the token is not left in the work directory of this machine.
+          clean: false
+          persist-credentials: false
+
+      - name: Remove everything untracked except the build cache
+        run: |
+          git clean -ffdx --exclude=build
+          git status --porcelain --ignored | grep -v '^!! build/' || true
+          # Where the gate logs and the collected summary lines go; outside the checkout.
+          # (The `runner` context is not available in a job-level `env`, so it is exported here.)
+          echo "ORACLE_LOG=${RUNNER_TEMP}/oracle" >> "$GITHUB_ENV"
+          mkdir -p "${RUNNER_TEMP}/oracle" && rm -f "${RUNNER_TEMP}/oracle"/*
+
+      - name: Link the private inputs (local/, roms/) from the runner environment
+        run: |
+          missing=""
+          for v in DW4_LOCAL_TOOLS DW4_ROMS DW4_BUILD_LOCK; do
+            [ -n "${!v:-}" ] || missing="$missing $v"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::runner environment incomplete: unset$missing. Set them in the runner's .env file (docs/engine/oracle-runner.md); they are never set in this workflow."
+            exit 1
+          fi
+          # Keep the host's paths out of the log even if a tool prints them.
+          echo "::add-mask::$DW4_LOCAL_TOOLS"
+          echo "::add-mask::$DW4_ROMS"
+          echo "::add-mask::$DW4_BUILD_LOCK"
+          ln -sfn "$DW4_LOCAL_TOOLS" local
+          ln -sfn "$DW4_ROMS" roms
+          # the dtk-template layout: the retail executable of each version sits in orig/<GAMEID>/
+          ln -sfn ../../roms/dw4/game.elf orig/SLUS-20836/SLUS_208.36
+          for f in orig/SLUS-20836/SLUS_208.36 local/wibo local/mwcps2/3.0-011126/mwccps2.exe; do
+            if [ ! -e "$f" ]; then
+              echo "::error::$f is missing behind the runner's link; the runner's DW4_LOCAL_TOOLS / DW4_ROMS do not point at a complete private input set."
+              exit 1
+            fi
+          done
+          mkdir -p "$(dirname "$DW4_BUILD_LOCK")"
+          echo "private inputs linked: local/ and orig/SLUS-20836/SLUS_208.36 present"
+
+      # ---- the gates, in the order CONTRIBUTING.md lists them ---------------------------
+      # Each make runs under the machine's build lock so it never overlaps an interactive build.
+      # A failing gate does not stop the later ones (continue-on-error); the verdict and the
+      # summary at the end fail the job.
+
+      - name: make check
+        id: check
+        continue-on-error: true
+        env:
+          FRESH: ${{ inputs.fresh }}
+        run: |
+          target=check
+          if [ "$FRESH" = "true" ]; then target=check-fresh; fi
+          flock "$DW4_BUILD_LOCK" make "$target" 2>&1 | tee "$ORACLE_LOG/check.log"
+
+      - name: make link
+        id: link
+        continue-on-error: true
+        env:
+          FRESH: ${{ inputs.fresh }}
+        run: |
+          target=link
+          if [ "$FRESH" = "true" ]; then target=link-fresh; fi
+          flock "$DW4_BUILD_LOCK" make "$target" 2>&1 | tee "$ORACLE_LOG/link.log"
+
+      - name: debt ratchet (when tools/progress.py has --debt-check)
+        id: debt
+        continue-on-error: true
+        run: |
+          # Runs before the verdict because the hook's parser also reads its result (DEBT_RC:
+          # the exit code, or `skip` while the option does not exist at this commit).
+          if python3 tools/progress.py --help 2>/dev/null | grep -q -- '--debt-check'; then
+            rc=0
+            python3 tools/progress.py --debt-check 2>&1 | tee "$ORACLE_LOG/debt.log" || rc=$?
+          else
+            rc=skip
+            echo "progress --debt-check: not available at this commit, skipped" | tee "$ORACLE_LOG/debt.log"
+          fi
+          echo "debt_rc=$rc" >> "$GITHUB_OUTPUT"
+          [ "$rc" = skip ] || exit "$rc"
+
+      - name: Byte oracle verdict (mismatches 0, no lost matches, link byte-identical)
+        id: verdict
+        continue-on-error: true
+        env:
+          DEBT_RC: ${{ steps.debt.outputs.debt_rc || 'skip' }}
+        run: |
+          # The byte-gate parser kept in .githooks/pre-push (testing/test_prepush_gate.py covers it):
+          # mismatch count from the `(N not matched: M mismatch, D debt)` line must be 0, the
+          # `cover :` matched count must be >= functions.fully_verified in docs/progress.json
+          # of the pushed commit, and `make link` must print `linkcheck: BYTE-IDENTICAL`.
+          # Any further gate that parser grows (it reads DEBT_RC from the environment) is
+          # applied here as well, so the verdict has one definition.
+          touch "$ORACLE_LOG/check.log" "$ORACLE_LOG/link.log"
+          baseline=$(python3 -c 'import json; f = json.load(open("docs/progress.json"))["functions"]; print(f.get("fully_verified") or f["matched"])')
+          {
+            echo '```'
+            grep -E '^cover *:|^ *\([0-9]+ (not matched|mismatched)|^ *!! .*compile failed|^linkcheck:' "$ORACLE_LOG/check.log" "$ORACLE_LOG/link.log" -h || echo "(no cover / linkcheck lines: a make did not finish)"
+            echo "baseline: functions.fully_verified = $baseline (docs/progress.json at ${GITHUB_SHA::9})"
+          } >> "$ORACLE_LOG/lines.md"
+          DW4_PREPUSH_GATE_ONLY=1 sh .githooks/pre-push "$ORACLE_LOG/check.log" "$ORACLE_LOG/link.log" "$baseline" 2>&1 | tee "$ORACLE_LOG/verdict.log"
+          rc=${PIPESTATUS[0]}
+          { grep '^gate ' "$ORACLE_LOG/verdict.log"; echo '```'; } >> "$ORACLE_LOG/lines.md"
+          exit "$rc"
+
+      - name: make typed-check
+        id: typed
+        continue-on-error: true
+        run: |
+          flock "$DW4_BUILD_LOCK" make typed-check 2>&1 | tee "$ORACLE_LOG/typed.log"
+          grep -q 'baseline matches' "$ORACLE_LOG/typed.log"
+
+      - name: make hygiene
+        id: hygiene
+        continue-on-error: true
+        run: |
+          flock "$DW4_BUILD_LOCK" make hygiene 2>&1 | tee "$ORACLE_LOG/hygiene.log"
+          grep -q 'check_host_details: clean' "$ORACLE_LOG/hygiene.log"
+
+      - name: progress files up to date
+        id: progress
+        continue-on-error: true
+        run: |
+          python3 tools/progress.py --check 2>&1 | tee "$ORACLE_LOG/progress.log"
+          grep -q 'up to date' "$ORACLE_LOG/progress.log"
+
+      - name: tools unit tests
+        id: unittests
+        continue-on-error: true
+        run: |
+          python3 -m unittest discover -s tools -p 'test_*.py' 2>&1 | tee "$ORACLE_LOG/unittests.log"
+
+      # ---- the summary: every gate's line, and the job fails if any gate failed ----------
+      - name: Summary
+        if: always()
+        env:
+          OUTCOMES: >-
+            check=${{ steps.check.outcome }}
+            link=${{ steps.link.outcome }}
+            debt=${{ steps.debt.outcome }}
+            verdict=${{ steps.verdict.outcome }}
+            typed=${{ steps.typed.outcome }}
+            hygiene=${{ steps.hygiene.outcome }}
+            progress=${{ steps.progress.outcome }}
+            unittests=${{ steps.unittests.outcome }}
+        run: |
+          mkdir -p "$ORACLE_LOG"
+          # pick PATTERN LOG: the last matching line of a gate's log, or nothing (never a failure).
+          pick() { { grep -E "$1" "$ORACLE_LOG/$2.log" 2>/dev/null || true; } | tail -n 1; }
+          last() { if [ -s "$ORACLE_LOG/$1.log" ]; then tail -n 1 "$ORACLE_LOG/$1.log"; else echo "(did not run)"; fi; }
+          failed=0
+          {
+            echo "## Byte oracle: ${GITHUB_SHA::9} on \`$GITHUB_REF_NAME\`"
+            echo
+            echo "| gate | outcome | line |"
+            echo "|---|---|---|"
+            for pair in $OUTCOMES; do
+              gate=${pair%%=*}; outcome=${pair#*=}
+              case $gate in
+                check)     line=$(pick '^ *\([0-9]+ (not matched|mismatched)' check); [ -n "$line" ] || line=$(pick '^cover *:' check) ;;
+                link)      line=$(pick '^linkcheck:' link) ;;
+                verdict)   line=$(pick '^pre-push:' verdict) ;;
+                typed)     line=$(pick 'typed coverage' typed) ;;
+                hygiene)   line=$(pick 'check_host_details' hygiene) ;;
+                progress)  line=$(pick 'progress --check' progress) ;;
+                unittests) line=$(pick '^(OK|FAILED)' unittests) ;;
+                *)         line= ;;
+              esac
+              [ -n "$line" ] || line=$(last "$gate")
+              case $outcome in
+                success) mark="pass" ;;
+                *) mark="FAIL ($outcome)"; failed=1 ;;
+              esac
+              printf '| %s | %s | `%s` |\n' "$gate" "$mark" "$(echo "$line" | sed 's/|/\\|/g; s/`//g')"
+            done
+            echo
+            [ -s "$ORACLE_LOG/lines.md" ] && cat "$ORACLE_LOG/lines.md"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+          if [ "$failed" -ne 0 ]; then
+            echo "::error::the byte oracle refused ${GITHUB_SHA::9}: see the gate table above"
+            exit 1
+          fi
+          echo "the byte oracle holds for ${GITHUB_SHA::9}"

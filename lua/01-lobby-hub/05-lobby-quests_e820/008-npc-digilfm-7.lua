@@ -1,0 +1,13 @@
+be:FLGset(409, 0)
+be:FLGset(379, 0)
+be:FLGset(571, 0)
+be:FLGset(424, 0)
+funcCloseMessage("talk", "n_digilfm", "fWt", 4, "noturn")
+funcOpenMessage("talk", "n_digilfm", "fWt", 4)
+mswk25074 = "TALKFONT02/font00/I<27>"
+funcOneMessage(mswk25074)
+funcCloseMessage("talk", "n_digilfm", "fWt", 4)
+be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN01/SET", 10)
+be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN00/SET", 10)
+be:DMsetSD("MODELCTRL", "g_cytrerp2", 0, "SQ_POWERON")
+be:DMrun()

@@ -1,0 +1,11 @@
+# Body-derived allocator owner/selector/dispatch names; finding #894.
+# Reverse list60/list58 search tests allocator slots132 (available) and340
+# (buffer membership). Encoding uses kind116, runtime byte and IndexOf.
+# Constant/no-op leaves retain address names: their broader roles are unknown.
+0x002f04f0	Memory_FindOwningAllocator	engine
+0x002f0650	igAllocator_EncodeIndexAlias	engine
+0x002f0670	igAllocator_EncodeIndex	engine
+0x002f00d0	Memory_GetDefaultAllocator	engine
+0x002ed1c0	Memory_AllocateBufferViaSharedTail	engine
+0x002ed200	Memory_AllocateDefaultBuffer	engine
+0x002ed240	Memory_AllocateBufferDirect	engine

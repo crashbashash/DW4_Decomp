@@ -1,0 +1,26 @@
+# The igBinary reader — the loader that turns a pack into an object graph.
+#
+# Curated, not generated: every name here comes from decompiling the function and
+# reading it against the facts findings #422/#424/#425/#426 established about the
+# object-section reader.  The class prefix is recovered, not invented — 0x002e95e0,
+# the 17-section dispatch that calls all of these, is already `igIGBFile_ReadFile`.
+#
+# The chain, from finding #422 (each arrow is a `jal` in the matched C):
+#   igIGBFile_ReadFile (0x002e95e0, 17-section dispatch)
+#     -> 0x002e7390 / 0x002e79a0   read the object section, version >= 4 / < 4
+#          -> 0x002e7100          reads one object: first word = class index,
+#                                 advance = its own field-reader byte count +
+#                                 4 * ctx+0xd8 (never the file's recordSize)
+#   and finding #426:
+#     0x002e6090  parses the blob's 12-word header and maps word N -> a ctx slot
+#                 (word 1 -> ctx+0x70, the object loop count)
+#     0x002e9f30  allocates the section buffer: ctx+0x108 = buffer,
+#                 ctx+0x104 = capacity = align4(max(ctx+0xa4, blockSize, size))
+#
+# <va>	<name>	<module>
+#
+0x002e6090	igIGBFile_ReadHeader	engine
+0x002e9f30	igIGBFile_GetSectionBuffer	engine
+0x002e7100	igIGBFile_ReadObject	engine
+0x002e7390	igIGBFile_ReadObjectSection	engine
+0x002e79a0	igIGBFile_ReadObjectSectionOld	engine

@@ -1,0 +1,113 @@
+entry	stage	chunk	proto	pc	modulus	category
+e0417	09-dungeon-4/06-dng412b3_e417	0028	main	4	1	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0029	main	4	19	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0029	main	21	1	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0030	main	4	19	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0030	main	21	1	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0031	main	4	19	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0031	main	21	1	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0032	main	4	19	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0032	main	21	1	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0033	main	4	19	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0033	main	21	1	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0034	main	4	19	Machine Pit rail/platform layout
+e0417	09-dungeon-4/06-dng412b3_e417	0034	main	21	1	Machine Pit rail/platform layout
+e0425	09-dungeon-4/07-dng412b4_e425	0007	main	4	19	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0007	main	10	2	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0007	main	51	1	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0069	main	4	19	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0069	main	10	2	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0069	main	51	1	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0070	main	4	19	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0070	main	10	2	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0070	main	51	1	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0071	main	4	19	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0071	main	10	2	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0071	main	51	1	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0072	main	4	19	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0072	main	10	2	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0072	main	51	1	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0073	main	4	19	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0073	main	10	2	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0073	main	51	1	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0074	main	4	19	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0074	main	10	2	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0074	main	51	1	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0075	main	4	19	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0075	main	10	2	Machine Pit rail/platform + station layout
+e0425	09-dungeon-4/07-dng412b4_e425	0075	main	51	1	Machine Pit rail/platform + station layout
+e0540	10-quest-dungeons/14-quest-5-6-rare-six-doors_e540	0038	0	11	3	Quest 5-6 "rare six doors" room/link pattern
+e0556	10-quest-dungeons/16-dngq7b2e_e556	0047	main	6	10	Quest item counter reward
+e0607	14-misc/02-stage-clear-sequence_e607	0018	main	51	6	Stage-clear sequence: damage-reaction tier
+e0614	02-valley-overworld/01-stag0101-valley-entrance_e614	0021	main	33	99	First-visit demo enemy (stag0101)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	205	299	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	293	239	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	381	179	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	491	419	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	578	299	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	666	239	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	754	179	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	864	419	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	951	299	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	1039	239	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	1127	179	Crown/elite variant roll (stag0102)
+e0621	02-valley-overworld/02-stag0102-valley-crossroads_e621	0022	main	1237	419	Crown/elite variant roll (stag0102)
+e0635	02-valley-overworld/04-stag0104-valley-cliff_e635	0000	main	187	299	Crown/elite variant roll (stag0104)
+e0635	02-valley-overworld/04-stag0104-valley-cliff_e635	0000	main	275	239	Crown/elite variant roll (stag0104)
+e0635	02-valley-overworld/04-stag0104-valley-cliff_e635	0000	main	363	179	Crown/elite variant roll (stag0104)
+e0635	02-valley-overworld/04-stag0104-valley-cliff_e635	0000	main	473	419	Crown/elite variant roll (stag0104)
+e0642	03-desert-overworld/01-stag0201-desert-entrance_e642	0024	main	25	99	Crown/elite + first-visit demo (stag0201)
+e0642	03-desert-overworld/01-stag0201-desert-entrance_e642	0024	main	472	299	Crown/elite + first-visit demo (stag0201)
+e0642	03-desert-overworld/01-stag0201-desert-entrance_e642	0024	main	560	239	Crown/elite + first-visit demo (stag0201)
+e0642	03-desert-overworld/01-stag0201-desert-entrance_e642	0024	main	648	179	Crown/elite + first-visit demo (stag0201)
+e0642	03-desert-overworld/01-stag0201-desert-entrance_e642	0024	main	758	419	Crown/elite + first-visit demo (stag0201)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0018	main	1	121	Crown/elite + miniboss add-group (stag0202)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0050	main	244	299	Crown/elite + miniboss add-group (stag0202)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0050	main	332	239	Crown/elite + miniboss add-group (stag0202)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0050	main	420	179	Crown/elite + miniboss add-group (stag0202)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0050	main	530	419	Crown/elite + miniboss add-group (stag0202)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0050	main	617	299	Crown/elite + miniboss add-group (stag0202)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0050	main	705	239	Crown/elite + miniboss add-group (stag0202)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0050	main	793	179	Crown/elite + miniboss add-group (stag0202)
+e0649	03-desert-overworld/02-stag0202-desert-ruins_e649	0050	main	903	419	Crown/elite + miniboss add-group (stag0202)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	25	99	Crown/elite + first-visit demo (stag0301)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	472	299	Crown/elite + first-visit demo (stag0301)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	560	239	Crown/elite + first-visit demo (stag0301)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	648	179	Crown/elite + first-visit demo (stag0301)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	758	419	Crown/elite + first-visit demo (stag0301)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	845	299	Crown/elite + first-visit demo (stag0301)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	933	239	Crown/elite + first-visit demo (stag0301)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	1021	179	Crown/elite + first-visit demo (stag0301)
+e0679	04-forest-overworld/01-stag0301-forest-entrance_e679	0015	main	1131	419	Crown/elite + first-visit demo (stag0301)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0014	main	1	121	Crown/elite + miniboss add-group (stag0302)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0028	main	264	299	Crown/elite + miniboss add-group (stag0302)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0028	main	352	239	Crown/elite + miniboss add-group (stag0302)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0028	main	440	179	Crown/elite + miniboss add-group (stag0302)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0028	main	550	419	Crown/elite + miniboss add-group (stag0302)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0028	main	637	299	Crown/elite + miniboss add-group (stag0302)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0028	main	725	239	Crown/elite + miniboss add-group (stag0302)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0028	main	813	179	Crown/elite + miniboss add-group (stag0302)
+e0686	04-forest-overworld/02-stag0302-forest-grove_e686	0028	main	923	419	Crown/elite + miniboss add-group (stag0302)
+e0702	04-forest-overworld/04-stag0304-forest-deep_e702	0000	main	38	299	Crown/elite variant roll (stag0304)
+e0702	04-forest-overworld/04-stag0304-forest-deep_e702	0000	main	126	239	Crown/elite variant roll (stag0304)
+e0702	04-forest-overworld/04-stag0304-forest-deep_e702	0000	main	214	179	Crown/elite variant roll (stag0304)
+e0702	04-forest-overworld/04-stag0304-forest-deep_e702	0000	main	324	419	Crown/elite variant roll (stag0304)
+e0709	05-city-overworld/01-stag0403-city-quest-hub_e709	0039	main	61	99	First-visit demo enemy (stag0403)
+e0737	11-bosses/02-boss02-belialvamdemon_e737	0000	main	249	2	Boss02 BelialVamdemon: hit-reaction coin flip
+e0737	11-bosses/02-boss02-belialvamdemon_e737	0000	main	277	2	Boss02 BelialVamdemon: hit-reaction coin flip
+e0737	11-bosses/02-boss02-belialvamdemon_e737	0000	main	305	2	Boss02 BelialVamdemon: hit-reaction coin flip
+e0744	11-bosses/03-boss03-lucemon_e744	0002	main	116	1	Boss03 Lucemon: no-op mod1 draw
+e0744	11-bosses/03-boss03-lucemon_e744	0002	main	135	1	Boss03 Lucemon: no-op mod1 draw
+e0751	11-bosses/04-boss04-devimon-1_e751	0006	main	12	5	Boss04 Devimon-1: teleport spot + UFO corner
+e0751	11-bosses/04-boss04-devimon-1_e751	0023	main	1	3	Boss04 Devimon-1: teleport spot + UFO corner
+e0816	01-lobby-hub/04-lobby-ofanimon-seraphimon_e816	0100	1	1	1	Lobby: no-op mod1 draw
+e0820	01-lobby-hub/05-lobby-quests_e820	0036	1	1	1	Lobby: no-op mod1 draw
+e0820	01-lobby-hub/05-lobby-quests_e820	0044	1	1	1	Lobby: no-op mod1 draw
+e0824	01-lobby-hub/06-lobby-quest-board_e824	0072	1	1	1	Lobby: no-op mod1 draw
+e0824	01-lobby-hub/06-lobby-quest-board_e824	0087	1	1	1	Lobby: no-op mod1 draw
+e0824	01-lobby-hub/06-lobby-quest-board_e824	0088	1	1	1	Lobby: no-op mod1 draw
+e0824	01-lobby-hub/06-lobby-quest-board_e824	0089	1	1	1	Lobby: no-op mod1 draw
+e0828	01-lobby-hub/07-lobby-shops_e828	0008	1	1	1	Lobby: no-op mod1 draw
+e0828	01-lobby-hub/07-lobby-shops_e828	0009	1	1	1	Lobby: no-op mod1 draw
+e0828	01-lobby-hub/07-lobby-shops_e828	0010	1	1	1	Lobby: no-op mod1 draw
+e0828	01-lobby-hub/07-lobby-shops_e828	0020	1	1	1	Lobby: no-op mod1 draw

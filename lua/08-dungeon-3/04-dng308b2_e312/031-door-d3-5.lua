@@ -1,0 +1,3 @@
+be:sd("MODELCTRL", "g_d3door", 6, "SQ_SWON", 30)
+be:sd("HITLANDMODEL", "doorwall07", 0, "OFFHIT", 45)
+be:FLGset(127, 1)

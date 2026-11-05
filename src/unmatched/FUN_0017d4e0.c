@@ -1,0 +1,12 @@
+/* 0x0017d4e0 — FUN_0017d4e0. m2c draft + mechanical fixups, then verified
+ * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
+ * The SHAPE matched; the C types are a guess. */
+#include "dw4/reflected.h"
+void FUN_0017d4e0(igVertexArray *arg0, int arg1, void *arg2) {
+    void *temp_v1;
+
+    temp_v1 = (void *)(*(int *)((char *)(arg0->_vdata) + 4) + (arg1 * 0xC));
+    *(float *)((char *)(arg2) + 0) = (float) *(float *)((char *)(temp_v1) + 0);
+    *(float *)((char *)(arg2) + 4) = (float) *(float *)((char *)(temp_v1) + 4);
+    *(float *)((char *)(arg2) + 8) = (float) *(float *)((char *)(temp_v1) + 8);
+}

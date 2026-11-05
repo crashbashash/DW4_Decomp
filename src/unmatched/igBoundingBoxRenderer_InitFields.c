@@ -1,0 +1,53 @@
+/* 0x0045e0f0 — igBoundingBoxRenderer_InitFields. m2c draft + mechanical fixups, then verified
+ * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
+ * The SHAPE matched; the C types are a guess. */
+#include "dw4/reflected.h"
+int FUN_001356f0(void);
+int FUN_00137850(void);
+int FUN_00137fb0(void);
+int FUN_0013af00(void);
+int FUN_0019f670(void);
+int FUN_0045b420(void);
+int igMetaObject_CreateFields(void *, int *, int);
+void *igMetaObject_GetFieldAt(void *, int);
+int igMetaObject_GetFieldCount(void *);
+int igMetaObject_NameFields(void *, int *, int *, int *, int);
+extern int DAT_004d1940[4];
+extern int DAT_004d1960[4];
+extern int DAT_004d1980[4];
+extern int DAT_004d19a0[4];
+extern int DAT_0058ce18[4];
+void igBoundingBoxRenderer_InitFields(void);
+void igBoundingBoxRenderer_InitFields(void) {
+    void *temp_s2;
+    void *temp_s2_2;
+    void *temp_s2_3;
+    void *temp_s2_4;
+    void *temp_s2_5;
+    void *temp_s2_6;
+    void *temp_s2_7;
+    void *temp_s1;
+    int temp_s0;
+
+    temp_s1 = (void *)DAT_0058ce18[0];
+    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    igMetaObject_CreateFields(temp_s1, &DAT_004d1940[0], 8);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0045b420();
+    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00137fb0();
+    ((igRefMetaField *)temp_s2_2)->_construct = 1;
+    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0013af00();
+    ((igRefMetaField *)temp_s2_3)->_construct = 1;
+    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_001356f0();
+    ((igRefMetaField *)temp_s2_4)->_construct = 1;
+    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00137850();
+    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00137850();
+    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_0019f670();
+    igMetaObject_NameFields(temp_s1, &DAT_004d1960[0], &DAT_004d1980[0], &DAT_004d19a0[0], temp_s0);
+}

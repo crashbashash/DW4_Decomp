@@ -1,0 +1,3 @@
+AFS entry 595  |  dngq8b3v  |  quest 8 stage 3 very hard (e_ldknight)
+A file's numeric prefix is its chunk index in that pack entry.
+120 chunks

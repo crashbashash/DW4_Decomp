@@ -1,0 +1,3 @@
+AFS entry 665  |  stag0204-desert-canyon  |  Leads to dng206f1
+A file's numeric prefix is its chunk index in that pack entry.
+44 chunks

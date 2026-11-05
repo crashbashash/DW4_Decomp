@@ -1,0 +1,117 @@
+# The engine boot chain — from the CRT entry to the frame loop
+
+This is the `main` a native port has to stand in for (porting P2.6/P6.1).  It is recovered from the
+disassembly; the functions are not decompiled yet, so the addresses and the call graph are the
+deliverable.  Everything here is in the EE runtime / Alchemy-core region, which is why a source-level
+port cannot run it until those functions are ported.
+
+## The CRT entry (`entry`, `0x00100008`)
+
+```
+0x100008  _start: clear the GPR file, $f0..$f31, mthi/mtlo/mtsah
+          clear .bss  0x554b00 .. 0x58d280
+0x100198  gp = 0x55c870 ; syscall 60 -> sp
+0x1001c0  syscall 61  = SetupHeap(0x0058d280, -1)          (finding #380)
+0x1001e8  jal 0x1141c8                                      the EE runtime init sequence
+0x1001f0  jal 0x10b160(0)                                   FlushCache
+0x1001f8  ei
+0x1001fc  jal 0x2d1640  = thunk_FUN_001029d0                __init_user / C++ static ctors
+0x100210  lw a0,[0x554f00] ; a1 = 0x554f04 ; jal 0x2595e0   <-- main
+0x100218  jal 0x2d1650  = thunk_FUN_00100bc0                exit / atexit runner
+0x100220  j 0x124d60                                        C++ static destructor runner
+```
+
+`0x1141c8` calls the runtime init sub-sequence `0x113f90`, `0x1140b8`, `0x1146a8`, `0x114820(2)`,
+`0x114a60`, `0x10bcb8`, `0x1142f0`, `0x1137c8` and tail-jumps `0x115ed8`.  `FUN_001029d0` sets up
+four table pointers (`0x522440`, `0x522480`, `0x546fb0`, `0x554858`) and jumps into `0x100c50`
+(the static-initialiser driver).  `FUN_00100bc0` is the atexit list walker
+(`while (e) { next = e->next; e->fn(e->arg, -1); }`).  `FUN_00124d60` walks the C++ static
+destructor list at `0x004854a0` and then re-enters `0x100228`.
+
+## The game's `main` (`FUN_002595e0`, `0x002595e0`, 976 bytes)
+
+Read as a sequence of phases:
+
+| phase | calls |
+| --- | --- |
+| process/argv setup | `0x259a20`, `0x259cd0(argv[0])` |
+| globals | `0x587338 = 2`, `0x587340 = 0x4ec870`, gp flags |
+| SDK/library init | `0x2d16a0`, `0x259d10`, `0x2590c0` (1308 B) |
+| the **app object** at `sp+112` | `0x234900(&obj)`, `0x234d70(&obj, argc, argv)` |
+| allocator / root | `0x2f8a20`, `0x165d20` |
+| **managers** | `0x1a1ae0`, `0x1a7cc0`, `0x1a67c0` (each 52 B, reached through `0x2f8a20`/`0x2ff820`) |
+| scene/parameter setup | `0x25a070`, `0x259f90` |
+| the **frame object** `*(0x57dc50)` | `0x1007e0` / `0x238110`, then `+0xe8` (a frame counter) is incremented |
+| **the loop** | `0x25a8c0` **or** `0x25a580` (chosen by a flag on the app object) |
+| shutdown | `0x30c940`, `0x100610`, `0x25a330`, `0x234b90`, `0x2d1770` |
+
+The `0x1a1ae0`/`0x1a7cc0`/`0x1a67c0` trio is the manager construction (Insight core); the
+temporary is released with `0x2ff820` after each, which is the object-model destructor
+(`igObject`'s refcount release).  `0x25a070`/`0x259f90` build the app's parameter block.
+
+### The managers are named (finding [#503](../findings/findings-0501-0750.md#f503))
+
+Each of the three is `<Class>_Create`: it runs the class's static init
+(`igMetaObject_RunStaticInit(<Class>_Register)`, through the 12-byte `_RunStaticInit` thunks
+`0x1a1ca0`/`0x1a7d90`/`0x1a6890`) and then `igMetaObject_CreateInstance(<Class> MetaObject, owner)`.
+The class is recovered from both ends and they agree — the `_Register` function the thunk tail-calls,
+and the MetaObject global the class's own `_GetMetaObject` accessor lazily fills:
+
+| `main` call | class (`_Create`) | `_RunStaticInit` | MetaObject global | stored at |
+| --- | --- | --- | --- | --- |
+| `0x1a1ae0` | `igEnbayaContextPool_Create` | `0x1a1ca0` | `0x561b60` | `0x562718` |
+| `0x1a7cc0` | `igAnimationCombinerBoneInfoPool_Create` | `0x1a7d90` | `0x562250` | `0x562528` |
+| `0x1a67c0` | `igAnimationStatePool_Create` | `0x1a6890` | `0x5620d8` | `0x562540` |
+
+All six are matched C (`config/SLUS-20836/names/Managers.tsv`, `src/engine/`).  A port reproduces them as
+`igMetaObject_CreateInstance` at the semantic level — allocate the class's reflected size (0x20),
+run `igObject_InitHeader`, stamp the vtable — because its class schema is the recovered reflection,
+so no guest MetaObject pointer is needed to identify the class (`DW4_Port` `src/engine.c`).
+
+## The frame functions (`FUN_0025a580` / `FUN_0025a8c0`)
+
+Both read the global app object `*(0x57dc50)`, set per-frame state and branch on its `+0x18`:
+
+**Both contain lifecycle setup, update/render repetition and teardown.**
+The [clock scheduling recovery](system-clock.md#executable-lifecycle-and-scheduling-contracts-772774)
+shows that `0x25a8c0` can repeat render passes without sampling the world clock
+again; these bodies are not single-frame callbacks.
+The disassembly of `FUN_0025a580` carries the whole sequence — the same subsystem calls the text
+below used to attribute to `0x25a8c0` — so they are two variants `main` chooses between, and the
+README's earlier split into a "non-windowed" and a "windowed/drawing" path read the flag as a
+pipeline split rather than as a variant selector.
+
+* `FUN_0025a580` (`0x25a580`, 832 B) requires `arg0+24 != 0`, writes the app pointer to
+  `*(0x57df80)`, lazily creates `*(0x57dc50)` (`0x1007e0`/`0x238110`), then runs
+  the per-frame field setup (finding [#506](../findings/findings-0501-0750.md#f506)): `+0xe8` (the frame counter) `+= 1`, byte `+0xb4 = 0`,
+  byte `+0xd5 = 0`, byte `+5 = 0`, float `+0x94`/`+0x98`/`+0x9c = 0.1f`, float `+0xa0 = 1.0f`,
+  byte `+0x5c = 0`, byte `+0x5e = 1`, byte `+0xa8 = 1`, and the release block is the finding [#509](../findings/findings-0501-0750.md#f509)
+  real-struct idiom (`FUN_00234ca0` is that release extracted).  It then runs the per-frame work:
+  `0x239390`, `0x238d40`, `0x3343a0`, `0x33bf50`, `0x3719c0`, `0x3b04e0`, `0x463b30(app)`,
+  `0x259f80(app)`, `0x463c70(app)`; builds a list from `0x236f80(app->+0, *(0x587d08))` and, when
+  `*(0x586f20)` is NULL, creates it via `0x2eb010(0x10)`/`0x2eadf0`, then releases the old list at
+  `s0+60` and stores `0x2eaf60(*(0x586f20), &0x4ecf60)`; calls the app's vtable `+152` and then the
+  returned object's `+708` with a stack vector; and polls `app+44` / `s0+16` / `s0+64` / `s0+60`
+  around `0x259d40`, `0x463bc0`, `0x463bb0`, `0x25afe0` and `0x463b70` (finding [#512](../findings/findings-0501-0750.md#f512)).
+* `FUN_0025a8c0` (`0x25a8c0`, 928 B) repeats that opening sequence (`0x239390`, `0x238d40`,
+  `0x463b30(app)`, `0x259f80(app)`, `0x463c70(app)`) and adds a set of `0x4578c0` state setups,
+  its own lazy frame-object create/release, and further present-side calls
+  (`0x463bc0`/`0x463bb0`/`0x22fd70`/`0x230298`/`0x3082b0`/`0x463b70`/`0x2ff820`).
+
+The loop that calls one of them is in `FUN_002595e0` around `0x2598c0`/`0x2598d0`, chosen by a flag
+on the app object.  `FUN_0025a580`'s m2c draft compiles but does not match yet: **207 differing
+words**, size 844 vs retail 832, dominated by callee-saved register allocation (retail spills
+`s0`/`s1`/`s2`; the draft `s0`–`s5`) — reducing live temps, not the structure, is the next step.
+
+## What the port does with this
+
+The native host (`DW4_Port`, `include/dw4/engine.h`) is the same shape — **init → object graph →
+per-frame update → present** — over the parts that are portable today: the platform-seam inventory,
+the reflection object model, the ported `igObject_InitHeader` (`0x2fef20`) and the renderer.  The
+functions above are the target list to port into `dw4_engine_frame`, in this order:
+
+1. `igObject_InitHeader` (`0x2fef20`) — **ported** (all 4-byte offsets).
+2. the manager construction trio and the app object (`0x234900`/`0x234d70`,
+   `0x1a1ae0`/`0x1a7cc0`/`0x1a67c0`);
+3. the frame functions `0x25a580`/`0x25a8c0` (they need the renderer seam and the manager state);
+4. `FUN_002595e0` itself once its callees exist.

@@ -1,0 +1,77 @@
+# Publishes the progress numbers on every push to main.
+#
+# `make check` is the oracle, but it needs the retail ELF and the proprietary compiler, so CI
+# cannot verify anything. What it *can* do is count: `tools/progress.py` reads config/SLUS-20836/symbols.txt
+# (committed) and src/ (committed) and writes PROGRESS.md, docs/progress.json and the one-line
+# block at the top of README.md. Every file in src/ was written only after tools/verify.py proved
+# it byte-identical to retail, so the counts are a record of verification — see the "How these
+# numbers are produced" section of PROGRESS.md.
+#
+# The commit it makes is pushed with the default GITHUB_TOKEN, which does not trigger further
+# workflow runs, so this cannot loop; `[skip ci]` is belt and braces.
+#
+# Operator note: a push that adds C gets a follow-up "progress:" commit, so pull before the *next*
+# push (`git pull --rebase`) or that one will be rejected as non-fast-forward. A push with no C in
+# it changes nothing and gets no follow-up.
+name: progress
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: progress-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  progress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: the script itself needs none of it (its output carries no date or
+          # revision), but the follow-up commit below rebases onto and pushes to the branch.
+          fetch-depth: 0
+
+      - name: Check typed coverage has not regressed
+        # The count of field accesses written as a recovered struct member must never fall
+        # (tools/typed_coverage.py).  The *percentage* is not gated, because the
+        # m2c loop keeps adding matched -- and therefore untyped -- C, so the ratio can fall
+        # while the count grows.  A gain also fails here until the baseline is re-recorded, so
+        # every change in coverage is a reviewed diff in config/typed-coverage.json.
+        run: python3 tools/typed_coverage.py --check
+
+      - name: Regenerate the progress files
+        run: |
+          python3 tools/progress.py
+
+      - name: Check the build tools' explicit-path options
+        run: python3 -m unittest discover -s tools -p 'test_build_options.py'
+
+      - name: Summarise the run
+        run: |
+          echo "Checked out \`$(git rev-parse --short HEAD)\` (\`tools/progress.py\` output is a function of the tree, not of the revision)." >> "$GITHUB_STEP_SUMMARY"
+          echo >> "$GITHUB_STEP_SUMMARY"
+          sed -n '1,40p' PROGRESS.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit and push if anything changed
+        run: |
+          set -euo pipefail
+          # `git status`, not `git diff`: on a fresh checkout the generated files may be untracked.
+          if [ -z "$(git status --porcelain -- PROGRESS.md docs/progress.json README.md)" ]; then
+            echo "Progress is unchanged; nothing to publish."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add PROGRESS.md docs/progress.json README.md
+          # The one-line report states C/C++ figures, with the asm bodies left out, and the
+          # fully-linked share of the section from C/C++, so the log never counts asm bodies.
+          git commit -m "progress: $(python3 tools/progress.py --report) [skip ci]"
+          # someone may have pushed while this job ran
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

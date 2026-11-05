@@ -1,0 +1,36 @@
+# Fails a push or pull request that adds text identifying a developer's machine or account
+# (home paths, hardware models, controller brands, driver versions, device ids, personal e-mail,
+# private addresses, credentials).  Rules and rationale: docs/host-details-policy.md.
+name: hygiene
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  host-details:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checker self-test
+        run: python3 testing/test_check_host_details.py
+      - name: Whole tree and the findings register
+        run: python3 scripts/check_host_details.py --tree && python3 scripts/findings.py check
+      - name: Added lines and commit messages in this push or pull request
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            RANGE="origin/${{ github.base_ref }}..HEAD"
+          else
+            BEFORE="${{ github.event.before }}"
+            case "$BEFORE" in 0000000000000000000000000000000000000000|"") RANGE="" ;; *) RANGE="$BEFORE..${{ github.sha }}" ;; esac
+          fi
+          if [ -n "$RANGE" ] && git rev-parse --verify -q "${RANGE%%..*}" >/dev/null; then
+            python3 scripts/check_host_details.py --range "$RANGE"
+          else
+            echo "no comparable base (new branch or rewritten history): tree check above covers the current content"
+          fi

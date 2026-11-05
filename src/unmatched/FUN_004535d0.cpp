@@ -1,0 +1,44 @@
+#include "dw4/reflected.h"
+struct V { float x; float y; int z; };
+struct P { float x; float y; };
+struct R { char pad0[8]; float f8; float f12; float f16; float f20; float f24; float f28; float f32; float f36; };
+class DW4VC_116_2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int vX(int, V *); };
+class DW4VC_200_3 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual int vX(int, int, void *); };
+extern "C" void FUN_004535d0(beFontImage *arg0, DW4VC_116_2 *arg1, int arg2, P *arg3, R *arg4);
+void FUN_004535d0(beFontImage *arg0, DW4VC_116_2 *arg1, int arg2, P *arg3, R *arg4) {
+    V a, b, c, d, e, f;
+    P g, h;
+    float x0, y0, x1, y1, ta, tb;
+    int i1, i2, i3, i4, i5;
+    x0 = arg3->x;
+    y0 = arg3->y;
+    x0 = x0 + arg4->f8;
+    y0 = y0 + arg4->f12;
+    x1 = x0 + arg4->f16;
+    y1 = y0 + arg4->f20;
+    a.z = 0; a.x = x0; a.y = y0;
+    arg1->vX(arg2, &a);
+    b.x = x1; b.z = 0; b.y = y1;
+    i1 = arg2 + 1;
+    arg1->vX(i1, &b);
+    c.x = x1; c.z = 0; c.y = y0;
+    i2 = arg2 + 2;
+    arg1->vX(i2, &c);
+    d.y = y0; d.z = 0; d.x = x0;
+    i3 = arg2 + 3;
+    arg1->vX(i3, &d);
+    e.x = x0; e.z = 0; e.y = y1;
+    i4 = arg2 + 4;
+    arg1->vX(i4, &e);
+    f.x = x1; f.z = 0; f.y = y1;
+    i5 = arg2 + 5;
+    arg1->vX(i5, &f);
+    ((DW4VC_200_3 *)arg1)->vX(0, arg2, &arg4->f24);
+    ((DW4VC_200_3 *)arg1)->vX(0, i1, &arg4->f32);
+    ta = arg4->f28; tb = arg4->f32; g.x = tb; g.y = ta;
+    ((DW4VC_200_3 *)arg1)->vX(0, i2, &g);
+    ((DW4VC_200_3 *)arg1)->vX(0, i3, &arg4->f24);
+    ta = arg4->f36; tb = arg4->f24; h.x = tb; h.y = ta;
+    ((DW4VC_200_3 *)arg1)->vX(0, i4, &h);
+    ((DW4VC_200_3 *)arg1)->vX(0, i5, &arg4->f32);
+}

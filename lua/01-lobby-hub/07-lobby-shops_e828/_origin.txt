@@ -1,0 +1,3 @@
+AFS entry 828  |  lobby-shops  |  Lobby shops: bank + disk (bankshop.lua, diskshop.lua)
+A file's numeric prefix is its chunk index in that pack entry.
+60 chunks

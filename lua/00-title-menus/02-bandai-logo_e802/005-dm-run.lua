@@ -1,0 +1,8 @@
+be:DMsetSD("MODELCTRL", "j_bandailogo", 0, "GENERATE", "SQ_OPEN")
+be:DMchkSD("MODELCTRL", "j_bandailogo", 0, "ISSEQNAME", "SQ_CLOSE", "==0")
+be:DMchkSD("MODELCTRL", "j_bandailogo", 0, "ISSEQNAME", "SQ_CLOSE", "!=0")
+be:DMsetSD("MODELCTRL", "j_rating", 0, "GENERATE", "SQ_OPEN")
+be:DMchkSD("MODELCTRL", "j_rating", 0, "ISSEQNAME", "SQ_CLOSE", "==0")
+be:DMchkSD("MODELCTRL", "j_rating", 0, "ISSEQNAME", "SQ_CLOSE", "!=0")
+be:DMsetSD("STAGECTL", nil, -1, "NEXTSTAGE", "stagis09", 1)
+be:DMrun()

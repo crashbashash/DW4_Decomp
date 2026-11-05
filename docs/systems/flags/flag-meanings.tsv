@@ -1,0 +1,644 @@
+flag	meaning	confidence	evidence
+0	global/story flag (5 regions)	low	heuristic (cross-region)
+1	intro step 0 (game start)	high	set in lobby cutscene e0816
+2	intro step 1	high	set in e0816; checked by Leomon (e0820)
+3	intro step 2	high	set in e0816
+4	intro step 3	high	set in e0816
+5	intro step 4	high	set in e0816
+6	main story underway (intro done)	high	set e0816/e0820; checked in city hub e0709
+19	regional flag (quest-dungeons)	low	heuristic
+20	intro flag (checked with 2 in e0820)	medium	set e0603/e0786
+22	intro sub-step	medium	set in e0816
+24	regional flag (lobby-hub)	low	heuristic
+25	regional flag (lobby-hub)	low	heuristic
+26	regional flag (lobby-hub)	low	heuristic
+27	shop NPC dialogue (bank)	medium	e0828
+28	shop NPC dialogue (disk)	medium	e0828
+29	regional flag (lobby-hub)	low	heuristic
+30	shop NPC dialogue	medium	e0828
+31	shop NPC dialogue	medium	e0828
+32	shop NPC dialogue	medium	e0828
+33	regional flag (lobby-hub)	low	heuristic
+34	regional flag (lobby-hub)	low	heuristic
+35	shop NPC dialogue	medium	e0828
+37	regional flag (valley-overworld)	low	heuristic
+38	regional flag (valley-overworld)	low	heuristic
+41	regional flag (valley-overworld)	low	heuristic
+43	regional flag (goblimon-fortress)	low	heuristic
+45	regional flag (desert-overworld)	low	heuristic
+46	regional flag (desert-overworld)	low	heuristic
+47	regional flag (desert-overworld)	low	heuristic
+48	regional flag (desert-overworld)	low	heuristic
+49	global/story flag (2 regions)	low	heuristic (cross-region)
+50	global/story flag (2 regions)	low	heuristic (cross-region)
+51	regional flag (desert-overworld)	low	heuristic
+52	regional flag (desert-overworld)	low	heuristic
+53	regional flag (desert-overworld)	low	heuristic
+54	regional flag (desert-overworld)	low	heuristic
+55	regional flag (desert-overworld)	low	heuristic
+56	global/story flag (2 regions)	low	heuristic (cross-region)
+57	global/story flag (2 regions)	low	heuristic (cross-region)
+62	regional flag (forest-overworld)	low	heuristic
+63	global/story flag (3 regions)	low	heuristic (cross-region)
+64	shop counter interaction	medium	e0828
+66	regional flag (valley-overworld)	low	heuristic
+67	Boss 1 (Apocalymon) defeated	high	set=1 in boss stage e0730
+68	Boss 2 (BelialVamdemon) defeated	high	set=1 in e0737
+69	Boss 3 (Lucemon) defeated	high	set=1 in e0744
+70	Final boss (Devimon) defeated	high	set=1 in e0765
+71	city gate/lever state 1	medium	e0709; also set on quest completion
+72	city gate/lever state 2	medium	e0709
+77	global/story flag (2 regions)	low	heuristic (cross-region)
+82	global/story flag (3 regions)	low	heuristic (cross-region)
+83	Dungeon 4 (LordKnightmon) cleared	high	set=1 in e0425 (dng412b4)
+85	lobby story beat	medium	set in e0816
+86	Final boss / main story cleared	high	set=1 in e0765; checked with 6 in e0709
+87	regional flag (title-menus)	low	heuristic
+88	regional flag (title-menus)	low	heuristic
+89	valley river event	medium	e0628
+90	valley river event	medium	e0628
+91	valley river event	medium	e0628
+92	valley river event	medium	e0628
+93	valley river event	medium	e0628
+94	valley river event	medium	e0628
+95	valley river event	medium	e0628
+96	valley river event	medium	e0628
+97	valley river event	medium	e0628
+98	valley river story event done	high	set in e0628; checked in shops e0828
+100	stage-local: g_d1door	low	heuristic (device name)
+101	stage-local: g_d2door	low	heuristic (device name)
+102	stage-local: g_d1door	low	heuristic (device name)
+103	stage-local: g_d2door	low	heuristic (device name)
+104	stage-local: g_dcap	low	heuristic (device name)
+105	stage-local: g_d2door	low	heuristic (device name)
+106	stage-local: g_d2door	low	heuristic (device name)
+107	stage-local: g_d2door	low	heuristic (device name)
+108	stage-local: g_d1door	low	heuristic (device name)
+109	stage-local: g_ddamagefloor	low	heuristic (device name)
+110	stage-local: g_d2door	low	heuristic (device name)
+111	stage-local: g_d2door	low	heuristic (device name)
+112	stage-local: g_d2door	low	heuristic (device name)
+113	stage-local: g_d2door	low	heuristic (device name)
+114	stage-local: g_d2door	low	heuristic (device name)
+115	stage-local: g_d1door	low	heuristic (device name)
+116	stage-local: g_page	low	heuristic (device name)
+117	stage-local: g_dwbutton2	low	heuristic (device name)
+118	stage-local: g_dwbutton2	low	heuristic (device name)
+119	stage-local: g_dwbutton2	low	heuristic (device name)
+120	stage-local: g_d4door	low	heuristic (device name)
+121	stage-local: g_d2door	low	heuristic (device name)
+122	stage-local: g_dtdoor	low	heuristic (device name)
+123	stage-local: g_d2door	low	heuristic (device name)
+124	stage-local: g_dbutton1	low	heuristic (device name)
+125	stage-local: g_dbutton1	low	heuristic (device name)
+126	stage-local: g_d2door	low	heuristic (device name)
+127	stage-local: g_d2door	low	heuristic (device name)
+128	stage-local: g_d1door	low	heuristic (device name)
+129	stage-local: g_d2door	low	heuristic (device name)
+130	stage-local: g_dwbutton1	low	heuristic (device name)
+131	stage-local: g_dwbutton2	low	heuristic (device name)
+132	stage-local: g_dwbutton2	low	heuristic (device name)
+133	stage-local: g_security	low	heuristic (device name)
+134	stage-local: g_dtdoor	low	heuristic (device name)
+135	stage-local: g_d2door	low	heuristic (device name)
+136	stage-local: g_d2door	low	heuristic (device name)
+137	stage-local: g_dcap	low	heuristic (device name)
+138	stage-local: g_dcap	low	heuristic (device name)
+139	stage-local: g_dcap	low	heuristic (device name)
+140	stage-local: g_dcap	low	heuristic (device name)
+141	stage-local: g_d2door	low	heuristic (device name)
+142	stage-local: g_d2door	low	heuristic (device name)
+143	stage-local: g_d3door	low	heuristic (device name)
+144	stage-local: g_page	low	heuristic (device name)
+145	stage-local: g_d2door	low	heuristic (device name)
+146	stage-local: g_d2door	low	heuristic (device name)
+147	stage-local: g_d4door	low	heuristic (device name)
+148	stage-local: g_d3movecell1	low	heuristic (device name)
+149	stage-local: g_d4door	low	heuristic (device name)
+150	stage-local: g_d4door	low	heuristic (device name)
+151	stage-local: g_dtdoor	low	heuristic (device name)
+152	stage-local: g_dbarrierw3	low	heuristic (device name)
+153	stage-local: g_dcap	low	heuristic (device name)
+154	stage-local: g_dcap	low	heuristic (device name)
+155	stage-local: g_dcap	low	heuristic (device name)
+156	stage-local: g_dtdoor	low	heuristic (device name)
+157	stage-local: g_d3door	low	heuristic (device name)
+158	stage-local: g_dbossgate	low	heuristic (device name)
+159	stage-local: g_dbossgate	low	heuristic (device name)
+160	stage-local: g_d2door	low	heuristic (device name)
+161	stage-local: g_d2door	low	heuristic (device name)
+162	stage-local: g_d2door	low	heuristic (device name)
+163	stage-local: g_d2door	low	heuristic (device name)
+164	stage-local: g_d2door	low	heuristic (device name)
+165	stage-local: g_d2door	low	heuristic (device name)
+166	stage-local: g_d2door	low	heuristic (device name)
+167	stage-local: g_d1door	low	heuristic (device name)
+168	stage-local: g_ddamagefloor	low	heuristic (device name)
+169	stage-local: g_dcap	low	heuristic (device name)
+170	stage-local: g_dcap	low	heuristic (device name)
+171	stage-local: g_dcap	low	heuristic (device name)
+172	stage-local: g_d4door	low	heuristic (device name)
+173	stage-local: g_d4door	low	heuristic (device name)
+174	stage-local: g_d3door	low	heuristic (device name)
+175	stage-local: g_d2door	low	heuristic (device name)
+176	stage-local: g_d4door	low	heuristic (device name)
+177	stage-local: g_d3door	low	heuristic (device name)
+178	stage-local: g_d2door	low	heuristic (device name)
+179	stage-local: g_d4door	low	heuristic (device name)
+180	stage-local: g_d2door	low	heuristic (device name)
+181	stage-local: g_d2door	low	heuristic (device name)
+182	stage-local: g_d3door	low	heuristic (device name)
+183	stage-local: g_d4door	low	heuristic (device name)
+184	stage-local: g_d2door	low	heuristic (device name)
+185	stage-local: g_dtdoor	low	heuristic (device name)
+186	stage-local: g_dbarrierw3	low	heuristic (device name)
+187	stage-local: g_dbarrierw3	low	heuristic (device name)
+188	stage-local: g_d4door	low	heuristic (device name)
+189	stage-local: g_d3movecell2w	low	heuristic (device name)
+190	stage-local: g_d2door	low	heuristic (device name)
+191	stage-local: g_d2door	low	heuristic (device name)
+192	stage-local: g_d2door	low	heuristic (device name)
+193	stage-local scratch flag	low	heuristic
+194	stage-local scratch flag	low	heuristic
+195	stage-local: g_d4door	low	heuristic (device name)
+196	stage-local: g_d4door	low	heuristic (device name)
+197	stage-local scratch flag	low	heuristic
+198	stage-local: g_d4door	low	heuristic (device name)
+199	stage-local scratch flag	low	heuristic
+200	stage-local scratch flag	low	heuristic
+201	stage-local: g_d4door	low	heuristic (device name)
+202	stage-local: g_d2door	low	heuristic (device name)
+203	stage-local: g_d2door	low	heuristic (device name)
+204	stage-local: g_d2door	low	heuristic (device name)
+205	stage-local: g_d2door	low	heuristic (device name)
+206	stage-local: g_d2door	low	heuristic (device name)
+207	stage-local: g_d2door	low	heuristic (device name)
+208	stage-local: g_page	low	heuristic (device name)
+209	stage-local: g_d2door	low	heuristic (device name)
+210	stage-local: g_d2door	low	heuristic (device name)
+211	stage-local: g_d2door	low	heuristic (device name)
+212	stage-local: g_d2door	low	heuristic (device name)
+213	stage-local: g_d2door	low	heuristic (device name)
+214	stage-local scratch flag	low	heuristic
+215	stage-local scratch flag	low	heuristic
+216	stage-local: g_dcap	low	heuristic (device name)
+217	stage-local: g_dcap	low	heuristic (device name)
+218	stage-local: g_dcap	low	heuristic (device name)
+219	stage-local: g_dcap	low	heuristic (device name)
+220	stage-local: g_d4door	low	heuristic (device name)
+221	stage-local scratch flag	low	heuristic
+222	stage-local scratch flag	low	heuristic
+223	stage-local: g_d4door	low	heuristic (device name)
+224	stage-local: g_d4door	low	heuristic (device name)
+225	stage-local scratch flag	low	heuristic
+226	stage-local scratch flag	low	heuristic
+227	stage-local scratch flag	low	heuristic
+228	stage-local scratch flag	low	heuristic
+229	stage-local scratch flag	low	heuristic
+230	stage-local scratch flag	low	heuristic
+231	stage-local scratch flag	low	heuristic
+232	stage-local: g_dcap	low	heuristic (device name)
+233	stage-local: g_d3door	low	heuristic (device name)
+234	stage-local: g_d3door	low	heuristic (device name)
+235	stage-local: g_dcap	low	heuristic (device name)
+236	stage-local scratch flag	low	heuristic
+237	stage-local: g_dbarrierw9	low	heuristic (device name)
+238	stage-local: g_dbarrierw9	low	heuristic (device name)
+239	stage-local: g_dbarrierw9	low	heuristic (device name)
+240	stage-local: g_dbarrierw9	low	heuristic (device name)
+241	stage-local: g_dbarrierw9	low	heuristic (device name)
+242	stage-local: g_dbarrierw9	low	heuristic (device name)
+243	stage-local: g_dbarrierw9	low	heuristic (device name)
+244	stage-local: g_d4door	low	heuristic (device name)
+245	stage-local: g_dbarrierw9	low	heuristic (device name)
+246	stage-local: g_dbarrierw9	low	heuristic (device name)
+247	stage-local: g_dcap	low	heuristic (device name)
+248	stage-local: g_d3door	low	heuristic (device name)
+249	stage-local: g_dcap	low	heuristic (device name)
+250	stage-local: g_page	low	heuristic (device name)
+251	stage-local: g_d3door	low	heuristic (device name)
+252	stage-local: g_d3door	low	heuristic (device name)
+253	stage-local scratch flag	low	heuristic
+254	stage-local scratch flag	low	heuristic
+255	stage-local scratch flag	low	heuristic
+256	stage-local scratch flag	low	heuristic
+257	stage-local: g_security	low	heuristic (device name)
+258	stage-local scratch flag	low	heuristic
+259	stage-local scratch flag	low	heuristic
+260	stage-local: g_d4door	low	heuristic (device name)
+261	stage-local scratch flag	low	heuristic
+262	stage-local scratch flag	low	heuristic
+263	stage-local scratch flag	low	heuristic
+264	stage-local: g_d4door	low	heuristic (device name)
+265	stage-local scratch flag	low	heuristic
+266	stage-local scratch flag	low	heuristic
+267	stage-local scratch flag	low	heuristic
+268	stage-local: g_d4door	low	heuristic (device name)
+269	stage-local: g_d4door	low	heuristic (device name)
+270	stage-local scratch flag	low	heuristic
+271	stage-local scratch flag	low	heuristic
+272	stage-local scratch flag	low	heuristic
+273	stage-local scratch flag	low	heuristic
+274	stage-local scratch flag	low	heuristic
+275	stage-local scratch flag	low	heuristic
+276	stage-local scratch flag	low	heuristic
+277	stage-local scratch flag	low	heuristic
+278	stage-local scratch flag	low	heuristic
+279	stage-local scratch flag	low	heuristic
+280	stage-local scratch flag	low	heuristic
+281	stage-local scratch flag	low	heuristic
+282	stage-local scratch flag	low	heuristic
+283	stage-local: g_dcap	low	heuristic (device name)
+284	stage-local scratch flag	low	heuristic
+285	stage-local scratch flag	low	heuristic
+291	stage-local scratch flag	low	heuristic
+292	dungeon checkpoint (block 1-2)	medium	set at dungeon finales
+293	dungeon checkpoint (block 2-3)	medium	set at dungeon finales
+294	dungeon checkpoint (block 3-4)	medium	set at dungeon finales
+300	regional flag (dungeon-1)	low	heuristic
+301	regional flag (dungeon-2)	low	heuristic
+302	regional flag (dungeon-2)	low	heuristic
+303	regional flag (dungeon-4)	low	heuristic
+320	regional flag (misc)	low	heuristic
+321	global/story flag (2 regions)	low	heuristic (cross-region)
+322	global/story flag (2 regions)	low	heuristic (cross-region)
+323	regional flag (misc)	low	heuristic
+324	global/story flag (2 regions)	low	heuristic (cross-region)
+325	global/story flag (2 regions)	low	heuristic (cross-region)
+326	global/story flag (2 regions)	low	heuristic (cross-region)
+327	global/story flag (2 regions)	low	heuristic (cross-region)
+328	global/story flag (2 regions)	low	heuristic (cross-region)
+329	global/story flag (2 regions)	low	heuristic (cross-region)
+330	global/story flag (2 regions)	low	heuristic (cross-region)
+331	global/story flag (2 regions)	low	heuristic (cross-region)
+332	global/story flag (2 regions)	low	heuristic (cross-region)
+333	global/story flag (2 regions)	low	heuristic (cross-region)
+334	global/story flag (2 regions)	low	heuristic (cross-region)
+335	global/story flag (3 regions)	low	heuristic (cross-region)
+336	regional flag (lobby-hub)	low	heuristic
+337	regional flag (valley-overworld)	low	heuristic
+338	regional flag (valley-overworld)	low	heuristic
+339	regional flag (valley-overworld)	low	heuristic
+340	regional flag (valley-overworld)	low	heuristic
+341	regional flag (valley-overworld)	low	heuristic
+342	regional flag (valley-overworld)	low	heuristic
+343	regional flag (valley-overworld)	low	heuristic
+344	regional flag (valley-overworld)	low	heuristic
+345	regional flag (valley-overworld)	low	heuristic
+346	regional flag (valley-overworld)	low	heuristic
+347	regional flag (valley-overworld)	low	heuristic
+348	regional flag (valley-overworld)	low	heuristic
+349	regional flag (valley-overworld)	low	heuristic
+350	regional flag (valley-overworld)	low	heuristic
+351	regional flag (valley-overworld)	low	heuristic
+352	regional flag (lobby-hub)	low	heuristic
+355	regional flag (valley-overworld)	low	heuristic
+356	regional flag (valley-overworld)	low	heuristic
+357	regional flag (valley-overworld)	low	heuristic
+358	regional flag (desert-overworld)	low	heuristic
+359	regional flag (desert-overworld)	low	heuristic
+360	regional flag (forest-overworld)	low	heuristic
+361	regional flag (forest-overworld)	low	heuristic
+362	city intro battle (Infermon/Megadramon) done	high	set=1 in e0709
+363	regional flag (city-overworld)	low	heuristic
+364	global/story flag (2 regions)	low	heuristic (cross-region)
+368	global/story flag (2 regions)	low	heuristic (cross-region)
+369	global/story flag (2 regions)	low	heuristic (cross-region)
+370	global/story flag (2 regions)	low	heuristic (cross-region)
+371	shop quest state	medium	checked in e0828
+372	global/story flag (2 regions)	low	heuristic (cross-region)
+373	global/story flag (2 regions)	low	heuristic (cross-region)
+374	regional flag (lobby-hub)	low	heuristic
+375	shop story event	medium	e0828
+376	quest 1 done	high	set=1 in e0820
+377	quest 2 done	high	set=1 in e0820
+378	quest 3 done	high	set=1 in e0820
+379	quest 4 done	high	set=1 in e0820
+380	quest 5 done	high	set=1 in e0820
+381	quest chain complete (final gate)	high	checked in e0709
+382	regional flag (misc)	low	heuristic
+383	global/story flag (3 regions)	low	heuristic (cross-region)
+384	quest 1 sub-step	medium	paired with 376 in e0820
+385	quest 2 sub-step	medium	paired with 377 in e0820
+386	quest 3 sub-step	medium	paired with 378 in e0820
+387	quest 4 sub-step	medium	paired with 379 in e0820
+388	quest 5 sub-step	medium	paired with 380 in e0820
+389	quest final sub-step	medium	paired with 381 in e0820
+392	shop event sub-flag	medium	e0828
+393	shop event sub-flag	medium	e0828
+394	regional flag (lobby-hub)	low	heuristic
+395	regional flag (lobby-hub)	low	heuristic
+396	regional flag (lobby-hub)	low	heuristic
+397	regional flag (lobby-hub)	low	heuristic
+398	regional flag (lobby-hub)	low	heuristic
+399	regional flag (lobby-hub)	low	heuristic
+400	regional flag (lobby-hub)	low	heuristic
+401	regional flag (lobby-hub)	low	heuristic
+402	regional flag (lobby-hub)	low	heuristic
+403	regional flag (lobby-hub)	low	heuristic
+404	regional flag (lobby-hub)	low	heuristic
+405	regional flag (lobby-hub)	low	heuristic
+406	global/story flag (2 regions)	low	heuristic (cross-region)
+407	regional flag (misc)	low	heuristic
+409	quest/act in-progress marker (1=done, 0=reset)	high	reset in 902/906 fail chunks
+415	quest board completion sub-flag	medium	e0824
+416	quest board completion sub-flag	medium	e0824
+417	quest board completion sub-flag	medium	e0824
+418	quest board completion sub-flag	medium	e0824
+419	quest board completion sub-flag	medium	e0824
+420	quest board completion sub-flag	medium	e0824
+424	quest/act in-progress marker	high	reset with 409
+426	regional flag (lobby-hub)	low	heuristic
+427	regional flag (lobby-hub)	low	heuristic
+428	regional flag (lobby-hub)	low	heuristic
+429	regional flag (lobby-hub)	low	heuristic
+430	quest board completion sub-flag	medium	e0824
+431	regional flag (lobby-hub)	low	heuristic
+432	regional flag (lobby-hub)	low	heuristic
+433	regional flag (lobby-hub)	low	heuristic
+434	regional flag (lobby-hub)	low	heuristic
+435	regional flag (lobby-hub)	low	heuristic
+436	regional flag (lobby-hub)	low	heuristic
+437	regional flag (lobby-hub)	low	heuristic
+438	regional flag (lobby-hub)	low	heuristic
+439	regional flag (lobby-hub)	low	heuristic
+440	regional flag (lobby-hub)	low	heuristic
+441	regional flag (lobby-hub)	low	heuristic
+442	regional flag (lobby-hub)	low	heuristic
+443	regional flag (lobby-hub)	low	heuristic
+444	regional flag (lobby-hub)	low	heuristic
+445	regional flag (lobby-hub)	low	heuristic
+446	regional flag (lobby-hub)	low	heuristic
+447	global/story flag (2 regions)	low	heuristic (cross-region)
+448	global/story flag (2 regions)	low	heuristic (cross-region)
+449	global/story flag (2 regions)	low	heuristic (cross-region)
+450	global/story flag (2 regions)	low	heuristic (cross-region)
+451	global/story flag (2 regions)	low	heuristic (cross-region)
+452	global/story flag (2 regions)	low	heuristic (cross-region)
+466	regional flag (misc)	low	heuristic
+467	regional flag (misc)	low	heuristic
+468	regional flag (misc)	low	heuristic
+469	quest board reward 1	medium	e0824
+470	regional flag (lobby-hub)	low	heuristic
+471	quest board reward 2	medium	e0824
+472	regional flag (lobby-hub)	low	heuristic
+473	quest board reward 3	medium	e0824
+474	regional flag (lobby-hub)	low	heuristic
+475	global/story flag (2 regions)	low	heuristic (cross-region)
+476	regional flag (lobby-hub)	low	heuristic
+477	global/story flag (2 regions)	low	heuristic (cross-region)
+478	global/story flag (2 regions)	low	heuristic (cross-region)
+479	regional flag (lobby-hub)	low	heuristic
+480	global/story flag (2 regions)	low	heuristic (cross-region)
+481	regional flag (valley-overworld)	low	heuristic
+482	regional flag (valley-overworld)	low	heuristic
+483	regional flag (valley-overworld)	low	heuristic
+484	regional flag (valley-overworld)	low	heuristic
+485	regional flag (valley-overworld)	low	heuristic
+486	regional flag (valley-overworld)	low	heuristic
+487	regional flag (valley-overworld)	low	heuristic
+488	regional flag (valley-overworld)	low	heuristic
+489	regional flag (valley-overworld)	low	heuristic
+492	regional flag (city-overworld)	low	heuristic
+493	regional flag (desert-overworld)	low	heuristic
+498	regional flag (desert-overworld)	low	heuristic
+499	regional flag (desert-overworld)	low	heuristic
+500	regional flag (desert-overworld)	low	heuristic
+501	global/story flag (2 regions)	low	heuristic (cross-region)
+502	global/story flag (2 regions)	low	heuristic (cross-region)
+503	global/story flag (2 regions)	low	heuristic (cross-region)
+504	global/story flag (2 regions)	low	heuristic (cross-region)
+505	global/story flag (2 regions)	low	heuristic (cross-region)
+506	global/story flag (2 regions)	low	heuristic (cross-region)
+507	global/story flag (2 regions)	low	heuristic (cross-region)
+508	stage-intro tutorial gate	high	set in every stage; checked in act-start chunk
+509	regional flag (lobby-hub)	low	heuristic
+510	regional flag (lobby-hub)	low	heuristic
+511	regional flag (lobby-hub)	low	heuristic
+512	regional flag (lobby-hub)	low	heuristic
+513	regional flag (lobby-hub)	low	heuristic
+514	regional flag (misc)	low	heuristic
+518	regional flag (title-menus)	low	heuristic
+519	regional flag (title-menus)	low	heuristic
+520	regional flag (title-menus)	low	heuristic
+521	regional flag (title-menus)	low	heuristic
+522	regional flag (title-menus)	low	heuristic
+523	regional flag (title-menus)	low	heuristic
+524	regional flag (title-menus)	low	heuristic
+525	regional flag (title-menus)	low	heuristic
+526	regional flag (title-menus)	low	heuristic
+527	regional flag (title-menus)	low	heuristic
+528	regional flag (title-menus)	low	heuristic
+530	regional flag (title-menus)	low	heuristic
+531	regional flag (title-menus)	low	heuristic
+532	regional flag (title-menus)	low	heuristic
+533	regional flag (title-menus)	low	heuristic
+534	regional flag (title-menus)	low	heuristic
+535	regional flag (title-menus)	low	heuristic
+536	regional flag (title-menus)	low	heuristic
+537	regional flag (title-menus)	low	heuristic
+538	regional flag (title-menus)	low	heuristic
+539	regional flag (title-menus)	low	heuristic
+540	regional flag (title-menus)	low	heuristic
+542	regional flag (title-menus)	low	heuristic
+543	regional flag (title-menus)	low	heuristic
+544	regional flag (title-menus)	low	heuristic
+545	regional flag (title-menus)	low	heuristic
+546	regional flag (title-menus)	low	heuristic
+547	regional flag (title-menus)	low	heuristic
+548	regional flag (title-menus)	low	heuristic
+549	regional flag (title-menus)	low	heuristic
+550	regional flag (title-menus)	low	heuristic
+551	regional flag (title-menus)	low	heuristic
+552	regional flag (title-menus)	low	heuristic
+554	regional flag (lobby-hub)	low	heuristic
+555	regional flag (lobby-hub)	low	heuristic
+556	regional flag (lobby-hub)	low	heuristic
+557	regional flag (lobby-hub)	low	heuristic
+558	regional flag (lobby-hub)	low	heuristic
+559	regional flag (lobby-hub)	low	heuristic
+560	regional flag (lobby-hub)	low	heuristic
+561	regional flag (lobby-hub)	low	heuristic
+562	global/story flag (2 regions)	low	heuristic (cross-region)
+563	global/story flag (2 regions)	low	heuristic (cross-region)
+564	global/story flag (2 regions)	low	heuristic (cross-region)
+565	global/story flag (2 regions)	low	heuristic (cross-region)
+566	global/story flag (2 regions)	low	heuristic (cross-region)
+567	regional flag (lobby-hub)	low	heuristic
+568	regional flag (lobby-hub)	low	heuristic
+569	regional flag (lobby-hub)	low	heuristic
+570	regional flag (lobby-hub)	low	heuristic
+571	quest/act in-progress marker	high	reset with 409
+572	quest board chain progress 1	medium	e0820/e0824
+573	quest board chain progress 2	medium	e0820/e0824
+574	quest board chain progress 3	medium	e0820/e0824
+575	quest board chain progress 4	medium	e0820/e0824
+576	quest board chain progress 5	medium	e0824
+582	regional flag (lobby-hub)	low	heuristic
+588	regional flag (lobby-hub)	low	heuristic
+594	shop story flag	medium	e0828
+595	regional flag (lobby-hub)	low	heuristic
+596	regional flag (lobby-hub)	low	heuristic
+597	regional flag (lobby-hub)	low	heuristic
+598	global/story flag (2 regions)	low	heuristic (cross-region)
+599	global/story flag (2 regions)	low	heuristic (cross-region)
+600	Boss 1 story scene done	high	set=1 in e0730
+601	global/story flag (2 regions)	low	heuristic (cross-region)
+602	global/story flag (2 regions)	low	heuristic (cross-region)
+603	Boss 2 story scene done	high	set=1 in e0737
+604	global/story flag (2 regions)	low	heuristic (cross-region)
+605	global/story flag (2 regions)	low	heuristic (cross-region)
+606	global/story flag (2 regions)	low	heuristic (cross-region)
+607	Boss 3 story scene done	high	set=1 in e0744
+608	global/story flag (2 regions)	low	heuristic (cross-region)
+609	Dungeon 4 story scene done	high	set=1 in e0425
+610	Final boss story scene done	high	set=1 in e0765
+611	regional flag (lobby-hub)	low	heuristic
+711	regional flag (title-menus)	low	heuristic
+712	regional flag (title-menus)	low	heuristic
+713	regional flag (title-menus)	low	heuristic
+738	regional flag (title-menus)	low	heuristic
+743	regional flag (title-menus)	low	heuristic
+768	regional flag (title-menus)	low	heuristic
+773	regional flag (title-menus)	low	heuristic
+798	regional flag (title-menus)	low	heuristic
+801	regional flag (title-menus)	low	heuristic
+802	regional flag (title-menus)	low	heuristic
+803	regional flag (title-menus)	low	heuristic
+804	regional flag (title-menus)	low	heuristic
+805	regional flag (title-menus)	low	heuristic
+806	regional flag (title-menus)	low	heuristic
+807	regional flag (title-menus)	low	heuristic
+808	regional flag (title-menus)	low	heuristic
+809	regional flag (title-menus)	low	heuristic
+810	regional flag (title-menus)	low	heuristic
+811	regional flag (title-menus)	low	heuristic
+812	regional flag (title-menus)	low	heuristic
+900	regional flag (valley-overworld)	low	heuristic
+901	regional flag (desert-overworld)	low	heuristic
+902	regional flag (forest-overworld)	low	heuristic
+904	regional flag (misc)	low	heuristic
+905	city entryway state	medium	set in e0709 from persistent folder 8/9
+908	level gate: player Lv >= 16	high	e0828
+909	level gate: player Lv >= 46	high	e0828
+910	level gate: player Lv >= 76	high	e0828
+912	regional flag (lobby-hub)	low	heuristic
+913	regional flag (lobby-hub)	low	heuristic
+914	regional flag (lobby-hub)	low	heuristic
+915	regional flag (lobby-hub)	low	heuristic
+916	regional flag (lobby-hub)	low	heuristic
+917	regional flag (lobby-hub)	low	heuristic
+918	regional flag (lobby-hub)	low	heuristic
+919	regional flag (lobby-hub)	low	heuristic
+920	regional flag (lobby-hub)	low	heuristic
+921	regional flag (lobby-hub)	low	heuristic
+922	regional flag (lobby-hub)	low	heuristic
+923	regional flag (lobby-hub)	low	heuristic
+924	regional flag (lobby-hub)	low	heuristic
+925	regional flag (lobby-hub)	low	heuristic
+926	regional flag (lobby-hub)	low	heuristic
+927	regional flag (lobby-hub)	low	heuristic
+928	regional flag (lobby-hub)	low	heuristic
+929	regional flag (lobby-hub)	low	heuristic
+930	regional flag (lobby-hub)	low	heuristic
+931	quest board slot 1 availability	medium	e0824
+932	quest board slot 2 availability	medium	e0824
+933	quest board slot 3 availability	medium	e0824
+934	quest board slot 4 availability	medium	e0824
+935	regional flag (lobby-hub)	low	heuristic
+936	regional flag (lobby-hub)	low	heuristic
+937	regional flag (lobby-hub)	low	heuristic
+960	regional flag (misc)	low	heuristic
+1 + local_1	regional flag (title-menus)	low	heuristic
+100 + be:MDLgetRamNo()	regional flag (quest-dungeons)	low	heuristic
+104 + local_5	regional flag (quest-dungeons)	low	heuristic
+124 + local_1	regional flag (quest-dungeons)	low	heuristic
+13 + local_1	regional flag (title-menus)	low	heuristic
+145 + local_1	regional flag (quest-dungeons)	low	heuristic
+19 + local_1	regional flag (title-menus)	low	heuristic
+249 + local_1	regional flag (quest-dungeons)	low	heuristic
+251 + local_0	regional flag (dungeon-4)	low	heuristic
+284 + local_0	regional flag (dungeon-4)	low	heuristic
+320 + local_1	regional flag (title-menus)	low	heuristic
+329 + local_1	regional flag (title-menus)	low	heuristic
+42, be:FLGisOn(	regional flag (quest-dungeons)	low	heuristic
+518 + local_1	regional flag (title-menus)	low	heuristic
+530 + local_1	regional flag (title-menus)	low	heuristic
+542 + local_1	regional flag (title-menus)	low	heuristic
+67 + local_1	regional flag (title-menus)	low	heuristic
+7 + local_1	regional flag (title-menus)	low	heuristic
+700 + local_1	regional flag (title-menus)	low	heuristic
+706 + local_1	regional flag (title-menus)	low	heuristic
+708 + local_1	regional flag (title-menus)	low	heuristic
+714 + local_1	regional flag (title-menus)	low	heuristic
+725 + local_1	regional flag (title-menus)	low	heuristic
+733 + local_1	regional flag (title-menus)	low	heuristic
+74 + local_1	regional flag (title-menus)	low	heuristic
+741 + local_1	regional flag (title-menus)	low	heuristic
+744 + local_1	regional flag (title-menus)	low	heuristic
+755 + local_1	regional flag (title-menus)	low	heuristic
+763 + local_1	regional flag (title-menus)	low	heuristic
+771 + local_1	regional flag (title-menus)	low	heuristic
+774 + local_1	regional flag (title-menus)	low	heuristic
+78 + local_1	regional flag (title-menus)	low	heuristic
+785 + local_1	regional flag (title-menus)	low	heuristic
+793 + local_1	regional flag (title-menus)	low	heuristic
+8, be:FLGisOn(	regional flag (quest-dungeons)	low	heuristic
+89 + local_1	regional flag (title-menus)	low	heuristic
+be:FLGisOn(	global/story flag (2 regions)	low	heuristic (cross-region)
+be:MDLgetRamNo() + 171	regional flag (dungeon-3)	low	heuristic
+be:MDLgetRamNo() + 181	regional flag (quest-dungeons)	low	heuristic
+be:MDLgetRamNo() + 248	regional flag (quest-dungeons)	low	heuristic
+be:SYSgetDifficulty() + 406	regional flag (bosses)	low	heuristic
+folder:0	persistent story flag 0	medium	SYSctlFlagFolder
+folder:1	persistent story flag 1	medium	SYSctlFlagFolder
+folder:10	LordKnightmon ID (Electro Mine)	medium	save observation #128; separate from script-derived labels
+folder:11	persistent quest-chain marker	high	SET in e0824/chunk_0104; corrected signed decoding #787
+folder:2	persistent story flag 2	medium	SYSctlFlagFolder
+folder:3	persistent story flag 3	medium	SYSctlFlagFolder
+folder:4	persistent story flag 4	medium	SYSctlFlagFolder
+folder:5	persistent story flag 5	medium	SYSctlFlagFolder
+folder:6	persistent story flag 6	medium	SYSctlFlagFolder
+folder:7	persistent story flag 7	medium	SYSctlFlagFolder
+folder:8	persistent story gate 8	high	checked in city hub e0709
+folder:9	persistent story gate 9	high	checked in city hub e0709
+local_0 + 166	regional flag (dungeon-2)	low	heuristic
+local_0 + 173	regional flag (dungeon-2)	low	heuristic
+local_0 + 214	regional flag (dungeon-2)	low	heuristic
+local_1	regional flag (title-menus)	low	heuristic
+local_1 + 115	regional flag (quest-dungeons)	low	heuristic
+local_1 + 119	regional flag (dungeon-1)	low	heuristic
+local_1 + 124	regional flag (dungeon-3)	low	heuristic
+local_1 + 125	regional flag (dungeon-4)	low	heuristic
+local_1 + 126	regional flag (dungeon-1)	low	heuristic
+local_1 + 127	regional flag (dungeon-3)	low	heuristic
+local_1 + 128	regional flag (dungeon-4)	low	heuristic
+local_1 + 130	regional flag (quest-dungeons)	low	heuristic
+local_1 + 138	regional flag (dungeon-1)	low	heuristic
+local_1 + 144	regional flag (dungeon-3)	low	heuristic
+local_1 + 146	regional flag (dungeon-2)	low	heuristic
+local_1 + 150	global/story flag (2 regions)	low	heuristic (cross-region)
+local_1 + 156	regional flag (dungeon-4)	low	heuristic
+local_1 + 157	regional flag (dungeon-3)	low	heuristic
+local_1 + 159	global/story flag (2 regions)	low	heuristic (cross-region)
+local_1 + 163	regional flag (quest-dungeons)	low	heuristic
+local_1 + 182	regional flag (dungeon-3)	low	heuristic
+local_1 + 183	regional flag (dungeon-4)	low	heuristic
+local_1 + 187	regional flag (quest-dungeons)	low	heuristic
+local_1 + 192	regional flag (dungeon-2)	low	heuristic
+local_1 + 208	regional flag (quest-dungeons)	low	heuristic
+local_1 + 234	regional flag (dungeon-3)	low	heuristic
+local_1 + 270	regional flag (dungeon-4)	low	heuristic
+local_2	global/story flag (6 regions)	low	heuristic (cross-region)
+local_2 + 104	regional flag (quest-dungeons)	low	heuristic
+local_2 + 106	global/story flag (3 regions)	low	heuristic (cross-region)
+local_2 + 107	global/story flag (2 regions)	low	heuristic (cross-region)
+local_2 + 108	global/story flag (2 regions)	low	heuristic (cross-region)
+local_2 + 109	regional flag (dungeon-2)	low	heuristic
+local_2 + 111	regional flag (quest-dungeons)	low	heuristic
+local_2 + 112	global/story flag (2 regions)	low	heuristic (cross-region)
+local_2 + 113	global/story flag (2 regions)	low	heuristic (cross-region)
+local_2 + 114	regional flag (dungeon-2)	low	heuristic
+local_2 + 122	regional flag (quest-dungeons)	low	heuristic
+local_2 + 228	regional flag (dungeon-4)	low	heuristic
+local_3	regional flag (quest-dungeons)	low	heuristic

@@ -1,0 +1,43 @@
+funcStartLayerSet()
+if be:SYSgetLightMode() ~= 0 then
+    be:sd("LIGHTCTRL", nil, -1, "SETCOLOR", "Z0101Light0Shape1/V<0.0,0.0,0.0>/V<0.9,0.9,0.9>/V<0.9,0.9,0.9>")
+    be:sd("LIGHTCTRL", nil, -1, "SETCOLOR", "Z0101Light0Shape2/V<0.22,0.14,0.08>/V<0.0,0.0,0.0>/V<0.0,0.0,0.0>")
+end
+be:sd("MATCTRL", nil, -1, "PAUSE")
+funcPlayerSet()
+be:sd("PLAYER", nil, -1, "SQ_DEMOWAIT")
+be:sd("PLAYER", nil, -1, "SQ_DEMOWAIT", 1)
+be:sd("MODELCTRL", "g_breakinggatez05", 0, "GENERATE", "V<5,10,-185>/V<0,0,0>")
+be:sd("MODELCTRL", "g_covercnsz05", 0, "GENERATE", "V<46.961,11.426,-103.867>/V<0,0,0>")
+be:sd("MODELCTRL", "g_covergatez05", 0, "GENERATE", "V<5,10,-45>/V<0,0,0>")
+be:sd("MODELCTRL", "g_energyfieldz05", 0, "GENERATE", "V<5,5,35>/V<0,0,0>")
+be:sd("MODELCTRL", "g_energyfieldz05", 1, "GENERATE", "V<5,5,185>/V<0,0,0>")
+be:sd("MODELCTRL", "g_liftz05", 0, "GENERATE", "V<5,10,145>/V<0,0,0>")
+be:sd("MODELCTRL", "g_breakinggatez05", 0, "SQ_SILENTON")
+be:sd("HITLANDMODEL", "hitbreakinggatez05", 0, "OFFHIT")
+if be:FLGisOn(383) == 1 and be:FLGisOn(20) == 0 then
+    be:sd("MODELCTRL", "g_liftz05", 0, "SQ_SILENTON")
+    be:sd("HITLANDMODEL", "hitliftz05", 0, "OFFHIT")
+    be:sd("MODELCTRL", "g_covercnsz05", 0, "SQ_SILENTON")
+    be:sd("MODELCTRL", "g_covergatez05", 0, "SQ_SILENTON")
+    be:sd("HITLANDMODEL", "hitcovergatez05", 0, "OFFHIT")
+    be:sd("MODELCTRL", "g_energyfieldz05", 0, "SQ_SILENTON")
+    be:sd("HITLANDMODEL", "hitenergyfieldz050", 0, "OFFHIT")
+elseif be:FLGisOn(20) == 1 then
+    be:sd("MODELCTRL", "g_covercnsz05", 0, "SQ_SILENTON")
+    be:sd("MODELCTRL", "g_covergatez05", 0, "SQ_SILENTON")
+    be:sd("HITLANDMODEL", "hitcovergatez05", 0, "OFFHIT")
+    be:sd("MODELCTRL", "g_energyfieldz05", 0, "SQ_SILENTON")
+    be:sd("HITLANDMODEL", "hitenergyfieldz050", 0, "OFFHIT")
+    be:sd("MODELCTRL", "g_energyfieldz05", 1, "SQ_SILENTON")
+    be:sd("HITLANDMODEL", "hitenergyfieldz051", 0, "OFFHIT")
+    be:sd("MODELCTRL", "g_liftz05", 0, "SQ_SILENTON")
+    be:sd("HITLANDMODEL", "hitliftz05", 0, "OFFHIT")
+end
+if be:FLGisOn(20) == 0 then
+    be:sd("MODELCTRL", "n_leomon", 0, "GENERATE", "V<5,12.5,185>/V<0,-180,0>")
+end
+be:sd("SOUND", nil, -1, "PLAY", "ST_GOBLI")
+be:sd("SOUND", nil, -1, "PLAY", "AM_GOBLI")
+be:sd("MODELCTRL", "i_fadewn01", 0, "GENERATE", "SQ_BLOUT00")
+funcPlayerStatusGenerate()

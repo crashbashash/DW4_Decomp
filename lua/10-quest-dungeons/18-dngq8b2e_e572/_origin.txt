@@ -1,0 +1,3 @@
+AFS entry 572  |  dngq8b2e  |  quest 8 stage 2
+A file's numeric prefix is its chunk index in that pack entry.
+86 chunks

@@ -1,0 +1,43 @@
+/* 0x002a0ae0 — FUN_002a0ae0 (164 bytes). Closes the eight handles in DAT_004beadc and shuts the sub-systems down; returns the FUN_002afca0 error if any, else the last close status. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+void FUN_0029d4b8();
+void FUN_002a0e10();
+void FUN_002a0e48();
+void FUN_002a0e68();
+int FUN_002abd18();
+void FUN_002ae020();
+int FUN_002afca0();
+extern void *DAT_004beadc[8];
+
+/* Sub-system block at DAT_004bea88. */
+struct Block2a0ae0 {
+    char f0[12];                          /* shut down by FUN_002ae020 */
+    char f12[4];                          /* shut down by FUN_0029d4b8 */
+    char f16[4];                          /* shut down by FUN_002afca0 */
+};
+extern struct Block2a0ae0 DAT_004bea88;
+
+/* Shuts the eight handles in DAT_004beadc and the sub-systems down; returns the first error seen
+ * from FUN_002afca0, else the last FUN_002abd18 status. */
+int FUN_002a0ae0(void) {
+    int i;
+    void **handle = DAT_004beadc;
+    int status = 0;
+    int error;
+
+    for (i = 7; i >= 0; i--) {
+        if (*handle != 0) {
+            status = FUN_002abd18(*handle);
+        }
+        handle++;
+    }
+    FUN_002ae020(DAT_004bea88.f0);
+    FUN_0029d4b8(DAT_004bea88.f12);
+    error = FUN_002afca0(DAT_004bea88.f16);
+    FUN_002a0e68();
+    FUN_002a0e48();
+    FUN_002a0e10();
+    if (error != 0) {
+        return error;
+    }
+    return status;
+}

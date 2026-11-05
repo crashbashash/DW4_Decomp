@@ -1,0 +1,52 @@
+struct V { int x; int y; int z; int w; };
+struct M { int m[16]; };
+int FUN_00130e90();
+int FUN_0018c640();
+int igMetaObject_CreateFields();
+int igMetaObject_GetFieldAt();
+int igMetaObject_GetFieldCount();
+int igMetaObject_NameFields();
+extern int DAT_00485a70[4];
+extern int DAT_00485a78[4];
+extern int DAT_00485a80[4];
+extern int DAT_00485a88[4];
+extern int DAT_0055ec68[4];
+extern void FUN_00141900(void);
+
+void igVertexBlendMatrixAttr_InitFields(void) {
+    struct V o5;
+    struct V o4;
+    struct V o3;
+    struct V o2;
+    struct M o1;
+    void *temp_s0;
+    int temp_s1;
+    int temp_s2;
+    int tf;
+
+    temp_s0 = (void *)DAT_0055ec68[0];
+    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    igMetaObject_CreateFields(temp_s0, &DAT_00485a70[0], 2);
+    temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2);
+    o5.x = 0;
+    o5.y = 0;
+    o5.z = 0;
+    o5.w = 0x3F800000;
+    o4.x = 0;
+    o4.y = 0;
+    o4.z = 0x3F800000;
+    o4.w = 0;
+    o3.x = 0;
+    o3.y = 0x3F800000;
+    o3.z = 0;
+    o3.w = 0;
+    o2.x = 0x3F800000;
+    o2.y = 0;
+    o2.z = 0;
+    o2.w = 0;
+    FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
+    FUN_0018c640(temp_s1, &o1);
+    tf = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
+    *(int *)((char *)tf + 48) = (int)&FUN_00141900;
+    igMetaObject_NameFields(temp_s0, &DAT_00485a78[0], &DAT_00485a80[0], &DAT_00485a88[0], temp_s2);
+}

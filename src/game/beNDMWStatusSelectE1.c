@@ -1,0 +1,13 @@
+/* src/game/beNDMWStatusSelectE1.c — the beNDMWStatusSelectE1 methods
+ *
+ * One translation unit: 1 functions, in retail address order.  Folded
+ * from the per-function units by tools/merge_units.py; the matching build
+ * splits a function back out with tools/units.py, so `make check` still
+ * verifies one function at a time. */
+
+extern int g_beNDMWStatusSelectE1_metaObject_0058abd8[4];
+/* 0x00424110 */
+int Gap__Bec__beNDMWStatusSelectE1__vfunc_20(void)
+{
+    return g_beNDMWStatusSelectE1_metaObject_0058abd8[0];
+}

@@ -1,0 +1,3 @@
+AFS entry 824  |  lobby-quest-board  |  Lobby quest board dialogue
+A file's numeric prefix is its chunk index in that pack entry.
+114 chunks

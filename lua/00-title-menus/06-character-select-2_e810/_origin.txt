@@ -1,0 +1,3 @@
+AFS entry 810  |  character-select-2  |  Character select / difficulty
+A file's numeric prefix is its chunk index in that pack entry.
+7 chunks

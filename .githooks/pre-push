@@ -1,0 +1,205 @@
+#!/bin/sh
+# pre-push: what a push cannot take back, and the rule that guards the byte oracle's own files.
+#
+# The byte oracle is NOT run here. Whoever made the change runs the gates on the final tree
+# (CONTRIBUTING.md, "Checking your work"), and the oracle runner (.github/workflows/oracle.yml)
+# runs them again on every pushed commit, on a machine the pusher does not control; a third
+# run in between proved nothing new and cost a full build per push. A real push checks:
+#
+#   1. host details: the lines and commit messages being pushed carry nothing that identifies
+#      a machine or an account (scripts/check_host_details.py). Published text cannot be
+#      recalled, so this is the one check that has to happen before the push leaves;
+#   2. the oracle-change rule, only when the pushed commits touch the oracle's own files
+#      (.githooks/oracle-files.txt): the tools unit tests pass, every counterexample still
+#      fails to verify, and each such commit carries an `oracle-change:` line.
+#
+# The byte gate's parser stays in this file because the oracle runner evaluates its logs with
+# it, so the verdict has one definition:
+#   DW4_PREPUSH_GATE_ONLY=1 .githooks/pre-push CHECK_LOG LINK_LOG BASELINE
+#     `make check` zero mismatches, the `cover :` matched count >= BASELINE
+#     (`functions.fully_verified` in docs/progress.json), `make link` BYTE-IDENTICAL, orphans
+#     within the recorded debt, and the debt ratchet's exit code in DEBT_RC.
+#   DW4_PREPUSH_ORACLE_ONLY=1 .githooks/pre-push RANGE UNITTEST_LOG ORACLE_LOG
+# testing/test_prepush_gate.py runs both on sample logs (no build).
+#
+# Enable once per clone: scripts/install_git_hooks.sh.  Never bypass with --no-verify.
+set -u
+
+root=$(git rev-parse --show-toplevel 2>/dev/null) || root=.
+cd "$root" || exit 1
+
+# ---- the gate: pure parsing of the two logs ------------------------------------------
+gate() {
+    check_log=$1; link_log=$2; baseline=$3
+    ok=0
+
+    # `make check` prints "   (N not matched: M mismatch, D debt)" after the per-unit lines when
+    # anything is not fully verified; only M (code bytes differ) is a mismatch for this gate —
+    # debt categories (code-only, name-defect, inventory-gap) are reported, counted by
+    # tools/progress.py and ratcheted separately. A compile failure prints
+    # "   !! name: compile failed: ..." and counts as a mismatch. The older
+    # "   (N mismatched)" summary is still accepted.
+    mism=$(sed -n 's/^ *([0-9][0-9]* not matched: \([0-9][0-9]*\) mismatch, [0-9][0-9]* debt)$/\1/p' "$check_log" | tail -n 1)
+    [ -n "$mism" ] || mism=$(sed -n 's/^ *(\([0-9][0-9]*\) mismatched)$/\1/p' "$check_log" | tail -n 1)
+    [ -n "$mism" ] || mism=0
+    fail=$(grep -c '^ *!! .*: compile failed' "$check_log" 2>/dev/null || true)
+    [ -n "$fail" ] || fail=0
+    mism=$((mism + fail))
+    if [ "$mism" -eq 0 ]; then
+        echo "gate 1/3  mismatches: 0  (required 0)                      OK"
+    else
+        echo "gate 1/3  mismatches: $mism  (required 0)                      REFUSED"; ok=1
+    fi
+
+    # "cover : 18407/19293 decompiled in src/ (95.4%), 18407 match byte-for-byte"
+    matched=$(sed -n 's/^cover *: .*, \([0-9][0-9]*\) match byte-for-byte.*$/\1/p' "$check_log" | tail -n 1)
+    if [ -z "$matched" ]; then
+        echo "gate 2/3  matched: (no cover line in make check output)      REFUSED"; ok=1
+    elif [ "$matched" -ge "$baseline" ]; then
+        echo "gate 2/3  matched: $matched  (required >= $baseline from docs/progress.json at HEAD)  OK"
+    else
+        echo "gate 2/3  matched: $matched  (required >= $baseline from docs/progress.json at HEAD)  REFUSED"; ok=1
+    fi
+
+    if grep -q '^linkcheck: BYTE-IDENTICAL' "$link_log"; then
+        echo "gate 3/5  link: BYTE-IDENTICAL                                OK"
+    else
+        echo "gate 3/5  link: not byte-identical (no 'linkcheck: BYTE-IDENTICAL' line)  REFUSED"; ok=1
+    fi
+
+    # "linkcheck: orphans: 22697 bytes linked outside .text (...) <= recorded debt 22697 bytes (...)  OK"
+    orphans=$(sed -n 's/^linkcheck: orphans: \(.*\)$/\1/p' "$link_log" | tail -n 1)
+    case "$orphans" in
+        *"  OK") echo "gate 4/5  orphans <= recorded debt: ${orphans%  OK}  OK" ;;
+        "")      echo "gate 4/5  orphans <= recorded debt: (no 'linkcheck: orphans:' line)  REFUSED"; ok=1 ;;
+        *)       echo "gate 4/5  orphans <= recorded debt: $orphans  REFUSED"; ok=1 ;;
+    esac
+
+    # gate 5: tools/progress.py --debt-check, when that command exists (it is run by the
+    # caller in a real push; the self-test modes pass its verdict in DEBT_RC)
+    case "${DEBT_RC:-skip}" in
+        skip) echo "gate 5/5  debt-check: tools/progress.py has no --debt-check; skipped  OK" ;;
+        0)    echo "gate 5/5  debt-check: tools/progress.py --debt-check passed           OK" ;;
+        *)    echo "gate 5/5  debt-check: tools/progress.py --debt-check exited $DEBT_RC   REFUSED"; ok=1 ;;
+    esac
+
+    if [ "$ok" -eq 0 ]; then
+        echo "pre-push: PASS — the byte oracle holds; pushing"
+    else
+        echo "pre-push: REFUSED — fix the tree (make check / make link) and push again; never --no-verify"
+    fi
+    return $ok
+}
+
+# ---- the oracle-change rule ------------------------------------------------------------
+oracle_files() {
+    sed -e 's/#.*//' -e '/^[[:space:]]*$/d' "$root/.githooks/oracle-files.txt"
+}
+
+# oracle_rule RANGE UNITTEST_LOG ORACLE_LOG — prints its lines, returns 0/1.
+oracle_rule() {
+    range=$1; unit_log=$2; oracle_log=$3
+    ok=0
+    # shellcheck disable=SC2046
+    touched=$(git diff --name-only "$range" -- $(oracle_files) 2>/dev/null)
+    if [ -z "$touched" ]; then
+        echo "oracle-change: no protected oracle file changes in $range"
+        return 0
+    fi
+    echo "oracle-change: protected files change in $range:"
+    echo "$touched" | sed 's/^/    /'
+
+    # (a) the tools unit tests
+    if grep -q '^OK' "$unit_log" && ! grep -q '^FAILED' "$unit_log"; then
+        echo "oracle a/c  unit tests: OK                                   OK"
+    else
+        echo "oracle a/c  unit tests: not OK (see $unit_log)                REFUSED"; ok=1
+    fi
+
+    # (b) every counterexample still fails to verify: each test ran (not skipped) and passed
+    missing=""
+    for t in test_smuggled_data_fails_naming_every_section \
+             test_defining_the_referenced_datum_fails \
+             test_function_name_pointing_inside_a_body_fails \
+             test_data_name_pointing_into_code_fails; do
+        grep -q "^$t (.*) \.\.\. ok$" "$oracle_log" || missing="$missing $t"
+    done
+    if [ -z "$missing" ]; then
+        echo "oracle b/c  counterexamples: all still fail to verify          OK"
+    else
+        echo "oracle b/c  counterexamples: not shown failing (skipped/failed/absent):$missing  REFUSED"; ok=1
+    fi
+
+    # (c) every commit touching the protected files says what it changed
+    undocumented=""
+    # shellcheck disable=SC2046
+    for c in $(git rev-list "$range" -- $(oracle_files) 2>/dev/null); do
+        git log -1 --format=%B "$c" | grep -q '^oracle-change:' || undocumented="$undocumented ${c%${c#???????}}"
+    done
+    if [ -z "$undocumented" ]; then
+        echo "oracle c/c  every oracle commit carries an 'oracle-change:' line   OK"
+    else
+        echo "oracle c/c  commits without an 'oracle-change:' line:$undocumented  REFUSED"; ok=1
+    fi
+    return $ok
+}
+
+if [ "${DW4_PREPUSH_GATE_ONLY:-}" = "1" ]; then
+    gate "$1" "$2" "$3"
+    exit $?
+fi
+if [ "${DW4_PREPUSH_ORACLE_ONLY:-}" = "1" ]; then
+    oracle_rule "$1" "$2" "$3"
+    exit $?
+fi
+
+# ---- a real push -------------------------------------------------------------------------
+# stdin: "<local ref> <local sha> <remote ref> <remote sha>" per ref being pushed.
+ranges=""
+whole_tree=0
+zero=0000000000000000000000000000000000000000
+while read -r local_ref local_sha remote_ref remote_sha; do
+    [ -n "$local_sha" ] || continue
+    [ "$local_sha" = "$zero" ] && continue            # a delete
+    base=$remote_sha
+    if [ "$remote_sha" = "$zero" ]; then
+        # a new remote branch: compare against what the remote already has, if that is known
+        base=$(git merge-base "$local_sha" "$(git rev-parse --abbrev-ref '@{upstream}' 2>/dev/null || echo origin/main)" 2>/dev/null) || base=""
+    fi
+    # Fail closed: with no base this clone can diff against (a first push, or a remote commit
+    # this clone does not have), the whole tree is checked instead of a range.
+    if [ -n "$base" ] && git cat-file -e "${base}^{commit}" 2>/dev/null; then
+        ranges="$ranges $base..$local_sha"
+    else
+        whole_tree=1
+    fi
+done
+
+rc=0
+for range in $ranges; do
+    echo "pre-push: host details in $range"
+    python3 scripts/check_host_details.py --range "$range" || rc=1
+done
+if [ "$whole_tree" -eq 1 ]; then
+    echo "pre-push: no comparable base for a pushed ref; host details in the whole tree"
+    python3 scripts/check_host_details.py --tree || rc=1
+fi
+
+# ---- the oracle-change rule, for every pushed range that touches the oracle's files ------
+logdir=${TMPDIR:-/tmp}/dw4-prepush.$$
+for range in $ranges; do
+    # shellcheck disable=SC2046
+    if git diff --name-only "$range" -- $(oracle_files) 2>/dev/null | grep -q .; then
+        mkdir -p "$logdir"
+        echo "pre-push: oracle files change in $range; running the tools unit tests and the counterexample suite (logs in $logdir)"
+        python3 -m unittest discover -s tools -p 'test_*.py' > "$logdir/unittest.log" 2>&1
+        python3 -W ignore -m unittest discover -s tools -p 'test_oracle_holes.py' -v > "$logdir/oracle.log" 2>&1
+        oracle_rule "$range" "$logdir/unittest.log" "$logdir/oracle.log" || rc=1
+    fi
+done
+if [ "$rc" -ne 0 ]; then
+    echo "pre-push: REFUSED — see the lines above; never --no-verify"
+else
+    echo "pre-push: PASS — the byte oracle is the runner's verdict on the pushed commit (.github/workflows/oracle.yml)"
+fi
+exit $rc

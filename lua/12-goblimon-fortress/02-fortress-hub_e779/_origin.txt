@@ -1,0 +1,3 @@
+AFS entry 779  |  fortress-hub  |  Fortress hub (stagGF01/03/04)
+A file's numeric prefix is its chunk index in that pack entry.
+18 chunks

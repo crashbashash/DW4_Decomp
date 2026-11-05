@@ -1,0 +1,7 @@
+be:FLGset(137, 1)
+be:FLGset(123, 1)
+be:FLGset(132, 1)
+be:FLGset(133, 1)
+be:sd("GENERATER", nil, -1, "STOP", "GENE-04")
+be:sd("GENERATER", nil, -1, "STOP", "GENE-13")
+be:sd("GENERATER", nil, -1, "STOP", "GENE-14")

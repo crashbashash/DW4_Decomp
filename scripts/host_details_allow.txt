@@ -1,0 +1,3 @@
+# Exceptions to scripts/check_host_details.py (rules: docs/host-details-policy.md).
+# One per line:  <path-glob><TAB><regex that the matched text must match>
+# Keep this list short and justify each entry in a comment above it (a fixture, a deliberate example, ...).

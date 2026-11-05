@@ -1,0 +1,5217 @@
+{
+  "0x003fab90": {
+    "emitted": {
+      "__dt__10IntListRefFv": "0x003fc670",
+      "beNDMWGameRam_CollectNearbyNonzeroHp": "0x003fc780"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "duplicates": {
+      "__dt__13NearbyListRefFv": "0x00150eb0",
+      "__dt__9StringRefFv": "0x00130720"
+    }
+  },
+  "0x0038d860": {
+    "emitted": {
+      "__dt__3RefFv": "0x0038c410"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0038e060": {
+    "emitted": {
+      "__dt__6ObjRefFv": "0x0038e530"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0038e8f0": {
+    "emitted": {
+      "__dt__6RowRefFv": "0x0038c390",
+      "__dt__8SavedRefFv": "0x00357a90"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003fca10": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryRef<0>Fv": "0x001363f0",
+      "__dt__14RecoveryRef<1>Fv": "0x003d9d50",
+      "__dt__14RecoveryRef<2>Fv": "0x003d9cd0",
+      "__dt__14RecoveryRef<3>Fv": "0x003d9c50",
+      "__dt__14RecoveryRef<4>Fv": "0x003d9bd0",
+      "__dt__14RecoveryRef<5>Fv": "0x00150eb0",
+      "__dt__14RecoveryStringFv": "0x00130720",
+      "release__14RecoveryTargetFP14RecoveryTarget": "0x003e9110",
+      "release__14RecoveryStringFPPc": "0x00406fa0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610",
+      "__ct__17RecoveryCopiedRefFRC8DW4Sret4": "0x00406e10",
+      "__dt__17RecoveryCopiedRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00553b80",
+      "table": "0x00544fd4",
+      "table_size": "0x1a0"
+    }
+  },
+  "0x00165bb0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x004577f0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x001afb60": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x00457ab0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x00303dc0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x00454930": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x00454e30": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x00454b30": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x00454c30": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x00100400": {
+    "emitted": {
+      "__dt__3PADFv": "0x00100530"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004551f0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002efa20": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003a7fd0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00320aa0": {
+    "emitted": {},
+    "duplicates": {
+      "FUN_00320930": "0x00320930",
+      "FUN_00320960": "0x00320960"
+    }
+  },
+  "0x00320a20": {
+    "emitted": {},
+    "duplicates": {
+      "FUN_00320960": "0x00320960"
+    }
+  },
+  "0x00464b70": {
+    "emitted": {},
+    "duplicates": {
+      "FUN_00464af0": "0x00464af0"
+    }
+  },
+  "0x003de7a0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003832d0"
+    },
+    "exceptions": {
+      "index": "0x005534d8",
+      "table": "0x005447ec",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002da990": {
+    "duplicates": {
+      "__dt__3RefFv": "0x003d9bd0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00229d40": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryStringFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0015f4a0": {
+    "emitted": {},
+    "duplicates": {
+      "FUN_0015f430": "0x0015f430"
+    }
+  },
+  "0x0015f510": {
+    "emitted": {},
+    "duplicates": {
+      "FUN_0015f460": "0x0015f460"
+    }
+  },
+  "0x003209a0": {
+    "emitted": {},
+    "duplicates": {
+      "FUN_00320930": "0x00320930",
+      "FUN_00320960": "0x00320960"
+    }
+  },
+  "0x0036f970": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x0036fa60"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00454820": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x0017fe50": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00324840": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x0038c410"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0037d310": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00367a20"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001c5eb0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0031cfa0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0039b320": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x0039b4e0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0022cb80": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryStringFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00305800": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryStringFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001b2790": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00308860": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__4Ref2Fv": "0x001363f0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d5df0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryStringFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00154f30": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x003d9bd0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0044b290": {
+    "duplicates": {
+      "__dt__8ValueRefFv": "0x00352fc0",
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005547d4",
+      "table": "0x00546f78",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00179e00": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00164970"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003a7a20": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x0033e9c0",
+      "__dt__4RefBFv": "0x003a7d00"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d1960": {
+    "duplicates": {
+      "__dt__11DataListRefFv": "0x0033e9c0",
+      "__dt__11InfoWorkRefFv": "0x003d1c60"
+    },
+    "exceptions": {
+      "index": "0x00553280",
+      "table": "0x0054453c",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f8990": {
+    "duplicates": {
+      "__dt__14RecoveryRef<1>Fv": "0x003d9d50"
+    },
+    "exceptions": {
+      "index": "0x00553a90",
+      "table": "0x00544f34",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d9cf0": {
+    "duplicates": {
+      "__dt__3RefFv": "0x003d9bd0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00375ff0": {
+    "duplicates": {
+      "__dt__10AttrRef<0>Fv": "0x0019ab10",
+      "__dt__10AttrRef<1>Fv": "0x001d21b0",
+      "__dt__10AttrRef<2>Fv": "0x00239200"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0025a8c0": {
+    "duplicates": {
+      "__dt__3RefFv": "0x00150a70"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003092f0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3MemFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x003a4f40": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x0034d6c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00307c10": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00164970"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00462fb0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3MemFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x0020b280": {
+    "emitted": {},
+    "duplicates": {
+      "FUN_002082b0": "0x002082b0"
+    }
+  },
+  "0x001e1ac0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00376930": {
+    "duplicates": {
+      "__dt__6Ref<0>Fv": "0x0019ab10",
+      "__dt__6Ref<1>Fv": "0x001aaf00",
+      "__dt__6Ref<2>Fv": "0x00239200"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0043cc20": {
+    "duplicates": {
+      "__dt__12WindowRef<0>Fv": "0x00428710",
+      "__dt__12WindowRef<1>Fv": "0x0042c790",
+      "__dt__12WindowRef<2>Fv": "0x0042b800"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x00554450",
+      "table": "0x00546a60",
+      "table_size": "0x000024"
+    }
+  },
+  "0x002da1c0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3MemFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x002d10b0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x0038c410"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d4390": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3TmpFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x00553340",
+      "table": "0x00544610",
+      "table_size": "0x10"
+    }
+  },
+  "0x0042d450": {
+    "duplicates": {
+      "__dt__12WindowRef<0>Fv": "0x0042d350",
+      "__dt__12WindowRef<1>Fv": "0x0042def0",
+      "__dt__12WindowRef<2>Fv": "0x0042de70",
+      "__dt__12WindowRef<3>Fv": "0x0042ddf0"
+    },
+    "exceptions": {
+      "index": "0x0055424c",
+      "table": "0x00546328",
+      "table_size": "0x000030"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00429630": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__12WindowRef<1>Fv": "0x00414420",
+      "__dt__12WindowRef<2>Fv": "0x00411080",
+      "__dt__12WindowRef<3>Fv": "0x00428710",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004196c0": {
+    "duplicates": {
+      "__dt__5RP<0>Fv": "0x0040f6a0",
+      "__dt__5RP<1>Fv": "0x0040f620",
+      "__dt__5RP<2>Fv": "0x00414420",
+      "__dt__5RP<3>Fv": "0x0041a380",
+      "__dt__5RP<4>Fv": "0x003b90a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003cd810": {
+    "duplicates": {
+      "__dt__3RefFv": "0x001489a0"
+    },
+    "exceptions": {
+      "index": "0x00553124",
+      "table": "0x00544474",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003993e0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0",
+      "__dt__3RefFv": "0x00198190"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0040ee60": {
+    "duplicates": {
+      "__dt__4RefBFv": "0x0040ece0"
+    },
+    "emitted": {
+      "__dt__4RefAFv": "0x0040f6a0",
+      "__dt__4RefCFv": "0x0040f620",
+      "__dt__4RefDFv": "0x0040f5a0"
+    },
+    "exceptions": {
+      "index": "0x00553cd0",
+      "table": "0x00545494",
+      "table_size": "0x000030"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0042c810": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__6Ref<7>Fv": "0x0042d2d0",
+      "__dt__6Ref<5>Fv": "0x0042d350",
+      "__dt__6Ref<1>Fv": "0x0042d3d0",
+      "__dt__6Ref<2>Fv": "0x003b7fe0",
+      "__dt__6Ref<3>Fv": "0x00426fa0",
+      "__dt__6Ref<4>Fv": "0x0040ed60"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0055421c",
+      "table": "0x005462d4",
+      "table_size": "0x54"
+    }
+  },
+  "0x0042bc70": {
+    "duplicates": {
+      "__dt__5RP<0>Fv": "0x00428710",
+      "__dt__5RP<1>Fv": "0x00226990",
+      "__dt__5RP<2>Fv": "0x004295b0",
+      "__dt__5RP<3>Fv": "0x0042c790",
+      "__dt__5RP<4>Fv": "0x00411080"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0040de80": {
+    "emitted": {
+      "__dt__9WinRef<1>Fv": "0x0040ede0",
+      "__dt__9WinRef<2>Fv": "0x0040ed60",
+      "__dt__9WinRef<3>Fv": "0x0040ece0",
+      "__dt__9WinRef<4>Fv": "0x0040ec60",
+      "__dt__9WinRef<5>Fv": "0x0040ebe0",
+      "__dt__9WinRef<6>Fv": "0x0040eb60",
+      "__dt__9WinRef<7>Fv": "0x0040eae0"
+    },
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003b7fe0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0041f190": {
+    "duplicates": {
+      "__dt__4RefAFv": "0x0040f620",
+      "__dt__4RefBFv": "0x00411100",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004207a0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x0041de40": {
+    "emitted": {
+      "__dt__3RefFv": "0x0041f110"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "duplicates": {
+      "__dt__4RefXFv": "0x001363f0",
+      "__dt__4RefBFv": "0x00411100",
+      "__dt__4RefAFv": "0x00411080",
+      "__dt__9StringRefFv": "0x00130720"
+    }
+  },
+  "0x004353e0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__12WindowRef<1>Fv": "0x00411100",
+      "__dt__12WindowRef<2>Fv": "0x00411080",
+      "__dt__12WindowRef<3>Fv": "0x00428710",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00436ac0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__11SelectE1RefFv": "0x00411100",
+      "__dt__13DecideListRefFv": "0x00226990",
+      "__dt__11QuantityRefFv": "0x0041d240",
+      "__dt__10ConfirmRefFv": "0x00411080",
+      "__dt__9ResultRefFv": "0x00428710"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003a8580": {
+    "duplicates": {
+      "__dt__2RPFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003e42a0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003e3d80"
+    },
+    "exceptions": {
+      "index": "0x00553580",
+      "table": "0x00544880",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f96e0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003832d0"
+    },
+    "exceptions": {
+      "index": "0x00553ac0",
+      "table": "0x00544f6c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003de480": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003832d0"
+    },
+    "exceptions": {
+      "index": "0x005534cc",
+      "table": "0x005447c8",
+      "table_size": "0x000024"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00382eb0": {
+    "duplicates": {
+      "__dt__3RefFv": "0x003832d0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003dd6d0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003832d0"
+    },
+    "exceptions": {
+      "index": "0x005534b4",
+      "table": "0x005447b4",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003926d0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9RideOnRefFv": "0x00350d90"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003dc590": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x003832d0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x00553478",
+      "table": "0x00544784",
+      "table_size": "0x14"
+    }
+  },
+  "0x00439f30": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003b6090"
+    },
+    "exceptions": {
+      "index": "0x00554408",
+      "table": "0x005468a4",
+      "table_size": "0x000020"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00390f80": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003db060": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003832d0"
+    },
+    "exceptions": {
+      "index": "0x00553448",
+      "table": "0x00544758",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d9ec0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003832d0"
+    },
+    "exceptions": {
+      "index": "0x00553424",
+      "table": "0x00544730",
+      "table_size": "0x000020"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00418ac0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x001489a0"
+    },
+    "exceptions": {
+      "index": "0x00553f94",
+      "table": "0x005458f0",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d59b0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003b2f30"
+    },
+    "exceptions": {
+      "index": "0x005533d0",
+      "table": "0x005446ac",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004267b0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__4RefAFv": "0x00427020",
+      "__dt__4RefBFv": "0x0040ed60",
+      "__dt__4RefCFv": "0x0040ece0",
+      "__dt__4RefDFv": "0x003b7fe0",
+      "__dt__4RefEFv": "0x00426fa0",
+      "__dt__4RefFFv": "0x003b90a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d0bc0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003bd940"
+    },
+    "exceptions": {
+      "index": "0x0055322c",
+      "table": "0x005444f0",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00389170": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00229350"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00428790": {
+    "emitted": {
+      "__dt__12WindowRef<5>Fv": "0x004295b0"
+    },
+    "duplicates": {
+      "__dt__12WindowRef<0>Fv": "0x00428710",
+      "__dt__12WindowRef<3>Fv": "0x00414420",
+      "__dt__12WindowRef<4>Fv": "0x00411080"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0039ec10": {
+    "emitted": {
+      "__dt__9PlaySERefFv": "0x0039fae0"
+    },
+    "duplicates": {
+      "__dt__11NameListRefFv": "0x001c6460",
+      "__dt__12GlobalStrRefFv": "0x001489a0",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d8740": {
+    "emitted": {
+      "__dt__10ItemRef<1>Fv": "0x003d9d50",
+      "__dt__10ItemRef<2>Fv": "0x003d9cd0",
+      "__dt__10ItemRef<3>Fv": "0x003d9c50",
+      "__dt__10ItemRef<4>Fv": "0x003d9bd0"
+    },
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003b5cf0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0040c220": {
+    "emitted": {
+      "__dt__5RP<1>Fv": "0x0040da50"
+    },
+    "duplicates": {
+      "__dt__5RP<0>Fv": "0x0033e9c0",
+      "__dt__5RP<2>Fv": "0x003eb800",
+      "__dt__5RP<3>Fv": "0x003eb880",
+      "__dt__5RP<4>Fv": "0x003eb680",
+      "__dt__5RP<5>Fv": "0x003eb780",
+      "__dt__5RP<6>Fv": "0x003eb600",
+      "__dt__5RP<7>Fv": "0x003eb580",
+      "__dt__5RP<8>Fv": "0x003eb500"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0040f720": {
+    "emitted": {
+      "__dt__4RefAFv": "0x00411080",
+      "__dt__4RefBFv": "0x00411100"
+    },
+    "duplicates": {
+      "__dt__4RefCFv": "0x00226990",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d60e0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x001363f0"
+    },
+    "exceptions": {
+      "index": "0x005533dc",
+      "table": "0x005446bc",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00389ff0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9LuaStrRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003ee6d0": {
+    "duplicates": {
+      "__dt__2RPFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0042eb80": {
+    "duplicates": {
+      "__dt__12SubWindowRefFv": "0x0042d350",
+      "__dt__9WindowRefFv": "0x0042de70"
+    },
+    "exceptions": {
+      "index": "0x005542a0",
+      "table": "0x005463dc",
+      "table_size": "0x000028"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00431760": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__12WindowRef<1>Fv": "0x00427020",
+      "__dt__12WindowRef<2>Fv": "0x003b7fe0",
+      "__dt__12WindowRef<3>Fv": "0x00426fa0",
+      "__dt__12WindowRef<4>Fv": "0x0042d350",
+      "__dt__12WindowRef<5>Fv": "0x00432950",
+      "__dt__12WindowRef<6>Fv": "0x0040ebe0",
+      "__dt__12WindowRef<7>Fv": "0x0042de70",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004332d0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__5RP<0>Fv": "0x0041f110",
+      "__dt__5RP<1>Fv": "0x00411080",
+      "__dt__5RP<2>Fv": "0x00428710"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0042f710": {
+    "duplicates": {
+      "__dt__12WindowRef<0>Fv": "0x00411100",
+      "__dt__12WindowRef<1>Fv": "0x00428710",
+      "__dt__12WindowRef<2>Fv": "0x00411080",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003de990": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003832d0"
+    },
+    "exceptions": {
+      "index": "0x005534e4",
+      "table": "0x005447fc",
+      "table_size": "0x000030"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004432a0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00443540"
+    },
+    "exceptions": {
+      "index": "0x005545b8",
+      "table": "0x00546e94",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004329d0": {
+    "duplicates": {
+      "__dt__2RPFv": "0x00150eb0"
+    },
+    "exceptions": {
+      "index": "0x005542f4",
+      "table": "0x0054658c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003ed650": {
+    "duplicates": {
+      "__dt__11DegiDataRefFv": "0x003e9010",
+      "__dt__13SlotPlayerRefFv": "0x003edba0"
+    },
+    "exceptions": {
+      "index": "0x0055376c",
+      "table": "0x00544bdc",
+      "table_size": "0x000034"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004393e0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x001489a0",
+      "__dt__3StrFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005543e4",
+      "table": "0x00546888",
+      "table_size": "0x1c"
+    }
+  },
+  "0x00377990": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x00378ed0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RPDFv": "0x0033e9c0",
+      "__dt__3RPEFv": "0x003699a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0042a2e0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__11SelectE1RefFv": "0x00411100",
+      "__dt__11QuantityRefFv": "0x0041d240",
+      "__dt__10ConfirmRefFv": "0x00411080",
+      "__dt__9ResultRefFv": "0x00428710",
+      "__dt__7MenuRefFv": "0x0042b800"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004270a0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__5RP<0>Fv": "0x00428710",
+      "__dt__5RP<1>Fv": "0x00428690",
+      "__dt__5RP<2>Fv": "0x00411080",
+      "__dt__5RP<3>Fv": "0x00428610"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003e9430": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__11CtrlDataRefFv": "0x003eb980",
+      "__dt__11ItemListRefFv": "0x003eb900",
+      "__dt__9ComMdlRefFv": "0x003eb880",
+      "__dt__12TextOrderRefFv": "0x003eb800",
+      "__dt__10SelSlotRefFv": "0x003eb780",
+      "__dt__10NameSelRefFv": "0x003eb700",
+      "__dt__9MesWinRefFv": "0x003eb680",
+      "__dt__12DegiStateRefFv": "0x003eb600",
+      "__dt__11StatDataRefFv": "0x003eb580",
+      "__dt__10DataSelRefFv": "0x003eb500",
+      "__dt__10DiffSelRefFv": "0x003eb480",
+      "__dt__11DataListRefFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00396a80": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x0033e9c0",
+      "__dt__3StrFv": "0x00130720",
+      "__dt__9ObjRef<0>Fv": "0x00350c10",
+      "__dt__9ObjRef<1>Fv": "0x00350e10",
+      "__dt__9ObjRef<2>Fv": "0x00398d20",
+      "__dt__9ObjRef<3>Fv": "0x00398ca0",
+      "__dt__9ObjRef<4>Fv": "0x00398c20",
+      "__dt__9ObjRef<5>Fv": "0x0034c1b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0041acf0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x003a8140": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00432d30": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__7ListRefFv": "0x00150eb0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00381d70": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__5RP<0>Fv": "0x00382d70",
+      "__dt__5RP<1>Fv": "0x001353b0",
+      "__dt__5RP<2>Fv": "0x001363f0",
+      "__dt__5RP<3>Fv": "0x001489a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004081a0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryRef<0>Fv": "0x003e9010",
+      "__dt__14RecoveryRef<1>Fv": "0x003edba0",
+      "release__14RecoveryTargetFP14RecoveryTarget": "0x003e9110"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610",
+      "__ct__17RecoveryCopiedRefFRC8DW4Sret4": "0x0040c180",
+      "__dt__17RecoveryCopiedRefFv": "0x0033e9c0",
+      "__ct__8DW4Vec16FRC8DW4Vec16": "0x003e9220"
+    },
+    "exceptions": {
+      "index": "0x00553c10",
+      "table": "0x00545200",
+      "table_size": "0x6c"
+    }
+  },
+  "0x00423000": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x003b6090"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0037e3a0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x0037e250"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00383420": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x003832d0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003cdef0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryStringFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x00553154",
+      "table": "0x00544484",
+      "table_size": "0x34"
+    }
+  },
+  "0x003810c0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00436060": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x001489a0"
+    },
+    "exceptions": {
+      "index": "0x00554384",
+      "table": "0x00546748",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00393c80": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RPAFv": "0x00150eb0",
+      "__dt__3RPBFv": "0x001c6460",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0037c4c0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x001489a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f2ef0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__11TitleRef<0>Fv": "0x0033e9c0",
+      "__dt__11TitleRef<2>Fv": "0x003eb880",
+      "__dt__11TitleRef<4>Fv": "0x003eb800",
+      "__dt__11TitleRef<3>Fv": "0x003f5210",
+      "__dt__11TitleRef<1>Fv": "0x003f5290"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005538e0",
+      "table": "0x00544d74",
+      "table_size": "0x80"
+    }
+  },
+  "0x003e4750": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14RecoveryRef<0>Fv": "0x003e9010",
+      "__dt__14RecoveryRef<1>Fv": "0x003832d0",
+      "release__14RecoveryTargetFP14RecoveryTarget": "0x003e9110"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610",
+      "__ct__17RecoveryCopiedRefFRC8DW4Sret4": "0x003e9330",
+      "__dt__17RecoveryCopiedRefFv": "0x0033e9c0",
+      "__ct__8LoadVec3FRC8LoadVec3": "0x003e9220"
+    },
+    "exceptions": {
+      "index": "0x005535b0",
+      "table": "0x00544890",
+      "table_size": "0xc0"
+    }
+  },
+  "0x0015ff10": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x003af150": {
+    "emitted": {
+      "__dt__5RP<0>Fv": "0x003afdf0",
+      "__dt__5RP<1>Fv": "0x003afd70",
+      "__dt__5RP<2>Fv": "0x003afcf0",
+      "__dt__5RP<3>Fv": "0x003afc70",
+      "__dt__5RP<4>Fv": "0x003afbf0",
+      "__dt__5RP<5>Fv": "0x003afb70",
+      "__dt__5RP<6>Fv": "0x003afaf0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003392a0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x00336440"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00418090": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__9WindowRefFv": "0x00411100"
+    },
+    "exceptions": {
+      "index": "0x00553f88",
+      "table": "0x005458bc",
+      "table_size": "0x000034"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00434790": {
+    "emitted": {
+      "__dt__12WindowRef<2>Fv": "0x004350d0",
+      "__dt__12WindowRef<1>Fv": "0x00435150",
+      "__dt__12WindowRef<0>Fv": "0x004351d0"
+    },
+    "duplicates": {
+      "__dt__7ListRefFv": "0x00226990",
+      "__dt__12WindowRef<4>Fv": "0x00411080"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001c66c0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__2RPFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x00411950": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__11NameListRefFv": "0x001c6460",
+      "__dt__10IntListRefFv": "0x00150eb0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00379ce0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RPDFv": "0x0033e9c0",
+      "__dt__3RPEFv": "0x0037a600"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0037e180": {
+    "duplicates": {
+      "__dt__10KeepMesRefFv": "0x0037e250"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054e7b0",
+      "table": "0x005435dc",
+      "table_size": "0x10"
+    }
+  },
+  "0x0037e2d0": {
+    "duplicates": {
+      "__dt__10KeepMesRefFv": "0x0037e250"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054e7c8",
+      "table": "0x005435ec",
+      "table_size": "0x10"
+    }
+  },
+  "0x0037e6e0": {
+    "duplicates": {
+      "__dt__10KeepMesRefFv": "0x0037e250"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054e7e0",
+      "table": "0x00543610",
+      "table_size": "0x10"
+    }
+  },
+  "0x0037e890": {
+    "duplicates": {
+      "__dt__10KeepMesRefFv": "0x0037e250"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054e7ec",
+      "table": "0x00543620",
+      "table_size": "0x10"
+    }
+  },
+  "0x00332e90": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00547334",
+      "table": "0x00542c3c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00372b50": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0054e0d8",
+      "table": "0x005433e8",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003742e0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054e2e8",
+      "table": "0x0054342c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00383910": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x001338d0"
+    },
+    "exceptions": {
+      "index": "0x0054e930",
+      "table": "0x0054378c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00383ab0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x001338d0"
+    },
+    "exceptions": {
+      "index": "0x0054e93c",
+      "table": "0x0054379c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00388f00": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0019e3c0"
+    },
+    "exceptions": {
+      "index": "0x0054ea74",
+      "table": "0x00543818",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0038a6e0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0038abf0",
+      "__dt__9ReaderRefFv": "0x0038ab70"
+    },
+    "exceptions": {
+      "index": "0x0054eb4c",
+      "table": "0x00543854",
+      "table_size": "0x000034"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0038d560": {
+    "duplicates": {
+      "__dt__8GroupRefFv": "0x0038d7a0",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0054ec48",
+      "table": "0x00543928",
+      "table_size": "0x000020"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0038f830": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0054ed98",
+      "table": "0x005439d0",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003908e0": {
+    "duplicates": {
+      "__dt__8AABoxRefFv": "0x00198190"
+    },
+    "exceptions": {
+      "index": "0x0054ee04",
+      "table": "0x005439f8",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00391b40": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054ee58",
+      "table": "0x00543a40",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00392fa0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054eedc",
+      "table": "0x00543a78",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00394400": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054ef24",
+      "table": "0x00543b00",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003956e0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054ef9c",
+      "table": "0x00543b30",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00395b50": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054efa8",
+      "table": "0x00543b40",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003960f0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0054efb4",
+      "table": "0x00543b50",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00396740": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054efcc",
+      "table": "0x00543b74",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00396940": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00198190"
+    },
+    "exceptions": {
+      "index": "0x0054efd8",
+      "table": "0x00543b84",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00399940": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054f05c",
+      "table": "0x00543c48",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0039a250": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0039a480"
+    },
+    "exceptions": {
+      "index": "0x0054f0bc",
+      "table": "0x00543c68",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0039a500": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0039a6d0"
+    },
+    "exceptions": {
+      "index": "0x0054f0d4",
+      "table": "0x00543c7c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0039a750": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0039a880"
+    },
+    "exceptions": {
+      "index": "0x0054f0ec",
+      "table": "0x00543c8c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0039bca0": {
+    "duplicates": {
+      "__dt__7WorkRefFv": "0x0034be40"
+    },
+    "exceptions": {
+      "index": "0x0054f200",
+      "table": "0x00543cd4",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0039cbf0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054f290",
+      "table": "0x00543cf8",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0039d720": {
+    "duplicates": {
+      "__dt__11BoolListRefFv": "0x00226990",
+      "__dt__7ListRefFv": "0x0033e9c0",
+      "__dt__7WorkRefFv": "0x00345410"
+    },
+    "exceptions": {
+      "index": "0x0054f29c",
+      "table": "0x00543d08",
+      "table_size": "0x000034"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003a1830": {
+    "duplicates": {
+      "__dt__7ListRefFv": "0x0033f6d0",
+      "__dt__9ObjectRefFv": "0x003a19d0"
+    },
+    "exceptions": {
+      "index": "0x0054f3e0",
+      "table": "0x00543dc4",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003a7d80": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054f668",
+      "table": "0x00543e84",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003a7e90": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054f674",
+      "table": "0x00543e94",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003a82f0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0054f698",
+      "table": "0x00543ec4",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003b02c0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0019aa10"
+    },
+    "exceptions": {
+      "index": "0x0054fa88",
+      "table": "0x00543fb4",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003cbb60": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x005530a0",
+      "table": "0x0054444c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d14c0": {
+    "duplicates": {
+      "__dt__8ValueRefFv": "0x00352fc0",
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00553244",
+      "table": "0x00544504",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d1700": {
+    "duplicates": {
+      "__dt__7ListRefFv": "0x0033e9c0",
+      "__dt__9EffectRefFv": "0x00352fc0"
+    },
+    "exceptions": {
+      "index": "0x0055325c",
+      "table": "0x00544520",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d2030": {
+    "duplicates": {
+      "__dt__8ValueRefFv": "0x00352fc0",
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005532c8",
+      "table": "0x00544574",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d31f0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00553310",
+      "table": "0x005445ac",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d3640": {
+    "duplicates": {
+      "__dt__10IntListRefFv": "0x00150eb0",
+      "__dt__11DataListRefFv": "0x0033e9c0",
+      "__dt__11InfoWorkRefFv": "0x003bde80",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0055331c",
+      "table": "0x005445bc",
+      "table_size": "0x000034"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d40f0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00553328",
+      "table": "0x005445f0",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d4240": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00553334",
+      "table": "0x00544600",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d45f0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x0055334c",
+      "table": "0x00544620",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d4820": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00553358",
+      "table": "0x00544630",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d4a20": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "emitted": {
+      "__dt__8ValueRefFv": "0x003d4e20"
+    },
+    "exceptions": {
+      "index": "0x00553388",
+      "table": "0x00544640",
+      "table_size": "0x000028"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d4ea0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005533a0",
+      "table": "0x00544668",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003dcc60": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003832d0"
+    },
+    "exceptions": {
+      "index": "0x00553490",
+      "table": "0x00544798",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003e3e00": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003e3d80"
+    },
+    "exceptions": {
+      "index": "0x0055355c",
+      "table": "0x0054485c",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003e4030": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003e3d80"
+    },
+    "exceptions": {
+      "index": "0x00553568",
+      "table": "0x00544870",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f0ed0": {
+    "emitted": {
+      "__dt__10SlotRef<0>Fv": "0x003f11f0",
+      "__dt__10SlotRef<1>Fv": "0x003f1170",
+      "__dt__10SlotRef<2>Fv": "0x003f10f0"
+    },
+    "exceptions": {
+      "index": "0x00553808",
+      "table": "0x00544cd0",
+      "table_size": "0x000024"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f1a80": {
+    "duplicates": {
+      "__dt__7ListRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00553880",
+      "table": "0x00544cf4",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f5410": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0055391c",
+      "table": "0x00544df4",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f56d0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00553934",
+      "table": "0x00544e10",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f5c90": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00553964",
+      "table": "0x00544e34",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f7310": {
+    "duplicates": {
+      "__dt__13PlayerDataRefFv": "0x003ba350",
+      "__dt__7ItemRefFv": "0x003b9ba0"
+    },
+    "exceptions": {
+      "index": "0x00553a18",
+      "table": "0x00544ec8",
+      "table_size": "0x000020"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f77b0": {
+    "duplicates": {
+      "__dt__17CommonDataListRefFv": "0x003ba350",
+      "__dt__21PlayerDataListListRefFv": "0x003c9ef0"
+    },
+    "exceptions": {
+      "index": "0x00553a24",
+      "table": "0x00544ee8",
+      "table_size": "0x000018"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f7e40": {
+    "duplicates": {
+      "__dt__6RamRefFv": "0x003f7fd0",
+      "__dt__7InfoRefFv": "0x003f8050"
+    },
+    "exceptions": {
+      "index": "0x00553a48",
+      "table": "0x00544f00",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f80e0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00553a6c",
+      "table": "0x00544f1c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003f8c90": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00553a9c",
+      "table": "0x00544f48",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00411180": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003c1520"
+    },
+    "exceptions": {
+      "index": "0x00553d24",
+      "table": "0x00545504",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004141a0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__9WindowRefFv": "0x00414420"
+    },
+    "exceptions": {
+      "index": "0x00553db4",
+      "table": "0x005456e8",
+      "table_size": "0x00002c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00414670": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__9WindowRefFv": "0x00411100"
+    },
+    "exceptions": {
+      "index": "0x00553dfc",
+      "table": "0x00545714",
+      "table_size": "0x00002c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00414d10": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00414420"
+    },
+    "exceptions": {
+      "index": "0x00553e20",
+      "table": "0x00545760",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00416250": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__9WindowRefFv": "0x00414420"
+    },
+    "exceptions": {
+      "index": "0x00553e8c",
+      "table": "0x005457cc",
+      "table_size": "0x00002c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00416c80": {
+    "duplicates": {
+      "__dt__11BoolListRefFv": "0x00226990",
+      "__dt__9WindowRefFv": "0x00413fd0"
+    },
+    "exceptions": {
+      "index": "0x00553ee0",
+      "table": "0x00545834",
+      "table_size": "0x000020"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00416f90": {
+    "duplicates": {
+      "__dt__9WindowRefFv": "0x00414420"
+    },
+    "exceptions": {
+      "index": "0x00553eec",
+      "table": "0x00545854",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00417880": {
+    "duplicates": {
+      "__dt__11BoolListRefFv": "0x00226990",
+      "__dt__9WindowRefFv": "0x00413fd0"
+    },
+    "exceptions": {
+      "index": "0x00553f40",
+      "table": "0x00545874",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00417cc0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__9WindowRefFv": "0x00414420"
+    },
+    "exceptions": {
+      "index": "0x00553f58",
+      "table": "0x00545890",
+      "table_size": "0x00002c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0041a400": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__9WindowRefFv": "0x00411100"
+    },
+    "exceptions": {
+      "index": "0x00553fc4",
+      "table": "0x0054594c",
+      "table_size": "0x000048"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0041d810": {
+    "duplicates": {
+      "__dt__15SelectWindowRefFv": "0x0041ddc0",
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__9WindowRefFv": "0x00411080"
+    },
+    "exceptions": {
+      "index": "0x00554024",
+      "table": "0x00545b34",
+      "table_size": "0x00003c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00422c00": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x003b6090"
+    },
+    "exceptions": {
+      "index": "0x00554078",
+      "table": "0x00545e0c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00423760": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x005540a8",
+      "table": "0x00545e2c",
+      "table_size": "0x000044"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00423bf0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x005540b4",
+      "table": "0x00545e70",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00425430": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x005540fc",
+      "table": "0x00545f9c",
+      "table_size": "0x000014"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00426140": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0055412c",
+      "table": "0x00545fc0",
+      "table_size": "0x000040"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004265c0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00554144",
+      "table": "0x00546000",
+      "table_size": "0x000018"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0042df70": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0055427c",
+      "table": "0x00546358",
+      "table_size": "0x000028"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0042e9e0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00554294",
+      "table": "0x005463cc",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00433120": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0040ed60"
+    },
+    "exceptions": {
+      "index": "0x00554318",
+      "table": "0x005465ac",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0043d1d0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0055445c",
+      "table": "0x00546a84",
+      "table_size": "0x000024"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0043d450": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00554468",
+      "table": "0x00546aa8",
+      "table_size": "0x000070"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0043eab0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x00554480",
+      "table": "0x00546c08",
+      "table_size": "0x000018"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0043ecc0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0055448c",
+      "table": "0x00546c20",
+      "table_size": "0x0000f0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00440670": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x005544d4",
+      "table": "0x00546d20",
+      "table_size": "0x00002c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00440a20": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x005544e0",
+      "table": "0x00546d4c",
+      "table_size": "0x000048"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00441040": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x005544f8",
+      "table": "0x00546d94",
+      "table_size": "0x000018"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004429d0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00554588",
+      "table": "0x00546e64",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00442d10": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005545a0",
+      "table": "0x00546e84",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00443900": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005545dc",
+      "table": "0x00546ea4",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00443bd0": {
+    "duplicates": {
+      "__dt__7ListRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005545e8",
+      "table": "0x00546eb4",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00445200": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005545f4",
+      "table": "0x00546ec4",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004456c0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00150eb0"
+    },
+    "exceptions": {
+      "index": "0x00554600",
+      "table": "0x00546ed4",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00445990": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00150eb0"
+    },
+    "exceptions": {
+      "index": "0x0055460c",
+      "table": "0x00546ee4",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00445d10": {
+    "duplicates": {
+      "__dt__10IntListRefFv": "0x00150eb0",
+      "__dt__11BoolListRefFv": "0x00226990",
+      "__dt__7ListRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x00554624",
+      "table": "0x00546ef4",
+      "table_size": "0x000028"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0044acc0": {
+    "duplicates": {
+      "__dt__11DataListRefFv": "0x0033e9c0",
+      "__dt__11InfoWorkRefFv": "0x00352fc0"
+    },
+    "exceptions": {
+      "index": "0x005547b0",
+      "table": "0x00546f4c",
+      "table_size": "0x00001c"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0044af50": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005547bc",
+      "table": "0x00546f68",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0044b520": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0"
+    },
+    "exceptions": {
+      "index": "0x005547e0",
+      "table": "0x00546f94",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0038ed70": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00357a90"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054ed08",
+      "table": "0x005439a8",
+      "table_size": "0x000010"
+    }
+  },
+  "0x0038ef50": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00357a90"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054ed14",
+      "table": "0x005439b8",
+      "table_size": "0x000010"
+    }
+  },
+  "0x0038e6b0": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0038c390"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054eccc",
+      "table": "0x0054397c",
+      "table_size": "0x000010"
+    }
+  },
+  "0x0038bee0": {
+    "duplicates": {
+      "__dt__10ArgDataRefFv": "0x00357a90",
+      "__dt__7WorkRefFv": "0x0038c410",
+      "__dt__8DelayRefFv": "0x0038c390"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054ebb8",
+      "table": "0x005438d0",
+      "table_size": "0x000030"
+    }
+  },
+  "0x003cfe50": {
+    "externals": {
+      "__ct__9StringRefFPCc": "0x003cc550",
+      "__dt__9StringRefFv": "0x00130720",
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005531fc",
+      "table": "0x005444d8",
+      "table_size": "0x000010"
+    }
+  },
+  "0x003cbd80": {
+    "externals": {
+      "__ct__9StringRefFPCc": "0x003cc550",
+      "__dt__9StringRefFv": "0x00130720",
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005530ac",
+      "table": "0x0054445c",
+      "table_size": "0x000010"
+    }
+  },
+  "0x00259dc0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "exceptions": {
+      "index": "0x0054716c",
+      "table": "0x00542b88",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0033bd30": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x00130140"
+    },
+    "exceptions": {
+      "index": "0x00547bb0",
+      "table": "0x00542e2c",
+      "table_size": "0x000010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002595e0": {
+    "emitted": {
+      "__dt__5GuardFv": "0x002599b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610",
+      "__ct__3AppFv": "0x00234900",
+      "__dt__3AppFv": "0x00234b90",
+      "__ct__3BlkFv": "0x0025a070",
+      "__dt__3BlkFv": "0x0025a330"
+    },
+    "exceptions": {
+      "index": "0x00547100",
+      "table": "0x00542b5c",
+      "table_size": "0x2c"
+    }
+  },
+  "0x003ef1e0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__10ItemRef<1>Fv": "0x003d9d50",
+      "__dt__10ItemRef<2>Fv": "0x003d9cd0",
+      "__dt__10ItemRef<3>Fv": "0x003d9c50",
+      "__dt__10ItemRef<4>Fv": "0x003d9bd0",
+      "__dt__11ItemRefLastFv": "0x003b9ba0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005537d8",
+      "table": "0x00544c20",
+      "table_size": "0x3c"
+    }
+  },
+  "0x003ef5d0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__8ChunkRefFv": "0x003832d0",
+      "__dt__7ItemRefFv": "0x001363f0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005537e4",
+      "table": "0x00544c5c",
+      "table_size": "0x6c"
+    }
+  },
+  "0x004415b0": {
+    "emitted": {
+      "__dt__8ItemRefCFv": "0x00441f10",
+      "__dt__8ItemRefBFv": "0x00441f90",
+      "__dt__7WorkRefFv": "0x00442010"
+    },
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0033e9c0",
+      "__dt__7ItemRefFv": "0x003b9ba0",
+      "__dt__11ItemRefK<1>Fv": "0x003d9d50",
+      "__dt__11ItemRefK<2>Fv": "0x003d9cd0",
+      "__dt__11ItemRefK<3>Fv": "0x003d9c50",
+      "__dt__11ItemRefK<4>Fv": "0x003d9bd0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0055454c",
+      "table": "0x00546dac",
+      "table_size": "0xa4"
+    }
+  },
+  "0x003f6620": {
+    "emitted": {
+      "__dt__29DataRef<18beDataObjFloatList>Fv": "0x003f6f90",
+      "__dt__30DataRef<19beDataObjObjectList>Fv": "0x003f7010",
+      "__dt__30DataRef<19beDataObjStringList>Fv": "0x003f7090",
+      "__dt__26DataRef<15beDataObjString>Fv": "0x003f7110",
+      "__dt__28DataRef<17beDataObjBoolList>Fv": "0x003f7190",
+      "__dt__24DataRef<13beDataObjBool>Fv": "0x003f7210",
+      "__dt__27DataRef<16beDataObjIntList>Fv": "0x003f7290"
+    },
+    "duplicates": {
+      "__dt__23DataRef<12beDataObjInt>Fv": "0x00350b10",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005539b8",
+      "table": "0x00544e60",
+      "table_size": "0x68"
+    }
+  },
+  "0x003f2490": {
+    "emitted": {
+      "__dt__11CtrlDataRefFv": "0x003f2cc0",
+      "__dt__13CommonIntfRefFv": "0x003f2c40",
+      "__dt__11FlagWorkRefFv": "0x003f2bc0"
+    },
+    "duplicates": {
+      "__dt__11DataListRefFv": "0x0033e9c0",
+      "__dt__11DegiDataRefFv": "0x003e9010"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00407aa0": {
+    "emitted": {
+      "__dt__15SaveCtrlDataRefFv": "0x00408070"
+    },
+    "duplicates": {
+      "__dt__11DataListRefFv": "0x0033e9c0",
+      "__dt__13CommonIntfRefFv": "0x003f2c40",
+      "__dt__11DegiDataRefFv": "0x003e9010",
+      "__dt__11FlagWorkRefFv": "0x003f2bc0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0037fa30": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__12GlobalStrRefFv": "0x001489a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003d22f0": {
+    "emitted": {
+      "__dt__8NamedRefFv": "0x003d3170"
+    },
+    "duplicates": {
+      "__dt__8PropsRefFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005532f8",
+      "table": "0x00544590",
+      "table_size": "0x1c"
+    }
+  },
+  "0x00393260": {
+    "emitted": {
+      "__dt__7MoveRefFv": "0x00393aa0"
+    },
+    "duplicates": {
+      "__dt__11DataListRefFv": "0x0033e9c0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x0054eee8",
+      "table": "0x00543a8c",
+      "table_size": "0x20"
+    }
+  },
+  "0x0042e330": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x00554288",
+      "table": "0x00546380",
+      "table_size": "0x4c"
+    }
+  },
+  "0x00413480": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__12GlobalStrRefFv": "0x001489a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00415680": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__12GlobalStrRefFv": "0x001489a0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00339110": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__11ObjectShareFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0025ac60": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x001c6460",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003bfd60": {
+    "externals": {
+      "__ct__18PEBaseInfoWorkViewFv": "0x003c0120",
+      "__dt__18PEBaseInfoWorkViewFv": "0x003bfde0",
+      "__ct__14ObjectRefFieldFv": "0x001510d0",
+      "__dt__14ObjectRefFieldFv": "0x00150eb0",
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x00551900",
+      "table": "0x00544250",
+      "table_size": "0x10"
+    },
+    "stripped": [
+      "__dt__18PlayerInfoWorkViewFv"
+    ]
+  },
+  "0x003c1480": {
+    "externals": {
+      "__ct__8InfoBaseFv": "0x003bf650",
+      "__dt__8InfoBaseFv": "0x00350410",
+      "__ct__9StringRefFv": "0x00229270",
+      "__dt__9StringRefFv": "0x00130720",
+      "__dl__FPv": "0x00100610",
+      "__ct__15ItemObjectFieldFv": "0x003c15a0",
+      "__dt__15ItemObjectFieldFv": "0x003c1520"
+    },
+    "exceptions": {
+      "index": "0x00551bb8",
+      "table": "0x005443e8",
+      "table_size": "0x1c"
+    },
+    "stripped": [
+      "__dt__12ItemInfoWorkFv"
+    ]
+  },
+  "0x003410c0": {
+    "externals": {
+      "__ct__12igObjectViewFv": "0x002fef20",
+      "__ct__15igMatrix44fViewFv": "0x00190380",
+      "__dt__10igNodeViewFv": "0x00195a90",
+      "__dt__15igTransformViewFv": "0x001962d0",
+      "__dt__22SyncTransformListFieldFv": "0x00341160"
+    },
+    "exceptions": {
+      "index": "0x00548360",
+      "table": "0x0054302c",
+      "table_size": "0x10"
+    },
+    "stripped": [
+      "__dt__17TransformSyncViewFv"
+    ]
+  },
+  "0x0034fde0": {
+    "externals": {
+      "__ct__12igObjectViewFv": "0x002fef20",
+      "__ct__15igMatrix44fViewFv": "0x00190380",
+      "__dt__10igNodeViewFv": "0x00195a90",
+      "__dt__15igTransformViewFv": "0x001962d0",
+      "__dt__21OverrideAttrListFieldFv": "0x0013bfe0"
+    },
+    "exceptions": {
+      "index": "0x0054a160",
+      "table": "0x005430d4",
+      "table_size": "0x10"
+    },
+    "stripped": [
+      "__dt__18ModelCtrlNode2ViewFv"
+    ]
+  },
+  "0x00367ea0": {
+    "externals": {
+      "__ct__12igObjectViewFv": "0x002fef20",
+      "__ct__15igMatrix44fViewFv": "0x00190380",
+      "__dt__10igNodeViewFv": "0x00195a90",
+      "__dt__15igTransformViewFv": "0x001962d0",
+      "__dt__17SrcTransformFieldFv": "0x001a7580"
+    },
+    "exceptions": {
+      "index": "0x0054d070",
+      "table": "0x00543348",
+      "table_size": "0x10"
+    },
+    "stripped": [
+      "__dt__17CopyTransformViewFv"
+    ]
+  },
+  "0x00368100": {
+    "externals": {
+      "__ct__12igObjectViewFv": "0x002fef20",
+      "__ct__15igMatrix44fViewFv": "0x00190380",
+      "__dt__10igNodeViewFv": "0x00195a90",
+      "__dt__15igTransformViewFv": "0x001962d0",
+      "__dt__12SrcNodeFieldFv": "0x0034c1b0"
+    },
+    "exceptions": {
+      "index": "0x0054d0c4",
+      "table": "0x00543358",
+      "table_size": "0x10"
+    },
+    "stripped": [
+      "__dt__18CopyModelCtrl2ViewFv"
+    ]
+  },
+  "0x00369900": {
+    "externals": {
+      "__ct__12igObjectViewFv": "0x002fef20",
+      "__ct__15igMatrix44fViewFv": "0x00190380",
+      "__dt__18ControllerBaseViewFv": "0x0033f5e0",
+      "__dt__15CameraModeFieldFv": "0x003699a0"
+    },
+    "exceptions": {
+      "index": "0x0054d3ac",
+      "table": "0x00543378",
+      "table_size": "0x18"
+    },
+    "stripped": [
+      "__dt__14CameraCtrlViewFv"
+    ]
+  },
+  "0x00221870": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {}
+  },
+  "0x00221a10": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {
+      "crc_table": "0x004e6aa0"
+    },
+    "stripped": [
+      "get_crc_table"
+    ]
+  },
+  "0x00221bf0": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {},
+    "stripped": [
+      "deflate",
+      "deflateCopy",
+      "deflateInit2_",
+      "deflateInit_",
+      "deflateParams",
+      "deflateReset",
+      "deflateSetDictionary",
+      "deflate_fast",
+      "deflate_slow",
+      "deflate_stored",
+      "fill_window",
+      "flush_pending",
+      "lm_init",
+      "longest_match",
+      "putShortMSB",
+      "read_buf"
+    ]
+  },
+  "0x00221d10": {
+    "whole_file": true,
+    "emitted": {
+      "inflate_blocks_new": "0x00221dd0",
+      "inflate_blocks": "0x00221ee0",
+      "inflate_blocks_free": "0x00222e20"
+    },
+    "data": {
+      "@373": "0x004e72f0",
+      "@374": "0x004e7310",
+      "@375": "0x004e7330",
+      "@376": "0x004e7360",
+      "@381": "0x004e7380",
+      "border": "0x004e72a0",
+      "inflate_mask": "0x00497b20"
+    },
+    "stripped": [
+      "inflate_blocks_sync_point",
+      "inflate_set_dictionary"
+    ]
+  },
+  "0x00222e90": {
+    "whole_file": true,
+    "emitted": {
+      "inflate_codes": "0x00222f10",
+      "inflate_codes_free": "0x00223970"
+    },
+    "data": {
+      "@252": "0x004e73b0",
+      "@253": "0x004e73d0",
+      "@258": "0x004e73f0",
+      "inflate_mask": "0x00497b20"
+    }
+  },
+  "0x00223990": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {
+      "@170": "0x004e7420",
+      "@171": "0x004e7440",
+      "inflate_mask": "0x00497b20"
+    }
+  },
+  "0x00223ec0": {
+    "whole_file": true,
+    "emitted": {
+      "inflateEnd": "0x00223f30",
+      "inflateInit2_": "0x00223fb0",
+      "inflateInit_": "0x00224130",
+      "inflate": "0x00224150"
+    },
+    "data": {
+      "@183": "0x004e7470",
+      "@184": "0x004e7490",
+      "@185": "0x004e74b0",
+      "@186": "0x004e74d0",
+      "@187": "0x004e74e0",
+      "@192": "0x004e7500",
+      "@64": "0x004e7460"
+    },
+    "stripped": [
+      "inflateSetDictionary",
+      "inflateSync",
+      "inflateSyncPoint"
+    ]
+  },
+  "0x00224780": {
+    "whole_file": true,
+    "emitted": {
+      "inflate_trees_bits": "0x00224d60",
+      "inflate_trees_dynamic": "0x00224e80",
+      "inflate_trees_fixed": "0x002250a0"
+    },
+    "data": {
+      "@289": "0x004e7740",
+      "@290": "0x004e7770",
+      "@331": "0x004e77a0",
+      "@332": "0x004e77d0",
+      "@333": "0x004e77f0",
+      "@334": "0x004e7810",
+      "@335": "0x004e7830",
+      "cpdext": "0x004e76c0",
+      "cpdist": "0x004e7640",
+      "cplens": "0x004e7540",
+      "cplext": "0x004e75c0",
+      "fixed_bd": "0x00496a18",
+      "fixed_bl": "0x00496a10",
+      "fixed_td": "0x00497a20",
+      "fixed_tl": "0x00496a20"
+    }
+  },
+  "0x002250e0": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {}
+  },
+  "0x002252a0": {
+    "whole_file": true,
+    "emitted": {
+      "zcfree": "0x002252b0"
+    },
+    "data": {},
+    "stripped": [
+      "zError",
+      "zlibVersion"
+    ],
+    "externals": {
+      "calloc": "0x00123730",
+      "free": "0x00126360"
+    }
+  },
+  "0x0020e750": {
+    "whole_file": true,
+    "emitted": {
+      "png_sig_cmp": "0x0020e7b0",
+      "png_zalloc": "0x0020e840",
+      "png_zfree": "0x0020e8c0",
+      "png_reset_crc": "0x0020e8d0",
+      "png_calculate_crc": "0x0020e910",
+      "png_create_info_struct": "0x0020e9a0",
+      "png_destroy_info_struct": "0x0020e9f0",
+      "png_info_init": "0x0020ea50",
+      "png_free_data": "0x0020ea60",
+      "png_info_destroy": "0x0020ef40",
+      "png_get_io_ptr": "0x0020efb0",
+      "png_handle_as_unknown": "0x0020efc0"
+    },
+    "data": {
+      "@13": "0x004e56c0",
+      "@25": "0x004966c0"
+    },
+    "stripped": [
+      "png_access_version_number",
+      "png_check_sig",
+      "png_convert_to_rfc1123",
+      "png_data_freer",
+      "png_get_copyright",
+      "png_get_header_ver",
+      "png_get_header_version",
+      "png_get_libpng_ver",
+      "png_init_io",
+      "png_reset_zstream"
+    ],
+    "externals": {
+      "crc32": "0x00221a10",
+      "memcmp": "0x00127004"
+    }
+  },
+  "0x0020f070": {
+    "whole_file": true,
+    "emitted": {
+      "png_warning": "0x0020f0c0",
+      "png_format_buffer": "0x0020f100",
+      "png_chunk_error": "0x0020f230",
+      "png_chunk_warning": "0x0020f270",
+      "png_default_error": "0x0020f2b0",
+      "png_default_warning": "0x0020f2f0",
+      "png_set_error_fn": "0x0020f330"
+    },
+    "data": {
+      "@72": "0x004e5700",
+      "@81": "0x004e5720",
+      "_impure_ptr": "0x004854a0",
+      "png_digit": "0x004e56f0"
+    },
+    "stripped": [
+      "png_get_error_ptr"
+    ],
+    "externals": {
+      "abort": "0x001236b8",
+      "fprintf": "0x00125220"
+    }
+  },
+  "0x0020f340": {
+    "whole_file": true,
+    "emitted": {
+      "png_get_rowbytes": "0x0020f370",
+      "png_get_IHDR": "0x0020f3a0",
+      "png_get_PLTE": "0x0020f4d0",
+      "png_get_sBIT": "0x0020f520",
+      "png_get_tRNS": "0x0020f570"
+    },
+    "data": {
+      "@444": "0x004e5740"
+    },
+    "stripped": [
+      "png_get_bKGD",
+      "png_get_bit_depth",
+      "png_get_cHRM",
+      "png_get_cHRM_fixed",
+      "png_get_channels",
+      "png_get_color_type",
+      "png_get_compression_buffer_size",
+      "png_get_compression_type",
+      "png_get_filter_type",
+      "png_get_gAMA",
+      "png_get_gAMA_fixed",
+      "png_get_hIST",
+      "png_get_image_height",
+      "png_get_image_width",
+      "png_get_interlace_type",
+      "png_get_oFFs",
+      "png_get_pCAL",
+      "png_get_pHYs",
+      "png_get_pixel_aspect_ratio",
+      "png_get_pixels_per_meter",
+      "png_get_rgb_to_gray_status",
+      "png_get_rows",
+      "png_get_sCAL",
+      "png_get_sPLT",
+      "png_get_sRGB",
+      "png_get_signature",
+      "png_get_tIME",
+      "png_get_text",
+      "png_get_unknown_chunks",
+      "png_get_user_chunk_ptr",
+      "png_get_x_offset_microns",
+      "png_get_x_offset_pixels",
+      "png_get_x_pixels_per_meter",
+      "png_get_y_offset_microns",
+      "png_get_y_offset_pixels",
+      "png_get_y_pixels_per_meter"
+    ]
+  },
+  "0x0020f610": {
+    "whole_file": true,
+    "emitted": {
+      "png_destroy_struct_2": "0x0020f6d0",
+      "png_malloc": "0x0020f710",
+      "png_malloc_default": "0x0020f770",
+      "png_free": "0x0020f7c0",
+      "png_free_default": "0x0020f820",
+      "png_memcpy_check": "0x0020f860",
+      "png_memset_check": "0x0020f8c0",
+      "png_set_mem_fn": "0x0020f920"
+    },
+    "data": {
+      "@107": "0x004e5790",
+      "@119": "0x004e57b0",
+      "@72": "0x004e5778"
+    },
+    "stripped": [
+      "png_create_struct",
+      "png_destroy_struct",
+      "png_get_mem_ptr"
+    ],
+    "externals": {
+      "free": "0x00126360",
+      "malloc": "0x00126308"
+    }
+  },
+  "0x0020f930": {
+    "whole_file": true,
+    "emitted": {
+      "png_read_info": "0x0020fbb0",
+      "png_read_update_info": "0x002101a0",
+      "png_read_row": "0x002101f0",
+      "png_read_end": "0x00210500",
+      "png_destroy_read_struct": "0x00210a10",
+      "png_read_destroy": "0x00210b20"
+    },
+    "data": {
+      "@205": "0x004e58b8",
+      "@206": "0x004e58d0",
+      "@207": "0x004e5900",
+      "@208": "0x004e5920",
+      "@294": "0x004e5940",
+      "@295": "0x004e5970",
+      "@296": "0x004e5990",
+      "@297": "0x004e59b0",
+      "@463": "0x004e59d0",
+      "@55": "0x004e57d0",
+      "@56": "0x004e5810",
+      "@57": "0x004e5850",
+      "@58": "0x004e5860",
+      "@59": "0x004e5880",
+      "@60": "0x004e58a0",
+      "png_IDAT": "0x004e5628",
+      "png_IEND": "0x004e5630",
+      "png_IHDR": "0x004e5620",
+      "png_PLTE": "0x004e5638",
+      "png_bKGD": "0x004e5640",
+      "png_cHRM": "0x004e5648",
+      "png_gAMA": "0x004e5650",
+      "png_hIST": "0x004e5658",
+      "png_libpng_ver": "0x00496630",
+      "png_oFFs": "0x004e5660",
+      "png_pCAL": "0x004e5668",
+      "png_pHYs": "0x004e5678",
+      "png_sBIT": "0x004e5680",
+      "png_sCAL": "0x004e5670",
+      "png_sPLT": "0x004e5688",
+      "png_sRGB": "0x004e5690",
+      "png_tEXt": "0x004e5698",
+      "png_tIME": "0x004e56a0",
+      "png_tRNS": "0x004e56a8",
+      "png_zTXt": "0x004e56b0"
+    },
+    "stripped": [
+      "png_create_read_struct",
+      "png_read_image",
+      "png_read_init",
+      "png_read_init_2",
+      "png_read_png",
+      "png_read_rows",
+      "png_set_read_status_fn",
+      "png_start_read_image"
+    ],
+    "externals": {
+      "inflate": "0x00224150",
+      "inflateEnd": "0x00223f30",
+      "inflateInit_": "0x00224130",
+      "memcmp": "0x00127004"
+    }
+  },
+  "0x00210df0": {
+    "whole_file": true,
+    "emitted": {
+      "png_default_read_data": "0x00210e40",
+      "png_set_read_fn": "0x00210ea0"
+    },
+    "data": {
+      "@13": "0x004e59f0",
+      "@24": "0x004e5a10",
+      "@37": "0x004e5a20",
+      "@38": "0x004e5a70"
+    },
+    "externals": {
+      "fread": "0x001252c8"
+    }
+  },
+  "0x00210f20": {
+    "whole_file": true,
+    "emitted": {
+      "png_set_gray_1_2_4_to_8": "0x00210f30",
+      "png_set_tRNS_to_alpha": "0x00210f40",
+      "png_set_read_user_transform_fn": "0x00210f50",
+      "png_init_read_transformations": "0x00210f70",
+      "png_read_transform_info": "0x00212280",
+      "png_do_read_transformations": "0x00212580",
+      "png_do_unpack": "0x00212a60",
+      "png_do_unshift": "0x00212c20",
+      "png_do_chop": "0x00213430",
+      "png_do_read_swap_alpha": "0x00213520",
+      "png_do_read_invert_alpha": "0x00214100",
+      "png_do_read_filler": "0x002147f0",
+      "png_do_gray_to_rgb": "0x00215d10",
+      "png_do_rgb_to_gray": "0x00216310",
+      "png_do_background": "0x00216ac0",
+      "png_do_gamma": "0x00217f30",
+      "png_do_expand_palette": "0x00218e70",
+      "png_do_expand": "0x00219450",
+      "png_do_dither": "0x002199e0",
+      "png_build_gamma_table": "0x0021a0c0"
+    },
+    "data": {
+      "@1245": "0x004e5ab0",
+      "@1246": "0x004e5ae0",
+      "@1247": "0x004e5b10",
+      "png_gamma_shift": "0x004966d0"
+    },
+    "stripped": [
+      "png_build_grayscale_palette",
+      "png_set_background",
+      "png_set_crc_action",
+      "png_set_dither",
+      "png_set_expand",
+      "png_set_gamma",
+      "png_set_gray_to_rgb",
+      "png_set_palette_to_rgb",
+      "png_set_rgb_to_gray",
+      "png_set_rgb_to_gray_fixed",
+      "png_set_strip_alpha"
+    ],
+    "externals": {
+      "_d_utod": "0x00100290",
+      "_dpfgt": "0x00100340",
+      "_dpflt": "0x001002f0",
+      "_dpfne": "0x001002d0",
+      "dpadd": "0x002306d0",
+      "dpdiv": "0x00230a18",
+      "dpmul": "0x00230790",
+      "dpsub": "0x00230728",
+      "dptoul": "0x00230ea8",
+      "fabs": "0x00122538",
+      "fptodp": "0x00230298",
+      "litodp": "0x00230cc8",
+      "pow": "0x001235e0"
+    }
+  },
+  "0x0021aa30": {
+    "whole_file": true,
+    "emitted": {
+      "png_get_int_32": "0x0021aa60",
+      "png_get_uint_16": "0x0021aa90",
+      "png_crc_read": "0x0021aab0",
+      "png_crc_finish": "0x0021ab00",
+      "png_crc_error": "0x0021ac00",
+      "png_decompress_chunk": "0x0021acb0",
+      "png_handle_IHDR": "0x0021b030",
+      "png_handle_PLTE": "0x0021b370",
+      "png_handle_IEND": "0x0021b5e0",
+      "png_handle_gAMA": "0x0021b680",
+      "png_handle_sBIT": "0x0021b880",
+      "png_handle_cHRM": "0x0021ba70",
+      "png_handle_sRGB": "0x0021c250",
+      "png_handle_sPLT": "0x0021c580",
+      "png_handle_tRNS": "0x0021c860",
+      "png_handle_bKGD": "0x0021cb20",
+      "png_handle_hIST": "0x0021cdb0",
+      "png_handle_pHYs": "0x0021cf80",
+      "png_handle_oFFs": "0x0021d0c0",
+      "png_handle_pCAL": "0x0021d200",
+      "png_handle_sCAL": "0x0021d570",
+      "png_handle_tIME": "0x0021d7c0",
+      "png_handle_tEXt": "0x0021d900",
+      "png_handle_zTXt": "0x0021da60",
+      "png_handle_unknown": "0x0021dc10",
+      "png_check_chunk_name": "0x0021ddd0",
+      "png_combine_row": "0x0021dec0",
+      "png_read_filter_row": "0x0021e2c0",
+      "png_read_finish_row": "0x0021e9d0",
+      "png_read_start_row": "0x0021ed40"
+    },
+    "data": {
+      "@1005": "0x004e6780",
+      "@1006": "0x004e67a0",
+      "@1007": "0x004e67c0",
+      "@1008": "0x004e67e0",
+      "@1009": "0x004e6810",
+      "@1010": "0x004e6840",
+      "@1032": "0x004e6860",
+      "@1033": "0x004e6880",
+      "@1034": "0x004e68a0",
+      "@1064": "0x004e68c0",
+      "@1101": "0x004e68e0",
+      "@1102": "0x004e6900",
+      "@1137": "0x004e6920",
+      "@1177": "0x004e6940",
+      "@1472": "0x004e6960",
+      "@148": "0x004e5b50",
+      "@149": "0x004e5b90",
+      "@150": "0x004e5bc0",
+      "@151": "0x004e5bf0",
+      "@1604": "0x004e6990",
+      "@1605": "0x004e69b0",
+      "@1606": "0x004e69d0",
+      "@1607": "0x004e69f0",
+      "@1732": "0x004e6a10",
+      "@218": "0x004e5c20",
+      "@219": "0x004e5c40",
+      "@220": "0x004e5c60",
+      "@221": "0x004e5c80",
+      "@222": "0x004e5ca0",
+      "@223": "0x004e5cc0",
+      "@224": "0x004e5d00",
+      "@225": "0x004e5d30",
+      "@226": "0x004e5d60",
+      "@277": "0x004e5d80",
+      "@278": "0x004e5da0",
+      "@279": "0x004e5dc0",
+      "@280": "0x004e5de0",
+      "@281": "0x004e5e00",
+      "@282": "0x004e5e30",
+      "@299": "0x004e5e60",
+      "@300": "0x004e5e80",
+      "@341": "0x004e5ea0",
+      "@342": "0x004e5ec0",
+      "@343": "0x004e5ee0",
+      "@344": "0x004e5f00",
+      "@345": "0x004e5f20",
+      "@346": "0x004e5f40",
+      "@347": "0x004e5f80",
+      "@387": "0x004e5fa0",
+      "@388": "0x004e5fc0",
+      "@389": "0x004e5fe0",
+      "@390": "0x004e6000",
+      "@391": "0x004e6020",
+      "@496": "0x004e6040",
+      "@497": "0x004e6060",
+      "@498": "0x004e6080",
+      "@499": "0x004e60a0",
+      "@500": "0x004e60c0",
+      "@501": "0x004e60e0",
+      "@502": "0x004e6100",
+      "@503": "0x004e6120",
+      "@504": "0x004e6140",
+      "@505": "0x004e6160",
+      "@506": "0x004e61a0",
+      "@507": "0x004e61c0",
+      "@563": "0x004e61e0",
+      "@564": "0x004e6200",
+      "@565": "0x004e6220",
+      "@566": "0x004e6240",
+      "@567": "0x004e6260",
+      "@568": "0x004e6280",
+      "@569": "0x004e62a0",
+      "@57": "0x004e5b38",
+      "@636": "0x004e62c0",
+      "@637": "0x004e62e0",
+      "@638": "0x004e6300",
+      "@639": "0x004e6320",
+      "@692": "0x004e6340",
+      "@693": "0x004e6360",
+      "@694": "0x004e6380",
+      "@695": "0x004e63a0",
+      "@696": "0x004e63c0",
+      "@697": "0x004e63e0",
+      "@698": "0x004e6400",
+      "@757": "0x004e6430",
+      "@758": "0x004e6450",
+      "@759": "0x004e6470",
+      "@760": "0x004e6490",
+      "@761": "0x004e64b0",
+      "@762": "0x004e64d0",
+      "@800": "0x004e6500",
+      "@801": "0x004e6520",
+      "@802": "0x004e6540",
+      "@803": "0x004e6560",
+      "@804": "0x004e6580",
+      "@832": "0x004e65a0",
+      "@833": "0x004e65c0",
+      "@834": "0x004e65e0",
+      "@835": "0x004e6600",
+      "@862": "0x004e6620",
+      "@863": "0x004e6640",
+      "@864": "0x004e6660",
+      "@865": "0x004e6680",
+      "@952": "0x004e66a0",
+      "@953": "0x004e66c0",
+      "@954": "0x004e66e0",
+      "@955": "0x004e6700",
+      "@956": "0x004e6720",
+      "@957": "0x004e6750",
+      "_impure_ptr": "0x004854a0",
+      "msg$85": "0x004966f0",
+      "png_IDAT": "0x004e5628",
+      "png_pass_inc": "0x00496660",
+      "png_pass_start": "0x00496640",
+      "png_pass_yinc": "0x004966a0",
+      "png_pass_ystart": "0x00496680"
+    },
+    "externals": {
+      "_dpfle": "0x00100310",
+      "fprintf": "0x00125220",
+      "fptodp": "0x00230298",
+      "inflate": "0x00224150",
+      "inflateReset": "0x00223ec0",
+      "memcmp": "0x00127004",
+      "strtod": "0x0012bf90"
+    }
+  },
+  "0x0021f0f0": {
+    "whole_file": true,
+    "emitted": {
+      "png_set_cHRM": "0x0021f150",
+      "png_set_cHRM_fixed": "0x0021f3e0",
+      "png_set_gAMA": "0x0021f5d0",
+      "png_set_gAMA_fixed": "0x0021f670",
+      "png_set_hIST": "0x0021f6f0",
+      "png_set_IHDR": "0x0021f720",
+      "png_set_oFFs": "0x0021f840",
+      "png_set_pCAL": "0x0021f880",
+      "png_set_sCAL": "0x0021fa20",
+      "png_set_pHYs": "0x0021fa60",
+      "png_set_PLTE": "0x0021faa0",
+      "png_set_sBIT": "0x0021fae0",
+      "png_set_sRGB": "0x0021fb40",
+      "png_set_sRGB_gAMA_and_cHRM": "0x0021fb70",
+      "png_set_text": "0x0021fd40",
+      "png_set_tIME": "0x0021ffa0",
+      "png_set_tRNS": "0x00220010",
+      "png_set_sPLT": "0x002200a0",
+      "png_set_unknown_chunks": "0x00220200"
+    },
+    "data": {
+      "@123": "0x004e6a40",
+      "@307": "0x004e6a80"
+    },
+    "stripped": [
+      "png_permit_empty_plte",
+      "png_set_compression_buffer_size",
+      "png_set_invalid",
+      "png_set_keep_unknown_chunks",
+      "png_set_read_user_chunk_fn",
+      "png_set_rows",
+      "png_set_unknown_chunk_location"
+    ],
+    "externals": {
+      "dpadd": "0x002306d0",
+      "dpdiv": "0x00230a18",
+      "dpmul": "0x00230790",
+      "dptofp": "0x00230e50",
+      "dptoli": "0x00230d80",
+      "fptodp": "0x00230298",
+      "litodp": "0x00230cc8"
+    }
+  },
+  "0x00220370": {
+    "whole_file": true,
+    "emitted": {
+      "png_do_invert": "0x002203a0",
+      "png_do_swap": "0x00220480",
+      "png_do_packswap": "0x00220580",
+      "png_do_strip_filler": "0x002206d0",
+      "png_do_bgr": "0x00221180"
+    },
+    "data": {
+      "fourbppswaptable": "0x00496910",
+      "onebppswaptable": "0x00496710",
+      "twobppswaptable": "0x00496810"
+    },
+    "stripped": [
+      "png_get_user_transform_ptr",
+      "png_set_bgr",
+      "png_set_filler",
+      "png_set_interlace_handling",
+      "png_set_invert_alpha",
+      "png_set_invert_mono",
+      "png_set_packswap",
+      "png_set_shift",
+      "png_set_swap",
+      "png_set_swap_alpha",
+      "png_set_user_transform_info"
+    ]
+  },
+  "0x00221670": {
+    "whole_file": true,
+    "emitted": {
+      "png_write_destroy": "0x00221750"
+    },
+    "data": {},
+    "stripped": [
+      "png_convert_from_struct_tm",
+      "png_convert_from_time_t",
+      "png_create_write_struct",
+      "png_create_write_struct_2",
+      "png_set_compression_level",
+      "png_set_compression_mem_level",
+      "png_set_compression_method",
+      "png_set_compression_strategy",
+      "png_set_compression_window_bits",
+      "png_set_filter",
+      "png_set_filter_heuristics",
+      "png_set_flush",
+      "png_set_write_status_fn",
+      "png_set_write_user_transform_fn",
+      "png_write_end",
+      "png_write_flush",
+      "png_write_image",
+      "png_write_info",
+      "png_write_info_before_PLTE",
+      "png_write_init",
+      "png_write_init_2",
+      "png_write_png",
+      "png_write_row",
+      "png_write_rows"
+    ],
+    "externals": {
+      "deflateEnd": "0x00221bf0"
+    }
+  },
+  "0x00246d30": {
+    "whole_file": true,
+    "emitted": {
+      "luaA_indexAcceptable__FP9lua_Statei": "0x00246d60",
+      "lua_stackspace__FP9lua_State": "0x00246db0",
+      "lua_gettop__FP9lua_State": "0x00246de0",
+      "lua_settop__FP9lua_Statei": "0x00246e10",
+      "lua_remove__FP9lua_Statei": "0x00246e50",
+      "lua_insert__FP9lua_Statei": "0x00246eb0",
+      "lua_pushvalue__FP9lua_Statei": "0x00246f10",
+      "lua_type__FP9lua_Statei": "0x00246f70",
+      "lua_typename__FP9lua_Statei": "0x00246fa0",
+      "lua_isnumber__FP9lua_Statei": "0x00246fd0",
+      "lua_isstring__FP9lua_Statei": "0x00247030",
+      "lua_tag__FP9lua_Statei": "0x00247070",
+      "lua_lessthan__FP9lua_Stateii": "0x002470b0",
+      "lua_tonumber__FP9lua_Statei": "0x00247100",
+      "lua_tostring__FP9lua_Statei": "0x00247160",
+      "lua_strlen__FP9lua_Statei": "0x002471d0",
+      "lua_tocfunction__FP9lua_Statei": "0x00247240",
+      "lua_touserdata__FP9lua_Statei": "0x00247290",
+      "lua_topointer__FP9lua_Statei": "0x002472e0",
+      "lua_pushnil__FP9lua_State": "0x00247340",
+      "lua_pushnumber__FP9lua_Stated": "0x00247390",
+      "lua_pushlstring__FP9lua_StatePCcUi": "0x002473f0",
+      "lua_pushstring__FP9lua_StatePCc": "0x00247450",
+      "lua_pushcclosure__FP9lua_StatePFP9lua_State_ii": "0x002474b0",
+      "lua_pushusertag__FP9lua_StatePvi": "0x002474c0",
+      "lua_getglobal__FP9lua_StatePCc": "0x00247580",
+      "lua_gettable__FP9lua_Statei": "0x00247600",
+      "lua_rawget__FP9lua_Statei": "0x00247670",
+      "lua_rawgeti__FP9lua_Stateii": "0x002476e0",
+      "lua_getglobals__FP9lua_State": "0x00247780",
+      "lua_getref__FP9lua_Statei": "0x002477e0",
+      "lua_newtable__FP9lua_State": "0x002478b0",
+      "lua_setglobal__FP9lua_StatePCc": "0x00247910",
+      "lua_settable__FP9lua_Statei": "0x00247960",
+      "lua_rawset__FP9lua_Statei": "0x002479d0",
+      "lua_rawseti__FP9lua_Stateii": "0x00247a50",
+      "lua_setglobals__FP9lua_State": "0x00247ad0",
+      "lua_ref__FP9lua_Statei": "0x00247af0",
+      "lua_rawcall__FP9lua_Stateii": "0x00247bf0",
+      "lua_getgcthreshold__FP9lua_State": "0x00247c10",
+      "lua_getgccount__FP9lua_State": "0x00247c20",
+      "lua_setgcthreshold__FP9lua_Statei": "0x00247c30",
+      "lua_settag__FP9lua_Statei": "0x00247c60",
+      "lua_next__FP9lua_Statei": "0x00247cf0",
+      "lua_getn__FP9lua_Statei": "0x00247db0",
+      "lua_concat__FP9lua_Statei": "0x00247e90"
+    },
+    "data": {
+      "@142": "0x004eaab8",
+      "@424": "0x004eaad0",
+      "@643": "0x004eaaf0",
+      "@686": "0x004eab10",
+      "@739": "0x004eab38",
+      "luaO_typenames": "0x004eba90"
+    },
+    "stripped": [
+      "luaA_pushobject__FP9lua_StatePC11lua_TObject",
+      "lua_equal__FP9lua_Stateii",
+      "lua_iscfunction__FP9lua_Statei",
+      "lua_newuserdata__FP9lua_StateUi",
+      "lua_unref__FP9lua_Statei"
+    ],
+    "externals": {
+      "_dpfgt": "0x00100340",
+      "dptoli": "0x00230d80",
+      "litodp": "0x00230cc8",
+      "luaC_checkGC__FP9lua_State": "0x0024dc50",
+      "luaD_adjusttop__FP9lua_StateP11lua_TObjecti": "0x0024c440",
+      "luaD_call__FP9lua_StateP11lua_TObjecti": "0x0024c780",
+      "luaD_checkstack__FP9lua_Statei": "0x0024c360",
+      "luaH_get__FP9lua_StatePC4HashPC11lua_TObject": "0x00255820",
+      "luaH_getnum__FPC4Hashd": "0x00255720",
+      "luaH_getstr__FPC4HashP7TString": "0x002557c0",
+      "luaH_new__FP9lua_Statei": "0x00255b80",
+      "luaH_next__FP9lua_StatePC4HashPC11lua_TObject": "0x00255890",
+      "luaH_set__FP9lua_StateP4HashPC11lua_TObject": "0x00255e10",
+      "luaH_setint__FP9lua_StateP4Hashi": "0x00255fb0",
+      "luaM_growaux__FP9lua_StatePvUiiUiPCcUi": "0x00250150",
+      "luaO_verror__FP9lua_StatePCce": "0x00250500",
+      "luaS_createudata__FP9lua_StatePvi": "0x00253700",
+      "luaS_new__FP9lua_StatePCc": "0x002537a0",
+      "luaS_newlstr__FP9lua_StatePCcUi": "0x00253530",
+      "luaT_realtag__FP9lua_Statei": "0x00256340",
+      "luaT_tag__FPC11lua_TObject": "0x00256430",
+      "luaV_Cclosure__FP9lua_StatePFP9lua_State_ii": "0x002575f0",
+      "luaV_getglobal__FP9lua_StateP7TString": "0x00257920",
+      "luaV_gettable__FP9lua_StateP11lua_TObject": "0x00257660",
+      "luaV_lessthan__FP9lua_StatePC11lua_TObjectPC11lua_TObjectP11lua_TObject": "0x00257d10",
+      "luaV_setglobal__FP9lua_StateP7TString": "0x00257a00",
+      "luaV_settable__FP9lua_StateP11lua_TObjectP11lua_TObject": "0x002577c0",
+      "luaV_strconc__FP9lua_StateiP11lua_TObject": "0x00257e20",
+      "luaV_tonumber__FP11lua_TObject": "0x00257370",
+      "luaV_tostring__FP9lua_StateP11lua_TObject": "0x002573d0"
+    },
+    "symbol": "luaA_index__FP9lua_Statei"
+  },
+  "0x00247ef0": {
+    "whole_file": true,
+    "emitted": {
+      "type_error__FP9lua_Stateii": "0x00247f80",
+      "luaL_checkstack__FP9lua_StateiPCc": "0x00248000",
+      "luaL_checktype__FP9lua_Stateii": "0x00248060",
+      "luaL_checkany__FP9lua_Statei": "0x002480b0",
+      "luaL_check_lstr__FP9lua_StateiPUi": "0x00248100",
+      "luaL_opt_lstr__FP9lua_StateiPCcPUi": "0x00248180",
+      "luaL_check_number__FP9lua_Statei": "0x00248210",
+      "luaL_opt_number__FP9lua_Stateid": "0x00248280",
+      "luaL_openlib__FP9lua_StatePC8luaL_regi": "0x002482e0",
+      "luaL_verror__FP9lua_StatePCce": "0x00248370",
+      "emptybuffer__FP11luaL_Buffer": "0x002483f0",
+      "adjuststack__FP11luaL_Buffer": "0x00248450",
+      "luaL_prepbuffer__FP11luaL_Buffer": "0x00248510",
+      "luaL_addlstring__FP11luaL_BufferPCcUi": "0x00248550",
+      "luaL_pushresult__FP11luaL_Buffer": "0x002485d0",
+      "luaL_addvalue__FP11luaL_Buffer": "0x00248630",
+      "luaL_buffinit__FP9lua_StateP11luaL_Buffer": "0x00248700"
+    },
+    "data": {
+      "@33": "0x004eab40",
+      "@34": "0x004eab48",
+      "@35": "0x004eab50",
+      "@44": "0x004eab80",
+      "@54": "0x004eaba0",
+      "@72": "0x004eabb8"
+    },
+    "stripped": [
+      "luaL_addstring__FP11luaL_BufferPCc",
+      "luaL_findstring__FPCcPCPCc"
+    ],
+    "externals": {
+      "_dpfeq": "0x001002a0",
+      "lua_concat__FP9lua_Statei": "0x00247e90",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70",
+      "lua_getinfo__FP9lua_StatePCcP9lua_Debug": "0x0024bbe0",
+      "lua_getstack__FP9lua_StateiP9lua_Debug": "0x0024b700",
+      "lua_insert__FP9lua_Statei": "0x00246eb0",
+      "lua_isnumber__FP9lua_Statei": "0x00246fd0",
+      "lua_pushcclosure__FP9lua_StatePFP9lua_State_ii": "0x002474b0",
+      "lua_pushlstring__FP9lua_StatePCcUi": "0x002473f0",
+      "lua_setglobal__FP9lua_StatePCc": "0x00247910",
+      "lua_settop__FP9lua_Statei": "0x00246e10",
+      "lua_stackspace__FP9lua_State": "0x00246db0",
+      "lua_strlen__FP9lua_Statei": "0x002471d0",
+      "lua_tonumber__FP9lua_Statei": "0x00247100",
+      "lua_tostring__FP9lua_Statei": "0x00247160",
+      "lua_type__FP9lua_Statei": "0x00246f70",
+      "lua_typename__FP9lua_Statei": "0x00246fa0",
+      "vsprintf": "0x0012fde0"
+    },
+    "symbol": "luaL_argerror__FP9lua_StateiPCc"
+  },
+  "0x00248720": {
+    "whole_file": true,
+    "emitted": {
+      "luaB__ERRORMESSAGE__FP9lua_State": "0x00248760",
+      "luaB_print__FP9lua_State": "0x00248870",
+      "luaB_tonumber__FP9lua_State": "0x00248990",
+      "luaB_error__FP9lua_State": "0x00248af0",
+      "luaB_setglobal__FP9lua_State": "0x00248b30",
+      "luaB_getglobal__FP9lua_State": "0x00248b80",
+      "luaB_tag__FP9lua_State": "0x00248bc0",
+      "luaB_settag__FP9lua_State": "0x00248c10",
+      "luaB_newtag__FP9lua_State": "0x00248c70",
+      "luaB_copytagmethods__FP9lua_State": "0x00248cb0",
+      "luaB_globals__FP9lua_State": "0x00248d30",
+      "luaB_rawget__FP9lua_State": "0x00248d90",
+      "luaB_rawset__FP9lua_State": "0x00248de0",
+      "luaB_settagmethod__FP9lua_State": "0x00248e40",
+      "luaB_gettagmethod__FP9lua_State": "0x00248f40",
+      "luaB_gcinfo__FP9lua_State": "0x00248fe0",
+      "luaB_collectgarbage__FP9lua_State": "0x00249040",
+      "luaB_type__FP9lua_State": "0x00249090",
+      "luaB_next__FP9lua_State": "0x002490e0",
+      "passresults__FP9lua_Stateii": "0x00249140",
+      "luaB_dostring__FP9lua_State": "0x002491e0",
+      "luaB_dofile__FP9lua_State": "0x00249290",
+      "luaB_call__FP9lua_State": "0x002492f0",
+      "luaB_tostring__FP9lua_State": "0x002494c0",
+      "luaB_foreachi__FP9lua_State": "0x00249610",
+      "luaB_foreach__FP9lua_State": "0x002496f0",
+      "luaB_assert__FP9lua_State": "0x002497b0",
+      "luaB_getn__FP9lua_State": "0x00249820",
+      "luaB_tinsert__FP9lua_State": "0x00249870",
+      "luaB_tremove__FP9lua_State": "0x00249980",
+      "set2__FP9lua_Stateii": "0x00249a90",
+      "sort_comp__FP9lua_Stateii": "0x00249ae0",
+      "auxsort__FP9lua_Stateii": "0x00249ba0",
+      "luaB_sort__FP9lua_State": "0x00249ea0",
+      "deprecated_func__FP9lua_State": "0x00249f30",
+      "deprecated_funcs__FP9lua_State": "0x00249f70",
+      "lua_baselibopen__FP9lua_State": "0x00249ff0"
+    },
+    "data": {
+      "@144": "0x004eac70",
+      "@145": "0x004eac90",
+      "@146": "0x004eaca0",
+      "@156": "0x004eace0",
+      "@187": "0x004ead18",
+      "@188": "0x004ead20",
+      "@189": "0x004ead30",
+      "@190": "0x004ead40",
+      "@191": "0x004ead50",
+      "@192": "0x004ead60",
+      "@211": "0x004eada0",
+      "@24": "0x004eabc8",
+      "@246": "0x004eadc8",
+      "@247": "0x004eadd0",
+      "@248": "0x004eade0",
+      "@249": "0x004eae00",
+      "@25": "0x004eabd0",
+      "@26": "0x004eabd8",
+      "@264": "0x004eae20",
+      "@265": "0x004eae30",
+      "@266": "0x004eae40",
+      "@267": "0x004eae58",
+      "@268": "0x004eae60",
+      "@269": "0x004eae70",
+      "@27": "0x004eabe0",
+      "@28": "0x004eabf8",
+      "@304": "0x004eae90",
+      "@326": "0x004eaeb0",
+      "@418": "0x004eaec0",
+      "@428": "0x004eaee8",
+      "@429": "0x004eaef8",
+      "@430": "0x004eaf00",
+      "@431": "0x004eaf10",
+      "@437": "0x004eaf40",
+      "@455": "0x004eaf60",
+      "@456": "0x004eaf68",
+      "@457": "0x004eaf78",
+      "@458": "0x004eaf88",
+      "@459": "0x004eaf90",
+      "@46": "0x004eac00",
+      "@460": "0x004eafa0",
+      "@461": "0x004eafa8",
+      "@462": "0x004eafb0",
+      "@463": "0x004eafc0",
+      "@464": "0x004eafc8",
+      "@465": "0x004eafd8",
+      "@466": "0x004eafe8",
+      "@467": "0x004eaff0",
+      "@468": "0x004eaff8",
+      "@469": "0x004eb000",
+      "@47": "0x004eac10",
+      "@470": "0x004eb008",
+      "@471": "0x004eb010",
+      "@472": "0x004eb018",
+      "@473": "0x004eb028",
+      "@474": "0x004eb038",
+      "@475": "0x004eb048",
+      "@476": "0x004eb050",
+      "@477": "0x004eb060",
+      "@478": "0x004eb068",
+      "@479": "0x004eb078",
+      "@48": "0x004eac40",
+      "@480": "0x004eb080",
+      "@481": "0x004eb088",
+      "@482": "0x004eb090",
+      "@483": "0x004eb098",
+      "@484": "0x004eb0a0",
+      "@490": "0x004eb1b8",
+      "@491": "0x004eb1c8",
+      "@79": "0x004eac50",
+      "_ctype_": "0x004d3d10",
+      "_impure_ptr": "0x004854a0",
+      "base_funcs": "0x004eb0b0",
+      "deprecated_names": "0x004eaf20",
+      "errornames$186": "0x004ead80"
+    },
+    "externals": {
+      "_d_ulltod": "0x00100240",
+      "dptoli": "0x00230d80",
+      "fputs": "0x00125278",
+      "litodp": "0x00230cc8",
+      "luaL_argerror__FP9lua_StateiPCc": "0x00247ef0",
+      "luaL_check_lstr__FP9lua_StateiPUi": "0x00248100",
+      "luaL_check_number__FP9lua_Statei": "0x00248210",
+      "luaL_checkany__FP9lua_Statei": "0x002480b0",
+      "luaL_checkstack__FP9lua_StateiPCc": "0x00248000",
+      "luaL_checktype__FP9lua_Stateii": "0x00248060",
+      "luaL_openlib__FP9lua_StatePC8luaL_regi": "0x002482e0",
+      "luaL_opt_lstr__FP9lua_StateiPCcPUi": "0x00248180",
+      "luaL_opt_number__FP9lua_Stateid": "0x00248280",
+      "luaL_verror__FP9lua_StatePCce": "0x00248370",
+      "lua_call__FP9lua_Stateii": "0x0024c990",
+      "lua_concat__FP9lua_Statei": "0x00247e90",
+      "lua_copytagmethods__FP9lua_Stateii": "0x00256380",
+      "lua_dobuffer__FP9lua_StatePCcUiPCc": "0x0024cb40",
+      "lua_dofile__FP9lua_StatePCc": "0x00246b30",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70",
+      "lua_getgccount__FP9lua_State": "0x00247c20",
+      "lua_getgcthreshold__FP9lua_State": "0x00247c10",
+      "lua_getglobal__FP9lua_StatePCc": "0x00247580",
+      "lua_getglobals__FP9lua_State": "0x00247780",
+      "lua_getinfo__FP9lua_StatePCcP9lua_Debug": "0x0024bbe0",
+      "lua_getn__FP9lua_Statei": "0x00247db0",
+      "lua_getstack__FP9lua_StateiP9lua_Debug": "0x0024b700",
+      "lua_gettagmethod__FP9lua_StateiPCc": "0x00256470",
+      "lua_gettop__FP9lua_State": "0x00246de0",
+      "lua_isnumber__FP9lua_Statei": "0x00246fd0",
+      "lua_lessthan__FP9lua_Stateii": "0x002470b0",
+      "lua_newtag__FP9lua_State": "0x00256290",
+      "lua_next__FP9lua_Statei": "0x00247cf0",
+      "lua_pushcclosure__FP9lua_StatePFP9lua_State_ii": "0x002474b0",
+      "lua_pushnil__FP9lua_State": "0x00247340",
+      "lua_pushnumber__FP9lua_Stated": "0x00247390",
+      "lua_pushstring__FP9lua_StatePCc": "0x00247450",
+      "lua_pushusertag__FP9lua_StatePvi": "0x002474c0",
+      "lua_pushvalue__FP9lua_Statei": "0x00246f10",
+      "lua_rawcall__FP9lua_Stateii": "0x00247bf0",
+      "lua_rawget__FP9lua_Statei": "0x00247670",
+      "lua_rawgeti__FP9lua_Stateii": "0x002476e0",
+      "lua_rawset__FP9lua_Statei": "0x002479d0",
+      "lua_rawseti__FP9lua_Stateii": "0x00247a50",
+      "lua_setgcthreshold__FP9lua_Statei": "0x00247c30",
+      "lua_setglobal__FP9lua_StatePCc": "0x00247910",
+      "lua_setglobals__FP9lua_State": "0x00247ad0",
+      "lua_settag__FP9lua_Statei": "0x00247c60",
+      "lua_settagmethod__FP9lua_StateiPCc": "0x00256540",
+      "lua_settop__FP9lua_Statei": "0x00246e10",
+      "lua_tag__FP9lua_Statei": "0x00247070",
+      "lua_tonumber__FP9lua_Statei": "0x00247100",
+      "lua_topointer__FP9lua_Statei": "0x002472e0",
+      "lua_tostring__FP9lua_Statei": "0x00247160",
+      "lua_touserdata__FP9lua_Statei": "0x00247290",
+      "lua_type__FP9lua_Statei": "0x00246f70",
+      "lua_typename__FP9lua_Statei": "0x00246fa0",
+      "strchr": "0x0012a314",
+      "strcmp": "0x0012a4a4",
+      "strtoul": "0x0012c478"
+    },
+    "symbol": "luaB__ALERT__FP9lua_State"
+  },
+  "0x0024a050": {
+    "whole_file": true,
+    "emitted": {
+      "previous_instruction__FP9FuncState": "0x0024a060",
+      "luaK_jump__FP9FuncState": "0x0024a090",
+      "luaK_fixjump__FP9FuncStateii": "0x0024a0f0",
+      "luaK_getjump__FP9FuncStatei": "0x0024a1a0",
+      "luaK_getlabel__FP9FuncState": "0x0024a1f0",
+      "luaK_deltastack__FP9FuncStatei": "0x0024a240",
+      "luaK_kstr__FP8LexStatei": "0x0024a2b0",
+      "number_constant__FP9FuncStated": "0x0024a2c0",
+      "luaK_number__FP9FuncStated": "0x0024a3c0",
+      "luaK_adjuststack__FP9FuncStatei": "0x0024a470",
+      "luaK_lastisopen__FP9FuncState": "0x0024a4b0",
+      "luaK_setcallreturns__FP9FuncStatei": "0x0024a500",
+      "discharge__FP9FuncStateP7expdesc": "0x0024a570",
+      "discharge1__FP9FuncStateP7expdesc": "0x0024a620",
+      "luaK_storevar__FP8LexStatePC7expdesc": "0x0024a680",
+      "invertjump__F6OpCode": "0x0024a700",
+      "luaK_patchlistaux__FP9FuncStateii6OpCodei": "0x0024a780",
+      "luaK_patchlist__FP9FuncStateii": "0x0024a880",
+      "need_value__FP9FuncStatei6OpCode": "0x0024a8c0",
+      "luaK_concat__FP9FuncStatePii": "0x0024a920",
+      "luaK_testgo__FP9FuncStateP7expdesci6OpCode": "0x0024a990",
+      "luaK_goiftrue__FP9FuncStateP7expdesci": "0x0024aaa0",
+      "luaK_goiffalse__FP9FuncStateP7expdesci": "0x0024aac0",
+      "code_label__FP9FuncState6OpCodei": "0x0024aae0",
+      "luaK_tostack__FP8LexStateP7expdesci": "0x0024ab30",
+      "luaK_prefix__FP8LexState5UnOprP7expdesc": "0x0024ad20",
+      "luaK_infix__FP8LexState6BinOprP7expdesc": "0x0024adf0",
+      "luaK_posfix__FP8LexState6BinOprP7expdescP7expdesc": "0x0024ae60",
+      "codelineinfo__FP9FuncState": "0x0024af50",
+      "luaK_code0__FP9FuncState6OpCode": "0x0024b030",
+      "luaK_code1__FP9FuncState6OpCodei": "0x0024b040",
+      "luaK_code2__FP9FuncState6OpCodeii": "0x0024b050"
+    },
+    "data": {
+      "@129": "0x004eb230",
+      "@234": "0x004eb250",
+      "@469": "0x004eb2e0",
+      "@57": "0x004eb1e0",
+      "@589": "0x004eb300",
+      "@98": "0x004eb200",
+      "codes": "0x004eb280",
+      "luaK_opproperties": "0x004eb320"
+    },
+    "externals": {
+      "_dpfeq": "0x001002a0",
+      "_dpfle": "0x00100310",
+      "dptoli": "0x00230d80",
+      "litodp": "0x00230cc8",
+      "luaM_growaux__FP9lua_StatePvUiiUiPCcUi": "0x00250150",
+      "luaX_error__FP8LexStatePCci": "0x0024ddc0"
+    },
+    "symbol": "luaK_error__FP8LexStatePCc"
+  },
+  "0x0024b620": {
+    "whole_file": true,
+    "emitted": {
+      "isLmark__FP11lua_TObject": "0x0024b660",
+      "aux_stackedfunction__FP9lua_StateiP11lua_TObject": "0x0024b6a0",
+      "lua_getstack__FP9lua_StateiP9lua_Debug": "0x0024b700",
+      "nups__FP11lua_TObject": "0x0024b740",
+      "luaG_getline__FPiiiPi": "0x0024b780",
+      "currentpc__FP11lua_TObject": "0x0024b860",
+      "currentline__FP11lua_TObject": "0x0024b8b0",
+      "infoLproto__FP9lua_DebugP5Proto": "0x0024b910",
+      "funcinfo__FP9lua_StateP9lua_DebugP11lua_TObject": "0x0024b940",
+      "travtagmethods__FP9lua_StatePC11lua_TObject": "0x0024ba10",
+      "travglobals__FP9lua_StatePC11lua_TObject": "0x0024baa0",
+      "getname__FP9lua_StateP11lua_TObjectP9lua_Debug": "0x0024bb50",
+      "lua_getinfo__FP9lua_StatePCcP9lua_Debug": "0x0024bbe0",
+      "pushpc__FPiiii": "0x0024bd70",
+      "luaG_symbexec__FPC5Protoii": "0x0024bda0",
+      "getobjname__FP9lua_StateP11lua_TObjectPPCc": "0x0024bfc0",
+      "getfuncname__FP9lua_StateP11lua_TObjectPPCc": "0x0024c0f0",
+      "luaG_typeerror__FP9lua_StateP11lua_TObjectPCc": "0x0024c1b0",
+      "luaG_binerror__FP9lua_StateP11lua_TObjectiPCc": "0x0024c250",
+      "luaG_ordererror__FP9lua_StateP11lua_TObject": "0x0024c270"
+    },
+    "data": {
+      "@239": "0x004eb3b8",
+      "@257": "0x004eb3c0",
+      "@258": "0x004eb3f0",
+      "@259": "0x004eb3f8",
+      "@260": "0x004eb400",
+      "@323": "0x004eb408",
+      "@324": "0x004eb410",
+      "@325": "0x004eb420",
+      "@456": "0x004eb428",
+      "@457": "0x004eb430",
+      "@492": "0x004eb440",
+      "@493": "0x004eb470",
+      "@515": "0x004eb490",
+      "@516": "0x004eb4c0",
+      "luaK_opproperties": "0x004eb320",
+      "luaO_typenames": "0x004eba90",
+      "luaT_eventname": "0x004ec220"
+    },
+    "stripped": [
+      "getluaproto__FP11lua_TObject",
+      "lua_getlocal__FP9lua_StatePC9lua_Debugi",
+      "lua_setcallhook__FP9lua_StatePFP9lua_StateP9lua_Debug_v",
+      "lua_setlinehook__FP9lua_StatePFP9lua_StateP9lua_Debug_v",
+      "lua_setlocal__FP9lua_StatePC9lua_Debugi"
+    ],
+    "externals": {
+      "luaD_checkstack__FP9lua_Statei": "0x0024c360",
+      "luaF_getlocalname__FPC5Protoii": "0x0024d050",
+      "luaO_chunkid__FPcPCci": "0x00250580",
+      "luaO_equalObj__FPC11lua_TObjectPC11lua_TObject": "0x00250340",
+      "luaO_verror__FP9lua_StatePCce": "0x00250500",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70"
+    },
+    "symbol": "setnormalized__FP11lua_TObjectPC11lua_TObject"
+  },
+  "0x0024c2e0": {
+    "whole_file": true,
+    "emitted": {
+      "luaD_checkstack__FP9lua_Statei": "0x0024c360",
+      "restore_stack_limit__FP9lua_State": "0x0024c3f0",
+      "luaD_adjusttop__FP9lua_StateP11lua_TObjecti": "0x0024c440",
+      "luaD_openstack__FP9lua_StateP11lua_TObject": "0x0024c4d0",
+      "dohook__FP9lua_StateP9lua_DebugPFP9lua_StateP9lua_Debug_v": "0x0024c560",
+      "luaD_lineHook__FP9lua_StateP11lua_TObjectiPFP9lua_StateP9lua_Debug_v": "0x0024c5e0",
+      "luaD_callHook__FP9lua_StateP11lua_TObjectPFP9lua_StateP9lua_Debug_vPCc": "0x0024c620",
+      "callCclosure__FP9lua_StatePC7ClosureP11lua_TObject": "0x0024c660",
+      "luaD_callTM__FP9lua_StateP7Closureii": "0x0024c710",
+      "luaD_call__FP9lua_StateP11lua_TObjecti": "0x0024c780",
+      "f_call__FP9lua_StatePv": "0x0024c980",
+      "lua_call__FP9lua_Stateii": "0x0024c990",
+      "f_parser__FP9lua_StatePv": "0x0024c9f0",
+      "protectedparser__FP9lua_StateP3zioi": "0x0024ca40",
+      "parse_buffer__FP9lua_StatePCcUiPCc": "0x0024cae0",
+      "lua_dobuffer__FP9lua_StatePCcUiPCc": "0x0024cb40",
+      "lua_dostring__FP9lua_StatePCc": "0x0024cb80",
+      "message__FP9lua_StatePCc": "0x0024cbd0",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70",
+      "luaD_breakrun__FP9lua_Statei": "0x0024ccb0",
+      "luaD_runprotected__FP9lua_StatePFP9lua_StatePv_vPv": "0x0024cd10"
+    },
+    "data": {
+      "@112": "0x004eb4f8",
+      "@213": "0x004eb500",
+      "@214": "0x004eb508",
+      "@29": "0x004eb4e8",
+      "@333": "0x004eb510",
+      "@367": "0x004eb518",
+      "@389": "0x004eb530"
+    },
+    "stripped": [
+      "lua_dofile__FP9lua_StatePCc",
+      "parse_file__FP9lua_StatePCc"
+    ],
+    "externals": {
+      "exit": "0x00124d60",
+      "longjmp": "0x001298d8",
+      "luaC_checkGC__FP9lua_State": "0x0024dc50",
+      "luaC_collectgarbage__FP9lua_State": "0x0024dbf0",
+      "luaG_typeerror__FP9lua_StateP11lua_TObjectPCc": "0x0024c1b0",
+      "luaH_getglobal__FP9lua_StatePCc": "0x00256040",
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "luaT_tag__FPC11lua_TObject": "0x00256430",
+      "luaU_undump__FP9lua_StateP3zio": "0x00257270",
+      "luaV_Lclosure__FP9lua_StateP5Protoi": "0x00257630",
+      "luaV_execute__FP9lua_StatePC7ClosureP11lua_TObject": "0x00258180",
+      "luaY_parser__FP9lua_StateP3zio": "0x00251330",
+      "luaZ_mopen__FP3zioPCcUiPCc": "0x00258fa0",
+      "lua_pushstring__FP9lua_StatePCc": "0x00247450",
+      "setjmp": "0x00129880"
+    },
+    "symbol": "luaD_init__FP9lua_Statei"
+  },
+  "0x0024cde0": {
+    "whole_file": true,
+    "emitted": {
+      "luaF_newproto__FP9lua_State": "0x0024ce50",
+      "protosize__FP5Proto": "0x0024ced0",
+      "luaF_protook__FP9lua_StateP5Protoi": "0x0024cf30",
+      "luaF_freeproto__FP9lua_StateP5Proto": "0x0024cf60",
+      "luaF_freeclosure__FP9lua_StateP7Closure": "0x0024d020",
+      "luaF_getlocalname__FPC5Protoii": "0x0024d050"
+    },
+    "data": {},
+    "externals": {
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200"
+    },
+    "symbol": "luaF_newclosure__FP9lua_Statei"
+  },
+  "0x0024d0d0": {
+    "whole_file": true,
+    "emitted": {
+      "markstack__FP9lua_StateP7GCState": "0x0024d1e0",
+      "marklock__FP9lua_StateP7GCState": "0x0024d240",
+      "markclosure__FP7GCStateP7Closure": "0x0024d2c0",
+      "marktagmethods__FP9lua_StateP7GCState": "0x0024d320",
+      "markobject__FP7GCStateP11lua_TObject": "0x0024d3c0",
+      "markall__FP9lua_State": "0x0024d470",
+      "hasmark__FPC11lua_TObject": "0x0024d5c0",
+      "invalidaterefs__FP9lua_State": "0x0024d630",
+      "collectproto__FP9lua_State": "0x0024d6a0",
+      "collectclosure__FP9lua_State": "0x0024d710",
+      "collecttable__FP9lua_State": "0x0024d780",
+      "checktab__FP9lua_StateP11stringtable": "0x0024d7f0",
+      "collectstrings__FP9lua_Statei": "0x0024d850",
+      "collectudata__FP9lua_Statei": "0x0024d930",
+      "checkMbuffer__FP9lua_State": "0x0024d9e0",
+      "callgcTM__FP9lua_StatePC11lua_TObject": "0x0024da30",
+      "callgcTMudata__FP9lua_State": "0x0024daf0",
+      "luaC_collect__FP9lua_Statei": "0x0024db90",
+      "luaC_collectgarbage__FP9lua_State": "0x0024dbf0",
+      "luaC_checkGC__FP9lua_State": "0x0024dc50"
+    },
+    "data": {
+      "luaO_nilobject": "0x004eba40"
+    },
+    "externals": {
+      "luaD_call__FP9lua_StateP11lua_TObjecti": "0x0024c780",
+      "luaD_checkstack__FP9lua_Statei": "0x0024c360",
+      "luaF_freeclosure__FP9lua_StateP7Closure": "0x0024d020",
+      "luaF_freeproto__FP9lua_StateP5Proto": "0x0024cf60",
+      "luaH_free__FP9lua_StateP4Hash": "0x00255c10",
+      "luaH_remove__FP4HashP11lua_TObject": "0x00255980",
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "luaS_resize__FP9lua_StateP11stringtablei": "0x002533a0",
+      "luaT_tag__FPC11lua_TObject": "0x00256430"
+    },
+    "symbol": "protomark__FP5Proto"
+  },
+  "0x0024dc80": {
+    "whole_file": true,
+    "emitted": {
+      "luaX_checklimit__FP8LexStateiiPCc": "0x0024dcf0",
+      "luaX_syntaxerror__FP8LexStatePCcPCc": "0x0024dd50",
+      "luaX_error__FP8LexStatePCci": "0x0024ddc0",
+      "luaX_token2str__FiPc": "0x0024de30",
+      "luaX_invalidchar__FP8LexStatei": "0x0024de80",
+      "inclinenumber__FP8LexState": "0x0024ded0",
+      "luaX_setinput__FP9lua_StateP8LexStateP3zioP7TString": "0x0024df60",
+      "readname__FP8LexState": "0x0024e060",
+      "read_number__FP8LexStateiP7SemInfo": "0x0024e160",
+      "read_long_string__FP8LexStateP7SemInfo": "0x0024e580",
+      "read_string__FP8LexStateiP7SemInfo": "0x0024e920",
+      "luaX_lex__FP8LexStateP7SemInfo": "0x0024efd0"
+    },
+    "data": {
+      "@10": "0x004eb550",
+      "@11": "0x004eb558",
+      "@111": "0x004eb720",
+      "@12": "0x004eb560",
+      "@13": "0x004eb568",
+      "@14": "0x004eb570",
+      "@15": "0x004eb578",
+      "@16": "0x004eb580",
+      "@17": "0x004eb588",
+      "@18": "0x004eb598",
+      "@19": "0x004eb5a0",
+      "@20": "0x004eb5a8",
+      "@21": "0x004eb5b0",
+      "@22": "0x004eb5b8",
+      "@23": "0x004eb5c0",
+      "@24": "0x004eb5c8",
+      "@25": "0x004eb5d0",
+      "@26": "0x004eb5d8",
+      "@266": "0x004eb740",
+      "@267": "0x004eb780",
+      "@27": "0x004eb5e0",
+      "@28": "0x004eb5e8",
+      "@29": "0x004eb5f0",
+      "@30": "0x004eb5f8",
+      "@31": "0x004eb600",
+      "@32": "0x004eb608",
+      "@33": "0x004eb610",
+      "@34": "0x004eb618",
+      "@346": "0x004eb7a0",
+      "@35": "0x004eb620",
+      "@484": "0x004eb7c0",
+      "@485": "0x004eb7e0",
+      "@61": "0x004eb6a0",
+      "@675": "0x004eb800",
+      "@70": "0x004eb6c0",
+      "@98": "0x004eb6f8",
+      "@99": "0x004eb700",
+      "_ctype_": "0x004d3d10",
+      "token2string": "0x004eb630"
+    },
+    "externals": {
+      "luaO_chunkid__FPcPCci": "0x00250580",
+      "luaO_openspace__FP9lua_StateUi": "0x002503f0",
+      "luaO_str2d__FPCcPd": "0x00250460",
+      "luaO_verror__FP9lua_StatePCce": "0x00250500",
+      "luaS_new__FP9lua_StatePCc": "0x002537a0",
+      "luaS_newlstr__FP9lua_StatePCcUi": "0x00253530"
+    },
+    "symbol": "luaX_init__FP9lua_State"
+  },
+  "0x0024f740": {
+    "whole_file": true,
+    "emitted": {
+      "math_sin__FP9lua_State": "0x0024f780",
+      "math_cos__FP9lua_State": "0x0024f7d0",
+      "math_tan__FP9lua_State": "0x0024f820",
+      "math_asin__FP9lua_State": "0x0024f870",
+      "math_acos__FP9lua_State": "0x0024f8c0",
+      "math_atan__FP9lua_State": "0x0024f910",
+      "math_atan2__FP9lua_State": "0x0024f960",
+      "math_ceil__FP9lua_State": "0x0024f9d0",
+      "math_floor__FP9lua_State": "0x0024fa10",
+      "math_mod__FP9lua_State": "0x0024fa50",
+      "math_sqrt__FP9lua_State": "0x0024fab0",
+      "math_pow__FP9lua_State": "0x0024faf0",
+      "math_log__FP9lua_State": "0x0024fb50",
+      "math_log10__FP9lua_State": "0x0024fb90",
+      "math_exp__FP9lua_State": "0x0024fbd0",
+      "math_deg__FP9lua_State": "0x0024fc10",
+      "math_rad__FP9lua_State": "0x0024fc60",
+      "math_frexp__FP9lua_State": "0x0024fcb0",
+      "math_ldexp__FP9lua_State": "0x0024fd10",
+      "math_min__FP9lua_State": "0x0024fd80",
+      "math_max__FP9lua_State": "0x0024fe30",
+      "math_random__FP9lua_State": "0x0024fee0",
+      "math_randomseed__FP9lua_State": "0x002500a0",
+      "lua_mathlibopen__FP9lua_State": "0x002500d0"
+    },
+    "data": {
+      "@11": "0x005548b0",
+      "@153": "0x004eb840",
+      "@154": "0x004eb860",
+      "@160": "0x004eb880",
+      "@161": "0x004eb888",
+      "@162": "0x004eb890",
+      "@163": "0x004eb898",
+      "@164": "0x004eb8a0",
+      "@165": "0x004eb8a8",
+      "@166": "0x004eb8b0",
+      "@167": "0x004eb8b8",
+      "@168": "0x004eb8c0",
+      "@169": "0x004eb8c8",
+      "@170": "0x004eb8d0",
+      "@171": "0x004eb8d8",
+      "@172": "0x004eb8e0",
+      "@173": "0x004eb8e8",
+      "@174": "0x004eb8f0",
+      "@175": "0x004eb8f8",
+      "@176": "0x004eb900",
+      "@177": "0x004eb908",
+      "@178": "0x004eb910",
+      "@179": "0x004eb918",
+      "@180": "0x004eb920",
+      "@181": "0x004eb928",
+      "@182": "0x004eb930",
+      "@188": "0x004eb9f8",
+      "@189": "0x00554888",
+      "@190": "0x004eba00",
+      "mathlib": "0x004eb940"
+    },
+    "externals": {
+      "_dpfgt": "0x00100340",
+      "_dpflt": "0x001002f0",
+      "acos": "0x00123538",
+      "asin": "0x00123550",
+      "atan": "0x00121cf0",
+      "atan2": "0x00123568",
+      "ceil": "0x001221b8",
+      "cos": "0x00122410",
+      "dpdiv": "0x00230a18",
+      "dpmul": "0x00230790",
+      "dptoli": "0x00230d80",
+      "exp": "0x00123580",
+      "fabs": "0x00122538",
+      "floor": "0x00122590",
+      "fmod": "0x00123598",
+      "frexp": "0x001227a8",
+      "ldexp": "0x00122918",
+      "litodp": "0x00230cc8",
+      "log": "0x001235b0",
+      "log10": "0x001235c8",
+      "luaL_argerror__FP9lua_StateiPCc": "0x00247ef0",
+      "luaL_check_number__FP9lua_Statei": "0x00248210",
+      "luaL_openlib__FP9lua_StatePC8luaL_regi": "0x002482e0",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70",
+      "lua_gettop__FP9lua_State": "0x00246de0",
+      "lua_pushcclosure__FP9lua_StatePFP9lua_State_ii": "0x002474b0",
+      "lua_pushnumber__FP9lua_Stated": "0x00247390",
+      "lua_setglobal__FP9lua_StatePCc": "0x00247910",
+      "lua_settagmethod__FP9lua_StateiPCc": "0x00256540",
+      "pow": "0x001235e0",
+      "rand": "0x00128fa0",
+      "sin": "0x00122bb0",
+      "sqrt": "0x001235f8",
+      "srand": "0x00128f88",
+      "tan": "0x00122ce8"
+    },
+    "symbol": "math_abs__FP9lua_State"
+  },
+  "0x00250310": {
+    "whole_file": true,
+    "emitted": {
+      "luaO_equalObj__FPC11lua_TObjectPC11lua_TObject": "0x00250340",
+      "luaO_openspace__FP9lua_StateUi": "0x002503f0",
+      "luaO_str2d__FPCcPd": "0x00250460",
+      "luaO_verror__FP9lua_StatePCce": "0x00250500",
+      "luaO_chunkid__FPcPCci": "0x00250580"
+    },
+    "data": {
+      "@113": "0x004ebab0",
+      "@114": "0x004ebac0",
+      "@115": "0x004ebad0",
+      "@116": "0x004ebad8",
+      "@117": "0x004ebae8",
+      "@118": "0x004ebaf0",
+      "_ctype_": "0x004d3d10"
+    },
+    "externals": {
+      "_dpfeq": "0x001002a0",
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70",
+      "strcspn": "0x0012a710",
+      "strtod": "0x0012bf90",
+      "vsprintf": "0x0012fde0"
+    },
+    "symbol": "luaO_power2__FUi"
+  },
+  "0x002506d0": {
+    "whole_file": true,
+    "emitted": {
+      "lookahead__FP8LexState": "0x00250730",
+      "error_expected__FP8LexStatei": "0x00250760",
+      "check__FP8LexStatei": "0x002507b0",
+      "check_condition__FP8LexStateiPCc": "0x002507f0",
+      "optional__FP8LexStatei": "0x00250810",
+      "check_match__FP8LexStateiii": "0x00250840",
+      "string_constant__FP9FuncStateP7TString": "0x002508f0",
+      "code_string__FP8LexStateP7TString": "0x00250990",
+      "str_checkname__FP8LexState": "0x002509d0",
+      "checkname__FP8LexState": "0x00250a20",
+      "luaI_registerlocalvar__FP8LexStateP7TString": "0x00250a50",
+      "new_localvar__FP8LexStateP7TStringi": "0x00250ae0",
+      "adjustlocalvars__FP8LexStatei": "0x00250b60",
+      "removelocalvars__FP8LexStatei": "0x00250bc0",
+      "new_localvarstr__FP8LexStatePCci": "0x00250c20",
+      "search_local__FP8LexStateP7TStringP7expdesc": "0x00250c70",
+      "singlevar__FP8LexStateP7TStringP7expdesc": "0x00250cf0",
+      "indexupvalue__FP8LexStateP7expdesc": "0x00250d50",
+      "pushupvalue__FP8LexStateP7TString": "0x00250e20",
+      "adjust_mult_assign__FP8LexStateii": "0x00250ee0",
+      "code_params__FP8LexStateii": "0x00250f60",
+      "enterbreak__FP9FuncStateP10Breaklabel": "0x00251000",
+      "leavebreak__FP9FuncStateP10Breaklabel": "0x00251020",
+      "pushclosure__FP8LexStateP9FuncState": "0x00251070",
+      "open_func__FP8LexStateP9FuncState": "0x00251160",
+      "close_func__FP8LexState": "0x002511f0",
+      "luaY_parser__FP9lua_StateP3zio": "0x00251330",
+      "explist1__FP8LexState": "0x002513c0",
+      "funcargs__FP8LexStatei": "0x00251450",
+      "var_or_func_tail__FP8LexStateP7expdesc": "0x00251550",
+      "var_or_func__FP8LexStateP7expdesc": "0x002516d0",
+      "recfield__FP8LexState": "0x00251760",
+      "recfields__FP8LexState": "0x00251800",
+      "listfields__FP8LexState": "0x002518d0",
+      "constructor_part__FP8LexStateP9Constdesc": "0x002519e0",
+      "constructor__FP8LexState": "0x00251aa0",
+      "simpleexp__FP8LexStateP7expdesc": "0x00251bc0",
+      "exp1__FP8LexState": "0x00251d40",
+      "getunopr__Fi": "0x00251d80",
+      "getbinopr__Fi": "0x00251db0",
+      "subexpr__FP8LexStateP7expdesci": "0x00251ed0",
+      "expr__FP8LexStateP7expdesc": "0x00251ff0",
+      "block_follow__Fi": "0x00252000",
+      "block__FP8LexState": "0x00252050",
+      "assignment__FP8LexStateP7expdesci": "0x002520b0",
+      "cond__FP8LexStateP7expdesc": "0x002521c0",
+      "whilestat__FP8LexStatei": "0x00252200",
+      "repeatstat__FP8LexStatei": "0x002522d0",
+      "forbody__FP8LexStatei6OpCode6OpCode": "0x00252380",
+      "fornum__FP8LexStateP7TString": "0x00252460",
+      "forlist__FP8LexStateP7TString": "0x00252540",
+      "forstat__FP8LexStatei": "0x00252630",
+      "test_then_block__FP8LexStateP7expdesc": "0x00252700",
+      "ifstat__FP8LexStatei": "0x00252750",
+      "localstat__FP8LexState": "0x00252880",
+      "funcname__FP8LexStateP7expdesc": "0x00252920",
+      "funcstat__FP8LexStatei": "0x002529d0",
+      "namestat__FP8LexState": "0x00252a30",
+      "retstat__FP8LexState": "0x00252ac0",
+      "breakstat__FP8LexState": "0x00252b40",
+      "stat__FP8LexState": "0x00252be0",
+      "parlist__FP8LexState": "0x00252d60",
+      "body__FP8LexStateii": "0x00252e40",
+      "chunk__FP8LexState": "0x00252f10"
+    },
+    "data": {
+      "@108": "0x004ebb70",
+      "@121": "0x004ebb80",
+      "@130": "0x004ebb90",
+      "@197": "0x004ebba0",
+      "@237": "0x004ebbc8",
+      "@254": "0x004ebbe0",
+      "@255": "0x004ebc00",
+      "@281": "0x004ebc40",
+      "@282": "0x004ebc50",
+      "@332": "0x004ebc58",
+      "@362": "0x004ebc70",
+      "@38": "0x004ebb00",
+      "@400": "0x004ebc90",
+      "@445": "0x004ebcb0",
+      "@484": "0x004ebce0",
+      "@485": "0x004ebd00",
+      "@504": "0x004ebd20",
+      "@607": "0x004ebd60",
+      "@608": "0x004ebd88",
+      "@656": "0x004ebd98",
+      "@657": "0x004ebda0",
+      "@668": "0x004ebda8",
+      "@669": "0x004ebdb0",
+      "@670": "0x004ebdc0",
+      "@685": "0x004ebdd0",
+      "@780": "0x004ebdf0",
+      "@800": "0x004ebe10",
+      "@81": "0x004ebb20",
+      "@820": "0x004ebe30",
+      "@831": "0x004ebe50",
+      "@95": "0x004ebb50",
+      "priority": "0x004ebd40"
+    },
+    "externals": {
+      "luaF_newproto__FP9lua_State": "0x0024ce50",
+      "luaF_protook__FP9lua_StateP5Protoi": "0x0024cf30",
+      "luaK_adjuststack__FP9FuncStatei": "0x0024a470",
+      "luaK_code0__FP9FuncState6OpCode": "0x0024b030",
+      "luaK_code1__FP9FuncState6OpCodei": "0x0024b040",
+      "luaK_code2__FP9FuncState6OpCodeii": "0x0024b050",
+      "luaK_concat__FP9FuncStatePii": "0x0024a920",
+      "luaK_deltastack__FP9FuncStatei": "0x0024a240",
+      "luaK_error__FP8LexStatePCc": "0x0024a050",
+      "luaK_getlabel__FP9FuncState": "0x0024a1f0",
+      "luaK_goiftrue__FP9FuncStateP7expdesci": "0x0024aaa0",
+      "luaK_infix__FP8LexState6BinOprP7expdesc": "0x0024adf0",
+      "luaK_jump__FP9FuncState": "0x0024a090",
+      "luaK_kstr__FP8LexStatei": "0x0024a2b0",
+      "luaK_lastisopen__FP9FuncState": "0x0024a4b0",
+      "luaK_number__FP9FuncStated": "0x0024a3c0",
+      "luaK_patchlist__FP9FuncStateii": "0x0024a880",
+      "luaK_posfix__FP8LexState6BinOprP7expdescP7expdesc": "0x0024ae60",
+      "luaK_prefix__FP8LexState5UnOprP7expdesc": "0x0024ad20",
+      "luaK_setcallreturns__FP9FuncStatei": "0x0024a500",
+      "luaK_storevar__FP8LexStatePC7expdesc": "0x0024a680",
+      "luaK_tostack__FP8LexStateP7expdesci": "0x0024ab30",
+      "luaM_growaux__FP9lua_StatePvUiiUiPCcUi": "0x00250150",
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "luaS_new__FP9lua_StatePCc": "0x002537a0",
+      "luaS_newfixed__FP9lua_StatePCc": "0x002537f0",
+      "luaX_checklimit__FP8LexStateiiPCc": "0x0024dcf0",
+      "luaX_lex__FP8LexStateP7SemInfo": "0x0024efd0",
+      "luaX_setinput__FP9lua_StateP8LexStateP3zioP7TString": "0x0024df60",
+      "luaX_syntaxerror__FP8LexStatePCcPCc": "0x0024dd50",
+      "luaX_token2str__FiPc": "0x0024de30"
+    },
+    "symbol": "next__FP8LexState"
+  },
+  "0x00253270": {
+    "whole_file": true,
+    "emitted": {
+      "luaS_freeall__FP9lua_State": "0x002532f0",
+      "hash_s__FPCcUi": "0x00253350",
+      "luaS_resize__FP9lua_StateP11stringtablei": "0x002533a0",
+      "newentry__FP9lua_StateP11stringtableP7TStringi": "0x002534c0",
+      "luaS_newlstr__FP9lua_StatePCcUi": "0x00253530",
+      "luaS_newudata__FP9lua_StateUiPv": "0x00253650",
+      "luaS_createudata__FP9lua_StatePvi": "0x00253700",
+      "luaS_new__FP9lua_StatePCc": "0x002537a0",
+      "luaS_newfixed__FP9lua_StatePCc": "0x002537f0"
+    },
+    "data": {},
+    "externals": {
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "memcmp": "0x00127004"
+    },
+    "symbol": "luaS_init__FP9lua_State"
+  },
+  "0x00253820": {
+    "whole_file": true,
+    "emitted": {
+      "posrelat__FlUi": "0x00253870",
+      "str_sub__FP9lua_State": "0x002538a0",
+      "str_lower__FP9lua_State": "0x002539b0",
+      "str_upper__FP9lua_State": "0x00253a60",
+      "str_rep__FP9lua_State": "0x00253b10",
+      "str_byte__FP9lua_State": "0x00253bb0",
+      "str_char__FP9lua_State": "0x00253c80",
+      "check_capture__FP9lua_StateiP7Capture": "0x00253d50",
+      "capture_to_close__FP9lua_StateP7Capture": "0x00253dc0",
+      "luaI_classend__FP9lua_StatePCc": "0x00253e20",
+      "match_class__Fii": "0x00253f00",
+      "matchbracketclass__FiPCcPCc": "0x002540c0",
+      "luaI_singlematch__FiPCcPCc": "0x002541d0",
+      "matchbalance__FP9lua_StatePCcPCcP7Capture": "0x00254240",
+      "max_expand__FP9lua_StatePCcPCcPCcP7Capture": "0x00254300",
+      "min_expand__FP9lua_StatePCcPCcPCcP7Capture": "0x002543e0",
+      "start_capture__FP9lua_StatePCcPCcP7Capture": "0x00254490",
+      "end_capture__FP9lua_StatePCcPCcP7Capture": "0x00254540",
+      "match_capture__FP9lua_StatePCciP7Capture": "0x002545d0",
+      "match__FP9lua_StatePCcPCcP7Capture": "0x00254650",
+      "lmemfind__FPCcUiPCcUi": "0x00254900",
+      "push_captures__FP9lua_StateP7Capture": "0x002549d0",
+      "str_find__FP9lua_State": "0x00254a70",
+      "add_s__FP9lua_StateP11luaL_BufferP7Capture": "0x00254c90",
+      "str_gsub__FP9lua_State": "0x00254e60",
+      "luaI_addquoted__FP9lua_StateP11luaL_Bufferi": "0x00255060",
+      "str_format__FP9lua_State": "0x002551f0",
+      "lua_strlibopen__FP9lua_State": "0x002555a0"
+    },
+    "data": {
+      "@101": "0x004ebe90",
+      "@121": "0x004ebea0",
+      "@134": "0x004ebeb0",
+      "@149": "0x004ebed0",
+      "@174": "0x004ebef0",
+      "@175": "0x004ebf20",
+      "@286": "0x004ebf40",
+      "@349": "0x004ebf60",
+      "@41": "0x004ebe88",
+      "@500": "0x004ebf80",
+      "@541": "0x004ebf98",
+      "@630": "0x004ebfb0",
+      "@666": "0x004ebfd0",
+      "@731": "0x004ebfe0",
+      "@732": "0x004ec000",
+      "@733": "0x004ec030",
+      "@734": "0x004ec050",
+      "@735": "0x004ec058",
+      "@736": "0x004ec060",
+      "@737": "0x004ec070",
+      "@738": "0x004ec080",
+      "@739": "0x004ec088",
+      "@740": "0x004ec090",
+      "@741": "0x004ec098",
+      "@742": "0x004ec0a0",
+      "@743": "0x004ec0a8",
+      "@744": "0x004ec0b0",
+      "_ctype_": "0x004d3d10",
+      "strlib": "0x004ec0c0"
+    },
+    "externals": {
+      "_d_utod": "0x00100290",
+      "dptoli": "0x00230d80",
+      "dptoul": "0x00230ea8",
+      "litodp": "0x00230cc8",
+      "luaL_addlstring__FP11luaL_BufferPCcUi": "0x00248550",
+      "luaL_addvalue__FP11luaL_Buffer": "0x00248630",
+      "luaL_argerror__FP9lua_StateiPCc": "0x00247ef0",
+      "luaL_buffinit__FP9lua_StateP11luaL_Buffer": "0x00248700",
+      "luaL_check_lstr__FP9lua_StateiPUi": "0x00248100",
+      "luaL_check_number__FP9lua_Statei": "0x00248210",
+      "luaL_checkstack__FP9lua_StateiPCc": "0x00248000",
+      "luaL_openlib__FP9lua_StatePC8luaL_regi": "0x002482e0",
+      "luaL_opt_number__FP9lua_Stateid": "0x00248280",
+      "luaL_prepbuffer__FP11luaL_Buffer": "0x00248510",
+      "luaL_pushresult__FP11luaL_Buffer": "0x002485d0",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70",
+      "lua_gettop__FP9lua_State": "0x00246de0",
+      "lua_isstring__FP9lua_Statei": "0x00247030",
+      "lua_pushlstring__FP9lua_StatePCcUi": "0x002473f0",
+      "lua_pushnil__FP9lua_State": "0x00247340",
+      "lua_pushnumber__FP9lua_Stated": "0x00247390",
+      "lua_pushstring__FP9lua_StatePCc": "0x00247450",
+      "lua_pushvalue__FP9lua_Statei": "0x00246f10",
+      "lua_rawcall__FP9lua_Stateii": "0x00247bf0",
+      "lua_settop__FP9lua_Statei": "0x00246e10",
+      "lua_strlen__FP9lua_Statei": "0x002471d0",
+      "lua_tostring__FP9lua_Statei": "0x00247160",
+      "lua_type__FP9lua_Statei": "0x00246f70",
+      "memchr": "0x00126f24",
+      "memcmp": "0x00127004",
+      "strpbrk": "0x0012af18",
+      "tolower": "0x0012c4a8",
+      "toupper": "0x0012c4c8"
+    },
+    "symbol": "str_len__FP9lua_State"
+  },
+  "0x002555b0": {
+    "whole_file": true,
+    "emitted": {
+      "luaH_getany__FP9lua_StatePC4HashPC11lua_TObject": "0x00255680",
+      "luaH_getnum__FPC4Hashd": "0x00255720",
+      "luaH_getstr__FPC4HashP7TString": "0x002557c0",
+      "luaH_get__FP9lua_StatePC4HashPC11lua_TObject": "0x00255820",
+      "luaH_next__FP9lua_StatePC4HashPC11lua_TObject": "0x00255890",
+      "luaH_remove__FP4HashP11lua_TObject": "0x00255980",
+      "setnodevector__FP9lua_StateP4HashUi": "0x00255a80",
+      "luaH_new__FP9lua_Statei": "0x00255b80",
+      "luaH_free__FP9lua_StateP4Hash": "0x00255c10",
+      "numuse__FPC4Hash": "0x00255c80",
+      "rehash__FP9lua_StateP4Hash": "0x00255cd0",
+      "luaH_set__FP9lua_StateP4HashPC11lua_TObject": "0x00255e10",
+      "luaH_setint__FP9lua_StateP4Hashi": "0x00255fb0",
+      "luaH_setstrnum__FP9lua_StateP4HashP7TStringd": "0x00256000",
+      "luaH_getglobal__FP9lua_StatePCc": "0x00256040"
+    },
+    "data": {
+      "@105": "0x004ec140",
+      "@155": "0x004ec158",
+      "@38": "0x004ec120",
+      "luaO_nilobject": "0x004eba40"
+    },
+    "externals": {
+      "_dpfeq": "0x001002a0",
+      "dptoli": "0x00230d80",
+      "litodp": "0x00230cc8",
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "luaO_equalObj__FPC11lua_TObjectPC11lua_TObject": "0x00250340",
+      "luaO_power2__FUi": "0x00250310",
+      "luaS_new__FP9lua_StatePCc": "0x002537a0",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70"
+    },
+    "symbol": "luaH_mainposition__FPC4HashPC11lua_TObject"
+  },
+  "0x00256070": {
+    "whole_file": true,
+    "emitted": {
+      "luaI_checkevent__FP9lua_StatePCci": "0x002560e0",
+      "luaT_validevent__Fii": "0x00256190",
+      "init_entry__FP9lua_Statei": "0x002561d0",
+      "luaT_init__FP9lua_State": "0x00256210",
+      "lua_newtag__FP9lua_State": "0x00256290",
+      "checktag__FP9lua_Statei": "0x00256300",
+      "luaT_realtag__FP9lua_Statei": "0x00256340",
+      "lua_copytagmethods__FP9lua_Stateii": "0x00256380",
+      "luaT_tag__FPC11lua_TObject": "0x00256430",
+      "lua_gettagmethod__FP9lua_StateiPCc": "0x00256470",
+      "lua_settagmethod__FP9lua_StateiPCc": "0x00256540"
+    },
+    "data": {
+      "@10": "0x004ec190",
+      "@105": "0x004ec350",
+      "@11": "0x004ec1a0",
+      "@111": "0x004ec360",
+      "@12": "0x004ec1b0",
+      "@121": "0x004ec380",
+      "@13": "0x004ec1b8",
+      "@131": "0x004ec3a0",
+      "@14": "0x004ec1c0",
+      "@15": "0x004ec1c8",
+      "@16": "0x004ec1d0",
+      "@17": "0x004ec1d8",
+      "@18": "0x004ec1e0",
+      "@19": "0x004ec1e8",
+      "@20": "0x004ec1f0",
+      "@21": "0x004ec1f8",
+      "@216": "0x004ec3d0",
+      "@217": "0x004ec410",
+      "@218": "0x004ec430",
+      "@22": "0x004ec208",
+      "@23": "0x004ec210",
+      "@24": "0x004ec218",
+      "@59": "0x004ec270",
+      "@60": "0x004ec290",
+      "@61": "0x004ec2c0",
+      "@7": "0x004ec168",
+      "@8": "0x004ec178",
+      "@9": "0x004ec188",
+      "luaO_typenames": "0x004eba90",
+      "luaT_eventname": "0x004ec220",
+      "luaT_validevents": "0x004ec2f0"
+    },
+    "externals": {
+      "luaD_checkstack__FP9lua_Statei": "0x0024c360",
+      "luaM_growaux__FP9lua_StatePvUiiUiPCcUi": "0x00250150",
+      "luaO_verror__FP9lua_StatePCce": "0x00250500",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70",
+      "strcmp": "0x0012a4a4"
+    },
+    "symbol": "findevent__FPCc"
+  },
+  "0x00256680": {
+    "whole_file": true,
+    "emitted": {
+      "unexpectedEOZ__FP9lua_StateP3zio": "0x002566a0",
+      "ezgetc__FP9lua_StateP3zio": "0x002566e0",
+      "ezread__FP9lua_StateP3zioPvi": "0x00256760",
+      "LoadBlock__FP9lua_StatePvUiP3zioi": "0x002567b0",
+      "LoadVector__FP9lua_StatePviUiP3zioi": "0x00256840",
+      "LoadInt__FP9lua_StateP3zioi": "0x00256910",
+      "LoadSize__FP9lua_StateP3zioi": "0x00256940",
+      "LoadNumber__FP9lua_StateP3zioi": "0x00256970",
+      "LoadString__FP9lua_StateP3zioi": "0x002569a0",
+      "LoadCode__FP9lua_StateP5ProtoP3zioi": "0x00256a30",
+      "LoadLocals__FP9lua_StateP5ProtoP3zioi": "0x00256b00",
+      "LoadLines__FP9lua_StateP5ProtoP3zioi": "0x00256c10",
+      "LoadConstants__FP9lua_StateP5ProtoP3zioi": "0x00256ca0",
+      "LoadFunction__FP9lua_StateP3zioi": "0x00256e00",
+      "LoadSignature__FP9lua_StateP3zio": "0x00256f00",
+      "TestSize__FP9lua_StateiPCcP3zio": "0x00256f90",
+      "LoadHeader__FP9lua_StateP3zio": "0x00257010",
+      "LoadChunk__FP9lua_StateP3zio": "0x00257230",
+      "luaU_undump__FP9lua_StateP3zio": "0x00257270",
+      "luaU_endianess__Fv": "0x00257350"
+    },
+    "data": {
+      "@150": "0x004ec490",
+      "@234": "0x004ec4a8",
+      "@235": "0x004ec4b0",
+      "@247": "0x004ec4d0",
+      "@268": "0x004ec510",
+      "@269": "0x004ec550",
+      "@27": "0x004ec460",
+      "@270": "0x004ec590",
+      "@271": "0x004ec5a0",
+      "@272": "0x004ec5b0",
+      "@273": "0x004ec5d0",
+      "@274": "0x004ec5e8",
+      "@275": "0x004ec5f0",
+      "@276": "0x004ec5f8",
+      "@277": "0x005548a8",
+      "@278": "0x004ec610",
+      "@309": "0x004ec650"
+    },
+    "externals": {
+      "dptoli": "0x00230d80",
+      "luaF_newproto__FP9lua_State": "0x0024ce50",
+      "luaF_protook__FP9lua_StateP5Protoi": "0x0024cf30",
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "luaO_openspace__FP9lua_StateUi": "0x002503f0",
+      "luaO_verror__FP9lua_StatePCce": "0x00250500",
+      "luaS_newlstr__FP9lua_StatePCcUi": "0x00253530",
+      "luaZ_read__FP3zioPvUi": "0x00258fe0"
+    },
+    "symbol": "ZNAME__FP3zio"
+  },
+  "0x00257370": {
+    "whole_file": true,
+    "emitted": {
+      "luaV_tostring__FP9lua_StateP11lua_TObject": "0x002573d0",
+      "traceexec__FP9lua_StateP11lua_TObjectP11lua_TObjectPFP9lua_StateP9lua_Debug_v": "0x00257440",
+      "luaV_closure__FP9lua_Statei": "0x00257530",
+      "luaV_Cclosure__FP9lua_StatePFP9lua_State_ii": "0x002575f0",
+      "luaV_Lclosure__FP9lua_StateP5Protoi": "0x00257630",
+      "luaV_gettable__FP9lua_StateP11lua_TObject": "0x00257660",
+      "luaV_settable__FP9lua_StateP11lua_TObjectP11lua_TObject": "0x002577c0",
+      "luaV_getglobal__FP9lua_StateP7TString": "0x00257920",
+      "luaV_setglobal__FP9lua_StateP7TString": "0x00257a00",
+      "call_binTM__FP9lua_StateP11lua_TObject3TMS": "0x00257b40",
+      "call_arith__FP9lua_StateP11lua_TObject3TMS": "0x00257c10",
+      "luaV_strcomp__FPC7TStringPC7TString": "0x00257c60",
+      "luaV_lessthan__FP9lua_StatePC11lua_TObjectPC11lua_TObjectP11lua_TObject": "0x00257d10",
+      "luaV_strconc__FP9lua_StateiP11lua_TObject": "0x00257e20",
+      "luaV_pack__FP9lua_StateP11lua_TObject": "0x00258000",
+      "adjust_varargs__FP9lua_StateP11lua_TObjecti": "0x00258100",
+      "luaV_execute__FP9lua_StatePC7ClosureP11lua_TObject": "0x00258180"
+    },
+    "data": {
+      "@127": "0x004ec688",
+      "@239": "0x004ec690",
+      "@28": "0x004ec680",
+      "@361": "0x004ec6a8",
+      "@362": "0x004ec6b0",
+      "@393": "0x004ec6c8",
+      "@707": "0x004ec6d0",
+      "@708": "0x004ec6f0",
+      "@709": "0x004ec710",
+      "@710": "0x004ec730",
+      "@711": "0x004ec760",
+      "@712": "0x004ec780",
+      "@713": "0x004ec7a0",
+      "luaO_nilobject": "0x004eba40",
+      "luaT_eventname": "0x004ec220"
+    },
+    "externals": {
+      "_dpfgt": "0x00100340",
+      "_dpflt": "0x001002f0",
+      "dpadd": "0x002306d0",
+      "dpdiv": "0x00230a18",
+      "dpmul": "0x00230790",
+      "dpsub": "0x00230728",
+      "litodp": "0x00230cc8",
+      "luaC_checkGC__FP9lua_State": "0x0024dc50",
+      "luaD_adjusttop__FP9lua_StateP11lua_TObjecti": "0x0024c440",
+      "luaD_callTM__FP9lua_StateP7Closureii": "0x0024c710",
+      "luaD_call__FP9lua_StateP11lua_TObjecti": "0x0024c780",
+      "luaD_checkstack__FP9lua_Statei": "0x0024c360",
+      "luaD_lineHook__FP9lua_StateP11lua_TObjectiPFP9lua_StateP9lua_Debug_v": "0x0024c5e0",
+      "luaF_newclosure__FP9lua_Statei": "0x0024cde0",
+      "luaG_binerror__FP9lua_StateP11lua_TObjectiPCc": "0x0024c250",
+      "luaG_getline__FPiiiPi": "0x0024b780",
+      "luaG_ordererror__FP9lua_StateP11lua_TObject": "0x0024c270",
+      "luaG_typeerror__FP9lua_StateP11lua_TObjectPCc": "0x0024c1b0",
+      "luaH_get__FP9lua_StatePC4HashPC11lua_TObject": "0x00255820",
+      "luaH_getstr__FPC4HashP7TString": "0x002557c0",
+      "luaH_new__FP9lua_Statei": "0x00255b80",
+      "luaH_next__FP9lua_StatePC4HashPC11lua_TObject": "0x00255890",
+      "luaH_set__FP9lua_StateP4HashPC11lua_TObject": "0x00255e10",
+      "luaH_setint__FP9lua_StateP4Hashi": "0x00255fb0",
+      "luaH_setstrnum__FP9lua_StateP4HashP7TStringd": "0x00256000",
+      "luaO_equalObj__FPC11lua_TObjectPC11lua_TObject": "0x00250340",
+      "luaO_openspace__FP9lua_StateUi": "0x002503f0",
+      "luaO_str2d__FPCcPd": "0x00250460",
+      "luaS_new__FP9lua_StatePCc": "0x002537a0",
+      "luaS_newlstr__FP9lua_StatePCcUi": "0x00253530",
+      "luaT_tag__FPC11lua_TObject": "0x00256430",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70",
+      "lua_pushstring__FP9lua_StatePCc": "0x00247450",
+      "strcoll": "0x0012a5e8"
+    },
+    "symbol": "luaV_tonumber__FP11lua_TObject"
+  },
+  "0x00258f90": {
+    "whole_file": true,
+    "emitted": {
+      "luaZ_mopen__FP3zioPCcUiPCc": "0x00258fa0",
+      "luaZ_read__FP3zioPvUi": "0x00258fe0"
+    },
+    "data": {},
+    "stripped": [
+      "luaZ_Fopen__FP3zioP5_FILEPCc",
+      "luaZ_sopen__FP3zioPCcPCc",
+      "zffilbuf__FP3zio"
+    ],
+    "symbol": "zmfilbuf__FP3zio"
+  }
+}

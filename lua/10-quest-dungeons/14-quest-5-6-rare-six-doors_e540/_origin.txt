@@ -1,0 +1,3 @@
+AFS entry 540  |  quest-5-6-rare-six-doors  |  quest 5/6 — six-door puzzle, rare enemies (e_rare; exact stage id uncertain)
+A file's numeric prefix is its chunk index in that pack entry.
+64 chunks

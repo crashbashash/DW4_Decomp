@@ -1,0 +1,3 @@
+AFS entry 820  |  lobby-quests  |  Lobby quest giver (n_leomon)
+A file's numeric prefix is its chunk index in that pack entry.
+64 chunks

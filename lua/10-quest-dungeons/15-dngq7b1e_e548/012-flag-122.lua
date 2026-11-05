@@ -1,0 +1,7 @@
+be:FLGset(122, 1)
+be:COUNTERset(3, be:COUNTERget(3) + local_0)
+be:sd("NUMBERCTRL", "questnm1", 0, "SETVALUE", "I<" .. be:COUNTERget(3) .. ">")
+if be:SYSgetDifficulty() == 2 then
+    be:sd("GENERATER", nil, -1, "STOPREVERS", "GENE-11")
+    be:sd("GENERATER", nil, -1, "START", "GENE-10", 1)
+end

@@ -1,0 +1,51 @@
+/* 0x002d1930 — FUN_002d1930. m2c draft + mechanical fixups, then verified
+ * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
+ * The SHAPE matched; the C types are a guess. */
+void *FUN_002d1930(void *arg0) {
+    *(int *)((char *)(arg0) + 920) = 0;
+    *(int *)((char *)(arg0) + 924) = 0;
+    *(char *)((char *)(arg0) + 20) = 0;
+    *(char *)((char *)(arg0) + 21) = 0;
+    *(char *)((char *)(arg0) + 22) = 0;
+    *(char *)((char *)(arg0) + 0) = 0;
+    *(int *)((char *)(arg0) + 24) = 0;
+    *(int *)((char *)(arg0) + 48) = 0;
+    *(int *)((char *)(arg0) + 32) = 0;
+    *(int *)((char *)(arg0) + 36) = 0;
+    *(int *)((char *)(arg0) + 40) = 0;
+    *(int *)((char *)(arg0) + 44) = 0;
+    *(int *)((char *)(arg0) + 56) = 0;
+    *(int *)((char *)(arg0) + 68) = 0;
+    *(int *)((char *)(arg0) + 72) = 0;
+    *(char *)((char *)(arg0) + 116) = 0;
+    *(char *)((char *)(arg0) + 117) = 0;
+    *(char *)((char *)(arg0) + 118) = 0;
+    *(char *)((char *)(arg0) + 119) = 0;
+    *(char *)((char *)(arg0) + 120) = 0;
+    *(char *)((char *)(arg0) + 121) = 0;
+    *(char *)((char *)(arg0) + 122) = 0;
+    *(int *)((char *)(arg0) + 124) = 0x80000;
+    *(int *)((char *)(arg0) + 128) = -1;
+    *(int *)((char *)(arg0) + 132) = -1;
+    *(int *)((char *)(arg0) + 136) = -1;
+    *(int *)((char *)(arg0) + 140) = -1;
+    *(char *)((char *)(arg0) + 144) = 0;
+    *(char *)((char *)(arg0) + 272) = 0;
+    *(char *)((char *)(arg0) + 400) = 0;
+    *(char *)((char *)(arg0) + 528) = 0;
+    *(char *)((char *)(arg0) + 784) = 0;
+    *(int *)((char *)(arg0) + 80) = 0;
+    *(int *)((char *)(arg0) + 84) = 0;
+    *(int *)((char *)(arg0) + 52) = 0;
+    *(char *)((char *)(arg0) + 92) = 0;
+    *(int *)((char *)(arg0) + 96) = 0;
+    *(int *)((char *)(arg0) + 88) = 0;
+    *(int *)((char *)(arg0) + 100) = 0;
+    *(int *)((char *)(arg0) + 104) = 0;
+    *(int *)((char *)(arg0) + 60) = 0;
+    *(int *)((char *)(arg0) + 916) = 0;
+    *(int *)((char *)(arg0) + 76) = 0;
+    *(int *)((char *)(arg0) + 108) = 0;
+    *(int *)((char *)(arg0) + 112) = 0;
+    return arg0;
+}

@@ -1,0 +1,5 @@
+be:FLGset(409, 0)
+be:FLGset(376, 0)
+be:FLGset(571, 0)
+be:FLGset(424, 0)
+be:sd("MODELCTRL", "g_cytrerp2", 0, "SQ_POWERON")

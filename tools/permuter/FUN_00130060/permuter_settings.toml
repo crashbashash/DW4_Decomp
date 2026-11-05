@@ -1,0 +1,4 @@
+# decomp-permuter reads this from the project dir. compiler_type only selects
+# randomization weights (default_weights.toml has a [mwcc] section) -- the compile
+# command comes from compile.sh, so no MWCC-MIPS code adapter is needed.
+compiler_type = "mwcc"

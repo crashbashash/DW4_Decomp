@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""seed_names_reflection.py — emit the class registrar / field-init names.
+
+`data/reflection.json` records, for all 1,075 MetaObjects, the class name and the
+two functions the static-init registrar is built from:
+
+  register_site  the address of the `jal igMetaObject_RegisterClass` inside the
+                 class's registrar — so the enclosing function *is* that class's
+                 registrar, and its name is not a guess;
+  post_init      the function passed to the registrar that adds the class's fields
+                 (it calls igMetaObject_CreateFields / _NameFields).
+
+This emits
+
+  <Class>_Register     at the registrar function
+  <Class>_InitFields   at the post_init function, where one exists
+
+Two MetaObjects share the name `igModelViewMatrixBoneSelectList`; those get their
+handle address as a suffix, which is unique.
+
+  scripts/seed_names_reflection.py > config/SLUS-20836/names/Reflection.tsv
+"""
+import bisect
+import json
+import os
+import re
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CLASSES = os.path.join(ROOT, "data", "reflection.json")
+SYMBOLS = os.path.join(ROOT, "config", "SLUS-20836", "symbols.txt")
+
+
+def toint(x):
+    return int(x, 16) if isinstance(x, str) else int(x)
+
+
+def load_symbols(path):
+    rows = []
+    for ln in open(path):
+        if ln.startswith("#") or not ln.strip():
+            continue
+        p = ln.split()
+        rows.append((int(p[0], 16), int(p[1], 16), p[2]))
+    rows.sort()
+    return rows
+
+
+def auto(name):
+    return name.startswith(("FUN_", "thunk_FUN_"))
+
+
+def nameable(current, want):
+    """A symbol we may (re)name: still auto, or already carrying our own name.
+
+    This keeps regeneration idempotent: after tools/apply_names.py has run, the
+    registrars are no longer `FUN_*`, and a filter on "auto" alone would emit
+    nothing and erase the overlay.
+    """
+    return auto(current) or current == want
+
+
+def folder_of(head):
+    if head == "Bec":
+        return "game"
+    if head == "Core":
+        return "engine"
+    if head.startswith("igAdx"):
+        return "audio"
+    if head.startswith(("igMovie", "igCriMovie")):
+        return "movie"
+    if head == "Gui":
+        return "menu"
+    return "engine"
+
+
+def namespace_map(rows):
+    """{leaf class: folder} from the already-named `Gap::<head>::<Class>::vfunc_N`.
+
+    The reflection name has no namespace (`igWindow`, not `Gap::Core::igWindow`),
+    so the prefix alone cannot place a class.  A class that already has named
+    vfuncs can: their namespace says which folder it belongs in.
+    """
+    out = {}
+    for _a, _s, n in rows:
+        parts = n.split("__")
+        if parts and parts[0] == "Gap" and "vfunc" in " ".join(parts):
+            try:
+                i = next(k for k, p in enumerate(parts) if p.startswith("vfunc"))
+            except StopIteration:
+                continue
+            if i >= 2:
+                out[parts[i - 1]] = folder_of(parts[1])
+    return out
+
+
+def module(name, nsmap):
+    if name in nsmap:
+        return nsmap[name]
+    if name.startswith("ig"):
+        return "engine"
+    if name.startswith(("be", "Particle", "libBec", "libNdmw")):
+        return "game"
+    return "engine"
+
+
+def main():
+    classes = json.load(open(CLASSES))["classes"]
+    rows = load_symbols(SYMBOLS)
+    starts = [r[0] for r in rows]
+
+    def containing(va):
+        i = bisect.bisect_right(starts, va) - 1
+        if i < 0:
+            return None
+        a, s, n = rows[i]
+        return (a, s, n) if a <= va < a + s else None
+
+    def at(va):
+        i = bisect.bisect_left(starts, va)
+        if i < len(rows) and rows[i][0] == va:
+            return rows[i]
+        return None
+
+    nsmap = namespace_map(rows)
+    counts = {}
+    for c in classes.values():
+        counts[c["class"]] = counts.get(c["class"], 0) + 1
+
+    out = []
+    for handle in sorted(classes, key=lambda h: toint(h)):
+        c = classes[handle]
+        name = c["class"]
+        if counts[name] > 1:                       # disambiguate by handle slot
+            name = "%s_%s" % (name, handle[2:].lower())
+        reg = containing(toint(c["register_site"]))
+        if reg and nameable(reg[2], "%s_Register" % name):
+            out.append((reg[0], "%s_Register" % name, module(c["class"], nsmap)))
+        pi = c.get("post_init")
+        if pi:
+            p = at(toint(pi))
+            if p and nameable(p[2], "%s_InitFields" % name):
+                out.append((p[0], "%s_InitFields" % name, module(c["class"], nsmap)))
+    out.sort()
+    assert len({n for _, n, _ in out}) == len(out), "duplicate name generated"
+    print("# Class registrars and field initialisers, from data/reflection.json.")
+    print("# Every class's static-init registrar ends with `jal igMetaObject_RegisterClass`")
+    print("# and passes its name string; the reflection dump records that call site")
+    print("# (register_site) and the field-adding post_init function. GENERATED by")
+    print("# scripts/seed_names_reflection.py; do not hand-edit.")
+    print("# <va>\t<name>\t<module>")
+    for va, name, mod in out:
+        print("0x%08x\t%s\t%s" % (va, name, mod))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

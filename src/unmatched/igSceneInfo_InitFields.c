@@ -1,0 +1,51 @@
+#include "dw4/reflected.h"
+struct V3 { int x; int y; int z; };
+int FUN_0013a360();
+int FUN_0018e470();
+int FUN_0019cbe0();
+int FUN_0019cd50();
+int FUN_0019f4c0();
+int igMetaObject_CreateFields();
+void *igMetaObject_GetFieldAt();
+int igMetaObject_GetFieldCount();
+int igMetaObject_NameFields();
+extern int DAT_0048b780[4];
+extern int DAT_0048b7a0[4];
+extern int DAT_0048b7c0[4];
+extern int DAT_0048b7e0[4];
+extern int DAT_005615e0[4];
+void igSceneInfo_InitFields(void) {
+    struct V3 v;
+    void *temp_s0;
+    int temp_s1;
+    void *temp_a0;
+    void *temp_s2;
+    void *temp_s2_2;
+    void *temp_s2_3;
+    void *temp_s2_4;
+
+    temp_s0 = (void *)DAT_005615e0[0];
+    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
+    igMetaObject_CreateFields(temp_s0, &DAT_0048b780[0], 7);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0019cd50();
+    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0013a360();
+    ((igRefMetaField *)temp_s2_2)->_construct = 1;
+    ((igMetaField *)temp_s2_2)->_deepCopyMethod = 0;
+    ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 2;
+    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0019f4c0();
+    ((igRefMetaField *)temp_s2_3)->_construct = 1;
+    ((igMetaField *)temp_s2_3)->_deepCopyMethod = 0;
+    ((igMetaField *)temp_s2_3)->_shallowCopyMethod = 2;
+    temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
+    v.x = 0;
+    v.y = 0x3F800000;
+    v.z = 0;
+    FUN_0018e470(temp_a0, &v);
+    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0019cbe0();
+    ((igRefMetaField *)temp_s2_4)->_construct = 1;
+    igMetaObject_NameFields(temp_s0, &DAT_0048b7a0[0], &DAT_0048b7c0[0], &DAT_0048b7e0[0], temp_s1);
+}

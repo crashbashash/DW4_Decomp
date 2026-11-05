@@ -1,0 +1,75 @@
+for local_2 = 0, 3 do
+    if be:SYSisJoinPlayer(local_2) == 1 then
+        local_1 = local_1 + be:SYSctlPlayer("HP", "GETHP", local_2, 0)
+    end
+end
+if local_1 == 0 then
+    return nil, 0
+end
+be:sd("MODELCTRL", nil, -1, "OFCTRL")
+be:DMsetSD("CAMERA", nil, -1, "SETDEMOCAMERA", "sbossafter")
+be:DMchkSD("CAMERA", nil, -1, "ISDEMOCAMERA", "==0")
+be:DMsetSD("MODELCTRL", "e_anomalo", 0, "MOVETRANS", "V<140,10,-1200>/V<0,0,0>")
+be:DMsetSD("PLAYER", nil, 0, "MOVETRANS", "V<140,10,-1130>/V<0,180,0>")
+be:DMsetSD("PLAYER", nil, 1, "MOVETRANS", "V<130,10,-1130>/V<0,180,0>")
+be:DMsetSD("PLAYER", nil, 2, "MOVETRANS", "V<170,10,-1140>/V<0,180,0>")
+be:DMsetSD("PLAYER", nil, 3, "MOVETRANS", "V<110,10,-1140>/V<0,180,0>")
+be:DMsetSD("PLAYER", nil, 0, "SQ_DEMOWALK", 200)
+be:DMsetSD("SOUND", nil, -1, "PLAY", "BT_WIN03", 270)
+be:DMsetSD("PLAYER", nil, 0, "SQ_DEMOWAIT", 305)
+be:DMsetSD("MODELCTRL", "g_000boost1", -1, "SQ_DDMG", 305)
+be:DMsetSD("PLAYER", nil, -1, "SQ_ENJOY", 310)
+be:DMchkSD("CAMERA", nil, -1, "ISDEMOCAMERA", "!=0")
+be:DMchkSD("PLAYER", be:SYSgetPlayerName(0), 0, "ISSEQNAME", "SQ_ENJOY", "!=0")
+be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN01/CLR")
+be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN00/CLR")
+be:DMsetSD("MODELCTRL", "i_messwn", 0, "GENERATE", "SQ_OPEN")
+be:DMsetSD("TEXTCTL", nil, -1, "ALIGN", "TALKFONT01/font00/CENTER")
+g_talk = "mess"
+g_page = 0
+g_messPlayerNo = 0
+for local_4 = 0, 3 do
+    if be:SYSisJoinPlayer(local_4) == 1 then
+        local_2 = local_2 + be:SYSctlPlayer("HP", "GETHP", local_4, 0)
+        local_3 = local_3 + be:SYSctlPlayer("HP", "GETMHP", local_4, 0)
+    end
+end
+if be:SYSctlPlayer("HP", "GETHP", local_0, 0) == 1 then
+    be:FLGset(566, 1)
+elseif local_4 < 80 then
+    be:FLGset(563, 1)
+elseif local_4 < 100 then
+    be:FLGset(564, 1)
+else
+    be:FLGset(565, 1)
+end
+be:DMchkSD("MODELCTRL", "i_messwn", 0, "ISRUN", "==0")
+be:DMchkSD("MODELCTRL", "i_messwn", 0, "ISSEQNAME", "SQ_OPEN", "==0")
+be:DMchkSD("MODELCTRL", "i_messwn", 0, "ISSEQNAME", "SQ_OPEN", "!=0")
+funcOneMessage(mswk61069)
+if be:FLGisOn(566) == 1 then
+    funcOneMessage(mswk61087)
+elseif be:FLGisOn(565) == 1 then
+    funcOneMessage(mswk61089)
+elseif be:FLGisOn(564) == 1 then
+    funcOneMessage(mswk61088)
+else
+    funcOneMessage(mswk61070)
+end
+be:DMsetSD("MODELCTRL", "i_messwn", 0, "SQ_CLOSE")
+be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN01/SET", 10)
+be:DMsetSD("LAYERCTL", nil, -1, "SWITCH", "WN00/SET", 10)
+be:DMchkSD("MODELCTRL", "i_messwn", 0, "ISRUN", "!=0")
+be:DMsetSD("CAMERA", nil, -1, "SETDEMOCAMERA", "sbossdoor")
+be:DMchkSD("CAMERA", nil, -1, "ISDEMOCAMERA", "==0")
+be:DMsetSD("MODELCTRL", "g_d2door", 8, "SQ_SWON", 20)
+be:DMsetSD("HITLANDMODEL", "doorwall09", 0, "OFFHIT", 35)
+be:DMsetSD("MODELCTRL", "g_d2door", 9, "SQ_SWON", 20)
+be:DMsetSD("HITLANDMODEL", "doorwall10", 0, "OFFHIT", 35)
+be:DMchkSD("CAMERA", nil, -1, "ISDEMOCAMERA", "!=0")
+be:DMsetSD("CAMERA", nil, -1, "SETBOXCAMERA")
+be:DMsetSD("MODELCTRL", nil, -1, "ONCTRL")
+be:DMsetSD("SOUND", nil, -1, "PLAY", "QS_THEME", 60)
+be:DMrun()
+be:FLGset(130, 1)
+be:FLGset(387, 1)

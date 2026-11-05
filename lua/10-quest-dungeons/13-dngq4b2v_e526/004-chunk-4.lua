@@ -1,0 +1,17 @@
+if be:MATisPlayer() == 1 then
+    be:sd("MODELCTRL", "g_ddamagefloor", 1, "SETLABEL", "SQ_WAIT/ON")
+    be:sd("MODELCTRL", "g_ddamagefloor", 2, "SETLABEL", "SQ_WAIT/ON")
+    be:sd("MODELCTRL", "g_ddamagefloor", 3, "SETLABEL", "SQ_WAIT/ON")
+    be:sd("MODELCTRL", "g_darrowshotter", 2, "SQ_POWERON2")
+    be:sd("MODELCTRL", "g_darrowshotter", 5, "SQ_POWERON2")
+    be:sd("MODELCTRL", "g_darrowshotter", 7, "SQ_POWERON2")
+    be:sd("MODELCTRL", "g_darrowshotter", 8, "SQ_POWERON2")
+else
+    be:sd("MODELCTRL", "g_ddamagefloor", 1, "SETLABEL", "SQ_WAIT/OFF")
+    be:sd("MODELCTRL", "g_ddamagefloor", 2, "SETLABEL", "SQ_WAIT/OFF")
+    be:sd("MODELCTRL", "g_ddamagefloor", 3, "SETLABEL", "SQ_WAIT/OFF")
+    be:sd("MODELCTRL", "g_darrowshotter", 2, "SQ_POWEROF")
+    be:sd("MODELCTRL", "g_darrowshotter", 5, "SQ_POWEROF")
+    be:sd("MODELCTRL", "g_darrowshotter", 7, "SQ_POWEROF")
+    be:sd("MODELCTRL", "g_darrowshotter", 8, "SQ_POWEROF")
+end

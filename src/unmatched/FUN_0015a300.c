@@ -1,0 +1,2 @@
+typedef unsigned char u8;
+void FUN_0015a300(u8 *p, int n, int k) { int i; int v; int c; switch (k) { case 7: for (i = 0; i < n; i++) { c = p[3]; if (c & 0x80) v = ~(c & 0xff) << 1; else v = c << 1; p[3] = v; p += 4; } break; case 1: case 3: case 8: case 9: default: break; } }

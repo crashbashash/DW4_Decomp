@@ -1,0 +1,8 @@
+# Body-derived context construction/destruction and event-tracker delegation.
+# Finding #897; slot204 builder and concrete allocator/tracker implementations remain open.
+0x002f25d0	igMemoryPoolContextInfo_Construct	engine
+0x002f2670	igMemoryPoolContextInfo_Destruct	engine
+0x002f49e0	igMemoryPoolContextInfo_InitializeRecordNames	engine
+0x002f8830	igMemoryPoolContextInfo_DeleteAllocation	engine
+0x002f64e0	MemoryContext_BuildAndAttachEventTracker	engine
+0x002f6780	MemoryContext_RemoveAllocator	engine

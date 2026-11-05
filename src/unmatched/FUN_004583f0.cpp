@@ -1,0 +1,24 @@
+/* The retail unit was C++ with exceptions on (it keeps an exception index record);
+ * the code is C, so the whole unit keeps C linkage. */
+extern "C" {
+int FUN_00100610(void **);
+int igObject_Destroy(char *);
+
+void **FUN_004583f0(void **arg0, long long arg1) {
+    char *o;
+
+    if (arg0 != 0) {
+        o = (char *)*arg0;
+        if (o != 0) {
+            *(int *)(o + 4) = *(int *)(o + 4) - 1;
+            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
+                igObject_Destroy(o);
+            }
+        }
+        if ((short)arg1 > 0) {
+            FUN_00100610(arg0);
+        }
+    }
+    return arg0;
+}
+} /* extern "C" */

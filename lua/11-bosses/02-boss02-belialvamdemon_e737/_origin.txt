@@ -1,0 +1,3 @@
+AFS entry 737  |  boss02-belialvamdemon  |  f_belvam (BelialVamdemon)
+A file's numeric prefix is its chunk index in that pack entry.
+15 chunks

@@ -1,0 +1,3 @@
+AFS entry 800  |  menu-database  |  DBBase + font database load
+A file's numeric prefix is its chunk index in that pack entry.
+5 chunks

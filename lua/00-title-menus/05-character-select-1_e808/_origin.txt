@@ -1,0 +1,3 @@
+AFS entry 808  |  character-select-1  |  Character select + shop cards
+A file's numeric prefix is its chunk index in that pack entry.
+7 chunks

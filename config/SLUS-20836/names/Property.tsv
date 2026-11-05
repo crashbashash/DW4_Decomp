@@ -1,0 +1,27 @@
+# The object property/registry system and the MetaObject reflection driver.
+#
+# Recovered from docs/engine/property-system.md and docs/engine/reflection-metadata.md,
+# which name each function by address and role:
+#   * the container lookup (FindByName/FindByPointer/FindBySortedKey) and the
+#     record accessors the game reaches player/world state through;
+#   * the MetaObject registrar and its two per-class field-table drivers.
+# Names are descriptive of the recovered role — the engine is stripped, so the
+# original identifiers are not recoverable — and a name here is a claim the docs
+# already made, not a guess.
+#
+# 0x3023f0/0x302480 roles corrected from original-instruction cases, findings #873/#874.
+# <va>	<name>	<module>
+0x0012a4a4	igStrCmp	engine
+0x002fdf40	igMetaObject_CreateFields	engine
+0x002fe000	igMetaObject_NameFields	engine
+0x002fe9c0	igMetaObject_RegisterClass	engine
+0x003022c0	igProperty_FindByName	engine
+0x00302380	igProperty_FindByPointer	engine
+0x003023f0	igProperty_FindBySortedKey	engine
+0x00302480	igProperty_FindInsertionIndex	engine
+0x003a9220	igProperty_GetRecord	engine
+0x003a9280	igProperty_GetRecordByte	engine
+0x003a92b0	igProperty_GetRecordArray	engine
+0x003a9340	igProperty_GetRecordFolder	engine
+0x00371c10	bePlayer_GetStruct	game
+0x00372cf0	Lua_sd_OptionalArg	lua

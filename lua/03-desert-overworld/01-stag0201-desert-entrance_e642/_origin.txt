@@ -1,0 +1,3 @@
+AFS entry 642  |  stag0201-desert-entrance  |  Leads to dungeon 2 (dng204b1)
+A file's numeric prefix is its chunk index in that pack entry.
+34 chunks

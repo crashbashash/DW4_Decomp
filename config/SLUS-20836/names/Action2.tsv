@@ -1,0 +1,13 @@
+# beAction2 component playback, recovered from the component-class dispatch and
+# beAction2InfoWork state slots (finding #618; docs/engine/modelctrl-semantics.md).
+0x00375e70	beAction2FLASHSET_Update	game
+0x00375ff0	beAction2FLASHSET_Start	game
+0x00376340	beAction2WAITCHECK_Update	game
+0x003764c0	beAction2WAITCHECK_Start	game
+0x00376680	beAction2FADESET_Update	game
+0x00376930	beAction2FADESET_Start	game
+0x00376de0	beAction2JOINTSET_Update	game
+0x00376f40	beAction2JOINTSET_Start	game
+0x00377090	beAction2MOTIONSET_Update	game
+0x00377340	beAction2MOTIONSET_Start	game
+0x00377700	beAction2_StartComponents	game

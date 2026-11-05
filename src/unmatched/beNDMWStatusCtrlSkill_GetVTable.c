@@ -1,0 +1,30 @@
+int FUN_003b6770();
+int FUN_003b8980();
+int ObjectRef_Destruct_00150eb0();
+int igObject_InitHeader();
+extern int DAT_0053ec80[4];
+extern void * DAT_00586dc8[4];
+union U { int vt; char b[112]; };
+int beNDMWStatusCtrlSkill_GetVTable(void) {
+    union U u;
+    int temp_s1;
+    char *p1;
+    igObject_InitHeader(u.b);
+    *(int *)&u.b[52] = 0;
+    *(int *)&u.b[56] = 0;
+    *(int *)&u.b[60] = 0;
+    *(int *)&u.b[64] = 0;
+    *(int *)&u.b[68] = 0;
+    *(int *)&u.b[72] = 0;
+    *(int *)&u.b[76] = 0;
+    u.vt = (int)&DAT_0053ec80[0];
+    p1 = &u.b[100];
+    *(int *)p1 = 0;
+    *(int *)&u.b[104] = 0;
+    temp_s1 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    u.vt = (int)&DAT_0053ec80[0];
+    ObjectRef_Destruct_00150eb0(&u.b[104], -1);
+    FUN_003b8980(p1, -1);
+    FUN_003b6770(u.b, 0);
+    return temp_s1;
+}

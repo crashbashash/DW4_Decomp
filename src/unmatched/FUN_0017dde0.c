@@ -1,0 +1,23 @@
+int FUN_0015e050();
+int FUN_0017d170();
+int Gap__Core__igVertexArray2__vfunc_48();
+extern int DAT_0055fac8[4];
+void FUN_0017dde0(void *arg0, int arg1) {
+    unsigned int temp_a4;
+    unsigned int *var_a5;
+    unsigned int var_a6;
+
+    FUN_0015e050();
+    if (DAT_0055fac8[0] == arg1) {
+        Gap__Core__igVertexArray2__vfunc_48(arg0, arg1);
+    }
+    FUN_0017d170(arg0);
+    if (*(int *)((char *)(arg0) + 28) & 4) {
+        var_a5 = (unsigned int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8));
+        for (var_a6 = 0; var_a6 < (unsigned int) *(int *)((char *)(arg0) + 12); var_a6++) {
+            temp_a4 = *var_a5;
+            *var_a5 = (temp_a4 & 0xFFFFFFULL) | (((temp_a4 >> 1) & 0x7F000000) + (temp_a4 & 0x01000000));
+            var_a5 += 1;
+        }
+    }
+}

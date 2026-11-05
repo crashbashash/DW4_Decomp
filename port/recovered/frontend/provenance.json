@@ -1,0 +1,25 @@
+{
+  "source": "recovered/frontend",
+  "source_head": "1d7a89b8e0bd611ff4f7c197aea9b7dc7ee52a9c",
+  "note": "Existing references imported from source_head; loadingnode.c/h imported from loadingnode_source_head. sha256 identifies each exact imported file.",
+  "sha256": {
+    "title-menu.c": "0d97d4fa88c23a14ffbdc0d18a76c319938f110db61ff4169ef7176333e60558",
+    "title-menu.h": "62c6ced8021f7ee3dad7a36917fc920df467e2e66724c75758255c4336ff4929",
+    "commdl.c": "78ca66c4c1daf3f2f4dd287574cbc8f1d8d489c47c141288133858724991bce4",
+    "commdl.h": "a774a0daf31b1303ce13d514518ab40d6c6504403b3cbc02c54d9393cf9dc345",
+    "completion.c": "0bfdc13850e43ce57256b333791080a06758779a96788c21370d827bf962f9e4",
+    "completion.h": "eb25a80aee07586eb502179e796e0e5430dfcb8b856823e5f4093ee0a8a5162a",
+    "loadintf2.h": "5051ee7eae0e325efbc8723c5338f00624c76e58bb7cb5946f492ef7e9d5f643",
+    "modelwait.c": "36de707a9c542bd7bff364c427a7c48149eb9a3301db957a8e4c1ca32e09b82d",
+    "modelwait.h": "f521b02d767f0a3a9f49f0b3fa458afb4f8683f58c8734a9b210634985998f3f",
+    "action2time.c": "ac7de5bf3943c6678d465e26fab2c8157fa720bd1f3e3b157130f5f8c6dcd735",
+    "action2time.h": "4af9fb1f771afa79fced8969503b4ea062256a79bfa627ce4367ce4fd23e8c5e",
+    "eefloat.c": "28ca26e1fdea8306b3b3d7d18611ceb9bfb729ad484e3905ba425a9cfb85fde8",
+    "eefloat.h": "7ed8a1f83a0d7ca953e02d75f0730c710d1f940f5306323f28470df5b68d706b",
+    "systemclock.c": "03a22dabb320f0530c110ecb54cf833564c1033b30ba261a8d13495920eb70bd",
+    "systemclock.h": "79a1ed99eeef28a2b75ba5d496f3ff09c60e541cebd182d538d76db435113e30",
+    "loadingnode.c": "9d7225bd0b490737f6bc3206a5e1481c118078d444861eda932d4abbae29957f",
+    "loadingnode.h": "6d51764223747119f681955145c8378de6383a7e8a43b825168c61d58676076b"
+  },
+  "loadingnode_source_head": "5e7336dc28bc698e836086431d783e5ae6354c31"
+}

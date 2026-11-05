@@ -1,0 +1,37 @@
+struct W { int *vt; int f[23]; };
+int igObject_InitHeader(struct W *);
+int FUN_0013bfe0();
+int FUN_00195a90();
+int FUN_0019ab10();
+int FUN_001aaf00();
+int FUN_001ab380();
+extern int DAT_005364a0[4];
+extern void * DAT_00586dc8[4];
+int beLOA_GetVTable(void) {
+    struct W o;
+    int *p18;
+    int *p17;
+    int *p16;
+    int r;
+    igObject_InitHeader(&o);
+    o.f[1] = 0;
+    o.f[2] = 0;
+    o.f[3] = 0;
+    o.f[6] = 0;
+    o.vt = &DAT_005364a0[0];
+    p16 = &o.f[18];
+    *p16 = 0;
+    p17 = &o.f[19];
+    *p17 = 0;
+    p18 = &o.f[20];
+    *p18 = 0;
+    o.f[21] = 0;
+    r = *(int *)((char *)&o + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    o.vt = &DAT_005364a0[0];
+    FUN_0019ab10(&o.f[21], -1);
+    FUN_001ab380(p18, -1);
+    FUN_001aaf00(p17, -1);
+    FUN_0013bfe0(p16, -1);
+    FUN_00195a90(&o, 0);
+    return r;
+}

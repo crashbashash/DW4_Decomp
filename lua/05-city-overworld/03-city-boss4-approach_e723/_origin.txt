@@ -1,0 +1,3 @@
+AFS entry 723  |  city-boss4-approach  |  Approach to boss 4 (stagBS04)
+A file's numeric prefix is its chunk index in that pack entry.
+40 chunks

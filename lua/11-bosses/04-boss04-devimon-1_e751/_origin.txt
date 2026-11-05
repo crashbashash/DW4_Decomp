@@ -1,0 +1,3 @@
+AFS entry 751  |  boss04-devimon-1  |  f_devl1 (Devimon form 1)
+A file's numeric prefix is its chunk index in that pack entry.
+31 chunks

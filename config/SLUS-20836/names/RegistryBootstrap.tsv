@@ -1,0 +1,8 @@
+# Body-derived global registry lifecycle and current allocator-context services.
+# Finding #896; concrete context virtual implementations remain unresolved.
+0x002f2180	Memory_InitializeAllocatorRegistries	engine
+0x002f2200	Memory_ShutdownAllocatorRegistries	engine
+0x002f8680	Memory_GetCurrentContext	engine
+0x002f88d0	Memory_GetCurrentContextAlias	engine
+0x002f88e0	Memory_GetAllocatorBySelector	engine
+0x002f8920	Memory_GetAllocatorByName	engine

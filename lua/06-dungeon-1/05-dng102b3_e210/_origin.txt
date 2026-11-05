@@ -1,0 +1,3 @@
+AFS entry 210  |  dng102b3  |  block 2 (e_mammos)
+A file's numeric prefix is its chunk index in that pack entry.
+66 chunks

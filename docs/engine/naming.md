@@ -1,0 +1,239 @@
+# Naming — the committed name overlay and the module loop
+
+Many functions in `config/SLUS-20836/symbols.txt` are still `FUN_<addr>` (the live counts are in
+[`../../PROGRESS.md`](../../PROGRESS.md)). This page is how a name gets recovered and
+applied, why the project does it a module at a time, and the rules a finished module
+has to meet: one profile per translation unit, shared headers, decimal `fNN` members
+and evidence-named strings.
+
+**End state.** A module is complete only when every `DAT_`/`FUN_` reference inside it
+is either named from evidence or carries a finding id (`/* #NNNN */`) recording the
+hypothesis. `FUN_`/`DAT_` names are a work-in-progress form, not a permanent one.
+
+## Where a name lives
+
+A name has to reach three things that all key off it: the C unit's filename, the
+definition and call sites inside `src/`, and the `asm/<name>.s` unit that links the
+undecompiled remainder. The build reads the layout from `config/SLUS-20836/symbols.txt`, which
+`tools/split.py` regenerates from `data/functions.json` — a dump of the Ghidra
+project. So a name that only exists in Ghidra is invisible to the repository: it
+cannot be reviewed, and re-dumping is a manual round-trip.
+
+`config/SLUS-20836/names/` is the fix. It is a directory of committed overlays, **one `.tsv`
+per module**, that `tools/split.py` merges *over* the dump:
+
+```
+config/SLUS-20836/names/Lua.tsv      # the Lua native API
+config/SLUS-20836/names/GapCore.tsv  # (future) a Gap::Core module
+```
+
+```
+<va>\t<name>\t<module>
+```
+
+- `va` — the function address (the key; an address may be named once, so two
+  modules disagreeing is an error rather than a silent last-wins).
+- `name` — the recovered name. `::` is allowed and sanitised to `__` for C/as, so
+  `Gap::Core::Foo` becomes the C identifier `Gap__Core__Foo`.
+- `module` — the `src/` folder the unit belongs in (`Lua`, `Gap/Core`, …). Unnamed
+  units are `unmatched`.
+
+The dump is still the source for every function the overlay does not name, so
+adding an overlay never reduces coverage — it is merged, not substituted.
+
+## The module loop
+
+1. **Choose a module** with a recovered boundary and a name source (below).
+2. **Write the names** into `config/SLUS-20836/names/<Module>.tsv`. Where a generator already
+   holds the names (e.g. `scripts/seed_names_lua.py`), run it rather than typing
+   them, so the overlay keeps its provenance.
+3. **Apply the batch:**
+   ```sh
+   python3 tools/apply_names.py             # dry run: what would change
+   python3 tools/apply_names.py --apply --check
+   ```
+   `apply_names.py` rewrites every `<old>` occurrence in `src/` (definition and
+   call sites), moves each unit to `src/<module>/`, removes the stale `asm/<old>.s`,
+   regenerates `config/SLUS-20836/symbols.txt` + `asm/`, and then runs `make check` and
+   `make link`. Renaming one function by hand is a multi-file edit; a whole module
+   at once is one verified commit.
+
+A one-function file's **filename is its symbol**; a named function is resolved at
+any depth, so moving it between modules never touches a build tool. Newly
+decompiled functions are banked into `src/unmatched/` and leave it the first time
+they are named.
+
+### Folding a module into a translation unit
+
+An automated match is banked one function per file, but the repository's source is
+translation units (`src/lua/api.c`, `src/engine/*.c`), the way the original was
+built. Once a module is named, fold it:
+
+```sh
+python3 tools/merge_units.py --out src/lua/api.c \
+    --title "the Lua native-API implementations" --remove src/Lua/*.c
+```
+
+Functions are written in **retail address order** (the order the original compiler
+saw, which is why the original file can be recovered from the binary at all), and
+declarations every user agrees on are hoisted. A symbol two functions declare
+differently — m2c guesses `int[4]` in one and `char[]` in another — is kept inside
+each user as a block-scope `extern` instead, since a declaration has no effect on
+the code being matched.
+
+### Placing units that are already named
+
+The RTTI/vtable names (`Gap::Bec::beCameraMode::vfunc_20`) are real but carry no
+folder, so those units sat flat in `src/` root. Their name does say where they
+belong, so one command places and folds them:
+
+```sh
+python3 tools/place_named.py            # dry run: what would move where
+python3 tools/place_named.py --apply
+```
+
+It groups by class and folds each group with `merge_units.py`:
+
+```
+Gap__Bec__beCameraMode__vfunc_08.c Gap__Bec__beCameraMode__vfunc_20.c  ->  src/game/beCameraMode.c
+Gap__Bec__beCameraMode__vfunc_23.c /
+```
+
+Folders come from the namespace: `Gap::Bec::*` → `src/game/`, `Gap::Core::*` →
+`src/engine/`, `Gap::igAdx*` → `src/audio/`, `Gap::igMovie*`/`igCriMovie*` →
+`src/movie/`, `Gap::Gui::*` → `src/menu/`. A class whose methods need both C mode
+and C++ mode keeps two files (`Foo.c` and `Foo.cpp`): a C-mode method compiled as
+C++ does **not** match (measured 0 of 25 mixed classes), so that split is real.
+
+`tools/units.py` keeps all of this compatible with the per-function build: it
+scans a file for its definitions and hands `check.py`, `linkgen.py` and `verify.py`
+one function at a time by blanking the others. `make check` and `make link` are the
+gate, as always.
+
+### One translation unit, one profile
+
+The original build compiled a class or a source file once, with one compiler and one
+flag set, so a folded unit must verify that way too. **Every method of a class, and
+every function of a folded unit, verifies under the same compiler and flags** — the
+rows in `config/SLUS-20836/unit-compilers.tsv` and `config/SLUS-20836/unit-flags.tsv` are per unit, not per
+function. A per-function row that disagrees with its siblings (one method pinned to
+the alternate compiler inside a class the pinned compiler builds, or `-O3,p` beside
+`-O4`) is **provisional**: it stays banked, but it is recorded as an *unconfirmed*
+finding naming the sibling profile it failed under, it is re-attempted under that
+profile before the unit is called complete, and reports count it separately until it
+is resolved. A unit whose functions genuinely need two compilers is two source files
+(as `.c`/`.cpp` already are), never one file with mixed rows.
+
+### Offset members: `fNN` is decimal and temporary
+
+A matched function that reads a field the reflection does not describe may spell it
+as an offset member (`p->f12`). Two rules: the number is the **decimal** byte offset
+(`f12`, never `f0xc` or `f0c`), so one field has one spelling across the tree and
+`tools/typed_coverage.py` can pair it with the reflected layout; and an `fNN` member
+is a temporary form — it is replaced by the recovered field name (through
+`include/dw4/reflected.h` or a hand header) when the struct is typed, and a module
+with `fNN` members left is not complete.
+
+### One shared definition per class
+
+A class or struct has **one definition**, under `include/dw4/`: the generated
+`include/dw4/reflected.h` for every reflected class, or a hand-written header for a
+struct the reflection does not describe. Matched files include that header instead of
+restating the struct. A **local view** (a file-private struct covering only the offsets
+one function touches) is allowed only where ABI dispatch needs it — a receiver whose
+real class is undetermined, or a layout the compiler must see differently to colour
+registers as retail — and it must not reuse a reflected class name: `struct
+beSound_view` or `struct G`, never a second `struct beSound`. When the real class is
+known, the local view is replaced by the shared header in the same commit.
+
+## What counts as a name
+
+A name must be *recovered*, not guessed. The sources used so far, best first (per-source
+counts are in [`../../PROGRESS.md`](../../PROGRESS.md) and the overlay files themselves):
+
+| Source | Names | Where |
+|---|---|---|
+| RTTI / vtables | `Class::vfunc_NN` for RTTI-headed vtables | `docs/engine/rtti-and-vtables.md` |
+| `GetVTable`-derived vtables | `<Namespace>::<Class>::vfunc_NN` for the vtables that have no `__RTTI__` record — the class comes from its own `<Class>_GetVTable` (finding [#368](../findings/findings-0251-0500.md#f368)'s rule), the namespace from the nearest RTTI ancestor, the role from the slot | `scripts/seed_names_getvtable_slots.py` → `config/SLUS-20836/names/GetVTableSlots.tsv`, findings [#285](../findings/findings-0251-0500.md#f285)/#529 |
+| Lua native API table | the real implementations + dispatcher | `data/script_api.json`, `docs/engine/script-engine-lua.md` |
+| Class registration (reflection) | `<Class>_Register` + `<Class>_InitFields` | `data/reflection.json` (per-class `register_site` / `post_init`), `scripts/seed_names_reflection.py` |
+| MetaObject accessors | `<Class>_GetMetaObject` (t0 -> `_getMetaObjectFunction`; many are reached through the registrar's `j <accessor>; nop` thunk), `<Class>_GetVTable` (t3 -> `_vTablePointer`) + the `igMetaObject` methods | `scripts/seed_names_metaobject.py` (the registrar's `t0`, role read from the decompiler), findings [#358](../findings/findings-0251-0500.md#f358)/#366 |
+| SDK `libkernel` syscalls | the syscall stubs | `config/SLUS-20836/syscalls.txt`, `docs/engine/binary.md` |
+| SDK library functions | named from the function's *own* name in a string it references (`sceMtapPortOpen/PortClose/GetConnection/ChangeThreadPriority/GetModVersion`, `sceMcUdCheckNewCard`), plus functions attributed to a library (`libpad`, `libmc`, `libmtap`, `libdma`, the IOP-module loaders) which are findings rather than names | `config/SLUS-20836/names/Sdk.tsv` (generated by `scripts/seed_names_sdk_strings.py`), findings [#376](../findings/findings-0251-0500.md#f376)/#377, [`platform-boundary.md`](platform-boundary.md) |
+| Decoded semantics | hand-written, with a finding | `docs/findings/` |
+| Object-model core | `igMetaField` / `igMetaObject` / `igRefMetaField` / `igMemoryRefMetaField` / `igMetaEnum` methods, read off the decompiler against `data/reflection.json`, the class `GetVTable` functions and the vtable slot map | `config/SLUS-20836/names/ObjectModel.tsv`, `config/SLUS-20836/names/MetaFieldSlots.tsv` (generated by `scripts/seed_names_metafield_slots.py`), findings [#359](../findings/findings-0251-0500.md#f359)/#361/#362/#363/#364/#365/#367/#368 |
+| Assert / log strings | `Class::method` names | `config/SLUS-20836/names/Methods.tsv`, finding [#360](../findings/findings-0251-0500.md#f360) |
+
+A name whose only justification is "it looks like a getter" is not ready; it
+belongs in the findings register as a hypothesis, not in `config/SLUS-20836/names/`.
+
+## Data symbols
+
+Functions are named through `config/SLUS-20836/names/`; the `DAT_<addr>` data symbols the matched C
+refers to have their own overlay, `config/SLUS-20836/data-names.tsv`, generated by
+`scripts/seed_data_names.py` and applied by `tools/apply_data_names.py` (one `src/`
+module at a time, then `make check` and `make link`). The build finds a data symbol's
+address from the hex digits ending its name, so a recovered name keeps `_<addr>` as a
+suffix; a function passed by address takes the function's own symbol instead.
+
+| Rule | Name | Evidence |
+|---|---|---|
+| `function-symbol` | the function's symbol | the address is a function entry in `config/SLUS-20836/symbols.txt` (a callback argument) |
+| `class-handle` | `g_<Class>_metaObject_<addr>` | `handle` of the class in `data/reflection.json` |
+| `class-name` | `s_<Class>_className_<addr>` | `name_ptr` of the class in `data/reflection.json` |
+| `published-accessor` | `<Class>_GetPublishedMetaObject_<addr>` | a 12-byte `lui at; jr ra; lw v0,lo(at)` leaf whose load is the class's `handle` slot; the same shape as the three accessors already named in `config/SLUS-20836/symbols.txt` |
+| `callback-list` | `g_<Class>_callbackList_<addr>` | the eleventh argument of the class's `igMetaObject_RegisterClass` call (docs/engine/reflection-metadata.md section 1); `scripts/format_registrars.py` lays those calls out one argument per line |
+| `string-literal` | `s_<TEXT>_<addr>` | the printable NUL-terminated text at the address in the image |
+
+An address that matches no rule keeps its `DAT_` name: it is not named until it has evidence —
+and a module is not complete while such a `DAT_` is referenced without a finding id beside it.
+
+**String literals** always take the `string-literal` row above: `s_<TEXT>_<addr>`, where `<TEXT>`
+is the printable text at the address sanitised to an identifier and `<addr>` keeps the build's
+address lookup working. The seed script derives it from the image; do not hand-write a different
+spelling for the same string.
+
+## Receiver classes without names
+
+Some matched `FUN_` functions cannot be named (the role is unknown) although their receiver
+class is determined by evidence. `config/SLUS-20836/receiver-classes.tsv` records `<va> <class> <rule>`
+for those, generated by `scripts/seed_receiver_classes.py`, and `scripts/retype_receiver_class.py`
+reads it alongside function names. It is a type overlay: it never renames anything.
+
+| Rule | Evidence |
+|---|---|
+| `vtable-slot` | The function is a slot of one class family's vtables (`data/vtables.json`, `data/vtables-getvtable.json`). The owner is the nearest common ancestor (`data/class-hierarchy.tsv`); bare `igObject` is rejected (a shared stub), and every offset applied to `arg0` must be a reflected field of the owner or an ancestor (offset 0 is the vtable pointer). |
+| `vtable-stamp` | The function stores exactly one vtable at `+0` of its receiver and no other rodata address. A function that stamps several vtables is an inlined base-constructor chain and is excluded. |
+
+All overlay rows are `ig*` middleware, which the port plan scopes out (finding [#488](../findings/findings-0251-0500.md#f488)), so this raises
+the typed count without adding port-relevant structure. Propagating classes through callers
+reaches almost nothing further (finding [#1088](../findings/findings-1001-1250.md#f1088), refuted): most remaining receivers are stack
+temporaries or game structs that reflection does not describe, and need struct recovery.
+The retyper does not check callee prototypes: thirteen files fail `make check` after it
+(finding [#1089](../findings/findings-1001-1250.md#f1089)) and stay raw, so `make check` after `--apply` is mandatory.
+
+## Coverage
+
+`tools/progress.py` counts a function as named when its symbol is not `FUN_`/
+`thunk_FUN_`. The live named/total counts, and the split by source (reflection
+registrars and field initialisers, MetaObject accessors / vtable getters, RTTI
+`vfunc_*`, Lua, object-model methods, assert strings, SDK and hand-named), are in
+[`../../PROGRESS.md`](../../PROGRESS.md); this
+page does not repeat them because they change with every batch.
+
+The *denominator* is not fixed: `tools/split.py` passes recover functions Ghidra had
+only labelled. `promote_gap_labels` promotes a gap label with a frame prologue
+(finding [#346](../findings/findings-0251-0500.md#f346)); `promote_data_labels` promotes a gap label a vtable points at whose
+bytes form a leaf body (finding [#365](../findings/findings-0251-0500.md#f365)). Both only add entries in unclaimed gaps and
+never change an existing symbol's size, so the relink stays byte-identical — but each
+one lowers the coverage *percentage* by growing the denominator while the matched
+count is unchanged. A commit that changes the denominator (a split pass, an extent
+override, a symbol split or merge) says so in its message with the before/after
+counts, as `CLAUDE.md` requires.
+
+## Not yet nameable
+
+The 116 Lua **stubs** are branch targets *inside* the single function at
+`0x00370780` (auto-analysis made the dispatcher and its stub table one function),
+so there is no symbol to name. Naming them needs that function split first, which
+is a layout change, not a naming one.

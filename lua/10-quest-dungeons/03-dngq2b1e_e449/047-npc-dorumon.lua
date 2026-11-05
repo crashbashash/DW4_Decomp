@@ -1,0 +1,23 @@
+if be:DMgetCount() == 0 then
+    be:MDLsetSeq("SQ_TALK")
+    be:sd("LAYERCTL", nil, -1, "SWITCH", "WN01/CLR")
+    be:sd("LAYERCTL", nil, -1, "SWITCH", "WN00/CLR")
+    be:sd("ENEMY", nil, -1, "OFCTRL")
+    be:sd("GENERATER", nil, -1, "ONFREEZE")
+    be:sd("MODELCTRL", "i_timenm0", 0, "SQ_STOP")
+    g_npcRamNo = be:MDLgetRamNo()
+    g_messPlayerNo = be:BLTgetShootRamNo()
+    be:sd("MODELCTRL", local_0, g_messPlayerNo, "SQ_WAIT", 0)
+    be:DMchkSD("PLAYER", local_0, g_messPlayerNo, "ISSEQNAME", "SQ_WAIT", "==0")
+    be:sd("PLAYER", nil, -1, "OFCTRL")
+    funcOpenMessage("talk", "n_dorumon", "h")
+    funcOneMessage(mswk61012)
+    funcOneMessage(mswk61013)
+    funcCloseMessage("talk", "n_dorumon", "h")
+    be:DMchkSD("MODELCTRL", "n_dorumon", g_npcRamNo, "ISSEQNAME", "SQ_WAIT", "==0")
+    be:DMsetSD("GENERATER", nil, -1, "OFFREEZE")
+    be:DMsetSD("MODELCTRL", "i_timenm0", 0, "SQ_RESTART")
+    be:DMrun()
+else
+    be:MDLsetDMGTurn(0)
+end

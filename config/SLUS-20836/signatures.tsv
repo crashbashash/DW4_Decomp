@@ -1,0 +1,30 @@
+# Recovered function signatures for the engine's own API.
+#
+# Columns (tab-separated):  name <TAB> return-type <TAB> parameter-types (comma) <TAB> evidence
+#
+# WHY THIS FILE EXISTS
+#   Typed coverage (repo task T10 / port task P1.2) needs to know what a call
+#   RESULT points at, not only what the calling function's name implies.  Measured:
+#   of 1,389 offset casts inside class-named matched functions, only 46 apply the
+#   offset to the receiver; the rest apply it to a temporary holding a call result.
+#   The callee's return type is the missing fact, and this file is where it lives.
+#
+# RULES
+#   * A row is only added when the type is RECOVERED, never guessed.  A wrong
+#     return type would not break the build (the code is byte-identical either
+#     way) but would put a wrong struct name in the C, which is worse for the port
+#     than leaving it raw.
+#   * The evidence column names the fact that settles it.
+#   * Consumed by scripts/retype_initfields.py (via tools), which uses
+#     `igMetaObject_GetFieldAt` to type the field objects the `<Class>_InitFields`
+#     family builds; more passes will read the same table.
+#
+# name	returns	parameters	evidence
+igMetaObject_GetFieldAt	igMetaField *	igMetaObject *, int	it indexes the `igObjectList` at igMetaObject._metaFields (+40 -> +8 -> [i*4]), whose elements are field objects; the `<Class>_InitFields` bodies then write +52/+56, which are igEnumMetaField._getMetaEnumFunction and igObjectRefMetaField._metaObject
+igMetaObject_GetFieldCount	int	igMetaObject *	loop bound for the field walk; the value the `_InitFields` bodies add to before GetFieldAt
+igMetaObject_CreateFields	void	igMetaObject *, void *, int	constructs N fields on the metaobject from a MetaField ctor array (data/reflection.json's ctors); the `_InitFields` bodies call it with the class's own field count
+igMetaObject_NameFields	void	igMetaObject *, void *, void *, void *, int	assigns each created field's name from parallel arrays; result unused
+igMetaObject_GetChildAt	igMetaObject *	igMetaObject *, int	igMetaObject._children (+52) is an object list of metaobjects; the accessor indexes it
+igMetaObject_GetChildCount	int	igMetaObject *	loop bound over igMetaObject._children
+igMetaField_Init	void	igMetaField *	sets a field object's defaults; called by igMetaField_Construct and by the per-class GetVTable/InitFields path
+igMetaObject_Init	void	igMetaObject *	the metaobject constructor's init half (igMetaObject_Construct calls it)

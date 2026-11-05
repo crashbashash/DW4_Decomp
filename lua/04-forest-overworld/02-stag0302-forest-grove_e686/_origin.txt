@@ -1,0 +1,3 @@
+AFS entry 686  |  stag0302-forest-grove  |  Leads to dng308b1
+A file's numeric prefix is its chunk index in that pack entry.
+45 chunks

@@ -1,0 +1,3 @@
+AFS entry 744  |  boss03-lucemon  |  f_luce
+A file's numeric prefix is its chunk index in that pack entry.
+23 chunks

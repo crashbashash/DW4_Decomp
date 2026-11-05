@@ -1,0 +1,13 @@
+/* src/game/beNDMWLoadIntf2DegiStateCtrl.c — the beNDMWLoadIntf2DegiStateCtrl methods
+ *
+ * One translation unit: 1 functions, in retail address order.  Folded
+ * from the per-function units by tools/merge_units.py; the matching build
+ * splits a function back out with tools/units.py, so `make check` still
+ * verifies one function at a time. */
+
+extern int g_beNDMWLoadIntf2DegiStateCtrl_metaObject_0058b958[4];
+/* 0x003cba70 */
+int Gap__Bec__beNDMWLoadIntf2DegiStateCtrl__vfunc_20(void)
+{
+    return g_beNDMWLoadIntf2DegiStateCtrl_metaObject_0058b958[0];
+}

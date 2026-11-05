@@ -1,0 +1,7 @@
+/* 0x00142a70 - igObjectList metaobject accessor: returns the first word of the class's
+ * metaobject handle at 0x00585b60 (same accessor shape as ParticleInfo,
+ * src/game/ParticleInfo.c). */
+extern int g_igObjectList_metaObject_00585b60[4];
+int igObjectList_GetMetaObject_Virtual(void) {
+    return g_igObjectList_metaObject_00585b60[0];
+}

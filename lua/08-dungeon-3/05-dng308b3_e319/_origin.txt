@@ -1,0 +1,3 @@
+AFS entry 319  |  dng308b3  |  block 2 (e_mecha4)
+A file's numeric prefix is its chunk index in that pack entry.
+80 chunks

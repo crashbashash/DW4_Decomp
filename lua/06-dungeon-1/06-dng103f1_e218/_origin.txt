@@ -1,0 +1,3 @@
+AFS entry 218  |  dng103f1  |  final area 1
+A file's numeric prefix is its chunk index in that pack entry.
+58 chunks

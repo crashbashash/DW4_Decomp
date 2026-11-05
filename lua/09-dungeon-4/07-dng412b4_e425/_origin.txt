@@ -1,0 +1,3 @@
+AFS entry 425  |  dng412b4  |  block 2 (e_ldknight = LordKnightmon)
+A file's numeric prefix is its chunk index in that pack entry.
+121 chunks

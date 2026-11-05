@@ -1,0 +1,74 @@
+/* 0x003b1f20 — beNDMWWindow_InitFields. m2c draft + mechanical fixups, then verified
+ * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
+ * The SHAPE matched; the C types are a guess.
+ * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+#include "dw4/reflected.h"
+extern "C" {
+int FUN_00232840(void);
+int FUN_002b9120(void);
+int igIntList_GetOrCreateMetaObject(void);
+int FUN_002d3890(void *, int);
+int FUN_0034c8e0(void);
+int FUN_00357910(void);
+int FUN_003b1be0(void);
+int FUN_003b1dd0(void);
+int igMetaObject_CreateFields(void *, int *, int);
+void *igMetaObject_GetFieldAt(void *, int);
+int igMetaObject_GetFieldCount(void *);
+int igMetaObject_NameFields(void *, int *, int *, int *, int);
+extern int DAT_004c9490[4];
+extern int DAT_004c94e0[4];
+extern int DAT_004c9530[4];
+extern int DAT_004c9580[4];
+extern int DAT_0058a9b8[4];
+void beNDMWWindow_InitFields(void);
+}
+void beNDMWWindow_InitFields(void) {
+    int temp_s0;
+    void *temp_s1;
+    void *temp_s2;
+    void *temp_s2_10;
+    void *temp_s2_2;
+    void *temp_s2_3;
+    void *temp_s2_4;
+    void *temp_s2_5;
+    void *temp_s2_6;
+    void *temp_s2_7;
+    void *temp_s2_8;
+    void *temp_s2_9;
+
+    temp_s1 = (void *)DAT_0058a9b8[0];
+    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    igMetaObject_CreateFields(temp_s1, &DAT_004c9490[0], 0x12);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00232840();
+    ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
+    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00357910();
+    ((igObjectRefMetaField *)temp_s2_2)->_refCounted = 0;
+    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0034c8e0();
+    ((igObjectRefMetaField *)temp_s2_3)->_refCounted = 0;
+    FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1);
+    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_003b1be0();
+    ((igRefMetaField *)temp_s2_4)->_construct = 1;
+    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xC));
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_003b1dd0();
+    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xD));
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_002b9120();
+    ((igRefMetaField *)temp_s2_6)->_construct = 1;
+    temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xE));
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_002b9120();
+    ((igRefMetaField *)temp_s2_7)->_construct = 1;
+    temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xF));
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_002b9120();
+    ((igRefMetaField *)temp_s2_8)->_construct = 1;
+    temp_s2_9 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x10));
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)temp_s2_9)->_construct = 1;
+    temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11));
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_002b9120();
+    ((igRefMetaField *)temp_s2_10)->_construct = 1;
+    igMetaObject_NameFields(temp_s1, &DAT_004c94e0[0], &DAT_004c9530[0], &DAT_004c9580[0], temp_s0);
+}

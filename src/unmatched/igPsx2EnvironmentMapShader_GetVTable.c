@@ -1,0 +1,33 @@
+int FUN_0019aa90();
+int FUN_0019ac20();
+int FUN_001aaf80();
+int FUN_001ab380();
+int FUN_001ab400();
+int FUN_001ab480();
+int FUN_001ab490();
+int FUN_001ab4a0();
+extern int DAT_00528170[4];
+extern void * DAT_00586dc8[4];
+union U { int *vt; char b[128]; };
+int igPsx2EnvironmentMapShader_GetVTable(void) {
+    union U u;
+    int temp_s2;
+    char *p0;
+    char *p2;
+    char *p1;
+    FUN_001ab4a0(u.b);
+    u.vt = &DAT_00528170[0];
+    p0 = &u.b[112];
+    FUN_001ab490(p0);
+    p1 = &u.b[116];
+    FUN_0019ac20(p1);
+    p2 = &u.b[120];
+    FUN_001ab480(p2);
+    temp_s2 = *(int *)&u.b[*(int *)((char *)(DAT_00586dc8[0]) + 916)];
+    u.vt = &DAT_00528170[0];
+    FUN_001ab400(p2, -1);
+    FUN_0019aa90(p1, -1);
+    FUN_001ab380(p0, -1);
+    FUN_001aaf80(u.b, 0);
+    return temp_s2;
+}

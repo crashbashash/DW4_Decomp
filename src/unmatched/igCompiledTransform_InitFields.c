@@ -1,0 +1,44 @@
+struct Fld { char p0[38]; char f38; char p39[13]; char f52; char p53[3]; int f56; };
+int FUN_00194dd0();
+int FUN_002b9540();
+int FUN_002d3890();
+int FUN_002ea4b0();
+int igMetaObject_CreateFields();
+struct Fld *igMetaObject_GetFieldAt();
+int igMetaObject_GetFieldCount();
+int igMetaObject_NameFields();
+extern int DAT_0048c6e0[4];
+extern int DAT_0048c700[4];
+extern int DAT_0048c720[4];
+extern int DAT_0048c740[4];
+extern int DAT_00561d30[4];
+void igCompiledTransform_InitFields(void) {
+    void *temp_s0;
+    struct Fld *temp_s1;
+    struct Fld *temp_s1_2;
+    struct Fld *temp_v0;
+    struct Fld *temp_v0_2;
+    int temp_s2;
+
+    temp_s0 = (void *)DAT_00561d30[0];
+    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
+    igMetaObject_CreateFields(temp_s0, &DAT_0048c6e0[0], 8);
+    igMetaObject_GetFieldAt(temp_s0, temp_s2)->f38 = 0;
+    temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
+    temp_s1->f56 = FUN_00194dd0();
+    temp_s1->f38 = 0;
+    temp_v0 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2);
+    FUN_002ea4b0(temp_v0, -1);
+    temp_v0->f38 = 0;
+    igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)->f38 = 0;
+    temp_s1_2 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4);
+    temp_s1_2->f56 = FUN_002b9540();
+    temp_s1_2->f52 = 1;
+    temp_s1_2->f38 = 0;
+    temp_v0_2 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5);
+    FUN_002d3890(temp_v0_2, 1);
+    temp_v0_2->f38 = 0;
+    igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6)->f38 = 0;
+    igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7)->f38 = 0;
+    igMetaObject_NameFields(temp_s0, &DAT_0048c700[0], &DAT_0048c720[0], &DAT_0048c740[0], temp_s2);
+}

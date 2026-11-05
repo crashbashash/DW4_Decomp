@@ -1,0 +1,27 @@
+# Digimon World 4 (USA) — build configuration in the dtk-template layout (configure.py --version SLUS-20836).
+# decomp-toolkit cannot split a MIPS ELF, so tools/project.py reads this file and drives the
+# repository tools (tools/check.py, tools/linkgen.py) instead of dtk; see docs/build-system.md.
+name: Digimon World 4 (USA)
+boot_file: SLUS_208.36
+# The retail executable (private, gitignored); hash is its SHA-1.
+object: orig/SLUS-20836/SLUS_208.36
+hash: d6c8bbcd6b3a0b3f135f7559d098af088ba06e2a
+# The merged load image the relink reproduces; build.sha1 pins its bytes.
+image:
+  start: 0x100000
+  file_offset: 0x80
+  size: 0x454b00
+# Per-binary tables (address-bearing) for this version.
+symbols: config/SLUS-20836/symbols.txt
+splits: config/SLUS-20836/units.tsv
+exceptions: config/SLUS-20836/exceptions.txt
+extent_overrides: config/SLUS-20836/extent-overrides.tsv
+layout: config/SLUS-20836/layout.txt
+jumptables: config/SLUS-20836/jumptables.txt
+names: config/SLUS-20836/names
+unit_flags: config/SLUS-20836/unit-flags.tsv
+unit_compilers: config/SLUS-20836/unit-compilers.tsv
+unit_objects: config/SLUS-20836/unit-objects.json
+source: src
+asm: asm
+build: build

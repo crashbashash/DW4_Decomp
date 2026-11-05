@@ -1,0 +1,17 @@
+# The byte oracle's own files. A push whose commits touch any of these must (a) pass
+# `python3 -m unittest discover -s tools -p 'test_*.py'`, (b) show every counterexample of
+# tools/test_oracle_holes.py still failing to verify, and (c) carry an `oracle-change:` line
+# in the message of every commit that touches them (.githooks/pre-push; the rule is
+# documented in docs/engine/compiler-object-verification.md). One git pathspec per line.
+tools/verify.py
+tools/check.py
+tools/linkgen.py
+tools/linkcheck.py
+tools/exceptions.py
+tools/buildcache.py
+tools/cc.py
+tools/eegcc_compile.py
+.githooks/*
+scripts/host_details_allow.txt
+config/SLUS-20836/exceptions.txt
+config/SLUS-20836/compiler-runtime-symbols.tsv

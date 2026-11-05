@@ -1,0 +1,3 @@
+AFS entry 816  |  lobby-ofanimon-seraphimon  |  Lobby cutscene (n_ofanim, n_seraph)
+A file's numeric prefix is its chunk index in that pack entry.
+155 chunks

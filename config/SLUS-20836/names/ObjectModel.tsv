@@ -1,0 +1,356 @@
+# The igMetaObject / igMetaField object model — methods named from their bodies.
+#
+# These are curated, not generated: each name comes from decompiling the function
+# and reading it against the reflection structs in data/reflection.json (which give
+# every field's name and offset).  Kept out of the generated overlays on purpose —
+# a generator cannot infer these, a reader can.
+#
+# <va>	<name>	<module>
+#
+# igMetaField — the field's technique dispatcher and name mangling.
+#   `_isAlikeExactlyMethod` (+0x2a), `_isAlikeDeepMethod` (+0x2b) and
+#   `_isAlikeShallowMethod` (+0x2c) each hold a technique number 0-3; the three
+#   8-byte thunks load that byte into a3 and jump to the common dispatcher.
+0x002fcec0	igMetaField_IsAlikeByTechnique	engine
+0x002fcf60	igMetaField_IsAlikeExactly	engine
+0x002fcf70	igMetaField_IsAlikeDeep	engine
+0x002fcf80	igMetaField_IsAlikeShallow	engine
+#   builds "__MF__" + parentMetaObject->_name + sep + _fieldName (igMetaField
+#   +0x18 -> igMetaObject +0x1c, and +0x0c), and finds a field by that name across
+#   the whole registered MetaObject list.
+0x002fd240	igMetaField_GetMangledName	engine
+0x002fd480	igMetaField_FindByName	engine
+#
+# igMetaObject — construction and the bookkeeping fields.
+#   +0x28 _metaFields, +0x2c _instanceCount, +0x34 _children.
+0x002fd820	igMetaObject_Init	engine
+0x002fd980	igMetaObject_ReleaseLists	engine
+0x002fda10	igMetaObject_CreateInstanceDefault	engine
+0x002fdd20	igMetaObject_CountInstances	engine
+#
+# Second pass: children/field bookkeeping and the object construction path.
+#   igMetaObject +0x28 _metaFields, +0x34 _children, +0x2c _instanceCount,
+#   +0x30 _instances; igObject's MetaObject is fetched through vtable +0x58.
+0x002fe2c0	igMetaObject_GetChildCount	engine
+0x002fe2e0	igMetaObject_GetChildAt	engine
+0x002fe3d0	igMetaObject_CountTree	engine
+0x002fe4a0	igMetaObject_AddField	engine
+# calls the registrar, then invokes every vfunc of the returned object and
+# releases it — the static-initialiser runner the class accessors call.
+0x002fe940	igMetaObject_RunStaticInit	engine
+# stores the class's _vTablePointer into the new instance and initialises it.
+0x002ff1d0	igObject_Construct	engine
+# bumps the MetaObject's _instanceCount and appends to _instances.
+0x002ff3a0	igObject_RegisterInstance	engine
+# `*obj = &0x52f0f0` (igObject's vtable) + header flags; the temp GetVTable builds.
+0x002fef20	igObject_InitHeader	engine
+#
+# Third pass: the igMetaField base, igMetaObject, and igMemoryPoolInfo.
+#
+# The whole 0x2fa000-0x300000 run is the object model.  Three vtables anchor it:
+#   0x52f230  igMetaField             (the constructor below stores it)
+#   0x532bb0  igMetaObject            (`igMetaObject_GetVTable` returns it)
+#   0x52f430  igMemoryPoolInfo        (`igMemoryPoolInfo_GetVTable` returns it)
+# plus the two memory-ref metafields 0x532a50 / 0x52f330.  The 100+ subclasses
+# share these methods through their own vtables, so most of the addresses below
+# occur as the same slot in dozens of tables (e.g. 0x2fc210 at +0x08 of every
+# `<X>MetaField` table, 0x2fc440 at +0x8c).
+#
+# `igMemoryPoolInfo::Print` -- the 17 format strings at 0x4facc0..0x4faed0 name
+# every field, and the offsets it reads (+0x14 _handleName, +0x18 _aliasedTo,
+# +0x1c _size, +0x20 _maxSize, +0x24 _address, +0x28 _class, ... +0x4c
+# _releaseMessages, +0x50 _eventTrackerCapacity) are exactly those of the class
+# in data/reflection.json.  Vtable 0x52f430 +0x6c.
+0x002fa1b0	igMemoryPoolInfo_Print	engine
+#
+# igMetaField (vtable 0x52f230) -- field offsets are those of igMetaField in
+# data/reflection.json: +0x08 _offset, +0x0c _fieldName, +0x10 _typeIndex,
+# +0x12 _internalIndex, +0x14 _size, +0x18 _parentMetaObject, +0x1c
+# _externalEnumStorage, +0x20 _default, +0x24 _resetMethod, +0x25 _isRunTime,
+# +0x26 _persistent, +0x27 _shallowCopyMethod, +0x28 _deepCopyMethod,
+# +0x29 _constructCopyMethod, +0x2a..0x2c the _isAlike* techniques, +0x30
+# _invarianceFunction.
+#   the constructor: the igObject constructor, the vtable, then _Init; every
+#   derived MetaField's constructor calls it.  (MWCC emits the pair -- a
+#   constructor that sets the vtable and an explicit `_Init` body, exactly as
+#   igMetaObject_Construct 0x2fd7c0 wraps igMetaObject_Init 0x2fd820.)
+0x002fbf90	igMetaField_Construct	engine
+#   the body: every field to its default (_typeIndex 0xffff, _persistent 1,
+#   the alike techniques 0/1/2); every `<X>MetaField_GetVTable` calls it.
+0x002fbfe0	igMetaField_Init	engine
+#   the copy constructor: vtable, then each field from the source, duping
+#   _default through the memory manager.
+0x002fc0e0	igMetaField_CopyConstruct	engine
+#   vtable slot +0x08: releases _default (+0x20) and chains to the base slot --
+#   the destructor path FUN_002ff820 runs as `(**(code **)(*obj + 8))()`.
+0x002fc210	igMetaField_Destruct	engine
+#   vtable slot +0x8c: sizes _default for the field's type, then copies the
+#   argument in -- sets the field's default value.
+0x002fc440	igMetaField_SetDefault	engine
+#   refcounted assignment to +0x0c _fieldName.
+0x002fc490	igMetaField_SetFieldName	engine
+#   dispatches on +0x24 _resetMethod to the technique slots +0x70/+0x74/+0x78.
+0x002fc500	igMetaField_Reset	engine
+#   returns +0x10 _typeIndex; when it is -1, asks the +0x5c type slot for its
+#   +0x12 _internalIndex first.
+0x002fc5d0	igMetaField_GetTypeIndex	engine
+#   aligns its argument up to the size the +0x6c slot reports.
+0x002fc6b0	igMetaField_AlignSize	engine
+#   dispatches an explicit technique to the copy slots +0x90/+0x94/+0x98/
+#   +0x9c/+0xa0; the three 8-byte thunks below pass +0x27/+0x28/+0x29, so each
+#   copy kind has its own entry point.
+0x002fc8e0	igMetaField_CopyByTechnique	engine
+0x002fc9a0	igMetaField_ShallowCopy	engine
+0x002fc9b0	igMetaField_DeepCopy	engine
+0x002fc9c0	igMetaField_ConstructCopy	engine
+#   vtable slot +0xa4: prints "<field> = <value>" (format 0x4faf00) with the
+#   field's own value string, via its +0xe4 slot.
+0x002fd090	igMetaField_Print	engine
+#
+# igMetaObject (vtable 0x532bb0).
+#   base constructor, then the vtable, igMetaObject_Init, and the _metaFields
+#   list at +0x28.
+0x002fd7c0	igMetaObject_Construct	engine
+#   copy constructor: the igObject copy constructor, the vtable, +0x1c _name
+#   and +0x60 _poolName.
+0x002fd940	igMetaObject_CopyConstruct	engine
+#   allocates `_runTimeSize (+0x20) + _sizeofSize (+0x48)` from the pool named
+#   by +0x60 _poolName and runs the instance initialiser on it; the pool-aware
+#   sibling of igMetaObject_CreateInstance (0x2fda40).
+0x002fdb40	igMetaObject_CreateInstanceWithPool	engine
+#   returns +0x60 _poolName.
+0x002fe930	igMetaObject_GetPoolName	engine
+#
+# igRefMetaField (vtable 0x52ec50) and igMemoryRefMetaField (0x532a50).
+#   The intermediate class is igRefMetaField: its two fields, +0x34 _construct
+#   and +0x35 _destruct (data/reflection.json), are exactly what its _Init
+#   clears.  igMemoryRefMetaField's ctor calls the igRefMetaField ctor first,
+#   then sets its own vtable (its fields +0x38 _memSize, +0x3c _memType, +0x40
+#   _releaseOnCopy, +0x41 _releaseOnReset, +0x42 _refCounted, +0x44
+#   _alignmentType, +0x48 _memTypeRef, +0x4c _poolName).
+0x00305bf0	igRefMetaField_Construct	engine
+0x00305c30	igRefMetaField_Init	engine
+0x00305c70	igRefMetaField_CopyConstruct	engine
+0x002fb8e0	igMemoryRefMetaField_Construct	engine
+0x002fb930	igMemoryRefMetaField_Init	engine
+0x002fb9a0	igMemoryRefMetaField_CopyConstruct	engine
+#   the factory the reflection field ctor for an igMemoryRef field calls:
+#   allocates 0x50 bytes and constructs, or goes through the class's MetaObject.
+0x002bf2e0	igMemoryRefMetaField_Create	engine
+#
+# Fourth pass: the igMemoryRefMetaField slot roles and igMemoryPoolInfoList.
+#
+# THE VTABLE SLOT MAP (read off 0x532a50 = igMemoryRefMetaField and 0x52f330 =
+# igMemoryRefArrayMetaField; both tables are 0x100 bytes, and the 27-slot
+# igMemoryPoolInfoList table 0x5329e0 ends at +0x6c, so the igMemoryRefMetaField
+# table that follows it is a separate one).  Slots below +0x54 are the embedded
+# igObject interface; +0x54 is Gap::Core::igObject::vfunc_19.  igMetaField's own
+# interface runs +0x58..+0xf0:
+#   +0x64 GetTypeSize            (the class override differs per field class)
+#   +0x68 GetTypeSizeU16         returns (u16)(*this)[+0x64] -- 0x2fca50
+#   +0x70/74/78 the _resetMethod techniques (igMetaField_Reset 0x2fc500
+#             dispatches _resetMethod 0/3/2 there; the +0x70 base body 0x2fc580
+#             is `memcpy(instance + _offset, _default, _size)`, +0x74 0x2fc5c0 is
+#             a no-op, +0x78 0x2fc5a0 repeats the +0x70 body)
+#   +0x7c/80    construct / destruct the instance's value in place (the base
+#             0x2fd050/0x2fd060 are no-ops -- a scalar field has no lifecycle)
+#   +0x84/88    zero the instance's value (base no-ops)
+#   +0x8c SetDefault (0x2fc440)
+#   +0x90/94/98/9c/a0  the copy techniques; igMetaField_CopyByTechnique
+#             0x2fc8e0 dispatches _shallowCopyMethod/_deepCopyMethod/
+#             _constructCopyMethod there.  igMetaField_Init 0x2fbfe0 sets all
+#             three method numbers to 0, and the technique-0 body 0x2fc9d0 is a
+#             `memcpy(dst + _offset, src + _offset, _size)`.
+#   +0xa4 Print (igMetaField_Print 0x2fd090)
+#   +0xa8 discard the value (base no-op)
+#   +0xac Write to the IGB writer (base 0x2fcea0 returns 0 when _persistent,
+#             else -1 -- "nothing to write")
+#   +0xb4/b8/bc/c0  the alike techniques.  igMetaField_IsAlikeByTechnique
+#             0x2fcec0 dispatches a3 0/1/2/3 there; +0xb4 0x2fcf90 is a byte
+#             compare over _size, +0xc0 0x2fd000 returns 1 ("always alike"),
+#             and 0x2fcfe0/0x2fcff0 tail-call +0xb4.  The three 8-byte thunks
+#             0x2fcf60/70/80 load _isAlikeExactlyMethod/_isAlikeDeepMethod/
+#             _isAlikeShallowMethod (+0x2a/+0x2b/+0x2c) into a3 and jump there.
+#   +0xc8/cc    the field-value (de)serialisation pair; the base bodies are
+#             the two directions of `memcpy` around _size, each calling the
+#             +0xd0 hook on the object side
+#   +0xd0       the hook +0xc8/+0xcc call after a transfer
+# igMemoryRefMetaField initialises _resetMethod 3, _releaseOnCopy 1,
+# _releaseOnReset 1, _refCounted 1, _alignmentType -1, _shallowCopyMethod 2
+# (see igMemoryRefMetaField_Init), so it selects reset technique +0x74 (a no-op
+# in this class!) and copy technique 2 -- the +0x70 and +0x90 overrides below are
+# taken by a direct +0x70 call and by the deep/construct method numbers, not by
+# the two dispatchers.  That _resetMethod 3 vs the +0x74 no-op is an open
+# question, recorded in the finding.
+#   the instance value is allocated from the field's _memType (+0x3c): element
+#   size (*_memType->vtable)[+0x64], alignment (*_memType->vtable)[+0x6c], and
+#   the element count is `_memSize / elementSize` or, for the array subclass,
+#   `_num` (+0x50, igMemoryRefArrayMetaField's extra reflected field).
+0x002faa10	igMemoryRefMetaField_ConstructValue	engine
+0x002faae0	igMemoryRefMetaField_DestructValue	engine
+#   vtable +0x70: release the instance's value (element refs, and the buffer
+#   when _releaseOnReset), then install a refcounted clone of _default there.
+0x002facc0	igMemoryRefMetaField_SetToDefault	engine
+#   vtable +0x90, copy technique 0 -- the one _deepCopyMethod and
+#   _constructCopyMethod select: release the destination, clone the source (per
+#   element where the memory type is named), then re-addref the elements.
+0x002fad50	igMemoryRefMetaField_DeepCopy	engine
+#   vtable +0x98, copy technique 2 and the class's _shallowCopyMethod: release
+#   the destination, clone the source, re-addref the elements.
+0x002faf10	igMemoryRefMetaField_ShallowCopy	engine
+#   vtable +0xa4: prints each element with the field's own value format
+#   (0x4faef0) instead of the scalar one igMetaField_Print uses.
+0x002fafb0	igMemoryRefMetaField_Print	engine
+#   vtable +0xa8: walks the instance's elements (count from _memSize / element
+#   size) and runs each element's +0x48 slot plus the recursive release 0x300b00.
+0x002fb0b0	igMemoryRefMetaField_ReleaseElements	engine
+#   vtable +0xac: writes the field into the IGB writer -- _persistent gates it,
+#   then FUN_002d8a80 creates the member from _memType, _alignmentType and the
+#   pool name (the array subclass instead writes every element).
+0x002fb3d0	igMemoryRefMetaField_Write	engine
+#   vtable +0xb8 (alike technique 1, _deepCopyMethod's sibling): compares two
+#   instance values element by element through 0x300820.
+0x002fb570	igMemoryRefMetaField_IsAlikeDeep	engine
+#   vtable +0xbc (alike technique 2 = _isAlikeShallowMethod, inherited as 2 from
+#   igMetaField_Init): equal element counts and a byte compare of the contents.
+0x002fb760	igMemoryRefMetaField_IsAlikeShallow	engine
+#   +0x4c _poolName: the setter interns the name through the string cache
+#   (0x2eb010/0x2eaf60) and refcounts the old one; the getter returns it.
+0x002fb830	igMemoryRefMetaField_SetPoolName	engine
+0x002fb8d0	igMemoryRefMetaField_GetPoolName	engine
+#   +0x44 _alignmentType: resolves an alignment-type name through the context's
+#   type list (0x586dd0) and stores its index, or -1 when the name is null.
+0x002fb280	igMemoryRefMetaField_SetAlignmentType	engine
+#   the non-virtual refcount helpers over an instance's element array: +1 each
+#   element's refcount (the low 23 bits of the word at +4 are the count), and
+#   -1 with a release through 0x2ff820 when it reaches zero.
+0x002fab40	igMemoryRefMetaField_AddElementRefs	engine
+0x002fabf0	igMemoryRefMetaField_ReleaseElementRefs	engine
+#   the shared array allocator the memory-ref construct path and the two
+#   array-reserve paths call: `count * elementSize` bytes with the memory type's
+#   alignment, zeroed when the pool asks for it, stored at the field's _offset.
+#   Its callers pass three different field instances (the reflection prototypes
+#   0x562498/0x5624a0, and a field resolved with igMetaObject_GetFieldAt), so the
+#   prefix names the family the helper serves rather than one owner.
+0x002fb190	igMetaField_AllocateArray	engine
+#
+#   igMemoryRefArrayMetaField (vtable 0x52f330) -- the same methods with `_num`
+#   (+0x50) as the element count.  vtable +0xa8:
+0x002fa8c0	igMemoryRefArrayMetaField_ReleaseElements	engine
+#
+# igMemoryPoolInfoList (vtable 0x5329e0) -- the {buffer, count, capacity=0x40}
+# growable list of memory-pool infos: the engine keeps two of them in the globals
+# 0x586f58/0x586f60 (created by FUN_002f2180, destroyed by FUN_002f2200) and hands
+# out entries through FUN_002f0370.  None of these are vtable entries; the two
+# 32-byte wrappers are the list's allocator/deallocator, both calling the context
+# memory pool at 0x586dc8+0x30 through its +0xd8 (allocate) and +0x108 (release)
+# slots.
+0x002fa4d0	igMemoryPoolInfoList_Init	engine
+0x002fa540	igMemoryPoolInfoList_Release	engine
+0x002fa5c0	igMemoryPoolInfoList_IndexOf	engine
+0x002fa610	igMemoryPoolInfoList_Append	engine
+0x002fa6c0	igMemoryPoolInfoList_Allocate	engine
+0x002fa6e0	igMemoryPoolInfoList_Delete	engine
+#
+# igMetaEnum (handle 0x585d60, vtable 0x532b50): the named value/flag table the
+# engine's enum fields and "pool option" tables are built from.  reflection.json
+# names its three fields exactly — +0x08 `_name` (igStringMetaField), +0x0c
+# `_names` (an igStringRefList) and +0x10 `_values` (an igIntList) — and every
+# <X>_GetTable accessor is `if (!*global) *global = igMetaEnum_Create(name,
+# names[], values[], count);`, e.g. 0x131f80 builds "ApplyType" =
+# {NOT_SET=0, CUBE_MAP=1, SPHERE_MAP=2} from the rodata at 0x4d4ce0/0x485bf0.
+# The class has no overrides: all nine are plain methods.
+#   creates the instance (0x2befe0 -> igMetaObject_CreateInstance on 0x585d60),
+#   interns `_name`, builds the two lists and fills them.
+0x002fbc70	igMetaEnum_Create	engine
+#   returns `_names`' element count; `_names[index]` as a refcounted string;
+#   `_values[index]` as the u32.
+0x002fbbc0	igMetaEnum_GetNameCount	engine
+0x002fbbd0	igMetaEnum_GetNameAt	engine
+0x002fbc20	igMetaEnum_GetValueAt	engine
+#   the two lookups: by name over `_names` (returns the matching `_values` entry)
+#   and by value over `_values` (returns the matching name).
+0x002fba30	igMetaEnum_GetValueByName	engine
+0x002fbb40	igMetaEnum_GetNameByValue	engine
+#   the two debug-printing helpers (both take the enum as the last argument):
+#   append the name of every value whose bit is set in `mask`, joined by a space
+#   (0x4f9950 — a single blank, not a '|'), and copy one value's name into a
+#   size-bounded buffer.
+0x00312020	igMetaEnum_GetNamesByMask	engine
+0x00312140	igMetaEnum_GetValueName	engine
+#
+# igMetaField's raw-field-memory transfer slots: the IGB binary serializer's
+# per-field read and write, in the field's own inline representation.  The
+# argument order is the same for both — (field, field_memory, stream, ...) — and
+# only the copy direction differs, so +0xc8 copies field -> stream and +0xcc
+# stream -> field; each then runs the +0xd0 hook on the destination (the base
+# +0xd0, 0x2fd170, byte-swaps each `_size`-byte element, which is the endian
+# swap this transfer needs).  The engine's own name survives in the +0xc8
+# override's log string: "%s->%s(%s)->writeRawFieldMem()0x%x[0] = 0x%x,Not in
+# directory\nDid you modify the object after adding it to the directory ?\n"
+# (0x4fafd0/0x4fb050) — a raw-ref write must be able to resolve the pointer into
+# the output directory, which is exactly what the +0xc8 override does
+# (`FUN_002d7c50` pointer -> index, writing 0xffffffff when it is not in the
+# directory).  The +0xcc override is its mirror: it reads the index and installs
+# the resolved pointer (`FUN_002d7e90`) plus the element's `_memType` (+0x3c).
+# The base bodies are the inverse memcpys; the array class loops them over `_num`
+# four-byte slots.
+0x002fc830	igMetaField_WriteRawFieldMem	engine
+0x002fc7c0	igMetaField_ReadRawFieldMem	engine
+0x00305620	igMemoryRefMetaField_WriteRawFieldMem	engine
+0x002fb690	igMemoryRefMetaField_ReadRawFieldMem	engine
+0x002fa800	igMemoryRefArrayMetaField_WriteRawFieldMem	engine
+0x002fa760	igMemoryRefArrayMetaField_ReadRawFieldMem	engine
+#
+# The four `GetSize` overrides and the base `SetToDefault`, read off the field
+# constructor.  `0x2fc630` computes a field's `_size` (+0x14) as
+# `_size = vtable[0x64]()` -- and `igMetaField_AllocateArray` 0x2fb190 divides an
+# allocation by the *same* slot on the memory type (`_memType`+0x3c), so +0x64 is
+# the field's byte size and every concrete field class overrides it: the base
+# returns 0, `igRefMetaField` and `igMemoryRefMetaField` return 4 (one pointer),
+# and `igMemoryRefArrayMetaField` returns `_num * 4` (one pointer per element of
+# the inline array), truncated to the u16 `_size` field.  The base +0x70 is the
+# same virtual the ref class overrides with `igMemoryRefMetaField_SetToDefault`
+# (#363): it copies `_default` (+0x20) over the instance's value at `_offset`.
+0x002fc580	igMetaField_SetToDefault	engine
+0x002fc2b0	igMetaField_GetSize	engine
+0x003054f0	igRefMetaField_GetSize	engine
+0x002fa9d0	igMemoryRefMetaField_GetSize	engine
+0x002fa8b0	igMemoryRefArrayMetaField_GetSize	engine
+#   the +0xd0 technique is a byte reversal of each `_size`-byte element of a
+#   buffer (`t6 = _size` at +0x14; for each element, swap byte i with byte
+#   `_size-1-i`), which is the endian conversion `WriteRawFieldMem` /
+#   `ReadRawFieldMem` run on the destination after their copy.  +0xd4 is the
+#   in-place form: it byte-swaps this field's own value in an instance
+#   (`vtable[+0xd0](field, instance + _offset, 1)`).
+0x002fd170	igMetaField_SwapBytes	engine
+0x002fd1e0	igMetaField_SwapValue	engine
+#   `igRefMetaField`'s +0xcc override (vtable 0x52ec50): the same index -> pointer
+#   resolution as `igMemoryRefMetaField_ReadRawFieldMem` (0x2fb690) without the
+#   `_memType` learning -- a plain reference has no element type to learn.
+0x00305580	igRefMetaField_ReadRawFieldMem	engine
+#
+# The base `igMetaField` implementation of the slots whose subclass overrides are
+# already named, so the virtual is identified by its counterpart rather than by a
+# guess: the ref class overrides `+0x7c`/`+0x80` with ConstructValue/DestructValue,
+# `+0xa8` with ReleaseElements and `+0xac` with Write, and the base bodies are the
+# no-ops / the `_persistent` stub those override.  (The copy and alike technique
+# slots are NOT named this way: their *dispatch thunks* already carry the method
+# names -- `igMetaField_DeepCopy` 0x2fc9b0, `igMetaField_ShallowCopy` 0x2fc9a0,
+# `igMetaField_IsAlikeDeep` 0x2fcf70, `igMetaField_IsAlikeShallow` 0x2fcf80 -- so
+# the technique bodies at `+0x90`/`+0x94`/`+0x98`/`+0xb4`..`+0xc0` cannot take them.)
+0x002fd050	igMetaField_ConstructValue	engine
+0x002fd060	igMetaField_DestructValue	engine
+0x002fd040	igMetaField_ReleaseElements	engine
+#   +0xac: m2c's ReadRawFieldMem counterpart -- base returns 0 when the field is
+#   `_persistent` and -1 otherwise; the ref class replaces it with the IGB writer.
+0x002fcea0	igMetaField_Write	engine
+#   the class destructor slot (+0x08).  igMetaField_Destruct is the body; each
+#   subclass whose vtable needs its own entry carries a `j` thunk to it.
+0x00305cc0	igRefMetaField_Destruct	engine
+0x002fba20	igMemoryRefMetaField_Destruct	engine
+#   +0xf0: the construct flag -- the base returns 0 (the generic object initialiser
+#   constructs a plain field's value), and igRefMetaField returns its own
+#   `_construct` (+0x34, `igRefMetaField`'s only declared field).
+0x002fd230	igMetaField_IsConstruct	engine
+0x00305cd0	igRefMetaField_IsConstruct	engine

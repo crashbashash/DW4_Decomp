@@ -1,0 +1,30 @@
+/* 0x002c59f0 igEventTracker_Register: registers class igEventTracker with the object system, derived from igObject.
+ * The igMetaObject_RegisterClass arguments are laid out per
+ * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
+extern char igObject_GetMetaObject_ParentAccessor[];
+extern char igEventTracker_GetVTable[];
+extern char thunk_igEventTracker_GetMetaObject[];
+extern char igObject_Register[];
+extern char g_igEventTracker_callbackList_004c0d10[];
+extern char s_igEventTracker_className_004f7bd8[];
+extern char g_igEventTracker_metaObject_00586480[];
+int FUN_002b5d50();
+int igMetaObject_RegisterClass();
+int igEventTracker_InitFields();
+
+void igEventTracker_Register(void) {
+    FUN_002b5d50();
+    igMetaObject_RegisterClass(
+        0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
+        g_igEventTracker_metaObject_00586480,  /* published MetaObject slot */
+        igObject_Register,                     /* base class registrar */
+        igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
+        thunk_igEventTracker_GetMetaObject,    /* own MetaObject accessor (stored at +0x54) */
+        s_igEventTracker_className_004f7bd8,   /* class name */
+        0x2530,                                /* instance size */
+        igEventTracker_GetVTable,              /* vtable getter */
+        &igEventTracker_InitFields,            /* field adder */
+        0,                                     /* extra callback item */
+        g_igEventTracker_callbackList_004c0d10  /* callback list */
+    );
+}

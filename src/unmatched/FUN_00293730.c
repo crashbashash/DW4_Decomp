@@ -1,0 +1,17 @@
+/* 0x00293730 — FUN_00293730 (88 bytes). Sets a playback handle's frame-sync mode at +88 (its error string names it mwPlySetFrmSync), rejecting an invalid handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+extern int FUN_002968c0(void *ply);
+extern void FUN_0029a320(const char *msg);
+extern char DAT_004f30a0[]; /* "E1122629: mwPlySetFrmSync: handle is invalid." */
+
+typedef struct {
+    char pad0[88];
+    int frmSync;  /* 88 */
+} Ply293730;
+
+void FUN_00293730(Ply293730 *ply, int frmSync) {
+    if (FUN_002968c0(ply) == 0) {
+        FUN_0029a320(DAT_004f30a0);
+        return;
+    }
+    ply->frmSync = frmSync;
+}

@@ -1,0 +1,3 @@
+AFS entry 702  |  stag0304-forest-deep  |  Leads to dng310f1
+A file's numeric prefix is its chunk index in that pack entry.
+26 chunks

@@ -1,0 +1,34 @@
+/* 0x00270800 — FUN_00270800 (164 bytes). Reports whether the named file exists: splits the path into device and file names (FUN_0026fe00), finds the device interface (FUN_0026fbb8) and calls its entry +64; errors are reported through FUN_0026f530 and return 0. Its error strings name it cvFsIsExistFile (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+typedef struct CvFsDevice_270800 {
+    void *pad0[16];
+    int (*is_exist_file)(const char *name);  /* 0x40 */
+} CvFsDevice_270800;
+
+extern char s_cvFsIsExistFile_1_illegal_file_name_004ef558[]; /* 'cvFsIsExistFile #1:illegal file name' */
+extern char s_cvFsIsExistFile_3_device_not_found_004ef5a8[]; /* 'cvFsIsExistFile #3:device not found' */
+extern char s_cvFsIsExistFile_4_vtbl_error_004ef5d0[]; /* 'cvFsIsExistFile #4:vtbl error' */
+void FUN_0026f530(const char *message);
+void FUN_0026fe00(char *device_name, char *file_name, const char *path);
+CvFsDevice_270800 *FUN_0026fbb8(const char *device_name, const char *file_name, const char *path);
+
+int FUN_00270800(const char *path) {
+    char device_name[304];
+    char file_name[304];
+    CvFsDevice_270800 *device;
+
+    FUN_0026fe00(device_name, file_name, path);
+    if (file_name[0] == 0) {
+        FUN_0026f530(s_cvFsIsExistFile_1_illegal_file_name_004ef558);
+        return 0;
+    }
+    device = FUN_0026fbb8(device_name, file_name, path);
+    if (device == 0) {
+        /* Retail reports the miss and still reads the interface entry. */
+        FUN_0026f530(s_cvFsIsExistFile_3_device_not_found_004ef5a8);
+    }
+    if (device->is_exist_file != 0) {
+        return device->is_exist_file(file_name);
+    }
+    FUN_0026f530(s_cvFsIsExistFile_4_vtbl_error_004ef5d0);
+    return 0;
+}

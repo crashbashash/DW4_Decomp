@@ -1,0 +1,225 @@
+# Digimon World 4 — matching decompilation and native port
+
+This repository contains both the matching PS2 recovery and the native PC port,
+plus analysis tools, tests and reference evidence that support those two goals. The matching
+build remains at the repository root; the native build lives in `port/`.
+
+The project recovers the PS2 USA release (`SLUS-20836`).
+
+| Work | Start here | Build and validation |
+| --- | --- | --- |
+| Retail recovery (PS2) | [Progress](PROGRESS.md), [recovery documentation](docs/README.md) | `make check`, `make link`, `make typed-check` |
+| Native PC port | [Technical specification](port/docs/technical-spec.md), [boot contract](port/docs/boot-contract.md), [port tasks](port/docs/project/tasks.md) | `make -C port`, `make -C port check check-retail -j8` |
+| Shared tools and evidence | [Source layout](src/README.md), [build tools](tools/README.md), [Analysis](scripts/analysis/README.md), [analysis and capture scripts](scripts/README.md), [testing](testing/README.md), [reference](docs/reference/README.md) | Commands in each topic's documentation |
+
+Run commands from the repository root. Game data and toolchains are never committed: see
+[Installation](#installation) for where they go. Progress:
+
+<!-- progress:start -->
+| Region | Size | Matched | Readable |
+| --- | ---: | ---: | ---: |
+| Game (`be*` classes) | 1075 KB | 84.7 % | 5.2 % |
+| Alchemy engine | 1450 KB | 55.6 % | 3.8 % |
+| Lua 4.0.1 | 70 KB | 100.0 % | 98.3 % |
+| CRI middleware (ADX, Sofdec, audio) | 443 KB | 52.9 % | 1.1 % |
+| libpng and zlib | 96 KB | 95.3 % | 94.1 % |
+| Sony SDK and libc | 250 KB | 30.3 % | 2.9 % |
+| **Total** | **3383 KB** | **64.7 %** | **8.3 %** |
+
+The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
+<!-- progress:end -->
+
+- This repo contains a **matching decompilation** of *Digimon World 4* (USA, `SLUS-20836`) — an
+  ELF32 MIPS R5900 (PS2 Emotion Engine) binary. Every matched function is verified byte-identical to
+  retail with the original compiler, and `PROGRESS.md` (regenerated on every push) says how far it
+  has got.
+- Naming and documentation of the source code and data structures are in progress; `PROGRESS.md`
+  carries the current counts (this line used to quote them, and had already drifted from the
+  generated report by the time anyone checked). The engine's own class names come from the binary's
+  `__RTTI__` records.
+
+The matching build produces the following artifact:
+
+* `build/SLUS-20836/main.bin` — the game's merged load image, 4,541,184 bytes at `0x00100000`,
+  `sha1: ffad4dab663cb290190bdfa34a8016d616a1652a` (`config/SLUS-20836/build.sha1`)
+
+This repo does not include the game or the compilers. You need your own copy of the game; the
+compilers are fetched from their public releases by `tools/download_tools.py`.
+
+## Quick Start (for Ubuntu)
+
+1. Install prerequisites:
+   `sudo apt install -y binutils-mipsel-linux-gnu ninja-build git python3`
+   (and `sudo dpkg --add-architecture i386 && sudo apt update && sudo apt install -y libc6:i386` for the
+   32-bit Sony EE GCC).
+2. Clone the repo: `git clone https://github.com/crashbashash/DW4_Decomp.git && cd DW4_Decomp`
+3. Download the compilers and the loader: `python3 tools/download_tools.py` (fetched from their public
+   releases into the gitignored `local/` and checked by SHA-256).
+4. Copy your *Digimon World 4* (USA, `SLUS-20836`) disc image into `orig/SLUS-20836/`
+   (any name ending in `.iso`).
+5. `python3 configure.py` (extracts and verifies `SLUS_208.36` from the disc image), then `ninja` to
+   relink and compare, or `ninja check` / `make check` to verify every decompiled function.
+
+## Installation
+
+### Linux
+
+#### Step 1: Install dependencies
+
+The build needs `mipsel-linux-gnu` binutils, Python 3, ninja (or GNU make) and the
+[wibo](https://github.com/decompals/wibo) Windows-binary loader (the Metrowerks compiler is a
+Windows executable; Wine dies on its FLEXlm license check).
+
+```
+sudo apt install -y binutils-mipsel-linux-gnu ninja-build build-essential git python3
+python3 tools/download_tools.py
+```
+
+`tools/download_tools.py` puts every toolchain the build pins into the gitignored `local/`, each from
+its public release and verified against the SHA-256 recorded in `config/SLUS-20836/units.tsv`:
+
+| Path | What | Used for |
+|---|---|---|
+| `local/wibo` | wibo 1.2.0 | runs the Windows compilers |
+| `local/mwcps2/3.0-011126/mwccps2.exe` | MWCC for PS2 3.0 (build 011126) | the default engine compiler |
+| `local/mwcps2/combat/mwccps2.exe` | MWCC 3.0b38 (030307) | the game (`be*`) units; [unit compilers](docs/engine/unit-compilers.md) |
+| `local/mwcps2/3.0.3-020716/`, `3.0b52-030722/`, `2.4/` | further MWCC builds | units pinned to them in `units.tsv` |
+| `local/ee-gcc2.96/` | Sony EE GCC 2.96 | the Sony SDK and CRI library units ([sd-prologue](docs/engine/sd-prologue.md)); a 32-bit Linux executable |
+
+Every compile command is built by `tools/cc.py` from the unit's profile in
+`config/SLUS-20836/units.tsv` ([build profiles](docs/engine/build-profiles.md)); a missing or changed
+compiler fails the build rather than falling back to another one. To keep the toolchains elsewhere,
+point the build at them with `DW4_WIBO`, `DW4_MWCC` and the other `DW4_*` variables (`DW4_ELF`,
+`DW4_M2C`, `DW4_M2C_DIR`, `DW4_PERMUTER`); each tool's `--help` names its default.
+
+#### Step 2: Supply the game
+
+Copy your disc image of the USA release into `orig/SLUS-20836/` (any `*.iso`). `python3 configure.py`
+extracts `SLUS_208.36` from it and checks its hash against `config/SLUS-20836/config.yml`; another dump
+of the same release works as long as the executable is identical. The disc image can be deleted
+afterwards. If you already have the executable, put it at `orig/SLUS-20836/SLUS_208.36` directly. The
+build never writes to it.
+
+Nothing from the game is ever committed: `orig/` keeps only its `.gitkeep` files, and the other working
+folders are gitignored, so real game data can live next to the analysis:
+
+| Directory | Holds |
+|---|---|
+| `orig/<GAMEID>/` | your disc image and the extracted executable |
+| `asm/` | the retail code as assembly, one file per function, generated from your executable (`make asm`) |
+| `roms/` | other game data (the full disc extraction the native port reads) |
+| `bios/` | a PS2 BIOS image, if you run the game |
+| `pcsx2/` | emulator data: memory cards, `sstates/`, logs |
+| `ghidra-projects/` | the analysed Ghidra project (`ghidra-projects/dw4/`) |
+
+For the native port, extract all disc files with `python3 port/tools/extract_iso.py <iso> --out <dir>`
+(see [port documentation](port/docs/README.md#setting-up-a-machine-from-a-disc-image)); `DW4_ROMS=<dir>`
+points `make -C port` at them.
+
+#### Step 3: Build
+
+The layout follows [dtk-template](https://github.com/encounter/dtk-template): `python3 configure.py`
+writes `build.ninja` and `objdiff.json` for a version (`--version SLUS-20836`, the default), and
+`ninja`, `ninja check`, `ninja objdiff` and `ninja report` run the relink, the per-unit check, the
+objdiff objects and the decomp.dev report; see [build system](docs/build-system.md). The Make targets
+below run the same tools.
+
+Run `make`. It generates the retail split in `asm/` from your executable when that folder is
+missing or stale, then does two things, in order: reassembles the split and checks that it
+round-trips byte-exactly, then compiles every `src/` function and diffs it against the game. A
+function is only counted as decompiled when its bytes are identical; `make check` prints the
+differing instruction otherwise.
+
+```
+make                      # build and compare (the default target)
+make link                 # relink the whole section and compare it to the ELF
+make verify VA=0x246780 SRC=src/unmatched/FUN_00246780.c    # one function, per-instruction diff
+make report               # coverage only
+make objs                 # compile objects, verify nothing
+make symbols              # regenerate config/SLUS-20836/symbols.txt
+make asm                  # regenerate asm/ (generated from your executable, never committed)
+```
+
+The full list of variables, with the default first:
+
+* `DW4_ELF`: path to the retail `game.elf`
+* `DW4_MWCC`: path to `mwccps2.exe`
+* `DW4_WIBO`: path to `wibo`
+* `FLAGS`: compiler flags (default `-O3`, which is what the game was built with)
+* `VA`, `SRC`: the function to check for `make verify`
+
+## Project Structure
+
+	DW4_Decomp
+	├── asm: split disassembly of the retail code, one file per function (generated, gitignored)
+	├── config: the build's symbol map, section tiling, and jump tables
+	├── src: decompiled C source, one file per function
+	├── tools: build and executable-format tools
+	├── scripts: analysis tools: Ghidra dumps, format parsers, doc generators
+	├── data: committed snapshot of the Ghidra dumps and derived tables
+	├── docs: the documentation hub
+	│   ├── engine: toolchain, binary layout, RTTI/vtables, reflection, igBinary, Lua
+	│   ├── systems: flags, spawns, drops, enemy stats, RNG, save format
+	│   └── findings: the findings register: hypotheses, evidence and dead ends, cited as #N
+	├── lua: every Lua 4.0.1 chunk from NDMW.AFS, decompiled and organised by world/area
+	├── PROGRESS.md: how far the decompilation has got, rewritten on every push
+	├── LICENSE: CC0 1.0 for this project's own work
+	├── NOTICE: non-affiliation, trademarks, and what is not licensed
+	├── build: output directory
+	└── Makefile: check, link, verify, report, progress
+
+`config/`, `data/`, `lua/`, `docs/findings/` and `PROGRESS.md` are written by the
+tools that own
+them (`make symbols`, `tools/jumptables.py`, `scripts/sync_data.sh`,
+`make progress`); `src/` and the prose docs are not.
+
+`src/` is grouped by module, and every function that has no recovered name yet lives in
+`src/unmatched/`. It holds **translation units**, the way the game was built — `src/lua/api.c`
+is one file defining 47 functions, `src/engine/*.c` will be a system each — written in retail
+address order, with a function moved out of `unmatched/` into its module once its purpose is
+known. The per-function matching build (`check.py`, `linkgen.py`) splits a function back out
+with [`tools/units.py`](tools/units.py), so a unit compiles as one and is still verified as
+many. The module boundaries that are known are described in
+[`docs/engine/architecture.md`](docs/engine/architecture.md).
+
+Names are recorded in `config/SLUS-20836/names/`, one `.tsv` per module, merged over the Ghidra dump by
+`tools/split.py` and applied to the tree (rename, call sites, `src/` folder, `asm/`) by
+`tools/apply_names.py` — see [`docs/engine/naming.md`](docs/engine/naming.md).
+
+## Status
+
+The build is a **Ship of Theseus**: functions with C are compiled from it, everything else is
+assembled from the original bytes, so the section always links whole while functions are decompiled
+one at a time. [`PROGRESS.md`](PROGRESS.md) carries the numbers — functions and code bytes matched,
+the size bands, where in the binary the work has reached, and what metadata has been recovered.
+
+| | |
+|---|---|
+| Toolchain | MWCCPS2 3.0 `011126` via wibo at `-O3` for the game and engine; an alternate MWCC build and Sony EE GCC 2.96, content-pinned per unit — [`docs/engine/toolchain.md`](docs/engine/toolchain.md), [`docs/engine/unit-compilers.md`](docs/engine/unit-compilers.md), [`docs/engine/sd-prologue.md`](docs/engine/sd-prologue.md) |
+| Relink | all 4,541,184 bytes of the main section rebuild byte-identical to retail (`make link`); the object count and the from-source accounting are in [`PROGRESS.md`](PROGRESS.md) |
+| Documentation | [`docs/README.md`](docs/README.md) — the index of everything recovered so far |
+| Findings | claims in `docs/` cite numbered entries in the [findings register](docs/findings/README.md) |
+
+## License and reuse
+
+The native tree under `port/` includes game-derived behavioral references and vendored
+third-party sources; consult their own notices. The root CC0 dedication does not extend
+to material outside its stated scope.
+
+This project's own work — the build system, the tooling in `tools/` and `scripts/`, and the
+documentation in `docs/` — is dedicated to the public domain under [CC0 1.0](LICENSE): use it,
+change it and redistribute it for any purpose, commercial or not, without attribution.
+
+The **game-derived material** — the decompiled source (`src/`), the
+extracted metadata (`data/`, `findings/`) and the decompiled Lua (`lua/`) — is a derivative work of the retail game and is **not** covered by that dedication.
+Copyright remains with the respective rights holders; it is included for preservation, research and
+interoperability. See [`LICENSE`](LICENSE) for the scope in full and [`NOTICE`](NOTICE) for the
+non-affiliation and trademark statement. No game binaries are distributed here — see
+§Installation for what you must supply.
+
+## Contributing
+
+Pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) has the method: where to find work, the
+gate a function has to pass (byte identity under its unit's profile and readable, evidence-named source),
+how to check it, and the four result lines to paste into a pull request. The documentation index is
+[`docs/README.md`](docs/README.md).

@@ -1,0 +1,32 @@
+struct Obj { int *vt; int w[27]; };
+int igObject_InitHeader(struct Obj *);
+int FUN_001374b0(int *, int);
+int FUN_00195030(int *, int);
+int FUN_00195190(int *, int);
+int FUN_00195210(int *, int);
+extern int DAT_005282c0[4];
+extern void * DAT_00586dc8[4];
+int igTransformSequence1_5_GetVTable(void) {
+    struct Obj obj;
+    int t;
+    igObject_InitHeader(&obj);
+    obj.w[1] = 0;
+    obj.w[2] = 0;
+    obj.w[3] = 0;
+    obj.w[4] = 0;
+    obj.vt = &DAT_005282c0[0];
+    obj.w[13] = 0;
+    obj.w[14] = 0;
+    obj.w[15] = 0;
+    obj.w[16] = 0;
+    obj.w[23] = 0;
+    t = *(int *)((char *)&obj + *(int *)((char *)(DAT_00586dc8[0]) + 916));
+    obj.vt = &DAT_005282c0[0];
+    FUN_00195210(&obj.w[23], -1);
+    FUN_001374b0(&obj.w[16], -1);
+    FUN_001374b0(&obj.w[15], -1);
+    FUN_001374b0(&obj.w[14], -1);
+    FUN_00195190(&obj.w[13], -1);
+    FUN_00195030((int *)&obj, 0);
+    return t;
+}

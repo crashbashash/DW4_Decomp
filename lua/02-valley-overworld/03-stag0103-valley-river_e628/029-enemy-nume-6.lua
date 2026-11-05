@@ -1,0 +1,25 @@
+if be:MATisPlayer() == 1 and g_lFLG19 ~= 1 then
+    g_lFLG19 = 1
+    be:sd("MODELCTRL", "g_annihilativebomz06", 0, "GENERATE", "V<-552.552,75.296,-122.603>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_annihilativebomz06", 1, "GENERATE", "V<-537.592,75.296,-122.603>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_dumperz06", 0, "GENERATE", "V<-544.936,71.498,-121.982>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_facteyez06", 0, "GENERATE", "V<-560.309,81.195,149.749>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_facteyez06", 1, "GENERATE", "V<-529.690,81.195,149.749>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_factgatez06", 0, "GENERATE", "V<-545,-15,133.140>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_facttowerz06", 0, "GENERATE", "V<-571.671,15.257,90.653>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_facttowerz06", 1, "GENERATE", "V<-518.453,15.257,90.384>/V<0,180,0>")
+    be:sd("MODELCTRL", "g_facttowerz06", 2, "GENERATE", "V<-571.671,15.257,40.502>/V<0,180,0>")
+    be:sd("MODELCTRL", "g_facttowerz06", 3, "GENERATE", "V<-518.453,15.257,40.597>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_facttowerz06", 4, "GENERATE", "V<-571.671,15.257,-9.343>/V<0,0,0>")
+    be:sd("MODELCTRL", "g_facttowerz06", 5, "GENERATE", "V<-518.453,15.257,-9.673>/V<0,180,0>")
+    be:sd("MODELCTRL", "g_shelfz06", 0, "GENERATE", "V<-594.622,14.692,-107.580>/V<0,0,0>/SQ_RSET")
+    be:sd("MODELCTRL", "g_shelfz06", 1, "GENERATE", "V<-495.207,14.692,-107.580>/V<0,0,0>/SQ_LSET")
+    be:sd("MODELCTRL", "g_numeprisonz01", 3, "GENERATE", "V<-570,15,320>/V<0,135,0>")
+    be:sd("ENEMY", "e_nume", -1, "SQ_ERAS")
+    be:sd("GENERATER", nil, -1, "START", "GENE-25", 60)
+    be:sd("GENERATER", nil, -1, "START", "GENE-27", 60)
+    be:sd("GENERATER", nil, -1, "START", "GENE-31", 60)
+    be:sd("GENERATER", nil, -1, "START", "GENE-33", 60)
+    be:sd("GENERATER", nil, -1, "START", "GENE-34", 60)
+else
+end

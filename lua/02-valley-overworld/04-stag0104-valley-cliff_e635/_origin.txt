@@ -1,0 +1,3 @@
+AFS entry 635  |  stag0104-valley-cliff  |  Leads to dng103f1
+A file's numeric prefix is its chunk index in that pack entry.
+24 chunks

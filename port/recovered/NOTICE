@@ -1,0 +1,36 @@
+NOTICE
+======
+
+Digimon World 4 decompilation — non-affiliation, trademarks, and scope
+
+This repository is an independent, fan-made reverse-engineering project. It is **not affiliated
+with, authorised by, endorsed by, or sponsored by** Bandai, Bandai Namco Entertainment, Toei
+Animation, or any other rights holder of the *Digimon* franchise or of *Digimon World 4*.
+
+*Digimon*, *Digimon World* and all related names, characters and marks are the trademarks of their
+respective owners and are used here only to identify the game being studied.
+
+No game data is distributed
+---------------------------
+
+This repository contains no game binaries: no ISO, ROM, BIOS dump, memory card, save state, or game
+executable (`SLUS_208.36` / `game.elf`). Building the project requires the user's own copy of the
+game. The Metrowerks CodeWarrior compiler is likewise not redistributed — it must be supplied
+locally. See `README.md` §Installation.
+
+What is licensed, and what is not
+---------------------------------
+
+* **CC0 1.0** (`LICENSE`) covers this project's original contributions: the build system and
+  `Makefile`, the tooling in `tools/` and `scripts/`, and the documentation in `docs/`. Those may be
+  used, modified and redistributed for any purpose without attribution.
+
+* **No licence is granted** for the game-derived material: the decompiled source (`src/`), the
+  split disassembly (`asm/`), the extracted metadata (`data/`, `findings/`) and the decompiled
+  scripts (`lua/`). That material is a derivative work of the retail
+  game; copyright remains with its respective rights holders. It is included for preservation,
+  research and interoperability, and is provided as-is with no warranty of any kind. The project
+  claims no copyright in it.
+
+If you are a rights holder and you object to any of this material being present, contact the
+repository owner and it will be removed.

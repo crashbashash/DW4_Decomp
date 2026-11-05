@@ -1,0 +1,3 @@
+AFS entry 464  |  dngq2b2h  |  quest 2 stage 2 hard (timed, e_mummy)
+A file's numeric prefix is its chunk index in that pack entry.
+56 chunks

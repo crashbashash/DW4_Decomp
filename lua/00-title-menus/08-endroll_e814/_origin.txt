@@ -1,0 +1,3 @@
+AFS entry 814  |  endroll  |  End roll / staff credits
+A file's numeric prefix is its chunk index in that pack entry.
+5 chunks

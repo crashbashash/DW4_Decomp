@@ -1,0 +1,65 @@
+#include "dw4/reflected.h"
+struct V { int x; int y; int z; int w; };
+struct M { int m[16]; };
+int FUN_00130e90();
+int FUN_00139170();
+int FUN_0018a6a0();
+int FUN_0018c640();
+int FUN_002e3810(void *, float);
+int FUN_002fe480();
+int igMetaObject_CreateFields();
+void *igMetaObject_GetFieldAt();
+int igMetaObject_GetFieldCount();
+int igMetaObject_NameFields();
+extern int DAT_0048c090[4];
+extern int DAT_0048c0b0[4];
+extern int DAT_0048c0d0[4];
+extern int DAT_0048c0f0[4];
+extern int DAT_00561a50[4];
+extern void thunk_FUN_001c45d0(void);
+
+void igFrustCullTraversal_InitFields(void) {
+    struct V o5;
+    struct V o4;
+    struct V o3;
+    struct V o2;
+    struct M o1;
+    int temp_s0;
+    void *temp_s1;
+    void *temp_s2;
+    void *temp_s2_2;
+    void *temp_s2_3;
+
+    temp_s1 = (void *)DAT_00561a50[0];
+    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    igMetaObject_CreateFields(temp_s1, &DAT_0048c090[0], 7);
+    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
+    o5.x = 0;
+    o5.y = 0;
+    o5.z = 0;
+    o5.w = 0x3F800000;
+    o4.x = 0;
+    o4.y = 0;
+    o4.z = 0x3F800000;
+    o4.w = 0;
+    o3.x = 0;
+    o3.y = 0x3F800000;
+    o3.z = 0;
+    o3.w = 0;
+    o2.x = 0x3F800000;
+    o2.y = 0;
+    o2.z = 0;
+    o2.w = 0;
+    FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
+    FUN_0018c640(temp_s2, &o1);
+    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00139170();
+    ((igRefMetaField *)temp_s2_2)->_construct = 1;
+    FUN_002e3810(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1.0f);
+    FUN_002e3810(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5), 2.0f);
+    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0018a6a0();
+    ((igRefMetaField *)temp_s2_3)->_construct = 1;
+    igMetaObject_NameFields(temp_s1, &DAT_0048c0b0[0], &DAT_0048c0d0[0], &DAT_0048c0f0[0], temp_s0);
+    FUN_002fe480(&thunk_FUN_001c45d0);
+}

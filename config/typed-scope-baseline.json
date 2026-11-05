@@ -1,0 +1,10 @@
+{
+ "accesses": 10570,
+ "functions": 1160,
+ "local": 476,
+ "note": "Baseline for tools/typed_scope.py: the port-relevant game layer. Record deliberately with --update-baseline.",
+ "raw": 295,
+ "synthetic": 443,
+ "typed": 9356,
+ "typed_pct": 88.51
+}

@@ -1,0 +1,1050 @@
+{
+  "function": 4180496,
+  "size": 41864,
+  "table": 5525460,
+  "header": 9,
+  "frame": 1200,
+  "save_area_base": 0,
+  "saved_gprs": 9,
+  "saved_fprs": 0,
+  "return_save_offset": 144,
+  "range_end": 175,
+  "ranges": [
+    {
+      "record_offset": 4,
+      "delta": 772,
+      "length": 0,
+      "action_offset": 182,
+      "start": 4181268,
+      "end_inclusive": 4181268,
+      "cleanup_chain": [
+        {
+          "offset": 182,
+          "tag": 130,
+          "stack_offset": 1196,
+          "destructor": 1270768,
+          "final": true,
+          "end_offset": 189
+        }
+      ]
+    },
+    {
+      "record_offset": 9,
+      "delta": 20,
+      "length": 0,
+      "action_offset": 175,
+      "start": 4181288,
+      "end_inclusive": 4181288,
+      "cleanup_chain": [
+        {
+          "offset": 175,
+          "tag": 2,
+          "stack_offset": 1032,
+          "destructor": 1270768,
+          "final": false,
+          "end_offset": 182
+        },
+        {
+          "offset": 182,
+          "tag": 130,
+          "stack_offset": 1196,
+          "destructor": 1270768,
+          "final": true,
+          "end_offset": 189
+        }
+      ]
+    },
+    {
+      "record_offset": 13,
+      "delta": 8,
+      "length": 0,
+      "action_offset": 182,
+      "start": 4181296,
+      "end_inclusive": 4181296,
+      "cleanup_chain": [
+        {
+          "offset": 182,
+          "tag": 130,
+          "stack_offset": 1196,
+          "destructor": 1270768,
+          "final": true,
+          "end_offset": 189
+        }
+      ]
+    },
+    {
+      "record_offset": 17,
+      "delta": 112,
+      "length": 0,
+      "action_offset": 189,
+      "start": 4181408,
+      "end_inclusive": 4181408,
+      "cleanup_chain": [
+        {
+          "offset": 189,
+          "tag": 130,
+          "stack_offset": 1028,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 196
+        }
+      ]
+    },
+    {
+      "record_offset": 21,
+      "delta": 2260,
+      "length": 12,
+      "action_offset": 196,
+      "start": 4183668,
+      "end_inclusive": 4183680,
+      "cleanup_chain": [
+        {
+          "offset": 196,
+          "tag": 130,
+          "stack_offset": 1192,
+          "destructor": 4037968,
+          "final": true,
+          "end_offset": 203
+        }
+      ]
+    },
+    {
+      "record_offset": 26,
+      "delta": 84,
+      "length": 12,
+      "action_offset": 203,
+      "start": 4183764,
+      "end_inclusive": 4183776,
+      "cleanup_chain": [
+        {
+          "offset": 203,
+          "tag": 130,
+          "stack_offset": 1188,
+          "destructor": 4037840,
+          "final": true,
+          "end_offset": 210
+        }
+      ]
+    },
+    {
+      "record_offset": 30,
+      "delta": 80,
+      "length": 12,
+      "action_offset": 210,
+      "start": 4183856,
+      "end_inclusive": 4183868,
+      "cleanup_chain": [
+        {
+          "offset": 210,
+          "tag": 130,
+          "stack_offset": 1184,
+          "destructor": 4037712,
+          "final": true,
+          "end_offset": 217
+        }
+      ]
+    },
+    {
+      "record_offset": 34,
+      "delta": 80,
+      "length": 12,
+      "action_offset": 217,
+      "start": 4183948,
+      "end_inclusive": 4183960,
+      "cleanup_chain": [
+        {
+          "offset": 217,
+          "tag": 130,
+          "stack_offset": 1180,
+          "destructor": 4037584,
+          "final": true,
+          "end_offset": 224
+        }
+      ]
+    },
+    {
+      "record_offset": 38,
+      "delta": 1748,
+      "length": 8376,
+      "action_offset": 231,
+      "start": 4185708,
+      "end_inclusive": 4194084,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 44,
+      "delta": 16,
+      "length": 1128,
+      "action_offset": 224,
+      "start": 4194100,
+      "end_inclusive": 4195228,
+      "cleanup_chain": [
+        {
+          "offset": 224,
+          "tag": 2,
+          "stack_offset": 1152,
+          "destructor": 1247008,
+          "final": false,
+          "end_offset": 231
+        },
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 49,
+      "delta": 12,
+      "length": 1868,
+      "action_offset": 231,
+      "start": 4195240,
+      "end_inclusive": 4197108,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 54,
+      "delta": 16,
+      "length": 2072,
+      "action_offset": 238,
+      "start": 4197124,
+      "end_inclusive": 4199196,
+      "cleanup_chain": [
+        {
+          "offset": 238,
+          "tag": 2,
+          "stack_offset": 1132,
+          "destructor": 1247008,
+          "final": false,
+          "end_offset": 245
+        },
+        {
+          "offset": 245,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 252
+        }
+      ]
+    },
+    {
+      "record_offset": 59,
+      "delta": 12,
+      "length": 60,
+      "action_offset": 231,
+      "start": 4199208,
+      "end_inclusive": 4199268,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 63,
+      "delta": 16,
+      "length": 2040,
+      "action_offset": 252,
+      "start": 4199284,
+      "end_inclusive": 4201324,
+      "cleanup_chain": [
+        {
+          "offset": 252,
+          "tag": 2,
+          "stack_offset": 1108,
+          "destructor": 1247008,
+          "final": false,
+          "end_offset": 259
+        },
+        {
+          "offset": 259,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 266
+        }
+      ]
+    },
+    {
+      "record_offset": 68,
+      "delta": 12,
+      "length": 5596,
+      "action_offset": 231,
+      "start": 4201336,
+      "end_inclusive": 4206932,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 73,
+      "delta": 12,
+      "length": 0,
+      "action_offset": 266,
+      "start": 4206944,
+      "end_inclusive": 4206944,
+      "cleanup_chain": [
+        {
+          "offset": 266,
+          "tag": 2,
+          "stack_offset": 1000,
+          "destructor": 3402176,
+          "final": false,
+          "end_offset": 273
+        },
+        {
+          "offset": 273,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 280
+        }
+      ]
+    },
+    {
+      "record_offset": 77,
+      "delta": 12,
+      "length": 1080,
+      "action_offset": 231,
+      "start": 4206956,
+      "end_inclusive": 4208036,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 82,
+      "delta": 16,
+      "length": 968,
+      "action_offset": 280,
+      "start": 4208052,
+      "end_inclusive": 4209020,
+      "cleanup_chain": [
+        {
+          "offset": 280,
+          "tag": 2,
+          "stack_offset": 1092,
+          "destructor": 1247008,
+          "final": false,
+          "end_offset": 287
+        },
+        {
+          "offset": 287,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 294
+        }
+      ]
+    },
+    {
+      "record_offset": 87,
+      "delta": 12,
+      "length": 2116,
+      "action_offset": 231,
+      "start": 4209032,
+      "end_inclusive": 4211148,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 92,
+      "delta": 16,
+      "length": 1984,
+      "action_offset": 294,
+      "start": 4211164,
+      "end_inclusive": 4213148,
+      "cleanup_chain": [
+        {
+          "offset": 294,
+          "tag": 2,
+          "stack_offset": 1088,
+          "destructor": 1247008,
+          "final": false,
+          "end_offset": 301
+        },
+        {
+          "offset": 301,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 308
+        }
+      ]
+    },
+    {
+      "record_offset": 97,
+      "delta": 12,
+      "length": 60,
+      "action_offset": 231,
+      "start": 4213160,
+      "end_inclusive": 4213220,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 101,
+      "delta": 16,
+      "length": 1984,
+      "action_offset": 308,
+      "start": 4213236,
+      "end_inclusive": 4215220,
+      "cleanup_chain": [
+        {
+          "offset": 308,
+          "tag": 2,
+          "stack_offset": 1084,
+          "destructor": 1247008,
+          "final": false,
+          "end_offset": 315
+        },
+        {
+          "offset": 315,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 322
+        }
+      ]
+    },
+    {
+      "record_offset": 106,
+      "delta": 12,
+      "length": 692,
+      "action_offset": 231,
+      "start": 4215232,
+      "end_inclusive": 4215924,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 111,
+      "delta": 36,
+      "length": 216,
+      "action_offset": 322,
+      "start": 4215960,
+      "end_inclusive": 4216176,
+      "cleanup_chain": [
+        {
+          "offset": 322,
+          "tag": 2,
+          "stack_offset": 1076,
+          "destructor": 1380016,
+          "final": false,
+          "end_offset": 329
+        },
+        {
+          "offset": 329,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 336
+        }
+      ]
+    },
+    {
+      "record_offset": 116,
+      "delta": 24,
+      "length": 620,
+      "action_offset": 231,
+      "start": 4216200,
+      "end_inclusive": 4216820,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 121,
+      "delta": 44,
+      "length": 400,
+      "action_offset": 336,
+      "start": 4216864,
+      "end_inclusive": 4217264,
+      "cleanup_chain": [
+        {
+          "offset": 336,
+          "tag": 2,
+          "stack_offset": 1068,
+          "destructor": 1380016,
+          "final": false,
+          "end_offset": 343
+        },
+        {
+          "offset": 343,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 350
+        }
+      ]
+    },
+    {
+      "record_offset": 126,
+      "delta": 32,
+      "length": 252,
+      "action_offset": 231,
+      "start": 4217296,
+      "end_inclusive": 4217548,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 131,
+      "delta": 36,
+      "length": 80,
+      "action_offset": 350,
+      "start": 4217584,
+      "end_inclusive": 4217664,
+      "cleanup_chain": [
+        {
+          "offset": 350,
+          "tag": 2,
+          "stack_offset": 1060,
+          "destructor": 1380016,
+          "final": false,
+          "end_offset": 357
+        },
+        {
+          "offset": 357,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 364
+        }
+      ]
+    },
+    {
+      "record_offset": 135,
+      "delta": 24,
+      "length": 584,
+      "action_offset": 231,
+      "start": 4217688,
+      "end_inclusive": 4218272,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 140,
+      "delta": 8,
+      "length": 808,
+      "action_offset": 364,
+      "start": 4218280,
+      "end_inclusive": 4219088,
+      "cleanup_chain": [
+        {
+          "offset": 364,
+          "tag": 2,
+          "stack_offset": 1052,
+          "destructor": 1380016,
+          "final": false,
+          "end_offset": 371
+        },
+        {
+          "offset": 371,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 378
+        }
+      ]
+    },
+    {
+      "record_offset": 145,
+      "delta": 32,
+      "length": 796,
+      "action_offset": 231,
+      "start": 4219120,
+      "end_inclusive": 4219916,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 150,
+      "delta": 8,
+      "length": 452,
+      "action_offset": 378,
+      "start": 4219924,
+      "end_inclusive": 4220376,
+      "cleanup_chain": [
+        {
+          "offset": 378,
+          "tag": 2,
+          "stack_offset": 1044,
+          "destructor": 1380016,
+          "final": false,
+          "end_offset": 385
+        },
+        {
+          "offset": 385,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 392
+        }
+      ]
+    },
+    {
+      "record_offset": 155,
+      "delta": 24,
+      "length": 712,
+      "action_offset": 231,
+      "start": 4220400,
+      "end_inclusive": 4221112,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 160,
+      "delta": 8,
+      "length": 464,
+      "action_offset": 392,
+      "start": 4221120,
+      "end_inclusive": 4221584,
+      "cleanup_chain": [
+        {
+          "offset": 392,
+          "tag": 2,
+          "stack_offset": 1036,
+          "destructor": 1380016,
+          "final": false,
+          "end_offset": 399
+        },
+        {
+          "offset": 399,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 406
+        }
+      ]
+    },
+    {
+      "record_offset": 165,
+      "delta": 24,
+      "length": 20,
+      "action_offset": 231,
+      "start": 4221608,
+      "end_inclusive": 4221628,
+      "cleanup_chain": [
+        {
+          "offset": 231,
+          "tag": 130,
+          "stack_offset": 1176,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 238
+        }
+      ]
+    },
+    {
+      "record_offset": 169,
+      "delta": 156,
+      "length": 64,
+      "action_offset": 406,
+      "start": 4221784,
+      "end_inclusive": 4221848,
+      "cleanup_chain": [
+        {
+          "offset": 406,
+          "tag": 130,
+          "stack_offset": 1004,
+          "destructor": 1247008,
+          "final": true,
+          "end_offset": 413
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "offset": 175,
+      "tag": 2,
+      "stack_offset": 1032,
+      "destructor": 1270768,
+      "final": false,
+      "end_offset": 182
+    },
+    {
+      "offset": 182,
+      "tag": 130,
+      "stack_offset": 1196,
+      "destructor": 1270768,
+      "final": true,
+      "end_offset": 189
+    },
+    {
+      "offset": 189,
+      "tag": 130,
+      "stack_offset": 1028,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 196
+    },
+    {
+      "offset": 196,
+      "tag": 130,
+      "stack_offset": 1192,
+      "destructor": 4037968,
+      "final": true,
+      "end_offset": 203
+    },
+    {
+      "offset": 203,
+      "tag": 130,
+      "stack_offset": 1188,
+      "destructor": 4037840,
+      "final": true,
+      "end_offset": 210
+    },
+    {
+      "offset": 210,
+      "tag": 130,
+      "stack_offset": 1184,
+      "destructor": 4037712,
+      "final": true,
+      "end_offset": 217
+    },
+    {
+      "offset": 217,
+      "tag": 130,
+      "stack_offset": 1180,
+      "destructor": 4037584,
+      "final": true,
+      "end_offset": 224
+    },
+    {
+      "offset": 224,
+      "tag": 2,
+      "stack_offset": 1152,
+      "destructor": 1247008,
+      "final": false,
+      "end_offset": 231
+    },
+    {
+      "offset": 231,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 238
+    },
+    {
+      "offset": 238,
+      "tag": 2,
+      "stack_offset": 1132,
+      "destructor": 1247008,
+      "final": false,
+      "end_offset": 245
+    },
+    {
+      "offset": 245,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 252
+    },
+    {
+      "offset": 252,
+      "tag": 2,
+      "stack_offset": 1108,
+      "destructor": 1247008,
+      "final": false,
+      "end_offset": 259
+    },
+    {
+      "offset": 259,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 266
+    },
+    {
+      "offset": 266,
+      "tag": 2,
+      "stack_offset": 1000,
+      "destructor": 3402176,
+      "final": false,
+      "end_offset": 273
+    },
+    {
+      "offset": 273,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 280
+    },
+    {
+      "offset": 280,
+      "tag": 2,
+      "stack_offset": 1092,
+      "destructor": 1247008,
+      "final": false,
+      "end_offset": 287
+    },
+    {
+      "offset": 287,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 294
+    },
+    {
+      "offset": 294,
+      "tag": 2,
+      "stack_offset": 1088,
+      "destructor": 1247008,
+      "final": false,
+      "end_offset": 301
+    },
+    {
+      "offset": 301,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 308
+    },
+    {
+      "offset": 308,
+      "tag": 2,
+      "stack_offset": 1084,
+      "destructor": 1247008,
+      "final": false,
+      "end_offset": 315
+    },
+    {
+      "offset": 315,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 322
+    },
+    {
+      "offset": 322,
+      "tag": 2,
+      "stack_offset": 1076,
+      "destructor": 1380016,
+      "final": false,
+      "end_offset": 329
+    },
+    {
+      "offset": 329,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 336
+    },
+    {
+      "offset": 336,
+      "tag": 2,
+      "stack_offset": 1068,
+      "destructor": 1380016,
+      "final": false,
+      "end_offset": 343
+    },
+    {
+      "offset": 343,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 350
+    },
+    {
+      "offset": 350,
+      "tag": 2,
+      "stack_offset": 1060,
+      "destructor": 1380016,
+      "final": false,
+      "end_offset": 357
+    },
+    {
+      "offset": 357,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 364
+    },
+    {
+      "offset": 364,
+      "tag": 2,
+      "stack_offset": 1052,
+      "destructor": 1380016,
+      "final": false,
+      "end_offset": 371
+    },
+    {
+      "offset": 371,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 378
+    },
+    {
+      "offset": 378,
+      "tag": 2,
+      "stack_offset": 1044,
+      "destructor": 1380016,
+      "final": false,
+      "end_offset": 385
+    },
+    {
+      "offset": 385,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 392
+    },
+    {
+      "offset": 392,
+      "tag": 2,
+      "stack_offset": 1036,
+      "destructor": 1380016,
+      "final": false,
+      "end_offset": 399
+    },
+    {
+      "offset": 399,
+      "tag": 130,
+      "stack_offset": 1176,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 406
+    },
+    {
+      "offset": 406,
+      "tag": 130,
+      "stack_offset": 1004,
+      "destructor": 1247008,
+      "final": true,
+      "end_offset": 413
+    }
+  ],
+  "referenced_end": 413,
+  "padding": 3
+}

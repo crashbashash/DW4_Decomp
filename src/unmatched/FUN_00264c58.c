@@ -1,0 +1,19 @@
+/* 0x00264c58 — FUN_00264c58 (204 bytes). Stops the thread DAT_0049da2c: until it reports exit in DAT_0049da80, raises the exit request DAT_0049da78, boosts it to priority 1, wakes it and resumes it with FUN_00264368; then clears both flags and the thread id. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+int ChangeThreadPriority(int threadId, int priority);
+int WakeupThread(int threadId);
+int FUN_00264368(int threadId);
+extern volatile long DAT_0049da80; /* thread exited */
+extern volatile long DAT_0049da78; /* exit requested */
+extern volatile int DAT_0049da2c;  /* thread id */
+
+void FUN_00264c58(void) {
+    while (DAT_0049da80 == 0) {
+        DAT_0049da78 = 1;
+        ChangeThreadPriority(DAT_0049da2c, 1);
+        WakeupThread(DAT_0049da2c);
+        FUN_00264368(DAT_0049da2c);
+    }
+    DAT_0049da80 = 0;
+    DAT_0049da78 = 0;
+    DAT_0049da2c = 0;
+}

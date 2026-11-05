@@ -1,0 +1,6 @@
+funcOpenMessage("talk", "n_agumon", "AO")
+funcOneMessage(mswk61740)
+funcOneMessage(mswk61741)
+funcOneMessage(mswk61742)
+funcCloseMessage("talk", "n_agumon", "AO")
+be:DMrun()

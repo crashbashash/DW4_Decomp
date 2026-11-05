@@ -1,0 +1,17 @@
+# The engine's Insight managers and their class registration thunks (finding #502).
+# `FUN_002595e0` (the game's main) constructs three managers, one per class: it runs the class's
+# static init and then `igMetaObject_CreateInstance(<Class> MetaObject, owner)`.  The class is
+# recovered from both ends -- the `_Register` function the thunk tail-calls and the MetaObject
+# global the `_GetMetaObject` accessor lazily fills:
+#   0x1a1ae0 -> igMetaObject_RunStaticInit(igEnbayaContextPool_Register) +
+#               igMetaObject_CreateInstance(*(0x561b60), owner)      = igEnbayaContextPool
+#   0x1a7cc0 -> ... igAnimationCombinerBoneInfoPool_Register + *(0x562250) = igAnimationCombinerBoneInfoPool
+#   0x1a67c0 -> ... igAnimationStatePool_Register            + *(0x5620d8) = igAnimationStatePool
+# The `_RunStaticInit` thunks are the 12-byte `igMetaObject_RunStaticInit(<Class>_Register)` drivers
+# the `_GetMetaObject` accessors call when the class is not yet registered.
+0x001a1ae0	igEnbayaContextPool_Create	engine
+0x001a1ca0	igEnbayaContextPool_RunStaticInit	engine
+0x001a7cc0	igAnimationCombinerBoneInfoPool_Create	engine
+0x001a7d90	igAnimationCombinerBoneInfoPool_RunStaticInit	engine
+0x001a67c0	igAnimationStatePool_Create	engine
+0x001a6890	igAnimationStatePool_RunStaticInit	engine

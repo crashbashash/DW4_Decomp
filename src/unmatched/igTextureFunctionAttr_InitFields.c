@@ -1,0 +1,51 @@
+struct F { char pad[48]; int f48; int f52; int f56; };
+int FUN_002dc7a0();
+int FUN_0030e750();
+int igMetaObject_CreateFields();
+struct F *igMetaObject_GetFieldAt();
+int igMetaObject_GetFieldCount();
+int igMetaObject_NameFields();
+extern int DAT_00485b60[4];
+extern int DAT_00485b80[4];
+extern int DAT_00485ba0[4];
+extern int DAT_00485bc0[4];
+extern int DAT_00485be0[4];
+extern int DAT_00485be8[4];
+extern int DAT_0055ed00[4];
+void DAT_00141250(void);
+void FUN_0014d450(void);
+void DAT_0014d450(void);
+void FUN_0014d4b0(void);
+void FUN_0014d510(void);
+void FUN_002d1870(void);
+
+void igTextureFunctionAttr_InitFields(void) {
+    void *temp_s1;
+    struct F *temp_v0;
+    struct F *temp_v0_2;
+    int temp_s0;
+    struct F *t1;
+    struct F *t2;
+    struct F *t3;
+    struct F *t4;
+
+    temp_s1 = (void *)DAT_0055ed00[0];
+    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
+    igMetaObject_CreateFields(temp_s1, &DAT_00485b60[0], 7);
+    temp_v0 = igMetaObject_GetFieldAt(temp_s1, temp_s0);
+    FUN_002dc7a0(temp_v0, &DAT_00485be0[0]);
+    temp_v0->f52 = (int)FUN_002d1870;
+    t1 = igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1);
+    t1->f48 = (int)DAT_00141250;
+    t2 = igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2);
+    t2->f52 = (int)FUN_0014d450;
+    t3 = igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3);
+    t3->f52 = (int)DAT_0014d450;
+    t4 = igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4);
+    t4->f52 = (int)FUN_0014d4b0;
+    FUN_0030e750(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5), 2);
+    temp_v0_2 = igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6);
+    FUN_002dc7a0(temp_v0_2, &DAT_00485be8[0]);
+    temp_v0_2->f52 = (int)FUN_0014d510;
+    igMetaObject_NameFields(temp_s1, &DAT_00485b80[0], &DAT_00485ba0[0], &DAT_00485bc0[0], temp_s0);
+}

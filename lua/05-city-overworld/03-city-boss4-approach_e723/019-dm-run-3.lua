@@ -1,0 +1,5 @@
+be:sd("MODELCTRL", "g_mvbox1z04", 5, "SQ_SWON2")
+be:DMchkSD("MODELCTRL", "g_mvbox1z04", 5, "ISSEQNAME", "SQ_SWON2", "==0")
+be:DMchkSD("MODELCTRL", "g_mvbox1z04", 5, "ISSEQNAME", "SQ_SWON2", "!=0")
+be:DMsetSD("HITLANDMODEL", "hitmvbox1z045", 0, "OFFHIT")
+be:DMrun()
