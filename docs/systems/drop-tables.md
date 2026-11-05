@@ -6,8 +6,6 @@
 [#259](../findings/findings-0251-0500.md#f259) (family→table map), [#260](../findings/findings-0251-0500.md#f260) (pack list-data encoding), [#419](../findings/findings-0251-0500.md#f419)/#460 (its offline decode, §6).
 **Method:** the pack is parsed as igBinary ([`../../scripts/igb_parse.py`](../../scripts/igb_parse.py))
 and the tables are read out of the RAM of a save state.
-**Evidence:** `extras/reference/drop-reports/live-data/obje_live.json` (outside the repository: `extras/reference/drop-reports/live-data/obje_live.json`),
-`extras/reference/drop-reports/live-data/mec4_live.json` (outside the repository)
 
 ---
 
@@ -243,7 +241,7 @@ All names in this table were resolved from the game's own item tables in RAM
 through `item_ids.json` (verified, 52 models × stride 5, so id = 5·model + grade
 and a weapon's grade is part of its name here, e.g. `Battle Hawk ε`). `armor1`
 ids are cores (9 models × 3 grades, order Brave, Aegis, Vulture, Cipher, Astral,
-Wizard, Element, Spirit, Divine — `the archived note `item-probe.md``), `armor2` ids are boards
+Wizard, Element, Spirit, Divine), `armor2` ids are boards
 (14 models × 3 grades, order Achilles, Atlas, Meteor, Fire, Ice, Bolt, Dark,
 Armor, Beast, Rack, EXP, BIT, Mana, Resist — `docs/systems/items.md`), `insItem` is
 the shell family (20 elements × 5 grades) and `conItem` indexes the 12-row
@@ -351,13 +349,9 @@ at `0x4c6b50`), but **no Lua script in the game ever calls it** (`grep PERFECTDR
 over `lua/`: 0 hits), so there is no reachable
 "always drop" state in normal play.
 
-Raw: `extras/reference/drop-reports/live-data/enemy_live.json` (outside the repository: `extras/reference/drop-reports/live-data/enemy_live.json`) — all 24 generators,
-their rows, counts, and both lists.
-
 ### The container pool (`Z1cont1`) — "boxes", and the bit barrel (`Z1bit`)
 
-Read live out of **`stag0101`** (Valley Entrance, in front of the Goblin Pass gate;
-save state `../local/testing/states/goblin_pass_crate_barrell.p2s`). This state has both prop
+Read live out of **`stag0101`** (Valley Entrance, in front of the Goblin Pass gate). This state has both prop
 families side by side, which settles the family→pool map by direct observation:
 
 | generator | row | pool | that is |
@@ -437,8 +431,6 @@ The general failure mode is a generator whose
 document's §5 and §5c) are complete — that stage has no special or last-enemy lists.
 Stages with no RAM image captured remain unaudited.
 
-Raw: `extras/reference/drop-reports/live-data/containers_live.json` (outside the repository: `extras/reference/drop-reports/live-data/containers_live.json`) and
-`extras/reference/drop-reports/live-data/cont1_live.json` (outside the repository).
 Method: dump each named list out of a RAM image; enumerate every pool a stage's generators
 reference so nothing stays undumped by accident.
 
@@ -457,7 +449,7 @@ extending.
 `GENE-00` row 60 = `e_mecha4`, tables `n/h/vZ1mec41`; **Normal is exactly
 10000/10000** (a guaranteed drop): `weapon` 175 (Mighty Talon) 250, `weapon` 200
 (Beam Magnum) 250, `insItem` 1 @7000, `insItem` 2 @2500. Hard = 34 entries
-Σ 9400, Very Hard = 25 entries Σ 8730. Raw: `drops/mec4_live.json`.
+Σ 9400, Very Hard = 25 entries Σ 8730.
 
 ## 5b. Item names — how (category, id, rank) becomes a display name
 
@@ -505,8 +497,7 @@ string objects → `+8` = text):
 * **Consumables** in id order: HP Disk α/β/γ, MP Disk α/β/γ, Cure Disk, Raise Disk,
   Gate Disk, Recovery, B. Pack, Key Chain (12 rows — matching the highest `conItem`
   id in any drop table, 11).
-* Resolver: the item-name mapping; resolved tables in
-  `extras/reference/drop-reports/live-data/obje_resolved.json` (outside the repository: `extras/reference/drop-reports/live-data/obje_resolved.json`). Finding [#261](../findings/findings-0251-0500.md#f261).
+* Resolver: the item-name mapping. Finding [#261](../findings/findings-0251-0500.md#f261).
 
 Caveat: the drop routine as decompiled passes only the id + the category ordinal on to
 `MODELCTRL … GENERATE` and does not visibly read `beGeneraterItemDataOne +0x10`, so the

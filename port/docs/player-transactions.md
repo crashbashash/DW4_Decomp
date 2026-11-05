@@ -115,7 +115,7 @@ base arrays. Allocation, property/list lookup, item attribute lookup and message
 sinks are controlled leaves. This does not establish general derived stat math,
 menu command ordering, preview text, save interoperability or full scene behavior.
 Read-only Ghidra exports reuse the analyzed project with no analysis; objdump
-checks instruction shape. Private exports remain under `../scratch/`.
+checks instruction shape.
 
 `make check-playertransactions` covers all four player slots across 128 owner
 lifetimes, failed recalculation after partial staged writes, successful preview
@@ -124,7 +124,7 @@ chip lookup failure, full-inventory holds, signed persistence and atomic type
 conflicts. Existing child folder addresses survive publication. Fresh character
 checks verify the empty equipment arrays alongside the retail stats.
 
-`SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a
+`SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>
 make -C port all check check-retail -j8` passes, including scripted created-card
 boot and SDL/Vulkan presentation equality. Optional live-input/capture checks
 retain their documented skips. The focused transaction/initializer checks pass.

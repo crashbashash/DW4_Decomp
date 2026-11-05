@@ -4,9 +4,11 @@ Finding [#896](../findings/findings-0751-1000.md#f896) recovers **17 complete bo
 [registry-bootstrap.c](../../recovered/engine/registry-bootstrap.c): six contiguous
 registry-list methods, global registry initialization/shutdown, current context and
 five adjacent context dispatch wrappers, and two concrete record-lookup methods.
-Thirteen bodies /1,120 bytes have exact source. New list init104/release116/append168
-and concrete named lookup156 add **544 matched bytes**. List allocate/delete32 each,
-current-context getter84 and concrete selector244 retain assembly and candidates.
+Fifteen bodies /1,448 bytes have exact source. New list init104/release116/append168
+and concrete named lookup156 add **544 matched bytes**. Current-context getter84 matches in
+[Memory_GetCurrentContext.c](../../src/unmatched/Memory_GetCurrentContext.c) and concrete selector244 in
+[Gap__Core__igMemoryPoolContextInfo__vfunc_51.cpp](../../src/unmatched/Gap__Core__igMemoryPoolContextInfo__vfunc_51.cpp).
+List allocate/delete32 each have no C source yet.
 
 Six body-derived names are applied through `config/SLUS-20836/names/RegistryBootstrap.tsv`.
 Concrete methods retain their generated, evidenced class/virtual-slot names;
@@ -116,5 +118,4 @@ oracles. Native gameplay is unchanged.
 The subsequent context lifecycle recovery covers original record-name initialization,
 retained slot updates, and special208/212 delegation/removal. The slot204 builder,
 context-stack manipulation, allocator virtual internals/close hook, type/scalar
-publication, actual cloning and broader gameplay remain open. Private candidates/logs:
-repository-relative `../scratch/lua-engine-recovery/`.
+publication, actual cloning and broader gameplay remain open.

@@ -1334,7 +1334,7 @@ static int cmd_models(const uint8_t *blob, size_t len, const char *label, int ar
  * `--check` validates the loader's own output (the ids tile the arena and every payload is the
  * file's bytes, every mesh handle resolves), which is what `tools/verify_scene.py` asserts. */
 /* dw4asset chr <roms-dir> --t SECONDS [--sel N] [--out F.png]: the Game Start slot screen at one clock
- * (every layer on the same time), for calibrating `src/frontchr.c` against `charsel/` captures. */
+ * (every layer on the same time), for calibrating `src/frontchr.c` against retail captures. */
 static int cmd_chr(int argc, char **argv)
 {
     dw4_mount mnt;

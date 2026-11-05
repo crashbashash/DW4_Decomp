@@ -1,6 +1,6 @@
 # Save Format
 
-Verified against a **real USA save**: `../local/testing/memcards/Mcd001.ps2`.
+Verified against a **real USA save**.
 
 ## Memory-card layout (PS2)
 

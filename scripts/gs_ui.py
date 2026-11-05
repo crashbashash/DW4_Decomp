@@ -13,7 +13,7 @@ measurement rather than by a texture list.  Each strip/fan/list becomes plain sc
 each TEX0's texture decoded out of the dump's VRAM (PSMT8 + CT32 CLUT, `gsdump.texture_rgba`).  The
 port's `--ui` path then draws them over the scene with the game's own alpha blend.
 
-    python3 scripts/gs_ui.py --dump ../local/dumps/goblin_pass_ref.gs.zst --out /tmp/ui
+    python3 scripts/gs_ui.py --dump <dump>.gs.zst --out /tmp/ui
 
 Writes `<out>/ui.tsv` (one row per triangle: `TEX\tx0 y0 u0 v0 r g b a\tx1 ...\t...`, the RGBA the
 same for all three) and `<out>/<TEX0>.rgba` (RGBA8888 with a 2-word width/height header -- the same

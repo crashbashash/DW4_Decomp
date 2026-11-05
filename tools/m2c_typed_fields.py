@@ -11,7 +11,7 @@ draft can be re-tested quickly.  Chains `*(T *)((char *)(VAR->f16) + 8)` become 
 It is a starting point, not a result: a variable accessed with two types at one offset, overlapping or
 misaligned members, or a declaration that is not `void *VAR` / `int *VAR` is left raw.  Use `--only` to retype
 a subset when the compiler rejects a comparison between two differently typed pointers.  Output goes to
-stdout; run `tools/verify.py` or `tools/dispatcher/regalloc.py` on it.  See archived near-miss note wave8s6.
+stdout; run `tools/verify.py` or `tools/dispatcher/regalloc.py` on it.
 """
 import collections
 import re

@@ -7,8 +7,8 @@ machine keeps things or what it is built from. These rules are enforced mechanic
 ## The rules
 
 1. **No absolute home or container paths.** Never write `/home/<user>/…`, `/Users/<user>/…`, `C:\Users\<user>\…` or a
-   container mount such as `/workspace/…`. Use a path relative to the repository root, `../local/` (private inputs),
-   `../extras/` or `../scratch/` (sibling workspace folders), the placeholders `<repo>` / `<workspace>`, or `~/` when a home
+   container mount such as `/workspace/…`. Use a path relative to the repository root, `../local/` (the toolchains and
+   game data you supply), the placeholders `<repo>` / `<workspace>`, or `~/` when a home
    directory is unavoidable. Scripts resolve their own location (`os.path.dirname(os.path.abspath(__file__))`,
    `"$(dirname "${BASH_SOURCE[0]}")"`) instead of embedding a path.
 2. **No specific hardware.** Never name a graphics card, processor, motherboard or controller *model or brand*, and never a
@@ -27,7 +27,7 @@ machine keeps things or what it is built from. These rules are enforced mechanic
 8. **No emulator-driving facts.** The private emulator builds are driven through endpoints that belong to one machine and
    one session: PINE instance slots chosen for a profile, agent-socket paths that carry a user id (`/run/user/<uid>/…`,
    `/tmp/<tool>-agent-<uid>.sock`), `DISPLAY=:N` values and spare-display recipes, launch scripts and profile directories of
-   a private build, and the savestate slot numbers of one profile. These live in `../extras/` and in the skills that drive
+   a private build, and the savestate slot numbers of one profile. These live in the skills that drive
    the emulators, never in the repository. The repository states the **requirement** ("a PCSX2 build with the agent PINE
    protocol", "an X11 or XWayland display") and the **procedure** ("load the Terminal arrival state, pause, read the
    loader string"), and a session note says `pine read`, `state load` or `input press` rather than naming the endpoint.
@@ -63,8 +63,8 @@ text file, staged line and commit message; the evidence rule applies to the find
 | `runtime-socket` | a per-user runtime socket directory (`/run/user/<uid>/…`, also spelled with `%d`, `$UID` or `<uid>`) | the path from `PINE_SOCK` or `XDG_RUNTIME_DIR` |
 | `x-display` | the X display number of one machine (`DISPLAY=:9`, `Xwayland :9`, "display :9") | "an X11 or XWayland display", the number from `DISPLAY` |
 | `opt-path` | an install location of one machine (`/opt/<tool>/…`) | the tool's name and the env var or config key that locates it (`<pcsx2-install>/…`) |
-| `tmp-session-path` | a session- or account-stamped scratch path (an agent scratchpad, a uid-stamped `/tmp/<name>-NNNN`) | `../scratch/` or `<scratch>` |
-| `db-scratch-path` (database only) | any `/tmp/…`, `/opt/…` or `/var/tmp/…` path in a finding — evidence must be reproducible from the repository | a repository-relative path, `../scratch/`, `../local/`, `../extras/`, or `<scratch>/` for a session file that was not retained |
+| `tmp-session-path` | a session- or account-stamped scratch path (an agent scratchpad, a uid-stamped `/tmp/<name>-NNNN`) | a path under `build/` |
+| `db-scratch-path` (database only) | any `/tmp/…`, `/opt/…` or `/var/tmp/…` path in a finding — evidence must be reproducible from the repository | a repository-relative path |
 
 A plain `/tmp/<file>` in a command example in the docs is generic and is not flagged by the tree-wide rules; in the findings
 database it is, because a finding's evidence must name something a reader can open. `testing/test_check_host_details.py`

@@ -34,6 +34,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import cc
 import automatch as am  # noqa: E402
 
 REGS = ("zero", "at", "v0", "v1", "a0", "a1", "a2", "a3", "t0", "t1", "t2", "t3",
@@ -373,7 +374,7 @@ def decompile(va, elf=ELF_DEFAULT, symbols=SYMBOLS_DEFAULT, m2c=M2C_DEFAULT,
         else am.disassemble(img, lo, hi)
     text = asm_for(va, name, size, table, names_by_va, bounds=load_bounds(elf),
                    jtables=jtables, gp=load_gp(elf))
-    sp = asm_out or "/tmp/m2c_one_%d.s" % os.getpid()
+    sp = asm_out or os.path.join(cc.scratch_dir(), "m2c_one.s")
     os.makedirs(os.path.dirname(sp) or ".", exist_ok=True)
     open(sp, "w").write(text)
     # Run m2c through the guard wrapper, not `m2c.py` directly: the vendored m2c crashes

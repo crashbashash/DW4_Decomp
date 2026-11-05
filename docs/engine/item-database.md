@@ -19,8 +19,8 @@ The existing12-byte beDataBase metadata getter is preserved separately.
 | 3a9580 | String storage lookup with empty-string fallback | 88 |
 | 3a95e0 | Record count from the first nonempty column family | 296 |
 
-Matching source is in [beDataBase.c](../../src/game/beDataBase.c) and the
-[item C](../../src/game/beNDMWItemBaseDatabase.c)/
+Matching source is in [beDataBase.c](../../src/game/beDataBase.cpp) and the
+[item C](../../src/game/beNDMWItemBaseDatabase.cpp)/
 [C++ dispatch](../../src/game/beNDMWItemBaseDatabase.cpp) units. The
 [guest-address adapter](../../recovered/engine/item-database.c) passes
 **474 full-return/RAM/ordered-call comparisons** with original EE instructions.

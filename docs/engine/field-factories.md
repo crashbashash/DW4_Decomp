@@ -4,8 +4,8 @@ Finding [#880](../findings/findings-0751-1000.md#f880) records eighteen complete
 [behavioral C](../../recovered/engine/field-factories.c). They cover the three
 factory kinds referenced by Work's original field table, their constructor and
 initializer chains, object header construction, raw allocation and the two concrete
-post-construction default hooks. Seventeen bodies / 1,676 bytes match retail;
-header initialization at `2fef20` (76 bytes) retains assembly.
+post-construction default hooks. All eighteen bodies / 1,752 bytes match retail;
+header initialization at `2fef20` (76 bytes) is `src/unmatched/igObject_InitHeader.c`.
 
 Three new matches add **504 bytes**: `igMetaField_Init` (252),
 `igObject_ConstructHeader` (140) and `igObject_AllocateRawStorage` (112).
@@ -134,10 +134,9 @@ required. Native gameplay is unchanged.
 The [base bootstrap recovery](object-base.md) extends the adapter/oracle with
 `igUnsignedIntMetaField` factory/constructor/initializer (276 existing exact bytes).
 The current factory oracle therefore covers 21 bodies / 2,028 bytes in 306 cases;
-twenty bodies / 1,952 bytes match, with the original header initializer 76 remaining
-a compiler residual. The original eighteen-body milestone above is unchanged.
+all 21 bodies / 2,028 bytes match. The original eighteen-body milestone above is unchanged.
 
 The [memory descriptor extension](list-descriptor-copy.md) adds its factory,
 constructor and initializer (340 existing exact bytes). The current factory
-adapter/oracle covers 24 bodies / 2,368 bytes in 336 cases; 23 bodies / 2,292 bytes
-match, with header initializer 76 remaining the same compiler residual.
+adapter/oracle covers 24 bodies / 2,368 bytes in 336 cases; all 24 bodies / 2,368 bytes
+match.

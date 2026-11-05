@@ -32,10 +32,10 @@ TSV = os.environ.get("DW4_FOG_TSV",
                                   "pose-solved-20261002", "cam.tsv"))
 TEXDIR = os.environ.get("DW4_FOG_TEXDIR", "/tmp/proptex")
 REF = os.environ.get("DW4_FOG_REF",
-                     os.path.join(WS, "scratch", "pose-solve", "regen-artifacts",
+                     os.path.join(PORT, "build", "pose-solve", "regen-artifacts",
                                   "combat-fb-frame.png"))
 ROMS = os.environ.get("DW4_ROMS", os.path.join(WS, "local/extracted"))
-POSE_ARTS = os.environ.get("DW4_POSE_ARTIFACTS", os.path.join(WS, "scratch", "pose-solve"))
+POSE_ARTS = os.environ.get("DW4_POSE_ARTIFACTS", os.path.join(PORT, "build", "pose-solve"))
 # the pre-fog whole-frame baseline this check must beat, and the headroom bound the fog achieves.
 # (This check renders without the HUD overlay, so the baseline is 15.90 here; on the full render the
 # overlay-carrying baseline is 14.70 and the fog takes it to 10.96 -- both shown in the finding.)

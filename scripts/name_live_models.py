@@ -2,7 +2,7 @@
 """Map live DW4 geometry attributes to their model (part) names.
 
 Needs a **paused** game (the heap mutates every frame, so unpaused reads are not
-reproducible).  Pause with `python3 extras/dw4-tools/retail-live/host_probe.py emulator pause` first.
+reproducible).
 
 Recovered chain (findings #455/#456):
 
@@ -33,10 +33,10 @@ first version issued one PINE round trip per pointer chase (tens of thousands) a
 keep it bulk.  `--dump` writes that buffer so a later run can work `--from` it with no emulator.
 
 Usage:
-    python3 extras/dw4-tools/retail-live/host_probe.py emulator pause
-    python3 name_live_models.py --tsv ../local/evidence/models/model-names.tsv --rename-dir ../local/evidence/models --dump /tmp/ee.bin
+    # with the game paused:
+    python3 name_live_models.py --tsv <out-dir>/model-names.tsv --rename-dir <out-dir> --dump /tmp/ee.bin
     # later, emulator off:
-    python3 name_live_models.py --from /tmp/ee.bin --tsv ../local/evidence/models/model-names.tsv
+    python3 name_live_models.py --from /tmp/ee.bin --tsv <out-dir>/model-names.tsv
 """
 import argparse
 import os

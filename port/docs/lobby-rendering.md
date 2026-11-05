@@ -60,18 +60,18 @@ separate authored texture packs. The loaded shadow shader, shadow factor, lightn
 and receiver projection are the same in both held retail arrivals. No mode-dependent blur is
 added.
 
-Run these commands from `port/` with the retained private captures:
+Run these commands from `port/` with a retail GS dump and screenshot of each mode:
 
 ```sh
 for mode in soft hard; do
   python3 tools/verify_lobby_render.py --held-world --light "$mode" --frame 339 \
-    --dump "../../local/captures/dw4-port/light-modes/retail-$mode.gs.zst" \
-    --reference "../../local/captures/dw4-port/light-modes/retail-$mode.png" \
-    --out "../../local/captures/dw4-port/light-modes/compare-$mode.png" \
-    --json "../../local/captures/dw4-port/light-modes/$mode-report.json"
+    --dump "<capture-dir>/retail-$mode.gs.zst" \
+    --reference "<capture-dir>/retail-$mode.png" \
+    --out "<out-dir>/compare-$mode.png" \
+    --json "<out-dir>/$mode-report.json"
   python3 tools/verify_lobby_shadows.py --light "$mode" --frame 339 \
-    --dump "../../local/captures/dw4-port/light-modes/retail-$mode.gs.zst" \
-    --json "../../local/captures/dw4-port/light-modes/$mode-shadow-report.json"
+    --dump "<capture-dir>/retail-$mode.gs.zst" \
+    --json "<out-dir>/$mode-shadow-report.json"
 done
 ```
 
@@ -118,9 +118,7 @@ world tests, with atomic graph replacement and texture-cache invalidation.
 Layer tests check that all-visible callbacks reproduce the complete adapter image, STATUS layer
 masks retain actors/weapon, all-hidden masks suppress geometry including particles, and repeated
 draws preserve presentation state. Private native underlay captures contain the three retail
-actor/weapon texture hashes of the underlay, including the 64×64 weapon atlas. Logs are workspace
-`scratch/status-world-layers-*.log`, `scratch/status-underlay-*.log` and
-`scratch/status-weapon-publication-*.log`.
+actor/weapon texture hashes of the underlay, including the 64×64 weapon atlas.
 
 ## Simulation and arrival timing
 
@@ -260,9 +258,8 @@ evaluates named skeleton bones, including non-skinning bones, using the original
 translations and Enbaya tracks. It does not use the inverse-bind skin matrix to place the weapon.
 Weapon alpha participates in the player's entry fade on both CPU and GPU paths.
 
-The retained offline RAM inputs are `ram_card.bin` and `ram_lobby.bin` from the power-on
-character-creation session described in workspace
-`../local/captures/dw4-port/charsel/RAM-NOTES.md`. Dorumon's created card at `0x0137c298` points
+The offline RAM inputs are two dumps from a power-on character-creation session.
+Dorumon's created card at `0x0137c298` points
 to a payload at `0x0138fa58`: its first folder entry (`+0x64`, payload offsets exclude the save's
 eight-byte header) is `0x050d`, and its three equipment indices at `+0x2dc..+0x2e4` are 0/1/2. In
 the lobby, player work `0x01227130` names `SQ_WAIT` and has `slash` label entries; Action2 work
@@ -284,8 +281,8 @@ repository root:
 ```sh
 make -C port build/lobby_frame
 python3 port/tools/verify_player_appearance.py \
-  --dump ../local/hermes/cache/scratch/pi-pcsx2-charsel/scratch/lobby_now.gs.zst \
-  --reference ../local/hermes/cache/scratch/pi-pcsx2-charsel/scratch/lobby_now.png \
+  --dump <capture>.gs.zst \
+  --reference <capture>.png \
   --json /tmp/player-appearance.json
 ```
 
@@ -306,8 +303,7 @@ screenshot; a build with the `waitD` body and no weapon measures 39.61 at the sa
 and camera. The environment oracle reports the phase-dependent player colour separately: at frame
 339, 6,721 matched player instances have MAE 0.246/255 and maximum channel error 6. The actor
 classification uses texture identity before consulting colour; the player outliers remain in its
-report. Local images, vertex exports and the report are under workspace
-`../local/captures/dw4-port/player-appearance`.
+report.
 
 This verifies the initial equipment/motion selection and attached rendering. The retained GS dump
 is not synchronized to native skeletal phase, so the fixed player screenshot region is not a
@@ -359,10 +355,8 @@ triangles separately for each attachment; the total remains available.
 The four-character native lobby test exercises all seven common weapon families through repeated
 swaps and requires nonzero submissions from each expected hand. The headless CPU/GPU test checks
 paired-gun/sword replacement for all four characters, retains the GPU and compares composed
-pixels. The 640×448 GPU paired-gun capture was inspected. Private evidence is under
-repository-relative `../scratch/dual-wield-{lobby,gpu}.log` and
-`../scratch/dual-wield-captures/`. These checks verify native authored attachment publication;
-they do not establish retail full-frame pixel parity.
+pixels. The 640×448 GPU paired-gun capture was inspected. These checks verify native authored
+attachment publication; they do not establish retail full-frame pixel parity.
 
 ## Projective shadows
 
@@ -411,8 +405,8 @@ Run from the repository root:
 make -C port build/lobby_frame
 port/build/lobby_frame ../local/extracted 339 /tmp/lobby.png /tmp/lobby-vertices.tsv
 python3 port/tools/verify_lobby_render.py \
-  --dump ../local/hermes/cache/scratch/pi-pcsx2-charsel/scratch/lobby_now.gs.zst \
-  --reference ../local/hermes/cache/scratch/pi-pcsx2-charsel/scratch/lobby_now.png \
+  --dump <capture>.gs.zst \
+  --reference <capture>.png \
   --out /tmp/lobby-comparison.png --json /tmp/lobby-report.json
 ```
 
@@ -441,10 +435,6 @@ separately in [greeting UI](lobby-greeting-ui.md). The comparison image also inc
 difference panel, so actor, UI, shadow and remaining geometry/raster differences remain visible.
 Actor colour populations and whole-frame differences are reported separately and are not treated
 as proof of a matched retail frame.
-
-Local artifacts are under workspace `../local/captures/dw4-port/lobby-rendering`; reports,
-images, clock traces and scratch pose/particle oracles are under
-`../local/captures/dw4-port/rendering-parity`.
 
 ## GPU execution and remaining performance work
 
@@ -609,9 +599,7 @@ with either Cross or Circle dialogue prompts covers the same HUD.
 
 Native/retail checks that use a virtual pad set `SDL_GAMECONTROLLER_IGNORE_DEVICES` for a
 connected physical pad, which otherwise interferes with the virtual-pad disconnect check. The
-setting is local to tests, not a persisted game/controller configuration. Private logs:
-`hud-dialogue-ui.log`, `hud-dialogue-boot.log`, `hud-dialogue-input.log` and
-`hud-dialogue-native-recheck.log` in repository-relative `../scratch/main-menu-fidelity/`.
+setting is local to tests, not a persisted game/controller configuration.
 
 ### MP dots
 

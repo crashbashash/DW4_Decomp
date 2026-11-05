@@ -90,8 +90,8 @@ For a diagnostic intermediate, from the repository root:
 
 ```sh
 python3 scripts/gen_combat_context.py
-python3 tools/m2c_one.py 0x3fca10 --context build/combat-context.c > ../scratch/combat-raw.c
-python3 scripts/repair_combat_draft.py ../scratch/combat-raw.c --raw --out ../scratch/combat-repaired.c
+python3 tools/m2c_one.py 0x3fca10 --context build/combat-context.c > build/combat-raw.c
+python3 scripts/repair_combat_draft.py build/combat-raw.c --raw --out build/combat-repaired.c
 python3 testing/test_combat_draft_repairs.py
 ```
 
@@ -221,7 +221,7 @@ uses or intervening effects, preserved draws and repeat rejection.
 For this source projection:
 
 ```sh
-python3 scripts/repair_combat_draft.py ../scratch/combat-raw.c --raw --hit-switch --rng-samples --out ../scratch/combat-repaired.c
+python3 scripts/repair_combat_draft.py build/combat-raw.c --raw --hit-switch --rng-samples --out build/combat-repaired.c
 ```
 
 With this projection the complete diagnostic's cases 9/11/12 have 7/17/16 normalized
@@ -265,7 +265,7 @@ differ. This does not establish a matching region or callback ([#1055](../findin
 The call-order investigations have a reproducible opt-in mode ([#1056](../findings/findings-1001-1250.md#f1056)):
 
 ```sh
-python3 tools/m2c_one.py 0x3fca10 --context build/combat-context.c --materialize-calls > ../scratch/combat-materialized.c
+python3 tools/m2c_one.py 0x3fca10 --context build/combat-context.c --materialize-calls > build/combat-materialized.c
 ```
 
 Every nonvoid call result becomes a temporary at its translation site. Void

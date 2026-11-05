@@ -89,7 +89,7 @@ All sixteen shinka NAME rows reach the authored font; an out-of-range species
 fails dependency preflight before publishing text.
 
 Full `make -C port all check check-retail -j8` passes on Linux with
-`SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a`; optional private live-input
+`SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>`; optional private live-input
 checks retain their skips. Database ownership and STATUS view/text checks
 pass ASan/UBSan with `detect_leaks=1` and both sanitizers set to halt on errors.
 

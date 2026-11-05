@@ -82,13 +82,9 @@ unmatched, alongside unsynchronized cursor/background phases. The first unmatche
 glyph samples a completely transparent atlas region including the inspected filter
 border; this observation does not waive the remaining geometric comparison.
 See [submenu validation](status-submenus.md#submenu-factory-identities-and-folder-routing).
-Evidence: workspace `scratch/status-string-to-unicode.txt`,
-`scratch/status-codec-*.log`, and capture-directory
-`weapon-coded-comparison.json` / `native-coded-menus/` under
-`local/captures/dw4-port/status-validation-20261012/`.
 
-Equipment-selector text also matches all 1,506 submitted vertices in
-`equipment-coded-comparison.json`. Full native/retail, normal boot, expanded SDL
+Equipment-selector text also matches all 1,506 submitted vertices.
+Full native/retail, normal boot, expanded SDL
 and prepared ASan/UBSan checks pass. Submenu full-frame and live-phase parity
 remain open.
 
@@ -178,7 +174,7 @@ buffer independence, both prepared faces, repeated text replacement and 32
 owner reopen cycles.
 
 Full `make check check-retail -j8` passes on Linux
-with `SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a`. The focused actor,
+with `SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>`. The focused actor,
 controller, dialogue and SELECTCTRL-oracle checks pass. Separate headless
 actor/dialogue ASan/UBSan checks pass with `detect_leaks=0` and
 `halt_on_error=1`, including repeated text changes and owner teardown;

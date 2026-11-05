@@ -13,18 +13,18 @@ calls; the whole run provides the surrounding reference/list contract.
 | `0x00130720` | 116 | [Deleting interned-string wrapper cleanup](../../src/engine/StringRef_Destruct_00130720.c) |
 | `0x001363f0` | 128 | [Unwind reference cleanup](../../src/engine/ObjectRef_Destruct_001363f0.c) |
 | `0x00150eb0` | 128 | [Unwind reference cleanup](../../src/engine/ObjectRef_Destruct_00150eb0.c) |
-| `0x0033e9c0` | 128 | [Temporary owning-reference cleanup](../../src/engine/ObjectRef_Destruct_0033e9c0.c) |
-| `0x003d9bd0` | 128 | [Unwind reference cleanup](../../src/engine/ObjectRef_Destruct_003d9bd0.c) |
-| `0x003d9c50` | 128 | [Unwind reference cleanup](../../src/engine/ObjectRef_Destruct_003d9c50.c) |
-| `0x003d9cd0` | 128 | [Unwind reference cleanup](../../src/engine/ObjectRef_Destruct_003d9cd0.c) |
-| `0x003d9d50` | 128 | [Unwind reference cleanup](../../src/engine/ObjectRef_Destruct_003d9d50.c) |
-| `0x003e9010` | 128 | [Deleting reference-wrapper destruction](../../src/engine/ObjectRef_Destruct_003e9010.c) |
+| `0x0033e9c0` | 128 | [Temporary owning-reference cleanup](../../src/engine/ObjectRef_Destruct_0033e9c0.cpp) |
+| `0x003d9bd0` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |
+| `0x003d9c50` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |
+| `0x003d9cd0` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |
+| `0x003d9d50` | 128 | [Unwind reference cleanup](../../src/unmatched/FUN_003d8740.cpp) |
+| `0x003e9010` | 128 | [Deleting reference-wrapper destruction](../../src/engine/ObjectRef_Destruct_003e9010.cpp) |
 | `0x003e90d0` | 32 | [Retain one object reference](../../src/engine/ObjectRef_Retain_003e90d0.c) |
-| `0x003e9110` | 68 | [Release one object reference](../../src/engine/ObjectRef_Release_003e9110.c) |
-| `0x003e9160` | 188 | [Retained list-slot replacement](../../src/engine/ObjectList_SetAtRetained_003e9160.c) |
-| `0x003e92b0` | 124 | [Assign from reference storage](../../src/engine/ObjectRef_Assign_003e92b0.c) |
-| `0x003e9370` | 56 | [Allocator selection](../../src/engine/Memory_SelectAllocator_003e9370.c) |
-| `0x00406e60` | 124 | [Assign from an object pointer](../../src/engine/ObjectRef_AssignObject_00406e60.c) |
+| `0x003e9110` | 68 | [Release one object reference](../../src/engine/ObjectRef_Release_003e9110.cpp) |
+| `0x003e9160` | 188 | [Retained list-slot replacement](../../src/engine/ObjectList_SetAtRetained_003e9160.cpp) |
+| `0x003e92b0` | 124 | [Assign from reference storage](../../src/engine/ObjectRef_Assign_003e92b0.cpp) |
+| `0x003e9370` | 56 | [Allocator selection](../../src/engine/Memory_SelectAllocator_003e9370.cpp) |
+| `0x00406e60` | 124 | [Assign from an object pointer](../../src/engine/ObjectRef_AssignObject_00406e60.cpp) |
 
 The generated names describe decoded operations. Address suffixes distinguish
 the recovered bodies while their original template and type spellings remain
@@ -57,7 +57,8 @@ from the factory copies while preserving the same ownership rule.
 These are physical cleanup identities and verified object-prefix operations.
 Distinct entry points do not establish distinct original template spellings.
 The [complete protected ranges](../engine/exception-unwind.md) are now decoded. The callback
-itself remains unmatched; see [draft recovery](combat-draft-recovery.md#retail-unwind-data).
+itself matches as `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`; see
+[draft recovery](combat-draft-recovery.md#retail-unwind-data).
 
 The string cleanup at `0x130720` releases its nonnull token by decrementing the
 word at token−4. At zero it calls `StringChunk_ReleaseHeader` with both the owner
@@ -128,5 +129,5 @@ data and allocator-selector names. Reference storage uses
 guest-word pointers in that analysis-only context to agree with reflected
 four-byte fields. These are machine-ABI projections, not original template names.
 The [three immediate helpers](combat-helpers.md), including the nearby query,
-now match too. The full [calculation callback](combat-damage.md) remains
-unmatched. No native gameplay integration is included.
+now match too. The full [calculation callback](combat-damage.md) matches as
+`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`. No native gameplay integration is included.

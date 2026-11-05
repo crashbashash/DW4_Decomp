@@ -7,7 +7,7 @@ draw: are the mesh's **UVs** the ST the GS sampled, or was a texture matrix (UV 
 applied?  Are the positions the same?  Is the colour the fit?  Those three are the port's only
 inputs besides the light rig.
 
-    python3 scripts/gs_draw_pair.py --dump ../local/dumps/goblin_pass_ref.gs.zst \\
+    python3 scripts/gs_draw_pair.py --dump <dump>.gs.zst \\
         --tex0 0x4007950555307ca4 --afs ../local/extracted/NDMW.AFS --entry 614 \\
         --vertex-array 36087
 """

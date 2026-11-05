@@ -221,7 +221,7 @@ save fields or private stock arrays.
   replacement and owner teardown, retain an item after slot replacement, and
   check the arena block baseline for 128 lifetimes.
 - The full native run
-  `SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a make -C port all check check-retail -j8`
+  `SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product> make -C port all check check-retail -j8`
   includes the scripted created-card boot-to-lobby flow.
 - Sanitizer runs (ASan/UBSan, halt on error) cover the ownership/tree test and
   the database, initializer and STATUS integration tests with leak detection

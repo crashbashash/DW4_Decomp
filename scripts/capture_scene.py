@@ -26,7 +26,7 @@ exactly `dw4_scene_mesh.attr_id` in the port, so the renderer can join on identi
 
 Usage
 -----
-  capture_scene.py --from ../local/evidence/models/ee-pre-leomon.bin --tsv /tmp/scene.tsv [--limit N]
+  capture_scene.py --from <ee-dump>.bin --tsv /tmp/scene.tsv [--limit N]
   # with the stage's model pack, so the fifth column carries pack identity
   capture_scene.py --from dump.bin --pack /path/NDMW.AFS:614 --tsv /tmp/scene.tsv
 """

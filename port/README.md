@@ -459,7 +459,7 @@ reproduces the frame.
 ```sh
 # --character auto picks the live skinned mesh (on this capture the Ogremon NPC, see below), and
 # --textures reads the parent-node material, so that skin gets E_ogre01.png
-python3 scripts/livedump.py ../local/testing/states/goblin_pass_crate_barrell.p2s dump.bin
+python3 scripts/livedump.py <savestate>.p2s dump.bin
 python3 scripts/camera_match.py --from dump.bin --pack NDMW.AFS:614 \
     --target 421.83 72 -110.07 --character auto --textures --stage-material \
     --prop M_TR32_barrelShape@0x14df9d0 --prop M_box_bodyShape@0x130a858 \
@@ -815,7 +815,7 @@ The slot screen draws `NDMW.AFS` entry 806's `BG02` scene beneath its panels:
 Their transform and UV tracks repeat over six seconds, driven at 60 Hz and reset on Game Start.
 The texture, palette and blend modes come from the pack; no captured image is needed at runtime.
 
-The projection is measured against `charsel/05-slot-screen-settled.gs.zst`: depth is
+The projection is measured against a retail GS dump of the settled slot screen: depth is
 `300 - world Z`, with focal lengths 628.03 / 659.43 at 640×448. The capture uses neutral
 127 RGB, 128 alpha, alpha-test reference 12, and ordinary/additive blending by material.
 This is a measured reconstruction; exact phase synchronisation and the panel-assembly transition
@@ -838,7 +838,7 @@ the portrait is approximately z=80, and the circular rim is z=120. These depths 
 inside the base mesh, so sorting entire meshes (or forcing the portrait to the front)
 obscures the rim and exposes the portrait's polygon corners. The badge uses retail
 RGB 127 / alpha 128 modulation; the red rim measures about (249,110,110), checked
-against `charsel/13-name-entry-first.png` and the supplied PS2 footage.
+against a retail capture of the first name-entry screen and the supplied PS2 footage.
 
 `dw4_scene_load_actor_preview` additionally follows `igActor._appearance` →
 `igAppearance._skin` → `igSkin._skinnedGraph`. The skin's `igBlendMatrixSelect` supplies
@@ -862,7 +862,7 @@ layer rasterizer rounds depth to integer GS units. Unscaled reciprocal depth rou
 vertex to zero, incorrectly exposing rear faces, teeth and eye surfaces. Lighting
 reads the enabled `igLightStateAttr` references: the warm directional light and cool
 ambient light, excluding the inactive spotlight. Normals are skinned before lighting.
-These are native reconstructions, visually checked against `charsel/09`–`12`, not a claim
+These are native reconstructions, visually checked against retail captures, not a claim
 of phase-aligned pixel identity.
 
 Cross opens the pack's name-entry keyboard. Its original mode/key outlines and four
@@ -872,8 +872,8 @@ The name uses 17-pixel character slots. Its insertion brackets nudge once when t
 letter selection changes and rest while idle or typing; the left mode outline and centre
 key outline independently loop their original quarter-second scale pulses. The candidate
 letter is grey and placed letters are white (GS RGB 64 versus 114, both alpha 121), and
-the candidate is hidden on confirmation. Saved PS2 draw data in
-`charsel/14-name-entry-two-letters.gs.zst` supplies these colours and positions: name glyphs
+the candidate is hidden on confirmation. Saved PS2 draw data of
+name entry with two letters supplies these colours and positions: name glyphs
 start at (83.5, 15), key centres are 46 pixels apart at y=70, and mode glyphs centre on x=36.
 The screen's font-atlas descriptor remains alive through rasterization. Left/Right selects a key, Up/Down changes
 lowercase/uppercase/digits/symbols, Cross types, and Circle deletes or returns to the slots
@@ -1035,7 +1035,7 @@ Still open: the engine's **virtual dispatch** (the `igObject` vtable interface b
 methods.  The **identity** half of dispatch is in place: every class's vtable address is in the
 schema (976 of 1,074, finding [#529](../docs/findings/findings-0501-0750.md#f529)), so a live object's `+0` word names its class; what remains is the
 slot-to-method *signature* (`data/vtables-getvtable.json` carries the 62 slot bodies per vtable, and
-`../config/names/GetVTableSlots.tsv` names 1,177 of them).
+`../config/SLUS-20836/names/GetVTableSlots.tsv` names 1,177 of them).
 
 ## The first renderer: `render` (software, P4.3)
 
@@ -1099,7 +1099,7 @@ recorded, which closes the frame and pins the 2D blend and the screen-space mapp
 # the overlay draws, separated from the 3D ones by measurement: alpha-blended (PRIM.ABE), unlit
 # (one constant per-vertex colour) and inside the framebuffer.  --stq keeps the 3D draws too and
 # writes raw STQ, with a trailing blend code per row (0 opaque / 1 alpha 0x44 / 2 additive 0x48)
-python3 scripts/gs_ui.py --dump ../local/dumps/goblin_pass_ref.gs.zst --out /tmp/ui
+python3 scripts/gs_ui.py --dump <dump>.gs.zst --out /tmp/ui
 ./build/dw4asset render <the same arguments as any scene render> \
     --ui /tmp/ui/ui.tsv --uitex /tmp/ui --out-dir /tmp/withui
 ```
@@ -1181,13 +1181,13 @@ engine's own frames instead:
 
     dw4asset render --stage <roms> stagml11.igb --ref 0 --scene <menu.tsv> --livedump <menu.bin> \
         --camera --w 640 --h 448 --ui-native 0.42 \
-        --ui-seq ../local/captures/dw4-port/menu-anim \
-        --uitex ../local/captures/dw4-port/menu-anim/tex --ui-seq-fps 5.2 --window --frames 1000000
+        --ui-seq <sequence-dir> \
+        --uitex <sequence-dir>/tex --ui-seq-fps 5.2 --window --frames 1000000
 
 `--ui-seq DIR` cycles `DIR/uiNNN.tsv` in name order, each file one captured frame in GS draw order
 (so the trails stay behind the logo, as the hardware drew them), and `--ui-seq-fps` sets the rate.
-`scripts/menu_anim_seq.py` builds the sequence from a list of `.gs.zst` captures and documents the
-capture loop; the 34-frame set in `local/captures/dw4-port/menu-anim` was built with it.
+`scripts/menu_anim_seq.py` builds the sequence from a list of `.gs.zst` captures; a 34-frame set
+was built with it.
 
 Two honest limits.  **The rate is the capture rate**: PCSX2's screenshot hotkey writes a GS dump every
 ~190 ms (5.2 fps measured, 184 ms best case), so this is the engine's real effect sampled at ~5 fps
@@ -1340,7 +1340,7 @@ savestate and in a slow whole-RAM dump, finding [#499](../docs/findings/findings
 same directions and cutoffs as the prototypes, different colours, and **no third light**. Those live
 values appear **nowhere in the disc** (a byte search for both triples: 0 hits), so the runtime
 derivation is still unknown. The built-in default is that live read **re-fitted**
-(below); the live read itself is what `extras/dw4-tools/retail-live/live_rig.py` writes to `--lights`. The packs'
+(below); `--lights` takes the live read itself. The packs'
 `igLightAttr` rig is not it, and the default carries no overhead spot;
 `--lights FILE` overrides the default.
 
@@ -1398,9 +1398,8 @@ are already depth-occluded — so it is a knob (`--cull` / `--cull-front` / `--n
 not a fix.
 
 ```sh
-# read the live rig (needs the game mid-render; ~300-1700 samples/s on one PINE connection)
-python3 extras/dw4-tools/retail-live/live_rig.py --out /tmp/rig.txt     # or read_lights.py against a running game
-./build/dw4asset render ... --lights /tmp/rig.txt --ambient 0.25,0.2,0.35
+# use a rig read live (the read needs the game mid-render; ~300-1700 samples/s on one PINE connection)
+./build/dw4asset render ... --lights <rig>.txt --ambient 0.25,0.2,0.35
 # unlit: skip the light term entirely (refuted for this frame by #569/#571 -- it measures 27.36
 # on the corrected reference, against 17.98 lit)
 ./build/dw4asset render ... --unlit
@@ -1566,12 +1565,7 @@ beTextureCtrlData._tex (+12) -> igTextureAttr._image (+48) -> igImage
     _pImage (+52)  the pixel buffer          _pClut (+68) -> igClut._pData (+20)  the palette
 ```
 
-`extras/dw4-tools/retail-live/live_textures.py` follows it and feeds this decoder (finding [#448](../docs/findings/findings-0251-0500.md#f448)):
-
-```sh
-extras/dw4-tools/retail-live/live_textures.py --list                     # what the loaded scene holds
-extras/dw4-tools/retail-live/live_textures.py --all --outdir out/        # every reachable texture -> PNG
-```
+Following it from a running game feeds this decoder (finding [#448](../docs/findings/findings-0251-0500.md#f448)).
 
 **46 textures** come out of a loaded save, with their real asset names, and they are correct by eye —
 the status-screen label atlas (`stmojipnl01.png`: Strength/Defense/Wisdom/Spirit/Speed/LV/Max MP/Max

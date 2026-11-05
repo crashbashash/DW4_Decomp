@@ -13,9 +13,9 @@ The projection must mirror `DW4_Port/src/render.c` exactly, including the sign c
 (`dw4asset.c` negates the view's third row because `cam_project` divides by `+z`); the *un*-negated
 form is the classic mistake and puts the whole scene behind the near plane.
 
-    python3 scripts/gs_world_shading.py --dump ../local/dumps/goblin_pass_ref.gs.zst \\
+    python3 scripts/gs_world_shading.py --dump <dump>.gs.zst \\
         --afs ../local/extracted/NDMW.AFS --entry 614 --out /tmp/world_shading.json \\
-        --scatter ../local/captures/dw4-port/live-camera/world-shading-model-fit.png
+        --scatter <out-dir>/world-shading-model-fit.png
 
 The census reports the fit of the recovered model `rgb8 = floor(255 * 0.5 * clamp(ambient +
 diffuse*max(0,N.L), 0, 1))` with the live-read rig, both one- and two-sided and at scale 1.0, over

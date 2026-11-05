@@ -31,7 +31,7 @@ lower-case stage names:
 | `stagIS12` | 809 | 810 | `j_saveareawin01..04`, `j_savecheckwin`, `j_memoryiconwin`, `j_slotbase/mark/cursor`, `j_chrselback`; Lua loads `mainstatuswin`, `savecheckwin`, `icondata` |
 | `stagIS13` | 811 | 812 | `j_namewin01/02`, `j_namecursorjp/us`, `j_saveareacursorr`, `j_slotcursor`; Lua generates `LOADCTRL2`; the Terminal's join/load screen, hosted natively ([load scene](load-scene.md)) |
 
-A retail PS2 capture of the screen (`local/ps2-box-research/save-confirm.png`) shows the four colored player
+A retail PS2 capture of the screen shows the four colored player
 panels with a **MEMORY CARD slot 1 / slot 2** list and "Saving... Do not remove the memory card (PS2) or touch the
 RESET button."
 

@@ -447,7 +447,7 @@ int dw4_render_light_count(void) { return g_nlights; }
  * re-fitted against the corrected reference with the props in the objective (findings #573/#574).
  * It is an *ambient* light (0.2846,0.2355,0.2976, carried by `g_ambient`) and one directional key
  * light (0.7931,0.7938,1.3141) along (0.3482,-0.9370,0.0272).  `scripts/fit_light_rig.py` fits
- * it and `extras/dw4-tools/retail-live/live_rig.py` writes the original live read to `--lights`; the values do not
+ * it and `--lights` takes the original live read; the values do not
  * exist anywhere on the disc, which is why they are baked in here as the default.  Measured on the
  * camera-matched Goblin Pass frame: whole-frame mean abs difference 19.26 -> 18.00 (the 27.09 ->
  * 24.73 figure this comment used to carry was scored against a wrongly-scaled reference, #573). */

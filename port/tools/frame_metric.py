@@ -8,7 +8,7 @@ it moves features (finding #573 measured the whole-frame mean |delta| falling 24
 the floor 20.51 -> 9.45, once the reference is rescaled).  So this tool always **resamples the
 reference to the frame's size** before comparing -- a no-op for a reference that is already 640x448.
 
-    tools/frame_metric.py --ref ../local/captures/.../real-goblin-pass.png FRAME.png [FRAME2.png ...]
+    tools/frame_metric.py --ref <reference>.png FRAME.png [FRAME2.png ...]
     tools/frame_metric.py --ref REF --json out.json FRAME.png
     tools/frame_metric.py --self-test          # no game data needed; runs in `make check`
 

@@ -10,14 +10,16 @@ cleanup/persistence run at `2ffc10..2fff90`, concrete reference assignment and
 construction/destruction/reset, shared zero/clear helpers, construct-flag and
 metadata count/index getters. Finding [#876](../findings/findings-0751-1000.md#f876) records their evidence and boundaries.
 
-Ten bodies (784 bytes) have exact source. Eight reference-field bodies (748 bytes)
+Thirteen bodies (1,292 bytes) have exact source. Eight reference-field bodies (748 bytes)
 are consolidated in [ref-field-lifecycle.cpp](../../src/engine/ref-field-lifecycle.cpp),
 using reflected receiver fields and explicitly documented header/virtual-slot ABI
 views. Assignment adds **168 matched bytes** and construction adds **220**; six
 prior matches are preserved with corrected types/signatures. The existing
 [metadata count](../../src/engine/igMetaObject_GetFieldCount.c) and
 [index](../../src/engine/igMetaObject_GetFieldAt.c) getters contribute 36 bytes.
-The four generic cleanup/persistence compiler residuals retain assembly.
+Of the four generic cleanup/persistence bodies, `2ffc10`, `2ffcb0` and `2ffd40` (508 bytes)
+match in one-function files under `src/unmatched/`; `igObject_WritePersistentFields`
+(`2ffe10`, 384 bytes) has no C source yet.
 
 ## Generic cleanup and field-table traversal
 

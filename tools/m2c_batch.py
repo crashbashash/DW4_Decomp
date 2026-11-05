@@ -41,6 +41,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import cc
 sys.path.insert(0, os.environ.get("DW4_M2C_DIR",
                                   os.path.join(os.path.dirname(HERE), "local", "m2c")))
 
@@ -1094,7 +1095,7 @@ def score_candidate(cand):
     target = "mipsee-gcc-c" if va in ctx.get("eegcc", ()) else "mipsee-mwcc-c"
     try:
         with _M2C_LOCK:
-            c_src = run_m2c(asm, name, "/tmp/m2c_batch_%s.s" % _tag(),
+            c_src = run_m2c(asm, name, os.path.join(cc.scratch_dir(), "m2c_batch_%s.s" % _tag()),
                             target=target, context=ctx["context"])
     except Exception:                             # noqa: BLE001
         return None, False, None, "", "m2cfail"
@@ -1134,7 +1135,7 @@ def score_candidate(cand):
             if sret and all(sret != v for v, _ in variants):
                 variants.append((sret, tag + "+sretvcpp"))
         for vsrc, vmode in variants:
-            tmp = "/tmp/m2c_batch_%s%s" % (_tag(), ".cpp" if vmode.endswith("vcpp") else ".c")
+            tmp = os.path.join(cc.scratch_dir(), "m2c_batch_%s%s" % (_tag(), ".cpp" if vmode.endswith("vcpp") else ".c"))
             open(tmp, "w").write("/* %s */\n" % name + vsrc)
             good, rep = vfy.verify_one(va, tmp, symbols=ctx["symbols"], elf=ctx["elf"])
             if "compile failed" in rep.splitlines()[0]:
@@ -1223,7 +1224,6 @@ def main(argv=None):
 
     cands = [(v, s, n) for v, s, n in syms if n not in have
              and a.min_size <= s <= a.max_size]
-    import cc
     import unitprofiles
     eegcc = set()
     for v, _s, _n in cands:

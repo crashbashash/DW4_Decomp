@@ -21,8 +21,8 @@ What is verified here, when the artifacts are on disk (all skipped otherwise, so
      striped/overlaid game fb — not geometry).
 
 Set DW4_LIVEDUMP to the 31 MB EE dump and DW4_POSE_ARTIFACTS to the directory
-holding gs_char_model2.npy + char_runs.pkl (the scratch/pose-solve staging) to
-enable; DW4_POSE_REF names the ground-truth frame png.
+holding gs_char_model2.npy + char_runs.pkl to enable; DW4_POSE_REF names the
+ground-truth frame png.
 """
 import os
 import shutil
@@ -35,7 +35,7 @@ PORT = os.path.dirname(HERE)
 
 DUMP = os.environ.get("DW4_LIVEDUMP", "")
 ARTS = os.environ.get("DW4_POSE_ARTIFACTS",
-                      os.path.join(PORT, "..", "scratch", "pose-solve"))
+                      os.path.join(PORT, "build", "pose-solve"))
 REF = os.environ.get("DW4_POSE_REF",
                      os.path.join(ARTS, "regen-artifacts", "combat-fb-frame.png"))
 ROMS = os.environ.get("DW4_ROMS", os.path.join(PORT, "..", "..", "local/extracted"))

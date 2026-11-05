@@ -12,7 +12,10 @@ All **1,909 reachable instruction addresses** run. The full1,979-word spans
 also contain six excluded zero padding words and64 statically impossible
 literal-null construction words. The84-byte
 [FO2TOP predicate](../../src/game/beNDMWWindowSelect_CanRequestFO2TOP.cpp) is exact source;
-the other five bodies /7,832 bytes retain assembly. Receiver/input, pool/list,
+the three shop initializers and the stat/cost display /7,060 bytes match in one-function
+files under `src/unmatched/`, and the shared update4233f0 /772 bytes is `foreign-profile` in
+[Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp](../../src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp) (code bytes
+identical; the build-profile check is open). Receiver/input, pool/list,
 lookup/recalculation, formatting, text/model and Lua services remain boundaries.
 No native shop UI or input parity is accepted here.
 
@@ -178,11 +181,11 @@ registration39cbc0 have exact source, 100 bytes ([#914](../findings/findings-075
 metadata getter and inherited check are matched as well. The complete
 [SELECTCTRL manager review](selectctrl.md) records the2,864-byte update
 and1,960-byte general handler. Both have full behavioral source and4,089
-original-instruction cases ([#915](../findings/findings-0751-1000.md#f915)), but retain assembly. This selector suite's receiver
+original-instruction cases ([#915](../findings/findings-0751-1000.md#f915)), and both match. This selector suite's receiver
 responses remain controlled. A separate [joint owner/manager oracle](selector-manager-composition.md)
 covers144 lifecycles /3,146 checkpoints with actual handler responses,
 pad lookup and empty close queues. It controls initialization, message delivery
 and model services; the full initializer/XDATA transaction composition remains open.
 
-Exact matching of the7,832-byte residue, this receiver/input block, chip controller
-and remaining stat/transaction services continue under the [full hub goal](../systems/hub-recovery.md).
+The open build-profile checks on the shared update4233f0 and the chip controller update, and exact
+matching of the remaining stat/transaction services, continue under the [full hub goal](../systems/hub-recovery.md).

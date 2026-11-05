@@ -231,8 +231,7 @@ that drawing twice without a simulation tick produces identical pixels, and
 verifies changing pixels along the stationary outline between idle ticks on
 both rendering paths. Bound Options CPU/GPU comparisons at 640×448 have mean
 RGB differences below 0.013/255. A native boot→Options→camera-toggle run was
-rendered and visually inspected against the retail captures in the
-workspace-private `local/captures/dw4-port/option-screen`, which supply the
+rendered and visually inspected against the retail captures, which supply the
 composition reference.
 
 ## GPU title trails

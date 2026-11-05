@@ -7,7 +7,7 @@ Complements getvtable_stack_gen.py for the frames that keep saved-register point
   ptr      straight line: zero stores through saved-register pointers and member destructor calls
            (`sw zero,0(s1)`, `move a0,s1; li a1,-1`); one `int *pN = &o.f[k]` local per saved register.
   release  two inlined releases (`igObject_Destroy` ref release and/or `StringChunk_ReleaseHeader`
-           string release) of members at fixed offsets; union U template of archived near-miss note wave5s4.
+           string release) of members at fixed offsets; union U template.
 
 --search tries the declaration orders of the locals (and the late/early placement of the pointer
 initialisers for `ptr`) with tools/verify.py at the alternate compiler -O3 and -O3,p (and the default

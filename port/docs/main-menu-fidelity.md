@@ -19,13 +19,9 @@ not establish accurate layout or timing.
 
 ## Evidence and method
 
-- Workspace-private `../local/captures/dw4-port/charsel/` holds paired retail
-  PNG/GS references for Create/Call, all four species, naming, question/Yes/No
-  and the created summary. Repository-relative paths to this directory start
-  with `../local/`. Its `NOTES.md` and `RAM-NOTES.md` give capture provenance.
-  The title and Options references are in
-  `../local/captures/dw4-port/option-screen/`.
-- `RAM-NOTES.md` establishes that the observed creation flow remains in
+- Paired retail PNG/GS references cover Create/Call, all four species, naming,
+  question/Yes/No, the created summary, the title and Options.
+- RAM reads establish that the observed creation flow remains in
   `stagIS10` with NDMW entry 806. Separate character-stage script folders do
   not own this live flow; the scripts that matter are entry 806's
   `gameStart.lua` and its native controller/text dependencies.
@@ -293,64 +289,64 @@ unaffected.
 
 ## Reproducing a comparison
 
-From the repository root, with an existing private output directory.
+From the repository root, with an existing output directory.
 
 Created summary:
 
 ```sh
 make -C port build/test_mainmenu
-port/build/test_mainmenu ../local/extracted ../scratch/main-menu-fidelity
+port/build/test_mainmenu ../local/extracted build/main-menu-fidelity
 python3 port/tools/verify_mainmenu_summary.py \
-  --dump ../local/captures/dw4-port/charsel/20-created-digimon-card-stats.gs.zst \
-  --native-dir ../scratch/main-menu-fidelity
+  --dump <created-digimon-card-stats>.gs.zst \
+  --native-dir build/main-menu-fidelity
 ```
 
 Cursor (state and diagnostic joint time from the table above):
 
 ```sh
 make -C port build/test_mainmenu_cursor
-port/build/test_mainmenu_cursor ../local/extracted ../scratch/main-menu-fidelity/yes-fit yes 0.083913515
+port/build/test_mainmenu_cursor ../local/extracted build/main-menu-fidelity/yes-fit yes 0.083913515
 python3 port/tools/verify_mainmenu_cursor.py \
-  --dump ../local/captures/dw4-port/charsel/17-name-confirm-yes-no.gs.zst \
-  --native-dir ../scratch/main-menu-fidelity/yes-fit --state yes
+  --dump <name-confirm-yes-no>.gs.zst \
+  --native-dir build/main-menu-fidelity/yes-fit --state yes
 
-port/build/test_mainmenu_cursor ../local/extracted ../scratch/main-menu-fidelity/create-fit create 0.23358
+port/build/test_mainmenu_cursor ../local/extracted build/main-menu-fidelity/create-fit create 0.23358
 python3 port/tools/verify_mainmenu_cursor.py \
-  --dump ../local/captures/dw4-port/charsel/07-cursor-create-digimon.gs.zst \
-  --native-dir ../scratch/main-menu-fidelity/create-fit --state create
+  --dump <cursor-create-digimon>.gs.zst \
+  --native-dir build/main-menu-fidelity/create-fit --state create
 ```
 
 Lower message text:
 
 ```sh
-port/build/test_mainmenu_cursor ../local/extracted ../scratch/main-menu-fidelity/text-name name-empty 0.1
+port/build/test_mainmenu_cursor ../local/extracted build/main-menu-fidelity/text-name name-empty 0.1
 python3 port/tools/verify_mainmenu_text.py \
-  --dump ../local/captures/dw4-port/charsel/13-name-entry-first.gs.zst \
-  --native-dir ../scratch/main-menu-fidelity/text-name
+  --dump <name-entry-first>.gs.zst \
+  --native-dir build/main-menu-fidelity/text-name
 ```
 
 Name-field bracket:
 
 ```sh
-port/build/test_mainmenu_cursor ../local/extracted ../scratch/main-menu-fidelity/bracket-name-empty name-empty 0.1
+port/build/test_mainmenu_cursor ../local/extracted build/main-menu-fidelity/bracket-name-empty name-empty 0.1
 python3 port/tools/verify_mainmenu_cursor.py \
-  --dump ../local/captures/dw4-port/charsel/13-name-entry-first.gs.zst \
-  --native-dir ../scratch/main-menu-fidelity/bracket-name-empty --state name-empty
+  --dump <name-entry-first>.gs.zst \
+  --native-dir build/main-menu-fidelity/bracket-name-empty --state name-empty
 ```
 
 Title:
 
 ```sh
-port/build/test_mainmenu_cursor ../local/extracted ../scratch/main-menu-fidelity/title-create title-create 1
+port/build/test_mainmenu_cursor ../local/extracted build/main-menu-fidelity/title-create title-create 1
 python3 port/tools/verify_mainmenu_title.py \
-  --dump ../local/captures/dw4-port/option-screen/01-main-menu-game-start.gs.zst \
-  --native-dir ../scratch/main-menu-fidelity/title-create
+  --dump <main-menu-game-start>.gs.zst \
+  --native-dir build/main-menu-fidelity/title-create
 ```
 
 ## Private reports
 
-Reports, logs and generated images stay outside Git in the workspace's
-`../scratch/main-menu-fidelity/`:
+Reports, logs and generated images stay outside Git in
+`build/main-menu-fidelity/`:
 
 | File | Content |
 | --- | --- |

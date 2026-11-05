@@ -392,9 +392,8 @@ Prepared STATUS checks render the root for all four players. They verify
 repeat-draw equality, every controller clock and unique prepared scene remaining
 unchanged, and zero draws while layers are disabled. The captured root includes
 authored panels/portrait/cursor and original fonts with production records.
-Private PNGs live under `../scratch/status-root-modelview*.png`; no retail pixel
-parity is claimed from those captures. UI layers are explicitly activated in this
-prepared harness. Source nodes are sampled through private copies. WN-only
+No retail pixel parity is claimed from those captures. UI layers are explicitly
+activated in this prepared harness. Source nodes are sampled through private copies. WN-only
 drawing is not a general world or actor renderer. The complete menu tree
 passes its separate controller/record contracts (finding [#808](../../docs/findings/findings-0751-1000.md#f808)).
 
@@ -444,7 +443,6 @@ An actual scene translation test checks use of this fraction. Independently
 read paused retail background matrices agree to a few millionths with this
 fraction (errors were up to 0.00048 without it). All seventeen menu submissions pass
 the unchanged geometry/UV/RGBA/Q allowances in a single dump vsync interval.
-Logs are workspace `scratch/status-sequence-fraction-*.log`.
 
 ## Model fade presentation
 
@@ -489,10 +487,8 @@ across 128 slot indices and four starting word patterns, checking all four words
 and the original Work +16 write. It executes the two switch-bit fragments;
 receiver decoding, allocation and component replacement remain outside this
 verifier's scope. Prepared STATUS roots separately require the selected player's
-actual cursor to be drawable. The source/export are workspace
-`scratch/status-action2-visibility.txt` and `scratch/status-cursor-program.txt`;
-the original assembly remains the instruction evidence. Logs are workspace
-`scratch/status-visibility-*.log`.
+actual cursor to be drawable. The original assembly remains the instruction
+evidence.
 
 Reference exports include pack/id and active/drawable state. Use the optional
 `--root-only` final argument to `test_statusviews` for a fresh root fixture,
@@ -594,7 +590,7 @@ Run conditions and limits:
   field publication/effect teardown) use ASan/UBSan with `detect_leaks=0` and
   `halt_on_error=1`. Leak detection is unavailable under the runner, so the
   model and peer tests assert explicit arena baselines.
-- The live SDL tests run with `SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a`
+- The live SDL tests run with `SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>`
   (the virtual-pad ignore override). The SDL disconnect assertion fails while a
   uinput virtual-pad helper is present; it passes with that helper stopped and
   physical controllers excluded. No input/runtime timeout is changed for this.

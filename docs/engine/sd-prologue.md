@@ -1,6 +1,6 @@
 # The `sd` callee-saved prologue: vendor library code, not MWCC
 
-Two independent investigations (census A (archived outside the repository), census B (archived outside the repository)) reached the same conclusion: the functions that
+Two independent investigations reached the same conclusion: the functions that
 save callee-saved registers with `sd` at 8-byte spacing are **Sony EE GCC output**, the SDK libraries and the CRI middleware linked into the
 game, not Metrowerks code (finding [#1076](../findings/findings-1001-1250.md#f1076) is resolved by [#1078](../findings/findings-1001-1250.md#f1078)). A Sony EE GCC 2.96 build is kept
 under `local/ee-gcc2.96/` and reproduces this prologue, so these functions *are* matchable as C — about a hundred of the Sony-built units
@@ -31,7 +31,7 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   command in `tools/cc.py`; an `ee-gcc` compiler runs through `tools/eegcc_compile.py`, because `ee-gcc -c` crashes inside
   `cc1` and the object is built with `-S` followed by the sibling `ee-as`, whose symbol table the script repairs for GNU ld.
 * Data and unnamed callees use address-bearing names (`D_00498a38`) exactly as for MWCC units.
-* The open-source [ps2sdk](https://github.com/ps2dev/ps2sdk) (cloned under `local/ps2sdk-ref/`, reference only) names the
+* The open-source [ps2sdk](https://github.com/ps2dev/ps2sdk) (reference only) names the
   structures and call sequences of the libraries the Sony blocks contain. Its code is not copied; the recovered source is
   written from the retail bytes.
 * Recovering one of these functions as C adds it to the decompiled and matched figures.

@@ -7,10 +7,10 @@ registrar tuples, the three inherited schema callbacks and default element selec
 original metadata, descriptor-copy and callback-array implementations. The two
 specialization bodies delegate to their existing recovery rather than duplicate it.
 
-Twenty-six bodies / 1,708 bytes have matching source. Two reviewed parent getters
-add **24 newly classified and matched bytes**. Six compiler residuals / 384 bytes
-remain: four vtable getters of 60 bytes, the RAM-list allocation getter 68 and ready
-getter 76. Existing matched registrar/public-accessor wrappers now explicitly return
+All 32 bodies / 2,092 bytes have matching source. Two reviewed parent getters
+add **24 newly classified and matched bytes**. The four vtable getters of 60 bytes,
+the RAM-list allocation getter 68 and ready getter 76 match in per-function files
+under `src/unmatched/`. Existing matched registrar/public-accessor wrappers now explicitly return
 the callback state or metadata pointer consumed by their callers.
 
 The two twelve-byte parent accessors were previously data gaps. The recovery script

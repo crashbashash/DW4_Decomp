@@ -15,7 +15,7 @@ by NXP (via Motorola → Freescale). It is *not* legally redistributable, but th
 community (decomp.me ecosystem) archives it as abandonware, exactly like the IDO/SGI
 compilers the SM64/OOT decomp projects use.
 
-`tools/mwcps2/` is **not** in this repo (proprietary, and the rule here is that only
+The compiler is **not** in this repo (proprietary, and the rule here is that only
 analysis text is committed). Put your copy under the gitignored `local/mwcps2`, or,
 anywhere else, with `DW4_MWCC` pointing at it.
 

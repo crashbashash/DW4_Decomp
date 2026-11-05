@@ -177,13 +177,13 @@ python3 tools/gen_unit_profiles.py --results <sweep results...> [--sweep more.js
 The generator prints the consistency report (every unit whose members' evidence has an
 empty intersection, with the members that keep an override), the row counts before and
 after, and writes the three tables. The sweep result files are evidence, not
-configuration; they live outside the repository (the audit's under the scratch
-area), and the `source` column carries their conclusions.
+configuration; they live outside the repository, and the `source` column carries their
+conclusions.
 
 ## First-generation measurements
 
 `make check` and `tools/progress.py` carry the current numbers. The first generation of the
-table (parent commit ce9e06972) measured `config/SLUS-20836/units.tsv` at **4,987 units** —
+table measured `config/SLUS-20836/units.tsv` at **4,987 units** —
 154 library/Sony pieces, 2,143 class runs, 2,690 unlabeled runs — of which **554 are
 provisional**. 1,678 units compile with exceptions on and 3,309 off (957 of those are
 undetermined: frameless leaves only). Profiles: 2,933 × default `-O3`, 877 × combat

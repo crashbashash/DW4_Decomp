@@ -17,7 +17,7 @@ Repeat draws preserve controller/scene clocks and source node state.
 
 ### Acceptance state
 
-Presentation: projection normalization and VU viewport (archived outside the repository)
+Presentation: projection normalization and VU viewport
 passes all seventeen single-interval geometry/texture/depth/filter/color-mask
 comparisons and one-to-one ordered pixel-bearing primitives. Original
 mode-three normalization occurs before point projection, and the native path uses VU multiply/add and
@@ -27,7 +27,7 @@ Prefix occlusion has an explicit opaque-background/depth certificate. Live
 phase and complete pixel parity retain the documented limits.
 Position/UV/Q allowances are those stated below.
 
-Live frames: completed opening submissions (archived outside the repository)
+Live frames: completed opening submissions
 compare five normal-engine reopening frames with retail GS intervals, without
 observed-clock overrides. All 7,308 vertices and 2,015 ordered pixel-bearing
 primitives pass with prefix certificates. Terminal closing UI passes separately;
@@ -46,7 +46,7 @@ vertex gate alone does not establish depth, draw order or pixel parity.
 ### Reference, export and comparator
 
 The fresh retail Dorumon `aa` root has a PNG/GS reference and STATUS-open
-savestate; see reference setup (archived outside the repository).
+savestate.
 `test_statusviews` accepts an optional fourth command argument naming an existing
 private output directory. It exports each of its four complete roots separately,
 including the actual model/text vertices, normalized UVs, decoded textures,
@@ -69,21 +69,14 @@ From the repository root (private output directories must already exist):
 ```sh
 port/build/test_statusviews ../local/extracted /tmp/status-root.png /tmp/status-export --root-only
 python3 port/tools/verify_status_render.py \
-  --dump '../local/captures/dw4-port/status-validation-20261012/Digimon World 4_SLUS-20836_20261012193738.gs.zst' \
+  --dump <dump>.gs.zst \
   --native-dir /tmp/status-export --root 0 --json /tmp/status-root-comparison.json
 ```
 
-Evidence is workspace `local/captures/dw4-port/status-validation-20261012/`. The
-passing root report at the observed clocks is `trivial-root-comparison.json`, with
-exports in `native-trivial-root/` (see the projection section below).
-`native-root/`, `root-comparison.json`, `root-comparison-visible.json`,
-`native-phase-root/` and `phase-root-comparison.json` in the same folder are
-exports and reports made without the cursor visibility, root title identities or
-authored projection described below; they fail on the affected cursor,
-help/header and background groups and are not the reference result. The folder also
-holds `phase-root-manifest.json` and `phase-root-clocks.{json,tsv}`. Logs are workspace
-`scratch/status-root-export*.log`, `status-root-comparison.log` and
-`status-root-strict.log`.
+The root comparison passes at the observed clocks (see the projection section
+below). Exports and reports made without the cursor visibility, root title
+identities or authored projection described below fail on the affected cursor,
+help/header and background groups and are not the reference result.
 
 ### Cursor visibility
 
@@ -154,7 +147,7 @@ Affine menu geometry retains its unclipped submission convention.
 
 The comparator requires exported reciprocal Q as well as position,
 normalized UV, color and byte-identical texture. At the observed root clocks,
-`trivial-root-comparison.json` passes all **5,220 retained vertices**, including
+the root comparison passes all **5,220 retained vertices**, including
 756 background vertices, 3,378 other model vertices and 1,086 text vertices.
 Maximum position error is **0.0721441 pixels**; maximum observed relative Q error
 is **0.000023447**, within the combined `1e-8 + 2e-5 × |retail Q|` tolerance.
@@ -163,10 +156,6 @@ A negative diagnostic replacing background Q with 1 while retaining XY/UV/colors
 fails all 756 background vertices and exits nonzero. A comparison of normalized
 UV alone cannot detect that error.
 
-Evidence is workspace `local/captures/dw4-port/status-validation-20261012/`,
-with exports in `native-trivial-root/`. Negative evidence is workspace
-`scratch/status-validation-20261012/q-negative.json`. Logs are
-`scratch/status-projection-*.log` and `scratch/status-trivial-root-comparison.log`.
 Full native/retail, normal-boot STATUS, expanded SDL and prepared ASan/UBSan pass.
 This report is native-to-retail candidate evidence over four vsyncs;
 by itself it does not establish full-frame, reverse draw-set or live phase equivalence.
@@ -310,7 +299,7 @@ verify the chosen name, stats, species, remaining EXP, three preview colors and
 restoration in actual authored font rows.
 
 Full `make check check-retail -j8` passes on Linux with
-`SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a`; optional private live-input
+`SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>`; optional private live-input
 checks retain their skips. Headless view/text tests
 and stat ownership tests pass ASan/UBSan with leak detection enabled and both sanitizers configured to
 halt on errors. No Windows or physical Steam Deck validation is claimed; the

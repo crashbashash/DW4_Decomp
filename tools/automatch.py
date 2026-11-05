@@ -61,6 +61,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import cc
 import verify as vfy  # noqa: E402
 
 VADDR_BASE, FILE_BASE = 0x100000, 0x80
@@ -85,11 +86,11 @@ def disassemble(img, lo, hi):
     four or more zero words as `...`, those addresses never reach the table, and any
     function containing a nop block looks truncated (it is skipped as "missing").
     """
-    open("/tmp/automatch_%d.bin" % os.getpid(), "wb").write(img[lo - VADDR_BASE + FILE_BASE:
-                                                 hi - VADDR_BASE + FILE_BASE])
+    binpath = os.path.join(cc.scratch_dir(), "automatch.bin")
+    open(binpath, "wb").write(img[lo - VADDR_BASE + FILE_BASE:hi - VADDR_BASE + FILE_BASE])
     out = subprocess.run(["mipsel-linux-gnu-objdump", "-D", "-z", "-b", "binary",
                           "-m", "mips:5900", "-EL", "--adjust-vma", hex(lo),
-                          "/tmp/automatch_%d.bin" % os.getpid()], capture_output=True, text=True).stdout
+                          binpath], capture_output=True, text=True).stdout
     table = {}
     for ln in out.splitlines():
         m = re.match(r"^\s*([0-9a-f]+):\s+([0-9a-f]{8})\s+(\S+)\s*(.*)$", ln)
@@ -780,7 +781,7 @@ def main(argv=None):
             stats[tmpl + ":tried"] += 1
             # MWCC picks the language from the file extension: `guard` needs C++.
             ext = ".cpp" if tmpl in CPP_TEMPLATES else ".c"
-            tmp = "/tmp/automatch_cand_%d%s" % (os.getpid(), ext)
+            tmp = os.path.join(cc.scratch_dir(), "automatch_cand" + ext)
             with open(tmp, "w") as fh:
                 fh.write(src)
             ok, _report = vfy.verify_one(va, tmp, elf=a.elf, symbols=a.symbols)

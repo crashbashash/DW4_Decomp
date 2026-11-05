@@ -42,6 +42,24 @@ class Keys(unittest.TestCase):
             buildcache._memo.clear()
             self.assertNotEqual(a, buildcache.tree_sha(d, skip_ext=(".c",)))
 
+    def test_header_digest_ignores_documentation_but_not_headers(self):
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / "sub").mkdir()
+            (Path(d) / "x.c").write_text("1")
+            (Path(d) / "y.h").write_text("2")
+            (Path(d) / "sub" / "z.inc").write_text("3")
+            for name in ("README.md", "LICENSE", "sub/COPYRIGHT", "sub/README"):
+                (Path(d) / name).write_text("words")
+            buildcache._memo.clear()
+            a = buildcache.tree_sha(d, skip_ext=buildcache.NOT_HEADERS)
+            for name in ("README.md", "LICENSE", "sub/COPYRIGHT", "sub/README", "x.c"):
+                (Path(d) / name).write_text("edited")
+            buildcache._memo.clear()
+            self.assertEqual(a, buildcache.tree_sha(d, skip_ext=buildcache.NOT_HEADERS))
+            (Path(d) / "sub" / "z.inc").write_text("changed")
+            buildcache._memo.clear()
+            self.assertNotEqual(a, buildcache.tree_sha(d, skip_ext=buildcache.NOT_HEADERS))
+
     def test_tool_closure_includes_what_check_imports(self):
         names = {os.path.basename(p) for p in buildcache.module_closure("check.py")}
         self.assertTrue({"check.py", "verify.py", "units.py", "unitobjects.py", "buildcache.py"} <= names)

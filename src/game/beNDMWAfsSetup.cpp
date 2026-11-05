@@ -15,8 +15,7 @@ extern int g_beNDMWAfsSetup_metaObject_0058c158[4];
  * src/unmatched/FUN_00236f80.cpp). */
 int FUN_00236f80(int, int);
 /* Takes the beCri component but never reads it: the 32-byte body (asm/FUN_0037d2f0.s)
- * only calls FUN_00332e90(-1, 0), the global string/object-list teardown
- * (archived near-miss note wave21). */
+ * only calls FUN_00332e90(-1, 0), the global string/object-list teardown. */
 int FUN_0037d2f0(int);
 
 /* 0x003cdb00: empty virtual slot 21 */

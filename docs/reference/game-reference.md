@@ -44,8 +44,7 @@ confirms, Circle cancels.
 > overlay.
 >
 > A virtual pad whose D-pad is not a real hat (`ABS_HAT0X`/`ABS_HAT0Y`) cannot deliver a D-pad press at all, which
-> reads as "the D-pad does nothing in menus"; a measurement on such a pad does not support that conclusion. The pad
-> notes are kept outside the repository.
+> reads as "the D-pad does nothing in menus"; a measurement on such a pad does not support that conclusion.
 
 Advanced moves (manual p.8–9):
 - **Slam Attack** — while guarding, double-tap left stick in a direction; pushes/crushes enemies.
@@ -346,11 +345,3 @@ EOF
 The manual has no text layer, so it must be read **visually** (the `read` tool
 renders PNGs). Page mapping: PDF page 1 = covers; PDF page *k* (k ≥ 3) =
 manual pages *2k−4* (left) and *2k−3* (right); PDF page 2 = warning + contents.
-
-Output locations on the host (keep durable evidence in the workspace):
-
-- `../extras/reference/walkthrough.txt` — full text dump of the walkthrough
-- `docs/reference/manual-pages/pNN.jpg` — the 12 manual spreads (1360×1088,
-  legible), `pNN` = PDF page NN
-- `/tmp/pdfout/` — scratch copies plus `US_PS2_Game_Manual.pdf.txt` (empty:
-  the scan has no text layer)

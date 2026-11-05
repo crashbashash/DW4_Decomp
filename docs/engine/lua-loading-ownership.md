@@ -120,14 +120,14 @@ that requests unload still needs its tested deferred-release policy.
 
 ## Evidence and reproduction ([#793](../findings/findings-0751-1000.md#f793))
 
-Run from the workspace root:
+Run from the repository root:
 
 ```sh
 python3 port/tools/verify_scriptownership_retail.py \
   --elf ../local/extracted/SLUS_208.36 \
-  --state ../local/states/SLUS-20836/logo-close-start+50ms.p2s \
-  --state ../local/states/SLUS-20836/logo-close-start+434ms.p2s \
-  --state ../local/states/SLUS-20836/dw4-inworld.p2s
+  --state <logo-close-start+50ms>.p2s \
+  --state <logo-close-start+434ms>.p2s \
+  --state <in-world>.p2s
 ```
 
 The 85 contract samples execute original MIPS instructions: 48 lookup/fallback

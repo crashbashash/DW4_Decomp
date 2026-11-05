@@ -126,7 +126,8 @@ establish this block's own behavior against those contracts, not complete
 receiver implementation or native gameplay. Lower list/string services have
 [separate recovered bodies](list-services.md) and deeper
 [result-channel composition](messenger-results.md); integrating those real
-services into this selection oracle remains open. Nine bodies retain assembly.
+services into this selection oracle remains open. The other nine bodies match in
+`src/unmatched/` (`FUN_0038e530` as the destructor emitted by `beMessenger_DispatchSelected.cpp`).
 
 The reviewed Ghidra address sets contain holes: occupied byte counts truncated
 the selector before `jr ra` and dispatch inside its epilogue. Generated

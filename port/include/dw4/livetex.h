@@ -12,7 +12,7 @@
  *   _bitsIdx +0x48   _bytesPerRow +0x4c   _pNameString +0x58
  *
  * and its `igClut` (`_numEntries` +0x0c, `_stride` +0x10, `_pData` +0x14).  This is the same
- * chain `extras/dw4-tools/retail-live/live_textures.py` walks through PINE, resolved offline against a dump.
+ * chain a live read walks through PINE, resolved offline against a dump.
  *
  * The dump's base is auto-detected: a 31 MB image is EE RAM from 0x00100000 (the low 1 MB is
  * kernel), a 32 MB image is the whole RAM from 0.  A `p2s_ram.py` extraction is the 32 MB form,

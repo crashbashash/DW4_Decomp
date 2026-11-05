@@ -16,7 +16,7 @@ verified only when an offline model's vertex list is byte-identical to a live on
 checks the *names*: the offline shape -> attribute link against the live `M_*Shape` walk.
 
     python3 testing/verify_models_offline.py
-    python3 testing/verify_models_offline.py --dump ../local/evidence/models/ee-pre-leomon.bin --pack ../local/extracted/NDMW.AFS:621
+    python3 testing/verify_models_offline.py --dump <ee-dump>.bin --pack ../local/extracted/NDMW.AFS:621
 
 The two sides legitimately differ in coverage: the dump holds only the models the session
 had loaded (669 of them, for one stage), while the pack holds the stage's whole set (549

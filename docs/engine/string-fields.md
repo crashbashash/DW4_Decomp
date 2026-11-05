@@ -13,8 +13,9 @@ Thirteen bodies (908 bytes) have exact source in
 [string-field-dispatch.cpp](../../src/engine/string-field-dispatch.cpp). Generic
 reset adds 124 bytes and three equality methods add 288, totaling **412 new matched
 code bytes**. The existing write dispatcher now explicitly receives/forwards all
-five physical arguments and retains its 72-byte match. Eight compiler residuals
-remain, accounting for 1,640 bytes.
+five physical arguments and retains its 72-byte match. Six more bodies (780 bytes)
+match in one-function files under `src/unmatched/`. Raw decode (`30ab20`, 676 bytes) and
+raw encode (`30add0`, 184 bytes) have no C source yet.
 
 ## Runtime field identity and value methods
 
@@ -143,5 +144,5 @@ messenger Work/ArgData string descriptor types. Seven dependency regressions pas
 Existing cold-messenger payload constructors remain explicit controlled boundaries;
 this owned-string class does not substitute synthetic metadata for the retail
 class-descriptor recovery still required. Original string/memory descriptor setup,
-other memory fields, compiler residuals and concrete gameplay receivers remain
+other memory fields, the two raw-value bodies without C source and concrete gameplay receivers remain
 part of the full Lua-dependent engine goal. Native gameplay is unchanged.

@@ -11,8 +11,9 @@ vtable-slot names. Finding [#870](../findings/findings-0751-1000.md#f870) record
 Three forwarding bodies (192 bytes) have exact source in
 [beMessengerLifecycle.cpp](../../src/game/beMessengerLifecycle.cpp). Group-delayed
 send at `38ecf0` adds **84 matched bytes**; named-delayed send and group preparation
-were existing matches and now have explicit, corrected signatures. Seven bodies
-retain retail assembly. No native gameplay implementation changes are implied.
+were existing matches and now have explicit, corrected signatures. Six more bodies
+(3,312 bytes) match in one-function files under `src/unmatched/`; the expiry update
+`38d0a0` (`beMessenger::vfunc_27`, 972 bytes) has no C source yet. No native gameplay implementation changes are implied.
 
 ## Entry points and storage
 
@@ -134,7 +135,8 @@ This validates the engine lifecycle itself; it does not prove those lower
 contracts, concurrency, a real wall-clock unit or complete native gameplay.
 Real list/pool/chunk composition remains a next integration step. Concrete
 virtual receiver implementations and group registry behavior remain recovery
-work, together with seven compiler residuals and broader Lua dependencies.
+work, together with the expiry update `38d0a0`, which has no C source yet, and broader
+Lua dependencies.
 
 The subsequent [memory recovery](messenger-memory.md) covers original initialization
 and reset, with a cold integration oracle through this lifecycle. Factory internals

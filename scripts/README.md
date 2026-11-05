@@ -23,7 +23,7 @@ regression tests live in `testing/` and native checks in `port/tools/`.
 | Pooled strings and ordered table | [seed_names_string_pool.py](seed_names_string_pool.py) names fifteen verified [pool/table operations](../docs/engine/string-pool.md) |
 | Packed string chunks | [seed_names_string_chunks.py](seed_names_string_chunks.py) names twelve verified [allocation/coalescing operations](../docs/engine/string-chunks.md) |
 | Model and texture evidence | [livedump.py](livedump.py), [extract_live_models.py](extract_live_models.py), [name_live_models.py](name_live_models.py), [capture_scene.py](capture_scene.py), [camera_match.py](camera_match.py) |
-| GS and rendering analysis | [gsdump.py](gsdump.py), `gs_*.py`, [pack_inline_tex.py](pack_inline_tex.py), [pack_lights.py](pack_lights.py); ordered replay (archived outside the repository) |
+| GS and rendering analysis | [gsdump.py](gsdump.py), `gs_*.py`, [pack_inline_tex.py](pack_inline_tex.py), [pack_lights.py](pack_lights.py) |
 | Save-format and item-ID probes | [ps2mc_extract.py](ps2mc_extract.py), [probe_items.py](probe_items.py), [probe_items2.py](probe_items2.py), [save_probe.py](save_probe.py), [diff_story.py](diff_story.py), [dump_story_all.py](dump_story_all.py); [save format](../docs/systems/save-format.md) |
 
 Offline regression checks, without a running emulator:
@@ -33,11 +33,8 @@ python3 testing/test_name_live_models.py
 python3 testing/test_story_state.py
 ```
 
-The SDL virtual-pad diagnostic lives at `extras/testing/sdl-pad-mapping-probe.py`, outside the repository.
 Native desktop setup reporting lives at `port/tools/port_display.py`.
-Private assets, emulator state and evidence remain in `../local/`.
-Standalone mods, save/technique editors and preset-save utilities are outside
-Git in `../extras/`. The former repository folder `dw4-tools/` is retired.
+A contributor's own game data stays in `../local/`.
 
 Story comparison accepts extracted 81920-byte USA savedata with no extra package.
 Memory-card images use the existing optional `ps2mc` reader; no standalone save

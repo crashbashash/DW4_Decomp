@@ -102,7 +102,7 @@ whole-function inline assembly, which recovers no source and would only inflate 
 the default compiler is ever found (the stack-offset fold of
 [#659](../findings/findings-0501-0750.md#f659) is the open question) they can be matched mechanically; until then do not spend matching time on that spelling.
 
-The decision does not cover the accessors the pinned alternate compiler reproduces: the stack-object `*_GetVTable` accessors with a 48-byte frame (171 functions of the 60-byte family) match as C at `-O3,p` with a `struct Obj { int *vt; char pad[28]; }` template (see near-miss shapes fam60 (archived near-miss note fam60)). Other `_GetVTable` sizes are worth re-testing with the same template.
+The decision does not cover the accessors the pinned alternate compiler reproduces: the stack-object `*_GetVTable` accessors with a 48-byte frame (171 functions of the 60-byte family) match as C at `-O3,p` with a `struct Obj { int *vt; char pad[28]; }` template. Other `_GetVTable` sizes are worth re-testing with the same template.
 
 ## One translation unit, one profile
 

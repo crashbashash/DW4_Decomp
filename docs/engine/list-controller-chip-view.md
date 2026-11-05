@@ -13,10 +13,10 @@ All five bodies now have **2,196 exact bytes**: initialization260, previous
 page320, next page336, chip page-count208 and chip text1,072. Finding [#919](../findings/findings-0751-1000.md#f919) matched
 three /864 bytes; [#922](../findings/findings-0751-1000.md#f922) added initialization260; [#923](../findings/findings-0751-1000.md#f923) adds text1,072, completing
 both contiguous helper groups. Matching source lives in the
-[C-mode initializer](../../src/game/beNDMWListCtrl.c),
+[C-mode initializer](../../src/game/beNDMWListCtrl.cpp),
 [C++ page methods](../../src/game/beNDMWListCtrl.cpp),
 [chip count](../../src/game/beNDMWShopCtrlXdataChip_UpdatePageCount.c) and
-[chip text](../../src/game/beNDMWShopCtrlXdataChip_RefreshText.c).
+[chip text](../../src/game/beNDMWShopCtrlXdataChip_RefreshText.cpp).
 The primary7,232-byte chip transaction update has
 [separate behavioral recovery](chip-controller.md) ([#921](../findings/findings-0751-1000.md#f921)) and still retains
 assembly. These checkpoints do not establish native rendering or complete chip

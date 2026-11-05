@@ -13,9 +13,9 @@ at that slot (data/vtables.json) - a superset of what one call can reach.
 | kind | sites | meaning |
 | --- | ---: | --- |
 | switch | 66 | `jr` of a recovered jump table (`config/SLUS-20836/jumptables.txt`): local control flow, not a dependency |
-| virtual | 352 | `lw vt,0(obj); lw fn,8+4*slot(vt); jalr fn`: reaches one of the slot's candidates below |
+| virtual | 346 | `lw vt,0(obj); lw fn,8+4*slot(vt); jalr fn`: reaches one of the slot's candidates below |
 | other | 0 | a function pointer from a table or argument, or a pattern the scan does not recognize |
-| **total** | **418** | the closure's `indirect` count |
+| **total** | **412** | the closure's `indirect` count |
 
 49 of the virtual sites use a slot that no vtable in data/vtables.json has (the highest slot there is 47): they load through an object whose first word is not a class vtable we know, or the pattern matched something else, and they have no candidate list. A hand check of four sites (two ordinary, two above the table) found real `lw vt,0(obj); lw fn,off(vt); jalr fn` calls with the slot computed correctly; the two high-slot ones call through a field of an Alchemy memory-pool object (`igAliasMemoryPool`, `MemoryContext`), whose vtables data/vtables.json does not list.
 
@@ -36,13 +36,13 @@ at that slot (data/vtables.json) - a superset of what one call can reach.
 | `Gap__Bec__beFont__vfunc_34` | 4092 | 7 | 0 | 1 |
 | `Gap__Core__igObject__vfunc_31` | 1412 | 7 | 0 | 0 |
 | `beAction2FADESET_Start` | 1200 | 6 | 0 | 0 |
-| `FUN_00398ef0` | 1192 | 6 | 0 | 0 |
 | `beAction2_StartComponents` | 456 | 5 | 0 | 0 |
 | `FUN_003ef1e0` | 996 | 5 | 0 | 0 |
 | `Gap__Bec__beNDMWMdlPEBase__vfunc_46` | 5676 | 5 | 0 | 0 |
 | `FUN_002d0c10` | 188 | 4 | 0 | 0 |
 | `Gap__Bec__beAction2__vfunc_33` | 2644 | 4 | 0 | 1 |
 | `Gap__Core__igObject__vfunc_25` | 280 | 4 | 0 | 0 |
+| `FUN_00383420` | 1260 | 4 | 0 | 0 |
 
 ## Virtual slots used by the closure
 
@@ -50,25 +50,25 @@ Candidates are the distinct functions at the slot across all vtables; the last c
 
 | slot | sites | functions | candidates | in game region | matched C | asm body | unmatched |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 22 | 59 | 26 | 144 | 135 | 124 | 0 | 11 |
+| 22 | 59 | 26 | 144 | 135 | 125 | 0 | 10 |
 | 20 | 45 | 17 | 477 | 474 | 474 | 0 | 0 |
 | 23 | 24 | 17 | 53 | 48 | 44 | 0 | 4 |
-| 21 | 19 | 15 | 91 | 85 | 73 | 0 | 12 |
-| 24 | 19 | 10 | 39 | 33 | 32 | 0 | 1 |
-| 30 | 19 | 9 | 49 | 46 | 46 | 0 | 0 |
-| 33 | 18 | 12 | 18 | 16 | 11 | 0 | 5 |
+| 33 | 20 | 13 | 18 | 16 | 12 | 0 | 4 |
+| 21 | 19 | 15 | 91 | 85 | 77 | 0 | 8 |
+| 24 | 18 | 9 | 39 | 33 | 32 | 0 | 1 |
+| 30 | 15 | 7 | 49 | 46 | 46 | 0 | 0 |
 | 35 | 13 | 5 | 18 | 15 | 14 | 0 | 1 |
 | 27 | 8 | 3 | 25 | 21 | 17 | 0 | 4 |
 | 101 | 7 | 7 | 0 | 0 | 0 | 0 | 0 |
 | 48 | 7 | 2 | 0 | 0 | 0 | 0 | 0 |
 | 29 | 6 | 5 | 49 | 44 | 42 | 0 | 2 |
-| 31 | 6 | 4 | 46 | 43 | 31 | 2 | 10 |
 | 19 | 5 | 4 | 1 | 0 | 0 | 0 | 0 |
+| 31 | 5 | 3 | 46 | 43 | 32 | 0 | 11 |
 | 28 | 5 | 3 | 13 | 9 | 7 | 0 | 2 |
 | 26 | 5 | 4 | 25 | 21 | 20 | 0 | 1 |
 | 46 | 4 | 3 | 4 | 4 | 4 | 0 | 0 |
 | 43 | 4 | 4 | 3 | 3 | 3 | 0 | 0 |
-| 25 | 4 | 3 | 30 | 23 | 20 | 0 | 3 |
+| 25 | 4 | 3 | 30 | 23 | 21 | 0 | 2 |
 | 37 | 4 | 3 | 17 | 14 | 14 | 0 | 0 |
 | 9 | 3 | 3 | 1 | 0 | 0 | 0 | 0 |
 | 7 | 3 | 3 | 28 | 20 | 20 | 0 | 0 |
@@ -77,17 +77,16 @@ Candidates are the distinct functions at the slot across all vtables; the last c
 | 91 | 3 | 1 | 0 | 0 | 0 | 0 | 0 |
 | 41 | 3 | 2 | 2 | 2 | 2 | 0 | 0 |
 | 88 | 3 | 1 | 0 | 0 | 0 | 0 | 0 |
-| 34 | 3 | 3 | 32 | 29 | 25 | 0 | 4 |
+| 34 | 3 | 3 | 32 | 29 | 26 | 0 | 3 |
 | 16 | 3 | 3 | 6 | 4 | 4 | 0 | 0 |
 | 39 | 3 | 2 | 6 | 5 | 5 | 0 | 0 |
-| 36 | 3 | 3 | 17 | 14 | 12 | 0 | 2 |
+| 36 | 3 | 3 | 17 | 14 | 13 | 0 | 1 |
 | 52 | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 | 97 | 2 | 1 | 0 | 0 | 0 | 0 | 0 |
 | 40 | 2 | 2 | 2 | 2 | 2 | 0 | 0 |
 | 96 | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 | 49 | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 | 38 | 2 | 2 | 9 | 8 | 7 | 0 | 1 |
-| 5 | 2 | 1 | 1 | 0 | 0 | 0 | 0 |
 | 32 | 2 | 1 | 47 | 44 | 43 | 0 | 1 |
 | 92 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | 63 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
@@ -114,7 +113,7 @@ Candidates are the distinct functions at the slot across all vtables; the last c
 
 ## Calls on an incoming argument of known class
 
-Where the object of a virtual call is still an incoming argument (a0..a3, or an s-register copy made before the first call; a linear scan that ignores branches, so approximate) and its class is known - `this` of a `Gap::...::Class::vfunc_N` method, or a parameter whose class the matched source declares - the candidates are that class and its descendants at the slot, not every vtable. 136 virtual sites are on an incoming argument; 62 of them have a known class.
+Where the object of a virtual call is still an incoming argument (a0..a3, or an s-register copy made before the first call; a linear scan that ignores branches, so approximate) and its class is known - `this` of a `Gap::...::Class::vfunc_N` method, or a parameter whose class the matched source declares - the candidates are that class and its descendants at the slot, not every vtable. 135 virtual sites are on an incoming argument; 64 of them have a known class.
 
 | method | param | class | slot | candidates | in game region | unmatched |
 | --- | ---: | --- | ---: | ---: | ---: | ---: |
@@ -126,6 +125,8 @@ Where the object of a virtual call is still an incoming argument (a0..a3, or an 
 | `Gap__Bec__beModelCtrlSCHitBox__vfunc_22` | 0 | `Gap::Bec::beModelCtrlSCHitBox` | 21 | 1 | 1 | 0 |
 | `Gap__Bec__beNDMWMdlPlayer__vfunc_39` | 0 | `Gap::Bec::beNDMWMdlPlayer` | 33 | 1 | 1 | 0 |
 | `Gap__Bec__beNDMWMdlPlayer__vfunc_39` | 0 | `Gap::Bec::beNDMWMdlPlayer` | 33 | 1 | 1 | 0 |
+| `Gap__Bec__beNDMWMdlPlayer2__vfunc_38` | 0 | `Gap::Bec::beNDMWMdlPlayer2` | 33 | 1 | 1 | 0 |
+| `Gap__Bec__beNDMWMdlPlayer2__vfunc_38` | 0 | `Gap::Bec::beNDMWMdlPlayer2` | 33 | 1 | 1 | 0 |
 | `Gap__Bec__beNDMWMdlPlayer2__vfunc_47` | 0 | `Gap::Bec::beNDMWMdlPlayer2` | 33 | 1 | 1 | 0 |
 | `Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21` | 0 | `Gap::Bec::beNDMWStatusCtrlSkill` | 22 | 1 | 1 | 0 |
 | `Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21` | 0 | `Gap::Bec::beNDMWStatusCtrlSkill` | 23 | 1 | 1 | 0 |
@@ -141,37 +142,27 @@ Where the object of a virtual call is still an incoming argument (a0..a3, or an 
 | `Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21` | 0 | `Gap::Bec::beNDMWShopCtrlXdataChip` | 24 | 1 | 1 | 0 |
 | `Gap__Bec__beNDMWMdlPEBase__vfunc_46` | 0 | `Gap::Bec::beNDMWMdlPEBase` | 33 | 1 | 1 | 0 |
 | `Gap__Bec__beNDMWMdlPEBase__vfunc_46` | 0 | `Gap::Bec::beNDMWMdlPEBase` | 33 | 1 | 1 | 0 |
-| `Gap__Bec__beNDMWMdlPEBase__vfunc_46` | 0 | `Gap::Bec::beNDMWMdlPEBase` | 33 | 1 | 1 | 0 |
-| `Gap__Bec__beNDMWMdlPEBase__vfunc_46` | 0 | `Gap::Bec::beNDMWMdlPEBase` | 33 | 1 | 1 | 0 |
 
 Unsourced game-region functions that a narrowed call can reach (0): none
 
 
 ## Game-region candidates with no source yet
 
-Distinct functions that a virtual slot used by the closure can reach and that have no definition in `src/` (65). Each is a place where a hidden dependency could sit; whether any call actually reaches one needs the receiver's class at that site.
+Distinct functions that a virtual slot used by the closure can reach and that have no definition in `src/` (57). Each is a place where a hidden dependency could sit; whether any call actually reaches one needs the receiver's class at that site.
 
 | function | bytes | slots |
 | --- | ---: | --- |
 | `Gap__igMovieManager__vfunc_29` | 7320 | 29 |
 | `Gap__Bec__beSvFileMakeApi__vfunc_22` | 6404 | 22 |
 | `Gap__Bec__beNDMWLogo__vfunc_31` | 6076 | 31 |
-| `Gap__Bec__libBecRuntimePlugin__vfunc_21` | 4928 | 21 |
 | `Gap__Bec__beNDMWShopCtrlSales__vfunc_21` | 4736 | 21 |
 | `Gap__Bec__beNDMWStatusTitle01__vfunc_22` | 4496 | 22 |
 | `Gap__Bec__ParticleArray__vfunc_26` | 3324 | 26 |
-| `Gap__Bec__libNdmwRuntimePlugin__vfunc_21` | 2728 | 21 |
-| `Gap__Bec__beNDMWStatusCtrlD0__vfunc_21` | 2600 | 21 |
+| `Gap__Bec__beMatCtrl__vfunc_31` | 3064 | 31 |
 | `Gap__igCriMovieCodec__vfunc_23` | 2528 | 23 |
-| `Gap__Bec__beSaveUtil__vfunc_34` | 2456 | 34 |
-| `Gap__Bec__beNDMWMdlItem__vfunc_36` | 2396 | 36 |
-| `Gap__igMovieManager__vfunc_25` | 2372 | 25 |
 | `Gap__Bec__beNDMWMdlItem__vfunc_38` | 2364 | 38 |
 | `Gap__Bec__beNDMWSaveCtrl__vfunc_31` | 2360 | 31 |
-| `Gap__Bec__beNDMWShopCtrlSell__vfunc_21` | 2360 | 21 |
-| `Gap__Bec__beCameraCtrl__vfunc_33` | 2336 | 33 |
 | `Gap__Bec__beSvReadMediaApi__vfunc_22` | 2016 | 22 |
-| `Gap__Bec__beSvWriteMediaApi__vfunc_22` | 1960 | 22 |
 | `Gap__Bec__beSaveUtil__vfunc_31` | 1944 | 31 |
 | `Gap__Bec__beHitLandDeliv__vfunc_33` | 1936 | 33 |
 | `Gap__Bec__beGenerater__vfunc_31` | 1912 | 31 |
@@ -190,7 +181,15 @@ Distinct functions that a virtual slot used by the closure can reach and that ha
 | `Gap__Bec__beGenerater__vfunc_33` | 1112 | 33 |
 | `Gap__Bec__beMessenger__vfunc_27` | 972 | 27 |
 | `Gap__Bec__beNDMWStatusPowerSocket__vfunc_27` | 944 | 27 |
-| `Gap__Bec__beSound__vfunc_31` | 928 | 31 |
 | `Gap__Bec__beNDMWStatusMainSlot__vfunc_27` | 848 | 27 |
 | `Gap__Bec__beNDMWStatusMainSlot__vfunc_32` | 792 | 32 |
-| _25 more_ | | |
+| `Gap__Bec__beModelCtrlInfoRideOn4__vfunc_21` | 776 | 21 |
+| `Gap__Bec__beNDMWStatusPowerSocket__vfunc_35` | 776 | 35 |
+| `Gap__igMovieManager__vfunc_28` | 696 | 28 |
+| `Gap__Bec__beNDMWPanelObjectItem__vfunc_22` | 692 | 22 |
+| `Gap__Bec__beNDMWMdlObject__vfunc_36` | 656 | 36 |
+| `Gap__Bec__beNDMWStatusMainSlot__vfunc_33` | 608 | 33 |
+| `Gap__Bec__beParticleCtrl2__vfunc_31` | 564 | 31 |
+| `Gap__Bec__beWaterPlain__vfunc_31` | 504 | 31 |
+| `Gap__igCriMovieCodec__vfunc_22` | 464 | 22 |
+| _17 more_ | | |

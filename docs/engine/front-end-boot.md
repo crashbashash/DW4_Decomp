@@ -10,8 +10,7 @@ and its native API are [`script-engine-lua.md`](script-engine-lua.md); the decom
 Power-on, no savestate: **Intrinsic Alchemy** (publisher) → **Sođec + ADK** (developer) → the
 "DIGIMON WORLD" / "DIGITAL MONSTER" cards → the "Annihilation" opening FMV (with the "The Scourge of
 the Royal Knights!" card) → the title ("DIGIMON 4 / DIGIMON WORLD", "▸ Press START button ◂") → the
-**main menu: "Game Start" (highlighted) / "Option"**. Nine labelled frames and a reproduce recipe:
-`../local/captures/dw4-port/boot`.
+**main menu: "Game Start" (highlighted) / "Option"**.
 
 ## It is a stage sequence, scripted in Lua
 
@@ -157,8 +156,7 @@ at v 0.1…0.45 — and the game shows the two menu zones **mutually exclusively
 - **menu** (after START): `j_startlogo` plus `j_startmenu02`, the `menu`/`null1` rows = "Game Start"
   (highlighted) / "Option" and the `select` highlight bar. The "Press START button" line is gone.
 
-The observed frames are `boot-08-title-press-start.png` (press-start) and
-`boot-09-main-menu-game-start.png` (menu) in `../local/captures/dw4-port/boot`; the game advances on the
+The game advances on the
 pad's **START** (Cross skips the opening FMV instead). The port models this as
 `DW4_FRONTUI_PRESS_START` → `DW4_FRONTUI_MENU` (`src/frontui.c`), drawing `j_startmenu01` only in the
 first state and `j_startmenu02` only in the second, with the rows' own recovered OPEN (`JOINTSET
@@ -189,8 +187,7 @@ not framebuffer equivalence.
   skippable with Start or Cross.)
 - **START opens the Game Start / Option rows** once the opening is over; before that
   START does nothing.
-- **Option** opens the settings screen (findings [#724](../findings/findings-0501-0750.md#f724)/#725, captured from the real game in
-  `../local/captures/dw4-port/option-screen`). It is the pack's own graphs in `NDMW.AFS` entry 806:
+- **Option** opens the settings screen (findings [#724](../findings/findings-0501-0750.md#f724)/#725, captured from the real game). It is the pack's own graphs in `NDMW.AFS` entry 806:
   `j_optionwin02` (band, legend panel, pill bars A–D) and the cursor `j_optioncursor11/12`, played on the
   three-slot pass of their sequences, with the front-end font's glyph quads over them. Rows: **Dungeon camera**
   (Near / Far), **Light** (Hard / Soft; power-on defaults Near and **Hard**) and **Return to Menu**. Up/Down
@@ -203,8 +200,7 @@ not framebuffer equivalence.
 
 Game Start fades the title out (rows ~1 s, logo a beat later, then a white flash near 2 s) and the
 four-panel **slot screen** assembles over a rotating grid dome. The live flow, captured from the
-pristine disc in `../local/captures/dw4-port/charsel` (PNG + GS dump per state, `NOTES.md` with the
-input table):
+pristine disc:
 
 | state | what is on screen | input |
 | --- | --- | --- |
@@ -251,11 +247,10 @@ attribute roots include `j_slotbase`, `j_slotcursor`, `j_slotmark01/02`, `j_chrs
 `0x0137C298`, stat block at +56): Dorumon `p_dorumon` 170 HP / 60 MP, Agumon `p_agumon` 180 / 50,
 Veemon `p_vmon` 160 / 70, Guilmon `p_girumon` 150 / 80, all Lv 1 (HP + MP = 230 for each). The
 `_id` word at +44 is a hash (`0x5AAA67E4`, `0xE5AB8488`, `0xECBB18CC`, `0x5BEEB640` in that order).
-Evidence: `../local/captures/dw4-port/charsel/RAM-NOTES.md`.
 
 **Port behaviour (findings [#726](../findings/findings-0501-0750.md#f726)/#727).** Game Start opens the slot screen from pack 806
 (`port/src/frontchr.c`): the four panels, the two windows and the text, offline-checked against
-`charsel/05-slot-screen-settled.png` to within 5 per channel on the panel bodies
+a retail capture of the settled slot screen to within 5 per channel on the panel bodies
 (`tools/verify_frontend.py` run 2c). Up/Down moves the highlight, Cross on Create goes on to the
 existing character-select hand-off, Cross on Call only logs. The dome behind the panels, the
 panel-assembly intro, the species list, the name entry, the created card and the memory-card
@@ -268,7 +263,7 @@ Not yet recovered: the state machine that picks the windows, and how the panel p
 
 The title does not come up at once. Immediately after the FMV the game plays an opening effect with
 **no logo, no "Press START button" and no copyright**, and the title UI appears only once it has
-finished. Watched live, frame by frame (`../local/captures/dw4-port/title-open`, a no-input boot):
+finished. Watched live, frame by frame (a no-input boot):
 
 | phase | what the screen shows |
 | --- | --- |
@@ -313,7 +308,7 @@ pack sequence rather than from a recovered controller state.
 3. **The scene content** — the logo/opening/title packs, the FMV (CRI Sofdec, `igCriMovieCodec`),
    and the title menu rows.
 4. **The input gate** — the title's "Press START" state; in the recorded test the *pad*'s START does not
-   reach PCSX2, which is why the boot recipe rebinds it (`extras/testing/pad-start-defect.md`, outside the repository).
+   reach PCSX2, so it has to be rebound.
 
 A first slice that gets the port itself booting from a blank slate can hard-code this four-stage
 front-end (menu-database → logo → opening → title/menu) and defer the Lua VM until the rest of the

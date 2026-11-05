@@ -7,15 +7,10 @@ additive draws change count per frame (384 / 850 / 808 in three consecutive capt
 survive from one frame to the next.  So it cannot be reproduced as a transform of one picture; it is
 replayed here as a sequence of captured frames.
 
-Capture first -- the ceiling is PCSX2's screenshot rate, ~190 ms per GS dump (measured 5.2 fps):
+The input is a text file listing `.gs.zst` captures of consecutive menu frames, in order, one path per
+line.  The ceiling is PCSX2's screenshot rate, ~190 ms per GS dump (measured 5.2 fps).
 
-    # with the menu up in PCSX2 and its window focused
-    for i in $(seq 1 34); do python3 extras/dw4-tools/retail-live/host_probe.py input hotkey screenshot --activate; done
-    ls -1t ../local/pcsx2/PCSX2/snaps/*.gs.zst | head -34 | tac > frames.txt
-
-then:
-
-    python3 scripts/menu_anim_seq.py --frames frames.txt --out ../local/captures/dw4-port/menu-anim
+    python3 scripts/menu_anim_seq.py --frames frames.txt --out <out-dir>
 
 Writes `<out>/uiNNN.tsv` (one full frame per capture, in draw order, perspective-correct `#stq` form)
 and `<out>/tex/<TEX0>.rgba` (a shared texture set -- the textures are byte-identical across frames).

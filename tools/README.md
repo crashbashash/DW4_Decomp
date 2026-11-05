@@ -60,6 +60,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`flag_sweep.py`](flag_sweep.py) | retry every near-miss draft under other MWCC optimisation flags |
 | [`perm_fixed.py`](perm_fixed.py) | permute the drafts that only became compilable after the compile-repair pass (`autofix.py`) |
 | [`permuter_one.py`](permuter_one.py) | turn one function into a decomp-permuter project and run it |
+| [`perm_refine.py`](perm_refine.py) | search a permuter project in rounds that build on each other, merge the small changes of near-best outputs, and refuse candidates that lose the target's calls or stores |
 | [`restore_dropped_args.py`](restore_dropped_args.py) | recover m2c's dropped/gap call parameters (M7 near-miss tier) |
 | [`retype_struct_member.py`](retype_struct_member.py) | bank the near-miss tier's mechanical source shapes |
 | [`scan_near.py`](scan_near.py) | compile every unmatched build/m2c draft, record its instruction diff |
@@ -83,7 +84,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Tests
 
-`test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
+`test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
 
 ## Subfolders
 

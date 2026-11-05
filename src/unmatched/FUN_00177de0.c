@@ -1,7 +1,7 @@
 /* 0x00177de0 - FUN_00177de0: read one GS/frame statistic as a per-frame rate.
  *
  * FUN_001f6f50 snapshots ~50 GS-side counters into a 464-byte block of 58 long long
- * (finding in archived near-miss note wave18).  The game keeps the current block
+ * The game keeps the current block
  * at 0x560d20 and the block taken at the last reset at 0x560b50 (0x1d0 apart, which is
  * the block size).  The function turns `id` into a number:
  *   - elapsed = current[5] - previous[5]  (frame-length counter); nothing is computed

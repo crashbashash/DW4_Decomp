@@ -5,7 +5,10 @@ release bridge have complete [behavioral C](../../recovered/engine/string-chunks
 They account for 1,272 code bytes. Seven matching bodies (376 bytes) are in
 [matching C](../../src/engine/string-chunks.c) and
 [matching C++](../../src/engine/string-chunks.cpp), including adjacent-block merge
-and storage initialization. Five compiler residuals retain assembly. Names come
+and storage initialization. `StringChunk_AllocateToken` (`0x30c830`, 264 bytes) matches in
+[StringChunk_AllocateToken.c](../../src/unmatched/StringChunk_AllocateToken.c). Four bodies (632 bytes) have no C
+source yet: the table and chunk allocation wrappers (`0x30c740`, `0x30cce0`), TakeBlock
+(`0x30ca40`) and ReturnBlock (`0x30cb80`). Names come
 from [the semantic generator](../../scripts/seed_names_string_chunks.py), not
 assertions about original C++ method spelling. Finding [#866](../findings/findings-0751-1000.md#f866) records this work.
 
@@ -60,8 +63,7 @@ Successful-allocation fixtures do not establish allocator failure/exception poli
 RAM/return/ordered-call cases**, covering all twelve bodies, split/exact-fit/miss
 searches, head/non-head links, every release order for four adjacent allocations,
 both-sided coalescing, cache updates, storage initialization, deletion flags and
-cross-chunk growth. Original Ghidra/objdump and compiler candidates are private
-under repository-relative `../scratch/lua-engine-recovery/`.
+cross-chunk growth.
 
 The pool suite passes **548 cases**, including ten successful
 constructor/intern/cache-hit/release/destructor calls with actual chunk bodies
@@ -77,7 +79,7 @@ case retains its controlled boundary rather than inventing lower failure behavio
 Merge is **68 matching code bytes**. Construction/destruction/deletion sources
 match with their incoming arguments
 explicit and a short deletion-flag cast. Root matching, typed and byte-identical
-link gates remain required. Open: the five compiler residuals and allocator/delete/
+link gates remain required. Open: the four bodies without C source and allocator/delete/
 synchronization contracts, then composing original producers and stage receivers
 through this storage. This subgroup does not complete the allocator platform layer
 or the full Lua-dependent engine recovery.
@@ -98,14 +100,13 @@ typed/link gates retain byte identity; the 291 primitive cases and 1,196 compose
 messenger cases pass.
 
 The two virtual forwarding routines emit frames in C++
-source and remain assembly. A branch-sensitive, 60-second TakeBlock permuter
+source and have no C source yet. A branch-sensitive, 60-second TakeBlock permuter
 search reached a comparison score of 1,601 but produced no exact match;
 `tools/verify.py` rejects the best result. Scores are not completion evidence.
 The permuter driver honors `--outdir` in normal/pilot modes and defaults projects
-to repository-relative `../scratch/permuter/`, keeping target objects/search
+to `build/permuter/`, keeping target objects/search
 artifacts private. Four path regressions and a real build-only override smoke
-check pass. Private logs/candidates are under `../scratch/lua-engine-recovery/`;
-finding [#868](../findings/findings-0751-1000.md#f868) records this.
+check pass. Finding [#868](../findings/findings-0751-1000.md#f868) records this.
 
 The [cold registry/interner composition](string-pool.md#cold-registry-interning-and-erase-byte-match)
 adds 158 persistent checkpoints through real chunk storage, name lookup, typed

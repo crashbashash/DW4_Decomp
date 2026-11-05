@@ -32,10 +32,8 @@ default and explicit argument movements, halfword alignment, full -1 sentinel
 and virtual tail transfer are verified instruction-for-instruction. Existing
 286-case retail runtime comparisons still cover all54 bodies/4,160 bytes.
 
-The alias runtime has44 exact bodies /1,508 bytes; ten bodies /
-2,652 bytes retain assembly. The private740-byte backend candidate
-differs at eight instruction words (six return-buffer offsets and two retry
-branch/scheduling words). It remains outside `src/`. The exception setting alone
+All54 bodies /4,160 bytes of the alias runtime match; the740-byte backend is
+`src/unmatched/igAliasMemoryPool_ManageAllocation.cpp`. The exception setting alone
 does not solve the larger bodies, and these seven matches do not establish an
 exception configuration for every retail compilation unit.
 
@@ -91,9 +89,6 @@ and its code is never executed.
 
 The full check/link and recovered-access gate
 validate the seven wrappers independently of the private compiler experiments.
-Private logs and sources are repository-relative
-`../scratch/lua-engine-recovery/alias-relocation-*`, `alias-verifier-*`,
-`alias-tail-*`, `tail-noexcept-*` and `alias-core-member.*`.
 
 ## Oracle holes closed by the audit
 

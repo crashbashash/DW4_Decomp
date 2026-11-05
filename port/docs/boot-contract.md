@@ -248,8 +248,6 @@ Shared by both paths:
   Fresh characters include empty equipment arrays, native identity references and fresh
   disk/card/bank/flag records with the common aliases.
 
-Captures and controls: `local/captures/dw4-port/charsel/NOTES.md` in the workspace.
-
 ## Created-card login and first arrival
 
 **Closing transition.** The boot window stays alive through loading. The caller-owned creation

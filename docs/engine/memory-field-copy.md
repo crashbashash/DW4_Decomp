@@ -3,9 +3,12 @@
 Finding [#891](../findings/findings-0751-1000.md#f891) recovers **14 complete bodies / 1,668 code bytes**: the contiguous
 four-body memory-field copy/print/visitor run (1,044 bytes), nine contiguous
 buffer services (368 bytes), and the generic object visitor (256 bytes).
-Nine bodies / 720 bytes have exact source. The new shallow copy and object visitor
-add **408 matched bytes**. Deep copy436, print244, field visitor212 and the two
-allocator tail dispatches28 each retain assembly and private compiler candidates.
+Twelve bodies / 1,612 bytes have exact source; eleven are `match` and the object visitor
+is `foreign-profile` in `data/check-categories.tsv`. The new shallow copy and object visitor
+add **408 matched bytes**. Deep copy436, print244 and field visitor212 match in
+`src/unmatched/igMemoryRefMetaField_DeepCopy.cpp`, `src/unmatched/igMemoryRefMetaField_Print.cpp`
+and `src/unmatched/igMemoryRefMetaField_ReleaseElements.cpp`. The two
+allocator tail dispatches28 each (`2ed4c0`, `2ed5a0`) have no C source yet.
 Names in `config/SLUS-20836/names/MemoryBuffers.tsv` describe observed behavior; they do not
 assert original C++ spelling. Slot240 remains address-named because its meaning
 has not been established.
@@ -80,7 +83,8 @@ header-field count. Each row reloads the field-list data pointer. The callback
 receives object/field/context; exactly1 skips that field, while other results invoke
 field slot168 with field/object/callback/context. The field receiver is captured
 before the callback. Its 256 bytes are exact source in
-[object-visitor.cpp](../../src/engine/object-visitor.cpp).
+[object-visitor.cpp](../../src/engine/object-visitor.cpp); its category is `foreign-profile`
+(the code bytes are reproduced only under a provisional per-function override).
 
 ## Verification and remaining boundaries
 
@@ -113,4 +117,3 @@ The subsequent [allocator-registry checkpoint](allocator-registry.md) recovers
 owner traversal and encoding plus complete allocation wrappers. Compiler residuals,
 registry bootstrap, allocator virtual implementations/slot240, object cloning,
 per-object print, scalar/type publication and broader gameplay remain open. Native gameplay is unchanged.
-Private candidates/logs: repository-relative `../scratch/lua-engine-recovery/`.

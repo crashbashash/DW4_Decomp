@@ -3,9 +3,9 @@
 Finding [#902](../findings/findings-0751-1000.md#f902) extends the [factory/binding checkpoint](alias-pool-binding.md)
 through the complete contiguous method run **2d0560..2d163c**. Together with
 factory2cd170, this is **54 bodies /4,160 bytes**. All have readable behavioral
-recovery and original-instruction comparisons. This does not mean all54 are
-byte-matched: **44 bodies /1,508 bytes** have matching source; **ten bodies /
-2,652 bytes** retain assembly. The [#903](../findings/findings-0751-1000.md#f903) follow-up adds seven exact virtual tails
+recovery and original-instruction comparisons. All54 bodies /4,160 bytes have
+matching source in `src/engine/` and `src/unmatched/` (category `match` in
+`data/check-categories.tsv`). The [#903](../findings/findings-0751-1000.md#f903) follow-up adds seven exact virtual tails
 /160 bytes using per-unit exceptions-off settings; see
 [compiler evidence](compiler-object-verification.md). Teardown108 adds **108 matched bytes** here.
 The eight newly classified bodies add980 bytes to the code denominator, not
@@ -38,8 +38,7 @@ existing extents, then creates only these reviewed functions. Run it against
 the existing analyzed project with `-noanalysis`, dump through
 `scripts/dump_functions.py`, and refresh with `sh scripts/sync_data.sh` and
 `python3 tools/split.py --symbols`. The normal name-overlay workflow applies
-the generated slot names and body/reflection-derived names. The private export
-recipe and objdump are in `../scratch/lua-engine-recovery/alias-backend-*`.
+the generated slot names and body/reflection-derived names.
 
 The classified code total becomes3,374,876 bytes /19,292 functions. The retail
 image bytes are unchanged. This corrects classification of980 previously unclaimed
@@ -150,15 +149,15 @@ Its backing allocator, base constructors, actual locks, file/print and ownership
 services remain controlled leaves. Complete-body instruction coverage does not
 establish complete game-state, hardware-threading or native gameplay coverage.
 
-Ten bodies /2,652 bytes remain compiler residuals. The private typed backend
-candidate has the original740-byte size and is down to eight differing words
-(six temporary-result offsets and two retry/scheduling words); it is not banked as matching C. The lock
-and diagnostic bodies also retain assembly; the seven simple virtual tails are
-now exact ([#903](../findings/findings-0751-1000.md#f903)). No assembly
+All54 bodies /4,160 bytes match. The typed backend740 is
+`src/unmatched/igAliasMemoryPool_ManageAllocation.cpp`, lock484 is
+`src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_34.cpp`, and the diagnostic bodies are
+`src/unmatched/igAliasMemoryPool_PrintStatistics.cpp` and
+`src/unmatched/igAliasMemoryPool_Dump.cpp`; the seven simple virtual tails are
+exact ([#903](../findings/findings-0751-1000.md#f903)). No assembly
 patches or fixed instruction encodings are inserted into C to count a match.
 
-Active resume: finish exact matching of the contiguous alias module, starting
-with backend740 and lock484; then close the parent allocator/ownership services
+Active resume: close the parent allocator/ownership services
 needed by the [full hub recovery contract](../systems/hub-recovery.md). Keep hub
 SD receiver, service-menu, portal/progression and save closure visible alongside
 this shared engine work. Native port acceptance remains separate.

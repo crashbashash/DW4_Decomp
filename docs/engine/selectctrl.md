@@ -8,8 +8,9 @@ The metadata getter at `0x0039cbb0` (12 bytes) and inherited dispatch check at
 `0x00378410` (8 bytes) are matched as well.
 The complete update (2,864 bytes) and general handler (1,960 bytes)
 have [readable behavioral source](../../recovered/engine/selectctrl.c), checked
-against the original instructions. These two bodies use retail assembly
-in the matching build.
+against the original instructions. These two bodies match in
+[Gap__Bec__beSelectCtrl__vfunc_31.cpp](../../src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp) and
+[Gap__Bec__beSelectCtrl__vfunc_33.cpp](../../src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp).
 
 ## Entry methods and ownership
 
@@ -153,13 +154,9 @@ actual handler/update/pad lookup beneath the owner, with immediate SD delivery
 and empty close queues. Shop-specific initialization and XDATA transactions
 are not part of that call tree.
 
-Matching probes using the original compiler are negative: with corrected field widths
-the update candidate is 2,844 versus retail's 2,864 bytes, and the handler candidate
-1,844 (1,888 with selected original no-ops) versus 1,960.
-Instruction/register allocation also differs; size proximity is not matching.
-Neither candidate is in `src/`.
+The update (2,864 bytes) and the general handler (1,960 bytes) match.
 
-Open: matching the complete 4,824-byte manager block, extending the joint common-owner
+Open: extending the joint common-owner
 oracle to actual ShopSelect initialization and XDATA transactions, and closing the
 pad/model service dependencies. The broader chip/list/recalculation, other services,
 saving and hub script closure belong to the full lobby goal, which is unfinished.
@@ -171,7 +168,7 @@ The SELECTCTRL update's lookup at `0x0039b810` is named
 [Readable source](../../recovered/engine/pad-manager-selection.c) recovers all
 88 bytes under the same guest-memory API, with no external callees. The adjacent
 12-byte metadata getter is matched. The
-lookup itself retains assembly in the matching build.
+lookup itself matches in [bePadManager_GetPadForPlayer.c](../../src/unmatched/bePadManager_GetPadForPlayer.c).
 
 Reflection handle `0x00588518` identifies `bePadManager`: `_padList` is word20,
 `_is1pAllDevice` byte28 and `_isPadDisable` byte29. The lookup uses byte29 and

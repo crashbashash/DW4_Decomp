@@ -92,7 +92,7 @@ The rows this pass added, by evidence class:
 
 | class | rows | what the bytes show |
 | --- | --- | --- |
-| epilogue growth | 159 (all EE GCC asm bodies) + `FUN_00114780` (`eret` then `jr ra; nop`) | the dump stopped 3–5 words before `ld ra; jr ra; addiu sp,+N`; the walk from the symbol start ends there |
+| epilogue growth | 159 (all functions of the EE GCC blocks; of the 156 such rows in the table, 25 match and 131 have no C source yet) + `FUN_00114780` (`eret` then `jr ra; nop`) | the dump stopped 3–5 words before `ld ra; jr ra; addiu sp,+N`; the walk from the symbol start ends there |
 | `cut`: tail-call wrapper + framed body | 20 (`FUN_00129c88`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `FUN_0012c858`, `FUN_00169e30`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
 | `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `FUN_00293788`, `FUN_00294838/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
 | `cut`: span reached a referenced leaf | 5 (`FUN_002d3d30`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |
@@ -106,8 +106,8 @@ SDK-descriptor split piece that now takes the walk's extent. `FUN_001236b8` keep
 ends in a call to a non-returning function and has no epilogue. `FUN_001eba30` and `FUN_00102550`
 stay as the earlier extent findings describe them.
 
-Every asm body whose extent changed was regenerated (`tools/asm_body_gen.py`) and verifies
-`MATCH … cat=match` (186 bodies). Three matched units were renamed because the stub rule now reaches
+A function whose extent changed and that has no C source yet links from the retail image at its
+reviewed extent; the repository keeps no asm bodies ([asm-body matches](asm-body-matches.md)). Three matched units were renamed because the stub rule now reaches
 them before the leaf rule (`FUN_001673b0`, `FUN_0016e390`, `FUN_0022bbc0` → `thunk_…` after their
 targets); ten units that called `thunk_FUN_002fe2ac` call `FUN_002fe290`.
 
@@ -157,12 +157,14 @@ The denominator grew by the code that was always there; no byte moved.
 A side effect on matched units: 104 units pass the address of a promoted function as a `DAT_<va>`
 (a callback, a field adder, a static-initializer item). The verifier flags a data name that points
 into code (`name-defect`), so those units now declare the function and pass it by name (an `(int *)`
-cast or a function-pointer parameter where the callee's prototype demanded it). Five units keep a
+cast or a function-pointer parameter where the callee's prototype demanded it). Four units keep a
 data alias on purpose — `DAT_`/`g_` spellings of one address next to its `FUN_` name defeat the
 compiler's address CSE, a matching construct the m2c pass used (`igTextureFunctionAttr_InitFields`,
-`igStencilFunctionAttr_InitFields`, `igBlendFunctionAttr_InitFields`, `igMovieInfo_InitFields`,
-`FUN_001c0f00`); naming the function there changes the bytes, so they stay `name-defect` until the
-real reason the original did not keep the address live is found.
+`igStencilFunctionAttr_InitFields`, `igBlendFunctionAttr_InitFields`, `igMovieInfo_InitFields`);
+naming the function there changes the bytes, so the first three stay `name-defect` and
+`igMovieInfo_InitFields` is `foreign-profile` in `data/check-categories.tsv` until the
+real reason the original did not keep the address live is found. `FUN_001c0f00` passes the function
+by name and is `match` (`src/unmatched/FUN_001c0f00.cpp`).
 
 ## 6. Replaying and checking
 

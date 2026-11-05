@@ -23,8 +23,7 @@ void Gap__Bec__beFont__vfunc_23(void)
 
 /* 0x00381b40 - slot 29: register `receiver` with the font's messenger under
  * the "TEXTCTL" group string (0x0050e728, data/strings.json), with a null
- * text argument and -1 as the last argument (argument roles per
- * archived near-miss note wave19). */
+ * text argument and -1 as the last argument. */
 void Gap__Bec__beFont__vfunc_29(beFont *self, int receiver)
 {
     beMessenger_RegisterReceiver(self->_messenger, receiver, &s_TEXTCTL_0050e728[0], 0, -1);

@@ -75,8 +75,15 @@ def fresh_sha(path):
         return "missing"
 
 
+# What a digest of src/ leaves out when it stands for "the headers every compile can read": the
+# translation units themselves (each is keyed by its own text) and documentation (a README or a
+# licence file is no compiler input, so editing one must not invalidate every compiled result).
+# Everything else under src/ is treated as a header.
+NOT_HEADERS = (".c", ".cpp", ".s", ".md", "LICENSE", "COPYRIGHT", "README")
+
+
 def tree_sha(root, skip_ext=()):
-    """Digest of every file under `root` (relative path + bytes), skipping the extensions in skip_ext."""
+    """Digest of every file under `root` (relative path + bytes), skipping names that end in one of skip_ext."""
     key = ("t", root, tuple(skip_ext))
     with _memo_lock:
         hit = _memo.get(key)
@@ -151,7 +158,7 @@ def build_inputs_sha(elf, symbols, unit_objects=None, extra_files=()):
         "elf", file_sha(elf),
         "symbols", file_sha(symbols),
         "include", tree_sha(os.path.join(ROOT, "include")),
-        "src-headers", tree_sha(os.path.join(ROOT, "src"), skip_ext=(".c", ".cpp", ".s")),
+        "src-headers", tree_sha(os.path.join(ROOT, "src"), skip_ext=NOT_HEADERS),
         "compilers", tree_sha(os.path.join(ROOT, "local", "mwcps2")),
         # the Sony EE GCC the pinned library units compile with (tools/eegcc_compile.py): the whole tree, like mwcps2
         "ee-gcc", tree_sha(os.path.join(ROOT, "local", "ee-gcc2.96")),

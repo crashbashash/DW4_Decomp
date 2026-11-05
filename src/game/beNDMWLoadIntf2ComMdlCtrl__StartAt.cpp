@@ -50,8 +50,7 @@ public:
  * beLoadIntf2ComMdlData record (ram number, info name, open sequence) on the
  * controller's open list; the two names are interned in the shared string
  * pool, releasing whatever the fresh record held; the creating reference is
- * released when the block ends.  Matching shapes:
- * archived near-miss note wave19. */
+ * released when the block ends. */
 extern "C" void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, int infoName, int openSQ, float *position, int recordOpen) {
     struct { float x, y, z; } v3;
     StringTokenHeader *oldNameHeader;

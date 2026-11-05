@@ -5,12 +5,12 @@ need, and how far is each recovered?* It needs the private ELF to regenerate.
 
 ## Method
 
-- **Seeds** (606 functions): the 116 Lua API implementations plus Lua dispatch and reviewed roots (277), every game-region function
-  that `port/src` or `port/include` cites by address or retail name (264), and the same from `port/docs` (65 more).
+- **Seeds** (599 functions): the 116 Lua API implementations plus Lua dispatch and reviewed roots (277), every game-region function
+  that `port/src` or `port/include` cites by address or retail name (264), and the same from `port/docs` (58 more).
 - **Closure**: direct calls and tail jumps inside the game/engine region (`0x334000`-`0x540000`), breadth first; *depth* is the number of
   calls from the nearest seed. Middleware (Sony SDK, Alchemy core, CRI, Lua, libpng) is a platform boundary the port replaces and is not
   traversed.
-- **Lower bound**: virtual dispatch, register jumps and Lua callbacks are frontiers, not inferred edges (414 unresolved sites in the set).
+- **Lower bound**: virtual dispatch, register jumps and Lua callbacks are frontiers, not inferred edges (412 unresolved sites in the set).
 - *Matched C* / *matched asm* mean a definition in `src/` that `make check` verifies byte for byte (*matched asm* is an `asm` body; none are kept in the repository). *Typed accesses*
   is the share of member accesses in matched C that use a recovered struct field (`tools/typed_coverage.py`).
 
@@ -18,15 +18,15 @@ need, and how far is each recovered?* It needs the private ELF to regenerate.
 
 | scope | functions | bytes | matched C | matched asm | not in src (bytes) | typed accesses |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| port-critical closure | 1,141 | 583,868 | 99.1% | 0.0% | 5,012 | 84.6% |
+| port-critical closure | 1,124 | 582,584 | 99.1% | 0.0% | 5,000 | 84.6% |
 
-For scale, the game/engine region holds 6,508 functions / 1,235,392 bytes, of which 1,100,268 bytes (89.1%) have a definition in `src/`; the closure is 47.3% of
+For scale, the game/engine region holds 6,508 functions / 1,235,392 bytes, of which 1,100,268 bytes (89.1%) have a definition in `src/`; the closure is 47.2% of
 the region's bytes.
 
 ## Reading
 
 - Matching has not followed the port's needs: the closure is 99.1% matched against 89.1% for the region as a whole.
-- What remains is concentrated: 0 of the 3 unmatched port-critical functions are 4 KB or larger and hold 0 of the 5,012 bytes.
+- What remains is concentrated: 0 of the 2 unmatched port-critical functions are 4 KB or larger and hold 0 of the 5,000 bytes.
   They are mostly large virtual methods (`vfunc_21`/`31`/`34`) of save/load, status, shop and model controllers.
 - The port already runs without them: it was written from the analysed behavior, so these are the places where its faithfulness is
   checked by retail comparison rather than by a byte-matched oracle.
@@ -35,8 +35,8 @@ the region's bytes.
 
 | scope | functions | bytes | matched C | matched asm | not in src (bytes) | typed accesses |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| depth 0 (seeds) | 606 | 503,176 | 99.0% | 0.0% | 5,012 | 85.6% |
-| depth 1 | 404 | 70,432 | 100.0% | 0.0% | 0 | 78.8% |
+| depth 0 (seeds) | 599 | 502,012 | 99.0% | 0.0% | 5,000 | 85.5% |
+| depth 1 | 394 | 70,312 | 100.0% | 0.0% | 0 | 79.0% |
 | depth 2 | 112 | 7,692 | 100.0% | 0.0% | 0 | 70.9% |
 | depth 3+ | 19 | 2,568 | 100.0% | 0.0% | 0 | 55.1% |
 
@@ -49,7 +49,7 @@ transitive helpers that matter only where the port runs the retail path rather t
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Lua API / script bindings | 373 | 104,920 | 97.1% | 0.0% | 3,064 | 80.2% |
 | port sources | 606 | 429,680 | 99.5% | 0.0% | 1,936 | 85.2% |
-| port documentation only | 162 | 49,268 | 100.0% | 0.0% | 12 | 87.2% |
+| port documentation only | 145 | 47,984 | 100.0% | 0.0% | 0 | 87.2% |
 
 ## By port module (functions its source cites, plus everything they reach)
 
@@ -59,7 +59,6 @@ Each function is counted once, under the first seed that reaches it (Lua binding
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | `Lua root` | 217 | 79,308 | 96.1% | 0.0% | 3,064 | 87.0% |
 | `lobbycollision.c` | 4 | 2,144 | 9.7% | 0.0% | 1,936 | 100.0% |
-| `tasks.md` | 28 | 3,536 | 99.7% | 0.0% | 12 | 81.2% |
 | `fightcalc.c` | 56 | 44,200 | 100.0% | 0.0% | 0 | 93.6% |
 | `audio-playback.md` | 34 | 13,488 | 100.0% | 0.0% | 0 | 85.5% |
 | `stagetravel.c` | 4 | 1,336 | 100.0% | 0.0% | 0 | 86.3% |
@@ -117,23 +116,23 @@ Each function is counted once, under the first seed that reaches it (Lua binding
 | `Lua API MATgetPlayerNo` | 2 | 168 | 100.0% | 0.0% | 0 | 71.4% |
 | `Lua API MATisRidePlayer` | 2 | 132 | 100.0% | 0.0% | 0 | 71.4% |
 | `Lua API MATisRideOffPlayer` | 2 | 132 | 100.0% | 0.0% | 0 | 71.4% |
-| _140 smaller origins_ | 548 | 341,312 | 100.0% | 0.0% | 0 | 86.3% |
+| `Lua API MATgetPlayerMatStat` | 1 | 36 | 100.0% | 0.0% | 0 | n/a |
+| _140 smaller origins_ | 558 | 343,528 | 100.0% | 0.0% | 0 | 86.2% |
 
 ## What is left to byte-match, nearest first
 
-Port-critical functions with no definition in `src/` yet: **3 functions / 5,012 bytes**. The list is ordered by depth, then size;
+Port-critical functions with no definition in `src/` yet: **2 functions / 5,000 bytes**. The list is ordered by depth, then size;
 the first 80:
 
 | address | name | bytes | depth | reached from |
 | --- | --- | ---: | ---: | --- |
 | `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | 3064 | 0 | Lua root |
 | `0x00385890` | `Gap__Bec__beHitLandDeliv__vfunc_33` | 1936 | 0 | lobbycollision.c |
-| `0x00467110` | `FUN_00467110` | 12 | 0 | tasks.md |
 
 ## What is left to type, biggest first
 
 Matched-C functions in the closure whose untyped accesses (raw offset casts, synthetic structs, unrecovered members) outnumber the
-recovered ones: **145 functions**. The first 60:
+recovered ones: **136 functions**. The first 60:
 
 | name | bytes | recovered | untyped | depth | reached from |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -189,7 +188,6 @@ recovered ones: **145 functions**. The first 60:
 | `FUN_004369f0` | 200 | 0 | 8 | 1 | diskshop.c |
 | `Gap__Core__igAliasMemoryPool__vfunc_34` | 484 | 6 | 7 | 0 | Lua root |
 | `FUN_0037d570` | 264 | 0 | 7 | 0 | audio-playback.md |
-| `Gap__Insight__igActorManager__vfunc_25` | 236 | 5 | 7 | 0 | tasks.md |
 | `Gap__Bec__beModelCtrlSCSound__vfunc_21` | 192 | 2 | 6 | 0 | modelsubcom.h |
 | `FUN_003a7890` | 268 | 0 | 6 | 0 | frontaudio.c |
 | `FUN_003e9220` | 28 | 0 | 6 | 1 | fightcalc.c |
@@ -197,8 +195,9 @@ recovered ones: **145 functions**. The first 60:
 | `SYSsetGateStage` | 400 | 0 | 5 | 0 | Lua API SYSsetGateStage |
 | `FUN_0037dc60` | 176 | 0 | 5 | 1 | audio-playback.md |
 | `Gap__Bec__beModelCtrlSCSound__vfunc_23` | 116 | 2 | 5 | 0 | audio-playback.md |
+| `FUN_003a64d0` | 288 | 0 | 5 | 2 | modelai.h |
 
 ## What is left to understand
 
-617 of the closure's 1,141 functions are still unnamed (166,992 bytes); 616 of those already have matching source, so naming them is a rename,
+605 of the closure's 1,124 functions are still unnamed (166,732 bytes); 605 of those already have matching source, so naming them is a rename,
 not a recovery. The rest of the evidence is in `data/port-critical-map.tsv` (one row per function).

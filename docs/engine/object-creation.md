@@ -11,8 +11,10 @@ recovery and boundaries.
 Twelve bodies have matching source (952 bytes): the eight factory/registration
 wrappers (336), default creation (48), instance registration (180), and the newly
 matched static initializer runner (120), plus full object destruction (268, [#917](../findings/findings-0751-1000.md#f917)).
-Eight bodies retain assembly. The exact
-sources are [beMessengerFactories.cpp](../../src/game/beMessengerFactories.cpp),
+The other eight have source in one-function files under `src/unmatched/`: seven match
+(1,464 bytes) and field zeroing `2ff930` (200 bytes) is `foreign-profile` (code bytes
+identical; the build-profile check is open). The exact
+sources of the twelve are [beMessengerFactories.cpp](../../src/game/beMessengerFactories.cpp),
 [igMetaObjectCreation.cpp](../../src/engine/igMetaObjectCreation.cpp), and the
 existing [instance registration source](../../src/unmatched/igObject_RegisterInstance.cpp).
 The initial checkpoint added only the120-byte runner; [#917](../findings/findings-0751-1000.md#f917) adds268 destruction

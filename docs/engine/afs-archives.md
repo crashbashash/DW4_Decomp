@@ -222,7 +222,7 @@ share `_pfmt` 0x00010000.
 Verified by eye: `stmojipnl01.png` is the status-screen label atlas (Strength/Defense/Wisdom/Spirit/
 Speed/LV/Max MP/Max HP/Tech/Skill/EXP, the digits, the fire/skull/crown/star/sword/lightning/key/eye
 icons), `stcngmoji.png` reads “Go to the destination.” / “Stay here.”, and the rest are gradients and
-ramps. `extras/dw4-tools/retail-live/live_textures.py --all` dumps all 46, keeping their real asset names
+ramps. All 46 keep their real asset names
 (`base01.png`, `num02.png`, `P12W00.png`, …).
 
 ## Unexplored

@@ -4,8 +4,13 @@ The complete contiguous four-body group at `38bee0..38ca40` has readable
 [behavioral C](../../recovered/engine/messenger-memory.c): initialization, two
 temporary reference-owner destructors and reset, totaling 2,904 code bytes.
 The same adapter includes the 28-byte `beMessenger::vfunc_26` reset forwarder,
-for five bodies / 2,932 bytes. Finding [#871](../findings/findings-0751-1000.md#f871) records the recovery. Only that
-forwarder has matching source; the other four remain assembly.
+for five bodies / 2,932 bytes. Finding [#871](../findings/findings-0751-1000.md#f871) records the recovery. All five
+bodies match: the forwarder in [beMessenger.cpp](../../src/game/beMessenger.cpp), initialization in
+[beMessenger_InitializeMemory.cpp](../../src/unmatched/beMessenger_InitializeMemory.cpp), reset in
+[beMessenger_ResetMemory.cpp](../../src/unmatched/beMessenger_ResetMemory.cpp), and the two destructors as
+compiler-emitted members of the units in
+[beMessenger_EnqueueSelected.cpp](../../src/unmatched/beMessenger_EnqueueSelected.cpp) (`38c390`) and
+[beMessenger_SelectReceivers.cpp](../../src/unmatched/beMessenger_SelectReceivers.cpp) (`38c410`).
 
 The [name generator](../../scripts/seed_names_messenger_memory.py) identifies
 initialization and reset from reflection and original instructions. The precise
@@ -66,9 +71,8 @@ flag additionally deletes owner storage. They return the original owner referenc
 The existing reset forwarder in [beMessenger.cpp](../../src/game/beMessenger.cpp)
 now explicitly receives and forwards its messenger argument. Its prior source
 omitted the argument despite the original call using incoming a0. The corrected
-signature preserves all 28 original bytes. No new matching code bytes are added
-by this checkpoint. Natural typed destructor drafts still differ in instruction
-scheduling and remain outside `src/`.
+signature preserves all 28 original bytes. The two destructors match as
+compiler-emitted members of the units named above.
 
 ## Verification and integration
 
@@ -108,8 +112,7 @@ fixtures supply layouts required by the callers; they are not recovered factory
 implementations. In particular, transitive constructor/destructor ownership and
 allocation failure policy remain open. Native gameplay and complete engine
 recovery are not established by this subgroup. Next work includes actual
-factories/registry, lower-service composition, concrete receivers and the four
-compiler residuals.
+factories/registry, lower-service composition and concrete receivers.
 
 The subsequent [creation recovery](object-creation.md) executes the original
 factory and shared reflection/construction/lifetime bodies through this memory

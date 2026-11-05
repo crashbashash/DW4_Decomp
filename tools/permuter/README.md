@@ -50,6 +50,43 @@ prints the improved candidate and writes it to the project directory.
 improvement, so `run.sh --print-diffs > log 2>&1 &` dies immediately with `EOFError`. Use
 `--better-only`, which writes `output-<score>-N/` and prints the improvement line, or feed stdin.
 
+## Rounds, merging and the guard
+
+A single run keeps restarting from the same `base.c`, so what it finds does not accumulate, and a
+lower score is sometimes reached by losing code rather than by getting closer.
+[`../perm_refine.py`](../perm_refine.py) works on a project folder that `permuter_one.py` built:
+
+```sh
+python3 tools/permuter_one.py 0x302000 --build-only            # build/permuter/<symbol>/
+python3 tools/perm_refine.py facts  build/permuter/<symbol>
+python3 tools/perm_refine.py rounds build/permuter/<symbol> --rounds 20 --budget 60 --jobs 4
+python3 tools/perm_refine.py merge  build/permuter/<symbol> --apply
+```
+
+- **`rounds`** searches in short rounds. The best acceptable output of a round replaces `base.c`
+  for the next one; every round's outputs are kept under `rounds/rNNN/`, the starting source as
+  `rounds/base.start.c`, and each replaced `base.c` beside the current one. It stops at score 0,
+  after `--rounds`, or after `--stall` rounds without an acceptable improvement.
+- **`merge`** takes the outputs within `--within` of the best score, splits what each changed in
+  `base.c` into edits of at most `--max-lines` lines, tries every edit on its own, and stacks the
+  ones that lower the score, re-scoring after each. Longer rewrites are left out on purpose: they
+  can tie on score while moving away from the original source. `rounds` runs a merge every
+  `--merge-every` rounds and once more before it gives up.
+- **The guard** applies to both. A candidate is refused when, compared with the current `base.c`,
+  it is missing more of the calls the target makes, has fewer of the target's stores to memory
+  (stack saves do not count), or shrinks below `--min-share` of the target's instruction count.
+  `facts` prints what the guard sees for the target and for a source file.
+
+The score is the number of instruction-level differences from `target.o` (calls compared by
+symbol, branches without their addresses). It ranks candidates; it proves nothing. A result at 0
+goes through `tools/verify.py` like any other candidate, and what the search produced is
+permuter-shaped C: it earns a place in `src/` only once it is rewritten to read as source, with
+`/* matching construct: permuter — … */` at any line whose shape came from the search.
+
+A measured example on `ObjectList_RemoveFirstRetained` (`0x302000`, 62 instructions): the m2c
+draft starts at 56 differences; three 30-second rounds take it to 41, 28 and 27 with the target's
+two calls kept throughout.
+
 ## The compile contract
 
 The permuter preprocesses the candidate in C mode and then hands the *preprocessed* text to
@@ -59,7 +96,9 @@ front end, which rejects `_Bool`, so `FUN_00334460/compile.sh` deletes that line
 (`sed '/^typedef .* bool;$/d'`) before compiling. No MWCC-MIPS code adapter was needed:
 `compiler_type` in `permuter_settings.toml` only selects randomization weights, and the build
 command comes from `compile.sh`. Arch detection reads `e_machine` from `target.o` (`8` = MIPS) and
-picks `mips-linux-gnu-objdump`.
+picks `mips-linux-gnu-objdump`. Where binutils are installed only under the little-endian name
+(`mipsel-linux-gnu-objdump`), `permuter_one.py` puts a link to it on the permuter's `PATH`; a permuter that
+still cannot start is reported with the last line of its log instead of an empty result.
 
 A project directory must contain exactly **`base.c`, `target.o`, `compile.sh`**.
 

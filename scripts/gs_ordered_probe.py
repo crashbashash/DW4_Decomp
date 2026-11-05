@@ -7,7 +7,7 @@ This is a scoped model, not a GS emulator: nearest sampling, approximate float
 interpolation/edge rounding, a zero initial depth surface and no GS memory aliasing.
 The selected section must contain the observed context-0 triangle pipeline only.
 Images are evidence for draw ordering, not a pixel-exact PCSX2 replacement.
-Requires Pillow and the private ../local/tools/gs dump readers.
+Requires Pillow and the GS dump readers gsread, gsregs and gsdraws, which are not in the repository.
 """
 import os, struct, sys, argparse, json
 from pathlib import Path

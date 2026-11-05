@@ -56,9 +56,6 @@ The match category of each function is recorded in the generated `data/check-cat
 The seven Lua wrappers total **240 matched code bytes** and each passes `tools/verify.py` in C++
 mode. C mode produces tail jumps rather than the original stack frames.
 
-Private compiler candidates, the exporter bootstrap, original Ghidra and objdump evidence,
-verification reports and logs are in repository-relative `../scratch/lua-engine-recovery/`.
-
 ## Fields
 
 | beMatCtrl offset | Recovered meaning |

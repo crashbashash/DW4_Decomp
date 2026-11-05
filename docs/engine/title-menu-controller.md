@@ -89,7 +89,8 @@ make typed-check
 make hygiene
 ```
 
-The complete build has **18,325 exact functions** and a byte-identical relink.
+The complete build relinks byte-identically; the live function figures are in
+[`PROGRESS.md`](../../PROGRESS.md).
 Two negative ownership configurations are rejected: selecting the adjacent
 exception-index record, and redirecting CTRL cleanup to the byte-identical
 `0x3f2bc0` body. In the latter test all code bodies still match, but the exception
@@ -290,9 +291,9 @@ the next module down: `beNDMWLoadIntf2`.
 
 The title runtime is closed. A remaining controller target is the
 6,076-byte `beNDMWLogo::vfunc_31` at `0x449030`.
-The downstream `beNDMWLoadIntf2` update at `0x3e4750` remains a documented
-18,616-byte assembly-body roadblock; its message handler at `0x3e9430`
-has matching C++. See [the current roadblocks](asm-body-matches.md#the-port-critical-seeds)
+The downstream 18,616-byte `beNDMWLoadIntf2` update at `0x3e4750` matches as
+[`src/game/beNDMWLoadIntf2Update.cpp`](../../src/game/beNDMWLoadIntf2Update.cpp); its message handler at `0x3e9430`
+has matching C++. See [the port-critical seeds](asm-body-matches.md#the-port-critical-seeds)
 and [the load-interface contracts](load-intf2.md).
 
 ### Common-model boundary ([#756](../findings/findings-0751-1000.md#f756)–[#758](../findings/findings-0751-1000.md#f758))

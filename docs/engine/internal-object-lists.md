@@ -2,10 +2,11 @@
 
 Finding [#882](../findings/findings-0751-1000.md#f882) records **22 complete bodies / 2,324 code bytes** in
 [behavioral C](../../recovered/engine/internal-object-lists.c): the full contiguous
-raw/retaining list run `2ea4f0..2eade8` and factory `2c2670`. Twenty bodies /
-2,024 bytes now have matching source (lookup follow-up [#886](../findings/findings-0751-1000.md#f886)). Seven new matches add **884 bytes**: copy 160,
+raw/retaining list run `2ea4f0..2eade8` and factory `2c2670`. All 22 bodies /
+2,324 bytes have matching source (lookup follow-up [#886](../findings/findings-0751-1000.md#f886)). Seven new matches add **884 bytes**: copy 160,
 slack clearing 104, insertion 188, erase 84, append 136, retained destruction 48
-and retained resize 164. Growth 232 and pointer-index lookup 68 retain assembly; the corrected string-field
+and retained resize 164. Growth 232 and pointer-index lookup 68 match in
+`src/unmatched/ObjectPointerList_EnsureIndex.cpp` and `src/unmatched/ObjectPointerList_FindIndex.c`; the corrected string-field
 lookup adds 160 exact bytes in follow-up [#886](../findings/findings-0751-1000.md#f886). The shared pointer-index behavioral implementation
 remains in the prior metadata recovery; no independent duplicate is introduced.
 

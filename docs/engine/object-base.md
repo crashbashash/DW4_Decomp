@@ -5,8 +5,9 @@ publication and descriptor-attachment bodies in
 [object-base.c](../../recovered/engine/object-base.c), plus the unsigned descriptor
 factory/constructor/initializer now included in
 [field-factories.c](../../recovered/engine/field-factories.c).
-Eleven bodies / 556 bytes have exact matching source. Vtable lookup (48) and
-manual field initialization (540) retain assembly and private compiler candidates.
+All thirteen bodies / 1,144 bytes have exact matching source. Vtable lookup (48) is in
+[igObject_GetVTable.c](../../src/unmatched/igObject_GetVTable.c) and manual field initialization (540) in
+[igObject_InitFields.c](../../src/unmatched/igObject_InitFields.c).
 
 Five new matching functions add **104 bytes**: empty initializer callbacks 60,
 registration forwarding 12, and three newly classified leaf callbacks totaling 32.

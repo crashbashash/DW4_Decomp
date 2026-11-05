@@ -23,11 +23,11 @@ _Questions that have an answer are not kept in the tables — see [Answered](#an
 | Do enemies **terrain-snap** Y like the player? | open for enemies ([#413](../findings/findings-0251-0500.md#f413)) | [`enemy-spawn-system.md`](enemy-spawn-system.md) §7. The player **does** snap up (measured); the enemy's three found copies are *derived*, so writing them measures the refresh schedule, not the entity. The clean experiment is named: author a spawn Y **below** the floor in `_genePosList` |
 | Decode the per-stage generator igb tables (positions/rows for every stage, not just the two sampled) | open — a sweep of the 143 generator-bearing packs; the instance encoding is solved ([#417](../findings/findings-0251-0500.md#f417)–[#420](../findings/findings-0251-0500.md#f420)) | same §7. Enumerating `beGenerater*` by vtable ([#415](../findings/findings-0251-0500.md#f415)/#416) reads a loaded stage's generator rows directly — 73 generators in stag0102 with enemy id, start/fill mode strings and timings — so the decode has a live cross-check |
 | Any `_genePosIsGlobal=0` (stage-local) spawn entries anywhere | open | same §7 |
-| Drop-list `rank` field meaning; `abChip` ids; weapon ids 256–265 model order | open | [`drop-tables.md`](drop-tables.md), `drops/WOODENCASE-DROPS.md` (outside the repository: `extras/reference/drop-reports/WOODENCASE-DROPS.md`) |
+| Drop-list `rank` field meaning; `abChip` ids; weapon ids 256–265 model order | open | [`drop-tables.md`](drop-tables.md) |
 | ~16 variant models with no row of their own (`f_devl*`, `e_mecha2st0203`, `e_mecha4dn`, …) | unconfirmed | same §7.4 |
 | Every boss row except `e_mecha4` row 60 — unmeasured (they scale by construction) | unconfirmed | same §7.4 |
 | Destructibles: confirm the generator-row vs MODELCTRL-default split on a scratch disc; is the 20/34 damage fixed or a fraction of max? | open | same §7.10 / §5 |
-| Boss enemy-drop amounts: two rows pay out different amounts — which is authoritative | open | `drops/GOBLIN-FORTRESS-ENEMY-DROPS.md` (outside the repository: `extras/reference/drop-reports/GOBLIN-FORTRESS-ENEMY-DROPS.md`) |
+| Boss enemy-drop amounts: two rows pay out different amounts — which is authoritative | open | — |
 
 ## Items, techniques & content
 

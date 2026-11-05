@@ -416,7 +416,6 @@ Validation: `check-statusdevice-retail` executes 4,096 row-decision cases,
 against original instructions. Property/attribute lookup, generic allocations,
 selector/resource operations and stat recalculation are controlled leaves;
 the row decisions, controller branches and preview admission execute retail.
-Read-only/noanalysis Ghidra exports and objdump checks remain in `../scratch/`.
 Prepared view checks use original Lua, production databases/player records,
 actual cursor/model waits and production transaction IO. They cover three pages,
 disabled confirm, short final pages, per-player/vertical input, repeated queries,
@@ -655,7 +654,7 @@ Model REMOVE clears the retained fade state (`fade_present`): original Action2
 `377990` releases Work and clears node default attributes on REMOVE. Keeping the
 previous OUT opacity makes reopened Key/DISK panels invisible. Capture
 regressions require the reopened `i_stfolder` slot to be drawable with positive
-alpha. Evidence export: workspace `scratch/status-action2-visibility.txt`.
+alpha.
 
 Text: retail string conversion `382eb0` uses 424 custom Unicode/encoded-byte
 pairs at retail table `4c8880`. The mapping is not standard CP932 or UTF-8:
@@ -663,8 +662,6 @@ marker `81ba` maps to `2286`, and `8a71` to `8d6b`. Native text uses that
 424-pair decoder rather than copying TEXTSET bytes individually; all 816 original
 code-output cases pass. See
 [byte-to-Unicode boundary](dialogue-services.md#original-byte-to-unicode-boundary).
-Read-only/noanalysis exports are workspace `scratch/status-text-encoding.txt` and
-`scratch/status-string-to-unicode.txt`.
 
 ## Validation
 
@@ -692,36 +689,24 @@ The per-owner comparisons are listed with each owner above. The normal-boot and
 SDL controller routes through these menus are in
 [status/menu verification](status-menu.md#verification). The full native run is
 `all check check-retail` with the virtual-pad ignore override
-`SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a`; optional live-input, display
+`SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>`; optional live-input, display
 and live-dump checks skip. Sanitizer runs of the headless view, equipment,
 record/detail/FLAG and transaction tests use ASan/UBSan with `detect_leaks=0` and
 `halt_on_error=1`; the focused submenu/scene tests also pass with leak detection
 enabled.
 
-Run logs of these comparisons are in the workspace `scratch/` folder:
-`status-folder-routing-*.log`, `status-submenu-export*.log`,
-`status-disk-outer-*.log`, `status-detail-outer-*.log`,
-`status-currency-outer-*.log`, `status-positioned-retail.log`,
-`status-socket-resume-*.log`, `status-equipment-blank-*.log` and
-`status-sequence-fraction-*.log`. The source export for the Key/DISK font
-initialization is `scratch/status-folder-owners.txt`.
-
 ## Rendered-menu comparison against retail
-
-Captures and reports are in the workspace folder
-`local/captures/dw4-port/status-validation-20261012/`.
 
 Native menu exports are enabled with `DW4_STATUS_CAPTURE_MENUS=1` and
 `test_statusviews ROMS PNG EXISTING_DIR --root-only`. `frames.tsv` identifies each
 actual player/view; `verify_status_render.py --frame N` selects that submission.
-`native-menus/` covers the root, equipment selector, three equipment slots,
-FOLDER selector and skill selector for all four players;
-`native-folder-pages/frames.tsv` identifies the exported FOLDER pages.
+The exports cover the root, equipment selector, three equipment slots,
+FOLDER selector and skill selector for all four players; a second `frames.tsv`
+identifies the exported FOLDER pages.
 
 Retail PNG/GS captures cover DEVICE list/actions, empty Key Folder, DISK
 list/actions and no-disk refusal, no-recipient currency, the skill selector and
-all three real fresh-player skill pages (files and route provenance in
-`socket-skill-pages/manifest.json`).
+all three real fresh-player skill pages.
 
 Text vertices, compared as retained vertices across multi-vsync dump candidates:
 
@@ -740,17 +725,15 @@ Text vertices, compared as retained vertices across multi-vsync dump candidates:
 
 Each of these pages also matches twelve vertices in the other font atlas. All
 DEVICE list/action text, currency refusal text and skill-selector text vertices
-match their retail candidates. The Key and DISK reports are
-`*-aligned-comparison.json`; `weapon-slot-comparison.json` is the first-player
-weapon-slot diagnostic. The five compressed skill-page dumps validate and the
+match their retail candidates. The five compressed skill-page dumps validate and the
 three page PNGs were visually inspected. These text checks do not establish
 animated model timing or full-frame parity.
 
-Phase comparison: `socket-phase-pages/` contains seventeen visually identified
+Phase comparison: the captures cover seventeen visually identified
 menus, each with a twelve-frame GS dump request and paused EE node-clock reads
 after six emulated vsyncs; the VM resumes to complete and validate the compressed
-file. `all-clocks.tsv` supplies 215 page-specific model/slot/time samples;
-`native-socket-phase-pages/` exports the corresponding diagnostic native route.
+file. The clock reads supply 215 page-specific model/slot/time samples, and a
+diagnostic native route exports the corresponding pages.
 The sampler changes only pose evaluation, retaining native eligibility, alpha,
 ownership and live clocks. Actor/scene/clock immutability and repeat-draw checks
 pass, as does the legacy three-column clock fixture.
@@ -761,18 +744,15 @@ that fraction; all 876 original queries pass, and independent paused background
 matrix reads converge closely. Without the quantization four background vertices
 (armor slot one, FOLDER selector two, species skill one; 128,348/128,352 matched)
 fail reciprocal Q with relative errors of 2.58–2.88e-5 against the
-`1e-8 + 2e-5*abs(Q)` allowance while their position errors stay below 0.073 px
-(detailed values: workspace `scratch/status-socket-q-diag.log`); the allowance is
-not widened.
+`1e-8 + 2e-5*abs(Q)` allowance while their position errors stay below 0.073 px;
+the allowance is not widened.
 
 The complete seventeen-page comparison matches 128,352/128,352 vertices
 (geometry, UV, RGBA and reciprocal Q), including all 26,136 text vertices, with
 unchanged position/UV/RGBA/Q allowances. Restricting each comparison to dump
 vsync interval five also passes all seventeen; every other tested root interval
 fails. The parser's interval/record/packet metadata and `--retail-vsync` prevent
-combining different frames. PRIM.TME is checked independently of ABE. Reports:
-`socket-phase-pages/*-phase-comparison.json`, `phase-summary.json`,
-`single-interval-summary.json` and `*-vsync5-comparison.json`. The phase
+combining different frames. PRIM.TME is checked independently of ABE. The phase
 comparison is a multi-vsync candidate comparison and the single-interval gate
 restricts it to one dump interval; neither is a live scheduling proof.
 
@@ -783,8 +763,7 @@ restricts it to one dump interval; neither is a live scheduling proof.
   STATUS mode zero only, not the shop/card modes.
 - Recipient quantity alignment on the DISK giving panel has no contract audit.
 - Pixel comparison is a separate gate from the vertex comparisons; it exposes a
-  WN depth omission. The address decoder check is workspace
-  `scratch/status-framebuffer-address-test.log`.
+  WN depth omission.
 - Full-frame and reverse draw-set comparison, live phase, live joined-player
   ownership and physical input/audio devices are not validated. No emulator,
   Windows or physical Steam Deck parity is established for these menus.

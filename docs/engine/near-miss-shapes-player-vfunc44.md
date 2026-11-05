@@ -1,8 +1,9 @@
 # beNDMWMdlPlayer::vfunc_44 (0x003d4390): typed recovery and the last wall
 
 `Gap::Bec::beNDMWMdlPlayer::vfunc_44` (608 bytes) is the player's idle player-number-badge handler
-(findings [#1090](../findings/findings-1001-1250.md#f1090) and [#1092](../findings/findings-1001-1250.md#f1092)). It is **not banked**: the best source below is byte-identical to retail except
-for one 5-word cluster, so it stays assembly until that is solved.
+(findings [#1090](../findings/findings-1001-1250.md#f1090) and [#1092](../findings/findings-1001-1250.md#f1092)). It matches: the source is
+[Gap__Bec__beNDMWMdlPlayer__vfunc_44.cpp](../../src/unmatched/Gap__Bec__beNDMWMdlPlayer__vfunc_44.cpp). The source below is byte-identical to retail except
+for one 5-word cluster; the matched file compares the status through a pointer-to-pointer, which keeps that cluster.
 
 ## What it does (typed)
 

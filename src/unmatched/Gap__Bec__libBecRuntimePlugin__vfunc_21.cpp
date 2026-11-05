@@ -8,7 +8,7 @@
  * Evidence: asm/Gap__Bec__libBecRuntimePlugin__vfunc_21.s (38 repeated create blocks, 39 registrations).
  *
  * Compiler: the alternate (combat) MWCC at -O3,p -- its 8-byte alignment nops before the join
- * labels are part of retail's layout (see archived near-miss note wave15). */
+ * labels are part of retail's layout. */
 #include "dw4/reflected.h"
 struct RefCountedObject { int w0; int refCount; };
 extern "C" {

@@ -10,8 +10,7 @@ tables are decoded for two stages: `stag0102` (sampled) and **`stagGF01` in full
 (§4b — all 24 generators, with rows, counts and drop lists).
 
 The "MODELCTRL is the enemy spawner" reading in findings [#156](../findings/findings-0001-0250.md#f156)/#160/#162
-is **refuted** (§7). Evidence: findings [#249](../findings/findings-0001-0250.md#f249)–[#253](../findings/findings-0251-0500.md#f253) and
-`scratch/gene_inspect.py`, `gen_iw.py`.
+is **refuted** (§7). Evidence: findings [#249](../findings/findings-0001-0250.md#f249)–[#253](../findings/findings-0251-0500.md#f253).
 
 ---
 
@@ -115,8 +114,7 @@ facing comes from `_geneRotYRadianList`), which is why its value only mirrors th
 angle.
 
 **Confirmed live:** walked the pristine bridge and 3× `e_goburi` (row 5, HP 649)
-spawned on entering radar range of the row-5 points
-(`captures/dw4/frame-20260922T103104.270Z.png` — capture kept with the working data).
+spawned on entering radar range of the row-5 points.
 
 ## 4. Where the spawn goes
 
@@ -144,7 +142,7 @@ next spawn and editing `_geneRotYRadianList` turns it — live, no reload needed
 
 ## 4b. `stagGF01` generator inventory (live, complete)
 
-All 24 authored generators, read out of a live fortress (`extras/reference/drop-reports/live-data/enemy_live.json` (outside the repository: `extras/reference/drop-reports/live-data/enemy_live.json`)).
+All 24 authored generators, read out of a live fortress.
 `_geneEnemyId` is row 0 or 2 for every one of them — both ordinary `e_goburi`
 (Goburimon) rows of the 649-row table, i.e. **this stage contains no other enemy
 type**. `_pos` is the radar anchor (`_genePosIsGlobal` = 1 on every entry); the
@@ -263,11 +261,6 @@ pack edit. That path is open (§6c): the row/position/rotation values read strai
 out of the pack (`scripts/igb_inst.py`, [#419](../findings/findings-0251-0500.md#f419)/#420) **and** live (`beGeneraterInfoRam` →
 `beGeneraterData`, [#427](../findings/findings-0251-0500.md#f427)), and `_geneEnemyId` has been changed both ways and booted.
 
-Helper scripts: `../extras/dw4-tools/swap_spawn.py` (live: list the generator graph and repoint
-rows + force a re-latch), `../extras/dw4-tools/patch_spawn.py` (offline: rewrite `_geneEnemyId` in
-the pack and drop it into an ISO), `scratch/gene_inspect.py`, `scratch/gen_iw.py` and
-`scratch/gene_move.py` (the §4 position/facing demo).
-
 ## 6b. Swapping the spawned **model** — pinned, not re-read per spawn (finding [#255](../findings/findings-0251-0500.md#f255); mechanism decoded by [#412](../findings/findings-0251-0500.md#f412))
 
 Unlike position and facing, the spawned **model name is latched at generator init**:
@@ -323,24 +316,22 @@ beGeneraterInfoWork +0x1c latched model name (char*), +0x20 row, +0x24 HPMAX
 ```
 
 Then write the new row to `beGeneraterData+0x24` and clear `InfoRam+0x2c` to force a
-re-latch. `../extras/dw4-tools/swap_spawn.py --list` prints the whole 1:1 map (name, row, active,
-latched model/HP); `--from <rows> --to <row> --reinit [--only GENE-xx]` does the swap.
-This turned the stag0102 bridge's `e_goburi` (rows 4/5) into `e_ogre` (row 36) — GENE-03
+re-latch. This turned the stag0102 bridge's `e_goburi` (rows 4/5) into `e_ogre` (row 36) — GENE-03
 and GENE-13 both verified on screen.
 
 **Durable (cold boot):** rewrite `_geneEnemyId` in the stage's generator pack and patch
 the ISO. The pack is `NDMW.AFS` entry 622 (§7), the field's record offset is recomputed
-by walking the record's own descriptors (`../extras/dw4-tools/patch_spawn.py`), and the write is a
-same-size 4-byte edit — `--goburi-to-ogre` changes **156 4-byte words** (52 per tier
+by walking the record's own descriptors, and the write is a
+same-size 4-byte edit — turning Goburimon into Ogremon changes **156 4-byte words** (52 per tier
 pack × 3) in a copy of the disc and nothing else. A cold boot of that disc spawns
-Ogremon where the vanilla disc spawned Goburimon (`captures/dw4/ogremon-swap/`).
+Ogremon where the vanilla disc spawned Goburimon.
 
 **Tier packs ([#429](../findings/findings-0251-0500.md#f429); not "per-language copies", as [#419](../findings/findings-0251-0500.md#f419) has it):** entries **622/623/624** are the
 same 72-generator stag0102 layout (identical `GENE` positions) at three **row tiers** —
 622 = `e_goburi` 4/5 + `e_ogre` 36, 623 = 0/1 + 33, 624 = 8/9 + 39, i.e. the tier-1/0/2
 bands of the `e_goburi` rows 0–11 and `e_ogre` rows 33–41. Which one loads depends on
 the difficulty/setting (the live session here used 622). So a pack edit is a *set* of
-edits; `patch_spawn.py --goburi-to-ogre` maps each pack to its own e_ogre row.
+edits, each pack mapped to its own e_ogre row.
 
 ## 7. Refuted readings, settled points and open questions
 

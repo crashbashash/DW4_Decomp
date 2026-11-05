@@ -411,7 +411,7 @@ def main():
             if not os.path.exists(ofr) or os.path.getsize(ofr) < 1024:
                 problems.append("no frame written while the Option screen was up")
 
-        # --- run 2c: the slot screen is the pack's own four coloured panels (finding: charsel/) ----
+        # --- run 2c: the slot screen is the pack's own four coloured panels ----
         sfr = os.path.join(tmp, "slot.png")
         asset = os.path.join(os.path.dirname(a.tool), "dw4asset")
         rc, outs, errs = run(asset, ["chr", a.roms, "--t", "3.5", "--out", sfr])

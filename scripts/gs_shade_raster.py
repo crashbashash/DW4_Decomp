@@ -16,7 +16,7 @@ against the port isolates *which* half is wrong (findings #583/#584/#585).
 
 Usage:
 
-    python3 scripts/gs_shade_raster.py --dump ../local/dumps/goblin_pass_ref.gs.zst \
+    python3 scripts/gs_shade_raster.py --dump <dump>.gs.zst \
         --tex0 0x40060805e1312fc0 --tex0 0x40063405dd30b160 --out-dir /tmp/raster
 
 Writes `shade.npy`/`shade.png`, `texel.npy`/`texel.png`, `frame.npy`/`frame.png` and prints the

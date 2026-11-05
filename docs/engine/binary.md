@@ -91,18 +91,17 @@ size** — which the generated linker script now enforces a unit at a time.
 - **`make link`'s own output boots.** Measured: `build/game.elf` goes onto a disc and the game plays
   (one LOAD at `0x00100000`, entry `0x100008`, and the CRT clears BSS itself, so the segment's
   `MemSiz == FileSz` is fine).
-- **`../extras/dw4-tools/shape_elf.py`** then splices the linked section back into a copy of the retail ELF.
+- A later step splices the linked section back into a copy of the retail ELF.
   That is not needed to boot — it is what makes a mod *small*: the linked file is 7.3 MB because ld
   pads its segment and adds a separately named `.exceptix` section. Retail retains exception-index
   data within its flat image ([combat example](../systems/combat-reference-helpers.md#retail-unwind-identities)). A retail-shaped file
   of 4,541,744 bytes lets the disc be patched **in place**, so the ISO keeps its exact size and a mod
   is the bytes it actually changes.
-- `../extras/dw4-tools/repack_iso.py` writes the file in (see below), and `../extras/dw4-tools/make_mod.sh` runs the
-  whole sequence from a source patch and reports how many bytes of the disc differ.
+- The file is then written into the disc image (see below).
 
-**Measured end to end** (the `mods/code-mod-difficulty` example, which forces Very Hard by ignoring
+**Measured end to end** (a patch that forces Very Hard by ignoring
 the difficulty argument): the patch compiles, `linkcheck` reports **15 differing bytes**, all inside
-`SYSsetDifficulty` (`0x371dd4`–`0x371de7`); `shape_elf` produces a retail-sized ELF with those same
+`SYSsetDifficulty` (`0x371dd4`–`0x371de7`); the spliced ELF is retail-sized with those same
 15 bytes; the repacked ISO is **the same 1,448,902,656 bytes as the master and differs in exactly 15
 bytes**; and that disc boots and plays.
 
@@ -175,8 +174,8 @@ So:
 - On the disc the boot ELF sits at **LBA 289** with 17 files behind it (down to `OUTER.DAT` at
   607458) and only **14 free sectors** at the end of the volume, so a section that *does* grow cannot
   be written in place: the file is appended and its ISO9660 directory record re-pointed (a record
-  holds its extent and length as 8-byte both-endian fields, and the volume space size likewise). That
-  tool is `../extras/dw4-tools/repack_iso.py`, and it was verified by booting a grown image.
+  holds its extent and length as 8-byte both-endian fields, and the volume space size likewise). This
+  was verified by booting a grown image.
 
 ### Entry point (`0x00100008`)
 Disassembles to `padduw`-based register zeroing — an **EE MMI** instruction, which

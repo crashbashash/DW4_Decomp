@@ -54,7 +54,7 @@ RULES = [
     ("opt-path", r"(?<![A-Za-z0-9_.-])/opt/[A-Za-z0-9._-]+",
      "an install location of one machine; name the tool and the env var or config key that locates it"),
     ("tmp-session-path", r"/tmp/(?:[A-Za-z0-9._-]*(?:claude|codex|agent|session)[A-Za-z0-9._-]*|[A-Za-z0-9._-]*-home-[A-Za-z0-9._-]*|[A-Za-z]+-\d{4,})(?:/|\b)",
-     "a session- or account-stamped scratch path; use ../scratch/ or <scratch>"),
+     "a session- or account-stamped scratch path; use a path under build/"),
     # Hardware words beyond a model number: the host's processor vendor, and GPU families/architectures.
     ("cpu-vendor", r"\b(?:[Aa]ctual\s+)?(?:AMD|Intel|ARM|Apple)\s+CPU(?:\s*/\s*GPU)?\b",
      "the vendor of the host's processor says nothing a reader needs; write 'a desktop CPU' (or 'the CPU and GPU checks')"),
@@ -66,7 +66,7 @@ COMPILED = [(n, re.compile(p), h) for n, p, h in RULES]
 # path there is a machine's scratch or install location, not an artifact a reader can open.
 DB_RULES = [
     ("db-scratch-path", r"(?<![A-Za-z0-9_.-])/(?:tmp|opt|var/tmp)/[A-Za-z0-9._-]+",
-     "findings cite repository-relative paths (or ../scratch/, ../local/, ../extras/); a /tmp or /opt path is one machine's"),
+     "findings cite repository-relative paths; a /tmp or /opt path is one machine's"),
 ]
 DB_COMPILED = [(n, re.compile(p), h) for n, p, h in DB_RULES]
 REGISTER = "docs/findings/"       # the findings register: evidence text, held to DB_RULES as well

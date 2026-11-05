@@ -15,7 +15,7 @@ mapping is `dump vertex k of packet p -> mesh vertex base[p] + k`, with that one
 
 Usage:
 
-    python3 gs_barrel_shading.py --dump ../local/dumps/goblin_pass_frame.gs.zst \\
+    python3 gs_barrel_shading.py --dump <dump>.gs.zst \\
         --tex0 0x4007950555307ca4 --afs ../local/extracted/NDMW.AFS --entry 614 \\
         --vertex-array 36087 --decomp . --out /tmp/barrel_shading.json
 

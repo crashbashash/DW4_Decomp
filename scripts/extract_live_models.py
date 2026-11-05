@@ -34,10 +34,10 @@ UVs are written into the OBJ as `vn`/`vt`.
 
 Usage:
     python3 extract_live_models.py --list
-    python3 extract_live_models.py --out-dir ../local/evidence/models --limit 20
-    python3 extract_live_models.py --addr 0x1260d88 --out ../local/evidence/models/barrel.obj
+    python3 extract_live_models.py --out-dir <out-dir> --limit 20
+    python3 extract_live_models.py --addr 0x1260d88 --out <out-dir>/barrel.obj
     # offline, from a paused-game EE-RAM dump (no emulator):
-    python3 extract_live_models.py --from ../local/evidence/models/ee-pre-leomon.bin --out-dir /tmp/geom
+    python3 extract_live_models.py --from <ee-dump>.bin --out-dir /tmp/geom
 """
 import argparse
 import json

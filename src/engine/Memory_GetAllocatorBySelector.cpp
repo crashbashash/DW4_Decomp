@@ -2,7 +2,7 @@
  * Ask the current memory context (Memory_GetCurrentContextAlias, a jump to
  * 0x002f8680) for an allocator by selector: virtual call through vtable slot 23
  * (+0x5c) of the context, passing the context and the selector.  Callers use the
- * result as the allocator of a new object, e.g. archived near-miss note wave6s8.
+ * result as the allocator of a new object.
  * The context's first 23 virtuals are placeholders; the declared return type
  * is void, as matched (the result stays in v0). */
 extern "C" {

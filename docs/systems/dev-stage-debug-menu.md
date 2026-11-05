@@ -139,7 +139,7 @@ Each screen is one `msg-80xxx.lua` script: a `SELECTCTRL i_stcursor01` cursor pl
 
 ```sh
 pad run &
-pcsx2 start --statefile ../local/testing/states/dev-world/digi-elf-2.p2s "<any disc>"
+pcsx2 start --statefile <digi-elf-savestate>.p2s "<any disc>"
 # talk, then advance the two dialogue lines
 input press Cross --backend pad --ms 250          # x3
 # walk to screen N:  Cross on つぎのページ, once per screen (N-1 times)

@@ -130,7 +130,7 @@ def collect():
         name = syms[va][0]
         if name not in paths:
             return "unmatched"
-        return "asm body" if progress.is_asm_body(paths[name]) else "matched C"
+        return "asm body" if progress.is_asm_body(name, paths[name]) else "matched C"
 
     rows = []
     for line in TSV.read_text().splitlines():

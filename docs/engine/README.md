@@ -17,7 +17,7 @@ Index: [`../README.md`](../README.md).
 
 | File | Topic |
 |---|---|
-| `binary.md` | ELF/binary facts, entry point, Ghidra import, middleware, the 80 kernel syscall stubs (`../config/syscalls.txt`), baseline dumps |
+| `binary.md` | ELF/binary facts, entry point, Ghidra import, middleware, the 80 kernel syscall stubs (`../config/SLUS-20836/syscalls.txt`), baseline dumps |
 | `architecture.md` | Engine architecture, two state systems, object-method system, save layer |
 | `script-engine-lua.md` | Lua 4.0.1 VM + the 116-function native API binding |
 | [Lua dependencies](lua-dependencies.md) | Generated direct dependency closure of all 116 bindings, registration/dispatch, source coverage and unresolved indirect transfers |
@@ -126,5 +126,4 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [sd-prologue](sd-prologue.md): the `sd` callee-saved prologue is Sony EE GCC output (the SDK and CRI blocks); census, evidence, and how the Sony compiler builds these units.
 - [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold — the measured MWCC wall behind the 983 accessors, what was tried, and the generators that bank the members that do match.
 - [asm-body-matches](asm-body-matches.md): asm bodies are not kept in the repository (owner decision); what a function without C looks like, the generator for local study, assembler quirks.
-- The near-miss notes (`sweep*`, `wave*`, `fam*`) are kept outside the repository; source comments and findings cite one as *archived near-miss note <name>*.
 - [Oracle runner](oracle-runner.md): the byte oracle (`make check`, `make link`, typed/hygiene/progress gates) on every push via a private self-hosted runner; what it proves, what it cannot block, install and rotation.

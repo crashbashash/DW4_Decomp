@@ -19,7 +19,7 @@ function needs C++). The folder never matters to the build: `tools/srctree.py` f
 name at any depth, so moving a unit between folders is byte-neutral.
 
 Related functions are folded into one translation unit named for what they do
-(`engine/string-chunks.c`, `lua/api.c`) or for the class they belong to
+(`engine/string-chunks.c`, `lua/api.cpp`) or for the class they belong to
 (`game/beCameraMode.c`). Functions sit in retail address order, the order the original compiler
 saw them. `tools/units.py` hands the checker one function at a time, so folding changes no
 bytes. See [naming](../docs/engine/naming.md) for how names are recovered and applied

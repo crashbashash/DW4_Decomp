@@ -154,6 +154,4 @@ by these tests. No emulator or pristine disc is modified.
 Continue exact matching and the concrete
 service-controller/result dependencies for the [full hub goal](../systems/hub-recovery.md).
 The ten alias matching residuals remain open; private compiler/permuter searches
-did not produce a newly verified exact body. Evidence, candidates and objdump
-are repository-relative `../scratch/lua-engine-recovery/hub-subwindow-*`;
-the analyzed-project export recipe is `export-subwindow-extents.py` in that folder.
+did not produce a newly verified exact body.

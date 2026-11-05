@@ -41,44 +41,50 @@
 
 - [Reflection registration](../../docs/engine/reflection-registration.md): fourteen
   registrar/builder/binding bodies, 487 retail cases and actual Work descriptor
-  tables. Twelve bodies match; main registration and layout remain compiler
-  residuals. Factories/type/system/vector/allocator/interner services stay
+  tables. Eleven bodies match and two (field creation `2fdf40`, naming `2fe000`) are
+  `foreign-profile`; main registration (`2fe9c0`) has no C source yet.
+  Factories/type/system/vector/allocator/interner services stay
   controlled; complete bootstrap remains open.
 
 - [String fields](../../docs/engine/string-fields.md): twenty-one value/lifetime/
   raw-codec/dispatch bodies, 255 retail cases and 42 owned-string checkpoints
-  through actual pool storage and generic lifecycle. Eight compiler residuals
-  and original class descriptor construction remain open.
+  through actual pool storage and generic lifecycle. Nineteen bodies match; raw
+  decode (`30ab20`) and raw encode (`30add0`) have no C source yet, and original
+  class descriptor construction remains open.
 
 - [Object fields](../../docs/engine/object-fields.md): fourteen cleanup/persistence
   and concrete reference-field bodies; 230 retail cases plus six owned-graph
-  checkpoints through real creation and final release. Four generic compiler
-  residuals remain; actual class descriptors/other concrete fields remain open.
+  checkpoints through real creation and final release. Thirteen bodies match;
+  `igObject_WritePersistentFields` (`2ffe10`) has no C source yet; actual class
+  descriptors/other concrete fields remain open.
 
 - [Object lists](../../docs/engine/object-lists.md): complete twelve-body list/
   property group plus name publication; 718 retail cases and twelve persistent
-  cold-registry checkpoints through real object/generic lists. Twelve compiler
-  residuals and lower field/pool/allocation/byte/receiver contracts remain.
+  cold-registry checkpoints through real object/generic lists. Eleven bodies match,
+  `igProperty_FindByName` (`3022c0`) is `foreign-profile` and remove-first (`302000`)
+  has no C source yet; lower field/pool/allocation/byte/receiver contracts remain.
 
 - [Object creation](../../docs/engine/object-creation.md): twenty factory,
   reflection-allocation and construction/lifetime bodies; 249 retail comparisons
   and thirteen persistent cold-messenger integration checkpoints. Concrete field,
-  registrar and allocator services remain controlled; nine compiler residuals.
+  registrar and allocator services remain controlled. Nineteen bodies match and
+  field zeroing (`2ff930`) is `foreign-profile`.
 
 - [Messenger memory](../../docs/engine/messenger-memory.md): complete four-body
   initialization/reset group plus reset forwarder; 254 retail comparisons
   through actual cold selection, lifecycle and reset. Factories and lower
-  services remain controlled; four compiler residuals remain.
+  services remain controlled; all five bodies match.
 
 - [Messenger lifecycle](../../docs/engine/messenger-lifecycle.md): ten full
   argument-clearing, delayed-delivery and context-nesting bodies; 464 retail
-  comparisons through real selection/dispatch, including nested enqueue. Three
-  exact forwarding bodies include an 84-byte match; lower services remain
+  comparisons through real selection/dispatch, including nested enqueue. Nine
+  bodies match, among them three forwarding bodies with an 84-byte match; the expiry
+  update (`38d0a0`) has no C source yet; lower services remain
   controlled.
 
 - [Messenger dispatch](../../docs/engine/messenger-dispatch.md): complete fourteen-body
-  receiver selection/registration/dispatch block, 1,561 retail comparisons and
-  five matching wrappers. External services
+  receiver selection/registration/dispatch block, 1,561 retail comparisons; all
+  fourteen bodies match, five of them forwarding wrappers. External services
   and receiver callbacks remain controlled.
 
 - [Messenger results](../../docs/engine/messenger-results.md): complete 32-body
@@ -153,36 +159,43 @@ verify allocation/status/initialization and retained registry behavior. See
 `memory-field-copy.c` / `.h` recover four contiguous copy/print/visitor bodies;
 `memory-buffer-services.c` / `.h` recover nine contiguous owner-directed buffer
 helpers. The object-field adapter also recovers the original callback visitor.
-Together: 14 bodies / 1,668 bytes, nine bodies / 720 bytes exact source.
+Together: 14 bodies / 1,668 bytes; eleven bodies / 1,356 bytes match, the 256-byte
+object visitor is `foreign-profile`, and the two 28-byte allocator tail dispatches
+(`2ed4c0`, `2ed5a0`) have no C source yet.
 167 retail cases and the extended 113-checkpoint Work lifetime suite verify the
 [copy, buffer and traversal contracts](../../docs/engine/memory-field-copy.md).
 
 `allocator-registry.c` / `.h` recover 13 owner/selector/allocation bodies (772 bytes),
-including the shared-tail wrapper. Ten bodies /400 bytes are exact source.
+including the shared-tail wrapper. Eleven bodies /692 bytes are exact source; the
+shared-tail wrapper (`2ed1c0`) and the direct tail (`2ed240`) have no C source yet.
 186 retail cases and a114-checkpoint Work/list/runtime-header composition verify
 [registry contracts and remaining boundaries](../../docs/engine/allocator-registry.md).
 
 `registry-bootstrap.c` / `.h` recover 17 registry/context bodies (1,512 bytes),
-including original concrete selector/name lookup. Thirteen bodies /1,120 bytes are
-exact source. 191 retail cases and the116-checkpoint
+including original concrete selector/name lookup. Fifteen bodies /1,448 bytes are
+exact source; list allocate/delete (`2fa6c0`, `2fa6e0`) have no C source yet.
+191 retail cases and the116-checkpoint
 Work/list/runtime-header/registry-lifetime composition verify
 [bootstrap contracts and remaining boundaries](../../docs/engine/registry-bootstrap.md).
 
 context-lifecycle.c / .h recover seven context lifetime/delegation bodies
-(1,928 bytes), four /552 bytes exact. 244 retail cases and the210-checkpoint
+(1,928 bytes), all seven exact. 244 retail cases and the210-checkpoint
 context/Work/list composition verify [lifecycle contracts](../../docs/engine/context-lifecycle.md).
 The slot204 allocator builder and concrete tracker/allocator backends remain open.
 
 allocator-builder.c / .h recover the complete2,064-byte builder and metadata
 lookup helpers (three bodies /2,140 bytes). 280 retail cases cover full dispatch,
 recursive aliases and backing/publication policies. The16-byte default metadata
-wrapper has exact source; the builder retains assembly and a private candidate.
+wrapper has exact source; the builder matches as
+`src/unmatched/MemoryContext_BuildAllocator.cpp`.
 See [builder contracts and backend boundaries](../../docs/engine/allocator-builder.md).
 
 `selectctrl.c` / `.h` recover the complete concrete SELECTCTRL update and general
 receiver (two bodies /4,824 bytes). 4,089 original-instruction RAM/ordered-call
 cases cover all 1,187 non-padding words, ownership callbacks, input/command paths
-and persistent generate/select/close cycles. Both bodies retain retail assembly;
+and persistent generate/select/close cycles. Both bodies match
+(`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp` and
+`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp`);
 [contracts and remaining dependencies](../../docs/engine/selectctrl.md).
 
 `pad-manager-selection.c` / `.h` recover the complete88-byte player/fallback
@@ -206,7 +219,8 @@ See [ListCtrl/chip-list contracts](../../docs/engine/list-controller-chip-view.m
 `chip-controller.c` / `.h` recover the full7,232-byte chip transaction update.
 Inventory filtering, preview record restoration, fresh confirmation debit and
 error/close state behavior are compared with original instructions. The update
-still retains assembly in the matching build;
+is `foreign-profile` in `data/check-categories.tsv` (code bytes identical only under a
+provisional compiler override; `src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`);
 [contracts and limits](../../docs/engine/chip-controller.md).
 
 `item-database.c` / `.h` recover the complete item request/value and database

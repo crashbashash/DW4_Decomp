@@ -399,8 +399,7 @@ NEXTSTAGE: responsive loading screens, application publication and Retry/Back
 are covered by `check-hub-boot`, not by this test. The six-route bridge-approach
 chain passes original accept/No/Circle (18 flows), arrival control restoration,
 STATUS cycles, source isolation and equipped-record retention, and passes under
-ASan/UBSan (detect_leaks=0). Private logs/captures are under repository-relative
-`../scratch/hubruntime-*` and `../scratch/hubscene-captures/`.
+ASan/UBSan (detect_leaks=0).
 
 **Application (`check-hub-boot`).** Drives the actual SDL dummy application
 pump, original character creation/startup, threaded destination preparation,
@@ -440,10 +439,7 @@ window close releases it, then requires safe joining/cleanup. The focused
 application sanitizer run uses `DW4_HUB_TICK_BATCH=8` to exercise production
 catch-up/render-skipping while retaining every simulation update and loading
 presentation. The six-route CPU and two-transfer GPU runs render at their
-ordinary test cadence. Private evidence: `../scratch/hub-app-six-final.log`,
-`hub-app-back-terminal.log`, `hub-app-gpu.log`, `hub-app-shutdown.log`,
-`hub-app-regression.log` and `hubscene-captures/app-choice-*.png`. The passing
-later-source sanitizer log is `hub-app-asan-batched.log` (detect_leaks=0).
+ordinary test cadence. The later-source sanitizer run passes (detect_leaks=0).
 
 **Gates (`check-hubgates`, `port/tools/test_hubgates.c`).** Prepares each hub
 with flag fixtures and places the player with `dw4_lobby_place_player` at the

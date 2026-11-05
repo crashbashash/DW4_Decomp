@@ -60,9 +60,8 @@ this arrival. They do not cover later action poses or other shadow controllers.
 
 ## Retail verification
 
-Private evidence is retained under workspace
-`../local/captures/dw4-port/light-modes`: the two pre-login states, two loaded
-states, complete GS captures, 640×448 screenshots, extracted atlases and reports.
+The evidence is two pre-login states, two loaded states, complete GS captures,
+640×448 screenshots, extracted atlases and reports.
 Only the confirmed load-controller option (+0x28) was changed in copies of the
 pre-login state. Retail then performed its login/stage load for each mode;
 loaded lighting was never patched. The pristine disc was read without modification.

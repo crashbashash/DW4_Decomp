@@ -189,7 +189,7 @@ existing short and long dialogue cases retain exact NPC relocations. Set
 atlas samples. `test_lobby_gpu` also advances the complete greeting and renders
 post-handoff frame 1100 through both backends. `make check` and `make check-retail`
 pass; focused checks cover the HUD portrait UV/composition path.
-The arrival validation (archived outside the repository) compares the complete
+The arrival validation compares the complete
 retail route with the native SDL2 window and virtual controller, including all
 15 greeting pages and the final handoff. Physical-controller and optional live
 pose/fog checks remain environment-dependent.

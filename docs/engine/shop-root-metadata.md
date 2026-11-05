@@ -7,12 +7,12 @@ parent accessor at3b65b0. The
 passes **117 original-instruction RAM/return/ordered-call cases**, executing all
 **104 instruction addresses** across the seven bodies /416 bytes.
 
-Six bodies /300 bytes now have exact source. Finding [#913](../findings/findings-0751-1000.md#f913) adds the76-byte lazy
+All seven bodies /416 bytes have exact source. Finding [#913](../findings/findings-0751-1000.md#f913) adds the76-byte lazy
 accessor using the existing project padding convention ([#731](../findings/findings-0501-0750.md#f731)). Four /212 bytes were already matched:
 the factory52 and registration wrapper32 were under anonymous `FUN_` names,
 alongside Register100 and GetMetaObject28. They are named and their return/callback
 ABIs corrected with no additional matching credit. The newly classified parent
-getter contributes **one function /12 matched bytes**. The vtable getter116 remains assembly with a private compiler candidate.
+getter contributes **one function /12 matched bytes**. The vtable getter116 matches in [beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp).
 This is metadata recovery, not working shop transactions or native UI acceptance.
 
 ## Factory and published metadata
@@ -116,16 +116,13 @@ The lazy76-byte body now matches with one explicit retail padding NOP and a
 label preserving the null branch's direct entry at the registration call. The
 non-null/not-ready path executes the NOP; all104 module instructions remain
 covered by the oracle. This follows the existing matching convention from#731,
-without claiming the original C++ source spelling. The116-byte vtable candidate differs in two words:
-retail uses sp+dynamic offset then load+32, while the candidate uses the already
-materialized temporary pointer plus dynamic offset then load+0. Pointer/integer
-address forms and C++ temporary-object probes did not match; the latter also
-emits an extra destructor body and cannot be banked. No opaque assembly replacement body is used. The matched accessor retains its
+without claiming the original C++ source spelling. The116-byte vtable getter matches in
+[beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp). No opaque assembly replacement body is used. The matched accessor retains its
 original no-op within readable C++ under the established project convention.
 
 The [root runtime and common window tree](window-tree-and-shop-root.md) now have
-complete behavioral recovery. Continue exact matching of the116 metadata bytes
-and the runtime, then actual shop
+complete behavioral recovery. The116 metadata bytes and the six runtime bodies
+match. Continue with actual shop
 subcontrollers, price/item services and transaction results. The
 [full hub goal](../systems/hub-recovery.md), dedicated LABO/CARD roots and separate
 Save Keeper stagIS12 route remain open. This work does not expand the native port.
@@ -133,6 +130,6 @@ Save Keeper stagIS12 route remain open. This work does not expand the native por
 Finding [#917](../findings/findings-0751-1000.md#f917) separately adds192 exact bytes for that complete base-controller
 cleanup dependency. Its seven member helper calls and signed deletion flag are
 readable source; it contains one explicit return-register copy and original NOP.
-The seven-body metadata accounting above remains300/416 exact bytes: the new
-cleanup body is outside that block. Header and member-cell services, the getter's
-116-byte compiler residue and native integration remain open boundaries.
+The seven-body metadata accounting above is416/416 exact bytes: the new
+cleanup body is outside that block. Header and member-cell services
+and native integration remain open boundaries.

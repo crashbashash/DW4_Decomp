@@ -2,10 +2,11 @@
 
 Finding [#917](../findings/findings-0751-1000.md#f917) recovers and byte-matches the complete192-byte
 `beNDMWWindowCtrl_Destroy` body at `0x003b6430`, used by shop-root and other
-GetVTable temporary cleanup. [The typed source](../../src/game/beNDMWWindowCtrl_Destroy.c)
+GetVTable temporary cleanup. [The typed source](../../src/game/beNDMWWindowCtrl_Destroy.cpp)
 uses the reflected controller's inherited window reference cells. It is a
 separate dependency of the [shop metadata block](shop-root-metadata.md);
-the metadata block's116-byte getter still retains assembly.
+the metadata block's 116-byte getter matches as
+`src/unmatched/beNDMWShopCtrl00_GetVTable.cpp`.
 
 ## Identity and exact operations
 
@@ -47,7 +48,7 @@ return point and still leaves the full control flow and cleanup calls in C.
 This does not claim the original source used inline assembly.
 
 ```sh
-python3 tools/verify.py 0x3b6430 src/game/beNDMWWindowCtrl_Destroy.c --verbose
+python3 tools/verify.py 0x3b6430 src/game/beNDMWWindowCtrl_Destroy.cpp --verbose
 python3 testing/test_shop_root_metadata_retail.py
 make check
 make link

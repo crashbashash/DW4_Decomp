@@ -52,7 +52,7 @@ reviewed call interfaces and memory repairs while the full callback is unmatched
 | [`engine/`](engine) | How the binary and engine work: the ELF and toolchain, the architecture, RTTI/vtables, the Lua engine, live game-state globals, the property/method system, the archives, reflection and igBinary, and the matching-decompilation build |
 | [`systems/`](systems) | Game data and mechanics: items, techniques, enemy data, spawns, drops, digivolution, flags, the critical path, the save format, and the debug stage-select |
 | [`findings/`](findings/README.md) | The findings register: every hypothesis, confirmed fact and dead end, by number |
-| [Reference](reference/README.md) | Retail reference write-ups and stage catalogue pages; raw evidence is in data/reference (outside the repository: `extras/reference/data-reference-README.md`) |
+| [Reference](reference/README.md) | Retail reference write-ups |
 
 Each folder also has its own `README.md` listing what is in it.
 
@@ -93,7 +93,7 @@ Each folder also has its own `README.md` listing what is in it.
 | The Game Start slot/character/name/difficulty/card controller family | [`engine/load-intf2.md`](engine/load-intf2.md) |
 | When a model-controller ACTION completes — WAIT/WAITCHECK, the named timer, JOINTSET completion, the node clock and the EE float arithmetic under them | [`engine/system-clock.md`](engine/system-clock.md), [`engine/action2-timing.md`](engine/action2-timing.md), [`engine/action2-jointset.md`](engine/action2-jointset.md), [`engine/model-sequence-waits.md`](engine/model-sequence-waits.md) |
 | How the binary was built, or how to import it into Ghidra | [`engine/binary.md`](engine/binary.md), [`engine/toolchain.md`](engine/toolchain.md) |
-| A kernel syscall, its number, or a `libkernel` stub | [`engine/binary.md`](engine/binary.md) §Kernel syscall stubs, `../config/syscalls.txt` |
+| A kernel syscall, its number, or a `libkernel` stub | [`engine/binary.md`](engine/binary.md) §Kernel syscall stubs, `../config/SLUS-20836/syscalls.txt` |
 | Native original-bytecode execution and DM scheduling verification | [Lua integration](../port/docs/lua-integration.md) |
 | Corrected Lua numeric recovery and affected progression evidence | [Lua numeric audit](engine/lua-numeric-audit.md) |
 | The Lua native API and its calling convention | [`engine/script-engine-lua.md`](engine/script-engine-lua.md) |
@@ -124,7 +124,7 @@ Each folder also has its own `README.md` listing what is in it.
 | Technique-row lookup and nearby target collection | [Immediate combat helper recovery](systems/combat-helpers.md) |
 | Enemy models, the stat table, bosses | [`systems/enemy-data.md`](systems/enemy-data.md) |
 | How enemies spawn (`GENERATER` / `GENE-xx`) | [`systems/enemy-spawn-system.md`](systems/enemy-spawn-system.md) |
-| What enemies and boxes drop, and how the roll works | [`systems/drop-tables.md`](systems/drop-tables.md), `systems/drops/` (outside the repository: `extras/reference/drop-reports/`) |
+| What enemies and boxes drop, and how the roll works | [`systems/drop-tables.md`](systems/drop-tables.md) |
 | The RNG: its seed, every draw site, how to predict it | [`systems/rng.md`](systems/rng.md), [`systems/rng-sites.tsv`](systems/rng-sites.tsv) |
 | How to reach any stage (the engine's own stage select) | [`systems/dev-stage-debug-menu.md`](systems/dev-stage-debug-menu.md) §6 |
 | Which flags gate the ending, and the critical path | [`systems/critical-path.md`](systems/critical-path.md), [`systems/flags/`](systems/flags) |
@@ -172,7 +172,7 @@ retail. Both take `--help`.
 
 | Tool | Purpose |
 |---|---|
-| `split.py` | Write `../config/symbols.txt` and emit `../asm/`, the retail split |
+| `split.py` | Write `../config/SLUS-20836/symbols.txt` and emit `../asm/`, the retail split |
 | `layout.py`, `linkgen.py`, `linkcheck.py` | The relink: disjoint tiling → objects and a linker script → comparison with retail |
 | `check.py` | Split round-trip and coverage; backs `make check` |
 | `verify.py` | The oracle: compile one candidate and diff it against retail, relocation-aware |
@@ -183,8 +183,8 @@ retail. Both take `--help`.
 | `queue_diag.py` | Cluster a worklist tier by *why* each function misses — the retail shape plus the per-instruction `retail -> ours` signature — instead of by diff count, and flag size-truncated rows whose diff count under-reports — see [`engine/m2c-bulk.md`](engine/m2c-bulk.md) §The queue, measured before it is worked |
 | `platform_map.py` | Resolve the addresses the code forms and classify them against the EE's register blocks — which functions are platform code, and the game's call surface into the SDK — see [`engine/platform-boundary.md`](engine/platform-boundary.md) |
 | `sdk_bindings.py` | Decode the eight SDK library descriptors at `0x481000+` (name, ASCII version, and whatever each library actually stores — register bases, function tables, DCT tables, string tables) into `data/sdk-bindings.json`, and report the function starts their tables imply — see [`engine/platform-boundary.md`](engine/platform-boundary.md) |
-| `jumptables.py` | Recover the `switch`es' `.rodata` tables → `../config/jumptables.txt` |
-| `syscalls.py` | Recover the EE kernel syscall stubs → `../config/syscalls.txt` (number per stub; the pipeline skips them) |
+| `jumptables.py` | Recover the `switch`es' `.rodata` tables → `../config/SLUS-20836/jumptables.txt` |
+| `syscalls.py` | Recover the EE kernel syscall stubs → `../config/SLUS-20836/syscalls.txt` (number per stub; the pipeline skips them) |
 | `permuter_one.py`, `permuter/` | The `decomp-permuter` harness — see [`../tools/permuter/README.md`](../tools/permuter/README.md) |
 
 Ghidra work needs the analysed project (`../ghidra-projects/dw4/`) and **one Ghidra process at a
@@ -204,7 +204,7 @@ Committed files, and the gitignored working directories the analysis writes to. 
 | `../ghidra-projects/dw4/` *(local)* | The analysed Ghidra project and the live dump outputs | the `dump_*` scripts |
 | `../roms/`, `../bios/` *(local)* | Your own copy of the game — the ISO and the extracted `game.elf` — and a PS2 BIOS image if you run it | — |
 | `../pcsx2/` *(local)* | Emulator data: memory cards, `sstates/`, logs | PCSX2 |
-| `../../scratch/`, `../../local/captures/`, `../../local/evidence/`, `../../local/snapshots/`, `../../local/testing/`, `../../local/extracted/` *(local)* | Working output: RAM dumps, verification images, extracted archives, savestates | the analysis scripts |
+| `../../local/extracted/` *(local)* | Extracted archives | the analysis scripts |
 
 ## Conventions
 
@@ -222,8 +222,7 @@ Committed files, and the gitignored working directories the analysis writes to. 
   id). Refuted rows are kept rather than deleted, so nobody re-investigates them. A live-memory
   claim counts when a running game or an off-line savestate read confirms it — say which.
   `python3 scripts/findings.py check` (part of `make hygiene`) refuses a *confirmed* entry without
-  evidence, so the rule cannot regress silently. `<scratch>/` in a row stands for a session file
-  that was not retained; no repository path is claimed for it.
+  evidence, so the rule cannot regress silently.
 - **A savestate carries the loaded world in RAM**, so it cannot test a disc change. To test one, boot
   the disc and then load the stage.
 - **Never write the pristine disc.** Work from a copy.

@@ -7,14 +7,16 @@ default storage and the original Work registrar/field adder. Finding [#878](../f
 the recovery and limits. The adapter accepts eleven registrar arguments and a
 320-byte scratch area for original debug-name/token/output temporaries.
 
-Twelve bodies (1,624 bytes) have matching source. Five new matches add **872 code
+Thirteen bodies (2,068 bytes) have source with identical code bytes. Five new matches add **872 code
 bytes** in [reflection-builders.cpp](../../src/engine/reflection-builders.cpp):
 inheritance 208, creation 184, naming 208, default storage 144 and descriptor
-finalization 128. Five prior ownership/binding matches (452 bytes) are folded in
+finalization 128; creation (`2fdf40`) and naming (`2fe000`) are `foreign-profile` (the
+build-profile check is open). Five prior ownership/binding matches (452 bytes) are folded in
 [metadata-field-values.c](../../src/engine/metadata-field-values.c), with explicit
 forwarded receivers/arguments and corrected void declarations. The prior Work
-registrar/adder matches add 300 bytes. Main registration (744) and layout finalization
-(444) remain compiler residuals. ABI/virtual-slot views are observed projections,
+registrar/adder matches add 300 bytes. Layout finalization
+(444) matches in [igMetaObject_FinalizeFieldLayout.cpp](../../src/unmatched/igMetaObject_FinalizeFieldLayout.cpp); main
+registration (`2fe9c0`, 744) has no C source yet. ABI/virtual-slot views are observed projections,
 not original C++ type declarations, and must not be instantiated.
 
 ## Registrar arguments and validity states

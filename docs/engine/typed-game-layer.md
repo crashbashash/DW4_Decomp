@@ -82,7 +82,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | --- | --- | --- |
 | `ParticleTimer._attributes` | `igObjectList` | by shape (count +8, data +16) |
 | `be._stringRefList` | `igStringRefList` | DAT_0058a1d8 is the Game this (docs/engine/game-state.md); Gap__Bec__be__vfunc_26 clears it as a string list |
-| `beAction2._system` | `beSystem` | slot-96 draw on field +48 = beSystem._random; the archived note `combat-dispatcher-typing-typing2.md` (beNDMWGameRam._system -> beSystem); applied in beAction2WAITCHEC |
+| `beAction2._system` | `beSystem` | slot-96 draw on field +48 = beSystem._random (beNDMWGameRam._system -> beSystem); applied in beAction2WAITCHEC |
 | `beAction2Data._comList` | `igObjectList` | shaped list: docs/engine/action2-jointset.md |
 | `beAction2InfoRam._parentInfo` | `beAction2Info` | reflection field pairing (ram/info), _switch read at +28 |
 | `beAction2InfoRam._work` | `beAction2InfoWork` | docs/engine/action2-jointset.md work offsets match _motionSt0/_jointSt0/_fadeSt0/_waitSt0/_flashSt0/_isFreeze |

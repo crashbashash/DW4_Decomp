@@ -68,7 +68,7 @@ def TMP_TAG():
 
     It has to be a function, not a module constant: a constant froze the importing
     thread's id, so a thread pool (m2c_batch --jobs) would have every worker write the
-    same `/tmp/verify_*` path. `getpid` keeps separate processes apart, `get_ident` the
+    same scratch path. `getpid` keeps separate processes apart, `get_ident` the
     threads within one.
     """
     return "%d_%d" % (os.getpid(), threading.get_ident())
@@ -346,7 +346,7 @@ def object_section(obj, sname, index=None):
         with open(obj, "rb") as fh:
             fh.seek(header[4])
             return fh.read(header[5])
-    out = "/tmp/verify_verify%s_%s.bin" % (TMP_TAG(), re.sub(r"\W", "_", sname))
+    out = os.path.join(cc.scratch_dir(), "verify_%s_%s.bin" % (TMP_TAG(), re.sub(r"\W", "_", sname)))
     if os.path.exists(out):
         os.remove(out)
     subprocess.run(["mipsel-linux-gnu-objcopy", "-j", sname, "-O", "binary", obj, out],
@@ -1186,7 +1186,7 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
     lines, success, twins_ok, twin_refusals = [], good, True, []
     for number, (twin_profile, names) in enumerate(sorted(profiles.items())):
         twin_flags = unitprofiles.command_flags(twin_profile)
-        twin = "/tmp/verify_twin_%s_%d.o" % (TMP_TAG(), number)
+        twin = os.path.join(cc.scratch_dir(), "twin_%s_%d.o" % (TMP_TAG(), number))
         if os.path.exists(twin):
             os.remove(twin)
         try:
@@ -1395,7 +1395,7 @@ def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
         """Compile `source` under `profile` and verify it -> (ok, report)."""
         profile = unitprofiles.for_source(profile, source, flags, mwcc)
         cmd_flags = unitprofiles.command_flags(profile)
-        obj = "/tmp/verify_cand_%s.o" % TMP_TAG()
+        obj = os.path.join(cc.scratch_dir(), "cand_%s.o" % TMP_TAG())
         if os.path.exists(obj):
             os.remove(obj)
         r = subprocess.run(cc.compile_argv(wibo, profile.compiler, cmd_flags, source, obj),

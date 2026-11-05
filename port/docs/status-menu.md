@@ -301,7 +301,7 @@ This is plumbing: the hubs run one player. The limits are listed under
   tree and STATUS instruction comparisons hold with the arena-backed windows.
 
 The full native run is `make check check-retail -j8` on Linux with
-`SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a`; optional private live-input
+`SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>`; optional private live-input
 checks skip. Sanitizer runs use ASan/UBSan with both set to halt on errors and
 `detect_leaks=0`; the arena test separately checks complete block release, and
 the focused `check-statusctrl` test also passes with leak detection enabled.

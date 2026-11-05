@@ -9,16 +9,21 @@ root/tree/title/presentation closure. It executes **651/657 instruction addresse
 four words are excluded zero padding; two belong to a contradictory branch under
 the checked callee-save ABI. Neither is counted as exercised.
 
-Three bodies /252 bytes have exact source. ClearTextElement136 was already matched;
+All eight bodies /2,628 bytes have exact source. ClearTextElement136 was already matched;
 its five receiver accesses now use the recovered Window layout. New
 [model forwards](../../src/game/window-model-forwarding.cpp) add **116 matched
-bytes**: default-origin64 and model-sequence52. Five bodies /2,376 bytes retain
-assembly. This does not establish shop transactions or native UI operation.
+bytes**: default-origin64 and model-sequence52. The other five bodies /2,376 bytes
+match as `src/unmatched/beNDMWWindow_ClearQueuedText.cpp`,
+`src/unmatched/beNDMWWindow_PresentModel.cpp`,
+`src/unmatched/beNDMWWindow_PlayQueuedModelClose.cpp`,
+`src/unmatched/beNDMWWindow_PollCloseComplete.cpp` and
+`src/unmatched/Gap__Bec__beNDMWWindowTitle__vfunc_21.cpp`.
+This does not establish shop transactions or native UI operation.
 
 Finding [#912](../findings/findings-0751-1000.md#f912) extends this run backward with the144-byte
 [message-script dispatcher](xdata-controller.md#script-call-number-and-pack-ownership)
 at3f5920. The current presentation/title boundary is nine bodies /2,772 bytes;
-the added body is behavioral recovery and retains assembly.
+the added body matches as `src/unmatched/beNDMWWindow_RunMessageScript.cpp`.
 
 ## Text close requests
 
@@ -152,7 +157,7 @@ storage, resize relocation, negative counts, return-width distinctions and
 persistent all-mode root/title close sequences. Private input frames are mapped
 before execution; no retail output is copied into expected memory.
 
-A208-byte title matching candidate remains196 bytes with different branch/padding
-scheduling; it is not banked. Continue matching the2,376-byte residue and recover
+The 208-byte title matches as
+`src/unmatched/Gap__Bec__beNDMWWindowTitle__vfunc_21.cpp`. Recover
 the selected XDATA/BANK/CNOS/DISK/ShopDevice/JUNK controllers and their actual
 record transactions against the [full hub contract](../systems/hub-recovery.md).

@@ -1046,7 +1046,7 @@ static dw4_technique_pad technique_pad(const dw4_hubruntime *h,unsigned slot,uin
  * One SUBWND owner exists, so a Start while a menu runs does nothing; the world is frozen for everyone (statusscene.c) and only the owner's pad reaches the menu. */
 static int start_status(dw4_hubruntime *h,int32_t slot)
 {
-    if(!h->status_ui)return 0;   /* a stage without a beNDMWStatusInfo (the practice stage) has no Start menu (extras/testing/practice-stage-pause.md) */
+    if(!h->status_ui)return 0;   /* a stage without a beNDMWStatusInfo (the practice stage) has no Start menu */
     char payload[16];snprintf(payload,sizeof payload,"STATUS/I<%d>",(int)slot);
     dw4_statusview_context v=status_view(h,slot);
     return dw4_statusui_call(&v,0,"SUBWND",NULL,0,"GENERATE",payload,h->error,sizeof h->error);

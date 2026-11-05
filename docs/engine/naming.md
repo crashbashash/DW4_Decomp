@@ -66,11 +66,11 @@ they are named.
 ### Folding a module into a translation unit
 
 An automated match is banked one function per file, but the repository's source is
-translation units (`src/lua/api.c`, `src/engine/*.c`), the way the original was
+translation units (`src/lua/api.cpp`, `src/engine/*.c`), the way the original was
 built. Once a module is named, fold it:
 
 ```sh
-python3 tools/merge_units.py --out src/lua/api.c \
+python3 tools/merge_units.py --out src/lua/api.cpp \
     --title "the Lua native-API implementations" --remove src/Lua/*.c
 ```
 

@@ -356,13 +356,12 @@ clock boundary, and ticks DM before the existing scene/model adapters. DM list
 snapshot/reverse traversal and next-tick event publication remain unchanged.
 This is host cadence policy; it does not reproduce variable EE Timer 0 samples.
 
-Retail ordering is checked against both private logo CLOSE savestates: the serial
+Retail ordering is checked against two logo CLOSE savestates: the serial
 scheduler has 35 managers, DM (`0x0037ed70`) at slot 8 and Action2
 (`0x00378bc0` / `0x003778d0`) at slot 17. Reproduce from the repository root:
 
 ```sh
-python3 port/tools/verify_simulation_order.py ../local/states/SLUS-20836/logo-close-start+50ms.p2s
-python3 port/tools/verify_simulation_order.py ../local/states/SLUS-20836/logo-close-start+434ms.p2s
+python3 port/tools/verify_simulation_order.py <logo-close-savestate>.p2s
 ```
 
 Normal title initialization creates a session-owned script engine, loads the
@@ -419,8 +418,7 @@ remains frozen across loss/return until an explicit R. An engine that latches a 
 the background clock/rendering assertion. `check-background-focus-gpu` runs
 the same fixture at 640×448 on hardware with zero CPU graphics calls. These are
 real event-pump/backend checks using injected events and a virtual controller,
-not a physical desktop Alt-Tab test. Private logs are repository-relative
-`../scratch/background-focus/`.
+not a physical desktop Alt-Tab test.
 
 ## Shared retail random stream
 
@@ -743,7 +741,7 @@ ten-second minimum-hold checks pass with shared boot preparation enabled.
 These checks do not establish full retail scene outcomes or platform playtests.
 
 The full `make check` and `make check-script-retail` suites pass. The input test
-requires `SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a` so its
+requires `SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>` so its
 virtual pad is assigned instead of a connected physical gamepad.
 The negative-delay reentrant SD discrepancy remains reported by the
 retail oracle.

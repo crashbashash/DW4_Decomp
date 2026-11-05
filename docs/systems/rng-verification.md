@@ -120,8 +120,8 @@ Fresh boot of the pristine ISO, no statefile; emulator left on the title screen.
 | T+15 s | 624 |
 
 The RNG object exists (vtable `0x52b8e0`) and sits at twist #0 / **0 draws** —
-the raw `sgenrand(5150)` array. Screenshot
-`captures/dw4/frame-20260922T222944.311Z.png` confirms the title screen.
+the raw `sgenrand(5150)` array. A screenshot
+confirms the title screen.
 
 ---
 

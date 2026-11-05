@@ -27,12 +27,13 @@ Usage:
   permuter_one.py 0x100240 --build-only            # just the project dir
   permuter_one.py --from-worklist build/m2c_worklist3.tsv --max-diffs 3 --limit 20
 
-Projects default to ../scratch/permuter/ outside the repository. --outdir
+Projects default to build/permuter/, which Git ignores. --outdir
 selects that project root; each function has its own named subdirectory.
 """
 import argparse
 import os
 import re
+import signal
 import struct
 import subprocess
 import sys
@@ -130,21 +131,50 @@ def _shrink_text(path, want):
     open(path, "wb").write(d)
 
 
+def permuter_env():
+    """The environment the permuter runs in. It looks for `mips-linux-gnu-objdump`; a host whose
+    binutils are installed under the little-endian name gets a link to that one on PATH (the tool
+    reads the object's own endianness)."""
+    import shutil
+    env = dict(os.environ)
+    if shutil.which("mips-linux-gnu-objdump") is None:
+        have = shutil.which("mipsel-linux-gnu-objdump")
+        if have:
+            shim = os.path.join(ROOT, "build", "permuter-bin")
+            os.makedirs(shim, exist_ok=True)
+            link = os.path.join(shim, "mips-linux-gnu-objdump")
+            if not os.path.exists(link):
+                os.symlink(have, link)
+            env["PATH"] = shim + os.pathsep + env.get("PATH", "")
+    return env
+
+
 def run(dirpath, budget, stop_on_zero=True, jobs=1):
     """-> (score, source). score 0 means the permuter thinks it matched."""
     cmd = [VENV_PY, os.path.join(PERMUTER, "permuter.py"), dirpath,
            "-j", str(jobs)] + (["--stop-on-zero"] if stop_on_zero else [])
-    with open(os.path.join(dirpath, "permuter.log"), "w") as log:
-        p = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT,
-                             stdin=subprocess.DEVNULL)
+    log_path = os.path.join(dirpath, "permuter.log")
+    started = time.time()
+    with open(log_path, "w") as log:
+        p = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
+                             env=permuter_env(), start_new_session=True)
         try:
             p.wait(timeout=budget)
         except subprocess.TimeoutExpired:
-            p.terminate()
+            os.killpg(p.pid, signal.SIGTERM)    # the whole group: its workers outlive it otherwise
             try:
                 p.wait(timeout=10)
             except subprocess.TimeoutExpired:
-                p.kill()
+                pass
+        try:
+            os.killpg(p.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    if p.returncode not in (0, None, -15) and time.time() - started < min(budget, 5):
+        # it died at once: that is a setup fault (no objdump, no toml, a bad project), not a search result
+        lines = [line for line in open(log_path, errors="replace").read().splitlines() if line.strip()]
+        print("permuter failed to start in %s: %s" % (os.path.basename(dirpath), lines[-1][:200] if lines else "no output"),
+              file=sys.stderr, flush=True)
     best, src = None, None
     for d in sorted(os.listdir(dirpath)):
         m = re.match(r"output-(\d+)-\d+$", d)
@@ -211,15 +241,15 @@ target_by_name = {}
 
 
 def project_root(outdir=None):
-    """Keep target objects/private search artifacts outside Git by default."""
-    return os.path.abspath(outdir or os.path.join(ROOT, "..", "scratch", "permuter"))
+    """Keep target objects and search artifacts out of Git by default."""
+    return os.path.abspath(outdir or os.path.join(ROOT, "build", "permuter"))
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("address", nargs="?")
-    ap.add_argument("--outdir", default=None, help="project root (default: ../scratch/permuter)")
+    ap.add_argument("--outdir", default=None, help="project root (default: build/permuter)")
     ap.add_argument("--budget", type=int, default=120, help="seconds per function")
     ap.add_argument("--jobs", type=int, default=4, help="permuter worker threads")
     ap.add_argument("--build-only", action="store_true")

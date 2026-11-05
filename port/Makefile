@@ -429,13 +429,15 @@ check: check-loadingstale
 .PHONY: check-loadingstale
 $(BUILD)/test_loading: tools/test_loading.c $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+# The live SDL tests take SDL_GAMECONTROLLER_IGNORE_DEVICES from the environment. With a physical
+# controller attached, set it to that pad's <vendor>/<product> ids so it cannot feed the scripted route.
 $(BUILD)/test_loading_live: tools/test_loading_live.c $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS) -Wl,--wrap=dw4_window_pump,--wrap=dw4_window_pump_mates,--wrap=dw4_simulation_due,--wrap=dw4_frontui_loading_sample,--wrap=dw4_window_present,--wrap=dw4_frontend_boot
 
 check-loading: all $(BUILD)/test_loading $(BUILD)/test_loading_live
 	python3 ../scripts/verify_loadingnode.py --elf $(if $(DW4_ELF),$(DW4_ELF),../../local/extracted/SLUS_208.36)
 	./$(BUILD)/test_loading $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a ./$(BUILD)/test_loading_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy ./$(BUILD)/test_loading_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
 	python3 tools/verify_loading.py $(ROMS)
 check: check-loading
 .PHONY: check-loading
@@ -702,11 +704,11 @@ STATUS_LIVE_WRAP += -Wl,--wrap=dw4_gl_layer_ui,--wrap=dw4_modelview_draw
 $(BUILD)/test_status_live: tools/test_status_live.c $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS) $(if $(filter -DDW4_ENABLE_SDL2,$(CFLAGS)),$(STATUS_LIVE_WRAP))
 check-status-live: $(BUILD)/test_status_live
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
 check-status-gpu: $(BUILD)/test_statusviews $(BUILD)/test_status_live
 	python3 tools/verify_status_gpu.py $(ROMS) --tool $(BUILD)/test_statusviews
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a DW4_STATUS_LIVE_GPU=640x448 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a DW4_STATUS_LIVE_GPU=640x448 DW4_STATUS_LIVE_GPU_FAIL=1 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy DW4_STATUS_LIVE_GPU=640x448 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy DW4_STATUS_LIVE_GPU=640x448 DW4_STATUS_LIVE_GPU_FAIL=1 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
 .PHONY: check-status-gpu
 .PHONY: check-status-live
 CALLED_ARRIVAL_WRAP := -Wl,--wrap=dw4_lobby_tick,--wrap=dw4_controllers_sample,--wrap=dw4_lobby_dialogue,--wrap=dw4_dialogue_input
@@ -718,7 +720,7 @@ check: check-called-arrival
 .PHONY: check-called-arrival
 
 check-lobby-parity: $(BUILD)/test_status_live
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a DW4_LOBBY_PARITY=1 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy DW4_LOBBY_PARITY=1 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
 check: check-lobby-parity
 .PHONY: check-lobby-parity
 
@@ -794,7 +796,7 @@ check-retail: check-mdllive-retail
 $(BUILD)/test_loading_startup: tools/test_loading_live.c $(OBJ)
 	$(CC) $(CFLAGS) -DDW4_TEST_START_FAILURE $^ -o $@ $(LDLIBS) -Wl,--wrap=dw4_window_pump,--wrap=dw4_window_pump_mates,--wrap=dw4_simulation_due,--wrap=dw4_frontui_loading_sample,--wrap=dw4_window_present,--wrap=dw4_frontend_boot,--wrap=dw4_filelist_first,--wrap=dw4_lobby_tick
 check-loading-startup: $(BUILD)/test_loading_startup
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a ./$(BUILD)/test_loading_startup $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy ./$(BUILD)/test_loading_startup $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
 check: check-loading-startup
 .PHONY: check-loading-startup
 
@@ -809,9 +811,9 @@ check-retail: check-boxcamera-retail
 .PHONY: check-boxcamera check-boxcamera-retail
 
 check-background-focus: $(BUILD)/test_status_live
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a DW4_STATUS_LIVE_FOCUS_ONLY=1 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy DW4_STATUS_LIVE_FOCUS_ONLY=1 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
 check-background-focus-gpu: $(BUILD)/test_status_live
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a DW4_STATUS_LIVE_FOCUS_ONLY=1 DW4_STATUS_LIVE_GPU=640x448 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy DW4_STATUS_LIVE_FOCUS_ONLY=1 DW4_STATUS_LIVE_GPU=640x448 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
 .PHONY: check-background-focus check-background-focus-gpu
 
 check-lobby-floor-retail:
@@ -827,7 +829,7 @@ check: check-lobby-portaledge
 .PHONY: check-lobby-portaledge
 
 check-lobby-portaledge-live: $(BUILD)/test_status_live
-	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a DW4_LOBBY_PORTAL_EDGE=1 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
+	SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy DW4_LOBBY_PORTAL_EDGE=1 ./$(BUILD)/test_status_live $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted)
 check: check-lobby-portaledge-live
 .PHONY: check-lobby-portaledge-live
 

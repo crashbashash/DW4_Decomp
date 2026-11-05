@@ -143,7 +143,7 @@ def object_func_words(obj, symbol=None):
 
     Returns (words, size_in_bytes) or (None, None) if the symbol is absent.
     """
-    binpath = "/tmp/check_text_%s.bin" % TMP_TAG()
+    binpath = os.path.join(cc.scratch_dir(), "text_%s.bin" % TMP_TAG())
     if os.path.exists(binpath):
         os.remove(binpath)
     r = subprocess.run(["mipsel-linux-gnu-objcopy", "-j", ".text", "-O", "binary",
@@ -168,7 +168,7 @@ def object_func_words(obj, symbol=None):
 
 
 def assemble_s(src, out=None):
-    out = out or "/tmp/check_s_%s.o" % TMP_TAG()
+    out = out or os.path.join(cc.scratch_dir(), "s_%s.o" % TMP_TAG())
     if os.path.exists(out):
         os.remove(out)
     r = subprocess.run(["mipsel-linux-gnu-as", "-o", out, src],
@@ -362,7 +362,7 @@ def main(argv=None):
                                  a.elf, a.symbols, a.unit_objects,
                                  extra_files=profile_files + (vfy.jumptables_path(a.symbols),)),
                               repr(profile_files), os.path.abspath(a.src_dir),
-                              buildcache.tree_sha(a.src_dir, skip_ext=(".c", ".cpp", ".s")),
+                              buildcache.tree_sha(a.src_dir, skip_ext=buildcache.NOT_HEADERS),
                               buildcache.tools_sha("check.py"), buildcache.tools_sha("eegcc_compile.py"), a.flags, a.mwcc, a.wibo,
                               buildcache.file_sha(a.mwcc), buildcache.file_sha(a.wibo), tool_versions())
 

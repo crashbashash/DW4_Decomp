@@ -281,7 +281,7 @@ Notes:
 
 ---
 
-## 10. Progression-testing findings (from `../local/testing/memcards/Progression_Testing`)
+## 10. Progression-testing findings
 
 Experiments with a fresh character (`test_base_save.ps2`, intro step 1) settled
 several things and left a few open questions.

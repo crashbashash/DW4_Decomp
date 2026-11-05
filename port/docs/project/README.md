@@ -127,18 +127,17 @@ That single observation is why the plan below changes what the decompilation pri
 ## Goal A — moddable, recompilable, runs on hardware
 
 **Already in place, and more than the coverage percentage suggests.** `make link` rebuilds the whole
-section from a mix of decompiled C and the committed split assembly, byte-identically. So:
+section from a mix of decompiled C and, for the functions that have no C source yet, the retail bytes in the generated `asm/` split, byte-identically. So:
 
-* **any** function is modifiable *today* — C where it is decompiled, assembly where it is not;
+* **any** function is modifiable *today* — C where it is decompiled, its generated `asm/` unit where it has no C source yet;
 * a mod's only footprint is the mod: everything else relinks bit-exact;
-* the data side is well covered already (drops, item IDs, stats, spawn rows, save format, the
-  shipped crown/warp patchers are working examples — see [`../mods`](../../../../extras/mods)).
+* the data side is well covered already (drops, item IDs, stats, spawn rows, save format).
 
 **What it needs beyond that** (small, and none of it is "more percent"; items 1 and 3 are built,
 items 2 and 4 are missing):
 
-1. **An ISO relayout tool: built and verified** — `../extras/dw4-tools/repack_iso.py`. The patchers
-   rewrite bytes in place and refuse a length change; a rebuilt ELF is a different length, and it
+1. **An ISO relayout tool: built and verified.** An in-place patch
+   cannot change a file's length; a rebuilt ELF is a different length, and it
    sits at LBA 289 with 17 files behind it and 14 free sectors at the end. The tool appends the file
    and re-points its ISO9660 directory record (extent+length are both-endian fields) and the volume
    size; the game's data never moves. Verified by booting a grown image.
@@ -147,13 +146,12 @@ items 2 and 4 are missing):
    with `SetupHeap(0x0058d280, -1)`, and it is in use from its first byte (~8.3 MB live). But that
    base is an **argument in code this repo re-links**, so a mod region can go at `0x0058d280`…`+N`
    with the heap moved up and segment 0's `FileSz`/`MemSz` grown by `N`. That needs the CRT startup
-   built from source instead of linked as the committed disassembly. Same-size edits need none of it
+   built from source; it (`entry`, `0x100008`) has no C source yet and links from the retail image. Same-size edits need none of it
    and already work. Rules: `docs/engine/binary.md` §Rebuilding the image with a mod and
    §Memory map at runtime.
-3. **A documented mod build recipe: built and verified** — `../extras/dw4-tools/make_mod.sh` takes a
-   source patch all the way to a bootable disc (`patch src/` → `make link` → `shape_elf.py` →
-   `repack_iso.py`), and `mods/code-mod-difficulty` is a worked example whose whole disc footprint is
-   **15 bytes**. Two facts keep it small: the linker's own output boots as it
+3. **A documented mod build recipe: built and verified** — a source patch goes all the way to a
+   bootable disc (`patch src/` → `make link` → splice into the retail ELF → ISO relayout), and a
+   worked example has a whole disc footprint of **15 bytes**. Two facts keep it small: the linker's own output boots as it
    stands (no ELF-container step needed), and `tools/linkgen.py` pins each unit to its retail
    address, so a modified function can change size without shifting the disassembly's baked-in
    addresses. What that leaves for *adding* code is item 2.
@@ -284,10 +282,10 @@ One headline per goal, so progress is legible without reading a tracker:
 
 | number | what it answers | today |
 | --- | --- | --- |
-| **code matched** | how much of the binary is verified-correct C | 13.7 % of code bytes (9,195 / 19,277 functions) |
-| **data identified** | how much of the non-code half is understood | 21.3 % (297,947 / 1,399,812 bytes) |
+| **code matched** | how much of the binary is verified-correct C | percentage of code bytes, with the function count: read from [`PROGRESS.md`](../../../PROGRESS.md) (`code_bytes.fully_verified` and `functions.fully_verified` in [`docs/progress.json`](../../../docs/progress.json)) |
+| **data identified** | how much of the non-code half is understood | percentage of data bytes identified: read from [`PROGRESS.md`](../../../PROGRESS.md) (`data_bytes` in [`docs/progress.json`](../../../docs/progress.json)) |
 | **Lua decompiled** | how much of the game's logic is recovered | 100 % (5,291 / 5,291 chunks) |
-| **typed coverage** | how much of the matched C is portable rather than int-soup | **35.3 %** (1,997 / 5,662 field accesses use a recovered struct; `config/typed-coverage.json` is the gated baseline) |
+| **typed coverage** | how much of the matched C is portable rather than int-soup | share of field accesses that use a recovered struct: read from `make typed-check` (also `typed` in [`docs/progress.json`](../../../docs/progress.json); `config/typed-coverage.json` is the gated baseline) |
 | **shim surface** | how much platform code a port must replace | **measured** (T9): the EE runtime is 410 functions (`0x100008`–`0x1137a8`), the game reaches it through **127 entry points / 1,364 call sites**, 41 of those stubs are kernel syscalls; 56 functions touch hardware registers; the IOP side is 11 `.irx` modules + `IOPRP280.IMG` |
 
 Definitions and the generator for the first two are in

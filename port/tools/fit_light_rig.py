@@ -13,9 +13,9 @@ rig that was fitted without that correction came out degenerate -- it was driven
 wall, whose normals barely vary, and the up-facing facets of the flat-shaded props clipped to white.
 
     # one frame, the boxes the P4.4 table reports, nine parameters
-    tools/fit_light_rig.py --ref ../local/captures/.../real-goblin-pass.png \\
+    tools/fit_light_rig.py --ref <reference>.png \\
         --cmd './build/dw4asset render --stage ~/local/extracted stag0101.igb --ref 1 \\
-               --scene /tmp/cam.tsv --livedump ~/dumps/goblin_pass.bin \\
+               --scene /tmp/cam.tsv --livedump <ee-dump>.bin \\
                --pack2 ~/local/extracted/NDMW.AFS:861 --texdir /tmp/proptex \\
                --view "0.5 0.495845 0.710027 0 0 0.819868 -0.572552 0 -0.866025 0.286276 \\
                        0.409934 0 -115.58885 -299.804123 -223.409985 1" \\

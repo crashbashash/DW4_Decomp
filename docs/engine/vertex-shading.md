@@ -213,14 +213,12 @@ decode has the page's block map right but reads inner words row-major, which is 
 4,108 address cases and actual STATUS savestate images establish this.
 The framebuffer-dependent per-pixel maps/numbers below come from the [#588](../findings/findings-0501-0750.md#f588) decode and must be
 regenerated before reuse. The packet/texture evidence is independent of that decoder.
-See the pixel checkpoint (archived outside the repository).
 
 One reading of finding [#590](../findings/findings-0501-0750.md#f590) is that the game's framebuffer is warmer-and-bluer than
 `texel x Cv/128` because a **single global response curve** — some shared per-channel
 nonlinearity — sits after the modulate.  That reading is refuted by measurement.
 
-Over the whole covered frame of the same-instant combat dump (`scratch/frag590/response_curves.npz`,
-pred `= Cv*texel/128` per channel, fb from the corrected [#588](../findings/findings-0501-0750.md#f588) decode):
+Over the whole covered frame of the same-instant combat dump (pred `= Cv*texel/128` per channel, fb from the corrected [#588](../findings/findings-0501-0750.md#f588) decode):
 
 * The best global per-channel **affine** is `g = (0.591, 0.635, 0.580)`, `lift = (29.5, 23.5, 25.4)`
   with per-pixel mean `|d|` `(18.9, 16.8, 17.6)`.
@@ -278,6 +276,3 @@ implement a response curve and do not un-fit the light rig on this basis.  Two r
 are left to chase: the floor box reads *below* `pred` (it is overlay-covered, not a clean floor
 sample), and the bright character group (TBP `0x37c000`) is over-predicted.  The per-pixel scatter
 around the correct mean is pred/sampler (winner-raster + bilinear) noise, not a second combine.
-
-Reproduce the curve refutation with `scratch/frag590/analyze_curve.py` and the fog identification
-with `scratch/frag590/fog_verify.py` (both offline; staged rasters plus the dump).

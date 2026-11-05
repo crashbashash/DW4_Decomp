@@ -3,11 +3,13 @@
 Finding [#894](../findings/findings-0751-1000.md#f894) recovers **13 complete bodies / 772 code bytes** in
 [allocator-registry.c](../../recovered/engine/allocator-registry.c): the contiguous
 owner/selector run, its list-search and default-getter dependencies, and three
-allocation wrappers. Ten bodies / 400 bytes have exact source, among them the 140-byte
-encoder and 72-byte index search (**212 matched bytes**) and the default
-allocation wrapper, exact at56 bytes with an explicit allocator ABI view.
-Owner lookup292, the shared-tail allocation wrapper52 and direct tail28 remain
-compiler residuals with readable behavioral recovery.
+allocation wrappers. Eleven bodies / 692 bytes have exact source, among them the 140-byte
+encoder and 72-byte index search (**212 matched bytes**), the default
+allocation wrapper, exact at56 bytes with an explicit allocator ABI view, and
+owner lookup292 in `src/unmatched/Memory_FindOwningAllocator.cpp`.
+The shared-tail allocation wrapper52 (`Memory_AllocateBufferViaSharedTail` and its
+shared tail `FUN_002ed1e0`) and direct tail28 have no C source yet, with readable
+behavioral recovery.
 
 Seven names in `config/SLUS-20836/names/AllocatorRegistry.tsv` describe observed operations.
 The adjacent status/constant/no-op leaves retain address names because their wider
@@ -107,5 +109,4 @@ The bootstrap/context recovery also covers registry-list lifetime
 and global publication. Remaining work includes compiler residuals, context-record
 initialization/stack/special delegation, actual allocator virtual implementations,
 scalar/type publication, object cloning and broader Lua gameplay receivers. Native gameplay
-is unchanged. Private candidates, objdump and logs:
-repository-relative `../scratch/lua-engine-recovery/`.
+is unchanged.

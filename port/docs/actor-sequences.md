@@ -312,7 +312,7 @@ Run conditions and limits:
 
 - The actor, controller and dialogue tests also run under ASan/UBSan in
   separate headless builds with `detect_leaks=0` and `halt_on_error=1`.
-- The full run uses `SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a` for the
+- The full run uses `SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>` for the
   virtual-pad test.
 - Optional live texture/pose/fog checks skip without their private inputs.
 - No emulator-session, Windows, physical-controller or Steam Deck validation is

@@ -9360,7 +9360,7 @@
       "address": 1049152,
       "name": "FUN_00100240",
       "size": 76,
-      "source": null,
+      "source": "src/unmatched/FUN_00100240.cpp",
       "direct": [
         {
           "site": 1049164,
@@ -9387,7 +9387,7 @@
       "address": 1049232,
       "name": "FUN_00100290",
       "size": 12,
-      "source": null,
+      "source": "src/unmatched/FUN_00100290.c",
       "direct": [
         {
           "site": 1049236,
@@ -9532,7 +9532,7 @@
       "address": 1095320,
       "name": "FUN_0010b698",
       "size": 20,
-      "source": null,
+      "source": "src/unmatched/FUN_0010b698.c",
       "direct": [],
       "indirect": []
     },
@@ -9547,7 +9547,7 @@
     {
       "address": 1100144,
       "name": "FUN_0010c970",
-      "size": 352,
+      "size": 360,
       "source": null,
       "direct": [
         {
@@ -9624,6 +9624,12 @@
         },
         {
           "site": 1100464,
+          "target": 1102032,
+          "function": 1102032,
+          "entry_offset": 0
+        },
+        {
+          "site": 1100496,
           "target": 1102032,
           "function": 1102032,
           "entry_offset": 0
@@ -9989,7 +9995,7 @@
       "address": 1190032,
       "name": "FUN_00122890",
       "size": 72,
-      "source": null,
+      "source": "src/unmatched/FUN_00122890.c",
       "direct": [],
       "indirect": []
     },
@@ -9997,15 +10003,15 @@
       "address": 1190104,
       "name": "FUN_001228d8",
       "size": 60,
-      "source": null,
+      "source": "src/unmatched/FUN_001228d8.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1191312,
       "name": "FUN_00122d90",
-      "size": 640,
-      "source": null,
+      "size": 652,
+      "source": "src/unmatched/FUN_00122d90.c",
       "direct": [
         {
           "site": 1191496,
@@ -10028,7 +10034,7 @@
       "address": 1193536,
       "name": "FUN_00123640",
       "size": 20,
-      "source": null,
+      "source": "src/unmatched/FUN_00123640.c",
       "direct": [
         {
           "site": 1193548,
@@ -10043,7 +10049,7 @@
       "address": 1193680,
       "name": "FUN_001236d0",
       "size": 24,
-      "source": null,
+      "source": "src/unmatched/FUN_001236d0.c",
       "direct": [
         {
           "site": 1193696,
@@ -10058,7 +10064,7 @@
       "address": 1193744,
       "name": "FUN_00123710",
       "size": 28,
-      "source": null,
+      "source": "src/unmatched/FUN_00123710.c",
       "direct": [
         {
           "site": 1193764,
@@ -10730,7 +10736,7 @@
       "address": 1199440,
       "name": "FUN_00124d50",
       "size": 12,
-      "source": null,
+      "source": "src/unmatched/FUN_00124d50.c",
       "direct": [],
       "indirect": []
     },
@@ -10738,7 +10744,7 @@
       "address": 1199456,
       "name": "FUN_00124d60",
       "size": 172,
-      "source": null,
+      "source": "src/unmatched/FUN_00124d60.c",
       "direct": [
         {
           "site": 1199620,
@@ -10763,7 +10769,7 @@
     {
       "address": 1199632,
       "name": "FUN_00124e10",
-      "size": 268,
+      "size": 276,
       "source": null,
       "direct": [
         {
@@ -10791,7 +10797,7 @@
       "address": 1199912,
       "name": "FUN_00124f28",
       "size": 92,
-      "source": null,
+      "source": "src/unmatched/FUN_00124f28.c",
       "direct": [],
       "indirect": []
     },
@@ -10799,7 +10805,7 @@
       "address": 1200440,
       "name": "FUN_00125138",
       "size": 140,
-      "source": null,
+      "source": "src/unmatched/FUN_00125138.c",
       "direct": [
         {
           "site": 1200496,
@@ -10852,8 +10858,8 @@
     {
       "address": 1201128,
       "name": "FUN_001253e8",
-      "size": 744,
-      "source": null,
+      "size": 756,
+      "source": "src/unmatched/FUN_001253e8.c",
       "direct": [
         {
           "site": 1201156,
@@ -10931,7 +10937,7 @@
       "address": 1202256,
       "name": "FUN_00125850",
       "size": 92,
-      "source": null,
+      "source": "src/unmatched/FUN_00125850.c",
       "direct": [
         {
           "site": 1202292,
@@ -10945,7 +10951,7 @@
     {
       "address": 1202352,
       "name": "FUN_001258b0",
-      "size": 972,
+      "size": 992,
       "source": null,
       "direct": [
         {
@@ -11031,7 +11037,7 @@
       "address": 1203344,
       "name": "FUN_00125c90",
       "size": 148,
-      "source": null,
+      "source": "src/unmatched/FUN_00125c90.c",
       "direct": [],
       "indirect": [
         {
@@ -11053,7 +11059,7 @@
       "address": 1204136,
       "name": "FUN_00125fa8",
       "size": 28,
-      "source": null,
+      "source": "src/unmatched/FUN_00125fa8.c",
       "direct": [
         {
           "site": 1204156,
@@ -11067,7 +11073,7 @@
     {
       "address": 1204264,
       "name": "FUN_00126028",
-      "size": 332,
+      "size": 340,
       "source": null,
       "direct": [
         {
@@ -11094,7 +11100,7 @@
     {
       "address": 1205160,
       "name": "FUN_001263a8",
-      "size": 584,
+      "size": 600,
       "source": null,
       "direct": [
         {
@@ -11155,7 +11161,7 @@
       "address": 1208048,
       "name": "FUN_00126ef0",
       "size": 52,
-      "source": null,
+      "source": "src/unmatched/FUN_00126ef0.c",
       "direct": [],
       "indirect": []
     },
@@ -11177,7 +11183,7 @@
     },
     {
       "address": 1208472,
-      "name": "FUN_00127098",
+      "name": "memcpy",
       "size": 176,
       "source": null,
       "direct": [],
@@ -11185,7 +11191,7 @@
     },
     {
       "address": 1208648,
-      "name": "FUN_00127148",
+      "name": "memmove",
       "size": 260,
       "source": null,
       "direct": [],
@@ -11193,7 +11199,7 @@
     },
     {
       "address": 1208908,
-      "name": "FUN_0012724c",
+      "name": "memset",
       "size": 192,
       "source": null,
       "direct": [],
@@ -11203,7 +11209,7 @@
       "address": 1209104,
       "name": "FUN_00127310",
       "size": 124,
-      "source": null,
+      "source": "src/unmatched/FUN_00127310.c",
       "direct": [
         {
           "site": 1209120,
@@ -11224,7 +11230,7 @@
       "address": 1209232,
       "name": "FUN_00127390",
       "size": 76,
-      "source": null,
+      "source": "src/unmatched/FUN_00127390.c",
       "direct": [
         {
           "site": 1209288,
@@ -11239,7 +11245,7 @@
       "address": 1209312,
       "name": "FUN_001273e0",
       "size": 164,
-      "source": null,
+      "source": "src/unmatched/FUN_001273e0.c",
       "direct": [
         {
           "site": 1209348,
@@ -11260,7 +11266,7 @@
       "address": 1209480,
       "name": "FUN_00127488",
       "size": 44,
-      "source": null,
+      "source": "src/unmatched/FUN_00127488.c",
       "direct": [],
       "indirect": []
     },
@@ -11322,7 +11328,7 @@
       "address": 1210096,
       "name": "FUN_001276f0",
       "size": 128,
-      "source": null,
+      "source": "src/unmatched/FUN_001276f0.c",
       "direct": [],
       "indirect": []
     },
@@ -11330,7 +11336,7 @@
       "address": 1210224,
       "name": "FUN_00127770",
       "size": 188,
-      "source": null,
+      "source": "src/unmatched/FUN_00127770.c",
       "direct": [],
       "indirect": []
     },
@@ -11338,7 +11344,7 @@
       "address": 1210416,
       "name": "FUN_00127830",
       "size": 56,
-      "source": null,
+      "source": "src/unmatched/FUN_00127830.c",
       "direct": [
         {
           "site": 1210432,
@@ -11428,7 +11434,7 @@
       "address": 1211600,
       "name": "FUN_00127cd0",
       "size": 104,
-      "source": null,
+      "source": "src/unmatched/FUN_00127cd0.c",
       "direct": [],
       "indirect": []
     },
@@ -11462,7 +11468,7 @@
     {
       "address": 1212104,
       "name": "FUN_00127ec8",
-      "size": 200,
+      "size": 208,
       "source": null,
       "direct": [],
       "indirect": []
@@ -11485,7 +11491,7 @@
     {
       "address": 1212720,
       "name": "FUN_00128130",
-      "size": 380,
+      "size": 388,
       "source": null,
       "direct": [
         {
@@ -11545,7 +11551,7 @@
     {
       "address": 1216720,
       "name": "FUN_001290d0",
-      "size": 1408,
+      "size": 1440,
       "source": null,
       "direct": [
         {
@@ -11620,7 +11626,7 @@
     {
       "address": 1218216,
       "name": "FUN_001296a8",
-      "size": 372,
+      "size": 380,
       "source": null,
       "direct": [
         {
@@ -11666,7 +11672,7 @@
       "address": 1218600,
       "name": "FUN_00129828",
       "size": 88,
-      "source": null,
+      "source": "src/unmatched/FUN_00129828.c",
       "direct": [
         {
           "site": 1218632,
@@ -11687,9 +11693,9 @@
     },
     {
       "address": 1220192,
-      "name": "FUN_00129e60",
+      "name": "sprintf",
       "size": 144,
-      "source": null,
+      "source": "src/unmatched/sprintf.c",
       "direct": [
         {
           "site": 1220308,
@@ -11733,7 +11739,7 @@
       "address": 1222120,
       "name": "FUN_0012a5e8",
       "size": 20,
-      "source": null,
+      "source": "src/unmatched/FUN_0012a5e8.c",
       "direct": [
         {
           "site": 1222132,
@@ -11746,7 +11752,7 @@
     },
     {
       "address": 1222540,
-      "name": "FUN_0012a78c",
+      "name": "strlen",
       "size": 312,
       "source": null,
       "direct": [],
@@ -12209,7 +12215,7 @@
       "address": 1228688,
       "name": "FUN_0012bf90",
       "size": 36,
-      "source": null,
+      "source": "src/unmatched/FUN_0012bf90.c",
       "direct": [
         {
           "site": 1228716,
@@ -12223,8 +12229,8 @@
     {
       "address": 1228768,
       "name": "FUN_0012bfe0",
-      "size": 560,
-      "source": null,
+      "size": 568,
+      "source": "src/unmatched/FUN_0012bfe0.c",
       "direct": [
         {
           "site": 1229028,
@@ -12251,7 +12257,7 @@
       "address": 1229336,
       "name": "FUN_0012c218",
       "size": 44,
-      "source": null,
+      "source": "src/unmatched/FUN_0012c218.c",
       "direct": [
         {
           "site": 1229372,
@@ -12292,7 +12298,7 @@
     {
       "address": 1230288,
       "name": "FUN_0012c5d0",
-      "size": 384,
+      "size": 392,
       "source": null,
       "direct": [
         {
@@ -12320,7 +12326,7 @@
       "address": 1234120,
       "name": "FUN_0012d4c8",
       "size": 72,
-      "source": null,
+      "source": "src/unmatched/FUN_0012d4c8.c",
       "direct": [
         {
           "site": 1234160,
@@ -12354,9 +12360,9 @@
     },
     {
       "address": 1234376,
-      "name": "FUN_0012d5c8",
+      "name": "vfprintf",
       "size": 116,
-      "source": null,
+      "source": "src/unmatched/vfprintf.c",
       "direct": [
         {
           "site": 1234444,
@@ -12902,7 +12908,7 @@
       "address": 1244640,
       "name": "FUN_0012fde0",
       "size": 84,
-      "source": null,
+      "source": "src/unmatched/FUN_0012fde0.c",
       "direct": [
         {
           "site": 1244696,
@@ -12975,9 +12981,9 @@
     },
     {
       "address": 1639296,
-      "name": "FUN_00190380",
+      "name": "igMatrix44f_SetIdentity",
       "size": 72,
-      "source": "src/unmatched/FUN_00190380.c",
+      "source": "src/engine/igMatrix44f_SetIdentity.c",
       "direct": [],
       "indirect": []
     },
@@ -13009,7 +13015,7 @@
       "address": 1650512,
       "name": "FUN_00192f50",
       "size": 112,
-      "source": null,
+      "source": "src/unmatched/FUN_00192f50.c",
       "direct": [],
       "indirect": []
     },
@@ -13025,7 +13031,7 @@
       "address": 1877536,
       "name": "StringList_AppendRetained",
       "size": 144,
-      "source": null,
+      "source": "src/unmatched/StringList_AppendRetained.c",
       "direct": [
         {
           "site": 1877568,
@@ -13046,7 +13052,7 @@
       "address": 1994032,
       "name": "FUN_001e6d30",
       "size": 80,
-      "source": null,
+      "source": "src/unmatched/FUN_001e6d30.c",
       "direct": [
         {
           "site": 1994060,
@@ -13073,7 +13079,7 @@
     },
     {
       "address": 2286776,
-      "name": "FUN_0022e4b8",
+      "name": "__divdi3",
       "size": 1688,
       "source": null,
       "direct": [],
@@ -13081,7 +13087,7 @@
     },
     {
       "address": 2288464,
-      "name": "FUN_0022eb50",
+      "name": "__moddi3",
       "size": 1680,
       "source": null,
       "direct": [],
@@ -13090,22 +13096,22 @@
     {
       "address": 2290144,
       "name": "FUN_0022f1e0",
-      "size": 1388,
+      "size": 1404,
       "source": null,
       "direct": [],
       "indirect": []
     },
     {
       "address": 2291552,
-      "name": "FUN_0022f760",
+      "name": "__umoddi3",
       "size": 1384,
-      "source": null,
+      "source": "src/unmatched/__umoddi3.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2292936,
-      "name": "FUN_0022fcc8",
+      "name": "__floatdidf",
       "size": 168,
       "source": null,
       "direct": [
@@ -13268,7 +13274,7 @@
       "address": 2294280,
       "name": "FUN_00230208",
       "size": 92,
-      "source": null,
+      "source": "src/unmatched/FUN_00230208.c",
       "direct": [],
       "indirect": []
     },
@@ -13276,7 +13282,7 @@
       "address": 2294376,
       "name": "FUN_00230268",
       "size": 44,
-      "source": null,
+      "source": "src/unmatched/FUN_00230268.c",
       "direct": [
         {
           "site": 2294400,
@@ -13291,7 +13297,7 @@
       "address": 2294424,
       "name": "FUN_00230298",
       "size": 60,
-      "source": null,
+      "source": "src/unmatched/FUN_00230298.c",
       "direct": [
         {
           "site": 2294440,
@@ -13310,7 +13316,7 @@
     },
     {
       "address": 2294488,
-      "name": "FUN_002302d8",
+      "name": "pack_d",
       "size": 216,
       "source": null,
       "direct": [],
@@ -13318,8 +13324,8 @@
     },
     {
       "address": 2294704,
-      "name": "FUN_002303b0",
-      "size": 176,
+      "name": "unpack_d",
+      "size": 188,
       "source": null,
       "direct": [],
       "indirect": []
@@ -13334,9 +13340,9 @@
     },
     {
       "address": 2295504,
-      "name": "FUN_002306d0",
+      "name": "__adddf3",
       "size": 88,
-      "source": null,
+      "source": "src/unmatched/__adddf3.c",
       "direct": [
         {
           "site": 2295528,
@@ -13369,7 +13375,7 @@
       "address": 2295592,
       "name": "FUN_00230728",
       "size": 100,
-      "source": null,
+      "source": "src/unmatched/FUN_00230728.c",
       "direct": [
         {
           "site": 2295616,
@@ -13400,8 +13406,8 @@
     },
     {
       "address": 2295696,
-      "name": "FUN_00230790",
-      "size": 632,
+      "name": "__muldf3",
+      "size": 644,
       "source": null,
       "direct": [
         {
@@ -13451,7 +13457,7 @@
     },
     {
       "address": 2296344,
-      "name": "FUN_00230a18",
+      "name": "__divdf3",
       "size": 320,
       "source": null,
       "direct": [
@@ -13513,7 +13519,7 @@
     },
     {
       "address": 2297032,
-      "name": "FUN_00230cc8",
+      "name": "__floatsidf",
       "size": 184,
       "source": null,
       "direct": [
@@ -13596,7 +13602,7 @@
       "address": 2345248,
       "name": "FUN_0023c920",
       "size": 120,
-      "source": null,
+      "source": "src/unmatched/FUN_0023c920.c",
       "direct": [
         {
           "site": 2345316,
@@ -13644,7 +13650,7 @@
       "address": 2345792,
       "name": "FUN_0023cb40",
       "size": 448,
-      "source": null,
+      "source": "src/unmatched/FUN_0023cb40.c",
       "direct": [],
       "indirect": []
     },
@@ -13687,7 +13693,7 @@
       "address": 2351456,
       "name": "FUN_0023e160",
       "size": 420,
-      "source": null,
+      "source": "src/unmatched/FUN_0023e160.c",
       "direct": [
         {
           "site": 2351536,
@@ -13803,7 +13809,7 @@
       "address": 2379968,
       "name": "FUN_002450c0",
       "size": 424,
-      "source": null,
+      "source": "src/unmatched/FUN_002450c0.c",
       "direct": [
         {
           "site": 2380020,
@@ -13862,7 +13868,7 @@
       "address": 2380560,
       "name": "FUN_00245310",
       "size": 424,
-      "source": null,
+      "source": "src/unmatched/FUN_00245310.c",
       "direct": [
         {
           "site": 2380612,
@@ -13913,7 +13919,7 @@
       "address": 2385824,
       "name": "FUN_002467a0",
       "size": 132,
-      "source": null,
+      "source": "src/unmatched/FUN_002467a0.c",
       "direct": [
         {
           "site": 2385908,
@@ -13932,17 +13938,17 @@
     },
     {
       "address": 2387296,
-      "name": "FUN_00246d60",
+      "name": "luaA_indexAcceptable",
       "size": 68,
-      "source": null,
+      "source": "src/third_party/lua/lapi.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2388624,
-      "name": "FUN_00247290",
+      "name": "lua_touserdata",
       "size": 68,
-      "source": null,
+      "source": "src/third_party/lua/lapi.c",
       "direct": [
         {
           "site": 2388632,
@@ -13955,9 +13961,9 @@
     },
     {
       "address": 2388800,
-      "name": "FUN_00247340",
+      "name": "lua_pushnil",
       "size": 76,
-      "source": null,
+      "source": "src/third_party/lua/lapi.c",
       "direct": [
         {
           "site": 2388840,
@@ -13970,9 +13976,9 @@
     },
     {
       "address": 2388880,
-      "name": "FUN_00247390",
+      "name": "lua_pushnumber",
       "size": 84,
-      "source": null,
+      "source": "src/third_party/lua/lapi.c",
       "direct": [
         {
           "site": 2388928,
@@ -13985,9 +13991,9 @@
     },
     {
       "address": 2388976,
-      "name": "FUN_002473f0",
+      "name": "lua_pushlstring",
       "size": 92,
-      "source": "src/unmatched/FUN_002473f0.c",
+      "source": "src/third_party/lua/lapi.c",
       "direct": [
         {
           "site": 2388988,
@@ -14006,9 +14012,9 @@
     },
     {
       "address": 2389072,
-      "name": "FUN_00247450",
+      "name": "lua_pushstring",
       "size": 88,
-      "source": "src/unmatched/FUN_00247450.c",
+      "source": "src/third_party/lua/lapi.c",
       "direct": [
         {
           "site": 2389100,
@@ -14033,49 +14039,49 @@
     },
     {
       "address": 2405984,
-      "name": "FUN_0024b660",
+      "name": "isLmark",
       "size": 60,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2406048,
-      "name": "FUN_0024b6a0",
+      "name": "aux_stackedfunction",
       "size": 96,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2406272,
-      "name": "FUN_0024b780",
+      "name": "luaG_getline",
       "size": 220,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2406496,
-      "name": "FUN_0024b860",
+      "name": "currentpc",
       "size": 72,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2407792,
-      "name": "FUN_0024bd70",
+      "name": "pushpc",
       "size": 44,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2407840,
-      "name": "FUN_0024bda0",
+      "name": "luaG_symbexec",
       "size": 532,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [
         {
           "site": 2408080,
@@ -14100,9 +14106,9 @@
     },
     {
       "address": 2408384,
-      "name": "FUN_0024bfc0",
+      "name": "getobjname",
       "size": 292,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [
         {
           "site": 2408408,
@@ -14139,9 +14145,9 @@
     },
     {
       "address": 2408880,
-      "name": "FUN_0024c1b0",
+      "name": "luaG_typeerror",
       "size": 152,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [
         {
           "site": 2408912,
@@ -14166,9 +14172,9 @@
     },
     {
       "address": 2409040,
-      "name": "FUN_0024c250",
+      "name": "luaG_binerror",
       "size": 24,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [
         {
           "site": 2409056,
@@ -14181,9 +14187,9 @@
     },
     {
       "address": 2409072,
-      "name": "FUN_0024c270",
+      "name": "luaG_ordererror",
       "size": 108,
-      "source": null,
+      "source": "src/third_party/lua/ldebug.c",
       "direct": [
         {
           "site": 2409140,
@@ -14202,9 +14208,9 @@
     },
     {
       "address": 2409312,
-      "name": "FUN_0024c360",
+      "name": "luaD_checkstack",
       "size": 144,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2409404,
@@ -14223,9 +14229,9 @@
     },
     {
       "address": 2409536,
-      "name": "FUN_0024c440",
+      "name": "luaD_adjusttop",
       "size": 136,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2409608,
@@ -14238,9 +14244,9 @@
     },
     {
       "address": 2409680,
-      "name": "FUN_0024c4d0",
+      "name": "luaD_openstack",
       "size": 140,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2409784,
@@ -14253,9 +14259,9 @@
     },
     {
       "address": 2409824,
-      "name": "FUN_0024c560",
+      "name": "dohook",
       "size": 124,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2409876,
@@ -14274,9 +14280,9 @@
     },
     {
       "address": 2409952,
-      "name": "FUN_0024c5e0",
+      "name": "luaD_lineHook",
       "size": 64,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2409996,
@@ -14289,9 +14295,9 @@
     },
     {
       "address": 2410016,
-      "name": "FUN_0024c620",
+      "name": "luaD_callHook",
       "size": 56,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2410052,
@@ -14304,9 +14310,9 @@
     },
     {
       "address": 2410080,
-      "name": "FUN_0024c660",
+      "name": "callCclosure",
       "size": 168,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2410124,
@@ -14325,9 +14331,9 @@
     },
     {
       "address": 2410256,
-      "name": "FUN_0024c710",
+      "name": "luaD_callTM",
       "size": 112,
-      "source": "src/unmatched/FUN_0024c710.c",
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2410304,
@@ -14346,9 +14352,9 @@
     },
     {
       "address": 2410368,
-      "name": "FUN_0024c780",
+      "name": "luaD_call",
       "size": 500,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2410420,
@@ -14409,9 +14415,9 @@
     },
     {
       "address": 2411472,
-      "name": "FUN_0024cbd0",
+      "name": "message",
       "size": 160,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2411500,
@@ -14442,9 +14448,9 @@
     },
     {
       "address": 2411632,
-      "name": "FUN_0024cc70",
+      "name": "lua_error",
       "size": 56,
-      "source": "src/unmatched/FUN_0024cc70.c",
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2411652,
@@ -14463,9 +14469,9 @@
     },
     {
       "address": 2411696,
-      "name": "FUN_0024ccb0",
+      "name": "luaD_breakrun",
       "size": 88,
-      "source": null,
+      "source": "src/third_party/lua/ldo.c",
       "direct": [
         {
           "site": 2411724,
@@ -14490,9 +14496,9 @@
     },
     {
       "address": 2412000,
-      "name": "FUN_0024cde0",
+      "name": "luaF_newclosure",
       "size": 108,
-      "source": null,
+      "source": "src/third_party/lua/lfunc.c",
       "direct": [
         {
           "site": 2412044,
@@ -14505,17 +14511,17 @@
     },
     {
       "address": 2412240,
-      "name": "FUN_0024ced0",
+      "name": "protosize",
       "size": 84,
-      "source": "src/unmatched/FUN_0024ced0.c",
+      "source": "src/third_party/lua/lfunc.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2412384,
-      "name": "FUN_0024cf60",
+      "name": "luaF_freeproto",
       "size": 184,
-      "source": null,
+      "source": "src/third_party/lua/lfunc.c",
       "direct": [
         {
           "site": 2412416,
@@ -14570,9 +14576,9 @@
     },
     {
       "address": 2412576,
-      "name": "FUN_0024d020",
+      "name": "luaF_freeclosure",
       "size": 36,
-      "source": null,
+      "source": "src/third_party/lua/lfunc.c",
       "direct": [
         {
           "site": 2412604,
@@ -14585,25 +14591,25 @@
     },
     {
       "address": 2412624,
-      "name": "FUN_0024d050",
+      "name": "luaF_getlocalname",
       "size": 124,
-      "source": null,
+      "source": "src/third_party/lua/lfunc.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2412752,
-      "name": "FUN_0024d0d0",
+      "name": "protomark",
       "size": 264,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2413024,
-      "name": "FUN_0024d1e0",
+      "name": "markstack",
       "size": 88,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2413060,
@@ -14616,9 +14622,9 @@
     },
     {
       "address": 2413120,
-      "name": "FUN_0024d240",
+      "name": "marklock",
       "size": 124,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2413192,
@@ -14631,9 +14637,9 @@
     },
     {
       "address": 2413248,
-      "name": "FUN_0024d2c0",
+      "name": "markclosure",
       "size": 84,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2413292,
@@ -14646,9 +14652,9 @@
     },
     {
       "address": 2413344,
-      "name": "FUN_0024d320",
+      "name": "marktagmethods",
       "size": 156,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2413424,
@@ -14661,9 +14667,9 @@
     },
     {
       "address": 2413504,
-      "name": "FUN_0024d3c0",
+      "name": "markobject",
       "size": 176,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2413604,
@@ -14682,9 +14688,9 @@
     },
     {
       "address": 2413680,
-      "name": "FUN_0024d470",
+      "name": "markall",
       "size": 336,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2413732,
@@ -14733,17 +14739,17 @@
     },
     {
       "address": 2414016,
-      "name": "FUN_0024d5c0",
+      "name": "hasmark",
       "size": 104,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2414128,
-      "name": "FUN_0024d630",
+      "name": "invalidaterefs",
       "size": 108,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2414188,
@@ -14756,9 +14762,9 @@
     },
     {
       "address": 2414240,
-      "name": "FUN_0024d6a0",
+      "name": "collectproto",
       "size": 100,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2414300,
@@ -14771,9 +14777,9 @@
     },
     {
       "address": 2414352,
-      "name": "FUN_0024d710",
+      "name": "collectclosure",
       "size": 100,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2414412,
@@ -14786,9 +14792,9 @@
     },
     {
       "address": 2414464,
-      "name": "FUN_0024d780",
+      "name": "collecttable",
       "size": 100,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2414524,
@@ -14801,9 +14807,9 @@
     },
     {
       "address": 2414576,
-      "name": "FUN_0024d7f0",
+      "name": "checktab",
       "size": 84,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2414640,
@@ -14816,9 +14822,9 @@
     },
     {
       "address": 2414672,
-      "name": "FUN_0024d850",
+      "name": "collectstrings",
       "size": 220,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2414816,
@@ -14837,9 +14843,9 @@
     },
     {
       "address": 2414896,
-      "name": "FUN_0024d930",
+      "name": "collectudata",
       "size": 176,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2415064,
@@ -14852,9 +14858,9 @@
     },
     {
       "address": 2415072,
-      "name": "FUN_0024d9e0",
+      "name": "checkMbuffer",
       "size": 80,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2415124,
@@ -14867,9 +14873,9 @@
     },
     {
       "address": 2415152,
-      "name": "FUN_0024da30",
+      "name": "callgcTM",
       "size": 188,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2415184,
@@ -14894,9 +14900,9 @@
     },
     {
       "address": 2415344,
-      "name": "FUN_0024daf0",
+      "name": "callgcTMudata",
       "size": 160,
-      "source": null,
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2415412,
@@ -14915,9 +14921,9 @@
     },
     {
       "address": 2415504,
-      "name": "FUN_0024db90",
+      "name": "luaC_collect",
       "size": 92,
-      "source": "src/unmatched/FUN_0024db90.c",
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2415524,
@@ -14960,9 +14966,9 @@
     },
     {
       "address": 2415600,
-      "name": "FUN_0024dbf0",
+      "name": "luaC_collectgarbage",
       "size": 92,
-      "source": "src/unmatched/FUN_0024dbf0.c",
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2415612,
@@ -14999,9 +15005,9 @@
     },
     {
       "address": 2415696,
-      "name": "FUN_0024dc50",
+      "name": "luaC_checkGC",
       "size": 48,
-      "source": "src/unmatched/FUN_0024dc50.c",
+      "source": "src/third_party/lua/lgc.c",
       "direct": [
         {
           "site": 2415724,
@@ -15014,9 +15020,9 @@
     },
     {
       "address": 2425344,
-      "name": "FUN_00250200",
+      "name": "luaM_realloc",
       "size": 268,
-      "source": null,
+      "source": "src/engine/luaM_realloc.cpp",
       "direct": [
         {
           "site": 2425380,
@@ -15069,17 +15075,17 @@
     },
     {
       "address": 2425616,
-      "name": "FUN_00250310",
+      "name": "luaO_power2",
       "size": 44,
-      "source": null,
+      "source": "src/third_party/lua/lobject.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2425664,
-      "name": "FUN_00250340",
+      "name": "luaO_equalObj",
       "size": 176,
-      "source": null,
+      "source": "src/third_party/lua/lobject.c",
       "direct": [
         {
           "site": 2425756,
@@ -15092,9 +15098,9 @@
     },
     {
       "address": 2425840,
-      "name": "FUN_002503f0",
+      "name": "luaO_openspace",
       "size": 100,
-      "source": null,
+      "source": "src/third_party/lua/lobject.c",
       "direct": [
         {
           "site": 2425880,
@@ -15107,9 +15113,9 @@
     },
     {
       "address": 2425952,
-      "name": "FUN_00250460",
+      "name": "luaO_str2d",
       "size": 152,
-      "source": null,
+      "source": "src/third_party/lua/lobject.c",
       "direct": [
         {
           "site": 2425976,
@@ -15122,9 +15128,9 @@
     },
     {
       "address": 2426112,
-      "name": "FUN_00250500",
+      "name": "luaO_verror",
       "size": 124,
-      "source": null,
+      "source": "src/third_party/lua/lobject.c",
       "direct": [
         {
           "site": 2426200,
@@ -15143,17 +15149,17 @@
     },
     {
       "address": 2437968,
-      "name": "FUN_00253350",
+      "name": "hash_s",
       "size": 68,
-      "source": null,
+      "source": "src/third_party/lua/lstring.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2438048,
-      "name": "FUN_002533a0",
+      "name": "luaS_resize",
       "size": 280,
-      "source": null,
+      "source": "src/third_party/lua/lstring.c",
       "direct": [
         {
           "site": 2438088,
@@ -15172,9 +15178,9 @@
     },
     {
       "address": 2438336,
-      "name": "FUN_002534c0",
+      "name": "newentry",
       "size": 108,
-      "source": null,
+      "source": "src/third_party/lua/lstring.c",
       "direct": [
         {
           "site": 2438424,
@@ -15187,9 +15193,9 @@
     },
     {
       "address": 2438448,
-      "name": "FUN_00253530",
+      "name": "luaS_newlstr",
       "size": 284,
-      "source": null,
+      "source": "src/third_party/lua/lstring.c",
       "direct": [
         {
           "site": 2438496,
@@ -15226,9 +15232,9 @@
     },
     {
       "address": 2439072,
-      "name": "FUN_002537a0",
+      "name": "luaS_new",
       "size": 68,
-      "source": "src/unmatched/FUN_002537a0.c",
+      "source": "src/third_party/lua/lstring.c",
       "direct": [
         {
           "site": 2439096,
@@ -15247,9 +15253,9 @@
     },
     {
       "address": 2446768,
-      "name": "FUN_002555b0",
+      "name": "luaH_mainposition",
       "size": 196,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2446844,
@@ -15262,9 +15268,9 @@
     },
     {
       "address": 2446976,
-      "name": "FUN_00255680",
+      "name": "luaH_getany",
       "size": 156,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2447008,
@@ -15289,9 +15295,9 @@
     },
     {
       "address": 2447136,
-      "name": "FUN_00255720",
+      "name": "luaH_getnum",
       "size": 152,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2447172,
@@ -15310,17 +15316,17 @@
     },
     {
       "address": 2447296,
-      "name": "FUN_002557c0",
+      "name": "luaH_getstr",
       "size": 96,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2447392,
-      "name": "FUN_00255820",
+      "name": "luaH_get",
       "size": 100,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2447436,
@@ -15345,9 +15351,9 @@
     },
     {
       "address": 2447504,
-      "name": "FUN_00255890",
+      "name": "luaH_next",
       "size": 228,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2447552,
@@ -15366,9 +15372,9 @@
     },
     {
       "address": 2447744,
-      "name": "FUN_00255980",
+      "name": "luaH_remove",
       "size": 244,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2447828,
@@ -15399,9 +15405,9 @@
     },
     {
       "address": 2448000,
-      "name": "FUN_00255a80",
+      "name": "setnodevector",
       "size": 252,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2448052,
@@ -15420,9 +15426,9 @@
     },
     {
       "address": 2448256,
-      "name": "FUN_00255b80",
+      "name": "luaH_new",
       "size": 132,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2448284,
@@ -15447,9 +15453,9 @@
     },
     {
       "address": 2448400,
-      "name": "FUN_00255c10",
+      "name": "luaH_free",
       "size": 104,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2448460,
@@ -15468,17 +15474,17 @@
     },
     {
       "address": 2448512,
-      "name": "FUN_00255c80",
+      "name": "numuse",
       "size": 76,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2448592,
-      "name": "FUN_00255cd0",
+      "name": "rehash",
       "size": 316,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2448640,
@@ -15521,9 +15527,9 @@
     },
     {
       "address": 2448912,
-      "name": "FUN_00255e10",
+      "name": "luaH_set",
       "size": 404,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2448956,
@@ -15560,9 +15566,9 @@
     },
     {
       "address": 2449328,
-      "name": "FUN_00255fb0",
+      "name": "luaH_setint",
       "size": 80,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2449360,
@@ -15581,9 +15587,9 @@
     },
     {
       "address": 2449408,
-      "name": "FUN_00256000",
+      "name": "luaH_setstrnum",
       "size": 64,
-      "source": null,
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2449436,
@@ -15596,9 +15602,9 @@
     },
     {
       "address": 2449472,
-      "name": "FUN_00256040",
+      "name": "luaH_getglobal",
       "size": 48,
-      "source": "src/unmatched/FUN_00256040.c",
+      "source": "src/third_party/lua/ltable.c",
       "direct": [
         {
           "site": 2449484,
@@ -15617,17 +15623,17 @@
     },
     {
       "address": 2450480,
-      "name": "FUN_00256430",
+      "name": "luaT_tag",
       "size": 60,
-      "source": null,
+      "source": "src/third_party/lua/ltm.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2454384,
-      "name": "FUN_00257370",
+      "name": "luaV_tonumber",
       "size": 92,
-      "source": "src/unmatched/FUN_00257370.c",
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2454428,
@@ -15640,9 +15646,9 @@
     },
     {
       "address": 2454480,
-      "name": "FUN_002573d0",
+      "name": "luaV_tostring",
       "size": 112,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2454536,
@@ -15661,9 +15667,9 @@
     },
     {
       "address": 2454592,
-      "name": "FUN_00257440",
+      "name": "traceexec",
       "size": 236,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2454724,
@@ -15682,9 +15688,9 @@
     },
     {
       "address": 2454832,
-      "name": "FUN_00257530",
+      "name": "luaV_closure",
       "size": 184,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2454856,
@@ -15703,9 +15709,9 @@
     },
     {
       "address": 2455088,
-      "name": "FUN_00257630",
+      "name": "luaV_Lclosure",
       "size": 48,
-      "source": "src/unmatched/FUN_00257630.c",
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2455104,
@@ -15718,9 +15724,9 @@
     },
     {
       "address": 2455136,
-      "name": "FUN_00257660",
+      "name": "luaV_gettable",
       "size": 348,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2455228,
@@ -15757,9 +15763,9 @@
     },
     {
       "address": 2455488,
-      "name": "FUN_002577c0",
+      "name": "luaV_settable",
       "size": 340,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2455588,
@@ -15796,9 +15802,9 @@
     },
     {
       "address": 2455840,
-      "name": "FUN_00257920",
+      "name": "luaV_getglobal",
       "size": 220,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2455872,
@@ -15829,9 +15835,9 @@
     },
     {
       "address": 2456064,
-      "name": "FUN_00257a00",
+      "name": "luaV_setglobal",
       "size": 320,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2456096,
@@ -15868,9 +15874,9 @@
     },
     {
       "address": 2456384,
-      "name": "FUN_00257b40",
+      "name": "call_binTM",
       "size": 208,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2456420,
@@ -15901,9 +15907,9 @@
     },
     {
       "address": 2456592,
-      "name": "FUN_00257c10",
+      "name": "call_arith",
       "size": 76,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2456612,
@@ -15922,9 +15928,9 @@
     },
     {
       "address": 2456672,
-      "name": "FUN_00257c60",
+      "name": "luaV_strcomp",
       "size": 168,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2456716,
@@ -15943,9 +15949,9 @@
     },
     {
       "address": 2456848,
-      "name": "FUN_00257d10",
+      "name": "luaV_lessthan",
       "size": 268,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2456916,
@@ -15982,9 +15988,9 @@
     },
     {
       "address": 2457120,
-      "name": "FUN_00257e20",
+      "name": "luaV_strconc",
       "size": 472,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2457192,
@@ -16045,9 +16051,9 @@
     },
     {
       "address": 2457600,
-      "name": "FUN_00258000",
+      "name": "luaV_pack",
       "size": 252,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2457636,
@@ -16090,9 +16096,9 @@
     },
     {
       "address": 2457856,
-      "name": "FUN_00258100",
+      "name": "adjust_varargs",
       "size": 120,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2457928,
@@ -16111,9 +16117,9 @@
     },
     {
       "address": 2457984,
-      "name": "FUN_00258180",
+      "name": "luaV_execute",
       "size": 3588,
-      "source": null,
+      "source": "src/third_party/lua/lvm.c",
       "direct": [
         {
           "site": 2458076,
@@ -16620,7 +16626,7 @@
       "address": 2975360,
       "name": "List_Reserve",
       "size": 264,
-      "source": null,
+      "source": "src/unmatched/List_Reserve.cpp",
       "direct": [
         {
           "site": 2975408,
@@ -16676,7 +16682,7 @@
       "address": 2975632,
       "name": "List_Resize",
       "size": 120,
-      "source": null,
+      "source": "src/unmatched/List_Resize.c",
       "direct": [
         {
           "site": 2975720,
@@ -16733,7 +16739,7 @@
       "address": 2977008,
       "name": "List_RemoveWordAt",
       "size": 124,
-      "source": null,
+      "source": "src/unmatched/List_RemoveWordAt.c",
       "direct": [
         {
           "site": 2977096,
@@ -16748,7 +16754,7 @@
       "address": 3057296,
       "name": "ObjectPointerList_EnsureIndex",
       "size": 232,
-      "source": null,
+      "source": "src/unmatched/ObjectPointerList_EnsureIndex.cpp",
       "direct": [
         {
           "site": 3057344,
@@ -16796,7 +16802,7 @@
       "address": 3057696,
       "name": "ObjectPointerList_FindIndex",
       "size": 68,
-      "source": null,
+      "source": "src/unmatched/ObjectPointerList_FindIndex.c",
       "direct": [],
       "indirect": []
     },
@@ -16833,7 +16839,7 @@
       "address": 3059184,
       "name": "StringPool_Construct",
       "size": 196,
-      "source": null,
+      "source": "src/unmatched/StringPool_Construct.c",
       "direct": [
         {
           "site": 3059244,
@@ -16878,7 +16884,7 @@
       "address": 3059552,
       "name": "StringPool_Intern",
       "size": 172,
-      "source": null,
+      "source": "src/unmatched/StringPool_Intern.c",
       "direct": [
         {
           "site": 3059600,
@@ -16973,7 +16979,7 @@
       "address": 3068720,
       "name": "FUN_002ed330",
       "size": 116,
-      "source": "src/unmatched/FUN_002ed330.cpp",
+      "source": "src/engine/FUN_002ed330.cpp",
       "direct": [
         {
           "site": 3068748,
@@ -17102,7 +17108,7 @@
       "address": 3081456,
       "name": "Memory_FindOwningAllocator",
       "size": 292,
-      "source": null,
+      "source": "src/unmatched/Memory_FindOwningAllocator.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17131,7 +17137,7 @@
       "address": 3081984,
       "name": "igAllocator_ResolveEncodedIndex",
       "size": 76,
-      "source": null,
+      "source": "src/unmatched/igAllocator_ResolveEncodedIndex.c",
       "direct": [],
       "indirect": []
     },
@@ -17139,7 +17145,7 @@
       "address": 3114624,
       "name": "Memory_GetCurrentContext",
       "size": 84,
-      "source": null,
+      "source": "src/unmatched/Memory_GetCurrentContext.c",
       "direct": [],
       "indirect": []
     },
@@ -17265,7 +17271,7 @@
       "address": 3136064,
       "name": "igMetaObject_CreateInstance",
       "size": 244,
-      "source": null,
+      "source": "src/unmatched/igMetaObject_CreateInstance.cpp",
       "direct": [
         {
           "site": 3136184,
@@ -17358,7 +17364,7 @@
       "address": 3142096,
       "name": "igObject_Construct",
       "size": 276,
-      "source": null,
+      "source": "src/unmatched/igObject_Construct.cpp",
       "direct": [
         {
           "site": 3142188,
@@ -17511,7 +17517,7 @@
       "address": 3143984,
       "name": "igObject_ZeroFields",
       "size": 200,
-      "source": null,
+      "source": "src/unmatched/igObject_ZeroFields.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17530,7 +17536,7 @@
       "address": 3144192,
       "name": "igObject_ConstructFields",
       "size": 164,
-      "source": null,
+      "source": "src/unmatched/igObject_ConstructFields.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17554,7 +17560,7 @@
       "address": 3144528,
       "name": "igObject_ResetUnconstructedFields",
       "size": 188,
-      "source": null,
+      "source": "src/unmatched/igObject_ResetUnconstructedFields.cpp",
       "direct": [
         {
           "site": 3144640,
@@ -17585,7 +17591,7 @@
       "address": 3144720,
       "name": "igObject_DestructFieldValues",
       "size": 160,
-      "source": null,
+      "source": "src/unmatched/igObject_DestructFieldValues.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17609,7 +17615,7 @@
       "address": 3144880,
       "name": "igObject_ClearFieldValues",
       "size": 144,
-      "source": null,
+      "source": "src/unmatched/igObject_ClearFieldValues.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17626,9 +17632,9 @@
     },
     {
       "address": 3149008,
-      "name": "FUN_00300cd0",
+      "name": "igObject_IsKindOf",
       "size": 84,
-      "source": null,
+      "source": "src/engine/igObject_IsKindOf.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17749,7 +17755,7 @@
       "address": 3153632,
       "name": "ObjectList_ResizeRetained",
       "size": 276,
-      "source": null,
+      "source": "src/unmatched/ObjectList_ResizeRetained.c",
       "direct": [
         {
           "site": 3153740,
@@ -17776,7 +17782,7 @@
       "address": 3154624,
       "name": "igProperty_FindByName",
       "size": 188,
-      "source": null,
+      "source": "src/unmatched/igProperty_FindByName.c",
       "direct": [
         {
           "site": 3154736,
@@ -17791,7 +17797,7 @@
       "address": 3191584,
       "name": "FUN_0030b320",
       "size": 152,
-      "source": null,
+      "source": "src/unmatched/FUN_0030b320.c",
       "direct": [
         {
           "site": 3191648,
@@ -17929,7 +17935,7 @@
       "address": 3192368,
       "name": "FUN_0030b630",
       "size": 60,
-      "source": null,
+      "source": "src/unmatched/FUN_0030b630.c",
       "direct": [
         {
           "site": 3192400,
@@ -17989,7 +17995,7 @@
       "address": 3195072,
       "name": "StringTable_Construct",
       "size": 84,
-      "source": null,
+      "source": "src/unmatched/StringTable_Construct.cpp",
       "direct": [],
       "indirect": [
         {
@@ -18003,7 +18009,7 @@
       "address": 3195456,
       "name": "StringTable_Find",
       "size": 140,
-      "source": null,
+      "source": "src/unmatched/StringTable_Find.cpp",
       "direct": [
         {
           "site": 3195532,
@@ -18029,7 +18035,7 @@
       "address": 3195600,
       "name": "StringTable_Register",
       "size": 192,
-      "source": null,
+      "source": "src/unmatched/StringTable_Register.cpp",
       "direct": [
         {
           "site": 3195704,
@@ -18061,7 +18067,7 @@
       "address": 3195792,
       "name": "StringTable_RemoveHeader",
       "size": 148,
-      "source": null,
+      "source": "src/unmatched/StringTable_RemoveHeader.cpp",
       "direct": [
         {
           "site": 3195868,
@@ -18093,7 +18099,7 @@
       "address": 3195952,
       "name": "StringTable_NotifyEmptyChunk",
       "size": 208,
-      "source": null,
+      "source": "src/unmatched/StringTable_NotifyEmptyChunk.cpp",
       "direct": [
         {
           "site": 3196084,
@@ -18119,7 +18125,7 @@
       "address": 3196160,
       "name": "StringTable_SearchRetained",
       "size": 244,
-      "source": null,
+      "source": "src/unmatched/StringTable_SearchRetained.c",
       "direct": [
         {
           "site": 3196276,
@@ -18149,7 +18155,7 @@
       "address": 3196528,
       "name": "StringTable_InsertAt",
       "size": 204,
-      "source": null,
+      "source": "src/unmatched/StringTable_InsertAt.c",
       "direct": [
         {
           "site": 3196584,
@@ -18220,7 +18226,7 @@
       "address": 3196976,
       "name": "StringChunk_AllocateToken",
       "size": 264,
-      "source": null,
+      "source": "src/unmatched/StringChunk_AllocateToken.c",
       "direct": [
         {
           "site": 3197072,
@@ -18375,7 +18381,7 @@
       "address": 3198448,
       "name": "StringList_Resize",
       "size": 300,
-      "source": null,
+      "source": "src/unmatched/StringList_Resize.c",
       "direct": [
         {
           "site": 3198528,
@@ -18528,7 +18534,7 @@
       "address": 3553216,
       "name": "FUN_003637c0",
       "size": 52,
-      "source": "src/unmatched/FUN_003637c0.c",
+      "source": "src/unmatched/FUN_003637c0.cpp",
       "direct": [
         {
           "site": 3553228,
@@ -18564,7 +18570,7 @@
       "address": 3554336,
       "name": "FUN_00363c20",
       "size": 52,
-      "source": "src/unmatched/FUN_00363c20.c",
+      "source": "src/unmatched/FUN_00363c20.cpp",
       "direct": [
         {
           "site": 3554348,
@@ -18598,9 +18604,9 @@
     },
     {
       "address": 3583616,
-      "name": "FUN_0036ae80",
+      "name": "beBaseInfoDataList_Create",
       "size": 52,
-      "source": "src/unmatched/FUN_0036ae80.c",
+      "source": "src/game/beBaseInfoDataList_Create.cpp",
       "direct": [
         {
           "site": 3583628,
@@ -18635,8 +18641,8 @@
     {
       "address": 3606400,
       "name": "LuaAPI_Dispatch",
-      "size": 4192,
-      "source": null,
+      "size": 4188,
+      "source": "src/unmatched/LuaAPI_Dispatch.cpp",
       "direct": [
         {
           "site": 3606420,
@@ -20229,7 +20235,7 @@
       "address": 3611088,
       "name": "LuaAPI_Register",
       "size": 60,
-      "source": null,
+      "source": "src/unmatched/LuaAPI_Register.cpp",
       "direct": [
         {
           "site": 3611128,
@@ -20244,7 +20250,7 @@
       "address": 3611664,
       "name": "bePlayer_GetStruct",
       "size": 84,
-      "source": "src/game/bePlayer_GetStruct.c",
+      "source": "src/game/bePlayer_GetStruct.cpp",
       "direct": [
         {
           "site": 3611712,
@@ -20265,7 +20271,7 @@
       "address": 3611760,
       "name": "SYSisJoinPlayer",
       "size": 48,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3611768,
@@ -20286,7 +20292,7 @@
       "address": 3611808,
       "name": "SYSgetPlayerName",
       "size": 48,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3611816,
@@ -20307,7 +20313,7 @@
       "address": 3611856,
       "name": "SYSgetWeaponName",
       "size": 152,
-      "source": null,
+      "source": "src/unmatched/SYSgetWeaponName.cpp",
       "direct": [
         {
           "site": 3611872,
@@ -20340,7 +20346,7 @@
       "address": 3612016,
       "name": "SYSgetPlayerNinzu",
       "size": 48,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3612024,
@@ -20361,7 +20367,7 @@
       "address": 3612064,
       "name": "SYSgetDifficulty",
       "size": 48,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3612072,
@@ -20382,7 +20388,7 @@
       "address": 3612112,
       "name": "SYSsetDifficulty",
       "size": 60,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3612128,
@@ -20403,7 +20409,7 @@
       "address": 3612176,
       "name": "SYSgetCameraMode",
       "size": 84,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3612204,
@@ -20430,7 +20436,7 @@
       "address": 3612272,
       "name": "SYSgetLightMode",
       "size": 84,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3612300,
@@ -20457,7 +20463,7 @@
       "address": 3612368,
       "name": "SYSgetArea",
       "size": 8,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20465,7 +20471,7 @@
       "address": 3612384,
       "name": "SYSgetCountry",
       "size": 8,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20473,7 +20479,7 @@
       "address": 3612400,
       "name": "SYSgetTarget",
       "size": 8,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20481,7 +20487,7 @@
       "address": 3612416,
       "name": "SYSgetIsPackOnly",
       "size": 8,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20503,7 +20509,7 @@
       "address": 3612512,
       "name": "SYSsetGateStage",
       "size": 400,
-      "source": null,
+      "source": "src/unmatched/SYSsetGateStage.cpp",
       "direct": [
         {
           "site": 3612560,
@@ -20590,7 +20596,7 @@
       "address": 3612912,
       "name": "SYSgetGateStageName",
       "size": 84,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3612940,
@@ -20617,7 +20623,7 @@
       "address": 3613008,
       "name": "SYSgetGateStageNo",
       "size": 84,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3613036,
@@ -20644,7 +20650,7 @@
       "address": 3613104,
       "name": "SYSctlDeviceFolder",
       "size": 264,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3613172,
@@ -20713,7 +20719,7 @@
       "address": 3613376,
       "name": "SYSctlDiskFolder",
       "size": 244,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3613428,
@@ -20782,7 +20788,7 @@
       "address": 3613632,
       "name": "SYSctlFlagFolder",
       "size": 220,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3613668,
@@ -20851,7 +20857,7 @@
       "address": 3613856,
       "name": "SYSctlBit",
       "size": 232,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3613900,
@@ -20920,7 +20926,7 @@
       "address": 3614096,
       "name": "SYSgetPlayerLevel",
       "size": 48,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3614104,
@@ -20941,7 +20947,7 @@
       "address": 3614144,
       "name": "SYSgetPlayerDigimon",
       "size": 48,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3614152,
@@ -20962,7 +20968,7 @@
       "address": 3614192,
       "name": "SYSisGetShinkaDigimon",
       "size": 72,
-      "source": "src/unmatched/SYSisGetShinkaDigimon.c",
+      "source": "src/unmatched/SYSisGetShinkaDigimon.cpp",
       "direct": [
         {
           "site": 3614208,
@@ -20982,8 +20988,8 @@
     {
       "address": 3614272,
       "name": "SYSctlCardFolder",
-      "size": 384,
-      "source": null,
+      "size": 392,
+      "source": "src/unmatched/SYSctlCardFolder.cpp",
       "direct": [
         {
           "site": 3614300,
@@ -21022,7 +21028,7 @@
       "address": 3614672,
       "name": "SYSctlShinka",
       "size": 412,
-      "source": null,
+      "source": "src/unmatched/SYSctlShinka.cpp",
       "direct": [
         {
           "site": 3614708,
@@ -21097,7 +21103,7 @@
       "address": 3615088,
       "name": "SYSctlPlayer",
       "size": 188,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3615140,
@@ -21148,7 +21154,7 @@
       "address": 3615280,
       "name": "CFLclear",
       "size": 276,
-      "source": null,
+      "source": "src/unmatched/CFLclear.cpp",
       "direct": [
         {
           "site": 3615364,
@@ -21186,8 +21192,8 @@
     {
       "address": 3615568,
       "name": "CFLsetName",
-      "size": 384,
-      "source": null,
+      "size": 392,
+      "source": "src/unmatched/CFLsetName.cpp",
       "direct": [
         {
           "site": 3615640,
@@ -21250,15 +21256,15 @@
       "address": 3615968,
       "name": "CFLgetFolderName",
       "size": 16,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 3615984,
       "name": "Lua_sd_OptionalArg",
-      "size": 732,
-      "source": null,
+      "size": 756,
+      "source": "src/unmatched/Lua_sd_OptionalArg.cpp",
       "direct": [
         {
           "site": 3616036,
@@ -21327,7 +21333,7 @@
       "address": 3616752,
       "name": "sd_29",
       "size": 108,
-      "source": null,
+      "source": "src/unmatched/sd_29.cpp",
       "direct": [
         {
           "site": 3616800,
@@ -21354,7 +21360,7 @@
       "address": 3616864,
       "name": "sd_30",
       "size": 56,
-      "source": null,
+      "source": "src/unmatched/sd_30.cpp",
       "direct": [
         {
           "site": 3616900,
@@ -21369,7 +21375,7 @@
       "address": 3616928,
       "name": "sd_31",
       "size": 124,
-      "source": null,
+      "source": "src/unmatched/sd_31.cpp",
       "direct": [
         {
           "site": 3616984,
@@ -21396,7 +21402,7 @@
       "address": 3617056,
       "name": "sd_32",
       "size": 64,
-      "source": null,
+      "source": "src/unmatched/sd_32.cpp",
       "direct": [
         {
           "site": 3617100,
@@ -21516,7 +21522,7 @@
       "address": 3617408,
       "name": "DMsetSD_40",
       "size": 68,
-      "source": null,
+      "source": "src/unmatched/DMsetSD_40.cpp",
       "direct": [
         {
           "site": 3617456,
@@ -21531,7 +21537,7 @@
       "address": 3617488,
       "name": "DMsetSD_41",
       "size": 64,
-      "source": null,
+      "source": "src/unmatched/DMsetSD_41.cpp",
       "direct": [
         {
           "site": 3617532,
@@ -21546,7 +21552,7 @@
       "address": 3617552,
       "name": "DMsetSD_42",
       "size": 64,
-      "source": null,
+      "source": "src/unmatched/DMsetSD_42.cpp",
       "direct": [
         {
           "site": 3617596,
@@ -21561,7 +21567,7 @@
       "address": 3617616,
       "name": "DMsetSD_43",
       "size": 60,
-      "source": null,
+      "source": "src/unmatched/DMsetSD_43.cpp",
       "direct": [
         {
           "site": 3617656,
@@ -21576,7 +21582,7 @@
       "address": 3617680,
       "name": "DMchkSD_44",
       "size": 276,
-      "source": null,
+      "source": "src/unmatched/DMchkSD_44.cpp",
       "direct": [
         {
           "site": 3617744,
@@ -21621,7 +21627,7 @@
       "address": 3617968,
       "name": "DMchkSD_45",
       "size": 264,
-      "source": null,
+      "source": "src/unmatched/DMchkSD_45.cpp",
       "direct": [
         {
           "site": 3618024,
@@ -21666,7 +21672,7 @@
       "address": 3618240,
       "name": "DMsetLua",
       "size": 36,
-      "source": null,
+      "source": "src/unmatched/DMsetLua.cpp",
       "direct": [
         {
           "site": 3618256,
@@ -21681,7 +21687,7 @@
       "address": 3618288,
       "name": "DMmsgBox",
       "size": 44,
-      "source": null,
+      "source": "src/unmatched/DMmsgBox.cpp",
       "direct": [
         {
           "site": 3618312,
@@ -21696,7 +21702,7 @@
       "address": 3618336,
       "name": "DMswtSD_46",
       "size": 64,
-      "source": null,
+      "source": "src/unmatched/DMswtSD_46.cpp",
       "direct": [
         {
           "site": 3618380,
@@ -21711,7 +21717,7 @@
       "address": 3618400,
       "name": "DMswtSD_47",
       "size": 60,
-      "source": null,
+      "source": "src/unmatched/DMswtSD_47.cpp",
       "direct": [
         {
           "site": 3618440,
@@ -21726,7 +21732,7 @@
       "address": 3618464,
       "name": "DMswtEnd",
       "size": 32,
-      "source": null,
+      "source": "src/unmatched/DMswtEnd.cpp",
       "direct": [
         {
           "site": 3618476,
@@ -21741,7 +21747,7 @@
       "address": 3618496,
       "name": "DMcase",
       "size": 36,
-      "source": null,
+      "source": "src/unmatched/DMcase.cpp",
       "direct": [
         {
           "site": 3618512,
@@ -21756,7 +21762,7 @@
       "address": 3618544,
       "name": "DMrun",
       "size": 32,
-      "source": null,
+      "source": "src/unmatched/DMrun.cpp",
       "direct": [
         {
           "site": 3618556,
@@ -21771,7 +21777,7 @@
       "address": 3618576,
       "name": "DMgetCount",
       "size": 148,
-      "source": null,
+      "source": "src/unmatched/DMgetCount.cpp",
       "direct": [
         {
           "site": 3618644,
@@ -21798,7 +21804,7 @@
       "address": 3618736,
       "name": "FLGisOn",
       "size": 144,
-      "source": null,
+      "source": "src/unmatched/FLGisOn.cpp",
       "direct": [
         {
           "site": 3618780,
@@ -21831,7 +21837,7 @@
       "address": 3618880,
       "name": "FLGset",
       "size": 156,
-      "source": null,
+      "source": "src/unmatched/FLGset.cpp",
       "direct": [
         {
           "site": 3618932,
@@ -21858,7 +21864,7 @@
       "address": 3619040,
       "name": "FLGflip",
       "size": 268,
-      "source": null,
+      "source": "src/unmatched/FLGflip.cpp",
       "direct": [
         {
           "site": 3619088,
@@ -21897,7 +21903,7 @@
       "address": 3619312,
       "name": "COUNTERset",
       "size": 164,
-      "source": null,
+      "source": "src/unmatched/COUNTERset.cpp",
       "direct": [
         {
           "site": 3619364,
@@ -21924,7 +21930,7 @@
       "address": 3619488,
       "name": "COUNTERget",
       "size": 120,
-      "source": "src/unmatched/COUNTERget.c",
+      "source": "src/unmatched/COUNTERget.cpp",
       "direct": [
         {
           "site": 3619532,
@@ -21951,7 +21957,7 @@
       "address": 3619616,
       "name": "MDLgetRamNo",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -21959,7 +21965,7 @@
       "address": 3619632,
       "name": "MDLgetInfoName",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -21967,7 +21973,7 @@
       "address": 3619648,
       "name": "MDLgetPosStr",
       "size": 204,
-      "source": null,
+      "source": "src/unmatched/MDLgetPosStr.cpp",
       "direct": [
         {
           "site": 3619688,
@@ -22024,7 +22030,7 @@
       "address": 3619856,
       "name": "MDLgetRotStr",
       "size": 232,
-      "source": null,
+      "source": "src/unmatched/MDLgetRotStr.cpp",
       "direct": [
         {
           "site": 3619900,
@@ -22081,7 +22087,7 @@
       "address": 3620096,
       "name": "MDLgetMHp",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22089,7 +22095,7 @@
       "address": 3620112,
       "name": "MDLgetHp",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22097,7 +22103,7 @@
       "address": 3620128,
       "name": "MDLaddHp",
       "size": 48,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22105,7 +22111,7 @@
       "address": 3620176,
       "name": "MDLsetSeq",
       "size": 60,
-      "source": null,
+      "source": "src/unmatched/MDLsetSeq.cpp",
       "direct": [
         {
           "site": 3620216,
@@ -22120,7 +22126,7 @@
       "address": 3620240,
       "name": "MDLsetSD",
       "size": 56,
-      "source": null,
+      "source": "src/unmatched/MDLsetSD.cpp",
       "direct": [
         {
           "site": 3620276,
@@ -22135,7 +22141,7 @@
       "address": 3620304,
       "name": "MDLisLive",
       "size": 172,
-      "source": null,
+      "source": "src/unmatched/MDLisLive.cpp",
       "direct": [
         {
           "site": 3620352,
@@ -22162,7 +22168,7 @@
       "address": 3620480,
       "name": "MDLgetBulletKind",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22170,7 +22176,7 @@
       "address": 3620496,
       "name": "MDLgetBulletName",
       "size": 68,
-      "source": null,
+      "source": "src/unmatched/MDLgetBulletName.c",
       "direct": [],
       "indirect": []
     },
@@ -22178,15 +22184,15 @@
       "address": 3620576,
       "name": "MDLgetBulletBoxNo",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 3620592,
-      "name": "FUN_00373ef0",
-      "size": 508,
-      "source": null,
+      "name": "FloatingNumber_Spawn",
+      "size": 528,
+      "source": "src/game/FloatingNumber_Spawn.cpp",
       "direct": [
         {
           "site": 3620696,
@@ -22306,7 +22312,7 @@
       "address": 3621216,
       "name": "MDLsetDMGTurn",
       "size": 20,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22314,7 +22320,7 @@
       "address": 3621248,
       "name": "MDLisCallName",
       "size": 68,
-      "source": null,
+      "source": "src/unmatched/MDLisCallName.cpp",
       "direct": [
         {
           "site": 3621288,
@@ -22329,7 +22335,7 @@
       "address": 3621328,
       "name": "MDLsetWorldPosTarget_78",
       "size": 40,
-      "source": null,
+      "source": "src/unmatched/MDLsetWorldPosTarget_78.c",
       "direct": [],
       "indirect": []
     },
@@ -22337,7 +22343,7 @@
       "address": 3621376,
       "name": "MDLsetWorldPosTarget_79",
       "size": 84,
-      "source": null,
+      "source": "src/unmatched/MDLsetWorldPosTarget_79.cpp",
       "direct": [
         {
           "site": 3621404,
@@ -22352,7 +22358,7 @@
       "address": 3621472,
       "name": "MDLgetKyoriSquare",
       "size": 112,
-      "source": null,
+      "source": "src/unmatched/MDLgetKyoriSquare.cpp",
       "direct": [
         {
           "site": 3621512,
@@ -22367,7 +22373,7 @@
       "address": 3621584,
       "name": "MDLgetRecNo",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22375,7 +22381,7 @@
       "address": 3621600,
       "name": "MDLisSeqName",
       "size": 304,
-      "source": null,
+      "source": "src/unmatched/MDLisSeqName.cpp",
       "direct": [
         {
           "site": 3621640,
@@ -22426,7 +22432,7 @@
       "address": 3621904,
       "name": "MDLisStatus",
       "size": 144,
-      "source": null,
+      "source": "src/unmatched/MDLisStatus.cpp",
       "direct": [
         {
           "site": 3621940,
@@ -22465,7 +22471,7 @@
       "address": 3622048,
       "name": "PLAYERgetPos",
       "size": 64,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3622076,
@@ -22486,7 +22492,7 @@
       "address": 3622112,
       "name": "PLAYERgetDataStr",
       "size": 320,
-      "source": null,
+      "source": "src/unmatched/PLAYERgetDataStr.cpp",
       "direct": [
         {
           "site": 3622164,
@@ -22573,7 +22579,7 @@
       "address": 3622432,
       "name": "PLAYERgetPosStr",
       "size": 264,
-      "source": null,
+      "source": "src/unmatched/PLAYERgetPosStr.cpp",
       "direct": [
         {
           "site": 3622500,
@@ -22636,7 +22642,7 @@
       "address": 3622704,
       "name": "MsgBox",
       "size": 8,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22644,7 +22650,7 @@
       "address": 3622720,
       "name": "ShutDown",
       "size": 168,
-      "source": null,
+      "source": "src/unmatched/ShutDown.cpp",
       "direct": [
         {
           "site": 3622772,
@@ -22677,7 +22683,7 @@
       "address": 3622896,
       "name": "TXTgetCallNo",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22685,7 +22691,7 @@
       "address": 3622912,
       "name": "BLTisPlayerBullet",
       "size": 128,
-      "source": null,
+      "source": "src/lua/combat.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22693,7 +22699,7 @@
       "address": 3623040,
       "name": "BLTgetShootRamNo",
       "size": 12,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22701,7 +22707,7 @@
       "address": 3623056,
       "name": "BLTisHitCheck",
       "size": 272,
-      "source": null,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3623112,
@@ -22776,7 +22782,7 @@
       "address": 3623328,
       "name": "BLTisCritical",
       "size": 156,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3623348,
@@ -22827,7 +22833,7 @@
       "address": 3623488,
       "name": "BLTgetDamageValue",
       "size": 364,
-      "source": null,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3623552,
@@ -22920,7 +22926,7 @@
       "address": 3623856,
       "name": "BLTgetDamageRank",
       "size": 264,
-      "source": null,
+      "source": "src/lua/combat.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22928,7 +22934,7 @@
       "address": 3624128,
       "name": "BLTgetAttributeStr",
       "size": 56,
-      "source": null,
+      "source": "src/lua/combat.cpp",
       "direct": [],
       "indirect": []
     },
@@ -22936,7 +22942,7 @@
       "address": 3624192,
       "name": "BLTgetStunTime",
       "size": 212,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3624228,
@@ -22998,8 +23004,8 @@
     {
       "address": 3624416,
       "name": "BLTgetPoisonTime",
-      "size": 280,
-      "source": null,
+      "size": 288,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3624548,
@@ -23055,8 +23061,8 @@
     {
       "address": 3624704,
       "name": "BLTgetSleepTime",
-      "size": 252,
-      "source": null,
+      "size": 260,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3624828,
@@ -23106,8 +23112,8 @@
     {
       "address": 3624976,
       "name": "BLTgetBindTime",
-      "size": 252,
-      "source": null,
+      "size": 260,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3625100,
@@ -23157,8 +23163,8 @@
     {
       "address": 3625248,
       "name": "BLTgetAttackDownTime",
-      "size": 280,
-      "source": null,
+      "size": 288,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3625380,
@@ -23214,8 +23220,8 @@
     {
       "address": 3625536,
       "name": "BLTgetPowerDownTime",
-      "size": 280,
-      "source": null,
+      "size": 288,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3625668,
@@ -23272,7 +23278,7 @@
       "address": 3625824,
       "name": "BLTcalcSkillUp",
       "size": 176,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3625860,
@@ -23323,7 +23329,7 @@
       "address": 3626000,
       "name": "BLTcalcEXPUp",
       "size": 136,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3626020,
@@ -23368,7 +23374,7 @@
       "address": 3626144,
       "name": "BLPisHitCheck",
       "size": 156,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3626164,
@@ -23419,7 +23425,7 @@
       "address": 3626304,
       "name": "BLPgetDamageValue",
       "size": 336,
-      "source": null,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3626360,
@@ -23506,7 +23512,7 @@
       "address": 3626640,
       "name": "BLPgetAttackZokusei",
       "size": 148,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3626660,
@@ -23557,7 +23563,7 @@
       "address": 3626800,
       "name": "BLPgetDamageRank",
       "size": 244,
-      "source": null,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3626836,
@@ -23620,7 +23626,7 @@
       "address": 3627056,
       "name": "BLPgetStunTime",
       "size": 328,
-      "source": null,
+      "source": "src/lua/combat.cpp",
       "direct": [
         {
           "site": 3627128,
@@ -23707,7 +23713,7 @@
       "address": 3627392,
       "name": "BLPgetPoisonTime",
       "size": 164,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3627420,
@@ -23758,7 +23764,7 @@
       "address": 3627568,
       "name": "BLPgetSleepTime",
       "size": 156,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3627588,
@@ -23809,7 +23815,7 @@
       "address": 3627728,
       "name": "BLPgetBindTime",
       "size": 156,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3627748,
@@ -23860,7 +23866,7 @@
       "address": 3627888,
       "name": "BLPgetAttackDownTime",
       "size": 184,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3627916,
@@ -23917,7 +23923,7 @@
       "address": 3628080,
       "name": "BLPgetPowerDownTime",
       "size": 184,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3628108,
@@ -23974,7 +23980,7 @@
       "address": 3628272,
       "name": "BLPcalcKoukaMagic",
       "size": 156,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3628292,
@@ -24025,7 +24031,7 @@
       "address": 3628432,
       "name": "LISsetDifficultMax",
       "size": 96,
-      "source": "src/lua/api.c",
+      "source": "src/lua/api.cpp",
       "direct": [
         {
           "site": 3628468,
@@ -24052,7 +24058,7 @@
       "address": 3662096,
       "name": "FUN_0037e110",
       "size": 100,
-      "source": null,
+      "source": "src/unmatched/FUN_0037e110.cpp",
       "direct": [
         {
           "site": 3662172,
@@ -24067,7 +24073,7 @@
       "address": 3662208,
       "name": "FUN_0037e180",
       "size": 200,
-      "source": null,
+      "source": "src/unmatched/FUN_0037e180.cpp",
       "direct": [
         {
           "site": 3662264,
@@ -24106,7 +24112,7 @@
       "address": 3662544,
       "name": "FUN_0037e2d0",
       "size": 196,
-      "source": null,
+      "source": "src/unmatched/FUN_0037e2d0.cpp",
       "direct": [
         {
           "site": 3662584,
@@ -24145,7 +24151,7 @@
       "address": 3662752,
       "name": "FUN_0037e3a0",
       "size": 832,
-      "source": null,
+      "source": "src/unmatched/FUN_0037e3a0.cpp",
       "direct": [
         {
           "site": 3662836,
@@ -24304,7 +24310,7 @@
       "address": 3663584,
       "name": "FUN_0037e6e0",
       "size": 420,
-      "source": null,
+      "source": "src/unmatched/FUN_0037e6e0.cpp",
       "direct": [
         {
           "site": 3663624,
@@ -24391,7 +24397,7 @@
       "address": 3664016,
       "name": "FUN_0037e890",
       "size": 440,
-      "source": null,
+      "source": "src/unmatched/FUN_0037e890.cpp",
       "direct": [
         {
           "site": 3664064,
@@ -24478,7 +24484,7 @@
       "address": 3664464,
       "name": "FUN_0037ea50",
       "size": 128,
-      "source": null,
+      "source": "src/unmatched/FUN_0037ea50.cpp",
       "direct": [
         {
           "site": 3664504,
@@ -24499,7 +24505,7 @@
       "address": 3714208,
       "name": "beMatCtrl_IsPlayer",
       "size": 48,
-      "source": null,
+      "source": "src/unmatched/beMatCtrl_IsPlayer.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24507,7 +24513,7 @@
       "address": 3714256,
       "name": "beMatCtrl_IsAllPlayer",
       "size": 104,
-      "source": null,
+      "source": "src/unmatched/beMatCtrl_IsAllPlayer.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24515,7 +24521,7 @@
       "address": 3714368,
       "name": "beMatCtrl_GetPlayerNo",
       "size": 136,
-      "source": null,
+      "source": "src/unmatched/beMatCtrl_GetPlayerNo.cpp",
       "direct": [],
       "indirect": []
     },
@@ -24523,7 +24529,7 @@
       "address": 3714512,
       "name": "beMatCtrl_IsRidePlayer",
       "size": 96,
-      "source": null,
+      "source": "src/unmatched/beMatCtrl_IsRidePlayer.c",
       "direct": [],
       "indirect": []
     },
@@ -24531,7 +24537,7 @@
       "address": 3714608,
       "name": "beMatCtrl_IsRideOffPlayer",
       "size": 96,
-      "source": null,
+      "source": "src/unmatched/beMatCtrl_IsRideOffPlayer.c",
       "direct": [],
       "indirect": []
     },
@@ -24546,8 +24552,8 @@
     {
       "address": 3714720,
       "name": "beMatCtrl_GetPlayerMatStat",
-      "size": 208,
-      "source": null,
+      "size": 200,
+      "source": "src/unmatched/beMatCtrl_GetPlayerMatStat.c",
       "direct": [],
       "indirect": []
     },
@@ -24555,7 +24561,7 @@
       "address": 3718880,
       "name": "beMessenger_InitializeMemory",
       "size": 1196,
-      "source": null,
+      "source": "src/unmatched/beMessenger_InitializeMemory.cpp",
       "direct": [
         {
           "site": 3718908,
@@ -24720,7 +24726,7 @@
       "address": 3721792,
       "name": "beMessengerArgData_Clear",
       "size": 1072,
-      "source": null,
+      "source": "src/unmatched/beMessengerArgData_Clear.cpp",
       "direct": [
         {
           "site": 3721848,
@@ -24831,7 +24837,7 @@
       "address": 3725408,
       "name": "beMessenger_SelectReceivers",
       "size": 2036,
-      "source": null,
+      "source": "src/unmatched/beMessenger_SelectReceivers.cpp",
       "direct": [
         {
           "site": 3725472,
@@ -25038,7 +25044,7 @@
       "address": 3727456,
       "name": "beMessenger_DispatchSelected",
       "size": 1228,
-      "source": null,
+      "source": "src/unmatched/beMessenger_DispatchSelected.cpp",
       "direct": [
         {
           "site": 3727528,
@@ -25193,7 +25199,7 @@
       "address": 3729072,
       "name": "beMessenger_PrepareDelayedSelection",
       "size": 576,
-      "source": null,
+      "source": "src/unmatched/beMessenger_PrepareDelayedSelection.cpp",
       "direct": [
         {
           "site": 3729124,
@@ -25298,7 +25304,7 @@
       "address": 3729648,
       "name": "beMessenger_EnqueueSelected",
       "size": 932,
-      "source": null,
+      "source": "src/unmatched/beMessenger_EnqueueSelected.cpp",
       "direct": [
         {
           "site": 3729884,
@@ -25416,7 +25422,7 @@
       "address": 3732048,
       "name": "beMessenger_AppendInt",
       "size": 120,
-      "source": null,
+      "source": "src/game/beMessengerArgs.cpp",
       "direct": [
         {
           "site": 3732120,
@@ -25439,7 +25445,7 @@
       "address": 3732304,
       "name": "beMessenger_AppendFloat",
       "size": 120,
-      "source": null,
+      "source": "src/game/beMessengerArgs.cpp",
       "direct": [
         {
           "site": 3732376,
@@ -25454,7 +25460,7 @@
       "address": 3732480,
       "name": "beMessenger_AppendLong",
       "size": 120,
-      "source": null,
+      "source": "src/unmatched/beMessenger_AppendLong.cpp",
       "direct": [
         {
           "site": 3732552,
@@ -25469,7 +25475,7 @@
       "address": 3732656,
       "name": "beMessenger_AppendVec3",
       "size": 148,
-      "source": null,
+      "source": "src/game/beMessengerArgs.cpp",
       "direct": [
         {
           "site": 3732728,
@@ -25538,7 +25544,7 @@
       "address": 3733552,
       "name": "beMessenger_AppendString",
       "size": 188,
-      "source": null,
+      "source": "src/game/beMessengerArgs.cpp",
       "direct": [
         {
           "site": 3733608,

@@ -5,7 +5,7 @@
  * setter twin of vfunc_34, which reads the preset back as seconds
  * (docs/engine/system-clock.md; findings #772).  The EE has no double
  * hardware, so the arithmetic goes through the soft-float runtime
- * (archived near-miss note wave11 names 0x00230790 as the double
+ * (0x00230790 is the double
  * multiply and 0x00230cc8 as the 64-bit integer to double conversion) and the
  * double arrives and travels as an integer register pair. */
 extern "C" {

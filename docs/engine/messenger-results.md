@@ -4,8 +4,9 @@ The complete contiguous 32-body block at `0x0038f0e0..0x0038f94c`
 (2,032 code bytes) exposes `beMessenger`'s typed result/argument channels.
 All bodies have readable [behavioral C](../../recovered/engine/messenger-results.c).
 Twenty have matching C/C++ in [beMessengerResults.c](../../src/game/beMessengerResults.c)
-and [beMessengerResults.cpp](../../src/game/beMessengerResults.cpp); twelve retain
-retail assembly pending compiler recovery. Finding [#862](../findings/findings-0751-1000.md#f862) records this boundary.
+and [beMessengerResults.cpp](../../src/game/beMessengerResults.cpp); the other twelve
+match in [beMessengerArgs.cpp](../../src/game/beMessengerArgs.cpp) (seven) and in one-function files
+under `src/unmatched/` (five). Finding [#862](../findings/findings-0751-1000.md#f862) records this boundary.
 
 Receiver selection and actual message routing have a separate complete
 [behavioral recovery](messenger-dispatch.md); receiver virtual implementations
@@ -99,10 +100,9 @@ Recovered float get, matrix get and object append add **104 matched code bytes**
 Both C++ wrappers require the original frame-preserving language mode. The other
 seventeen source bodies were already matched; naming/folding preserves their
 bytes. Full root matching checks, typed baseline and byte-identical relink are
-required after the module fold. Compiler candidates and original Ghidra/objdump
-exports are private under repository-relative `../scratch/lua-engine-recovery/`.
+required after the module fold.
 
-Next finish the twelve compiler residuals and recover the list metadata/allocator,
+Next recover the list metadata/allocator,
 string pool and remaining matrix compiler bodies. Then integrate actual messenger selection and player result
 production, so material update can consume these channels without controlled
 matrix/selector results. The [Lua dependency inventory](lua-dependencies.md)

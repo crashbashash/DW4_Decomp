@@ -4,7 +4,7 @@ Finding [#890](../findings/findings-0751-1000.md#f890) recovers two complete bod
 [array-storage.c](../../recovered/engine/array-storage.c). The 228-byte allocator
 has byte-identical matching source in
 [array-allocation.cpp](../../src/engine/array-allocation.cpp). The adjacent
-336-byte alignment selector retains assembly: its readable recovery passes the
+336-byte alignment selector has no C source yet: its readable recovery passes the
 retail behavioral oracle, but the private compiler candidate still differs.
 These routines are storage services, with no element constructor loop.
 
@@ -69,5 +69,4 @@ reviewed memory-construction root; this checkpoint adds no speculative roots.
 The subsequent [memory-copy/buffer checkpoint](memory-field-copy.md) recovers
 copying, size and free dispatch. Allocator internals, owner registry search, type
 queries/publication, object cloning and other gameplay receivers remain open. This is evidence for these
-storage contracts, not native gameplay completion. Private candidates and logs:
-repository-relative `../scratch/lua-engine-recovery/`.
+storage contracts, not native gameplay completion.

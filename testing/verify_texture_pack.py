@@ -2,7 +2,7 @@
 """verify_texture_pack.py -- live regression check for the texture-pack decode.
 
 Decodes every texture of NDMW.AFS entry 625 through the recovered rules and compares
-the RGB against the live-extracted PNGs in ../local/evidence/screenshots/dw4-textures.  This is the check
+the RGB against the live-extracted PNGs.  This is the check
 that *pins the rules to real data*: the pool layout and the texture -> palette pairing are
 both predictions, and 26/26 exact RGB is what makes them facts.
 

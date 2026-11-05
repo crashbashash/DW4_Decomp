@@ -2,14 +2,15 @@
 
 All **26 functions / 5,372 code bytes** at `0x00374800..0x00375d8c`
 now rebuild byte-for-byte from readable C. The functions are in
-[`src/lua/api.c`](../../src/lua/api.c) and
-[`src/lua/combat.c`](../../src/lua/combat.c), in retail address order within
+[`src/lua/api.cpp`](../../src/lua/api.cpp) and
+[`src/lua/combat.cpp`](../../src/lua/combat.cpp), in retail address order within
 each unit. The [generated inventory](combat-inventory.md) lists every body,
 its reviewed size and source. Finding [#1034](../findings/findings-1001-1250.md#f1034) records this checkpoint.
 
 This is the caller API, not the calculation dispatcher. It assembles messenger
 arguments, reads results and handles a few local decisions. The complete
-41,864-byte GAMERAM callback containing FIGHTCALC still retains assembly.
+41,864-byte GAMERAM callback containing FIGHTCALC matches as
+`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
 Its [calculation rules and recovery blockers](combat-damage.md) remain separate.
 
 ## Recovered behavior
@@ -66,9 +67,10 @@ interior zeros, and every relocation must match; close sizes are insufficient.
 retail section. No new gameplay implementation or native integration is added.
 
 The callback's post-module string-pool accessor also now has 76 bytes of matching
-C at [`StringPool_GetInstance`](../../src/engine/StringPool_GetInstance.c)
+C at [`StringPool_GetInstance`](../../src/engine/StringPool_GetInstance.cpp)
 ([#1035](../findings/findings-1001-1250.md#f1035)). It lazily allocates 16 bytes and calls `StringPool_Construct`; failed
 allocation leaves the cache null so a later call retries. The semantic name is
 generated with the other combat dependency names. Neither that helper nor the
 completed Lua API closes the calculation dispatcher. Its three immediate helpers
-now also have matching source; the callback itself remains open.
+now also have matching source; the callback itself matches as
+`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.

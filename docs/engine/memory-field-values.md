@@ -3,10 +3,13 @@
 Finding [#889](../findings/findings-0751-1000.md#f889) records **32 complete bodies / 1,168 code bytes** in
 [memory-field-values.c](../../recovered/engine/memory-field-values.c): the contiguous
 seven-body memory value/lifetime run, generic scalar defaults/no-ops and the exact
-metadata/trim/base hooks used by Work and its lists. Thirty bodies / 1,120 bytes
-have matching source. Five new memory bodies add **788 exact bytes**: construction 200,
+metadata/trim/base hooks used by Work and its lists. All 32 bodies / 1,168 bytes
+have matching source; add-reference 164 and release-reference 200 are `foreign-profile` in
+`data/check-categories.tsv` (the code bytes are reproduced only under a provisional
+per-function override) and the other 30 are `match`. Five new memory bodies add **788 exact bytes**: construction 200,
 destruction 88, add-reference 164, release-reference 200 and default reset 136.
-The two scalar default-copy bodies (24 each) retain assembly and private candidates.
+The two scalar default-copy bodies (24 each) match in `src/unmatched/igMetaField_SetToDefault.c`
+and `src/unmatched/igMetaField_CopyDefaultToValue.c`.
 
 ## Memory-reference construction and default dispatch
 

@@ -19,7 +19,7 @@ Modes
 Profiles: "def -O3", "def -O3,p", "def -O4", "def -O4,p", "alt -O3", "alt -O3,p", "alt -O4", "alt -O4,p" (def = tools/verify.py's
 default compiler, alt = local/mwcps2/combat/mwccps2.exe). Several are separated by ';'.
 
-Rules of thumb collected with it (archived near-miss note wave7c2): the mnemonic score finds the control-flow spelling first
+Rules of thumb collected with it: the mnemonic score finds the control-flow spelling first
 (loop form, early return, `(x != 0) ^ 1`, `(c ? 1 : 0)`, `0 < n`), the exact word count then finds registers and stack layout
 (declaration order, volatile reads that fix a load order, padding structs).  Output files go to /tmp/shape_search_<pid>.
 """

@@ -5,8 +5,8 @@ Four public pool bodies, the complete ten-body ordered-table run at
 have readable [behavioral C](../../recovered/engine/string-pool.c).
 These fifteen bodies account for 2,228 code bytes. Four matches
 (pool/table destruction, table erase and header release, 384 bytes) are folded in
-[matching source](../../src/engine/string-pool.c). Eleven compiler residuals
-retain assembly. Finding [#865](../findings/findings-0751-1000.md#f865) records the scope and evidence.
+[matching source](../../src/engine/string-pool.c). The other eleven (1,844 bytes)
+match in one-function files under `src/unmatched/`. Finding [#865](../findings/findings-0751-1000.md#f865) records the scope and evidence.
 
 The combat unwind table also identifies the complete 116-byte
 [deleting string-wrapper cleanup](../../src/engine/StringRef_Destruct_00130720.c):
@@ -83,11 +83,9 @@ instead of hanging on malformed test state.
 The matching destruction/release sources declare their incoming
 arguments explicitly. Short casts preserve the deletion tests without signed
 shift expressions; original bytes match. Names come from [the generator](../../scripts/seed_names_string_pool.py)
-and decoded roles, without asserting original C++ spelling. Exports, compiler
-candidates and logs are private under repository-relative
-`../scratch/lua-engine-recovery/`.
+and decoded roles, without asserting original C++ spelling.
 
-Open: the compiler residuals, chunk composition through all messenger routes, allocator/
+Open: chunk composition through all messenger routes, allocator/
 metadata and synchronization dependencies, then actual messenger receiver/result
 production. These subgroups do not complete the string allocator, list library
 or full Lua-dependent engine recovery.
@@ -134,8 +132,7 @@ byte count; this is not a claim about the original SDK prototype. A typed
 three-parameter declaration emits an extra temporary and does not match.
 No forced instruction padding or binary patching is used.
 
-Four bodies match (384 bytes), leaving eleven compiler residuals in this
-fifteen-body family. Root matching, typed coverage and relink are validated
+All fifteen bodies in this family match (2,228 bytes). Root matching, typed coverage and relink are validated
 separately from these behavioral comparisons. Run:
 
 ```sh

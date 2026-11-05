@@ -78,11 +78,6 @@ explicit press/release state: an uninitialized union keeps a nonzero repeat byte
 consumer correctly ignores, and the route then fails its third keyboard/FOLDER checkpoint. This
 is a fixture rule, not native input behaviour.
 
-Logs are workspace `scratch/gpu-policy-{clean-build,software-backend,
-software-boot,hardware-boot,material,reference-boot,live-fixed,input}.log`. The failing
-uninitialized-event routes and their focused reproducer are in `gpu-policy-live.log`,
-`gpu-policy-live-1280.log`, `gpu-policy-input-trace.log` and `gpu-input-probe{,-zero}.log`.
-
 ## GPU offscreen and pixel composites
 
 `gl_layer.c` provides GPU pixel transforms and conventional RGBA image blits. The fade pass
@@ -119,11 +114,6 @@ simulation/controller clock is changed by these passes.
 At 640x448 the retained warm lobby benchmark measures CPU mean 24.294 ms versus GPU 10.974 ms,
 including scene/pose work and readback, not presentation, on a desktop hardware GPU; this is not
 a Steam Deck guarantee.
-
-Evidence is workspace `scratch/gpu-{post,blit}-build.log`,
-`gpu-shadow-{lobby-final,lobby-cpu,cpu,live}.log`,
-`gpu-offscreen-{api-final,menus-final,menus-1280,material,live-final,
-reference-boot}.log` and `gpu-portrait-cpu.log`.
 
 ## GPU mesh, main clears and text/FPS
 
@@ -166,12 +156,6 @@ counters for a tested route do not prove other paths GPU-only, which is why star
 movies, stage rendering and SDL/Vulkan presentation have their own gate in the
 [normal-path audit](#normal-path-audit).
 
-Logs are workspace
-`scratch/gpu-title-{api-final,kernels-final,composition-check,live,live-fps,
-reference-boot,font-check,fps}.log`, `gpu-mesh-render-regression.log` and
-`gpu-mesh-gouraud-check.log`. The title pair and diagnostic JSON are under
-`scratch/gpu-title-{native,reference}/` and `gpu-title-final-comparison.json`.
-
 ## RGBA8 byte recovery before GS truncation
 
 `texelFetch` returns normalized RGBA8 floats; multiplying by 255 can fall just below the source
@@ -203,9 +187,8 @@ comparisons and the GPU post tests pass, while
 rejects llvmpipe before submitting any GPU passes; an llvmpipe run is not hardware-required
 acceptance. No matching-recovery source is involved.
 
-Private logs are `texel-byte-*.log`, `closure-hardware.log` and `terminal-native-retail.log` in
-repository-relative `../scratch/main-menu-fidelity/`. This validates normal graphics execution
-and scoped retail geometry, not complete-game or whole-frame retail parity.
+This validates normal graphics execution and scoped retail geometry, not complete-game or
+whole-frame retail parity.
 
 ## Normal-path audit
 
@@ -234,12 +217,7 @@ boundary.
 rather than silently skipping missing required presentation paths. Physical SDL/Vulkan pixel
 comparison reports 99.985% identical and mean RGB delta 0.017 under its allowance.
 
-Logs are workspace `scratch/gpu-entry-acceptance.log`,
-`gpu-present-{sdl-hardware,sdl-reject,vk-hardware,vk-reject}.log`,
-`gpu-startup-physical-{sdl,vk}.log`, `gpu-stage-{headless,physical-sdl}.log`,
-`gpu-strict-{final-build,live,menus}.log`, `gpu-final-status-gpu.log`,
-`gpu-final-boot-gates.log`, `gpu-final-native-retail.log` and `gpu-final-matching.log`. The
-validated host is a Linux desktop with a hardware GPU.
+The validated host is a Linux desktop with a hardware GPU.
 
 ## Rules for rendering changes
 
@@ -259,8 +237,7 @@ validated host is a Linux desktop with a hardware GPU.
 - Benchmark simulation, draw preparation, rasterization and presentation separately, and retain
   host/backend details with the private results.
 
-The [task list](project/tasks.md) holds the current tasks. STATUS GPU performance evidence and
-its limits are in the acceptance audit, archived outside the repository.
+The [task list](project/tasks.md) holds the current tasks.
 
 ## Open items
 

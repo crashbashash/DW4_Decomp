@@ -12,8 +12,11 @@ passes **2,501 original-instruction RAM/ordered-call cases**. It executes
 **1,458/1,503 instruction addresses** across the five bodies. Thirty-three zero
 words are padding; twelve nonzero words are statically unreachable literal-null
 construction branches. These exclusions are checked independently. All five
-bodies retain assembly; **zero new matching bytes** or native UI functionality
-are claimed. Widget/input, player recalculation, lookup, pool/list, formatting,
+bodies match (`src/unmatched/Gap__Bec__beNDMWShopCtrl10__vfunc_21.cpp`,
+`src/unmatched/FUN_00428610.cpp`, `src/unmatched/FUN_00428690.cpp`,
+`src/unmatched/FUN_00428710.cpp` and
+`src/unmatched/beNDMWWindow_RunMessageScript.cpp`); no native UI functionality
+is claimed. Widget/input, player recalculation, lookup, pool/list, formatting,
 text/model receivers and Lua execution remain explicit services.
 
 ## Owner and primary state
@@ -181,13 +184,13 @@ The [shared selector and three initializers](shop-selectors.md), including stat
 cost refresh, now have complete behavioral recovery and composed owner/widget
 coverage. The actual SELECTCTRL receiver/input, XdataChip43aae0 and inherited
 ListCtrl40dae0/40dbf0/40dd30 remain explicitly reviewed callback dependencies.
-Recover them alongside RECALCPLAYER and exact matching of these bodies. The other five primary service updates total16,260 reviewed
+Recover them alongside RECALCPLAYER. The other five primary service updates total16,260 reviewed
 bytes before their dependencies; BANK/CNOS/DISK/ShopDevice/JUNK, LABO/CARD, saving
 and the [full hub script/dispatch closure](../systems/hub-recovery.md) remain open.
 
 Finding [#919](../findings/findings-0751-1000.md#f919) now recovers the complete inherited ListCtrl paging block and
 chip-specific page-count/text helpers: [five bodies /2,196 bytes](list-controller-chip-view.md),
-with864 exact bytes and3,149 original-instruction comparisons. The chip text
+with all 2,196 bytes exact and3,149 original-instruction comparisons. The chip text
 helper's full1,072-byte return span is restored. The primary chip transaction
 update43aae0 /7,232 bytes still requires complete recovery; cost/stat/property
 services and actual upgrade outcomes remain open. This adds helper recovery,

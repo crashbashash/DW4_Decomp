@@ -99,7 +99,7 @@ Native checks also exercise production equipment commit, preview isolation and
 failed database dependency rollback. Fresh initialization retains its sixteen
 retail paths and 624 scalar comparisons. ASan/UBSan with leak detection and
 halt-on-error passes all 1,760 native fixtures and the transaction integration
-checks. The full `SDL_GAMECONTROLLER_IGNORE_DEVICES=0x2dc8/0x310a
+checks. The full `SDL_GAMECONTROLLER_IGNORE_DEVICES=<vendor>/<product>
 make -C port all check check-retail -j8` and focused transaction/creation/stat
 checks pass. SDL/Vulkan presentation is 100% identical; optional live-input/
 capture checks retain their documented skips.

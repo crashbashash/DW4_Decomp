@@ -59,9 +59,7 @@ documented EE arithmetic model; this is not a PS2 hardware float-bit proof.
 Live pristine-disc reads from fresh-Dorumon slot 44 verify region `16 → 14 → 8`,
 an interrupted transition, continuing movement and faster completion after stopping.
 The settled region-16 eye/interest composition agrees with the measured inverse
-view within 0.000006. Private evidence is
-repository-relative `../scratch/camera-runtime/`: `retail-right.json`,
-`eyes.json`, `interests.json`, Ghidra/objdump exports and verification logs.
+view within 0.000006.
 These checks establish the camera contract, not frame-identical whole-scene
 latency or complete pixel parity. Finding [#850](../../docs/findings/findings-0751-1000.md#f850) records the recovery.
 
@@ -69,9 +67,7 @@ Validation covers the full native `check check-retail`, both Cross/Circle
 normal creation/login/STATUS routes, the extended SDL region-crossing route with
 three STATUS restores and keyboard events, hardware-GPU STATUS rendering and
 explicit draw failure, the focused camera ASan/UBSan check and the root
-`check typed-check link` gate. Logs are `native-retail.log`,
-`live-boot-gpu.log`, `live-camera-final.log`, `final-focused.log`, `asan.log` and
-`matching.log` under the private evidence directory above. Optional native
+`check typed-check link` gate. Optional native
 pose/fog checks retain their explicit missing-input skips.
 
 ## Other hub preparation

@@ -157,10 +157,8 @@ with leak checking disabled under the tool runner. The FIRST rollback fixture wa
 failed callbacks before Retry/Back, so its two-failure and zero-world-tick assertions do not
 depend on preparation duration.
 
-Private source exports, logs and captures live in repository-relative `../scratch/lobby-parity/`:
-terminal-native-retail.log, hardware-capture.log, moving-jump.log, health-near2.log,
-records-closure.log, loading-audio.log, asan-*.log and link.log. Full-frame timing/pixel parity,
-heal particles, physical controller/audio and other stages are not established by these checks.
+Full-frame timing/pixel parity, heal particles, physical controller/audio and other stages are not
+established by these checks.
 
 ## Stage portal, commander instances and walking falls
 
@@ -225,12 +223,8 @@ controlled leaves. On a hardware GPU at 640×448 the route runs with zero CPU dr
 stage-portal pair, single commander effect and walking-fall GPU captures were inspected. Focused
 movement/portal/actor ASan/UBSan passes with leak checks disabled under the tool runner.
 
-Private source exports, source objdump, slot hashes/RAM, live traces, native logs and GPU
-captures live in repository-relative `../scratch/lobby-portals-edges/`:
-terminal-native-retail.log, hardware-final.log, portal-edge-native7.log, loop-retail.log,
-floor-retail.log, retail-stairs.json/log, asan-*.log and matching.log. Optional private pose/fog
-inputs keep their explicit skips. These checks verify the presentation/traversal paths; they do
-not establish full-frame phase/pixel parity.
+Optional private pose/fog inputs keep their explicit skips. These checks verify the
+presentation/traversal paths; they do not establish full-frame phase/pixel parity.
 
 ## Shared material callback queries
 
@@ -417,11 +411,6 @@ validated player Work, node matrix and movement channel while paused. Up decreas
 increases X, down increases Z and left decreases X; the speed reaches 0.7 and brakes to zero.
 Camera interpolation and the 59.94-Hz retail cadence account for residual trajectory differences;
 no fitted input/camera offset is applied.
-
-Private evidence and logs are repository-relative `../scratch/lobby-runtime/`:
-`retail-walk-fresh.json`, its savestate hash, `retail-fresh.png`, Ghidra/objdump exports, normal
-boot/SDL traces and native/retail/matching checks. `retail-walk.json` is a separate, coarser
-manual cardinal check.
 
 The automated checks cover four starter movement/entry/animation banks,
 acceleration/braking/collision/camera/material updates, repeated draws, independent probe gates,

@@ -6,7 +6,7 @@ builds at load time (`beTextureCtrlInfo._name` -> `beTextureCtrlAttr._attrSet` -
 mesh's material colour, lighting-enabled flag, shade model, blend/alpha state and texture state come
 out of the game's own memory instead of the port's guesses (finding #563).
 
-    python3 live_materials.py --from ../local/dumps/goblin_pass.bin [--name BGGround00n]
+    python3 live_materials.py --from <ee-dump>.bin [--name BGGround00n]
 """
 import argparse
 import importlib.util

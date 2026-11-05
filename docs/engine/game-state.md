@@ -157,8 +157,8 @@ address, and a `stag0102` calibration was dead in a later
 stale one points at other objects — writing it corrupts them. **Never hard-code or reuse
 these across loads.** To avoid hunting each time, derive them from a stable route: read
 the placement record at `*(0x0058a1e8)+48` (accurate right after a load) and keep every
-copy of that triple in RAM — no walking, ~2 min (`extras/dw4-tools/retail-live/teleport_player.py --scan`,
-which caches per stage and re-validates before every use); the walk-based differential
+copy of that triple in RAM — no walking, ~2 min (cache them per stage and
+re-validate before every use); the walk-based differential
 below is the fallback for when the record has gone stale. `stag0101`'s set (found by this
 method):
 `0x0111ee50 0x012fecc0 0x01383e50 0x0165135c 0x01651368 0x016b9720 0x016de1c0 0x017bdf10`,

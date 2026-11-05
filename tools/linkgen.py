@@ -242,7 +242,7 @@ def main(argv=None):
                                 extra_files=(a.layout, verify.jumptables_path(a.symbols),
                                              exception_records.config_path(a.symbols)) + profile_files),
                              repr(profile_files), a.section_start, a.section_size, os.path.abspath(a.src),
-                             buildcache.tree_sha(a.src, skip_ext=(".c", ".cpp", ".s")),
+                             buildcache.tree_sha(a.src, skip_ext=buildcache.NOT_HEADERS),
                              buildcache.tools_sha("linkgen.py"), a.flags, buildcache.file_sha(a.mwcc), buildcache.file_sha(
                                  os.environ.get("DW4_WIBO", os.path.join(ROOT, "local", "wibo"))),
                              a.mwcc, "a.no_c=%s" % a.no_c, binutils_versions())
@@ -272,7 +272,7 @@ def main(argv=None):
         # raw bytes -> object. `as` rounds every section up to 16 bytes, so an
         # 8-byte unit becomes 16 and shifts the whole layout; objcopy -I binary
         # gives the exact size with alignment 1.
-        tmp = "/tmp/dw4_%s_unit.bin" % TMP_TAG()
+        tmp = os.path.join(cc.scratch_dir(), "%s_unit.bin" % TMP_TAG())
         with open(tmp, "wb") as fh:
             fh.write(raw)
         # objcopy -I binary names its symbols after the *path* (`/tmp/unit.bin` ->
@@ -381,7 +381,7 @@ def main(argv=None):
         # output through a freshly-named temp file in the destination directory,
         # and build/link/ holds ~34k objects, so creating a new name there costs
         # ~160 ms against ~5 ms here (measured).  The copy back is a plain write.
-        stage = "/tmp/dw4_%s_%08x.o" % (TMP_TAG(), va)
+        stage = os.path.join(cc.scratch_dir(), "%s_%08x.o" % (TMP_TAG(), va))
         group = unitobjects.group_for(va, a.unit_objects)
         owner = group.owner if group else va
         # The unit profile (config/SLUS-20836/units.tsv), or the function's provisional override when it has

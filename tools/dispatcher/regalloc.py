@@ -27,8 +27,8 @@ How the ids come about (use it to turn a suggested order into a source change; s
 
 Exit status: 0 when the candidate already matches, 1 otherwise, 2 on a tool error.
 
-What it cannot do: see the "Small functions" section of the archived note `README.md` (it needs a traceable compiler build, assumes the
-two functions have the same instruction sequence, explains register choice only, and treats an id order as the only lever).
+What it cannot do: it needs a traceable compiler build, assumes the two functions have the same instruction sequence, explains
+register choice only, and treats an id order as the only lever.
 """
 import argparse, difflib, itertools, os, random, re, subprocess, sys, tempfile
 

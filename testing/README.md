@@ -1,17 +1,14 @@
 # `testing/` — dynamic testing
 
-How to drive the emulator, which save states exist, and the bugs/traps that waste time.
+The testing tools, and the bugs and traps that waste time.
 
 Relative command paths start at
 the `DW4_Decomp` repository root; private data lives in the sibling `../local/`.
 The Pi-environment automation
-helpers (`pi-pcsx2`, `pi-pine`, `pi-pad`, `pi-input`, `pi-state`, `pi-emu` and `pi-screen`) are not available, so a command that uses them cannot be run as written.
-The live scripts use the host probes (`extras/testing/host-probes.md`, outside the repository);
+helpers (`pi-pcsx2`, `pi-pine`, `pi-pad`, `pi-input`, `pi-state`, `pi-emu` and `pi-screen`) are not available, so a command that uses them cannot be run as written;
 offline analysis and saved-state reads remain useful.
 
-Private fixtures live in [../local/testing/](../../local/testing/README.md),
-[../local/evidence/](../../local/evidence/README.md), and
-[../local/extracted/](../../local/extracted/README.md). Use these canonical paths.
+Extracted game data lives in `../local/extracted/`.
 
 Index: [documentation hub](../docs/README.md).
 
@@ -23,12 +20,8 @@ Index: [documentation hub](../docs/README.md).
 | `texture-pack-groundtruth.tsv` | The 25 live-located texture buffers of entry 625 (name, size, palette/grid offset, `C`, dim) |
 | `texture-pack-625-layout.tsv` | The complete derived 54-row pool layout of entry 625 (mirrors `docs/engine/texture-pack-625-layout.tsv`) |
 
-**Environment traps of the `pi-*` helper setup** (duplicate `pi-pad` servers, the real-controller player-id steal, the
-savestate-carries-the-world rule, focus/XTEST issues, `pkill -f` self-match) are collected in
-[`../mods/warp-randomiser.md`](../../extras/mods/warp-randomiser.md) §3.
-
 Live recipes: [`../systems/dev-stage-debug-menu.md`](../docs/systems/dev-stage-debug-menu.md) §6
-(stage select) and the mod docs.
+(stage select).
 
 Shared regression commands run from the repository root:
 
@@ -309,6 +302,3 @@ All290 non-padding module words and all47 property-search words execute; two
 module padding words are checked. The chain includes real chip selection and
 property lookup; database-message delivery and strcmp remain controlled.
 [Contracts and limits](../docs/engine/item-database.md).
-
-Documentation for driving or manipulating the retail game (emulator control, pad input,
-save states, capture procedure) lives outside the repository in `../extras/testing/`.

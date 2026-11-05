@@ -9,7 +9,7 @@ is a separate milestone; a bounded working lobby does not close this recovery.
 
 The core script packs are NDMW entries 816, 820, 824 and 828: **393 chunks**.
 The existing [Lua tree index](../engine/lua-tree-layout.md) identifies their
-content; retail warp observations (outside the repository: `extras/reference/screenshots-warp-unknown.md`)
+content; retail warp observations
 identify stagML11 as Terminal, ML12/ML14 as Central, ML13 as Shop and ML02 as
 Commander Room. These labels do not establish that each scene's complete asset
 and script ownership is recovered. Entry 824 references both Central variants;
@@ -28,10 +28,13 @@ python3 testing/test_hub_recovery_inventory.py
 ```
 
 The inventory observes 49 bound APIs and reaches 508 native functions /
-117,120 bytes; 346 functions / 106,432 bytes lack source, with 110 unresolved
+117,120 bytes; 94 functions / 48,540 bytes have no C source yet (of the other 414,
+409 are `match` and 5 `foreign-profile` in `data/check-categories.tsv`; sizes from
+`config/SLUS-20836/symbols.txt`), with 110 unresolved
 register transfers. This is a **lower bound**, not a completion percentage or a
-remaining function estimate. The shared closure is 985 functions / 240,640 bytes,
-483 of them with source / 32,712 bytes ([#924](../findings/findings-0751-1000.md#f924)). Direct APIs do not reveal SD receiver implementations,
+remaining function estimate. The shared closure is 985 functions / 240,640 bytes
+([#924](../findings/findings-0751-1000.md#f924)); 868 of them have C source (851 `match`, 16 `foreign-profile`, 1 `code-only`)
+and 117 / 61,900 bytes have no C source yet. Direct APIs do not reveal SD receiver implementations,
 data-held callbacks, model programs or arbitrary named-chunk ownership. Shared
 SDK and middleware bodies also need classification at the platform boundary.
 The current generated inventory is authoritative when these counts change.
@@ -106,15 +109,15 @@ replacement hub or modernize the original scripts to satisfy this goal.
 
 ## Current work queue
 
-1. Finish matching the alias-pool dependency beneath the Lua object/message path.
+1. The alias-pool dependency beneath the Lua object/message path is matched.
    The complete54-body method run plus factory has readable recovery and286
    original-instruction cases, including factory/initialization, locks, event
    tracker, accounting, ownership, diagnostics and allocation backend ([#902](../findings/findings-0751-1000.md#f902)).
    All1,040 instructions are exercised; backing/base/lock/file services remain
-   explicit leaves.44 bodies /1,508 bytes have exact source; ten bodies /2,652 bytes
-   retain assembly. Exact matches include [#900](../findings/findings-0751-1000.md#f900)'s 152-byte setter, [#902](../findings/findings-0751-1000.md#f902)'s 108-byte
+   explicit leaves. All 54 bodies /4,160 bytes have exact source (39 in `src/engine/`,
+   15 in `src/unmatched/`). Exact matches include [#900](../findings/findings-0751-1000.md#f900)'s 152-byte setter, [#902](../findings/findings-0751-1000.md#f902)'s 108-byte
    teardown and 160 tail bytes from the [#903](../findings/findings-0751-1000.md#f903) compiler follow-up.
-   See [runtime evidence and compiler residuals](../engine/alias-pool-runtime.md).
+   See [runtime evidence](../engine/alias-pool-runtime.md).
 2. Resolve the inventory's SD receivers and named-chunk ownership, starting with
    SUBWND's controller factory at 3d59b0 and commands at 3d60e0. The
    [lifecycle prefix](../engine/subwindow-lifecycle.md) has full11-mode
@@ -124,7 +127,7 @@ replacement hub or modernize the original scripts to satisfy this goal.
    multiplayer/species selection and reference callbacks ([#907](../findings/findings-0751-1000.md#f907)). The9,820-byte
    [command receiver](../engine/subwindow-command.md) has272 retail cases ([#908](../findings/findings-0751-1000.md#f908)), including status/preview snapshots and full all-mode
    lifecycle composition. All11 manager bodies /17,616 bytes are behaviorally
-   recovered; only two getters /24 bytes are exact. Exact matching and concrete
+   recovered and all 11 match. Concrete
    service outcomes remain open; no new native menu functionality is implied.
    CARD has a literal front-end caller in entry808; its name does not by itself
    identify Booster Pack/album or Save Keeper behavior. Track all ten
@@ -132,33 +135,38 @@ replacement hub or modernize the original scripts to satisfy this goal.
    treating the STATUS parent as their implementation.
 3. The [generic shop-root metadata block](../engine/shop-root-metadata.md)
    has complete seven-body behavioral recovery /416 bytes and117 retail cases
-   ([#909](../findings/findings-0751-1000.md#f909)); six bodies /300 bytes match: 212 bytes that include 84 under anonymous
-   factory/ensure names, 12 bytes of classification/matching from [#909](../findings/findings-0751-1000.md#f909) and the 76-byte
-   accessor ([#913](../findings/findings-0751-1000.md#f913)). The remaining metadata matching residue is the116-byte vtable getter.
+   ([#909](../findings/findings-0751-1000.md#f909)); all seven bodies /416 bytes match: 212 bytes that include 84 under anonymous
+   factory/ensure names, 12 bytes of classification/matching from [#909](../findings/findings-0751-1000.md#f909), the 76-byte
+   accessor ([#913](../findings/findings-0751-1000.md#f913)) and the 116-byte vtable getter
+   (`src/unmatched/beNDMWShopCtrl00_GetVTable.cpp`).
    The concrete class vtable53feb0 raw92 identifies update4267b0, also selected
    by the tree updater. The [root runtime/window tree](../engine/window-tree-and-shop-root.md)
    has six complete behavioral bodies /2,980 bytes and1,057 retail cases
    ([#910](../findings/findings-0751-1000.md#f910)), including all mode factories, child binding/update/removal and the
-   actual child-close helper. No matched bytes are claimed for it; concrete selected
+   actual child-close helper. All six bodies match in `src/unmatched/`
+   (`beNDMWWindow_RequestChildrenClose.c`, `beNDMWWindow_BindContext.cpp`,
+   `beNDMWWindow_UpdateTree.cpp`, `Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`,
+   `FUN_00426fa0.cpp` and `FUN_00427020.cpp`); concrete selected
    service controllers and transaction/result producers remain open. The
    [presentation/title module](../engine/window-presentation.md) has223 retail
-   cases with actual root/tree/title close composition and116 matched
-   bytes ([#911](../findings/findings-0751-1000.md#f911)); concrete text/model receivers remain dependencies. Recover the
+   cases with actual root/tree/title close composition and all eight bodies /2,628 bytes
+   matched ([#911](../findings/findings-0751-1000.md#f911)); concrete text/model receivers remain dependencies. Recover the
    five remaining primary service updates /16,260 reviewed bytes in hub execution
    order. The [XDATA controller](../engine/xdata-controller.md) has complete
    behavioral update/cleanup recovery,2,501 retail cases and a verified txt_shop.lua
-   binding in both core packs ([#912](../findings/findings-0751-1000.md#f912)). Its widget/chip/recalculation dependencies
-   and exact matching remain open. The [selector widgets](../engine/shop-selectors.md)
+   binding in both core packs ([#912](../findings/findings-0751-1000.md#f912)). Its five bodies match; its widget/chip/recalculation dependencies
+   remain open. The [selector widgets](../engine/shop-selectors.md)
    have six complete behavioral bodies /7,916 bytes and576 composed/isolated
-   retail cases ([#913](../findings/findings-0751-1000.md#f913)), with 84 exact bytes plus the 76 exact metadata bytes. Their SELECTCTRL
+   retail cases ([#913](../findings/findings-0751-1000.md#f913)), with five bodies /7,144 bytes matched and the 772-byte shared
+   update at 4233f0 `foreign-profile` (code bytes identical only under a provisional compiler override;
+   `src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp`), plus the 76 exact metadata bytes. Their SELECTCTRL
    input/receiver and chip dependencies have behavioral recovery (sections below); the
    recalculation contract remains open. Review the corresponding script branches.
 4. Close every hub transition, progression state and multiplayer-dependent branch;
    retain a separate native integration queue in the port's owning docs.
 
-Private candidate/objdump/build logs remain
-repository-relative `../scratch/lua-engine-recovery/`. This work adds recovery and
-evidence; it does not expand native gameplay acceptance.
+This work adds recovery and evidence; it does not expand native gameplay
+acceptance.
 
 ### SELECTCTRL manager, handler and pad selection ([#914](../findings/findings-0751-1000.md#f914)–[#916](../findings/findings-0751-1000.md#f916))
 
@@ -173,14 +181,14 @@ readable behavioral source / 4,824 bytes (the 2,864-byte update and the
 1,960-byte handler) and 4,089 original-instruction cases.
 All 1,187 non-padding words execute, including input/confirmation/cancel/FO2TOP,
 registry/work/list/string ownership and full generate/close lifecycles. Both
-bodies use assembly in the matching build, so they contribute **zero exact
-bytes**.
+bodies match (`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp` and
+`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp`).
 
 The [original pad-record lookup](../engine/selectctrl.md#original-pad-record-selection-916)
 executes beneath SELECTCTRL in 216 composed cases, with 201 direct cases;
 manager coverage is 4,089, for 4,506 total. Its 88-byte body is fully recovered
-behaviorally and named from original callers/reflection; it retains ASM and
-contributes zero exact bytes.
+behaviorally and named from original callers/reflection; it matches as
+`src/unmatched/bePadManager_GetPadForPlayer.c`.
 
 Actual pad acquisition and sampling, model execution, message services and the
 combined manager/widget/XDATA suite remain open boundaries. A read-only matching
@@ -220,7 +228,8 @@ helpers' full return spans (8 bytes), without changing the retail image.
 
 This closes utility dependencies, not chip pricing/recalculation/debit outcomes,
 native UI or native rendering acceptance, and it does not close the full lobby
-goal. Chip transaction matching, actual item/status/recalculation/receiver/script
+goal. Chip transaction matching under its unit profile (the update is
+`foreign-profile`), actual item/status/recalculation/receiver/script
 execution and other lobby services remain open; native acceptance is separate.
 
 ### Chip transaction controller ([#921](../findings/findings-0751-1000.md#f921))
@@ -231,8 +240,10 @@ non-padding words execute; 47 padding/static-dead words are checked. Actual page
 count and context binding compose in 18 cases. Inventory rebuilding, equipped
 preview restoration, notice/confirmation, current-record increment and fresh
 XDATA debit are recovered. Item/status/recalculation/message/script and selector
-execution remain controlled dependencies; exact matching of this update and
-full hub/native acceptance remain open. It contributes zero exact code bytes.
+execution remain controlled dependencies; full hub/native acceptance remains open.
+The update is `foreign-profile` in `data/check-categories.tsv`
+(`src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`): its code bytes
+are identical to retail only under a provisional compiler override, not under its unit profile.
 
 ### Item/database lookup and return ABI ([#924](../findings/findings-0751-1000.md#f924))
 

@@ -1,6 +1,6 @@
 # Where a live vertex buffer sits inside `NDMW.AFS` entry 621's pool
 
-`extract_live_models.py --from ../local/evidence/models/ee-pre-leomon.bin --pack NDMW.AFS:621` located **446**
+`extract_live_models.py --from <ee-dump>.bin --pack NDMW.AFS:621` located **446**
 of the 669 live meshes' vertex buffers in the pack, byte-identically.  Comparing each found
 offset with the block boundaries the `_memSize` prefix-sum rule predicts (`igb_pool.py`):
 

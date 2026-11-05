@@ -80,7 +80,7 @@ def main():
         edits.append(f"{WEP + 8}=2")
         dst = os.path.join(outdir, f"Mcd001_probe_{b[0]:#06x}_{b[-1]:#06x}.ps2")
         print(f"batch {b[0]:#06x}..{b[-1]:#06x}: {[hex(x) for x in b]}")
-        # invoke save_edit's main logic programmatically via subprocess-style args
+        # apply the edits to the copied card
         from save_probe import block_sum, fix_checksums  # noqa: F401
         import struct, shutil
         from ps2mc.ps2mc import Ps2mc

@@ -8,7 +8,7 @@ game-pause routing remain separate questions.
 
 The int64 clock that Action2 reads at `(mgr+0xc)+0x50`: where it comes from, how it advances,
 and a measured read of the logo CLOSE `WAIT` timer. Reproduce with
-`scripts/system_clock_probe.py`; the live sampler is `extras/dw4-tools/retail-live/clock_capture.py` (workspace-relative tool).
+`scripts/system_clock_probe.py`.
 
 Evidence classes are marked **[static]** (retail instructions), **[observed]** (memory read from
 a running game or a savestate) and **[hypothesis]**.
@@ -66,7 +66,7 @@ this->(+0x20)->vfunc(+92)(); this->(+0x0c)->vfunc(+92)()   # then two notificati
 
 ## Units and cadence **[observed]**
 
-Live PCSX2 (stock, PINE, 6 s sample, `extras/dw4-tools/retail-live/clock_capture.py sample`):
+Live PCSX2 (stock, PINE, 6 s sample):
 
 | Quantity | Value |
 |---|---|
@@ -95,7 +95,7 @@ Captured live (stock disc, MD5 `3185f04230b1dabd853db750e4b51108`) by saving a s
 ~0.4 s through the title's "Press START button" and START press. Two states contain the timer;
 the next does not.
 
-States (not committed; stored under `../local/states/SLUS-20836`):
+States (not committed):
 `logo-close-start+50ms.p2s`, `logo-close-start+434ms.p2s`.
 
 ```
@@ -172,8 +172,8 @@ game pause to the timer flag still require initialization and caller evidence.
 Resume's rebase arithmetic is verified; the pause-button routing is not.
 
 For deterministic comparison, retain and replay an actual sequence of absolute retail
-clock samples. The current `clock_capture.py sample` prints only aggregate statistics;
-it does **not** save a replay sequence. Consumers must continue to perform their own
+clock samples. The live sample above kept only aggregate statistics, **not** a replay
+sequence. Consumers must continue to perform their own
 `>>18` conversion. At these small absolute tick values the 1,908-tick threshold applies;
 large-clock float rounding follows the qualifications in [Action2 timing](action2-timing.md).
 
@@ -182,8 +182,6 @@ large-clock float rounding follows the qualifications in [Action2 timing](action
 ```sh
 python3 scripts/system_clock_probe.py verify STATE.p2s        # clock object + timer chain
 python3 scripts/system_clock_probe.py writers                 # the +0x50 read-modify-write units
-python3 extras/dw4-tools/retail-live/clock_capture.py sample 6                   # live cadence (PINE)
-SSTATES=<emulator sstates dir> python3 extras/dw4-tools/retail-live/clock_capture.py capture 90 <outdir>
 ```
 
 ## Independent offline review

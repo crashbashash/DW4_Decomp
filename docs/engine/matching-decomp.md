@@ -97,7 +97,7 @@ stores definite results in `build/cache/` (untracked), keyed by content:
 
 ## Translation units
 
-`src/` holds **translation units**, the way the original source was built: `src/lua/api.c`
+`src/` holds **translation units**, the way the original source was built: `src/lua/api.cpp`
 defines 47 functions, `src/engine/igObject.c` the 40 `igObject` vtable methods, `src/game/*.c` a
 `be*` class each. Unnamed functions stay in `src/unmatched/`; named ones are grouped and folded
 there by `tools/place_named.py` (see [`naming.md`](naming.md)). A unit's functions are
@@ -370,8 +370,8 @@ minutes (see *Cached gates*), and the scaling is what this table shows:
 `--jobs` defaults to the core count; `--jobs 1` forces the serial path. Two things
 make the pool safe, and there is one trap:
 
-* **Thread-tagged scratch paths.** Scratch names keyed on the *process*
-  (`/tmp/check_{text,c,s}_<pid>.*`, `/tmp/dw4_<pid>_unit.bin`) would make two workers
+* **Thread-tagged scratch paths.** Scratch files live in the process's private folder
+  (`cc.scratch_dir()`, removed at exit). Names keyed on the *process* alone would make two workers
   collide on the same file, so `check.py` and `linkgen.py` use `verify.TMP_TAG()` (pid + thread ident), the
   same convention `m2c_batch --jobs` uses ([`m2c-bulk.md`](m2c-bulk.md) §*The loop runs
   on every core*).

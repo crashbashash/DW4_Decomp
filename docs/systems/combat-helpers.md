@@ -2,7 +2,7 @@
 
 All three complete immediate helper bodies now have matching source:
 **912 code bytes** at `0x003fc670`, `0x003fc6f0` and `0x003fc780`.
-The 132-byte [technique-row lookup](../../src/game/beNDMWGameRam_FindTechniqueRow.c)
+The 132-byte [technique-row lookup](../../src/game/beNDMWGameRam_FindTechniqueRow.cpp)
 is C; the 652-byte query and 128-byte deleting destructor share one
 [C++ compiler unit](../../src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc), now compiled together with the
 [player stat recompute](../../src/unmatched/FUN_003fab90.cpp).
@@ -82,7 +82,7 @@ The same compiler unit emits the complete 128-byte deleting destructor at
 `0x3fc670`. It releases the held object using the low-23-bit rule, invokes the
 delete entry when its signed low-16-bit deletion flag is positive, and returns
 the wrapper pointer. The delete symbol has an explicit binding to `0x100610`;
-that callee's own body remains assembly.
+that callee's own body has no C source yet.
 
 [Explicit emitted-function ownership](../engine/emitted-functions.md) verifies
 both complete bodies before placing either one. Both now have matching source;
@@ -114,6 +114,6 @@ versus already recovered primitive code. Appending after an allocation failure,
 MMU fault behavior and arbitrary aliases into compiler scratch storage are
 outside this validation. The engine's other dependencies remain separate work.
 
-The full [combat calculation callback](combat-damage.md) still needs matching
-source. Continue its types, lifetimes, arithmetic and control flow; the three
+The full [combat calculation callback](combat-damage.md) matches as
+`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`; the three
 completed immediate helpers do not complete the combat module.

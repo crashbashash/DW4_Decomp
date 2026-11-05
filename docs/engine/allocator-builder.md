@@ -102,8 +102,7 @@ status publication and the authoritative metadata name-field descriptor.
 The dispatcher and its dependencies are not the complete allocator backend.
 Next: actual proxy/allocator factories and virtual resize/backing/apply/enable
 implementations, context configuration/stack control and the remaining Lua
-gameplay receivers. Native gameplay is unchanged. Private candidates/objdump/logs:
-repository-relative ../scratch/lua-engine-recovery/.
+gameplay receivers. Native gameplay is unchanged.
 
 
 ## Alias pool backend trace

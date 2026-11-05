@@ -10,12 +10,12 @@ from diff_story import REGIONS, story_state
 
 MCDIR = Path(__file__).resolve().parents[2] / "local/testing/memcards"
 
-# Historical progression order (the checkpoint inventory is archived outside Git).
+# Historical progression order.
 ORDER = [
     'Mcd001_op_base.ps2',
     'prog_humid_cave.ps2',
     'prog_cliff_dungeon.ps2',
-    'prog_leomon_save.ps2',   # MISSING in local/testing/memcards/
+    'prog_leomon_save.ps2',   # missing from the inventory
     'prog_world1.ps2',
     'prog_ophanimon_key.ps2',
     'prog_ophanimon_key_used.ps2',

@@ -3,11 +3,13 @@
 Finding [#897](../findings/findings-0751-1000.md#f897) recovers seven bodies /1,928 bytes in
 [context-lifecycle.c](../../recovered/engine/context-lifecycle.c): constructor152,
 destructor188, name initialization116, retained slot setter184, allocation delete64,
-and the contiguous special delegate668/removal556 pair. Four bodies /552 bytes
+and the contiguous special delegate668/removal556 pair. All seven bodies /1,928 bytes
 have matching source: destructor188/setter184 (**372 matched bytes**) in
-[context-slot-lifetime.cpp](../../src/engine/context-slot-lifetime.cpp) and the two
-helper bodies (180 bytes). Constructor and the
-delegation/removal pair retain assembly and private candidates.
+[context-slot-lifetime.cpp](../../src/engine/context-slot-lifetime.cpp), the two
+helper bodies (180 bytes), the constructor in
+`src/unmatched/igMemoryPoolContextInfo_Construct.cpp` and the delegation/removal pair in
+`src/unmatched/MemoryContext_BuildAndAttachEventTracker.cpp` and
+`src/unmatched/MemoryContext_RemoveAllocator.cpp`.
 
 Six body-derived names are applied; the setter retains its evidenced generated
 class/slot name. ABI projections describe observed layout and are not claims of
@@ -100,4 +102,3 @@ Twenty-one dependency tests verify constructor/destructor sites, concrete slots1
 180/208/212 and reviewed roots. Retail objdump confirms the complete shapes.
 Native gameplay is unchanged. Next: context configuration/stack
 control, actual allocator/tracker backends and remaining Lua gameplay receivers.
-Private candidates/logs: repository-relative ../scratch/lua-engine-recovery/.

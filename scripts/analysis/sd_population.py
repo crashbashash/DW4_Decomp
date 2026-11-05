@@ -3,8 +3,8 @@
 
 GCC evidence: callee-saved register stored with `sd` (opcode 0x3f) off sp, or a
 branch-likely (beql/bnel/blezl/bgtzl).  MWCC evidence: callee-saved register
-stored with `sq`, or `slt/sltu` into `at`.  Prints contiguous GCC runs; see
-the archived note `sd-prologue-sdB.md`.  Usage: python3 scripts/analysis/sd_population.py
+stored with `sq`, or `slt/sltu` into `at`.  Prints contiguous GCC runs.
+Usage: python3 scripts/analysis/sd_population.py
 """
 import glob
 import re

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """getvtable_union_conv.py DRAFT NAME SIZE
 
-Turns the m2c draft of a stack-object `*_GetVTable` accessor into the union form used by the banked siblings (see
-archived near-miss note wave6s11): zero stores in order, object/string member releases, member destructor calls
+Turns the m2c draft of a stack-object `*_GetVTable` accessor into the union form used by the banked siblings:
+zero stores in order, object/string member releases, member destructor calls
 through `&u.w[i]`.  Run from the repository root; SIZE is the byte size of the stack object (scan frame-objoff-28..+12).
 Environment: DECLREV=1 reverses the declaration order of the member pointers, ALIAS=1 writes the later vtable stores through
 a second symbol plus offset (defeats the constant CSE across a call).  The result is only a candidate: verify it with

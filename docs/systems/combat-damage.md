@@ -22,15 +22,15 @@ nearby query, totaling 912 bytes. The row/query pair also has behavioral C
 and original-instruction comparisons.
 All [26 contiguous BLT/BLP Lua helpers](combat-lua-api.md) now have matching C
 (5,372 bytes), as do the FightCom enum builder and cached string-pool accessor.
-The calculation dispatcher itself remains unmatched.
+The calculation dispatcher itself matches as
+`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
 The [draft recovery notes](combat-draft-recovery.md) describe its reviewed
 argument slots, byte/word access widths, address units and protected repairs.
 Its three [reference-ownership helpers](combat-reference-helpers.md) now have
 316 bytes of matching C and explicit release/assignment call slots in the
 generated analysis context ([#1037](../findings/findings-1001-1250.md#f1037)).
 
-At the start of this recovery, the complete dispatcher still has no matching C.
-Thirteen of the 26 contiguous BLT/BLP Lua helpers already have matching source;
+All 26 contiguous BLT/BLP Lua helpers have matching source;
 these wrappers are separate from the calculation rules. Five status-duration
 helpers had disjoint Ghidra bodies whose byte counts truncated their epilogues.
 Reviewed spans restore eight bytes apiece without changing retail bytes or
@@ -47,7 +47,7 @@ linking now preserve their section indices, individual relocations and separate
 retail placements, including the raw padding between tables ([#1024](../findings/findings-1001-1250.md#f1024)). Six
 regressions cover an independent GNU link, both table contents, corrupt/missing
 tables, unresolved relocations and preserved layout gaps.
-These drafts remain private scratch, outside `src/`; removing
+These drafts remain private, outside `src/`; removing
 or initializing incoming registers requires the path checks below. The per-case
 addresses below are interior labels, not independently
 bankable functions. No native port implementation is part of this recovery.
@@ -120,14 +120,14 @@ integer function loses that result ([#1030](../findings/findings-1001-1250.md#f1
 ## Where the code is
 
 Lua asks the native `FIGHTCALC` object for a result by key name. `BLTisCritical`
-(`0x003749a0`, [`src/lua/api.c`](../../src/lua/api.c)) sends the key `P2EISCRITICAL` plus three ints
+(`0x003749a0`, [`src/lua/api.cpp`](../../src/lua/api.cpp)) sends the key `P2EISCRITICAL` plus three ints
 (the MDL cache fields `0x58a208`, `0x58a1f4`, `0x58a1fc`) and reads a bool back; it contains no
 game logic. The handlers sit in one dispatcher switch:
 
 | Piece | Address |
 |---|---|
 | Key-name table (22 pointers, `E2PISHITCHECK` first) | `0x004cc350` |
-| Name → id dictionary builder | [`FightCom_GetMetaEnum`](../../src/game/FightCom_GetMetaEnum.c), `0x003c9be0` (second table at `0x004cc3b0` is just ids 0–21); 84 bytes matched |
+| Name → id dictionary builder | [`FightCom_GetMetaEnum`](../../src/game/FightCom_GetMetaEnum.cpp), `0x003c9be0` (second table at `0x004cc3b0` is just ids 0–21); 84 bytes matched |
 | Dispatcher jump table (22 entries) | `0x00519310` |
 | Case 2, `P2EISCRITICAL` | `0x003fe130` |
 | Case 5, `P2EDAMAGE` | `0x003fe550`–`0x003ff030` |

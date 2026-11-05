@@ -210,7 +210,7 @@ directory. Its `+8` offset selects a 32-byte header followed by 32-byte
 note records; note byte 2 is the waveform index. This describes the shipped
 front-end single-note subset, not a general CRI sequencer implementation.
 
-The PCSX2 recording `../local/evidence/videos/2026-10-10 06-35-25.mp4`
+A PCSX2 recording
 (20.466667 seconds, 48 kHz AAC stereo) independently confirms the resolved
 waveforms at their authored 24 kHz rate. High-pass 100-ms templates find
 START at 2.0524/4.1075/16.1024 seconds (minimum correlation 0.985), six
@@ -249,7 +249,7 @@ Q8 ratios **161/256**, **181/256**, **143/256**, **40/256**. Resident SFP playba
 is a separate SFX master/per-voice path, including `_sndfVolume=75`; applying
 this stream attenuation to resident cues would be unjustified.
 
-From the workspace root, run
+From the repository root, run
 `python3 port/tools/verify_frontaudio_rules.py --elf orig/SLUS-20836/SLUS_208.36`.
 It executes original admission and deadline-store regions for **473 cases**,
 all **1,000** original table packet writes, and the original level clamp at

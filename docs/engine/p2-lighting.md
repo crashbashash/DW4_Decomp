@@ -121,7 +121,7 @@ them; the *values* are not in the disc.
 | `0x56AED0` | int | lighting mode 1/5 |
 | `0x56AE50` | u8[?] | light-type → program-index table (`FUN_001f8490`) |
 
-Measured from the offline RAM dump `../local/evidence/models/ee-pre-leomon.bin` (stag0102 loaded): `0x56AF00 = 2`,
+Measured from an offline RAM dump (stag0102 loaded): `0x56AF00 = 2`,
 `0x56AF94 = 0`, `0x56AF60 = 0x006e9820`, `0x56AFD0` is the identity, and `0x56AF40` is **all NULL**.
 The same is true of **every** saved state (17 checked): the per-light pointer table is populated only
 during the render pass and is empty in a savestate taken outside it, so a savestate cannot supply the

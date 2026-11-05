@@ -394,9 +394,9 @@
   "asm_units": 20214,
   "classes_with_fields": 659,
   "fields": 3680,
-  "findings": 2286,
+  "findings": 2285,
   "findings_by_status": {
-   "confirmed": 1433,
+   "confirmed": 1432,
    "refuted": 92,
    "unconfirmed": 761
   },

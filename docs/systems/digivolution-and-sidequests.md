@@ -79,9 +79,9 @@ Save values measured directly:
 
 | save | Digimon | `BASE_ISUSE` @ `+0x76c` |
 | --- | --- | --- |
-| `../local/testing/save-dumps/first` | `p_dorumon` | `[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]` |
-| `../local/testing/save-dumps/second` | `p_dorumon` | `[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]` |
-| `../local/testing/save-experiments/fresh.raw` | `p_dorumon` | `[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]` |
+| first save | `p_dorumon` | `[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]` |
+| second save | `p_dorumon` | `[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]` |
+| fresh save | `p_dorumon` | `[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]` |
 
 A fresh Digimon has **only its own index set** — consistent with one byte per
 form and only the starting form available.
@@ -231,6 +231,5 @@ state load op-ready
   `0xFFF80`, not `+0x100000`).
 - Lua: `lua/01-lobby-hub/05-lobby-quests_e820/chunk_001{0,1,2,3}.lua`,
   `lua/01-lobby-hub/06-lobby-quest-board_e824/029-npc-digilfm-5.lua`, `entry_0603/chunk_0030…0046.lua`.
-- Saves: `../local/testing/save-dumps/first`, `../local/testing/save-dumps/second`,
-  `../local/testing/save-experiments/fresh.raw`, byte range `+0x76c … +0x77c`.
+- Saves: the three in the table above, byte range `+0x76c … +0x77c`.
 - Findings: [#139](../findings/findings-0001-0250.md#f139), [#111](../findings/findings-0001-0250.md#f111), [#106](../findings/findings-0001-0250.md#f106), [#136](../findings/findings-0001-0250.md#f136), [#785](../findings/findings-0751-1000.md#f785), [#787](../findings/findings-0751-1000.md#f787).

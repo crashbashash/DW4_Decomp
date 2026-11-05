@@ -6,7 +6,7 @@ the vertex count, the per-vertex RGBA census (the key question: does the colour 
 draw lit, or is it a single constant RGBA, i.e. unlit?), and the ALPHA/TEST/ZBUF/FRAME/TEX1/CLAMP
 registers in force.  This is the ground-truth the port's per-material state should reproduce.
 
-    python3 scripts/gs_draw_state.py ../local/dumps/goblin_pass_ref.gs.zst
+    python3 scripts/gs_draw_state.py <dump>.gs.zst
 """
 import collections
 import sys

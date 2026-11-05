@@ -10,8 +10,11 @@ code bytes. Together with the 148-byte name setter at `2fecb0`, all thirteen
 bodies have readable [behavioral C](../../recovered/engine/object-lists.c).
 Findings [#873](../findings/findings-0751-1000.md#f873)/#874 record the recovery and correction of two historical property
 lookup labels. One body, retained append (88 bytes), already has exact source in
-[list-services.c](../../src/engine/list-services.c); twelve compiler residuals
-remain. The behavioral C claims no new matching bytes.
+[list-services.c](../../src/engine/list-services.c); ten more match in one-function
+files under `src/unmatched/`. `igProperty_FindByName` (`3022c0`, 188 bytes) is
+`foreign-profile` in [igProperty_FindByName.c](../../src/unmatched/igProperty_FindByName.c) (code bytes
+identical; the build-profile check is open), and remove-first (`302000`, 248 bytes) has
+no C source yet. The behavioral C claims no new matching bytes.
 
 The [name generator](../../scripts/seed_names_object_lists.py) derives retained-list
 and name-publication roles from verified accesses. Existing property roles live
@@ -133,8 +136,7 @@ concrete field/registrar/allocator/byte/interner/receiver services. Standalone
 object-list destruction is controlled; the cold composition executes the recovered
 shared object lifetime path with its remaining cleanup leaves. Actual pool/chunk
 composition, concrete class descriptors/fields/receivers and lower service contracts
-remain work. Twelve compiler drafts were rejected by exact verification and stay
-outside `src/`; naming, recovery and these comparisons do not establish complete
+remain work. Remove-first (`302000`) has no C source yet; naming, recovery and these comparisons do not establish complete
 Lua-dependent engine recovery or new native gameplay.
 
 The [interned-registry composition](string-pool.md#cold-registry-interning-and-erase-byte-match)

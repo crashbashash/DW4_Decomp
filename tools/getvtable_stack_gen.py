@@ -18,7 +18,7 @@ the unit compiled with exceptions on (retail keeps the exception index record on
 emits), the local declarations in the unit compiler's saved-register order.  `--retarget FILE...` runs
 that step alone on existing files and verifies them (`--no-retarget` keeps the raw C draft).  It does not
 claim a match: verify with `python3 tools/verify.py 0x<va> <file>`, which applies the unit profile.
-Rows it cannot model print `skip` and the reason.  See archived near-miss note wave4s8 and
+Rows it cannot model print `skip` and the reason.  See
 docs/engine/getvtable-fold.md (phase 3b section).
 """
 import argparse

@@ -5,8 +5,10 @@ and four retained-reference bridges (584 bytes) now have complete readable
 [behavioral C](../../recovered/engine/list-services.c). All sixteen bodies are
 compared with original instructions, including their nested calls to each other.
 Three matched bodies are folded in [matching source](../../src/engine/list-services.c);
-the pre-existing eight-byte -1 default remains under its generic name. Twelve
-bodies retain assembly pending compiler recovery. Finding [#864](../findings/findings-0751-1000.md#f864) records this work.
+the pre-existing eight-byte -1 default remains under its generic name. Ten
+further bodies match in per-function files under `src/unmatched/`. The two range
+insertions, `List_InsertBytes` (`0x2d6810`, 232 bytes) and `List_InsertWords`
+(`0x2d6b80`, 220 bytes), have no C source yet. Finding [#864](../findings/findings-0751-1000.md#f864) records this work.
 
 ## Primitive contracts
 
@@ -97,9 +99,8 @@ publication or gameplay behavior.
 String copy (52 bytes) and word append (84 bytes) now match the retail compiler,
 adding **136 verified code bytes**. Their initial decompiler drafts had invalid
 output typing or omitted incoming call arguments. Object append's existing
-88-byte match is retained. The remaining compiler drafts stay outside `src/`.
-Original Ghidra/objdump exports, candidates and logs are private under
-repository-relative `../scratch/lua-engine-recovery/`.
+88-byte match is retained. Ten further bodies match in `src/unmatched/`;
+`List_InsertBytes` and `List_InsertWords` have no C source yet.
 
 Continue with the allocation/metadata and string-pool service dependencies,
 remaining compiler bodies and actual messenger receiver/result production.

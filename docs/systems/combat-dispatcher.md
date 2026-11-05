@@ -4,8 +4,9 @@
 [`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`](../../src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp). It is the
 parent command callback (GETCOMMON, GETPLAYER, CTRLITEM, FIGHTCALC, CTRLPLAYER and the rest of the 22-name `Message` enum) and
 contains the 36,000-byte FIGHTCALC region with its 22 sub-commands: hit checks, damage and damage rank, critical, the status times,
-EXP and skill gain, the Kouka magic and the attack-attribute lookup. `make check` reports 9,592 exact functions with zero mismatches
-and `make link` is byte-identical to retail (findings [#1071](../findings/findings-1001-1250.md#f1071)-[#1073](../findings/findings-1001-1250.md#f1073)).
+EXP and skill gain, the Kouka magic and the attack-attribute lookup. `make check` reports zero mismatches
+and `make link` is byte-identical to retail (findings [#1071](../findings/findings-1001-1250.md#f1071)-[#1073](../findings/findings-1001-1250.md#f1073)); the live function figures are in
+[`PROGRESS.md`](../../PROGRESS.md).
 
 The source is a **model that reproduces the bytes**, not a claim of the original spelling: cleaned m2c output with reviewed ABI
 repairs ([draft recovery](combat-draft-recovery.md)), RAII reference locals whose destructors reproduce the retail unwind table
@@ -26,7 +27,7 @@ nops, and declarations placed where the register colouring needs them ([register
   compiled owner's individual tables from `config/SLUS-20836/jumptables.txt` and pins each at its own address.
 * **Verification:** `python3 tools/dispatcher/full_verify.py src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp` (code, duplicates,
   tables, exception data), `tools/dispatcher/score.py` (per-region shape/exact/extra diff), `tools/dispatcher/bank.py` (rehearsal and
-  banking), described in `the archived note `README.md`` and `BANKING.md`.
+  banking).
 
 ## How the registers were matched
 
@@ -40,7 +41,7 @@ callees ([callees](combat-callees.md)).
 
 ## Remaining combat work
 
-The two non-reproducible callees (`igStrCmp`, `Matrix44_Copy`) stay assembly. The dispatcher's dynamic behaviour (indirect call targets,
+The two non-reproducible callees (`igStrCmp`, `Matrix44_Copy`) have no C source yet. The dispatcher's dynamic behaviour (indirect call targets,
 hit geometry, actor programs, spawning, progression) is separate recovery work; this page claims byte identity of the callback only.
 
 ## Typed members
@@ -50,7 +51,6 @@ match with them: 61 `(char *)` occurrences remain and raw `*(int *)((char *)` lo
 (`beMessenger_GetString`, `beDataBase_GetRecordString`, `StringPool_Intern`, ...), not offsets; the three offset-style accesses that stay raw are
 `(char *)arg2 + 0x14` (the callback's message argument has no recovered class) and two `(char *)obj + 0x28` member addresses of an object whose class is
 not determined (passed to `DW4Fresh::Assign` and `FUN_003e92a0`). The property records (`+12` value), `igDataList` (`_count`), the byte list, the folder-list slots (`+20`
-value) and `beSystem._random` (`+0x30`) are written as members; accesses that stay raw, with the reason, are in
-typing1 (archived outside the repository), typing2 (archived outside the repository), typing3 (archived outside the repository), typing4 (archived outside the repository), typing5 (archived outside the repository). Several small identical record views (`DW4Property`, `DW4PropRec`,
+value) and `beSystem._random` (`+0x30`) are written as members. Several small identical record views (`DW4Property`, `DW4PropRec`,
 `DW4IntProperty`, ...) exist side by side and can be merged into one when the shared types are promoted to
 `include/dw4/reflected.h`.

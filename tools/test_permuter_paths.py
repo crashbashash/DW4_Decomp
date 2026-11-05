@@ -6,14 +6,13 @@ import unittest
 from unittest.mock import patch
 import permuter_one as p
 class Paths(unittest.TestCase):
-    def test_default_is_workspace_scratch(self):
-        expected=Path(p.ROOT).parent/'scratch/permuter'
+    def test_default_is_under_build(self):
+        expected=Path(p.ROOT)/'build/permuter'
         self.assertEqual(Path(p.project_root()),expected)
-        self.assertNotEqual(os.path.commonpath([p.ROOT,p.project_root()]),p.ROOT)
     def test_relative_and_absolute_overrides(self):
         with tempfile.TemporaryDirectory() as td:
             self.assertEqual(p.project_root(td),os.path.abspath(td))
-        self.assertEqual(p.project_root('../scratch/custom'),os.path.abspath('../scratch/custom'))
+        self.assertEqual(p.project_root('../custom'),os.path.abspath('../custom'))
     def test_main_build_uses_override(self):
         with tempfile.TemporaryDirectory() as td:
             seen=[]

@@ -142,7 +142,7 @@ Shapes found on one function:
 
 * `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes): the complete body is typed C ([#2746](../findings/findings-2501-2750.md#f2746)); see
   [system update recovery](system-clock.md#complete-besystem-update-recovery).
-* `FUN_0039a9e0` (308 bytes) matches as typed C in `src/game/beNodeAnimClock.c` ([#2747](../findings/findings-2501-2750.md#f2747)).
+* `FUN_0039a9e0` (308 bytes) matches as typed C in `src/game/beNodeAnimClock.cpp` ([#2747](../findings/findings-2501-2750.md#f2747)).
   A `const` timestamp snapshot, a `const` play-count load before subtraction,
   and reuse of the incoming parameter for the elapsed delta preserve the original
   parameter web and operand order. No inline assembly, fake arguments or compiler modification is used.

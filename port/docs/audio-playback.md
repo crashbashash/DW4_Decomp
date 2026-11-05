@@ -90,8 +90,7 @@ group. The sequence note resolves through the tone table to the VAG waveform.
 multi-event sequences. Reading `_memoryIdx` as a direct waveform index plays
 unrelated samples (a 0.22-second sample for the 0.96-second START cue).
 
-The PCSX2 reference capture, workspace-private
-`local/evidence/videos/2026-10-10 06-35-25.mp4`, confirms 15 occurrences: three
+The PCSX2 reference capture confirms 15 occurrences: three
 START, six DECIDE, four OPEN and two CLOSE. At the authored 24 kHz rate, 100-ms
 waveform templates correlate with the captured mix at 0.879–0.993. This
 establishes sample identity and rate; captured output gain and native
@@ -456,7 +455,7 @@ loaded.
 To reproduce the reference-capture comparison (requires numpy/scipy):
 
 ```sh
-python3 tools/verify_menu_capture.py '../../local/evidence/videos/2026-10-10 06-35-25.mp4' --roms ../../local/extracted
+python3 tools/verify_menu_capture.py <capture>.mp4 --roms ../../local/extracted
 ```
 
 ## Open items

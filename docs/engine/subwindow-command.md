@@ -9,9 +9,13 @@ function from [preparation](subwindow-preparation.md) at3d8740.
 
 Together with the [lifecycle](subwindow-lifecycle.md) and preparation, this finishes
 readable behavioral recovery of the11-body SUBWND manager region /17,616 code
-bytes. **Only the two existing metadata getters /24 bytes are exact source**;
-the other9 bodies /17,592 bytes still retain assembly. This checkpoint banks
-zero matching bytes and adds no native menu functionality.
+bytes. All 11 bodies /17,616 bytes match (`src/game/beNDMWStatus.c`,
+`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_29.cpp`,
+`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_31.cpp`,
+`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_32.cpp`,
+`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_34.cpp` and
+`src/unmatched/FUN_003d8740.cpp`). This checkpoint
+adds no native menu functionality.
 
 ## Dispatch and command contract
 
@@ -143,10 +147,9 @@ its actual9,820-byte return span. The final padding word becomes ordinary data:
 **four fewer classified code bytes, zero matched-byte gain**, with retail image
 contents unchanged. Existing RTTI/slot names are retained.
 
-Matching probes for the72-byte init now reproduce all executable logic but emit
-68 bytes without the retail block-padding NOP. C/C++/optimization and source-shape
-probes did not produce an exact unit. The adjacent scoped cleanup candidate still
-has five scheduling-word differences. Neither is banked. Continue exact matching
-and the concrete [hub service-controller and result dependencies](../systems/hub-recovery.md),
+The 72-byte init at 3d5960 and the adjacent 92-byte scoped cleanup at 3d58f0 match
+(`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_29.cpp` and
+`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_32.cpp`). Continue
+the concrete [hub service-controller and result dependencies](../systems/hub-recovery.md),
 including price/stock services, transactions, bank/appraisal/lab/X Data and the
 separate Save Keeper stagIS12 route.

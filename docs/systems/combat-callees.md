@@ -3,7 +3,7 @@
 The [generated inventory](combat-inventory.md) lists 68 distinct bodies called directly from the FIGHTCALC region. 44 of them
 had matching source; two passes matched **22 more** (all of the size-1,228-and-up messenger bodies and the 6,872-byte stat
 recomputation included), plus six compiler-emitted destructors, so **66 of 68 bodies (17,932 of 18,444 bytes)** now rebuild
-byte-for-byte. `make check` reports 9,591 exact functions (9,565 before) with zero mismatches and `make link` stays byte-identical.
+byte-for-byte. `make check` reports zero mismatches and `make link` stays byte-identical; the live function figures are in [`PROGRESS.md`](../../PROGRESS.md).
 The 26-body BLT/BLP helper run was already complete ([Combat Lua API](combat-lua-api.md)).
 
 Almost all of these need the content-pinned alternate compiler (`-O3,p`, see [unit compilers](../engine/unit-compilers.md)); the
@@ -20,13 +20,13 @@ original source.
 | `0x0038e6b0` | 576 | `beMessenger_PrepareDelayedSelection` | `src/unmatched/beMessenger_PrepareDelayedSelection.cpp` |
 | `0x0038ed70` | 476 | `beMessenger_PushArgContext` | `src/unmatched/beMessenger_PushArgContext.cpp` |
 | `0x0038ef50` | 400 | `beMessenger_PopArgContext` | `src/unmatched/beMessenger_PopArgContext.cpp` |
-| `0x0038f150`..`0x0038f8f0` | 908 | `beMessenger_AppendBool/Int/Float/Vec3/Matrix/String`, `GetString` (7 bodies) | `src/game/beMessengerArgs.c` |
+| `0x0038f150`..`0x0038f8f0` | 908 | `beMessenger_AppendBool/Int/Float/Vec3/Matrix/String`, `GetString` (7 bodies) | `src/game/beMessengerArgs.cpp` |
 | `0x0038e060` | 1228 | `beMessenger_DispatchSelected` (+ emitted holder destructor `0x0038e530`, 128) | `src/unmatched/beMessenger_DispatchSelected.cpp` |
 | `0x0038e8f0` | 932 | `beMessenger_EnqueueSelected` (+ emitted destructors `0x0038c390` and `0x00357a90`, 128 each) | `src/unmatched/beMessenger_EnqueueSelected.cpp` |
 | `0x003fab90` | 6872 | player stat recompute (derived stats, WAZALIST rebuild, rates); owns the `0x003fc670` destructor and the `0x003fc780` query | `src/unmatched/FUN_003fab90.cpp` |
-| `0x003f8760` | 548 | current-to-BASE save preparation (mirror of `FUN_003f82a0`) | `src/game/beNDMWGameRam_SaveBase.c` |
-| `0x003f9c80` | 408 | HP gauge update (delta or absolute, clamp to [0, MHP], `hpmt`/`hpnm`) | `src/game/beNDMWGameRam_VitalsDelta.c` |
-| `0x003f9e20` | 344 | MP gauge update (`mpmt`/`mpnm`) | `src/game/beNDMWGameRam_VitalsDelta.c` |
+| `0x003f8760` | 548 | current-to-BASE save preparation (mirror of `FUN_003f82a0`) | `src/game/beNDMWGameRam_SaveBase.cpp` |
+| `0x003f9c80` | 408 | HP gauge update (delta or absolute, clamp to [0, MHP], `hpmt`/`hpnm`) | `src/game/beNDMWGameRam_VitalsDelta.cpp` |
+| `0x003f9e20` | 344 | MP gauge update (`mpmt`/`mpnm`) | `src/game/beNDMWGameRam_VitalsDelta.cpp` |
 | `0x00447b00` | 56 | list slot nonzero test | `src/unmatched/FUN_00447b00.cpp` |
 | `0x00447b40` | 88 | list slot store from `DAT_004cfe80` | `src/unmatched/FUN_00447b40.cpp` |
 
@@ -67,4 +67,5 @@ not recovered source.
   `FUN_001906d0` are plainly hand-written (VU0 macro mode, `mtsab`/`qfsrv`), and the register choice looks human-picked too.
   A candidate with an `asm` block matches but is not banked.
 
-The dispatcher itself (`0x3fca10`, 41,864 bytes) and the 22 FIGHTCALC commands remain assembly.
+The dispatcher itself (`0x3fca10`, 41,864 bytes), which contains the 22 FIGHTCALC commands, matches as
+`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
