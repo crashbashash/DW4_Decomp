@@ -10,6 +10,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`verify.py`](verify.py) | verify a candidate C function against the retail binary, WITH relocations |
 | [`linkgen.py`](linkgen.py) | build the relink inputs from config/SLUS-20836/layout.txt |
 | [`linkcheck.py`](linkcheck.py) | compare a relinked section against the retail binary |
+| [`make_iso.py`](make_iso.py) | `make iso`: write the built executable into a copy of your disc image, in `build/` |
 | [`layout.py`](layout.py) | turn the symbol map into a DISJOINT, ordered tiling of the section |
 | [`whole_file_rows.py`](whole_file_rows.py) | measure a stock library's whole-file rows from retail: members, stripped functions, data and externals |
 | [`split.py`](split.py) | lay out the retail code and emit one assembly unit per function |

@@ -52,7 +52,7 @@ C_OBJ   := $(patsubst $(SRC)/%.c,$(BUILD)/src/%.o,$(C_SRC)) \
 
 export MWCIncludes := $(SRC)
 
-.PHONY: all symbols asm asm-ensure objs objs-build check report verify link progress clean help rules hygiene check-fresh link-fresh vtable-slots-check struct-report inventory-check
+.PHONY: iso all symbols asm asm-ensure objs objs-build check report verify link progress clean help rules hygiene check-fresh link-fresh vtable-slots-check struct-report inventory-check
 
 # The default target builds AND compares, the way a matching build should: a plain
 # `make` answers "does this tree still reproduce retail?". `make objs` is the
@@ -75,6 +75,7 @@ help:
 	@echo "make vtable-slots-check — fail if a local dummy-vtable view names a slot vfunc_NN at a position other than NN"
 	@echo "make struct-report — report (not a gate) local struct views that disagree with each other or with reflected.h"
 	@echo "make link     — relink the whole section (C + retail remainder) and compare"
+	@echo "make iso [DISC=path] — publishing step, not part of the build: the relinked executable in a copy of your disc, in build/$(GAMEID)/"
 	@echo "make hygiene — fail on host-identifying details in the tree, and check the findings register (docs/host-details-policy.md)"
 	@echo "make inventory-check — fail if code the symbol map does not own grew past the recorded debt, or data/inventory-scan.tsv is stale"
 	@echo "make clean"
@@ -169,6 +170,10 @@ link:
 	python3 tools/linkgen.py --all
 	mipsel-linux-gnu-ld -T build/link.ld -G0 --no-warn-mismatch -o build/game.elf
 	python3 tools/linkcheck.py build/game.elf
+
+iso: link
+	python3 tools/project.py image --version $(GAMEID) build/game.elf
+	python3 tools/make_iso.py --version $(GAMEID) $(if $(DISC),--disc "$(DISC)")
 
 link-fresh:
 	python3 tools/layout.py >/dev/null

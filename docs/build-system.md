@@ -34,6 +34,10 @@ python3 configure.py progress              # the progress numbers (tools/progres
 `make check`, `make link`, `make typed-check` and the other Make targets run the same tools and
 stay the commands the git hooks, the CI oracle and `CLAUDE.md` use.
 
+`make iso` (with `DISC=<path>` when the disc is not in `orig/<GAMEID>/`) is a publishing step, outside
+the build and CI: it relinks, then writes the executable into a copy of your disc at
+`build/<GAMEID>/<GAMEID>.iso` with `tools/make_iso.py`. The copy is game data and stays in `build/`.
+
 ## objdiff objects
 
 The base object of a unit is the function's definition compiled under its unit profile, extracted

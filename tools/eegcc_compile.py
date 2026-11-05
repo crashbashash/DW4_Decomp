@@ -45,6 +45,12 @@ def fix_symtab_info(path):
         fh.write(data)
 
 
+def assembler_env():
+    """`ee-as` output depends on the heap layout: on some C libraries a `lui` comes out as `lw` in a few
+    functions (finding #3897). Giving every allocation its own mapping keeps the layout out of it."""
+    return dict(os.environ, GLIBC_TUNABLES="glibc.malloc.mmap_threshold=0")
+
+
 def main(argv):
     compiler, flags, source, out = argv[0], argv[1:-2], argv[-2], argv[-1]
     bindir = os.path.dirname(os.path.abspath(compiler))
@@ -62,7 +68,7 @@ def main(argv):
             sys.stderr.write(r.stdout + r.stderr)
             return 1
         r = subprocess.run([os.path.join(bindir, "ee-as"), *asflags, "-o", out, asm],
-                           capture_output=True, text=True)
+                           capture_output=True, text=True, env=assembler_env())
         if r.returncode:
             sys.stderr.write(r.stdout + r.stderr)
             return 1
