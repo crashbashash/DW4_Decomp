@@ -46,9 +46,10 @@ def fix_symtab_info(path):
 
 
 def assembler_env():
-    """`ee-as` output depends on the heap layout: on some C libraries a `lui` comes out as `lw` in a few
-    functions (finding #3897). Giving every allocation its own mapping keeps the layout out of it."""
-    return dict(os.environ, GLIBC_TUNABLES="glibc.malloc.mmap_threshold=0")
+    """`ee-as` copies an expanded macro with an overlapping memcpy, which glibc's SSSE3 version gets
+    wrong at some alignments (finding #3897). Turn that version off, and give every allocation its own
+    mapping so the alignment does not depend on the C library either."""
+    return dict(os.environ, GLIBC_TUNABLES="glibc.cpu.hwcaps=-SSSE3:glibc.malloc.mmap_threshold=0")
 
 
 def main(argv):
