@@ -2,8 +2,8 @@
 
 Guidance for AI coding agents (and a summary for people) working in this repository. The method
 contributors follow is in [CONTRIBUTING.md](CONTRIBUTING.md); read it first. This file holds the
-strict form of it: the gate a function must pass and the rules for driving the build, delegating work
-and reporting a result.
+strict form of it: what makes a function matched and readable, and the rules for driving the build,
+delegating work and reporting a result.
 
 Two goals: (1) recover the PS2 release of **Digimon World 4** — USA `SLUS-20836` — as readable,
 evidence-named source that rebuilds to a byte-identical retail ELF; (2) build a **complete native PC
@@ -59,10 +59,10 @@ specification agrees. Run every command from the repository root; paths here are
 
 ## Decompilation
 
-Read [naming](docs/engine/naming.md), [asm-body matches](docs/engine/asm-body-matches.md) and the gate
-below before module work. Work a contiguous module
-through recovery, naming and verification. Byte identity and readability are **one gate**: a count that
-grows while readability falls is not progress.
+Read [naming](docs/engine/naming.md), [asm-body matches](docs/engine/asm-body-matches.md) and
+[matched and readable](#matched-and-readable) before module work. Byte matching and readability are
+**separate jobs**: a function lands once it matches, in whatever form it matched, and a later pass can
+make it read well. Either can be done alone.
 
 - **One translation unit, one profile.** Every method of a class, and every function of a folded unit,
   verifies under the same compiler and flags. A per-function row that disagrees with its siblings is
@@ -88,26 +88,30 @@ grows while readability falls is not progress.
 - **Names** come from evidence; a guess goes in the topic document's open questions, not into a name. Apply overlays with
   `tools/apply_names.py` (dry run, then `--apply --check`).
 
-### The gate: when a function is done
+### Matched and readable
 
-Byte identity and readability are one gate. A function counts as done when all of these hold:
+**Matched** is one condition: the function verifies byte-identical under its **translation unit's
+profile** in `config/SLUS-20836/units.tsv` (compiler, flags, exception mode;
+[build profiles](docs/engine/build-profiles.md)), including the C++ exception metadata. A function that
+matches only under a per-function override in `config/SLUS-20836/unit-flags.tsv` / `unit-compilers.tsv`
+is `foreign-profile` debt, not a match. That is all a match needs: decompiler output, `FUN_` names and
+raw casts can land as they are.
 
-1. It verifies byte-identical under its **translation unit's profile** in `config/SLUS-20836/units.tsv`
-   (compiler, flags, exception mode; [build profiles](docs/engine/build-profiles.md)), including the
-   C++ exception metadata. A function that matches only under a per-function override in
-   `config/SLUS-20836/unit-flags.tsv` / `unit-compilers.tsv` is `foreign-profile` debt, not a match.
-2. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.
-3. Every identifier is a recovered name, from evidence (RTTI, strings, callers), never a guess. What
+**Readable** is a separate pass over matched code, measured by the README's Readable column. A function
+is readable when all of these hold:
+
+1. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.
+2. Every identifier is a recovered name, from evidence (RTTI, strings, callers), never a guess. What
    it does should make the name obvious, so source never justifies a name: a hypothesis goes in
    the topic document's open questions. A name
    holding an address is not recovered: it says where a thing is, not what it is. That goes for
    functions, variables, structs and classes alike; a type also needs a real name, not a placeholder
    such as `S`, `Obj` or `Info176`.
-4. No m2c idioms (`temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`) and no raw offset casts where
+3. No m2c idioms (`temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`) and no raw offset casts where
    `include/dw4/reflected.h` names the field; real structs, enums and control flow; a comment
    appears only when it is necessary, for what the code cannot say, and it stands alone: no pointer
    to another document or tool, and no account of how the code was recovered.
-5. A shape found by a permuter, flag sweep or random walk carries
+4. A shape found by a permuter, flag sweep or random walk carries
    `/* matching construct: <tool> — <what moved> */` at the affected line.
 
 When two spellings match the same bytes, keep the more readable one. A function that cannot be
@@ -168,7 +172,7 @@ Sub-agents draft; the integrator verifies and promotes. A sub-agent report lists
 symbol, candidate path (in its scratch directory), the exact `tools/check.py --function` (or `tools/verify.py`)
 command with flags, compiler path and SHA-256, the verifier's last line, and any `config/<GAMEID>/unit-*` rows
 the match needs. The integrator re-runs that command before promoting anything and treats an unreproduced
-claim as unmatched. Brief sub-agents with the gate; they never run full builds and never write into the
+claim as unmatched. Brief sub-agents with what matched and readable mean; they never run full builds and never write into the
 repository.
 
 ## Native port

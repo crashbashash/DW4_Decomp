@@ -1,4 +1,4 @@
-# The debt ratchet — every debt counter may only go down
+# The debt ratchet — debt counters may only go down
 
 `make check` proves bytes; it does not stop the tree from accumulating *debt*: units whose
 code bytes match while something else is unproven, functions with no C at all, m2c
@@ -42,6 +42,10 @@ as zero.
 | `fun_dat_refs` | the matched units' source, comments and strings blanked, asm bodies excluded | occurrences of `FUN_<va>` / `DAT_<va>` identifiers (prototypes and calls), minus every occurrence of the name of each `FUN_` function the file defines (its definition and, in a C++ unit, its `extern "C"` prototype) |
 | `foreign_profile.functions`, `foreign_profile.bytes` | `data/check-categories.tsv` | functions whose code bytes match only under a provisional per-function override (compiler, flags or exception mode) that differs from their translation unit's profile in `config/SLUS-20836/units.tsv`; never counted as `match` (see [build profiles](build-profiles.md)) |
 | `orphan.bytes` | `data/check-categories.tsv` | exception-metadata orphan bytes: the `extra` + `differ` code-only bytes |
+
+`m2c_idiom.units`, `raw_casts.reflected` and `fun_dat_refs` measure readability, which is a separate
+job from matching ([matched and readable](../../CLAUDE.md#matched-and-readable)). They stay in the report
+and may rise without a recorded reason, so a byte-matching change is never refused for them.
 
 ## Re-recording the baseline
 

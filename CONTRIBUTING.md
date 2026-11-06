@@ -20,16 +20,8 @@ planning something big, open an issue first so two people don't end up on the sa
 
 ## Writing code
 
-The code has to match the original byte for byte, and a person has to be able to read it.
-
-- Name things for what they are, based on something you can point to, like a string or how it's
-  called. If you're only guessing, leave the name and note the guess in the topic's document. Addresses
-  aren't names.
-- Clean up after the decompiler: rename `temp_s0` and `sp5C`, and use real structs instead of pointer
-  maths.
-- Only comment what the code can't tell the reader.
-- If you wrote something odd just to match, mark it: `/* matching construct: <what and why> */`.
-- If you can't get a function into C yet, leave it out. Please don't wrap its instructions in `asm`.
+The code has to match the original byte for byte. If you can't get a function into C yet, leave it
+out. Please don't wrap its instructions in `asm`.
 
 ## Checking your work
 

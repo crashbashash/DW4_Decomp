@@ -444,6 +444,10 @@ DEBT_COUNTERS = [
 ]
 
 
+# Readability is a separate job from matching, so these are tracked and never refuse a change.
+READABILITY_COUNTERS = {"m2c_idiom.units", "raw_casts.reflected", "fun_dat_refs"}
+
+
 def _unit_files(paths, asm_body_names):
     """The distinct source files of the matched units, minus files that are asm bodies only."""
     files = {}
@@ -563,7 +567,7 @@ def debt_check(d):
         if k not in base:
             new.append(k)
             continue
-        if v > base[k]["value"]:
+        if v > base[k]["value"] and k not in READABILITY_COUNTERS:
             rose.append((k, base[k]["value"], v))
     for k in unavailable:
         print("debt: %s unavailable (its source is missing or stale; see the warning above)" % k)
@@ -584,7 +588,8 @@ def debt_record(d, reason):
     """Re-record the baseline; refuse a counter that went up unless a reason is given."""
     cur, base = d["debt"]["counters"], d["debt"]["baseline"] or {}
     rose = [(k, base[k]["value"], v) for k, _ in DEBT_COUNTERS
-            for v in [cur.get(k)] if v is not None and k in base and v > base[k]["value"]]
+            for v in [cur.get(k)] if v is not None and k in base and v > base[k]["value"]
+            and k not in READABILITY_COUNTERS]
     if rose and not reason:
         for k, old, v in rose:
             print("debt: %s would rise %s → %s" % (k, format(old, ","), format(v, ",")))
