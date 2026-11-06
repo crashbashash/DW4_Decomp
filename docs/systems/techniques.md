@@ -70,8 +70,8 @@ for MHP and `UPCNT[species*11+1]` for MMP; `FUN_003fab90` reads
 `UPCNT[species*11+7..10]` for the four resistances. Each stat is clamped to
 **1..9999** after the final equipment/temporary additions (HP/MP instead
 cap above at 99999). Growth factors are piecewise tables, not the raw level;
-see the recovered [growth table and recalculation contract](../../port/docs/player-stats.md)
-([#797](../findings/findings-0751-1000.md#f797)). The displayed formulas above describe the base helpers before equipment.
+see the recovered [growth table and recalculation contract](../../port/docs/player-stats.md).
+The displayed formulas above describe the base helpers before equipment.
 
 ### Technique → SKILL slot (all 9 CONFIRMED by dynamic probe)
 
@@ -101,8 +101,7 @@ advance); pass `--species` if the tester evolves.
 - **Type is signed int32**: `0xFFFFFFFF` displays as **−1**, and a +1 gain
   wraps −1 → 0. So the full range is **`-0x80000000 .. 0x7FFFFFFF`**
   (−2,147,483,648 .. 2,147,483,647); the usable maximum is **`0x7FFFFFFF`**.
-  Negative values are valid — the editor's advanced mode allows them
-  (finding [#112](../findings/findings-0001-0250.md#f112)).
+  Negative values are valid — the editor's advanced mode allows them.
 - **No low display cap**: 99 is accepted and displayed.
 - **Text colour scales with the level**: value 1 = white, value 99 = **orange**.
   (Likely the same white→blue→green→yellow→orange→pink scale used for item
@@ -111,7 +110,7 @@ advance); pass `--species` if the tester evolves.
   lvl" = `threshold(100) − threshold(99)` — consistent with the level formula.
 - **99 is NOT the functional max**: some high-tier weapons require a technique
   skill level of **2500** to use. 99 is only a display cap; the real effective
-  range goes at least to 2500 (full functional cap still TBD — see [#99](../findings/findings-0001-0250.md#f99)).
+  range goes at least to 2500 (full functional cap still TBD).
 
 ### Damage effect (UNRESOLVED — testing paused)
 - `0x7FFFFFFF` at level 1 **overflows the damage calc**: bash-katana hit fell
@@ -128,7 +127,7 @@ advance); pass `--species` if the tester evolves.
   `tech_maxed_lvl1.ps2` damage test), and the effective (vs displayed) cap.
 - The item **stat** database (id→base stats) still lives in the igBinary
   objects (see `docs/systems/enemy-data.md`); the rarity seed model is now CRACKED
-  (finding [#116](../findings/findings-0001-0250.md#f116): `item_stat = base + (seed & 0x7FF)`, colour thresholds).
+  (`item_stat = base + (seed & 0x7FF)`, colour thresholds).
 
 ## Editing techniques
 

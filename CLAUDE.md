@@ -12,13 +12,13 @@ specification agrees. Run every command from the repository root; paths here are
 
 ## Hard rules
 
-- **Privacy.** Nothing that identifies a developer's machine or account goes into the repository, the
-  findings register, generated files or commit messages: no absolute home/container paths, hardware
+- **Privacy.** Nothing that identifies a developer's machine or account goes into the repository,
+  generated files or commit messages: no absolute home/container paths, hardware
   models, driver/kernel versions, device nodes, user/host names, e-mail addresses, credentials, or
-  emulator-driving facts (socket paths, display numbers). State requirements, not "this host" facts;
-  findings `evidence` is repository-relative ([host details policy](docs/host-details-policy.md)).
+  emulator-driving facts (socket paths, display numbers). State requirements, not "this host" facts
+  ([host details policy](docs/host-details-policy.md)).
   Install the hooks once per clone (`scripts/install_git_hooks.sh`), run `make hygiene` before every
-  commit or push, never `--no-verify`, and fix a finding rather than allow-list it unless it is a
+  commit or push, never `--no-verify`, and fix a reported line rather than allow-list it unless it is a
   deliberate fixture.
 - **Assets.** No game binaries or extracted assets in the repository (disc images, executables, IRX,
   BIOS, memory cards, savestates, screenshots, small extracts), and no retail code as assembly: the
@@ -30,12 +30,12 @@ specification agrees. Run every command from the repository root; paths here are
   workspace's archive outside Git: agent handoffs, session logs and per-wave or per-shard work
   reports; changelogs and accounts of how the repository was reorganised; player-facing guides and
   catalogues; tools that drive or read a running emulator, and
-  their captures. Write what a wave learned into the topic's document or a finding, not a dated log.
+  their captures. Write what a wave learned into the topic's document, not a dated log.
 - **One build at a time.** At most one full build (`make check`/`make link`, `ninja`, `ninja check`,
   `ninja objdiff`, `ninja report`) runs on a host, from the integrating session, never from a sub-agent.
   Where several sessions share a host, take a lock: `flock <shared lock file> make check`.
 - **Sub-agents write only to a scratch directory outside the repository**, never `src/`, `config/`, `asm/`,
-  `findings/`, `docs/` or the repository root. The integrator promotes work (see Delegated work).
+  `docs/` or the repository root. The integrator promotes work (see Delegated work).
 - **Commits.** Sync with `git fetch && git merge origin/main` (never rebase shared history).
 
 ## Layout
@@ -46,7 +46,7 @@ specification agrees. Run every command from the repository root; paths here are
   missing or stale), `include/dw4/` shared headers
   (`reflected.h` is generated), `tools/` build and matching tools ([README](tools/README.md)),
   `scripts/` analysis, `data/` recovered data, `lua/` the game's Lua scripts decompiled and filed by
-  stage (`scripts/lua_tree.py` resolves a pack entry and chunk to its file), `docs/findings/` the findings register (hypotheses, evidence and dead ends, cited as `#N`), `docs/` the
+  stage (`scripts/lua_tree.py` resolves a pack entry and chunk to its file), `docs/` the
   documentation ([index](docs/README.md)), `port/` the native implementation.
 - The build follows the [dtk-template](https://github.com/encounter/dtk-template) layout
   ([build system](docs/build-system.md)): each version's address-bearing tables live in
@@ -68,12 +68,12 @@ grows while readability falls is not progress.
 
 - **One translation unit, one profile.** Every method of a class, and every function of a folded unit,
   verifies under the same compiler and flags. A per-function row that disagrees with its siblings is
-  provisional: record it as an unconfirmed finding, re-attempt under the sibling profile, and count it
+  provisional: note it in the topic's open questions, re-attempt under the sibling profile, and count it
   separately until resolved. Never pin a profile to make one function pass while its unit says otherwise.
 - **Exception metadata is part of the match.** Cleanup scopes are RAII holder classes whose destructor copies
   `config/<GAMEID>/unit-objects.json` names (`emitted`, `duplicates`, `externals`, `exceptions`, and
   `stripped` for an out-of-line destructor copy the retail linker dead-stripped);
-  [emitted functions](docs/engine/emitted-functions.md), findings [#3882](docs/findings/findings-3751-4000.md#f3882) and [#3888](docs/findings/findings-3751-4000.md#f3888). A stock library's rows
+  [emitted functions](docs/engine/emitted-functions.md). A stock library's rows
   (`whole_file`, `data`, `symbol`) are measured by `tools/whole_file_rows.py`, never typed.
 - **Progress is verified C/C++.** The headline is `functions.fully_verified` and
   `code_bytes.fully_verified` in `docs/progress.json`: units `make check` classifies as `match`. Decompiled
@@ -86,11 +86,9 @@ grows while readability falls is not progress.
   ([asm-body matches](docs/engine/asm-body-matches.md)). The work queue is every symbol without a
   definition in `src/`: `python3 tools/m2c_batch.py` drafts them (gcc target for Sony EE GCC units;
   `--write` adds a draft only when the C verifies). When a compiler is added, re-attempt the functions in
-  its blocks first. Blocks built by a compiler build the project does not have stay without source
-  (finding [#3890](docs/findings/findings-3751-4000.md#f3890)).
-- **Names** come from evidence; a guess is a hypothesis in the findings register, not a name. Apply overlays with
-  `tools/apply_names.py` (dry run, then `--apply --check`). What confirms a finding is defined in the
-  [documentation conventions](docs/README.md#conventions).
+  its blocks first. Blocks built by a compiler build the project does not have stay without source.
+- **Names** come from evidence; a guess goes in the topic document's open questions, not into a name. Apply overlays with
+  `tools/apply_names.py` (dry run, then `--apply --check`).
 
 ### The gate: when a function is done
 
@@ -102,15 +100,15 @@ Byte identity and readability are one gate. A function counts as done when all o
    `config/SLUS-20836/unit-flags.tsv` / `unit-compilers.tsv` is `foreign-profile` debt, not a match.
 2. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.
 3. Every identifier is a recovered name, from evidence (RTTI, strings, callers), never a guess. What
-   it does should make the name obvious, so source never justifies a name: a hypothesis and its
-   evidence go in the findings register. A name
+   it does should make the name obvious, so source never justifies a name: a hypothesis goes in
+   the topic document's open questions. A name
    holding an address is not recovered: it says where a thing is, not what it is. That goes for
    functions, variables, structs and classes alike; a type also needs a real name, not a placeholder
    such as `S`, `Obj` or `Info176`.
 4. No m2c idioms (`temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`) and no raw offset casts where
    `include/dw4/reflected.h` names the field; real structs, enums and control flow; a comment
    appears only when it is necessary, for what the code cannot say, and it stands alone: no pointer
-   to another document, finding or tool, and no account of how the code was recovered.
+   to another document or tool, and no account of how the code was recovered.
 5. A shape found by a permuter, flag sweep or random walk carries
    `/* matching construct: <tool> — <what moved> */` at the affected line.
 
@@ -151,7 +149,7 @@ a regenerated `config/<GAMEID>/symbols.txt` are reviewed in the commit message w
 `config/<GAMEID>/{symbols,layout,jumptables,syscalls}.txt`, `data/`, `lua/`,
 flag tables and progress blocks
 (`scripts/sync_data.sh`, `make progress`).
-Update findings, generated views and prose in the same commit.
+Update topic documents, generated views and prose in the same commit.
 
 ### Tools and limits
 
@@ -191,7 +189,7 @@ repository.
 - Verification matches the change: the full `make -C port check` only for shared/core modules (collision, scene,
   model control, stage objects, script engine, build files), unknown dependents, or once before a merge of many
   commits; otherwise the focused `check-*` targets for tests that include or link the module, `make hygiene`,
-  and the sanitizer run on the changed tests. Doc/findings/data-only changes need only `make hygiene`. Say in
+  and the sanitizer run on the changed tests. Doc/data-only changes need only `make hygiene`. Say in
   the commit or report which tests ran.
 
 ## Retail-game work

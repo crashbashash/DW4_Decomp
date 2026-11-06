@@ -15,10 +15,10 @@ the CRT hands the allocator the whole address space above the image:
 
 | fact | value | source |
 | --- | --- | --- |
-| image / BSS end | `0x0058D280` | `docs/engine/binary.md`, finding [#380](../../../docs/findings/findings-0251-0500.md#f380) |
+| image / BSS end | `0x0058D280` | `docs/engine/binary.md` |
 | heap | `SetupHeap(0x0058D280, -1)` — the image's end to the top of RAM | CRT startup, re-linked by the repo |
 | address space | 32 MB, flat LOAD segment, 1 MB stack at the top | `docs/engine/binary.md` |
-| reference fields | 4-byte handles that hold **resolved pointers** at runtime (the loader converts the pack's ids to pointers in a later pass) | finding [#423](../../../docs/findings/findings-0251-0500.md#f423) |
+| reference fields | 4-byte handles that hold **resolved pointers** at runtime (the loader converts the pack's ids to pointers in a later pass) | `dw4_scene_load`, below |
 
 On a 64-bit host a pointer is 8 bytes, so a resolved pointer no longer fits the field that holds
 it. That is the whole problem, and there are exactly three ways out.
@@ -79,11 +79,11 @@ The reasons are the plan's own:
 The handle type exists and is exercised: `dw4_handle` in [`../../include/dw4/scene.h`](../../include/dw4/scene.h)
 is `{ uint32_t off; }` and it is the only way the loader hands anything out — `dw4_scene_handle(id)`
 and `dw4_scene_host(h)`, with the arena's first payload at `0x1000` so a zero handle is NULL. The
-scene loader (finding [#481](../../../docs/findings/findings-0251-0500.md#f481)) places 50,497 ids and resolves every mesh through those handles.
+scene loader places 50,497 ids and resolves every mesh through those handles.
 
-The reference rewriting is done too: `dw4_scene_load` performs finding [#423](../../../docs/findings/findings-0251-0500.md#f423)'s id -> pointer pass, and
+The reference rewriting is done too: `dw4_scene_load` performs the id -> pointer pass, and
 which values are references comes from the value's own descriptor — its type id **is** the kind
-(finding [#482](../../../docs/findings/findings-0251-0500.md#f482): type 0 is always an object id or NULL, type 7 always a pool-block id or NULL, with no
+(type 0 is always an object id or NULL, type 7 always a pool-block id or NULL, with no
 value of either kind ever outside the id space). The (class, offset) table this section used to
 expect was not needed. What is still not rewritten is the *contents* of a memory block, because a
 block can be shared and the item kind belongs to the field that points at it.

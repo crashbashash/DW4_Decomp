@@ -152,8 +152,8 @@ CURATED = {
     "folder:7":  ("persistent story flag 7", "medium", "SYSctlFlagFolder"),
     "folder:8":  ("persistent story gate 8", "high", "checked in city hub e0709"),
     "folder:9":  ("persistent story gate 9", "high", "checked in city hub e0709"),
-    "folder:10": ("LordKnightmon ID (Electro Mine)", "medium", "save observation #128; separate from script-derived labels"),
-    "folder:11": ("persistent quest-chain marker", "high", "SET in e0824/chunk_0104; corrected signed decoding #787"),
+    "folder:10": ("LordKnightmon ID (Electro Mine)", "medium", "save observation; separate from script-derived labels"),
+    "folder:11": ("persistent quest-chain marker", "high", "SET in e0824/chunk_0104; corrected signed decoding"),
 }
 
 

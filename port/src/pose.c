@@ -173,7 +173,7 @@ int dw4_pose_mesh(const dw4_pose *p, const float *pos, const float *nrm, const u
             return -1;
         m = p->mat + 16 * s;
         x = pos[3 * i]; y = pos[3 * i + 1]; z = pos[3 * i + 2];
-        /* the matrix read column-wise: basis (m0,m4,m8), translation (m12..14) (#540) */
+        /* the matrix read column-wise: basis (m0,m4,m8), translation (m12..14) */
         out_pos[3 * i] = m[0] * x + m[4] * y + m[8] * z + m[12];
         out_pos[3 * i + 1] = m[1] * x + m[5] * y + m[9] * z + m[13];
         out_pos[3 * i + 2] = m[2] * x + m[6] * y + m[10] * z + m[14];

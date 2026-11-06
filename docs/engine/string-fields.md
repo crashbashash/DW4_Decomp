@@ -5,7 +5,7 @@ Twenty-one complete bodies (2,548 code bytes) have readable
 scalar string-value run at `30a910..30b230`, its retained-slot helper (`1c8c00`),
 and common reset/write dispatchers (`2fc500`, `2fc6f0`). Some shared methods retain
 canonical derived `igStringArrayMetaField::vfunc_*` names; this recovery establishes
-their scalar-value behavior, not complete string-array behavior. Finding [#877](../findings/findings-0751-1000.md#f877)
+their scalar-value behavior, not complete string-array behavior.
 records the evidence and limits.
 
 Thirteen bodies (908 bytes) have exact source in

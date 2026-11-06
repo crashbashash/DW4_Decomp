@@ -1,8 +1,8 @@
 # SUBWND service-menu lifecycle
 
-Finding [#905](../findings/findings-0751-1000.md#f905) recovers the complete lifecycle prefix **3d58f0..3d60d8**, the four
-emitted pointer-wrapper cleanup helpers at3d9bd0..3d9dd0 and the final metadata
-getter3d9dd0. The nine bodies span **2,532 bytes**. The readable
+The complete lifecycle prefix **3d58f0..3d60d8**, the four emitted pointer-wrapper
+cleanup helpers at 3d9bd0..3d9dd0 and the final metadata getter 3d9dd0 are recovered.
+The nine bodies span **2,532 bytes**. The readable
 [guest-reference implementation](../../recovered/engine/subwindow-lifecycle.c)
 passes **1,072 original-instruction RAM/return/ordered-call cases** for all eleven
 service modes and four owning-player arguments. This is behavioral recovery;

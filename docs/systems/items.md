@@ -237,7 +237,7 @@ table. (See [`save-format.md`](save-format.md) for the offsets.)
 ### Item-ID instance field (corrected)
 `instance(16b) = (seed << 4) | mod_count`
 - `mod_count` = low nibble, 0–15; **0–5 valid, 6+ crashes** (max 5 mod slots).
-- `seed` = high 12 bits = **+N quality bonus** (CRACKED, finding [#116](../findings/findings-0001-0250.md#f116)).
+- `seed` = high 12 bits = **+N quality bonus** (CRACKED).
 
 ### Rarity seed = direct +N stat bonus; colour = seed thresholds (CRACKED)
 
@@ -268,7 +268,7 @@ one `0x040` anomaly likely a misread):
 Order (CONFIRMED by tester, most common -> rarest): **white < blue < green <
 yellow < orange < pink**.
 
-#### Bit 11 (`0x800`) — purpose UNKNOWN (finding [#117](../findings/findings-0001-0250.md#f117))
+#### Bit 11 (`0x800`) — purpose UNKNOWN
 
 The top bit of the 12-bit seed is ignored by both the stat bonus and the colour,
 so the instance field is most likely really `[1 flag bit | 11 quality bits |
@@ -357,8 +357,9 @@ CONFIRMED by probe round 4.** Within a 3-grade family each grade spans 5 bases
 
 Grade-less uniques: `0x101b` Invincible, `0x101c` Mythlandia, `0x101d`
 Rainbow Veil, `0x101e` Talis of Order, `0x101f` `??????` (unidentified,
-needs appraisal). Invalid range: `0x1020–0x103f` = blank (`0x1026` crashes
-when selected). Machine-readable: `cores.json`.
+needs appraisal). The valid range is `0x1000–0x101f` (32 items). Invalid range:
+`0x1020–0x103f` = blank (`0x1026` crashes when selected). Machine-readable:
+`cores.json`.
 
 ## String-ID table (0x004cda40) — static name lookup (partial)
 360 records, 12-byte stride: `{u32 key, u32 message_id, u32 font_subtable_ptr}`,
@@ -368,8 +369,10 @@ uses `key & 0xFFFFF`. `message_id` = index into the entry-9 text table
 selects a message-id page (flag 0/1/2/3 → base +0/+10000/+20000/+30000).
 The table is **incomplete** — several confirmed items (Omega Blade 0x0501,
 Crush Arm 0x0512, Divine β 0x1019) are absent, so a second name path exists.
-Still useful to enumerate *valid* ids: a sub absent from this table is likely
-blank/crash.
+A sub absent from this table is likely blank/crash, but a row does not prove an
+id is valid: `0x1024` and `0x1026`–`0x102e`, inside the invalid core range, have
+rows at every flag page. They are orphan text entries with no real item behind
+them.
 
 ### How the message-id is consumed (text system)
 `FUN_003ebe00` linear-searches the table, stores `message_id` to `0x0058a220`
@@ -390,5 +393,17 @@ resolved by the runtime object system, not a static table.
 
 The `message_id` is a **flat text-table index assigned by the igBinary
 deserializer**, not the type-256 file order (`Dark Shadow` msg=200 is record
-[#1109](../findings/findings-1001-1250.md#f1109)). Fully resolving message-id → string statically = replicating the
+#1109). Fully resolving message-id → string statically = replicating the
 igBinary deserializer (same prerequisite as the NDMW.AFS item DB).
+
+## Open questions
+
+- Unproven: mod slot counts are rolled per item and normal rolls cap at 4, one below the functional maximum
+  of 5. Counts of 6 and 15 crash or show a question mark.
+- Unproven: the Rack Board's luck may be a dead stat. Rack Board (armor2 model 9, ids `0x201b`-`0x201d`)
+  raises `LUCKRITSU`, which `FUN_003fab90` sums from the equipped board through `FUN_003fa2c0` and stores in
+  the GAMERAM property. No string-keyed read of it exists: the single `LUCKRITSU` string (`0x5189e0`) is
+  used only at that compute and store and in the property template (`0x4cefa8`). `EXPRITSU` and `BITRITSU`
+  do have readers, in `beNDMWGameRam::vfunc_34` (`0x3ff87c`) and `beNDMWItemInstant::vfunc_22` (`0x448bd8`).
+  These rates are not shown in-game. A positional read of the property or of board field +0x40 is not
+  excluded. Test: equip a Rack Board and compare a forced single-entry drop table with `LUCKRITSU` 0 and N.

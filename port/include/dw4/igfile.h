@@ -46,7 +46,7 @@ int dw4_igfile_open_afs(dw4_igfile *f, const char *afs_path, uint32_t entry);
 int dw4_igfile_open_named(dw4_igfile *f, dw4_mount *m, const char *name);
 
 /* The engine's own route to a stage's pack: a stage file carries its pack list as
- * `[<pt>.<entry>]` text (finding #445), so `index` names the n-th of them.  This is how the game
+ * `[<pt>.<entry>]` text, so `index` names the n-th of them.  This is how the game
  * reaches its sound pack and its model pack -- by pointing at them from the stage file, not by an
  * archive index.  `dw4_igfile_stage_refs` reports the list without opening anything. */
 uint32_t dw4_igfile_stage_refs(dw4_mount *m, const char *stage, dw4_ref *out, uint32_t cap);

@@ -18,7 +18,7 @@ Per function:
 The **address form has to match retail**, and that cannot be decided from the
 source: MWCC materialises a *literal* address through a scratch register with
 `ori`, and a *symbol* address straight into the destination with `addiu`
-(finding #307). m2c emits literals, so both spellings are generated and verified —
+. m2c emits literals, so both spellings are generated and verified —
 whichever matches is kept. That is why this pass can bank a function whose
 "correct" source nobody wrote by hand.
 
@@ -255,7 +255,7 @@ def clean(c, addr_mode="symbol", bounds=None):
                 return m.group(0)
             # In hybrid mode only an address used as a *base* of a cast (`*(T *)ADDR`,
             # `(T *)ADDR`) becomes a symbol; a bare `= 0xADDR` is a stored constant,
-            # which retail materialises with `ori` (finding #307).
+            # which retail materialises with `ori`.
             if addr_mode == "hybrid":
                 before = c[max(0, m.start() - 16):m.start()]
                 if "*)" not in before:
@@ -412,7 +412,7 @@ def declare_stack_placeholders(c):
 
     In C an undeclared identifier is an implicit int, so this only ever mattered for the
     *declaration* m2c expects to be there; in C++ it is a hard error, which is how the
-    C++ virtual-call path (finding #406) found it: `spD0` reaches MWCC as
+    C++ virtual-call path found it: `spD0` reaches MWCC as
     `undefined identifier`. Declaring them is also the right *shape*, not just a spelling
     fix -- a declared local lives in the frame, which is where retail's slot is.
     """
@@ -450,7 +450,7 @@ def fix_pointer_types(c):
     `*(int *)`).  Neither looks at the lvalue, so the draft stopped compiling wherever
     the two disagreed, and those disagreements *are* MWCC's int/pointer buckets: the
     first error over the compile tier was `'int' to 'void *'` 1,826 times over 292
-    functions, with the mirror image right behind it (finding #369).
+    functions, with the mirror image right behind it.
 
     Every rewrite is a cast between a 32-bit pointer and a 32-bit integer, so the
     emitted instructions cannot change (`lw`/`sw` either way) -- only the types have
@@ -552,7 +552,7 @@ def arrayize_globals(c):
 
     m2c emits its own `extern void *DAT_00555048;`. That is a 4-byte object, which
     MWCC places in small data and addresses gp-relative — but retail uses absolute
-    `lui at` / `lw` (finding #311). Declaring the symbol as a 4-element array makes
+    `lui at` / `lw`. Declaring the symbol as a 4-element array makes
     it non-small-data, and `DAT_x[0]` then compiles to exactly retail's sequence.
     """
     names = re.findall(r"^extern\s+[^;\n]*?\b(DAT_[0-9a-f]{8})\s*;\s*$", c, re.M)
@@ -567,7 +567,7 @@ def desymbolize_globals(c):
     """The other spelling: turn the named globals back into plain addresses.
 
     Retail sometimes materialises a stored pointer constant with `ori` from a
-    scratch register rather than `addiu` into the destination (finding #307), so the
+    scratch register rather than `addiu` into the destination, so the
     literal form has to stay available as a candidate.
     """
     # A store needs an lvalue: `0x555048 = x` is not valid C, and retail would use a
@@ -715,7 +715,7 @@ LOADED_RE = re.compile(r"\b(\w+)\s*=\s*(DAT_\w+\[0\])\s*;")
 
 
 def retype_global_loads(c):
-    """Retype a local loaded from a global word as `void *` (finding #394).
+    """Retype a local loaded from a global word as `void *`.
 
     m2c types the loaded handle `int`, so MWCC loads it straight into the first
     argument register and saves it afterwards (`lw a0,...; move s0,a0`); retail
@@ -737,7 +737,7 @@ DECL_RE = re.compile(
 
 
 def order_pointer_decls(c):
-    """Move pointer-typed locals before integer locals (finding #395).
+    """Move pointer-typed locals before integer locals.
 
     MWCC assigns saved registers by declaration order, and the larger reflection
     initialisers want the field pointer in `s1` and the count in `s2`; m2c declares
@@ -851,7 +851,7 @@ def _vc_rewrite(c, defs):
     arguments used to be left as a plain indirect call -- the loop replaced the
     outermost call and then skipped past its args -- and MWCC compiles a plain indirect
     call `jalr v0` where retail has the C++ ABI's `jalr t9`, so those functions could
-    never match however many other calls in the body were rewritten (finding #408).
+    never match however many other calls in the body were rewritten.
     `defs` is the shared `(slot, nargs) -> class name` map for the whole function.
     """
     res, i = [], 0
@@ -927,7 +927,7 @@ def _virtualize_sret_statements(body):
 
     MWCC's MIPS C++ ABI passes the hidden return buffer in ``a0`` and shifts
     ``this`` to ``a1``.  Re-spelling the statement as a four-byte class return is
-    what produces retail's ``lw t9,0(a1)`` call shape (finding #409).  Keep the
+    what produces retail's ``lw t9,0(a1)`` call shape.  Keep the
     transform deliberately narrow: a discarded-result statement, an ``int`` local,
     and a first argument that is exactly that local's address.  Verification is
     still the oracle, but the narrow shape avoids multiplying variants for ordinary
@@ -1003,7 +1003,7 @@ def _virtualize_sret_statements(body):
 
 
 def virtualize_calls(c, name, sret=False):
-    """Re-spell m2c's vtable calls as C++ virtual calls, as a `.cpp` source (finding #404).
+    """Re-spell m2c's vtable calls as C++ virtual calls, as a `.cpp` source.
 
     MWCC's **C** front end emits `jalr v0` for an indirect call; its **C++** front end emits
     the MIPS C++ ABI sequence `lw t9,0(A); lw t9,K(t9); jalr t9`.  So every function whose
@@ -1017,8 +1017,7 @@ def virtualize_calls(c, name, sret=False):
     `K/4 - 2` preceding virtuals; and every declaration has to sit in `extern "C"`, or the
     definition is mangled and `verify.py` cannot find the symbol.
 
-    With ``sret=True``, also try the statement-level hidden-return spelling from
-    finding #409.  It is a separate variant because an address-first virtual call
+    With ``sret=True``, also try the statement-level hidden-return spelling.  It is a separate variant because an address-first virtual call
     may be an ordinary output parameter rather than a class return.
 
     Returns the `.cpp` source, or None when the requested shape is absent.
@@ -1126,7 +1125,7 @@ def score_candidate(cand):
             if od != base and all(od != v for v, _ in variants):
                 variants.append((od, tag + "+o"))
         # C++ virtual calls: MWCC's C front end cannot emit `jalr t9`, so a function whose
-        # retail body contains one is unreachable from C (finding #404).
+        # retail body contains one is unreachable from C.
         for base, tag in list(variants):
             vc = virtualize_calls(base, name)
             if vc and all(vc != v for v, _ in variants):

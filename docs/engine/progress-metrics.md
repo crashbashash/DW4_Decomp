@@ -62,7 +62,7 @@ metric: matched bytes say how much of the binary is verified, this says how much
 is exactly what another compiler cannot use — the port's prerequisite (tracker T10, page
 [`typed-coverage.md`](typed-coverage.md)).
 
-It was measured **neutral for matching** ([#319](../findings/findings-0251-0500.md#f319)), and that is not a contradiction: it buys nothing in
+It was measured **neutral for matching**, and that is not a contradiction: it buys nothing in
 the matched-byte percentage and everything for the second goal. The number also has a *ceiling*
 worth watching — only 1.4 % of accesses are typeable from the receiver class alone, because most
 matched C is address-named, so **typed coverage advances with naming**: the two loops are the same

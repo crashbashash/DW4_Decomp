@@ -11,7 +11,7 @@
  *   igClut._pData          the palette bytes
  *
  * What this module canNOT do is find those buffers: a memory ref is a load-time ordinal
- * (finding #433), so the bytes have to come from the loader's own replay or a live
+ *, so the bytes have to come from the loader's own replay or a live
  * session.  Decoding them is well defined, and that half is here.
  */
 #ifndef DW4_TEXTURE_H

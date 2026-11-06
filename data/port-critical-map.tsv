@@ -175,6 +175,11 @@
 0x0035abe0	FUN_0035abe0	32	c	0	3	-	save-keeper.md	0	0	0
 0x0035c9e0	FUN_0035c9e0	84	c	0	1	-	stageobjects.c	0	0	0
 0x0035ca40	FUN_0035ca40	84	c	0	1	-	stageobjects.c	0	0	0
+0x0035d720	FUN_0035d720	84	c	0	1	-	hub-travel.md	0	0	0
+0x0035dbd0	FUN_0035dbd0	52	c	0	1	-	hub-travel.md	0	0	0
+0x0035dd30	FUN_0035dd30	32	c	0	2	-	hub-travel.md	0	0	0
+0x0035de90	FUN_0035de90	52	c	0	1	-	hub-travel.md	0	0	0
+0x0035e090	FUN_0035e090	32	c	0	2	-	hub-travel.md	0	0	0
 0x0035e860	beHitLandDelivInfoRam_InitFields	348	c	1	0	port	lobby.c	1	0	0
 0x0035eb30	FUN_0035eb30	84	c	0	1	-	lobbycollision.c	0	0	0
 0x003614f0	FUN_003614f0	52	c	0	1	-	memcard.c	0	0	0
@@ -405,6 +410,14 @@
 0x003841d0	FUN_003841d0	416	c	0	1	-	dialogue.h	19	3	0
 0x003843c0	beUnicodeObj_AllocateBuffer	188	c	1	1	-	memcard.c	7	0	0
 0x00385890	Gap__Bec__beHitLandDeliv__vfunc_33	1936	none	1	0	port	lobbycollision.c	0	0	0
+0x003861d0	Gap__Bec__beHitLandModel__vfunc_34	1444	none	1	0	doc	hub-travel.md	0	0	5
+0x00386780	FUN_00386780	3876	none	0	1	-	hub-travel.md	0	0	8
+0x003876b0	FUN_003876b0	2388	none	0	1	-	hub-travel.md	0	0	2
+0x00388010	FUN_00388010	1404	none	0	1	-	hub-travel.md	0	0	4
+0x00388590	FUN_00388590	72	c	0	2	-	hub-travel.md	0	0	0
+0x003885e0	FUN_003885e0	96	c	0	3	-	hub-travel.md	0	0	0
+0x00388640	FUN_00388640	1520	none	0	2	-	hub-travel.md	0	0	3
+0x00388ff0	FUN_00388ff0	16	c	0	2	-	hub-travel.md	3	0	0
 0x00389170	Gap__Bec__beLayerCtl__vfunc_34	2576	c	1	0	port	stageobjects.c	35	4	3
 0x00389ff0	beLua__RunNamedChunk	732	c	1	0	port	laboshop.c	17	8	2
 0x0038a2d0	FUN_0038a2d0	136	c	0	1	-	save-keeper.md	4	0	0
@@ -458,6 +471,7 @@
 0x0038f480	beMessenger_GetLong	28	c	1	1	-	modelsubcom.h	3	1	0
 0x0038f4a0	beMessenger_GetVec3Count	16	c	1	1	-	Lua root	3	0	0
 0x0038f4b0	beMessenger_AppendVec3	148	c	1	1	-	Lua root	6	0	0
+0x0038f550	beMessenger_ClearVec3	16	c	1	2	-	hub-travel.md	3	0	0
 0x0038f560	beMessenger_GetVec3	56	c	1	1	-	Lua root	3	0	0
 0x0038f5a0	beMessenger_GetMatrixCount	16	c	1	1	-	Lua API PLAYERgetPosStr	3	0	0
 0x0038f5b0	beMessenger_AppendMatrix	124	c	1	1	-	action2host.c	6	0	0
@@ -501,7 +515,7 @@
 0x00395250	FUN_00395250	1168	c	0	0	port	logoseq.c	11	15	15
 0x003956e0	FUN_003956e0	1128	c	0	0	doc	lobby-gameplay.md	17	8	0
 0x00395b50	Gap__Core__igObject__vfunc_31	1412	c	1	0	port	controllers.c	68	11	7
-0x003960f0	FUN_003960f0	580	c	0	1	-	modelctrl.c	15	3	1
+0x003960f0	FUN_003960f0	580	c	0	0	doc	npc-interactions.md	15	3	1
 0x00396740	FUN_00396740	512	c	0	1	-	hubruntime.c	15	3	2
 0x00396940	FUN_00396940	316	c	0	1	-	controllers.c	17	0	0
 0x00396a80	Gap__Bec__beModelCtrl__vfunc_33	8604	c	1	0	port	modelctrl.c	183	26	19
@@ -694,8 +708,8 @@
 0x003ba9f0	FUN_003ba9f0	32	c	0	2	-	statussubmenu.c	0	0	0
 0x003bace0	FUN_003bace0	52	c	0	0	doc	labo-shop.md	0	0	0
 0x003badf0	FUN_003badf0	32	c	0	1	-	labo-shop.md	0	0	0
-0x003baf10	FUN_003baf10	52	c	0	1	-	Lua root	0	0	0
-0x003bb040	FUN_003bb040	32	c	0	2	-	Lua root	0	0	0
+0x003baf10	FUN_003baf10	52	c	0	0	doc	bank-shop.md	0	0	0
+0x003bb040	FUN_003bb040	32	c	0	1	-	bank-shop.md	0	0	0
 0x003bb1d0	FUN_003bb1d0	52	c	0	1	-	Lua root	0	0	0
 0x003bb2e0	FUN_003bb2e0	32	c	0	2	-	Lua root	0	0	0
 0x003bb730	FUN_003bb730	84	c	0	1	-	Lua root	0	0	0

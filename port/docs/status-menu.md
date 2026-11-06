@@ -97,7 +97,7 @@ player in the lobby. Prepared tests retain broader four-slot tree coverage.
 
 Each native window's active byte, four counters, parent link and ordered child
 handles/count live in `beNDMWWindow`-derived objects and `beNDMWWindowList` in the
-session arena ([#2728](../../docs/findings/findings-2501-2750.md#f2728)/#2729). `dw4_menu_window` is a host facade for
+session arena. `dw4_menu_window` is a host facade for
 callbacks/resources and child-owner lookup. `dw4_menu_window_data` resolves its
 handle; `dw4_menu_window_count` reads the typed list. Tree growth preflights both
 allocations before publication, pruning clears vacated slots, and recursive
@@ -232,7 +232,7 @@ be used; this guard is not a general generator implementation.
 The retail shops start their window with
 `SUBWND nil 0 GENERATE "<MODE>/I<g_messPlayerNo>"`, so the payload's player index
 names the owner: the window tree, its stat owner (`dw4_statusstats_refresh`, the
-chip quote preview) and its restoration all run on that player's records ([#2850](../../docs/findings/findings-2751-3000.md#f2850)).
+chip quote preview) and its restoration all run on that player's records.
 `hubruntime.c` keeps the index in `h->owner`, set by `status_prepare` (the player
 must have `ISUSE`), and uses it for the view context of the STATUS tree and of
 every shop service; `status_input`, `status_appearance`, `status_update` and

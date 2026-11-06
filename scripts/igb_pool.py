@@ -8,13 +8,13 @@ concatenation of those blocks in id order, so a block's offset is
     pool_start + sum(_memSize of every igMemoryDirEntry id below it)
 
 with `pool_start` the end of the object section and the id table read by
-`scripts/igb_ids.py` (finding #460).  Each block is placed at a **4-byte boundary**, so a
-`_memSize` that is not a multiple of 4 is followed by 1-3 padding bytes (finding #478):
+`scripts/igb_ids.py`.  Each block is placed at a **4-byte boundary**, so a
+`_memSize` that is not a multiple of 4 is followed by 1-3 padding bytes:
 
     offset(id) = pool_start + sum(align4(_memSize) of every id below it)
 
 and `sum(align4(_memSize))` is the pool size **exactly** on every pack checked — the "~141-byte
-residual" of findings #464/#475 *was* this alignment.  On the generator packs (entry 622: 228 blocks,
+residual" of *was* this alignment.  On the generator packs (entry 622: 228 blocks,
 7,112 bytes) the rule is unchanged because every size is already a multiple of 4; on the model packs
 it removes the drift and makes a geometry buffer land on its own block start (verified against 432
 live-located vertex buffers, and the geometry decodes byte-identically to the live extraction).
@@ -53,7 +53,7 @@ def load(file, blob, reflection):
             ms = igb_ids.field_map(r)["_memSize"]
             off_of[i], size_of[i] = pool + run, ms
             # A block is placed at a 4-byte boundary, so a `_memSize` that is not a
-            # multiple of 4 is followed by 1-3 padding bytes (finding #478).  Without
+            # multiple of 4 is followed by 1-3 padding bytes.  Without
             # this the offsets drift, which is what the old ~141-byte "residual" was:
             # sum(align4(_memSize)) == the pool size exactly.
             run += (ms + 3) // 4 * 4

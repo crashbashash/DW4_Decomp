@@ -1,5 +1,5 @@
 # Body-derived context construction/destruction and event-tracker delegation.
-# Finding #897; slot204 builder and concrete allocator/tracker implementations remain open.
+# Slot204 builder and concrete allocator/tracker implementations remain open.
 0x002f25d0	igMemoryPoolContextInfo_Construct	engine
 0x002f2670	igMemoryPoolContextInfo_Destruct	engine
 0x002f49e0	igMemoryPoolContextInfo_InitializeRecordNames	engine

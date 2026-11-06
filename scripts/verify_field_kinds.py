@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """verify_field_kinds.py — a pack's descriptor type id IS the field's kind.
 
-Which values a loader has to rewrite into pointers (finding #423's id -> pointer pass) looked like
+Which values a loader has to rewrite into pointers (the id -> pointer pass) looked like
 it needed a generated (class, offset) -> kind table from the reflection, because a first look at the
 type ids seemed to show them serving several kinds at once (type 0 against object references, name
 slots, floats and enums).  That reading was wrong: those row groups came from the classes where

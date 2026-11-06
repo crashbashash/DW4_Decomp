@@ -77,7 +77,7 @@ is private; retail temporarily changes shared lists and restores them after the
 synchronous stat/preview commands. Reentrant observation during retail temporary
 mutation is not claimed equivalent.
 
-## Recovered rules ([#796](../../docs/findings/findings-0751-1000.md#f796))
+## Recovered rules
 
 - Equipment helper `0x00411950` toggles an identical item identity off, clears the
   previous equipped flag, removes duplicate references to the candidate within
@@ -134,7 +134,7 @@ halt-on-error.
 ## Connected owners and open items
 
 The production general recalculation/technique owner and item attributes
-exist ([#797](../../docs/findings/findings-0751-1000.md#f797)); fresh creation and accepted equipment commits share them.
+exist; fresh creation and accepted equipment commits share them.
 [Production recalculation](player-stats.md) compares 1,760 cases,
 54,560 scalar results, 9,158 technique records and socket-name lists.
 Shared equipment-base selection/action routing and accepted transaction IO

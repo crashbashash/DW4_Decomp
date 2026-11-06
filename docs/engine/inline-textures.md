@@ -11,18 +11,18 @@ an `igAttrSet` in the pack's own content pool:
 `igImage` names the pool blocks directly (`_pImage`, `_pClut`, `_px`, `_py`, `_bytesPerRow`,
 `_imageSize`), so the image is a plain indexed bitmap plus a 256-entry palette, and no texture pack
 or live object graph is involved. That is why the texture-pack walk and the live texture walk both
-come back empty for these two shapes (finding [#552](../findings/findings-0501-0750.md#f552)).
+come back empty for these two shapes.
 
 ## The format
 
 * **Palette order is `R G B A`** — colour in bytes 0..2. (The texture packs use `A R G B`; the two
-  are not interchangeable, finding [#552](../findings/findings-0501-0750.md#f552).)
+  are not interchangeable.)
 * The image is a `_px × _py` grid of indices, `_bytesPerRow` bytes per row (row-major), indexing the
   palette. In the Goblin Pass fixture both props' atlases are **32×32**.
 * The atlas is a *shared* layout, not one texture per shape: `g_bbarrelsz01` holds the barrel's wood
   staves, its metal hoops and a top-corner block, and the shapes' UVs select the pieces.
 
-## Orientation (finding [#579](../findings/findings-0501-0750.md#f579))
+## Orientation
 
 **The stored image is top-down**: row 0 of `_pImage` is the row the GS samples at `v = 0`. A GS dump
 confirms it — the per-vertex `ST/Q` the VU1 emitted equals the mesh's own `(u, v)` exactly (an affine

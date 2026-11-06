@@ -12,7 +12,7 @@
 #include <string.h>
 #include "dw4/platform.h"
 
-/* one row per igPsx2 class that sits under a generic interface (finding #497).  The field count is
+/* one row per igPsx2 class that sits under a generic interface.  The field count is
  * the *generic interface's* serialised field count, recovered from reflection -- it is what a host
  * implementation has to fill in, and tools/verify_platform.py pins the totals. */
 const dw4_iface dw4_ifaces[] = {

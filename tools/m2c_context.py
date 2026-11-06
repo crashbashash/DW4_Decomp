@@ -164,7 +164,7 @@ def main(argv=None):
             # The handle is the address the engine stores the object pointer at,
             # so the symbol is a pointer. Declared as a 4-element array in `array`
             # mode so MWCC uses absolute `lui at`/`lw` (a lone 4-byte pointer is
-            # small data and goes gp-relative; finding #311).
+            # small data and goes gp-relative).
             if a.globals == "array":
                 globals_.append("extern struct %s *DAT_%08x[4];" % (tn, v))
             else:

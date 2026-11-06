@@ -1,7 +1,7 @@
 /* dw4/models.h — offline model-geometry reader for a stage's model pack.
  *
  * A model pack states its own addressing, so geometry comes out of the file with no running
- * game, no RAM dump and no load replay (findings #477/#478).  The chain is documented in
+ * game, no RAM dump and no load replay.  The chain is documented in
  * DW4_Decomp/docs/engine/model-format.md; the decoder it was recovered with is
  * DW4_Decomp/scripts/igb_models.py, and this is the port's C reader for the same rules:
  *
@@ -22,7 +22,7 @@
  *
  * A stream block's `_memSize` is its content size exactly — `12*_numVerts` for the positions,
  * `8*_numVerts` for the UVs — and the pool places every block on a 4-byte boundary
- * (`offset(id) = pool_start + sum(align4(_memSize) ...)`, finding #478), so a stream starts at
+ * (`offset(id) = pool_start + sum(align4(_memSize) ...)`), so a stream starts at
  * its block's offset and no search is needed.  Every value read below is then checked with the
  * format's own arithmetic — the `_vdata` block must list a stream of exactly `12*_numVerts`
  * bytes and the lengths must sum to `_numVerts` — so a wrong offset shows up as a skipped

@@ -65,7 +65,7 @@ void *dw4_object_init_header(void *o)
     return o;
 }
 
-/* `ordinal = declaredIndex + K + 1` (#290): find the K that makes every descriptor with
+/* `ordinal = declaredIndex + K + 1`: find the K that makes every descriptor with
  * `ordinal > K` land on a declared field whose type matches.  0xff fields never match, exactly as
  * `igb_inst.TID2REF.get` returns None, so a class with an array field behaves the same both ways. */
 static int find_K(const dw4_metaobject *mo, const dw4_igb_record *r)
@@ -136,7 +136,7 @@ int dw4_object_from_record_with(dw4_object *o, const dw4_igb *g, const dw4_igb_r
         dw4_object_free(o);
         return -1;
     }
-    /* the engine's own header init, then the class's vtable at +0 (finding #359) */
+    /* the engine's own header init, then the class's vtable at +0 */
     dw4_object_init_header(o->data);
     if (o->mo && o->mo->vtable) {
         uint32_t vt = o->mo->vtable;

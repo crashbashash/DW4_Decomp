@@ -2,7 +2,7 @@
 """camera_match.py — build a camera-matched scene TSV for a paused DW4 capture.
 
 The port has three ways to learn where geometry goes, and they cover different parts of a frame
-(findings #519/#520/#521):
+:
 
   * the *static environment* is world-space pack geometry: its `igGeometry` shapes carry no usable
     `igTransform`-chain matrix, so the mesh is already in stage coordinates and identity places it;
@@ -17,7 +17,7 @@ This tool writes one TSV the port's `--scene` consumes (name, matrix, live attrs
     --pack      the stage model pack (AFS:ENTRY), to compute mesh bounds
     --big       bbox-diagonal threshold for the world-space environment (default 150)
     --min-z     a mesh flatter than this in z is a screen-space UI/backdrop card, not world
-                geometry (default 1.0); this is the world-set membership test (finding #544
+                geometry (default 1.0); this is the world-set membership test (finding
                 follow-up -- the old --big-only test kept 40 flat cards and they were the frame's
                 flat "gaps")
     --character MESH at the beModelCtrlNode2 node nearest --target
@@ -80,11 +80,11 @@ def pack_bounds(pack, decomp):
     flat *cards* authored in a constant-z plane (their z extent is exactly 0 in the pack), while
     the 3D world spans z.  `camera_match --big` used to keep every large pack mesh, which pulled in
     the whole screen-space pass (`color0Shape1`, `win0Shape*`, `maskShape`, `fadein/bgclear`, ...)
-    and they rendered as the frame's flat planes -- the "gaps" of finding #544's follow-up.
+    and they rendered as the frame's flat planes -- the "gaps" of finding's follow-up.
 
     `has_uv` is the *texture* signal: a drawn surface in this engine carries texcoords, so an
     untextured mesh of the pack is an auxiliary volume (collision, blocker, a vertex-colour helper)
-    the render does not draw -- the world test can drop it (finding #550)."""
+    the render does not draw -- the world test can drop it."""
     sys.path.insert(0, os.path.join(decomp, "scripts"))
     import igb_ids
     import igb_models
@@ -136,7 +136,7 @@ def pack_normals(pack, decomp):
 
 
 def pack_shape_keys(pack, decomp):
-    """`(primType, numPrims) -> [pack geometry-attr id]`, the key finding #565 matches a world
+    """`(primType, numPrims) -> [pack geometry-attr id]`, the key matches a world
     shape on when its live vertex buffer is drained.  One pack attribute is one shape, so a key
     usually names exactly one id; the small props share keys and the caller keeps the distinctive
     ones."""
@@ -156,22 +156,22 @@ def pack_shape_keys(pack, decomp):
 
 
 def stage_fallback_textures(ram, ground_name=None, wall_name=None):
-    """`(ground, wall)` texture names for the *unnamed* world meshes (finding #544).
+    """`(ground, wall)` texture names for the *unnamed* world meshes.
 
     The cave's big meshes are RamData/packet-drawn, so `attr_pack_map`'s vertex-buffer content
     match never reaches them and they end up with no texture.  The stage's BG ground/object material
     sets already carry the textures they actually use, so this is a fallback, not a new binding: the
     ground set has **two** variants and the stage draws one per surface -- the `s` (`P11G00s`, the
     brown cracked floor) for the flat floor and the `n` (`P11G00n`, a 256x128 rock atlas that also
-    carries the wall's blue light-dash band) for the wall/dome (finding #547, measured against the
+    carries the wall's blue light-dash band) for the wall/dome (measured against the
     real frame: `P11G00n` reproduces both the rock and the band's curve, `P11G00s` the floor).
     `camera_match` picks between them per mesh by the mesh's own shape (see the membership section),
     not by the old `--big`/mean-normal guess.
 
     `ground_name`/`wall_name` override the set's choice.  The wall default is now the `n` variant,
-    not the ground `s` material: #544's colour test could not separate a cave rock from a cave wall
+    not the ground `s` material:'s colour test could not separate a cave rock from a cave wall
     because it only looked at mean RGB, but the textures themselves do -- `P11G00n` is the atlas
-    with the blue strip.  The real per-draw binding is still the staged packet material (#522).
+    with the blue strip.  The real per-draw binding is still the staged packet material.
     """
     import texture_map
     tm = texture_map.TextureMap(ram)
@@ -196,8 +196,7 @@ def skinned_char_ids(ram, pack, decomp):
     A skinned mesh is the one whose `igVertexArray1_1` carries the per-vertex blend stream: the
     runtime allocates `_blendWeights` (+0x20, f32 per vertex) and `_blendIndices` (+0x24, u8 per
     vertex), which the VU1 BLEND family consumes.  On the Goblin Pass capture exactly ONE live mesh
-    qualifies -- and it is `ogre_skinShape`, an **Ogremon NPC**, NOT the player (finding #531,
-    refuted by #535).  The player is Susanoomon and is an **actor rig**, not a mesh: walk
+    qualifies -- and it is `ogre_skinShape`, an **Ogremon NPC**, NOT the player (refuted by).  The player is Susanoomon and is an **actor rig**, not a mesh: walk
     beModelCtrlNode2 -> igLod -> igActor -> igAppearance._skin -> igSkin._skinnedGraph, whose child
     list is the model and whose igActor owns the bone matrix caches.  So `--character auto` here is
     a trap: it answers "which mesh is skinned", not "which mesh is the player".
@@ -235,7 +234,7 @@ def walk_live_pack(ram, pack, decomp):
     ids split by whether the shape's `igTransform` chain yields a usable matrix.  A shape with a
     matrix is a **placed** object (a prop, a backdrop sphere, the character) and must not be drawn
     at identity; a shape without one is authored in world space, so identity *is* its placement
-    (finding #520).
+.
     """
     import capture_scene
     import extract_live_models as el
@@ -265,14 +264,14 @@ def main():
                     help="the camera look-at (beCameraCtrl._avgPos)")
     ap.add_argument("--character",
                     help="a mesh name to place at the node nearest --target.  'auto' = the live"
-                         " skinned mesh, which is an NPC here, NOT the player (finding #535)")
+                         " skinned mesh, which is an NPC here, NOT the player")
     ap.add_argument("--prop", action="append", default=[], metavar="MESH@NODE_ADDR",
                     help="a mesh at that beModelCtrlNode2 node's transform (repeatable)")
     ap.add_argument("--prop-tex", action="append", default=[], metavar="MATERIAL@MESH",
                     help="bind MESH to a stage-pack igAttrSet's inline texture (repeatable).  The"
                          " destructible objects' material is not in the live graph or a texture"
                          " pack -- it is an igAttrSet in the stage pack whose igTextureAttr points"
-                         " at an inline pool block (scripts/pack_inline_tex.py; finding #552)")
+                         " at an inline pool block (scripts/pack_inline_tex.py)")
     ap.add_argument("--character-pack", metavar="AFS:ENTRY",
                     help="a second pack to resolve --character in -- the player is"
                          " `P_susanoo_Skin0Shape*` in NDMW.AFS:861, which the stage pack does not"
@@ -293,14 +292,14 @@ def main():
     ap.add_argument("--keep-placed", action="store_true",
                     help="also emit a pack mesh the live scene places with a real transform (a"
                          " prop, a backdrop sphere); by default the env set is only the unplaced"
-                         " world-space geometry (finding #520), which is the other half of the"
+                         " world-space geometry, which is the other half of the"
                          " membership test")
     ap.add_argument("--include-untextured", action="store_true",
                     help="keep large 3D world meshes that carry no texcoords.  By default they"
                          " are dropped: a drawn surface in this engine has UVs, and the untextured"
                          " meshes are auxiliary volumes.  On Goblin Pass one of them (38907) is a"
                          " big blocker that crosses the camera plane and hides the barrel"
-                         " (finding #550); drop the flag to see it come back")
+                         "; drop the flag to see it come back")
     ap.add_argument("--drop-id", action="append", default=[], type=int, metavar="ID",
                     help="never emit this pack geometry-attribute id (repeatable); for sweeping a"
                          " single mesh out of the world set while a rule is being pinned down")
@@ -310,7 +309,7 @@ def main():
     ap.add_argument("--stage-material", action="store_true",
                     help="for a world mesh the material walk cannot name (the cave shell is"
                          " RamData/packet-drawn), fall back to the stage's BG ground/object texture"
-                         " chosen by the mesh's mean normal (finding #544; needs --textures)")
+                         " chosen by the mesh's mean normal (needs --textures)")
     ap.add_argument("--ground-tex", metavar="NAME",
                     help="override the stage-material ground texture (default: the BG ground set's"
                          " `s` variant, P11G00s on Goblin Pass)")
@@ -347,7 +346,7 @@ def main():
     for gid, (name, diag, _ze, _uv) in bounds.items():
         by_name.setdefault(name, []).append(gid)
     # A character can live in another pack: the player is `P_susanoo_Skin0Shape*` in
-    # NDMW.AFS:861, a model file the stage pack does not contain (finding #555).
+    # NDMW.AFS:861, a model file the stage pack does not contain.
     char_by_name = by_name
     if getattr(args, "character_pack", None):
         cb = pack_bounds(args.character_pack, args.decomp)
@@ -369,7 +368,7 @@ def main():
         pack_tex = tm.pack_id_textures(a2p)
         shape_tex = tm.per_shape_pack_textures(pack_shape_keys(args.pack, args.decomp))
         name_tex = tm.name_textures
-        print("  textures: %d pack mesh(es) content-match, %d by (primType,numPrims) key (#565),"
+        print("  textures: %d pack mesh(es) content-match, %d by (primType,numPrims) key,"
               " %d live shape name(s)" % (len(pack_tex), len(shape_tex), len(name_tex)))
 
     normals, fallback = {}, (None, None)
@@ -382,9 +381,9 @@ def main():
         if name and name in prop_tex:
             texs = [prop_tex[name]]
         else:
-            # The per-shape binding (#565) first: the live material's own shape's texture, keyed by
+            # The per-shape binding first: the live material's own shape's texture, keyed by
             # (primType, numPrims).  Then the vertex-buffer content match, the live shape name, and
-            # the stage-material fallback (#544) for the RamData-drawn meshes none of the above reach.
+            # the stage-material fallback for the RamData-drawn meshes none of the above reach.
             texs = sorted({t for i in ids for t in shape_tex.get(i, ())})
             if not texs:
                 texs = sorted({t for i in ids for t in pack_tex.get(i, ())})
@@ -402,9 +401,9 @@ def main():
         rows.append(line)
 
     # 1. the world-space environment: identity.  The world test has two parts: a screen-space
-    #    UI/backdrop card is flat in z (finding #546), and a mesh the live scene *places* (a prop,
+    #    UI/backdrop card is flat in z, and a mesh the live scene *places* (a prop,
     #    a backdrop sphere) must not be drawn at identity -- only the unplaced shapes are authored
-    #    in world space (finding #520).  Together they replace the old `--big`-only heuristic.
+    #    in world space.  Together they replace the old `--big`-only heuristic.
     ident = [1.0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 1.0]
     # A mesh that is placed *and* also drawn unplaced is still world geometry, so only the
     # placed-only ids are dropped.
@@ -422,7 +421,7 @@ def main():
                 # normal (0.04, 1.00, 0.02)); the wall/dome wraps, so its mean normal is tilted
                 # even though it still points up (21835: (-0.47, 0.86, 0.19)).  The plain
                 # `n[1] > 0.5` test called both of them floor and put the ground texture on the
-                # wall (finding #547).
+                # wall.
                 planar = abs(n[0]) + abs(n[2])
                 fb = fallback[0] if (n[1] > 0.5 and planar < 0.15) else fallback[1]
         row(ident, gid, fb=fb)

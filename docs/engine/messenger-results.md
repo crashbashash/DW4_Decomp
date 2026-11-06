@@ -6,7 +6,7 @@ All bodies have readable [behavioral C](../../recovered/engine/messenger-results
 Twenty have matching C/C++ in [beMessengerResults.c](../../src/game/beMessengerResults.c)
 and [beMessengerResults.cpp](../../src/game/beMessengerResults.cpp); the other twelve
 match in [beMessengerArgs.cpp](../../src/game/beMessengerArgs.cpp) (seven) and in one-function files
-under `src/unmatched/` (five). Finding [#862](../findings/findings-0751-1000.md#f862) records this boundary.
+under `src/unmatched/` (five).
 
 Receiver selection and actual message routing have a separate complete
 [behavioral recovery](messenger-dispatch.md); receiver virtual implementations

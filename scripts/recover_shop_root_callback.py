@@ -2,7 +2,7 @@
 
 Run without analysis, then regenerate function/symbol snapshots with their owning
 scripts. Each entry is proven by literal registrar arguments and exact leaf words;
-this script refuses overlap and rolls back on any failed check. Finding #909.
+this script refuses overlap and rolls back on any failed check.
 """
 from ghidra.program.model.address import AddressSet
 from ghidra.program.model.symbol import SourceType
@@ -11,7 +11,7 @@ ROWS=((0x3b65b0,(0x3c010059,0x03e00008,0x8c22b010)),)
 def main():
     space=currentProgram.getAddressFactory().getDefaultAddressSpace()
     memory=currentProgram.getMemory();manager=currentProgram.getFunctionManager()
-    tx=currentProgram.startTransaction('Reviewed WindowCtrl metadata callback #909');ok=False
+    tx=currentProgram.startTransaction('Reviewed WindowCtrl metadata callback');ok=False
     try:
         # RegisterClass argument3 is the parent metadata accessor. Check both
         # instruction halves, not a guessed association from address proximity.

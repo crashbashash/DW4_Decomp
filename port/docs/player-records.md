@@ -115,15 +115,13 @@ Retail BASE2CURRENT `3f82a0` aliases common FLAG/FLAGFOLDER/COUNTER to player ze
 BASE_* records. Native publication binds those aliases by stable folder and key,
 so replacing a private payload cannot leave an old buffer referenced. Reads,
 setters, describe/copy and commits resolve that alias; creating another player
-never retargets it. Finding [#804](../../docs/findings/findings-0751-1000.md#f804) records these records and aliases.
+never retargets it.
 
 ## Template evidence and record types
 
 Retail initializer `0x003f7310` passes template **`0x004cedf0`** to `0x003f6620`.
 Each 12-byte entry is `{type,count,name}`, with its name at +8. The first entry's
 name pointer is therefore at `0x004cedf8`; that address is not the template base.
-Finding [#297](../../docs/findings/findings-0251-0500.md#f297), which places the template at `0x4cedf8`, is refuted; finding [#795](../../docs/findings/findings-0751-1000.md#f795)
-records the initializer evidence.
 
 The constructor dispatch at `0x00518b90` distinguishes scalar integer (0), integer
 array (1), scalar byte (2), byte array (3), string (4), string array (5), object
@@ -159,8 +157,7 @@ nonallocating; this does not recalculate stats or advance gameplay.
 
 The normal loading path publishes the created player's actual health/level into
 its lobby HUD owner. The STATUS factory's health/HUD restoration is described in
-[live factory wiring](status-menu.md#live-factory-wiring). Finding [#810](../../docs/findings/findings-0751-1000.md#f810) records
-these boundaries.
+[live factory wiring](status-menu.md#live-factory-wiring).
 
 ## Private stage-transition snapshots
 

@@ -110,8 +110,7 @@ floor probe.
 All twelve authored jump motions (three phases for dual/slash/arm/gun) prepare with the immutable
 player asset, including the separate shadow skin. Motion, previous-motion blending and
 weapon-bone attachments use the selected native animation clock. Weapon changes update jump/fall
-labels as well as idle/walk. This is a bounded Main Lobby jump implementation. Evidence: finding
-[#851](../../docs/findings/findings-0751-1000.md#f851).
+labels as well as idle/walk. This is a bounded Main Lobby jump implementation.
 
 ### Gate proximity
 
@@ -123,7 +122,7 @@ shared retail RNG and strict quantized timers are used, including single-choice 
 gates keep WAIT01 and do not acquire proximity choices. Authored OFF2ON/ONSW01/ON2OFF/OFSW01
 clocks, opacity and generated transforms reach the renderer. Callbacks detach before registry
 release. This binds the single created player; general nearest-target selection and live co-op
-are not covered. Evidence: finding [#852](../../docs/findings/findings-0751-1000.md#f852) and original manager 390f80.
+are not covered. Evidence: original manager 390f80.
 
 ### Heal gate and HP/MP recovery
 
@@ -141,7 +140,7 @@ SYSctlPlayer HP/MP reads current/max values from the session record. Original GA
 ADDHP/ADDMP commands apply recovered wrapped addition, dead-HP guard, optional absolute HP and
 maxima clamps, then publish authored HUD meters/numbers. The helper's optional notice flag is
 accepted, but the additional player x_250healhit00 particle effect is not published. Evidence:
-finding [#853](../../docs/findings/findings-0751-1000.md#f853), 3fca10 cases 9/10 and scalar leaves 3f9c80/3f9e20. No save is written by these
+3fca10 cases 9/10 and scalar leaves 3f9c80/3f9e20. No save is written by these
 services.
 
 ### Jump, gate and heal validation
@@ -173,7 +172,7 @@ STATUS/manual holds retain the clock, and repeated drawing cannot advance it.
 Source 1bf7d0 wraps mode 0/3 strictly after first+duration; the exact end sample is retained and
 the authored duration is distinct from the last quantized key. Ninety-six original instruction
 cases validate that boundary. The loop/fraction helpers keep their native signatures; matching
-source is unchanged. Evidence: finding [#854](../../docs/findings/findings-0751-1000.md#f854).
+source is unchanged.
 
 ### Commander-room effect instances
 
@@ -185,7 +184,6 @@ template copies and applies slot zero's generated placement to all three. Slot z
 anchored at (5,27,15); the authored -7 Y effect transform places the surface on the platform.
 Rendering and diagnostics verify three allocated slots but one visible branch at the original
 center. General multi-instance publication is outside this created-player lobby adapter.
-Evidence: finding [#855](../../docs/findings/findings-0751-1000.md#f855).
 
 ### Walking falls
 
@@ -199,8 +197,7 @@ selected weapon's PDMOVE/Fall/jump*02/jump*03 commands keep their original horiz
 arithmetic and motion clocks. The wall half runs the recovered retail ray query
 ([hub travel](hub-travel.md#wall-solver)); the floor
 half stays the bounded triangle solver. Walking off Main Lobby steps/platforms is implemented;
-ride-on collision, body combat collision and other stages need separate retail checks. Evidence:
-findings [#856](../../docs/findings/findings-0751-1000.md#f856), [#3003](../../docs/findings/findings-3001-3250.md#f3003).
+ride-on collision, body combat collision and other stages need separate retail checks.
 
 Retail evidence comes from the pristine disc and the fresh-Dorumon slot 44 state (settled spawn
 (60,10,-30)). A validated node-matrix placement starts at the stair platform (175,30,-40);
@@ -238,8 +235,6 @@ listed under [Gate pads](#gate-pads).
 
 ## Name labels and the travel prompt
 
-Finding [#1017](../../docs/findings/findings-1001-1250.md#f1017).
-
 - **Labels.** The `matf*` material regions of every hub stage run their original scripts, which
   call `PintmessOpen`: the bottom band (`i_stpnl06`) shows the object's name and the arrow
   `i_pointcur` stands over it ("Gate to Outside World", "Gate to Commander Room", "Heal Circle",
@@ -247,6 +242,13 @@ Finding [#1017](../../docs/findings/findings-1001-1250.md#f1017).
   Appraisal Keepers in Central; the Disk, Weapon, Armor, Chip and Junk Shops and the Bank Keeper
   in the Shop Area). The Shop Area's Junk Shop region is only reachable at height 90. The label
   text sits within 1 px of retail on four compared Terminal labels.
+- **Opening a label.** `PintmessOpen` opens `i_stpnl06` with `SQ_OPEN` (instance 4 for the single
+  player), writes the name centred into `POINTFONT00/font04` and generates `i_pointcur` on the WN00
+  layer at the target's world position (`V<pos>/V<rot>/SQ_OPEN4`). Leaving the region closes both.
+  The Terminal's regions are `matf00` Gate to Outside World, `matf01` Gate to Commander Room,
+  `matf02` Heal Circle, `matf03` Emergency Gate and `matf04` Call Keeper; `mate01` and `mate02` are
+  the Commander Room and emergency travel triggers. Only `i_pointcur` is projected with the scene
+  camera; the other WN models keep their screen layout.
 - **Draw order.** The lobby UI's models (the HUD) are drawn first and the window-layer models
   after them. The label text (the original's FONT layer) draws between the window layers: after
   WN00/WN01 (the band, `i_stpnl06`, is WN01, like the HUD's `i_stpnl00`) and before WN02
@@ -349,13 +351,14 @@ in retail frames of every NPC conversation; they return when the message closes.
 HUD ring sits over the speaker's portrait and the label stays up. `check-hubtalk` asserts the
 talk opens at the Save Keeper after its label; the hiding itself was checked on rendered frames.
 
-Retail timing (finding [#3111](../../docs/findings/findings-3001-3250.md#f3111)): a retail trace at the Terminal Digi-Elf (a 1-frame Cross press,
+Retail timing: a retail trace at the Terminal Digi-Elf (a 1-frame Cross press,
 then a fixed vsync count, then a single capture) shows that the HUD ring, digits, bottom band,
 side chevrons and the arrow over the player are gone within one frame of the press (the point
 label's text stays one frame longer), long before the window has opened (it opens over about 24
-frames) or any text shows. On the final Cross the text clears by about frame 20, the window has
-collapsed by about frame 28 and the HUD, band, label and arrow slide back in over about frames
-30-38. The hidden span brackets the speaker window's (`i_talkwn`) life, not the visible text.
+frames) or any text shows. On the final Cross the text clears by about frame 20 and the window has
+collapsed by about frame 28. The HUD does not slide back: it is first visible at frame 33 after the
+closing press and fades in over three frames (about 40%, 80% and full at frames 34, 35 and 36). The
+hidden span brackets the speaker window's (`i_talkwn`) life, not the visible text.
 
 `dw4_lobbyui_talk_open` therefore holds while any `TALKFONT*` text is visible
 (`dw4_dialogue_talk_open`) and while the `i_talkwn` controller is active, which hides within 3
@@ -363,8 +366,10 @@ ticks (`check-hubtalk`). Keying on visible text alone hides at tick 20 and resto
 the text clears. The return is a measured offset: in retail the HUD is first visible 33 frames
 after the closing press, about 11 frames after the window's closing range (16 frames) starts,
 while the window is still collapsing. `dw4_lobbyui_talk_open` ends the hidden span 11 frames
-after `SQ_CLOSEL` begins (`check-hubtalk` asserts 10-13), not at the window's removal. The
-trigger (script or engine) is not recovered, and the HUD's slide-in itself is not verified.
+after `SQ_CLOSEL` begins (`check-hubtalk` asserts 10-13), not at the window's removal, and the port
+draws the HUD at 1/3, 2/3 and full over the first three ticks after that. Only `i_stpnl06` gets
+`SQ_CLOSE` from a script and no stage script names the HUD ring models, which points at an
+engine-side hide tied to the message window; the exact trigger is not recovered.
 
 ## NPC dialogue end to end
 
@@ -395,7 +400,8 @@ retail.
 Source anchors include player control `3d22f0` (yaw fragment `3d252c..2558`), model update
 `395b50`, rotation refresh `3956e0`, GENERATE `396a80`, Work metadata `3511ac..3511c0` (control
 defaults true), MDLisLive `373dd0`, and Motion WAITCHECK `376340`. Decompiler exports were
-checked against retail objdump.
+checked against retail objdump. `MDLisLive` ORs the result bytes of its query rather than taking
+only the first result. GENERATE with only vector parameters, or bare, selects SQ_WAIT.
 
 `verify_modelai_retail.py` includes 324 exact player-yaw instruction cases with camera-vector
 construction and pad admission as controlled leaves. The movement/CTRL/turn/RNG oracles are
@@ -435,8 +441,7 @@ ticks. Missing private pose/fog inputs keep their explicit skips. Current tasks 
 - General gameplay audio and exact audible mixing.
 - Full-frame timing, phase and pixel parity with retail; physical controller and audio checks.
 - Complete portal destination menus/transitions for field and dungeon destinations.
-- The trigger of the HUD hide/return around NPC messages is not recovered and the HUD slide-in is
-  not verified.
+- The exact trigger of the HUD hide/return around NPC messages is not recovered.
 - The Call Keeper's drawing has no automated assertion; the items listed as not covered under
   [NPCs in the scripted first Terminal](#npcs-in-the-scripted-first-terminal) and
   [NPC dialogue end to end](#npc-dialogue-end-to-end).

@@ -9,7 +9,7 @@ extern int g_beNDMWItemBlueArmor_metaObject[4];
 
 /* Inventory word layout shared by every beNDMWItem* subclass: bits 0-9 record
  * number, bit 10 equipped flag, bits 12-15 item kind (see beNDMWItemDisk.c;
- * finding #335: the equipped flag is a byte store).  Blue armor adds two fields above that:
+ * the equipped flag is a byte store).  Blue armor adds two fields above that:
  * bits 16-19 the pocket and bits 20-30 the revision. */
 #define ITEM_REC_NO_MASK 0x3FF
 #define ITEM_EQUIPPED_BIT 0x400

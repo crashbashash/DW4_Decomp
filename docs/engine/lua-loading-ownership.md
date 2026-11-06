@@ -1,12 +1,12 @@
 # Lua loading and ownership
 
-Findings **[#790](../findings/findings-0751-1000.md#f790)–[#793](../findings/findings-0751-1000.md#f793)** establish the retail startup, lookup and cleanup contracts.
+This document records the retail startup, lookup and cleanup contracts.
 The native [scoped named cache](../../port/docs/lua-integration.md#scoped-named-chunks-and-lobby-unload)
 remains a host lifetime policy. The native ordered-info loader, startup milestones
 and coordinated scene reset now implement the contracts below; see
-[native implementation and limits](../../port/docs/lua-integration.md#recovered-retail-loading-and-ownership-790793).
+[native implementation and limits](../../port/docs/lua-integration.md#recovered-retail-loading-and-ownership).
 
-## Boot, shared definitions and scene startup ([#790](../findings/findings-0751-1000.md#f790))
+## Boot, shared definitions and scene startup
 
 The application loop `0x0025a580` initializes its managers and requests
 `ndmw.igb` through `beSystem`. Between scene loops it calls `0x0025afe0`, whose
@@ -55,7 +55,7 @@ VM recreation is separate from native session state. It must not reset the
 shared retail RNG, save fields or progression just because Lua globals are gone;
 those remain owned by their recovered native systems.
 
-## Duplicate names and fallback ([#791](../findings/findings-0751-1000.md#f791))
+## Duplicate names and fallback
 
 `0x00389ff0` traverses `beLua._infoList` forward. For each info object it scans
 `beLuaInfo._dataList` (`+0x1c`) forward. On its **first** matching `beLuaData.name`
@@ -86,7 +86,7 @@ missing-marker failures return -1. This path is distinct from cached original
 binary chunks. The native logical `dofile` hook remains an adapter; this recovery
 has not established its equivalence to every retail base-library file call.
 
-## Coordinated chunk, DM and SD teardown ([#792](../findings/findings-0751-1000.md#f792))
+## Coordinated chunk, DM and SD teardown
 
 The system-clock manager-wide RemoveAll body `0x002370c0` traverses registered
 managers **forward**, calling each vtable's `+0x70` method. Only after that pass
@@ -118,7 +118,7 @@ and replace the scene VM before publishing the destination. The exact retail
 order above belongs to the non-reentrant boundary; safely handling a host callback
 that requests unload still needs its tested deferred-release policy.
 
-## Evidence and reproduction ([#793](../findings/findings-0751-1000.md#f793))
+## Evidence and reproduction
 
 Run from the repository root:
 

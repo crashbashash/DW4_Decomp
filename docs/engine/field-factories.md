@@ -1,6 +1,6 @@
 # Concrete descriptor factories and initializer chains
 
-Finding [#880](../findings/findings-0751-1000.md#f880) records eighteen complete bodies / 1,752 code bytes in
+Eighteen complete bodies / 1,752 code bytes are recovered in
 [behavioral C](../../recovered/engine/field-factories.c). They cover the three
 factory kinds referenced by Work's original field table, their constructor and
 initializer chains, object header construction, raw allocation and the two concrete

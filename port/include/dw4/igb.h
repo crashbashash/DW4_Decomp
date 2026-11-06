@@ -26,7 +26,7 @@
 #define DW4_IGB_MAGIC   0x00000100u
 #define DW4_IGB_MAXSFX  48u          /* descriptor type ids are < 48 */
 
-/* The descriptor's type id IS the value's kind (finding #482, measured): a type-0 value is always
+/* The descriptor's type id IS the value's kind (measured): a type-0 value is always
  * an object id or NULL and a type-7 value always a pool-block id or NULL -- 0.0% "neither" over
  * 163,482 values of six packs -- while every other type has values outside the id space (floats
  * 88%, matrices 100%).  So a loader rewrites exactly these two kinds and reads the kind from the
@@ -79,7 +79,7 @@ typedef struct dw4_igb {
     uint32_t dir_off;
     uint32_t dir_end;
 
-    /* The pack's reference tables (findings #460 / #464).  A pack holds two object
+    /* The pack's reference tables.  A pack holds two object
      * chains: section 1 is the memory/object directory and section 2 the objects.
      * Between them sits the id remap table -- {u32 tableBytes}{u32 idCount} plus
      * idCount u16 -- whose entries index section 1.  Entries landing on an
@@ -122,7 +122,7 @@ uint32_t dw4_igb_find_chain(const dw4_igb *g, uint32_t lo);
  * caller can enumerate *all* chains rather than only the longest. */
 int dw4_igb_record_end(const dw4_igb *g, uint32_t off, uint32_t *end_out);
 
-/* ---- references: the id remap table and the content pool (findings #460 / #464) ---
+/* ---- references: the id remap table and the content pool ---
  *
  * Locate the two object chains, the remap table between them and the pool block
  * offsets, and build the id -> {pool block | object} map.  Returns 0 on success and

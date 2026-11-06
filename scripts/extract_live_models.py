@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Extract model geometry from a *paused* running DW4 (PINE).
 
-Recovered live-object chain (findings #453/#454/#455, #458):
+Recovered live-object chain:
 
     igGeometryAttr1_5   vtable 0x005238c0   (concrete igGeometryAttr)
       +0x0c  _vertexArray   -> igVertexArray object (vtable 0x00525190)

@@ -170,7 +170,6 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 190 tables, 3,099 entries, in 150 functions |
-| recorded findings | 2,290 (1438 confirmed, 92 refuted, 760 unconfirmed) |
 | Lua chunks decompiled | 5,291 |
 | field accesses using a **recovered** type (not an offset cast) | 24,677 of 56,090 (44.00 %) |
 | functions in the retail split (`asm/`, generated) | 20,214 |

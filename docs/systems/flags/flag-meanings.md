@@ -102,8 +102,8 @@ level gate, quest completion), **medium** = by pattern, **low** = heuristic.
 | --- | --- | --- |
 | `folder:0` | persistent story flag 0 | SYSctlFlagFolder |
 | `folder:1` | persistent story flag 1 | SYSctlFlagFolder |
-| `folder:10` | LordKnightmon ID (Electro Mine) | save observation [#128](../../findings/findings-0001-0250.md#f128); separate from script-derived labels |
-| `folder:11` | persistent quest-chain marker | SET in e0824/chunk_0104; corrected signed decoding [#787](../../findings/findings-0751-1000.md#f787) |
+| `folder:10` | LordKnightmon ID (Electro Mine) | save observation; separate from script-derived labels |
+| `folder:11` | persistent quest-chain marker | SET in e0824/chunk_0104; corrected signed decoding |
 | `folder:2` | persistent story flag 2 | SYSctlFlagFolder |
 | `folder:3` | persistent story flag 3 | SYSctlFlagFolder |
 | `folder:4` | persistent story flag 4 | SYSctlFlagFolder |

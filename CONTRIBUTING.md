@@ -15,8 +15,8 @@ There are a few ways to help:
 ## Before you start
 
 Follow the [README](README.md#installation) to get a build working, then check nobody has beaten you
-to it. Look through the [findings](docs/findings/README.md), where we keep what we've learned,
-including what didn't work. If you're planning something big, open an issue first so two people don't
+to it. Check the [documentation](docs/README.md) for the topic you're working on, including its notes
+on what didn't work. If you're planning something big, open an issue first so two people don't
 end up on the same module.
 
 ## Writing code
@@ -24,7 +24,7 @@ end up on the same module.
 The code has to match the original byte for byte, and a person has to be able to read it. Both count.
 
 - Name things for what they are, based on something you can point to, like a string or how it's
-  called. If you're only guessing, leave the name and write the guess up in the findings. Addresses
+  called. If you're only guessing, leave the name and note the guess in the topic's document. Addresses
   aren't names.
 - Clean up after the decompiler: rename `temp_s0` and `sp5C`, and use real structs instead of pointer
   maths.
@@ -58,8 +58,7 @@ If you changed `tools/` or the tables in `config/`, use `make check-fresh` and `
 ## Making a pull request
 
 1. Fork the repo and run `scripts/install_git_hooks.sh` once in your clone.
-2. Make your changes. If you learned something useful, add it to the findings too:
-   `python3 scripts/findings.py next` gives you the next number.
+2. Make your changes. If you learned something useful, add it to the document for that topic.
 3. Run the four checks above.
 4. Open a pull request with a clear title, like "Name the shop menu's page functions", and include the
    results of the checks.

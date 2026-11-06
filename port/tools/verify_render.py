@@ -6,7 +6,7 @@ named meshes of a stage pack and asserts, for each: the image is not the cleared
 fraction of it is covered, and two runs produce identical bytes (the pass is deterministic — no
 threads, no curves, no timing).  It is the renderer half of `make check`.
 
-It also pins the stage framing (findings #495/#496): the pack's own camera must compose
+It also pins the stage framing: the pack's own camera must compose
 (child x parent) to the position the live session measured, (0, 102.490, 74.565) for `stag0102` —
 that is pure pack data, so it runs with no RAM capture.  When `--scene <capture.tsv>` is given (a
 live capture from `scripts/capture_scene.py`) it additionally renders the placed stage through
@@ -109,9 +109,9 @@ def main():
                      "ok" if ok else "BAD"))
             if not ok:
                 bad += 1
-        # The character model packs (P3.5, finding #536): their records sit on the other
+        # The character model packs (P3.5): their records sit on the other
         # parity from the stage packs, so this is what proves a `p_*.igb` loads and draws.
-        # The three shapes are the player's actor LODs (finding #537).
+        # The three shapes are the player's actor LODs.
         for name in ("P_susanoo_Skin0Shape0", "P_susanoo_Skin0Shape1", "P_susanoo_Skin0Shape2"):
             out = os.path.join(tmp, "char_%s.png" % name)
             r = subprocess.run([args.tool, "render", "--afs", afs, "--entry", "861",
@@ -251,7 +251,7 @@ def main():
             if not ok:
                 bad += 1
 
-        # the fifth-column pack-attr-id join (finding #519): a capture row carrying a real pack
+        # the fifth-column pack-attr-id join: a capture row carrying a real pack
         # geometry-attribute id draws that mesh even though its name is not a pack name, and an
         # unknown id draws nothing -- the name is ignored whenever the column is present.
         tsv = subprocess.run([args.tool, "scene", "--stage", args.roms, args.stage,
@@ -288,7 +288,7 @@ def main():
 
         # --- the scene path's vertex normals ------------------------------------------------------
         # A scene row is shaded with the mesh's own unit-length normal stream where the pack ships
-        # one (the engine's LIGHT programs interpolate it; finding #559).  The scene reader resolves
+        # one (the engine's LIGHT programs interpolate it).  The scene reader resolves
         # it to a second `12*numVerts` block, so the check is a render: a mesh whose normals differ
         # from its face normals must come out *different* under `--flat` (the face-normal baseline)
         # than under the default.  Pack 621's id 1141 is such a mesh (3599 verts, smooth normals);
@@ -317,8 +317,8 @@ def main():
         # --- the game's per-vertex (gouraud) shading path ----------------------------------------
         # The GS lights each vertex and interpolates the *colour*; the port's other path interpolates
         # the normal and lights per pixel.  On a smooth-shaded mesh the two differ, so `--per-pixel`
-        # and `--gouraud` must render differently (finding #583), and both must still draw.  The
-        # game's path is the default (finding #591), so pin the explicit pair rather than a flag
+        # and `--gouraud` must render differently, and both must still draw.  The
+        # game's path is the default, so pin the explicit pair rather than a flag
         # against the default.
         p_ppx = os.path.join(tmp, "nrm-perpixel.png")
         subprocess.run([args.tool, "render", "--stage", args.roms, args.stage,
@@ -336,7 +336,7 @@ def main():
         cov_g = coverage(p_gour, gl_bg)[0] if os.path.exists(p_gour) else None
         differs_g = (os.path.exists(p_ppx) and os.path.exists(p_gour) and
                      open(p_ppx, "rb").read() != open(p_gour, "rb").read())
-        # Pin the texture-modulation SOURCE (finding #587) with a render identity.  The GS's
+        # Pin the texture-modulation SOURCE with a render identity.  The GS's
         # modulate is per fragment: out = (texel * fragment_colour) / 255, and the port computes
         # both halves independently -- `--unlit --texture` gives the texel map (white x texel),
         # plain `--gouraud` gives the interpolated colour map -- so the textured gouraud render
@@ -400,11 +400,11 @@ def main():
         if not ok:
             bad += 1
         if not default_is_gouraud:
-            print("  %-18s the default render is not the game's per-vertex path (finding #591)  BAD"
+            print("  %-18s the default render is not the game's per-vertex path  BAD"
                   % "gouraud default")
             bad += 1
 
-        # --- the game's own stage fog (the GS fog stage, findings #603/#604) ---------------------
+        # --- the game's own stage fog (the GS fog stage) ---------------------
         # The scene path now defaults to the engine's recovered fog: FOG_LINEAR, near 60 / far 300,
         # lerping toward FOGCOL 0xE5CCE5.  The port previously left fog off, so the two things to
         # pin are that the default actually applies it (a scene render differs from --no-fog) and
@@ -474,7 +474,7 @@ def main():
             # The game's own `igTextureAttr` records ask for linear magnification and minification
             # (`_magFilter`/`_minFilter` = 1) on every material that carries a texture -- the crate's
             # `g_woodencasez01`, the barrels, the cave, the floor -- with 0 only on a handful of
-            # internal records, and the GS filters accordingly (finding #562).  The port sampled
+            # internal records, and the GS filters accordingly.  The port sampled
             # nearest, so the check is a render of that same textured row: `--nearest` must differ
             # from the default and both must still draw.
             fl = os.path.join(tmp, "filt-linear")
@@ -499,7 +499,7 @@ def main():
             if not ok:
                 bad += 1
 
-            # --- the stage-material fallback (`--default-tex`, finding #544) -------------------
+            # --- the stage-material fallback (`--default-tex`) -------------------
             # A scene row the material walk cannot name (the cave shell is RamData/packet-drawn)
             # gets the stage's own material via --default-tex, split by the mesh's mean normal; that
             # must differ from the same row left flat.
@@ -521,7 +521,7 @@ def main():
                 if not differs:
                     bad += 1
 
-        # --- near-plane clipping (finding #544 follow-up) -----------------------------------------
+        # --- near-plane clipping -----------------------------------------
         # The camera sits *inside* a stage's cave, so a triangle straddling the near plane is the
         # common case; dropping it (the old behaviour) left the frame's "gaps".  Render pack 614's
         # 21721 -- a cave shell the recovered Goblin Pass camera is inside -- and require the frame
@@ -743,7 +743,7 @@ def main():
 
         # --- live textures from a RAM dump (`--livedump`, P4.1's material residual) ---------------
         # A stage pack's texture list does not carry every material: the character's texture is an
-        # `igPsx2Image` reachable only through the live object graph (finding #525's residual).
+        # `igPsx2Image` reachable only through the live object graph.
         # With a dump, `livetex` must find them and the scene renderer must sample the one a row
         # names, so a row textured from the dump differs from the same row untextured.
         if not args.livedump or not os.path.exists(args.livedump):
@@ -792,7 +792,7 @@ def main():
                     if not ok:
                         bad += 1
 
-        # --- the stage camera (findings #495/#496) ---------------------------------------------
+        # --- the stage camera ---------------------------------------------
         # The pack's own camera node composes child x parent into a world matrix; its translation is
         # the measured (0, 102.490, 74.565).  This is pure pack data: if the composition breaks (a
         # parent link lost, the multiply order flipped, the chain truncated) the number moves, which
@@ -819,7 +819,7 @@ def main():
 
         # the whole-stage framing: render the placed stage through that camera, twice, and require
         # a non-degenerate deterministic frame.  Needs the live capture (placement is not in the
-        # pack, finding #484), so it is skipped rather than faked when no capture was supplied.
+        # pack), so it is skipped rather than faked when no capture was supplied.
         if args.scene and os.path.exists(args.scene):
             outs = []
             for run in (0, 1):
@@ -837,7 +837,7 @@ def main():
             if len(outs) == 2:
                 cov, _ = coverage(outs[0])
                 same = open(outs[0], "rb").read() == open(outs[1], "rb").read()
-                # the measured camera fills the frame (389 of 702 placements on screen, #496), so
+                # the measured camera fills the frame (389 of 702 placements on screen), so
                 # the frame must be substantially covered -- a floor well above a dot.  (An
                 # interior stage legitimately covers ~everything; the floor is what catches the
                 # 'auto-fit zoomed to one cluster' failure.)

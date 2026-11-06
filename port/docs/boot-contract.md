@@ -117,15 +117,15 @@ and fully hidden alpha; optional test output captures all three cards for inspec
 ## Title screen
 
 The title frame is drawn in `dw4_engine_boot` (`src/engine.c`) in the game's own composition order:
-the static `stagML11` backdrop through the recovered title camera (finding [#638](../../docs/findings/findings-0501-0750.md#f638)), the generated
+the static `stagML11` backdrop through the recovered title camera, the generated
 additive `j_startback` trail, then the recovered UI tree over both. The dark field and the game-font
 rows remain only as the fallback when the pack graphs are unavailable.
 
-**Two states (`src/frontui.c`, finding [#639](../../docs/findings/findings-0501-0750.md#f639)).** The title boots to the **press-start** screen (logo +
+**Two states (`src/frontui.c`).** The title boots to the **press-start** screen (logo +
 copyright + the "Press START button" line, the `j_startmenu01` graph) and only **START** advances to
 the **"Game Start" / "Option"** rows (`j_startmenu02`); Cross confirms once inside the menu. Before
 the UI draws at all, the `j_startback` layer's `SQ_OPEN` plays **alone** — the game shows no title UI
-until its 209-frame opening (3.48 s) has finished (finding [#640](../../docs/findings/findings-0501-0750.md#f640)), so the UI's clock is offset by
+until its 209-frame opening (3.48 s) has finished, so the UI's clock is offset by
 `dw4_frontlayer_open_ns()` and its nodes stay degenerate until then.
 
 **Controller.** The title/Options input loop uses the imported recovered controller; see
@@ -135,17 +135,20 @@ with queries for the five rendered greeting models. Original title `first.lua`
 completes against model/camera state in integration checks, while the live title scene orchestration
 is the bounded adapter.
 
-**Trail layer (`src/frontlayer.c`, findings [#610](../../docs/findings/findings-0501-0750.md#f610)/#611/#612).** The backdrop's animated additive layer
+**Trail layer (`src/frontlayer.c`).** The backdrop's animated additive layer
 is generated from the pack's own model controller. `src/frontlayer.c` loads `AREA.AFS` entry 620's
 `j_startback` graph and its `sback00` texture (its 8 bpp `igImage` grid through the `igClut` its
 `_pClut` names) and plays the scripted schedule: `SQ_OPEN` frames `0…209` one-shot, then `SQ_WAIT`
-frames `240…360` looping (finding [#614](../../docs/findings/findings-0501-0750.md#f614); `beAction2JOINTSET` is a *time range* with a loop mode, not a
+frames `240…360` looping (`beAction2JOINTSET` is a *time range* with a loop mode, not a
 joint count). It recomputes each animated `igTransform` node's time from the host's 60 fps engine
-clock (`_time = ((int64)(_timeScale*(engineTime>>18)))<<18 + _timeBias`, finding [#619](../../docs/findings/findings-0501-0750.md#f619)), then draws
-the graph's 16 `igGeometry` meshes / 3184 triangles once each (finding [#623](../../docs/findings/findings-0501-0750.md#f623)) additively in a
+clock (`_time = ((int64)(_timeScale*(engineTime>>18)))<<18 + _timeBias`), then draws
+the graph's 16 `igGeometry` meshes / 3184 triangles once each additively in a
 perspective screen space. The layer moves every frame and needs nothing but the game's assets.
+`sback00.png` is a 128x64 byte-per-pixel grid (`_imageSize` 8192) read through a 256-entry palette with
+RGBA in the four entry bytes, not the texture packs' layout; decoded this way it reproduces the game's
+uploaded `sback00` texture pixel for pixel.
 
-**UI tree (`src/frontui.c`, findings [#632](../../docs/findings/findings-0501-0750.md#f632)/#633/#634).** The logo, the copyright block and the rows
+**UI tree (`src/frontui.c`).** The logo, the copyright block and the rows
 are pack data, not hand-placed. `src/frontui.c` loads `AREA.AFS` entry 620's `j_startlogo` /
 `j_startmenu01` / `j_startmenu02` graphs through the shared `dw4_scene`, resolves each geometry
 node's mesh and its material texture through the pack's own chain (`igAttrSet._attributes` →
@@ -153,7 +156,7 @@ node's mesh and its material texture through the pack's own chain (`igAttrSet._a
 `logo.png`/`mojips.png`/`cursor.png` from the arena and draws the quads in the recovered screen-space
 (one unit = one pixel in a 640x448 space, +y up, `z` as painter depth). It draws `j_startlogo`'s
 `rogo`/`kenri` and the `j_startmenu01`/`02` rows and plays their recovered `beAction2`
-opening/selection/closing schedule (finding [#636](../../docs/findings/findings-0501-0750.md#f636)) on the engine clock. `src/scene.c` carries the two
+opening/selection/closing schedule on the engine clock. `src/scene.c` carries the two
 resolution passes (`add_materials`, `link_nodes`) and the inline-image table.
 
 **Text (`src/fefont.c`).** The game's own font is decoded from `bectext.igb` on the disc — the
@@ -375,8 +378,8 @@ What the tree is built from:
   ([concrete STATUS views](status-views.md)).
 - **Records and transactions.** Staged commits and private previews, CTRLITEM DEVICE operations and
   CURRENT2BASE persistence pass retail instruction comparisons. Production
-  [stat/technique recalculation](player-stats.md) supports those transactions and fresh creation
-  ([#797](../../docs/findings/findings-0751-1000.md#f797)), with production database item attributes ([player transactions](player-transactions.md)).
+  [stat/technique recalculation](player-stats.md) supports those transactions and fresh creation,
+  with production database item attributes ([player transactions](player-transactions.md)).
 - **Submenus.** Equipment/folder/skill orchestration and scene freeze/entry/restoration ordering have
   owned native callbacks and retail checks. Authored Select01/SelectE0/SelectE1, shared
   equipment-base orchestration and accepted transaction IO are available. Concrete equipment,

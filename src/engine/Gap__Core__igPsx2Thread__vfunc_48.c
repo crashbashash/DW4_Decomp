@@ -3,7 +3,7 @@
  * reports the outcome through the first (hidden return-slot) argument: a
  * negative SDK result publishes the engine's failure status word, anything
  * else the success word.  Both words are set once at engine start-up
- * (docs/engine/array-storage.md, findings #504: 0x4fb410 = 0, 0x4fb418 = 1).
+ * (docs/engine/array-storage.md: 0x4fb410 = 0, 0x4fb418 = 1).
  * Vfunc 49 is the same body calling iResumeThread (interrupt-handler variant). */
 #include "dw4/reflected.h"
 

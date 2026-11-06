@@ -1,8 +1,7 @@
 # Main Lobby arrival rendering
 
 The first arrival loads `stagml11.igb`, NDMW 820, BG02 and `camsp0101`. The renderer uses the
-stage's own geometry and materials, not a frame replay. The rendering recovery is recorded in
-finding **[#775](../../docs/findings/findings-0751-1000.md#f775)**.
+stage's own geometry and materials, not a frame replay.
 
 Normal created-card Main Lobby login runs the original start/first scripts with scene-owned
 actor/player movement, collision, motion/opacity publication and restoration; that contract is in
@@ -217,6 +216,10 @@ the four created starters uses the dual-weapon `waitD` branch.
 `slash` here is a **model-controller pose branch**, not the weapon's attack skill. A Bash Katana
 therefore uses `slash`/`waitS`; selecting `waitD` from the weapon's name or skill would be
 incorrect. The character-select preview keeps `waitC`.
+
+Each of the sixteen player forms (`shinka` rows 0..15) has an actor pack `m_<name>.igb` (`MODEL_NAME`
+without its `p_`) in `NDMW.AFS`, a model-controller info `p_<name>` in the hub packs and a HUD portrait
+range in `WAIT01..WAIT16`. The lobby needs nothing else per form but the equipped weapon asset.
 
 ### Evidence and native lookup
 
@@ -574,7 +577,7 @@ instead of the raw clock. Clamping the embedded animations to their end in the g
 draws an extra upper line and the `»`/`«` chevron meshes (`polySurfaceShape16/17`) that retail
 frames do not show. `check-hubtalk` asserts the idle panel's node time is zero while a running
 NPC action advances. Evidence is the sequence data, first.lua and two retail frames; there is no
-instruction trace of the retail draw path (recorded as an unconfirmed finding).
+instruction trace of the retail draw path, so this is unconfirmed.
 
 `dw4_modelview_open` skips the five `i_stpnl00..04` controller instances; the lobby HUD, which
 `lobbyui` draws from the real records, is their single owner. Drawing them in the hub's generic
@@ -628,7 +631,7 @@ checked only against the authored 3-place `lvnm1` geometry.
 
 ### Portrait tiles of the evolved forms
 
-The portrait window's `WAIT01..WAIT16` ranges are not in shinka row order (finding [#1016](../../docs/findings/findings-1001-1250.md#f1016)). Each
+The portrait window's `WAIT01..WAIT16` ranges are not in shinka row order. Each
 evolved form's retail arrival HUD (after a Digi-Lab evolution of a controlled card character) was
 matched to its atlas tile: shinka rows 4..15 show tiles 8, 7, 9, 4, 6, 5, 15, 10, 11, 14, 12, 13
 (zero-based; rows 0..3 are the starters in order). `lobbyui.c` applies that table; `test_lobbyui`

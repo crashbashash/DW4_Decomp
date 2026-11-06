@@ -349,7 +349,7 @@ static int cmd_reflect(const uint8_t *blob, size_t len, const char *label)
     return 0;
 }
 
-/* The pack's reference tables (findings #460/#464): the id remap table between the two
+/* The pack's reference tables: the id remap table between the two
  * object sections, and the content-pool block offsets (an igMemoryRef value is the id
  * of its block, so offset = pool_start + sum of _memSize of the block ids below it). */
 static int cmd_refs(const uint8_t *blob, size_t len, const char *label)
@@ -781,7 +781,7 @@ static int cmd_media(const char *roms, const char *verb, const char *name, const
 
 
 /* The stage sound packs.  A stage's `[0.620]` pack is an igBinary container whose
- * content pool holds six `ps2_DTPK` banks (finding #450); each bank is VAG ADPCM and
+ * content pool holds six `ps2_DTPK` banks; each bank is VAG ADPCM and
  * decodes to a WAV.  The banks are listed by index; the pack's `beCriSfpData` records
  * name them (e_goburi.sfp, ...), and tools/verify_sound.py matches that name set.
  *
@@ -912,7 +912,7 @@ static int cmd_sfp(const uint8_t *blob, size_t len, const char *label, int argc,
 }
 
 /* Decode an indexed texture from explicit inputs.  The buffers cannot be located
- * offline yet (a memory ref is a load-time ordinal, finding #433), so the CLI takes
+ * offline yet (a memory ref is a load-time ordinal), so the CLI takes
  * the index and palette bytes directly: the decode half is what the renderer needs,
  * and it is testable on its own (tools/verify_texture.py). */
 static int cmd_texture(const char *src_path, const char *png_path, int argc, char **argv)
@@ -1011,7 +1011,7 @@ static int cmd_texture(const char *src_path, const char *png_path, int argc, cha
 
 /* Textures from a live EE RAM dump (`livetex.c`): list every named `igPsx2Image`, or decode
  * one to a PNG.  This is the source the pack path cannot reach for a character/world material
- * (finding #525's residual) -- the live graph points at ordinary pointers.
+ * -- the live graph points at ordinary pointers.
  *
  *   dw4asset livetex <ram.bin> --list
  *   dw4asset livetex <ram.bin> --decode E_ogre01.png --out ogre.png
@@ -1064,7 +1064,7 @@ static int cmd_livetex(int argc, char **argv)
 }
 
 /* A skinned character mesh from the same kind of dump: the runtime blend stream, the bone map
- * and the matrix palette, skinned in C (findings #532/#535).  This is the counterpart of
+ * and the matrix palette, skinned in C.  This is the counterpart of
  * `scripts/live_skin.py`; `tools/verify_skin.py` diffs the two OBJs. */
 static int cmd_skin(int argc, char **argv)
 {
@@ -1120,7 +1120,7 @@ static int cmd_skin(int argc, char **argv)
 }
 
 /* A texture pack read end to end: the pool layout, the id->class table and the
- * image -> palette link (findings #472/#473/#476).  Nothing here needs a load replay,
+ * image -> palette link.  Nothing here needs a load replay,
  * so this is the offline texture loader the renderer consumes. */
 static int cmd_texpack(const uint8_t *blob, size_t len, const char *label, int argc,
                        char **argv)
@@ -1415,7 +1415,7 @@ static int cmd_scene(int argc, char **argv)
         else if (strcmp(argv[i], "--arena-out") == 0 && i + 1 < argc)
             arena_out = argv[++i];
         else if (strcmp(argv[i], "--stage") == 0 && i + 3 < argc) {
-            /* --stage <roms-dir> <stage.igb> --ref N : the engine's own route (finding #445) */
+            /* --stage <roms-dir> <stage.igb> --ref N : the engine's own route */
             const char *roms = argv[++i], *stage = argv[++i];
             uint32_t idx = 0;
             if (i + 1 < argc && strcmp(argv[i + 1], "--ref") == 0 && i + 2 < argc) {
@@ -1530,7 +1530,7 @@ static int cmd_scene(int argc, char **argv)
         printf("  wrote %s (%u bytes)\n", arena_out, (uint32_t)sc.arena_len);
     }
     if (cam || cam_node) {
-        /* The stage's own camera (porting P4.2/P4.3, findings #495/#496): a camera node's
+        /* The stage's own camera (porting P4.2/P4.3): a camera node's
          * **world** matrix is its ancestor chain composed child x parent, and the view matrix is
          * that world's affine inverse.  `--cam` reports the stage camera (the first camera whose
          * composed world is not the identity) and every candidate; `--cam-node NAME` reports one. */
@@ -1547,7 +1547,7 @@ static int cmd_scene(int argc, char **argv)
                sc.node[sel].name ? sc.node[sel].name : "-", sel, sc.node[sel].depth,
                (double)swm[12], (double)swm[13], (double)swm[14]);
         if (!cam_node) {
-            /* list every igCamera so the chosen one can be audited (findings #495/#496) */
+            /* list every igCamera so the chosen one can be audited */
             for (j = 0; j < sc.nnode; j++) {
                 float wm[16];
                 if (!sc.node[j].class_name || strcmp(sc.node[j].class_name, "igCamera") != 0)
@@ -1558,7 +1558,7 @@ static int cmd_scene(int argc, char **argv)
                        sc.node[j].depth, (double)wm[12], (double)wm[13], (double)wm[14]);
             }
         } else {
-            /* the selected node's own chain and matrices, as finding #495 recorded it */
+            /* the selected node's own chain and matrices */
             uint32_t chain[64], nc = 0;
             for (k = (uint32_t)sel; k != 0xFFFFFFFFu && nc < 64; k = sc.node[k].parent)
                 chain[nc++] = k;
@@ -1725,7 +1725,7 @@ done:
  *
  * Every mesh of the pack is drawn into a grid cell with a camera fitted to it, shaded by a Lambert
  * term and tinted per mesh, so the geometry the loader produced is visible.  This is *not* the game's
- * own pipeline: the stage's object placement is a runtime assignment (finding #484), so a stage's
+ * own pipeline: the stage's object placement is a runtime assignment, so a stage's
  * layout cannot be drawn from the pack alone. */
 /* One matched mesh in the merged scene: where its vertices and triangles sit in the merged
  * buffers, and a tint so neighbouring surfaces are told apart (the merge is one tint otherwise). */
@@ -1789,11 +1789,11 @@ typedef struct {
  * {u32 w}{u32 h}{rgba} file, so the scene path can sample it too).
  *
  * The file is the pack's own image order (row 0 = the first row the index data stores, which is
- * the GS's v=0), but the sampler indexes with `(1 - tv)` (findings #562/#579) and so wants the
+ * the GS's v=0), but the sampler indexes with `(1 - tv)` and so wants the
  * array bottom-up -- exactly what `dw4_texpack_rgba` produces for the texture packs, by reading
  * `grid + (h - 1 - y) * w`.  Flip the file here so both texture sources meet the sampler in one
  * convention; writing the .rgba pre-flipped instead is what made the props sample the mirrored
- * texel and the barrel's metal trim read pale (finding #579). */
+ * texel and the barrel's metal trim read pale. */
 static void rgba_flip_rows(uint8_t *rgba, uint32_t w, uint32_t h)
 {
     uint32_t y;
@@ -1912,7 +1912,7 @@ static void texcache_free(dw4_texcache *tc)
     }
 }
 
-/* The per-mesh hash tint that used to live here is gone (finding #563/#568): the world materials
+/* The per-mesh hash tint that used to live here is gone: the world materials
  * carry no `igMaterialAttr`/`igColorAttr`, and the GS's per-vertex colours (which the live rig
  * reproduces) are the only shade on the mesh, so a scene row defaults to white.  `--tint R,G,B`
  * still applies one constant colour to every row for an experiment. */
@@ -1928,7 +1928,7 @@ static void texcache_free(dw4_texcache *tc)
  * #499) loads through `--lights FILE` with no code change. */
 
 /* The mean face normal of one mesh, area-weighted -- the ground/wall split for the stage-material
- * fallback (finding #544).  A mesh with no usable normal is treated as a wall. */
+ * fallback.  A mesh with no usable normal is treated as a wall. */
 static void mesh_mean_normal(const uint8_t *pos, uint32_t nv, const uint32_t *tris, uint32_t nt,
                              float out[3])
 {
@@ -1970,7 +1970,7 @@ static int ui_threads = 0;
 
 /* --ui-seq: the captured animated layer, cycled in time (dw4/uireplay.h).  One frame is the whole
  * front-end menu as the GS drew it -- logo, rows, cursor, copyright and the streaming additive light
- * trails (findings #609/#610); the layer cannot be a transform of one picture because the engine
+ * trails; the layer cannot be a transform of one picture because the engine
  * regenerates its trails every frame, so the port cycles the engine's own captured frames. */
 static dw4_uiseq *ui_seq = NULL;             /* opened on the first drawn frame */
 static int ui_seq_draw(dw4_fb *fb, const char *dir, const char *texdir, double secs, double fps)
@@ -1985,7 +1985,7 @@ static int ui_seq_draw(dw4_fb *fb, const char *dir, const char *texdir, double s
 
 /* A mesh's per-vertex bone-index block: a pool block of exactly `num_verts` bytes whose bytes
  * are all small bone numbers.  Found by size, which is unique in the player's pack 861
- * (finding #596: the pack's 354/2018/3580-byte blocks are the three shapes' bone streams).
+ * (the pack's 354/2018/3580-byte blocks are the three shapes' bone streams).
  * A pack carries many same-sized blocks for other meshes, so the bone-range test is what
  * admits a block; a mesh with none keeps its bind pose. */
 static const uint8_t *scene_bone_block(const dw4_scene *sp, uint32_t num_verts)
@@ -2024,7 +2024,7 @@ static int cmd_render(int argc, char **argv)
     const char *texname = NULL;
     char deftx_ground[64] = "", deftx_wall[64] = "";  /* --default-tex G[,W]: the stage-material
                                                       * fallback for a scene row the material walk
-                                                      * cannot name (finding #544) */
+                                                      * cannot name */
     const char *live_path = NULL;
     const char *texdir = NULL;   /* --texdir: <name>.rgba for inline pack textures */
     const char *ui_path = NULL;  /* --ui: scripts/gs_ui.py's ui.tsv, drawn over the scene */
@@ -2044,7 +2044,7 @@ static int cmd_render(int argc, char **argv)
     int rgba_w = 0, rgba_h = 0;  /* --rgba-w/--rgba-h */
     const char *scene_tsv = NULL;
     const char *pack2 = NULL;   /* --pack2 AFS:ENTRY */
-    /* --pose-*: skin the character from the livedump (P4.1, finding #596).  The select is the
+    /* --pose-*: skin the character from the livedump (P4.1).  The select is the
      * skinned graph's igBlendMatrixSelect, the palette the igAnimationCombiner's matrix array
      * (+0x58), the node the beModelCtrlNode2 whose +0x20 matrix the character row already
      * carries -- the scene path applies it, so only the skinning itself is new here. */
@@ -2075,7 +2075,7 @@ static int cmd_render(int argc, char **argv)
     float cam[3] = { 0, 0, 0 };
     float span = 0;                     /* 0 = fit each mesh's own bounds */
     float yaw = 0.6f, pitch = 0.35f;
-    float amb[3] = { 0.3005f, 0.2444f, 0.2986f };   /* re-fitted live rig ambient (#574) */
+    float amb[3] = { 0.3005f, 0.2444f, 0.2986f };   /* re-fitted live rig ambient */
     dw4_light lights[DW4_MAX_LIGHTS];
     dw4_fog fog;
     int nlights = 0, have_fog = 0, no_fog = 0;
@@ -2084,7 +2084,7 @@ static int cmd_render(int argc, char **argv)
     float const_tint[3] = { 1.0f, 1.0f, 1.0f };   /* --tint R,G,B: one colour for every scene row */
     int have_const_tint = 0;
     uint32_t drawn = 0, skipped = 0, i;
-    uint32_t withn = 0;      /* meshes that ship decoded vertex normals (finding #458) */
+    uint32_t withn = 0;      /* meshes that ship decoded vertex normals */
     int rc = 0;
     int use_gl = 0;          /* --gl: draw the --scene path on the GPU backend */
     dw4_gl *gl = NULL;
@@ -2273,7 +2273,7 @@ static int cmd_render(int argc, char **argv)
             /* The stage-material fallback: a scene row with no recovered texture gets G when the
              * mesh's mean normal is up-facing, else W (or G when W is absent).  The names come from
              * the material walk (camera_match --stage-material); this is a join fallback, not a
-             * recovered binding (finding #544). */
+             * recovered binding. */
             const char *v = argv[++a];
             const char *comma = strchr(v, ',');
             size_t n = comma ? (size_t)(comma - v) : strlen(v);
@@ -2349,7 +2349,7 @@ static int cmd_render(int argc, char **argv)
         return 2;
     }
     /* The lighting rig (P4.4): the shading model is the game's, the values are supplied here
-     * because the disc and the savestates do not carry them (finding #499). */
+     * because the disc and the savestates do not carry them. */
     dw4_render_set_ambient(amb[0], amb[1], amb[2]);
     if (unlit)
         dw4_render_set_unlit(1);
@@ -2359,7 +2359,7 @@ static int cmd_render(int argc, char **argv)
     if (have_fog)
         dw4_render_set_fog(&fog);
     else if (scene_tsv && !no_fog) {
-        /* The game's own stage fog (the GS fog stage, findings #603/#604) is the default for a
+        /* The game's own stage fog (the GS fog stage) is the default for a
          * scene render, because the reference framebuffer carries it and every region improves
          * (whole 14.70 -> 10.96 at --blur 1.2).  `--fog` overrides, `--no-fog` drops it. */
         dw4_fog gf;
@@ -2378,7 +2378,7 @@ static int cmd_render(int argc, char **argv)
     /* An optional texture, from a texture pack's own name: this proves the mesh's UV pipeline
      * against real game data.  The model -> texture *binding* is a different question -- it lives on
      * igTextureBindAttr -> igTextureAttr -> igImage, and nothing in the pack links a mesh to it
-     * (finding #485) -- so the caller names the texture for now. */
+     * -- so the caller names the texture for now. */
     memset(&tex, 0, sizeof(tex));
     if (!tc.nentries) {
         tc.entries[0] = texentry;
@@ -2460,7 +2460,7 @@ static int cmd_render(int argc, char **argv)
         return 1;
     }
     /* A second pack the scene rows may name (the player's `P_susanoo_Skin0Shape*` live in
-     * NDMW.AFS:861, not in the stage's pack; finding #555).  A row resolves in the first pack that
+     * NDMW.AFS:861, not in the stage's pack).  A row resolves in the first pack that
      * has its id, so the stage's 566 meshes and the player's 3 can share one TSV. */
     if (pack2) {
         char *colon = strrchr(pack2, ':');
@@ -2474,7 +2474,7 @@ static int cmd_render(int argc, char **argv)
             *colon = ':';
         }
     }
-    /* Framing (findings #495/#496).  `--camera` uses the pack's own camera -- the game's framing --
+    /* Framing.  `--camera` uses the pack's own camera -- the game's framing --
      * with the measured 39.60 deg fov and the PS2 640x448 projection; `--fit` instead fits the
      * drawn geometry's own bounds (the default when neither is given); `--view` overrides both. */
     if (have_camera) {
@@ -2536,7 +2536,7 @@ static int cmd_render(int argc, char **argv)
     }
     if (fe) {
         /* The front-end's own layer, generated by the port instead of replayed from a capture
-         * (finding #610): the pack's scene graph is posed at `--time`, each geometry node's mesh is
+         *: the pack's scene graph is posed at `--time`, each geometry node's mesh is
          * projected into SCREEN space (the origin at the framebuffer centre, +x right, +y up, the
          * same 2D setup the UI rows use) and composited additively through the GS UI primitive. */
         const uint8_t rgba[3][4] = { { 63, 63, 70, 127 }, { 63, 63, 70, 127 },
@@ -2684,7 +2684,7 @@ static int cmd_render(int argc, char **argv)
                 tint[0] = const_tint[0]; tint[1] = const_tint[1]; tint[2] = const_tint[2];
             }
             if (want_attr >= 0 || want_name) {
-                /* one model, full frame; the mesh's own vertex normals (finding #458) smooth it */
+                /* one model, full frame; the mesh's own vertex normals smooth it */
                 const uint8_t *nrm = flat ? NULL
                                           : (const uint8_t *)dw4_scene_host(&sc, g->normals);
                 const uint8_t *uvp = (const uint8_t *)dw4_scene_host(&sc, g->uvs);
@@ -2751,7 +2751,7 @@ static int cmd_render(int argc, char **argv)
         }
     }
     /* A captured scene: one row per placed node -- the model's DCC name, its world matrix, and the
-     * geometry-attribute addresses a live capture found (finding #487).  The *name* is the link to
+     * geometry-attribute addresses a live capture found.  The *name* is the link to
      * the pack: every mesh with that name is transformed by the matrix and merged into one buffer,
      * so the camera fits the whole stage and the geometry is drawn where the game puts it. */
     if (scene_tsv) {
@@ -2793,7 +2793,7 @@ static int cmd_render(int argc, char **argv)
                            &m[10], &m[11], &m[12], &m[13], &m[14], &m[15]) != 16)
                     continue;
                 /* A fifth column (capture_scene --pack) holds the pack geometry-attribute ids,
-                 * the unique link finding #519 needs: names repeat and the large environment
+                 * the unique link needed: names repeat and the large environment
                  * meshes have none, so a name join over-draws.  Without the column, fall back
                  * to the name. */
                 if (nf >= 5 && fld[4][0]) {
@@ -2849,7 +2849,7 @@ static int cmd_render(int argc, char **argv)
                                : NULL;
                     /* --pose-*: skin this mesh when the pack carries its per-vertex bone block
                      * (a pool block of exactly num_verts bytes, all small bone numbers -- the
-                     * player's are 5483/5595/5566 in pack 861, finding #596).  The skinned
+                     * player's are 5483/5595/5566 in pack 861).  The skinned
                      * vertices stay in model space; the row matrix below places them, which is
                      * the node matrix the chain was verified against. */
                     if (pose) {
@@ -2900,7 +2900,7 @@ static int cmd_render(int argc, char **argv)
                         } else {
                             uv[2 * (nv + k)] = uv[2 * (nv + k) + 1] = 0.0f;
                         }
-                        /* The mesh's own vertex normals (finding #458), rotated into world space.
+                        /* The mesh's own vertex normals, rotated into world space.
                          * A mesh that ships none keeps a zero normal, which the shader reads as
                          * "use the face normal" -- so the smooth path is per mesh, not global. */
                         if (gnrm) {
@@ -3182,7 +3182,7 @@ static int cmd_render(int argc, char **argv)
                     }
                     if (osd_fps != 0 && (osd_fps == 1 || win || vk)) {
                         /* the readout: top-left, over a darkened plate so it stays legible over the
-                         * logo (dw4_fb_text is a diagnostic font, not the game's -- finding #608) */
+                         * logo (dw4_fb_text is a diagnostic font, not the game's) */
                         char osd[64];
                         int scale = 2, pad = 4, tw, th;
                         if (osd_text)
@@ -3399,7 +3399,7 @@ int main(int argc, char **argv)
 {
     const char *cmd;
     if (argc >= 2 && strcmp(argv[1], "platform") == 0) {
-        /* The platform seam (porting P2.1, finding #497): the igPsx2* -> generic-interface mapping
+        /* The platform seam (porting P2.1): the igPsx2* -> generic-interface mapping
          * the engine is written against, and which of those interfaces a host build provides. */
         unsigned stubs = dw4_platform_status(argc > 2 && strcmp(argv[2], "-v") == 0);
         printf("platform seam: %u igPsx2* class(es) under %u generic interface(s); %u implemented, %u stub\n",

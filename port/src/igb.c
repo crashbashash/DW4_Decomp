@@ -496,7 +496,7 @@ uint32_t dw4_igb_find_chain(const dw4_igb *g, uint32_t lo)
     return best;
 }
 
-/* ---- references: the id remap table and the content pool (#460/#464) ------- */
+/* ---- references: the id remap table and the content pool ------- */
 
 typedef struct {
     uint32_t off, n, end;
@@ -678,7 +678,7 @@ int dw4_igb_refs_open(dw4_igb *g)
             g->id_off[i] = g->pool_off + run;
             g->id_len[i] = s1_size[e];
             /* A block is placed at a 4-byte boundary, so a `_memSize` that is not a
-             * multiple of 4 is followed by 1-3 padding bytes (finding #478).  Without
+             * multiple of 4 is followed by 1-3 padding bytes.  Without
              * this the offsets drift, which is what the old ~141-byte "residual" on the
              * model packs was: sum(align4(_memSize)) is the pool size exactly. */
             run += (s1_size[e] + 3u) & ~3u;

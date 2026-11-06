@@ -93,8 +93,7 @@ The 8-byte header is followed by the "deliver struct" (base = block+8).
 ## ✅ Complete block byte map (authoritative)
 
 The whole 0xA000 block is mapped contiguously — **no unknown bytes**.
-Verified by a pure-synthesis builder that reproduces both reference saves **byte-for-byte**
-(findings [#139](../findings/findings-0001-0250.md#f139)–[#143](../findings/findings-0001-0250.md#f143)).
+Verified by a pure-synthesis builder that reproduces both reference saves **byte-for-byte**.
 
 | File offset | Size | Field |
 | --- | --- | --- |
@@ -142,11 +141,11 @@ BASE_FLAGFOLDER BASE_COUNTER BASE_ISUSE BASE_LEVEL BASE_EXP BASE_SKILL
 BASE_UPCNT` (`0x517e58..0x517fc0`).
 
 `BASE_ISUSE` is at `+0x76c`, immediately after the 16-entry `BASE_COUNTER`
-(not at `+0x764`, where finding [#87](../findings/findings-0001-0250.md#f87) placed it).
+(not at `+0x764`).
 
 `Time` / `SaveDataTime` / `MakeDataTime` / `GAMEDATAINIT` are **not**
 serialized: the record key table's leading `"Time"` (`0x517e50`) has no code
-references, and the struct has no free byte slot for them (finding [#140](../findings/findings-0001-0250.md#f140)).
+references, and the struct has no free byte slot for them.
 
 ### Load-time mirror restore ⭐
 
@@ -162,7 +161,7 @@ Normal (−1): intro `0..4 ← 699..703`; `18,19 ← 705,706`; bosses
 folders `0..9 ← 530..539`. Very Hard: `0..4 ← 12..16`, `66..68 ← 77..79`,
 `82 ← 772`, `85 ← 87`, folders `0..9 ← 542..551`.)
 
-Difficulty itself is **not** serialized (finding [#137](../findings/findings-0001-0250.md#f137)) — it is runtime-only.
+Difficulty itself is **not** serialized — it is runtime-only.
 
 ### Device folder — `file+0x6c` (36 × u32)
 
@@ -265,7 +264,7 @@ XDATA, BIT, DEVICEFOLDER, …` (key strings `0x00517e58`–`0x00517ee0`).
   styles (blunt/slash/stab/bash/shot/crush) are `BASE_SKILL[species*9 + 0..5]` —
   see [`techniques.md`](techniques.md).
 
-**Species index order** (confirmed — see finding [#111](../findings/findings-0001-0250.md#f111)): the game derives the
+**Species index order** (confirmed): the game derives the
 species index from `DIGIMONNAME` via `FUN_003f80e0`, which linear-searches the
 MODEL_NAME table (ELF `0x417b88`):
 `0 agumon, 1 vmon, 2 girumon, 3 dorumon, 4 weregaru, 5 hekabut, 6 wargrey,
@@ -311,9 +310,9 @@ Meta     : SaveDataTime MakeDataTime GAMEDATAINIT
 
 > **Note:** the `Meta` keys (`Time` / `SaveDataTime` / `MakeDataTime` /
 > `GAMEDATAINIT`) are **not** serialized into the 81920-byte save. They are
-> runtime-only or memory-card directory (icon.sys) metadata (finding [#140](../findings/findings-0001-0250.md#f140)).
+> runtime-only or memory-card directory (icon.sys) metadata.
 > The record key table's leading `"Time"` (`0x517e50`) has no code references.
-> `DIFFICULTY` is not serialized either (finding [#137](../findings/findings-0001-0250.md#f137)).
+> `DIFFICULTY` is not serialized either.
 
 ## Editing recipe
 
@@ -406,3 +405,7 @@ Proven by deleting each from a working card and re-testing:
 The **BIOS browser lists a save that the game then rejects.** Test any
 synthesised card in an emulator or on hardware; self-consistency and third-party
 tooling agreement are not sufficient.
+
+## Open questions
+
+- Unproven: the game may clamp BIT when a save loads. Writing `0x7FFFFFFF` to `+0x68` displays 9,999,999.

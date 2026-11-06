@@ -1,5 +1,5 @@
 /* Getter for the record field at +0xc of buffer `bufferIndex`: the secondary format (0x20/0x18 in
- * finding #523). `_pBufList` (+0x364) is an igDataList whose data pointer (+0x10) addresses
+ *. `_pBufList` (+0x364) is an igDataList whose data pointer (+0x10) addresses
  * 0x30-byte VRAM buffer records. */
 #include "dw4/reflected.h"
 #define BUFFER_RECORD_SIZE 0x30  /* bytes per _pBufList record */

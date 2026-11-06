@@ -1,8 +1,8 @@
-> **NOTE (findings [#172](../findings/findings-0001-0250.md#f172)/#255):** the enemy stat table is *plain data inside the ISO*
+> **NOTE:** the enemy stat table is *plain data inside the ISO*
 > (`AREA.AFS`, 665 identical copies) and can therefore be rewritten directly in the disc image:
 > changing a stat is a data patch, not a RAM-side patch — see [`../engine/afs-archives.md`](../engine/afs-archives.md).
 >
-> **Row coverage (finding [#255](../findings/findings-0251-0500.md#f255)):** the 649-row table holds 580 live rows
+> **Row coverage:** the 649-row table holds 580 live rows
 > — all **31 `e_*`** types (regular enemies + area bosses) and **8 `f_*` story-boss rows**
 > (`f_apocaly`, `f_belvam`, `f_luce`, `f_luce2`, `f_devl1`, `f_devl1b`, `f_devl22`, `f_devl3`),
 > plus 9 `g_*` destructibles. The many other `f_*` model variants
@@ -96,14 +96,14 @@ string found).
 - Field model: the **names** `hp mhp mp mmp level lv def power hit waza
   no kazu` + `stun sleep poison guard powerdown attackdown` (18 total) exist as
   strings, but they are **not** reflection field records — see
-  §"Field descriptor encoding" below and finding **[#291](../findings/findings-0251-0500.md#f291)**.
+  §"Field descriptor encoding" below.
 
 ### Key addresses
 
 | Item | Address |
 | --- | --- |
 | AREA.AFS blob (level pack, magic `0x12a8`) | `0x72ed000` |
-| …type directory (`beBaseInfo` etc.) | `0x72ee34d` |
+| …object sections (168 and 4,941 records) | `0x72ee91d`, `0x72f2f75` |
 | …enemy name hash table | `0x7300261` |
 | NDMW.AFS blob (stage pack, magic `0x6300`) | `0x1055b000` |
 | …`beNDMWStatusInfo` type definition | `0x1055efc4` |
@@ -122,14 +122,14 @@ hdr[1]=0x37b    MetaField type-name list (48 names, NUL-terminated)
 hdr[2]=0x3960   type directory  ({name}{u32 descriptors})
 hdr[3]=0xcf     type-index table (bytes)
 hdr[4]=0xf86bc  OBJECT DATA (serialized instances)
-hdr[5]=0x7105   index table (repeating {0x4ff,0x2000,0,x,…} records)
+hdr[5]=0x7105   second object section's record count (28,933)
 hdr[6]=0x1b8330 0xff padding (empty)
 hdr[7]=0x2604   field-descriptor table
 ```
 
 **AREA.AFS blob (`0x12a8`)** — `0x72ed000`:
 ```
-hdr[5]=0x134d   type directory
+hdr[5]=0x134d   second object section's record count (4,941)
 hdr[7]=0x685    type-name strings (VertexArrayData, ImageData, …)
 hdr[6]=0x33060  float/font data
 hdr[4]=0x34420  object data
@@ -149,7 +149,7 @@ flattened field-slot list**. Full write-up, the framing rule and worked examples
 [`../engine/igbinary-format.md`](../engine/igbinary-format.md) §"Field descriptor
 encoding".
 
-**Ordinal and offset (findings [#290](../findings/findings-0251-0500.md#f290)/#292):**
+**Ordinal and offset:**
 
 - `ordinal = i + K + 1` for the class's declared field `f[i]`, where `K` (the
   inherited base-slot count) is **constant per class** — over the 135 records, 93 have
@@ -168,7 +168,7 @@ encoding".
   just a slot the directory does not re-state, and its omission leaves a hole
   without shifting later ordinals.
 
-**The stat layout is *not* in the reflection dump (finding [#291](../findings/findings-0251-0500.md#f291)).**
+**The stat layout is *not* in the reflection dump.**
 The `beNDMWStatusInfo`/`beBaseInfo*` entries in `data/reflection.json` do not give the
 stat fields' offsets:
 `beNDMWStatusInfo` has `field_count 0`, `beBaseInfoData` has exactly one field
@@ -177,8 +177,7 @@ stat fields' offsets:
 (`beNDMWStatusInfo` @NDMW blob+`0x3fc4` = `(igString,2,4)(igBool,4,1)(igObjectRef,5,4)…`;
 `beBaseInfoData` @+`0x24b2` = `(igString,2,4)(igInt,3,4)`). So the hp/mhp/… layout
 must come from the stat-name xrefs or from fitting the object instances — **not**
-from `reflection.json`. (Consistent with finding [#288](../findings/findings-0251-0500.md#f288): the class registers no
-fields of its own.)
+from `reflection.json`. (The class registers no fields of its own.)
 
 The 48 MetaField names (string table @ `0x30`): `igObjectRefMetaField(0)
 igIntMetaField(1) igBoolMetaField(2) igCharMetaField(3) igStringMetaField(4)
@@ -199,12 +198,11 @@ valid anchor: `e_goburi` has **several rows** in the
 number cannot serve as an anchor. Any "HP ≈ N" anchor should name the **row**
 (§"The enemy stat table" below) — that is the stable identifier.
 
-## The live stat read path (corroborates [#182](../findings/findings-0001-0250.md#f182))
+## The live stat read path
 
-> **This section is corroboration.** The path is confirmed as
-> finding **[#182](../findings/findings-0001-0250.md#f182)** and documented in
+> **This section is corroboration.** The path is confirmed and documented in
 > [`enemy-spawn-system.md`](enemy-spawn-system.md); the table it reads from is decoded
-> as **[#205](../findings/findings-0001-0250.md#f205)**. Read it as confirmation that the same conclusions reproduce
+> [below](#the-enemy-stat-table-areaafs--iso). Read it as confirmation that the same conclusions reproduce
 > from savestates, and for the `FUN_00394400`/`"ONE"` mechanism, which only this
 > section describes.
 
@@ -223,16 +221,14 @@ status    = *(record + 0x14)
 *(0x58a1e4) = *(model + 8)                  // RamNo
 *(0x58a1e8) = *(record + 0x10) + 0x20       // transform
 *(0x58a1ec) = *(*(status +  8) + 0x0c)      // field object (+0x08) -- see caveat
-*(0x58a1f0) = *(*(status + 0x0c) + 0x0c)    // current HP   [= #182's [InfoWork+0x0c]+0x0c]
-*(0x58a1f4) = *(status + 0x10)              // the stat-table ROW  [#182: elite-scaled stat]
+*(0x58a1f0) = *(*(status + 0x0c) + 0x0c)    // current HP   [= [InfoWork+0x0c]+0x0c]
+*(0x58a1f4) = *(status + 0x10)              // the stat-table ROW  [the crown ladder scales it]
 *(0x58a1f8) = <name argument>               // InfoName
 ```
 
-This **corroborates the confirmed finding [#182](../findings/findings-0001-0250.md#f182)**: [#182](../findings/findings-0001-0250.md#f182) establishes the current HP as
-`[InfoWork+0x0c] + 0x0c` (verified
-by live damage, 2816→2431) and `InfoWork+0x10` as an elite-scaled stat which it
-explicitly **refutes as HP** — both true, because `+0x10` is the **row** and the crown
-ladder scales that row. [`enemy-spawn-system.md`](enemy-spawn-system.md) states
+The current HP is `[InfoWork+0x0c] + 0x0c` (verified by live damage, 2816→2431).
+`InfoWork+0x10` differs between crowned and uncrowned enemies but does not drop on damage, so it
+is **not HP**: it is the **row**, and the crown ladder scales that row. [`enemy-spawn-system.md`](enemy-spawn-system.md) states
 the same layout (`beNDMWMdlPEBaseInfoWork`, vtable `0x53D3E0`, `+0x10` row,
 `[+0x0c]+0x0c` current HP).
 
@@ -256,8 +252,8 @@ enemy appears with different values:
 | --- | --- | --- | --- | --- |
 | `normal_lvl1_before_load` | `e_goburi` | 0 | 50 | |
 | `goblin_pass_crate_barrell` | `e_goburi` | 0 | 50 | |
-| `normal_lvl1_before_crown_enemy` | `e_goburi` | 1 | 58 | = [#205](../findings/findings-0001-0250.md#f205)'s row 1 `e_goburi` 58 |
-| `before_crown_spawn` / `before_enemy_spawn` / `no_crown` / `pink_crown` | `e_goburi` | 5 | **649** | = [#205](../findings/findings-0001-0250.md#f205)/rng-verification row 5 |
+| `normal_lvl1_before_crown_enemy` | `e_goburi` | 1 | 58 | = table row 1, `e_goburi` 58 |
+| `before_crown_spawn` / `before_enemy_spawn` / `no_crown` / `pink_crown` | `e_goburi` | 5 | **649** | = table row 5, as in rng-verification |
 | `before_load_area` | `p_susanoo` | — | 99999 | |
 | `dw4-inworld`, `op-ready`, `all_worlds_gate` | `n_digilff` | — | 100 | |
 
@@ -290,8 +286,7 @@ of a row of the 649-row stat table (below); there is no separate definition tabl
 ## The enemy stat table (`AREA.AFS` / ISO)
 
 This page owns the table ([`docs/README.md`](../README.md)
-points "the 649-row stat table" here). It is findings **[#195](../findings/findings-0001-0250.md#f195)** and **[#205](../findings/findings-0001-0250.md#f205)**, both
-confirmed:
+points "the 649-row stat table" here). The layout is confirmed:
 
 | | |
 | --- | --- |
@@ -301,17 +296,51 @@ confirmed:
 | **12 stats** | `i16`, **row-major** @ ISO `0x78DACB9` |
 | **3 bytes** | `CHIMEIRITSU`, `MAHIRITSU`, `RARITY` — `u8`, row-major @ ISO `0x78DA51D` |
 
-Anchors from [#205](../findings/findings-0001-0250.md#f205): row 370 = destructible crate, 100 HP / 100 TSUYOSA / RARITY 0;
+Anchors: row 370 = destructible crate, 100 HP / 100 TSUYOSA / RARITY 0;
 row 60 = boss 3194/3564; row 1 = `e_goburi` 58; 69 rows are zeroed. Only **60 of the
 649 rows have `RARITY > 0`** — 4 types × 3 tiers × 5 crown ranks (`e_goburi`
-379-393, `e_mummy` 394-408, `e_otama` 409-423, `e_mecha2` 610-624) — and [#205](../findings/findings-0001-0250.md#f205) decodes
-the whole crown ladder from them (HP = rank1 + 100·(rank−1), TSUYOSA/KASHIKOSA
-×1.25 per rank in tier 0, MAMORI +8..12/rank, SEISHIN +10/rank, EXP ×1.1^(rank−1),
-colour rank1 green → 5 yellow).
+379-393, `e_mummy` 394-408, `e_otama` 409-423, `e_mecha2` 610-624) — and they hold
+the [crown ladder](#the-crown-ladder).
 
 **There is no 88-row table.** "88" is the `beNDMWStatusInfo` *instance* count;
 the stat table is 649 rows, and a `×667`/`×88`
-framing has no other provenance. See finding **[#301](../findings/findings-0251-0500.md#f301)**, refuted.
+framing has no other provenance.
+
+### The crown ladder
+
+Each type block is ordered rank 1 tiers 0, 1, 2, then rank 2, up to rank 5. Per rank, over the same type and tier:
+
+| Column | Growth per rank |
+| --- | --- |
+| HP | rank 1 plus 100 per rank |
+| TSUYOSA, KASHIKOSA | about ×1.25 in tier 0, ×1.40 in tier 1, 1% in tier 2; KASHIKOSA is 0.7 of TSUYOSA |
+| MAMORI | +8 to 12 in tier 0, +5 in tiers 1 and 2 |
+| SEISHIN | +10 |
+| SUBAYASA | +20 in tiers 1 and 2; in tier 0 +10 (`e_goburi`, `e_mummy`), +20 (`e_otama`) or +25 (`e_mecha2`) |
+| EXP | rank 1 × 1.1^(rank−1), truncated |
+| CHIMEIRITSU, MAHIRITSU | +3 (`e_goburi`) or +6 |
+| Resists | +25 or +50 (RES_STUN +3), flat on `e_mecha2` |
+
+Rank 1 is itself about ×5 the uncrowned HP and TSUYOSA in tier 0. RARITY colours, confirmed in play: 1 green, 2 blue,
+3 pink, 4 white, 5 yellow.
+
+### The practice stage's rows
+
+Rows 638 to 645 are the practice stage's own block, between the `e_nume` rows 636/637 and the last `e_mecha3` rows 646 to
+648. Each pair has EXP 3 and RARITY 0:
+
+| Rows | Model | Authored HP and TSUYOSA |
+| --- | --- | --- |
+| 638/639 | `e_goburi` | 20 |
+| 640/641 | `e_ogre` | 25 |
+| 642/643 | `e_nume` | 30 |
+| 644/645 | `e_cockatri` | 35 |
+
+The practice generators (`NDMW.AFS` entry 608) carry these rows: `GENE-a00..a06` = 638, 640, 642, 642, 638, 640, 644 and
+`GENE-b00..b06` = 639, 641, 643, 643, 639, 641, 645. Lessons 1 to 3 start one enemy each, using the b group when flag 382
+is set. The arena step (`lua/14-misc/02-stage-clear-sequence_e607/019-camera-5.lua`) branches on `SYSgetPlayerNinzu()`:
+`<= 2` starts x03 and x04, `>= 3` starts x05 and x06. So the `e_cockatri` rows are reached only with three or more players.
+That follows from the script; a solo run spawning 642 and 638 is the only part seen live.
 
 ### How a live entity reaches the table
 
@@ -319,7 +348,7 @@ framing has no other provenance. See finding **[#301](../findings/findings-0251-
 beGeneraterInfoWork   +0x1c _geneEnemyName (e.g. e_goburi)   (spawn system)
                       +0x20 row        +0x24 HPMAX          +0x28 1.0f
 beNDMWMdlPEBaseInfoWork (vtable 0x53D3E0, the enemy InfoWork)
-                      +0x10 row        [+0x0c]+0x0c current HP      (findings #182/#298)
+                      +0x10 row        [+0x0c]+0x0c current HP
 ```
 
 So an entity carrying `(name, row, HPMAX)` in RAM is a **per-instance copy of a row**
@@ -330,25 +359,31 @@ is why an "HP ≈ 200–600" anchor is unreliable.
 
 ## Next steps
 
-> **The stats themselves are answered.** The 649-row table is decoded ([#205](../findings/findings-0001-0250.md#f205))
-> and the live read path is proven ([#182](../findings/findings-0001-0250.md#f182), [#298](../findings/findings-0251-0500.md#f298)/#299). Do not hunt for another stat table:
-> an "88-record `beNDMWStatusInfo` definition table" is finding **[#301](../findings/findings-0251-0500.md#f301)**,
-> **refuted**, and the `×667`/`×88` counts are a miscount of [#205](../findings/findings-0001-0250.md#f205)'s 665 copies.
+> **The stats themselves are answered.** The 649-row table is decoded
+> and the live read path is proven. Do not hunt for another stat table:
+> an "88-record `beNDMWStatusInfo` definition table" is
+> **refuted**, and the `×667`/`×88` counts are a miscount of the 665 copies.
 > Following the MDL block is not a route to the stats either — it is a cache whose
-> producing chain resolves to 0 ([#300](../findings/findings-0251-0500.md#f300)).
+> producing chain resolves to 0.
 
 The genuinely open work here is the igBinary **object graph** (below), not the stats.
 The descriptor structure and the `ordinal` → byte offset rule are not part of it
-(§"Field descriptor encoding", findings [#290](../findings/findings-0251-0500.md#f290)/#292):
+(§"Field descriptor encoding"):
 
 1. **Walk the object instances** at `hdr[4]` (`0x34420` here) using the type
    directory, reading each field per its resolved type. The instance encoding at
    `hdr[4]` is described in [`../engine/igbinary-format.md`](../engine/igbinary-format.md)
-   §"The instance encoding" (finding [#417](../findings/findings-0251-0500.md#f417)).
+   §"The instance encoding".
 2. **Recover the `beBaseInfoData`/`beNDMWStatusInfo` layout** — these two classes
-   have no usable field list in `data/reflection.json` (finding [#291](../findings/findings-0251-0500.md#f291)), so this is
+   have no usable field list in `data/reflection.json`, so this is
    a prerequisite for the dump below, not a given. Start from the xrefs to the
    `hp`/`mhp`/`powerdown` strings in `data/strings.json`.
 3. Dump all 88 `beNDMWStatusInfo` instances and the `beBaseInfoData` records into a
    spreadsheet, validated against a named stat-table row (§"Validation anchor"), not
    a single "Goburimon HP" figure.
+
+## Open questions
+
+- A savestate appears to carry the loaded enemy table, but this is not confirmed elsewhere. The table is copied to EE RAM at
+  zone load and a state load restores that RAM without re-reading the disc, so a state taken on an unmodified disc keeps
+  authored rows on a patched disc. To test a stat patch, take the state before the zone pack is loaded.

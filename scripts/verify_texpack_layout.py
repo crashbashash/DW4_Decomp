@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""verify_texpack_layout.py -- regression check for the texture-pack pool order rule (finding #472).
+"""verify_texpack_layout.py -- regression check for the texture-pack pool order rule.
 
 Derives a texture pack's pool layout from the id-order rule and diffs it against the committed
 reference table (default `docs/engine/texture-pack-625-layout.tsv`).  Every row must match: an id,

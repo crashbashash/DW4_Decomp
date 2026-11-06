@@ -1,5 +1,5 @@
 #define _DEFAULT_SOURCE
-/* dw4/frontend.c — the native front-end boot (porting §4, finding #606).
+/* dw4/frontend.c — the native front-end boot (porting §4).
  *
  * Two halves, both in this file:
  *
@@ -10,7 +10,7 @@
  *      resolve its scene-stage
  *      pack, and hand the title's menu to the caller.
  *
- * The plan order is the recovered one (finding #606); the per-entry `expect` token makes the order
+ * The plan order is the recovered one; the per-entry `expect` token makes the order
  * self-checking against the disc, so a mis-ordered or changed disc is reported, not glossed over.
  */
 #include "dw4/frontend.h"
@@ -312,7 +312,7 @@ const char *dw4_frontend_first_stage(void) {
 
 const char *dw4_frontend_movie(void) {
     /* The `opening` stage's Sofdec stream on the US disc (`AREA.AFS`).  MPEG-1 + ADX, 64 s:
-     * finding #447. */
+     * . */
     return "aus_opening.sfd";
 }
 

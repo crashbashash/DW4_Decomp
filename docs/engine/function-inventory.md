@@ -96,15 +96,15 @@ The rows this pass added, by evidence class:
 | `cut`: tail-call wrapper + framed body | 20 (`FUN_00129c88`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `FUN_0012c858`, `FUN_00169e30`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
 | `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `FUN_00293788`, `FUN_00294838/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
 | `cut`: span reached a referenced leaf | 5 (`FUN_002d3d30`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |
-| `cut`: verifier extent findings | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop — `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`) | the inner address is a fresh start after the container's return |
+| `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop — `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`) | the inner address is a fresh start after the container's return |
 | `merge` | `FUN_002fe290` (44 bytes) | `thunk_FUN_002fe2ac` (`b 0x2fe2ac; nop`) was the entry of a list-search loop whose other half Ghidra called `FUN_002fe2ac`; one leaf, its callers now name `FUN_002fe290` |
-| plain shrink | `FUN_00108078` (312 → 272), `FUN_001e6130` (584 → 248) | the dump's extent ran into the next symbol; both now end at their own transfer. `FUN_001e6130` remains a block of an earlier function (its `j 0x1e5fe0` lands inside `FUN_001e5f00`), a finding for the EE GCC blocks |
+| plain shrink | `FUN_00108078` (312 → 272), `FUN_001e6130` (584 → 248) | the dump's extent ran into the next symbol; both now end at their own transfer. `FUN_001e6130` remains a block of an earlier function (its `j 0x1e5fe0` lands inside `FUN_001e5f00`), a matter for the EE GCC blocks |
 
 `FUN_0029a210` (56 → 20) is not a row: it is a rule-1 promotion whose walk now stops at its tail
 call; the framed body after it (`0x29a228`) is a rule-5 promotion. `FUN_001044f0` (64 → 148) is the
 SDK-descriptor split piece that now takes the walk's extent. `FUN_001236b8` keeps its 24 bytes: it
 ends in a call to a non-returning function and has no epilogue. `FUN_001eba30` and `FUN_00102550`
-stay as the earlier extent findings describe them.
+keep their extents.
 
 A function whose extent changed and that has no C source yet links from the retail image at its
 reviewed extent; the repository keeps no asm bodies ([asm-body matches](asm-body-matches.md)). Three matched units were renamed because the stub rule now reaches
@@ -163,7 +163,7 @@ compiler's address CSE, a matching construct the m2c pass used (`igTextureFuncti
 `igStencilFunctionAttr_InitFields`, `igBlendFunctionAttr_InitFields`, `igMovieInfo_InitFields`);
 naming the function there changes the bytes, so the first three stay `name-defect` and
 `igMovieInfo_InitFields` is `foreign-profile` in `data/check-categories.tsv` until the
-real reason the original did not keep the address live is found. `FUN_001c0f00` passes the function
+real reason the original did not keep the address live is found ([open questions](#open-questions)). `FUN_001c0f00` passes the function
 by name and is `match` (`src/unmatched/FUN_001c0f00.cpp`).
 
 ## 6. Replaying and checking
@@ -174,3 +174,10 @@ python3 tools/layout.py --report                    # truncated : 0
 python3 scripts/inventory_scan.py --write           # refresh data/inventory-scan.tsv after a symbol change
 make inventory-check                                # stale table or grown debt fails
 ```
+
+## Open questions
+
+- Unproven: `igTextureFunctionAttr_InitFields`, `igStencilFunctionAttr_InitFields` and
+  `igBlendFunctionAttr_InitFields` materialise one function address through two symbols. `FUN_` naming for
+  all uses merges the `lui`/`addiu` loads (relocations 41 to 39) and shrinks the frame. Identical-code folding
+  of the callbacks by the retail linker is the likely reason.

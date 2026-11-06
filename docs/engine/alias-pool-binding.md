@@ -1,6 +1,6 @@
 # Alias-pool retained binding and accounting controls
 
-Finding [#900](../findings/findings-0751-1000.md#f900). The complete contiguous method block **2d0560..2d06b8** contains
+The complete contiguous method block **2d0560..2d06b8** contains
 nine bodies / **304 bytes**, all represented by exact matching source: the setter
 at 2d0560 (**152 matched bytes**) and the eight following methods. Factory2cd170
 has an exact mechanical draft, a name and behavioral verification. Together these

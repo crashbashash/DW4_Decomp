@@ -1,8 +1,8 @@
 # System clock `sys+0x50` — source, update, and the logo CLOSE WAIT timer
 
-**Lifecycle and normal Action2 update order are recovered ([#772](../findings/findings-0751-1000.md#f772)–[#774](../findings/findings-0751-1000.md#f774)).**
+**Lifecycle and normal Action2 update order are recovered.**
 The clock owner is `igInsightCore`; `+0x50` is its reflected `_worldTime`.
-See [the executable contracts](#executable-lifecycle-and-scheduling-contracts-772774)
+See [the executable contracts](#executable-lifecycle-and-scheduling-contracts)
 below. Hardware cadence, message-triggered starts, allocation-time defaults and
 game-pause routing remain separate questions.
 
@@ -16,7 +16,7 @@ a running game or a savestate) and **[hypothesis]**.
 ## Complete beSystem update recovery
 
 `beSystem::vfunc_27` (`0x003a0020`, **1,300 code bytes**) has
-byte-identical typed C in `src/game/beSystemUpdate.cpp` (finding [#2746](../findings/findings-2501-2750.md#f2746)).
+byte-identical typed C in `src/game/beSystemUpdate.cpp`.
 The function samples `igInsightCore._worldTime`, stores the signed wrapped delta
 in `_frameTimeL`, converts it to `_frameTimeF` with the original frame divisor,
 and stores the new `_svWorldTimeL`. Its remaining body owns next-stage directory
@@ -146,7 +146,7 @@ Established **[static]**: the writer chain above, including the pause flag in
 
 Not established:
 - **Physical-frame phase and action starts.** The normal scheduler proves that
-  Action2 updates follow the `_worldTime` write ([#773](../findings/findings-0751-1000.md#f773)). The timing of every
+  Action2 updates follow the `_worldTime` write. The timing of every
   message-triggered action start/replacement and the exact displayed frame remain open.
 - **Game routing of reset/rebase.** Timer methods and system start/stop are recovered
   below. Which stage transitions or pause commands invoke them remains unverified.
@@ -193,7 +193,7 @@ The timer verifier checks the base/start equality, WAIT name, timer/action
 vtable identities, list bounds and pointer bounds before accepting a chain.
 This validates these captures; it does not establish a general address invariant.
 
-## Executable lifecycle and scheduling contracts ([#772](../findings/findings-0751-1000.md#f772)–[#774](../findings/findings-0751-1000.md#f774))
+## Executable lifecycle and scheduling contracts
 
 `recovered/frontend/systemclock.{c,h}` is a behavioral reference over a flat
 read/write/call interface. It covers the complete thirteen-body timer group

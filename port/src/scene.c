@@ -38,7 +38,7 @@
 #define BLENDFN_SRC_ORD      4u   /* igBlendFunctionAttr._src / _dst (probed from the pack's triples) */
 #define BLENDFN_DST_ORD      5u
 #define XFORM_TARGET_ORD     9u   /* igTransform._target (read from the pack's triples, #716) */
-#define COLOR_VALUE_ORD      4u   /* igColorAttr._color (the 4-float RGBA, finding #664) */
+#define COLOR_VALUE_ORD      4u   /* igColorAttr._color (the 4-float RGBA) */
 #define TEXBIND_TEX_ORD      4u   /* igTextureBindAttr._texture (an igTextureAttr id) */
 #define TEXATTR_IMAGE_ORD   12u   /* igTextureAttr._image (an igImage id) */
 #define IMG_PX_ORD           2u
@@ -115,7 +115,7 @@ static dw4_handle field_ref(const uint8_t *rec, uint32_t off)
 }
 
 /* Does this id name a block of exactly `size` bytes?  The check that makes the stream pair
- * self-validating (finding #477: a stream's `_memSize` IS its content size). */
+ * self-validating (a stream's `_memSize` IS its content size). */
 static int block_of_size(const dw4_scene *s, uint32_t id, uint32_t size, dw4_handle *out)
 {
     const dw4_scene_ent *e = dw4_scene_lookup(s, id);
@@ -240,7 +240,7 @@ static void add_mesh(dw4_scene *s, const dw4_igb *g, uint32_t id, const uint8_t 
         if (block_of_size(s, sid, 12 * nv, &h) && !m.positions.off)
             m.positions = h;
         else if (block_of_size(s, sid, 12 * nv, &h) && !m.normals.off)
-            m.normals = h;         /* the second 12*n stream is the vertex normals (#458) */
+            m.normals = h;         /* the second 12*n stream is the vertex normals */
         else if (block_of_size(s, sid, 8 * nv, &h) && !m.uvs.off)
             m.uvs = h;
     }
@@ -283,7 +283,7 @@ static void add_mesh(dw4_scene *s, const dw4_igb *g, uint32_t id, const uint8_t 
 
 /* The shape -> attribute link: an igGeometry's ordinal-2 value names it and its ordinal-8
  * igAttrList's array holds the ids of its attributes.  By ordinal, because a record's byte
- * offsets shift with the length of its name string (finding #480). */
+ * offsets shift with the length of its name string. */
 static void add_names(dw4_scene *s, const dw4_igb *g)
 {
     uint32_t i;
@@ -459,7 +459,7 @@ static void add_materials(dw4_scene *s, const dw4_igb *g)
                 n->has_viewport = 1;
             }
             /* The set's own colour: an `igColorAttr` in the same list carries the RGBA the pack
-             * shades the set with (finding #664).  Its `_color` is the record's ordinal-4 value. */
+             * shades the set with.  Its `_color` is the record's ordinal-4 value. */
             if (!n->has_color && class_is(s, g, ah, "igColorAttr")) {
                 uint32_t co = rec_off(g, ar, COLOR_VALUE_ORD);
                 if (co) {
@@ -683,7 +683,7 @@ static void link_nodes(dw4_scene *s, const dw4_igb *g)
             uint32_t aid = rd32(arr_p + 4 * k), j;
 
             /* The geometry's own colour: its attribute list names the `igColorAttr` the pack shades
-             * this mesh with (finding #664), read in place from the record's ordinal-4 `_color`. */
+             * this mesh with, read in place from the record's ordinal-4 `_color`. */
             if (!n->has_color) {
                 dw4_handle ch = dw4_scene_handle(s, aid);
                 const uint8_t *cr = (const uint8_t *)dw4_scene_host(s, ch);
@@ -836,7 +836,7 @@ const dw4_scene_image *dw4_scene_image_of(const dw4_scene *s, uint32_t image_id)
     return NULL;
 }
 
-/* The loader's id -> pointer pass (finding #423).  Every object record's `igObjectRef` and
+/* The loader's id -> pointer pass.  Every object record's `igObjectRef` and
  * `igMemoryRef` values become handles; the kind is the value's own descriptor type id (finding
  * #482), so no table is involved.  A NULL stays NULL. */
 static void materialise(dw4_scene *s, const dw4_igb *g)
@@ -1118,7 +1118,7 @@ static void graph_add(dw4_scene *s, const dw4_igb *g, uint32_t id, uint32_t pare
     memset(&n, 0, sizeof(n));
     n.id = id;
     n.mesh = 0xFFFFFFFFu;
-    n.time_scale = 1.0f;                /* beModelCtrlNode2._timeScale defaults to 1.0 (#619) */
+    n.time_scale = 1.0f;                /* beModelCtrlNode2._timeScale defaults to 1.0 */
     /* the class directory lives in the container, which is closed when loading ends -- so the
      * name is owned here (the nodes outlive the parse) */
     if (c->name) {
@@ -1143,7 +1143,7 @@ static void graph_add(dw4_scene *s, const dw4_igb *g, uint32_t id, uint32_t pare
         }
         if (t->type == 1 && t->ordinal == XFORM_TARGET_ORD && c->name &&
             strcmp(c->name, "igTransform") == 0 && q + 4 <= he->size) {
-            n.xform_target = rd32(rec + q);                 /* igTransform._target (finding #716) */
+            n.xform_target = rd32(rec + q);                 /* igTransform._target */
         } else if (t->type == 40 && q + 64 <= he->size) {   /* igMatrix44f */
             memcpy(n.m, rec + q, 64);
             n.has_matrix = 1;
@@ -1171,7 +1171,7 @@ static void graph_add(dw4_scene *s, const dw4_igb *g, uint32_t id, uint32_t pare
                     dw4_scene_seq sq = read_compressed_seq(s, g, th);
                     if (sq.ntimes) n.seq = sq, n.has_seq = 1;
                 } else if (class_is(s, g, th, "igTransformSequence1_5") && !n.has_seq) {
-                    /* a placeholder `_m` means the real transform is the sequence (finding #611) */
+                    /* a placeholder `_m` means the real transform is the sequence */
                     dw4_scene_seq sq = read_seq(s, g, th);
                     if (sq.ntimes)
                         n.seq = sq, n.has_seq = 1;
@@ -1580,7 +1580,7 @@ int dw4_scene_write_obj(const dw4_scene *s, const dw4_scene_mesh *g, FILE *f)
     return rc;
 }
 
-/* --- the stage's own camera (findings #495/#496) ---------------------------------------------
+/* --- the stage's own camera ---------------------------------------------
  *
  * A node carries its local igMatrix44f; its world is the chain composed child x parent (the
  * row-vector convention, translation at words 12..14), and the view is that world's affine
@@ -1791,7 +1791,7 @@ void dw4_scene_set_time(dw4_scene *s, double ns)
     if (!s)
         return;
     s->time_ns = ns;
-    /* the analysis timeline takes the nodes back from any controller drive (#619) */
+    /* the analysis timeline takes the nodes back from any controller drive */
     for (i = 0; s->node && i < s->nnode; i++)
         s->node[i].driven = 0;
 }
@@ -1834,7 +1834,7 @@ void dw4_scene_set_engine_time(dw4_scene *s, long long engine_ns)
     if (!s->node)
         return;
     e = engine_ns >> 18;                 /* the `>>18 ... <<18` pair evaluates _timeScale at a
-                                          * 2^18 ns rounding granularity, not a rescale (#619) */
+                                          * 2^18 ns rounding granularity, not a rescale */
     for (i = 0; i < s->nnode; i++) {
         dw4_scene_node *n = &s->node[i];
         if (!n->has_seq)
@@ -1886,7 +1886,7 @@ int dw4_scene_node_world(const dw4_scene *s, uint32_t j, float world[16])
     mat_identity_set(wm);
     while (nc--) {                           /* root first: world = local x parent */
         if (s->node[chain[nc]].xform_target)
-            continue;                        /* a UV-offset transform, not a position (#716) */
+            continue;                        /* a UV-offset transform, not a position */
         if (!dw4_scene_node_local(s, chain[nc], lm))
             continue;
         mat_mul(lm, wm, t);
@@ -1928,7 +1928,7 @@ int dw4_scene_camera(const dw4_scene *s, const char *name, float world[16], floa
 
 float dw4_scene_camera_aspect(int width, int height)
 {
-    /* The measured projection has m[0]/m[5] = 448/640 = 0.7 (finding #496); the renderer builds
+    /* The measured projection has m[0]/m[5] = 448/640 = 0.7; the renderer builds
      * its scale from the vertical fov, so the horizontal multiplier is 0.7 * width / height. */
     if (width <= 0 || height <= 0)
         return 0.7f;

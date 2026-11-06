@@ -1,13 +1,13 @@
 # Internal pointer lists and retained ownership
 
-Finding [#882](../findings/findings-0751-1000.md#f882) records **22 complete bodies / 2,324 code bytes** in
+**22 complete bodies / 2,324 code bytes** are recovered in
 [behavioral C](../../recovered/engine/internal-object-lists.c): the full contiguous
 raw/retaining list run `2ea4f0..2eade8` and factory `2c2670`. All 22 bodies /
-2,324 bytes have matching source (lookup follow-up [#886](../findings/findings-0751-1000.md#f886)). Seven new matches add **884 bytes**: copy 160,
+2,324 bytes have matching source. Seven new matches add **884 bytes**: copy 160,
 slack clearing 104, insertion 188, erase 84, append 136, retained destruction 48
 and retained resize 164. Growth 232 and pointer-index lookup 68 match in
 `src/unmatched/ObjectPointerList_EnsureIndex.cpp` and `src/unmatched/ObjectPointerList_FindIndex.c`; the corrected string-field
-lookup adds 160 exact bytes in follow-up [#886](../findings/findings-0751-1000.md#f886). The shared pointer-index behavioral implementation
+lookup adds 160 exact bytes. The shared pointer-index behavioral implementation
 remains in the prior metadata recovery; no independent duplicate is introduced.
 
 `ObjectPointerList` names describe recovered roles and a 16-byte ABI projection,
@@ -77,7 +77,7 @@ mutate storage before the buffer; such instruction behavior is tested without
 presenting it as a valid high-level caller contract. Erase does not clear the
 vacated last cell. String-field lookup re-reads count each iteration and re-reads
 the selected object pointer after the comparison callback. The prior offset-list
-interpretation is refuted ([#885](../findings/findings-0751-1000.md#f885)); see [corrected selector evidence](metadata-callback-services.md).
+interpretation is refuted; see [corrected selector evidence](metadata-callback-services.md).
 
 ## Retained operations
 
@@ -128,7 +128,7 @@ rounding. Base/other class metadata remain synthetic where previously documented
 Full instance composition, concrete memory/array fields and gameplay receivers
 remain required. Native gameplay is unchanged.
 
-**Append return hypothesis ([#883](../findings/findings-0751-1000.md#f883)):** a matching `int` implementation returns the
+**Append return hypothesis:** a matching `int` implementation returns the
 old count left physically in `v0`. The direct call sites examined do not explicitly consume that value (two lead
 straight to an epilog); no consuming caller establishes the original public return signature. Matching
 source labels this as a compiler/ABI candidate. Behavioral oracles deliberately

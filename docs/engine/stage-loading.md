@@ -42,7 +42,7 @@ case-insensitive qualified lookup while retaining basename behavior.
 
 `FUN_0039a9e0` has complete, byte-identical typed C in
 [`beNodeAnimClock.cpp`](../../src/game/beNodeAnimClock.cpp): **308 code bytes and
-two relocations** (finding [#2747](../findings/findings-2501-2750.md#f2747)). It uses the reflected `beNodeAnim` base
+two relocations**. It uses the reflected `beNodeAnim` base
 fields; the same clock routine serves derived loading nodes.
 
 Keeping the
@@ -53,8 +53,6 @@ without them four words differ in register allocation.
 The explicit locked-time switch and compound 64-bit shift retain the original
 control flow and arithmetic shape. The pinned alternate compiler with `-O3,p`
 produces the entire retail body without inline assembly or compiler changes.
-Finding [#2626](../findings/findings-2501-2750.md#f2626)'s inference that no source form produces this body is refuted
-by the match.
 
 The full matching check has zero mismatches and the relink is
 byte-identical. The reference/retail loading-node oracle also passes
@@ -162,3 +160,15 @@ contracts and checked against their original assembly. Their full runtime
 modules have not been reconstructed as differential C references here. Stage
 streaming, shutdown cancellation inside decoders, other stage transitions and
 retail visual comparison remain separate work.
+
+## Open questions
+
+An unproven static reading of the stage change:
+
+- `STAGECTL` is `Gap::Bec::beNDMWStageCtl` (runtime vtable `0x0053DEA0`, descriptor at `0x00515708`).
+- `FUN_003cd500` is its six-state `NEXTSTAGE` coroutine (jump table `0x00515680`), which issues commands to
+  STAGECTL, LAYERCTL, MODELCTRL and GENERATER.
+- `beNDMWAfsStageLoad` and `beNDMWAfsSetup` sit beside it in the metadata and look like the pack streamers.
+- The pending request is not held in the StageCtl object.
+- The gate bookmark is separate: a stage calls `SYSsetGateStage(g_GateStage, g_GatePos)`, or
+  `SYSsetGateStage("GateOff", -1)`, and `SYSgetGateStageName`/`SYSgetGateStageNo` read it back.

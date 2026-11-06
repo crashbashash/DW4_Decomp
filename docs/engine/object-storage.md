@@ -1,6 +1,6 @@
 # Object storage and encoded allocator selection
 
-Finding [#879](../findings/findings-0751-1000.md#f879) records eleven complete behavioral bodies / 716 code bytes:
+This recovery covers eleven complete behavioral bodies / 716 code bytes:
 the contiguous helper run `300d30..301008` and its encoded-selector dependency
 `2f0700`. [Guest-reference C](../../recovered/engine/object-storage.c) preserves
 RAM, defined returns and callback ordering. Ten bodies / 640 bytes have exact

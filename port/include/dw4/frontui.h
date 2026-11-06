@@ -1,4 +1,4 @@
-/* dw4/frontui.h — the front-end title's own UI tree (findings #632/#633/#634/#635).
+/* dw4/frontui.h — the front-end title's own UI tree.
  *
  * The title/menu screen's 2D layer — the DIGIMON 4 logo, the copyright block and the menu rows —
  * is not drawn by hand: it is the pack's own scene graphs carried in `AREA.AFS` entry 620,
@@ -8,7 +8,7 @@
  *     j_startmenu01 -> the single `start` line = the "Press START button" text (mojips.png v 0.758..0.984)
  *     j_startmenu02 -> the `menu`/`null1` rows = "Game Start" / "Option" (mojips.png v 0.62..0.78)
  *
- * **The title has two states (finding #605/#639).**  The game opens on the *press-start* screen —
+ * **The title has two states.**  The game opens on the *press-start* screen —
  * the logo, the copyright and the `j_startmenu01` "Press START button" line, with no menu rows — and
  * only shows the `j_startmenu02` Game Start/Option rows once the player presses START.  The two menu
  * graphs are therefore mutually exclusive: `dw4_frontui_start` advances press-start -> menu.
@@ -20,7 +20,7 @@
  * draws (larger z is nearer, drawn last).
  *
  * **The animation is the pack's own controller data, not a frozen frame.**  Every UI node carries an
- * `igTransformSequence1_5` pop-in (finding #634) and `beNDMWTitle2` (finding #635) drives the graphs
+ * `igTransformSequence1_5` pop-in and `beNDMWTitle2` drives the graphs
  * with `MODELCTRL ... GENERATE <seq>` exactly like `j_startback`.  The per-graph `beAction2` OPEN
  * step carries a `beAction2JOINTSET` window and the CLOSE step a `beAction2FADESET`, so this module
  * plays the recovered schedule on the host's 60 fps tick:
@@ -32,7 +32,7 @@
  *     (down), LINEUP00 `80..100 'OS'` (up), resting on the sequence's own `y = -60` / `-108` keys.
  *
  * A `beAction2JOINTSET` is a *time range* (frames at 60 fps -> `frames*1e9/60` ns), not a joint
- * count (findings #614/#618): a node's `_time` advances with the engine clock and is rebased onto
+ * count: a node's `_time` advances with the engine clock and is rebased onto
  * the window, clamped at `_endTime` for `OS`.  See `dw4_frontlayer.h` for the same mechanism.
  */
 #ifndef DW4_FRONTUI_H
@@ -47,7 +47,7 @@
 
 typedef struct dw4_frontui dw4_frontui;
 
-/* The title screen's two states (finding #605/#639).  The game boots into PRESS_START (the logo, the
+/* The title screen's two states.  The game boots into PRESS_START (the logo, the
  * copyright and the "Press START button" line); pressing START advances to MENU (the Game Start /
  * Option rows).  The two menu graphs are mutually exclusive. */
 #define DW4_FRONTUI_PRESS_START 0

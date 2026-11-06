@@ -113,7 +113,7 @@ static int edit_main(struct edit *e)
         if(!edit_changed(e))return 0;
         if(arena_edit(e)->_entCode!=2)return 1;
         arena_edit(e)->_st1=5;return 0;
-    case 5: /* donation: a yes/no question follows the acknowledgement */
+    case 5: /* donation: the answer to question 0x7A9 */
         if(!edit_child(e,DW4_STATUS_XDATAMENU,0x7AA,0))return -1;
         arena_edit(e)->_st1=6;return 0;
     case 6:

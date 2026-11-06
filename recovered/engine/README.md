@@ -202,7 +202,7 @@ and persistent generate/select/close cycles. Both bodies match
 record lookup used by SELECTCTRL. 201 direct cases and216 composed manager cases
 run its original instructions; the combined suite has4,506 cases and1,208/1,228
 instruction addresses (20 padding words). Physical pad sampling remains controlled;
-[record-selection contract](../../docs/engine/selectctrl.md#original-pad-record-selection-916).
+[record-selection contract](../../docs/engine/selectctrl.md#original-pad-record-selection).
 
 The [joint selector/manager oracle](../../docs/engine/selector-manager-composition.md)
 composes the selector, manager, pad selection and empty presentation

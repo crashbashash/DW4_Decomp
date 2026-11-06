@@ -9,7 +9,7 @@ All addresses are in the ELF's BSS (`0x00554b00`–`0x0058d280`) and are stable.
 | Global | Type | Meaning | Class typeinfo |
 | --- | --- | --- | --- |
 | `0x0058a1b8` | ptr | object #1 | `0x00587d08` |
-| `0x0058a1c0` | ptr | **main game / GAMERAM object** (property root) — the instance it points at is a `Gap::Bec::beMessenger` (its `+0` vtable is `0x0053ab70`, finding [#415](../findings/findings-0251-0500.md#f415)) | `0x00588f38` |
+| `0x0058a1c0` | ptr | **main game / GAMERAM object** (property root) — the instance it points at is a `Gap::Bec::beMessenger` (its `+0` vtable is `0x0053ab70`) | `0x00588f38` |
 | `0x0058a1c8` | ptr | object #3 | `0x00589160` |
 | `0x0058a1d0` | ptr | object #4 | `0x00589790` |
 | `0x0058a1d8` | ptr | the Game `this` pointer | — |
@@ -71,11 +71,16 @@ the `MDL*`/`BLT*`/`BLP*` script functions.
 Only HP/max-HP live in the MDL block. MP/EXP/LEVEL/NINZU live in the GAMERAM
 property system (`docs/engine/property-system.md`).
 
-> **The MP field (findings [#172](../findings/findings-0001-0250.md#f172)/#255).** MP is a property *field*, not a
+> **The MP field.** MP is a property *field*, not a
 > global: the player status container at `0x8803E4` holds 24-byte records
 > `[hdr][def_ptr][value u32][pad][flags][handler]` and each def record embeds the field name,
 > so `def 0x69A4E4` = `"MP"` and its live value is **`0x88041C`** (HP `0x8803EC`, MMP
-> `0x880434` in the same array). Two mirrors of MP sit at `0x1227730`/`0x1227734`.
+> `0x880434` in the same array). The records run in the order `EXP`, `ISUSE`, `HP`, `MHP`, `MP`,
+> `MMP`, `TSUYOSA`, `MAMORI`, `LUCKRITSU`, `ATTACKZOKUSEI`. These values are live and writable:
+> with `TSUYOSA` and its copies set to 1 the player's attacks did no damage. A second copy of the
+> numbers sits in a `VList` data array just before the records (11 entries in the measured save),
+> with further copies elsewhere in the heap, so change every copy when testing a stat.
+> Two mirrors of MP sit at `0x1227730`/`0x1227734`.
 > **The container address is save-dependent** (LV-999 saves: MP `0x88041C`; level-1 save: MP
 > `0x87E3A4`, container moved -0x2044) — locate it per save by scanning for the MP def pointer
 > `u32 == 0x69A4E4`, whose value is at `hit+4`. A Heal Circle refill
@@ -111,7 +116,7 @@ position:
 >   character, `transform+48/52/56` is unchanged, to the bit. It **is** rewritten on a
 >   *placement* event, though (a knockdown/knockback re-place moved it from
 >   `(120.74, 62.54, 327.63)` to `(147.85, 56.48, 325.24)` across one interval in a live
->   test — finding [#413](../findings/findings-0251-0500.md#f413)), which is why it can look like it tracks;
+>   test), which is why it can look like it tracks;
 > * writing it **does not move the character on screen**. Writes round-trip and persist
 >   (nothing else rewrites the field), and were tested at three targets, one of them a
 >   spot with no scenery of the kind on screen, so the unchanged view is conclusive.
@@ -119,8 +124,8 @@ position:
 > It does read correctly **immediately after a stage load** (it is set when the
 > character is placed), which is why it is usable as "the player position" right
 > after a load — read it early, and treat it as where the character was *placed*.
-> The value the movement/render systems use is still unidentified ([#269](../findings/findings-0251-0500.md#f269)); the field's
-> own writes *can* wedge the character: after writing it, movement input produced no
+> The value the movement systems use is the scene node's translation row (below). Writes to
+> this field *can* wedge the character: after writing it, movement input produced no
 > change at all until the save state was reloaded.
 >
 > The stage's **entry-point table** (the `PLAYERPOINT`/`SETGENERATEPOS` targets) is a
@@ -128,51 +133,79 @@ position:
 > `(417.01, 72.02, −106.22)`, `(417.18, 72.00, −119.96)`, `(427.45, 72.00, −117.33)`,
 > `(402.37, 53.53, −10.06)`. Those are the positions the game itself teleports to.
 
-### Teleporting: write the *mirrors*, not the transform
+### The live player position
 
-The live position is **mirrored into ~8 identical 12-byte xyz triples**, plus a 4-corner
-collision footprint (16 triples total in `stag0101`). Writing **all** mirrors moves the
-character; writing the `*(0x0058a1e8)` matrix does nothing. Verified end-to-end: a write
-to `(445, 72, −110)` and back to `(430, 72, −120)` moved the character on screen both
-times (~27 % frame change, same as a walk), while the placement record stayed at the
-value it had at load.
+The player's model owner is `o = *(*(0x56df40)+0x84)`; the scene node (a `beModelCtrlNode2`) is `*(o+0xe0)`
+and the player info object is `*(o+0xe4)`. This path does not depend on the message-argument object, which is
+populated only intermittently. It is not available in the Terminal gate-menu state.
 
-**Finding the mirrors.** They are not discoverable by value: `pine find` returns "no
-match" for u32 values that provably exist (it missed a float read back from a known
-address even with `--start/--end` around it), so scan a RAM window in Python instead —
-or use the differential method:
+The authoritative world position is the translation row at node+0x50. Four other copies exist: AI data +0x70
+in a `beModelCtrlAIData`, a `beBaseInfoRamList` record, the message-argument matrix and a `beCopyModelCtrl2`.
 
-1. read 16 MB at `0x800000` (≈60 s),
-2. **walk the character one step in an OPEN direction** (into a wall gives zero
-   candidates — this is the trap),
-3. read the window again,
-4. keep the triples that moved, and among them those sharing the *dominant
-   displacement* — that set is the player's mirrors.
+`*(*(*(0x58a1c0)+0x10)+0xc0)+0x30` is the world position (x, y, z, 1.0) of the model the engine is currently
+processing; the middle object is a `beMessengerArgData`. It follows the player under free control in Central
+and the Terminal, but it is not a registry lookup: in a scripted stage with no message context (`stag0001`)
+the object is null.
 
-Addresses are stable across reloads of the **same savestate** — but not across different
-states, and not even across two states of the same stage: the allocator decides. Measured
-(finding [#414](../findings/findings-0251-0500.md#f414)): `pre-leomon` and `normal_lvl1_before_crown_enemy` share **no** mirror
-address, and a `stag0102` calibration was dead in a later
-`stag0102` load (its first slot held `nan`). So a set of addresses is per-*state*, and a
-stale one points at other objects — writing it corrupts them. **Never hard-code or reuse
-these across loads.** To avoid hunting each time, derive them from a stable route: read
-the placement record at `*(0x0058a1e8)+48` (accurate right after a load) and keep every
-copy of that triple in RAM — no walking, ~2 min (cache them per stage and
-re-validate before every use); the walk-based differential
-below is the fallback for when the record has gone stale. `stag0101`'s set (found by this
-method):
-`0x0111ee50 0x012fecc0 0x01383e50 0x0165135c 0x01651368 0x016b9720 0x016de1c0 0x017bdf10`,
-with a footprint at `0x017c25e8`/`0x017c2648`/`0x017c26a8`/`0x017c2708` (±3 units, no
-need to write).
+Player facing lives in `beNDMWMdlPlayerInfoWork`: yaw in radians at +0x84 (0 faces +z, positive towards +x)
+and the last applied yaw, normalised to 0..2pi, at +0x9c. When the two differ the engine re-derives the node's
+rotation rows (right = (cos, 0, -sin), forward = (sin, 0, cos), 4x4 row-major from node+0x20) and updates
++0x9c. Writing both with equal values is ignored, and writing only the node rows is unreliable.
 
-**How to write it:** set the position floats at `0x012A9264` (X), `0x012A9268` (Y), `0x012A926C`
-(Z); the next frame's section check places the model. Calibrating against a scratch cue of the last
-coordinates makes it repeatable.
+### Teleporting: write the scene node
+
+Writing the translation row at node+0x50 propagates to all the copies and moves the character on screen with
+stick control intact. Writes to the AI data, message matrix or render copy are reverted by the engine, and a
+write to the base-info record stays isolated. Writing the `*(0x0058a1e8)` matrix does nothing. To turn the
+player, write yaw at +0x84 with a different value from +0x9c.
 
 **One limit:** teleporting to a point whose *section* is not loaded makes the game try
 to stream it and can hang the load (observed: a 300-unit jump put up the area-loading
 tip and stayed there). Teleport inside the loaded section, walk across a boundary, then
 teleport again; otherwise reload the state.
+
+### Locating position copies in RAM
+
+Where the owner path is not available, the position can still be located through its heap copies: in
+`stag0101` it is repeated in ~8 identical 12-byte xyz triples, plus a 4-corner collision footprint (16 triples
+in total). Read them; write the scene node.
+
+They are not discoverable by value: `pine find` returns "no
+match" for u32 values that provably exist (it missed a float read back from a known
+address even with `--start/--end` around it), so scan a RAM window in Python instead —
+or use the differential method:
+
+1. pause the game and read 16 MB at `0x800000` (≈60 s),
+2. **walk the character one step in an OPEN direction** (into a wall gives zero
+   candidates — this is the trap),
+3. pause and read the window again, so the diff is exact,
+4. keep the triples that moved, and among them those sharing the *dominant
+   displacement* — that set is the player's copies.
+
+Ignore the static program image (the ELF loads at `0x100000..0x554b00`; it never changes as the world moves)
+and keep only translation rows (x, y, z, 1.0): unfiltered three-float diffs are dominated by rotation-matrix
+rows of unit vectors.
+
+Addresses are stable across reloads of the **same savestate** — but not across different
+states, and not even across two states of the same stage: the allocator decides.
+`pre-leomon` and `normal_lvl1_before_crown_enemy` share **no** copy
+address, and a `stag0102` calibration was dead in a later
+`stag0102` load (its first slot held `nan`). So a set of addresses is per-*state*, and a
+stale one points at other objects. **Never hard-code or reuse
+these across loads.** To avoid hunting each time, derive them from a stable route: read
+the placement record at `*(0x0058a1e8)+48` (accurate right after a load) and keep every
+copy of that triple in RAM — no walking, ~2 min; the walk-based differential
+is the fallback for when the record has gone stale. `stag0101`'s set (found by this
+method):
+`0x0111ee50 0x012fecc0 0x01383e50 0x0165135c 0x01651368 0x016b9720 0x016de1c0 0x017bdf10`,
+with a footprint at `0x017c25e8`/`0x017c2648`/`0x017c26a8`/`0x017c2708` (±3 units).
+
+## Story-flag table
+
+The retail story-flag table is a 1,024-byte array of 0/1 bytes in the heap, indexed by flag id:
+`t = *(*(*(0x5875e0)+0xdc)+0x10)`. The table address differs between states (`0x7deef8`, `0x86b228`,
+`0x880a10`, `0x7e66e8` seen) but the chain holds. Flag 1 is 0 on a fresh save and 1 on progressed saves; flag
+25 goes from 0 to 1 at the Data Keeper's first conversation.
 
 ## Pointer-chain cheat sheet (for dynamic testing)
 | Want | Expression |
@@ -183,8 +216,14 @@ teleport again; otherwise reload the state.
 | Current HP | `*(u32*)0x0058a1f0` |
 | Max HP | `*(u32*)0x0058a1ec` |
 | Current model transform | `*(0x0058a1e8)` |
-| Model position | `f32 @ transform+48/+52/+56` |
+| Model placement position | `f32 @ transform+48/+52/+56` |
 | MDL entity object | `*(0x0058a1e0)` |
+| Player model owner `o` | `*( *(0x56df40) + 0x84 )` |
+| Player scene node | `*(o+0xe0)` |
+| Player live position | `f32 @ node+0x50` (x, y, z) |
+| Player info object | `*(o+0xe4)` |
+| Processed model position | `*(*(*(0x58a1c0)+0x10)+0xc0)+0x30` |
+| Story-flag table | `*(*(*(0x5875e0)+0xdc)+0x10)` |
 
 ## Hot engine globals (not game state)
 Very-high-reference-count BSS words — engine/runtime, not gameplay:
@@ -206,3 +245,20 @@ at `0x004c8770`–`0x004c87f8`:
 
 `MDLdspExp` (0x00374140) → `0x373ef0` indexes these tables (stride 28) and calls
 the `GAMERAM` object method to display the number.
+
+## Open questions
+
+- Unproven: the table at `0x21000` looks like a model display list, a hash map from RamNo to pointer with
+  chained 0x10-byte entries `{key, value, 0, 0}`.
+- Unproven: the MDL block may not be usable as a player handle. Idle reads of `*(0x0058a1e8)` alternated between
+  two entities from sample to sample (`0x012cba38` 28 times, `0x0125a408` 12 times in 40 samples), and
+  `0x0058a1f0`/`0x0058a1ec` read 3/100 while the HUD showed HP 170. Check which entity the block holds before
+  reading player values from it.
+
+## What didn't work
+
+- **Writing the HUD's HP.** The HP shown on the HUD is a display copy. In one measured state it sat at
+  `0x013F2FBC`, with a second copy at `0x013F2FB8` tracking it each frame. Writing either only fakes the
+  number: the fake survives until something refreshes the stat block, and using an HP Disk α then rewrites it
+  from the real HP (real HP rose by 450 per disk). Neither address is the real or the maximum HP; use the
+  status container above.

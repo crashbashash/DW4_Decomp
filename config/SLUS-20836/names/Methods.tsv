@@ -33,7 +33,7 @@
 0x00326e30	igPageMemoryPool_GetBlockSize	engine
 0x0033bd30	igMovieRenderer_InitializeDrawing	movie
 #
-# --- the `p2` PS2/EE renderer backend (finding #491, docs/engine/p2-renderer.md) ---
+# --- the `p2` PS2/EE renderer backend (docs/engine/p2-renderer.md) ---
 #
 # Two more of the same kind: the message names the function it is in.
 #   0x1f8050  its own trace, "p2readGSPrivRegister(%d)\n", with the register argument -- and the
@@ -45,6 +45,6 @@
 # passed as a0 to 0x20dfd0 together with a 3-float payload built from s4+112..120, i.e. an event
 # name, not the function's own name.  0x207210 / 0x2082f0 carry `swapbuffers*Predicate` /
 # `textureLoaded*Predicate`, which are registry names for *other* functions; the ones here register
-# them.  Both stay hypotheses in finding #491 until the registration site is read.
+# them.  Both stay hypotheses until the registration site is read.
 0x001f8050	p2readGSPrivRegister	engine
 0x0020c270	p2LoadTexture	engine

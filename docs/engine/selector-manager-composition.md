@@ -1,6 +1,6 @@
 # Common selector and SELECTCTRL protocol composition
 
-Finding [#918](../findings/findings-0751-1000.md#f918) adds a joint original-instruction oracle for the common shop
+A joint original-instruction oracle covers the common shop
 selector owner, its concrete SELECTCTRL handler/update, pad-record lookup and
 empty close queues. The owner obtains its selected value and completion flag
 from the real handler's append operations. It has no fixture-selected result

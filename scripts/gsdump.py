@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """gsdump.py — read a PCSX2 `.gs` (or `.gs.zst`) GS dump: its header, the freeze state, the GIF
-stream, and (findings #568/#569/#570) the texture the GS actually sampled out of VRAM.
+stream, and the texture the GS actually sampled out of VRAM.
 
 The .gs format (PCSX2 `GS/GSDump.cpp`, `GSDumpBase::AddHeader`):
 
@@ -29,10 +29,10 @@ The freeze data is the whole drawing environment in `GSState::GetSaveStateSize` 
 
 `--state` prints the header and the fields this frame's draws use.  `--draws` tracks the PACKED
 register cycle (the A_D state writes) and the vertex packets, so every draw's TEX0/PRIM/ALPHA/TEST
-and its per-vertex RGBA/ST/XYZ come out (finding #569: the vertex format here is the PACKED
+and its per-vertex RGBA/ST/XYZ come out (the vertex format here is the PACKED
 `NREG=3` STQRGBAXYZF2 complex type — STQ, RGBA, XYZF2 — not STQ+UV+XYZF2, so there *is* a
 per-vertex colour).  `--tex TEX0 --tex-out F.png` decodes a texture out of the dump's VRAM with the
-GS swizzle and CLUT, which is how the world's P11G00n binding was settled (#570).
+GS swizzle and CLUT, which is how the world's P11G00n binding was settled.
 """
 import argparse
 import ctypes
@@ -356,7 +356,7 @@ def draws(d):
 
 
 # ---------------------------------------------------------------------------------------------------
-# decoding a texture out of the dump's VRAM (PSMT8 + CT32 CLUT), findings #570/#571
+# decoding a texture out of the dump's VRAM (PSMT8 + CT32 CLUT)
 # ---------------------------------------------------------------------------------------------------
 
 # GSTables.cpp / GSOffset for swizzle8: page 128x64, blocks 16x16, 8 blocks wide x 4 high.

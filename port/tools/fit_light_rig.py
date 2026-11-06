@@ -7,7 +7,7 @@ every pack, and are empty in every savestate.  So the port carries a baked defau
 fits it by driving `build/dw4asset render` as a black box and minimising the mean absolute
 difference against a reference frame.
 
-**Use `tools/frame_metric.py`'s rescaling** (finding #573): the reference is a 640x480 PCSX2
+**Use `tools/frame_metric.py`'s rescaling**: the reference is a 640x480 PCSX2
 screenshot of a 640x448 framebuffer, so it is resampled to the frame's size before comparing.  The
 rig that was fitted without that correction came out degenerate -- it was driven by the floor and
 wall, whose normals barely vary, and the up-facing facets of the flat-shaded props clipped to white.

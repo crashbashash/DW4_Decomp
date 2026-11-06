@@ -1,6 +1,6 @@
 # Memory-reference values and actual Work instance lifetime
 
-Finding [#889](../findings/findings-0751-1000.md#f889) records **32 complete bodies / 1,168 code bytes** in
+Recovery covers **32 complete bodies / 1,168 code bytes** in
 [memory-field-values.c](../../recovered/engine/memory-field-values.c): the contiguous
 seven-body memory value/lifetime run, generic scalar defaults/no-ops and the exact
 metadata/trim/base hooks used by Work and its lists. All 32 bodies / 1,168 bytes

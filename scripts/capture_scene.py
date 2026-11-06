@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """capture_scene.py — where a stage's models actually sit, from a live EE RAM dump.
 
-This closes the two gaps the pack cannot answer (findings #484/#485): which geometry a node draws
+This closes the two gaps the pack cannot answer: which geometry a node draws
 and, with the model's own attr list in hand, what it is called.  Both are **load-time assignments**,
 so they only exist in RAM — and a saved dump is as live as a paused emulator, so no emulator is
 needed to read it:

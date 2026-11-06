@@ -1,6 +1,6 @@
 # SELECTCTRL manager and pad input
 
-Findings [#914](../findings/findings-0751-1000.md#f914)–[#915](../findings/findings-0751-1000.md#f915) recover the concrete `beSelectCtrl` receiver used by the
+This page covers the concrete `beSelectCtrl` receiver used by the
 [shop selectors](shop-selectors.md). Two entry bodies match exactly:
 `beSelectCtrl_EnsurePadManager` at `0x0039cb70` (64 bytes) and
 `beSelectCtrl_RegisterReceiver` at `0x0039cbc0` (36 bytes).
@@ -23,14 +23,13 @@ The method at raw136 is **not cleanup**. It tests the reflected `_padManager`
 word32 and, only when absent, calls `0x00236f80` with `_insight` word12 and the
 published metadata at `0x00588518`. It stores the returned pointer directly.
 This body has no retain/release traffic; a failed lookup leaves zero for another
-attempt. Finding [#913](../findings/findings-0751-1000.md#f913) called this slot cleanup;
-the body disproves that interpretation.
+attempt.
 
 The initializer calls `beMessenger_RegisterReceiverFromInfo` (`0x0038d820`)
 with `_messenger` word20, the supplied info record and literal `SELECTCTRL`
 (`0x0050f7f0`). The C++ compilation matches its36-byte frame/call/return;
 C mode instead emits a16-byte tail call. The pad-manager method uses the
-existing explicit retail NOP convention ([#731](../findings/findings-0501-0750.md#f731)) after pointer publication.
+existing explicit retail NOP convention after pointer publication.
 These matching sources preserve observed machine behavior; their original
 source spelling is unknown.
 
@@ -161,7 +160,7 @@ oracle to actual ShopSelect initialization and XDATA transactions, and closing t
 pad/model service dependencies. The broader chip/list/recalculation, other services,
 saving and hub script closure belong to the full lobby goal, which is unfinished.
 
-## Original pad-record selection ([#916](../findings/findings-0751-1000.md#f916))
+## Original pad-record selection
 
 The SELECTCTRL update's lookup at `0x0039b810` is named
 `bePadManager_GetPadForPlayer` from its body and its manager/player arguments.
@@ -203,8 +202,8 @@ Matching candidates should start from the measured residues, with the corrected
 byte/ref/float field types. Open: full manager/widget/XDATA composition, the
 physical pad/model services, and the remaining hub controllers and scripts.
 
-Finding [#917](../findings/findings-0751-1000.md#f917) matches the shared268-byte `igObject_Destroy` body used by the
-retained work/list release path, plus192 bytes of base-window cleanup used by
+The shared268-byte `igObject_Destroy` body used by the
+retained work/list release path matches, as do192 bytes of base-window cleanup used by
 metadata temporaries. [Object destruction](object-creation.md#destruction) records
 the explicit single register-copy instruction and exact-byte validation. Those
 bodies are not matching residues; the SELECTCTRL suite controls its

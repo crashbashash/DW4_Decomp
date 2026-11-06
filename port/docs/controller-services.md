@@ -154,8 +154,7 @@ four-player STATUS-root checks pass with freezes in place. Eight active/inactive
 execute original `396a80`, including FPR rate zero/one publication; property
 lookup, enum parsing and animation hooks are controlled leaves. The raw enum
 names/indices are checked directly. These checks do not compare complete original
-animation-manager freeze clocks, rendered poses or audio/generator behavior
-(finding [#807](../../docs/findings/findings-0751-1000.md#f807)).
+animation-manager freeze clocks, rendered poses or audio/generator behavior.
 
 ## Retail subcommand phase and node locks
 
@@ -207,7 +206,6 @@ leaves and arithmetic uses the repository's modeled EE FPU. Native checks cover
 source replacement, freeze, no query delivery, authoritative callback transports,
 parent retention and both callback-owner teardown orders. These checks do not
 establish full-scene manager order or complete combat/renderer parity. See
-findings [#2738](../../docs/findings/findings-2501-2750.md#f2738)–[#2740](../../docs/findings/findings-2501-2750.md#f2740) and
 [combat boundaries](combat.md#hitbox-scheduler).
 
 ## Effect, sound and attachment services
@@ -290,8 +288,7 @@ references, missing bone/track results, an original heal effect and Digi-Elf
 bone lookup from mounted assets. Dummy-device checks cover fade progression,
 held clocks and stale voice tokens. ASan/UBSan cover mixed records, prepared
 asset dependencies, retained callbacks, contact cache and field
-teardown/attacks, including pending erase and inherited facing. See findings
-[#2741](../../docs/findings/findings-2501-2750.md#f2741)–[#2743](../../docs/findings/findings-2501-2750.md#f2743).
+teardown/attacks, including pending erase and inherited facing.
 
 ## BIND movement consumer
 
@@ -349,7 +346,6 @@ graphs. It verifies unchanged presentation counts/clocks and both close orders,
 with arena baselines. The field `hitschedule` test exercises actual player
 publication and leaves a generated effect alive across runtime teardown; it also
 runs under ASan/UBSan. The related retail checks cover mixed-list detach order.
-See finding [#2745](../../docs/findings/findings-2501-2750.md#f2745).
 
 ## Camera and layers
 
@@ -395,28 +391,52 @@ authored panels/portrait/cursor and original fonts with production records.
 No retail pixel parity is claimed from those captures. UI layers are explicitly
 activated in this prepared harness. Source nodes are sampled through private copies. WN-only
 drawing is not a general world or actor renderer. The complete menu tree
-passes its separate controller/record contracts (finding [#808](../../docs/findings/findings-0751-1000.md#f808)).
+passes its separate controller/record contracts.
 
 ### Projection, depth and color masks
 
 Replay honors inherited pack view, projection and viewport attributes.
 Perspective STQ and clip handling are covered by the
 [STATUS root projection comparison](status-views.md#authored-wn-projection-and-reciprocal-q).
-Both sampled corners are resolved with original mode-three XY normalization and
-VU viewport conversion. Ordinary draw remains read-only; observed reference
-clocks are diagnostic only.
 
-WN draws carry hardware depth, GEQUAL/ALWAYS and write policy through CPU/GPU
-presentation, with model linear and font nearest filtering. The frame clears UI
-depth once before model/text batches. Original disabled depth state bypasses
-comparison and suppresses writes. Legacy draw constructors initialize the added
-fields.
+Projection upload normalizes XY before any transform. Attribute dispatch
+`0x0013fb80` reaches `0x00172b00`, whose projection stack calls `0x001fbce0` mode 3:
+it copies 16 floats, takes one reciprocal of the factor at `0x0056c2d8` (6 for the
+STATUS root) and multiplies only the 8 XY-column values. VU viewport scale is
+(1920,-1344,-32760,6) and origin (2048,2048,32760,0). `port/src/wnprojection.c`
+follows this: translation-first projected XY, then scale, reciprocal, multiply-add
+and positive-origin FTOI4 before XYOFFSET subtraction. Original clip coordinates
+remain for near/far clipping. Both sampled corners are resolved this way;
+normalizing after projection, or alternate W-scaling, does not reproduce retail.
+Physical hardware rounding is not proven for all inputs. Ordinary draw remains
+read-only; observed reference clocks are diagnostic only.
 
-Settled menus have prefix occlusion by their opaque background. The original
-fullscreen quad masks its color writes (FRAME.FBMSK=ffffffff). The scene loader
-and native publication carry nearest-ancestor channel masks through CPU/GPU
-rendering. Alpha/depth behavior and the UI bridge are checked; all seventeen
-observed-clock menus match the source mask.
+The STATUS root draws to a PSMZ16S depth buffer. Packed XYZF2 hardware Z is
+`(raw>>4)&0xffffff`. WN depth comes from the authored projection as
+`(1-z/w)*32760` with the viewport near/far; text borrows the authored WN01/N01
+camera. WN draws carry hardware depth, compare and write policy through CPU/GPU
+presentation: foreground draws use GEQUAL, while a disabled igDepthState and text
+use ALWAYS with writes suppressed. Models filter linearly (MMAG/MMIN 1/1), fonts
+nearest (0/0). The frame clears UI depth once before model/text batches. Omitting
+per-vertex depth lets a lower-depth panel cover the portrait card. A
+projection-free direct-XY fallback stays depth-free. None of this is a claim about
+general world depth. Legacy draw constructors initialize the added fields.
+
+Settled menus have prefix occlusion by their opaque background. The first
+fullscreen STATUS quad is not a color occluder: its alpha is 91/128 and
+FRAME.FBMSK is ffffffff. It passes the alpha test, its GEQUAL depth exceeds all
+prefix Z and its depth writes cover the viewport, so it retires prefix depth only.
+Later ALWAYS/no-write background triangles with opaque bilinear UV bounds
+collectively cover every sample and retire prefix color. This holds for settled
+menus; it does not establish opening/closing phases, order or pixel parity.
+
+`igColorMaskAttr` `_red/_green/_blue/_alpha` are bytes 12-15 and pack ordinals 4-7;
+ordinal 8 is unused. `0x00138e10` sets true defaults and `0x0013c8a0` stores the
+four bytes. True enables a channel write. NDMW 820 attributes 7818 and 11692
+disable every channel, so those WN draws preserve framebuffer color while alpha and
+depth processing continue. The scene loader and native publication carry
+nearest-ancestor channel masks through CPU/GPU rendering. Alpha/depth behavior and
+the UI bridge are checked; all seventeen observed-clock menus match the source mask.
 
 Seventeen single-interval comparisons include hardware depth and filter state,
 and all seventeen ordered comparisons pass with the projection normalization.

@@ -1,5 +1,5 @@
 # NDMW.AFS entry 621 (stag0102's model pack) -- every geometry attribute the offline chain
-# resolves, following findings #477/#478: `igGeometryAttr1_5._vertexArray` (an id) ->
+# resolves, following `igGeometryAttr1_5._vertexArray` (an id) ->
 # `igVertexArray1_1`, whose `_vdata` block lists this array's streams and whose `_numVerts` is
 # the count; a stream block's `_memSize` is its content size exactly (12*_numVerts positions,
 # 8*_numVerts UVs) and the pool is laid out 4-byte aligned, so the stream starts at the block's

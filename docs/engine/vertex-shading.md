@@ -58,7 +58,7 @@ the `0.5` is the GS's half-scale vertex-colour convention and a renderer uses th
 `1.0` — which is what the port already does.
 
 (Reading the `0.5` as a capture-time fade, because `127` looks too small against the
-reference's `164`, is refuted as finding [#578](../findings/findings-0501-0750.md#f578): the `2×` in the modulate is where the missing factor
+reference's `164`, is refuted as: the `2×` in the modulate is where the missing factor
 lives.)
 
 ## The frame's per-draw GS state
@@ -76,6 +76,10 @@ is uniform where it matters:
   **freeze state**. This confirms the port's linear default.
 * **The opaque lit draws** are `PRIM` with `TME 1 ABE 0 IIP 1`, `ALPHA A0 B1 C0 D1` (the GS's
   `(Cs−Cd)·C + Cd`), `TEST ATE 1 ATST 6` (GREATER) `AREF 0xc ZTE 1 ZTST 2`, `TEXCLUT 1`.
+* **The world's enabled blend is effectively opaque.** The ground palettes (`P11G00n`, `P10G00n`,
+  `P11G00s`, `TA01GM02`) are constant alpha `0x80`, which the GS treats as 1.0, so with
+  `igBlendStateAttr._enabled` 1 and `_src` 4, `_dst` 5 the blend reduces to a copy. It does not explain
+  the wall's colour, and the port needs no blending for this geometry.
 * **The unlit overlays** (HUD, shadows, the wall's blue light dash) carry a **constant** RGBA of
   `127` (full) or `0` (black) with `ABE 1` — these are the draws a renderer must *not* shade.
 
@@ -95,7 +99,7 @@ readback, swap and lighting.
   the reference frame's constants remain a **fit**; the model is decoded, the numbers are not.
 * The metal trim's residual is **not** a rig value and not the light model. It is the **texture
   orientation** — inline pack textures sampled vertically mirrored make the metal
-  sample the wrong texel ([`inline-textures.md`](inline-textures.md), finding [#579](../findings/findings-0501-0750.md#f579)). With the
+  sample the wrong texel ([`inline-textures.md`](inline-textures.md)). With the
   orientation correct the barrel box scores `15.43` instead of `20.77` and the crate `22.58` instead of `24.93`.
 
 ## Separating shade from texel: the GS's own maps
@@ -125,7 +129,42 @@ mirrors every interpolated attribute (shade, `S`/`T`/`Q` and `Z` alike). It is i
 *region mean* and shows up only as a spurious feature in the
 map: on Goblin Pass it produces a bright chevron over the floor at `x 378–402, y 345–412` that the
 GS's own framebuffer does not contain (`57.2, 38.9, 24.6` inside the chevron against `57.2, 38.9,
-25.0` over the floor box — identical). There is no crease in the game (finding [#586](../findings/findings-0501-0750.md#f586)).
+25.0` over the floor box — identical). There is no crease in the game.
+
+## Decoding a GS dump
+
+The front-end's PACKED vertices use descriptor `[2,1,4]` = ST, RGBAQ, XYZF2, 16 bytes per entry. RGBAQ
+holds one 8-bit channel in the low byte of each 32-bit dword (R, G, B, A).
+
+| form | layout |
+| --- | --- |
+| PACKED XYZF2/3 | X low-qword bits 0-15, Y bits 32-47, Z high-qword bits 4-27, F bits 36-43 |
+| PACKED XYZ2/3 | as XYZF2/3, with a 32-bit Z in high-qword bits 0-31 |
+| A+D entry | register address in the low byte of its second qword |
+| A+D vertex write | register value: X bits 0-15, Y 16-31, Z 32-63 |
+
+Addresses: TEX1_1 `0x14`, XYOFFSET_1 `0x18`, TEXCLUT `0x1c`, FOGCOL `0x3d`, TEXFLUSH `0x3f`, SCISSOR_1
+`0x40`, TEST_1 `0x47`. In TEST, ZTE is bit 16 and ZTST bits 17-18. FRAME's FBP is in units of 8192 bytes
+and FBW (bits 16-21) is width/64.
+
+The title uses XYOFFSET (1728,1824), so screen = raw/16 minus those; SCISSOR (0,639)x(0,447); FRAME_1
+`0x000a0000` (byte 0), `0x000a008c` (byte `0x118000`), `0x000401a3` (byte `0x346000`, 256 px wide); ZBUF
+ZBP 280 (byte `0x230000`).
+
+PCSX2's GS-dump replay is the authority for frame conclusions: Vulkan and software replays of a
+trace-phase dump both give the blue ring on black with no bright tunnel, while a custom per-run raster
+predicted a bright annulus. An ordered replay that keeps primitive boundaries and draw order agrees
+closely (`scripts/gs_ordered_score.py`: MAE 1.21 against the software replay, 167.29 all-additive, 11.85
+all-black) but is not pixel-exact. A dump holds several geometry sections, so score against the right
+one: the runner showed one four-section dump in the order 5, 8, 11, 2, and its sidecar matches section
+2.
+
+Vulkan and software replays of the same dump agree to a mean abs diff of 0.09-0.19 of 255, but sections of
+one dump need not. Geometry sections can have identical vertex positions, UVs, colours and draw state (only
+FRAME_1/2 and FINISH/LABEL differ) and still replay differently in PCSX2, by a few short radial trace
+segments (mean abs diff 0.12-0.25, 0.33-0.54 % of pixels). The ordered diagnostic uses one texture dump and
+cannot show this. The cause is unproven; texture or palette uploads between frames are the likely one, not
+checked.
 
 ## Reproducing
 
@@ -168,7 +207,7 @@ draw's colour varies across its vertices) and whose vertices stay inside the fra
 properties separate them from the lit 3D draws without a texture list.  `scripts/gs_ui.py` exports
 them as screen-space triangles with the GS's own UV (`STQ / Q`), each TEX0's texture decoded out of
 the dump's VRAM, and the port's `--ui` replays them over the scene with the GS's `(Cs-Cd)*As+Cd`
-blend and `(Ct*Cv)>>7` modulate (finding [#593](../findings/findings-0501-0750.md#f593)):
+blend and `(Ct*Cv)>>7` modulate:
 
 ```sh
 python3 scripts/gs_ui.py --dump dumps/goblin_pass_ref.gs.zst --out /tmp/ui
@@ -181,7 +220,7 @@ halves the frame's largest remaining error region.  The overlay's *content* is p
 this is a reproduction path and not the native UI a port needs -- but it pins the 2D blend and the
 screen-space mapping by measurement, which is what the UI implementation will be checked against.
 
-### The HUD digits have no hidden per-glyph UV (finding [#595](../findings/findings-0501-0750.md#f595))
+### The HUD digits have no hidden per-glyph UV
 
 The number strip's 40 triangles carry only **two distinct first-vertex UVs** (`u` 0.84375/0.9375).
 That is not a missing per-digit choice: each digit cell is a **2-triangle quad** (triangle 1 starts
@@ -195,8 +234,7 @@ Two measured facts about the *reference*, worth knowing before trusting the HUD 
 
 * The port's replay matches the native framebuffer's digit **placement** (column peaks align) and
   **ink level** (158 vs 154 G).  The dump screenshot's digits sit ~3.5 px right of the fb's and are
-  brighter (185 G) — a display-path offset, the same family as finding [#590](../findings/findings-0501-0750.md#f590)'s display-path
-  candidate.
+  brighter (185 G) — a display-path offset.
 * The native fb's digit rows alternate bright (~248 G) and dim (~125 G) rows that the displayed
   image does not carry — identical in both FBP twins and byte-identically in a second dump, so a
   deterministic fb-HUD artifact a progressive render cannot and should not reproduce (drawing the
@@ -206,19 +244,19 @@ So the HUD box's remaining 16.4 is that artifact plus the world background error
 defect.
 
 
-## The framebuffer excess is not a global response curve (findings [#601](../findings/findings-0501-0750.md#f601)/#602)
+## The framebuffer excess is not a global response curve
 
-The framebuffer reader follows GS columnTable32 for the words inside a block; the [#588](../findings/findings-0501-0750.md#f588)
+The framebuffer reader follows GS columnTable32 for the words inside a block; the
 decode has the page's block map right but reads inner words row-major, which is incorrect.
 4,108 address cases and actual STATUS savestate images establish this.
-The framebuffer-dependent per-pixel maps/numbers below come from the [#588](../findings/findings-0501-0750.md#f588) decode and must be
+The framebuffer-dependent per-pixel maps/numbers below come from that row-major decode and must be
 regenerated before reuse. The packet/texture evidence is independent of that decoder.
 
-One reading of finding [#590](../findings/findings-0501-0750.md#f590) is that the game's framebuffer is warmer-and-bluer than
-`texel x Cv/128` because a **single global response curve** — some shared per-channel
-nonlinearity — sits after the modulate.  That reading is refuted by measurement.
+The game's framebuffer is warmer-and-bluer than `texel x Cv/128`.  One reading is that a **single
+global response curve** — some shared per-channel nonlinearity — sits after the modulate.  That reading
+is refuted by measurement.
 
-Over the whole covered frame of the same-instant combat dump (pred `= Cv*texel/128` per channel, fb from the corrected [#588](../findings/findings-0501-0750.md#f588) decode):
+Over the whole covered frame of the same-instant combat dump (pred `= Cv*texel/128` per channel, fb from that decode):
 
 * The best global per-channel **affine** is `g = (0.591, 0.635, 0.580)`, `lift = (29.5, 23.5, 25.4)`
   with per-pixel mean `|d|` `(18.9, 16.8, 17.6)`.
@@ -236,13 +274,13 @@ interpolation convention (affine or perspective-correct) yields the same `pred` 
 under any shared curve or interpolation rule, so the term is **per-draw**, in the combine, not a
 global grade.
 
-The origin is pinned (finding [#602](../findings/findings-0501-0750.md#f602)): the dump's embedded raw screenshot **equals** the decoded
+The origin is pinned: the dump's embedded raw screenshot **equals** the decoded
 framebuffer per box to `<0.25/255` (whole means `53.77` vs `53.78`), so PCSX2's presentation applies
 no transform — the excess is already in the framebuffer; and the record stream carries **zero**
 IMAGE (`flg2`) packets, never writes `BITBLTBUF`/`TRXPOS`/`TRXREG`, and has no full-screen draw, so
-There is no VRAM copy / BBPASS / full-screen post pass.
+there is no VRAM copy / BBPASS / full-screen post pass.
 
-### The per-draw term is the GS fog stage (finding [#603](../findings/findings-0501-0750.md#f603))
+### The per-draw term is the GS fog stage
 
 The per-draw combine term is **fog**.  The dump stores each packed `XYZF2` vertex as
 four dwords — `X`, `Y`, `Z`, `F` (vertex bytes 32/36/40/44) — and PCSX2 extracts the fog value as
@@ -267,12 +305,36 @@ This also explains the crate's constant-colour dark face that motivated the "com
 reading: fog `F` varies per vertex, so the face diverges from `Cv*texel/128` even though its vertex
 colour does not.
 
-The "fog is dead (`F = 0`)" line in [#602](../findings/findings-0501-0750.md#f602) is an **extraction artifact**: `F = (XYZ[2] >> 24)`
-reads the top byte of the 24-bit `Z` dword, which is structurally 0.  [#602](../findings/findings-0501-0750.md#f602)'s other conclusion — the
-deviation is baked into the framebuffer, not applied by a display or post pass — stands.
+Reading fog as dead (`F = 0`) is an **extraction artifact**: `F = (XYZ[2] >> 24)` reads the top byte of
+the 24-bit `Z` dword, which is structurally 0.  The deviation is baked into the framebuffer, not applied
+by a display or post pass.
 
 **Consequence for the renderer:** implement the GS fog stage against the per-vertex `F`; do not
 implement a response curve and do not un-fit the light rig on this basis.  Two region-mean residuals
 are left to chase: the floor box reads *below* `pred` (it is overlay-covered, not a clean floor
 sample), and the bright character group (TBP `0x37c000`) is over-predicted.  The per-pixel scatter
 around the correct mean is pred/sampler (winner-raster + bilinear) noise, not a second combine.
+
+## Open questions
+
+* **Whether the GS alpha test matters on the lit draws.** Unproven, from one Goblin Pass census: `ATE 1
+  ATST 6 AREF 0xc` looks inert on the opaque lit draws, because the barrel, crate, world, floor-sized and
+  terrain textures each read alpha 128 on every texel, so it would only bite on the unlit `ABE` overlays
+  (the 32x32 HUD draw `0x40071a05553078cc` has 34.9 % of texels at alpha 12 or below). Check other stages
+  before leaving the cutout out of the scene renderer.
+* **The 128x128 draw `0x40063405dd30b160`.** It matched neither pack's `P11G00s` in that comparison
+  (palette intact, indices scrambled), which looks like a TBW or swizzle mismatch in the extractor.
+* **Whether a dump's embedded screenshot renders its own command stream during fast transitions.**
+  Dumps taken around the white flash pair near-identical ring geometry with no full-screen draw against
+  images of a line-art ring and a 97 % white frame, so at least one side is offset in time. Early
+  trace-phase dumps are aligned; later transition dumps are unresolved.
+
+## What didn't work
+
+* **Crediting the rig for a better frame score.** Comparing a fitted rig with per-pixel shading against the
+  live rig with Gouraud changes two things at once. A 2x2 comparison shows the gain is the per-vertex
+  Gouraud path, and the fitted rig stays better or tied nearly everywhere. The fit's apparent win on the
+  crate came from the resampled 640x480 reference plus the retail framebuffer's ordered dither of about
+  +-4 per channel: against the native 640x448 framebuffer with a 1.2 px blur, the crate mask is rig- and
+  path-independent (all four cells 18.38-18.44). At blur 0 the dither inflates every per-pixel score against
+  the dither-free port render.

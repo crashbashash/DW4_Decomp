@@ -8,11 +8,10 @@ is C; the 652-byte query and 128-byte deleting destructor share one
 [player stat recompute](../../src/unmatched/FUN_003fab90.cpp).
 The row/query pair also has readable
 [behavioral C](../../recovered/game/combat-helpers.c) and an independent
-original-instruction comparison. Findings [#1031](../findings/findings-1001-1250.md#f1031)/#1032 record those contracts;
-[#1038](../findings/findings-1001-1250.md#f1038)/#1040/#1041 record the exact matches and compiler ownership.
+original-instruction comparison.
 
 The separate FightCom metadata builder and BLT attribute accessor now have
-140 bytes of matching C ([#1033](../findings/findings-1001-1250.md#f1033)); see the
+140 bytes of matching C; see the
 [compiler requirements](../engine/unit-compilers.md).
 
 | Address | Bytes | Semantic name | Role |

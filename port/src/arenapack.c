@@ -2,7 +2,7 @@
  *
  * Pass 1 allocates a block for every pool block and every object (the object's bytes come from dw4_object_from_record, which
  * already lays values out at the reflected offsets and stamps the header); string fields get their own blocks. Pass 2 rewrites the
- * reference fields from pack ids into handles. Types 0 and 7 are the reference descriptors (finding #482). */
+ * reference fields from pack ids into handles. Types 0 and 7 are the reference descriptors. */
 #include "dw4/arenapack.h"
 
 #include <stdio.h>

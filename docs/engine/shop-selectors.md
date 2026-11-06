@@ -1,6 +1,6 @@
 # Shared selector and shop widget initialization
 
-Finding [#913](../findings/findings-0751-1000.md#f913) recovers **six complete bodies /7,916 code bytes**: the shared
+**Six complete bodies /7,916 code bytes** are recovered: the shared
 WindowSelect update4233f0 /772 bytes, FO2TOP predicate423700 /84 bytes,
 ShopSelect00 initializer43d1d0 /636, ShopSelect01 initializer43d450 /1,976,
 ShopSelect11 initializer43ecc0 /3,752 and its stat/cost display43fb70 /696.
@@ -20,7 +20,7 @@ lookup/recalculation, formatting, text/model and Lua services remain boundaries.
 No native shop UI or input parity is accepted here.
 
 The76-byte lazy shop metadata
-accessor is exact source as well, using the repository's explicit-padding convention ([#731](../findings/findings-0501-0750.md#f731)).
+accessor is exact source as well, using the repository's explicit-padding convention.
 Its null branch enters at the registration call while the non-null/not-ready path
 executes the original no-op. Together the two exact bodies are160 bytes.
 
@@ -177,11 +177,11 @@ at table53b290 registers literal50f7f0 through39cbc0. Raw132 selects update39cbf
 raw140 selects general handler39d720. Its inherited raw144 check378410 is the
 exact return-zero body, so the shared messenger uses the general raw140 path.
 Pad-manager acquisition39cb70 (not cleanup) and
-registration39cbc0 have exact source, 100 bytes ([#914](../findings/findings-0751-1000.md#f914)). The
+registration39cbc0 have exact source, 100 bytes. The
 metadata getter and inherited check are matched as well. The complete
 [SELECTCTRL manager review](selectctrl.md) records the2,864-byte update
 and1,960-byte general handler. Both have full behavioral source and4,089
-original-instruction cases ([#915](../findings/findings-0751-1000.md#f915)), and both match. This selector suite's receiver
+original-instruction cases, and both match. This selector suite's receiver
 responses remain controlled. A separate [joint owner/manager oracle](selector-manager-composition.md)
 covers144 lifecycles /3,146 checkpoints with actual handler responses,
 pad lookup and empty close queues. It controls initialization, message delivery

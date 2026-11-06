@@ -154,7 +154,7 @@ int dw4_fight_p2e_expup(dw4_playerrecords *records,const dw4_databases *database
 /* Enemy-to-player FIGHTCALC rules (GAMERAM command FIGHTCALC, FightCom E2PISHITCHECK, E2PDAMAGE, E2PDAMAGERANK), ported from the
  * reviewed source of beNDMWGameRam::vfunc_34 (src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp cases 0, 3, 4 of the FIGHTCALC
  * switch on sp494; retail 0x00401e68 E2PDAMAGE, 0x00402ec0 E2PDAMAGERANK). Compared with the retail Mammothmon reads of 2026-11-01 (check-fieldstage e2pboss, findings
- * #2984, #3021): the hit check's dependence on the player's SUBAYASA and the plain TYPE 0 damage ranges agree; the contact criticals do not fully (#3020). Every random draw uses the one engine stream (beSystem::_random, system+0x30) as `next % n`, unsigned.
+ * #2984, #3021): the hit check's dependence on the player's SUBAYASA and the plain TYPE 0 damage ranges agree; the contact criticals do not fully. Every random draw uses the one engine stream (beSystem::_random, system+0x30) as `next % n`, unsigned.
  *
  * Strings resolved from the retail ELF (virtual address -> text):
  *   eneatk columns: 0x5191d0 TYPE, 0x5191d8 SEQUENCE, 0x518950 MEICHURITSU, 0x5188b0 TSUYOSA, 0x518960 CHIMEIRITSU, 0x519018 ZOKUSEI

@@ -16,7 +16,7 @@
  * unit is ~96 px and 1.0 draws the text at the atlas' resolution (calibrated against the live menu
  * capture, boot-contract W1). */
 #define DW4_FEFONT_K   96.0f
-#define DW4_FEFONT_ENTRY 79u      /* NDMW.AFS entry 79 = bectext.igb (finding #608) */
+#define DW4_FEFONT_ENTRY 79u      /* NDMW.AFS entry 79 = bectext.igb */
 
 static uint32_t rec_u32(const dw4_igb_record *r, uint32_t ord, uint32_t def)
 {

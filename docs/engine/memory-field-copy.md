@@ -1,6 +1,6 @@
 # Memory-field copying, buffer services and object visitation
 
-Finding [#891](../findings/findings-0751-1000.md#f891) recovers **14 complete bodies / 1,668 code bytes**: the contiguous
+This page covers **14 complete bodies / 1,668 code bytes**: the contiguous
 four-body memory-field copy/print/visitor run (1,044 bytes), nine contiguous
 buffer services (368 bytes), and the generic object visitor (256 bytes).
 Twelve bodies / 1,612 bytes have exact source; eleven are `match` and the object visitor
@@ -103,15 +103,13 @@ remain controlled leaves. The older isolated and `--array-storage` modes remain
 separate checks. Eighteen dependency tests verify original slots144/152/164/168,
 duplicate-buffer calls, type handles and prior roots.
 
-Finding [#892](../findings/findings-0751-1000.md#f892) refutes the old intrinsic-discard interpretation in [#363](../findings/findings-0251-0500.md#f363); the historical
-symbol alone does not establish that behavior.
+The intrinsic-discard interpretation does not hold; the historical symbol alone does not establish
+that behavior.
 
-Finding [#893](../findings/findings-0751-1000.md#f893) records two `apply_names.py` bugs exposed by the naming batch: target-derived thunk names
-could override explicit alias names, and filename indexing skipped one half of
-same-basename C/C++ pairs. Explicit names now win, and reference rewriting visits
-both files. `python3 testing/test_apply_names.py` reproduces both cases in an
-isolated naming batch. Existing string delete wrappers preserve their exact alias
-targets after the repaired batch.
+In `apply_names.py`, explicit alias names win over target-derived thunk names, and
+reference rewriting visits both halves of same-basename C/C++ pairs.
+`python3 testing/test_apply_names.py` covers both cases in an isolated naming batch.
+Existing string delete wrappers keep their exact alias targets.
 
 The subsequent [allocator-registry checkpoint](allocator-registry.md) recovers
 owner traversal and encoding plus complete allocation wrappers. Compiler residuals,

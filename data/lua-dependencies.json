@@ -588,639 +588,639 @@
   "reviewed_roots": [
     {
       "address": 3714928,
-      "evidence": "beMatCtrl initialization for the material owner used by Lua MAT; docs/engine/material-contact.md, finding #860"
+      "evidence": "beMatCtrl initialization for the material owner used by Lua MAT; docs/engine/material-contact.md"
     },
     {
       "address": 3715152,
-      "evidence": "beMatCtrl MATCTRL receiver registration; docs/engine/material-contact.md, finding #860"
+      "evidence": "beMatCtrl MATCTRL receiver registration; docs/engine/material-contact.md"
     },
     {
       "address": 3715200,
-      "evidence": "Recursive material-mask producer called by beMatCtrl update; docs/engine/material-contact.md, finding #860"
+      "evidence": "Recursive material-mask producer called by beMatCtrl update; docs/engine/material-contact.md"
     },
     {
       "address": 3715568,
-      "evidence": "beMatCtrl vfunc_31 publishes the masks queried by all seven MAT bindings; docs/engine/material-contact.md, finding #860"
+      "evidence": "beMatCtrl vfunc_31 publishes the masks queried by all seven MAT bindings; docs/engine/material-contact.md"
     },
     {
       "address": 3718640,
-      "evidence": "beMatCtrl vfunc_34 handles MATCTRL messages for the Lua material owner; docs/engine/material-contact.md, finding #860"
+      "evidence": "beMatCtrl vfunc_34 handles MATCTRL messages for the Lua material owner; docs/engine/material-contact.md"
     },
     {
       "address": 3159120,
-      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x64 type size; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md, finding #876"
+      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x64 type size; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md"
     },
     {
       "address": 3159360,
-      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x7c construct value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md, finding #876"
+      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x7c construct value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md"
     },
     {
       "address": 3159584,
-      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x80 destruct value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md, finding #876"
+      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x80 destruct value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md"
     },
     {
       "address": 3159680,
-      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x88 clear/reset value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md, finding #876"
+      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x88 clear/reset value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md"
     },
     {
       "address": 3167488,
-      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x84 zero value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md, finding #876"
+      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0x84 zero value; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md"
     },
     {
       "address": 3169488,
-      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0xf0 construct flag; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md, finding #876"
+      "evidence": "igObjectRefMetaField vtable 0x532c80 slot 0xf0 construct flag; messenger Work/ArgData reflection fields use igObjectRefMetaField; data/reflection.json, data/vtables-getvtable.json, docs/engine/object-fields.md"
     },
     {
       "address": 3189248,
-      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x64 type size; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md, finding #877"
+      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x64 type size; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md"
     },
     {
       "address": 3190448,
-      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x70 reset default; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md, finding #877"
+      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x70 reset default; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md"
     },
     {
       "address": 3190960,
-      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x7c construct value; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md, finding #877"
+      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x7c construct value; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md"
     },
     {
       "address": 3190976,
-      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x80 destruct value; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md, finding #877"
+      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x80 destruct value; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md"
     },
     {
       "address": 3167552,
-      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x88 clear value; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md, finding #877"
+      "evidence": "igStringMetaField initializer 0x30b270 / GetVTable 0x2b98c0 establishes vtable 0x533180, slot 0x88 clear value; messenger string descriptors and generic construction/cleanup/reset; docs/engine/string-fields.md"
     },
     {
       "address": 3506672,
-      "evidence": "beMessengerWork: Work registrar passed by EnsureRegistered 0x3581d0 to RunStaticInit; Lua messenger memory initializes 64 Work objects through its factory; docs/engine/reflection-registration.md, finding #878"
+      "evidence": "beMessengerWork: Work registrar passed by EnsureRegistered 0x3581d0 to RunStaticInit; Lua messenger memory initializes 64 Work objects through its factory; docs/engine/reflection-registration.md"
     },
     {
       "address": 3506832,
-      "evidence": "beMessengerWork: Work field adder passed in caller stack slot 0 to RegisterClass by registrar 0x3581f0; Lua messenger memory initializes 64 Work objects through its factory; docs/engine/reflection-registration.md, finding #878"
+      "evidence": "beMessengerWork: Work field adder passed in caller stack slot 0 to RegisterClass by registrar 0x3581f0; Lua messenger memory initializes 64 Work objects through its factory; docs/engine/reflection-registration.md"
     },
     {
       "address": 3506432,
-      "evidence": "beMessengerWork: Work vtable getter passed in t3 to RegisterClass by registrar 0x3581f0; Lua messenger memory initializes 64 Work objects through its factory; docs/engine/reflection-registration.md, finding #878"
+      "evidence": "beMessengerWork: Work vtable getter passed in t3 to RegisterClass by registrar 0x3581f0; Lua messenger memory initializes 64 Work objects through its factory; docs/engine/reflection-registration.md"
     },
     {
       "address": 2856784,
-      "evidence": "beMessengerWork string descriptor factory: original constructor table 0x4c5ce0 consumed by field adder 0x358290; docs/engine/field-factories.md, finding #880"
+      "evidence": "beMessengerWork string descriptor factory: original constructor table 0x4c5ce0 consumed by field adder 0x358290; docs/engine/field-factories.md"
     },
     {
       "address": 2895088,
-      "evidence": "beMessengerWork integer descriptor factory: original constructor table 0x4c5ce0 consumed by field adder 0x358290; docs/engine/field-factories.md, finding #880"
+      "evidence": "beMessengerWork integer descriptor factory: original constructor table 0x4c5ce0 consumed by field adder 0x358290; docs/engine/field-factories.md"
     },
     {
       "address": 2870928,
-      "evidence": "beMessengerWork object-reference descriptor factory: original constructor table 0x4c5ce0 consumed by field adder 0x358290; docs/engine/field-factories.md, finding #880"
+      "evidence": "beMessengerWork object-reference descriptor factory: original constructor table 0x4c5ce0 consumed by field adder 0x358290; docs/engine/field-factories.md"
     },
     {
       "address": 3058736,
-      "evidence": "__internalObjectList vtable 0x5327d0 slot 8 destructor, consumed by igObject_Destroy; original metadata field-list factory 0x2c2670 and constructor 0x2eab70; docs/engine/internal-object-lists.md, finding #882"
+      "evidence": "__internalObjectList vtable 0x5327d0 slot 8 destructor, consumed by igObject_Destroy; original metadata field-list factory 0x2c2670 and constructor 0x2eab70; docs/engine/internal-object-lists.md"
     },
     {
       "address": 3142896,
-      "evidence": "igObject: base registrar passed by Work registrar 0x3581f0; docs/engine/object-base.md, finding #884"
+      "evidence": "igObject: base registrar passed by Work registrar 0x3581f0; docs/engine/object-base.md"
     },
     {
       "address": 1266992,
-      "evidence": "igObject: base metadata getter passed by Work registrar 0x3581f0; docs/engine/object-base.md, finding #884"
+      "evidence": "igObject: base metadata getter passed by Work registrar 0x3581f0; docs/engine/object-base.md"
     },
     {
       "address": 3142752,
-      "evidence": "igObject: empty base callback registrar passed in a2 by igObject registrar 0x2ff4f0; docs/engine/object-base.md, finding #884"
+      "evidence": "igObject: empty base callback registrar passed in a2 by igObject registrar 0x2ff4f0; docs/engine/object-base.md"
     },
     {
       "address": 3142816,
-      "evidence": "igObject: null-parent getter passed in a3 by igObject registrar 0x2ff4f0; docs/engine/object-base.md, finding #884"
+      "evidence": "igObject: null-parent getter passed in a3 by igObject registrar 0x2ff4f0; docs/engine/object-base.md"
     },
     {
       "address": 3143008,
-      "evidence": "igObject: published metadata accessor passed in t0 by igObject registrar 0x2ff4f0; docs/engine/object-base.md, finding #884"
+      "evidence": "igObject: published metadata accessor passed in t0 by igObject registrar 0x2ff4f0; docs/engine/object-base.md"
     },
     {
       "address": 3142832,
-      "evidence": "igObject: base vtable getter passed in t3 by igObject registrar 0x2ff4f0; docs/engine/object-base.md, finding #884"
+      "evidence": "igObject: base vtable getter passed in t3 by igObject registrar 0x2ff4f0; docs/engine/object-base.md"
     },
     {
       "address": 3143024,
-      "evidence": "igObject: manual header-field adder passed in stack slot0 by igObject registrar 0x2ff4f0; docs/engine/object-base.md, finding #884"
+      "evidence": "igObject: manual header-field adder passed in stack slot0 by igObject registrar 0x2ff4f0; docs/engine/object-base.md"
     },
     {
       "address": 1399680,
-      "evidence": "igObject: base object vtable 0x52f0f0 slot88 metadata getter; docs/engine/object-base.md, finding #884"
+      "evidence": "igObject: base object vtable 0x52f0f0 slot88 metadata getter; docs/engine/object-base.md"
     },
     {
       "address": 3137312,
-      "evidence": "Metadata field-name query called by igIntList specializer at 0x2cac44 and igObjectList specializer at 0x2bd854; original registrar callback literals identify those entries; docs/engine/metadata-callback-services.md, finding #886"
+      "evidence": "Metadata field-name query called by igIntList specializer at 0x2cac44 and igObjectList specializer at 0x2bd854; original registrar callback literals identify those entries; docs/engine/metadata-callback-services.md"
     },
     {
       "address": 3137184,
-      "evidence": "Metadata field replacement called by igIntList specializer at 0x2cac98 and igObjectList specializer at 0x2bd8a8; docs/engine/metadata-callback-services.md, finding #886"
+      "evidence": "Metadata field replacement called by igIntList specializer at 0x2cac98 and igObjectList specializer at 0x2bd8a8; docs/engine/metadata-callback-services.md"
     },
     {
       "address": 2873392,
-      "evidence": "igObjectList field specializer passed in caller stack slot0 by registrar 0x2bd7b0; original post_init record and reviewed192-byte body; docs/engine/list-descriptor-copy.md, finding #887"
+      "evidence": "igObjectList field specializer passed in caller stack slot0 by registrar 0x2bd7b0; original post_init record and reviewed192-byte body; docs/engine/list-descriptor-copy.md"
     },
     {
       "address": 2927648,
-      "evidence": "igIntList field specializer passed in caller stack slot0 by registrar 0x2caba0; Work dependency callback 0x2cab90 reaches this registration; docs/engine/list-descriptor-copy.md, finding #887"
+      "evidence": "igIntList field specializer passed in caller stack slot0 by registrar 0x2caba0; Work dependency callback 0x2cab90 reaches this registration; docs/engine/list-descriptor-copy.md"
     },
     {
       "address": 2917520,
-      "evidence": "Reviewed list registration: allocation-only data-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: allocation-only data-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2917600,
-      "evidence": "Reviewed list registration: ready data-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: ready data-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2917680,
-      "evidence": "Reviewed list registration: data-list vtable getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: data-list vtable getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2917872,
-      "evidence": "Reviewed list registration: data-list own metadata callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: data-list own metadata callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2917888,
-      "evidence": "Reviewed list registration: data-list native field adder; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: data-list native field adder; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2873024,
-      "evidence": "Reviewed list registration: allocation-only object-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: allocation-only object-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2873104,
-      "evidence": "Reviewed list registration: ready object-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: ready object-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2873184,
-      "evidence": "Reviewed list registration: object-list vtable getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: object-list vtable getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2873376,
-      "evidence": "Reviewed list registration: object-list own metadata callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: object-list own metadata callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2927280,
-      "evidence": "Reviewed list registration: allocation-only int-list metadata getter supplied to Work reference descriptor; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: allocation-only int-list metadata getter supplied to Work reference descriptor; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2927360,
-      "evidence": "Reviewed list registration: ready int-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: ready int-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2927440,
-      "evidence": "Reviewed list registration: int-list vtable getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: int-list vtable getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 2927632,
-      "evidence": "Reviewed list registration: int-list own metadata callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: int-list own metadata callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 3580064,
-      "evidence": "Reviewed list registration: allocation-only RAM-list metadata getter supplied to Work reference descriptor; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: allocation-only RAM-list metadata getter supplied to Work reference descriptor; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 3580144,
-      "evidence": "Reviewed list registration: ready RAM-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: ready RAM-list metadata getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 3580224,
-      "evidence": "Reviewed list registration: RAM-list vtable getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: RAM-list vtable getter; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 3580432,
-      "evidence": "Reviewed list registration: RAM-list own metadata callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: RAM-list own metadata callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 1324832,
-      "evidence": "Reviewed list registration: data-list parent-publication callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: data-list parent-publication callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 1248256,
-      "evidence": "Reviewed list registration: object-list parent-publication callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md, finding #888"
+      "evidence": "Reviewed list registration: object-list parent-publication callback; original registrar literal/stack or Work descriptor argument sites; docs/engine/list-registration.md"
     },
     {
       "address": 3123728,
-      "evidence": "Instance value/lifetime: memory descriptor vtable 0x532a50 slot124 construction; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: memory descriptor vtable 0x532a50 slot124 construction; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 3123936,
-      "evidence": "Instance value/lifetime: memory descriptor vtable 0x532a50 slot128 destruction; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: memory descriptor vtable 0x532a50 slot128 destruction; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 3124416,
-      "evidence": "Instance value/lifetime: memory descriptor vtable 0x532a50 slot112 reset-to-default; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: memory descriptor vtable 0x532a50 slot112 reset-to-default; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 1294720,
-      "evidence": "Instance value/lifetime: object/RAM list vtables 0x5249b0/0x534890 slot72 trim before field teardown; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: object/RAM list vtables 0x5249b0/0x534890 slot72 trim before field teardown; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 3349856,
-      "evidence": "Instance value/lifetime: int list vtable 0x531b70 slot72 trim before field teardown; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: int list vtable 0x531b70 slot72 trim before field teardown; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 1321584,
-      "evidence": "Instance value/lifetime: object list vtable 0x5249b0 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: object list vtable 0x5249b0 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 1321792,
-      "evidence": "Instance value/lifetime: data list vtable 0x5309b0 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: data list vtable 0x5309b0 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 3348064,
-      "evidence": "Instance value/lifetime: int list vtable 0x531b70 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: int list vtable 0x531b70 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 3600288,
-      "evidence": "Instance value/lifetime: RAM list vtable 0x534890 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: RAM list vtable 0x534890 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 3601920,
-      "evidence": "Instance value/lifetime: Work vtable 0x536f10 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md, finding #889"
+      "evidence": "Instance value/lifetime: Work vtable 0x536f10 slot88 metadata publication; actual registered Work/list creation and release path; docs/engine/memory-field-values.md"
     },
     {
       "address": 3124560,
-      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot144 deep value copy; real Work/list data descriptors, original buffer duplication and object-clone loop; docs/engine/memory-field-copy.md, finding #891"
+      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot144 deep value copy; real Work/list data descriptors, original buffer duplication and object-clone loop; docs/engine/memory-field-copy.md"
     },
     {
       "address": 3125008,
-      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot152 shallow value copy; duplicate raw storage then retain elements; docs/engine/memory-field-copy.md, finding #891"
+      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot152 shallow value copy; duplicate raw storage then retain elements; docs/engine/memory-field-copy.md"
     },
     {
       "address": 3125168,
-      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot164 print; original captured buffer/stride/debug calls; docs/engine/memory-field-copy.md, finding #891"
+      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot164 print; original captured buffer/stride/debug calls; docs/engine/memory-field-copy.md"
     },
     {
       "address": 3125424,
-      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot168 field visitor; original object visitor dispatches slot168 and skips real base-header descriptors; docs/engine/memory-field-copy.md, finding #891"
+      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot168 field visitor; original object visitor dispatches slot168 and skips real base-header descriptors; docs/engine/memory-field-copy.md"
     },
     {
       "address": 2880384,
-      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot84 Clone, invoked by real inherited list _data specializers; copy chain reaches igObject_CopyConstructHeader and allocator-owner/index services; docs/engine/list-descriptor-copy.md and allocator-registry.md, findings #887/#894"
+      "evidence": "igMemoryRefMetaField vtable 0x532a50 slot84 Clone, invoked by real inherited list _data specializers; copy chain reaches igObject_CopyConstructHeader and allocator-owner/index services; docs/engine/list-descriptor-copy.md and allocator-registry.md"
     },
     {
       "address": 3088768,
-      "evidence": "Producer of allocator registries 0x586f58/0x586f60 consumed by Lua-dependent owner/index services; original startup calls at0x2f46d8/0x2f4770; docs/engine/registry-bootstrap.md, finding #896"
+      "evidence": "Producer of allocator registries 0x586f58/0x586f60 consumed by Lua-dependent owner/index services; original startup calls at0x2f46d8/0x2f4770; docs/engine/registry-bootstrap.md"
     },
     {
       "address": 3088896,
-      "evidence": "Original allocator registry teardown called at0x2f4978; clears registries and invokes root slot392; docs/engine/registry-bootstrap.md, finding #896"
+      "evidence": "Original allocator registry teardown called at0x2f4978; clears registries and invokes root slot392; docs/engine/registry-bootstrap.md"
     },
     {
       "address": 3090224,
-      "evidence": "Concrete context selector receiver: constructor0x2f25d0/destructor0x2f2670 store vtable0x52f510 whose slot92 points here; current-context/default allocator dispatch used by metadata/Lua storage; docs/engine/registry-bootstrap.md, finding #896"
+      "evidence": "Concrete context selector receiver: constructor0x2f25d0/destructor0x2f2670 store vtable0x52f510 whose slot92 points here; current-context/default allocator dispatch used by metadata/Lua storage; docs/engine/registry-bootstrap.md"
     },
     {
       "address": 3090480,
-      "evidence": "Concrete context name receiver: vtable0x52f510 slot96, dispatched by named-pool wrapper0x2f8920 and memory-field construction; docs/engine/registry-bootstrap.md, finding #896"
+      "evidence": "Concrete context name receiver: vtable0x52f510 slot96, dispatched by named-pool wrapper0x2f8920 and memory-field construction; docs/engine/registry-bootstrap.md"
     },
     {
       "address": 3089872,
-      "evidence": "Actual context constructor publishes vtable52f510, reference1 and46 original record names via slot180; downstream allocator lookup consumes these records; docs/engine/context-lifecycle.md, finding #897"
+      "evidence": "Actual context constructor publishes vtable52f510, reference1 and46 original record names via slot180; downstream allocator lookup consumes these records; docs/engine/context-lifecycle.md"
     },
     {
       "address": 3090032,
-      "evidence": "Context destructor republishes52f510, clears records, initializes names, releases parent16 and conditionally deletes; prior constructor interpretation refuted; docs/engine/context-lifecycle.md, findings #897/#898"
+      "evidence": "Context destructor republishes52f510, clears records, initializes names, releases parent16 and conditionally deletes; prior constructor interpretation refuted; docs/engine/context-lifecycle.md"
     },
     {
       "address": 3090640,
-      "evidence": "Concrete52f510 slot100 setter retains allocator record values and delegates old value removal through212; context record ownership consumed by selector/name lookup; docs/engine/context-lifecycle.md, finding #897"
+      "evidence": "Concrete52f510 slot100 setter retains allocator record values and delegates old value removal through212; context record ownership consumed by selector/name lookup; docs/engine/context-lifecycle.md"
     },
     {
       "address": 3106016,
-      "evidence": "Concrete52f510 slot208 special selector delegate calls builder204 then attaches inherited/owned event trackers; docs/engine/context-lifecycle.md, finding #897"
+      "evidence": "Concrete52f510 slot208 special selector delegate calls builder204 then attaches inherited/owned event trackers; docs/engine/context-lifecycle.md"
     },
     {
       "address": 3106688,
-      "evidence": "Concrete52f510 slot212 allocator removal/sole-owner backing release; called by retained slot setter2f28d0; docs/engine/context-lifecycle.md, finding #897"
+      "evidence": "Concrete52f510 slot212 allocator removal/sole-owner backing release; called by retained slot setter2f28d0; docs/engine/context-lifecycle.md"
     },
     {
       "address": 3099104,
-      "evidence": "Concrete52f510 slot180 record-name initializer called by actual constructor/destructor; copies46 names from4c2170 with127-byte copy and explicit128th terminator; docs/engine/context-lifecycle.md, finding #897"
+      "evidence": "Concrete52f510 slot180 record-name initializer called by actual constructor/destructor; copies46 names from4c2170 with127-byte copy and explicit128th terminator; docs/engine/context-lifecycle.md"
     },
     {
       "address": 3103952,
-      "evidence": "Concrete52f510 slot204 builder called by special208 delegate at2f651c and recursively for aliases; exact2064-byte body, metadata selection/backing/publication contracts; docs/engine/allocator-builder.md, finding #899"
+      "evidence": "Concrete52f510 slot204 builder called by special208 delegate at2f651c and recursively for aliases; exact2064-byte body, metadata selection/backing/publication contracts; docs/engine/allocator-builder.md"
     },
     {
       "address": 2950496,
-      "evidence": "Alias pool5313a0 slot400 retained alias binding; builder2f5cd0 creates factory2cd170 then invokes slot400; docs/engine/alias-pool-binding.md, finding #900"
+      "evidence": "Alias pool5313a0 slot400 retained alias binding; builder2f5cd0 creates factory2cd170 then invokes slot400; docs/engine/alias-pool-binding.md"
     },
     {
       "address": 2950656,
-      "evidence": "Alias pool5313a0 slot120 resets counters and enables; builder enables concrete alias proxy through slot132/120 after binding/publication; docs/engine/alias-pool-binding.md, finding #900"
+      "evidence": "Alias pool5313a0 slot120 resets counters and enables; builder enables concrete alias proxy through slot132/120 after binding/publication; docs/engine/alias-pool-binding.md"
     },
     {
       "address": 2950768,
-      "evidence": "Alias pool5313a0 slot132 queries enabled byte112; builder checks concrete alias proxy readiness before slot120; docs/engine/alias-pool-binding.md, finding #900"
+      "evidence": "Alias pool5313a0 slot132 queries enabled byte112; builder checks concrete alias proxy readiness before slot120; docs/engine/alias-pool-binding.md"
     },
     {
       "address": 2950688,
-      "evidence": "Concrete alias pool5313a0 raw slot124; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot124; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2950720,
-      "evidence": "Concrete alias pool5313a0 raw slot128; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot128; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2950784,
-      "evidence": "Concrete alias pool5313a0 raw slot104; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot104; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2950800,
-      "evidence": "Concrete alias pool5313a0 raw slot96; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot96; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2950816,
-      "evidence": "Concrete alias pool5313a0 raw slot100; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot100; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2950832,
-      "evidence": "Concrete alias pool5313a0 raw slot116; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot116; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2950848,
-      "evidence": "Concrete alias pool5313a0 raw slot136; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot136; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951344,
-      "evidence": "Concrete alias pool5313a0 raw slot140; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot140; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951360,
-      "evidence": "Concrete alias pool5313a0 raw slot144; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot144; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951376,
-      "evidence": "Concrete alias pool5313a0 raw slot164; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot164; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951408,
-      "evidence": "Concrete alias pool5313a0 raw slot168; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot168; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951424,
-      "evidence": "Concrete alias pool5313a0 raw slot148; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot148; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951456,
-      "evidence": "Concrete alias pool5313a0 raw slot152; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot152; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951472,
-      "evidence": "Concrete alias pool5313a0 raw slot156; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot156; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951504,
-      "evidence": "Concrete alias pool5313a0 raw slot160; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot160; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951520,
-      "evidence": "Concrete alias pool5313a0 raw slot180; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot180; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951568,
-      "evidence": "Concrete alias pool5313a0 raw slot184; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot184; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951584,
-      "evidence": "Concrete alias pool5313a0 raw slot188; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot188; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951600,
-      "evidence": "Concrete alias pool5313a0 raw slot192; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot192; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951616,
-      "evidence": "Concrete alias pool5313a0 raw slot404; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot404; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951632,
-      "evidence": "Concrete alias pool5313a0 raw slot408; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot408; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951648,
-      "evidence": "Concrete alias pool5313a0 raw slot196; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot196; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951664,
-      "evidence": "Concrete alias pool5313a0 raw slot212; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot212; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951872,
-      "evidence": "Concrete alias pool5313a0 raw slot216; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot216; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951904,
-      "evidence": "Concrete alias pool5313a0 raw slot220; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot220; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2951936,
-      "evidence": "Concrete alias pool5313a0 raw slot224; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot224; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952048,
-      "evidence": "Concrete alias pool5313a0 raw slot228; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot228; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952160,
-      "evidence": "Concrete alias pool5313a0 raw slot232; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot232; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952192,
-      "evidence": "Concrete alias pool5313a0 raw slot236; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot236; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952208,
-      "evidence": "Concrete alias pool5313a0 raw slot260; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot260; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952400,
-      "evidence": "Concrete alias pool5313a0 raw slot248; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot248; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952464,
-      "evidence": "Concrete alias pool5313a0 raw slot252; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot252; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952528,
-      "evidence": "Concrete alias pool5313a0 raw slot256; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot256; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952576,
-      "evidence": "Concrete alias pool5313a0 raw slot264; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot264; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952608,
-      "evidence": "Concrete alias pool5313a0 raw slot340; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot340; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952752,
-      "evidence": "Concrete alias pool5313a0 raw slot336; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot336; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2952784,
-      "evidence": "Concrete alias pool5313a0 raw slot348; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot348; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2953248,
-      "evidence": "Concrete alias pool5313a0 raw slot356; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot356; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2953264,
-      "evidence": "Concrete alias pool5313a0 raw slot360; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot360; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2953392,
-      "evidence": "Concrete alias pool5313a0 raw slot344; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot344; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2953712,
-      "evidence": "Concrete alias pool5313a0 raw slot364; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot364; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2953728,
-      "evidence": "Concrete alias pool5313a0 raw slot368; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot368; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2953744,
-      "evidence": "Concrete alias pool5313a0 raw slot412; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot412; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 2954704,
-      "evidence": "Concrete alias pool5313a0 raw slot8; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md, finding #902"
+      "evidence": "Concrete alias pool5313a0 raw slot8; factory2cd170 creates this controller for builder aliases. Contiguous runtime behavior reviewed with original instructions; metadata and inherited methods remain separate dependencies; docs/engine/alias-pool-runtime.md"
     },
     {
       "address": 4020464,
-      "evidence": "Concrete beNDMWStatus vtable53e7c0 raw slot136: root-reference release/clear; registration name at516788. docs/engine/subwindow-lifecycle.md, finding #905"
+      "evidence": "Concrete beNDMWStatus vtable53e7c0 raw slot136: root-reference release/clear; registration name at516788. docs/engine/subwindow-lifecycle.md"
     },
     {
       "address": 4020576,
-      "evidence": "Concrete beNDMWStatus vtable53e7c0 raw slot124: single-info SUBWND receiver registration and RAM initialization; registration name at516788. docs/engine/subwindow-lifecycle.md, finding #905"
+      "evidence": "Concrete beNDMWStatus vtable53e7c0 raw slot124: single-info SUBWND receiver registration and RAM initialization; registration name at516788. docs/engine/subwindow-lifecycle.md"
     },
     {
       "address": 4020656,
-      "evidence": "Concrete beNDMWStatus vtable53e7c0 raw slot132: all11-mode lifecycle/root factory/update/exit; registration name at516788. docs/engine/subwindow-lifecycle.md, finding #905"
+      "evidence": "Concrete beNDMWStatus vtable53e7c0 raw slot132: all11-mode lifecycle/root factory/update/exit; registration name at516788. docs/engine/subwindow-lifecycle.md"
     },
     {
       "address": 4022496,
-      "evidence": "Concrete beNDMWStatus vtable53e7c0 raw slot144: SUBWND command receiver used by authored Central/Shop script services; registration name at516788. docs/engine/subwindow-lifecycle.md, finding #905"
+      "evidence": "Concrete beNDMWStatus vtable53e7c0 raw slot144: SUBWND command receiver used by authored Central/Shop script services; registration name at516788. docs/engine/subwindow-lifecycle.md"
     },
     {
       "address": 3892656,
-      "evidence": "RegisterClass argument3 at3b8efc is the published WindowCtrl parent accessor; exact getter words/handle58b010 recovered by scripts/recover_shop_root_callback.py. docs/engine/shop-root-metadata.md, finding #909"
+      "evidence": "RegisterClass argument3 at3b8efc is the published WindowCtrl parent accessor; exact getter words/handle58b010 recovered by scripts/recover_shop_root_callback.py. docs/engine/shop-root-metadata.md"
     },
     {
       "address": 3902864,
-      "evidence": "SUBWND lifecycle factory3d5ba0 selects ShopCtrl00 creation for modes1,3..9; creates the metadata-published class via2fda40. docs/engine/shop-root-metadata.md, finding #909"
+      "evidence": "SUBWND lifecycle factory3d5ba0 selects ShopCtrl00 creation for modes1,3..9; creates the metadata-published class via2fda40. docs/engine/shop-root-metadata.md"
     },
     {
       "address": 3902928,
-      "evidence": "ShopCtrl00 own metadata wrapper3b8f30 directly calls this lazy validity accessor. docs/engine/shop-root-metadata.md, finding #909"
+      "evidence": "ShopCtrl00 own metadata wrapper3b8f30 directly calls this lazy validity accessor. docs/engine/shop-root-metadata.md"
     },
     {
       "address": 3903008,
-      "evidence": "ShopCtrl00 registrar argument7 at3b8f0c is this vtable getter; temporary publishes53feb0. docs/engine/shop-root-metadata.md, finding #909"
+      "evidence": "ShopCtrl00 registrar argument7 at3b8f0c is this vtable getter; temporary publishes53feb0. docs/engine/shop-root-metadata.md"
     },
     {
       "address": 3903136,
-      "evidence": "ShopCtrl00 factory3b8d9c directly calls this static initializer wrapper. docs/engine/shop-root-metadata.md, finding #909"
+      "evidence": "ShopCtrl00 factory3b8d9c directly calls this static initializer wrapper. docs/engine/shop-root-metadata.md"
     },
     {
       "address": 3903168,
-      "evidence": "ShopCtrl00 ensure3b8eb0 supplies this static registrar callback to2fe940. docs/engine/shop-root-metadata.md, finding #909"
+      "evidence": "ShopCtrl00 ensure3b8eb0 supplies this static registrar callback to2fe940. docs/engine/shop-root-metadata.md"
     },
     {
       "address": 3903280,
-      "evidence": "ShopCtrl00 RegisterClass argument4 at3b8f00 is this own metadata accessor. docs/engine/shop-root-metadata.md, finding #909"
+      "evidence": "ShopCtrl00 RegisterClass argument4 at3b8f00 is this own metadata accessor. docs/engine/shop-root-metadata.md"
     },
     {
       "address": 4351920,
-      "evidence": "ShopCtrl00 concrete vtable53feb0 raw byte92 stores this update; window-tree update3f64bc/3f64c0 loads/calls raw92. docs/engine/shop-root-metadata.md, finding #909"
+      "evidence": "ShopCtrl00 concrete vtable53feb0 raw byte92 stores this update; window-tree update3f64bc/3f64c0 loads/calls raw92. docs/engine/shop-root-metadata.md"
     },
     {
       "address": 4342112,
-      "evidence": "Five state0 title factories in ShopCtrl00 update select concrete tables5403e0/53f6b0/53f640/53f5d0/540370 whose raw92 share this title update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md, finding #910"
+      "evidence": "Five state0 title factories in ShopCtrl00 update select concrete tables5403e0/53f6b0/53f640/53f5d0/540370 whose raw92 share this title update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md"
     },
     {
       "address": 4354208,
-      "evidence": "ShopCtrl00 mode1/default factory3b8b60 creates ShopCtrl10; concrete table53fe50 raw92 selects this service update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md, finding #910"
+      "evidence": "ShopCtrl00 mode1/default factory3b8b60 creates ShopCtrl10; concrete table53fe50 raw92 selects this service update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md"
     },
     {
       "address": 4360080,
-      "evidence": "ShopCtrl00 mode3 factory3b8630 creates ShopCtrl30; concrete table53fdf0 raw92 selects this BANK update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md, finding #910"
+      "evidence": "ShopCtrl00 mode3 factory3b8630 creates ShopCtrl30; concrete table53fdf0 raw92 selects this BANK update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md"
     },
     {
       "address": 4363824,
-      "evidence": "ShopCtrl00 mode4 factory3b8400 creates ShopCtrl40; concrete table53fd90 raw92 selects this CNOS update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md, finding #910"
+      "evidence": "ShopCtrl00 mode4 factory3b8400 creates ShopCtrl40; concrete table53fd90 raw92 selects this CNOS update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md"
     },
     {
       "address": 4367072,
-      "evidence": "ShopCtrl00 mode5 factory3b81d0 creates ShopCtrl50; concrete table53fd30 raw92 selects this DISK update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md, finding #910"
+      "evidence": "ShopCtrl00 mode5 factory3b81d0 creates ShopCtrl50; concrete table53fd30 raw92 selects this DISK update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md"
     },
     {
       "address": 4443168,
-      "evidence": "ShopCtrl00 modes6/7/8 factory3b6650 creates ShopDevice; concrete table53f800 raw92 selects this WPU/APU/CHIP update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md, finding #910"
+      "evidence": "ShopCtrl00 modes6/7/8 factory3b6650 creates ShopDevice; concrete table53f800 raw92 selects this WPU/APU/CHIP update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md"
     },
     {
       "address": 4373616,
-      "evidence": "ShopCtrl00 mode9 factory3b6310 creates ShopJunk; concrete table53fcd0 raw92 selects this JUNK update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md, finding #910"
+      "evidence": "ShopCtrl00 mode9 factory3b6310 creates ShopJunk; concrete table53fcd0 raw92 selects this JUNK update. Common tree3f64bc/3f64c0 calls raw92; docs/engine/window-tree-and-shop-root.md"
     },
     {
       "address": 4338672,
-      "evidence": "XDATA child factories select three ShopSelect tables540220/5400d0/540290 whose raw92 share WindowSelect update; common tree calls raw92. docs/engine/xdata-controller.md, finding #912"
+      "evidence": "XDATA child factories select three ShopSelect tables540220/5400d0/540290 whose raw92 share WindowSelect update; common tree calls raw92. docs/engine/xdata-controller.md"
     },
     {
       "address": 4444624,
-      "evidence": "XDATA dialog factory3b4f50 creates ShopSelect00, concrete540290 raw96; WindowSelect423444/423448 loads/calls raw96. docs/engine/xdata-controller.md, finding #912"
+      "evidence": "XDATA dialog factory3b4f50 creates ShopSelect00, concrete540290 raw96; WindowSelect423444/423448 loads/calls raw96. docs/engine/xdata-controller.md"
     },
     {
       "address": 4445264,
-      "evidence": "XDATA main/confirm factory3b4d90 creates ShopSelect01, concrete540220 raw96; WindowSelect423444/423448 loads/calls raw96. docs/engine/xdata-controller.md, finding #912"
+      "evidence": "XDATA main/confirm factory3b4d90 creates ShopSelect01, concrete540220 raw96; WindowSelect423444/423448 loads/calls raw96. docs/engine/xdata-controller.md"
     },
     {
       "address": 4451520,
-      "evidence": "XDATA stat-list factory3b4790 creates ShopSelect11, concrete5400d0 raw96; WindowSelect423444/423448 loads/calls raw96. docs/engine/xdata-controller.md, finding #912"
+      "evidence": "XDATA stat-list factory3b4790 creates ShopSelect11, concrete5400d0 raw96; WindowSelect423444/423448 loads/calls raw96. docs/engine/xdata-controller.md"
     },
     {
       "address": 4434656,
-      "evidence": "XDATA chip action factory3b6940 creates ShopCtrlXdataChip, concrete53f870 raw92 selected by common tree. docs/engine/xdata-controller.md, finding #912"
+      "evidence": "XDATA chip action factory3b6940 creates ShopCtrlXdataChip, concrete53f870 raw92 selected by common tree. docs/engine/xdata-controller.md"
     },
     {
       "address": 4250336,
-      "evidence": "ShopCtrlXdataChip table53f870 raw96 contains inherited ListCtrl method; chip43b184/43b188 loads/calls raw96. docs/engine/xdata-controller.md, finding #912"
+      "evidence": "ShopCtrlXdataChip table53f870 raw96 contains inherited ListCtrl method; chip43b184/43b188 loads/calls raw96. docs/engine/xdata-controller.md"
     },
     {
       "address": 4250608,
-      "evidence": "ShopCtrlXdataChip table53f870 raw100 contains inherited ListCtrl method; chip43b348/43b34c loads/calls raw100. docs/engine/xdata-controller.md, finding #912"
+      "evidence": "ShopCtrlXdataChip table53f870 raw100 contains inherited ListCtrl method; chip43b348/43b34c loads/calls raw100. docs/engine/xdata-controller.md"
     },
     {
       "address": 4250928,
-      "evidence": "ShopCtrlXdataChip table53f870 raw104 contains inherited ListCtrl method; chip43b36c/43b370 loads/calls raw104. docs/engine/xdata-controller.md, finding #912"
+      "evidence": "ShopCtrlXdataChip table53f870 raw104 contains inherited ListCtrl method; chip43b36c/43b370 loads/calls raw104. docs/engine/xdata-controller.md"
     },
     {
       "address": 3787632,
-      "evidence": "Concrete beSelectCtrl table53b290 raw136 lazy pad-manager acquisition (not cleanup); same manager whose raw124 registers SELECTCTRL. docs/engine/selectctrl.md, finding #914"
+      "evidence": "Concrete beSelectCtrl table53b290 raw136 lazy pad-manager acquisition (not cleanup); same manager whose raw124 registers SELECTCTRL. docs/engine/selectctrl.md"
     },
     {
       "address": 3787712,
-      "evidence": "Concrete beSelectCtrl table53b290 raw124 initialization calls38d820 at39cbd0 with literalSELECTCTRL50f7f0. docs/engine/shop-selectors.md, finding #913"
+      "evidence": "Concrete beSelectCtrl table53b290 raw124 initialization calls38d820 at39cbd0 with literalSELECTCTRL50f7f0. docs/engine/shop-selectors.md"
     },
     {
       "address": 3787760,
-      "evidence": "Concrete beSelectCtrl table53b290 raw132 concrete update entry; registration39cbc0 namesSELECTCTRL. docs/engine/shop-selectors.md, finding #913"
+      "evidence": "Concrete beSelectCtrl table53b290 raw132 concrete update entry; registration39cbc0 namesSELECTCTRL. docs/engine/shop-selectors.md"
     },
     {
       "address": 3790624,
-      "evidence": "Concrete beSelectCtrl table53b290 raw140 general message handler; inheritedraw144 check378410 returns0 so messengerdispatch usesraw140. docs/engine/shop-selectors.md, finding #913"
+      "evidence": "Concrete beSelectCtrl table53b290 raw140 general message handler; inheritedraw144 check378410 returns0 so messengerdispatch usesraw140. docs/engine/shop-selectors.md"
     },
     {
       "address": 3638288,
-      "evidence": "beSelectCtrl table53b290 raw144 check is the exacttwo-wordreturn0 at378410, selecting the messenger general-handler path. docs/engine/shop-selectors.md, finding #913"
+      "evidence": "beSelectCtrl table53b290 raw144 check is the exacttwo-wordreturn0 at378410, selecting the messenger general-handler path. docs/engine/shop-selectors.md"
     }
   ],
   "functions": [

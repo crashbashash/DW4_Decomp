@@ -4,7 +4,7 @@
 `texture_map.py` stops at the texture bind; this dumps **every** attribute of the sets the engine
 builds at load time (`beTextureCtrlInfo._name` -> `beTextureCtrlAttr._attrSet` -> `igAttrSet`), so a
 mesh's material colour, lighting-enabled flag, shade model, blend/alpha state and texture state come
-out of the game's own memory instead of the port's guesses (finding #563).
+out of the game's own memory instead of the port's guesses.
 
     python3 live_materials.py --from <ee-dump>.bin [--name BGGround00n]
 """

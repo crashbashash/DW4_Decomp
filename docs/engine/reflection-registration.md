@@ -3,8 +3,7 @@
 Fourteen complete bodies (2,812 code bytes) have readable
 [behavioral C](../../recovered/engine/reflection-registration.c), covering the main
 class registrar, inheritance, field creation/naming/layout, descriptor binding,
-default storage and the original Work registrar/field adder. Finding [#878](../findings/findings-0751-1000.md#f878) records
-the recovery and limits. The adapter accepts eleven registrar arguments and a
+default storage and the original Work registrar/field adder. The adapter accepts eleven registrar arguments and a
 320-byte scratch area for original debug-name/token/output temporaries.
 
 Thirteen bodies (2,068 bytes) have source with identical code bytes. Five new matches add **872 code
@@ -194,3 +193,8 @@ A separate [base bootstrap oracle](object-base.md) now executes original `igObje
 registration and its two manually generated header descriptors before Work. That
 path has eight total Work fields; this page's original controlled-base fixtures
 retain six own fields to isolate the registrar and descriptor builders.
+
+## Open questions
+
+* Fifteen 24-byte `GpFlag_SetOnce_*` functions are run-once latches on a gp-relative flag byte, and 606
+  `be*` class registrars call `GpFlag_SetOnce_0033c8e0` first. What each flag guards is not established.

@@ -48,7 +48,7 @@ void dw4_combat_view_current(const dw4_combat *,dw4_combat_view *out);
 void dw4_combat_set_downed(dw4_combat *,int32_t slot,int downed,const float pos[3]);
 
 /* Player KO flow (docs/combat.md "KO, the capsule and game over"). Every joined player whose record HP reaches 0 after having been seen above 0 is KO'd;
- * DW4_KO_CAPSULE_DELAY ticks later (measured live, finding #340: the BKCHIP* record is written ~120 frames after the KO) its PLAYER2 capsule is created at the
+ * DW4_KO_CAPSULE_DELAY ticks later (measured live, the BKCHIP* record is written ~120 frames after the KO) its PLAYER2 capsule is created at the
  * player's feet position: BKCHIPSTAGE/BKCHIPPOS (beNDMWMdlPlayer2::vfunc_36), then BKCHIPBITEXP (beNDMWMdlPlayer::vfunc_43). The player is then no longer a PLAYER
  * (not joined, not running for the area queries, its body takes no hits). Every capsule ticks once per frame (vfunc_38): the ONE counter counts to 10,
  * the SQ_SWON/SQ_SWOF state follows the distance to the nearest living player, and with no living player left the end chunk (end_g_000bcaps.lua) is due. */

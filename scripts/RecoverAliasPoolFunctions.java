@@ -1,4 +1,4 @@
-/* Reviewed missing igAliasMemoryPool methods; finding #902.
+/* Reviewed missing igAliasMemoryPool methods.
  * Run on the existing analyzed project with -noanalysis, then regenerate its
  * functions dump using dump_functions.py. No game bytes are changed.
  * Extents were checked against retail objdump including return delay slots.

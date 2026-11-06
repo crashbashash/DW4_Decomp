@@ -4,7 +4,7 @@ Central's `n_prmame[0]` (stagML12) is a gift NPC, **not** the Save Keeper that e
 original script calls the engine services `SYSctlDiskFolder` and `SYSctlDeviceFolder`, which were missing
 and stopped the conversation (`engine service unavailable: SYSctlDiskFolder`). Both services are now native.
 The real Save Keeper is the Digi-Elf whose choice queues `saveshop.lua` and a `stagIS12` stage request
-(see [save-keeper edge](../../docs/systems/hub-recovery.md#save-keeper-named-script-edge-906)); that stage and its
+(see [save-keeper edge](../../docs/systems/hub-recovery.md#save-keeper-named-script-edge)); that stage and its
 save controllers are still open.
 
 ## Script behaviour (original bytecode, `lua/01-lobby-hub/06-lobby-quest-board_e824`)
@@ -58,6 +58,6 @@ and plays through the existing cue path.
 
 - The later prizes (flags 394..401) follow the same script lines but only the first two are driven in tests; the
   multiplayer branches (flag 935 = 0) are not exercised.
-- The jingle's voice and timing are not compared with retail (finding [#957](../../docs/findings/findings-0751-1000.md#f957)).
-- SUBWND mode 10 (CARD) is requested by no hub pack (finding [#956](../../docs/findings/findings-0751-1000.md#f956)), so no hub NPC reaches it.
+- The jingle's voice and timing are not compared with retail.
+- SUBWND mode 10 (CARD) is requested by no hub pack, so no hub NPC reaches it.
 - Only player 0 is wired; co-op is out of scope.

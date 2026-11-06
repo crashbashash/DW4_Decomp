@@ -10,8 +10,7 @@ page records what is known about it; the object-graph kind is
 | **texture pack** | 625 / 626 / 618 / 619 (≈200 KB) | a class directory, a string table, an **id→class table**, a stream of serialised `igImage`/`igClut` objects, and a flat **pool** of palettes and index buffers |
 
 A stage therefore loads *both*: the object pack supplies the names and the scene, the texture pack the
-image data. Reading only the object pack is why an earlier pass concluded the palette "was not in the
-pack" (finding [#465](../findings/findings-0251-0500.md#f465), refuted by [#467](../findings/findings-0251-0500.md#f467)) — the search was in the wrong entry.
+image data. Reading only the object pack makes the palette look absent: it is in the other entry.
 
 Everything below is reproducible offline; nothing needs a load replay, a RAM dump or the loader
 decompiled. A live PNG dump was the ground truth that pinned it.
@@ -44,18 +43,24 @@ So an igImage record carries its own **name**, **size** (`_px`/`_py`, `_bytesPer
 width), its **grid block id** (`_pImage`) and its **palette reference** (`_pClut`). The run earlier
 work read as a separate "descriptor entry" — `[1, 0, C, bitsIdx, DIM, 0, 0, namelen, name]` — is
 just this record's own tail (`_localImage`, `_bitsInt`, `_pClut`, `_bitsIdx`, `_bytesPerRow`, …,
-`_pNameString`), which is why the record looked 60 bytes long (finding [#476](../findings/findings-0251-0500.md#f476) supersedes [#469](../findings/findings-0251-0500.md#f469)/#470).
+`_pNameString`), which is why the record can look 60 bytes long.
+
+An object pack names its textures differently. To name a texture offline from one, read
+`beTextureCtrlAttr._name`, which already ends in `.png`. `NDMW.AFS` entry 621 has 96 such records with
+46 distinct names, the same 46 dumped from a running game. None of those names is on an igImage of
+entry 621, and 35 of its 130 igImage records have an empty `_pNameString`; the images themselves are in
+the texture packs (`P10G00n.png` is in entry 618).
 
 An igClut's `_pData` is the id of its palette block. Palette entries are `A R G B` with a **varying**
 alpha — many textures have a transparent or partly-transparent entry 0 — so a palette block must not
 be recognised by testing bytes for `0xFF`; only its RGB (bytes 1..3) is reliable, and then only at
 its own offset.
 
-## The id→class table and the texture→palette link — solved (finding [#476](../findings/findings-0251-0500.md#f476))
+## The id→class table and the texture→palette link — solved
 
 `_pClut` is **an id in the pack's own id space, not a block id**. That space is declared by the same
 `{u32 tableBytes}{u32 idCount}` + `idCount × u16` shape the object packs use for their id remap table
-(`igbinary-format.md`, finding [#460](../findings/findings-0251-0500.md#f460)) — but here each entry is the **class of that id**:
+(`igbinary-format.md`) — but here each entry is the **class of that id**:
 
 * entry 625: `+0x1099`, `tableBytes 388`, `idCount 190`. The space interleaves the pack's objects
   and their memory blocks, so it is longer than the record stream.
@@ -84,7 +89,7 @@ pool offset → grid block (+1) → palette block → RGB
 `scripts/igb_texpack.py --textures` prints name/size/image id/palette id; `--decode NAME --out F`
 writes one texture as raw RGBA.
 
-## The pool order (finding [#472](../findings/findings-0251-0500.md#f472))
+## The pool order
 
 The pool is the records' data blocks laid out in **ascending id order**: a clut contributes `N*4`
 bytes (1024 for a 256-entry palette), an image `W*H`:
@@ -94,7 +99,7 @@ offset(id) = pool_base + sum(sizes of blocks with a smaller id)
 ```
 
 An **image block has a one-byte prefix**, so its grid data begins at `block + 1`; a palette has none,
-so its entries begin at the block. The pack header states the pool's own geometry (finding [#473](../findings/findings-0251-0500.md#f473)):
+so its entries begin at the block. The pack header states the pool's own geometry:
 
 ```
 hdr[6] == sum(block sizes) + 4*(nclut + 2)      hdr[7] == nclut + nimg + 3
@@ -107,6 +112,10 @@ entry 625 they give `pool_base = 0x2c08`, the value the live ground truth pins i
 is a four-byte slot, so it can only sit in a gap of the id sequence; its position is chosen to line
 up the most palettes (reproducing 625 exactly) but is not yet pinned on every pack, while the base
 and the pad total are exact.
+
+The identities hold only for pure texture packs. `AREA.AFS` packs (for example 51 cluts with
+`hdr[6]`-sum around 10^5) are multi-asset: their pool carries block types beyond igClut/igImage, so
+the sum undercounts and the identities fail.
 
 A pad **reuses the id of the block it follows**, so a table of layout rows must skip pad rows or it
 silently picks the four-byte pad instead of the block. And because an image's data is one byte longer
@@ -122,9 +131,16 @@ Pack coverage today: the class table validates and pairs on entries **625, 626, 
 646, 676, 713 and 720 do not (multi-asset packs). Pixel-exactness against live data is checked on
 625, whose textures are the ones that were dumped.
 
-## Findings
+## At run time
 
-`#466` (names are `beTextureCtrlAttr._name`), `#467` (texture packs; buffers located), `#468` (pool
-analysis + ground truth), `#472` (the pool order), `#473` (the base and pads out of the header),
-`#474` (the name→image link), **`#476` (the record shape and the texture→palette link — supersedes
-[#469](../findings/findings-0251-0500.md#f469)/#470)**. `#465` is refuted; `#471` holds the dynamic ground truth that pinned the exact offsets.
+The loader copies the pack into RAM unpatched (entry 625's blob region `0x10940..0x22b80` is
+byte-identical in RAM), so no computed offset is written back into it. It walks the pool in file
+order and converts each palette as it goes: a file entry `FF R G B` becomes the runtime entry
+`R G B 80`, 0x80 being the GS's opaque alpha. Inverting that conversion matches a runtime palette
+back to its exact file offset. The runtime igClut has vtable `0x00526a60`, and its `_pData` points at
+the converted palette.
+
+## Open questions
+
+- Unproven: whether the loader fills an empty `igImage._pNameString` at run time from the
+  `beTextureCtrlAttr` that drives the texture.

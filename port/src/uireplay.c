@@ -1,6 +1,6 @@
 /* src/uireplay.c — the captured-frame 2D layer replay, shared by `dw4asset` and the `dw4` host.
  *
- * Lifted out of `dw4asset.c` (findings #609/#610): one frame is a list of screen-space triangles in
+ * Lifted out of `dw4asset.c`: one frame is a list of screen-space triangles in
  * the GS's draw order; the textures are `<texdir>/<key>.rgba`.  The host reuses it for the title's
  * captured menu layer, so the front-end presentation and the analysis tool read the same files the
  * same way.

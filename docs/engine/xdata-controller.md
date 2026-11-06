@@ -1,6 +1,6 @@
 # XDATA controller and script publication
 
-Finding [#912](../findings/findings-0751-1000.md#f912) recovers the complete **5,484-byte ShopCtrl10 update**
+This page covers the complete **5,484-byte ShopCtrl10 update**
 4270a0..42860c and its three adjacent128-byte scoped-reference cleanups
 428610/428690/428710: **four bodies /5,868 bytes**. The common144-byte
 message-script dispatcher3f5920 is also recovered in
@@ -188,8 +188,8 @@ Recover them alongside RECALCPLAYER. The other five primary service updates tota
 bytes before their dependencies; BANK/CNOS/DISK/ShopDevice/JUNK, LABO/CARD, saving
 and the [full hub script/dispatch closure](../systems/hub-recovery.md) remain open.
 
-Finding [#919](../findings/findings-0751-1000.md#f919) now recovers the complete inherited ListCtrl paging block and
-chip-specific page-count/text helpers: [five bodies /2,196 bytes](list-controller-chip-view.md),
+The complete inherited ListCtrl paging block and chip-specific page-count/text helpers are
+recovered: [five bodies /2,196 bytes](list-controller-chip-view.md),
 with all 2,196 bytes exact and3,149 original-instruction comparisons. The chip text
 helper's full1,072-byte return span is restored. The primary chip transaction
 update43aae0 /7,232 bytes still requires complete recovery; cost/stat/property

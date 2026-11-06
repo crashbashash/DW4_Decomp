@@ -1,5 +1,5 @@
 /* Constructor / initializer chains of the reflection field descriptors (igMetaField and its Int,
- * UnsignedInt, Ref, ObjectRef and String subclasses; finding #880). Every class has two entry
+ * UnsignedInt, Ref, ObjectRef and String subclasses). Every class has two entry
  * points. <Class>_Construct builds the base part, stamps the class vtable and, when the object
  * exists, runs <Class>_Init. <Class>_Init runs the base Init, stamps the vtable again (so a
  * subclass vtable is replaced by the more derived one) and sets that class's field defaults.

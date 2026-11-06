@@ -2,14 +2,14 @@
 """afs_manifest_names.py — every AFS entry's name, from the root manifest NDMW.IGB.
 
 `NDMW.IGB` is not only a container: decoded as igBinary it is the game's **virtual
-filesystem**, and two of its 20 classes carry the whole thing (finding #444):
+filesystem**, and two of its 20 classes carry the whole thing:
 
     beNDMWAfsSetupData   `_name` "ndmw.afs" / "area.afs", `_fileCount` 972 / 1382
     igAdxAfsFile         `_name`, `_ptNumber` (which archive), `_fileNumber` (which entry)
 
 So the archive is `NDMW.AFS` for `_ptNumber` 0 and `AREA.AFS` for 1, and a name resolves
 to an (archive, entry) pair with no guessing.  Checked against facts already recorded:
-`(0, 140)` is `stag0102.igb` (finding #434 identified AFS entry 140 as the stag0102
+`(0, 140)` is `stag0102.igb` identified AFS entry 140 as the stag0102
 manifest) and `(1, 0)` is `aeu_opening.sfd`, an MPEG whose AREA entry 0 starts `00 00 01
 ba`.  The manifest names all 1,382 AREA entries and 697 of NDMW's 972.
 

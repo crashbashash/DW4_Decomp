@@ -8,7 +8,7 @@
  * +8 (30 after construction, then the highest populated slot + 1), a flag word at
  * +12 and a parent object at +16 that the destructor releases with the igObject
  * reference-count idiom.
- * Evidence: docs/engine/context-lifecycle.md, findings #896 and #897.
+ * Evidence: docs/engine/context-lifecycle.md.
  * The views below describe the observed 32-bit layout, not the original C++ spelling. */
 
 struct ContextRecord {

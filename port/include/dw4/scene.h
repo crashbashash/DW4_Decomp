@@ -1,7 +1,7 @@
 /* dw4/scene.h — a stage pack loaded into the port's guest arena (porting tasks P2.3 / P3.5).
  *
  * This is the loader's *output*, not a reader over the file.  The engine's loader converts a
- * pack's ids into resolved pointers in a later pass (finding #423), so the port gives itself the
+ * pack's ids into resolved pointers in a later pass, so the port gives itself the
  * same shape: one arena holds every id's payload, and a **32-bit handle** addresses it.
  *
  *   handle = arena offset (0 is NULL)          -- pointer-model option (b), P1.5
@@ -15,16 +15,16 @@
  * Two consequences worth stating, because they are the reason this exists:
  *
  *  * **the pool's padding disappears.** In the file a block starts at a 4-byte boundary, so a
- *    `_memSize` that is not a multiple of 4 is followed by 1-3 pad bytes (finding #478).  The
+ *    `_memSize` that is not a multiple of 4 is followed by 1-3 pad bytes.  The
  *    loader *allocates*, so it decides its own layout: the arena packs ids densely at a chosen
  *    alignment and no arithmetic depends on the file's offsets.
  *  * **the meshes are renderer-ready.** A mesh points straight at the arena's float streams
  *    (positions, UVs) and carries its triangle list, so the renderer never touches a pack.
  *
-The **id -> pointer pass** (finding #423) happens here too: once every payload is placed, each
+The **id -> pointer pass** happens here too: once every payload is placed, each
 object record's `igObjectRef` and `igMemoryRef` values are rewritten from the pack's ids into
 handles.  Which values those are comes from the value's own descriptor -- its type id is the kind
-(finding #482, measured: type 0 is always an object id or NULL and type 7 always a pool-block id or
+(measured: type 0 is always an object id or NULL and type 7 always a pool-block id or
 NULL, with no value of either kind ever outside the id space) -- so there is no (class, offset) table
 and no reflection involved.  A NULL (0xFFFFFFFF) stays NULL.
 
@@ -65,7 +65,7 @@ typedef struct {
                               * file reader names an unnamed mesh by, so both front ends agree */
     dw4_handle attr;         /* the attribute record */
     dw4_handle positions;    /* `num_verts` x 3 floats */
-    dw4_handle normals;      /* `num_verts` x 3 floats (0 = the mesh ships none; finding #458) */
+    dw4_handle normals;      /* `num_verts` x 3 floats (0 = the mesh ships none) */
     dw4_handle uvs;          /* `num_verts` x 2 floats (0 = the mesh has none) */
     dw4_handle lengths;      /* the primitive lengths, u32 (0 for a list) */
     uint32_t num_verts;
@@ -111,11 +111,11 @@ typedef struct {
     dw4_handle geometry;     /* an igGeometry it references, or a NULL handle */
     /* An `igTransform` may name an `igTransformSequence1_5` instead of holding a usable `_m`: the
      * pack writes a *placeholder* matrix (zero rows) for an animated node and keeps the real
-     * transform in the sequence's keyframe lists (finding #611).  When present the sequence, not
+     * transform in the sequence's keyframe lists.  When present the sequence, not
      * `m`, is the node's local transform -- evaluated at the scene's current time. */
     int has_seq;
     dw4_scene_seq seq;
-    /* Per-node animation clock (beModelCtrlNode2, finding #619): a node's `_time` is recomputed
+    /* Per-node animation clock (beModelCtrlNode2): a node's `_time` is recomputed
      * every frame as `((int64)(_timeScale * (engineTime>>18)))<<18 + _timeBias`, not advanced by a
      * cursor.  `time_scale` (`_timeScale`, +0x78) is normally 1.0; `time_bias` (`_timeBias`, +0x80)
      * is what a JOINTSET range writes to select the animation window.  A node the front-end drive
@@ -139,11 +139,11 @@ typedef struct {
     float color[4];          /* that record's `_color` (RGBA 0..1), valid when `has_color` */
     uint32_t xform_target;   /* igTransform._target (ordinal 9): 0 = a model transform; 9 on the 8 trace
                               * transforms of j_startback, whose translation is a texture-coordinate
-                              * offset, not a position (finding #716) */
+                              * offset, not a position */
     int has_fog;             /* the node's own attribute list names an `igFogStateAttr` */
-    uint32_t fog_enabled;    /* its `_enabled` (finding #722) */
+    uint32_t fog_enabled;    /* its `_enabled` */
     int has_alpha;           /* the node's own attribute list names an `igAlphaFunctionAttr` */
-    float alpha_ref;         /* its `_refValue` (0..1; the GS AREF is floor(ref * 128), finding #721) */
+    float alpha_ref;         /* its `_refValue` (0..1; the GS AREF is floor(ref * 128)) */
     int has_blend;           /* the node's own attribute list names an `igBlendFunctionAttr` */
     uint32_t blend_src;      /* its `_src` / `_dst` (4 = src alpha, 1 = dst colour, 5 = 1 - src alpha) */
     uint32_t blend_dst;
@@ -211,7 +211,7 @@ typedef struct {
     long long engine_time;
     /* The id -> pointer pass, measured on the pack that was loaded: `nref` values were rewritten
      * from an id into a handle, `nnull` were NULL, and `nref_bad` were neither -- which must be 0,
-     * because a reference-typed value is always an id or NULL (finding #482). */
+     * because a reference-typed value is always an id or NULL. */
     uint32_t nref, nnull, nref_bad;
     /* The inline textures the scene's material sets bind (the front-end title's own UI images). */
     dw4_scene_image *img;
@@ -252,12 +252,12 @@ int dw4_scene_tris(const dw4_scene *s, const dw4_scene_mesh *g, uint32_t **out, 
 /* One mesh as a Wavefront OBJ — the text `dw4asset models` writes, so the two can be diffed. */
 int dw4_scene_write_obj(const dw4_scene *s, const dw4_scene_mesh *g, FILE *f);
 
-/* The stage pack's own camera (porting P4.2/P4.3, findings #495/#496).  A camera node's world
+/* The stage pack's own camera (porting P4.2/P4.3).  A camera node's world
  * matrix is its ancestor chain composed **child x parent** (row-major, translation at words
  * 12..14), and the renderer's view is its affine inverse.  `name` selects an `igCamera` node by
  * its own name; NULL selects the **stage camera**, which is the first `igCamera` in node order
  * whose composed world is not the identity (on `stag0102` that is node 4 `cameraShape00`, the one
- * finding #495 measured at (0, 102.490, 74.565)).  `world`/`view` are each 16 floats and may be
+ * measured at (0, 102.490, 74.565)).  `world`/`view` are each 16 floats and may be
  * NULL.  Returns the selected node index, or -1 when the pack has no such camera. */
 int dw4_scene_camera(const dw4_scene *s, const char *name, float world[16], float view[16]);
 
@@ -318,7 +318,7 @@ uint32_t dw4_scene_node_light_rot(const dw4_scene *s, uint32_t node);
 /* Set the instant (nanoseconds -- the pack's keyframe unit) that the animated nodes evaluate at. */
 void dw4_scene_set_time(dw4_scene *s, double ns);
 
-/* The controller clock (finding #619).  `engine_ns` is the engine's shared int64 clock in
+/* The controller clock.  `engine_ns` is the engine's shared int64 clock in
  * nanoseconds, advanced one frame per 60 fps tick by the caller.  For every animated node this
  * recomputes `_time = ((int64)(_timeScale * (engineTime>>18)))<<18 + _timeBias` and marks the node
  * driven, so it ignores the scene-wide `dw4_scene_set_time` timeline.  A JOINTSET range selects its
@@ -332,7 +332,7 @@ void dw4_scene_node_drive(dw4_scene *s, uint32_t node, float time_scale, long lo
  * Action2 JOINTSET window. Caller supplies a simulation-owned clock. */
 int64_t dw4_scene_node_loop_time(const dw4_scene *,uint32_t,int64_t);
 
-/* The projection the game actually uses (finding #496): a 39.60 degree vertical field of view at
+/* The projection the game actually uses: a 39.60 degree vertical field of view at
  * a 640x448 framebuffer.  `dw4_scene_camera_fov()` is that angle in radians; the renderer wants
  * the horizontal scale as `0.7 * width / height` so its square-pixel projection matches the
  * game's. */

@@ -1,4 +1,4 @@
-# Body-derived allocator owner/selector/dispatch names; finding #894.
+# Body-derived allocator owner/selector/dispatch names.
 # Reverse list60/list58 search tests allocator slots132 (available) and340
 # (buffer membership). Encoding uses kind116, runtime byte and IndexOf.
 # Constant/no-op leaves retain address names: their broader roles are unknown.

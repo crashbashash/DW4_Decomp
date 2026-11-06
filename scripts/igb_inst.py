@@ -10,7 +10,7 @@
 decodes the *instances* (the values). Together they read a stage's authored data —
 generator rows and drop rows — with no emulator and no live game.
 
-THE ENCODING (findings #417, #418)
+THE ENCODING
 
 A pack's object data is a run of records:
 
@@ -55,14 +55,14 @@ They are **load-time ordinals**: assigned as the loader creates objects, in an o
 file does not record, with sharing/deduplication for identical objects (six generators
 share one empty rotation list). Two things confirm it: `beGeneraterDataList._data` holds
 the twelve generators' own ids in one run, and every object's refs are *lower* than its
-own id — i.e. referenced objects are created before their referrer (finding #418).
+own id — i.e. referenced objects are created before their referrer.
 
 The *contents* they point at are in the file, though. After the object stream comes a
 content pool that holds the list contents — spawn positions and rotations, e.g.
 `(-55.0, 40.0, -405.0) (15.0, 40.0, -435.0) (15.0, 40.0, -405.0)` and `-1.5708` (≈ −π/2) —
 `--pool` dumps it. Pairing each list to its exact array needs the load-time mapping.
 
-### THE LIST CONTENTS — the pool, and what `_data` means (finding #420)
+### THE LIST CONTENTS — the pool, and what `_data` means
 
 After the object stream comes a **content pool** holding every list's contents. A list
 record reads `{count, count, _data}`, and `_data` is an **ordering key**: lay the lists
@@ -85,7 +85,7 @@ import struct
 import sys
 from collections import Counter
 
-# canonical element size per ig*MetaField type id (see igb_dir.py / finding #292)
+# canonical element size per ig*MetaField type id (see igb_dir.py /)
 CANON = {0: 4, 1: 4, 2: 1, 3: 1, 4: 4, 5: 4, 6: 4, 7: 4, 8: 1, 9: 4, 10: 2, 11: 4,
          12: 8, 13: 4, 14: 128, 15: 4, 16: 4, 17: 2, 19: 4, 20: 4, 21: 4, 22: 4,
          23: 4, 24: 4, 25: 4, 26: 4, 27: 4, 28: 8, 29: 768, 30: 4, 31: 8, 32: 8,

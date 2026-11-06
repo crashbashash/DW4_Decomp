@@ -1,6 +1,6 @@
 # Original igObject bootstrap and inherited header fields
 
-Finding [#884](../findings/findings-0751-1000.md#f884) records **13 complete bodies / 1,144 code bytes**: ten bootstrap,
+This recovery covers **13 complete bodies / 1,144 code bytes**: ten bootstrap,
 publication and descriptor-attachment bodies in
 [object-base.c](../../recovered/engine/object-base.c), plus the unsigned descriptor
 factory/constructor/initializer now included in

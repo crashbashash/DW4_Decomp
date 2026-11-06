@@ -176,7 +176,7 @@ Prepared tests open the full root separately for every player slot using
 production SYS record queries and actual authored assets/Lua/models/fonts. They
 enter every root choice, open/cancel Power/Main/Sub, retain equipment/main-menu
 choices, close normally and handle external removal. All counts refer to real
-owned children. Finding [#806](../../docs/findings/findings-0751-1000.md#f806) records this composition.
+owned children.
 
 ## Authored selectors and shared equipment base
 
@@ -241,8 +241,7 @@ previews, socket swaps, atomic pocket clearing, accepted IO routing, window
 close/failure holds, and clearing the private projection of an actually equipped
 Main/Sub item while retaining every live record/reference. Expanded view
 initialization compares 200 traces; original submenu text, real cursor selection
-and close waits pass prepared-asset integration tests. Finding [#799](../../docs/findings/findings-0751-1000.md#f799) records the
-selectors and shared base.
+and close waits pass prepared-asset integration tests.
 
 ## Owned equipment views
 
@@ -276,7 +275,7 @@ original-Lua/font/controller tests cover weapon swaps, Main/Sub
 acceptance/removal, chip insertion/removal, ineligible-item popup/retry, private
 preview isolation, appearance publication, actual model/cursor close waits and
 the seven unused fields staying hidden. UI/player-renderer publication in these
-prepared tests is a controlled boundary. Finding [#803](../../docs/findings/findings-0751-1000.md#f803) records the equipment views.
+prepared tests is a controlled boundary.
 
 ## Item and skill content projection
 
@@ -326,7 +325,6 @@ authored fonts for all three skill modes, equipment projections, second-page
 species ordering, DEVICE short final pages, repeated resource refresh and actual
 model close waits. Invalid database identities and failed-refresh holds are tested.
 These checks do not establish scrolling input, detail actions or full-scene parity.
-Finding [#800](../../docs/findings/findings-0751-1000.md#f800) records the content projection.
 
 ## Owned skill controller and page restart
 
@@ -370,7 +368,7 @@ production records/databases, authored fonts, real SELECTCTRL and model owners.
 It covers two-way paging, short-page bounds, simultaneous direction priority,
 vertical inhibition, player-slot isolation, empty/single species lists,
 retained mode, confirm/cancel, external close, busy restart rejection and failure
-holds. Finding [#801](../../docs/findings/findings-0751-1000.md#f801) records the skill controller.
+holds.
 
 ## Owned DEVICE selector and inventory preview gate
 
@@ -422,7 +420,7 @@ disabled confirm, short final pages, per-player/vertical input, repeated queries
 retained acceptance, removal/restart, duplicate identities, private/unchanged/
 disabled previews, accepted equipment publication, cancellation, real close and
 missing-bank failure holds. The item removal itself is a controlled detail leaf
-in those checks. Finding [#802](../../docs/findings/findings-0751-1000.md#f802) records the DEVICE selector.
+in those checks.
 
 ## DEVICE detail and its retained owner
 
@@ -434,8 +432,7 @@ give reads ISJYOUDO, collects joined recipients in slot order and publishes thei
 actual Unicode names. Accepted transactions use the exact DEVICEFOLDER index and
 the atomic
 [inventory primitives](player-transactions.md#detail-actions-and-atomic-giving).
-Original success text is call 131 and refused/full text is 149. Finding [#804](../../docs/findings/findings-0751-1000.md#f804)
-records the owner and finding [#825](../../docs/findings/findings-0751-1000.md#f825) the outer update's instruction evidence.
+Original success text is call 131 and refused/full text is 149.
 
 The original folder constructor stores the DEVICE sibling at `419d88`: detail +88
 retains it. The native FOLDER context provides that dependency
@@ -491,7 +488,7 @@ initialization segments: all forty service calls match the literal font names,
 alignment and blank text. Prepared owner checks use the production common alias,
 authored assets and real selectors for empty/two/full lists, selection changes,
 cancellation, external close and malformed-record failure holds, and check both
-blank Key fields. Finding [#804](../../docs/findings/findings-0751-1000.md#f804) records the detail and important-item owners.
+blank Key fields.
 
 ## Complete FOLDER ownership
 
@@ -510,15 +507,13 @@ has closed and been pruned. The children are described in
 Prepared checks enter every choice, arrange an inventory identity, restart/cancel
 the retained DEVICE, return from each remaining page and close the complete tree.
 FOLDER reuse checks positive panel alpha on the reopened `i_stfolder`
-([model REMOVE](#shared-model-and-text-services)). Finding [#805](../../docs/findings/findings-0751-1000.md#f805) records the
-currency, DISK and FOLDER owners.
+([model REMOVE](#shared-model-and-text-services)).
 
 ## DISK outer lifecycle and resource ownership
 
 `statusdisk.c` owns the original `41acf0` paths for ordering and quantity giving;
 `statusdiskctrl.c` supplies the complete `41acf0` outer update through mandatory
-native resource/record sinks in `statusdisk.c` (finding [#824](../../docs/findings/findings-0751-1000.md#f824) records the
-instruction evidence).
+native resource/record sinks in `statusdisk.c`.
 
 The page displays all twelve DISKFOLDER records but both its main and reorder
 selectors address the first ten; the currently selected reorder row is disabled.
@@ -576,7 +571,6 @@ with that retained list or the original no-recipient ShopSelect00 popup (call
 88). The wrapper remains at its child wait while SendBit owns recipient selection,
 seven-digit editing, transfer and acknowledgement. Child pruning and final
 completion close the wrapper; its state is not the amount editor's state.
-Finding [#826](../../docs/findings/findings-0751-1000.md#f826) records this composition and its instruction comparisons.
 
 SendBit owns the authored resources, Unicode names, balances, seven-digit
 selector, edit sound, transfer acknowledgement and return/cancel paths. It uses
@@ -586,8 +580,7 @@ creation/fallthrough boundaries and command order:
 
 - Reset clears digits, updates its displayed balances/names and creates the
   recipient selector; it sends neither SUBWND UPDATE nor an extra cursor-close
-  command. (The reset clause of finding [#820](../../docs/findings/findings-0751-1000.md#f820) is refuted by the outer comparison;
-  its acknowledgement and close-state evidence remains valid.)
+  command.
 - The amount phase uses a shared recovered edit primitive for place-width
   refresh, selector readiness and value edits. A changed digit position redraws
   only and updates the previous-position latch. A ready value change redraws and
@@ -682,8 +675,7 @@ behavior.
 `make check-statussubmenu` runs 384 native owned-tree lifetimes, 128 four-player
 restoration cycles and failed-sink holds. `make check-dialogue` additionally
 checks accepted-GENERATE activation, repeated-GENERATE idempotence, activation
-failure, retained DM completion and teardown of the pending tree. Finding [#798](../../docs/findings/findings-0751-1000.md#f798)
-records the controller callbacks and the scene lifecycle.
+failure, retained DM completion and teardown of the pending tree.
 
 The per-owner comparisons are listed with each owner above. The normal-boot and
 SDL controller routes through these menus are in

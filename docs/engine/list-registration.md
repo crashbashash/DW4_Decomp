@@ -1,6 +1,6 @@
 # Original inherited list metadata registration
 
-Finding [#888](../findings/findings-0751-1000.md#f888) records **32 complete bodies / 2,092 code bytes** covering metadata
+**32 complete bodies / 2,092 code bytes** cover metadata
 allocation/readiness, publication callbacks, vtable access, initializer forwarding,
 registrar tuples, the three inherited schema callbacks and default element selectors.
 [Portable behavior](../../recovered/engine/list-registration.c) composes with the

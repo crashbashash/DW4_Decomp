@@ -12,7 +12,7 @@ Shapes (`--shape`, repeatable / comma-separated):
   * ``struct`` — a struct member keeps the base pointer.  m2c CSEs ``argN + K`` into a
     scratch register (``addiu sX,aN,K; sb 0(sX)``) where retail keeps the base
     (``move sX,aN; sb K(sX)``).  Giving the parameter a struct type and reading
-    ``argN->fK`` reproduces retail (finding #509's shape; the previous session banked 13
+    ``argN->fK`` reproduces retail (the shape; 13
     of these by hand).
   * ``width`` — a defaulted ``int`` member access whose retail instruction is narrower
     (``sb``/``sh``/``lb``/``lbu``/``lh``/``lhu``/``sd``/``ld``).  m2c only carries the

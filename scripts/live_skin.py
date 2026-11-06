@@ -3,7 +3,7 @@
 
 The engine's skinning data is **runtime only**: the model pack carries a 4-byte stub for
 `igVertexArray1_1._blendWeights`, and the real weight/index arrays are allocated at load
-(findings #532/#535).  This reads them from a paused game's dump, where they exist:
+.  This reads them from a paused game's dump, where they exist:
 
     igVertexArray1_1   vtable 0x00525190
       +0x08  _vdata          -> {positions, normals}; [0] is the positions block
@@ -21,7 +21,7 @@ capture's only skinned mesh is `ogre_skinShape` (pack `NDMW.AFS:614` id 5150, 14
 one bone per vertex with weight 1.0 and bone numbers 0..32; the bone map is
 `[0,0,0,1,2,3,4,5,0,6,7,8,9,0,0,10,11,12,13,14,15,0,16,17,18,0,19,0,20,0,21,22,23]`.
 
-**Measured open item (finding #532):** no pointer links the mesh/select to *its*
+**Measured open item:** no pointer links the mesh/select to *its*
 `igBlendMatricesAttr` in the object graph, so the palette is chosen here by `--palette`
 (an index into the non-empty pool in address order) rather than resolved.  The live pool
 holds several 24-matrix palettes that differ only slightly; the default is the first.

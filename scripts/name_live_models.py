@@ -4,7 +4,7 @@
 Needs a **paused** game (the heap mutates every frame, so unpaused reads are not
 reproducible).
 
-Recovered chain (findings #455/#456):
+Recovered chain:
 
     M_<model>Shape object        vtable 0x00528e70   (826 live on stag0102)
       +0x08  name string pointer    e.g. "M_BK17v1_barrelmShape", "pCubeShape5", "barrelbody"

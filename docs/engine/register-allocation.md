@@ -4,7 +4,7 @@ Notes from matching the GAMERAM dispatcher ([result](../systems/combat-dispatche
 
 ## The allocator (read from the pinned compiler, checked against the draft)
 
-`Coloring.c` in `local/mwcps2/combat/mwccps2.exe` (simplify at 0x4c3f30, select at 0x4c42a0), GPR class:
+`Coloring.c` in the pinned combat `mwccps2.exe` (simplify at 0x4c3f30, select at 0x4c42a0), GPR class:
 
 * A node is a virtual register (ids from 32; ids 0..31 are the physical registers).  Its degree counts every neighbour,
   virtual or physical.  K = 25 allocatable registers.
@@ -72,6 +72,8 @@ survivors are left (receiver `s2`); with both below `total` four survive and the
 one id.  Hence the two source forms that colour the receiver `s4` (exact-diff 2,717 -> 1,146, shape 71 -> 67): the old-exp /
 new-total chain of case 6 is one variable `temp_s0_9` (retail keeps both in `s0`; this also avoids a separate web), and
 `temp_v0_68` is declared right after it.
+
+Pointer-typed copies of call results take their id from their declaration position; integer copies take it from call order.
 
 ## Moving a node to another register
 
@@ -147,3 +149,10 @@ for byte):
 * `lw t9,N(..); jalr t9` is the form of a C++ virtual call; no id order produces `t9` for an ordinary call.
 * `lui rA / addiu rB,rA,lo` with a scratch `rA` is an address materialised as a literal or through a different expression, not a
   colouring difference (FUN_0027ed10 stays open).
+* Alternate compiler at `-O3,p`: a volatile struct member (or `*(volatile T *)&x->f`) forces its load at the statement position
+  and cannot be forward-substituted, so the loaded value becomes a named virtual register with a low id. This reorders integer
+  and float colouring and fixes swapped f-registers and operand order that no ordinary spelling changes (FUN_00396740,
+  beAction2FADESET_Update, beAction2MOTIONSET_Update, FUN_003fa120). Float colouring is the tracer's class-1 pass.
+* Alternate compiler at `-O3,p`: accumulating a sum in place on the call-result web (`r = call << 18; r += prop->field; b = r;`)
+  instead of `b = field + (call << 18)` keeps the first sum out of the saved register holding `b` across the second call, producing
+  retail's `move s1,v0` in the `jal` delay slot and the trailing `nop` (FUN_003a82f0).

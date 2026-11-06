@@ -148,14 +148,14 @@ player slots and configurable margins/scale still requiring their own work.
 
 **Player-number badge (implemented as an approximation of the native SETEFFECT).** Retail shows a dark hexagon with
 the player number and a leader line beside the player in the hubs. It is not scripted: `beNDMWMdlPlayer::vfunc_44` (`0x3d4390`)
-sends the native messenger command `MODELCTRL <player> SETEFFECT i_pcnumic SQ_OPENP<n> 480.0 V<0,10,0> true true` (finding [#1090](../../docs/findings/findings-1001-1250.md#f1090)).
+sends the native messenger command `MODELCTRL <player> SETEFFECT i_pcnumic SQ_OPENP<n> 480.0 V<0,10,0> true true`.
 `i_pcnumic` is a WN00-layer model in each hub pack (like `i_pointcur`) whose `SQ_OPENP0..3` sequences pick one of four
 `igBillboard` children drawing `pShape1`. The port has no `SETEFFECT` handler; instead `badge_tick` in `src/lobby.c` drives the same
 owned `i_pcnumic` controller through `dw4_controllers_send`: `GENERATE "V<x,y+10,z>/V<0,0,0>/SQ_OPENP0"` once the player has been under
 control and idle (no stick, jump or talk input) for 480 frames (not during the greeting or a conversation, as in retail frames), `MOVETRANS` every tick, `REMOVE` when control is lost,
 and `src/modelview.c` projects it with the scene camera exactly like `i_pointcur`. The Terminal free-control pose (60,10,-30)
 matches the retail frame to within a few pixels (the leader line's animation phase differs); `test_hubruntime` asserts the
-badge is absent before control and live in Terminal, Central and Shop. **Idle delay (finding [#1092](../../docs/findings/findings-1001-1250.md#f1092)):** the badge is not shown while the player is active. Live in the Terminal, after a
+badge is absent before control and live in Terminal, Central and Shop. **Idle delay:** the badge is not shown while the player is active. Live in the Terminal, after a
 stick push it is absent at 20-420 idle frames and present at 540 and 700, so `480.0` is the delay before it shows (8 s at 60 fps);
 input clears it (`vfunc_38` sets the `+0x124` flag, `vfunc_44` then sends the clearing message). The window is 420-540 frames
 (captures add a few frames of latency) and only stick input was tried as the reset. `badge_tick` gates on 480 frames since the

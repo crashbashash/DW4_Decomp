@@ -1,11 +1,11 @@
 # Title-menu controller recovery
 
 The title controller is `beNDMWTitle2`. Its complete contiguous runtime block is
-byte-matched: **nine functions / 9,876 code bytes** (finding **[#2724](../findings/findings-2501-2750.md#f2724)**).
+byte-matched: **nine functions / 9,876 code bytes**.
 The 8,992-byte update is in [`src/game/beNDMWTitle2.cpp`](../../src/game/beNDMWTitle2.cpp),
 including initialization and reference lifetimes. Its initialized-state
 [executable C reference](../../recovered/frontend/README.md) remains available
-for the 55,264-case retail-instruction comparison ([#728](../findings/findings-0501-0750.md#f728)).
+for the 55,264-case retail-instruction comparison.
 
 The title scene and its asset graphs are described in
 [front-end boot](front-end-boot.md). The state machine supplies the missing
@@ -17,14 +17,14 @@ block `0x003f2d50..0x003f540c`; its metadata/constructors live separately around
 
 | Start | Bytes in split | Role | Recovery |
 |---|---:|---|---|
-| `0x003f2d50` | 172 | Initialize option messenger/settings | Byte-matched `beNDMWTitle2Option_InitSettings`, [#729](../findings/findings-0501-0750.md#f729) |
-| `0x003f2e00` | 228 | Resolve pad manager and release cached memory-card utility | **Byte-matched** `Gap::Bec::beNDMWTitle2::vfunc_32`, [#731](../findings/findings-0501-0750.md#f731) |
-| `0x003f2ef0` | 8,992 | Per-frame title/menu/options controller, including its internal padding | **Byte-matched C++**, complete compiler unit, [#2724](../findings/findings-2501-2750.md#f2724)–[#2726](../findings/findings-2501-2750.md#f2726) |
-| `0x003f5210` | 128 | Reference-wrapper cleanup | Matching C; compiler copy also verified with the update ([#733](../findings/findings-0501-0750.md#f733) refuted, [#2725](../findings/findings-2501-2750.md#f2725)) |
-| `0x003f5290` | 128 | Second reference-wrapper cleanup | Matching C; compiler copy also verified with the update ([#733](../findings/findings-0501-0750.md#f733) refuted, [#2725](../findings/findings-2501-2750.md#f2725)) |
+| `0x003f2d50` | 172 | Initialize option messenger/settings | Byte-matched `beNDMWTitle2Option_InitSettings` |
+| `0x003f2e00` | 228 | Resolve pad manager and release cached memory-card utility | **Byte-matched** `Gap::Bec::beNDMWTitle2::vfunc_32` |
+| `0x003f2ef0` | 8,992 | Per-frame title/menu/options controller, including its internal padding | **Byte-matched C++**, complete compiler unit |
+| `0x003f5210` | 128 | Reference-wrapper cleanup | Matching C; compiler copy also verified with the update (no register-allocation wall) |
+| `0x003f5290` | 128 | Second reference-wrapper cleanup | Matching C; compiler copy also verified with the update (no register-allocation wall) |
 | `0x003f5310` | 12 | Info MetaObject return | Matching source |
-| `0x003f5320` | 36 | Slot-29 descriptor wrapper | Matching C++, [#645](../findings/findings-0501-0750.md#f645) |
-| `0x003f5350` | 168 | RUN/GAMESTART message handler | Matching C over the repaired complete extent, [#730](../findings/findings-0501-0750.md#f730) |
+| `0x003f5320` | 36 | Slot-29 descriptor wrapper | Matching C++ |
+| `0x003f5350` | 168 | RUN/GAMESTART message handler | Matching C over the repaired complete extent |
 | `0x003f5400` | 12 | Controller MetaObject return | Matching source |
 
 The update's 8,700-byte Ghidra body count is the sum of
@@ -34,7 +34,7 @@ entire 8,992-byte span.
 
 ## Complete matching unit
 
-Findings [#2724](../findings/findings-2501-2750.md#f2724)–[#2726](../findings/findings-2501-2750.md#f2726). The update is **8,992 matched C++ bytes and one function**. The other eight
+The update is **8,992 matched C++ bytes and one function**. The other eight
 runtime bodies have their own matching source. Its content-pinned compiler and `-O3,p`
 profile are recorded in `config/SLUS-20836/unit-compilers.tsv` and `config/SLUS-20836/unit-flags.tsv`;
 `config/SLUS-20836/unit-objects.json` checks the complete compiler object:
@@ -54,7 +54,7 @@ The exception table occupies `0x544d74..0x544df4`: **127 payload bytes and one
 zero padding byte**. The next external-table index record at `0x55391c`
 independently names function `0x3f5410` and table `0x544df4`. The update uses a
 240-byte frame, nine saved GPRs and fourteen protected ranges. Scoped wrappers
-reproduce the full payload, including the shared cleanup suffixes ([#2725](../findings/findings-2501-2750.md#f2725)):
+reproduce the full payload, including the shared cleanup suffixes:
 
 | Reference role | Stack homes | Cleanup address |
 |---|---|---|
@@ -76,7 +76,7 @@ lookup. Matching constructs retain fresh state-increment reads, a common exit,
 the CTRL/model/text/OPTION declaration order and distinct camera/light values.
 Boolean conditions avoid integer promotion; signed clamp tests written as
 `n > k-1` produce the retail branch-condition registers. The destructor's
-low-23-bit AND form preserves the retail receiver/deletion-flag colours ([#2726](../findings/findings-2501-2750.md#f2726)).
+low-23-bit AND form preserves the retail receiver/deletion-flag colours.
 
 Verification:
 
@@ -152,9 +152,9 @@ The reflected `beNDMWTitle2Option` fields are `_selLang` (`+0x14`), `_ctrlPos`
 The matching update uses byte accesses for `_isOK` and word accesses for the
 selectors and settings, following the retail instructions.
 
-Initialization ([#729](../findings/findings-0501-0750.md#f729)) binds `_messenger`, sets `_selLang=0`, and either fetches
+Initialization binds `_messenger`, sets `_selLang=0`, and either fetches
 `GAMERAM GETCOMMON`'s `CAMERAMODE` and `LIGHTMODE` if global byte `0x00554e70` is
-1, or supplies values 0 and 1. The power-on visual meaning is Near/Hard ([#724](../findings/findings-0501-0750.md#f724)).
+1, or supplies values 0 and 1. The power-on visual meaning is Near/Hard.
 
 Opening copies the saved values into binary displayed choices (nonzero becomes
 1), sets country and old-country to 1, and selects row 0. `_selLang=0` chooses
@@ -202,8 +202,8 @@ build.
 
 The message handler's Ghidra body counts 160 bytes but ends at `0x003f53f7`.
 Using the count as a contiguous length dropped `jr ra` at `0x003f53f0` and its
-stack-restore delay slot. Finding [#730](../findings/findings-0501-0750.md#f730) repairs this with a generated, reviewed
-span file:
+stack-restore delay slot. A generated, reviewed
+span file repairs this:
 
 ```sh
 ghidra-post orig/SLUS-20836/SLUS_208.36 --project-path ghidra-projects/dw4 \
@@ -231,21 +231,21 @@ for their bounded engine-call contracts:
 
 | Start | Bytes | Role | Recovery |
 |---|---:|---|---|
-| `0x003f19e0` | 156 | Resolve pad manager and addref/release it | **Byte-matched** `vfunc_32`, [#731](../findings/findings-0501-0750.md#f731) |
-| `0x003f1a80` | 2,504 | Per-frame load-controller update | **Byte-matched** `vfunc_31`; behavioral reference [#734](../findings/findings-0501-0750.md#f734) |
-| `0x003f2450` | 12 | MetaObject return `*(int*)0x0058baf0` | **Byte-matched** `vfunc_30`, [#732](../findings/findings-0501-0750.md#f732) |
-| `0x003f2460` | 36 | Slot-29 descriptor wrapper (C++ mode) | **Byte-matched** `vfunc_29`, [#732](../findings/findings-0501-0750.md#f732) |
-| `0x003f2490` | 1,832 | RUN/GAMESTART message handler | **Byte-matched** `vfunc_34`; behavioral reference [#735](../findings/findings-0501-0750.md#f735) |
-| `0x003f2bc0`/`c40`/`cc0` | 128 each | Reference-release wrappers | Matching source; [#733](../findings/findings-0501-0750.md#f733) refuted |
-| `0x003f2d40` | 12 | MetaObject return `*(int*)0x0058bef0` | **Byte-matched** `vfunc_20`, [#732](../findings/findings-0501-0750.md#f732) |
+| `0x003f19e0` | 156 | Resolve pad manager and addref/release it | **Byte-matched** `vfunc_32` |
+| `0x003f1a80` | 2,504 | Per-frame load-controller update | **Byte-matched** `vfunc_31`; has a behavioral reference |
+| `0x003f2450` | 12 | MetaObject return `*(int*)0x0058baf0` | **Byte-matched** `vfunc_30` |
+| `0x003f2460` | 36 | Slot-29 descriptor wrapper (C++ mode) | **Byte-matched** `vfunc_29` |
+| `0x003f2490` | 1,832 | RUN/GAMESTART message handler | **Byte-matched** `vfunc_34`; has a behavioral reference |
+| `0x003f2bc0`/`c40`/`cc0` | 128 each | Reference-release wrappers | Matching source; no register-allocation wall |
+| `0x003f2d40` | 12 | MetaObject return `*(int*)0x0058bef0` | **Byte-matched** `vfunc_20` |
 
 The reference-counting idiom these wrappers share is a known matchable
-shape ([#731](../findings/findings-0501-0750.md#f731)): the addref `if` body ends in an explicit `asm{nop}`, the release
+shape: the addref `if` body ends in an explicit `asm{nop}`, the release
 call is followed by `asm{nop}`, and the closing store by `asm{nop}` — that is
 MWCC's trailing-padding placement, and moving the last `nop` inside the addref
 block is what aligns the branch displacement. The three release-only wrappers
 (`0x003f2bc0` family and the title's `0x003f5210`/`0x003f5290`) match
-with it; a register-allocation wall for them is refuted finding [#733](../findings/findings-0501-0750.md#f733).
+with it; a register-allocation wall for them is refuted.
 The generated symbol map supplies the contiguous extents above; they are
 not Ghidra occupied-body counts.
 
@@ -296,7 +296,7 @@ The downstream 18,616-byte `beNDMWLoadIntf2` update at `0x3e4750` matches as
 has matching C++. See [the port-critical seeds](asm-body-matches.md#the-port-critical-seeds)
 and [the load-interface contracts](load-intf2.md).
 
-### Common-model boundary ([#756](../findings/findings-0751-1000.md#f756)–[#758](../findings/findings-0751-1000.md#f758))
+### Common-model boundary
 
 The shared `0x003e3b80..0x003e46a4` helper group has a verified
 [common-model reference](common-model-controller.md), and the native port uses
@@ -306,7 +306,7 @@ The action interpreter, exact sequence/running predicates, timing, rendering and
 audio remain outside that equivalence claim. See `load-intf2.md` for the
 master/slot behavioral references and their seeded-queue limitation.
 
-### Logo sequence ([#759](../findings/findings-0751-1000.md#f759)–[#760](../findings/findings-0751-1000.md#f760))
+### Logo sequence
 
 [Model-sequence waits](model-sequence-waits.md) recover the next contiguous
 JUMP/WCHECK group. The port uses the extracted logo command program and

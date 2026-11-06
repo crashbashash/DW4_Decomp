@@ -6,7 +6,7 @@ reached only through original data: live Cross probe → `hit_n_digilfm.lua` →
 the NPC to `SQ_WAIT` and issues `SUBWND GENERATE XDATA/I<player>`. The native window tree
 then runs the recovered `beNDMWShopCtrl10` update (`4270a0..42860c`, evidence in
 [XDATA controller](../../docs/engine/xdata-controller.md) and
-[shop selectors](../../docs/engine/shop-selectors.md)). The retail findings cover the XDATA service entry, the RECALCPLAYER flag and the sequence-set muteki clear.
+[shop selectors](../../docs/engine/shop-selectors.md)). Retail evidence covers the XDATA service entry, the RECALCPLAYER flag and the sequence-set muteki clear.
 
 ## Ownership
 
@@ -91,7 +91,7 @@ in the Data column, and its quote reads "Wisdom Chip γ+120 / Wisdom 360 Remaini
 left panel keeps its values (the capture character's Wisdom is already 9999, and the Data row is not previewed: it stays 9999
 while the quote's Remaining shows the balance after the charge), as in the port's quote frame. Avoid Circle after leaving the lab: it reaches the log-out/save screen.
 
-The raised-stat reference (finding [#1015](../../docs/findings/findings-1001-1250.md#f1015)): a Dorumon Lv 40 with a bought Wisdom chip (upgrade cost 2400, +120 step) equipped,
+The raised-stat reference: a Dorumon Lv 40 with a bought Wisdom chip (upgrade cost 2400, +120 step) equipped,
 written to a copy of the card with the port's save writer and called in retail, shows on the Data Keeper chip quote: Wisdom 600 -> 720 in cyan,
 every other stat unchanged, the X Data row unchanged (6000), and the quote line "Wisdom 360 Remaining 3600 Data" (6000 - 2400). The panel
 read 3074 HP and 418 Strength. `test_hubtalk` (`chip_projection`) reproduces exactly those figures from the same recipe. The projection is a

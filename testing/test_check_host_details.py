@@ -37,12 +37,8 @@ class Rules(unittest.TestCase):
             for item in items:
                 self.assertIn(rule, rules(item), "%s should flag %r" % (rule, item))
 
-    def test_register_rules_flag_scratch_paths_only_in_the_findings_register(self):
-        for item in ["/tmp/boss_mod.png", "/opt/emulator/x", "/var/tmp/out.bin"]:
-            self.assertIn("db-scratch-path", {h[2] for h in chd.scan_text("docs/findings/findings-0001-0250.md", item, rules=chd.DB_COMPILED)}, item)
-        # the tree-wide rules leave a generic scratch file in a command example alone
+    def test_a_generic_scratch_file_in_a_command_example_passes(self):
         self.assertEqual(rules("python3 scripts/lua_dump.py /tmp/lua_179.bin --limit=2"), set())
-        self.assertEqual({h[2] for h in chd.scan_text("docs/findings/findings-0001-0250.md", "../scratch/boss_mod.png", rules=chd.DB_COMPILED)}, set())
 
     def test_placeholders_and_generic_wording_pass(self):
         for ok in ["/home/example/x", "/home/user/x", "/home/runner/work", "../local/extracted", "<repo>/docs", "~/x",

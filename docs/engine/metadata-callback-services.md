@@ -1,6 +1,6 @@
 # Metadata lookup and deferred callback services
 
-Finding [#886](../findings/findings-0751-1000.md#f886) records six complete bodies / **568 code bytes**, all with matching
+Six complete bodies / **568 code bytes** all have matching
 source. Four new exact functions add **468 bytes**: string-field lookup 160,
 metadata name lookup 20, callback-array destruction 96 and append 192. Constructor 20
 and finalize/replace 80 retain existing matches with explicit interfaces. The
@@ -10,7 +10,7 @@ with the previously recovered list, descriptor and dispatcher implementations.
 ## Corrected string-field lookup
 
 The interpretation of `2ea780` as a list of byte offsets into another object's
-buffer is **refuted ([#885](../findings/findings-0751-1000.md#f885))**. Actual list-specialization callbacks pass a field
+buffer is **refuted**. Actual list-specialization callbacks pass a field
 selector through `igMetaObject_FindFieldByName` (`2fdf20`, 20). That wrapper loads
 global descriptor `585cd8`, independently identified in reflection as
 `igMetaField::_fieldName` with member offset 12, and passes the metadata field list
@@ -27,8 +27,7 @@ Earlier numeric fixtures verified the same address arithmetic while assigning
 the wrong meaning to its operands: addition is commutative. They now use actual
 object references and a selector offset 12. Corrected receiver types also produce
 an exact 160-byte match in
-[list-string-field-find.c](../../src/engine/list-string-field-find.c). The previous
-interpretation remains explicitly retained as a refuted finding.
+[list-string-field-find.c](../../src/engine/list-string-field-find.c).
 
 `igMetaObject_FinalizeAndReplaceField` (`2fdea0`, 80) finalizes the incoming
 descriptor, then invokes retaining replacement in the current metadata field list.

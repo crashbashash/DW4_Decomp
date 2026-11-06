@@ -1,7 +1,7 @@
 /* 0x0030e450 — igPsx2ThreadManager vtable slot 11.
  * Makes one call on the manager's `_sema` object (its virtual method at vtable
  * offset 92) and discards the four-byte result it returns through a hidden
- * buffer (finding #643, the four-byte struct-return shape). */
+ * buffer (the four-byte struct-return shape). */
 #include "dw4/reflected.h"
 extern "C" {
 

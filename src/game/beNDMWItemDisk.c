@@ -10,7 +10,7 @@ extern int g_beNDMWItemDisk_metaObject[4];
 /* Inventory word layout shared by every beNDMWItem* subclass: bits 0-9 record
  * number, bit 10 equipped flag, bits 12-15 item kind, and one
  * subclass-specific field above that.  The disk folder stores its entries as
- * (count << 16) | (0x4000 + type) (finding #133; receiver fields: #539). */
+ * (count << 16) | (0x4000 + type) (receiver fields:). */
 #define ITEM_REC_NO_MASK 0x3FF
 #define ITEM_EQUIPPED_BIT 0x400
 #define ITEM_KIND_SHIFT 12

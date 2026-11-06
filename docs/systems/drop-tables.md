@@ -2,8 +2,6 @@
 
 **Status:** format solved and **live-verified**. The Guard Room
 (`stagGF01`) box drop tables are read out in §5.
-**Findings:** [#256](../findings/findings-0251-0500.md#f256) (roll format), [#257](../findings/findings-0251-0500.md#f257) (stage→pack map), [#258](../findings/findings-0251-0500.md#f258) (Guard Room boxes),
-[#259](../findings/findings-0251-0500.md#f259) (family→table map), [#260](../findings/findings-0251-0500.md#f260) (pack list-data encoding), [#419](../findings/findings-0251-0500.md#f419)/#460 (its offline decode, §6).
 **Method:** the pack is parsed as igBinary ([`../../scripts/igb_parse.py`](../../scripts/igb_parse.py))
 and the tables are read out of the RAM of a save state.
 
@@ -117,7 +115,7 @@ inheritance and no fallback:
 * **There is no "zone default" to fall back to.** A generator whose list is empty
   drops nothing, full stop — verified live: zeroing every weight in the active
   `nZ1gobr3` produced no drops at all rather than a fallback to some other list
-  (finding [#265](../findings/findings-0251-0500.md#f265)).
+.
 * What *looks* like a default is an authoring pattern. One zone pack's region in the
   ISO lists a whole family library, all three difficulties at once:
 
@@ -244,7 +242,7 @@ ids are cores (9 models × 3 grades, order Brave, Aegis, Vulture, Cipher, Astral
 Wizard, Element, Spirit, Divine), `armor2` ids are boards
 (14 models × 3 grades, order Achilles, Atlas, Meteor, Fire, Ice, Bolt, Dark,
 Armor, Beast, Rack, EXP, BIT, Mana, Resist — `docs/systems/items.md`), `insItem` is
-the shell family (20 elements × 5 grades) and `conItem` indexes the 12-row
+the sub-slot family (BIT, x-data and the plugs, §5b) and `conItem` indexes the 12-row
 consumable table.
 
 **Shape of the table:** a case pays an install item or a consumable far more often
@@ -408,7 +406,8 @@ Two further specials in the same stage:
 `nZ1reizu` is the *raise case* (`GWCS-03`, Normal only, same fallback rule as the gate
 case). The sixteen `comonEPIC` pools are used by `GENE-e00`–`e15` (all stat row 636) —
 sixteen guaranteed-unique-weapon spawns. Of the RAM images examined they appear only in
-`stag0101`. Weapon ids 256–265 are unnamed in `dw4_itemnames.py` (its model list ends
+`stag0101`. Every `comonEPIC` entry carries `_rank` 200, a value seen in no other list; its
+meaning is unknown, and the drop path does not read `_rank`. Weapon ids 256–265 are unnamed in `dw4_itemnames.py` (its model list ends
 at 255, and the id space extends at least to 276 — see the `vZ1cont1` row above).
 
 #### Auditing a stage for missed tables
@@ -449,7 +448,8 @@ extending.
 `GENE-00` row 60 = `e_mecha4`, tables `n/h/vZ1mec41`; **Normal is exactly
 10000/10000** (a guaranteed drop): `weapon` 175 (Mighty Talon) 250, `weapon` 200
 (Beam Magnum) 250, `insItem` 1 @7000, `insItem` 2 @2500. Hard = 34 entries
-Σ 9400, Very Hard = 25 entries Σ 8730.
+Σ 9400, Very Hard = 25 entries Σ 8730. The stage's generator packs `787/788/789`
+hold only these `Z1mec41` boss tables; they have no object table.
 
 ## 5b. Item names — how (category, id, rank) becomes a display name
 
@@ -474,7 +474,7 @@ string objects → `+8` = text):
   types × 2 variants (`Strgth.↑Plug`, `Def.↑Plug`, `MaxHP/MaxMP/Wisdom/Spirit/Speed↑Plug`,
   `⊂/⊃/∪/∩↑Plug`), slots `g_000bit` / `g_000xdata1` / `g_000xdata2`.
 
-  **Naming ([#265](../findings/findings-0251-0500.md#f265)):** the row that can be misread as `P Data` is
+  **Naming:** the row that can be misread as `P Data` is
   **x-data** — confirmed in game. Its display string is `b"\x81\xf7 Data"`
   (CP932 `0x81F7` = U+00B6 PILCROW, not a "P"), its model/slot string is `xdata`
   (hence `g_000xdata1/2`) and its pickup icon is an X. Other items in the same table
@@ -488,33 +488,33 @@ string objects → `+8` = text):
 > list (RAM `0x17dd1e0`, alphabetical) is
 > `abChip armor1 armor2 conItem eneatk enemy impItem insItem pcTech shinka weapon wazaPanel`
 > — `insItem` is a distinct DB from `wazaPanel`/`pcTech`/`eneatk`. Attributing that table
-> to `insItem` produces a false "skills drop from crates" claim; see finding [#262](../findings/findings-0251-0500.md#f262).
+> to `insItem` produces a false "skills drop from crates" claim.
 >
-> **Settled live ([#263](../findings/findings-0251-0500.md#f263)):** forcing `insItem id 0` in the Guard Room's live table drops the
+> **Settled live:** forcing `insItem id 0` in the Guard Room's live table drops the
 > **bit item** (seen on the ground); the same id at `rank 4` drops the *same* item, so the
 > repeated rows are one item at five probabilities and the `rank` field is not read by the
 > drop path. The insItem rows do pay out, so the 43.3 % Normal figure is real.
 * **Consumables** in id order: HP Disk α/β/γ, MP Disk α/β/γ, Cure Disk, Raise Disk,
   Gate Disk, Recovery, B. Pack, Key Chain (12 rows — matching the highest `conItem`
   id in any drop table, 11).
-* Resolver: the item-name mapping. Finding [#261](../findings/findings-0251-0500.md#f261).
+* Resolver: the item-name mapping..
 
 Caveat: the drop routine as decompiled passes only the id + the category ordinal on to
 `MODELCTRL … GENERATE` and does not visibly read `beGeneraterItemDataOne +0x10`, so the
 meaning of the `rank` field is unresolved — see the warning above.
 
-## 6. Fully offline (findings [#419](../findings/findings-0251-0500.md#f419)/#460)
+## 6. Fully offline
 
 The table counts, the object references and the element arrays are all static:
 
 * object-reference fields and the list element arrays store **ids** that index the pack's
   own **remap table** (between the blob's two object sections), so any id resolves to its
-  record offline — `scripts/igb_ids.py` ([#460](../findings/findings-0251-0500.md#f460)). The table's object entries *are* the
+  record offline — `scripts/igb_ids.py`. The table's object entries *are* the
   record order, with the objects' memory blocks interleaved; reading the ids as a "loader
   instantiation order" numbering is a misreading of that table. No live RAM is involved.
 * a list is serialised as `{u32 count, u32 capacity, u32 X}` and **`X` is an ordering key,
   not an offset**: lay the lists out in ascending `X` and the pool reconstructs exactly
-  ([#419](../findings/findings-0251-0500.md#f419)). The Hard and Very-Hard arrays do not overlap because each list's block is placed
+. The Hard and Very-Hard arrays do not overlap because each list's block is placed
   by its key, not indexed by `X`.
 
 So a stage's drop rows read from the file: `beGeneraterData._playerDataList` ->
@@ -526,7 +526,7 @@ their category name and `_id`/`_rank`/`_rate`. Worked example: **entry 622 yield
 rate=1600`, ...). The live-save recipe below is a way to cross-check a table, not a
 requirement.
 
-The three difficulty-tier packs of a stage do not split the drop table (finding [#462](../findings/findings-0251-0500.md#f462)):
+The three difficulty-tier packs of a stage do not split the drop table:
 stag0102's three tier packs (622/623/624) carry the **same** 772-row drop table, differing
 only in `_geneEnemyId` (the enemy stat-row band), so there is nothing to split — the
 difficulty axis between the packs is entirely in `_geneEnemyId`.
@@ -573,7 +573,7 @@ entry — addressed by its `(category, id, rank)` triple — to `10000`, and sma
   anything at all — they have no generator, so by §1 they currently cannot.
 
 
-## 9. Stage-generator findings (World 1 sweep)
+## 9. Stage generators (World 1 sweep)
 
 A sweep of World 1 — 4 overworld rooms, the 7 `dng1**` dungeon floors, the 4 Goblin Fortress
 rooms and one boss arena — settled several questions about how generators and their lists are

@@ -4,7 +4,7 @@
 Lua MAT wrappers supply roles; construction of global 0x58a1c8 with the
 beMatCtrl handle 0x589160 and reflected fields supply receiver identity.
 Retail objdump and the exhaustive behavioral oracle establish semantics.
-See docs/engine/material-contact.md and findings #859.
+See docs/engine/material-contact.md.
 """
 ROWS = [
     (0x38aca0, "beMatCtrl_IsPlayer"),

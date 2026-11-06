@@ -6,10 +6,7 @@ Lua binding `be:SYSgetRandom(M)` **and by ~11 native `genrand` callers** (drop
 rolls, damage/AI rolls — see §4). There is **no reseed anywhere in the code**
 — the whole run is a single deterministic MT19937 sequence.
 
-Evidence: findings [#273](../findings/findings-0251-0500.md#f273)–[#281](../findings/findings-0251-0500.md#f281) ([#275](../findings/findings-0251-0500.md#f275) is refuted; [#279](../findings/findings-0251-0500.md#f279) is the
-consumer inventory; [#281](../findings/findings-0251-0500.md#f281) identifies the native callers and settles the reseed
-question); tool `scripts/dw4_rng.py`; generated site table
-[`rng-sites.tsv`](rng-sites.tsv).
+Tool: `scripts/dw4_rng.py`. Generated site table: [`rng-sites.tsv`](rng-sites.tsv).
 
 ---
 
@@ -91,9 +88,9 @@ The states in the available snapshots all fall on that *one* sequence:
 | `pk_ram2.bin` | 212 | `a8a088ad` | 19 | 11444 |
 
 Different snapshot moments, wildly different draw counts, one seed. An area
-load does **not** reseed: finding [#172](../findings/findings-0001-0250.md#f172) measured the load as `_mti 318 → 321`
+load does **not** reseed: a load measures as `_mti 318 → 321`
 (3 draws) with the state words unchanged. There is no second MT state anywhere
-in the 32 MB (finding [#171](../findings/findings-0001-0250.md#f171)), and there are exactly two `0x52B8E0` words in RAM:
+in the 32 MB, and there are exactly two `0x52B8E0` words in RAM:
 the live object and the class descriptor's vtable pointer.
 
 ---
@@ -189,34 +186,36 @@ control:
 
 | Entry | Stage | n | M | What the draw controls |
 |---|---|---|---|---|
-| `e0614` | stag0101 Valley Entrance | 1 | 99 | first-visit intro-demo enemy (GENE-21 goburi vs GENE-22 nume) |
-| `e0621` | stag0102 Valley Crossroads | 12 | 179/239/299/419 | **crown/elite enemy variant** (3 groups × 4 armor2 branches) |
-| `e0635` | stag0104 Valley Cliff | 4 | 179/239/299/419 | crown/elite variant |
-| `e0642` | stag0201 Desert Entrance | 5 | 99 + crown | crown/elite + first-visit demo enemy |
-| `e0649` | stag0202 Desert Ruins | 9 | 121 + crown | crown/elite + miniboss (SkullGreymon) add-group `GENE-s01..s05` |
-| `e0679` | stag0301 Forest Entrance | 9 | 99 + crown | crown/elite + first-visit demo enemy |
-| `e0686` | stag0302 Forest Grove | 9 | 121 + crown | crown/elite + miniboss (Tonogeko) add-group |
-| `e0702` | stag0304 Forest Deep | 4 | 179/239/299/419 | crown/elite variant |
-| `e0709` | stag0403 City Quest Hub | 1 | 99 | first-visit intro-demo enemy (e_infermo vs e_megadra) |
-| `e0417` | dng412b3 (Electro Mine) | 13 | 1, 19 | moving-rail/platform branch; rare-layout `rand%19==0`, else coin flip |
-| `e0425` | dng412b4 (Electro Mine) | 24 | 1, 2, 19 | as above + station animation (`rand%2`) |
-| `e0540` | quest 5-6 "rare six doors" | 1 | 3 | `g_linkPtnNum = rand%3 + SYSgetDifficulty()` → room/link pattern |
-| `e0556` | dngq7b2e | 1 | 10 | adds `rand%10` to a quest counter (`COUNTERget(2)`, "questnm1") |
-| `e0607` | stage-clear sequence | 1 | 6 | damage-reaction tier (`local = rand%6` → SQ_SDMG/MDMG/LDMG) |
-| `e0737` | boss02 BelialVamdemon | 3 | 2 | hit-reaction knockback ("DMGJUMP") coin flips |
-| `e0744` | boss03 Lucemon | 2 | 1 | **no-op** (`rand%1 == 0`), but still advances the state |
-| `e0751` | boss04 Devimon-1 | 2 | 5, 3 | boss teleport position (5 spots, avoids repeat); UFO add spawn corner (3) |
-| `e0816`/`e0820`/`e0824`/`e0828` | lobby hub (4 entries) | 11 | 1 | **no-op** `funcRandom()` callbacks in the `WPos` handler; result unused |
+| `e0614` | stag0101 Valley Entrance | 1 | 100 | first-visit intro-demo enemy (GENE-21 goburi vs GENE-22 nume) |
+| `e0621` | stag0102 Valley Crossroads | 12 | 180/240/300/420 | **crown/elite enemy variant** (3 groups × 4 armor2 branches) |
+| `e0635` | stag0104 Valley Cliff | 4 | 180/240/300/420 | crown/elite variant |
+| `e0642` | stag0201 Desert Entrance | 5 | 100 + crown | crown/elite + first-visit demo enemy |
+| `e0649` | stag0202 Desert Ruins | 9 | 122 + crown | crown/elite + miniboss (SkullGreymon) add-group `GENE-s01..s05` |
+| `e0679` | stag0301 Forest Entrance | 9 | 100 + crown | crown/elite + first-visit demo enemy |
+| `e0686` | stag0302 Forest Grove | 9 | 122 + crown | crown/elite + miniboss (Tonogeko) add-group |
+| `e0702` | stag0304 Forest Deep | 4 | 180/240/300/420 | crown/elite variant |
+| `e0709` | stag0403 City Quest Hub | 1 | 100 | first-visit intro-demo enemy (e_infermo vs e_megadra) |
+| `e0417` | dng412b3 (Electro Mine) | 13 | 2, 20 | moving-rail/platform branch; rare-layout `rand%20==0`, else coin flip |
+| `e0425` | dng412b4 (Electro Mine) | 24 | 2, 3, 20 | as above + station animation (`rand%3`) |
+| `e0540` | quest 5-6 "rare six doors" | 1 | 4 | `g_linkPtnNum = rand%4 + SYSgetDifficulty()` → room/link pattern |
+| `e0556` | dngq7b2e | 1 | 11 | adds `rand%11` to a quest counter (`COUNTERget(2)`, "questnm1") |
+| `e0607` | stage-clear sequence | 1 | 7 | damage-reaction tier (`local = rand%7`: 0-3 SQ_SDMG, 4-5 SQ_MDMG, 6 SQ_LDMG) |
+| `e0737` | boss02 BelialVamdemon | 3 | 3 | hit-reaction knockback ("DMGJUMP"), taken on `rand%3 == 0` |
+| `e0744` | boss03 Lucemon | 2 | 2 | hit-reaction coin flips that set `g_dmgf` |
+| `e0751` | boss04 Devimon-1 | 2 | 6, 4 | boss teleport position (`rand%6`, with a repeat check); UFO add spawn corner (`rand%4`) |
+| `e0816`/`e0820`/`e0824`/`e0828` | lobby hub (4 entries) | 11 | 2 | `funcRandom()` in the `WPos` handler: a coin flip that steps the model's path index (`MDLaddHp(1)` or `MDLaddHp(-1)`) |
 
 Notes:
 
-- The **crown roll** moduli (`179/239/299/419`) are one per equipped `armor2`
+- The **crown roll** moduli (`180/240/300/420`) are one per equipped `armor2`
   board (device folders 26/27/28/none); only the matching branch runs, so an
   area load costs **1 draw per enemy group (2–3 draws)**, which is exactly the
-  `_mti 318 → 321` measurement in [#172](../findings/findings-0001-0250.md#f172).
-- **`M == 1` is not a no-op for the RNG.** Eleven lobby calls and two Lucemon
-  calls return `0` every time but still bump `_mti`; they are free knobs for
-  shifting the sequence.
+  `_mti 318 → 321` measurement.
+- The moduli here are decoded with the signed bias of
+  [the Lua numeric audit](../engine/lua-numeric-audit.md). Several draws store
+  their result in a local that the decompiled `lua/` tree omits: the crown rolls
+  show only their `local_0 >= N` branches, and `funcRandom` prints with an empty
+  body. Read those sites from the bytecode.
 - The per-entry table with every call (`entry/chunk/proto/pc/modulus`) is
   auto-generated to [`rng-sites.tsv`](rng-sites.tsv) by
   `dw4_rng.py sites --tsv`.
@@ -236,13 +235,13 @@ Extracting the RNG object from the curated save states on the character-creation
 | fresh save before finishing the practice stage | 266 | 9 | **5258** |
 
 The jump from the title (0) to the World-1 gate (~4000) is **not** the big
-rolls — those stages are not loaded yet. It is the hub's no-op draw: AFS entry
+rolls — those stages are not loaded yet. It is the hub's path draw: AFS entry
 `816` (`lobby-ofanimon-seraphimon`) chunk `c100` runs
-`funcRandom = SYSgetRandom(1)` from a model `WPos` handler, so it stamps `_mti`
+`funcRandom`, which draws `SYSgetRandom(2)`, from a model `WPos` handler, so it stamps `_mti`
 **continuously while you are in the lobby**. Measured live: `_mti` 330 → 458 →
 590 over 10 s of doing nothing — **~26 draws/second**, i.e. the hub position is
 a function of how many frames you spend there. In the practice stage itself the
-only resident draw chunk is `607/c18` (`SYSgetRandom(6)`, damage-reaction
+only resident draw chunk is `607/c18` (`SYSgetRandom(7)`, damage-reaction
 tier), which fires when you take damage.
 
 So after that trip the **seed is still 5150**, but the RNG has advanced by
@@ -262,7 +261,7 @@ made so far**. Three practical consequences:
    A fresh boot always starts at the same place.
 2. **Shift by spending draws.** Any roll can be moved to a chosen outcome by
    first consuming the right number of *other* draws. The cheapest knobs are the
-   **no-op `M==1` calls** (lobby `WPos` callbacks, Lucemon hit reactions) and
+   lobby `WPos` callbacks, Lucemon's hit reactions and
    re-entering an area (the crown/demo rolls). Because a savestate carries the
    RNG, you can save before a roll, spend draws, and compare — or pick the
    number of draws that gives the wanted result.
@@ -321,7 +320,7 @@ grep -n -- '-24136' /tmp/dw4.dis       # 10 reads of *(0x58A1B8); only 0x371f28 
 _None of these block understanding or using the RNG; all are low priority and
 recorded for completeness._
 
-- Exact call frequency of the lobby `funcRandom` no-op draws (per NPC update
+- Exact call frequency of the lobby `funcRandom` draws (per NPC update
   vs per frame) — measured ~26/s in the hub, but the trigger granularity is not
   pinned. Relevant to how fast `_mti` drifts while you are in the lobby.
 - What caused the ~6 draws/s idle drift measured in the Goblin Pass state
@@ -329,8 +328,6 @@ recorded for completeness._
   flag-gated, so it is either a running scripted cutscene or a native periodic
   draw. Normal-play idling in `before_crown_spawn` was draw-free, so drift is
   state-dependent.
-- Whether the `M==1` draws are a compiler artefact of a disabled (debug)
-  random branch or deliberate.
 - The per-stage **group count** of crown rolls (2 vs 3) for every crown-capable
   stage, to make the per-load draw cost exact everywhere.
 - Whether a route can be found where a specific desirable roll (e.g. pink

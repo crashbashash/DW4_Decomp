@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Retype a matched function's receiver from the recovered reflection metadata.
 
-The first batch of typed coverage (finding #381) rewrote automatch's synthetic `struct G`
+The first batch of typed coverage rewrote automatch's synthetic `struct G`
 into `igMetaObject` in 550 files.  This is the second, and it is the general form of it:
 a matched function is named `<Class>_<Method>` (or a sanitised `Gap__Bec__<Class>__vfunc_N`
 or `thunk_...`), its first argument is the receiver, and `data/reflection.json` already
@@ -114,7 +114,7 @@ def main():
     ap.add_argument("--class-regex", default=None,
                     help="only retype receivers whose class matches this regex (e.g. 'be' for the "
                          "game classes; the engine `ig*` set is the port plan's out-of-scope "
-                         "middleware, finding #488)")
+                         "middleware)")
     args = ap.parse_args()
 
     header = load_header(args.header)

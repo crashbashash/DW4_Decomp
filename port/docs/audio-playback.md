@@ -64,8 +64,8 @@ startup and standalone acceptance are recorded in
 
 `src/frontaudio.c` resolves `beSoundInfo._fnameList` through its named-object
 list and pool IDs, then follows each `beSoundData._fnameIdx`. The title sound
-pack is loaded through `stagis10.igb`'s references. Asset evidence is recorded
-as finding [#777](../../docs/findings/findings-0751-1000.md#f777) in this repository's recovery findings.
+pack is loaded through `stagis10.igb`'s references. The asset format is described in
+[sound format](../../docs/engine/sound-format.md).
 
 | Sound | Retail source | Playback |
 | --- | --- | --- |
@@ -99,7 +99,7 @@ model-event scheduling are separate verification boundaries.
 ### Cue selection and repeat admission
 
 Selection cues resolve the original `beSeInfoData._actionList` / `beSeData`
-model/action table in NDMW805 ([finding #780](../../docs/engine/sound-format.md#pre-lobby-selection-mapping-780)).
+model/action table in NDMW805 ([selection mapping](../../docs/engine/sound-format.md#pre-lobby-selection-mapping)).
 Title model sequence requests emit their first authored ACTION; horizontal
 option sequences emit `MOVE`. Character/name actions use the same lookup.
 Ignored confirmation during menu movement, empty-name Start and full-name Cross
@@ -284,7 +284,7 @@ and resolves each `_fnameIdx` through `_fnameList` to a file. A file is a
 resident `.sfp` bank (`allse.sfp` is the shared bank in `sbiallse.igb`, others
 are embedded in the pack) or an ADX `[pt.entry]` stream. Opening reads records
 only; decoding one cue is explicit (`dw4_stagesound_decode`) and can run on a
-worker. Findings [#2757](../../docs/findings/findings-2751-3000.md#f2757) to [#2760](../../docs/findings/findings-2751-3000.md#f2760).
+worker.
 
 | Measured over the shipped stages | |
 |---|---|
@@ -311,14 +311,14 @@ The byte after the note is `0x7f` in the menu cues but `0x64` (84 cues), `0x69`
 (39), `0x6e` (36), `0x73`, `0x5a` and `0x78` (3 each) in 168 gameplay cues.
 `dw4_sfp_resolve_note` accepts 1 to `0x7f` and reports the byte; a resolver
 that accepts only `0x7f` leaves those 168 cues silent. The byte is not applied
-as a gain: no retail path was traced for it (unconfirmed, [#2759](../../docs/findings/findings-2751-3000.md#f2759)).
+as a gain: no retail path was traced for it.
 
 96 of the 8,855 cues stay silent, with an explicit `DW4_STAGESOUND_*` code and
 never a guess: the two-event `WINDOW_OPEN2`
 (`c0 df 2e 7f 00 82 02 df 2f 7f 80 ff`, one per pack; the `00 82 02` wait is
 not decoded).
 
-### Bank resolution ([#2760](../../docs/findings/findings-2751-3000.md#f2760))
+### Bank resolution
 
 A pack's banks are named by matching the `beCriSfpData` size, which two banks
 of equal size can swap: the `mcannon` and `scannon` banks of `stag0204`,
@@ -355,11 +355,11 @@ names a prepared clip: the `stag0101` `hurt` flow makes 14 requests (the music
 `ST_DEATH` and ambience `AM_VALLE`, nine `goNATK01` goblin-attack cues and the
 three game-over window cues) and the `stagGF03` Leomon room flow 48
 (`ST_GOBLI`, `AM_GOBLI`, the boss's `m4SDMG01`/`m4LDMG04`/`m4ACTN03` and
-others), none unresolved ([#2778](../../docs/findings/findings-2751-3000.md#f2778)). The flows are headless, so no device plays
+others), none unresolved. The flows are headless, so no device plays
 them: this proves the routing from enemy and player actions to the stage
 catalogue and the name resolution, not audible playback, mixing or timing.
 
-### Dungeon stages ([#2761](../../docs/findings/findings-2751-3000.md#f2761))
+### Dungeon stages
 
 The 57 `dng*` packs are catalogued and decode like the field stages, and
 `dw4_lobby_prepare_audio` picks the gameplay set for every non-hub world, so a
@@ -370,14 +370,14 @@ floors that are playable are listed in [dungeon floors](dungeon-floors.md).
 Opening a floor proves the sound requests of its scripts resolve to prepared
 clips, not that they are audible or timed like retail. The Blossomon intro
 waits on `querySD ISREADY <name>` (beSound case 12, `FUN_0037dd10`); the
-gameplay set answers 1 for a decoded clip ([#2788](../../docs/findings/findings-2751-3000.md#f2788), unconfirmed timing).
+gameplay set answers 1 for a decoded clip (unconfirmed timing).
 `check-dungeonroute` plays the Humid Cave floors for one player and every one
 of the second floor's 1,220 sound requests resolves to a prepared clip.
 
 ## Retail effect pool, music and stop rules in the gameplay set
 
-The retail rules traced in [sound format](../../docs/engine/sound-format.md#besound-runtime-play-stop-commands-and-the-voice-pool-27622765)
-(findings [#2762](../../docs/findings/findings-2751-3000.md#f2762)–[#2765](../../docs/findings/findings-2751-3000.md#f2765)) are followed by `dw4_frontaudio_prepare_gameplay` sets:
+The retail rules traced in [sound format](../../docs/engine/sound-format.md#besound-runtime-play-stop-commands-and-the-voice-pool)
+are followed by `dw4_frontaudio_prepare_gameplay` sets:
 
 | Rule | Native behaviour | How it is checked |
 |---|---|---|
@@ -405,9 +405,8 @@ python3 tools/verify_title_pacing.py --roms ../../local/extracted
   executes retail instruction regions for repeat admission/deadline creation
   (473 cases), all 1,000 stream-level table packet writes and the level clamp.
   This is a focused oracle; playback/allocation/messenger leaves and the rest
-  of `beSound` are boundaries. Findings
-  [#781 and #782](../../docs/engine/sound-format.md#repeat-admission-and-stream-levels-781782)
-  record the traced paths.
+  of `beSound` are boundaries. The traced paths are in
+  [sound format](../../docs/engine/sound-format.md#repeat-admission-and-stream-levels).
 - The callback test checks a loop with an intro, overlapping voices, saturation
   and silence after EOF. The device harness checks mono conversion, sample
   clock advancement/reset and repeated cleanup.
@@ -471,9 +470,9 @@ mixing, so general player and enemy sound coverage is **not** claimed.
 - Resident effect mixing: the SFX master level, authored bank parameters,
   fades, extra CRI channel adjustments, effect volume/pan and positional
   behaviour are not recovered. The sound-bank backend's use of the event
-  (velocity) byte and the handle maximum are open ([#2765](../../docs/findings/findings-2751-3000.md#f2765); the byte is
-  unconfirmed, [#2759](../../docs/findings/findings-2751-3000.md#f2759)), and no EE code reads `_channel` ([#2772](../../docs/findings/findings-2751-3000.md#f2772)).
-- The sound-bank backend is an RPC into the sound IOP module ([#2766](../../docs/findings/findings-2751-3000.md#f2766)), so the
+  (velocity) byte and the handle maximum are open (the byte is
+  unconfirmed), and no EE code reads `_channel`.
+- The sound-bank backend is an RPC into the sound IOP module, so the
   two-event `WINDOW_OPEN2` sequence stays silent; its timing is not decoded.
 - The retail stream player's music cross-fade and delayed retry
   (`0x0037c2c0`/`0x0037cf30`) are not claimed.

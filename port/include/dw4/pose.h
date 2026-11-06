@@ -1,7 +1,7 @@
 /* dw4/pose.h — pose the player's skinned mesh from a live EE RAM dump (P4.1).
  *
  * The player (Susanoomon) is skinned by the engine's VU1 blend programs from three runtime
- * pieces, all recovered offline from the Goblin Pass capture (finding #596):
+ * pieces, all recovered offline from the Goblin Pass capture:
  *
  *   per-vertex bone index   in the MODEL PACK, a u8 pool block of exactly `num_verts` bytes
  *                           (pack 861: 5483/5595/5566 for Skin0Shape0/2/1) — one bone per

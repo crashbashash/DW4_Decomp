@@ -3,7 +3,7 @@
  * helper on igInsightCore (the `_insight` member, with its `_scheduler` at +12
  * in include/dw4/reflected.h) that asks the scheduler's slot 26 (0x68) whether
  * the object is present and then calls slot 24 (0x60, add) or slot 25 (0x64,
- * remove); see findings #3321/#3322, hypothetical names.  Functions are in
+ * remove), hypothetical names.  Functions are in
  * retail address order; the slot argument is unused. */
 #include "dw4/reflected.h"
 extern "C" {

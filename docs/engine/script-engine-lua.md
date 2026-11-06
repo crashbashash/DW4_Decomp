@@ -6,8 +6,8 @@ and register transfers. [Material-contact helpers](material-contact.md) recover
 the complete first engine module through behavioral C, matching Lua wrappers
 and an exhaustive original-instruction oracle.
 
-Timed-message callback reentrancy is recorded in finding **[#789](../findings/findings-0751-1000.md#f789)** and the
-[native integration](../../port/docs/lua-integration.md#timed-callback-follow-ups-and-ownership-789).
+Timed-message callback reentrancy is recorded in the
+[native integration](../../port/docs/lua-integration.md#timed-callback-follow-ups-and-ownership).
 Eleven zero/positive-delay samples match original enqueue/update instructions,
 including two 32-callback passes. Negative-delay insertion ahead of the executing
 record exposes a retail head-recycling discrepancy; native retains its existing
@@ -252,8 +252,8 @@ Example (`FUN_00371c10`):
 ## Script loading / chunk storage
 
 Retail startup, duplicate-name execution, whole-VM globals cleanup and coordinated
-SD/Lua/DM teardown are recovered in [Lua loading and ownership](lua-loading-ownership.md)
-(findings **[#790](../findings/findings-0751-1000.md#f790)–[#793](../findings/findings-0751-1000.md#f793)**). The native scoped cache remains a host policy.
+SD/Lua/DM teardown are recovered in [Lua loading and ownership](lua-loading-ownership.md).
+The native scoped cache remains a host policy.
 - Scripts are compiled Lua 4.0.1 chunks concatenated inside `NDMW.AFS` entries.
 - All chunk headers carry `source='=(none)'` (compiled from in-memory strings).
 - Named scripts (`bML01001.lua`, `armorshop.lua`, …) appear as **string
@@ -287,13 +287,13 @@ code          : n(int32) * u32 instruction
 ```
 Instruction: 32 bits → opcode[0:6], B[6:15], A[15:32]; single `U` arg = bits[6:32].
 
-> **Signed operands and jumps ([#785](../findings/findings-0751-1000.md#f785)):**
+> **Signed operands and jumps:**
 > `MAXARG_S = ((1 << 26) - 1) >> 1 = 33554431`; decode
 > `s = (ins >> 6) - MAXARG_S`. Jump target is stock Lua 4.0.1
 > `pc + 1 + s`. A `pc + s + 2` target only compensates for a
 > decoder using the wrong bias; that bias also makes every PUSHINT literal
 > one too small and turns normal numeric-for step 1 into apparent step 0.
-> The tools and generated corpus use the stock decode ([#787](../findings/findings-0751-1000.md#f787)); see the
+> The tools and generated corpus use the stock decode; see the
 > [numeric audit](lua-numeric-audit.md). Execute original bytecode. The [native Lua integration](../../port/docs/lua-integration.md)
 > loads all 5,291 chunks and compares title DM traces with retail instructions.
 Opcode enum (0..48): `OP_END, OP_RETURN, OP_CALL, OP_TAILCALL, OP_PUSHNIL, OP_POP,

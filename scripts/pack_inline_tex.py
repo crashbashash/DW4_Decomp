@@ -21,8 +21,7 @@ decoder reads bytes 0..2 as colour.
 
 The `.rgba` is the pack's own image order (top-down, as stored and as the GS samples it), which is
 what `--png` shows too.  The port owns the orientation: `dw4asset`'s texdir loader flips rows on
-load, exactly as its texture-pack decoder does, because the sampler indexes with `(1 - tv)` (finding
-#579).  So write the .rgba **unflipped** here.
+load, exactly as its texture-pack decoder does, because the sampler indexes with `(1 - tv)`.  So write the .rgba **unflipped** here.
 """
 import argparse
 import os
@@ -163,7 +162,7 @@ def write_rgba(path, rgba, w, h):
     """Write `<u32 w><u32 h><RGBA>` in the pack's own (top-down) image order.
 
     The port flips this on load (`dw4asset.c`: `rgba_flip_rows`), matching its texture-pack decoder,
-    so the .rgba must stay unflipped here.  See the module docstring (finding #579)."""
+    so the .rgba must stay unflipped here.  See the module docstring."""
     open(path, "wb").write(struct.pack("<II", w, h) + rgba)
 
 

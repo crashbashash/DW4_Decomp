@@ -281,7 +281,7 @@
 0x002ed1c0	20	Memory_AllocateBufferViaSharedTail	cut
 
 # --- one function under two symbols: `thunk_FUN_002fe2ac` (`b 0x2fe2ac; nop`) and `FUN_002fe2ac` are the
-# --- entry and the loop of one 40-byte list-search leaf starting at 0x2fe290 (finding #390) ----------
+# --- entry and the loop of one 40-byte list-search leaf starting at 0x2fe290 ----------
 0x002fe290	44	FUN_002fe290	merge
 
 # --- the dump's extent ran into the next function (a layout unit was truncated) ------------------

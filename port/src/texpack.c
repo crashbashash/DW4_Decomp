@@ -87,7 +87,7 @@ static int by_off(const void *a, const void *b)
     return x < y ? -1 : (x > y ? 1 : 0);
 }
 
-/* `id -> class`, the object packs' table shape with class entries (finding #476).  It is
+/* `id -> class`, the object packs' table shape with class entries.  It is
  * validated by requiring one class to be exactly the clut blocks and another exactly the
  * images' `_pClut` values; anything less means the pack is not one we understand, and the
  * caller must not get guessed offsets. */

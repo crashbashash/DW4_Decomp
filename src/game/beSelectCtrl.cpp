@@ -14,7 +14,7 @@ extern int D_00588518[];
 }
 
 /* raw136 lazily resolves a borrowed pad-manager pointer. No reference-count increment/decrement is
- * present in this body. One explicit original padding NOP follows the publication (#731
+ * present in this body. One explicit original padding NOP follows the publication (
  * convention). */
 extern "C" {
 void beSelectCtrl_EnsurePadManager(beSelectCtrl *self);

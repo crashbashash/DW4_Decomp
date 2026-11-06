@@ -1,5 +1,5 @@
 # NDMW.AFS entry 625 -- each texture's igImage/palette pairing, following the id->class
-# table rule (finding #476): `_pClut` ranks among the ids of its class; that rank names
+# table rule: `_pClut` ranks among the ids of its class; that rank names
 # the igClut record, whose `_pData` is the palette block.
 # The 26 RGB decodes this reproduces were checked pixel-for-pixel against a live dump;
 # this file is the offline fixture the port diffs.

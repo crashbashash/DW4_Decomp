@@ -1,10 +1,10 @@
-/* dw4/fefont.h -- the front-end's own text: `bectext.igb`'s bitmap font (finding #608).
+/* dw4/fefont.h -- the front-end's own text: `bectext.igb`'s bitmap font.
  *
  * The engine generates its menu strings from a bitmap font, not from a font in the OS: `NDMW.AFS`
  * entry 79 (`bectext.igb`) holds an `igImage` (`font00.png`, a 512x512 8-bit grid + a 256-entry
  * `igClut`) and two `igCharMetricsList`s (484 glyphs each: the `NORMAL` and `MINIMUM` faces).  This
  * decodes them natively from the disc -- the same offline route the texture packs use (the pool is
- * the pack's id remap table + block offsets, findings #460/#464) -- so the port draws the game's
+ * the pack's id remap table + block offsets) -- so the port draws the game's
  * text instead of its diagnostic 5x7 readout font.
  *
  * All geometry is in the font's own units: a glyph's quad is its atlas texel rectangle, and the pen

@@ -39,6 +39,12 @@ What the count means and does not mean:
   class, a struct derived from it, or accesses inside a static member are not counted, so use the
   reflected name in the declaration where the compiler allows it (the shop helpers gained 52
   accesses that way).
+- **Two readable spellings are under-counted**, so moving a hand-spelled release into a class-body
+  holder lowers the metric with the typing unchanged. A reference release in an inline destructor
+  or static member inside a class body is invisible, because the function splitter sees only
+  top-level definitions. A field read through a typed global array element
+  (`g_<Class>_metaObject[0]->_validity`) has no declared local to attribute the class to. Counting
+  class-body member functions and typed array elements would remove the gap.
 - **`((T *)base)->field` counts as recovered.** The access scanner has a `CAST_MEMBER_RE` for that
   form, which is how the typing passes spell an access whose class came from reflection rather
   than a declaration.
@@ -55,7 +61,7 @@ return *(int *)((char *)(*(int *)((char *)(arg0) + 52)) + 8);   /* matches retai
 
 That satisfies the matching oracle and is useless to another compiler: it encodes 4-byte pointers and
 hand-computed offsets, which is what a port has to undo by hand (the port plan's `port/docs/project/README.md` §*What a native
-build changes about the constraints*). Typing is measured as **neutral for matching** ([#319](../findings/findings-0251-0500.md#f319)) and is
+build changes about the constraints*). Typing is measured as **neutral for matching** and is
 essential for the port — same work, different objective.
 
 ## The gate
@@ -213,7 +219,7 @@ return DAT_0055ebc0[0];
 Every fact needed to say that meaningfully is recovered: the global is a **reflection class
 handle**, so what it holds is an **`igMetaObject *`** (the invariant the object-model work
 established), reflection names the field at +36 **`_validity`**, and this accessor is the lazy
-get-or-register path — `if (!*handle || flags & 4 == 0) register();` ([#358](../findings/findings-0251-0500.md#f358)) — so `_validity & 4`
+get-or-register path — `if (!*handle || flags & 4 == 0) register();` — so `_validity & 4`
 is read, not guessed.
 
 `scripts/retype_metaobject_idiom.py` rewrites those 550 files (and only files whose shape is exactly
@@ -257,7 +263,7 @@ Three rules keep it from inventing anything, and everything skipped is counted a
   `igMetaObject_GetFieldAt`, not the class the function is named for; using the function-name class
   there would produce wrong member names that happen to compile.
 
-`--class-regex` scopes a pass to matching class names. The port plan ([#488](../findings/findings-0251-0500.md#f488)) scopes typed coverage
+`--class-regex` scopes a pass to matching class names. The port plan scopes typed coverage
 to game code because the engine middleware is replaced wholesale on a port, so `--class-regex be`
 restricts a pass to the **game** classes. The names it produces are real, not placeholders:
 `Gap__Bec__beNDMWItemWeapon__vfunc_24` unpacks to `arg0->_recNo` / `_isEquip` / `_kindNo` /
@@ -337,10 +343,10 @@ of the temporary: a reused local is checked only against the descriptor currentl
 consistently with registration order. `python3 testing/test_retype_initfields.py` covers valid
 reuse, unrelated reassignment, and real type errors both before and after reuse.
 
-### RTTI-less vtables (findings [#529](../findings/findings-0501-0750.md#f529)/#530)
+### RTTI-less vtables
 
 `scripts/seed_names_getvtable_slots.py` resolves the class of every vtable from the class's own
-`<Class>_GetVTable` function (finding [#368](../findings/findings-0251-0500.md#f368)'s rule), taking the map from the 478 RTTI vtables to
+`<Class>_GetVTable` function, taking the map from the 478 RTTI vtables to
 **958 / 980 classes**, and names the **1,177** unmatched unique slots of the 499 non-RTTI vtables
 (`config/SLUS-20836/names/GetVTableSlots.tsv`). All of them are `ig*` engine classes — the game's `be*`
 classes all carry RTTI — so this is T6 naming, not game typing. For the port's method dispatch the
@@ -349,7 +355,7 @@ the receiver rule above.
 
 ### The 316-file typing pass
 
-The pass ([#2723](../findings/findings-2501-2750.md#f2723)) replaces raw offsets and private layouts in 316 existing source files with fields
+The pass replaces raw offsets and private layouts in 316 existing source files with fields
 from `include/dw4/reflected.h`. It claims no new function and no matched code byte.
 
 The edits cover engine receiver fields, object headers, retained list storage, matrix translation
@@ -357,8 +363,9 @@ arrays and field-descriptor initialization. References in the authoritative stru
 integers. Typed views retain the original access widths, signed extensions, volatile reads and
 compiler-specific virtual-call scaffolding where byte matching requires them.
 
-Class identity remains separate evidence. Findings **[#2631](../findings/findings-2501-2750.md#f2631)-[#2722](../findings/findings-2501-2750.md#f2722)** record 92 provisional receiver
-interpretations rather than promoting them to confirmed facts. In particular, the unchanged symbols
+Class identity remains separate evidence: a byte match verifies code generation, so 92 receiver
+interpretations rest on layout alone and are not confirmed class identities. In particular, the
+unchanged symbols
 `Gap__Core__igObject__vfunc_26` and `Gap__Core__igVertexArray2__vfunc_48` are viewed through
 `beBaseInfoManager` and `igVertexArray1_1` layouts respectively; their symbol/receiver ownership
 discrepancies remain unresolved. Followed-reference target classes likewise need separate class,
@@ -379,7 +386,7 @@ source initializer audit is `python3 scripts/retype_initfields.py --check` (abov
 
 ### Port-critical closure helpers
 
-Thirty-odd `FUN_` helpers of the port-critical closure are typed (findings [#2753](../findings/findings-2751-3000.md#f2753)-[#2782](../findings/findings-2751-3000.md#f2782)) by taking
+Thirty-odd `FUN_` helpers of the port-critical closure are typed by taking
 each receiver from evidence rather than from the offsets alone: a typed matched caller
 (`dw4/reflected.h` casts or prototypes), the matched dispatcher that passes the object, or an exact
 multi-field offset match against a reflected class. Practical findings, all verified with
@@ -401,7 +408,7 @@ these entries stay untyped for a recorded reason:
 |---|---|
 | `LuaAPI_Dispatch` | its views are the Lua 4.0 argument stack (24-byte value slots); no reflected class describes it |
 | `MemoryContext_*`, `igMemoryRefMetaField_DeepCopy` | Alchemy memory and meta-field middleware, which the port replaces |
-| `beNDMWDegiData__LoadFromProperties` (`0x003ee6d0`), `beNDMWDegiData__UpdateFieldsFromData` (`0x003ee4d0`) | typed up to the 2.6 KB property block of a `beNDMWDegiData`, which has no reflected class ([#2754](../findings/findings-2751-3000.md#f2754)) |
+| `beNDMWDegiData__LoadFromProperties` (`0x003ee6d0`), `beNDMWDegiData__UpdateFieldsFromData` (`0x003ee4d0`) | typed up to the 2.6 KB property block of a `beNDMWDegiData`, which has no reflected class |
 | `beNDMWLoadIntf2ComMdlCtrl__StartAt` (`0x003e3e00`), `FUN_003a8140`, `FUN_00394400` | typed except for `igProperty` records and string-chunk headers, which are not reflected classes |
 | `beNDMWLoadIntf2NameSel__Update` (`0x003def80`) | typed through `beNDMWLoadIntf2NameSel`; the per-cell save area after it is unreflected |
 | `FUN_00423000`, `FUN_0043a450`, `FUN_00422c00` | typed except the item subclass fields (sort key at +20, a field at +16) whose class is not established |
@@ -433,16 +440,22 @@ these entries stay untyped for a recorded reason:
   `asm/FUN_00383bf0.s` shows (`lw s5,8(s4); lw v1,12(s4)`, the in-capacity test, then
   `sw v1,8(s4)` for the increment and `lw a1,16(s4)` for the data) and the reflected `igIntList`.
 
-## Limits on recovering a receiver's class (finding [#530](../findings/findings-0501-0750.md#f530))
+## Limits on recovering a receiver's class
 
 Two routes for the game-side receiver queue are measured and are dry:
 
 - Attributing a receiver class from the offsets it accesses against `reflection.json` is too weak —
   **0** of 78 unmatched game functions with `argN` casts has a unique matching class (thousands of
   classes share a field at +8/+16/+20).
-- Adjacency to the same class's RTTI `vfunc_*` on both sides **does** recover the class (e.g.
-  `FUN_004482c0` sits between `Gap__Bec__beNDMWItemWeapon__vfunc_21` and `vfunc_23`), but not the
-  **role**, and a name whose only justification is an inferred role is a findings hypothesis, not
+- Adjacency to the same class's RTTI `vfunc_*` on both sides **does** recover the class, because
+  MWCC emits a translation unit's functions contiguously. `scripts/retype_block_receiver.py` types
+  an unnamed `FUN_*` that sits between two `<Class>__vfunc_N` symbols, and leaves it alone unless
+  every `arg0`/`this` offset cast lands on a reflected field of that class with matching width;
+  `--game-only` limits it to the module map's `0x334000..0x460000`. For example, `FUN_004482c0` sits
+  between `Gap__Bec__beNDMWItemWeapon__vfunc_21` and `vfunc_23` and resolves to
+  `beNDMWItemWeapon._kindNo/_recNo/_isEquip/_pocket/_revision`. Field names beginning `_pad` are not
+  all padding: `_padManager` and `_padList` are real object references. Adjacency does not give the
+  **role**, and a name whose only justification is an inferred role is a hypothesis, not
   an overlay line. So the item cluster's per-class record setters (`FUN_004482c0` and five
   siblings, each writing a distinct `_kindNo` 0..5) are typeable but stay unnamed until a role
   source appears.
@@ -477,13 +490,13 @@ The order that pays:
    the object model only, and passes read it), but it is not the biggest lever.
 2. **Name receivers** (the naming loop) — each name converts that function's accesses from *not
    typeable* to typeable.
-3. **Object identity from a live instance** (finding [#415](../findings/findings-0251-0500.md#f415)) — the one route that supplies *identity*
+3. **Object identity from a live instance** — the one route that supplies *identity*
    without naming the receiver first. Every engine object's `+0` word is its class's vtable, and the
    478 vtables are decoded, so scanning RAM for vtable words enumerates live objects by class
    and reading them at their reflection offsets gives named, typed fields (verified field-perfect on
-   `beGeneraterData`, and cross-validated against the stat table by [#416](../findings/findings-0251-0500.md#f416)). That is a source of types
+   `beGeneraterData`, and cross-validated against the stat table). That is a source of types
    that does not depend on the naming loop, though it needs the emulator and so cannot run in CI: it
-   is evidence for a name or a cast, recorded in the findings register like any other live measurement.
+   is evidence for a name or a cast, like any other live measurement.
    It also bounds the work — only **171 of 478** classes are instantiated in a loaded stage, so a
    batch can be scoped to what the game actually builds.
 
@@ -493,8 +506,28 @@ The order that pays:
   [Port-critical closure helpers](#port-critical-closure-helpers) stay partly or wholly untyped
   until their receiver or neighbouring record has a reflected class or a typed caller.
 - The symbol/receiver ownership discrepancies of `Gap__Core__igObject__vfunc_26` and
-  `Gap__Core__igVertexArray2__vfunc_48`, and the 92 provisional receiver interpretations of
-  findings [#2631](../findings/findings-2501-2750.md#f2631)-[#2722](../findings/findings-2501-2750.md#f2722), are unresolved.
+  `Gap__Core__igVertexArray2__vfunc_48`, and the 92 receiver interpretations resting on layout alone, are
+  unresolved.
 - The item cluster's per-class record setters (`FUN_004482c0` and five siblings) have a class but
   no role source, so they are unnamed.
 - `config/SLUS-20836/signatures.tsv` is seeded with the object model only.
+
+## What didn't work
+
+These mechanical routes to more typed accesses are measured and dry, so do not retry them. What
+remains is naming `FUN_*` bodies by hand, after which the receiver rule types them.
+
+- **Vtable membership.** Only 28 distinct `FUN_*` symbols appear in the 478 vtables, their owners are
+  ambiguous shared defaults, and no decompiled `FUN_*` unit is a vtable slot.
+- **Call-site propagation.** Looking for an argument of known class at each `FUN_*` call gives 0
+  votes, because callers' locals are untyped m2c temporaries.
+- **Object-ref chains.** A (class, field) -> referenced-class map built from the `_InitFields`
+  `_metaObject` assignments has 485 pairs but types only 2 accesses, because the functions that walk
+  object graphs are the unnamed `FUN_*` units.
+- **Assert and log strings.** The `Class::method` strings are used up, leaving only 2 unnamed
+  functions, one a deliberately declined twin of `igIGBFile_ReadFile`.
+- **Other data.** The unapplied `register_site`/`post_init` sites in `data/reflection.json` (the 52
+  non-function-start `post_init` addresses are leaf fragments in unclaimed gaps), the signature field
+  of `data/functions.json` (1 of 15,974 functions) and `ctor_table` are all empty of new types.
+- **Live vtable scan.** It gives runtime objects' classes, not a static function's `arg0`; that needs
+  a trace.

@@ -209,12 +209,11 @@ that optional argument. All six object-system calls take the root object
 
 ## GAMERAM property template (`0x004cedf0`, 64 × 12 bytes)
 
-Finding **[#297](../findings/findings-0251-0500.md#f297) is refuted** by the initializer and constructor dispatch ([#795](../findings/findings-0751-1000.md#f795)).
 `0x003f7310` passes `0x004cedf0` to `0x003f6620`; each entry is
-`{u32 type, u32 count, char *name}` at offsets +0, +4 and +8. The old scan
-started at the first name pointer (`0x004cedf8`), shifting the other two words
-into the following entry. Its supposed nonzero defaults and bitmasks were
-therefore the next entry's type and count. A type of -1 terminates the table at
+`{u32 type, u32 count, char *name}` at offsets +0, +4 and +8. A scan that starts
+at the first name pointer (`0x004cedf8`) shifts the other two words into the
+following entry, so its apparent nonzero defaults and bitmasks are the next
+entry's type and count. A type of -1 terminates the table at
 `0x004cf0f0`.
 
 Constructor dispatch `0x00518b90` selects integer scalar (0), integer array (1),

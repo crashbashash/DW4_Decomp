@@ -14,8 +14,7 @@ void beNDMWStatus_AssignEquipment(beNDMWStatusPowerSocket *, int, int, int);
 void Gap__Bec__beNDMWStatusPowerSocket__vfunc_37(beNDMWStatusPowerSocket *, char *, char *, char *);
 }
 
-/* 0x00414610 - slot 39: run the shared helper FUN_00412600 (finding #802,
- * the DEVICE row selection step; -1 is its "no row" case per the asm) over the
+/* 0x00414610 - slot 39: run the shared helper FUN_00412600 (* the DEVICE row selection step; -1 is its "no row" case per the asm) over the
  * power socket's WPU pocket list at the current pocket position, passing the
  * first argument through as the row index.  The MainSlot sibling does the same
  * with its APU pocket.  The other two arguments are unused. */

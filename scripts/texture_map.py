@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """texture_map.py — the live world-mesh -> texture-name link, read out of an EE RAM dump.
 
-Finding #522 concluded the world-mesh texture binding is *not* in the live object graph, and that
+An earlier reading concluded the world-mesh texture binding is *not* in the live object graph, and that
 only UI/effect/font meshes link to a texture directly.  That is true for the geometry attribute's own
 fields, but the binding is one level up: the **material attr set**.
 
@@ -264,9 +264,9 @@ class TextureMap:
     def per_shape_pack_textures(self, key2ids):
         """pack geometry-attr id -> its material's texture, keyed by ``(primType, numPrims)``.
 
-        Finding #565: a live material is a list of ``beTextureCtrlAttr`` records, each carrying
+        a live material is a list of ``beTextureCtrlAttr`` records, each carrying
         **one** texture bind and **one** shape list, so the binding is per shape.  The live shape's
-        vertex buffer is drained (#520/#567), so the content match cannot reach it; the shape's
+        vertex buffer is drained, so the content match cannot reach it; the shape's
         ``_primType``/``_numPrims`` can, and ``key2ids`` is the pack's ``(primType, numPrims) ->
         [id]`` map from `camera_match.pack_shape_keys`.  A key shared by several pack ids (the
         small props) assigns the texture to all of them; the caller prefers the distinctive keys.

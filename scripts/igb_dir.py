@@ -4,7 +4,7 @@ igb_dir.py — parse the igBinary *type directory* of a stage/level pack.
 
 Decodes the `{NUL-terminated class name}` + N x 6-byte `{u16 type_id, u16 ordinal,
 u16 size}` triples records described in docs/engine/igbinary-format.md
-("Field descriptor encoding", findings #289/#290/#292).
+("Field descriptor encoding").
 
 The class-record chain is self-delimiting only via the *next* record's name (no
 count is stored), so records are recovered with a greedy walk: from a name at
@@ -46,7 +46,7 @@ import struct
 import sys
 
 # Canonical element size per ig*MetaField id, observed constant across the NDMW
-# 0x6300 directory (finding #292). Sized entries only; None = never observed.
+# 0x6300 directory. Sized entries only; None = never observed.
 SIZE = {
     0: 4, 1: 4, 2: 1, 3: 1, 4: 4, 5: 4, 6: 4, 7: 4, 8: 1, 9: 4, 10: 2,
     11: 4, 12: 8, 13: 4, 14: 128, 15: 4, 16: 4, 17: 2, 19: 4, 20: 4,

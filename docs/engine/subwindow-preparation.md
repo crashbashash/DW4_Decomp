@@ -1,7 +1,7 @@
 # SUBWND work and shop-stock preparation
 
-Finding [#907](../findings/findings-0751-1000.md#f907) recovers the complete **3d8740..3d9bd0 /5,264-byte** preparation
-body called by the [service-menu lifecycle](subwindow-lifecycle.md). The readable
+The complete **3d8740..3d9bd0 / 5,264-byte** preparation body called by the
+[service-menu lifecycle](subwindow-lifecycle.md) is recovered. The readable
 [guest-reference implementation](../../recovered/engine/subwindow-preparation.c)
 passes **843 original-instruction RAM/ordered-call cases**, including composition
 with the lifecycle for all eleven modes. All **1,222 executable instructions**

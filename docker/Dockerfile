@@ -19,7 +19,7 @@ RUN apt-get update \
         binutils-mipsel-linux-gnu ninja-build make git python3 libc6:i386 gcc-multilib \
  && rm -rf /var/lib/apt/lists/*
 
-# ee-as copies with an overlapping memcpy (finding #3897); this makes that call safe.
+# ee-as copies with an overlapping memcpy; this makes that call safe.
 COPY memmove_shim.c /usr/local/lib/
 RUN gcc -m32 -O2 -fno-builtin -shared -fPIC -o /usr/local/lib/memmove_shim.so /usr/local/lib/memmove_shim.c
 ENV DW4_EE_AS_SHIM=/usr/local/lib/memmove_shim.so

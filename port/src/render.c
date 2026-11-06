@@ -263,11 +263,10 @@ static void plot(dw4_fb *fb, int x, int y, float z, uint8_t r, uint8_t g, uint8_
  *
  * Glossary: N is the surface normal, L the unit direction from the surface toward the light, V the
  * direction toward the eye, H = normalize(L + V).  The terms are the ones the LIGHT program names
- * state (findings #489/#492/#494, docs/engine/p2-lighting.md).
+ * state (docs/engine/p2-lighting.md).
  *
- * The default rig below is the game's own live rig (finding #564), **re-fitted against a corrected
- * reference (findings #573/#574)**.  The packs' `igLightAttr` records (finding #554,
- * `scripts/pack_lights.py --emit`) share the directions but not the colours, and the values the
+ * The default rig below is the game's own live rig, **re-fitted against a corrected
+ * reference**.  The packs' `igLightAttr` records (* `scripts/pack_lights.py --emit`) share the directions but not the colours, and the values the
  * game actually feeds p2lighting are not on the disc at all, so the rig is a *fit*, not a decode.
  * Read mid-render from the live descriptors it was ambient (0.25, 0.20, 0.35) plus one directional
  * light of (1.20, 1.15, 1.20) along (0.3214, -0.866, 0.383) -- but that fit was scored against a
@@ -281,7 +280,7 @@ static void plot(dw4_fb *fb, int x, int y, float z, uint8_t r, uint8_t g, uint8_
  * `igLightingStateAttr._enabled = 0` really does want no term at all is drawn with `--unlit`. */
 static dw4_light g_lights[DW4_MAX_LIGHTS];
 static int g_nlights;                       /* 0 = use the built-in game rig */
-static float g_ambient[3] = { 0.3005f, 0.2444f, 0.2986f };   /* re-fitted live rig (#574) */
+static float g_ambient[3] = { 0.3005f, 0.2444f, 0.2986f };   /* re-fitted live rig */
 static float g_eye[3];
 static int g_eye_valid;
 static dw4_fog g_fog;                       /* mode 0 = off */
@@ -329,7 +328,7 @@ int dw4_render_parse_fog(const char *s, dw4_fog *f)
     return 0;
 }
 
-/* The game's own fog rig, recovered from the GS dump (finding #603/#604): the engine's stage fog is
+/* The game's own fog rig, recovered from the GS dump: the engine's stage fog is
  * a FOG_LINEAR program with near 60 / far 300 in view-space depth, lerping toward FOGCOL
  * 0xE5CCE5.  The dump's per-vertex F, extracted from the packed `XYZF2` 4th dword (PCSX2's
  * `GIFPackedRegHandlerSTQRGBAXYZF2`: F = (dword44 >> 4) & 0xff), is linear in the view depth to
@@ -379,7 +378,7 @@ void dw4_render_set_ambient(float r, float g, float b)
     g_ambient[0] = r; g_ambient[1] = g; g_ambient[2] = b;
 }
 
-/* One-sided or two-sided `N.L` (default two-sided; finding #560).
+/* One-sided or two-sided `N.L` (default two-sided).
  *
  * The game culls back faces -- the CLIP_*CULLFACE programs are the clip stage's own variants -- and
  * the LIGHT family has one- and two-sided bodies, so which one a surface gets is a material
@@ -388,10 +387,10 @@ void dw4_render_set_ambient(float r, float g, float b)
  * culled front face gets in the game.  It is a knob, not a new default, because on the
  * camera-matched Goblin Pass frame it changes nothing measurable: every visible surface already has
  * `N.L > 0`, the key light sitting behind the camera.  That frame's flatness turned out to be the
- * *dropped vertex normals* (finding #559), not this. */
+ * *dropped vertex normals*, not this. */
 static int g_two_sided = 1;
 
-/* Back-face culling (finding #575).  The game culls at the VU1 clip stage -- the ucode map has
+/* Back-face culling.  The game culls at the VU1 clip stage -- the ucode map has
  * CLIPBACK/CULLBACK and the twelve CLIP_*_CULLFACE programs, and render.c's own note above already
  * says "the engine draws front faces only" -- but every port rasteriser so far has drawn both
  * faces and relied on the z-buffer.  That is invisible on the closed world meshes and very visible
@@ -409,7 +408,7 @@ int dw4_render_two_sided(void) { return g_two_sided; }
 
 /* Unlit: the material is drawn with no light term at all, so the fragment colour is the texel
  * multiplied by the per-draw `tint` (the `igLightingStateAttr._enabled = 0` materials of finding
- * #563).  It is a global knob (`--unlit`), not a default: finding #569/#570 measured it a
+ * #563).  It is a global knob (`--unlit`), not a default: measured, it is a
  * regression on the Goblin Pass frame, whose meshes the engine lights per vertex. */
 static int g_unlit;
 
@@ -421,10 +420,10 @@ int dw4_render_unlit(void) { return g_unlit; }
  * per vertex from that vertex's normal and the GS interpolates the colour across the primitive, so
  * the game never interpolates a normal.  The port's per-pixel path (interpolate the normal, then
  * light) is a different function of the same inputs wherever a triangle spans a shading gradient,
- * so the game's own path is the DEFAULT (finding #591: measured against the corrected native
+ * so the game's own path is the DEFAULT (measured against the corrected native
  * framebuffer it wins the whole frame, the floor, the barrel and the crate over the fitted
  * per-pixel rig); `--per-pixel` restores the older default and `--gouraud` states it explicitly.
- * The vertex colours here use the authored vertex normals one-sided, exactly as finding #583
+ * The vertex colours here use the authored vertex normals one-sided, exactly as measured
  * recovers the model from the GS dump (no eye-facing flip, which is what turns a back face lit). */
 static int g_gouraud = 1;
 
@@ -443,8 +442,8 @@ void dw4_render_set_lights(const dw4_light *lights, int n)
 
 int dw4_render_light_count(void) { return g_nlights; }
 
-/* The game's light rig, read mid-render from the live p2lighting descriptors (finding #564) and
- * re-fitted against the corrected reference with the props in the objective (findings #573/#574).
+/* The game's light rig, read mid-render from the live p2lighting descriptors and
+ * re-fitted against the corrected reference with the props in the objective.
  * It is an *ambient* light (0.2846,0.2355,0.2976, carried by `g_ambient`) and one directional key
  * light (0.7931,0.7938,1.3141) along (0.3482,-0.9370,0.0272).  `scripts/fit_light_rig.py` fits
  * it and `--lights` takes the original live read; the values do not
@@ -526,7 +525,7 @@ static void shade(v3 n, v3 p, float tint[3], uint8_t *out)
 
     if (g_unlit) {
         /* no light term: the fragment colour is the mesh tint alone (which the caller sets to
-         * white for a material that carries no colour) -- finding #563 */
+         * white for a material that carries no colour) */
         c[0] = c[1] = c[2] = 1.0f;
     } else if (g_nlights > 0) {
         for (i = 0; i < g_nlights; i++)
@@ -617,7 +616,7 @@ static rvert rvert_lerp(const rvert *a, const rvert *b, float t, int width, int 
     return r;
 }
 
-/* Linear or nearest texel filtering (linear by default; finding #562).
+/* Linear or nearest texel filtering (linear by default).
  *
  * The packs' own materials settle this: 300 of the 323 `igTextureAttr` records behind packs 614/621's
  * `igTextureBindAttr`s carry `_magFilter = _minFilter = 1`, and the 23 that carry 0 are the
@@ -626,13 +625,13 @@ static rvert rvert_lerp(const rvert *a, const rvert *b, float t, int width, int 
  * frame's floor in front of the camera is soft and the nearest-sampled frame is blocky), and linear
  * is the one change that moves the camera-matched frame toward the real capture.  `g_tex_filter`
  * drives both paths -- `gl_render.c` maps it to GL_LINEAR / GL_NEAREST. */
-static int g_tex_filter = 1;   /* 0 = nearest (the port up to finding #562), 1 = linear */
+static int g_tex_filter = 1;   /* 0 = nearest (the earlier port), 1 = linear */
 
-/* The engine's texture matrix (`igTextureMatrixAttr._m`, finding #567).  Every live instance is the
+/* The engine's texture matrix (`igTextureMatrixAttr._m`).  Every live instance is the
  * identity with a translation in elements 12..13 and `_isProjective = 0`, so for the sampler it is a
  * UV offset plus, where it matters, a scale: `uv' = (uv * scale) + offset`.  The ground material (`BGGround00n`)
  * *enables* the unit (`igTextureMatrixStateAttr._enabled = 1`) without carrying a matrix, which is
- * the tile/UV question of finding #547 -- these knobs exist so the offset can be measured against
+ * the tile/UV question -- these knobs exist so the offset can be measured against
  * the real frame and then looked up in the live matrices. */
 static float g_uv_scale = 1.0f;
 static float g_uv_off[2];
@@ -1324,7 +1323,7 @@ static void raster_tri(dw4_fb *fb, const rvert *A, const rvert *B, const rvert *
                     ni.x /= nl; ni.y /= nl; ni.z /= nl;
                 } else {
                     /* a mesh with no normal buffer carries zero normals in a merged buffer
-                     * (only 195 of 549 stage meshes ship one, finding #458): shade it with
+                     * (only 195 of 549 stage meshes ship one): shade it with
                      * the face normal rather than black */
                     ni = n;
                 }
@@ -1362,7 +1361,7 @@ static void raster_tri(dw4_fb *fb, const rvert *A, const rvert *B, const rvert *
                 }
                 /* modulate by the fragment colour `r,g,bb` -- the gouraud path sets those directly
                  * and never fills `col[]`, so reading `col[]` here used a stale colour from a
-                 * previous triangle (finding #586). */
+                 * previous triangle. */
                 r = (uint8_t)((tr * r) / 255);
                 g = (uint8_t)((tg * g) / 255);
                 bb = (uint8_t)((tb * bb) / 255);
@@ -1451,7 +1450,7 @@ int dw4_render_mesh_n(dw4_fb *fb, const uint8_t *pos, const uint8_t *normal, con
             } else {
                 r->u = r->v = 0.0f;
             }
-            /* the per-vertex fog value (the VU1 FOG program's output, finding #603): a pure
+            /* the per-vertex fog value (the VU1 FOG program's output): a pure
              * function of view-space depth, lerped per fragment toward FOGCOL. */
             r->fog = fog_factor(r->vz);
         }
@@ -1669,7 +1668,7 @@ void dw4_fb_plate(dw4_fb *fb, int x, int y, int w, int h, int darken_percent)
 
 /* The `--fps` readout, shared by every windowed present loop (the stage/boot renderer, the movie
  * player and `dw4asset render`) so the boot's FMV and title show the frame rate too.  The font is
- * the diagnostic 5x7 one above, not the game's text (finding #608). */
+ * the diagnostic 5x7 one above, not the game's text. */
 void dw4_render_fps(dw4_fb *fb, double fps)
 {
     char osd[64];

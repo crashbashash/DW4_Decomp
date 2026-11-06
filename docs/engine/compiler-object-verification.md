@@ -1,10 +1,10 @@
 # Compiler object ownership and exception settings
 
-Findings [#903](../findings/findings-0751-1000.md#f903)–[#904](../findings/findings-0751-1000.md#f904). These are measured properties of MWCCPS2
+These are measured properties of MWCCPS2
 3.0 build011126 and the matching pipeline. They do not change native-port
 exception policy or mark a behavioral adapter as byte-matched source.
 
-## Exact alias-pool tail calls ([#903](../findings/findings-0751-1000.md#f903))
+## Exact alias-pool tail calls
 
 Seven virtual wrappers have exact source in
 [`alias-pool-tail.cpp`](../../src/engine/alias-pool-tail.cpp):
@@ -37,7 +37,7 @@ All54 bodies /4,160 bytes of the alias runtime match; the740-byte backend is
 does not solve the larger bodies, and these seven matches do not establish an
 exception configuration for every retail compilation unit.
 
-## Function sections and relocation ownership ([#904](../findings/findings-0751-1000.md#f904))
+## Function sections and relocation ownership
 
 Two properties of compiler objects, found on the reference-object candidates, shape the verifier:
 
@@ -54,7 +54,7 @@ Two properties of compiler objects, found on the reference-object candidates, sh
 `tools/verify.py` reads the selected symbol's indexed section bytes, decodes
 the size as decimal, and selects relocation ownership using the relocation
 section header's `sh_info`. Relocations are rebased within a selected symbol when
-needed. ELF table order is retained, including backward HI16/LO16 pairs ([#895](../findings/findings-0751-1000.md#f895)).
+needed. ELF table order is retained, including backward HI16/LO16 pairs.
 Local text addresses resolve only within that selected section, unless a symbol
 already has a canonical retail address.
 
@@ -78,7 +78,7 @@ make typed-check
 ```
 
 The four relocation tests cover decimal sizes, selected relocation offsets/order,
-the backward HI/LO pair ([#895](../findings/findings-0751-1000.md#f895)), and a real MWCC object containing a preceding
+the backward HI/LO pair, and a real MWCC object containing a preceding
 unknown-call body plus the exact alias constructor. The latter has two
 different sections both named `.text`, each with symbol offset0. The verifier
 compares the constructor without importing the unknown helper relocation, but

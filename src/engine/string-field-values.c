@@ -1,6 +1,6 @@
 /* src/engine/string-field-values.c — scalar string value operations of igStringMetaField (vtable
  * 0x533180) and the igStringArrayMetaField slots that share its bodies. Recovered from retail
- * instructions.md and finding #877. One translation unit: 8 functions, in retail address order.
+ * instructions.md. One translation unit: 8 functions, in retail address order.
  * Folded from the per-function units by tools/merge_units.py; the matching build splits a function
  * back out with tools/units.py, so `make check` still verifies one function at a time. A string
  * value is a pointer to interned text ("token") owned by the shared StringPool. The pool header

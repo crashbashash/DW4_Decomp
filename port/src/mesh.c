@@ -71,7 +71,7 @@ int dw4_mesh_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
                  * (k+1, k, k+2) for odd k -- so every triangle keeps the same facing.  The old
                  * form emitted (k, k+1, k+2) for both, so half of every strip was wound the
                  * other way; that was invisible while nothing culled, and it is what makes
-                 * back-face culling (the game's VU1 CULLBACK) possible now (finding #575). */
+                 * back-face culling (the game's VU1 CULLBACK) possible now. */
                 if ((k & 1) == 0) {
                     t[3 * n] = base + k;
                     t[3 * n + 1] = base + k + 1;

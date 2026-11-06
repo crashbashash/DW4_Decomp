@@ -1,7 +1,7 @@
 # `*_GetVTable` — the plain-family stack-offset fold (a measured MWCC wall)
 
 The 983 `*_GetVTable` functions split into ~345 **plain** (48–68 B) bodies and ~638
-larger variants (68–964 B) — finding **[#397](../findings/findings-0251-0500.md#f397)**. Every one of them ends in the same
+larger variants (68–964 B). Every one of them ends in the same
 **stack-offset fold**:
 
 ```
@@ -22,8 +22,7 @@ lw   v0,0(v0)
 ```
 
 — 11 of 15 instructions identical, 60 vs 64 bytes, the 5 relocations identical
-(`tools/verify.py 0x1307f0 …`). Status: **fail-closed**, a compiler wall (finding
-**[#659](../findings/findings-0501-0750.md#f659)**); the drafts stay in `build/m2c/` and nothing guessed is committed.
+(`tools/verify.py 0x1307f0 …`). Status: **fail-closed**, a compiler wall; the drafts stay in `build/m2c/` and nothing guessed is committed.
 
 ## The measured addressing rule
 
@@ -94,13 +93,12 @@ addend order and parenthesisation; declaration order / extra temporaries;
 version; C vs C++ front end. All produce the `addiu` form (or an `sll`-carrying
 subscript), never the fold.
 
-## Decision: link-verbatim where no source matches (finding [#1004](../findings/findings-1001-1250.md#f1004))
+## Decision: link-verbatim where no source matches
 
 A `*_GetVTable` that no C or C++ source reproduces stays as retail bytes reassembled from `asm/`. These are per-class type-metadata accessors; no matched or
 native code depends on them being C, the port reimplements behaviour from recovered contracts, and the only other way to match one is
 whole-function inline assembly, which recovers no source and would only inflate the percentage. If a C or C++ spelling of the fold under
-the default compiler is ever found (the stack-offset fold of
-[#659](../findings/findings-0501-0750.md#f659) is the open question) they can be matched mechanically; until then do not spend matching time on that spelling.
+the default compiler is ever found (the stack-offset fold is the open question) they can be matched mechanically; until then do not spend matching time on that spelling.
 
 The decision does not cover the accessors the pinned alternate compiler reproduces: the stack-object `*_GetVTable` accessors with a 48-byte frame (171 functions of the 60-byte family) match as C at `-O3,p` with a `struct Obj { int *vt; char pad[28]; }` template. Other `_GetVTable` sizes are worth re-testing with the same template.
 
@@ -148,13 +146,14 @@ Probing every one of the 272 files as written, with the unit tables disabled
 | combat `-O3,p` (the 99 the row above misses) | 99 (24 `match`, 75 `code-only`) |
 | 3.0.3 `-O3` | 0 |
 
-Every one of the 272 is reproduced by the 2003 beta and none by the default build, while the
-units' other members (the `_Register`/`_InitFields`/`_GetMetaObject` siblings, all verified
-under the unit profile) are small enough to match under either. The unit rows should be re-scored
-with that evidence (`tools/gen_unit_profiles.py`); until then the 272 stay `foreign-profile` and are
-reported as such, never counted. Once a unit moves to the combat profile its `_GetVTable` is a
-`tools/getvtable_stack_gen.py --retarget` away from `match` (the 26 + 75 `code-only` rows need the
-`.cpp` form).
+Every one of the 272 is reproduced by the 2003 beta and none by the default build; the
+3.0.3-020716 build mismatches all 272. The units' other members (the
+`_Register`/`_InitFields`/`_GetMetaObject` siblings) verify under the unit profile, and none of them
+reproduces under combat: that holds for all 8,677 undecided (function, candidate) pairs over the pins
+of every provisional unit. So the unit profiles stand, and the 272 stay `foreign-profile` overrides,
+reported as such and never counted. A unit that did move to the combat profile would have its
+`_GetVTable` a `tools/getvtable_stack_gen.py --retarget` away from `match` (the 26 + 75 `code-only`
+rows need the `.cpp` form).
 
 The 273rd, `igOptInterface_GetVTable` (0x225ae0), lies inside the `libpng_225700` unit (3.0.3,
 exceptions off): a library run that swallowed an engine class — a unit boundary to cut, case 1 of
@@ -167,3 +166,14 @@ python3 tools/getvtable_stack_gen.py --retarget src/<module>/<Class>_GetVTable.c
 python3 tools/getvtable_stack_gen.py <Class>_GetVTable                               # new drafts, retargeted on write
 python3 tools/verify.py 0x<va> src/<module>/<Class>_GetVTable.cpp                    # the gate: cat=match, no foreign override
 ```
+
+## Open questions
+
+- **The larger variants.** Unproven beyond one instance: the larger `*_GetVTable` variants are the plain
+  core plus a tail. `igVisualContextAttrDefaultManager_GetVTable` (`0x1300b0`, 140 B) has the same
+  60-byte core, then a null-checked refcount decrement and a call to `igObject_Destroy` (`0x2ff820`),
+  which is dead there because the tested pointer was just zeroed. Size histogram of the 983 functions:
+  plain form 60 B x334, 68 B x7, 48 B x3; then 140 B x101, 132 B x45, 216 B x41, 116 B x36, 224 B x32,
+  100 B x22, up to 964 B.
+- **Where the 272 accessors were compiled.** Unproven: they were not compiled in the class unit at all,
+  and come from a generated accessor object or a later build of the same unit.

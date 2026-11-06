@@ -6,7 +6,7 @@ have readable [behavioral C](../../recovered/engine/string-pool.c).
 These fifteen bodies account for 2,228 code bytes. Four matches
 (pool/table destruction, table erase and header release, 384 bytes) are folded in
 [matching source](../../src/engine/string-pool.c). The other eleven (1,844 bytes)
-match in one-function files under `src/unmatched/`. Finding [#865](../findings/findings-0751-1000.md#f865) records the scope and evidence.
+match in one-function files under `src/unmatched/`.
 
 The combat unwind table also identifies the complete 116-byte
 [deleting string-wrapper cleanup](../../src/engine/StringRef_Destruct_00130720.c):
@@ -92,7 +92,7 @@ or full Lua-dependent engine recovery.
 
 ## Cold registry interning and erase byte match
 
-Finding [#875](../findings/findings-0751-1000.md#f875) extends the composed cold-messenger chain through actual pool, table,
+The composed cold-messenger chain extends through actual pool, table,
 chunk and string-result bodies. The
 [registry/interner oracle](../../testing/test_messenger_interned_registry_retail.py)
 passes **158 persistent original-instruction RAM/defined-return/ordered-call

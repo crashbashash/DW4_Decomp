@@ -10,7 +10,7 @@ and storage initialization. `StringChunk_AllocateToken` (`0x30c830`, 264 bytes) 
 source yet: the table and chunk allocation wrappers (`0x30c740`, `0x30cce0`), TakeBlock
 (`0x30ca40`) and ReturnBlock (`0x30cb80`). Names come
 from [the semantic generator](../../scripts/seed_names_string_chunks.py), not
-assertions about original C++ method spelling. Finding [#866](../findings/findings-0751-1000.md#f866) records this work.
+assertions about original C++ method spelling.
 
 ## Layout and packed free list
 
@@ -106,7 +106,7 @@ search reached a comparison score of 1,601 but produced no exact match;
 The permuter driver honors `--outdir` in normal/pilot modes and defaults projects
 to `build/permuter/`, keeping target objects/search
 artifacts private. Four path regressions and a real build-only override smoke
-check pass. Finding [#868](../findings/findings-0751-1000.md#f868) records this.
+check pass.
 
 The [cold registry/interner composition](string-pool.md#cold-registry-interning-and-erase-byte-match)
 adds 158 persistent checkpoints through real chunk storage, name lookup, typed

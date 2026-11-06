@@ -1,6 +1,6 @@
 # Metadata construction, ownership and registry indexing
 
-Finding [#881](../findings/findings-0751-1000.md#f881) records ten complete behavioral bodies / 1,216 code bytes in
+Ten complete behavioral bodies / 1,216 code bytes are in
 [metadata-bootstrap.c](../../recovered/engine/metadata-bootstrap.c): the contiguous
 metadata constructor/initializer/copy/release run, metadata factory, name setter,
 index assignment, registry append, pointer search and base header copy dependency.

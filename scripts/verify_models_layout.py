@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""verify_models_layout.py -- regression check for the offline model chain (findings #477/#478).
+"""verify_models_layout.py -- regression check for the offline model chain.
 
 Re-derives a model pack's geometry-attribute table by the offline rule and diffs it against the
 committed reference table (default `docs/engine/model-pack-621-attributes.tsv`).  Every row must
@@ -21,17 +21,16 @@ A model pack addresses its own geometry — no replay, no RAM dump:
                        _lengthData    (+0x08)  -> the u32 primitive lengths
                        _numStrips     (+0x0c)
 
-An `igObjectRef` id indexes the pack's remap table (`igb_ids.py`, finding #460) and a block's
-offset is the pool prefix sum with **every block 4-byte aligned** (`igb_pool.py`, finding #478).
+An `igObjectRef` id indexes the pack's remap table (`igb_ids.py`) and a block's
+offset is the pool prefix sum with **every block 4-byte aligned** (`igb_pool.py`).
 A stream block's `_memSize` IS its content size — `12*_numVerts` for the positions, `8*_numVerts`
-for the UVs (finding #477) — so a stream starts at its block's offset and needs no search.  Both
+for the UVs — so a stream starts at its block's offset and needs no search.  Both
 links are validated by the format's own arithmetic: the `_vdata` block must list a `12*_numVerts`
 stream, and the lengths must sum to `_numVerts`.
 
 The last column is the model's name, recovered offline through the shape -> attribute link: an
 `igGeometry` (a `M_*Shape`) record's ordinal-2 value is the DCC part name (`pCylinderShape3`, …) and its
-ordinal-8 value is an `igAttrList` whose array block holds that shape's attribute ids (finding #458,
-reached from the pack, which is what the live namer does from RAM).  Found by ordinal and not by offset
+ordinal-8 value is an `igAttrList` whose array block holds that shape's attribute ids (reached from the pack, which is what the live namer does from RAM).  Found by ordinal and not by offset
 -- a record's byte offsets shift with a variable-length value (a long name moves everything after it),
 while the container's slot numbers do not.  444 of the 549 attributes are named this way; the other 105
 have a shape with an empty name, or no named shape at all, and stay unnamed rather than borrowing a

@@ -51,13 +51,13 @@ policy. GPU initialization/draw errors remain explicit. Normal loading framebuff
 operations too. Explicit reference mode retains the CPU oracle. See the active
 [GPU rendering goal](gpu-rendering.md).
 
-**Card textures on the shared GPU layer ([#3089](../../docs/findings/findings-3001-3250.md#f3089), [#3090](../../docs/findings/findings-3001-3250.md#f3090)).** The GPU layer caches uploaded textures by pixel pointer and size. A hub card is
+**Card textures on the shared GPU layer.** The GPU layer caches uploaded textures by pixel pointer and size. A hub card is
 closed when the next load begins, and the next card's atlas (also 256x256) is allocated at the freed address, so `dw4_frontui_close` forgets its
 textures on the layer (`dw4_gl_layer_texture_forget`) before freeing them. Without that a later load draws the previous
 destination's atlas: after a Central visit, the Terminal gate's practice stage shows "Main Lobby: Terminal Area". `make -C port check-loadingstale` renders the Terminal and practice cards
 in turn on one layer and requires the second to match its own CPU render (with a stale atlas it is identical to the first, 0.05 against 16.8 mean level difference).
 
-**Plain cards and the save scene ([#3092](../../docs/findings/findings-3001-3250.md#f3092), [#3093](../../docs/findings/findings-3001-3250.md#f3093)).** Five destinations (`stagML14`, `stagIS07/09/10/20`) have a 9,639-byte card with no `beLoadingNode`: one opaque black 32x32 quad. Retail shows a black screen there. The card opens as a still card, ready at once (`dw4_frontui_open_loading` does not return NULL for it, so the "Now Loading" text fallback is not drawn). `make -C port check-loadingcards` opens and draws all 98 `loadingUSA` cards. The save/slot scene (`dw4_savescene_close`) forgets its image and font-atlas textures on the shared layer and releases its layer reference (a reference kept per visit leaks the layer, and for a hub's own layer a whole GL context); `check-savescene` asserts the layer's cache is empty and its owner count back to 1.
+**Plain cards and the save scene.** Five destinations (`stagML14`, `stagIS07/09/10/20`) have a 9,639-byte card with no `beLoadingNode`: one opaque black 32x32 quad. Retail shows a black screen there. The card opens as a still card, ready at once (`dw4_frontui_open_loading` does not return NULL for it, so the "Now Loading" text fallback is not drawn). `make -C port check-loadingcards` opens and draws all 98 `loadingUSA` cards. The save/slot scene (`dw4_savescene_close`) forgets its image and font-atlas textures on the shared layer and releases its layer reference (a reference kept per visit leaks the layer, and for a hub's own layer a whole GL context); `check-savescene` asserts the layer's cache is empty and its owner count back to 1.
 
 ## Preparation and ownership
 
@@ -149,7 +149,7 @@ start/first choreography and general controller commands remain pending; see
 Native flags and RNG survive the fresh VM. A failed script publication discards
 the destination and restores a fresh title library before Retry/Back; worker
 shutdown still joins before releasing borrowed mount/context data. See
-[Lua ownership](lua-integration.md#recovered-retail-loading-and-ownership-790793).
+[Lua ownership](lua-integration.md#recovered-retail-loading-and-ownership).
 
 ## Hub-to-hub application transitions
 

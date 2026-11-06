@@ -1,14 +1,13 @@
 # Generic shop-root factory and metadata
 
-Finding [#909](../findings/findings-0751-1000.md#f909) recovers the complete contiguous six-body **3b8d90..3b8f4c**
-`beNDMWShopCtrl00` metadata block /404 code bytes, plus its12-byte published
-parent accessor at3b65b0. The
+The complete contiguous six-body **3b8d90..3b8f4c** `beNDMWShopCtrl00` metadata block
+(404 code bytes) and its 12-byte published parent accessor at 3b65b0 are recovered. The
 [guest-reference implementation](../../recovered/engine/shop-root-metadata.c)
 passes **117 original-instruction RAM/return/ordered-call cases**, executing all
 **104 instruction addresses** across the seven bodies /416 bytes.
 
-All seven bodies /416 bytes have exact source. Finding [#913](../findings/findings-0751-1000.md#f913) adds the76-byte lazy
-accessor using the existing project padding convention ([#731](../findings/findings-0501-0750.md#f731)). Four /212 bytes were already matched:
+All seven bodies /416 bytes have exact source. The 76-byte lazy
+accessor uses the existing project padding convention. Four /212 bytes were already matched:
 the factory52 and registration wrapper32 were under anonymous `FUN_` names,
 alongside Register100 and GetMetaObject28. They are named and their return/callback
 ABIs corrected with no additional matching credit. The newly classified parent
@@ -115,7 +114,7 @@ suite proves the seven adapter bodies under those service contracts.
 The lazy76-byte body now matches with one explicit retail padding NOP and a
 label preserving the null branch's direct entry at the registration call. The
 non-null/not-ready path executes the NOP; all104 module instructions remain
-covered by the oracle. This follows the existing matching convention from#731,
+covered by the oracle. This follows the existing matching convention,
 without claiming the original C++ source spelling. The116-byte vtable getter matches in
 [beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp). No opaque assembly replacement body is used. The matched accessor retains its
 original no-op within readable C++ under the established project convention.
@@ -127,7 +126,7 @@ subcontrollers, price/item services and transaction results. The
 [full hub goal](../systems/hub-recovery.md), dedicated LABO/CARD roots and separate
 Save Keeper stagIS12 route remain open. This work does not expand the native port.
 
-Finding [#917](../findings/findings-0751-1000.md#f917) separately adds192 exact bytes for that complete base-controller
+A separate 192 exact bytes cover that complete base-controller
 cleanup dependency. Its seven member helper calls and signed deletion flag are
 readable source; it contains one explicit return-register copy and original NOP.
 The seven-body metadata accounting above is416/416 exact bytes: the new

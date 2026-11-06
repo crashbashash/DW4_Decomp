@@ -5,7 +5,7 @@ now rebuild byte-for-byte from readable C. The functions are in
 [`src/lua/api.cpp`](../../src/lua/api.cpp) and
 [`src/lua/combat.cpp`](../../src/lua/combat.cpp), in retail address order within
 each unit. The [generated inventory](combat-inventory.md) lists every body,
-its reviewed size and source. Finding [#1034](../findings/findings-1001-1250.md#f1034) records this checkpoint.
+its reviewed size and source.
 
 This is the caller API, not the calculation dispatcher. It assembles messenger
 arguments, reads results and handles a few local decisions. The complete
@@ -67,8 +67,8 @@ interior zeros, and every relocation must match; close sizes are insufficient.
 retail section. No new gameplay implementation or native integration is added.
 
 The callback's post-module string-pool accessor also now has 76 bytes of matching
-C at [`StringPool_GetInstance`](../../src/engine/StringPool_GetInstance.cpp)
-([#1035](../findings/findings-1001-1250.md#f1035)). It lazily allocates 16 bytes and calls `StringPool_Construct`; failed
+C at [`StringPool_GetInstance`](../../src/engine/StringPool_GetInstance.cpp).
+It lazily allocates 16 bytes and calls `StringPool_Construct`; failed
 allocation leaves the cache null so a later call retries. The semantic name is
 generated with the other combat dependency names. Neither that helper nor the
 completed Lua API closes the calculation dispatcher. Its three immediate helpers

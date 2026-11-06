@@ -134,7 +134,7 @@ class OverrideTests(Fixture):
         self.clear()
         with self.assertRaisesRegex(ValueError, "not marked provisional"):
             self.resolve(0x100010)
-        self.flags.write_text("0x100010\t-O3,p -Iinclude\tprovisional\tfinding #646\n")
+        self.flags.write_text("0x100010\t-O3,p -Iinclude\tprovisional\ta note\n")
         self.clear()
         res = self.resolve(0x100010)
         self.assertEqual(res.unit.name, "u")

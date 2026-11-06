@@ -24,9 +24,8 @@ Tree builder: `scripts/build_lua_tree.py` (index: [lua-tree-layout](lua-tree-lay
 - `OP_CALL`: **A = stack position of the function**, B = nresults;
   `nargs = top - A - 1` (args are everything above the function).
 - `OP_PUSHSELF`: pops the receiver, pushes `[method, receiver]`.
-- **Jump target = `pc + 1 + s`**, stock Lua 4.0.1. Finding [#785](../findings/findings-0751-1000.md#f785)
-  supersedes [#119](../findings/findings-0001-0250.md#f119)'s extra-increment claim: the old decoder's bias was one
-  too large. Original bytecode executes on the stock VM.
+- **Jump target = `pc + 1 + s`**, stock Lua 4.0.1, with no extra increment: the old
+  decoder's bias was one too large. Original bytecode executes on the stock VM.
 - Opcodes 38/39 are the **stock pop variants** (`JMPT` = jump-if-truthy-pop,
   `JMPF` = jump-if-falsy-pop), used for `if x` / `if not x` conditions.
   `JMPONT`/`JMPONF` (40/41) are **never emitted**, so the scripts contain **no
@@ -36,7 +35,7 @@ Tree builder: `scripts/build_lua_tree.py` (index: [lua-tree-layout](lua-tree-lay
 - Local-variable names and line info are **stripped** (`nlocvars == 0`);
   locals are named `local_0`, `local_1`, … and closure params `arg_0`, ….
 - Numeric-for loops use normal step 1. The old decoded step 0 was the
-  signed-bias error, not a game-specific sentinel ([#785](../findings/findings-0751-1000.md#f785), superseding [#120](../findings/findings-0001-0250.md#f120)).
+  signed-bias error, not a game-specific sentinel.
 
 ## Script-API recap (the `be:` object)
 
@@ -70,7 +69,7 @@ triggers); a few are large level-init scripts (the `funcStartLayerSet`,
 ## Notes / known quirks
 
 - Dump/decompiler signed operands and branches are corrected and all 5,291
-  chunks, their index, cleaned tree and flag tables are regenerated ([#787](../findings/findings-0751-1000.md#f787)).
+  chunks, their index, cleaned tree and flag tables are regenerated.
   `python3 scripts/verify_lua_decode.py --afs <NDMW.AFS>` checks fixtures,
   all 81,856 branch targets and 2,805 numeric loops, and generated-source agreement.
   Numeric loops pair by their back edge, including nested loops and threaded

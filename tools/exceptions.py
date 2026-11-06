@@ -5,7 +5,7 @@ exceptions.py — find the retail C++ exception index records and record them.
 MWCCPS2 emits, for every function of a translation unit compiled with
 `-Cpp_exceptions on` (the compiler's default), one 12-byte **index record** in
 `.exceptix` and, when the function has cleanup actions, an **exception table**
-in `.exception` (docs/engine/exception-unwind.md, finding #1061):
+in `.exception` (docs/engine/exception-unwind.md):
 
     word 0  function address              (R_MIPS_32 against the function)
     word 1  code size, bit 0 set when word 2 is the packed inline form

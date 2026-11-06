@@ -51,6 +51,11 @@ argument is a different travel parameter and must not select arrival placement.
 The Commander Room's own contract (welcome, events, label, audio, validation) is
 in [Commander Room](commander-room.md).
 
+Retail exit triggers fire on box membership alone, with no walk-in: placing the
+player at (20,40,-40) in Central, inside the `matz00` box (x 10..30, z -50..-30),
+opens the Terminal Area prompt, and confirming loads `stagML11` with the player at
+(0,10,-40). The prompt waits for an answer.
+
 Keep original name casing in the request. Asset resolution supplies its existing
 case-insensitive stage lookup. The callbacks reject incomplete material player
 membership and busy DM execution. The helper checks the triggering player's HP,
@@ -206,30 +211,49 @@ Ungenerated NPC/player instances are not supplied by the environment diagnostic.
 ### Wall solver
 
 `dw4_lobby_collision_check` runs the recovered retail wall query (`CHECKWALL`,
-FUN_00386780, findings [#3001](../../docs/findings/findings-3001-3250.md#f3001)/#3003): rays at `y + downRange`,
+FUN_00386780): rays at `y + downRange`,
 `r = 1.42 * halfWidth`, three broad rays, a stage-1 push back along the heading
 by `2r - dmin` (no slide) and a stage-2 push along the hit's face normal by
 `r - dist` (the slide), one-sided (a triangle blocks only when
 `n . dir < -5e-7`, `n = (v1-v0)x(v2-v0)`), and no query on a tick where x and z
 did not change. The floor half is the bounded solver.
 
+The retail ray/triangle test is `FUN_0018b9e0`. Beyond the one-sided check (strip
+parity corrected), it requires `0 <= t <= length` and an inside test of three
+same-sign cross products. Only triangle lists and strips are tested, and every hit
+is collected.
+
 Not ported: the previous-hit latch that skips the broad test, the
 `_checkSwitch` initial bits, `HITWALLFULL` for ride-on models, and the stage-2
 normal's y component.
 
 Which wall infos a model queries is retail's per-model rule on its check flag
-(`dw4_hitland_info_applies`, `check-hitkinds`: players 7, enemies 11, bullets
-2051):
+(`dw4_hitland_info_applies`, `check-hitkinds`), ordinal 12 of
+`beHitLandDelivInfoRam`. The order kind is the check flag with bit 0 cleared. An
+info takes part when `(info.kind & order.kind & 0x1FF) != 0`; an info with 0x800 is
+skipped by an order with 0x800, and an order with 0x1000 sees only infos with
+0x1000.
 
-- The player (flag 7) and hub actors (3) also query the static kinds 4
-  (`limit_Circle`) and 0x802 (the arena boundaries: the practice stage's walls
-  are 0x802, `check-arenawalls`).
+| Check flag | Models | Collides with kinds |
+| ---: | --- | --- |
+| 7 | players (all `p_`/`m_`/`q_` records and hub `h_*`) | 2, 4, 0x402, 0x802, 0x1403, 0x1405 (not 8) |
+| 11 | regular enemies | 2, 8, 0x402, 0x802, 0x1403 |
+| 2051 | shots, bullets and `g_bbarrel` | 2, 0x402, 0x1403 (never the 0x802 air walls) |
+| 3 | several bosses and NPCs | 2, 0x402, 0x802, 0x1403 |
+
+The `stagML12` pack's hub player record carries 3, but the live player reads 7.
+
+In the port:
+
+- The player (flag 7) also queries the static kind 4 (`limit_Circle`), and the
+  player and hub actors (3) the static kind 0x802 (the arena boundaries: the
+  practice stage's walls are 0x802, `check-arenawalls`).
 - The dynamic 0x402 prop proxies (bushes, rocks, boxes, barrels: one box proxy
   per live model slot) are queried for players and hub actors
-  (`check-fieldstage-propwalls`, [#3103](../../docs/findings/findings-3001-3250.md#f3103); the slot-activity enable rule is
-  unconfirmed, [#3101](../../docs/findings/findings-3001-3250.md#f3101)).
+  (`check-fieldstage-propwalls`; the slot-activity enable rule is
+  unconfirmed).
 - Enemies (check flag 11) query the kind-2, 8 and 0x802 graphs and the dynamic
-  props too ([#3108](../../docs/findings/findings-3001-3250.md#f3108)): they walk and hop with the player's walking and airborne
+  props too: they walk and hop with the player's walking and airborne
   solvers, so no floor edge holds them and an unsupported enemy falls
   (`SQ_FALL`) unless a wall is in the way (`check-fieldstage-enemyfall`: the
   corridor wall and the practice arena's 0x802 wall hold a hopping enemy, a live
@@ -237,6 +261,35 @@ Which wall infos a model queries is retail's per-model rule on its check flag
   [dungeon floors](dungeon-floors.md#enemies-fall-off-ledges)).
 - The hub actors' edge hold (`dw4_lobby_collision_check_for`'s floor step) stays
   for NPCs.
+
+### Dynamic prop proxies
+
+A kind-0x402 info's ordinal-8 `_checkSwitch` subtree holds one `beCopyTransform` box
+proxy per ram slot: eight outward-wound triangles, four sides, y 0..50, `igAABox`
+±7.07 (not the prop's visual mesh, ordinal 7 `_switchgraph`). Node i takes its matrix
+from the `beModelCtrlNode2` of ram slot i of the model with the info's name. The xz
+prefilter is the proxy bound plus the matrix translation only (unrotated, inclusive).
+A live bush stops the player about 9.3-11 units from its centre, a `rock02` about
+14.4. On retail the player stops against a crate and walks through its position once
+it is erased.
+
+A rotated dynamic prop collides as the port models it: `g_d1bkwall` at (95,10,120) in
+`dng101b2`, turned -90 degrees, stops a westward walk at x 104.29 on retail (port
+104.26), and past it the static wall stops the player at 74.29 (74.26). Retail's
+block spans about z 97..143 and the port's 96..145: the port's corner contact blocks
+z 96 and 144, which are free on retail, consistent with a slightly shorter authored
+extent or a narrower end ray. This does not decide the translation-only prefilter,
+since the proxy bound already covers the whole wall.
+
+### Retail collision dispatch
+
+Read from the code, not traced on retail. `beHitLandDeliv::vfunc_33` (`0x385890`) takes
+{`HITWALL`, `HITWALLFULL`, `HITFLOORCHECK`, `HITFLOORADJUST`, `HITFLOOR`} and forwards on
+group `HITLANDMODEL` to `beHitLandModel::vfunc_34` (`0x3861d0`), {`CHECKWALL`,
+`CHECKWALLFULL`, `CHECKLAND`, `ONHIT`, `OFFHIT`}. The solvers are `FUN_00386780` (wall),
+`FUN_003876b0` (wall-full, ride-on only, 8 radial rays) and `FUN_00388010` (floor). Each
+`beHitLandModelInfo` also passes an xz bounding-box test (`FUN_003885e0`); `_checkSwitch`
+bits enable nodes, and 0x400 marks moving objects.
 
 ## Native material callback queries
 
@@ -461,18 +514,17 @@ platform's reach in 16 headings, `HUBEDGE_TRACE=1` the position every 15 ticks.
 
 ## Hub verification against retail
 
-A read-only retail pass (fresh level-1 fixture) paired the hubs with the port
-([#3084](../../docs/findings/findings-3001-3250.md#f3084)–[#3088](../../docs/findings/findings-3001-3250.md#f3088)):
+A read-only retail pass (fresh level-1 fixture) paired the hubs with the port:
 
 | topic | result |
 |---|---|
-| Disk Shop prices and sell prices | equal (100/500/1200/160/680/1560/150/200/120/3000; sell = buy/4), [#3084](../../docs/findings/findings-3001-3250.md#f3084) |
-| shop flows and strings (quantity step, confirm, Buy / Choose another, `Not enough BITS.`, sold-out rows, `Cannot equip this Item yet.`, junk donation) | equal, [#3084](../../docs/findings/findings-3001-3250.md#f3084) |
-| Central Card Keeper at flag 1 clear / set | equal (menu only with the flag clear), [#3085](../../docs/findings/findings-3001-3250.md#f3085) |
-| Central south lip, Terminal bridge limits, Terminal north and east rims, stick headings | equal within about 1 unit, [#3086](../../docs/findings/findings-3001-3250.md#f3086) |
-| Central north-west and west holds (retail reads stopped at (-99.8,-73.5) and (-109.3,15.3)) | not blocks: those are where a 2.5 s hold ends; an 8 s hold ends at (-156.0,40.9,-138.3) and (-245.3,40,131.8) on retail and in the port, [#3086](../../docs/findings/findings-3001-3250.md#f3086) refuted |
-| Terminal ring south passage (retail walks through to a ramp down to y 10 at (16.1,-47.9)) | equal with the one-sided `CHECKWALL` solver: retail's wall query only blocks motion against a triangle's face normal (back faces are ignored); two-sided walls jam the player at a wall at z=-60 and make it arc at x 6-14, [#3087](../../docs/findings/findings-3001-3250.md#f3087) |
-| loading cards (retail about 17-18 s to the arrival frame) | not a parity target, [#3088](../../docs/findings/findings-3001-3250.md#f3088) |
+| Disk Shop prices and sell prices | equal (100/500/1200/160/680/1560/150/200/120/3000; sell = buy/4) |
+| shop flows and strings (quantity step, confirm, Buy / Choose another, `Not enough BITS.`, sold-out rows, `Cannot equip this Item yet.`, junk donation) | equal |
+| Central Card Keeper at flag 1 clear / set | equal (menu only with the flag clear) |
+| Central south lip, Terminal bridge limits, Terminal north and east rims, stick headings | equal within about 1 unit |
+| Central north-west and west holds (retail reads stopped at (-99.8,-73.5) and (-109.3,15.3)) | not blocks: those are where a 2.5 s hold ends; an 8 s hold ends at (-156.0,40.9,-138.3) and (-245.3,40,131.8) on retail and in the port |
+| Terminal ring south passage (retail walks through to a ramp down to y 10 at (16.1,-47.9)) | equal with the one-sided `CHECKWALL` solver: retail's wall query only blocks motion against a triangle's face normal (back faces are ignored); two-sided walls jam the player at a wall at z=-60 and make it arc at x 6-14 |
+| loading cards (retail sampled at 1 Hz, +-1 s, from the confirm) | not a parity target: the port's shorter cards are a deliberate quality-of-life choice. Retail shows 3-4 s of black before the card in every sample; Terminal to Central shows the card from 6.5 to 16 s with the first HUD frame at about 17 s, Central to Shop from 7.6 to 17 s with the first HUD frame at about 18 s |
 
 ## Open items
 
@@ -485,7 +537,7 @@ A read-only retail pass (fresh level-1 fixture) paired the hubs with the port
   whether ordinary walking reaches them was not established.
 - **Wall solver.** The parts listed as not ported under
   [Wall solver](#wall-solver), and the unconfirmed slot-activity enable rule of
-  the 0x402 prop proxies ([#3101](../../docs/findings/findings-3001-3250.md#f3101)).
+  the 0x402 prop proxies.
 - **Collision and approach.** The floor half is the bounded walking/falling
   solver; the travel tests use bounded bridge-approach fixtures, not navigation
   from arbitrary positions.
@@ -496,3 +548,15 @@ A read-only retail pass (fresh level-1 fixture) paired the hubs with the port
 - **Retail stage controller.** The host handoff does not recover the entire
   retail stage controller, and the failure Retry/Back screen is a host policy,
   not a recovered retail disc-error flow.
+
+## Open questions
+
+- **When a dynamic wall is solid.** Unproven: a dynamic wall is solid while its slot is
+  generated and shown. In one savestate the dynamic masks read as per-slot activity
+  (`g_bush01z01` 0xfff for slots 0-11, `g_cannon01` 0x3, `g_torchz01` 0x1) while static
+  infos read 0xffffffff, and every dynamic mask starts at 0 in the pack;
+  `g_woodencasez01` reads 0x3f against three entrance spawns. Who sets the bits is not
+  found in the recovered code.
+- **Kind 4 winding.** Kind 4 (`limit_Circle`, 32 triangles at (403,0,93)-(517,250,207)
+  in 98 stages) is wound inward and applies to players, so a one-sided treatment must
+  not trap a player inside it.

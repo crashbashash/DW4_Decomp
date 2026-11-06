@@ -50,7 +50,7 @@ VADDR_BASE, FILE_BASE = 0x100000, 0x80
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ELF_DEFAULT = os.path.join(ROOT, "orig", "SLUS-20836", "SLUS_208.36")
 # The tree's global compiler flags, used outside every unit of config/SLUS-20836/units.tsv; a unit's
-# own profile (compiler, flags, exception mode) replaces them (finding #646 — the retail
+# own profile (compiler, flags, exception mode) replaces them — the retail
 # ELF was built with per-file flags; docs/engine/build-profiles.md).
 FLAGS_DEFAULT = "-O3 -Iinclude"
 
@@ -580,7 +580,7 @@ def main(argv=None):
 
         obj = os.path.join(a.out, "u_%08x.o" % va)
         # .c normally, .cpp for the templates that need C++ mode (MWCC picks the
-        # language from the extension; see finding #312). Both are still one unit.
+        # language from the extension). Both are still one unit.
         csrc = None
         if kind == "code" and not a.no_c:
             csrc = src_index.get(name)

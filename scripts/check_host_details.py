@@ -49,8 +49,7 @@ RULES = [
      "the X display number of one machine; say 'an X11 or XWayland display' and take the number from DISPLAY"),
     # Install and scratch locations of one machine.  /opt/<x> is where *this* host put a tool; a session- or
     # account-stamped /tmp path (an agent scratchpad, a uid-stamped directory) names a session that no reader
-    # has.  Plain `/tmp/<file>` in a command example is generic and is not flagged here, but the findings
-    # register (docs/findings/) holds evidence and is held to the stricter DB_RULES below.
+    # has.  Plain `/tmp/<file>` in a command example is generic and is not flagged here.
     ("opt-path", r"(?<![A-Za-z0-9_.-])/opt/[A-Za-z0-9._-]+",
      "an install location of one machine; name the tool and the env var or config key that locates it"),
     ("tmp-session-path", r"/tmp/(?:[A-Za-z0-9._-]*(?:claude|codex|agent|session)[A-Za-z0-9._-]*|[A-Za-z0-9._-]*-home-[A-Za-z0-9._-]*|[A-Za-z]+-\d{4,})(?:/|\b)",
@@ -62,14 +61,6 @@ RULES = [
      "a GPU family or architecture of the host; write 'a desktop GPU' (vendor-level is fine)"),
 ]
 COMPILED = [(n, re.compile(p), h) for n, p, h in RULES]
-# The findings register records evidence, which must be reproducible from the repository: any /tmp or /opt
-# path there is a machine's scratch or install location, not an artifact a reader can open.
-DB_RULES = [
-    ("db-scratch-path", r"(?<![A-Za-z0-9_.-])/(?:tmp|opt|var/tmp)/[A-Za-z0-9._-]+",
-     "findings cite repository-relative paths; a /tmp or /opt path is one machine's"),
-]
-DB_COMPILED = [(n, re.compile(p), h) for n, p, h in DB_RULES]
-REGISTER = "docs/findings/"       # the findings register: evidence text, held to DB_RULES as well
 ALLOW_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "host_details_allow.txt")
 MAX_BYTES = 8 * 1024 * 1024
 SELF = "scripts/check_host_details.py"
@@ -131,8 +122,6 @@ def scan_tree():
         if b"\0" in raw[:8000]:
             continue
         yield from scan_text(p, raw.decode("utf-8", "replace"))
-        if p.startswith(REGISTER):
-            yield from scan_text(p, raw.decode("utf-8", "replace"), rules=DB_COMPILED)
 
 
 

@@ -28,7 +28,8 @@ independent projected-box caches. `dw4_modelctrl_talk_hit` implements the NPC,
 player-source branch of `396a80` case6: active/control/invulnerability gates,
 first intersecting authored box, original `hit_<info>.lua` with call name `Hit`,
 native HP precedence and optional turn toward the source. It does not implement
-the player/player invulnerability exception or general combat contacts.
+the player/player invulnerability exception (case 6, `397b40`, rejects any nonzero MUTEKI
+unless both names start with 'p') or general combat contacts.
 
 Body projection follows `3908e0`: transform the box, retain its transformed
 centre, then restore the original world-axis half extents. Results cache at the
@@ -98,7 +99,8 @@ pass with leak detection disabled.
   visits *every* active registered receiver in list order and each tests its own authored boxes,
   so there is no nearest-NPC choice and overlapping NPCs all fire. The source `BHit` callback
   (`394400`) is not implemented: no original Lua defines `BHit`.
-- **Probe** (`3d22f0`): `dw4_lobby_talk` latches the Cross pressed edge (`0x4000`, forwarded by
+- **Probe** (`3d22f0`): byte +293 enables the Cross probe path for stagML02, stagML11, stagML12 and
+  stagML13. `dw4_lobby_talk` latches the Cross pressed edge (`0x4000`, forwarded by
   `dw4_hubruntime_input`, suppressed while STATUS is active, travel is pending, input is
   disabled, or the stage input slot is blocked). It is consumed on the next player update that
   has `finished`, player control, native models and a sequence that is not `SQ_JUMP`/`SQ_FALL`,
@@ -108,16 +110,21 @@ pass with leak detection disabled.
   The one-frame sub-command clock (`399d90`, Frame delta) is modelled as same-tick execution;
   non-unit Frame deltas are not modelled.
 - **Wake**: the `n_*` NPC models carry a NEAR `MAP00` (far zone `SQ_SILENT`, which sets
-  `MUTEKI -1`). A name-based sequence set clears negative MUTEKI (`396a80` `398358`), so an NPC
-  that wakes to `SQ_WAIT` becomes talkable; positive counts (the 120-frame talk guard) persist.
-  `select_sequence` mirrors that reset.
+  `MUTEKI -1`). The name-based sequence set, block `398100..398370` of beModelCtrl vfunc_33
+  (`396a80`), stores the new name at Work+20, resolves it (`3960f0`), resets bytes 216..218 to 1 and
+  clears negative MUTEKI (`398358`), so an NPC that wakes to `SQ_WAIT` becomes talkable; positive
+  counts (the 120-frame talk guard) persist. `select_sequence` mirrors that reset. The AI consumer
+  `391cf0` reaches the block through virtual slot 140 (`391fa8`). Work+124 (MUTEKI) has only three
+  writers in `0x38xxxx..0x3axxxx`: the MUTEKI command `395070`, the countdown `3951e0` (positive
+  counts only) and this block.
 - **Walkability**: NPCs and walls block movement; the XDATA Digi-Elf's route is a waypoint list
   derived by breadth-first search over the real movement code (`test_hubtalk.c`).
 
 ## Remaining integration
 
 - Every SUBWND mode reachable from a Terminal, Central or Shop NPC (XDATA, LABO, BANK, CNOS, DISK, WPU, APU, CHIP, JUNK) is
-  implemented; mode 10 (CARD) is requested only by the front-end pack, not by any hub NPC. The
+  implemented. Hub entries 816, 820, 824 and 828 request only those modes: no hub pack requests mode 10 (CARD). The only
+  literal `GENERATE CARD/I<0>` is in pack 808, the Lua of `stagIS11`, so the Card Keeper reaches CARD by stage change. The
   screen behind the Save Keeper's `saveshop.lua` choice (`stagIS12`) is hosted natively ([Save Keeper](save-keeper.md)):
   talk, accept, the save scene, a saved slot-0 character on the host card and the return to Central are driven
   headlessly (`check-hubsave`, and as a service case in `check-hubnpcs`). The Terminal's join screen (`stagIS13`,

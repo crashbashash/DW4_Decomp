@@ -1,6 +1,6 @@
 # Window presentation, close queues and shared titles
 
-Finding [#911](../findings/findings-0751-1000.md#f911) recovers the complete seven-body presentation run
+This page covers the complete seven-body presentation run
 **3f59b0..3f6348 /2,420 code bytes**, plus the complete shared title update
 **424160..424230 /208 bytes**. The readable
 [guest-reference implementation](../../recovered/engine/window-presentation.c)
@@ -20,7 +20,7 @@ match as `src/unmatched/beNDMWWindow_ClearQueuedText.cpp`,
 `src/unmatched/Gap__Bec__beNDMWWindowTitle__vfunc_21.cpp`.
 This does not establish shop transactions or native UI operation.
 
-Finding [#912](../findings/findings-0751-1000.md#f912) extends this run backward with the144-byte
+The run extends backward with the 144-byte
 [message-script dispatcher](xdata-controller.md#script-call-number-and-pack-ownership)
 at3f5920. The current presentation/title boundary is nine bodies /2,772 bytes;
 the added body matches as `src/unmatched/beNDMWWindow_RunMessageScript.cpp`.

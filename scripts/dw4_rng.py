@@ -144,10 +144,10 @@ def cmd_seq(args):
         if idx >= N:
             st = twist(st)
             idx = 0
-        print("%6d  %08x  -> %%2=%d %%6=%d %%19=%d %%99=%d %%121=%d %%299=%d"
+        print("%6d  %08x  -> %%2=%d %%6=%d %%20=%d %%100=%d %%122=%d %%300=%d"
               % (_, temper(st[idx]), temper(st[idx]) % 2, temper(st[idx]) % 6,
-                 temper(st[idx]) % 19, temper(st[idx]) % 99,
-                 temper(st[idx]) % 121, temper(st[idx]) % 299))
+                 temper(st[idx]) % 20, temper(st[idx]) % 100,
+                 temper(st[idx]) % 122, temper(st[idx]) % 300))
         idx += 1
     return 0
 
@@ -170,7 +170,7 @@ def cmd_sites(args):
                     for q in range(pc + 1, min(pc + 6, len(code))):
                         o2 = code[q] & 0x3F
                         if o2 == 6:
-                            mod = (code[q] >> 6) - (1 << 25)
+                            mod = (code[q] >> 6) - ((1 << 25) - 1)
                             break
                         if o2 in (8, 9):
                             k = code[q] >> 6

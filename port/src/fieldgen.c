@@ -218,7 +218,7 @@ int dw4_fieldgen_tick(dw4_fieldgen *g,int64_t now_ns,const float (*players)[3],u
         const char *model=dw4_database_string(enemy,e->enemy_row,"MODEL");
         if(!model || !*model){snprintf(error,cap,"generator %s: enemy row %d has no model",e->name,e->enemy_row);return -1;}
         /* A stopped generator (the player left its region box) spawns nothing, but an instance of it that ends is still dropped from the live list and rolls its drop in
-         * that tick: retail GENE-09 victims killed with the player outside the box were destroyed and their items appeared in the same tick (finding #3082). */
+         * that tick: retail GENE-09 victims killed with the player outside the box were destroyed and their items appeared in the same tick. */
         if(e->state==DW4_GENE_STOPPED){reap(g,e,model);continue;}
         if(!e->armed){
             e->armed=1;e->wave1=0;e->remaining=e->count[np-1]>0?(unsigned)e->count[np-1]:0;
@@ -245,7 +245,7 @@ int dw4_fieldgen_tick(dw4_fieldgen *g,int64_t now_ns,const float (*players)[3],u
         if(!e->wave1) {
             /* State 1 of the recovered machine (docs/systems/enemy-spawn-system.md 5b): the first wave fills the generator to its concurrent count in one tick, whatever the
              * fill mode; the fill mode only rules the maintain pass after it. Retail dng102b3 GENE-09 (add, 10 total / 6 concurrent): all six within 18 ms of the player
-             * entering, remaining 4 (findings #2978, #3071, #3073). */
+             * entering, remaining 4. */
             e->wave1=1;
             unsigned batch=e->remaining<maxc?e->remaining:maxc;
             for(unsigned b=0;b<batch;b++){int rc=spawn(g,e,model,error,cap);if(rc<0)return -1;if(!rc)break;e->remaining--;}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ee-as always runs with the heap setting that keeps its output the same on every C library (#3897)."""
+"""ee-as always runs with the heap setting that keeps its output the same on every C library."""
 import os
 import sys
 import tempfile

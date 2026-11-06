@@ -1,6 +1,6 @@
 /* base.c — candidate for FUN_00334460 (0x334460), input to decomp-permuter.
  *
- * This is the 76-byte VARIANT of the guard family (507 functions, finding #313):
+ * This is the 76-byte VARIANT of the guard family (507 functions):
  * same source idiom as FUN_00130060, but retail keeps an extra `nop` before the
  * merged call block (index 11) and the two branch displacements are one word
  * larger. Compiling this source at -O3 gives the 72-byte form; at -O1/-O2 MWCC

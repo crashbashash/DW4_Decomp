@@ -14,7 +14,7 @@ through original data: live Cross probe → `hit_<npc>.lua` → the NPC's talk s
 
 `n_metete`'s first conversation is an introduction; the shop is offered from the second. The native window tree
 then runs the recovered controllers. They share STATUS/XDATA's scene freeze, restore and `SUBWND UPDATE` balance
-refresh. Retail findings: [#947](../../docs/findings/findings-0751-1000.md#f947)–[#952](../../docs/findings/findings-0751-1000.md#f952).
+refresh.
 
 ## Ownership
 
@@ -52,6 +52,12 @@ armor roll a pocket count and every weapon or armor an enhancement from the engi
 (`dw4_shopstock_pocket_roll`, `dw4_shopstock_revision_roll`); chips take no draws. A purchased slot is replaced by
 the sold-out chip (record `0xB9`, name "Sold Out").
 
+The junk stock is `DATABASE.$shopJunk` in `NDMW.AFS` entry 828, `beDataBase` id 1170: 9 rows, one per investment
+tier, of 36 `(kind, value)` columns named `NNkind`/`NN` in `_shortOffsetList`. Kind 0 is a weapon id (grade E), 1 a
+core index (id = 4096 + v), 2 a board index (id = 8192 + v). Tier 1,000 offers Filter Board; each later tier adds
+items, up to cores 4123-4125 at 1,956,000 and Talis of Order (core 4126) plus Talis of Chaos (board 8235) at
+3,956,000.
+
 ## Roots
 
 - **Device root (6–8)**: a three-entry menu (calls `0x672` / `0x6D6` / `0x73A`: buy, sell, leave). Entry 0 opens the
@@ -77,8 +83,8 @@ the sold-out chip (record `0xB9`, name "Sold Out").
 ## Junk donation (editor mode 2, `4332d0`)
 
 The editor is the bank's digit editor with `j_shwin SQ_JUNKOPEN`, one tracked `STWINFONT36` font and `txt_shop` 1378.
-The limit is `min(BIT, 999,999,999 - BIT)`. A confirmed amount is acknowledged (`0x7A9`) and then asked about
-(`0x7AA`); no gives -1. A completed donation adds the amount to the common `COUNTER[1]` and debits `BIT` in one
+The limit is `min(BIT, 999,999,999 - BIT)`. A confirmed amount shows the question `0x7A9` ("Do you want to donate this
+amount?"), which waits on Cross, then the Donate/Choose-another choice (`0x7AA`); Choose another gives -1. A completed donation adds the amount to the common `COUNTER[1]` and debits `BIT` in one
 publication and sends `SUBWND UPDATE`. If a tier threshold lies above the investment remembered when the shop opened
 and at or below the new one, the named chunk `junkexit.lua` runs and notice `0x7B2` ("Item development will start.")
 precedes closing the shop.
@@ -104,12 +110,19 @@ weapons and blue armor a grade table indexed by the pocket count (buy `0,500,150
 - `make -C port check-hubnpcs`: the four NPCs count as implemented services.
 - `make -C port check-statuscontent-retail`: the list helpers' oracle (its stubs cover `dw4_playerstats_item_price`, which the shop goods and sell lists call).
 
+## Retail comparison
+
+Disk sell prices are buy/4 rounded down; `Not enough BITS.` comes after the quantity step; the retail typo
+`Abiliy Chip?` is original; per-row weapon prices differ by a random roll in both retail and the port. The junk
+donation runs the same sequence as retail: the `0x7A9` question, Cross, then the choice. Not reached on retail: the
+folder-full notice, the Device Folder sell list, the `Buy Junk Parts` list, Digi-Lab, Bank and Appraiser.
+
 ## Boundaries
 
 - The window code is recovered from decoded m2c drafts, rodata and tables, not matched source. Retail's exact
   instruction timing and the base-window virtuals (page arrows, `+0x60/+0x64/+0x68`) are reproduced from the chip
   list's recovered shape.
-- Unverified (finding [#952](../../docs/findings/findings-0751-1000.md#f952)): the goods list's colour reset after close, the digit selector placement for editor mode
+- Unverified: the goods list's colour reset after close, the digit selector placement for editor mode
   2 (the deposit placement is used), the observable effect of `junkexit.lua`, and the preview's stat panel (not shown
   by these windows). No retail pixel comparison and no hardware-GPU run was done.
 - APU columns 00–11 that lack a blue-armor entry would construct a record -1 in retail; the native stock refuses
@@ -137,3 +150,7 @@ Root and Sales controllers retain their actual stock lists. Sales decisions
 are `igBoolList` bytes. The item factory is shared with player records, and
 all retained references release through their recursive owner API. Stock
 persistence, prices, draws, purchase ordering and admission are as described above.
+
+## Open questions
+
+- The colour of a price the player cannot afford is unverified against retail. `4393e0` applies none.

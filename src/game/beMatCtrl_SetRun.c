@@ -1,5 +1,5 @@
 /* deferred material activation request. Receiver and fields established by Lua MATsetRun,
- * beMatCtrl construction and reflection. Behavioral oracle: findings #859. */
+ * beMatCtrl construction and reflection. */
 #include "dw4/reflected.h"
 void beMatCtrl_SetRun(beMatCtrl *self, int value) {
     self->_wkChgFlagNO = self->_wkChkMat;

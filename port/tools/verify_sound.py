@@ -126,7 +126,7 @@ def main():
             assert int(f['entries']) == len(b[6]), '%s: entries' % line
 
         # The bank names and per-sound mapping come from the pack's beCriSfpData and
-        # beSoundData records (finding #452).  These are the measured facts for
+        # beSoundData records.  These are the measured facts for
         # NDMW.AFS entry 620, cross-checked against the live beSoundInfo._fnameList:
         # _fnameIdx 9/8/1/7/6/10 name e_goburi/e_ogre/common_blst/scannon/stag0102/e_blosso.
         expect = ['e_goburi.sfp', 'e_ogre.sfp', 'common_blst.sfp', 'scannon.sfp',

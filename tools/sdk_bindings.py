@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Decode the SDK's library descriptors in game.elf's rodata (finding #375, #382).
+"""Decode the SDK's library descriptors in game.elf's rodata.
 
 Eight records sit in the `0x481000+` window, each opening with a **12-byte
 space-padded library name and a 4-byte ASCII version** -- `PsIIlibgraph2800`,
@@ -17,7 +17,7 @@ What the payload is depends on the library, and that is the point of this tool:
   * `ipu`   -- the MPEG-2 DCT quantisation tables (an intra zig-zag matrix and
                the all-16 non-intra default) plus microcode.
   * `kernl` -- the C heap base `0x0058D280` (the same value the CRT passes to
-               syscall 61, finding #380), one code pointer, and a long run of
+               syscall 61), one code pointer, and a long run of
                `0xffffffff` marking absent entries.
   * `pad`   -- ten pointers into the shared string pool: the status names
                ERROR / STABLE / EXECCMD / FINDCTP1 / DISCONNECT / BUSY / FAILED
@@ -35,8 +35,7 @@ stated limit, not a missing decoder: per-library extents cannot be had this way
      (`0x104478` and `0x1044f0` inside `FUN_00104258`, `0x105050` unclaimed) --
      each ends exactly where the next begins, so the table is a split oracle.
   2. The same window holds the VU1 microcode's own symbol table and the
-     renderer's technique table, which are recorded separately (findings
-     #383/#384); this tool only walks the eight descriptors.
+     renderer's technique table, which are recorded separately; this tool only walks the eight descriptors.
 
 A record's `span` is bounded by the *next descriptor*, not by the record's own
 length, so a long span picks up unrelated rodata: `kernl`'s 5,888-byte span and
@@ -55,7 +54,7 @@ import struct
 import sys
 
 VADDR, FILE_BASE = 0x100000, 0x80
-# The window the descriptors live in (finding #375); nothing SDK-ish is above it
+# The window the descriptors live in; nothing SDK-ish is above it
 # except the EE runtime, which has no descriptors.
 SCAN_LO, SCAN_HI = 0x481000, 0x4d2000
 # EE register blocks: a word here is a hardware base, not a pointer.
@@ -207,7 +206,7 @@ def decode(img, desc, next_va):
             if w in img.ends:
                 # Nothing covers it, but it begins exactly where a function ends
                 # and a descriptor table holds it: that is a code entry the
-                # tiling missed (#382/#387), not data.
+                # tiling missed, not data.
                 item["at_function_end"] = True
                 item["entry_point"] = False
                 rec.setdefault("_late_code", []).append(item)

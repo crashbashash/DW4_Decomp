@@ -122,14 +122,32 @@ supplies none:
   (`sceMcUdCheckNewCard`, `sceMtapPortOpen`, `sceMtapPortClose`, `sceMtapGetConnection`,
   `sceMtapChangeThreadPriority`, `sceMtapGetModVersion`). The same generator reports a second class —
   functions that name a *library* (`libpad:`, `libmc:`, `*.irx`) without naming themselves — which
-  attributes a function to an SDK library but is not a name, so those are findings, not symbols:
+  attributes a function to an SDK library but is not a name, so those are attributions, not symbols:
   `libpad` 0x117b60/0x117c78/0x117ed8, `libmc` 0x1194c0, `libmtap` 0x225300, `libdma`
-  0x102c98/0x102d08, the IOP-module loaders at 0x1485c0/0x32dd80/0x332860 and the CRI file layers.
-* **the library descriptors** at 0x481000+ (findings [#375](../findings/findings-0251-0500.md#f375)/#382), which hold each library's name
+  0x102c98/0x102d08, the IOP-module loaders at 0x1485c0/0x32dd80/0x332860 and the CRI file layers. The other 21 `sce*`
+  strings in `game.elf` are call-site messages that name the callee, not the function holding them:
+  CRI SRD's `SRD: sceCdBreak is fail. %d` sits in SRD's wrapper and names `sceCdBreak`. They are
+  evidence about call sites and cannot name the containing function.
+* **the library descriptors** at 0x481000+, which hold each library's name
   and version — `libdma`'s block even carries the EE DMA channel
   bases (`0x10008000`, `0x10009000`, …, `0x1000d400`). They are decoded
   ([below](#the-eight-library-descriptors-decoded)): each holds library data and only `libdma`
   carries a function table, so they supply no function names.
+
+Rodata also carries build strings and markers:
+
+| string | address |
+| --- | --- |
+| `SJ/PS2EE Ver.6.28` | `0x4b5601` |
+| `ADXRT Ver.2810` | `0x4a8e11` |
+| `PL2ENC Ver.1.01` | `0x4b0dd9` |
+| `1.0.8` | `0x496630` |
+| `MARK:adxt_obj` | `0x49c8c8` |
+| `MARK:lsc_obj` | `0x4abc58` |
+
+`libdma: sync timeout` at `0x4d1e70` is referenced from exactly two sites, `0x102cc0` and `0x102d3c`,
+inside `FUN_00102c98` and `FUN_00102d08`, which confirms their `libdma` attribution. The IPU/MPEG-2
+decoder error strings sit together at `0x4d1ee0+`, matching `libipu`.
 
 ## Platform code outside the block
 
@@ -142,7 +160,7 @@ same map finds it again in clusters:
 | 0x1efb40..0x1f8350 | 4,700 | dmac, dma_spr, dmac_ctrl, vif1, vu1_regs, gs | the DMA/VIF/GS driver (5 functions) |
 | 0x20cd10..0x20e080 | 3,200 | timer, vif1 | a second timer cluster (7 functions) |
 | 0x2a9210 | 500 | ipu | IPU helpers |
-| 0x482ec0..0x4831e8 | 900 | timer | **inside a data region** — see [`data-regions.md`](data-regions.md), [#374](../findings/findings-0251-0500.md#f374): unclaimed code hides in data |
+| 0x482ec0..0x4831e8 | 900 | timer | **inside a data region** — see [`data-regions.md`](data-regions.md): unclaimed code hides in data |
 
 ## The platform-side inventory
 
@@ -151,7 +169,7 @@ What a port replaces, with the evidence for each — nothing here is inferred fr
 | component | evidence | measured size |
 | --- | --- | --- |
 | **EE runtime**: CRT, C++ runtime, libc, libkernel | syscall stubs span `0x100008..0x114698`; `std::bad_alloc`/`std::bad_exception` typeinfo; the printf `va_list` prologue at `0x10d108`; 39 named OS functions | 410 functions / 75,268 B, `0x100008..0x1137a8` |
-| **Sony EE SDK libraries** — libgraph, libdma, libipu, libkernl, libcdvd, libpad, libsdr, libmc | eight descriptors at `0x481000+` holding a name and an ASCII version, **decoded** ([#382](../findings/findings-0251-0500.md#f382)): each holds library *data*, and only `libdma` carries a function table (15 entries at `0x104478..0x105050`) | 12 functions attributed by strings + 6 named + libdma's 15; extents for the other seven unmeasurable this way |
+| **Sony EE SDK libraries** — libgraph, libdma, libipu, libkernl, libcdvd, libpad, libsdr, libmc | eight descriptors at `0x481000+` holding a name and an ASCII version, **decoded**: each holds library *data*, and only `libdma` carries a function table (15 entries at `0x104478..0x105050`) | 12 functions attributed by strings + 6 named + libdma's 15; extents for the other seven unmeasurable this way |
 | **CRI middleware** — SRD (file/stream), HTCI, DVCI, PS2RNA, ADXM (ADX sound) | 51 `SRD:`, 48 `HTCI:`, 36 `DVCI:`, 9 `PS2RNA:`, 6 `ADXM:` error strings; the 41 functions referencing them cluster at `0x2716f8` (39 of them, spanning ~39 KB to `0x27b188`), the sound layer at `0x37e070` | 41 functions at `0x2644d8..0x27b188` |
 | **The IOP side** — 11 `.irx` modules + `IOPRP280.IMG` | the loader functions name the modules they load: `sio2man`/`padman`/`mtapman` (0x1485c0), `libsd`/`igFileIO` (0x32dd80), `cri_adxi`/`sdrdrv`/`sndfi` (0x332860), `mcman`/`mcserv` (0x3ad5b0), `igAudio` (0x1439d0) | the modules themselves are on the disc, not in the image |
 | **Hardware** | the 56 MMIO-touching functions, all anonymous | 19,956 B |
@@ -160,13 +178,13 @@ What a port replaces, with the evidence for each — nothing here is inferred fr
 **A limit worth stating plainly:** the *extent* of any single SDK library cannot be delimited from
 outside. Anonymity is not a boundary signal — 13,249 of the image's 18,661 functions are anonymous
 `FUN_` — and strings mark a library only where it happens to report errors. This is a **proof**,
-not a suspicion: the eight descriptors are decoded ([#382](../findings/findings-0251-0500.md#f382)) and only
+not a suspicion: the eight descriptors are decoded and only
 `libdma` contains a function list, so no other library's extent can be read off them. The counts in
 this table are *floors* over evidence, not totals.
 
 ## The eight library descriptors, decoded
 
-`0x481000+` holds eight records ([#382](../findings/findings-0251-0500.md#f382)), each a 16-byte header: a 12-byte space-padded library name
+`0x481000+` holds eight records, each a 16-byte header: a 12-byte space-padded library name
 and a 4-byte **ASCII version**.
 
 | descriptor | version | payload |
@@ -211,7 +229,7 @@ lw    a2,0(v0)         ; dispatch through table[index]
 
 so the table is indexed through a base anchored *mid-table*, and its own start address (`0x481c98`)
 is formed nowhere. **Stored-pointer, computed-base and direct-call xrefs each miss all or most of
-it**, which is how a live dispatch table reads as dead code ([#387](../findings/findings-0251-0500.md#f387)). Resolve `lui`/`addiu` pairs
+it**, which is how a live dispatch table reads as dead code. Resolve `lui`/`addiu` pairs
 before concluding a table is unreachable.
 
 Disassembly also confirms what the pointer alone suggested: `0x104478` follows
@@ -221,9 +239,9 @@ with an MMI mask idiom (`pnor`/`psrlh`/`psllh`). Both are argument-taking MMI bl
 the kind a DMA driver has, not data tables.
 
 Two further things live in the same window and are recorded because the port needs them, not the
-decompilation: the **VU1 microcode's own symbol table** at `0x491910` ([#383](../findings/findings-0251-0500.md#f383)) — about 150
+decompilation: the **VU1 microcode's own symbol table** at `0x491910` — about 150
 `vu1_entry_*`/`vu1_end_*` pairs with byte offsets, the complete map of the renderer's microcode from
-`UCODE_BEGIN;0` to `UCODE_END;109184` — and the middleware's build strings ([#384](../findings/findings-0251-0500.md#f384): `SJ/PS2EE
+`UCODE_BEGIN;0` to `UCODE_END;109184` — and the middleware's build strings (`SJ/PS2EE
 Ver.6.28`, `ADXRT Ver.2810`, `PL2ENC Ver.1.01`, all built 2004-10-06).
 
 ## The engine's own platform seam
@@ -284,11 +302,11 @@ functions are largely irrelevant to a port, because a port replaces the classes 
   the game plausibly reads the timers itself (profiling, frame timing). Splitting SDK timing from
   game timing needs a call-graph look, not a register look.
 * **Most entry points are still unnamed, and the names are not in the shipped data.** Measured
-  ([#385](../findings/findings-0251-0500.md#f385)): `game.elf` names 6 SDK functions in their own error strings, `IOPRP280.IMG` keeps 16
+: `game.elf` names 6 SDK functions in their own error strings, `IOPRP280.IMG` keeps 16
   `sceCd*` names — in `cdvdman`, the only one of its sixteen embedded modules with a name table — and
   all eleven extracted `MODULES/*.IRX` are stripped (`readelf -s` finds 0 function symbols). Beyond
   those 22, SDK function names exist only in Sony's headers, so naming them would be documentation
-  rather than recovery; the descriptors cannot supply them either ([#382](../findings/findings-0251-0500.md#f382)). What *is* recoverable is
+  rather than recovery; the descriptors cannot supply them either. What *is* recoverable is
   **attribution**, and the one bounded naming route left is the cdvd join: those 16 names are
   `cdvdman`'s exports by number, and the EE-side `libcdvd` wrappers call them by RPC command number,
   so the two match up by number (T12).

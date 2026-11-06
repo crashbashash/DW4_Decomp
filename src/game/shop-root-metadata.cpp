@@ -1,5 +1,5 @@
 /* beNDMWShopCtrl00 factory and metadata forwards (0x003b8d90..0x003b8f4c) plus the
- * published parent-class accessor at 0x003b65b0; finding #909, walked through in
+ * published parent-class accessor at 0x003b65b0, walked through in
  * docs/engine/shop-root-metadata.md.  The shop controller is created by the
  * shared igMetaObject machinery: the metadata handle is registered lazily and
  * the instance comes from igMetaObject_CreateInstance, not a C++ constructor.
@@ -27,7 +27,7 @@ extern "C" void *beNDMWShopCtrl00_Create(void *allocator){
  * runs the registrar; the handle is re-read afterwards because the callback may
  * publish a different object.
  * The null branch enters at ensure; only the non-null/not-ready path executes
- * the retail padding instruction. Existing project convention: finding #731. */
+ * the retail padding instruction. */
 igMetaObject *beNDMWShopCtrl00_ResolveMetaObject(){
     igMetaObject *meta=g_beNDMWShopCtrl00_metaObject[0];bool validityBit4Set;
     if(!meta)goto ensure;

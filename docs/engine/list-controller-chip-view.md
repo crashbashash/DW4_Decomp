@@ -1,6 +1,6 @@
 # Shared ListCtrl paging and chip-list presentation
 
-Finding [#919](../findings/findings-0751-1000.md#f919) recovers two complete helper groups: the three shared ListCtrl
+Two complete helper groups are recovered: the three shared ListCtrl
 methods at `40dae0..40de80` (916 bytes), and the contiguous XDATA-chip page/text
 helpers at `43c720..43cc20` (1,280 bytes). Five bodies total **2,196 bytes**.
 The [list-controller adapter](../../recovered/engine/list-controller.c) and
@@ -9,16 +9,15 @@ original-instruction RAM/defined-return/ordered-call cases**, executing all
 **544 non-padding addresses /549 span words**. Five excluded words are
 independently checked as zero padding.
 
-All five bodies now have **2,196 exact bytes**: initialization260, previous
-page320, next page336, chip page-count208 and chip text1,072. Finding [#919](../findings/findings-0751-1000.md#f919) matched
-three /864 bytes; [#922](../findings/findings-0751-1000.md#f922) added initialization260; [#923](../findings/findings-0751-1000.md#f923) adds text1,072, completing
-both contiguous helper groups. Matching source lives in the
+All five bodies have **2,196 exact bytes**: initialization 260, previous
+page 320, next page 336, chip page-count 208 and chip text 1,072. Matching source
+lives in the
 [C-mode initializer](../../src/game/beNDMWListCtrl.cpp),
 [C++ page methods](../../src/game/beNDMWListCtrl.cpp),
 [chip count](../../src/game/beNDMWShopCtrlXdataChip_UpdatePageCount.c) and
 [chip text](../../src/game/beNDMWShopCtrlXdataChip_RefreshText.cpp).
 The primary7,232-byte chip transaction update has
-[separate behavioral recovery](chip-controller.md) ([#921](../findings/findings-0751-1000.md#f921)) and still retains
+[separate behavioral recovery](chip-controller.md) and still retains
 assembly. These checkpoints do not establish native rendering or complete chip
 dependency execution.
 
@@ -110,7 +109,7 @@ branches, one return-register copy and14 original NOPs:68 bytes. The remaining
 projection without claiming an assembly-free or original-source spelling.
 No opaque assembly replacement body is used.
 
-The initializer follow-up ([#922](../findings/findings-0751-1000.md#f922)) also retains the original join and two
+The initializer follow-up also retains the original join and two
 NOPs. Its single-page path needs the `i_stcursorright` address-high instruction
 before the first coordinate load; ordinary C schedules those two words in the
 opposite order. One explicit `lui a1,0x52` plus a compiler-coalesced `dmove`
@@ -124,9 +123,9 @@ the two original instruction positions. Source presence was checked through
 The initializer adds four explicit target words /16 bytes (one LUI, one join,
 two NOPs), with244 bytes generated from C. Across all four matched helper bodies,
 explicit instructions total84 bytes and C/C++-generated code totals1,040 bytes.
-The earlier three-body accounting above remains the [#919](../findings/findings-0751-1000.md#f919) checkpoint's scope.
+The three-body accounting above covers the two page methods and the chip count only.
 
-The text matching follow-up ([#923](../findings/findings-0751-1000.md#f923)) uses full-width flags/status/NEXTX results,
+The text matching follow-up uses full-width flags/status/NEXTX results,
 reflected fields and a four-byte font-pointer stride. Explicit binding pseudos
 keep the original saved-register allocation; twelve `dmove` bindings coalesce
 without introducing extra instructions. This is a code-generation projection,
@@ -149,7 +148,7 @@ verification checks all268 text words /115 relocations. No post-compile patching
 custom flag or opaque assembly replacement is used. Helper and transaction
 oracles retain their original service boundaries.
 
-The [item/database lookup checkpoint](item-database.md) ([#924](../findings/findings-0751-1000.md#f924)) now explicitly
+The [item/database lookup checkpoint](item-database.md) now explicitly
 recovers the adjacent wrappers' value returns and status forwarding, preserving
 their matched bytes. Database delivery/loading and full transaction/native
 acceptance remain separate boundaries.

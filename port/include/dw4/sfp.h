@@ -1,8 +1,8 @@
 /* dw4/sfp.h — CRI "ps2_" sound banks (the `.sfp` container inside a stage's sound pack).
  *
  * A stage is delivered as a pair of NDMW.AFS entries: the bigger is the model/setup pack,
- * the smaller is its **sound + SE pack** (finding #431).  That pack is an igBinary container
- * whose *content pool* holds six `ps2_DTPK` banks (finding #450) — one per entity, named by
+ * the smaller is its **sound + SE pack**.  That pack is an igBinary container
+ * whose *content pool* holds six `ps2_DTPK` banks — one per entity, named by
  * the pack's `beCriSfpData` records (`e_goburi.sfp`, `common_blst.sfp`, …).
  *
  * A bank is three chunks at fixed offsets:
@@ -54,7 +54,7 @@ typedef struct {
     uint32_t rate;         /* this entry's sample rate: 24000 in most records, 48000 in some stag0403 sounds */
 } dw4_sfp_entry;
 
-/* A named sound, from the pack's `beSoundData` records (finding #452):
+/* A named sound, from the pack's `beSoundData` records:
  * `_fnameIdx` picks the bank through `beSoundInfo._fnameList` and `_memoryIdx`'s high
  * 16 bits is a sequence index, not a waveform index. `dw4_sfp_resolve` follows
  * its group tag and note-to-waveform routing. `bank` is -1 for a sound whose bank is not in

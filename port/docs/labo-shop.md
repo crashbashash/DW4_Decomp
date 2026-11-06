@@ -27,6 +27,15 @@ Factory mapping used for the class names: `3b31b0` ShopTitle01, `3b3370` ShopTit
 ShopSelect02, `3b4d90` ShopSelect01 (menu), `3b4f50` ShopSelect00 (notice), `3b51b0` StatusSelectE1 (list),
 `3b8860` ShopCtrlEvolve and `3bace0` StatusCtrlEquip (the "Check" child).
 
+`ShopSelect02` picks its rows by call:
+
+| Call | Rows | Script |
+| --- | --- | --- |
+| 1 | three (`font01..03`) | `0x7F2` |
+| 2, 3, 4 | four (`font01..04`) | `0x7EE` |
+| 1262, 1268, 2003, 2005, 2008 | two (`font01..02`) | the call number |
+| -1 | player chooser | |
+
 ## The GAMERAM commands behind the commit
 
 The retail dispatcher `3fca10` switches on a 22-entry command table (`4cc410`: 11 `RECALCPLAYER`, 12 `BASE2CURRENT`,
@@ -45,6 +54,9 @@ The retail dispatcher `3fca10` switches on a 22-entry command table (`4cc410`: 1
 - **WEAPONEQUIPSTRONG `3f8c90` (flag 1)**: every weapon is un-equipped, the three sockets are emptied and the eligible
   weapon with the highest `TSUYOSA` (the first one on ties) becomes the only equipped weapon; `POWERSOCKETNAME` then holds
   just its `MODEL` (or nothing).
+- **WEAPONEQUIPSTRONG `3f8c90` (flag 0, the call from `FUN_003f9570`)**: rebuilds the sockets differently. It clears
+  `POWERSOCKET` and `POWERSOCKETNAME`, then fills up to three sockets with the first weapons of `POWERPOCKET` in list
+  order, adding each one's `MODEL` and marking it equipped.
 - **`431670`**: empties and un-equips a list; it is applied to `MAINSLOT`, `SUBSLOT`, `POWERPOCKET` and `MAINPOCKET`.
 
 ## Controller (Digilabo)
@@ -284,9 +296,6 @@ envelope only (the mix cannot be separated into the two clips), and no retail re
 - The closing script is queued as an engine event for the next DM tick (the hub's way to run a named chunk); retail's
   `389ff0` starts it directly.
 - The retail comparison (above) is measured, not by eye, but covers only the frames listed there.
-
-Findings: [#939](../../docs/findings/findings-0751-1000.md#f939) (GAMERAM command table), [#940](../../docs/findings/findings-0751-1000.md#f940) and [#941](../../docs/findings/findings-0751-1000.md#f941) (evolution record and weapon commands), [#942](../../docs/findings/findings-0751-1000.md#f942) (commit sequence), [#943](../../docs/findings/findings-0751-1000.md#f943)
-(Digilabo), [#944](../../docs/findings/findings-0751-1000.md#f944) (Evolve window), [#945](../../docs/findings/findings-0751-1000.md#f945) (talk-window selectors), [#946](../../docs/findings/findings-0751-1000.md#f946) (shop title frames, unconfirmed).
 
 ## Arena control state
 

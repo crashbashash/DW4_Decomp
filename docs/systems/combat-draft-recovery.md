@@ -5,7 +5,7 @@ The full `beNDMWGameRam::vfunc_34` callback (41,864 code bytes, including the ne
 [the matched dispatcher](combat-dispatcher.md). This page describes the reviewed repairs
 applied to its m2c draft. The repairs make a provisional draft more faithful; they do not
 by themselves establish complete equivalence, and the draft variants measured below are
-diagnostics, not the matched source. Findings [#1042](../findings/findings-1001-1250.md#f1042)–[#1046](../findings/findings-1001-1250.md#f1046) record the evidence.
+diagnostics, not the matched source.
 
 ## Call interfaces and type propagation
 
@@ -43,7 +43,7 @@ takes an `igDataList` receiver. Its complete five-instruction body reads
 the buffer at +16 and an indexed word. GAMERAM supplies object lists and lists
 of lists, whose hierarchy reaches the declaring base `igDataList`. The source
 uses `igDataList::_data`, preserving all 20 bytes and the unchecked index.
-A LoadIntf2 `_system` association for that receiver is refuted ([#1043](../findings/findings-1001-1250.md#f1043)).
+A LoadIntf2 `_system` association for that receiver is refuted.
 
 ## Guarded diagnostic source repairs
 
@@ -189,7 +189,7 @@ stack homes but change the frame and emit additional destructor code.
 
 A nested inline-release projection emits a 128-byte destructor and a 68-byte
 release body at inline level 1, while a destructor that calls an external release
-emits 88 bytes. These are private source-model hypotheses ([#1053](../findings/findings-1001-1250.md#f1053)): sizes do not
+emits 88 bytes. These are private source-model hypotheses: sizes do not
 prove helper identity or original inline settings. The oracle rejects the
 unowned emitted code. Neither this model nor a volatile-word diagnostic is
 banked as dispatcher source.
@@ -206,7 +206,7 @@ At getter sites `0x403b68`, `0x4043c0` and `0x404bd8`, retail calls the RNG's
 vtable slot +96 and computes its unsigned remainder modulo 10000 before the
 reusable ratio division. The draft lifts that ratio into a statement before
 an embedded virtual call in the following condition. Restoring an explicit
-bounded-roll temporary reproduces the original sampling point ([#1054](../findings/findings-1001-1250.md#f1054)).
+bounded-roll temporary reproduces the original sampling point.
 
 The optional `--rng-samples` mode in
 [`repair_combat_draft.py`](../../scripts/repair_combat_draft.py) operates on the
@@ -258,11 +258,11 @@ applies twenty-one reviewed changes. The compiled diagnostic differs
 from retail at 41,760 bytes / frame 1,216. Cases 9–12 have 2/4/12/11 normalized
 instruction edits; case 9's seven internal relative branch destinations also
 agree independently. General registers, stack slots and external destinations
-differ. This does not establish a matching region or callback ([#1055](../findings/findings-1001-1250.md#f1055)).
+differ. This does not establish a matching region or callback.
 
 ## Explicit call-result materialization
 
-The call-order investigations have a reproducible opt-in mode ([#1056](../findings/findings-1001-1250.md#f1056)):
+The call-order investigations have a reproducible opt-in mode:
 
 ```sh
 python3 tools/m2c_one.py 0x3fca10 --context build/combat-context.c --materialize-calls > build/combat-materialized.c
@@ -294,11 +294,11 @@ banked source.
 
 ## Direct-call boundaries and RNG expressions
 
-`--materialize-boundaries` (finding [#1057](../findings/findings-1001-1250.md#f1057)) preserves named call-result
+`--materialize-boundaries` preserves named call-result
 lifetimes and consumed remainders while leaving indirect RNG calls nested with
 their bounds. It reproduces the independently reviewed full-draft input. The
 ordinary mode and the all-call mode are unaffected by it. See the
-[m2c projection contract](../engine/m2c-bulk.md#named-calls-and-consumed-remainders-1057).
+[m2c projection contract](../engine/m2c-bulk.md#named-calls-and-consumed-remainders).
 
 With the width, quotient, promotion, HP, item-loop, scalar ABI and
 work-object repairs, the first hit projection produces 41,848 bytes with the
@@ -329,7 +329,7 @@ adding an alias for diagnostic inspection does not establish ownership or a matc
 
 ## Predicate and expression review
 
-Finding [#1058](../findings/findings-1001-1250.md#f1058) reviews the boundary draft's predicates and expressions. Four clamps use `value > 80`
+Four clamps in the boundary draft use `value > 80`
 rather than `value >= 81`. Constant list indices 0, 1, 4 and 5 use the ordinary
 `count && index >= 0 && index < count` shape; an inlined setter, an explicit
 local index and equivalent strict constant comparisons reproduce the same code.
@@ -357,7 +357,7 @@ class projections enlarge the frame and emit unowned destructor/EH data.
 
 ## Retail unwind data
 
-Finding [#1059](../findings/findings-1001-1250.md#f1059) establishes that the retail flat image retains GAMERAM's unwind
+The retail flat image retains GAMERAM's unwind
 index at `0x553b80`, pointing to table `0x544fd4` for `0x3fca10..0x406d98`.
 The cleanup records identify the five missing reference homes and five physical
 destructor targets, plus the copied argument at `+0x408` and nearby-list cleanup.
@@ -365,7 +365,7 @@ The [reference-helper inventory](combat-reference-helpers.md#retail-unwind-ident
 records their exact sites and associations. Six of those destructors have
 complete matching source (768 code bytes).
 
-The single-wrapper C++ probes are hypotheses ([#1053](../findings/findings-1001-1250.md#f1053)). Their private
+The single-wrapper C++ probes are hypotheses. Their private
 symbol aliases do not establish original cleanup identities. Retail's table
 provides those identities directly. Candidate
 exception data requires explicit verified ownership before it can be linked;
@@ -373,7 +373,7 @@ unowned sections are strictly rejected.
 
 ## Complete scopes and allocation differences
 
-Finding [#1061](../findings/findings-1001-1250.md#f1061) decodes all 36 protected ranges and 34 cleanup actions; the
+All 36 protected ranges and 34 cleanup actions are decoded; the
 [format and generated inventory](../engine/exception-unwind.md) give the precise
 return-PC and lifetime rules. A private C++ model reproduces the ordered pattern of 1,681 direct-call targets and 29
 indirect-call sites, plus all 36 protected call spans and cleanup chains,
@@ -400,7 +400,7 @@ whole-function equivalence. The unusual case-5 `%1000` is present in retail.
 
 ## Technique parameter table address units
 
-Finding [#1062](../findings/findings-1001-1250.md#f1062) establishes an actual source defect at `0x405a04..0x405a34`.
+The draft has an actual source defect at `0x405a04..0x405a34`.
 The row helper writes `sp428`; retail shifts that row left by two once, adds the
 result to both `0x4cf538` and `0x4cf558`, and loads signed words. The draft instead
 adds the already scaled offset to `int *` bases, making the compiled stride 16.

@@ -4,7 +4,7 @@
 The port renders the PS2's 640x448 framebuffer; a PCSX2 savestate screenshot of it is **640x480**,
 because the screenshot is the 448-line image scaled by 480/448.  Comparing the screenshot's top 448
 rows against the port's 448 rows therefore mixes two vertical scales: it inflates every number and
-it moves features (finding #573 measured the whole-frame mean |delta| falling 24.73 -> 19.26, and
+it moves features (the measured whole-frame mean |delta| falling 24.73 -> 19.26, and
 the floor 20.51 -> 9.45, once the reference is rescaled).  So this tool always **resamples the
 reference to the frame's size** before comparing -- a no-op for a reference that is already 640x448.
 
@@ -57,7 +57,7 @@ def load_frame(path, size):
 
 def blur(img, sigma):
     """Gaussian blur both sides of a comparison, so the metric scores the scale the shading lives
-    at.  The game's framebuffer carries a +-4 ordered dither (finding #588) and the port's render
+    at.  The game's framebuffer carries a +-4 ordered dither and the port's render
     does not, so a pixel-exact |d| against the native framebuffer is dominated by that dither; a
     known-good fallback is scipy, and without it the blur is skipped rather than faked."""
     if not sigma:
@@ -89,7 +89,7 @@ def self_test():
     stretched = small.resize((640, 480), Image.BILINEAR)
     ref = resample(stretched, (640, 448))
     d = np.abs(np.asarray(ref).astype(np.float64) - base.astype(np.float64)).mean()
-    # Without the rescale the same pair differs by a lot, which is what #573 was.
+    # Without the rescale the same pair differs by a lot, which is what the first measurement showed.
     naive = np.abs(np.asarray(stretched)[:448].astype(np.float64) - base).mean()
     ok = d < 1.0 and naive > 5.0
     print("  self-test: resampled %.3f, raw-top-448 %.3f -> %s" % (d, naive, "ok" if ok else "BAD"))
@@ -104,7 +104,7 @@ def main():
                                    "a native 640x448 frame -- e.g. gs_shade_raster.py's frame.png -- "
                                    "is used as-is, which is the better ground truth")
     ap.add_argument("--blur", type=float, default=0.0,
-                    help="gaussian sigma applied to the reference and every frame (finding #591: "
+                    help="gaussian sigma applied to the reference and every frame ("
                          "~1.2 px removes the framebuffer's dither; 0 keeps the raw pixel metric)")
     ap.add_argument("--json", help="write the table as JSON to this path")
     ap.add_argument("--self-test", action="store_true")

@@ -1,7 +1,7 @@
 # Combat callback reference ownership helpers
 
 The reference/list utility recovery now includes **fifteen complete ownership, string
-and allocator bodies, 1,732 code bytes** ([#1037](../findings/findings-1001-1250.md#f1037), [#1051](../findings/findings-1001-1250.md#f1051), [#1059](../findings/findings-1001-1250.md#f1059), [#1060](../findings/findings-1001-1250.md#f1060)). Retail unwind data
+and allocator bodies, 1,732 code bytes**. Retail unwind data
 identifies eight additional cleanup bodies, contributing 1,012 matched bytes.
 Every one of the nineteen functions in the contiguous
 `0x3e9010..0x3e93b8` utility run is now recovered: 816 code bytes in total,
@@ -104,8 +104,8 @@ Allocator selection uses the incoming fallback when the direct-mode byte at
 
 The data getter at `0x3e9090` and word getters at `0x3e90f0`/`0x3e9240` now
 use the declaring `igDataList::_data` view. The two indexed bodies had inherited
-an incorrect `_system` association from `beNDMWLoadIntf2`; finding [#1052](../findings/findings-1001-1250.md#f1052) retains
-that association as refuted. All original getter bytes remain unchanged.
+an incorrect `_system` association from `beNDMWLoadIntf2`; that association is
+refuted. All original getter bytes remain unchanged.
 
 ## Recovery corrections and verification
 
@@ -113,7 +113,9 @@ Raw m2c guessed an eight-byte count load where the original instruction is
 `lw`. Correcting the load to four bytes is necessary before widening; an
 eight-byte access can read a neighboring member and does not match. The release
 draft also omitted the destructor's argument. The full original body proves the
-call slot, and the recovered source preserves it.
+call slot, and the recovered source preserves it. Allocator selection matches in
+all 56 bytes when written as an explicit if/else or a conditional return; the
+assignment-style draft does not match.
 
 All seven bodies are verified with the content-pinned alternate compiler and
 `-O3,p`.

@@ -47,7 +47,6 @@ random stream and the database and compares names, models and `CARDLIST`.
   names outside ASCII show as `?`.
 - Title windows `ShopTitle03/01` are tracked content windows; the `StatusTitle01` panel's refresh uses the scene's own stat owner.
 - Scene sound is not examined; the scene runs on the headless CPU path (no GPU or windowed run).
-Findings [#975](../../docs/findings/findings-0751-1000.md#f975)-[#978](../../docs/findings/findings-0751-1000.md#f978).
 
 ## Arena control state
 

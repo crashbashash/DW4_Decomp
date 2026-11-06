@@ -105,7 +105,7 @@ static void add_geometry(dw4_models *m, uint32_t rec)
         m->m[m->n++] = g;
 }
 
-/* The shape -> attribute link (finding #458's rule, reached offline).  A shape is an `igGeometry`
+/* The shape -> attribute link (reached offline).  A shape is an `igGeometry`
  * record: its ordinal-2 value is the DCC part name (`pCylinderShape3`, `M_BK17v1_barrelmShape`, ...)
  * and ordinal 8 is its `igAttrList`, whose `_array` (+0x10) is a block of attribute ids.  The ids
  * that are `igGeometryAttr1_5` records are that shape's geometry, so they take its name.  Found by

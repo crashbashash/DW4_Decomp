@@ -1,4 +1,4 @@
-# Curated body-derived buffer service names; finding #891.
+# Curated body-derived buffer service names.
 # Owner search uses allocator slot340 membership; size336 and free264 are
 # corroborated by the allocation/duplicate/free call chains and retail oracles.
 # Slot240's semantics remain unresolved: FUN_002ed5a0 is intentionally unnamed.

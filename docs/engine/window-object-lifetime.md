@@ -1,7 +1,7 @@
 # Base window-controller object cleanup
 
-Finding [#917](../findings/findings-0751-1000.md#f917) recovers and byte-matches the complete192-byte
-`beNDMWWindowCtrl_Destroy` body at `0x003b6430`, used by shop-root and other
+The complete 192-byte `beNDMWWindowCtrl_Destroy` body at `0x003b6430` is recovered and
+byte-matched. It is used by shop-root and other
 GetVTable temporary cleanup. [The typed source](../../src/game/beNDMWWindowCtrl_Destroy.cpp)
 uses the reflected controller's inherited window reference cells. It is a
 separate dependency of the [shop metadata block](shop-root-metadata.md);

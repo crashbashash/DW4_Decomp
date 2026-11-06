@@ -7,7 +7,7 @@
  * (`src/frontlayer.c`) and no longer uses this path.
  *
  * A captured frame of the front-end menu carries the whole screen: the logo, the menu rows, the
- * cursor, the copyright and the streaming additive light trails (findings #609/#610).  `hide` is a
+ * cursor, the copyright and the streaming additive light trails.  `hide` is a
  * comma-separated texture-key list (NULL draws everything), so an analysis render can isolate a
  * layer.
  */

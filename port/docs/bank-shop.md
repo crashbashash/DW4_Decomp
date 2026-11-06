@@ -34,6 +34,10 @@ menu's choice. Completion of a child is a change in the child count, as in retai
 | 4 / 5 | The money editor. When it ends with an amount other than -1, BIT/BANKBIT are updated (no validation in retail; the native transaction validates) and `SUBWND UPDATE` is sent. |
 | 6 | One-choice notice (**0x55E**) and return to main 0. |
 
+The D0 list opens through factory `3baf10`, with the bank flag at `+0x60`, `equip_disable` at `+0x6C` and
+`auto_close` at `+0x6F`. The controller finds the list among its children by type, closes it by advancing its
+state, and restarts it with sub 1, counter 0.
+
 Primary state 2 closes (no extra work here) and state 3 waits for the children to disappear.
 
 ## Money editor (ShopCtrlEditBit)

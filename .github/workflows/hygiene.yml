@@ -19,8 +19,8 @@ jobs:
           fetch-depth: 0
       - name: Checker self-test
         run: python3 testing/test_check_host_details.py
-      - name: Whole tree and the findings register
-        run: python3 scripts/check_host_details.py --tree && python3 scripts/findings.py check
+      - name: Whole tree
+        run: python3 scripts/check_host_details.py --tree
       - name: Added lines and commit messages in this push or pull request
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then

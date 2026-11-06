@@ -3,7 +3,7 @@
  * variant of ResumeThread) on the thread's kernel id (_threadID); a negative
  * result publishes the failure status word, anything else the success word
  * through the first (hidden return-slot) argument.  Both words are set once
- * at engine start-up (docs/engine/array-storage.md, findings #504:
+ * at engine start-up (docs/engine/array-storage.md:
  * 0x4fb410 = 0, 0x4fb418 = 1). */
 #include "dw4/reflected.h"
 

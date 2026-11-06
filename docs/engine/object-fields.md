@@ -8,7 +8,7 @@ Fourteen complete bodies (1,676 code bytes) have readable
 [behavioral C](../../recovered/engine/object-fields.c): the contiguous four-body
 cleanup/persistence run at `2ffc10..2fff90`, concrete reference assignment and
 construction/destruction/reset, shared zero/clear helpers, construct-flag and
-metadata count/index getters. Finding [#876](../findings/findings-0751-1000.md#f876) records their evidence and boundaries.
+metadata count/index getters.
 
 Thirteen bodies (1,292 bytes) have exact source. Eight reference-field bodies (748 bytes)
 are consolidated in [ref-field-lifecycle.cpp](../../src/engine/ref-field-lifecycle.cpp),

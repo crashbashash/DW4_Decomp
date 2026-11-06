@@ -48,7 +48,6 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SYMBOLS = os.path.join(ROOT, "config", "SLUS-20836", "symbols.txt")
 SRC = os.path.join(ROOT, "src")
 JUMPTABLES = os.path.join(ROOT, "config", "SLUS-20836", "jumptables.txt")
-FINDINGS = os.path.join(ROOT, "docs", "findings")      # the register: findings-NNNN-NNNN.md (scripts/findings.py)
 CATEGORIES_TSV = os.path.join(ROOT, "data", "check-categories.tsv")
 PROGRESS_MD = os.path.join(ROOT, "PROGRESS.md")
 PROGRESS_JSON = os.path.join(ROOT, "docs", "progress.json")
@@ -290,17 +289,6 @@ def collect():
         meta["table_entries"] = sum(sum(v) for v in tabs.values())
     except FileNotFoundError:
         pass
-    by_status = {}
-    try:
-        for name in sorted(os.listdir(FINDINGS)):
-            if re.match(r"findings-\d{4}-\d{4}\.md$", name):
-                for status in re.findall(r"(?m)^### #\d+ · (\w+)\s*$", open(os.path.join(FINDINGS, name)).read()):
-                    by_status[status] = by_status.get(status, 0) + 1
-    except OSError:
-        pass
-    if by_status:
-        meta["findings"] = sum(by_status.values())
-        meta["findings_by_status"] = by_status
     n_lua = sum(1 for _ in _walk(os.path.join(ROOT, "lua"), ".lua"))
     if n_lua:
         meta["lua_chunks"] = n_lua
@@ -1064,11 +1052,6 @@ def render_md(d):
         if "table_functions" in m:
             A("| switch jump tables recovered | %s tables, %s entries, in %s functions |"
               % (format(m["tables"], ","), format(m["table_entries"], ","), m["table_functions"]))
-        if "findings" in m:
-            by = m.get("findings_by_status", {})
-            A("| recorded findings | %s (%s) |"
-              % (format(m["findings"], ","),
-                 ", ".join("%s %s" % (v, k) for k, v in sorted(by.items()))))
         if "lua_chunks" in m:
             A("| Lua chunks decompiled | %s |" % format(m["lua_chunks"], ","))
         if d.get("typed") and d["typed"].get("total"):

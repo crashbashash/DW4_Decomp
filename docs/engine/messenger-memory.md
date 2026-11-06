@@ -4,7 +4,7 @@ The complete contiguous four-body group at `38bee0..38ca40` has readable
 [behavioral C](../../recovered/engine/messenger-memory.c): initialization, two
 temporary reference-owner destructors and reset, totaling 2,904 code bytes.
 The same adapter includes the 28-byte `beMessenger::vfunc_26` reset forwarder,
-for five bodies / 2,932 bytes. Finding [#871](../findings/findings-0751-1000.md#f871) records the recovery. All five
+for five bodies / 2,932 bytes. All five
 bodies match: the forwarder in [beMessenger.cpp](../../src/game/beMessenger.cpp), initialization in
 [beMessenger_InitializeMemory.cpp](../../src/unmatched/beMessenger_InitializeMemory.cpp), reset in
 [beMessenger_ResetMemory.cpp](../../src/unmatched/beMessenger_ResetMemory.cpp), and the two destructors as

@@ -9,7 +9,7 @@ Instruction layout (verified against reference Lua 4.0.1):
     GETARG_U = ins >> 6          GETARG_S = (ins>>6) - (2^25 - 1)
     GETARG_B = (ins>>6) & 0x1ff  GETARG_A = ins >> 15
 
-Lua 4.0.1 semantics (retail evidence: finding #785):
+Lua 4.0.1 semantics (retail evidence::
   * OP_CALL: A = stack position of function, B = nresults.
   * OP_PUSHSELF: pops receiver, pushes [method, receiver].
   * Jump target = pc + 1 + s, including numeric-for branches.

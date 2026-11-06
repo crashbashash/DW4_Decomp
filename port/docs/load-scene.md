@@ -6,6 +6,10 @@ accepts. `stagIS13` is hosted natively by the same interface-scene host as the s
 `LoadCtrl2` and `LoadIntf2`. Everything is exercised headless by `make -C port check-hubload` (the real NPC) and
 `check-hubnpcs` / `check-hubstages`.
 
+The Digi-Elf offers `stagIS13` only when `SYSgetPlayerNinzu()` is not 4
+(`lua/01-lobby-hub/05-lobby-quests_e820/033-msg-special001.lua`): with four players logged in there is no join
+screen to reach.
+
 ## What the screen is in the hub
 
 `LoadCtrl2` is the controller the pack's `first` chunk starts (`be:sd("LOADCTRL2", NULL, 0, "GENERATE")`). It is
@@ -44,7 +48,7 @@ and item states 5/6 (card access and notice). They are reachable only for a join
 flow, neither of which exists in the single-player hub; they are ported for the title and run in `DW4_SCENE_TITLE`:
 
 - **Call Digimon**: control states 6 (card chooser), 7 (data select) and 8 (difficulty and the log-in prompt) and item states 5 and 6
-  (card access and notices); see [Save Keeper](save-keeper.md#calling-a-saved-character-from-the-title-port), findings [#999](../../docs/findings/findings-0751-1000.md#f999)-[#1002](../../docs/findings/findings-1001-1250.md#f1002).
+  (card access and notices); see [Save Keeper](save-keeper.md#calling-a-saved-character-from-the-title-port).
 - **Create/Call window**: control state 3 (`ld_create_call`). The title scene opens with the slot screen and runs player 0 from control
   state 0: the base panels, the Create/Call window, and Call's states 6 to 8 with the retail window change (the two-row window closes
   on `SQ_LINEON01`, the chooser opens), Circle on the chooser back to state 3 inside the scene, and no cancel at state 3 for player 0
@@ -56,8 +60,6 @@ flow, neither of which exists in the single-player hub; they are ported for the 
 State 3's cancel for a joining player 1..3 is coded from the draft but unexercised (the host connects only player 0's pad).
 `LoadCtrl2`'s title mode (the GENERATE that carries integers, the `SQ_WTIN60` fade wait, `TITLE2 GAMESTART`, `gameStart.lua`) is not
 ported: `dw4_loadctrl_generate` returns an error for it.
-
-Findings [#971](../../docs/findings/findings-0751-1000.md#f971)-[#974](../../docs/findings/findings-0751-1000.md#f974) record the controller, the interface, the hub flow and the scene-layer fix.
 
 ## Boundaries
 

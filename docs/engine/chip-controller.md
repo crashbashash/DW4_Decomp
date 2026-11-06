@@ -89,7 +89,7 @@ open. Other lobby services and their script outcomes retain the scope in the
 [hub inventory](../systems/hub-recovery.md).
 
 The [item/database block](item-database.md) now has complete exact source and
-explicit status/value-return contracts ([#924](../findings/findings-0751-1000.md#f924)). Its standalone composed oracle
+explicit status/value-return contracts. Its standalone composed oracle
 validates the lookup chain; this controller's existing oracle still treats
 lookups as services. Live database delivery, recalculation and full transaction
 composition remain open.

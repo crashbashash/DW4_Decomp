@@ -30,6 +30,27 @@ that pool's virtual functions. Those two files are therefore not stock and not h
 whole-file units under the library's profile. `include/dw4/lua_game_state.h` adds the pool to
 `lua_State` without touching `lstate.h`.
 
+## How each library is built
+
+- **zlib** is built as C by MWCC 3.0b38 (`combat`) with `-O4,p -sdatathreshold 1 -lang c`, one profile
+  for the whole library. `deflate.c` contributes only `deflateEnd` at `0x221bf0`; the retail linker
+  dropped the rest.
+- **libpng** uses the same profile: eleven files, 126 functions. The block runs to `0x221870` because
+  `0x221670` and `0x221750` are stock `pngwrite.c`. Every line of `libpng_prefix.h` is needed: no
+  setjmp, user memory, no iCCP, no progressive read, `long` as int after `zlib.h`, no read interlacing.
+- **Lua** is built by MWCC 3.0b52 as C++ with `-O4,s -sdatathreshold 1 -str readonly -lang c++`, and
+  `-Dlong=int` on the core only. `0x246d30` is `luaA_index`, the first function `lapi.c` keeps;
+  `0x246b30` is the game's own `lua_dofile`, and `0x2590c0` has a retail exception record where the Lua
+  range has none. Lua 4.0 text fails `traceexec`, `luaS_newudata`, `retstat`, `luaB_rawget`, `luaB_rawset`
+  and `luaB_dostring` where 4.0.1 fits.
+
+The game's libraries narrowed `luaL_check_long` and `luaL_opt_long` to int, so `str_sub`, `str_byte` and
+`str_find` need `dw4_lualib_config.h`. `luaV_gettable` re-reads `hvalue(t)` before `luaH_get`; reaching it
+through a const lvalue reproduces that (`dw4_lvm_config.h`), though whether the original read it that way
+is an inference.
+
+The library ranges and flags were first reported by the dw4-ps2-ai project.
+
 ## Rows
 
 The rows in `config/SLUS-20836/unit-objects.json` and `units.tsv` are measured by

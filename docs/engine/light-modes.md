@@ -1,6 +1,6 @@
 # Hard/Soft lighting in the Main Lobby
 
-Finding **[#784](../findings/findings-0751-1000.md#f784)** connects the menu's LIGHTMODE value to retail stage presentation.
+The menu's LIGHTMODE value connects to retail stage presentation.
 The observed contract is **0 = Soft, 1 = Hard**. This recovery covers the bounded
 Main Lobby arrival (NDMW 820, `stagml11.igb`, BG02 and `camsp0101`). It does not
 establish mode behavior for every stage.

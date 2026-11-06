@@ -66,7 +66,7 @@ script names rather than the host filesystem. Each VM has independent globals
 and locked chunk references; releasing it frees those references and its state.
 The legacy VM is for trusted original code, not an untrusted-mod sandbox.
 
-Finding **[#785](../../docs/findings/findings-0751-1000.md#f785)** records the signed-operand bias:
+The signed-operand bias is
 `MAXARG_S = 33554431`, not `33554432`. Retail PUSHINT at
 `0x00258340..0x00258364` adds `0xfe000001` to `ins >> 6`. A decoder that uses
 33554432 makes all signed literals one too small, has to compensate jumps with an
@@ -74,7 +74,7 @@ extra increment, and produces an apparent numeric-for step of zero.
 Generated source remains
 analysis material; execute original bytecode. Original title bytecode passes
 with stock jumps, bounds and steps. The dump/decompiler, all 5,291 chunks,
-index, cleaned tree and flag tables are regenerated with 33554431 ([#787](../../docs/findings/findings-0751-1000.md#f787)); the [numeric audit](../../docs/engine/lua-numeric-audit.md)
+index, cleaned tree and flag tables are regenerated with 33554431; the [numeric audit](../../docs/engine/lua-numeric-audit.md)
 records affected progression evidence.
 
 ## Native calls, command groups and events
@@ -101,7 +101,7 @@ Other native methods route to the supplied engine callback and fail if absent.
 This state bridge inherits the current front-end's storage limits; it is not a
 replacement for recovered gameplay/save ownership.
 
-Scheduling behavior (finding **[#786](../../docs/findings/findings-0751-1000.md#f786)**) is explicit:
+Scheduling behavior is explicit:
 
 - `DMsetSD` copies a command into the building group. Strings outlive the Lua call.
 - `DMchkSD` copies a **while condition** into that group. `!=0`/`==1` waits while
@@ -121,7 +121,7 @@ Services receive `sd` for command application and `querySD` for receiver queries
 The session routes these through the native receiver registry and timed
 message queue described below. SOUND delegates to the existing title audio
 service. Prepared model slots, command-driven greeting windows and title/lobby camera services connect here; see [Scene controller services](controller-services.md). General model programs and stage-transition services remain outstanding.
-DM switch/case groups and subwindow-aware counts run natively ([#788](../../docs/findings/findings-0751-1000.md#f788));
+DM switch/case groups and subwindow-aware counts run natively;
 see the recovered rules below. General material/model/bullet/player context
 still requires an engine service. `dw4_scriptengine_run` latches failures, discards unpublished commands and
 prevents further ticking. The operation owner must close/recreate the engine
@@ -129,7 +129,7 @@ as part of Retry/Back; globals and native side effects already performed are not
 rolled back. General script-error Retry/Back remains outstanding; scene-boundary reset
 coordinates SD, Lua and DM as described below.
 
-## DM switches and counts ([#788](../../docs/findings/findings-0751-1000.md#f788))
+## DM switches and counts
 
 `DMswtSD` queues a receiver query with four or five arguments. The retail
 builder has one switch latch: nested switches are ignored, `DMcase` outside a
@@ -480,9 +480,9 @@ active groups until the DM traversal ends. Calls during DM retain the next-tick
 publication boundary. The live SD bridge tags timed messages with the active
 script scope; stage owners must cancel both DM and SD scopes before release.
 The legacy scoped cache retains its host precedence policy. Live scene libraries
-use the retail ordered-info lookup and whole-scene cleanup described below
-([#790](../../docs/findings/findings-0751-1000.md#f790)–[#793](../../docs/findings/findings-0751-1000.md#f793)). Timed follow-up publication
-uses the host ownership policy described in [#789](../../docs/findings/findings-0751-1000.md#f789) below.
+use the retail ordered-info lookup and whole-scene cleanup described below.
+Timed follow-up publication uses the host ownership policy described under
+[timed callback follow-ups](#timed-callback-follow-ups-and-ownership).
 
 The Main Lobby collects all 64 referenced rows through `beLuaInfo._dataList`,
 executes its own `func.lua` and runs `aim_n_digilff.lua` callbacks after publishing
@@ -567,7 +567,7 @@ The Lua and attached-lobby checks also pass a separate headless ASan/UBSan build
 their missing-private-input skips. No Windows, physical Steam Deck or retail
 emulator playthrough covers this cache/lifetime slice.
 
-## Timed callback follow-ups and ownership ([#789](../../docs/findings/findings-0751-1000.md#f789))
+## Timed callback follow-ups and ownership
 
 Timed dispatch temporarily installs the executing message's publication
 scope. Follow-up messages inherit that owner rather than the most recent unrelated
@@ -584,7 +584,7 @@ reusable record list size, initially 32, so a self-scheduling zero-delay chain
 runs 32 times per pass. Receiver execution and list/allocation remain controlled
 leaves. Nested native ticks are rejected without changing the sampled clock.
 
-Finding **[#789](../../docs/findings/findings-0751-1000.md#f789)** also preserves a discrepancy: a negative-delay child inserted
+One discrepancy remains: a negative-delay child inserted
 ahead of the executing retail record is removed by post-callback head recycling,
 leaving the recycled idle parent ahead of a due peer. The fixture emits only
 PARENT on retail; native emits PARENT, CHILD, PEER because it detaches the executing
@@ -600,7 +600,7 @@ checks pass ASan/UBSan with leak detection disabled. Full native checks and the
 script retail suite pass; platform playtests and general stage outcomes remain
 outstanding.
 
-## Recovered retail loading and ownership ([#790](../../docs/findings/findings-0751-1000.md#f790)–[#793](../../docs/findings/findings-0751-1000.md#f793))
+## Recovered retail loading and ownership
 
 [Retail loading and ownership](../../docs/engine/lua-loading-ownership.md)
 establishes scene startup and teardown. The retail loader replaces its Lua

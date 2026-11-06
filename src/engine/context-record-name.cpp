@@ -1,7 +1,7 @@
 /* igMemoryPoolContextInfo: lookup of a context record by name.
  *
  * A context holds 46 records of 144 bytes starting at +0x14, each with a 128-byte
- * inline name at +4 (docs/engine/context-lifecycle.md, findings #896 and #897; the
+ * inline name at +4 (docs/engine/context-lifecycle.md; the
  * record view matches src/engine/context-slot-lifetime.cpp).  The view below
  * describes the observed 32-bit layout, not the original C++ spelling. */
 

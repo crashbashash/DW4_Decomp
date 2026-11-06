@@ -121,7 +121,7 @@ def apply_extent_overrides(fns, img, path):
                   `check_cuts` fails the run if none does, so a cut can never orphan code silently.
     * ``merge`` — the function at `va` absorbs every dump function that starts inside its new
                   extent and takes the row's name: Ghidra had split one body into a `thunk_` and a
-                  fragment (finding #390, `FUN_002fe2ac`), and only one symbol may own those bytes.
+                  fragment (`FUN_002fe2ac`), and only one symbol may own those bytes.
 
     Returns (functions, cuts) — `cuts` is `[(va, new_end)]` for `check_cuts`.
     """
@@ -656,7 +656,7 @@ def promote_gap_labels(fns, img, labels, strong, strong_data):
     nothing takes its address as code, it stays a label and lands in the unclaimed
     gap between two functions, so it is absent from `config/SLUS-20836/symbols.txt` and can
     never be decompiled. The 592 class-registrar trampolines were exactly this
-    (finding #345): each alone in its own 116-404-byte gap with a `LAB_<addr>` at
+: each alone in its own 116-404-byte gap with a `LAB_<addr>` at
     its `addiu sp,sp,-N`, e.g. `LAB_001301d0`.
 
     A gap label is promoted when it opens a frame (`addiu sp,sp,-N`), nothing falls
@@ -758,8 +758,7 @@ def referenced_code_addresses(img, fns):
 
     A code address held in a vtable or a function-pointer table is a *data*
     reference, and Ghidra follows branch and `jal` targets but not those, so a stub
-    reached only from a vtable is never promoted to a function object (finding
-    #364). The word that points at it is the evidence that it is code; this is the
+    reached only from a vtable is never promoted to a function object. The word that points at it is the evidence that it is code; this is the
     set `promote_data_labels` uses in place of the frame prologue it cannot expect
     from a leaf.
     """
@@ -786,7 +785,7 @@ def promote_data_labels(fns, img, labels):
     reachable by fallthrough (the preceding word is padding, or a `jr ra`/its delay
     slot). Its size runs to that terminator's delay slot; a sibling start bounds it.
     Nothing is invented and no existing symbol changes size, so the relink is
-    unaffected — the bytes it claims were already linked as raw data (#346
+    unaffected — the bytes it claims were already linked as raw data (
     precedent).
     """
     refs = referenced_code_addresses(img, fns)
@@ -860,12 +859,12 @@ def promote_data_labels(fns, img, labels):
 def load_sdk_starts(path):
     """Function starts an SDK library descriptor declares (data/sdk-bindings.json).
 
-    Eight descriptors sit in the image's rodata (finding #382) and one of them,
+    Eight descriptors sit in the image's rodata and one of them,
     `libdma`'s, carries a real function table. Those addresses are entry points by
     construction, which makes the table a **split oracle**: three of them are
     boundaries the tiling does not have, because Ghidra treats an unconditional
     tail-call `j` as fallthrough, so one function object swallowed the bodies after
-    it (findings #382/#387).
+    it.
     """
     if not path or not os.path.exists(path):
         return []
@@ -979,13 +978,13 @@ def literal_code_addresses(img, fns):
     The second evidence class for a code pointer besides a data word. The class
     registrars pass their per-class accessor stub as the 9th argument, materialised
     with `lui t0,hi; addiu t0,t0,lo`, so the stub's own address is never a data word
-    and `referenced_code_addresses` cannot see it (findings #358/#366). The
+    and `referenced_code_addresses` cannot see it. The
     resolution rules -- the low half usually lands in a call's delay slot, and a page
     is not an address -- live in tools/mips_literals.py, shared with the
-    platform-boundary map (#377). The search window has to be wider than the default:
+    platform-boundary map. The search window has to be wider than the default:
     a registrar builds all nine arguments at once, so `lui t0,hi` and its completing
     `addiu t0,t0,lo` sit up to eleven instructions apart, past `scan_from_lui`'s
-    default of eight (findings #388/#389). Nothing writes `rt` in between, which is
+    default of eight. Nothing writes `rt` in between, which is
     what keeps the wider window honest -- raising it 9 -> 16 finds all 572 registrar
     thunks and saturates there.
     """
@@ -1019,7 +1018,7 @@ def promote_j_thunks(fns, img, refs, names=None):
     The class registrars pass a function pointer per class, and for 572 classes
     that pointer is a two-instruction stub whose body jumps to the class's accessor
     (`j <accessor>; nop`). Ghidra never disassembled them and never made them
-    functions, so no label-driven pass can see them (findings #364/#366); the call
+    functions, so no label-driven pass can see them; the call
     is indirect, so no `jal` reaches them either.
 
     Evidence is shape *and* reference: the stub's address is formed as a code literal

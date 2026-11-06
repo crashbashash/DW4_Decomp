@@ -6,7 +6,7 @@ instructions and reflection. They cover argument clearing, delay-record reuse,
 initialization checking, expiry updates, enqueue and context push/pop. The six
 bodies at `38e8f0..38f0e0` form a contiguous enqueue/nesting block; the adjacent
 clear functions are `38ca40..38cff0`. Initialization/update retain their existing
-vtable-slot names. Finding [#870](../findings/findings-0751-1000.md#f870) records the recovery and its boundaries.
+vtable-slot names.
 
 Three forwarding bodies (192 bytes) have exact source in
 [beMessengerLifecycle.cpp](../../src/game/beMessengerLifecycle.cpp). Group-delayed

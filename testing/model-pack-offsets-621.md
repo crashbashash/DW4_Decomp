@@ -24,7 +24,7 @@ or vertex count, and it does not accumulate across the pack (it stays <=141 for 
 though the pack has 12,362 blocks).  So the `_memSize` prefix sum places each block's *region*
 correctly, and the stream inside a block begins at a small per-block offset.
 
-The instance to work from (finding [#477](../docs/findings/findings-0251-0500.md#f477)): live mesh `0x0111ca30` -- 55 verts, `_primType` 4,
+The instance to work from: live mesh `0x0111ca30` -- 55 verts, `_primType` 4,
 14 prims -- has its positions in memory block id **38756** (660 B = 55x12 = `_memSize`) at
 **block+59**, byte-identical to the live heap; the 59 bytes before it are small dyadic values.
 The 446 located offsets are in `model-pack-offsets-621.tsv`.

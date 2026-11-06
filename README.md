@@ -231,8 +231,7 @@ The full list of variables, with the default first:
 	├── data: committed snapshot of the Ghidra dumps and derived tables
 	├── docs: the documentation hub
 	│   ├── engine: toolchain, binary layout, RTTI/vtables, reflection, igBinary, Lua
-	│   ├── systems: flags, spawns, drops, enemy stats, RNG, save format
-	│   └── findings: the findings register: hypotheses, evidence and dead ends, cited as #N
+	│   └── systems: flags, spawns, drops, enemy stats, RNG, save format
 	├── lua: every Lua 4.0.1 chunk from NDMW.AFS, decompiled and organised by world/area
 	├── PROGRESS.md: how far the decompilation has got, rewritten on every push
 	├── LICENSE: CC0 1.0 for this project's own work
@@ -240,7 +239,7 @@ The full list of variables, with the default first:
 	├── build: output directory
 	└── Makefile: check, link, verify, report, progress
 
-`config/`, `data/`, `lua/`, `docs/findings/` and `PROGRESS.md` are written by the
+`config/`, `data/`, `lua/` and `PROGRESS.md` are written by the
 tools that own
 them (`make symbols`, `tools/jumptables.py`, `scripts/sync_data.sh`,
 `make progress`); `src/` and the prose docs are not.
@@ -270,7 +269,6 @@ the size bands, where in the binary the work has reached, and what metadata has 
 | Toolchain | MWCCPS2 3.0 `011126` via wibo at `-O3` for the game and engine; an alternate MWCC build and Sony EE GCC 2.96, content-pinned per unit — [`docs/engine/toolchain.md`](docs/engine/toolchain.md), [`docs/engine/unit-compilers.md`](docs/engine/unit-compilers.md), [`docs/engine/sd-prologue.md`](docs/engine/sd-prologue.md) |
 | Relink | all 4,541,184 bytes of the main section rebuild byte-identical to retail (`make link`); the object count and the from-source accounting are in [`PROGRESS.md`](PROGRESS.md) |
 | Documentation | [`docs/README.md`](docs/README.md) — the index of everything recovered so far |
-| Findings | claims in `docs/` cite numbered entries in the [findings register](docs/findings/README.md) |
 
 ## License and reuse
 
@@ -283,7 +281,7 @@ documentation in `docs/` — is dedicated to the public domain under [CC0 1.0](L
 change it and redistribute it for any purpose, commercial or not, without attribution.
 
 The **game-derived material** — the decompiled source (`src/`), the
-extracted metadata (`data/`, `findings/`) and the decompiled Lua (`lua/`) — is a derivative work of the retail game and is **not** covered by that dedication.
+extracted metadata (`data/`) and the decompiled Lua (`lua/`) — is a derivative work of the retail game and is **not** covered by that dedication.
 Copyright remains with the respective rights holders; it is included for preservation, research and
 interoperability. See [`LICENSE`](LICENSE) for the scope in full and [`NOTICE`](NOTICE) for the
 non-affiliation and trademark statement. No game binaries are distributed here — see

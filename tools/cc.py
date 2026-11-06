@@ -20,7 +20,7 @@ def scratch_dir():
     """This process's private temp folder, removed when it exits; every temporary file of the tools goes here.
 
     A compile under wibo costs time in proportion to the entries of the folder its object is written to, so
-    objects written straight to a shared /tmp slow every later compile as leftovers pile up (finding #3896).
+    objects written straight to a shared /tmp slow every later compile as leftovers pile up.
     """
     global _scratch
     with _scratch_lock:

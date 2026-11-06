@@ -1,6 +1,6 @@
 # Registry bootstrap and allocator-context lookup
 
-Finding [#896](../findings/findings-0751-1000.md#f896) recovers **17 complete bodies / 1,512 bytes** in
+**17 complete bodies / 1,512 bytes** are recovered in
 [registry-bootstrap.c](../../recovered/engine/registry-bootstrap.c): six contiguous
 registry-list methods, global registry initialization/shutdown, current context and
 five adjacent context dispatch wrappers, and two concrete record-lookup methods.

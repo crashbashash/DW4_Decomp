@@ -13,9 +13,9 @@ at that slot (data/vtables.json) - a superset of what one call can reach.
 | kind | sites | meaning |
 | --- | ---: | --- |
 | switch | 66 | `jr` of a recovered jump table (`config/SLUS-20836/jumptables.txt`): local control flow, not a dependency |
-| virtual | 346 | `lw vt,0(obj); lw fn,8+4*slot(vt); jalr fn`: reaches one of the slot's candidates below |
+| virtual | 368 | `lw vt,0(obj); lw fn,8+4*slot(vt); jalr fn`: reaches one of the slot's candidates below |
 | other | 0 | a function pointer from a table or argument, or a pattern the scan does not recognize |
-| **total** | **412** | the closure's `indirect` count |
+| **total** | **434** | the closure's `indirect` count |
 
 49 of the virtual sites use a slot that no vtable in data/vtables.json has (the highest slot there is 47): they load through an object whose first word is not a class vtable we know, or the pattern matched something else, and they have no candidate list. A hand check of four sites (two ordinary, two above the table) found real `lw vt,0(obj); lw fn,off(vt); jalr fn` calls with the slot computed correctly; the two high-slot ones call through a field of an Alchemy memory-pool object (`igAliasMemoryPool`, `MemoryContext`), whose vtables data/vtables.json does not list.
 
@@ -33,16 +33,16 @@ at that slot (data/vtables.json) - a superset of what one call can reach.
 | `igAliasMemoryPool_ManageAllocation` | 740 | 9 | 0 | 0 |
 | `MemoryContext_RemoveAllocator` | 556 | 9 | 0 | 0 |
 | `igAliasMemoryPool_PrintStatistics` | 456 | 8 | 0 | 0 |
+| `FUN_00386780` | 3876 | 8 | 0 | 0 |
 | `Gap__Bec__beFont__vfunc_34` | 4092 | 7 | 0 | 1 |
 | `Gap__Core__igObject__vfunc_31` | 1412 | 7 | 0 | 0 |
 | `beAction2FADESET_Start` | 1200 | 6 | 0 | 0 |
 | `beAction2_StartComponents` | 456 | 5 | 0 | 0 |
+| `Gap__Bec__beHitLandModel__vfunc_34` | 1444 | 5 | 0 | 0 |
 | `FUN_003ef1e0` | 996 | 5 | 0 | 0 |
 | `Gap__Bec__beNDMWMdlPEBase__vfunc_46` | 5676 | 5 | 0 | 0 |
 | `FUN_002d0c10` | 188 | 4 | 0 | 0 |
 | `Gap__Bec__beAction2__vfunc_33` | 2644 | 4 | 0 | 1 |
-| `Gap__Core__igObject__vfunc_25` | 280 | 4 | 0 | 0 |
-| `FUN_00383420` | 1260 | 4 | 0 | 0 |
 
 ## Virtual slots used by the closure
 
@@ -51,10 +51,10 @@ Candidates are the distinct functions at the slot across all vtables; the last c
 | slot | sites | functions | candidates | in game region | matched C | asm body | unmatched |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 22 | 59 | 26 | 144 | 135 | 125 | 0 | 10 |
-| 20 | 45 | 17 | 477 | 474 | 474 | 0 | 0 |
-| 23 | 24 | 17 | 53 | 48 | 44 | 0 | 4 |
+| 20 | 50 | 18 | 477 | 474 | 474 | 0 | 0 |
+| 21 | 33 | 18 | 91 | 85 | 77 | 0 | 8 |
+| 23 | 27 | 18 | 53 | 48 | 44 | 0 | 4 |
 | 33 | 20 | 13 | 18 | 16 | 12 | 0 | 4 |
-| 21 | 19 | 15 | 91 | 85 | 77 | 0 | 8 |
 | 24 | 18 | 9 | 39 | 33 | 32 | 0 | 1 |
 | 30 | 15 | 7 | 49 | 46 | 46 | 0 | 0 |
 | 35 | 13 | 5 | 18 | 15 | 14 | 0 | 1 |

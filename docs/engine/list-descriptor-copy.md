@@ -1,6 +1,6 @@
 # Inherited list storage-descriptor construction and copying
 
-Finding [#887](../findings/findings-0751-1000.md#f887) records **eleven complete bodies / 1,468 code bytes**, all with exact
+This recovery covers **eleven complete bodies / 1,468 code bytes**, all with exact
 matching source, plus portable guest-reference behavior in
 [list-descriptor-copy.c](../../recovered/engine/list-descriptor-copy.c).
 Four new exact functions add **800 bytes**: base descriptor copy 300, memory clone 116

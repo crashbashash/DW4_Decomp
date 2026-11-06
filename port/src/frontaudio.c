@@ -511,7 +511,7 @@ int dw4_frontaudio_script_service(void *user, const char *method, const dw4_scri
         }return 0;
     }
     /* BGMSTOP, ENVSTOP and SESTOP read no cue name (beSound::vfunc_34 cases 6, 7, 8): they stop the BGM handle, the ambience handle and
-     * the effect handles; only BGMSTOP clears the current BGM (finding #2763). */
+     * the effect handles; only BGMSTOP clears the current BGM. */
     if(!strcmp(method,"sd") && n>=4 && args[3].type==DW4_SCRIPT_STRING &&
        (!strcmp(args[3].string,"BGMSTOP") || !strcmp(args[3].string,"ENVSTOP") || !strcmp(args[3].string,"SESTOP"))){
         unsigned first=0,last=0;
@@ -565,7 +565,7 @@ int dw4_frontaudio_script_service(void *user, const char *method, const dw4_scri
             unsigned v=k;
             if(a->open_set){
                 if(a->type[k]!=1 && a->type[k]!=2){dw4_frontaudio_cue(a,tag);return 0;}
-                return stream_play(a,k);   /* retail stream player: current-BGM check, busy slot -> fade-down + delayed retry (#2762, #2768) */
+                return stream_play(a,k);   /* retail stream player: current-BGM check, busy slot -> fade-down + delayed retry */
             }else if(k>=a->cue_start){
                 if(a->cue_start!=2 || (a->type[k]!=1 && a->type[k]!=2)){dw4_frontaudio_cue(a,tag);return 0;}
                 v=strncmp(tag,"AM_",3)?0:1;

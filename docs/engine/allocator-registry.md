@@ -1,6 +1,6 @@
 # Allocator-owner lookup, encoded indices and allocation dispatch
 
-Finding [#894](../findings/findings-0751-1000.md#f894) recovers **13 complete bodies / 772 code bytes** in
+Recovery covers **13 complete bodies / 772 code bytes** in
 [allocator-registry.c](../../recovered/engine/allocator-registry.c): the contiguous
 owner/selector run, its list-search and default-getter dependencies, and three
 allocation wrappers. Eleven bodies / 692 bytes have exact source, among them the 140-byte
@@ -97,7 +97,7 @@ root, connecting the inherited-list descriptor copy chain to
 header copying and these allocator services. This does not infer unknown virtual
 receiver edges.
 
-Finding [#895](../findings/findings-0751-1000.md#f895) covers `tools/verify.py` relocation handling: MWCC can place a loop's
+`tools/verify.py` handles one relocation case specially: MWCC can place a loop's
 HI16 at a higher address than its paired LO16. Sorting relocations by address
 changes ELF table order and falsely leaves valid pairs unresolved, so the verifier
 preserves the table order. `tools/test_verify_relocations.py` reproduces the

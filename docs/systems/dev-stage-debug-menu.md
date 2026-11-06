@@ -9,8 +9,8 @@ stage-list captures) plus the original frames.
 `stag0000` is a **developer/debug world** present in the shipped retail disc. It is not a
 playable area: a wireframe-grid floor over a pink void, with debug characters and objects
 floating in the air, no generator entries loaded, and no level geometry beyond the grid.
-It loads cleanly by cold warp (verified in a 20-destination sweep) and is the only stage measured
-so far that is safe to enter from anywhere.
+It loads cleanly by cold warp (verified in a 20-destination sweep). No stage is unsafe in itself;
+see [Warp safety](#warp-safety).
 
 It appears exactly **once** as a `NEXTSTAGE` literal in the whole decompiled corpus, and
 it is *not* reachable through normal play — the hub's gate menu offers the four worlds,
@@ -30,6 +30,26 @@ build could do at runtime is exposed here as an in-world character you talk to.
 The RAM route that produced the state: the gate menu keeps pre-built `STAGECTL NEXTSTAGE`
 command records; re-point the record's `+0x00` (stage-name pointer) at another interned
 name and confirm the menu entry.
+
+A pre-built gate record, by offset from the name argument:
+
+| offset | value |
+|---|---|
+| `-0x18` | id `0xbe` |
+| `-0x10` | pointer to `STAGECTL` |
+| `-0x08` | player index `0xFFFFFFFF` |
+| `-0x04` | pointer to `NEXTSTAGE` |
+| `+0x00` | pointer to the stage name |
+| `+0x04` | 0 |
+| `+0x0c` | `0x08000603` |
+| `+0x10` | vtable `0x00535610` |
+| `+0x14` | `0x10000001` |
+| `+0x18` | 4 |
+
+There is one record per unlocked destination; find it where the `STAGECTL` pointer sits 0x0C before
+a `NEXTSTAGE` pointer. Addresses vary per state. A clean warp shows the destination's own
+`beGeneraterData` set with the source set gone; `dng102b3`, which the gate menu does not offer, comes
+up clean this way. Other RAM warps fail; see [What didn't work](#11-what-didnt-work).
 
 ## 3. The NPC roster
 
@@ -155,14 +175,40 @@ input press Cross --backend pad --ms 200
   menu has not been tested with one, so keep using the stick, which is known to work.
 * Loading is a normal stage load (~12 s to the banner). `stagGF01` shows the
   **"Guard Room / Goblin Fortress"** banner, so the destination is self-verifying.
-* **Confirming a name does warp there**, and the entry
-  position is the `I<0>` in `PLAYERPOINT SETGENERATEPOS` next to each `NEXTSTAGE` (every
-  screen here uses `I<0>`; the randomiser's `(name, pos)` question is about gate records,
-  not this menu).
+* **Confirming a name does warp there**, and every screen here enters at `I<0>`
+  (see [Stage name and entry point](#stage-name-and-entry-point)).
 * It is ASCII, so it needs no translation; the annotated captures carry a header only.
 * **Automating this menu** (to load a stage for a RAM dump) means talk → page forward →
   cursor down → select, then confirming from the game's own load log that the requested
   stage loaded; the pitfalls are in [`drop-tables.md`](drop-tables.md) §9.
+
+### Stage name and entry point
+
+`NEXTSTAGE` takes one argument, the stage name. The trailing int in
+`DMsetSD(..., "NEXTSTAGE", "<name>", N)` is the DM scheduler time, not a position: scripts issue one
+command at rising values, `NEXTSTAGE` always shares the value of its sibling `SETGENERATEPOS`, and
+changing it leaves a gate warp's outcome unchanged.
+
+The entry point is that sibling, `PLAYERPOINT SETGENERATEPOS "I<N>"`. `I<0>` is the normal entry (419
+sites) and `I<3>` the Main Lobby return (105 sites). Non-lobby, non-zero entries are few: `stag0102`
+`I<4>`, `stag0201` `I<4>` and `I<5>`, `stag0401` `I<6>`, `dngq1b1e` and `dngq3b1e` `I<1>`.
+
+### Warp safety
+
+No stage is unsafe in itself. The stage select enters `dng101b1` and `stagBS01` cleanly and
+`stagBS01` is playable, because it submits the full transition: `SETGENERATEPOS "I<0>"`, then
+`NEXTSTAGE`, then `LAYERCTL` and `ONCTRL`. Re-pointing the gate menu's Death Valley record at
+`dng101b1` crashes with repeating TLB misses, so a crash there says nothing about the destination.
+
+When testing a warp, confirm the stage on screen and allow over 90 seconds: a crash can come late,
+and a TLB count cannot see a stalled load. `0x006FF148` is not always a stage name; during a load and
+after `stagBS01` it holds other pointers.
+
+Warping cold into `stagBS01` does not soft-lock: the arena spawns its own boss and the encounter
+starts (boss HP bar, boss attacks). `f_apocaly` and its helper `f_bit` come from the arena's own
+scripts (`009-boss-apocaly.lua` generates `f_bit`), so the fight does not depend on the preceding
+stage. The arena is escapable: after the kill `001-exit-to-stagml11.lua` changes stage to `stagML11`
+once `g_dreturngate` is live.
 
 ## 7. The memcard dead end (why the patched disc can't be used normally)
 
@@ -219,3 +265,19 @@ The captures and savestates are working artifacts of the survey, not part of thi
    the same variable the retail "difficulty" option uses.
 4. `stag0000` also appears once as a `NEXTSTAGE` destination in normal scripts — find which
    script, and whether it is a leftover or a reachable path.
+5. Why does re-pointing the gate menu's Death Valley record crash ([Warp safety](#warp-safety))? The
+   cause is unproven: that record is the only one of four with no adjacent `PLAYERPOINT` record.
+
+## 11. What didn't work
+
+Two RAM warps fail, because a destination name is a filesystem node name and the engine loads that
+node's contents. The game keeps a RAM copy of the AFS tree, one record per stage, pointing at the same
+interned strings the scripts push.
+
+* **Renaming an interned string.** The new banner shows but a hybrid loads: two nodes claim one name,
+  the renamed node keeps its old children, and the source stage's generators stay resident. The only
+  clean case is renaming to the stage already resident.
+* **Re-pointing the pending-request slot after the request is registered.** The source is torn down,
+  but the load never finishes.
+
+The destination must be right before the request is built.

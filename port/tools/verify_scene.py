@@ -3,18 +3,18 @@
 
 `dw4asset scene` is not a second reader: it is the *loader*.  It walks a pack's id table, places
 every id's payload in one arena and records a 32-bit handle for it, then reads the geometry back
-through those handles — which is what the engine's own loader does (finding #423).  So three
+through those handles — which is what the engine's own loader does.  So three
 things have to hold, and this is where they are checked:
 
 1. **the arena is the file.**  `scene --check` asserts that every id is placed in order, exactly
    once, and that its payload is byte-for-byte the file's bytes for that id, and that every mesh
    handle resolves — 50,497 ids for the model pack;
 2. **the route is the game's.**  The same pack is opened the way the game reaches it —
-   `stag0102.igb`'s own `[0.621]` reference (finding #445), not an archive index — and that is
+   `stag0102.igb`'s own `[0.621]` reference, not an archive index — and that is
    what the OBJ comparison uses;
 3. **the references are the pack's ids.**  Every `igObjectRef`/`igMemoryRef` value is rewritten
-   from its id into a handle — the id -> pointer pass of finding #423 — with the kind taken from the
-   value's own descriptor (finding #482: type 0 is always an object id or NULL and type 7 always a
+   from its id into a handle — the id -> pointer pass — with the kind taken from the
+   value's own descriptor (type 0 is always an object id or NULL and type 7 always a
    pool-block id or NULL).  The loader counts this on the pack it loaded and the count must show
    **0 NEITHER**, which is the C-side check of that finding;
 4. **the meshes are the extractor's.**  `scene --out-dir` and `models --out-dir` and
@@ -85,7 +85,7 @@ def main():
         return 1
     print("  %s" % (line[0] if line else ""))
     print("  %s" % chk[0].strip())
-    # the id -> pointer pass (findings #423/#482): reference-typed values become handles, and no
+    # the id -> pointer pass: reference-typed values become handles, and no
     # value of a reference type is ever outside the id space
     if not ref or " 0 NEITHER" not in ref[0] or " 0 reference(s) rewritten" in ref[0]:
         print("  the id -> pointer pass did not report cleanly: %s" % (ref or "no line"))

@@ -78,8 +78,8 @@ def main():
 
         # the engine's boot: the three Insight managers from `FUN_002595e0`, each constructed the
         # way its matched `_Create` does (reflected size 0x20, its class's recovered vtable, flags
-        # 0x1).  The vtables are the classes' own, from the `<Class>_GetVTable` map (findings
-        # #359/#529); before #529 the schema knew only the 478 RTTI vtables, so these three fell
+        # 0x1).  The vtables are the classes' own, from the `<Class>_GetVTable` map;
+        # before the fix the schema knew only the 478 RTTI vtables, so these three fell
         # back to the base igObject vtable 0x52f0f0.
         mlines = [l.strip() for l in out.splitlines() if l.strip().startswith("manager ")]
         seen_mgr = {}
@@ -94,7 +94,7 @@ def main():
         } and all("created" in l and "flags = 0x1" in l for l in mlines))
         # the frame tick is FUN_0025a580's per-frame setup: the `+0x94`/`+0x9c` fields 0.1,
         # `+0xa0` 1.0, `+0x5e`/`+0xa8` 1, and `+0xe8` peaks at 1 because the context is one-shot
-        # (acquire -> run -> release every tick, finding #506).
+        # (acquire -> run -> release every tick).
         ulines = [l for l in out.splitlines() if "frame context acquire/release" in l]
         tick_ok = bool(ulines) and all(s in ulines[0] for s in (
             "+0xe8 peak = 1", "+0x94 = 0.10", "+0xa0 = 1.00", "+0x5e = 1", "+0xa8 = 1"))

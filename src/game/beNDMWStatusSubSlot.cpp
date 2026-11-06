@@ -15,7 +15,7 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_32(beNDMWStatusSubSlot *, char *, char
 }
 
 /* 0x00417fc0 - slot 31: equipment assignment for the sub slot.  beNDMWStatus_AssignEquipment
- * (finding #796: equip by shared item identity, toggle-off, chip-family
+ * (equip by shared item identity, toggle-off, chip-family
  * exclusion) takes the slot list (_subSlot), the entry position in it
  * (_kindListPos) and the index chosen in the device folder (_retCode; the asm
  * bounds-checks it against the list at +120, _deviceFolder).  The PowerSocket
@@ -25,8 +25,7 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_31(beNDMWStatusSubSlot *self, char *un
     beNDMWStatus_AssignEquipment(self, self->_subSlot, self->_kindListPos, self->_retCode);
 }
 
-/* 0x00418000 - slot 32: run the shared helper FUN_00412600 (finding #802,
- * the DEVICE row selection step; -1 is its "no row" case per the asm) over
+/* 0x00418000 - slot 32: run the shared helper FUN_00412600 (* the DEVICE row selection step; -1 is its "no row" case per the asm) over
  * the sub slot's list at the current list position, passing the first
  * argument through as the row index.  The other two arguments are unused. */
 void Gap__Bec__beNDMWStatusSubSlot__vfunc_32(beNDMWStatusSubSlot *self, char *index, char *unusedArg2, int unusedArg3)

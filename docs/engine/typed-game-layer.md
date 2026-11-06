@@ -20,17 +20,17 @@ that misses those forms understates the code.
 
 The scope measures **9,356 / 10,570 typed (88.51 %) over 1,160 functions**; `config/typed-scope-baseline.json` and
 `config/typed-scope.tsv` record that source set, and the 80 % scope target is satisfied. The figure includes the
-316-file typing pass ([typed coverage](typed-coverage.md#the-316-file-typing-pass), finding [#2723](../findings/findings-2501-2750.md#f2723))
+316-file typing pass ([typed coverage](typed-coverage.md#the-316-file-typing-pass))
 and the [title update recovery](title-menu-controller.md) (one function, 304 recovered accesses). The wider global gain
 of the 316-file pass primarily concerns engine code and registration functions excluded here; it does not imply another
-native subsystem has been retargeted. Receiver hypotheses are explicitly unconfirmed ([#2631](../findings/findings-2501-2750.md#f2631)-[#2722](../findings/findings-2501-2750.md#f2722)). Source recovery
+native subsystem has been retargeted. Receiver hypotheses are explicitly unconfirmed. Source recovery
 continues from the remaining byte-focused module work, not from extending the blanket typing pass.
 
 ## The `igObject` header
 
 The classes share the two-word `igObject` header: a vtable word at +0 and a reference-count word at +4.
 Reflection lists no field for `igObject`, so `config/SLUS-20836/authoritative-fields.tsv` records them with their
-evidence (finding [#2616](../findings/findings-2501-2750.md#f2616); the identifier `_refCount` is a name hypothesis, [#2617](../findings/findings-2501-2750.md#f2617)). `scripts/gen_type_headers.py` merges
+evidence (the identifier `_refCount` is a name hypothesis). `scripts/gen_type_headers.py` merges
 that overlay, so every class struct in `reflected.h` starts `int _vtable; unsigned int _refCount;` instead of
 `char _pad0[8]`, and `tools/typed_coverage.py` counts accesses through them. `scripts/retype_igobject_shims.py` replaces
 the file-private header structs with the reflected one (62 files) and leaves 4 C++ files as they were, because their
@@ -70,8 +70,7 @@ accessors, each with a behavior check against retail. The fight status/calc rule
   what they are.
 * A pointer-typed local declared first is the safe spelling for a followed reference: casting an `int` field at every use
   can change register allocation.
-* A class identity that rests on an offset fingerprint or a documented convention is a **hypothesis** (findings status
-  `unconfirmed`), not a recovered fact.
+* A class identity that rests on an offset fingerprint or a documented convention is a **hypothesis**, not a recovered fact.
 
 ## Reference-field targets
 
@@ -89,7 +88,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beAction2InfoWork._comData` | `beAction2Data` | docs/engine/action2-timing.md ("+0xc beAction2Data") and action2-jointset.md |
 | `beActionStarterInfo._modelList` | `igDataList` | of model records (+8 name, +12 data list; record class unidentified) |
 | `beActionStarterInfoRam._parentInfo` | `beActionStarterInfo` (hypothesis) | (hypothesis): BaseInfoRam._parentInfo; accessed +8 _name and +28 _modelList match beActionStarterInfo |
-| `beBaseInfoManager._insight` | `igInsightCore` | docs/engine/system-clock.md, finding [#773](../findings/findings-0751-1000.md#f773) (+20 _window, +80 _worldTime) |
+| `beBaseInfoManager._insight` | `igInsightCore` | docs/engine/system-clock.md (+20 _window, +80 _worldTime) |
 | `beBaseInfoManager._system` | `beSystem` | ; _messenger -> beMessenger; _infoList -> beBaseInfoList (FUN_0036aaf0): beBaseInfoManager_InitFields metaObjects |
 | `beBaseInfoRam._dataList` | `beBaseInfoDataList` | beBaseInfoRam_InitFields field 8 getter FUN_0036aec0 reads class handle 0x589e00; FUN_0036ae80 allocates that class |
 | `beBaseInfoRam._parentInfo` | `beBaseInfo` | beBaseInfoRam_InitFields field 1 getter FUN_0036ac80 reads handle 0x589de8 |
@@ -255,7 +254,6 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 * beMovie list items (arg1 info list) -> beMovieInfoData: class-handle cast DAT_00588760
 * beNDMWPanelWazaInfoWork._textSetList, ._textColorList -> igDataList-derived lists (List_Reserve/List_Resize/StringList_Resize callees); subclasses unidentified
 * beNDMWAfsSetup._infoList, beCri._infoList, beStaticInfoCtl._staticInfoList, beMatCtrl._wkMatOnList -> igDataList-layout lists (layout only; subclasses unidentified)
-* beSvUseCheckApi/beSvFileFindApi vfunc arg1 -> beSvDeliver (hypothesis, 3-offset fingerprint)
 * beMessengerArgData._boolList igBoolList 0x5868a8 -> : beMessengerArgData_InitFields sets the field's _metaObject from the getter reading class handle  (reflection class )
 * beMessengerArgData._intList igIntList 0x586880 -> : beMessengerArgData_InitFields sets the field's _metaObject from the getter reading class handle  (reflection class )
 * beMessengerArgData._floatList igFloatList 0x586808 -> : beMessengerArgData_InitFields sets the field's _metaObject from the getter reading class handle  (reflection class )
@@ -273,3 +271,30 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 ## Header coverage
 
 `scripts/check_scope_headers.py` (run by `make reflected-check`) verifies that every class named in `config/typed-scope.tsv` has its authoritative struct in `include/dw4/reflected.h`: **460 of 460** in-scope classes (`FUN` and `bePlayer` are not classes). The port includes that one header (`port/include/dw4/arena.h` consumers, `playerrecords.c`, `stageobjects.c`, `fightcalc.h`), and `scripts/check_port_struct_duplicates.py` guarantees no port struct redefines a reflected class.
+
+## Open questions
+
+All of these are unproven.
+
+* **Property record classes.** The class of each property record is taken from the template type of its property key. All 146
+  sites in `beNDMWGameRam::vfunc_34` resolve to a single key and all int-typed keys share one class, but a variable aliasing two
+  keys would be mistyped.
+* **Handler `arg1`.** The `arg1` of handler vfuncs is `beBaseInfoRam` or a subclass. The best evidence is `beSelectCtrl::vfunc_33`
+  (eight offsets and widths: 8, 12, 20, 24, 28, 32, 36, 40) and `beNDMWTitle2::vfunc_34` (+24..+36 and +40), plus the shared
+  `igProperty_FindByName(arg1+40, DAT_00585be0)` lookup, the `vfunc_31` `(this, ram)` convention and
+  `beMessenger_RegisterReceiverFromInfo` (+8 `_ramNo`, +12 `_parentInfo`, parent +8 `_name`). Many other sites rest on one or two
+  offsets and the shared signature, and concrete model-info subclasses have no reflected struct. Unrelated classes share these
+  offsets and RTTI does not confirm it. Not applied in `beNDMWPanelWaza::vfunc_29` or `beNDMWMdlPlayer2::vfunc_36` (two offsets).
+* **`beNDMWMdlPlayer2::vfunc_38` work record.** Its byte +236 and int +240 fit `beNDMWMdlPlayer2InfoWork._isPowerOn`/`_timerCount`
+  on two offsets only. Not applied.
+* **List element classes**, from the list name and offsets: `beActionStarter` elements are `beActionStarterData2` (fingerprint);
+  `beTimerDataList` elements are `beTimerData` (+8 `_startTime`, +16 `_resetCondition`, +20 `_callLuaFile`, +24 `_downTimer`);
+  `beNDMWItemBaseList` elements are `beNDMWItemBase` (+16 `_isEquip`).
+* **`beAction2._switch` target.** Not identified. `beAction2FADESET_Start` reads it as a local view, `Action2SwitchBits`, with a
+  bit-word list at +32.
+* **Save API `arg1`.** It is `beSvDeliver`, by the fingerprint +16 `_targetConnect`, +24 `_result`, +44 `_isEndOperat` (one-byte
+  bool), +64 `_platformData`, and the API semantics. Among game classes the fingerprint is unique; `beSvFileFindApi` `vfunc_21`
+  stores +64 into `DAT_0058a600`, which `vfunc_22` uses as `beSvPlatBaseData`. Applied in `beSvFileFindApi` `vfunc_21`/`23`,
+  `beSvFileMakeApi` `vfunc_23` and `beSvUseCheckApi` `vfunc_21`/`23`. Not applied in `beSvReadMediaApi`, `beSvEndApi`,
+  `beSvStartApi`, `beSvWriteMediaApi` and `beSvFormatApi` `vfunc_23` or `beSvGetFreeSizeApi` and `beSvFormatApi` `vfunc_21`, which
+  show too few offsets or also fit `igAdxFile` and `igMediaFile`.

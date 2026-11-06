@@ -1,4 +1,4 @@
-/* platform.h -- the platform seam (porting P2.1; finding #497).
+/* platform.h -- the platform seam (porting P2.1).
  *
  * The engine is written against **generic** platform classes and the PS2 implementations sit under
  * them, so a port implements the generic side and everything above it runs unchanged.  The seam is

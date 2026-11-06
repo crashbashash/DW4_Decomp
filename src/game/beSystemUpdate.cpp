@@ -38,7 +38,7 @@ extern int g_defaultAllocatorSelector[4];
 /* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used as returned instead
  * of the selector. */
 extern unsigned char GPR_00554c14;
-/* File-context calls, named by findings #3163-#3168: FUN_003092f0 requests a directory by name,
+/* File-context calls, named by FUN_003092f0 requests a directory by name,
  * FUN_00309740 tells whether it has loaded, FUN_00309750 releases the request, FUN_00308e00 closes
  * the context; __floatdisf converts the 64-bit frame delta to float (Int64ToFloat). */
 float __floatdisf(long long);

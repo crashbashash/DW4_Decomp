@@ -4,7 +4,7 @@ Behavioral recovery of the retail code that decides **when a model-controller AC
 finishes**: the WAIT/WAITCHECK component, the named timer it arms, the JOINTSET
 completion path, the node clock they share, the float-to-integer conversion under all
 of them, the component walker and per-frame driver, and the `ISCOMEND` predicate the
-sequence layer polls (findings [#761](../findings/findings-0751-1000.md#f761)–[#767](../findings/findings-0751-1000.md#f767)).
+sequence layer polls.
 The C is an executable reference, not newly byte-matched compilation units; nothing
 here is banked into `src/`.
 
@@ -40,7 +40,7 @@ driver calls `*_Update` with exactly `(mgr, act)`. `mgr+0xc` is the engine syste
 int64 clock is at `+0x50`; `mgr+0x14` is the messenger. The `a2_*` names are the C
 reference's, not committed symbols: no retail name for the timer group or the
 conversion has evidence beyond the property names `WAIT` (`0x50dfd8`) and `FADE`
-(`0x50dfe0`), so they are recorded as hypotheses in the findings register.
+(`0x50dfe0`), so they remain hypotheses.
 
 ## The time model
 
@@ -59,6 +59,11 @@ time  = ((int64)(f * scale) << 18) + bias       # scale: node +0x78 / timer +0x1
 magnitude of 2^64 or more saturates to 2^64 − 1 (so `-x` becomes 1); magnitudes between
 2^63 and 2^64 wrap as unsigned; denormals and negative zero convert to 0. This is
 verified against retail for every exponent, both signs and several mantissa classes.
+
+`FUN_00398ef0` writes a `beModelCtrlNode2`'s cached time at node `+112` (`_time`) separately,
+from the effective time `0x00398e80` calculates. A paused snapshot can stop mid-update
+(`0x003f6490` updates child windows recursively within one call), so a partial snapshot does
+not show a cache or delay defect.
 
 ### Floating point is not host floating point
 
@@ -207,7 +212,7 @@ The interpreter checks itself first on hand-assembled programs (64-bit variable 
 - **Clock scheduling and resets.** The source chain and nanosecond quantization are
   now supported by static code and two independently checked logo savestates; see
   [system clock](system-clock.md). The handoff reports variable steps near 60 Hz.
-  Normal scheduler order and timer reset/pause methods are now verified ([#772](../findings/findings-0751-1000.md#f772)–[#774](../findings/findings-0751-1000.md#f774)).
+  Normal scheduler order and timer reset/pause methods are now verified.
   Game-pause/stage routing, allocation defaults, message-driven starts and the exact
   displayed completion frame remain open.
 - **The full EE FPU model** (truncation, denormal flush, saturation, `div` by zero)
@@ -226,7 +231,7 @@ The interpreter checks itself first on hand-assembled programs (64-bit variable 
   replacement/sequence dispatch and other models remain outside this recovery.
   The duration was checked in stock-emulator savestates; complete timing equivalence was not.
 
-## Native integration ([#769](../findings/findings-0751-1000.md#f769)–[#770](../findings/findings-0751-1000.md#f770))
+## Native integration
 
 The logo's Action2 components are extracted from AREA 620, including the original
 frame values as f32 bit patterns. A bounded native adapter runs this reference's

@@ -116,6 +116,13 @@ The capture manifest and `phase-root-clocks.{json,tsv}` retain that scope.
 Four-root checks, full authored views, root retail states,
 eight factory identities, normal boot/SDL STATUS and prepared ASan/UBSan pass.
 
+The first middle-frame background mismatch (retail GS interval 112, native live tick 2158) is a
+pose-time difference, not missing foreground or background geometry. All 948 live foreground/font
+triangles match in order, and a separate diagnostic with `i_stback` at the observed node time
+130809856 reproduces all 267 retail background triangles. Retail initialization spans presentation
+steps, while native rational 60 Hz stepping is agreed policy. Separately sampled background and
+live foreground must not be combined into a whole-frame parity claim.
+
 ### Root title identities
 
 Original registration/factory traces show `3b3c80` creates Title00, `3b3ac0` Title01,

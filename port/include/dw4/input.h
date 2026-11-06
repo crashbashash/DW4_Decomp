@@ -3,7 +3,7 @@
  * The engine reads a controller through the platform seam (`igPsx2Controller` /
  * `igPsx2ControllerManager`, porting P2.1).  A host pad is filled here: the *window* layer forwards
  * raw SDL events as portable `DW4_BTN_*`/`DW4_AXIS_*` codes, and this layer applies the **game's own
- * mapping** (finding #605/#606 and `docs/reference/game-reference.md`):
+ * mapping**:
  *
  *   Cross = confirm/attack   Circle = cancel/jump   Square = guard
  *   L1 = item window         R1 = MP technique      R2 = status effects   Start = status screen

@@ -7,7 +7,7 @@ a property the barrel did not need: **the recovered camera**, which places a pac
 same screen pixel as the GS vertex it became.  So the pairing here is by **projected screen
 position** (median residual < 0.1 px), and the UV is then used to *check* the pairing, not to make
 it: every pack candidate at the same (position, quantised UV) gives the same model colour, so the
-pairing is unambiguous (finding #583).
+pairing is unambiguous.
 
 The projection must mirror `DW4_Port/src/render.c` exactly, including the sign convention
 (`dw4asset.c` negates the view's third row because `cam_project` divides by `+z`); the *un*-negated
@@ -35,7 +35,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import gsdump  # noqa: E402
 
-# The live rig (finding #564): one directional light, L = -igLightAttr._direction.
+# The live rig: one directional light, L = -igLightAttr._direction.
 LIVE_L = (-0.3214, 0.8660, -0.3830)
 LIVE_AMB = (0.25, 0.20, 0.35)
 LIVE_DIF = (1.20, 1.15, 1.20)

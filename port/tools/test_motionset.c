@@ -1,6 +1,6 @@
 /* The Action2 host starts each MOTIONSET when the component walk reaches it (beAction2_StartComponents -> beAction2MOTIONSET_Start, 0x377340), and a
  * `WAITCHECK Motion` holds the walk until THAT motion has played out (beAction2WAITCHECK_Update, A2_WAIT_MOTION). An action with several MOTIONSETs
- * separated by Motion waits therefore plays them in order (finding #3005: Mammothmon's ACTN03 is actn03 1.517 s, wait, actn04 0.05 s, wait; the port used
+ * separated by Motion waits therefore plays them in order (: Mammothmon's ACTN03 is actn03 1.517 s, wait, actn04 0.05 s, wait; the port used
  * to register both at the start so only the last played and the sequence lasted 3-5 ticks).
  *   host level:   fixed programs with known durations (order, durations, consecutive MOTIONSETs, a MOTIONSET behind a Frame wait, one motion unchanged)
  *   pack level:   the retail Mammothmon pack (needs the extracted assets) still reads ACTN03 as four components, two of them MOTIONSETs. The sequence span itself
@@ -80,7 +80,7 @@ static void host_level(void)
     assert(seen[0]>=19 && seen[0]<=22 && done>=seen[0]+t1 && done<=seen[0]+t1+3);
     /* A blend leaves two states in the combiner until it has run out, and the Motion wait only proceeds with one state (beAction2WAITCHECK_Update case 2;
      * the old state is removed once elapsed >= the blend time, FUN_001ac140): the wait ends at max(length, blend) after the motion started. Mammothmon's
-     * ACTN03 is actn03 (hokan 8 frames) then actn04 (12 frames, a 0.05 s animation): 1.517 s + 0.2 s = 103.02 ticks, retail 103.0-103.1 (finding #3012). */
+     * ACTN03 is actn03 (hokan 8 frames) then actn04 (12 frames, a 0.05 s animation): 1.517 s + 0.2 s = 103.02 ticks, retail 103.0-103.1. */
     dw4_action2_component mammos[]={motionb("actn03",first,"OS",8),waitc("Motion",0),motionb("actn04",second,"OS",12),waitc("Motion",0)};
     done=run(mammos,4,names,2,seen);
     int tb=(int)((first+200000000LL)/TICK);   /* 103 */

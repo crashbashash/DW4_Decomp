@@ -85,7 +85,7 @@ class RetailTable(unittest.TestCase):
         text = exception_records.format_table(exception_records.scan(image, functions))
         self.assertEqual(text, Path(exception_records.CONFIG_DEFAULT).read_text())
         table = exception_records.load()
-        # finding #1061's anchors
+        # the anchors
         self.assertEqual(table[0x3fca10], (0x553b80, 0x544fd4, 0x1a0))
         self.assertEqual(table[0x407120], (0x553bd4, 0x545174, 0x28))
         self.assertEqual(table[0x1005f0], (0x546fd4, None, 0))

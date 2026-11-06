@@ -63,7 +63,7 @@ dw4_action2_record dw4_action2_host_records(const dw4_action2_host *);
 void dw4_action2_host_snapshot(const dw4_action2_host *,unsigned char out[DW4_A2_BYTES]);
 void dw4_action2_host_motion(dw4_action2_host *,int64_t start,int64_t duration,int loop);
 /* Current/previous sampler names and blend duration belong to animation records. A blend > 0 over a previous motion keeps the combiner at two states until start + blend
- * (the WAITCHECK Motion cannot end earlier; finding #3050). */
+ * (the WAITCHECK Motion cannot end earlier). */
 int dw4_action2_host_motion_name(dw4_action2_host *,const char *,int64_t blend);
 void dw4_action2_host_start(dw4_action2_host *,int action,int64_t clock);
 /* Components are copied; borrowed strings need survive only this call. */

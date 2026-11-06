@@ -24,12 +24,12 @@ Templates (`--only NAME` to run one):
 `guard`, `wcall`, `wload` and `wargs` write a `.cpp`, and both reasons are codegen,
 not taste — MWCC picks the language from the file extension:
 
-* `guard` needs a *named* C++ `bool`; only C++ has the type (finding #312).
+* `guard` needs a *named* C++ `bool`; only C++ has the type.
 * `wcall`/`wload`/`wargs` are the frame-keeping single-call wrappers, and **MWCC
   keeps the frame in C++ mode but turns the same source into a `j` tail call in C
-  mode** (finding #314). The 1,085 wrappers only reproduce as C++. `wargs`
+  mode**. The 1,085 wrappers only reproduce as C++. `wargs`
   generalises the argument setup; its decode relies on the R5900 convention of
-  passing the first EIGHT integer arguments in a0-a3 then t0-t3 (finding #332).
+  passing the first EIGHT integer arguments in a0-a3 then t0-t3.
 
 `Makefile`, `tools/check.py` and `tools/linkgen.py` all treat `src/<name>.cpp` as a
 source unit.
@@ -40,7 +40,7 @@ source unit.
   fzero        sw zero,OFF(a0); jr ra; move v0,a0      -> int *f(int *p) { *(int*)((char*)p+OFF)=0; return p; }
   thunk        j TARGET   (no prologue)                -> int f(a...) { return TARGET(a...); } tried at arity 1..4
   tsetup       j TARGET; <delay-slot setup>            -> void f(...) { [store;] TARGET(...); }, setup decoded from the delay slot
-               (move/li/lw/addiu/addu into an argument, or a store before the jump; findings #391)
+               (move/li/lw/addiu/addu into an argument, or a store before the jump)
 
 Caveat worth stating loudly: **matching proves the code, not the types.** A 4-byte
 return load is byte-identical whether the source said int, unsigned, float or a
@@ -151,7 +151,7 @@ def eff_addr(hi, off, is_addiu):
     objdump prints an `addiu` immediate already sign-extended (`-24064`) but an
     `ori` immediate as the raw 16-bit value (`0x52b0`, and 0xa200 for what is really
     -24064). Applying the sign correction to both — as this pipeline did until
-    finding #323 — shifts every address whose `%lo` half has bit 15 set down by
+ — shifts every address whose `%lo` half has bit 15 set down by
     0x10000, silently misnaming half the globals.
     """
     if is_addiu:
@@ -171,7 +171,7 @@ def call_args(n):
     return ", ".join("a%d" % i for i in range(n))
 
 
-# Parameters 5-8 live in the hardware t0-t3 (finding #332), which C spells a4-a7.
+# Parameters 5-8 live in the hardware t0-t3, which C spells a4-a7.
 # `call_args`/`params` only reach a3, so the tail-call setup needs the full eight.
 REG8 = ["a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7"]
 HWREG = {"a0": "a0", "a1": "a1", "a2": "a2", "a3": "a3",
@@ -187,7 +187,7 @@ def tsetup_source(name, callee, last):
     """C for a tail call whose delay slot sets up an argument: `j T ; <setup>`.
 
     m2c drops this delay-slot instruction from the candidate, so the call loses the
-    argument the target is actually given (the 8-byte near-misses of finding #391).
+    argument the target is actually given (the 8-byte near-misses).
     The setup is a single instruction -- a register move, a constant, a field load,
     an address add, or a store that runs just before the call.  Registers the setup
     does not touch are passed through unchanged, so they are still forwarded.
@@ -254,7 +254,7 @@ NEXT_SYM = {}
 # Templates whose output must be compiled as C++ (MWCC decides by extension).
 CPP_TEMPLATES = {"guard", "wcall", "wload", "wargs"}
 
-# ---- the generalised frame-keeping wrapper (finding #332) ------------------
+# ---- the generalised frame-keeping wrapper ------------------
 # The R5900 C calling convention passes the first EIGHT integer arguments in
 # a0-a3 followed by t0-t3, not the O32 four, so a wrapper that forwards more than
 # four arguments sets t-registers (measured: MWCC emits `li t0,4` for the fifth
@@ -485,7 +485,7 @@ def gen(name, cand, va=None):
     mn = [m for m, _, _ in ins]
     out = []
 
-    # ---- the flag-guard family (finding #312) -----------------------------
+    # ---- the flag-guard family -----------------------------
     # 18 instructions, 72 bytes:
     #   addiu sp,-16 ; lui at,HI ; sd ra ; lw v0,OFF(at) ; beqz v0,CALL ; nop
     #   lw v0,36(v0) ; andi v0,v0,4 ; sltu v0,zero,v0 ; bnez v0,END ; nop
@@ -513,7 +513,7 @@ def gen(name, cand, va=None):
             gname = "DAT_%08x" % glob
             # The global is declared as a 16-byte ARRAY so MWCC addresses it
             # absolutely (`lui at` + `lw`) like retail; as a plain pointer it is
-            # small data and goes gp-relative. See finding #311.
+            # small data and goes gp-relative. See.
             out.append(("guard",
                         "struct G { char pad[%d]; int f; };\n"
                         "extern struct G *%s[4];\n"
@@ -581,7 +581,7 @@ def gen(name, cand, va=None):
 
     # plain setter: jr ra ; sw/sb/sh/sd aX,OFF(aY), or a zero store.  The width
     # comes from the mnemonic -- m2c widens a byte store to a word and emits
-    # dsll32/dsra32/sw, which is the near-miss class of finding #391.
+    # dsll32/dsra32/sw, which is the near-miss class.
     if len(ins) == 2 and mn[0] == "jr" and mn[1] in ("sw", "sb", "sh", "sd"):
         off, base = mem(ins[1][1])
         val, _, _ = ins[1][1].partition(",")
@@ -608,7 +608,7 @@ def gen(name, cand, va=None):
                 out.append(("fset", "void %s(int *p, float a1)\n{\n    *(float *)((char *)p + %d) = a1;\n}\n"
                             % (name, off)))
 
-    # ---- frame-keeping one-call wrappers (finding #314) -------------------
+    # ---- frame-keeping one-call wrappers -------------------
     # MWCC's C front end turns `void f(void){ X(); }` into a 2-instruction tail
     # call; its C++ front end keeps the frame. These two shapes are the retail
     # wrappers, so they must be compiled as C++ (.cpp).
@@ -653,7 +653,7 @@ def gen(name, cand, va=None):
                             "    %s(DAT_%08x);\n"
                             "}\n" % (arg, callee, name, name, callee, arg)))
 
-    #  wargs: every other argument setup, decoded from the retail shape (finding #332)
+    #  wargs: every other argument setup, decoded from the retail shape
     if va is not None and wrapper_shape(ins) is not None:
         wsrc = wrapper_source(name, va, ins)
         if wsrc:
@@ -674,7 +674,7 @@ def gen(name, cand, va=None):
             out.append(("gget", "%s %s(void)\n{\n    return *(%s *)0x%08x;\n}\n"
                         % (ct, name, ct, addr)))
             # The same read through a named symbol: MWCC keeps the base in the destination-side scratch (`lui v1`) instead
-            # of `$at`, which is how the literal and symbol spellings differ (finding #307).
+            # of `$at`, which is how the literal and symbol spellings differ.
             out.append(("gget", "extern %s DAT_%08x;\n%s %s(void)\n{\n    return DAT_%08x;\n}\n"
                         % (ct, addr, ct, name, addr)))
 
@@ -711,7 +711,7 @@ def gen(name, cand, va=None):
             out.append(("jload", "int %s(int *p)\n{\n    return %s(*(int *)((char *)p + %d));\n}\n"
                         % (name, tn, off)))
 
-    # tail call with a delay-slot argument setup: j TARGET ; <setup>  (finding #391).
+    # tail call with a delay-slot argument setup: j TARGET ; <setup>.
     # m2c drops this setup, so the candidate loses the argument the target is given.
     if len(ins) == 2 and mn[0] == "j":
         t = BR.match(ins[0][1])

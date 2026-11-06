@@ -5,12 +5,11 @@ The retail ELF was built with **per-file** optimisation flags. The flag set of a
 is its unit's profile in config/SLUS-20836/units.tsv (tools/unitprofiles.py); this table holds
 the per-function **overrides** of that profile. The discriminator is often MWCC's `,p`
 peephole sub-flag, which changes how an integral float literal is materialised
-(finding #646): `beAction2JOINTSET_Start` needs `,p` (the IEEE-754 bits are loaded
+: `beAction2JOINTSET_Start` needs `,p` (the IEEE-754 bits are loaded
 directly, `lui`/`ori`/`mtc1`), while `FUN_0015e130` needs it *off* (`,p` rewrites its
 popcount into a different, longer shape). The flag lives in a table rather than a
 source pragma because `,p` has no source-level equivalent: `#pragma peephole`,
-`#pragma opt_peephole` and `#pragma optimization_level` are all ignored (measured,
-finding #646).
+`#pragma opt_peephole` and `#pragma optimization_level` are all ignored (measured).
 
 The table is a committed, hand-authored overlay (like `config/SLUS-20836/names/*.tsv`):
 

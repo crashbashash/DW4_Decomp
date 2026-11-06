@@ -1,7 +1,6 @@
 # Allocator builder and metadata-name selection
 
-Finding [#899](../findings/findings-0751-1000.md#f899) recovers the complete2,064-byte context slot204 builder in
-[allocator-builder.c](../../recovered/engine/allocator-builder.c), plus its active
+[allocator-builder.c](../../recovered/engine/allocator-builder.c) recovers the complete 2,064-byte context slot 204 builder, plus its active
 object-system metadata-name lookup60 and default-system wrapper16. Three bodies /
 2,140 bytes are behaviorally recovered. The two lookup helpers /76 bytes have
 matching source, the default wrapper's16 exact bytes among them. The builder retains

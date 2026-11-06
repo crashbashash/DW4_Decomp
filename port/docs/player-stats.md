@@ -9,6 +9,10 @@ remains disabled until concrete submenu and restoration integration is verified.
 
 ## Ownership and inputs
 
+The `GAMERAM RECALCPLAYER` bool is optional and defaults to true: the receiver (`3fcb80`)
+passes `GetBoolCount > 0 ? GetBool(0) : TRUE` as `3fab90`'s third argument. That argument
+gates every equipment-bonus helper: eleven per-stat sites and the two tail sections.
+
 `dw4_playerstats_recalculate_base` is retail `3fab90` with its third argument clear
 (`GAMERAM RECALCPLAYER` with an explicit false): no equipment bonus is applied and the
 delay/accuracy/extras and element/weapon/model sections are skipped, leaving the stats,
@@ -39,7 +43,7 @@ are valid. These records do not yet supply Lua typed-object results or save I/O.
 POWERSOCKETNAME contains only non-null weapon models, in socket order, matching
 retail's compact string list rather than inserting empty placeholders.
 
-## Recovered arithmetic ([#797](../../docs/findings/findings-0751-1000.md#f797))
+## Recovered arithmetic
 
 Growth helpers `0x003fa3b0` and `0x003fa850` use the first level ceiling at least
 the current level. Growth is `initial + UPCNT + grow * factor / 100`, with signed
@@ -71,7 +75,8 @@ HP is set to MHP when old HP is zero or above the new maximum. MP is set to MMP
 when **old HP is zero**, or old MP is above its maximum. This preserves the retail
 cross-field condition, including MP zero with nonzero HP remaining zero.
 NEXTEXP is zero at level 999; otherwise the wrapped word expression is
-`level * 200 + (level + 140) * level * level`. Attack delay caps above at 70.
+`level * 200 + (level + 140) * level * level`; retail gives 341 at level 1 and
+968 at level 2. Attack delay caps above at 70.
 Critical/evasion/stun-resistance minima are one. Evasion and CHOHATURITSU share
 the same computed value. Attack element is the first recognized power-pocket
 ZOKUSEI (`fire`, `ice`, `thunder`, `dark`), otherwise -1.

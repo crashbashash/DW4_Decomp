@@ -15,7 +15,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
 
-# pinned from docs/engine/platform-seam.md (findings #497); regenerate that doc and update these
+# pinned from docs/engine/platform-seam.md; regenerate that doc and update these
 # three numbers together, never one alone
 EXPECT_CLASSES = 31          # igPsx2* classes under a generic interface (igPsx2IopRpcConnection is
                              # not: it derives from igObject and is deleted on a port)

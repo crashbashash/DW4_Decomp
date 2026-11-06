@@ -2,7 +2,7 @@
 """verify_models.py — diff the C model reader against the repository's Python decoder.
 
 The port's `dw4asset models` and DW4_Decomp/scripts/igb_models.py implement the same rules
-(the geometry chain of finding #477 and the 4-byte pool alignment of finding #478), so they
+(the geometry chain and the 4-byte pool alignment), so they
 must agree on every geometry attribute of a model pack: the stream ids, the counts and the
 OBJ bytes (positions, UVs and triangles).  This is the model half of `make check`, and the
 OBJ diff is what makes it strong -- a wrong stream offset or a triangle rule shows up as

@@ -12,7 +12,7 @@ Builds a draw (by TEX0) as triangles in GS screen space and rasterises them with
 
 The three together separate the two halves of the pixel pipeline: `shade` is what the VU1 lighting
 produced, `texel` is what the sampler read, and `frame` is the result.  Comparing `shade`/`texel`
-against the port isolates *which* half is wrong (findings #583/#584/#585).
+against the port isolates *which* half is wrong.
 
 Usage:
 
@@ -48,7 +48,7 @@ BOXES = [("floor", (260, 330, 420, 420)), ("wall", (120, 60, 250, 110)),
 # table the 8-bit texture swizzle uses) interleaves them.  Taking the blocks row-major instead puts
 # every 8x8 block in the wrong place: the decoded frame is the right picture with each block
 # displaced, which reads as an 8-pixel "checkerboard" scramble and cost a session of per-pixel
-# analysis (finding #588). Within each block, GS columnTable32 interleaves
+# analysis. Within each block, GS columnTable32 interleaves
 # two rows at a time; row-major words also scramble the pixels.
 _BLOCK32 = [[0, 1, 4, 5, 16, 17, 20, 21], [2, 3, 6, 7, 18, 19, 22, 23],
             [8, 9, 12, 13, 24, 25, 28, 29], [10, 11, 14, 15, 26, 27, 30, 31]]
@@ -138,7 +138,7 @@ def main():
         # cross-product form puts the *third* vertex's weight in the first expression, so the
         # three must be paired back as (wa, wb, wc) = (w2, w1, w0); pairing `w0` with `p` instead
         # swaps the first and third corners, which mirrors every interpolated attribute (finding
-        # #586).
+        #).
         wc = ((bx - ax) * (PY - ay) - (PX - ax) * (by - ay)) / det
         wb = ((PX - ax) * (cy - ay) - (cx - ax) * (PY - ay)) / det
         wa = 1.0 - wc - wb

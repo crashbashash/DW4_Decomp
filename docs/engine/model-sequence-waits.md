@@ -1,7 +1,7 @@
 # Model-sequence JUMP and WCHECK
 
 The contiguous four-body group `0x00394ae0..0x00394f98` is behaviorally
-recovered in `recovered/frontend/modelwait.{c,h}` (findings [#759](../findings/findings-0751-1000.md#f759)–[#760](../findings/findings-0751-1000.md#f760)).
+recovered in `recovered/frontend/modelwait.{c,h}`.
 These are executable references, not newly byte-matched compilation units.
 
 | Entry | Bytes | Reference contract after API |
@@ -86,7 +86,7 @@ and validation. This slice does not establish retail action timing or pixels.
 Native `make check` and `make check-retail`
 pass, as do address/undefined-behavior sanitizer title tests (leak detection
 disabled). The load-interface verifier retains 11 direct + 432 message + 1,045
-update cases, including [#742](../findings/findings-0501-0750.md#f742), two-argument `0x003de260`, and Cross/Circle behavior.
+update cases, including, two-argument `0x003de260`, and Cross/Circle behavior.
 Window presentation and live-dump pose/fog tests skip without their prerequisites,
 and the host Vulkan test reports its backend unavailable where there is none.
 No console comparison covers this slice.

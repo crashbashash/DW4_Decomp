@@ -8,7 +8,7 @@ Three matched bodies are folded in [matching source](../../src/engine/list-servi
 the pre-existing eight-byte -1 default remains under its generic name. Ten
 further bodies match in per-function files under `src/unmatched/`. The two range
 insertions, `List_InsertBytes` (`0x2d6810`, 232 bytes) and `List_InsertWords`
-(`0x2d6b80`, 220 bytes), have no C source yet. Finding [#864](../findings/findings-0751-1000.md#f864) records this work.
+(`0x2d6b80`, 220 bytes), have no C source yet.
 
 ## Primitive contracts
 

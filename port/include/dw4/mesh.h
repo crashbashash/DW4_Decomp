@@ -2,7 +2,7 @@
  *
  * Both front ends need them — `dw4asset models` (walking a pack *file*, src/models.c) and
  * `dw4_scene` (walking a loaded *arena*, src/scene.c) — and they must agree byte for byte, so
- * they are written once here rather than twice.  The rule is findings #455/#457/#458/#477:
+ * they are written once here rather than twice.  The rule:
  *
  *   primType 4 (strip)  a `_stripLengths` array of u32s; `sum(lengths) == _numVerts`; primitive
  *                       k uses vertices [off, off+L), off += L, and contributes L-2 triangles

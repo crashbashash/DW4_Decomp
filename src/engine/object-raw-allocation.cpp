@@ -6,7 +6,7 @@
  * bytes slot. */
 extern "C" {
 /* libc-style allocation fallback taking the total size (docs/engine/field-factories.md,
- * "Raw allocation"); finding #3189 suggests the name Memory_AllocateFromGlobalHeap. */
+ * "Raw allocation"). */
 char *FUN_00126308(int);
 /* Default allocator provider: selector in, allocator object (or null) out. */
 void **Memory_GetAllocatorBySelector(...);

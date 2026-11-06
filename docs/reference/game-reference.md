@@ -234,7 +234,7 @@ digivolution byte. Full detail, grant sites and open items in that document.
 
 | Zone | Regions | Dungeons | Bosses |
 | --- | --- | --- | --- |
-| **Death Valley** | Goblin Pass, Abyss of Grief, Numenume River, Dome Base | Humid Cave, Cliff Dungeon, Goblin Fortress, Doom Dome | Blossomon, Mammothmon, Mecha Rogue (Type-3), Apokarimon (zone boss) |
+| **Death Valley** | Goblin Pass, Abyss of Grief, Numenume River, Doom Dome | Humid Cave, Cliff Dungeon, Goblin Fortress, Dome Base | Blossomon, Mammothmon, Mecha Rogue (Type-3), Apokarimon (zone boss) |
 | **Dry Land** | Mummy Desert, Grief Wasteland, Storm Train, Power Plant, Station X | Sand Labyrinth, Ancient Ruins, Virus Lab | SkullGreymon, Scorpiomon, Malomyotismon |
 | **Venom Jungle** | GekoGeko Land, Mangrove Forest, Venom Swamp, Dread Note | Geko Path, Vine Tunnel, Vein, Dread Bridge | ShogunGekomon, Mecha Rogue (Type-4), Diaboromon, Lucemon |
 | **Machine Pit** | Battle Arena, Black Core, Inside the Black Core | Machine Pit, Electro Mine, Item Road (side quest), Mecha Nest | Mecha Rogue (Type-5), LordKnightmon, **Mecha Rogue X** (final boss) |
@@ -242,6 +242,41 @@ digivolution byte. Full detail, grant sites and open items in that document.
 Other named playfields: Apokarimon's Space, Geko Path, Vein, Barbaric Cave,
 Forbidden Dungeon, Undead Yard, Captive Dungeon, Legendary Coliseum, Trading
 Hall, Junk Shop areas.
+
+### Stage display names
+
+The loading banner shows the area top-left and the world lower-right; stage ids
+are never shown. The worlds are Death Valley, Dry Land, Venom Jungle and Machine
+Pit, with Home Server for lobby screens. Where these differ from the lists above,
+the banner is the game's own name.
+
+| World | Stages | Dungeons |
+| --- | --- | --- |
+| Death Valley | `stag0101`-`0104` Goblin Pass, Abyss of Grief, Numenume River, Doom Dome | `dng101` Humid Cave, `dng102` Cliff Dungeon, `dng103` Dome Base |
+| Dry Land | `stag0201`-`0205` Mummy Desert, Grief Wasteland, Train Line, Station X, Power Plant | `dng204` Sand Labyrinth, `dng205` Ancient Ruins, `dng206` Virus Lab |
+| Venom Jungle | `stag0301`-`0304` Gekogeko Land, Mangrove Forest, Venom Swamp, Dread Note | `dng307` Geko Path, `dng308` Vine Tunnel, `dng309` Vein, `dng310` Dread Bridge |
+| Machine Pit | `stag0401` Battle Arena, `stag0403` Mechanical Core, `stag0404` Core Area | `dng411` Mecha Nest, `dng412` Electro Mine |
+
+| Group | Stage | Banner | World |
+| --- | --- | --- | --- |
+| Boss | `stagBS01` | Apokarimon Space | Death Valley |
+| Boss | `stagBS02` | Demon Shift | Dry Land |
+| Boss | `stagBS03` | Hades Obelisk | Venom Jungle |
+| Boss | `stagBS04`, `stagBS05`, `stagBS06` | Zone X | Machine Pit |
+| Lobby | `stagML02` | Commander Room | Home Server |
+| Lobby | `stagML11` | Terminal Area | Home Server |
+| Lobby | `stagML12` | Main Lobby: Central Area | Home Server |
+| Lobby | `stagML13` | Main Lobby: Shop Area | Home Server |
+| Lobby | `stagIS11`, `stagIS12` | Central Area | Home Server |
+| Lobby | `stagIS13` | Terminal Area | Home Server |
+
+The fortress stages `stagGF01`-`04` are Guard Room, Rotating Hall, X Digimon Lab
+and GobGob Room. The quest dungeons `dngq1`-`8` are Barbarian Cave, Undead Yard,
+Forbidden Shrine, Captive Dungeon, Trader Hall, Dungeon of Doom, Item Road and
+Cursed Dungeon.
+
+`stagIS07`-`IS10`, `stagIS20` (the ending) and `stagML14` have no banner.
+`stagIS09` renders nothing and `stagIS10` is the title screen.
 
 Enemy sets per area (walkthrough §4) — handy for mapping spawn tables:
 

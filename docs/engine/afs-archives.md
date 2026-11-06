@@ -1,10 +1,11 @@
 # AFS Archives
 
-Two CRI **AFS** archives hold the bulk of the game data.
+Two CRI **AFS** archives hold the bulk of the game data: `NDMW.AFS` at ISO 0x1ED11000 and `AREA.AFS` at
+ISO 0x5A9000.
 
 | Archive | Entries | File size | Contents |
 | --- | --- | --- | --- |
-| `NDMW.AFS` | **972** | 727,056,384 B (≈727 MB) | per-stage data packs: `ig*` reflection metadata + **5,291 Lua 4.0.1 bytecode chunks** + textures/models |
+| `NDMW.AFS` | **972** | 727,056,384 B (≈727 MB) | 79 standalone ADX streams, then per-stage data packs: `ig*` reflection metadata + **5,291 Lua 4.0.1 bytecode chunks** + textures/models |
 | `AREA.AFS` | **1,382** | 511,082,496 B (≈511 MB) | 3 FMV movies + level geometry/animation/texture packs |
 
 ## AFS container format
@@ -19,9 +20,9 @@ page-aligned (0x2000 for NDMW, 0x3000 for AREA).
 
 ### NDMW.AFS first entries
 ```
-[  0] off=0x00002000 size=4401152  magic 80 00 07 fc 03 12 04 02  (texture/model)
+[  0] off=0x00002000 size=4401152  magic 80 00 07 fc 03 12 04 02  (ADX stream)
 [  1] off=0x00434800 size=4401152  ...
-[  5] off=0x013f5800 size=1078942  magic 80 00 00 24 ...
+[  5] off=0x013f5800 size=1078942  magic 80 00 00 24 ...          (ADX stream)
 ...
 [967] off=0x2b536000 size=  18773  magic a4 03 00 00 28 00 00 00
 [971] off=0x2b54d000 size=  29420  magic 44 05 00 00 38 00 00 00
@@ -32,7 +33,7 @@ page-aligned (0x2000 for NDMW, 0x3000 for AREA).
 [  0] off=0x00003000 size=40091648  magic 00 00 01 ba  -> CRI Sofdec, MPEG-1 video + ADX audio
 [  1] off=0x0263f000 size=40091648  MPEG
 [  2] off=0x04c7b000 size=40312832  MPEG
-[  3] off=0x072ed000 size=  447477  magic a8 12 00 00 a8 00 00 00  -> {count,stride}
+[  3] off=0x072ed000 size=  447477  magic a8 12 00 00 a8 00 00 00  -> {count,stride}, the text pack
 ...                                 (level geometry / animation packs)
 ```
 
@@ -79,7 +80,7 @@ beLuaData beLuaDataObject beActionStarterData beModelCtrlAIData ...
 A standalone 106,350-byte igBinary file (first words `00 01 00 00 0B 00 00 00 …`). Decoded,
 it is a schema of **20 classes** and 2,297 objects; the container's own record decode
 (`scripts/igb_inst.py`) reaches them, and two classes carry the whole filesystem
-(finding [#444](../findings/findings-0251-0500.md#f444)):
+:
 
 | class | fields | meaning |
 | --- | --- | --- |
@@ -88,8 +89,7 @@ it is a schema of **20 classes** and 2,297 objects; the container's own record d
 
 So **`_ptNumber` 0 is `NDMW.AFS` and 1 is `AREA.AFS`**, and a name resolves to an
 `(archive, entry)` pair. The manifest names **2,080 files — all 1,382 AREA entries and 697 of
-NDMW's 972**. Two anchors check it against facts already recorded: `(0, 140)` is
-`stag0102.igb` (finding [#434](../findings/findings-0251-0500.md#f434) identified AFS entry 140 as the stag0102 manifest) and
+NDMW's 972**. Two anchors check it: `(0, 140)` is `stag0102.igb`, the manifest at AFS entry 140, and
 `(1, 0)` is `aeu_opening.sfd`, whose AREA entry 0 starts `00 00 01 ba`, an MPEG pack.
 
 ```sh
@@ -103,9 +103,9 @@ What the names show about the NDMW layout: the stage manifests sit in a run
 entries repeat in **groups of seven** — `generatorh.igb`, `generatorn.igb`,
 `generatorv.igb`, `lh_pack.igb`, `ls_pack.igb` and two **unnamed** entries. Those two
 unnamed ones are the packs a stage manifest reaches *by index* rather than by name: the
-`[0.620]`/`[0.621]` pair of findings [#434](../findings/findings-0251-0500.md#f434)/#435 (`stag0102`'s sound and model packs) is
-entries 620 and 621. The remaining unnamed entries are the 0–136 lead-in (textures/models)
-and the same two slots in every later group.
+`[0.620]`/`[0.621]` pair (`stag0102`'s sound and model packs) is entries 620 and 621. The
+remaining unnamed entries are the 0–136 lead-in (entries 0–78 are the ADX streams) and the
+same two slots in every later group.
 
 The object mix, as a sanity check on the schema: `igAdxAfsFile` 2,080, `igNamedObject`
 106, `igNamedObjectList` 105, then a handful of `beNDMWAfsSetupData`/`igInfo`/`igInfoList`
@@ -116,10 +116,8 @@ records — the lists being `igMemoryRef`s into the content pool after the strea
 A stage's own file list spells its packs the same way the root manifest addresses them:
 `stag0102.igb` (AFS entry 140) contains the literal strings **`[0.620]/s`** and
 **`[0.621]`**, i.e. `<part>.<entry>` with part 0 = `NDMW.AFS`. So a stage's two unnamed packs
-— the ones findings [#434](../findings/findings-0251-0500.md#f434)/#435 swapped to test model residency — are **NDMW.AFS entries 620
-and 621** (finding [#445](../findings/findings-0251-0500.md#f445)). That is why those indices appeared throughout the modding work as
-bare numbers nothing resolved: they are addresses, and the root manifest leaves exactly those
-two slots in each group unnamed because a stage reaches them positionally. The `/s` suffix on
+are **NDMW.AFS entries 620 and 621**. The indices are addresses, and the root manifest leaves
+exactly those two slots in each group unnamed because a stage reaches them positionally. The `/s` suffix on
 the sound pack's string is a variant marker in the list, not part of the pair.
 
 Resolved, so the indices are no longer opaque:
@@ -131,10 +129,32 @@ Resolved, so the indices are no longer opaque:
 | `stag0201.igb` | `[0.641]` | `NDMW.AFS` entry 641 | 346,670 |
 | | `[0.642]` | `NDMW.AFS` entry 642 | 5,173,220 |
 
-The pair is `(base+0, base+1)` in `NDMW.AFS` — sound then model — and `642` is exactly the pack
-the live model-residency experiment of finding [#435](../findings/findings-0251-0500.md#f435) swapped into `stag0102`. A sweep of the whole
-table confirms **2,079 of the 2,080 named files resolve into their archive**; the 2,080th is the
+The pair is `(base+0, base+1)` in `NDMW.AFS` — sound then model — and `642` is the pack the test
+below swaps into `stag0102`. A sweep of the whole table confirms **2,079 of the 2,080 named files resolve into their archive**; the 2,080th is the
 manifest's own `NONE` record (`_ptNumber` 0, `_fileNumber` -1).
+
+### A stage's file list is what loads
+
+A stage manifest's `_fnames` is the pack list the game loads at run time (`beFileListInfo`, managed by
+`beFileListInfoManager`: singleton accessor `0x381990`, global `0x5996f8`). On a patched disc, changing
+`stag0102.igb`'s `[0.621]` to `[0.642]` (same size, three digits) and loading the stage fresh from disc
+through the dev stage select leaves `E_mummy01.png` and `mummy_skinShape` in RAM and no `E_goburi01.png`
+or `gobr_skinShape2`. A savestate cannot test this, because it carries the already-loaded world.
+
+A stage's model pack also carries its level geometry, so a manifest swap is a diagnostic and not a
+usable mod: after that swap RAM holds `Stage0201` strings and no `Stage0102` strings, and the stage
+renders as a corrupt hybrid. Loading both model packs (`[0.642]` in the sound slot, keeping `[0.621]`)
+crashes the emulator during the load with wild TLB misses, while the unpatched disc loads normally. The
+cause is not isolated: EE memory, or the shared objects both packs define, are the candidates. To add
+an enemy to a stage, merge its records and assets into that stage's own pack.
+
+## Area names
+
+Area names are not in `NDMW.AFS`. They sit in the text pack `AREA.AFS` entry 3 (447,477 bytes, ISO
+0x7896000) as UTF-16LE strings (some copies UTF-16BE), null-padded and mixed with menu labels, with no
+contiguous block and no stage index, so the pool alone cannot map a stage to its name. The gate prompt
+and the loading banner can name the same destination differently (Goblin Pass and Rotating Hall), so
+they come from different tables.
 
 ## Extraction recipes
 ```sh
@@ -163,12 +183,12 @@ python3 scripts/build_lua_tree.py                # files the chunks by stage int
 
 ## The FMV: three CRI Sofdec files
 
-The root manifest names exactly three media files and nothing else stands alone: the extension count
+The root manifest names exactly three media files: the extension count
 over all 2,080 names is **2,076 `.igb` + 3 `.sfd` + 1 `NONE`**. The movies are `aeu_opening.sfd`,
 `ajp_opening.sfd` and `aus_opening.sfd`, AREA.AFS entries 0, 1 and 2 (40,091,648 B each ≈ 1:04).
 
 They are CRI **Sofdec** — a program stream, so the `00 00 01 ba` prefix looked like MPEG-2, but ffprobe
-says otherwise (finding [#447](../findings/findings-0251-0500.md#f447)):
+says otherwise:
 
 ```
 Duration: 00:01:04.05
@@ -180,28 +200,30 @@ Stream #0:1: Video: mpeg1video, 640x480, 29.97 fps
 reverse engineering at all: stock ffmpeg decodes both streams. (The port's `media convert` does exactly
 that.)
 
-Sound effects and music are **not** ADX files in these archives: a full sweep of both finds `(c)CRI`
-79 + 3 times and every hit in NDMW is at offset `0x22` of a pack header — CRI's author string, not an
-ADX header. SE/BGM is instead inside each stage's **sound pack** (the smaller of its pair of AFS
-entries) as CRI `ps2_` banks, and those decode offline — see [`sound-format.md`](sound-format.md)
-(finding [#450](../findings/findings-0251-0500.md#f450)).
+A stage's resident sound effects are CRI `ps2_` banks inside its **sound pack** (the smaller of its pair
+of AFS entries), and those decode offline — see [`sound-format.md`](sound-format.md). Music and ambience
+can instead be **standalone ADX streams**: `NDMW.AFS` entries 0–78 are ADX files, each opening `80 00`
+with `(c)CRI` at its header's copyright offset. The root manifest does not name them; sound metadata
+reaches them by index, so `ST_CHARA`, `AM_TITLE` and `AM_START` resolve to `[0.53]`, `[0.19]` and
+`[0.18]`.
 
-## Where the asset work stops
+## Locating an image
 
-Every container level is decoded and cross-checked; the one thing that is not is **finding a buffer**.
-An `igImage` says everything needed to *decode* an image and nothing that *locates* it (finding [#446](../findings/findings-0251-0500.md#f446)):
+Every container level is decoded and cross-checked, and an image's buffers are located offline. An
+`igImage` says everything needed to *decode* the image, and its references name the buffers:
 
 ```
 _px 32  _py 32  _bitsIdx 8  _bytesPerRow 32  _imageSize 1024  _pfmt 0x10000
-_pImage 211  _pClut 1315        <- two load-time ordinals, not offsets (#433)
+_pImage 211  _pClut 1315        <- pack-local ids, not byte offsets
 ```
 
-Ordering the pack's own blocks does not help: the packs that hold images (e.g. NDMW entry 179 — 116
-`igImage` records) have **no `igMemoryDirEntry` records in the same chain**, so the block list is in
-another section and only the loader's allocation order maps the ordinal. That is the tracker's **T14**
-(the load-level replay).
+An `igMemoryRef` such as `_pImage` is the id of its pool block, and a block's offset follows from the
+pack's own directory, with no load-level replay ([`igbinary-format.md`](igbinary-format.md);
+`scripts/igb_pool.py --image`). Texture packs resolve `_pClut` through their id→class table
+([`texture-packs.md`](texture-packs.md)), and materials held inside a stage pack are in
+[`inline-textures.md`](inline-textures.md).
 
-**The live route solves it for the port (finding [#448](../findings/findings-0251-0500.md#f448)).** A scan of a loaded save finds 18,812 live
+**The live route reaches the same images at run time.** A scan of a loaded save finds 18,812 live
 objects over 171 classes and no `igImage`/`igClut` *by class* — those classes are not among the 478
 recovered vtables, which is why a vtable-keyed scan cannot see them. But the chain is reachable from
 one that *is* live:
@@ -215,7 +237,8 @@ and at runtime those are ordinary **pointers**, not ordinals. Confirmed field-fo
 `igImage`: `_px` 256, `_py` 128, `_pfmt` 0x00010000, `_imageSize` 32768 (= 256×128, 8 bits per index),
 `_bitsIdx` 8, `_bytesPerRow` 256, `_pNameString` → `stmojipnl01.png`; its `igClut` is `_numEntries`
 256, `_stride` 4, `_clutSize` 1024, so the palette is 32-bit **R,G,B,A**. Two facts the pixels settle:
-textures are stored **bottom-up** (a vertical flip is needed), and the source is a **plain linear
+row 0 is the row the GS samples at `v = 0`, so a sampler that indexes with `1 - v` flips the rows on
+decode ([`inline-textures.md`](inline-textures.md)), and the source is a **plain linear
 8-bit indexed image** — no swizzle — since `_bytesPerRow == _px` for all 46 reachable textures and all
 share `_pfmt` 0x00010000.
 

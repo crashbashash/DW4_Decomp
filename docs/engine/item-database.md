@@ -1,7 +1,7 @@
 # Item and database record lookup
 
-Finding [#924](../findings/findings-0751-1000.md#f924) recovers two complete contiguous lookup blocks and the concrete
-chip database selector: **ten bodies /1,168 bytes**, all byte-identical to retail.
+Two complete contiguous lookup blocks and the concrete
+chip database selector are recovered: **ten bodies /1,168 bytes**, all byte-identical to retail.
 Seven bodies add **952 exact bytes**. Three already-matched item wrappers
 /216 bytes retain their bytes with corrected return and status-argument contracts.
 The existing12-byte beDataBase metadata getter is preserved separately.

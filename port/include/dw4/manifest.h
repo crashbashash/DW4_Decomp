@@ -10,7 +10,7 @@
  * Measured: `igAdxAfsFile` (`NDMW.IGB`, 2,081 records) gives 2,080 names, `_ptNumber` 0
  * = `ndmw.afs` (697 of its 972 entries) and 1 = `area.afs` (all 1,382).  The mapping is
  * checkable and checked — `_ptNumber` 0 `_fileNumber` 140 is `stag0102.igb`, which
- * finding #434 had already identified as AFS entry 140 — and `(pt 1, entry 0)` is
+ * identified as AFS entry 140 — and `(pt 1, entry 0)` is
  * `aeu_opening.sfd`, matching AREA.AFS entry 0 being MPEG.
  *
  * The descriptors the reader uses are ordinal-based, and the ordinals are part of the

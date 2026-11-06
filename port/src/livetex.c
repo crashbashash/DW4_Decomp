@@ -7,7 +7,7 @@
 
 #include "dw4/texture.h"
 
-/* The recovered vtable of the runtime image class (finding #529: the engine's `ig*` classes are
+/* The recovered vtable of the runtime image class (the engine's `ig*` classes are
  * in `data/vtables-getvtable.json`; 0x525630 is `igPsx2Image`, the concrete `igImage`). */
 #define VT_PSX2IMAGE 0x00525630u
 
@@ -55,7 +55,7 @@ static const uint8_t *lt_ptr(const dw4_livetex *lt, uint32_t a, size_t n)
     return lt->b + o;
 }
 
-/* An address a live pointer may take: inside the guest arena (finding #481: 32-bit handles). */
+/* An address a live pointer may take: inside the guest arena (32-bit handles). */
 static int lt_addr_ok(const dw4_livetex *lt, uint32_t a)
 {
     return a >= lt->base && (size_t)(a - lt->base) + 4 <= lt->len;
@@ -162,7 +162,7 @@ dw4_livetex *dw4_livetex_open(const char *path)
         free(lt);
         return NULL;
     }
-    /* One pass for the image vtable; objects are 4-byte aligned (finding #481). */
+    /* One pass for the image vtable; objects are 4-byte aligned. */
     for (i = 0; i + 4 <= lt->len; i += 4) {
         uint32_t a = lt->base + (uint32_t)i;
         if (lt_u32(lt, a) == VT_PSX2IMAGE)

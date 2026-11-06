@@ -12,7 +12,7 @@ struct ObjectShare {
     ~ObjectShare() {
 /* matching construct: retail kept the out-of-line copy 0x00130140 from a translation unit built without exceptions (single load of the
          * held pointer), while this exceptions-on unit releases with a reload of the pointer after the count store.  One class, two
-         * spellings, selected by the exception mode the verifier compiles each part under (finding #3884 limit (a)). */
+         * spellings, selected by the exception mode the verifier compiles each part under. */
 #if __option(exceptions)
         if (p != 0) {
             p->_refCount = p->_refCount - 1;

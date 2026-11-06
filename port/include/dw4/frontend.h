@@ -4,7 +4,7 @@
  * menu-database, 802 bandai-logo -> scene `stagis09`, 804 opening -> `stagis10`, 806 title-screen
  * -> `stagML11`), each a set of Lua chunks run in order, driven by the script's own `be:` API
  * (`DMsetSD("STAGECTL", …, "NEXTSTAGE", stage, mode)` + `DMrun()`, gated by `PADINPUT ENABLE 29`).
- * See `DW4_Decomp/docs/engine/front-end-boot.md` (finding #606).
+ * See `DW4_Decomp/docs/engine/front-end-boot.md`.
  *
  * The port now loads original chunks into Lua 4.0.1 and executes shared definitions.
  * Scene orchestration still uses a **native stage/script sequencer** with the
@@ -39,7 +39,7 @@ typedef struct {
 } dw4_be_sdrec;
 
 /* The front-end's `be:` state: the SD table plus the flags, counters and system values the
- * front-end scripts touch (finding #606). */
+ * front-end scripts touch. */
 typedef struct {
     dw4_be_sdrec sd[DW4_BE_MAX_SD];
     dw4_random random;                     /* boot stream; never reset by VM/stage changes */
@@ -57,7 +57,7 @@ typedef struct {
     int       runs;                         /* DMrun() calls that drained the queue */
 } dw4_be_state;
 
-/* --- the `be:` API subset (finding #606) -------------------------------------------------------- */
+/* --- the `be:` API subset -------------------------------------------------------- */
 void dw4_be_init(dw4_be_state *be);
 
 /* be:sd(cat, name, id, key, value[, arg]) — set one SD record and run it immediately. */
@@ -128,7 +128,7 @@ typedef struct {
     int         game;
 } dw4_frontend_stage;
 
-/* The recovered plan (finding #606): the boot/attract chain 800 -> 802 -> 804 -> 806, then the
+/* The recovered plan: the boot/attract chain 800 -> 802 -> 804 -> 806, then the
  * Game Start branch 808 -> 810 -> 812 (character-select; scenes stagis11/12/13).  Returns the
  * count, fills up to `cap`. */
 int dw4_frontend_stages(dw4_frontend_stage *out, int cap);

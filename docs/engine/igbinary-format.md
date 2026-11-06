@@ -21,8 +21,8 @@ Every igBinary blob shares an identical tail and string table:
 | --- | --- |
 | header[8] | `0x656` = offset to interface name (`"igInterfaceDeclarationField"`) |
 | header[9] | `0x30` = 48 = string count |
-| header[10] | `0xfada` = offset to file refs |
-| header[11] | `0xf0000006` (AREA) / `0xb0000006` (NDMW.AFS) = flags |
+| header[10] | `0xfada` = validity constant |
+| header[11] | `0xf0000006` (AREA) / `0xb0000006` (NDMW.AFS) = flags, with the version in the low half |
 
 and the 48 strings are **always the same** `ig*MetaField` type names
 (`igIntMetaField` … `igInterfaceDeclarationField`). Only header[0..7] are
@@ -35,27 +35,25 @@ file-specific:
 | NDMW.AFS 179 | `6300 37b 3960 cf f86bc 7105 1b8330 2604` |
 | NDMW.AFS 180 | `230 19 914 26 1a80 a6 15c 1e` |
 
-header[0] is a magic/type tag (only NDMW.IGB uses `0x100`); the rest are
-file-specific offsets/counts into the sections that follow the string table.
+header[0] differs per file (only NDMW.IGB holds `0x100`); header[1..7] are the
+per-file sizes and counts of the sections that follow the string table.
 
 ## Header (12 × u32, 0x30 bytes)
-The exact meaning of `[0..7]` is **file-specific** — the labels below are the
-NDMW.IGB (manifest) interpretation; other files use those slots for their own
-offsets/counts.
+The words mean the same in every blob. The values below are NDMW.IGB's.
 
 ```
-0x00  u32 magic = 0x00000100            (NDMW.IGB only; AREA entry 9 omits it)
-0x04  u32 version = 0x0b (11)
-0x08  u32 = 0x492 (1170)                [meaning TBD]
-0x0c  u32 = 0x14  (20)                  [meaning TBD]
-0x10  u32 offset -> file refs A         ("eng_pack.igb", "g_pack.igb", …)
-0x14  u32 offset -> type directory      (object type names + field descriptors)
-0x18  u32 offset -> int array           (small u32 array, e.g. {7,6,7,5,7,…})
-0x1c  u32 = 0x6c (108)                  [meaning TBD]
-0x20  u32 offset -> interface name      (points into string table: "igInterfaceDeclarationField")
-0x24  u32 string count = 48
-0x28  u32 offset -> file refs B         ("aaacamera.igb", …)
-0x2c  u32 flags = 0xf0000006
+0x00  hdr[0]  = 0x100                   [meaning not established]
+0x04  hdr[1]  = 0x0b (11)               first object section's record count
+0x08  hdr[2]  = 0x492 (1170)            [meaning not established]
+0x0c  hdr[3]  = 0x14 (20)               class count
+0x10  hdr[4]  = 0x15628                 object stream's byte size
+0x14  hdr[5]  = 0x8f9 (2297)            second object section's record count
+0x18  hdr[6]  = 0x23b4                  content pool's byte size
+0x1c  hdr[7]  = 0x6c (108)              memory block count
+0x20  hdr[8]  = 0x656                   offset to the interface name ("igInterfaceDeclarationField")
+0x24  hdr[9]  = 48                      string count
+0x28  hdr[10] = 0xfada                  validity constant
+0x2c  hdr[11] = 0xf0000006              flags, with the version in the low half
 ```
 
 Note: `AREA.AFS` entry 9 has the **same** `0x20..0x2c` tail
@@ -88,27 +86,32 @@ then  count concatenated null-terminated strings
 48 strings are the `ig*MetaField` type names (`igIntMetaField`,
 `igStringArrayMetaField`, …, `igInterfaceDeclarationField`).
 
-## Type directory (NDMW `0x6300` pack: `hdr[7]=0x2604` → `hdr[5]=0x7105`)
+## Type directory
 A list of `{null-terminated type name}{6-byte field descriptors}` records (**not**
 `u32` descriptors — see §"Field descriptor encoding" below; the earlier "small
 u32s" reading was one half of the mis-parse). Names
 seen: `igObjectDirEntry`, `igMemoryDirEntry`, `igExternalDirEntry`,
 `igExternalImageEntry`, `igExternalIndexedEntry`, `igExternalInfoEntry`,
 `beNDMWAfsSetupData`, `igInfo`, `beNDMWAfsSetupInfo`, `igFileName`,
-`igAdxAfsFile`, `igDataList`, `igObjectList`, … 135 of its records are class
-records; `hdr[2]=0x3960` points *into* this region rather than at its start, and
-the AREA `0x12a8` pack instead splits the directory (`hdr[5]=0x134d`) from a
-type-name string pool (`hdr[7]=0x685`).
+`igAdxAfsFile`, `igDataList`, `igObjectList`, … There is one record per class, so
+the walked count equals `hdr[3]` (207 in NDMW.AFS entry 179). No header word is
+known to point at the directory: `scripts/igb_inst.py` finds it by its opening
+`igObject` record (at `0x1a3a` in entry 179, `0xd02` in the AREA `0x12a8` pack).
 
-### Blob header field map (per blob magic)
+### Blob header field map
 
-Stage/level-pack blobs (in `NDMW.AFS`/`AREA.AFS`) reuse `hdr[0..7]` for
-file-specific sections (see `docs/systems/enemy-data.md` for the full map):
+The header words are sizes and counts, and they mean the same whatever `hdr[0]` holds
+(§"The object section headers"):
 
-| magic | hdr[1] | hdr[2] | hdr[3] | hdr[4] | hdr[5] | hdr[6] | hdr[7] |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| `0x6300` (NDMW.AFS stage pack) | MetaField type-name list | points *into* the type directory | type-index table | **object data** | index table (end of the directory region) | `0xff` pad | **type directory start** |
-| `0x12a8` (AREA.AFS level pack) | — | — | — | object data | type directory | float/font data | type-name strings |
+| blob | hdr[1] | hdr[3] | hdr[4] | hdr[5] | hdr[6] | hdr[7] |
+| --- | --- | --- | --- | --- | --- | --- |
+| meaning | section 1 records | classes | object stream bytes | section 2 records | content pool bytes | memory blocks |
+| NDMW.AFS entry 179 (`0x6300`) | `0x37b` | `0xcf` | `0xf86bc` | `0x7105` | `0x1b8330` | `0x2604` |
+| AREA.AFS level pack (`0x12a8`) | `0xa8` | `0x42` | `0x34420` | `0x134d` | `0x33060` | `0x685` |
+
+None of `hdr[4..7]` is an offset. `hdr[5] + hdr[7]` is the pack's id count: the remap
+table's `{tableBytes}{idCount}` prefix built from that sum is present in NDMW.IGB and in
+all 2,272 igBinary blobs of the two archives.
 
 ### Field descriptor encoding — structure and semantics recovered
 
@@ -169,7 +172,7 @@ how an earlier version of this page reported 141 records with 45 bad triples, an
 still earlier one reported 179. `scripts/igb_dir.py --verify` validates as it walks
 and reports the real boundary.
 
-### `ordinal` → byte offset (resolved, finding [#290](../findings/findings-0251-0500.md#f290))
+### `ordinal` → byte offset (resolved)
 
 `ordinal` is the field's **1-based slot index in the class's flattened field-slot
 list**: inherited base slots first, then the class's own declared fields in
@@ -253,13 +256,13 @@ and larger defaults for the array types — `igIntArray` 128, `igFloatArray` 768
 have size 1 and 1-byte strides (12,13,14,15). Stride comes from the class's declared
 layout, which is why the declared reflection offsets are the layout of record.
 
-## File references (at header[4] / header[10])
+## File references
 Records shaped like `{ … u32 strlen, u32=0x28, u32=0x10, "name.igb\0", … }`,
 naming the sub-IGB files referenced by the manifest.
 
-## The instance encoding — the object data (decoded, findings [#417](../findings/findings-0251-0500.md#f417)/#418)
+## The instance encoding — the object data (decoded)
 
-### The object section headers (finding [#426](../findings/findings-0251-0500.md#f426), corrected by [#459](../findings/findings-0251-0500.md#f459))
+### The object section headers
 
 A blob carries **two object sections**, and the twelve-word header states both counts. They are not
 "the object count" and a small side section — both are real record chains, in file order, and a pack's
@@ -272,6 +275,7 @@ id window spans their concatenation.
 | `hdr[4]` | the object stream's **byte size** | 40,492 (decoded) | 8,608 (decoded) | 1,354,896 | — |
 | `hdr[5]` | **second** object section's record count | 1,206 (decoded) | 266 (decoded) | 38,135 | 5 |
 | `hdr[6]` | the content pool's **byte size** | 7,112 (decoded) | 1,656 (decoded) | — | — |
+| `hdr[7]` | the **memory block** count (§*References are pack-local ids*) | 228 | 62 | 12,362 | 2 |
 
 `scripts/igb_sections.py` prints both and checks them against the decoded chains; five blobs agree, and
 on entry 140 the "first" section is the larger one (6 vs 5), so the two are section slots, not a
@@ -316,17 +320,24 @@ directory order** — so the record names its own class. No name lookup is neede
   rejected every list record. Storage needs no `K` — the `K` of §"`ordinal` → byte
   offset" is only for *naming* fields.)
 * a declared field with no descriptor is simply absent.
+* a record's fields are read **by ordinal, not by byte offset**, whenever the class
+  serialises a string before them: a long name shifts every later value.
 
 Value widths, all little-endian:
 
 | type | bytes | note |
 | --- | --- | --- |
 | `igBool`/`igChar`/`igUnsignedChar` | 1 | **padded to 4** — treating them as 1 byte derails the walk |
-### The type id **is** the kind (finding [#482](../findings/findings-0251-0500.md#f482))
+| `igShort`/`igUnsignedShort` | 2 | padded to 4 |
+| `igInt`/`igEnum`/`igFloat`, every reference | 4 | |
+| `igLong`/`igDouble` | 8 | |
+| `igVec2f` / `igVec3f` / `igVec4f` | 8 / 12 / 16 | `igMatrix44f` 64 |
+| any string | `{u32 len}{bytes}` | `len = align4(strlen+1)`, bytes padded to `len`, so `"direct\0"` costs 8 |
+
+### The type id **is** the kind
 
 A descriptor triple's `type_id` is not just a width — it names the value's type, which is what a
-loader needs in order to know which values are references (an id the loader turns into a pointer,
-finding [#423](../findings/findings-0251-0500.md#f423)) and which are plain data. `igb_inst.TID2REF` records the map and the bytes confirm it:
+loader needs in order to know which values are references (an id the loader turns into a pointer) and which are plain data. `igb_inst.TID2REF` records the map and the bytes confirm it:
 over six packs of `NDMW.AFS` **every value of type 0 (`igObjectRef`) is an object id or NULL, and
 every value of type 7 (`igMemoryRef`) a pool-block id or NULL — 0.0 % "neither" in both cases**, while
 every other type has values outside the id space (floats 88 % "neither", matrices 100 %; `igInt` only
@@ -340,13 +351,7 @@ looks like a reference because small integers land in the id range anyway).
 So the reference set is read from each value's own descriptor — no `(class, offset)` table and no
 reflection involved — and `scripts/verify_field_kinds.py` re-measures the matrix.
 
-| `igShort`/`igUnsignedShort` | 2 | padded to 4 |
-| `igInt`/`igEnum`/`igFloat`, every reference | 4 | |
-| `igLong`/`igDouble` | 8 | |
-| `igVec2f` / `igVec3f` / `igVec4f` | 8 / 12 / 16 | `igMatrix44f` 64 |
-| any string | `{u32 len}{bytes}` | `len = align4(strlen+1)`, bytes padded to `len`, so `"direct\0"` costs 8 |
-
-### The content pool: blocks keyed by id, laid out 4-byte aligned (findings [#419](../findings/findings-0251-0500.md#f419)/#464/#478)
+### The content pool: blocks keyed by id, laid out 4-byte aligned
 
 `_data` (and every other `igMemoryRef` field) is the **global id of its pool block**. The content pool
 is those blocks concatenated in **id order**, each one starting on a **4-byte boundary**, so a block's
@@ -354,7 +359,7 @@ offset is
 
     pool_start + sum(align4(_memSize) of every igMemoryDirEntry id below it)
 
-`pool_start` is the end of the object section and the ids come from the remap table ([#460](../findings/findings-0251-0500.md#f460)).
+`pool_start` is the end of the object section and the ids come from the remap table.
 `_memSize` is a byte count that need not be a multiple of 4 — the generator and texture packs are all
 multiples of 4, but entry 621 has blocks of 123, 231, 302, 403, 465, 501, 681 … bytes (45 of them odd) —
 and the next block starts on the next boundary, so such a block is followed by 1-3 padding bytes.
@@ -366,16 +371,16 @@ pool is therefore **fully** accounted for, and a geometry or texture buffer land
 start. `scripts/igb_pool.py` reads a block by id (`--id`, `--list`, `--check`, `--image`).
 
 **Two superseded readings, kept because they were believed:** the plain sum left the big model packs
-“short by ~141 bytes (621) / ~58 (179)”, which [#475](../findings/findings-0251-0500.md#f475) read as a **trailing normal buffer** and [#477](../findings/findings-0251-0500.md#f477) then
+“short by ~141 bytes (621) / ~58 (179)”, read first as a **trailing normal buffer** and then
 as a per-id **drift** (`p` rising `15/16 → 20 → 45 → 59 → 141`). Both are the same thing: the
 alignment padding. 141 bytes is exactly `Σ(align4 − size)` on 621 — 120 from block type 3 (61 blocks),
 16 from type 10 (8), 5 from type 8 (3) — and it is *scattered* along the pool as 1-3 byte pads, not a
 short tail. Doing the arithmetic without `align4` is what made the offsets drift; the bytes either side
-of `pool + Σ_memSize` being continuous ([#475](../findings/findings-0251-0500.md#f475)’s observation) is a stream crossing the padded end.
+of `pool + Σ_memSize` being continuous is a stream crossing the padded end.
 The texture packs declare only multiples of 4 (1024-byte palettes, `W*H` grids), so their layout is
 unaffected.
 
-### References are pack-local ids: the id remap table ([#460](../findings/findings-0251-0500.md#f460))
+### References are pack-local ids: the id remap table
 
 **Resolved — the ids are not a load-wide ordinal.** Between the pack's two object sections (section 1,
 the memory/object directory, and section 2, the game objects — §*The object section headers*) sits a
@@ -415,19 +420,22 @@ target class — entry 622: 304 refs, `beGeneraterData._genePosList` -> `igVec3f
 GENE-00 (record 846, `_pos` `(-117, 72, 609)`) reads `_genePosList` 916, and id 916 is record 845, an
 `igVec3fList` whose pool content is exactly that triple.
 
-**What this corrects ([#426](../findings/findings-0251-0500.md#f426)).** The ids *did* reach ~1,430 against 1,206 records, but the gap is the
+**What this corrects.** The ids *did* reach ~1,430 against 1,206 records, but the gap is the
 pack's own memory blocks, not earlier packs: the id space is pack-local and 0-based. So no load replay,
 manifest or section list is needed. The conversion mechanism is unchanged — `igObjectRef`'s `0xcc`
 reader (`FUN_003034e0` -> `FUN_00305580`) resolves the id with `FUN_002d7e90(list, id) =
 *(*(list+0x10) + id*4)` and takes `+0x18`, and `FUN_002e7640` is where the loader builds that list from
 the table. `scripts/igb_ids.py` reads it (`--id N`, `--check-refs`).
 
+An object id cannot be told from an arena handle by range (ids reach 50,497 in a 5 MB arena), so a
+reader must know which of the two it holds.
+
 **Method note for the earlier failures.** What looked like a "load-wide creation ordinal" was the table
 read as if it were the record order: the object entries *are* the record order, but the interleaved
 memory entries shift every id. That is why a constant base, a rotation, a live rank and an arena offset
-all missed ([#421](../findings/findings-0251-0500.md#f421)), and why the "extras" grew with position — they are the memory blocks, in table order.
+all missed, and why the "extras" grew with position — they are the memory blocks, in table order.
 
-### The loader side: where the ids are built (findings [#422](../findings/findings-0251-0500.md#f422)/#460)
+### The loader side: where the ids are built
 
 The chain is mapped:
 
@@ -454,12 +462,37 @@ FUN_002e95e0   17-section dispatch pipeline
 
 So the id is a direct index into the loader context's global list (`ctx+0x10`, count `ctx+0x8`), which
 `FUN_002e7640` builds from the file's remap table and `FUN_00305580` reads through `FUN_002d7e90`;
-`FUN_002e8a40` clears the per-file context on the way out. The MetaField vtables are **not** in the
-RTTI dump (0 of 478), so those implementations are found another way; the field objects are built at
-runtime by the registrar, not statically (verified: `beGeneraterData`'s `field_table` `0x4c69f0` holds
-pointers to field *names*, not to field objects).
+`FUN_002e8a40` clears the per-file context on the way out.
 
-### Identifying which pack a running game loaded ([#420](../findings/findings-0251-0500.md#f420))
+### MetaField vtables and the value readers
+
+MetaField vtables have no RTTI record (0 of 478 in the dump), and the field objects are built at runtime
+by the registrar, not statically: `beGeneraterData`'s `field_table` `0x4c69f0` holds pointers to field
+*names*, not to field objects. So read the vtables off a live class: MetaObject -> `_metaFields` (+40) ->
+container data (+8) and count (+0xc) -> each field object's word 0. For `beGeneraterData` this gives:
+
+| Field type | Vtable |
+| --- | --- |
+| `igObjectRef` | `0x532c80` |
+| `igString` | `0x533180` |
+| `igFloat` | `0x52ff50` |
+| `igBool` | `0x531540` |
+| `igInt` | `0x532670` |
+| vec3f | `0x5274e0` |
+| `_refCount`, `_memPoolIndex` | `0x533430` |
+
+Do not use `0x52f230`, the vtable reached from the registrar's getter `0x2bd000`: live field objects do not
+carry it, and it makes object refs look copied raw, which they are not.
+
+Slot `0xcc` reads a value and slot `0xd0` byte-swaps it. Scalars use `igMetaField_ReadRawFieldMem`
+(`0x2fc7c0`), a plain `_size`-byte copy, and `igMetaField_SwapBytes` (`0x2fd170`). `igObjectRef` and
+`igString` override `0xcc`. `igObjectRefMetaField::vfunc_51` (`0x3034e0`) calls
+`igRefMetaField_ReadRawFieldMem` (`0x305580`), which stores NULL when the context is null or the id is -1,
+otherwise resolves the id, and then increments the referenced object's refcount at +4. `ctx+0x130` is
+unrelated to references: it is the 46 memory-pool objects, used for per-object pool assignment after each
+read.
+
+### Identifying which pack a running game loaded
 
 The authored generator fields (`_geneEnemyId`, `_startData`, `_startModeStr`,
 `_fillModeStr`, `_callLua`, `_genePosIsGlobal`) form a fingerprint that is unique across the
@@ -469,9 +502,10 @@ generator classes, the live `pre-leomon` (`stag0102`) generator reading `_geneEn
 record — `GENE-00` at `+0x8820` in **entry 622**. That pack's chain holds **72** generators
 and the live world has 72 live `beGeneraterData` instances, so it is `stag0102`'s.
 `_pos` must **not** be used as a fingerprint: the runtime rewrites it (§above). Note the
-packs come in triples of identical size (183/184/185, 622/623/624, …) — per-language copies.
+packs come in triples of identical size (183/184/185, 622/623/624, …) — the row-tier variants of a stage's
+generator pack, not language copies; see [`enemy-spawn-system.md`](../systems/enemy-spawn-system.md).
 
-### Looking back at the load-level replay (tracker T14) — closed by [#460](../findings/findings-0251-0500.md#f460)
+### Looking back at the load-level replay (tracker T14) — closed
 
 The replay is not needed. The ids resolve from the pack's own remap table (§*References are pack-local
 ids*), so a pack's generator rows, drop rows, spawn positions/rotations **and now every object-to-object
@@ -491,10 +525,10 @@ place their records at `2 mod 4`, but the **character model packs** (`common/p_*
 `NDMW.AFS` entry 861, the player) place theirs at the *other* parity — entry 861's first
 record is at `+0x260f`, an odd offset. A chain finder therefore has to try every offset
 rather than step by two from an even one; `igb_inst.find_chains` scans every byte and counts
-a record as a *chain* start only when no other record ends on it (finding [#536](../findings/findings-0501-0750.md#f536)). Entry 861
+a record as a *chain* start only when no other record ends on it. Entry 861
 then decodes as section 1 = **215 records at `+0x260f`** and section 2 = **6,184 at `+0x7241`**,
 exactly the blob header's `hdr[1]`/`hdr[5]`, and its geometry chain resolves to the player's
-three actor LODs (findings [#536](../findings/findings-0501-0750.md#f536)/#537).
+three actor LODs.
 
 ### The check, and what it has been run on
 
@@ -523,7 +557,7 @@ starts a gap.
 * **NDMW.AFS entry 861** (`common/p_susanoo.igb`, the player model) — the character-model
   alignment: records begin at an **odd** offset and the two object sections decode as 215 +
   6,184 records, equal to `hdr[1]`/`hdr[5]`. Following the geometry chain from it yields the
-  player's three actor LODs (`P_susanoo_Skin0Shape0/1/2`; findings [#536](../findings/findings-0501-0750.md#f536)/#537,
+  player's three actor LODs (`P_susanoo_Skin0Shape0/1/2`;
   `docs/engine/model-pack-861-attributes.tsv`).
 
 What it makes readable with no emulator and no running game: the per-stage **generator
@@ -532,8 +566,8 @@ rows** (`_pos`, `_geneEnemyId`, `_startModeStr`/`_fillModeStr`, the frame timer
 (`beGeneraterItemDataOne._id`/`_rank`/`_rate`, one per category), the **spawn positions and
 rotations** and every other list's contents (the content pool, `--lists`) — D1 and D2 in
 the tracker. The decoded field set and the `"direct"`/`"wipeout"` values match the live
-`beGeneraterData` reads of finding [#416](../findings/findings-0251-0500.md#f416) exactly, and the pool was verified cell-for-cell
-against the running game ([#419](../findings/findings-0251-0500.md#f419)).
+`beGeneraterData` reads exactly, and the pool was verified cell-for-cell
+against the running game.
 
 Tool: `scripts/igb_inst.py` (`--blob`, `--class`, `--slot`, `--pool`, `--lists`, `--json`;
 the size check is the walk itself).
@@ -562,12 +596,12 @@ The parallel per-model tables agree exactly — `beAction2Info`, `igAnimationDat
 in 621; `E_mummy01.png` in 642). **The boundary is pack membership, not a name table:** the
 name `e_mummy` is present in *both* packs, but only as a row of the global 986-entry
 `beAsTargetModelData` table; 621 has no `beModelCtrlInfo e_mummy` and no mummy asset —
-exactly the "row latches, geometry lookup finds nothing" behaviour of finding [#428](../findings/findings-0251-0500.md#f428). Making a
+exactly the "row latches, geometry lookup finds nothing" behaviour. Making a
 model spawn in a stage it was not authored for therefore means porting its records into
 that pack — a content edit (copy the subgraph, or overwrite a resident model's assets), not
 a spawn-row change.
 
-#### Decoding the big model packs — three corrections to the walker ([#432](../findings/findings-0251-0500.md#f432))
+#### Decoding the big model packs — three corrections to the walker
 
 The model packs are where the earlier decoder silently stopped early; each fix is general:
 
@@ -593,16 +627,16 @@ The model packs are where the earlier decoder silently stopped early; each fix i
 
 ### Still unread
 
-Nothing structural. Every record's fields decode, every list's contents decode ([#419](../findings/findings-0251-0500.md#f419)), and
-every `igObjectRef` resolves through the pack's own remap table ([#460](../findings/findings-0251-0500.md#f460)). What is left is
+Nothing structural. Every record's fields decode, every list's contents decode, and
+every `igObjectRef` resolves through the pack's own remap table. What is left is
 semantic: naming the classes and fields that are not in `reflection.json`, and the
 pack-to-stage mapping (`beFileListInfo`, entry 140).
 
 ## Next steps (to reach the item/enemy stats)
 
-Steps 1 and 2 are done (findings [#290](../findings/findings-0251-0500.md#f290), [#292](../findings/findings-0251-0500.md#f292)). What remains is the object data.
+Steps 1 and 2 are done. What remains is the object data.
 
-1. ~~Map `ordinal` → byte offset.~~ **Resolved** — findings [#290](../findings/findings-0251-0500.md#f290)/#292: the offset is
+1. ~~Map `ordinal` → byte offset.~~ **Resolved** — the offset is
    the class's declared offset from `data/reflection.json`; `ordinal` is the
    flattened slot index and `ordinal = i + K + 1` for declared field `f[i]`.
 2. ~~Explain the omitted fields.~~ **Resolved** — a descriptor with no declared
@@ -610,7 +644,7 @@ Steps 1 and 2 are done (findings [#290](../findings/findings-0251-0500.md#f290),
    out by type in §"Descriptors that match no declared field"); a declared field with no descriptor is just a slot the
    directory does not re-state. Omitting one leaves a hole and does not shift later
    ordinals.
-3. ~~Walk the object graph~~ **Resolved** — finding [#417](../findings/findings-0251-0500.md#f417), §"The instance encoding": the
+3. ~~Walk the object graph~~ **Resolved** — §"The instance encoding": the
    section at `hdr[4]` is `{classIndex, recordSize, nameLen}{name}{fields in descriptor
    order}`, decoded and size-verified by `scripts/igb_inst.py`. Still unread: the
    `igObjectRef` reference encoding that reaches the sub-objects.
@@ -621,13 +655,19 @@ Steps 1 and 2 are done (findings [#290](../findings/findings-0251-0500.md#f290),
    that, read at `+1`; "NDMW opens with a small-integer run" was the same record stream
    read at the wrong alignment, which is why the `0x7f30..0x815f` values looked
    unexplained (they are a record's `classIndex`/`recordSize` words). No alignment tag
-   and no non-u32 section were involved, and `hdr[5]` was the right thing to rule out
-   ([#293](../findings/findings-0251-0500.md#f293) — it is six memory-arena descriptors, not an object list).
+   and no non-u32 section were involved. `hdr[5]` is a record count, not an offset to
+   such a section.
 4. **Locate and validate** the databases (`beBaseInfoData` ×667 in `AREA.AFS`,
    `beNDMWStatusInfo` ×88 in `NDMW.AFS`). Goburimon HP ≈ 200–600 is the anchor
    (see [`../systems/enemy-data.md`](../systems/enemy-data.md)).
-   **Caveat (finding [#291](../findings/findings-0251-0500.md#f291)):** these two classes carry no usable field list in
+   **Caveat:** these two classes carry no usable field list in
    `data/reflection.json` (`beNDMWStatusInfo` has 0 fields, `beBaseInfoData` only
    `_version` @12), and their igBinary directory records list a couple of
    descriptors each — so the hp/mhp/… layout must be recovered from the stat-name
    xrefs or by fitting the instances, **not** from the reflection dump.
+
+## What didn't work
+
+- **`hdr[0]` as a blob's cumulative object count.** It reads 1,432 on entry 622, close to that pack's 1,434
+  ids, but 32,196 on entry 621, below `hdr[1]` + `hdr[5]` = 39,257. On the object packs its meaning is not
+  established.

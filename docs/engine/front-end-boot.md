@@ -5,7 +5,7 @@ below it (CRT → heap → managers → frame loop) is [`engine-boot.md`](engine
 and its native API are [`script-engine-lua.md`](script-engine-lua.md); the decompiled scripts are in
 [`lua-tree-layout.md`](lua-tree-layout.md).
 
-## The observed sequence (finding [#605](../findings/findings-0501-0750.md#f605))
+## The observed sequence
 
 Power-on, no savestate: **Intrinsic Alchemy** (publisher) → **Sođec + ADK** (developer) → the
 "DIGIMON WORLD" / "DIGITAL MONSTER" cards → the "Annihilation" opening FMV (with the "The Scourge of
@@ -48,7 +48,7 @@ over these, which is why the same names appear in it.
   **`beNDMWStageCtlInfo`** (vtable `0x53d9d0`, RTTI `0x515238`) carrying `_stageName` (`0x501d00`),
   `_nextStage` (`0x501d10`) and `_isStageLoop` (`0x501d20`) — the stage machine's own fields.
 - **The Lua API does the switching.** Every front-end entry has a `dm-run` chunk that ends with the
-  same template (finding [#606](../findings/findings-0501-0750.md#f606)), differing only in stage name and mode:
+  same template, differing only in stage name and mode:
 
   ```lua
   be:DMsetSD("STAGECTL", nil, -2, "NEXTSTAGE", "stagis09", 0)   -- logo → its scene stage
@@ -71,7 +71,7 @@ over these, which is why the same names appear in it.
 - **`beNDMWLogo`** (vtable `0x5409d0`, RTTI `0x51db88`) with `beNDMWLogoInfo` /
   `beNDMWLogoCtrlData` — the logo splash.
 
-The small slot-29 wrappers are matching C++ ([#645](../findings/findings-0501-0750.md#f645)). `beNDMWTitle2::vfunc_29`
+The small slot-29 wrappers are matching C++. `beNDMWTitle2::vfunc_29`
 (`0x3f5320`) forwards `(this->_field14, callerArgument, descriptor 0x5186a8)` to
 `FUN_0038d820`; `beNDMWLogo::vfunc_29` (`0x44abc0`) is the same operation with descriptor
 `0x51db38`. The middle argument matters: m2c drops it when the callee has no recovered
@@ -91,7 +91,7 @@ script-drawn UI.
 The **game-start** path is the `GAMESTART` / `gameStart.lua` / `PLAYERPOINT SETGENERATEPOS` block in
 the `beNDMWLoadCtrl2` table, followed by another `NEXTSTAGE`.
 
-## The title's 2-D UI tree (findings [#632](../findings/findings-0501-0750.md#f632)/#633/#634)
+## The title's 2-D UI tree
 
 The logo, the copyright block and the two menu rows are **pack scene content**, not an engine
 overlay. `AREA.AFS` entry 620 holds three `igModelCtrl` graphs beside the light-trail `j_startback`
@@ -118,8 +118,7 @@ Each node carries an `igTransformSequence1_5` **pop-in** (scale (0,0,1) → (1,1
 `igTransform`'s stored `_m` is a placeholder (zero x/y rows) and the visible resting layout is the
 part of the timeline where the scale is (1,1,1).
 
-The graphs are **animated by the pack's own `beAction2` schedule, not a frozen pose** (finding
-[#636](../findings/findings-0501-0750.md#f636)): `j_startlogo`'s `OPEN` step is a `beAction2JOINTSET` `0…30` (60 fps frames, mode `OS`) with a
+The graphs are **animated by the pack's own `beAction2` schedule, not a frozen pose**: `j_startlogo`'s `OPEN` step is a `beAction2JOINTSET` `0…30` (60 fps frames, mode `OS`) with a
 `beAction2FADESET IN` of 10 frames, and its `CLOSE` an `OUT` of 30; `j_startmenu01`/`02` `OPEN` is
 `JOINTSET 0…15 OS` with 1-frame `IN`/`OUT` fades. `j_startmenu02`'s row steps are `LINEON00 110…125`,
 `LINEDW01 50…70` (indicator down), `LINEUP00 80…100` (up) and `LINEON01 170…185`; its `select` node's
@@ -128,7 +127,7 @@ sequence carries the indicator's `y = −60 / −108` rest keys. A JOINTSET is a
 
 Beneath the layer and this UI sits the static **`stagML11` dome** (`NDMW.AFS` 806, `stagml11.igb`
 ref 0: 208 meshes / 24 949 triangles), composed through the same recovered title camera and drawn
-first — the game's order is backdrop → additive trail → UI (finding [#638](../findings/findings-0501-0750.md#f638)). That pack carries no
+first — the game's order is backdrop → `j_startback` layer → UI. That pack carries no
 lights, colours or textures, so its exact VU1 tone (and the mirrored "DIGIMON WORLD" reflection) is
 engine runtime state that the pack does not encode and is not recovered.
 
@@ -139,13 +138,13 @@ resolved item count, the three pack texture names (`logo.png`, `mojips.png`, `cu
 pop-in (a degenerate logo quad at `t=0` settling to the rest rectangle) and the `stagML11` backdrop
 composed under the layer.
 
-**How the controller addresses them (finding [#635](../findings/findings-0501-0750.md#f635)).** `beNDMWTitle2`'s own message/target table in
+**How the controller addresses them.** `beNDMWTitle2`'s own message/target table in
 `.data` runs `… TEXTORDER`, `j_startlogo`, `SQ_OPEN`, `j_startmenu01`, `MODELCTRL`, `SQ_LINESL00`,
 `ISSEQNAME`, `i_fadewn01`, `GENERATE`, `SQ_BLOUT30`, `ISRUN` — so the graphs are named targets of
 `MODELCTRL … GENERATE <seq>` exactly like `j_startback`, which is why the recovered layout *is* the
 title's rendering path (the port plays the same `SQ_*` mechanism).
 
-## The title's two states (finding [#639](../findings/findings-0501-0750.md#f639))
+## The title's two states
 
 The title is not one screen. The `mojips.png` atlas (256×128) holds three zones — **"Press START
 button"** at v 0.78…1.0, the **"Game Start" / "Option"** rows at v 0.62…0.78 and the copyright block
@@ -166,8 +165,7 @@ The opening effect runs first, on its own — see *The opening: traces, a white 
 
 ## Title input, skipping and the Option screen (port behaviour)
 
-The controller is recovered as [executable behavioral C](title-menu-controller.md)
-(finding [#728](../findings/findings-0501-0750.md#f728)). Its press-start gate accepts START alone. Option edits change displayed working values immediately and commit camera/light
+The controller is recovered as [executable behavioral C](title-menu-controller.md). Its press-start gate accepts START alone. Option edits change displayed working values immediately and commit camera/light
 after closing; Circle accepts those changes. The comparison covers state and engine-call order,
 not framebuffer equivalence.
 
@@ -187,7 +185,7 @@ not framebuffer equivalence.
   skippable with Start or Cross.)
 - **START opens the Game Start / Option rows** once the opening is over; before that
   START does nothing.
-- **Option** opens the settings screen (findings [#724](../findings/findings-0501-0750.md#f724)/#725, captured from the real game). It is the pack's own graphs in `NDMW.AFS` entry 806:
+- **Option** opens the settings screen (captured from the real game). It is the pack's own graphs in `NDMW.AFS` entry 806:
   `j_optionwin02` (band, legend panel, pill bars A–D) and the cursor `j_optioncursor11/12`, played on the
   three-slot pass of their sequences, with the front-end font's glyph quads over them. Rows: **Dungeon camera**
   (Near / Far), **Light** (Hard / Soft; power-on defaults Near and **Hard**) and **Return to Menu**. Up/Down
@@ -248,7 +246,7 @@ attribute roots include `j_slotbase`, `j_slotcursor`, `j_slotmark01/02`, `j_chrs
 Veemon `p_vmon` 160 / 70, Guilmon `p_girumon` 150 / 80, all Lv 1 (HP + MP = 230 for each). The
 `_id` word at +44 is a hash (`0x5AAA67E4`, `0xE5AB8488`, `0xECBB18CC`, `0x5BEEB640` in that order).
 
-**Port behaviour (findings [#726](../findings/findings-0501-0750.md#f726)/#727).** Game Start opens the slot screen from pack 806
+**Port behaviour.** Game Start opens the slot screen from pack 806
 (`port/src/frontchr.c`): the four panels, the two windows and the text, offline-checked against
 a retail capture of the settled slot screen to within 5 per channel on the panel bodies
 (`tools/verify_frontend.py` run 2c). Up/Down moves the highlight, Cross on Create goes on to the
@@ -259,7 +257,7 @@ screens are not drawn yet. The panels' rest key is the first 1.167 s of their se
 
 Not yet recovered: the state machine that picks the windows, and how the panel palettes are chosen.
 
-## The opening: traces, a white flash, then the UI (findings [#640](../findings/findings-0501-0750.md#f640)/#641)
+## The opening: traces, a white flash, then the UI
 
 The title does not come up at once. Immediately after the FMV the game plays an opening effect with
 **no logo, no "Press START button" and no copyright**, and the title UI appears only once it has
@@ -269,7 +267,7 @@ finished. Watched live, frame by frame (a no-input boot):
 | --- | --- |
 | ~2.4 s | on **black**, thick glowing **blue circuit-trace lines are drawn progressively** — segments appear and extend into a ring decorated with runes, with traces radiating out to the screen edges |
 | then | the pattern turns white with a bright flare in the centre |
-| when `SQ_OPEN` ends | a **full-screen white flash**: the stage's Lua runs `MODELCTRL i_fadewn01 GENERATE SQ_WTIN60`, which is `beAction2FADESET OUT _fadeTime=60 _fadeValue=1.0` on the fade model's joint 45 — white at alpha 1.0 fading to 0 over 60 frames (finding [#642](../findings/findings-0501-0750.md#f642)) |
+| when `SQ_OPEN` ends | a **full-screen white flash**: the stage's Lua runs `MODELCTRL i_fadewn01 GENERATE SQ_WTIN60`, which is `beAction2FADESET OUT _fadeTime=60 _fadeValue=1.0` on the fade model's joint 45 — white at alpha 1.0 fading to 0 over 60 frames |
 | then | a solid 3D **tunnel of concentric rings** with a bright white core, seen head-on |
 | at the same tick | the **title UI** (logo + "Press START button" + copyright) over the tunnel |
 
@@ -278,12 +276,17 @@ a rough length, not frame-exact. The port times its title UI from the layer's `S
 (`beAction2JOINTSET 0.0 → 209.0`, 60 fps, then `SQ_WAIT`; 3.48 s) — the same stretch — and the UI
 nodes stay degenerate (sequence scale 0, not drawn) until it elapses.
 
-**The traces are `j_startback` geometry** (finding [#666](../findings/findings-0501-0750.md#f666); see the title layer's render state
+**The traces are `j_startback` geometry** (see the title layer
 below): the ring and trace strips of that graph, not a separate graph or loader screen. Its animated parent
 groups carry **no scale keys and no keyframe before t≈2.0 s** (checked with the port's
 `DW4_FL_DEBUG=1` dump), so the layer is static for the opening's first two seconds. The flash is
-`i_fadewn01`'s `SQ_WTIN60` (finding [#642](../findings/findings-0501-0750.md#f642)) —
+`i_fadewn01`'s `SQ_WTIN60` —
 *not* the layer's one-frame node 895 `group9`, which is a different thing in a different model.
+
+`i_fadewn01` is a family of full-screen fade actions: joint 45 is the white node and joint 5 the black
+node. `SQ_BLIN30` is `beAction2FADESET OUT` on joint 5 over 30 frames, the mirror of `SQ_WTIN60`. The
+rest are the same pair at 0/30/60 frames (`BLOUT00/30/60`, `BLIN60`, `WTOUT00/60`), plus
+`BHLFIN30`/`BHLFOUT30` at 20 frames.
 
 The title stage's own Lua (`lua/00-title-menus/04-title-screen_e806/`) is the driver and is
 worth reading before the controller: `004-layer-setup-2.lua` runs `SQ_BLIN30` (the fade the title
@@ -314,55 +317,160 @@ A first slice that gets the port itself booting from a blank slate can hard-code
 front-end (menu-database → logo → opening → title/menu) and defer the Lua VM until the rest of the
 game needs it.
 
-## Open
-
-- **What starts the very first entry** (the power-on `menu-database` stage) is not pinned yet; the
-  tail of the engine boot chain (`engine-boot.md`, findings [#502](../findings/findings-0501-0750.md#f502)/#505) is the candidate.
-- The `0x30xxxxxx` addresses in `data/strings.json` for several of these names (`start.lua`,
-  `stagIS10`, `beNDMWStageCtlInfo`, `gameStart.lua`, `NEXTSTAGE`) are a second image in the dump, not
-  the ELF's `.data`; the ELF copies are the `0x0050…`/`0x0051…` ones cited above.
-
-## The title layer's render state (finding [#664](../findings/findings-0501-0750.md#f664))
+## The title layer: `j_startback`
 
 The front-end UI pack is **AREA.AFS entry 620** — `j_startback` (the trail/tunnel layer, scene 3),
-`j_startlogo`, `j_startmenu01/02`, 5 `igSceneInfo`, 5914 records. It carries the per-draw render
-state, so finding [#631](../findings/findings-0501-0750.md#f631)'s "no per-draw material in the pack" is **too strong** and the title layer's
-tone is recoverable from data:
+`j_startlogo`, `j_startmenu01/02`, 5 `igSceneInfo`, 5914 records.
+
+The layer's chain is `igSceneInfo` -> `igAttrSet` `BG02` (texture bind -> `igImage` `sback00.png`,
+128x64) -> `igSwitch` -> `beModelCtrlNode2` -> `igAttrSet`s -> `igTransform` groups
+(`group9/10/11/15`, `BASE05_1`) -> `igGeometry` meshes. The captured additive draws (TEX0
+`0x400714059d30b880`) are RGB-identical to `sback00.png`. `SQ_OPEN` runs action `OPEN` then jumps to
+`SQ_WAIT`, which runs `WAIT01`; the title Lua starts it with `MODELCTRL j_startback GENERATE SQ_OPEN`.
+
+`j_startback` is a 3D scene drawn in perspective down its axis, not a screen-space layer. Its meshes
+form a tunnel: `pCylinderShape3` has radius about 500 and spans z +4.5 to -3309, with rings at z about
+15, -103, -1600 and -2128, and the animated node translations along z drive the expanding rings. An
+orthographic or screen-space read collapses the meshes onto one ring. There is no joint instancing:
+each mesh is drawn once, on its node's own clock.
+
+`polySurfaceShape97`/`98` and `pCubeShape2` are the *thick circuit-trace line strips* and
+`polySurfaceShape109` the *rune ring*: the pack has the trace art as geometry. `pCubeShape8` is a
+413×413 camera-facing quad at z = −1200 whose four UVs are all (0.9844, 0.9219), a single texel.
+
+The opening "traces on black" are the same `j_startback` ring + trace strips seen before the tunnel
+panels join; they are not a separate loader screen.
+
+### Keyframes
+
+Keyframes for the layer live in `igTransformSequence1_5`, reached by `igTransform._transformInput`
+(+0x68), not in any `beAction2*` or `beModelCtrl*` record. `igTransform::vfunc_29` (`0x1dd080`) is the
+link. Entry 620 has no `igSkeleton`, `igSkin` or `igAnimation`: the "joints" are `j_startback`'s 23
+animated `igTransform` nodes, which share 12 sequences. A sequence holds `_xlateList` +0x08
+(`igVec3fList`), `_quatList` +0x0c (`igQuaternionfList`), `_scaleList` +0x10, `_startTime` +0x18 (-1.0),
+`_timeListLong` +0x38 (`igLongList`, int64 ns) and `_drivenChannels` +0x48 (1 translate, 3 translate +
+rotate, 8 scale, 9 translate + scale). The `_interpolationData*` and `_compressedDataObject` slots are
+NULL, so values come from the base lists.
+
+Channels are identified by descriptor slot, not read order: slot 2 translation (`igVec3fList`), slot 3
+rotation (`igQuaternionfList`), slot 4 scale (`igVec3fList`), slot 11 times (`igLongList`). A node may
+carry only one vec3 channel, and a missing scale channel does not mean scale 0. Where a layer node's
+`_m` is a placeholder it equals the t=0 key.
+
+| node | timeline |
+| --- | --- |
+| `group8` (the traces) | scale 1 until 2.500 s, (0,0,1) from 2.517 s |
+| `group9` | (0,1,0) except one (1,1,1) key at 2.500 s |
+| `group10`/`group11` | translate x 0 to -200/+200 over 2.583-3.000 s |
+| `group15` | moves z 0 to 800 over 2.583-3.500 s |
+
+4.000-6.000 s is the `SQ_WAIT` loop.
+
+The layer's UV scroll is an `igTransform` with `_target=9`: its translation applies to texture
+coordinates, not the model. Exactly 8 of the 299 transforms in entry 620 have it, the unnamed
+`j_startback` nodes 875, 878, 881, 884, 887, 890, 899 and 902, each parent of one trace mesh. Node 902
+has x keys -0.80 (0 s), -0.84 (1.983 s), -1.00 (2.0 s), -0.80 (2.333 s), and the stream's u offsets
+fall on that segment. The behaviour is confirmed; the enum name and the meaning "texture matrix" are
+inferred.
+
+### The title camera
+
+The title camera is the `entry` `beCameraCtrlInfo`/`igSceneInfo` in `NDMW.AFS` entry 806, selected by
+`SETDEMOCAMERA "entry"`. Its `beCameraDemoData` (`_cameraPath`, `_endTime` 1e9 ns, `_totalSec` 1) walks
+an `igGraphPath` through `animCamera01_60`, `cameraanim_GP1` (+600), `cameraanim_group01`,
+`cameraanim01` (+130) and `igCamera` `cameraanimShape01`. All four chain transforms have
+`_transformInput` NULL and a static `_m`, so `beCameraMode::vfunc_28` (`0x37a900`, via
+`FUN_001c5b30`/`FUN_001c59f0`) composes the same matrix at every time: an on-axis eye at (0,~0,730) with
+about 0.04 degrees of tilt. It is not a dolly; `_totalSec` only runs `_nowTimeL` to its end and latches
+`_isEnd`. `beCameraCtrl::vfunc_31` (`0x379c40`) selects the box path `FUN_00378ed0` or the demo path
+`FUN_00379a90`. The `stagML11` box camera is the wrong camera for this layer: it gives an off-axis arc.
+
+### Render state in the pack
+
+The pack carries the per-draw render state, so the layer's blend, alpha test and texture are
+recoverable from data:
 
 | record | value | meaning |
 | --- | --- | --- |
-| `igBlendFunctionAttr` A | `_src=4 _dst=1 _eq=0` | src-alpha + dst-colour — **the additive pass** |
-| `igBlendFunctionAttr` B | `_src=4 _dst=5 _eq=0` | src-alpha + dst-alpha — the normal pass |
-| `igAlphaFunctionAttr` | `_func=4 _refValue=0.6` | alpha test from 0.6 |
+| `igBlendFunctionAttr` A | `_src=4 _dst=1 _eq=0` | `Cs*As + Cd`, additive (GS ALPHA 0x48) |
+| `igBlendFunctionAttr` B | `_src=4 _dst=5 _eq=0` | `(Cs-Cd)*As + Cd`, ordinary alpha (GS ALPHA 0x44) |
+| `igAlphaFunctionAttr` | `_func=4 _refValue=0.6` | alpha test GREATER 0.6 |
 | `igAlphaStateAttr` / `igBlendStateAttr` | `_enabled=1` | both on |
-| `igLightingStateAttr` | `_enabled=0` | lighting **off** — there is no light rig in the tone |
+| `igLightingStateAttr` | `_enabled=0` | lighting **off**; entry 620 has no `igLightAttr` for the layer |
 | `igMaterialAttr` | `_diffuse=[1,1,1,1] _ambient=[1,1,1,1]` | white, unlit |
-| `igColorAttr` ×265 | `_color=[0.9, 0.9, 0.9, 0.95]` | on the **265 font attribute sets** (`font00`, `font01`, … `font000`…): the UI text tint. *Not* the layer — verified with the port's own loader, 265 of 301 `igAttrSet`s resolve one and all are `font*`; none of the layer's 16 meshes does (finding [#665](../findings/findings-0501-0750.md#f665), correcting [#664](../findings/findings-0501-0750.md#f664)) |
+| `igColorAttr` ×265 | `_color=[0.9, 0.9, 0.9, 0.95]` | on the **265 font attribute sets** (`font00`, `font01`, … `font000`…): the UI text tint. *Not* the layer — verified with the port's own loader, 265 of 301 `igAttrSet`s resolve one and all are `font*`; none of the layer's 16 meshes does |
 | `igTextureAttr` ×12 | filter/wrap = 1 | `_image` → `sback00.png`, `logo.png`, `base*.png`, `moji*.png`, `cursor.png` |
 
 `igShadeModelAttr _mode=1`, `igCullFaceAttr _enabled=0`, `igDepthStateAttr`, `igFogStateAttr` (one
 enabled), `igTextureStateAttr`/`igTextureMatrixStateAttr` `_enabled=1`.
 
-Consequence for the port: the layer's *shade* is not pack data (finding [#631](../findings/findings-0501-0750.md#f631) stands, [#665](../findings/findings-0501-0750.md#f665)), but the
+**Blend mode is per mesh**: an `igBlendFunctionAttr` (`_src` ordinal 4, `_dst` 5, `_eq` 6) in the mesh's
+own or the nearest ancestor `igAttrSet`. In `j_startback`, nodes 867-891 (`pCubeShape8/4/7`,
+`pCylinderShape4/2`, `pCubeShape2`, `polySurfaceShape98/97/109`) inherit record B (ordinary) and nodes
+894-907 (`polySurfaceShape101`, `pCubeShape3`, `pCylinderShape8/7/6`, `polySurfaceShape104`) inherit
+record A (additive). `pCylinderShape3`, the tunnel, has no blend attribute and draws ordinary; that
+default comes from the capture, not engine code. This is also the draw order.
+
+Consequence for the port: the layer's *shade* is not pack data, but the
 pack does bind the blend/alpha/test state and **a texture per node** (`dw4_scene_node_texture`):
 `sback00.png` for the layer's 16 meshes, `logo.png` for `polySurfaceShape2`, `mojips.png` for the
-panels, `cursor.png` for the ticks. The port's `src/frontlayer.c` draws all 16 with one texture and a
-hard-coded neutral shade (`72,72,77,127`).
+panels, `cursor.png` for the ticks. The port's `src/frontlayer.c` shades the layer per vertex with
+`fl_lit_color` (see *Open questions*); `DW4_FL_FLATCOLOR=1` gives the flat `72,72,77,127` instead.
 
-**The layer's texture is
-sampled u-mirrored** (finding [#666](../findings/findings-0501-0750.md#f666)). `polySurfaceShape97`/`98` and `pCubeShape2` are the *thick
-circuit-trace line strips* and `polySurfaceShape109` the *rune ring* — the pack has the trace art as
-geometry, the port draws it, and read straight it lands (u 0.07..0.49 at v = 0.9844) in the black half
-of `sback00`'s bottom row, where the game's traces are the vivid blue at x ≥ 64: the traces paint black
-and the opening's "trace lines" look missing. Read straight, `pCubeShape8` — a 413×413 camera-facing quad at
-z = −1200 whose four UVs are all (0.9844, 0.9219) — samples one *pure-white* texel, a hard
-**white square** over the centre. Mirroring u restores the traces, the rune ring and the violet panel
-art, and the white block goes.
+### GS draw state
 
-The opening "traces on black" are the same `j_startback` ring + trace strips seen before the tunnel
-panels join; they are not a separate loader screen.
+Each title colour buffer (FBP 0 and FBP 140) is preceded by its own full-screen clear: a SPRITE pass
+under TEST 0x30000 (ATE off, ZTST ALWAYS), black RGBAQ, five XYZ3/XYZ2 pairs tiling 64-pixel columns
+over 640x448, writing colour and Z=0. A 256-pixel CT32 target at FBP 419 is also cleared each frame.
 
-Render workbench — a title frame in about a second, no window:
+- **Material.** The trace-phase material is textured and Gouraud. PRMODECONT.AC=0 in every measured
+  dump, so the GIFtag PRIM supplies only the primitive type and PRMODE supplies the flags: 0x78 (IIP,
+  TME, FGE, ABE) and 0x58 (IIP, TME, ABE). TEX0 `0x400714059d30b880` is PSMT8 128x64 at TBP0 0x388000
+  with a CLUT; the title proper uses `0x40078005e1313b80` (PSMT8 256x128). COLCLAMP=1, DTHE=0. The
+  saturated blue comes from the texture. Read ALPHA per draw from the ordered writes: the freeze-state
+  value is left over from the previous frame's last draws.
+- **Sampling.** The GS samples `j_startback` unmirrored, with REPEAT wrap (CLAMP WMS=WMT=0) and linear
+  TEX1. Stream u minus pack u is exactly 0 for static meshes and a `_target=9` key value for scrolled
+  ones, at one time. `pCylinderShape4`'s constant u = -1/128 needs REPEAT and a floor lookup. The
+  trace-phase captures sit at layer clock 1.78-2.03 s, not t=0, so the look of 0-1.78 s has no capture
+  behind it.
+- **Far clip and depth.** The stream omits every primitive with a vertex beyond view depth 2048 (64 of
+  `polySurfaceShape101`'s 112 quads). GS Z is about 6.57e5/depth - 329, clamped at 0, larger nearer (a
+  fit), tested GEQUAL with ZMSK=0; this removes the thin `polySurfaceShape101` quads that are drawn.
+- **Alpha test.** `igAlphaFunctionAttr _func=4` (GREATER), `_refValue` 0.6 on node 862 'New Object', an
+  ancestor of `pCylinderShape3`, and 0.1 elsewhere (inferred from the stream); AREF = floor(ref*128) =
+  76 / 12, applied as `(At*Av)>>7 > AREF`.
+- **Fog.** The tunnel's fog is the GS fog stage, linear in view depth: F = floor(255*(2000-depth)/1900),
+  clamped to 0..255 (near 100, far 2000), FOGCOL white, C = Cs*F/255 + FOGCOL*(1-F/255), applied after
+  texture modulation and before blending. It fits all 160 distinct depth/F pairs of `pCylinderShape3`
+  exactly; truncation fits and rounding does not. `igFogStateAttr _enabled=1` is on node 862 only and 0
+  on BG02, PromotedAttr and WN01, which gives the stream's FGE split under nearest-ancestor lookup. The
+  near/far values are not in this pack and were fitted from one scene.
+- **Registration.** Stream y sits 0.873 px below the port's projection (empirical, dx -0.03). Later
+  tunnel phases and UI are unchecked against these rules.
+- **Title UI.** The logo, Press START text, the five-quad translucent band and the copyright quad share
+  one GS state: ALPHA 0x44, TEST GREATER AREF 12, TEX1 linear, REPEAT wrap, vertex colour
+  (127,127,127,128) = 1.0 with no tint, not the 0.9/0.95 of the font sets. Pack palette alpha is 0..255
+  where the GS holds 0..128, so every pack texture needs `(a+1)>>1`; without it partial alpha clamps to
+  opaque.
+
+### The trace phase
+
+During the trace phase the bright tunnel is drawn and then covered: later ordinary-alpha draws in the
+same frame paint over it. In the ordered stream one 1393-vertex batch (PRMODE 0x58, ALPHA 0x44) lowers
+mean RGB from 152.8 to 11.9; forcing ALPHA 0x48 throughout gives 179.1 instead of the final 12.9. Do
+not replace this with a mesh-name hide or a global blend toggle.
+
+Stream draws are attributed to meshes by per-vertex UV-multiset coverage against the pack, because a
+run of vertices sharing (TEX0, PRIM) is not one mesh and vertex counts do not identify geometry. In a
+trace-phase frame the ALPHA 0x44 runs are `pCylinderShape3` (1217/1223, 357/421, 698/698), so the
+tunnel is submitted; the covering batch is the ordinary meshes (`pCubeShape4` 196/196, `pCubeShape7`
+181/181, `pCubeShape8` 4/4); the ALPHA 0x48 runs are `polySurfaceShape101`, `pCubeShape3` and
+`pCylinderShape6`. The order matches the mesh order.
+
+### Render workbench
+
+A title frame in about a second, no window:
 
     python3 - <<'EOF'                      # a sparse roms dir straight from the ISO
     ...
@@ -372,3 +480,35 @@ Render workbench — a title frame in about a second, no window:
 `DW4_TITLE_LAYER=0` / `DW4_TITLE_BACKDROP=0` isolate each composite; `DW4_FL_TEXDUMP=1` writes the
 decoded `sback00`; `DW4_FL_DEBUG=1` lists the 16 drawn nodes and their meshes; `DW4_FL_COLOR=r,g,b,a`
 overrides the layer shade.
+
+## Open questions
+
+- **What starts the very first entry** (the power-on `menu-database` stage) is not pinned yet; the
+  tail of the engine boot chain ([`engine-boot.md`](engine-boot.md)) is the candidate.
+- The `0x30xxxxxx` addresses in `data/strings.json` for several of these names (`start.lua`,
+  `stagIS10`, `beNDMWStageCtlInfo`, `gameStart.lua`, `NEXTSTAGE`) are a second image in the dump, not
+  the ELF's `.data`; the ELF copies are the `0x0050…`/`0x0051…` ones cited above.
+- Unproven: the layer's vertex colours look lit, as `min(1, ambient + diffuse * max(0, N.L))` in the GS
+  0x80 domain. A fit over 4,494 stream vertices gives ambient (0.5, 0.5, 0.55), L = (0.297, 0.414,
+  0.861) and diffuse about 1.5 x (1, 1, 0.875), RMS 17 levels. It is not recovered data: entry 620 has
+  no `igLightAttr` for the layer, the diffuse rests on about 100 vertices and the light's space is
+  unsettled. The port's `fl_lit_color` uses this fit.
+
+## What didn't work
+
+What does not hide the tunnel during the trace phase:
+
+- **Alpha test.** GS MODULATE gives `min(0xff,(At*Av)>>7)`, so texture alpha 128 and vertex alpha 128
+  give 128, which passes GREATER AREF 76 (dividing by 255 is wrong); this settles that texel value only,
+  and real texels change the result slightly.
+- **Depth.** The frame clears Z to 0 and GEQUAL rejects some fragments, but about 93 % of the covering
+  batch is written.
+- **Back-face culling.** All-or-nothing for a tube, wherever the eye sits on its axis.
+- **Per-action appearance swap.** `j_startback`'s `beAction2Data` records carry only `_comList`, and
+  `_overrideAttrList` is empty.
+- **Undriven channels as scale 0.** Blackens the whole layer.
+- **Off-screen placement.** Its X/Y bounds cover the screen.
+- **Pose.** The stream's silhouette agrees with the port's at IoU 0.90.
+
+Sampling the layer's texture u-mirrored only appeared to work, because of rendering at t=0 with clamped
+lookups.

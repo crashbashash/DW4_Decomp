@@ -3,7 +3,7 @@
 
 No running game, no RAM dump and no load replay: a model-pack's own ids address its pool.
 
-The chain (findings #455, #457/#458, #477, #478):
+The chain:
 
     igGeometryAttr1_5   slot 4 (+0x0c) _vertexArray  -> an igObjectRef id
                         slot 5 (+0x10) _indexArray   -> 0 (NULL; there is no index buffer)
@@ -19,7 +19,7 @@ The chain (findings #455, #457/#458, #477, #478):
 
 A stream block's `_memSize` is its content size exactly -- `12*_numVerts` for the positions,
 `8*_numVerts` for the UVs -- and its offset is the pool's, where every block is 4-byte aligned
-(finding #478), so a stream lands on its own block start and no search is needed:
+, so a stream lands on its own block start and no search is needed:
 
     offset(id) = pool_start + sum(align4(_memSize) of every id below it)
 
@@ -61,7 +61,7 @@ def triples_from(prim_type, num_prims, num_verts, lengths):
             # (k+1, k, k+2) for odd k -- so every triangle keeps the same facing.  The old form
             # emitted (k, k+1, k+2) for both, so half of every strip was wound the other way;
             # that was invisible while nothing culled and it is what makes back-face culling
-            # possible now (finding #575).  This mirrors src/mesh.c's `dw4_mesh_tris`.
+            # possible now.  This mirrors src/mesh.c's `dw4_mesh_tris`.
             if k % 2 == 0:
                 tris.append((off + k, off + k + 1, off + k + 2))
             else:
@@ -106,7 +106,7 @@ def read_names(P, refl, geom_ids):
     """`{geometry attr id: model name}` -- the offline replacement for the live `M_*Shape` walk.
 
     A shape is an `igGeometry` record: its `_name` (+0x08) is the DCC part name (`pCylinderShape3`,
-    `M_BK17v1_barrelmShape`, ...), and its **attr list is ordinal 8** (the live finding #458 link).
+    `M_BK17v1_barrelmShape`, ...), and its **attr list is ordinal 8** (the live link).
     That `igAttrList`'s array (+0x10) is a block of attribute ids; the ones that are
     `igGeometryAttr1_5` records are the shape's geometry, so they take its name.  The list's count
     (+0x08) must equal the array block's u32 count -- the self-check.  An empty name (105 of the 549
@@ -169,7 +169,7 @@ def read_geometry(P, refl):
     hold would show up as a skipped attribute rather than as wrong geometry:
 
       * the vertex array must be an `igVertexArray1_1` whose `_vdata` block lists a stream of
-        exactly `12*_numVerts` bytes (finding #477: `_memSize` IS the stream's content size);
+        exactly `12*_numVerts` bytes (`_memSize` IS the stream's content size);
       * the primitive lengths must sum to `_numVerts`.
 
     Each row also carries the model's `name` where the pack names it (see `read_names`).

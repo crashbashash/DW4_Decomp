@@ -141,7 +141,7 @@ items 2 and 4 are missing):
    sits at LBA 289 with 17 files behind it and 14 free sectors at the end. The tool appends the file
    and re-points its ISO9660 directory record (extent+length are both-endian fields) and the volume
    size; the game's data never moves. Verified by booting a grown image.
-2. **A mod-ELF step, which is the *other* half and is not built.** Measured (finding [#380](../../../docs/findings/findings-0251-0500.md#f380)): the
+2. **A mod-ELF step, which is the *other* half and is not built.** Measured: the
    space above the image is **not free — it is the C heap**, which the CRT startup hands the allocator
    with `SetupHeap(0x0058d280, -1)`, and it is in use from its first byte (~8.3 MB live). But that
    base is an **argument in code this repo re-links**, so a mod region can go at `0x0058d280`…`+N`
@@ -171,7 +171,7 @@ and its hardest parts are not helped by decompiling more game code:
 | **The platform layer — replace, don't decompile** | the SDK is statically linked *inside* `game.elf` (libgraph, libdma, libpad, libmc, libcdvd, CRI), plus the 83 kernel syscall stubs, plus VU0/VU1 and the GS/DMA path; then the IOP side (pads, sound, files) behind RPC. On a port these become host shims (SDL2, file I/O, threads) | **mapped** ([`platform-boundary.md`](../../../docs/engine/platform-boundary.md)): the EE runtime is 410 functions at 0x100008..0x1137a8 (CRT + C++ runtime + libc + libkernel); its external surface is 127 entry points / 1,364 call sites, of which **41 are kernel syscall stubs** and 39 named OS functions — that named set *is* the OS shim list. CRI's file/stream middleware is a separate ~39 KB cluster at 0x2716f8, and the IOP side is 11 `.irx` modules + `IOPRP280.IMG`, named by their loaders |
 | **The engine's own seam — 32 classes, not 18,661 functions** | the engine (an `ig*` cross-platform middleware family) is written against **generic** platform classes; the PS2 implementations sit under them. **32 `igPsx2*` classes, and 32 of 32 derive from a non-PS2 base** (`igPsx2File → igFile`, `igPsx2Controller → igController`, `igPsx2Thread → igThread`, `igPsx2VisualContext → igVisualContext`, …) — recovered from the registrar's base, so it is measured rather than assumed | **this is the boundary to build against**: implement those 32 interfaces natively and the engine's logic runs unchanged. Mapping: threads/sync → pthreads; `igLongTimer` → a monotonic clock; `igFile`/`igFolder`/`igMedia` → POSIX + an ISO reader; `igController` → SDL2; `igAudioContext` → SDL2/OpenAL; the `igVisualContext`/`igWindow`/image/vertex/shader-`*Ext` set → the new renderer; `igPsx2IopRpcConnection` (the one class whose base is `igObject`, i.e. the seam itself) → **deleted**, with the IOP modules' work done in native code |
 | **What replaces libdma? Not a Linux API** | libdma drives the EE's DMA controller — chain lists to VIF1/GIF (rendering), SIF0–2 (the EE↔IOP path carrying pad/file/audio/memory-card traffic), IPU (FMV) and the scratchpad. There is no host bus to move data across, so no syscall or library takes its place | the "transfer" becomes an ordinary call consuming the same chain data from RAM: a **new renderer** for VIF1/GIF, **native code** where the IOP modules were, **ffmpeg** for the IPU path, and **no sync semantics** (`libdma: sync timeout` has no counterpart when the call is synchronous). Corollary: the SDK function *names* barely matter for a port — see [`platform-boundary.md`](../../../docs/engine/platform-boundary.md) §*The engine's own platform seam* |
-| **The renderer** | VU1 microcode plus GS → a new renderer consuming the same scene data | biggest single sub-project; **not helped by more decompilation**. The microcode's own symbol table is recovered: `0x491910` in `game.elf` lists ~150 `vu1_entry_*`/`vu1_end_*` pairs with byte offsets (`UCODE_BEGIN;0` … `UCODE_END;109184`), which is the complete map of the renderer's microcode — finding [#383](../../../docs/findings/findings-0251-0500.md#f383) |
+| **The renderer** | VU1 microcode plus GS → a new renderer consuming the same scene data | biggest single sub-project; **not helped by more decompilation**. The microcode's own symbol table is recovered: `0x491910` in `game.elf` lists ~150 `vu1_entry_*`/`vu1_end_*` pairs with byte offsets (`UCODE_BEGIN;0` … `UCODE_END;109184`), which is the complete map of the renderer's microcode |
 | **Asset loaders** | CRI AFS archives, textures, models, FMV → host formats. The *formats* are already documented ([`afs-archives.md`](../../../docs/engine/afs-archives.md), [`igbinary-format.md`](../../../docs/engine/igbinary-format.md), [`reflection-metadata.md`](../../../docs/engine/reflection-metadata.md)) | docs done; the native CRI AFS + igBinary readers are the port's asset layer ([native source](../../README.md)) |
 | **The Lua logic** | 5,291 script chunks — the game's missions, quests and UI logic | **all 5,291 decompiled and load in the native Lua 4.0.1 runtime**; native engine services and scene validation remain in progress ([tasks](tasks.md#lua-integration)) |
 
@@ -216,7 +216,7 @@ What replaces the ceilings on the source-level road is a different and much more
 
 - **Types.** Our matched C is byte-exact and written as `*(int *)((char *)p + 12)` — correct for MWCC
   and not portable C. A 64-bit host needs the real structs and signatures, which is why typed coverage
-  (repo task T10) is the port's prerequisite. Note that this work is *neutral for matching* ([#319](../../../docs/findings/findings-0251-0500.md#f319)) and
+  (repo task T10) is the port's prerequisite. Note that this work is *neutral for matching* and
   essential here: different objective, same work.
 - **32-bit pointer assumptions.** The game treats pointers as 32-bit ints, does pointer arithmetic and
   stores handles. A port either keeps a 32-bit guest arena (contained, and the simplest first step) or
@@ -247,8 +247,7 @@ what makes a port run *before* that work is done.
 
 The port's advantage is speed, so both replaced subsystems are **reimplemented natively rather than
 emulated**. In particular the GS is *not* going to be emulated: there is no plan for a GS register/
-packet interpreter driven by the real VU1 microcode. The VU1's ~237 programs (the map is finding
-[#489](../../../docs/findings/findings-0251-0500.md#f489), the image itself [#490](../../../docs/findings/findings-0251-0500.md#f490)) are treated as the **specification of what the pipeline computes** --
+packet interpreter driven by the real VU1 microcode. The VU1's ~237 programs (map and image: [`vu1-microcode.md`](../../../docs/engine/vu1-microcode.md)) are treated as the **specification of what the pipeline computes** --
 LIGHT (91 programs, 82 % of the code), TRANS, CLIP, TEXGEN, FOG, BLEND, MULTIPASS, COMPRESS -- and
 the port implements those effects on the host GPU. The same applies to audio: CRI's ADX/Sofdec and
 the SNDF sequence player are replaced, not emulated, and the `igAdx*`/`igSnd*` layer behind
@@ -263,13 +262,12 @@ asked to do while the engine still drives it.
 The work items this plan implies:
 
 1. **Map the SDK boundary inside `game.elf`** — the SDK's own library-descriptor tables are already
-   located in the data regions (the `PsIIlibgraph 2800` / `PsIIlibcdvd 2800` tables identified in
-   finding [#373](../../../docs/findings/findings-0251-0500.md#f373)), so they should yield library names and entry points: label the SDK functions,
+   located in the data regions (the `PsIIlibgraph 2800` / `PsIIlibcdvd 2800` tables), so they should yield library names and entry points: label the SDK functions,
    exclude them from decompilation priority, and **count the game→SDK call surface**, which is the
    real size of the port's shim layer.
 2. **Typed coverage as a published number** — apply the recovered structs and signatures to the
    decompiled C (`obj->field` instead of `+8`) and count what share of the code is typed. Note the
-   subtlety: this was measured **neutral for matching** ([#319](../../../docs/findings/findings-0251-0500.md#f319)) and that is expected — it is
+   subtlety: this was measured **neutral for matching** and that is expected — it is
    worthless for the matched-byte percentage and *essential* for this goal. It was never a dead end,
    it was aimed at the wrong objective.
 3. **Keep byte-identity as the oracle**, and keep decompiling engine logic through the module loop —

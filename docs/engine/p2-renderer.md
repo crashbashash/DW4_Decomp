@@ -57,9 +57,9 @@ a 64-bit pair, so the transfer is measured in *instructions*, which is what micr
 like. And the destination is not an argument — the uploader writes the **VU1 registers** and hands the
 buffer to the **scratchpad DMA**, so "where it lands" is VU1-relative, not EE-relative.
 
-### The linked-in microcode is what runs (finding [#493](../findings/findings-0251-0500.md#f493))
+### The linked-in microcode is what runs
 
-The static trace above leaves one thing open — nothing references `0x467178` (finding [#490](../findings/findings-0251-0500.md#f490)) — and a
+The static trace above leaves one thing open — nothing references `0x467178` — and a
 running game settles it. **PINE cannot read VU memory** (`0x11000000` is outside EE main RAM and
 reads back as zeros), but a **PCSX2 savestate carries `vu1MicroMem.bin`, the 16 KiB VU1 micro
 memory**, so `scripts/p2s_ram.py` gives it without the emulator running:
@@ -77,6 +77,12 @@ memory**, so `scripts/p2s_ram.py` gives it without the emulator running:
 The 24-byte shift at the start is consistent with `0x467178` being 8 mod 16 and the transfer needing
 16-byte alignment (the "Buffer not aligned" path in the chain above) — read as the explanation of the
 delta, not as a proven step.
+
+The microcode does not locate itself. No word in the image holds the address `0x467178` or the constant
+109184, so the upload does not build the address inline. `B`/`BAL` targets inside the microcode do not
+land on the `vu1_entry_*` offsets (0-5 % over 252 branches, against about 2.7 % by chance), so the 237
+programs are not entered by branches from inside the image: the EE sets the VU1 program counter. Ghidra
+offers no help here, as the extension provides only `r5900:LE:32:default` and no VU language.
 
 ## The rest of the layer names itself
 
@@ -97,18 +103,41 @@ the two predicate pairs belong to the swap-buffers and deferred-texture paths �
 outside face. The names in the first column are the *addresses*; the strings are the evidence for
 what they are.
 
+### Binding a VRAM buffer as a texture
+
+`igPsx2VisualContext::vfunc_49` (`0x169840`) takes a VRAM buffer index and reads the 0x30-byte
+`_pBufList` record at `*(ctx+0x364)+0x10+index*0x30`:
+
+| offset | field |
+| --- | --- |
+| `+0x00` | px |
+| `+0x04` | py |
+| `+0x08` | format (8, 7, 0x18, 0xf or 0x10) |
+| `+0x0c` | secondary format (0x20 or 0x18) |
+| `+0x24` | descriptor index |
+| `+0x28` | primary descriptor |
+| `+0x2c` | secondary descriptor |
+
+`FUN_0017aa20` pops a free index from the `_pTexList` pool (`+0x144`) and fills a 0x88-byte record: the
+primary descriptor goes to `+0x48`, the secondary to `+0x4c`, and `+0x84` = 2. `p2LoadTexture`
+(`0x20c270`) allocates from the `FUN_00208210` pool (global `0x56c0c8`) and writes image argument
+`+0x30`, px `+0x3c`, py `+0x3e`, format `+0x42`, TBW (`(px+0x3f)>>6`) in word 2 bits 14-19, a size at
+`+0x40` and size-1 clamped to 0x1f at `+0x44`. On this path its image argument is 0, because the pixels
+are already in VRAM.
+
 ## Lighting
 
 The layer's lighting is one function, **`p2lighting` (`0x001fb710`, 980 bytes)**, plus the two it
 tails into: it packs the engine's light list into the VU1's 16-byte constant records, and the LIGHT
 microcode does the arithmetic. The record stream, the runtime state and light tables, the light
 matrix and the call chain are decoded on their own page — [`p2-lighting.md`](p2-lighting.md)
-(finding [#499](../findings/findings-0251-0500.md#f499)) — and that page is what a reimplemented renderer consumes: the pair (LIGHT family,
+ — and that page is what a reimplemented renderer consumes: the pair (LIGHT family,
 capability bits) states *what* each program computes, and `p2lighting` states *what it is handed*.
 
-The parameters themselves are not in the disc (no light class; the runtime list is empty in every
-saved state), so a source-level port must take its light values from an explicit rig until a live
-read of the populated list supplies them — the shading *model* to implement is the one above.
+The packs carry serialised `igLightAttr` records (`scripts/pack_lights.py`), but they are prototypes
+rather than the running values: the runtime list reads empty at a frame boundary and in every saved
+state, and the live rig's colours differ from the records. The shading *model* to implement is the one
+above; [`vertex-shading.md`](vertex-shading.md) has the rig read from a live frame.
 
 ## What this gives the port
 

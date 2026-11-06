@@ -5,7 +5,7 @@
  * grid and palette.  The layout is documented in
  * DW4_Decomp/docs/engine/texture-packs.md; the decoders it was recovered with are
  * DW4_Decomp/scripts/igb_texpack.py and verify_texpack_layout.py, and this is the port's
- * C reader for the same rules (findings #472/#473/#476):
+ * C reader for the same rules:
  *
  *   +0x00  u32[12] header      [6] = sum(block sizes) + 4*(nclut + 2)
  *                              [7] = nclut + nimg + 3

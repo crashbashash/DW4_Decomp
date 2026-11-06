@@ -2,8 +2,8 @@
 """verify_models_offline.py — the offline model extractor against the live game's models.
 
 `scripts/igb_models.py` reads geometry straight out of a stage's model pack: a
-pack states its own addressing (findings #460/#464), a stream block's `_memSize` is its
-content size exactly (#477) and every block is laid out 4-byte aligned (#478), so no replay
+pack states its own addressing, a stream block's `_memSize` is its
+content size exactly and every block is laid out 4-byte aligned, so no replay
 and no running game are involved.  This is the rule test for that claim, and it is the
 reason the extractor is trusted: it compares the offline result against the ground truth a
 *paused game's* RAM holds.

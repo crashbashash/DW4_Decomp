@@ -2,7 +2,7 @@
 
 Run without analysis, then regenerate function/symbol snapshots with their owning
 scripts. Each entry is proven by literal registrar arguments and exact leaf words;
-this script refuses overlap and rolls back on any failed check. Finding #884.
+this script refuses overlap and rolls back on any failed check.
 """
 from ghidra.program.model.address import AddressSet
 from ghidra.program.model.symbol import SourceType
@@ -13,7 +13,7 @@ ROWS=((0x135530,(0x3c010058,0x03e00008,0x8c227198)),
 def main():
     space=currentProgram.getAddressFactory().getDefaultAddressSpace()
     memory=currentProgram.getMemory();manager=currentProgram.getFunctionManager()
-    tx=currentProgram.startTransaction('Reviewed object-base callback leaves #884');ok=False
+    tx=currentProgram.startTransaction('Reviewed object-base callback leaves');ok=False
     try:
         for va,words in ROWS:
             start=space.getAddress(va);end=space.getAddress(va+4*len(words)-1)

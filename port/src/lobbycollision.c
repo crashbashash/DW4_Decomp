@@ -219,7 +219,7 @@ static unsigned walk_i(const dw4_lobby_collision *c,unsigned flags,const float o
     return hit|support;
 }
 
-/* Retail CHECKWALL (FUN_00386780, findings #3001/#3003): rays at y+downRange against back-face-culled wall triangles. Returns the nearest hit
+/* Retail CHECKWALL (FUN_00386780): rays at y+downRange against back-face-culled wall triangles. Returns the nearest hit
  * distance along the ray (and the unit face normal) or a negative number. A triangle only blocks a ray travelling against its face normal
  * (n.dir < -5e-7, n = (v1-v0)x(v2-v0)); the port's strips keep one facing, so the sign agrees with retail's parity-corrected strips. */
 /* One back-face-culled triangle against the ray: the hit distance in [0,maxt] and the unit face normal, or a negative number. */

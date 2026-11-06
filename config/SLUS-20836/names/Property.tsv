@@ -9,7 +9,7 @@
 # original identifiers are not recoverable — and a name here is a claim the docs
 # already made, not a guess.
 #
-# 0x3023f0/0x302480 roles corrected from original-instruction cases, findings #873/#874.
+# 0x3023f0/0x302480 roles corrected from original-instruction cases.
 # <va>	<name>	<module>
 0x0012a4a4	igStrCmp	engine
 0x002fdf40	igMetaObject_CreateFields	engine

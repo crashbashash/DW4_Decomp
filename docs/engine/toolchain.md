@@ -3,9 +3,10 @@
 Status: **identified, running, and reproducing the retail code byte-for-byte.**
 The default matching compiler reproduces thousands of recovered functions, but
 its identity is not proof of the exact original compiler build. The complete
-combat Lua run now also needs a content-pinned alternate compiler for thirteen
-of its bodies. See [per-unit requirements](unit-compilers.md) and findings
-[#1034](../findings/findings-1001-1250.md#f1034)/#1036; the earlier unique-build conclusion in [#302](../findings/findings-0251-0500.md#f302) is unconfirmed.
+combat Lua run also needs a content-pinned alternate compiler for thirteen
+of its bodies, and many other units build under a pinned alternate. See
+[per-unit requirements](unit-compilers.md) and [build profiles](build-profiles.md).
+No single original build is established.
 
 ## Summary
 
@@ -87,7 +88,7 @@ prove original provenance; the complete combat bodies demonstrate the limit.
 
 ```sh
 # wibo is the transport that works; Wine fails on the FLEXlm license check
-local/wibo local/mwcps2/3.0-011126/mwccps2.exe -c -O4,p f.c -o f.o
+local/wibo local/mwcps2/3.0-011126/mwccps2.exe -c -O3 -Iinclude f.c -o f.o
 
 # or via the harness (compares against the retail ELF in one step)
 python3 scripts/match_func.py 0x151090 cand.c f1
@@ -102,6 +103,11 @@ Under **wibo** (the N64/PS2 decomps' loader; `decompals/wibo`, one static binary
 same binary compiles with no license prompt at all — no patching needed. Other real
 PS2 decomps do the same (`WIBO := $(BIN_DIR)/wibo` in 3s-decomp's Makefile).
 
+A compile under wibo costs time in proportion to the entries of the folder its object is
+written to: with about 178,000 files there, one small compile took up to 2.7 s against 8 ms in
+a near-empty folder, mostly in the kernel's `iterate_dir`. The tools therefore keep temporary
+files in one private folder per process, removed at exit (`tools/cc.py`).
+
 ## Verified matches
 
 First three targets, all byte-identical at `-O4,p` (see `scripts/match_func.py`):
@@ -112,10 +118,12 @@ First three targets, all byte-identical at `-O4,p` (see `scripts/match_func.py`)
 | `0x10b5c8` | `int f1(void) { return -1; }` | MATCH |
 | `0x124d40` | `void f1(void) { return; }` | MATCH |
 
-So **`-O4,p` reproduces retail code, and `wibo` + `3.0-011126` is the build to use.**
-These are deliberately trivial leaf functions; the real test is a function with calls,
-globals and control flow, which is the next step below — do not read three 8-byte
-matches as "the whole toolchain question is settled".
+These are deliberately trivial leaf functions, and `-O3` produces the same code for them, so
+they do not pin the level. The project default is `wibo` + `3.0-011126` with `-O3 -Iinclude`
+(`FLAGS` in the Makefile); each unit's compiler and flags are its profile in
+`config/SLUS-20836/units.tsv` ([build profiles](build-profiles.md)). `-O4,p` remains in a few
+units under the alternate compiler, mostly the third-party zlib and libpng units.
+`scripts/match_func.py` still defaults to `-O4,p`, so pass `--flags` for anything else.
 
 ## Fingerprinting — reproducible, with an incomplete provenance conclusion
 
@@ -126,10 +134,7 @@ and use `0x151090` with `int f1(int a){return a;}`. A differing move idiom rules
 out that build for this source spelling; agreement does not uniquely identify
 the original toolchain. Complete-function comparisons remain necessary.
 
-Still open: the other optimisation sub-flags (`-O4,p` matches on the three above, but
-`-O3` produces the same code for them, so the level is not yet pinned by evidence from
-a function that can distinguish them), and the `main`-section merge /
-`.init`/`.ctor` static-init emission.
+Still open: the `main`-section merge and the `.init`/`.ctor` static-init emission.
 
 ## Legal note
 

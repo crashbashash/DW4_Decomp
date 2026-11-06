@@ -61,7 +61,7 @@ an interrupted transition, continuing movement and faster completion after stopp
 The settled region-16 eye/interest composition agrees with the measured inverse
 view within 0.000006.
 These checks establish the camera contract, not frame-identical whole-scene
-latency or complete pixel parity. Finding [#850](../../docs/findings/findings-0751-1000.md#f850) records the recovery.
+latency or complete pixel parity.
 
 Validation covers the full native `check check-retail`, both Cross/Circle
 normal creation/login/STATUS routes, the extended SDL region-crossing route with

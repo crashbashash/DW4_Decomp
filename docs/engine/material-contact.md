@@ -26,9 +26,7 @@ symbol contains eight trailing padding bytes after its return.
 Names are semantic recoveries from the Lua API and the verified receiver, not claims about the
 original C++ spelling. Generate them with
 `python3 scripts/seed_names_material_contact.py > config/SLUS-20836/names/MaterialContact.tsv`,
-then use the dry run and `--apply --check` naming workflow. Findings [#858](../findings/findings-0751-1000.md#f858)–[#859](../findings/findings-0751-1000.md#f859) record the
-dependency inventory and module evidence; finding [#860](../findings/findings-0751-1000.md#f860) records the lifecycle recovery and [#861](../findings/findings-0751-1000.md#f861) the
-dispatcher extent and box-membership evidence.
+then use the dry run and `--apply --check` naming workflow.
 
 ## Matching status and source
 
@@ -170,7 +168,7 @@ and misalignment.
 
 ## Update ownership and call contracts
 
-Finding [#2749](../findings/findings-2501-2750.md#f2749) establishes five automatic reference-owner lifetimes in the update at `0x0038b1f0`.
+The update at `0x0038b1f0` has five automatic reference-owner lifetimes.
 Its exception index at `0x0054eba0` records function size `0xbf8` and table `0x00543890`. The
 independently checked next full index at `0x0054ebb8` identifies `0x0038bee0`, size `0x4ac`, table
 `0x005438d0`. This bounds the material table to **64 bytes: 62 payload bytes and two zero pads**.
@@ -203,12 +201,12 @@ These contracts are recovered independently of a matching main-body claim.
 
 ### Regional and platform counterparts
 
-Confirmed finding **[#2750](../findings/findings-2501-2750.md#f2750)** identifies the corresponding update at `0x0038b480` in Europe and
+The corresponding update is at `0x0038b480` in Europe and
 `0x0038c8c0` in Japan. All three releases have the same critical bit-test loop. Address-shaped
 operand differences in the rest of the body do not establish equivalent behavior of the referenced
 callees or data, and comparing the releases does not resolve the USA mismatch.
 
-A comparison with the GameCube and Xbox updates (finding [#2752](../findings/findings-2751-3000.md#f2752)) shows different load placement
+A comparison with the GameCube and Xbox updates shows different load placement
 there; it does not close the USA boundary either. The regional and platform targets are retired
 and their comparison tooling is not in the repository.
 
@@ -248,7 +246,7 @@ still applies.
   the changed-bit scan. The register gap is that retail holds the previous word in `a0` and the
   current compare temporary in `a1`. The candidate stays outside `src/`; no instruction difference
   is patched away.
-- **Natural loop forms do not close the gap (refuted finding [#2756](../findings/findings-2751-3000.md#f2756)).** Retail leaves the four-bit
+- **Natural loop forms do not close the gap.** Retail leaves the four-bit
   scan after the first changed bit: the changed path ends with an unconditional branch to the
   outer-loop increment (`0x38bc58`), and the unchanged path increments the bit and branches back to
   the shift at `0x38ba58`. The current and previous list words are loaded once before that loop.

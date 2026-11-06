@@ -129,6 +129,10 @@ marked `provisional`. An emitted body or duplicate of a compiler unit
 (`config/SLUS-20836/unit-objects.json`) is not compiled on its own, so a pin on such an address
 that differs from its unit's profile is kept as an untested override.
 
+A stub cannot decide a unit's profile, since a 12-byte `vfunc_20` matches under both
+compilers. The `beNDMWShopDevice` unit (`0x43cc20`-`0x43d0bc`) looks like default `-O3` on
+its stub alone; `vfunc_21` reproduces only under the 2003 beta at `-O3,p` with exceptions on.
+
 ## Reviewing a provisional unit
 
 A provisional unit is a claim that its members cannot have been built by one command,
@@ -153,6 +157,11 @@ which is impossible for a real translation unit. One of three things is true:
 Until one of those is done the function stays `foreign-profile` and the unit stays
 `provisional`. Never pin a profile to make one function pass while its unit says
 otherwise.
+
+A per-function pin on an emitted body breaks every unit that names it as a duplicate.
+`0x357a90` and `0x38c390` are emitted by the `beMessenger` unit at `0x38e8f0` (combat
+`-O3,p`, exceptions on), and default-compiler pins on them made `0x38ed70`, `0x38ef50`,
+`0x38e6b0` and `0x38bee0` fail on the kept copy's delay-slot scheduling.
 
 ## Adding or changing a unit by hand
 

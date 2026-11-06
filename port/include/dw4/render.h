@@ -2,11 +2,11 @@
  *
  * The plan's first renderer consumes scene data on the host rather than emulating the VU1/GS pair,
  * and a software pass is the shortest route to something you can *look at*: the loader already hands
- * out renderer-ready meshes (positions, UVs, triangles, DCC names — findings #481/#482), `png.c`
+ * out renderer-ready meshes (positions, UVs, triangles, DCC names), `png.c`
  * writes the output and the texture packs decode, so no window system or GPU is needed yet.
  *
  * What it is not: the game's own pipeline.  The GS's register state, the VU1 microcode's transform
- * and lighting, and the stage's object placement (finding #484: a model node's attr list is empty in
+ * and lighting, and the stage's object placement (a model node's attr list is empty in
  * the file — the controller assigns models to nodes at load) are all still open.  This draws meshes,
  * with a camera fitted to each one.
  */
@@ -32,11 +32,10 @@ typedef struct {
 /* --- lighting (renderer P4.3/P4.4) -------------------------------------------------------------
  *
  * The shading *model* is the engine's: the LIGHT VU1 programs name AMBIENT, DIRECTIONAL
- * (infinite), POSITIONAL/LOCAL, SPOTLIGHT, LINEAR_ATT and `_SPEC`/`_NOSPEC` (findings #489/#492/
- * #494), and `igLightAttr` (`data/reflection.json`) is the serialised light those programs read.
+ * (infinite), POSITIONAL/LOCAL, SPOTLIGHT, LINEAR_ATT and `_SPEC`/`_NOSPEC`, and `igLightAttr` (`data/reflection.json`) is the serialised light those programs read.
  *
  * The *values* are not recovered: `p2lighting` reads a runtime list that is empty in every saved
- * state (finding #499, `docs/engine/p2-lighting.md`), so the disc does not state them.  A caller
+ * state (`docs/engine/p2-lighting.md`), so the disc does not state them.  A caller
  * therefore supplies the rig; `dw4_render_mesh`/`dw4_render_mesh_tex` fall back to a built-in
  * placeholder rig when none is set.  Positions and directions are in the **same space as the
  * mesh's `pos` buffer** (object space for `--name`, world space for a captured scene). */
@@ -79,7 +78,7 @@ void dw4_render_set_fog(const dw4_fog *fog);
 /* Parse `<linear|exp|exp2>,start,end,density,r,g,b` (start/end ignored by exp/exp2).  Returns 0. */
 int dw4_render_parse_fog(const char *spec, dw4_fog *fog);
 const dw4_fog *dw4_render_get_fog(void);
-/* The game's own stage fog (finding #603/#604): FOG_LINEAR, near 60 / far 300, colour FOGCOL
+/* The game's own stage fog: FOG_LINEAR, near 60 / far 300, colour FOGCOL
  * 0xE5CCE5.  Fills `out`, returns 0.  The scene path uses this when the caller passes no fog. */
 int dw4_render_game_fog(dw4_fog *out);
 
@@ -106,35 +105,35 @@ void dw4_render_fit_view(const uint8_t *pos, uint32_t nverts, float yaw, float p
 /* One-sided or two-sided `N.L` (default two-sided, the port's long-standing behaviour).  Two-sided
  * folds the term with `fabs`, lighting a surface turned away from the light as if it faced it;
  * `dw4_render_set_two_sided(0)` drops that term instead, which is what the game's culled front
- * faces get.  Measured a no-op on the camera-matched Goblin Pass frame (finding #560), so it is a
+ * faces get.  Measured a no-op on the camera-matched Goblin Pass frame, so it is a
  * knob rather than a new default. */
 void dw4_render_set_two_sided(int on);
 int  dw4_render_two_sided(void);
 
-/* Back-face culling (finding #575): 0 off, 1 cull back faces, 2 cull front faces.  The game culls
+/* Back-face culling: 0 off, 1 cull back faces, 2 cull front faces.  The game culls
  * at the VU1 clip stage, so a surface the camera cannot see is never drawn; the port used to draw
  * both faces everywhere, which is what put slivers and a sawtooth rim on the props. */
 void dw4_render_set_cull(int mode);
 int  dw4_render_cull(void);
 
 /* Unlit: skip the light term entirely, so the fragment colour is the texel times the mesh tint
- * (`igLightingStateAttr._enabled = 0` materials, finding #563). */
+ * (`igLightingStateAttr._enabled = 0` materials). */
 void dw4_render_set_unlit(int on);
 int  dw4_render_unlit(void);
 
 /* Gouraud: light each vertex once with its own authored normal and interpolate the colour, the
- * game's own path (finding #583). Enabled by default; disabling it interpolates
+ * game's own path. Enabled by default; disabling it interpolates
  * normals and lights per pixel. */
 void dw4_render_set_gouraud(int on);
 int  dw4_render_gouraud(void);
 
 /* Texture sampling: bilinear (the default, as the GS filters a magnified texture) or nearest.
- * A 32x32 atlas magnified ~10x is where it shows -- the crate's wood (finding #562).  The GL path
+ * A 32x32 atlas magnified ~10x is where it shows -- the crate's wood.  The GL path
  * maps this to GL_LINEAR / GL_NEAREST. */
 void dw4_render_set_tex_filter(int bilinear);
 int  dw4_render_tex_filter(void);
 
-/* The engine's texture matrix as a UV affine: `uv' = uv * scale + offset` (finding #567; every live
+/* The engine's texture matrix as a UV affine: `uv' = uv * scale + offset` (every live
  * `igTextureMatrixAttr` is the identity with a translation in elements 12..13). */
 void dw4_render_set_uv_offset(float u, float v);
 void dw4_render_set_uv_scale(float scale);
@@ -142,7 +141,7 @@ void dw4_render_set_uv_scale(float scale);
 /* Replace the rig (up to `DW4_MAX_LIGHTS`; `n <= 0` restores the game's built-in rig). */
 void dw4_render_set_lights(const dw4_light *lights, int n);
 int  dw4_render_light_count(void);
-/* The game's standard light rig (finding #554), from the packs' `igLightAttr` records: fills up to
+/* The game's standard light rig, from the packs' `igLightAttr` records: fills up to
  * `max` lights and returns the count (2).  Both backends use it when the caller supplies no rig. */
 int  dw4_render_builtin_rig(dw4_light *out, int max);
 
@@ -268,7 +267,7 @@ void dw4_render_wire(dw4_fb *fb, const uint8_t *pos, uint32_t nverts, const uint
 /* --- a readout on the frame (`--fps`, `--osd-text`) --------------------------------------------
  *
  * A deliberately minimal 5x7 bitmap font for on-screen readouts.  It is NOT the game's text: the
- * engine generates its own from `bectext.igb`'s bitmap font (finding #608), and nothing of that is
+ * engine generates its own from `bectext.igb`'s bitmap font, and nothing of that is
  * wired up here.  This exists so a diagnostic number can be read off the frame itself.
  *
  * `dw4_fb_text` draws `s` at (x, y), one 5x7 glyph per 6*scale px, in `r,g,b`, with a 1px dark

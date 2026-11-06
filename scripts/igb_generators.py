@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """igb_generators.py — resolve a pack's spawn/drop graph offline.
 
-Uses the remap table (`scripts/igb_ids.py`, finding #460) to walk:
+Uses the remap table (`scripts/igb_ids.py`) to walk:
 
     beGeneraterData                  the spawn row (enemy id, position, timer, modes)
       ._playerDataList  -> beGeneraterPlayerDataList
@@ -12,7 +12,7 @@ Uses the remap table (`scripts/igb_ids.py`, finding #460) to walk:
                                -> beGeneraterItemDataOne  (category, _id, _rank, _rate)
 
 and prints the result, or writes it as JSON.  Everything comes from the file: no
-emulator and no live RAM (findings #419/#460).
+emulator and no live RAM.
 
   igb_generators.py NDMW.AFS --blob 0x21307000
   igb_generators.py NDMW.AFS --blob 0x21307000 --json /tmp/stag0102.json

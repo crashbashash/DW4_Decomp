@@ -16,7 +16,7 @@
 
 /* --- the recovered controller schedule (the pack's own `beAction2` data, AREA.AFS 620) ----------
  *
- * `beNDMWTitle2` (finding #635) drives each UI graph with `MODELCTRL <graph> GENERATE <seq>`, the
+ * `beNDMWTitle2` drives each UI graph with `MODELCTRL <graph> GENERATE <seq>`, the
  * same mechanism `j_startback` uses.  Each graph's action-2 `OPEN`/`CLOSE` step carries a
  * `beAction2JOINTSET` (a *time range* in 60 fps frames -> `frames*1e9/60` ns) and a
  * `beAction2FADESET` (its fade time, in frames).  Recovered per graph (scripts/modelctrl_dump.py):
@@ -26,8 +26,8 @@
  *   j_startmenu02  OPEN  JOINTSET  0..15 'OS'   FADESET IN  1 frame,  CLOSE FADESET OUT  1 frame
  *                  row steps: LINEON00 110..125, LINEDW01 50..70, LINEUP00 80..100, LINEON01 170..185
  *
- * A node's `_time` advances with the engine clock and is rebased onto the window (finding #619);
- * `OS` clamps at `_endTime` (finding #618).  The `select` node of `j_startmenu02` is the moving row
+ * A node's `_time` advances with the engine clock and is rebased onto the window;
+ * `OS` clamps at `_endTime`.  The `select` node of `j_startmenu02` is the moving row
  * indicator: its sequence keys map `y` -60 (LINEDW01 start) -> -84 -> -108 (down) and the reverse
  * (LINEUP00), so the two rest positions are samples of that one sequence.
  */
@@ -164,7 +164,7 @@ static const dw4_tex *ui_texture(dw4_frontui *ui, uint32_t image_id)
             rgba[(y * im->w + x) * 4 + 1] = pal[pi + 1];
             rgba[(y * im->w + x) * 4 + 2] = pal[pi + 2];
             /* the palette's alpha is 0..255; the GS holds it as 0..128 (0x80 == 1.0), which the PCSX2
-             * texture dump shows is exactly (a + 1) >> 1 (finding #712 / sback00).  Without it every
+             * texture dump shows is exactly (a + 1) >> 1.  Without it every
              * soft edge and the band's partial alpha clamped to opaque. */
             rgba[(y * im->w + x) * 4 + 3] = (uint8_t)(((unsigned)pal[pi + 3] + 1u) >> 1);
         }
@@ -458,7 +458,7 @@ static const dw4_title_model *host_graph(const dw4_frontui *ui, uint32_t gi)
 }
 
 /* Whether an item of graph `gi` is drawn in the current state: the logo/copyright always, the
- * press-start line only before START, the Game Start/Option rows only after (finding #605/#639). */
+ * press-start line only before START, the Game Start/Option rows only after. */
 static int ui_item_visible(const dw4_frontui *ui, uint32_t gi)
 {
     if (ui->card) return 1;
@@ -672,7 +672,7 @@ int dw4_frontui_draw(dw4_frontui *ui, dw4_fb *fb, int selected)
     if (!ui || !fb || !ui->nitems)
         return 0;
     /* a selection change plays the recovered transition (the pack's own `select` indicator); the
-     * rows only exist in the menu state (finding #605/#639) */
+     * rows only exist in the menu state */
     if (!ui->host && ui->state == DW4_FRONTUI_MENU && selected >= 0 && selected != ui->prev_sel) {
         if (ui->prev_sel >= 0 && ui->sel_node != 0xFFFFFFFFu) {
             ui->sel_dir = (selected > ui->prev_sel) ? 1 : -1;

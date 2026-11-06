@@ -1,13 +1,13 @@
 /* beNDMWStatusMainSlot methods (Gap::Bec::beNDMWStatusMainSlot): two slots of
  * the status screen's main slot that forward to the equipment procedures
- * 0x00411950 and 0x00412600 (findings #796/#802: "STATUS equipment
+ * 0x00411950 and 0x00412600 ("STATUS equipment
  * 411950/412600") with the current pocket (`_apuPocket`), the cursor position
  * in it (`_pocketPos`) and one more argument.  Functions are in retail address
  * order. */
 #include "dw4/reflected.h"
 extern "C" {
 /* Equipment procedure of the status screen; the last argument is passed through
- * from the vfunc_39 caller (finding #802, DEVICE). */
+ * from the vfunc_39 caller (DEVICE). */
 void FUN_00412600(int slot, int pocket, int pocketPos, char *extra);
 void Gap__Bec__beNDMWStatusMainSlot__vfunc_39(beNDMWStatusMainSlot *, char *, char *, int);
 }

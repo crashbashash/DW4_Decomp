@@ -19,7 +19,7 @@ refuses the file / guesses wrong:
 
 This is the *first* half of the pipeline. m2c's output references globals as
 literal casts (`*(int *)0x55EBC0`), which MWCC compiles to a scratch register +
-`ori` instead of retail's symbol-relative `lui`/`addiu` (finding #307), so a
+`ori` instead of retail's symbol-relative `lui`/`addiu`, so a
 post-pass (see `tools/m2c_batch.py`) is what turns it into a verifiable candidate.
 
 Usage:
@@ -288,7 +288,7 @@ def asm_for(va, name, size, table, names_by_va, bounds=None, symbolize_data=True
         #
         # The name is `GPR_<addr>`, not `DAT_<addr>`, because it has to carry the
         # *addressing mode*: `m2c_batch.arrayize_globals` forces a `DAT_` global out of
-        # small data (so it gets absolute `lui`/`addiu`, finding #311), which is exactly
+        # small data (so it gets absolute `lui`/`addiu`), which is exactly
         # wrong for an object retail reaches through gp. Keeping the two namespaces
         # apart lets the cleaner leave a `GPR_` object the size m2c inferred, so `lbu`
         # stays `lbu` and `lwc1`/`ld` stay gp-relative too.
@@ -329,7 +329,7 @@ def asm_for(va, name, size, table, names_by_va, bounds=None, symbolize_data=True
         # registers `t0-t3`. m2c's EE arch (`MipseeArch`) names those argument slots
         # `a4-a7` instead, so feeding it the hardware names leaves the `t0-t3` setup
         # unmodelled as a *temporary* and the arguments are dropped from the call
-        # (finding #332 measured the convention; this is the bridge to m2c).
+        # (the bridge to m2c).
         for row in ins:
             row[2] = re.sub(r"\$t([0-3])\b",
                             lambda m: "$a%d" % (4 + int(m.group(1))), row[2])

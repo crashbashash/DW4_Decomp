@@ -2,7 +2,7 @@
 """verify_texpack.py — diff the C texture-pack reader against the repository's decoder.
 
 The port's `dw4asset texpack` and DW4_Decomp/scripts/igb_texpack.py implement the same
-rules (#472/#473/#476), so they must agree on every texture's ids and block offsets, and
+rules, so they must agree on every texture's ids and block offsets, and
 on the decoded pixels.  This is the texture half of `make check`.
 
   tools/verify_texpack.py [--tool build/dw4asset] [--afs <NDMW.AFS>] [entries...]

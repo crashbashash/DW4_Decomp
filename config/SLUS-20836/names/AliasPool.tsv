@@ -1,7 +1,7 @@
-# Alias pool factory and retained binding; finding #900.
+# Alias pool factory and retained binding.
 0x002cd170	igAliasMemoryPool_Create	engine
 0x002d0560	igAliasMemoryPool_AssignAlias	engine
-# Complete runtime behavior and reflection-backed fields; finding #902.
+# Complete runtime behavior and reflection-backed fields.
 0x002d0a10	igAliasMemoryPool_Lock	engine
 0x002d0a50	igAliasMemoryPool_Unlock	engine
 0x002d0a80	igAliasMemoryPool_UnlockAndReturn	engine

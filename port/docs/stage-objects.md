@@ -25,6 +25,15 @@ the mount must outlive these owners. Object reference fields retain pack-local i
 `dw4_scene_handle` resolves them into four-byte arena handles. No host pointer is
 written into a recovered reference field.
 
+`dw4_scene_load` (`src/scene.c`) places every id's payload at a 32-bit arena handle in
+id order, then reads geometry back through those handles. The arena packs ids at
+`DW4_SCENE_ALIGN` (16), so the file's pool padding is not reproduced and nothing in the
+loader path depends on a file offset. The stage's pack is reached the way the game
+does it: manifest, stage `.igb`, then its own `[0.621]` entry reference.
+`dw4asset scene --check` asserts that every id is placed once in order, that each
+payload is byte-identical to the file, and that every mesh handle resolves (NDMW.AFS
+entry 621: 50,497 ids, 549 meshes, 82,134 vertices).
+
 The live title MODELCTRL receivers select their names from routed native
 `beModelCtrlInfo` objects and require the authored `entry` camera info. The five
 lobby window receivers likewise require and use their routed controller records.

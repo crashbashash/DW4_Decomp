@@ -21,7 +21,7 @@ The method is three cheap measurements over each region, all reproducible:
 
 | region | bytes | composition | what it is |
 | --- | ---: | --- | --- |
-| `0x521750` | 209,840 | 79 % code pointers | **the vtable region.** 6,613 runs of code pointers, most 21–23 long, each preceded by a `[rtti, 0]` header — the layout the 478 vtables in `data/vtables.json` have. That dump came from the RTTI records, so this region holds the vtables of the classes with **no** RTTI (finding [#368](../findings/findings-0251-0500.md#f368) extracted 980 class vtables in total). Its first 828 words are code, not data (§below) |
+| `0x521750` | 209,840 | 79 % code pointers | **the vtable region.** 6,613 runs of code pointers, most 21–23 long, each preceded by a `[rtti, 0]` header — the layout the 478 vtables in `data/vtables.json` have. That dump came from the RTTI records, so this region holds the vtables of the classes with **no** RTTI (980 class vtables are extracted in total). Its first 828 words are code, not data (§below) |
 | `0x4833c8` | 321,816 | 44 % pointers, 33 % zero | **Sony SDK library metadata + embedded VU1 microcode.** Strings: `PsIIlibcdvd 2800`, `PsIIlibpad 2800`, `PsIIlibsdr 2800`, `PsIIlibmc 2810`, plus VU program metadata (`EXECUTE_PATH;1073741824;;131077;;;;.EXECUTE_RENDERLIST;…`, `vu1_entry_UCODE_BEGIN;0;vu1_entry_EXECUTE_PATH;16;vu1_end_EXECUTE_PATH`) and `Error decoding compressed text` |
 | `0x467108` | 110,536 | packed records: 4,465 words of `0x2ff`, 3,515 of `0x8000033c` | **more SDK metadata** — `PsIIlibgraph 2800`, `PsIIlibdma 2800`, `PsIIlibipu 2800`, `PsIIlibkernl 2800` — with the word shape of SDK library-descriptor / relocation entries |
 | `0x50005c` | 54,724 | 11 % pointers, 1,688 ASCII runs | **reflection metadata** — the class and field name/descriptor arrays behind the MetaObject field tables (`Gap::igAdxFile`, `Gap::Core::igNamedObject`, `_ptNumber`, `_fileNumber`) |
@@ -42,10 +42,10 @@ Two consequences worth stating:
 
 Two of the biggest regions **start with code**. `0x521750` disassembles cleanly — a
 `lui at,0x59 / sw zero,-14736(at)` guard, then a tail `j 0x100c20` with its arguments set, the
-static-initialiser idiom — and `config/SLUS-20836/symbols.txt` jumps from `FUN_00521730` (ends `0x521750`)
-straight to `data_00521750`.
+static-initialiser idiom — and is `FUN_00521750` in `config/SLUS-20836/symbols.txt`, directly after
+`FUN_00521730`.
 
-The same search finds verified leaf functions that were never claimed:
+Ghidra's labels miss verified leaf functions in the same way:
 
 | address | body | what it is |
 | --- | --- | --- |
@@ -54,21 +54,15 @@ The same search finds verified leaf functions that were never claimed:
 | `0x13c410` | `jr ra; sw a1,12(a0)` | a one-instruction setter, `obj->unkC = v` |
 
 `0x1024d0` appears as a 4-byte word in the image — once, at `0x5224ac` inside the vtable region —
-so this is not dead code. It survived because **both promotion passes iterate Ghidra's gap `LAB_`
-labels**: `promote_gap_labels` wants a frame prologue (finding [#346](../findings/findings-0251-0500.md#f346)) and `promote_data_labels`
-wants a data reference (finding [#365](../findings/findings-0251-0500.md#f365)), but for an address Ghidra never disassembled there is no
-label to iterate at all. A function reachable only through a pointer table is therefore invisible
-to both.
+so this is not dead code. **The two label rules cannot see such a function, because both iterate
+Ghidra's gap `LAB_` labels**: `promote_gap_labels` wants a frame prologue and `promote_data_labels`
+wants a data reference, but for an address Ghidra never disassembled there is no label to iterate at
+all. A function reachable only through a pointer table is therefore invisible to both.
 
-Measured over the whole image: 8,679 distinct 4-byte words point into a data region, of which
-**43 are leaf-shaped** (a `jr ra` in the first 16 bytes, no prologue) and **145 are
-prologue-shaped** — about 188 unclaimed functions. 1,143 data regions contain a `jr ra` at all
-(503 of them ≤24 bytes; some of those are the 80 known SDK syscall stubs, which sit in data regions
-because they are deliberately excluded from the split).
+`promote_referenced_starts` in `tools/split.py` closes that gap: it is keyed on table-context data words
+and code literals rather than on Ghidra's labels, and the body may be a leaf or open a frame. The
+reference is the signal instead of the label, and all the functions above now have symbols. The 80
+known SDK syscall stubs are a separate case: they are deliberately excluded from the split.
 
-The fix is a **third promotion pass keyed on the data words rather than on Ghidra's labels**: for
-every 4-byte word landing in an unclaimed region whose target decodes to a plausible body, promote
-it. The reference is the signal instead of the label. Note that adding ~188 unmatched functions
-*lowers* the published coverage percentage until they are decompiled — the matched count is the
-number that matters (the same point [#365](../findings/findings-0251-0500.md#f365) made when the leaf promotion grew the denominator), and
-these are trivial functions that the m2c pipeline handles well.
+Promoting a function *lowers* the published coverage percentage until it is decompiled, so the matched
+count is the number that matters.

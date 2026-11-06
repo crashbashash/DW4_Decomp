@@ -2,13 +2,13 @@
 
 `p2lighting` (`0x001fb710`, 980 bytes) is the one lighting function in the `p2` backend that
 **builds the constant block the LIGHT microcode reads**. It is named in its own trace string (the
-pointer `0x004e5150` is passed to the logger at `0x0020dfd0`), which is how [#491](../findings/findings-0251-0500.md#f491) identified it; this
+pointer `0x004e5150` is passed to the logger at `0x0020dfd0`); this
 page is the static decode of its body and of the runtime state it reads.
 
-Nothing here is a value the disc ships: every source is a runtime global in the EE's bss (the pack
-has **no** class containing `Light`, finding [#498](../findings/findings-0251-0500.md#f498)), and the per-light descriptors are built by the
-scene-load hooks around `0x00170ed0`/`0x001709d0`. The record stream is therefore fully recovered,
-while the **parameters** are not present in the files — see *What is not recovered*.
+Every source the function reads is a runtime global in the EE's bss, and the per-light descriptors
+are built by the scene-load hooks around `0x00170ed0`/`0x001709d0`. The record stream is fully
+recovered. The packs carry serialised `igLightAttr` records, but those are prototypes, not the running
+**parameters** — see *Light records in the packs* and *What is not recovered*.
 
 ## The call chain
 
@@ -25,7 +25,7 @@ while the **parameters** are not present in the files — see *What is not recov
 | `FUN_001f8aa0` | 60 | copies 16 bytes into `0x56AEE0` — the block `p2lighting` emits as record 3 |
 
 `FUN_001fb0e0` reads the current program record's flags through `0x562C70 + 4*(*(0x569330))` (the
-runtime program table, the same flags [#492](../findings/findings-0251-0500.md#f492)/#494 decoded) and branches on four bits: `0x1000`
+runtime program table, the same flags decoded in [VU1 microcode](vu1-microcode.md)) and branches on four bits: `0x1000`
 (texgen), `0x100000` (scale), `0x200000`, and the mode global `0x56AED0` (1 or 5). It then copies
 the program's 48-byte record into the transfer descriptor's cursor, appends either `p2lighting`'s
 block (lit) or `FUN_001fb470`'s (unlit), and hands the cursor on. That is the whole "lighting" step:
@@ -69,7 +69,7 @@ record B is the plain `L[0x70]`. Finally, if `0x56AFAE` is set, it calls
 
 The names of the LIGHT programs and the object model agree on the vocabulary: `AMBIENT`,
 `DIRECTIONAL` (infinite), `POSITIONAL`/`LOCAL`, `SPOTLIGHT`, `LINEAR_ATT`, `_SPEC`/`_NOSPEC`, and the
-per-material multipass suffixes (findings [#489](../findings/findings-0251-0500.md#f489)/#492/#494). `igLightAttr` is the serialised light
+per-material multipass suffixes. `igLightAttr` is the serialised light
 (reflection, `data/reflection.json`), and its declared layout is the semantic key:
 
 ```
@@ -101,7 +101,21 @@ names:
 | `+0x84`, `+0x90`, `+0x94`, `+0x98` | `w`, registration index, enabled bool, direction mode (0 or 2) |
 
 So the *stream* is recovered to the byte, and the *field roles* are recovered from how the code uses
-them; the *values* are not in the disc.
+them; the running *values* are not.
+
+## Light records in the packs
+
+Packs carry serialised `igLightAttr` records (fields `_lightType` +0xc, `_ambient` +0x20, `_diffuse` +0x30,
+`_specular` +0x40, `_direction` +0x50, `_falloff` +0x5c, `_cutoff` +0x60, `_attenuation` +0x64), decoded offline by
+`scripts/pack_lights.py`:
+
+| pack | ambient | directional | spot |
+| --- | --- | --- | --- |
+| common packs (179, 187, 195, 203, 210, 218 and others) | (0.4, 0.4, 0.45) | diffuse/specular (0.8, 0.8, 1.1) along (0.2424, -0.8192, -0.5198) | white at (0, 90, 0), 30 degree cone |
+| stage pack `NDMW.AFS:614` | (0.5, 0.5, 0.55) | diffuse (1.3, 1.3, 1.17) along (0.3214, -0.866, 0.383) | the same; it does not reach the Goblin Pass arena |
+
+The `0x56AF40`/`0x56AF94` globals read empty at a frame boundary, and the live rig's colours differ from these records,
+so the records are prototypes, not the running values.
 
 ## The runtime globals
 
@@ -124,14 +138,13 @@ them; the *values* are not in the disc.
 Measured from an offline RAM dump (stag0102 loaded): `0x56AF00 = 2`,
 `0x56AF94 = 0`, `0x56AF60 = 0x006e9820`, `0x56AFD0` is the identity, and `0x56AF40` is **all NULL**.
 The same is true of **every** saved state (17 checked): the per-light pointer table is populated only
-during the render pass and is empty in a savestate taken outside it, so a savestate cannot supply the
-light values either. That is a measured negative, not a guess.
+during the render pass and is empty in a savestate taken outside it.
 
 ## The VU1 rotates the light block in place
 
 A lit draw's colour depends on **how many hardware matrix uploads came since the EE last sent the light block**, not only on the
-light and the normal. Recovered from the asm, a retail savestate (stag0001 practice stage) and a retail GS dump ([#3105](../findings/findings-3001-3250.md#f3105) confirmed for the
-stag0001 values; the generalisation and the event model are [#3106](../findings/findings-3001-3250.md#f3106), unconfirmed):
+light and the normal. Recovered from the asm, a retail savestate (stag0001 practice stage) and a retail GS dump (confirmed for the
+stag0001 values; the generalisation and the event model are unconfirmed):
 
 1. **Eye-space light, once per light apply.** `igLightAttr::apply` (`0x0013eb10`) calls `FUN_00170ed0`, which stores descriptor `+0x60 =
    normalise(-src_dir x getMatrix(1))`, the source direction times the model-view top. The `igLightAttr` itself keeps its authored
@@ -171,7 +184,12 @@ then `k = fresh ? 0 : k + 1` and pending clears. Two event models (transform ent
 are run side by side and k is kept only where they agree. Safe scope: static meshes of a `BG02` root in field stages (never the
 Main Lobby hubs), world 3x3 identity, and a root made only of attribute sets, groups, geometries and transforms.
 
-**Not established ([#3106](../findings/findings-3001-3250.md#f3106), unconfirmed):** a second retail dump with k > 0 (the three practice-stage dumps are the only constant dim additive draws in
+**Other stages.** Outside the practice stage and the hubs the port's lighting agrees with retail at the same camera and position:
+mean luminance ratios 0.97-1.01 on Goblin Pass floor and walls, 0.992-0.998 on the dng101b2 tiles, back wall and checker band. Only
+environment regions were compared. This shows no visible brightness error, not that k > 0 draws occur there; no stage beyond the
+practice stage with stag0001's BG02 overlay pattern has been found.
+
+**Not established (unconfirmed):** a second retail dump with k > 0 (the three practice-stage dumps are the only constant dim additive draws in
 about 1,300 parsed dumps; the Main Lobby frames contain no lit k > 0 mesh, so they neither confirm nor contradict the hub half);
 which events re-emit a fresh block in the draw-begin path `FUN_001f9430` (`DAT_00491478` bit 2 and the lighting-dirty state); whether
 leaving a texture-matrix transform uploads on its own (the stream shows only the entry uploads plus one restore on leaving the scope);
@@ -181,9 +199,9 @@ skips its upload).
 
 ## What is not recovered
 
-* **The light parameter values.** They are written into the runtime descriptors from the scene at
-  load/update time; the pack carries no light class ([#498](../findings/findings-0251-0500.md#f498)), the savestates are empty of them, and
-  VU1 data memory is too dense in float patterns to identify them by shape ([#498](../findings/findings-0251-0500.md#f498)). What is needed is
+* **The running light values.** They are written into the runtime descriptors from the scene at
+  load/update time; the pack records are prototypes whose colours differ from the live rig, the
+  savestates are empty of them, and VU1 data memory is too dense in float patterns to identify them by shape. What is needed is
   a breakpoint/readback **while the light list is non-empty** (`FUN_001f8a30`/`FUN_001f8ae0` fill
   `0x56AF40`/`0x56AF60`), or a `--statefile` taken mid-render.
 * **The runtime descriptor's class.** It is a 160-byte bss structure, not the reflected
@@ -199,3 +217,13 @@ mipsel-linux-gnu-objdump -d --start-address=0x001fb710 --stop-address=0x001fbae4
 mipsel-linux-gnu-objdump -d --start-address=0x001fb0e0 --stop-address=0x001fb470 game.elf   # selector
 mipsel-linux-gnu-objdump -d --start-address=0x001f8b50 --stop-address=0x001f9430 game.elf   # state refresh
 ```
+
+## What didn't work
+
+Two routes to the light parameter values fail.
+
+* **A savestate.** `0x56AF40` is all NULL and the count `0x56AF94` is 0 in all 17 saved states, because the list is
+  populated only during the render pass.
+* **Scanning class directories for a name containing `Light`.** This finds nothing and wrongly suggests the parameters are
+  not on the disc. The source objects are `igLightAttr` records in the common packs, which `scripts/pack_lights.py`
+  decodes offline.

@@ -13,7 +13,6 @@ cover twenty-two complete bodies / 4,848 code bytes in total.
 Verification includes all instruction
 words and relocations. This does not establish a single original compiler build,
 prove that retail used multiple builds, or match the combat dispatcher.
-Findings [#1033](../findings/findings-1001-1250.md#f1033)–[#1044](../findings/findings-1001-1250.md#f1044) record the evidence and its limits.
 
 The ordinary compiler emits a 60-byte attribute accessor. A content-pinned
 alternate compiler emits the original 56 bytes from the same source. For the
@@ -22,6 +21,14 @@ branch-delay scheduling and interior zero word. The enum builder creates the
 22-entry `FightCom` name/id enum once and returns the cached object. The accessor
 uses the fallback string for signed indices at least four; negative indices
 remain unchecked, as in retail.
+
+The same compiler at `-O3` or `-O3,p` reproduces retail's delay-slot fill and
+padding nops for families the default compiler cannot, from an unchanged m2c
+draft: lazily created singleton getters of 68, 76 and 84 bytes, 60-byte
+`*_GetVTable` stack-object accessors, `_GetMetaObject` accessors and
+nop-before-join loops. Delay-slot fill and an extra nop in a small function are
+therefore a symptom of compiler choice, not a wall: retry under this compiler
+first.
 
 ## Reproduction
 

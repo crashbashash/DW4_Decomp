@@ -2126,7 +2126,7 @@ static int badge_tick(dw4_lobby *l)
 {
     if(!l->native_models || dw4_controllers_live(l->native_models,"i_pcnumic",0)<0)return 0;
     int control=l->control.player_control && l->finished && dw4_modelctrl_active(l->p->player_controller);
-    /* Retail shows the badge only after 480.0 frames (the SETEFFECT time, finding #1090) without input;
+    /* Retail shows the badge only after 480.0 frames (the SETEFFECT time) without input;
      * measured live 2026-10-20: absent at 420 idle frames, present at 540. */
     if(!control)l->badge_active_ns=l->native_now;
     /* vfunc_44 sends SETEFFECT only while the player's sequence is SQ_WAIT (0x516290), so any other sequence restarts the delay. */

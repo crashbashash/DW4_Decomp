@@ -4,10 +4,10 @@ Raw, reproducible evidence for the claims in [`rng.md`](rng.md). Everything here
 was produced by `scripts/dw4_rng.py`, `scripts/p2s_ram.py`,
 `pine`, and `mipsel-linux-gnu-objdump`.
 
-- **Generator / seed:** findings **[#273](../findings/findings-0251-0500.md#f273)**, **[#274](../findings/findings-0251-0500.md#f274)**
-- **No reseed / single sequence:** **[#276](../findings/findings-0251-0500.md#f276)**
-- **Consumer inventory:** **[#279](../findings/findings-0251-0500.md#f279)** (**[#275](../findings/findings-0251-0500.md#f275)** is refuted)
-- **New-game timeline + hub drain:** **[#278](../findings/findings-0251-0500.md#f278)**
+- **Generator / seed:** §1
+- **No reseed / single sequence:** §7
+- **Consumer inventory:** §5, §7
+- **New-game timeline + hub drain:** §2, §3
 
 ---
 
@@ -27,7 +27,7 @@ pk_ram2.bin              RNG @ 0x6ff180 mti= 212 state0=a8a088ad  twist#19  draw
 ```
 
 All eight states match the **full 624-word** array of one MT19937 sequence
-seeded by `sgenrand(5150)`, at three different points (twist #4, #5, [#19](../findings/findings-0001-0250.md#f19)).
+seeded by `sgenrand(5150)`, at three different points (twist #4, #5, #19).
 A 2496-byte match cannot occur by chance, so the seed is fixed and the states
 share one stream.
 
@@ -36,13 +36,13 @@ share one stream.
 `python3 scripts/dw4_rng.py seq 4`
 
 ```text
-     0  cdb83dd3  -> %2=1 %6=1 %19=18 %99=94 %121=94 %299=87
-     1  d10604d7  -> %2=1 %6=5 %19=15 %99=50 %121=72 %299=36
-     2  f11df354  -> %2=0 %6=0 %19=18 %99=24 %121=13 %299=129
-     3  cd1139a9  -> %2=1 %6=1 %19=17 %99=55 %121=55 %299=2
+     0  cdb83dd3  -> %2=1 %6=1 %20=11 %100=31 %122=63 %300=31
+     1  d10604d7  -> %2=1 %6=5 %20=19 %100=99 %122=61 %300=299
+     2  f11df354  -> %2=0 %6=0 %20=12 %100=92 %122=40 %300=192
+     3  cd1139a9  -> %2=1 %6=1 %20=13 %100=53 %122=81 %300=253
 ```
 
-Statics backing [#273](../findings/findings-0251-0500.md#f273)/#274 (`sgenrand` multiplier 69069, `Reset()` hard-codes
+Statics backing the seed (`sgenrand` multiplier 69069, `Reset()` hard-codes
 5150, single object):
 
 ```sh
@@ -95,13 +95,13 @@ $ sleep 5 ; pine read 0x6FF188 --type u32
 ```
 
 The source is AFS entry **816** (`lobby-ofanimon-seraphimon`) chunk **c100**,
-whose model `WPos` handler calls `funcRandom = SYSgetRandom(1)` — a no-op that
-still stamps `_mti`. A full live read-back (vtable `0x52b8e0`, `mti` 323,
+whose model `WPos` handler runs `funcRandom`, which draws `SYSgetRandom(2)` — a
+coin flip that steps the model's path index and stamps `_mti`. A full live read-back (vtable `0x52b8e0`, `mti` 323,
 `state0` `91738063`, twist #9, 5315 draws) was still exactly on the
 `sgenrand(5150)` sequence, confirming no reseed.
 
 In the practice stage the only resident draw chunk is AFS entry **607** chunk
-**18** (`SYSgetRandom(6)`, damage-reaction tier), firing on taking damage.
+**18** (`SYSgetRandom(7)`, damage-reaction tier), firing on taking damage.
 
 Measured idle drift elsewhere: **~6 draws/s** in a Goblin Pass field state
 whose only resident Lua draw chunk is flag-gated.
@@ -125,20 +125,13 @@ confirms the title screen.
 
 ---
 
-## 5. Native consumers exist ([#279](../findings/findings-0251-0500.md#f279); [#275](../findings/findings-0251-0500.md#f275) is refuted)
+## 5. Native consumers exist
 
-The RNG object `0x6FF180` has **exactly one** incoming pointer in all of RAM,
+`SYSgetRandom` is the only Lua-facing binding, not the only consumer. The RNG object `0x6FF180` has **exactly one** incoming pointer in all of RAM,
 at `manager+0x30` (`0x6FF140`). The manager pointer `0x6FF110` occurs **60
 times** in RAM, and **53 of those sit at `object+0x10` with a vtable at
-`object+0x00`**. Native code therefore reaches the RNG with:
-
-```asm
-lw v0,16(obj)     ; manager
-lw a0,48(v0)      ; manager+0x30 = RNG object
-lw t9,0(a0)
-lw t9,96(t9)      ; vtable slot 24 = genrand
-jalr t9
-```
+`object+0x00`**. Native code therefore reaches the RNG by loading the manager from
+`object+0x10`, the RNG object from `manager+0x30`, and calling vtable slot 24 (`genrand`).
 
 **11** such sites (exactly 11 by the strict scan in §7), each immediately followed by a
 roll-shaped modulus:

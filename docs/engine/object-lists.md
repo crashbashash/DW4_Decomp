@@ -3,13 +3,12 @@
 The separate [unchecked entry-word getter](../../src/engine/ObjectList_GetAt_003e9260.c)
 at `0x3e9260` uses the declaring base `igDataList::_data` and retains its exact
 20 bytes. A LoadIntf2 `_system` receiver association for it is refuted;
-see [GAMERAM ABI recovery](../systems/combat-draft-recovery.md) ([#1042](../findings/findings-1001-1250.md#f1042)/#1043).
+see [GAMERAM ABI recovery](../systems/combat-draft-recovery.md).
 
 The complete contiguous twelve-body group at `301c90..302540` contains 2,160
 code bytes. Together with the 148-byte name setter at `2fecb0`, all thirteen
 bodies have readable [behavioral C](../../recovered/engine/object-lists.c).
-Findings [#873](../findings/findings-0751-1000.md#f873)/#874 record the recovery and correction of two historical property
-lookup labels. One body, retained append (88 bytes), already has exact source in
+One body, retained append (88 bytes), already has exact source in
 [list-services.c](../../src/engine/list-services.c); ten more match in one-function
 files under `src/unmatched/`. `igProperty_FindByName` (`3022c0`, 188 bytes) is
 `foreign-profile` in [igProperty_FindByName.c](../../src/unmatched/igProperty_FindByName.c) (code bytes
@@ -70,12 +69,11 @@ particular class field. Messenger group names use offset eight.
 | `3023f0` — `igProperty_FindBySortedKey` | Search using the insertion-index helper, then return the record only if its selected word equals the key |
 | `302480` — `igProperty_FindInsertionIndex` | Binary-search sorted unsigned selected words; return an equal midpoint or an insertion position; return -1 for a null descriptor and zero for an empty list |
 
-Older findings name `302480` `igProperty_GetByIndex` and `3023f0`
-`igProperty_FindByIndexChecked`. Neither consumes a positional index. The former
+The older labels `igProperty_GetByIndex` for `302480` and
+`igProperty_FindByIndexChecked` for `3023f0` are wrong: neither consumes a positional
+index, and a standalone positional-getter reading is refuted. The former
 returns an integer search/insertion position, not a record or count. Equality can
 return a midpoint duplicate; it is not a guaranteed first-equal/lower-bound search.
-Those findings keep the old names, with explicit correction
-and a refuted standalone positional-getter interpretation ([#874](../findings/findings-0751-1000.md#f874)).
 
 Text lookup captures count once but reloads the buffer and descriptor member
 offset before subsequent comparisons. A comparator callback changing count to

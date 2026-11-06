@@ -3,7 +3,7 @@
  * `NDMW.IGB` names every file and says which archive holds it (`_ptNumber` 0 =
  * `NDMW.AFS`, 1 = `AREA.AFS`), so a directory of the two extracted archives plus the
  * manifest is a *filesystem*: a name resolves to bytes, and a stage's own `[<pt>.<entry>]`
- * pack references resolve through the same table (findings #444/#445).
+ * pack references resolve through the same table.
  *
  * The archives are 727 MB and 511 MB, so they are **mapped**, not read: a lookup touches
  * the entry table and the one entry it needs.
@@ -44,7 +44,7 @@ const uint8_t *dw4_mount_entry(const dw4_mount *m, int pt, int entry, uint32_t *
 
 /* Every `[<pt>.<entry>]` occurrence in a blob, in order.  Returns the count; fills up
  * to `cap`.  This is how a stage's pack list is read without decoding the record that
- * owns the strings (the notation itself is the recovered fact, finding #445). */
+ * owns the strings (the notation itself is the recovered fact). */
 uint32_t dw4_mount_scan_refs(const uint8_t *blob, size_t size, dw4_ref *out, uint32_t cap);
 
 #endif /* DW4_MOUNT_H */

@@ -2,7 +2,6 @@
 
 The first-arrival adapter draws the game's own message windows and portrait from
 NDMW 820 and reads the English text layouts from AREA 674 (`usa_pack.igb`).
-Finding **[#776](../../docs/findings/findings-0751-1000.md#f776)** records the static data and offline retail GS comparison.
 `src/lobbyui.c` owns this bounded greeting controller; it does not execute the
 full messenger or SELECTCTRL runtime.
 

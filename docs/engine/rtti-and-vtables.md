@@ -9,8 +9,6 @@ Tooling: `scripts/dump_vtables.py`, `scripts/apply_vtable_names.py`,
 `scripts/dump_reflection.py` + `scripts/apply_reflection_names.py` (class/MetaField
 metadata — see [`reflection-metadata.md`](reflection-metadata.md)).
 Output: `ghidra-projects/dw4/vtables.json`, `ghidra-projects/dw4/reflection.json`.
-Findings: **[#282](../findings/findings-0251-0500.md#f282)** (layout), **[#283](../findings/findings-0251-0500.md#f283)** (naming applied), **[#284](../findings/findings-0251-0500.md#f284)** (reflection
-records, decoded — see §6), **[#285](../findings/findings-0251-0500.md#f285)** (RTTI-less vtables).
 
 ---
 
@@ -63,6 +61,11 @@ slot count is recovered. Verified against the docs' live-RAM result:
 `beGeneraterInfoWork`'s vtable is `0x00536050`, exactly the address recorded from
 the running game.
 
+Word +0 ties a vtable to its class: `beGeneraterData`'s vtable `0x00535eb0` reads
+`0x005089c8`, the `rtti` value in `data/vtables.json`. A vtable whose +0 is zero
+belongs to a class with no RTTI record. The MetaField classes are such classes, which
+is why none is in the 478-entry dump ([RTTI-less vtables](#rtti-less-vtables-resolved-from-getvtable)).
+
 ### Inheritance — and the important catch
 
 The `+4` field looks like the base class and is **not**. Measured across all 579
@@ -80,7 +83,7 @@ from siblings.
 Practical consequence: a shared vfunc body resolves to `igObject` and no deeper.
 That names the global defaults correctly and cannot name group-specific ones.
 
-**The hierarchy is recovered elsewhere (finding [#360](../findings/findings-0251-0500.md#f360)).** The reflection registrar's
+**The hierarchy is recovered elsewhere.** The reflection registrar's
 `a3` ("fn2") returns the *base* class's MetaObject and is passed straight to
 `igMetaObject_InheritFromBase`, so parsing the getter's returned handle and mapping
 it back through `data/reflection.json` yields the real parent of **1,074 of 1,075**
@@ -100,7 +103,7 @@ It does **not** resolve the ambiguous vfuncs below, though — see [§6](#6-what
 | — class overrides | 1,239 |
 | — shared base defaults | 94 |
 | **Uniquely named** (the 94 minus collisions — see below) | **1,286** |
-| Ambiguous after the vtable pass | 47: 19 named from the hierarchy (finding [#410](../findings/findings-0251-0500.md#f410)), 28 unnamed |
+| Ambiguous after the vtable pass | 47: 19 named from the hierarchy, 28 unnamed |
 | Functions newly created (auto-analysis missed them) | 807 |
 | Functions renamed | 526 |
 | `__RTTI__` / `__vt__` labels | 1,045 |
@@ -115,7 +118,9 @@ had merged or missed.
 MWCC emits **one shared default stub per slot** and points every non-overriding
 class at it. `0x002ff0a0` is slot 0 of all 478 vtables; the defaults
 `0x002ff0a0`–`0x002ff1c0` are 16-byte `jr ra` bodies. So the ~21-slot base prefix
-of every vtable is a single set of ~21 functions.
+of every vtable is a single set of ~21 functions. Any vtable slot holding an address
+in `0x002ff0a0..0x002ff1c0` is therefore an inherited `igObject` default, not an
+override.
 
 Naming rule:
 
@@ -142,7 +147,7 @@ a plate comment recording the slot, the referrer families and why.
 
 The recovered hierarchy does let most of them be placed — but not by the lowest
 common ancestor of the referrers, which is always `igObject`
-([#360](../findings/findings-0251-0500.md#f360)) and says nothing; the right question is whether some class's
+ and says nothing; the right question is whether some class's
 **descendant set** is *exactly* the referrer set. A body referenced by every
 descendant of `C` and by nothing else is `C`'s slot, whether or not `C` emits a
 vtable — and these owners are precisely classes that declare the virtual but
@@ -233,7 +238,7 @@ last `jr ra` is at `0x00482958`).
 
 Two things fell out of the scan that are **not** vtables but matter.
 
-### The class reflection records — finding **[#284](../findings/findings-0251-0500.md#f284)** — DECODED
+### The class reflection records — DECODED
 
 Scanning for code-pointer runs in rodata finds 1,532 runs / 35,211 slots; 478 carry
 the `{rtti, 0}` header (the vtables). The rest are mostly the **per-class field
@@ -247,13 +252,13 @@ extraction tool are documented in
 recovers **1,075 MetaObjects, 659 with fields, 3,680 fields with name + offset +
 type** (`data/reflection.json`).
 
-Two points on [#284](../findings/findings-0251-0500.md#f284): the class name is an argument at
+Two further points: the class name is an argument at
 the registrar call site (not adjacent in the data), and the `__ct`/`__dt`/`__as`/
 `__eq` strings are a single MWCC name-mangling/operator lookup table at
 `0x004fde68`, **not** per-class method names. The field tables do not name the 47
 shared vfunc bodies; the 28 the hierarchy does not place (§3) remain open (T7).
 
-### RTTI-less vtables — finding **[#285](../findings/findings-0251-0500.md#f285)**, and resolved from `GetVTable` (finding **[#529](../findings/findings-0501-0750.md#f529)**)
+### RTTI-less vtables, resolved from `GetVTable`
 
 58 runs of ≥5 code pointers (1,537 slots) in the vtable region
 `0x00533000`–`0x00542000` carry a `{0, 0}` header. The **RNG class** is one: the
@@ -269,12 +274,29 @@ constructor, or read by a virtual call site.
 `<Class>_GetVTable` function, and it builds the class's vtable as the first
 rodata-range value stored to a stack slot — the same rule
 [`seed_names_metafield_slots.py`](naming.md) uses for the MetaField subclasses
-(finding [#368](../findings/findings-0251-0500.md#f368), `metafield-slots`). Applying it to **every** `_GetVTable` symbol
+(`metafield-slots`). Applying it to **every** `_GetVTable` symbol
 resolves **958 distinct vtables / 980 classes**, of which **499 are not RTTI
 records**. The two sources are consistent (the class agrees on 453 of the 454
 vtables they share; the one miss is a duplicate-handle class whose symbol carries
 a `_587aa0` suffix), and for the shared vtables the generated
 `Class::vfunc_N` equals the RTTI name **1197/1197**.
+
+Reading a vtable out of `<Class>_GetVTable` has three traps, each of which silently
+mis-attributes:
+
+- **The first `lui`/`addiu` pair in the vtable range is not the answer.** The pair is
+  often split, and every body also materialises its base class's vtable for an identity
+  test, which gives 26 classes `igMetaField`'s table. Take the first rodata-range value
+  actually stored to a stack slot, with registers tracked. 3 of 983 classes materialise
+  it from a global and do not resolve.
+- **Counting matching slots does not test descent.** The embedded `igObject` block
+  (+0x08..+0x58) matches in every subclass. Count only the 18 named MetaField slots:
+  25 classes score 16-18 and all others at most 4.
+- **A body used by more than one class's vtable cannot be attributed.** Ten classes
+  (`igIntMetaField`, `igBoolMetaField`, ...) share `igMetaField`'s vtable whole.
+
+The generated `GetSize` overrides corroborate the rule by returning their element
+sizes: Vec2f 8, Vec3f 12, Vec4f 16, Matrix44f 64.
 
 So the RTTI-less vtables are not a blind spot: their unmatched unique slot
 bodies are named `<Namespace>::<Class>::vfunc_N` by

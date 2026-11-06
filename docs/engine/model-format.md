@@ -3,8 +3,7 @@
 A rendered object in DW4 is **not** a mesh handed to the GS. Its geometry is an
 `igGeometryAttr` object whose vertices are consumed *sequentially* by a strip-length array; there is
 no index array on the shipped models (1 of 1,006 live attributes has one). Recovering this chain is
-what makes a model extractable at all — findings [#453](../findings/findings-0251-0500.md#f453)/#454/#455, with the model-name link and the
-normals/UV streams in [#456](../findings/findings-0251-0500.md#f456) (corrected and completed by [#457](../findings/findings-0251-0500.md#f457)/#458).
+what makes a model extractable at all.
 
 This page is the format. The live-memory extractor used to prove it is kept with the emulator
 tooling rather than in this repository (it needs a running game, which this repo deliberately does
@@ -56,7 +55,11 @@ Three details are easy to get wrong:
   `_primLengths` is at `+0x20` and stays NULL.  Objects are 0x38 bytes and are allocated
   back-to-back, so reading past the end silently reads the *next* geometry attribute.
 * `_vertexFormat` (`igVertexArray1_1` +0x1c) is a struct, not the stride: the buffer size always comes
-  from `_numVerts * 12`.
+  from `_numVerts * 12`.  At run time `igPsx2VertexArray1_1._vertexFormat` is a bitmask: bit 22
+  (`0x400000`) is positions, 12 bytes per vertex through `_vdata`+68, and bit 23 (`0x800000`) is normals
+  through +72.  No other bit is tested in the decompiled engine and no vertex-array consumer has a
+  colour element, so per-vertex colour comes from the VU1 shade.  The GS vertex packing is VU1
+  microcode, not C.
 
 ## Connecting the vertices — no indices
 
@@ -82,7 +85,7 @@ all.**  Of the 669 extracted live models 130 carry unit-length normals and **539
 strip + 318 list).  (That split is a property of the **live** object graph, not of the pack: read
 straight from the file, *every* mesh of a stage's drawn set in `NDMW.AFS:614` carries a unit-length
 second `12*numVerts` stream — the six big terrain meshes, the floor, the props and the character — which is
-why a port can shade them smoothly; finding [#559](../findings/findings-0501-0750.md#f559).)  The buffer layout in the loader's packed pool is
+why a port can shade them smoothly.)  The buffer layout in the loader's packed pool is
 
     [positions: 12*n][tag + pad][optional normals: 12*n][tag + pad][uv: 8*n]
 
@@ -151,10 +154,10 @@ streams, so all three buffers are exported (669 files, 669 with UVs, 130 with no
 locates **446** of those models' vertex blocks in the stage's model pack by content, which agrees
 with the offline route (see below).
 
-## The offline route (findings [#477](../findings/findings-0251-0500.md#f477)/#478)
+## The offline route
 
 The offline form needs no load-level replay: a
-pack states its own addressing (findings [#460](../findings/findings-0251-0500.md#f460)/#464/#478).  An `igObjectRef` id indexes the pack's remap
+pack states its own addressing.  An `igObjectRef` id indexes the pack's remap
 table, an `igMemoryRef` value **is** the id of its pool block, and blocks are laid out **4-byte aligned**
 (`offset = pool_start + Σ align4(_memSize)`), which makes the pool exact.  The geometry chain resolves
 through it:
@@ -190,16 +193,16 @@ counts, streams) and `scripts/verify_models_layout.py` re-derives it from the pa
 
 The **character model packs** (`common/p_*.igb`, e.g. entry 861 = the player) read the same way, but
 they are a second record alignment: their records start at an **odd** file offset, while the stage packs
-start at `2 mod 4`.  The chain finder scans every offset rather than stepping by two (finding [#536](../findings/findings-0501-0750.md#f536)),
+start at `2 mod 4`.  The chain finder scans every offset rather than stepping by two,
 so `igb_models.py --entry 861` yields the player's three `igGeometryAttr1_5` — the three actor **LODs**,
-named `P_susanoo_Skin0Shape0/1/2` (finding [#537](../findings/findings-0501-0750.md#f537)); `docs/engine/model-pack-861-attributes.tsv` is that
+named `P_susanoo_Skin0Shape0/1/2`; `docs/engine/model-pack-861-attributes.tsv` is that
 fixture, re-derived by the same `make rules` check.
 
 Note this is an **offline extractor** route — a port does not need it, because it runs the engine's own
 loader over a host `igFile`, which allocates the pool itself.  What the port does need is the
 addressing, and that is the same file-derived chain on both sides.
 
-## Names in the pack (finding [#480](../findings/findings-0251-0500.md#f480))
+## Names in the pack
 
 A shape is an `igGeometry` record: its
 **ordinal-2** value is the DCC part name (`pCylinderShape3`, `M_BK17v1_barrelmShape`, …) and its
@@ -217,13 +220,85 @@ are content duplicates, where two shapes share a vertex list and either name is 
 attribute.  The live path is `scripts/name_live_models.py`, which reads EE RAM once and resolves
 offline (`--from` reuses a saved dump); `--rename-dir` re-applies names to the OBJs.
 
-## Skinning, the actor graph, and the node-held material (findings [#531](../findings/findings-0501-0750.md#f531)-[#535](../findings/findings-0501-0750.md#f535))
+## Scene graphs in the pack
+
+A stage's scene graph reads offline.  `igSceneInfo` has a name at ordinal 2 and `_sceneGraph` at ordinal
+5, which is either an `igNode` root or an `igGraphPathList`.  An `igGraphPath` reaches its roots through
+a separate `igNodeList` (an `igObjectRef`); walking the path's own `igMemoryRef` finds no nodes.  A
+list's items are ids in the block behind its `igMemoryRef`.  A node carries a name, optionally an
+`igMatrix44f` (type 40, row-major, translation at words 12..14), an `igNodeList` of children and a
+reference to an `igGeometry`.  Find each value by its descriptor type, not by class or offset.
+
+Scene names are the game's own entity names (`Ogremon`, `Goblimon`, `Sdc0102a`, `Slope`).  Stage packs
+also hold camera and scene-animation chains in these graphs, such as `animCamera03_300` ->
+`cameraanim_GP1` -> `cameraanim_group01`.  `igSceneInfo`'s own `igNodeList` (ordinal 11) is empty in all
+18 records of entry 621.
+
+Geometry nodes and their transforms are in these graphs, not in the model-controller records.
+`beModelCtrlNode2` (1,075 records in entry 621) carries a name, an `igMatrix44f` and an `igNodeList` of
+children; its `igAttrList` is empty in every record, so it holds no geometry attribute directly.  The
+`*InfoRam*` classes are referenced by no record and are built at run time (all 1,075
+`beModelCtrlInfoRamData` have no parent).  Walking `_sceneGraph` on `stag0102`'s pack gives 18 scenes,
+11,736 nodes and 2,724 named `igGeometry` nodes; `dw4asset scene --world-tsv` emits each with its
+composed world matrix.
+
+`igGeometryAttr1_5` has no material reference: ordinals 5, 9, 11 and 12 are NULL in all 549 attributes of
+entry 621, and only 4 (`igVertexArray1_1`) and 13 (`igPrimLengthArray1_1`) are ever set.  Texture-side
+names (`TA01GM07.png`) do not match model DCC names (`pCylinderShape3`), so name matching is no route to
+a mesh's texture.  In the pack the texture side is `igTextureBindAttr` ordinal 4 -> `igTextureAttr`
+ordinal 12 -> `igImage`, and `beTextureCtrlAttr` ordinal 2 is the texture's name, ordinal 3 an
+`igAttrSet`.
+
+## The live model graph
+
+```
+beModelCtrlInfo         vtable 0x537c10   (148 in stag0102), the per-model registry
+  +8   _name
+  +20  _dataList        beModelCtrlInfoDataHit 'HIT', beModelCtrlInfoDataSeq 'SEQ'
+  +24  _ramList         a list of beBaseInfoRam (vtable 0x539e90)
+
+beModelCtrlNode2        vtable 0x537f40, a transform node
+  +28  _childList       walks to G_* groups (vtable 0x5284f0) and M_*Shape meshes (0x528e70)
+
+beModelCtrlInfoRamData  vtable 0x537bb0, 24 bytes, holds no geometry
+  +16  _node
+  +20  _work
+```
+
+`igVertexArray`, `igVertexArray1_1` and `igIndexArray` are abstract: their registrars (`0x14ba30`,
+`0x14b720`, `0x14d8a0`) pass no GetVTable.  `igVertexArray2` (vtable `0x526410`) and
+`igVertexArray2Helper` (`0x5262a0`) are concrete, but neither has a live instance.
+
+**Reading a dump.**  Live `igGeometry` objects can be read from a saved EE RAM dump with no emulator
+(`scripts/capture_scene.py`).  Two traps: the objects are 4-byte aligned, so an 8-byte-stepped scan finds
+none, and `+0x10` `_parentList` is a list whose array's first entry is the parent node, not the node
+itself.  A node's world matrix composes its chain's `igTransform` `_m` (+32) child x parent.  Keep only
+affine matrices (last row 0,0,0,1, orthonormal rotation rows): a wrong field then reads as garbage and
+is dropped instead of multiplied in.
+
+**A live vertex array can be drained.**  An `igGeometryAttr1_5`'s `_vertexArray` can read `_vdata` 0,
+`_numVerts` 0: the game copies the geometry into render buffers and frees the array.  Those buffers hold
+the pack's streams unchanged.  For the Goblin Pass crate the 415-vertex position stream at `0x0143c3c0`,
+the normals after it and the UV stream at `0x0143eab0` are byte-identical to the pack decode, with a size
+word (`0x26f0` = 2*4980 + 8) just before the UVs, and the inline image's index block is intact at
+`0x0130ac20`.  A second, reordered copy of similar values at `0x00e379dc` is not the crate's stream.
+
+**Node and bone matrices.**  `igTransform._m` (+0x20) is a node's local matrix.  Slot 37 of the
+`beModelCtrlNode2` vtable (`0x537f40`), `FUN_001b2750`, sets it: when `_transformInput` (+0x68) is
+non-NULL it passes `node+0x20` and the source matrix to that object's `vfunc_0x5c`.  `SETMATRIX` and
+`MOVETRANS` call this slot.  A skinned actor's bone matrices are `igActor._boneMatrixCacheArray` and
+`_blendMatrixCacheArray`, reset on action start by `beAction2::vfunc_33`.  The runtime bone array is
+`igAnimationState+0x54`, stride 0x40 (getters `0x1e34c0`/`0x1e34d0`).  `GETBONEMATRIX` resolves a joint
+name through the model at action+0x34 and pushes a 0x40-byte matrix.  `FUN_00398ef0` is the candidate
+per-frame walk: it writes `node._time` and composes parent * local.
+
+## Skinning, the actor graph, and the node-held material
 
 A live render differs from the pack in two ways that are **runtime state**, so they are read from a
 paused capture (`scripts/livedump.py` trims a `.p2s` to the base the readers expect):
 
-**The per-vertex blend stream is on the vertex array, not on the model controller.**  Correcting
-[#454](../findings/findings-0251-0500.md#f454)/#527, `igVertexArray1_1` carries
+**The per-vertex blend stream is on the vertex array, not on the model controller.**
+`igVertexArray1_1` carries
 
 ```
 +0x20  _blendWeights   a runtime f32 array, one weight per vertex
@@ -235,7 +310,7 @@ paused capture (`scripts/livedump.py` trims a `.p2s` to the base the readers exp
 and the stream is **not in the pack**: `igVertexArray1_1._blendWeights` exists in the file but holds a
 4-byte stub, because the engine allocates the real arrays at load.  So a skinned mesh is identifiable
 from the live graph alone — it is the one whose vertex array has non-NULL `_blendWeights` *and*
-`_blendIndices`.  **A skinned mesh is not necessarily the player** (finding [#535](../findings/findings-0501-0750.md#f535) refutes [#531](../findings/findings-0501-0750.md#f531)): on the
+`_blendIndices`.  **A skinned mesh is not necessarily the player**: on the
 Goblin Pass capture the only such mesh is `ogre_skinShape`, an **Ogremon NPC**, while the player is
 Susanoomon (see the actor graph below).  The bone-selection map is
 `igBlendMatrixSelect._blendMatrixIndices` (+0x28, an `igIntList` of bone-count entries mapping a vertex
@@ -245,32 +320,46 @@ count +0x10) — or, for an actor, its own `_boneMatrixCacheArray` (+0x24) and `
 found — several live 24-/40-matrix caches exist with no back-pointer — so for an unparented mesh the
 palette cannot be paired from the object graph and the bind pose stands.
 
-### The player's own skinning, offline (findings [#597](../findings/findings-0501-0750.md#f597)/#598/#599)
+`gobr_skinShape2` (pack 614 attr 22308) is a Goburimon, not the player.  Its live parent group
+`gobr_main` is a root that no `beModelCtrlNode2` reaches, its texture is `E_goburi01.png` and its
+animation is `karada_Trans1`/`SQ_WALK`.  The live-attr to pack-id content match misses this skinned mesh,
+so its texture has to be resolved by live shape name.
+
+**The skinning-matrix upload.**  `FUN_001e9770` reads an `igBlendMatricesAttr` pool palette and stages it
+for VU1: a loop at `0x001E98F0..0x001E9934` copies 64-byte records.  The upload descriptor is at
+`*(0x568F04)` (cursor at +48), and the stride is `*(0x562D48) << 6`, where `*(0x562D48)` is the matrix
+count (24 for the player palette).  A snapshot of VU1 data memory holds matrices but none of the player's
+bind positions, and EE RAM has one full copy of the mesh.  The pool palette is duplicated byte for byte
+in a second attr and appears compacted (duplicate dropped, reordered) in a per-object buffer near the
+player node.  Changing the pool palette, the actor's matrix caches or the bind vertices in memory never
+alters the frame, because the pose is recomputed before each render.
+
+### The player's own skinning, offline
 
 For the player the gaps above are closed, and the answer is
 *not* in the object graph:
 
-* **The per-vertex bone indices are in the pack** (finding [#596](../findings/findings-0501-0750.md#f596)): pack 861 holds pool blocks of exactly
+* **The per-vertex bone indices are in the pack**: pack 861 holds pool blocks of exactly
   `num_verts` bytes — 5483 (354, shape0), 5595 (2018, shape2), 5566 (3580, shape1) — each a u8
   bone index per vertex, values 1..23.  The neighbouring 4-bytes-per-vertex blocks (5593/5594/5565)
   are constant `1.0f` weights — **no weight data exists in the pack**.
 * **The palette the GPU actually skinned with is a per-bone array staged in the VU/DMA packet area**
-  (finding [#597](../findings/findings-0501-0750.md#f597)): four byte-identical 24-matrix copies (0x1b743dc0 / 0x1b53f40 / 0x1b64040 / 0x1b741c0,
+: four byte-identical 24-matrix copies (0x1b743dc0 / 0x1b53f40 / 0x1b64040 / 0x1b741c0,
   one per character draw run) with a repeated copy 0x11f0 bytes into each, indexed **directly by the
   bone byte** — the `igBlendMatrixSelect` list is not consulted for the player.  Shape1 fits the
   native GS draw at median 0.0057 model units single-bone (100 % within 0.05); the
   `igAnimationCombiner`-held palette (0x16df680, 21 slots, slot-mapped) fits the same vertices about
   7× worse, so the combiner's +0x58 pointer is the engine's own copy, not what the VU received.
-* **Shape0 (the 354-vert LOD) is not drawn at all in that frame** (finding [#598](../findings/findings-0501-0750.md#f598)): none of its UVs
+* **Shape0 (the 354-vert LOD) is not drawn at all in that frame**: none of its UVs
   appear in the character draw's 6134-vertex UV union.  A renderer of that instant draws
   `Skin0Shape1 + Skin0Shape2` only; shape2's remaining ~0.03-unit residuals sit on blend bones
   (9/10/11) and are unresolved, but sub-pixel at that camera.
-* **A measurement trap worth naming** (finding [#599](../findings/findings-0501-0750.md#f599)): a staged model-space conversion with a wrong
+* **A measurement trap worth naming**: a staged model-space conversion with a wrong
   node/view step scores every palette candidate meaningless (medians of ~438 units); recomputing the
   conversion from the same world points (bind-vs-gs median 0.68 once posed) is what makes the sweeps
   sharp.
 
-## The player is an actor, and its model is named by a path (finding [#535](../findings/findings-0501-0750.md#f535))
+## The player is an actor, and its model is named by a path
 
 The player is **not** an `igGeometry` whose name you guess.  It is a model-controller node with an actor
 rig:
@@ -288,16 +377,16 @@ beModelCtrlNode2 0x016de170   (the node nearest the camera's `_avgPos`)
 ```
 
 That is the graph a renderer should walk: the skinnedGraph's child list is the model, its attr list the
-material, and the **actor** owns the matrix caches (where [#532](../findings/findings-0501-0750.md#f532)'s missing pairing lives).  On the Goblin
+material, and the **actor** owns the matrix caches (the pairing a free mesh lacks).  On the Goblin
 Pass capture the player's skin is `P_susanoo_Skin0Shape0/1/2` (Susanoomon), the RAM string
 `common/p_susanoo.igb` names the model, and the manifest resolves `p_susanoo.igb` to **`NDMW.AFS` entry
 861** (685,597 B, beside `m_`/`q_`/`s_susanoo.igb` = 845/877/893) with textures `P_susanoo01.png` /
-`P_susanoo02.png`.  **Offline (finding [#537](../findings/findings-0501-0750.md#f537)):** the live skin shapes' `igVertexArray1_1` read
+`P_susanoo02.png`.  **Offline:** the live skin shapes' `igVertexArray1_1` read
 `numVerts` 0 / `vdata` 0 in the capture because the actor builds its geometry through the actor graph —
 but the pack itself is complete: entry 861 decodes and yields its three `igGeometryAttr1_5`, all named
 `P_susanoo_Skin0Shape0/1/2`, which are the actor's **three LODs** (354 / 3,580 / 2,018 verts) and each
 spans the whole humanoid.  A port loads `p_susanoo.igb`; a renderer can also read the actor's
-`_attachedGraphs`.  Reaching the pack needs the every-offset chain scan of finding [#536](../findings/findings-0501-0750.md#f536) (the character packs'
+`_attachedGraphs`.  Reaching the pack needs the every-offset chain scan (the character packs'
 records sit at the odd alignment).
 
 **A material can hang off the parent node.**  A shape's own `+0x20` list is geometry only, but a mesh's
@@ -305,8 +394,9 @@ texture can instead sit on the `igBlendMatrixSelect` (an `igAttrSet` subclass) t
 entry: the `igAttrSet._attributes` (+0x20) list holds the `igTextureBindAttr`.  Reading the
 parent-chain node attr sets — testing that `+0x20` really is an `igAttrList` (`0x00524420`), because on a
 plain `igTransform` the same offset is `_m` — lifts the live material map from 106 to 136 geometry
-attributes.  The big ground mesh and the crates still resolve nothing this way; their material is in the
-staged render packet stream ([#522](../findings/findings-0501-0750.md#f522)).
+attributes.  The big ground mesh and the crates still resolve nothing this way.  Their binding is the
+live-built material attr set: `beTextureCtrlAttr._attrSet` (+0xc), whose `+0x1c` list holds the shapes
+and `+0x20` the `igTextureBindAttr`.
 
 ## See also
 
@@ -315,3 +405,18 @@ staged render packet stream ([#522](../findings/findings-0501-0750.md#f522)).
 * [`rtti-and-vtables.md`](rtti-and-vtables.md) — how `0x5238c0` and friends are resolved to classes.
 * [`igbinary-format.md`](igbinary-format.md) — the container the model packs are written in.
 * [`afs-archives.md`](afs-archives.md) — which pack holds a stage's models.
+
+## Open questions
+
+* Which buffer supplies the vertices that are skinned.  VU1 data memory holds none of the player's bind
+  positions and EE RAM has one full copy of the mesh, but the source of the skinned stream is unproven.
+
+## What didn't work
+
+* **Reading a world mesh's texture off its shape.**  Of 832 live `igGeometry` shapes none has an
+  `igTextureBindAttr` in its own `+0x20` attr list, no attr list holds both a geometry attr and a texture
+  bind (0 of 2,766), and only 39 of 1,023 `igGeometryAttr1_5` reach a texture by any pointer field (32 of
+  them `font00.png`).
+* **Reading the texture out of a staged packet stream in EE RAM.**  The region `0x00cc3000-0x00d3xxxx`
+  holds per-vertex data, a whole-RAM scan finds no GIF tags there, and per-draw state has to come from a
+  GS dump.

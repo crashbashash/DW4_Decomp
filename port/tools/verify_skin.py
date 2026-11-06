@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """verify_skin.py — diff the port's C skinning path against `scripts/live_skin.py`.
 
-The engine's skinning data is runtime-only (findings #532/#535), so both the C path
+The engine's skinning data is runtime-only, so both the C path
 (`dw4asset skin`, `src/skin.c`) and the Python extractor (`scripts/live_skin.py`) read it
 from the same paused EE RAM dump.  This runs both over every 24-matrix palette in the pool
 and requires the **OBJ bytes** to be identical, for the bind pose and the posed mesh — a

@@ -1,5 +1,5 @@
 # Function names recovered during the readability pass over the matched C.
-# Only names with asm/doc evidence; descriptive guesses stay in the findings register as hypotheses.
+# Only names with asm/doc evidence.
 # <va>	<name>	<module>
 0x003e90a0	beNDMWLoadSavePlWork::SetIsCtrl	game
 0x003e90b0	beNDMWLoadSavePlWork::GetIsRdy	game

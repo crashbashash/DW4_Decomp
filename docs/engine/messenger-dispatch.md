@@ -6,7 +6,7 @@ with guest references behind the shared memory/call API. Five forwarding bodies
 (244 bytes) retain exact matching source in
 [beMessengerDispatch.cpp](../../src/game/beMessengerDispatch.cpp).
 These were existing matches; the consolidation corrects their signatures and
-removes surplus forwarded arguments without adding matching bytes. Finding [#869](../findings/findings-0751-1000.md#f869)
+removes surplus forwarded arguments without adding matching bytes.
 records the evidence and limits. The semantic names describe verified operations,
 not original C++ method spellings.
 

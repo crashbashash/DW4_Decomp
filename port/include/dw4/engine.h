@@ -18,7 +18,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "dw4/render.h"       /* dw4_light: the caller's rig (findings #498/#499) */
+#include "dw4/render.h"       /* dw4_light: the caller's rig */
 
 /* Session-owned creation result; save-file serialization and player spawning are separate. */
 typedef struct {
@@ -35,10 +35,10 @@ typedef struct {
     int w, h;               /* framebuffer */
     float spin;             /* degrees the camera turns per frame */
     const char *out_dir;    /* where frame_NNNN.png goes ("." when NULL) */
-    const char *scene_tsv;  /* optional live capture (finding #487) placing the meshes */
+    const char *scene_tsv;  /* optional live capture placing the meshes */
     const float *view;      /* optional 16-float view matrix (the engine camera); NULL = bbox fit */
     float fov, aspect;      /* the projection when `view` is given */
-    int use_camera;         /* derive the view from the loaded pack's own camera (findings #495/#496) */
+    int use_camera;         /* derive the view from the loaded pack's own camera */
     const char *camera;     /* camera node name, or NULL for the stage camera */
     int window;             /* present each frame through the host window backend (SDL2) */
     int vulkan;             /* with `window`: present through a Vulkan swapchain instead */
@@ -54,7 +54,7 @@ typedef struct {
     int skip_logos;         /* testing: skip startup logo cards */
     const char *pad_script[3]; /* testing: scripted pads of co-op players 2-4 for a hub run (as `input_script`; `--input-script-pad N`) */
     int software;           /* explicitly retain CPU rendering (including title trails) */
-    /* The light rig (findings #498/#499): the model is the game's, the values are runtime-only, so
+    /* The light rig: the model is the game's, the values are runtime-only, so
      * they are a caller input.  All NULL uses the built-in placeholder one-directional rig. */
     const float *ambient;   /* 3 floats, the ambient floor */
     const dw4_light *lights;

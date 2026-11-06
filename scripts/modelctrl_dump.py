@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """modelctrl_dump.py — resolve the front-end title's model-controller chain in a pack.
 
-Decomposes the DATA side of the animated front-end layer (finding #610/#614).  For an
+Decomposes the DATA side of the animated front-end layer.  For an
 AREA.AFS entry (default 620 = the title pack, model 'j_startback') it prints:
 
   * the id chain from `beAction2Info '<model>'` (`_switch` / `_animationDatabase` /
@@ -61,7 +61,7 @@ def afs_entry(path, index):
 # --- field names for the classes this chain uses, by descriptor ordinal -----------------
 # The directory states a type + ordinal + size per descriptor; the ordinal is the class's
 # flattened 1-based slot.  `K` is the inherited-slot count, so a declared field f[i] sits at
-# ordinal i + K + 1 (finding #290).  Where reflection.json already carries the names the
+# ordinal i + K + 1.  Where reflection.json already carries the names the
 # scripts use them; this table names the handful of classes whose base fields the record
 # stores but reflection does not list for the subclass.
 ORD_NAMES = {
@@ -89,7 +89,7 @@ class Pack:
         dirs, s1, s2, chains = igb_ids.sections(blob, self.refl)
         self.dirs, self.s1, self.s2 = dirs, s1, s2
         self.p, self.cnt, self.obj_of_id = igb_ids.find_table(blob, s1, s2)
-        # pool blocks, in id order (finding #478 alignment)
+        # pool blocks, in id order alignment)
         self.memsz = {}
         for i in range(self.cnt):
             if self.obj_of_id[i] is None:

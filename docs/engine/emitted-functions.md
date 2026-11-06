@@ -7,8 +7,7 @@ retail functions besides the owner: the 652-byte query at `0x3fc780` and a
 128-byte deleting destructor at `0x3fc670`. The
 compiler puts them in distinct sections both named `.text`. Both bodies must
 match and both must be placed in the retail layout; ignoring the destructor
-would hide code generated from the recovered source. Findings [#1039](../findings/findings-1001-1250.md#f1039)–[#1041](../findings/findings-1001-1250.md#f1041)
-record the evidence and implementation.
+would hide code generated from the recovered source.
 
 ## Ownership overlay
 
@@ -92,13 +91,13 @@ row for the pinned combat compiler):
 **externals and an `exceptions` record alone**, with neither emitted nor duplicate
 bodies: the unit whose RAII helpers are out of line in retail (`beNDMWPanelWaza::vfunc_31`,
 `0x3cfe50`, calls the `StringRef` constructor at `0x3cc550` and the destructor at
-`0x130720` instead of instantiating them; finding [#3874](../findings/findings-3751-4000.md#f3874)). The externals bind those calls
+`0x130720` instead of instantiating them). The externals bind those calls
 and the record's cleanup pointers; a row with externals and no record, or a record and
 nothing to bind, is still refused.
 
 A row may list **`stripped`** destructor bodies: MWCC emits an out-of-line copy of a
 local class's inline destructor even when every use is inlined, and the retail linker
-dead-stripped such copies (finding [#3888](../findings/findings-3751-4000.md#f3888); the `*_GetVTable` views of [#3886](../findings/findings-3751-4000.md#f3886)). A stripped
+dead-stripped such copies (the local views in the `*_GetVTable` functions). A stripped
 name must start with `__dt__` (see [whole-file units](#whole-file-units) for the exception), be a complete `.text` section of its own, be referenced by
 nothing the object keeps, and have no copy in retail (relocated words masked; a retail
 copy is named as a duplicate instead). Its record and table are dropped with it, and it
@@ -194,12 +193,47 @@ The 128-byte exception region includes one zero alignment byte. All fourteen
 protected ranges and the five cleanup identities agree with compiler output.
 Redirecting one cleanup alias to a byte-identical function is rejected by the
 exception-table comparison even though every code body still matches. Selecting
-the adjacent exception-index record is rejected too. Findings [#2724](../findings/findings-2501-2750.md#f2724)–[#2726](../findings/findings-2501-2750.md#f2726) and
-`config/SLUS-20836/unit-objects.json` record the source, profiles and evidence.
+the adjacent exception-index record is rejected too.
+`config/SLUS-20836/unit-objects.json` records the source, profiles and evidence.
 
 The symbol reader handles processor-specific binding 13. Readelf prints that
 binding in several tokens, so section/name extraction uses its final columns
 instead of fixed binding-column positions.
+
+## RAII holders and exception tables
+
+A RAII cleanup scope reproduces retail's exception table only when the holder:
+
+- is a class with a real inline destructor (the release is not hand-spelled before each exit);
+- is built at its use site from the factory result (`Holder h(create(a));`, no constructor store);
+- is declared after any earlier return;
+- has one class per distinct destructor copy the table names.
+
+The `unit-objects` row names that copy, read from the decoded table's action list, in `duplicates`
+(copy elsewhere) or `emitted` (copy placed behind the owner). `externals.__dl__FPv` is what that copy
+calls: `0x100610` for releasing copies, `0x2ed5c0` only for the 68-byte empty destructor at `0x2e2300`.
+
+Table tags: `0x02` destroy, `0x06`/`0x86` base subobject flag 0, `0x07`/`0x87` member subobject flag -1,
+`0x01` chain link. `scripts/combat_unwind_inventory.py` does not decode `0x01`, `0x06`/`0x86`/`0xa6`,
+`0x07`/`0x87`/`0x27` or an FPR-flag header.
+
+Further holder shapes:
+
+- Expression temporaries take the lowest frame slots. A temporary read in one statement is destroyed at
+  its end and gets no unwind range.
+- Nested holder chains take one holder per scope, built at the use site.
+- A holder inside a free inline helper is inlined only with `#pragma inline_depth(8)`. A holder that must
+  sit in a lower frame slot is a local of a struct static-inline helper under `inline_depth(8)`.
+- Volatile holder members reproduce a store-then-reload.
+- A `(o = p) != 0` destructor shares the load with the use site.
+
+In several units the destructor inlined in the owner reloads the held pointer after the decrement store
+(direct `p->_refCount = p->_refCount - 1`) while retail's 128-byte out-of-line copy does not
+(`igObject *o = p`), and one source text cannot produce both. The verifier compiles an exceptions-off
+duplicate's copy in a second compile, so the spellings can be selected per mode with
+`#if __option(exceptions)` (`__option(cpp_exceptions)` is silently false in both compiles) or a
+`__MWERKS__ >= 0x3000` gate. The split is a compiler constraint and carries a matching-construct comment.
+It suggests the retail sources had two definitions of the class.
 
 ## Tests
 
@@ -223,3 +257,30 @@ a GNU-linked fixture, a changed datum, a wrong address, an undeclared datum and 
 Implementation: `tools/unitobjects.py`, `tools/units.py`, `tools/verify.py`,
 `tools/check.py` and `tools/linkgen.py`. The full byte-identical retail relink
 remains the integration oracle.
+
+## Open questions
+
+- **When the inlined release reloads.** Unproven: retail's inlined reference release reloads the holder
+  pointer between the decrement store and the zero test only when the holder's address escaped to a call,
+  not for register-held holders (seen at `0x33bd30`, `0x339110`, `0x43dc10`, `0x25ac60`). In one compile the
+  direct `p->` spelling reproduces each owner body and table but makes the kept linkonce destructor 132 bytes
+  under the default profile, against retail's 128; the `o = p` spelling does the reverse. About seven
+  spellings per unit were tried.
+- **Limits of the unit-objects model.** Two class symbols cannot alias one retail destructor address:
+  `0x41acf0` needs direct-p and single-load shapes at different sites of one class. `0x41acf0`, `0x4207a0`,
+  `0x43dc10` and `0x3d50c0` stay `code-only` in `data/check-categories.tsv`. `0x390320` (53 code words off)
+  and `0x38b1f0` (13 words, the order and registers of loop-invariant values in the preheader) have no source.
+- **Member-subobject tables at the frame size.** `0x350100`, `0x3b0a80`, `0x33c950`, `0x3c0120`, `0x3c0640`,
+  `0x3bfd60` and `0x3c1480` are the only retail functions with tag `0x07`/`0x87` (`0x86` for the base) tables
+  whose location field equals the frame size, and they never materialise an inlined `this`: every member
+  address is a constant `addiu a0,sp,N`. The construct is a class with N non-trivial members whose constructor
+  is inlined. `0x3bfd60` and `0x3c1480` now match with their tables; the tables of the other five are not
+  reproduced. For those, no available compiler emits the construct: the combat family uses tag `0x27`/`0xa7`
+  with a register in the location field and keeps `this` in a saved register (712 bytes against 784 for
+  `0x350100`); the stack family uses tag `0x07`/`0x87` with frame-4 and stores and reloads `this`. About 25
+  spellings and every pragma and flag variant failed. Unproven: retail's compiler build treats the tracked
+  `this` as a dead variable at the default location, a build not available here.
+- **Names from the reflection accessors.** Unproven: `0x195a90` is the `igNode` destructor
+  (`igTransform_GetVTable` ends with a call to it), `0x1962d0` the `igTransform` destructor, and `0x33f5e0` the
+  destructor of an unnamed controller base shared by `beLayerCtl`, `beFont`, `beMovie`,
+  `beNDMWLogo`/`SaveCtrl`/`SaveIntf`/`GameRam` and `beShadow01`.

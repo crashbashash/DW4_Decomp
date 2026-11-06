@@ -2,7 +2,7 @@
  *
  * This is the real GPU path the plan asks for: the game's shading model is run as a fragment
  * shader, not emulated.  The VU1 microcode is the *specification* of that model (LIGHT 91 programs
- * = 82 % of the pipeline; findings #489/#492/#494), and the model here matches `render.c`'s
+ * = 82 % of the pipeline), and the model here matches `render.c`'s
  * software implementation: ambient + two-sided N·L diffuse, positional d/d² (or linear)
  * attenuation, a spotlight cone, and Blinn-Phong specular.
  *

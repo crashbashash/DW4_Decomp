@@ -31,7 +31,7 @@ Byte sizes on this page are the function extents in
 | Start | Bytes | Symbol | Role | Source |
 |---|---:|---|---|---|
 | `0x003e46b0` | 156 | `Gap__Bec__beNDMWLoadIntf2__vfunc_32` | reference/pad wrapper: takes the pad-manager reference into `_padManager` when it is not set | `src/unmatched/Gap__Bec__beNDMWLoadIntf2__vfunc_32.cpp` |
-| `0x003e4750` | 18,616 | `Gap__Bec__beNDMWLoadIntf2__vfunc_31` | per-frame update (the master flow) | `src/game/beNDMWLoadIntf2Update.cpp` ([#2748](../findings/findings-2501-2750.md#f2748)) |
+| `0x003e4750` | 18,616 | `Gap__Bec__beNDMWLoadIntf2__vfunc_31` | per-frame update (the master flow) | `src/game/beNDMWLoadIntf2Update.cpp` |
 | `0x003e9010`–`0x003e93b0` | 19 functions | see the next table | accessors / per-controller helpers | `src/engine/`, `src/game/`, `src/unmatched/` |
 | `0x003e93c0` | 12 | `Gap__Bec__beNDMWLoadIntf2__vfunc_30` | MetaObject return | `src/game/beNDMWLoadIntf2.c` |
 | `0x003e93d0` | 88 | `Gap__Bec__beNDMWLoadIntf2__vfunc_29` | descriptor wrapper: registers the record as receiver of `LOADINTF2_ALL` and `LOADINTF2` | `src/unmatched/Gap__Bec__beNDMWLoadIntf2__vfunc_29.cpp` |
@@ -91,7 +91,7 @@ of a manager derives from `beBaseInfoManager`.
 ### Typed receivers and links
 
 The slot, data-selection and card-utility functions read reflected fields, not
-private offset views ([#2753](../findings/findings-2751-3000.md#f2753)):
+private offset views:
 
 | Receiver | Reached through | Fields used |
 |---|---|---|
@@ -105,9 +105,9 @@ private offset views ([#2753](../findings/findings-2751-3000.md#f2753)):
   records; the "slot state == 1" test is `_isConnect`.
 - `_gameUseData` is a `beNDMWDegiDataList` of the per-player Digimon records, and
   `_haveSaveData` is a `beNDMWLoadSlotPlayer` whose `_saveDataList` holds the
-  four save areas ([#2755](../findings/findings-2751-3000.md#f2755)).
+  four save areas.
 - The pad words read by `0x003db780` are `bePadData._lTrg/_lRpt/_trigger/_repeat`.
-- Unconfirmed ([#2754](../findings/findings-2751-3000.md#f2754)): the object behind `_statDisp`, the property block
+- Unconfirmed: the object behind `_statDisp`, the property block
   `0x003ee6d0` fills (`beNDMWDegiData._data`) and `_svData`'s object have no
   reflected class and stay private views in the sources.
 
@@ -240,33 +240,33 @@ so far:
 Per-player item state 5 checks and reads the card behind the card-access notice
 (`0x1004`). Face buttons: `0x4000` (Cross) is confirm/advance and `0x2000`
 (Circle) is cancel/back, in `vfunc_31` (st0==3 and st0==2) and in the slot update
-([#751](../findings/findings-0751-1000.md#f751)).
+.
 
 Details of the body that are easy to get wrong:
 
 - In the case-1 preamble (`0x3e4e90`–`0x3e4eac`) retail resets the **per-player
   record** returned by `0x003e9240` (`+0x24`/`+0x30`/`+0x2c`/`+0x28`), not `CTRL`.
   Resetting `CTRL` removes the state-2 re-entry and changes the flow to
-  `0x3e3e00(JCHRSELBASE)` where retail emits `0x3e3e00(JLINEWIN01)` ([#742](../findings/findings-0501-0750.md#f742)).
+  `0x3e3e00(JCHRSELBASE)` where retail emits `0x3e3e00(JLINEWIN01)`.
 - In the CTRL `st0==0`, `st1==4` path retail writes `CTRL+0x1d = 0` (`0x3e51c8`)
-  before setting state 8 ([#746](../findings/findings-0501-0750.md#f746)).
+  before setting state 8.
 - `0x003de260(int, char)` reads its second argument (the verifier's
   `ARGC[0x3de260]` is 2). The two call sites pass
   different values: `0x3e6534` inherits `a1=1` from `li a1,1` at `0x3e64ec`,
-  `0x3e7b54` does `move a1,zero` ([#747](../findings/findings-0501-0750.md#f747), [#750](../findings/findings-0501-0750.md#f750)).
+  `0x3e7b54` does `move a1,zero`.
 - The Yes branch calls `0x003def70` with a1 = 1 left by the `li a1,1` at
   `0x3e66ec` (the behavioural reference passes no a1 at that call); the No branch
   passes 0 in the delay slot at `0x3e6734`.
 - The `0x3e3e00` send's 6th register is set per call site (the slot-open cursor
   publish carries `t1=1`, the mark publishes 0).
 - The play/close helpers take five arguments and the sequence query four; the
-  fifth (wait) argument comes from retail `t0=1` definitions ([#758](../findings/findings-0751-1000.md#f758)).
+  fifth (wait) argument comes from retail `t0=1` definitions.
 - The starter preview's two `0x1ae1a0` vectors (MOVETRANS) are zero (`mtc1 zero`).
 
 ### Matched source
 
 [`src/game/beNDMWLoadIntf2Update.cpp`](../../src/game/beNDMWLoadIntf2Update.cpp)
-is the complete body ([#2748](../findings/findings-2501-2750.md#f2748)): **18,616 code bytes / 4,654 instructions**, including the
+is the complete body: **18,616 code bytes / 4,654 instructions**, including the
 initial eleven context ensures, input sampling, every nested screen/card state
 and all ownership exits. The source uses reflected receivers for the common,
 control, creation, model, message, slot, name, text, status, save-selection and
@@ -285,7 +285,7 @@ What the match depends on:
 
 - Both vector objects and the four source arrays contain **three floats**,
   although argument homes are spaced sixteen bytes apart. Treating them as
-  larger leaves a 20-byte frame gap (the near miss recorded in [#2627](../findings/findings-2501-2750.md#f2627), which is
+  larger leaves a 20-byte frame gap (the near miss recorded, which is
   refuted as a roadblock).
 - The name-copy helper advances UTF16 pointers by two bytes, limits the name to
   eight characters and zero-fills the rest using an indexed loop.
@@ -312,7 +312,7 @@ method names.
 
 ### Slot selection
 
-The `beNDMWLoadIntf2SelSlot` helpers ([#745](../findings/findings-0501-0750.md#f745)–[#748](../findings/findings-0501-0750.md#f748)). The slot-selection screen runs
+The `beNDMWLoadIntf2SelSlot` helpers. The slot-selection screen runs
 in CTRL state 6 of the master update. The record
 is the `SELSLOT` record the master passes as `a0` (`v21 = ENSURE(LI2_SELSLOT)` in
 the reference); its pointers are `+0x14` pad
@@ -336,7 +336,7 @@ modelIndex}` each; the per-row model "made" flag is
 ### Text order
 
 The six consecutive bodies `0x003eba10..0x003ec114` publish and configure the
-screens' text lines (`beNDMWLoadIntf2TextOrder`; [#749](../findings/findings-0501-0750.md#f749), [#755](../findings/findings-0751-1000.md#f755), [#771](../findings/findings-0751-1000.md#f771)).
+screens' text lines (`beNDMWLoadIntf2TextOrder`).
 
 | Entry | Bytes | Symbol / source | Reference | Contract |
 |---|---:|---|---|---|
@@ -373,7 +373,7 @@ screens' text lines (`beNDMWLoadIntf2TextOrder`; [#749](../findings/findings-050
 
 ### Completion and selection
 
-The two CommMdlCtrl queue queries and the confirm selection ([#753](../findings/findings-0751-1000.md#f753)).
+The two CommMdlCtrl queue queries and the confirm selection.
 
 | Entry | Bytes | Symbol / source | Reference | Contract |
 |---|---:|---|---|---|
@@ -389,8 +389,8 @@ by the common-model submission helpers and drained by `0x003e44f0`
 
 ### Difficulty
 
-The `beNDMWLoadIntf2Diffselect` pair ([#1000](../findings/findings-0751-1000.md#f1000)) and the script that sizes the
-window ([#1001](../findings/findings-1001-1250.md#f1001)).
+The `beNDMWLoadIntf2Diffselect` pair and the script that sizes the
+window.
 
 | Entry | Bytes | Symbol / source | Role |
 |---|---:|---|---|
@@ -404,7 +404,7 @@ many rows, the difficulty window shows (`+0x2C` of the load controller: 0 none,
 
 ### Name entry
 
-The `beNDMWLoadIntf2NameSel` functions ([#1011](../findings/findings-1001-1250.md#f1011)–[#1013](../findings/findings-1001-1250.md#f1013)).
+The `beNDMWLoadIntf2NameSel` functions.
 
 | Entry | Bytes | Symbol / source | Role |
 |---|---:|---|---|
@@ -419,7 +419,7 @@ The `beNDMWLoadIntf2NameSel` functions ([#1011](../findings/findings-1001-1250.m
 (`_st0`, `_st3`, `_st2`, `_st1`; the last sits in the delay slot of the return
 at `0x003de478`). A second name entry therefore opens the keyboard again; the
 hypothesis that `_st1` survives and the open step is skipped is refuted by the
-code and by a retail capture ([#1014](../findings/findings-1001-1250.md#f1014)).
+code and by a retail capture.
 
 Data: the key rows at `0x004cc860` (`{int count; u16 codes[32]}`, stride `0x44`,
 30 rows; USA rows 0..3 are `ａ..ｚ`, `Ａ..Ｚ`, `０..９`, `＆！？～ー・：`), the starter
@@ -428,7 +428,7 @@ player models `0x004cd0e0`.
 
 ### Card selection and card utilities
 
-The step functions the load and save masters share ([#2753](../findings/findings-2751-3000.md#f2753)). Every one is matched
+The step functions the load and save masters share. Every one is matched
 and reads the reflected receivers listed under
 [Typed receivers and links](#typed-receivers-and-links).
 
@@ -463,10 +463,10 @@ reference over one flat `peek/poke/call` world:
   `0x3e3e00` vec3 temporaries are copied through reference scratch slots.
 
 Sixteen helpers are reconstructed beside them and called directly by the
-reference: the seven slot helpers in `recovered/frontend/selslot.{c,h}` ([#745](../findings/findings-0501-0750.md#f745)),
-the six text-order bodies in `recovered/frontend/textorder.{c,h}` ([#749](../findings/findings-0501-0750.md#f749), [#771](../findings/findings-0751-1000.md#f771))
+reference: the seven slot helpers in `recovered/frontend/selslot.{c,h}`,
+the six text-order bodies in `recovered/frontend/textorder.{c,h}`
 and the three completion/selection helpers in
-`recovered/frontend/completion.{c,h}` ([#753](../findings/findings-0751-1000.md#f753)).
+`recovered/frontend/completion.{c,h}`.
 
 ```sh
 python3 scripts/verify_loadintf2.py --elf orig/SLUS-20836/SLUS_208.36
@@ -481,18 +481,18 @@ the one call that carries one (`0x003e3e00`), and every non-stack byte written.
 On the retail side the interpreter descends into the sixteen helpers and executes
 their **original instructions** (the `REAL` set; a `real_hits` set records every
 `REAL` jal target and the run asserts it covers `REAL`), while the C side runs
-the recovered bodies ([#748](../findings/findings-0501-0750.md#f748), [#752](../findings/findings-0751-1000.md#f752)). Engine and messenger callees are opaque
+the recovered bodies. Engine and messenger callees are opaque
 `api->call`s. The interpreter's `lb` sign-extends the byte (`0xff` reads
 as −1); focused `interpreter_selftest` checks run before every verification
-([#743](../findings/findings-0501-0750.md#f743)).
+.
 
 The matrix is **626 focused direct cases, 432 message cases and 1,045 update
-cases** ([#744](../findings/findings-0501-0750.md#f744), [#752](../findings/findings-0751-1000.md#f752), [#758](../findings/findings-0751-1000.md#f758), [#771](../findings/findings-0751-1000.md#f771)):
+cases**:
 
 - Message cases: every command × registry presence × kind × entry/ready flag.
 - Update cases: 600 randomized single-tick rows, 4 targeted edge rows (system
   gate / pad absent / player 1), 40 randomized 8-tick multi-step flows, 15
-  deliberate 8-tick flows and 1 deterministic regression (the [#742](../findings/findings-0501-0750.md#f742) case-1
+  deliberate 8-tick flows and 1 deterministic regression (the case-1
   preamble, which fails at event index 41 when `CTRL` is reset instead of the
   per-player record). Controller input (the pad block) is rewritten every tick
   while the controller/record state evolves across a flow, and all four player
@@ -517,7 +517,7 @@ cases** ([#744](../findings/findings-0501-0750.md#f744), [#752](../findings/find
   focused slot-close case that checks all three tracked closes. The verifier
   also asserts tracked movement/cancel requests.
 
-Completion is not forced ([#754](../findings/findings-0751-1000.md#f754)): the harness wires the state the accessors read — the
+Completion is not forced: the harness wires the state the accessors read — the
 CommMdlCtrl queues at `CM+0x14`/`+0x18` with their counts written each tick from
 the `cmon`/`cmcn` keys — and wires all four per-player records (`RECARR[0..3]`)
 so `ds_select` has real targets. It also wires the SELSLOT record's pointers and
@@ -554,11 +554,11 @@ than it is:
 The port's title scene runs these states over `src/saveintf.c`
 ([Save Keeper](../../port/docs/save-keeper.md)):
 
-- **Call Digimon** ([#999](../findings/findings-0751-1000.md#f999)–[#1002](../findings/findings-1001-1250.md#f1002)): control states 6, 7 and 8 in order — the
+- **Call Digimon**: control states 6, 7 and 8 in order — the
   memory-card chooser (SelSlot, text `0x1009`), the card-access notice
   (`0x1004`) while item state 5 checks and reads the card, the data select
   (`0x513`), the difficulty window and the log-in prompt (`0x51D`).
-- **Create** ([#1011](../findings/findings-1001-1250.md#f1011)–[#1013](../findings/findings-1001-1250.md#f1013)): states 3 (Create/Call), 4 (`MakeChr`), 5 (`NameSel`)
+- **Create**: states 3 (Create/Call), 4 (`MakeChr`), 5 (`NameSel`)
   and the new-character commit of state 8
   ([creating a character on the title](../../port/docs/save-keeper.md#creating-a-character-on-the-title-port)).
 
@@ -572,7 +572,7 @@ The port's title scene runs these states over `src/saveintf.c`
   `0x003ed2e0`/`0x003edc20`, `0x003ec120`, `0x003ecdc0`, `0x003ef1e0`, the
   hand-off wrappers `0x003f1270`–`0x003f13d0` and `0x003ecc60`, and the child
   constructors `0x003c27c0`–`0x003c6b00`.
-- **Unidentified objects ([#2754](../findings/findings-2751-3000.md#f2754)).** The object behind `_statDisp`, the property
+- **Unidentified objects.** The object behind `_statDisp`, the property
   block `0x003ee6d0` fills and `_svData`'s object have no reflected class.
 - **Behavioural reference coverage.** The remaining per-screen helpers
   (`0x003ec120`, `0x003ec450`, `0x003ecdc0`–`0x003ef5d0`) — the character
@@ -583,5 +583,5 @@ The port's title scene runs these states over `src/saveintf.c`
 - **Not described.** The `making`/`GAMEREMOVE` transitions and the interaction
   with `beNDMWLoadSavePlWork`.
 - **Outside this block.** `0x003e3b80` (`beNDMWLoadIntf2ComMdlCtrl__Start`, 504
-  bytes), the common-model start helper, has no source in `src/` ([#1698](../findings/findings-1501-1750.md#f1698)); see
+  bytes), the common-model start helper, has no source in `src/`; see
   [common-model request queues](common-model-controller.md).

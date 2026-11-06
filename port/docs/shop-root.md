@@ -1,6 +1,6 @@
 # Generic shop root (hub SUBWND modes 1..9)
 
-Arena state ([#2728](../../docs/findings/findings-2501-2750.md#f2728)/#2729): this root owns a recovered
+Arena state: this root owns a recovered
 `beNDMWShopCtrl00` in the session arena. Its lifecycle uses `_isRun` and
 `_st0..3`, entry/player use `_entCode`/`_playerNo`, and the service child-count
 snapshot uses `_nowProcKazu`. `_subWindow` points to a typed

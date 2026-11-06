@@ -394,12 +394,6 @@
   "asm_units": 20214,
   "classes_with_fields": 659,
   "fields": 3680,
-  "findings": 2290,
-  "findings_by_status": {
-   "confirmed": 1438,
-   "refuted": 92,
-   "unconfirmed": 760
-  },
   "lua_chunks": 5291,
   "metaobjects": 1075,
   "rtti_records": 579,

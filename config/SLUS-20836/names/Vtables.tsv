@@ -4,10 +4,10 @@
 #
 # Each body in data/vtables.json's `ambiguous` list is referenced by the
 # full descendant set of exactly one class, so it is that class's virtual
-# slot.  This is the `<Class>::vfunc_<slot>` convention of #283, with the
-# owner recovered from data/class-hierarchy.tsv (#360's LCA test was too
+# slot.  This is the `<Class>::vfunc_<slot>` convention, with the
+# owner recovered from data/class-hierarchy.tsv (the LCA test was too
 # weak; descendant-set equality is the right test).  Bodies whose owner is a
-# template base with no MetaObject stay anonymous -- see finding #410.
+# template base with no MetaObject stay anonymous --.
 #
 # <va>	<name>	<module>
 0x001dcf40	Gap::Sg::igTransform::vfunc_7	engine

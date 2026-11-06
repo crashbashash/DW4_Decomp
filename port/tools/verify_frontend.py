@@ -2,8 +2,7 @@
 """verify_frontend.py — the port boots to the title, presents it, stops for input, and (on Game
 Start) follows the Game Start branch to the first playable stage (porting §4; boot-contract W1/W2).
 
-The `dw4` host with `--boot` must not jump straight into a stage.  The recovered front-end (finding
-#606) is a boot/attract chain that *stops at the title* and waits for the pad:
+The `dw4` host with `--boot` must not jump straight into a stage.  The recovered front-end is a boot/attract chain that *stops at the title* and waits for the pad:
 
   boot/attract chain:  menu-database (AFS 800) -> bandai-logo (802, scene stagis09) -> opening
                        (804, stagis10) -> title-screen (806, stagML11)   -- then STOP.
@@ -50,16 +49,16 @@ GAME_BRANCH = [
 PLAN = BOOT_CHAIN + GAME_BRANCH
 FIRST_STAGE = "stagml11.igb"
 
-# The front-end trail layer is generated from the pack's own model controller (findings
-# #610/#614/#619): AREA.AFS entry 620's `j_startback` graph, its JOINTSET schedule and its
+# The front-end trail layer is generated from the pack's own model controller:
+# AREA.AFS entry 620's `j_startback` graph, its JOINTSET schedule and its
 # `sback00` texture.  It is part of the shipped path — no capture directory and no flag.
 LAYER_LINE = "front-end layer: j_startback, 16 mesh(es)"
-# The layer's camera is recovered from the pack, not calibrated (finding #630): the title's
+# The layer's camera is recovered from the pack, not calibrated: the title's
 # `SETDEMOCAMERA "entry"` demo path composes to an on-axis eye at world z = 730.  The port must
 # resolve that chain and must not fall back to a calibrated distance or a missing camera.
 CAM_RE = re.compile(r"front-end layer camera: 'cameraanimShape01' eye \(([-\d.]+) ([-\d.]+) ([-\d.]+)\)")
 
-# The title's own UI tree (findings #632/#633) is the pack's `AREA.AFS` 620 graphs `j_startlogo`
+# The title's own UI tree is the pack's `AREA.AFS` 620 graphs `j_startlogo`
 # (the `rogo` logo quad + `kenri` copyright) and `j_startmenu01`/`02` (the rows), each geometry's
 # texture resolved through the pack's material chain.  It is part of the shipped path, and it
 # resolves four image identities under three names -- the logo, separate row/copyright atlases
@@ -71,7 +70,7 @@ UI_RECT_RE = re.compile(r"front-end UI: logo rect x ([-.\d]+)\.\.([-.\d]+) y ([-
 UI_OPEN_RE = re.compile(r"front-end UI: logo rect at OPEN t=0 x ([-.\d]+)\.\.([-.\d]+)"
                         r" y ([-.\d]+)\.\.([-.\d]+)")
 EXPECT_TEXTURES = ["cursor.png", "logo.png", "mojips.png", "mojips.png"]
-# The recovered composition order (findings #609/#610/#632/#636): the static stagML11 backdrop is
+# The recovered composition order: the static stagML11 backdrop is
 # composed under the generated layer and the native UI, through the recovered title camera.
 BACKDROP_RE = re.compile(r"front-end title: stagML11 backdrop composed under the layer"
                          r" \((\d+) mesh\(es\), (\d+) triangles\) via the recovered camera")
@@ -187,7 +186,7 @@ def main():
                 problems.append("title missing %r" % need)
 
         # W1: the title presented with the game's own font + the stagML11 backdrop, and it STOPS.
-        # The title boots into its press-start state (finding #605/#639): the logo, the copyright and
+        # The title boots into its press-start state: the logo, the copyright and
         # the "Press START button" line, with the Game Start/Option rows not yet shown.
         if "title: 'Press START button' screen (TITLE2 RUN); START -> 'Game Start' / 'Option'" not in out:
             problems.append("the title's press-start screen was not presented")
@@ -298,7 +297,7 @@ def main():
         if rc != 0:
             problems.append("Game Start host failed (%s)" % (err2.strip() or out2.strip()))
         else:
-            # the press-start screen advances to the Game Start/Option rows (finding #605/#639):
+            # the press-start screen advances to the Game Start/Option rows:
             # START on the pad; Cross is deliberately not an alias
             # the first press during the opening skips it to the press-start screen; only the next
             # START opens the menu (buttons are edge-triggered)
@@ -388,7 +387,7 @@ def main():
         if rc or not re.search(r"title: name question: [f-z]", outh):
             problems.append("held naming input did not repeat: " + errh)
 
-        # --- run 2a: the Option screen (finding #724): Down + Cross opens it from the menu, Right flips the
+        # --- run 2a: the Option screen: Down + Cross opens it from the menu, Right flips the
         # highlighted setting (Dungeon camera Near -> Far), Down moves to Light, Cross on the Return row
         # closes it.  Edge-triggered input: each press is one action.
         odir = os.path.join(tmp, "option")
@@ -533,7 +532,7 @@ def main():
                 problems.append("frontend frame %d depends on uninitialized heap state" % frame)
 
         # The layer's opening plays alone: the game shows no title UI until the recovered 209-frame
-        # SQ_OPEN has finished (finding #640), so the UI's first drawn frame must be past it.  Run 3
+        # SQ_OPEN has finished, so the UI's first drawn frame must be past it.  Run 3
         # renders 240 frames, which is the run that reaches it.
         mfirst = re.search(r"title: UI first drawn at frame (\d+) \(after the layer's ([\d.]+) s opening\)", out3)
         if not mfirst:
@@ -541,7 +540,7 @@ def main():
         elif int(mfirst.group(1)) < 209:
             problems.append("the title UI appears during the layer's opening (frame %s)" % mfirst.group(1))
 
-        # The white flash (finding #642): the title stage's Lua runs `MODELCTRL i_fadewn01 GENERATE
+        # The white flash: the title stage's Lua runs `MODELCTRL i_fadewn01 GENERATE
         # SQ_WTIN60` once j_startback's SQ_OPEN has finished -- a full-screen white overlay at alpha
         # 1.0 fading to 0 over 60 frames (FADESET OUT fadeTime 60).  It must start on the frame the
         # opening ends, at full alpha, and fade from there.

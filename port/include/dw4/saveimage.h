@@ -31,7 +31,7 @@ int dw4_saveimage_store(dw4_playerrecords *,int32_t player,int32_t slot,uint8_t 
 /* Replace the saved keys of player from a slot of a verified image, atomically (a private copy is committed only
  * when every key decodes). Species (DIGIMONNO), the current stats derived from BASE_*, the equipped weapon model
  * (POWERSOCKETNAME) and every recalculated stat are not stored in a save: the caller must rebuild them, as
- * retail does after 3ef5d0 (finding #106). Equipment lists are re-projected from the stored references. */
+ * retail does after 3ef5d0. Equipment lists are re-projected from the stored references. */
 int dw4_saveimage_load(dw4_playerrecords *,int32_t player,int32_t slot,const uint8_t *,size_t);
 /* Whole-file helpers. write replaces the destination atomically (temporary file in the same directory, flush,
  * rename) so a failed write leaves the previous valid file untouched; it verifies what it wrote. */

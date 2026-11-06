@@ -105,7 +105,7 @@ to the host 802→804→806 sequencer, then resets the title controller and
 presentation clock. That sequencer keeps its logo/movie presentation
 limitations; it is not a recovered stage loader.
 
-## Logo command program ([#759](../../docs/findings/findings-0751-1000.md#f759)–[#760](../../docs/findings/findings-0751-1000.md#f760))
+## Logo command program
 
 The logo walks its actual AREA 620 model program, extracted by
 `tools/gen_logo_program.py` into `src/logo_program.h`. `--check` re-extracts it
@@ -126,7 +126,7 @@ handler. Fade/joint presentation is native. Joint completion (including strict
 comparisons and shared-clock conversion) and generic command metadata dispatch
 are unverified.
 
-## Action2 completion and the clock ([#769](../../docs/findings/findings-0751-1000.md#f769)–[#770](../../docs/findings/findings-0751-1000.md#f770), [#772](../../docs/findings/findings-0751-1000.md#f772)–[#774](../../docs/findings/findings-0751-1000.md#f774))
+## Action2 completion and the clock
 
 ### Action2
 
@@ -189,7 +189,7 @@ and their captured vtable establish the source chain; the supplied clock uses
 nanoseconds with 100 ns quantization. External sampling reports variable steps
 near 60 Hz, without a retained raw sequence or frame counter. See
 [system-clock evidence](../../docs/engine/system-clock.md). The timer lifecycle
-and the normal world-store-before-Action2 order are recovered ([#772](../../docs/findings/findings-0751-1000.md#f772)–[#774](../../docs/findings/findings-0751-1000.md#f774)). No
+and the normal world-store-before-Action2 order are recovered. No
 exact completion frame was measured.
 
 ## Options presentation
@@ -340,6 +340,15 @@ original text callbacks; their retail comparisons and limits are in
 [created summary](main-menu-fidelity.md#created-summary),
 [selection cursors](main-menu-fidelity.md#selection-cursors) and
 [upper fields](main-menu-fidelity.md#upper-species-name-and-keyboard-fields)).
+
+## Front-end font
+
+The front-end font (`src/fefont.c`) draws one quad per glyph from the 484 metric records of
+`bectext.igb`, including a quad for space. Each pen advance (advance × 96) is rounded up to a
+whole pixel in the 448-line frame. Codes are Unicode-like with icon glyphs: 8801 D-pad, 8711
+L-stick, 8811 Circle, 8810 Cross; the icon meanings are inferred from the legend text. Draw
+state: ALPHA 0x44, AREF 12 (TEST 0x300cd, ZTST ALWAYS), TEX1 linear, vertex colour
+(114,114,114,121), which is 0.9/0.95.
 
 ## Login hand-off
 

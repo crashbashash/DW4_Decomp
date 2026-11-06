@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """flag_sweep.py — retry every near-miss draft under other MWCC optimisation flags.
 
-The Action2 block needed a per-unit `-O3,p` override (finding #646); a function whose
+The Action2 block needed a per-unit `-O3,p` override; a function whose
 draft is otherwise complete can match under a different `,p`/`-O` setting. This tries
 a small flag set per draft and banks the first byte-identical result.
 """

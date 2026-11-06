@@ -113,7 +113,7 @@ with a diagnostic. `python3 testing/test_story_state.py` checks this behavior of
 ## Dynamic-testing / reverse-engineering helpers
 
 > **Where the scripts live.** The decompilation pipeline (Ghidra dumps, vtable naming, Lua
-> decompilation, flags, findings index) is committed in `scripts/`.
+> decompilation, flags) is committed in `scripts/`.
 
 | Tool | What it does |
 |---|---|
@@ -144,11 +144,6 @@ PINE reads, and the emulator cannot get stuck.
 | `lua_strings.txt` | script strings from a few representative entries |
 | `afs_strings.txt` | strings from AFS entries incl. reflection type names |
 
-## Findings
-
-Findings are in the [register](../docs/findings/README.md): `python3 scripts/findings.py show <id>` prints one,
-`next` gives the next free id and `check` validates the register.
-
 ## Tooling limitations and gotchas
 
 Hard-won lessons that cost hours; each of these looked like a bug in the game and was not. Read
@@ -158,13 +153,13 @@ before a dynamic session.
 |---|---|
 | **Live model probing needs a PAUSED VM** | The heap mutates every frame, so reads taken while running are not reproducible (an object's fields move between two reads of the same address). `pi-emu pause` first; `pi-emu resume` after. Both live scripts assume this. |
 | **Never chase pointers with one PINE read each** | A `name_live_models.py` that does that (~tens of thousands of round trips over 826 `M_*Shape` objects) never finishes. Read EE RAM once into a local buffer and resolve offline — `--dump`/`--from` exist for exactly this, so a dump also survives the emulator being torn down. |
-| **Model names are DCC names, not game names** | Geometry is named after its art source: `M_BK17v1_barrelmShape`, `pCylinderShape3`, `barrelbody`. They hang off a `M_*Shape` object (vtable `0x00528e70`, name at `+0x08`), which owns its geometry attr via the **single** `+0x20` `igAttrList` — not a chain (the lists are a packed shared arena). The `+0x1c` wrapper attr is only a fallback. Full chain: `docs/engine/model-format.md` (findings [#455](../docs/findings/findings-0251-0500.md#f455)/#457/#458). |
-| Live model extraction needs the vertex buffer walked **in order** | There is no index array (1 of 1,006 live attributes has one): `_primType` 4 walks a strip-length array (`sum(L) == numVerts`), `_primType` 3 walks the buffer in triples (`3*numPrims == numVerts`). `igVertexArray._vdata` is a `{positions, normals}` pair, **not** a `{start,end}` descriptor — size the read from `_numVerts`; `_vdata[1]` is 0 on the 539 unlit/2D meshes, and the 8-byte `{u,v}` UV pair follows the last 12-byte stream at `align8((normals or positions) + 12*numVerts)`. See `docs/engine/model-format.md` (findings [#455](../docs/findings/findings-0251-0500.md#f455)/#458). |
+| **Model names are DCC names, not game names** | Geometry is named after its art source: `M_BK17v1_barrelmShape`, `pCylinderShape3`, `barrelbody`. They hang off a `M_*Shape` object (vtable `0x00528e70`, name at `+0x08`), which owns its geometry attr via the **single** `+0x20` `igAttrList` — not a chain (the lists are a packed shared arena). The `+0x1c` wrapper attr is only a fallback. Full chain: `docs/engine/model-format.md`. |
+| Live model extraction needs the vertex buffer walked **in order** | There is no index array (1 of 1,006 live attributes has one): `_primType` 4 walks a strip-length array (`sum(L) == numVerts`), `_primType` 3 walks the buffer in triples (`3*numPrims == numVerts`). `igVertexArray._vdata` is a `{positions, normals}` pair, **not** a `{start,end}` descriptor — size the read from `_numVerts`; `_vdata[1]` is 0 on the 539 unlit/2D meshes, and the 8-byte `{u,v}` UV pair follows the last 12-byte stream at `align8((normals or positions) + 12*numVerts)`. See `docs/engine/model-format.md`. |
 | **`pi-emu step` does not process pad input** | FrameAdvance (F5) advances the world but does **not** poll the controller, so you cannot walk frame-by-frame. Use real-time `pi-input stick … --ms N` for movement. Frame-stepping still works for **autonomous** processes (area loads, cutscenes). |
 | Real-time stick needs a settle + a long enough burst | `resume; sleep 0.2; stick --ms 800; pause` moves the player; `resume; stick --ms 300; pause` (no delay) often does not. |
 | `pi-state load` needs **resume first** | Loading while paused is flaky (`pi-emu pause` may report "already paused"). Resume, then load, then pause. |
 | `pi-pine snap` is slow | ~107 s per 32 MB ee-ram (≈0.29 MB/s). **Pause before snapping** so the image is coherent, and prefer extracting RAM from a `.p2s` offline (`p2s_ram.py`, ~0.07 s). |
-| **PINE reads only plain mapped EE memory** | VU1 (`0x11004000`), EE regs/MMIO (`0x1000…`), and the scratchpad (`0x70000000`) all read back **0**, and writes there do nothing. It is not a `pi-pine` bug: the client sends the raw address and the protocol has no memory-space selector — PCSX2's server resolves the address as `vtlbdata.pMem[addr>>12] + addr` and returns 0 for gated/unmapped pages instead of dispatching the register handler. So VU1/MMIO need PCSX2's own debugger (`-debugger`, Memory view) or a savestate (every `.p2s` carries `vu1Memory.bin`/`vu1MicroMem.bin`), not PINE. (Patching `pcsx2-qt` to call `vtlb_memRead`/`vtlb_memWrite` would fix it, but PCSX2 is kept stock.) Findings. |
+| **PINE reads only plain mapped EE memory** | VU1 (`0x11004000`), EE regs/MMIO (`0x1000…`), and the scratchpad (`0x70000000`) all read back **0**, and writes there do nothing. It is not a `pi-pine` bug: the client sends the raw address and the protocol has no memory-space selector — PCSX2's server resolves the address as `vtlbdata.pMem[addr>>12] + addr` and returns 0 for gated/unmapped pages instead of dispatching the register handler. So VU1/MMIO need PCSX2's own debugger (`-debugger`, Memory view) or a savestate (every `.p2s` carries `vu1Memory.bin`/`vu1MicroMem.bin`), not PINE. (Patching `pcsx2-qt` to call `vtlb_memRead`/`vtlb_memWrite` would fix it, but PCSX2 is kept stock.) |
 | PCSX2 re-applies `patches/*.pnach` after a state load | A pnach survives loading an *unpatched* state, which is how the MP-9999 patch corrupted unrelated saves. Also, the `extended` type was written as a **single byte** in this build — use explicit per-byte lines. Keep the patches dir empty unless a pnach is intended. |
 | Whole-RAM diffs are unusable | Animation phase alone makes the same state differ by ~10⁵ words; the crown work's pink-vs-no-crown dumps were 865k words apart. **Signature searches beat diffs** — a high-entropy byte-pattern scan found the MT state instantly where diffs found noise. |
 | MIPS builds 32-bit constants with `lui`+`ori` | Searching for a raw 32-bit constant in the ELF finds almost nothing; search the **imm16 pairs** instead. |
@@ -184,9 +179,7 @@ GS framebuffer checks: `python3 testing/test_gs_framebuffer.py` validates the
 PSMCT32 block/column address map used by `scripts/gs_shade_raster.py`. Within a
 block, columnTable32 interleaves two rows at a time; words are not row-major.
 Inspect both framebuffer bases and the captured screenshot before identifying
-the displayed image: FRAME may address a partly rendered back buffer. STATUS's
-paused pixel checkpoint
-records that case and supersedes the inner-word/identical-buffer clauses of [#588](../docs/findings/findings-0501-0750.md#f588).
+the displayed image: FRAME may address a partly rendered back buffer.
 
 The native asset readers and their checks live in [`../port`](../port/README.md):
 
@@ -210,7 +203,7 @@ The native asset readers and their checks live in [`../port`](../port/README.md)
 
 | Gotcha | Detail / workaround |
 |---|---|
-| **The live-object scan is blind to the engine's `ig*` classes** | The scan keys on the **478 recovered RTTI vtables**, and the engine's `Gap::Core::ig*` objects are **not** among them (a live `igImage` is `0x00525630`, an `igTextureAttr` `0x00522c60`, an array class `0x00526590`). So a scan for `igImage` reports **0 instances even when they exist** — reach them by following a pointer from a class the scan *does* see (`beTextureCtrlData._tex` → `igTextureAttr._image` → `igImage`, finding [#448](../docs/findings/findings-0251-0500.md#f448)), not by vtable. |
-| **A texture's buffers are load-time ordinals offline** | In a pack, `igImage._pImage`/`_pClut` are **not** offsets (finding [#433](../docs/findings/findings-0251-0500.md#f433)/#446) — ordering the pack's blocks does not find them. Use the live route (it needs a running game and a live-object scan), or solve the replay (tracker T14). |
+| **The live-object scan is blind to the engine's `ig*` classes** | The scan keys on the **478 recovered RTTI vtables**, and the engine's `Gap::Core::ig*` objects are **not** among them (a live `igImage` is `0x00525630`, an `igTextureAttr` `0x00522c60`, an array class `0x00526590`). So a scan for `igImage` reports **0 instances even when they exist** — reach them by following a pointer from a class the scan *does* see (`beTextureCtrlData._tex` → `igTextureAttr._image` → `igImage`), not by vtable. |
+| **A texture's buffers are pack-local ids offline** | In a pack, `igImage._pImage`/`_pClut` are **not** byte offsets: each is the id of a pool block, and the pack's own directory gives the block's offset, with no load-level replay (`docs/engine/igbinary-format.md`; `scripts/igb_pool.py --image`). The live route reaches the same images but needs a running game and a live-object scan. |
 | **`pi-pine read … --raw` writes to stdout** | `--out -` is not supported; either use `--out <file> --raw`, or `--raw` alone to pipe. `--size` takes a **decimal** int (not `0x…`). |
 | Live texture decode is only trustworthy by eye | Verified so far: the status-screen label atlas, `stcngmoji.png` ("Go to the destination."), gradients and ramps — 46 dumped PNGs. Palette is 32-bit R,G,B,A and textures are **bottom-up** (`--flip`). |

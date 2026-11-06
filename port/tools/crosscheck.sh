@@ -74,7 +74,7 @@ check_entry() {
     echo "   agree: $c_cls classes, records $c_rec"
 }
 
-# The id remap table and the content-pool blocks (findings #460/#464).  The C reader and
+# The id remap table and the content-pool blocks.  The C reader and
 # the repository's igb_ids.py + igb_pool.py must agree on the table location, the id
 # split (objects vs pool blocks) and the pool accounting.
 check_refs() {

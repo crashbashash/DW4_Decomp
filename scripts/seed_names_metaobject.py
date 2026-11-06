@@ -113,7 +113,7 @@ def thunk_target(img, va):
 
     The registrar's `t0` is either the class's accessor or a two-instruction thunk
     to it; the thunk has no symbol of its own, so the pointer is the only way to
-    find the accessor (finding #365).
+    find the accessor.
     """
     off = va - VADDR_BASE + FILE_BASE
     if off < 0 or off + 8 > len(img):
@@ -162,7 +162,7 @@ def main():
             # promotes and names the thunks (`thunk_<accessor>`), so a symbol at `v`
             # no longer means `v` is the accessor.  Both are emitted, so the overlay
             # stays authoritative and `apply_names.py` can move a name that used to
-            # sit on a thunk onto the accessor it belongs to (finding #389).
+            # sit on a thunk onto the accessor it belongs to.
             thunk_va = None
             if suffix == "GetMetaObject":
                 t = thunk_target(elf, v)
@@ -189,7 +189,7 @@ def main():
     print("# the register_site tracker; do not hand-edit.  %d accessor targets are still"
           % gap)
     print("# unresolved (neither an accessor nor a `j` thunk to one) and are not listed;")
-    print("# registrar and accessor, so they add no names (finding #358).")
+    print("# registrar and accessor, so they add no names.")
     print("# <va>\t<name>\t<module>")
     for va, nm, mod in out:
         print("0x%08x\t%s\t%s" % (va, nm, mod))

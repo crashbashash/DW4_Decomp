@@ -117,8 +117,10 @@ General shapes:
 * `if (a == 0) b = X; else b = a;` null fallbacks;
 * a C++ class with enough dummy virtuals for `lw t9,0(s4); lw t9,N(t9); jalr t9`;
 * an empty-destructor `struct RP` holder for stack smart-pointer slots;
-* a pointer counter turned into an `int` counter with the loop flag materialised in its own local (`r = a > i; } while (r);`) so the
-  `slt` colours as retail;
+* a pointer loop counter under the alternate compiler makes the materialised `slt` colour the counter v1 and the count v0: turn it into
+  an `int` counter with the loop flag materialised in its own local (`r = a > i; } while (r);`) so the `slt` colours as retail. A plain
+  `while (a > i)` gives the fused `slt at` form instead, so the flag needs its own local. When the pointer is still needed elsewhere, make
+  the counter an `int` member of a union with it;
 * a dummy `l2 = l;` re-read at the bottom of a loop, so strength reduction cannot make a pointer induction
   variable and the base load hoists late;
 * explicit byte-offset variables (`jo += 4`) with `j = 0; if (j < n) { jo = 0; do { } while
@@ -133,6 +135,8 @@ Shapes found on one function:
 * `beNDMWLoadCtrl2::vfunc_31`: a loop-carried base reload and a goto-form count loop with the preheader written after the return.
 * `beNDMWShopCtrlDeviceSell::vfunc_21`: `default: return;` first in the outer switch. In `-O3,p` the scheduler stops hoisting
   successor instructions into delay slots for the whole function once the post-RA jump optimiser deletes a jump to the next block.
+  The effect needs a default with a real body, laid out first so the compare chain falls into it: `default: return;` triggers it,
+  `default: break;` does not. Nop-filled delay slots across the ShopCtrl/StatusCtrl `vfunc_21` family are its symptom.
 * `beFileListInfoManager::vfunc_27`: when both arms of an if/else assign the same local the front end turns it into a high-numbered
   IR temp, which flips the v0/v1 colouring; any harmless statement such as `li = (int)lst;` between the diamond and the test that
   reads it keeps the declared variable.
@@ -140,26 +144,26 @@ Shapes found on one function:
 
 ### The system update, the node-clock timer and the LoadIntf2 update
 
-* `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes): the complete body is typed C ([#2746](../findings/findings-2501-2750.md#f2746)); see
+* `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes): the complete body is typed C; see
   [system update recovery](system-clock.md#complete-besystem-update-recovery).
-* `FUN_0039a9e0` (308 bytes) matches as typed C in `src/game/beNodeAnimClock.cpp` ([#2747](../findings/findings-2501-2750.md#f2747)).
+* `FUN_0039a9e0` (308 bytes) matches as typed C in `src/game/beNodeAnimClock.cpp`.
   A `const` timestamp snapshot, a `const` play-count load before subtraction,
   and reuse of the incoming parameter for the elapsed delta preserve the original
   parameter web and operand order. No inline assembly, fake arguments or compiler modification is used.
   A draft whose elapsed delta occupies `a0` instead of retail's `a1`, with
   one addition also using the commutative operands in the opposite order, differs
   at four words, and around 400 spellings of that draft do not resolve it. The traced need for an invisible
-  interference node describes that draft, not every possible source form: finding [#2626](../findings/findings-2501-2750.md#f2626)'s source-impossibility inference
-  is refuted.
+  interference node describes that draft, not every possible source form, so it does not make the
+  function impossible in source.
   See [the clock recovery](stage-loading.md#byte-matched-clock-update).
 * `beNDMWLoadIntf2::vfunc_31`: the complete 18,616-byte update
-  matches as typed C++ in `src/game/beNDMWLoadIntf2Update.cpp` ([#2748](../findings/findings-2501-2750.md#f2748)), including all three
+  matches as typed C++ in `src/game/beNDMWLoadIntf2Update.cpp`, including all three
   emitted helper duplicates, nine jump tables, exception index and sixteen cleanup
   ranges/actions. See [the full recovery](load-intf2.md#matched-source).
 
 ### Open: `beMatCtrl::vfunc_31`
 
-`beMatCtrl::vfunc_31` (3,064 bytes) has no matching C. A genuine C++ candidate ([#2749](../findings/findings-2501-2750.md#f2749))
+`beMatCtrl::vfunc_31` (3,064 bytes) has no matching C. A genuine C++ candidate
 reproduces five owner lifetimes, both destructor profiles and the complete
 exception index/table; its main body is unbanked with ten differences. The manual-reference draft's five stale call
 arguments are corrected. See [ownership and ABI evidence](material-contact.md#update-ownership-and-call-contracts).

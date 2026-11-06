@@ -1,6 +1,6 @@
 # Array allocation and named alignment selection
 
-Finding [#890](../findings/findings-0751-1000.md#f890) recovers two complete bodies / 564 bytes in
+Two complete bodies / 564 bytes are recovered in
 [array-storage.c](../../recovered/engine/array-storage.c). The 228-byte allocator
 has byte-identical matching source in
 [array-allocation.cpp](../../src/engine/array-allocation.cpp). The adjacent

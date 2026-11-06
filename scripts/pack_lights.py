@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """pack_lights.py — read a pack's `igLightAttr` records (the game's light rig).
 
-`p2-lighting.md` recorded the light values as "not in the disc" (finding #499): the *runtime* globals
+`p2-lighting.md` recorded the light values as "not in the disc": the *runtime* globals
 (`0x56AF40`, `0x56AF94`) are empty in a savestate because they are populated only during the render
 pass.  But the **source** objects are ordinary `igLightAttr` records in the common packs -- the
 earlier `dw4asset scan Light` looked at class *directories* and found 0, missing them.  Every common
@@ -11,7 +11,7 @@ pack (179/187/195/203/210/218 ...) carries the same three lights, i.e. the engin
     lightType 0  diffuse  (0.8, 0.8, 1.1)           -- bluish key, dir (0.2424, -0.8192, -0.5198)
     lightType 2  diffuse  (1, 1, 1)                 -- white overhead spot at (0, 90, 0), 30 deg
 
-Finding #554.  Emit the port's `--lights` file (one SPEC per line) and the `--ambient` value with
+Emit the port's `--lights` file (one SPEC per line) and the `--ambient` value with
 `--emit`; the port's built-in default already carries the same rig (DW4_Port/src/render.c).
 
     python3 pack_lights.py --pack <roms>/NDMW.AFS:187 --list

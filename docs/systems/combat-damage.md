@@ -13,7 +13,7 @@ standalone function. Its setup and cases occupy the contiguous physical region
 `0x003fde30..0x00406ad0` (36,000 bytes), sharing the enclosing 41,864-byte
 dispatcher's frame and return. The original name table is `FightCom`, with 22
 commands covering both directions of hit/damage/status calculations, EXP,
-skill growth, player-to-player magic and player attack element lookup ([#1018](../findings/findings-1001-1250.md#f1018)).
+skill growth, player-to-player magic and player attack element lookup.
 The [generated inventory](combat-inventory.md) records the switch targets,
 direct calls, unresolved indirect call sites and actual source coverage.
 The [three immediate helpers](combat-helpers.md) now have matching C/C++:
@@ -28,15 +28,15 @@ The [draft recovery notes](combat-draft-recovery.md) describe its reviewed
 argument slots, byte/word access widths, address units and protected repairs.
 Its three [reference-ownership helpers](combat-reference-helpers.md) now have
 316 bytes of matching C and explicit release/assignment call slots in the
-generated analysis context ([#1037](../findings/findings-1001-1250.md#f1037)).
+generated analysis context.
 
 All 26 contiguous BLT/BLP Lua helpers have matching source;
 these wrappers are separate from the calculation rules. Five status-duration
 helpers had disjoint Ghidra bodies whose byte counts truncated their epilogues.
 Reviewed spans restore eight bytes apiece without changing retail bytes or
-increasing the matched-source count ([#1019](../findings/findings-1001-1250.md#f1019)). The full dispatcher's reviewed
+increasing the matched-source count. The full dispatcher's reviewed
 span ends at `0x00406d98`; the former next-symbol heuristic included eight
-padding bytes after its return ([#1022](../findings/findings-1001-1250.md#f1022)).
+padding bytes after its return.
 
 The initial whole-dispatcher m2c draft references undefined incoming
 `saved_reg_s0`/`saved_reg_s3`. Known accessor signatures remove spurious call
@@ -44,7 +44,7 @@ arguments containing `MULT_HI` in a later draft, but code still differs.
 The initial report that only one switch table was emitted is refuted: the
 compiler emits two different sections both named `.rodata`. Verification and
 linking now preserve their section indices, individual relocations and separate
-retail placements, including the raw padding between tables ([#1024](../findings/findings-1001-1250.md#f1024)). Six
+retail placements, including the raw padding between tables. Six
 regressions cover an independent GNU link, both table contents, corrupt/missing
 tables, unresolved relocations and preserved layout gaps.
 These drafts remain private, outside `src/`; removing
@@ -57,10 +57,10 @@ is `a0`, command object is `a2`, and omitting the `a1` slot shifts the command t
 the wrong register. Its seven matrix and fifteen vector scratch buffers cannot
 remain m2c's guessed four-byte integers: known callees write 64 and 12 bytes
 respectively. Correcting widths alone does not match the original frame; the
-diagnostic grows from 720 to 1,328 bytes versus the original 1,200 ([#1025](../findings/findings-1001-1250.md#f1025)).
+diagnostic grows from 720 to 1,328 bytes versus the original 1,200.
 Using the reviewed call slots and aggregate types together now reproduces the
-original 1,200-byte frame in a diagnostic; the instructions still differ
-([#1029](../findings/findings-1001-1250.md#f1029)). Generate the flat decompiler context with
+original 1,200-byte frame in a diagnostic; the instructions still differ.
+Generate the flat decompiler context with
 `python3 scripts/gen_combat_context.py`, then pass
 `--context build/combat-context.c` to the m2c pipeline. It reuses the generated
 reflected receiver and models four-byte reference words, scalar calls, `f12`
@@ -73,10 +73,10 @@ logical sign bit form one signed division by 10000. Upstream m2c retained an
 extra sign correction after prematurely folding the product. The constrained
 compatibility rule and full-domain integer proof are in
 [`tools/m2c_compat.py`](../../tools/m2c_compat.py) and
-[`testing/test_m2c_compat.py`](../../testing/test_m2c_compat.py) ([#1021](../findings/findings-1001-1250.md#f1021)).
+[`testing/test_m2c_compat.py`](../../testing/test_m2c_compat.py).
 The correction now covers eleven reviewed reciprocal/shift pairs for divisors
 3, 5, 10, 20, 40, 50, 80, 100, 400, 1000 and 10000, each proved over the complete
-signed 32-bit domain ([#1026](../findings/findings-1001-1250.md#f1026)/#1046). The unshifted `/3` case needs separate
+signed 32-bit domain. The unshifted `/3` case needs separate
 positive and negative endpoint bounds. Partial expressions separated by control-flow
 merges can remain `MULT_HI`; they need an actual signed high-product expression,
 not an undeclared helper call or a premature truncating division.
@@ -91,7 +91,7 @@ the only incoming-register snapshot is the verified prologue save; no gameplay
 read remains. The apparent critical-bonus read cannot be reached from the
 zero-base-damage path because damage stays zero and the later guards skip it.
 Changing just that path's zero assignment to one exposes six reads, making the
-counterfactual check sensitive to the guard ([#1027](../findings/findings-1001-1250.md#f1027)).
+counterfactual check sensitive to the guard.
 
 The `P2ESKILLUP` row search has a separate domain condition. Its original level
 arithmetic admits a current skill only below these thresholds:
@@ -104,7 +104,7 @@ arithmetic admits a current skill only below these thresholds:
 | 228–999 | `8 × level + 1884` |
 
 The largest threshold is 9876; the final search boundary is 10000. Every skill
-admitted at levels 1–999 therefore finds a row and assigns `s3` ([#1028](../findings/findings-1001-1250.md#f1028)). This is
+admitted at levels 1–999 therefore finds a row and assigns `s3`. This is
 a pre-increment gate, not the maximum stored skill. Out-of-range edited levels
 are outside the proof and can exhaust the search without assigning the index;
 do not add a zero initialization to conceal that path. Six regression checks
@@ -115,7 +115,7 @@ This constrained analysis does not establish complete callback equivalence.
 The enclosing `CTRLITEM` case also needs its acknowledged return preserved:
 its paths return one through `0x3fde08`/`0x3fde10`, even for an unhandled
 subgroup/action. The draft's outer-switch `break` followed by falling off an
-integer function loses that result ([#1030](../findings/findings-1001-1250.md#f1030)).
+integer function loses that result.
 
 ## Where the code is
 
@@ -153,11 +153,14 @@ plus a pointer argument. Let `S = SKILL[WEAPONSKILLNO]` for a weapon hit, or the
 the technique's `SKILL` column for a technique.
 
 1. **Base damage**
-   - Weapon: `(6·TSUYOSA + 4·S) / D`, where `D` is the target's `MAMORI` minus a value read from a list on
-     the attacker entity (`D` is about 125 for a row-5 Goblin in the test state; the subtracted term is
-     not identified).
+   - Weapon: `(6·TSUYOSA + 4·S) / D`, where `D` is `MAMORI − down[5]`. `down[5]` is the target work's
+     `_downDataList` entry 5, the power-down defence, zero without a status (`D` is about 125 for a row-5
+     Goblin in the test state).
    - Technique: `(20·(−tech.HP) + 10·KASHIKOSA + 5·S) / enemy.SEISHIN`.
-2. **Element resistance** (elemental attacks only): `dmg × (1000 − enemy.RES_<element>) / 1000`.
+2. **Element**
+   - Technique with an element: `dmg × (1000 − enemy.RES_<element>) / 1000`.
+   - Weapon with an element: `dmg += dmg × (1000 − enemy.RES_<element>) / 1000`, only when
+     `enemy.RES_<element> < rand % 1000`. For a weapon hit this is a chance of a bonus, not a multiplier.
 3. Clamp to `0..99999`.
 4. **Critical bonus** (when `arg3 != 0`): `dmg += dmg × bonus / 100`, with
 
@@ -201,7 +204,6 @@ twice and the ±5 percent spread shows in the numbers.
 
 ## Open
 
-- The attacker-side term subtracted from `MAMORI` in the weapon denominator.
 - That `arg3` is exactly the `BLTisCritical` result at the Lua call site (it behaves as the critical flag).
 - The technique and elemental crit-chance rows and the technique base formula are from the disassembly
   only; they were not exercised live.

@@ -5,7 +5,6 @@ record at `0x553b80` is `(0x3fca10, 0xa388, 0x544fd4)`: callback, complete code
 size, table address. The next physical table is independently anchored by
 `0x553bd4 = (0x407120, 0x938, 0x545174)`. These anchors bound the combat table
 at 416 bytes; a missing ELF section name does not imply missing unwind data.
-Finding [#1061](../findings/findings-1001-1250.md#f1061) records the format and compiler evidence.
 
 ## Observed destroy-only format
 
@@ -158,4 +157,20 @@ records are verified by `verify_emitted_unit` but linked from retail bytes,
 and the remaining 21,108 bytes of `.exceptix` plus 1,589 of `.exception` from
 `extra`/`differ` units are still orphans that `linkcheck` names. Every one of
 these failures is a property of the source (language, exception setting or a
-missing lifetime), not of the oracle.
+missing lifetime), not of the oracle. A probe of 40 code-only units bears this
+out: `exc=extra` units match fully with `-Cpp_exceptions off`, and 12 of 40
+`exc=missing` units match unchanged when compiled as C++.
+
+## Open questions
+
+- `FUN_00383ed0` and `FUN_00447d00` keep a retail exception record, but the compiler
+  emits none for them as C or C++, so both stay code-only. About seven spellings of
+  each failed, and neither table has a cleanup scope. Unproven: the original had a
+  frame or call the optimiser removed after the record was scheduled, or an inlined
+  helper left a cleanup scope.
+- The 84-byte exception table of `FUN_0025a070` reads as a constructor's member-destroy
+  chain: action kinds `0x27`/`0x02` over five ranges, with base destructor `0x463910`
+  and seven member destructors. That makes the function a mangled constructor of a
+  class with a base and seven destructible members. Reproducing the table needs the
+  unit written as that constructor, and `tools/verify.py` cannot find the body by its
+  retail symbol name once the definition is mangled. The body itself matches as C++.

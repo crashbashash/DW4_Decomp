@@ -1,4 +1,4 @@
-# NDMW.AFS entry 625 texture-pack pool layout -- derived by the id-order rule (finding #472).
+# NDMW.AFS entry 625 texture-pack pool layout -- derived by the id-order rule.
 # The rule reproduces all 26 textures exactly; scripts/verify_texpack_layout.py re-checks it.
 # id	kind	size	offset	texture
 21	clut	1024	0x002c08	P10G00n

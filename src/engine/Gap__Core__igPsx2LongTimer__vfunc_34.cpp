@@ -22,7 +22,7 @@ void Gap__Core__igPsx2LongTimer__vfunc_34(void **self) {
     presetNs = ((DW4VC_140_0 *)(self))->vX();
     /* whole seconds = presetNs / 1e9 (signed 64-bit divide, __divdi3); sub-second part = (presetNs % 1e9) / 1e9
      * (__moddi3 remainder, __floatdidf int64 -> double, __divdf3 double divide); the sum is __adddf3
-     * (double add).  Helper identities: findings #3190-#3195. */
+     * (double add). */
     remainderNsAsDouble = __floatdidf(__moddi3(presetNs, NANOSECONDS_PER_SECOND));
     fractionSeconds = __divdf3(remainderNsAsDouble, __floatsidf(NANOSECONDS_PER_SECOND));
     __adddf3(__floatdidf(__divdi3(presetNs, NANOSECONDS_PER_SECOND)), fractionSeconds);

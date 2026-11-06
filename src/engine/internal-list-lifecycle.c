@@ -31,7 +31,7 @@ void *ObjectPointerList_Construct(void *);
 void *ObjectPointerList_CopyConstruct(void *, void *);
 void ObjectPointerList_EnsureIndex(PointerList *, int);
 void ObjectPointerList_Insert(PointerList *, int, int);
-int ObjectPointerList_Append(PointerList *, int); /* physical return candidate #883 */
+int ObjectPointerList_Append(PointerList *, int); /* physical return candidate */
 unsigned int Memory_GetBufferSize(void *);
 void igObject_Destroy(void *);
 

@@ -95,7 +95,7 @@ def main(argv):
 
 
 # ---------------------------------------------------------------------------
-# The generator space reported in docs/engine/getvtable-fold.md (finding #659).
+# The generator space reported in docs/engine/getvtable-fold.md.
 # ---------------------------------------------------------------------------
 def _space():
     idx = [SLOT, "(unsigned)(" + SLOT + ")", "(char)(" + SLOT + ")",

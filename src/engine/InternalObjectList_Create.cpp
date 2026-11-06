@@ -1,5 +1,5 @@
 /* The factory for the internal object list (the 16-byte raw/retaining list behind
- * __internalObjectList; finding #882). With the object system active it registers the class and
+ * __internalObjectList). With the object system active it registers the class and
  * creates the instance through its metaobject; otherwise it allocates 16 bytes and runs the
  * concrete constructor plus the post-construction virtual hooks, the same two branches as the
  * other descriptor factories. */

@@ -1,4 +1,4 @@
-/* memmove_shim.c — memcpy for ee-as that allows overlapping copies (finding #3897).
+/* memmove_shim.c — memcpy for ee-as that allows overlapping copies.
  *
  * ee-as moves an expanded macro over itself with memcpy, which modern C libraries may get wrong.
  * tools/eegcc_compile.py preloads this for ee-as alone when DW4_EE_AS_SHIM names it. */

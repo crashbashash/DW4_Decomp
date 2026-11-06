@@ -32,7 +32,7 @@ it with the port's own flags. Four-byte references remain arena handles.
    *stage* region that is released as a whole when a stage is unloaded (matching retail's stage heap teardown). The existing scene
    arena stays the loader's staging area; its payloads are copied or adopted into the game arena at stage publication.
 2. **Objects are the decomp's structs, byte for byte.** An object is `mo->size` bytes at its handle, laid out by
-   `reflected.h` (field offsets are the authority). `_vtable` holds the retail vtable address (finding [#359](../../docs/findings/findings-0251-0500.md#f359); the generated schema
+   `reflected.h` (field offsets are the authority). `_vtable` holds the retail vtable address (the generated schema
    already records it per class) and `_refCount` the 23-bit count with its flag bits, exactly as `igObject_InitHeader` writes them.
 3. **Handle accessors, never host pointers in fields.** `dw4_arena_at(arena, handle)` resolves a handle to a host pointer for the
    duration of a call; `DW4_ARENA_OBJ(arena, Class, handle)` checks allocation bounds and size. Constructors and typed owner boundaries
@@ -119,7 +119,7 @@ against capacities, block sizes, whole rows, column objects) live in `dw4_adb_va
 
 The calculation and both status-time modules resolve scalar, SKILL and
 WAZALIST records through the authoritative `beDataObj*`, `igIntList` and
-`beNDMWItemWaza` layouts in the owning arena ([#2727](../../docs/findings/findings-2501-2750.md#f2727)). Those rules do not use a
+`beNDMWItemWaza` layouts in the owning arena. Those rules do not use a
 copied technique-item view. The borrowed record-reference API
 reuses the name/alias/type lookup and reacquires on every read; record
 publication and recalculation cannot leave cached references in the fight code.
@@ -131,7 +131,7 @@ lookup. Formula and RNG code is unchanged. See [combat validation and limits](co
 
 ### Shared window/controller arena state
 
-Window, STATUS root, shop root, view and SUBWND state is typed arena state ([#2728](../../docs/findings/findings-2501-2750.md#f2728)/#2729):
+Window, STATUS root, shop root, view and SUBWND state is typed arena state:
 
 | Owner | Arena state | Host facade |
 | --- | --- | --- |
@@ -159,7 +159,7 @@ retail instructions; prepared views exercise all four player slots. See
 ### Concrete shop and STATUS records
 
 Concrete service controllers allocate their recovered classes and retain
-mutable control fields in the session arena ([#2730](../../docs/findings/findings-2501-2750.md#f2730)/#2731). XDATA and chip
+mutable control fields in the session arena. XDATA and chip
 upgrades, bank/editor, appraisal, disk buy/sell, equipment/junk sales, Digi-Lab
 and card A0/A1/A2 store their primary/substate/flag, return selection,
 child-count snapshot and applicable menu/page/cursor/quantity/price fields there.
@@ -260,7 +260,7 @@ lifetimes and the mission route. Explicit arena block baselines check complete
 teardown. The contact ctypes fixture checks its size/offsets against its C header,
 and the pure view oracle's unused close leaf aborts if executed.
 The empty-inventory purchase copy skips a null-source zero-byte memcpy;
-this changes no purchase rule or RNG calculation. Findings [#2732](../../docs/findings/findings-2501-2750.md#f2732)–[#2734](../../docs/findings/findings-2501-2750.md#f2734).
+this changes no purchase rule or RNG calculation.
 
 ### Action2, hit-volume and stat comparison records
 
@@ -309,7 +309,7 @@ Validation includes 128 Action2/preview lifetimes, direct arena edits, independe
 model clones, the original title/Action2 tick oracle, stat preview traces and the
 `check-modelsubcom-retail` producer oracle (370 signed-kind, sentinel,
 rounding and geometry cases). Full/oversize program replacement, cleared tails,
-freeze and signed clock extremes are also checked. Findings [#2735](../../docs/findings/findings-2501-2750.md#f2735)–[#2737](../../docs/findings/findings-2501-2750.md#f2737).
+freeze and signed clock extremes are also checked.
 
 ### Subcommand scheduling and retained node locks
 
@@ -328,8 +328,8 @@ The callback contexts detach when either owner closes. The field fixture
 releases its temporary source scene after the destination takes its snapshot,
 so arena-baseline checks are complete.
 
-See [phase, clocks, limits and validation](controller-services.md#retail-subcommand-phase-and-node-locks)
-and findings [#2738](../../docs/findings/findings-2501-2750.md#f2738)–[#2740](../../docs/findings/findings-2501-2750.md#f2740). The instruction oracle compares
+See [phase, clocks, limits and validation](controller-services.md#retail-subcommand-phase-and-node-locks).
+The instruction oracle compares
 520 scheduler states, 136 frame samples, 128 node-lock matrices and 370 producer
 payloads. Native ownership/phase tests cover source replacement, retained entries,
 freeze, query isolation and both teardown orders.

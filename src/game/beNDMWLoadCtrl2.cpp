@@ -33,7 +33,7 @@ int Gap__Bec__beNDMWLoadCtrl2__vfunc_20(void);
 /* 0x003f19e0: lazily acquire the pad manager.  The first call finds the bePadManager
  * registered with the insight, takes a reference on it and stores it in _padManager
  * (the generated release of the previous value is the shared smart-pointer idiom of
- * finding #731: the low 23 bits of _refCount are the count).  The `asm { nop }`
+ * the low 23 bits of _refCount are the count).  The `asm { nop }`
  * statements reproduce retail's delay-slot nops (matching constructs). */
 void Gap__Bec__beNDMWLoadCtrl2__vfunc_32(beNDMWLoadCtrl2 *self) {
     igObject *found;
@@ -64,7 +64,7 @@ int Gap__Bec__beNDMWLoadCtrl2__vfunc_30(void)
 }
 
 /* 0x003f2460 — slot 29: register the load controller with its messenger as the
- * receiver named by the "LOADCTRL2" string at 0x00518290 (finding #732, same
+ * receiver named by the "LOADCTRL2" string at 0x00518290 (same
  * wrapper shape as beNDMWTitle2 slot 29). */
 void Gap__Bec__beNDMWLoadCtrl2__vfunc_29(beNDMWLoadCtrl2 *self, int info)
 {

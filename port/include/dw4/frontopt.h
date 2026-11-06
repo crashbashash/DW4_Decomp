@@ -1,4 +1,4 @@
-/* dw4/frontopt.h -- the title's Option screen (finding #724).
+/* dw4/frontopt.h -- the title's Option screen.
  *
  * The screen is the pack's own graphs: `j_optionwin02` (the dark left band, the legend panel, three
  * pill rows with their icons) and the highlight cursor `j_optioncursor11/12`, all in `NDMW.AFS`

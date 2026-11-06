@@ -66,7 +66,7 @@ is kept at `+54`. Completion of a child is a change in the child count, as in re
 
 ## Boundaries
 
-- The window's initial `_retCode` is an inference (finding [#935](../../docs/findings/findings-0751-1000.md#f935)): retail would close on its first update
+- The window's initial `_retCode` is an inference: retail would close on its first update
   if the field started at `-1`, so it is taken as zero-initialised memory. The base window constructor was
   not traced.
 - An empty inventory is unreachable in retail; there the list's single blank row would publish index 0.

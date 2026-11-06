@@ -7,7 +7,7 @@
  * (count) kind 6, arg2 * count 1-byte elements, count in +24 bits 20..21 (mode) kind 9, mode 1 =
  * 4-byte list, mode 2 = 8-byte list bit 22 / bit 23 kinds 7 / 8 (12 byte elements) Returns arg2,
  * or 0 when the helper already has an array. The reference-counted locals (array, record, list)
- * release themselves when their scope ends. Evidence: findings #656-#658. */
+ * release themselves when their scope ends. */
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_0014a780(...);

@@ -76,7 +76,7 @@ static dw4_hubruntime *enter(dw4_mount *mount,const int *flags,unsigned nflags)
     dw4_databases_close(db);dw4_stageobjects_close(objects);dw4_filelist_close(f);dw4_playerrecords_close(players);
     return h;
 }
-/* Mammothmon's SQ_ATCK3 span (finding #3005): ACTN03 plays actn03 (1.517 s) and then actn04 (0.05 s), one after the other. While `on`, every tick of the
+/* Mammothmon's SQ_ATCK3 span: ACTN03 plays actn03 (1.517 s) and then actn04 (0.05 s), one after the other. While `on`, every tick of the
  * pilots samples the boss; `first` is the first run, `clean` the first run that ended into SQ_WAIT (its own JUMP) and so was not cut short by a hit. */
 static struct {int on;unsigned run,runs,first,clean;} boss_atck3;
 static void boss_atck3_sample(dw4_hubruntime *h)
@@ -208,7 +208,7 @@ static unsigned pilot(dw4_hubruntime *h,unsigned *frame,unsigned ticks,int verbo
     dw4_property_number(p0,"LEVEL",&level);dw4_property_number(p0,"EXP",&exp0);
     size_t gi=0;
     while(*frame-start<ticks){
-        if(getenv("BOSSSEQ")){   /* BOSSSEQ=<model>: tally the sequences that model runs each tick (compared with the retail sampling in findings #2926) */
+        if(getenv("BOSSSEQ")){   /* BOSSSEQ=<model>: tally the sequences that model runs each tick (compared with the retail sampling in ) */
             for(size_t k=0;k<dw4_controllers_count(dw4_hubruntime_models(h));k++){const dw4_stageobject *info;int32_t slot;const dw4_modelctrl *mc=dw4_controllers_model(dw4_hubruntime_models(h),k,&info,&slot);
                 if(!info || strcmp(dw4_stageobject_name(info),getenv("BOSSSEQ")) || !dw4_modelctrl_active(mc) || !dw4_modelctrl_sequence(mc))continue;
                 const char *sq=dw4_modelctrl_sequence(mc);unsigned q;
@@ -1518,7 +1518,7 @@ int main(int argc,char **argv)
         return 0;
     }
     if(!strcmp(mode,"guard")) {
-        /* The Square guard (beNDMWMdlPlayer::vfunc_38: outside the main lobby, not in SQ_JUMP, the edge word 0x8000 requests SQ_GUARD; findings #3040, #3031). Three phases
+        /* The Square guard (beNDMWMdlPlayer::vfunc_38: outside the main lobby, not in SQ_JUMP, the edge word 0x8000 requests SQ_GUARD). Three phases
          * on the hurt fixture (a Goblin with its authored AI next to the starter, the original hit_p script through the E2P rules):
          *  1. no enemy: one Square press; count the ticks the player stays in SQ_GUARD and SQ_GUARD2 (the model's own GURD motions) until SQ_WAIT; Square in SQ_JUMP is refused;
          *  2. a player that guards (Square pressed whenever it is out of SQ_GUARD) is hit by the Goblin's volumes: every hit that finds the player in SQ_GUARD runs the chunk's
@@ -2301,7 +2301,7 @@ int main(int argc,char **argv)
         return 0;
     }
     if(!strcmp(mode,"enemyfall")) {
-        /* Enemies fall off ledges that have no wall (owner-reported, not a retail trace; findings #3107-#3110): no floor edge holds a walking or hopping enemy, the
+        /* Enemies fall off ledges that have no wall (owner-reported, not a retail trace): no floor edge holds a walking or hopping enemy, the
          * floor query's support drives the retail floor response (3926d0: unsupported and not rising or falling -> SQ_FALL, a landing ends the fall), and the wall infos
          * of the enemy's check flag (kind 2, 8, 0x802, the dynamic 0x402 props) keep it where retail has walls.
          * dng102b3: a corridor (x 370..390, kind-2 walls on both sides, void beyond) whose y 35 walkway ends at z -126 in a drop to the y 10 floor, no wall across it.
@@ -3051,7 +3051,7 @@ int main(int argc,char **argv)
         return 0;
     }
     if(!strcmp(mode,"gene09refill")) {
-        /* dng102b3 GENE-09 (row 42, radar 6400, fill 'add', 10 total / 6 concurrent) against the retail reads of findings #2978, #3072 and #3073: the six spawn at once
+        /* dng102b3 GENE-09 (row 42, radar 6400, fill 'add', 10 total / 6 concurrent) against the retail reads of : the six spawn at once
          * when the player stands in matg09, a victim's InfoWork ends about 153-158 ticks after HP 0 on the flat floor, the refill follows within a tick, and refills happen only
          * while a player is inside the matg09 box (the region chunk's START/STOP pair): with the player outside the victim is destroyed but nothing spawns
          * until the player re-enters. The floor is prepared as dungeondoors2 does (opened directly, FIXLEVEL default 60, full HP). */
@@ -3094,7 +3094,7 @@ int main(int argc,char **argv)
         assert(o.hp0>=0 && o.end>o.hp0 && o.refill>=o.end);
         const int in_end=o.end-o.hp0,in_refill=o.refill-o.end;
         assert(o.drift<.01f);   /* no turning during the knockback hop */
-        assert(in_end>=150 && in_end<=158);   /* two 39-tick knockback hops (Jump 1.7/6.3 up, Fall down to the floor) plus the Ldmg03..05 tail; retail SQ_DDMG to SQ_ERAS 153.1-157.4 on the flat floor (#3081) */
+        assert(in_end>=150 && in_end<=158);   /* two 39-tick knockback hops (Jump 1.7/6.3 up, Fall down to the floor) plus the Ldmg03..05 tail; retail SQ_DDMG to SQ_ERAS 153.1-157.4 on the flat floor */
         assert(g->spawned_total==7 && g->remaining==3 && running_models(h,model)==6);
         run(h,&frame,60,0,0);assert(g->spawned_total==7);
         /* 3. a kill with the player moved outside the box at HP 0: the victim ends, nothing spawns until the player is back */
@@ -3102,7 +3102,7 @@ int main(int argc,char **argv)
         const int32_t v2=g->live_id[0];
         g9_kill(h,&frame,g,model,v2,centre,outside,&o,600,0);
         fprintf(stderr,"gene09 outside: HP 0 at tick %d, instance ended %d ticks later, refill %s over 600 ticks, spawned %u, live %u, remaining %u (retail: destroyed, no spawn while outside)\n",o.hp0,o.end-o.hp0,o.refill<0?"none":"yes",g->spawned_total,g->nlive,g->remaining);
-        assert(o.hp0>=0 && o.end>o.hp0 && o.refill<0 && g->spawned_total==7 && running_models(h,model)==5 && g->remaining==3 && g->nlive==5);   /* the instance is gone and the generator's live list trimmed in the same tick, region or not (#3082) */
+        assert(o.hp0>=0 && o.end>o.hp0 && o.refill<0 && g->spawned_total==7 && running_models(h,model)==5 && g->remaining==3 && g->nlive==5);   /* the instance is gone and the generator's live list trimmed in the same tick, region or not */
         place(h,inside);
         int back=-1;
         for(int t=0;t<120 && back<0;t++){run(h,&frame,1,0,0);if(g->spawned_total>7)back=t;}
@@ -3494,7 +3494,7 @@ int main(int argc,char **argv)
         for(until=0;until<2000 && !control(h);until++)run(h,&frame,1,0,0);
         run(h,&frame,300,0,0);
         assert(dw4_lobby_player_count(dw4_hubruntime_world(h))==2 && control(h) && slot_control(h,1));
-        {   /* Square on pad 2 requests SQ_GUARD on slot 1's model only (vfunc_38's guard request, issued per slot; findings #3040) */
+        {   /* Square on pad 2 requests SQ_GUARD on slot 1's model only (vfunc_38's guard request, issued per slot) */
             dw4_lobby *wd=dw4_hubruntime_world(h);struct padw idle[4]={{0}},sq1[4]={{0},{0,0x8000,0x8000}};
             coop_tick(h,&frame,2,sq1);
             assert(!dw4_lobby_select_player(wd,1));const char *s1=dw4_modelctrl_sequence(dw4_lobby_player_model(wd));assert(s1 && !strcmp(s1,"SQ_GUARD"));
@@ -3638,7 +3638,7 @@ int main(int argc,char **argv)
                         fprintf(stderr,"popup digit colour (tick 12): %s, %u orange px (mean y %d), %u pale px (mean y %d)\n",found?"found":"missing",orange,oy,pale,py);
                         if(getenv("POPCOLOR"))assert(!dw4_png_write(getenv("POPCOLOR"),cfb.rgba,cfb.w,cfb.h));
                         assert(found && orange>=10 && pale>=8);   /* orange fill and pale body with the dark outline: the numdmg.png palette reaches the screen */
-                        assert(oy<py);   /* gradient direction (#2900): orange on the upper part of the upright glyph, pale below; the retail capture of "728" measures orange (248,157,72) at the top rows and pale (234,224,217) at the bottom */
+                        assert(oy<py);   /* gradient direction : orange on the upper part of the upright glyph, pale below; the retail capture of "728" measures orange (248,157,72) at the top rows and pale (234,224,217) at the bottom */
                         dw4_fb_free(&cfb);dw4_fb_free(&prev);
                     }
                     if(popwait==(getenv("POPTICKS")?(unsigned)atoi(getenv("POPTICKS")):12u)){dw4_fb fb;assert(!dw4_fb_init(&fb,640,448));assert(dw4_hubruntime_draw(h,&fb,NULL)>0);if(getenv("POPSHOT"))assert(!dw4_png_write(getenv("POPSHOT"),fb.rgba,fb.w,fb.h));dw4_fb_free(&fb);popshot=1;
@@ -4859,7 +4859,7 @@ int main(int argc,char **argv)
         return 0;
     }
     if(!strcmp(mode,"droptables")) {
-        /* The drop lists decoded from the generator packs against the live-measured sums of findings #263/#264 (stagGF01): the Goburimon generators'
+        /* The drop lists decoded from the generator packs against the live-measured sums (stagGF01): the Goburimon generators'
          * lists sum to 3502/3170/4050 (35.02 / 31.70 / 40.50 % chance of any drop) on Normal/Hard/Very Hard, the Guard Room box list nZ1obje1 to 4330, and GENE-19's list is empty. */
         static const int enemy_sum[3]={3502,3170,4050};
         for(int diff=0;diff<3;diff++){
@@ -4876,7 +4876,7 @@ int main(int argc,char **argv)
         /* The roll itself: draw 0 takes the first row, draw 9999 nothing (the sums are below 10000). */
         dw4_fieldgen *g=dw4_fieldgen_open(&mount,"stagGF01",0);const dw4_gene *e=dw4_fieldgen_find(g,"GENE-00");dw4_drop_entry d;
         assert(e && dw4_fieldgen_roll_drop(e,0,0,&d) && d.rate>0 && !dw4_fieldgen_roll_drop(e,0,9999,&d));
-        {   /* every draw 0..9999 exactly once: the original selects while the remainder is <= 0 (FUN_00384800, finding 3006), so a list drops on rate-sum + 1 draws */
+        {   /* every draw 0..9999 exactly once: the original selects while the remainder is <= 0 (FUN_00384800), so a list drops on rate-sum + 1 draws */
             int drops=0,sum=0;for(unsigned k=0;k<e->ndrops[0];k++)sum+=e->drops[0][k].rate;
             for(uint32_t r=0;r<10000;r++)if(dw4_fieldgen_roll_drop(e,0,r,&d))drops++;
             assert(drops==sum+1);
@@ -5298,7 +5298,7 @@ int main(int argc,char **argv)
             assert(retail[k].plain_lo>=plo && retail[k].plain_hi<=phi && retail[k].plain_lo-plo<=1);
             assert(kind==70000?phi-retail[k].plain_hi<=1:phi-retail[k].plain_hi<=6);
             /* The critical samples: the low ones fit the formula; the contact row's retail maximum 386 is ABOVE the formula's 372 (a x1.9 critical of the largest plain hit, 355 x 1.05), and
-             * the retail critical rate was about 1 in 5 against the formula's 8 % (58 hits only). Open (#3020): reported, bounded by "about 2x" (<= 2 x base x 1.05), not asserted equal. */
+             * the retail critical rate was about 1 in 5 against the formula's 8 % (58 hits only). Open: reported, bounded by "about 2x" (<= 2 x base x 1.05), not asserted equal. */
             assert(retail[k].crit_lo>=clo && retail[k].crit_hi<=base*2*105/100);
             if(retail[k].crit_hi>chi)fprintf(stderr,"  OPEN #3020: retail critical maximum %d exceeds the formula's %d (critical factor %d%%)\n",retail[k].crit_hi,chi,100+(a_crit/2+90));
         }

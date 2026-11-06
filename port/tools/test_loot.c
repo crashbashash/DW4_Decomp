@@ -465,7 +465,7 @@ static void test_real(const char *root)
         fprintf(stderr,"%s: %u of %u rows carry a NAME\n",dw4_loot_category_name(c),named,rows);
         assert(named>0);
     }
-    /* x-data id 1 pays UP = 5 through the real record, as the live measurement (finding #265) */
+    /* x-data id 1 pays UP = 5 through the real record, as the live measurement */
     {dw4_playerrecords *p=dw4_playerrecords_open();make_players(p);dw4_random r;dw4_random_init(&r);
      dw4_loot_ctx c={.players=p,.db=l,.random=&r};int32_t amount;
      assert(dw4_loot_instant(&c,1,0,&amount)==1 && num(p,0,"XDATA")==12);

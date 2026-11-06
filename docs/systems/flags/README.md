@@ -39,7 +39,7 @@ Query it with anything — e.g. all writes to flag 375:
 awk -F'\t' '$2==375 && $1=="set"' docs/systems/flags/flag-xref.tsv
 ```
 
-## Reading the flags (corrected [#785](../../findings/findings-0751-1000.md#f785)/#787)
+## Reading the flags
 
 The corpus and tables now use stock Lua signed decoding. Ordinary script flag
 writes/checks use **0/1**; `FLGisOn` returns the retail unsigned byte, so a
@@ -56,4 +56,4 @@ observations with a correction notice.
 Curated runtime IDs and thresholds were corrected in the generators. Existing
 save-derived folder names remain observations rather than newly verified
 script semantics. See the [numeric audit](../../engine/lua-numeric-audit.md)
-before using older prose/findings as implementation contracts.
+before using older prose as an implementation contract.

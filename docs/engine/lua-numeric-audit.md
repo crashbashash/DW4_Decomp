@@ -1,6 +1,6 @@
 # Lua numeric recovery audit
 
-Findings **[#785](../findings/findings-0751-1000.md#f785)/#787**. The original VM uses signed bias
+The original VM uses signed bias
 `33554431` and target `pc + 1 + s`. Subtracting `33554432` is wrong: the extra
 jump increment hides that error for branches, but every
 PUSHINT/ADDI signed operand comes out one too low. Numbers stored as floating-point
@@ -47,13 +47,14 @@ script evidence from historical save interpretations. Runtime curated flag
 keys and script-derived level thresholds in the flag generators are corrected.
 Persistent-folder labels from save observations are retained separately.
 
-Findings **[#121](../findings/findings-0001-0250.md#f121)/#137** are refuted for their value/difficulty
-interpretation. **[#122](../findings/findings-0001-0250.md#f122)/#126/#129/#132/#136/#152** retain their raw observations
-but are unconfirmed where they combine those observations with off-by-one Lua numbers.
+The older reading of save flags as byte `0x01` = `FLGset(N,0)` and `0x00` = `FLGset(N,-1)`, and of
+difficulty as Normal -1 / Hard 0 / Very Hard 1, is refuted. Older notes on boss-defeat flags, the title
+mirror/restore system, the world-4 end state, side-quest flags and rewards, and transient flags keep their
+raw observations but are unconfirmed where they combine those observations with off-by-one Lua numbers.
 The [save-flag map](../systems/flags/flag-map.md) retains its historical evidence
 with a correction notice: its claimed Lua-to-save inversion is invalid, and
 old boss/quest labels must not guide runtime implementation. This audit does
 not relocate observed save bytes or prove a new persistent-folder meaning.
 
-Other older prose/findings may contain Lua-derived literals; recheck a claim
+Other older prose may contain Lua-derived literals; recheck a claim
 against original entry/chunk evidence before importing it into the native port.

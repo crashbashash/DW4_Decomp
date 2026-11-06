@@ -43,7 +43,7 @@ The project has two downstream goals, and they are not the same finish line.
 signatures the original had is what makes matching code *portable*, so the recovered metadata —
 `data/reflection.json`'s 659 classes and 3,680 fields, the object-model field maps, the vtable slot
 signatures — is a first-class deliverable. It
-measures as *neutral for matching* ([#319](../findings/findings-0251-0500.md#f319)), and that is exactly as expected: it buys nothing in
+measures as *neutral for matching*, and that is exactly as expected: it buys nothing in
 the matched-byte percentage and everything for the second goal. The same reasoning excludes the
 SDK/IOP modules from decompilation scope (they get *replaced* on a port) and puts the SDK boundary
 itself on the list (**T9**).
@@ -112,6 +112,11 @@ its words to retail. `tools/units.py` bridges the two by blanking every definiti
 being checked, leaving the unit's `#include`s, prototypes and `extern`s in place. A symbol whose
 declaration two functions disagree on (m2c guesses `int[4]` in one, `char[]` in another) is kept
 as a block-scope `extern` inside each user, so no two functions have to agree.
+
+The split is written as a short `dw4u_`-prefixed file in the unit's own directory. MWCC
+reads a file's extension from the first dot, so it refuses a filename with a leading dot
+(`unrecognized file contents or filename extension`), and it truncates paths past about
+80 characters.
 
 ## Workflow
 
@@ -216,7 +221,7 @@ it in. `gp = 0x0055c870`, and `gp - 32112 == 0x00554b00`, exactly the first byte
 rather than leaf-only ones. A full data symbol map is not needed: Ghidra's `DAT_<addr>` labels
 (6,562 of them, in `data/symbols.json`) and the address-bearing-name convention cover data references.
 
-### Multiple switch tables and ELF section ownership ([#1024](../findings/findings-1001-1250.md#f1024))
+### Multiple switch tables and ELF section ownership
 
 MWCC can emit several distinct sections all named `.rodata` in one function
 object. GAMERAM has two 88-byte tables at `0x519310` and `0x519370`, with eight
@@ -280,10 +285,10 @@ A census of 15,974 functions (10,059 distinct shapes; the top 40 shapes cover **
 what picks the templates.
 
 **The two big families are solved by source idiom and
-language mode, not by flags.** The full account, including the one part still open, is
+language mode, not by flags.** The full account is
 [`guard-family.md`](guard-family.md); the short version:
 
-* **The guard family (1,057 functions) — 550 banked.** Retail's `andi ; sltu v0,zero,v0 ; bnez`
+* **The guard family (1,057 functions).** Retail's `andi ; sltu v0,zero,v0 ; bnez`
   flag test is the int→bool **value** conversion of an assignment to a *named* `bool` inside the
   short-circuit condition:
 
@@ -298,8 +303,9 @@ language mode, not by flags.** The full account, including the one part still op
   these are `src/*.cpp` units). The pointer test stays a plain `beqz`, the global
   is still loaded exactly twice, and the global must be declared as a 16-byte array or MWCC
   addresses it gp-relative. Verified **550/550** (72 bytes each). The other **507** members are
-  the *same idiom plus one dead `nop`* before the merged `jal` and are **still open** — finding
-  [#313](../findings/findings-0251-0500.md#f313) records everything ruled out.
+  the *same idiom plus one dead `nop`* before the merged `jal`. They match with `asm { nop }`
+  under the default compiler, or without it under the alternate compiler at `-O3,p`
+  (`tools/guard_b_gen.py`).
 * **The one-call wrappers — 1,067 banked.** The 28/32-byte "single call, frame kept" wrappers are
   not a tail-call puzzle: **MWCC's C front end turns `void f(void){ X(); }` into a 2-instruction
   `j` tail call; its C++ front end keeps the frame.** Retail is C++, so these reproduce only as
@@ -307,20 +313,53 @@ language mode, not by flags.** The full account, including the one part still op
   wrappers that also set up arguments - so **`wargs` generalises them**: it decodes the
   argument setup from the retail instructions and lets `verify.py` decide (**55** more, 658
   candidates). The decode hinges on the R5900 calling convention, which passes argument 5..8 in
-  `t0-t3` rather than on the stack, so a wrapper's `t`-register setup is an argument too
-  (finding **[#332](../findings/findings-0251-0500.md#f332)**). The m2c pass needs the same thing: m2c's `MipsArch` models only
-  `a0-a3`, so the pipeline runs its **`mipsee-mwcc-c`** arch with `t0-t3` renamed to `a4-a7`
-  (finding **[#341](../findings/findings-0251-0500.md#f341)**), which is what matches 168 of the 1,075 class-registrar trampolines.
+  `t0-t3` rather than on the stack, so a wrapper's `t`-register setup is an argument too.
+  The m2c pass needs the same thing: m2c's `MipsArch` models only
+  `a0-a3`, so the pipeline runs its **`mipsee-mwcc-c`** arch with `t0-t3` renamed to `a4-a7`,
+  which is what matches 168 of the 1,075 class-registrar trampolines.
 
 **The rest, via m2c.** Functions beyond shape templates go through
 [`m2c`](https://github.com/matt-kempster/m2c) with its
-**`mipsee-mwcc-c`** target (the EE ABI — see [#341](../findings/findings-0251-0500.md#f341)), each draft verified before it is written.
+**`mipsee-mwcc-c`** target (the EE ABI), each draft verified before it is written.
 Two things that pass depends on
 are worth more than its yield: feeding m2c **symbolized** data references (`%hi`/`%lo`) rather
 than raw `lui`/`lw` (its type context is useless without that), and **727 functions whose Ghidra
 boundary cuts off the delay slot** — not functions at all, and unmatchable until `tools/split.py`
 grows them (the link stays byte-identical). The pipeline, the cleaner, the measured failure
 taxonomy and the near-miss worklist are in [`m2c-bulk.md`](m2c-bulk.md).
+
+## Source idioms
+
+Retail shapes that only one spelling reproduces:
+
+* **`jal X; nop; nop` at a join**, a `nop` just before the label a preceding branch targets.
+  This is not reachable from source under the default compiler: about 40 C and C++ spellings
+  give a function one word short, as do all `-O` levels and the `-O3,s`/`-O3,p` variants. The
+  alternate compiler at `-O3,p` emits it from ordinary source, for example `FUN_00259d10` and
+  `FUN_00259a20`. Try that profile before anything else.
+* **A value spilled and reloaded before every use.** Declare the local `volatile`:
+  `RT * volatile sp6C` reproduces the register allocation of `FUN_00234d70`, where a plain
+  local adds a saved register. Read it once into a plain local for the final release so the
+  object stays in `a0`.
+* **The object graph's reference release** compiles only from
+  `if (&obj->field) { release(obj->field); }` on a real struct with the field at its recovered
+  offset. Retail emits a redundant `addiu vX,base,OFF; beqz vX` on the field's address before
+  the value test. A value test, a `(char *)obj + N` expression and arithmetic on a `void **` do
+  not reproduce it. The struct can be a shape: `void *fNNN` at the exact offset is enough, plus
+  any byte field the code really reads. `FUN_00234b90` shows the form, with these companions:
+  * The 64-bit refcount mask `dsll32 vX,vX,9; dsrl32 vX,vX,9` is
+    `((unsigned long long)((long long)v << 0x29) >> 0x29)`.
+  * A refcount release reads +4; a handle release reads -4 with the pointer at -8.
+  * Two vtable stamps are the base constructor then the derived one.
+  * A destructor tail is `if (arg1 > 0) <thunk>(arg0); return arg0;` with `arg1` a 16-bit
+    signed value.
+* **A call wrapper whose retail body ends in a memory barrier** is the call followed by an
+  inline `sync` statement: the barrier sits after the call's delay slot and before the frame
+  restore. `FUN_0010c008` adds a trailing `ei` and a zero return. Inline `sync` and `ei`
+  compile to the exact retail words.
+
+decomp-permuter's assembler rejects EE MMI opcodes (`opcode not supported on this processor:
+mips3`), so a function containing `lq`/`sq` cannot become a permuter project.
 
 ## The relink — byte-identical (`make link`)
 
@@ -338,11 +377,11 @@ object per layout unit (the count grows with the layout; `make link` prints it, 
 from-source accounting is in `PROGRESS.md`): the functions compiled from C/C++, the `asm`
 bodies, the remaining code and data units as retail bytes, and the **`jtbl` units** — a
 `switch`'s jump table, which the
-compiler emits into `.rodata` (findings [#324](../findings/findings-0251-0500.md#f324)/#325). Those are the one
+compiler emits into `.rodata`. Those are the one
 thing that is not `obj(.text)`: `tools/layout.py` carves each function's table span out
 of the enclosing data unit, and `tools/linkgen.py` places `obj(.rodata)` of the owning
 function's object there, checking the size against the layout. Duplicate-named
-table sections use the individual names described above ([#1024](../findings/findings-1001-1250.md#f1024)). Without that the table
+table sections use the individual names described above. Without that the table
 would be orphaned and the retail bytes emitted twice. This is the Ship-of-Theseus proof
 for the whole build — it demonstrates that the compiler reproduces retail code for every
 decompiled function, that the tiling is exact, and that **every cross-reference
@@ -430,3 +469,10 @@ code bytes.
    address-derived or role name; decompiling them is possible, organising the work by module is
    what naming buys. Re-run `scripts/sync_data.sh` before trusting `data/functions.json`'s
    symbol coverage.
+
+## Open questions
+
+- `FUN_00259cd0` (60 bytes, `0x32d4b0(&local, argv0); GPR_00554bec = local == DAT_004fb410[0]`)
+  has no source body. Besides the missing `nop`, its best spelling under the default compiler
+  left a register-only residual: retail keeps the local's address in `v1` and the result in
+  `v0`, where the draft uses `a0`.

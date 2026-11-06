@@ -17,7 +17,7 @@ Every fact needed to say that meaningfully is already recovered:
     get-or-register accessor all hang off this object);
   * reflection gives the field at +36 a name: `_validity`, an `igIntMetaField`;
   * and this exact accessor is the lazy get-or-register path the repo already described
-    (finding #358: `if (!*handle || flags & 4 == 0) register(); return *handle;`), so
+    (`if (!*handle || flags & 4 == 0) register(); return *handle;`), so
     `_validity & 4` is not a guess.
 
 So the rewritten file says what it does, and that is the first half of typed coverage

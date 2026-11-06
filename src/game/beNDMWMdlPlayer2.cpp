@@ -11,7 +11,7 @@ extern "C" {
 extern int g_bePadManager_metaObject[4];
 extern int g_beNDMWMdlPlayer2_metaObject[4];
 /* Looks up the insight's object list for the entry whose class metaObject is the
- * second argument (hypothesis: igInsightCore::FindObjectByMetaObject, finding #3188;
+ * second argument (hypothesis: igInsightCore::FindObjectByMetaObject;
  * the matched body is src/unmatched/FUN_00236f80.cpp). */
 int FUN_00236f80(int, int);
 int Gap__Core__igObject__vfunc_23();

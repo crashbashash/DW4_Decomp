@@ -12,7 +12,7 @@ which aborts the whole decompile. It is a *simplification*, so not folding an
 out-of-range shift is always sound: `handle_bgez` falls back to `expr >= 0`, the same
 condition it started from.
 
-The pipeline triggered it 4 times before finding #349 and **133 more** after it, because
+The pipeline triggered it 4 times before the fix and **133 more** after it, because
 naming a `%hi` base makes m2c fold a register to a constant it previously left symbolic
 (a `bltz` on the result then reaches the buggy folder). Guarding it is what keeps the
 `%lo` register-lifetime fix usable.

@@ -311,7 +311,7 @@
 # and `igMemoryRefArrayMetaField` returns `_num * 4` (one pointer per element of
 # the inline array), truncated to the u16 `_size` field.  The base +0x70 is the
 # same virtual the ref class overrides with `igMemoryRefMetaField_SetToDefault`
-# (#363): it copies `_default` (+0x20) over the instance's value at `_offset`.
+#: it copies `_default` (+0x20) over the instance's value at `_offset`.
 0x002fc580	igMetaField_SetToDefault	engine
 0x002fc2b0	igMetaField_GetSize	engine
 0x003054f0	igRefMetaField_GetSize	engine

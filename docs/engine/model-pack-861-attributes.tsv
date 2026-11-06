@@ -7,7 +7,7 @@
 # sum == _numVerts.  This pack is the second alignment the chain finder must handle: its
 # records start at an ODD file offset (the first record is at +0x260f), while the stage packs
 # start at 2-mod-4, so `igb_inst.find_chains` scans every offset rather than stepping by two
-# (finding #536).
+#.
 # columns: vertexArray  primType  numPrims  numVerts  vdata  numLengths  stream ids  name
 # scripts/verify_models_layout.py re-derives every row from the pack.
 # The three shapes are the three actor LODs of the player (beModelCtrlNode2 -> igLod ->

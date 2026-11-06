@@ -1,4 +1,4 @@
-/* src/engine/alias-pool-controls.c — Alias-pool accounting controls and fixed results; finding #900
+/* src/engine/alias-pool-controls.c — Alias-pool accounting controls and fixed results
  *
  * One translation unit: 7 functions, in retail address order.  Folded
  * from the per-function units by tools/merge_units.py; the matching build

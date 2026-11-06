@@ -592,8 +592,8 @@ be:MDLgetRamNo() + 248	regional flag (quest-dungeons)	low	heuristic
 be:SYSgetDifficulty() + 406	regional flag (bosses)	low	heuristic
 folder:0	persistent story flag 0	medium	SYSctlFlagFolder
 folder:1	persistent story flag 1	medium	SYSctlFlagFolder
-folder:10	LordKnightmon ID (Electro Mine)	medium	save observation #128; separate from script-derived labels
-folder:11	persistent quest-chain marker	high	SET in e0824/chunk_0104; corrected signed decoding #787
+folder:10	LordKnightmon ID (Electro Mine)	medium	save observation; separate from script-derived labels
+folder:11	persistent quest-chain marker	high	SET in e0824/chunk_0104; corrected signed decoding
 folder:2	persistent story flag 2	medium	SYSctlFlagFolder
 folder:3	persistent story flag 3	medium	SYSctlFlagFolder
 folder:4	persistent story flag 4	medium	SYSctlFlagFolder

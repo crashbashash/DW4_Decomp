@@ -1,6 +1,6 @@
 # Context construction, record ownership and tracker delegation
 
-Finding [#897](../findings/findings-0751-1000.md#f897) recovers seven bodies /1,928 bytes in
+Recovery covers seven bodies /1,928 bytes in
 [context-lifecycle.c](../../recovered/engine/context-lifecycle.c): constructor152,
 destructor188, name initialization116, retained slot setter184, allocation delete64,
 and the contiguous special delegate668/removal556 pair. All seven bodies /1,928 bytes
@@ -24,15 +24,15 @@ copies46 names from pointer table4c2170: each127-byte copy is followed by an exp
 zero at the128th byte. This establishes a128-byte inline name field, including the
 original names Bootstrap, Default, Current and NonTracked.
 
-The destructor is 2f2670, not the constructor that [#896](../findings/findings-0751-1000.md#f896) describes.
+The destructor is 2f2670.
 It skips null self; otherwise it republishes52f510, clears its reference word and
 all record bytes, initializes names, releases parent16 using full-word decrement/
 low23-bit destruction, then deletes the allocation for a positive signed low16 flag.
 The parent cell is not cleared. Delete (2f8830) chooses generic object-allocation
 release when the object system is active, or the lower free service otherwise.
 
-Finding [#898](../findings/findings-0751-1000.md#f898) refutes that constructor interpretation while preserving [#896](../findings/findings-0751-1000.md#f896)'s
-valid vtable-binding evidence. Destruction does not itself walk the allocator
+Constructor and destructor both publish vtable52f510, so that receiver binding stands
+for either role. Destruction does not itself walk the allocator
 pointers that were cleared; original slot removal is a separate path.
 
 ## Retained allocator slots

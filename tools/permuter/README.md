@@ -15,7 +15,7 @@ The permuter is the right instrument for "one instruction off", and it runs fine
 but on the guard family **it did not find the answer and could not have**: the base source had no
 `bool` at all, so the named-boolean value conversion that fixes the family was outside its mutation
 space. Both harnesses ended at the base score of 105 (66k and ~1.2 M iterations respectively), and the
-idiom was found by reading the code instead (finding [#312](../../docs/findings/findings-0251-0500.md#f312)). The measured cost/benefit of scaling it
+idiom was found by reading the code instead. The measured cost/benefit of scaling it
 is in [`../../docs/engine/m2c-bulk.md`](../../docs/engine/m2c-bulk.md) §Measured negatives — the
 near-miss tier it would work on is less than 1 % of the remaining code bytes.
 

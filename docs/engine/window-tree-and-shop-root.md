@@ -1,6 +1,6 @@
 # Window tree and generic shop-root runtime
 
-Finding [#910](../findings/findings-0751-1000.md#f910) recovers **six bodies /2,980 code bytes**: the contiguous child-close,
+**Six bodies /2,980 code bytes** are recovered: the contiguous child-close,
 context-binding and recursive-update helpers at3f6350..3f6618, plus the complete
 ShopCtrl00 update4267b0..426f94 and its two adjacent128-byte scoped-reference
 cleanups426fa0/427020. The readable

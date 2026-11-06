@@ -4,10 +4,10 @@
  * _num times the requested count.  The descriptor is the lazily created object
  * cached at 0x00585910 (the cell sits between the igStringMetaField and
  * igStringArrayMetaField class handles, the same layout as the confirmed
- * default-descriptor getters of finding 888). */
+ * default-descriptor getters). */
 #include "dw4/reflected.h"
 extern "C" {
-void **FUN_002b9c60(...);  /* igStringMetaField default-descriptor getter (name inferred from finding 888, not confirmed) */
+void **FUN_002b9c60(...);  /* igStringMetaField default-descriptor getter (name inferred, not confirmed) */
 void Gap__Core__igStringArrayMetaField__vfunc_52(igStringArrayMetaField *self, int item, int count);
 }
 /* Placeholder vtable: only the call through slot 50 of the descriptor is used. */

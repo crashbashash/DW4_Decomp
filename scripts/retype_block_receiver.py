@@ -5,7 +5,7 @@
 (`igMetaEnum_GetNameCount` -> `igMetaEnum`), so it cannot touch a `FUN_*`.  But many
 `FUN_*` bodies sit **between two `...<Class>__vfunc_N` symbols of the same class**, and
 MWCC emits a translation unit's functions contiguously, so the block proves the class the
-same way it proves `FUN_00388e60` is a `beHitLandModelOrder` method (finding #488 / #530).
+same way it proves `FUN_00388e60` is a `beHitLandModelOrder` method.
 
 That alone is weak for a one-cast function, so this pass also **validates** the class
 against the body: every `arg0`/`this` offset cast must land on a reflected field of that
@@ -21,7 +21,7 @@ unrecovered; naming it is the module loop's job).  Width-checked, so `make check
 `make link` must both stay green.
 
 The middleware set is deliberately excluded (`--game-only`, the module map's game region
-0x334000..0x460000): a port replaces it wholesale (finding #488).
+0x334000..0x460000): a port replaces it wholesale.
 
 Usage:
     scripts/retype_block_receiver.py                 # report (all)

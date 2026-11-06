@@ -1,7 +1,7 @@
 /* src/frontlayer.c — the front-end title's generated light-trail layer.  See dw4/frontlayer.h.
  *
  * The whole subsystem is recovered knowledge, not a replay: the graph and the controller live in
- * AREA.AFS entry 620 (findings #610/#614), the clock is #619, the JOINTSET ranges are #618/#621 and
+ * AREA.AFS entry 620, the clock is #619, the JOINTSET ranges are #618/#621 and
  * the 16-mesh / 3184-triangle make-up is #623.  The pack's own `sback00.png` (an 8bpp `igImage`
  * plus its `igClut`) is the texture; nothing here touches a capture.
  */
@@ -55,7 +55,7 @@
 #define FL_CAM_NAME   "cameraanimShape01"
 
 /* The generation rate the controller converts against: JOINTSET start/end are 60 fps frame numbers
- * (finding #618: `_startTime*1e9/60`). */
+ * (`_startTime*1e9/60`). */
 #define FL_FRAME_NS 16666666LL    /* floor(1e9/60) */
 
 struct dw4_frontlayer {
@@ -74,7 +74,7 @@ struct dw4_frontlayer {
     int ntx;
     uint32_t gi;                 /* the `j_startback` graph index */
     struct { uint32_t node, mesh; float col[4]; } *item;
-    int ncolor;                  /* how many items carry a pack colour (finding #664) */
+    int ncolor;                  /* how many items carry a pack colour */
     int nitems;
     long long engine_ns;
     /* The recovered title camera: the `entry` pack, whether its named igCamera resolved, and the
@@ -92,7 +92,7 @@ struct dw4_frontlayer {
  * `SQ_OPEN` carries a `beAction2JOINTSET 0…209` mode `OS` (one-shot, hold at the end); on its
  * completion `SQ_WAIT`'s `WAIT01` runs `JOINTSET 240…360` mode `LP` (loop).  The ranges are frames,
  * so the node time is `frames * 1e9 / 60` ns.  A loop re-bases the bias by one duration each wrap
- * (finding #618); here that is the modulo, which needs no per-frame cursor. */
+ *; here that is the modulo, which needs no per-frame cursor. */
 static long long fl_phase(long long e)
 {
     const long long open_end = 209LL * 1000000000LL / 60;
@@ -108,7 +108,7 @@ static long long fl_phase(long long e)
     }
 }
 
-/* The `SQ_OPEN` one-shot's length, for the caller that has to wait it out (finding #640). */
+/* The `SQ_OPEN` one-shot's length, for the caller that has to wait it out. */
 long long dw4_frontlayer_open_ns(void) { return 209LL * 1000000000LL / 60; }
 
 /* --- the pack's own sback00 texture ------------------------------------------------------------ */
@@ -269,11 +269,11 @@ static int fl_load_texture(dw4_frontlayer *fl, const uint8_t *blob, size_t len)
     return 0;
 }
 
-/* --- the layer's own colour (finding #664) -----------------------------------------------------
+/* --- the layer's own colour -----------------------------------------------------
  *
  * The pack's `igColorAttr` records (265 of them, all `_color` = 0.9, 0.9, 0.9, 0.95) belong to the
  * 265 *font* attribute sets: `dw4_scene_load` resolves one for `font00`, `font01`, ... and none for
- * the layer's 16 meshes, so finding #631 stands for the layer -- its shade is not pack data.  The
+ * the layer's 16 meshes, so this holds for the layer -- its shade is not pack data.  The
  * loader still resolves the colour wherever the pack names one (`dw4_scene_node`, alongside the
  * texture), and this uses it, with `DW4_FL_COLOR=r,g,b,a` (0..1 floats) as an override so the value
  * can be A/B'd against a capture and the earlier neutral shade as the fallback. */
@@ -307,7 +307,7 @@ static int fl_node_color(const dw4_frontlayer *fl, uint32_t node, float out[4])
 
 /* The layer's per-vertex shade.  The pack gives these meshes no colour (no colour stream, and the
  * only `igColorAttr`s are the fonts'), but the game's vertex colours in the GS stream are not flat: a
- * fit over 4,494 stream vertices matched to the pack's vertices (ring-f008, finding #719) is
+ * fit over 4,494 stream vertices matched to the pack's vertices (ring-f008) is
  * `min(1, ambient + diffuse * max(0, N.L))`, in the GS's 0x80 = 1.0 domain (x127.5): ambient
  * (0.5, 0.5, 0.55), directional L = (0.297, 0.414, 0.861) toward the light, diffuse 1.5 x (1, 1, 0.875).
  * RMS error 17 levels, 94 % of vertices within 8.  `DW4_FL_FLATCOLOR=1` restores the old flat grey. */
@@ -332,7 +332,7 @@ static void fl_lit_color(const float n[3], uint8_t out[4])
  * ancestor's).  `_src=4 _dst=1` is `Cs*As + Cd` (GS ALPHA 0x48, mode 2); `_src=4 _dst=5` is ordinary
  * alpha, `(Cs-Cd)*As + Cd` (ALPHA 0x44, mode 1).  A node with no blend attribute -- the tunnel
  * cylinder -- draws with the default ordinary alpha: ring-f008 runs 0-2 are `pCylinderShape3` under
- * ALPHA 0x44 (finding #711).  The pack makes 10 of the 16 layer meshes ordinary and the last 6
+ * ALPHA 0x44.  The pack makes 10 of the 16 layer meshes ordinary and the last 6
  * (`polySurfaceShape101`, `pCubeShape3`, `pCylinderShape6/7/8`, `polySurfaceShape104`) additive;
  * the original draws the layer in that order, so the ordinary meshes cover the tunnel.
  * `DW4_FL_ALLADD=1` restores the old blanket additive blend, to reproduce the before image. */
@@ -508,7 +508,7 @@ dw4_frontlayer *dw4_frontlayer_open(const dw4_mount *mnt)
         dw4_frontlayer_close(fl);
         return NULL;
     }
-    /* The layer's own shade: each node's `igColorAttr` in the pack (finding #664), not a constant. */
+    /* The layer's own shade: each node's `igColorAttr` in the pack, not a constant. */
     fl_colors(fl);
     printf("  front-end layer: %d mesh(es), %d with the pack's own colour\n", fl->nitems, fl->ncolor);
     /* The layer's own textures: one `igImage` per binding, not sback00 for everything. */
@@ -775,7 +775,7 @@ void dw4_frontlayer_draw(dw4_frontlayer *fl, dw4_fb *fb)
 {
     /* The recovered per-draw material state.  The layer's shade is the pack's own: each mesh's
      * `igGeometryAttr1_5` names an `igColorAttr` (`_color` = 0.9, 0.9, 0.9, 0.95 across this pack,
-     * finding #664), resolved in `fl_colors`.  The *texture state* is the pack's `sback00.png`,
+     * ), resolved in `fl_colors`.  The *texture state* is the pack's `sback00.png`,
      * whose alpha the rasteriser already applies.  The blend is per mesh and the pack's own
      * (`fl_node_blend`: additive `_dst=1` for 6 meshes, ordinary alpha otherwise; PRIM ABE=1 IIP=1).  Lighting is off in the pack (`igLightingStateAttr._enabled = 0`), so a per-vertex
      * colour would be flat anyway -- the single pack colour is the whole shade. */
@@ -806,7 +806,7 @@ void dw4_frontlayer_draw(dw4_frontlayer *fl, dw4_fb *fb)
     focal = FL_FOCAL * (float)fb->h / FL_REF_H;
     cx = fb->w * 0.5f;
     /* The GS's vertices sit 0.87 px below the pure projection's centre at 448 lines (measured over 4,494
-     * matched ring-f008 vertices: median 0.873, 80 % within 0.81-0.96; dx -0.03; finding #721). */
+     * matched ring-f008 vertices: median 0.873, 80 % within 0.81-0.96; dx -0.03). */
     cy = fb->h * 0.5f + (e_nocyoff ? 0.0f : 0.873f * (float)fb->h / 448.0f);
     for (i = 0; i < fl->nitems; i++) {
         uint32_t nj = fl->item[i].node;
@@ -833,7 +833,7 @@ void dw4_frontlayer_draw(dw4_frontlayer *fl, dw4_fb *fb)
         }
         const float *pos = (const float *)dw4_scene_host(&fl->sc, m->positions);
         const float *uv = m->uvs.off ? (const float *)dw4_scene_host(&fl->sc, m->uvs) : NULL;
-        float uoff = 0.0f, voff = 0.0f;       /* the `_target=9` transform's UV offset (finding #716) */
+        float uoff = 0.0f, voff = 0.0f;       /* the `_target=9` transform's UV offset */
         int fog_on = 0;
         const float *nrm = m->normals.off ? (const float *)dw4_scene_host(&fl->sc, m->normals) : NULL;
         int lit = nrm && !e_flatcolor &&
@@ -849,7 +849,7 @@ void dw4_frontlayer_draw(dw4_frontlayer *fl, dw4_fb *fb)
         }
         {   /* the GS alpha test: GREATER, AREF = floor(_refValue * 128) from the pack's own
              * `igAlphaFunctionAttr` (0.6 on the tunnel cylinder's set); the engine default is 0.1
-             * (the stream's other draws test AREF 12), finding #721 */
+             * (the stream's other draws test AREF 12) */
             float ref = 0.1f;
 
             dw4_scene_node_alpha_ref(&fl->sc, nj, &ref);
@@ -902,13 +902,13 @@ void dw4_frontlayer_draw(dw4_frontlayer *fl, dw4_fb *fb)
                 if (pz < 1.0f)
                     pz = 1.0f;
                 {   /* the GS fog coefficient: linear in view depth, near 100 / far 2000, truncated
-                     * (an exact fit over 160 distinct stream (depth, F) pairs; finding #722) */
+                     * (an exact fit over 160 distinct stream (depth, F) pairs) */
                     float ff = floorf(255.0f * (2000.0f - pz) / 1900.0f);
 
                     vf[e] = ff < 0.0f ? 0.0f : (ff > 255.0f ? 255.0f : ff);
                 }
                 {   /* the GS Z of this vertex: fitted to the stream, z = 6.57e5 / depth - 329.4, larger =
-                     * nearer, 0 at the far end (finding #721) */
+                     * nearer, 0 at the far end */
                     float zf = 657000.0f / pz - 329.4f;
 
                     vz[e] = zf < 0.0f ? 0.0f : floorf(zf + 0.5f);   /* the GS's Z is an integer */
@@ -929,7 +929,7 @@ void dw4_frontlayer_draw(dw4_frontlayer *fl, dw4_fb *fb)
                 u = (uv ? uv[2 * vi] : 0.0f) + uoff;
                 vv = (uv ? uv[2 * vi + 1] : 0.0f) + voff;
                 if (e_mirror)
-                    u = 1.0f - u;                    /* the old u-mirror (#666), for A/B */
+                    u = 1.0f - u;                    /* the old u-mirror, for A/B */
                 v[e][0] = cx + focal * Xv / pz;
                 v[e][1] = cy - focal * Yv / pz;
                 v[e][2] = u * pz;                    /* GS STQ: q is the depth, divided per pixel */
@@ -967,7 +967,7 @@ void dw4_frontlayer_draw(dw4_frontlayer *fl, dw4_fb *fb)
                 continue;
             {   /* the layer's far clip: the stream omits every primitive with a vertex beyond view depth
                  * 2048 (drawn geometry reaches 2040, omitted polySurfaceShape101 quads start at 2049;
-                 * finding #721).  DW4_FL_FAR=<depth> overrides, 0 disables. */
+                 * ).  DW4_FL_FAR=<depth> overrides, 0 disables. */
                 const char *fe = e_far;
                 float far_z = fe ? (float)atof(fe) : 2048.0f;
 

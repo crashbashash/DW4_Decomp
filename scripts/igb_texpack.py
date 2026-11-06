@@ -6,7 +6,7 @@ descriptor record per texture) followed by a flat **pool** that holds every text
 palette and index grid.  Neither the descriptor records nor the pool carry an offset,
 so the pool has to be *derived*.
 
-The layout rule (finding #472, verified 52/52 on NDMW.AFS entry 625):
+The layout rule (verified 52/52 on NDMW.AFS entry 625):
 
   * The pack stores one `igClut` sub-record and one `igImage` sub-record per texture.
     Each carries an **object id**: the clut's is the word after `_stride` in
@@ -28,7 +28,7 @@ exact call is `--base 0x2c08 --pads 129,140`; the verified result is
 Each record is a **serialised igObject** whose fields sit at the reflected offsets, so an
 igImage carries its own name, size, grid id (`_pImage`) and palette id (`_pClut`) -- these
 are ordinary igBinary records with a `{u32 class}{u32 bytes}` header, not the flat
-descriptors earlier work read them as (finding #476).  `_pClut` is an id in the pack's id
+descriptors earlier work read them as.  `_pClut` is an id in the pack's id
 space rather than a block id; `resolve_palettes` turns it into the palette block through
 the pack's id->class table, and `decode_rgba` reproduces the texture.
 
@@ -165,7 +165,7 @@ def image_records(b):
     """Every igImage record as a dict: name, rec, image (grid id), clut, w, h.
 
     A texture's igImage is a **serialised igImage object**: the reflected field offsets
-    hold in the file (#476), so `_px/_py` are at +8/+12, `_pImage` (an igMemoryRef, i.e.
+    hold in the file, so `_px/_py` are at +8/+12, `_pImage` (an igMemoryRef, i.e.
     the grid block's id) at +52, `_pClut` (an igObjectRef) at +68 and the `_pNameString`
     length at +88 with the bytes after it.  The `[1, 0, C, bitsIdx, DIM, 0, 0, namelen,
     name]` run earlier work read as a separate "descriptor entry" is just this record's
@@ -194,7 +194,7 @@ def find_textures(b):
 def class_table(b, recs):
     """Locate and validate the pack's **id -> class** table.
 
-    Same shape as the object packs' id remap table (#460) -- `{u32 tableBytes}`
+    Same shape as the object packs' id remap table -- `{u32 tableBytes}`
     `{u32 idCount}` then idCount u16 -- but the entries are the *class* of each id rather
     than a record index.  The class numbering is pack-local: on NDMW.AFS 625 the clut
     blocks are class 0 and the igClut objects class 8, on 626 it is 4 and 1.
@@ -224,7 +224,7 @@ def class_table(b, recs):
 
 
 def resolve_palettes(b, recs):
-    """`{image block id: palette block id}` -- the texture -> palette link (#476).
+    """`{image block id: palette block id}` -- the texture -> palette link.
 
     An igImage's `_pClut` is an **id in the pack's id space, not a block id**: the space
     interleaves the pack's objects and their memory blocks, and the class table says

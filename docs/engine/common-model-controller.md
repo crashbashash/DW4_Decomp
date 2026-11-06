@@ -77,7 +77,7 @@ This establishes integration at that boundary, not rendering, audio or timing
 identity with a running console. The Game Start slot verifier still seeds its
 queues; integrating the recovered submissions there is separate work.
 
-## Caller wait flags ([#758](../findings/findings-0751-1000.md#f758))
+## Caller wait flags
 
 The play/close contracts take five arguments, and Game Start C passes the wait
 flag at 18 call sites where retail reuses `t0=1` from nearby comparisons: nine
@@ -93,7 +93,7 @@ strengthens call equivalence but does not replace that harness's queue seeds.
 
 - No matched-code coverage is claimed for this group.
 - Behavioral checks: common-model 2,676; title 55,264; load controller 1,624;
-  load interface 11 direct + 432 message + 1,045 update cases, including [#742](../findings/findings-0501-0750.md#f742).
+  load interface 11 direct + 432 message + 1,045 update cases, including.
 - Native `make check` and `make check-retail` pass. Address/undefined-behavior
   sanitizer checks pass for title/queue tests, including storage reuse and
   overflow. Leak detection is unavailable under the test runner's tracing.
@@ -101,7 +101,7 @@ strengthens call equivalence but does not replace that harness's queue seeds.
   session/capture inputs. No synchronized console/native frame or audio
   comparison exists.
 
-## Logo sequence ([#759](../findings/findings-0751-1000.md#f759)–[#760](../findings/findings-0751-1000.md#f760))
+## Logo sequence
 
 [Model-sequence waits](model-sequence-waits.md) recover the next contiguous
 JUMP/WCHECK group. The port uses the extracted logo command program and

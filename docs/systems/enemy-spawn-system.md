@@ -1,16 +1,16 @@
 # The enemy spawn system (GENERATER / GENE-xx)
 
 **Status:** pipeline mapped and live-confirmed, the **per-frame state
-machine, fill modes and timer units are decoded from the code** (finding [#412](../findings/findings-0251-0500.md#f412)),
+machine, fill modes and timer units are decoded from the code**,
 and **the spawned enemy is swappable both live and from disc** —
 the row knob, the init latch and the geometry-residency limit are confirmed
-(findings [#427](../findings/findings-0251-0500.md#f427)/#428/#429, §6b/§6c). Triggers, positions,
+(§6b/§6c). Triggers, positions,
 counts and enemy selection are all identified. Authored per-stage generator
 tables are decoded for two stages: `stag0102` (sampled) and **`stagGF01` in full**
 (§4b — all 24 generators, with rows, counts and drop lists).
 
-The "MODELCTRL is the enemy spawner" reading in findings [#156](../findings/findings-0001-0250.md#f156)/#160/#162
-is **refuted** (§7). Evidence: findings [#249](../findings/findings-0001-0250.md#f249)–[#253](../findings/findings-0251-0500.md#f253).
+The "MODELCTRL is the enemy spawner" reading
+is **refuted** (§7).
 
 ---
 
@@ -18,14 +18,14 @@ is **refuted** (§7). Evidence: findings [#249](../findings/findings-0001-0250.m
 
 | Layer | Object / site | Notes |
 |---|---|---|
-| Lua script | `be:sd("GENERATER", nil, -2, "START", "GENE-xx")` | the **only** enemy-spawn entry point |
+| Lua script | `be:sd("GENERATER", nil, -1, "START", "GENE-xx")` | the **only** enemy-spawn entry point |
 | Data (authored) | `Gap::Bec::beGeneraterData`, vtable `0x535EB0`, size 0x68 | one per `GENE-xx` in the stage pack's `separate/generatorH.igb` |
 | Runtime | `beGeneraterInfoWork`, vtable `0x536050` | one per player per started GENE |
 
 `beGenerater` (the subsystem) methods are
 `START / STOP / STOPREVERS / RESET / RESTART / PERFECTDROP / ONFREEZE / OFFREEZE`
 (name table at `0x4c6b50`). Lua calls them as
-`sd("GENERATER", nil, -2, "<METHOD>", "<GENE-xx>")`.
+`sd("GENERATER", nil, -1, "<METHOD>", "<GENE-xx>")`.
 
 ## 2. `beGeneraterData` — the authored spawn record
 
@@ -62,29 +62,32 @@ Example live entry — **GENE-00**, the end-of-bridge e_ogre demo:
 
 **(a) Lua / script.** Stage chunks call `START/STOP/RESTART` behind ordinary
 script conditions: `be:FLGisOn(n)` / `be:FLGset`, `be:PLAYERgetPos()` (entry
-point 0–3), `be:SYSgetPlayerNinzu()` (1P vs 2P+), `be:SYSctlDeviceFolder(...)`
+point, 0–4 in this stage), `be:SYSgetPlayerNinzu()` (1P vs 2P+), `be:SYSctlDeviceFolder(...)`
 (difficulty / equipped device), and `be:DMsetSD(..., <frame time>)` + `DMrun()`
 scheduling.
 
 Worked example, `02-valley-overworld/02-stag0102-valley-crossroads_e621/022-layer-setup-3.lua`:
 
 ```lua
-if be:FLGisOn(355) == -1 then              -- first visit only
-    be:FLGset(355, 0)
-    be:DMsetSD("CAMERA", nil, -2, "SETDEMOCAMERA", "Sdc0102a")
-    be:DMsetSD("GENERATER", nil, -2, "START", "GENE-00", 9)   -- the bridge e_ogre
-    be:DMchkSD("MODELCTRL", "e_ogre", -2, "ISRUN", "==0")
+if be:FLGisOn(356) == 0 then               -- first visit only
+    be:FLGset(356, 1)
+    be:DMsetSD("CAMERA", nil, -1, "SETDEMOCAMERA", "Sdc0102a")
+    be:DMsetSD("GENERATER", nil, -1, "START", "GENE-00", 10)  -- the bridge e_ogre
+    be:DMchkSD("MODELCTRL", "e_ogre", -1, "ISRUN", "==0")
     funcOpenDigimonInfoWin(...)            -- tutorial popup
     ...
 end
 ...
-if be:SYSctlDeviceFolder("ISEQUIP", -1, "armor2", 26, -1, -1) == 0 then
-    if     local_0 >= 60 then be:sd("GENERATER", nil, -2, "START", "GENE-a00")  -- row 5
-    elseif local_0 >= 40 then ... GENE-a01 ...                                 -- row 380
-    elseif local_0 >= 12 then ... GENE-a03 ...                                 -- row 386 pink
+if be:SYSctlDeviceFolder("ISEQUIP", 0, "armor2", 27, 0, 0) == 1 then
+    if     local_0 >= 61 then be:sd("GENERATER", nil, -1, "START", "GENE-a00")  -- row 5
+    elseif local_0 >= 41 then ... GENE-a01 ...                                 -- row 380
+    elseif local_0 >= 25 then ... GENE-a02 ...                                 -- row 383
+    elseif local_0 >= 13 then ... GENE-a03 ...                                 -- row 386 pink
     ... end
 end
 ```
+
+The `local_0` compare chain is the crown roll (§5c).
 
 `004-chunk.lua` starts `GENE-47/48/49/50` unconditionally; `012-enemy-blosso.lua`
 starts `GENE-38` (row 78 `e_blosso`) behind a flag.
@@ -95,10 +98,10 @@ starts `GENE-38` (row 78 `e_blosso`) behind a flag.
 |---|---|---|
 | `direct` | spawn as soon as the generator runs, no range gate | **unused** — the engine never reads it in this mode; the value just mirrors the authored facing angle in degrees (the facing itself comes from `_geneRotYRadianList`) |
 | `radar` | spawn when the player comes within range | **squared radius** — live values 625=25², 1225=35², 2025=45², 3025=55², 4225=65² |
-| `timer` | countdown, armed under the key **`BOOT_TIMER`** | **frames** at 60 fps; the code arms it as `f × 1e9 / 60` ns (finding [#412](../findings/findings-0251-0500.md#f412)) |
+| `timer` | countdown, armed under the key **`BOOT_TIMER`** | **frames** at 60 fps; the code arms it as `f × 1e9 / 60` ns |
 
-`_fillModeStr` decides what happens after the first wave (state 1 fills to `_geneMaxCount` in one tick in every mode; retail GENE-09, fill `add`, spawned all six within 18 ms, finding [#3080](../findings/findings-3001-3250.md#f3080)), and the three modes are
-exact (finding [#412](../findings/findings-0251-0500.md#f412)):
+`_fillModeStr` decides what happens after the first wave (state 1 fills to `_geneMaxCount` at once in every mode, §5b; retail GENE-09, fill `add`, spawned all six within 18 ms), and the three modes are
+exact:
 
 | `_fillModeStr` | behaviour |
 |---|---|
@@ -133,7 +136,7 @@ when it is 1 (every entry seen in stag0102) it is `list[i]` alone — so for glo
 rows `_pos` is only the **radar/range anchor**, not the spawn point. It then
 advances the cursor: `_genePoint = (i + 1) % count`.
 
-**This is read per spawn, not baked at `START`** — verified live (finding [#254](../findings/findings-0251-0500.md#f254)):
+**This is read per spawn, not baked at `START`** — verified live:
 injecting a unique `Y = 123.456` plus rotation 0 into every row-5 `_genePosList` /
 `_geneRotYRadianList`, then reloading and walking, produced live model transforms
 (vtable `0x537F40`) whose translation was exactly the entry's `(x, 123.456, z)` with
@@ -186,9 +189,9 @@ breakable gates on and `START`s **GENE-23** (the room fight, 12 Goburimon);
 `017-damage-calc-3.lua` fires when a gate is cracked, `STOP`s GENE-23 and `START`s
 **GENE-00** (12 more Goburimon) and **GENE-19** (14 more, no drop list). The trailing
 number in `START "GENE-xx", N` is a frame delay, not a count (the same slot is used
-for `ONCTRL`, 59) — the enemy total comes from `_geneCount`.
+for `ONCTRL`, 60) — the enemy total comes from `_geneCount`.
 
-**Proven (finding [#412](../findings/findings-0251-0500.md#f412)):** `_geneMaxCount` **is** the alive-at-once cap, read from the
+**Proven:** `_geneMaxCount` **is** the alive-at-once cap, read from the
 code rather than inferred. `add` spawns only while the live count is below it, and
 `wipeout` spawns `min(remaining, _geneMaxCount)` per batch; `_geneCount` is the total
 for that player, and the remaining counter (`_nokoriKazu`, the state object's `+0x10`)
@@ -205,7 +208,7 @@ Lua sd("GENERATER",…,"START","GENE-xx")
        └─ FUN_00384c40             per-frame state machine (state @ +0x1c)
             ├─ start modes: 'd' direct / 'r' radar (range vs +0x30) / 't' timer ('BOOT_TIMER')
             ├─ fill modes : 't' timer ('GENE_TIMER') / 'a' add / 'w' wipeout
-            ├─ FUN_00384800        drop pass for the dead (#256)
+            ├─ FUN_00384800        drop pass for the dead
             └─ FUN_00384540        spawn: position + facing + the MODELCTRL command
                  └─ FUN_003d1960   enemy model generate
                       DATABASE 'enemy' → MODEL/HPMAX from the row
@@ -214,16 +217,21 @@ Lua sd("GENERATER",…,"START","GENE-xx")
 ```
 
 `beGeneraterInfoWork`'s **per-player state object** (pointer at `+0x2c`, created on
-the generator's first frame) is where the live fields sit (finding [#412](../findings/findings-0251-0500.md#f412); they are
-not on the InfoWork itself, as [#251](../findings/findings-0251-0500.md#f251) has it): `+0x0c` the 1-based
+the generator's first frame) is where the live fields sit (they are
+not on the InfoWork itself): `+0x0c` the 1-based
 player index, `+0x10` `_nokoriKazu` (remaining to spawn), `+0x14` the live-enemy
 list, `+0x18` the `_genePoint` cursor, `+0x1c` the **latched** `MODEL` name,
 `+0x20` the row, `+0x24` `HPMAX`, `+0x28` a float timer speed, and `+0x08`/`+0x09`
 two flags that bypass the state machine (drops keep being processed, nothing spawns).
 The enemy-side InfoWork is `beNDMWMdlPEBaseInfoWork` (vtable `0x53D3E0`),
-`+0x10` row, `[+0x0c]+0x0c` current HP (see [#182](../findings/findings-0001-0250.md#f182)).
+`+0x10` row, `[+0x0c]+0x0c` current HP.
 
-### 5b. The state machine (finding [#412](../findings/findings-0251-0500.md#f412))
+`beGeneraterInfoWork` is the quickest way to read a spawn's rolled row: an enemy InfoWork
+only populates `+0xF0` and `+0x110` about four seconds of unpaused play after spawn.
+Several objects share the InfoWork vtable `0x0053D3E0` and live ones move between loads,
+so keep those with `+0x110 == *(0x58A1C0)`, `+0xEC == 0` and `+0xF0 != 0`.
+
+### 5b. The state machine
 
 The state lives at `InfoWork+0x1c`; `InfoWork+0x14` is the active flag (cleared when
 the generator finishes). Four states:
@@ -243,25 +251,52 @@ the facing `× 57.29578` to degrees, stamps the `MODELCTRL` command sequence
 `GENERATE`), and returns the number actually spawned — `0` when the model pool is
 full, which stops the wave rather than overrunning it.
 
+A wave is synchronous. GENE-11's list count reaches 1, 2, 3 within 2 ms and 4 one tick
+later, with the state object's remaining count (`+0x10`) at 0 at once; GENE-10 reaches 4
+within 17 ms. So the last one or two instances can go active one tick after the first
+ones. No pooled-instance delay shows, in a small sample (GENE-11 twice, GENE-10 once).
+GENE-10 getting 2 of 4 while GENE-06's four row-25 enemies are alive is consistent with a
+shared instance pool.
+
+### 5c. Crowns
+
+The crown roll is Lua, not native. Seven stage chunks (for example
+`lua/02-valley-overworld/02-stag0102-valley-crossroads_e621/022-layer-setup-3.lua`, §3)
+draw one `SYSgetRandom` per enemy group at load, then pick a generator by a compare
+chain, repeated per `armor2` branch (`ISEQUIP` 27, 28, 29 or none). Groups a and b use
+`>= 61/41/25/13/5/0` and group c uses `>= 27/20/14/9/5/0`, selecting `GENE-x00` to
+`GENE-x05`. In `stag0102` those carry rows 5, 380, 383, 386, 389 and 392: no crown, then
+ranks 1 to 5 (pack 622; §6c gives the other tiers). A roll of 13 is the only value that
+selects `GENE-x03` (row 386, pink) in both sets.
+
+At most four enemies show a crown at once. The crown is drawn from `_dispRamNoList[10]`
+(`i_rareicon`, status index 10), which holds a display id, not the rank. With six enemies
+and four crowns, exactly four objects hold ids 0, 1, 2 and 3 and the others hold -1, so
+nothing is culled at draw time: the draw loop at `0x443d00` walks a fixed 12 statuses and
+the extra enemies have no crown data. A freed id is reused, so killing a crowned enemy can
+crown another. The value comes from `FUN_0038f800(this->0x14, 0)` field `+8` and
+`FUN_0038d860` stores it in the icon object at `+0x10`. Where the 0..3 range is bounded is
+open (§7).
+
 ## 6. What is modifiable, and how
 
 | Want to change | Knob |
 |---|---|
 | which enemy a point spawns | `_geneEnemyId` (+0x24) — a stat-table row; **proven live and from disc (§6c)** |
 | how strong it is | the row in the ISO stat table (data patch, `patch_iso.py`) |
-| where it spawns | `_genePosList` (+0x1c) per element; `_pos` (+0x0c) is the radar anchor when `_genePosIsGlobal` (+0x18) — proven live, [#254](../findings/findings-0251-0500.md#f254) |
-| facing | `_geneRotYRadianList` (+0x20), radians — proven live, [#254](../findings/findings-0251-0500.md#f254) |
+| where it spawns | `_genePosList` (+0x1c) per element; `_pos` (+0x0c) is the radar anchor when `_genePosIsGlobal` (+0x18) — proven live |
+| facing | `_geneRotYRadianList` (+0x20), radians — proven live |
 | how many | `beGeneraterPlayerData._geneCount/_geneMaxCount` (+0x08/+0x0c) |
 | when it spawns | Lua `START/STOP` per stage chunk; engine `_startModeStr`/`_startData` |
 | whether it refills | `_fillModeStr`/`_fillData` (+0x34/+0x38) |
-| crown icon | row RARITY (colour only, [#176](../findings/findings-0001-0250.md#f176)/#206) |
+| crown icon | row RARITY (colour only); the row comes from the Lua roll (§5c) |
 
 All of these are per-stage data inside the packs (generator igb), so a spawn edit is a
 pack edit. That path is open (§6c): the row/position/rotation values read straight
-out of the pack (`scripts/igb_inst.py`, [#419](../findings/findings-0251-0500.md#f419)/#420) **and** live (`beGeneraterInfoRam` →
-`beGeneraterData`, [#427](../findings/findings-0251-0500.md#f427)), and `_geneEnemyId` has been changed both ways and booted.
+out of the pack (`scripts/igb_inst.py`) **and** live (`beGeneraterInfoRam` →
+`beGeneraterData`), and `_geneEnemyId` has been changed both ways and booted.
 
-## 6b. Swapping the spawned **model** — pinned, not re-read per spawn (finding [#255](../findings/findings-0251-0500.md#f255); mechanism decoded by [#412](../findings/findings-0251-0500.md#f412))
+## 6b. Swapping the spawned **model** — pinned, not re-read per spawn
 
 Unlike position and facing, the spawned **model name is latched at generator init**:
 `FUN_00384c40` copies `MODEL` from the row into `beGeneraterInfoWork+0x1c` once when the
@@ -274,7 +309,7 @@ generator. What was tried on the loaded `stag0102` bridge (row 5 = `e_goburi`):
 | repoint the **row's** `MODEL` string object (`[0x01749308+8]`) → `'n_leomon'` **and** force re-init (`InfoRam+0x2c := 0`) | **worked at the data level** — fresh InfoWorks read `model='n_leomon'` — but **no Leomon was created or rendered**: the name is in the stage manifest (pool `0x012bfac0`) but its **geometry is not resident** in stag0102 |
 | same method with a **resident** model (`'e_ogre'`, string `0x69298c`; row 36 already uses it there) | fresh InfoWork read `model='e_ogre'`; the row-5 population went **3 → 7** and green club-wielding Ogremon appeared where Goburimon had been |
 
-**Conclusion — confirmed ([#427](../findings/findings-0251-0500.md#f427)/#428):** model swapping works
+**Conclusion — confirmed:** model swapping works
 for models whose geometry is loaded in the stage, and **fails silently for models that
 are not**. Why: the generator resolves the row's `MODEL` **once, when its InfoWork is
 created** (the generator's first frame after `START`), stores it at `InfoWork+0x1c`, and
@@ -299,7 +334,7 @@ HP=0 alone did not reliably free a slot. Re-init only helps an *active* generato
 per-frame state machine reads the byte flag at `InfoRam+0x14` first (`0x384c68`) and
 returns when it is 0.
 
-## 6c. A spawn editor, both ways ([#427](../findings/findings-0251-0500.md#f427)/#429)
+## 6c. A spawn editor, both ways
 
 The row knob is confirmed live and from disc; the recipe is small.
 
@@ -326,12 +361,19 @@ same-size 4-byte edit — turning Goburimon into Ogremon changes **156 4-byte wo
 pack × 3) in a copy of the disc and nothing else. A cold boot of that disc spawns
 Ogremon where the vanilla disc spawned Goburimon.
 
-**Tier packs ([#429](../findings/findings-0251-0500.md#f429); not "per-language copies", as [#419](../findings/findings-0251-0500.md#f419) has it):** entries **622/623/624** are the
+**Tier packs:** entries **622/623/624** are the
 same 72-generator stag0102 layout (identical `GENE` positions) at three **row tiers** —
 622 = `e_goburi` 4/5 + `e_ogre` 36, 623 = 0/1 + 33, 624 = 8/9 + 39, i.e. the tier-1/0/2
 bands of the `e_goburi` rows 0–11 and `e_ogre` rows 33–41. Which one loads depends on
 the difficulty/setting (the live session here used 622). So a pack edit is a *set* of
 edits, each pack mapped to its own e_ogre row.
+
+The three packs differ only in `_geneEnemyId`: names, positions, timers, modes, `_callLua`
+and the 772-row drop table are identical, and 69 of 72 generators change id. Relative to
+622, each generator shifts by its own constant, down in 623 and up in 624: 4 for 37
+generators, 3 for 16, 1 for 15, 2 for 1, 0 for 3. The ids therefore select consecutive
+stat-row bands, for example `GENE-00` reads 36/33/39. The crown rows (§5c) shift the same
+way: 380/383/386/389/392 in 622, 379/382/385/388/391 in 623, 381/384/387/390/393 in 624.
 
 ## 7. Refuted readings, settled points and open questions
 
@@ -339,12 +381,11 @@ edits, each pack mapped to its own e_ogre row.
   `g_000bcaps` **checkpoint-capsule** command handler (`GENERATE` / `GENESTAGE` /
   `RAISE`, using `GAMERAM::GETCOMMON`, `BKCHIPSTAGE`, `BKCHIPPOS`, `SQ_ENTR%dP`;
   sibling `FUN_003d4a20` writes the checkpoint, `FUN_003d4ea0` is its proximity
-  switch). Enemy generate is `FUN_003d1960` (vtable slot `0x53e448`). Findings
-  [#156](../findings/findings-0001-0250.md#f156)/#160/#162 → refuted; see [#253](../findings/findings-0251-0500.md#f253). (The *spawn*
+  switch). Enemy generate is `FUN_003d1960` (vtable slot `0x53e448`). (The *spawn*
   command **is** issued through the `MODELCTRL` interface — `FIND_SPACE` →
-  position/facing → `GENERATE`, [#412](../findings/findings-0251-0500.md#f412) — so "MODELCTRL is not involved" is too strong;
+  position/facing → `GENERATE` — so "MODELCTRL is not involved" is too strong;
   what is refuted is only `FUN_003d50c0` being the spawner.)
-- **The generator rows AND their positions read offline ([#419](../findings/findings-0251-0500.md#f419)/#420).** `scripts/igb_inst.py --blob <pack> --lists` reads a stage's generator
+- **The generator rows AND their positions read offline.** `scripts/igb_inst.py --blob <pack> --lists` reads a stage's generator
   records (`_pos`, `_geneEnemyId`, `_startModeStr`/`_fillModeStr`, the `_startData` frame
   timer, `_callLua`) **and** every list's contents from the disc: a list reads
   `{count, count, _data}`, `_data` is an **ordering key**, and laying the lists out in
@@ -357,46 +398,47 @@ edits, each pack mapped to its own e_ogre row.
   609.0), so it is not a fingerprint. **`stag0102`'s generator pack is `NDMW.AFS` entry
   622** (72 generators, matching the 72 live instances), found by a fingerprint that is
   unique across the archive. **The three same-size entries 622/623/624
-  are not per-language copies — they are the three row-tier variants of stag0102 ([#429](../findings/findings-0251-0500.md#f429))** (same
+  are the three row-tier variants of stag0102** (same
   generator layout and positions, different `e_goburi`/`e_ogre` rows: 4/5+36, 0/1+33,
   8/9+39); the tier the game loads depends on difficulty. An `igObjectRef` id indexes the
-  pack's own remap table (`scripts/igb_ids.py`, [#460](../findings/findings-0251-0500.md#f460)), so the **drop-list groupings** also
+  pack's own remap table (`scripts/igb_ids.py`), so the **drop-list groupings** also
   resolve offline — see [`drop-tables.md`](drop-tables.md) §6.
 - **Open:** decode the per-stage generator igb tables for every stage. The instance
-  encoding is solved ([#417](../findings/findings-0251-0500.md#f417)–[#420](../findings/findings-0251-0500.md#f420)) and entry 622 reads end to end, so this is a sweep of
+  encoding is solved and entry 622 reads end to end, so this is a sweep of
   the 143 generator-bearing packs, not a format question. (`stagGF01` is also done in
   full — §4b, read live.)
-- **Timer-mode semantics ([#412](../findings/findings-0251-0500.md#f412)).** `_startData`/`_fillData`
+- **Timer-mode semantics.** `_startData`/`_fillData`
   are in **frames at 60 fps** (armed as `f × 1e9 / 60` ns), under the timer keys
   `BOOT_TIMER` (start delay) and `GENE_TIMER` (refill period).
-- **`_fillModeStr` vs `_geneMaxCount`/`_nokoriKazu` ([#412](../findings/findings-0251-0500.md#f412)):** the
+- **`_fillModeStr` vs `_geneMaxCount`/`_nokoriKazu`:** the
   three modes are decoded above (§3), and `_geneMaxCount` is the alive-at-once cap.
 - **The drop-table path** (`beGeneraterItemDataOne._rank`/
   `_rate` + `PERFECTDROP`) is fully traced — structure, the `RNG%10000` subtractive
   roll, the difficulty index, the family→pool map and the `stagGF01` Guard Room
-  box tables are in **`docs/systems/drop-tables.md`** (findings [#256](../findings/findings-0251-0500.md#f256)–[#260](../findings/findings-0251-0500.md#f260)), as is the
+  box tables are in **`docs/systems/drop-tables.md`**, as is the
   pack-internal id/`X` encoding that reads a table's element array *without* a live
-  reference ([#419](../findings/findings-0251-0500.md#f419)/#460).
+  reference.
 - **`_isPerfectDrop` is not at `0x5050b8`** — that address
   holds the reflection *name string* `"_isPerfectDrop"` (followed by `beFontInfo`).
   The `PERFECTDROP` method (index 5 of the `0x4c6b50` name table) is never called by
-  any Lua script in the game, so there is no reachable always-drop state. See [#264](../findings/findings-0251-0500.md#f264).
+  any Lua script in the game, so there is no reachable always-drop state.
+- **Open:** where the 0..3 crown display id range (§5c) is bounded. A four-entry display
+  table and the four per-player generators are the candidates; neither is proven.
 - **Open:** whether spawn positions can be stage-local (`_genePosIsGlobal=0`) in
   any real entry — every stag0102 entry was global.
-- **The model swap and its limit ([#427](../findings/findings-0251-0500.md#f427)/#428).** The row
+- **The model swap and its limit.** The row
   (`beGeneraterData._geneEnemyId`) is the knob; the model is latched into
   `beGeneraterInfoWork` at init, so a running generator must be re-latched by clearing
   `beGeneraterInfoRam._work` (+0x2c). Resident models swap (Goburimon → Ogremon in
   stag0102, live and in a patched ISO); **non-resident models spawn nothing** (the
   `e_mummy` A/B, with its instance-count check). §6b/§6c.
-- **Terrain snapping of Y — player answered, enemy open (findings [#413](../findings/findings-0251-0500.md#f413)/#416).**
+- **Terrain snapping of Y — player answered, enemy open.**
   Injecting a large Y into the model transform and
   re-reading it over time **cannot answer the question**: `*(0x0058a1e8)` is a *placement
   record*, not the live position (writing `Y = ground+200` to its six copies round-trips
   and **persists** while the character visibly stays on the ground). It has to be read from
-  the live **mirror** triples; [#413](../findings/findings-0251-0500.md#f413) has the addresses and the paused-differential method,
-  plus a trap (`0x100000–0x300000` is the *static program
-  image* and never changes however much the world moves). Measured that way, the **player
+  the live **mirror** triples, by a paused differential. One trap: `0x100000–0x300000` is the
+  *static program image* and never changes however much the world moves. Measured that way, the **player
   does snap up**: writing `Y = floor−6` to its six authoritative copies returns them to the
   floor and holds, and writing `y+60` visibly lifts the character.
 
@@ -410,16 +452,16 @@ edits, each pack mapped to its own e_ogre row.
   motion) is consistent with ground-following but is not proof.
 
   **The clean experiment, not yet run:** author a spawn Y **below** the floor in
-  `_genePosList` — the engine's own placement path, read per spawn ([#254](../findings/findings-0251-0500.md#f254)) — and watch
+  `_genePosList` — the engine's own placement path, read per spawn — and watch
   whether the spawned enemy appears on the floor. That writes the entity through the engine
   instead of poking derived copies. Also still open: terrain following *during motion*.
-- **The generator rows are readable live ([#415](../findings/findings-0251-0500.md#f415)/#416).** Enumerating engine
+- **The generator rows are readable live.** Enumerating engine
   objects by their `+0` vtable pointer finds the whole `beGenerater*` graph for a loaded
-  stage — 73 `beGeneraterData` in stag0102, plus `beGeneraterInfoRam`,
-  `beGeneraterPlayerData`, `beGeneraterItemDataOne` (773 drop rows, stride 32) — and reading
+  stage — 72 `beGeneraterData` in stag0102, plus `beGeneraterInfoRam`,
+  `beGeneraterPlayerData`, `beGeneraterItemDataOne` (772 drop rows, stride 32) — and reading
   them at the reflection offsets gives the row's values: `_geneEnemyId`, `_startModeStr`
   (`"direct"`), `_startData` (150.0), `_fillModeStr` (`"wipeout"`). The live works resolve
   `_geneEnemyName` → `"e_goburi"` with `_geneEnemyRecNo` 5 and `_geneEnemyMHp` 649, exactly
-  the stat-table row `#301` gives for `e_goburi` RecNo 5. So the D1 data can be read without
+  the stat-table values for `e_goburi` RecNo 5. So the D1 data can be read without
   the igBinary decode — **the values, not the format** — per loaded stage and with the
   emulator up, which makes it a cross-check for T2's decode rather than a replacement.

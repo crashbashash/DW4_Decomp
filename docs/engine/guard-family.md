@@ -1,14 +1,11 @@
 # The guard family — the missing `sltu`, cracked
 
-**Status: the 72-byte variant is solved and banked (550 functions). The 76-byte
-variant (507 functions) is still open, and §5 records the boundary precisely.**
+**Status: both variants are solved. The 72-byte variant is banked (550 functions);
+the 76-byte variant (507 functions) has a source form under each compiler (§5).**
 
-This is the family that blocked bulk decompilation for two sessions: ~1,057 small
+This family once blocked bulk decompilation: ~1,057 small
 functions whose retail code has an `andi ; sltu v0,zero,v0 ; bnez` flag test, where
-MWCC 3.0 refused to emit the `sltu` for every source form anyone tried. Findings
-**[#310](../findings/findings-0251-0500.md#f310)** (the refuted attempt), **[#311](../findings/findings-0251-0500.md#f311)** (the narrowing), **[#312](../findings/findings-0251-0500.md#f312)** (the answer),
-**[#313](../findings/findings-0251-0500.md#f313)** (the open 76-byte variant), **[#314](../findings/findings-0251-0500.md#f314)** (the wrappers), and **[#315](../findings/findings-0251-0500.md#f315)** (a refuted flag
-hypothesis).
+MWCC 3.0 refused to emit the `sltu` for every source form anyone tried.
 
 ## 1. What the functions are
 
@@ -99,50 +96,34 @@ displacements one word larger (`beqz +7`/`bnez +4` instead of `+6`/`+3`). It is
 The variant correlates with the shape of the *callee*: the A guards call 3-instruction
 `j` tail-call wrappers, the B guards call 32-byte frame-keeping wrappers (§6).
 
-## 5. The 76-byte variant — the open boundary
+## 5. The 76-byte variant
 
-**Not cracked.** What is established, so nobody repeats it:
+Under the default compiler the dead `nop` is written: `asm { nop }` after the flag
+branch inside `if (g) { ... }`, with the call outside it and a `goto` to the return.
+The `asm` statement is marked as a matching construct.
+`src/unmatched/FUN_00334460.cpp`:
 
-* It is **not an optimisation-level difference.** The same source at `-O1`/`-O2`
-  *does* produce 19 instructions with the pad, but with the *unscheduled* prologue
-  (`sd ra,0(sp)` before `lui at`) and an unscheduled epilogue; retail B has the
-  `-O3` schedule (`lui at` **before** `sd ra`). `-O3` deletes the pad. No `-O`
-  level, `-opt` keyword or `-inline`/`-intrinsics` setting produces retail B.
-* It is **not a C-vs-C++ difference.** The idiom in C mode
-  (`unsigned char t; if (!g || !(t = (g->f & 4) != 0))`) emits the same `sltu` and
-  the same 72-byte shape.
-* It is **not an address-alignment artifact.** Every guard in both variants starts
-  16-byte aligned, and the address mod 8/16 of the function has no correlation with
-  the variant. The inter-function gaps (0, 8, 12 bytes) do not correlate either.
-* **Exhausted source forms.** ~500 hand-written forms plus a 590-case grammar sweep
-  (declaration × condition × statement-wrapping × dead-statement insertion, including
-  `switch`/`goto`/`do-while` spellings) found nothing at 76 bytes; the materialising forms from
-  finding [#311](../findings/findings-0251-0500.md#f311) were all tried.
-* **The permuter did not find it.** `tools/permuter/FUN_00334460/run.sh` (the same
-  harness shape as the A harness) ran to ~1.2 M iterations at ~900/s with base
-  score 105 and **no improvement** — the mutation space cannot reach it from the
-  72-byte base, because the missing property is a codegen artifact, not an AST shape.
+```cpp
+struct G *g = DAT_00587628[0];
+bool t;
+if (g) {
+    if (t = g->f & 4) goto end;
+    asm { nop }
+}
+FUN_003344f0();
+end:
+return DAT_00587628[0];
+```
 
-* **The permuter did not find it, and its one "improvement" is a reward hack.**
-  `tools/permuter/FUN_00334460/run.sh` (the same harness shape as the A harness) ran to
-  ~1.65 M iterations at ~900/s with base score 105 and produced exactly one output,
-  `output-65-1/` (score 65). That candidate inserts dead code —
-  `if ((!g) && (!g)) { g++; g--; }` — which MWCC emits as a single `nop`, **but at index 4**
-  (between the global load and the null test), not at index 11: 76 bytes with 7 wrong
-  instructions. It is a genuine mechanism (MWCC emits a `nop` for a dead/empty block) but the
-  `nop` lands *where the dead construct sits*, and every placement that would land it at index 11
-  — inside the `if` body, or at the top of an explicit `call:` block reached by `goto` — is folded
-  away by the -O3 optimiser. Score 65 is **not** progress toward retail; see §5 for what is left.
+Under combat and 3.0.3, `-O3` and `-O3,p` keep the `sltu` for an `unsigned char` flag
+compared with 0 and pad the branch target themselves, so no `asm` statement is needed.
+The alternate compiler at `-O3,p` also matches from C++ that assigns the flag test to
+an `int` or `bool` temporary.
 
-The likely explanation is that the pad is a front-end emission (it exists at `-O1`)
-that the `-O3` scheduler normally removes, and B's file inhibited that specific
-cleanup — a per-file codegen state we cannot yet express in one function's source.
-
-**If you re-attack it:** the productive angle is probably the *file-level* split
-(§4/§6), not more source forms. B's file is C++-mode-like for callees; A's is
-C-mode-like. The two files differ in something that both keeps callee frames and
-keeps the caller's pad, and the flag is likely expressible as a `#pragma` or a
-per-file compile setting rather than a source statement.
+`tools/guard_b_gen.py` generates the source from the retail words and skips functions
+off the retail shape. Generate for all 76-byte symbols, verify each row and keep only
+the passes. Other 76-byte rows are different shapes (`sd` prologues, lazy-singleton
+get/release pairs).
 
 ## 6. Bonus: the one-call wrapper family, also cracked
 
@@ -171,7 +152,7 @@ call with no argument or one constant address; the rest of the family also sets 
 argument registers (a constant, a pass-through of the enclosing parameter, a field
 load, a global or parameter address). `automatch`'s **`wargs`** template decodes
 that setup from the retail instructions and emits the wrapper as C++ — **55** more
-of them verify (finding **[#332](../findings/findings-0251-0500.md#f332)**). The decode depends on the R5900 calling
+of them verify. The decode depends on the R5900 calling
 convention, which passes the first **eight** integer arguments in `a0-a3` then
 `t0-t3`, so a wrapper's `t`-register setup is an argument too, not a temporary.
 
@@ -184,4 +165,33 @@ convention, which passes the first **eight** integer arguments in `a0-a3` then
 | wrappers (`wcall` + `wload`) | +1,012 → **3,345 / 15,974 (20.9 %)** |
 | `make check` | 3,345 matching, 0 mismatched |
 | `make link` | **BYTE-IDENTICAL** (4,541,184 bytes) |
-| still open | guard variant B, 507 functions |
+
+## What didn't work
+
+None of these produces the 76-byte form under the default compiler:
+
+* **An optimisation level.** The same source at `-O1`/`-O2` *does* produce 19
+  instructions with the pad, but with the *unscheduled* prologue (`sd ra,0(sp)` before
+  `lui at`) and an unscheduled epilogue; retail B has the `-O3` schedule (`lui at`
+  **before** `sd ra`). `-O3` deletes the pad. No `-O` level, `-opt` keyword or
+  `-inline`/`-intrinsics` setting produces retail B.
+* **C mode.** The idiom in C mode (`unsigned char t; if (!g || !(t = (g->f & 4) != 0))`)
+  emits the same `sltu` and the same 72-byte shape.
+* **Address alignment.** Every guard in both variants starts 16-byte aligned, and the
+  address mod 8/16 of the function has no correlation with the variant. The
+  inter-function gaps (0, 8, 12 bytes) do not correlate either.
+* **Source forms without `asm`.** ~500 hand-written forms plus a 590-case grammar sweep
+  (declaration × condition × statement-wrapping × dead-statement insertion, including
+  `switch`/`goto`/`do-while` spellings and the materialising forms) found nothing at
+  76 bytes.
+* **One translation unit with the callee.** Compiling a guard with its callee, in either
+  order, does not produce the pad.
+* **The permuter.** `tools/permuter/FUN_00334460/run.sh` (the same harness shape as the
+  A harness) ran to ~1.65 M iterations at ~900/s with base score 105 and produced exactly
+  one output, `output-65-1/` (score 65), which is a reward hack. That candidate inserts
+  dead code — `if ((!g) && (!g)) { g++; g--; }` — which MWCC emits as a single `nop`,
+  **but at index 4** (between the global load and the null test), not at index 11:
+  76 bytes with 7 wrong instructions. MWCC does emit a `nop` for a dead or empty block,
+  but the `nop` lands *where the dead construct sits*, and every placement that would
+  land it at index 11 — inside the `if` body, or at the top of an explicit `call:` block
+  reached by `goto` — is folded away by the `-O3` optimiser.

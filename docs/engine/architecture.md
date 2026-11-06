@@ -7,6 +7,11 @@ native API to the scripts, and all persistent game state lives in a
 `GAMERAM` object that the scripts read/write through named *properties* and
 *methods*.
 
+The `ig*` engine core is Intrinsic Alchemy 3.2: the executable carries the string
+`Intrinsic Alchemy  v3.2 -0810 (Static/Release)`. Alchemy 3.2 itself is not preserved, but
+Alchemy 5.0 ships headers and DLL symbols. Those are a naming and layout reference for the `ig*`
+engine, to be checked against this binary's RTTI before use.
+
 ```
  ┌────────────────────────────────────────────────────────────────┐
  │  Lua 4.0.1 scripts (in NDMW.AFS)                               │
@@ -31,7 +36,7 @@ native API to the scripts, and all persistent game state lives in a
 ## Namespaces / prefixes
 | Prefix | Meaning | Examples |
 | --- | --- | --- |
-| `ig*` | engine core (Insomniac-Games-derived object system) | `igObject`, `igNode`, `igTransform`, `igGeometry`, `igVec3fMetaField` |
+| `ig*` | engine core (Intrinsic Alchemy object system) | `igObject`, `igNode`, `igTransform`, `igGeometry`, `igVec3fMetaField` |
 | `Gap::Core::` | core engine C++ namespace | `igTObjectList<...>` |
 | `Gap::Bec::` | game ("Bec" = the game project) namespace | `beSaveDataDeliver`, `beNDMWMcSlotPS2`, `beModelCtrlData` |
 | `be*` | game data structures / controllers | `beBaseInfo`, `beModelCtrl`, `beLuaDataObject` |

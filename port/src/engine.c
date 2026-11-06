@@ -246,7 +246,7 @@ static int engine_frame(unsigned frame, uint32_t *last_header, uint32_t *last_fl
 /* --- boot: the engine's own main, phase by phase --------------------------------------------------
  *
  * `FUN_002595e0` (the game's `main`) is undecompiled, but the call graph is mapped in
- * `docs/engine/engine-boot.md` (finding #502) and every callee on the manager path is decompiled
+ * `docs/engine/engine-boot.md` and every callee on the manager path is decompiled
  * and byte-matched in the decompilation repo.  This runs the boot in the engine's own order and
  * constructs the parts the port has a model for:
  *
@@ -277,7 +277,7 @@ typedef struct {
     uint32_t    via;       /* the matched `_Create` function that built it */
 } boot_manager;
 
-/* `main`'s three manager constructions, in order (finding #503).  The globals are the ones the
+/* `main`'s three manager constructions, in order.  The globals are the ones the
  * disassembly stores to: `sw v0,0x2718(at)` after `jal 0x1a1ae0`, etc. */
 static const boot_manager boot_managers[3] = {
     { "igEnbayaContextPool",             0x562718u, 0x001a1ae0u },
@@ -290,7 +290,7 @@ static const boot_manager boot_managers[3] = {
 #define DW4_FRAME_OBJECT_SIZE 0xf0u
 #define DW4_FRAME_COUNTER_OFF 0xe8u
 
-/* The fields `FUN_0025a580` writes each tick (finding #506), kept after the frame object is freed
+/* The fields `FUN_0025a580` writes each tick, kept after the frame object is freed
  * so the boot report can print the values the engine actually produced. */
 typedef struct {
     uint32_t counter;       /* the peak `+0xe8` value seen during a tick (always 1) */
@@ -332,7 +332,7 @@ static void put_f32(uint8_t *p, float v) { memcpy(p, &v, 4); }
 /* `FUN_0025a580`'s frame tick: gate on the app's `+0x18` (0x25a594), then lazily create the frame
  * object (`0x1007e0`/`0x238110`), run the per-frame field setup at `0x25a5f0` (`+0xe8` = 1,
  * `+0x94`/`+0x98`/`+0x9c` = 0.1f, `+0xa0` = 1.0f, `+0x5e`/`+0xa8` = 1, `+0x5c`/`+5`/`+0xb4`/
- * `+0xd5` = 0), and release the context (finding #506): `+0xe8` is decremented back to 0 and the
+ * `+0xd5` = 0), and release the context: `+0xe8` is decremented back to 0 and the
  * object's refs are released and it is freed, so the frame context is **one-shot** -- acquire,
  * run, release, every tick.  The values are snapshotted for the report before the free. */
 static uint32_t frame_tick(boot_state *b)
@@ -439,8 +439,8 @@ typedef struct {
     int nids;
 } capture_row;
 
-/* A live scene capture (finding #487): one row per placed node -- the model's DCC name and its world
- * matrix.  The pack has no placement (finding #484), so without this every mesh sits at the origin. */
+/* A live scene capture: one row per placed node -- the model's DCC name and its world
+ * matrix.  The pack has no placement, so without this every mesh sits at the origin. */
 static capture_row *load_capture(const char *path, uint32_t *nout)
 {
     FILE *fp = fopen(path, "r");
@@ -568,7 +568,7 @@ static int merge_scene(const dw4_scene *sc, const capture_row *cap, uint32_t nca
     memset(m, 0, sizeof(*m));
     if (cap) {
         /* One instance per capture row: a stage places the same model many times, and each row is
-         * a placement (findings #484/#487).  Collapsing by mesh name (one instance per mesh) is
+         * a placement.  Collapsing by mesh name (one instance per mesh) is
          * what left the host frame a fragment of the stage. */
         for (i = 0; i < ncap; i++)
             for (j = 0; j < sc->nmesh; j++) {
@@ -629,7 +629,7 @@ int dw4_engine_run(const dw4_engine_opts *o)
 
     dw4_light sun;
     /* The same legible placeholder rig the asset renderer uses: the game's light values are
-     * runtime-only (finding #499), so this keeps a host frame readable, not authentic.  A caller
+     * runtime-only, so this keeps a host frame readable, not authentic.  A caller
      * rig (`--ambient`/`--light`/`--lights`) replaces it, for the GL path too. */
     float amb_builtin[3] = { 0.22f, 0.22f, 0.25f };
     const float *amb = o->ambient ? o->ambient : amb_builtin;
@@ -755,7 +755,7 @@ int dw4_engine_run(const dw4_engine_opts *o)
     engine_frame(0, &hdr, &flags);
     printf("  igObject_InitHeader: +0 = 0x%06x, +4 flags = 0x%x\n", hdr, flags);
 
-    /* a default rig, since the light values are runtime-only (finding #499) */
+    /* a default rig, since the light values are runtime-only */
     if (!rig) {
         memset(&sun, 0, sizeof(sun));
         sun.type = DW4_LIGHT_DIRECTIONAL;
@@ -1611,7 +1611,7 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
     dw4_title_host title={0};
     dw4_frontlayer *flayer = NULL;
     dw4_frontui *fui = NULL;
-    dw4_frontopt *fopt = NULL;       /* the Option screen's own window graphs (finding #724) */
+    dw4_frontopt *fopt = NULL;       /* the Option screen's own window graphs */
     front_screens front = {0};
     dw4_loadjob *front_job = NULL;   /* the front-end screens decoding during the opening movie */
     dw4_loadjob *audio_job = NULL;   /* the title audio decode that runs during the opening movie */
@@ -1752,7 +1752,7 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
     }
 
     BOOT_MARK("font loaded");
-    /* the title pack's own geometry as the backdrop (its 2D/additive layer is finding #610-#612) */
+    /* the title pack's own geometry as the backdrop (its 2D/additive layer is separate) */
     memset(&sc, 0, sizeof(sc));
     if (dw4_igfile_open_stage_ref(&f, &mnt, "stagml11.igb", 0) == 0) {
         if (dw4_scene_load(&sc, dw4_igfile_data(&f), dw4_igfile_size(&f)) == 0 &&
@@ -1783,14 +1783,14 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
     } else if (flayer) {
         printf("  title trails: CPU\n");
     }
-    /* The recovered composition order (findings #609/#610/#632/#636): the static stagML11 backdrop
+    /* The recovered composition order: the static stagML11 backdrop
      * is composed UNDER the layer and the UI, through the same recovered title camera, not the
      * placeholder fit/spin the no-layer path uses.  Reported once so a check can pin it. */
     if (flayer && have_scene)
         printf("  front-end title: stagML11 backdrop composed under the layer"
                " (%u mesh(es), %u triangles) via the recovered camera\n", sc.nmesh, mb.nt);
 
-    /* The title's own UI tree, also from AREA.AFS 620 (findings #632/#633): the `j_startlogo`
+    /* The title's own UI tree, also from AREA.AFS 620: the `j_startlogo`
      * graph's `rogo`/`kenri` quads (logo.png / mojips.png) and the `j_startmenu01`/`02` rows, each
      * geometry's texture resolved through the pack's material chain.  No captured texture. */
     fui = front.ui;
@@ -1829,7 +1829,7 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
         printf("\n");
         printf("  front-end UI: logo=%s\n",
                dw4_frontui_logo_texture(fui) ? dw4_frontui_logo_texture(fui) : "-");
-        /* the recovered title state: the game opens on the press-start screen (finding #605/#639) */
+        /* the recovered title state: the game opens on the press-start screen */
         printf("  front-end UI: state=press-start (%d visible item(s)); START -> menu\n",
                dw4_frontui_visible(fui));
         if (dw4_fb_init(&probe, w, h) == 0) {
@@ -1927,7 +1927,7 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
     const char *dev_warp_frames_env = getenv("DW4_DEV_WARP_FRAMES");
     int dev_warp_frames = dev_warp_frames_env ? atoi(dev_warp_frames_env) : 900, dev_warp_wait = 0;
     double tr_tick = 0.0, tr_draw = 0.0, tr_present = 0.0, tr_post = 0.0, tr_draw_end = 0.0;   /* DW4_FRAME_TRACE phase sums (ms, this second) */
-    int ui_first = 0;               /* the first frame the title UI actually draws (finding #640) */
+    int ui_first = 0;               /* the first frame the title UI actually draws */
     for (i = 0; frames <= 0 || i < frames; i++) {
         double iteration_start = now_ms();
         dw4_fps_overlay=(o->fps != 0 && (o->fps == 1 || vk || (win && !o->headless)) && dw4_gpu_policy_required())?boot_fps_ema:-1;
@@ -1939,7 +1939,7 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
         float menu_lx, menu_ly;
         int ui_flash_frame = 0;     /* first frame the white flash (SQ_WTIN60) is drawn on */
 
-        /* The layer's opening plays alone (finding #640): the game shows no title UI until the
+        /* The layer's opening plays alone: the game shows no title UI until the
          * 209-frame SQ_OPEN has finished, so the UI's own OPEN is timed from there rather than from
          * the boot.  At ui_ns 0 every UI node is still degenerate (scale 0), i.e. not yet drawn. */
         eng_ns = (long long)i * 1000000000LL / 60 + skip_ns;
@@ -2341,7 +2341,7 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
         dw4_input_menu_axes(&in, &menu_lx, &menu_ly);
 
 
-        /* The title (finding #605/#639).  Buttons are edge-triggered: one press is one action (the key
+        /* The title.  Buttons are edge-triggered: one press is one action (the key
          * that skipped the movie is still down when the title loop starts, and a level-triggered read
          * took it for START and then for Cross, straight into Game Start).
          *
@@ -2630,7 +2630,7 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
         yaw += 0.15f;
         if (fui)
             dw4_frontui_set_engine(fui, ui_ns);
-        /* The UI is gated on the layer's opening (finding #640): report the first frame it draws, so
+        /* The UI is gated on the layer's opening: report the first frame it draws, so
          * a check can hold the port to the game's sequence (opening alone, then the title). */
         if (fui && !ui_first) {
             float r0[4];
@@ -2645,23 +2645,23 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
             int title_resident = 0;
             if (flayer) {
                 /* The controller runs on the game's own 60 fps tick: one frame's worth of the engine
-                 * clock (int64 ns) per presented frame, so the layer moves every frame (#619). */
+                 * clock (int64 ns) per presented frame, so the layer moves every frame. */
                 {   /* the backdrop mesh pass begins by clearing to the same black, so a separate clear would be a wasted pass */
                     const char *bg0=getenv("DW4_TITLE_BACKDROP");float cv0[16],fp0;
                     int mesh_pass=title_mesh && have_scene && !(bg0 && bg0[0]=='0') && dw4_frontlayer_view(flayer,cv0,&fp0)==0;
                     if(!mesh_pass && engine_clear_fb(&fb,frame_gpu,0,0,0)){rc=-1;goto done;}
                 }
                 /* Probes: DW4_TITLE_BACKDROP=0 / DW4_TITLE_LAYER=0 drop one of the two title layers so a
-                 * comparison run can attribute what is on screen to each (finding #641). */
+                 * comparison run can attribute what is on screen to each. */
                 {
                     const char *bg = getenv("DW4_TITLE_BACKDROP");
                     const char *ly = getenv("DW4_TITLE_LAYER");
                     int want_bg = !(bg && bg[0] == '0');
                     int want_ly = !(ly && ly[0] == '0');
-                    /* The recovered composition order (findings #609/#610/#632): the static stagML11
+                    /* The recovered composition order: the static stagML11
                      * backdrop first, then the generated additive j_startback trail, then the title UI.
                      * The backdrop is the stage's own merged geometry composed through the recovered title
-                     * camera (finding #628, the same `entry` chain the layer uses), so it sits with the
+                     * camera (the same `entry` chain the layer uses), so it sits with the
                      * tunnel instead of the placeholder fit/spin the no-layer path uses. */
                     if (have_scene && want_bg) {
                         float cview[16], fpr;
@@ -2694,7 +2694,7 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
                     dw4_frontui_draw(fui, &fb, menu.sel);
                 draw_title(&fb,frame_gpu, &font, &menu, have_scene ? &mb : NULL, yaw, i, 0, fui != NULL);
             }
-            /* The white flash (finding #642).  The title stage's own Lua runs, once `j_startback`'s
+            /* The white flash.  The title stage's own Lua runs, once `j_startback`'s
              * `SQ_OPEN` has finished and `SYSgetArea() == -1` (the front-end),
              * `MODELCTRL i_fadewn01 GENERATE SQ_WTIN60`
              * (`DW4_Decomp/lua/00-title-menus/04-title-screen_e806/004-layer-setup-2.lua`).  That action

@@ -40,6 +40,10 @@ retail 3926d0 response after waits, including automatic SQ_FALL and onFall/noFal
 see [walking falls and portal ownership](lobby-gameplay.md#stage-portal-commander-instances-and-walking-falls). See [jump and gate contracts](lobby-gameplay.md#jump-gate-proximity-and-heal-activation)
 for current ownership, evidence and validation limits.
 `MOVEEX` supports TX/TY/TZ and RY with positive/negative ACC/DEC/TMP modes.
+`FUN_00393260` compares a `MOVE` name whole but decodes a `MOVEEX` name by position:
+`name[0]` and `name[1]` give the channel (`T` then `X`..`Z`, or `R` then `Y`),
+`name[2] == 'M'` is the minus sign, and `name[3]` is the mode: `A` 0, `D` 2, `T` 4,
+plus 1 for minus. Later letters are never read, so `TZMTGD` is a negative timed Z move.
 Original `_value`, `_frame`, `_playTime`, `_isSeqStop`, `_stopValue` and
 `_stopFrame` bits reach the recovered EE movement-channel implementation.
 Yaw updates precede local translation; movement precedes action completion

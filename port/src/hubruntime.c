@@ -1051,10 +1051,10 @@ static int start_status(dw4_hubruntime *h,int32_t slot)
     dw4_statusview_context v=status_view(h,slot);
     return dw4_statusui_call(&v,0,"SUBWND",NULL,0,"GENERATE",payload,h->error,sizeof h->error);
 }
-/* The Square (edge word 0x8000) request of beNDMWMdlPlayer::vfunc_38 (src/unmatched/Gap__Bec__beNDMWMdlPlayer__vfunc_38.cpp, the first test of the non-lobby branch, findings #3040):
+/* The Square (edge word 0x8000) request of beNDMWMdlPlayer::vfunc_38 (src/unmatched/Gap__Bec__beNDMWMdlPlayer__vfunc_38.cpp, the first test of the non-lobby branch):
  * outside the main lobby, when the sequence is not SQ_JUMP, the key SQ_GUARD is requested. It sits ahead of the Cross branch and is not gated by the panel byte or by SQ_FALL (the Cross
  * request excludes SQ_JUMP and SQ_FALL). The same-frame Cross request is the later write in retail and wins here too (it is issued after this one). A guarding player takes no damage in the
- * enemy-hit chunk (#3031). The main lobby check is the combat owner: only the field stages have one and the lobby hub does not. */
+ * enemy-hit chunk. The main lobby check is the combat owner: only the field stages have one and the lobby hub does not. */
 static void guard_request(dw4_hubruntime *h,const char *seq,const char *what)
 {
     if(!seq || !strcmp(seq,"SQ_JUMP"))return;

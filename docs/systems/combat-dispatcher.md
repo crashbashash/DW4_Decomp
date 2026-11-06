@@ -5,8 +5,31 @@
 parent command callback (GETCOMMON, GETPLAYER, CTRLITEM, FIGHTCALC, CTRLPLAYER and the rest of the 22-name `Message` enum) and
 contains the 36,000-byte FIGHTCALC region with its 22 sub-commands: hit checks, damage and damage rank, critical, the status times,
 EXP and skill gain, the Kouka magic and the attack-attribute lookup. `make check` reports zero mismatches
-and `make link` is byte-identical to retail (findings [#1071](../findings/findings-1001-1250.md#f1071)-[#1073](../findings/findings-1001-1250.md#f1073)); the live function figures are in
+and `make link` is byte-identical to retail; the live function figures are in
 [`PROGRESS.md`](../../PROGRESS.md).
+
+The parent command switch uses the 22-name table at `0x4cc410` and the jump table at `0x519370`:
+
+| command | name |
+| --- | --- |
+| 0 | GETCOMMON |
+| 1-5 | GETPLAYER, GETPLAYER1, GETPLAYER2, GETPLAYER3, GETPLAYER4 |
+| 6 | GAMEDATAINIT |
+| 7 | GAMESTART |
+| 8 | GAMEREMOVE |
+| 9 | ADDHP |
+| 10 | ADDMP |
+| 11 | RECALCPLAYER |
+| 12 | BASE2CURRENT |
+| 13 | CURRENT2BASE |
+| 14 | WEAPONEQUIPCHECK |
+| 15 | WEAPONEQUIPSTRONG |
+| 16 | DEADRESTART |
+| 17 | CTRLITEM |
+| 18 | FIGHTCALC |
+| 19 | DISPFIGHTDATA |
+| 20 | BKCHIPBITEXP |
+| 21 | CTRLPLAYER |
 
 The source is a **model that reproduces the bytes**, not a claim of the original spelling: cleaned m2c output with reviewed ABI
 repairs ([draft recovery](combat-draft-recovery.md)), RAII reference locals whose destructors reproduce the retail unwind table

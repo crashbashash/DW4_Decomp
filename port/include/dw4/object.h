@@ -9,7 +9,7 @@
  *   * an instance stores its fields at those offsets and its class at `+0`,
  *   * a pack record is `{u32 classIndex}{u32 recordSize}{value per descriptor}` (findings
  *     #417/#418), and a descriptor is `{type, ordinal, size}` with `ordinal = declaredIndex + K + 1`
- *     (#290).  `K` is the inherited-slot count; construction recovers it by the type match that
+ *.  `K` is the inherited-slot count; construction recovers it by the type match that
  *     `DW4_Decomp/scripts/igb_inst.py:find_K` uses, so the port names the same fields the Python
  *     reference does.
  *
@@ -36,7 +36,7 @@ typedef struct {
     const char *name;
     const char *parent;
     uint32_t size;      /* instance size in bytes (ancestors included) */
-    uint32_t vtable;    /* the class's vtable address (finding #359), 0 when unknown */
+    uint32_t vtable;    /* the class's vtable address, 0 when unknown */
     const dw4_metafield *fields;
     uint32_t nfields;
 } dw4_metaobject;
@@ -93,7 +93,7 @@ int dw4_object_set_f32(dw4_object *o, const char *name, float v);
 int dw4_object_set_vec3(dw4_object *o, const char *name, const float v[3]);
 int dw4_object_set_ref(dw4_object *o, const char *name, uint32_t id);
 
-/* The value's kind, from the igBinary type id (finding #482): is it a reference id? */
+/* The value's kind, from the igBinary type id: is it a reference id? */
 int dw4_object_field_is_ref(uint8_t tid);
 
 #endif /* DW4_OBJECT_H */

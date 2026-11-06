@@ -1,6 +1,6 @@
 # SUBWND command receiver
 
-Finding [#908](../findings/findings-0751-1000.md#f908) recovers the entire **3d60e0..3d873c /9,820-byte** receiver.
+The entire **3d60e0..3d873c / 9,820-byte** receiver is recovered.
 The readable [guest-reference implementation](../../recovered/engine/subwindow-command.c)
 passes **272 original-instruction RAM/return/ordered-call cases**. All **2,434
 executable instruction addresses** run. Its21 internal alignment NOPs are excluded

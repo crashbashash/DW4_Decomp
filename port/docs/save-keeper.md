@@ -14,7 +14,7 @@ scene host: see [load scene](load-scene.md). `stagIS11` (SUBWND CARD) is hosted 
 1. Live Cross probe → the slot-0 conversation (`entry_0824/chunk_0073` carries the choice and the `saveshop.lua`
    queue; `make -C port check-hubnpcs` drives it end to end): a two-choice prompt (`TALKFONT02` texts 3 and 4).
 2. Choice 0 queues **`saveshop.lua`**, a named chunk in the Central pack (`beLuaInfo3100` position 112,
-   655 bytes, [finding #906](../../docs/systems/hub-recovery.md)). Its original bytecode closes the dialogue,
+   655 bytes, see [hub recovery](../../docs/systems/hub-recovery.md)). Its original bytecode closes the dialogue,
    returns the NPC to `SQ_WAIT`, disables player control, starts the change fade and issues
    `STAGECTL NEXTSTAGE stagIS12` with delay 90. `make -C port check-hubnpcs` reaches this as a stage request.
 3. Choice 1 closes the dialogue and returns control.
@@ -110,10 +110,12 @@ file (refused by scan, load and save with the bytes left untouched), and that no
 players whose COMMONINTF item byte `+0xD` ("data chosen") is 1, not the used card slots. With none the scene leaves for the
 title (`stagis10`); otherwise it sets `PLAYERPOINT SETGENERATEPOS 2` and requests `stagML12` (Central).
 
-`SYSctlFlagFolder(op, index)`, which the IS12 start script calls to snapshot twelve story flags, is the same
-`CTRLITEM` receiver as the disk and device folders, with the group `FLAG` over the **session** `FLAGFOLDER`
-(`src/foldercalls.c`). SET stores 1 and answers true only from 0, CLR stores 0 and answers true only from set, and IS
-answers the byte itself. `make -C port check-retail` compares 300 random folder states with retail `3fca10` run from the ELF.
+`SYSctlFlagFolder(op, index)` is the same `CTRLITEM` receiver as the disk and device folders, with the group `FLAG` over
+the **session** `FLAGFOLDER` (`src/foldercalls.c`), which is 12 bytes and is not the per-player `BASE_FLAGFOLDER`. SET
+stores 1 and answers true only from 0, CLR stores 0 and answers true only from set, and IS answers the byte itself.
+Retail bounds-checks writes but not reads; the port refuses an out-of-range index for both. The IS12 start script's
+`SYSctlFlagFolder("IS", i)` loop copies the twelve session flags into story flags `518 + i`, `530 + i` or `542 + i` for
+difficulty 0, 1 or 2. `make -C port check-retail` compares 300 random folder states with retail `3fca10` run from the ELF.
 
 ## SaveCtrl, recovered (`src/savectrl.c`, `make -C port check-savectrl`)
 
@@ -181,7 +183,7 @@ state** (`+0x24` of the `CTRL` property, 0..9).
 
 This table is read from the m2c drafts and is unconfirmed; it names states and prompts, but the helper functions (91 in
 `3d9de0..3f13d0`, about 40 KB) that create the windows, read the slot list, perform the card requests and format the notices are
-not recovered. Findings [#965](../../docs/findings/findings-0751-1000.md#f965)-[#967](../../docs/findings/findings-0751-1000.md#f967).
+not recovered.
 
 ## What is still open
 
@@ -206,22 +208,22 @@ not recovered. Findings [#965](../../docs/findings/findings-0751-1000.md#f965)-[
 ## Calling a saved character from the title (port)
 
 The title's slot screen offers *Create Digimon* and *Call Digimon*. Retail runs **Call** as `beNDMWLoadIntf2` control states
-3 -> 6 -> 7 -> 8 (finding [#999](../../docs/findings/findings-0751-1000.md#f999)), the same toolkit as the Save Keeper, in this order (a live retail run):
+3 -> 6 -> 7 -> 8, the same toolkit as the Save Keeper, in this order (a live retail run):
 
 1. **Memory-card chooser** (state 6, `SelSlot`): "MEMORY CARD slot 1 / slot 2" with the three round icons and
    "Select a memory card (PS2) to call a Digimon." (text `0x1009`). Circle returns to Create/Call.
 2. **"Accessing memory card (PS2). Do not remove the memory card (PS2) or touch the RESET button."** (`0x1004`) while item state 5
-   runs the card checks (`USE_CHECK`, `FILEFIND`, `READ_MEDIA`); a card with no game file answers FILEFIND with result 4 and shows "This memory card (PS2) contains no Digimon World 4 game file." (`0x1028`, finding [#1003](../../docs/findings/findings-1001-1250.md#f1003)); other results show the notices of item state 6.
+   runs the card checks (`USE_CHECK`, `FILEFIND`, `READ_MEDIA`); a card with no game file answers FILEFIND with result 4 and item state 6 shows "This memory card (PS2) contains no Digimon World 4 game file." (`0x1028`). Result 3 shows "Reading of the memory card (PS2) has failed." (`0x100D`), although the save screen's flows treat 3 and 4 alike; other results show the remaining notices of item state 6.
 3. **Data select** (state 7, `DATASELINTF` in load mode): the 2x2 character areas (name and face icon, or "NO DATA"), the status panel
    of the highlighted area on top, "Select the Digimon to call." (`0x513`). Circle returns to the chooser.
 4. **Select Difficulty** (state 8 sub 0): the `j_linewin02` window with Normal / Hard (`0x402`, `0x404`) when `hostLoad.lua` allows it
-   (finding [#1001](../../docs/findings/findings-1001-1250.md#f1001): flag 77 -> three rows, flag 711 -> two rows, else none), then
+   (flag 77 -> three rows, flag 711 -> two rows, else none), then
 5. the **log-in prompt** ("To log into the Digital World press the START button.", `0x51D`) with the character's status card; Circle
    returns to the chooser, START finishes.
 
 The port runs those states unchanged from the verified behavioural recovery (`recovered/frontend/loadintf2.c`) over the SaveIntf toolkit
 (`src/saveintf.c`: `ld_chooser`, `ld_data_select`, `ld_log_in`, `ld_card_access`, `ld_card_notice_state`; `diff_init`/`diff_update` are
-`3ddb10`/`3ddb80`, finding [#1000](../../docs/findings/findings-0751-1000.md#f1000)). `dw4_savescene` has a `DW4_SCENE_TITLE` kind that hosts them over the `stagIS13` pack with
+`3ddb10`/`3ddb80`). `dw4_savescene` has a `DW4_SCENE_TITLE` kind that hosts them over the `stagIS13` pack with
 `dw4_loadintf_open_title` (player 0, control machine from state 0).
 
 **The Create/Call window is the scene's (control state 3, `ld_create_call`).** Retail's state 3 (`recovered/frontend/loadintf2.c`,
@@ -240,8 +242,7 @@ and the chooser opens; Circle on the chooser returns to state 3 in the scene (th
 also flows inside the scene (states 4, 5 and 8; next section). Without a save library the character UI (`frontchr`) keeps its own
 Create/Call window and Create flow (Call
 unavailable). On START of a called character the engine takes the chosen card area and difficulty row, rebuilds the character with
-`dw4_memcard_restore` (a fresh record of the saved species, the stored keys loaded over it, `BASE2CURRENT` and `RECALCPLAYER`, finding
-[#1002](../../docs/findings/findings-1001-1250.md#f1002)) and goes straight to the loading card.
+`dw4_memcard_restore` (a fresh record of the saved species, the stored keys loaded over it, `BASE2CURRENT` and `RECALCPLAYER`) and goes straight to the loading card.
 
 `make -C port check-titlecall` drives the whole screen sequence on a card with two characters (one with flag 711 set, so the difficulty
 window shows) and renders every screen (`DW4_TITLECALL_FRAMES=<dir>` writes PNGs); `tools/test_save_cycle.py` runs create -> save ->
@@ -251,8 +252,6 @@ card (slot 2 shows as unavailable), and the slot screen's opening animations (ba
 off-screen, as the character UI skips them.
 
 ## Creating a character on the title (port)
-
-Findings [#1011](../../docs/findings/findings-1001-1250.md#f1011) (NameSel), [#1012](../../docs/findings/findings-1001-1250.md#f1012) (states 4 and 5), [#1013](../../docs/findings/findings-1001-1250.md#f1013) (GAMESTART) and [#1014](../../docs/findings/findings-1001-1250.md#f1014) (refuted by a retail capture: the keyboard reopens on a second name entry).
 
 Retail's **Create** is the same `beNDMWLoadIntf2` update: control state 4 (the starter choice, `MAKECHR`), state 5 (the name entry, the
 `NAMESEL` widget) and the new-character branch of state 8 (`GAMEDATAINIT` + `GAMESTART`), then the log-in prompt Call also uses. The port
@@ -279,8 +278,8 @@ runs all three in the title scene (`src/saveintf.c`: `ld_species`, `ld_name`, `n
    edited and ends the entry. Message `0x517`; the finished name shows `0x519` (continue) and `0x51B` (Yes/No, cursor on Yes). Yes
    (`3def70` with a1 = 1, the `li` at `3e66ec`) commits; No returns to the last typed cell. On a second entry into state 5
    (after a Circle back from the starter choice or from the log-in prompt) the keyboard reopens, so each entry starts from step 0,
-   in retail and in the port (finding [#1014](../../docs/findings/findings-1001-1250.md#f1014), which read `_st1` (`+0x58`) as not reset by `3de260` and the window opening as skipped,
-   is refuted by a retail capture).
+   in retail and in the port. A reading of `_st1` (`+0x58`) as not reset by `3de260`, with the window opening skipped, is
+   refuted by a retail capture.
 3. **GAMESTART** (state 8 sub 0, CTRL `+0x1C`): `GAMERAM GAMEDATAINIT`, then `GAMESTART` with the player model `4cec70[_chaSelDegi]` and an
    eight-code name object built from the cells (zero padded), then `GETPLAYER UNIQUE` = the low word of the world clock
    (`sys+0x50` `_worldTime`), and the record copied into the player's display (`3ee6d0`). `hostLoad.lua` finds no difficulty flag on a new
@@ -301,10 +300,13 @@ then Yes, the GAMESTART record (`p_agumon`, name "Agu", Lv. 1, ISUSE, a non-zero
 START to the `stagML11` exit with title state 1. The engine route used by `test_save_cycle.py`, `verify_frontend.py` and the boot tests
 creates Dorumon "ac" through the scene. Limits: the 3D preview is drawn by the character UI's renderer, not by the scene (no retail frame
 of it was compared); NameSel's `_langID` is fixed to 1, so the Japanese (`j_namecursorjp`, six cells) and European (rows 0x18..0x1D) layouts
-are not exercised; the second-entry behaviour was checked on retail (the keyboard reopens, so each entry starts from step 0; finding [#1014](../../docs/findings/findings-1001-1250.md#f1014) refuted); the name conversion of
+are not exercised; the second-entry behaviour was checked on retail (the keyboard reopens, so each entry starts from step 0); the name conversion of
 GAMESTART is approximated; and `UNIQUE` uses the scene's clock (it starts at the slot screen, not at power-on).
 
-**The hand-off script (finding [#1006](../../docs/findings/findings-1001-1250.md#f1006)).** After the log-in prompt the title pack's `gameStart.lua` runs (LoadCtrl2 state 3, title mode): it clears the
+**The hand-off script.** After the log-in prompt the title pack's `gameStart.lua` (chunk 6 of AFS entry 806) runs: `LoadCtrl2` state 3
+calls it when `beNDMWLoadCtrl2CtrlData._isTitle` (+0x10) is 1, after the `GAMESTART` message. It clears the
 mission flags, flag folders and counter 2, applies the carry-over folder flags for the chosen difficulty and rebuilds the story flags from that
 difficulty's snapshot block (the block the Save Keeper's start script wrote). The engine runs it between the record build and the stage library
-switch, for a new character (difficulty 0) and a called one (the difficulty row of the Select Difficulty window).
+switch, for a new character (difficulty 0) and a called one (the difficulty row of the Select Difficulty window). The difficulty chosen in
+LoadIntf2 is `beNDMWLoadCtrl2CommonIntf._difficultMode` (+0x3C); `LoadCtrl2` copies it into the common `DIFFICULTY` record that
+`SYSgetDifficulty` reads.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Type the `<Class>_InitFields` family from the reflection field list.
 
-Every `<Class>_InitFields` is the same shape (finding #357/#381; the 142-function
+Every `<Class>_InitFields` is the same shape (the 142-function
 family):
 
     temp_s1 = (void *)(DAT_0055f170[0]);                              /* class handle */

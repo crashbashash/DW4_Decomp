@@ -8,7 +8,7 @@ its data structures.
 
 **Status: the records are decoded.** `scripts/dump_reflection.py` extracts all of it to
 `data/reflection.json` — 1,075 `MetaObject`s, 659 of them with fields, **3,680 fields with name +
-offset + type**. Finding **[#284](../findings/findings-0251-0500.md#f284)**.
+offset + type**.
 
 ---
 
@@ -35,7 +35,7 @@ long igMetaObject_RegisterClass(
     int   v48,            // t2  stored at metaobj+0x48: declared instance size
     code *root_init,      // t3  the class's vtable getter, called only when abstract_state == 0; its
                            //     result is stored at +0x5c, which the igMetaObject reflection struct
-                           //     names `_vTablePointer`, and is then inherited (finding #358)
+                           //     names `_vTablePointer`, and is then inherited
     code *post_init,      // sp+0  <-- no-argument field adder; Work reads its global handle
     int   arg10,          // sp+8  passed to FUN_002d3480 when non-zero
     int  *list_ptrs);     // sp+16 0-terminated word list, one FUN_002d3480 call per entry
@@ -46,7 +46,7 @@ The only fields needed for the extraction are `handle_slot` (a1) and `class_name
 > Every argument is an `igMetaObject` field, and the class's own reflection record names them:
 > `a0` → `+0x1a _abstractState`, `t0` → `+0x54 _getMetaObjectFunction`, `t1` → `+0x1c _name`,
 > `t2` → `+0x48 _sizeofSize`, `t3` → `+0x5c _vTablePointer`, and `sp+0` is the field adder.
-> That is what lets each one's role be read off the binary rather than guessed (finding [#358](../findings/findings-0251-0500.md#f358)).
+> That is what lets each one's role be read off the binary rather than guessed.
 
 Real example, `0x001301d0` registering `igVisualContextAttrDefaultManager`:
 
@@ -184,8 +184,7 @@ enum's own name, an `igStringMetaField`), `+0x0c _names` (an `igStringRefList`) 
 maps to its name and back. Every enum is a lazily-built singleton — the per-enum
 accessor is `if (!*global) *global = igMetaEnum_Create(name, names[], values[], count);`,
 e.g. `ApplyType` = `{NOT_SET=0, CUBE_MAP=1, SPHERE_MAP=2}` at `0x131f80` — and the class
-has no virtual overrides. The methods are in `config/SLUS-20836/names/ObjectModel.tsv`;
-finding **[#364](../findings/findings-0251-0500.md#f364)**.
+has no virtual overrides. The methods are in `config/SLUS-20836/names/ObjectModel.tsv`.
 
 ## 5. Running it
 
@@ -256,17 +255,17 @@ It also labels each class's field-table and ctor-table addresses `reflect_<Class
 
 **Does not answer (yet).**
 
-- Some classes legitimately register **no** fields. `beNDMWStatusInfo` is one (finding [#288](../findings/findings-0251-0500.md#f288)): its
+- Some classes legitimately register **no** fields. `beNDMWStatusInfo` is one: its
   siblings `beNDMWStatusInfoRam` (1 field) and `beNDMWStatusInfoWork` (7) carry only manager data,
   so the stat record is not driven by this class's MetaField table.
 
-- **The 47 shared vfunc bodies** (finding [#283](../findings/findings-0251-0500.md#f283) / tracker **T7**). The ctor tables are per-*field*
+- **The 47 shared vfunc bodies** (tracker **T7**). The ctor tables are per-*field*
   factories, not method tables; they carry no virtual-method names. Names for the ambiguous vfunc
   bodies need a different route.
 - **`__ct` / `__dt` / `__as` / `__eq`.** These are *not* per-class method names: they occur exactly
   once each, at `0x004fde68`+, in a MWCC **name-mangling/operator lookup table** (beside
-  `operator==`, `operator<<`, `>=`, …). Reading them as class method metadata, as finding [#284](../findings/findings-0251-0500.md#f284)
-  first did, is wrong.
+  `operator==`, `operator<<`, `>=`, …). Reading them as class method
+  metadata is wrong.
 - **`{X,Y}` igBinary field descriptors** (tracker **T2**/`D2`). The field metadata above is the
   *source* those descriptors index, so this is testable — decode a pack's type directory and
   correlate `{X,Y}` against a known class's field list. Still open.
@@ -299,7 +298,7 @@ stun  sleep  poison  guard  powerdown  attackdown
 
 (`waza` = technique/skill, `kazu` = count, `no` = number.)
 
-**These do not have offsets** (finding [#291](../findings/findings-0251-0500.md#f291)). Reading the `beNDMWStatusInfo` / `beBaseInfo*` entries
+**These do not have offsets**. Reading the `beNDMWStatusInfo` / `beBaseInfo*` entries
 in `data/reflection.json` for the layout does not work: `beNDMWStatusInfo` has `field_count 0`, `beBaseInfoData` has one field
 (`_version`, `igIntMetaField` @12) and `beBaseInfo` two (`_dataList` @20, `_ramList` @24). The names
 exist as strings (`data/strings.json`) and in the igBinary directories only as near-empty records.
@@ -309,8 +308,7 @@ Recovering the hp/mhp/… layout needs the stat-name xrefs or a fit against the 
 ## 9. Live objects — an object's class is its `+0` vtable pointer
 
 Sections 1–4 say what a class *looks like*. This says how to find an **instance** of one in a running
-game, which is the object identity [`typed-coverage.md`](typed-coverage.md) needs (finding
-[#415](../findings/findings-0251-0500.md#f415)).
+game, which is the object identity [`typed-coverage.md`](typed-coverage.md) needs.
 
 Every engine object begins with its class's **vtable pointer**, and the 478 vtables are already
 decoded in `data/vtables.json` (from the RTTI records). So scanning RAM for words equal to one of them
@@ -340,11 +338,11 @@ header. What those records *are* is **not established** (candidates: per-class
 constructor/descriptor records, statically allocated pools, a registry); they are reported separately
 rather than silently dropped, and only the bit-28 hits are treated as instances.
 
-**This needs the emulator**, so it is a measurement recorded in the findings register rather than a
+**This needs the emulator**, so it is a recorded measurement rather than a
 regenerable artifact under `data/` — the same rule the other live measurements follow. The scanner
 itself is kept with the emulator tooling, outside this repository.
 
-**The vtable test undercounts by 3.2×, and the `+4` marker is the fix (finding [#421](../findings/findings-0251-0500.md#f421)).** A search for
+**The vtable test undercounts by 3.2×, and the `+4` marker is the fix.** A search for
 words equal to a known vtable cannot see the **vtable-less** classes at all — and those are every
 `*List` kind (`igVec3fList`, `igFloatList`, `igDataList`, the `be*List` families). Every instance,
 vtable-less ones included, instead carries the `0x10000000 | n` word at `+4`, so scanning for that
@@ -354,6 +352,11 @@ that any per-class census or address-order argument built on the vtable scan inh
 (The `+4` scan is highly selective — ~8 false positives expected across 8M positions — and
 reproduces exactly across reloads of the same savestate.) For the list classes `n` equals the list's
 own count, which is a useful check.
+
+**End a RAM scan at about `0x1f00000`.** Live engine objects extend above `0x1800000`: a scan of
+`0x1000000..0x1800000` for the `beGeneraterInfoWork` vtable `0x536050` finds 4 objects while 14 generators
+are live, their works sitting at `0x1801b78` and up. The active generators can be read without scanning for
+that vtable, by resolving each `beGeneraterInfoRam._work` (`+0x2c`).
 
 ## 10. The generated families as translation units
 

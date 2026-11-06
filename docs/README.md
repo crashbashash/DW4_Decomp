@@ -9,10 +9,9 @@ configure.py, objdiff). Native implementation contracts are
 indexed in [port documentation](../port/docs/README.md), with priorities in
 [porting tasks](../port/docs/project/tasks.md).
 
-Everything here is a recovery. The retail game shipped without symbols, so each page records what
-was found, how it was found, and how sure it is. Claims are backed by numbered entries in the
-[findings register](findings/README.md), and a claim without a finding is an opinion — statuses are
-used honestly, including *refuted*.
+Everything here is a recovery. The retail game shipped without symbols, so each page says what is
+known and how sure it is. Anything unproven is marked as an open question, and approaches that failed
+are kept so nobody repeats them.
 
 New to the project? [`engine/architecture.md`](engine/architecture.md) is the overall picture;
 [`engine/binary.md`](engine/binary.md) and [`engine/toolchain.md`](engine/toolchain.md) cover the ELF
@@ -51,7 +50,6 @@ reviewed call interfaces and memory repairs while the full callback is unmatched
 |---|---|
 | [`engine/`](engine) | How the binary and engine work: the ELF and toolchain, the architecture, RTTI/vtables, the Lua engine, live game-state globals, the property/method system, the archives, reflection and igBinary, and the matching-decompilation build |
 | [`systems/`](systems) | Game data and mechanics: items, techniques, enemy data, spawns, drops, digivolution, flags, the critical path, the save format, and the debug stage-select |
-| [`findings/`](findings/README.md) | The findings register: every hypothesis, confirmed fact and dead end, by number |
 | [Reference](reference/README.md) | Retail reference write-ups |
 
 Each folder also has its own `README.md` listing what is in it.
@@ -129,11 +127,10 @@ Each folder also has its own `README.md` listing what is in it.
 | How to reach any stage (the engine's own stage select) | [`systems/dev-stage-debug-menu.md`](systems/dev-stage-debug-menu.md) §6 |
 | Which flags gate the ending, and the critical path | [`systems/critical-path.md`](systems/critical-path.md), [`systems/flags/`](systems/flags) |
 | Digivolution unlocks and side-quest gating | [`systems/digivolution-and-sidequests.md`](systems/digivolution-and-sidequests.md) |
-| A finding by number, or every finding on a subject | `python3 scripts/findings.py show <id>`; `grep -rn '<text>' docs/findings/` |
 | A script to run | [Scripts](#scripts) |
 | What you may reuse, and under what terms | [`../LICENSE`](../LICENSE), [`../NOTICE`](../NOTICE) |
 
-- [Lua loading and ownership](engine/lua-loading-ownership.md): retail scene startup, duplicate names, global cleanup and coordinated SD/Lua/DM teardown ([#790](findings/findings-0751-1000.md#f790)–[#793](findings/findings-0751-1000.md#f793)).
+- [Lua loading and ownership](engine/lua-loading-ownership.md): retail scene startup, duplicate names, global cleanup and coordinated SD/Lua/DM teardown.
 
 ## Scripts
 
@@ -150,7 +147,7 @@ retail. Both take `--help`.
 | `verify_systemclock.py`, `clock_dispatch_probe.py` | Compare timer lifecycle, system sample/render and scheduler order with retail instructions; independently check the logo scheduler chain in a savestate; [contracts](engine/system-clock.md) |
 | `verify_modelwait.py` | Compare all four JUMP/WCHECK bodies with retail instructions, ordered writes and engine calls; [contracts](engine/model-sequence-waits.md) |
 | `verify_action2time.py` (`ee_core.py`) | Compare the Action2 timer, WAITCHECK, JOINTSET, node-clock, float→int64, walker, driver and ISCOMEND bodies with retail instructions on an exact 64-bit/EE-float interpreter; [contracts](engine/action2-timing.md) |
-| `verify_sectl.py` | Compare the complete selection-sound dispatcher with retail instructions, signed delays and ordered model messages; [mappings](engine/sound-format.md#pre-lobby-selection-mapping-780) |
+| `verify_sectl.py` | Compare the complete selection-sound dispatcher with retail instructions, signed delays and ordered model messages; [mappings](engine/sound-format.md#pre-lobby-selection-mapping) |
 | `verify_commdl.py` | Compare all ten common-model helper bodies with retail instructions, ordered memory writes and engine arguments |
 | `verify_title_menu.py` | Compare the recovered title-menu C state machine with direct interpretation of retail MIPS instructions at a stubbed engine boundary |
 | `dump_functions.py`, `dump_strings.py`, `dump_xrefs.py`, `dump_symbols.py` | Ghidra dumps → `../data/` |
@@ -163,7 +160,6 @@ retail. Both take `--help`.
 | `dw4_rng.py`, `p2s_ram.py` | MT19937 identification and draw sites; reading a savestate's RAM without the emulator |
 | `match_func.py` | One-off matching harness: compile a candidate, diff it against the target |
 | `sync_data.sh` | Refresh the committed `../data/` snapshot |
-| `findings.py` | Show a finding, give the next free id, check the register, link citations |
 | `progress.py` | Count what is committed (symbols vs `../src/`) into `../PROGRESS.md`, `progress.json` and the block at the top of `../README.md`; run by `make progress` and by CI on every push |
 | `datamap.py` | Classify the image's data bytes (jump tables, RTTI vtables, strings, class handles, unclassified) for the data half of the progress numbers — see [`engine/progress-metrics.md`](engine/progress-metrics.md) |
 
@@ -208,25 +204,13 @@ Committed files, and the gitignored working directories the analysis writes to. 
 
 ## Conventions
 
-- **Findings are the evidence.** A hypothesis, a fact that needs its proof recorded, or a dead end
-  gets an entry in the [findings register](findings/README.md), and the page that uses it cites the
-  number (`#254`). `Evidence` names the artifact: a repository path when it is committed, otherwise
-  the working file and how it was produced.
-- **Statuses mean what they say — the criterion.** *confirmed* requires non-empty
-  `evidence` naming a repository-relative artifact: a string reference, a caller/callee contract, a
-  reflected offset, a vtable slot, a `tools/verify.py` / `make` line, or a live read with its
-  savestate path. *unconfirmed* is everything else — the claim may be right, but nothing recorded
-  lets a reader check it. *refuted* means the hypothesis **text is false**, with the evidence that
-  shows it; it is not "the attempt failed" and not "a later finding has a better answer" (a
-  superseded row is refuted only when its text is wrong, and then its notes name the superseding
-  id). Refuted rows are kept rather than deleted, so nobody re-investigates them. A live-memory
-  claim counts when a running game or an off-line savestate read confirms it — say which.
-  `python3 scripts/findings.py check` (part of `make hygiene`) refuses a *confirmed* entry without
-  evidence, so the rule cannot regress silently.
+- **Knowledge lives in the topic's document.** Write what is known as plain fact. Mark anything unproven
+  under an "Open questions" section, and keep approaches that failed under "What didn't work", so nobody
+  repeats them. A live-memory claim counts when a running game or an off-line savestate read confirms it.
 - **A savestate carries the loaded world in RAM**, so it cannot test a disc change. To test one, boot
   the disc and then load the stage.
 - **Never write the pristine disc.** Work from a copy.
-- **Regenerate, don't hand-edit:** `findings/`, `systems/flags/flag-xref.tsv`,
+- **Regenerate, don't hand-edit:** `systems/flags/flag-xref.tsv`,
   `systems/flags/flag-meanings.{md,tsv}`, `../data/`,
   `../lua/`, `../config/{symbols,layout,jumptables,syscalls}.txt`,
   `../PROGRESS.md`, `progress.json`, the `<!-- progress:start -->` block in `../README.md`, and
@@ -246,7 +230,7 @@ Committed files, and the gitignored working directories the analysis writes to. 
   directory is easy to do and easy to miss, and `git add -f` is never the answer.
 - **No host details, ever — and it is enforced.** Nothing that identifies a developer's machine or account (absolute home
   or container paths, hardware models, controller brands, driver/kernel versions, device ids, e-mail, credentials) goes into
-  code, docs, test fixtures, the findings register or a commit message. The hard rules, the pre-commit/commit-msg hooks
+  code, docs, test fixtures or a commit message. The hard rules, the pre-commit/commit-msg hooks
   (`scripts/install_git_hooks.sh`), the CI job and `make hygiene` are in [host details policy](host-details-policy.md).
 - **The repo is self-contained.** Everything it points at is either committed here or a gitignored
   working directory of this tree (`roms/`, `build/`, `states/`, `local/` for your toolchain copies).

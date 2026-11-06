@@ -4,8 +4,8 @@ Based on static analysis (Ghidra/objdump), the decompiled Lua
 (`lua/`) and save inspection. Items marked **inferred** are
 supported by code + data but have **not** been confirmed live.
 
-Numeric Lua examples and the grant/gate sections follow findings
-**[#785](../findings/findings-0751-1000.md#f785)/#787**; see the [numeric audit](../engine/lua-numeric-audit.md).
+Numeric Lua examples and the grant/gate sections follow the
+[numeric audit](../engine/lua-numeric-audit.md).
 Original bytecode is the execution baseline.
 
 ## 0. Summary
@@ -15,9 +15,9 @@ Original bytecode is the execution baseline.
   **`+0x76c`** (16 × u8).
 - Set by `SYSctlShinka("SETSHINKA", player, form)`; read by
   `SYSisGetShinkaDigimon(player, form)`.
-- **Form index = species/model index** (finding [#111](../findings/findings-0001-0250.md#f111) order; see §3).
+- **Form index = species/model index** (see §3).
 - Side-quest *completion* is mostly **transient runtime state** (the quest-chain
-  flags are cleared on load, historical finding [#136](../findings/findings-0001-0250.md#f136); numeric audit [#787](../findings/findings-0751-1000.md#f787)) plus **persisted counters**
+  flags are cleared on load; see the [numeric audit](../engine/lua-numeric-audit.md)) plus **persisted counters**
   (`BASE_COUNTER`). The durable reward of a side quest is the digivolution byte
   in §2.
 
@@ -72,7 +72,7 @@ not resolved statically but is **inferred to be 1** (the "unlocked" byte).
 | | |
 | --- | --- |
 | Runtime | property record keyed `"BASE_ISUSE"`, byte array, per player |
-| Save field | `BASE_ISUSE`, **16 × u8 at `+0x76c`** (finding [#139](../findings/findings-0001-0250.md#f139)) |
+| Save field | `BASE_ISUSE`, **16 × u8 at `+0x76c`** |
 | Encoding | **inferred**: `0` = form locked, `1` = form unlocked/available |
 
 Save values measured directly:
@@ -86,12 +86,12 @@ Save values measured directly:
 A fresh Digimon has **only its own index set** — consistent with one byte per
 form and only the starting form available.
 
-> **`BASE_ISUSE` is not an "active species" marker (that reading of finding [#139](../findings/findings-0001-0250.md#f139) does not hold).** The active
-> species is derived from `DIGIMONNAME` (finding [#106](../findings/findings-0001-0250.md#f106)), so `BASE_ISUSE[3]=1` on a
+> **`BASE_ISUSE` is not an "active species" marker (that reading does not hold).** The active
+> species is derived from `DIGIMONNAME`, so `BASE_ISUSE[3]=1` on a
 > Dorumon save is *the Dorumon form being unlocked*, not a separate "in use"
 > marker.
 
-### 2.1 Lua-level convention ([#785](../findings/findings-0751-1000.md#f785)/#787)
+### 2.1 Lua-level convention
 
 Reward scripts query player 0 and compare the unlock byte with **0** (locked)
 or **1** (available). A repeated reward can pay **2000 BITS**. A
@@ -101,7 +101,7 @@ Live reward delivery and the setter's small-data constant need validation.
 
 ## 3. Form index map
 
-Index = the 16-species/model order of finding [#111](../findings/findings-0001-0250.md#f111) (`FUN_003f80e0` `MODEL_NAME`
+Index = the 16-species/model order (`FUN_003f80e0` `MODEL_NAME`
 table). This is also the order of the save's `BASE_*` arrays.
 
 | idx | model name | Digimon | starter? |
@@ -173,7 +173,7 @@ carry further grants. A single-form-4 interpretation of `chunk_0029` is wrong.
 | --- | --- |
 | digivolution unlock | **yes** — `BASE_ISUSE` @ `+0x76c` |
 | kill counters | **yes** — `BASE_COUNTER`, 16 × u32 @ `+0x72c` |
-| quest-chain flags `376–381`, sub-steps `384–389`, `409`, `571–576` | **no** — transient; `entry_0806/chunk_0006` clears them on load and does not restore from the mirror (historical finding [#136](../findings/findings-0001-0250.md#f136); numeric audit [#787](../findings/findings-0751-1000.md#f787)) |
+| quest-chain flags `376–381`, sub-steps `384–389`, `409`, `571–575` | **no** — transient; `entry_0806/chunk_0006` clears them on load and does not restore from the mirror |
 | persistent quest marker | folder `11` (`SYSctlFlagFolder("SET",11)`) |
 
 Consequence: **you cannot mark a side quest "done" by editing a save.** The
@@ -232,4 +232,3 @@ state load op-ready
 - Lua: `lua/01-lobby-hub/05-lobby-quests_e820/chunk_001{0,1,2,3}.lua`,
   `lua/01-lobby-hub/06-lobby-quest-board_e824/029-npc-digilfm-5.lua`, `entry_0603/chunk_0030…0046.lua`.
 - Saves: the three in the table above, byte range `+0x76c … +0x77c`.
-- Findings: [#139](../findings/findings-0001-0250.md#f139), [#111](../findings/findings-0001-0250.md#f111), [#106](../findings/findings-0001-0250.md#f106), [#136](../findings/findings-0001-0250.md#f136), [#785](../findings/findings-0751-1000.md#f785), [#787](../findings/findings-0751-1000.md#f787).

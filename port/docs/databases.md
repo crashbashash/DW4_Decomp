@@ -55,7 +55,7 @@ retail's unchecked negative-index read.
 
 ## Retail evidence and host validation
 
-Finding **[#794](../../docs/findings/findings-0751-1000.md#f794)** records the instruction boundary. `0x003a93a0` searches the
+`0x003a93a0` searches the
 column list via `igProperty_FindByName` (`0x003022c0`), then computes
 `row * column_count + first_equal_column` with wrapped 32-bit arithmetic.
 An empty column list or missing name returns -1. `0x003a9580` reads the string
@@ -108,7 +108,7 @@ accessor returns 0 for a found value, 1 with output zero for a missing column
 preparation checks each corresponding igCharList/igShortList/igIntList; the
 values are read from the typed lists in the owner's arena. Borrowers retain no archive references.
 
-Finding [#795](../../docs/findings/findings-0751-1000.md#f795) and [fresh character records](player-records.md#fresh-character-name-and-stats)
+[Fresh character records](player-records.md#fresh-character-name-and-stats)
 use these values for shinka initial stats and all three starter weapon rows.
 The numeric retail oracle adds 100 sign/precedence/fallback cases; the authored
 fixture independently checks 22,425 numeric cells against raw IGB values.

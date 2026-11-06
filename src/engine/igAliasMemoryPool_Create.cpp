@@ -1,4 +1,4 @@
-/* igAliasMemoryPool_Create Class factory of igAliasMemoryPool (finding #900.md, "Original
+/* igAliasMemoryPool_Create Class factory of igAliasMemoryPool
  * factory"). Once the object system is running it registers the class and creates the pool through
  * its metaobject on `allocator`. During bootstrap, before the object system exists, it allocates
  * the 184-byte pool by hand, constructs it, and then runs virtual slot 44 and slot 36 (with 0) on

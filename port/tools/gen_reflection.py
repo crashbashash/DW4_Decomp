@@ -55,10 +55,10 @@ def esc(s):
 def build(decomp):
     refl = json.load(open(os.path.join(decomp, "data", "reflection.json")))
     classes = list(refl["classes"].values())
-    # the class's vtable address (finding #359: the instance's +0 word IS its class vtable), so the
+    # the class's vtable address (the instance's +0 word IS its class vtable), so the
     # ported igObject_InitHeader can stamp a real object header.  Two sources: the 478 vtables that
     # carry an `__RTTI__` record (`vtables.json`) and, for the classes that emit none, the class's
-    # own `<Class>_GetVTable` (`vtables-getvtable.json`, finding #529) — together 976 of the 1,074
+    # own `<Class>_GetVTable` (`vtables-getvtable.json`) — together 976 of the 1,074
     # reflection classes.  RTTI wins where both name a vtable; the extension fills the rest.
     vtables = {}
     for fname in ("vtables.json", "vtables-getvtable.json"):

@@ -208,7 +208,7 @@ retail/C comparisons over 1,013 covered body
 instruction addresses, with five exemptions reported separately. The system clock's source and
 cadence remain a boundary; see [the contracts](../../docs/engine/action2-timing.md).
 
-### Text configuration and indexed-font wrappers ([#771](../../docs/findings/findings-0751-1000.md#f771))
+### Text configuration and indexed-font wrappers
 
 The six-body text-order runtime group is fully behaviorally represented.
 `to_configure` (`0x003eba10`) emits alignment/colour/text/show commands;
@@ -219,7 +219,7 @@ instructions in these three bodies are covered, excluding two unreachable
 padding nops. A messenger-rebinding regression checks that `to_line` does not
 cache the messenger pointer. See [contracts and verification limits](../../docs/engine/load-intf2.md#text-order).
 
-### System clock lifecycle and scheduling ([#772](../../docs/findings/findings-0751-1000.md#f772)–[#774](../../docs/findings/findings-0751-1000.md#f774))
+### System clock lifecycle and scheduling
 
 [`systemclock.c`](systemclock.c) / [`systemclock.h`](systemclock.h) recover the
 complete thirteen-body long-timer runtime group plus system start/stop,
@@ -233,7 +233,7 @@ passes 9,431 retail/C calls, covers all 585 reachable body instruction addresses
 and rejects four wrong implementations. The final Action2 update, other external
 callbacks, Timer 0 and software-double leaves remain boundaries. An offline probe
 checks that the two logo captures use the recovered scheduler path. See the
-[clock contract and native integration guidance](../../docs/engine/system-clock.md#executable-lifecycle-and-scheduling-contracts-772774).
+[clock contract and native integration guidance](../../docs/engine/system-clock.md#executable-lifecycle-and-scheduling-contracts).
 
 ### Loading-card node runtime
 
@@ -243,11 +243,11 @@ complete nine-body node/loading traversal group `0x0039a930..0x0039ae44`.
 passes 2,631 retail/C comparisons over every reachable body instruction. See
 [stage selection, clock contracts and boundaries](../../docs/engine/stage-loading.md).
 
-### Selection sound dispatch ([#780](../../docs/findings/findings-0751-1000.md#f780))
+### Selection sound dispatch
 
 [`sectl.c`](sectl.c) / [`sectl.h`](sectl.h) recover the complete six-body
 `beSeCtl` runtime group `0x0039c900..0x0039cb6c`, including last-model lookup,
 every matching action and ordered `SETSOUND` message construction.
 `python3 scripts/verify_sectl.py --elf orig/SLUS-20836/SLUS_208.36` passes 392
 retail/C comparisons over 150 instruction addresses. See the
-[authored selection mappings and boundaries](../../docs/engine/sound-format.md#pre-lobby-selection-mapping-780).
+[authored selection mappings and boundaries](../../docs/engine/sound-format.md#pre-lobby-selection-mapping).

@@ -1,13 +1,12 @@
 # Digimon World 4 — Save Flag Encoding & Story-State Map
 
-**How to read this page ([#785](../../findings/findings-0751-1000.md#f785)/#787):** the raw save-byte observations below are
-evidence at their recorded offsets. The Lua flag IDs and values quoted beside
-them are not: they come from a signed decoder that shows `FLGset(N,1)` as
-`FLGset(N-1,0)` and `FLGset(N,0)` as `FLGset(N-1,-1)`. The original Apocalymon
-write is **flag 67 = 1**, not flag 66 = 0; difficulty is **0/1/2**, not -1/0/1.
-A Lua-to-save inversion (finding [#121](../../findings/findings-0001-0250.md#f121)) does not exist. The boss/quest labels
-attached to the save bytes need revalidation. Do not use the Lua-side numbers
-on this page for runtime/save logic; see the
+**How to read this page:** the raw save-byte observations below are evidence at
+their recorded offsets. §3, §4, §6, §7, §9 and §10 quote the current Lua. An older
+signed decoder showed `FLGset(N,1)` as `FLGset(N-1,0)` and `FLGset(N,0)` as
+`FLGset(N-1,-1)`: the original Apocalymon write is **flag 67 = 1**, not flag 66 = 0,
+and difficulty is **0/1/2**, not -1/0/1. A Lua-to-save inversion does not exist.
+Labels attached to save bytes, the folder labels among them, and the Lua references
+in §5 need revalidation before use in runtime/save logic; see the
 [numeric audit](../../engine/lua-numeric-audit.md) and the
 [script gates](../critical-path.md).
 
@@ -20,7 +19,7 @@ In the save file, **`0x01` = done/defeated/set** ("event happened / boss dead / 
 Every one of the 1024 `BASE_FLAG` bytes is only ever `0x00` or `0x01`.
 
 An inverse Lua-to-save model — `be:FLGset(N, 0)` (runtime byte `0x00`) saved as `0x01`
-and `be:FLGset(N, -1)` (runtime byte `0xFF`) saved as `0x00` — is refuted (finding [#121](../../findings/findings-0001-0250.md#f121)):
+and `be:FLGset(N, -1)` (runtime byte `0xFF`) saved as `0x00` — is refuted:
 it rests on the old decoder's `0`/`-1` values.
 
 The observation it was built on (the Apocalymon flag, written in exactly one gameplay
@@ -56,7 +55,7 @@ resets to 0 at each world completion — **ignore it for story state**.
 
 ## 2. Story-state fingerprint per checkpoint (ground truth)
 
-`boss` = flags 66,67,68,69,82,85 · `chapter` = flags 701–706 · `intro` = flags 0–6
+`boss` = save bytes 66,67,68,69,82,85 (bytes 66, 82 and 85 are not boss flags, see §3) · `chapter` = flags 701–706 · `intro` = flags 0–6
 
 | save | folders SET | boss | chapter | intro |
 | --- | --- | --- | --- | --- |
@@ -86,28 +85,23 @@ The World-4 checkpoints (`prog_mecha_nest`, `prog_electro_mine`, `prog_world4`) 
 
 | id | boss | Lua writer (on death) | first set in diffs |
 | --- | --- | --- | --- |
-| 66 | Apocalymon | `entry_0730/chunk_0006:87` | `prog_world1` (W1) |
-| 67 | BelialVamdemon | `entry_0737/chunk_0000:86` | `prog_world1` (W1) |
-| 68 | Lucemon | `entry_0744` | `prog_world2` (W2) |
-| 69 | Devimon (form 3 / final) | `entry_0765/chunk_0005:105` | `prog_world3` (W3) |
-| 82 | LordKnightmon (`dng412b4`) | `entry_0425/chunk_0076:29` | `prog_world3_unlocked` |
-| 85 | story cleared (final boss, Hard/Very Hard only) | `entry_0765/chunk_0005:107` | *(still 0 — not reached)* |
-| 609 | final scene (Hard/Very Hard only) | `entry_0765/chunk_0005:108` | *(still 0 — not reached)* |
+| 67 | Apocalymon | `entry_0730/chunk_0006:87` | `prog_world1` (W1) |
+| 68 | BelialVamdemon | `entry_0737/chunk_0000:86` | `prog_world2` (W2) |
+| 69 | Lucemon | `entry_0744` | `prog_world3` (W3) |
+| 83 | LordKnightmon (`dng412b4`) | `entry_0425/chunk_0076:29` | `prog_electro_mine` (§9) |
+| 70 | Devimon (form 3 / final) | `entry_0765/chunk_0005:105` | `prog_world4` (§9) |
+| 86 | story cleared | `entry_0765/chunk_0005:107` (Hard/Very Hard only), `entry_0820/chunk_0009:30` (when flag 70 is on) | `prog_world4` (§9) |
+| 610 | final scene (Hard/Very Hard only) | `entry_0765/chunk_0005:108` | *(still 0 — not reached)* |
 
 Notes:
 
-- The canonical boss order (from `entry_0603` stage-select chunks 0071→0075) is
-  **66 (W1) → 67 (W2) → 68 (W3) → 82 (W4) → 69+85+609 (final)**. Real saves
-  set them slightly earlier (66+67 at W1, 68 at W2, 69 at W3, 82 at W3-unlock),
-  so trust the diff column above for "already-beaten" state, not the labels in
-  `docs/systems/flags/flag-meanings.md`.
-- Flag **66 is non-monotonic**: it flips back to `0x00` at `prog_vine_tunnel`
-  (W3 d2). Don't rely on 66 as a persistent "defeated" marker.
-- `entry_0765` writes `FLGset(85,0)`/`FLGset(609,0)` only when
-  `SYSgetDifficulty() > -1` (Hard or Very Hard; **Normal is −1**, so these are
-  never set on Normal). `FLGset(69,0)` is unconditional.
-  (`prog_world3` has 69=1 but 85=0 — consistent with the W3 boss being a Devimon
-  form whose death sets 69 while 85 stays for the true final fight.)
+- The boss order (from `entry_0603` stage-select chunks 0071→0075) is
+  **67 (W1) → 68 (W2) → 69 (W3) → 83 (W4) → 70+86 (final)**, and the diff column agrees.
+- Save byte **66 is not a boss flag**: the title script clears 36–66 on load, and the
+  byte flips back to `0x00` at `prog_vine_tunnel` (W3 d2).
+- `entry_0765` writes `FLGset(86,1)`/`FLGset(610,1)` only when
+  `SYSgetDifficulty() > 0` (Hard or Very Hard; **Normal is 0**). `FLGset(70,1)` is
+  unconditional.
 
 ---
 
@@ -133,40 +127,43 @@ Observed chronological accumulation:
 10 = LordKnightmon (W4)** — not "folder 8 = Mecha Rogue 05, folder 9 =
 LordKnightmon".)*
 
-*(Note: the W1 boss defeat — `prog_world1` — sets boss flags 66+67 but **no**
-folder; folder 2 is the earlier Leomon-rescue story beat.)*
+*(Note: the W1 boss defeat — `prog_world1` — sets flag 67 (save bytes 66 and 67
+both flip) but **no** folder; folder 2 is the earlier Leomon-rescue story beat.)*
 
-**The final-boss security gate requires folders 8 AND 9 SET.**
+**The final-boss security gate requires folders 9 AND 10 SET.**
 `lua/05-city-overworld/01-stag0403-city-quest-hub_e709/034-layer-setup-2.lua:102`:
 ```lua
-if be:SYSctlFlagFolder("IS", 8) == 0 and be:SYSctlFlagFolder("IS", 9) == 0 then
-    be:FLGset(904, 0)   -- gate-closed marker (only when a key card is missing)
-    ...
+if be:SYSctlFlagFolder("IS", 9) == 1 and be:SYSctlFlagFolder("IS", 10) == 1 then
+    be:FLGset(905, 1)
+    be:sd("MODELCTRL", "g_entrywayz04", 0, "SQ_SILENTON")
 end
 ```
 
+So flag 905 is set when both folders are set. The chunk does not write flag 904, and 905 is not a
+gate-closed marker; an `IS 8`/`IS 9`, `FLGset(904, 0)` reading is the old decoder's off-by-one. Script
+folders 9 and 10 have not been re-checked against the save-observed table above.
+
 The game's own "everything done" snapshot (`lua/14-misc/01-stage-select-list_e603/075-flag-1-7.lua`) sets
-**folders 0–9** and the boss flags 66,67,68,82,69,85 all to `0` (Lua) → save
-`0x01`. That is the post-game state; **final-boss-READY = folders 0–10 set but
-flag 85/609 still `0`** (see §9 below for the observed World-4 end state).
+**folders 0–10** and the flags 67,68,69,70,83,86 to `1`. That is the post-game
+state; **final-boss-READY = folders 0–10 set but flag 610 still `0`** (see §9
+below for the observed World-4 end state).
 
 ---
 
 ## 5. Chapter / intro step flags
 
 - **700-series = per-difficulty mirror backups** of the intro/chapter flags
-  (see §7): `701/702/703` = mirror of intro `2/3/4`, `705/706` = mirror of
-  `18/19`, `704` is unused. In the checkpoint diffs they read as a one-hot world
+  (see §7): `700–705` = mirror of intro `1–6`, `706/707` = mirror of
+  `19/20`. In the checkpoint diffs they read as a one-hot world
   chapter — 701=W1 era → 702 (got Ophanimon key) → 703 (key used / W2) → 704 (W3)
   → 705 (W4), with advance points matching the folder table above — because
   "chapter" and "mirror" are the same bytes; §7's table is the authoritative
   interpretation.
 - **0–6 series = tutorial marker + chapter one-hot** (NOT a 0→1→2… sequence):
   - flag **1** = tutorial in progress — the true fresh state
-    (`test_base_save.ps2` = flag 1 ticked).
-  - flag **0** = "not in tutorial" / idle marker. `entry_0816/chunk_0096`
-    ticks it when flags 1–5 + 85 are all `0` (no chapter active); it also
-    stays ticked post-tutorial (op_base/world1 = flag 0 + flag 2).
+    (`test_base_save.ps2` = flag 1 ticked). `entry_0816/chunk_0096` sets it
+    when flags 2–6 and 86 are all clear (no chapter active).
+  - flag **0** stays ticked post-tutorial (op_base/world1 = flag 0 + flag 2).
     **flag 0 = 1 with flags 1–6 all `0` = LOCKED** (no NPC chat, no levels,
     can't talk to Ophanimon) — not a playable pre-intro state.
   - flags **2–6** = the current chapter, one at a time:
@@ -176,20 +173,20 @@ flag 85/609 still `0`** (see §9 below for the observed World-4 end state).
 
 ## 6. Other flags worth knowing
 
-- `375–379` quests 1–5, `380` final quest gate — quest-chain, **not** required
+- `376–380` quests 1–5, `381` final quest gate — quest-chain, **not** required
   for the main story (see `entry_0820`/`entry_0824`).
-- `408, 570, 423, 384, 388` — quest sub-state, written by the quest NPCs.
-- `904` — final-gate-closed marker (set when folders 8/9 are missing).
-- `903` — set in the stage-select final snapshot (world 4 reached).
-- `48, 81, 333, 382, 500–507, 319–334` — story sub-state copied by the
+- `409, 571, 424, 385, 389` — quest sub-state, written by the quest NPCs.
+- `905` — final-gate-open marker (set when folders 9 and 10 are both set).
+- `904` — set in the stage-select final snapshot (world 4 reached).
+- `49, 82, 334, 383, 320–327, 329–333, 335` — story sub-state copied by the
   title-screen restore (`entry_0806/chunk_0006`) from per-difficulty mirror
   flags (see below).
 - **Transient flags (cleared on load, NOT restored from a mirror):**
-  quest flags `375–380` (+ `383–388`, `408`, `570–575`), final-scene `609`,
-  `327`, and the ranges 22–33, 35–65, 70–72, 83–84, 99–318, 335–390,
-  414–424, 456–467, 474, 476–477, 479, 480–499, 513–516, 561–565, 570–574,
-  592–593, 597–608. Edits to these revert to `0` after a load. (Contrast:
-  81/333/382/334/48/18–19/88–97/319–325/328–331 are cleared but then
+  quest flags `376–381` (+ `384–389`, `409`, `571–575`), final-scene `610`,
+  `328`, and the ranges 23–34, 36–66, 71–73, 84–85, 100–319, 336–391,
+  415–425, 457–468, 475, 477–478, 480–500, 514–517, 562–566, 571–575,
+  593–594, 598–610. Edits to these revert to `0` after a load. (Contrast:
+  1–6, 19–20, 49, 67–70, 82, 83, 86, 89–99, 320–327, 329–335 and 383 are
   *restored* from mirrors, so they persist.)
 
 ---
@@ -197,30 +194,30 @@ flag 85/609 still `0`** (see §9 below for the observed World-4 end state).
 ## 7. The mirror/restore system (why there are 700–811 "backup" flags)
 
 `lua/00-title-menus/04-title-screen_e806/006-flag-82.lua` (title screen / new game / load) clears folders and
-a big flag range (`FLGset(N,-1)` → save `0x00`), then restores the active story
+a big flag range (`FLGset(N,0)` → save `0x00`), then restores the active story
 flags from **per-difficulty mirror flags**.
 
-**Difficulties** (user-confirmed): **Normal = `SYSgetDifficulty() == -1`,
-Hard = 0, Very Hard = 1.** Difficulty is **not stored in the save** — the editor
+**Difficulties:** **Normal = `SYSgetDifficulty() == 0`,
+Hard = 1, Very Hard = 2.** Difficulty is **not stored in the save** — the editor
 infers it from which mirror set is live (see below).
 
 Active ← mirror, per difficulty:
 
-| active | Normal (−1) | Hard (0) | Very Hard (1) |
+| active | Normal (0) | Hard (1) | Very Hard (2) |
 | --- | --- | --- | --- |
-| intro 0–4 | 699–703 | 6–10 | 12–16 |
-| 18–19 | 705–706 | 740–741 | 770–771 |
-| 66–68 | 707–709 | 73–75 | 77–79 |
-| 82 | 711 | 742 | 772 |
-| 85 | 712 | 86 | 87 |
-| 88–97 | 713–722 | 743–752 | 773–782 |
-| 319–325 | 724–730 | 754–760 | 784–790 |
-| 328–331 | 732–735 | 762–765 | 792–795 |
-| 334 | 737 | 767 | 797 |
-| 48 | 800 | 801 | 802 |
-| 382 | 803 | 804 | 805 |
-| 81 | 806 | 807 | 808 |
-| 333 | 809 | 810 | 811 |
+| intro 1–6 | 700–705 | 7–12 | 13–18 |
+| 19–20 | 706–707 | 741–742 | 771–772 |
+| 67–70 | 708–711 | 74–77 | 78–81 |
+| 83 | 712 | 743 | 773 |
+| 86 | 713 | 87 | 88 |
+| 89–99 | 714–724 | 744–754 | 774–784 |
+| 320–327 | 725–732 | 755–762 | 785–792 |
+| 329–333 | 733–737 | 763–767 | 793–797 |
+| 335 | 738 | 768 | 798 |
+| 49 | 801 | 802 | 803 |
+| 383 | 804 | 805 | 806 |
+| 82 | 807 | 808 | 809 |
+| 334 | 810 | 811 | 812 |
 
 and folders `N ← mirror(518+N)` (Normal), `530+N` (Hard), `542+N` (Very Hard),
 where folder SET ⇔ mirror byte `0x01` (direct copy).
@@ -267,24 +264,21 @@ World-4 step diffs:
 
 Notes:
 
-- **Flag 85 and 609 stay `0` even at `prog_world4`.** Those are the
-  `entry_0765` (boss06-devimon-3) "story cleared" writes, gated by
-  `SYSgetDifficulty() > -1` (Hard/Very Hard). The run was on **Normal**, so
-  they're simply never written.
-- **Flag 86 (`= FLGisOn(85)` mirror, written at character-select) is `1`** at
-  `prog_world4` while active `85` is `0` — a mirror/restore divergence worth
-  knowing if you re-load the save (on load, `entry_0806` restores active flags
-  from the mirrors).
-- The Black Core gate (`entry_0709/chunk_0034`) checks **folders 8 and 9**
-  (Diaboro + MRE05), so it is already open by `prog_mecha_nest`; folder 10
-  (LordKnight) is collected afterwards on the way to the World-4 boss.
+- **Flag 610 stays `0` even at `prog_world4`.** `entry_0765` (boss06-devimon-3)
+  writes 86 and 610 only when `SYSgetDifficulty() > 0` (Hard/Very Hard), and the
+  run was on **Normal**.
+- **Flag 86 is `1`** at `prog_world4` all the same: `entry_0820/chunk_0009` sets it
+  whenever flag 70 is on.
+- The Black Core gate (`entry_0709/chunk_0034`) checks **folders 9 and 10**, so it
+  opens once `prog_electro_mine`'s folder 10 is set; flag 905 first appears in the
+  `electro_mine → world4` diff.
 
 ---
 
 ## 10. Progression-testing findings
 
 Experiments with a fresh character (`test_base_save.ps2`, intro step 1) settled
-several things and left a few open questions.
+several things and left a few [open questions](#open-questions).
 
 ### Confirmed
 
@@ -294,35 +288,21 @@ several things and left a few open questions.
 - **Keys/IDs are *not* separate inventory items.** A full-save diff of
   `prog_world1 → prog_ophanimon_key` changed *only* flags + folder 3 (+ the
   human's bits/X-Data). "Ophanimon key" is **folder 3**, nothing else.
-- **The quest chain (375–380) is an unrelated side-quest system.** Marking it
+- **The quest chain (376–381) is an unrelated side-quest system.** Marking it
   "done" has no effect on teleports, keys, or the main story. Its **reward** is
   digivolutions: the quest NPCs (`entry_0820` Digi-Elf giver, `entry_0824`
-  quest board) call `SYSctlShinka` to unlock forms (376→3/4/5/6, 377→3/4/5/6/14,
-  378→7/8/10). Those unlocks are stored in **`BASE_ISUSE`** (save `+0x76c`) and
-  *do* persist even though the `375–380` flags are transient. See
+  quest board) call `SYSctlShinka` to unlock forms (377→4/5/6/7, 378→4/5/6/7/15,
+  379→8/9/11). Those unlocks are stored in **`BASE_ISUSE`** (save `+0x76c`) and
+  *do* persist even though the `376–381` flags are transient. See
   [`docs/systems/digivolution-and-sidequests.md`](../digivolution-and-sidequests.md).
-
-### Open questions
-
-- **The "Key Folder" UI is not driven by folder flags alone.** A save with
-  folders 0–10 set still showed no keys while the tutorial was active. The
-  inventory Key Folder panel is likely gated on a further story/location state
-  (not yet pinned).
-- **Intro flags don't control the spawn stage.** `test_base_save` (flag 1 = 1)
-  is the tutorial. flag 0 = "idle/no-chapter" (ticked by `chunk_0096` when
-  flags 1–5+85 are all 0). A save with flag 0 = 1 and flags 1–6 all 0 loads
-  into a **locked** state (no NPC chat, no levels) — there is **no loadable
-  pre-DigiElf state**. The new-game opening (title → char select → stagML11 →
-  first DigiElf chat) is runtime-state-driven; the save record contains **no
-  stage/intro/location field** (verified from `FUN_003ee6d0`).
 
 ### Save-editor support
 
 A save editor for this format wants **Story**, **Disks**, **Bank** and
 **Bank items** tabs plus a **Raw edits** tab (always last):
 
-- Story: checkboxes for folders 0–11, boss flags (66/67/68/69/82/85/609),
-  chapter (701–706), intro steps (0–6), quests (375–380), and lobby/system
+- Story: checkboxes for folders 0–11, boss flags (67/68/69/70/83/86/610),
+  chapter (701–706), intro steps (0–6), quests (376–381), and lobby/system
   flags (24/501/508/931/935/936/960) — checked = `0x01`;
 - presets: **Fresh (tutorial)** (matches `test_base_save`), After World 1/2/3,
   All worlds + keys, Story cleared (post-game), plus "mark all quests done";
@@ -331,7 +311,7 @@ A save editor for this format wants **Story**, **Disks**, **Bank** and
   edits survive the load-time restore;
 - Disks: the 12 disk counts; Bank: balance + 96 item slots.
 
-*(Note: quest flags 375–380 and final-scene 609 are transient — the editor
+*(Note: quest flags 376–381 and final-scene 610 are transient — the editor
 can set them but they revert to 0 on load; see §6.)*
 
 ---
@@ -398,3 +378,20 @@ the property key table `0x00517e50`. Struct offset + 8 = block offset.
 `dw4save.py` exposes `disk_count(i)` / `set_disk_count(i, n)`,
 `bank_bit`, and `bank_device(i)`; the GUI has a **"Bank & Disks"** tab
 (bank balance + 12 disk counts).
+
+## Open questions
+
+- **The "Key Folder" UI is not driven by folder flags alone.** A save with
+  folders 0–10 set still showed no keys while the tutorial was active. The
+  inventory Key Folder panel is likely gated on a further story/location state
+  (not yet pinned).
+- **Intro flags don't control the spawn stage.** `test_base_save` (flag 1 = 1)
+  is the tutorial. A save with flag 0 = 1 and flags 1–6 all 0 loads
+  into a **locked** state (no NPC chat, no levels) — there is **no loadable
+  pre-DigiElf state**. The new-game opening (title → char select → stagML11 →
+  first DigiElf chat) is runtime-state-driven; the save record contains **no
+  stage/intro/location field** (verified from `FUN_003ee6d0`).
+- **The exact fresh-state flag set.** Unproven: a true fresh (tutorial) state is
+  flag 1, the lobby flags 24/501/508/931/935/936/960 and mirror flag 700. Flag 2
+  means World 1 access (Ophanimon already spoken to), so a fresh preset built on
+  flag 2 opens the World 1 gate.

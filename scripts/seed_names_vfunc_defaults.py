@@ -4,12 +4,12 @@ vtable pass had to leave anonymous.
 
 MWCC emits one default stub per virtual slot and points every class that does not
 override it at that one body, so 11,714 vtable slots collapse to 1,333 functions
-(#283).  When a body is referenced by the classes of exactly one family, its owner
+.  When a body is referenced by the classes of exactly one family, its owner
 is the family's base class; when two *different* bodies resolve to the same
 owner + slot, the base is an unnamed intermediate and both bodies had to be left
 as `FUN_` — 47 of them (data/vtables.json `ambiguous`).
 
-#360 tested whether the recovered class hierarchy lifts that ambiguity, using the
+An earlier test checked whether the recovered class hierarchy lifts that ambiguity, using the
 *lowest common ancestor* of the referrers, and concluded it does not: the LCA is
 always `igObject`.  That test is too weak.  The right question is not "what is the
 common ancestor" but "is there a class whose **descendant set** is exactly the set
@@ -27,7 +27,7 @@ i.e. every referrer is a descendant of C, and the only member of C's closure tha
 does not reference the body is C itself (C emits no vtable, so it cannot).  The
 candidate must be **unique**; if two classes satisfy it the body stays anonymous.
 
-This is a derived label (`<Class>::vfunc_<slot>`, the convention #283 used for the
+This is a derived label (`<Class>::vfunc_<slot>`, the convention used for the
 other 1,286), not a semantic name, and the evidence is structural.  The bodies the
 rule cannot place are genuinely ownerless in the available data: their base is a
 template instantiation (`igTObjectList<…>`, `igTDataList<…>`) that has no MetaObject
@@ -136,10 +136,10 @@ def main():
         "#",
         "# Each body in data/vtables.json's `ambiguous` list is referenced by the",
         "# full descendant set of exactly one class, so it is that class's virtual",
-        "# slot.  This is the `<Class>::vfunc_<slot>` convention of #283, with the",
-        "# owner recovered from data/class-hierarchy.tsv (#360's LCA test was too",
+        "# slot.  This is the `<Class>::vfunc_<slot>` convention, with the",
+        "# owner recovered from data/class-hierarchy.tsv (the LCA test was too",
         "# weak; descendant-set equality is the right test).  Bodies whose owner is a",
-        "# template base with no MetaObject stay anonymous -- see finding #410.",
+        "# template base with no MetaObject stay anonymous --.",
         "#",
         "# <va>\t<name>\t<module>",
     ]

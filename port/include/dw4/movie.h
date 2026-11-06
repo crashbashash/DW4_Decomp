@@ -1,7 +1,7 @@
 /* dw4/movie.h — the front-end's Sofdec movies as a frame source (P3.6).
  *
  * The boot opens with a CRI Sofdec movie (`aus_opening.sfd`, `AREA.AFS`), which the decompilation
- * side has already settled as **MPEG-1 video + ADX audio** (finding #447).  The project's FMV
+ * side has already settled as **MPEG-1 video + ADX audio**.  The project's FMV
  * route is ffmpeg (`dw4asset media`), so this decodes the movie's video stream to raw frames and
  * hands them to the caller a frame at a time — the seam the native MPEG-1/ADX decoders will
  * replace without the caller changing. Windowed playback decodes ADX audio through

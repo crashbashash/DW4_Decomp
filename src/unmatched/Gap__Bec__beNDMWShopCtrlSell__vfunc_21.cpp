@@ -6,7 +6,7 @@
  * branch 1 (device sell sub-window 0x3b70e0) or 2 (disk sell sub-window 0x3b6e60), which return to
  * state 0 when they end.  State 2 closes the sub-windows, state 3 waits for the close to finish
  * and clears _isRun.
- * Evidence: finding 937 (decide-list constants 554a50..5c, windows 3b3f40/3b70e0/3b6e60/3b4f50),
+ * Evidence: (decide-list constants 554a50..5c, windows 3b3f40/3b70e0/3b6e60/3b4f50),
  * asm/Gap__Bec__beNDMWShopCtrlSell__vfunc_21.s.
  * Profile: combat compiler, -O3,p -Cpp_exceptions off; the exception table names the WindowRef/ListRef
  * destructor copies listed in config/SLUS-20836/unit-objects.json (three are this unit's own, emitted after the function).  Matching constructs (each measured): the

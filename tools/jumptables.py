@@ -3,7 +3,7 @@
 jumptables.py — find the switches' jump tables and record them in a config file.
 
 Ghidra stops a `switch` at the indirect `jr $vN`, so a dispatcher's case bodies
-were attributed to nobody until `tools/split.py` grew those symbols (finding #322).
+were attributed to nobody until `tools/split.py` grew those symbols.
 The *table* is not in the function at all: MWCC puts it in `.rodata`, and the
 dispatcher reaches it through a `lui`/`addiu` pair, so from the source alone there
 is no way to know it exists. This tool recovers it from the retail image.
@@ -74,7 +74,7 @@ def eff_addr(hi, off, is_addiu):
 
     Kept as a one-line wrapper so the sign convention lives in exactly one place:
     objdump prints an `addiu` immediate already sign-extended and an `ori` immediate
-    raw, and getting that wrong shifts half the globals by 0x10000 (finding #323).
+    raw, and getting that wrong shifts half the globals by 0x10000.
     """
     return am.eff_addr(hi, off, is_addiu)
 

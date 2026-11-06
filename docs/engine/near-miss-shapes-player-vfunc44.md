@@ -1,7 +1,7 @@
 # beNDMWMdlPlayer::vfunc_44 (0x003d4390): typed recovery and the last wall
 
 `Gap::Bec::beNDMWMdlPlayer::vfunc_44` (608 bytes) is the player's idle player-number-badge handler
-(findings [#1090](../findings/findings-1001-1250.md#f1090) and [#1092](../findings/findings-1001-1250.md#f1092)). It matches: the source is
+. It matches: the source is
 [Gap__Bec__beNDMWMdlPlayer__vfunc_44.cpp](../../src/unmatched/Gap__Bec__beNDMWMdlPlayer__vfunc_44.cpp). The source below is byte-identical to retail except
 for one 5-word cluster; the matched file compares the status through a pointer-to-pointer, which keeps that cluster.
 
@@ -14,7 +14,7 @@ for one 5-word cluster; the matched file compares the status through a pointer-t
 * While the sequence name is `"SQ_WAIT"` it sends
   `MODELCTRL <receiver> SETEFFECT i_pcnumic SQ_OPENP<n> 480.0 V<0,10,0> true true` through
   `self->_messenger` (`beNDMWMdlPlayer` `+20`). `480.0` is a delay in frames: the badge appears after about
-  8 s in `SQ_WAIT` (measured live, finding [#1092](../findings/findings-1001-1250.md#f1092)).
+  8 s in `SQ_WAIT` (measured live).
 * If `_isPanel` is set and the current sequence name is a known enum value (`igMetaEnum_GetValueByName`
   status equals `DAT_004fb410`, "found"), it clears `_isPanel` and sends `NDMWPANEL ... REMOVE`.
 * It ends by calling the base handler `FUN_00445200(self, msg)`.

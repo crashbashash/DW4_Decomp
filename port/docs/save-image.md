@@ -10,8 +10,8 @@ not defined here. The retail evidence is the record serializer `3ee6d0` (records
 
 | Piece | Evidence |
 | --- | --- |
-| Two **mirrored** blocks of `0xA000` bytes; block word 0 is the checksum, word 1 the version (4) | finding [#43](../../docs/findings/findings-0001-0250.md#f43)/#44; the second block is byte-identical to the first in every retail file |
-| Checksum = sum (mod 2³²) of the u32 words from block+4 to block+`0xA000` | [#43](../../docs/findings/findings-0001-0250.md#f43); verified on all six samples below |
+| Two **mirrored** blocks of `0xA000` bytes; block word 0 is the checksum, word 1 the version (4) | the second block is byte-identical to the first in every retail file |
+| Checksum = sum (mod 2³²) of the u32 words from block+4 to block+`0xA000` | verified on all six samples below |
 | Four **character records**, one per player slot, `0x2000` bytes apart from file offset 8 | retail resaves carry records at `0x8`, `0x2008`, `0x4008`, `0x6008`; `SaveCtrl` (`407120`) loops four slots |
 | Record = the "deliver struct", offsets below, relative to the record base | serializer `3ee6d0` and loader `3ef5d0`, decompiled with `tools/m2c_one.py` |
 
@@ -63,7 +63,7 @@ A kind nibble above 4 (including `0xFFFFFFFF`) is an empty entry; `3ef1e0` store
   re-read, verify, rename); a failed write leaves the previous valid file and no partial file behind.
   `dw4_savefile_read` returns only a verified image.
 
-Not stored in a save, so the caller rebuilds them after a load (finding [#106](../../docs/findings/findings-0001-0250.md#f106)): species (`DIGIMONNO`), the
+Not stored in a save, so the caller rebuilds them after a load: species (`DIGIMONNO`), the
 current stats from `BASE_*`, the equipped weapon model (`POWERSOCKETNAME`) and every recalculated stat.
 
 ## Verification (headless)

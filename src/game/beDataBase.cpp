@@ -3,7 +3,7 @@
  * records (rows). Its cells are split by type into six data lists (char, short, int, float, bool,
  * string); each data list is paired with an "offset list" that names the table's columns for that
  * type. A cell of record R and column C is stored row-major at index (columnCount * R + C) of the
- * matching data list (findings #794, #607: the Junk Shop table is 9 rows x 36 columns; the enemy
+ * matching data list (the Junk Shop table is 9 rows x 36 columns; the enemy
  * table keys MODEL, HPMAX, ... by column name). The lists are reached through the reflected
  * object-reference fields and viewed here as the igDataList count/data prefix. "matching
  * construct" marks the volatile local and the hand-placed asm (joins, delay-slot NOPs, register

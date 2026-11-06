@@ -108,7 +108,7 @@ def main():
         fh.write("# SDK functions whose own name appears in a string they reference -- the PS2 SDK\n"
                  "# convention is to report errors as \"sceXxx: ...\", so a function whose only string\n"
                  "# is its own name in an error path *is* that function. Recovered by\n"
-                 "# scripts/seed_names_sdk_strings.py (finding #377); see docs/engine/platform-boundary.md.\n")
+                 "# scripts/seed_names_sdk_strings.py; see docs/engine/platform-boundary.md.\n")
         for fn, name in sorted(found.items()):
             fh.write("0x%08x\t%s\tsdk\n" % (fn, name))
     print("wrote %s: %d named functions" % (args.out, len(found)))

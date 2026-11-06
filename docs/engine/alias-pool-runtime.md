@@ -1,12 +1,12 @@
 # Alias-pool method run and allocation backend
 
-Finding [#902](../findings/findings-0751-1000.md#f902) extends the [factory/binding checkpoint](alias-pool-binding.md)
+The [factory/binding checkpoint](alias-pool-binding.md) extends
 through the complete contiguous method run **2d0560..2d163c**. Together with
 factory2cd170, this is **54 bodies /4,160 bytes**. All have readable behavioral
 recovery and original-instruction comparisons. All54 bodies /4,160 bytes have
 matching source in `src/engine/` and `src/unmatched/` (category `match` in
-`data/check-categories.tsv`). The [#903](../findings/findings-0751-1000.md#f903) follow-up adds seven exact virtual tails
-/160 bytes using per-unit exceptions-off settings; see
+`data/check-categories.tsv`). Seven exact virtual tails
+/160 bytes use per-unit exceptions-off settings; see
 [compiler evidence](compiler-object-verification.md). Teardown108 adds **108 matched bytes** here.
 The eight newly classified bodies add980 bytes to the code denominator, not
 matched progress. Parent allocators, metadata, synchronization and file services
@@ -154,7 +154,7 @@ All54 bodies /4,160 bytes match. The typed backend740 is
 `src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_34.cpp`, and the diagnostic bodies are
 `src/unmatched/igAliasMemoryPool_PrintStatistics.cpp` and
 `src/unmatched/igAliasMemoryPool_Dump.cpp`; the seven simple virtual tails are
-exact ([#903](../findings/findings-0751-1000.md#f903)). No assembly
+exact. No assembly
 patches or fixed instruction encodings are inserted into C to count a match.
 
 Active resume: close the parent allocator/ownership services

@@ -1,7 +1,7 @@
 /* dw4/skin.h — a skinned character mesh read from a live EE RAM dump.
  *
  * The model pack carries the bind-pose geometry but only a 4-byte stub for the per-vertex
- * blend stream (findings #532/#535); the real data is runtime-allocated, so it comes from a
+ * blend stream; the real data is runtime-allocated, so it comes from a
  * paused game's dump.  The chain, all live pointers:
  *
  *   igVertexArray1_1    vtable 0x00525190   _vdata +0x08 (-> {positions,normals}),
@@ -18,7 +18,7 @@
  * Skinning is `v' = M[slot[bone]] * v`, one bone per vertex for the shipped mesh.  This is the
  * C counterpart of `scripts/live_skin.py`, and `tools/verify_skin.py` diffs the two OBJs.
  *
- * Measured open item (finding #532): nothing links the mesh/select to *its* palette, so the
+ * Measured open item: nothing links the mesh/select to *its* palette, so the
  * palette is chosen by index into the non-empty pool in address order, not resolved.
  */
 #ifndef DW4_SKIN_H

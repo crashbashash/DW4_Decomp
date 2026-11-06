@@ -81,7 +81,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | --- | --- |
 | [`platform_map.py`](platform_map.py) | Map the platform boundary of the image: which functions touch EE hardware |
 | [`mips_literals.py`](mips_literals.py) | Resolve the addresses MIPS code forms, from the `lui` that starts them |
-| [`sdk_bindings.py`](sdk_bindings.py) | Decode the SDK's library descriptors in game.elf's rodata (finding [#375](../docs/findings/findings-0251-0500.md#f375), [#382](../docs/findings/findings-0251-0500.md#f382)) |
+| [`sdk_bindings.py`](sdk_bindings.py) | Decode the SDK's library descriptors in game.elf's rodata |
 
 ## Tests
 

@@ -6,8 +6,8 @@
  * verifies one function at a time.
  *
  * These are the shared default virtual slots that RTTI vtable naming
- * resolves to igObject (docs/engine/rtti-and-vtables.md, findings #283 and
- * #410): almost every class inherits them, so most are empty or return a
+ * resolves to igObject (docs/engine/rtti-and-vtables.md and
+ *): almost every class inherits them, so most are empty or return a
  * constant.  The slot number is the only name evidence, so the bodies are
  * documented by what they do, not by an invented role.  The `__<addr>`
  * names are distinct bodies the vtable pass resolved to the same slot. */

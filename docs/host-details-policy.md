@@ -20,8 +20,8 @@ machine keeps things or what it is built from. These rules are enforced mechanic
 4. **No identity or contact details.** No personal e-mail addresses, user names, host names, private network addresses or
    account handles. Commit authorship stays the repository's neutral identities.
 5. **No credentials.** No tokens, keys or passwords, ever. If one is committed, treat it as compromised and rotate it first.
-6. **It applies to everything that is committed**: code, comments, docs, test fixtures and strings, generated files, the
-   **findings register**, and **commit messages**. Findings `evidence` names a repository-relative path.
+6. **It applies to everything that is committed**: code, comments, docs, test fixtures and strings, generated files
+   and **commit messages**.
 7. **Do not bypass the checks.** No `--no-verify`. A genuine exception (a fixture that must contain such a string) goes in
    `scripts/host_details_allow.txt` with a comment saying why; it is reviewed like code.
 8. **No emulator-driving facts.** The private emulator builds are driven through endpoints that belong to one machine and
@@ -48,8 +48,8 @@ protocol's documented default (PINE's standard slot) stated as the vendor defaul
 
 ### Checker rules
 
-Each rule is a generic pattern with a hint that says what to write instead. The tree-wide rules apply to every tracked
-text file, staged line and commit message; the evidence rule applies to the findings register (`docs/findings/`).
+Each rule is a generic pattern with a hint that says what to write instead. The rules apply to every tracked text file,
+staged line and commit message.
 
 | Rule | Catches | Write instead |
 | --- | --- | --- |
@@ -64,15 +64,13 @@ text file, staged line and commit message; the evidence rule applies to the find
 | `x-display` | the X display number of one machine (`DISPLAY=:9`, `Xwayland :9`, "display :9") | "an X11 or XWayland display", the number from `DISPLAY` |
 | `opt-path` | an install location of one machine (`/opt/<tool>/…`) | the tool's name and the env var or config key that locates it (`<pcsx2-install>/…`) |
 | `tmp-session-path` | a session- or account-stamped scratch path (an agent scratchpad, a uid-stamped `/tmp/<name>-NNNN`) | a path under `build/` |
-| `db-scratch-path` (database only) | any `/tmp/…`, `/opt/…` or `/var/tmp/…` path in a finding — evidence must be reproducible from the repository | a repository-relative path |
 
-A plain `/tmp/<file>` in a command example in the docs is generic and is not flagged by the tree-wide rules; in the findings
-database it is, because a finding's evidence must name something a reader can open. `testing/test_check_host_details.py`
+A plain `/tmp/<file>` in a command example in the docs is generic and is not flagged. `testing/test_check_host_details.py`
 has a positive sample for every rule and a list of generic wordings that must pass.
 
 ## If something leaks anyway
 
-1. Fix the working tree, the findings register included; `make hygiene` must be clean.
+1. Fix the working tree; `make hygiene` must be clean.
 2. Remove it from history with `git filter-repo` (a blob callback applying the same replacements, plus a message callback),
    verify with `git log --all --text -S'<term>'` that no commit still contains it, then force-push with
    `--force-with-lease`. Rewriting history changes every commit id and everyone else must re-clone.
