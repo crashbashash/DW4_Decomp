@@ -33,7 +33,7 @@ static int effect(void *u,dw4_modelctrl *m,dw4_handle h,int finish,int *keep)
     struct dependencies *d=u;beModelCtrlSCEffect *e=DW4_ARENA_OBJ(d->arena,beModelCtrlSCEffect,h);
     if(d->reject_rebind)assert(dw4_modelctrl_dependencies_bind(m,NULL)==-1);
     assert(!strcmp(al_text(d->arena,e->_modelName),"effect"));
-    assert(e->_offset[0]==0x3f800000 && e->_rotation[2]==0x40400000);
+    assert(e->_offset[0]==1.0f && e->_rotation[2]==3.0f);
     if(finish){d->finishes++;d->finish_order=d->finish_order*10+1;return 0;}
     d->starts++;e->_geneRamNo=7;*keep=e->_isSeqDead!=0;
     if(d->replace){d->replace=0;assert(!dw4_modelctrl_start(m,"SQ_WAIT02"));

@@ -755,7 +755,7 @@ int dw4_engine_run(const dw4_engine_opts *o)
     dw4_render_set_fog(o->fog);
 
     /* an optional texture for the GL path, from a texture pack's own name (the mesh -> texture
-     * binding is a load-time assignment, #485, so the caller names one) */
+     * binding is a load-time assignment, so the caller names one) */
     if ((o->gl || dw4_gpu_policy_required()) && o->texname) {
         char afs[4096];
         dw4_igfile tf;

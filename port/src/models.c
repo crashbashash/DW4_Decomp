@@ -36,7 +36,7 @@ static int class_is(const dw4_models *m, uint32_t rec, const char *name)
 }
 
 /* Does the block `vdata` list a stream of exactly `want` bytes?  This is the check that makes
- * `_vdata`/`_numVerts` self-validating (`_memSize` IS the stream's content size, #477). */
+ * `_vdata`/`_numVerts` self-validating (`_memSize` IS the stream's content size). */
 static int stream_size_is(const dw4_models *m, uint32_t vdata, uint32_t want)
 {
     uint32_t i, n = 0, off = 0, len = 0;

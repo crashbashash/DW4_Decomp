@@ -500,6 +500,13 @@ check-stageobjects: $(BUILD)/test_stageobjects
 check: check-stageobjects
 .PHONY: check-stageobjects
 
+$(BUILD)/test_mesh: tools/test_mesh.c $(OBJ)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+check-mesh: $(BUILD)/test_mesh
+	./$(BUILD)/test_mesh
+check: check-mesh
+.PHONY: check-mesh
+
 $(BUILD)/test_controllers: tools/test_controllers.c $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 check-controllers: $(BUILD)/test_controllers
@@ -1211,7 +1218,7 @@ check-dungeondoors2-boss: $(BUILD)/test_fieldstage
 	ARENADIRECT=1 FLOOR=dng102b3 BOSSSMART=1 BOSSBUDGET=6000 BOSSREQUIRE=1 ./$(BUILD)/test_fieldstage $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted) dungeondoors2
 .PHONY: check-dungeondoors2 check-dungeondoors2-full check-dungeondoors2-boss
 check: check-dungeondoors2
-# dng102b3 GENE-09 (add, 10 total / 6 concurrent) against the retail reads, #3073: the wave of six at once, the victim's end after HP 0, the refill, no refill while the player is outside the matg09 box (about 35 s).
+# dng102b3 GENE-09 (add, 10 total / 6 concurrent) against the retail reads: the wave of six at once, the victim's end after HP 0, the refill, no refill while the player is outside the matg09 box (about 35 s).
 check-gene09refill: $(BUILD)/test_fieldstage
 	./$(BUILD)/test_fieldstage $(if $(DW4_ROMS),$(DW4_ROMS),../../local/extracted) gene09refill
 .PHONY: check-gene09refill

@@ -24,6 +24,12 @@ int dw4_mesh_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
                   const uint8_t *lengths, uint32_t num_lengths,
                   uint32_t **out, uint32_t *ntris, const char **why);
 
+/* The same triangles as the retail collision walk winds them: winding alternates with the vertex
+ * index across the whole geometry, so a strip after an odd-length strip starts reversed. */
+int dw4_mesh_collision_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
+                            const uint8_t *lengths, uint32_t num_lengths,
+                            uint32_t **out, uint32_t *ntris, const char **why);
+
 /* One mesh as Wavefront OBJ.  `pos` is `num_verts` x 3 floats and `uv` (may be NULL) is
  * `num_verts` x 2 floats, both little-endian f32.  Writes exactly what `dw4asset models` writes,
  * including the byte order of the text, so two front ends can be diffed. */

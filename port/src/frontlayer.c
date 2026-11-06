@@ -1,8 +1,7 @@
 /* src/frontlayer.c — the front-end title's generated light-trail layer.  See dw4/frontlayer.h.
  *
  * The whole subsystem is recovered knowledge, not a replay: the graph and the controller live in
- * AREA.AFS entry 620, the clock is #619, the JOINTSET ranges are #618/#621 and
- * the 16-mesh / 3184-triangle make-up is #623.  The pack's own `sback00.png` (an 8bpp `igImage`
+ * AREA.AFS entry 620, and the layer has 16 meshes and 3184 triangles.  The pack's own `sback00.png` (an 8bpp `igImage`
  * plus its `igClut`) is the texture; nothing here touches a capture.
  */
 #include "dw4/frontlayer.h"

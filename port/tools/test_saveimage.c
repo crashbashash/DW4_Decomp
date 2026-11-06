@@ -20,7 +20,7 @@ static void items_roundtrip(void)
     }
     /* Bit placement: record 0..9, equipped bit 10, kind 12..15, pocket 16..19, revision 20..30 (disk revision 16..19). */
     assert(!dw4_saveimage_item_encode(&(dw4_item_record){0,0x10D,1,3,2},&id) && id==(0x10Du|0x400u|0u<<12|2u<<16|3u<<20));
-    assert(!dw4_saveimage_item_encode(&(dw4_item_record){3,0x2D,1,0,0},&id) && id==0x342Du); /* equipped chip, #95's 0x34 */
+    assert(!dw4_saveimage_item_encode(&(dw4_item_record){3,0x2D,1,0,0},&id) && id==0x342Du); /* equipped chip, 0x34 */
     assert(!dw4_saveimage_item_encode(&(dw4_item_record){4,7,0,9,0},&id) && id==(7u|4u<<12|9u<<16));
     assert(!dw4_saveimage_item_encode(&(dw4_item_record){.kind=-1},&id) && id==0xFFFFFFFFu);
     assert(!dw4_saveimage_item_decode(0xFFFFFFFFu,&back) && back.kind==-1);

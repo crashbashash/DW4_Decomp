@@ -37,7 +37,7 @@
 #define ALPHAFN_REF_ORD      5u   /* igAlphaFunctionAttr._refValue (a float; _func is ordinal 4) */
 #define BLENDFN_SRC_ORD      4u   /* igBlendFunctionAttr._src / _dst (probed from the pack's triples) */
 #define BLENDFN_DST_ORD      5u
-#define XFORM_TARGET_ORD     9u   /* igTransform._target (read from the pack's triples, #716) */
+#define XFORM_TARGET_ORD     9u   /* igTransform._target (read from the pack's triples) */
 #define COLOR_VALUE_ORD      4u   /* igColorAttr._color (the 4-float RGBA) */
 #define TEXBIND_TEX_ORD      4u   /* igTextureBindAttr._texture (an igTextureAttr id) */
 #define TEXATTR_IMAGE_ORD   12u   /* igTextureAttr._image (an igImage id) */
@@ -1563,6 +1563,14 @@ int dw4_scene_tris(const dw4_scene *s, const dw4_scene_mesh *g, uint32_t **out, 
     return dw4_mesh_tris(g->prim_type, g->num_prims, g->num_verts,
                          (const uint8_t *)dw4_scene_host(s, g->lengths), g->num_lengths,
                          out, ntris, why);
+}
+
+int dw4_scene_collision_tris(const dw4_scene *s, const dw4_scene_mesh *g, uint32_t **out,
+                             uint32_t *ntris, const char **why)
+{
+    return dw4_mesh_collision_tris(g->prim_type, g->num_prims, g->num_verts,
+                                   (const uint8_t *)dw4_scene_host(s, g->lengths), g->num_lengths,
+                                   out, ntris, why);
 }
 
 int dw4_scene_write_obj(const dw4_scene *s, const dw4_scene_mesh *g, FILE *f)

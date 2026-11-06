@@ -20,9 +20,9 @@ static float rdf(const uint8_t *p)
     return f;
 }
 
-int dw4_mesh_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
-                  const uint8_t *lengths, uint32_t num_lengths,
-                  uint32_t **out, uint32_t *ntris, const char **why)
+static int mesh_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
+                     const uint8_t *lengths, uint32_t num_lengths, int geometry_parity,
+                     uint32_t **out, uint32_t *ntris, const char **why)
 {
     uint32_t i, k, n = 0, base = 0, *t;
 
@@ -72,7 +72,7 @@ int dw4_mesh_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
                  * form emitted (k, k+1, k+2) for both, so half of every strip was wound the
                  * other way; that was invisible while nothing culled, and it is what makes
                  * back-face culling (the game's VU1 CULLBACK) possible now. */
-                if ((k & 1) == 0) {
+                if ((((geometry_parity ? base : 0) + k) & 1) == 0) {
                     t[3 * n] = base + k;
                     t[3 * n + 1] = base + k + 1;
                     t[3 * n + 2] = base + k + 2;
@@ -89,6 +89,20 @@ int dw4_mesh_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
     *out = t;
     *ntris = n;
     return 0;
+}
+
+int dw4_mesh_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
+                  const uint8_t *lengths, uint32_t num_lengths,
+                  uint32_t **out, uint32_t *ntris, const char **why)
+{
+    return mesh_tris(prim_type, num_prims, num_verts, lengths, num_lengths, 0, out, ntris, why);
+}
+
+int dw4_mesh_collision_tris(uint32_t prim_type, uint32_t num_prims, uint32_t num_verts,
+                            const uint8_t *lengths, uint32_t num_lengths,
+                            uint32_t **out, uint32_t *ntris, const char **why)
+{
+    return mesh_tris(prim_type, num_prims, num_verts, lengths, num_lengths, 1, out, ntris, why);
 }
 
 void dw4_mesh_obj_basename(const char *name, uint32_t id, char *out, size_t cap)

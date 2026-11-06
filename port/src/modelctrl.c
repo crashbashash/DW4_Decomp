@@ -113,6 +113,11 @@ static beBaseInfoRam *model_ram(const dw4_modelctrl *m)
 {return DW4_ARENA_OBJ(m->arena,beBaseInfoRam,m->ram);}
 static uint32_t model_float_bits(const float *f){uint32_t u;memcpy(&u,f,4);return u;}
 static void model_float_store(float *f,uint32_t u){memcpy(f,&u,4);}
+static void model_direction_store(const dw4_modelctrl *m,uint32_t bits)
+{
+    beModelCtrlInfoWork *w=model_work(m);
+    model_float_store(&w->_direction[1],bits);model_float_store(&w->_targetDirection[1],bits);
+}
 static float *model_position(const dw4_modelctrl *m)
 {return (float *)(void *)(DW4_ARENA_OBJ(m->arena,beModelCtrlNode2,m->node)->_m+12);}
 static beModelCtrlMoveObject *model_channel(const dw4_modelctrl *m,unsigned i)
@@ -340,9 +345,9 @@ static void model_move_unlock(dw4_modelctrl *m)
 {
     beModelCtrlInfoWork *w=model_work(m);if(!w->_isPosLock)return;
     const beModelCtrlNode2 *n=DW4_ARENA_OBJ(m->arena,beModelCtrlNode2,m->node);
-    uint32_t x=(uint32_t)n->_m[8],z=(uint32_t)n->_m[10];
+    uint32_t x=model_float_bits(&n->_m[8]),z=model_float_bits(&n->_m[10]);
     uint32_t angle=dw4_model_ai_direction(x,z,0),degrees=ee_f32_mul(angle,0x42652ee1);
-    w->_direction[1]=w->_targetDirection[1]=angle;memcpy(m->pose.rotation+1,&degrees,4);
+    model_direction_store(m,angle);memcpy(m->pose.rotation+1,&degrees,4);
     w->_isPosLock=0;m->pose.matrix_valid=0;
 }
 static void model_pose_publish(dw4_modelctrl *m)
@@ -1045,8 +1050,8 @@ static int ai_tick(dw4_modelctrl *m)
             const dw4_model_ai_choice *c=a->choices[zone]+choice;
             uint32_t dx=ee_f32_sub(float_bits(model_ai_target(m)[0]),float_bits(model_position(m)[0]));
             uint32_t dz=ee_f32_sub(float_bits(model_ai_target(m)[2]),float_bits(model_position(m)[2]));
-            (model_work(m)->_targetDirection[1])=dw4_model_ai_direction(dx,dz,c->direction);
-            (model_work(m)->_directionLimiter[1])=a->rot_limit;if(model_ai_sequence(m,c->sequence))return -1;
+            model_float_store(&model_work(m)->_targetDirection[1],dw4_model_ai_direction(dx,dz,c->direction));
+            model_float_store(&model_work(m)->_directionLimiter[1],a->rot_limit);if(model_ai_sequence(m,c->sequence))return -1;
             model_ai_timer_arm(m,dw4_model_ai_clock(m->now),dw4_model_ai_duration(c->frames));
         }
         next=al_text(m->arena,model_ai(m)->_seqName);
@@ -1178,7 +1183,7 @@ int dw4_modelctrl_generate_effect(dw4_modelctrl *m,dw4_modelctrl *source,const c
     w->_aIHOffsetY=offset[1];
     /* GENERATE samples the initialized node's forward axis after vfunc36. */
     uint32_t facing=dw4_model_ai_direction(model_float_bits(world+8),model_float_bits(world+10),0);
-    w->_direction[1]=w->_targetDirection[1]=facing;
+    model_direction_store(m,facing);
     uint32_t degrees=ee_f32_mul(facing,0x42652ee1);memcpy(m->pose.rotation+1,&degrees,4);
     m->pose.matrix_valid=1;memcpy(m->pose.matrix_rotation,m->pose.rotation,12);
     return dw4_modelctrl_start(m,seq);
@@ -1249,12 +1254,12 @@ static int model_tick_impl(dw4_modelctrl *m,int64_t now,uint32_t system_frame) {
         int turning=model_channel(m,3)->_isRun;
         uint32_t turn=model_move_tick(model_channel(m,3),delta);float rotation;memcpy(&rotation,&turn,4);
         if(model_ai(m)->_mapNo<0)m->pose.rotation[1]+=rotation;
-        else (model_work(m)->_targetDirection[1])=ee_f32_add((model_work(m)->_targetDirection[1]),ee_f32_mul(turn,0x3c8efa35));
-        if(turning)(model_work(m)->_directionLimiter[1])=ee_f32_mul(ee_f32_mul(turn&0x7fffffff,0x3c8efa35),0x3fa00000);
+        else model_float_store(&model_work(m)->_targetDirection[1],ee_f32_add(model_float_bits(&model_work(m)->_targetDirection[1]),ee_f32_mul(turn,0x3c8efa35)));
+        if(turning)model_float_store(&model_work(m)->_directionLimiter[1],ee_f32_mul(ee_f32_mul(turn&0x7fffffff,0x3c8efa35),0x3fa00000));
         if(model_ai(m)->_mapNo>=0) {
-            uint32_t current=(model_work(m)->_direction[1]);
-            uint32_t out=dw4_model_ai_turn(current,(model_work(m)->_targetDirection[1]),(model_work(m)->_directionLimiter[1]),delta);
-            (model_work(m)->_direction[1])=out;m->pose.rotation[1]=bits_float(ee_f32_mul(out,0x42652ee1));
+            uint32_t current=model_float_bits(&model_work(m)->_direction[1]);
+            uint32_t out=dw4_model_ai_turn(current,model_float_bits(&model_work(m)->_targetDirection[1]),model_float_bits(&model_work(m)->_directionLimiter[1]),delta);
+            model_float_store(&model_work(m)->_direction[1],out);m->pose.rotation[1]=bits_float(ee_f32_mul(out,0x42652ee1));
         }
         float step[3];for(unsigned i=0;i<3;i++) {
             uint32_t bits=model_move_tick(model_channel(m,i),delta);memcpy(step+i,&bits,4);
@@ -1521,7 +1526,7 @@ static int model_service_impl(void *user,const char *method,const dw4_script_val
                (size_t)used!=a[4].length)goto bad;
             for(unsigned i=0;i<3;i++)if(!isfinite(pos[i]) || !isfinite(rot[i]))goto bad;
             if(model_ram(m)->_isRun){memcpy(model_position(m),pos,sizeof pos);memcpy(m->pose.rotation,rot,sizeof rot);
-                (model_work(m)->_direction[1])=(model_work(m)->_targetDirection[1])=ee_f32_mul(float_bits(rot[1]),0x3c8efa35);model_pose_write(m);}
+                model_direction_store(m,ee_f32_mul(float_bits(rot[1]),0x3c8efa35));model_pose_write(m);}
             return 0;
         }
         if(n==4 && equal(a[3],"REMOVE")){dw4_modelctrl_remove(m);return 0;}
@@ -1584,7 +1589,7 @@ static int model_service_impl(void *user,const char *method,const dw4_script_val
             int rc=(!model_ram(m)->_isRun && !generate && find_seq(m,name)>=0)?0:start_sequence(m,name,generate);
             if(!rc && positioned)memcpy(model_position(m),position,sizeof position);
             if(!rc && rotated){memcpy(m->pose.rotation,rotation,sizeof rotation);
-                (model_work(m)->_direction[1])=(model_work(m)->_targetDirection[1])=ee_f32_mul(float_bits(rotation[1]),0x3c8efa35);model_pose_write(m);}
+                model_direction_store(m,ee_f32_mul(float_bits(rotation[1]),0x3c8efa35));model_pose_write(m);}
             free(name);
             if(rc)snprintf(error,cap,"%s",m->error);
             return rc;
@@ -1653,8 +1658,8 @@ static int model_talk_hit_impl(dw4_modelctrl *m,const float world[16],const dw4_
     model_bridge_pull(m);
     if((*model_hp(m,0))==before)(*model_hp(m,0))=snapshot.hp;
     if(model_ram(m)->_isRun && contact.damage_turn) {
-        (model_work(m)->_direction[1])=(model_work(m)->_targetDirection[1])=dw4_model_ai_direction(dx,dz,0);   /* retail: the victim snaps to face the attacker and keeps that yaw (the AI turn has nothing left to do), #3083 */
-        m->pose.rotation[1]=bits_float(ee_f32_mul((model_work(m)->_direction[1]),0x42652ee1));
+        model_direction_store(m,dw4_model_ai_direction(dx,dz,0));   /* retail: the victim snaps to face the attacker and keeps that yaw (the AI turn has nothing left to do) */
+        m->pose.rotation[1]=bits_float(ee_f32_mul(model_float_bits(&model_work(m)->_direction[1]),0x42652ee1));
     }
     return 1;
 invalid:
@@ -1731,8 +1736,8 @@ static int model_bullet_hit_impl(dw4_modelctrl *m,const float world[16],const dw
     model_bridge_pull(m);
     if((*model_hp(m,0))==before)(*model_hp(m,0))=snapshot.hp;
     if(model_ram(m)->_isRun && contact.damage_turn) {
-        (model_work(m)->_direction[1])=(model_work(m)->_targetDirection[1])=dw4_model_ai_direction(dx,dz,0);   /* retail: the victim snaps to face the attacker and keeps that yaw (the AI turn has nothing left to do), #3083 */
-        m->pose.rotation[1]=bits_float(ee_f32_mul((model_work(m)->_direction[1]),0x42652ee1));
+        model_direction_store(m,dw4_model_ai_direction(dx,dz,0));   /* retail: the victim snaps to face the attacker and keeps that yaw (the AI turn has nothing left to do) */
+        m->pose.rotation[1]=bits_float(ee_f32_mul(model_float_bits(&model_work(m)->_direction[1]),0x42652ee1));
     }
     return 1;
 invalid:

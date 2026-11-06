@@ -266,7 +266,7 @@ size_t dw4_vag_decode(const uint8_t *adpcm, size_t len, int16_t *out, size_t cap
  * records.  `beCriSfpData` names each bank and its `_pcmSize` equals the DTPK size, so
  * the bank table is exact.  `beSoundData` names each sound and says which bank and
  * entry it is: `_fnameIdx` selects a bank through `beSoundInfo._fnameList`, and
- * `_memoryIdx`'s high 16 bits is a sequence index (#783 corrects #452). The
+ * `_memoryIdx`'s high 16 bits is a sequence index. The
  * legacy diagnostic name list retains that number; playback uses the full packed
  * selector through dw4_sfp_resolve. Offline the filename list is
  * not decoded, so the groups are matched to banks by their size, which is unique on

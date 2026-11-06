@@ -18,7 +18,7 @@ void FUN_00259dc0(S *arg0, int arg1, int arg2);
 }
 /* matching construct: retail writes a zero byte to a word-sized frame temporary (sp+88, sp+84) before each
  * "release the old reference, store the new one" pair; a one-byte class temporary with a zeroing constructor
- * takes those slots (below the named StringRef at sp+92).  Its purpose is unknown (hypothesis, no finding yet). */
+ * takes those slots (below the named StringRef at sp+92). */
 struct ScratchFlag { volatile char c; ScratchFlag() { c = 0; } };
 class StringRef {
 public:

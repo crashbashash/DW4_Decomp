@@ -26,7 +26,7 @@ static int append_below(dw4_collision_mesh *out,const dw4_scene *s,unsigned node
     uint32_t mi=dw4_scene_node_mesh(s,node);if(mi==UINT32_MAX)return 0;
     const dw4_scene_mesh *m=s->mesh+mi;const float *p=dw4_scene_host(s,m->positions);
     uint32_t *indices=NULL,count=0;float world[16];
-    if(!p || dw4_scene_tris(s,m,&indices,&count,NULL) || (stop==UINT32_MAX?dw4_scene_node_world(s,node,world):world_below(s,node,stop,world))) {free(indices);return -1;}
+    if(!p || dw4_scene_collision_tris(s,m,&indices,&count,NULL) || (stop==UINT32_MAX?dw4_scene_node_world(s,node,world):world_below(s,node,stop,world))) {free(indices);return -1;}
     if(m->num_verts>UINT_MAX-out->vertices || count>UINT_MAX-out->count){free(indices);return -1;}
     for(size_t i=0;i<(size_t)count*3;i++)if(indices[i]>=m->num_verts){free(indices);return -1;}
     size_t vertices=(size_t)out->vertices+m->num_verts,triangles=(size_t)out->count+count;
@@ -139,7 +139,7 @@ static int lobby_collision_open_raw(dw4_lobby_collision *c, const dw4_scene *s,c
                                 s->mesh[i].attr_id == 1064 ? &c->floor : NULL;
         if (!m) continue;
         m->positions=dw4_scene_host(s,s->mesh[i].positions);
-        if (!m->positions || dw4_scene_tris(s,&s->mesh[i],&m->indices,&m->count,NULL)) goto fail;
+        if (!m->positions || dw4_scene_collision_tris(s,&s->mesh[i],&m->indices,&m->count,NULL)) goto fail;
     }
     if (c->wall.count == 286 && c->floor.count == 226) return 0;
 fail: dw4_lobby_collision_close(c); return -1;
@@ -165,7 +165,7 @@ static int floor_y(const float *a,const float *b,const float *c,float x,float z,
 unsigned dw4_lobby_collision_move(const dw4_lobby_collision *c,const float old[3],
                                   float pos[3],float half_width,float up,float down)
 {return dw4_lobby_collision_move_for(c,0,old,pos,half_width,up,down);}
-/* Retail CHECKLAND (FUN_00388010, #3001 and the floor-selection trace): four vertical segments at the footprint corners cover y -100..1000. The chosen
+/* Retail CHECKLAND (FUN_00388010): four vertical segments at the footprint corners cover y -100..1000. The chosen
  * floor is the highest triangle inside the height window (y-up < h < y+down), else the nearest one below the model, else the lowest one above it.
  * *in_window says whether the chosen floor passes the window; the return is 0 when no triangle is hit at all. */
 static int floor_select(const dw4_lobby_collision *c,const float old[3],const float pos[3],float half_width,float up,float down,float *h,int *in_window)

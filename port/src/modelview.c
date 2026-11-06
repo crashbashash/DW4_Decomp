@@ -308,7 +308,7 @@ static int billboard_matrix(const dw4_scene *s,uint32_t node,const float m[16],c
     for(unsigned k=0;k<3;k++)out[12+k]=bw[12+k]+off[k];
     out[15]=1;return 1;
 }
-/* WN00 models that stand at a world position and are projected with the scene camera: the point-message cursor and the floating combat numbers (hypothesis #2798 for the latter). */
+/* WN00 models that stand at a world position and are projected with the scene camera: the point-message cursor and the floating combat numbers. */
 static int follows_world(const char *name){
     static const char *const names[]={"i_pointcur","i_pcnumic","i_dmgnum","i_expnum","i_healnum","i_pcdmgnum","i_bitnum","i_getitempnl01","i_getitempnl02","i_getitempnl03"};   /* the got-item panels (PLAYER SETEFFECT) follow the picking player */
     for(unsigned i=0;i<sizeof names/sizeof *names;i++)if(!strcmp(name,names[i]))return 1;
@@ -356,7 +356,7 @@ int dw4_modelview_draw_clocks(dw4_modelview *v,unsigned width,unsigned height,co
             follow=fi && fi->object.off && dw4_stageobject_name(fi) && follows_world(dw4_stageobject_name(fi));}
         if(v->hide_labels && follow_label(v,model))continue;
         if(v->hide_hud && model->hud)continue;
-        if(model->hud){   /* a panel's slot copy carries an authored layout offset in its beModelCtrlNode2 (the portrait icon: 15 x slot); the instance's own position (GENERATE/MOVETRANS) is its place (hypothesis, #2923) */
+        if(model->hud){   /* a panel's slot copy carries an authored layout offset in its beModelCtrlNode2 (the portrait icon: 15 x slot); the instance's own position (GENERATE/MOVETRANS) is its place */
             uint32_t root=model->root,selected=s->node[root].switch_mask.off && s->node[root].switch_bits>1?(uint32_t)model->slot:0,index=0,child;
             for(child=root+1;child<model->end;child++)if(s->node[child].parent==root && index++==selected)break;
             if(child<model->end && !strcmp(s->node[child].class_name,"beModelCtrlNode2"))s->node[child].m[12]=s->node[child].m[13]=s->node[child].m[14]=0;

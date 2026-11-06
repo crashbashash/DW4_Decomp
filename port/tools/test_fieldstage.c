@@ -891,7 +891,7 @@ static void g9_kill(dw4_hubruntime *h,unsigned *frame,const dw4_gene *g,const ch
         unsigned k=t%90;dw4_hubruntime_input(h,0,0,0,o->hp0<0 && k<3?0x4000:0,o->hp0<0 && k==0?0x4000:0);
         if(dw4_hubruntime_tick(h,(uint64_t)(*frame)++*1000000000ULL/60)){fprintf(stderr,"tick: %s\n",dw4_hubruntime_error(h));exit(1);}
         if(o->hp0<0 && st->hp<=0){o->hp0=(int)t;if(away)place(h,away);}
-        if(o->hp0>=0 && (int)t<=o->hp0+24) {   /* retail: the victim snaps to face the attacker at the lethal hit and keeps that yaw through the first hop (40 victims, 0.000 degrees of change), #3083 */
+        if(o->hp0>=0 && (int)t<=o->hp0+24) {   /* retail: the victim snaps to face the attacker at the lethal hit and keeps that yaw through the first hop (40 victims, 0.000 degrees of change) */
             for(size_t k=0;k<dw4_controllers_count(dw4_hubruntime_models(h));k++){const dw4_stageobject *info;int32_t sl;const dw4_modelctrl *mc=dw4_controllers_model(dw4_hubruntime_models(h),k,&info,&sl);
                 if(mc && info && sl==slot && !strcmp(dw4_stageobject_name(info),model) && dw4_modelctrl_active(mc)){dw4_modelctrl_actor a;dw4_modelctrl_actor_state(mc,&a);
                     if((int)t==o->hp0)o->rot0=a.rotation[1];else{float d=fabsf(fmodf(a.rotation[1]-o->rot0+540.f,360.f)-180.f);if(d>o->drift)o->drift=d;}}}
@@ -5246,7 +5246,7 @@ int main(int argc,char **argv)
         return 0;
     }
     if(!strcmp(mode,"e2pboss")) {
-        /* Enemy-to-player damage of Mammothmon (enemy row 97) against the retail reads of 2026-11-01 (docs/dungeon-floors.md "Second retail pass", #2984):
+        /* Enemy-to-player damage of Mammothmon (enemy row 97) against the retail reads of 2026-11-01 (docs/dungeon-floors.md "Second retail pass"):
          * a player with MAMORI 100, SUBAYASA 1, KAIHIRITSU 0, BOUGYORITSU 0 took body contact (hit boxes 70000 = eneatk row 0) 177-196 with criticals 339-386, the charge
          * (70016 = eneatk row 16) 284-309 with a first critical of 568, and SQ_FIRE (70015 = eneatk row 15) as 0 damage with guard flinches; with SUBAYASA 9999 no hit
          * landed in the sample. The expectation is derived below from the recovered formula (beNDMWGameRam::vfunc_34 FIGHTCALC cases 0 and 3) and the tables, then the

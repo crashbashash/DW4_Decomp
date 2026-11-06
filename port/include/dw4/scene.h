@@ -5,7 +5,7 @@
  * same shape: one arena holds every id's payload, and a **32-bit handle** addresses it.
  *
  *   handle = arena offset (0 is NULL)          -- pointer-model option (b), P1.5
- *   id     = the pack's own id (igb.h, #460)   -- what the file says
+ *   id     = the pack's own id (igb.h)   -- what the file says
  *
  * `dw4_scene_load` walks the pack's id table, allocates each id's payload in the arena in id
  * order and records the handle, so a reader afterwards asks for *handles*, exactly as engine code
@@ -248,6 +248,8 @@ uint32_t dw4_scene_id_of(const dw4_scene *s, dw4_handle h);
  * `*why` set, when the counts do not add up. */
 int dw4_scene_tris(const dw4_scene *s, const dw4_scene_mesh *g, uint32_t **out, uint32_t *ntris,
                    const char **why);
+int dw4_scene_collision_tris(const dw4_scene *s, const dw4_scene_mesh *g, uint32_t **out,
+                             uint32_t *ntris, const char **why);
 
 /* One mesh as a Wavefront OBJ — the text `dw4asset models` writes, so the two can be diffed. */
 int dw4_scene_write_obj(const dw4_scene *s, const dw4_scene_mesh *g, FILE *f);

@@ -290,7 +290,7 @@ static void scene_dependencies(dw4_controllers *c)
     call_slot(dw4_modelctrl_service,source,"sd","MODELCTRL","n_digilff",0,"SETEFFECT",
         "x_250healhit00/SQ_HEALEFONLY/F<0>/V<1,2,3>/FALSE/TRUE");
     assert(!dw4_modelctrl_tick_frame(source,1,0));assert(!dw4_modelctrl_start(source,"SQ_WAIT02"));
-    assert(dw4_modelctrl_active(effect) && (uint32_t)ew->_direction[1]==0x3fc90fda);
+    assert(dw4_modelctrl_active(effect) && ew->_direction[1]==1.57079625f);
     ((float *)(void *)sn->_m)[12]=15;
     assert(!dw4_modelctrl_tick_frame(effect,2,0));dw4_modelctrl_matrix(effect,pose);assert(pose[12]==18);
     dw4_modelctrl_remove(effect);

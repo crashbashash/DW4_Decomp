@@ -875,7 +875,7 @@ void dw4_lobby_exit_events(dw4_lobby *l,int enabled){if(l)l->exit_events=!!enabl
 const char *dw4_lobby_material_name(const dw4_lobby *l,unsigned index){return l && index<l->nmaterial?l->material[index].name:NULL;}
 /* A beHitLandModelInfo that lists several names over a graph with as many meshes (the Humid Cave's doorwall01..06: one wall graph, one mesh per
  * door at the door's authored position, listed in the script's numbering) switches the name's own mesh; an info with one name switches its graph.
- * Hypothesis (#2857, unconfirmed): the names answer to the meshes in list order. */
+ * Unconfirmed: the names answer to the meshes in list order. */
 static int hit_part(const dw4_lobby *l,unsigned h,unsigned k)
 {return l->hit_name[h].count>1 && l->hit_name[h].count==dw4_lobby_collision_parts(&l->scene,k) && l->hit_name[h].index<64;}
 int dw4_lobby_collision_hit(dw4_lobby *l,const char *name,int on)

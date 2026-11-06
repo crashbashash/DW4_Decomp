@@ -55,7 +55,7 @@ typedef struct {
     int nlights;
     const dw4_fog *fog;     /* the VU1 FOG family rig, or NULL for no fog */
     /* A decoded texture pack image to sample on the GL path (the mesh -> texture binding is a
-     * load-time assignment, #485, so the caller names one). */
+     * load-time assignment, so the caller names one). */
     const char *texname;
     uint32_t texentry;      /* texture pack entry; 0 means the default 625 */
 } dw4_engine_opts;

@@ -319,7 +319,7 @@ int dw4_render_parse_fog(const char *s, dw4_fog *f)
  * a FOG_LINEAR program with near 60 / far 300 in view-space depth, lerping toward FOGCOL
  * 0xE5CCE5.  The dump's per-vertex F, extracted from the packed `XYZF2` 4th dword (PCSX2's
  * `GIFPackedRegHandlerSTQRGBAXYZF2`: F = (dword44 >> 4) & 0xff), is linear in the view depth to
- * 0.22/255 (100 % within 1) at these values, and the framebuffer is the #603 model
+ * 0.22/255 (100 % within 1) at these values, and the framebuffer is the model
  * `out = C*(F/255) + FOGCOL*(1 - F/255)`.  This is the game's rig, not a fit: the pairs (60,300)
  * and (59.5,299.5) both reproduce the dump, and 60/300 appear as float pairs across the live RAM.
  * Returns 0 and fills `out`; the mode is DW4_FOG_LINEAR. */
