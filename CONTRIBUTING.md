@@ -75,9 +75,6 @@ If you changed `tools/` or the tables in `config/`, use `make check-fresh` and `
 
 - **Anything from the game:** disc images, executables, BIOS files, saves, extracted assets,
   screenshots, or the game's code as assembly. Names and notes we've worked out are fine.
-- **Anything about your machine:** paths with your username, hardware details, email addresses and
-  passwords, including in commit messages. The hooks catch these, so please don't skip them with
-  `--no-verify` ([why](docs/host-details-policy.md)).
 - **Hand edits to generated files:** `PROGRESS.md`, most of `data/` and the symbol tables in `config/`.
   Change what they're built from and run `make progress`.
 

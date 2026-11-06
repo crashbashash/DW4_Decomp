@@ -22,7 +22,7 @@
 #   DW4_PREPUSH_ORACLE_ONLY=1 .githooks/pre-push RANGE UNITTEST_LOG ORACLE_LOG
 # testing/test_prepush_gate.py runs both on sample logs (no build).
 #
-# Enable once per clone: scripts/install_git_hooks.sh.  Never bypass with --no-verify.
+# Enable once per clone: scripts/install_git_hooks.sh.
 set -u
 
 root=$(git rev-parse --show-toplevel 2>/dev/null) || root=.
@@ -86,7 +86,7 @@ gate() {
     if [ "$ok" -eq 0 ]; then
         echo "pre-push: PASS — the byte oracle holds; pushing"
     else
-        echo "pre-push: REFUSED — fix the tree (make check / make link) and push again; never --no-verify"
+        echo "pre-push: REFUSED — fix the tree (make check / make link) and push again"
     fi
     return $ok
 }
@@ -198,7 +198,7 @@ for range in $ranges; do
     fi
 done
 if [ "$rc" -ne 0 ]; then
-    echo "pre-push: REFUSED — see the lines above; never --no-verify"
+    echo "pre-push: REFUSED — see the lines above"
 else
     echo "pre-push: PASS — the byte oracle is the runner's verdict on the pushed commit (.github/workflows/oracle.yml)"
 fi
