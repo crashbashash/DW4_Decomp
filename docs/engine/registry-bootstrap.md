@@ -7,7 +7,7 @@ five adjacent context dispatch wrappers, and two concrete record-lookup methods.
 Fifteen bodies /1,448 bytes have exact source. New list init104/release116/append168
 and concrete named lookup156 add **544 matched bytes**. Current-context getter84 matches in
 [Memory_GetCurrentContext.c](../../src/unmatched/Memory_GetCurrentContext.c) and concrete selector244 in
-[Gap__Core__igMemoryPoolContextInfo__vfunc_51.cpp](../../src/unmatched/Gap__Core__igMemoryPoolContextInfo__vfunc_51.cpp).
+[FUN_002f2730.cpp](../../src/unmatched/FUN_002f2730.cpp).
 List allocate/delete32 each have no C source yet.
 
 Six body-derived names are applied through `config/SLUS-20836/names/RegistryBootstrap.tsv`.

@@ -205,5 +205,5 @@ recovered ones: **148 functions**. The first 60:
 
 ## What is left to understand
 
-631 of the closure's 1,152 functions are still unnamed (178,332 bytes); 626 of those already have matching source, so naming them is a rename,
+634 of the closure's 1,152 functions are still unnamed (178,916 bytes); 629 of those already have matching source, so naming them is a rename,
 not a recovery. The rest of the evidence is in `data/port-critical-map.tsv` (one row per function).

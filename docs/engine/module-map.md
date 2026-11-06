@@ -175,4 +175,4 @@ sonyModulePath = MODULE`; `atstream:!-5150` |
 * **AdxMovie's origin.** It wraps CRI, sits directly in `Gap::` and shares the `-O3,p` build of Bec, Ndmw and `main`, so it counts with the game; Viewer shares that build too, so the build alone does not prove it was written for this title.
 * **Enbaya's classes.** The code at `0x27ede0` has vtables at `0x52d6d0` and `0x52d6f0` and no RTTI, so its classes are unnamed; that it is the codec rather than other Enbaya code is an inference.
 * **Region names.** Audio, WindowInput, Base, SceneSearch, Collision, AdxMovie and maths describe their classes; no retail string gives them.
-* **Vtable slot names.** `scripts/seed_names_getvtable_slots.py` reads 62 words from every table. Stopping at the next table's start would remove 87 more names and allow about 1,100 that the overrun hides as shared.
+* **Vtable slot names.** `scripts/seed_names_getvtable_slots.py` names a slot only inside its table, but still judges a body shared from a 62-word read, so about 1,100 bodies that belong to one class stay unnamed.

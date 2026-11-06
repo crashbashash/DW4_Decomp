@@ -1,7 +1,7 @@
 extern "C" {
 int FUN_001f7340(...);
 int FUN_001f7360(...);
-int Gap__Core__igPrimLengthArray1_1__vfunc_60(...);
+int FUN_0015d0d0(...);
 extern int DAT_004df6b0[4];
 void FUN_00176800(int *arg0, int arg1, int arg2);
 }
@@ -12,7 +12,7 @@ void FUN_00176800(int *arg0, int arg1, int arg2) {
     int *q;
     int s3, a1, a0_3, s3_2;
     if (!(((int *)arg0[6])[5] & 0x10)) {
-        Gap__Core__igPrimLengthArray1_1__vfunc_60(arg0);
+        FUN_0015d0d0(arg0);
         return;
     }
     p = ((VA *)arg0[6])->vX();

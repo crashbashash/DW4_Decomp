@@ -158,9 +158,9 @@ def main():
       "its classes are unnamed; that it is the codec rather than other Enbaya code is an inference.")
     w("* **Region names.** Audio, WindowInput, Base, SceneSearch, Collision, AdxMovie and maths describe "
       "their classes; no retail string gives them.")
-    w("* **Vtable slot names.** `scripts/seed_names_getvtable_slots.py` reads 62 words from every table. "
-      "Stopping at the next table's start would remove 87 more names and allow about 1,100 that the "
-      "overrun hides as shared.")
+    w("* **Vtable slot names.** `scripts/seed_names_getvtable_slots.py` names a slot only inside its table, "
+      "but still judges a body shared from a 62-word read, so about 1,100 bodies that belong to one class "
+      "stay unnamed.")
     w("")
 
     text = "\n".join(out)

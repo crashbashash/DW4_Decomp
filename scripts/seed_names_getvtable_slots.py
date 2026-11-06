@@ -31,10 +31,6 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-sys.path.insert(0, os.path.join(REPO, "tools"))
-
-import regions  # noqa: E402
-
 ELF_DEFAULT = os.environ.get("DW4_ELF", os.path.join(REPO, "orig", "SLUS-20836", "SLUS_208.36"))
 SYMBOLS = os.path.join(REPO, "config", "SLUS-20836", "symbols.txt")
 MODULE = "engine"
@@ -102,6 +98,24 @@ def main():
                 reg.pop(rt, None)
         return None
 
+    def loaded_addresses():
+        """Every vtable-range address built by a lui/addiu pair: code names only a table's start."""
+        out = set()
+        for addr, size, _n in rows:
+            reg = {}
+            for k in range(size // 4):
+                ins = word(addr + 4 * k)
+                if ins is None:
+                    break
+                op, rs, rt, imm = ins >> 26, (ins >> 21) & 0x1F, (ins >> 16) & 0x1F, ins & 0xFFFF
+                if op == 0x0F:
+                    reg[rt] = imm << 16
+                elif op == 0x09 and rs in reg:
+                    v = reg[rs] + (imm - 0x10000 if imm & 0x8000 else imm)
+                    if VLO <= v < VHI:
+                        out.add(v)
+        return out
+
     # every class's own vtable, from its <Class>_GetVTable function
     vtable_of = {}
     for addr, size, n in rows:
@@ -154,7 +168,12 @@ def main():
             out.append(c)
         return out
 
-    enbaya = range(regions.named("enbaya").lo, regions.named("enbaya").hi)
+    table_starts = loaded_addresses()
+
+    def table_slots(v):
+        """How many slots a table has: it ends where code loads the address of the next table."""
+        return next((s for s in range(1, MAX_SLOT) if v + 4 * s in table_starts), MAX_SLOT)
+
     out, skipped_ns = [], 0
     for v, cls in sorted(unique.items(), key=lambda kv: (kv[1], kv[0])):
         if v in rtti_addrs:
@@ -163,10 +182,10 @@ def main():
         if not ns:
             skipped_ns += 1
             continue
-        for s in range(2, MAX_SLOT):
+        for s in range(2, table_slots(v)):
             body = slots_of[cls][s]
-            if not body or body in enbaya:
-                continue                              # the read ran into Enbaya's own table
+            if not body:
+                continue
             gen = "%s::%s::vfunc_%02d" % (ns, cls, s)
             n = syms.get(body, "")
             # `FUN_` before the batch; after `apply_names.py` the symbol carries the generated

@@ -30,7 +30,7 @@ extern "C" int igStrCmp(const char *, const char *);  /* 0 when the strings are 
 
 /* Finds the first of the 46 records whose name equals `name` and returns what its slot-21 lookup
  * yields; null or empty names, and unknown names, give null. */
-extern "C" void *Gap__Core__igMemoryPoolContextInfo__vfunc_52(ContextVirtuals *self, const char *name) {
+extern "C" void *FUN_002f2830(ContextVirtuals *self, const char *name) {
     if (name) {
         if (*name) {
             for (int i = 0; i < 46; ++i)

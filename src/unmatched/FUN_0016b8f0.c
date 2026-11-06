@@ -6,7 +6,7 @@ int FUN_00170510();
 int FUN_001788e0();
 int FUN_0017a540();
 int FUN_001edf20();
-int Gap__Core__igVisualContextCapabilityManager__vfunc_38();
+int FUN_00165bb0();
 int Memory_FreeBuffer();
 
 void FUN_0016b8f0(S_arg0 *arg0) {
@@ -26,5 +26,5 @@ void FUN_0016b8f0(S_arg0 *arg0) {
     if (arg0->f142 != 0) {
         FUN_001edf20();
     }
-    Gap__Core__igVisualContextCapabilityManager__vfunc_38(arg0);
+    FUN_00165bb0(arg0);
 }

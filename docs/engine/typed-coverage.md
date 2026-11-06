@@ -366,7 +366,7 @@ compiler-specific virtual-call scaffolding where byte matching requires them.
 Class identity remains separate evidence: a byte match verifies code generation, so receiver
 interpretations that rest on layout alone are not confirmed class identities. In particular, the
 unchanged symbols
-`Gap__Core__igObject__vfunc_26` and `Gap__Core__igVertexArray2__vfunc_48` are viewed through
+`Gap__Core__igObject__vfunc_26` and `FUN_0015e2b0` are viewed through
 `beBaseInfoManager` and `igVertexArray1_1` layouts respectively; their symbol/receiver ownership
 discrepancies remain unresolved. Followed-reference target classes likewise need separate class,
 reflection or ownership evidence. Matching alone proves none of these identities.
@@ -422,7 +422,7 @@ these entries stay untyped for a recorded reason:
   `struct igObject`.
 - The reference release has one spelling. `include/dw4/igobject_release.h` holds
   `IG_OBJECT_RELEASE(obj)`, whose expansion is the retail sequence, and all five users
-  (`FUN_004614b0`, `FUN_00235370`, `Gap__Core__igVisualContextCapabilityManager__vfunc_31`,
+  (`FUN_004614b0`, `FUN_00235370`, `FUN_00164f50`,
   `Gap__Bec__beNDMWShopCtrlSell__vfunc_21`, `beAction2FADESET_Start`) match through it. The
   argument is evaluated more than once on purpose (a stack slot whose address escaped must be
   re-read, as retail does); a unit whose source holds the pointer in a smart-pointer temporary
@@ -506,7 +506,7 @@ The order that pays:
   [Port-critical closure helpers](#port-critical-closure-helpers) stay partly or wholly untyped
   until their receiver or neighbouring record has a reflected class or a typed caller.
 - The symbol/receiver ownership discrepancies of `Gap__Core__igObject__vfunc_26` and
-  `Gap__Core__igVertexArray2__vfunc_48`, and the receiver interpretations resting on layout alone, are
+  `FUN_0015e2b0`, and the receiver interpretations resting on layout alone, are
   unresolved.
 - The item cluster's per-class record setters (`FUN_004482c0` and five siblings) have a class but
   no role source, so they are unnamed.

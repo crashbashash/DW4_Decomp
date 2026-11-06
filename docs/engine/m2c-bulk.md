@@ -260,7 +260,7 @@ A wrapper that shifts its argument registers and tail-jumps (the 12-byte form
 rest. The fix is an unused leading parameter: `void f(int unused, int a, int b) { T(a, b); }`. A vfunc
 of this shape keeps the repository's flat extern-C symbol name and must be a `.c` file, because C++
 mode frames the call at 32 bytes instead of the 12-byte tail jump. Examples: `FUN_0016cdd0`,
-`FUN_0015ad30` (forwards 7 of 8), `Gap__Core__igPsx2CallStackTracer__vfunc_38`.
+`FUN_0015ad30` (forwards 7 of 8), `FUN_00328f70`.
 
 m2c also loses an argument set up in a delay slot: it decompiles `j X` with a setup instruction there
 as a call to `X` without that argument (the same for `addiu`, `li`, `lw` and `move`). For a `void *`

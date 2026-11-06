@@ -52,7 +52,7 @@ extern "C" void igMemoryPoolContextInfo_DeleteAllocation(void *);
 /* (vtable offset 100) Bind `value` to record `index` (0..45). Re-binding the same object is a no-
  * op; a different old binding is released through Clear first. The new object is retained, and a
  * non-null binding raises the used-record count. */
-extern "C" void Gap__Core__igMemoryPoolContextInfo__vfunc_53(ContextView *self, int index, igObject *value) {
+extern "C" void FUN_002f28d0(ContextView *self, int index, igObject *value) {
     if (index >= 0 && index < 46) {
         /* record address spelled as index * 144 + self (+ 20 for the allocator word); the
          * typed spelling &self->records[index] changes the bytes */

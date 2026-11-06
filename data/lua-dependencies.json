@@ -13287,9 +13287,9 @@
     },
     {
       "address": 3090224,
-      "name": "Gap__Core__igMemoryPoolContextInfo__vfunc_51",
+      "name": "FUN_002f2730",
       "size": 244,
-      "source": "src/unmatched/Gap__Core__igMemoryPoolContextInfo__vfunc_51.cpp",
+      "source": "src/unmatched/FUN_002f2730.cpp",
       "direct": [],
       "indirect": [
         {
@@ -13306,7 +13306,7 @@
     },
     {
       "address": 3090480,
-      "name": "Gap__Core__igMemoryPoolContextInfo__vfunc_52",
+      "name": "FUN_002f2830",
       "size": 156,
       "source": "src/engine/context-record-name.cpp",
       "direct": [
@@ -13327,7 +13327,7 @@
     },
     {
       "address": 3090640,
-      "name": "Gap__Core__igMemoryPoolContextInfo__vfunc_53",
+      "name": "FUN_002f28d0",
       "size": 184,
       "source": "src/engine/context-slot-lifetime.cpp",
       "direct": [],
