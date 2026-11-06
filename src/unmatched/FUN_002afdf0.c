@@ -1,4 +1,5 @@
-/* 0x002afdf0 — FUN_002afdf0 (72 bytes). Initialises a small record: clears +0/+4, stores the argument at +12, 8 into +16 and the three words at +20..+28, and -1 into +32. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises a small record: clears +0/+4, stores the argument at +12, 8 into +16 and the three
+ * words at +20..+28, and -1 into +32. */
 
 struct Rec24 {
     int f0, f4, f8;

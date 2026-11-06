@@ -1,11 +1,9 @@
-/* 0x002ed330 - Memory_ReallocateBuffer (a buffer reallocate; no retail name known).
- * Resize `buffer` to `size` bytes.  A null buffer is simply allocated from the
- * default allocator; otherwise Memory_FindOwningAllocator names the pool that
- * owns the block and its virtual method at vtable offset 232 does the resize.
- * A block no pool owns yields 0.  Used by igArray_Append to grow its data
- * buffer (src/engine/init-callback-array.c, docs/engine/metadata-callback-services.md).
- * Matching construct: the owner lookup is declared variadic and called
- * without arguments so it sees the untouched argument register. */
+/* Memory_ReallocateBuffer (a buffer reallocate; no retail name known). Resize `buffer` to `size`
+ * bytes. A null buffer is simply allocated from the default allocator; otherwise
+ * Memory_FindOwningAllocator names the pool that owns the block and its virtual method at vtable
+ * offset 232 does the resize. A block no pool owns yields 0. Used by igArray_Append to grow its
+ * data buffer. Matching construct: the owner lookup is declared variadic and called without
+ * arguments so it sees the untouched argument register. */
 extern "C" {
 int Memory_AllocateDefaultBuffer(...);
 void **Memory_FindOwningAllocator(...);

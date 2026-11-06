@@ -1,4 +1,5 @@
-/* 0x0029d7d0 — FUN_0029d7d0 (104 bytes). When channel index is in state 5, releases its buffer handler through ops slot 12 and clears the pointer. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When channel index is in state 5, releases its buffer handler through ops slot 12 and clears the
+ * pointer. */
 struct Handler;
 struct HandlerOps {
     char pad[12];

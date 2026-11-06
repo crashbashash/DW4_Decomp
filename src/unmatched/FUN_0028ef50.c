@@ -1,4 +1,5 @@
-/* 0x0028ef50 — FUN_0028ef50 (196 bytes). Reports three values of a validated handle: +684 scaled by 2048, +700 as is, and +700 * +680 / 1800 (-1 when +680 is the 0x3FFFF "unknown" marker). Error 0xFF03020F goes through FUN_0028eb38. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports three values of a validated handle: +684 scaled by 2048, +700 as is, and +700 * +680 /
+ * 1800 (-1 when +680 is the 0x3FFFF "unknown" marker). Error 0xFF03020F goes through FUN_0028eb38. */
 int FUN_002913f8(void *handle); /* handle check; non-zero rejects */
 int FUN_0028eb38(void *handle, int error);
 

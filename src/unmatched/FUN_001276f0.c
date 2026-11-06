@@ -1,4 +1,5 @@
-/* 0x001276f0 — FUN_001276f0 (128 bytes). Counts the leading zero bits of a 32-bit word, 32 for zero (newlib mprec hi0bits shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Counts the leading zero bits of a 32-bit word, 32 for zero (newlib mprec hi0bits shape; name is
+ * a hypothesis). */
 int FUN_001276f0(unsigned int x) {
     int count = 0;
 

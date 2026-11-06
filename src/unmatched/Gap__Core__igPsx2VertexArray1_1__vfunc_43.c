@@ -1,4 +1,3 @@
-/* 0x17d710 — Gap__Core__igPsx2VertexArray1_1__vfunc_43. Verified byte-identical by tools/verify.py (wave3 sweep). */
 #include "dw4/reflected.h"
 int Gap__Core__igPsx2VertexArray1_1__vfunc_43(igPsx2VertexArray1_1 *arg0, int arg1) {
     int temp_a1;

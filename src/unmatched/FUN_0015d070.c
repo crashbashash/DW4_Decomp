@@ -1,4 +1,3 @@
-/* 0x0015d070 - FUN_0015d070. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 void FUN_0015d070(igPointSpriteExt *arg0, int arg1, void *arg2) {
     float temp_f0;

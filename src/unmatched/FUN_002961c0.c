@@ -1,4 +1,5 @@
-/* 0x002961c0 — FUN_002961c0 (100 bytes). Gets object 9 from FUN_00102df0, stores `owner` at its +128 and passes `data` with size/16 to FUN_00103188; returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Gets object 9 from FUN_00102df0, stores `owner` at its +128 and passes `data` with size/16 to
+ * FUN_00103188; returns 0. */
 
 struct Object002961c0 {
     char pad0[128];

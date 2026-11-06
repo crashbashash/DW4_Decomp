@@ -1,4 +1,4 @@
-/* 0x002b3130 — FUN_002b3130 (20 bytes). Stores the three byte arguments into the entry's byte triple at +20. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores the three byte arguments into the entry's byte triple at +20. */
 struct EntryParams {
     int f0;
     int f4;

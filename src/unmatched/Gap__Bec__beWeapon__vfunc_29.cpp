@@ -1,8 +1,7 @@
-/* 0x003a1830 - Gap__Bec__beWeapon__vfunc_29: register the weapon with the messenger.
- * On the first call the attach-data list (FUN_0033f8b0 creates it) is built with four attach-data
- * objects (FUN_0033fa80) before the receiver is registered from the weapon's info table.  The new list
- * and each new element live on the stack in owning references whose releases the retail exception
- * table records. */
+/* Register the weapon with the messenger. On the first call the attach-data list (FUN_0033f8b0
+ * creates it) is built with four attach-data objects (FUN_0033fa80) before the receiver is
+ * registered from the weapon's info table. The new list and each new element live on the stack in
+ * owning references whose releases the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 igObject *FUN_0033f8b0(int);

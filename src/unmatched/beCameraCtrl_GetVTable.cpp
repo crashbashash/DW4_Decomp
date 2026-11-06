@@ -1,10 +1,10 @@
-/* 0x00369900 beCameraCtrl_GetVTable: builds a beCameraCtrl on the stack and returns the word at the runtime
+/* beCameraCtrl_GetVTable: builds a beCameraCtrl on the stack and returns the word at the runtime
  * vtable-slot offset the meta object publishes (DAT_00586dc8[0] + 916), then destroys it.
- * Reflection accessor. Its exception table (around the two igMatrix44f constructors: tag-0x27 member
- * _cameraMode, dtor 0x3699a0, then the tag-0xa6 base, dtor 0x33f5e0) is reproduced by the inline constructor
- * of a derived view whose base and member have out-of-line destructors (finding #3886). The view's inline
- * destructor is emitted out of line by MWCC and was dead-stripped by the retail linker: the `stripped` entry
- * of this unit's row in config/SLUS-20836/unit-objects.json (finding #3888). */
+ * Reflection accessor. Its exception table (around the two igMatrix44f constructors: tag-0x27
+ * member _cameraMode, dtor 0x3699a0, then the tag-0xa6 base, dtor 0x33f5e0) is reproduced by the
+ * inline constructor of a derived view whose base and member have out-of-line destructors. The
+ * view's inline destructor is emitted out of line by MWCC and was dead-stripped by the retail
+ * linker: the `stripped` entry of this unit's row in config/SLUS-20836/unit-objects.json. */
 extern "C" {
 extern int DAT_0053a210[4];                 /* beCameraCtrl vtable */
 extern void *DAT_00586dc8[4];               /* the class's meta object */

@@ -1,6 +1,6 @@
-/* 0x00277210 — FUN_00277210 (104 bytes). Restarts a stream controller: stops it first (FUN_00277278) when
-   it is active, then marks it active as state 2 when +36 is positive and state 1 otherwise; a null
-   controller is reported as "E0003: Illigal parameter lsc=NULL". Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Restarts a stream controller: stops it first (FUN_00277278) when it is active, then marks it
+ * active as state 2 when +36 is positive and state 1 otherwise; a null controller is reported as
+ * "E0003: Illigal parameter lsc=NULL". */
 struct Lsc277 {
     signed char f0;
     signed char active;   /* +1 */

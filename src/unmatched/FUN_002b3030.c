@@ -1,4 +1,5 @@
-/* 0x002b3030 — FUN_002b3030 (40 bytes). Releases an entry taken by FUN_002b2f48: clears its in-use word and decrements the count DAT_004beb58. Null is ignored. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Releases an entry taken by FUN_002b2f48: clears its in-use word and decrements the count
+ * DAT_004beb58. Null is ignored. */
 
 extern int DAT_004beb58;                  /* count of entries handed out */
 

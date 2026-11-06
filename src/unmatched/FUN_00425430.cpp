@@ -1,7 +1,7 @@
-/* 0x00425430 - FUN_00425430. Model-window reset: clears the two close-info string lists and the ram-number list,
- * selects a model-name string by the player's record field (16 arms) and presents the model at the fixed window
- * origin.  The selected name lives on the stack in a StringRef that each arm reassigns; the retail exception table
- * records its release.  alternate compiler -O3,p. */
+/* Model-window reset: clears the two close-info string lists and the ram-number list, selects a
+ * model-name string by the player's record field (16 arms) and presents the model at the fixed
+ * window origin. The selected name lives on the stack in a StringRef that each arm reassigns; the
+ * retail exception table records its release. alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(int);

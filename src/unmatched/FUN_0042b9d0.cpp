@@ -1,6 +1,3 @@
-/* 0x0042b9d0 — FUN_0042b9d0. Banked by tools/retype_struct_member.py (shape: struct0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 /* Receiver by the matched caller beNDMWShopCtrl50::vfunc_21: offset +12 is _messenger. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);

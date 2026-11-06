@@ -1,4 +1,5 @@
-/* 0x0027d400 — FUN_0027d400 (112 bytes). Returns the length of a handle's linked list (head at +20, next pointer at 0 of each node); a NULL or unused (+4 clear) handle is reported through FUN_0027b2e0 and returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the length of a handle's linked list (head at +20, next pointer at 0 of each node); a
+ * NULL or unused (+4 clear) handle is reported through FUN_0027b2e0 and returns 0. */
 typedef struct Node_27d400 {
     struct Node_27d400 *next;   /* 0x00 */
 } Node_27d400;

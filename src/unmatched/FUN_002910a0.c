@@ -1,4 +1,5 @@
-/* 0x002910a0 — FUN_002910a0 (80 bytes). Returns the first 1024-byte handle of the global pool whose word at +392 is 1 (free; see FUN_00290e40), or 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the first 1024-byte handle of the global pool whose word at +392 is 1 (free; see
+ * FUN_00290e40), or 0. */
 
 struct Handle002910a0 {
     char pad0[392];

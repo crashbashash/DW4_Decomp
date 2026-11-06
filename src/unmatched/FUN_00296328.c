@@ -1,4 +1,5 @@
-/* 0x00296328 — FUN_00296328 (96 bytes). Switches a playback handle's audio on or off (its error string names it mwPlySetAudioSw): sets stream parameter 6 through FUN_002ad950, rejecting an invalid handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Switches a playback handle's audio on or off (its error string names it mwPlySetAudioSw): sets
+ * stream parameter 6 through FUN_002ad950, rejecting an invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern void FUN_002ad950(int stream, int param, int value);

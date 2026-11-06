@@ -1,4 +1,6 @@
-/* 0x002b5490 — FUN_002b5490 (104 bytes). For a header whose two-digit number (FUN_002b52d8) is at least 2, returns whether the byte at +22 matches DAT_004f5a20 (FUN_0012aba0 over one character); 0 for a null header, a negative index or an older number. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* For a header whose two-digit number (FUN_002b52d8) is at least 2, returns whether the byte at
+ * +22 matches DAT_004f5a20 (FUN_0012aba0 over one character); 0 for a null header, a negative
+ * index or an older number. */
 extern char DAT_004f5a20[];
 
 unsigned int FUN_002b52d8(char *header, int index);

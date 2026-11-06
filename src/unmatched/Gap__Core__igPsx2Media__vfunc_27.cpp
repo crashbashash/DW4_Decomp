@@ -1,4 +1,7 @@
-/* 0x0032e720 — Gap__Core__igPsx2Media__vfunc_27. igPsx2Media vfunc 27 (write): unaligned heads are staged through the scratch buffer in 0x8000-byte chunks, aligned writes go directly. Alternate -O3. Each hidden-result call is read through an inline Code() so the temporaries get separate slots in call order; the table index is computed after the scratch allocation; declaration order found by permutation search. */
+/* IgPsx2Media vfunc 27 (write): unaligned heads are staged through the scratch buffer in
+ * 0x8000-byte chunks, aligned writes go directly. Alternate -O3. Each hidden-result call is read
+ * through an inline Code() so the temporaries get separate slots in call order; the table index is
+ * computed after the scratch allocation; declaration order found by permutation search. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_0010b7d8(int, int);

@@ -1,6 +1,3 @@
-/* 0x00329030 — Gap__Core__igPsx2CallStackTracer__vfunc_43. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern "C" {
 
 void Gap__Core__igPsx2CallStackTracer__vfunc_43(void **arg0, int arg1, int arg2);

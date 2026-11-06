@@ -1,4 +1,5 @@
-/* 0x0026ebf8 — FUN_0026ebf8 (128 bytes). Moves a handle to state 6 (field 96 = -1) when its request reports 4 through FUN_0026a138 or its field-148 object reports 3 through FUN_002773a0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Moves a handle to state 6 (field 96 = -1) when its request reports 4 through FUN_0026a138 or its
+ * field-148 object reports 3 through FUN_002773a0. */
 /* Handle layout shared by FUN_0026bb38 … FUN_0026ebf8 (offsets from their accesses). */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {

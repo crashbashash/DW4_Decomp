@@ -1,4 +1,5 @@
-/* 0x002306d0 — __adddf3 (88 bytes). Soft-float double addition: unpacks both operands, adds the parts with FUN_00230470 and repacks the result (fp-bit add). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Soft-float double addition: unpacks both operands, adds the parts with FUN_00230470 and repacks
+ * the result (fp-bit add). */
 typedef unsigned int USItype __attribute__((mode(SI)));
 typedef unsigned int UDItype __attribute__((mode(DI)));
 typedef float DFtype __attribute__((mode(DF)));

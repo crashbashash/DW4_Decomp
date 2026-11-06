@@ -1,6 +1,3 @@
-/* 0x0031d230 — Gap__Core__igArenaMemoryPool__vfunc_43. Banked by tools/retype_struct_member.py (shape: base):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 extern "C" {
 extern int DAT_004fb410[4];
 void Gap__Core__igArenaMemoryPool__vfunc_43(int *arg0, void *arg1, int arg2);

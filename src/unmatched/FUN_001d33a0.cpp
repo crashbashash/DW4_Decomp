@@ -1,6 +1,3 @@
-/* 0x001d33a0 — FUN_001d33a0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern "C" {
 int Gap__Core__igObject__vfunc_07(...);
 void FUN_001d33a0(void **arg0, int arg1);

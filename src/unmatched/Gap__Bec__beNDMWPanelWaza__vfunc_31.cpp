@@ -1,23 +1,17 @@
-/* 0x003cfe50 - beNDMWPanelWaza::vfunc_31, the per-ram tab/state machine of the
- * Waza/Item/Stat info panel.
- *
- * ram->_st0 is the phase (0 build, 1 run, 2 close request, 3 finished), _st1 the sub-state
- * of the run phase, _st2/_st3 the sub-state timers.  work->_page selects the active panel.
- *
- * Matching notes (compiler: the combat alternate compiler, -O3,p, C++):
- *  - SetLabel is an inlined static member; the string pool singleton is created on first use,
- *    the new string is interned BEFORE the old one is read and released.
- *  - PanelVt/WorkVt are dummy-virtual classes: only the slots called here are real, they make
- *    the call go through t9 like retail.
- *  - ramState = (T *)(int)ram is a deliberate type-laundering copy: without it the incoming
- *    register is propagated into every use and the pre-call loads use s4 instead of a1.
- *  - the "< 2" test of _st3 reads through a volatile lvalue so that the increment reloads the
- *    field (retail does the same; precedent: FUN_001b1490 uses *(volatile int *)&l->n).
- *  - the local declaration order and the exact condition spellings (blocked == 0 / blocked,
- *    "if (confirm)", "if (show)") select retail's register colouring and the bool tests.
- *  - raw offset casts remain only for the player-work chain (+200 -> +8/+16 -> +4 -> +8), which
- *    has no reflected field.
- */
+/* Vfunc_31, the per-ram tab/state machine of the Waza/Item/Stat info panel. ram->_st0 is the phase
+ * (0 build, 1 run, 2 close request, 3 finished), _st1 the sub-state of the run phase, _st2/_st3
+ * the sub-state timers. work->_page selects the active panel. Matching notes (compiler: the combat
+ * alternate compiler, -O3,p, C++): - SetLabel is an inlined static member; the string pool
+ * singleton is created on first use, the new string is interned BEFORE the old one is read and
+ * released. - PanelVt/WorkVt are dummy-virtual classes: only the slots called here are real, they
+ * make the call go through t9 like retail. - ramState = (T *)(int)ram is a deliberate type-
+ * laundering copy: without it the incoming register is propagated into every use and the pre-call
+ * loads use s4 instead of a1. - the "< 2" test of _st3 reads through a volatile lvalue so that the
+ * increment reloads the field (retail does the same; precedent: FUN_001b1490 uses *(volatile int
+ * *)&l->n). - the local declaration order and the exact condition spellings (blocked == 0 /
+ * blocked, "if (confirm)", "if (show)") select retail's register colouring and the bool tests. -
+ * raw offset casts remain only for the player-work chain (+200 -> +8/+16 -> +4 -> +8), which has
+ * no reflected field. */
 #include "dw4/reflected.h"
 
 extern "C" {
@@ -54,10 +48,11 @@ extern int DAT_00586f20[4];
 void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *, beNDMWPanelWazaInfoRam *);
 }
 
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]).
- * Both members are out of line in retail: the constructor interns the text (0x003cc550) and the
- * destructor releases the token on scope exit and in the exception table (StringRef_Destruct_00130720);
- * config/SLUS-20836/unit-objects.json binds them as externals __ct__9StringRefFPCc / __dt__9StringRefFv. */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]). Both members are out of line in retail: the constructor interns the text (0x003cc550)
+ * and the destructor releases the token on scope exit and in the exception table
+ * (StringRef_Destruct_00130720).json binds them as externals __ct__9StringRefFPCc /
+ * __dt__9StringRefFv. */
 class StringRef {
 public:
     char *p;

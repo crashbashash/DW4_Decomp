@@ -1,4 +1,6 @@
-/* 0x002af780 — FUN_002af780 (196 bytes). Clears *verdict and, for an enabled block in state 4, asks FUN_002af848 with the limit at +0xA04+180; a disabled block yields verdict 1. Reports error 0xFF000126 when FUN_002a0dd8 refuses. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears *verdict and, for an enabled block in state 4, asks FUN_002af848 with the limit at
+ * +0xA04+180; a disabled block yields verdict 1. Reports error 0xFF000126 when FUN_002a0dd8
+ * refuses. */
 int FUN_002a0dd8(void *handle);
 int FUN_002a0bb8(void *obj, int code);
 void FUN_002af848(void *handle, int a, int b, int *verdict, int limit);

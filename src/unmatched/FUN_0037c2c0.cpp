@@ -1,7 +1,9 @@
-/* 0x0037c2c0 - FUN_0037c2c0. The retail stream player: handles a music (type 1) or ambience (type 2) request whose memory index is -1 (an ADX file),
- * taking the BGM or ambience handle of the beCri; types 3 and 4 are ignored. If the handle's voice is still playing it arms the 1.0 -> 0.0 over 10.0
- * ramp (only when none runs) and returns 0; otherwise it sets the level to volume + base, starts the file named by the sound pack's file list and,
- * on success, returns the new request id. Alternate compiler, -O3,p. Receivers by the matched beSound::vfunc_34. */
+/* The retail stream player: handles a music (type 1) or ambience (type 2) request whose memory
+ * index is -1 (an ADX file), taking the BGM or ambience handle of the beCri; types 3 and 4 are
+ * ignored. If the handle's voice is still playing it arms the 1.0 -> 0.0 over 10.0 ramp (only when
+ * none runs) and returns 0; otherwise it sets the level to volume + base, starts the file named by
+ * the sound pack's file list and, on success, returns the new request id. Alternate compiler,
+ * -O3,p. Receivers by the matched beSound::vfunc_34. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_003a6c00(int, int *);

@@ -1,6 +1,3 @@
-/* 0x00147a50 — FUN_00147a50. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_001479b0(int);
 int Gap__Core__igObject__vfunc_09();
 

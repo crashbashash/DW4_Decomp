@@ -1,7 +1,6 @@
-/* Exact descriptor factories and post-construction defaults. Virtual classes
- * are ABI slot projections; do not instantiate. Physical factory flag 1 is
- * preserved at constructor calls; no wider constructor ABI is inferred.
- * Recovery notes: docs/engine/field-factories.md (finding #880). */
+/* Exact descriptor factories and post-construction defaults. Virtual classes are ABI slot
+ * projections; do not instantiate. Physical factory flag 1 is preserved at constructor calls; no
+ * wider constructor ABI is inferred. Recovery notes: docs/engine/field-factories.md. */
 extern "C" {
 /* Class registration guards: each is igMetaObject_RunStaticInit(<Class>_Register). */
 int igStringMetaField_EnsureRegistered(...);

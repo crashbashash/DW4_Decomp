@@ -9,7 +9,7 @@ extern char igBoolList_className[];
 extern char g_igBoolList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
-void FUN_002cb280(void);  /* code at 0x2cb280, passed by address (was DAT_2cb280; docs/engine/function-inventory.md) */
+void FUN_002cb280(void);
 void igBoolList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(

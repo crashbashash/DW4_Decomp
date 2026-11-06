@@ -1,4 +1,5 @@
-/* 0x002606e0 — FUN_002606e0 (112 bytes). Forwards its eleven arguments to FUN_0025ffd0 when DAT_00499cd0 is set, otherwise to FUN_00260398. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards its eleven arguments to FUN_0025ffd0 when DAT_00499cd0 is set, otherwise to
+ * FUN_00260398. */
 extern int DAT_00499cd0;
 void FUN_0025ffd0(int a0, int a1, int a2, int a3, int a4, int a5, short a6, short a7, int a8, short a9, short a10);
 void FUN_00260398(int a0, int a1, int a2, int a3, int a4, int a5, short a6, short a7, int a8, short a9, short a10);

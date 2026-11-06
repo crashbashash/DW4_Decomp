@@ -1,5 +1,5 @@
-/* 0x00353600 — beModelCtrlInfoDataSeq_GetVTable. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8).
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 union U { int vt; char b[32]; };
 extern "C" {
 int igObject_InitHeader(char *);

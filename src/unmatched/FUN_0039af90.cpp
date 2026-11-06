@@ -1,4 +1,4 @@
-/* 0x0039af90 - FUN_0039af90. edge-detect state update; forwarded this to the helper, stack float pair, countdown arm order. Verified byte-identical by tools/verify.py. */
+/* Edge-detect state update; forwarded this to the helper, stack float pair, countdown arm order. */
 struct V2 { float x; float y; };
 struct O { char pad[12]; float f12; float f16; char pad2[8]; int f28; int f32; int f36; int f40; int f44; char pad3[48]; int f96; int f100; };
 extern "C" {

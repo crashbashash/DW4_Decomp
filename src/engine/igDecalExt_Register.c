@@ -2,7 +2,7 @@
  * The igMetaObject_RegisterClass arguments are laid out per
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igContextExt_GetPublishedMetaObject[];
-void thunk_FUN_0014f8d0(void);  /* code at 0x14f9a0, passed by address (was DAT_14f9a0; docs/engine/function-inventory.md) */
+void thunk_FUN_0014f8d0(void);
 extern char igContextExt_Register[];
 extern char igDecalExt_className[];
 extern char g_igDecalExt_metaObject[];

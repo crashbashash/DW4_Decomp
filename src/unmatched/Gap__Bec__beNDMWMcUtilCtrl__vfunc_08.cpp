@@ -1,6 +1,3 @@
-/* 0x003cb700 — Gap__Bec__beNDMWMcUtilCtrl__vfunc_08. Banked by tools/retype_struct_member.py (shape: base):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_003a9870(...);

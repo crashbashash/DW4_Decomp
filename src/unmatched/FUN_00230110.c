@@ -1,4 +1,5 @@
-/* 0x00230110 — FUN_00230110 (60 bytes). Converts a float to a signed 64-bit integer by converting its magnitude with FUN_0022ffe8 and negating (libgcc2 __fixsfdi shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Converts a float to a signed 64-bit integer by converting its magnitude with FUN_0022ffe8 and
+ * negating (libgcc2 __fixsfdi shape; name is a hypothesis). */
 typedef int SItype __attribute__((mode(SI)));
 typedef unsigned int USItype __attribute__((mode(SI)));
 typedef int DItype __attribute__((mode(DI)));

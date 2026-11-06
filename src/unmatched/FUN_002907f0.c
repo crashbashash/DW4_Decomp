@@ -1,4 +1,5 @@
-/* 0x002907f0 — FUN_002907f0 (164 bytes). Advances a (pointer, remaining, offset) cursor to the next start code found by FUN_0028de10 and returns its FUN_0028dc78 class; with none found the whole remainder is skipped and 0 returned. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Advances a (pointer, remaining, offset) cursor to the next start code found by FUN_0028de10 and
+ * returns its FUN_0028dc78 class; with none found the whole remainder is skipped and 0 returned. */
 unsigned char *FUN_0028de10(unsigned char *data, int size, int code);
 int FUN_0028dc78(unsigned char *p);
 

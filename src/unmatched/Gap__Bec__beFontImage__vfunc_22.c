@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
-/* 0x00453410 - Gap__Bec__beFontImage__vfunc_22. glyph layout loop with a stack float pair, declaration order, inverted compare for the at-register temp; alternate compiler -O3. Verified byte-identical by tools/verify.py. */
+/* Glyph layout loop with a stack float pair, declaration order, inverted compare for the at-
+ * register temp; alternate compiler -O3. */
 struct V2 { float x; float y; };
 struct GlyphMetricsRecord { char pad[4]; float f4; };
 struct TextLayoutBuffer { char pad[12]; int f12; };

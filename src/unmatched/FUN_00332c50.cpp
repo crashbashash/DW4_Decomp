@@ -5,7 +5,7 @@ int FUN_00264910(int);
 int FUN_00280d48();
 int FUN_00332860();
 int FUN_00332c40();
-void FUN_003327b0(void);  /* code at 0x3327b0, passed by address (was DAT_3327b0; docs/engine/function-inventory.md) */
+void FUN_003327b0(void);
 int FUN_00332c50(int arg0) {
     int var_s0;
 

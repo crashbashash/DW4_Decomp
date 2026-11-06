@@ -1,4 +1,5 @@
-/* 0x00290db8 — FUN_00290db8 (136 bytes). Builds the 1024-byte saturation table at 0x4bcce0 (384 zeros, the identity ramp 0..255, 384 x 0xFF) and points DAT_004bccd4 at its middle, so clamp[v] saturates v in -384..639 to 0..255. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Builds the 1024-byte saturation table at 0x4bcce0 (384 zeros, the identity ramp 0..255, 384 x
+ * 0xFF) and points DAT_004bccd4 at its middle, so clamp[v] saturates v in -384..639 to 0..255. */
 extern unsigned char DAT_004bcce0[1024];
 extern unsigned char *DAT_004bccd4;
 

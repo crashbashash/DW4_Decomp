@@ -1,4 +1,5 @@
-/* C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 struct Fld { char p0[38]; char f38; char p1[13]; char f52; int f56; };
 extern "C" {
 int FUN_00142f70(void);

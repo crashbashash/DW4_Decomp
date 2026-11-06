@@ -1,4 +1,5 @@
-/* 0x0027b5f8 — FUN_0027b5f8 (68 bytes). Handle getter: returns the word at +8 of a handle whose +4 word is set, reporting a NULL or invalid handle through FUN_0027b2e0 and returning 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Handle getter: returns the word at +8 of a handle whose +4 word is set, reporting a NULL or
+ * invalid handle through FUN_0027b2e0 and returning 0. */
 typedef struct Handle_27b5f8 {
     int pad0;
     int used;   /* 0x04 */

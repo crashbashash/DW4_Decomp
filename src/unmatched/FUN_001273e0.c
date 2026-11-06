@@ -1,4 +1,5 @@
-/* 0x001273e0 — FUN_001273e0 (164 bytes). Takes a big-integer block of 2^k words from the reent free list, allocating the list or a fresh block with FUN_00123798 when needed (newlib _Balloc shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Takes a big-integer block of 2^k words from the reent free list, allocating the list or a fresh
+ * block with FUN_00123798 when needed (newlib _Balloc shape; name is a hypothesis). */
 typedef struct BigInt {
     struct BigInt *next;
     int k;

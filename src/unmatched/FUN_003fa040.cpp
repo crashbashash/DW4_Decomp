@@ -1,4 +1,5 @@
-/* 0x003fa040 - FUN_003fa040. list walk re-fetching the record folder each pass; 0 < cnt gives the slt/beqz head; alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* List walk re-fetching the record folder each pass; 0 < cnt gives the slt/beqz head; alternate
+ * compiler -O3,p. */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */

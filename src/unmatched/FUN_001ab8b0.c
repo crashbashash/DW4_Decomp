@@ -1,5 +1,3 @@
-/* 0x001ab8b0 — FUN_001ab8b0. m2c draft (build/m2c/FUN_001ab8b0.c), dropped leading call arguments restored; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_001ab770();
 int FUN_001ab920();
 

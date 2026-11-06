@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
-/* 0x0037dd10 - FUN_0037dd10: check that the named entry (arg1) is available among the owner's two direct entries and its list; arg0 owner with entries at +32/+36 and list at +40 */
+/* Check that the named entry (arg1) is available among the owner's two direct entries and its
+ * list; arg0 owner with entries at +32/+36 and list at +40 */
 extern "C" {
 int strlen(int *);
 int FUN_00332490(int);

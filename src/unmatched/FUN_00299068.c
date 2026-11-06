@@ -1,4 +1,6 @@
-/* 0x00299068 — FUN_00299068 (168 bytes). Starts looped playback of a file (its error strings name it mwPlyStartFnameLp): rejects an invalid handle or a NULL name, otherwise opens the name (FUN_00295b68), resets the +76 stream, applies the +440 setting, enables looping and starts. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Starts looped playback of a file (its error strings name it mwPlyStartFnameLp): rejects an
+ * invalid handle or a NULL name, otherwise opens the name (FUN_00295b68), resets the +76 stream,
+ * applies the +440 setting, enables looping and starts. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern void FUN_00295b68(void *ply, const char *fname);

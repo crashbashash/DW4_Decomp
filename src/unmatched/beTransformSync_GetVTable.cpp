@@ -1,9 +1,10 @@
-/* 0x003410c0 beTransformSync_GetVTable: builds a beTransformSync on the stack and returns the word at the
+/* beTransformSync_GetVTable: builds a beTransformSync on the stack and returns the word at the
  * runtime vtable-slot offset the meta object publishes (DAT_00586dc8[0] + 916), then destroys it.
- * Reflection accessor. Its exception table (one tag-0xa6 base action: igNode dtor 0x195a90 around the
- * igMatrix44f constructor) is reproduced by the inline constructors of igNode -> igTransform -> beTransformSync
- * views (finding #3886). The leaf's inline destructor is emitted out of line by MWCC and was dead-stripped by
- * the retail linker: the `stripped` entry of this unit's row in config/SLUS-20836/unit-objects.json (finding #3888). */
+ * Reflection accessor. Its exception table (one tag-0xa6 base action: igNode dtor 0x195a90 around
+ * the igMatrix44f constructor) is reproduced by the inline constructors of igNode -> igTransform
+ * -> beTransformSync views. The leaf's inline destructor is emitted out of line by MWCC and was
+ * dead-stripped by the retail linker: the `stripped` entry of this unit's row in
+ * config/SLUS-20836/unit-objects.json. */
 extern "C" {
 extern int DAT_005284f0[4];                 /* igTransform vtable */
 extern int DAT_005397d0[4];                 /* beTransformSync vtable */

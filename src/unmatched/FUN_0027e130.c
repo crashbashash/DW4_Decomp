@@ -1,4 +1,5 @@
-/* 0x0027e130 — FUN_0027e130 (140 bytes). SVM unlock (the diagnostic string names it svm_unlock): drops the lock count, checks the releasing type against the one that took the lock, and runs the unlock callback. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* SVM unlock (the diagnostic string names it svm_unlock): drops the lock count, checks the
+ * releasing type against the one that took the lock, and runs the unlock callback. */
 void FUN_0027e2f0();
 
 struct Callback0027e0d0 {

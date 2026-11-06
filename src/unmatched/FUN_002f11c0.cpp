@@ -1,4 +1,5 @@
-/* 0x002f11c0 - FUN_002f11c0. Sibling of FUN_002f1e30 with an extra argument pair; C++ virtual calls, unsigned __int128 spill; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Sibling of FUN_002f1e30 with an extra argument pair; C++ virtual calls, unsigned __int128 spill;
+ * alternate compiler. */
 extern "C" {
 int FUN_002e2190(int *, int, int, int, unsigned __int128, int, int, int, long long, long long, long long, long long);
 int FUN_002e2300(...);

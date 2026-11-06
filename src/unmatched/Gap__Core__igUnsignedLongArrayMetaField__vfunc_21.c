@@ -1,4 +1,3 @@
-/* 0x002b6740 — Gap__Core__igUnsignedLongArrayMetaField__vfunc_21. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_002b6890();
 int FUN_0030ebc0();
 int igObject_AllocateRawStorageDefault();

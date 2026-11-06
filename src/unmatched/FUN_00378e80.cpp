@@ -1,5 +1,3 @@
-/* 0x00378e80 — FUN_00378e80. m2c draft with dropped/gap parameters restored; verified
- * byte-identical by tools/verify.py (loop: tools/m2c_loop.py). */
 extern "C" {
 extern int DAT_00589be8[4];
 int FUN_00378e80(int dummy0, void *arg1);

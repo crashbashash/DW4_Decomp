@@ -1,6 +1,3 @@
-/* 0x0038a3a0 — Gap__Bec__beLua__vfunc_23. Banked by tools/retype_struct_member.py (shape: struct3):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 /* reference-counted engine object header: refcount word at +4 */
 typedef struct RefCountedHeader { char pad4[4]; int f4; } RefCountedHeader;

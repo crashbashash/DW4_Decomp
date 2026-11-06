@@ -1,4 +1,5 @@
-/* 0x002a75b8 — FUN_002a75b8 (88 bytes). Folds the current channel entry's FUN_0029eaf8 value into the player's 64-bit accumulator at +2456 (FUN_0029ecb0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Folds the current channel entry's FUN_0029eaf8 value into the player's 64-bit accumulator at
+ * +2456 (FUN_0029ecb0). */
 void FUN_0029e370();
 void FUN_0029eaf8();
 long FUN_0029ecb0();

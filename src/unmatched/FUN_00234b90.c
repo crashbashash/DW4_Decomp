@@ -1,5 +1,3 @@
-/* 0x00234b90 — FUN_00234b90. m2c draft, hand-fixed; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 #include "dw4/reflected.h"
 int FUN_00100610();
 int FUN_00234ca0();

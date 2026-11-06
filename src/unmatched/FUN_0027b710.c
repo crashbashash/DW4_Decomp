@@ -1,7 +1,6 @@
-/* 0x0027b710 — FUN_0027b710 (84 bytes). Rewinds a handle: copies the start value (+24) into the current
-   position (+12) and clears +16; reports "E2004090237 : NULL pointer is specified." for a null handle and
-   "E2004090238 : Specified handle is invalid." when the handle is not in use (+4 is 0).
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Rewinds a handle: copies the start value (+24) into the current position (+12) and clears +16;
+ * reports "E2004090237 : NULL pointer is specified." for a null handle and "E2004090238 :
+ * Specified handle is invalid." when the handle is not in use (+4 is 0). */
 struct Handle27b {
     int f0;
     int used;      /* +4 */

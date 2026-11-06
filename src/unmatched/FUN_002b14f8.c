@@ -1,4 +1,4 @@
-/* 0x002b14f8 — FUN_002b14f8 (68 bytes). True when FUN_002adc40(obj, 15) is clear, else whether FUN_002afb00(obj) is set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when FUN_002adc40(obj, 15) is clear, else whether FUN_002afb00(obj) is set. */
 int FUN_002adc40();
 int FUN_002afb00();
 

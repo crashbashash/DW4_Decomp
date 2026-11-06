@@ -1,4 +1,5 @@
-/* 0x0029dba8 — FUN_0029dba8 (112 bytes). Starts channel index from state 4 by handing the source to its buffer (FUN_0029dc18), or reports error 0xFF000409. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Starts channel index from state 4 by handing the source to its buffer (FUN_0029dc18), or reports
+ * error 0xFF000409. */
 int FUN_0029dc18();
 int FUN_002a0bb8();
 

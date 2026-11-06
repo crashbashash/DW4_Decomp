@@ -1,14 +1,12 @@
-/* 0x00233c10 - FUN_00233c10: the Alchemy viewer's usage / option help printer.
- * Prints the banner ("USAGE: %s [option1 ...") and then one help entry per command-line option:
- * name, description and the option's default value, through five typed helpers (bool, int, float,
- * vec3, vec4) that format the entry with printf.
- * Evidence: the strings at 0x004e87c0..0x004e9590 (data/strings.json), the helper call shapes
- * (FUN_002342b0 prints "true"/"false" from its flag, FUN_002342e0 an int, FUN_00234300 a float,
- * FUN_00234350 a float[3], FUN_002343d0 a float[4]).
- * Each entry is guarded by `if (name)`: retail tests the literal's address against zero, so the
- * guard comes from the option macro, not from the data.
- * Argument: the program name for the USAGE line.
- * Build: default compiler, -O3 -Iinclude (verified MATCH). */
+/* The Alchemy viewer's usage / option help printer. Prints the banner ("USAGE: %s [option1 ...")
+ * and then one help entry per command-line option: name, description and the option's default
+ * value, through five typed helpers (bool, int, float, vec3, vec4) that format the entry with
+ * printf. Evidence: the strings at 0x004e87c0..0x004e9590 (data/strings.json), the helper call
+ * shapes (FUN_002342b0 prints "true"/"false" from its flag, FUN_002342e0 an int, FUN_00234300 a
+ * float, FUN_00234350 a float[3], FUN_002343d0 a float[4]). Each entry is guarded by `if (name)`:
+ * retail tests the literal's address against zero, so the guard comes from the option macro, not
+ * from the data. Argument: the program name for the USAGE line. Build: default compiler, -O3
+ * -Iinclude. */
 extern int printf(const char *, ...);
 extern void FUN_002342b0(const char *name, const char *help, int defaultValue);   /* bool option */
 extern void FUN_002342e0(const char *name, const char *help, int defaultValue);   /* int option */

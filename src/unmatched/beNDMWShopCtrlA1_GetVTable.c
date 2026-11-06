@@ -1,4 +1,3 @@
-/* 0x003b7c90 — beNDMWShopCtrlA1_GetVTable. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 struct Obj { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; int w20; int w21; int w22; int w23; };
 int igObject_InitHeader(struct Obj *);
 int ObjectRef_Destruct_001c6460();

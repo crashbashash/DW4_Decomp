@@ -1,6 +1,6 @@
-/* 0x003cc7d0 - Gap__Bec__libNdmwRuntimePlugin__vfunc_21: build the plugin's 21 sub-objects (each factory takes the
- * object's memory allocator: the object's own pool or, when GPR_00554c14 is zero, the selector-108 default pool),
- * dropping any previous reference, then register every non-null sub-object with the owner passed in arg1
+/* Build the plugin's 21 sub-objects (each factory takes the object's memory allocator: the
+ * object's own pool or, when GPR_00554c14 is zero, the selector-108 default pool), dropping any
+ * previous reference, then register every non-null sub-object with the owner passed in arg1
  * (vfunc_22 is the matching teardown that walks the same fields). */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);

@@ -1,4 +1,4 @@
-/* 0x002a0528 — FUN_002a0528 (180 bytes). Reads seven settings through getter callbacks into the first seven words of a record. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads seven settings through getter callbacks into the first seven words of a record. */
 extern int FUN_002b21b0(void *handle, int *value);
 extern int FUN_002b2200(void *handle, int *value);
 extern int FUN_002b2250(void *handle, int *value);

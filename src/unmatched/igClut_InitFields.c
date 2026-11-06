@@ -1,4 +1,5 @@
-/* 0x0014fc00 - igClut_InitFields. Thunk address spelled as a function declaration (absolute lui/addiu, not gp-relative); byte store at +38. */
+/* Thunk address spelled as a function declaration (absolute lui/addiu, not gp-relative); byte
+ * store at +38. */
 int FUN_002d3890();
 int FUN_002dc7a0();
 int FUN_002ea4b0();

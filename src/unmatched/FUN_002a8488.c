@@ -1,4 +1,5 @@
-/* 0x002a8488 — FUN_002a8488 (72 bytes). Finds the 136-byte record (at +5800) paired with a given 232-byte slot of the play state; NULL if none. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Finds the 136-byte record (at +5800) paired with a given 232-byte slot of the play state; NULL
+ * if none. */
 typedef struct SfdPlaySlot {
     char pad0[232];
 } SfdPlaySlot;

@@ -1,4 +1,7 @@
-/* 0x0027bb68 — FUN_0027bb68 (192 bytes). Grants a request against a handle: mode 0 grants nothing, mode 1 grants min(request, available (+12)), any other mode is reported to the error callback (+28, object +32, code -3). Stores the grant and returns 1 when it equals the request; a NULL or unused (+4 clear) handle is reported through FUN_0027b2e0 and returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Grants a request against a handle: mode 0 grants nothing, mode 1 grants min(request, available
+ * (+12)), any other mode is reported to the error callback (+28, object +32, code -3). Stores the
+ * grant and returns 1 when it equals the request; a NULL or unused (+4 clear) handle is reported
+ * through FUN_0027b2e0 and returns 0. */
 typedef struct Handle_27bb68 {
     int pad0;
     int used;                                   /* 0x04 */

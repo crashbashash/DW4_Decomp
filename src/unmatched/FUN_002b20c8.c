@@ -1,4 +1,5 @@
-/* 0x002b20c8 — FUN_002b20c8 (96 bytes). Finds the marker DAT_004f5388 in `text` (FUN_0012aff0) and parses the "major.minor" number that follows it four characters on (FUN_002b2128 twice); returns 1 when found, else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Finds the marker DAT_004f5388 in `text` (FUN_0012aff0) and parses the "major.minor" number that
+ * follows it four characters on (FUN_002b2128 twice); returns 1 when found, else 0. */
 char *FUN_0012aff0(char *text, char *marker);
 char *FUN_002b2128(char *text, int *value);
 

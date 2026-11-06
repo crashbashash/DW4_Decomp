@@ -1,4 +1,4 @@
-/* 0x0029dcc8 — FUN_0029dcc8 (72 bytes). Stores a 16-byte entry into the given slot of a channel. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a 16-byte entry into the given slot of a channel. */
 /* A 16-byte entry with byte alignment, so whole-entry copies use ldl/ldr and sdl/sdr. */
 struct Entry16 {
     char bytes[16];

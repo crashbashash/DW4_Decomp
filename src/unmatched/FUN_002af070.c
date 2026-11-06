@@ -1,4 +1,5 @@
-/* 0x002af070 — FUN_002af070 (160 bytes). Dispatches a descriptor to the handler DAT_004f5088[type][variant] with the type's context from DAT_004f5060; without a handler reports error 0xFF000221 and returns 0 / 1 through the outputs. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Dispatches a descriptor to the handler DAT_004f5088[type][variant] with the type's context from
+ * DAT_004f5060; without a handler reports error 0xFF000221 and returns 0 / 1 through the outputs. */
 struct Descriptor {
     int type;    /* +0 */
     int variant; /* +4 */

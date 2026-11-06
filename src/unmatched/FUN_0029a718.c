@@ -1,4 +1,6 @@
-/* 0x0029a718 — FUN_0029a718 (188 bytes). If the stream at +68 is not in state 2, notifies the handler at +464, re-issues the request from +440..+460 and returns 1, or flags error 4 / reports -102 and returns -1 when FUN_0029b328 fails. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* If the stream at +68 is not in state 2, notifies the handler at +464, re-issues the request from
+ * +440..+460 and returns 1, or flags error 4 / reports -102 and returns -1 when FUN_0029b328
+ * fails. */
 int FUN_00291d30();
 int FUN_00294ef8();
 int FUN_0029a320();

@@ -1,6 +1,3 @@
-/* 0x00190e50 — FUN_00190e50. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_00190f50();
 extern float DAT_004e1058[4];
 extern float DAT_004e105c[4];

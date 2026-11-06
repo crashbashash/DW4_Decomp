@@ -1,4 +1,4 @@
-/* 0x00290e40 — FUN_00290e40 (68 bytes). Sets the word at +392 to 1 in every 1024-byte handle of the global pool. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the word at +392 to 1 in every 1024-byte handle of the global pool. */
 
 struct Handle00290e40 {
     char pad0[392];

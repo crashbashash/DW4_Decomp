@@ -1,4 +1,4 @@
-/* 0x002af060 — FUN_002af060 (16 bytes). Stores value into word slot `index` of the array at +3368. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores value into word slot `index` of the array at +3368. */
 
 struct Obj0D28 {
     char pad[3368];

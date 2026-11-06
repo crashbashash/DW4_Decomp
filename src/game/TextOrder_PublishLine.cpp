@@ -1,6 +1,3 @@
-/* 0x003ebce0 — TextOrder_PublishLine. Banked by tools/retype_struct_member.py (shape: struct0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

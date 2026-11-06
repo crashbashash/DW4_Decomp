@@ -27,8 +27,9 @@ extern int DAT_0058b028[4];
 struct Slot { char p0[24]; int f24; };
 /* element-buffer list header: buffer pointer at +16 (list class not recovered) */
 struct SlotList { char p[16]; Slot **arr; };
-/* Retained share of the system's global string object (retail destructor copy 0x001489a0, config/SLUS-20836/unit-objects.json duplicates);
- * the cleanup range of the decoded retail table 0x54578c spans the string-build calls only. */
+/* Retained share of the system's global string object (retail destructor copy 0x001489a0.json
+ * duplicates); the cleanup range of the decoded retail table 0x54578c spans the string-build calls
+ * only. */
 struct GlobalStrRef {
     RefCountedHeader *p;
     GlobalStrRef(RefCountedHeader *o) : p(o) { if (p != 0) p->references = p->references + 1; }

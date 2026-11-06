@@ -1,4 +1,5 @@
-/* 0x002abae0 — FUN_002abae0 (100 bytes). Resets a 48-byte record: clears it through FUN_0028b530, then sets the id fields at +36/+40/+44 to -1 and the flag at +28 to 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a 48-byte record: clears it through FUN_0028b530, then sets the id fields at +36/+40/+44
+ * to -1 and the flag at +28 to 1. */
 void FUN_0028b530(void *dst, int value, int size);
 
 struct Record48 {

@@ -1,4 +1,5 @@
-/* 0x002aef78 — FUN_002aef78 (104 bytes). Checked entry point: validates the handle (error 0xFF00012A), then calls FUN_002aefe0 unless FUN_002adc40(handle, 71) reports 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Checked entry point: validates the handle (error 0xFF00012A), then calls FUN_002aefe0 unless
+ * FUN_002adc40(handle, 71) reports 1. */
 int FUN_002a0bb8();
 int FUN_002a0dd8();
 int FUN_002adc40();

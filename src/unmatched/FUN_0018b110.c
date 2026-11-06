@@ -1,4 +1,3 @@
-/* 0x18b110 — FUN_0018b110. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int FUN_0018ab70();
 int FUN_0018d060();
 

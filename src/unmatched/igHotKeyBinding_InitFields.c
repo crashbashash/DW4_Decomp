@@ -1,6 +1,3 @@
-/* 0x0044dde0 — igHotKeyBinding_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_002dc7a0();
 int FUN_00453250();
@@ -8,8 +5,8 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_00145eb0(void);  /* code at 0x145eb0, passed by address (was DAT_145eb0; docs/engine/function-inventory.md) */
-void FUN_00146850(void);  /* code at 0x146850, passed by address (was FUN_00146850; docs/engine/function-inventory.md) */
+void FUN_00145eb0(void);
+void FUN_00146850(void);
 extern int DAT_004d0138[4];
 extern int DAT_004d0148[4];
 extern int DAT_004d0158[4];

@@ -1,6 +1,3 @@
-/* 0x00149620 — FUN_00149620. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int igMetaEnum_Create();
 extern int DAT_00487850[4];
 extern int DAT_00487858[4];

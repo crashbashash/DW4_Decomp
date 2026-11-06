@@ -1,4 +1,4 @@
-/* FUN_0035fcd0: scalar deleting destructor shape (release member, delete when flags > 0); verified by tools/verify.py. */
+/* FUN_0035fcd0: scalar deleting destructor shape (release member, delete when flags > 0).py. */
 extern "C" int FUN_00100610(void *);
 extern "C" int igObject_Destroy(void *);
 struct S_temp_a0 { char pad4[4]; int f4; };

@@ -1,4 +1,4 @@
-/* 0x003844a0 - Gap__Bec__beGenerater__vfunc_32. Typed struct fields (no address CSE) and a padding nop after the guarded store. */
+/* Typed struct fields (no address CSE) and a padding nop after the guarded store. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00236f80(int, int);

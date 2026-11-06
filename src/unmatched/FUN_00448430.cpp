@@ -1,5 +1,3 @@
-/* 0x00448430 — FUN_00448430. m2c draft (build/m2c/FUN_00448430.c), dropped leading call arguments restored; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */

@@ -1,4 +1,5 @@
-/* 0x002940a0 — FUN_002940a0 (104 bytes). mwl_convPtypeToSFD (named by its diagnostic string): passes picture types 1..4 through; anything else is reported as "Invalid Ptype" and treated as 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* mwl_convPtypeToSFD (named by its diagnostic string): passes picture types 1..4 through; anything
+ * else is reported as "Invalid Ptype" and treated as 1. */
 void FUN_0029a320(const char *message);
 
 extern char DAT_004f31b0[]; /* "mwl_convPtypeToSFD : Invalid Ptype" */

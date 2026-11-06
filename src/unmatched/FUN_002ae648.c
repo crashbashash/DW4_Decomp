@@ -1,4 +1,5 @@
-/* 0x002ae648 — FUN_002ae648 (128 bytes). With slot 6 enabled and a threshold in slot 51, returns whether the position/rate from FUN_002ae570 exceeds the threshold. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* With slot 6 enabled and a threshold in slot 51, returns whether the position/rate from
+ * FUN_002ae570 exceeds the threshold. */
 int FUN_002adc40(int obj, int slot);
 void FUN_002ae570(int obj, int block, int *pos, int *rate);
 

@@ -1,4 +1,5 @@
-/* 0x00128fa0 — FUN_00128fa0 (100 bytes). Steps the 64-bit linear congruential generator kept in the reent block and returns its top 31 bits (newlib rand shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Steps the 64-bit linear congruential generator kept in the reent block and returns its top 31
+ * bits (newlib rand shape; name is a hypothesis). */
 typedef struct Reent {
     char f0[168];
     unsigned long randomNext;

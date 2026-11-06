@@ -1,4 +1,3 @@
-/* 0x0023d0b0 - FUN_0023d0b0. signed 2-bit field read through a char load; dropped and swapped call arguments Verified byte-identical by tools/verify.py. */
 int FUN_0023cf10();
 int FUN_002467a0();
 extern int DAT_004ea240[4];

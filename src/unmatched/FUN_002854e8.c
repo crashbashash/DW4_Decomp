@@ -1,4 +1,5 @@
-/* 0x002854e8 — FUN_002854e8 (112 bytes). Stores a pair of words in the handle at +4 once FUN_0028b098 accepts the handle; otherwise reports error 0xFF030203 through FUN_002855d8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a pair of words in the handle at +4 once FUN_0028b098 accepts the handle; otherwise
+ * reports error 0xFF030203 through FUN_002855d8. */
 int FUN_0028b098(void *handle); /* 0 when handle is non-null and in state 2, else -1 */
 void FUN_002855d8(void *handle, int error);
 

@@ -1,4 +1,3 @@
-/* 0x003c8400 - beNDMWItemInstant_GetReadyMetaObject. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 struct SFUN_003c8400 { char pad[36]; unsigned int flags; int ok() { return (flags & 4) != 0; } };
 extern SFUN_003c8400 *DAT_0058bf28[4];
 extern "C" void FUN_003c8490(void);

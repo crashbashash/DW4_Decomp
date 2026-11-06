@@ -1,6 +1,3 @@
-/* 0x00227f90 — igItemInterface_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_002280b0();
 int FUN_002c86a0();
@@ -11,7 +8,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_002280a0(void);  /* code at 0x2280a0, passed by address (was DAT_2280a0; docs/engine/function-inventory.md) */
+void FUN_002280a0(void);
 extern int DAT_00497df0[4];
 extern int DAT_00497e10[4];
 extern int DAT_00497e30[4];

@@ -1,4 +1,4 @@
-/* 0x002a25b0 — FUN_002a25b0 (108 bytes). Returns the OR of FUN_0029ea48 over the player's three streams at +8068, +8064 and +8072. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the OR of FUN_0029ea48 over the player's three streams at +8068, +8064 and +8072. */
 int FUN_0029ea48();
 
 struct Params;

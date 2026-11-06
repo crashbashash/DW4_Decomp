@@ -1,4 +1,6 @@
-/* 0x00270d28 — FUN_00270d28 (132 bytes). Returns the name of the device a file-system handle uses, found by matching its interface in the 32-entry device table DAT_0056e220; a NULL handle is reported through FUN_0026f530 and returns 0. Its error string names it cvFsGetDevName (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the name of the device a file-system handle uses, found by matching its interface in the
+ * 32-entry device table DAT_0056e220; a NULL handle is reported through FUN_0026f530 and returns
+ * 0. Its error string names it cvFsGetDevName (CRI), a name hypothesis. */
 typedef struct CvFsDevEntry_270d28 {
     void *device;   /* 0x00: interface table */
     char name[12];  /* 0x04 */

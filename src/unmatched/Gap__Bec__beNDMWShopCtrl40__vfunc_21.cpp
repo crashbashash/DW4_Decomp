@@ -1,14 +1,13 @@
-/* 0x00429630 Gap__Bec__beNDMWShopCtrl40__vfunc_21: the ShopCtrl40 (mode 4, "CNOS") update.
- * Four-level state machine on _st0 (open / run / close / wait-close), _st1 (sub-state), _st2
- * (step) and _st3 (timer); _subWindow is the child-window list, _nowProcKazu the child count
- * that a freshly spawned child must exceed before the step advances.
- * Build requirements (same as beNDMWShopDevice::vfunc_21, 0x0043cc20): the alternate compiler
- * with "-O3,p -Cpp_exceptions off"; the window and string holders' destructors are duplicates of the
- * retail bodies the exception table names (config/SLUS-20836/unit-objects.json).
- * Codegen projections, not recovered declarations: Rc/Rec/Fld/Item/V are partial views of
- * objects whose reflected structs are not tied to these call sites; the WindowRef/StringRef
- * holders release their object in the destructor; the window search guard reads
- * _subWindow through the beNDMWShopCtrl30 view so it is not merged with the loop-body loads
+/* Gap__Bec__beNDMWShopCtrl40__vfunc_21: the ShopCtrl40 (mode 4, "CNOS") update. Four-level state
+ * machine on _st0 (open / run / close / wait-close), _st1 (sub-state), _st2 (step) and _st3
+ * (timer); _subWindow is the child-window list, _nowProcKazu the child count that a freshly
+ * spawned child must exceed before the step advances. Build requirements (same as
+ * beNDMWShopDevice::vfunc_21, 0x0043cc20): the alternate compiler with "-O3,p -Cpp_exceptions
+ * off"; the window and string holders' destructors are duplicates of the retail bodies the
+ * exception table names. Codegen projections, not recovered declarations: Rc/Rec/Fld/Item/V are
+ * partial views of objects whose reflected structs are not tied to these call sites; the
+ * WindowRef/StringRef holders release their object in the destructor; the window search guard
+ * reads _subWindow through the beNDMWShopCtrl30 view so it is not merged with the loop-body loads
  * (retail reloads the list pointer for the guard, body and latch separately). */
 #include "dw4/reflected.h"
 extern "C" {

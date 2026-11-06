@@ -1,5 +1,3 @@
-/* 0x001e3ce0 — FUN_001e3ce0. m2c draft (build/m2c/FUN_001e3ce0.c), call-argument/cleaner fix-up; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int List_Reserve();
 
 void FUN_001e3ce0(void *arg0) {

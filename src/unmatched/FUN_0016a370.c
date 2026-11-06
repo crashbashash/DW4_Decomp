@@ -1,5 +1,3 @@
-/* 0x0016a370 — FUN_0016a370. hand-matched: struct member keeps the base pointer;
- * verified by tools/verify.py. */
 int FUN_00193540();
 typedef struct Obj { char pad[896]; int f896; } Obj;
 

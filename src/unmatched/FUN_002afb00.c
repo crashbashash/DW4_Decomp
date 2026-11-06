@@ -1,4 +1,6 @@
-/* 0x002afb00 — FUN_002afb00 (152 bytes). While the handle is active (+2384), returns whether FUN_00285118 accepts the current position pair (FUN_002ae968) against the base time (+0xD28+636) advanced by the 59.94 Hz frame count at +640; 0 without a base time. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* While the handle is active (+2384), returns whether FUN_00285118 accepts the current position
+ * pair (FUN_002ae968) against the base time (+0xD28+636) advanced by the 59.94 Hz frame count at
+ * +640; 0 without a base time. */
 int FUN_002ae968(void *handle, int *first, int *second);
 int FUN_00285118(int time, int frames, int first, int second);
 

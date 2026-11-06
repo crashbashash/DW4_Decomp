@@ -1,7 +1,6 @@
-/* 0x00277278 — FUN_00277278 (132 bytes). Stops an active stream controller: clears the active byte,
-   stops a running read on its stream (+40) through FUN_0026a2a0, clears +44, resets the counters
-   (FUN_002771d0) and clears +52; a null controller is reported as "E0003: Illigal parameter lsc=NULL".
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stops an active stream controller: clears the active byte, stops a running read on its stream
+ * (+40) through FUN_0026a2a0, clears +44, resets the counters (FUN_002771d0) and clears +52; a
+ * null controller is reported as "E0003: Illigal parameter lsc=NULL". */
 struct Lsc277 {
     signed char f0;
     signed char active;   /* +1 */

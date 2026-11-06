@@ -1,4 +1,4 @@
-/* 0x003730a0 - sd_31. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 extern "C" {
 int Lua_sd_OptionalArg(int);
 int beMessenger_EnqueueSelected(int, int, int);

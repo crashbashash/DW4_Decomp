@@ -1,4 +1,3 @@
-/* 0x002f8680 - Memory_GetCurrentContext. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 extern int DAT_00586fd0[4];
 extern int DAT_00586ffc[4];
 extern int DAT_00587010[4];

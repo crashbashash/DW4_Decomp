@@ -1,4 +1,6 @@
-/* 0x0026ffb0 — FUN_0026ffb0 (116 bytes). Closes a file-system handle: calls the device's close entry (vtable +20) on the device file, then releases the handle with FUN_0026fdf0; a NULL handle or missing entry is reported through FUN_0026f530. Its error strings name it cvFsClose (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Closes a file-system handle: calls the device's close entry (vtable +20) on the device file,
+ * then releases the handle with FUN_0026fdf0; a NULL handle or missing entry is reported through
+ * FUN_0026f530. Its error strings name it cvFsClose (CRI), a name hypothesis. */
 typedef struct FsDevice_26ffb0 {
     int pad0[5];
     void (*close)(int file);    /* 0x14 */

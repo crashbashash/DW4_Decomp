@@ -1,4 +1,5 @@
-/* 0x002a8a30 — FUN_002a8a30 (252 bytes). Picks the best and second-best slots holding a picture (state 2 or 4), ranked by FUN_002a8b30; clears them when fewer are held. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Picks the best and second-best slots holding a picture (state 2 or 4), ranked by FUN_002a8b30;
+ * clears them when fewer are held. */
 int FUN_002a8b30();
 
 /* One 232-byte decode slot. */

@@ -1,6 +1,3 @@
-/* 0x001716c0 — FUN_001716c0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern float DAT_004e1170[4];
 extern float DAT_004e1174[4];
 extern float DAT_004e1178[4];

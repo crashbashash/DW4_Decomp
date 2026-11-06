@@ -1,8 +1,6 @@
-/* 0x003034e0
- * The object-reference field's raw-field-memory read (vtable +0xcc, slot 51;
- * finding #365): run the igRefMetaField base read, then take a reference on
- * the object now held in *valueSlot when the field is reference counted
- * (_refCounted, +60) or destructed (_destruct, +53). */
+/* The object-reference field's raw-field-memory read (vtable +0xcc, slot 51): run the
+ * igRefMetaField base read, then take a reference on the object now held in *valueSlot when the
+ * field is reference counted (_refCounted, +60) or destructed (_destruct, +53). */
 #include "dw4/reflected.h"
 int igRefMetaField_ReadRawFieldMem();
 

@@ -1,4 +1,4 @@
-/* 0x00291c28 — FUN_00291c28 (88 bytes). Returns FUN_002977d8 of the object's +8/+12 pair, plus 0x20000 when FUN_00298260 reports 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns FUN_002977d8 of the object's +8/+12 pair, plus 0x20000 when FUN_00298260 reports 1. */
 extern int FUN_002977d8(int a, int b);
 extern int FUN_00298260(void *obj);
 

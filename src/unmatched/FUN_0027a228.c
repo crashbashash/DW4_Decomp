@@ -1,8 +1,7 @@
-/* 0x0027a228 — FUN_0027a228 (188 bytes). Library shutdown: while active (not mode 1 with no entries), counts
-   the init reference 0x004b1e0c down and, at zero, frees the work areas 0x004b1ddc and 0x004b1e14
-   (FUN_001122d8), releases 0x004b4860 (FUN_002734d0), tears down the entry table and the request,
-   transfer and support state (FUN_002795d0, FUN_00279f08, FUN_002737a8, FUN_0027df08, FUN_0027db68).
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Library shutdown: while active (not mode 1 with no entries), counts the init reference
+ * 0x004b1e0c down and, at zero, frees the work areas 0x004b1ddc and 0x004b1e14 (FUN_001122d8),
+ * releases 0x004b4860 (FUN_002734d0), tears down the entry table and the request, transfer and
+ * support state (FUN_002795d0, FUN_00279f08, FUN_002737a8, FUN_0027df08, FUN_0027db68). */
 extern void FUN_001122d8(int area);
 extern void FUN_002734d0(int object);
 extern void FUN_002795d0(void);

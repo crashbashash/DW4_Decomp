@@ -1,6 +1,3 @@
-/* 0x001e0470 — FUN_001e0470. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int igObject_Destroy(void *);
 
 void FUN_001e0470(void) {

@@ -1,4 +1,4 @@
-/* 0x0029ccd0 — FUN_0029ccd0 (72 bytes). Forwards a value to FUN_0029cd18 unless it is zero while state+44 is 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards a value to FUN_0029cd18 unless it is zero while state+44 is 1. */
 typedef struct SfdDecoderState {
     int decoder;            /* +0 */
     char pad4[40];

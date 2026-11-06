@@ -25,11 +25,11 @@ extern unsigned char GPR_00554c14;
 }
 /* the incoming message: its +20 word is the enum name; no reflected class established */
 struct A2 { char p[20]; int f20; };
-/* Owning stack references while the controller list is wired up (one stack slot per holder; each releases its object
- * on scope exit).  One class per retail destructor copy: DataListRef 0x0033e9c0 (the property list and the
- * ensure-list temporaries), SaveCtrlDataRef 0x00408070 (emitted behind this function), CommonIntfRef 0x003f2c40,
- * DegiDataRef 0x003e9010 and FlagWorkRef 0x003f2bc0 (shared with beNDMWLoadCtrl2__vfunc_34, same bodies; see
- * config/SLUS-20836/unit-objects.json). */
+/* Owning stack references while the controller list is wired up (one stack slot per holder; each
+ * releases its object on scope exit). One class per retail destructor copy: DataListRef 0x0033e9c0
+ * (the property list and the ensure-list temporaries), SaveCtrlDataRef 0x00408070 (emitted behind
+ * this function), CommonIntfRef 0x003f2c40, DegiDataRef 0x003e9010 and FlagWorkRef 0x003f2bc0
+ * (shared with beNDMWLoadCtrl2__vfunc_34, same bodies). */
 class DataListRef {
 public:
     igObject *p;

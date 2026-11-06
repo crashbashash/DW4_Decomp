@@ -1,4 +1,5 @@
-/* 0x003273e0 - FUN_003273e0. Stream/object helper: three virtual error paths each store the status and return; vtable dummies (offset-8)/4, fields through a plain struct. Alternate -O3. */
+/* Stream/object helper: three virtual error paths each store the status and return; vtable dummies
+ * (offset-8)/4, fields through a plain struct. Alternate -O3. */
 extern "C" {
 extern char DAT_00500000[];
 int memset(...);

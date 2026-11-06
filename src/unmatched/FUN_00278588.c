@@ -1,4 +1,6 @@
-/* 0x00278588 — FUN_00278588 (132 bytes). Opens an entry: rejects a non-positive entry number or a non-zero rw mode, takes a free handle (FUN_00277fc0) and initialises it (FUN_00278038); failures are reported through FUN_00277de8 and return 0. Its error strings name it mfCiOpenEntry (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Opens an entry: rejects a non-positive entry number or a non-zero rw mode, takes a free handle
+ * (FUN_00277fc0) and initialises it (FUN_00278038); failures are reported through FUN_00277de8 and
+ * return 0. Its error strings name it mfCiOpenEntry (CRI), a name hypothesis. */
 extern char E1041001_invalid_entry_number_mfCiOpenEntry[];          /* 'E1041001:invalid entry number.(mfCiOpenEntry)' */
 extern char E1041002_rw_is_illigal_mfCiOpenEntry[];                 /* 'E1041002:rw is illigal.(mfCiOpenEntry)' */
 extern char E1041002_not_enough_handle_resource_mfCiOpenEntry[];    /* 'E1041002:not enough handle resource.(mfCiOpenEntry)' */

@@ -1,4 +1,5 @@
-/* 0x002b1278 — FUN_002b1278 (48 bytes). Points the header at +8520 at the item list at +13808 and resets that list with FUN_002b12a8; returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Points the header at +8520 at the item list at +13808 and resets that list with FUN_002b12a8;
+ * returns 0. */
 int FUN_002b12a8();
 
 struct ListHeader {

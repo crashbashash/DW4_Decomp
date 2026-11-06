@@ -1,4 +1,5 @@
-/* 0x00265200 — FUN_00265200 (136 bytes). For the handles in DAT_0049da2c and (when FUN_00264808 returns 1) DAT_0049da30: calls FUN_00264300 on a handle that FUN_00264368 reports back unchanged. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* For the handles in DAT_0049da2c and (when FUN_00264808 returns 1) DAT_0049da30: calls
+ * FUN_00264300 on a handle that FUN_00264368 reports back unchanged. */
 /* Retail re-reads both globals after each call, so they are volatile. */
 extern volatile int DAT_0049da2c;
 extern volatile int DAT_0049da30;

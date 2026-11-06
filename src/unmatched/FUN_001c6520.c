@@ -1,4 +1,5 @@
-/* 0x001c6520 - FUN_001c6520. Cached smart-pointer refresh: out-parameter smart pointer as a volatile local read once per use, string-pool reset; default compiler. Verified byte-identical by tools/verify.py. */
+/* Cached smart-pointer refresh: out-parameter smart pointer as a volatile local read once per use,
+ * string-pool reset; default compiler. */
 typedef struct Ob { int w0; unsigned refs; int w2; } Ob;
 typedef struct O { int w[6]; int f24; Ob *f28; Ob *f32; int f36; int f40; } O;
 extern int DAT_00586f20[4];

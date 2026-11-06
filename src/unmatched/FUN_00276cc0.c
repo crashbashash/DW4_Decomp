@@ -1,5 +1,5 @@
-/* 0x00276cc0 — FUN_00276cc0 (36 bytes). Queries FUN_00276b18 into a 16-byte local record and reports
-   whether its second word is non-zero. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queries FUN_00276b18 into a 16-byte local record and reports whether its second word is non-
+ * zero. */
 struct Info276 {
     int f0;
     int second;

@@ -1,4 +1,5 @@
-/* 0x0027d568 — FUN_0027d568 (172 bytes). Parses seven hex digits text[0..6] (most significant first) into an integer through the digit-value table DAT_004ba2b8 indexed by character; the inverse of FUN_0027d4d0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Parses seven hex digits text[0..6] (most significant first) into an integer through the digit-
+ * value table DAT_004ba2b8 indexed by character; the inverse of FUN_0027d4d0. */
 extern int DAT_004ba2b8[];
 
 int FUN_0027d568(signed char *text) {

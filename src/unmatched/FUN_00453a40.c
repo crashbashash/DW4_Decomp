@@ -1,4 +1,3 @@
-/* 0x00453a40 - FUN_00453a40. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 void FUN_00453a40(igBasicColorChanger *arg0, int arg1, int arg2, int arg3, void *arg4) {
     int var_v1;

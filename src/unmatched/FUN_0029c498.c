@@ -1,4 +1,4 @@
-/* 0x0029c498 — FUN_0029c498 (100 bytes). Refreshes the cached value of handle option 27 and pushes a change to the decoder. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Refreshes the cached value of handle option 27 and pushes a change to the decoder. */
 typedef struct SfdDecoderState {
     int decoder;            /* +0: passed to FUN_0026c7b0 */
     char pad4[64];

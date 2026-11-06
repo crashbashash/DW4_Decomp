@@ -1,4 +1,4 @@
-/* 0x002ae528 — FUN_002ae528 (72 bytes). Sets the block's word at +720 from +680 when FUN_002adc40(handle, 71) is 1, else from +732. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the block's word at +720 from +680 when FUN_002adc40(handle, 71) is 1, else from +732. */
 int FUN_002adc40();
 
 /* The block at +3368 (0xD28) of the owning object. Retail re-reads the counters and never merges or

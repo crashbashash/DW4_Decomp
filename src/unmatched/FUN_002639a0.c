@@ -1,4 +1,6 @@
-/* 0x002639a0 — FUN_002639a0 (172 bytes). ADXT_StartFnameRangeLp (name from the error string at DAT_004ee1d8): resets the play handle file list, enters the name range with FUN_00263768, enables looping on the list and starts playback with FUN_002638a0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* ADXT_StartFnameRangeLp (name from the error string at DAT_004ee1d8): resets the play handle file
+ * list, enters the name range with FUN_00263768, enables looping on the list and starts playback
+ * with FUN_002638a0. */
 typedef struct AdxtHandle {
     char f0[148];
     void *fileList;

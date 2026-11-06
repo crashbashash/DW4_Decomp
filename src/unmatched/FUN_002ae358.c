@@ -1,4 +1,5 @@
-/* 0x002ae358 — FUN_002ae358 (60 bytes). Returns the next deadline for `now` from the interval statistics: last+estimate while before it, then last+largest, and 0x7FFFFFFF once that has passed too. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the next deadline for `now` from the interval statistics: last+estimate while before it,
+ * then last+largest, and 0x7FFFFFFF once that has passed too. */
 struct IntervalStats {
     char pad0[660];
     int last;     /* +660 */

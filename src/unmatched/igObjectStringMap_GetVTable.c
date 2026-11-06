@@ -1,4 +1,3 @@
-/* 0x002bcc50 — igObjectStringMap_GetVTable. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 #include "dw4/reflected.h"
 int igObject_InitHeader();
 int igObject_Destroy();

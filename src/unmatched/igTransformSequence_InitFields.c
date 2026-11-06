@@ -9,7 +9,7 @@ int igMetaObject_CreateFields();
 struct Fld *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void thunk_FUN_00194ef0(void);  /* code at 0x195320, passed by address (was DAT_195320; docs/engine/function-inventory.md) */
+void thunk_FUN_00194ef0(void);
 extern int DAT_0048b080[4];
 extern int DAT_0048b0b0[4];
 extern int DAT_0048b0e0[4];

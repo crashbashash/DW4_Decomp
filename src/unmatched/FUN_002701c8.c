@@ -1,4 +1,6 @@
-/* 0x002701c8 — FUN_002701c8 (88 bytes). Stops the transfer through the device interface (entry +40) of a file-system handle; a NULL handle or missing entry is reported through FUN_0026f530 and nothing happens. Its error strings name it cvFsStopTr (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stops the transfer through the device interface (entry +40) of a file-system handle; a NULL
+ * handle or missing entry is reported through FUN_0026f530 and nothing happens. Its error strings
+ * name it cvFsStopTr (CRI), a name hypothesis. */
 typedef struct CvFsDevice_2701c8 {
     void *pad0[10];
     void (*stop_tr)(int file);  /* 0x28 */

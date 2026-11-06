@@ -1,4 +1,5 @@
-/* 0x002dc340 - FUN_002dc340. Object list destructor; element virtual (vptr at +8) via a class with two leading ints; typed first parameter keeps the parameter-copy order. Alternate -O3. */
+/* Object list destructor; element virtual (vptr at +8) via a class with two leading ints; typed
+ * first parameter keeps the parameter-copy order. Alternate -O3. */
 extern "C" {
 int Memory_FreeBufferAliasB(void *);
 void igObject_Destroy(void *);

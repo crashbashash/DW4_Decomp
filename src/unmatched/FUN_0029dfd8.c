@@ -1,4 +1,5 @@
-/* 0x0029dfd8 — FUN_0029dfd8 (140 bytes). Clears the reader cursor at +24 when it lies outside both chunks FUN_0029e068 maps from the ring. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears the reader cursor at +24 when it lies outside both chunks FUN_0029e068 maps from the
+ * ring. */
 int FUN_0029e068();
 
 struct Chunk {

@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
-/* 0x0016c650 - FUN_0016c650. Container teardown: virtual per-element release loop (s0 > -1 for the slti/beqz test), string-pool reset and member release; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Container teardown: virtual per-element release loop (s0 > -1 for the slti/beqz test), string-
+ * pool reset and member release; alternate compiler. */
 extern "C" {
 int FUN_002eb010(int);
 int StringPool_Construct(int);

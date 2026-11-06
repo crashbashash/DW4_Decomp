@@ -1,4 +1,4 @@
-/* 0x002ada08 — FUN_002ada08 (112 bytes). Calls FUN_002ada78(entry, a, b) for every non-null entry of the eight-slot table DAT_004beadc. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_002ada78(entry, a, b) for every non-null entry of the eight-slot table DAT_004beadc. */
 extern int DAT_004beadc[8];
 int FUN_002ada78();
 

@@ -1,10 +1,8 @@
-/* 0x001d07e0
- * Clear the LOD's cached range lookup: release the reference held in
- * _lastRange (destroying it when its 23-bit count in the low bits of the
- * _refCount word reaches zero, the same inline release as
- * igParticleAttr::vfunc_32) and reset _lastIndex to -1 and the cached
- * _lastLower/_lastUpper bounds to 0.  _lastRange/_lastIndex are the pair
- * read back by igLod::vfunc_37 (src/unmatched/Gap__Sg__igLod__vfunc_37.c). */
+/* Clear the LOD's cached range lookup: release the reference held in _lastRange (destroying it
+ * when its 23-bit count in the low bits of the _refCount word reaches zero, the same inline
+ * release as igParticleAttr::vfunc_32) and reset _lastIndex to -1 and the cached
+ * _lastLower/_lastUpper bounds to 0. _lastRange/_lastIndex are the pair read back by
+ * igLod::vfunc_37. */
 #include "dw4/reflected.h"
 int igObject_Destroy();
 

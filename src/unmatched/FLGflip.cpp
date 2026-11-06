@@ -1,4 +1,5 @@
-/* 0x003738e0 - FLGflip. bounds-checked byte set chosen by the current byte; the byte table is read through a local pointer, the store index added first; alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* Bounds-checked byte set chosen by the current byte; the byte table is read through a local
+ * pointer, the store index added first; alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 extern "C" {
 struct Rec { char pad[12]; igUnsignedCharList *f12; };

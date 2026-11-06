@@ -1,5 +1,3 @@
-/* 0x0019c0e0 — FUN_0019c0e0. m2c draft, hand-fixed; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_001958f0();
 int FUN_00195970();
 int igObject_Destroy();

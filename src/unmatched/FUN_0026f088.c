@@ -1,4 +1,4 @@
-/* 0x0026f088 — FUN_0026f088 (48 bytes). Unless the object is busy, stores four arguments and kind 2; returns 1, or 0 when busy. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Unless the object is busy, stores four arguments and kind 2; returns 1, or 0 when busy. */
 typedef struct Object_26f058 {
     char pad0[12];
     int busy;           /* 0x0c: the call is refused while non-zero */

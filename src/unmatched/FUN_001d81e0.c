@@ -1,5 +1,3 @@
-/* 0x001d81e0 — FUN_001d81e0. m2c draft, hybrid; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_003065f0();
 int FUN_00306e50();
 extern int DAT_0048dae0[4];

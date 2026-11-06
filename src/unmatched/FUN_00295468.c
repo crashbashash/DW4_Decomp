@@ -1,4 +1,5 @@
-/* 0x00295468 — FUN_00295468 (72 bytes). Returns whether SFD_GetPaStat (FUN_002aa2f0 on the handle's target) reports 1; values other than 0 and 1 are reported as invalid. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns whether SFD_GetPaStat (FUN_002aa2f0 on the handle's target) reports 1; values other than
+ * 0 and 1 are reported as invalid. */
 int FUN_002aa2f0(int target);
 void FUN_0029a320(const char *format, ...);
 

@@ -1,4 +1,4 @@
-/* 0x002aa750 — FUN_002aa750 (100 bytes). True when every one of the eight handle slots (DAT_004beadc) is empty or passes FUN_002aa728. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when every one of the eight handle slots (DAT_004beadc) is empty or passes FUN_002aa728. */
 typedef struct SfdHandle SfdHandle;
 
 extern SfdHandle *DAT_004beadc[8];

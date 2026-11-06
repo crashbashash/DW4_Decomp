@@ -1,6 +1,3 @@
-/* 0x00330a50 — FUN_00330a50. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern "C" {
 int __divdi3(...);
 int __moddi3(...);

@@ -1,5 +1,3 @@
-/* 0x00140f40 — FUN_00140f40. m2c draft, symbol; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 extern char DAT_004d5e30[];
 int FUN_00140e90();
 int FUN_00306e50();

@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x001c55c0 — Gap__Bec__ParticleTimer__vfunc_29. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 extern "C" {
 class ParticleAttributeObj;
 struct FieldOffsetHolder { char pad[8]; int f8; };

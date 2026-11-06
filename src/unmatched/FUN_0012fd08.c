@@ -1,4 +1,5 @@
-/* 0x0012fd08 — FUN_0012fd08 (108 bytes). Formats a va_list into a caller buffer of the given size through a string stream, keeping one byte for the terminator (newlib vsnprintf shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Formats a va_list into a caller buffer of the given size through a string stream, keeping one
+ * byte for the terminator (newlib vsnprintf shape; name is a hypothesis). */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 

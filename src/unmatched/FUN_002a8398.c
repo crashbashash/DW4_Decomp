@@ -1,4 +1,5 @@
-/* 0x002a8398 — FUN_002a8398 (164 bytes). Releases one reference on the player's entry id (count clamped at 0, error 0xFF000F31 when missing) and decrements the player's count at +2428; error 0xFF000189 when refused. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Releases one reference on the player's entry id (count clamped at 0, error 0xFF000F31 when
+ * missing) and decrements the player's count at +2428; error 0xFF000189 when refused. */
 void FUN_002a0bb8();
 int FUN_002a0dd8();
 struct Entry2a8398 {

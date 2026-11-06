@@ -1,4 +1,4 @@
-/* 0x00378ed0 - FUN_00378ed0: beCameraCtrl per-frame update (receiver beCameraCtrl, argument a camera-owning actor) */
+/* BeCameraCtrl per-frame update (receiver beCameraCtrl, argument a camera-owning actor) */
 #include "dw4/reflected.h"
 #pragma inline_depth(8)
 extern "C" {

@@ -1,4 +1,6 @@
-/* 0x0026e5f0 — FUN_0026e5f0 (184 bytes). Once the source (+4) reports state 3 (FUN_002661d0), checks every one of its FUN_00267228 channel streams (+24) with the vtable +36 query; when all report less than 64, sets the object's state byte (+1) to 4. The count and the last query are kept in DAT_004a8ea4/DAT_004a8ea8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Once the source (+4) reports state 3 (FUN_002661d0), checks every one of its FUN_00267228
+ * channel streams (+24) with the vtable +36 query; when all report less than 64, sets the object's
+ * state byte (+1) to 4. The count and the last query are kept in DAT_004a8ea4/DAT_004a8ea8. */
 typedef struct Stream_26e5f0 Stream_26e5f0;
 typedef struct StreamVtbl_26e5f0 {
     void *pad0[9];

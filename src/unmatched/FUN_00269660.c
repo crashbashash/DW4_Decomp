@@ -1,4 +1,6 @@
-/* 0x00269660 — FUN_00269660 (100 bytes). Sets the object's owner id (+68) and re-claims both of its table entries (+128, +132): each held entry is released with FUN_00267da0 and replaced by a fresh one from FUN_00267d00 for the new owner. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the object's owner id (+68) and re-claims both of its table entries (+128, +132): each held
+ * entry is released with FUN_00267da0 and replaced by a fresh one from FUN_00267d00 for the new
+ * owner. */
 typedef struct Obj_269660 {
     char pad0[68];
     int owner;          /* 0x44 */

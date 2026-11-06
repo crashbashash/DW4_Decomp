@@ -1,4 +1,4 @@
-/* 0x00269f50 — FUN_00269f50 (68 bytes). Calls FUN_00269da8(0, 0, 0, a0) for a second argument below 256, else FUN_00269e80(0, 0, 0, a0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_00269da8(0, 0, 0, a0) for a second argument below 256, else FUN_00269e80(0, 0, 0, a0). */
 void FUN_00269da8(int a0, int a1, int a2, int a3);
 void FUN_00269e80(int a0, int a1, int a2, int a3);
 

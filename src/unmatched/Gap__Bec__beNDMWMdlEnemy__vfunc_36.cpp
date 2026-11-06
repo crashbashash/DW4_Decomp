@@ -1,9 +1,9 @@
-/* 0x003d1960 - Gap__Bec__beNDMWMdlEnemy__vfunc_36: attach the enemy info work to a RAM slot.
- * Creates the slot's data list on first use, replaces the info-work record found by name with a new
- * beNDMWMdlEnemyInfoWork (FUN_003c1910 creates it), seeds its record number and HP from the
- * messenger's int arguments, queues the delayed "enemy appears" selection when the record asks for
- * one, and hands the slot to the common attach step FUN_00396740.  Both created objects live on the
- * stack in owning references whose releases the retail exception table records. */
+/* Attach the enemy info work to a RAM slot. Creates the slot's data list on first use, replaces
+ * the info-work record found by name with a new beNDMWMdlEnemyInfoWork (FUN_003c1910 creates it),
+ * seeds its record number and HP from the messenger's int arguments, queues the delayed "enemy
+ * appears" selection when the record asks for one, and hands the slot to the common attach step
+ * FUN_00396740. Both created objects live on the stack in owning references whose releases the
+ * retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 void *beBaseInfoDataList_Create(...);

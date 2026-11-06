@@ -1,4 +1,5 @@
-/* 0x002aeef0 — FUN_002aeef0 (136 bytes). Runs FUN_002aef78 on one handle, or with a null handle on every handle in DAT_004beadc, returning the last non-zero result. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs FUN_002aef78 on one handle, or with a null handle on every handle in DAT_004beadc,
+ * returning the last non-zero result. */
 int FUN_002aef78(int handle);
 
 extern int DAT_004beadc[8];

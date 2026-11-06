@@ -1,4 +1,5 @@
-/* 0x0027e2f0 — FUN_0027e2f0 (168 bytes). SVM error report: formats the message into a 128-byte buffer with FUN_0012fde0 (vsprintf-shaped: buffer, format, va_list) and hands it to the registered error callback. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* SVM error report: formats the message into a 128-byte buffer with FUN_0012fde0 (vsprintf-shaped:
+ * buffer, format, va_list) and hands it to the registered error callback. */
 typedef __builtin_va_list va_list;
 
 void *memset(void *, int, unsigned int);

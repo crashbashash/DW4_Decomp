@@ -1,4 +1,5 @@
-/* 0x0029ceb8 — FUN_0029ceb8 (48 bytes). Returns the record at +3340 of the handle's work area while the state's count at +64 is not positive, else NULL. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the record at +3340 of the handle's work area while the state's count at +64 is not
+ * positive, else NULL. */
 typedef struct SfdDecoderState {
     char pad0[64];
     int f64;                /* +64 */

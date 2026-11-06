@@ -1,10 +1,8 @@
-/* 0x00328620 — Gap::Core::igStandardQueue::vfunc_12.
- * Queue teardown: while the queue still owns its data buffer (vfunc_25 returns
- * `_data != 0`), vfunc_24 frees it (it releases `_data` and zeroes it); then the
- * thunk to FUN_00305000 runs the shared release loop over the `_serviceThreads`
- * list (FUN_00305000 is matched in src/unmatched).
- * DW4VC_96_0 / DW4VC_100_0 are stand-in classes: their single real virtual
- * sits at vtable byte offset 96 (slot 24) and 100 (slot 25) respectively. */
+/* Queue teardown: while the queue still owns its data buffer (vfunc_25 returns `_data != 0`),
+ * vfunc_24 frees it (it releases `_data` and zeroes it); then the thunk to FUN_00305000 runs the
+ * shared release loop over the `_serviceThreads` list (FUN_00305000 is matched in src/unmatched).
+ * DW4VC_96_0 / DW4VC_100_0 are stand-in classes: their single real virtual sits at vtable byte
+ * offset 96 (slot 24) and 100 (slot 25) respectively. */
 extern "C" {
 int thunk_FUN_00305000(...);
 void Gap__Core__igStandardQueue__vfunc_12(void **self);

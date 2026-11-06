@@ -1,4 +1,5 @@
-/* 0x002a8b50 — FUN_002a8b50 (76 bytes). Returns the 2048-byte sector index of position from the area base, or 0 at the area's end ((f8 * 16 + f4 + 16) masked to 28 bits). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the 2048-byte sector index of position from the area base, or 0 at the area's end ((f8 *
+ * 16 + f4 + 16) masked to 28 bits). */
 struct Area2a8b50 {
     int base;
     int f4;

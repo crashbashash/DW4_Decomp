@@ -1,4 +1,5 @@
-/* 0x0026c378 — FUN_0026c378 (76 bytes). Returns -1 (after reporting DAT_004ee6a0) for a null handle, 0 while its state is below 2, else FUN_00267228 of its stream. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns -1 (after reporting DAT_004ee6a0) for a null handle, 0 while its state is below 2, else
+ * FUN_00267228 of its stream. */
 /* Handle layout shared by FUN_0026bb38 … FUN_0026ebf8 (offsets from their accesses). */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {

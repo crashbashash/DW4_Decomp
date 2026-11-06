@@ -1,8 +1,6 @@
-/* 0x0015feb0
- * Reset step of an igVertexStream: clears the configured flag and releases
- * the vertex data list (_vertexDataList, an igObjectRefMetaField).  The release
- * is the engine's usual reference drop: decrement the count at object +4 and
- * destroy the object when its low 23 bits reach zero (docs/engine/object-creation.md). */
+/* Reset step of an igVertexStream: clears the configured flag and releases the vertex data list
+ * (_vertexDataList, an igObjectRefMetaField). The release is the engine's usual reference drop:
+ * decrement the count at object +4 and destroy the object when its low 23 bits reach zero. */
 #include "dw4/reflected.h"
 int igObject_Destroy();
 

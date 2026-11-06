@@ -1,4 +1,4 @@
-/* 0x0028b530 — FUN_0028b530 (200 bytes). Fills count words at dst with value, unrolled by 16. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills count words at dst with value, unrolled by 16. */
 void FUN_0028b530(int *dst, int value, unsigned int count) {
     int *p = dst + count;
     unsigned int n;

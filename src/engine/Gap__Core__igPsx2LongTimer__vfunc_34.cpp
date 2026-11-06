@@ -1,8 +1,7 @@
-/* 0x00330db0 - Gap::Core::igPsx2LongTimer::vfunc_34, the preset time in seconds.
- * Reads the preset through the virtual at slot 35 (vfunc_35, 0x00330da0: returns _resetTime,
- * a nanosecond count, docs/engine/system-clock.md) and converts it to a double:
- * whole seconds plus the leftover nanoseconds divided by 1e9, with the soft-float helpers
- * the EE needs for doubles. Its setter twin is vfunc_32 (0x00330d30). */
+/* Vfunc_34, the preset time in seconds. Reads the preset through the virtual at slot 35 (vfunc_35,
+ * 0x00330da0: returns _resetTime, a nanosecond count) and converts it to a double: whole seconds
+ * plus the leftover nanoseconds divided by 1e9, with the soft-float helpers the EE needs for
+ * doubles. Its setter twin is vfunc_32 (0x00330d30). */
 extern "C" {
 int __divdi3(...);
 int __moddi3(...);

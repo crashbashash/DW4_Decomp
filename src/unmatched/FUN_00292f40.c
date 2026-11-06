@@ -1,4 +1,5 @@
-/* 0x00292f40 — FUN_00292f40 (80 bytes). Returns -1 when the handle (no flag at +24) has a status block from FUN_00294a30 with either +40 or +44 still zero, else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns -1 when the handle (no flag at +24) has a status block from FUN_00294a30 with either +40
+ * or +44 still zero, else 0. */
 
 struct Status00292f40 {
     char pad0[40];

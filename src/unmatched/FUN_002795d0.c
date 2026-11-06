@@ -1,7 +1,7 @@
-/* 0x002795d0 — FUN_002795d0 (224 bytes). Tears down every entry of the 24-byte table at 0x004b1e20
-   (count 0x004b1dc0): destroys its stream (+4, FUN_0027d880), its object (+8, through its method at slot +12)
-   and its +12 resource (FUN_0027e078), then clears the entry; finally releases the shared resource
-   0x004b1dcc through FUN_001122d8 when the owned flag 0x004b1dd4 is set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Tears down every entry of the 24-byte table at 0x004b1e20 (count 0x004b1dc0): destroys its
+ * stream (+4, FUN_0027d880), its object (+8, through its method at slot +12) and its +12 resource
+ * (FUN_0027e078), then clears the entry; finally releases the shared resource 0x004b1dcc through
+ * FUN_001122d8 when the owned flag 0x004b1dd4 is set. */
 struct Object279;
 struct Object279Methods {
     void *slots[3];

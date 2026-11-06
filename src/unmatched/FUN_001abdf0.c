@@ -1,4 +1,4 @@
-/* 0x001abdf0 - FUN_001abdf0. release three global references (cached pointer, int refcount, 23-bit test), then clear them. Verified byte-identical by tools/verify.py. */
+/* Release three global references (cached pointer, int refcount, 23-bit test), then clear them. */
 struct R { char pad[4]; int f4; };
 int igObject_Destroy(struct R *);
 extern struct R *DAT_00562528[4];

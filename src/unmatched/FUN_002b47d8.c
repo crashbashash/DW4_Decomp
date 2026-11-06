@@ -1,4 +1,6 @@
-/* 0x002b47d8 — FUN_002b47d8 (244 bytes). Clears the first 0x400 bytes of buf, fills buf+0x400 with FUN_002b4630, then hands both halves to the object's callback at +68 (with its floats at +60/+64) or, without one, to FUN_002b48d0 (mode 16 at +4) or FUN_002b4960. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears the first 0x400 bytes of buf, fills buf+0x400 with FUN_002b4630, then hands both halves
+ * to the object's callback at +68 (with its floats at +60/+64) or, without one, to FUN_002b48d0
+ * (mode 16 at +4) or FUN_002b4960. */
 int FUN_002b4630();
 int FUN_002b48d0();
 int FUN_002b4960();

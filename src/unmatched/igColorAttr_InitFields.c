@@ -1,4 +1,3 @@
-/* 0x00139090 - igColorAttr_InitFields. byte store of zero, the four floats as an int array local Verified byte-identical by tools/verify.py. */
 int FUN_0018e670();
 int FUN_0030e9b0();
 int igMetaObject_CreateFields();

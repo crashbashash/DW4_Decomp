@@ -13,8 +13,8 @@ extern int DAT_0048c3c0[4];
 extern int DAT_0048c3e0[4];
 extern int DAT_0048c400[4];
 extern int DAT_00561ba0[4];
-void FUN_001a21b0(void);  /* code at 0x1a21b0, passed by address (was DAT_1a21b0; docs/engine/function-inventory.md) */
-void FUN_001a24e0(void);  /* code at 0x1a24e0, passed by address (was FUN_001a24e0; docs/engine/function-inventory.md) */
+void FUN_001a21b0(void);
+void FUN_001a24e0(void);
 void igEnbayaAnimationSource_InitFields(void) {
     igMemoryRefMetaField *temp_s2;
     igFloatMetaField *temp_v0;

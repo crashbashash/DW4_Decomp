@@ -1,4 +1,5 @@
-/* 0x002a0498 — FUN_002a0498 (140 bytes). Reads four settings through getter callbacks into +16..+28 of a record; a missing third one defaults to 2. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads four settings through getter callbacks into +16..+28 of a record; a missing third one
+ * defaults to 2. */
 typedef struct SfdSettings {
     char pad0[16];
     int f16;

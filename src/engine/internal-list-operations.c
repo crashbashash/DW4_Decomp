@@ -1,6 +1,6 @@
-/* Exact internal-list operations. PointerList/RefHeader are observed ABI views.
- * Append physical old-count return is a compiler-match signature hypothesis (#883);
- * no defined public return is claimed by the behavioral oracle. */
+/* Exact internal-list operations. PointerList/RefHeader are observed ABI views. Append physical
+ * old-count return is a compiler-match signature hypothesis; no defined public return is claimed
+ * by the behavioral oracle. */
 /* Observed 16-byte ABI; no reflected public-list layout is substituted. */
 typedef struct {int header[2];int *data;int count;} PointerList;
 typedef struct {int vtable;unsigned refs;} RefHeader;
@@ -13,7 +13,6 @@ void ObjectPointerList_Destruct(PointerList *);
 void InternalObjectList_SetCount(PointerList *,int);
 void igObject_Destroy(void *);
 int igStrCmp(const char *,const char *);
-
 
 void ObjectPointerList_ClearUnused(PointerList *list){
     int i=list->count;

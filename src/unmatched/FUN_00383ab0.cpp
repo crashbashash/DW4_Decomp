@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
-/* 0x00383ab0 - FUN_00383ab0: sizes the geometry attribute for a glyph run (3 vertices per glyph, plus two
- * glyphs of slack when arg3 is set) and rebuilds its vertex array through FUN_00383910 when the current
- * one is missing or too small.  The vertex array is retained for the check in an owning stack reference. */
+/* Sizes the geometry attribute for a glyph run (3 vertices per glyph, plus two glyphs of slack
+ * when arg3 is set) and rebuilds its vertex array through FUN_00383910 when the current one is
+ * missing or too small. The vertex array is retained for the check in an owning stack reference. */
 /* matching construct: dummy-virtual class supplies the retail vtable slot offset for igGeometryAttr's configure virtual (vtable slot 39) */
 class GeomAttrVirtual {
 public:

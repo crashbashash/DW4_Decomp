@@ -1,4 +1,5 @@
-/* 0x002a2bd8 — FUN_002a2bd8 (136 bytes). Resets a stream parameter block: handles and counters to 0, times to LONG_MAX/INT_MAX, unknown fields to -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a stream parameter block: handles and counters to 0, times to LONG_MAX/INT_MAX, unknown
+ * fields to -1. */
 /* Stream parameter block reset to "unknown" values. */
 struct Params {
     int handle;

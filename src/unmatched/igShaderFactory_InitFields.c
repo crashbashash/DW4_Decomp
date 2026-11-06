@@ -1,12 +1,10 @@
-/* 0x00199570 — igShaderFactory_InitFields, m2c draft (hybrid+po mode), does not match yet.
- * Iterate here; a match is copied to src/igShaderFactory_InitFields.c only after verify.py agrees. */
 int FUN_002be100();
 int FUN_002dc7a0();
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_00199110(void);  /* code at 0x199110, passed by address (was DAT_199110; docs/engine/function-inventory.md) */
+void FUN_00199110(void);
 extern int DAT_0048b678[4];
 extern int DAT_0048b688[4];
 extern int DAT_0048b698[4];

@@ -6,7 +6,7 @@ extern char igVisualAttribute_Register[];
 extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igTextureFunctionAttr_GetVTable[];
 extern char thunk_igTextureFunctionAttr_GetMetaObject[];
-void FUN_00131f70(void);  /* code at 0x131f70, passed by address (was DAT_131f70; docs/engine/function-inventory.md) */
+void FUN_00131f70(void);
 extern char igTextureFunctionAttr_className[];
 extern char g_igTextureFunctionAttr_metaObject[];
 int GpFlag_SetOnce_00130000();

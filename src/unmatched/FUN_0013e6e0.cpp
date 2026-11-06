@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
-/* 0x0013e6e0 - FUN_0013e6e0. C++ bool result (daddiu 1), pointer-range loops over a list with virtual calls (slots 96 and 48) and a break; bool declared before the call result; alternate compiler -O3 */
+/* C++ bool result (daddiu 1), pointer-range loops over a list with virtual calls (slots 96 and 48)
+ * and a break; bool declared before the call result; alternate compiler -O3 */
 struct Ob { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8(); virtual void a9(); virtual void v10(); };
 struct Item { virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10(); virtual void b11(); virtual void b12(); virtual void b13(); virtual void b14(); virtual void b15(); virtual void b16(); virtual void b17(); virtual void b18(); virtual void b19(); virtual void b20(); virtual void b21(); virtual void v22(int); };
 /* matching construct: dummy-virtual view so ->v30() dispatches through the object vtable */

@@ -1,5 +1,4 @@
-/* 0x00275f48 — FUN_00275f48 (56 bytes). Returns the state byte (+2) of a handle, reporting a null handle and returning 0 for it.
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the state byte (+2) of a handle, reporting a null handle and returning 0 for it. */
 struct Handle275 {
     signed char used;      /* +0 */
     signed char shared;    /* +1 */

@@ -1,10 +1,8 @@
-/* 0x00175cb0 — Gap::Gfx::igPsx2ParticleArray::vfunc_26: decode the particle at `index`
- * into a shared scratch record and return it.  The software ParticleArray
- * (Gap::Bec::ParticleArray::vfunc_24) returns a pointer straight into
- * _particleArray; here the data lives packed in the PS2 vertex format, so each
- * component is unpacked by a helper into a 0x90-byte record (the layout that
- * vfunc_27, the setter, takes as a stack buffer).  Without hardware support the
- * base implementation is used. */
+/* Decode the particle at `index` into a shared scratch record and return it. The software
+ * ParticleArray (Gap::Bec::ParticleArray::vfunc_24) returns a pointer straight into
+ * _particleArray; here the data lives packed in the PS2 vertex format, so each component is
+ * unpacked by a helper into a 0x90-byte record (the layout that vfunc_27, the setter, takes as a
+ * stack buffer). Without hardware support the base implementation is used. */
 #include "dw4/reflected.h"
 /* Reset the 0x90-byte record to defaults (zero, with 1.0f at +0x74/+0x78). */
 int FUN_0015b1e0();

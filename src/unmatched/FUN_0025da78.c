@@ -1,5 +1,5 @@
-/* 0x0025da78 — FUN_0025da78 (44 bytes). Reports the object's state byte (+14), except that state 1 reads as 2
- * once the word at +232 is set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports the object's state byte (+14), except that state 1 reads as 2 once the word at +232 is
+ * set. */
 typedef struct Obj25da78 {
     char pad0[14];
     signed char state;      /* +14 */

@@ -1,4 +1,5 @@
-/* 0x002a4888 — FUN_002a4888 (208 bytes). Advances the player by one decoded step: counts it (FUN_0029edf8, context f136), refreshes the clock and resets the two clock trackers, leaving the context in state 192; -1 on decode error. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Advances the player by one decoded step: counts it (FUN_0029edf8, context f136), refreshes the
+ * clock and resets the two clock trackers, leaving the context in state 192; -1 on decode error. */
 void FUN_0029edf8();
 int FUN_002a4958();
 int FUN_002a49b8();

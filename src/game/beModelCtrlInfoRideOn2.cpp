@@ -17,10 +17,8 @@ void Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21(beModelCtrlInfoRideOn2 *self);
 int Gap__Bec__beModelCtrlInfoRideOn2__vfunc_20(void);
 }
 
-/* 0x00392200
- * Reset the ride-on pose: clear the translation of `_oldMatrix` to (0,0,0) and
- * write `_vector` into the translation of the model node's matrix (+0x20 of a
- * node, the igTransform `_m` offset, finding #533).
+/* Reset the ride-on pose: clear the translation of `_oldMatrix` to (0,0,0) and write `_vector`
+ * into the translation of the model node's matrix (+0x20 of a node, the igTransform `_m` offset).
  * Matrix44_SetTranslation(matrix, vec3) copies vec3 into matrix words 12..14
  * (asm/Matrix44_SetTranslation.s: stores at +48/+52/+56). */
 void Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21(beModelCtrlInfoRideOn2 *self) {

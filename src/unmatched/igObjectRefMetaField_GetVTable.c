@@ -1,4 +1,4 @@
-/* stack-object GetVTable accessor with two inlined string releases; verified by tools/verify.py. */
+/* stack-object GetVTable accessor with two inlined string releases.py. */
 typedef struct { int *vt; int p1; int p2; char *s1; int pad[12]; char *s2; int tail[1]; } Obj;
 int igObjectRefMetaField_Init(void *);
 int StringChunk_ReleaseHeader();

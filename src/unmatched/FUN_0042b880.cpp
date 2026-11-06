@@ -1,4 +1,5 @@
-/* 0x0042b880 - FUN_0042b880. Sends a named message, reads a record count from the database and posts two string-table messages (9 - reserved - used, and that times the record value); alternate compiler -O3,p. */
+/* Sends a named message, reads a record count from the database and posts two string-table
+ * messages (9 - reserved - used, and that times the record value); alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 /* Receiver by the matched caller beNDMWShopCtrl50::vfunc_21: offsets +12/+48/+88/+92 are _messenger/_retCode/_conItemNo/_diskCnt. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);

@@ -1,4 +1,5 @@
-/* 0x0039ab20 — FUN_0039ab20. Sibling of FUN_003a3960 (timed item start with an optional pending-state flush first). Alternate -O3,p (flags row); the pool pointer is read after the clock call. */
+/* Sibling of FUN_003a3960 (timed item start with an optional pending-state flush first). Alternate
+ * -O3,p (flags row); the pool pointer is read after the clock call. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_001b1490(...);

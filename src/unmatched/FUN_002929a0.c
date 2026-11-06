@@ -1,4 +1,6 @@
-/* 0x002929a0 — FUN_002929a0 (332 bytes). Programs the handle's target (+64) with a fixed parameter set through FUN_002ad950, including rate*scale*1000 rounded to nearest for parameters 45, 44 and 42, then finishes with FUN_002a3200(target, 5, 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Programs the handle's target (+64) with a fixed parameter set through FUN_002ad950, including
+ * rate*scale*1000 rounded to nearest for parameters 45, 44 and 42, then finishes with
+ * FUN_002a3200(target, 5, 0). */
 void FUN_002ad950(int target, int param, int value);
 void FUN_002a3200(int target, int a, int b);
 

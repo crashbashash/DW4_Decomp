@@ -1,5 +1,3 @@
-/* 0x002423f0 — FUN_002423f0. hand-matched: struct members keep the base pointers;
- * verified by tools/verify.py. */
 typedef struct A { char pad[20]; void *f20; char pad2[4]; int f28; int f32; } A;
 typedef struct B { char pad[24]; int f24; } B;
 

@@ -1,4 +1,6 @@
-/* 0x002713d0 — FUN_002713d0 (152 bytes). Reports DAT_004efb40 through FUN_0026f530 and returns 0 for a null object; otherwise returns the 64-bit value whose high word is query 200 and low word query 201 of the object's slot-24 function (0 when that slot is empty). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports DAT_004efb40 through FUN_0026f530 and returns 0 for a null object; otherwise returns the
+ * 64-bit value whose high word is query 200 and low word query 201 of the object's slot-24
+ * function (0 when that slot is empty). */
 typedef struct DeviceTable_2713d0 {
     void *slot[24];
     int (*query)(void *handle, int code, int a2, int a3);  /* +0x60 */

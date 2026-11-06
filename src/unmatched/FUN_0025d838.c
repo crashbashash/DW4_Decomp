@@ -1,4 +1,5 @@
-/* 0x0025d838 — FUN_0025d838 (156 bytes). Fills the decoder block with a fixed default format (48000 in f20, 2 in f14, 16 in f13, 127 in f15) and clears its position counters. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills the decoder block with a fixed default format (48000 in f20, 2 in f14, 16 in f13, 127 in
+ * f15) and clears its position counters. */
 /* CRI ADX decoder block as this function touches it; field meanings are not yet known */
 typedef struct DecoderBlock {
     short f0;

@@ -1,4 +1,4 @@
-/* 0x001520f0 - igPsx2VertexStream_InitFields. char stores at +38, local for a call result before a constant store, declaration order. Verified byte-identical by tools/verify.py. */
+/* Char stores at +38, local for a call result before a constant store, declaration order. */
 int FUN_002d3890();
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();

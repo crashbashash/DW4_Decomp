@@ -1,4 +1,5 @@
-/* 0x002933f8 — FUN_002933f8 (76 bytes). Classifies a handle from three flags: +4 set gives 1 (with +12) or 3; otherwise +8 set without +12 gives 2; else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Classifies a handle from three flags: +4 set gives 1 (with +12) or 3; otherwise +8 set without
+ * +12 gives 2; else 0. */
 
 struct Flags002933f8 {
     int f0;

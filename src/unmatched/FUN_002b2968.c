@@ -1,4 +1,5 @@
-/* 0x002b2968 — FUN_002b2968 (112 bytes). Looks up descriptor `id` (FUN_002b25a8) and, when it exists and its tag (FUN_002b2ea0) is 0xE0, returns FUN_002b2db0 of the byte at +31 through *value; returns 1 then, else 0 with *value = 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks up descriptor `id` (FUN_002b25a8) and, when it exists and its tag (FUN_002b2ea0) is 0xE0,
+ * returns FUN_002b2db0 of the byte at +31 through *value; returns 1 then, else 0 with *value = 0. */
 struct Descriptor {
     char pad0[31];
     unsigned char f31; /* +31 */

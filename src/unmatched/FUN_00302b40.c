@@ -1,4 +1,3 @@
-/* 0x302b40 — FUN_00302b40. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int igObject_ResetFields();
 
 void FUN_00302b40(void *arg0, int arg1) {

@@ -1,4 +1,5 @@
-/* 0x002983c8 — FUN_002983c8 (88 bytes). When the object holds a stream joint (+400) and its +424 state is not 1, runs FUN_00298468 then FUN_00298618 on it. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When the object holds a stream joint (+400) and its +424 state is not 1, runs FUN_00298468 then
+ * FUN_00298618 on it. */
 extern void FUN_00298468(void *obj);
 extern void FUN_00298618(void *obj);
 

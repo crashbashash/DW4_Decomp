@@ -1,5 +1,7 @@
-/* 0x00351070 - 936 bytes. InitFields: the float setter is declared (void *, float) so 0.0f / -1.0f land in $f12; the refcount read is an int read. Default compiler.
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* 936 bytes. InitFields: the float setter is declared (void *, float) so 0.0f / -1.0f land in
+ * $f12; the refcount read is an int read. Default compiler. C++ translation unit: the unit
+ * compiled with exceptions on and retail keeps this function's exception index record, which only
+ * the C++ front end emits. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_0018a6a0(void);

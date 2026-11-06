@@ -1,4 +1,6 @@
-/* 0x00298ec0 — FUN_00298ec0 (192 bytes). mwPlyEntryFname (named by its diagnostic strings): adds a file name to a valid player's file list (+76, FUN_00277010) and counts the entries at +120; a failed entry sets state 4 and reports the name. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* mwPlyEntryFname (named by its diagnostic strings): adds a file name to a valid player's file
+ * list (+76, FUN_00277010) and counts the entries at +120; a failed entry sets state 4 and reports
+ * the name. */
 int FUN_002968c0(void *player); /* non-zero for a valid player handle */
 int FUN_00277010(int list, const char *name);
 void FUN_0029a320(const char *format, ...);

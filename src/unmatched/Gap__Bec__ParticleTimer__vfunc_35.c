@@ -1,6 +1,3 @@
-/* 0x001d98f0 — Gap__Bec__ParticleTimer__vfunc_35. Banked by tools/retype_struct_member.py (shape: struct5):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 /* igObject header: the reference count at +4 is not a reflected field */
 typedef struct RefCountedHeader { char pad4[4]; int references; } RefCountedHeader;

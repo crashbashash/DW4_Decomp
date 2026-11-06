@@ -1,4 +1,5 @@
-/* 0x002a4730 — FUN_002a4730 (76 bytes). Copies the first two words of the player's FUN_0029dd98 info into *out, or zeroes them when the query fails. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies the first two words of the player's FUN_0029dd98 info into *out, or zeroes them when the
+ * query fails. */
 int FUN_0029dd98();
 
 struct Player2a4730 {

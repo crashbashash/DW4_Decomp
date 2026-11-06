@@ -1,4 +1,5 @@
-/* 0x00262398 — FUN_00262398 (96 bytes). Between FUN_0025f2d0 and FUN_0025f2e8, runs FUN_002622d0 on each of the 16 68-byte records in DAT_00499de8 whose first byte is 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Between FUN_0025f2d0 and FUN_0025f2e8, runs FUN_002622d0 on each of the 16 68-byte records in
+ * DAT_00499de8 whose first byte is 1. */
 typedef struct Object_262398 {
     char used; /* 0x00 */
     char rest[67];

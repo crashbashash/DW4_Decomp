@@ -1,11 +1,10 @@
-/* 0x003d3640 - Gap__Bec__beNDMWMdlPlayer__vfunc_36: attach the player info work to a RAM slot.
- * Creates the slot's data list on first use, replaces the info-work record found by name with a new
- * beNDMWMdlPlayerInfoWork (FUN_003bfc80 creates it) and gives it a zeroed 8-entry turn-attack timer
- * list, places the model (identity matrix unless the messenger carried one), runs the common attach
- * step FUN_00396740, then seeds the player's record (HP/MP copies, trained lists, name text, first
- * item sequence) and reports HP/MP to the status receivers; the lobby map names set _isMainLobby.
- * Every created object lives on the stack in an owning reference whose release the retail exception
- * table records. */
+/* Attach the player info work to a RAM slot. Creates the slot's data list on first use, replaces
+ * the info-work record found by name with a new beNDMWMdlPlayerInfoWork (FUN_003bfc80 creates it)
+ * and gives it a zeroed 8-entry turn-attack timer list, places the model (identity matrix unless
+ * the messenger carried one), runs the common attach step FUN_00396740, then seeds the player's
+ * record (HP/MP copies, trained lists, name text, first item sequence) and reports HP/MP to the
+ * status receivers; the lobby map names set _isMainLobby. Every created object lives on the stack
+ * in an owning reference whose release the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(igObject *);

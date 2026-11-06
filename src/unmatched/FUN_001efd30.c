@@ -1,4 +1,3 @@
-/* 0x001efd30 - FUN_001efd30. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int FUN_00204240();
 extern int *DAT_005691b8[4];
 void FUN_001efd30(int arg0) {

@@ -1,4 +1,3 @@
-/* 0x246680 — igLuaState_RunFile. Verified byte-identical by tools/verify.py (wave3 sweep). */
 #include "dw4/reflected.h"
 int FUN_002467a0();
 int FUN_00246b30();

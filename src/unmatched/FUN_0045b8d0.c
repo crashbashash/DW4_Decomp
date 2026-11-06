@@ -1,4 +1,4 @@
-/* 0x0045b8d0 - FUN_0045b8d0. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 int Memory_GetAllocatorBySelector();
 int igMetaObject_Create();
 extern int DAT_00587040[4];

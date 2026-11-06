@@ -1,4 +1,5 @@
-/* 0x00285f98 — FUN_00285f98 (108 bytes). Advances the field counter (+968, parity into +964) for field pictures or resets both for frame pictures (structure 3), then loads two per-mode table words indexed by +276. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Advances the field counter (+968, parity into +964) for field pictures or resets both for frame
+ * pictures (structure 3), then loads two per-mode table words indexed by +276. */
 
 /* Members of the decoder object used here. */
 struct Decoder00285f98 {

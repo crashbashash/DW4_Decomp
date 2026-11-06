@@ -1,4 +1,5 @@
-/* 0x00296cf8 — FUN_00296cf8 (44 bytes). Returns the sum of the second and fourth words of the 32-byte status FUN_002ac3a8 reports for the handle's +64 stream. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the sum of the second and fourth words of the 32-byte status FUN_002ac3a8 reports for
+ * the handle's +64 stream. */
 typedef struct {
     int f0;
     int f4;

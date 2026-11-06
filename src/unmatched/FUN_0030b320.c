@@ -1,4 +1,3 @@
-/* 0x0030b320 — FUN_0030b320. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int memcpy();
 int FUN_00300f50();
 int igObject_AllocateStorage();

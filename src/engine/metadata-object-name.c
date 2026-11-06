@@ -8,7 +8,7 @@ int FUN_002eb010(int);
 int StringPool_Construct(int);
 int StringPool_Intern(int,int);
 int StringChunk_ReleaseHeader(int,void *);
-/* Shared string pool singleton (finding #1035); array form keeps the load absolute. */
+/* Shared string pool singleton; array form keeps the load absolute. */
 extern int g_stringPool[4];
 void igMetaObject_SetName(igMetaObject *meta, int name) {
     int pool, internedName, oldName, refCount;

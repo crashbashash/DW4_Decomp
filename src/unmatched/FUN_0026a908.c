@@ -1,4 +1,5 @@
-/* 0x0026a908 — FUN_0026a908 (124 bytes). When FUN_0027eca8 reports the flag DAT_004a7f00, runs FUN_0026a728 on each of the 40 96-byte entries of DAT_004a7f10 whose first byte is 1, then clears the flag. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When FUN_0027eca8 reports the flag DAT_004a7f00, runs FUN_0026a728 on each of the 40 96-byte
+ * entries of DAT_004a7f10 whose first byte is 1, then clears the flag. */
 /* Request layout shared by FUN_00269ff0 … FUN_0026a300 (offsets from their accesses). */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */

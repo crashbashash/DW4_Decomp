@@ -1,4 +1,4 @@
-/* 0x00460d90 - FUN_00460d90. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 int FUN_00460be0();
 int ObjectList_AppendRetained();
 int ObjectList_RemoveFirstRetained();

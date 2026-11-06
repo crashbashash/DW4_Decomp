@@ -1,4 +1,4 @@
-/* 0x0026c6c8 - FUN_0026c6c8. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 int FUN_002607e8();
 extern int DAT_004ee850[4];
 short FUN_0026c6c8(void *arg0) {

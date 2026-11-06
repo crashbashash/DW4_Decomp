@@ -1,6 +1,3 @@
-/* 0x001d8b90 — FUN_001d8b90. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern char DAT_004fb3a8[];
 int FUN_002d81f0();
 int igObject_Destroy();

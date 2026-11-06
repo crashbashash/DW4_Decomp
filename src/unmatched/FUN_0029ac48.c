@@ -1,6 +1,3 @@
-/* 0x0029ac48 — FUN_0029ac48. m2c draft + decomp-permuter search, verified
- * byte-identical to retail by tools/verify.py. */
-
 void *FUN_00294a30();
 void FUN_0029ac48(void)
 {

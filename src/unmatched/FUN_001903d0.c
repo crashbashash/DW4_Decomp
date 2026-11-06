@@ -1,4 +1,5 @@
-/* 0x001903d0 - FUN_001903d0. transpose into a stack matrix then Matrix44_Copy(arg0, tmp): the draft dropped the leading argument. Verified byte-identical by tools/verify.py. */
+/* Transpose into a stack matrix then Matrix44_Copy(arg0, tmp): the draft dropped the leading
+ * argument. */
 int Matrix44_Copy(float *, float *);
 void FUN_001903d0(float *a) {
     float m[16];

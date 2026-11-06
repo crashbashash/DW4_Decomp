@@ -1,6 +1,5 @@
-/* 0x0027d348 — FUN_0027d348 (124 bytes). Returns the number of nodes queued on one lane of a handle (linked
-   list at +24 + 4 * lane); null and unused handles are reported through FUN_0027b2e0 and return 0.
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the number of nodes queued on one lane of a handle (linked list at +24 + 4 * lane); null
+ * and unused handles are reported through FUN_0027b2e0 and return 0. */
 struct Node27d {
     struct Node27d *next;   /* +0 */
 };

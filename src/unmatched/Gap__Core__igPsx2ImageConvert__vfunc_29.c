@@ -1,5 +1,5 @@
-/* 0x0016f170 — Gap__Core__igPsx2ImageConvert__vfunc_29. Swaps the red and blue 5-bit fields of n
- * little-endian 16-bit RGB565 pixels in place (bits 0..4 <-> bits 11..15, green kept). */
+/* Swaps the red and blue 5-bit fields of n little-endian 16-bit RGB565 pixels in place (bits 0..4
+ * <-> bits 11..15, green kept). */
 void Gap__Core__igPsx2ImageConvert__vfunc_29(void *arg0, unsigned char *p, int n) {
     unsigned int t; /* matching construct: permuter — the assembled pixel word is declared at function scope, the other temporaries inside the loop; the unit compiler (combat build) colours the registers as retail only this way */
     int i;

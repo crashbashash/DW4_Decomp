@@ -16,8 +16,8 @@ extern int GAMERAM_3[4];
 extern int GETCOMMON_2[4];
 extern int CAMERAMODE_2[4];
 extern int LIGHTMODE_2[4];
-/* Set once the title settings are valid (docs/engine/title-menu-controller.md,
- * "Options"; finding #729): InitSettings restores the saved modes only then. */
+/* Set once the title settings are valid (docs/engine/title-menu-controller.md, "Options"):
+ * InitSettings restores the saved modes only then. */
 extern unsigned char g_commonSettingsValid;
 
 /* 0x003cc6f0 */
@@ -26,12 +26,10 @@ int Gap__Bec__beNDMWTitle2Option__vfunc_20(void)
     return g_beNDMWTitle2Option_metaObject[0];
 }
 
-/* 0x003f2d50
- * Bind the messenger and load the Options settings (finding #729).  Once the
- * title settings are valid, the saved camera and light modes are read back from
- * the GAMERAM GETCOMMON property group (property record value at +12);
- * otherwise the defaults are camera 0 and light 1.  The language selector
- * always starts at 0. */
+/* Bind the messenger and load the Options settings. Once the title settings are valid, the saved
+ * camera and light modes are read back from the GAMERAM GETCOMMON property group (property record
+ * value at +12); otherwise the defaults are camera 0 and light 1. The language selector always
+ * starts at 0. */
 void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger) {
     int commonSettings;
 

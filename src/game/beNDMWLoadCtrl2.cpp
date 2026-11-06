@@ -1,17 +1,14 @@
-/* src/game/beNDMWLoadCtrl2.cpp — the beNDMWLoadCtrl2 methods, one translation unit
- * in retail address order:
- *   0x003f19e0  Gap__Bec__beNDMWLoadCtrl2__vfunc_32  lazily acquire the pad manager
- *   0x003f2450  Gap__Bec__beNDMWLoadCtrl2__vfunc_30  info-record class metaObject accessor
- *   0x003f2460  Gap__Bec__beNDMWLoadCtrl2__vfunc_29  register the LOADCTRL2 message receiver
- *   0x003f2d40  Gap__Bec__beNDMWLoadCtrl2__vfunc_20  class metaObject accessor
- *
- * The retail unit was C++ with exceptions on (every framed function keeps an exception
- * index record, config/SLUS-20836/exceptions.txt).  The three methods that used to live in
- * beNDMWLoadCtrl2.c now compile here as C++ under that profile, which also reproduces the
- * records; the whole unit keeps C linkage.  MWCC's C++ front end preserves the framed call
- * of the one-call wrapper vfunc_29 where the C front end tail-calls it.
- * The matching build splits a function back out with tools/units.py, so `make check`
- * still verifies one function at a time. */
+/* src/game/beNDMWLoadCtrl2.cpp — the beNDMWLoadCtrl2 methods, one translation unit in retail
+ * address order: 0x003f19e0 Gap__Bec__beNDMWLoadCtrl2__vfunc_32 lazily acquire the pad manager
+ * 0x003f2450 Gap__Bec__beNDMWLoadCtrl2__vfunc_30 info-record class metaObject accessor 0x003f2460
+ * Gap__Bec__beNDMWLoadCtrl2__vfunc_29 register the LOADCTRL2 message receiver 0x003f2d40
+ * Gap__Bec__beNDMWLoadCtrl2__vfunc_20 class metaObject accessor The retail unit was C++ with
+ * exceptions on (every framed function keeps an exception index record). The three methods that
+ * used to live in beNDMWLoadCtrl2.c now compile here as C++ under that profile, which also
+ * reproduces the records; the whole unit keeps C linkage. MWCC's C++ front end preserves the
+ * framed call of the one-call wrapper vfunc_29 where the C front end tail-calls it. The matching
+ * build splits a function back out with tools/units.py, so `make check` still verifies one
+ * function at a time. */
 #include "dw4/reflected.h"
 extern "C" {
 extern int g_beNDMWLoadCtrl2Info_metaObject[4];

@@ -1,4 +1,4 @@
-/* 0x0028f0d8 — FUN_0028f0d8 (40 bytes). Copies the first and third words of the record at +1000 out through the optional pointers. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies the first and third words of the record at +1000 out through the optional pointers. */
 typedef struct {
     int f0;
     int f4;

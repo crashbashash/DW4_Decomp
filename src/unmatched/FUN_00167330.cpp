@@ -1,5 +1,3 @@
-/* 0x00167330 — FUN_00167330. m2c draft with dropped/gap parameters restored; verified
- * byte-identical by tools/verify.py (loop: tools/m2c_loop.py). */
 extern "C" {
 void **png_get_io_ptr(...);
 void FUN_00167330(int dummy0, int arg1, int arg2);

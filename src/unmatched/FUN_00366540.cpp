@@ -1,4 +1,3 @@
-/* 0x00366540 - FUN_00366540. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 struct SFUN_00366540 { char pad[36]; unsigned int flags; int ok() { return (flags & 4) != 0; } };
 extern SFUN_00366540 *DAT_00589998[4];
 extern "C" void FUN_00366620(void);

@@ -1,4 +1,4 @@
-/* 0x0018fad0 - FUN_0018fad0. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 extern void * DAT_00561120[4];
 int FUN_0018fad0(void *arg0, void *arg1) {
     int var_v0;

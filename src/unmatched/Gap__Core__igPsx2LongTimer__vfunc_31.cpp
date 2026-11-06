@@ -1,4 +1,4 @@
-/* 0x00330cf0 - Gap__Core__igPsx2LongTimer__vfunc_31. Virtual call returning long long (sd store). */
+/* Virtual call returning long long (sd store). */
 #include "dw4/reflected.h"
 extern "C" {
 

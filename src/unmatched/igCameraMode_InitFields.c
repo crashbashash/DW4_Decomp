@@ -1,6 +1,3 @@
-/* 0x0045ce60 — igCameraMode_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_0019f670(void);
 int FUN_001a4560(void);

@@ -1,6 +1,3 @@
-/* 0x00450fa0 — igFieldChangeView_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_002beca0();
 int FUN_00450a00();

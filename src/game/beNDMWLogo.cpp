@@ -9,9 +9,8 @@ extern int LOGO[4];
 void Gap__Bec__beNDMWLogo__vfunc_29(beNDMWLogo *, int);
 }
 
-/* 0x0044abc0 — slot 29: register the logo controller with its messenger as the
- * receiver named by the "LOGO" string at 0x0051db38. Same one-call wrapper as
- * beNDMWTitle2 and beFont slot 29 (finding #645). */
+/* slot 29: register the logo controller with its messenger as the receiver named by the "LOGO"
+ * string at 0x0051db38. Same one-call wrapper as beNDMWTitle2 and beFont slot 29. */
 void Gap__Bec__beNDMWLogo__vfunc_29(beNDMWLogo *self, int info)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &LOGO[0]);

@@ -1,4 +1,4 @@
-/* 0x002abde0 — FUN_002abde0 (128 bytes). Validates the handle, picks FUN_002aa538 or FUN_002abe60 by option 47, then sets +68. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates the handle, picks FUN_002aa538 or FUN_002abe60 by option 47, then sets +68. */
 typedef struct SfdHandle {
     char pad0[68];
     int f68;                /* +68 */

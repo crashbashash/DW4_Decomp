@@ -1,4 +1,5 @@
-/* 0x002a3850 — FUN_002a3850 (156 bytes). When options 93 and 94 are both set and the context is in state 192, hands them to FUN_0028f360 and on success moves the context to state 200 (f116 = 2). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When options 93 and 94 are both set and the context is in state 192, hands them to FUN_0028f360
+ * and on success moves the context to state 200 (f116 = 2). */
 int FUN_0028f360();
 int FUN_002adc40();
 

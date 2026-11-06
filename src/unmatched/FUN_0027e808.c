@@ -1,5 +1,5 @@
-/* 0x0027e808 — FUN_0027e808 (88 bytes). Registers the callback and context for an event id in the table at
-   0x00570b60 inside the FUN_0027e1c0 / FUN_0027e1d8 critical section. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Registers the callback and context for an event id in the table at 0x00570b60 inside the
+ * FUN_0027e1c0 / FUN_0027e1d8 critical section. */
 struct Callback27e {
     void (*function)(int context);
     int context;

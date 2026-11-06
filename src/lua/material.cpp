@@ -1,10 +1,7 @@
-/* Complete contiguous Lua MAT binding group, 0x373160..0x373274.
- * All seven wrappers verify byte-identically with MWCC's C++ front end.
- * C mode turns these calls into tail jumps and loses the retail frames.
- * Receiver: the beMatCtrl instance stored in global 0x58a1c8 (g_matCtrl),
- * built by constructor 0x371a30 with class handle 0x589160 (g_beMatCtrl_metaObject).
- * Callee semantics: docs/engine/material-contact.md, findings #859.
- */
+/* Complete contiguous Lua MAT binding group, 0x373160..0x373274. C mode turns these calls into
+ * tail jumps and loses the retail frames. Receiver: the beMatCtrl instance stored in global
+ * 0x58a1c8 (g_matCtrl), built by constructor 0x371a30 with class handle 0x589160
+ * (g_beMatCtrl_metaObject). Callee semantics: docs/engine/material-contact.md. */
 #include "dw4/reflected.h"
 extern beMatCtrl *g_matCtrl[4];
 extern "C" bool beMatCtrl_IsPlayer(beMatCtrl *);

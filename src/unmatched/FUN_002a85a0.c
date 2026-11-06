@@ -1,4 +1,4 @@
-/* 0x002a85a0 — FUN_002a85a0 (136 bytes). Claims the first free context slot under the guard and returns it, or 0 when all are in use. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Claims the first free context slot under the guard and returns it, or 0 when all are in use. */
 void FUN_002a0e70();
 void FUN_002a0e88();
 

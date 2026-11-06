@@ -1,4 +1,5 @@
-/* C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 union U { int vt; int w[16]; void *p[16]; char b[64]; };
 extern "C" {
 int FUN_00131bc0(char *, int);

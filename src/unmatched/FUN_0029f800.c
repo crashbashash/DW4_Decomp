@@ -1,4 +1,5 @@
-/* 0x0029f800 — FUN_0029f800 (124 bytes). Returns text advanced past one element: by the decoder's consumed length when a FUN_0028da88 decoder exists, else by min(length, 6). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns text advanced past one element: by the decoder's consumed length when a FUN_0028da88
+ * decoder exists, else by min(length, 6). */
 void FUN_0028b750();
 void *FUN_0028da88();
 int FUN_0028dc28();

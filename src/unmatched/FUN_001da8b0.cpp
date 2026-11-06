@@ -1,4 +1,6 @@
-/* 0x001da8b0 - FUN_001da8b0. Reset a device set: virtual slots 30/31 on three devices, push the list at +80 onto the list at +84 (count read volatile so it is reloaded for the increment), force the list at +88 to one element holding the default; dummy-virtual class; default compiler. */
+/* Reset a device set: virtual slots 30/31 on three devices, push the list at +80 onto the list at
+ * +84 (count read volatile so it is reloaded for the increment), force the list at +88 to one
+ * element holding the default; dummy-virtual class; default compiler. */
 extern "C" {
 int FUN_001db500();
 int List_Resize(...);

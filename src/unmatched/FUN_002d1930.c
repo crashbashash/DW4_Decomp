@@ -1,6 +1,3 @@
-/* 0x002d1930 — FUN_002d1930. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 void *FUN_002d1930(void *arg0) {
     *(int *)((char *)(arg0) + 920) = 0;
     *(int *)((char *)(arg0) + 924) = 0;

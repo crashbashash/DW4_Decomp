@@ -1,4 +1,5 @@
-/* 0x002b48d0 — FUN_002b48d0 (132 bytes). When FUN_002b4b98 accepts the decoder, converts 256 32-bit samples to 16-bit by dropping the low 15 bits; otherwise reports through FUN_002b3b38 with the table DAT_004f58b0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When FUN_002b4b98 accepts the decoder, converts 256 32-bit samples to 16-bit by dropping the low
+ * 15 bits; otherwise reports through FUN_002b3b38 with the table DAT_004f58b0. */
 extern char DAT_004f58b0[];
 
 int FUN_002b4b98(void *dec);

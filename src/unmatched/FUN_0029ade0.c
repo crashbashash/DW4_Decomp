@@ -1,4 +1,6 @@
-/* 0x0029ade0 — FUN_0029ade0 (188 bytes). Runs one decode-server pass for a playback handle bracketed by FUN_0029af20(ply, 1)..(ply, 0): handles in state 1 become current (DAT_004be8b0), drive their stream with FUN_002aa7b8 and, if requested at +8, run FUN_0029a868; returns non-zero unless FUN_002aa728 reports 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs one decode-server pass for a playback handle bracketed by FUN_0029af20(ply, 1)..(ply, 0):
+ * handles in state 1 become current (DAT_004be8b0), drive their stream with FUN_002aa7b8 and, if
+ * requested at +8, run FUN_0029a868; returns non-zero unless FUN_002aa728 reports 1. */
 extern void FUN_0029af20(void *ply, int flag);
 extern void FUN_0029af30(void *ply, int flag);
 extern void FUN_002aa7b8(int stream);

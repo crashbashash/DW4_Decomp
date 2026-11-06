@@ -1,4 +1,6 @@
-/* 0x00269af8 — FUN_00269af8 (148 bytes). Runs the decode pump (FUN_00268960) and accumulates its output count at +44 until +48 reaches +60, then marks the input ended (+3); once ended, FUN_00268a10 drains and a positive result sets the state byte (+1) to 3. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs the decode pump (FUN_00268960) and accumulates its output count at +44 until +48 reaches
+ * +60, then marks the input ended (+3); once ended, FUN_00268a10 drains and a positive result sets
+ * the state byte (+1) to 3. */
 typedef struct Decoder_269af8 {
     signed char pad0;
     signed char state;      /* 0x01 */

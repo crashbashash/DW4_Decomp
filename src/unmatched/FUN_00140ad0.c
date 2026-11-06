@@ -1,4 +1,6 @@
-/* 0x00140ad0 - FUN_00140ad0. Stores a retained object into slot arg2 of a retained-object array (slot 0 is a separate field at +48), growing the array on first use; refcount decrement/destroy written out with the 23-bit mask; declaration order s1,s0,n,a0,v1,a0b found by permdecl; alternate compiler -O3. */
+/* Stores a retained object into slot arg2 of a retained-object array (slot 0 is a separate field
+ * at +48), growing the array on first use; refcount decrement/destroy written out with the 23-bit
+ * mask; declaration order s1,s0,n,a0,v1,a0b found by permdecl; alternate compiler -O3. */
 typedef struct L { char p[8]; int n; int p1; int *d; } L;
 typedef struct T { char p[48]; int *f48; char q[4]; int f56; int f60; L *f64; } T;
 int ObjectList_ResizeRetained(L *, int);

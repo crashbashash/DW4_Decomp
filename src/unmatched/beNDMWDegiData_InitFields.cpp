@@ -1,5 +1,5 @@
-/* 0x003c6a40 — beNDMWDegiData_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8).
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 extern "C" {
 int FUN_00232840(void);
 int FUN_002cc2c0(void);

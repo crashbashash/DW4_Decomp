@@ -1,5 +1,3 @@
-/* 0x0016e3a0 — FUN_0016e3a0. m2c draft with dropped/gap parameters restored; verified
- * byte-identical by tools/verify.py (loop: tools/m2c_loop.py). */
 extern "C" {
 int Gap__Core__igPsx2LongList__vfunc_47(...);
 void FUN_0016e3a0(int dummy0, void **arg1);

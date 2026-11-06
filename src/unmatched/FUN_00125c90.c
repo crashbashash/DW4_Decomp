@@ -1,6 +1,6 @@
-/* 0x00125c90 — FUN_00125c90 (148 bytes). Walks every stream on the state block's stream lists and ORs together
- * the callback's result for each stream whose flags (+12) are non-zero. The shape of newlib's _fwalk (hypothesis;
- * the list is the one FUN_00125138 builds at +472). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Walks every stream on the state block's stream lists and ORs together the callback's result for
+ * each stream whose flags (+12) are non-zero. The shape of newlib's _fwalk (hypothesis; the list
+ * is the one FUN_00125138 builds at +472). */
 typedef struct Stream125c90 {
     char pad0[12];
     short flags;                    /* +12: 0 = slot unused */

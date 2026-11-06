@@ -7,12 +7,10 @@
 #include "dw4/reflected.h"
 extern int g_beNDMWItemAbilityChip_metaObject[4];
 
-/* 0x004486c0
- * Unpack a packed item word into the reflected fields: bits 0-9 are the
- * record number (_recNo), bit 10 the equipped flag (_isEquip) and bits 12-15
- * the kind number (_kindNo).  The same unpacking is shared by the sibling
- * beNDMWItem* classes (Weapon, Disk, ...); see docs/engine/item-database.md
- * for _recNo and docs/engine/typed-coverage.md for the field map. */
+/* Unpack a packed item word into the reflected fields: bits 0-9 are the record number (_recNo),
+ * bit 10 the equipped flag (_isEquip) and bits 12-15 the kind number (_kindNo). The same unpacking
+ * is shared by the sibling beNDMWItem* classes (Weapon, Disk, ...).md for _recNo and
+ * docs/engine/typed-coverage.md for the field map. */
 void Gap__Bec__beNDMWItemAbilityChip__vfunc_24(beNDMWItemAbilityChip *self, int packed) {
     self->_recNo = (int) (packed & 0x3FF);
     self->_isEquip = (char) ((packed & 0x400) != 0);

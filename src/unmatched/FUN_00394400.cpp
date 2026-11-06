@@ -1,9 +1,10 @@
 #include "dw4/reflected.h"
-/* 0x00394400 - FUN_00394400: publishes a model-control event to the Lua side.  Receivers by the matched caller
- * beModelCtrl::vfunc_33: arg0 is the beModelCtrl (_luaManager), arg1 a beBaseInfoRam (_ramNo, _dataList = the
- * property list, created lazily and installed through an owning stack reference).  The event arguments are
- * staged in the DAT_0058a1e0 block, the chunk name is formatted from arg2/arg4 and run; the second cell of the
- * property is refreshed from the block afterwards when the chunk left it untouched. */
+/* Publishes a model-control event to the Lua side. Receivers by the matched caller
+ * beModelCtrl::vfunc_33: arg0 is the beModelCtrl (_luaManager), arg1 a beBaseInfoRam (_ramNo,
+ * _dataList = the property list, created lazily and installed through an owning stack reference).
+ * The event arguments are staged in the DAT_0058a1e0 block, the chunk name is formatted from
+ * arg2/arg4 and run; the second cell of the property is refreshed from the block afterwards when
+ * the chunk left it untouched. */
 typedef struct Cell { char pad12[12]; int value; } Cell;
 typedef struct PropData { char pad8[8]; Cell *first; Cell *second; int third; } PropData;
 typedef struct Prop { char pad16[16]; int base; PropData *data; } Prop;

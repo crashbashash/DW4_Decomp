@@ -1,6 +1,3 @@
-/* 0x00272918 — FUN_00272918. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_0010d108();
 int FUN_0010f5b8();
 int FUN_00272688();

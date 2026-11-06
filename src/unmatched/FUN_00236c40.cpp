@@ -1,4 +1,3 @@
-/* 0x00236c40 - FUN_00236c40. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 
 struct S236;

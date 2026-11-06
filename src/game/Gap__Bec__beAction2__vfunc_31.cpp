@@ -1,11 +1,8 @@
-/* 0x003778d0 - Gap::Bec::beAction2::vfunc_31, the beAction2 per-frame Update driver
- * (finding #653, docs/engine/action2-jointset.md).
- *
- * Runs only while the info's _isRun flag is set and its work block is not frozen
- * (_isFreeze). It then calls the Update handler of each component whose "started"
- * state slot is non-zero, in the fixed type order MOTIONSET, JOINTSET, FADESET,
- * WAITCHECK, FLASHSET. The state slots (_motionSt0 ... _flashSt0) are the ones the
- * matching *_Start handlers set when StartComponents launches a component. */
+/* Vfunc_31, the beAction2 per-frame Update driver. Runs only while the info's _isRun flag is set
+ * and its work block is not frozen (_isFreeze). It then calls the Update handler of each component
+ * whose "started" state slot is non-zero, in the fixed type order MOTIONSET, JOINTSET, FADESET,
+ * WAITCHECK, FLASHSET. The state slots (_motionSt0 ... _flashSt0) are the ones the matching
+ * *_Start handlers set when StartComponents launches a component. */
 #include "dw4/reflected.h"
 extern "C" {
 void beAction2MOTIONSET_Update(void *self, void *info);

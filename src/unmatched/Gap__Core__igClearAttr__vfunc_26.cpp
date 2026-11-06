@@ -1,4 +1,4 @@
-/* Virtual getters typed float and the callee typed long long float-argument; verified by tools/verify.py. */
+/* Virtual getters typed float and the callee typed long long float-argument.py. */
 extern "C" {
 long long FUN_00230298(float);
 void Gap__Core__igClearAttr__vfunc_26(void *arg0, void **arg1);

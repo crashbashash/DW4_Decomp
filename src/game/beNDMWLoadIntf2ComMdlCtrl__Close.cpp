@@ -1,7 +1,7 @@
-/* 0x003e42a0 beNDMWLoadIntf2ComMdlCtrl__Close (docs/engine/common-model-controller.md cm_close): sends the
- * MODELCTRL message "<infoName> <ramNo> <sequence>" through the controller's messenger and, when `trackClose`
- * is 1, also remembers the request as a beLoadIntf2ComMdlData record on the close list, which Poll later
- * visits until each entry's ISRUN check finishes (docs/engine/common-model-controller.md). */
+/* beNDMWLoadIntf2ComMdlCtrl__Close (docs/engine/common-model-controller.md cm_close): sends the
+ * MODELCTRL message "<infoName> <ramNo> <sequence>" through the controller's messenger and, when
+ * `trackClose` is 1, also remembers the request as a beLoadIntf2ComMdlData record on the close
+ * list, which Poll later visits until each entry's ISRUN check finishes. */
 #include "dw4/reflected.h"
 /* Receiver is the reflected beNDMWLoadIntf2ComMdlCtrl (_messenger +16, _closeDataList +24); the queued record is beLoadIntf2ComMdlData (_ramNo +8, _openSQ +12, _infoName +16). String handles are 4-byte reference fields; the casts give the typed views */
 extern "C" {
@@ -17,9 +17,9 @@ int ObjectList_AppendRetained(...);
 int beMessenger_SendNamed(...);
 /* "MODELCTRL", the messenger receiver name (also in src/game/beNDMWLoadIntf2ComMdlCtrl__StartAt.c) */
 extern int MODELCTRL[4];
-/* lazily created shared string pool (finding #1035) */
+/* lazily created shared string pool */
 extern int g_stringPool[4];
-/* default allocator selector, used when byte 0x554c14 is zero (docs/engine/subwindow-preparation.md) */
+/* default allocator selector, used when byte 0x554c14 is zero */
 extern int g_defaultAllocatorSelector[4];
 extern unsigned char GPR_00554c14;
 void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSequence, unsigned char trackClose);

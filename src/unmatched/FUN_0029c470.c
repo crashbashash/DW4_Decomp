@@ -1,4 +1,4 @@
-/* 0x0029c470 — FUN_0029c470 (36 bytes). True when FUN_0026bd20 reports a value of 2 or more. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when FUN_0026bd20 reports a value of 2 or more. */
 extern unsigned int FUN_0026bd20(void *handle);
 
 int FUN_0029c470(void *handle) {

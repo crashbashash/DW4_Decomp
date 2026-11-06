@@ -1,4 +1,3 @@
-/* 0x001bafb0 — FUN_001bafb0. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_001b7770();
 int FUN_001b7920();
 int FUN_001b7af0();

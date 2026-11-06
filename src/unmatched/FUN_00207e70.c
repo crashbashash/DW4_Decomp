@@ -1,4 +1,3 @@
-/* 0x00207e70 — FUN_00207e70. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_00113f20();
 int FUN_00113f78();
 long long FUN_001f03a0();

@@ -1,4 +1,6 @@
-/* 0x002644d8 — FUN_002644d8 (184 bytes). Creates and starts the ADXM user V-sync thread (FUN_00263e20) on the given stack, or on the 4 KB default stack DAT_0049e2b0 when none is given (a given stack is logged through FUN_002659a0), and sets its priority from DAT_0049d998. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Creates and starts the ADXM user V-sync thread (FUN_00263e20) on the given stack, or on the 4 KB
+ * default stack DAT_0049e2b0 when none is given (a given stack is logged through FUN_002659a0),
+ * and sets its priority from DAT_0049d998. */
 /* EE kernel thread creation block (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_t) */
 typedef struct ThreadParam {
     int status;

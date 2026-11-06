@@ -1,11 +1,12 @@
-/* 0x00146570 igDefaultInterfaceManager_Register: static-init registration of igDefaultInterfaceManager,
- * derived from igInterfaceManager (instance size 0x4C; fields added by igDefaultInterfaceManager_InitFields).
- * The igMetaObject_RegisterClass arguments are laid out per docs/engine/reflection-metadata.md
- * section 1 (finding #358); names from data/reflection.json.
- * GpFlag_SetOnce_00145ce0 is a set-once latch (it only sets a gp byte flag). thunk_FUN_00146470 is the class's own
- * get-or-register MetaObject accessor stub (a jump to the accessor body at 0x00146470). */
+/* igDefaultInterfaceManager_Register: static-init registration of igDefaultInterfaceManager,
+ * derived from igInterfaceManager (instance size 0x4C; fields added by
+ * igDefaultInterfaceManager_InitFields). The igMetaObject_RegisterClass arguments are laid out per
+ * docs/engine/reflection-metadata.md section 1; names from data/reflection.json.
+ * GpFlag_SetOnce_00145ce0 is a set-once latch (it only sets a gp byte flag). thunk_FUN_00146470 is
+ * the class's own get-or-register MetaObject accessor stub (a jump to the accessor body at
+ * 0x00146470). */
 extern char igInterfaceManager_Register[];
-void thunk_FUN_00146470(void);  /* code at 0x1460a0, passed by address (was DAT_1460a0; docs/engine/function-inventory.md) */
+void thunk_FUN_00146470(void);
 extern char igDefaultInterfaceManager_GetVTable[];
 extern char igInterfaceManager_GetPublishedMetaObject[];
 extern char igDefaultInterfaceManager_className[];

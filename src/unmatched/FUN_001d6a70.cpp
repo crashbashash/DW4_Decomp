@@ -1,15 +1,14 @@
-/* 0x001d6a70 - FUN_001d6a70: configure the stage render-state objects (viewport/camera/clear/light setup).
- *
- * A straight run of configuration writes: object fields (+12 mode words, +20/+24/+36 flags), the
- * virtual setters at vtable offsets +100 (select) and +128 (value) on the objects held in the
- * globals 0x5628f0..0x5629f0, a unit-colour vector copied into one object (0x562940), then the
- * scene list (0x5629a0, +32) is cleared and refilled with the object FUN_001d6900 returns, and
- * the projection/view helpers FUN_00191860 / FUN_00191b10 get their literal arguments.
- * Names are role hypotheses; evidence: asm/FUN_001d6a70.s.
- * Matching constructs: dummy virtual slots give the retail vtable offsets (offset = 8 + 4 * index);
- * the stack vectors are declared in the order eye, origin, up, white, forward so the frame offsets
- * match, and the Vec4 is copied with float loads/stores.  Build: local/mwcps2/combat/mwccps2.exe
- * (sha256 acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a), -O3 -Iinclude. */
+/* Configure the stage render-state objects (viewport/camera/clear/light setup). A straight run of
+ * configuration writes: object fields (+12 mode words, +20/+24/+36 flags), the virtual setters at
+ * vtable offsets +100 (select) and +128 (value) on the objects held in the globals
+ * 0x5628f0..0x5629f0, a unit-colour vector copied into one object (0x562940), then the scene list
+ * (0x5629a0, +32) is cleared and refilled with the object FUN_001d6900 returns, and the
+ * projection/view helpers FUN_00191860 / FUN_00191b10 get their literal arguments. Names are role
+ * hypotheses; evidence: asm/FUN_001d6a70.s. Matching constructs: dummy virtual slots give the
+ * retail vtable offsets (offset = 8 + 4 * index); the stack vectors are declared in the order eye,
+ * origin, up, white, forward so the frame offsets match, and the Vec4 is copied with float
+ * loads/stores. Build: local/mwcps2/combat/mwccps2.exe (sha256
+ * acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a), -O3 -Iinclude. */
 struct Vec4 { float x, y, z, w; };
 struct Vec3x { float x, y, z; };
 

@@ -1,4 +1,5 @@
-/* 0x0013e230 - FUN_0013e230. Vertex stream flag update with per-element virtual setters and two counted array releases (released object read once into a local); default compiler. Verified byte-identical by tools/verify.py. */
+/* Vertex stream flag update with per-element virtual setters and two counted array releases
+ * (released object read once into a local); default compiler. */
 extern "C" {
 int FUN_0013b820();
 void igObject_Destroy(void *);

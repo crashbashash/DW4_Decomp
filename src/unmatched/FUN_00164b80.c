@@ -1,6 +1,6 @@
-/* 0x00164b80 — FUN_00164b80. Matched with tools/dispatcher/regalloc.py: the replay wanted the first loaded
- * value to get a lower node id than the constant 1 stored to the init flag, which the flag store placed
- * after the first data store gives (retail: li v0,1 / lw a3,... / sb v0,flag). */
+/* Matched with tools/dispatcher/regalloc.py: the replay wanted the first loaded value to get a
+ * lower node id than the constant 1 stored to the init flag, which the flag store placed after the
+ * first data store gives (retail: li v0,1 / lw a3,... / sb v0,flag). */
 extern int DAT_005606e0[4];
 extern int DAT_005606e4[4];
 extern int DAT_005606e8[4];

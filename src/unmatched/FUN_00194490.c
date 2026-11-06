@@ -1,5 +1,3 @@
-/* 0x00194490 — FUN_00194490. m2c draft, hand-fixed; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int igObject_Destroy();
 int thunk_FUN_002ed460__002ff810();
 extern int DAT_00528250[4];

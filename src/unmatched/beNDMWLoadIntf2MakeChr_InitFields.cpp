@@ -1,4 +1,3 @@
-/* 0x003c4290 — beNDMWLoadIntf2MakeChr_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 #include "dw4/reflected.h"
 extern "C" {
 int ObjectPointerList_FindIndex(...);

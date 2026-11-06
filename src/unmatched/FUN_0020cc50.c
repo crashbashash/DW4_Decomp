@@ -1,4 +1,3 @@
-/* 0x0020cc50 — FUN_0020cc50. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int DeleteSema();
 int FUN_0010b9c0();
 int RemoveIntcHandler();

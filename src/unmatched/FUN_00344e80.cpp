@@ -1,5 +1,4 @@
 extern "C" {
-/* 0x00344e80 - FUN_00344e80. Near-miss sweep fix (alternate compiler), verified byte-identical to retail by tools/verify.py. */
 int Memory_GetAllocatorBySelector(int);
 int igMetaObject_Create(int);
 extern int DAT_00587040[4];

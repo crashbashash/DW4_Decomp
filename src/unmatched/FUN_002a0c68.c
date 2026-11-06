@@ -1,4 +1,5 @@
-/* 0x002a0c68 — FUN_002a0c68 (148 bytes). Passes two values to FUN_002a0d00 on the handle's error block (+2544), or the global one without a handle; returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Passes two values to FUN_002a0d00 on the handle's error block (+2544), or the global one without
+ * a handle; returns 0. */
 typedef struct SfdHandle {
     char pad0[2544];
     char errorBlock[4];     /* +2544 */

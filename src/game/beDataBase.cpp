@@ -1,17 +1,13 @@
 // clang-format off
-/* beDataBase record lookup and row count, 0x003a93a0..0x003a9708 (finding #924).
- *
- * A beDataBase is a table of records (rows).  Its cells are split by type into
- * six data lists (char, short, int, float, bool, string); each data list is
- * paired with an "offset list" that names the table's columns for that type.
- * A cell of record R and column C is stored row-major at index
- * (columnCount * R + C) of the matching data list (findings #794, #607: the
- * Junk Shop table is 9 rows x 36 columns; the enemy table keys MODEL, HPMAX, ...
- * by column name).  The lists are reached through the reflected object-reference
- * fields and viewed here as the igDataList count/data prefix.
- *
- * "matching construct" marks the volatile local and the hand-placed asm
- * (joins, delay-slot NOPs, register moves) that reproduce the retail scheduling. */
+/* beDataBase record lookup and row count, 0x003a93a0..0x003a9708. A beDataBase is a table of
+ * records (rows). Its cells are split by type into six data lists (char, short, int, float, bool,
+ * string); each data list is paired with an "offset list" that names the table's columns for that
+ * type. A cell of record R and column C is stored row-major at index (columnCount * R + C) of the
+ * matching data list (findings #794, #607: the Junk Shop table is 9 rows x 36 columns; the enemy
+ * table keys MODEL, HPMAX, ... by column name). The lists are reached through the reflected
+ * object-reference fields and viewed here as the igDataList count/data prefix. "matching
+ * construct" marks the volatile local and the hand-placed asm (joins, delay-slot NOPs, register
+ * moves) that reproduce the retail scheduling. */
 #include "dw4/reflected.h"
 
 /* Index returned by beDataBase_FindRecordValueIndex when the key has no column. */
@@ -22,9 +18,9 @@
 extern "C" {
 extern int g_beDataBase_metaObject[4];
 long long igProperty_FindByName(void *, void *, const char *);
-/* Descriptor of the property record's name member (src/engine/property.cpp). */
+/* Descriptor of the property record's name member. */
 extern int g_propertyNameField[4];
-/* Empty string returned for a null string cell (finding #794); verified zero bytes in the ELF. */
+/* Empty string returned for a null string cell. */
 extern char emptyString[];
 
 int Gap__Bec__beDataBase__vfunc_20(void);
@@ -33,8 +29,8 @@ long long beDataBase_GetRecordInt(beDataBase *, int, const char *);
 /* 0x003a9540: boolean cell (one byte) for (record, key).  The index is used
  * unchecked, as in retail, so the key must name a bool column. */
 unsigned long long beDataBase_GetRecordBool(beDataBase *, int, const char *);
-/* 0x003a9580: string cell for (record, key): the characters of the stored
- * igStringObj, or an empty string when the cell is null (finding #794). */
+/* string cell for (record, key): the characters of the stored igStringObj, or an empty string when
+ * the cell is null. */
 char *beDataBase_GetRecordString(beDataBase *, int, const char *);
 int beDataBase_GetRecordCount(beDataBase *);
 }
@@ -168,8 +164,8 @@ unsigned long long beDataBase_GetRecordBool(beDataBase *self, int record, const 
     return *(unsigned char *)(((igDataList *)self->_boolData)->_data + index);
 }
 
-/* 0x003a9580: string cell for (record, key): the characters of the stored
- * igStringObj, or an empty string when the cell is null (finding #794). */
+/* string cell for (record, key): the characters of the stored igStringObj, or an empty string when
+ * the cell is null. */
 char *beDataBase_GetRecordString(beDataBase *self, int record, const char *key) {
     int index = (int)beDataBase_FindRecordValueIndex(self, record, key,
                                                      (igDataList *)self->_stringOffsetList);

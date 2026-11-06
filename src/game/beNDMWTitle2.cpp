@@ -1,37 +1,25 @@
-/* beNDMWTitle2, the title-menu controller (0x003f2d50..0x003f540c), one translation
- * unit in retail address order (docs/engine/title-menu-controller.md):
- *   0x003f2e00  Gap__Bec__beNDMWTitle2__vfunc_32  resolve the pad manager, release the MC utility
- *   0x003f2ef0  Gap__Bec__beNDMWTitle2__vfunc_31  per-frame update (state machine)
- *   0x003f5310  Gap__Bec__beNDMWTitle2__vfunc_30  info-record class metaObject accessor
- *   0x003f5320  Gap__Bec__beNDMWTitle2__vfunc_29  register the TITLE2 message receiver
- *   0x003f5400  Gap__Bec__beNDMWTitle2__vfunc_20  class metaObject accessor
- *
- * The retail unit was C++ with exceptions on (config/SLUS-20836/exceptions.txt).  vfunc_32, vfunc_30
- * and vfunc_20 used to live in beNDMWTitle2.c; they now compile here as C++ under that
- * profile, which also reproduces vfunc_32's exception index record.  The whole unit keeps
- * C linkage.
- *
- * vfunc_31 (0x003f2ef0) is the per-frame update: a four-level state machine
- * (CTRL._st0.._st3) that drives the logo, the Press START wait, the Game Start /
- * Option menu, the Options window and the hand-off to beNDMWLoadCtrl2. The
- * state values and the pad words it reads are documented in
- * docs/engine/title-menu-controller.md (finding #2724). The string externs are
- * the model-control sequence and message names it sends; the numbers 0xf0001..
- * 0xf000d passed to the text-order helper are Options text ids (0xf0001 header,
- * 0xf0002/3 camera, 0xf0004/5 light, 0xf0006 country header, 0xf0007..d country).
- *
- * Matching constructs (the pinned compiler is sensitive to all of these):
- *  - TitleRef<Tag> reproduces the five reference wrappers and their exception
- *    cleanup; the tags only keep otherwise identical destructors apart.
- *  - Local declaration order, the bool direction flags and the volatile
- *    state-field re-reads (`ctrl->_stN = (*(volatile int *)&ctrl->_stN) + 1`,
- *    the advance-to-next-step idiom) fix register allocation and reload points.
- *  - The two language locals (Up and Down handlers) are kept separate; merging
- *    them changes the register colouring.
- *  - Address-named externs only fix the access; their C types are not recovered.
- *
- * vfunc_29 (0x003f5320) registers the controller as the TITLE2 message receiver.
- */
+/* beNDMWTitle2, the title-menu controller (0x003f2d50..0x003f540c), one translation unit in retail
+ * address order: 0x003f2e00 Gap__Bec__beNDMWTitle2__vfunc_32 resolve the pad manager, release the
+ * MC utility 0x003f2ef0 Gap__Bec__beNDMWTitle2__vfunc_31 per-frame update (state machine)
+ * 0x003f5310 Gap__Bec__beNDMWTitle2__vfunc_30 info-record class metaObject accessor 0x003f5320
+ * Gap__Bec__beNDMWTitle2__vfunc_29 register the TITLE2 message receiver 0x003f5400
+ * Gap__Bec__beNDMWTitle2__vfunc_20 class metaObject accessor The retail unit was C++ with
+ * exceptions on. vfunc_32, vfunc_30 and vfunc_20 used to live in beNDMWTitle2.c; they now compile
+ * here as C++ under that profile, which also reproduces vfunc_32's exception index record. The
+ * whole unit keeps C linkage. vfunc_31 (0x003f2ef0) is the per-frame update: a four-level state
+ * machine (CTRL._st0.._st3) that drives the logo, the Press START wait, the Game Start / Option
+ * menu, the Options window and the hand-off to beNDMWLoadCtrl2. The state values and the pad words
+ * it reads are documented in docs/engine/title-menu-controller.md. The string externs are the
+ * model-control sequence and message names it sends; the numbers 0xf0001.. 0xf000d passed to the
+ * text-order helper are Options text ids (0xf0001 header, 0xf0002/3 camera, 0xf0004/5 light,
+ * 0xf0006 country header, 0xf0007..d country). Matching constructs (the pinned compiler is
+ * sensitive to all of these): - TitleRef<Tag> reproduces the five reference wrappers and their
+ * exception cleanup; the tags only keep otherwise identical destructors apart. - Local declaration
+ * order, the bool direction flags and the volatile state-field re-reads (`ctrl->_stN = (*(volatile
+ * int *)&ctrl->_stN) + 1`, the advance-to-next-step idiom) fix register allocation and reload
+ * points. - The two language locals (Up and Down handlers) are kept separate; merging them changes
+ * the register colouring. - Address-named externs only fix the access; their C types are not
+ * recovered. vfunc_29 (0x003f5320) registers the controller as the TITLE2 message receiver. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00236f80(...);
@@ -123,10 +111,10 @@ extern int GENERATE_TITLE[4];
 extern int g_propertyNameField[4];
 extern int g_defaultAllocatorSelector[4];
 extern int g_beLua_metaObject[4];
-/* Byte flag: allocate from the owner's allocator (docs/engine/messenger-memory.md). */
+/* Byte flag: allocate from the owner's allocator. */
 extern unsigned char g_useOwnerAllocator;
-/* Set by the GAMESTART path; tells the Options initialiser that GAMERAM's
- * CAMERAMODE/LIGHTMODE are valid (docs/engine/title-menu-controller.md). */
+/* Set by the GAMESTART path; tells the Options initialiser that GAMERAM's CAMERAMODE/LIGHTMODE are
+ * valid. */
 extern char g_commonSettingsValid;
 extern int g_beNDMWTitle2Info_metaObject[4];
 extern int g_beNDMWTitle2_metaObject[4];
@@ -145,12 +133,11 @@ void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *, int);
 int Gap__Bec__beNDMWTitle2__vfunc_20(void);
 }
 
-/* 0x003f2e00 — vfunc_32: resolves the pad manager on first use, and releases the cached
- * memory-card utility controller (finding #731, docs/engine/title-menu-controller.md).
- * References are counted in the low 23 bits of _refCount (docs/engine/alias-pool-binding.md).
- * The `asm { nop }` statements reproduce retail's delay-slot nops after each call and
- * store, and the repeated null test on the held reference reproduces retail's inlined
- * release-then-clear sequence; they are matching constructs, not code. */
+/* Resolves the pad manager on first use, and releases the cached memory-card utility controller.
+ * References are counted in the low 23 bits of _refCount. The `asm { nop }` statements reproduce
+ * retail's delay-slot nops after each call and store, and the repeated null test on the held
+ * reference reproduces retail's inlined release-then-clear sequence; they are matching constructs,
+ * not code. */
 void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
     igObject *padManager;
     igObject *held;
@@ -259,9 +246,8 @@ template <int Tag> struct TitleRef {
         infoRam->_dataList = (int)n;                                                               \
     }
 
-/* 0x003f2ef0: per-frame title-menu update. Lazily builds the CTRL / COMMDLCTRL /
- * OPTION / TEXTORDER objects in the info record's property list, then runs the
- * CTRL._st0.._st3 state machine (docs/engine/title-menu-controller.md). */
+/* per-frame title-menu update. Lazily builds the CTRL / COMMDLCTRL / OPTION / TEXTORDER objects in
+ * the info record's property list, then runs the CTRL._st0.._st3 state machine. */
 #pragma opt_propagation on
 void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
     int allocator;
@@ -1130,7 +1116,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             goto done;
         }
         break;
-    /* Jump-table entries 3, 5, 6 and 9 are inert (docs/engine/title-menu-controller.md). */
+    /* Jump-table entries 3, 5, 6 and 9 are inert. */
     case 3:
     case 5:
     case 6:

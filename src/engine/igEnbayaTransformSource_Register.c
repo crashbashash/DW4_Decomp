@@ -5,7 +5,7 @@
 extern char igTransformSource_Register[];
 extern char igTransformSource_GetPublishedMetaObject[];
 extern char igEnbayaTransformSource_GetVTable[];
-void thunk_FUN_001a18b0(void);  /* code at 0x1a1a20, passed by address (was DAT_1a1a20; docs/engine/function-inventory.md) */
+void thunk_FUN_001a18b0(void);
 extern char g_igEnbayaTransformSource_callbackList[];
 extern char igEnbayaTransformSource_className[];
 extern char g_igEnbayaTransformSource_metaObject[];

@@ -1,4 +1,4 @@
-/* 0x002af688 — FUN_002af688 (52 bytes). Null-safe wrapper: returns FUN_002af6c0(arg0, p->f20, p->f24), or 0 when p is null. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Null-safe wrapper: returns FUN_002af6c0(arg0, p->f20, p->f24), or 0 when p is null. */
 int FUN_002af6c0();
 
 struct Pair14 {

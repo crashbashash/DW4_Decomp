@@ -1,6 +1,3 @@
-/* 0x002c7990 — igDirEntry_InitFields. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int FUN_002dc7a0();
 int FUN_002ea4b0();
@@ -8,7 +5,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_002c7720(void);  /* code at 0x2c7720, passed by address (was DAT_2c7720; docs/engine/function-inventory.md) */
+void FUN_002c7720(void);
 extern int DAT_004c1290[4];
 extern int DAT_004c12a0[4];
 extern int DAT_004c12b0[4];

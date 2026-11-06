@@ -1,7 +1,7 @@
-/* 0x00124f28 — FUN_00124f28 (92 bytes). Initialises one 88-byte stream: clears its buffer state, sets its flags and
- * file number, makes it its own cookie, installs the four I/O hooks (FUN_00129fa0 read, FUN_0012a008 write,
- * FUN_0012a088 seek, FUN_0012a0f0 close) and records the owning state block. The shape of newlib's std() helper
- * of __sinit (hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises one 88-byte stream: clears its buffer state, sets its flags and file number, makes
+ * it its own cookie, installs the four I/O hooks (FUN_00129fa0 read, FUN_0012a008 write,
+ * FUN_0012a088 seek, FUN_0012a0f0 close) and records the owning state block. The shape of newlib's
+ * std() helper of __sinit (hypothesis). */
 typedef struct Stream124f28 {
     unsigned char *p;       /* +0: next byte in the buffer */
     int r;                  /* +4: bytes left to read */

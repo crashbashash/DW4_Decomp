@@ -1,4 +1,3 @@
-/* 0x001985a0 — igSkeleton_GetVTable. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int StringChunk_ReleaseHeader();
 int igObject_Destroy();
 int igObject_InitHeader();

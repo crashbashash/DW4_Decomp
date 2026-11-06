@@ -1,4 +1,4 @@
-/* 0x0029ead0 — FUN_0029ead0 (40 bytes). Fills a status block through FUN_0029dd80 and returns the sum of its words 1 and 3. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills a status block through FUN_0029dd80 and returns the sum of its words 1 and 3. */
 typedef struct SfdStatus {
     int f0;
     int f4;

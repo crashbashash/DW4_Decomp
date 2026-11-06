@@ -1,4 +1,6 @@
-/* 0x002956d8 — FUN_002956d8 (172 bytes). Starts a Sofdec handle on a memory buffer (its error string names it mwSfdStartMem): rejects an invalid handle, otherwise resets it, releases the previous stream joint through its vtable slot +12, wraps the buffer in a new one (FUN_0027b408) and kicks playback. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Starts a Sofdec handle on a memory buffer (its error string names it mwSfdStartMem): rejects an
+ * invalid handle, otherwise resets it, releases the previous stream joint through its vtable slot
+ * +12, wraps the buffer in a new one (FUN_0027b408) and kicks playback. */
 extern int FUN_002968c0(void *sfd);
 extern void FUN_0029a320(const char *msg);
 extern void FUN_00295808(void *sfd);

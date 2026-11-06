@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* igVertexArray1_1 receiver hypothesis (#2722); the existing symbol is unchanged. */
+/* igVertexArray1_1 receiver hypothesis; the existing symbol is unchanged. */
 class Alloc { public:
   virtual void d0();
   virtual void d1();

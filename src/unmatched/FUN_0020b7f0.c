@@ -6,9 +6,9 @@ int FUN_001efd90();
 int FUN_00207e70();
 int FUN_0020b280();
 int FUN_0020b650();
-void FUN_001f0470(void);  /* code at 0x1f0470, passed by address (was DAT_1f0470; docs/engine/function-inventory.md) */
-void FUN_001f74e0(void);  /* code at 0x1f74e0, passed by address (was FUN_001f74e0; docs/engine/function-inventory.md) */
-void FUN_001f7500(void);  /* code at 0x1f7500, passed by address (was FUN_001f7500; docs/engine/function-inventory.md) */
+void FUN_001f0470(void);
+void FUN_001f74e0(void);
+void FUN_001f7500(void);
 extern struct W *DAT_00568f04[4];
 extern struct V *DAT_00568f08[4];
 extern int DAT_0056c0d0[4];

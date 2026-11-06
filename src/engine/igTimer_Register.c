@@ -8,7 +8,7 @@ extern char igTimer_className[];
 extern char g_igTimer_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
-void FUN_002b7b40(void);  /* code at 0x2b7b40, passed by address (was DAT_2b7b40; docs/engine/function-inventory.md) */
+void FUN_002b7b40(void);
 void igTimer_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(

@@ -1,4 +1,5 @@
-/* 0x002adba0 — FUN_002adba0 (156 bytes). Looks up entry `index`: from the static table DAT_004be8d8 when handle is null, otherwise through FUN_002adc40 (error 0xFF000113 when FUN_002a0dd8 refuses). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks up entry `index`: from the static table DAT_004be8d8 when handle is null, otherwise
+ * through FUN_002adc40 (error 0xFF000113 when FUN_002a0dd8 refuses). */
 int FUN_002a0bb8();
 int FUN_002a0dd8(handle);
 int FUN_002adc40();

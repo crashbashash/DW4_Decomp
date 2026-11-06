@@ -1,4 +1,6 @@
-/* 0x003f6490 - beNDMWWindow_UpdateTree. Window tree update: virtual hook slot 21, children below the minimum state are reset to state 2, then children without the flag are released and removed (recursion before the check); alternate compiler -O3,p. */
+/* Window tree update: virtual hook slot 21, children below the minimum state are reset to state 2,
+ * then children without the flag are released and removed (recursion before the check); alternate
+ * compiler -O3,p. */
 #include "dw4/reflected.h"
 extern "C" {
 void List_RemoveWordAt(void *, int);

@@ -1,4 +1,5 @@
-/* C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 struct Obj { int *vt; int p4; int f8; int pc; int p10; int f14; int f18; int f1c; };
 extern "C" {
 int igObject_InitHeader(struct Obj *);

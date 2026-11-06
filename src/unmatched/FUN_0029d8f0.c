@@ -1,4 +1,5 @@
-/* 0x0029d8f0 — FUN_0029d8f0 (160 bytes). Sets channel index to state 2 (FUN_0029da68) and loads its buffer block with datas[index]/sizes[index], clearing the remaining words. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets channel index to state 2 (FUN_0029da68) and loads its buffer block with
+ * datas[index]/sizes[index], clearing the remaining words. */
 void FUN_0029da68();
 
 /* One 116-byte (0x74) channel record; the block at +16 is cleared by FUN_0029d8f0. */

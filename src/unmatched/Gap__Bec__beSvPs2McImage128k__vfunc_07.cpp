@@ -1,6 +1,3 @@
-/* 0x0036ff10 — Gap__Bec__beSvPs2McImage128k__vfunc_07. Banked by tools/retype_struct_member.py (shape: base):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 extern "C" {
 int Memory_AllocateDefaultBuffer(...);

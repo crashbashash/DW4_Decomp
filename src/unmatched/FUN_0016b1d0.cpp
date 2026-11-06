@@ -1,4 +1,3 @@
-/* 0x0016b1d0 — FUN_0016b1d0. Hand-retyped from the m2c draft, verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 int FUN_001ea420(int);
 int FUN_001ea8a0(int);

@@ -1,4 +1,5 @@
-/* 0x002ad5e0 — FUN_002ad5e0 (132 bytes). Stores a divisor/scale pair at +3528/+3532 of the handle's timing record and recomputes it with FUN_002ad870; reports error 0xFF00015A when FUN_002a0dd8 refuses. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a divisor/scale pair at +3528/+3532 of the handle's timing record and recomputes it with
+ * FUN_002ad870; reports error 0xFF00015A when FUN_002a0dd8 refuses. */
 int FUN_002a0dd8(void *handle);
 int FUN_002a0bb8(void *obj, int code);
 void FUN_002ad870(void *handle);

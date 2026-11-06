@@ -1,4 +1,3 @@
-/* 0x003658e0 - FUN_003658e0. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 int Memory_GetAllocatorBySelector(int);
 int igMetaObject_Create(int);

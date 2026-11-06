@@ -1,4 +1,5 @@
-/* 0x00230298 — FUN_00230298 (60 bytes). Widens a float to a double by unpacking it and repacking the fraction 30 bits higher with FUN_00230e20 (fp-bit __extendsfdf2 shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Widens a float to a double by unpacking it and repacking the fraction 30 bits higher with
+ * FUN_00230e20 (fp-bit __extendsfdf2 shape; name is a hypothesis). */
 typedef unsigned int USItype __attribute__((mode(SI)));
 typedef unsigned int UDItype __attribute__((mode(DI)));
 typedef float SFtype __attribute__((mode(SF)));

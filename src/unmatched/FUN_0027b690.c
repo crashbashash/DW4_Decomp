@@ -1,6 +1,6 @@
-/* 0x0027b690 — FUN_0027b690 (80 bytes). Stores a pair of words into +28 / +32 of a handle; reports
-   "E2004090235 : NULL pointer is specified." for a null handle and "E2004090236 : Specified handle is
-   invalid." when the handle is not in use (+4 is 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a pair of words into +28 / +32 of a handle; reports "E2004090235 : NULL pointer is
+ * specified." for a null handle and "E2004090236 : Specified handle is invalid." when the handle
+ * is not in use (+4 is 0). */
 struct Handle27b {
     int f0;
     int used;      /* +4 */

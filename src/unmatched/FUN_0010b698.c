@@ -1,4 +1,4 @@
-/* 0x0010b698 — FUN_0010b698 (20 bytes). Fills a stat-like record for a character device: mode 0x2000, 64-bit field at +72 cleared. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills a stat-like record for a character device: mode 0x2000, 64-bit field at +72 cleared. */
 
 typedef struct {
     int f0;

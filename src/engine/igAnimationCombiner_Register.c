@@ -3,7 +3,7 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igAnimationSystem_Register[];
 extern char igAnimationCombiner_GetVTable[];
-void thunk_FUN_001a8520(void);  /* code at 0x1a8890, passed by address (was DAT_1a8890; docs/engine/function-inventory.md) */
+void thunk_FUN_001a8520(void);
 extern char igAnimationSystem_GetPublishedMetaObject[];
 extern char g_igAnimationCombiner_callbackList[];
 extern char igAnimationCombiner_className[];

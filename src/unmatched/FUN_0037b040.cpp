@@ -1,4 +1,7 @@
-/* 0x0037b040 — FUN_0037b040. Pooled-item family (FUN_0037b4d0, FUN_0039ab20): composes the item transform from the tail of the current list, takes the next pooled matrix item and the next pooled time item, registers both with their attr stacks, runs the traversal callback and undoes both again.  Formerly an asm body; reproduces only under the combat -O3,p unit profile (finding #3885).*/
+/* Pooled-item family (FUN_0037b4d0, FUN_0039ab20): composes the item transform from the tail of
+ * the current list, takes the next pooled matrix item and the next pooled time item, registers
+ * both with their attr stacks, runs the traversal callback and undoes both again. Formerly an asm
+ * body; reproduces only under the combat -O3,p unit profile. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_001b1490(...);

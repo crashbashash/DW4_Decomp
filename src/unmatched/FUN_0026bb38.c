@@ -1,4 +1,6 @@
-/* 0x0026bb38 — FUN_0026bb38 (132 bytes). Reports DAT_004ee5a0 for a null handle or value; otherwise calls FUN_0026bc60, then between FUN_0025f2d0 and FUN_0025f2e8 calls FUN_0026b978(handle, value), sets the mode byte to 3 and calls FUN_0026d158(handle, 1). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports DAT_004ee5a0 for a null handle or value; otherwise calls FUN_0026bc60, then between
+ * FUN_0025f2d0 and FUN_0025f2e8 calls FUN_0026b978(handle, value), sets the mode byte to 3 and
+ * calls FUN_0026d158(handle, 1). */
 /* Handle layout shared by FUN_0026bb38 … FUN_0026ebf8 (offsets from their accesses). */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {

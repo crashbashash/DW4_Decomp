@@ -1,45 +1,31 @@
-/* FUN_003fab90 (0x003fab90, 6,872 bytes): recompute one player's derived stats.
- *
- * `self` is the GAMERAM object; `index` selects the player record out of its
- * player list and `apply` says whether the equipment/chip/skill modifiers are
- * applied on top of the database/UPDATA/DOWNDATA base values.  The function
- *   - rewrites MHP/MMP (clamped to 99999) and initialises or clamps HP and MP,
- *   - rewrites the five attributes (TSUYOSA, MAMORI, KASHIKOSA, SEISHIN,
- *     SUBAYASA) and the four element resistances, each clamped to 1..9999,
- *   - rebuilds WAZALIST from the six TECHn level/skill thresholds of the
- *     species' database row and rewrites NEXTEXP from the level,
- *   - when `apply` is set also rewrites ATTACKDELAY, the hit, critical,
- *     paralysis, evade, guard, bit, experience and luck rates, the
- *     paralysis/poison resistances, the weapon element, HP/MP drain and the
- *     weapon record/skill numbers, and refreshes POWERSOCKETNAME from the
- *     MODEL string of every power socket.
- *
- * The property record names (DAT_0051xxxx) are read from the retail image;
- * the PROP_* aliases below give them their literal text.  The callees whose
- * behaviour is not recovered yet keep their FUN_ names.
- *
- * Matching notes.  Everything here is a compiler-pinned spelling (see
- * docs/engine/unit-compilers.md); the choices that matter for the register
- * colouring and stack layout are:
- *   - the player pointer and the DIGIMONNO / LEVEL reads go through the tiny
- *     inline accessors StatHelpers::GetPlayer() and GetProp(); their result
- *     temporaries are created late, so the register colouring orders the player
- *     pointer, index and spill slots as in retail;
- *   - the helpers are static members of a struct because tools/units.py splits
- *     a unit at its top-level definitions and would drop free helper functions;
- *   - locals are declared where they are first set, one variable per loop;
- *   - the two threshold tests are written as `record <= value` and the delay
- *     clamp as `> 70`, the forms that keep the compare in `at`;
- *   - the new WAZALIST object is an IntListRef (a stack-resident reference
- *     whose destructor is the emitted body at 0x003fc670, shared with the
- *     nearby query that is compiled in the same unit);
- *   - the interned MODEL string handed to StringList_AppendRetained is a StringRef whose
- *     destructor is the retail copy at 0x00130720 (a duplicate in config/SLUS-20836/unit-objects.json).
- * The unit also owns that query (0x003fc780) and the reference destructor
- * (0x003fc670) through config/SLUS-20836/unit-objects.json; the query lives in the
- * included .inc so that one object holds all three bodies.  The include path
- * is relative to the repository root (the compiler's working directory).
- */
+/* FUN_003fab90 (0x003fab90, 6,872 bytes): recompute one player's derived stats. `self` is the
+ * GAMERAM object; `index` selects the player record out of its player list and `apply` says
+ * whether the equipment/chip/skill modifiers are applied on top of the database/UPDATA/DOWNDATA
+ * base values. The function - rewrites MHP/MMP (clamped to 99999) and initialises or clamps HP and
+ * MP, - rewrites the five attributes (TSUYOSA, MAMORI, KASHIKOSA, SEISHIN, SUBAYASA) and the four
+ * element resistances, each clamped to 1..9999, - rebuilds WAZALIST from the six TECHn level/skill
+ * thresholds of the species' database row and rewrites NEXTEXP from the level, - when `apply` is
+ * set also rewrites ATTACKDELAY, the hit, critical, paralysis, evade, guard, bit, experience and
+ * luck rates, the paralysis/poison resistances, the weapon element, HP/MP drain and the weapon
+ * record/skill numbers, and refreshes POWERSOCKETNAME from the MODEL string of every power socket.
+ * The property record names (DAT_0051xxxx) are read from the retail image; the PROP_* aliases
+ * below give them their literal text. The callees whose behaviour is not recovered yet keep their
+ * FUN_ names. Matching notes. Everything here is a compiler-pinned spelling; the choices that
+ * matter for the register colouring and stack layout are: - the player pointer and the DIGIMONNO /
+ * LEVEL reads go through the tiny inline accessors StatHelpers::GetPlayer() and GetProp(); their
+ * result temporaries are created late, so the register colouring orders the player pointer, index
+ * and spill slots as in retail; - the helpers are static members of a struct because
+ * tools/units.py splits a unit at its top-level definitions and would drop free helper functions;
+ * - locals are declared where they are first set, one variable per loop; - the two threshold tests
+ * are written as `record <= value` and the delay clamp as `> 70`, the forms that keep the compare
+ * in `at`; - the new WAZALIST object is an IntListRef (a stack-resident reference whose destructor
+ * is the emitted body at 0x003fc670, shared with the nearby query that is compiled in the same
+ * unit); - the interned MODEL string handed to StringList_AppendRetained is a StringRef whose
+ * destructor is the retail copy at 0x00130720 (a duplicate in config/SLUS-20836/unit-
+ * objects.json). The unit also owns that query (0x003fc780) and the reference destructor
+ * (0x003fc670) through config/SLUS-20836/unit-objects.json; the query lives in the included .inc
+ * so that one object holds all three bodies. The include path is relative to the repository root
+ * (the compiler's working directory). */
 #include "src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc"
 
 #define PROP_DIGIMONNO       DAT_00518848

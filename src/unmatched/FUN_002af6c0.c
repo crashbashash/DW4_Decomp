@@ -1,4 +1,5 @@
-/* 0x002af6c0 — FUN_002af6c0 (52 bytes). Returns 1 while the block at +0xA04 is enabled (+56); otherwise asks FUN_002af848 with the limit at +176 and returns its verdict. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 while the block at +0xA04 is enabled (+56); otherwise asks FUN_002af848 with the limit
+ * at +176 and returns its verdict. */
 void FUN_002af848(int obj, int a, int b, int *verdict, int limit);
 
 struct BlockA04 {

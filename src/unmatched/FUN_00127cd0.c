@@ -1,4 +1,5 @@
-/* 0x00127cd0 — FUN_00127cd0 (104 bytes). Compares two big integers by word count and then word by word from the top; returns <0, 0 or >0 (newlib mprec __mcmp shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Compares two big integers by word count and then word by word from the top; returns <0, 0 or >0
+ * (newlib mprec __mcmp shape; name is a hypothesis). */
 typedef struct BigInt {
     struct BigInt *next;
     int k;

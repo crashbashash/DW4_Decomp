@@ -1,4 +1,5 @@
-/* 0x00297b18 — FUN_00297b18 (108 bytes). Validates the picture's chromaFormat (+144): 1, 2, 3 pass through; anything else is reported ("E301273 : chroma_format is invalid.") and gives 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates the picture's chromaFormat (+144): 1, 2, 3 pass through; anything else is reported
+ * ("E301273 : chroma_format is invalid.") and gives 1. */
 void FUN_0029a320(const char *format, ...);
 
 extern char DAT_004f4078[]; /* "E301273 : chroma_format is invalid." */

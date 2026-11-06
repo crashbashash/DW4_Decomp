@@ -1,4 +1,3 @@
-/* 0x003c4590 — beNDMWLoadIntf2CtrlData_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 extern "C" {
 int ObjectPointerList_FindIndex(...);
 int igMetaObject_CreateFields(...);

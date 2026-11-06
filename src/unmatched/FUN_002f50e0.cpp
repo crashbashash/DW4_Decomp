@@ -1,4 +1,6 @@
-/* 0x002f50e0 - FUN_002f50e0. Entity manager teardown: virtual hooks (slots 47, 53, 64, 51), then a descending sweep over 46 slots of 144 bytes (the skip list 6/5/4/0 is a switch, which leaves the compare-chain delay slots empty) and a second, dead loop kept as retail has it. Alternate compiler -O3. */
+/* Entity manager teardown: virtual hooks (slots 47, 53, 64, 51), then a descending sweep over 46
+ * slots of 144 bytes (the skip list 6/5/4/0 is a switch, which leaves the compare-chain delay
+ * slots empty) and a second, dead loop kept as retail has it. Alternate compiler -O3. */
 extern "C" {
 int FUN_002f00f0(int);
 extern char *DAT_00586dc8[4];

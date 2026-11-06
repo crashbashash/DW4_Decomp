@@ -1,4 +1,5 @@
-/* 0x002af488 — FUN_002af488 (100 bytes). Scales the global rate DAT_004bea90 by pos/rate (FUN_002916f8) and, under the FUN_002a0e70 guard, adds it to the stream position (+0xD28+680) and the counter at +0xD28+716. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Scales the global rate DAT_004bea90 by pos/rate (FUN_002916f8) and, under the FUN_002a0e70
+ * guard, adds it to the stream position (+0xD28+680) and the counter at +0xD28+716. */
 int FUN_002916f8(int value, int scale, int divisor);
 void FUN_002a0e70(void *guard);
 void FUN_002a0e88(void *guard);

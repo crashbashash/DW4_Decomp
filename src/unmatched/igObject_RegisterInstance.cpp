@@ -1,6 +1,3 @@
-/* 0x002ff3a0 — igObject_RegisterInstance. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern "C" {
 int ObjectPointerList_Append(...);
 void igObject_RegisterInstance(void **arg0, void *arg1);

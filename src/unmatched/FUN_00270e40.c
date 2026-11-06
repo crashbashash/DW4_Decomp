@@ -1,4 +1,6 @@
-/* 0x00270e40 — FUN_00270e40 (100 bytes). Calls the device option function 2 through the device interface (entry +100) of a file-system handle; a NULL handle or missing entry is reported through FUN_0026f530 and returns 0. Its error strings name it cvFsOptFn2 (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls the device option function 2 through the device interface (entry +100) of a file-system
+ * handle; a NULL handle or missing entry is reported through FUN_0026f530 and returns 0. Its error
+ * strings name it cvFsOptFn2 (CRI), a name hypothesis. */
 typedef struct CvFsDevice_270e40 {
     void *pad0[25];
     int (*opt_fn2)(int file, int code, int arg);  /* 0x64 */

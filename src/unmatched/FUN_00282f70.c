@@ -1,4 +1,5 @@
-/* 0x00282f70 — FUN_00282f70 (164 bytes). Queues kind-3 command 0x1800 for slot id 1..24 with a percentage split into whole (+64) and 1/64 fraction (+64) bytes, refusing re-entry. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queues kind-3 command 0x1800 for slot id 1..24 with a percentage split into whole (+64) and 1/64
+ * fraction (+64) bytes, refusing re-entry. */
 int FUN_00281ac0(unsigned short kind, unsigned short arg, int a, int b, int c, int d);
 
 /* Context reached through DAT_004bb114 (only the members used here). */

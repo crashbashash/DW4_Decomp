@@ -1,4 +1,4 @@
-/* 0x0028dac0 — FUN_0028dac0 (88 bytes). Returns the first 256-byte entry of the shared state's table whose state is 1, or 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the first 256-byte entry of the shared state's table whose state is 1, or 0. */
 
 struct Entry0028dac0 {
     int state;            /* +0: 1 = selected by this search */

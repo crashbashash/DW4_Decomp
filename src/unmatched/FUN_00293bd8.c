@@ -1,4 +1,6 @@
-/* 0x00293bd8 — FUN_00293bd8 (156 bytes). Fills out->data/size (+64/+68) from the frame's chunk, skipping a 4-byte header when there is more than 4 bytes; cleared when FUN_00294d28 is not 1 or the decoder's current entry (+380) is its own embedded one (+356). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills out->data/size (+64/+68) from the frame's chunk, skipping a 4-byte header when there is
+ * more than 4 bytes; cleared when FUN_00294d28 is not 1 or the decoder's current entry (+380) is
+ * its own embedded one (+356). */
 int FUN_00294d28(void);
 
 struct Chunk00293bd8 {

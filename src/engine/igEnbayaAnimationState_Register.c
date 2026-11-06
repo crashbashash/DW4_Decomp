@@ -5,7 +5,7 @@
 extern char igEnbayaAnimationState_GetVTable[];
 extern char thunk_igEnbayaAnimationState_GetMetaObject[];
 extern char igAnimationState_GetPublishedMetaObject[];
-void FUN_001a2190(void);  /* code at 0x1a2190, passed by address (was DAT_1a2190; docs/engine/function-inventory.md) */
+void FUN_001a2190(void);
 extern char igAnimationState_Register[];
 extern char igEnbayaAnimationState_className[];
 extern char g_igEnbayaAnimationState_metaObject[];

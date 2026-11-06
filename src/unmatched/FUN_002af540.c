@@ -1,4 +1,5 @@
-/* 0x002af540 — FUN_002af540 (60 bytes). Reports the object's rate as (rate, scale): index 0 at +2336 gives 29970 with scale 0, otherwise DAT_004f5060[index] with scale 1000. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports the object's rate as (rate, scale): index 0 at +2336 gives 29970 with scale 0, otherwise
+ * DAT_004f5060[index] with scale 1000. */
 extern int DAT_004f5060[];
 
 struct Obj0920 {

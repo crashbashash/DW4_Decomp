@@ -1,4 +1,3 @@
-/* 0x00171a10 — FUN_00171a10. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_00172330();
 extern int DAT_00560900[4];
 struct T { char pad[48]; float v[4]; };

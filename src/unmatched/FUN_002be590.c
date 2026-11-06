@@ -1,4 +1,4 @@
-/* 0x002be590 - 116 bytes. Clone-or-construct; every path returns the callee result (the m2c void signature was the miss). */
+/* 116 bytes. */
 int igMetaObject_EnsureRegistered();
 void *igMetaObject_CopyConstruct(void *, int);
 void *igObject_AllocateRawStorageDefault(int, int);

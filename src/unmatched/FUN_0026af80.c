@@ -1,4 +1,5 @@
-/* 0x0026af80 — FUN_0026af80 (76 bytes). Formats a file reference as "%08x.%08x" (offset, size rounded up to 2048-byte sectors) and passes that name with the third argument to FUN_002618c0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Formats a file reference as "%08x.%08x" (offset, size rounded up to 2048-byte sectors) and
+ * passes that name with the third argument to FUN_002618c0. */
 extern char text_08x_08x[]; /* '%08x.%08x' */
 int sprintf(char *buffer, const char *format, ...);
 int FUN_002618c0(const char *name, int arg);

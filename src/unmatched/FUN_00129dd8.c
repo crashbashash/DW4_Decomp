@@ -1,4 +1,5 @@
-/* 0x00129dd8 — FUN_00129dd8 (136 bytes). Reentrant sprintf: formats into a caller buffer through a string stream bound to the given reent block and terminates it (newlib _sprintf_r shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reentrant sprintf: formats into a caller buffer through a string stream bound to the given reent
+ * block and terminates it (newlib _sprintf_r shape; name is a hypothesis). */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))

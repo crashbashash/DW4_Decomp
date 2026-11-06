@@ -1,5 +1,5 @@
-/* 0x00277768 — FUN_00277768 (48 bytes). Sets the byte at +3 of a stream controller; a null controller is
-   reported as "E0003: Illigal parameter lsc=NULL". Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the byte at +3 of a stream controller; a null controller is reported as "E0003: Illigal
+ * parameter lsc=NULL". */
 struct Lsc277 {
     signed char f0;
     signed char active;   /* +1 */

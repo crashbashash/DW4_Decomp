@@ -1,4 +1,3 @@
-/* 0x002e24e0 - FUN_002e24e0. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 void FUN_002e24e0(void *arg0, int arg1, int arg2) {
     int temp_a4;
     int idx;

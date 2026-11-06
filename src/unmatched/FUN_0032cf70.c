@@ -1,4 +1,6 @@
-/* 0x0032cf70 - FUN_0032cf70. Looks up a record, retries FUN_00113038 until it succeeds (when the first byte is 0x63), publishes the status through arg0 on every path; alternate compiler -O3; `arg3 > 0xFB` keeps the fused slti/bnez on at and every path stores its own status. */
+/* Looks up a record, retries FUN_00113038 until it succeeds (when the first byte is 0x63),
+ * publishes the status through arg0 on every path; alternate compiler -O3; `arg3 > 0xFB` keeps the
+ * fused slti/bnez on at and every path stores its own status. */
 int FUN_00113038();
 char *FUN_0032cb50();
 int Memory_FreeBufferAliasA();

@@ -1,4 +1,6 @@
-/* 0x00290e88 — FUN_00290e88 (52 bytes). Points a decoder object's three buffers into the shared block (DAT_00573f68 + 4384/4352/4448) and its two clamp-table pointers (+64, +272) at the saturation table centre DAT_004bccd4 (built by FUN_00290db8). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Points a decoder object's three buffers into the shared block (DAT_00573f68 + 4384/4352/4448)
+ * and its two clamp-table pointers (+64, +272) at the saturation table centre DAT_004bccd4 (built
+ * by FUN_00290db8). */
 extern char *DAT_00573f68;           /* shared 7136-byte block (FUN_00290ec8) */
 extern unsigned char *DAT_004bccd4;  /* saturation table centre (FUN_00290db8) */
 

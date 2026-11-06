@@ -1,4 +1,4 @@
-/* 0x002a6010 — FUN_002a6010 (52 bytes). Fills a record from a five-word source plus two caller values (+16, +32). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills a record from a five-word source plus two caller values (+16, +32). */
 typedef struct SfdFive {
     int f0;
     int f4;

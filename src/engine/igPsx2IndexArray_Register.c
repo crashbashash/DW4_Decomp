@@ -22,7 +22,7 @@ void igPsx2IndexArray_Register(void) {
         0x1C,                                         /* instance size */
         igPsx2IndexArray_GetVTable,                   /* vtable getter */
         &igPsx2IndexArray_InitFields_00153bd0[0],     /* field adder (post_init in data/reflection.json) */
-        0,                                            /* extra callback-vector item (none; docs/engine/reflection-registration.md) */
+        0,                                            /* extra callback-vector item (none) */
         0                                             /* zero-terminated callback-vector item list (none) */
     );
 }

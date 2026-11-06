@@ -1,4 +1,4 @@
-/* 0x002b4b58 — FUN_002b4b58 (44 bytes). True unless both floats at +60/+64 (set by FUN_002b4aa8) are zero. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True unless both floats at +60/+64 (set by FUN_002b4aa8) are zero. */
 
 struct Obj003C {
     char pad[60];

@@ -1,6 +1,3 @@
-/* 0x002400a0 — FUN_002400a0. Banked by tools/retype_struct_member.py (shape: leadcall1):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 void *FUN_0023f830();
 int lua_pushvalue();
 int lua_tostring();

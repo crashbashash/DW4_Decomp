@@ -1,4 +1,3 @@
-/* 0x00240990 - FUN_00240990. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 int FUN_002407c0();
 int FUN_00240900();
 int FUN_00240fd0();

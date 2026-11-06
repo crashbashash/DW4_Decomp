@@ -1,4 +1,5 @@
-/* 0x002add28 — FUN_002add28 (152 bytes). Copies the handle's 160-byte status block (+0x950) to *out; reports error 0xFF000119 when FUN_002a0dd8 refuses. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies the handle's 160-byte status block (+0x950) to *out; reports error 0xFF000119 when
+ * FUN_002a0dd8 refuses. */
 int FUN_002a0dd8(void *handle);
 int FUN_002a0bb8(void *obj, int code);
 

@@ -1,6 +1,3 @@
-/* 0x001bb550 — FUN_001bb550. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 void FUN_001bbae0(void); /* address-taken; signature not recovered */
 void FUN_001bc0e0(void); /* address-taken; signature not recovered */
 void FUN_001bc1e0(void); /* address-taken; signature not recovered */
@@ -8,15 +5,15 @@ void FUN_001bcdf0(void); /* address-taken; signature not recovered */
 void FUN_001bce40(void); /* address-taken; signature not recovered */
 void FUN_001bcf70(void); /* address-taken; signature not recovered */
 void FUN_001bd0e0(void); /* address-taken; signature not recovered */
-void FUN_001bcd80(void);  /* code at 0x1bcd80, passed by address (was DAT_1bcd80; docs/engine/function-inventory.md) */
-void FUN_001bcd90(void);  /* code at 0x1bcd90, passed by address (was FUN_001bcd90; docs/engine/function-inventory.md) */
-void FUN_001bcda0(void);  /* code at 0x1bcda0, passed by address (was FUN_001bcda0; docs/engine/function-inventory.md) */
-void FUN_001bcdb0(void);  /* code at 0x1bcdb0, passed by address (was FUN_001bcdb0; docs/engine/function-inventory.md) */
-void FUN_001bcdc0(void);  /* code at 0x1bcdc0, passed by address (was FUN_001bcdc0; docs/engine/function-inventory.md) */
-void FUN_001bcdd0(void);  /* code at 0x1bcdd0, passed by address (was FUN_001bcdd0; docs/engine/function-inventory.md) */
-void FUN_001bcde0(void);  /* code at 0x1bcde0, passed by address (was FUN_001bcde0; docs/engine/function-inventory.md) */
-void FUN_001bd150(void);  /* code at 0x1bd150, passed by address (was FUN_001bd150; docs/engine/function-inventory.md) */
-void FUN_001bd160(void);  /* code at 0x1bd160, passed by address (was FUN_001bd160; docs/engine/function-inventory.md) */
+void FUN_001bcd80(void);
+void FUN_001bcd90(void);
+void FUN_001bcda0(void);
+void FUN_001bcdb0(void);
+void FUN_001bcdc0(void);
+void FUN_001bcdd0(void);
+void FUN_001bcde0(void);
+void FUN_001bd150(void);
+void FUN_001bd160(void);
 int FUN_001b68c0();
 int FUN_001e06c0();
 int FUN_002fe290();

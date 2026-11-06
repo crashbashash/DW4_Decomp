@@ -1,4 +1,5 @@
-/* 0x0028af90 — FUN_0028af90 (176 bytes). Installs callback `index` either globally (null handle, also forwarded to FUN_0028b040) or in a validated handle's table at +24; slot 8 defaults to FUN_00285278. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Installs callback `index` either globally (null handle, also forwarded to FUN_0028b040) or in a
+ * validated handle's table at +24; slot 8 defaults to FUN_00285278. */
 typedef void (*Callback0028af90)();
 
 int FUN_0028b098(void *handle); /* 0 when handle is non-null and in state 2, else -1 */

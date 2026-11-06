@@ -1,4 +1,5 @@
-/* 0x002b0b30 — FUN_002b0b30 (76 bytes). Returns the integer mean of the `count` samples at +24 (the divide traps on a zero count, as GCC emits it). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the integer mean of the `count` samples at +24 (the divide traps on a zero count, as GCC
+ * emits it). */
 
 struct Samples {
     char pad[16];

@@ -1,4 +1,5 @@
-/* 0x00277658 — FUN_00277658 (100 bytes). Sets the value at +20 of an lsc object after checking it lies in 0..limit (+24); a NULL object or out-of-range value is reported through FUN_002777f8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the value at +20 of an lsc object after checking it lies in 0..limit (+24); a NULL object
+ * or out-of-range value is reported through FUN_002777f8. */
 typedef struct Lsc_277658 {
     char pad0[20];
     int value;  /* 0x14 */

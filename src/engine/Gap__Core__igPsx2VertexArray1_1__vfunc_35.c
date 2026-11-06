@@ -1,8 +1,6 @@
-/* 0x0015efc0
- * Write the position of vertex `index` from `in` (3 floats).  Counterpart of
- * vfunc_36: does nothing unless the vertex format has the position bit set,
- * and stores into the position stream at _vdata + 68, 12 bytes per vertex
- * (finding 680, docs/engine/model-format.md). */
+/* Write the position of vertex `index` from `in` (3 floats). Counterpart of vfunc_36: does nothing
+ * unless the vertex format has the position bit set, and stores into the position stream at _vdata
+ * + 68, 12 bytes per vertex (finding 680). */
 #include "dw4/reflected.h"
 #define VERTEX_FORMAT_POSITIONS 0x400000   /* bit 22 of _vertexFormat (finding 680) */
 #define VDATA_POSITION_STREAM 68           /* _vdata + 68: pointer to the position stream */

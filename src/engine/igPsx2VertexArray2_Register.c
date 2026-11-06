@@ -22,7 +22,7 @@ void igPsx2VertexArray2_Register(void) {
         0x18,                                            /* instance size */
         igPsx2VertexArray2_GetVTable,                    /* vtable getter */
         &igPsx2VertexArray2_InitFields_00152350[0],      /* field adder (post_init in data/reflection.json) */
-        0,                                               /* extra callback-vector item (none; docs/engine/reflection-registration.md) */
+        0,                                               /* extra callback-vector item (none) */
         0                                                /* zero-terminated callback-vector item list (none) */
     );
 }

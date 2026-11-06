@@ -1,4 +1,5 @@
-/* 0x0029fff0 — FUN_0029fff0 (84 bytes). Reads one value through a temporary FUN_002b17d8 handle (FUN_002b19f0, then FUN_002b18a0); returns 0 when unavailable. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads one value through a temporary FUN_002b17d8 handle (FUN_002b19f0, then FUN_002b18a0);
+ * returns 0 when unavailable. */
 void *FUN_002b17d8();
 void FUN_002b18a0();
 int FUN_002b19f0();

@@ -1,4 +1,5 @@
-/* 0x00425fb0 - FUN_00425fb0. stack copy of a 29-word pointer table (struct assignment: lq loop plus float tail), NULL-terminated walk; alternate compiler -O3,p */
+/* Stack copy of a 29-word pointer table (struct assignment: lq loop plus float tail), NULL-
+ * terminated walk; alternate compiler -O3,p */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

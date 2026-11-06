@@ -1,14 +1,12 @@
-/* 0x00164f50 - Gap::Core::igVisualContextCapabilityManager::vfunc_31 (2856 bytes).
- * Initialiser that fills the manager's reference-counted pool slots (+24..+52)
- * with a shared singleton pool when one exists (globals 0x560760..0x560798) and
- * otherwise with the owner object's allocator (igObject_GetAllocator, falling
- * back to Memory_GetAllocatorBySelector(selector) when the engine flag at
- * GPR_00554c14 is clear), then builds the +56 capability table and the
- * +304 / +308 helper objects.  Evidence: asm/Gap__Core__igVisualContextCapabilityManager__vfunc_31.s.
- *
- * Build: combat mwccps2, -O3 -Cpp_exceptions off.  The shared-pool globals are
- * declared as 4-element arrays so they stay out of small data (lui/lw in retail).
- * Each arm of the pool fill stores the slot itself (retail duplicates the store). */
+/* Initialiser that fills the manager's reference-counted pool slots (+24..+52) with a shared
+ * singleton pool when one exists (globals 0x560760..0x560798) and otherwise with the owner
+ * object's allocator (igObject_GetAllocator, falling back to
+ * Memory_GetAllocatorBySelector(selector) when the engine flag at GPR_00554c14 is clear), then
+ * builds the +56 capability table and the +304 / +308 helper objects. Evidence:
+ * asm/Gap__Core__igVisualContextCapabilityManager__vfunc_31.s. Build: combat mwccps2, -O3
+ * -Cpp_exceptions off. The shared-pool globals are declared as 4-element arrays so they stay out
+ * of small data (lui/lw in retail). Each arm of the pool fill stores the slot itself (retail
+ * duplicates the store). */
 
 #include "dw4/pool_slot.hpp"
 /* Only the fields this method touches are named. */

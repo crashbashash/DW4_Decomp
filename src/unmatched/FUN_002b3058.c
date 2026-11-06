@@ -1,4 +1,5 @@
-/* 0x002b3058 — FUN_002b3058 (60 bytes). Passes the entry's three parameter words and the caller's value to FUN_002846c0, then clears the entry's word at +4. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Passes the entry's three parameter words and the caller's value to FUN_002846c0, then clears the
+ * entry's word at +4. */
 int FUN_002846c0();
 
 struct EntryParams {

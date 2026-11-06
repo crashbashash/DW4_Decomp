@@ -1,6 +1,5 @@
-/* 0x0013e850 — Gap::Core::igGeometrySetAttr::vfunc_32: setter for the retained _vc
- * reference.  Takes a reference on the new object, drops the old one (destroying it when
- * its low 23 reference bits reach zero, docs/engine/alias-pool-binding.md), then stores. */
+/* Setter for the retained _vc reference. Takes a reference on the new object, drops the old one
+ * (destroying it when its low 23 reference bits reach zero), then stores. */
 #include "dw4/reflected.h"
 int igObject_Destroy();
 

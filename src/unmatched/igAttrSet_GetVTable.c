@@ -1,4 +1,4 @@
-/* stack-object GetVTable accessor with a string member released through a helper; verified by tools/verify.py. */
+/* stack-object GetVTable accessor with a string member released through a helper.py. */
 typedef struct { int *vt; int w[7]; int s; } Obj;
 int igObject_InitHeader(void *);
 int FUN_0013bfe0(void *, int);

@@ -1,4 +1,5 @@
-/* 0x00264430 — FUN_00264430 (164 bytes). Creates and starts the ADX server thread (FUN_00263dc8 on the 2 KB stack DAT_0049dab0), suspends it again with FUN_002643d0 and sets its working priority from DAT_0049d994. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Creates and starts the ADX server thread (FUN_00263dc8 on the 2 KB stack DAT_0049dab0), suspends
+ * it again with FUN_002643d0 and sets its working priority from DAT_0049d994. */
 /* EE kernel thread creation block (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_t) */
 typedef struct ThreadParam {
     int status;

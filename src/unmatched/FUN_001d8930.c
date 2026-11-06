@@ -1,6 +1,3 @@
-/* 0x001d8930 — FUN_001d8930. Banked by tools/retype_struct_member.py (shape: struct0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 typedef struct S0 { char pad20[20]; int f14; } S0;
 int ObjectList_ClearRetainedPreserveCount();
 int ObjectList_ResizeRetained();

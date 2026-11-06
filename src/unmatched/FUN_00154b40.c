@@ -1,5 +1,3 @@
-/* 0x00154b40 — FUN_00154b40. hand-matched (member access keeps the base pointer, finding #509's
- * shape); verified byte-identical to retail by tools/verify.py. */
 int FUN_00154ad0();
 typedef struct Obj { char pad[29]; unsigned char f29; } Obj;
 

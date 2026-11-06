@@ -1,4 +1,5 @@
-/* 0x002a8800 — FUN_002a8800 (120 bytes). Returns the player's FUN_002a8878 count, one less when f2408 is 1, or 0 with error 0xFF000187 when FUN_002a0dd8 refuses the player. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the player's FUN_002a8878 count, one less when f2408 is 1, or 0 with error 0xFF000187
+ * when FUN_002a0dd8 refuses the player. */
 void FUN_002a0bb8();
 int FUN_002a0dd8();
 int FUN_002a8878();

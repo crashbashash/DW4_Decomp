@@ -1,11 +1,13 @@
-/* 0x003d8740 - FUN_003d8740: SUBWND service-menu work creation, BIT/XDATA caps and shop-stock list preparation.
- * owner = beNDMWStatus (the SUBWND manager), ram = its beNDMWStatusInfoRam; _subWndNo 6..9 selects weapon / armor /
- * chip / junk stock (WPU / APU / CHIP / JUNK).  Build profile: alternate combat compiler, -O3,p -Cpp_exceptions off,
- * plus a unit-objects entry for the work holder's shared destructor (duplicate 0x3b5cf0) and the four item-holder destructors (emitted 0x3d9bd0..0x3d9d50).
- * Match-critical shapes: Lst::count is volatile (retail re-reads it for the reserve test); caps use '>' compares and a
- * separate record local; the level tier chains are else-if chains; row8 is declared before the loop counters (register
- * colouring); each item holder is constructed at its use site from the new object and released by its destructor at scope exit; the dispatch switches list their arms in
- * ascending order. */
+/* SUBWND service-menu work creation, BIT/XDATA caps and shop-stock list preparation. owner =
+ * beNDMWStatus (the SUBWND manager), ram = its beNDMWStatusInfoRam; _subWndNo 6..9 selects weapon
+ * / armor / chip / junk stock (WPU / APU / CHIP / JUNK). Build profile: alternate combat compiler,
+ * -O3,p -Cpp_exceptions off, plus a unit-objects entry for the work holder's shared destructor
+ * (duplicate 0x3b5cf0) and the four item-holder destructors (emitted 0x3d9bd0..0x3d9d50). Match-
+ * critical shapes: Lst::count is volatile (retail re-reads it for the reserve test); caps use '>'
+ * compares and a separate record local; the level tier chains are else-if chains; row8 is declared
+ * before the loop counters (register colouring); each item holder is constructed at its use site
+ * from the new object and released by its destructor at scope exit; the dispatch switches list
+ * their arms in ascending order. */
 #include "dw4/reflected.h"
 extern "C" {
 struct Rec { int p[3]; int f12; };

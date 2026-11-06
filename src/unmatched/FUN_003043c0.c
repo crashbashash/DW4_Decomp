@@ -1,4 +1,3 @@
-/* 0x003043c0 - FUN_003043c0. retain/release of a global reference; typed pointer, count field read as int Verified byte-identical by tools/verify.py. */
 typedef struct R { char pad4[4]; int f4; } R;
 int igObject_Destroy();
 extern R *DAT_005871b8[4];

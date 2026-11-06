@@ -1,4 +1,4 @@
-/* 0x00176280 - Gap__Gfx__igPsx2ParticleArray__vfunc_39. Virtual callees take a float (lwc1). */
+/* Virtual callees take a float (lwc1). */
 #include "dw4/reflected.h"
 extern "C" {
 

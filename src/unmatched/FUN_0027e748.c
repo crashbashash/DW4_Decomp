@@ -1,7 +1,6 @@
-/* 0x0027e748 — FUN_0027e748 (188 bytes). SVM_SetCbSvrId by its message strings: registers a server
-   callback and its object in the [svtype][6] table at 0x005709e0 inside the FUN_0027e1c0 / FUN_0027e1d8
-   critical section, reporting an illegal id, an illegal svtype and an overwritten callback through
-   FUN_0027e398. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* SVM_SetCbSvrId by its message strings: registers a server callback and its object in the
+ * [svtype][6] table at 0x005709e0 inside the FUN_0027e1c0 / FUN_0027e1d8 critical section,
+ * reporting an illegal id, an illegal svtype and an overwritten callback through FUN_0027e398. */
 struct ServerCallback27e {
     void *function;
     void *object;

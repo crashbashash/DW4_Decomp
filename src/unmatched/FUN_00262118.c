@@ -1,4 +1,6 @@
-/* 0x00262118 — FUN_00262118 (236 bytes). ADXF_Stop (name from the error strings at DAT_004edd68/DAT_004edd90): stops a running read, records the sectors actually read, detaches the reader and returns the handle to state 1, bracketed by FUN_00260c20 trace calls. Returns the current position, or -3/-1 on a bad handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* ADXF_Stop (name from the error strings at DAT_004edd68/DAT_004edd90): stops a running read,
+ * records the sectors actually read, detaches the reader and returns the handle to state 1,
+ * bracketed by FUN_00260c20 trace calls. Returns the current position, or -3/-1 on a bad handle. */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {

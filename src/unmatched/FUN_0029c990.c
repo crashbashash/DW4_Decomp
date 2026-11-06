@@ -1,4 +1,5 @@
-/* 0x0029c990 — FUN_0029c990 (168 bytes). Records FUN_0026bd20(source) in DAT_004be8b8, then passes the source's 64-bit size pair and the FUN_002b5a10/FUN_002b5b80 pair to FUN_002b0608 and returns the low words of its two results. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Records FUN_0026bd20(source) in DAT_004be8b8, then passes the source's 64-bit size pair and the
+ * FUN_002b5a10/FUN_002b5b80 pair to FUN_002b0608 and returns the low words of its two results. */
 int FUN_0026bd20();
 int FUN_0026bf90();
 void FUN_002b0608();

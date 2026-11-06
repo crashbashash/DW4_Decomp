@@ -4,7 +4,7 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igVectorMorphing_GetVTable[];
 extern char thunk_igVectorMorphing_GetMetaObject_00186ec0[];
-void FUN_00186ed0(void);  /* code at 0x186ed0, passed by address (was DAT_186ed0; docs/engine/function-inventory.md) */
+void FUN_00186ed0(void);
 extern char igObject_Register[];
 extern char igVectorMorphing_className[];
 extern char g_igVectorMorphing_metaObject[];

@@ -1,4 +1,5 @@
-/* 0x002f78b0 - FUN_002f78b0. Per-slot listing with duplicate-object scan and virtual lookups; found-flag as bool, declaration order found by permutation search; default compiler. Verified byte-identical by tools/verify.py. */
+/* Per-slot listing with duplicate-object scan and virtual lookups; found-flag as bool, declaration
+ * order found by permutation search; default compiler. */
 extern "C" {
 int sprintf(...);
 int strncpy(char *, char *, int);

@@ -1,6 +1,3 @@
-/* 0x001cb2d0 — FUN_001cb2d0. Banked by tools/retype_struct_member.py (shape: leadfn1):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 int FUN_00303cd0();
 int FUN_00303dc0();
 int FUN_00304030();

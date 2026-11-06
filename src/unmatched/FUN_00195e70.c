@@ -1,6 +1,3 @@
-/* 0x00195e70 — FUN_00195e70. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int igMetaObject_Create(int);
 int Memory_GetAllocatorBySelector(int);
 extern int DAT_005612a0[4];

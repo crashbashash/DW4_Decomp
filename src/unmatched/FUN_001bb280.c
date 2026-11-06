@@ -1,4 +1,4 @@
-/* Typed refcount release (-= 1 with the 23-bit mask); verified by tools/verify.py. */
+/* Typed refcount release (-= 1 with the 23-bit mask).py. */
 typedef struct Q { char pad4[4]; int f4; } Q;
 typedef struct C { char pad[28]; Q *f28; } C;
 int FUN_001b6b30();

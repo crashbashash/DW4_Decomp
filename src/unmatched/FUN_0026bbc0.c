@@ -1,4 +1,6 @@
-/* 0x0026bbc0 — FUN_0026bbc0 (160 bytes). Between FUN_0025f2d0 and FUN_0025f2e8, stops a handle: resets its field-12 object (FUN_00265cb8, FUN_00265cd0, FUN_0027a948), detaches its stream with FUN_002662c8, releases its source in mode 2, frees field 116 with FUN_0025b610 and clears the state. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Between FUN_0025f2d0 and FUN_0025f2e8, stops a handle: resets its field-12 object (FUN_00265cb8,
+ * FUN_00265cd0, FUN_0027a948), detaches its stream with FUN_002662c8, releases its source in mode
+ * 2, frees field 116 with FUN_0025b610 and clears the state. */
 /* Handle layout shared by FUN_0026bb38 … FUN_0026ebf8 (offsets from their accesses). */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {

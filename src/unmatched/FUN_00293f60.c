@@ -1,4 +1,5 @@
-/* 0x00293f60 — FUN_00293f60 (52 bytes). Fetches a 16-byte record with FUN_002a3170(a, b, c, &record) and hands it to FUN_00294108 with `out`. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fetches a 16-byte record with FUN_002a3170(a, b, c, &record) and hands it to FUN_00294108 with
+ * `out`. */
 
 struct Record00293f60 {
     int word[4];

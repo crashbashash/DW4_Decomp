@@ -1,6 +1,3 @@
-/* 0x00176bb0 — FUN_00176bb0. Banked by tools/retype_struct_member.py (shape: leadcall0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 extern "C" {
 int FUN_0015d6c0(...);
 void FUN_00176bb0(void *arg0);

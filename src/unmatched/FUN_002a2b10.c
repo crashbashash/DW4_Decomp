@@ -1,4 +1,5 @@
-/* 0x002a2b10 — FUN_002a2b10 (196 bytes). Points the player at its embedded parameter block, resets it and opens a FUN_0028da88 decoder with callback FUN_002a2c60, reporting errors 0xFF000D08/0xFF000D09. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Points the player at its embedded parameter block, resets it and opens a FUN_0028da88 decoder
+ * with callback FUN_002a2c60, reporting errors 0xFF000D08/0xFF000D09. */
 int FUN_0028d918();
 void *FUN_0028da88();
 void FUN_002a0bb8();

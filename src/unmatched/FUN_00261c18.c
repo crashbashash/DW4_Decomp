@@ -1,4 +1,5 @@
-/* 0x00261c18 — FUN_00261c18 (112 bytes). Detaches the reader object from an ADXF handle that is not busy (f2 clear), first calling FUN_00260a40 on f36/f40 when DAT_0049a628 is 1, then calls the reader method at slot 12. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Detaches the reader object from an ADXF handle that is not busy (f2 clear), first calling
+ * FUN_00260a40 on f36/f40 when DAT_0049a628 is 1, then calls the reader method at slot 12. */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {

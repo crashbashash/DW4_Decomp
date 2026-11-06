@@ -1,4 +1,5 @@
-/* 0x002b4358 — FUN_002b4358 (40 bytes). Marks the entry's parameter block at +8 valid (1) with the two arguments, then tail-calls FUN_002b4380 on the entry. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Marks the entry's parameter block at +8 valid (1) with the two arguments, then tail-calls
+ * FUN_002b4380 on the entry. */
 int FUN_002b4380();
 
 struct EntryParams {

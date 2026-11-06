@@ -1,4 +1,6 @@
-/* 0x0027a818 — FUN_0027a818 (152 bytes). Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0, stores the busy flag (+88); a flag other than 1 then runs FUN_00272fc8 on each of the object's channel handles (count at +82, handles at +16), marking +89 and clearing the busy flag after each. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0, stores the busy flag (+88);
+ * a flag other than 1 then runs FUN_00272fc8 on each of the object's channel handles (count at
+ * +82, handles at +16), marking +89 and clearing the busy flag after each. */
 typedef struct Obj_27a818 {
     char pad0[16];
     int handles[16];        /* 0x10 */

@@ -1,4 +1,3 @@
-/* 0x002cc6d0 - igCallStackTracer_GetVTable. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int igObject_InitHeader();
 extern int DAT_00530b80[4];
 extern int *DAT_00586dc8[4];

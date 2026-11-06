@@ -1,4 +1,5 @@
-/* 0x0029da18 — FUN_0029da18 (76 bytes). Resets entry \`index\` of a 116-byte table: header (3, 1) via FUN_0029da68, body at +16 via FUN_0029da88. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets entry \`index\` of a 116-byte table: header (3, 1) via FUN_0029da68, body at +16 via
+ * FUN_0029da88. */
 typedef struct SfdEntry {
     int f0;
     int f4;

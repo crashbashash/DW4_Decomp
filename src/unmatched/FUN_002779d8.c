@@ -1,4 +1,8 @@
-/* 0x002779d8 — FUN_002779d8 (296 bytes). Starts reading the current queue entry of an lsc object (slot +32 of the 32-byte ring at +56) when entries are queued (+36): resets the transfer (+40), verifies the file name's byte-sum against the entry's key (reporting a mismatch through FUN_002777f8), then opens the file range (FUN_00269ff0), sets its limits and buffer, rewinds and starts it, and marks the entry (status 1) and the object (+2) as reading. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Starts reading the current queue entry of an lsc object (slot +32 of the 32-byte ring at +56)
+ * when entries are queued (+36): resets the transfer (+40), verifies the file name's byte-sum
+ * against the entry's key (reporting a mismatch through FUN_002777f8), then opens the file range
+ * (FUN_00269ff0), sets its limits and buffer, rewinds and starts it, and marks the entry (status
+ * 1) and the object (+2) as reading. */
 typedef struct LscEntry_2779d8 {
     int id;             /* 0x00 */
     char *name;         /* 0x04 */

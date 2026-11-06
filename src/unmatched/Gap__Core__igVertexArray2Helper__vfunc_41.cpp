@@ -1,4 +1,5 @@
-/* 0x00161690 - Gap__Core__igVertexArray2Helper__vfunc_41. Vertex element set from a converted value: result of the converter stored word-wise or copied bytewise from a stack union; virtual type test; default compiler. Verified byte-identical by tools/verify.py. */
+/* Vertex element set from a converted value: result of the converter stored word-wise or copied
+ * bytewise from a stack union; virtual type test; default compiler. */
 #include "dw4/reflected.h"
 extern "C" {
 void *igVertexArray2__FindVertexData(...);

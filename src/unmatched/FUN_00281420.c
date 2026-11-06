@@ -1,4 +1,5 @@
-/* 0x00281420 — FUN_00281420 (176 bytes). For a channel whose two table entries are set and which is not on, returns its start (base + sum of the earlier channels' first entries) and 0x20000 + the sum of their second entries. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* For a channel whose two table entries are set and which is not on, returns its start (base + sum
+ * of the earlier channels' first entries) and 0x20000 + the sum of their second entries. */
 
 /* Context reached through DAT_004bb114 (only the members used here). */
 struct Ctx00281420 {

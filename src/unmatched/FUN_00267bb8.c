@@ -1,4 +1,5 @@
-/* 0x00267bb8 — FUN_00267bb8 (96 bytes). Returns the first unused entry (byte 0 clear) of the 16-entry table DAT_004a7530 (12-byte entries), or 0 when all are in use. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the first unused entry (byte 0 clear) of the 16-entry table DAT_004a7530 (12-byte
+ * entries), or 0 when all are in use. */
 typedef struct Entry_267bb8 {
     signed char used;   /* 0x00 */
     char pad1[11];

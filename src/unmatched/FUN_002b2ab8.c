@@ -1,4 +1,5 @@
-/* 0x002b2ab8 — FUN_002b2ab8 (112 bytes). Looks up descriptor `id` (FUN_002b25a8) and, when it exists and FUN_002b2e60 accepts it, returns bit 0 of the byte at +35 through *value; returns 1 then, else 0 with *value = 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks up descriptor `id` (FUN_002b25a8) and, when it exists and FUN_002b2e60 accepts it, returns
+ * bit 0 of the byte at +35 through *value; returns 1 then, else 0 with *value = 0. */
 struct Descriptor {
     char pad0[35];
     unsigned char f35; /* +35 */

@@ -1,4 +1,5 @@
-/* 0x002b30f0 — FUN_002b30f0 (28 bytes). Sets the entry's three parameter words (+8: third argument, +12: first, +16: second) and its word at +4 to 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the entry's three parameter words (+8: third argument, +12: first, +16: second) and its
+ * word at +4 to 1. */
 struct EntryParams {
     int f0;
     int f4;

@@ -1,9 +1,8 @@
-/* 0x004141a0 - Gap__Bec__beNDMWStatusPowerSocket__vfunc_29: open the power-socket item page.
- * Creates the D0 item-page window (FUN_003baf10), binds it as a sub-window, registers its close
- * text type and name, runs its message script, restricts it to one item kind and disables the
- * equip / unknown rows.  The window lives on the stack in an owning reference; the two interned
- * tokens are temporaries bound to the list-append calls.  The retail exception table records all
- * three releases. */
+/* Open the power-socket item page. Creates the D0 item-page window (FUN_003baf10), binds it as a
+ * sub-window, registers its close text type and name, runs its message script, restricts it to one
+ * item kind and disables the equip / unknown rows. The window lives on the stack in an owning
+ * reference; the two interned tokens are temporaries bound to the list-append calls. The retail
+ * exception table records all three releases. */
 #include "dw4/reflected.h"
 extern "C" {
 /* igObject header: the reference count at +4 is not a reflected field */

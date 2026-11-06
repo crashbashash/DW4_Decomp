@@ -1,4 +1,6 @@
-/* 0x0027bf60 — FUN_0027bf60 (108 bytes). Resets a handle's transfer state: copies the start value (+32) to +16 and clears the counters at +12, +20, +24, +40, +44, +48 and +52; a NULL or unused (+4 clear) handle is reported through FUN_0027b2e0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a handle's transfer state: copies the start value (+32) to +16 and clears the counters at
+ * +12, +20, +24, +40, +44, +48 and +52; a NULL or unused (+4 clear) handle is reported through
+ * FUN_0027b2e0. */
 typedef struct Handle_27bf60 {
     int pad0;
     int used;       /* 0x04 */

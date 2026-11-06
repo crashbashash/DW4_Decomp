@@ -1,6 +1,3 @@
-/* 0x001a5c30 — igAttrStack_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_0013b070();
 int FUN_00197af0();

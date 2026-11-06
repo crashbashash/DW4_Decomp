@@ -10,7 +10,7 @@ extern char igAttrStackManager_className[];
 extern char g_igAttrStackManager_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
-void FUN_001a58e0(void);  /* code at 0x1a58e0, passed by address (was DAT_1a58e0; docs/engine/function-inventory.md) */
+void FUN_001a58e0(void);
 int igAttrStackManager_InitFields();
 
 void igAttrStackManager_Register(void) {

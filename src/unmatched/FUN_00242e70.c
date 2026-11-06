@@ -1,4 +1,4 @@
-/* 0x00242e70 - FUN_00242e70. Dropped leading parameter: lua_touserdata takes (arg0, n). */
+/* Dropped leading parameter: lua_touserdata takes (arg0, n). */
 int __floatsidf();
 int FUN_00230d80();
 int FUN_002467a0();

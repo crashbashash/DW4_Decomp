@@ -1,7 +1,6 @@
-/* 0x00277918 — FUN_00277918 (188 bytes). Library shutdown: counts the init reference 0x004abc68 down and,
-   when it reaches zero, destroys every live object (state 1) of the 32-entry table at 0x004abc70 through
-   FUN_00276fb8, clears the table, and runs FUN_00277890 and FUN_002777d0(0, 0).
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Library shutdown: counts the init reference 0x004abc68 down and, when it reaches zero, destroys
+ * every live object (state 1) of the 32-entry table at 0x004abc70 through FUN_00276fb8, clears the
+ * table, and runs FUN_00277890 and FUN_002777d0(0, 0). */
 struct Entry568 {          /* 568-byte table entry; only the state byte is read here */
     signed char state;     /* 1 = live */
     char rest[567];

@@ -1,4 +1,3 @@
-/* 0x00237b50 — FUN_00237b50. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 extern "C" {
 class N;
 struct L { char pad[8]; int cnt; int cap; N **data; };

@@ -1,9 +1,10 @@
-/* 0x004415b0 - Gap__Bec__beNDMWMdlItem__vfunc_36: attach the model-item work record to a base-info RAM entry.
- * Creates the per-info data list on first use, creates a beNDMWMdlItemInfoWork under the "item work" property, reads
- * its db id / kind from the messenger arguments, classifies the parent info's name against the ten item-category
- * names (kind 0..2 are plain, 3..9 flag _isNamed), then builds the concrete item object for the db id (ids 0, 1, 2
- * and 6 take only the record number; 3, 4 and 5 are initialised from the "item roll" record the messenger carries).
- * Ends by running the shared base-info setup (FUN_00396740). */
+/* Attach the model-item work record to a base-info RAM entry. Creates the per-info data list on
+ * first use, creates a beNDMWMdlItemInfoWork under the "item work" property, reads its db id /
+ * kind from the messenger arguments, classifies the parent info's name against the ten item-
+ * category names (kind 0..2 are plain, 3..9 flag _isNamed), then builds the concrete item object
+ * for the db id (ids 0, 1, 2 and 6 take only the record number; 3, 4 and 5 are initialised from
+ * the "item roll" record the messenger carries). Ends by running the shared base-info setup
+ * (FUN_00396740). */
 #include "dw4/reflected.h"
 extern "C" {
 struct Prop { char pad[20]; igObject *f20; };

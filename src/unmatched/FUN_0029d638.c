@@ -1,4 +1,5 @@
-/* 0x0029d638 — FUN_0029d638 (188 bytes). Opens channel index: state 4 when its size is 0, otherwise describes datas/sizes[index] via FUN_0029d6f8 (returns its error) and hands that to the channel buffer before entering state 5. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Opens channel index: state 4 when its size is 0, otherwise describes datas/sizes[index] via
+ * FUN_0029d6f8 (returns its error) and hands that to the channel buffer before entering state 5. */
 int FUN_0029d6f8();
 void FUN_0029da68();
 void FUN_0029dc18();

@@ -1,22 +1,16 @@
-/* beMessenger_SelectReceivers — 0x0038d860, 2036 bytes.
- *
- * Selects the receivers of a messenger send.  The messenger keeps a stack of
- * work records (_workStack); the record whose group name (category), info
- * name and ram number match is moved to the front (index 0).  If none matches,
- * the oldest record (the last one) is recycled: its names and ram number are
- * replaced, its two result lists are cleared, and it is moved to the front.
- * When the front record has no ram receivers yet, they are looked up in the
- * messenger group registered under the record's group name and copied, one
- * per info name that matches the record's info name.
- *
- * The views below project only the reviewed fields (reflected fields are
- * named in the comments; offsets are bytes).  Class names are readable
- * labels, not original spellings.  Several helpers are written in an unusual
- * way on purpose: each form is the one that reproduces retail's instruction
- * stream, register allocation and delay-slot schedule, and each is marked.
- * The exception-unwind table of the retail function (two destroy actions for
- * the stack references at +172 and +168) is not part of this source; the unit
- * builds with exceptions off, see config/SLUS-20836/unit-flags.tsv. */
+/* beMessenger_SelectReceivers — 0x0038d860, 2036 bytes. Selects the receivers of a messenger send.
+ * The messenger keeps a stack of work records (_workStack); the record whose group name
+ * (category), info name and ram number match is moved to the front (index 0). If none matches, the
+ * oldest record (the last one) is recycled: its names and ram number are replaced, its two result
+ * lists are cleared, and it is moved to the front. When the front record has no ram receivers yet,
+ * they are looked up in the messenger group registered under the record's group name and copied,
+ * one per info name that matches the record's info name. The views below project only the reviewed
+ * fields (reflected fields are named in the comments; offsets are bytes). Class names are readable
+ * labels, not original spellings. Several helpers are written in an unusual way on purpose: each
+ * form is the one that reproduces retail's instruction stream, register allocation and delay-slot
+ * schedule, and each is marked. The exception-unwind table of the retail function (two destroy
+ * actions for the stack references at +172 and +168) is not part of this source; the unit builds
+ * with exceptions off. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);

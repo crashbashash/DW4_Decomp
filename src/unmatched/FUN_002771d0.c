@@ -1,6 +1,5 @@
-/* 0x002771d0 — FUN_002771d0 (64 bytes). Resets the three counters (+28, +32, +36) of a stream controller
-   ("lsc") unless its active byte (+1) is set; a null controller is reported as
-   "E0003: Illigal parameter lsc=NULL". Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets the three counters (+28, +32, +36) of a stream controller ("lsc") unless its active byte
+ * (+1) is set; a null controller is reported as "E0003: Illigal parameter lsc=NULL". */
 struct Lsc277 {
     signed char f0;
     signed char active;   /* +1 */

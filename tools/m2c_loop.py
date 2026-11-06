@@ -242,10 +242,7 @@ def bank(name, va, note="m2c draft, hand-fixed"):
     ext = ".cpp" if "vcpp mode" in text.splitlines()[0] else ".c"
     dest = os.path.join(ROOT, "src", "unmatched", name + ext)
     os.makedirs(os.path.dirname(dest), exist_ok=True)
-    note = note.rstrip(". ").replace(", verified", "")
-    open(dest, "w").write("/* 0x%08x — %s. %s; verified byte-identical by\n"
-                          " * tools/verify.py (loop: tools/m2c_loop.py). */\n%s"
-                          % (va, name, note, "".join(lines).lstrip("\n")))
+    open(dest, "w").write("".join(lines).lstrip("\n"))
     return dest
 
 

@@ -1,6 +1,3 @@
-/* 0x002e9470 — FUN_002e9470. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 int FUN_002e8a10();
 int FUN_002e8a40();
 

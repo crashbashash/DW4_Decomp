@@ -1,9 +1,6 @@
-/* 0x0013e6a0
- * Copy the mask of another attribute: call the source's virtual method at
- * vtable offset 280 (a getter returning the 4-byte mask by value, through a
- * hidden return buffer) and store the result in _mask.  Reproduced
- * byte-identically as a struct-returning virtual call
- * (docs/engine/m2c-bulk.md, "struct-returning virtual call"). */
+/* Copy the mask of another attribute: call the source's virtual method at vtable offset 280 (a
+ * getter returning the 4-byte mask by value, through a hidden return buffer) and store the result
+ * in _mask. */
 #include "dw4/reflected.h"
 extern "C" {
 

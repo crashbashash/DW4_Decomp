@@ -1,4 +1,4 @@
-/* 0x002fe3d0 - igMetaObject_CountTree. Recursive tree count; sum declared before the bound; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Recursive tree count; sum declared before the bound; alternate compiler. */
 struct M;
 struct L { char p[8]; struct M **arr; int n; };
 struct M { char p[44]; int f44; char q[4]; struct L *f52; };

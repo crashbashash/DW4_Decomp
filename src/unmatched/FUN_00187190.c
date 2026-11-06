@@ -1,4 +1,3 @@
-/* 0x00187190 - FUN_00187190. lazily created meta object; typed structs, pointer cached for the release, int length local Verified byte-identical by tools/verify.py. */
 typedef struct M { char pad4[4]; int f4; char pad8[10]; short f18; } M;
 typedef struct R { char pad12[12]; int f12; } R;
 R *FUN_002fc250();

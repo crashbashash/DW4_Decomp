@@ -1,4 +1,4 @@
-/* 0x002b3c28 — FUN_002b3c28 (76 bytes). Calls FUN_002b3c88(obj, 100), then stores value into word `index` of the array at +64. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_002b3c88(obj, 100), then stores value into word `index` of the array at +64. */
 int FUN_002b3c88();
 
 struct Obj0040 {

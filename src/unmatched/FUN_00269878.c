@@ -1,4 +1,5 @@
-/* 0x00269878 — FUN_00269878 (92 bytes). Calls FUN_00269650 with all four arguments, then FUN_00269640(object, a2), FUN_002696d0(object, a3) and FUN_00269648(object, 284). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_00269650 with all four arguments, then FUN_00269640(object, a2), FUN_002696d0(object,
+ * a3) and FUN_00269648(object, 284). */
 void FUN_00269650(void *object, void *a1, char *a2, void *a3);
 void FUN_00269640(void *object, char *value);
 void FUN_002696d0(void *object, void *value);

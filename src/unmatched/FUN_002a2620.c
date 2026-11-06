@@ -1,4 +1,4 @@
-/* 0x002a2620 — FUN_002a2620 (96 bytes). Applies FUN_0029ea28(value) to the player's three streams at +8068, +8064 and +8072. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Applies FUN_0029ea28(value) to the player's three streams at +8068, +8064 and +8072. */
 void FUN_0029ea28();
 
 struct Params;

@@ -1,9 +1,7 @@
-/* 0x00300c60 — igObject_CloneViaMetadata: generic clone of any object (finding #887,
- * docs/engine/list-descriptor-copy.md).  Asks the source for its metaobject through vtable
- * slot 20 (the GetMetaObject slot: vfunc_20 of beCameraMode returns the class handle),
- * creates an instance of that class on the source's own allocator and copies the
- * contents across.  `copyMode` is passed to the contents copy unchanged; its meaning is
- * not inferred (the copy dispatches on 0, 1 and 2). */
+/* Generic clone of any object. Asks the source for its metaobject through vtable slot 20 (the
+ * GetMetaObject slot: vfunc_20 of beCameraMode returns the class handle), creates an instance of
+ * that class on the source's own allocator and copies the contents across. `copyMode` is passed to
+ * the contents copy unchanged; its meaning is not inferred (the copy dispatches on 0, 1 and 2). */
 extern "C" {
 int FUN_00300c00(...);
 int igObject_GetAllocator(...);

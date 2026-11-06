@@ -1,4 +1,6 @@
-/* 0x00298288 — FUN_00298288 (92 bytes). Part of mwPlyCreate: initialises the sub-block at +12 (FUN_00298260) and creates the additional-information SJ from +404/+408 (FUN_0027bd48); on failure reports "can't create AddInfSJ" and tears down with FUN_00293118. Returns the SJ or 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Part of mwPlyCreate: initialises the sub-block at +12 (FUN_00298260) and creates the additional-
+ * information SJ from +404/+408 (FUN_0027bd48); on failure reports "can't create AddInfSJ" and
+ * tears down with FUN_00293118. Returns the SJ or 0. */
 int FUN_00298260(void *block);
 int FUN_0027bd48(int buffer, int size, int flags);
 void FUN_00293118(void *player);

@@ -1,4 +1,6 @@
-/* 0x001dca40 - FUN_001dca40. Grows the object list by f24 entries and fills each new slot from the factory callback (retain, release the previous occupant, bounds-checked store, release). The count is read volatile so it is loaded before f24 (retail adds f24 + count). Alternate compiler -O3. */
+/* Grows the object list by f24 entries and fills each new slot from the factory callback (retain,
+ * release the previous occupant, bounds-checked store, release). The count is read volatile so it
+ * is loaded before f24 (retail adds f24 + count). Alternate compiler -O3. */
 typedef struct Obj Obj;
 struct Obj { int w0; int references; };
 typedef struct List List;

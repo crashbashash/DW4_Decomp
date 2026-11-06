@@ -1,4 +1,3 @@
-/* 0x001431a0 — igPsx2AudioContext_GetVTable. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int igObject_InitHeader();
 int FUN_00143250();
 int FUN_001432d0();

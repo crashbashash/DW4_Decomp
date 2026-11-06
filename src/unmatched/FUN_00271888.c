@@ -1,4 +1,6 @@
-/* 0x00271888 — FUN_00271888 (176 bytes). Queues a request on an idle SRD object (state 0, 3 or 9) inside the FUN_0027e1f0/FUN_0027e268 lock: stores the request (+48) and its parameters (+24, +32, +40), sets +1 to 2 and the state to 1 (busy) and clears +4. Returns 1 when queued, 0 when the object was busy. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queues a request on an idle SRD object (state 0, 3 or 9) inside the FUN_0027e1f0/FUN_0027e268
+ * lock: stores the request (+48) and its parameters (+24, +32, +40), sets +1 to 2 and the state to
+ * 1 (busy) and clears +4. Returns 1 when queued, 0 when the object was busy. */
 typedef struct Srd_271888 {
     signed char used;       /* 0x00 */
     signed char kind;       /* 0x01 */

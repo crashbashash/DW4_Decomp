@@ -1,6 +1,3 @@
-/* 0x001d1550 — FUN_001d1550. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_001d0c90(void *);
 int FUN_001d1a80(int, void *, int);
 

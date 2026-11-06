@@ -20,10 +20,10 @@ int igObject_Destroy(beLoadIntf2ComMdlData *);
 int igObject_GetAllocator(beNDMWLoadIntf2ComMdlCtrl *);
 extern int MODELCTRL[4];
 extern int g_stringPool[4];
-/* Default allocator selector (docs/engine/subwindow-preparation.md). */
+/* Default allocator selector. */
 extern int g_defaultAllocatorSelector[4];
-/* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used
- * as returned instead of the selector (docs/engine/xdata-controller.md). */
+/* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used as returned instead
+ * of the selector. */
 extern unsigned char GPR_00554c14;
 void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, int *modelName, int *sequenceName, int wait);
 }

@@ -1,4 +1,7 @@
-/* 0x00277b00 — FUN_00277b00 (196 bytes). Polls the file transfer (+40) of an lsc object with FUN_0026a138 and updates the current queue entry (slot +32 of the 32-byte ring at +56): state 2 stores the progress from FUN_0026a160, state 3 marks the entry done (2) with the full size (+44), state 4 puts the object in error state (+1 = 3). A missing transfer is reported through FUN_002777f8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Polls the file transfer (+40) of an lsc object with FUN_0026a138 and updates the current queue
+ * entry (slot +32 of the 32-byte ring at +56): state 2 stores the progress from FUN_0026a160,
+ * state 3 marks the entry done (2) with the full size (+44), state 4 puts the object in error
+ * state (+1 = 3). A missing transfer is reported through FUN_002777f8. */
 typedef struct LscEntry_277b00 {
     int id;             /* 0x00 */
     int pad4[5];

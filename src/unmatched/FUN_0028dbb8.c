@@ -1,4 +1,4 @@
-/* 0x0028dbb8 — FUN_0028dbb8 (24 bytes). Sets every field of a 16-byte record to -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets every field of a 16-byte record to -1. */
 typedef struct {
     long long f0;
     int f8;

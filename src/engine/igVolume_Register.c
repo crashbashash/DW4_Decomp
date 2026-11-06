@@ -1,9 +1,9 @@
-/* 0x00186b30 igVolume_Register: static-init registration of igVolume, an abstract class derived
- * from igObject (abstract state 1, so no vtable getter; instance size 8).
- * The igMetaObject_RegisterClass arguments are laid out per docs/engine/reflection-metadata.md
- * section 1 (finding #358); names from data/reflection.json.
- * FUN_00186a40 is the set-once latch (a gp byte flag guards a few shared one-time registrations);
- * FUN_00186bc0 is igVolume's own extra callback item (passed as RegisterClass's stack argument 2). */
+/* igVolume_Register: static-init registration of igVolume, an abstract class derived from igObject
+ * (abstract state 1, so no vtable getter; instance size 8). The igMetaObject_RegisterClass
+ * arguments are laid out per docs/engine/reflection-metadata.md section 1; names from
+ * data/reflection.json. FUN_00186a40 is the set-once latch (a gp byte flag guards a few shared
+ * one-time registrations); FUN_00186bc0 is igVolume's own extra callback item (passed as
+ * RegisterClass's stack argument 2). */
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igVolume_GetMetaObject[];
 extern char FUN_00186bc0[];

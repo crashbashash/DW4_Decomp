@@ -1,4 +1,5 @@
-/* 0x0029b850 — FUN_0029b850 (136 bytes). Passes a chunk to the sink: whole through slot 28 when length is 0, otherwise split at length by FUN_0027d470, head through slot 32 and remainder through slot 28. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Passes a chunk to the sink: whole through slot 28 when length is 0, otherwise split at length by
+ * FUN_0027d470, head through slot 32 and remainder through slot 28. */
 int FUN_0027d470();
 
 /* A data chunk as split by FUN_0027d470: start pointer and length. */

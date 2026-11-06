@@ -1,8 +1,7 @@
-/* 0x00273128 — FUN_00273128 (128 bytes). RPC server thread body: binds the queue at 0x004aa420 to the current
-   thread, registers handler FUN_00273078 for the command id in 0x004a9b14 with receive buffer 0x004aa440,
-   raises the ready flag 0x004a9b18 and enters the serve loop. The call sequence matches ps2sdk's
-   sceSifSetRpcQueue / sceSifRegisterRpc / sceSifRpcLoop (ps2sdk reference: ee/kernel/src/sifrpc.c).
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* RPC server thread body: binds the queue at 0x004aa420 to the current thread, registers handler
+ * FUN_00273078 for the command id in 0x004a9b14 with receive buffer 0x004aa440, raises the ready
+ * flag 0x004a9b18 and enters the serve loop. The call sequence matches ps2sdk's sceSifSetRpcQueue
+ * / sceSifRegisterRpc / sceSifRpcLoop (ps2sdk reference: ee/kernel/src/sifrpc.c). */
 extern int GetThreadId(void);
 extern void FUN_0010e4e0(void *queue, int thread_id);
 extern void FUN_0010e578(void *server, int command, void *handler, void *buffer, void *cancel_handler,

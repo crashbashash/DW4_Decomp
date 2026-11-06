@@ -1,6 +1,3 @@
-/* 0x001324d0 — igTextureCubeAttr_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_0014dfb0();
 int FUN_002dc7a0();
@@ -8,7 +5,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_00131f80(void);  /* code at 0x131f80, passed by address (was DAT_131f80; docs/engine/function-inventory.md) */
+void FUN_00131f80(void);
 extern int DAT_00485c18[4];
 extern int DAT_00485c28[4];
 extern int DAT_00485c38[4];

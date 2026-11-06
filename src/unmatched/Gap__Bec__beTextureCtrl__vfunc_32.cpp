@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* 0x003b00e0 - Gap__Bec__beTextureCtrl__vfunc_32. Typed fields, 64-bit bitfield compare on a 32-bit load, padding nop after the destroy call. */
+/* Typed fields, 64-bit bitfield compare on a 32-bit load, padding nop after the destroy call. */
 typedef struct { int pad0; int rc; } RefObj;
 extern "C" {
 int igObject_Destroy(RefObj *);

@@ -1,4 +1,5 @@
-/* 0x0012a8c8 — FUN_0012a8c8 (76 bytes). Lowercases the string in place using the ctype table's upper-case bit and returns it (newlib strlwr shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Lowercases the string in place using the ctype table's upper-case bit and returns it (newlib
+ * strlwr shape; name is a hypothesis). */
 extern const char DAT_004d3d10[]; /* ctype class table; entry c + 1 classifies character c */
 
 #define CTYPE_UPPER 0x01

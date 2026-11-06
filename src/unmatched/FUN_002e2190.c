@@ -1,5 +1,3 @@
-/* 0x002e2190 — FUN_002e2190. m2c draft, hybrid; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_002e2350();
 
 void *FUN_002e2190(void *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {

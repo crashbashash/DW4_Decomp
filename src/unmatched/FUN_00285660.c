@@ -1,4 +1,6 @@
-/* 0x00285660 — FUN_00285660 (184 bytes). Once FUN_0028b098 accepts the handle, polls `stream` with FUN_00290898 (advancing with FUN_00290ac0 while it returns 4) until a status in mask 0xCC appears, then reports 0 or 0xFF030305 through FUN_002855d8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Once FUN_0028b098 accepts the handle, polls `stream` with FUN_00290898 (advancing with
+ * FUN_00290ac0 while it returns 4) until a status in mask 0xCC appears, then reports 0 or
+ * 0xFF030305 through FUN_002855d8. */
 int FUN_0028b098(void *handle); /* 0 when handle is non-null and in state 2, else -1 */
 void FUN_002855d8(void *handle, int error);
 int FUN_00290898(void *stream);

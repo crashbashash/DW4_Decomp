@@ -1,4 +1,4 @@
-/* 0x002a26e0 — FUN_002a26e0 (244 bytes). Clears options 6 and 5 once their streams (2 and 1) are idle and flags 6/7 allow it. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears options 6 and 5 once their streams (2 and 1) are idle and flags 6/7 allow it. */
 typedef struct SfdStatus8052 {
     int f0;
     int f4;                 /* +4 */

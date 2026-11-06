@@ -1,9 +1,7 @@
-/* igObject_Destroy, 0x002ff820 /268 bytes. RTTI-headed dispatch projection;
- * slot names are indices, not a claim of original C++ method declarations.
- * Finding #917. One explicit four-byte DMOVE preserves the original receiver
- * capture after the system-mode read. Plain assignment hoists that copy into
- * the null-system branch's delay slot (two different instruction words).
- */
+/* igObject_Destroy, 0x002ff820 /268 bytes. RTTI-headed dispatch projection; slot names are
+ * indices, not a claim of original C++ method declarations. One explicit four-byte DMOVE preserves
+ * the original receiver capture after the system-mode read. Plain assignment hoists that copy into
+ * the null-system branch's delay slot (two different instruction words). */
 #include "dw4/reflected.h"
 class igObjectDispatchView {
 public:

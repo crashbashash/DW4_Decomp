@@ -1,6 +1,3 @@
-/* 0x0037f260 — Gap__Bec__beFileListInfoManager__vfunc_23. Banked by tools/retype_struct_member.py (shape: struct0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00236f80(int, int);

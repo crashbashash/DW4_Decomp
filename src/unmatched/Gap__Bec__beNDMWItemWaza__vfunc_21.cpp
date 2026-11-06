@@ -1,5 +1,5 @@
-/* 0x00448f10 — Gap__Bec__beNDMWItemWaza__vfunc_21: forwards its two arguments to the shared item-base data-base request
- * (0x447bc0) with this class's static data-base table (DAT_0051d770) as the third. */
+/* Forwards its two arguments to the shared item-base data-base request (0x447bc0) with this
+ * class's static data-base table (DAT_0051d770) as the third. */
 extern "C" {
 extern char DAT_0051d770[];
 int beNDMWItemBase_RequestDataBase(int, int, char *);

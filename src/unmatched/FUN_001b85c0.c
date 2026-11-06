@@ -1,4 +1,6 @@
-/* 0x001b85c0 - FUN_001b85c0. Removes the top item of the selected slot (callback with the item and the context word), by the selector id of the current mode. The two leading field reads are both volatile so they keep the source order (s2 before s0). Alternate compiler -O3. */
+/* Removes the top item of the selected slot (callback with the item and the context word), by the
+ * selector id of the current mode. The two leading field reads are both volatile so they keep the
+ * source order (s2 before s0). Alternate compiler -O3. */
 #include "dw4/reflected.h"
 struct Slot { int p[2]; int cnt; int p3; int *items; int p5[2]; int (*cb)(int, int, int); };
 struct Y { int p[4]; struct Slot **arr; };

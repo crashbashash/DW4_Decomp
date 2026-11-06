@@ -1,4 +1,5 @@
-/* 0x002acb98 — FUN_002acb98 (112 bytes). Resets a 0xDD8-byte record: clears its head through FUN_0028b530, runs FUN_002acc08 and sets the value/divisor/scale triples to 0/-8/1 and the ids to -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a 0xDD8-byte record: clears its head through FUN_0028b530, runs FUN_002acc08 and sets the
+ * value/divisor/scale triples to 0/-8/1 and the ids to -1. */
 void FUN_0028b530(void *dst, int value, int size);
 void FUN_002acc08(void *record);
 

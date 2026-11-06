@@ -1,4 +1,5 @@
-/* 0x0027d9c0 — FUN_0027d9c0 (76 bytes). Packs two words and a two-word pair into the shared send buffer and issues request 0x27 through FUN_00273820. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Packs two words and a two-word pair into the shared send buffer and issues request 0x27 through
+ * FUN_00273820. */
 int FUN_00273820();
 extern int DAT_005707c0[4]; /* request send buffer shared by the 0x0027d... wrappers */
 

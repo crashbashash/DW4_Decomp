@@ -1,4 +1,6 @@
-/* 0x002777f8 — FUN_002777f8 (140 bytes). printf-style error report: formats the arguments into the message buffer DAT_004abb50 with FUN_0012fde0 and passes it to the registered error callback DAT_004abb48 (with its object DAT_004abb4c), if any. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* printf-style error report: formats the arguments into the message buffer DAT_004abb50 with
+ * FUN_0012fde0 and passes it to the registered error callback DAT_004abb48 (with its object
+ * DAT_004abb4c), if any. */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))

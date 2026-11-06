@@ -1,4 +1,5 @@
-/* 0x0026c978 — FUN_0026c978 (96 bytes). Returns -1 (after reporting DAT_004ee940) for a null handle, 0 without a source, else the source position for argument 1 in 2048-byte sectors. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns -1 (after reporting DAT_004ee940) for a null handle, 0 without a source, else the source
+ * position for argument 1 in 2048-byte sectors. */
 /* Handle layout shared by FUN_0026bb38 … FUN_0026ebf8 (offsets from their accesses). */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {

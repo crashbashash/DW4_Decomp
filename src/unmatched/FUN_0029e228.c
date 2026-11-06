@@ -1,4 +1,4 @@
-/* 0x0029e228 — FUN_0029e228 (104 bytes). Writes the position pair at +40 of channel index under the FUN_002a0e70/FUN_002a0e88 guard. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Writes the position pair at +40 of channel index under the FUN_002a0e70/FUN_002a0e88 guard. */
 void FUN_002a0e70();
 void FUN_002a0e88();
 

@@ -1,4 +1,4 @@
-/* 0x002a5060 — FUN_002a5060 (40 bytes). Resets a record: three zeroed words, then -1, -1, 0 and -1 in the block at +16. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a record: three zeroed words, then -1, -1, 0 and -1 in the block at +16. */
 typedef struct SfdBlock16 {
     long f0;                /* one 64-bit store of -1 covers +16..+23 */
     int f8;

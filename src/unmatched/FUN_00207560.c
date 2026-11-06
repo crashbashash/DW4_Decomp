@@ -8,7 +8,7 @@ int FUN_00207470();
 int FUN_0020d270();
 int FUN_0020d9e0();
 int WaitSema();
-void FUN_00207400(void);  /* code at 0x207400, passed by address (was DAT_207400; docs/engine/function-inventory.md) */
+void FUN_00207400(void);
 extern short DAT_00568e0c[16];
 extern short DAT_00568e0e[16];
 extern short DAT_00568e10[16];

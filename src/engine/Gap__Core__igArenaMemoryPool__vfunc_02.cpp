@@ -1,6 +1,6 @@
-/* 0x0031ec60: call the virtual at vtable offset 392, then the igObject slot-0 base step.
- * The DW4VC_392_0 stand-in class has 96 dummy virtuals so vX() lands at that offset
- * (offset = 8 + 4 * preceding virtuals, docs/engine/m2c-bulk.md). */
+/* call the virtual at vtable offset 392, then the igObject slot-0 base step. The DW4VC_392_0
+ * stand-in class has 96 dummy virtuals so vX() lands at that offset (offset = 8 + 4 * preceding
+ * virtuals). */
 extern "C" {
 int Gap__Core__igObject__vfunc_00(...);
 void Gap__Core__igArenaMemoryPool__vfunc_02(void **self);

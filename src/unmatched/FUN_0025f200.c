@@ -1,4 +1,4 @@
-/* 0x0025f200 — FUN_0025f200 (100 bytes). Returns 1 when a header carries the tag DAT_004ed868 at offset 0 and DAT_004ed870 at offset 8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 when a header carries the tag DAT_004ed868 at offset 0 and DAT_004ed870 at offset 8. */
 int FUN_00127004(const void *a, const void *b, int length);
 extern char DAT_004ed868[];
 extern char DAT_004ed870[];

@@ -1,4 +1,4 @@
-/* 0x0025e608 — FUN_0025e608 (96 bytes). Runs FUN_0025e4b8 on each of the 16 slots in DAT_00498c80 whose state halfword is 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs FUN_0025e4b8 on each of the 16 slots in DAT_00498c80 whose state halfword is 1. */
 /* One 260-byte slot of the DAT_00498c80 table; only the leading state is read here. */
 typedef struct Slot_25e608 {
     short state;

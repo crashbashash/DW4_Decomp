@@ -1,4 +1,5 @@
-/* 0x002a8f90 — FUN_002a8f90 (128 bytes). Consumes count bytes from the stream (+20 and the 64-bit +72) under its semaphore; hangs if the buffer count goes negative. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Consumes count bytes from the stream (+20 and the 64-bit +72) under its semaphore; hangs if the
+ * buffer count goes negative. */
 int SignalSema();
 int WaitSema();
 

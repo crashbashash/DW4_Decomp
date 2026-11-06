@@ -1,4 +1,6 @@
-/* 0x00277898 — FUN_00277898 (128 bytes). Library initialisation under the FUN_00277798/FUN_002777b8 lock: the first call clears the 0x4700-byte work area DAT_004abc70 and runs FUN_00277888 and FUN_002777d0(0, 0); every call counts in DAT_004abc68. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Library initialisation under the FUN_00277798/FUN_002777b8 lock: the first call clears the
+ * 0x4700-byte work area DAT_004abc70 and runs FUN_00277888 and FUN_002777d0(0, 0); every call
+ * counts in DAT_004abc68. */
 typedef struct Lock_277898 {
     int words[4];
 } Lock_277898;

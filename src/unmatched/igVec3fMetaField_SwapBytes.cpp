@@ -1,4 +1,4 @@
-/* 0x0018e310 - igVec3fMetaField_SwapBytes. Unsigned-int shift of the halfword count (srl, not sra). */
+/* Unsigned-int shift of the halfword count (srl, not sra). */
 #include "dw4/reflected.h"
 extern "C" {
 void **FUN_002c4870(...);

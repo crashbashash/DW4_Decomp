@@ -1,5 +1,6 @@
-/* stack-object GetVTable accessor with zeroed members and a trailing destructor call; verified by tools/verify.py.
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* stack-object GetVTable accessor with zeroed members and a trailing destructor call.py. C++
+ * translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 typedef struct { int *vt; int w[23]; } Obj;
 extern "C" {
 int igObject_InitHeader(void *);

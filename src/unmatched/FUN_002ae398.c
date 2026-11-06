@@ -1,4 +1,5 @@
-/* 0x002ae398 — FUN_002ae398 (108 bytes). Bumps the counter at the head of DAT_004bea88 and calls FUN_002ae408 on each of its eight slot objects whose word at +76 is set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Bumps the counter at the head of DAT_004bea88 and calls FUN_002ae408 on each of its eight slot
+ * objects whose word at +76 is set. */
 int FUN_002ae408();
 
 struct SlotObj {

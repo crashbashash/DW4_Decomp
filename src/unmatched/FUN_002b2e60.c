@@ -1,4 +1,4 @@
-/* 0x002b2e60 — FUN_002b2e60 (64 bytes). True when FUN_002b2ea0(arg0) reports 0xE0 and the byte at +32 of the record is exactly 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when FUN_002b2ea0(arg0) reports 0xE0 and the byte at +32 of the record is exactly 1. */
 int FUN_002b2ea0();
 
 struct Rec20 {

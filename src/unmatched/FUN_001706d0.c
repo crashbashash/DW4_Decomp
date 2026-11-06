@@ -1,4 +1,3 @@
-/* 0x001706d0 - FUN_001706d0. typed unsigned char member, int parameter; alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 typedef struct S0 { char pad1340[1340]; unsigned char f1340; } S0;
 int FUN_001e74b0();
 int FUN_001e7500();

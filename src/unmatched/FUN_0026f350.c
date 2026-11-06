@@ -1,4 +1,5 @@
-/* 0x0026f350 — FUN_0026f350 (80 bytes). Returns the first unused entry (byte 0 clear) of the handle pool DAT_0056dfd4 (DAT_0056dfd8 16-byte entries), or 0 when the pool is full. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the first unused entry (byte 0 clear) of the handle pool DAT_0056dfd4 (DAT_0056dfd8
+ * 16-byte entries), or 0 when the pool is full. */
 typedef struct Slot_26f350 {
     signed char used;   /* 0x00 */
     char pad1[15];

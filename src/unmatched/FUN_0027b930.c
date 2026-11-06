@@ -1,4 +1,6 @@
-/* 0x0027b930 — FUN_0027b930 (140 bytes). Rejects a chunk handed to a handle in an unsupported mode (anything but 0 or 1): a non-empty chunk is cleared and the handle's error callback (+28, object +32) gets code -3. A NULL or unused (+4 clear) handle is reported through FUN_0027b2e0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Rejects a chunk handed to a handle in an unsupported mode (anything but 0 or 1): a non-empty
+ * chunk is cleared and the handle's error callback (+28, object +32) gets code -3. A NULL or
+ * unused (+4 clear) handle is reported through FUN_0027b2e0. */
 typedef struct Chunk_27b930 {
     char *data;     /* 0x00 */
     int length;     /* 0x04 */

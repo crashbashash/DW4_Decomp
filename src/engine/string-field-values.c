@@ -1,17 +1,11 @@
-/* src/engine/string-field-values.c — scalar string value operations of
- * igStringMetaField (vtable 0x533180) and the igStringArrayMetaField slots
- * that share its bodies.  Recovered from retail instructions; see
- * docs/engine/string-fields.md and finding #877.
- *
- * One translation unit: 8 functions, in retail address order.  Folded
- * from the per-function units by tools/merge_units.py; the matching build
- * splits a function back out with tools/units.py, so `make check` still
- * verifies one function at a time.
- *
- * A string value is a pointer to interned text ("token") owned by the
- * shared StringPool.  The pool header sits in front of the text: the
- * owner at token - 8 and a full 32-bit reference count at token - 4.
- * When the count reaches zero the header goes back to its owner through
+/* src/engine/string-field-values.c — scalar string value operations of igStringMetaField (vtable
+ * 0x533180) and the igStringArrayMetaField slots that share its bodies. Recovered from retail
+ * instructions.md and finding #877. One translation unit: 8 functions, in retail address order.
+ * Folded from the per-function units by tools/merge_units.py; the matching build splits a function
+ * back out with tools/units.py, so `make check` still verifies one function at a time. A string
+ * value is a pointer to interned text ("token") owned by the shared StringPool. The pool header
+ * sits in front of the text: the owner at token - 8 and a full 32-bit reference count at token -
+ * 4. When the count reaches zero the header goes back to its owner through
  * StringChunk_ReleaseHeader. */
 int igStringMetaField_AssignRetainedToken();
 int StringPool_Construct();
@@ -86,12 +80,12 @@ int igStringMetaField_GetTypeSize(void) {
     return 4;
 }
 
-/* 0x0030ae90 — no-op value hook (docs/engine/string-fields.md). */
+/* no-op value hook. */
 void igStringMetaField_SwapValue(void) {
 
 }
 
-/* 0x0030aea0 — no-op value hook (docs/engine/string-fields.md). */
+/* no-op value hook. */
 void Gap__Core__igStringArrayMetaField__vfunc_53(void) {
 
 }

@@ -1,5 +1,5 @@
-/* 0x0034ff40 - beModelCtrlNode2_InitFields. float literal through a float prototype, byte store Verified byte-identical by tools/verify.py.
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 extern "C" {
 int FUN_0013af00(void);
 int FUN_002e3810(void *, float);

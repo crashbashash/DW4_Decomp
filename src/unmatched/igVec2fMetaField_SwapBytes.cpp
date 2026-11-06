@@ -1,4 +1,3 @@
-/* 0x0018e1b0 - igVec2fMetaField_SwapBytes. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 extern "C" {
 void **FUN_002c4870(...);

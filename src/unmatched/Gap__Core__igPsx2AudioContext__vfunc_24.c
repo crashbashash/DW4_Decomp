@@ -6,7 +6,7 @@ extern int DAT_004d5f98[4];
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];
 extern struct L *DAT_0055f5d0[4];
-void FUN_00143800(void);  /* code at 0x143800, passed by address (was DAT_143800; docs/engine/function-inventory.md) */
+void FUN_00143800(void);
 int FUN_00112ca0();
 int FUN_0032cf50();
 int FUN_00300db0();

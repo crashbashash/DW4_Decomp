@@ -1,4 +1,4 @@
-/* 0x00309750 - FUN_00309750. Smart-pointer out-parameter with inlined releases; flag is a bool tested without a compare. Verified byte-identical by tools/verify.py. */
+/* Smart-pointer out-parameter with inlined releases; flag is a bool tested without a compare. */
 extern "C" { int FUN_002d91c0(...); int FUN_003087a0(...); int igObject_Destroy(...); }
 struct S1 { char pad4[4]; int f4; char pad8[24]; S1 *f32; };
 struct W { char p[12]; S1 *f12; };

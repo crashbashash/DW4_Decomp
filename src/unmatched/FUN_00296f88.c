@@ -1,4 +1,5 @@
-/* 0x00296f88 — FUN_00296f88 (100 bytes). Returns a Sofdec handle's output pan for a channel (its error string names it mwSfdGetOutPan): 0 for an invalid handle, otherwise FUN_00295e40's value. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns a Sofdec handle's output pan for a channel (its error string names it mwSfdGetOutPan): 0
+ * for an invalid handle, otherwise FUN_00295e40's value. */
 extern int FUN_002968c0(void *sfd);
 extern void FUN_0029a320(const char *msg);
 extern int FUN_00295e40(void *sfd, int channel);

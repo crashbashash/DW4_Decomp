@@ -1,6 +1,5 @@
-/* 0x00273f78 — FUN_00273f78 (88 bytes). Shuts an object down: when its state byte (+2) is 2 or more it is
-   stopped through FUN_00274248 first, then the in-use byte (+0) is cleared and FUN_00273de0 releases it.
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Shuts an object down: when its state byte (+2) is 2 or more it is stopped through FUN_00274248
+ * first, then the in-use byte (+0) is cleared and FUN_00273de0 releases it. */
 struct Object273 {
     unsigned char used;   /* +0 */
     unsigned char f1;

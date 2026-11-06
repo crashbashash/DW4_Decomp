@@ -1,4 +1,5 @@
-/* 0x002aa9f0 — FUN_002aa9f0 (192 bytes). Advances the stream state by its kind (2, 3, or 4/6 via FUN_002aaea0/FUN_002abe70) once FUN_002aaab0 reports both inputs ready; returns the state. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Advances the stream state by its kind (2, 3, or 4/6 via FUN_002aaea0/FUN_002abe70) once
+ * FUN_002aaab0 reports both inputs ready; returns the state. */
 int FUN_002aaab0();
 void FUN_002aab60();
 int FUN_002aaea0();

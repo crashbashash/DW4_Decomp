@@ -1,4 +1,4 @@
-/* 0x003278c0 - Gap__Core__igStackMemoryPool__vfunc_53. Aligned stack allocation with a repeated null check. Verified byte-identical by tools/verify.py. */
+/* Aligned stack allocation with a repeated null check. */
 struct S { char p[112]; unsigned short f112; char q[14]; int f128; int f132; int *f136; unsigned char f140; };
 int Gap__Core__igStackMemoryPool__vfunc_53(struct S *arg0) {
     int temp_a1_2;

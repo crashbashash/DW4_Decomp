@@ -1,4 +1,4 @@
-/* 0x0029eaf8 — FUN_0029eaf8 (184 bytes). Reports two positions for a stream object, by direct query, by its interface slot +36, or zero. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports two positions for a stream object, by direct query, by its interface slot +36, or zero. */
 typedef struct SfdStreamObj SfdStreamObj;
 typedef struct SfdStreamVtbl {
     char pad0[36];

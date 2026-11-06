@@ -1,5 +1,3 @@
-/* 0x00236f30 — FUN_00236f30. hand-matched (member access keeps the base pointer, finding #509's
- * shape); verified byte-identical to retail by tools/verify.py. */
 int FUN_002d7750();
 int FUN_00457ca0();
 extern int DAT_004fb410[4];

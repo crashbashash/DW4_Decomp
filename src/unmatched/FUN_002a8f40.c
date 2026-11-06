@@ -1,4 +1,4 @@
-/* 0x002a8f40 — FUN_002a8f40 (80 bytes). Under the record's semaphore, adds a byte count to its 32-bit (+20) and 64-bit (+72) totals. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Under the record's semaphore, adds a byte count to its 32-bit (+20) and 64-bit (+72) totals. */
 typedef struct SfdCounter {
     char pad0[20];
     int total32;            /* +20 */

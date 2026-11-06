@@ -1,4 +1,6 @@
-/* 0x00306770 - FUN_00306770. Stores a shared object reference into *arg3: the existing node's reference when FUN_00307c10 finds one, else a freshly built object held in a stack slot; returns whether a node existed; alternate compiler -O3. */
+/* Stores a shared object reference into *arg3: the existing node's reference when FUN_00307c10
+ * finds one, else a freshly built object held in a stack slot; returns whether a node existed;
+ * alternate compiler -O3. */
 extern "C" {
 struct T { int word0; int references; };
 void igObject_Destroy(T *);

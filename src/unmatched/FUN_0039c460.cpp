@@ -1,13 +1,15 @@
-/* 0x0039c460 - FUN_0039c460. Traversal procedure of beResetNode (registered for the node class by FUN_0039c8c0 through the
- * thunk FUN_0039c430, which swaps the two arguments). While its children are traversed it temporarily replaces the
- * traversal's model-view rotation/scale and/or time:
- *   _isResetRotAndScale: a pooled igModelViewMatrixAttr receives the traversal's view matrix with the translation of the
- *     current model-view attribute, and is pushed on the model-view attribute stack;
- *   _isResetTime: a pooled igTimeAttr takes the root time (first entry of the time stack), the traversal's time is set to it
- *     and the attribute is pushed on the time attribute stack.
- * After the children (FUN_001e07a0) both attributes are popped again and the time is restored; the result is 2 only when the
- * children asked for it.  The code has no object with a destructor, so the retail exception record is the 8-byte header only.
- * Unit profile: combat -O3,p -Iinclude (config/SLUS-20836/units.tsv row 0x0039c430).  Formerly an asm body; reproduces only under the combat -O3,p unit profile (finding #3885).*/
+/* Traversal procedure of beResetNode (registered for the node class by FUN_0039c8c0 through the
+ * thunk FUN_0039c430, which swaps the two arguments). While its children are traversed it
+ * temporarily replaces the traversal's model-view rotation/scale and/or time: _isResetRotAndScale:
+ * a pooled igModelViewMatrixAttr receives the traversal's view matrix with the translation of the
+ * current model-view attribute, and is pushed on the model-view attribute stack; _isResetTime: a
+ * pooled igTimeAttr takes the root time (first entry of the time stack), the traversal's time is
+ * set to it and the attribute is pushed on the time attribute stack. After the children
+ * (FUN_001e07a0) both attributes are popped again and the time is restored; the result is 2 only
+ * when the children asked for it. The code has no object with a destructor, so the retail
+ * exception record is the 8-byte header only. Unit profile: combat -O3,p -Iinclude
+ * (config/SLUS-20836/units.tsv row 0x0039c430). Formerly an asm body; reproduces only under the
+ * combat -O3,p unit profile. */
 #include "dw4/reflected.h"
 extern "C" {
 void igMatrix44f_SetIdentity(float *);

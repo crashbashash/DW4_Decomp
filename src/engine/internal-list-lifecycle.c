@@ -35,9 +35,8 @@ int ObjectPointerList_Append(PointerList *, int); /* physical return candidate #
 unsigned int Memory_GetBufferSize(void *);
 void igObject_Destroy(void *);
 
-/* Vtables stored into offset 0: the plain pointer list (finding #3187) and
- * the derived internal object list that the InternalObjectList_* functions
- * below install over it. */
+/* Vtables stored into offset 0: the plain pointer list and the derived internal object list that
+ * the InternalObjectList_* functions below install over it. */
 extern int g_ObjectPointerList_vtable[4];
 extern int g_InternalObjectList_vtable[4];
 

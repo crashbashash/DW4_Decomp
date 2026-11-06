@@ -1,7 +1,5 @@
 #include "dw4/reflected.h"
-/* 0x003ecb20 — FUN_003ecb20. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * Receiver: beNDMWLoadIntf2MesWin (+16 _messenger, +34 _isCtrl, +44 _ramNo). */
+/* Receiver: beNDMWLoadIntf2MesWin (+16 _messenger, +34 _isCtrl, +44 _ramNo). */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

@@ -1,4 +1,6 @@
-/* 0x0026dc78 — FUN_0026dc78 (140 bytes). With both a source (+4) and a stream (+8): in normal mode (+108 clear) resets the source with FUN_002671c8(source, -1) and opens the stream fully (FUN_0026a300 with 0x7fffffff); otherwise passes the source's byte count (FUN_00267300) as 2048-byte sectors to FUN_0026a140. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* With both a source (+4) and a stream (+8): in normal mode (+108 clear) resets the source with
+ * FUN_002671c8(source, -1) and opens the stream fully (FUN_0026a300 with 0x7fffffff); otherwise
+ * passes the source's byte count (FUN_00267300) as 2048-byte sectors to FUN_0026a140. */
 typedef struct Obj_26dc78 {
     int pad0;
     int source;         /* 0x04 */

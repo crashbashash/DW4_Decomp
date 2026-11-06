@@ -1,4 +1,3 @@
-/* 0x002d3950 — FUN_002d3950. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int List_Reserve();
 int List_Resize();
 struct L { char pad[8]; int cnt; int cap; };

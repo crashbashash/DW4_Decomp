@@ -1,5 +1,6 @@
-/* 0x00334f80 - igAdxFile_InitFields. Thunk address spelled as a function declaration (absolute lui/addiu, not gp-relative).
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* Thunk address spelled as a function declaration (absolute lui/addiu, not gp-relative). C++
+ * translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 extern "C" {
 int FUN_002d3890(int, int);
 int FUN_002ea4b0(int, int);

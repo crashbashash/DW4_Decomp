@@ -1,4 +1,3 @@
-/* 0x00192dd0 - FUN_00192dd0. cross product; the compiler emits mula/msub itself; locals declared in register order, loads in the winning order Verified byte-identical by tools/verify.py. */
 void FUN_00192dd0(float *arg0, float *arg1, float *arg2) {
     float a1; float b2; float a2; float b1; float a0; float b0;
     a0 = arg1[0];

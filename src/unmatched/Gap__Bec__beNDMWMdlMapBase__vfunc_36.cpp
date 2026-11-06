@@ -1,8 +1,8 @@
-/* 0x0044acc0 - Gap__Bec__beNDMWMdlMapBase__vfunc_36: attach the map info work to a RAM slot.
- * Creates the slot's data list on first use, replaces the info-work record (FUN_00350020 creates
- * it) found by name, fills its interned name and number from the messenger's first arguments and
- * hands the slot to the common attach step FUN_00396740.  Both created objects live on the stack
- * in owning references whose releases the retail exception table records. */
+/* Attach the map info work to a RAM slot. Creates the slot's data list on first use, replaces the
+ * info-work record (FUN_00350020 creates it) found by name, fills its interned name and number
+ * from the messenger's first arguments and hands the slot to the common attach step FUN_00396740.
+ * Both created objects live on the stack in owning references whose releases the retail exception
+ * table records. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(...);

@@ -1,4 +1,4 @@
-/* 0x00298378 — FUN_00298378 (28 bytes). Sets the +420 word to -1 and clears the three words at +424. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the +420 word to -1 and clears the three words at +424. */
 typedef struct {
     int f0;
     int f4;

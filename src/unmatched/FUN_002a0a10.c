@@ -1,4 +1,5 @@
-/* 0x002a0a10 — FUN_002a0a10 (192 bytes). Initialises the global state block at DAT_004be8d8 from the template DAT_004f4ea0 and the config, then starts the DAT_004bea98 sub-system with config->f0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises the global state block at DAT_004be8d8 from the template DAT_004f4ea0 and the
+ * config, then starts the DAT_004bea98 sub-system with config->f0. */
 void FUN_0028b0c0();
 void FUN_0028b530();
 void FUN_0029d4a0();

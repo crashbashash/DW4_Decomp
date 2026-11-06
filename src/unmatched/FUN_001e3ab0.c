@@ -1,4 +1,5 @@
-/* 0x001e3ab0 - FUN_001e3ab0. sorted-array lower bound; declaration order (cnt, mid, a, b, hi, lo) and the final increment as a conditional expression. Verified byte-identical by tools/verify.py. */
+/* Sorted-array lower bound; declaration order (cnt, mid, a, b, hi, lo) and the final increment as
+ * a conditional expression. */
 struct L { char pad[8]; int cnt; int pad2; int *items; };
 int FUN_001e3ab0(struct L *arg0, int *arg1) {
     int cnt;

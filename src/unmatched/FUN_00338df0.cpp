@@ -1,5 +1,3 @@
-/* 0x00338df0 — FUN_00338df0. m2c draft with dropped/gap parameters restored; verified
- * byte-identical by tools/verify.py (loop: tools/m2c_loop.py). */
 extern "C" {
 void **igObject_GetAllocator(...);
 void FUN_00338df0(int dummy0, int arg1);

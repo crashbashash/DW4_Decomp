@@ -1,4 +1,6 @@
-/* 0x0026c918 — FUN_0026c918 (88 bytes). Stores the reload sector count (+62) of an ADXT handle and, when it has a stream (+8), passes both sector counts (+62 and +60, scaled to bytes) to FUN_0026a9d8; a NULL handle is reported through FUN_002607e8. Its error string names it ADXT_SetReloadSct (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores the reload sector count (+62) of an ADXT handle and, when it has a stream (+8), passes
+ * both sector counts (+62 and +60, scaled to bytes) to FUN_0026a9d8; a NULL handle is reported
+ * through FUN_002607e8. Its error string names it ADXT_SetReloadSct (CRI), a name hypothesis. */
 typedef struct Adxt_26c918 {
     char pad0[8];
     void *stream;           /* 0x08 */

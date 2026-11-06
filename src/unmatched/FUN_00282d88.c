@@ -1,4 +1,5 @@
-/* 0x00282d88 — FUN_00282d88 (116 bytes). Queues kind-3 command 0x1100 for slot id 1..24 (see FUN_00282c20) through FUN_00281ac0, refusing re-entry. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queues kind-3 command 0x1100 for slot id 1..24 (see FUN_00282c20) through FUN_00281ac0, refusing
+ * re-entry. */
 int FUN_00281ac0(unsigned short kind, unsigned short arg, int a, int b, int c, int d);
 
 /* Context reached through DAT_004bb114 (only the members used here). */

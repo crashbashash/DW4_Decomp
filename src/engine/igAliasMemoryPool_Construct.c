@@ -1,8 +1,6 @@
-/* 0x002d1540 — igAliasMemoryPool constructor.
- * Runs the base-class constructor, publishes the pool's vtable (0x5313a0) and
- * clears the lock, event-tracker and aliased-pool references (offsets 116,
- * 152, 180), then calls igAliasMemoryPool_Initialize on a non-null receiver
- * and returns it (docs/engine/alias-pool-runtime.md, allocator-builder.md). */
+/* igAliasMemoryPool constructor. Runs the base-class constructor, publishes the pool's vtable
+ * (0x5313a0) and clears the lock, event-tracker and aliased-pool references (offsets 116, 152,
+ * 180), then calls igAliasMemoryPool_Initialize on a non-null receiver and returns it. */
 #include "dw4/reflected.h"
 int igAliasMemoryPool_Initialize();
 int FUN_002effb0();  /* base-pool constructor: igObject header init (0x2ff010), base vtable 0x52f620 */

@@ -5,7 +5,7 @@ int png_set_gray_1_2_4_to_8();
 int png_set_tRNS_to_alpha();
 int png_set_read_user_transform_fn();
 int png_set_packing();
-void FUN_001673a0(void);  /* code at 0x1673a0, passed by address (was DAT_1673a0; docs/engine/function-inventory.md) */
+void FUN_001673a0(void);
 int FUN_001681c0(int arg0, int arg1, int arg2) {
     int sp44;
     int sp48;

@@ -1,4 +1,5 @@
-/* 0x002609b8 — FUN_002609b8 (136 bytes). FUN_002608b0 fills text from source, FUN_0012a9f0 appends DAT_004ed8c0 within size, then FUN_002608b0 fills from extra at the end of the text with 4 - length. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* FUN_002608b0 fills text from source, FUN_0012a9f0 appends DAT_004ed8c0 within size, then
+ * FUN_002608b0 fills from extra at the end of the text with 4 - length. */
 extern char DAT_004ed8c0[];
 int strlen(const char *s);
 void FUN_002608b0(void *source, char *text, int size);

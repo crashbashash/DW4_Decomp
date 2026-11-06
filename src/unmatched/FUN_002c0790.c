@@ -1,5 +1,3 @@
-/* 0x002c0790 — FUN_002c0790. m2c draft, hand-fixed; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 #include "dw4/reflected.h"
 int StringChunk_ReleaseHeader();
 int thunk_FUN_002ed460__002ff810();

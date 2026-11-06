@@ -1,4 +1,4 @@
-/* 0x0029c368 — FUN_0029c368 (24 bytes). Forwards the handle and its word at +8196 to FUN_0029ea88. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards the handle and its word at +8196 to FUN_0029ea88. */
 typedef struct SfdHandle_29c368 {
     char pad0[8196];
     int f8196;

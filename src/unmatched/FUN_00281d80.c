@@ -1,4 +1,5 @@
-/* 0x00281d80 — FUN_00281d80 (108 bytes). Copies a 4-word message, passes words 1 and 2 to the context's notification callback when both it and word 2 are set, clears the in-handler flag and re-enables interrupts. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies a 4-word message, passes words 1 and 2 to the context's notification callback when both
+ * it and word 2 are set, clears the in-handler flag and re-enables interrupts. */
 
 struct Message00281d80 {
     int word[4];

@@ -1,6 +1,5 @@
-/* 0x0027a090 — FUN_0027a090 (76 bytes). Updates the byte at +86 of an object to the new value when it
-   differs, only while the library is active (not mode 1 with no entries) and 0x004b1e08 is 2.
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Updates the byte at +86 of an object to the new value when it differs, only while the library is
+ * active (not mode 1 with no entries) and 0x004b1e08 is 2. */
 struct Object27a {
     char pad0[86];
     signed char flag86;   /* +86 */

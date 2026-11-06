@@ -1,4 +1,5 @@
-/* 0x0028d9c0 — FUN_0028d9c0 (160 bytes). Copies a 12-byte block to *out: the global defaults for a null handle, else the validated handle's block at +4 (error 0xFF020102 through FUN_0028d890). Returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies a 12-byte block to *out: the global defaults for a null handle, else the validated
+ * handle's block at +4 (error 0xFF020102 through FUN_0028d890). Returns 0. */
 int FUN_0028da60(void *handle);
 int FUN_0028d890(void *handle, int error);
 

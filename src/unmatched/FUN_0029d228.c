@@ -1,4 +1,4 @@
-/* 0x0029d228 — FUN_0029d228 (108 bytes). Sets flag 7 through FUN_002b03b8 once stream +8468 reports 1 and flag 7 is not already 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets flag 7 through FUN_002b03b8 once stream +8468 reports 1 and flag 7 is not already 1. */
 typedef struct SfdHandle {
     char pad0[8468];
     int f8468;              /* +8468 */

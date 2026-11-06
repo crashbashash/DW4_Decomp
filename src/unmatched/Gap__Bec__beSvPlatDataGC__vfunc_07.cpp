@@ -1,6 +1,3 @@
-/* 0x0036fe40 — Gap__Bec__beSvPlatDataGC__vfunc_07. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern "C" {
 int Gap__Core__igObject__vfunc_07(...);
 int igMetaObject_CountInstances(...);

@@ -1,4 +1,5 @@
-/* 0x00264368 — FUN_00264368 (100 bytes). Resumes a thread if it is currently suspended (or waiting and suspended); returns the ResumeThread result, or 0 when nothing was done. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resumes a thread if it is currently suspended (or waiting and suspended); returns the
+ * ResumeThread result, or 0 when nothing was done. */
 /* EE kernel thread status block filled by ReferThreadStatus (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_status_t) */
 typedef struct ThreadStatus {
     int status;

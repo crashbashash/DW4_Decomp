@@ -1,4 +1,5 @@
-/* 0x00297aa8 — FUN_00297aa8 (108 bytes). Validates the picture's pictureStructure (+140): 1, 2, 3 pass through; anything else is reported ("E301272 : picture_structure is invalid.") and gives 3. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates the picture's pictureStructure (+140): 1, 2, 3 pass through; anything else is reported
+ * ("E301272 : picture_structure is invalid.") and gives 3. */
 void FUN_0029a320(const char *format, ...);
 
 extern char DAT_004f4050[]; /* "E301272 : picture_structure is invalid." */

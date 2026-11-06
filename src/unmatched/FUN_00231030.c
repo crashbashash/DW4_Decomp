@@ -1,5 +1,3 @@
-/* 0x00231030 — FUN_00231030. m2c draft, hand-fixed; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int StringChunk_ReleaseHeader();
 int thunk_FUN_002ed460__002ff810();
 extern int DAT_0052cf80[4];

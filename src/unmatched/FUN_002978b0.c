@@ -1,4 +1,5 @@
-/* 0x002978b0 — FUN_002978b0 (92 bytes). Validates a MwsfdBufFmt value: 1, 2 and 3 pass through; anything else is reported and treated as 3. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates a MwsfdBufFmt value: 1, 2 and 3 pass through; anything else is reported and treated as
+ * 3. */
 void FUN_0029a320(const char *format, ...);
 
 extern char DAT_004f4028[]; /* "E201184 : MwsfdBufFmt value is invalid." */

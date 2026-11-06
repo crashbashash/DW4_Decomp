@@ -1,4 +1,6 @@
-/* 0x002d40f0 — Gap__Core__igCallStackTable__vfunc_31. igCallStackTable vfunc 31: reserves/resizes the slot list to arg1 entries (or releases it for 0), fills it from the table symbol, then walks the zero-terminated records through virtual 28. Alternate compiler -O3; declaration order found by permutation search. */
+/* IgCallStackTable vfunc 31: reserves/resizes the slot list to arg1 entries (or releases it for
+ * 0), fills it from the table symbol, then walks the zero-terminated records through virtual 28.
+ * Alternate compiler -O3; declaration order found by permutation search. */
 extern "C" {
 extern int DAT_004c1e98[];
 void *FUN_002ca8b0(int);

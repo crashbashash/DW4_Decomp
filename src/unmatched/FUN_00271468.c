@@ -1,4 +1,6 @@
-/* 0x00271468 — FUN_00271468 (180 bytes). Returns the 64-bit size of the named file: finds its device (FUN_0026fe00/FUN_0026fbb8) and, when the device has option function 1 (+96), asks it for the high (code 202) and low (code 203) 32-bit halves; 0 when there is no option function. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the 64-bit size of the named file: finds its device (FUN_0026fe00/FUN_0026fbb8) and,
+ * when the device has option function 1 (+96), asks it for the high (code 202) and low (code 203)
+ * 32-bit halves; 0 when there is no option function. */
 typedef struct CvFsDevice_271468 {
     void *pad0[24];
     int (*opt_fn1)(const char *path, int code, char *file_name, int arg);  /* 0x60 */

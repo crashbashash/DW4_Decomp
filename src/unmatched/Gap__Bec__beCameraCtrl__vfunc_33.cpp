@@ -1,8 +1,8 @@
-/* 0x00379ce0 - Gap__Bec__beCameraCtrl__vfunc_33: beCameraCtrl message handler (ResolveEnumValue over the camera
- * message table).  Per message: 0/1 camera box on/off, 2 report the average position, 3/4 arm / disarm the info,
- * 5 reset, 6 arm unless another camera info of the same manager has the named camera, 7 report the info name,
- * 8 poll for a finished shake, 9 start a shake record (SHAKEONE / SHAKEALL), 10/11 freeze toggles on the camera mode,
- * 12..14 debug zoom.  Returns 1 when the message was handled. */
+/* BeCameraCtrl message handler (ResolveEnumValue over the camera message table). Per message: 0/1
+ * camera box on/off, 2 report the average position, 3/4 arm / disarm the info, 5 reset, 6 arm
+ * unless another camera info of the same manager has the named camera, 7 report the info name, 8
+ * poll for a finished shake, 9 start a shake record (SHAKEONE / SHAKEALL), 10/11 freeze toggles on
+ * the camera mode, 12..14 debug zoom. Returns 1 when the message was handled. */
 #include "dw4/reflected.h"
 #pragma inline_depth(8)
 extern "C" {

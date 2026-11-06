@@ -1,7 +1,7 @@
-/* 0x003f80e0 - FUN_003f80e0: index of the evolution-database record whose name string is the interned
- * copy of arg1 (0..15), or 0; the database object is fetched from the messenger on first use.
- * The interned name lives in a StringRef for the whole search (released at both exits); the record
- * compare is a pointer compare of the pooled tokens. alternate compiler -O3,p */
+/* Index of the evolution-database record whose name string is the interned copy of arg1 (0..15),
+ * or 0; the database object is fetched from the messenger on first use. The interned name lives in
+ * a StringRef for the whole search (released at both exits); the record compare is a pointer
+ * compare of the pooled tokens. alternate compiler -O3,p */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(int);

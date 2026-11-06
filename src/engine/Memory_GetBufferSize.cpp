@@ -1,10 +1,8 @@
-/* 0x002ed4e0 — Memory_GetBufferSize: find the allocator that owns `buffer`
- * (Memory_FindOwningAllocator, 0x002f04f0) and ask it for the buffer's size
- * through its vtable offset 336 (docs/engine/memory-field-copy.md, "Raw
- * buffers are duplicated").  Matching construct: the owner lookup is declared
- * variadic and called without arguments so it sees the untouched argument
- * register, and the function is declared void although the allocator's reply
- * stays in v0 for the caller. */
+/* Find the allocator that owns `buffer` (Memory_FindOwningAllocator, 0x002f04f0) and ask it for
+ * the buffer's size through its vtable offset 336 (docs/engine/memory-field-copy.md, "Raw buffers
+ * are duplicated"). Matching construct: the owner lookup is declared variadic and called without
+ * arguments so it sees the untouched argument register, and the function is declared void although
+ * the allocator's reply stays in v0 for the caller. */
 extern "C" {
 void **Memory_FindOwningAllocator(...);
 void Memory_GetBufferSize(int buffer);

@@ -1,6 +1,3 @@
-/* 0x003ae770 — FUN_003ae770. Banked by tools/retype_struct_member.py (shape: struct2):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 typedef struct S0 { char pad36[36]; int f24; } S0;
 typedef struct S1 { char pad48[48]; int f30; } S1;
 extern "C" {

@@ -1,4 +1,5 @@
-/* FUN_0022e0a0 - dynamic-cast pair then a typed field copy. Parameters reused in place, one padding nop in the then-arm, alternate compiler -O3. Verified byte-identical by tools/verify.py. */
+/* FUN_0022e0a0 - dynamic-cast pair then a typed field copy. Parameters reused in place, one
+ * padding nop in the then-arm, alternate compiler -O3. */
 int igObject_IsKindOf();
 extern int DAT_00586930[4];
 int FUN_0022e0a0(void *arg0, int arg1, void *arg2, int arg3) {

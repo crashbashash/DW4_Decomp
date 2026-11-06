@@ -1,4 +1,6 @@
-/* 0x0029a690 — FUN_0029a690 (136 bytes). When the handle's stream reports status 3, prepares playback (FUN_00295398, FUN_00295908 unless flagged at +118) and, if linking is requested at +116, reports a failed stream link (error string from mwPlyStartXX). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When the handle's stream reports status 3, prepares playback (FUN_00295398, FUN_00295908 unless
+ * flagged at +118) and, if linking is requested at +116, reports a failed stream link (error
+ * string from mwPlyStartXX). */
 extern int FUN_002ad910(int stream);
 extern int FUN_00295398(void *ply);
 extern void FUN_00295908(void *ply, int arg);

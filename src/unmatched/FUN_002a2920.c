@@ -1,4 +1,5 @@
-/* 0x002a2920 — FUN_002a2920 (176 bytes). Updates the clock offset at +3712 from the stream's start time and, for a fresh timing record (f0 == 0), fills it from the clock, video block and stream parameters. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Updates the clock offset at +3712 from the stream's start time and, for a fresh timing record
+ * (f0 == 0), fills it from the clock, video block and stream parameters. */
 struct Timing {
     int f0;
     int f4;

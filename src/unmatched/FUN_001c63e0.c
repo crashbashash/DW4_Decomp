@@ -1,6 +1,3 @@
-/* 0x001c63e0 — FUN_001c63e0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 void *igMetaObject_FindFieldByName();
 extern int DAT_004e4640[4];
 extern void * DAT_00562770[4];

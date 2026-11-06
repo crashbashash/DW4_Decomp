@@ -1,4 +1,6 @@
-/* 0x00292af0 — FUN_00292af0 (144 bytes). Resets a handle's SFD decoder (its error strings name it MWSFCRE_ResetSfdHn): stops it (FUN_002abe98, "SFD_Stop"), reinstalls the error callback FUN_00295010 (FUN_002a0c68, "SFD_SetErrFn") and reinitialises the handle; returns -1 on either failure. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a handle's SFD decoder (its error strings name it MWSFCRE_ResetSfdHn): stops it
+ * (FUN_002abe98, "SFD_Stop"), reinstalls the error callback FUN_00295010 (FUN_002a0c68,
+ * "SFD_SetErrFn") and reinitialises the handle; returns -1 on either failure. */
 extern int FUN_002abe98(int sfd);
 extern int FUN_002a0c68(int sfd, void (*errFn)(void), void *ctx);
 extern void FUN_00295010(void);

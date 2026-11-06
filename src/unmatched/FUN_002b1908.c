@@ -1,4 +1,4 @@
-/* 0x002b1908 — FUN_002b1908 (20 bytes). Fills a three-word record: valid flag 1, then the two arguments. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills a three-word record: valid flag 1, then the two arguments. */
 
 struct Rec0C {
     int f0;                               /* set to 1 */

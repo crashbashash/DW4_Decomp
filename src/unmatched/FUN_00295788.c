@@ -1,4 +1,6 @@
-/* 0x00295788 — FUN_00295788 (128 bytes). Starts a Sofdec handle on a stream-joint source (its error string names it mwSfdStartSj): rejects an invalid handle, otherwise resets it, records the source, sets state 2, clears the counters and kicks playback. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Starts a Sofdec handle on a stream-joint source (its error string names it mwSfdStartSj):
+ * rejects an invalid handle, otherwise resets it, records the source, sets state 2, clears the
+ * counters and kicks playback. */
 extern int FUN_002968c0(void *sfd);
 extern void FUN_0029a320(const char *msg);
 extern void FUN_00295808(void *sfd);

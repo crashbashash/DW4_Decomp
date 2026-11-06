@@ -1,4 +1,5 @@
-/* 0x002a99c8 — FUN_002a99c8 (100 bytes). Latches an 8-byte event record into DAT_00585680 and the player context (+4472), sets DAT_00585678 and reports event 0xFF000F40. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Latches an 8-byte event record into DAT_00585680 and the player context (+4472), sets
+ * DAT_00585678 and reports event 0xFF000F40. */
 void FUN_002a0bb8();
 extern int DAT_00585678;
 extern char DAT_00585680[8];

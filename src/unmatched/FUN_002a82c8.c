@@ -1,4 +1,5 @@
-/* 0x002a82c8 — FUN_002a82c8 (48 bytes). Returns the record at +2768 of the handle's work area while the state's count at +136 is not positive, else NULL. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the record at +2768 of the handle's work area while the state's count at +136 is not
+ * positive, else NULL. */
 typedef struct SfdPlayState {
     char pad0[136];
     int f136;               /* +136 */

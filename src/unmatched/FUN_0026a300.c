@@ -1,4 +1,4 @@
-/* 0x0026a300 — FUN_0026a300 (24 bytes). Sets field 48 of a request to value, or to its sector count when value is negative. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets field 48 of a request to value, or to its sector count when value is negative. */
 /* Request layout shared by FUN_00269ff0 … FUN_0026a300 (offsets from their accesses). */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */

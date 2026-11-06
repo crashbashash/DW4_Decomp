@@ -1,4 +1,4 @@
-/* 0x002a7a30 — FUN_002a7a30 (160 bytes). Initialises \`count\` 232-byte slots, taking each slot's id from \`ids\`. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises \`count\` 232-byte slots, taking each slot's id from \`ids\`. */
 typedef struct SfdSlot {
     int f0;
     int f4;

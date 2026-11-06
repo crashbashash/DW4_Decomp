@@ -1,9 +1,7 @@
-/* 0x002f2200
- * Tear down the two allocator registries built by the startup routine at
- * 0x002f2180 (docs/engine/registry-bootstrap.md, finding #896): release the
- * primary then the secondary list with delete flag 1, clear both globals, then
- * call the root allocator's virtual method at vtable offset 392.  Each global is
- * reloaded for its release, so a release callback may change the second one. */
+/* Tear down the two allocator registries built by the startup routine at 0x002f2180: release the
+ * primary then the secondary list with delete flag 1, clear both globals, then call the root
+ * allocator's virtual method at vtable offset 392. Each global is reloaded for its release, so a
+ * release callback may change the second one. */
 extern "C" {
 int igMemoryPoolInfoList_Release(...);
 /* Registry lists: primary at 0x586f58, secondary at 0x586f60. */

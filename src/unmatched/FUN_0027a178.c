@@ -1,4 +1,6 @@
-/* 0x0027a178 — FUN_0027a178 (132 bytes). Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0, closes channel id (0 or 1): when its slot in DAT_004b1e00 is set, sends command 17 with the id through FUN_00273820 and clears the slot. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0, closes channel id (0 or 1):
+ * when its slot in DAT_004b1e00 is set, sends command 17 with the id through FUN_00273820 and
+ * clears the slot. */
 extern int DAT_004b1dc8;
 extern int DAT_004b1dc0;
 extern int DAT_004b1e00[2];

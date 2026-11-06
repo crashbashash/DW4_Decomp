@@ -1,5 +1,4 @@
-/* 0x002751d8 — FUN_002751d8 (36 bytes). Queries FUN_00274e30 into a 48-byte local record and reports
-   whether its first word is non-zero. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queries FUN_00274e30 into a 48-byte local record and reports whether its first word is non-zero. */
 struct Info275 {
     int first;
     int rest[11];

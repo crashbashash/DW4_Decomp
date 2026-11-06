@@ -1,4 +1,5 @@
-/* 0x00240de0 - FUN_00240de0. C++ virtual slot 88 plus an iterator loop with a goto exit; local declaration order found by permutation search (Ob*, Meta*, ints, iterator); alternate compiler -O3 */
+/* C++ virtual slot 88 plus an iterator loop with a goto exit; local declaration order found by
+ * permutation search (Ob*, Meta*, ints, iterator); alternate compiler -O3 */
 struct Meta { char p[28]; int f28; };
 struct Ob { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8(); virtual void a9(); virtual void a10(); virtual void a11(); virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15(); virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19(); virtual Meta *v20(); };
 struct It { int b; int c; };

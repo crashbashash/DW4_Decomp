@@ -1,4 +1,4 @@
-/* 0x0026a160 - FUN_0026a160. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 int FUN_0026a160(void *arg0) {
     int var_v0;
 

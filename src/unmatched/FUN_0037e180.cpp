@@ -1,5 +1,5 @@
-/* 0x0037e180 — FUN_0037e180: when the manager's "turning OK" flag is raised, queue a
- * kind-5 keep-message on the build work's list and drop the flag. */
+/* When the manager's "turning OK" flag is raised, queue a kind-5 keep-message on the build work's
+ * list and drop the flag. */
 #include "dw4/reflected.h"
 
 extern "C" {

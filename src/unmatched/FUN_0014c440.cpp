@@ -1,4 +1,3 @@
-/* 0x0014c440 — FUN_0014c440. Hand-retyped from the m2c draft, verified byte-identical to retail by tools/verify.py. */
 extern "C" int igObject_Destroy(void *);
 extern "C" int thunk_FUN_002ed460__002ff810(void *);
 extern int DAT_00526600[4];

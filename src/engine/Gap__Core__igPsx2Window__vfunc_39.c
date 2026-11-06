@@ -1,9 +1,7 @@
-/* 0x00148be0 — igPsx2Window setter for the _vc field (the view context
- * reference, +0x18).  Standard reference-counted assignment: retain the new
- * object, release the old one (destroying it when its count reaches zero),
- * then store.  Returns 0 and leaves the field alone when handed NULL, 1 once
- * the new view context is stored.  The refcount is the low 23 bits of
- * igObject::_refCount (see src/engine/ref-field-lifecycle.cpp). */
+/* igPsx2Window setter for the _vc field (the view context reference, +0x18). Standard reference-
+ * counted assignment: retain the new object, release the old one (destroying it when its count
+ * reaches zero), then store. Returns 0 and leaves the field alone when handed NULL, 1 once the new
+ * view context is stored. The refcount is the low 23 bits of igObject::_refCount. */
 #include "dw4/reflected.h"
 void igObject_Destroy(void *);
 

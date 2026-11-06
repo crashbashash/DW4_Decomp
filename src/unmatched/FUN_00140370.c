@@ -1,6 +1,3 @@
-/* 0x00140370 — FUN_00140370. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_00174ea0(int, int);
 int FUN_00174ee0(int, int);

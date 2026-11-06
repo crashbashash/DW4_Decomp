@@ -1,19 +1,17 @@
 /* Exact constructor/free dispatch. Virtual classes are ABI views; do not instantiate. */
 #include "dw4/reflected.h"
 
-/* The raw pointer list is the ancestor of the retained list (__internalObjectList):
- * object header, then data buffer +8 and signed count +12, the layout of
- * __internalNonRefCountedObjectList.  It stamps vtable 0x00532770 and takes its
- * buffer from the object's allocator (docs/engine/internal-object-lists.md). */
+/* The raw pointer list is the ancestor of the retained list (__internalObjectList): object header,
+ * then data buffer +8 and signed count +12, the layout of __internalNonRefCountedObjectList. It
+ * stamps vtable 0x00532770 and takes its buffer from the object's allocator. */
 
-/* 0x002ea4f0 - ObjectPointerList_Construct: build the header, run the raw
- * initializer, then ask the object's allocator (virtual slot 216, allocate) for
- * the 16-byte data buffer (docs/engine/internal-object-lists.md). */
+/* Build the header, run the raw initializer, then ask the object's allocator (virtual slot 216,
+ * allocate) for the 16-byte data buffer. */
 extern "C" {
 int ObjectPointerList_Init(...);
 int igObject_ConstructHeader(...);
 void **igObject_GetAllocator(...);
-/* vtable of the raw pointer list (finding #882) */
+/* vtable of the raw pointer list */
 extern int g_ObjectPointerList_vtable[4];
 void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self);
 }
@@ -32,9 +30,8 @@ void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self) {
     return self;
 }
 
-/* 0x002ea630 - ObjectPointerList_Destruct: free the data buffer, if any, through
- * the object's allocator (virtual slot 264, free), then run the base object
- * destructor.  The buffer pointer is not cleared (docs/engine/internal-object-lists.md). */
+/* Free the data buffer, if any, through the object's allocator (virtual slot 264, free), then run
+ * the base object destructor. The buffer pointer is not cleared. */
 extern "C" {
 void **igObject_GetAllocator(...);
 int Gap__Core__igObject__vfunc_00__002ff0a0(...);

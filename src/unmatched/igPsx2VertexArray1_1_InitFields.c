@@ -1,4 +1,4 @@
-/* 0x00152680 - igPsx2VertexArray1_1_InitFields. the thunk address is a function declaration (an extern int object is gp-relative); one temp. Verified byte-identical by tools/verify.py. */
+/* The thunk address is a function declaration (an extern int object is gp-relative); one temp. */
 #include "dw4/reflected.h"
 int FUN_00152800();
 int FUN_002c9170();

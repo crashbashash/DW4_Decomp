@@ -1,4 +1,3 @@
-/* 0x00302780 — FUN_00302780. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int igObject_Destroy();
 struct R { int w0; int rc; };
 struct A { char pad[8]; int f8; char pad2[48]; unsigned char f60; };

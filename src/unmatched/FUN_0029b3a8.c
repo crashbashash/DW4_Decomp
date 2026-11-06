@@ -1,4 +1,5 @@
-/* 0x0029b3a8 — FUN_0029b3a8 (96 bytes). Recognises a 288-byte stream header (0x80, 0x00 lead bytes and the 6-byte DAT_004f4b68 tag at +282); always reports the header size. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Recognises a 288-byte stream header (0x80, 0x00 lead bytes and the 6-byte DAT_004f4b68 tag at
+ * +282); always reports the header size. */
 int FUN_0012aba0();
 extern char DAT_004f4b68[];
 

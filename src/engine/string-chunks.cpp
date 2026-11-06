@@ -1,8 +1,7 @@
-/* 0x0030c9b0 — byte-identical packed-storage initialization, finding #868.
- * ABI declarations below describe only observed fields and vtable position.
- * Reserved slots are not recovered method names; never instantiate this view.
- * MWCC reserves two leading slots, so 52 preceding methods place allocate at
- * byte 216. Host code uses the separate arena/memory-accessor reconstruction. */
+/* ABI declarations below describe only observed fields and vtable position. Reserved slots are not
+ * recovered method names; never instantiate this view. MWCC reserves two leading slots, so 52
+ * preceding methods place allocate at byte 216. Host code uses the separate arena/memory-accessor
+ * reconstruction. */
 class AllocatorSlot216 {
 public:
     virtual void reserved0(); virtual void reserved1(); virtual void reserved2(); virtual void reserved3();

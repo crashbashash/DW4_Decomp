@@ -1,4 +1,3 @@
-/* 0x0030e6b0 - FUN_0030e6b0. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int sprintf();
 int FUN_002eb010();
 int StringPool_Construct();

@@ -1,4 +1,3 @@
-/* 0x3a68e0 — FUN_003a68e0. Retyped m2c draft, verified byte-identical by tools/verify.py. */
 extern "C" {
 float FUN_00123640(float, float);
 extern float DAT_0058a5e0[4];

@@ -1,4 +1,5 @@
-/* 0x002afc08 — FUN_002afc08 (152 bytes). Copies a 60-byte record from `src` to `dst`, then resets the source through FUN_002afcb8(src, 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies a 60-byte record from `src` to `dst`, then resets the source through FUN_002afcb8(src,
+ * 0). */
 struct Record60 {
     int words[15];
 };

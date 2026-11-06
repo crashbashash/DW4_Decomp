@@ -1,4 +1,5 @@
-/* 0x00281018 — FUN_00281018 (96 bytes). If the context is open, runs FUN_00281078(arg, extra) then repeats FUN_00281df0/FUN_00281cf8 on `arg` while the latter returns 1; a final 2 maps to 0, a closed context to -30. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* If the context is open, runs FUN_00281078(arg, extra) then repeats FUN_00281df0/FUN_00281cf8 on
+ * `arg` while the latter returns 1; a final 2 maps to 0, a closed context to -30. */
 int FUN_00281078();
 int FUN_00281df0();
 int FUN_00281cf8();

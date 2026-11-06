@@ -1,9 +1,9 @@
-/* 0x0038a6e0 - Gap__Bec__beLuaState__vfunc_22: load a Lua script file into the state's buffer and run it.
- * Resolves the script name through a locator object (FUN_00362f90 / FUN_0037f1b0; 2 = not found),
- * opens it through a reader object (FUN_00334dc0; v23 = open, v25 = read, v24 = close), reads the
- * whole file into a fresh _lp buffer, replaces the "[EOF]" marker's bracket by '0' to terminate the
- * chunk and runs the text with igLuaState_RunBuffer; -1 on any failure.  Both helper objects live on
- * the stack in owning references whose releases the retail exception table records. */
+/* Load a Lua script file into the state's buffer and run it. Resolves the script name through a
+ * locator object (FUN_00362f90 / FUN_0037f1b0; 2 = not found), opens it through a reader object
+ * (FUN_00334dc0; v23 = open, v25 = read, v24 = close), reads the whole file into a fresh _lp
+ * buffer, replaces the "[EOF]" marker's bracket by '0' to terminate the chunk and runs the text
+ * with igLuaState_RunBuffer; -1 on any failure. Both helper objects live on the stack in owning
+ * references whose releases the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(igObject *);

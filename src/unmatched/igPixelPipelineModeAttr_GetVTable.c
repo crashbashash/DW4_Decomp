@@ -1,4 +1,3 @@
-/* 0x00134bf0 - igPixelPipelineModeAttr_GetVTable. temporary stack object as a union (byte index folds into the load), alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 int igObject_InitHeader();
 extern int DAT_00523200[4];
 extern void * DAT_00586dc8[4];

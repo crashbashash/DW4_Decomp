@@ -1,6 +1,5 @@
-/* 0x003226e0 — Gap::Core::igMallocMemoryPool::vfunc_35: setter for the pool's 64-bit _size
- * (+136 in include/dw4/reflected.h).  It reports through a status word, always the
- * "succeeded" one (docs/engine/array-storage.md: the word at 0x004fb410). */
+/* Setter for the pool's 64-bit _size (+136 in include/dw4/reflected.h). It reports through a
+ * status word, always the "succeeded" one (docs/engine/array-storage.md: the word at 0x004fb410). */
 #include "dw4/reflected.h"
 /* Status word reported on success; array form keeps the load absolute (lui/lw). */
 extern int g_statusSucceeded[4];

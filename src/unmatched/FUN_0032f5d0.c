@@ -6,7 +6,7 @@ int FUN_0032a1b0();
 struct O *FUN_0032a1e0();
 int FUN_0032a600();
 int List_InsertWords();
-void FUN_0032a260(void);  /* code at 0x32a260, passed by address (was DAT_32a260; docs/engine/function-inventory.md) */
+void FUN_0032a260(void);
 extern int DAT_004ffa98[4];
 extern int DAT_004ffdd0[4];
 extern int DAT_004ffdf0[4];

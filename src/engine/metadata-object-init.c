@@ -1,16 +1,15 @@
-/* 0x002fd820 igMetaObject_Init: reset a freshly constructed metaobject to its
- * defaults (docs/engine/metadata-bootstrap.md): version 1.0, persistent, required
- * alignment 4, declared size -1, every name, list, proxy and callback cleared.  It then
- * interns the empty string as the pool name, creating the shared string pool on first
- * use.  The object is assumed fresh: no previous lists are released. */
+/* igMetaObject_Init: reset a freshly constructed metaobject to its defaults: version 1.0,
+ * persistent, required alignment 4, declared size -1, every name, list, proxy and callback
+ * cleared. It then interns the empty string as the pool name, creating the shared string pool on
+ * first use. The object is assumed fresh: no previous lists are released. */
 #include "dw4/reflected.h"
 void *igObject_InitHeader(void *);
 int FUN_002eb010(int);
 int StringPool_Construct(int);
 void *StringPool_Intern(int,int);
 int StringChunk_ReleaseHeader(int,void *);
-/* igMetaObject vtable (docs/engine/metadata-bootstrap.md, vtable 532bb0) and the
- * shared string pool singleton (finding #1035); array form keeps the load absolute. */
+/* igMetaObject vtable (docs/engine/metadata-bootstrap.md, vtable 532bb0) and the shared string
+ * pool singleton; array form keeps the load absolute. */
 extern int g_igMetaObject_vtable[4],g_stringPool[4];
 igMetaObject *igMetaObject_Init(igMetaObject *meta){
     int pool,oldName,refCount;int *oldHeader;void *emptyToken;

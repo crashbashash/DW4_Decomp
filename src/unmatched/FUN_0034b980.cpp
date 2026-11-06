@@ -1,4 +1,4 @@
-/* 0x0034b980 - FUN_0034b980. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 extern "C" {
 int igMetaEnum_Create(int *, int *, int *, int);
 extern int DAT_004c4550[4];

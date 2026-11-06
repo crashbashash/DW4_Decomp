@@ -1,6 +1,3 @@
-/* 0x0013b1a0 — igAttr_InitFields. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int FUN_0030a520();
 int igMetaObject_CreateFields();

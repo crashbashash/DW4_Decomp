@@ -1,4 +1,3 @@
-/* 0x0030c670 — StringTable_InsertAt. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int memmove();
 int Memory_ReallocateBuffer();
 struct S { char pad[4]; volatile unsigned cnt; unsigned f8; int f12; char *f16; };

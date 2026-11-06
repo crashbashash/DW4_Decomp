@@ -1,4 +1,6 @@
-/* 0x0029c2c0 — FUN_0029c2c0 (168 bytes). Looks up the current entry via FUN_0029e370; when present, folds its two FUN_0029eaf8 values and those of the second table's entry into the four 64-bit accumulators at +2480..+2512 with FUN_0029ecb0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks up the current entry via FUN_0029e370; when present, folds its two FUN_0029eaf8 values and
+ * those of the second table's entry into the four 64-bit accumulators at +2480..+2512 with
+ * FUN_0029ecb0. */
 int FUN_0029e370();
 int FUN_0029eaf8();
 long FUN_0029ecb0();

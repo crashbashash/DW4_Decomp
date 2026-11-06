@@ -1,4 +1,5 @@
-/* 0x002a8c08 — FUN_002a8c08 (100 bytes). Writes the IPU_TO DMA channel (4) CHCR with the DMAC suspended, inside the FUN_00113f20/FUN_00113f78 guard. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Writes the IPU_TO DMA channel (4) CHCR with the DMAC suspended, inside the
+ * FUN_00113f20/FUN_00113f78 guard. */
 void FUN_00113f20();
 void FUN_00113f78();
 

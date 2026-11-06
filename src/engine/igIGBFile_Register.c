@@ -11,7 +11,7 @@ extern char igIGBFile_className[];
 extern char g_igIGBFile_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
-void FUN_002c43a0(void);  /* code at 0x2c43a0, passed by address (was DAT_2c43a0; docs/engine/function-inventory.md) */
+void FUN_002c43a0(void);
 int igIGBFile_InitFields();
 
 void igIGBFile_Register(void) {

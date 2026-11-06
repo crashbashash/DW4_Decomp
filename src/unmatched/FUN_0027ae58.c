@@ -1,6 +1,5 @@
-/* 0x0027ae58 — FUN_0027ae58 (80 bytes). Sets one entry of the per-channel level table (+64, one word per
-   channel), clamped to -15..15, while the library is active (not mode 1 with no entries).
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets one entry of the per-channel level table (+64, one word per channel), clamped to -15..15,
+ * while the library is active (not mode 1 with no entries). */
 struct Voice27a {
     char pad0[64];
     int channel_level[8];   /* +64 */

@@ -1,6 +1,3 @@
-/* 0x0013b8a0 — FUN_0013b8a0. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 int igAttr_GetMetaObject();
 int FUN_002fe290();
 extern short GPR_00554b04;

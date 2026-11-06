@@ -5,7 +5,7 @@ extern char igVisualAttribute_Register[];
 extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igModelViewMatrixAttr_GetVTable[];
 extern char thunk_igModelViewMatrixAttr_GetMetaObject[];
-void FUN_00135980(void);  /* code at 0x135980, passed by address (was DAT_135980; docs/engine/function-inventory.md) */
+void FUN_00135980(void);
 extern char igModelViewMatrixAttr_className[];
 extern char g_igModelViewMatrixAttr_metaObject[];
 int GpFlag_SetOnce_00130000();

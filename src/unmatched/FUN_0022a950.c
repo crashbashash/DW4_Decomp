@@ -1,4 +1,3 @@
-/* 0x0022a950 - FUN_0022a950. Near-miss sweep fix (alternate compiler), verified byte-identical to retail by tools/verify.py. */
 struct S22 { int a0, a1, b, c; };
 int FUN_002fe300();
 int igMetaObject_CountTree();

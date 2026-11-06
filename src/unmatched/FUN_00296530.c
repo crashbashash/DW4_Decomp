@@ -1,4 +1,5 @@
-/* 0x00296530 — FUN_00296530 (116 bytes). mwPlySetBpicSkip / mwPlySetPpicSkip (named by the shared diagnostic): sets decoder parameter `param` of a valid player's target (+64) to whether `mode` differs from 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* mwPlySetBpicSkip / mwPlySetPpicSkip (named by the shared diagnostic): sets decoder parameter
+ * `param` of a valid player's target (+64) to whether `mode` differs from 1. */
 int FUN_002968c0(void *player); /* non-zero for a valid player handle */
 void FUN_002ad950(int target, int param, int value);
 void FUN_0029a320(const char *format, ...);

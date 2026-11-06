@@ -1,4 +1,5 @@
-/* 0x002a9a30 — FUN_002a9a30 (160 bytes). Fetches the stream's two buffer spans (FUN_002a8e50), submits them in the uncached segment to FUN_002a9dc8 and reports the result to FUN_002a8f40. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fetches the stream's two buffer spans (FUN_002a8e50), submits them in the uncached segment to
+ * FUN_002a9dc8 and reports the result to FUN_002a8f40. */
 void FUN_002a8e50();
 void FUN_002a8f40();
 int FUN_002a9dc8();

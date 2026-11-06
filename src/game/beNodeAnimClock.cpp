@@ -1,22 +1,17 @@
-/* 0x0039a9e0 - advance the base node animation clock, or return its locked time.
- * See docs/engine/stage-loading.md (finding #2747) and docs/engine/action2-timing.md
- * for the clock model: the engine clock counts nanoseconds and every consumer
- * scales it in 2^18 ns ticks.
- *
- * A nonzero _stopTime is returned unchanged.  Otherwise the time since the
- * previous update is added to _playTime; when it exceeds 33,333,333 ns the
- * excess is taken off _timeBias, so a long stall does not jump the animation.
- * The node's local time is (ticks * _timeScale) << 18 plus _timeBias; once it
- * reaches the loop end (_loop2Time) the code subtracts the loop end while the
- * time is strictly greater (the equality behaviour is retail's), adds the loop
- * start (_loop1Time) and rebases through FUN_0039a960.
- *
- * Matching constructs: preserve the incoming timestamp and old play count in
- * const locals before reusing the incoming parameter as the elapsed delta.
- * The switch retains the original locked-time branch layout. */
+/* advance the base node animation clock, or return its locked time. See docs/engine/stage-
+ * loading.md and docs/engine/action2-timing.md for the clock model: the engine clock counts
+ * nanoseconds and every consumer scales it in 2^18 ns ticks. A nonzero _stopTime is returned
+ * unchanged. Otherwise the time since the previous update is added to _playTime; when it exceeds
+ * 33,333,333 ns the excess is taken off _timeBias, so a long stall does not jump the animation.
+ * The node's local time is (ticks * _timeScale) << 18 plus _timeBias; once it reaches the loop end
+ * (_loop2Time) the code subtracts the loop end while the time is strictly greater (the equality
+ * behaviour is retail's), adds the loop start (_loop1Time) and rebases through FUN_0039a960.
+ * Matching constructs: preserve the incoming timestamp and old play count in const locals before
+ * reusing the incoming parameter as the elapsed delta. The switch retains the original locked-time
+ * branch layout. */
 #include "dw4/reflected.h"
 
-/* The clock is read in 2^18 ns ticks (docs/engine/action2-timing.md). */
+/* The clock is read in 2^18 ns ticks. */
 #define CLOCK_TICK_SHIFT 18
 
 /* Longest per-update step that still advances the animation (about 1/30 s). */

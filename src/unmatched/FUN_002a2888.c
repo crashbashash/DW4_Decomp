@@ -1,4 +1,5 @@
-/* 0x002a2888 — FUN_002a2888 (152 bytes). Refreshes the video block at +2316 from the stream's FUN_0028d4a8/FUN_0028d510 info and fills its unset (-1) fields from the parameters. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Refreshes the video block at +2316 from the stream's FUN_0028d4a8/FUN_0028d510 info and fills
+ * its unset (-1) fields from the parameters. */
 void FUN_0028d4a8();
 void FUN_0028d510();
 

@@ -4,7 +4,7 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igVectorBlending_GetVTable[];
 extern char thunk_igVectorBlending_GetMetaObject_00186ff0[];
-void FUN_00187000(void);  /* code at 0x187000, passed by address (was DAT_187000; docs/engine/function-inventory.md) */
+void FUN_00187000(void);
 extern char igObject_Register[];
 extern char igVectorBlending_className[];
 extern char g_igVectorBlending_metaObject[];

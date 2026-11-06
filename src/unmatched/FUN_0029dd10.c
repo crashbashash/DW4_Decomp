@@ -1,4 +1,4 @@
-/* 0x0029dd10 — FUN_0029dd10 (72 bytes). Copies the 16-byte entry in slot `slot` of channel index out to *out. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies the 16-byte entry in slot `slot` of channel index out to *out. */
 /* A 16-byte entry with byte alignment, so whole-entry copies use ldl/ldr and sdl/sdr. */
 struct Entry16 {
     char bytes[16];

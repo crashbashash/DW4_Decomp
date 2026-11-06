@@ -1,17 +1,16 @@
-/* 0x002fbfe0 igMetaField_Init: reset a freshly constructed field descriptor to its
- * defaults (docs/engine/field-factories.md, finding #880).  Every member starts
- * cleared, the type index is -1, and the descriptor is persistent.  The
- * name slot is then given the interned empty token: the shared string pool is created
- * on first use, the previous name token (none for a fresh object) has its reference
- * count dropped, and the pool's token replaces it. */
+/* igMetaField_Init: reset a freshly constructed field descriptor to its defaults. Every member
+ * starts cleared, the type index is -1, and the descriptor is persistent. The name slot is then
+ * given the interned empty token: the shared string pool is created on first use, the previous
+ * name token (none for a fresh object) has its reference count dropped, and the pool's token
+ * replaces it. */
 #include "dw4/reflected.h"
 void *igObject_InitHeader(void *);
 int FUN_002eb010(int);
 int StringPool_Construct(int);
 void *StringPool_Intern(int,int);
 int StringChunk_ReleaseHeader(int,void *);
-/* igMetaField vtable (docs: stamped at +0 by igMetaField_Construct) and the shared
- * string pool singleton (finding #1035); array form keeps the load absolute. */
+/* igMetaField vtable (docs: stamped at +0 by igMetaField_Construct) and the shared string pool
+ * singleton; array form keeps the load absolute. */
 extern int g_igMetaField_vtable[4];
 extern int g_stringPool[4];
 igMetaField *igMetaField_Init(igMetaField *field){
@@ -35,8 +34,8 @@ igMetaField *igMetaField_Init(igMetaField *field){
         g_stringPool[0]=pool;
     }
     emptyToken=StringPool_Intern(g_stringPool[0],0);
-    /* Interned strings carry a header in front of the characters: owner chunk at -8,
-     * reference count at -4 (docs/engine/messenger-results.md). */
+    /* Interned strings carry a header in front of the characters: owner chunk at -8, reference
+     * count at -4. */
     oldName=field->_fieldName;
     if(oldName){
         oldHeader=(int *)(oldName-8);

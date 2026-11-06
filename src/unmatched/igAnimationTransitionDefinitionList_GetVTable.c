@@ -1,4 +1,3 @@
-/* 0x001a94c0 - igAnimationTransitionDefinitionList_GetVTable. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int igObject_InitHeader();
 extern int DAT_00529a90[4];
 extern int *DAT_00586dc8[4];

@@ -1,4 +1,3 @@
-/* 0x00190cb0 — FUN_00190cb0. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 void FUN_00190cb0(float *arg0, volatile float *arg1) {
     arg0[0] = arg0[0] * arg1[0];
     arg0[1] = arg0[1] * arg1[0];

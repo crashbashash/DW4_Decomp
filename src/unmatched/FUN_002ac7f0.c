@@ -1,4 +1,5 @@
-/* 0x002ac7f0 — FUN_002ac7f0 (140 bytes). Queues a 16-byte item on entry `index`'s ring (FUN_002ac880) when the item is valid and the ring exists, reporting error 0xFF000421 on overflow. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queues a 16-byte item on entry `index`'s ring (FUN_002ac880) when the item is valid and the ring
+ * exists, reporting error 0xFF000421 on overflow. */
 struct Item16 {
     long first;  /* 64-bit; negative = no item */
     long second;

@@ -1,6 +1,6 @@
-/* 0x00122570 — FUN_00122570 (32 bytes). Returns 1 when the (soft-float, 64-bit) double is finite: the high word's
- * exponent field is below 0x7ff. The shape of newlib's finite() (hypothesis; the block below is its GET_HIGH_WORD
- * macro written out). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 when the (soft-float, 64-bit) double is finite: the high word's exponent field is
+ * below 0x7ff. The shape of newlib's finite() (hypothesis; the block below is its GET_HIGH_WORD
+ * macro written out). */
 typedef union DoubleShape122570 {
     double value;
     struct { unsigned int lsw; unsigned int msw; } parts;

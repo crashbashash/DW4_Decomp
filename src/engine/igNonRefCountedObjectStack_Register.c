@@ -22,7 +22,7 @@ void igNonRefCountedObjectStack_Register(void) {
         0x14,                                               /* instance size */
         igNonRefCountedObjectStack_GetVTable,               /* vtable getter */
         &igNonRefCountedObjectStack_InitFields_001e44c0[0], /* field adder (post_init in data/reflection.json) */
-        0,                                                  /* extra callback-vector item (none; docs/engine/reflection-registration.md) */
+        0,                                                  /* extra callback-vector item (none) */
         0                                                   /* zero-terminated callback-vector item list (none) */
     );
 }

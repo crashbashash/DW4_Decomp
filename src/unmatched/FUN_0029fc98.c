@@ -1,4 +1,4 @@
-/* 0x0029fc98 — FUN_0029fc98 (128 bytes). Unpacks the bit fields of header bytes 1..3 into eleven FrameHeader bytes. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Unpacks the bit fields of header bytes 1..3 into eleven FrameHeader bytes. */
 /* Frame header fields unpacked by FUN_0029fc98 from an 0xFFFx sync word (layout of an MPEG audio
  * header: f0 version, f2 bitrate index with 15 invalid, f3 sample-rate index with 3 reserved). */
 struct FrameHeader {

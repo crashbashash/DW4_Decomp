@@ -1,4 +1,6 @@
-/* 0x002b5168 — FUN_002b5168 (144 bytes). Builds a fixed-layout header in `out`: an 8-character tag (DAT_004f59f8), the number 19 formatted with DAT_004f5a08 appended, then at +16 a 2-character field (DAT_004f5a10), the value written by FUN_002b51f8 and the suffix DAT_004f5a18. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Builds a fixed-layout header in `out`: an 8-character tag (DAT_004f59f8), the number 19
+ * formatted with DAT_004f5a08 appended, then at +16 a 2-character field (DAT_004f5a10), the value
+ * written by FUN_002b51f8 and the suffix DAT_004f5a18. */
 extern char DAT_004f59f8[];
 extern char DAT_004f5a08[];
 extern char DAT_004f5a10[];

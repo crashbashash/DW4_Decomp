@@ -1,5 +1,5 @@
-/* 0x00276010 — FUN_00276010 (44 bytes). Returns the low word of the readable byte count of a handle: the
-   64-bit position (+8) clamped to the file size (+40 sectors of 2048 bytes). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the low word of the readable byte count of a handle: the 64-bit position (+8) clamped to
+ * the file size (+40 sectors of 2048 bytes). */
 struct File276 {
     int f0;
     int f4;

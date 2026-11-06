@@ -1,4 +1,4 @@
-/* 0x002b3098 — FUN_002b3098 (40 bytes). Calls FUN_00284910(value, bytes[0], bytes[1], bytes[2]) with the entry's byte triple at +20. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_00284910(value, bytes[0], bytes[1], bytes[2]) with the entry's byte triple at +20. */
 int FUN_00284910();
 
 struct EntryParams {

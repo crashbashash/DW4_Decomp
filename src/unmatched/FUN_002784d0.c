@@ -1,4 +1,6 @@
-/* 0x002784d0 — FUN_002784d0 (124 bytes). Changes a handle's unit size (+4): recomputes the unit count of the total (+8, rounded up) at +12, rescales the position (+16) to the new unit and sets +20 to +24 units; a NULL handle is reported through FUN_00277de8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Changes a handle's unit size (+4): recomputes the unit count of the total (+8, rounded up) at
+ * +12, rescales the position (+16) to the new unit and sets +20 to +24 units; a NULL handle is
+ * reported through FUN_00277de8. */
 typedef struct Handle_2784d0 {
     int pad0;
     int unit;       /* 0x04 */

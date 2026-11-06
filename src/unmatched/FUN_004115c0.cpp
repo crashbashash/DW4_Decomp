@@ -1,4 +1,4 @@
-/* 0x004115c0 - FUN_004115c0. Sibling of FUN_0043a950 (name table at 0x4cf6a0, vector -83/148); alternate compiler -O3,p. */
+/* Sibling of FUN_0043a950 (name table at 0x4cf6a0, vector -83/148); alternate compiler -O3,p. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

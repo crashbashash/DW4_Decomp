@@ -1,12 +1,9 @@
-/* 0x001430a0 — igAudioContext_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_002d3890();
 int igMetaObject_CreateFields();
 int igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void thunk_FUN_00143150(void);  /* code at 0x143140, passed by address (was DAT_143140; docs/engine/function-inventory.md) */
+void thunk_FUN_00143150(void);
 extern int DAT_00486cd8[4];
 extern int DAT_00486ce0[4];
 extern int DAT_00486ce8[4];

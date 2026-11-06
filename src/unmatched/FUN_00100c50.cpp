@@ -1,5 +1,5 @@
 extern "C" {
-/* 0x00100c50 - FUN_00100c50. Calls each function pointer of a table range; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Calls each function pointer of a table range; alternate compiler. */
 void FUN_00100c50(void (**arg0)(), void (**arg1)()) {
     void (**var_s0)();
 

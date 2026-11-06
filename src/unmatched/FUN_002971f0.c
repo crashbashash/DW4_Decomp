@@ -1,4 +1,6 @@
-/* 0x002971f0 — FUN_002971f0 (152 bytes). mwPlyGetPlyInf (named by its diagnostic string): fills a five-word playback statistics block for a valid player: FUN_00296438, FUN_002964a0 (skipped decodes), FUN_00294308, FUN_002970e8 and decoder status word 8 from FUN_002add28. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* mwPlyGetPlyInf (named by its diagnostic string): fills a five-word playback statistics block for
+ * a valid player: FUN_00296438, FUN_002964a0 (skipped decodes), FUN_00294308, FUN_002970e8 and
+ * decoder status word 8 from FUN_002add28. */
 int FUN_002968c0(void *player); /* non-zero for a valid player handle */
 void *FUN_002963a8(void *player);
 void FUN_002add28(void *decoder, int *status);

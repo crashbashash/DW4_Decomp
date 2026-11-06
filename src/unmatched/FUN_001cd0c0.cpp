@@ -1,6 +1,3 @@
-/* 0x001cd0c0 — FUN_001cd0c0. Banked by tools/retype_struct_member.py (shape: base):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 extern "C" {
 int Gap__Core__igObject__vfunc_15(...);
 void FUN_001cd0c0(void *arg0);

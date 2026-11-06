@@ -1,4 +1,5 @@
-/* 0x0026aae8 — FUN_0026aae8 (128 bytes). Attaches a stream interface at offset 4 and, between FUN_0025f2d0 and FUN_0025f2e8, stores the sum of its slot-9 values for 0 and 1 at offset 64, then copies that total to offsets 24 and 28. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Attaches a stream interface at offset 4 and, between FUN_0025f2d0 and FUN_0025f2e8, stores the
+ * sum of its slot-9 values for 0 and 1 at offset 64, then copies that total to offsets 24 and 28. */
 typedef struct Stream_26aae8 Stream_26aae8;
 typedef struct StreamTable_26aae8 {
     void *slot[9];

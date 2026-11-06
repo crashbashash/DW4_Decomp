@@ -1,4 +1,5 @@
-/* 0x00261960 — FUN_00261960 (128 bytes). Opens a sector range on the ADXF handle stream, closing it again when FUN_0026a138 reports state 4; on success records the length in sectors and bytes (sectors * 2048). Returns 0 or -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Opens a sector range on the ADXF handle stream, closing it again when FUN_0026a138 reports state
+ * 4; on success records the length in sectors and bytes (sectors * 2048). Returns 0 or -1. */
 /* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
 typedef struct AdxfHandle {
     signed char used;

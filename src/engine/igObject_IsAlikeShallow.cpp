@@ -1,4 +1,4 @@
-/* 0x00300920 - igObject_IsAlikeShallow. C++ virtual calls (slots 88 and 32) on two objects, member loop; alternate compiler -O3. Verified byte-identical by tools/verify.py. */
+/* C++ virtual calls (slots 88 and 32) on two objects, member loop; alternate compiler -O3. */
 struct M { char pad[8]; int *f8; int f12; };
 struct W { char pad[40]; M *f40; };
 struct W;

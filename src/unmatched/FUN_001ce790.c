@@ -1,6 +1,3 @@
-/* 0x001ce790 — FUN_001ce790. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern char DAT_001cf980[];
 int igTransform_GetMetaObject();
 int igNode_GetMetaObject();

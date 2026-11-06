@@ -1,4 +1,6 @@
-/* 0x00230208 — FUN_00230208 (92 bytes). Splits a single-precision bit pattern into class, sign, unbiased exponent and guarded fraction; exponent 0 is always zero (fp-bit unpack_d built without denormals or NaNs; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Splits a single-precision bit pattern into class, sign, unbiased exponent and guarded fraction;
+ * exponent 0 is always zero (fp-bit unpack_d built without denormals or NaNs; name is a
+ * hypothesis). */
 typedef unsigned int USItype __attribute__((mode(SI)));
 typedef unsigned int UDItype __attribute__((mode(DI)));
 typedef float SFtype __attribute__((mode(SF)));

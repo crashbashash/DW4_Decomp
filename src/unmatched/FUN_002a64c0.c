@@ -1,4 +1,5 @@
-/* 0x002a64c0 — FUN_002a64c0 (80 bytes). Returns 1 when nothing is pending for picture kind 1..3 (word +8/+12/+16 of the block at +2564), and 1 for any other kind. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 when nothing is pending for picture kind 1..3 (word +8/+12/+16 of the block at +2564),
+ * and 1 for any other kind. */
 struct Pending2a64c0 {
     char pad0[8];
     int f8;                               /* +2572 */

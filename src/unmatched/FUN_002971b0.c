@@ -1,4 +1,5 @@
-/* 0x002971b0 — FUN_002971b0 (60 bytes). Returns a playback handle's input stream joint at +468 (its error string names it mwPlyGetInputSj), or 0 for an invalid handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns a playback handle's input stream joint at +468 (its error string names it
+ * mwPlyGetInputSj), or 0 for an invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern char DAT_004f3f08[]; /* "E1122624: mwPlyGetInputSj: handle is invalid." */

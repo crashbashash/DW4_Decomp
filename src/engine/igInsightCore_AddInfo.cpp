@@ -1,14 +1,9 @@
-/* 0x00237030 — igInsightCore_AddInfo: offer `info` to each manager in the
- * core's manager list, in order, stopping at the first one whose virtual
- * slot 27 (vtable +0x6c) returns non-zero; then append `info` to the core's
- * `_infoList` with a retained reference (ObjectList_AppendRetained).
- * The archive collector 0x003810c0 routes beLuaInfo objects through here
- * (docs/engine/lua-loading-ownership.md, finding #790).  The info is
- * appended whether or not a manager took it.
- *
- * `_managerList` is a holder whose +8 field is the igObjectList of managers
- * (the layout of igSerialScheduler._managerList, +8; the class is not
- * established). */
+/* Offer `info` to each manager in the core's manager list, in order, stopping at the first one
+ * whose virtual slot 27 (vtable +0x6c) returns non-zero; then append `info` to the core's
+ * `_infoList` with a retained reference (ObjectList_AppendRetained). The archive collector
+ * 0x003810c0 routes beLuaInfo objects through here. The info is appended whether or not a manager
+ * took it. `_managerList` is a holder whose +8 field is the igObjectList of managers (the layout
+ * of igSerialScheduler._managerList, +8; the class is not established). */
 #include "dw4/reflected.h"
 extern "C" {
 int ObjectList_AppendRetained(...);

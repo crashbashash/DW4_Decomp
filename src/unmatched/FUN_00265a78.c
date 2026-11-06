@@ -1,4 +1,4 @@
-/* 0x00265a78 — FUN_00265a78 (60 bytes). Returns half of what slot 9 of track index's stream interface reports for argument 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns half of what slot 9 of track index's stream interface reports for argument 0. */
 typedef struct Stream_265a78 Stream_265a78;
 typedef struct StreamTable_265a78 {
     void *slot[9];

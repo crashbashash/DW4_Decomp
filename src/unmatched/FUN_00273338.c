@@ -1,4 +1,9 @@
-/* 0x00273338 — FUN_00273338 (408 bytes). Creates DTX object id (0..15) in DAT_004a9b30: checks the work-area alignment (EE 64, IOP 32, length 64*N), creates the server side with FUN_002731a8, records the work areas (the EE one also through its uncached 0x20000000 alias), clears and writes back the EE work area (FUN_0010b7d8, FUN_0010b918), installs the FUN_00273268/FUN_00273280 callbacks and marks the object used. Returns it, or 0 with a message on failure. Its messages name it DTX_Create (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Creates DTX object id (0..15) in DAT_004a9b30: checks the work-area alignment (EE 64, IOP 32,
+ * length 64*N), creates the server side with FUN_002731a8, records the work areas (the EE one also
+ * through its uncached 0x20000000 alias), clears and writes back the EE work area (FUN_0010b7d8,
+ * FUN_0010b918), installs the FUN_00273268/FUN_00273280 callbacks and marks the object used.
+ * Returns it, or 0 with a message on failure. Its messages name it DTX_Create (CRI), a name
+ * hypothesis. */
 typedef struct Dtx_273338 {
     signed char used;       /* 0x00 */
     signed char state;      /* 0x01 */

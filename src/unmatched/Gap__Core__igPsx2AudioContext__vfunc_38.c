@@ -1,4 +1,3 @@
-/* 0x001458f0 - Gap__Core__igPsx2AudioContext__vfunc_38. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int FUN_0032d850();
 

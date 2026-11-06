@@ -1,4 +1,5 @@
-/* 0x002b3f48 — FUN_002b3f48 (136 bytes). Rounds both dimensions down to even and sets up the three planes at +4, +20 and +36 through FUN_002b3fd0: the first at full size, the other two at half size. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Rounds both dimensions down to even and sets up the three planes at +4, +20 and +36 through
+ * FUN_002b3fd0: the first at full size, the other two at half size. */
 struct Plane16 {
     int words[4];
 };

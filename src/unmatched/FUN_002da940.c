@@ -1,6 +1,3 @@
-/* 0x002da940 — FUN_002da940. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int Memory_FreeBufferAliasB();
 extern int DAT_00530618[4];
 void *FUN_002da940(void *arg0, long long arg1) {

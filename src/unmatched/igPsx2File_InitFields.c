@@ -1,4 +1,4 @@
-/* Byte store through a named field pointer and the thunk typed as a function; verified by tools/verify.py. */
+/* Byte store through a named field pointer and the thunk typed as a function.py. */
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();

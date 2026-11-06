@@ -1,4 +1,4 @@
-/* 0x00294060 — FUN_00294060 (60 bytes). Maps a picture type: 1 -> 1, 2 -> 2, anything else -> 3. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Maps a picture type: 1 -> 1, 2 -> 2, anything else -> 3. */
 
 int FUN_00294060(unsigned int type) {
     int result;

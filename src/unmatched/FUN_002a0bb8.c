@@ -1,4 +1,5 @@
-/* 0x002a0bb8 — FUN_002a0bb8 (112 bytes). Records an error code: on the handle's error block (+2544, and makes +72 non-positive) or on the global one without a handle; returns the code. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Records an error code: on the handle's error block (+2544, and makes +72 non-positive) or on the
+ * global one without a handle; returns the code. */
 typedef struct SfdHandle {
     char pad0[72];
     int f72;                /* +72 */

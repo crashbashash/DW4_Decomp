@@ -1,5 +1,5 @@
-/* 0x00278148 — FUN_00278148 (68 bytes). Releases a buffer: clears its busy byte (FUN_00278410) and, if it was in use,
-   clears the in-use byte and frees it through FUN_00278018. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Releases a buffer: clears its busy byte (FUN_00278410) and, if it was in use, clears the in-use
+ * byte and frees it through FUN_00278018. */
 struct Buffer278 {
     signed char used;     /* +0 */
 };

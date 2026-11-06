@@ -1,4 +1,3 @@
-/* 0x3a9990 — FUN_003a9990. Verified byte-identical by tools/verify.py (wave3 sweep). */
 extern "C" {
 int Memory_FreeBufferWithAllocator(int, int);
 int Memory_GetAllocatorBySelector(int);

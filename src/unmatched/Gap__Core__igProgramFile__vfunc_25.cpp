@@ -1,6 +1,3 @@
-/* 0x00327380 — Gap__Core__igProgramFile__vfunc_25. Banked by tools/retype_struct_member.py (shape: base):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 extern "C" {
 extern int DAT_004fb410[4];
 void Gap__Core__igProgramFile__vfunc_25(int *arg0, void *arg1);

@@ -1,4 +1,6 @@
-/* 0x002afe38 — FUN_002afe38 (288 bytes). Applies the first pending change in a request (flags at +4, +8, +12, +32): logs it through FUN_002b01a8, hands it to its handler and, for the stream changes, re-issues the FUN_002ada78 requests 6/5 and clears the matching ids at +2988/+2984; returns -1 when nothing was pending. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Applies the first pending change in a request (flags at +4, +8, +12, +32): logs it through
+ * FUN_002b01a8, hands it to its handler and, for the stream changes, re-issues the FUN_002ada78
+ * requests 6/5 and clears the matching ids at +2988/+2984; returns -1 when nothing was pending. */
 void FUN_002b01a8(void *handle, int a, int code);
 void FUN_002aff58(void *handle, void *request);
 void FUN_002b0048(void *handle, void *request);

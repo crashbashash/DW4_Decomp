@@ -1,5 +1,3 @@
-/* 0x001e2a80 — Gap__Core__igTransformSequence1_5__vfunc_55, m2c draft (hybrid mode), does not match yet.
- * Iterate here; a match is copied to src/Gap__Core__igTransformSequence1_5__vfunc_55.c only after verify.py agrees. */
 #include "dw4/reflected.h"
 void Gap__Core__igTransformSequence1_5__vfunc_55(igTransformSequence1_5 *arg0, int arg1, long long arg2) {
     int temp_v1;

@@ -1,4 +1,6 @@
-/* 0x00293508 — FUN_00293508 (160 bytes). Allocates `size` bytes for the Sofdec work area (its error string names it MWSFD_Malloc): refuses once 32 blocks are held, allocates through FUN_002935a8 or FUN_002935e0 depending on the +512 mode word, and records each block in the +532 table. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Allocates `size` bytes for the Sofdec work area (its error string names it MWSFD_Malloc):
+ * refuses once 32 blocks are held, allocates through FUN_002935a8 or FUN_002935e0 depending on the
+ * +512 mode word, and records each block in the +532 table. */
 extern void *FUN_002935a8(void *work, int size);
 extern void *FUN_002935e0(int size);
 extern void FUN_00293708(void *work);

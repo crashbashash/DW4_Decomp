@@ -1,4 +1,3 @@
-/* 0x00153c40 — igPsx2ImageConvert_GetVTable. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 struct Obj { int *vt; char pad[4]; };
 int igObject_InitHeader(struct Obj *);
 extern int DAT_005255a0[4];

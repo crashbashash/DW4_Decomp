@@ -1,4 +1,4 @@
-/* 0x0029d378 — FUN_0029d378 (72 bytes). When option 6 is set, posts event (3, 7) through FUN_002b0338. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When option 6 is set, posts event (3, 7) through FUN_002b0338. */
 extern int FUN_002adc40(void *handle, int option);
 extern int FUN_002b0338(void *handle, int group, int event, int a, int b);
 

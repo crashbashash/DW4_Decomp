@@ -1,4 +1,3 @@
-/* 0x002c1610 - igMediaList_GetVTable. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int igObject_InitHeader();
 extern int DAT_005328a0[4];
 extern int *DAT_00586dc8[4];

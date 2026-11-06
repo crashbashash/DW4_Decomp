@@ -1,7 +1,6 @@
-/* 0x00280840 — Gap::Lua::igLuaState::vfunc_38: deleting destructor of the 0x50-byte
- * object built by FUN_00280810 (see vfunc_30).  Sets only the base vtable 0x0052d6f0,
- * then calls FUN_00100610 when the signed low 16 bits of the delete flag are positive;
- * vfunc_30 calls the bare-return FUN_002809e0 at the same point.  FUN_00100610 never
+/* Deleting destructor of the 0x50-byte object built by FUN_00280810 (see vfunc_30). Sets only the
+ * base vtable 0x0052d6f0, then calls FUN_00100610 when the signed low 16 bits of the delete flag
+ * are positive; vfunc_30 calls the bare-return FUN_002809e0 at the same point. FUN_00100610 never
  * returns (asm/FUN_00100610.s ends in an endless loop). */
 #include "dw4/reflected.h"
 int FUN_00100610();

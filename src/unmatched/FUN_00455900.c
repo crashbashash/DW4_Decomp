@@ -1,4 +1,3 @@
-/* 0x455900 — FUN_00455900. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int FUN_004578c0();
 extern int DAT_0058c458[4];
 struct S { char pad[14]; unsigned char f; };

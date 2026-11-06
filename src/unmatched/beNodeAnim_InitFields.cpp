@@ -1,5 +1,5 @@
-/* 0x0034e9f0 — beNodeAnim_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8).
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 extern "C" {
 int FUN_002d3890(void *, int);
 int FUN_002e3810(void *, float);

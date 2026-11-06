@@ -1,4 +1,4 @@
-/* 0x003c4c20 - FUN_003c4c20. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 extern "C" {
 int Memory_GetAllocatorBySelector(int);
 int igMetaObject_Create(int);

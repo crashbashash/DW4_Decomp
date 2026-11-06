@@ -1,4 +1,5 @@
-/* 0x0029fbc8 — FUN_0029fbc8 (208 bytes). Scans for the first valid frame header (0xFF, 0xF8 sync, then FUN_0029fc98 checks) and returns its position, or 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Scans for the first valid frame header (0xFF, 0xF8 sync, then FUN_0029fc98 checks) and returns
+ * its position, or 0. */
 void FUN_0029fc98();
 
 /* Frame header fields unpacked by FUN_0029fc98 from an 0xFFFx sync word (layout of an MPEG audio

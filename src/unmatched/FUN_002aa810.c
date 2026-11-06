@@ -1,4 +1,4 @@
-/* 0x002aa810 — FUN_002aa810 (84 bytes). Runs FUN_002aa868 on every occupied handle slot (DAT_004beadc), then FUN_002ab6b8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs FUN_002aa868 on every occupied handle slot (DAT_004beadc), then FUN_002ab6b8. */
 typedef struct SfdHandle SfdHandle;
 
 extern SfdHandle *DAT_004beadc[8];

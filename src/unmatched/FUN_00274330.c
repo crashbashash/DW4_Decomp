@@ -1,5 +1,5 @@
-/* 0x00274330 — FUN_00274330 (56 bytes). Returns the state byte at +2 of a handle, reporting
-   "E0092912:handl is null." and returning 0 for a null handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the state byte at +2 of a handle, reporting "E0092912:handl is null." and returning 0
+ * for a null handle. */
 struct Handle274 {
     signed char f0;
     signed char f1;

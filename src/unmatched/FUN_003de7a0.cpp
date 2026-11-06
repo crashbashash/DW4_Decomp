@@ -1,4 +1,8 @@
-/* 0x003de7a0 - FUN_003de7a0. Five-slot table fill: case 1 issues five identical bind calls, case 0 builds a pooled value object per slot (allocator chosen by a global flag), copies one 16-bit table entry into it and binds it. The object lives on the stack in a Ref whose destructor is a compiler-emitted duplicate of the retail reference destructor (config/SLUS-20836/unit-objects.json, duplicates); exceptions off. Alternate compiler -O3,p. */
+/* Five-slot table fill: case 1 issues five identical bind calls, case 0 builds a pooled value
+ * object per slot (allocator chosen by a global flag), copies one 16-bit table entry into it and
+ * binds it. The object lives on the stack in a Ref whose destructor is a compiler-emitted
+ * duplicate of the retail reference destructor (config/SLUS-20836/unit-objects.json, duplicates);
+ * exceptions off. Alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);

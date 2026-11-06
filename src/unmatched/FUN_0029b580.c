@@ -1,4 +1,5 @@
-/* 0x0029b580 — FUN_0029b580 (88 bytes). Copies a seven-word buffer configuration into DAT_0057fa90, rounding the two sizes up to 32 bytes. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies a seven-word buffer configuration into DAT_0057fa90, rounding the two sizes up to 32
+ * bytes. */
 /* Seven-word buffer configuration: pointer-typed words and two byte sizes (+8, +24).
  * The pointer/int split is what lets the scheduler reorder the loads and stores the way retail does. */
 struct BufConfig {

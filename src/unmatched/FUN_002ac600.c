@@ -1,4 +1,4 @@
-/* 0x002ac600 — FUN_002ac600 (112 bytes). Validates the handle, clears +2408 and posts event (6, 12) with a value through FUN_002b0338. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates the handle, clears +2408 and posts event (6, 12) with a value through FUN_002b0338. */
 typedef struct SfdHandle {
     char pad0[2408];
     int f2408;              /* +2408 */

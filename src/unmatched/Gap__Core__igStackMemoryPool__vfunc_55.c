@@ -1,4 +1,6 @@
-/* 0x003279d0 - Gap__Core__igStackMemoryPool__vfunc_55. Stack pool aligned allocation: size defaults to 1, alignment is the larger of the pool and request 16-bit values (movz select on the in-place parameter), size header stored at the downward-growing top; alignment variable is unsigned short; default compiler. Verified byte-identical by tools/verify.py. */
+/* Stack pool aligned allocation: size defaults to 1, alignment is the larger of the pool and
+ * request 16-bit values (movz select on the in-place parameter), size header stored at the
+ * downward-growing top; alignment variable is unsigned short; default compiler. */
 struct P { int p[28]; unsigned short f112; short pad; int p2[4]; char *cur; int *top; };
 int Gap__Core__igStackMemoryPool__vfunc_55(struct P *arg0, int arg1, unsigned short arg2) {
     unsigned short a;

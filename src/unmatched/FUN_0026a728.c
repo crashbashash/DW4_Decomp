@@ -1,4 +1,10 @@
-/* 0x0026a728 — FUN_0026a728 (480 bytes). Server step of an ADX stream-file object (its error string names it adxstmf_stat_exec, a name hypothesis): handles pending stop (+72), close (+70) and open (+69) requests. An open request opens the file (FUN_0026fc60 on the name +80 and offset +84), measures it in sectors (seek to end, FUN_00270028) or bytes (FUN_002702e8 when +84 is 0), clamps the start (+12) and length (+20 sectors, +16 bytes) to it and rewinds (FUN_0026a140); a failed open is reported through FUN_00260840 and sets state 4. Finally a running (state 2) and open (+73) stream is serviced with FUN_0026a330. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Server step of an ADX stream-file object (its error string names it adxstmf_stat_exec, a name
+ * hypothesis): handles pending stop (+72), close (+70) and open (+69) requests. An open request
+ * opens the file (FUN_0026fc60 on the name +80 and offset +84), measures it in sectors (seek to
+ * end, FUN_00270028) or bytes (FUN_002702e8 when +84 is 0), clamps the start (+12) and length (+20
+ * sectors, +16 bytes) to it and rewinds (FUN_0026a140); a failed open is reported through
+ * FUN_00260840 and sets state 4. Finally a running (state 2) and open (+73) stream is serviced
+ * with FUN_0026a330. */
 typedef struct Stmf_26a728 {
     signed char pad0;
     signed char state;          /* 0x01 */

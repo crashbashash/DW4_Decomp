@@ -1,4 +1,4 @@
-/* stack-object GetVTable accessor with two released members; verified by tools/verify.py. */
+/* stack-object GetVTable accessor with two released members.py. */
 typedef struct { int *vt; int p4; int f8; int pad[4]; int a; int b; int tail[4]; } Obj;
 int igObject_InitHeader(void *);
 int StringRef_Destruct_00130720(void *, int);

@@ -1,4 +1,6 @@
-/* 0x002da990 - FUN_002da990. Run a callback over a list into a stack-held pooled object, then flush it and report whether the first flag byte is clear; the stack Ref releases on return (compiler-emitted duplicate destructor, exceptions off). Alternate compiler -O3. */
+/* Run a callback over a list into a stack-held pooled object, then flush it and report whether the
+ * first flag byte is clear; the stack Ref releases on return (compiler-emitted duplicate
+ * destructor, exceptions off). Alternate compiler -O3. */
 extern "C" {
 void igObject_Destroy(void *);
 struct Obj { int word0; unsigned refs; };

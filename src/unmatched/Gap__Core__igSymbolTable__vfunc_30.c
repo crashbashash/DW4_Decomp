@@ -1,4 +1,4 @@
-/* 0x0030e140 - Gap__Core__igSymbolTable__vfunc_30. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 #include "dw4/reflected.h"
 unsigned int Gap__Core__igSymbolTable__vfunc_30(igSymbolTable *arg0, int arg1) {
     unsigned int temp_a2;

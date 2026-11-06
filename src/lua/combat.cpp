@@ -1,15 +1,10 @@
-/* src/lua/combat.c: the combat half of the Lua BLT/BLP script API.
- *
- * Each BLT* (bullet-versus-target, player attacks enemy) and BLP* (enemy
- * attacks player) helper is a thin caller of the native FIGHTCALC object:
- * it selects the GAMERAM message group, appends a command key and the cached
- * MDL/bullet fields as arguments, dispatches, and reads the answer back
- * (docs/systems/combat-lua-api.md).  The damage formulas live in the
- * FIGHTCALC callback, not here (docs/systems/combat-damage.md).
- *
- * 13 functions in retail address order.  The matching build splits a
- * function back out with tools/units.py, so `make check` still verifies one
- * function at a time. */
+/* src/lua/combat.c: the combat half of the Lua BLT/BLP script API. Each BLT* (bullet-versus-
+ * target, player attacks enemy) and BLP* (enemy attacks player) helper is a thin caller of the
+ * native FIGHTCALC object: it selects the GAMERAM message group, appends a command key and the
+ * cached MDL/bullet fields as arguments, dispatches, and reads the answer back. The damage
+ * formulas live in the FIGHTCALC callback, not here. 13 functions in retail address order. The
+ * matching build splits a function back out with tools/units.py, so `make check` still verifies
+ * one function at a time. */
 
 /* Attack codes.  The cached bullet kind is divided by 10000 to get its group;
  * group 4 marks a technique (docs/systems/combat-damage.md, P2EISCRITICAL). */
@@ -21,8 +16,7 @@
 /* BLTgetDamageRank: damage / max HP above these fractions gives rank 2 and 1. */
 #define DAMAGE_RANK2_FRACTION 0.5f
 #define DAMAGE_RANK1_FRACTION 0.25f
-/* BLTisPlayerBullet accepts kinds below 1000, 10000..59999 and
- * 80000..89999 (docs/systems/combat-lua-api.md). */
+/* BLTisPlayerBullet accepts kinds below 1000, 10000..59999 and 80000..89999. */
 #define PLAYER_BULLET_WEAPON_END 1000
 #define PLAYER_BULLET_RANGE_A_END 60000
 #define PLAYER_BULLET_RANGE_B_BEGIN 80000
@@ -67,9 +61,8 @@ extern char E2PDAMAGE[];
 extern char E2PDAMAGERANK[];
 extern char E2PSTUNTIME[];
 
-/* The MDL / bullet cache block at 0x0058a1c0..0x0058a340
- * (docs/engine/game-state.md). */
-/* Main game object, a Gap::Bec::beMessenger (finding #415). */
+/* The MDL / bullet cache block at 0x0058a1c0..0x0058a340. */
+/* Main game object, a Gap::Bec::beMessenger. */
 extern int g_beMessenger[4];
 /* Focused Digimon model entity. */
 extern int g_mdlEntity[4];
@@ -84,10 +77,8 @@ extern int g_mdlInfoName[4];
  * "status field"); passed through to FIGHTCALC as arguments. */
 extern int g_statusFieldA[4];
 extern int g_blpStatus[4];
-/* Results cached by the damage wrappers from the FIGHTCALC reply
- * (docs/systems/combat-lua-api.md): damage, attribute index (into
- * g_attributeNames), and the flag the damage-rank helpers use to
- * raise a zero rank to one. */
+/* Results cached by the damage wrappers from the FIGHTCALC reply: damage, attribute index (into
+ * g_attributeNames), and the flag the damage-rank helpers use to raise a zero rank to one. */
 extern int g_damageResult[4];
 extern int g_attackZokusei[4];
 extern int g_damageFlag[4];
@@ -111,9 +102,8 @@ int BLPgetDamageRank(int scriptArg1, int scriptArg2);
 int BLPgetStunTime(int scriptArg1, int scriptArg2);
 }
 
-/* 0x00374800: is the cached attack code a player bullet?  True below 1000,
- * for 10000..59999 and for 80000..89999.  The cached code is signed and not
- * range-checked, so a negative code also counts (docs/systems/combat-lua-api.md). */
+/* is the cached attack code a player bullet? True below 1000, for 10000..59999 and for
+ * 80000..89999. The cached code is signed and not range-checked, so a negative code also counts. */
 int BLTisPlayerBullet(void) {
     extern int g_mdlBulletKind[4];
     if (g_mdlBulletKind[0] < BULLET_KIND_GROUP_SIZE) {
@@ -160,9 +150,8 @@ int BLTisHitCheck(void) {
     return beMessenger_GetBool(g_beMessenger[0], 0);
 }
 
-/* 0x00374a40: P2EDAMAGE.  The Lua caller supplies the critical flag (masked to
- * 8 bits; docs/systems/combat-damage.md, arg3).  The reply's three integers
- * (damage, attribute index, rank flag) are cached for BLTgetDamageRank and
+/* P2EDAMAGE. The Lua caller supplies the critical flag (masked to 8 bits.md, arg3). The reply's
+ * three integers (damage, attribute index, rank flag) are cached for BLTgetDamageRank and
  * BLTgetAttributeStr, and the damage is returned. */
 int BLTgetDamageValue(int criticalFlag) {
     extern int g_mdlRecNo[4];
@@ -191,14 +180,12 @@ int BLTgetDamageValue(int criticalFlag) {
     return g_damageResult[0];
 }
 
-/* 0x00374bb0: damage rank 0..3 of the last BLTgetDamageValue result.  `currentHp`
- * is what the script passes (BLTgetDamageRank(MDLgetHp(), ...) in
- * lua/11-bosses/04-boss04-devimon-1_e751/017-boss-devl1e.lua); a
- * nonpositive value is rank 3.  Otherwise the damage / max-HP fraction picks
- * rank 2 above one half, rank 1 above one quarter, else 0.  A rank of 0 or 1
- * is raised by one when the cached rank flag is 1 (rank 0 only), when
- * `rankBonus` is set, or for attack groups 2 and 3
- * (docs/systems/combat-lua-api.md).  The comparisons stay negated as in retail. */
+/* damage rank 0..3 of the last BLTgetDamageValue result. `currentHp` is what the script passes
+ * (BLTgetDamageRank(MDLgetHp(), ...) in lua/11-bosses/04-boss04-devimon-1_e751/017-boss-
+ * devl1e.lua); a nonpositive value is rank 3. Otherwise the damage / max-HP fraction picks rank 2
+ * above one half, rank 1 above one quarter, else 0. A rank of 0 or 1 is raised by one when the
+ * cached rank flag is 1 (rank 0 only), when `rankBonus` is set, or for attack groups 2 and 3. The
+ * comparisons stay negated as in retail. */
 int BLTgetDamageRank(int currentHp, int rankBonus) {
     extern int g_mdlBulletKind[4];
     float damageFraction;
@@ -240,12 +227,10 @@ char *BLTgetAttributeStr(void)
     return g_attributeNames[g_attackZokusei[0]];
 }
 
-/* The five BLTget*Time helpers share one shape: only a technique attack (group
- * 4) of the matching sub-kind carries the status effect; otherwise 0 without
- * messaging.  Then the matching P2E*TIME command is sent to FIGHTCALC with the
- * cached arguments and its first integer is the duration
- * (docs/systems/combat-lua-api.md).  Poison, attack-down and power-down also
- * pass the script's `effectKey` string. */
+/* The five BLTget*Time helpers share one shape: only a technique attack (group 4) of the matching
+ * sub-kind carries the status effect; otherwise 0 without messaging. Then the matching P2E*TIME
+ * command is sent to FIGHTCALC with the cached arguments and its first integer is the duration.
+ * Poison, attack-down and power-down also pass the script's `effectKey` string. */
 
 /* 0x00374de0: poison duration (P2EPOISONTIME). */
 int BLTgetPoisonTime(const char *effectKey) {
@@ -350,9 +335,8 @@ int BLTgetPowerDownTime(const char *effectKey) {
     return beMessenger_GetInt(g_beMessenger[0], 0);
 }
 
-/* 0x00375540: E2PDAMAGE, the enemy-to-player counterpart of BLTgetDamageValue.
- * Same caching of the reply (damage, attribute, rank flag); the argument
- * order differs from the P2E command (docs/systems/combat-lua-api.md). */
+/* E2PDAMAGE, the enemy-to-player counterpart of BLTgetDamageValue. Same caching of the reply
+ * (damage, attribute, rank flag); the argument order differs from the P2E command. */
 int BLPgetDamageValue(void) {
     extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];

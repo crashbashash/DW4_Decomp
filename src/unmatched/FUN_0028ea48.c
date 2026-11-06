@@ -1,4 +1,5 @@
-/* 0x0028ea48 — FUN_0028ea48 (112 bytes). Stores a pair of words in the handle at +592 once FUN_002913f8 accepts the handle; otherwise reports error 0xFF030203 through FUN_0028eb38. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a pair of words in the handle at +592 once FUN_002913f8 accepts the handle; otherwise
+ * reports error 0xFF030203 through FUN_0028eb38. */
 int FUN_002913f8(void *handle); /* handle check; non-zero rejects */
 void FUN_0028eb38(void *handle, int error);
 

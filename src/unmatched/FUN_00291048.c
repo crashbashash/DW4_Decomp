@@ -1,4 +1,5 @@
-/* 0x00291048 — FUN_00291048 (88 bytes). Takes a free handle (FUN_002910a0), clears 1016 bytes of it (FUN_00291238), initialises it (FUN_002910f0) and stores FUN_00291480's result at +944. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Takes a free handle (FUN_002910a0), clears 1016 bytes of it (FUN_00291238), initialises it
+ * (FUN_002910f0) and stores FUN_00291480's result at +944. */
 struct Handle00291048 {
     char pad0[944];
     int f944; /* +944 */

@@ -1,4 +1,6 @@
-/* 0x00299b50 — FUN_00299b50 (108 bytes). When FUN_00299f88 reports 1, calls the hook at +32 of the table from FUN_00299f68 (if both exist) with the handle's +20 value (read before the hook checks, as retail schedules it) and the two arguments. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When FUN_00299f88 reports 1, calls the hook at +32 of the table from FUN_00299f68 (if both
+ * exist) with the handle's +20 value (read before the hook checks, as retail schedules it) and the
+ * two arguments. */
 struct Hooks00299b50 {
     char pad0[32];
     void (*hook)(int value, int a, int b); /* +32 */

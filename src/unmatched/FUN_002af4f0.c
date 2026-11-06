@@ -1,4 +1,5 @@
-/* 0x002af4f0 — FUN_002af4f0 (80 bytes). Scales the block's own rate (+0xD28+736) by pos/rate (FUN_002916f8) and, under the FUN_002a0e70 guard, adds it to the decoded position (+0xD28+732). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Scales the block's own rate (+0xD28+736) by pos/rate (FUN_002916f8) and, under the FUN_002a0e70
+ * guard, adds it to the decoded position (+0xD28+732). */
 int FUN_002916f8(int value, int scale, int divisor);
 void FUN_002a0e70(void *guard);
 void FUN_002a0e88(void *guard);

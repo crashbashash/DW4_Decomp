@@ -1,4 +1,4 @@
-/* 0x002a6768 — FUN_002a6768 (24 bytes). Reads the two words at +2732/+2736 of a handle into caller variables. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads the two words at +2732/+2736 of a handle into caller variables. */
 typedef struct SfdBlock2564 {
     char pad0[168];
     int f168;               /* handle +2732 */

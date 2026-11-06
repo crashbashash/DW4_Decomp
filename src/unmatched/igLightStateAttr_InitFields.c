@@ -1,6 +1,3 @@
-/* 0x00136510 — igLightStateAttr_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_00136750();
 int FUN_002d3890();

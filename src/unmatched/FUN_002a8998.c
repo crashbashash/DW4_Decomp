@@ -1,4 +1,5 @@
-/* 0x002a8998 — FUN_002a8998 (152 bytes). Under the guard, returns the second-best picture slot (FUN_002a8a30) while the player runs (+72 == 4), dropping it when option 15 is set and FUN_002af6c0 rejects its f56/f60. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Under the guard, returns the second-best picture slot (FUN_002a8a30) while the player runs (+72
+ * == 4), dropping it when option 15 is set and FUN_002af6c0 rejects its f56/f60. */
 void FUN_002a0e70();
 void FUN_002a0e88();
 void FUN_002a8a30();

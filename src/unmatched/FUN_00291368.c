@@ -1,4 +1,5 @@
-/* 0x00291368 — FUN_00291368 (144 bytes). Reads callback `index` from the global table (null handle) or from a validated handle's table at +400 into *out; error 0xFF030210 goes through FUN_0028eb38. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads callback `index` from the global table (null handle) or from a validated handle's table at
+ * +400 into *out; error 0xFF030210 goes through FUN_0028eb38. */
 typedef void (*Callback00291250)();
 
 int FUN_002913f8(void *handle); /* handle check; non-zero rejects */

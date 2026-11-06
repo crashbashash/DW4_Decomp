@@ -1,4 +1,5 @@
-/* 0x0028f2f0 — FUN_0028f2f0 (108 bytes). Peeks at the next chunk of a stream object (vtable +24 to get it, +28 to put it back) and classifies its start code with FUN_0028dc78 when at least 4 bytes are available. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Peeks at the next chunk of a stream object (vtable +24 to get it, +28 to put it back) and
+ * classifies its start code with FUN_0028dc78 when at least 4 bytes are available. */
 int FUN_0028dc78(unsigned char *p);
 
 struct Chunk0028f2f0 {

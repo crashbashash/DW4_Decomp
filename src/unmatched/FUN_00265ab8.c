@@ -1,4 +1,4 @@
-/* 0x00265ab8 — FUN_00265ab8 (52 bytes). Returns half of FUN_0027da60(handle, 1) for track index's handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns half of FUN_0027da60(handle, 1) for track index's handle. */
 typedef struct Stream_265a78 Stream_265a78;
 typedef struct StreamTable_265a78 {
     void *slot[9];

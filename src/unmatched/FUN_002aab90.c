@@ -1,4 +1,5 @@
-/* 0x002aab90 — FUN_002aab90 (168 bytes). Clears the two pending-request flags at +0xA18/+0xA1C once FUN_0029e2d0/FUN_0029e2b0 report the channel idle, then forwards both to FUN_002ace60. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears the two pending-request flags at +0xA18/+0xA1C once FUN_0029e2d0/FUN_0029e2b0 report the
+ * channel idle, then forwards both to FUN_002ace60. */
 int FUN_0029e2b0(int obj, int channel);
 int FUN_0029e2d0(int obj, int channel);
 void FUN_002ace60(int obj, int request1, int request2);

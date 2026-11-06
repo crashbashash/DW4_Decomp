@@ -1,4 +1,7 @@
-/* 0x002910f0 — FUN_002910f0 (196 bytes). Initialises a decoder object: binds its buffers (FUN_00290e88), copies the first 16 words of the global descriptor at 0x573f18, resets its sub-records (FUN_0028ea30, FUN_00290f70), clears the counters, empties the four 12-byte entries (FUN_0028f098), calls FUN_0028f0c0(dec, 0, 0), and marks it ready (state 2, checked by FUN_002913f8); returns it. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises a decoder object: binds its buffers (FUN_00290e88), copies the first 16 words of the
+ * global descriptor at 0x573f18, resets its sub-records (FUN_0028ea30, FUN_00290f70), clears the
+ * counters, empties the four 12-byte entries (FUN_0028f098), calls FUN_0028f0c0(dec, 0, 0), and
+ * marks it ready (state 2, checked by FUN_002913f8); returns it. */
 extern void FUN_00290e88(void *dec);
 extern void FUN_0028b350(void *dst, const void *src, int words); /* word copy */
 extern void FUN_0028ea30(void *rec);

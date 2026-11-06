@@ -1,4 +1,4 @@
-/* 0x002b16b8 — FUN_002b16b8 (28 bytes). Forwards to FUN_0029e9b8(obj, obj+8400 word, value). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards to FUN_0029e9b8(obj, obj+8400 word, value). */
 int FUN_0029e9b8();
 
 struct EntryOwner {

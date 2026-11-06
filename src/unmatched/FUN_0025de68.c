@@ -1,4 +1,5 @@
-/* 0x0025de68 — FUN_0025de68 (68 bytes). Runs the hook in D_00498c70 when +232 is set, releases the handle at +8 through FUN_0026f108 and clears +4. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs the hook in D_00498c70 when +232 is set, releases the handle at +8 through FUN_0026f108 and
+ * clears +4. */
 typedef struct Rec25de68 {
     char pad0[4];
     int f4;             /* +4: cleared once the handle is released */

@@ -1,4 +1,5 @@
-/* 0x0026f3a0 — FUN_0026f3a0 (152 bytes). Returns the entry of the pool DAT_0056dfd4 (DAT_0056dfd8 16-byte entries) whose name matches name in its first 12 characters (FUN_0012aba0 returning 0), or 0 for an empty name or no match. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the entry of the pool DAT_0056dfd4 (DAT_0056dfd8 16-byte entries) whose name matches
+ * name in its first 12 characters (FUN_0012aba0 returning 0), or 0 for an empty name or no match. */
 typedef struct Slot_26f3a0 {
     char name[16];  /* 0x00 */
 } Slot_26f3a0;      /* 0x10 bytes */

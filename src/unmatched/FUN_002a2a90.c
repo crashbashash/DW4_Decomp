@@ -1,4 +1,5 @@
-/* 0x002a2a90 — FUN_002a2a90 (124 bytes). Accumulates channel 0's FUN_0029eaf8 value and the two given amounts into the player's 64-bit totals at +2432..+2448. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Accumulates channel 0's FUN_0029eaf8 value and the two given amounts into the player's 64-bit
+ * totals at +2432..+2448. */
 void FUN_0029eaf8();
 long FUN_0029ecb0();
 

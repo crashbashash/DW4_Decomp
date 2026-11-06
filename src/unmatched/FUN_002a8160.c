@@ -1,4 +1,5 @@
-/* 0x002a8160 — FUN_002a8160 (112 bytes). Runs FUN_002a81d0 for the player's context and, on success, sets context f116 = 2 and state 200 when its flag and option 48 are set, else 192. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs FUN_002a81d0 for the player's context and, on success, sets context f116 = 2 and state 200
+ * when its flag and option 48 are set, else 192. */
 int FUN_002a81d0();
 int FUN_002adc40();
 

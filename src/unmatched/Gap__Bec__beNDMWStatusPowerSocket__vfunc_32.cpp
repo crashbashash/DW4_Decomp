@@ -1,6 +1,3 @@
-/* 0x00414640 — Gap__Bec__beNDMWStatusPowerSocket__vfunc_32. Banked by tools/retype_struct_member.py (shape: leadcall0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */

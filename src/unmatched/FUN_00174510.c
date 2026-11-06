@@ -1,4 +1,4 @@
-/* 0x00174510 - 292 bytes. Per-slot change counters; clamp spelled as if/else, the call forwards arg0/arg3 (m2c had shifted the arguments), index arithmetic kept as off = n*4 plus a second n*4 inside the block. */
+/* 292 bytes. */
 struct R { char pad[1036]; int a[16]; int b[16]; int c[16]; };
 int FUN_00174640();
 extern int DAT_00560928[8];

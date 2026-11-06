@@ -1,4 +1,3 @@
-/* 0x001c5160 - FUN_001c5160. single && condition with early zero return; typed struct; alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 extern float DAT_0048da28[4];
 typedef struct S0 { char pad552[552]; float f552; float f556; } S0;
 int FUN_001c5160(S0 *arg0, float fparg0) {

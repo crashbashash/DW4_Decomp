@@ -1,4 +1,4 @@
-/* 0x0029ed68 — FUN_0029ed68 (72 bytes). True when option 49 or option 56 is set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when option 49 or option 56 is set. */
 extern int FUN_002adc40(void *handle, int option);
 
 int FUN_0029ed68(void *handle) {

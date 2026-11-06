@@ -1,4 +1,5 @@
-/* 0x002ab460 — FUN_002ab460 (108 bytes). When the request id at +0xA04+80 is set (not -4), fetches the current position pair through FUN_002ae968 and returns 1 when FUN_00285118 rejects it against the request. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When the request id at +0xA04+80 is set (not -4), fetches the current position pair through
+ * FUN_002ae968 and returns 1 when FUN_00285118 rejects it against the request. */
 int FUN_002ae968(int obj, int *first, int *second);
 int FUN_00285118(int first, int second, int request, int value);
 

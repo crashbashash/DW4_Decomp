@@ -1,6 +1,4 @@
-/* 0x0023bc30 — FUN_0023bc30. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * Receiver is igCollisionGroup (_bound -> igSphere; position/lastPosition/
+/* Receiver is igCollisionGroup (_bound -> igSphere; position/lastPosition/
  * collisionPosition/radius are initialised from the bound sphere). */
 #include "dw4/reflected.h"
 void FUN_0023bc30(igCollisionGroup *arg0) {

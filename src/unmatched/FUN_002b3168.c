@@ -1,4 +1,5 @@
-/* 0x002b3168 — FUN_002b3168 (32 bytes). Stores the fourth and fifth arguments at +68/+72 of the object and tail-calls FUN_002b3f48 with all arguments. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores the fourth and fifth arguments at +68/+72 of the object and tail-calls FUN_002b3f48 with
+ * all arguments. */
 int FUN_002b3f48();
 struct Obj0044 {
     char pad[68];

@@ -1,4 +1,5 @@
-/* 0x002963a8 — FUN_002963a8 (60 bytes). Returns a playback handle's SFD decoder handle at +64 (its error string names it mwPlyGetSfdHn), or 0 for an invalid handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns a playback handle's SFD decoder handle at +64 (its error string names it mwPlyGetSfdHn),
+ * or 0 for an invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern char DAT_004f39e8[]; /* "E1122640: mwPlyGetSfdHn: handle is invalid." */

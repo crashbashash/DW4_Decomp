@@ -1,4 +1,5 @@
-/* 0x002ab4d0 — FUN_002ab4d0 (200 bytes). With a request pending, combines the FUN_002b03d0 checks 6 and 7 according to the mode in slot 25 (0 both, 1 check 7, 2 check 6, 3 either); returns 1 when nothing is pending. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* With a request pending, combines the FUN_002b03d0 checks 6 and 7 according to the mode in slot
+ * 25 (0 both, 1 check 7, 2 check 6, 3 either); returns 1 when nothing is pending. */
 int FUN_002b03d0(int obj, int code);
 int FUN_002adc40(int obj, int slot);
 

@@ -1,15 +1,10 @@
-/* 0x003e4750 — beNDMWLoadIntf2::vfunc_31, the per-frame master update of the
- * Game Start interface for one player (`host`): it looks up the named working
- * set under host->_dataList (COMMONINTF, CTRL, MAKECHR, ...), samples that
- * player's pad, and advances the CtrlData screen state machine (join, new or
- * load, Digimon choice, name, slot, save data, start) plus the per-player
- * card-utility stages. See docs/engine/load-intf2.md for the state and
- * ownership contracts.
- *
- * The local declaration groups preserve the original allocation. Explicit
- * snapshots retain the observed ordering of published controller reads.
- * LoadVec3 is three floats; reference parameter homes remain 16 bytes apart.
- */
+/* Vfunc_31, the per-frame master update of the Game Start interface for one player (`host`): it
+ * looks up the named working set under host->_dataList (COMMONINTF, CTRL, MAKECHR, ...), samples
+ * that player's pad, and advances the CtrlData screen state machine (join, new or load, Digimon
+ * choice, name, slot, save data, start) plus the per-player card-utility stages. See
+ * docs/engine/load-intf2.md for the state and ownership contracts. The local declaration groups
+ * preserve the original allocation. Explicit snapshots retain the observed ordering of published
+ * controller reads. LoadVec3 is three floats; reference parameter homes remain 16 bytes apart. */
 #include "dw4/reflected.h"
 #pragma inline_depth(1)
 struct LoadVec3 {

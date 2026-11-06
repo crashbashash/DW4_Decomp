@@ -1,4 +1,7 @@
-/* 0x0017da90 - FUN_0017da90. Fills a vertex-stream descriptor (pointer + element size) for stream type 0..9 of the vertex array; the descriptor index is re-read volatile in the plain cases (retail does not reuse the early copy there), the base pointer of case 4 is added last. Dummy-virtual class for slot 23; alternate compiler -O3. */
+/* Fills a vertex-stream descriptor (pointer + element size) for stream type 0..9 of the vertex
+ * array; the descriptor index is re-read volatile in the plain cases (retail does not reuse the
+ * early copy there), the base pointer of case 4 is added last. Dummy-virtual class for slot 23;
+ * alternate compiler -O3. */
 #define RD *(volatile int *)&arg1->f8
 extern "C" int FUN_001f05a0(...);
 struct P { int f0; int f4; int f8; int pad[12]; int f60; int pad2[1]; int f68; int f72; };

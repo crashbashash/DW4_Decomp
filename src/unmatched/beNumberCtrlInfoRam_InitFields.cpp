@@ -1,5 +1,6 @@
-/* 0x0034d800 - beNumberCtrlInfoRam_InitFields. float argument declared as float, flag byte stored as char. Verified byte-identical by tools/verify.py.
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* Float argument declared as float, flag byte stored as char. C++ translation unit: the unit
+ * compiled with exceptions on and retail keeps this function's exception index record, which only
+ * the C++ front end emits. */
 extern "C" {
 int FUN_0019fae0(void);
 int FUN_002e3810(void *, float);

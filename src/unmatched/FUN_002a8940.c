@@ -1,4 +1,4 @@
-/* 0x002a8940 — FUN_002a8940 (84 bytes). Validates the handle and reports whether FUN_002a8998 finds a current entry. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates the handle and reports whether FUN_002a8998 finds a current entry. */
 extern int FUN_002a0dd8(void *handle);
 extern int FUN_002a0bb8(void *handle, int code);
 extern void *FUN_002a8998(void *handle);

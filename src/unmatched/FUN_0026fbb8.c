@@ -1,4 +1,7 @@
-/* 0x0026fbb8 — FUN_0026fbb8 (168 bytes). Finds the device interface for a split path: an empty device name takes the default device (FUN_0026ff48); FUN_00271318 adjusts the names and FUN_0026f890 looks the device up. If that fails, the default device is tried and the whole path becomes the file name. Returns the interface or 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Finds the device interface for a split path: an empty device name takes the default device
+ * (FUN_0026ff48); FUN_00271318 adjusts the names and FUN_0026f890 looks the device up. If that
+ * fails, the default device is tried and the whole path becomes the file name. Returns the
+ * interface or 0. */
 void FUN_0026ff48(char *device_name);
 void FUN_00271318(char *device_name, char *file_name);
 void *FUN_0026f890(const char *device_name);

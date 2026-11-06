@@ -1,4 +1,5 @@
-/* 0x0029e068 — FUN_0029e068 (244 bytes). Maps the bytes available on one side of a ring (ops slot 36) as up to two chunks via slot 24, releasing each with slot 28; returns the byte count. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Maps the bytes available on one side of a ring (ops slot 36) as up to two chunks via slot 24,
+ * releasing each with slot 28; returns the byte count. */
 struct Chunk {
     char *data;
     int size;

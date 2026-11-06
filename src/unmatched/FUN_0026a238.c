@@ -1,4 +1,6 @@
-/* 0x0026a238 — FUN_0026a238 (104 bytes). Inside the FUN_0027e1c0/FUN_0027e1d8 critical section: for an object whose header word (+0) carries type 0x0102 in bits 8-23, raises the flag at +72 and clears the one at +71 when set; any other object gets its error byte (+1) set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Inside the FUN_0027e1c0/FUN_0027e1d8 critical section: for an object whose header word (+0)
+ * carries type 0x0102 in bits 8-23, raises the flag at +72 and clears the one at +71 when set; any
+ * other object gets its error byte (+1) set. */
 typedef struct Obj_26a238 {
     union {
         int word;               /* type code in bits 8-23 */

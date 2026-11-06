@@ -93,12 +93,13 @@ struct VO {
     virtual int vX();
 };
 
-/* Exception-unwind holders (retail table 0x00543640, findings #3883): the stage-name object share (cases 0 and 1) and the interned
- * file-name shares (cases 1, 102, 9) are RAII locals so the compiler emits the retail cleanup ranges.  The named holders take the
- * upper frame slots in declaration order; the StringRef(...) copies handed to StringList_AppendRetained are expression temporaries
- * and take the lowest slots, as in retail.
- * Retained interned-string share; the destructor is the retail copy at 0x00130720 (#3883).  The copy constructor takes the extra
- * share that StringList_AppendRetained hands to the list. */
+/* Exception-unwind holders (retail table 0x00543640): the stage-name object share (cases 0 and 1)
+ * and the interned file-name shares (cases 1, 102, 9) are RAII locals so the compiler emits the
+ * retail cleanup ranges. The named holders take the upper frame slots in declaration order; the
+ * StringRef(...) copies handed to StringList_AppendRetained are expression temporaries and take
+ * the lowest slots, as in retail. Retained interned-string share; the destructor is the retail
+ * copy at 0x00130720. The copy constructor takes the extra share that StringList_AppendRetained
+ * hands to the list. */
 struct StringRef {
     char *p;
     StringRef(char *s) : p(s) {}

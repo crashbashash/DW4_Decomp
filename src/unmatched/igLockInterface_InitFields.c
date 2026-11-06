@@ -1,6 +1,3 @@
-/* 0x00226ab0 — igLockInterface_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_002b9120();
 int FUN_002c8810();

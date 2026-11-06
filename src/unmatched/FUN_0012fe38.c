@@ -1,4 +1,5 @@
-/* 0x0012fe38 — FUN_0012fe38 (84 bytes). Reentrant vsprintf: formats a va_list into a caller buffer through a string stream bound to the given reent block and terminates it (newlib _vsprintf_r shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reentrant vsprintf: formats a va_list into a caller buffer through a string stream bound to the
+ * given reent block and terminates it (newlib _vsprintf_r shape; name is a hypothesis). */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 
@@ -24,7 +25,6 @@ typedef struct Stream {
 #define INT_MAX 0x7fffffff
 
 int vfprintf(Stream *stream, const char *format, va_list args);
-
 
 int FUN_0012fe38(void *reent, char *buffer, const char *format, va_list args) {
     int result;

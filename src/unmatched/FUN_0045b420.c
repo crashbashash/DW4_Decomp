@@ -1,4 +1,3 @@
-/* 0x0045b420 - FUN_0045b420. Near-miss sweep fix (alternate compiler), verified byte-identical to retail by tools/verify.py. */
 int Memory_GetAllocatorBySelector();
 int igMetaObject_Create();
 extern int DAT_00587040[4];

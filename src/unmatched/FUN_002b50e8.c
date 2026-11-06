@@ -1,4 +1,5 @@
-/* 0x002b50e8 — FUN_002b50e8 (76 bytes). One-time initialiser: while the counter DAT_004bf280 is not positive, stores FUN_002b5138's result in DAT_005856a8 and bumps the counter. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* One-time initialiser: while the counter DAT_004bf280 is not positive, stores FUN_002b5138's
+ * result in DAT_005856a8 and bumps the counter. */
 int FUN_002b5138();
 
 extern int DAT_004bf280;                  /* initialisation count */

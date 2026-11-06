@@ -1,4 +1,6 @@
-/* 0x00158480 - FUN_00158480. Resolves the mode id at +44 (from the table lookup when negative), flags +80 for the ids 13,14,15,16,34, then fills the object fields from two out-parameter helpers; the case labels are written 34,13,14,15 because the compare chain comes out in reverse; alternate compiler -O3. */
+/* Resolves the mode id at +44 (from the table lookup when negative), flags +80 for the ids
+ * 13,14,15,16,34, then fills the object fields from two out-parameter helpers; the case labels are
+ * written 34,13,14,15 because the compare chain comes out in reverse; alternate compiler -O3. */
 #include "dw4/reflected.h"
 int FUN_00159320();
 int FUN_00159a80();

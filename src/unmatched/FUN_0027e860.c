@@ -1,5 +1,5 @@
-/* 0x0027e860 — FUN_0027e860 (60 bytes). Invokes the callback registered for an event id in the table at
-   0x00570b60 (function, context pairs), if any, with its context. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Invokes the callback registered for an event id in the table at 0x00570b60 (function, context
+ * pairs), if any, with its context. */
 struct Callback27e {
     void (*function)(int context);
     int context;

@@ -1,4 +1,6 @@
-/* 0x002ad828 — FUN_002ad828 (72 bytes). Two-level table lookup: the current index at ctx+7996 picks a 0x74-byte entry, whose word at +4952 picks a 0x44-byte entry of the table at ctx+7976; returns its word at +32, clamped to -1 when negative. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Two-level table lookup: the current index at ctx+7996 picks a 0x74-byte entry, whose word at
+ * +4952 picks a 0x44-byte entry of the table at ctx+7976; returns its word at +32, clamped to -1
+ * when negative. */
 
 /* Views of one 0x74-byte entry (indexed from ctx) and one 0x44-byte entry (indexed from ctx+7976);
  * only the members read here are known. */

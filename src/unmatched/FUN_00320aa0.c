@@ -1,4 +1,6 @@
-/* 0x00320aa0 - FUN_00320aa0. Byte-swaps an array of 16-byte records in place; the two swap helpers are compiled first in the same unit so the loop counter and pointer stay in a1/a2 across the calls (interprocedural register use); verified with the helpers as duplicates. */
+/* Byte-swaps an array of 16-byte records in place; the two swap helpers are compiled first in the
+ * same unit so the loop counter and pointer stay in a1/a2 across the calls (interprocedural
+ * register use). */
 #include "dw4/ipa/ipa_FUN_00320930.h"
 #include "dw4/ipa/ipa_FUN_00320960.h"
 void FUN_00320aa0(unsigned char *arg0, int arg1) {

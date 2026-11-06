@@ -1,4 +1,5 @@
-/* 0x002abc98 — FUN_002abc98 (100 bytes). Adds to the counter at +2388 and passes the block at +2384 to the optional callback read from option 37. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Adds to the counter at +2388 and passes the block at +2384 to the optional callback read from
+ * option 37. */
 typedef struct SfdBlock2384 {
     int f0;
     int count;              /* +4 */

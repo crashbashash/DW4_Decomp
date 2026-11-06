@@ -1,7 +1,7 @@
-/* 0x00275b50 — FUN_00275b50 (156 bytes). Destroys a handle: stops it through FUN_00275e50 when its state
-   byte (+2) is 2 or more; unless the shared flag (+1) is set, closes its file (+24) through FUN_00272918
-   between the 0x5000/0x5001 trace markers and logs "HTCI: Failed sceClose" on failure; then clears the
-   in-use byte and releases it through FUN_002759b8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Destroys a handle: stops it through FUN_00275e50 when its state byte (+2) is 2 or more; unless
+ * the shared flag (+1) is set, closes its file (+24) through FUN_00272918 between the
+ * 0x5000/0x5001 trace markers and logs "HTCI: Failed sceClose" on failure; then clears the in-use
+ * byte and releases it through FUN_002759b8. */
 struct Handle275 {
     signed char used;      /* +0 */
     signed char shared;    /* +1 */

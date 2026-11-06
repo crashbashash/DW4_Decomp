@@ -1,4 +1,6 @@
-/* 0x002abd18 — FUN_002abd18 (160 bytes). Destroys a handle: reports error 0xFF000131 if FUN_002a0dd8 refuses, otherwise tears it down (FUN_002abef0, FUN_0029fed0 on +120, FUN_0029d790, FUN_002abdb8) and clears it from DAT_004beadc. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Destroys a handle: reports error 0xFF000131 if FUN_002a0dd8 refuses, otherwise tears it down
+ * (FUN_002abef0, FUN_0029fed0 on +120, FUN_0029d790, FUN_002abdb8) and clears it from
+ * DAT_004beadc. */
 int FUN_002a0dd8(int handle);
 int FUN_002a0bb8(int obj, int code);
 void FUN_002abef0(int handle);

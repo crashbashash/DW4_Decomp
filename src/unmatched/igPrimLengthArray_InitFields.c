@@ -1,6 +1,3 @@
-/* 0x0014c160 — igPrimLengthArray_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int igUnsignedCharMetaField_GetDefaultDescriptor();
 int FUN_0030e9b0();
@@ -8,7 +5,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void thunk_FUN_0014bde0(void);  /* code at 0x14bef0, passed by address (was DAT_14bef0; docs/engine/function-inventory.md) */
+void thunk_FUN_0014bde0(void);
 extern int DAT_00488810[4];
 extern int DAT_00488820[4];
 extern int DAT_00488830[4];

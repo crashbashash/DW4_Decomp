@@ -1,7 +1,5 @@
-/* 0x003f1380 — FUN_003f1380. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * Receiver is the model-controller sub-object beNDMWMcUtilCtrl
- * (CommonIntf._mcUtilCtrl, +0x34): _isUseUtil gates the SendNamed on _messenger. */
+/* Receiver is the model-controller sub-object beNDMWMcUtilCtrl (CommonIntf._mcUtilCtrl, +0x34):
+ * _isUseUtil gates the SendNamed on _messenger. */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */

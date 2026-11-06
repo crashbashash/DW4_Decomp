@@ -1,5 +1,5 @@
-/* 0x00275370 — FUN_00275370 (56 bytes). Touches the volatile word 0x004ab5d8, calls FUN_00276d18(0) and
-   FUN_00276da8(0), and returns the address of the block at 0x004ab5e8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Touches the volatile word 0x004ab5d8, calls FUN_00276d18(0) and FUN_00276da8(0), and returns the
+ * address of the block at 0x004ab5e8. */
 extern void FUN_00276d18(int arg);
 extern void FUN_00276da8(int arg);
 extern volatile int DAT_004ab5d8;

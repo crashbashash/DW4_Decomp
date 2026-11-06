@@ -1,4 +1,3 @@
-/* 0x002407c0 — FUN_002407c0. Hand-retyped from the m2c draft, verified byte-identical to retail by tools/verify.py. */
 int __floatsidf();
 void *FUN_0023f830();
 void *FUN_0023fb30();

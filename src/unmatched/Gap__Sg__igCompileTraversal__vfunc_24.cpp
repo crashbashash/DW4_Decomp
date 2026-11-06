@@ -1,6 +1,3 @@
-/* 0x001bba70 — Gap__Sg__igCompileTraversal__vfunc_24. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_001b73d0(...);

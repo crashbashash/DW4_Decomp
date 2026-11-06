@@ -171,9 +171,7 @@ def do_one(row):
     if ok:
         bank = os.path.join(ROOT, "src", "unmatched", name + ".c")
         if not os.path.exists(bank):
-            open(bank, "w").write(
-                "/* 0x%08x — %s. m2c draft auto-repaired to compile; verified\n"
-                " * byte-identical by tools/verify.py (tools/autofix.py). */\n" % (va, name) + text)
+            open(bank, "w").write(text)
         return {"name": name, "status": "BANKED"}
     return {"name": name, "status": "fixed", "va": va}
 

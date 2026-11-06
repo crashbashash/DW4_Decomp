@@ -1,4 +1,5 @@
-/* 0x00282490 — FUN_00282490 (164 bytes). Queues a byte-swapped message word for one channel through FUN_00281ac0; requires channel < 32 and a status byte (bit 7), and refuses re-entry. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queues a byte-swapped message word for one channel through FUN_00281ac0; requires channel < 32
+ * and a status byte (bit 7), and refuses re-entry. */
 int FUN_00281ac0(unsigned short kind, unsigned short arg, int a, int b, int c, int d);
 
 /* Context reached through DAT_004bb114 (only the members used here). */

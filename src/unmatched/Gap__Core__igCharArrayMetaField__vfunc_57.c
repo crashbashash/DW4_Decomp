@@ -1,4 +1,3 @@
-/* 0x2d4cd0 — Gap__Core__igCharArrayMetaField__vfunc_57. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int sprintf();
 int FUN_002eb010();
 int StringPool_Construct();

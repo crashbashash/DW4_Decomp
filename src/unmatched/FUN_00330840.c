@@ -1,6 +1,3 @@
-/* 0x00330840 — FUN_00330840. Banked by tools/retype_struct_member.py (shape: leadcall0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 int FUN_00300f50();
 
 void FUN_00330840(void *arg0) {

@@ -14,10 +14,11 @@ void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_16(beNDMWPanelWazaInfoWork *arg0);
 }
 /* matching construct: dummy-virtual class; only slot 16 (vX) is called through the panel references */
 class PanelVirtualShim { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual int vX(); };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]).
- * Both members are out of line in retail: the constructor interns the text (0x003cc550) and the
- * destructor releases the token on scope exit and from the exception table (StringRef_Destruct_00130720);
- * config/SLUS-20836/unit-objects.json binds them as externals __ct__9StringRefFPCc / __dt__9StringRefFv. */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]). Both members are out of line in retail: the constructor interns the text (0x003cc550)
+ * and the destructor releases the token on scope exit and from the exception table
+ * (StringRef_Destruct_00130720).json binds them as externals __ct__9StringRefFPCc /
+ * __dt__9StringRefFv. */
 class StringRef {
 public:
     char *p;

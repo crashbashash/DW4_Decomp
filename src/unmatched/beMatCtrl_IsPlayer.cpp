@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
-/* 0x0038aca0 — beMatCtrl_IsPlayer: true when the material controller has a non-null entry for the caller's slot
- * (arg0->+0x38 list, +0x10 table, indexed by arg0->+0x28). A C++ bool (retail builds it with daddiu) and an explicit
+/* True when the material controller has a non-null entry for the caller's slot (arg0->+0x38 list,
+ * +0x10 table, indexed by arg0->+0x28). A C++ bool (retail builds it with daddiu) and an explicit
  * padding nop after the assignment reproduce the retail branch shape. */
 extern "C" {
 bool beMatCtrl_IsPlayer(beMatCtrl *);

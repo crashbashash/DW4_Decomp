@@ -1,4 +1,5 @@
-/* 0x002a3b70 — FUN_002a3b70 (168 bytes). When FUN_002a8500 reports -1, or 1 with FUN_002a84e0 set and state f24 pending, calls FUN_002a3c18(player, 1) and, if state f0 is clear, FUN_002ada78(player, 5, 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When FUN_002a8500 reports -1, or 1 with FUN_002a84e0 set and state f24 pending, calls
+ * FUN_002a3c18(player, 1) and, if state f0 is clear, FUN_002ada78(player, 5, 0). */
 void FUN_002a3c18();
 int FUN_002a84e0();
 int FUN_002a8500();

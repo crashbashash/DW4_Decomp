@@ -1,4 +1,4 @@
-/* stack-object GetVTable accessor with an inlined member release; verified by tools/verify.py. */
+/* stack-object GetVTable accessor with an inlined member release.py. */
 int StringChunk_ReleaseHeader();
 typedef struct { int *vt; int w[2]; char *s; } Obj;
 int igObject_InitHeader(void *);

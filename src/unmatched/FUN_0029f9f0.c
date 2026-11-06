@@ -1,4 +1,4 @@
-/* 0x0029f9f0 — FUN_0029f9f0 (120 bytes). Returns the bit rate (table DAT_004f4bf0 x 1000) of the first frame header in data, or -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the bit rate (table DAT_004f4bf0 x 1000) of the first frame header in data, or -1. */
 unsigned char *FUN_0029fbc8();
 extern int DAT_004f4bf0[];
 

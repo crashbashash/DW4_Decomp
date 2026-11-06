@@ -1,6 +1,3 @@
-/* 0x002b8860 — igSymbolTable_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_002b8d90();
 int FUN_002ca2a0();

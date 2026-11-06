@@ -5,9 +5,8 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-/* 36-byte string chunk (docs/engine/string-chunks.md, finding #866).  Only
- * the free-list head is used by the merge below; the other fields are written
- * by the constructor.  References are 4-byte values in this ABI. */
+/* 36-byte string chunk. Only the free-list head is used by the merge below; the other fields are
+ * written by the constructor. References are 4-byte values in this ABI. */
 typedef struct StringChunk {
     int table;          /* +0   owning string pool */
     int next;           /* +4   next chunk in the chain */

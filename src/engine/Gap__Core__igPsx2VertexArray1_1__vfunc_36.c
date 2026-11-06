@@ -1,8 +1,6 @@
-/* 0x0015f010
- * Read the position of vertex `index` into `out` (3 floats).  Does nothing
- * unless the vertex format has the position bit set.  _vdata is the runtime
- * table of stream pointers; the position stream is at +68, 12 bytes per vertex
- * (finding 680, docs/engine/model-format.md). */
+/* Read the position of vertex `index` into `out` (3 floats). Does nothing unless the vertex format
+ * has the position bit set. _vdata is the runtime table of stream pointers; the position stream is
+ * at +68, 12 bytes per vertex (finding 680). */
 #include "dw4/reflected.h"
 #define VERTEX_FORMAT_POSITIONS 0x400000   /* bit 22 of _vertexFormat (finding 680) */
 #define VDATA_POSITION_STREAM 68           /* _vdata + 68: pointer to the position stream */

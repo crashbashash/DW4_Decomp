@@ -1,4 +1,7 @@
-/* 0x001b9320 — FUN_001b9320. Message list dispatcher: appends each message item to its target list (pointer-walk loop forward), then undoes the additions in reverse running the list callback. Alternate -O3; spAC is a volatile stack word read once into a local, the first count read is volatile so the increment reloads it. */
+/* Message list dispatcher: appends each message item to its target list (pointer-walk loop
+ * forward), then undoes the additions in reverse running the list callback. Alternate -O3; spAC is
+ * a volatile stack word read once into a local, the first count read is volatile so the increment
+ * reloads it. */
 #include "dw4/reflected.h"
 int FUN_001b0440();
 int FUN_001b1490();

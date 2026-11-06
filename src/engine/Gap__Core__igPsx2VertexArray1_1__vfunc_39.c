@@ -1,8 +1,6 @@
-/* 0x0015f0f0
- * Read the normal of vertex `index` into `out` (3 floats).  Counterpart of
- * vfunc_38: does nothing unless the vertex format has the normal bit set.
- * The normal stream is at _vdata + 72, 12 bytes per vertex (finding 680,
- * docs/engine/model-format.md). */
+/* Read the normal of vertex `index` into `out` (3 floats). Counterpart of vfunc_38: does nothing
+ * unless the vertex format has the normal bit set. The normal stream is at _vdata + 72, 12 bytes
+ * per vertex (finding 680). */
 #include "dw4/reflected.h"
 #define VERTEX_FORMAT_NORMALS 0x800000     /* bit 23 of _vertexFormat (finding 680) */
 #define VDATA_NORMAL_STREAM 72             /* _vdata + 72: pointer to the normal stream */

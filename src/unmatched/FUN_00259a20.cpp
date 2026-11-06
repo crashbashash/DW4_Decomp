@@ -1,5 +1,4 @@
 extern "C" {
-/* 0x00259a20 - FUN_00259a20. Near-miss sweep fix (alternate compiler), verified byte-identical to retail by tools/verify.py. */
 int FUN_00259a10();
 int FUN_002d18c0(int);
 

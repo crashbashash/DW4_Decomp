@@ -1,4 +1,5 @@
-/* 0x00299a90 — FUN_00299a90 (84 bytes). When FUN_00299f88 reports state 1, invokes the +24 callback of the record from FUN_00299f68 (if both exist) with the object's +20 word. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When FUN_00299f88 reports state 1, invokes the +24 callback of the record from FUN_00299f68 (if
+ * both exist) with the object's +20 word. */
 typedef struct {
     char pad0[24];
     void (*callback)(int arg); /* 24 */

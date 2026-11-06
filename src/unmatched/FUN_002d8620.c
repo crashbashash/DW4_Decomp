@@ -1,6 +1,3 @@
-/* 0x002d8620 — FUN_002d8620. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_002d7e90();
 int FUN_002d86b0();
 int igNamedObject_SetName();

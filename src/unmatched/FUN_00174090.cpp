@@ -1,4 +1,4 @@
-/* Virtual call arguments typed (two floats); verified by tools/verify.py. */
+/* Virtual call arguments typed (two floats).py. */
 extern "C" {
 int FUN_00174850(...);
 void FUN_00174090(void *arg0);

@@ -1,5 +1,5 @@
-/* 0x00274068 — FUN_00274068 (56 bytes). Returns the word at +12 of a handle, reporting
-   "E0092912:handl is null." and returning 0 for a null handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the word at +12 of a handle, reporting "E0092912:handl is null." and returning 0 for a
+ * null handle. */
 struct Handle274 {
     signed char f0;
     signed char f1;

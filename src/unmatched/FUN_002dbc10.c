@@ -1,6 +1,3 @@
-/* 0x002dbc10 — FUN_002dbc10. Banked by tools/retype_struct_member.py (shape: struct0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 typedef struct S0 { char pad52[52]; int f34; } S0;
 int FUN_002db480();
 int FUN_002db540();

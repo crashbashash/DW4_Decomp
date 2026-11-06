@@ -1,4 +1,4 @@
-/* 0x002a8440 — FUN_002a8440 (72 bytes). Returns the context slot whose 136-byte record (at +5800) has the given body pointer, or 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the context slot whose 136-byte record (at +5800) has the given body pointer, or 0. */
 /* One 232-byte decode slot. */
 struct Slot {
     int state;                            /* 2/4 = holding a picture */

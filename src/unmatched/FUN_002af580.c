@@ -1,4 +1,5 @@
-/* 0x002af580 — FUN_002af580 (120 bytes). Checked getter (error 0xFF00011B): reports DAT_004f5060[rate index at +2336] through *rate, or -1 when the index is 0 or the handle is rejected. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Checked getter (error 0xFF00011B): reports DAT_004f5060[rate index at +2336] through *rate, or
+ * -1 when the index is 0 or the handle is rejected. */
 int FUN_002a0bb8();
 int FUN_002a0dd8();
 extern int DAT_004f5060[];

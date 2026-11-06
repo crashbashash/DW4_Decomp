@@ -1,4 +1,5 @@
-/* 0x002aac38 — FUN_002aac38 (136 bytes). Issues FUN_002ada78(obj, 15, n) for whichever pending request at +0xA18/+0xA1C is clear while the mode at +0xA40 asks for it. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Issues FUN_002ada78(obj, 15, n) for whichever pending request at +0xA18/+0xA1C is clear while
+ * the mode at +0xA40 asks for it. */
 void FUN_002ada78(int obj, int code, int channel);
 
 struct PendingPair {

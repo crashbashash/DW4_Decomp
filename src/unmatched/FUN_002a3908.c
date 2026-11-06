@@ -1,4 +1,5 @@
-/* 0x002a3908 — FUN_002a3908 (172 bytes). When stream +8132 is not 1 but stream +8128 is, and FUN_002a39b8 agrees, sets stream +8132 to 1 and calls FUN_002a3b48. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When stream +8132 is not 1 but stream +8128 is, and FUN_002a39b8 agrees, sets stream +8132 to 1
+ * and calls FUN_002a3b48. */
 typedef struct SfdStreamPair {
     char pad0[16];
     int f16;                /* handle +8128 */

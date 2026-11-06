@@ -1,5 +1,5 @@
-/* 0x00127830 — FUN_00127830 (56 bytes). Allocates a one-word big integer through FUN_001273e0 and sets it to
- * `value`. The shape of newlib's _i2b over Balloc (hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Allocates a one-word big integer through FUN_001273e0 and sets it to `value`. The shape of
+ * newlib's _i2b over Balloc (hypothesis). */
 typedef struct BigInt127830 {
     struct BigInt127830 *next;  /* +0 */
     int k;                      /* +4 */

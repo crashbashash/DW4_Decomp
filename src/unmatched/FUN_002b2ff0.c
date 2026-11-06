@@ -1,4 +1,5 @@
-/* 0x002b2ff0 — FUN_002b2ff0 (60 bytes). Initialises an entry handed out by FUN_002b2f48: parameter words (0, 31, 100) at +8, word +4 = 1 and the byte triple at +20 = (0, 64, 128). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises an entry handed out by FUN_002b2f48: parameter words (0, 31, 100) at +8, word +4 = 1
+ * and the byte triple at +20 = (0, 64, 128). */
 
 struct EntryParams {
     int f0;

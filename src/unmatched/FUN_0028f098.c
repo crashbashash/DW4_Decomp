@@ -1,4 +1,4 @@
-/* 0x0028f098 — FUN_0028f098 (36 bytes). Fills entry `index` of the 12-byte record table at +952 with three values. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills entry `index` of the 12-byte record table at +952 with three values. */
 typedef struct {
     int f0;
     int f4;

@@ -1,5 +1,4 @@
-/* 0x0027adb8 — FUN_0027adb8 (44 bytes). Stores a byte into +82 of an object while the library is active (not mode 1
-   with no entries). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a byte into +82 of an object while the library is active (not mode 1 with no entries). */
 struct Object27a {
     char pad0[82];
     signed char flag82;   /* +82 */

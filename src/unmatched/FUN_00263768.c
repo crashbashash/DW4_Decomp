@@ -1,4 +1,6 @@
-/* 0x00263768 — FUN_00263768 (112 bytes). ADXT_EntryFnameRange (name from the error string at DAT_004ee0d0): adds a file-name range to the play handle file list through FUN_00277038, reporting "Can't entry file" with the name through FUN_00260840 on failure. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* ADXT_EntryFnameRange (name from the error string at DAT_004ee0d0): adds a file-name range to the
+ * play handle file list through FUN_00277038, reporting "Can't entry file" with the name through
+ * FUN_00260840 on failure. */
 typedef struct AdxtHandle {
     char f0[148];
     void *fileList;

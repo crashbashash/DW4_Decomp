@@ -1,4 +1,5 @@
-/* 0x002b0ad0 — FUN_002b0ad0 (92 bytes). Subtracts delta from each of the `count` samples at +24, then stores their mean (FUN_002b0b30) at +424. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Subtracts delta from each of the `count` samples at +24, then stores their mean (FUN_002b0b30)
+ * at +424. */
 int FUN_002b0b30();
 
 struct Samples {

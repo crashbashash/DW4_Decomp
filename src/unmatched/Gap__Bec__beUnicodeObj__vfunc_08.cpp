@@ -1,4 +1,4 @@
-/* Struct member access under the alternate compiler (delay slot and padding nop); verified by tools/verify.py. */
+/* Struct member access under the alternate compiler (delay slot and padding nop).py. */
 #include "dw4/reflected.h"
 extern "C" {
 int Gap__Core__igObject__vfunc_08__002ff0f0(beUnicodeObj *);

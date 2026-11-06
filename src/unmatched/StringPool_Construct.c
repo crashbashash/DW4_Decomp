@@ -1,4 +1,3 @@
-/* 0x002eadf0 — StringPool_Construct. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int Memory_GetAllocatorBySelector();
 int Memory_GetDefaultAllocator();
 int StringChunk_AllocateObject();

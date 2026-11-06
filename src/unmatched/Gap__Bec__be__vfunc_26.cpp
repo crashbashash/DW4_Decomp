@@ -10,7 +10,7 @@ extern be *DAT_0058a1d8[4];
 void Gap__Bec__be__vfunc_26(void);
 }
 
-/* the Game this pointer (docs/engine/game-state.md) */
+/* the Game this pointer */
 void Gap__Bec__be__vfunc_26(void) {
     igStringRefList *s5;
     int s4;

@@ -1,4 +1,5 @@
-/* 0x002911d0 — FUN_002911d0 (104 bytes). Releases a validated handle: FUN_00291498 on it, FUN_00291240 over its 1016 bytes, then marks it free (+392 = 1); error 0xFF030201 goes through FUN_0028eb38. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Releases a validated handle: FUN_00291498 on it, FUN_00291240 over its 1016 bytes, then marks it
+ * free (+392 = 1); error 0xFF030201 goes through FUN_0028eb38. */
 int FUN_002913f8(void *handle); /* handle check; non-zero rejects */
 int FUN_0028eb38(void *handle, int error);
 void FUN_00291498(void *handle);

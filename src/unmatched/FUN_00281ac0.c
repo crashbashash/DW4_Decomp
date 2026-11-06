@@ -1,4 +1,5 @@
-/* 0x00281ac0 — FUN_00281ac0 (244 bytes). Queues a 20-byte entry (two halfwords, four words) in the context's 128-slot ring at +164 if the write slot is free and the count is not negative; returns 0 or -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queues a 20-byte entry (two halfwords, four words) in the context's 128-slot ring at +164 if the
+ * write slot is free and the count is not negative; returns 0 or -1. */
 
 struct Entry00281ac0 {
     unsigned short kind;  /* +0: 0 = free slot */

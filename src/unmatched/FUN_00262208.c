@@ -1,4 +1,6 @@
-/* 0x00262208 — FUN_00262208 (196 bytes). ADXF_StopNw (name from the error strings at DAT_004eddc0/DAT_004edde8): requests a non-waiting stop of the stream with FUN_0026a238 and flags it in f3, bracketed by FUN_00260c20 trace calls. Returns the current position, or -3/-1 on a bad handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* ADXF_StopNw (name from the error strings at DAT_004eddc0/DAT_004edde8): requests a non-waiting
+ * stop of the stream with FUN_0026a238 and flags it in f3, bracketed by FUN_00260c20 trace calls.
+ * Returns the current position, or -3/-1 on a bad handle. */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {

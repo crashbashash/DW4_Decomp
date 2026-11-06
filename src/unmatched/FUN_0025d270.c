@@ -1,6 +1,3 @@
-/* 0x0025d270 — FUN_0025d270. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_0025d078();
 int FUN_0025d0b8();
 extern int DAT_00498c5c[4];

@@ -1,4 +1,4 @@
-/* 0x00260ed0 — FUN_00260ed0 (52 bytes). Forwards to FUN_00260f88 with its fourth and fifth arguments zero and its last argument 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards to FUN_00260f88 with its fourth and fifth arguments zero and its last argument 0. */
 int FUN_00260f88(void *handle, int a, int b, int c, int d, int e, int f, int g, int h);
 
 void FUN_00260ed0(void *handle, int a, int b, int e, int f, int g) {

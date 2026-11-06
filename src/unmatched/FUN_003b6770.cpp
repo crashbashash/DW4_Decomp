@@ -1,4 +1,3 @@
-/* 0x003b6770 - FUN_003b6770. Near-miss sweep fix (alternate compiler), verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 int FUN_003b2d10(int **, int);
 int thunk_FUN_002ed460__002ff810(int **);

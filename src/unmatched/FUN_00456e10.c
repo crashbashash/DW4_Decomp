@@ -1,4 +1,3 @@
-/* 0x00456e10 — FUN_00456e10. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 void *FUN_004555c0();
 struct N { char pad[24]; struct N *f24; };
 struct O { char pad[12]; struct M *f12; };

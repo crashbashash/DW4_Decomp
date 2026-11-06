@@ -1,15 +1,16 @@
 /* Gap__Bec__beNDMWStatusCtrlEquip__vfunc_21 (0x0040ee60, 1852 B): update state machine of the
- * status-screen equip page: state 0 opens the equip select window for the entry code, state 1 drives the
- * equip menu (slot select, then the per-slot windows: power socket with three kinds, FUN_003ba760,
- * FUN_003ba260) and state 2/3 close it.  Matches under the unit profile (combat -O3,p, exceptions on)
- * with config/SLUS-20836/unit-objects.json 0x0040ee60: emitted {__dt__4RefAFv: 0x0040f6a0, __dt__4RefCFv: 0x0040f620,
- * __dt__4RefDFv: 0x0040f5a0}, duplicates {__dt__4RefBFv: 0x0040ece0}, externals {__dl__FPv: 0x00100610}
- * and the retail exceptions record (config/SLUS-20836/exceptions.txt); the provisional -Cpp_exceptions off override
- * is not needed.  Each Ref owns the new window until it has been bound and listed.
- * Levers: the two-way splits on _entCode are SWITCHES (`case 0: default:` first, `case 1:` second), not if/else:
- * the case labels block delay-slot hoisting from the next block and force the `move a0,s0` in the jal slot.
- * Four distinct holder classes (one per stack slot 60/56/52/48, declared A,B,C,D; the compiler emits the
- * destructors in reverse declaration order); B's destructor is the retail copy kept from the previous unit. */
+ * status-screen equip page: state 0 opens the equip select window for the entry code, state 1
+ * drives the equip menu (slot select, then the per-slot windows: power socket with three kinds,
+ * FUN_003ba760, FUN_003ba260) and state 2/3 close it. Matches under the unit profile (combat
+ * -O3,p, exceptions on) with config/SLUS-20836/unit-objects.json 0x0040ee60: emitted
+ * {__dt__4RefAFv: 0x0040f6a0, __dt__4RefCFv: 0x0040f620, __dt__4RefDFv: 0x0040f5a0}, duplicates
+ * {__dt__4RefBFv: 0x0040ece0}, externals {__dl__FPv: 0x00100610} and the retail exceptions record;
+ * the provisional -Cpp_exceptions off override is not needed. Each Ref owns the new window until
+ * it has been bound and listed. Levers: the two-way splits on _entCode are SWITCHES (`case 0:
+ * default:` first, `case 1:` second), not if/else: the case labels block delay-slot hoisting from
+ * the next block and force the `move a0,s0` in the jal slot. Four distinct holder classes (one per
+ * stack slot 60/56/52/48, declared A,B,C,D; the compiler emits the destructors in reverse
+ * declaration order); B's destructor is the retail copy kept from the previous unit. */
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_GetAllocator(beNDMWStatusCtrlEquip *);

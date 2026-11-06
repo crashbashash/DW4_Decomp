@@ -1,4 +1,6 @@
-/* 0x002b2c10 — FUN_002b2c10 (132 bytes). Looks up descriptor `id` (FUN_002b25a8) and, when it exists and FUN_002b2e60 accepts it, returns the byte at +37 (values of 64 and up read as -1) through *value; returns 1 then, else 0 with *value = -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks up descriptor `id` (FUN_002b25a8) and, when it exists and FUN_002b2e60 accepts it, returns
+ * the byte at +37 (values of 64 and up read as -1) through *value; returns 1 then, else 0 with
+ * *value = -1. */
 struct Descriptor {
     char pad0[37];
     unsigned char f37; /* +37 */

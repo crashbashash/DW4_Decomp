@@ -1,4 +1,5 @@
-/* 0x0029e960 — FUN_0029e960 (88 bytes). Sends request 11 with value for channel index through FUN_002b0338 when the channel is closed (+4 == 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sends request 11 with value for channel index through FUN_002b0338 when the channel is closed
+ * (+4 == 0). */
 int FUN_002b0338();
 
 struct Channel {

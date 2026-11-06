@@ -1,4 +1,5 @@
-/* 0x002913f8 — FUN_002913f8 (36 bytes). Records `obj` as the current object (DAT_00573f74) and returns 0 when it is non-NULL and in state 2 (+392), else -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Records `obj` as the current object (DAT_00573f74) and returns 0 when it is non-NULL and in
+ * state 2 (+392), else -1. */
 extern void *DAT_00573f74;
 
 typedef struct {

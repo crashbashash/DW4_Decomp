@@ -1,27 +1,19 @@
-/* src/game/beNDMWListCtrl.cpp — the beNDMWListCtrl methods, one translation unit in
- * retail address order:
- *   0x0040dae0  Gap__Bec__beNDMWListCtrl__vfunc_22  create the page-arrow models (finding #922)
- *   0x0040dbf0  Gap__Bec__beNDMWListCtrl__vfunc_23  previous page (finding #919)
- *   0x0040dd30  Gap__Bec__beNDMWListCtrl__vfunc_24  next page (findings #917, #919)
- *   0x004233e0  Gap__Bec__beNDMWListCtrl__vfunc_20  class metaObject accessor
- *
- * The retail unit at 0x0040dae0 was C++ with exceptions on (its three functions keep
- * exception index records, config/SLUS-20836/exceptions.txt).  vfunc_22 and vfunc_20 used to live
- * in beNDMWListCtrl.c; they now compile here as C++ under that profile, which also
- * reproduces vfunc_22's record.  vfunc_20 sits in a separate retail unit
- * (beNDMWListCtrl_4233e0 in config/SLUS-20836/units.tsv: the metaObject accessors were placed
- * apart from the method bodies); the build resolves each function's profile by address.
- * The whole unit keeps C linkage.
- *
- * A page turn happens when the player's pad shows left (previous) or right (next) and
- * no up/down is held; the page index moves by one and the i_stcursorleft /
- * i_stcursorright arrow models on the MODELCTRL receiver are told which sequence to
- * play.  All input tests, page arithmetic, vector copies and requests are C++.  Explicit
- * original NOPs, one local unconditional join per method and one address-high word in
- * the arrow initializer preserve branch/alignment layout (matching constructs; there is
- * no claim about the original declaration spelling or an assembly-free source).
- * Next-page return uses the original-width register copy (finding #917).
- */
+/* src/game/beNDMWListCtrl.cpp — the beNDMWListCtrl methods, one translation unit in retail address
+ * order: 0x0040dae0 Gap__Bec__beNDMWListCtrl__vfunc_22 create the page-arrow models 0x0040dbf0
+ * Gap__Bec__beNDMWListCtrl__vfunc_23 previous page 0x0040dd30 Gap__Bec__beNDMWListCtrl__vfunc_24
+ * next page 0x004233e0 Gap__Bec__beNDMWListCtrl__vfunc_20 class metaObject accessor The retail
+ * unit at 0x0040dae0 was C++ with exceptions on (its three functions keep exception index
+ * records). vfunc_22 and vfunc_20 used to live in beNDMWListCtrl.c; they now compile here as C++
+ * under that profile, which also reproduces vfunc_22's record. vfunc_20 sits in a separate retail
+ * unit (beNDMWListCtrl_4233e0 in config/SLUS-20836/units.tsv: the metaObject accessors were placed
+ * apart from the method bodies); the build resolves each function's profile by address. The whole
+ * unit keeps C linkage. A page turn happens when the player's pad shows left (previous) or right
+ * (next) and no up/down is held; the page index moves by one and the i_stcursorleft /
+ * i_stcursorright arrow models on the MODELCTRL receiver are told which sequence to play. All
+ * input tests, page arithmetic, vector copies and requests are C++. Explicit original NOPs, one
+ * local unconditional join per method and one address-high word in the arrow initializer preserve
+ * branch/alignment layout (matching constructs; there is no claim about the original declaration
+ * spelling or an assembly-free source). Next-page return uses the original-width register copy. */
 #include "dw4/reflected.h"
 /* Direction bits as the pad object reports them: the stick words (_lTrg, _lRpt,
  * _lStk) use 1 up, 2 right, 4 down, 8 left; the button words (_trigger, _repeat)

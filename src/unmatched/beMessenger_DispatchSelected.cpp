@@ -1,24 +1,18 @@
-/* beMessenger_DispatchSelected 0x0038e060, 1228 bytes (plus the emitted
- * stack-reference destructor at 0x0038e530, 128 bytes).
- *
- * Sends a message name to the current work entry (top of the work stack):
- * the name is interned and stored as the entry's message, then
- *   - the "result count" query appends a flag and the number of matching
- *     receivers (or a default count) to the argument lists;
- *   - the "first live receiver" query hands that receiver to the argument
- *     object list through a stack reference;
- *   - any other name calls the vtable Check/Send handlers of each receiver
- *     whose ram number matches.
- * The accesses go through the reflected beMessenger*, beBaseInfoRam and ig*List
- * classes (beMessenger._workStack elements are beMessengerWork; the work entry's
- * find lists are igIntList / igObjectList of beBaseInfoRam).  Several spellings are the ones
- * that reproduce retail's register assignment and are kept on purpose: the
- * per-call locals of the four list appends (the inlined AppendBool/AppendInt
- * bodies, the int one re-reading the count through a volatile cast), and the
- * first loop, which reads the element once into `have` and once more inline
- * (that second read is what keeps the data pointer load inside the loop and
- * settles the temporary registers).  The unit builds with exceptions off, see
- * config/SLUS-20836/unit-flags.tsv; the unwind table is not part of this source. */
+/* beMessenger_DispatchSelected 0x0038e060, 1228 bytes (plus the emitted stack-reference destructor
+ * at 0x0038e530, 128 bytes). Sends a message name to the current work entry (top of the work
+ * stack): the name is interned and stored as the entry's message, then - the "result count" query
+ * appends a flag and the number of matching receivers (or a default count) to the argument lists;
+ * - the "first live receiver" query hands that receiver to the argument object list through a
+ * stack reference; - any other name calls the vtable Check/Send handlers of each receiver whose
+ * ram number matches. The accesses go through the reflected beMessenger*, beBaseInfoRam and
+ * ig*List classes (beMessenger._workStack elements are beMessengerWork; the work entry's find
+ * lists are igIntList / igObjectList of beBaseInfoRam). Several spellings are the ones that
+ * reproduce retail's register assignment and are kept on purpose: the per-call locals of the four
+ * list appends (the inlined AppendBool/AppendInt bodies, the int one re-reading the count through
+ * a volatile cast), and the first loop, which reads the element once into `have` and once more
+ * inline (that second read is what keeps the data pointer load inside the loop and settles the
+ * temporary registers). The unit builds with exceptions off.tsv; the unwind table is not part of
+ * this source. */
 #include "dw4/reflected.h"
 
 typedef struct RefObj { int w0; int ref; } RefObj;
@@ -64,7 +58,6 @@ public:
     virtual unsigned char Check(beBaseInfoRam *obj, beMessengerWork *work);
 };
 
-
 extern "C" {
 int FUN_002eb010(int);
 int StringPool_Construct(int);
@@ -103,7 +96,6 @@ public:
         }
     }
 };
-
 
 extern "C"
 void beMessenger_DispatchSelected(beMessenger *self, int name)

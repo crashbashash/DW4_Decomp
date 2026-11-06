@@ -1,22 +1,17 @@
-/* 0x002e95e0 - igIGBFile::readFile(path): the Alchemy .igb loader driver.
- *
- * Logs "readFile(%s)", notes the clock, then runs the section readers in file order
- * (header, then the version-dependent tables, then the object sections).  Every reader
- * returns an igResult through a hidden result pointer; the global at 0x4fb418 holds the
- * failure code (finding #504), and a reader that yields it sends the loader to its error
- * path FUN_002e9470.  After the last reader the load time is logged once through the
- * assert/log hook (string 0x4f9b90); an old-format file that still has external references
- * is reported once through the same hook (string 0x4f9af0).
- *
- * Evidence: asm/igIGBFile_ReadFile.s; strings 0x4f9ad8, 0x4f9af0, 0x4f9b90.
- * Field names are hypotheses from those strings and from the sibling readers
- * (src/unmatched/igIGBFile_Read*.cpp).
- *
- * Matching constructs: every reader result is an unnamed temporary (the compiler gives
- * each its own stack word, laid out downwards by the combat MWCC build); failed() is
- * called on the temporary so the compare goes through its address.  Needs the compiler
- * local/mwcps2/combat/mwccps2.exe (sha256 acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a),
- * flags -O3 -Iinclude (the project default). */
+/* ReadFile(path): the Alchemy .igb loader driver. Logs "readFile(%s)", notes the clock, then runs
+ * the section readers in file order (header, then the version-dependent tables, then the object
+ * sections). Every reader returns an igResult through a hidden result pointer; the global at
+ * 0x4fb418 holds the failure code, and a reader that yields it sends the loader to its error path
+ * FUN_002e9470. After the last reader the load time is logged once through the assert/log hook
+ * (string 0x4f9b90); an old-format file that still has external references is reported once
+ * through the same hook (string 0x4f9af0). Evidence: asm/igIGBFile_ReadFile.s; strings 0x4f9ad8,
+ * 0x4f9af0, 0x4f9b90. Field names are hypotheses from those strings and from the sibling readers
+ * (src/unmatched/igIGBFile_Read*.cpp). Matching constructs: every reader result is an unnamed
+ * temporary (the compiler gives each its own stack word, laid out downwards by the combat MWCC
+ * build); failed() is called on the temporary so the compare goes through its address. Needs the
+ * compiler local/mwcps2/combat/mwccps2.exe (sha256
+ * acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a), flags -O3 -Iinclude (the
+ * project default). */
 
 /* The loader's result code: 0x4fb410 holds success, 0x4fb418 failure. */
 extern "C" int DAT_004fb418[4];

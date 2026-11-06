@@ -1,4 +1,5 @@
-/* 0x002a1770 — FUN_002a1770 (96 bytes). Reports whether position has reached f8 + f12 of the source's FUN_002a17d0 status (0 while f16/f20 are pending and f0 is clear). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports whether position has reached f8 + f12 of the source's FUN_002a17d0 status (0 while
+ * f16/f20 are pending and f0 is clear). */
 struct Status2a1770 {
     int f0;
     int f4;

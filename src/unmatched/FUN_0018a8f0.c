@@ -1,6 +1,3 @@
-/* 0x0018a8f0 — FUN_0018a8f0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 void FUN_0018afa0(void); /* address-taken; signature not recovered */
 void FUN_0018b050(void); /* address-taken; signature not recovered */
 void FUN_0018b110(void); /* address-taken; signature not recovered */
@@ -14,10 +11,10 @@ void FUN_0018b6b0(void); /* address-taken; signature not recovered */
 void FUN_0018b890(void); /* address-taken; signature not recovered */
 void thunk_FUN_0018ac80(void); /* address-taken; signature not recovered */
 void FUN_0018b990(void); /* address-taken; signature not recovered */
-void FUN_0018b730(void);  /* code at 0x18b730, passed by address (was DAT_18b730; docs/engine/function-inventory.md) */
-void FUN_0018b7d0(void);  /* code at 0x18b7d0, passed by address (was FUN_0018b7d0; docs/engine/function-inventory.md) */
-void FUN_0018b940(void);  /* code at 0x18b940, passed by address (was FUN_0018b940; docs/engine/function-inventory.md) */
-void FUN_0018b970(void);  /* code at 0x18b970, passed by address (was FUN_0018b970; docs/engine/function-inventory.md) */
+void FUN_0018b730(void);
+void FUN_0018b7d0(void);
+void FUN_0018b940(void);
+void FUN_0018b970(void);
 int igSphere_GetMetaObject();
 int igPlane_GetMetaObject();
 int FUN_0018fbc0();

@@ -1,4 +1,5 @@
-/* 0x002a1078 — FUN_002a1078 (112 bytes). Initialisation step: hangs if FUN_002a10e8 fails, reports 0xFF000D01 if FUN_0028d6e8 fails, else clears DAT_004beb00. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialisation step: hangs if FUN_002a10e8 fails, reports 0xFF000D01 if FUN_0028d6e8 fails, else
+ * clears DAT_004beb00. */
 extern int FUN_002a10e8(void);
 extern int FUN_0028d6e8(int a, void *b);
 extern int FUN_002a0bb8(void *handle, int code);

@@ -1,4 +1,3 @@
-/* 0x1945d0 — igTraversal_InitFields. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int FUN_0019a720();
 int FUN_002ebc00();
 int FUN_002fe480();

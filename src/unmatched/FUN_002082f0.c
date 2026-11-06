@@ -3,7 +3,7 @@ int FUN_001f0410();
 int FUN_00204240();
 struct B *FUN_00208210();
 int FUN_00209780();
-void FUN_001f0470(void);  /* code at 0x1f0470, passed by address (was DAT_1f0470; docs/engine/function-inventory.md) */
+void FUN_001f0470(void);
 int FUN_001f0490();
 extern int DAT_00490b60[4];
 extern int DAT_004e5370[4];

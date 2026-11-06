@@ -1,4 +1,6 @@
-/* 0x0016fea0 - FUN_0016fea0. Selects the active table row and programs the 5-argument setup call from the field block or from a 12-entry mode table; alternate compiler -O3; typed fields (byte flags at +28/+48), array-of-structs row table, and `arg1 > 1` for the fused slti/bnez at. */
+/* Selects the active table row and programs the 5-argument setup call from the field block or from
+ * a 12-entry mode table; alternate compiler -O3; typed fields (byte flags at +28/+48), array-of-
+ * structs row table, and `arg1 > 1` for the fused slti/bnez at. */
 typedef struct A { char p[24]; unsigned int f24; unsigned char f28; char p1[3]; int f32; int f36; int f40; int f44; unsigned char f48; } A;
 typedef struct It { char p[448]; } It;
 int FUN_001e81f0();

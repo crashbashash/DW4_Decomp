@@ -22,7 +22,7 @@ void igPointerList_Register(void) {
         0x14,                                  /* instance size */
         igPointerList_GetVTable,               /* vtable getter */
         &igPointerList_InitFields_002c92e0[0], /* field adder (post_init in data/reflection.json) */
-        0,                                     /* extra callback-vector item (none; docs/engine/reflection-registration.md) */
+        0,                                     /* extra callback-vector item (none) */
         0                                      /* zero-terminated callback-vector item list (none) */
     );
 }

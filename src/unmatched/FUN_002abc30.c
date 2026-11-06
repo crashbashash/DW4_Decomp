@@ -1,4 +1,5 @@
-/* 0x002abc30 — FUN_002abc30 (100 bytes). Adds `delta` to the counter at +0x950 and, when slot 36 holds a callback, calls it with the object, `arg` and the counter block. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Adds `delta` to the counter at +0x950 and, when slot 36 holds a callback, calls it with the
+ * object, `arg` and the counter block. */
 struct Owner;
 typedef void (*CounterCallback)(struct Owner *obj, int arg, int *counter);
 CounterCallback FUN_002adc40(struct Owner *obj, int slot);

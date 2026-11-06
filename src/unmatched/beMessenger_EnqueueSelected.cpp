@@ -1,34 +1,23 @@
-/* beMessenger::EnqueueSelected (0x0038e8f0, 932 bytes).
- *
- * Turns the messenger's oldest spare delay record into a pending send.  The
- * record at the end of the delay stack gets its release time (the insight
- * clock plus `delay` frames, 16,666,666 clock units each), swaps its argument
- * object with the messenger's current one, takes the interned message text
- * and is marked used.  It is then removed from the end of the stack and
- * inserted again in time order: after every used record whose release time is
- * not later than its own.  Callers: beMessenger_SendDelayedNamed and the
- * other delayed-send entry points (see docs/engine/messenger-lifecycle.md).
- *
- * Matching notes
- *  - Needs the content-pinned alternate compiler with -O3,p and
- *    -Cpp_exceptions off (config/SLUS-20836/unit-compilers.tsv, config/SLUS-20836/unit-flags.tsv).
- *  - The delay record and the temporary that holds the old argument object
- *    are smart references with destructors, which is what keeps them in
- *    stack memory (the record at +92, the temporary at +88).  Their
- *    compiler-emitted destructors are the retail bodies 0x0038c390 and
- *    0x00357a90 (config/SLUS-20836/unit-objects.json).  Both have the same body; the
- *    unit declares two classes so that each local owns one emitted copy.
- *  - The insertion search reads the list through helpers that take the list
- *    base as a parameter.  That is the form that keeps retail's separate
- *    index / byte-offset inductions and the list data pointer hoisted out of
- *    the loop; a direct `list->data[i]` is turned into one pointer induction
- *    by this compiler.  The dummy re-read `l2 = list` at the bottom of the
- *    loop and the integer type of `cur` fix the preheader order and the
- *    register assignment of the loop.
- *  - Callee-owned reference counts follow the usual inline pattern: the low
- *    23 bits of the word at +4 are the count, the object is destroyed at 0.
- *  - The receivers are the reflected classes (beMessenger, beMessengerDelay,
- *    igObjectList, igObject, igInsightCore); arena handles stay int fields. */
+/* beMessenger::EnqueueSelected (0x0038e8f0, 932 bytes). Turns the messenger's oldest spare delay
+ * record into a pending send. The record at the end of the delay stack gets its release time (the
+ * insight clock plus `delay` frames, 16,666,666 clock units each), swaps its argument object with
+ * the messenger's current one, takes the interned message text and is marked used. It is then
+ * removed from the end of the stack and inserted again in time order: after every used record
+ * whose release time is not later than its own. Callers: beMessenger_SendDelayedNamed and the
+ * other delayed-send entry points. Matching notes - Needs the content-pinned alternate compiler
+ * with -O3,p and -Cpp_exceptions off. - The delay record and the temporary that holds the old
+ * argument object are smart references with destructors, which is what keeps them in stack memory
+ * (the record at +92, the temporary at +88). Their compiler-emitted destructors are the retail
+ * bodies 0x0038c390 and 0x00357a90. Both have the same body; the unit declares two classes so that
+ * each local owns one emitted copy. - The insertion search reads the list through helpers that
+ * take the list base as a parameter. That is the form that keeps retail's separate index / byte-
+ * offset inductions and the list data pointer hoisted out of the loop; a direct `list->data[i]` is
+ * turned into one pointer induction by this compiler. The dummy re-read `l2 = list` at the bottom
+ * of the loop and the integer type of `cur` fix the preheader order and the register assignment of
+ * the loop. - Callee-owned reference counts follow the usual inline pattern: the low 23 bits of
+ * the word at +4 are the count, the object is destroyed at 0. - The receivers are the reflected
+ * classes (beMessenger, beMessengerDelay, igObjectList, igObject, igInsightCore); arena handles
+ * stay int fields. */
 #include "dw4/reflected.h"
 
 extern "C" {

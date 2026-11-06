@@ -1,21 +1,13 @@
-/* beMessenger::PrepareDelayedSelection (0x0038e6b0, 576 bytes).
- *
- * Make the messenger's last delay record ready for a delayed send: reset the
- * current argument context, replace the record by a fresh one when it is
- * already in use, then intern the group and name strings and store the
- * number.  Callers: beMessenger_SendDelayedNamed/SendDelayedGroup/
- * PrepareDelayedGroup (see docs/engine/messenger-lifecycle.md).
- *
- * Matching notes
- *  - The record handle is an owning stack reference (ObjectRef below) whose
- *    accesses are reloaded around calls; its destructor releases the record on
- *    scope exit and is the destroy action of the retail exception table.
- *  - Needs the content-pinned alternate compiler with -O3,p (see
- *    docs/engine/unit-compilers.md); the padding NOPs and register choices
- *    come out of the compiler, no inline assembly is used.
- *  - Fields are reached through the reflected beMessenger, beMessengerDelay,
- *    beMessengerDelayList and igObject structs; the 4-byte handles are cast
- *    at the use sites. */
+/* beMessenger::PrepareDelayedSelection (0x0038e6b0, 576 bytes). Make the messenger's last delay
+ * record ready for a delayed send: reset the current argument context, replace the record by a
+ * fresh one when it is already in use, then intern the group and name strings and store the
+ * number. Callers: beMessenger_SendDelayedNamed/SendDelayedGroup/ PrepareDelayedGroup. Matching
+ * notes - The record handle is an owning stack reference (ObjectRef below) whose accesses are
+ * reloaded around calls; its destructor releases the record on scope exit and is the destroy
+ * action of the retail exception table. - Needs the content-pinned alternate compiler with -O3,p;
+ * the padding NOPs and register choices come out of the compiler, no inline assembly is used. -
+ * Fields are reached through the reflected beMessenger, beMessengerDelay, beMessengerDelayList and
+ * igObject structs; the 4-byte handles are cast at the use sites. */
 #include "dw4/reflected.h"
 
 extern "C" {

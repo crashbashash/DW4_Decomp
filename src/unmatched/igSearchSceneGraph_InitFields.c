@@ -1,5 +1,3 @@
-/* 0x00238f70 — igSearchSceneGraph_InitFields, m2c draft (hybrid+po mode), does not match yet.
- * Iterate here; a match is copied to src/igSearchSceneGraph_InitFields.c only after verify.py agrees. */
 int FUN_002274a0();
 int FUN_002be610();
 int FUN_002dc7a0();

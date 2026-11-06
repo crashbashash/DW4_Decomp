@@ -1,4 +1,6 @@
-/* 0x002eb980 - Gap__Core__igLocationTable__vfunc_32. Location table clear-and-visit: reserve/resize the index list, fill it with the default word, then walk the 20-byte entries calling a virtual per entry (division of the pointer difference by 20 keeps the div); capacity test spelled arg1 <= cap; default compiler. Verified byte-identical by tools/verify.py. */
+/* Location table clear-and-visit: reserve/resize the index list, fill it with the default word,
+ * then walk the 20-byte entries calling a virtual per entry (division of the pointer difference by
+ * 20 keeps the div); capacity test spelled arg1 <= cap; default compiler. */
 
 struct E { int w[5]; };
 struct IL { int p[2]; int cnt; int cap; int *arr; };

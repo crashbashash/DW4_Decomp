@@ -1,6 +1,3 @@
-/* 0x0016a780 — FUN_0016a780. Banked by tools/retype_struct_member.py (shape: leadcall0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int FUN_0016a520();
 

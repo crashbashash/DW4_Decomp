@@ -9,7 +9,7 @@ extern char igCharMetricsList_className[];
 extern char g_igCharMetricsList_metaObject[];
 int igMetaObject_RegisterClass();
 int GpFlag_SetOnce_0044b860();
-void FUN_00452900(void);  /* code at 0x452900, passed by address (was DAT_452900; docs/engine/function-inventory.md) */
+void FUN_00452900(void);
 void igCharMetricsList_Register(void) {
     GpFlag_SetOnce_0044b860();
     igMetaObject_RegisterClass(

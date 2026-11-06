@@ -1,4 +1,4 @@
-/* 0x00266298 — FUN_00266298 (44 bytes). Resets an object with FUN_00265fb0 and sets its state to 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets an object with FUN_00265fb0 and sets its state to 1. */
 /* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
 typedef struct Object_265fb0 {
     char f0;

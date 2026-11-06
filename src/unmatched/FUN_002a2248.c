@@ -1,4 +1,4 @@
-/* 0x002a2248 — FUN_002a2248 (108 bytes). Returns the AND of FUN_0029ea88 over the player's three streams at +8068, +8064 and +8072. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the AND of FUN_0029ea88 over the player's three streams at +8068, +8064 and +8072. */
 int FUN_0029ea88();
 
 struct Params;

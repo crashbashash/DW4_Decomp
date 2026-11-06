@@ -1,4 +1,3 @@
-/* 0x001b8ba0 - FUN_001b8ba0. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 int igMatrix44f_SetIdentity(...);
 int FUN_001d0130(...);

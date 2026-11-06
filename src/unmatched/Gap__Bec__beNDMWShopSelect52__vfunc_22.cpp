@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
-/* 0x004405c0 - Gap__Bec__beNDMWShopSelect52__vfunc_22. string-pool intern, old name read after the intern call, typed members; alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* String-pool intern, old name read after the intern call, typed members; alternate compiler
+ * -O3,p. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

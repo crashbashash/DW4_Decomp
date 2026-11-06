@@ -1,4 +1,5 @@
-/* 0x0029e9b8 — FUN_0029e9b8 (108 bytes). Sends request 12 with value for channel index through FUN_002b0338 when the channel is closed, then sets the owner flag at +68. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sends request 12 with value for channel index through FUN_002b0338 when the channel is closed,
+ * then sets the owner flag at +68. */
 int FUN_002b0338();
 
 struct Channel {

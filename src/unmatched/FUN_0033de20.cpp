@@ -1,5 +1,4 @@
 extern "C" {
-/* 0x0033de20 — FUN_0033de20. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 int FUN_00100610(void **);
 int igObject_Destroy(S_temp_a0 *);

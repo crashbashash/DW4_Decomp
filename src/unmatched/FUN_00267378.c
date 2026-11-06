@@ -1,4 +1,5 @@
-/* 0x00267378 — FUN_00267378 (88 bytes). Returns FUN_0025db78 of the object handle when FUN_0025db70 reports a positive value and the state is 2 or 3, else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns FUN_0025db78 of the object handle when FUN_0025db70 reports a positive value and the
+ * state is 2 or 3, else 0. */
 /* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
 typedef struct Object_265fb0 {
     char f0;

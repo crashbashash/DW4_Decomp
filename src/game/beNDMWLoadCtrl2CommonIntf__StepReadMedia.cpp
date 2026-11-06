@@ -1,10 +1,10 @@
-/* 0x003ed650 - beNDMWLoadCtrl2CommonIntf__StepReadMedia: one step of the "read save media" sub-state for the
- * player slot idx (mode selects which of the control record's st0..st3 drives it).  State 0 starts the memory
- * card read; state 1 waits for the result and, on success (result 2), builds a slot player (FUN_003c6360) with
- * four empty Digimon records (beNDMWDegiData_Create), fills it from the read save data (FUN_003f0e30), appends it
- * to _slotSaveData and copies each used Digimon's name (up to 8 UTF-16 chars, zero padded) from its unicode
- * text through FUN_00382eb0.  The slot player and the Digimon records live on the stack in owning references
- * whose releases the retail exception table records. */
+/* One step of the "read save media" sub-state for the player slot idx (mode selects which of the
+ * control record's st0..st3 drives it). State 0 starts the memory card read; state 1 waits for the
+ * result and, on success (result 2), builds a slot player (FUN_003c6360) with four empty Digimon
+ * records (beNDMWDegiData_Create), fills it from the read save data (FUN_003f0e30), appends it to
+ * _slotSaveData and copies each used Digimon's name (up to 8 UTF-16 chars, zero padded) from its
+ * unicode text through FUN_00382eb0. The slot player and the Digimon records live on the stack in
+ * owning references whose releases the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00236f80(...);

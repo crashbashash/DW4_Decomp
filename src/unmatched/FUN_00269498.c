@@ -1,4 +1,5 @@
-/* 0x00269498 — FUN_00269498 (104 bytes). Between FUN_0025f2d0 and FUN_0025f2e8, releases the two resources at offsets 128 and 132 with FUN_00267da0 and clears the in-use word. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Between FUN_0025f2d0 and FUN_0025f2e8, releases the two resources at offsets 128 and 132 with
+ * FUN_00267da0 and clears the in-use word. */
 typedef struct Object_269498 {
     int used;           /* 0x00 */
     char pad4[124];

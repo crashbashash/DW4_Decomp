@@ -1,5 +1,4 @@
-/* 0x002753a8 — FUN_002753a8 (44 bytes). Busy-wait delay of 256 iterations. Sony EE GCC 2.96 unit
-   (docs/engine/sd-prologue.md). */
+/* Busy-wait delay of 256 iterations. */
 void FUN_002753a8(void) {
     int count;
 

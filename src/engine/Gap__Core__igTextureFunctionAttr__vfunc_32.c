@@ -1,6 +1,5 @@
-/* 0x00141400 — Gap::Core::igTextureFunctionAttr::vfunc_32.
- * Setter for `_type`; it also clears `_call_state`, the attribute's per-call
- * state byte, so the new type is applied afresh on the next apply. */
+/* Setter for `_type`; it also clears `_call_state`, the attribute's per-call state byte, so the
+ * new type is applied afresh on the next apply. */
 #include "dw4/reflected.h"
 void Gap__Core__igTextureFunctionAttr__vfunc_32(igTextureFunctionAttr *self, int type) {
     self->_type = type;

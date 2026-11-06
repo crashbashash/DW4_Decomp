@@ -1,4 +1,5 @@
-/* 0x002968f0 — FUN_002968f0 (112 bytes). Sets a playback limit time (its error string names it mwPlySetLimitTime): parameter 54 = `value` * 1000 through FUN_002967b8, rejecting an invalid handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets a playback limit time (its error string names it mwPlySetLimitTime): parameter 54 = `value`
+ * * 1000 through FUN_002967b8, rejecting an invalid handle. */
 extern int FUN_002968c0(void *sfd);
 extern void FUN_0029a320(const char *msg);
 extern void FUN_002967b8(void *sfd, int param, int value);

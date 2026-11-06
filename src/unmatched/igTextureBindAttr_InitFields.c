@@ -3,7 +3,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_00140e40(void);  /* code at 0x140e40, passed by address (was DAT_140e40; docs/engine/function-inventory.md) */
+void FUN_00140e40(void);
 extern int DAT_00485cb0[4];
 extern int DAT_00485cb8[4];
 extern int DAT_00485cc0[4];

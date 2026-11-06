@@ -1,6 +1,3 @@
-/* 0x002e2750 — FUN_002e2750. Banked by tools/retype_struct_member.py (shape: struct5):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 typedef struct S1 { char pad4[4]; int f4; } S1;
 typedef struct S0 { char pad24[24]; int f18; } S0;
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;

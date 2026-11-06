@@ -1,10 +1,9 @@
-/* 0x002ff790 - igObject_AllocateRawStorage: storage for a new object (finding #880).
- * Reserves size + prefix_size bytes from the given allocator, falls back to the default
- * allocator (looked up by selector) when none is passed, and to the global heap
- * (FUN_00126308) when there is no allocator at all. It returns the address prefix_size
- * bytes into the block, so a header can precede the object. The object factories in
- * src/unmatched call it with prefix_size 0. The allocator method called is vtable
- * offset 216 (vfunc_54), the allocate-bytes slot. */
+/* Storage for a new object. Reserves size + prefix_size bytes from the given allocator, falls back
+ * to the default allocator (looked up by selector) when none is passed, and to the global heap
+ * (FUN_00126308) when there is no allocator at all. It returns the address prefix_size bytes into
+ * the block, so a header can precede the object. The object factories in src/unmatched call it
+ * with prefix_size 0. The allocator method called is vtable offset 216 (vfunc_54), the allocate-
+ * bytes slot. */
 extern "C" {
 /* libc-style allocation fallback taking the total size (docs/engine/field-factories.md,
  * "Raw allocation"); finding #3189 suggests the name Memory_AllocateFromGlobalHeap. */

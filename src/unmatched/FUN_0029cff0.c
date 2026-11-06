@@ -1,4 +1,4 @@
-/* 0x0029cff0 — FUN_0029cff0 (124 bytes). Validates the handle, then calls the attached interface's slot +12 when option 6 is set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates the handle, then calls the attached interface's slot +12 when option 6 is set. */
 typedef struct SfdInterface {
     void (*f0)(void);
     void (*f4)(void);

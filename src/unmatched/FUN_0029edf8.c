@@ -1,4 +1,5 @@
-/* 0x0029edf8 — FUN_0029edf8 (136 bytes). Under the guard, adds amount to the running total at +3368+356 and records the new total in the 32-entry history slot for the incremented count. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Under the guard, adds amount to the running total at +3368+356 and records the new total in the
+ * 32-entry history slot for the incremented count. */
 void FUN_002a0e70();
 void FUN_002a0e88();
 

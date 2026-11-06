@@ -1,4 +1,7 @@
-/* 0x002ad478 — FUN_002ad478 (248 bytes). Starts playback on a handle: unless FUN_002a0dd8 refuses (error 0xFF000158) or there is no timing record, stops it (FUN_002abef0), issues the FUN_002ada78 requests 47 and, where the ids at +3512/+3516 are unset, 5 and 6, copies the 12-byte settings to +13868 and sends command 13 (FUN_002b02a0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Starts playback on a handle: unless FUN_002a0dd8 refuses (error 0xFF000158) or there is no
+ * timing record, stops it (FUN_002abef0), issues the FUN_002ada78 requests 47 and, where the ids
+ * at +3512/+3516 are unset, 5 and 6, copies the 12-byte settings to +13868 and sends command 13
+ * (FUN_002b02a0). */
 int FUN_002a0dd8(void *handle);
 void FUN_002a0bb8(void *obj, int code);
 int FUN_002abef0(void *handle);

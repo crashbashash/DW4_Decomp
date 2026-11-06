@@ -1,4 +1,5 @@
-/* 0x0027d470 — FUN_0027d470 (92 bytes). Splits a (pointer, length) chunk at max bytes: head gets the first min(length, max) bytes, rest the remainder (a NULL pointer when nothing is left). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Splits a (pointer, length) chunk at max bytes: head gets the first min(length, max) bytes, rest
+ * the remainder (a NULL pointer when nothing is left). */
 typedef struct Chunk_27d470 {
     char *data;     /* 0x00 */
     int length;     /* 0x04 */

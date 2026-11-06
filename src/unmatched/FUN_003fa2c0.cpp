@@ -1,4 +1,5 @@
-/* 0x003fa2c0 - FUN_003fa2c0. Shop record accumulator, string-compare variant: adds the record integer and, when the record string equals the key, the item field, through one reused temporary; alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* Shop record accumulator, string-compare variant: adds the record integer and, when the record
+ * string equals the key, the item field, through one reused temporary; alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */

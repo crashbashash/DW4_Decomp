@@ -1,6 +1,3 @@
-/* 0x001a76a0 — igAnimationModifier_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_00196190();
 int FUN_002dc7a0();
@@ -9,7 +6,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_001a7440(void);  /* code at 0x1a7440, passed by address (was DAT_1a7440; docs/engine/function-inventory.md) */
+void FUN_001a7440(void);
 extern int DAT_0048d1b8[4];
 extern int DAT_0048d1c8[4];
 extern int DAT_0048d1d8[4];

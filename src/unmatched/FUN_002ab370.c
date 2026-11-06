@@ -1,4 +1,4 @@
-/* 0x002ab370 — FUN_002ab370 (128 bytes). True when the current stream's level (interface slot +36) is at least 80% of its capacity. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when the current stream's level (interface slot +36) is at least 80% of its capacity. */
 typedef struct SfdStreamObj SfdStreamObj;
 typedef struct SfdStreamVtbl {
     char pad0[36];

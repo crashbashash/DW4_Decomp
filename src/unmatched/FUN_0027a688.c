@@ -1,4 +1,7 @@
-/* 0x0027a688 — FUN_0027a688 (232 bytes). Closes a player object unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0: stops each channel handle (+16) with FUN_00272f90, sends command 9 with its id (+32) through FUN_00273820 and releases each channel stream (+8) with FUN_00279728. Always marks the object unused (byte 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Closes a player object unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0:
+ * stops each channel handle (+16) with FUN_00272f90, sends command 9 with its id (+32) through
+ * FUN_00273820 and releases each channel stream (+8) with FUN_00279728. Always marks the object
+ * unused (byte 0). */
 typedef struct Player_27a688 {
     signed char used;   /* 0x00 */
     char pad1[3];

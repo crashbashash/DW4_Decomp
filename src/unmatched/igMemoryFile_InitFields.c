@@ -1,4 +1,3 @@
-/* 0x2c0940 — igMemoryFile_InitFields. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int FUN_002fe480();
 int igMetaObject_CreateFields();
 int igMetaObject_GetFieldCount();

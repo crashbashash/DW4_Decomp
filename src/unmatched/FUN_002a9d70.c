@@ -1,4 +1,5 @@
-/* 0x002a9d70 — FUN_002a9d70 (88 bytes). Once only, stops the play state's buffer at +4376 and records a value with the stopped flag (+4292/+4296). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Once only, stops the play state's buffer at +4376 and records a value with the stopped flag
+ * (+4292/+4296). */
 typedef struct SfdPumpCtl {
     char pad0[28];
     int stopped;            /* +28 */

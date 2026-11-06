@@ -1,7 +1,6 @@
-/* Cached FightCom metadata enum, 0x003c9be0; 22 command names (table at 0x004cc350,
- * ids at 0x004cc3b0; docs/systems/combat-damage.md) built once and cached at 0x0058c090.
- * Matching compiler requirement: config/SLUS-20836/unit-compilers.tsv.
- */
+/* Cached FightCom metadata enum, 0x003c9be0; 22 command names (table at 0x004cc350, ids at
+ * 0x004cc3b0) built once and cached at 0x0058c090. Matching compiler requirement:
+ * config/SLUS-20836/unit-compilers.tsv. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

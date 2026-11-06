@@ -1,9 +1,7 @@
 #include "dw4/reflected.h"
-/* 0x00171560 — FUN_00171560. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * Receiver igPsx2VisualContext (only class with a 4-byte ref at +1336,
- * _pLightList -> igLightList, _data +16, 0xA0-byte igLightAttr entries,
- * _diffuse +48). The metadata types _diffuse as int[4]; the code reads floats. */
+/* Receiver igPsx2VisualContext (only class with a 4-byte ref at +1336, _pLightList -> igLightList,
+ * _data +16, 0xA0-byte igLightAttr entries, _diffuse +48). The metadata types _diffuse as int[4];
+ * the code reads floats. */
 void FUN_00171560(igPsx2VisualContext *arg0, int arg1, float *arg2) {
     igLightAttr *temp_v1;
 

@@ -1,4 +1,5 @@
-/* 0x002ae4c8 — FUN_002ae4c8 (52 bytes). True when the object's state word at +72 is 4, its word at +80 is clear and the sub-block at +2384 has a clear word at +28. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when the object's state word at +72 is 4, its word at +80 is clear and the sub-block at
+ * +2384 has a clear word at +28. */
 
 struct Sub0950 {
     char pad[28];

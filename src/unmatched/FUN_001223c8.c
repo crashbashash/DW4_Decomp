@@ -1,4 +1,4 @@
-/* 0x001223c8 — FUN_001223c8 (68 bytes). Returns x with the sign bit of y (newlib copysign shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns x with the sign bit of y (newlib copysign shape; name is a hypothesis). */
 typedef union DoubleWords {
     double value;
     struct {

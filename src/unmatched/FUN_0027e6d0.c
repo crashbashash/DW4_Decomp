@@ -1,4 +1,5 @@
-/* 0x0027e6d0 — FUN_0027e6d0 (116 bytes). SVM_DelCbSvr (named by its diagnostic string): clears server slot `slot` of `group` under the SVM lock. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* SVM_DelCbSvr (named by its diagnostic string): clears server slot `slot` of `group` under the
+ * SVM lock. */
 void FUN_0027e1c0(void); /* SVM lock, type 1 */
 void FUN_0027e1d8(void); /* SVM unlock, type 1 */
 void FUN_0027e398(const char *message);

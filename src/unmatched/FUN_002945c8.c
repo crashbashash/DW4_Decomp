@@ -1,4 +1,5 @@
-/* 0x002945c8 — FUN_002945c8 (128 bytes). Clears the three words at +184 and the eight 20-byte entries at +196 (last word 17), then calls FUN_00297f18(obj, 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears the three words at +184 and the eight 20-byte entries at +196 (last word 17), then calls
+ * FUN_00297f18(obj, 0). */
 extern void FUN_00297f18(void *obj, int arg);
 
 typedef struct {

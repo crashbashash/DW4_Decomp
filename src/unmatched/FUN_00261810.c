@@ -1,4 +1,6 @@
-/* 0x00261810 — FUN_00261810 (176 bytes). Opens the named file on the ADXF handle stream (message from ADXF_Open at DAT_004edbc8 for a null name), closing it again when FUN_0026a138 reports state 4; on success records the sizes from FUN_0026aa00/FUN_0026aa08. Returns 0 or -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Opens the named file on the ADXF handle stream (message from ADXF_Open at DAT_004edbc8 for a
+ * null name), closing it again when FUN_0026a138 reports state 4; on success records the sizes
+ * from FUN_0026aa00/FUN_0026aa08. Returns 0 or -1. */
 /* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
 typedef struct AdxfHandle {
     signed char used;

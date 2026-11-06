@@ -1,4 +1,4 @@
-/* 0x002a9ba0 — FUN_002a9ba0 (36 bytes). Runs FUN_002a9310 on the play state's buffer at +4376; returns 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs FUN_002a9310 on the play state's buffer at +4376; returns 1. */
 typedef struct SfdPlayState {
     char pad0[4376];
     char buf[4];            /* +4376 */

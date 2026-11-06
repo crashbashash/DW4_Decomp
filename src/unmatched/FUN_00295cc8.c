@@ -1,4 +1,5 @@
-/* 0x00295cc8 — FUN_00295cc8 (100 bytes). Formats "%08x.%08x" from `first` and the 2048-byte sector count of `size` into a 20-byte name and passes it to the object's method at vtable +24, then clears the buffer. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Formats "%08x.%08x" from `first` and the 2048-byte sector count of `size` into a 20-byte name
+ * and passes it to the object's method at vtable +24, then clears the buffer. */
 int sprintf(char *, const char *, ...);
 void *memset(void *, int, unsigned int);
 

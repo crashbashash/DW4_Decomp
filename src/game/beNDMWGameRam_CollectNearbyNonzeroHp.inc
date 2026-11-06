@@ -34,7 +34,7 @@ void beMessenger_SetRunCheck(int,unsigned char);
 void beMessenger_DispatchSelected(int,const char *);
 void beMessenger_PopArgContext(int);
 extern char GETMATRIX[],GETHP[];
-/* Default allocator selector (docs/engine/subwindow-preparation.md). */
+/* Default allocator selector. */
 extern int g_defaultAllocatorSelector[4];
 extern unsigned char GPR_00554c14;
 }
@@ -56,8 +56,9 @@ public:
         }
     }
 };
-/* The query's own working reference: its destructor is a separate retail copy (0x00150eb0, config/SLUS-20836/unit-objects.json
- * duplicates), while the by-value result handed back to the caller is the IntListRef whose destructor is 0x003fc670. */
+/* The query's own working reference: its destructor is a separate retail copy (0x00150eb0.json
+ * duplicates), while the by-value result handed back to the caller is the IntListRef whose
+ * destructor is 0x003fc670. */
 class NearbyListRef {
 public:
     IntList *value;

@@ -1,5 +1,5 @@
-/* 0x0025d4f8 — FUN_0025d4f8 (68 bytes). Releases a 260-byte record: detaches and frees its handle at +8 through
- * FUN_0026f010, clears the whole record and its state halfword. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Releases a 260-byte record: detaches and frees its handle at +8 through FUN_0026f010, clears the
+ * whole record and its state halfword. */
 void FUN_0026f010(void *handle);
 void *memset(void *dst, int value, unsigned int size);
 

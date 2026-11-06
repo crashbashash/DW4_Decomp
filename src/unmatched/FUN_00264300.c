@@ -1,4 +1,4 @@
-/* 0x00264300 — FUN_00264300 (80 bytes). Wakes a thread if it is waiting (or waiting and suspended). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Wakes a thread if it is waiting (or waiting and suspended). */
 /* EE kernel thread status block filled by ReferThreadStatus (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_status_t) */
 typedef struct ThreadStatus {
     int status;

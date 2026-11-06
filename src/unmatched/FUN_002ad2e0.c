@@ -1,4 +1,5 @@
-/* 0x002ad2e0 — FUN_002ad2e0 (76 bytes). Forwards to FUN_002ad330 when the record carries a delegate at +3520; otherwise stores record+3496 * scale / divisor (FUN_002916f8, a 64-bit multiply-divide) through out. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards to FUN_002ad330 when the record carries a delegate at +3520; otherwise stores
+ * record+3496 * scale / divisor (FUN_002916f8, a 64-bit multiply-divide) through out. */
 int FUN_002916f8();
 int FUN_002ad330();
 

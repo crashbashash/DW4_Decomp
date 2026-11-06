@@ -1,6 +1,3 @@
-/* 0x003725f0 — SYSisGetShinkaDigimon. m2c draft + decomp-permuter search, verified
- * byte-identical to retail by tools/verify.py. */
-
 extern "C" {
 int bePlayer_GetStruct(int);
 void *igProperty_GetRecordArray(int, int *);

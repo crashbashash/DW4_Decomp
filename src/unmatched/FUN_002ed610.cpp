@@ -1,11 +1,10 @@
-/* 0x002ed610 - FUN_002ed610: hex dump of a memory range (hypothesis name: Memory_HexDump).
- * Parameters: size = bytes per element (clamped to 1..8), perLine = elements per row,
- * digits = address digits shown in the row prefix (0 = no prefix), addr/length = range,
- * name = optional output file name; the dump goes to a file object (open mode "w") when a
- * name is given and to the console otherwise.
- * Evidence: format strings at 0x4f9ca0..0x4f9cf8 ("0x%0*x: ", "0x%08x: ", "%02x ",
- * "%04x ", "%06x ", "%08x ", "%010lx", "%012lx", "%014lx", "%016lx"), a "\n" row
- * terminator at 0x4f95c8 and the open mode "w" at 0x4f92f0. */
+/* Hex dump of a memory range (hypothesis name: Memory_HexDump). Parameters: size = bytes per
+ * element (clamped to 1..8), perLine = elements per row, digits = address digits shown in the row
+ * prefix (0 = no prefix), addr/length = range, name = optional output file name; the dump goes to
+ * a file object (open mode "w") when a name is given and to the console otherwise. Evidence:
+ * format strings at 0x4f9ca0..0x4f9cf8 ("0x%0*x: ", "0x%08x: ", "%02x ", "%04x ", "%06x ", "%08x
+ * ", "%010lx", "%012lx", "%014lx", "%016lx"), a "\n" row terminator at 0x4f95c8 and the open mode
+ * "w" at 0x4f92f0. */
 extern "C" {
 int FUN_00304430(...);   /* console printf */
 int FUN_00304680();      /* console flush after each print */

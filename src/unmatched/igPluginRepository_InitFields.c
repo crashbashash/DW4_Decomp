@@ -1,9 +1,9 @@
-/* 0x002bcb20 - igPluginRepository_InitFields. the pointer store after GetFieldAt needs the call result in a local. Verified byte-identical by tools/verify.py. */
+/* The pointer store after GetFieldAt needs the call result in a local. */
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_002bc8d0(void);  /* code at 0x2bc8d0, passed by address (was DAT_2bc8d0; docs/engine/function-inventory.md) */
+void FUN_002bc8d0(void);
 extern int DAT_004bfa58[4];
 extern int DAT_004bfa60[4];
 extern int DAT_004bfa68[4];

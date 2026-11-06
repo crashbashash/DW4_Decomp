@@ -1,4 +1,7 @@
-/* 0x002638a0 — FUN_002638a0 (172 bytes). Reports DAT_004ee178 for a null object; otherwise, between FUN_0025f2d0 and FUN_0025f2e8, calls FUN_0026b978 with the object and its field 16, invokes slot 5 of the attached interface at offset 20, sets the state byte to 4 and passes the 2048-byte sector count at offset 62 to FUN_00277658 for the handle at offset 148, then FUN_00277210 and FUN_0026d158(object, 1). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports DAT_004ee178 for a null object; otherwise, between FUN_0025f2d0 and FUN_0025f2e8, calls
+ * FUN_0026b978 with the object and its field 16, invokes slot 5 of the attached interface at
+ * offset 20, sets the state byte to 4 and passes the 2048-byte sector count at offset 62 to
+ * FUN_00277658 for the handle at offset 148, then FUN_00277210 and FUN_0026d158(object, 1). */
 typedef struct Interface_2638a0 Interface_2638a0;
 typedef struct InterfaceTable_2638a0 {
     void (*slot[6])(Interface_2638a0 *self);

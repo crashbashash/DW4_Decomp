@@ -1,5 +1,5 @@
 extern "C" {
-/* 0x00340720 - FUN_00340720. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 int Memory_GetAllocatorBySelector(int);
 int igMetaObject_Create(int);
 extern int DAT_00587040[4];

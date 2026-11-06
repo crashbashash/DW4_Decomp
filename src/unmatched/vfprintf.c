@@ -1,4 +1,5 @@
-/* 0x0012d5c8 — vfprintf (116 bytes). Binds the stream to the current reent block and runs the one-time stdio setup if needed, then formats through FUN_0012d640 (newlib vfprintf with CHECK_INIT). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Binds the stream to the current reent block and runs the one-time stdio setup if needed, then
+ * formats through FUN_0012d640 (newlib vfprintf with CHECK_INIT). */
 typedef __builtin_va_list va_list;
 
 typedef struct Reent {

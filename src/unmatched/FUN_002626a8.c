@@ -1,4 +1,5 @@
-/* 0x002626a8 — FUN_002626a8 (120 bytes). Checks a partition id (below 256 and loaded in DAT_0049a228) and a file id (0 up to the partition file count); reports the bad one through FUN_002607e8 and returns -3, else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Checks a partition id (below 256 and loaded in DAT_0049a228) and a file id (0 up to the
+ * partition file count); reports the bad one through FUN_002607e8 and returns -3, else 0. */
 typedef struct AdxfPartition {
     int f0;
     int f4;

@@ -1,20 +1,14 @@
-/* 0x0043c7f0..0x0043cc20 — beNDMWShopCtrlXdataChip::RefreshText.  Finding #923.
- *
- * Redraws the chip shop's text windows through the messenger (TEXTCTL group,
- * TEXTSET / SWITCH messages).  `refreshRows`: for each of the 12 rows of the
- * current page, show the chip's NAME and its NEXTX value (printed with "%d", or
- * "----" when it is not positive) and switch the row on, or switch it off when
- * the row has no chip; then print the current and last page numbers.
- * `refreshDescription`: show the TXT description of the chip under the
- * cursor (index _nowPage * 12 + _retCode) and switch its window on.
- *
- * All messages, field reads, index decisions and formatting are C. Original
- * joins/NOPs and three address-high instructions preserve retail scheduling.
- * Register-binding dmove pseudos coalesce without adding instructions.
- * Explicit target words: two joins, eleven NOPs, three LUIs (64 bytes);
- * the remaining 1,008 bytes are generated from C. This is an ABI/codegen
- * projection, not a claim about original declaration or source spelling.
- */
+/* ..0x0043cc20 — beNDMWShopCtrlXdataChip::RefreshText. Redraws the chip shop's text windows
+ * through the messenger (TEXTCTL group, TEXTSET / SWITCH messages). `refreshRows`: for each of the
+ * 12 rows of the current page, show the chip's NAME and its NEXTX value (printed with "%d", or
+ * "----" when it is not positive) and switch the row on, or switch it off when the row has no
+ * chip; then print the current and last page numbers. `refreshDescription`: show the TXT
+ * description of the chip under the cursor (index _nowPage * 12 + _retCode) and switch its window
+ * on. All messages, field reads, index decisions and formatting are C. Original joins/NOPs and
+ * three address-high instructions preserve retail scheduling. Register-binding dmove pseudos
+ * coalesce without adding instructions. Explicit target words: two joins, eleven NOPs, three LUIs
+ * (64 bytes); the remaining 1,008 bytes are generated from C. This is an ABI/codegen projection,
+ * not a claim about original declaration or source spelling. */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
@@ -22,7 +16,7 @@ extern "C" {
 #define CHIPS_PER_PAGE 12  /* rows shown per page: the row loop bound and the page stride */
 /* Unspecified argument lists retain retail call setup. Observed result widths
  * are explicit; these are call-site projections, not recovered callee types. */
-int sprintf(char *, const char *, ...);  /* sprintf(dest, format, ...) (docs/engine/material-contact.md) */
+int sprintf(char *, const char *, ...);  /* sprintf(dest, format, ...) */
 long long FUN_00236f80(int, int);
 long long beNDMWItemBase_GetRecordInt(int, long long, char *);
 char *beNDMWItemBase_GetRecordString(int, long long, char *);

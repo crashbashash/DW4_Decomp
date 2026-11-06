@@ -1,4 +1,4 @@
-/* 0x002ab878 — FUN_002ab878 (64 bytes). Returns the index of the first free handle slot (DAT_004beadc), or -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the index of the first free handle slot (DAT_004beadc), or -1. */
 typedef struct SfdHandle SfdHandle;
 
 extern SfdHandle *DAT_004beadc[8];

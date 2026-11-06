@@ -1,5 +1,6 @@
-/* 0x0035cf20 - beLOA_InitFields. four stack words are one int sp40[4]; flag bytes stored as char. Verified byte-identical by tools/verify.py.
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* Four stack words are one int sp40[4]; flag bytes stored as char. C++ translation unit: the unit
+ * compiled with exceptions on and retail keeps this function's exception index record, which only
+ * the C++ front end emits. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00138f20(void);

@@ -1,6 +1,3 @@
-/* 0x0014b5a0 — igVertexData_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int igDataList_GetOrCreateMetaObject();
 int FUN_002dc7a0();
@@ -9,7 +6,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_0014b330(void);  /* code at 0x14b330, passed by address (was DAT_14b330; docs/engine/function-inventory.md) */
+void FUN_0014b330(void);
 extern int DAT_004886c0[4];
 extern int DAT_004886e0[4];
 extern int DAT_00488700[4];

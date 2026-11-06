@@ -1,4 +1,5 @@
-/* 0x00125ee0 — FUN_00125ee0 (140 bytes). Accepts only the "C" or "" locale, records category and locale in the reent block and returns "C"; any other locale returns 0 (newlib _setlocale_r shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Accepts only the "C" or "" locale, records category and locale in the reent block and returns
+ * "C"; any other locale returns 0 (newlib _setlocale_r shape; name is a hypothesis). */
 typedef struct Reent {
     char f0[48];
     int currentCategory;

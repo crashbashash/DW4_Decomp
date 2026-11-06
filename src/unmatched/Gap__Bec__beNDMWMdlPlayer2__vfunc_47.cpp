@@ -59,8 +59,9 @@ extern char DAT_005166d8[], DAT_005166e8[], DAT_005166f0[], DAT_00516700[], DAT_
 extern int DAT_004cc820[4], DAT_004cc828[4], DAT_00587110[4], DAT_00585be0[4];
 
 }
-/* matching construct: dummy-virtual receiver; only slot 33 (beNDMWMdlPlayer2::vfunc_33, vtable +0x08 + 4*33) is called.
- * The k-th declared virtual dispatches slot k, so the names count from vfunc_00 (scripts/check_vtable_slots.py). */
+/* matching construct: dummy-virtual receiver; only slot 33 (beNDMWMdlPlayer2::vfunc_33, vtable
+ * +0x08 + 4*33) is called. The k-th declared virtual dispatches slot k, so the names count from
+ * vfunc_00. */
 struct Msg;
 class Player2Virt {
 public:

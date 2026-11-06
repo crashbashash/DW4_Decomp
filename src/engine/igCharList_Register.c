@@ -9,7 +9,7 @@ extern char igCharList_className[];
 extern char g_igCharList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
-void FUN_002cb010(void);  /* code at 0x2cb010, passed by address (was DAT_2cb010; docs/engine/function-inventory.md) */
+void FUN_002cb010(void);
 void igCharList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(

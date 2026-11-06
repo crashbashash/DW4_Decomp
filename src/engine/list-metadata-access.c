@@ -4,12 +4,10 @@
  * from the per-function units by tools/merge_units.py; the matching build
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
-/* Meta-field default descriptors.  Each getter returns the class's published
- * descriptor, running the class's registration wrapper first when nothing has
- * been published yet (docs/engine/list-registration.md).  The wrapper at
- * 0x002b7500 has the same shape as igIntMetaField_EnsureRegistered: it passes
- * the class's Register routine (0x002b7510, igUnsignedCharMetaField_Register)
- * to igMetaObject_RunStaticInit. */
+/* Meta-field default descriptors. Each getter returns the class's published descriptor, running
+ * the class's registration wrapper first when nothing has been published yet. The wrapper at
+ * 0x002b7500 has the same shape as igIntMetaField_EnsureRegistered: it passes the class's Register
+ * routine (0x002b7510, igUnsignedCharMetaField_Register) to igMetaObject_RunStaticInit. */
 int igUnsignedCharMetaField_EnsureRegistered();
 extern int g_igUnsignedCharMetaField_descriptor[4];
 int igObjectRefMetaField_EnsureRegistered();
@@ -24,7 +22,6 @@ int igIntMetaField_EnsureRegistered();
 extern int g_igIntMetaField_descriptor[4];
 extern int g_igDataList_metaObject[4];
 extern int g_igIntList_metaObject[4];
-
 
 /* 0x002b7660: default descriptor of igUnsignedCharMetaField, registered on first use. */
 int igUnsignedCharMetaField_GetDefaultDescriptor(void) {

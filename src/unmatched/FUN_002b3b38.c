@@ -1,4 +1,5 @@
-/* 0x002b3b38 — FUN_002b3b38 (64 bytes). Counts the call in DAT_004bec30 and, when a callback is installed (FUN_002b38b0), calls it with its argument and `value`. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Counts the call in DAT_004bec30 and, when a callback is installed (FUN_002b38b0), calls it with
+ * its argument and `value`. */
 
 /* DAT_004bec30: a callback, the argument it is called with, and a call counter. */
 struct CallbackSlot {

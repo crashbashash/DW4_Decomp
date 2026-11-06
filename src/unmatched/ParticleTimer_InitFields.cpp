@@ -1,5 +1,5 @@
-/* 0x0036e790 - ParticleTimer_InitFields. byte stores of zero (the draft's int store through an odd offset became swl/swr) Verified byte-identical by tools/verify.py.
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 extern "C" {
 int FUN_002d3890(void *, int);
 int FUN_002ebc00(void *, int);

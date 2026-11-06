@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x003a5a10 — Gap__Bec__beTargetObj__vfunc_23. hand-matched: a struct member keeps the base pointer where m2c
- * CSE'd arg+N (finding #509's shape); verified byte-identical by tools/verify.py. */
 extern "C" {
 int FUN_00236f80(int, int);
 extern int DAT_00587ce8[4];

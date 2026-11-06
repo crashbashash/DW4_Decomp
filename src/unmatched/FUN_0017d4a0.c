@@ -1,6 +1,3 @@
-/* 0x0017d4a0 — FUN_0017d4a0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 void FUN_0017d4a0(igPsx2VertexArray1_1 *arg0, int arg1, void *arg2) {
     void *temp_v1;

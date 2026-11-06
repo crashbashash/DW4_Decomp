@@ -1,4 +1,5 @@
-/* 0x002a1f28 — FUN_002a1f28 (168 bytes). Writes length bytes into the ring in up to two pieces (FUN_002a1fd0) when slot 36 reports room; counts short second writes in DAT_004beb00. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Writes length bytes into the ring in up to two pieces (FUN_002a1fd0) when slot 36 reports room;
+ * counts short second writes in DAT_004beb00. */
 int FUN_002a1fd0();
 extern volatile int DAT_004beb00;
 

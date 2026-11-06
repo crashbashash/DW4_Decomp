@@ -1,4 +1,3 @@
-/* 0x1e3300 — Gap__Core__igCompressedAnimationSequenceQS__vfunc_37. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int igObject_Destroy();
 struct R { int vt; unsigned int rc; };
 struct S { char pad0[8]; struct R *p8; char pad1[44]; unsigned char f56; };

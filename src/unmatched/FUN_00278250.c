@@ -1,5 +1,5 @@
-/* 0x00278250 — FUN_00278250 (56 bytes). Returns the word at +16 of a handle, reporting
-   "E01100306:handl is null." and returning 0 for a null handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the word at +16 of a handle, reporting "E01100306:handl is null." and returning 0 for a
+ * null handle. */
 struct Handle278 {
     signed char used;     /* +0 */
     signed char busy;     /* +1 */

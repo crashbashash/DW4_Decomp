@@ -1,4 +1,5 @@
-/* 0x0027df80 — FUN_0027df80 (248 bytes). Creates an IOP-side SJX: takes a free slot of the 32-entry table, asks the IOP for a handle with request 0 through FUN_00273820, and reports "can't create SJX of IOP" on failure. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Creates an IOP-side SJX: takes a free slot of the 32-entry table, asks the IOP for a handle with
+ * request 0 through FUN_00273820, and reports "can't create SJX of IOP" on failure. */
 void *memset(void *, int, unsigned int);
 int FUN_00273820();
 int FUN_002659a0();

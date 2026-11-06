@@ -1,4 +1,3 @@
-/* 0x001d6240 — FUN_001d6240. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_001c5b80();
 int FUN_001c5d10();
 int igObject_Destroy();

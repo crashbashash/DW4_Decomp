@@ -1,4 +1,5 @@
-/* 0x00296f18 — FUN_00296f18 (112 bytes). mwSfdSetOutPan (named by its diagnostic string): forwards to FUN_00295e28 for a valid player handle, else reports it invalid. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* mwSfdSetOutPan (named by its diagnostic string): forwards to FUN_00295e28 for a valid player
+ * handle, else reports it invalid. */
 int FUN_002968c0(void *player); /* non-zero for a valid player handle */
 void FUN_00295e28(void *player, int channel, int pan);
 void FUN_0029a320(const char *format, ...);

@@ -1,4 +1,5 @@
-/* 0x0027e078 — FUN_0027e078 (68 bytes). Sends the handle's word at +16 as request 1 through FUN_00273820, then clears the handle's in-use byte. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sends the handle's word at +16 as request 1 through FUN_00273820, then clears the handle's in-
+ * use byte. */
 int FUN_00273820();
 
 struct Handle0027e078 {

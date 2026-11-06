@@ -1,4 +1,5 @@
-/* 0x0029e2d0 — FUN_0029e2d0 (156 bytes). Under the guard, returns the channel's buffered byte count (+48), or the pending count (+52) plus what its ring holds, saturated to 0x7FFFFFFF. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Under the guard, returns the channel's buffered byte count (+48), or the pending count (+52)
+ * plus what its ring holds, saturated to 0x7FFFFFFF. */
 void FUN_002a0e70();
 void FUN_002a0e88();
 

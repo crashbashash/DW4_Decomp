@@ -1,5 +1,5 @@
-/* 0x00275f88 — FUN_00275f88 (76 bytes). Returns the word at +40 scaled by 2048 while the state byte is 1 (0 otherwise), reporting a null handle.
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the word at +40 scaled by 2048 while the state byte is 1 (0 otherwise), reporting a null
+ * handle. */
 struct Handle275 {
     signed char used;      /* +0 */
     signed char shared;    /* +1 */

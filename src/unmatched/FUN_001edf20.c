@@ -1,6 +1,3 @@
-/* 0x001edf20 — FUN_001edf20. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int DeleteThread();
 int FUN_0010b9c0();
 int FUN_0010ba90();

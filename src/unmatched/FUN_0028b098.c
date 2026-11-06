@@ -1,5 +1,5 @@
-/* 0x0028b098 — FUN_0028b098 (36 bytes). Makes a decoder handle current (0x00573f00) and validates it:
-   returns 0 when its state word is 2, -1 otherwise or for a null handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Makes a decoder handle current (0x00573f00) and validates it: returns 0 when its state word is
+ * 2, -1 otherwise or for a null handle. */
 struct Decoder28b {
     int state;   /* +0: 2 = valid */
 };

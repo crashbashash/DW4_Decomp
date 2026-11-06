@@ -1,4 +1,4 @@
-/* 0x002a0658 — FUN_002a0658 (148 bytes). When a source is given, reads four values through getter callbacks via FUN_002a08c0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When a source is given, reads four values through getter callbacks via FUN_002a08c0. */
 extern int FUN_002b2600(void *handle, void *source, int *value);
 extern int FUN_002b2670(void *handle, void *source, int *value);
 extern int FUN_002b26f0(void *handle, void *source, int *value);

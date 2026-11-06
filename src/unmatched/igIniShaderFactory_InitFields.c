@@ -1,4 +1,3 @@
-/* 0x0019f060 — igIniShaderFactory_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 #include "dw4/reflected.h"
 int FUN_0019ea00();
 int FUN_002bb030();

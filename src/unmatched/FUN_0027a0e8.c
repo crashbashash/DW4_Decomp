@@ -1,4 +1,6 @@
-/* 0x0027a0e8 — FUN_0027a0e8 (140 bytes). Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0, opens channel id (0 or 1): unless its slot in DAT_004b1e00 is already 1, sends command 16 with the id through FUN_00273820 and sets the slot. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Unless mode DAT_004b1dc8 is 1 with no pending count in DAT_004b1dc0, opens channel id (0 or 1):
+ * unless its slot in DAT_004b1e00 is already 1, sends command 16 with the id through FUN_00273820
+ * and sets the slot. */
 extern int DAT_004b1dc8;
 extern int DAT_004b1dc0;
 extern int DAT_004b1e00[2];

@@ -1,4 +1,4 @@
-/* 0x0026a068 — FUN_0026a068 (56 bytes). Starts a request with FUN_00269ff0 and polls FUN_00262950 until it is no longer busy. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Starts a request with FUN_00269ff0 and polls FUN_00262950 until it is no longer busy. */
 /* Request layout shared by FUN_00269ff0 … FUN_0026a300 (offsets from their accesses). */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */

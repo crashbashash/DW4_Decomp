@@ -1,6 +1,5 @@
-/* 0x000037e6e0 — FUN_0037e6e0: queue a kind-7 keep-message whose parameter is the interned
- * string `arg1`; a build work is created first when the
- * manager has none. */
+/* Queue a kind-7 keep-message whose parameter is the interned string `arg1`; a build work is
+ * created first when the manager has none. */
 #include "dw4/reflected.h"
 
 extern "C" {

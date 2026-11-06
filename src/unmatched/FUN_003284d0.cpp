@@ -1,4 +1,3 @@
-/* 0x003284d0 — FUN_003284d0. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 extern "C" {
 int FUN_002d6e60(...);
 int FUN_002f89a0(...);
@@ -7,7 +6,7 @@ int FUN_0032a180(...);
 int FUN_0032a1b0(...);
 void *FUN_0032a1e0(...);
 int List_InsertWords(...);
-void FUN_0032a260(void);  /* code at 0x32a260, passed by address (was DAT_32a260; docs/engine/function-inventory.md) */
+void FUN_0032a260(void);
 extern int DAT_004ff570[4];
 void FUN_003284d0(void *arg0, int arg1);
 }

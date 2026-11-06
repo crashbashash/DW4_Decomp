@@ -9,7 +9,7 @@ int igMetaObject_CreateFields();
 struct Fld *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_0013ef20(void);  /* code at 0x13ef20, passed by address (was DAT_13ef20; docs/engine/function-inventory.md) */
+void FUN_0013ef20(void);
 extern int q2_0013ef20[4];
 extern int q3_0013ef20[4];
 extern int q4_0013ef20[4];

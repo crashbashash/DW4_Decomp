@@ -1,4 +1,5 @@
-/* 0x00267de8 — FUN_00267de8 (88 bytes). Converts (id, arg) into a pair of shorts through FUN_0025f300 and applies the pair to the object (FUN_00267dd8) and to its resource at +136 (FUN_00267c50). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Converts (id, arg) into a pair of shorts through FUN_0025f300 and applies the pair to the object
+ * (FUN_00267dd8) and to its resource at +136 (FUN_00267c50). */
 typedef struct Obj_267de8 {
     char pad0[136];
     int resource;   /* 0x88 */

@@ -1,4 +1,5 @@
-/* 0x001e2970 - Gap__Core__igTransformSequence1_5__vfunc_38. Resize the position, normal, colour and texture-coordinate lists of a transform sequence to the same count (the fused `n <= l->cap` compare). Alternate compiler -O3. */
+/* Resize the position, normal, colour and texture-coordinate lists of a transform sequence to the
+ * same count (the fused `n <= l->cap` compare). Alternate compiler -O3. */
 struct L { int pad[2]; int count; int cap; };
 struct T { char pad[8]; struct L *a; struct L *b; struct L *c; char pad2[36]; struct L *d; char pad3[12]; unsigned char flags; };
 int List_Resize();

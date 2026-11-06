@@ -1,4 +1,5 @@
-/* 0x00295b68 — FUN_00295b68 (120 bytes). Copies a file name into the handle's +440 buffer, truncating to the +444 capacity (and reporting it) when the name is longer. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies a file name into the handle's +440 buffer, truncating to the +444 capacity (and reporting
+ * it) when the name is longer. */
 extern int strlen(const char *s);
 extern char *strcpy(char *dst, const char *src);
 extern char *strncpy(char *dst, const char *src, int n);

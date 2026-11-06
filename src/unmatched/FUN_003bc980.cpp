@@ -1,6 +1,6 @@
-/* 0x003bc980 - FUN_003bc980, 76 bytes. Metaobject singleton accessor: create when the cached object is null or its flag 4 is clear.
- * Retail keeps the flag test as a materialised C++ bool (sltu) with a padding nop before the call: `ok = !!(f & 4)` tested
- * with `!= false`, the null case jumping straight to the call (verified byte-identical with tools/verify.py). */
+/* Metaobject singleton accessor: create when the cached object is null or its flag 4 is clear.
+ * Retail keeps the flag test as a materialised C++ bool (sltu) with a padding nop before the call:
+ * `ok = !!(f & 4)` tested with `!= false`, the null case jumping straight to the call. */
 struct S { char p[36]; unsigned f; };
 extern "C" {
 int FUN_003bca60();

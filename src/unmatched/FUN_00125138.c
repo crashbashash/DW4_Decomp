@@ -1,7 +1,7 @@
-/* 0x00125138 — FUN_00125138 (140 bytes). Initialises a C-library state block: installs the cleanup hook, marks it
- * initialised, sets up three 88-byte streams (flags 4/9/10 on files 0/1/2) and links them as the block's stream
- * list. The shape of newlib's __sinit (hypothesis: stdin/stdout/stderr = __SRD / __SWR|__SLBF / __SWR|__SNBF).
- * Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises a C-library state block: installs the cleanup hook, marks it initialised, sets up
+ * three 88-byte streams (flags 4/9/10 on files 0/1/2) and links them as the block's stream list.
+ * The shape of newlib's __sinit (hypothesis: stdin/stdout/stderr = __SRD / __SWR|__SLBF /
+ * __SWR|__SNBF). */
 typedef struct Stream125138 { char opaque[88]; } Stream125138;
 
 typedef struct StreamList125138 {

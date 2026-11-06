@@ -1,4 +1,5 @@
-/* 0x002b05b0 — FUN_002b05b0 (88 bytes). Unless paused (+12), advances the 64-bit accumulator at +296 by f304 * rate->f0 / rate->f8 (64-bit; GCC emits __muldi3 at 0x0022e440 and __divdi3). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Unless paused (+12), advances the 64-bit accumulator at +296 by f304 * rate->f0 / rate->f8
+ * (64-bit; GCC emits __muldi3 at 0x0022e440 and __divdi3). */
 
 /* long is 64-bit under EE GCC; the ld/sd accesses show these members are 64-bit. */
 struct Accum {

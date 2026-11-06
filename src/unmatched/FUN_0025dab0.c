@@ -1,4 +1,5 @@
-/* 0x0025dab0 — FUN_0025dab0 (96 bytes). Maps the decoder mode in f152 and sub-mode in f156 to a block size code: 16 by default, 4 or 8 for mode 2, 4 for mode 1 with sub-mode 2. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Maps the decoder mode in f152 and sub-mode in f156 to a block size code: 16 by default, 4 or 8
+ * for mode 2, 4 for mode 1 with sub-mode 2. */
 /* CRI ADX decoder block as this function touches it; field meanings are not yet known */
 typedef struct DecoderBlock {
     short f0;

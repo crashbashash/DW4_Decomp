@@ -1,4 +1,3 @@
-/* 0x00148ab0 - Gap__Core__igPsx2ControllerManager__vfunc_25. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int Gap__Core__igPsx2ControllerManager__vfunc_25(igPsx2ControllerManager *arg0) {
     int r;

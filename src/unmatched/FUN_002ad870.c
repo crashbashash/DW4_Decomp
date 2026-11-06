@@ -1,4 +1,6 @@
-/* 0x002ad870 — FUN_002ad870 (132 bytes). Recomputes the record's value at +3496: an explicit value at +3536 wins; else value*scale/divisor (FUN_002916f8) from +3524/+3532/+3528, falling back to +4 and then to the defaults at +3500/+3508/+3504. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Recomputes the record's value at +3496: an explicit value at +3536 wins; else
+ * value*scale/divisor (FUN_002916f8) from +3524/+3532/+3528, falling back to +4 and then to the
+ * defaults at +3500/+3508/+3504. */
 int FUN_002916f8();
 
 struct Rec0DD8 {

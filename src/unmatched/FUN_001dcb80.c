@@ -1,4 +1,6 @@
-/* 0x001dcb80 - FUN_001dcb80. Removes a key from a word list by swapping it with the last element after an optional reset call: the inline index search of Gap__Core__igObject__vfunc_32 (spilled key, early goto found), declaration order n,key,a0,v1,r,i; alternate compiler -O3. */
+/* Removes a key from a word list by swapping it with the last element after an optional reset
+ * call: the inline index search of Gap__Core__igObject__vfunc_32 (spilled key, early goto found),
+ * declaration order n,key,a0,v1,r,i; alternate compiler -O3. */
 typedef struct L { char p0[8]; int n; int p1; int *d; int cnt; int p2; unsigned char f28; } L;
 int igObject_ResetFields(int);
 void FUN_001dcb80(L *arg0, int arg1) {

@@ -1,4 +1,5 @@
-/* 0x0025ddd0 — FUN_0025ddd0 (124 bytes). Sets the decoder output buffer and its capacity in frames (bytes divided by the frame size from f15, or by bytes-per-sample times f14 when f152 is non-zero) and clears the transfer counters. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the decoder output buffer and its capacity in frames (bytes divided by the frame size from
+ * f15, or by bytes-per-sample times f14 when f152 is non-zero) and clears the transfer counters. */
 /* CRI ADX decoder block as this function touches it; field meanings are not yet known */
 typedef struct DecoderBlock {
     short f0;

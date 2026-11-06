@@ -1,4 +1,3 @@
-/* 0x002d7840 — FUN_002d7840. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_002d7130();
 int FUN_002d7280();
 int List_RemoveAt();

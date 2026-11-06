@@ -1,4 +1,5 @@
-/* 0x002b0ed0 — FUN_002b0ed0 (292 bytes). Checked setter (error 0xFF000192; 0xFF000602 in mode 8): sets list item `index` with FUN_002b1348(item, a, 0, b, c) and re-registers it through FUN_0029dcc8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Checked setter (error 0xFF000192; 0xFF000602 in mode 8): sets list item `index` with
+ * FUN_002b1348(item, a, 0, b, c) and re-registers it through FUN_0029dcc8. */
 void FUN_0029dcc8();
 int FUN_002a0bb8();
 int FUN_002a0dd8();

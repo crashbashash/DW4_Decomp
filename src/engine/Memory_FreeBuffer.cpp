@@ -1,8 +1,6 @@
-/* 0x002ed460 — Memory_FreeBuffer.
- * Release a block: ask Memory_FindOwningAllocator which pool owns it and call
- * that pool's free method (vtable offset 264, the "free" slot of the alias
- * pool, docs/engine/alias-pool-runtime.md).  A null buffer, or a block no
- * pool owns, is ignored. */
+/* Release a block: ask Memory_FindOwningAllocator which pool owns it and call that pool's free
+ * method (vtable offset 264, the "free" slot of the alias pool). A null buffer, or a block no pool
+ * owns, is ignored. */
 extern "C" {
 void **Memory_FindOwningAllocator(...);
 void Memory_FreeBuffer(int buffer);

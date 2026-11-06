@@ -1,4 +1,6 @@
-/* 0x00291250 — FUN_00291250 (196 bytes). Installs callback `index` either globally (null handle, also pushed to live handles by FUN_00291318) or in a validated handle's table at +400, then notifies FUN_002914b0; slot 8 defaults to FUN_00291248. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Installs callback `index` either globally (null handle, also pushed to live handles by
+ * FUN_00291318) or in a validated handle's table at +400, then notifies FUN_002914b0; slot 8
+ * defaults to FUN_00291248. */
 typedef void (*Callback00291250)();
 
 int FUN_002913f8(void *handle); /* handle check; non-zero rejects */

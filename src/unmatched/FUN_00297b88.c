@@ -1,4 +1,4 @@
-/* 0x00297b88 — FUN_00297b88 (76 bytes). Validates a chroma position: 0 and 1 pass through; anything else is reported and gives 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates a chroma position: 0 and 1 pass through; anything else is reported and gives 1. */
 void FUN_0029a320(const char *format, ...);
 
 extern char DAT_004f40a0[]; /* "E301274 : chromapos is invalid." */

@@ -1,4 +1,4 @@
-/* 0x0028b460 — FUN_0028b460 (208 bytes). Fills count bytes at dst with value, unrolled by 16. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Fills count bytes at dst with value, unrolled by 16. */
 void FUN_0028b460(char *dst, char value, unsigned int count) {
     char *p = dst + count;
     unsigned int n;

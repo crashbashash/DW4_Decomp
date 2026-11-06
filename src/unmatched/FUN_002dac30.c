@@ -1,5 +1,3 @@
-/* 0x002dac30 — FUN_002dac30. hand-matched: the callee's address argument is the *second*
- * (the pass-through arg0 was missing from the draft); verified by tools/verify.py. */
 int FUN_0030b3c0();
 extern int DAT_004f96b0[4];
 

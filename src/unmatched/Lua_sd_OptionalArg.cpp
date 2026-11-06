@@ -1,6 +1,6 @@
-/* 0x00372cf0 - Lua_sd_OptionalArg. Alternate (combat) compiler, -O3,p -Iinclude (also matches with -Cpp_exceptions off).
-   Splits a '/'-separated optional-argument string and appends each part to the messenger as a string, or a typed
-   value for 'I<n>' int, 'L<n>' long, 'V<x,y,z>' vec3 and 'F<expr>' float parts. */
+/* Alternate (combat) compiler, -O3,p -Iinclude (also matches with -Cpp_exceptions off). Splits a
+ * '/'-separated optional-argument string and appends each part to the messenger as a string, or a
+ * typed value for 'I<n>' int, 'L<n>' long, 'V<x,y,z>' vec3 and 'F<expr>' float parts. */
 #include "dw4/reflected.h"
 extern "C" {
 unsigned strlen(char *);

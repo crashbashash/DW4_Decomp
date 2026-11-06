@@ -1,4 +1,5 @@
-/* 0x002ac918 — FUN_002ac918 (116 bytes). Clears *out to -1 and, when entry `index` has a ring, looks up position `pos` (folded back by the entry's span when it lies past base+span) through FUN_002ac990. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears *out to -1 and, when entry `index` has a ring, looks up position `pos` (folded back by
+ * the entry's span when it lies past base+span) through FUN_002ac990. */
 struct Ring {
     void *items; /* +0 */
     int size;

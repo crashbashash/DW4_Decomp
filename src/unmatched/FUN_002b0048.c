@@ -1,4 +1,5 @@
-/* 0x002b0048 — FUN_002b0048 (156 bytes). Wires the chain 1→2→3, then either 3→4→5→6 (when the option word at +16 is set) or 3→6 directly, alternating FUN_002b0268 and FUN_002b01a8 links. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Wires the chain 1→2→3, then either 3→4→5→6 (when the option word at +16 is set) or 3→6 directly,
+ * alternating FUN_002b0268 and FUN_002b01a8 links. */
 int FUN_002b01a8();
 int FUN_002b0268();
 

@@ -1,4 +1,3 @@
-/* 0x002c54a0 — igExternalDirEntry_GetVTable. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int igObject_InitHeader();
 int FUN_0014f4e0();
 int StringRef_Destruct_00130720();

@@ -1,4 +1,3 @@
-/* 0x001f0410 - FUN_001f0410. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 struct P { int a; int b; };
 extern struct P DAT_005691d0[16];
 void FUN_001f0410(int arg0, int arg1) {

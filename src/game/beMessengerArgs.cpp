@@ -1,22 +1,16 @@
-/* src/game/beMessengerArgs.cpp - beMessenger argument append and string getters
- *
- * Siblings of the result-channel accessors in beMessengerResults.cpp: each
- * Append* grows one typed list of the messenger's beMessengerArgData
- * (bool/int/float/vec3/matrix/string) by one element.  The unit is C++ with
- * exceptions on (retail keeps an exception index record for every function
- * here), built by the combat compiler with `-O3,p` (config/SLUS-20836/units.tsv); the
- * ordinary compiler lacks the original branch-alignment word after the
- * in-capacity increment.  The C-ABI names stay unmangled through the
- * extern "C" block.
- *
- * AppendInt/AppendFloat re-read the list count for the in-capacity increment
- * (retail loads it a second time rather than reusing the index), which is
- * spelled with a volatile read.  Functions are in retail address order. */
+/* src/game/beMessengerArgs.cpp - beMessenger argument append and string getters Siblings of the
+ * result-channel accessors in beMessengerResults.cpp: each Append* grows one typed list of the
+ * messenger's beMessengerArgData (bool/int/float/vec3/matrix/string) by one element. The unit is
+ * C++ with exceptions on (retail keeps an exception index record for every function here), built
+ * by the combat compiler with `-O3,p`; the ordinary compiler lacks the original branch-alignment
+ * word after the in-capacity increment. The C-ABI names stay unmangled through the extern "C"
+ * block. AppendInt/AppendFloat re-read the list count for the in-capacity increment (retail loads
+ * it a second time rather than reusing the index), which is spelled with a volatile read.
+ * Functions are in retail address order. */
 #include "dw4/reflected.h"
 
-/* Header in front of every interned string token: the owning chunk, then the
- * token's reference count (docs/engine/messenger-results.md).  A token points
- * just past this header. */
+/* Header in front of every interned string token: the owning chunk, then the token's reference
+ * count. A token points just past this header. */
 typedef struct StringTokenHeader {
     int owner;
     int refCount;
@@ -30,8 +24,7 @@ int FUN_002eb010(int);   /* allocator for the 16-byte string pool object */
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
 void StringChunk_ReleaseHeader(int, void *);
-/* The shared string pool, created on first use (finding #1035,
- * docs/engine/messenger-results.md). */
+/* The shared string pool, created on first use. */
 extern int g_stringPool[4];
 void beMessenger_AppendBool(beMessenger *self, char value);
 void beMessenger_AppendInt(beMessenger *self, int value);

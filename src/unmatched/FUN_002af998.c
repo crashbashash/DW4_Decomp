@@ -1,4 +1,6 @@
-/* 0x002af998 — FUN_002af998 (116 bytes). Reports through *out whether the block at +3368 is due: a negative word at +716 is reset to 0 and counts as due; otherwise FUN_00285118(arg1, arg2, f716, DAT_004bea88 word +8, block) decides. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports through *out whether the block at +3368 is due: a negative word at +716 is reset to 0
+ * and counts as due; otherwise FUN_00285118(arg1, arg2, f716, DAT_004bea88 word +8, block)
+ * decides. */
 int FUN_00285118();
 
 /* DAT_004bea88: a counter, two words (+8 read by FUN_002af998) and, at +84, eight object slots (FUN_002ae398). */

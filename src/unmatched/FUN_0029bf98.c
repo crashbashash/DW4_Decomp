@@ -1,4 +1,5 @@
-/* 0x0029bf98 — FUN_0029bf98 (80 bytes). Looks up an entry with FUN_0029ceb8 and copies its +12 and +16 words out; returns 0, or -1 when there is no entry. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks up an entry with FUN_0029ceb8 and copies its +12 and +16 words out; returns 0, or -1 when
+ * there is no entry. */
 typedef struct {
     char pad0[12];
     int f12;

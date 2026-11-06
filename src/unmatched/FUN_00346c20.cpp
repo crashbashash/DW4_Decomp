@@ -1,5 +1,4 @@
 extern "C" {
-/* 0x00346c20 - FUN_00346c20. Near-miss sweep fix (alternate compiler), verified byte-identical to retail by tools/verify.py. */
 int igMetaEnum_Create(int *, int *, int *, int);
 extern int DAT_004c3c50[4];
 extern int DAT_004c3ca0[4];

@@ -1,6 +1,3 @@
-/* 0x002fbbd0 — igMetaEnum_GetNameAt. Banked by tools/retype_struct_member.py (shape: leadcall0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 int StringList_CopyRetained();
 
 void igMetaEnum_GetNameAt(int *arg0, void *arg1, int arg2) {

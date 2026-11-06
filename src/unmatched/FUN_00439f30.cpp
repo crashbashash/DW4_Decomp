@@ -1,8 +1,8 @@
-/* 0x00439f30 - FUN_00439f30: shop sales confirm step.  With arg1 == 1 and a selected sales item,
- * two scratch objects (FUN_003c90f0) are handed to the per-kind fill helpers (FUN_0043a450 before, FUN_0043a660
- * after the player data is re-fetched) and the item becomes the first entry of its kind list; otherwise the
- * sales-cancel message is dispatched.  The scratch objects live on the stack in owning references whose releases
- * the retail exception table records. */
+/* Shop sales confirm step. With arg1 == 1 and a selected sales item, two scratch objects
+ * (FUN_003c90f0) are handed to the per-kind fill helpers (FUN_0043a450 before, FUN_0043a660 after
+ * the player data is re-fetched) and the item becomes the first entry of its kind list; otherwise
+ * the sales-cancel message is dispatched. The scratch objects live on the stack in owning
+ * references whose releases the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 struct Rec { char pad[12]; int f12; };

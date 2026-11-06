@@ -1,4 +1,4 @@
-/* 0x0028ae28 — FUN_0028ae28 (80 bytes). Returns the first 1664-byte handle in the global pool whose state is 1, or 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the first 1664-byte handle in the global pool whose state is 1, or 0. */
 
 struct Handle0028ae28 {
     int state;            /* +0: 1 = selected by this search */

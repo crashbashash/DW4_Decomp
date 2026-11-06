@@ -3,7 +3,7 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 #include "dw4/reflected.h"
 extern char igSkeleton_GetVTable[];
-void thunk_FUN_00198550(void);  /* code at 0x198710, passed by address (was DAT_198710; docs/engine/function-inventory.md) */
+void thunk_FUN_00198550(void);
 extern char igAnimationHierarchy_GetPublishedMetaObject[];
 extern char igAnimationHierarchy_Register[];
 extern char g_igSkeleton_callbackList[];

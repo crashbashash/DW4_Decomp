@@ -1,4 +1,3 @@
-/* 0x003885e0 — FUN_003885e0. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 extern "C" {
 bool FUN_003885e0(int arg0, float *arg1, float *arg2, float *arg3, float *arg4);
 }

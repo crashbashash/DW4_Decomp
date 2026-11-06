@@ -1,4 +1,4 @@
-/* 0x00299fc8 — FUN_00299fc8 (60 bytes). Calls FUN_0027ec10 and clears the four words at 0x57fa80..0x57fa8c. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_0027ec10 and clears the four words at 0x57fa80..0x57fa8c. */
 extern void FUN_0027ec10(void);
 extern int DAT_0057fa80;
 extern int DAT_0057fa84;

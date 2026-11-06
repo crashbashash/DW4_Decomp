@@ -1,4 +1,5 @@
-/* 0x002b52d8 — FUN_002b52d8 (68 bytes). Parses the two ASCII digits at +16/+17 of a header record as a decimal number (FUN_001236e8); returns 0 for a null record or a negative index. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Parses the two ASCII digits at +16/+17 of a header record as a decimal number (FUN_001236e8);
+ * returns 0 for a null record or a negative index. */
 struct Chars2 {
     char c[2];
 };

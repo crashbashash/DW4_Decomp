@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x0040c1c0 - Gap__Bec__beNDMWSaveIntf__vfunc_29. typed receiver struct; first call forwards a1 (dropped argument) Verified byte-identical by tools/verify.py. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

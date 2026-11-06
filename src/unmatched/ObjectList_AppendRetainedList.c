@@ -1,4 +1,3 @@
-/* 0x00301e90 - ObjectList_AppendRetainedList. dummy leading parameter, list in a1, loop data pointer loaded before the count; alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 typedef struct R { char pad4[4]; int f4; } R;
 typedef struct L { char pad8[8]; int f8; char pad12[4]; R **f16; } L;
 int List_AppendWords();

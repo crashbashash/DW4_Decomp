@@ -1,4 +1,3 @@
-/* 0x003c4740 - FUN_003c4740. Near-miss sweep fix (alternate compiler), verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 int Memory_GetAllocatorBySelector(int);
 int igMetaObject_Create(int);

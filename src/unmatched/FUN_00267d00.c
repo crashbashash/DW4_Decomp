@@ -1,4 +1,6 @@
-/* 0x00267d00 — FUN_00267d00 (156 bytes). Gets a resource from FUN_00267bb8 and claims the first free entry of the 16-entry table DAT_004a75f0 for it (owner at 20, resource at 136); returns the entry, or 0 when the resource is missing or no entry is free. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Gets a resource from FUN_00267bb8 and claims the first free entry of the 16-entry table
+ * DAT_004a75f0 for it (owner at 20, resource at 136); returns the entry, or 0 when the resource is
+ * missing or no entry is free. */
 typedef struct Entry_267d00 {
     char used;          /* 0x00 */
     char pad1[19];

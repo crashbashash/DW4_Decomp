@@ -1,11 +1,12 @@
 #include "dw4/reflected.h"
-/* 0x0037ed70 - Gap__Bec__beDemoManager__vfunc_27: runs the queued demo messages of every active work item (iterating
- * from the back), drops finished work items, then clears _disableRemoveAll and re-issues the deferred RemoveAll
- * (vtable slot 28) if it was requested meanwhile.  Matching constructs: `off` is the explicit byte-offset induction of
- * the item list (the case-3 loop continues it, the case-4 loop is written with the index and lets the compiler
- * strength-reduce it; that is what keeps the hoisted `li a0,5` preheader out of line); the item reads happen before the
- * `idx >= end` test; `rn` is a local so that the ramNo compare gets retail's colouring; `flag` is an unsigned char
- * tested as `if (flag)`. */
+/* Runs the queued demo messages of every active work item (iterating from the back), drops
+ * finished work items, then clears _disableRemoveAll and re-issues the deferred RemoveAll (vtable
+ * slot 28) if it was requested meanwhile. Matching constructs: `off` is the explicit byte-offset
+ * induction of the item list (the case-3 loop continues it, the case-4 loop is written with the
+ * index and lets the compiler strength-reduce it; that is what keeps the hoisted `li a0,5`
+ * preheader out of line); the item reads happen before the `idx >= end` test; `rn` is a local so
+ * that the ramNo compare gets retail's colouring; `flag` is an unsigned char tested as `if
+ * (flag)`. */
 extern "C" int beMessenger_SelectReceivers(...);
 extern "C" int Lua_sd_OptionalArg(...);
 extern "C" int beMessenger_DispatchSelected(...);

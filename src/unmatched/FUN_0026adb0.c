@@ -1,4 +1,5 @@
-/* 0x0026adb0 — FUN_0026adb0 (100 bytes). Calls FUN_00275090 with a, b and fields 8, 12 and 4 of a descriptor and returns its result; for a null descriptor calls FUN_00274f10 with zeros and returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_00275090 with a, b and fields 8, 12 and 4 of a descriptor and returns its result; for
+ * a null descriptor calls FUN_00274f10 with zeros and returns 0. */
 /* Five-word descriptor read by FUN_0026ad50, FUN_0026adb0 and FUN_0026ae18. */
 typedef struct Desc_26ad50 {
     int f0;

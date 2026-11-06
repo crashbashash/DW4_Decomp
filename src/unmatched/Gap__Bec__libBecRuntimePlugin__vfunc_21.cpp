@@ -1,12 +1,10 @@
-/* 0x003a2130 - Gap::Bec::libBecRuntimePlugin::vfunc_21: build the runtime plugin's subsystem objects.
- *
- * Phase 1 replaces every _member with a freshly created object: the old reference is released
- * (refcount in the low 23 bits of +4, igObject_Destroy at zero) and the creator is handed the
- * plugin's allocator -- the object's own allocator when the global override flag (GPR_00554c14)
- * is set, otherwise the allocator selected by DAT_00587108.  Phase 2 registers each member that
- * exists with the context passed in arg1 (FUN_00236ab0; vfunc_22 performs the same walk).
- * Evidence: asm/Gap__Bec__libBecRuntimePlugin__vfunc_21.s (38 repeated create blocks, 39 registrations).
- *
+/* Build the runtime plugin's subsystem objects. Phase 1 replaces every _member with a freshly
+ * created object: the old reference is released (refcount in the low 23 bits of +4,
+ * igObject_Destroy at zero) and the creator is handed the plugin's allocator -- the object's own
+ * allocator when the global override flag (GPR_00554c14) is set, otherwise the allocator selected
+ * by DAT_00587108. Phase 2 registers each member that exists with the context passed in arg1
+ * (FUN_00236ab0; vfunc_22 performs the same walk). Evidence:
+ * asm/Gap__Bec__libBecRuntimePlugin__vfunc_21.s (38 repeated create blocks, 39 registrations).
  * Compiler: the alternate (combat) MWCC at -O3,p -- its 8-byte alignment nops before the join
  * labels are part of retail's layout. */
 #include "dw4/reflected.h"

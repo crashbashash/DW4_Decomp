@@ -1,4 +1,5 @@
-/* 0x002a24d0 — FUN_002a24d0 (84 bytes). Per-frame update: samples two values with FUN_002a27d8, then runs five update steps on the handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Per-frame update: samples two values with FUN_002a27d8, then runs five update steps on the
+ * handle. */
 extern void FUN_002a27d8(void *handle, int *a, int *b);
 extern void FUN_002a2528(void *handle);
 extern void FUN_002a2888(void *handle);

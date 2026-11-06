@@ -1,4 +1,4 @@
-/* 0x002a5d70 — FUN_002a5d70 (80 bytes). Copies seven words and a signed byte of a source record into a compact output record. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies seven words and a signed byte of a source record into a compact output record. */
 typedef struct SfdSource {
     char pad0[16];
     int f16;

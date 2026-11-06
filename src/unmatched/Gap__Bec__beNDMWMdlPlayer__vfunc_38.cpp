@@ -102,8 +102,8 @@ extern unsigned char GPR_00554c14;
 
 }
 
-/* Releasing holders (cf. docs/engine/exception-unwind.md): PropsRef is the retail ObjectRef copy at 0x33e9c0,
- * NamedRef the copy emitted right behind the owner at 0x3d3170. */
+/* Releasing holders: PropsRef is the retail ObjectRef copy at 0x33e9c0, NamedRef the copy emitted
+ * right behind the owner at 0x3d3170. */
 struct PropsRef {
     RefHdr *p;
     PropsRef(RefHdr *x) { p = x; }

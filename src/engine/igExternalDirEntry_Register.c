@@ -10,7 +10,7 @@ extern char igExternalDirEntry_className[];
 extern char g_igExternalDirEntry_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
-void FUN_002c55f0(void);  /* code at 0x2c55f0, passed by address (was DAT_2c55f0; docs/engine/function-inventory.md) */
+void FUN_002c55f0(void);
 void igExternalDirEntry_Register(void) {
     FUN_002b5d50();  /* set-once guard that first runs the sibling registrars it chains to (asm/FUN_002b5d50.s) */
     igMetaObject_RegisterClass(

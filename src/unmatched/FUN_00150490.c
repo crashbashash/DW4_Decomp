@@ -1,5 +1,3 @@
-/* 0x00150490 — FUN_00150490. m2c draft, hand-fixed; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 #include "dw4/reflected.h"
 int igObject_Destroy();
 int StringChunk_ReleaseHeader();

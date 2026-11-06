@@ -1,4 +1,5 @@
-/* 0x0029bbf8 — FUN_0029bbf8 (136 bytes). Walks 18-byte records until FUN_0026d2e8 reports a hit (sets *found) or length is exhausted; returns the byte offset reached. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Walks 18-byte records until FUN_0026d2e8 reports a hit (sets *found) or length is exhausted;
+ * returns the byte offset reached. */
 int FUN_0026d2e8();
 
 /* Scans `length` bytes of 18-byte records; stops at the first one FUN_0026d2e8 accepts. */

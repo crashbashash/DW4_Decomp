@@ -1,4 +1,5 @@
-/* 0x0027bfd0 — FUN_0027bfd0 (76 bytes). Returns the word at +12 for query 1 or at +16 for query 0; any other query is reported to the error callback (+56, with its object +60 and code -3) and returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the word at +12 for query 1 or at +16 for query 0; any other query is reported to the
+ * error callback (+56, with its object +60 and code -3) and returns 0. */
 typedef struct Obj_27bfd0 {
     char pad0[12];
     int value1;                                 /* 0x0c */

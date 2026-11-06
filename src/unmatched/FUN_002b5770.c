@@ -1,4 +1,6 @@
-/* 0x002b5770 — FUN_002b5770 (200 bytes). Scans `length` bytes of `text` for a header that starts with DAT_004f5a68 and carries the 8-character tag DAT_004f59f8 (FUN_00127004 compares); records the last such position in *found and its parsed value (FUN_002b5838) in *value, both 0 when absent. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Scans `length` bytes of `text` for a header that starts with DAT_004f5a68 and carries the
+ * 8-character tag DAT_004f59f8 (FUN_00127004 compares); records the last such position in *found
+ * and its parsed value (FUN_002b5838) in *value, both 0 when absent. */
 extern char DAT_004f5a68[];
 extern char DAT_004f59f8[];
 

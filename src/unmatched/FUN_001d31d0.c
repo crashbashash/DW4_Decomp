@@ -1,4 +1,3 @@
-/* 0x001d31d0 - FUN_001d31d0. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int List_Resize();
 struct L1d { int a; int b; volatile int count; int cap; int *data; };
 int FUN_001d31d0(void *arg0, int arg1) {

@@ -1,4 +1,5 @@
-/* 0x0029b0b8 — FUN_0029b0b8 (160 bytes). Seeks the handle at arg0 by whence 0/1/2 (absolute, relative to FUN_0026a160, relative to the FUN_0026aa00 size rounded up to 2048-byte sectors); returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Seeks the handle at arg0 by whence 0/1/2 (absolute, relative to FUN_0026a160, relative to the
+ * FUN_0026aa00 size rounded up to 2048-byte sectors); returns 0. */
 int FUN_0026a140();
 int FUN_0026a160();
 int FUN_0026aa00();

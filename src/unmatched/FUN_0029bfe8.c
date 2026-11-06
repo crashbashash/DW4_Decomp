@@ -1,4 +1,5 @@
-/* 0x0029bfe8 — FUN_0029bfe8 (164 bytes). If the entry at +8200 is not yet in state 1 while the one at +8196 is, and FUN_0029c090 agrees, calls FUN_0029ea28(obj, entry, 1). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* If the entry at +8200 is not yet in state 1 while the one at +8196 is, and FUN_0029c090 agrees,
+ * calls FUN_0029ea28(obj, entry, 1). */
 extern int FUN_0029c090(void *obj);
 extern void FUN_0029ea28(void *obj, int entry, int state);
 extern int FUN_0029ea48(void *obj, int entry);

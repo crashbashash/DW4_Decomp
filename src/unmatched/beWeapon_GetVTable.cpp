@@ -1,5 +1,5 @@
-/* 0x0033f4f0 - beWeapon_GetVTable. temporary stack object as a union (byte index folds into the load), alternate compiler -O3 Verified byte-identical by tools/verify.py.
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
+ * exception index record, which only the C++ front end emits. */
 union U { int vt; int w[12]; void *p[12]; char b[48]; };
 extern "C" {
 int FUN_0033f5e0(int *, int);

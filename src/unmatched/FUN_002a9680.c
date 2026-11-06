@@ -1,4 +1,5 @@
-/* 0x002a9680 — FUN_002a9680 (76 bytes). Rounds the stream's buffered byte count (+20) up to a 2048-byte multiple (after adding 3) under the stream semaphore. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Rounds the stream's buffered byte count (+20) up to a 2048-byte multiple (after adding 3) under
+ * the stream semaphore. */
 int SignalSema();
 int WaitSema();
 

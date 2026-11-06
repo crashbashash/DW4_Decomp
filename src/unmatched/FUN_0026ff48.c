@@ -1,4 +1,5 @@
-/* 0x0026ff48 — FUN_0026ff48 (100 bytes). Copies the string DAT_0056e420 (with its terminator) into dst, or stores an empty string when it is empty. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies the string DAT_0056e420 (with its terminator) into dst, or stores an empty string when it
+ * is empty. */
 extern char DAT_0056e420[];
 unsigned int strlen(const char *s);
 void *memcpy(void *dst, const void *src, unsigned int n);

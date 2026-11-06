@@ -1,4 +1,5 @@
-/* 0x0029ebb0 — FUN_0029ebb0 (144 bytes). Creates two temporary objects (FUN_0027bd48, FUN_0027b408) in local storage, caches their slot-16 values in DAT_0057fab0/DAT_0057fab4 and releases them. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Creates two temporary objects (FUN_0027bd48, FUN_0027b408) in local storage, caches their
+ * slot-16 values in DAT_0057fab0/DAT_0057fab4 and releases them. */
 struct Object;
 struct ObjectOps {
     char pad[12];

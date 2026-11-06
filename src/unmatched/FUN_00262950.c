@@ -1,4 +1,6 @@
-/* 0x00262950 — FUN_00262950 (172 bytes). One pass of the ADX server: unless a pass is already running (DAT_0049c8c0 non-zero, checked under the FUN_0025f2d0 lock), runs the service functions in a fixed order, recording the step number in DAT_0049c8c0 as it goes. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* One pass of the ADX server: unless a pass is already running (DAT_0049c8c0 non-zero, checked
+ * under the FUN_0025f2d0 lock), runs the service functions in a fixed order, recording the step
+ * number in DAT_0049c8c0 as it goes. */
 void FUN_0025f2d0(void);
 void FUN_0025f2e8(void);
 void FUN_00272118(void);

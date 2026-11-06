@@ -1,6 +1,5 @@
-/* 0x0028d658 — FUN_0028d658 (124 bytes). Copies the five 64-bit words at +168..+200 of a stream handle to
-   out[0..4] after validating it (FUN_0028da60); an invalid handle is reported as error 0xFF020203 through
-   FUN_0028d890. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies the five 64-bit words at +168..+200 of a stream handle to out[0..4] after validating it
+ * (FUN_0028da60); an invalid handle is reported as error 0xFF020203 through FUN_0028d890. */
 struct Stream28d {
     int state;
     char pad4[164];

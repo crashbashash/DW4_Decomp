@@ -1,4 +1,5 @@
-/* 0x0016cb40 - FUN_0016cb40. Per-entry fix-up loop with a status switch; first call also passes the receiver; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Per-entry fix-up loop with a status switch; first call also passes the receiver; alternate
+ * compiler. */
 #include "dw4/reflected.h"
 int FUN_00177010();
 int FUN_001e96d0();

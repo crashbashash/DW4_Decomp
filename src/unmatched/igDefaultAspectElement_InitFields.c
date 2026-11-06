@@ -1,5 +1,3 @@
-/* 0x00451d40 — igDefaultAspectElement_InitFields, m2c draft (hybrid+po mode), does not match yet.
- * Iterate here; a match is copied to src/igDefaultAspectElement_InitFields.c only after verify.py agrees. */
 int FUN_00196190();
 int FUN_002dc7a0();
 int FUN_004505b0();
@@ -8,7 +6,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_00451ac0(void);  /* code at 0x451ac0, passed by address (was DAT_451ac0; docs/engine/function-inventory.md) */
+void FUN_00451ac0(void);
 extern int DAT_004d07c0[4];
 extern int DAT_004d07e0[4];
 extern int DAT_004d0800[4];

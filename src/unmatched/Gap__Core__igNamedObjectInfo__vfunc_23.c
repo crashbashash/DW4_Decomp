@@ -1,4 +1,4 @@
-/* 0x002fed50 - Gap__Core__igNamedObjectInfo__vfunc_23. name-or-default via ?: (not an empty-then if); default compiler */
+/* Name-or-default via ?: (not an empty-then if); default compiler */
 typedef struct Arr { int p0; int p1; int n; int p3; int **d; } Arr;
 typedef struct Obj { int p0; int p1; int *name; } Obj;
 typedef struct This { char pad[20]; Arr *a; } This;

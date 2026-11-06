@@ -1,4 +1,5 @@
-/* 0x002979e8 — FUN_002979e8 (72 bytes). Reads two values for the handle's +172 object with FUN_002b3d30 into out +80/+84 and clears +88/+92. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads two values for the handle's +172 object with FUN_002b3d30 into out +80/+84 and clears
+ * +88/+92. */
 void FUN_002b3d30(int object, int *first, int *second);
 
 struct Handle002979e8 {

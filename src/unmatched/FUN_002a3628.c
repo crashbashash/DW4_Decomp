@@ -1,4 +1,5 @@
-/* 0x002a3628 — FUN_002a3628 (220 bytes). Initialisation: hangs if FUN_002a3708 fails, maps a FUN_00290bd0 failure to error 0xFF000F13/0xFF000F01, else clears three tables. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialisation: hangs if FUN_002a3708 fails, maps a FUN_00290bd0 failure to error
+ * 0xFF000F13/0xFF000F01, else clears three tables. */
 extern void FUN_002a96f0(void);
 extern int FUN_002a3708(void);
 extern int FUN_00290bd0(int a, void *b);

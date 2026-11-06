@@ -1,4 +1,3 @@
-/* 0x00458f60 — igStatisticsItem_InitFields. Hand-retyped from the m2c draft, verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int FUN_002dc7a0(igEnumMetaField *, int *);
 int FUN_002e3810(int, float);

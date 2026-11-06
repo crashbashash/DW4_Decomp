@@ -1,6 +1,3 @@
-/* 0x001a10a0 — FUN_001a10a0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int igMatrix44f_SetIdentity();
 int igObject_InitHeader();

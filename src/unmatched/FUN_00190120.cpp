@@ -1,4 +1,3 @@
-/* 0x00190120 - FUN_00190120. for loop; counter declared before the function pointer Verified byte-identical by tools/verify.py. */
 extern "C" {
 int (*FUN_0018fb60(int))(void **, int);
 void FUN_00190120(void **arg0, int arg1, int arg2);

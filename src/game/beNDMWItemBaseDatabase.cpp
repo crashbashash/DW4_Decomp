@@ -1,23 +1,17 @@
-/* src/game/beNDMWItemBaseDatabase.cpp — the beNDMWItemBase database accessors, one
- * translation unit in retail address order (finding #924):
- *   0x00447bc0  beNDMWItemBase_RequestDataBase        ask the status messenger for the item DATABASE
- *   0x00447c10  beNDMWItemBase_GetRecordInt           record value lookups through the
- *   0x00447c60  beNDMWItemBase_GetRecordBool            database-for-status virtual
- *   0x00447cb0  beNDMWItemBase_GetRecordString
- *   0x00448640  Gap__Bec__beNDMWItemAbilityChip__vfunc_21  the "abChip" database selector
- *
- * The retail unit at 0x00447bc0 was C++ with exceptions on (its four functions keep
- * exception index records, config/SLUS-20836/exceptions.txt).  RequestDataBase and the AbilityChip
- * selector used to live in beNDMWItemBaseDatabase.c; they now compile here as C++ under
- * that profile, which also reproduces RequestDataBase's record.  The AbilityChip selector
- * belongs to a separate retail unit (beNDMWItemAbilityChip_448640 in config/SLUS-20836/units.tsv);
- * the build resolves each function's profile by address.  The whole unit keeps C linkage.
- *
- * Return contracts are explicit.  The selector's empty assembler directive retains
- * JAL/return rather than a tail transfer without emitting a word (matching construct).
- * The dispatch-only class models raw vtable slot 92; it does not claim the original
- * class declaration or field layout.
- */
+/* src/game/beNDMWItemBaseDatabase.cpp — the beNDMWItemBase database accessors, one translation
+ * unit in retail address order: 0x00447bc0 beNDMWItemBase_RequestDataBase ask the status messenger
+ * for the item DATABASE 0x00447c10 beNDMWItemBase_GetRecordInt record value lookups through the
+ * 0x00447c60 beNDMWItemBase_GetRecordBool database-for-status virtual 0x00447cb0
+ * beNDMWItemBase_GetRecordString 0x00448640 Gap__Bec__beNDMWItemAbilityChip__vfunc_21 the "abChip"
+ * database selector The retail unit at 0x00447bc0 was C++ with exceptions on (its four functions
+ * keep exception index records). RequestDataBase and the AbilityChip selector used to live in
+ * beNDMWItemBaseDatabase.c; they now compile here as C++ under that profile, which also reproduces
+ * RequestDataBase's record. The AbilityChip selector belongs to a separate retail unit
+ * (beNDMWItemAbilityChip_448640 in config/SLUS-20836/units.tsv); the build resolves each
+ * function's profile by address. The whole unit keeps C linkage. Return contracts are explicit.
+ * The selector's empty assembler directive retains JAL/return rather than a tail transfer without
+ * emitting a word (matching construct). The dispatch-only class models raw vtable slot 92; it does
+ * not claim the original class declaration or field layout. */
 #include "dw4/reflected.h"
 extern "C" {
 /* "DATABASE", "GETDATABASE" and "abChip" (strings read from the ELF). */

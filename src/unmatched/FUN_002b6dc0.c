@@ -1,4 +1,3 @@
-/* 0x002b6dc0 — FUN_002b6dc0. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int igUnsignedIntMetaField_EnsureRegistered();
 int FUN_0030e960();
 int igObject_AllocateRawStorageDefault();

@@ -1,4 +1,5 @@
-/* 0x001e04c0 - FUN_001e04c0. Callback dispatch with two virtual calls and a function-pointer table; vtable result held in a local before the compare; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Callback dispatch with two virtual calls and a function-pointer table; vtable result held in a
+ * local before the compare; alternate compiler. */
 struct S; struct V;
 extern "C" { int FUN_001e07a0(...); extern int DAT_00561838[4]; }
 extern "C" int FUN_001e04c0(S *arg0, V *arg1);

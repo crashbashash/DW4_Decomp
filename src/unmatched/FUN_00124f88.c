@@ -1,6 +1,6 @@
-/* 0x00124f88 — FUN_00124f88 (120 bytes). Allocates (through FUN_00126600) a stream-list node followed by `count`
- * zeroed 88-byte streams and links them into the node; returns the node or 0. The shape of newlib's __sfmoreglue
- * (hypothesis; FUN_00126600 would be _malloc_r). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Allocates (through FUN_00126600) a stream-list node followed by `count` zeroed 88-byte streams
+ * and links them into the node; returns the node or 0. The shape of newlib's __sfmoreglue
+ * (hypothesis; FUN_00126600 would be _malloc_r). */
 typedef struct Stream124f88 { char opaque[88]; } Stream124f88;
 
 typedef struct StreamList124f88 {

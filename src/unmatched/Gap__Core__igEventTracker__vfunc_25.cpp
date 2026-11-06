@@ -1,4 +1,6 @@
-/* 0x002dd0f0 - Gap__Core__igEventTracker__vfunc_25. Smart-pointer local kept in memory (volatile pointer read once into a temporary before each test), one-word struct virtual returns, !(0 > x) for slt/bnez with the store arm first; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Smart-pointer local kept in memory (volatile pointer read once into a temporary before each
+ * test), one-word struct virtual returns, !(0 > x) for slt/bnez with the store arm first;
+ * alternate compiler. */
 extern "C" {
 int FUN_002d3a20(int);
 int FUN_0030d050(int);

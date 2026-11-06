@@ -1,4 +1,5 @@
-/* 0x002673d0 — FUN_002673d0 (100 bytes). Forwards arg to FUN_0025db80 on the object's handle (+4) when FUN_0025db70 reports it positive and the state byte (+1) is 2 or 3; otherwise returns -128. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards arg to FUN_0025db80 on the object's handle (+4) when FUN_0025db70 reports it positive
+ * and the state byte (+1) is 2 or 3; otherwise returns -128. */
 typedef struct Obj_2673d0 {
     unsigned char pad0;
     unsigned char state;    /* 0x01 */

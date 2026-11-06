@@ -1,4 +1,6 @@
-/* 0x00261da0 — FUN_00261da0 (256 bytes). Starts a read of up to the requested number of sectors from the current position of the ADXF handle into the buffer, inside the FUN_0025f2d0/FUN_0025f2e8 lock; marks the handle finished (state 3) when nothing is left. Returns the sectors requested. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Starts a read of up to the requested number of sectors from the current position of the ADXF
+ * handle into the buffer, inside the FUN_0025f2d0/FUN_0025f2e8 lock; marks the handle finished
+ * (state 3) when nothing is left. Returns the sectors requested. */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {

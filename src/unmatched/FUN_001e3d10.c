@@ -1,5 +1,3 @@
-/* 0x001e3d10 — FUN_001e3d10. m2c draft (build/m2c/FUN_001e3d10.c), call-argument/cleaner fix-up; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 #include "dw4/reflected.h"
 int List_Reserve();
 

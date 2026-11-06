@@ -1,9 +1,7 @@
-/* 0x00411950 - beNDMWStatus_AssignEquipment: put the equipment item at slot
- * `slot` of `slotList` into the status panel's equipment slot `equipIdx`,
- * unequipping whatever held it before.  When the incoming item is of kind 3
- * (a wearable), every other held item that carries one of the eight
- * equipment-category record names is unequipped first.
- * Idioms (inline string interning, refcount release, bounded list clear)
+/* Put the equipment item at slot `slot` of `slotList` into the status panel's equipment slot
+ * `equipIdx`, unequipping whatever held it before. When the incoming item is of kind 3 (a
+ * wearable), every other held item that carries one of the eight equipment-category record names
+ * is unequipped first. Idioms (inline string interning, refcount release, bounded list clear)
  * follow the matched Gap__Bec__beNDMWShopCtrl50__vfunc_21. */
 #include "dw4/reflected.h"
 extern "C" {

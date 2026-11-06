@@ -1,4 +1,6 @@
-/* 0x00261c88 — FUN_00261c88 (180 bytes). Releases an object: notifies FUN_00260c20 (event 3, phase 0), stops it when its state is 2, frees its attached handle through FUN_0026a0e0 and FUN_00269f98, clears the 68-byte record and notifies phase 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Releases an object: notifies FUN_00260c20 (event 3, phase 0), stops it when its state is 2,
+ * frees its attached handle through FUN_0026a0e0 and FUN_00269f98, clears the 68-byte record and
+ * notifies phase 1. */
 typedef struct Object_261c88 {
     char used;          /* 0x00 */
     signed char state;  /* 0x01: 2 = running (FUN_00262118 is called first) */

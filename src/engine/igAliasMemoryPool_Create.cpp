@@ -1,12 +1,9 @@
-/* 0x002cd170 — igAliasMemoryPool_Create
- * Class factory of igAliasMemoryPool (finding #900, docs/engine/alias-pool-binding.md,
- * "Original factory").  Once the object system is running it registers the class and
- * creates the pool through its metaobject on `allocator`.  During bootstrap, before
- * the object system exists, it allocates the 184-byte pool by hand, constructs it,
- * and then runs virtual slot 44 and slot 36 (with 0) on it.  Retail does not guard
- * those calls against a failed allocation; neither does this.
- * FactoryPoolView is an ABI dispatch view of slots 36 and 44 and must not be
- * instantiated. */
+/* igAliasMemoryPool_Create Class factory of igAliasMemoryPool (finding #900.md, "Original
+ * factory"). Once the object system is running it registers the class and creates the pool through
+ * its metaobject on `allocator`. During bootstrap, before the object system exists, it allocates
+ * the 184-byte pool by hand, constructs it, and then runs virtual slot 44 and slot 36 (with 0) on
+ * it. Retail does not guard those calls against a failed allocation; neither does this.
+ * FactoryPoolView is an ABI dispatch view of slots 36 and 44 and must not be instantiated. */
 class FactoryPoolView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void Set(int); virtual void d8(); virtual void Init(); };
 extern "C" {
 /* Object-system pointer; its byte 0 is the "object system active" flag. */

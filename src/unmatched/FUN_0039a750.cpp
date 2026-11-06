@@ -1,7 +1,8 @@
 #include "dw4/reflected.h"
-/* 0x0039a750 - FUN_0039a750: appends a sound sub-command to the controller's command list: the command object is
- * created from the controller's allocator, its _sndName is interned (replacing the string the constructor left),
- * _startFrame is set and the object appended; the creating reference is released on scope exit. */
+/* Appends a sound sub-command to the controller's command list: the command object is created from
+ * the controller's allocator, its _sndName is interned (replacing the string the constructor
+ * left), _startFrame is set and the object appended; the creating reference is released on scope
+ * exit. */
 extern "C" {
 int FUN_002eb010(...);
 beModelCtrlSCSound *FUN_0034f4a0(...);

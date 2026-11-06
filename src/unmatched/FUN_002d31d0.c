@@ -1,4 +1,3 @@
-/* 0x002d31d0 - FUN_002d31d0. byte stores, forwarded second argument (dropped argument) Verified byte-identical by tools/verify.py. */
 int strncpy();
 extern void * DAT_004c1eb8[4];
 void FUN_002d31d0(void *arg0, char *arg1) {

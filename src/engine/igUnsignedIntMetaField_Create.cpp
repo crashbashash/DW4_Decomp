@@ -1,12 +1,10 @@
-/* 0x002b6d20
- * Factory for an igUnsignedIntMetaField (52-byte instance).  Once the object system is
- * live, ensure the class is registered (igUnsignedIntMetaField_EnsureRegistered runs
- * igMetaObject_RunStaticInit(igUnsignedIntMetaField_Register)) and let its MetaObject create
- * the instance with the given allocator.  Before that, allocate by hand,
- * construct in place (second argument 1 is the flag retail passes) and run the
- * post-construction hooks, vfunc_09 then vfunc_07(0).  Same factory shape as
- * the other metafield factories in src/engine/field-descriptor-factories.cpp;
- * docs/engine/field-factories.md (finding #880). */
+/* Factory for an igUnsignedIntMetaField (52-byte instance). Once the object system is live, ensure
+ * the class is registered (igUnsignedIntMetaField_EnsureRegistered runs
+ * igMetaObject_RunStaticInit(igUnsignedIntMetaField_Register)) and let its MetaObject create the
+ * instance with the given allocator. Before that, allocate by hand, construct in place (second
+ * argument 1 is the flag retail passes) and run the post-construction hooks, vfunc_09 then
+ * vfunc_07(0). Same factory shape as the other metafield factories in src/engine/field-descriptor-
+ * factories.cpp. */
 extern "C" {
 int igUnsignedIntMetaField_EnsureRegistered(...);
 void **igObject_AllocateRawStorage(...);

@@ -1,4 +1,5 @@
-/* 0x0042bae0 - FUN_0042bae0. Messenger send with a 48-byte string table copied as an aligned struct (lq/sq unrolled); alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* Messenger send with a 48-byte string table copied as an aligned struct (lq/sq unrolled);
+ * alternate compiler -O3,p. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

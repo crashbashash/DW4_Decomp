@@ -1,11 +1,9 @@
-/* Messenger class factories and their lazy-registration wrappers, in retail order
- * (beMessengerWork 0x358070, Group 0x3584e0, Delay 0x358950, ArgData 0x358d80).  Each
- * factory makes sure the class is registered, reloads the class handle and creates an
- * instance from the caller's allocator; see docs/engine/object-creation.md.
+/* Messenger class factories and their lazy-registration wrappers, in retail order (beMessengerWork
+ * 0x358070, Group 0x3584e0, Delay 0x358950, ArgData 0x358d80). Each factory makes sure the class
+ * is registered, reloads the class handle and creates an instance from the caller's allocator.
  * Return and allocator signatures follow the original call/return registers. */
 
-/* Structural ABI view of the static-init callback list the registrars return
- * (see src/engine/igMetaObjectCreation.cpp); never defined here. */
+/* Structural ABI view of the static-init callback list the registrars return; never defined here. */
 struct StaticInitCallbacks;
 extern "C" void igMetaObject_RunStaticInit(StaticInitCallbacks *(*)());
 extern "C" void *igMetaObject_CreateInstance(void *classHandle,void *allocator);

@@ -1,8 +1,6 @@
-/* 0x002ff010 — igObject_ConstructHeader (finding #880, docs/engine/field-factories.md,
- * docs/engine/object-creation.md).  Stamps the igObject vtable, runs igObject_InitHeader,
- * then fills the header's allocator byte (+7): with the object system active it is the
- * result of the owning allocator's virtual slot 364 (the owner-derived encoded allocator
- * index, docs/engine/allocator-registry.md); otherwise zero. */
+/* Stamps the igObject vtable, runs igObject_InitHeader, then fills the header's allocator byte
+ * (+7): with the object system active it is the result of the owning allocator's virtual slot 364
+ * (the owner-derived encoded allocator index); otherwise zero. */
 #include "dw4/reflected.h"
 extern "C" {
 void **Memory_FindOwningAllocator(...);

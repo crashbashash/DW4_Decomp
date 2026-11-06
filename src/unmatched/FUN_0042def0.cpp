@@ -1,4 +1,3 @@
-/* 0x0042def0 — FUN_0042def0. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

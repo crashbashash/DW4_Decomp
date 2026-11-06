@@ -1,4 +1,5 @@
-/* 0x002ad1d0 — FUN_002ad1d0 (108 bytes). Sets *ready to 1 when the record exists, is running (FUN_002ace48) and either forwards to a delegate (+3520) or has a positive derived value (+3496); otherwise 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets *ready to 1 when the record exists, is running (FUN_002ace48) and either forwards to a
+ * delegate (+3520) or has a positive derived value (+3496); otherwise 0. */
 /* matching construct: declared void here — an int prototype moves the flag load from v0 to v1 */
 void FUN_002ace48(void *record, int *running);
 

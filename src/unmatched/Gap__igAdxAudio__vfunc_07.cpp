@@ -1,6 +1,3 @@
-/* 0x00331f30 — Gap__igAdxAudio__vfunc_07. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 extern "C" {
 int Gap__Core__igObject__vfunc_07(...);

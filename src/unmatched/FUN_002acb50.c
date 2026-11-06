@@ -1,4 +1,4 @@
-/* 0x002acb50 — FUN_002acb50 (72 bytes). Runs FUN_002acb98 over each of `count` consecutive 0xDD8-byte records. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs FUN_002acb98 over each of `count` consecutive 0xDD8-byte records. */
 int FUN_002acb98();
 
 /* One 3544-byte (0xDD8) record; members as read by FUN_002ad2e0..FUN_002ad870. */

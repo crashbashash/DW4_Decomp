@@ -1,4 +1,5 @@
-/* 0x0029f200 — FUN_0029f200 (176 bytes). Runs the state-update stages FUN_0029f310, FUN_0029f318, FUN_0029fd18, FUN_0029f880 and FUN_0029fb20, stopping at the first that reports a result. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs the state-update stages FUN_0029f310, FUN_0029f318, FUN_0029fd18, FUN_0029f880 and
+ * FUN_0029fb20, stopping at the first that reports a result. */
 int FUN_0029f2b0();
 int FUN_0029f310();
 int FUN_0029f318();

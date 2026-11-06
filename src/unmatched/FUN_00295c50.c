@@ -1,4 +1,6 @@
-/* 0x00295c50 — FUN_00295c50 (120 bytes). Looks up a file's range with FUN_00262748 (ADXF_GetFnameRangeEx, per its diagnostic) using the handle's +440 value and stores the three results at +452..+460 with +448 = 1; reports failure through FUN_0029a320. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks up a file's range with FUN_00262748 (ADXF_GetFnameRangeEx, per its diagnostic) using the
+ * handle's +440 value and stores the three results at +452..+460 with +448 = 1; reports failure
+ * through FUN_0029a320. */
 int FUN_00262748(int a, int b, int c, int *out0, int *out1, int *out2);
 void FUN_0029a320(const char *format, ...);
 

@@ -1,6 +1,3 @@
-/* 0x001f6470 — FUN_001f6470. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 void *FUN_001f6470(void *arg0, void *arg1) {
     *(int *)((char *)arg0 + 0) = (int) *(int *)((char *)arg1 + 0);
     *(int *)((char *)arg0 + 4) = (int) *(int *)((char *)arg1 + 4);

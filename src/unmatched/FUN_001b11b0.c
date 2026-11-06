@@ -1,4 +1,5 @@
-/* 0x001b11b0 - FUN_001b11b0. Pops the top entry of a stack in a table, with an optional callback; element read hoisted into a local; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Pops the top entry of a stack in a table, with an optional callback; element read hoisted into a
+ * local; alternate compiler. */
 int FUN_001b1490();
 struct Q { char p[8]; int n; char r[4]; int *a; char s[8]; int (*cb)(int, int); };
 struct X { char p[16]; struct Q **q; };

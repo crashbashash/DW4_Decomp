@@ -1,4 +1,4 @@
-/* 0x003247b0 - FUN_003247b0. Smart-pointer assignment guarded by an allocator check; reference count masked to 23 bits. Verified byte-identical by tools/verify.py. */
+/* Smart-pointer assignment guarded by an allocator check; reference count masked to 23 bits. */
 typedef struct S1 { char pad4[4]; int f4; } S1;
 typedef struct S0 { char pad148[148]; S1 *f94; } S0;
 int igObject_Destroy();

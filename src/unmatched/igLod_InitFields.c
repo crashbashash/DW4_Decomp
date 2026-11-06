@@ -1,4 +1,3 @@
-/* 0x0019d7b0 — igLod_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 #include "dw4/reflected.h"
 int FUN_0018e470();
 int FUN_0019cd50();

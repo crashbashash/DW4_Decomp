@@ -1,5 +1,3 @@
-/* 0x0015d050 — FUN_0015d050. m2c draft with dropped/gap parameters restored; verified
- * byte-identical by tools/verify.py (loop: tools/m2c_loop.py). */
 void FUN_0015d050(void *arg0, int dummy1, void *arg2) {
     float temp_f0;
 

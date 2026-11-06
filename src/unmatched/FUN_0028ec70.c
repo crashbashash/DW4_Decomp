@@ -1,4 +1,6 @@
-/* 0x0028ec70 — FUN_0028ec70 (172 bytes). Searches the caller's buffer (base, size) with FUN_0028de10 and stores the offset of the hit, or the whole size when there is none, through *out; reports 0 or error 0xFF030305 through FUN_0028eb38, and 0xFF03020A when FUN_002913f8 rejects the object. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Searches the caller's buffer (base, size) with FUN_0028de10 and stores the offset of the hit, or
+ * the whole size when there is none, through *out; reports 0 or error 0xFF030305 through
+ * FUN_0028eb38, and 0xFF03020A when FUN_002913f8 rejects the object. */
 extern int FUN_002913f8(void *obj);
 extern int FUN_0028eb38(void *obj, int code);
 extern char *FUN_0028de10(char *base, int size, int arg);

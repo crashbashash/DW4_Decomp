@@ -1,4 +1,4 @@
-/* 0x002a21d8 — FUN_002a21d8 (108 bytes). Sets streams +8068, +8064 and +8072 to 1 through FUN_0029ea68, then calls FUN_002a9d70. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets streams +8068, +8064 and +8072 to 1 through FUN_0029ea68, then calls FUN_002a9d70. */
 typedef struct SfdStreamIds {
     char pad0[20];
     int f20;                /* handle +8064 */

@@ -1,4 +1,3 @@
-/* 0x0016aea0 - FUN_0016aea0. dummy leading parameter, int pointers stepped by one element; alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 void FUN_0016aea0(int arg0, int arg1, int *arg2, int *arg3) {
     int *var_a2;
     int *var_a3;

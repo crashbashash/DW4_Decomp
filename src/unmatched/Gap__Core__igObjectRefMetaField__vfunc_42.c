@@ -1,4 +1,4 @@
-/* 0x00303a40 - Gap__Core__igObjectRefMetaField__vfunc_42. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 #include "dw4/reflected.h"
 int igObject_VisitFields();
 

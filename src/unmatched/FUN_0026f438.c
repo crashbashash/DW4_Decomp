@@ -1,4 +1,5 @@
-/* 0x0026f438 — FUN_0026f438 (116 bytes). Stores value under name in a free slot of the DAT_0056dfd4 table; returns 0, -1 without a table, or -2 when no slot is free. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores value under name in a free slot of the DAT_0056dfd4 table; returns 0, -1 without a table,
+ * or -2 when no slot is free. */
 /* A 16-byte named slot of the table DAT_0056dfd4 points at (FUN_0026f350 finds a free one, FUN_0026f3a0 one by name). */
 typedef struct NamedValue_26f438 {
     char name[12];      /* 0x00: empty when name[0] == 0 */

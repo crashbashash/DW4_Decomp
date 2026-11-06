@@ -1,4 +1,5 @@
-/* 0x00281cf8 — FUN_00281cf8 (132 bytes). Polls a channel: a pending error word is consumed and returned (-256 reported as 3); otherwise the state word gives 1 (busy) or 2 (done, consumed), else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Polls a channel: a pending error word is consumed and returned (-256 reported as 3); otherwise
+ * the state word gives 1 (busy) or 2 (done, consumed), else 0. */
 
 /* Context reached through DAT_004bb114 (only the members used here). */
 struct Ctx00281cf8 {

@@ -1,5 +1,5 @@
-/* 0x0037e2d0 — FUN_0037e2d0: while "turning OK" is set, queue a kind-4 keep-message
- * carrying the given RAM number on the build work's list. */
+/* While "turning OK" is set, queue a kind-4 keep-message carrying the given RAM number on the
+ * build work's list. */
 #include "dw4/reflected.h"
 
 extern "C" {

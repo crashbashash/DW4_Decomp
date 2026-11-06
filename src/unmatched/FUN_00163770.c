@@ -1,4 +1,7 @@
-/* 0x00163770 - FUN_00163770. Float-to-fixed-point conversion: splits a float into mantissa (23-bit bitfield read) and exponent, aligns the mantissa to arg0 fractional bits and ORs in the integer part. Union read-back through the stack; the exponent bias is subtracted after the join (not inside the condition); alternate compiler -O3. */
+/* Float-to-fixed-point conversion: splits a float into mantissa (23-bit bitfield read) and
+ * exponent, aligns the mantissa to arg0 fractional bits and ORs in the integer part. Union read-
+ * back through the stack; the exponent bias is subtracted after the join (not inside the
+ * condition); alternate compiler -O3. */
 int FUN_00163770(unsigned int arg0, float fparg0) {
     union { float f; unsigned u; struct { unsigned frac:23; } b; } x;
     int e, v;

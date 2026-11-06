@@ -1,4 +1,3 @@
-/* 0x002c1a80 - igLongMetaField_GetVTable. temporary stack object as a union (byte index folds into the load), alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 int StringChunk_ReleaseHeader();
 int igMetaField_Init();
 extern int DAT_0052f230[4];

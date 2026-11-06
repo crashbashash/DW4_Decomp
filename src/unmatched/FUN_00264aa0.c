@@ -1,4 +1,4 @@
-/* 0x00264aa0 — FUN_00264aa0 (80 bytes). Sets six 64-bit flags (DAT_0049da38 … DAT_0049da88, 16 bytes apart) to 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets six 64-bit flags (DAT_0049da38 … DAT_0049da88, 16 bytes apart) to 1. */
 /* Each store materialises the full address (lui/addiu/sd 0): the flags are volatile. */
 extern volatile long long DAT_0049da38;
 extern volatile long long DAT_0049da48;

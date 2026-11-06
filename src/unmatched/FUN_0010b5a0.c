@@ -1,4 +1,5 @@
-/* 0x0010b5a0 — FUN_0010b5a0 (40 bytes). Error stub: sets the per-thread error code (FUN_00124d50 returns its address) to 5 and fails with -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Error stub: sets the per-thread error code (FUN_00124d50 returns its address) to 5 and fails
+ * with -1. */
 int *FUN_00124d50(void);
 
 int FUN_0010b5a0(void) {

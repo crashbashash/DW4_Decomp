@@ -1,7 +1,8 @@
-/* 0x003fa120 - FUN_003fa120. Adds one equipment-style bonus to *out: the first element of the property folder's list gives
- * GetRecordInt(record, gameram, name), and when `with_flat` is set the record's own field at +20 is added too.
- * Matching note: the +20 read is volatile -- it is created before the *out reload so the register colouring puts the field in a0
- * and the running total in v1 (alternate compiler, -O3,p). Verified byte-identical by tools/verify.py. */
+/* Adds one equipment-style bonus to *out: the first element of the property folder's list gives
+ * GetRecordInt(record, gameram, name), and when `with_flat` is set the record's own field at +20
+ * is added too. Matching note: the +20 read is volatile -- it is created before the *out reload so
+ * the register colouring puts the field in a0 and the running total in v1 (alternate compiler,
+ * -O3,p). */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */

@@ -1,5 +1,5 @@
 extern "C" {
-/* 0x0033be60 - Gap__igMoviePlugin__vfunc_21. empty-then select written as a conditional expression; typed members. Verified byte-identical by tools/verify.py. */
+/* Empty-then select written as a conditional expression; typed members. */
 struct R { char pad[4]; int f4; char pad2[12]; char f20; };
 struct S { char pad[8]; struct R *f8; };
 int FUN_00236ab0(int, struct R *);

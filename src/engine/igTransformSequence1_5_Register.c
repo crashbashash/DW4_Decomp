@@ -3,7 +3,7 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 #include "dw4/reflected.h"
 extern char igTransformSequence1_5_GetVTable[];
-void thunk_FUN_00194ef0(void);  /* code at 0x195320, passed by address (was DAT_195320; docs/engine/function-inventory.md) */
+void thunk_FUN_00194ef0(void);
 extern char igTransformSequence_GetPublishedMetaObject[];
 extern char igTransformSequence_Register[];
 extern char g_igTransformSequence1_5_callbackList[];

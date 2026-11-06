@@ -1,6 +1,3 @@
-/* 0x0015e010 — FUN_0015e010. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int igMemoryRefMetaField_SetAlignmentType();
 int FUN_00308860();
 extern int DAT_004df000[4];

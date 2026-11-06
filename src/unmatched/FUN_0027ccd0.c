@@ -1,7 +1,7 @@
-/* 0x0027ccd0 — FUN_0027ccd0 (164 bytes). Returns the total size queued on one of the four lanes of a handle
-   (sum of +12 over the lane's linked list at +24 + 4 * lane); an out-of-range lane is reported through the
-   handle's error callback (+40, context +44, code -3) and returns 0. Null and unused handles are reported
-   through FUN_0027b2e0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the total size queued on one of the four lanes of a handle (sum of +12 over the lane's
+ * linked list at +24 + 4 * lane); an out-of-range lane is reported through the handle's error
+ * callback (+40, context +44, code -3) and returns 0. Null and unused handles are reported through
+ * FUN_0027b2e0. */
 struct Node27c {
     struct Node27c *next;   /* +0 */
     int f4;

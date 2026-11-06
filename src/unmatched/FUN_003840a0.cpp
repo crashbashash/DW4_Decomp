@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x003840a0 — FUN_003840a0. Hand-retyped from the m2c draft, verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 int FUN_002eb010(int);
 int FUN_003841d0(...);

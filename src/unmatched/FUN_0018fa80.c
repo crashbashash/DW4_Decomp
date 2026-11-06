@@ -1,4 +1,3 @@
-/* 0x0018fa80 - FUN_0018fa80. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 extern void * DAT_00561118[4];
 int FUN_0018fa80(void *arg0, void *arg1) {
     int var_v0;

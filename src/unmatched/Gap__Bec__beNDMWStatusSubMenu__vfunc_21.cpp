@@ -1,22 +1,20 @@
-/* 0x004207a0 Gap__Bec__beNDMWStatusSubMenu__vfunc_21: update state machine of the status-screen
- * sub-menu (_st0 open / run / close / wait-close, _st1 menu choice 0..3, _st2 step, _st3 argument).
- * Build requirements (same family as ShopCtrl40::vfunc_21, 0x00429630): alternate compiler with
- * "-O3,p -Cpp_exceptions off"; the empty RP destructor (__dt__2RPFv) is a duplicate of the retail
- * body at 0x002e2300 and operator delete is external (config/SLUS-20836/unit-objects.json).
- * Codegen notes (all measured):
- *  - RP slots are the memory-resident smart-pointer temporaries (the empty destructor keeps them on
- *    the stack); the interned-string temporaries tk0..tk11 and the Ref temporaries r1xx are
- *    address-taken locals.
- *  - The branch-delay hoisting of the pool-init 'li a0,16' / 'move a0,v0' words only turns off when
- *    the post-RA jump optimiser deletes at least one jump to the next block.  Retail gets that from the
- *    player-count presentation switch: its default body comes first (case 1 + default share it), so
- *    the compare chain falls into it without a trailing jump.  Keep `case 1: default:` first.
- *  - Helpers::AppendBoth is the inlined two-list append used twice (same registers both times).
- *  - DAT_004cf790 is the compiler's own image of a local const char *[3] initialiser; declaring it as
- *    an extern Str3 object gives the retail ld/lwc1 block move.  DAT_004cf760 (12 model-name
- *    pointers) is copied with three quadword loads then three stores.
- *  - Locals of the case-3 step 0 block are declared in the order rec, i, nN, item, lL, ctx, flag;
- *    that order (not the macro form) decides the saved-register colouring of the list append. */
+/* Gap__Bec__beNDMWStatusSubMenu__vfunc_21: update state machine of the status-screen sub-menu
+ * (_st0 open / run / close / wait-close, _st1 menu choice 0..3, _st2 step, _st3 argument). Build
+ * requirements (same family as ShopCtrl40::vfunc_21, 0x00429630): alternate compiler with "-O3,p
+ * -Cpp_exceptions off"; the empty RP destructor (__dt__2RPFv) is a duplicate of the retail body at
+ * 0x002e2300 and operator delete is external. Codegen notes (all measured): - RP slots are the
+ * memory-resident smart-pointer temporaries (the empty destructor keeps them on the stack); the
+ * interned-string temporaries tk0..tk11 and the Ref temporaries r1xx are address-taken locals. -
+ * The branch-delay hoisting of the pool-init 'li a0,16' / 'move a0,v0' words only turns off when
+ * the post-RA jump optimiser deletes at least one jump to the next block. Retail gets that from
+ * the player-count presentation switch: its default body comes first (case 1 + default share it),
+ * so the compare chain falls into it without a trailing jump. Keep `case 1: default:` first. -
+ * Helpers::AppendBoth is the inlined two-list append used twice (same registers both times). -
+ * DAT_004cf790 is the compiler's own image of a local const char *[3] initialiser; declaring it as
+ * an extern Str3 object gives the retail ld/lwc1 block move. DAT_004cf760 (12 model-name pointers)
+ * is copied with three quadword loads then three stores. - Locals of the case-3 step 0 block are
+ * declared in the order rec, i, nN, item, lL, ctx, flag; that order (not the macro form) decides
+ * the saved-register colouring of the list append. */
 #include "dw4/reflected.h"
 
 extern "C" {

@@ -1,4 +1,4 @@
-/* 0x0029cee8 — FUN_0029cee8 (144 bytes). Validates the handle, then calls the attached interface's slot +4 when option 6 is set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates the handle, then calls the attached interface's slot +4 when option 6 is set. */
 typedef struct SfdInterface {
     void (*f0)(void);
     void (*f4)(void *handle, int a, int b);  /* +4 */

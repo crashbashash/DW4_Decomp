@@ -1,4 +1,3 @@
-/* 0x00241390 - FUN_00241390. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int lua_remove();
 void *lua_touserdata();
 void FUN_00241390(int arg0) {

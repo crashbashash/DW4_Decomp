@@ -1,4 +1,5 @@
-/* 0x002aed08 — FUN_002aed08 (88 bytes). Stores a value at +3392 of the handle's object, or reports error 0xFF000124 when FUN_002a0dd8 rejects the handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a value at +3392 of the handle's object, or reports error 0xFF000124 when FUN_002a0dd8
+ * rejects the handle. */
 int FUN_002a0bb8();
 int FUN_002a0dd8();
 

@@ -1,6 +1,3 @@
-/* 0x002b80b0 — igThread_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_002dc7a0();
 int FUN_0030e9b0();
@@ -8,7 +5,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_002b7dc0(void);  /* code at 0x2b7dc0, passed by address (was DAT_2b7dc0; docs/engine/function-inventory.md) */
+void FUN_002b7dc0(void);
 void thunk_igPsx2Thread_GetMetaObject(void); /* address-taken; signature not recovered */
 extern int DAT_004bf420[4];
 extern int DAT_004bf450[4];

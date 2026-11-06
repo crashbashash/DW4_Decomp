@@ -1,4 +1,5 @@
-/* 0x0029a320 — FUN_0029a320 (148 bytes). MWSFD error report: formats the message into a 256-byte buffer with FUN_0012fde0 (vsprintf-shaped: buffer, format, va_list) and passes it to FUN_0029a3e8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* MWSFD error report: formats the message into a 256-byte buffer with FUN_0012fde0 (vsprintf-
+ * shaped: buffer, format, va_list) and passes it to FUN_0029a3e8. */
 typedef __builtin_va_list va_list;
 
 void *memset(void *, int, unsigned int);

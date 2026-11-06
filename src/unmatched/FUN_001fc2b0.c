@@ -1,4 +1,3 @@
-/* 0x001fc2b0 — FUN_001fc2b0. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 float FUN_001fc030();
 void FUN_001fc2b0(int arg0, float *arg1) {
     float v[16];

@@ -1,4 +1,6 @@
-/* 0x00246130 - FUN_00246130. Lazily created singleton with refcount, local pointer kept in memory via a volatile pointer local (retail stores and reloads it), one-word struct returns for the hidden-pointer virtuals; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Lazily created singleton with refcount, local pointer kept in memory via a volatile pointer
+ * local (retail stores and reloads it), one-word struct returns for the hidden-pointer virtuals;
+ * alternate compiler. */
 extern "C" {
 int FUN_001007e0(int);
 void FUN_00245e80(int, int, int, int);

@@ -19,7 +19,7 @@ void igObject_Destroy(void *);
 int ObjectPointerList_FindIndex(int,igMetaObject *);
 void MetaRefList_AppendRetained(void *,void *);
 void igObjectSystem_AppendMetaObject(void *,igMetaObject *);
-/* igMetaObject's vtable (RTTI-named; docs/engine/rtti-and-vtables.md). */
+/* igMetaObject's vtable (RTTI-named). */
 extern int g_igMetaObject_vtable[4];
 extern void *g_objectSystem[4];
 

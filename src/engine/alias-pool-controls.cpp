@@ -1,6 +1,5 @@
-/* igAliasMemoryPool binding and disable (finding #900, docs/engine/alias-pool-binding.md):
- * the setter that retains the aliased pool and records whether it accepts this
- * pool, and the disable callback.  Functions are in retail address order. */
+/* igAliasMemoryPool binding and disable: the setter that retains the aliased pool and records
+ * whether it accepts this pool, and the disable callback. Functions are in retail address order. */
 #include "dw4/reflected.h"
 /* Retail ABI views, not original class definitions. Virtual tables include
  * an eight-byte header; Object projects slot376. Never instantiate these views. */

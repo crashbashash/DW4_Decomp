@@ -1,5 +1,5 @@
-/* 0x0025bfd0 — FUN_0025bfd0 (100 bytes). Recognises an AIFF header: "FORM" at +0 and "AIFF" at +8. FUN_00127004
- * compares like memcmp (pointer, pointer, length). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Recognises an AIFF header: "FORM" at +0 and "AIFF" at +8. FUN_00127004 compares like memcmp
+ * (pointer, pointer, length). */
 int FUN_00127004(const void *a, const void *b, unsigned int size);
 
 extern const char FORM[];

@@ -1,4 +1,5 @@
-/* 0x00263b40 — FUN_00263b40 (64 bytes). Reports DAT_004ee270 through FUN_002607e8 for a null object; otherwise, when the byte at offset 1 is 0, calls FUN_002771d0 on the handle at offset 148. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports DAT_004ee270 through FUN_002607e8 for a null object; otherwise, when the byte at offset
+ * 1 is 0, calls FUN_002771d0 on the handle at offset 148. */
 typedef struct Object_263b40 {
     char f0;
     char f1;            /* 0x01 */

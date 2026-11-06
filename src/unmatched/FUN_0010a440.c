@@ -1,6 +1,3 @@
-/* 0x0010a440 — FUN_0010a440. m2c draft + decomp-permuter search, then verified
- * byte-identical to retail by tools/verify.py (see tools/permuter_one.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_0010a640();
 
 int FUN_0010a440(void *arg0)

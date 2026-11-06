@@ -1,6 +1,6 @@
-/* 0x0028d760 — FUN_0028d760 (140 bytes). Installs the stream work area at 0x004bcc68: clears count * 64 + 4
-   bytes of it (FUN_0028b530), initialises it (FUN_0028d868), records the stream count (+12) and marks every
-   stream entry (256 bytes from +16) with state 1. Returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Installs the stream work area at 0x004bcc68: clears count * 64 + 4 bytes of it (FUN_0028b530),
+ * initialises it (FUN_0028d868), records the stream count (+12) and marks every stream entry (256
+ * bytes from +16) with state 1. Returns 0. */
 struct StreamEntry28d {
     int state;          /* +0: 1 = free */
     char pad4[252];

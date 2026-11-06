@@ -1,5 +1,3 @@
-/* 0x001033f8 — FUN_001033f8. m2c draft (build/m2c/FUN_001033f8.c), call-argument/cleaner fix-up; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_00102d08();
 
 int FUN_001033f8(void *arg0, unsigned int arg1, int arg2, int arg3) {

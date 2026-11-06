@@ -1,4 +1,5 @@
-/* 0x002a0ae0 — FUN_002a0ae0 (164 bytes). Closes the eight handles in DAT_004beadc and shuts the sub-systems down; returns the FUN_002afca0 error if any, else the last close status. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Closes the eight handles in DAT_004beadc and shuts the sub-systems down; returns the
+ * FUN_002afca0 error if any, else the last close status. */
 void FUN_0029d4b8();
 void FUN_002a0e10();
 void FUN_002a0e48();

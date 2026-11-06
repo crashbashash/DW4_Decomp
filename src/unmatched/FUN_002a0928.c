@@ -1,4 +1,3 @@
-/* 0x2a0928 — FUN_002a0928. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int FUN_002a0928(void *arg0) {
     int r = 0;
     int t, m;

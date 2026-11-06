@@ -1,4 +1,5 @@
-/* 0x00265928 — FUN_00265928 (120 bytes). printf-style message: unless DAT_004a52c0 is set, formats the arguments into a 128-byte buffer with FUN_0012fde0 and prints it with FUN_0010d108. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* printf-style message: unless DAT_004a52c0 is set, formats the arguments into a 128-byte buffer
+ * with FUN_0012fde0 and prints it with FUN_0010d108. */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))

@@ -1,4 +1,5 @@
-/* 0x002796b0 — FUN_002796b0 (116 bytes). Claims the first unused entry (byte 0 clear) among the DAT_004b1dc0 24-byte entries of DAT_004b1e20, marking it used; returns it, or 0 when none is free. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Claims the first unused entry (byte 0 clear) among the DAT_004b1dc0 24-byte entries of
+ * DAT_004b1e20, marking it used; returns it, or 0 when none is free. */
 typedef struct Entry_2796b0 {
     signed char used;   /* 0x00 */
     char pad1[23];

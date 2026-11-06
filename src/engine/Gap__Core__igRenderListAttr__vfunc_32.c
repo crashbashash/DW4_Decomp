@@ -1,10 +1,9 @@
 #include "dw4/reflected.h"
 int igObject_Destroy();
 
-/* 0x00142620 — slot 32 of igRenderListAttr: set the _vc reference (+16).
- * Reference-counted assignment: retain the new object, release the old one
- * (destroying it when its 23-bit count reaches zero, see
- * docs/engine/near-miss-shapes-player-vfunc44.md), then store the new one. */
+/* slot 32 of igRenderListAttr: set the _vc reference (+16). Reference-counted assignment: retain
+ * the new object, release the old one (destroying it when its 23-bit count reaches zero), then
+ * store the new one. */
 void Gap__Core__igRenderListAttr__vfunc_32(igRenderListAttr *self, igObject *vertexCache) {
     igObject *previousVertexCache;
     if (vertexCache != 0) {

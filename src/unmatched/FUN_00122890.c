@@ -1,4 +1,4 @@
-/* 0x00122890 — FUN_00122890 (72 bytes). Returns 1 when the double argument is an infinity (newlib isinf shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 when the double argument is an infinity (newlib isinf shape; name is a hypothesis). */
 typedef union DoubleWords {
     double value;
     struct {

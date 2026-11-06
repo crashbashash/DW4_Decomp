@@ -22,7 +22,7 @@ void igPsx2LongList_Register(void) {
         0x14,                                   /* instance size */
         igPsx2LongList_GetVTable,               /* vtable getter */
         &igPsx2LongList_InitFields_00152970[0], /* field adder (post_init in data/reflection.json) */
-        0,                                      /* extra callback-vector item (none; docs/engine/reflection-registration.md) */
+        0,                                      /* extra callback-vector item (none) */
         0                                       /* zero-terminated callback-vector item list (none) */
     );
 }

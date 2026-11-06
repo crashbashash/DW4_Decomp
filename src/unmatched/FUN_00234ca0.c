@@ -1,5 +1,3 @@
-/* 0x00234ca0 — FUN_00234ca0. m2c draft, hand-fixed; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_00100610();
 int StringChunk_ReleaseHeader();
 extern struct Frame *DAT_0056dc50[4];

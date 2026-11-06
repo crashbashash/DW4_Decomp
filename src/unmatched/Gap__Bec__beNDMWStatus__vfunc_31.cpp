@@ -1,11 +1,10 @@
-/* 0x003d59b0 Gap__Bec__beNDMWStatus__vfunc_31: status-screen update for one info record
- * (info->_st0: 0 create the sub-window picked by _subWndNo, 1 run it until it stops, default tear down).
- * Build requirements: the unit profile (alternate compiler, -O3,p, exceptions on); the ObjectRef
- * destructor is the destroy action of the retail exception table and a duplicate of the retail body
- * at 0x003b2f30 (config/SLUS-20836/unit-objects.json).
- * Codegen notes (measured): FUN_003d8740 takes (self, info, st0) so the state stays in a2; the
- * sub-window reference lives in memory (reloaded from 76(sp)) and is released when its block ends,
- * before case 0 falls into case 1 into default. */
+/* Gap__Bec__beNDMWStatus__vfunc_31: status-screen update for one info record (info->_st0: 0 create
+ * the sub-window picked by _subWndNo, 1 run it until it stops, default tear down). Build
+ * requirements: the unit profile (alternate compiler, -O3,p, exceptions on); the ObjectRef
+ * destructor is the destroy action of the retail exception table and a duplicate of the retail
+ * body at 0x003b2f30. Codegen notes (measured): FUN_003d8740 takes (self, info, st0) so the state
+ * stays in a2; the sub-window reference lives in memory (reloaded from 76(sp)) and is released
+ * when its block ends, before case 0 falls into case 1 into default. */
 #include "dw4/reflected.h"
 
 extern "C" {

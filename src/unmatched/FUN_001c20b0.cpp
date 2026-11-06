@@ -1,16 +1,15 @@
-/* 0x001c20b0 - FUN_001c20b0: build the helper objects of a controller on its first update.
- *
- * Reads the stored enable flag from the property set (global 0x586dc8, +56; name at 0x4e4600),
- * then creates up to eight owned helper objects in the fields at +76..+108, each from the
- * controller's own allocator, configures them through their virtual methods (slots at
- * +100 / +128 / +132) and drops the temporary reference.  Every store is the reference-counted
- * assignment idiom: retain the new object, release the old one, publish.
- * Evidence: asm/FUN_001c20b0.s; the same idiom in src/unmatched/igIGBFile_ReadObject.cpp.
- * Matching constructs: each new object lives in a volatile stack slot (the retail code reloads it
- * from the stack for the retain and for the final release); the dummy virtual class supplies the
- * slot offsets (offset = 8 + 4 * index); the two arms that publish into +96 each carry their own
- * store, and `flag` is assigned just before the call.  Build: local/mwcps2/combat/mwccps2.exe
- * (sha256 acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a), -O3 -Iinclude. */
+/* Build the helper objects of a controller on its first update. Reads the stored enable flag from
+ * the property set (global 0x586dc8, +56; name at 0x4e4600), then creates up to eight owned helper
+ * objects in the fields at +76..+108, each from the controller's own allocator, configures them
+ * through their virtual methods (slots at +100 / +128 / +132) and drops the temporary reference.
+ * Every store is the reference-counted assignment idiom: retain the new object, release the old
+ * one, publish. Evidence: asm/FUN_001c20b0.s; the same idiom in
+ * src/unmatched/igIGBFile_ReadObject.cpp. Matching constructs: each new object lives in a volatile
+ * stack slot (the retail code reloads it from the stack for the retain and for the final release);
+ * the dummy virtual class supplies the slot offsets (offset = 8 + 4 * index); the two arms that
+ * publish into +96 each carry their own store, and `flag` is assigned just before the call. Build:
+ * local/mwcps2/combat/mwccps2.exe (sha256
+ * acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a), -O3 -Iinclude. */
 class Obj;
 struct PropertySet { char pad[56]; int props; };
 extern "C" {

@@ -1,4 +1,5 @@
-/* 0x002a2468 — FUN_002a2468 (104 bytes). When FUN_0029ea88 reports the player's video stream ready (1), runs FUN_002a21d8 with params->f60; reports whether it did through *done. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When FUN_0029ea88 reports the player's video stream ready (1), runs FUN_002a21d8 with
+ * params->f60; reports whether it did through *done. */
 int FUN_0029ea88();
 void FUN_002a21d8();
 

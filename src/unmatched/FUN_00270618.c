@@ -1,4 +1,6 @@
-/* 0x00270618 — FUN_00270618 (100 bytes). Returns the sector length through the device interface (entry +48) of a file-system handle; a NULL handle or missing entry is reported through FUN_0026f530 and returns 0. Its error strings name it cvFsGetSctLen (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the sector length through the device interface (entry +48) of a file-system handle; a
+ * NULL handle or missing entry is reported through FUN_0026f530 and returns 0. Its error strings
+ * name it cvFsGetSctLen (CRI), a name hypothesis. */
 typedef struct CvFsDevice_270618 {
     void *pad0[12];
     int (*get_sct_len)(int file);  /* 0x30 */

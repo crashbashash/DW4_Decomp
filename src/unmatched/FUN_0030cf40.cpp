@@ -1,6 +1,3 @@
-/* 0x0030cf40 — FUN_0030cf40. Banked by tools/retype_struct_member.py (shape: base):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 extern "C" {
 int List_Reserve(...);
 void FUN_0030cf40(void *arg0);

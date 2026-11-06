@@ -1,5 +1,3 @@
-/* 0x001b89b0 — FUN_001b89b0. hand-matched: the real argument is the second (m2c
- * dropped the leading one); verified by tools/verify.py. */
 #include "dw4/reflected.h"
 int List_RemoveWordAt();
 

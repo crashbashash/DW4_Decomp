@@ -5,12 +5,11 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 #include "dw4/reflected.h"
-/* Allocator failure-status word at 0x004fb418: the value every allocator
- * status leaf publishes (docs/engine/allocator-builder.md, allocator-registry.md).
+/* Allocator failure-status word at 0x004fb418: the value every allocator status leaf publishes.
  * Paired with the success word at 0x004fb410. */
 extern int g_allocatorFailureStatus[4];
 
-/* 0x002d0600: slot 30, reset the allocation counters and mark the pool active (docs/engine/alias-pool-binding.md). */
+/* slot 30, reset the allocation counters and mark the pool active. */
 void Gap__Core__igAliasMemoryPool__vfunc_30(igAliasMemoryPool *self) {
     self->_allocedBytes = 0;
     self->_allocedBytesHigh = 0;

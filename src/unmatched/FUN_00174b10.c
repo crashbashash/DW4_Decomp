@@ -1,4 +1,3 @@
-/* 0x00174b10 — FUN_00174b10. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_001e74b0();
 int FUN_001e7500();
 extern int DAT_0048a538[0x40];

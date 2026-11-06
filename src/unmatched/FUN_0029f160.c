@@ -1,4 +1,5 @@
-/* 0x0029f160 — FUN_0029f160 (160 bytes). Under the guard, runs FUN_0029f200 on the state and derives its two flag bytes from the words at +8/+12/+16. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Under the guard, runs FUN_0029f200 on the state and derives its two flag bytes from the words at
+ * +8/+12/+16. */
 void FUN_0029f200();
 void FUN_002a0e70();
 void FUN_002a0e88();

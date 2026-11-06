@@ -1,4 +1,4 @@
-/* 0x0029d298 — FUN_0029d298 (64 bytes). When option 6 is set, attaches the interface embedded at +13780 and initialises it. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When option 6 is set, attaches the interface embedded at +13780 and initialises it. */
 typedef struct SfdHandle {
     char pad0[8460];
     void *iface;            /* +8460 */

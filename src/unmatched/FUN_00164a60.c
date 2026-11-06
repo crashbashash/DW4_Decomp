@@ -1,6 +1,3 @@
-/* 0x00164a60 — FUN_00164a60. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern char DAT_00554b24[4];
 extern int DAT_00560688[4];
 extern int DAT_0056068c[4];

@@ -1,4 +1,5 @@
-/* 0x002919a8 — FUN_002919a8 (76 bytes). Reports the picture size (+8, +12) and derived values: half the width rounded up to a multiple of 32, and half the height. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports the picture size (+8, +12) and derived values: half the width rounded up to a multiple
+ * of 32, and half the height. */
 
 struct Picture002919a8 {
     int f0, f4;

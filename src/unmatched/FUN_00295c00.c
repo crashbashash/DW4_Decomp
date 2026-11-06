@@ -1,4 +1,5 @@
-/* 0x00295c00 — FUN_00295c00 (80 bytes). Runs FUN_00295b68(sfd, a), then records b and c at +456/+460, sets the +448 flag and clears +452. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs FUN_00295b68(sfd, a), then records b and c at +456/+460, sets the +448 flag and clears
+ * +452. */
 extern void FUN_00295b68(void *sfd, int a);
 
 typedef struct {

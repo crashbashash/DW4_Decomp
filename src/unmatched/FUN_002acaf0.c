@@ -1,4 +1,4 @@
-/* 0x002acaf0 — FUN_002acaf0 (64 bytes). True when stream slot \`index\` is active and its fill (+8) has reached its size (+4). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when stream slot \`index\` is active and its fill (+8) has reached its size (+4). */
 typedef struct SfdSlotFill {
     int active;             /* +0 */
     int size;               /* +4 */

@@ -1,4 +1,4 @@
-/* Global singleton release with -= 1 and the 23-bit mask on a typed struct; verified by tools/verify.py. */
+/* Global singleton release with -= 1 and the 23-bit mask on a typed struct.py. */
 typedef struct Q { char pad4[4]; int f4; } Q;
 int igObject_Destroy();
 extern Q * DAT_0055f508[4];

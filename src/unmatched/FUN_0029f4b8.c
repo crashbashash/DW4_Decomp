@@ -1,4 +1,5 @@
-/* 0x0029f4b8 — FUN_0029f4b8 (152 bytes). Decodes one element of text with a FUN_0028da88 decoder and, when its flags carry 0x10000, returns word +12 of the FUN_0028d4a8 info through *out. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Decodes one element of text with a FUN_0028da88 decoder and, when its flags carry 0x10000,
+ * returns word +12 of the FUN_0028d4a8 info through *out. */
 void FUN_0028b750();
 void FUN_0028d4a8();
 void *FUN_0028da88();

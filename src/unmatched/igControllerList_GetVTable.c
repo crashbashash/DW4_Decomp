@@ -1,4 +1,5 @@
-/* 0x001463a0 - igControllerList_GetVTable. Stack object, vtable slot read through the object plus a runtime offset. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Stack object, vtable slot read through the object plus a runtime offset. Matches only with the
+ * alternate (combat) compiler build. */
 typedef struct { int *vt; int pad[7]; } Obj;
 int igObject_InitHeader();
 extern int DAT_00524f70[4];

@@ -1,16 +1,15 @@
-/* 0x003d60e0 Gap__Bec__beNDMWStatus__vfunc_34: message handler of the status screen (enum-dispatched).
- * Build requirements: alternate compiler (local/mwcps2/combat) with "-O3,p -Cpp_exceptions off"; the ObjectRef
- * destructor (__dt__9ObjectRefFv) is a duplicate of the retail body at 0x001363f0 and operator delete is external
- * (config/SLUS-20836/unit-objects.json).
- * Codegen notes (all measured):
- *  - Every DAT_ string is declared int[4] on purpose: a small object (<= 8 bytes) is addressed gp-relative, which
- *    makes gp a live physical neighbour of every node and shifts the whole s-register colouring.
- *  - The block-local order "int idx; int v = ...; { igIntList *lst = ...; idx = ...; }" gives the per-row nodes the ids
- *    idx < v < lst, which is the push order retail needs (colours idx s5, v s4, lst s3).
- *  - beMessenger_AppendBool takes an unsigned char and beMessenger_AppendObject a pointer: the argument type decides
- *    which of the two argument loads lands in the delay slot.
- *  - The 5 and 2 byte copies are the compiler's __memcpy intrinsic (alternate compiler only; the default compiler
- *    crashes on it, so the duplicate check compiles the plain loop). */
+/* Gap__Bec__beNDMWStatus__vfunc_34: message handler of the status screen (enum-dispatched). Build
+ * requirements: alternate compiler (local/mwcps2/combat) with "-O3,p -Cpp_exceptions off"; the
+ * ObjectRef destructor (__dt__9ObjectRefFv) is a duplicate of the retail body at 0x001363f0 and
+ * operator delete is external. Codegen notes (all measured): - Every DAT_ string is declared
+ * int[4] on purpose: a small object (<= 8 bytes) is addressed gp-relative, which makes gp a live
+ * physical neighbour of every node and shifts the whole s-register colouring. - The block-local
+ * order "int idx; int v = ...; { igIntList *lst = ...; idx = ...; }" gives the per-row nodes the
+ * ids idx < v < lst, which is the push order retail needs (colours idx s5, v s4, lst s3). -
+ * beMessenger_AppendBool takes an unsigned char and beMessenger_AppendObject a pointer: the
+ * argument type decides which of the two argument loads lands in the delay slot. - The 5 and 2
+ * byte copies are the compiler's __memcpy intrinsic (alternate compiler only; the default compiler
+ * crashes on it, so the duplicate check compiles the plain loop). */
 #include "dw4/reflected.h"
 
 extern "C" {

@@ -1,6 +1,5 @@
-/* 0x000037e890 — FUN_0037e890: queue a kind-6 keep-message whose parameter is the interned
- * string `arg1` and whose RAM number is `arg2`; a build work is created first when the
- * manager has none. */
+/* Queue a kind-6 keep-message whose parameter is the interned string `arg1` and whose RAM number
+ * is `arg2`; a build work is created first when the manager has none. */
 #include "dw4/reflected.h"
 
 extern "C" {

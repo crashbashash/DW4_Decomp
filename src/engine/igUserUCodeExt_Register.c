@@ -8,7 +8,7 @@ extern char igUserUCodeExt_className[];
 extern char g_igUserUCodeExt_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
-void FUN_0014bc50(void);  /* code at 0x14bc50, passed by address (was DAT_14bc50; docs/engine/function-inventory.md) */
+void FUN_0014bc50(void);
 void igUserUCodeExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(

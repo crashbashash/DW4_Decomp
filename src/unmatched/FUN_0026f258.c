@@ -1,4 +1,4 @@
-/* 0x0026f258 — FUN_0026f258 (96 bytes). Runs FUN_0026f160 on each of the 16 60-byte entries of DAT_004a8eb8 whose first word is 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs FUN_0026f160 on each of the 16 60-byte entries of DAT_004a8eb8 whose first word is 1. */
 typedef struct Entry_26f258 {
     int used;           /* 0x00 */
     char rest[56];

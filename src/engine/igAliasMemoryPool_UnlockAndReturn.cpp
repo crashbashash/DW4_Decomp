@@ -1,18 +1,15 @@
-/* 0x002d0a80
- * Release the pool's allocation lock, then hand back the value the caller
- * supplied: when a lock object is attached (_allocationLock), call its
- * virtual method at vtable offset 124 (the same unlock call as
- * igAliasMemoryPool_Unlock); the status it returns is discarded.  This lets a
- * caller write `return igAliasMemoryPool_UnlockAndReturn(pool, result)` to
- * leave a locked section while preserving its result
- * (docs/engine/alias-pool-runtime.md). */
+/* Release the pool's allocation lock, then hand back the value the caller supplied: when a lock
+ * object is attached (_allocationLock), call its virtual method at vtable offset 124 (the same
+ * unlock call as igAliasMemoryPool_Unlock); the status it returns is discarded. This lets a caller
+ * write `return igAliasMemoryPool_UnlockAndReturn(pool, result)` to leave a locked section while
+ * preserving its result. */
 #include "dw4/reflected.h"
 extern "C" {
 
 int igAliasMemoryPool_UnlockAndReturn(igAliasMemoryPool *self, int result);
 }
-/* The unlock call returns a 4-byte struct by value; MWCC passes it through a hidden
- * return buffer, which the stack slot below reproduces (docs/engine/m2c-bulk.md). */
+/* The unlock call returns a 4-byte struct by value; MWCC passes it through a hidden return buffer,
+ * which the stack slot below reproduces. */
 struct LockStatus { int word; };
 /* The lock object's vtable: 29 unnamed padding slots, then the unlock call (offset 124 with
  * the two-word class header in front of the slots). */

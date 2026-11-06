@@ -1,4 +1,6 @@
-/* 0x002b28b8 — FUN_002b28b8 (176 bytes). For a video descriptor `id` (FUN_002b25a8, tag 0xE0 from FUN_002b2ea0), unpacks the two 12-bit picture dimensions packed in the three bytes at +28 into *width and *height; returns 1 then, else 0 with both cleared. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* For a video descriptor `id` (FUN_002b25a8, tag 0xE0 from FUN_002b2ea0), unpacks the two 12-bit
+ * picture dimensions packed in the three bytes at +28 into *width and *height; returns 1 then,
+ * else 0 with both cleared. */
 struct Descriptor {
     char pad0[28];
     unsigned char size[3]; /* +28; 12-bit width, 12-bit height */

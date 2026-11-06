@@ -1,4 +1,3 @@
-/* 0x00174850 - FUN_00174850. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int FUN_001e74b0();
 int FUN_001e7500();
 extern int DAT_005609a0[4];

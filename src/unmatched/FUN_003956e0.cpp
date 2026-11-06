@@ -1,6 +1,6 @@
-/* 0x003956e0 - FUN_003956e0: step the model's direction toward its target (per-axis rate limit, wrapping at 2*pi),
- * then write the new rotation into the ram object's transform. The ram object's data list is created on first use and
- * held in an ObjectRef whose destructor the exception table names. */
+/* Step the model's direction toward its target (per-axis rate limit, wrapping at 2*pi), then write
+ * the new rotation into the ram object's transform. The ram object's data list is created on first
+ * use and held in an ObjectRef whose destructor the exception table names. */
 #pragma opt_strength_reduction off
 #include "dw4/reflected.h"
 extern "C" {

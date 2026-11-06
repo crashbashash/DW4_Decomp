@@ -1,4 +1,4 @@
-/* Object pointer loaded before the flags word, matching the retail schedule; verified by tools/verify.py. */
+/* Object pointer loaded before the flags word, matching the retail schedule.py. */
 #include "dw4/reflected.h"
 int FUN_001c5b80();
 extern void * DAT_00562768[4];

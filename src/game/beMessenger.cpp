@@ -35,8 +35,7 @@ void Gap__Bec__beMessenger__vfunc_22(beMessenger *self, int unusedArg)
     FUN_00236c40(self->_insight, (char *)self); /* matching construct: char * parameter on FUN_00236*, receiver passed as a byte pointer */
 }
 
-/* 0x0038d080 — slot 26: reset forwarder to beMessenger_ResetMemory
- * (docs/engine/messenger-memory.md). */
+/* slot 26: reset forwarder to beMessenger_ResetMemory. */
 void Gap__Bec__beMessenger__vfunc_26(beMessenger *self)
 {
     beMessenger_ResetMemory(self);

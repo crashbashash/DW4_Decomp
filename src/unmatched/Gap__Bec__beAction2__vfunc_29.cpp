@@ -1,4 +1,3 @@
-/* 0x00375e20 - Gap__Bec__beAction2__vfunc_29. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 extern "C" {
 int beMessenger_RegisterReceiverFromInfo(int, char *, int *);

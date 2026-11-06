@@ -1,4 +1,4 @@
-/* 0x00425e60 - FUN_00425e60. Messenger string-table walk; 116-byte pointer table struct copy; alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* Messenger string-table walk; 116-byte pointer table struct copy; alternate compiler -O3,p. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

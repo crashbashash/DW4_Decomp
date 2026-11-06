@@ -1,4 +1,5 @@
-/* 0x0026ae18 — FUN_0026ae18 (100 bytes). Calls FUN_00275200 with fields 8, 12, 16 and 4 of a descriptor and FUN_00275220 with field 0, or both with zeros for a null descriptor. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_00275200 with fields 8, 12, 16 and 4 of a descriptor and FUN_00275220 with field 0, or
+ * both with zeros for a null descriptor. */
 /* Five-word descriptor read by FUN_0026ad50, FUN_0026adb0 and FUN_0026ae18. */
 typedef struct Desc_26ad50 {
     int f0;

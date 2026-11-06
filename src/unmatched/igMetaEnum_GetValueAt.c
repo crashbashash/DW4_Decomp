@@ -1,6 +1,3 @@
-/* 0x002fbc20 — igMetaEnum_GetValueAt. m2c draft + decomp-permuter search, verified
- * byte-identical to retail by tools/verify.py. */
-
 int igMetaEnum_GetValueAt(void *arg0, int arg1)
 {
   int *new_var;

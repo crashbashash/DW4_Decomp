@@ -1,8 +1,7 @@
-/* 0x0032fee0 — Gap::Core::igPsx2Thread::vfunc_47: runs the platform thread call on the
- * thread's id (_threadID) and reports through a status word: the "failed" word when the
- * call returns a negative value, the "succeeded" word otherwise.  Sibling vfunc_46 is
- * the same shape around SuspendThread.  The two status words at 0x004fb410 / 0x004fb418
- * are both zero in the pristine ELF (docs/engine/array-storage.md, allocator-registry.md). */
+/* Runs the platform thread call on the thread's id (_threadID) and reports through a status word:
+ * the "failed" word when the call returns a negative value, the "succeeded" word otherwise.
+ * Sibling vfunc_46 is the same shape around SuspendThread. The two status words at 0x004fb410 /
+ * 0x004fb418 are both zero in the pristine ELF. */
 #include "dw4/reflected.h"
 /* Status words reported to callers; array form keeps the load absolute (lui/lw). */
 extern int g_statusSucceeded[4];

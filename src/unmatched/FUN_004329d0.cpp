@@ -1,8 +1,8 @@
-/* 0x004329d0 - FUN_004329d0: per player slot 0..3 query the messenger and gather values and lists.
- * The per-player weapon-number list is held in an RP (owning reference) whose destructor the exception table names
- * (retail body 0x00150eb0, config/SLUS-20836/unit-objects.json duplicate __dt__2RPFv).
- * Register-id notes: the byte-offset induction variable shares the function-level `idx` (the first append's index
- * web, then the offset web), which gives it a later node id than the stack reload of the new list pointer. */
+/* Per player slot 0..3 query the messenger and gather values and lists. The per-player weapon-
+ * number list is held in an RP (owning reference) whose destructor the exception table names
+ * (retail body 0x00150eb0.json duplicate __dt__2RPFv). Register-id notes: the byte-offset
+ * induction variable shares the function-level `idx` (the first append's index web, then the
+ * offset web), which gives it a later node id than the stack reload of the new list pointer. */
 #include "dw4/reflected.h"
 extern "C" {
 extern int beMessenger_SendGroup(...);

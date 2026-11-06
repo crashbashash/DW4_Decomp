@@ -1,5 +1,8 @@
 #include "dw4/reflected.h"
-/* 0x003a3960 — FUN_003a3960. Timed message start: advances the clock record, takes the next pooled item, registers it with its target list and undoes it again around the callback. Alternate -O3,p (flags row); stack word volatile read once, count read volatile into its own variable, item field addresses held in short pointers; declaration order by hill climbing. */
+/* Timed message start: advances the clock record, takes the next pooled item, registers it with
+ * its target list and undoes it again around the callback. Alternate -O3,p (flags row); stack word
+ * volatile read once, count read volatile into its own variable, item field addresses held in
+ * short pointers; declaration order by hill climbing. */
 extern "C" {
 int FUN_001b1490(...);
 int FUN_001b9530(void *, void *);

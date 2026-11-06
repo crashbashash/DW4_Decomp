@@ -1,4 +1,3 @@
-/* 0x002e3d30 — FUN_002e3d30. Hand-retyped from the m2c draft, verified byte-identical to retail by tools/verify.py. */
 int strlen();
 int FUN_002eb010();
 int StringChunk_ReleaseHeader();

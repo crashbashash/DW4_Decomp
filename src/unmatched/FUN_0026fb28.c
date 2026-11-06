@@ -1,4 +1,5 @@
-/* 0x0026fb28 — FUN_0026fb28 (124 bytes). Returns 1 when the first length characters of name match the name of one of the 32 entries of the device table DAT_0056e220 (FUN_0012aba0 returning 0), else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 when the first length characters of name match the name of one of the 32 entries of
+ * the device table DAT_0056e220 (FUN_0012aba0 returning 0), else 0. */
 typedef struct CvFsDevEntry_26fb28 {
     void *device;   /* 0x00: interface table */
     char name[12];  /* 0x04 */

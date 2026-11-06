@@ -1,6 +1,6 @@
 struct S { long long f0; char pad[56]; unsigned char b0:1; unsigned char b1:1; unsigned char b2:6; };
 int FUN_001efd90();
-void FUN_001f0390(void);  /* code at 0x1f0390, passed by address (was DAT_1f0390; docs/engine/function-inventory.md) */
+void FUN_001f0390(void);
 extern struct S * DAT_00568f04[4];
 long long FUN_001f03a0(void) {
     struct S *s = DAT_00568f04[0];

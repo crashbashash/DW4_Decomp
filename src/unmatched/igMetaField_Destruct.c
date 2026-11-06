@@ -1,6 +1,3 @@
-/* 0x002fc210 — igMetaField_Destruct. Banked by tools/retype_struct_member.py (shape: leadcall0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int igObject_FreeStorage();
 int Gap__Core__igObject__vfunc_00__002ff0a0();

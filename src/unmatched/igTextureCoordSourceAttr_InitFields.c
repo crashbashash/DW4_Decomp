@@ -1,10 +1,9 @@
-/* 0x00132750 — igTextureCoordSourceAttr_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_002dc7a0();
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void FUN_00140fd0(void);  /* code at 0x140fd0, passed by address (was DAT_140fd0; docs/engine/function-inventory.md) */
+void FUN_00140fd0(void);
 extern int DAT_00485c60[4];
 extern int DAT_00485c70[4];
 extern int DAT_00485c80[4];

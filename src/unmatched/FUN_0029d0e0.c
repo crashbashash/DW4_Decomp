@@ -1,4 +1,4 @@
-/* 0x0029d0e0 — FUN_0029d0e0 (84 bytes). When option 6 is set, calls the attached interface's optional slot +20. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When option 6 is set, calls the attached interface's optional slot +20. */
 typedef struct SfdInterface {
     void (*f0)(void);
     void (*f4)(void);

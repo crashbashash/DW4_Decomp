@@ -1,4 +1,3 @@
-/* 0x002d4350 - Gap__Core__igCallStackTracer__vfunc_25. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 extern void * DAT_00586dc8[4];
 int Gap__Core__igCallStackTracer__vfunc_25(void);

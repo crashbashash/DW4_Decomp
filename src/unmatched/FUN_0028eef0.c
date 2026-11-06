@@ -1,4 +1,5 @@
-/* 0x0028eef0 — FUN_0028eef0 (92 bytes). Reads the object's +680 word into *out; when FUN_002913f8 rejects the object it reports error 0xFF03020D through FUN_0028eb38 instead. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads the object's +680 word into *out; when FUN_002913f8 rejects the object it reports error
+ * 0xFF03020D through FUN_0028eb38 instead. */
 extern int FUN_002913f8(void *obj);
 extern int FUN_0028eb38(int zero, int code);
 

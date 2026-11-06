@@ -35,11 +35,11 @@ extern int DAT_00587110[4];
 extern int DAT_00587d08[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack references while the controller list is wired up (retail keeps one stack slot per holder; each releases
- * its object on scope exit).  One class per retail destructor copy: DataListRef 0x0033e9c0 (the property list and
- * the ensure-list temporaries), CtrlDataRef 0x003f2cc0, CommonIntfRef 0x003f2c40, DegiDataRef 0x003e9010,
- * FlagWorkRef 0x003f2bc0 (the 0x003f2xxx copies sit behind this function and are emitted by it; see
- * config/SLUS-20836/unit-objects.json). */
+/* Owning stack references while the controller list is wired up (retail keeps one stack slot per
+ * holder; each releases its object on scope exit). One class per retail destructor copy:
+ * DataListRef 0x0033e9c0 (the property list and the ensure-list temporaries), CtrlDataRef
+ * 0x003f2cc0, CommonIntfRef 0x003f2c40, DegiDataRef 0x003e9010, FlagWorkRef 0x003f2bc0 (the
+ * 0x003f2xxx copies sit behind this function and are emitted by it). */
 class DataListRef {
 public:
     igObject *p;

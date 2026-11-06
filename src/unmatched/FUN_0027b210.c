@@ -1,6 +1,6 @@
-/* 0x0027b210 — FUN_0027b210 (60 bytes). Returns the word at +4 of the channel object for one channel of a
-   voice (channel table at +8, one pointer per channel) while the library is active (not mode 1 with no
-   entries); returns 0 otherwise. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the word at +4 of the channel object for one channel of a voice (channel table at +8,
+ * one pointer per channel) while the library is active (not mode 1 with no entries); returns 0
+ * otherwise. */
 struct Channel27b {
     int f0;
     int value4;    /* +4 */

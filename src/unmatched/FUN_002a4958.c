@@ -1,4 +1,5 @@
-/* 0x002a4958 — FUN_002a4958 (92 bytes). Returns how far the active source's decode position (FUN_002a5a50 then FUN_002af070) is past its base at +3464, or 0 when inactive. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns how far the active source's decode position (FUN_002a5a50 then FUN_002af070) is past its
+ * base at +3464, or 0 when inactive. */
 void FUN_002a5a50();
 void FUN_002af070();
 

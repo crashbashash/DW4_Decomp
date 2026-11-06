@@ -1,4 +1,4 @@
-/* 0x002afba8 — FUN_002afba8 (28 bytes). Resets a record: three 64-bit fields to 0, INT64_MAX, 0 and the word at +24 to 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a record: three 64-bit fields to 0, INT64_MAX, 0 and the word at +24 to 0. */
 
 /* The sd stores show 64-bit members (long is 64-bit under EE GCC). */
 struct Rec1C {

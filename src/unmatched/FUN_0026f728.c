@@ -1,4 +1,7 @@
-/* 0x0026f728 — FUN_0026f728 (144 bytes). Registers a file-system device: checks the device name and interface-function pointer, adds the device (FUN_0026f7b8) and, when its interface has an error-callback entry (+4), installs FUN_0026f500 there; failures are reported through FUN_0026f530. Its error strings name it cvFsAddDev (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Registers a file-system device: checks the device name and interface-function pointer, adds the
+ * device (FUN_0026f7b8) and, when its interface has an error-callback entry (+4), installs
+ * FUN_0026f500 there; failures are reported through FUN_0026f530. Its error strings name it
+ * cvFsAddDev (CRI), a name hypothesis. */
 typedef struct CvFsDevice_26f728 {
     void *pad0;
     void (*entry_err_func)(void (*callback)(), int object);  /* 0x04 */

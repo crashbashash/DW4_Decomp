@@ -1,4 +1,5 @@
-/* 0x002abbd0 — FUN_002abbd0 (96 bytes). Clears a 48-byte block, then resets its five 32-byte entries and the trailer at +160 with FUN_002afba8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears a 48-byte block, then resets its five 32-byte entries and the trailer at +160 with
+ * FUN_002afba8. */
 typedef struct SfdEntry32 {
     char pad0[32];
 } SfdEntry32;

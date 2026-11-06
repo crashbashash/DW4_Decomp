@@ -1,4 +1,5 @@
-/* 0x00453410 - Gap__Bec__beFontImage__vfunc_21. glyph layout loop with a stack float pair, declaration order, inverted compare for the at-register temp; alternate compiler -O3. Verified byte-identical by tools/verify.py. */
+/* Glyph layout loop with a stack float pair, declaration order, inverted compare for the at-
+ * register temp; alternate compiler -O3. */
 struct GlyphPos { float x; float y; };
 struct GlyphMetricsRecord { char pad[4]; float f4; };
 /* glyph-metrics list header: record buffer pointer at +16 (list class not recovered) */

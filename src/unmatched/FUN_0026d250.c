@@ -1,4 +1,6 @@
-/* 0x0026d250 — FUN_0026d250 (152 bytes). Header probe: when size is at least 2 and the big-endian 16-bit word at data is 0x8000, decodes the header with FUN_0025f588 and stores its first (16-bit) field; returns 1 on success, 0 otherwise. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Header probe: when size is at least 2 and the big-endian 16-bit word at data is 0x8000, decodes
+ * the header with FUN_0025f588 and stores its first (16-bit) field; returns 1 on success, 0
+ * otherwise. */
 int FUN_0025f588(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
 
 int FUN_0026d250(unsigned short *data, int size, int *out_value) {

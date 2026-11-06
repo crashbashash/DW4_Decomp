@@ -1,4 +1,6 @@
-/* 0x00271670 — FUN_00271670 (132 bytes). Creates the single SRD object DAT_004a9288 inside the FUN_0027e1f0/FUN_0027e268 lock: when it is free, runs FUN_00271640, marks it used with mode -1 and cleared state and counts the creation in DAT_004a92e8. Returns the object, or 0 when it is already in use. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Creates the single SRD object DAT_004a9288 inside the FUN_0027e1f0/FUN_0027e268 lock: when it is
+ * free, runs FUN_00271640, marks it used with mode -1 and cleared state and counts the creation in
+ * DAT_004a92e8. Returns the object, or 0 when it is already in use. */
 typedef struct Srd_271670 {
     signed char used;   /* 0x00 */
     signed char pad1;

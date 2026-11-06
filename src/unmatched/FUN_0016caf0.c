@@ -1,5 +1,3 @@
-/* 0x0016caf0 — FUN_0016caf0. hand-matched: byte-width load; verified byte-identical by
- * tools/verify.py. */
 int FUN_001e9740();
 
 int FUN_0016caf0(void *arg0) {

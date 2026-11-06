@@ -1,4 +1,4 @@
-/* Lazily created singleton with the typed refcount release; verified by tools/verify.py. */
+/* Lazily created singleton with the typed refcount release.py. */
 typedef struct Q { char pad4[4]; int f4; char pad12[10]; short f18; } Q;
 typedef struct R { char pad[12]; int f12; } R;
 R *FUN_002fc250();

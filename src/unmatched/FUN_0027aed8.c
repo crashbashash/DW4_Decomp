@@ -1,6 +1,6 @@
-/* 0x0027aed8 — FUN_0027aed8 (80 bytes). PS2RNA_SetBitPerSmpl by its message string: only 16 bits per sample
-   is supported, any other value is reported as "PS2RNA_SetBitPerSmpl: not support %d bps" (FUN_002659a0)
-   while the library is active (not mode 1 with no entries). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* PS2RNA_SetBitPerSmpl by its message string: only 16 bits per sample is supported, any other
+ * value is reported as "PS2RNA_SetBitPerSmpl: not support %d bps" (FUN_002659a0) while the library
+ * is active (not mode 1 with no entries). */
 extern void FUN_002659a0(const char *format, ...);
 extern int DAT_004b1dc0;
 extern int DAT_004b1dc8;

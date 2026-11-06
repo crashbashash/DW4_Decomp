@@ -1,4 +1,3 @@
-/* 0x00241210 - FUN_00241210. leading dummy parameter and forwarded arguments Verified byte-identical by tools/verify.py. */
 extern "C" {
 int FUN_0023deb0(...);
 int FUN_002467a0(...);

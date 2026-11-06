@@ -1,4 +1,5 @@
-/* 0x002813c8 — FUN_002813c8 (88 bytes). Sends request 0x700|channel (no data) through FUN_00281a00 and marks the channel off when it succeeds. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sends request 0x700|channel (no data) through FUN_00281a00 and marks the channel off when it
+ * succeeds. */
 int FUN_00281a00();
 
 /* Context reached through DAT_004bb114 (only the members used here). */

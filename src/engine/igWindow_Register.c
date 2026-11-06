@@ -8,7 +8,7 @@ extern char igWindow_className[];
 extern char g_igWindow_metaObject[];
 int GpFlag_SetOnce_00145ce0();
 int igMetaObject_RegisterClass();
-void FUN_00145e80(void);  /* code at 0x145e80, passed by address (was DAT_145e80; docs/engine/function-inventory.md) */
+void FUN_00145e80(void);
 void igWindow_Register(void) {
     GpFlag_SetOnce_00145ce0();
     igMetaObject_RegisterClass(

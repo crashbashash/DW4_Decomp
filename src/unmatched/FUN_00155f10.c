@@ -1,4 +1,7 @@
-/* 0x00155f10 - FUN_00155f10. Finds the index of the list entry (list at +304) whose +20 field equals an interned string obtained from a helper; each entry is held through a volatile stack slot (retail stores and re-reads it) and released with the inlined null-checked reference-count decrement and destroy; the string is released on every exit; returns -1 when absent; alternate compiler -O3. */
+/* Finds the index of the list entry (list at +304) whose +20 field equals an interned string
+ * obtained from a helper; each entry is held through a volatile stack slot (retail stores and re-
+ * reads it) and released with the inlined null-checked reference-count decrement and destroy; the
+ * string is released on every exit; returns -1 when absent; alternate compiler -O3. */
 typedef struct Obj { int w0; unsigned refs; char p8[12]; int w20; } Obj;
 typedef struct Lst { int p0, p1; int count; int cap; Obj **data; } Lst;
 typedef struct S { char p0[304]; Lst *list; } S;

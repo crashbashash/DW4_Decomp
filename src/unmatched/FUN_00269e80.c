@@ -1,4 +1,6 @@
-/* 0x00269e80 — FUN_00269e80 (208 bytes). Takes the first unused entry (byte 0 clear) among the DAT_004a7efc 96-byte entries of DAT_004a7f10 starting at index DAT_004a7ef8, initialises it with FUN_00269ca0 and the four arguments and clears its byte at +74; returns it, or 0 when none is free. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Takes the first unused entry (byte 0 clear) among the DAT_004a7efc 96-byte entries of
+ * DAT_004a7f10 starting at index DAT_004a7ef8, initialises it with FUN_00269ca0 and the four
+ * arguments and clears its byte at +74; returns it, or 0 when none is free. */
 typedef struct Entry_269e80 {
     signed char used;   /* 0x00 */
     char pad1[73];

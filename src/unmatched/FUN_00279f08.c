@@ -1,6 +1,6 @@
-/* 0x00279f08 — FUN_00279f08 (92 bytes). Sends request 13 without payload through FUN_00273820 and clears
-   the pair of words at 0x004b1e00, returning the request result, unless the library is in mode 1 (0x004b1dc8) with no entries (0x004b1dc0).
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sends request 13 without payload through FUN_00273820 and clears the pair of words at
+ * 0x004b1e00, returning the request result, unless the library is in mode 1 (0x004b1dc8) with no
+ * entries (0x004b1dc0). */
 struct Pair279 {
     int first;
     int second;

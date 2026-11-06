@@ -1,4 +1,5 @@
-/* 0x0029e370 — FUN_0029e370 (96 bytes). Returns the ring of channel index through *out, or reports error 0xFF000401 when the channel is not open. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the ring of channel index through *out, or reports error 0xFF000401 when the channel is
+ * not open. */
 int FUN_002a0bb8();
 
 struct Ring;

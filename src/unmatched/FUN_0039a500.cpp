@@ -1,6 +1,6 @@
-/* 0x0039a500 - FUN_0039a500: build one timed record from the request `arg1` (start time, optional duration,
- * two vectors and a kind code classified by its ten-thousands digit) and append it, retained, to the list at
- * arg0->f8.  The record is owned by a stack reference until the list has taken its own reference. */
+/* Build one timed record from the request `arg1` (start time, optional duration, two vectors and a
+ * kind code classified by its ten-thousands digit) and append it, retained, to the list at
+ * arg0->f8. The record is owned by a stack reference until the list has taken its own reference. */
 typedef struct R { int w0; int refs; int f8; int f12; float f16; int f20; int f24; float f28; float f32; float f36; float f40; float f44; float f48; float f52; } R;
 typedef struct A { char pad[8]; int f8; } A;
 typedef struct S { char pad[12]; int f12; float f16; float f20; float f24; float f28; float f32; float f36; float f40; float f44; } S;

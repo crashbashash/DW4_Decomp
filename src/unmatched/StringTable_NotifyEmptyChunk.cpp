@@ -1,4 +1,3 @@
-/* 0x0030c430 - StringTable_NotifyEmptyChunk. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 struct STc { int first; int pad[4]; int cnt; };
 extern "C" {
 int StringChunk_Destroy(...);

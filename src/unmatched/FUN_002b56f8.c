@@ -1,4 +1,5 @@
-/* 0x002b56f8 — FUN_002b56f8 (92 bytes). Copies the three characters at base+offset and converts them as a hexadecimal number through FUN_002b5758; returns 0 for a null base or a negative index. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies the three characters at base+offset and converts them as a hexadecimal number through
+ * FUN_002b5758; returns 0 for a null base or a negative index. */
 struct Chars3 {
     char c[3];
 };

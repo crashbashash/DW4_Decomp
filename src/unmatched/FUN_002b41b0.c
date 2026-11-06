@@ -1,4 +1,4 @@
-/* 0x002b41b0 — FUN_002b41b0 (32 bytes). Forwards the word pair at +96 of the object to FUN_002b5578. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards the word pair at +96 of the object to FUN_002b5578. */
 int FUN_002b5578();
 
 struct WordPair {

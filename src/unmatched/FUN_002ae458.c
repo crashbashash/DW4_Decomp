@@ -1,4 +1,5 @@
-/* 0x002ae458 — FUN_002ae458 (108 bytes). Updates the block at +3368: adds the step at +684 to the counter at +680 when FUN_002ae4c8 allows it, and to +716 when FUN_002ae500 allows it. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Updates the block at +3368: adds the step at +684 to the counter at +680 when FUN_002ae4c8
+ * allows it, and to +716 when FUN_002ae500 allows it. */
 int FUN_002ae4c8();
 int FUN_002ae500();
 

@@ -12,8 +12,7 @@ void FUN_00412600(int slot, int pocket, int pocketPos, char *extra);
 void Gap__Bec__beNDMWStatusMainSlot__vfunc_39(beNDMWStatusMainSlot *, char *, char *, int);
 }
 extern "C" {
-/* Equipment assignment of the status screen (finding #796); the last argument is
- * the slot's `_retCode`. */
+/* Equipment assignment of the status screen; the last argument is the slot's `_retCode`. */
 void beNDMWStatus_AssignEquipment(int slot, int pocket, int pocketPos, int retCode);
 void Gap__Bec__beNDMWStatusMainSlot__vfunc_37(beNDMWStatusMainSlot *, char *, char *, char *);
 }

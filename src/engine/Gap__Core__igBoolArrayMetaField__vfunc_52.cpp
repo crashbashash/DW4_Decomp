@@ -1,8 +1,6 @@
-/* 0x002d3560
- * The array field's +0xd0 hook (SwapBytes, config/SLUS-20836/names/ObjectModel.tsv): the
- * endian swap of the IGB raw-field transfer.  An array field holds `_num`
- * elements per instance, so it forwards to the shared igBoolMetaField descriptor
- * with `count * _num` elements (finding 364). */
+/* The array field's +0xd0 hook (SwapBytes): the endian swap of the IGB raw-field transfer. An
+ * array field holds `_num` elements per instance, so it forwards to the shared igBoolMetaField
+ * descriptor with `count * _num` elements (finding 364). */
 #include "dw4/reflected.h"
 extern "C" {
 /* Returns the shared igBoolMetaField descriptor (global 0x00586990), registering

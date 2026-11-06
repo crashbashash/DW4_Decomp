@@ -1,4 +1,5 @@
-/* 0x002ab778 — FUN_002ab778 (152 bytes). Unless FUN_002ab810 refuses, takes a free slot from FUN_002ab878 (reporting error 0xFF000206 when none is left), creates the handle with FUN_002ab8b8 and records it in DAT_004beadc. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Unless FUN_002ab810 refuses, takes a free slot from FUN_002ab878 (reporting error 0xFF000206
+ * when none is left), creates the handle with FUN_002ab8b8 and records it in DAT_004beadc. */
 int FUN_002ab810(void);
 int FUN_002ab878(void);
 int FUN_002ab8b8(int a, int b);

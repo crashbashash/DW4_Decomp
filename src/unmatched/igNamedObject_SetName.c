@@ -1,4 +1,4 @@
-/* 0x002fecb0 - igNamedObject_SetName. old name read after the intern call; typed struct member avoids the CSE of the field address. Verified byte-identical by tools/verify.py. */
+/* Old name read after the intern call; typed struct member avoids the CSE of the field address. */
 int FUN_002eb010();
 int StringChunk_ReleaseHeader();
 int StringPool_Construct();

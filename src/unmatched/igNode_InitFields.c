@@ -1,6 +1,3 @@
-/* 0x0019cfb0 — igNode_InitFields. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int FUN_00186a80();
 int FUN_0019c8c0();

@@ -14,11 +14,10 @@ void FUN_00236c40(int, beFileListInfoManager *);
 void Gap__Bec__beFileListInfoManager__vfunc_22(beFileListInfoManager *, int);
 }
 
-/* 0x0037f220 - slot 21: hand the object to the insight core's helper FUN_00236be0,
- * which (asm) asks the scheduler at +12 of the insight object it is given (_insight)
- * whether it already has the object (scheduler slot 26) and, if not, calls
- * scheduler slot 24 with it.  Same body as beMessenger slot 21
- * (src/game/beMessenger.cpp).  The second argument is unused. */
+/* slot 21: hand the object to the insight core's helper FUN_00236be0, which (asm) asks the
+ * scheduler at +12 of the insight object it is given (_insight) whether it already has the object
+ * (scheduler slot 26) and, if not, calls scheduler slot 24 with it. Same body as beMessenger slot
+ * 21. The second argument is unused. */
 void Gap__Bec__beFileListInfoManager__vfunc_21(beFileListInfoManager *self, int unusedArg)
 {
     FUN_00236be0(self->_insight, self);

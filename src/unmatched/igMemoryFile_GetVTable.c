@@ -1,4 +1,3 @@
-/* 0x002c0720 - igMemoryFile_GetVTable. temporary stack object as a union (byte index folds into the load), alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 int FUN_002c0790();
 int igObject_InitHeader();
 extern int DAT_0052f7b0[4];

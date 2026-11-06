@@ -1,4 +1,4 @@
-/* 0x00234350 - FUN_00234350. Float arguments (lwc1) for the converter calls. */
+/* Float arguments (lwc1) for the converter calls. */
 int printf();
 int FUN_00230298(float);
 extern int DAT_004e9650[4];

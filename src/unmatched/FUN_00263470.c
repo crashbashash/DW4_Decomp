@@ -1,4 +1,5 @@
-/* 0x00263470 — FUN_00263470 (216 bytes). Drops the counter DAT_0049c8d8 and, when it reaches zero, runs a fixed sequence of FUN_0026b900 … FUN_0025f2e8 calls with DAT_004a9b1c cleared, setting it back to 1 afterwards. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Drops the counter DAT_0049c8d8 and, when it reaches zero, runs a fixed sequence of FUN_0026b900
+ * … FUN_0025f2e8 calls with DAT_004a9b1c cleared, setting it back to 1 afterwards. */
 extern int DAT_0049c8d8;
 extern int DAT_0049c8e0;
 extern int DAT_0049c8ec;

@@ -1,4 +1,3 @@
-/* 0x002c4440 - igFolder_GetVTable. union stack object; string slot reached through a pointer local assigned after the header init; alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 int StringChunk_ReleaseHeader();
 int igObject_InitHeader();
 extern int DAT_0052fee0[4];

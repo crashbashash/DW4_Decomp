@@ -1,10 +1,8 @@
-/* 0x00300cd0 - igObject_IsKindOf.
- * Class-membership test: ask `object` for its metaobject (virtual slot 20, the
- * metaobject accessor, e.g. Gap__Bec__ParticleInfo__vfunc_20) and walk the
- * metaobject's `_parent` chain looking for `kind`.  Returns 1 when `kind` is
- * the object's own class or one of its ancestors, else 0.  The accessor is
- * called with `kind` still in the second argument register (the retail call
- * sequence passes it through; slot 20 has no use for it in the bodies seen). */
+/* Class-membership test: ask `object` for its metaobject (virtual slot 20, the metaobject
+ * accessor, e.g. Gap__Bec__ParticleInfo__vfunc_20) and walk the metaobject's `_parent` chain
+ * looking for `kind`. Returns 1 when `kind` is the object's own class or one of its ancestors,
+ * else 0. The accessor is called with `kind` still in the second argument register (the retail
+ * call sequence passes it through; slot 20 has no use for it in the bodies seen). */
 #include "dw4/reflected.h"
 extern "C" { int igObject_IsKindOf(void *object, igMetaObject *kind); }
 /* Stand-in for the object's vtable: vX is slot 20, the metaobject accessor. */

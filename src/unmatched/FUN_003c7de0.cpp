@@ -1,4 +1,3 @@
-/* 0x003c7de0 - FUN_003c7de0. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

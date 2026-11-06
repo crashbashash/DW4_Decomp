@@ -1,4 +1,9 @@
-/* 0x003de480 - FUN_003de480. Three-slot sibling of FUN_003de7a0: case 1 binds slots 0..2, case 0 builds a pooled value object per slot from table entry (index-1 wrapped to f44-1 when below f48, index, index+1 wrapped to f48 at f44) and binds it. Each object lives in a scoped ObjectRef whose destructor is the retail reference-destructor duplicate 0x003832d0 (config/SLUS-20836/unit-objects.json); exceptions off. Alternate compiler -O3,p. The last wrap must be written as if/else on the unwrapped n (if (n >= f44) s0 = f48; else s0 = n;): the if-without-else spelling pads the join label with a nop. */
+/* Three-slot sibling of FUN_003de7a0: case 1 binds slots 0..2, case 0 builds a pooled value object
+ * per slot from table entry (index-1 wrapped to f44-1 when below f48, index, index+1 wrapped to
+ * f48 at f44) and binds it. Each object lives in a scoped ObjectRef whose destructor is the retail
+ * reference-destructor duplicate 0x003832d0; exceptions off. Alternate compiler -O3,p. The last
+ * wrap must be written as if/else on the unwrapped n (if (n >= f44) s0 = f48; else s0 = n;): the
+ * if-without-else spelling pads the join label with a nop. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);

@@ -1,4 +1,5 @@
-/* 0x002adb18 — FUN_002adb18 (136 bytes). Returns 0 when a kind-6 or kind-5 request in mode 1 is refused by FUN_002b03e8 (checks 3 and 2); otherwise 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 0 when a kind-6 or kind-5 request in mode 1 is refused by FUN_002b03e8 (checks 3 and 2);
+ * otherwise 1. */
 int FUN_002b03e8(int handle, int check);
 
 int FUN_002adb18(int handle, int kind, int mode) {

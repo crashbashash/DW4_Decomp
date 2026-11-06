@@ -1,5 +1,3 @@
-/* 0x001e4c50 — FUN_001e4c50. m2c draft, hybrid (gap-promoted function); verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_001e4d30();
 int igMetaObject_CreateInstance();
 extern int DAT_00562bc0[4];

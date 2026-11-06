@@ -1,5 +1,3 @@
-/* 0x002b1348 — FUN_002b1348. m2c draft, hybrid; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 void FUN_002b1348(void *arg0, int arg1, int arg2, int arg3, int arg4) {
     /* matching construct: variant search — stmt order [1, 2, 3, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     *(int *)((char *)arg0 + 0) = arg1;

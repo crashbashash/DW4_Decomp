@@ -1,4 +1,7 @@
-/* 0x002724b0 — FUN_002724b0 (204 bytes). Prints the SRD debug summary: the enter flag (DAT_004a92c4), the last error (DAT_004a92dc), the SRD object's state and device type (1 DVD, 2 HOST) and the read status from FUN_00272460; returns 0. Its messages name the fields (srd_enter_fg, srd_debug_geterror, srd_obj.stat, srd_obj.devtype). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Prints the SRD debug summary: the enter flag (DAT_004a92c4), the last error (DAT_004a92dc), the
+ * SRD object's state and device type (1 DVD, 2 HOST) and the read status from FUN_00272460;
+ * returns 0. Its messages name the fields (srd_enter_fg, srd_debug_geterror, srd_obj.stat,
+ * srd_obj.devtype). */
 typedef struct Srd_2724b0 {
     signed char used;       /* 0x00 */
     signed char devtype;    /* 0x01: 1 DVD, 2 host */

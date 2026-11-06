@@ -1,4 +1,6 @@
-/* 0x002780a8 — FUN_002780a8 (156 bytes). Opens a file by name: rejects a NULL name or a non-zero rw mode, takes a free handle (FUN_00277fc0), copies the name to +28 and initialises it (FUN_00278038); failures are reported through FUN_00277de8 and return 0. Its error strings name it mfCiOpen (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Opens a file by name: rejects a NULL name or a non-zero rw mode, takes a free handle
+ * (FUN_00277fc0), copies the name to +28 and initialises it (FUN_00278038); failures are reported
+ * through FUN_00277de8 and return 0. Its error strings name it mfCiOpen (CRI), a name hypothesis. */
 typedef struct MfCi_2780a8 {
     char pad0[28];
     char name[1];   /* 0x1c */

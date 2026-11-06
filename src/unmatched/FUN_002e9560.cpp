@@ -1,4 +1,3 @@
-/* 0x2e9560 — FUN_002e9560. Verified byte-identical by tools/verify.py (wave3 sweep). */
 extern "C" {
 void **FUN_002d7e90(void *, int);
 extern int DAT_004fb410[4];

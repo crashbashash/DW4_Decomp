@@ -1,4 +1,7 @@
-/* 0x0026bd88 — FUN_0026bd88 (200 bytes). Reports an ADXT handle's playback position as a (samples, rate) pair: in states 3/4 from the renderer (+12) via FUN_00265ce8; in state 5 from the source (+4): FUN_00267288 samples scaled by 16 / FUN_00267240, rate FUN_00267210; otherwise (0, 1). The handle's offset (+136) is added to the sample count. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports an ADXT handle's playback position as a (samples, rate) pair: in states 3/4 from the
+ * renderer (+12) via FUN_00265ce8; in state 5 from the source (+4): FUN_00267288 samples scaled by
+ * 16 / FUN_00267240, rate FUN_00267210; otherwise (0, 1). The handle's offset (+136) is added to
+ * the sample count. */
 typedef struct Adxt_26bd88 {
     signed char pad0;
     signed char state;  /* 0x01 */

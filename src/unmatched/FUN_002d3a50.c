@@ -1,4 +1,3 @@
-/* 0x2d3a50 — FUN_002d3a50. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int FUN_002d3a50(void *arg0) {
     void *obj;
     int *p;

@@ -1,4 +1,6 @@
-/* 0x002ec310 - FUN_002ec310. String-to-id lookup returning this or 0; parameter reused in place, the join code after the final return 0, result as a ternary (a conditional store lets the scheduler fill the delay slot). Alternate -O3. */
+/* String-to-id lookup returning this or 0; parameter reused in place, the join code after the
+ * final return 0, result as a ternary (a conditional store lets the scheduler fill the delay
+ * slot). Alternate -O3. */
 extern "C" {
 extern char DAT_004f92f0[];
 extern char DAT_004f9c48[];

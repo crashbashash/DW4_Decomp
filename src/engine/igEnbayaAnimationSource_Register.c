@@ -5,7 +5,7 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igEnbayaAnimationSource_GetVTable[];
 extern char thunk_igEnbayaAnimationSource_GetMetaObject[];
-void FUN_001a24d0(void);  /* code at 0x1a24d0, passed by address (was DAT_1a24d0; docs/engine/function-inventory.md) */
+void FUN_001a24d0(void);
 extern char igObject_Register[];
 extern char igEnbayaAnimationSource_className[];
 extern char g_igEnbayaAnimationSource_metaObject[];

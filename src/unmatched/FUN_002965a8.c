@@ -1,4 +1,5 @@
-/* 0x002965a8 — FUN_002965a8 (124 bytes). Selects a playback handle's audio channel (its error strings name it mwPlySetAudioCh) through FUN_002aa5b8 on the +64 stream, reporting an invalid handle or channel number. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Selects a playback handle's audio channel (its error strings name it mwPlySetAudioCh) through
+ * FUN_002aa5b8 on the +64 stream, reporting an invalid handle or channel number. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern int FUN_002aa5b8(int stream, int ch);

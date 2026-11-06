@@ -1,4 +1,4 @@
-/* 0x0010dae0 — FUN_0010dae0 (36 bytes). Calls FUN_0010d460, then clears the word D_00481e70. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_0010d460, then clears the word D_00481e70. */
 void FUN_0010d460(void);
 extern int D_00481e70;
 

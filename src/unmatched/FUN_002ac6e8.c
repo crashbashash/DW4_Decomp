@@ -1,4 +1,5 @@
-/* 0x002ac6e8 — FUN_002ac6e8 (136 bytes). Hands `size` bytes at `data` to FUN_002ac770 on the block at +0x13B4, ignoring empty input and reporting error 0xFF000165 when FUN_002a0dd8 refuses. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Hands `size` bytes at `data` to FUN_002ac770 on the block at +0x13B4, ignoring empty input and
+ * reporting error 0xFF000165 when FUN_002a0dd8 refuses. */
 int FUN_002a0dd8(int handle);
 int FUN_002a0bb8(int obj, int code);
 void FUN_002ac770(int block, int data, int size);

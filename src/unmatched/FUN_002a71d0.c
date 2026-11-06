@@ -1,4 +1,5 @@
-/* 0x002a71d0 — FUN_002a71d0 (168 bytes). Delivers a decoded packet into the message's blob: copies type-3 payloads (memcpy) or hands the blob to FUN_002a73f0, after releasing kinds 1/2 to the context pool at +4116. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Delivers a decoded packet into the message's blob: copies type-3 payloads (memcpy) or hands the
+ * blob to FUN_002a73f0, after releasing kinds 1/2 to the context pool at +4116. */
 void FUN_002a7278();
 void FUN_002a73f0();
 void *memcpy();

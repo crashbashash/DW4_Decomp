@@ -1,4 +1,6 @@
-/* 0x002755e8 — FUN_002755e8 (120 bytes). When FUN_0027eca8 reports the request flag DAT_004ab5e4 raised, runs FUN_00275520 on every active (byte 0 == 1) entry of the 13-entry table DAT_004ab650 (48-byte entries) and clears the flag. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When FUN_0027eca8 reports the request flag DAT_004ab5e4 raised, runs FUN_00275520 on every
+ * active (byte 0 == 1) entry of the 13-entry table DAT_004ab650 (48-byte entries) and clears the
+ * flag. */
 typedef struct Entry_2755e8 {
     signed char state;  /* 0x00 */
     char pad1[47];

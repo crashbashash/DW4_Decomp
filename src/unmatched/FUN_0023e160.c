@@ -1,4 +1,6 @@
-/* 0x0023e160 - FUN_0023e160. String-hashed entry constructor; 12-bit index plus four flag bits as mixed short/char bitfields (separate read-modify-write per field), loop pointer assigned after the length call so it stays in a1; default compiler. Verified byte-identical by tools/verify.py. */
+/* String-hashed entry constructor; 12-bit index plus four flag bits as mixed short/char bitfields
+ * (separate read-modify-write per field), loop pointer assigned after the length call so it stays
+ * in a1; default compiler. */
 typedef struct R {
     unsigned hash; int w4; int w8; char *name; int v0; int v1; int v2; int f28; int f32; int f36;
     short f40;

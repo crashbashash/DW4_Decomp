@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
-/* 0x00445990 - FUN_00445990: refreshes the work record's _upDataList for a player entity.  A player's list is
- * fetched from the object the messenger returns for the record's id; everyone else gets a fresh seven-entry
+/* Refreshes the work record's _upDataList for a player entity. A player's list is fetched from the
+ * object the messenger returns for the record's id; everyone else gets a fresh seven-entry
  * igIntList filled with the default value, installed through an owning stack reference. */
 extern "C" {
 igIntList *FUN_002caa70(...);

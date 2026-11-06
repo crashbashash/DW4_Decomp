@@ -1,19 +1,16 @@
-/* 0x002f31b0 - FUN_002f31b0: fill one memory-pool handle object from the pool descriptor table.
- *
- * Looks up descriptor `index` (0x90 bytes each, from +0x14 of the table) and, when the index is in
- * 0..45, copies it into the handle object: the descriptor name via igNamedObject_SetName, the
- * integer size/limit fields (+0x1c..+0x24, +0x50), and ten interned strings (+0x18, +0x28..+0x4c,
- * each assigned through the shared StringPool with the usual retain/release of the old token). The
- * descriptor's attached object (+0 of the entry) supplies +0x1c when it reports a size; the handle
- * name (+0x14) is built from the table name "kIGMemoryPoolHandle%s". The status written through
- * `result` is DAT_004fb410 on success and DAT_004fb418 for an out-of-range index.
- *
- * Evidence: the 0x90 stride and 46-entry bound (slti 46), the string "kIGMemoryPoolHandle%s" at
- * 0x004fa3e0, the interned-string assignment idiom (see src/engine/string-field-values.c), and the
- * virtual calls through the descriptor object (vtable bytes 176/400/116/144).
- * Build: alternate compiler (local/mwcps2/combat/mwccps2.exe), -O3 -Iinclude (C++); needs
- * string_token_assign.h next to it (macro header: tools/units.py cannot split a unit around a
- * file-scope multi-line macro). */
+/* Fill one memory-pool handle object from the pool descriptor table. Looks up descriptor `index`
+ * (0x90 bytes each, from +0x14 of the table) and, when the index is in 0..45, copies it into the
+ * handle object: the descriptor name via igNamedObject_SetName, the integer size/limit fields
+ * (+0x1c..+0x24, +0x50), and ten interned strings (+0x18, +0x28..+0x4c, each assigned through the
+ * shared StringPool with the usual retain/release of the old token). The descriptor's attached
+ * object (+0 of the entry) supplies +0x1c when it reports a size; the handle name (+0x14) is built
+ * from the table name "kIGMemoryPoolHandle%s". The status written through `result` is DAT_004fb410
+ * on success and DAT_004fb418 for an out-of-range index. Evidence: the 0x90 stride and 46-entry
+ * bound (slti 46), the string "kIGMemoryPoolHandle%s" at 0x004fa3e0, the interned-string
+ * assignment idiom, and the virtual calls through the descriptor object (vtable bytes
+ * 176/400/116/144). Build: alternate compiler (local/mwcps2/combat/mwccps2.exe), -O3 -Iinclude
+ * (C++); needs string_token_assign.h next to it (macro header: tools/units.py cannot split a unit
+ * around a file-scope multi-line macro). */
 extern "C" {
 void igNamedObject_SetName(void *, void *);
 int FUN_002eb010(int);
@@ -24,7 +21,7 @@ int igObject_IsKindOf(void *, int);
 int sprintf(char *, const char *, ...);
 }
 
-/* Header stored in front of every interned string token (see src/engine/string-field-values.c). */
+/* Header stored in front of every interned string token. */
 struct StringTokenHeader { int owner; int refCount; };
 typedef void StringToken;   /* a token points at the interned text; its header precedes it */
 

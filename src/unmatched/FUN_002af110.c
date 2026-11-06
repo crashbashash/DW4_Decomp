@@ -1,4 +1,6 @@
-/* 0x002af110 — FUN_002af110 (140 bytes). Converts a non-drop timecode into thousandths of a frame at `rate` (frames per second times 1000): hours, minutes and seconds scale by rate, frames by 1000, and the half-frame flag adds 500; returns the rate alongside. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Converts a non-drop timecode into thousandths of a frame at `rate` (frames per second times
+ * 1000): hours, minutes and seconds scale by rate, frames by 1000, and the half-frame flag adds
+ * 500; returns the rate alongside. */
 struct Timecode {
     int f0, f4;
     int hours;   /* +8 */

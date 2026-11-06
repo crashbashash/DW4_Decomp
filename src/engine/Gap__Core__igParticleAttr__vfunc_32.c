@@ -1,11 +1,9 @@
-/* 0x0013f9a0 -- igParticleAttr::vfunc_32, the setter for the attribute's particle range.
- *
- * Points the attribute at `particleArray`, a window of `particleNum` particles
- * starting `particleOffset` into it (reflected fields _particleArray,
- * _particleNum, _particleOffset at +16/+20/+24 in include/dw4/reflected.h).
- * The array is a reference-counted igObject: the new one is retained and the
- * previous one released, destroyed when its 23-bit count (low bits of the word
- * at +4) reaches zero -- the same inline release as FUN_001c45d0. */
+/* Vfunc_32, the setter for the attribute's particle range. Points the attribute at
+ * `particleArray`, a window of `particleNum` particles starting `particleOffset` into it
+ * (reflected fields _particleArray, _particleNum, _particleOffset at +16/+20/+24 in
+ * include/dw4/reflected.h). The array is a reference-counted igObject: the new one is retained and
+ * the previous one released, destroyed when its 23-bit count (low bits of the word at +4) reaches
+ * zero -- the same inline release as FUN_001c45d0. */
 #include "dw4/reflected.h"
 int igObject_Destroy();
 

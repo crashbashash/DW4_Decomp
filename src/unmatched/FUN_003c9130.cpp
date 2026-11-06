@@ -1,4 +1,3 @@
-/* 0x003c9130 - FUN_003c9130. Near-miss sweep fix (alternate compiler), verified byte-identical to retail by tools/verify.py. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

@@ -1,4 +1,4 @@
-/* 0x00298398 — FUN_00298398 (48 bytes). Calls vtable slot +20 of the stream joint held at +400, if any. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls vtable slot +20 of the stream joint held at +400, if any. */
 typedef struct SjObj SjObj;
 typedef struct {
     char pad0[20];

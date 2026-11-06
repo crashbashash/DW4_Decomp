@@ -1,6 +1,3 @@
-/* 0x002c1230 — igMemoryDictionary_InitFields. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int FUN_002ca2a0();
 int igMetaObject_CreateFields();

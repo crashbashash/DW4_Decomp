@@ -1,5 +1,3 @@
-/* 0x001eb310 — FUN_001eb310, m2c draft (hybrid mode), does not match yet.
- * Iterate here; a match is copied to src/FUN_001eb310.c only after verify.py agrees. */
 int strcpy();
 int strlen();
 int FUN_00330730();

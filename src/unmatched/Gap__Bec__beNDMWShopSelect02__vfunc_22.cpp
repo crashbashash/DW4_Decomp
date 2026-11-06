@@ -1,9 +1,8 @@
-/* 0x0043dc10 - Gap__Bec__beNDMWShopSelect02__vfunc_22 (3736 bytes). Matches retail only with the same
- * build settings as the neighbouring ShopSelect00/A0/B0 vfunc_22 units: the content-pinned alternate
- * compiler (config/SLUS-20836/unit-compilers.tsv) with -O3,p (config/SLUS-20836/unit-flags.tsv); an 0x0043dc10 entry is needed
- * in both tables.  Matching constructs: `a`/`b` are volatile (the retail refs live in stack slots that are
- * stored and reloaded); the loop keeps explicit p/off induction variables; the declaration order fixes
- * the saved-register assignment. */
+/* Matches retail only with the same build settings as the neighbouring ShopSelect00/A0/B0 vfunc_22
+ * units: the content-pinned alternate compiler with -O3,p; an 0x0043dc10 entry is needed in both
+ * tables. Matching constructs: `a`/`b` are volatile (the retail refs live in stack slots that are
+ * stored and reloaded); the loop keeps explicit p/off induction variables; the declaration order
+ * fixes the saved-register assignment. */
 #include "dw4/reflected.h"
 typedef struct QTbl { int *v[4]; } __attribute__((aligned(16))) QTbl;
 extern "C" {

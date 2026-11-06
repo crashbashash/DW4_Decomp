@@ -1,4 +1,5 @@
-/* 0x003f9f80 - FUN_003f9f80. Shop record accumulator: first record of a folder adds a record integer and, on request, the item field, through one reused temporary; alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* Shop record accumulator: first record of a folder adds a record integer and, on request, the
+ * item field, through one reused temporary; alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */

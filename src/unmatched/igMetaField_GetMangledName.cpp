@@ -1,4 +1,3 @@
-/* 0x002fd240 - igMetaField_GetMangledName. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_0012a1e8(...);

@@ -1,7 +1,4 @@
-/* 0x0038b050 — beMatCtrl receiver registration. Findings #860.
- * Argument two remains in a1 and selects the registered receiver object;
- * m2c's first draft omitted it, shifting all later EE argument registers.
- * Verified byte-identical in C++ mode with the original compiler. */
+/* beMatCtrl receiver registration. */
 #include "dw4/reflected.h"
 extern "C" int beMessenger_RegisterReceiver(int, int, int, int, int);
 extern int MATCTRL[4];

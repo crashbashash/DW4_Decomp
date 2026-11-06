@@ -1,4 +1,5 @@
-/* 0x0029a450 — FUN_0029a450 (104 bytes). Waits for the handle's +100 flag to clear, at most 10 rounds of FUN_0029af90(handle, 1), FUN_00265330(), FUN_0029af90(handle, 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Waits for the handle's +100 flag to clear, at most 10 rounds of FUN_0029af90(handle, 1),
+ * FUN_00265330(), FUN_0029af90(handle, 0). */
 void FUN_0029af90(void *handle, int on);
 void FUN_00265330(void);
 

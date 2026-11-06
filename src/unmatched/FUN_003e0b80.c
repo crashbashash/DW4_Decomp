@@ -1,6 +1,4 @@
-/* 0x003e0b80 — FUN_003e0b80. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * Receiver is the beNDMWLoadIntf2SelSlot record (ss_clear). */
+/* Receiver is the beNDMWLoadIntf2SelSlot record (ss_clear). */
 #include "dw4/reflected.h"
 
 void FUN_003e0b80(beNDMWLoadIntf2SelSlot *arg0) {

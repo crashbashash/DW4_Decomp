@@ -1,4 +1,4 @@
-/* 0x001228d8 — FUN_001228d8 (60 bytes). Returns 1 when the double argument is a NaN (newlib isnan shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 when the double argument is a NaN (newlib isnan shape; name is a hypothesis). */
 typedef union DoubleWords {
     double value;
     struct {

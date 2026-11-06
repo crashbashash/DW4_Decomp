@@ -1,4 +1,4 @@
-/* 0x002a9628 — FUN_002a9628 (88 bytes). Stops the IPU_TO DMA channel, clears its MADR/QWC/TADR and deletes the stream semaphore. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stops the IPU_TO DMA channel, clears its MADR/QWC/TADR and deletes the stream semaphore. */
 int DeleteSema();
 void FUN_002a8c08();
 

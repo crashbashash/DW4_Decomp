@@ -1,6 +1,3 @@
-/* 0x002b03e8 — FUN_002b03e8. m2c draft + decomp-permuter search, verified
- * byte-identical to retail by tools/verify.py. */
-
 int FUN_002b03e8(int arg0, int arg1)
 {
   int new_var2;

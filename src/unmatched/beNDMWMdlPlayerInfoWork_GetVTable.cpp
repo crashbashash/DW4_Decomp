@@ -1,9 +1,10 @@
-/* 0x003bfd60 beNDMWMdlPlayerInfoWork_GetVTable: builds a beNDMWMdlPlayerInfoWork on the stack and returns the
- * word at the runtime vtable-slot offset the meta object publishes (DAT_00586dc8[0] + 916), then destroys it.
- * Reflection accessor; its exception table (tag 0x86 base subobject, dtor 0x3bfde0) is reproduced by the inline
- * constructor of a derived view whose base and member have out-of-line ctors/dtors (finding #3886). The view's
- * own inline destructor is emitted out of line by MWCC and was dead-stripped by the retail linker: it is the
- * `stripped` entry of this unit's row in config/SLUS-20836/unit-objects.json (finding #3888). */
+/* beNDMWMdlPlayerInfoWork_GetVTable: builds a beNDMWMdlPlayerInfoWork on the stack and returns the
+ * word at the runtime vtable-slot offset the meta object publishes (DAT_00586dc8[0] + 916), then
+ * destroys it. Reflection accessor; its exception table (tag 0x86 base subobject, dtor 0x3bfde0)
+ * is reproduced by the inline constructor of a derived view whose base and member have out-of-line
+ * ctors/dtors. The view's own inline destructor is emitted out of line by MWCC and was dead-
+ * stripped by the retail linker: it is the `stripped` entry of this unit's row in
+ * config/SLUS-20836/unit-objects.json. */
 extern "C" {
 extern int DAT_0053d4a0[4];                 /* beNDMWMdlPlayerInfoWork vtable */
 extern void *DAT_00586dc8[4];               /* the class's meta object */

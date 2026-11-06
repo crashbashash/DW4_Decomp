@@ -1,4 +1,6 @@
-/* 0x00320a20 - FUN_00320a20. Byte-swaps an array of 40-byte records (ten words each) in place; the word swap helper is compiled first in the same unit so the loop counter and pointer stay in a1/a2 across the calls (interprocedural register use); verified with the helper as a duplicate. */
+/* Byte-swaps an array of 40-byte records (ten words each) in place; the word swap helper is
+ * compiled first in the same unit so the loop counter and pointer stay in a1/a2 across the calls
+ * (interprocedural register use). */
 #include "dw4/ipa/ipa_FUN_00320960.h"
 void FUN_00320a20(unsigned char *arg0, int arg1) {
     unsigned char *p = arg0;

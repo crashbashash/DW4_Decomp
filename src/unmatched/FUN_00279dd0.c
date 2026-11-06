@@ -1,5 +1,5 @@
-/* 0x00279dd0 — FUN_00279dd0 (84 bytes). Sends request 11 with a one-word payload through FUN_00273820,
-   unless the library is in mode 1 (0x004b1dc8) with no entries (0x004b1dc0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sends request 11 with a one-word payload through FUN_00273820, unless the library is in mode 1
+ * (0x004b1dc8) with no entries (0x004b1dc0). */
 extern void FUN_00273820(int request, int *payload, int words, int a3, int t0);
 extern int DAT_004b1dc0;
 extern int DAT_004b1dc8;

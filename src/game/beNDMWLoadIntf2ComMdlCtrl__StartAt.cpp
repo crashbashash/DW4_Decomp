@@ -19,14 +19,14 @@ beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int);
 extern int MODELCTRL[4];
 extern int GENERATE[4];
 extern int g_stringPool[4];
-/* Default allocator selector (docs/engine/subwindow-preparation.md). */
+/* Default allocator selector. */
 extern int g_defaultAllocatorSelector[4];
-/* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used
- * as returned instead of the selector (docs/engine/xdata-controller.md). */
+/* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used as returned instead
+ * of the selector. */
 extern unsigned char GPR_00554c14;
 
-/* Header in front of every interned string token: owning chunk, then a full
- * 32-bit reference count (docs/engine/messenger-results.md). */
+/* Header in front of every interned string token: owning chunk, then a full 32-bit reference
+ * count. */
 typedef struct StringTokenHeader {
     int owner;
     int refCount;

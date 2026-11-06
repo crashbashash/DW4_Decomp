@@ -1,4 +1,4 @@
-/* 0x00265fb0 — FUN_00265fb0 (60 bytes). Resets the counters of an object: field 60 to -1, field 56 to 0x7FFFFFFF, the rest to 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets the counters of an object: field 60 to -1, field 56 to 0x7FFFFFFF, the rest to 0. */
 /* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
 typedef struct Object_265fb0 {
     char f0;

@@ -1,5 +1,8 @@
 #include "dw4/reflected.h"
-/* 0x00393c80 - FUN_00393c80. Sets (or appends) a name/value/float triple in the three parallel lists at +36/+40/+44 of the record, creating the lists on first use; smart-pointer slots RP are destructor holders (their out-of-line destructor is the duplicate at 0x00393aa0); alternate compiler -O3,p -Cpp_exceptions off. */
+/* Sets (or appends) a name/value/float triple in the three parallel lists at +36/+40/+44 of the
+ * record, creating the lists on first use; smart-pointer slots RP are destructor holders (their
+ * out-of-line destructor is the duplicate at 0x00393aa0); alternate compiler -O3,p -Cpp_exceptions
+ * off. */
 extern "C" {
 int FUN_001cafc0(igStringRefList *, int *, int);
 int FUN_001ca620(igStringRefList *, int *);
@@ -23,7 +26,6 @@ struct RPA { igObject *p; RPA() { p = 0; } ~RPA() { igObject *o = p; if (o != 0)
 struct RPB { igObject *p; RPB() { p = 0; } ~RPB() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 /* interned-string holder: count at p[-1], header at p[-2]; its destructor copy is the retail StringRef at 0x00130720 */
 struct StringRef { int p; StringRef(int x) { p = x; } ~StringRef() { int s = p; if (s != 0) { int *hd = (int *)(s - 8); int c = *(int *)(s - 4) - 1; *(int *)(s - 4) = c; if (c == 0) StringChunk_ReleaseHeader(*hd, hd); } } };
-
 
 extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, int val) {
     igStringRefList *l36, *l40;

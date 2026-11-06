@@ -1,4 +1,5 @@
-/* 0x00275408 — FUN_00275408 (80 bytes). Returns 1 when any of the 13 48-byte entries of DAT_004ab650 is active (byte 0 == 1) in state 2 (byte 2), else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 when any of the 13 48-byte entries of DAT_004ab650 is active (byte 0 == 1) in state 2
+ * (byte 2), else 0. */
 typedef struct Entry_275408 {
     signed char active;     /* 0x00 */
     char pad1;

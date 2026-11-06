@@ -1,4 +1,5 @@
-/* 0x00293df0 — FUN_00293df0 (68 bytes). Copies a picture header's fields (+88, +92, the flag bytes +108..+110, +60, +64) into the eight-word summary at +140 of the decoder, clearing its last word. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies a picture header's fields (+88, +92, the flag bytes +108..+110, +60, +64) into the eight-
+ * word summary at +140 of the decoder, clearing its last word. */
 
 struct Picture00293df0 {
     char pad0[60];

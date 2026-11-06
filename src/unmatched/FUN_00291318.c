@@ -1,4 +1,4 @@
-/* 0x00291318 — FUN_00291318 (76 bytes). Stores callback `index` in every in-use handle (state 2 at +392) of the global pool. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores callback `index` in every in-use handle (state 2 at +392) of the global pool. */
 typedef void (*Callback00291250)();
 
 struct Handle00291318 {

@@ -1,4 +1,6 @@
-/* 0x002ac990 — FUN_002ac990 (152 bytes). Pops items from a ring buffer: FUN_002aca28 finds how many to skip for position `pos` (between base and span), the tail and count advance by that many and the item now at the tail is copied to *out. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Pops items from a ring buffer: FUN_002aca28 finds how many to skip for position `pos` (between
+ * base and span), the tail and count advance by that many and the item now at the tail is copied
+ * to *out. */
 struct Item16 {
     long first; /* 64-bit; copied as a whole */
     int f8;

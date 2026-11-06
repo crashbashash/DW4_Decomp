@@ -1,4 +1,5 @@
-/* 0x00291818 — FUN_00291818 (168 bytes). 64-bit a * b / c rounded to nearest, computed on magnitudes with the sign restored; division by zero saturates to the signed 64-bit limit of the result's sign. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* 64-bit a * b / c rounded to nearest, computed on magnitudes with the sign restored; division by
+ * zero saturates to the signed 64-bit limit of the result's sign. */
 extern long long FUN_0022e440(long long a, long long b); /* 64-bit multiply */
 
 long long FUN_00291818(long long a, long long b, long long c) {

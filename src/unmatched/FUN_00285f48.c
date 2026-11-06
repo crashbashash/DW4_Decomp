@@ -1,4 +1,5 @@
-/* 0x00285f48 — FUN_00285f48 (80 bytes). Chooses the decoder mode at +56: 1 for progressive or field-structured (1/2) pictures, otherwise 3 when +308 is 1, else 2. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Chooses the decoder mode at +56: 1 for progressive or field-structured (1/2) pictures, otherwise
+ * 3 when +308 is 1, else 2. */
 
 /* Members of the decoder object used here. */
 struct Decoder00285f48 {

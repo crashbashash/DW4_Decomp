@@ -1,4 +1,7 @@
-/* 0x00441040 - Gap__Bec__beNDMWStatusTitle03__vfunc_22. Two interned strings appended to message lists (pool created on first use, refcount released inline) then the message script; the constant string address is still tested (if-else layout with the null arm first); price switch with an uninitialised default; alternate compiler -O3,p, C++ without exceptions. */
+/* Two interned strings appended to message lists (pool created on first use, refcount released
+ * inline) then the message script; the constant string address is still tested (if-else layout
+ * with the null arm first); price switch with an uninitialised default; alternate compiler -O3,p,
+ * C++ without exceptions. */
 extern "C" {
 void *FUN_002eb010(int);
 void *StringPool_Construct(void *);

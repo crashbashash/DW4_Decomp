@@ -1,6 +1,3 @@
-/* 0x00373aa0 — COUNTERget. m2c draft + decomp-permuter search, verified
- * byte-identical to retail by tools/verify.py. */
-
 extern "C" {
 int beMessenger_SendNamed(int, int *, int, int, int *);
 int beMessenger_GetObject(int, int);

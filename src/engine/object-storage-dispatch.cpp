@@ -1,12 +1,10 @@
-/* Object storage dispatch, 0x00300d70..0x00300f50: every helper re-selects the
- * allocator from the object header (igObject_GetAllocator, 0x00301000) and calls
- * one slot of that allocator's vtable, forwarding its arguments unchanged.
- * See docs/engine/object-storage.md (finding #879) for the slot table.
- *
- * Allocator is an observed ABI view of the vtable byte offsets the helpers call
- * through, not an original type; it is never instantiated.  Only slots 216
- * (AllocateStorage) and 264 (FreeStorage) are named by the original symbols; the
- * other slots keep their byte offset until their meaning is established. */
+/* Object storage dispatch, 0x00300d70..0x00300f50: every helper re-selects the allocator from the
+ * object header (igObject_GetAllocator, 0x00301000) and calls one slot of that allocator's vtable,
+ * forwarding its arguments unchanged. See docs/engine/object-storage.md for the slot table.
+ * Allocator is an observed ABI view of the vtable byte offsets the helpers call through, not an
+ * original type; it is never instantiated. Only slots 216 (AllocateStorage) and 264 (FreeStorage)
+ * are named by the original symbols; the other slots keep their byte offset until their meaning is
+ * established. */
 /* RESERVED(n) declares unused virtual slot n so the named slots land on the
  * right byte offsets. */
 #define RESERVED(n) virtual void reserved_##n()
@@ -85,8 +83,8 @@ void igObject_FreeStorage(int object, int storage) {
     }
 }
 
-/* 0x00300f50: same instruction body as igObject_FreeStorage; the original
- * distinction between the two is not established (docs/engine/object-storage.md) */
+/* same instruction body as igObject_FreeStorage; the original distinction between the two is not
+ * established */
 void FUN_00300f50(int object, int storage) {
     if (storage != 0) {
         Allocator *allocator = igObject_GetAllocator(object);

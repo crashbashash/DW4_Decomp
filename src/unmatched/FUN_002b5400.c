@@ -1,4 +1,6 @@
-/* 0x002b5400 — FUN_002b5400 (144 bytes). For a header whose two-digit number (FUN_002b52d8) is at least 2, classifies the byte at +21: 1 unless it matches DAT_004f5a50 (FUN_0012aba0 over one character), then 2 unless it also matches DAT_004f5a58, then 0; 0 for a null header or a negative index. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* For a header whose two-digit number (FUN_002b52d8) is at least 2, classifies the byte at +21: 1
+ * unless it matches DAT_004f5a50 (FUN_0012aba0 over one character), then 2 unless it also matches
+ * DAT_004f5a58, then 0; 0 for a null header or a negative index. */
 extern char DAT_004f5a50[];
 extern char DAT_004f5a58[];
 

@@ -1,7 +1,9 @@
-/* 0x0042f710 - Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21: shop evolve-menu state machine (typed recovery).
- * Matching constructs: DummyVirtual (dummy slots so v24/v25/v26 dispatch through vtable offsets 96/100/104), WindowRef (owning
- * stack reference, one per window; StringRef temporaries for the string-list appends), `> 8`/`> 1` compares (slti at), `case 1: default:` arm, case -1 first in the retCode switch,
- * obj/found split in the cast-search loop, cnt/idx declaration order in state 6. Profile: alt compiler, -O3,p -Cpp_exceptions off. */
+/* Shop evolve-menu state machine (typed recovery). Matching constructs: DummyVirtual (dummy slots
+ * so v24/v25/v26 dispatch through vtable offsets 96/100/104), WindowRef (owning stack reference,
+ * one per window; StringRef temporaries for the string-list appends), `> 8`/`> 1` compares (slti
+ * at), `case 1: default:` arm, case -1 first in the retCode switch, obj/found split in the cast-
+ * search loop, cnt/idx declaration order in state 6. Profile: alt compiler, -O3,p -Cpp_exceptions
+ * off. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(...);
@@ -95,8 +97,9 @@ struct DummyVirtual {
     virtual void v24(void *, void *); virtual int v25(); virtual int v26();
 };
 
-/* Owning stack reference to a freshly created sub-window of one class (kind 0 the page selector 0x3b51b0, 1 the select window 0x3b4d90, 2 the
- * item window 0x3b4f50); out-of-line destructor copies are the retail bodies 0x00411100, 0x00428710 and 0x00411080 (config/SLUS-20836/unit-objects.json). */
+/* Owning stack reference to a freshly created sub-window of one class (kind 0 the page selector
+ * 0x3b51b0, 1 the select window 0x3b4d90, 2 the item window 0x3b4f50); out-of-line destructor
+ * copies are the retail bodies 0x00411100, 0x00428710 and 0x00411080. */
 template <int kind> struct WindowRef {
     Rc *p;
     WindowRef(Rc *w) : p(w) {}

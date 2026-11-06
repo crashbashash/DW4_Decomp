@@ -1,5 +1,5 @@
-/* 0x00127310 — FUN_00127310 (124 bytes). Recursive lock: the owning thread only bumps the depth count; any other
- * thread waits on the semaphore D_00482590 and then takes ownership. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Recursive lock: the owning thread only bumps the depth count; any other thread waits on the
+ * semaphore D_00482590 and then takes ownership. */
 int GetThreadId(void);
 int WaitSema(int sema_id);
 

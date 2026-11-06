@@ -1,9 +1,8 @@
-/* 0x00417880 - Gap__Bec__beNDMWStatusSubSlot__vfunc_27: open the sub-slot choice window.
- * Creates the three-entry select window (FUN_003b5370), binds it as a sub-window, builds its
- * decide list (FUN_002cb0d0: always, never, and "slot in use" for the current kind) and sends the
- * row texts, the enabled rows with the normal group and the disabled rows with the grey one.  The
- * window and the decide list live on the stack in owning references whose releases the retail
- * exception table records. */
+/* Open the sub-slot choice window. Creates the three-entry select window (FUN_003b5370), binds it
+ * as a sub-window, builds its decide list (FUN_002cb0d0: always, never, and "slot in use" for the
+ * current kind) and sends the row texts, the enabled rows with the normal group and the disabled
+ * rows with the grey one. The window and the decide list live on the stack in owning references
+ * whose releases the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_GetAllocator(void *);

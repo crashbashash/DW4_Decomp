@@ -1,4 +1,5 @@
-/* 0x002b12a8 — FUN_002b12a8 (120 bytes). Empties a three-item list: clears its count, resets each 16-byte item with FUN_002b1320 and registers it with FUN_0029dcc8(owner, arg2, index, item). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Empties a three-item list: clears its count, resets each 16-byte item with FUN_002b1320 and
+ * registers it with FUN_0029dcc8(owner, arg2, index, item). */
 void FUN_0029dcc8();
 int FUN_002b1320();
 

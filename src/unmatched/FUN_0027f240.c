@@ -1,6 +1,3 @@
-/* 0x0027f240 — FUN_0027f240. m2c draft + decomp-permuter search, verified
- * byte-identical to retail by tools/verify.py. */
-
 int FUN_0027f2d0();
 int FUN_0027f240(void *arg0)
 {

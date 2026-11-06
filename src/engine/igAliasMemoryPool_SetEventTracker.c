@@ -1,8 +1,6 @@
-/* 0x002d1030 — igAliasMemoryPool::SetEventTracker: reference-counted
- * assignment of the _eventTracker field (+0x98).  Retain the new tracker,
- * release the previous one (destroying it when its count reaches zero), then
- * store.  The refcount is the low 23 bits of igObject::_refCount (see
- * src/engine/ref-field-lifecycle.cpp). */
+/* Reference-counted assignment of the _eventTracker field (+0x98). Retain the new tracker, release
+ * the previous one (destroying it when its count reaches zero), then store. The refcount is the
+ * low 23 bits of igObject::_refCount. */
 #include "dw4/reflected.h"
 void igObject_Destroy(void *);
 

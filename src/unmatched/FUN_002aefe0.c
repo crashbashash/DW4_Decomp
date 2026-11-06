@@ -1,4 +1,5 @@
-/* 0x002aefe0 — FUN_002aefe0 (124 bytes). Reads the current position/rate through FUN_002aea00 and, when it differs from the pair cached at +0xD28+652/656, notifies FUN_002ae528 and updates the cache; then sets the flag at +68. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads the current position/rate through FUN_002aea00 and, when it differs from the pair cached
+ * at +0xD28+652/656, notifies FUN_002ae528 and updates the cache; then sets the flag at +68. */
 struct TimingBlock {
     char pad0[652];
     int cached_pos;  /* +652 */

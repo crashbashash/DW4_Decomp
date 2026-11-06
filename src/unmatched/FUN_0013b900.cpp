@@ -1,4 +1,6 @@
-/* 0x0013b900 - FUN_0013b900. Smart-pointer result returned through a hidden pointer: the holder struct has constructors so the vcall initialises the slot directly (declared first = highest slot); volatile slot plus plain copies for the tests. Alternate -O3. */
+/* Smart-pointer result returned through a hidden pointer: the holder struct has constructors so
+ * the vcall initialises the slot directly (declared first = highest slot); volatile slot plus
+ * plain copies for the tests. Alternate -O3. */
 extern "C" {
 int FUN_0013ba30(...);
 int FUN_0013c060();

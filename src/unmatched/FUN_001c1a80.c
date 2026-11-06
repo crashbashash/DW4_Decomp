@@ -1,4 +1,6 @@
-/* 0x001c1a80 - FUN_001c1a80. Finds (or appends through FUN_001c17e0, whose arguments pass straight through) an item in the list at +12, then calls FUN_001c1950 with the entry of the list at +8; inline index search template (early goto found), declaration order i,r,l,n; alternate compiler -O3. */
+/* Finds (or appends through FUN_001c17e0, whose arguments pass straight through) an item in the
+ * list at +12, then calls FUN_001c1950 with the entry of the list at +8; inline index search
+ * template (early goto found), declaration order i,r,l,n; alternate compiler -O3. */
 typedef struct L { char p0[8]; int n; int p1; int *d; } L;
 typedef struct T { char p0[8]; L *f8; L *f12; } T;
 int FUN_001c17e0(T *, int);

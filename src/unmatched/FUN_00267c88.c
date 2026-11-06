@@ -1,4 +1,5 @@
-/* 0x00267c88 — FUN_00267c88 (120 bytes). Second-order predictor step: adds ((k0 * h0 + k1 * h1) >> 12) to the input, clamps to 16 bits, shifts the history and returns the new sample; with no state returns the input. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Second-order predictor step: adds ((k0 * h0 + k1 * h1) >> 12) to the input, clamps to 16 bits,
+ * shifts the history and returns the new sample; with no state returns the input. */
 typedef struct Predictor_267c88 {
     int pad0;
     short k0;       /* 0x04: coefficient of the last output */

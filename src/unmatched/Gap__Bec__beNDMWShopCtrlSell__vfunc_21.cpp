@@ -57,9 +57,10 @@ extern unsigned char GPR_00554a5c;
 extern unsigned char GPR_00554c14;
 void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self);
 }
-/* Owning stack references: kind 0..4 one per window class created here (0 chooser 0x3b3f40, 1 device sell 0x3b70e0, 2 disk sell 0x3b6e60,
- * 4 item window 0x3b4f50), ListRef the bool decide lists.  The out-of-line destructor copies are retail 0x004351d0, 0x00435150, 0x004350d0,
- * 0x00411080 and 0x00226990 (config/SLUS-20836/unit-objects.json). */
+/* Owning stack references: kind 0..4 one per window class created here (0 chooser 0x3b3f40, 1
+ * device sell 0x3b70e0, 2 disk sell 0x3b6e60, 4 item window 0x3b4f50), ListRef the bool decide
+ * lists. The out-of-line destructor copies are retail 0x004351d0, 0x00435150, 0x004350d0,
+ * 0x00411080 and 0x00226990. */
 template <int kind> struct WindowRef {
     igObject *p;
     WindowRef(igObject *w) : p(w) {}
@@ -70,7 +71,6 @@ struct ListRef {
     ListRef(igObject *l) : p(l) {}
     ~ListRef() { igObject *l = p; if (l != 0) { --l->_refCount; if ((l->_refCount & 0x7fffff) == 0) igObject_Destroy(l); } }
 };
-
 
 #define ALLOC(a, self) { \
     a = igObject_GetAllocator(self); \

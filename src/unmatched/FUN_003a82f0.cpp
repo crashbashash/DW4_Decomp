@@ -1,6 +1,6 @@
-/* 0x003a82f0 - FUN_003a82f0: rescale a beBaseInfoRamTimer property of a ram object. The data list is created on
- * first use (held in an ObjectRef whose destructor the exception table names), then the timer's bias is rebased so
- * the elapsed world time stays continuous across the scale change. */
+/* Rescale a beBaseInfoRamTimer property of a ram object. The data list is created on first use
+ * (held in an ObjectRef whose destructor the exception table names), then the timer's bias is
+ * rebased so the elapsed world time stays continuous across the scale change. */
 #include "dw4/reflected.h"
 extern "C" {
 long long FUN_00230110(float);

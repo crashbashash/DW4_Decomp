@@ -1,5 +1,3 @@
-/* 0x001adec0 — FUN_001adec0. m2c draft, hybrid; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_001ab8b0();
 int FUN_001ad990();
 

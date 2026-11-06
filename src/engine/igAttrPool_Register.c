@@ -10,7 +10,7 @@ extern char igAttrPool_className[];
 extern char g_igAttrPool_metaObject[];
 int GpFlag_SetOnce_00130000();
 int igMetaObject_RegisterClass();
-void FUN_0013aa90(void);  /* code at 0x13aa90, passed by address (was DAT_13aa90; docs/engine/function-inventory.md) */
+void FUN_0013aa90(void);
 int igAttrPool_InitFields();
 
 void igAttrPool_Register(void) {

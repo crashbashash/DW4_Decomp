@@ -1,4 +1,5 @@
-/* 0x00141410 - FUN_00141410. Singleton (pointer array form, not gp-relative) vcalls at 120/124; the third parameter of the 120 slot is unsigned, which fixes the argument load order. Alternate -O3. */
+/* Singleton (pointer array form, not gp-relative) vcalls at 120/124; the third parameter of the
+ * 120 slot is unsigned, which fixes the argument load order. Alternate -O3. */
 extern "C" {
 int FUN_0017c7a0(...);
 void FUN_00141410(void *arg0, int arg1);

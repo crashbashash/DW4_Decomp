@@ -1,6 +1,3 @@
-/* 0x002d4d60 — FUN_002d4d60. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_002d4da0(int **);
 int igMetaField_Construct();
 extern int DAT_00531640[4];

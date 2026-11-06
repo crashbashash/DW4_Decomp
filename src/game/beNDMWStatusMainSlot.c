@@ -1,8 +1,7 @@
-/* src/game/beNDMWStatusMainSlot.c - the beNDMWStatusMainSlot methods (main-equipment slot view
- * of the NDMW status screen), in retail address order.
- *
- * vfunc_30 is the equipment eligibility test: the item at a list index may be equipped when the
- * player's LEVEL property is at least the item's LVPOINT record (finding #803). Each function is matched on its own (tools/units.py). */
+/* src/game/beNDMWStatusMainSlot.c - the beNDMWStatusMainSlot methods (main-equipment slot view of
+ * the NDMW status screen), in retail address order. vfunc_30 is the equipment eligibility test:
+ * the item at a list index may be equipped when the player's LEVEL property is at least the item's
+ * LVPOINT record. Each function is matched on its own. */
 #include "dw4/reflected.h"
 /* A property record: the value sits at +12 (docs/engine/property-system.md, SYSgetPlayerLevel). */
 typedef struct PropertyRecord { char pad0[12]; int value; } PropertyRecord;

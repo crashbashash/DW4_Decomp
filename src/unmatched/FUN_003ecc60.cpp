@@ -1,4 +1,6 @@
-/* 0x003ecc60 - FUN_003ecc60. Clear four flag bytes, then set the flag of every item listed by each entry whose id equals the index of a zero-byte slot; the owner pointer is read volatile so the slot list is reloaded on each use. Alternate compiler -O3,p. */
+/* Clear four flag bytes, then set the flag of every item listed by each entry whose id equals the
+ * index of a zero-byte slot; the owner pointer is read volatile so the slot list is reloaded on
+ * each use. Alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */

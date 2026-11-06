@@ -1,14 +1,12 @@
-/* 0x002382e0 - FUN_002382e0: save the Alchemy viewer (INSIGHT) options into the property tree.
- *
- * Looks the "INSIGHT" group up in the property set held by the global at 0x586dc8 (+56),
- * falling back to "Viewer", and writes each option under its string name.  Every write is
- * guarded by its name pointer (the original option table can drop a name); the guards are
- * kept because the compiler does not fold them.  The option names are the string literals at
- * 0x4e9880..0x4e9c90; the option struct is laid out from the stored offsets.
- * Callees (names from their roles; retail symbols in parentheses): StoreString (thunk_FUN_00306910),
- * StoreByte (thunk_FUN_00306e50), StoreFloat (thunk_FUN_003066b0), StoreInt (thunk_FUN_003065f0),
- * StoreVec4 (FUN_001e71f0), StoreVec3 (FUN_001e70a0).
- * Evidence: asm/FUN_002382e0.s, data/strings.json. */
+/* Save the Alchemy viewer (INSIGHT) options into the property tree. Looks the "INSIGHT" group up
+ * in the property set held by the global at 0x586dc8 (+56), falling back to "Viewer", and writes
+ * each option under its string name. Every write is guarded by its name pointer (the original
+ * option table can drop a name); the guards are kept because the compiler does not fold them. The
+ * option names are the string literals at 0x4e9880..0x4e9c90; the option struct is laid out from
+ * the stored offsets. Callees (names from their roles; retail symbols in parentheses): StoreString
+ * (thunk_FUN_00306910), StoreByte (thunk_FUN_00306e50), StoreFloat (thunk_FUN_003066b0), StoreInt
+ * (thunk_FUN_003065f0), StoreVec4 (FUN_001e71f0), StoreVec3 (FUN_001e70a0). Evidence:
+ * asm/FUN_002382e0.s, data/strings.json. */
 typedef struct Vec3 { float x, y, z; } Vec3;
 typedef struct Vec4 { float x, y, z, w; } Vec4;
 typedef struct ViewerOptions {

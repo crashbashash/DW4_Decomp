@@ -1,4 +1,6 @@
-/* 0x002656c8 — FUN_002656c8 (172 bytes). Drops one reference from DAT_0049d984; on the last one, runs the shutdown steps FUN_00264aa0..FUN_00264f98, restores the priority of thread DAT_0049da28 to DAT_004a52b8, clears both FUN_0027e8e0/FUN_0027e8f8 hooks, clears DAT_0049d988 and finishes with FUN_0027ec50. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Drops one reference from DAT_0049d984; on the last one, runs the shutdown steps
+ * FUN_00264aa0..FUN_00264f98, restores the priority of thread DAT_0049da28 to DAT_004a52b8, clears
+ * both FUN_0027e8e0/FUN_0027e8f8 hooks, clears DAT_0049d988 and finishes with FUN_0027ec50. */
 extern int DAT_0049d984;
 extern int DAT_0049d988;
 extern volatile int DAT_0049da28; /* thread id; retail re-reads it through its address (volatile) */

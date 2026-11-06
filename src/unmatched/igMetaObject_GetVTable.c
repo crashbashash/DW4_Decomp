@@ -1,4 +1,3 @@
-/* 0x002be6b0 - igMetaObject_GetVTable. temporary stack object as a union (byte index folds into the load), alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 int StringChunk_ReleaseHeader();
 int igMetaObject_Init();
 extern int DAT_00532bb0[4];

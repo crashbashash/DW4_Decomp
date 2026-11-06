@@ -1,4 +1,5 @@
-/* 0x002aaf08 — FUN_002aaf08 (172 bytes). Under the FUN_002a0e70/FUN_002a0e88 guard, toggles the flag at +0x950+28 when FUN_002aafb8 (set) or FUN_002ab138 (clear) fires and reports it through FUN_002aa3d0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Under the FUN_002a0e70/FUN_002a0e88 guard, toggles the flag at +0x950+28 when FUN_002aafb8 (set)
+ * or FUN_002ab138 (clear) fires and reports it through FUN_002aa3d0. */
 void FUN_002a0e70(void *guard);
 void FUN_002a0e88(void *guard);
 int FUN_002aafb8(int obj);

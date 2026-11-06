@@ -1,4 +1,5 @@
-/* 0x00123850 — FUN_00123850 (88 bytes). Reentrant wrapper: clears the global errno, calls FUN_0010b5c8 and copies errno into the reent block when the call fails (newlib _r wrapper shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reentrant wrapper: clears the global errno, calls FUN_0010b5c8 and copies errno into the reent
+ * block when the call fails (newlib _r wrapper shape; name is a hypothesis). */
 typedef struct Reent {
     int errorNumber;
 } Reent;

@@ -1,4 +1,6 @@
-/* 0x0028ebc0 — FUN_0028ebc0 (176 bytes). Wraps the caller's buffer (base, size) in a temporary stream joint (FUN_0027b408), runs FUN_0028ed28 on it, stores size - fn36(sj, 1) through *out and releases the joint (slot +12); returns FUN_0028ed28's result, or -1 when the joint cannot be created. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Wraps the caller's buffer (base, size) in a temporary stream joint (FUN_0027b408), runs
+ * FUN_0028ed28 on it, stores size - fn36(sj, 1) through *out and releases the joint (slot +12);
+ * returns FUN_0028ed28's result, or -1 when the joint cannot be created. */
 typedef struct SjObj SjObj;
 typedef struct {
     char pad0[12];

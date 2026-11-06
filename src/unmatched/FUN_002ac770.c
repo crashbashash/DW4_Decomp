@@ -1,4 +1,5 @@
-/* 0x002ac770 — FUN_002ac770 (124 bytes). Sets up a pool over a caller buffer: aligns the start to 8, clears the rest and records it as 16-byte units. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets up a pool over a caller buffer: aligns the start to 8, clears the rest and records it as
+ * 16-byte units. */
 typedef struct SfdPool {
     char *base;             /* +0 */
     int units;              /* +4, 16-byte units */

@@ -1,13 +1,10 @@
-/* 0x00145ff0 — igInterfaceManager_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_001460b0();
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void thunk_FUN_00146470(void);  /* code at 0x1460a0, passed by address (was DAT_1460a0; docs/engine/function-inventory.md) */
+void thunk_FUN_00146470(void);
 extern int DAT_00487130[4];
 extern int DAT_00487138[4];
 extern int DAT_00487140[4];

@@ -1,4 +1,6 @@
-/* 0x0030c830 - StringChunk_AllocateToken. String chunk token allocator: walk the chunk chain taking a block, growing the chain with a freshly constructed chunk; bounds test spelled limit > x so the compare fuses into the branch (sltu at); default compiler. Verified byte-identical by tools/verify.py. */
+/* String chunk token allocator: walk the chunk chain taking a block, growing the chain with a
+ * freshly constructed chunk; bounds test spelled limit > x so the compare fuses into the branch
+ * (sltu at); default compiler. */
 struct A { struct A *f0; int f4; int f8; int f12; };
 struct C { struct A *f0; struct C *next; int f8; unsigned f12; int p16[3]; int f28; char f32; };
 void *StringChunk_AllocateObject();

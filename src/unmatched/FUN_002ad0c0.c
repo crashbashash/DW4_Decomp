@@ -1,4 +1,5 @@
-/* 0x002ad0c0 — FUN_002ad0c0 (128 bytes). If FUN_002b03e8(handle, 2) and FUN_002adc40(handle, 5) both succeed, reports 1 through *status and returns whether *flag is clear; otherwise reports 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* If FUN_002b03e8(handle, 2) and FUN_002adc40(handle, 5) both succeed, reports 1 through *status
+ * and returns whether *flag is clear; otherwise reports 0. */
 int FUN_002adc40();
 int FUN_002b03e8();
 

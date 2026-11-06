@@ -1,11 +1,8 @@
-/* 0x001510e0 — FUN_001510e0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_00100400();
 int igMatrix44f_SetIdentity();
 int igObject_InitHeader();
-void FUN_00151190(void);  /* code at 0x151190, passed by address (was DAT_151190; docs/engine/function-inventory.md) */
+void FUN_00151190(void);
 extern int DAT_00525e50[4];
 extern int DAT_00530a10[4];
 int FUN_00137360();

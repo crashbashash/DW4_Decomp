@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 int List_BinarySearch();
-void FUN_00453370(void);  /* code at 0x453370, passed by address (was DAT_453370; docs/engine/function-inventory.md) */
+void FUN_00453370(void);
 struct K { short key; char pad[38]; };
 void FUN_00453830(beFontImage *arg0, short arg1) {
     struct K k;

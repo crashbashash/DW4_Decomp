@@ -1,4 +1,5 @@
-/* 0x001ad860 - FUN_001ad860. Nested walk releasing a back reference; the found-flag is a bool; locals declared in the order the allocator needs; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Nested walk releasing a back reference; the found-flag is a bool; locals declared in the order
+ * the allocator needs; alternate compiler. */
 #include "dw4/reflected.h"
 extern "C" { int igObject_Destroy(...); }
 /* hypothesis: igAnimationCombiner._animHierarchy (+12, inherited from igAnimationSystem) is a vtable-carrying object whose slot 24 (+96) returns the bone count; its class is not reflected here, so the call goes through this local virtual-dispatch shim */

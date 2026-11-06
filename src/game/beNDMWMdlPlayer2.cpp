@@ -16,10 +16,9 @@ extern int g_beNDMWMdlPlayer2_metaObject[4];
 int FUN_00236f80(int, int);
 int Gap__Core__igObject__vfunc_23();
 
-/* 0x003d4980 — slot 23: after the shared igObject slot 23 body, cache the
- * pad manager registered with the insight core (_padManager), found by its
- * class metaObject; the same binding step as the other managers' slot 23
- * (docs/engine/typed-game-layer.md). */
+/* slot 23: after the shared igObject slot 23 body, cache the pad manager registered with the
+ * insight core (_padManager), found by its class metaObject; the same binding step as the other
+ * managers' slot 23. */
 void Gap__Bec__beNDMWMdlPlayer2__vfunc_23(beNDMWMdlPlayer2 *self) {
     Gap__Core__igObject__vfunc_23();
     self->_padManager = FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);

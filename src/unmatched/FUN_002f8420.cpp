@@ -1,4 +1,5 @@
-/* 0x002f8420 - FUN_002f8420. Debug listing loop over 46 slots with virtual getters; parameter reused in place for the default string (default compiler). Verified byte-identical by tools/verify.py. */
+/* Debug listing loop over 46 slots with virtual getters; parameter reused in place for the default
+ * string (default compiler). */
 extern "C" {
 int FUN_00304430(...);
 int FUN_00304680();

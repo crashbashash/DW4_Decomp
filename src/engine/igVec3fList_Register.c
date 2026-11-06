@@ -1,8 +1,8 @@
-/* 0x0018a190 igVec3fList_Register: static-init registration of igVec3fList (an igDataList of 3-component float vector elements)
- * with the object system.  The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1 (finding #358); names from data/reflection.json.
- * FUN_00186a40 is the set-once latch every registrar of this group calls first
- * (a gp byte flag guards a few shared one-time registrations). */
+/* igVec3fList_Register: static-init registration of igVec3fList (an igDataList of 3-component
+ * float vector elements) with the object system. The igMetaObject_RegisterClass arguments are laid
+ * out per docs/engine/reflection-metadata.md section 1; names from data/reflection.json.
+ * FUN_00186a40 is the set-once latch every registrar of this group calls first (a gp byte flag
+ * guards a few shared one-time registrations). */
 extern char igDataList_GetPublishedMetaObject[];
 extern char igVec3fList_GetVTable[];
 extern char thunk_igVec3fList_GetMetaObject[];

@@ -1,4 +1,4 @@
-/* 0x002b3d30 — FUN_002b3d30 (48 bytes). Reports the two words of the sub-record at +24 when its state is 1, else zeros. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports the two words of the sub-record at +24 when its state is 1, else zeros. */
 
 struct Sub0018 {
     int state;                            /* 1: the two values are valid */

@@ -1,5 +1,3 @@
-/* 0x001e9090 — FUN_001e9090. m2c draft, hybrid; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 extern int DAT_00562d10[4];
 extern int DAT_00562d18[4];
 extern int DAT_00562d20[4];

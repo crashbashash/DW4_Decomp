@@ -1,4 +1,3 @@
-/* 0x0032be80 — Gap__Core__igPsx2File__vfunc_37. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int memcpy();
 int strlen();
 int FUN_0032b5b0();

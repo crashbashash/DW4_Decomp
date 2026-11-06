@@ -1,4 +1,5 @@
-/* 0x00266be0 — FUN_00266be0 (140 bytes). Advances an object by the smaller of FUN_0025def8 and the remaining FUN_0025db20 - field 52 (adding it to fields 52 and 44) and adds FUN_0025def0 to field 48. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Advances an object by the smaller of FUN_0025def8 and the remaining FUN_0025db20 - field 52
+ * (adding it to fields 52 and 44) and adds FUN_0025def0 to field 48. */
 /* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
 typedef struct Object_265fb0 {
     char f0;

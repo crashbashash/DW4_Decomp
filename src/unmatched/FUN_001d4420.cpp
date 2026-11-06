@@ -1,6 +1,3 @@
-/* 0x001d4420 — FUN_001d4420. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern "C" {
 int FUN_001d33a0(...);
 int FUN_001d4180(...);

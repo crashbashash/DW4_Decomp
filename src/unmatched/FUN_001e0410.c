@@ -1,5 +1,3 @@
-/* 0x001e0410 — FUN_001e0410. m2c draft, symbol; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 extern char DAT_004e4880[];
 int FUN_0019a6e0();
 int Memory_GetAllocatorBySelector();

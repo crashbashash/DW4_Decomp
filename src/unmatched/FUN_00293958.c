@@ -1,4 +1,5 @@
-/* 0x00293958 — FUN_00293958 (80 bytes). Takes the +44 value of `src` into the object's +420 word, first calling FUN_00298420 when it grows. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Takes the +44 value of `src` into the object's +420 word, first calling FUN_00298420 when it
+ * grows. */
 extern void FUN_00298420(void *obj);
 
 typedef struct {

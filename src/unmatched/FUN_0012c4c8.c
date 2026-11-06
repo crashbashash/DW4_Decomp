@@ -1,6 +1,5 @@
-/* 0x0012c4c8 — FUN_0012c4c8 (32 bytes). Upper-cases a character: subtracts 32 when the character-class table
- * D_004d3d10 (indexed from c + 1) marks it lower case (bit 1). The shape of toupper over newlib's _ctype_
- * (hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Upper-cases a character: subtracts 32 when the character-class table D_004d3d10 (indexed from c
+ * + 1) marks it lower case (bit 1). The shape of toupper over newlib's _ctype_ (hypothesis). */
 extern const char D_004d3d10[];    /* character-class table; entry c + 1 describes c (bit 0 upper, bit 1 lower) */
 
 int FUN_0012c4c8(int c) {

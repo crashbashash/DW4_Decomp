@@ -1,4 +1,5 @@
-/* 0x002a6ea0 — FUN_002a6ea0 (132 bytes). For config mode 3, returns the stream's f64/f68 counts (summed over both layers when it has 3) through the out pointers; zero otherwise. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* For config mode 3, returns the stream's f64/f68 counts (summed over both layers when it has 3)
+ * through the out pointers; zero otherwise. */
 struct Counts2a6ea0 {
     char pad0[64];
     int f64;

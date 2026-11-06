@@ -1,6 +1,3 @@
-/* 0x003abd50 — Gap__Bec__beSvUseCheckApi__vfunc_21. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 extern char GPR_00554e60;
 

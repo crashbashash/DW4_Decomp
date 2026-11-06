@@ -6,9 +6,9 @@
  * specialization"). */
 #include "dw4/reflected.h"
 
-/* ABI projection of the descriptor object for the virtual Clone call (vtable offset 84 of
- * the igMemoryRefMetaField vtable at 0x532a50, docs/engine/list-descriptor-copy.md).  The
- * leading slots are placeholders that only position Clone; do not instantiate it. */
+/* ABI projection of the descriptor object for the virtual Clone call (vtable offset 84 of the
+ * igMemoryRefMetaField vtable at 0x532a50). The leading slots are placeholders that only position
+ * Clone; do not instantiate it. */
 class DescriptorCloneView {public:
 virtual void slot0();
 virtual void slot1();
@@ -43,8 +43,8 @@ extern "C" int g_igObjectList_metaObject[4];
 extern "C" int g_igIntList_metaObject[4];
 /* Name of the inherited field that is specialized: "_data". */
 extern "C" char data[];
-/* Descriptor-publication cells written to the clone's `_externalEnumStorage` (+28), one per
- * list class, 8 bytes after that class's handle (docs/engine/list-descriptor-copy.md). */
+/* Descriptor-publication cells written to the clone's `_externalEnumStorage` (+28), one per list
+ * class, 8 bytes after that class's handle. */
 extern "C" int g_igObjectList_dataDescriptorCell[4];
 extern "C" int g_igIntList_dataDescriptorCell[4];
 

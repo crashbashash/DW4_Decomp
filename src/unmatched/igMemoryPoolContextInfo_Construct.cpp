@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
-/* Refcount field as a 23+9 bit-field (read-modify-write with a 64-bit constant) and a 43-slot virtual call; verified by tools/verify.py. */
+/* Refcount field as a 23+9 bit-field (read-modify-write with a 64-bit constant) and a 43-slot
+ * virtual call.py. */
 extern "C" {
 int memset(...);
 int igObject_InitHeader(...);

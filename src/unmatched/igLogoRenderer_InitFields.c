@@ -1,6 +1,3 @@
-/* 0x0045ddc0 — igLogoRenderer_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int FUN_00137850(void);
 int FUN_00138f20(void);

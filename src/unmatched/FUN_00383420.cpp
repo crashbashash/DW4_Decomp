@@ -1,7 +1,8 @@
 #include "dw4/reflected.h"
-/* 0x00383420 - FUN_00383420. Selects the text group whose two names match an entry of a layout table, pushes the entry's
-   active refcounted object (the caller's, or one converted from its string) through the group's fragment list and the
-   panel's current slot, then moves the finished fragment into the entry's output list. */
+/* Selects the text group whose two names match an entry of a layout table, pushes the entry's
+ * active refcounted object (the caller's, or one converted from its string) through the group's
+ * fragment list and the panel's current slot, then moves the finished fragment into the entry's
+ * output list. */
 struct Ref;
 extern "C" {
 

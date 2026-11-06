@@ -1,4 +1,4 @@
-/* 0x002970b0 — FUN_002970b0 (52 bytes). Sets stream parameter 37 of a non-NULL handle through FUN_002ad950. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets stream parameter 37 of a non-NULL handle through FUN_002ad950. */
 extern void FUN_002ad950(int stream, int param, int value);
 
 typedef struct {

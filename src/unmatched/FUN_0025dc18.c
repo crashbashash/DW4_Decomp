@@ -1,4 +1,5 @@
-/* 0x0025dc18 — FUN_0025dc18 (100 bytes). Parses three 16-bit values out of a string with FUN_0025d0b8 and stores them in f160/f162/f164 of the decoder block. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Parses three 16-bit values out of a string with FUN_0025d0b8 and stores them in f160/f162/f164
+ * of the decoder block. */
 /* CRI ADX decoder block as this function touches it; field meanings are not yet known */
 typedef struct DecoderBlock {
     short f0;

@@ -1,5 +1,3 @@
-/* 0x004542a0 — FUN_004542a0. hand-matched: a struct member keeps the base pointer where m2c
- * CSE'd arg+N (finding #509's shape); verified byte-identical by tools/verify.py. */
 int FUN_002d7750();
 typedef struct Obj { char pad[12]; int f12; } Obj;
 

@@ -1,4 +1,5 @@
-/* 0x00126180 — FUN_00126180 (152 bytes). Walks every free-list bin of the allocator and refreshes the free/used totals in the allocator statistics block (newlib malloc_update_mallinfo shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Walks every free-list bin of the allocator and refreshes the free/used totals in the allocator
+ * statistics block (newlib malloc_update_mallinfo shape; name is a hypothesis). */
 typedef struct MallocChunk {
     unsigned int previousSize;
     unsigned int size;

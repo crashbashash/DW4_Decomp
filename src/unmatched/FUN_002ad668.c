@@ -1,4 +1,5 @@
-/* 0x002ad668 — FUN_002ad668 (112 bytes). Stores a value at +3536 of the owner's record (if any) and calls FUN_002ad870 on the owner; reports error 0xFF00015B when FUN_002a0dd8 refuses. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a value at +3536 of the owner's record (if any) and calls FUN_002ad870 on the owner;
+ * reports error 0xFF00015B when FUN_002a0dd8 refuses. */
 int FUN_002a0bb8();
 int FUN_002a0dd8(owner);
 int FUN_002ad870();

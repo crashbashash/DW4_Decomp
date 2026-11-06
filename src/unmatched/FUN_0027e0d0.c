@@ -1,4 +1,5 @@
-/* 0x0027e0d0 — FUN_0027e0d0 (96 bytes). SVM lock (counterpart of FUN_0027e130, which the string names svm_unlock): runs the lock callback, records the lock type on the outermost lock and counts the nesting. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* SVM lock (counterpart of FUN_0027e130, which the string names svm_unlock): runs the lock
+ * callback, records the lock type on the outermost lock and counts the nesting. */
 struct Callback0027e0d0 {
     void (*fn)(int arg); /* +0 */
     int arg;             /* +4 */

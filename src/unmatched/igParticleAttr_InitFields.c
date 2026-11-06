@@ -1,6 +1,3 @@
-/* 0x00134ef0 — igParticleAttr_InitFields. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int FUN_0014c980();
 int FUN_002ebc00();

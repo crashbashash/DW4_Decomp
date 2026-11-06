@@ -1,4 +1,5 @@
-/* 0x0026fd88 — FUN_0026fd88 (100 bytes). Returns the first free entry (word +4 clear) of the 40-entry table DAT_0056e0e0 (8-byte entries), or 0 when it is full. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the first free entry (word +4 clear) of the 40-entry table DAT_0056e0e0 (8-byte
+ * entries), or 0 when it is full. */
 typedef struct Entry_26fd88 {
     int key;    /* 0x00 */
     int value;  /* 0x04 */

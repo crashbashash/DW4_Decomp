@@ -1,4 +1,5 @@
-/* 0x0012aff0 — FUN_0012aff0 (132 bytes). Returns the first occurrence of the needle string inside the haystack string, or 0 (newlib strstr shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the first occurrence of the needle string inside the haystack string, or 0 (newlib
+ * strstr shape; name is a hypothesis). */
 char *FUN_0012aff0(const char *haystack, const char *needle) {
     if (*haystack == 0) {
         if (*needle) {

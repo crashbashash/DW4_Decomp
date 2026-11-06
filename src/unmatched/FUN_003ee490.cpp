@@ -1,5 +1,3 @@
-/* 0x003ee490 — FUN_003ee490. m2c draft + decomp-permuter search, verified
- * byte-identical to retail by tools/verify.py. */
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {

@@ -1,4 +1,6 @@
-/* 0x00294138 — FUN_00294138 (164 bytes). Releases the current frame of a Sofdec playback handle (its error string names it mwPlyRelCurFrm): rejects an invalid handle, otherwise frees the frame through FUN_002ac600 when one is held and advances the frame counters. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Releases the current frame of a Sofdec playback handle (its error string names it
+ * mwPlyRelCurFrm): rejects an invalid handle, otherwise frees the frame through FUN_002ac600 when
+ * one is held and advances the frame counters. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern void *FUN_002963a8(void *ply);

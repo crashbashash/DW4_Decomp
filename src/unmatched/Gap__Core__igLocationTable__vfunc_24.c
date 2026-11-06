@@ -1,6 +1,3 @@
-/* 0x002eb250 — Gap__Core__igLocationTable__vfunc_24. m2c draft + decomp-permuter search, verified
- * byte-identical to retail by tools/verify.py. */
-
 int List_Resize();
 extern int DAT_004fb410[4];
 void Gap__Core__igLocationTable__vfunc_24(int *arg0, void *arg1, int arg2)

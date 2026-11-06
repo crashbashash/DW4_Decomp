@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
-/* 0x003db060 - FUN_003db060: panel slot-state step (companion of FUN_003da7c0).
-   Alternate combat compiler, -O3,p -Cpp_exceptions off; the per-slot name text lives in an owning stack
-   reference whose destructor duplicate is named in config/SLUS-20836/unit-objects.json. */
+/* Panel slot-state step (companion of FUN_003da7c0). Alternate combat compiler, -O3,p
+ * -Cpp_exceptions off; the per-slot name text lives in an owning stack reference whose destructor
+ * duplicate is named in config/SLUS-20836/unit-objects.json. */
 extern "C" {
 int FUN_003614f0(...);
 int beUnicodeObj_AllocateBuffer(...);

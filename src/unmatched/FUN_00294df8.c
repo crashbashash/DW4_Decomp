@@ -1,4 +1,5 @@
-/* 0x00294df8 — FUN_00294df8 (256 bytes). Drops the init reference count at 0x4bd250; when it reaches zero, finishes every active one of the 8 player slots and shuts the subsystems down in order. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Drops the init reference count at 0x4bd250; when it reaches zero, finishes every active one of
+ * the 8 player slots and shuts the subsystems down in order. */
 extern char *FUN_00294a30(void);
 extern void FUN_00293118(void *slot);
 extern void FUN_0029a1d0(void);

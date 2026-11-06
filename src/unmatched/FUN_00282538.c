@@ -1,4 +1,5 @@
-/* 0x00282538 — FUN_00282538 (168 bytes). Builds a three-byte message (0xA0|kind for kind 8..13, then two 7-bit data bytes) and queues it for one channel through FUN_00281ac0, refusing re-entry. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Builds a three-byte message (0xA0|kind for kind 8..13, then two 7-bit data bytes) and queues it
+ * for one channel through FUN_00281ac0, refusing re-entry. */
 int FUN_00281ac0(unsigned short kind, unsigned short arg, int a, int b, int c, int d);
 
 /* Context reached through DAT_004bb114 (only the members used here). */

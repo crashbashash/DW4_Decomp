@@ -22,13 +22,14 @@ void beMessenger_InitializeMemory(beMessenger *arg0);
 #define RELEASE_REF(q) { igObject *rr = (q); \
     if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
 
-/* Owning stack references to the objects created here, one class per object class (reference count in
- * the low 23 bits of _refCount; released on scope exit).  matching construct: the held pointer is a
- * volatile member, so every read of it comes from the stack slot and the loop locals keep retail's
- * register colouring (off s1, list s2, cur s3); a plain member moves `cur` to s1.  The out-of-line copies the exception table
- * names (config/SLUS-20836/unit-objects.json): ArgDataRef -> retail body 0x00357a90 (duplicate, __dt__10ArgDataRefFv,
- * used for the argument record and the push/pop stack), WorkRef -> this unit's own 0x0038c410 (emitted,
- * __dt__7WorkRefFv), DelayRef -> this unit's own 0x0038c390 (emitted, __dt__8DelayRefFv). */
+/* Owning stack references to the objects created here, one class per object class (reference count
+ * in the low 23 bits of _refCount; released on scope exit). matching construct: the held pointer
+ * is a volatile member, so every read of it comes from the stack slot and the loop locals keep
+ * retail's register colouring (off s1, list s2, cur s3); a plain member moves `cur` to s1. The
+ * out-of-line copies the exception table names: ArgDataRef -> retail body 0x00357a90 (duplicate,
+ * __dt__10ArgDataRefFv, used for the argument record and the push/pop stack), WorkRef -> this
+ * unit's own 0x0038c410 (emitted, __dt__7WorkRefFv), DelayRef -> this unit's own 0x0038c390
+ * (emitted, __dt__8DelayRefFv). */
 class ArgDataRef {
 public:
     igObject *volatile p;

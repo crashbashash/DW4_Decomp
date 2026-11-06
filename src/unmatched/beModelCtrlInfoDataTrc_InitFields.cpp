@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x00353480 — beModelCtrlInfoDataTrc_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 extern "C" {
 int FUN_001957c0(...);
 int ObjectPointerList_FindIndex(...);

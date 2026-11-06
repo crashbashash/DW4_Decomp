@@ -1,4 +1,5 @@
-/* 0x002ae608 — FUN_002ae608 (60 bytes). Returns 1 after reporting error 0xFF000222 for the handle when FUN_002ae648(handle) fails, else 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns 1 after reporting error 0xFF000222 for the handle when FUN_002ae648(handle) fails, else
+ * 0. */
 int FUN_002a0bb8();
 int FUN_002ae648();
 

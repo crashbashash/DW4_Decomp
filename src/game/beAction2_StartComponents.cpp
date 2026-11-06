@@ -1,7 +1,6 @@
-/* beAction2 component Start driver, 0x00377700 (finding #653,
- * docs/engine/action2-jointset.md).  Each action carries a list of timeline
- * components (MOTIONSET, JOINTSET, FADESET, WAITCHECK, FLASHSET); this walks
- * the list from the saved position and starts them one by one. */
+/* beAction2 component Start driver, 0x00377700. Each action carries a list of timeline components
+ * (MOTIONSET, JOINTSET, FADESET, WAITCHECK, FLASHSET); this walks the list from the saved position
+ * and starts them one by one. */
 #include "dw4/reflected.h"
 
 extern "C" {
@@ -18,7 +17,8 @@ extern int g_beAction2MOTIONSET_metaObject[4];
 void beAction2_StartComponents(int manager, void *info);
 }
 
-/* matching construct: igObjectList-shaped component list (docs/engine/action2-jointset.md) with a pointer-typed buffer; reflected igObjectList._data (int) changes retail register allocation */
+/* matching construct: igObjectList-shaped component list with a pointer-typed buffer; reflected
+ * igObjectList._data (int) changes retail register allocation */
 struct Action2ComponentList {
     char _pad0[8];
     int _count;
@@ -52,11 +52,10 @@ public:
     virtual int GetMetaObject();
 };
 
-
-/* 0x00377700: resume at work._comIndex and start components until one handler
- * returns false (finding #653) or the list is exhausted, then save the position back into work._comIndex.  The component
- * kind is identified by comparing its virtual GetMetaObject() result with the
- * published metadata handle of each *_Start handler's class. */
+/* resume at work._comIndex and start components until one handler returns false or the list is
+ * exhausted, then save the position back into work._comIndex. The component kind is identified by
+ * comparing its virtual GetMetaObject() result with the published metadata handle of each *_Start
+ * handler's class. */
 void beAction2_StartComponents(int manager, void *info)
 {
     Action2Component *component;

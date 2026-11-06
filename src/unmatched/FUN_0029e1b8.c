@@ -1,4 +1,4 @@
-/* 0x0029e1b8 — FUN_0029e1b8 (112 bytes). Reads the position pair at +40 of channel index under the FUN_002a0e70/FUN_002a0e88 guard. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads the position pair at +40 of channel index under the FUN_002a0e70/FUN_002a0e88 guard. */
 void FUN_002a0e70();
 void FUN_002a0e88();
 

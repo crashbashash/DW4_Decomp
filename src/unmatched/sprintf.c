@@ -1,4 +1,5 @@
-/* 0x00129e60 — sprintf (144 bytes). Formats into a caller buffer through a string stream with unbounded space and terminates it (newlib sprintf shape). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Formats into a caller buffer through a string stream with unbounded space and terminates it
+ * (newlib sprintf shape). */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))

@@ -1,5 +1,4 @@
-/* 0x00230268 — FUN_00230268 (44 bytes). Packs its four word arguments into a block on the stack and passes the
- * block to FUN_00230150. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Packs its four word arguments into a block on the stack and passes the block to FUN_00230150. */
 void FUN_00230150(int *args);
 
 void FUN_00230268(int a, int b, int c, int d) {

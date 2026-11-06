@@ -1,6 +1,3 @@
-/* 0x0022b8a0 — FUN_0022b8a0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 extern "C" {
 int igObject_IsKindOf(...);
 extern int DAT_005615e0[4];

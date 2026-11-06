@@ -1,4 +1,4 @@
-/* Comparison written with the local on the left so the slt result stays in at; verified by tools/verify.py. */
+/* Comparison written with the local on the left so the slt result stays in at.py. */
 #include "dw4/reflected.h"
 extern "C" {
 float FUN_003a7810();

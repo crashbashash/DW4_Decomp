@@ -1,4 +1,6 @@
-/* 0x00262580 — FUN_00262580 (120 bytes). ADXF_GetFsizeSct (name from the error string at DAT_004ede90): returns the file size in sectors, first asking the stream to resolve it with FUN_0026abb0 when the cached size is still the 0x7FFFF800 placeholder (-5 when the stream then reports state 4). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* ADXF_GetFsizeSct (name from the error string at DAT_004ede90): returns the file size in sectors,
+ * first asking the stream to resolve it with FUN_0026abb0 when the cached size is still the
+ * 0x7FFFF800 placeholder (-5 when the stream then reports state 4). */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {

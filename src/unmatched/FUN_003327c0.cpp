@@ -1,5 +1,5 @@
 extern "C" {
-/* 0x003327c0 - FUN_003327c0. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Matches only with the alternate (combat) compiler build. */
 int memset(int *, int, int);
 int strcpy(int *, int);
 extern int DAT_005873d0[4];

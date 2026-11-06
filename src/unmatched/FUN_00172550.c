@@ -1,4 +1,4 @@
-/* 0x00172550 - 164 bytes. Seven-case switch with one return per case (the compare chain and duplicated tails come from the alternate compiler -O3); m2c's shared block label is not the source shape. */
+/* 164 bytes. */
 struct N { char pad0[12]; int f12; };
 struct S { char pad0[972]; struct N *f972; struct N *f976; struct N *f980; char pad984[4]; struct N *f988; struct N *f992; struct N *f996; struct N *f1000; };
 int FUN_00172550(struct S *arg0, int arg1) {

@@ -1,6 +1,3 @@
-/* 0x0015c790 — Gap__Bec__ParticleArray__vfunc_28. Banked by tools/retype_struct_member.py (shape: struct5):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 typedef struct RefCountedHeader { char pad4[4]; int f4; } RefCountedHeader;
 int igObject_Destroy();

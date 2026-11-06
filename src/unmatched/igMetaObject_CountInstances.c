@@ -1,4 +1,4 @@
-/* 0x002fdd20 - igMetaObject_CountInstances. Recursive count over a child array; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Recursive count over a child array; alternate compiler. */
 struct M;
 struct L { char p[8]; struct M **arr; int n; };
 struct M { char p[44]; int f44; char q[4]; struct L *f52; };

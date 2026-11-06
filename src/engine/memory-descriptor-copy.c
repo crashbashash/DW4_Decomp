@@ -1,8 +1,6 @@
-/* Copy constructors of the reference-field descriptors (igRefMetaField and its
- * subclass igMemoryRefMetaField), the two upper layers of the descriptor copy
- * chain igMemoryRefMetaField -> igRefMetaField -> igMetaField
- * (docs/engine/list-descriptor-copy.md, finding #887).  Functions are in
- * retail address order. */
+/* Copy constructors of the reference-field descriptors (igRefMetaField and its subclass
+ * igMemoryRefMetaField), the two upper layers of the descriptor copy chain igMemoryRefMetaField ->
+ * igRefMetaField -> igMetaField. Functions are in retail address order. */
 #include "dw4/reflected.h"
 igMetaField *igMetaField_CopyConstruct(igMetaField *, igMetaField *);
 igRefMetaField *igRefMetaField_CopyConstruct(igRefMetaField *, igRefMetaField *);

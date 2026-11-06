@@ -1,4 +1,4 @@
-/* 0x0013b6f0 - Gap__Core__igAlphaFunctionAttr__vfunc_26. Second virtual pair uses float getter/setter (mov.s); first is int. */
+/* Second virtual pair uses float getter/setter (mov.s); first is int. */
 extern "C" {
 
 void Gap__Core__igAlphaFunctionAttr__vfunc_26(void **arg0, void **arg1);

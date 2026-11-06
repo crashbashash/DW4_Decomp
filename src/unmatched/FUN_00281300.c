@@ -1,4 +1,5 @@
-/* 0x00281300 — FUN_00281300 (100 bytes). Sends request 0x800|channel with one word of data through FUN_00281a00 and marks the channel on when it succeeds. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sends request 0x800|channel with one word of data through FUN_00281a00 and marks the channel on
+ * when it succeeds. */
 int FUN_00281a00();
 
 /* Context reached through DAT_004bb114 (only the members used here). */

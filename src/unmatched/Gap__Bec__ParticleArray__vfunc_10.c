@@ -1,4 +1,3 @@
-/* 0x0015c850 — Gap__Bec__ParticleArray__vfunc_10. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 #include "dw4/reflected.h"
 /* igPointSpriteInterface-like object referenced by _pointSpriteInterface; class not identified from reflection */
 /* matching construct: f24 is volatile so the compare and the release each reload it, as retail does */

@@ -1,6 +1,5 @@
-/* 0x0028b608 — FUN_0028b608 (88 bytes). Stores a word into +16 of a stream handle after validating it
-   (FUN_0028da60); an invalid handle is reported as error 0xFF020302 through FUN_0028d890.
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores a word into +16 of a stream handle after validating it (FUN_0028da60); an invalid handle
+ * is reported as error 0xFF020302 through FUN_0028d890. */
 struct Stream28b {
     int state;
     char pad4[12];

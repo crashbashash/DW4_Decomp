@@ -1,4 +1,3 @@
-/* 0x373280 — DMsetSD_40. Retyped m2c draft, verified byte-identical by tools/verify.py. */
 extern "C" {
 int FUN_0037e3a0(...);
 extern int DAT_0058a1d0[4];

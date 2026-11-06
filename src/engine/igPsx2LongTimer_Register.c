@@ -5,7 +5,7 @@ extern char igLongTimer_Register[];
 extern char thunk_igPsx2LongTimer_GetMetaObject[];
 extern char igPsx2LongTimer_GetVTable[];
 extern char igLongTimer_GetPublishedMetaObject[];
-void FUN_002cfe00(void);  /* code at 0x2cfe00, passed by address (was DAT_2cfe00; docs/engine/function-inventory.md) */
+void FUN_002cfe00(void);
 extern char igPsx2LongTimer_className[];
 extern char g_igPsx2LongTimer_metaObject[];
 int FUN_002b5d50();

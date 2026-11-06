@@ -1,8 +1,7 @@
 extern "C" {
-/* FUN_00340af0 (0x00340af0): lazily creates the singleton when it is missing or its
- * ready flag (bit 2 of the word at +36) is clear, then returns it.  Needs the
- * pinned alternate compiler with -O3,p (config/SLUS-20836/unit-compilers.tsv): its
- * branch-target alignment gives the extra nop of the retail body. */
+/* FUN_00340af0 (0x00340af0): lazily creates the singleton when it is missing or its ready flag
+ * (bit 2 of the word at +36) is clear, then returns it. Needs the pinned alternate compiler with
+ * -O3,p: its branch-target alignment gives the extra nop of the retail body. */
 int FUN_00340bb0();
 extern void * DAT_00587be0[4];
 void *FUN_00340af0(void) {

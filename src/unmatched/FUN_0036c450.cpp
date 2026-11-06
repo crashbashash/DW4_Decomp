@@ -1,4 +1,3 @@
-/* 0x0036c450 — FUN_0036c450. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 extern "C" {
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 int FUN_00100610(void **);

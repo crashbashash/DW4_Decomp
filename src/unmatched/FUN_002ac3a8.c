@@ -1,4 +1,4 @@
-/* 0x002ac3a8 — FUN_002ac3a8 (108 bytes). Validates the handle, then posts event (0, 9) with a value through FUN_002b0338. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Validates the handle, then posts event (0, 9) with a value through FUN_002b0338. */
 extern int FUN_002a0dd8(void *handle);
 extern int FUN_002a0bb8(void *handle, int code);
 extern int FUN_002b0338(void *handle, int group, int event, int a, int b);

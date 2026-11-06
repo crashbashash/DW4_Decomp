@@ -1,10 +1,7 @@
-/* 0x0018d480 — FUN_0018d480. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 void FUN_0018d9b0(void); /* address-taken; signature not recovered */
 void FUN_0018dd20(void); /* address-taken; signature not recovered */
 void thunk_FUN_0018d630(void); /* address-taken; signature not recovered */
-void FUN_0018da00(void);  /* code at 0x18da00, passed by address (was FUN_0018da00; docs/engine/function-inventory.md) */
+void FUN_0018da00(void);
 int igPlane_GetMetaObject();
 int igAABox_GetMetaObject();
 int FUN_0018fbc0();
@@ -19,16 +16,16 @@ int FUN_0018fe50();
 int FUN_0018fe90();
 int FUN_0018fed0();
 int FUN_0018ff10();
-void FUN_0018d700(void);  /* code at 0x18d700, passed by address (was DAT_18d700; docs/engine/function-inventory.md) */
-void FUN_0018d7b0(void);  /* code at 0x18d7b0, passed by address (was FUN_0018d7b0; docs/engine/function-inventory.md) */
-void FUN_0018d820(void);  /* code at 0x18d820, passed by address (was FUN_0018d820; docs/engine/function-inventory.md) */
-void FUN_0018d8b0(void);  /* code at 0x18d8b0, passed by address (was FUN_0018d8b0; docs/engine/function-inventory.md) */
-void FUN_0018db20(void);  /* code at 0x18db20, passed by address (was FUN_0018db20; docs/engine/function-inventory.md) */
-void FUN_0018dcb0(void);  /* code at 0x18dcb0, passed by address (was FUN_0018dcb0; docs/engine/function-inventory.md) */
-void FUN_0018e040(void);  /* code at 0x18e040, passed by address (was FUN_0018e040; docs/engine/function-inventory.md) */
-void FUN_0018e150(void);  /* code at 0x18e150, passed by address (was FUN_0018e150; docs/engine/function-inventory.md) */
-void FUN_0018e160(void);  /* code at 0x18e160, passed by address (was FUN_0018e160; docs/engine/function-inventory.md) */
-void FUN_0018e190(void);  /* code at 0x18e190, passed by address (was FUN_0018e190; docs/engine/function-inventory.md) */
+void FUN_0018d700(void);
+void FUN_0018d7b0(void);
+void FUN_0018d820(void);
+void FUN_0018d8b0(void);
+void FUN_0018db20(void);
+void FUN_0018dcb0(void);
+void FUN_0018e040(void);
+void FUN_0018e150(void);
+void FUN_0018e160(void);
+void FUN_0018e190(void);
 extern int DAT_00560fa0[4];
 extern int DAT_00560fe0[4];
 extern int DAT_005610e0[4];

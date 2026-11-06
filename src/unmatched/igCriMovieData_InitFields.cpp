@@ -1,5 +1,6 @@
-/* 0x00335cc0 - igCriMovieData_InitFields. the draft's int stores at odd offset +38 are char stores. Verified byte-identical by tools/verify.py.
- * C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* The draft's int stores at odd offset +38 are char stores. C++ translation unit: the unit
+ * compiled with exceptions on and retail keeps this function's exception index record, which only
+ * the C++ front end emits. */
 #include "dw4/reflected.h"
 extern "C" {
 int igMetaObject_CreateFields(void *, int *, int);

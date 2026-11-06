@@ -1,11 +1,9 @@
-/* 0x002fb190 igMetaField_AllocateArray: allocate the backing array of a memory-reference
- * field (docs/engine/array-storage.md, finding #890).  The element descriptor
- * (_memType) supplies the element size and alignment through its virtual methods; the
- * allocator is asked for count * size bytes at that alignment and the pointer is
- * published into the owning object at the field's _offset.
- *
- * The *View classes below only project the observed vtable slots (the numbered
- * placeholders stand for slots this routine never calls); do not instantiate them. */
+/* igMetaField_AllocateArray: allocate the backing array of a memory-reference field. The element
+ * descriptor (_memType) supplies the element size and alignment through its virtual methods; the
+ * allocator is asked for count * size bytes at that alignment and the pointer is published into
+ * the owning object at the field's _offset. The *View classes below only project the observed
+ * vtable slots (the numbered placeholders stand for slots this routine never calls); do not
+ * instantiate them. */
 #include "dw4/reflected.h"
 class ElementLayoutView {public:
 virtual void d0();
@@ -89,8 +87,8 @@ virtual void a52();
 virtual void *Allocate(int,int);};
 extern "C" int igObject_IsKindOf(void *,int);
 extern "C" void memset(void *,int,int);
-/* Class handle of igRefMetaField, and the two status words reported to callers
- * (success / failure, docs/engine/array-storage.md); array form keeps the load absolute. */
+/* Class handle of igRefMetaField, and the two status words reported to callers (success /
+ * failure); array form keeps the load absolute. */
 extern "C" int g_igRefMetaField_metaObject[4],g_statusSucceeded[4],g_allocatorFailureStatus[4];
 extern "C" void igMetaField_AllocateArray(int *outStatus,igMemoryRefMetaField *field,void *object,int count,AlignedAllocatorView *allocator){
     unsigned int bytes=(unsigned int)count*(unsigned short)((ElementLayoutView *)field->_memType)->Size();

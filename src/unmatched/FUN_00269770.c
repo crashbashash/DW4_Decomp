@@ -1,4 +1,5 @@
-/* 0x00269770 — FUN_00269770 (104 bytes). Sets the 16-byte name at offset 727 of a header from name, the first time also flagging it at offset 726 and growing the size word at offset 72 by 36. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the 16-byte name at offset 727 of a header from name, the first time also flagging it at
+ * offset 726 and growing the size word at offset 72 by 36. */
 typedef struct Header_269770 {
     char pad0[72];
     int size;           /* 0x48 */

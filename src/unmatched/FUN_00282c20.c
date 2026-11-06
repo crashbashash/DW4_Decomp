@@ -1,4 +1,5 @@
-/* 0x00282c20 — FUN_00282c20 (236 bytes). Queues a kind-3 entry for all channels; for a message byte of 0xAE or above it first claims one of 24 slots and passes its 1-based id. Returns the id (0 when no slot is needed) or an error. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queues a kind-3 entry for all channels; for a message byte of 0xAE or above it first claims one
+ * of 24 slots and passes its 1-based id. Returns the id (0 when no slot is needed) or an error. */
 int FUN_00281ac0(unsigned short kind, unsigned short arg, int a, int b, int c, int d);
 
 struct Slot00282c20 {

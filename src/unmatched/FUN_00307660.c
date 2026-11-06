@@ -1,5 +1,3 @@
-/* 0x307660 — FUN_00307660, m2c draft + manual source-shape fix (finding #663),
- * verified byte-identical to retail by tools/verify.py. */
 void *FUN_00307c10();
 int FUN_0030b720();
 extern int DAT_004f95c0[4];

@@ -1,4 +1,4 @@
-/* 0x002b18a0 — FUN_002b18a0 (48 bytes). Calls FUN_002b18f0 and then decrements the word at +4 of DAT_00585690. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_002b18f0 and then decrements the word at +4 of DAT_00585690. */
 int FUN_002b18f0();
 
 struct Counter5690 {

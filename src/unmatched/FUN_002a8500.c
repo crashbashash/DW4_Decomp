@@ -1,4 +1,5 @@
-/* 0x002a8500 — FUN_002a8500 (156 bytes). Counts the context slots in state 2 or 4 under the guard; returns -1 instead of 0 when context f124 is 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Counts the context slots in state 2 or 4 under the guard; returns -1 instead of 0 when context
+ * f124 is 1. */
 void FUN_002a0e70();
 void FUN_002a0e88();
 

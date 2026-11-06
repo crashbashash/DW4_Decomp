@@ -1,4 +1,5 @@
-/* 0x002b1c20 — FUN_002b1c20 (72 bytes). Finds the first of the 26 64-byte entries at +384 whose byte at +24 equals key; returns it, or null. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Finds the first of the 26 64-byte entries at +384 whose byte at +24 equals key; returns it, or
+ * null. */
 
 struct Entry40 {
     char pad[24];

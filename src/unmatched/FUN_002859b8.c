@@ -1,4 +1,5 @@
-/* 0x002859b8 — FUN_002859b8 (120 bytes). Clears the 1304-byte block at +352 of the decoder object and sets its non-zero defaults (1 at +76/+212, 0xFF at +116/+120/+124). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears the 1304-byte block at +352 of the decoder object and sets its non-zero defaults (1 at
+ * +76/+212, 0xFF at +116/+120/+124). */
 void *memset(void *, int, unsigned int);
 
 /* Members of the block that this initialiser touches; roles not yet recovered. */

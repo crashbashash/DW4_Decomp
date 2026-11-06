@@ -1,4 +1,5 @@
-/* 0x00278948 — FUN_00278948 (64 bytes). Clears the two 96-entry word tables a context points at (+8 and +12), zeroes its count at +20 and sets +24 to 64. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears the two 96-entry word tables a context points at (+8 and +12), zeroes its count at +20
+ * and sets +24 to 64. */
 typedef struct Ctx_278948 {
     int pad0[2];
     int *table_a;   /* 0x08 */

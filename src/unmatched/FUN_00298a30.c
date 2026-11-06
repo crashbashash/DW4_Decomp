@@ -1,4 +1,5 @@
-/* 0x00298a30 — FUN_00298a30 (160 bytes). MWSFD_MakeTblZ32 (named by its diagnostic strings): for a valid player and a fetched frame, builds the conversion parameters (FUN_00297838) and makes the Z32 table with FUN_002b3708. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* MWSFD_MakeTblZ32 (named by its diagnostic strings): for a valid player and a fetched frame,
+ * builds the conversion parameters (FUN_00297838) and makes the Z32 table with FUN_002b3708. */
 int FUN_002968c0(void *player); /* non-zero for a valid player handle */
 void *FUN_00297810(void *player);
 void FUN_00297838(void *player, int *frame, void *params);

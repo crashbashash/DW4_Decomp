@@ -1,6 +1,5 @@
-/* 0x00278038 — FUN_00278038 (108 bytes). Initialises a buffer descriptor: 2048-byte units, total size from
-   FUN_00277fa0 on the area at +28, unit count rounded up, counters cleared and the in-use byte set.
-   Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises a buffer descriptor: 2048-byte units, total size from FUN_00277fa0 on the area at
+ * +28, unit count rounded up, counters cleared and the in-use byte set. */
 struct Buffer278 {
     signed char used;     /* +0 */
     signed char busy;     /* +1 */

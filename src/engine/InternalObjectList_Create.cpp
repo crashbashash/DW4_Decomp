@@ -1,17 +1,15 @@
-/* 0x002c2670 — InternalObjectList_Create: the factory for the internal object list
- * (the 16-byte raw/retaining list behind __internalObjectList; finding #882,
- * docs/engine/internal-object-lists.md).  With the object system active it registers the
- * class and creates the instance through its metaobject; otherwise it allocates 16 bytes
- * and runs the concrete constructor plus the post-construction virtual hooks, the same
- * two branches as the other descriptor factories (docs/engine/field-factories.md). */
+/* The factory for the internal object list (the 16-byte raw/retaining list behind
+ * __internalObjectList; finding #882). With the object system active it registers the class and
+ * creates the instance through its metaobject; otherwise it allocates 16 bytes and runs the
+ * concrete constructor plus the post-construction virtual hooks, the same two branches as the
+ * other descriptor factories. */
 extern "C" {
 int __internalObjectList_EnsureRegistered(...);
 void **InternalObjectList_Construct(...);
 void **igObject_AllocateRawStorage(...);
 void **igMetaObject_CreateInstance(...);
 extern int g___internalObjectList_metaObject[4];
-/* object-system runtime pointer; its byte 0 is the "object system active" flag
- * (docs/engine/allocator-registry.md) */
+/* object-system runtime pointer; its byte 0 is the "object system active" flag */
 extern unsigned char * g_objectSystem[4];
 void **InternalObjectList_Create(int allocator);
 }

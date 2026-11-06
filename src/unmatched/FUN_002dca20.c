@@ -1,6 +1,3 @@
-/* 0x002dca20 — FUN_002dca20. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_002c5e10();
 int Memory_GetAllocatorBySelector();
 extern unsigned char DAT_00554bfc[4];

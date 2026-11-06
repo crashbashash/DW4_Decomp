@@ -1,4 +1,5 @@
-/* 0x00280f60 — FUN_00280f60 (180 bytes). Sends a pair of 32-word tables to FUN_00281a00 (request 0x300) and, if it returns 0, keeps a copy of them in the context. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sends a pair of 32-word tables to FUN_00281a00 (request 0x300) and, if it returns 0, keeps a
+ * copy of them in the context. */
 int FUN_00281a00();
 
 struct Tables00280f60 {

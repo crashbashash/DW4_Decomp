@@ -1,4 +1,5 @@
-/* 0x00263c08 — FUN_00263c08 (112 bytes). Leaves the nestable ADX lock: on the last level suspends the ADX server thread (DAT_0049da18) with FUN_002643d0 and restores the calling thread's saved priority; clamps the depth at zero. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Leaves the nestable ADX lock: on the last level suspends the ADX server thread (DAT_0049da18)
+ * with FUN_002643d0 and restores the calling thread's saved priority; clamps the depth at zero. */
 int GetThreadId(void);
 int ChangeThreadPriority(int threadId, int priority);
 int FUN_002643d0(int threadId);

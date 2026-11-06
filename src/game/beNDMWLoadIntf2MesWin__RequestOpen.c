@@ -1,7 +1,5 @@
-/* 0x003eca70 — beNDMWLoadIntf2MesWin__RequestOpen. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * Receiver is a beNDMWLoadIntf2MesWin: the only reflected class with seven
- * bool fields at +28..+34 (_isWinOpen.._isCtrl). */
+/* Receiver is a beNDMWLoadIntf2MesWin: the only reflected class with seven bool fields at +28..+34
+ * (_isWinOpen.._isCtrl). */
 #include "dw4/reflected.h"
 
 void beNDMWLoadIntf2MesWin__RequestOpen(beNDMWLoadIntf2MesWin *arg0) {

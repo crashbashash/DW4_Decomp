@@ -1,8 +1,6 @@
-/* 0x002fa9e0
- * Word-default wrapper of the memory-reference metafield: copy the word into a
- * temporary cell and call the virtual method at vtable offset 140 with the
- * cell's address (not the word itself) as the default pointer
- * (docs/engine/memory-field-values.md). */
+/* Word-default wrapper of the memory-reference metafield: copy the word into a temporary cell and
+ * call the virtual method at vtable offset 140 with the cell's address (not the word itself) as
+ * the default pointer. */
 extern "C" {
 
 void igMemoryRefMetaField_SetDefaultWord(void **self, int defaultWord);

@@ -1,4 +1,6 @@
-/* 0x00270280 — FUN_00270280 (100 bytes). Returns the transfer status through the device interface (entry +44) of a file-system handle; a NULL handle or missing entry is reported through FUN_0026f530 and returns status 3 (error). Its error strings name it cvFsGetStat (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the transfer status through the device interface (entry +44) of a file-system handle; a
+ * NULL handle or missing entry is reported through FUN_0026f530 and returns status 3 (error). Its
+ * error strings name it cvFsGetStat (CRI), a name hypothesis. */
 typedef struct CvFsDevice_270280 {
     void *pad0[11];
     int (*get_stat)(int file);  /* 0x2c */

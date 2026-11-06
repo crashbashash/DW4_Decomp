@@ -1,6 +1,3 @@
-/* 0x002c2c40 — __internalNonRefCountedObjectList_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 int igObjectRefMetaField_GetDefaultDescriptor();
 int igMetaObject_CreateFields();

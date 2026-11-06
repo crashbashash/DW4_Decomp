@@ -1,4 +1,5 @@
-/* 0x0025dbd8 — FUN_0025dbd8 (64 bytes). Queries two words of the handle at +8 into the record (+172, +176), then passes it the three shorts at +166..+170. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queries two words of the handle at +8 into the record (+172, +176), then passes it the three
+ * shorts at +166..+170. */
 typedef struct Rec25dbd8 {
     char pad0[8];
     void *handle;       /* +8 */

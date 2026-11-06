@@ -1,4 +1,6 @@
-/* 0x00261ea0 — FUN_00261ea0 (140 bytes). ADXF_ReadSj32 (name from the error strings at DAT_004edc00..DAT_004edc58): validates the handle, sector count and buffer, then starts a read with FUN_00261da0 unless one is already running (state 2) and flags the handle busy. Returns the sectors requested, 0, or -3 on a bad argument. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* ADXF_ReadSj32 (name from the error strings at DAT_004edc00..DAT_004edc58): validates the handle,
+ * sector count and buffer, then starts a read with FUN_00261da0 unless one is already running
+ * (state 2) and flags the handle busy. Returns the sectors requested, 0, or -3 on a bad argument. */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {

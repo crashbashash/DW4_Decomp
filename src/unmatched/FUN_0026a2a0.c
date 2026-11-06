@@ -1,4 +1,4 @@
-/* 0x0026a2a0 — FUN_0026a2a0 (80 bytes). Calls FUN_0026a238, then polls FUN_00262950 until the state is 1 and nothing is pending. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_0026a238, then polls FUN_00262950 until the state is 1 and nothing is pending. */
 /* Request layout shared by FUN_00269ff0 … FUN_0026a300 (offsets from their accesses). */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */

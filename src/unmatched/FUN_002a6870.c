@@ -1,4 +1,5 @@
-/* 0x002a6870 — FUN_002a6870 (120 bytes). Copies the current picture record (+3560) over the latest one (+3604) when its f36 is older than the player's f3684. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies the current picture record (+3560) over the latest one (+3604) when its f36 is older than
+ * the player's f3684. */
 /* 44-byte picture record. */
 struct Picture {
     int f0, f4, f8, f12, f16, f20, f24, f28, f32;

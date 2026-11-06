@@ -1,4 +1,3 @@
-/* 0x001ef4c0 - FUN_001ef4c0. volatile hardware-register read-modify-writes, forwarded argument, asm sync/ei idiom Verified byte-identical by tools/verify.py. */
 extern "C" {
 int FUN_001ef280(int, int);
 int FUN_001ef4c0(int);

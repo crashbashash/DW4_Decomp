@@ -10,7 +10,7 @@ Ent *FUN_0032a1e0(...);
 int FUN_0032ac70(...);
 int FUN_0032ad50(...);
 int List_InsertWords(...);
-void FUN_0032a260(void);  /* code at 0x32a260, passed by address (was DAT_32a260; docs/engine/function-inventory.md) */
+void FUN_0032a260(void);
 extern int DAT_004ffb08[4];
 extern int DAT_004ffb18[4];
 extern int DAT_004ffb28[4];

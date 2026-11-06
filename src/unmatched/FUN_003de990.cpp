@@ -1,4 +1,9 @@
-/* 0x003de990 - FUN_003de990. Slot-table fill, sibling of FUN_003de7a0 with six (mode 0) or eight (mode 1/default) slots and two bind tables: arg1 == 1 issues identical bind calls; arg1 == 0 builds a pooled value object per slot whose kind (1 or 2) selects the last flag, stops at the first empty 16-bit entry and binds the remaining slots plain. ObjectRef is the stack smart pointer holding each value object (its destructor is the compiler-emitted duplicate of the retail body 0x003832d0, config/SLUS-20836/unit-objects.json). Alternate compiler -O3,p, exceptions off. */
+/* Slot-table fill, sibling of FUN_003de7a0 with six (mode 0) or eight (mode 1/default) slots and
+ * two bind tables: arg1 == 1 issues identical bind calls; arg1 == 0 builds a pooled value object
+ * per slot whose kind (1 or 2) selects the last flag, stops at the first empty 16-bit entry and
+ * binds the remaining slots plain. ObjectRef is the stack smart pointer holding each value object
+ * (its destructor is the compiler-emitted duplicate of the retail body 0x003832d0). Alternate
+ * compiler -O3,p, exceptions off. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);

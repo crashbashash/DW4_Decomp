@@ -7,7 +7,7 @@ int lua_pushstring();
 int lua_rawget();
 int lua_settable();
 int lua_rawset();
-void FUN_002410f0(void);  /* code at 0x2410f0, passed by address (was DAT_2410f0; docs/engine/function-inventory.md) */
+void FUN_002410f0(void);
 extern int DAT_004ea530[4];
 extern unsigned char GPR_00554be0;
 

@@ -1,7 +1,7 @@
-/* 0x00279080 — FUN_00279080 (168 bytes). Sets the two 3D-sound parameters (+236, +240) of the sound object
-   behind an ADXT handle after FUN_00278d58 on its +232 resource; reports "E2003091605 : NULL pointer is
-   specified." for a null handle and "E2003091606 : ADXT handle must be created for 3D sound." when the
-   handle is not ready (+3 below 2) or has no 3D resource. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the two 3D-sound parameters (+236, +240) of the sound object behind an ADXT handle after
+ * FUN_00278d58 on its +232 resource; reports "E2003091605 : NULL pointer is specified." for a null
+ * handle and "E2003091606 : ADXT handle must be created for 3D sound." when the handle is not
+ * ready (+3 below 2) or has no 3D resource. */
 struct Sound279 {
     char pad0[232];
     int resource;      /* +232 */

@@ -1,4 +1,5 @@
-/* 0x0025e5a0 — FUN_0025e5a0 (100 bytes). Reports the frames produced since the last report (f148 minus f244, wrapped into 0..0x7FFFFFFF) and the byte size from f144 to the callback in f252, then records f148 as reported. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports the frames produced since the last report (f148 minus f244, wrapped into 0..0x7FFFFFFF)
+ * and the byte size from f144 to the callback in f252, then records f148 as reported. */
 /* CRI ADX decoder block as this function touches it; field meanings are not yet known */
 typedef struct DecoderBlock {
     short f0;

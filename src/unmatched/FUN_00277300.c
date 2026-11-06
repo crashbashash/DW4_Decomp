@@ -1,4 +1,5 @@
-/* 0x00277300 — FUN_00277300 (60 bytes). Sets the byte flag at +4 of an lsc object to 1 when flag is 1 and to 0 otherwise; a NULL object is reported through FUN_002777f8 (error E0003). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the byte flag at +4 of an lsc object to 1 when flag is 1 and to 0 otherwise; a NULL object
+ * is reported through FUN_002777f8 (error E0003). */
 typedef struct Lsc_277300 {
     int pad0;
     char flag;  /* 0x04 */

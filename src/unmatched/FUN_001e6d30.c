@@ -1,4 +1,3 @@
-/* 0x1e6d30 — FUN_001e6d30. Retyped m2c draft, verified byte-identical by tools/verify.py. */
 int FUN_00129ef8(int, int, int *, int *, int *);
 int FUN_0018be80(int, int *, int, int, int);
 int FUN_001e6d30(int arg0, int *arg1, int arg2) {

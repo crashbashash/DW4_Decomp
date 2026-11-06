@@ -1,4 +1,6 @@
-/* 0x00270680 — FUN_00270680 (88 bytes). Sets the sector length through the device interface (entry +52) of a file-system handle; a NULL handle or missing entry is reported through FUN_0026f530 and nothing happens. Its error strings name it cvFsSetSctLen (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the sector length through the device interface (entry +52) of a file-system handle; a NULL
+ * handle or missing entry is reported through FUN_0026f530 and nothing happens. Its error strings
+ * name it cvFsSetSctLen (CRI), a name hypothesis. */
 typedef struct CvFsDevice_270680 {
     void *pad0[13];
     void (*set_sct_len)(int file, int length);  /* 0x34 */

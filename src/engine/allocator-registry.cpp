@@ -1,10 +1,8 @@
-/* Allocator registry index lookup (0x002fa5c0) and encoded-index publication
- * (0x002f0670).  An allocator is identified in saved data by "registry index
- * << 1 | which-registry": the primary list (0x586f58) gives an even code, the
- * secondary list (0x586f60) an odd one.  Findings #894, docs/engine/allocator-registry.md.
- *
- * The class below is an observed ABI view that projects the original virtual
- * slots by number (a0.. are unnamed padding); it must not be instantiated. */
+/* Allocator registry index lookup (0x002fa5c0) and encoded-index publication (0x002f0670). An
+ * allocator is identified in saved data by "registry index << 1 | which-registry": the primary
+ * list (0x586f58) gives an even code, the secondary list (0x586f60) an odd one. The class below is
+ * an observed ABI view that projects the original virtual slots by number (a0.. are unnamed
+ * padding); it must not be instantiated. */
 class AllocatorLookupView {public:
 virtual void a0();
 virtual void a1();

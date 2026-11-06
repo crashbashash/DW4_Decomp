@@ -30,10 +30,7 @@ def do_one(row):
             dest = os.path.join(ROOT, "src", "unmatched", name + ext)
             body = open(src).read()
             if not os.path.exists(dest):
-                open(dest, "w").write(
-                    "/* 0x%08x — %s. m2c draft, matches under flags '%s'\n"
-                    " * (tools/flag_sweep.py + tools/verify.py). */\n" % (row["va"], name, fl)
-                    + body)
+                open(dest, "w").write(body)
             return dict(row, flag=fl, status="banked")
     return dict(row, flag=None)
 

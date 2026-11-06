@@ -1,4 +1,3 @@
-/* 0x0015d6c0 - FUN_0015d6c0. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 void FUN_0015d6c0(void *arg0, int arg1, void *arg2) {
     int temp_a0;
     float *var_v1;

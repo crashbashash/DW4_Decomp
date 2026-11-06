@@ -1,4 +1,5 @@
-/* 0x00161580 - Gap__Core__igVertexArray2Helper__vfunc_40. Vertex element set; 4-byte value passed in a union (int store / bytewise store), virtual type test; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Vertex element set; 4-byte value passed in a union (int store / bytewise store), virtual type
+ * test; alternate compiler. */
 #include "dw4/reflected.h"
 extern "C" {
 void *igVertexArray2__FindVertexData(...);

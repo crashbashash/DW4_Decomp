@@ -1,4 +1,7 @@
-/* 0x00328ab0 - FUN_00328ab0. Resizes a ring buffer of ints (capacity at +24, count +28, head +32, data +36): allocates, copies the two segments, frees the old data, then asks the object (virtual slot 28) for the new count. C++ for the t9 virtual call (26 dummy slots), the allocator and the free keep arg0 in a0, the head offset is a separate local; default compiler, exceptions off. */
+/* Resizes a ring buffer of ints (capacity at +24, count +28, head +32, data +36): allocates,
+ * copies the two segments, frees the old data, then asks the object (virtual slot 28) for the new
+ * count. C++ for the t9 virtual call (26 dummy slots), the allocator and the free keep arg0 in a0,
+ * the head offset is a separate local; default compiler, exceptions off. */
 extern "C" {
 int memmove(int, int, int);
 int FUN_00300f50(void *, int);

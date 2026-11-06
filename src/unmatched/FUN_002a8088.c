@@ -1,4 +1,6 @@
-/* 0x002a8088 — FUN_002a8088 (204 bytes). Commits entry id as the context's current one: requires the pending slot to be 1 (error 0xFF000F0E) and FUN_002a8440 to agree with context f112 (error 0xFF000F0F), then clears the slot and calls FUN_002a8668. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Commits entry id as the context's current one: requires the pending slot to be 1 (error
+ * 0xFF000F0E) and FUN_002a8440 to agree with context f112 (error 0xFF000F0F), then clears the slot
+ * and calls FUN_002a8668. */
 int FUN_002a0bb8();
 int *FUN_002a8158();
 int FUN_002a8440();

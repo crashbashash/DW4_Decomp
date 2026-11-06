@@ -1,4 +1,5 @@
-/* 0x002b0268 — FUN_002b0268 (52 bytes). Links 0x74-byte entry `from` to 0x44-byte entry `to` in both directions: entry44[to] (+7992) records from, entry74[from] (+4952) records to. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Links 0x74-byte entry `from` to 0x44-byte entry `to` in both directions: entry44[to] (+7992)
+ * records from, entry74[from] (+4952) records to. */
 
 /* Views of the two entry tables as indexed from ctx; FUN_002ad828 follows the same links
  * (entry74 +4952 selects an entry44 of the table at ctx+7976). */

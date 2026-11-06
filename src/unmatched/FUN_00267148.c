@@ -1,4 +1,5 @@
-/* 0x00267148 — FUN_00267148 (96 bytes). Between FUN_0025f2d0 and FUN_0025f2e8, adds a positive amount to field 160 or subtracts a non-positive one from field 164; returns the amount. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Between FUN_0025f2d0 and FUN_0025f2e8, adds a positive amount to field 160 or subtracts a non-
+ * positive one from field 164; returns the amount. */
 /* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
 typedef struct Object_265fb0 {
     char f0;

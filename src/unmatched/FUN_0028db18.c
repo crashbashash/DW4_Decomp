@@ -1,4 +1,4 @@
-/* 0x0028db18 — FUN_0028db18 (160 bytes). Clears a 64-word object, then initialises its sub-records and callback slot; returns it. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears a 64-word object, then initialises its sub-records and callback slot; returns it. */
 extern void FUN_0028b530(void *dst, int value, int words); /* word fill: stores `value` into `words` words */
 extern void FUN_0028d880(void *rec);
 extern void FUN_0028dbb8(void *rec);

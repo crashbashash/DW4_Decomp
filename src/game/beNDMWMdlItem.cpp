@@ -16,10 +16,9 @@ extern int g_igViewerSceneInfoManager_metaObject[4];
 int FUN_00236f80(int, int);
 int Gap__Core__igObject__vfunc_23();
 
-/* 0x00441410 — slot 23: after the shared igObject slot 23 body, cache the
- * viewer scene-info manager registered with the insight core (_viewerSIManager), found by its
- * class metaObject; the same binding step as the other managers' slot 23
- * (docs/engine/typed-game-layer.md). */
+/* slot 23: after the shared igObject slot 23 body, cache the viewer scene-info manager registered
+ * with the insight core (_viewerSIManager), found by its class metaObject; the same binding step
+ * as the other managers' slot 23. */
 void Gap__Bec__beNDMWMdlItem__vfunc_23(beNDMWMdlItem *self) {
     Gap__Core__igObject__vfunc_23();
     self->_viewerSIManager = FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);

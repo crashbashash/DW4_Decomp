@@ -1,4 +1,3 @@
-/* 0x00147ad0 - FUN_00147ad0. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 void FUN_00147ad0(void *arg0, int arg1, float *arg2, float *arg3) {
     int temp_a1;
     int idx;

@@ -1,4 +1,4 @@
-/* 0x002acc08 — FUN_002acc08 (180 bytes). Clears a state block: header words, three sub-blocks, and two FUN_ initialisers. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears a state block: header words, three sub-blocks, and two FUN_ initialisers. */
 int FUN_0029feb8();
 int FUN_002ae248();
 

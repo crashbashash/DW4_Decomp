@@ -1,4 +1,3 @@
-/* 0x0036b7e0 — beAsTargetModelData_GetVTable. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int igObject_InitHeader();
 int igObject_Destroy();
 int StringChunk_ReleaseHeader();

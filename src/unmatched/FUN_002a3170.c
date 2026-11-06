@@ -1,4 +1,5 @@
-/* 0x002a3170 — FUN_002a3170 (144 bytes). Lays out a frame buffer at base for width x height: 64-byte aligned luma/chroma strides and the plane addresses. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Lays out a frame buffer at base for width x height: 64-byte aligned luma/chroma strides and the
+ * plane addresses. */
 /* Frame buffer layout: luma and chroma plane addresses and their 64-byte aligned strides. */
 struct Planes {
     char *luma;

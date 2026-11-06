@@ -1,4 +1,5 @@
-/* 0x00264618 — FUN_00264618 (136 bytes). Creates and starts the thread running FUN_00263fc0 on the 4 KB stack DAT_004a02b0 and sets its priority from DAT_0049d9a0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Creates and starts the thread running FUN_00263fc0 on the 4 KB stack DAT_004a02b0 and sets its
+ * priority from DAT_0049d9a0. */
 /* EE kernel thread creation block (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_t) */
 typedef struct ThreadParam {
     int status;

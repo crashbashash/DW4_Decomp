@@ -17,9 +17,8 @@ typedef struct ObjectSystemRecord {
 extern ObjectSystemRecord *g_objectSystem[4];
 
 void *Memory_AllocateBufferDirect(int,void *);
-/* Reallocate an existing buffer: allocates afresh when the buffer is null, otherwise
- * asks the owning allocator (Memory_FindOwningAllocator, virtual slot 232) to resize
- * it.  See docs/engine/metadata-callback-services.md. */
+/* Reallocate an existing buffer: allocates afresh when the buffer is null, otherwise asks the
+ * owning allocator (Memory_FindOwningAllocator, virtual slot 232) to resize it. */
 void *Memory_ReallocateBuffer(void *,int);
 void Memory_FreeBuffer(void *);
 /* Delete the array object itself (alias of Memory_FreeBuffer). */

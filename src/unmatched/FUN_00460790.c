@@ -1,4 +1,6 @@
-/* 0x00460790 - FUN_00460790. Recursive scene-node walk (children count via kids pointer), second branch appends the children to a retained list; counted do-while loops use 0 < n, locals declared n, i, off; alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* Recursive scene-node walk (children count via kids pointer), second branch appends the children
+ * to a retained list; counted do-while loops use 0 < n, locals declared n, i, off; alternate
+ * compiler -O3,p. */
 #include "dw4/reflected.h"
 int igObject_IsKindOf();
 int ObjectList_AppendUniqueRetained();

@@ -1,4 +1,3 @@
-/* 0x0032d640 — FUN_0032d640. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_0010e0d8();
 int FUN_00300db0();
 extern int DAT_004fb410[4];

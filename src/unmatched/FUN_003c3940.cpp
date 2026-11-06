@@ -1,4 +1,3 @@
-/* 0x003c3940 - FUN_003c3940. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 int Memory_GetAllocatorBySelector(int);
 int igMetaObject_Create(int);

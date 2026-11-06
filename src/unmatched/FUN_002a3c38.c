@@ -1,4 +1,5 @@
-/* 0x002a3c38 — FUN_002a3c38 (124 bytes). Repeats FUN_002a3cb8 then FUN_002a4468 while the latter asks for more and both succeed, then runs FUN_002a75b8; returns the first error. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Repeats FUN_002a3cb8 then FUN_002a4468 while the latter asks for more and both succeed, then
+ * runs FUN_002a75b8; returns the first error. */
 int FUN_002a3cb8();
 int FUN_002a4468();
 void FUN_002a75b8();

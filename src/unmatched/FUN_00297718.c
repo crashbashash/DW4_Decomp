@@ -1,4 +1,5 @@
-/* 0x00297718 — FUN_00297718 (64 bytes). Selects the timer channel (-1, 0 or 1) as global stream parameter 61 through FUN_002ad950, reporting any other value. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Selects the timer channel (-1, 0 or 1) as global stream parameter 61 through FUN_002ad950,
+ * reporting any other value. */
 extern void FUN_0029a320(const char *msg);
 extern void FUN_002ad950(int stream, int param, int value);
 extern char DAT_004f3ff8[]; /* "E309101 : Timer channel is only -1, 0, 1." */

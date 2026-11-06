@@ -1,4 +1,3 @@
-/* 0x002424d0 - FUN_002424d0. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 int __floatsidf();
 int FUN_002467a0();
 void *lua_touserdata();

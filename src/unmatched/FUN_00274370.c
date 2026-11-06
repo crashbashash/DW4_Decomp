@@ -1,6 +1,5 @@
-/* 0x00274370 — FUN_00274370 (76 bytes). Returns the word at +20 of a handle scaled by 2048 while its state
-   byte is 1 (0 otherwise), reporting
-   "E0092912:handl is null." and returning 0 for a null handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the word at +20 of a handle scaled by 2048 while its state byte is 1 (0 otherwise),
+ * reporting "E0092912:handl is null." and returning 0 for a null handle. */
 struct Handle274 {
     signed char f0;
     signed char f1;

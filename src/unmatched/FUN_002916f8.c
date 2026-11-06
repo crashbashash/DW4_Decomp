@@ -1,4 +1,5 @@
-/* 0x002916f8 — FUN_002916f8 (108 bytes). Returns a * b / c through a 64-bit product, saturating to INT_MIN/INT_MAX (by the sign of a * b) when c is 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns a * b / c through a 64-bit product, saturating to INT_MIN/INT_MAX (by the sign of a * b)
+ * when c is 0. */
 
 int FUN_002916f8(int a, int b, int c) {
     if (c == 0) {

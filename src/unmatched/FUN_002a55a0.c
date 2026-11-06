@@ -1,4 +1,5 @@
-/* 0x002a55a0 — FUN_002a55a0 (220 bytes). Raises option 52 when the frame qualifies, then hands the frame to FUN_002a5740 while option 52 is 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Raises option 52 when the frame qualifies, then hands the frame to FUN_002a5740 while option 52
+ * is 1. */
 typedef struct SfdFrame {
     char pad0[48];
     int f48;                /* +48 */

@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x003844f0 - Gap__Bec__beGenerater__vfunc_29. C++ framed call; ternary inside the call, forwarded a1, field loaded into a local first Verified byte-identical by tools/verify.py. */
 extern "C" {
 int beMessenger_RegisterReceiver(...);
 extern int DAT_004e0858[4];

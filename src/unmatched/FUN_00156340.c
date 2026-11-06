@@ -1,6 +1,3 @@
-/* 0x00156340 — FUN_00156340. Banked by tools/retype_struct_member.py (shape: struct0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 typedef struct S0 { char pad88[88]; int f58; } S0;
 int StringChunk_ReleaseHeader();
 

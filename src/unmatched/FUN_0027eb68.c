@@ -1,6 +1,6 @@
-/* 0x0027eb68 — FUN_0027eb68 (168 bytes). Resets the server-manager state: clears the 32-byte block at
-   0x004bb020, the four 8-byte slots at 0x00570ba0 / 0x00570ba8 / 0x00570bc0 / 0x00570bc8, the six words
-   at 0x004bb000 and the owner word 0x00570bb8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets the server-manager state: clears the 32-byte block at 0x004bb020, the four 8-byte slots
+ * at 0x00570ba0 / 0x00570ba8 / 0x00570bc0 / 0x00570bc8, the six words at 0x004bb000 and the owner
+ * word 0x00570bb8. */
 extern void *memset(void *dest, int value, unsigned int size);
 extern int DAT_004bb000[6];
 extern char DAT_004bb020[32];

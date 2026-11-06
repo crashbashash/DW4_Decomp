@@ -1,4 +1,4 @@
-/* 0x0029da68 — FUN_0029da68 (32 bytes). Initialises an entry header: two caller values, two zeroed words and 9 at +76/+80. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Initialises an entry header: two caller values, two zeroed words and 9 at +76/+80. */
 typedef struct SfdEntryHeader {
     int f0;
     int f4;

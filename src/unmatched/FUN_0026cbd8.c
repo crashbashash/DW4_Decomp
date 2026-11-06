@@ -1,4 +1,7 @@
-/* 0x0026cbd8 — FUN_0026cbd8 (236 bytes). Re-entrancy-guarded update: unless DAT_004a8e50 is already non-zero, steps it through 1, 2 (FUN_00267058, then FUN_0026ed10 on each of the 16 196-byte entries of DAT_0049c8f8 whose first byte is 1) and 3 (FUN_00265d68, twice while DAT_004a8e58 is below 51) back to 0, all between FUN_0025f2d0 and FUN_0025f2e8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Re-entrancy-guarded update: unless DAT_004a8e50 is already non-zero, steps it through 1, 2
+ * (FUN_00267058, then FUN_0026ed10 on each of the 16 196-byte entries of DAT_0049c8f8 whose first
+ * byte is 1) and 3 (FUN_00265d68, twice while DAT_004a8e58 is below 51) back to 0, all between
+ * FUN_0025f2d0 and FUN_0025f2e8. */
 typedef struct Entry_26cbd8 {
     char used;          /* 0x00 */
     char rest[195];

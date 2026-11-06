@@ -1,4 +1,6 @@
-/* 0x0028f360 — FUN_0028f360 (160 bytes). Wraps a memory buffer in a temporary stream object (FUN_0027b408), runs FUN_0028f100 on it, reports how many bytes it consumed (size - remaining from vtable +36) and destroys the stream (vtable +12). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Wraps a memory buffer in a temporary stream object (FUN_0027b408), runs FUN_0028f100 on it,
+ * reports how many bytes it consumed (size - remaining from vtable +36) and destroys the stream
+ * (vtable +12). */
 struct Stream0028f360;
 struct StreamVtbl0028f360 {
     char pad0[12];

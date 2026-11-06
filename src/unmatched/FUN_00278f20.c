@@ -1,4 +1,9 @@
-/* 0x00278f20 — FUN_00278f20 (308 bytes). Attaches Dolby Pro Logic II processing (per its error strings) to an ADXT handle with at least two channels (+3): resets it (FUN_0026bc60, FUN_00279058), installs the FUN_00279200 hook (FUN_00278640) and clears FUN_002786c8, creates the processor with FUN_00278780(a, b) and binds it to the renderer state (+4 then +4: words +232/+236/+240) via FUN_00278d58, then installs the four FUN_00279128/2791b0/279198/2791e8 callbacks and calls FUN_00265080. Failures are reported through FUN_002607e8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Attaches Dolby Pro Logic II processing (per its error strings) to an ADXT handle with at least
+ * two channels (+3): resets it (FUN_0026bc60, FUN_00279058), installs the FUN_00279200 hook
+ * (FUN_00278640) and clears FUN_002786c8, creates the processor with FUN_00278780(a, b) and binds
+ * it to the renderer state (+4 then +4: words +232/+236/+240) via FUN_00278d58, then installs the
+ * four FUN_00279128/2791b0/279198/2791e8 callbacks and calls FUN_00265080. Failures are reported
+ * through FUN_002607e8. */
 typedef struct Renderer_278f20 {
     char pad0[232];
     void *stream;   /* 0xe8 */

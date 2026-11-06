@@ -3,7 +3,7 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 #include "dw4/reflected.h"
 extern char igWindow_Register[];
-void thunk_FUN_00146a60(void);  /* code at 0x145ea0, passed by address (was DAT_145ea0; docs/engine/function-inventory.md) */
+void thunk_FUN_00146a60(void);
 extern char igPsx2Window_GetVTable[];
 extern char igWindow_GetPublishedMetaObject[];
 extern char g_igPsx2Window_callbackList[];

@@ -1,6 +1,3 @@
-/* 0x0023c860 — FUN_0023c860. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int lua_settop(int, int);
 int lua_pushstring(int, int);
 int lua_pushusertag(int, int, int);

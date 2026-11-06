@@ -22,7 +22,7 @@ void igQuaternionfList_Register(void) {
         0x14,                                      /* instance size */
         igQuaternionfList_GetVTable,               /* vtable getter */
         &igQuaternionfList_InitFields_00189d80[0], /* field adder (post_init in data/reflection.json) */
-        0,                                         /* extra callback-vector item (none; docs/engine/reflection-registration.md) */
+        0,                                         /* extra callback-vector item (none) */
         0                                          /* zero-terminated callback-vector item list (none) */
     );
 }

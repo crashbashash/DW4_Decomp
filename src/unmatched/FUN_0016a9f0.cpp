@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
-/* 0x0016a9f0 - FUN_0016a9f0. Teardown sibling of FUN_0016c650 with an inlined membership test; the test is an inline member returning bool by early returns (gives daddiu v1 / move v1,zero), index declared before the count; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Teardown sibling of FUN_0016c650 with an inlined membership test; the test is an inline member
+ * returning bool by early returns (gives daddiu v1 / move v1,zero), index declared before the
+ * count; alternate compiler. */
 extern "C" {
 int FUN_002eb010(int);
 int StringPool_Construct(int);

@@ -24,10 +24,9 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_39(beNDMWStatusPowerSocket *self, 
     FUN_00412600(self, self->_wpuPocket, self->_pocketPos, index);
 }
 
-/* 0x00414e40 - slot 37: equipment assignment for the power socket's WPU
- * pocket list: the shared helper beNDMWStatus_AssignEquipment (finding #796) gets the pocket
- * list, the pocket position and the device-folder index chosen in _retCode.
- * The MainSlot sibling does the same with its APU pocket.  The three
+/* slot 37: equipment assignment for the power socket's WPU pocket list: the shared helper
+ * beNDMWStatus_AssignEquipment gets the pocket list, the pocket position and the device-folder
+ * index chosen in _retCode. The MainSlot sibling does the same with its APU pocket. The three
  * arguments are unused. */
 void Gap__Bec__beNDMWStatusPowerSocket__vfunc_37(beNDMWStatusPowerSocket *self, char *unusedArg1, char *unusedArg2, char *unusedArg3)
 {

@@ -1,14 +1,11 @@
-/* pool_slot.hpp - reference-counted pool slot helpers shared by the Gap::Core
- * visual-context managers (inlined into Gap__Core__igVisualContextCapabilityManager__vfunc_31).
- *
- * igObjectSlotView: a local view of the Alchemy base object (the reflected layout is
- * igObject in dw4/reflected.h; this view adds the one virtual the manager calls).  The
- * 23-bit reference count lives in the word at +4 (decrement, then destroy when the
- * masked count reaches zero).  The 29 dummy virtuals place vfunc_29 at vtable byte
- * +124 = +0x08 + 4*29 (MWCC puts two header words ahead of the slots), i.e. the
- * project's slot 29 (scripts/check_vtable_slots.py).  The helpers must stay
- * `static inline` in a header: the retail code expands them in place, and units.py
- * drops static definitions that live in the candidate file. */
+/* pool_slot.hpp - reference-counted pool slot helpers shared by the Gap::Core visual-context
+ * managers (inlined into Gap__Core__igVisualContextCapabilityManager__vfunc_31). igObjectSlotView:
+ * a local view of the Alchemy base object (the reflected layout is igObject in dw4/reflected.h;
+ * this view adds the one virtual the manager calls). The 23-bit reference count lives in the word
+ * at +4 (decrement, then destroy when the masked count reaches zero). The 29 dummy virtuals place
+ * vfunc_29 at vtable byte +124 = +0x08 + 4*29 (MWCC puts two header words ahead of the slots),
+ * i.e. the project's slot 29. The helpers must stay `static inline` in a header: the retail code
+ * expands them in place, and units.py drops static definitions that live in the candidate file. */
 #include "dw4/igobject_release.h"
 
 class igObjectSlotView {
@@ -17,7 +14,6 @@ public:
     virtual void vfunc_29();
     unsigned int _refCount; /* +4: 23-bit reference count, flags above it */
 };
-
 
 extern "C" {
 extern unsigned char GPR_00554c14;

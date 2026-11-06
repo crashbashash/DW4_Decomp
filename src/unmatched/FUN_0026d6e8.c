@@ -1,4 +1,6 @@
-/* 0x0026d6e8 — FUN_0026d6e8 (180 bytes). Reports DAT_004eecd8 for a null handle or name; otherwise calls FUN_0026bc60, copies name into the handle buffer, stores the two extra arguments, resets the cursor and flags (state 1) and calls FUN_0026d158(handle, 0). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports DAT_004eecd8 for a null handle or name; otherwise calls FUN_0026bc60, copies name into
+ * the handle buffer, stores the two extra arguments, resets the cursor and flags (state 1) and
+ * calls FUN_0026d158(handle, 0). */
 /* Handle layout shared by FUN_0026bb38 … FUN_0026d6e8 (offsets from their accesses). */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {

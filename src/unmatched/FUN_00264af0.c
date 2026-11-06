@@ -1,4 +1,6 @@
-/* 0x00264af0 — FUN_00264af0 (148 bytes). Drops one ADXM initialisation reference; on the last one runs the thread shutdown functions, restores the start priority of thread DAT_0049da28 and runs the FUN_0027e8e0/FUN_0027e8f8/FUN_0027ec50 teardown. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Drops one ADXM initialisation reference; on the last one runs the thread shutdown functions,
+ * restores the start priority of thread DAT_0049da28 and runs the
+ * FUN_0027e8e0/FUN_0027e8f8/FUN_0027ec50 teardown. */
 void FUN_00264aa0(void);
 void FUN_00264c58(void);
 void FUN_00264df8(void);

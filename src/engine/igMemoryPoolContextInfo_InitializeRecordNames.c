@@ -1,11 +1,9 @@
-/* 0x002f49e0 — igMemoryPoolContextInfo slot 180: write the 46 original
- * context names (Bootstrap, Default, Current, NonTracked, ...) into the name
- * field of each 144-byte context record.  The names come from the pointer
- * table at 0x004c2170; each is copied with a 127-character limit and the
- * 128th byte is cleared explicitly.  Called by the constructor (0x002f25d0)
- * and the destructor (0x002f2670).  Evidence: docs/engine/context-lifecycle.md
- * (finding #897).
- * strncpy is a strncpy-like bounded string copy (dest, source, limit). */
+/* igMemoryPoolContextInfo slot 180: write the 46 original context names (Bootstrap, Default,
+ * Current, NonTracked, ...) into the name field of each 144-byte context record. The names come
+ * from the pointer table at 0x004c2170; each is copied with a 127-character limit and the 128th
+ * byte is cleared explicitly. Called by the constructor (0x002f25d0) and the destructor
+ * (0x002f2670). Evidence: docs/engine/context-lifecycle.md. strncpy is a strncpy-like bounded
+ * string copy (dest, source, limit). */
 #include "dw4/reflected.h"
 
 #define CONTEXT_RECORD_COUNT 46      /* docs/engine/context-lifecycle.md: 46 records */

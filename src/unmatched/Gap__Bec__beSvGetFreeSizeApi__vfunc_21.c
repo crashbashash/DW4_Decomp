@@ -1,6 +1,3 @@
-/* 0x003ad240 — Gap__Bec__beSvGetFreeSizeApi__vfunc_21. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 #include "dw4/reflected.h"
 extern int DAT_0058a600[4];
 extern char GPR_00554e60;

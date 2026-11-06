@@ -1,6 +1,6 @@
-/* 0x003a7d80 - FUN_003a7d80: make sure the info ram has a property data list, then report whether a property of
- * the given name exists in it.  The lazily created list is owned by a stack reference while it is retained into
- * the ram and the previous list is released. */
+/* Make sure the info ram has a property data list, then report whether a property of the given
+ * name exists in it. The lazily created list is owned by a stack reference while it is retained
+ * into the ram and the previous list is released. */
 #include "dw4/reflected.h"
 extern "C" {
 igObject *beBaseInfoDataList_Create(int);

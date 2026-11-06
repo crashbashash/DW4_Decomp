@@ -1,4 +1,4 @@
-/* 0x00452140 - igBasicColorChanger_InitFields. the constant store after GetFieldAt needs the call result in a local. Verified byte-identical by tools/verify.py. */
+/* The constant store after GetFieldAt needs the call result in a local. */
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();

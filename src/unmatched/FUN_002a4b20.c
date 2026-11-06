@@ -1,4 +1,5 @@
-/* 0x002a4b20 — FUN_002a4b20 (68 bytes). Forwards amount to FUN_0029e3d0 for the player's stream at +8128 and adds it to the 64-bit total at +2464. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Forwards amount to FUN_0029e3d0 for the player's stream at +8128 and adds it to the 64-bit total
+ * at +2464. */
 void FUN_0029e3d0();
 
 struct Player2a4b20 {

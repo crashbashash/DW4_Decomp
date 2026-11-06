@@ -1,4 +1,5 @@
-/* 0x002b7730 - igUnsignedCharArrayMetaField_GetVTable. Stack object with an inlined smart-pointer release. Matches only with the alternate (combat) compiler build; see docs/engine/unit-compilers.md. */
+/* Stack object with an inlined smart-pointer release. Matches only with the alternate (combat)
+ * compiler build. */
 typedef struct { int *vt; int p1; int p2; void *str; int pad[12]; } Obj;
 int StringChunk_ReleaseHeader();
 int igMetaField_Init();

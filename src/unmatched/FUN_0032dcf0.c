@@ -1,6 +1,3 @@
-/* 0x0032dcf0 — FUN_0032dcf0. Banked by tools/retype_struct_member.py (shape: struct0):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 typedef struct S0 { char pad28[28]; int f1C; } S0;
 int Memory_FreeBuffer();
 int Gap__Core__igObject__vfunc_02();

@@ -1,4 +1,4 @@
-/* 0x00267300 — FUN_00267300 (44 bytes). Returns FUN_0025db48 of the object handle, or 0 for a null object. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns FUN_0025db48 of the object handle, or 0 for a null object. */
 /* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
 typedef struct Object_265fb0 {
     char f0;

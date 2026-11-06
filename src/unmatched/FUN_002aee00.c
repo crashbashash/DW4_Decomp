@@ -1,4 +1,6 @@
-/* 0x002aee00 — FUN_002aee00 (240 bytes). Checked setter (error 0xFF000129): stores three parameters into the block at +3368 and reconfigures FUN_002ada78 entries 15 and 71 — (15,5)/(71,0) when enabling, (71,1)/(15,1) when clearing. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Checked setter (error 0xFF000129): stores three parameters into the block at +3368 and
+ * reconfigures FUN_002ada78 entries 15 and 71 — (15,5)/(71,0) when enabling, (71,1)/(15,1) when
+ * clearing. */
 int FUN_002a0bb8();
 int FUN_002a0dd8();
 int FUN_002ada78();

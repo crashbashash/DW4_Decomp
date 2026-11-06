@@ -1,4 +1,5 @@
-/* 0x002a12f8 — FUN_002a12f8 (104 bytes). Queries FUN_0029dd98 for the player's stream and, on success, returns its start, size and end (f4 + f12) through the out pointers; returns the query status. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Queries FUN_0029dd98 for the player's stream and, on success, returns its start, size and end
+ * (f4 + f12) through the out pointers; returns the query status. */
 int FUN_0029dd98();
 
 struct Player2a12f8 {

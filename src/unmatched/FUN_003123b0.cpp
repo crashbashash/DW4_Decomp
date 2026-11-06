@@ -8,7 +8,7 @@ int FUN_0032a180(...);
 int FUN_0032a1b0(...);
 void *FUN_0032a1e0(...);
 int List_InsertWords(...);
-void FUN_0032a260(void);  /* code at 0x32a260, passed by address (was DAT_32a260; docs/engine/function-inventory.md) */
+void FUN_0032a260(void);
 extern int DAT_004fc3e0[4];
 void FUN_003123b0(igArenaMemoryPool *arg0, int arg1);
 }

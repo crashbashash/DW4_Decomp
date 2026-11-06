@@ -1,8 +1,8 @@
-/* 0x002ca540 igUnsignedIntList_Register: static-init registration of igUnsignedIntList (an igDataList of unsigned 32-bit elements)
- * with the object system.  The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1 (finding #358); names from data/reflection.json.
- * FUN_002b5d50 is the set-once latch every registrar of this group calls first
- * (a gp byte flag guards a few shared one-time registrations). */
+/* igUnsignedIntList_Register: static-init registration of igUnsignedIntList (an igDataList of
+ * unsigned 32-bit elements) with the object system. The igMetaObject_RegisterClass arguments are
+ * laid out per docs/engine/reflection-metadata.md section 1; names from data/reflection.json.
+ * FUN_002b5d50 is the set-once latch every registrar of this group calls first (a gp byte flag
+ * guards a few shared one-time registrations). */
 extern char igDataList_GetPublishedMetaObject[];
 extern char igDataList_Register[];
 extern char igUnsignedIntList_GetVTable[];

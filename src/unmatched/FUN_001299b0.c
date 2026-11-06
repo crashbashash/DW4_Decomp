@@ -1,4 +1,5 @@
-/* 0x001299b0 — FUN_001299b0 (128 bytes). Installs a handler for a signal in the reent table and returns the previous one; sets EINVAL and returns SIG_ERR for an out-of-range signal (newlib _signal_r shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Installs a handler for a signal in the reent table and returns the previous one; sets EINVAL and
+ * returns SIG_ERR for an out-of-range signal (newlib _signal_r shape; name is a hypothesis). */
 typedef void (*SignalHandler)(int);
 
 typedef struct Reent {

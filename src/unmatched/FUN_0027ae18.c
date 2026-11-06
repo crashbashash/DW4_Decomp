@@ -1,5 +1,5 @@
-/* 0x0027ae18 — FUN_0027ae18 (64 bytes). Sets the output volume (+56) of a voice, clamped to -999..0, while
-   the library is active (not mode 1 with no entries). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Sets the output volume (+56) of a voice, clamped to -999..0, while the library is active (not
+ * mode 1 with no entries). */
 struct Voice27a {
     char pad0[56];
     int volume;   /* +56 */

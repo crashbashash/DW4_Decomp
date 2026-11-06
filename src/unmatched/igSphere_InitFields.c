@@ -1,4 +1,4 @@
-/* Field fetched before the zeroed vector local is filled; float constant typed; verified by tools/verify.py. */
+/* Field fetched before the zeroed vector local is filled; float constant typed.py. */
 int FUN_0018e470(int, int *);
 int FUN_002e3810(int, float);
 int igMetaObject_CreateFields();

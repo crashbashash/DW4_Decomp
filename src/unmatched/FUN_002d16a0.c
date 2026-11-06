@@ -1,5 +1,3 @@
-/* 0x002d16a0 — FUN_002d16a0. m2c draft, hand-fixed; verified byte-identical by
- * tools/verify.py (loop: tools/m2c_loop.py). */
 int FUN_002b9470();
 int FUN_002b9620();
 int FUN_002bad40();

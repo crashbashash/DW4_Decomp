@@ -1,9 +1,8 @@
-/* 0x003b6430 /192B — beNDMWWindowCtrl_Destroy (finding #917, docs/engine/window-object-lifetime.md).
- * Destructor body: republish the controller vtable and then the beNDMWWindow vtable (retail RTTI
- * of 0x0053daa0 and 0x0053dc30), release the seven reference cells the original constructor
- * initialized (reflected offsets 76..52, in that order, flag -1), and when the signed low 16 bits
- * of `flags` are positive hand the object to the deallocation thunk 0x002ff810 (Memory_FreeBuffer
- * wrapper).  No extra clearing.  `self` is returned unchanged.
+/* /192B — beNDMWWindowCtrl_Destroy. Destructor body: republish the controller vtable and then the
+ * beNDMWWindow vtable (retail RTTI of 0x0053daa0 and 0x0053dc30), release the seven reference
+ * cells the original constructor initialized (reflected offsets 76..52, in that order, flag -1),
+ * and when the signed low 16 bits of `flags` are positive hand the object to the deallocation
+ * thunk 0x002ff810 (Memory_FreeBuffer wrapper). No extra clearing. `self` is returned unchanged.
  * Matching constructs: the explicit 64-bit return copy (`dmove v0,self`) preserves the original
  * deletion-branch delay slots, and the `nop` after the last cleanup call is the original padding. */
 #include "dw4/reflected.h"

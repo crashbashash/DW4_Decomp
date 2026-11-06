@@ -1,4 +1,3 @@
-/* 0x00147120 - igPsx2Controller_GetVTable. union stack object; smart-ref slot through a pointer local assigned after the header init; reference-count field read as int; alternate compiler -O3 Verified byte-identical by tools/verify.py. */
 int igObject_Destroy();
 int igObject_InitHeader();
 extern int DAT_00524d00[4];

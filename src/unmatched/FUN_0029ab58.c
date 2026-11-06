@@ -1,4 +1,4 @@
-/* 0x0029ab58 — FUN_0029ab58 (88 bytes). Stores four values in the work area from FUN_00294a30 (+64..+76). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores four values in the work area from FUN_00294a30 (+64..+76). */
 typedef struct {
     char pad0[64];
     int f64;

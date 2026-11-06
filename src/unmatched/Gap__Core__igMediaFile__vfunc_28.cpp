@@ -1,6 +1,3 @@
-/* 0x002ec710 — Gap__Core__igMediaFile__vfunc_28. Banked by tools/retype_struct_member.py (shape: width):
- * the m2c draft plus a mechanical source respelling, verified
- * byte-identical to retail by tools/verify.py. */
 extern "C" {
 
 void Gap__Core__igMediaFile__vfunc_28(void *arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4);

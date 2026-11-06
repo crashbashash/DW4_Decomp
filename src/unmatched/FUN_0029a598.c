@@ -1,4 +1,5 @@
-/* 0x0029a598 — FUN_0029a598 (244 bytes). In state 3, once the sub-object at +660 is in state 2 or its slot-36 query returns 0, runs the follow-up calls gated by the flag bytes at +116/+118. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* In state 3, once the sub-object at +660 is in state 2 or its slot-36 query returns 0, runs the
+ * follow-up calls gated by the flag bytes at +116/+118. */
 int FUN_00295398();
 int FUN_00295908();
 int FUN_00299ae8();

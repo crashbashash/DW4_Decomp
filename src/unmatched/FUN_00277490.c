@@ -1,4 +1,5 @@
-/* 0x00277490 — FUN_00277490 (148 bytes). Returns word +4 of the lsc queue entry whose stream id matches (16 32-byte entries at +56); a NULL object or unknown id is reported through FUN_002777f8 and returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns word +4 of the lsc queue entry whose stream id matches (16 32-byte entries at +56); a
+ * NULL object or unknown id is reported through FUN_002777f8 and returns 0. */
 typedef struct LscEntry_277490 {
     int id;             /* 0x00 */
     int f4;        /* 0x04 */

@@ -1,4 +1,3 @@
-/* 0x001e33d0 - FUN_001e33d0. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 extern "C" {
 int FUN_001925f0(...);
 int FUN_001e33d0(void **arg0, int arg1);

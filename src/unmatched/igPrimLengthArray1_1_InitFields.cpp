@@ -1,4 +1,4 @@
-/* Refcount release written as -= 1 with the 23-bit mask on a typed struct; verified by tools/verify.py. */
+/* Refcount release written as -= 1 with the 23-bit mask on a typed struct.py. */
 extern "C" {
 int igUnsignedIntMetaField_GetDefaultDescriptor(...);
 int ObjectPointerList_FindIndex(...);

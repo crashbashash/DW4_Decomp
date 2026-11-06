@@ -3,7 +3,7 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 #include "dw4/reflected.h"
 extern char igAudioContext_Register[];
-void thunk_FUN_00143150(void);  /* code at 0x143140, passed by address (was DAT_143140; docs/engine/function-inventory.md) */
+void thunk_FUN_00143150(void);
 extern char igPsx2AudioContext_GetVTable[];
 extern char igAudioContext_GetPublishedMetaObject[];
 extern char g_igPsx2AudioContext_callbackList[];

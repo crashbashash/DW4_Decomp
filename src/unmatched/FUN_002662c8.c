@@ -1,4 +1,4 @@
-/* 0x002662c8 — FUN_002662c8 (44 bytes). Passes the object handle to FUN_0025de68 and sets its state to 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Passes the object handle to FUN_0025de68 and sets its state to 0. */
 /* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
 typedef struct Object_265fb0 {
     char f0;

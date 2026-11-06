@@ -1,4 +1,5 @@
-/* 0x0027e910 — FUN_0027e910 (196 bytes). Runs every server function registered for `group` (see FUN_0027e600) with its argument, flagging the group busy around each call; ORs the results and counts the pass. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Runs every server function registered for `group` (see FUN_0027e600) with its argument, flagging
+ * the group busy around each call; ORs the results and counts the pass. */
 struct CbSvr0027e600 {
     int (*fn)(int arg); /* +0: 0 = free */
     int arg;            /* +4 */

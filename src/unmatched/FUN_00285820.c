@@ -1,6 +1,5 @@
-/* 0x00285820 — FUN_00285820 (92 bytes). Reads the word at +724 of a decoder's +352 sub-block into *out after
-   validating the handle (FUN_0028b098); an invalid handle is reported as error 0xFF03020D through
-   FUN_002855d8. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads the word at +724 of a decoder's +352 sub-block into *out after validating the handle
+ * (FUN_0028b098); an invalid handle is reported as error 0xFF03020D through FUN_002855d8. */
 struct Block285 {
     char pad0[724];
     int value;          /* +724 */

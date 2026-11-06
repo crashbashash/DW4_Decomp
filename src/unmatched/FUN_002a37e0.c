@@ -1,4 +1,5 @@
-/* 0x002a37e0 — FUN_002a37e0 (112 bytes). When option 28 is set, posts state 5 through FUN_002a3200: mode 1 for a zero FUN_002a0960 value, 0 otherwise, nothing for -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* When option 28 is set, posts state 5 through FUN_002a3200: mode 1 for a zero FUN_002a0960 value,
+ * 0 otherwise, nothing for -1. */
 extern int FUN_002adc40(void *handle, int option);
 extern int FUN_002a0960(void *handle);
 extern void FUN_002a3200(void *handle, int state, int mode);

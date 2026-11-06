@@ -1,4 +1,5 @@
-/* 0x0029dc18 — FUN_0029dc18 (160 bytes). Under a FUN_002a0e70/FUN_002a0e88 guard, records the flag in the channel and resets the channel buffer from a 24-byte source description. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Under a FUN_002a0e70/FUN_002a0e88 guard, records the flag in the channel and resets the channel
+ * buffer from a 24-byte source description. */
 void FUN_0029dcb8();
 void FUN_002a0e70();
 void FUN_002a0e88();

@@ -1,4 +1,5 @@
-/* 0x00290f70 — FUN_00290f70 (172 bytes). Resets a 101-byte stream-information block to its defaults (sibling of FUN_0028ad38 with different defaults at +64 and +85..+87, +94). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a 101-byte stream-information block to its defaults (sibling of FUN_0028ad38 with
+ * different defaults at +64 and +85..+87, +94). */
 
 /* Members of the block; roles not yet recovered. */
 struct Info00290f70 {

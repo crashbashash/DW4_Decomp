@@ -1,4 +1,6 @@
-/* 0x002f0f70 - FUN_002f0f70. Sibling of FUN_002f1e30/FUN_002f11c0 with the arguments passed through (a1 and a3 unchanged, three 64-bit values): builds a stack message object, dispatches virtual 268, releases; 128-bit value and allocator-alias virtual written inside the argument list; alternate compiler. Verified byte-identical by tools/verify.py. */
+/* Sibling of FUN_002f1e30/FUN_002f11c0 with the arguments passed through (a1 and a3 unchanged,
+ * three 64-bit values): builds a stack message object, dispatches virtual 268, releases; 128-bit
+ * value and allocator-alias virtual written inside the argument list; alternate compiler. */
 extern "C" {
 int FUN_002e2190(int *, int, int, int, unsigned __int128, int, int, int, long long, long long, long long, long long);
 int FUN_002e2300(...);

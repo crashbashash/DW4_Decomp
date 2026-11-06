@@ -1,8 +1,7 @@
-/* 0x002bf380 — igMemoryRefMetaField_Clone: clone of a memory-reference field descriptor
- * (finding #887, docs/engine/list-descriptor-copy.md).  With the object system active it
- * runs the memory-field registration guard and clones through the source's metaobject
- * (igObject_CloneViaMetadata); otherwise (cold path) it raw-allocates the 0x50-byte
- * descriptor and runs the copy constructor.  `copyMode` only matters on the metadata path. */
+/* Clone of a memory-reference field descriptor. With the object system active it runs the memory-
+ * field registration guard and clones through the source's metaobject (igObject_CloneViaMetadata);
+ * otherwise (cold path) it raw-allocates the 0x50-byte descriptor and runs the copy constructor.
+ * `copyMode` only matters on the metadata path. */
 #include "dw4/reflected.h"
 int igMemoryRefMetaField_EnsureRegistered();
 void *igObject_AllocateRawStorageDefault();

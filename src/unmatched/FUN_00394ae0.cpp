@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x394ae0 — FUN_00394ae0. Verified byte-identical by tools/verify.py (wave3 sweep). */
 extern "C" {
 extern int DAT_004e0858[4];
 int FUN_00394ae0(void **arg0, int arg1, beModelCtrlJUMP *arg2);

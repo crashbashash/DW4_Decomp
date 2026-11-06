@@ -1,4 +1,6 @@
-/* 0x0026c660 — FUN_0026c660 (104 bytes). Stores an ADXT handle's output volume (+64) and applies it, offset by FUN_00267378 of the handle's stream (+4), to its renderer (+12) with FUN_00265dc8; a NULL handle is reported through FUN_002607e8. Its error string names it ADXT_SetOutVol (CRI), a name hypothesis. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Stores an ADXT handle's output volume (+64) and applies it, offset by FUN_00267378 of the
+ * handle's stream (+4), to its renderer (+12) with FUN_00265dc8; a NULL handle is reported through
+ * FUN_002607e8. Its error string names it ADXT_SetOutVol (CRI), a name hypothesis. */
 typedef struct Adxt_26c660 {
     int pad0;
     int stream;         /* 0x04 */

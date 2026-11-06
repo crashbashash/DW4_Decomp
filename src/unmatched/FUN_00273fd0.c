@@ -1,4 +1,6 @@
-/* 0x00273fd0 — FUN_00273fd0 (148 bytes). Seeks a memory-file handle: sets the position (+12) from the start (origin 0), the end (+8, origin 2) or the current position (origin 1), clamps it to 0..size, clears +20 and returns it; a NULL handle is reported through FUN_002739b8 and returns 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Seeks a memory-file handle: sets the position (+12) from the start (origin 0), the end (+8,
+ * origin 2) or the current position (origin 1), clamps it to 0..size, clears +20 and returns it; a
+ * NULL handle is reported through FUN_002739b8 and returns 0. */
 typedef struct File_273fd0 {
     char pad0[8];
     int size;       /* 0x08 */

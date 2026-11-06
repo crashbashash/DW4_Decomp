@@ -1,4 +1,6 @@
-/* 0x00456eb0 - FUN_00456eb0. Walks the neighbour chain until a stop condition: virtual test on the current item (slot 32 dummies), then FUN_00456e10 until it returns the head/null/an accepted item. The loop test is `((F(x) != 0) ^ 1)` (materialised sltu/xori). Default compiler, C++ for the real jalr. */
+/* Walks the neighbour chain until a stop condition: virtual test on the current item (slot 32
+ * dummies), then FUN_00456e10 until it returns the head/null/an accepted item. The loop test is
+ * `((F(x) != 0) ^ 1)` (materialised sltu/xori). Default compiler, C++ for the real jalr. */
 struct Item {
     virtual void d0();
     virtual void d1();

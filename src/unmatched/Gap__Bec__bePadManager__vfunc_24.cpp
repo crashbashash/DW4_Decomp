@@ -1,5 +1,3 @@
-/* 0x0039b560 — Gap__Bec__bePadManager__vfunc_24. hand-matched: a struct member keeps the base pointer where m2c
- * CSE'd arg+N (finding #509's shape); verified byte-identical by tools/verify.py. */
 extern "C" {
 int FUN_004542a0(int, int);
 int FUN_004542e0(int, int, int);

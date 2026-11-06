@@ -13,10 +13,9 @@ int FUN_00236f80(int insight, int metaObject);
 extern int D_00588518[];
 }
 
-/* 0x0039cb70: raw136 lazily resolves a borrowed pad-manager pointer.
- * No reference-count increment/decrement is present in this body. Finding #914.
- * One explicit original padding NOP follows the publication (#731 convention).
- */
+/* raw136 lazily resolves a borrowed pad-manager pointer. No reference-count increment/decrement is
+ * present in this body. One explicit original padding NOP follows the publication (#731
+ * convention). */
 extern "C" {
 void beSelectCtrl_EnsurePadManager(beSelectCtrl *self);
 int Gap__Bec__beSelectCtrl__vfunc_30(void);

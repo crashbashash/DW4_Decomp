@@ -1,4 +1,5 @@
-/* 0x00276e50 — FUN_00276e50 (96 bytes). Returns the first unused entry (byte 0 clear) of the 32-entry table DAT_004abc70 (568-byte entries), or 0 when all are in use. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the first unused entry (byte 0 clear) of the 32-entry table DAT_004abc70 (568-byte
+ * entries), or 0 when all are in use. */
 typedef struct Entry_276e50 {
     signed char used;   /* 0x00 */
     char pad1[567];

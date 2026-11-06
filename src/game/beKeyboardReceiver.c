@@ -1,10 +1,8 @@
-/* src/game/beKeyboardReceiver.c — the beKeyboardReceiver virtual methods
- *
- * 13 functions, in retail address order.  beKeyboardReceiver (reflected
- * handle 0x589308, include/dw4/reflected.h) holds only a _keyboard reference;
- * none of its virtual slots touch the receiver.  Slot 20 is the class's
- * GetMetaObject accessor (docs/engine/engine-boot.md) and returns the class
- * handle word; slots 21 to 32 are empty overrides that return 0. */
+/* src/game/beKeyboardReceiver.c — the beKeyboardReceiver virtual methods 13 functions, in retail
+ * address order. beKeyboardReceiver (reflected handle 0x589308, include/dw4/reflected.h) holds
+ * only a _keyboard reference; none of its virtual slots touch the receiver. Slot 20 is the class's
+ * GetMetaObject accessor and returns the class handle word; slots 21 to 32 are empty overrides
+ * that return 0. */
 
 /* Reflected class handle of beKeyboardReceiver (0x589308). */
 extern int g_beKeyboardReceiver_metaObject[4];

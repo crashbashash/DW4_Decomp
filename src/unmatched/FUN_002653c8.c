@@ -1,4 +1,5 @@
-/* 0x002653c8 — FUN_002653c8 (96 bytes). Copies a 4-word record into a 6-word stack record (fourth word = third + 1, sixth = 25) and hands it, or 0 when there is no source, to FUN_00264910. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Copies a 4-word record into a 6-word stack record (fourth word = third + 1, sixth = 25) and
+ * hands it, or 0 when there is no source, to FUN_00264910. */
 typedef struct Rec_2653c8 {
     int a;
     int b;

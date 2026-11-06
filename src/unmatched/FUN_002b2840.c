@@ -1,4 +1,6 @@
-/* 0x002b2840 — FUN_002b2840 (116 bytes). Looks up descriptor `id` (FUN_002b25a8) and, when it exists and its tag (FUN_002b2ea0) is 0xE0, returns the halfword at +26 (0xFFFF read as 0) through *value; returns 1 then, else 0 with *value = 0. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks up descriptor `id` (FUN_002b25a8) and, when it exists and its tag (FUN_002b2ea0) is 0xE0,
+ * returns the halfword at +26 (0xFFFF read as 0) through *value; returns 1 then, else 0 with
+ * *value = 0. */
 struct Descriptor {
     char pad0[26];
     unsigned short f26; /* +26 */

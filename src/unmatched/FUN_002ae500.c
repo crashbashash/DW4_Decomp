@@ -1,4 +1,4 @@
-/* 0x002ae500 — FUN_002ae500 (36 bytes). True when the block's word at +716 is not -1 and the object's state word at +76 is 4. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* True when the block's word at +716 is not -1 and the object's state word at +76 is 4. */
 
 struct Obj004C {
     char pad[76];

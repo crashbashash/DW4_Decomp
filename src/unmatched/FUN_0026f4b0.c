@@ -1,4 +1,5 @@
-/* 0x0026f4b0 — FUN_0026f4b0 (80 bytes). Looks name up in the DAT_0056dfd4 table and stores its value in *value; returns 0, -1 without a table, or -3 when the name is missing. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Looks name up in the DAT_0056dfd4 table and stores its value in *value; returns 0, -1 without a
+ * table, or -3 when the name is missing. */
 /* A 16-byte named slot of the table DAT_0056dfd4 points at (FUN_0026f350 finds a free one, FUN_0026f3a0 one by name). */
 typedef struct NamedValue_26f438 {
     char name[12];      /* 0x00: empty when name[0] == 0 */

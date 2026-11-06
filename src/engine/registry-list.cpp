@@ -1,7 +1,6 @@
-/* The growable pointer list shared by the allocator registries (igMemoryPoolInfoList,
- * finding #363): data, signed count, capacity.  Initial capacity 64 entries,
- * growing four at a time.  The allocator used for the storage is the one the
- * object system keeps at +48 (g_objectSystem).  The classes are
+/* The growable pointer list shared by the allocator registries (igMemoryPoolInfoList): data,
+ * signed count, capacity. Initial capacity 64 entries, growing four at a time. The allocator used
+ * for the storage is the one the object system keeps at +48 (g_objectSystem). The classes are
  * observed ABI projections of the allocator's virtual slots (a0.. are padding). */
 struct RegistryList {void **data;int count,capacity;};
 class RegistryAllocatorView {public:

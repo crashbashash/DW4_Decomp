@@ -1,4 +1,5 @@
-/* 0x002939a8 — FUN_002939a8 (116 bytes). Passes FUN_00297f30 a flag: whether FUN_00294838 is 1, or, when FUN_00293f50 returns 1, whether FUN_00298ae8 also returns 1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Passes FUN_00297f30 a flag: whether FUN_00294838 is 1, or, when FUN_00293f50 returns 1, whether
+ * FUN_00298ae8 also returns 1. */
 int FUN_00294838(void *handle);
 int FUN_00293f50(void *handle);
 int FUN_00298ae8(void *handle);

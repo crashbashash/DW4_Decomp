@@ -1,4 +1,3 @@
-/* 0x0032a180 - FUN_0032a180. Near-miss sweep fix, verified byte-identical to retail by tools/verify.py. */
 int strncpy();
 void FUN_0032a180(char *arg0, int arg1) {
     strncpy(arg0 + 8, arg1, 0x4F);

@@ -1,4 +1,5 @@
-/* 0x0026b120 — FUN_0026b120 (76 bytes). Calls FUN_00276b68 with fields 0, 8, 12 and 4 of a descriptor, or with zeros for a null descriptor. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Calls FUN_00276b68 with fields 0, 8, 12 and 4 of a descriptor, or with zeros for a null
+ * descriptor. */
 typedef struct Desc_26b120 {
     int f0;
     int f4;

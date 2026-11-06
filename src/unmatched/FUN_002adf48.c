@@ -1,4 +1,5 @@
-/* 0x002adf48 — FUN_002adf48 (48 bytes). Reads the word behind the pointer of 0x44-byte entry `index` (at ctx+7984 + index*0x44) into *out, or 0 when that pointer is null. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reads the word behind the pointer of 0x44-byte entry `index` (at ctx+7984 + index*0x44) into
+ * *out, or 0 when that pointer is null. */
 
 /* View of one 0x44-byte entry as indexed from ctx (see also FUN_002ad828, which indexes the same table from ctx+7976). */
 struct Entry44At1F30 {

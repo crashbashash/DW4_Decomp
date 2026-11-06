@@ -1,4 +1,3 @@
-/* 0x0030aff0 - Gap__Core__igStringArrayMetaField__vfunc_38. Hand-reworked from the m2c draft; verified byte-identical to retail by tools/verify.py. */
 #include "dw4/reflected.h"
 int StringChunk_ReleaseHeader();
 int igStringMetaField_AssignRetainedToken();

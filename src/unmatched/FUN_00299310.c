@@ -1,4 +1,6 @@
-/* 0x00299310 — FUN_00299310 (136 bytes). Enters a file name with a range into the playback list (its error string names it mwPlyEntryFnameRange): forwards (a, 0, b, c) to FUN_00277038 on the +76 stream, rejecting an invalid handle. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Enters a file name with a range into the playback list (its error string names it
+ * mwPlyEntryFnameRange): forwards (a, 0, b, c) to FUN_00277038 on the +76 stream, rejecting an
+ * invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern void FUN_00277038(int stream, int a, int zero, int b, int c);

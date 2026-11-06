@@ -1,7 +1,4 @@
 extern "C" {
-/* 0x003343a0 — FUN_003343a0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_003344f0();
 int FUN_003346f0();
 int FUN_003348d0();

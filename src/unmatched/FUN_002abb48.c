@@ -1,4 +1,4 @@
-/* 0x002abb48 — FUN_002abb48 (116 bytes). Clears a 40-byte header and its counters, then resets the four 24-byte sub-records at +48..+120. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Clears a 40-byte header and its counters, then resets the four 24-byte sub-records at +48..+120. */
 typedef struct SfdSub24 {
     char pad0[24];
 } SfdSub24;

@@ -1,6 +1,3 @@
-/* 0x0044e990 — FUN_0044e990. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int igMetaObject_CreateInstance(int, int);
 int igActiveComponentsObserver_RunStaticInit();
 

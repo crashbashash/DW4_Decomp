@@ -1,8 +1,6 @@
-/* 0x002ed5d0
- * Free `buffer` through the allocator that owns it: Memory_FindBufferOwner
- * (a tail jump to FUN_002f04f0) returns that allocator, and its virtual at
- * vtable byte offset 264 is the free method (same call as igObject_FreeStorage,
- * finding #3225).  "Unchecked" because there is no null test, unlike
+/* Free `buffer` through the allocator that owns it: Memory_FindBufferOwner (a tail jump to
+ * FUN_002f04f0) returns that allocator, and its virtual at vtable byte offset 264 is the free
+ * method (same call as igObject_FreeStorage). "Unchecked" because there is no null test, unlike
  * FUN_00300f50 (igObject_FreeStorage's twin). */
 extern "C" {
 void **Memory_FindBufferOwner(...);

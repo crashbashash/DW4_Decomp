@@ -1,10 +1,8 @@
-/* 0x002f2ab0 — Gap__Core__igMemoryPoolContextInfo__vfunc_56.
- * Renames record `recordIndex` of the context: copies at most 127 characters
- * into the record's inline 128-byte name field, terminates it, and renames the
- * record's bound named object (if any) to match.  Out-of-range indices are
- * ignored.  The context holds 46 records of 144 bytes starting at +0x14, each
- * with a 128-byte inline name at +4 (docs/engine/context-lifecycle.md,
- * finding #896; the record view matches src/engine/context-record-name.cpp). */
+/* Renames record `recordIndex` of the context: copies at most 127 characters into the record's
+ * inline 128-byte name field, terminates it, and renames the record's bound named object (if any)
+ * to match. Out-of-range indices are ignored. The context holds 46 records of 144 bytes starting
+ * at +0x14, each with a 128-byte inline name at +4 (docs/engine/context-lifecycle.md, finding
+ * #896; the record view matches src/engine/context-record-name.cpp). */
 int strncpy();
 int igNamedObject_SetName();
 

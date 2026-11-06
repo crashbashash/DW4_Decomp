@@ -1,4 +1,3 @@
-/* 0x14f9b0 — igDecalExt_InitFields. Verified byte-identical by tools/verify.py (wave3 sweep). */
 int igMetaObject_CreateFields();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();

@@ -1,4 +1,6 @@
-/* 0x00315050 - FUN_00315050. Unlinks every list node in [lo, hi) from 95 intrusive doubly linked lists (head table at base+72, 20 bytes apart); the link pair sits at +4 or +12 depending on the top bit of the node's byte 3 (`b7 == 0 ? 4 : 12` gives the movn form). Alternate compiler -O4. */
+/* Unlinks every list node in [lo, hi) from 95 intrusive doubly linked lists (head table at
+ * base+72, 20 bytes apart); the link pair sits at +4 or +12 depending on the top bit of the node's
+ * byte 3 (`b7 == 0 ? 4 : 12` gives the movn form). Alternate compiler -O4. */
 #include "dw4/reflected.h"
 struct F { char pad[3]; unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
 #define OFF(p) (((struct F *)(p))->b7 == 0 ? 4 : 12)

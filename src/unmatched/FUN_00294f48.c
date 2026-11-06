@@ -1,4 +1,6 @@
-/* 0x00294f48 — FUN_00294f48 (164 bytes). mwPlySfdInit (named by its diagnostic string): checks the SFD library version "1.946", initialises it with a parameter block whose second word is `arg`, and installs FUN_00295010 through FUN_002a0c68; failures record errors -301 / -303. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* mwPlySfdInit (named by its diagnostic string): checks the SFD library version "1.946",
+ * initialises it with a parameter block whose second word is `arg`, and installs FUN_00295010
+ * through FUN_002a0c68; failures record errors -301 / -303. */
 int FUN_002a0998(const char *version, int size);
 int FUN_002a09a8(void *params);
 int FUN_002a0c68(int a, void (*fn)(), int b);

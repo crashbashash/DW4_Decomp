@@ -1,6 +1,3 @@
-/* 0x002c6590 — igEnumArrayMetaField_InitFields. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int FUN_002ea4b0();
 int igMetaObject_CreateFields();
 int igMetaObject_GetFieldAt();

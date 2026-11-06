@@ -1,7 +1,7 @@
-/* 0x0028d918 — FUN_0028d918 (148 bytes). Applies FUN_0028d9b0(target, a, b) to a stream handle's +4 block
-   after validating it (FUN_0028da60), or to the global work area 0x004bcc68 when the handle is null; an
-   invalid handle is reported as error 0xFF020101 through FUN_0028d890 and its result returned. Returns 0
-   otherwise. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Applies FUN_0028d9b0(target, a, b) to a stream handle's +4 block after validating it
+ * (FUN_0028da60), or to the global work area 0x004bcc68 when the handle is null; an invalid handle
+ * is reported as error 0xFF020101 through FUN_0028d890 and its result returned. Returns 0
+ * otherwise. */
 struct Stream28d {
     int state;
     char block[4];   /* +4 */

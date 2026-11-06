@@ -1,4 +1,5 @@
-/* 0x002a4120 — FUN_002a4120 (136 bytes). Reports error 0xFF000F1C when stream +8128 has less room than the minimum at +40; returns 0 otherwise. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports error 0xFF000F1C when stream +8128 has less room than the minimum at +40; returns 0
+ * otherwise. */
 typedef struct SfdHandle {
     char pad0[40];
     int f40;                /* +40 */

@@ -1,9 +1,7 @@
-/* 0x001c2fe0 — igPsx2EnvironmentMapShader setter for _glossMapTexture (+0x34).
- * Reference-counted assignment: retain the new object, release the previous
- * one (destroying it when its count reaches zero), store, then clear
- * _configured so the shader is set up again before it is next used.  The
- * refcount is the low 23 bits of igObject::_refCount (see
- * src/engine/ref-field-lifecycle.cpp). */
+/* igPsx2EnvironmentMapShader setter for _glossMapTexture (+0x34). Reference-counted assignment:
+ * retain the new object, release the previous one (destroying it when its count reaches zero),
+ * store, then clear _configured so the shader is set up again before it is next used. The refcount
+ * is the low 23 bits of igObject::_refCount. */
 #include "dw4/reflected.h"
 void igObject_Destroy(void *);
 

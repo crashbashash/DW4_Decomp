@@ -1,5 +1,4 @@
-/* beSystem update, 0x003a0020: frame clock and staged-directory publication.
- * See docs/engine/system-clock.md. */
+/* beSystem update, 0x003a0020: frame clock and staged-directory publication. */
 #include "dw4/reflected.h"
 
 /* The engine-wide context object whose pointer lives at 0x00586dd0.  Only the
@@ -11,8 +10,8 @@ struct GlobalContextRecord {
     igObject *allocator64;
 };
 
-/* Header in front of every interned string token: owning chunk, then a full
- * 32-bit reference count (docs/engine/messenger-results.md). */
+/* Header in front of every interned string token: owning chunk, then a full 32-bit reference
+ * count. */
 typedef struct StringTokenHeader {
     int owner;
     int refCount;
@@ -32,18 +31,16 @@ int igStrCmp(const char *, const char *);
 extern int ndmw_igb[4];
 extern struct GlobalContextRecord *g_globalContext[4];
 extern int g_stringPool[4];
-/* Allocator selectors resolved through Memory_GetAllocatorBySelector; 0x587110 is
- * the default selector (docs/engine/subwindow-preparation.md), 0x587108 is the
- * one this update substitutes for the ndmw.igb boot scene. */
+/* Allocator selectors resolved through Memory_GetAllocatorBySelector; 0x587110 is the default
+ * selector, 0x587108 is the one this update substitutes for the ndmw.igb boot scene. */
 extern int g_ndmwAllocatorSelector[4];
 extern int g_defaultAllocatorSelector[4];
-/* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used
- * as returned instead of the selector (docs/engine/xdata-controller.md). */
+/* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used as returned instead
+ * of the selector. */
 extern unsigned char GPR_00554c14;
-/* File-context calls, named by findings #3163-#3168 (docs/engine/stage-loading.md):
- * FUN_003092f0 requests a directory by name, FUN_00309740 tells whether it has loaded,
- * FUN_00309750 releases the request, FUN_00308e00 closes the context; __floatdisf converts
- * the 64-bit frame delta to float (Int64ToFloat, finding #3165). */
+/* File-context calls, named by findings #3163-#3168: FUN_003092f0 requests a directory by name,
+ * FUN_00309740 tells whether it has loaded, FUN_00309750 releases the request, FUN_00308e00 closes
+ * the context; __floatdisf converts the 64-bit frame delta to float (Int64ToFloat). */
 float __floatdisf(long long);
 int FUN_00308c80(struct GlobalContextRecord *);
 igDirectory *FUN_003092f0(struct GlobalContextRecord *, int name);

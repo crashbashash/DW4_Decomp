@@ -1,4 +1,5 @@
-/* 0x0027dba8 — FUN_0027dba8 (156 bytes). Between FUN_0027b2b0/FUN_0027b2c8, dispatches every inactive entry of a list to its object's method at vtable +32; hangs on a null list. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Between FUN_0027b2b0/FUN_0027b2c8, dispatches every inactive entry of a list to its object's
+ * method at vtable +32; hangs on a null list. */
 int FUN_0027b2b0();
 int FUN_0027b2c8();
 

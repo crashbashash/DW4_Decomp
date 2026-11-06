@@ -1,4 +1,4 @@
-/* Struct member access and the forwarded receiver argument; verified by tools/verify.py. */
+/* Struct member access and the forwarded receiver argument.py. */
 typedef struct L { char pad[8]; int count; int cap; int *data; } L;
 int memcpy();
 int List_Resize();

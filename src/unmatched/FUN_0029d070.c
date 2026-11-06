@@ -1,4 +1,5 @@
-/* 0x0029d070 — FUN_0029d070 (108 bytes). Reports error 0xFF0001A4 when FUN_002a0dd8 refuses the player, otherwise calls ops slot 16 once FUN_002adc40(player, 6) succeeds. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reports error 0xFF0001A4 when FUN_002a0dd8 refuses the player, otherwise calls ops slot 16 once
+ * FUN_002adc40(player, 6) succeeds. */
 int FUN_002a0bb8();
 int FUN_002a0dd8();
 int FUN_002adc40();

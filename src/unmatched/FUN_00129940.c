@@ -1,4 +1,5 @@
-/* 0x00129940 — FUN_00129940 (112 bytes). Allocates the reent signal-handler table on first use and sets every entry to the default handler; returns -1 when allocation fails (newlib _init_signal_r shape; name is a hypothesis). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Allocates the reent signal-handler table on first use and sets every entry to the default
+ * handler; returns -1 when allocation fails (newlib _init_signal_r shape; name is a hypothesis). */
 typedef void (*SignalHandler)(int);
 
 typedef struct Reent {

@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x003c3b80 — beNDMWLoadIntf2DegiStateCtrl_InitFields. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 extern "C" {
 int FUN_003c3cb0(...);
 int ObjectPointerList_FindIndex(...);

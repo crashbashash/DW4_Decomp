@@ -1,4 +1,6 @@
-/* 0x00277400 — FUN_00277400 (144 bytes). Returns the id (first word) of queue entry no of an lsc object: entries are a 16-slot ring of 32-byte records at +56 starting at slot +32, with +36 entries queued; a NULL object or out-of-range no is reported through FUN_002777f8 and returns -1. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Returns the id (first word) of queue entry no of an lsc object: entries are a 16-slot ring of
+ * 32-byte records at +56 starting at slot +32, with +36 entries queued; a NULL object or out-of-
+ * range no is reported through FUN_002777f8 and returns -1. */
 typedef struct LscEntry_277400 {
     int id;             /* 0x00 */
     int pad4[7];

@@ -1,4 +1,3 @@
-/* 0x001e69e0 — FUN_001e69e0. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int FUN_001904f0();
 int List_Resize();
 int Matrix44_Copy();

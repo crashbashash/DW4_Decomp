@@ -1276,11 +1276,7 @@ def main(argv=None):
                             ".cpp" if "vcpp" in (row[5] or "") else ".c"))
                         os.makedirs(os.path.dirname(dest) or ".", exist_ok=True)
                         if not os.path.exists(dest):
-                            header = ("/* %s — %s. m2c draft + mechanical fixups, then verified\n"
-                                      " * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).\n"
-                                      " * The SHAPE matched; the C types are a guess. */\n"
-                                      % (row[1], row[0]))
-                            open(dest, "w").write(header + src)
+                            open(dest, "w").write(src)
                             written += 1
                 else:
                     first = rep.splitlines()[0] if rep else "(no report)"

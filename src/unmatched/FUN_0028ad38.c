@@ -1,4 +1,4 @@
-/* 0x0028ad38 — FUN_0028ad38 (172 bytes). Resets a 101-byte stream-information block to its defaults. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Resets a 101-byte stream-information block to its defaults. */
 
 /* Members of the block; roles not yet recovered. */
 struct Info0028ad38 {

@@ -1,4 +1,5 @@
-/* 0x00270220 — FUN_00270220 (92 bytes). For each of the 32 16-byte entries of DAT_0056e220, calls the first function of the table its first word points at, when both are set. Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* For each of the 32 16-byte entries of DAT_0056e220, calls the first function of the table its
+ * first word points at, when both are set. */
 typedef struct Callbacks_270220 {
     void (*run)(void);  /* 0x00 */
 } Callbacks_270220;

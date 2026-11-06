@@ -1,4 +1,4 @@
-/* 0x00259d40 - FUN_00259d40. Virtual call with a hidden struct-return pointer; alternate compiler -O3,p. Verified byte-identical by tools/verify.py. */
+/* Virtual call with a hidden struct-return pointer; alternate compiler -O3,p. */
 extern "C" {
 int FUN_00259dc0(...);
 extern int DAT_0056df78[4];

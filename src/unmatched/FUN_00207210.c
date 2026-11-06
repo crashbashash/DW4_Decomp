@@ -1,11 +1,13 @@
-/* 0x00207210 - FUN_00207210. Scheduler/semaphore bring-up: copy the 24-byte semaphore descriptor from the template (lq/ld, a 16-byte aligned struct), create three semaphores with different count/max pairs, register two handlers, reset the state words. Alternate compiler -O3. */
+/* Scheduler/semaphore bring-up: copy the 24-byte semaphore descriptor from the template (lq/ld, a
+ * 16-byte aligned struct), create three semaphores with different count/max pairs, register two
+ * handlers, reset the state words. Alternate compiler -O3. */
 typedef long long s128;
 int CreateSema();
 int FUN_001f0410();
 int FUN_00204240();
 int FUN_00206610();
 int FUN_00207f30();
-void FUN_00207400(void);  /* code at 0x207400, passed by address (was DAT_207400; docs/engine/function-inventory.md) */
+void FUN_00207400(void);
 extern int DAT_00490b60[4];
 struct Sema { int w0; int b; int c; int d; long long e; };
 extern struct Sema DAT_00491700;

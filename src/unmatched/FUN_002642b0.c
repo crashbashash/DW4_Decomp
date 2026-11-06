@@ -1,4 +1,5 @@
-/* 0x002642b0 — FUN_002642b0 (80 bytes). Interrupt-context wake-up: wakes a thread with FUN_0010bd90 if it is waiting (or waiting and suspended). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Interrupt-context wake-up: wakes a thread with FUN_0010bd90 if it is waiting (or waiting and
+ * suspended). */
 /* EE kernel thread status block filled by ReferThreadStatus (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_status_t) */
 typedef struct ThreadStatus {
     int status;

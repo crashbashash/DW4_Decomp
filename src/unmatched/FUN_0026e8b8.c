@@ -1,4 +1,6 @@
-/* 0x0026e8b8 — FUN_0026e8b8 (236 bytes). Restarts a handle: between FUN_0025f2d0/FUN_0025f2e8 pairs resets its field-12 object and stream, waits on its request (FUN_0026a2a0) and starts its source, starts each channel, rearms the request (FUN_0026a140, FUN_0026a1b0) and calls FUN_0026b978(handle, source). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Restarts a handle: between FUN_0025f2d0/FUN_0025f2e8 pairs resets its field-12 object and
+ * stream, waits on its request (FUN_0026a2a0) and starts its source, starts each channel, rearms
+ * the request (FUN_0026a140, FUN_0026a1b0) and calls FUN_0026b978(handle, source). */
 /* Handle layout shared by FUN_0026bb38 … FUN_0026ebf8 (offsets from their accesses). */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {

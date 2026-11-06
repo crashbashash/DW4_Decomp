@@ -1,6 +1,3 @@
-/* 0x001b6ee0 — FUN_001b6ee0. m2c draft + mechanical fixups, then verified
- * byte-identical to retail by tools/verify.py (see tools/m2c_batch.py).
- * The SHAPE matched; the C types are a guess. */
 int Matrix44_Copy(int);
 int FUN_00191f30(int *, int, int);
 

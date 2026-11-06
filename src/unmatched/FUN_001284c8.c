@@ -1,6 +1,5 @@
-/* 0x001284c8 — FUN_001284c8 (92 bytes). Reentrant variadic print: forwards (state, format, ...) to FUN_0012d640
- * with the state block's output stream (+8) and a va_list. The shape of newlib's _printf_r (hypothesis).
- * Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
+/* Reentrant variadic print: forwards (state, format, ...) to FUN_0012d640 with the state block's
+ * output stream (+8) and a va_list. The shape of newlib's _printf_r (hypothesis). */
 typedef __builtin_va_list va_list;
 
 typedef struct LibState1284c8 {
