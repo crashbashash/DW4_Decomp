@@ -29,7 +29,6 @@ extern int DAT_00569300[4];
 extern int DAT_00569330[4];
 extern int DAT_0056bad8[4];
 void FUN_001f1fe0(unsigned int arg0) {
-//D<
     unsigned int s3;
     int s2;
     int s1;
@@ -40,7 +39,6 @@ void FUN_001f1fe0(unsigned int arg0) {
     int a3;
     int t;
     int fl;
-//D>
 
     s3 = arg0;
     a2 = DAT_00562c70[DAT_00569330[0]];

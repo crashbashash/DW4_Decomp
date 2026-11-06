@@ -14,7 +14,6 @@ struct Player2a6870 {
     int f3684;
 };
 
-/* Copies the current picture record to the latest one when its f36 is older than the player's f3684. */
 void FUN_002a6870(struct Player2a6870 *player) {
     struct Picture *current = &player->current;
 

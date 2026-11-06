@@ -19,9 +19,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 int beAction2FADESET_Start(int arg0, beAction2InfoRam *arg1, beAction2FADESET *arg2);
 }
-/* Owning stack reference to the freshly created attribute (colour 0, blend state 1, lighting state 2): the
- * exception table protects it from after its construction, and the three out-of-line destructor copies retail
- * keeps are 0x0019ab10, 0x001aaf00 and 0x00239200 (config/SLUS-20836/unit-objects.json duplicates __dt__6Ref<k>Fv). */
+/* Owning stack reference to the freshly created attribute (colour 0, blend state 1, lighting state
+ * 2); one class per kind so each gets its own out-of-line destructor. */
 template <int kind> struct Ref {
     igObject *p;
     Ref(igObject *o) : p(o) {}

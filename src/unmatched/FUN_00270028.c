@@ -1,6 +1,6 @@
 /* Returns the current file position through the device interface (entry +28) of a file-system
  * handle; a NULL handle or missing entry is reported through FUN_0026f530 and returns 0. Its error
- * strings name it cvFsTell (CRI), a name hypothesis. */
+ * strings name it cvFsTell (CRI). */
 typedef struct CvFsDevice_270028 {
     void *pad0[7];
     int (*tell)(int file);  /* 0x1c */

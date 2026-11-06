@@ -1,4 +1,3 @@
-/* 0x0039b050 - 184 bytes. Update a pair of edge-detect fields from a 2-float input and run a repeat countdown. */
 struct Q { char p0[20]; float f20; float f24; char p1[20]; int f48; int f52; int f56; int f60; int f64; char p2[28]; int f96; int f100; };
 extern "C" {
 int FUN_0039b110(Q *, int *, float *);

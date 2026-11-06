@@ -77,10 +77,8 @@ extern unsigned char GPR_00554c14;
 void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0);
 }
 struct Rc { int w0; int references; };
-/* Owning stack reference to a shop select window (FUN_003b4950) while it is set up: constructed from
- * the created window and released on scope exit (reference count in the low 23 bits of references).
- * The out-of-line copy the exception table names is the retail body 0x0042de70
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to a shop select window while it is set up; released on scope exit
+ * (reference count in the low 23 bits of references). */
 class WindowRef {
 public:
     Rc *p;
@@ -90,8 +88,7 @@ public:
     operator Rc *() const { return p; }
     ~WindowRef() { Rc *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-/* Same role for the result sub-window (FUN_003b4b10); retail body 0x0042d350 (duplicate
- * __dt__12SubWindowRefFv). */
+/* Same role for the result sub-window. */
 class SubWindowRef {
 public:
     Rc *p;

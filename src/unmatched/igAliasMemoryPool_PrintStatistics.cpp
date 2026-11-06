@@ -1,7 +1,6 @@
 #include "dw4/reflected.h"
-/* Statistics print: twelve-argument formatter call (long long slots, one 128-bit slot) fed by ten
- * virtual getters; dummy-virtual pool class (100 slots), the first call is variadic-declared so it
- * passes only the format. Alternate compiler -O3. */
+/* Dummy-virtual pool class (100 slots); the first call is variadic-declared so it passes only the
+ * format. */
 extern "C" {
 int *FUN_002f89a0(int);
 int FUN_00304430(int *, ...);

@@ -26,18 +26,15 @@ extern unsigned char GPR_00554a28;
 extern unsigned char GPR_00554c14;
 }
 
-/* Owning stack reference to the E0 select sub-window created here: released on scope exit
- * (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names
- * is the retail body 0x00413fd0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the E0 select sub-window created here; released on scope exit
+ * (reference count in the low 23 bits of _refCount). */
 class WindowRef {
 public:
     beNDMWStatusSelectE0 *volatile p; /* matching construct: volatile member keeps every use a reload from the frame slot (register colouring) */
     WindowRef(beNDMWStatusSelectE0 *w) : p(w) {}
     ~WindowRef() { beNDMWStatusSelectE0 *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-/* Owning stack reference to the window's new decide list: released on scope exit.  The out-of-line
- * copy the exception table names is the retail body 0x00226990 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__11BoolListRefFv). */
+/* Owning stack reference to the window's new decide list; released on scope exit. */
 class BoolListRef {
 public:
     igBoolList *volatile p; /* matching construct: as above */

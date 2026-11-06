@@ -1,13 +1,10 @@
-/* 0x003c0120 — beNDMWMdlPEBaseInfoWork_Construct
- *
- * Constructor of the per-object info block shared by the player and enemy model controllers
- * (beNDMWMdlPlayerInfoWork and beNDMWMdlEnemyInfoWork derive from it, data/class-hierarchy.tsv).
- * It stamps the parent's vtable (beModelCtrlInfoWork), runs the default constructor of every
- * member whose type has one, then stamps its own vtable and clears the trailing list references.
- * The per-member constructors are 8..12-byte leaves that zero the member or do nothing: one
- * shared leaf per member type (igString 0x229270, igVec3f 0x19ace0), and one per object-reference
- * element type (igObjectRef<T> default constructors, 0x350f10..0x350fa0).  Each call below is
- * named by the reflected member it initialises. */
+/* Constructor of the per-object info block shared by the player and enemy model controllers
+ * (beNDMWMdlPlayerInfoWork and beNDMWMdlEnemyInfoWork derive from it). It stamps the parent's
+ * vtable (beModelCtrlInfoWork), runs the default constructor of every member whose type has one,
+ * then stamps its own vtable and clears the trailing list references. The per-member constructors
+ * are 8..12-byte leaves that zero the member or do nothing: one shared leaf per member type, and
+ * one per object-reference element type. Each call below is named by the reflected member it
+ * initialises. */
 #include "dw4/reflected.h"
 int FUN_001510d0();
 int FUN_0019ace0();
@@ -26,7 +23,6 @@ int FUN_00350f80();
 int FUN_00350f90();
 int FUN_00350fa0();
 int igObject_InitHeader();
-/* vtables: data/vtables.json 0x537ee0 = Gap::Bec::beModelCtrlInfoWork, 0x540520 = this class */
 extern int g_beModelCtrlInfoWork_vtable[4];
 extern int g_beNDMWMdlPEBaseInfoWork_vtable[4];
 void *beNDMWMdlPEBaseInfoWork_Construct(beNDMWMdlPEBaseInfoWork *self) {

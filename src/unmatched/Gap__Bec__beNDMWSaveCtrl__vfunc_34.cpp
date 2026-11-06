@@ -23,13 +23,10 @@ extern int DAT_00587110[4];
 extern int DAT_00587d08[4];
 extern unsigned char GPR_00554c14;
 }
-/* the incoming message: its +20 word is the enum name; no reflected class established */
+/* The incoming message: its +20 word is the enum name. */
 struct A2 { char p[20]; int f20; };
-/* Owning stack references while the controller list is wired up (one stack slot per holder; each
- * releases its object on scope exit). One class per retail destructor copy: DataListRef 0x0033e9c0
- * (the property list and the ensure-list temporaries), SaveCtrlDataRef 0x00408070 (emitted behind
- * this function), CommonIntfRef 0x003f2c40, DegiDataRef 0x003e9010 and FlagWorkRef 0x003f2bc0
- * (shared with beNDMWLoadCtrl2__vfunc_34, same bodies). */
+/* Owning stack references while the controller list is wired up; each releases its object on scope
+ * exit. */
 class DataListRef {
 public:
     igObject *p;
@@ -60,7 +57,7 @@ public:
     FlagWorkRef(igObject *o) : p(o) {}
     ~FlagWorkRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Releases an object reference (retail's old-list release inside the list install). */
+/* Releases an object reference, used for the old list during the list install. */
 struct Rel { static inline void go(igObject *object) {
     if (object) {
         --object->_refCount;

@@ -1,6 +1,5 @@
-/* ADXF_StopNw (name from the error strings at DAT_004eddc0/DAT_004edde8): requests a non-waiting
- * stop of the stream with FUN_0026a238 and flags it in f3, bracketed by FUN_00260c20 trace calls.
- * Returns the current position, or -3/-1 on a bad handle. */
+/* ADXF_StopNw: requests a non-waiting stop of the stream with FUN_0026a238 and flags it in f3,
+ * bracketed by FUN_00260c20 trace calls. Returns the current position, or -3/-1 on a bad handle. */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {
@@ -14,7 +13,7 @@ struct AdxfReader {
     const AdxfReaderMethods *methods;
 };
 
-/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
+/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8). */
 typedef struct AdxfHandle {
     signed char used;
     signed char f1;

@@ -3,7 +3,7 @@
 typedef struct Slot_26f350 {
     signed char used;   /* 0x00 */
     char pad1[15];
-} Slot_26f350;          /* 0x10 bytes */
+} Slot_26f350;
 
 extern Slot_26f350 *DAT_0056dfd4;
 extern int DAT_0056dfd8;

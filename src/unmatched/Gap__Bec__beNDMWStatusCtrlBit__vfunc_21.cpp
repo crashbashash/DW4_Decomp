@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ (it keeps an exception table for the two sub-window holders and the two
- * string tokens); the code keeps C linkage. */
 struct ChildWindow;
 extern "C" {
 int FUN_002eb010(int);
@@ -41,9 +39,8 @@ extern unsigned char GPR_00554c14;
 }
 typedef struct PropertyRecord { char p[12]; unsigned char f12; } PropertyRecord;
 typedef struct ChildWindow { int w0; int refs; char p8[52]; int f60; int f64; char p68[24]; int f92; } ChildWindow;
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     int *p;
@@ -51,24 +48,22 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
-/* Owning stack reference to the first sub-window (FUN_003b4f50) while it is set up: released on scope
- * exit (reference count in the low 23 bits of refs).  The out-of-line copy the exception table names
- * is the retail body 0x00411080 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the first sub-window while it is set up, released on scope exit
+ * (reference count in the low 23 bits of refs). */
 class WindowRef {
 public:
     ChildWindow *p;
     WindowRef(ChildWindow *w) : p(w) {}
     ~WindowRef() { ChildWindow *w = p; if (w != 0) { --w->refs; if ((w->refs & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-/* Owning stack reference to the player-select sub-window (FUN_003b9560, receives the player-number
- * list) while it is set up; retail body 0x0041ddc0 (duplicate __dt__15SelectWindowRefFv). */
+/* Owning stack reference to the player-select sub-window (receives the player-number list) while
+ * it is set up. */
 class SelectWindowRef {
 public:
     ChildWindow *p;
     SelectWindowRef(ChildWindow *w) : p(w) {}
     ~SelectWindowRef() { ChildWindow *w = p; if (w != 0) { --w->refs; if ((w->refs & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-/* string-pool intern (the pool singleton is created on first use) */
 struct Str { static inline int *intern(int *s) {
     int *tok;
     if (s == 0) {

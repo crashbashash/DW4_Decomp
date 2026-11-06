@@ -1,4 +1,3 @@
-/* Virtual call whose result may be replaced by a hook; running totals updated. */
 struct S; struct A;
 extern "C" { int FUN_002fe600(...); int igObject_GetSerializedSize(...); }
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_39(S *arg0, A *arg1);

@@ -1,8 +1,3 @@
-/* Open the sub-slot choice window. Creates the three-entry select window (FUN_003b5370), binds it
- * as a sub-window, builds its decide list (FUN_002cb0d0: always, never, and "slot in use" for the
- * current kind) and sends the row texts, the enabled rows with the normal group and the disabled
- * rows with the grey one. The window and the decide list live on the stack in owning references
- * whose releases the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_GetAllocator(void *);
@@ -27,18 +22,15 @@ extern unsigned char GPR_00554c14;
 }
 #define REL(P) { igObject *q = (igObject *)(P); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7fffff) == 0) { igObject_Destroy(q); } } }
 #define APPEND(V) { igBoolList *l = flags.p; int n = l->_count; if (n < l->_capacity) { l->_count = n + 1; } else { List_Resize(l, n + 1, 1); } *(unsigned char *)(n + l->_data) = (V); }
-/* Owning stack reference to the new select window: constructed from the creating call and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table
- * names is the retail body 0x00413fd0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the new select window; released on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class WindowRef {
 public:
     beNDMWStatusSelectE0 *p;
     WindowRef(beNDMWStatusSelectE0 *w) : p(w) {}
     ~WindowRef() { beNDMWStatusSelectE0 *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-/* Owning stack reference to the new decide list: released on scope exit.  The out-of-line copy the
- * exception table names is the retail body 0x00226990 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__11BoolListRefFv). */
+/* Owning stack reference to the new decide list; released on scope exit. */
 class BoolListRef {
 public:
     igBoolList *p;

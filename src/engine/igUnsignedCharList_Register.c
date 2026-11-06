@@ -1,6 +1,4 @@
-/* igUnsignedCharList_Register: static-init registration of igUnsignedCharList (an igDataList of
- * unsigned 8-bit elements) with the object system. The igMetaObject_RegisterClass arguments are
- * laid out per docs/engine/reflection-metadata.md section 1; names from data/reflection.json.
+/* Static-init registration of igUnsignedCharList (an igDataList of unsigned 8-bit elements).
  * FUN_002b5d50 is the set-once latch every registrar of this group calls first (a gp byte flag
  * guards a few shared one-time registrations). */
 extern char igDataList_GetPublishedMetaObject[];
@@ -15,16 +13,16 @@ extern int igUnsignedCharList_InitFields_002c9b10[4];
 void igUnsignedCharList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
-        0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igUnsignedCharList_metaObject,   /* published MetaObject slot */
+        0, /* abstract */
+        g_igUnsignedCharList_metaObject,
         igDataList_Register,                        /* base class registrar (igDataList) */
-        igDataList_GetPublishedMetaObject,          /* base class MetaObject accessor */
-        thunk_igUnsignedCharList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        igUnsignedCharList_className,    /* class name */
-        0x14,                                       /* instance size */
-        igUnsignedCharList_GetVTable,               /* vtable getter */
+        igDataList_GetPublishedMetaObject,
+        thunk_igUnsignedCharList_GetMetaObject,
+        igUnsignedCharList_className,
+        0x14, /* instance size */
+        igUnsignedCharList_GetVTable,
         &igUnsignedCharList_InitFields_002c9b10[0], /* field adder (class InitFields) */
-        0,                                          /* extra callback item */
-        0                                           /* callback list */
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

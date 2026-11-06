@@ -1,8 +1,6 @@
 extern "C" {
-/* Resizes the global pointer table to arg0 entries: frees the old entries and table through the
- * named allocator, zero-fills the new table and replaces the shared object reference; alternate
- * compiler -O3,p; `0 < n` on the inner guards, `n > 0` on the outer, reference released through a
- * local object pointer. */
+/* `0 < n` on the inner guards, `n > 0` on the outer, and the reference is released through a local
+ * object pointer. */
 typedef struct T { int w0; int references; } T;
 void *FUN_002b90e0(int);
 int FUN_002ed2b0(int, int, int);

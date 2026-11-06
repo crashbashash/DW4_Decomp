@@ -1,5 +1,4 @@
-/* Fill loop up to 16-byte alignment; the condition reads the word through a different type so the
- * load is not reused. */
+/* The condition reads the word through a different type so the load is not reused. */
 extern int DAT_004e5100[4];
 void FUN_001f4140(int *arg0) {
     int *p;

@@ -1,4 +1,5 @@
-/* 0x001fc430 - 216 bytes. Bit-test scan with goto-shared block; ternaries keep the zero/one constants in the branch delay slots, the negated bit is an unsigned char; alternate -O3. */
+/* The ternaries keep the zero/one constants in the branch delay slots, and the negated bit is an
+ * unsigned char. */
 extern unsigned int DAT_00562c70[4];
 extern int DAT_00569330[4];
 extern int DAT_0056b058[4];

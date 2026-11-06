@@ -1,5 +1,5 @@
-/* 0x003ebdc0 — passes the first two arguments through and appends table[arg2].f[arg3] (80-byte rows) to the worker call.
- * C++ keeps the call a real jal. */
+/* Passes the first two arguments through and appends table[arg2].f[arg3] (80-byte rows) to the
+ * worker call. C++ keeps the call a real jal. */
 struct E { int f[20]; };
 extern "C" {
 int TextOrder_PublishLine(int, int, int);

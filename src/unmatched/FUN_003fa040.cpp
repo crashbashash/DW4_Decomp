@@ -1,8 +1,5 @@
-/* List walk re-fetching the record folder each pass; 0 < cnt gives the slt/beqz head; alternate
- * compiler -O3,p. */
+/* `0 < cnt` gives the slt/beqz head. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 struct R { char pad[12]; igObjectList *f12; };
 int beNDMWItemBase_GetRecordInt(int, int, int);
@@ -24,4 +21,4 @@ void FUN_003fa040(int arg0, int arg1, int *arg2, int arg3) {
         } while (i < cnt);
     }
 }
-} /* extern "C" */
+}

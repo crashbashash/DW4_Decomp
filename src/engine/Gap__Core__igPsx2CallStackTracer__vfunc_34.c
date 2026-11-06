@@ -1,6 +1,6 @@
-/* Deleting destructor. Sets the vtable to the image at 0x0052dd30, then calls FUN_00100610 when
- * the signed low 16 bits of the delete flag are positive (same flag test as the Lua vfunc_38 /
- * vfunc_54). FUN_00100610 never returns (asm/FUN_00100610.s ends in an endless loop). */
+/* Deleting destructor. Sets the vtable to its own image, then calls FUN_00100610 when the signed
+ * low 16 bits of the delete flag are positive (same flag test as the Lua vfunc_38 / vfunc_54).
+ * FUN_00100610 never returns (it ends in an endless loop). */
 #include "dw4/reflected.h"
 int FUN_00100610();
 /* Vtable image; the array form keeps the address load absolute. */

@@ -1,6 +1,7 @@
-/* Native card album: retail SUBWND mode 10 (CARD), the stagIS11 scene's window tree: beNDMWShopCtrlA0 update 42c810 (the
- * root: titles, the two-row menu and the player chooser), ShopCtrlA1 42d450 (a player's menu and the album viewer) and
- * ShopCtrlA2 42eb80 (the Booster Pack opening). Evidence and open boundaries: port/docs/card-album.md. */
+/* Native card album: retail SUBWND mode 10 (CARD), the stagIS11 scene's window tree:
+ * beNDMWShopCtrlA0 update 42c810 (the root: titles, the two-row menu and the player chooser),
+ * ShopCtrlA1 42d450 (a player's menu and the album viewer) and ShopCtrlA2 42eb80 (the Booster Pack
+ * opening). */
 #ifndef DW4_CARDSHOP_H
 #define DW4_CARDSHOP_H
 #include "dw4/statusview.h"

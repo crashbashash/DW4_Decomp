@@ -1,6 +1,4 @@
-/* igUnsignedIntList_Register: static-init registration of igUnsignedIntList (an igDataList of
- * unsigned 32-bit elements) with the object system. The igMetaObject_RegisterClass arguments are
- * laid out per docs/engine/reflection-metadata.md section 1; names from data/reflection.json.
+/* Static-init registration of igUnsignedIntList (an igDataList of unsigned 32-bit elements).
  * FUN_002b5d50 is the set-once latch every registrar of this group calls first (a gp byte flag
  * guards a few shared one-time registrations). */
 extern char igDataList_GetPublishedMetaObject[];
@@ -15,16 +13,16 @@ extern int igUnsignedIntList_InitFields_002ca5c0[4];
 void igUnsignedIntList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
-        0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igUnsignedIntList_metaObject,   /* published MetaObject slot */
+        0, /* abstract */
+        g_igUnsignedIntList_metaObject,
         igDataList_Register,                       /* base class registrar (igDataList) */
-        igDataList_GetPublishedMetaObject,         /* base class MetaObject accessor */
-        thunk_igUnsignedIntList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        igUnsignedIntList_className,    /* class name */
-        0x14,                                      /* instance size */
-        igUnsignedIntList_GetVTable,               /* vtable getter */
+        igDataList_GetPublishedMetaObject,
+        thunk_igUnsignedIntList_GetMetaObject,
+        igUnsignedIntList_className,
+        0x14, /* instance size */
+        igUnsignedIntList_GetVTable,
         &igUnsignedIntList_InitFields_002ca5c0[0], /* field adder (class InitFields) */
-        0,                                         /* extra callback item */
-        0                                          /* callback list */
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

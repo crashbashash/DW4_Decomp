@@ -1,7 +1,5 @@
-/* 0x003bf650 — beModelCtrlInfoWork constructor (the engine
- * constructor shape).  Initialises the igObject header, stamps the class
- * vtable at 0x00537ee0 (also used by beNDMWMdlPEBaseInfoWork_Construct) and
- * zeroes the reflected data fields. */
+/* Initialises the igObject header, stamps the class vtable (also used by
+ * beNDMWMdlPEBaseInfoWork_Construct) and zeroes the reflected data fields. */
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_InitHeader();

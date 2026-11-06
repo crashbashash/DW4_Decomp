@@ -1,5 +1,4 @@
-/* dw4/arenadb.c — typed beDataBase accessors over arena objects (porting P1, docs/arena-object-model.md).
- * Sources of behavior: src/game/beDataBase.c (matched C of 0x3a93a0..0x3a9708) and the port's retail-checked dw4_database_*. */
+/* Typed beDataBase accessors over arena objects. */
 #include "dw4/arenadb.h"
 
 #include <stdio.h>

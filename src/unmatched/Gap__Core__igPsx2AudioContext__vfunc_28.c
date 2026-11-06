@@ -1,5 +1,3 @@
-/* First free slot of a 36-byte entry table (bit-field used flag), slot reset to defaults; table
- * pointer local and declaration order; alternate compiler -O3. */
 struct Ent { int f0; int f4; unsigned char used : 1; unsigned char rest : 7; char pad[3]; int f12; float f16; float f20; float f24; int pad2; int f32; };
 struct Tbl { char pad[8]; int cnt; int pad2; struct Ent *items; };
 int memset(void *, int, int);

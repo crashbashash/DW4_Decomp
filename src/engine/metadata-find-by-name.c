@@ -1,5 +1,5 @@
-/* Look a field descriptor up by name. The metadata object's _metaFields list is searched by the
- * string member that global descriptor 0x585cd8 names, igMetaField::_fieldName (+12). */
+/* Looks a field descriptor up by name. The metadata object's _metaFields list is searched by
+ * igMetaField::_fieldName (+12). */
 #include "dw4/reflected.h"
 void *ObjectPointerList_FindByStringField(void *list, igMetaField *stringMember, const char *name);
 /* The reflected handle of igMetaField::_fieldName (the string-member selector). */

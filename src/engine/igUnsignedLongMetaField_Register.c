@@ -1,6 +1,3 @@
-/* 0x002b68a0 igUnsignedLongMetaField_Register: registers class igUnsignedLongMetaField with the object system, derived from igMetaField.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igMetaField_GetPublishedMetaObject[];
 extern char igUnsignedLongMetaField_GetVTable[];
 extern char thunk_igUnsignedLongMetaField_GetMetaObject[];
@@ -12,16 +9,16 @@ int igMetaObject_RegisterClass();
 
 void igUnsignedLongMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igUnsignedLongMetaField_metaObject, /* published MetaObject slot */
-        igMetaField_Register,                          /* base class registrar */
-        igMetaField_GetPublishedMetaObject,   /* base class MetaObject accessor */
-        thunk_igUnsignedLongMetaField_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igUnsignedLongMetaField_className,  /* class name */
-        0x34,                                          /* instance size */
-        igUnsignedLongMetaField_GetVTable,             /* vtable getter */
-        0,                                             /* field adder */
-        0,                                             /* extra callback item */
-        g_igUnsignedLongMetaField_callbackList  /* callback list */
+        0, /* abstract */
+        g_igUnsignedLongMetaField_metaObject,
+        igMetaField_Register,
+        igMetaField_GetPublishedMetaObject,
+        thunk_igUnsignedLongMetaField_GetMetaObject,
+        igUnsignedLongMetaField_className,
+        0x34, /* instance size */
+        igUnsignedLongMetaField_GetVTable,
+        0,
+        0, /* extra callback item */
+        g_igUnsignedLongMetaField_callbackList /* callback list */
     );
 }

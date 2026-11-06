@@ -1,5 +1,3 @@
-/* Traversal pop: virtual call (slot 33 via 31 dummies after the header words), index list lookup,
- * pop hook with the last item, element count decrement. Alternate compiler -O3. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_001b1490(void *, void *, int);

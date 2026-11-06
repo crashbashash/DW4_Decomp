@@ -1,5 +1,4 @@
 #pragma inline_depth(8)
-/* beModelCtrl vfunc 33 (0x00396a80): message dispatcher of the model controller. */
 #include "dw4/reflected.h"
 extern "C" {
 struct V4 { float x, y, z; };
@@ -106,9 +105,8 @@ struct Ref {
     ~Ref() { igObject *x = p; if (x) { --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); } }
 };
 
-/* Owning stack references to the objects this handler creates before binding them: kind 0 the AI info (0x00350c10), 1 the hit-body info
- * (0x00350e10), 2..4 the ride-on infos of commands 25..27 (0x00398d20, 0x00398ca0, 0x00398c20) and 5 their model node (0x0034c1b0); the
- * out-of-line destructor copies are the retail bodies named in config/SLUS-20836/unit-objects.json. */
+/* Owning stack references to the objects this handler creates before binding them: kind 0 the AI
+ * info, 1 the hit-body info, 2..4 the ride-on infos of commands 25..27 and 5 their model node. */
 template <int kind> struct ObjRef {
     igObject *p;
     ObjRef(igObject *q) : p(q) {}

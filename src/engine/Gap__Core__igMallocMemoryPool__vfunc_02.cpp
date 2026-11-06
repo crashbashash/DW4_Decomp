@@ -1,8 +1,6 @@
-/* 0x00323640 — Gap__Core__igMallocMemoryPool__vfunc_02
- * Pool hook: run the class's virtual slot 392 on the receiver, then the igObject
- * default for this slot (0x002f0030, which forwards to the empty 0x002ff0a0).  What
- * slot 392 does is not established; the malloc and alias pools both bind it to an
- * empty stub (0x002f2270). */
+/* Pool hook: run the class's virtual slot 392 on the receiver, then the igObject default for this
+ * slot (which forwards to an empty stub). The malloc and alias pools both bind slot 392 to an
+ * empty stub. */
 #include "dw4/reflected.h"
 extern "C" {
 int Gap__Core__igObject__vfunc_00(...);

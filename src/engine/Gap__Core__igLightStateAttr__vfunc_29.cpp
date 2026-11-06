@@ -1,10 +1,6 @@
-/* 0x0013f000
- * Forwards to the held light: when `_light` is set, call the virtual at vtable
- * byte offset 116 (slot 27) of that object, with no arguments.
- * Evidence: the function's machine code is lw a0,16(a0); null guard; lw t9,116(t9);
- * jalr, and +16 is igLightStateAttr::_light (include/dw4/reflected.h).  What the
- * slot does is not established, so the call is spelled through the stand-in
- * `vX` below. */
+/* Forwards to the held light: when `_light` is set, call the virtual at vtable byte offset 116
+ * (slot 27) of that object, with no arguments. The call is spelled through the stand-in `vX`
+ * below. */
 #include "dw4/reflected.h"
 extern "C" {
 

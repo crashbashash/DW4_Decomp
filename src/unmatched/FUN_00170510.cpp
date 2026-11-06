@@ -1,6 +1,4 @@
-/* Reset a name table: call the virtual hook (slot 76) for every index below the count that is not
- * in the exclusion list (bool inline, direct returns), then when requested release the interned
- * name, free the buffers and the table. Loop test written -1 < i. Alternate compiler -O3. */
+/* The loop test is written -1 < i. */
 extern "C" {
 int FUN_002eb010(int);
 void Memory_FreeBuffer(void *);

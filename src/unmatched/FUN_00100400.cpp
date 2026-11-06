@@ -1,5 +1,4 @@
-/* Array constructor with a partial-array guard object (PAD) whose inline destructor runs at scope
- * exit; the emitted deleting destructor is the retail function at 0x00100530. */
+/* Array constructor with a partial-array guard object whose inline destructor runs at scope exit. */
 typedef void (*Fn)(void *, int);
 struct PAD {
     void *ptr; unsigned size; unsigned n; Fn dtor; unsigned i;

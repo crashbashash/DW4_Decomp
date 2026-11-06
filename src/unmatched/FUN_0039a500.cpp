@@ -14,9 +14,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void FUN_0039a500(A *arg0, S *arg1);
 }
-/* Owning stack reference to the new record: constructed from the object and released on scope exit
- * (reference count in the low 23 bits of refs).  The out-of-line copy the exception table names is the
- * retail body 0x0039a6d0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the new record, released on scope exit (reference count in the low 23
+ * bits of refs). */
 class ObjectRef {
 public:
     R *p;

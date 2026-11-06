@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 extern "C" {
-struct RefCountedNamedObject { int w0; int rc; int w8; int f12; }; /* igNamedObject-style header; +12 is the word passed to FUN_003a6950 */
+struct RefCountedNamedObject { int w0; int rc; int w8; int f12; }; /* +12 is the word passed to FUN_003a6950. */
 int FUN_00236f80(int, int);
 struct RefCountedNamedObject *FUN_00366910(int);
 int FUN_0037d310(beCri *);

@@ -1,15 +1,10 @@
-/* Current player record -> BASE_* save arrays; 0x003f8760, 548 bytes.
- * Mirror of the post-load BASE -> current mapping: LEVEL and EXP go to the
- * species' slot of BASE_LEVEL / BASE_EXP, SKILL[9] and UPCNT[11] to
- * BASE_SKILL[species * 9 + i] / BASE_UPCNT[species * 11 + i]. Every store is
- * bounds-checked against the destination list's count, like an inlined
- * igIntList set. The declaration order below preserves the original register
- * allocation; the pinned alternate compiler with -O3,p reproduces it.
- */
+/* Current player record -> BASE_* save arrays. Mirror of the post-load BASE -> current mapping:
+ * LEVEL and EXP go to the species' slot of BASE_LEVEL / BASE_EXP, SKILL[9] and UPCNT[11] to
+ * BASE_SKILL[species * 9 + i] / BASE_UPCNT[species * 11 + i]. Every store is bounds-checked
+ * against the destination list's count, like an inlined igIntList set. The declaration order
+ * preserves the original register allocation. */
 #include "dw4/reflected.h"
 /* Property record as returned by igProperty_GetRecord: scalar value at +12. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct PropertyRecord {
     char pad[12];
@@ -76,4 +71,4 @@ void FUN_003f8760(beNDMWGameRam *self, int player_index)
             ((int *)base_array->list->_data)[upcnt_base + upcnt_index] = upcnt;
     }
 }
-} /* extern "C" */
+}

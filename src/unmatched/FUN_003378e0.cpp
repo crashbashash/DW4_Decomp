@@ -1,5 +1,4 @@
-/* 0x003378e0 — forwards its seven parameters to the worker with the flag word 0x400 inserted as the third argument. C++ keeps the
- * call a real jal; the C front end would turn it into a tail jump. */
+/* Compiled as C++ so the call stays a real jal; C would turn it into a tail jump. */
 extern "C" {
 int FUN_00337630(int, int, int, int, int, int, int, int);
 void FUN_003378e0(int a0, int a1, int a2, int a3, int a4, int a5, int a6);

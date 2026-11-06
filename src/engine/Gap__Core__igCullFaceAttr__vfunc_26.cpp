@@ -1,8 +1,5 @@
-/* 0x0013ca60
- * Copy step between two cull-face attributes: two virtual getters on `source`
- * (vtable byte offsets 920 and 928) are passed to two setters on `self` (offsets 132
- * and 128). The attribute's fields (`_enabled`, `_mode`) are in include/dw4/reflected.h
- * (igCullFaceAttr); the slot-to-field pairing is not established. */
+/* Copy step between two cull-face attributes: two virtual getters on `source` (vtable byte offsets
+ * 920 and 928) are passed to two setters on `self` (offsets 132 and 128). */
 #include "dw4/reflected.h"
 extern "C" {
 

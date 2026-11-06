@@ -1,5 +1,4 @@
-/* FUN_00120808 -- fdlibm __kernel_sin(x, y, iy): sine of x + y on |x| <= pi/4 by a degree-13 odd
- * polynomial (S1..S6); iy == 0 means the tail y is zero. */
+/* fdlibm __kernel_sin(x, y, iy); iy == 0 means the tail y is zero. */
 #include "dw4/ieee_words.h"
 
 #define half 5.00000000000000000000e-01

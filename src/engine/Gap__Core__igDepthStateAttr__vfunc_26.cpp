@@ -1,8 +1,6 @@
-/* 0x0013cb50
- * Pass the result of `source`'s virtual getter (vtable slot 234, +0x3a8; no
- * name recovered) to the virtual setter in slot 32 (+0x80) of `self`, i.e. copy
- * one value from another object of the same family into this depth-state
- * attribute.  Both classes are placeholder dummy-virtual stubs. */
+/* Pass the result of `source`'s virtual getter (vtable slot 234, +0x3a8) to the virtual setter in
+ * slot 32 (+0x80) of `self`, i.e. copy one value from another object of the same family into this
+ * depth-state attribute. Both classes are placeholder dummy-virtual stubs. */
 extern "C" {
 
 void Gap__Core__igDepthStateAttr__vfunc_26(void **self, void **source);

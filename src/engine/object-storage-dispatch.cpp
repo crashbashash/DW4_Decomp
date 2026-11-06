@@ -1,10 +1,8 @@
-/* Object storage dispatch, 0x00300d70..0x00300f50: every helper re-selects the allocator from the
- * object header (igObject_GetAllocator, 0x00301000) and calls one slot of that allocator's vtable,
- * forwarding its arguments unchanged. See docs/engine/object-storage.md for the slot table.
- * Allocator is an observed ABI view of the vtable byte offsets the helpers call through, not an
- * original type; it is never instantiated. Only slots 216 (AllocateStorage) and 264 (FreeStorage)
- * are named by the original symbols; the other slots keep their byte offset until their meaning is
- * established. */
+/* Object storage dispatch: every helper re-selects the allocator from the object header
+ * (igObject_GetAllocator) and calls one slot of that allocator's vtable, forwarding its arguments
+ * unchanged. Allocator is an observed ABI view of the vtable byte offsets the helpers call
+ * through, not an original type; it is never instantiated. Only slots 216 (AllocateStorage) and
+ * 264 (FreeStorage) are named by the original symbols; the other slots keep their byte offset. */
 /* RESERVED(n) declares unused virtual slot n so the named slots land on the
  * right byte offsets. */
 #define RESERVED(n) virtual void reserved_##n()
@@ -45,37 +43,32 @@ void igObject_FreeStorage(int object, int storage);
 void FUN_00300f50(int object, int storage);
 }
 
-/* 0x00300d70 */
 int igObject_AllocateStorage(int object, int size) {
     Allocator *allocator = igObject_GetAllocator(object);
     return allocator->allocate_storage(size);
 }
 
-/* 0x00300db0 */
 int FUN_00300db0(int object, int size, int alignment) {
     Allocator *allocator = igObject_GetAllocator(object);
     return allocator->slot_220(size, alignment);
 }
 
-/* 0x00300e00: reached from igMetaField_EnsureDefaultStorage with (field, size, 1) */
 int FUN_00300e00(int object, int size, int option) {
     Allocator *allocator = igObject_GetAllocator(object);
     return allocator->slot_224(size, option);
 }
 
-/* 0x00300e50 */
 int FUN_00300e50(int object, int storage, int size) {
     Allocator *allocator = igObject_GetAllocator(object);
     return allocator->slot_232(storage, size);
 }
 
-/* 0x00300ea0 */
 int FUN_00300ea0(int object, int storage, int size, int alignment) {
     Allocator *allocator = igObject_GetAllocator(object);
     return allocator->slot_236(storage, size, alignment);
 }
 
-/* 0x00300f00: a null storage pointer returns without touching the allocator */
+/* A null storage pointer returns without touching the allocator */
 void igObject_FreeStorage(int object, int storage) {
     if (storage != 0) {
         Allocator *allocator = igObject_GetAllocator(object);
@@ -83,8 +76,7 @@ void igObject_FreeStorage(int object, int storage) {
     }
 }
 
-/* same instruction body as igObject_FreeStorage; the original distinction between the two is not
- * established */
+/* Same instruction body as igObject_FreeStorage. */
 void FUN_00300f50(int object, int storage) {
     if (storage != 0) {
         Allocator *allocator = igObject_GetAllocator(object);

@@ -1,4 +1,3 @@
-/* 0x002f2e30 - igMemoryPoolContextInfo vfunc_61. Hidden-return struct R (this in a1); child vcall at 104, self vcall at 140; allocator read before the field reload. Alternate -O3. */
 extern "C" {
 void *FUN_002c01f0(int);
 void igObject_Destroy(void *);

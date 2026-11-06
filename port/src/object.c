@@ -1,11 +1,7 @@
-/* dw4/object.c — the reflection-driven runtime object model (porting P2.6).
- *
- * See include/dw4/object.h for the shape and docs/engine/igbinary-format.md for the record
- * encoding.  The class schema is the generated `src/reflection_data.c`; the values come from a
- * decoded `dw4_igb_record`.  Construction recovers the inherited-slot count `K` by the same type
- * match `DW4_Decomp/scripts/igb_inst.py:find_K` uses, so the port names the fields the Python
- * reference names, then copies each value to its declared offset at the width its own type states.
- */
+/* The reflection-driven runtime object model. The class schema is the generated reflection_data.c;
+ * the values come from a decoded `dw4_igb_record`. Construction recovers the inherited-slot count
+ * `K` by a type match, so the port names the same fields the reference decoder names, then copies
+ * each value to its declared offset at the width its own type states. */
 #include "dw4/object.h"
 #include "dw4/reflected.h"   /* the decomp's authoritative class layouts (../include) */
 

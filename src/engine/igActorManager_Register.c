@@ -1,6 +1,3 @@
-/* 0x0045e4b0 igActorManager_Register: registers class igActorManager with the object system, derived from igInfoManager.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igInfoManager_GetPublishedMetaObject[];
 extern char igInfoManager_Register[];
 extern char igActorManager_GetVTable[];
@@ -15,16 +12,16 @@ int igActorManager_InitFields();
 void igActorManager_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igActorManager_metaObject,          /* published MetaObject slot */
-        igInfoManager_Register,                        /* base class registrar */
-        igInfoManager_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igActorManager_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        igActorManager_className,           /* class name */
-        0x38,                                          /* instance size */
-        igActorManager_GetVTable,                      /* vtable getter */
-        &igActorManager_InitFields,                    /* field adder */
-        0,                                             /* extra callback item */
-        g_igActorManager_callbackList         /* callback list */
+        0, /* abstract */
+        g_igActorManager_metaObject,
+        igInfoManager_Register,
+        igInfoManager_GetPublishedMetaObject,
+        thunk_igActorManager_GetMetaObject,
+        igActorManager_className,
+        0x38, /* instance size */
+        igActorManager_GetVTable,
+        &igActorManager_InitFields,
+        0, /* extra callback item */
+        g_igActorManager_callbackList /* callback list */
     );
 }

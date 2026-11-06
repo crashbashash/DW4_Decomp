@@ -1,4 +1,3 @@
-/* 0x00192810 - 196 bytes. Quaternion to 4x4 matrix. Float temporaries declared in a searched order (decides the FPU colouring); alternate compiler -O3,p. */
 void FUN_00192810(void *arg0, void *arg1) {
     float temp_f12;
     float temp_f6;

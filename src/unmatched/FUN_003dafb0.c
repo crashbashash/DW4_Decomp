@@ -1,5 +1,3 @@
-/* Receiver: beNDMWLoadIntf2DataSelIntf (offsets/widths 20,48-52,56,60,72,76-88 match its reflected
- * fields). Resets the data-select screen state. */
 #include "dw4/reflected.h"
 void FUN_003dafb0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1, int arg2) {
     arg0->_plNo = arg1;

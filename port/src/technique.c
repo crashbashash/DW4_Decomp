@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/* Retail facts (port/docs/combat.md "Technique firing (R1 panel)"): the panel update accepts input only once its frame counter reached 2
- * (Ram+0x24) and the named timer FIRE has elapsed; a fired technique starts FIRE with pcTech.DELAY frames (60 Hz), a refused press with 0x0fe502aa ns
- * (about 16 frames). Cursor: a four-row window without wrap. MP is charged in the panel when Cross is accepted (strictly less MP refuses). */
+/* Retail facts: the panel update accepts input only once its frame counter reached 2 (Ram+0x24)
+ * and the named timer FIRE has elapsed; a fired technique starts FIRE with pcTech.DELAY frames (60
+ * Hz), a refused press with 0x0fe502aa ns (about 16 frames). Cursor: a four-row window without
+ * wrap. MP is charged in the panel when Cross is accepted (strictly less MP refuses). */
 #define DEBOUNCE_FRAMES 2
 #define NG_LOCK_NS 0x0fe502aaULL
 #define PAD_R1 0x800u
@@ -138,9 +139,10 @@ int dw4_technique_poll(dw4_technique *t,int slot,int airborne,dw4_technique_cast
 void dw4_technique_launch(dw4_technique *t,int slot,const dw4_technique_cast *cast,const float world[16])
 {
     if(!t || !cast || slot<0 || slot>3)return;
-    /* Raise: the `reanimation` section of SQ_WAZA carries its own HITBOX (kind 80050, frame 0, 1x1x1 at the origin), which dw4_combat_tick delivers
-     * to the player bodies; a stand-in bullet on top would deliver the self hit twice (two skill-growth draws). The other support families have no
-     * HITBOX in their section, so their volume is this stand-in (an assumption, docs/combat.md "Support technique wiring"). */
+    /* Raise: the `reanimation` section of SQ_WAZA carries its own HITBOX (kind 80050, frame 0,
+     * 1x1x1 at the origin), which dw4_combat_tick delivers to the player bodies; a stand-in bullet
+     * on top would deliver the self hit twice (two skill-growth draws). The other support families
+     * have no HITBOX in their section, so their volume is this stand-in (an assumption). */
     if(cast->support && cast->base==50)return;
     slot_state *p=t->slot+slot;flight *b=p->bullet+p->next_bullet++%FLIGHTS;
     *b=(flight){.live=1,.attack=cast->attack,.support=cast->support};memcpy(b->world,world,sizeof b->world);

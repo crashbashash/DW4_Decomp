@@ -1,6 +1,3 @@
-/* SJX_Init: sets up the server-side buffer pair and the DTX server
- * (strings "E0100301: SJX_Init can't allocate IOP Heap" and
- * "E0100302: SJX_Init can't create DTX"). */
 extern int D_004ba484;          /* init count */
 extern char D_004ba720[2256];   /* EE work buffer */
 extern int D_004ba71c;          /* work length */

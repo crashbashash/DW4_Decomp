@@ -1,28 +1,15 @@
-/* dw4/texpack.h — texture-pack reader (the second pack kind in NDMW.AFS).
- *
- * A texture pack is a class directory, a string table, an id->class table, a stream of
- * serialised `igImage`/`igClut` objects and a flat pool holding every texture's index
- * grid and palette.  The layout is documented in
- * DW4_Decomp/docs/engine/texture-packs.md; the decoders it was recovered with are
- * DW4_Decomp/scripts/igb_texpack.py and verify_texpack_layout.py, and this is the port's
- * C reader for the same rules:
- *
- *   +0x00  u32[12] header      [6] = sum(block sizes) + 4*(nclut + 2)
- *                              [7] = nclut + nimg + 3
- *   +recs  igObject records    { u32 class, u32 bytes } then the fields at the offsets
- *                              data/reflection.json gives: class 10 = igImage
- *                              (_px +8, _py +12, _pfmt +44, _imageSize +48, _pImage +52,
- *                              _pClut +68, _bytesPerRow +76, _pNameString +88),
- *                              class 11 = igClut (_fmt +8, _numEntries +12, _stride +16,
- *                              _pData +20)
- *   +tbl   id -> class table   { u32 tableBytes, u32 idCount } then idCount u16; the
- *                              class numbering is pack-local and self-validating
- *   +pool  the blocks           in ascending id order, an image's grid one byte in
- *
- * The image -> palette link is `_pClut`'s rank among the ids of its class: the ids of a
- * class are in creation order (= file order), so that rank names the r-th igClut record,
- * whose `_pData` is the palette block.  No load replay is involved.
- */
+/* dw4/texpack.h — texture-pack reader (the second pack kind in NDMW.AFS). A texture pack is a
+ * class directory, a string table, an id->class table, a stream of serialised `igImage`/`igClut`
+ * objects and a flat pool holding every texture's index grid and palette. The layout: +0x00
+ * u32[12] header [6] = sum(block sizes) + 4*(nclut + 2) [7] = nclut + nimg + 3 +recs igObject
+ * records { u32 class, u32 bytes } then the fields at the offsets the reflection schema gives:
+ * class 10 = igImage (_px +8, _py +12, _pfmt +44, _imageSize +48, _pImage +52, _pClut +68,
+ * _bytesPerRow +76, _pNameString +88), class 11 = igClut (_fmt +8, _numEntries +12, _stride +16,
+ * _pData +20) +tbl id -> class table { u32 tableBytes, u32 idCount } then idCount u16; the class
+ * numbering is pack-local and self-validating +pool the blocks in ascending id order, an image's
+ * grid one byte in The image -> palette link is `_pClut`'s rank among the ids of its class: the
+ * ids of a class are in creation order (= file order), so that rank names the r-th igClut record,
+ * whose `_pData` is the palette block. No load replay is involved. */
 #ifndef DW4_TEXPACK_H
 #define DW4_TEXPACK_H
 

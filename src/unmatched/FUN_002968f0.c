@@ -1,4 +1,4 @@
-/* Sets a playback limit time (its error string names it mwPlySetLimitTime): parameter 54 = `value`
+/* Sets a playback limit time: parameter 54 = `value`
  * * 1000 through FUN_002967b8, rejecting an invalid handle. */
 extern int FUN_002968c0(void *sfd);
 extern void FUN_0029a320(const char *msg);

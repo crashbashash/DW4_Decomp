@@ -1,6 +1,4 @@
-/* FUN_0011c640 -- fdlibm __ieee754_log(x): natural logarithm. x is scaled to [sqrt(2)/2, sqrt(2)),
- * f = x - 1, and log(1+f) = f - s*(f - R) with s = f/(2+f) and R an even/odd split polynomial in
- * z = s*s (Lg1..Lg7); k*ln2 is added back from ln2_hi/ln2_lo. */
+/* fdlibm __ieee754_log(x). */
 #include "dw4/ieee_words.h"
 
 static const double ln2_hi = 6.93147180369123816490e-01,

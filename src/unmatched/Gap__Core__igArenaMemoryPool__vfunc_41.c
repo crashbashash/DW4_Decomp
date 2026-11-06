@@ -1,5 +1,5 @@
-/* 0x0031d1e0 — records the requested limit when none is set yet (or it does not exceed the current one) and hands back the
- * matching status word. Combat compiler at plain -O3; `arg2 <= lim` (not `lim >= arg2`) and the store repeated in both arms. */
+/* The comparison is written `arg2 <= lim`, not `lim >= arg2`, and the store is repeated in both
+ * arms. */
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];
 void Gap__Core__igArenaMemoryPool__vfunc_41(int *arg0, char *arg1, unsigned long long arg2) {

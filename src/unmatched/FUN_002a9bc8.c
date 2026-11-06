@@ -1,4 +1,3 @@
-/* Starts the work for the object when FUN_002a96e0 accepts it: picks FUN_00109118 + FUN_002a9c50 or FUN_00108f88 depending on FUN_002abf68. */
 typedef struct Obj { char pad[8120]; char *sub; } Obj;
 extern int FUN_002a96e0(Obj *);
 extern void FUN_002a9628(char *);

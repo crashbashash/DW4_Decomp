@@ -1,9 +1,6 @@
-/* 0x001624b0
- * Look up the bound vertex array's stream with component type 5, index 0
- * (igVertexArray2__FindVertexData, the igVertexArray2 stream accessor) and pass it to
- * FUN_00162b50, which switches on the class of the stream's data list and
- * leaves its component count in v0.  The declared return type is void, as
- * matched.  docs/engine/igvertexarray2helper.md, slot 24. */
+/* Looks up the bound vertex array's stream with component type 5, index 0
+ * (igVertexArray2__FindVertexData) and passes it to FUN_00162b50, which switches on the class of
+ * the stream's data list and leaves its component count in v0. The declared return type is void. */
 #include "dw4/reflected.h"
 int igVertexArray2__FindVertexData(int vertexArray, int componentType, int componentIndex);
 int FUN_00162b50(int vertexData);

@@ -1,8 +1,3 @@
-/* 0x00232520 igInsightScheduler_Register: registers class igInsightScheduler with the object system, derived from igObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json.
- * The post-init hook is a three-instruction stub that stores the entry point 0x00232320 in this
- * MetaObject's `_abstractProxy` (igMetaObject +0x3c). */
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igInsightScheduler_GetMetaObject[];
 extern char igObject_Register[];
@@ -14,16 +9,16 @@ extern int igInsightScheduler_SetAbstractProxy_002325a0[4];
 void igInsightScheduler_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igInsightScheduler_metaObject,         /* published MetaObject slot */
-        igObject_Register,                                /* base class registrar */
-        igObject_GetMetaObject_ParentAccessor,            /* base class MetaObject accessor */
-        thunk_igInsightScheduler_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        igInsightScheduler_className,          /* class name */
-        8,                                                /* instance size */
-        0,                                                /* vtable getter */
+        1, /* abstract */
+        g_igInsightScheduler_metaObject,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
+        thunk_igInsightScheduler_GetMetaObject,
+        igInsightScheduler_className,
+        8, /* instance size */
+        0,
         &igInsightScheduler_SetAbstractProxy_002325a0[0], /* post-init hook */
-        0,                                                /* extra callback item */
-        0                                                 /* callback list */
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

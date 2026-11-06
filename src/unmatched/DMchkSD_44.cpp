@@ -1,4 +1,4 @@
-/* 0x00373390 - 276 bytes. Dispatch a name to one of two modes (two accepted spellings each); alternate compiler -O3,p. */
+/* Dispatches a name to one of two modes (two accepted spellings each). */
 extern "C" {
 int FUN_0037e3a0(int, int, int, int, int, int, int, int);
 int igStrCmp(int *, int);

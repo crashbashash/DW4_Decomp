@@ -1,6 +1,4 @@
-/* FUN_0011b3e8 -- fdlibm __ieee754_asin(x): arcsine. |x| < 0.5 uses a rational approximation
- * x + x*p(t)/q(t) with t = x*x; otherwise asin(x) = pi/2 - 2*asin(sqrt((1-|x|)/2)) with the square
- * root split into high/low words for extra precision (pS0..pS5, qS1..qS4). */
+/* fdlibm __ieee754_asin(x). */
 #include "dw4/ieee_words.h"
 
 extern double FUN_00122538(double); /* fabs */

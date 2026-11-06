@@ -1,6 +1,3 @@
-/* C++ translation unit (retail kept this function's exception index record): the pooled-string token passed
- * to FUN_001ca620 is owned by a StringRef, released after the call (retail table: one range, destroy at sp+92,
- * out-of-line copy StringRef_Destruct_00130720 = config/SLUS-20836/unit-objects.json duplicate __dt__9StringRefFv). */
 typedef struct Rc { int w0; int refs; } Rc;
 typedef struct L { int w0, w4; volatile int n; int cap; int *data; } L;
 typedef struct S { char pad[36]; L *f36; void *f40; } S;

@@ -20,7 +20,6 @@ struct Stream {
     int f84;
 };
 
-/* Rounds the buffered byte count up (by 2051, to a 2048 multiple) under the stream semaphore. */
 void FUN_002a9680(struct Stream *stream) {
     WaitSema(stream->sema);
     stream->f20 = (stream->f20 + 2051) / 2048 * 2048;

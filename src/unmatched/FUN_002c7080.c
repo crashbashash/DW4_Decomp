@@ -1,4 +1,3 @@
-/* Lazily created meta object; same template as FUN_002cd0a0. */
 typedef struct M { char pad4[4]; int f4; char pad8[10]; short f18; } M;
 typedef struct R { char pad12[12]; int f12; } R;
 R *FUN_002fc250();

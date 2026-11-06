@@ -1,6 +1,3 @@
-/* 0x0014bbc0 igUserUCodeExt_Register: registers class igUserUCodeExt with the object system, derived from igContextExt.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char thunk_igUserUCodeExt_GetMetaObject[];
 extern char igContextExt_GetPublishedMetaObject[];
 extern char igContextExt_Register[];
@@ -12,16 +9,16 @@ void FUN_0014bc50(void);
 void igUserUCodeExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
-        1,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igUserUCodeExt_metaObject,         /* published MetaObject slot */
-        igContextExt_Register,                        /* base class registrar */
-        igContextExt_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igUserUCodeExt_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        igUserUCodeExt_className,          /* class name */
-        0x14,                                         /* instance size */
-        0,                                            /* vtable getter */
-        FUN_0014bc50,                             /* field adder */
-        0,                                            /* extra callback item */
-        0                                             /* callback list */
+        1, /* abstract */
+        g_igUserUCodeExt_metaObject,
+        igContextExt_Register,
+        igContextExt_GetPublishedMetaObject,
+        thunk_igUserUCodeExt_GetMetaObject,
+        igUserUCodeExt_className,
+        0x14, /* instance size */
+        0,
+        FUN_0014bc50,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

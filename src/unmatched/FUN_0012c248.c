@@ -1,12 +1,11 @@
-/* FUN_0012c248 -- newlib _strtoul_r(reent, nptr, endptr, base) on a 64-bit unsigned long.
- * Same character-class table (0x4d3d10, indexed from +1) and 64-bit divide/modulo helpers as the
- * signed variant FUN_0012bfe0; the overflow cutoff is ULONG_MAX and the sign only negates the result. */
+/* newlib _strtoul_r(reent, nptr, endptr, base) on a 64-bit unsigned long; the overflow cutoff is
+ * ULONG_MAX and the sign only negates the result. */
 typedef struct Reent { int _errno; } Reent;
 
 extern const unsigned char D_004d3d10[]; /* newlib _ctype_ */
-extern unsigned long __udivdi3(unsigned long, unsigned long); /* FUN_0022f1e0 */
+extern unsigned long __udivdi3(unsigned long, unsigned long);
 extern unsigned long __umoddi3(unsigned long, unsigned long);
-extern unsigned long __muldi3(unsigned long, unsigned long); /* FUN_0022e440 */
+extern unsigned long __muldi3(unsigned long, unsigned long);
 
 #define CT(c) (D_004d3d10 + 1)[c]
 #define CT_UPPER 0x1

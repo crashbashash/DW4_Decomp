@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* Panel slot-state step (companion of FUN_003da7c0). Alternate combat compiler, -O3,p
- * -Cpp_exceptions off; the per-slot name text lives in an owning stack reference whose destructor
- * duplicate is named in config/SLUS-20836/unit-objects.json. */
 extern "C" {
 int FUN_003614f0(...);
 int beUnicodeObj_AllocateBuffer(...);
@@ -31,9 +28,8 @@ extern unsigned char GPR_00554c14;
 /* matching construct: the model controller's _pos is a vec3 but reflected.h truncates it to one int; a typed receiver here grows the function, so the float view stays local */
 struct Ob { char p[28]; float v28; float v32; float v36; };
 struct V3 { float x; float y; float z; };
-/* Owning stack reference to the slot's name text: constructed from the freshly created object and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names
- * is the retail body 0x003832d0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the slot's name text; released on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class ObjectRef {
 public:
     beUnicodeObj *p;
@@ -182,7 +178,6 @@ extern "C" unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1
                     al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
                     ObjectRef text((beUnicodeObj *)FUN_003614f0(al));
                     beUnicodeObj_AllocateBuffer(text.p, 8);
-                    /* copy up to eight UTF-16 units of the name (skipping its first unit) and zero-fill the rest */
                     src = (unsigned short *)it->_dmNameUni;
                     n = 0;
                     a2 = (unsigned short *)text.p->_buffer;

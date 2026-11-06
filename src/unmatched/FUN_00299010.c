@@ -1,5 +1,4 @@
-/* Sets a playback handle's loop flag on its +76 stream through FUN_00277768 (its error string
- * names it mwPlySetLpFlg), rejecting an invalid handle. */
+/* Sets a playback handle's loop flag on its +76 stream through FUN_00277768, rejecting an invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern void FUN_00277768(int stream, int loop);

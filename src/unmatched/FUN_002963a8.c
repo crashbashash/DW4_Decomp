@@ -1,4 +1,4 @@
-/* Returns a playback handle's SFD decoder handle at +64 (its error string names it mwPlyGetSfdHn),
+/* Returns a playback handle's SFD decoder handle at +64,
  * or 0 for an invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);

@@ -25,7 +25,6 @@ struct Player2a8998 {
     int f72;                              /* 4 = running */
 };
 
-/* Under the guard, returns the second-best slot from FUN_002a8a30, or 0 when not running or FUN_002af6c0 rejects it. */
 struct Slot *FUN_002a8998(struct Player2a8998 *player) {
     int guard;
     struct Slot *best;

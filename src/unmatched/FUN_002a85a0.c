@@ -21,7 +21,6 @@ struct Player2a85a0 {
     struct Context *context;              /* +8120 */
 };
 
-/* Claims the first free slot under the guard; returns it, or 0 when all are in use. */
 struct Slot *FUN_002a85a0(struct Player2a85a0 *player) {
     char guard[16];
     struct Context *context;

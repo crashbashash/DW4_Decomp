@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beNDMWLoadIntf2ComMdlCtrl__StartAt(int, int, int *, int *, float *, int);
 int beNDMWLoadIntf2ComMdlCtrl__Play(int, int, int *, int *, int);
@@ -224,4 +222,4 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int mar
         }
     return self->_isOpen;
 }
-} /* extern "C" */
+}

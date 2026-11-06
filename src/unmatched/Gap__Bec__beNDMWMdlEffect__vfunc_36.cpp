@@ -7,7 +7,7 @@ igObject *beBaseInfoDataList_Create(...);
 int FUN_00396340(...);
 int Memory_GetAllocatorBySelector(...);
 int igObject_GetAllocator(...);
-/* property record: reference at +20 (class not recovered) */
+/* Property record: reference at +20. */
 struct PropertyRecordRef { char p[20]; igObject *f20; };
 PropertyRecordRef *igProperty_FindByName(...);
 extern int DAT_00515db8[4];
@@ -23,28 +23,21 @@ struct ReleaseRef { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-/* Owning stack reference to the freshly created property data list: constructed from the object
- * and released at the end of the full expression that stores it (reference count in the low 23
- * bits of _refCount).  The out-of-line copy the exception table names is the retail body
- * 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__7ListRefFv). */
+/* Owning stack reference to the freshly created property data list; released at the end of the
+ * full expression that stores it (reference count in the low 23 bits of _refCount). */
 class ListRef {
 public:
     igObject *p;
     ListRef(igObject *o) : p(o) {}
     ~ListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the effect work object created here: released on scope exit.  The
- * out-of-line copy the exception table names is the retail body 0x00352fc0
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9EffectRefFv). */
+/* Owning stack reference to the effect work object created here; released on scope exit. */
 class EffectRef {
 public:
     igObject *p;
     EffectRef(igObject *o) : p(o) {}
     ~EffectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Store a freshly created data list in the ram, taking the ram's share and dropping the previous
- * list; the caller passes the list as a temporary holder that gives up the creating share at the end
- * of the full expression. */
 struct DataList { static inline void store(beBaseInfoRam *ram, const ListRef &list) {
     igObject *created = list.p;
     igObject *old;

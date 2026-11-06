@@ -1,8 +1,4 @@
-/* 0x003dc2e0 - DATASELINTF area reset state machine. Receiver is beNDMWLoadIntf2DataSelIntf; _statDisp is a
- * beNDMWLoadIntf2DegiStateCtrl whose _statDataList (beNDMWLoadIntf2DegiStateList) _data[1] is the state object. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 extern int DAT_00516d30[4], DAT_00516d70[4], DAT_00516d80[4], DAT_00516d90[4], DAT_00516da0[4], DAT_00516dc8[4];
 int FUN_003d9e10(int, int, int);
@@ -60,4 +56,4 @@ unsigned char FUN_003dc2e0(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     }
     return r;
 }
-} /* extern "C" */
+}

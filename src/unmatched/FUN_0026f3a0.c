@@ -2,7 +2,7 @@
  * name in its first 12 characters (FUN_0012aba0 returning 0), or 0 for an empty name or no match. */
 typedef struct Slot_26f3a0 {
     char name[16];  /* 0x00 */
-} Slot_26f3a0;      /* 0x10 bytes */
+} Slot_26f3a0;
 
 extern Slot_26f3a0 *DAT_0056dfd4;
 extern int DAT_0056dfd8;

@@ -1,4 +1,3 @@
-/* 0x001e8850 - 308 bytes. Set the three colour bytes from 0..1 floats (inline float to unsigned conversion) and flag the dirty bits; alternate -O3. */
 struct Col { char pad[224]; unsigned char r; unsigned char g; unsigned char b; };
 extern int DAT_00491478[4];
 extern struct Col *DAT_0056ad80[4];

@@ -2,7 +2,7 @@
 struct R { int a, b, c; };
 struct H { char pad[236]; short a, b, c; };
 struct Q { char pad[200]; int a, b, c; };
-/* Tail of the NameSel object past the reflected fields (+100): selection table state, class not recovered. */
+/* Tail of the NameSel object past the reflected fields (+100): selection table state. */
 struct NameSelTail {
     char p0[104];
     struct R rows[8];

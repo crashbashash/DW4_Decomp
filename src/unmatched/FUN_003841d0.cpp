@@ -3,7 +3,7 @@ extern "C" {
 int igStrCmp(const char *, const char *);
 extern char DAT_004e0858[];   /* the empty string */
 extern char DAT_0050e7b8[];
-/* second argument: messenger node whose +12 holds the beFontInfo (class of the node itself not recovered) */
+/* Second argument: messenger node whose +12 holds the beFontInfo. */
 struct P { char p[12]; int f12; };
 int FUN_003841d0(beFont *arg0, struct P *arg1);
 }
@@ -19,7 +19,6 @@ int FUN_003841d0(beFont *arg0, struct P *arg1) {
     int off;
     beBaseInfoDataList *l;
     int off2;
-
 
     res = -1;
     l = (beBaseInfoDataList *)((beFontInfo *)arg1->f12)->_dataList;

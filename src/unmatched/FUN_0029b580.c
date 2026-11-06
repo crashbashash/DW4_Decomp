@@ -1,7 +1,7 @@
 /* Copies a seven-word buffer configuration into DAT_0057fa90, rounding the two sizes up to 32
  * bytes. */
-/* Seven-word buffer configuration: pointer-typed words and two byte sizes (+8, +24).
- * The pointer/int split is what lets the scheduler reorder the loads and stores the way retail does. */
+/* Seven-word buffer configuration: pointer-typed words and two byte sizes (+8, +24). The
+ * pointer/int split keeps the compiler's load and store order. */
 struct BufConfig {
     void *f0;
     void *f4;

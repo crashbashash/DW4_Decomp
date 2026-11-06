@@ -1,4 +1,5 @@
-/* 0x00161460 - 156 bytes. Cast-or-null result kept in a separate variable (t = s0 / t = 0): the then arm survives as a jump and the join load is copied into its delay slot. */
+/* The cast-or-null result is kept in a separate variable (t = s0 / t = 0): the then arm survives
+ * as a jump and the join load is copied into its delay slot. */
 #include "dw4/reflected.h"
 void *igVertexArray2__FindVertexData();
 int igObject_IsKindOf();

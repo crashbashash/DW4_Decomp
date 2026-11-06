@@ -1,5 +1,5 @@
 /* Converts a float to a signed 64-bit integer by converting its magnitude with FUN_0022ffe8 and
- * negating (libgcc2 __fixsfdi shape; name is a hypothesis). */
+ * negating. */
 typedef int SItype __attribute__((mode(SI)));
 typedef unsigned int USItype __attribute__((mode(SI)));
 typedef int DItype __attribute__((mode(DI)));

@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_002eb010(int);
 int StringPool_Construct(int);
@@ -24,4 +22,4 @@ int *FUN_003cc550(int *arg0, int arg1) {
     *arg0 = var_v0;
     return arg0;
 }
-} /* extern "C" */
+}

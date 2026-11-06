@@ -22,18 +22,16 @@ extern unsigned char GPR_00554c14;
 struct ElementBufferList { char p[8]; int n; int cap; int *data; };
 /* window object: close-text lists at +60/+64 are beNDMWWindow fields; the rest (list at +104, flag bytes at +108/+110/+111) belongs to an unreflected subclass */
 struct WindowObject { int word0; int references; char p8[52]; int f60; int f64; char p9[32]; ElementBufferList *list; int f104; char f108; char pad109; char f110; char f111; };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     const char *p;
     StringRef(const char *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
-/* Owning stack reference to the sub-window created here: released on scope exit (reference count in
- * the low 23 bits of references).  The out-of-line copy the exception table names is the retail body
- * 0x00414420 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the sub-window created here; released on scope exit (reference count
+ * in the low 23 bits of references). */
 class WindowRef {
 public:
     WindowObject *p;
@@ -43,7 +41,6 @@ public:
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 #include "dw4/reflected.h"
 extern "C" WindowObject *FUN_003baf10(...);
-/* intern `text` (the pool singleton is created on first use) and append the token to `field` */
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \

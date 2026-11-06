@@ -1,6 +1,3 @@
-/* 0x00231ac0 igMessageFilterList_Register: registers class igMessageFilterList with the object system, derived from igObjectList.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObjectList_GetPublishedMetaObject[];
 extern char igMessageFilterList_GetVTable[];
 extern char thunk_igMessageFilterList_GetMetaObject[];
@@ -14,16 +11,16 @@ int igMetaObject_RegisterClass();
 void igMessageFilterList_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMessageFilterList_metaObject, /* published MetaObject slot */
-        igObjectList_Register,                     /* base class registrar */
-        igObjectList_GetPublishedMetaObject,       /* base class MetaObject accessor */
-        thunk_igMessageFilterList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igMessageFilterList_className,  /* class name */
-        0x14,                                      /* instance size */
-        igMessageFilterList_GetVTable,             /* vtable getter */
-        0,                                         /* field adder */
-        0,                                         /* extra callback item */
-        g_igMessageFilterList_callbackList  /* callback list */
+        0, /* abstract */
+        g_igMessageFilterList_metaObject,
+        igObjectList_Register,
+        igObjectList_GetPublishedMetaObject,
+        thunk_igMessageFilterList_GetMetaObject,
+        igMessageFilterList_className,
+        0x14, /* instance size */
+        igMessageFilterList_GetVTable,
+        0,
+        0, /* extra callback item */
+        g_igMessageFilterList_callbackList /* callback list */
     );
 }

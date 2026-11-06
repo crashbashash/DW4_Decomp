@@ -1,15 +1,11 @@
-/* Gap__Bec__beNDMWStatus__vfunc_34: message handler of the status screen (enum-dispatched). Build
- * requirements: alternate compiler (local/mwcps2/combat) with "-O3,p -Cpp_exceptions off"; the
- * ObjectRef destructor (__dt__9ObjectRefFv) is a duplicate of the retail body at 0x001363f0 and
- * operator delete is external. Codegen notes (all measured): - Every DAT_ string is declared
- * int[4] on purpose: a small object (<= 8 bytes) is addressed gp-relative, which makes gp a live
- * physical neighbour of every node and shifts the whole s-register colouring. - The block-local
- * order "int idx; int v = ...; { igIntList *lst = ...; idx = ...; }" gives the per-row nodes the
- * ids idx < v < lst, which is the push order retail needs (colours idx s5, v s4, lst s3). -
- * beMessenger_AppendBool takes an unsigned char and beMessenger_AppendObject a pointer: the
- * argument type decides which of the two argument loads lands in the delay slot. - The 5 and 2
- * byte copies are the compiler's __memcpy intrinsic (alternate compiler only; the default compiler
- * crashes on it, so the duplicate check compiles the plain loop). */
+/* Message handler of the status screen (enum-dispatched). Every DAT_ string is declared int[4] on
+ * purpose: a small object (<= 8 bytes) is addressed gp-relative, which makes gp a live physical
+ * neighbour of every node and shifts the whole s-register colouring. The block-local order `int
+ * idx; int v = ...; { igIntList *lst = ...; idx = ...; }` gives the per-row nodes the ids idx < v
+ * < lst, the push order needed (colours idx s5, v s4, lst s3). beMessenger_AppendBool takes an
+ * unsigned char and beMessenger_AppendObject a pointer: the argument type decides which of the two
+ * argument loads lands in the delay slot. The 5 and 2 byte copies are the compiler's __memcpy
+ * intrinsic (alternate compiler only; the default compiler crashes on it). */
 #include "dw4/reflected.h"
 
 extern "C" {
@@ -102,10 +98,8 @@ extern int DAT_00516b10[4];
 extern int DAT_00516b18[4];
 }
 
-/* Owning stack reference to the first record of the selected folder: constructed from the object (then
- * retained) and released on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line
- * copy the exception table names is the retail body 0x001363f0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to the first record of the selected folder: constructed from the object
+ * (then retained) and released on scope exit (reference count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

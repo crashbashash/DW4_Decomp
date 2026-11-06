@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int igMetaEnum_Create(int *, int *, int *, int);
 extern int DAT_004cc020[4];
@@ -12,4 +10,4 @@ int FUN_003c7d40(void) {
     }
     return DAT_0058bee8[0];
 }
-} /* extern "C" */
+}

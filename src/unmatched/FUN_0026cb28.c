@@ -1,6 +1,6 @@
 /* Returns -1 (after reporting DAT_004ee9d8) for a null handle, 0 without a source, else whether
  * the source position for argument 1 has reached the byte count of the sector field at 62. */
-/* Handle layout shared by FUN_0026bb38 … FUN_0026ebf8 (offsets from their accesses). */
+/* Handle layout shared by FUN_0026bb38 through FUN_0026ebf8. */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {
     void *slot0[3];

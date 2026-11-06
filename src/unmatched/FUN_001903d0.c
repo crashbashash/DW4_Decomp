@@ -1,5 +1,3 @@
-/* Transpose into a stack matrix then Matrix44_Copy(arg0, tmp): the draft dropped the leading
- * argument. */
 int Matrix44_Copy(float *, float *);
 void FUN_001903d0(float *a) {
     float m[16];

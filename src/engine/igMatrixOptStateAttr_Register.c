@@ -1,6 +1,3 @@
-/* 0x00135ad0 igMatrixOptStateAttr_Register: registers class igMatrixOptStateAttr with the object system, derived from igVisualAttribute.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualAttribute_Register[];
 extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igMatrixOptStateAttr_GetVTable[];
@@ -14,16 +11,16 @@ int igMatrixOptStateAttr_InitFields();
 void igMatrixOptStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMatrixOptStateAttr_metaObject,        /* published MetaObject slot */
-        igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igMatrixOptStateAttr_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        igMatrixOptStateAttr_className,         /* class name */
-        0x10,                                              /* instance size */
-        igMatrixOptStateAttr_GetVTable,                    /* vtable getter */
-        &igMatrixOptStateAttr_InitFields,                  /* field adder */
-        0,                                                 /* extra callback item */
-        0                                                  /* callback list */
+        0, /* abstract */
+        g_igMatrixOptStateAttr_metaObject,
+        igVisualAttribute_Register,
+        igVisualAttribute_GetPublishedMetaObject,
+        thunk_igMatrixOptStateAttr_GetMetaObject,
+        igMatrixOptStateAttr_className,
+        0x10, /* instance size */
+        igMatrixOptStateAttr_GetVTable,
+        &igMatrixOptStateAttr_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

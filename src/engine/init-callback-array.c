@@ -1,15 +1,10 @@
-/* The growable callback array of the class-registration protocol (data pointer,
- * count, capacity): igArray_Construct 0x002d3400, igArray_Destruct 0x002d3420 and
- * igArray_Append 0x002d3480.  docs/engine/metadata-callback-services.md documents
- * the lifetime and the growth rule.
- *
- * The growth rule is retail's, not a conventional 1.5x: the first capacity is 4 and
- * every later growth multiplies the capacity by (capacity * 3) / 2, so ordinary
- * capacities advance 4 -> 24 -> 864.  Do not "fix" it. */
+/* The growable callback array of the class-registration protocol (data pointer, count, capacity).
+ * The growth rule is retail's, not a conventional 1.5x: the first capacity is 4 and every later
+ * growth multiplies the capacity by (capacity * 3) / 2, so ordinary capacities advance 4 -> 24 ->
+ * 864. Do not "fix" it. */
 typedef struct {int *data;int count;int capacity;} CallbackArray;
 
-/* Object system record: only the allocator it keeps at +52 is used here
- * (docs/engine/metadata-callback-services.md, "object system +52"). */
+/* Object system record: only the allocator it keeps at +52 is used here. */
 typedef struct ObjectSystemRecord {
     char unknown0[52];
     void *allocator;

@@ -1,6 +1,5 @@
-/* Lazily created singleton with refcount, local pointer kept in memory via a volatile pointer
- * local (retail stores and reloads it), one-word struct returns for the hidden-pointer virtuals;
- * alternate compiler. */
+/* The local pointer is kept in memory through a volatile pointer local, and the hidden-pointer
+ * virtuals return one-word structs. */
 extern "C" {
 int FUN_001007e0(int);
 void FUN_00245e80(int, int, int, int);

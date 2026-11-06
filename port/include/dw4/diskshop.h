@@ -1,6 +1,5 @@
-/* Native Digi-Disk shop: retail beNDMWShopCtrl50 update 42a2e0..42b7f8 (SUBWND mode 5, "DISK") with its
- * sell branch (ShopCtrlSell 434790, ShopCtrlDeviceSell 4353e0, ShopCtrlDiskSell 436ac0).
- * Evidence and open boundaries: port/docs/disk-shop.md. */
+/* Native Digi-Disk shop: retail beNDMWShopCtrl50 update 42a2e0..42b7f8 (SUBWND mode 5, "DISK")
+ * with its sell branch (ShopCtrlSell 434790, ShopCtrlDeviceSell 4353e0, ShopCtrlDiskSell 436ac0). */
 #ifndef DW4_DISKSHOP_H
 #define DW4_DISKSHOP_H
 #include "dw4/statusview.h"

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct PropertyRecord { char header[12]; void *value; } PropertyRecord;
 int FUN_002eb010(int);
@@ -43,7 +41,6 @@ extern int DAT_00586f20[4];
 #define RELO(X) { igObject *q = (X); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7fffff) == 0) igObject_Destroy(q); } }
 void FUN_003f82a0(beNDMWGameRam *arg0, int arg1, int arg2) {
 /* matching construct: local declaration order fixes register allocation */
-//D<
     int var_s0b;
     igIntList *a0;
     int s4;
@@ -75,7 +72,6 @@ void FUN_003f82a0(beNDMWGameRam *arg0, int arg1, int arg2) {
     igIntList *a2;
     int var_s2b;
     int s1i;
-//D>
     s4 = A_(((int *)((igIntList *)arg0->_playerDataListList)->_data)[arg1]);
     igProperty_GetRecord(s4, &DAT_00518858[0]);
     igProperty_GetRecord(s4, &DAT_00518848[0])->value = (void *)arg2;
@@ -156,4 +152,4 @@ void FUN_003f82a0(beNDMWGameRam *arg0, int arg1, int arg2) {
         s1c->value = s0c;
     }
 }
-} /* extern "C" */
+}

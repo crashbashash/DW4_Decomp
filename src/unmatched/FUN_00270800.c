@@ -1,7 +1,6 @@
 /* Reports whether the named file exists: splits the path into device and file names
  * (FUN_0026fe00), finds the device interface (FUN_0026fbb8) and calls its entry +64; errors are
- * reported through FUN_0026f530 and return 0. Its error strings name it cvFsIsExistFile (CRI), a
- * name hypothesis. */
+ * reported through FUN_0026f530 and return 0. */
 typedef struct CvFsDevice_270800 {
     void *pad0[16];
     int (*is_exist_file)(const char *name);  /* 0x40 */

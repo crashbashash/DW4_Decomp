@@ -1,4 +1,7 @@
-/* beSelectCtrl::vfunc_31 (0x0039cbf0): per-ram select-control update. Alt compiler (combat), -O3,p -Iinclude, C++ (.cpp). self=beSelectCtrl*, ram=beBaseInfoRam*, rd=beSelectCtrlInfoRamData*, wk=beSelectCtrlInfoWork*. Keys: bool flags (daddiu), ram->_ramNo/_svSeqName hoisted into locals before NAME ternary, switch(st3) case0/default, volatile re-read of ram->_st2 in the <16 test, info declared first, the on-demand data list held by an ObjectRef (its destructor is the exception table's destroy action), (unsigned) index in decide-list byte test. */
+/* Bool flags use daddiu, ram->_ramNo and ram->_svSeqName are hoisted into locals before the NAME
+ * ternary, switch(st3) has case 0 and default, ram->_st2 is re-read volatile in the `< 16` test,
+ * info is declared first, the on-demand data list is held by an ObjectRef, and the decide-list
+ * byte test uses an unsigned index. */
 #include "dw4/reflected.h"
 extern "C" {
 extern char DAT_0050f8b0[];
@@ -43,10 +46,8 @@ extern unsigned char GPR_00554c14;
 
 #define NAME (info->_name ? info->_name : (int)&DAT_004e0858[0])
 typedef struct DecideList { char pad[16]; unsigned char *data; } DecideList;
-/* Owning stack reference to the freshly created data list: constructed from the object and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the
- * exception table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list; released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

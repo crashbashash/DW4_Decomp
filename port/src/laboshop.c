@@ -1,7 +1,7 @@
-/* beNDMWShopCtrlDigilabo update 431760..432950 and its Evolve child (beNDMWShopCtrlEvolve 42f710..430d20). Field names
- * follow the other shop controllers: the primary state is +1c, main/sub are +20/+24, +30 is _retCode (written into
- * ret.selection by the child selectors), +50 the child-count snapshot. Completion of a child is a change in the
- * child count, as in retail. Evidence and boundaries: port/docs/labo-shop.md. */
+/* beNDMWShopCtrlDigilabo update 431760..432950 and its Evolve child (beNDMWShopCtrlEvolve
+ * 42f710..430d20). Field names follow the other shop controllers: the primary state is +1c,
+ * main/sub are +20/+24, +30 is _retCode (written into ret.selection by the child selectors), +50
+ * the child-count snapshot. Completion of a child is a change in the child count, as in retail. */
 #include "dw4/laboshop.h"
 #include "shinkarecord.h"
 #include "dw4/statusui.h"

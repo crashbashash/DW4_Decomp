@@ -29,16 +29,13 @@ typedef struct {
     int w, h;
 } dw4_tex;
 
-/* --- lighting (renderer P4.3/P4.4) -------------------------------------------------------------
- *
- * The shading *model* is the engine's: the LIGHT VU1 programs name AMBIENT, DIRECTIONAL
- * (infinite), POSITIONAL/LOCAL, SPOTLIGHT, LINEAR_ATT and `_SPEC`/`_NOSPEC`, and `igLightAttr` (`data/reflection.json`) is the serialised light those programs read.
- *
- * The *values* are not recovered: `p2lighting` reads a runtime list that is empty in every saved
- * state (`docs/engine/p2-lighting.md`), so the disc does not state them.  A caller
- * therefore supplies the rig; `dw4_render_mesh`/`dw4_render_mesh_tex` fall back to a built-in
- * placeholder rig when none is set.  Positions and directions are in the **same space as the
- * mesh's `pos` buffer** (object space for `--name`, world space for a captured scene). */
+/* Lighting. The shading model is the engine's: the LIGHT VU1 programs name AMBIENT, DIRECTIONAL
+ * (infinite), POSITIONAL/LOCAL, SPOTLIGHT, LINEAR_ATT and `_SPEC`/`_NOSPEC`, and `igLightAttr` is
+ * the serialised light those programs read. The values are not on the disc: `p2lighting` reads a
+ * runtime list that is empty in every saved state. A caller therefore supplies the rig;
+ * `dw4_render_mesh`/`dw4_render_mesh_tex` fall back to a built-in placeholder rig when none is
+ * set. Positions and directions are in the same space as the mesh's `pos` buffer (object space for
+ * `--name`, world space for a captured scene). */
 enum { DW4_LIGHT_DIRECTIONAL = 1, DW4_LIGHT_POSITIONAL = 2, DW4_LIGHT_SPOT = 3 };
 
 typedef struct {
@@ -236,13 +233,13 @@ typedef struct {
 
 void dw4_render_layer_draws(dw4_fb *fb, const dw4_layer_draw *draws, int n, int nthreads);
 
-/* A whole replay list, drawn across threads.  The draws must stay in order (the blends compose), so
+/* A whole replay list, drawn across threads. The draws must stay in order (the blends compose), so
  * the parallel axis is the framebuffer's *rows*: the frame is cut into horizontal bands and every
- * band replays the whole list with each draw clipped to that band.  A draw only writes pixels inside
- * its own bbox, so a band performs exactly the writes it would have performed serially, in the same
- * order -- the frame is bit-identical to `nthreads == 1` (and to looping the two calls above), which
- * tools/verify_render.py asserts.  `nthreads <= 1` replays serially.  Textures must already be
- * resident (decode them before calling: the texture cache is not thread-safe). */
+ * band replays the whole list with each draw clipped to that band. A draw only writes pixels
+ * inside its own bbox, so a band performs exactly the writes it would have performed serially, in
+ * the same order -- the frame is bit-identical to `nthreads == 1` (and to looping the two calls
+ * above). `nthreads <= 1` replays serially. Textures must already be resident (decode them before
+ * calling: the texture cache is not thread-safe). */
 typedef struct {
     const dw4_tex *tex;      /* NULL draws the vertex colour alone */
     uint8_t blend;           /* 0 opaque (ABE off), 1 alpha, 2 additive */
@@ -287,6 +284,5 @@ int dw4_render_fps_gpu(struct dw4_gl_layer *,dw4_fb *,double fps);
  * the GPU draws the counter in the same run and sets dw4_fps_overlay_drawn so the loop does not draw it a second time. */
 extern double dw4_fps_overlay;
 extern int dw4_fps_overlay_drawn;
-
 
 #endif /* DW4_RENDER_H */

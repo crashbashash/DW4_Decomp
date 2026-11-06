@@ -1,11 +1,8 @@
-/* 0x0031cdf0
- * Pool teardown/reset step.  A pool that has a size (_size at +160) calls the
- * virtual at vtable byte offset 204, clears _systemAllocated and zeroes the
- * 0x814-byte arena state block if one is attached; a pool with no size instead
- * calls the virtual at vtable byte offset 108 with 1.  The two vtable calls
- * are spelled through the dummy classes below (one per distinct vtable offset;
- * dN are placeholder virtuals that only position vX); the callees are not yet
- * identified. */
+/* Pool teardown/reset step. A pool that has a size (_size at +160) calls the virtual at vtable
+ * byte offset 204, clears _systemAllocated and zeroes the 0x814-byte arena state block if one is
+ * attached; a pool with no size instead calls the virtual at vtable byte offset 108 with 1. The
+ * two vtable calls are spelled through the dummy classes below (one per distinct vtable offset; dN
+ * are placeholder virtuals that only position vX). */
 #include "dw4/reflected.h"
 extern "C" {
 int memset(...);

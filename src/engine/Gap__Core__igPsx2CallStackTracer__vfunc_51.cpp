@@ -1,6 +1,5 @@
-/* 0x00329540
- * Result of the virtual call at vtable byte offset 168 (queried with 0), with a
- * zero result mapped to -1 (an index-style lookup that reports "not found" as -1). */
+/* Result of the virtual call at vtable byte offset 168 (queried with 0), with a zero result mapped
+ * to -1 (an index-style lookup that reports "not found" as -1). */
 #include "dw4/reflected.h"
 extern "C" {
 

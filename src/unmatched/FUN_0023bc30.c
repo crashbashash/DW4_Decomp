@@ -1,5 +1,3 @@
-/* Receiver is igCollisionGroup (_bound -> igSphere; position/lastPosition/
- * collisionPosition/radius are initialised from the bound sphere). */
 #include "dw4/reflected.h"
 void FUN_0023bc30(igCollisionGroup *arg0) {
     igSphere *temp_v1;

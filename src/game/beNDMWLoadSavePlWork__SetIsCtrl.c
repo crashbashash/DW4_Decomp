@@ -1,4 +1,3 @@
-/* Store the control flag of a LoadSavePlWork record. */
 #include "dw4/reflected.h"
 void beNDMWLoadSavePlWork__SetIsCtrl(beNDMWLoadSavePlWork *a0, int a1)
 {

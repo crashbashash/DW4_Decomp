@@ -1,5 +1,5 @@
 /* Returns FUN_0025db48 of the object handle, or 0 for a null object. */
-/* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
+/* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0. */
 typedef struct Object_265fb0 {
     char f0;
     char state;         /* 0x01: 1 after FUN_00266298, 0 after FUN_002662c8, 2 in FUN_00266d20 */

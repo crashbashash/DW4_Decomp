@@ -1,6 +1,3 @@
-/* 0x001a7b10 igAnimationDatabase_Register: registers class igAnimationDatabase with the object system, derived from igInfo.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igInfo_GetPublishedMetaObject[];
 extern char igAnimationDatabase_GetVTable[];
 extern char thunk_igAnimationDatabase_GetMetaObject[];
@@ -15,16 +12,16 @@ int igAnimationDatabase_InitFields();
 void igAnimationDatabase_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAnimationDatabase_metaObject, /* published MetaObject slot */
-        igInfo_Register,                           /* base class registrar */
-        igInfo_GetPublishedMetaObject,    /* base class MetaObject accessor */
-        thunk_igAnimationDatabase_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igAnimationDatabase_className,  /* class name */
-        0x28,                                      /* instance size */
-        igAnimationDatabase_GetVTable,             /* vtable getter */
-        &igAnimationDatabase_InitFields,           /* field adder */
-        0,                                         /* extra callback item */
-        g_igAnimationDatabase_callbackList  /* callback list */
+        0, /* abstract */
+        g_igAnimationDatabase_metaObject,
+        igInfo_Register,
+        igInfo_GetPublishedMetaObject,
+        thunk_igAnimationDatabase_GetMetaObject,
+        igAnimationDatabase_className,
+        0x28, /* instance size */
+        igAnimationDatabase_GetVTable,
+        &igAnimationDatabase_InitFields,
+        0, /* extra callback item */
+        g_igAnimationDatabase_callbackList /* callback list */
     );
 }

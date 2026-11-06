@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* Pad edge detection and auto-repeat: arg0 is a bePadData (called from bePadManager::vfunc_27); arg1 is the new button word. */
+/* Pad edge detection and auto-repeat; arg0 is the pad data and arg1 is the new button word. */
 void FUN_0039af10(bePadData *arg0, int arg1) {
     int temp_a1;
     int temp_v1;

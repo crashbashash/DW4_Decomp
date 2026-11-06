@@ -9,7 +9,7 @@ int bePadManager_GetPadForPlayer(int, int);
 int FUN_003a65f0(int, int *, int *);
 float FUN_003a68d0();
 int beLua__RunNamedChunk(int, int *, int);
-/* player work record: byte at +236, int at +240 (class not applied: only two offsets match, see report) */
+/* Player work record: byte at +236, int at +240. */
 struct PlayerWorkTail { char p[236]; unsigned char f236; char p2[3]; int f240; };
 /* property record: pointer to the work record at +20 */
 struct PropertyRecord { char p[16]; int f16; PlayerWorkTail *q; };
@@ -24,9 +24,8 @@ extern int DAT_00585be0[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released on scope
- * exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the
- * retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list; released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

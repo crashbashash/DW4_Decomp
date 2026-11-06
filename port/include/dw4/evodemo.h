@@ -1,10 +1,11 @@
-/* The digivolution demo stage stagML14 (NDMW 831/832), hosted by the hub runtime without a lobby world.
- * Central's closing Digi-Lab script (entry 824 chunk 61) requests it after a Digimon changed. Its original
- * Lua runs through the same file-list/stage-object/controller owners as a hub: chunk 0 selects the old and new
- * s_<species> models from COUNTER[8+player] and SYSgetPlayerDigimon, chunk 2 generates g_changebg, i_evoline,
- * g_dchange, i_evowipe and the two models, chunk 3 starts SETDEMOCAMERA "entry" and DM_EVOLV/AM_EVOLV and runs
- * the swap sequence, then requests its only exit (PLAYERPOINT I<3>, NEXTSTAGE stagML12) on the borrowed travel
- * owner. No player is generated (the pack's funcPlayerSet is empty). Boundaries: port/docs/labo-shop.md. */
+/* The digivolution demo stage stagML14 (NDMW 831/832), hosted by the hub runtime without a lobby
+ * world. Central's closing Digi-Lab script (entry 824 chunk 61) requests it after a Digimon
+ * changed. Its original Lua runs through the same file-list/stage-object/controller owners as a
+ * hub: chunk 0 selects the old and new s_<species> models from COUNTER[8+player] and
+ * SYSgetPlayerDigimon, chunk 2 generates g_changebg, i_evoline, g_dchange, i_evowipe and the two
+ * models, chunk 3 starts SETDEMOCAMERA "entry" and DM_EVOLV/AM_EVOLV and runs the swap sequence,
+ * then requests its only exit (PLAYERPOINT I<3>, NEXTSTAGE stagML12) on the borrowed travel owner.
+ * No player is generated (the pack's funcPlayerSet is empty). */
 #ifndef DW4_EVODEMO_H
 #define DW4_EVODEMO_H
 #include "dw4/mount.h"

@@ -1,6 +1,3 @@
-/* 0x00226550 igMessageBase_Register: registers class igMessageBase with the object system, derived from igBase.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igBase_GetPublishedMetaObject[];
 extern char igMessageBase_GetVTable[];
 extern char thunk_igMessageBase_GetMetaObject[];
@@ -13,16 +10,16 @@ int igMetaObject_RegisterClass();
 void igMessageBase_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMessageBase_metaObject,    /* published MetaObject slot */
-        igBase_Register,                        /* base class registrar */
-        igBase_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igMessageBase_GetMetaObject,      /* own MetaObject accessor (stored at +0x54) */
-        igMessageBase_className,     /* class name */
-        0x20,                                   /* instance size */
-        igMessageBase_GetVTable,                /* vtable getter */
-        0,                                      /* field adder */
-        0,                                      /* extra callback item */
-        0                                       /* callback list */
+        0, /* abstract */
+        g_igMessageBase_metaObject,
+        igBase_Register,
+        igBase_GetPublishedMetaObject,
+        thunk_igMessageBase_GetMetaObject,
+        igMessageBase_className,
+        0x20, /* instance size */
+        igMessageBase_GetVTable,
+        0,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

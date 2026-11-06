@@ -1,4 +1,3 @@
-/* igVec2fMetaField_GetVTable: stack object with an inlined smart-pointer release (sibling of igFloatMetaField_GetVTable). */
 typedef struct { int *vt; int p1; int p2; void *str; int pad[12]; } Obj;
 int igMetaField_Init();
 int StringChunk_ReleaseHeader();

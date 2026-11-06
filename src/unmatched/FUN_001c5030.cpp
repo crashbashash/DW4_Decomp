@@ -1,9 +1,6 @@
-/* C++ virtual type test; float constants loaded once into locals in use order; empty then-arm
- * assigns var=o; unsigned selector index */
 #include "dw4/reflected.h"
 /* matching construct: dummy virtual slots so the type-test call dispatches through the retail vtable offset 88 */
 struct Obj { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int ty(); };
-/* hypothesis: handle 0x562640 is not in data/reflection.json; its +16 slot is a table of node-handler functions */
 struct Tb { char pad[16]; void (**fn)(void *, void *); };
 extern "C" {
 extern int DAT_005610e0[4];

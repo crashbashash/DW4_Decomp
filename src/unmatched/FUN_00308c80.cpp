@@ -1,6 +1,4 @@
-/* Smart-pointer slot (volatile) with plain copies, three vcalls (92, 200 and 136 with discarded
- * R); the last parameter of the 00304f00 call is unsigned so its global is loaded before the
- * receiver field. Alternate -O3. */
+/* The last parameter of the call is unsigned, so its global is loaded before the receiver field. */
 extern "C" {
 void *FUN_002bc0d0(int);
 void *FUN_00304f00(void *, int (*)(), unsigned);

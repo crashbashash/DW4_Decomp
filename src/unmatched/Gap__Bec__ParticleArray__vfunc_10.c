@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* igPointSpriteInterface-like object referenced by _pointSpriteInterface; class not identified from reflection */
 /* matching construct: f24 is volatile so the compare and the release each reload it, as retail does */
 typedef struct PointSpriteInterfaceView { char pad[24]; igObject * volatile f24; } PointSpriteInterfaceView;
 int Memory_FreeBuffer();

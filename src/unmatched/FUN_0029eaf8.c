@@ -17,7 +17,7 @@ void FUN_0029eaf8(SfdStreamObj *obj, int *first, int *second) {
     if (FUN_0029ec40(obj) != 0) {
         *first = FUN_0027c760(obj, 1, 1);
         *second = FUN_0027c760(obj, 0, 1);
-    } else if (FUN_0029ec78(obj) != 0) {  /* a1/a2 still hold 1, 1 from the call above */
+    } else if (FUN_0029ec78(obj) != 0) {
         *first = FUN_0027bc30(obj);
         *second = *first - obj->vtbl->f36(obj, 1);
     } else {

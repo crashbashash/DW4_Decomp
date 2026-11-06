@@ -1,10 +1,8 @@
-/* igPsx2LongTimer vfunc 32: set the preset time from seconds. Converts a double count of seconds
- * to the timer's nanosecond unit (seconds * 1e9, truncated to a 64-bit integer) and stores it
- * through the virtual at slot 33 (vfunc_33, 0x00330d90: writes _resetTime). It is the setter twin
- * of vfunc_34, which reads the preset back as seconds. The EE has no double hardware, so the
- * arithmetic goes through the soft-float runtime (0x00230790 is the double multiply and 0x00230cc8
- * as the 64-bit integer to double conversion) and the double arrives and travels as an integer
- * register pair. */
+/* Sets the preset time from seconds. Converts a double count of seconds to the timer's nanosecond
+ * unit (seconds * 1e9, truncated to a 64-bit integer) and stores it through the virtual at slot 33
+ * (writes _resetTime). Setter twin of vfunc_34, which reads the preset back as seconds. The EE has
+ * no double hardware, so the arithmetic goes through the soft-float runtime and the double travels
+ * as an integer register pair. */
 extern "C" {
 int FUN_0022ff70(...);
 int __muldf3(...);

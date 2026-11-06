@@ -2,7 +2,6 @@
  * +76/+212, 0xFF at +116/+120/+124). */
 void *memset(void *, int, unsigned int);
 
-/* Members of the block that this initialiser touches; roles not yet recovered. */
 struct Block002859b8 {
     char pad0[76];
     int f76; /* +76 */

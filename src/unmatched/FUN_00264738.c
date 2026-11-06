@@ -1,8 +1,7 @@
-/* Creates and starts the ADXM user idle thread (FUN_002641d8, per the log string at DAT_004ee340)
- * on the given stack, or on the 8 KB default stack DAT_004a32b0 when none is given (a given stack
- * is logged through FUN_002659a0), sets its priority from DAT_0049d9ac and leaves it suspended
- * with FUN_002643d0. */
-/* EE kernel thread creation block (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_t) */
+/* Creates and starts the ADXM user idle thread (FUN_002641d8) on the given stack, or on the 8 KB
+ * default stack DAT_004a32b0 when none is given (a given stack is logged through FUN_002659a0),
+ * sets its priority from DAT_0049d9ac and leaves it suspended with FUN_002643d0. */
+/* EE kernel thread creation block (ee_thread_t). */
 typedef struct ThreadParam {
     int status;
     void (*entry)(void);

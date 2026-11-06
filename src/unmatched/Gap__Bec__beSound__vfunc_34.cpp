@@ -1,26 +1,18 @@
-/* beSound::vfunc_34 (0x0039ec10, 3792 bytes) - message handler of the sound manager.
- *
- * Resolves the message selector (beMessenger_ResolveEnumValue against the class enum) and dispatches over the commands
- * 1..22; the default entry returns 0, every other path returns 1.  Commands 2 and 3 look a sound entry up in the parent
- * info's data list and play it (entry types 1 and 2 go through the delayed message queue, other types register an
- * expiring record in the playing-SE list); command 20 gathers the sound names of the stage record into a string list.
- *
- * Matching notes
- *  - Needs the content-pinned alternate compiler with -O3,p and -Cpp_exceptions off, and a config/SLUS-20836/unit-objects.json
- *    entry (emitted PlaySERef destructor 0x0039fae0; duplicates NameListRef 0x001c6460, GlobalStrRef 0x001489a0, StringRef
- *    0x00130720; external __dl__FPv -> 0x00100610): the owning references' destructors release inline, and the string
- *    shares copied out of the name list are temporaries of the call that uses them.
- *  - The playing-SE search loop keeps retail's separate index / byte-offset inductions and the hoisted data pointer only
- *    through the loop-carried re-read `pl2 = pl` and the explicit `offv`; a direct `list->data[i]` is turned into one
- *    pointer induction by this compiler.  The list count is volatile like the engine's other list classes.
- *  - Null fallbacks: a ternary for the constant default (DAT_004e0858); `if (bn == 0) bn2 = G; else bn2 = bn;` with a
- *    separate variable for the global default (the empty else arm and the deleted jump keep the join unpadded).  The
- *    first compare argument (info->_dataType) is read before the test.
- *  - Counts are compared as `> 1` (slti at) and `0 < n` (slt at,zero); the declaration order of the locals decides the
- *    s-register colouring (found with tools/dispatcher/regalloc.py and a single-move hill climb).
- *  - The union at spD0 is a volatile float / sign-bit pair: retail stores the (otherwise dead) difference of the first
- *    two floats of command 10 into that slot with the sign bit cleared before the call.
- *  - Arg2 (the message record) and SubE (the stage record element) stay local views: their classes are not established. */
+/* Message handler of the sound manager: resolves the message selector against the class enum and
+ * dispatches over commands 1..22; the default entry returns 0, every other path returns 1.
+ * Commands 2 and 3 look a sound entry up in the parent info's data list and play it (entry types 1
+ * and 2 go through the delayed message queue, other types register an expiring record in the
+ * playing-SE list); command 20 gathers the sound names of the stage record into a string list. The
+ * playing-SE search loop keeps separate index / byte-offset inductions and the hoisted data
+ * pointer only through the loop-carried re-read `pl2 = pl` and the explicit `offv`; a direct
+ * `list->data[i]` is turned into one pointer induction by this compiler. The list count is
+ * volatile like the engine's other list classes. Null fallbacks: a ternary for the constant
+ * default; `if (bn == 0) bn2 = G; else bn2 = bn;` with a separate variable for the global default
+ * (the empty else arm and the deleted jump keep the join unpadded). The first compare argument
+ * (info->_dataType) is read before the test. Counts are compared as `> 1` (slti at) and `0 < n`
+ * (slt at,zero); the declaration order of the locals decides the s-register colouring. The union
+ * at spD0 is a volatile float / sign-bit pair: the otherwise dead difference of the first two
+ * floats of command 10 is stored into that slot with the sign bit cleared before the call. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(...);
@@ -88,9 +80,10 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, struct Arg2 
 }
 struct Arg2 { int p[5]; int f20; };
 struct SubE { int p[5]; igObjectList *f20; };
-/* Owning stack references of the sound manager's message handler.  PlaySERef holds a freshly created playing-SE record while it is listed
- * (retail destructor body 0x0039fae0 follows this function), NameListRef the string list built by command 20 (0x001c6460), GlobalStrRef a
- * retained share of the system's global string object (0x001489a0) and StringRef a share of an interned text (0x00130720). */
+/* Owning stack references of the sound manager's message handler. PlaySERef holds a freshly
+ * created playing-SE record while it is listed, NameListRef the string list built by command 20,
+ * GlobalStrRef a retained share of the system's global string object and StringRef a share of an
+ * interned text. */
 struct PlaySERef {
     igObject *p;
     PlaySERef(igObject *o) : p(o) {}

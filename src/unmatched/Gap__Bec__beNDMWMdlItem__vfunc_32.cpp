@@ -1,7 +1,6 @@
-/* 0x00441450 - beNDMWMdlItem vfunc 32. Releases every shared object in the list at +48, clears the slots (the compiler unrolls the clear by eight) and resets the count; alternate compiler -O3,p; the clear loop has its own counter and bound, declared in the order that gives retail's registers. */
+/* The clear loop has its own counter and bound, declared in the order that gives the right
+ * register assignment. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 void igObject_Destroy(igObject *);
 void Gap__Bec__beNDMWMdlItem__vfunc_32(beNDMWMdlItem *arg0) {
@@ -28,4 +27,4 @@ void Gap__Bec__beNDMWMdlItem__vfunc_32(beNDMWMdlItem *arg0) {
     }
     l->_count = 0;
 }
-} /* extern "C" */
+}

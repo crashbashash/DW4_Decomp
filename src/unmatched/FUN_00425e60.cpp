@@ -1,6 +1,3 @@
-/* Messenger string-table walk; 116-byte pointer table struct copy; alternate compiler -O3,p. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct Tbl { const char *s[29]; } Tbl;
 extern Tbl DAT_004cf7a0;
@@ -33,4 +30,4 @@ void FUN_00425e60(int *arg0) {
     beMessenger_AppendString(arg0[3], DAT_0051af38);
     beMessenger_DispatchSelected(arg0[3], DAT_0051af40);
 }
-} /* extern "C" */
+}

@@ -1,4 +1,4 @@
-/* 0x004485d0 - 64 bytes. Flag word; asm nop in the else arm (retail pads both arms); alternate compiler -O3,p. */
+/* Both arms are padded; the else arm gets an explicit asm nop. */
 #include "dw4/reflected.h"
 int Gap__Bec__beNDMWItemYellowArmor__vfunc_23(beNDMWItemYellowArmor *arg0) {
     int v;

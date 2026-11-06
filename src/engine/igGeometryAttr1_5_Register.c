@@ -1,6 +1,3 @@
-/* 0x001376e0 igGeometryAttr1_5_Register: registers class igGeometryAttr1_5 with the object system, derived from igGeometryAttr.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igGeometryAttr1_5_GetVTable[];
 extern char thunk_igGeometryAttr1_5_GetMetaObject[];
 extern char igGeometryAttr_GetPublishedMetaObject[];
@@ -15,16 +12,16 @@ int igGeometryAttr1_5_InitFields();
 void igGeometryAttr1_5_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igGeometryAttr1_5_metaObject,        /* published MetaObject slot */
-        igGeometryAttr_Register,                        /* base class registrar */
-        igGeometryAttr_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igGeometryAttr1_5_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        igGeometryAttr1_5_className,         /* class name */
-        0x34,                                           /* instance size */
-        igGeometryAttr1_5_GetVTable,                    /* vtable getter */
-        &igGeometryAttr1_5_InitFields,                  /* field adder */
-        0,                                              /* extra callback item */
-        g_igGeometryAttr1_5_callbackList       /* callback list */
+        0, /* abstract */
+        g_igGeometryAttr1_5_metaObject,
+        igGeometryAttr_Register,
+        igGeometryAttr_GetPublishedMetaObject,
+        thunk_igGeometryAttr1_5_GetMetaObject,
+        igGeometryAttr1_5_className,
+        0x34, /* instance size */
+        igGeometryAttr1_5_GetVTable,
+        &igGeometryAttr1_5_InitFields,
+        0, /* extra callback item */
+        g_igGeometryAttr1_5_callbackList /* callback list */
     );
 }

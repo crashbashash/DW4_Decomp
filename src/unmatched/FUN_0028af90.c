@@ -12,7 +12,6 @@ struct Handle0028af90 {
     Callback0028af90 callbacks[1]; /* +24 */
 };
 
-/* Global block at DAT_00573eb8 (only the member used here). */
 struct Pool0028af90 {
     Callback0028af90 callbacks[1]; /* +0: defaults for new handles */
 };

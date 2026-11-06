@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int memset(int, int, int);
 int beMessenger_AppendInt(int, int);
@@ -163,4 +161,4 @@ void FUN_003f1490(beNDMWMcUtilCtrl *op) {
         }
     }
 }
-} /* extern "C" */
+}

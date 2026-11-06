@@ -1,7 +1,4 @@
-/* Vtable slot 46 of the igMessenger vtable (0x0052cf20): returns the first word of the
- * igInfoManager metaobject handle at 0x0056dc38 (class name from data/reflection.json). Why
- * igMessenger answers with igInfoManager's metaobject is unproven; the vtable is attributed to
- * igMessenger by its GetVTable accessor. The receiver is not touched. */
+/* Returns the metaobject of igInfoManager, not of igMessenger. */
 extern int g_igInfoManager_metaObject[4];
 int Gap__Core__igMessenger__vfunc_46(void) {
     return g_igInfoManager_metaObject[0];

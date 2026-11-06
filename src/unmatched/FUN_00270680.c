@@ -1,6 +1,5 @@
 /* Sets the sector length through the device interface (entry +52) of a file-system handle; a NULL
- * handle or missing entry is reported through FUN_0026f530 and nothing happens. Its error strings
- * name it cvFsSetSctLen (CRI), a name hypothesis. */
+ * handle or missing entry is reported through FUN_0026f530 and nothing happens. */
 typedef struct CvFsDevice_270680 {
     void *pad0[13];
     void (*set_sct_len)(int file, int length);  /* 0x34 */

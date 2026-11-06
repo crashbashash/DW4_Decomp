@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* Receivers by the matched beSound::vfunc_34 (cases 5 and 10 pass the beCri): the BGM and ambience stream handles, then the effect handle list. */
 #define DEFN ((char *)DAT_004e0858)
 extern "C" {
 extern int DAT_004e0858[4];

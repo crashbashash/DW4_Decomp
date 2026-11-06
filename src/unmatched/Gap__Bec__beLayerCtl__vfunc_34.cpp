@@ -1,7 +1,7 @@
-/* 0x00389170 - beLayerCtl message handler (vtable slot 34): dispatches on an enum value name read from the message.
- * 0 builds the layer switch from the layer info record, 1 sets/toggles a named layer, 2 selects one, 3 lists the names,
- * 4 looks one up and returns it.  Class names below are readable labels (the layer switch is an igSwitch, the group elements igGroups).  Build: alternate combat compiler, -O3,p -Cpp_exceptions off, unit-objects
- * duplicate __dt__3RefFv = 0x00229350. */
+/* Message handler dispatching on an enum value name read from the message: 0 builds the layer
+ * switch from the layer info record, 1 sets or toggles a named layer, 2 selects one, 3 lists the
+ * names, 4 looks one up and returns it. Class names below are readable labels (the layer switch is
+ * an igSwitch, the group elements igGroups). */
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_001968f0(void *);
@@ -60,10 +60,9 @@ struct Ref {
         }
     }
 };
-/* FUN_00236f80 returns the scene-info manager (an igInfoManager subclass with no reflected struct); its +20 member is the current layer info record.
- * Hypothesis: the member is that manager's current-info field; the class is not in reflection.json, so this stays a local layout. */
 struct InsightRec { char pad[20]; beLayerInfoRam *cur; };
-/* the receiver's _groups is a beLayerGroupList; its elements are scene-graph groups (igGroup: name from igNamedObject, _childList at +28) */
+/* The receiver's _groups is a beLayerGroupList whose elements are scene-graph groups (igGroup:
+ * name from igNamedObject, _childList at +28). */
 #define GROUPS(i) ((beLayerGroupList *)(i)->_groups)
 #define KIDS(g) ((igNodeList *)(g)->_childList)
 #define SWT(a) ((igSwitch *)(a)->_layerSwt)

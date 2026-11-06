@@ -1,6 +1,6 @@
 /* Sets the decoder output buffer and its capacity in frames (bytes divided by the frame size from
  * f15, or by bytes-per-sample times f14 when f152 is non-zero) and clears the transfer counters. */
-/* CRI ADX decoder block as this function touches it; field meanings are not yet known */
+/* CRI ADX decoder block, limited to the fields this function touches. */
 typedef struct DecoderBlock {
     short f0;
     short state;

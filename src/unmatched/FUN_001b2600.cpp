@@ -1,4 +1,3 @@
-/* 0x001b2600 - 240 bytes. "All children accept" over a typed list; bool result and bool return type (daddiu for the constant, no andi at the return), default compiler. */
 extern "C" {
 int FUN_001b23e0(int, void *);
 int FUN_001b24d0(int, void *);

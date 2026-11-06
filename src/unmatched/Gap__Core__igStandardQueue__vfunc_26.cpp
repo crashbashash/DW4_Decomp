@@ -1,7 +1,5 @@
-/* IgStandardQueue vfunc 26 (push with blocking wait): waits while the ring is full, enqueues the
- * value and signals. Alternate -O3. Status results are copied to a local before the compare (gives
- * beq a0,v1); the loop condition is spelled with (x != 0) ^ 1 for the materialised sltu/xori; the
- * clamp is (a < b) ? a : b. */
+/* Status results are copied to a local before the compare (gives beq a0,v1); the loop condition is
+ * spelled with (x != 0) ^ 1 for the materialised sltu/xori; the clamp is (a < b) ? a : b. */
 extern "C" {
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];

@@ -4,7 +4,6 @@ int FUN_002a3cb8();
 int FUN_002a4468();
 void FUN_002a75b8();
 
-/* Repeats FUN_002a3cb8 / FUN_002a4468 while the latter asks for more, then finishes with FUN_002a75b8. */
 int FUN_002a3c38(void *player) {
     int a;
     int b;

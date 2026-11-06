@@ -1,5 +1,5 @@
 typedef struct S { char p0[32]; int f32; char p36[6]; unsigned short lo : 12; unsigned short a : 1; unsigned short flag : 1; unsigned short b : 2; } S;
-void FUN_002406a0(void); /* address-taken; signature not recovered */
+void FUN_002406a0(void);
 int lua_pushusertag();
 int lua_rawset();
 int lua_pushcclosure();

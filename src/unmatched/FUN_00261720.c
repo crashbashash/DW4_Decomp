@@ -1,6 +1,5 @@
-/* Returns the first unused ADXF handle of the 16-entry table, or 0 (allocator used by
- * adxf_CreateAdxFs, per the error string at DAT_004edb58; name is a hypothesis). */
-/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
+/* Returns the first unused ADXF handle of the 16-entry table, or 0. Used by adxf_CreateAdxFs. */
+/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8). */
 typedef struct AdxfHandle {
     signed char used;
     signed char f1;

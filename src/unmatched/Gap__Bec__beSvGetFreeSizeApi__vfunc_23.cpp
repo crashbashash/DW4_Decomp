@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-struct UnidentifiedFreeSizeGlobal { char pad[20]; unsigned int f20; }; /* unidentified object held in DAT_0058a600; +20 is compared with _memCapa */
+struct UnidentifiedFreeSizeGlobal { char pad[20]; unsigned int f20; };
 struct beSvGetFreeSizeApiTail { char pad[84]; int f84; }; /* word past the reflected beSvGetFreeSizeApi layout */
 struct UnidentifiedResultObject {  /* arg1; class not identified */
   char pad[24]; int f24; char pad2[4]; unsigned int f32; int f36; unsigned char b40; unsigned char b41; unsigned char b42; unsigned char b43; unsigned char b44; };

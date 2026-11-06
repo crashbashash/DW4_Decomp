@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_00236c40(int, beNDMWAfsSetup *);
 int List_Reserve(igDataList *, int, int);
@@ -34,4 +32,4 @@ void Gap__Bec__beNDMWAfsSetup__vfunc_26(beNDMWAfsSetup *arg0) {
     }
     FUN_00236c40(arg0->_insight, arg0);
 }
-} /* extern "C" */
+}

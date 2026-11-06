@@ -1,6 +1,6 @@
-/* 0x00416f90 - beNDMWStatusMainSlot vfunc 36: creates the D0 status sub-window (held in an ObjectRef across its
- * binding, the sub-window append and the kind-list push), marks it as the ability-type variant with equipment and
- * unknown entries disabled. */
+/* BeNDMWStatusMainSlot vfunc 36: creates the D0 status sub-window (held across its binding, the
+ * sub-window append and the kind-list push) and marks it as the ability-type variant with
+ * equipment and unknown entries disabled. */
 #include "dw4/reflected.h"
 extern "C" {
 beNDMWStatusCtrlD0 *FUN_003baf10(int);
@@ -14,9 +14,8 @@ extern int DAT_004cf6e8[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the new sub-window: constructed from the object and released on scope exit
- * (reference count in the low 23 bits of the igObject header's _refCount).  The out-of-line copy the exception
- * table names is the retail body 0x00414420 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the new sub-window, released on scope exit (reference count in the low
+ * 23 bits of the igObject header's _refCount). */
 class WindowRef {
 public:
     beNDMWStatusCtrlD0 *p;

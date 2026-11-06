@@ -3,7 +3,7 @@ extern "C" void FUN_00332430(void*, int);
 extern "C" int FUN_00281bb8(int, int, int);
 extern "C" void FUN_003a7580(void*, int, void*);
 extern "C" char DAT_00510120[], DAT_00510140[], DAT_00510170[];
-/* the beCriAudio::_sndf target (CRI sound-file handle); not a reflected class, so its +8 word stays local */
+/* The beCriAudio::_sndf target, a CRI sound-file handle; its +8 word is declared locally. */
 struct Q { int p0, p4; int f8; };
 /* matching construct: static bool helper members (the retail shape) over the reflected receiver */
 struct H {

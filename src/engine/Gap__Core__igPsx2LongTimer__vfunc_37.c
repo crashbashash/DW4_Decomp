@@ -1,6 +1,6 @@
-/* Samples the raw 64-bit clock value (the "raw" the timer group subtracts `_startTime` from;
- *. FUN_0020d290 writes it through a pointer: it reads the EE timer count register at
- * 0x10000800, scales it by a float factor, adds a 64-bit base and multiplies by 100. */
+/* Samples the raw 64-bit clock value (the "raw" the timer group subtracts `_startTime` from).
+ * FUN_0020d290 writes it through a pointer: it reads the EE timer count register at 0x10000800,
+ * scales it by a float factor, adds a 64-bit base and multiplies by 100. */
 int FUN_0020d290();
 
 long long Gap__Core__igPsx2LongTimer__vfunc_37(void) {

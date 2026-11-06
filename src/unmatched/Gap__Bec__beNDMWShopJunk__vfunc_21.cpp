@@ -57,8 +57,8 @@ extern unsigned char GPR_00554a44;
 extern unsigned char GPR_00554a48;
 }
 struct Lst { int pad[2]; int cnt; };
-/* Scope holder for a freshly built window or list: its destructor releases the reference. Retail keeps one out-of-line
- * destructor per holder (kind 0..4 = 0x428710, 0x226990, 0x4295b0, 0x42c790, 0x411080). */
+/* Scope holder for a freshly built window or list: its destructor releases the reference. One
+ * class per kind (0..4), so each gets its own out-of-line destructor. */
 template <int kind> struct RP {
     Rc *p;
     RP(Rc *x) { p = x; }

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 
 int igObject_Destroy(igObject *);
@@ -21,4 +19,4 @@ void **FUN_0041d490(void **arg0, igObject *arg1) {
     *arg0 = arg1;
     return arg0;
 }
-} /* extern "C" */
+}

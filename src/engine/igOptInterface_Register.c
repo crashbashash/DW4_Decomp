@@ -1,6 +1,3 @@
-/* 0x00225c20 igOptInterface_Register: registers class igOptInterface with the object system, derived from igInterface.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igOptInterface_GetVTable[];
 extern char thunk_igOptInterface_GetMetaObject[];
 extern char igInterface_GetPublishedMetaObject[];
@@ -15,16 +12,16 @@ int igOptInterface_InitFields();
 void igOptInterface_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igOptInterface_metaObject,        /* published MetaObject slot */
-        igInterface_Register,                        /* base class registrar */
-        igInterface_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igOptInterface_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        igOptInterface_className,         /* class name */
-        0x30,                                        /* instance size */
-        igOptInterface_GetVTable,                    /* vtable getter */
-        &igOptInterface_InitFields,                  /* field adder */
-        0,                                           /* extra callback item */
-        g_igOptInterface_callbackList       /* callback list */
+        0, /* abstract */
+        g_igOptInterface_metaObject,
+        igInterface_Register,
+        igInterface_GetPublishedMetaObject,
+        thunk_igOptInterface_GetMetaObject,
+        igOptInterface_className,
+        0x30, /* instance size */
+        igOptInterface_GetVTable,
+        &igOptInterface_InitFields,
+        0, /* extra callback item */
+        g_igOptInterface_callbackList /* callback list */
     );
 }

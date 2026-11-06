@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int sprintf(char *, int *, int);
 int FUN_00236f80(int, int);
@@ -121,4 +119,4 @@ void FUN_00437ae0(beNDMWShopCtrlDiskSell *arg0, int arg1, int arg2) {
         beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b558);
     }
 }
-} /* extern "C" */
+}

@@ -93,20 +93,16 @@ struct VO {
     virtual int vX();
 };
 
-/* Exception-unwind holders (retail table 0x00543640): the stage-name object share (cases 0 and 1)
- * and the interned file-name shares (cases 1, 102, 9) are RAII locals so the compiler emits the
- * retail cleanup ranges. The named holders take the upper frame slots in declaration order; the
- * StringRef(...) copies handed to StringList_AppendRetained are expression temporaries and take
- * the lowest slots, as in retail. Retained interned-string share; the destructor is the retail
- * copy at 0x00130720. The copy constructor takes the extra share that StringList_AppendRetained
- * hands to the list. */
+/* Retained interned-string share. The stage-name object share (cases 0 and 1) and the interned
+ * file-name shares (cases 1, 102, 9) are RAII locals. The copy constructor takes the extra share
+ * that StringList_AppendRetained hands to the list. */
 struct StringRef {
     char *p;
     StringRef(char *s) : p(s) {}
     StringRef(const StringRef &o) : p(o.p) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { char *s = p; if (s != 0) { int *hd = (int *)s - 2; int cnt = ((int *)s)[-1] - 1; ((int *)s)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 };
-/* Retained object share (the stage-name string object); the destructor is the retail copy at 0x001489a0. */
+/* Retained share of the stage-name string object. */
 struct GlobalStrRef {
     igObject *p;
     GlobalStrRef(igObject *o) : p(o) { if (p != 0) p->_refCount = p->_refCount + 1; }

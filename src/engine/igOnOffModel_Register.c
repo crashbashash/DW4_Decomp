@@ -1,6 +1,3 @@
-/* 0x0044d4e0 igOnOffModel_Register: registers class igOnOffModel with the object system, derived from igGuiComponentModel.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igGuiComponentModel_GetPublishedMetaObject[];
 extern char igOnOffModel_GetVTable[];
 extern char thunk_igOnOffModel_GetMetaObject[];
@@ -14,16 +11,16 @@ int igOnOffModel_InitFields();
 void igOnOffModel_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igOnOffModel_metaObject,                  /* published MetaObject slot */
-        igGuiComponentModel_Register,                        /* base class registrar */
-        igGuiComponentModel_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igOnOffModel_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        igOnOffModel_className,                   /* class name */
-        0x28,                                                /* instance size */
-        igOnOffModel_GetVTable,                              /* vtable getter */
-        &igOnOffModel_InitFields,                            /* field adder */
-        0,                                                   /* extra callback item */
-        0                                                    /* callback list */
+        0, /* abstract */
+        g_igOnOffModel_metaObject,
+        igGuiComponentModel_Register,
+        igGuiComponentModel_GetPublishedMetaObject,
+        thunk_igOnOffModel_GetMetaObject,
+        igOnOffModel_className,
+        0x28, /* instance size */
+        igOnOffModel_GetVTable,
+        &igOnOffModel_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

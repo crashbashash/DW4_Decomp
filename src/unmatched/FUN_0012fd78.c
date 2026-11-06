@@ -1,5 +1,5 @@
 /* Reentrant vsnprintf: formats a va_list into a sized caller buffer through a string stream bound
- * to the given reent block (newlib _vsnprintf_r shape; name is a hypothesis). */
+ * to the given reent block. */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 

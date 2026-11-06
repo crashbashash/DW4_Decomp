@@ -1,8 +1,6 @@
-/* 0x0033bd30 igMovieRenderer_InitializeDrawing: on first use (no movie manager yet, flag byte 0x554e4c clear) probe
- * the platform with FUN_00308320 and latch the flag when it answers 2, then hand the renderer's visual context to
- * the movie manager (FUN_00339110) through a counted reference that this call releases afterwards.  C++ unit: retail
- * keeps the exception record for that reference (one range at the FUN_00339110 call, destroy at sp+44 with the
- * out-of-line copy 0x00130140 = config/SLUS-20836/unit-objects.json duplicate __dt__9ObjectRefFv). */
+/* On first use (no movie manager yet, flag byte clear) probes the platform with FUN_00308320 and
+ * latches the flag when it answers 2, then hands the renderer's visual context to the movie
+ * manager (FUN_00339110) through a counted reference that this call releases afterwards. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00308320(int *);

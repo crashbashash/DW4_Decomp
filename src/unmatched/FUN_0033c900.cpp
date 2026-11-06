@@ -1,7 +1,4 @@
 extern "C" {
-/* FUN_0033c900 (0x0033c900): lazily creates the singleton when it is missing or its ready flag
- * (bit 2 of the word at +36) is clear, then returns it. Needs the pinned alternate compiler with
- * -O3,p: its branch-target alignment gives the extra nop of the retail body. */
 int FUN_0033e350();
 extern void * DAT_005878e0[4];
 void *FUN_0033c900(void) {

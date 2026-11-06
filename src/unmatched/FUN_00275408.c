@@ -5,7 +5,7 @@ typedef struct Entry_275408 {
     char pad1;
     signed char state;      /* 0x02 */
     char pad3[45];
-} Entry_275408;             /* 0x30 bytes */
+} Entry_275408;
 
 extern Entry_275408 DAT_004ab650[13];
 

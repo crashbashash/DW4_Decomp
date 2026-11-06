@@ -295,7 +295,7 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 84160,
    "foreign_profile.functions": 369,
-   "fun_dat_refs": 76122,
+   "fun_dat_refs": 76077,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
@@ -404,11 +404,11 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 199224,
+  "bytes": 285636,
   "failing": {
    "addresses": {
-    "bytes": 1961644,
-    "functions": 13396
+    "bytes": 1875232,
+    "functions": 12598
    },
    "fields": {
     "bytes": 700148,
@@ -427,8 +427,8 @@
     "functions": 12083
    },
    "references": {
-    "bytes": 1720960,
-    "functions": 9576
+    "bytes": 1720600,
+    "functions": 9561
    },
    "types": {
     "bytes": 852316,
@@ -439,7 +439,7 @@
     "functions": 1115
    }
   },
-  "functions": 1140,
+  "functions": 1938,
   "matched_functions": 16864
  },
  "regions": [

@@ -1,14 +1,9 @@
-/* Gap__Bec__beNDMWShopCtrl40__vfunc_21: the ShopCtrl40 (mode 4, "CNOS") update. Four-level state
- * machine on _st0 (open / run / close / wait-close), _st1 (sub-state), _st2 (step) and _st3
- * (timer); _subWindow is the child-window list, _nowProcKazu the child count that a freshly
- * spawned child must exceed before the step advances. Build requirements (same as
- * beNDMWShopDevice::vfunc_21, 0x0043cc20): the alternate compiler with "-O3,p -Cpp_exceptions
- * off"; the window and string holders' destructors are duplicates of the retail bodies the
- * exception table names. Codegen projections, not recovered declarations: Rc/Rec/Fld/Item/V are
- * partial views of objects whose reflected structs are not tied to these call sites; the
- * WindowRef/StringRef holders release their object in the destructor; the window search guard
- * reads _subWindow through the beNDMWShopCtrl30 view so it is not merged with the loop-body loads
- * (retail reloads the list pointer for the guard, body and latch separately). */
+/* Update of the ShopCtrl40 (mode 4, 'CNOS'): four-level state machine on _st0 (open / run / close
+ * / wait-close), _st1 (sub-state), _st2 (step) and _st3 (timer); _subWindow is the child-window
+ * list, _nowProcKazu the child count that a freshly spawned child must exceed before the step
+ * advances. Rc/Rec/Fld/Item/V are partial views of objects. The window search guard reads
+ * _subWindow through the beNDMWShopCtrl30 view so it is not merged with the loop-body loads (the
+ * list pointer is reloaded for the guard, body and latch separately). */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_003f5410(void *, int *, int *, int *, int *);
@@ -52,10 +47,10 @@ extern unsigned char GPR_00554c14;
 }
 struct Rc;
 struct Rc { int w0; int references; char pad[101]; char f109; char p110; char f111; };
-/* owning references to freshly created windows: the destructor drops one reference and destroys at zero.  The three window
- * kinds are separate classes (separate out-of-line destructors in retail: 0x414420, 0x411080, 0x428710). */
+/* Owning references to freshly created windows: the destructor drops one reference and destroys at
+ * zero. The three window kinds are separate classes, each with its own out-of-line destructor. */
 template <int K> struct WindowRef { Rc *p; WindowRef(Rc *o) : p(o) {} ~WindowRef() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } operator Rc *() { return p; } };
-/* owning reference to an interned string token (reference count at p[-1], chunk header at p[-2]); retail destructor 0x130720 */
+/* Owning reference to an interned string token (reference count at p[-1], chunk header at p[-2]). */
 struct StringRef { char *p; StringRef(char *s) : p(s) {} ~StringRef() { char *rs = p; if (rs != 0) { int *hd = (int *)rs - 2; int rc = hd[1] - 1; hd[1] = rc; if (rc == 0) { StringChunk_ReleaseHeader(hd[0], hd); } } } };
 struct Lst { int pad[2]; int cnt; int p12; int *data; };
 struct Rec { int pad[3]; int f12; };

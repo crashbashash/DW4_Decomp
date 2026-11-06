@@ -1,6 +1,3 @@
-/* 0x00138170 igDisplayListAttr_Register: registers class igDisplayListAttr with the object system, derived from igAttr.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igAttr_GetPublishedMetaObject[];
 extern char igDisplayListAttr_GetVTable[];
 extern char thunk_igDisplayListAttr_GetMetaObject[];
@@ -15,16 +12,16 @@ int igDisplayListAttr_InitFields();
 void igDisplayListAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igDisplayListAttr_metaObject, /* published MetaObject slot */
-        igAttr_Register,                         /* base class registrar */
-        igAttr_GetPublishedMetaObject,  /* base class MetaObject accessor */
-        thunk_igDisplayListAttr_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igDisplayListAttr_className,  /* class name */
-        0x10,                                    /* instance size */
-        igDisplayListAttr_GetVTable,             /* vtable getter */
-        &igDisplayListAttr_InitFields,           /* field adder */
-        0,                                       /* extra callback item */
-        g_igDisplayListAttr_callbackList  /* callback list */
+        0, /* abstract */
+        g_igDisplayListAttr_metaObject,
+        igAttr_Register,
+        igAttr_GetPublishedMetaObject,
+        thunk_igDisplayListAttr_GetMetaObject,
+        igDisplayListAttr_className,
+        0x10, /* instance size */
+        igDisplayListAttr_GetVTable,
+        &igDisplayListAttr_InitFields,
+        0, /* extra callback item */
+        g_igDisplayListAttr_callbackList /* callback list */
     );
 }

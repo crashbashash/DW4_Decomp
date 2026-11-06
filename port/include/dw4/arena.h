@@ -1,18 +1,15 @@
-/* dw4/arena.h — the game arena (porting P0 of docs/arena-object-model.md).
- *
- * One contiguous host allocation addressed by 32-bit offsets (`dw4_handle`, 0 = NULL, payloads 16-byte aligned), holding the
- * decomp's structs byte for byte (include/dw4/reflected.h at the repository root; field offsets are the authority). Two regions:
- *
- *   * persistent: grows up from DW4_ARENA_BASE, blocks are freed individually and reused (exact size classes, no coalescing);
- *   * stage: grows down from the end, released as a whole by dw4_arena_stage_reset, which reports the blocks still live.
- *
- * Every access goes through a handle accessor that checks the handle; a host pointer is never stored in the arena.
- * Allocation failure returns a NULL handle and records a status the caller must act on (technical specification: failure
- * handling). Reference counting follows the engine's inline idiom (`--refs; if ((refs & 0x7fffff) == 0) igObject_Destroy(o)`;
- * igObject_Destroy 0x2ff820 runs the destructor slots 08, 10 and 00, then frees the buffer).
- *
- * The class registry maps a retail vtable word to a class (name, instance size, parent) and its host method table, so retargeted
- * code keeps the original virtual dispatch. Slot function pointers are opaque here: the caller casts to the slot's documented
+/* The game arena. One contiguous host allocation addressed by 32-bit offsets (`dw4_handle`, 0 =
+ * NULL, payloads 16-byte aligned), holding the decomp's structs byte for byte (the field offsets
+ * in reflected.h are the authority). Two regions: persistent: grows up from DW4_ARENA_BASE, blocks
+ * are freed individually and reused (exact size classes, no coalescing); stage: grows down from
+ * the end, released as a whole by dw4_arena_stage_reset, which reports the blocks still live.
+ * Every access goes through a handle accessor that checks the handle; a host pointer is never
+ * stored in the arena. Allocation failure returns a NULL handle and records a status the caller
+ * must act on. Reference counting follows the engine's inline idiom (`--refs; if ((refs &
+ * 0x7fffff) == 0) igObject_Destroy(o)`; igObject_Destroy 0x2ff820 runs the destructor slots 08, 10
+ * and 00, then frees the buffer). The class registry maps a retail vtable word to a class (name,
+ * instance size, parent) and its host method table, so retargeted code keeps the original virtual
+ * dispatch. Slot function pointers are opaque here: the caller casts to the slot's documented
  * signature. */
 #ifndef DW4_ARENA_H
 #define DW4_ARENA_H
@@ -63,10 +60,12 @@ const char *dw4_arena_status_text(dw4_arena_status);
 /* A typed view of a live block start: NULL unless the block holds at least sizeof(Class) bytes. */
 #define DW4_ARENA_OBJ(arena, Class, handle) ((Class *)dw4_arena_at((arena), (handle), (uint32_t)sizeof(Class)))
 
-/* The session arena: one process-wide, retail-sized game arena shared by every owner of game state (databases, player records, stage
- * objects), so state can move between owners by handle (docs/arena-object-model.md). Created on first use with the schema's classes
- * registered; NULL on failure. Owners allocate in its persistent region and release what they allocated when they close
- * (dw4_arena_owned); dw4_arena_live shows what is still held. dw4_session_arena_close is for tests and orderly shutdown. */
+/* The session arena: one process-wide, retail-sized game arena shared by every owner of game state
+ * (databases, player records, stage objects), so state can move between owners by handle. Created
+ * on first use with the schema's classes registered; NULL on failure. Owners allocate in its
+ * persistent region and release what they allocated when they close (dw4_arena_owned);
+ * dw4_arena_live shows what is still held. dw4_session_arena_close is for tests and orderly
+ * shutdown. */
 dw4_arena *dw4_session_arena(void);
 void dw4_session_arena_close(void);
 

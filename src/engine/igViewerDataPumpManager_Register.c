@@ -1,6 +1,3 @@
-/* 0x0045bfb0 igViewerDataPumpManager_Register: registers class igViewerDataPumpManager with the object system, derived from igInfoManager.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igInfoManager_GetPublishedMetaObject[];
 extern char igInfoManager_Register[];
 extern char igViewerDataPumpManager_GetVTable[];
@@ -14,16 +11,16 @@ extern int igViewerDataPumpManager_InitFields_0045c040[4];
 void igViewerDataPumpManager_Register(void) {
     ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igViewerDataPumpManager_metaObject, /* published MetaObject slot */
-        igInfoManager_Register,                        /* base class registrar */
-        igInfoManager_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igViewerDataPumpManager_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igViewerDataPumpManager_className,  /* class name */
-        0x14,                                          /* instance size */
-        igViewerDataPumpManager_GetVTable,             /* vtable getter */
+        0, /* abstract */
+        g_igViewerDataPumpManager_metaObject,
+        igInfoManager_Register,
+        igInfoManager_GetPublishedMetaObject,
+        thunk_igViewerDataPumpManager_GetMetaObject,
+        igViewerDataPumpManager_className,
+        0x14, /* instance size */
+        igViewerDataPumpManager_GetVTable,
         &igViewerDataPumpManager_InitFields_0045c040[0],                              /* field adder: InitFields, registers the reflected fields */
-        0,                                             /* extra callback item */
-        g_igViewerDataPumpManager_callbackList  /* callback list */
+        0, /* extra callback item */
+        g_igViewerDataPumpManager_callbackList /* callback list */
     );
 }

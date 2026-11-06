@@ -1,5 +1,5 @@
 /* Formats into a caller buffer of the given size through a string stream, keeping one byte for the
- * terminator (newlib snprintf shape; name is a hypothesis). */
+ * terminator. */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))

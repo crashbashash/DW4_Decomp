@@ -1,4 +1,4 @@
-/* 0x002daac0 - 184 bytes. Reads lines into a 4096-byte stack buffer, cuts at ';' and forwards each; int char variable (a char one adds a sign extension); alternate compiler -O3. */
+/* The character variable is an int; a char would add a sign extension. */
 struct B { char pad0[12]; int f12; };
 struct S { char pad0[40]; struct B *f40; };
 int strlen(char *);

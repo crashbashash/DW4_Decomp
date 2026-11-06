@@ -1,4 +1,3 @@
-/* 0x0031edb0 - 264 bytes. Allocator block-size decode (same header layout as FUN_00324b50/FUN_0031f230, 19-bit size plus 12-bit extension); alternate -O3. */
 struct T { unsigned char lo:7; unsigned char flag:1; };
 struct H { unsigned lo:5; unsigned sz:19; unsigned mid:7; unsigned big:1; unsigned pad4; unsigned ext:12; unsigned rest:20; };
 int FUN_0031edb0(int arg0, unsigned char *p) {

@@ -1,22 +1,12 @@
-/* dw4/igb.h — igBinary (IGB) container reader.
- *
- * The container is documented in DW4_Decomp/docs/engine/igbinary-format.md and the
- * decoder it was recovered with is DW4_Decomp/scripts/igb_dir.py + igb_inst.py.
- * This header is the port's C reader for the same layout.
- *
- *   +0x00  u32[12] header   magic 0x00000100, version, ..., [3] class count,
- *                          [5] type-directory offset, [9] string count
- *   +0x30  string table     n_strings * { u32 len, u32 tag, u32 pad } then the bytes
- *   +dir   class directory  { NUL-terminated name }{pad to even}{ 6-byte triples }
- *                          repeated; the walk is validated because no count is stored
- *   +recs  instance records { u32 classIndex }{ u32 recordSize }{ value per descriptor }
- *                          with `recordSize` making each decode self-checking
- *
- * A record carries one value per descriptor, in ordinal order, and the descriptor
- * states its own width — a value occupies `align4(size)` bytes.  Type 4 is a
- * length-prefixed string (`{ u32 len }{ bytes }`, len a multiple of 4) and is the only
- * variable-length value.
- */
+/* igBinary (IGB) container reader. Layout: +0x00 u32[12] header magic 0x00000100, version, ...,
+ * [3] class count, [5] type-directory offset, [9] string count +0x30 string table n_strings { u32
+ * len, u32 tag, u32 pad } then the bytes +dir class directory { NUL-terminated name }{pad to
+ * even}{ 6-byte triples } repeated; the walk is validated because no count is stored +recs
+ * instance records { u32 classIndex }{ u32 recordSize }{ value per descriptor } with `recordSize`
+ * making each decode self-checking A record carries one value per descriptor, in ordinal order,
+ * and the descriptor states its own width — a value occupies `align4(size)` bytes. Type 4 is a
+ * length-prefixed string (`{ u32 len }{ bytes }`, len a multiple of 4) and is the only variable-
+ * length value. */
 #ifndef DW4_IGB_H
 #define DW4_IGB_H
 

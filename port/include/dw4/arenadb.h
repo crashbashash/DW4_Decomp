@@ -1,12 +1,11 @@
-/* dw4/arenadb.h — typed beDataBase accessors over arena objects (porting P1 of docs/arena-object-model.md).
- *
- * Clean-C ports of the retail lookups `beDataBase_GetRecordInt` (0x3a9460), `GetRecordBool` (0x3a9540) and `GetRecordString`
- * (0x3a9580), written on the decomp's authoritative structs (beDataBase, igNamedObjectList, igNamedObject, igCharList,
- * igShortList, igIntList, igBoolList in include/dw4/reflected.h) reached through arena handles. The matched C
- * (src/game/beDataBase.c) is the source of behavior; its matching-only constructs are not copied. The column is the first equal
- * name of the table's offset list and the cell is `row * columns + column` (retail wraps this in 32 bits; here a cell or row outside
- * the table is refused, as the host database does). Behavior is checked against dw4_database_* on every row and column of the
- * real tables (tools/test_arenadb.c). */
+/* Typed beDataBase accessors over arena objects. Clean-C ports of the retail lookups
+ * `beDataBase_GetRecordInt` (0x3a9460), `GetRecordBool` (0x3a9540) and `GetRecordString`
+ * (0x3a9580), written on the decomp's authoritative structs (beDataBase, igNamedObjectList,
+ * igNamedObject, igCharList, igShortList, igIntList, igBoolList) reached through arena handles.
+ * The matched C is the source of behavior; its matching-only constructs are not copied. The column
+ * is the first equal name of the table's offset list and the cell is `row * columns + column`
+ * (retail wraps this in 32 bits; here a cell or row outside the table is refused, as the host
+ * database does). */
 #ifndef DW4_ARENADB_H
 #define DW4_ARENADB_H
 

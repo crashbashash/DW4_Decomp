@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int TextOrder_PublishLine(int, int, int, int);
 struct Q { int a; int b; int c; };
@@ -21,4 +19,4 @@ void TextOrder_PublishLineListOnly(int arg0, int arg1) {
         }
     }
 }
-} /* extern "C" */
+}

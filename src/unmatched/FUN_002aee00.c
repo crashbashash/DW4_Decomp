@@ -24,7 +24,8 @@ struct Block0D28 {
     int f744;
 };
 
-/* FUN_002a0dd8(handle) records the handle in a global and returns -1 when it is null or its word at +72 is clear (asm/FUN_002a0dd8.s). */
+/* FUN_002a0dd8(handle) records the handle in a global and returns -1 when it is null or its word
+ * at +72 is clear. */
 int FUN_002aee00(char *handle, int enable, int arg2, int arg3) {
     struct Block0D28 *block;
 

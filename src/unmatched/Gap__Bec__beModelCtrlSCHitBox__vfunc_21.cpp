@@ -41,9 +41,9 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-/* owning reference to the freshly created data list (retail cleanup 0x33e9c0 in the exception table) */
+/* Owning reference to the freshly created data list. */
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() { igObject *object = p; if (object) { --object->_refCount; if ((object->_refCount & 0x7fffff) == 0) igObject_Destroy(object); } } };
-/* owning reference to the working box (retail cleanup 0x198190 in the exception table) */
+/* Owning reference to the working box. */
 struct Ref { BoxF *p; Ref(BoxF *o) : p(o) {} ~Ref() { igObject *object = (igObject *)p; if (object) { --object->_refCount; if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 
 /* matching construct: expression temporary -- the freshly created data list is held by a temporary passed to an

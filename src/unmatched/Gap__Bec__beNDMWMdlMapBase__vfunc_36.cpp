@@ -1,8 +1,3 @@
-/* Attach the map info work to a RAM slot. Creates the slot's data list on first use, replaces the
- * info-work record (FUN_00350020 creates it) found by name, fills its interned name and number
- * from the messenger's first arguments and hands the slot to the common attach step FUN_00396740.
- * Both created objects live on the stack in owning references whose releases the retail exception
- * table records. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(...);
@@ -25,31 +20,25 @@ extern int DAT_00586f20[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* property record: reference at +20 (class not recovered) */
+/* Property record: reference at +20. */
 struct Prop { char pad[20]; igObject *f20; };
-/* hypothesis: map info work created by FUN_00350020 — interned map name at +220, map number at +224 */
 struct Tgt { char pad[220]; int f220; int f224; };
 struct Rel { static inline void go(igObject *o) { igObject *t = o; if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); } } };
-/* Owning stack reference to the slot's new data list: constructed from the creating call and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body ObjectRef_Destruct_0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__11DataListRefFv). */
+/* Owning stack reference to the slot's new data list; released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class DataListRef {
 public:
     igObject *p;
     DataListRef(igObject *o) : p(o) {}
     ~DataListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the new map info work: released on scope exit.  The out-of-line copy the
- * exception table names is the retail body 0x00352fc0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__11InfoWorkRefFv). */
+/* Owning stack reference to the new map info work; released on scope exit. */
 class InfoWorkRef {
 public:
     igObject *p;
     InfoWorkRef(igObject *o) : p(o) {}
     ~InfoWorkRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* store a new data list in the RAM slot: the slot takes its own reference and drops the old one */
 struct Slot { static inline void setDataList(beBaseInfoRam *ram, const DataListRef &r) {
     igObject *t = r.p;
     if (t != 0) t->_refCount = t->_refCount + 1;

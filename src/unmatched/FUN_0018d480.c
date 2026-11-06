@@ -1,6 +1,6 @@
-void FUN_0018d9b0(void); /* address-taken; signature not recovered */
-void FUN_0018dd20(void); /* address-taken; signature not recovered */
-void thunk_FUN_0018d630(void); /* address-taken; signature not recovered */
+void FUN_0018d9b0(void);
+void FUN_0018dd20(void);
+void thunk_FUN_0018d630(void);
 void FUN_0018da00(void);
 int igPlane_GetMetaObject();
 int igAABox_GetMetaObject();

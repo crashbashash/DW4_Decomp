@@ -1,4 +1,3 @@
-/* Typed refcount release (-= 1 with the 23-bit mask).py. */
 extern "C" {
 int igObject_Destroy(void *);
 int thunk_FUN_002ed460__002ff810(void *);

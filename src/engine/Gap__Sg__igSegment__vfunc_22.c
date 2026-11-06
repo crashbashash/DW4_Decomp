@@ -1,6 +1,4 @@
-/* 0x001e3890
- * Metaobject accessor: returns the class handle of igSegment (slot 0 of
- * g_igSegment_metaObject), without the lazy registration of the *_GetMetaObject helpers. */
+/* Returns the class handle directly, without the lazy registration the *_GetMetaObject helpers do. */
 extern int g_igSegment_metaObject[4];
 int Gap__Sg__igSegment__vfunc_22(void) {
     return g_igSegment_metaObject[0];

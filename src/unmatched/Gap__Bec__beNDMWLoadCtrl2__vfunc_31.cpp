@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ (it keeps an exception table for the two data-list holders); the
- * code keeps C linkage.  Host is the ram object (data list at +40), S_ref its reference-counted
- * data list (count at +4; the reflected beBaseInfoRam/igObject layouts are not used here). */
 struct S_ref;
 struct Host;
 extern "C" {
@@ -63,10 +60,8 @@ extern unsigned char GPR_00554c14;
 
 struct S_ref { char pad4[4]; int f4; };
 struct Host { char pad40[40]; S_ref *f40; };
-/* Owning stack reference to a freshly created property data list: constructed from the object and
- * released on scope exit (reference count in the low 23 bits of f4).  The out-of-line copy the
- * exception table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__7ListRefFv). */
+/* Owning stack reference to a freshly created property data list, released on scope exit
+ * (reference count in the low 23 bits of f4). */
 class ListRef {
 public:
     S_ref *p;
@@ -331,4 +326,4 @@ cnt_pre:
     fw2 = (beNDMWLoadSavePlWorkList *)ci->_flagWork;
     goto cnt_test;
 }
-} /* extern "C" */
+}

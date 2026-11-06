@@ -2,8 +2,7 @@
  * length 64*N), creates the server side with FUN_002731a8, records the work areas (the EE one also
  * through its uncached 0x20000000 alias), clears and writes back the EE work area (FUN_0010b7d8,
  * FUN_0010b918), installs the FUN_00273268/FUN_00273280 callbacks and marks the object used.
- * Returns it, or 0 with a message on failure. Its messages name it DTX_Create (CRI), a name
- * hypothesis. */
+ * Returns it, or 0 with a message on failure. Its messages name it DTX_Create (CRI). */
 typedef struct Dtx_273338 {
     signed char used;       /* 0x00 */
     signed char state;      /* 0x01 */
@@ -21,7 +20,7 @@ typedef struct Dtx_273338 {
     void (*callback40)();   /* 0x28 */
     int f44;            /* 0x2c */
     char pad48[20];
-} Dtx_273338;               /* 0x44 bytes */
+} Dtx_273338;
 
 extern Dtx_273338 DAT_004a9b30[16];
 extern char eewk_is_not_alignment_64_byte[];          /* 'eewk is not alignment 64 byte\n' */

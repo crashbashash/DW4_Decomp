@@ -1,6 +1,4 @@
-/* Pushes five fields of arg0 (one int, three floats, one address) to a sink object arg1 through
- * five setters; the first field read is volatile so it is loaded from a0 before the copy to s1;
- * alternate compiler -O3. */
+/* The first field read is volatile so it is loaded from a0 before the copy to s1. */
 int FUN_001751b0(int, int);
 int FUN_00175140(int, float);
 int FUN_00175220(int, void *);

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 extern int beMessenger_AppendString(int, const char *);
 extern int beMessenger_DispatchSelected(int, const char *);
@@ -57,4 +55,4 @@ void TextOrder_Configure(beNDMWLoadIntf2TextOrder *arg0, char *arg1, char *arg2,
     beMessenger_AppendString(arg0->_messenger, DAT_00517a00);
     beMessenger_DispatchSelected(arg0->_messenger, DAT_00517a08);
 }
-} /* extern "C" */
+}

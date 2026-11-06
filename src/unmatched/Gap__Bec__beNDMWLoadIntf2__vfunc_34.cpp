@@ -1,4 +1,3 @@
-/* 0x003e9430 - Gap__Bec__beNDMWLoadIntf2__vfunc_34 (typed attempt 1) */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00236f80(...);
@@ -55,12 +54,9 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
 }
 
 struct Rc { int w0; int references; };
-/* Owning stack references to the freshly created controller objects while the list is wired up: each releases its
- * object on scope exit (reference count in the low 23 bits of references).  One class per retail destructor copy:
- * DataListRef 0x0033e9c0 (the property list, also the ensure-list temporaries), CtrlDataRef 0x003eb980,
- * ItemListRef 0x003eb900, ComMdlRef 0x003eb880, TextOrderRef 0x003eb800, SelSlotRef 0x003eb780, NameSelRef 0x003eb700,
- * MesWinRef 0x003eb680, DegiStateRef 0x003eb600, StatDataRef 0x003eb580 (both stat entries), DataSelRef 0x003eb500,
- * DiffSelRef 0x003eb480 (duplicates in config/SLUS-20836/unit-objects.json). */
+/* Owning stack references to the freshly created controller objects while the list is wired up;
+ * each releases its object on scope exit (reference count in the low 23 bits of references). Each
+ * object kind has its own class, one per destructor copy. */
 class DataListRef {
 public:
     Rc *p;
@@ -141,8 +137,6 @@ struct Rec { char p[40]; Arr *f40; };
 
 #define ALLOC(a, o) { a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 #define REL(o) { Rc *rr = (o); if (rr != 0) { rr->references = rr->references - 1; if (((unsigned long long)((long long)rr->references << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-/* Installs a freshly created property list into the controller context: retain the new list, release the old one,
- * store.  The owning reference to the new list is the caller's temporary (retail keeps one stack slot per use). */
 struct ListInstall { static inline void go(Ctx *o, const DataListRef &fresh) {
     Rc *n = fresh.p;
     if (n != 0) n->references = n->references + 1;

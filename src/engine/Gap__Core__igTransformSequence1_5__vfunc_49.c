@@ -1,8 +1,7 @@
-/* 0x001e2bf0 — igTransformSequence1_5 vfunc_49: store one scale key.  When the sequence
- * drives the scale channel it copies the three floats at `scale` into key `index` of
- * _scaleList (12 bytes per key); a missing channel or an out-of-range index is ignored.
- * Counterpart of vfunc_50, which returns the address of the same key (it tests the same
- * channel bit and uses the same 12-byte stride). */
+/* IgTransformSequence1_5 vfunc_49: store one scale key. When the sequence drives the scale channel
+ * it copies the three floats at `scale` into key `index` of _scaleList (12 bytes per key); a
+ * missing channel or an out-of-range index is ignored. Counterpart of vfunc_50, which returns the
+ * address of the same key (it tests the same channel bit and uses the same 12-byte stride). */
 #include "dw4/reflected.h"
 /* _drivenChannels bit for the scale channel (vfunc_50 tests it before reading _scaleList) */
 #define TRANSFORM_CHANNEL_SCALE 8

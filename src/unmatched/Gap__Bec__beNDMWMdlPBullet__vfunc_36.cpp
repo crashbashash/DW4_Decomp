@@ -21,18 +21,15 @@ struct ReleaseRef { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-/* Owning stack reference to the freshly created data list: constructed from the object and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
+ * _refCount); released on scope exit. */
 class ObjectRef {
 public:
     igObject *p;
     ObjectRef(igObject *o) : p(o) {}
     ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the new property value object: same release shape.  The out-of-line copy
- * the exception table names is the retail body 0x00352fc0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__8ValueRefFv). */
+/* Owning stack reference to the new property value object; released on scope exit. */
 class ValueRef {
 public:
     igObject *p;
@@ -55,8 +52,6 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        /* The new list is owned by the stack reference while it is retained into the ram and the old
-         * list is released; the reference's own release runs at the block end. */
         ObjectRef list(beBaseInfoDataList_Create(a));
         s0 = list.p;
         if (s0 != 0) {
@@ -80,8 +75,6 @@ void Gap__Bec__beNDMWMdlPBullet__vfunc_36(beNDMWMdlPBullet *arg0, beBaseInfoRam 
     } else {
         a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
     }
-    /* The new value object is owned by the stack reference while it replaces the record's value and
-     * the model is refreshed; released when the function returns. */
     ValueRef value(FUN_00350020(a));
     s0 = value.p;
     if (s0 != 0) {

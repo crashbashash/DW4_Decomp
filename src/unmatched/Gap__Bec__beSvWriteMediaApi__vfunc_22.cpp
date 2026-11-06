@@ -1,24 +1,16 @@
-/* The memory-card write state machine. Polled once per frame by the save-data pipeline. _phase
- * (_st0) selects the phase and _step (_st1) the step inside it. Every phase runs the same three
- * steps: 0 clears the retry counter, 1 issues one asynchronous memory-card request and raises that
- * request's DAT_0058a8xx "in flight" flag, 2 polls the flag (returning 0 while it is set) and then
- * reads the request's result code. A failed request is retried up to three times (step 1 again)
- * and then ends the machine with _isEnd = 1 and _result = 3 for the "card unusable" codes (-2, -4,
- * -5, ...) or 12 for anything else. When _isEnd is set the tail releases the save work
- * (FUN_003a9990) and clears GPR_00554e60. Phases (evidence: the callee arguments) 0 open the save
- * directory ("/%s/%s" from the card context volume number) FUN_001198a8 1 reset the image pass,
- * then fall into phase 2 2 select the image offset for the current pass (ctx +0xc4 + 4*pass)
- * FUN_00119ac8 3 write the save buffer (steps 0-2, FUN_00119d58), then flush it (steps 3-5,
- * FUN_0011a6f0); after the first image the machine steps back to phase 2 once 4 commit / close
- * (FUN_00119a08), then _result = 2 ("saved") and _isEnd = 1 Returns 1 when already finished, 0
- * while a request is pending, else _isEnd. Retail evidence for two odd constructs: _phase/_step
- * are volatile because retail reloads them at every use (no CSE across the jump-table dispatch);
- * the retry test goes through a local (`ok == 1`) because retail does not fold the comparison into
- * the branch. Build: alternate compiler (local/mwcps2/combat/mwccps2.exe) with -O3,p -Iinclude,
- * like the neighbouring unit at 0x003ab570. */
+/* Memory-card write state machine, polled once per frame by the save-data pipeline. _phase (_st0)
+ * selects the phase and _step (_st1) the step inside it. Every phase runs three steps: 0 clears
+ * the retry counter, 1 issues one asynchronous memory-card request and raises its in-flight flag,
+ * 2 polls the flag (returning 0 while it is set) and reads the result code. A failed request is
+ * retried up to three times, then the machine ends with _isEnd = 1 and _result = 3 for the card-
+ * unusable codes (-2, -4, -5, ...) or 12 for anything else. Phases: 0 opens the save directory, 1
+ * resets the image pass, 2 selects the image offset for the pass, 3 writes the save buffer and
+ * flushes it, 4 commits and closes (_result = 2, saved). Returns 1 when already finished, 0 while
+ * a request is pending, else _isEnd. _phase and _step are volatile because retail reloads them at
+ * every use; the retry test goes through a local because retail does not fold the comparison into
+ * the branch. */
 struct SvSaveWork;
 
-/* The card-context object (DAT_0058a600): only the fields read here. */
 typedef struct SvCardContext {
     char pad0[0x10];
     int dataSize;            /* +0x10 */
@@ -33,8 +25,8 @@ typedef struct SvSaveWork {
     int buffer;              /* +8 */
 } SvSaveWork;
 
-/* beSvWriteMediaApi as laid out in include/dw4/reflected.h, plus the two members the registered
- * metadata does not list (+60 retry count, +72 image pass). */
+/* beSvWriteMediaApi plus the two members the registered metadata does not list (+60 retry count,
+ * +72 image pass). */
 typedef struct beSvWriteMediaApiRun {
     int _vtable;
     unsigned int _refCount;

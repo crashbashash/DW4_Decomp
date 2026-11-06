@@ -1,5 +1,3 @@
-/* Parses a prefixed, comma-terminated name into a heap copy; result stored in each branch;
- * alternate compiler. */
 int FUN_0012a918();
 int strncpy();
 int FUN_002ee430();

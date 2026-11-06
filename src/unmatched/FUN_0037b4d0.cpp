@@ -1,6 +1,3 @@
-/* Third member of the pooled-item family (FUN_003a3960, FUN_0039ab20): composes the item transform
- * from the tail of the current list, takes the next pooled item, registers it and undoes it around
- * the callback. Alternate -O3,p (flags row). */
 extern "C" {
 int FUN_001b1490(...);
 int FUN_001e07a0(void *, void *);

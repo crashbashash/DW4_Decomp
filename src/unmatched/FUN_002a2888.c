@@ -22,7 +22,6 @@ struct Player2a2888 {
     char pad2360[8052 - 2316 - (int)sizeof(struct Video)];
     struct Params *params;                /* +8052 */
 };
-/* Filled by FUN_0028d4a8 / FUN_0028d510; only the words read here are named. */
 struct InfoA {
     int f0, f4, f8;
     int f12;

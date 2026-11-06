@@ -1,6 +1,6 @@
 /* Advances an object by the smaller of FUN_0025def8 and the remaining FUN_0025db20 - field 52
  * (adding it to fields 52 and 44) and adds FUN_0025def0 to field 48. */
-/* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
+/* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0. */
 typedef struct Object_265fb0 {
     char f0;
     char state;         /* 0x01: 1 after FUN_00266298, 0 after FUN_002662c8, 2 in FUN_00266d20 */

@@ -1,4 +1,3 @@
-/* Matches only with the alternate (combat) compiler build. */
 int FUN_0026a160(void *arg0) {
     int var_v0;
 

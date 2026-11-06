@@ -1,23 +1,14 @@
-/*
- * FUN_00286d28 -- MPEG-2 extension_data() parser of the CRI movie decoder (Sony EE GCC, -O2 -G0).
- *
- * Reads one extension_start_code_identifier and its payload from the video elementary stream
- * (ISO/IEC 13818-2 section 6.2.2.x) into the decoder's header state, using an inlined MSB-first
- * bit reader. Field names follow the syntax elements of the standard; they are hypotheses
- * derived from the bit widths and the order of the reads. The identifiers are
- *   1 sequence_extension            2 sequence_display_extension    3 quant_matrix_extension
- *   4 copyright_extension           5 sequence_scalable_extension   7 picture_display_extension
- *   8 picture_coding_extension      9 picture_spatial_scalable_ext. 10 picture_temporal_scalable_ext.
- * (6 is not defined by the standard and counts as an error.)
- *
- * Bit reader state (kept in registers by the compiler):
- *   p    - next byte to fetch, always word aligned after the first fetch
- *   acc  - 32-bit window, next unread bit at bit 31
- *   nxt  - the following 32 bits, already fetched
- *   cnt  - number of bits of the window consumed since the last refill
- * The macros are plain brace blocks on purpose: a do { } while (0) wrapper changes the
- * instruction scheduling and no longer reproduces the retail bytes.
- */
+/* MPEG-2 extension_data() parser of the CRI movie decoder: reads one
+ * extension_start_code_identifier and its payload from the video elementary stream (ISO/IEC
+ * 13818-2 section 6.2.2.x) into the decoder's header state, using an inlined MSB-first bit reader.
+ * The identifiers are 1 sequence_extension, 2 sequence_display_extension, 3
+ * quant_matrix_extension, 4 copyright_extension, 5 sequence_scalable_extension, 7
+ * picture_display_extension, 8 picture_coding_extension, 9 picture_spatial_scalable_extension, 10
+ * picture_temporal_scalable_extension (6 is not defined by the standard and counts as an error).
+ * Bit reader state: p is the next byte to fetch (word aligned after the first fetch), acc a 32-bit
+ * window with the next unread bit at bit 31, nxt the following 32 bits already fetched, cnt the
+ * number of bits of the window consumed since the last refill. The macros are plain brace blocks
+ * on purpose: a do { } while (0) wrapper changes the instruction scheduling. */
 typedef struct Mpeg2Ext {
     char pad0[20];  /* +0: not touched by this parser */
     int bit_rate_value;  /* +20 */
@@ -129,7 +120,6 @@ extern void FUN_00285f98(Mpeg2Ext *);
 extern void FUN_00286008(Mpeg2Ext *);
 extern int D_004f2890[];   /* blocks per macroblock, indexed by chroma_format: 0, 6, 8, 12 */
 
-/* Fetch the next four bytes, big endian, into w. */
 #define READ_WORD(w) \
     { \
         (w) = *p++; \

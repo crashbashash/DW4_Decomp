@@ -1,7 +1,6 @@
 /* Resets a 101-byte stream-information block to its defaults (sibling of FUN_0028ad38 with
  * different defaults at +64 and +85..+87, +94). */
 
-/* Members of the block; roles not yet recovered. */
 struct Info00290f70 {
     int f0; /* +0 */
     int f4; /* +4 */

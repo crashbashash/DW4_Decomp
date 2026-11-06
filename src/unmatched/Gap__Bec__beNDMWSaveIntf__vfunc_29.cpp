@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beMessenger_RegisterReceiver(int, beBaseInfoRam *, int *, int, int);
 int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, int *);
@@ -10,4 +8,4 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_29(beNDMWSaveIntf *arg0, beBaseInfoRam *arg
     beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, &DAT_00519908[0]);
     beMessenger_RegisterReceiver(arg0->_messenger, arg1, &DAT_00519918[0], 0, arg1->_ramNo);
 }
-} /* extern "C" */
+}

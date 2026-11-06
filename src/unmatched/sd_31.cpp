@@ -1,4 +1,3 @@
-/* Matches only with the alternate (combat) compiler build. */
 extern "C" {
 int Lua_sd_OptionalArg(int);
 int beMessenger_EnqueueSelected(int, int, int);

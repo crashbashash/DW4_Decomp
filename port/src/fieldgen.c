@@ -243,9 +243,10 @@ int dw4_fieldgen_tick(dw4_fieldgen *g,int64_t now_ns,const float (*players)[3],u
         unsigned maxc=e->max_count[np-1]>0?(unsigned)e->max_count[np-1]:1;
         if(!e->remaining)continue;
         if(!e->wave1) {
-            /* State 1 of the recovered machine (docs/systems/enemy-spawn-system.md 5b): the first wave fills the generator to its concurrent count in one tick, whatever the
-             * fill mode; the fill mode only rules the maintain pass after it. Retail dng102b3 GENE-09 (add, 10 total / 6 concurrent): all six within 18 ms of the player
-             * entering, remaining 4. */
+            /* State 1 of the recovered machine: the first wave fills the generator to its
+             * concurrent count in one tick, whatever the fill mode; the fill mode only rules the
+             * maintain pass after it. Retail dng102b3 GENE-09 (add, 10 total / 6 concurrent): all
+             * six within 18 ms of the player entering, remaining 4. */
             e->wave1=1;
             unsigned batch=e->remaining<maxc?e->remaining:maxc;
             for(unsigned b=0;b<batch;b++){int rc=spawn(g,e,model,error,cap);if(rc<0)return -1;if(!rc)break;e->remaining--;}

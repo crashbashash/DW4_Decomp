@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct S0 { char pad16[16]; int f10; } S0;
 int beMessenger_SelectReceivers(int, int *, int, int);
@@ -15,4 +13,4 @@ void TextOrder_PublishLine(S0 *arg0, int *arg1, int *arg2) {
     beMessenger_AppendString(arg0->f10, &DAT_00517a10[0]);
     beMessenger_DispatchSelected(arg0->f10, &DAT_00517a08[0]);
 }
-} /* extern "C" */
+}

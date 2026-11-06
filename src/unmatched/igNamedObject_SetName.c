@@ -1,4 +1,5 @@
-/* Old name read after the intern call; typed struct member avoids the CSE of the field address. */
+/* The old name is read after the intern call, and a typed struct member avoids CSE of the field
+ * address. */
 int FUN_002eb010();
 int StringChunk_ReleaseHeader();
 int StringPool_Construct();

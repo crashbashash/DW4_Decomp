@@ -1,5 +1,4 @@
-/* Returns a playback handle's skipped-display count at +136 (its error string names it
- * mwPlyGetNumSkipDisp), or 0 for an invalid handle. */
+/* Returns a playback handle's skipped-display count at +136, or 0 for an invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);
 extern char DAT_004f3278[]; /* "E202231: mwPlyGetNumSkipDisp: handle is invalid." */

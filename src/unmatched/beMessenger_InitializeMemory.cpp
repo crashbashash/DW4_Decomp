@@ -1,7 +1,3 @@
-/* beMessenger_InitializeMemory (0x0038bee0): give the messenger its argument record and fill its three
- * object stacks (64 work records, 32 delay records, 4 push/pop argument records), each stack grown to
- * its size and every slot replaced by a freshly created object.  Each new object is held by a stack
- * reference until it has been retained into its slot. */
 #include "dw4/reflected.h"
 
 extern "C" {
@@ -52,9 +48,6 @@ public:
 #define ALLOC(var) \
     { var = igObject_GetAllocator(arg0); var = GPR_00554c14 ? var : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 
-/* Grow the stack `field` to CNT slots and put a new `factory` object, held by a `Ref`, into each slot:
- * the slot's old object is released, the new one retained in its place (the slot store is skipped when
- * the index is out of the list's range), and the holder releases its share at the end of the body. */
 #define GROUP(field, CNT, factory, Ref) { \
     igObjectList *list = (igObjectList *)arg0->field; \
     if (list->_count < (CNT) + 1) List_Reserve(list, CNT, 4); \

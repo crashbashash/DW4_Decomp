@@ -1,26 +1,16 @@
-/* dw4/pose.h — pose the player's skinned mesh from a live EE RAM dump (P4.1).
- *
- * The player (Susanoomon) is skinned by the engine's VU1 blend programs from three runtime
- * pieces, all recovered offline from the Goblin Pass capture:
- *
- *   per-vertex bone index   in the MODEL PACK, a u8 pool block of exactly `num_verts` bytes
- *                           (pack 861: 5483/5595/5566 for Skin0Shape0/2/1) — one bone per
- *                           vertex, weight 1.0, values 1..23
- *   bone -> matrix slot     igBlendMatrixSelect._blendMatrixIndices (+0x28), an igIntList
- *                           (+0x08 count, +0x10 array)
- *   matrix palette          a 21-matrix array at igAnimationCombiner+0x58 — the pairing the
- *                           object graph DOES carry (0x16df680 behind 0x16de250+0x58); each
- *                           matrix is a 64-byte igMatrix44f, translation in elements 12..14
- *
- * Skinning is `v' = M[slot[bone]] * v` with the matrix read column-wise
- * (`v'x = m0*vx + m4*vy + m8*vz + m12`, the convention `tools/verify_skin.py` pinned on the
- * Ogremon, #540) — the mesh is then placed by its node matrix (`beModelCtrlNode2._m` +0x20,
- * row-vector convention) exactly as the scene path already places a row.
- *
- * The palette is a *capture* — an instant of the animation — so a posed render is exact for the
- * frame the dump was taken at.  The addresses are passed explicitly; discovery of the combiner
- * from the node is the next step.
- */
+/* Pose the player's skinned mesh from a live EE RAM dump. The player (Susanoomon) is skinned by
+ * the engine's VU1 blend programs from three runtime pieces, all recovered offline from the Goblin
+ * Pass capture: per-vertex bone index in the MODEL PACK, a u8 pool block of exactly `num_verts`
+ * bytes (pack 861: 5483/5595/5566 for Skin0Shape0/2/1) — one bone per vertex, weight 1.0, values
+ * 1..23 bone -> matrix slot igBlendMatrixSelect._blendMatrixIndices (+0x28), an igIntList (+0x08
+ * count, +0x10 array) matrix palette a 21-matrix array at igAnimationCombiner+0x58 — the pairing
+ * the object graph DOES carry (0x16df680 behind 0x16de250+0x58); each matrix is a 64-byte
+ * igMatrix44f, translation in elements 12..14 Skinning is `v' = M[slot[bone]] * v` with the matrix
+ * read column-wise (`v'x = m0*vx + m4*vy + m8*vz + m12`, the convention pinned on the Ogremon) —
+ * the mesh is then placed by its node matrix (`beModelCtrlNode2._m` +0x20, row-vector convention)
+ * exactly as the scene path already places a row. The palette is a *capture* — an instant of the
+ * animation — so a posed render is exact for the frame the dump was taken at. The addresses are
+ * passed explicitly. */
 #ifndef DW4_POSE_H
 #define DW4_POSE_H
 

@@ -34,28 +34,22 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, int arg2);
 }
-/* Owning stack reference to the freshly created property data list: constructed from the object and
- * released at the end of the full expression that stores it (reference count in the low 23 bits of
- * _refCount).  The out-of-line copy the exception table names is the retail body 0x0033e9c0
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__7ListRefFv). */
+/* Owning stack reference to the freshly created property data list, released at the end of the
+ * full expression that stores it (reference count in the low 23 bits of _refCount). */
 class ListRef {
 public:
     igObject *p;
     ListRef(igObject *o) : p(o) {}
     ~ListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the select work created on start: released on scope exit.  The
- * out-of-line copy the exception table names is the retail body 0x00345410 (config/SLUS-20836/unit-objects.json,
- * duplicate __dt__7WorkRefFv). */
+/* Owning stack reference to the select work created on start, released on scope exit. */
 class WorkRef {
 public:
     beSelectCtrlInfoWork *p;
     WorkRef(beSelectCtrlInfoWork *o) : p(o) {}
     ~WorkRef() { beSelectCtrlInfoWork *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
 };
-/* Owning stack reference to a new decide list while it is filled: released on scope exit.  The
- * out-of-line copy the exception table names is the retail body 0x00226990 (config/SLUS-20836/unit-objects.json,
- * duplicate __dt__11BoolListRefFv). */
+/* Owning stack reference to a new decide list while it is filled, released on scope exit. */
 class BoolListRef {
 public:
     igObject *p;

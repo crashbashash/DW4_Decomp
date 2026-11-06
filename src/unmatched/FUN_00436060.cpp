@@ -47,9 +47,8 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel);
 /* matching construct: raw view of the property-record folder (list at +12). */
 struct RecordFolder { int w0; int w4; int w8; igDataList *list; };
 struct V3 { float x, y, z; };
-/* Owning stack reference to the system's shared string object: retained while the shop labels are built and
- * released on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the
- * exception table names is the retail body 0x001489a0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the system's shared string object; retained while the shop labels are
+ * built and released on scope exit (reference count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igStringObj *p;

@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* Typed refcount release (-= 1 with the 23-bit mask).py. */
 extern "C" {
 typedef struct RefCountedObject { char pad4[4]; int f4; } RefCountedObject;
 int FUN_00462dc0(int);

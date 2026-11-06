@@ -4,7 +4,6 @@ void beBaseInfoRamList_EnsureRegistered(void);
 extern igMetaObject *DAT_00589d20[4];
 void *beBaseInfoRamList_GetReadyMetaObject(void);
 }
-/* The class meta-object, registering it first unless validity bit 2 says it is ready. */
 void *beBaseInfoRamList_GetReadyMetaObject(void) {
     igMetaObject *g = DAT_00589d20[0];
     int ready;

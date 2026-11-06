@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* Warning: missing "jr $ra" in last block of FUN_003ecdc0 (.L003ED020). */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 
 int FUN_003ecae0(int, int, int);
@@ -86,4 +83,4 @@ int FUN_003ecdc0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
     }
     return var_s1;
 }
-} /* extern "C" */
+}

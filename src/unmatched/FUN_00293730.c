@@ -1,4 +1,4 @@
-/* Sets a playback handle's frame-sync mode at +88 (its error string names it mwPlySetFrmSync),
+/* Sets a playback handle's frame-sync mode at +88,
  * rejecting an invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);

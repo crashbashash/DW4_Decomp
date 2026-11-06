@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int sprintf(char *, int *, int);
 int strlen(char *);
@@ -76,4 +74,4 @@ void FUN_004402e0(beNDMWWindow *arg0, int arg1, unsigned int arg2, int *arg3) {
         } while (i > -1);
     }
 }
-} /* extern "C" */
+}

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_00236f80(int, int);
 int igObject_Destroy(igObject *);
@@ -27,4 +25,4 @@ void beNDMWWindow_BindContext(beNDMWWindow *arg0, igObject *arg1, int arg2, int 
     arg0->_playerNo = arg3;
     arg0->_entCode = arg4;
 }
-} /* extern "C" */
+}

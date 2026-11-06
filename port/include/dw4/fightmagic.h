@@ -1,8 +1,8 @@
-/* Player technique support rules of FIGHTCALC (GAMERAM command FIGHTCALC): P2PKOUKAMAGIC (source case 20: healing, curing, reviving and the
- * Speed / Power / Resist buffs) and GETPATKZOKUSEI (case 21: the attacker's element), ported from the reviewed source of beNDMWGameRam::vfunc_34
- * (src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp). Self-consistency tested only (`check-fieldstage fightmagic`); not compared against
- * retail. The messenger sends (area queries, buff/raise receivers, effect particles) are not ported: the outputs are the integers the source appends
- * to the SET*UP / RAISE messages. docs/combat.md. */
+/* Player technique support rules of FIGHTCALC (GAMERAM command FIGHTCALC): P2PKOUKAMAGIC (source
+ * case 20: healing, curing, reviving and the Speed / Power / Resist buffs) and GETPATKZOKUSEI
+ * (case 21: the attacker's element), ported from beNDMWGameRam::vfunc_34. The messenger sends
+ * (area queries, buff/raise receivers, effect particles) are not ported: the outputs are the
+ * integers the source appends to the SET*UP / RAISE messages. */
 #ifndef DW4_FIGHTMAGIC_H
 #define DW4_FIGHTMAGIC_H
 #include "dw4/fightcalc.h"

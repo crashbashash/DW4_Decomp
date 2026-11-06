@@ -1,7 +1,3 @@
-/* Messenger send with a 48-byte string table copied as an aligned struct (lq/sq unrolled);
- * alternate compiler -O3,p. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct Tbl { const char *s[12]; } __attribute__((aligned(16))) Tbl;
 extern Tbl DAT_004cf990;
@@ -36,4 +32,4 @@ void FUN_0042bae0(int *arg0, int arg1) {
         beMessenger_SendNamed(arg0[3], DAT_0051b308, DAT_0051b7c8, 0, DAT_0051b620);
     }
 }
-} /* extern "C" */
+}

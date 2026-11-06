@@ -1,13 +1,9 @@
-/* 0x0030a300
- * igShortArrayMetaField slot 52: forwards (item, count * _num) to slot 50 of the
- * element type's default descriptor, so an array field of _num elements covers
- * _num times the requested count.  The descriptor is the lazily created object
- * cached at 0x00585950 (the cell sits between the igShortMetaField and
- * igShortArrayMetaField class handles, the same layout as the confirmed
- * default-descriptor getters). */
+/* Forwards (item, count * _num) to slot 50 of the element type's default descriptor, so an array
+ * field of _num elements covers _num times the requested count. The descriptor is the element
+ * type's lazily created default descriptor. */
 #include "dw4/reflected.h"
 extern "C" {
-void **igShortMetaField_GetDefaultDescriptor(...);  /* igShortMetaField default-descriptor getter (name inferred, not confirmed) */
+void **igShortMetaField_GetDefaultDescriptor(...);
 void Gap__Core__igShortArrayMetaField__vfunc_52(igShortArrayMetaField *self, int item, int count);
 }
 /* Placeholder vtable: only the call through slot 50 of the descriptor is used. */

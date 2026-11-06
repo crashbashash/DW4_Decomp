@@ -1,6 +1,5 @@
 #include "dw4/reflected.h"
 typedef struct P { char p0[28]; float x, y, z; } P;
-/* Receiver: the data-selection interface object the shared load/save helpers take (beNDMWLoadIntf2DataSelIntf); _comMdlCtrl is the target whose vec3 at +28 is published. */
 extern "C" {
 int beNDMWLoadIntf2ComMdlCtrl__StartAt(...);
 int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(...);

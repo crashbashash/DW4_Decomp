@@ -1,4 +1,4 @@
-/* Returns 1 when the double argument is a NaN (newlib isnan shape; name is a hypothesis). */
+/* Returns 1 when the double argument is a NaN. */
 typedef union DoubleWords {
     double value;
     struct {

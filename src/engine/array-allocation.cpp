@@ -1,9 +1,8 @@
-/* igMetaField_AllocateArray: allocate the backing array of a memory-reference field. The element
- * descriptor (_memType) supplies the element size and alignment through its virtual methods; the
- * allocator is asked for count * size bytes at that alignment and the pointer is published into
- * the owning object at the field's _offset. The *View classes below only project the observed
- * vtable slots (the numbered placeholders stand for slots this routine never calls); do not
- * instantiate them. */
+/* Allocates the backing array of a memory-reference field. The element descriptor (_memType)
+ * supplies the element size and alignment through its virtual methods; the allocator is asked for
+ * count * size bytes at that alignment and the pointer is published into the owning object at the
+ * field's _offset. The View classes below project only the observed vtable slots (numbered
+ * placeholders stand for slots this routine never calls); do not instantiate them. */
 #include "dw4/reflected.h"
 class ElementLayoutView {public:
 virtual void d0();

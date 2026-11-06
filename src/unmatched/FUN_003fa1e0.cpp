@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* the folder record is not a reflected class: +12 holds its igObjectList */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 struct F { char pad[12]; igObjectList *list; };
 int beNDMWItemBase_GetRecordInt(int, int, int);
@@ -19,4 +16,4 @@ void FUN_003fa1e0(int arg0, int arg1, int *arg2, int arg3) {
         }
     }
 }
-} /* extern "C" */
+}

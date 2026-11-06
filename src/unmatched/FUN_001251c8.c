@@ -1,5 +1,4 @@
-/* Variadic front end: forwards (stream, format, ...) to FUN_0012c858 as a va_list, the shape of
- * newlib's fiprintf over vfiprintf (hypothesis; FUN_00125220 is the same over vfprintf). */
+/* Variadic front end: forwards (stream, format, ...) to FUN_0012c858 as a va_list. */
 typedef __builtin_va_list va_list;
 
 int FUN_0012c858(void *stream, const char *format, va_list args);

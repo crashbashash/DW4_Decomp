@@ -1,7 +1,7 @@
 /* Creates the two allocator registries the engine keeps as empty igMemoryPoolInfoList-style lists:
- * the primary list at 0x586f58 receives the root allocator, the secondary list at 0x586f60 starts
- * empty. The root allocator's encoded index (the byte at object +7, read by igObject_GetAllocator)
- * is cleared so it resolves to slot 0 of the primary list. */
+ * the primary list receives the root allocator, the secondary list starts empty. The root
+ * allocator's encoded index (the byte at object +7, read by igObject_GetAllocator) is cleared so
+ * it resolves to slot 0 of the primary list. */
 #include "dw4/reflected.h"
 int igMemoryPoolInfoList_Allocate();
 int igMemoryPoolInfoList_Append();

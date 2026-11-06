@@ -1,6 +1,6 @@
 /* Maps the decoder mode in f152 and sub-mode in f156 to a block size code: 16 by default, 4 or 8
  * for mode 2, 4 for mode 1 with sub-mode 2. */
-/* CRI ADX decoder block as this function touches it; field meanings are not yet known */
+/* CRI ADX decoder block, limited to the fields this function touches. */
 typedef struct DecoderBlock {
     short f0;
     short state;

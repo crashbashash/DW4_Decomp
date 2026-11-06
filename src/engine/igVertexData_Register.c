@@ -1,6 +1,3 @@
-/* 0x0014b510 igVertexData_Register: registers class igVertexData with the object system, derived from igNamedObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igNamedObject_GetPublishedMetaObject[];
 extern char igVertexData_GetVTable[];
 extern char thunk_igVertexData_GetMetaObject[];
@@ -15,16 +12,16 @@ int igVertexData_InitFields();
 void igVertexData_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igVertexData_metaObject,            /* published MetaObject slot */
-        igNamedObject_Register,                        /* base class registrar */
-        igNamedObject_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igVertexData_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        igVertexData_className,             /* class name */
-        0x24,                                          /* instance size */
-        igVertexData_GetVTable,                        /* vtable getter */
-        &igVertexData_InitFields,                      /* field adder */
-        0,                                             /* extra callback item */
-        g_igVertexData_callbackList           /* callback list */
+        0, /* abstract */
+        g_igVertexData_metaObject,
+        igNamedObject_Register,
+        igNamedObject_GetPublishedMetaObject,
+        thunk_igVertexData_GetMetaObject,
+        igVertexData_className,
+        0x24, /* instance size */
+        igVertexData_GetVTable,
+        &igVertexData_InitFields,
+        0, /* extra callback item */
+        g_igVertexData_callbackList /* callback list */
     );
 }

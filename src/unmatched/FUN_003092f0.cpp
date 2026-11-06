@@ -26,15 +26,15 @@ void *FUN_003092f0(Item *arg0, int arg1) {
     Mem sp5C;
     Obj *sp58;
     R4 sp54;
-    Obj *r; /*P*/
-    int v; /*P*/
-    Obj *s3; /*P*/
-    int *old; /*P*/
-    int *hd; /*P*/
-    int c; /*P*/
-    Out *o; /*P*/
-    void *res; /*P*/
-    Obj *t; /*P*/
+    Obj *r;
+    int v;
+    Obj *s3;
+    int *old;
+    int *hd;
+    int c;
+    Out *o;
+    void *res;
+    Obj *t;
     FUN_003087a0(&sp58, arg0, arg1);
     r = sp58;
     if (r != 0) {

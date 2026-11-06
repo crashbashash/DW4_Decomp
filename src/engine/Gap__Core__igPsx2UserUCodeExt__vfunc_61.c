@@ -1,5 +1,5 @@
-/* 0x001767c0: run the shared slot-57 step, then store the value into the +392 word of the
- * object (past the reflected igPsx2UserUCodeExt fields, so it has no recovered name). */
+/* Run the shared slot-57 step, then store the value into the +392 word of the object (past the
+ * reflected igPsx2UserUCodeExt fields). */
 int Gap__Core__igPrimLengthArray1_1__vfunc_57();
 
 void Gap__Core__igPsx2UserUCodeExt__vfunc_61(void *self, int value) {

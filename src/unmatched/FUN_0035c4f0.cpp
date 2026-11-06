@@ -1,4 +1,4 @@
-/* Deleting reference-wrapper destructor; the deletion flag is signed short. */
+/* Deleting destructor; the deletion flag is a signed short. */
 extern "C" {
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;

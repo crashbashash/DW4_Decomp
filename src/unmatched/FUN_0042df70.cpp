@@ -26,9 +26,8 @@ extern int DAT_0051b930[4];
 extern int DAT_0051b938[4];
 extern int DAT_00586f20[4];
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     char *p;
@@ -36,7 +35,6 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
-/* string-pool intern (the pool singleton is created on first use) */
 struct Str { static inline int intern(int *s) {
     int ref;
     int pool;
@@ -88,7 +86,6 @@ void FUN_0042df70(beNDMWShopCtrlA1 *arg0) {
                 StringRef name(tt);
                 beNDMWWindow_PresentModelAtOrigin(arg0, name.p, 0, beDataBase_GetRecordString(s1, s0, &DAT_0051b930[0]), 0);
                 {
-                    /* the list takes its own share of the name */
                     StringRef copy((int)name.p);
                     tt = (int)copy.p;
                     if (tt)

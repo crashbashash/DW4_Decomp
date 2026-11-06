@@ -1,7 +1,7 @@
-/* Sets an ADXT handle's reload size from a time: time * rate samples, in 32-sample 18-byte frames
+/* Sets an ADXT handle's reload size from a time: time rate samples, in 32-sample 18-byte frames
  * per channel, as 2048-byte sectors capped at the buffer size (+60); stores it at +62 and, with a
  * stream (+8), passes both sizes in bytes to FUN_0026a9d8. A NULL handle is reported through
- * FUN_002607e8. Its error string names it ADXT_SetReloadTime (CRI), a name hypothesis. */
+ * FUN_002607e8. */
 typedef struct Adxt_26c7e8 {
     char pad0[8];
     void *stream;           /* 0x08 */

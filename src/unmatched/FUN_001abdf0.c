@@ -1,4 +1,3 @@
-/* Release three global references (cached pointer, int refcount, 23-bit test), then clear them. */
 struct R { char pad[4]; int f4; };
 int igObject_Destroy(struct R *);
 extern struct R *DAT_00562528[4];

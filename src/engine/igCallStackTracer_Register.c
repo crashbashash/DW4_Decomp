@@ -1,6 +1,3 @@
-/* 0x002cc720 igCallStackTracer_Register: registers class igCallStackTracer with the object system, derived from igUnsignedIntListNoClean.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igUnsignedIntListNoClean_Register[];
 extern char igCallStackTracer_GetVTable[];
 extern char thunk_igCallStackTracer_GetMetaObject[];
@@ -13,16 +10,16 @@ void FUN_002cc7b0(void);
 void igCallStackTracer_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
-        0,                                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igCallStackTracer_metaObject,                  /* published MetaObject slot */
-        igUnsignedIntListNoClean_Register,                        /* base class registrar */
-        igUnsignedIntListNoClean_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igCallStackTracer_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        igCallStackTracer_className,                   /* class name */
-        0x14,                                                     /* instance size */
-        igCallStackTracer_GetVTable,                              /* vtable getter */
-        FUN_002cc7b0,                                         /* field adder */
-        0,                                                        /* extra callback item */
-        0                                                         /* callback list */
+        0, /* abstract */
+        g_igCallStackTracer_metaObject,
+        igUnsignedIntListNoClean_Register,
+        igUnsignedIntListNoClean_GetPublishedMetaObject,
+        thunk_igCallStackTracer_GetMetaObject,
+        igCallStackTracer_className,
+        0x14, /* instance size */
+        igCallStackTracer_GetVTable,
+        FUN_002cc7b0,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

@@ -1,14 +1,7 @@
-/* FUN_00418ac0 (0x00418ac0, 1828 B): MATCH under the alternate compiler
- * (local/mwcps2/combat/mwccps2.exe). Receiver beNDMWStatusCtrlD0: rebuilds the 12-slot page of the
- * item list through messenger scripts (arg1: page list, arg2: cursor detail). Built under the unit
- * profile (alternate compiler, -O3,p, exceptions on); the ObjectRef destructor is the destroy
- * action of the retail exception table and a duplicate of the retail body 0x001489a0. Matching
- * constructs (each measured): the function-level declaration order fixes vreg ids and so the
- * s-register colouring; `self = p0` and DAT_004cf670[i] (the compiler strength-reduces it into a
- * late-numbered pointer) put the receiver below the name pointer; the string length of the holder
- * is read into the dead loop counter `i` / `idx` (a second web gets a later id than the holder
- * reload); per-arm block locals for the record folder; `s = s2 == 0 ? default : s2` keeps the
- * unthreaded join of the null fallback. */
+/* The function-level declaration order fixes the virtual register ids and so the s-register
+ * colouring; `self = p0` and DAT_004cf670[i] put the receiver below the name pointer; the string
+ * length of the holder is read into the dead loop counter i / idx; per-arm block locals hold the
+ * record folder; `s = s2 == 0 ? default : s2` keeps the unthreaded join of the null fallback. */
 #include "dw4/reflected.h"
 extern "C" {
 int strlen(void *);
@@ -54,10 +47,8 @@ void FUN_00418ac0(beNDMWStatusCtrlD0 *p0, int arg1, int arg2);
 }
 /* matching construct: raw view for the property-record folder (list at +12; no reflected class). */
 struct RecordFolder { int w0; int w4; int w8; igDataList *list; };
-/* Owning stack reference to the shared name-string object: constructed from the insight's string slot,
- * retained, and released on scope exit (reference count in the low 23 bits of _refCount).  The
- * out-of-line copy the exception table names is the retail body 0x001489a0 (config/SLUS-20836/unit-objects.json,
- * duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the shared name-string object; retained, and released on scope exit
+ * (reference count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igStringObj *p;

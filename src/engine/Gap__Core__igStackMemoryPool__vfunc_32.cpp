@@ -1,9 +1,7 @@
-/* 0x003276b0 — Gap__Core__igStackMemoryPool__vfunc_32
- * Disable step of the stack pool: run virtual slot 124 (vfunc_31, 0x00327670, which
- * copies +116 to +132 and recomputes +136 as the 4-byte-aligned end: +132 plus the
- * 64-bit size at +120, less 4), then clear _isActive.  The alias pool has the same
- * pair: its slot 128 calls the receiver's slot 124 and then clears the active byte
- * (docs/engine/alias-pool-binding.md, "Accounting control block"). */
+/* Disable step of the stack pool: run virtual slot 124 (vfunc_31, which copies +116 to +132 and
+ * recomputes +136 as the 4-byte-aligned end: +132 plus the 64-bit size at +120, less 4), then
+ * clear _isActive. The alias pool has the same pair: its slot 128 calls the receiver's slot 124
+ * and then clears the active byte. */
 #include "dw4/reflected.h"
 extern "C" {
 

@@ -1,4 +1,3 @@
-/* Registers the item model's receiver through its info (+0x14) with the class table. */
 #include "dw4/reflected.h"
 extern "C" {
 extern char DAT_0051cea8[];

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_00431670(beNDMWShopCtrlEvolve *, int);
 int FUN_00433120(int, int, int);
@@ -73,4 +71,4 @@ void FUN_004313b0(beNDMWShopCtrlEvolve *arg0) {
     beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b4a0[0]);
     FUN_00433120(arg0->_mother, arg0->_playerNo, 1);
 }
-} /* extern "C" */
+}

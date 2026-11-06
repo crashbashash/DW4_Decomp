@@ -25,7 +25,7 @@ extern int DAT_004f9ad8[4];             /* "readFile(%s)" */
 extern int DAT_004f9af0[4];             /* "...unable to read this oldversion of igb file format with external references..." */
 extern int DAT_004f9b90[4];             /* "Total Time to load %s - %f seconds" */
 extern char DAT_00586e20[64];           /* scratch buffer the log line is formatted into */
-extern unsigned char GPR_00554c08;      /* "already reported the old-format file" latch */
+extern unsigned char GPR_00554c08;
 extern unsigned char GPR_00554c0c;      /* "already reported the load time" latch */
 int sprintf(...);
 int FUN_00230728(...);                  /* elapsed time between two clock reads */
@@ -51,7 +51,7 @@ igResult FUN_002e91e0(void *);
 igResult FUN_002e94b0(void *);
 void FUN_002e8a10(void *);
 void FUN_002e8a40(void *);
-int FUN_002e9470(void *);               /* error path: tears the half-read file down */
+int FUN_002e9470(void *);
 }
 
 /* The engine clock; now() is the method at vtable offset 100. */

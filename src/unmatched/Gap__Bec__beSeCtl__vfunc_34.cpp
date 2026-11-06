@@ -10,7 +10,7 @@ extern int DAT_004e0858[4];
 extern int DAT_0050f778[4];
 extern int DAT_0050f788[4];
 }
-/* arg1 context: +12 holds the owning info (sectl.c context+0xc); class not identified */
+/* arg1 context: +12 holds the owning info. */
 struct ContextView { char p[12]; int f12; };
 /* arg2 message record: +12 model name, +16 slot, +20 action name */
 struct SeMessageView { char p[12]; int f12; int f16; int f20; };

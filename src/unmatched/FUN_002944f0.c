@@ -1,4 +1,3 @@
-/* Looks up a value through FUN_002b2d20 (query id 224) and maps result 1/3/6 to 33/81/97; every other result, or a failed lookup, gives 17. */
 extern int FUN_002b2d20(void *, int, int *);
 int FUN_002944f0(void *h)
 {

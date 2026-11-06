@@ -1,4 +1,3 @@
-/* Matches only with the alternate (combat) compiler build. */
 extern "C" {
 int igMetaEnum_Create(int *, int *, int *, int);
 extern int DAT_004c4550[4];

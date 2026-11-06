@@ -1,6 +1,3 @@
-/* 0x002b71e0 igUnsignedIntArrayMetaField_Register: registers class igUnsignedIntArrayMetaField with the object system, derived from igUnsignedIntMetaField.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igUnsignedIntMetaField_Register[];
 extern char igUnsignedIntArrayMetaField_GetVTable[];
 extern char thunk_igUnsignedIntArrayMetaField_GetMetaObject[];
@@ -15,16 +12,16 @@ int igUnsignedIntArrayMetaField_InitFields();
 void igUnsignedIntArrayMetaField_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
-        0,                                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igUnsignedIntArrayMetaField_metaObject,      /* published MetaObject slot */
-        igUnsignedIntMetaField_Register,                        /* base class registrar */
-        igUnsignedIntMetaField_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igUnsignedIntArrayMetaField_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        igUnsignedIntArrayMetaField_className,       /* class name */
-        0x38,                                                   /* instance size */
-        igUnsignedIntArrayMetaField_GetVTable,                  /* vtable getter */
-        &igUnsignedIntArrayMetaField_InitFields,                /* field adder */
-        0,                                                      /* extra callback item */
-        g_igUnsignedIntArrayMetaField_callbackList     /* callback list */
+        0, /* abstract */
+        g_igUnsignedIntArrayMetaField_metaObject,
+        igUnsignedIntMetaField_Register,
+        igUnsignedIntMetaField_GetPublishedMetaObject,
+        thunk_igUnsignedIntArrayMetaField_GetMetaObject,
+        igUnsignedIntArrayMetaField_className,
+        0x38, /* instance size */
+        igUnsignedIntArrayMetaField_GetVTable,
+        &igUnsignedIntArrayMetaField_InitFields,
+        0, /* extra callback item */
+        g_igUnsignedIntArrayMetaField_callbackList /* callback list */
     );
 }

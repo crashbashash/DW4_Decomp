@@ -1,10 +1,3 @@
-/* Attach the player info work to a RAM slot. Creates the slot's data list on first use, replaces
- * the info-work record found by name with a new beNDMWMdlPlayerInfoWork (FUN_003bfc80 creates it)
- * and gives it a zeroed 8-entry turn-attack timer list, places the model (identity matrix unless
- * the messenger carried one), runs the common attach step FUN_00396740, then seeds the player's
- * record (HP/MP copies, trained lists, name text, first item sequence) and reports HP/MP to the
- * status receivers; the lobby map names set _isMainLobby. Every created object lives on the stack
- * in an owning reference whose release the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(igObject *);
@@ -96,46 +89,38 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-/* Owning stack reference to the slot's new data list: constructed from the created object and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body ObjectRef_Destruct_0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__11DataListRefFv). */
+/* Owning stack reference to the slot's new data list; released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class DataListRef {
 public:
     igObject *p;
     DataListRef(igObject *o) : p(o) {}
     ~DataListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the new player info work: released on scope exit.  The out-of-line copy
- * the exception table names is the retail body 0x003bde80 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__11InfoWorkRefFv). */
+/* Owning stack reference to the new player info work; released on scope exit. */
 class InfoWorkRef {
 public:
     igObject *p;
     InfoWorkRef(igObject *o) : p(o) {}
     ~InfoWorkRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the new turn-attack timer list: released on scope exit.  The out-of-line
- * copy the exception table names is the retail body ObjectRef_Destruct_00150eb0
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__10IntListRefFv). */
+/* Owning stack reference to the new turn-attack timer list; released on scope exit. */
 class IntListRef {
 public:
     igIntList *p;
     IntListRef(igIntList *l) : p(l) {}
     ~IntListRef() { igIntList *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
 };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     int *p;
     StringRef(int *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
-/* retail hands the retained copy of a list entry back by hidden return pointer */
+/* The retained copy of a list entry is returned through a hidden return pointer. */
 extern "C" StringRef StringList_CopyRetained(igStringObjList *, int);
-/* store a new data list in the RAM slot: the slot takes its own reference and drops the old one */
 struct Slot { static inline void setDataList(beBaseInfoRam *ram, const DataListRef &r) {
     igObject *t = r.p;
     if (t != 0) t->_refCount = t->_refCount + 1;

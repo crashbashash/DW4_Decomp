@@ -1,5 +1,5 @@
 /* Walks every free-list bin of the allocator and refreshes the free/used totals in the allocator
- * statistics block (newlib malloc_update_mallinfo shape; name is a hypothesis). */
+ * statistics block. */
 typedef struct MallocChunk {
     unsigned int previousSize;
     unsigned int size;

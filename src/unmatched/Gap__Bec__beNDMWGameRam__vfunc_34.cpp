@@ -347,32 +347,12 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
     char *temp_v0_19;
     char *temp_v0_10;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     void *temp_v0_47;
     int sp400;
     int sp3FC;
     int sp3F8;
     int sp3F4;
     int sp3F0;
-
 
     int sp3E4;
     DW4Vec3 sp3D8;
@@ -2135,8 +2115,6 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
     void *temp_v0_86;
     void *temp_v0_93;
 
-
-
     temp_ret = FUN_00407050((char *)arg2 + 0x14);
     temp_ret_2 = (void *)(GameRamMessage_GetMetaEnum());
     temp_ret_3 = beMessenger_ResolveEnumValue(arg0->_messenger, temp_ret_2, temp_ret);
@@ -2173,7 +2151,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
         beMessenger_AppendObject(arg0->_messenger, temp_ret_15);
         return 1;
     case 11: {
-        unsigned char var_s0_2;   /* bool flag: retail loads it with daddiu */
+        unsigned char var_s0_2;
         temp_ret_16 = beMessenger_GetInt(arg0->_messenger, 0);
         var_s0_2 = 1;
         temp_ret_17 = beMessenger_GetBoolCount(arg0->_messenger);
@@ -3153,7 +3131,8 @@ block_215:
             skp = (void *)(temp_ret_330);
             temp_ret_331 = igProperty_GetRecord(skp, &DAT_00518858[0]);
             sklv = ((beDataObjInt *)temp_ret_331)->_data;
-            // ternary chain (not if/else): MWCC copies each next compare into the beqz delay slot only for this form
+            /* Ternary chain rather than if/else: only this form copies each next compare into the
+             * beqz delay slot. */
             var_s8 = (sklv < 0x25) ? sklv * 0x1E
                    : (sklv < 0x6C) ? (sklv * 0x14) + 0x168
                    : (sklv < 0xE4) ? (sklv * 0xA) + 0x596
@@ -3185,7 +3164,7 @@ block_215:
                 var_s7_2 = *(int *)(temp_ret_343 + (var_s5_3 * 4));
             }
             if (var_s7_2 < var_s8) {
-                // same ternary form for the level band; the 0/2 pick below stays an if/else
+                /* Same ternary form for the level band; the 0/2 pick below stays an if/else. */
                 skgrp = (sklv < 0x25) ? 0 : (sklv < 0x6C) ? 1 : (sklv < 0xE4) ? 2 : 3;
                 if (sp128 == 1) {
                     skhard = 2;
@@ -3193,7 +3172,7 @@ block_215:
                     skhard = 0;
                 }
                 skptr = (short *)(DAT_004cf590);
-                // 'value <= *p' (not '*p >= value') keeps the compare as slt at / bnez at as in retail
+                /* `value <= *p` (not `*p >= value`) keeps the compare as slt at / bnez at. */
                 for (skcnt = 0; skcnt < 0x15; skcnt++, skptr++) {
                     if (var_s7_2 <= *skptr) {
                         skband = skcnt;
@@ -3201,7 +3180,8 @@ block_215:
                     }
                 }
                 temp_s1_3 = DAT_004cf390[skgrp][skband][skhard];
-                // switch (default arm first) rather than a != chain: it places retail's nop after the third beq
+                /* A switch with the default arm first, rather than a != chain, places the nop
+                 * after the third beq. */
                 switch (skcls) {
                 default: {
                     temp_ret_344 = igProperty_GetRecord(skp, &DAT_00518848[0]);
@@ -3224,7 +3204,7 @@ block_215:
                 temp_v0_65 = (void **)(temp_ret_350);
                 temp_v0_66 = ((DW4VC_96_0 *)(temp_v0_65))->vX() % 100000U;
                 if ((int) temp_v0_66 < var_s0_11) {
-                    int skill_next = var_s7_2 + 1;  // kept in a saved register across the table calls
+                    int skill_next = var_s7_2 + 1;
                     temp_ret_351 = FUN_003a9250(skp, &DAT_00518860[0]);
                     temp_ret_352 = (void *)(FUN_00406e40(temp_ret_351));
                     temp_v0_67 = (void *)(temp_ret_352);
@@ -3250,8 +3230,8 @@ block_215:
             }
             break;
         case 6:
-            // block-local webs declared in the order expup_idx, expup_player, expup_level, expup_exp: their vreg ids fix the allocator push order
-            // (idx, player, level, exp web) that gives retail s3, s2, s1, s0
+            /* Block-local webs are declared in the order expup_idx, expup_player, expup_level,
+             * expup_exp; their register ids fix the allocator push order. */
             int expup_idx;
             void *expup_player;
             int expup_level;
@@ -3288,9 +3268,9 @@ block_215:
                             if (temp_v0_69 != 0) {
                                 var_s0_12 = (int)((int) (var_s0_12 * (temp_v0_69 + 0x64)) / 100);
                             }
-                            int split;  // declared here: a late vreg id lets the register allocator push the receiver before the four hot loop webs
+                            int split;  /* Declared here: a late register id lets the allocator push the receiver before the four hot loop webs. */
                             switch (temp_s6) {
-                            case 1:  // case 1 shares the default body (retail keeps its dead 'li v0,1' compare)
+                            case 1:  /* Case 1 shares the default body, which keeps a dead `li v0,1` compare. */
                             default:
                                 split = (var_s0_12 * 100) / 2;
                                 break;
@@ -3311,12 +3291,13 @@ block_215:
                                 split /= 100;
                             }
                             temp_ret_375 = igProperty_GetRecord(expup_player, &DAT_00518880[0]);
-                            // old value is read before the second record lookup (it lives across that call); the add is in place
+                            /* The old value is read before the second record lookup (it lives
+                             * across that call); the add is in place. */
                             expup_exp = ((beDataObjInt *)temp_ret_375)->_data;
                             expup_exp = expup_exp + split;
                             temp_ret_376 = igProperty_GetRecord(expup_player, &DAT_00518880[0]);
                             ((beDataObjInt *)temp_ret_376)->_data = expup_exp;
-                            bool leveled_up = false;  // bool: retail sets it with daddiu
+                            bool leveled_up = false;
                             temp_ret_377 = igProperty_GetRecord(expup_player, &DAT_00518938[0]);
                             if (((beDataObjInt *)temp_ret_377)->_data <= expup_exp) {
 loop_449:
@@ -4458,7 +4439,9 @@ loop_449:
                 }
             }
             if (var_s0_21 == 2) {
-                /* retail recomputes obj+0x28 at each of the three uses (no common subexpression); the integer-sum form of the first use (and a plain byte-offset form for the others) keeps the compiler from hoisting it into a saved register */
+                /* obj+0x28 is recomputed at each of the three uses (no common subexpression); the
+                 * integer-sum form of the first use, and a plain byte-offset form for the others,
+                 * keeps the compiler from hoisting it into a saved register. */
                 temp_ret_781 = FUN_003e93b0((void *)((int)temp_v0_128 + 0x28));
                 if (temp_ret_781 == 0) {
                     temp_ret_782 = igObject_GetAllocator(temp_v0_128);
@@ -5616,7 +5599,8 @@ temp_ret_1118 = FUN_003a92e0(temp_v0_165, &DAT_00518870[0]);
         }
         return 1;
     case 20:
-        // block-local webs declared in the order player, common, idx: their vreg ids fix the allocator push order
+        /* Block-local webs are declared in the order player, common, idx; their register ids fix
+         * the allocator push order. */
         int tail_idx;
         int temp_s3_18;
         int temp_s0_34;

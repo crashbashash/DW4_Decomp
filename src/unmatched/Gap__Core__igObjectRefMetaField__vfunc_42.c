@@ -1,4 +1,3 @@
-/* Matches only with the alternate (combat) compiler build. */
 #include "dw4/reflected.h"
 int igObject_VisitFields();
 

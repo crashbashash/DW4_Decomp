@@ -9,9 +9,8 @@ int igStrCmp(void *, int);
 extern int DAT_00586f20[4];
 }
 extern "C" beSystem *DAT_0058a1b8[4];
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     void *p;
@@ -19,7 +18,7 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(void *, StringRef *);
-/* retail hands the copied token back by hidden return pointer */
+/* The copied token is returned through a hidden return pointer. */
 extern "C" StringRef StringList_CopyRetained(void *, int);
 
 extern "C" void CFLsetName(int arg0) {

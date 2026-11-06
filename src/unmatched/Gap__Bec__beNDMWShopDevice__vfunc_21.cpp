@@ -1,9 +1,3 @@
-/* Gap__Bec__beNDMWShopDevice__vfunc_21 (0x0043cc20): update state machine of the shop device page.
- * State 1 opens one sub-window per step (_st1 0: the device select list FUN_003b4d90 with the entry
- * code of the shop kind, 1: FUN_003b6bc0 with the entry code, 2: FUN_003b7360) and waits for it to
- * close, routing the select result to the next step; state 2 closes everything; state 3 waits for the
- * close and clears _isRun.  Each new window is owned by a stack reference until it has been bound and
- * listed. */
 #include "dw4/reflected.h"
 extern "C" {
 igObject *FUN_003b4d90(void *);
@@ -22,10 +16,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to a sub-window of one of the three window classes opened here (kind 0..2
- * follows the _st1 step): constructed from the factory result and released on scope exit (reference
- * count in the low 23 bits of _refCount).  The out-of-line copies the exception table names are the
- * retail bodies 0x00428710, 0x0042c790 and 0x0042b800 (config/SLUS-20836/unit-objects.json, duplicates
- * __dt__12WindowRef<0>Fv, __dt__12WindowRef<1>Fv, __dt__12WindowRef<2>Fv). */
+ * follows the _st1 step); constructed from the factory result and released on scope exit
+ * (reference count in the low 23 bits of _refCount). */
 template <int kind> class WindowRef {
 public:
     igObject *p;

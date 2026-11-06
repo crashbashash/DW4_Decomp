@@ -1,11 +1,9 @@
 #include "dw4/reflected.h"
-/* Receivers (data/class-hierarchy.tsv, include/dw4/reflected.h; offset and width agree):
- *   tree  -> beMatCtrlSearchList (igObjectList): _count +8, _data +16 = beMatCtrlSearch *[]
- *   node  -> beMatCtrlSearch: _minX +8, _maxX +12, _matNO +16, _memberList +24 = child list
- *   cells -> beMatCtrlDataList: _count +8, _data +16 = beMatCtrlData *[]; cell->_chkBox +12 = box
- *   flags -> igIntList: _count +8, _data +16 = int[]
- * Arena references are 4-byte handles in the reflected fields; the casts below widen them to
- * the pointers the code dereferences. */
+/* tree is a beMatCtrlSearchList (igObjectList): _count +8, _data +16 = beMatCtrlSearch *[]; node
+ * is a beMatCtrlSearch: _minX +8, _maxX +12, _matNO +16, _memberList +24 = child list; cells is a
+ * beMatCtrlDataList: _count +8, _data +16 = beMatCtrlData *[], cell->_chkBox +12 = box; flags is
+ * an igIntList: _count +8, _data +16 = int[]. Arena references are 4-byte handles in the reflected
+ * fields; the casts below widen them to the pointers the code dereferences. */
 struct B;
 struct V;
 extern "C" {

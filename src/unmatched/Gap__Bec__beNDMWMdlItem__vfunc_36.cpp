@@ -1,10 +1,3 @@
-/* Attach the model-item work record to a base-info RAM entry. Creates the per-info data list on
- * first use, creates a beNDMWMdlItemInfoWork under the "item work" property, reads its db id /
- * kind from the messenger arguments, classifies the parent info's name against the ten item-
- * category names (kind 0..2 are plain, 3..9 flag _isNamed), then builds the concrete item object
- * for the db id (ids 0, 1, 2 and 6 take only the record number; 3, 4 and 5 are initialised from
- * the "item roll" record the messenger carries). Ends by running the shared base-info setup
- * (FUN_00396740). */
 #include "dw4/reflected.h"
 extern "C" {
 struct Prop { char pad[20]; igObject *f20; };
@@ -65,7 +58,6 @@ template <int K> struct ItemRefK { igObject *volatile p; ItemRefK(igObject *o) :
 #define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel[0]); }
 #define ALLOC(a, sel) ALLOC_OF(self, a, sel)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-/* hold `fresh` (+1), store it in `slot` after dropping the old reference, then drop the hold (-1) */
 #define STORE_ITEM(fresh) { igObject *held2 = fresh; beNDMWMdlItemInfoWork *w2 = work.p; if (held2 != 0) held2->_refCount = held2->_refCount + 1; REL((igObject *)w2->_itemObject) w2->_itemObject = (int)held2; }
 #define STORE_REF(slot, fresh) { igObject *held2 = fresh; if (held2 != 0) held2->_refCount = held2->_refCount + 1; REL((igObject *)slot) slot = (int)held2; }
 

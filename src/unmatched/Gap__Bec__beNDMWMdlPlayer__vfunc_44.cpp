@@ -81,7 +81,8 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *
     }
     if (pinfo->_isPanel != 0) {
         igMetaEnum_GetValueByName(&en, FUN_003bf830(), pinfo->_seqCodeName, &tmp);
-        /* compare through a pointer-to-pointer: keeps 'addiu v1,sp,120; lw v1,0(v1)' (same trick as FUN_00306f10) */
+        /* The compare goes through a pointer-to-pointer, which keeps the `addiu v1,sp,120; lw
+         * v1,0(v1)` pair. */
         int **ppp; int *pp = &en.v; ppp = &pp; if (**ppp == DAT_004fb410[0]) {
             pinfo->_isPanel = 0;
             beMessenger_SendNamed(self->_messenger, DAT_00516148, 0, msg->number, DAT_005164b0);

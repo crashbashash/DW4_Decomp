@@ -1,14 +1,8 @@
-/* CRI SRD (stream reader) per-handle server step, from the "SRD/PS2EE Ver.2.22"
- * library.  The state byte (+2) walks the CD read cycle:
- *   1  read requested  -> sceCdRead issued       -> 2 (or 9 on failure)
- *   2  read in flight  -> sceCdSync(1) polled    -> 3 done / 9 error (FUN_00271c00)
- * A pending abort request (+4 == 1) first breaks and syncs the drive when a
- * read is in flight, then resets the handle to state 0.
- * Message: "SRD: sceCdBreak is fail. %d" (string at 0x4efca8).
- * Hypotheses: FUN_002725a0 records a progress marker (trace hook),
- * FUN_001179d8 = sceCdBreak, FUN_00116c80 = sceCdSync, FUN_00117690 = sceCdRead,
- * FUN_0010d108 = printf.  The statistics words are volatile in the original
- * (this is what produces the retail delay-slot and address-load shapes). */
+/* CRI SRD (stream reader) per-handle server step. The state byte (+2) walks the CD read cycle: 1
+ * read requested (sceCdRead issued) goes to 2, or 9 on failure; 2 read in flight (sceCdSync(1)
+ * polled) goes to 3 done or 9 error. A pending abort request (+4 == 1) first breaks and syncs the
+ * drive when a read is in flight, then resets the handle to state 0. The statistics words are
+ * volatile, which produces the delay-slot and address-load shapes. */
 typedef struct Srd {
     char used;
     char pad0;

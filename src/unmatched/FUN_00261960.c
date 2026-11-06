@@ -1,6 +1,6 @@
 /* Opens a sector range on the ADXF handle stream, closing it again when FUN_0026a138 reports state
  * 4; on success records the length in sectors and bytes (sectors * 2048). Returns 0 or -1. */
-/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
+/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8). */
 typedef struct AdxfHandle {
     signed char used;
     signed char f1;

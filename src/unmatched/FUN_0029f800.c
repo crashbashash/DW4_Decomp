@@ -4,7 +4,6 @@ void FUN_0028b750();
 void *FUN_0028da88();
 int FUN_0028dc28();
 
-/* Returns text advanced past one element: by the decoder's length when available, else by min(length, 6). */
 char *FUN_0029f800(char *text, int length) {
     void *decoder;
     int consumed;

@@ -1,8 +1,8 @@
-/* dw4/arena.c — the game arena, class registry and igObject reference counting (porting P0, docs/arena-object-model.md).
- *
- * Layout: [0, DW4_ARENA_BASE) is never handed out, the persistent region grows up from there, the stage region grows down from
- * the end. Every block is a 16-byte header followed by a 16-byte aligned payload; the handle is the payload's offset, so
- * the header sits at handle - 16 and a handle is validated by finding a live header there. */
+/* The game arena, class registry and igObject reference counting. Layout: [0, DW4_ARENA_BASE) is
+ * never handed out, the persistent region grows up from there, the stage region grows down from
+ * the end. Every block is a 16-byte header followed by a 16-byte aligned payload; the handle is
+ * the payload's offset, so the header sits at handle - 16 and a handle is validated by finding a
+ * live header there. */
 #include "dw4/arena.h"
 
 #include <pthread.h>

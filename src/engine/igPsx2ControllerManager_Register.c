@@ -1,6 +1,3 @@
-/* 0x00146ef0 igPsx2ControllerManager_Register: registers class igPsx2ControllerManager with the object system, derived from igControllerManager.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igControllerManager_Register[];
 extern char thunk_igPsx2ControllerManager_GetMetaObject[];
 extern char igPsx2ControllerManager_GetVTable[];
@@ -14,16 +11,16 @@ int igPsx2ControllerManager_InitFields();
 void igPsx2ControllerManager_Register(void) {
     WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2ControllerManager_metaObject,       /* published MetaObject slot */
-        igControllerManager_Register,                        /* base class registrar */
-        igControllerManager_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igPsx2ControllerManager_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        igPsx2ControllerManager_className,        /* class name */
-        0x14,                                                /* instance size */
-        igPsx2ControllerManager_GetVTable,                   /* vtable getter */
-        &igPsx2ControllerManager_InitFields,                 /* field adder */
-        0,                                                   /* extra callback item */
-        0                                                    /* callback list */
+        0, /* abstract */
+        g_igPsx2ControllerManager_metaObject,
+        igControllerManager_Register,
+        igControllerManager_GetPublishedMetaObject,
+        thunk_igPsx2ControllerManager_GetMetaObject,
+        igPsx2ControllerManager_className,
+        0x14, /* instance size */
+        igPsx2ControllerManager_GetVTable,
+        &igPsx2ControllerManager_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

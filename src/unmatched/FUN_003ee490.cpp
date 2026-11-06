@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 
 int memcpy(int, int, unsigned int);
@@ -11,4 +9,4 @@ void FUN_003ee490(void *arg0, void *arg1)
   memcpy(*((int *) (((char *) arg0) + 28)), *((int *) (((char *) arg1) + 28)), new_var);
   beNDMWDegiData__UpdateFieldsFromData(arg0);
 }
-} /* extern "C" */
+}

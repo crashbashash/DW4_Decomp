@@ -1,17 +1,13 @@
-/* 0x0041f190 Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21 - MATCH (verify.py).
- * Build: alternate compiler local/mwcps2/combat/mwccps2.exe, flags "-O3,p -Cpp_exceptions off -Iinclude",
- * unit-objects entry {"duplicates": {"__dt__3RefFv": "0x003d9bd0"}, "externals": {"__dl__FPv": "0x00100610"}}
- * (the stack window Ref's destructor is inlined and an out-of-line copy is emitted).
- * Matching constructs:
+/* Matching constructs:
  *  - class VC with 22 dummy virtuals then v22/v23/v24: virtual calls through slots at +96/+100/+104 (lw t9)
  *  - Ref smart pointer with destructor for the two window objects (stack slot, reload per use);
  *    ObjectList_AppendRetained takes the object as a pointer argument (an (int) cast flips the delay slot)
  *  - StringPool_Intern takes a pointer argument (an int argument makes the constant a hoisted loop invariant)
  *  - ternary chain in Scale (delay slot filled from the branch target); `> 1` / `> 8` compares give slti at
  *  - bool ok (daddiu s1,zero,1); cast-self-assign empty then arm; unsigned reload of the record count
- *  - switch (_nowPage) / switch (_skillMenu) with default first: retail case alignment nops
+ *  - switch (_nowPage) / switch (_skillMenu) with default first: case alignment nops
  *  - Clr::ClearList loops: ref = Intern(pool, 0) before old = *slot
- *  - volatile read of _subWindow for the found-window search body (retail reloads the list pointer) */
+ *  - volatile read of _subWindow for the found-window search body (the list pointer is reloaded) */
 #include "dw4/reflected.h"
 #pragma inline_depth(8)
 
@@ -68,7 +64,8 @@ void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *);
 }
 
 struct VC { virtual void d0();virtual void d1();virtual void d2();virtual void d3();virtual void d4();virtual void d5();virtual void d6();virtual void d7();virtual void d8();virtual void d9();virtual void d10();virtual void d11();virtual void d12();virtual void d13();virtual void d14();virtual void d15();virtual void d16();virtual void d17();virtual void d18();virtual void d19();virtual void d20();virtual void d21(); virtual void v22(void *, void *); virtual int v23(); virtual int v24(); };
-/* One releasing holder class per retail destructor copy: RefA 0x0040f620 (the menu window), RefB 0x00411100 (the detail window). */
+/* RefA holds the menu window and RefB the detail window; each is its own class so it gets its own
+ * destructor copy. */
 struct RefA {
     igObject *p;
     RefA(int x) { p = (igObject *)x; }
@@ -79,7 +76,7 @@ struct RefB {
     RefB(int x) { p = (igObject *)x; }
     ~RefB() { igObject *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Interned-string reference (count at p[-1], header at p[-2]); the retail destructor copy is StringRef at 0x00130720. */
+/* Interned-string reference (count at p[-1], header at p[-2]). */
 struct StringRef {
     int p;
     StringRef(int x) { p = x; }

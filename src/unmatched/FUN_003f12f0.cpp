@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beMessenger_GetBool(int, int);
 int beMessenger_SendNamed(int, int *, int, int, int *);
@@ -23,4 +21,4 @@ unsigned char FUN_003f12f0(beNDMWMcUtilCtrl *arg0) {
     }
     return var_s0;
 }
-} /* extern "C" */
+}

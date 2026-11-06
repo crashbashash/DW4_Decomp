@@ -1,7 +1,7 @@
-/* Vfunc_34, the preset time in seconds. Reads the preset through the virtual at slot 35 (vfunc_35,
- * 0x00330da0: returns _resetTime, a nanosecond count) and converts it to a double: whole seconds
- * plus the leftover nanoseconds divided by 1e9, with the soft-float helpers the EE needs for
- * doubles. Its setter twin is vfunc_32 (0x00330d30). */
+/* Preset time in seconds. Reads the preset through the virtual at slot 35 (returns _resetTime, a
+ * nanosecond count) and converts it to a double: whole seconds plus the leftover nanoseconds
+ * divided by 1e9, with the soft-float helpers the EE needs for doubles. Its setter twin is
+ * vfunc_32. */
 extern "C" {
 int __divdi3(...);
 int __moddi3(...);
@@ -20,9 +20,6 @@ void Gap__Core__igPsx2LongTimer__vfunc_34(void **self) {
     int presetNs;
 
     presetNs = ((DW4VC_140_0 *)(self))->vX();
-    /* whole seconds = presetNs / 1e9 (signed 64-bit divide, __divdi3); sub-second part = (presetNs % 1e9) / 1e9
-     * (__moddi3 remainder, __floatdidf int64 -> double, __divdf3 double divide); the sum is __adddf3
-     * (double add). */
     remainderNsAsDouble = __floatdidf(__moddi3(presetNs, NANOSECONDS_PER_SECOND));
     fractionSeconds = __divdf3(remainderNsAsDouble, __floatsidf(NANOSECONDS_PER_SECOND));
     __adddf3(__floatdidf(__divdi3(presetNs, NANOSECONDS_PER_SECOND)), fractionSeconds);

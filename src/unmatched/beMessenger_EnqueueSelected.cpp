@@ -1,23 +1,13 @@
-/* beMessenger::EnqueueSelected (0x0038e8f0, 932 bytes). Turns the messenger's oldest spare delay
- * record into a pending send. The record at the end of the delay stack gets its release time (the
- * insight clock plus `delay` frames, 16,666,666 clock units each), swaps its argument object with
- * the messenger's current one, takes the interned message text and is marked used. It is then
- * removed from the end of the stack and inserted again in time order: after every used record
- * whose release time is not later than its own. Callers: beMessenger_SendDelayedNamed and the
- * other delayed-send entry points. Matching notes - Needs the content-pinned alternate compiler
- * with -O3,p and -Cpp_exceptions off. - The delay record and the temporary that holds the old
- * argument object are smart references with destructors, which is what keeps them in stack memory
- * (the record at +92, the temporary at +88). Their compiler-emitted destructors are the retail
- * bodies 0x0038c390 and 0x00357a90. Both have the same body; the unit declares two classes so that
- * each local owns one emitted copy. - The insertion search reads the list through helpers that
- * take the list base as a parameter. That is the form that keeps retail's separate index / byte-
- * offset inductions and the list data pointer hoisted out of the loop; a direct `list->data[i]` is
- * turned into one pointer induction by this compiler. The dummy re-read `l2 = list` at the bottom
- * of the loop and the integer type of `cur` fix the preheader order and the register assignment of
- * the loop. - Callee-owned reference counts follow the usual inline pattern: the low 23 bits of
- * the word at +4 are the count, the object is destroyed at 0. - The receivers are the reflected
- * classes (beMessenger, beMessengerDelay, igObjectList, igObject, igInsightCore); arena handles
- * stay int fields. */
+/* The release time is the insight clock plus `delay` frames of 16,666,666 clock units each. The
+ * delay record and the temporary that holds the old argument object are smart references with
+ * destructors, which keeps them in stack memory; both destructors have the same body, and the unit
+ * declares two classes so each local owns one emitted copy. The insertion search reads the list
+ * through helpers that take the list base as a parameter, which keeps separate index / byte-offset
+ * inductions and the list data pointer hoisted out of the loop; a direct `list->data[i]` is turned
+ * into one pointer induction by this compiler. The dummy re-read `l2 = list` at the bottom of the
+ * loop and the integer type of `cur` fix the preheader order and the register assignment.
+ * Reference counts follow the usual inline pattern: the low 23 bits of the word at +4 are the
+ * count and the object is destroyed at 0. */
 #include "dw4/reflected.h"
 
 extern "C" {
@@ -49,16 +39,14 @@ struct ListOps {
             igObject_Destroy(o); \
     } }
 
-/* Owning reference to the delay record.  The destructor is emitted as
- * 0x0038c390. */
+/* Owning reference to the delay record. */
 struct RowRef {
     igObject *p;
     RowRef(igObject *o) { p = o; if (p) ++p->_refCount; }
     ~RowRef() { igObject *o = p; RELEASE_OBJ(o) }
 };
 
-/* Owning reference to the old argument object.  The destructor is emitted as
- * 0x00357a90. */
+/* Owning reference to the old argument object. */
 struct SavedRef {
     igObject *p;
     SavedRef(igObject *o) { p = o; }
@@ -72,7 +60,6 @@ struct SavedRef {
     ~SavedRef() { igObject *o = p; RELEASE_OBJ(o) }
 };
 
-/* Replace the record's argument object by a retained `in`. */
 struct RowOps {
     static void SetArg(beMessengerDelay *r, igObject *in) {
         igObject *old;
@@ -83,11 +70,9 @@ struct RowOps {
     }
 };
 
-/* Reference stored through a pointer (the messenger's own argument slot) and
- * the temporary handed to the list insert.  Its constructor reads its stored
- * word back through a laundered pointer and fetches the delay-stack handle
- * between that read and the null test (same form as
- * beMessenger_PushArgContext). */
+/* Reference stored through a pointer (the messenger's own argument slot) and the temporary handed
+ * to the list insert. Its constructor reads its stored word back through a laundered pointer and
+ * fetches the delay-stack handle between that read and the null test. */
 struct Ref {
     igObject * volatile value;
     Ref(igObject *p, beMessenger *m, int &out) : value(p) {
@@ -115,7 +100,6 @@ extern "C" void beMessenger_EnqueueSelected(beMessenger *self, const char *text,
     igObjectList *list;
     const char *token;
 
-    /* The oldest record: last on the delay stack. */
     stack = (igObjectList *)self->_delayStack;
     idx = stack->_count - 1;
     RowRef row(((igObject **)stack->_data)[idx]);
@@ -124,7 +108,6 @@ extern "C" void beMessenger_EnqueueSelected(beMessenger *self, const char *text,
         ((beMessengerDelay *)row.p)->_sendTime = now + delay * 16666666;
     }
 
-    /* Swap the messenger's argument object with the record's. */
     {
         SavedRef saved(0);
         saved = (igObject *)self->_argData;
@@ -134,7 +117,6 @@ extern "C" void beMessenger_EnqueueSelected(beMessenger *self, const char *text,
         RowOps::SetArg(r, saved.p);
     }
 
-    /* Intern the message text (creating the string pool on first use). */
     {
         beMessengerDelay *r = (beMessengerDelay *)row.p;
         if (DAT_00586f20[0] == 0) {
@@ -152,14 +134,12 @@ extern "C" void beMessenger_EnqueueSelected(beMessenger *self, const char *text,
     }
     ((beMessengerDelay *)row.p)->_isUse = 1;
 
-    /* Take the record off the end of the stack. */
     stack = (igObjectList *)self->_delayStack;
     last = stack->_count - 1;
     Ref::release(((igObject **)stack->_data)[last]);
     List_RemoveWordAt(stack, last);
     ((igObject **)stack->_data)[stack->_count] = 0;
 
-    /* Find the insertion index: past every used record that is not later. */
     list = (igObjectList *)self->_delayStack;
     n = list->_count;
     unsigned cur;

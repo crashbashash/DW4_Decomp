@@ -1,8 +1,5 @@
-/* Nested walk releasing a back reference; the found-flag is a bool; locals declared in the order
- * the allocator needs; alternate compiler. */
 #include "dw4/reflected.h"
 extern "C" { int igObject_Destroy(...); }
-/* hypothesis: igAnimationCombiner._animHierarchy (+12, inherited from igAnimationSystem) is a vtable-carrying object whose slot 24 (+96) returns the bone count; its class is not reflected here, so the call goes through this local virtual-dispatch shim */
 class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
 
 /* matching construct: the reflected reference fields are 4-byte ints; the casts give the typed views (no layout effect) */

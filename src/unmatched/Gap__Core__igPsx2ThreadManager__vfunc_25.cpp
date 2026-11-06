@@ -1,4 +1,3 @@
-// 0x00330630 - 180 bytes. Raise the thread priority, remove a value from the manager's list, restore.
 extern "C" {
 int ChangeThreadPriority(int, int);
 int GetThreadId();

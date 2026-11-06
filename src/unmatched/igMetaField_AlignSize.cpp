@@ -1,5 +1,6 @@
-/* 0x002fc6b0 — round size up to a multiple of the field's alignment (virtual slot 108): (size + a - 1) & ~(a - 1).
- * Reusing the mask local for its complement (m = ~m) orders the temporaries so the nor lands in v0 and the sum in v1. */
+/* Rounds size up to a multiple of the field's alignment: (size + a - 1) & ~(a - 1). Reusing the
+ * mask local for its complement (m = ~m) orders the temporaries so the nor lands in v0 and the sum
+ * in v1. */
 extern "C" {
 int igMetaField_AlignSize(void *, int);
 }

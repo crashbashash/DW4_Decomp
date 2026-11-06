@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* Recovered list/param/model views (no reflected layout is used for the data pointers). */
 typedef struct List { int w0; int references; int size; int cap; int *data; } List;
 typedef struct BList { int w0; int references; int size; int cap; unsigned char *data; } BList;
 typedef struct OList { int w0; int references; int size; int cap; beModelCtrlMoveObject **data; } OList;
@@ -94,9 +93,8 @@ extern int DAT_0051d4c8[4];
 extern unsigned char GPR_00554a78, GPR_00554a7c, GPR_00554a80, GPR_00554a84, GPR_00554a88, GPR_00554a8c, GPR_00554a90, GPR_00554a94, GPR_00554a98, GPR_00554a9c, GPR_00554c14;
 
 }
-/* Owning stack reference to the freshly created property list: constructed from the object and released on scope
- * exit (reference count in the low 23 bits of references).  The out-of-line copy the exception table names is the
- * retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__7ListRefFv). */
+/* Owning stack reference to the freshly created property list; released on scope exit (reference
+ * count in the low 23 bits of references). */
 class ListRef {
 public:
     List *p;

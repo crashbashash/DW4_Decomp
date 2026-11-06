@@ -1,12 +1,8 @@
-/* WAZALIST base number -> current database row; 0x003fc6f0, 132 bytes.
- * Declaration order preserves the original loop register allocation.
- * The unused receiver occupies a0. A miss leaves output unchanged.
- */
+/* WAZALIST base number -> current database row. Declaration order preserves the loop register
+ * allocation. The unused receiver occupies a0. A miss leaves output unchanged. */
 #include "dw4/reflected.h"
 
-/* Only the property record's reviewed +12 value is projected here. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
+/* Only the property record's +12 value is declared here. */
 extern "C" {
 typedef struct TechniqueListProperty {
     char pad[12];
@@ -34,4 +30,4 @@ void beNDMWGameRam_FindTechniqueRow(beNDMWGameRam *receiver, void *player,
         }
     }
 }
-} /* extern "C" */
+}

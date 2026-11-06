@@ -1,6 +1,5 @@
 #include "dw4/reflected.h"
-/* Glyph layout loop with a stack float pair, declaration order, inverted compare for the at-
- * register temp; alternate compiler -O3. */
+/* The compare is inverted for the at-register temporary. */
 struct V2 { float x; float y; };
 struct GlyphMetricsRecord { char pad[4]; float f4; };
 struct TextLayoutBuffer { char pad[12]; int f12; };

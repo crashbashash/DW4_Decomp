@@ -1,6 +1,4 @@
-/* Four stack words are one int sp40[4]; flag bytes stored as char. C++ translation unit: the unit
- * compiled with exceptions on and retail keeps this function's exception index record, which only
- * the C++ front end emits. */
+/* Four stack words are one int sp40[4]; flag bytes are stored as char. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00138f20(void);

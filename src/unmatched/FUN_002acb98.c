@@ -3,7 +3,7 @@
 void FUN_0028b530(void *dst, int value, int size);
 void FUN_002acc08(void *record);
 
-/* One 3544-byte (0xDD8) record; members as read by FUN_002ad2e0..FUN_002ad870. */
+/* One 0xDD8-byte record; only the members read by FUN_002ad2e0 through FUN_002ad870 are known. */
 struct Rec0DD8 {
     int state;                            /* +0; 1 = running (FUN_002ace48) */
     int f4;

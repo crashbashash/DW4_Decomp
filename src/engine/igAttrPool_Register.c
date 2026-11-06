@@ -1,6 +1,3 @@
-/* 0x0013a910 igAttrPool_Register: registers class igAttrPool with the object system, derived from igObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igAttrPool_GetVTable[];
 extern char thunk_igAttrPool_GetMetaObject[];
@@ -14,17 +11,17 @@ void FUN_0013aa90(void);
 int igAttrPool_InitFields();
 
 void igAttrPool_Register(void) {
-    AttrsLibrary_MarkRegistered();  /* set-once latch: writes a gp-relative byte flag only if it is clear (asm/AttrsLibrary_MarkRegistered.s) */
+    AttrsLibrary_MarkRegistered();  /* Set-once latch: writes a gp-relative byte flag only if it is clear. */
     igMetaObject_RegisterClass(
-        0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAttrPool_metaObject,      /* published MetaObject slot */
-        igObject_Register,                     /* base class registrar */
-        igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
-        thunk_igAttrPool_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        igAttrPool_className,       /* class name */
-        0x14,                                  /* instance size */
-        igAttrPool_GetVTable,                  /* vtable getter */
-        &igAttrPool_InitFields,                /* field adder */
+        0, /* abstract */
+        g_igAttrPool_metaObject,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
+        thunk_igAttrPool_GetMetaObject,
+        igAttrPool_className,
+        0x14, /* instance size */
+        igAttrPool_GetVTable,
+        &igAttrPool_InitFields,
         FUN_0013aa90,                      /* static-initializer callback item (appended on fresh configuration) */
         g_igAttrPool_callbackList     /* 0-terminated dependency-callback list */
     );

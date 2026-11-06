@@ -1,12 +1,8 @@
-/* CRI SRD (stream reader) per-handle server step for the host-file back end
- * ("SRD: sceLseek64 error = %d", "SRD: sceRead error = %d", "SRD: sceIoctl
- * error = %d" at 0x4efe60..0x4eff00): sibling of FUN_00271d50.
- *   state 1 -> seek (sceLseek64 of sector << 11) and sceRead into the buffer,
- *              -> 2, or 9 with the negative result stored at +52
- *   state 2 -> sceIoctl(fd, 1, &busy): an error gives 9 / -1, a zero busy
- *              word completes the transfer (3).
- * An abort request (+4 == 1) first runs FUN_00271998 for a read in flight,
- * then resets the state to 0.  FUN_002725a0 is the progress-marker hook. */
+/* CRI SRD per-handle server step for the host-file back end. State 1 seeks (sceLseek64 of sector
+ * << 11) and reads into the buffer, then goes to 2, or to 9 with the negative result stored at
+ * +52; state 2 polls sceIoctl(fd, 1, &busy): an error gives 9 / -1, a zero busy word completes the
+ * transfer (3). An abort request (+4 == 1) first runs FUN_00271998 for a read in flight, then
+ * resets the state to 0. */
 typedef struct SrdHost {
     char used;
     char pad0;

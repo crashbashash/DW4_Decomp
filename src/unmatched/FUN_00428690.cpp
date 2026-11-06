@@ -1,6 +1,4 @@
-/* Deleting reference-wrapper destructor; the deletion flag is signed short. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
+/* Deleting destructor; the deletion flag is a signed short. */
 extern "C" {
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
@@ -18,4 +16,4 @@ ObjectRefWord *FUN_00428690(ObjectRefWord *self,int delete_storage) {
     }
     return self;
 }
-} /* extern "C" */
+}

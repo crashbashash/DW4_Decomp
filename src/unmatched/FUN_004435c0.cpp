@@ -1,9 +1,4 @@
-/* 0x004435c0 - FUN_004435c0 (832 bytes). Fills a menu-row record (out) for entry arg3 of table arg2
- * from the owner context: caches the owner's data-base object, interns the row's name string and
- * copies the row's scalar columns. Build: alternate combat compiler, -O3,p -Iinclude. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_002eb010(int);
 struct PropertyIntArray *FUN_003a9250(int, int *);
@@ -24,8 +19,7 @@ extern int DAT_0051d208[4];
 extern int DAT_0051d210[4];
 extern int DAT_00586f20[4];
 
-/* property record returned by FUN_003a9250: its int list sits at +12 (no reflected class
- * recovered for the holder; same shape as PropertyIntArray in beNDMWGameRam_SaveBase.c) */
+/* Property record returned by FUN_003a9250: its int list sits at +12. */
 struct PropertyIntArray { char pad[12]; igIntList *list; };
 
 void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg3) {
@@ -94,4 +88,4 @@ void FUN_004435c0(beNDMWShinkaObject *out, beNDMWGameRam *ctx, int arg2, int arg
     out->_heal = *(int *)(sd->_data + (arg3 * 9 + 7) * 4);
     out->_force = *(int *)(sd->_data + (arg3 * 9 + 8) * 4);
 }
-} /* extern "C" */
+}

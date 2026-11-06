@@ -1,5 +1,6 @@
-/* 0x00388f00 - beHitLandModelOrder vfunc 21: grows the ray list by one new ray when every pooled ray is in use
- * (the new ray is held in an ObjectRef across the append), then configures the next ray and advances the count. */
+/* BeHitLandModelOrder vfunc 21: grows the ray list by one new ray when every pooled ray is in use
+ * (the new ray is held in an ObjectRef across the append), then configures the next ray and
+ * advances the count. */
 #include "dw4/reflected.h"
 extern "C" {
 /* igObject header: vtable and reference count (the count is not a reflected field) */
@@ -12,9 +13,8 @@ int igObject_GetAllocator(beHitLandModelOrder *);
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the newly created ray: constructed from the object and released on scope exit
- * (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the retail
- * body 0x0019e3c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the newly created ray, released on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

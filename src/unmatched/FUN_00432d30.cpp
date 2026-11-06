@@ -24,8 +24,7 @@ typedef struct { char pad[12]; int f12; } Rec2;
 #define CNT(x) ((x)->_count)
 #define REL(t) if ((t) != 0) { (t)->_refCount = (t)->_refCount - 1; if (((unsigned long long)((long long)(int)(t)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(t); }
 
-/* working list reference: its destructor is the retail releasing copy at 0x00150eb0 (config/SLUS-20836/unit-objects.json duplicates);
- * the cleanup range covers the List_Resize call only (decoded retail table 0x54659c) */
+/* Working list reference held across the List_Resize call. */
 struct ListRef {
     igIntList *p;
     ListRef(igIntList *x) { p = x; }

@@ -1,6 +1,3 @@
-/* 0x0014f3a0 igGenericCapabilityManager_Register: registers class igGenericCapabilityManager with the object system, derived from igCapabilityManager.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igCapabilityManager_GetPublishedMetaObject[];
 extern char igGenericCapabilityManager_GetVTable[];
 extern char thunk_igGenericCapabilityManager_GetMetaObject[];
@@ -13,16 +10,16 @@ int igMetaObject_RegisterClass();
 void igGenericCapabilityManager_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
-        0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igGenericCapabilityManager_metaObject,    /* published MetaObject slot */
-        igCapabilityManager_Register,                        /* base class registrar */
-        igCapabilityManager_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igGenericCapabilityManager_GetMetaObject,      /* own MetaObject accessor (stored at +0x54) */
-        igGenericCapabilityManager_className,     /* class name */
-        8,                                                   /* instance size */
-        igGenericCapabilityManager_GetVTable,                /* vtable getter */
-        0,                                                   /* field adder */
-        0,                                                   /* extra callback item */
-        0                                                    /* callback list */
+        0, /* abstract */
+        g_igGenericCapabilityManager_metaObject,
+        igCapabilityManager_Register,
+        igCapabilityManager_GetPublishedMetaObject,
+        thunk_igGenericCapabilityManager_GetMetaObject,
+        igGenericCapabilityManager_className,
+        8, /* instance size */
+        igGenericCapabilityManager_GetVTable,
+        0,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

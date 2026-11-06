@@ -2,7 +2,6 @@
  * <<12) fields, macroblock counts (16-pixel; 32-line pairs doubled for structure 3 when not
  * progressive), and the padded sizes and halves. */
 
-/* Members of the decoder object used here (MPEG-style geometry; roles inferred from the arithmetic). */
 struct Decoder00285e98 {
     char pad0[4];
     int width; /* +4 */

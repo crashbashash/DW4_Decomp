@@ -1,25 +1,15 @@
-/* beNDMWTitle2, the title-menu controller (0x003f2d50..0x003f540c), one translation unit in retail
- * address order: 0x003f2e00 Gap__Bec__beNDMWTitle2__vfunc_32 resolve the pad manager, release the
- * MC utility 0x003f2ef0 Gap__Bec__beNDMWTitle2__vfunc_31 per-frame update (state machine)
- * 0x003f5310 Gap__Bec__beNDMWTitle2__vfunc_30 info-record class metaObject accessor 0x003f5320
- * Gap__Bec__beNDMWTitle2__vfunc_29 register the TITLE2 message receiver 0x003f5400
- * Gap__Bec__beNDMWTitle2__vfunc_20 class metaObject accessor The retail unit was C++ with
- * exceptions on. vfunc_32, vfunc_30 and vfunc_20 used to live in beNDMWTitle2.c; they now compile
- * here as C++ under that profile, which also reproduces vfunc_32's exception index record. The
- * whole unit keeps C linkage. vfunc_31 (0x003f2ef0) is the per-frame update: a four-level state
- * machine (CTRL._st0.._st3) that drives the logo, the Press START wait, the Game Start / Option
- * menu, the Options window and the hand-off to beNDMWLoadCtrl2. The state values and the pad words
- * it reads are documented in docs/engine/title-menu-controller.md. The string externs are the
- * model-control sequence and message names it sends; the numbers 0xf0001.. 0xf000d passed to the
+/* The title-menu controller. vfunc_31 is the per-frame update: a four-level state machine
+ * (CTRL._st0.._st3) that drives the logo, the Press START wait, the Game Start / Option menu, the
+ * Options window and the hand-off to beNDMWLoadCtrl2. The numbers 0xf0001..0xf000d passed to the
  * text-order helper are Options text ids (0xf0001 header, 0xf0002/3 camera, 0xf0004/5 light,
- * 0xf0006 country header, 0xf0007..d country). Matching constructs (the pinned compiler is
- * sensitive to all of these): - TitleRef<Tag> reproduces the five reference wrappers and their
- * exception cleanup; the tags only keep otherwise identical destructors apart. - Local declaration
- * order, the bool direction flags and the volatile state-field re-reads (`ctrl->_stN = (*(volatile
- * int *)&ctrl->_stN) + 1`, the advance-to-next-step idiom) fix register allocation and reload
- * points. - The two language locals (Up and Down handlers) are kept separate; merging them changes
- * the register colouring. - Address-named externs only fix the access; their C types are not
- * recovered. vfunc_29 (0x003f5320) registers the controller as the TITLE2 message receiver. */
+ * 0xf0006 country header, 0xf0007..d country).
+ * Matching constructs:
+ *  - TitleRef<Tag> reproduces the five reference wrappers and their exception cleanup; the tags only
+ *    keep otherwise identical destructors apart.
+ *  - Local declaration order, the bool direction flags and the volatile state-field re-reads
+ *    (`ctrl->_stN = (*(volatile int *)&ctrl->_stN) + 1`) fix register allocation and reload points.
+ *  - The two language locals (Up and Down handlers) are kept separate; merging them changes the
+ *    register colouring. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00236f80(...);
@@ -171,7 +161,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
         asm { nop }
     }
 }
-/* Outer state, CTRL._st0. Values and behaviour: docs/engine/title-menu-controller.md. */
+/* Outer state, CTRL._st0. */
 enum TitleState {
     TitleStateWaitRun = 0,
     TitleStateLogo = 1,
@@ -195,9 +185,8 @@ enum PadButton {
     ButtonCross = 0x4000
 };
 
-/* Options window rows, OPTION._ctrlPos. Row 0 edits _comConf, row 1 _lightConf and
- * row 2 the country (only with _selLang != 0); row 3 confirms. See the Options
- * section of docs/engine/title-menu-controller.md. */
+/* Options window rows, OPTION._ctrlPos. Row 0 edits _comConf, row 1 _lightConf and row 2 the
+ * country (only with _selLang != 0); row 3 confirms. */
 enum OptionRow { OptionRowCamera = 0, OptionRowLight = 1, OptionRowCountry = 2, OptionRowOk = 3 };
 
 enum TitleReferenceRole {
@@ -1131,19 +1120,17 @@ done:
 #undef SET_DATA
 #undef ALLOC
 
-/* 0x003f5310: slot 30, class metaObject accessor of the title menu's info record */
 int Gap__Bec__beNDMWTitle2__vfunc_30(void)
 {
     return g_beNDMWTitle2Info_metaObject[0];
 }
 
-/* 0x003f5320 — slot 29: register the controller as the TITLE2 message receiver. */
+/* Slot 29: register the controller as the TITLE2 message receiver. */
 void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *self, int info)
 {
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &TITLE2[0]);
 }
 
-/* 0x003f5400: slot 20, class metaObject accessor (RTTI handle at 0x0058ab10) */
 int Gap__Bec__beNDMWTitle2__vfunc_20(void)
 {
     return g_beNDMWTitle2_metaObject[0];

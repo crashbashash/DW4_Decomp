@@ -1,21 +1,15 @@
-/* ..0x0043cc20 — beNDMWShopCtrlXdataChip::RefreshText. Redraws the chip shop's text windows
- * through the messenger (TEXTCTL group, TEXTSET / SWITCH messages). `refreshRows`: for each of the
- * 12 rows of the current page, show the chip's NAME and its NEXTX value (printed with "%d", or
- * "----" when it is not positive) and switch the row on, or switch it off when the row has no
- * chip; then print the current and last page numbers. `refreshDescription`: show the TXT
- * description of the chip under the cursor (index _nowPage * 12 + _retCode) and switch its window
- * on. All messages, field reads, index decisions and formatting are C. Original joins/NOPs and
- * three address-high instructions preserve retail scheduling. Register-binding dmove pseudos
- * coalesce without adding instructions. Explicit target words: two joins, eleven NOPs, three LUIs
- * (64 bytes); the remaining 1,008 bytes are generated from C. This is an ABI/codegen projection,
- * not a claim about original declaration or source spelling. */
+/* Redraws the chip shop's text windows through the messenger (TEXTCTL group, TEXTSET / SWITCH
+ * messages). `refreshRows`: for each of the 12 rows of the current page, show the chip's NAME and
+ * its NEXTX value (printed with "%d", or "----" when it is not positive) and switch the row on, or
+ * switch it off when the row has no chip; then print the current and last page numbers.
+ * `refreshDescription`: show the TXT description of the chip under the cursor (index _nowPage * 12
+ * + _retCode) and switch its window on. The explicit joins, NOPs and address-high instructions in
+ * the body reproduce the original scheduling. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 #define CHIPS_PER_PAGE 12  /* rows shown per page: the row loop bound and the page stride */
-/* Unspecified argument lists retain retail call setup. Observed result widths
- * are explicit; these are call-site projections, not recovered callee types. */
+/* Unspecified argument lists keep the original call setup. Observed result widths are explicit;
+ * these are call-site projections, not recovered callee types. */
 int sprintf(char *, const char *, ...);  /* sprintf(dest, format, ...) */
 long long FUN_00236f80(int, int);
 long long beNDMWItemBase_GetRecordInt(int, long long, char *);
@@ -111,8 +105,7 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
                             .set reorder
                         }
                     } else {
-                        /* Copy exactly five bytes of "----", preserving load/store
-                         * order. High/low halves identify 0x51bdc0. */
+                        /* Copy exactly five bytes of "----", preserving load/store order. */
                         const char *src;
                         char *dst;
                         float value;
@@ -171,8 +164,8 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
             font += 1;
         } while (row < CHIPS_PER_PAGE);
         page[1] = 0;
-        /* Word-wide page reads; page text remains a single wrapped byte.
-         * 0x520000-19520 = TEXTCTL at0x51b3c0. */
+        /* Word-wide page reads; page text remains a single wrapped byte. 0x520000-19520 is the
+         * address of TEXTCTL (0x51b3c0). */
         asm {
             lui a1,0x52
         }
@@ -255,4 +248,4 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
 }
 
 // clang-format on
-} /* extern "C" */
+}

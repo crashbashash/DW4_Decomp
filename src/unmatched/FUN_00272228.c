@@ -1,6 +1,6 @@
 /* Busy-waits while the server-busy flag DAT_004a92c4 is 1, counting in DAT_004a92d8; past
  * 0x19640000 iterations it prints the timeout message and gives up. Its message names it
- * SRD_WaitForExecServer (CRI), a name hypothesis. */
+ * SRD_WaitForExecServer (CRI). */
 extern int DAT_004a92c4;
 extern volatile unsigned int DAT_004a92d8; /* the timeout counter is volatile so the spin is not optimised away */
 extern char SRD_SRD_WaitForExecServer_timeout_10sec[]; /* 'SRD: SRD_WaitForExecServer timeout.(10sec)\n' */

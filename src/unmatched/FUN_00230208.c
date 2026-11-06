@@ -1,6 +1,5 @@
 /* Splits a single-precision bit pattern into class, sign, unbiased exponent and guarded fraction;
- * exponent 0 is always zero (fp-bit unpack_d built without denormals or NaNs; name is a
- * hypothesis). */
+ * exponent 0 is always zero (unpack_d built without denormals or NaNs). */
 typedef unsigned int USItype __attribute__((mode(SI)));
 typedef unsigned int UDItype __attribute__((mode(DI)));
 typedef float SFtype __attribute__((mode(SF)));

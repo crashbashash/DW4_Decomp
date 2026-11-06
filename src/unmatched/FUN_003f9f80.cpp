@@ -1,8 +1,4 @@
-/* Shop record accumulator: first record of a folder adds a record integer and, on request, the
- * item field, through one reused temporary; alternate compiler -O3,p. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beNDMWItemBase_GetRecordInt(beNDMWItemRevisionBase *, int, int);
 beDataObjObjectList *igProperty_GetRecordFolder(int, int *);
@@ -19,4 +15,4 @@ void FUN_003f9f80(int arg0, int arg1, int *arg2, int arg3, int arg4) {
         }
     }
 }
-} /* extern "C" */
+}

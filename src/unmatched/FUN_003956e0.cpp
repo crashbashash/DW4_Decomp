@@ -1,6 +1,6 @@
-/* Step the model's direction toward its target (per-axis rate limit, wrapping at 2*pi), then write
- * the new rotation into the ram object's transform. The ram object's data list is created on first
- * use and held in an ObjectRef whose destructor the exception table names. */
+/* Steps the model's direction toward its target (per-axis rate limit, wrapping at 2*pi), then
+ * writes the new rotation into the ram object's transform. The ram object's data list is created
+ * on first use. */
 #pragma opt_strength_reduction off
 #include "dw4/reflected.h"
 extern "C" {
@@ -22,9 +22,8 @@ int Matrix44_GetTranslation(int, float *);
 int Matrix44_SetTranslation(int, float *);
 int FUN_00190ed0(int, float, float, float);
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released on scope
- * exit (reference count in the low 23 bits of references).  The out-of-line copy the exception table names is the
- * retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list, released on scope exit (reference count
+ * in the low 23 bits of references). */
 class ObjectRef {
 public:
     Ref *p;

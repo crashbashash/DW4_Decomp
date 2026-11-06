@@ -1,7 +1,5 @@
-/* Replaces the object reference at +192 with the one built from +280 (held in a stack slot,
- * released after the store), then appends every entry of the meta-object tree; alternate compiler
- * -O3; the holder keeps its address taken through the release method while the release body reads
- * the field directly. */
+/* The holder keeps its address taken through the release method while the release body reads the
+ * field directly. */
 extern "C" {
 struct T { int word0; int references; };
 void igObject_Destroy(T *);

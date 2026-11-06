@@ -1,4 +1,4 @@
-/* Decode-server step for a playing handle (its error string names mwlSfdExecDecSvrPlaying): while
+/* Decode-server step for a playing handle: while
  * the +117 flag is 1, waits for FUN_002773d0 on +76 and then terminates the stream and clears the
  * flag, else runs FUN_00295b10; a stream status of 6 moves the handle to state 3. */
 extern int FUN_002773d0(int obj);

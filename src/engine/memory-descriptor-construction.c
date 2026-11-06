@@ -1,12 +1,10 @@
 /* Construction of the memory-reference field descriptor (igMemoryRefMetaField), the reflection
- * descriptor of a field that points at a block of memory. Field layout comes from the reflected
- * struct in include/dw4/reflected.h; the descriptor's vtable is at 0x532a50. Functions are in
- * retail address order. */
+ * descriptor of a field that points at a block of memory. */
 #include "dw4/reflected.h"
 void *igRefMetaField_Construct(igRefMetaField *);
 void *igRefMetaField_Init(igRefMetaField *);
 igMemoryRefMetaField *igMemoryRefMetaField_Init(igMemoryRefMetaField *);
-/* vtable of igMemoryRefMetaField (the 0x532a50 table whose slot 124 builds the memory value). */
+/* vtable of igMemoryRefMetaField (the table whose slot 124 builds the memory value). */
 extern int g_igMemoryRefMetaField_vtable[4];
 
 /* Run the base-class constructor, point the descriptor at its own vtable and

@@ -1,4 +1,3 @@
-/* A call followed by a memory barrier (sync). */
 extern "C" {
 void FUN_00076160(int);
 void FUN_004831a0(int);

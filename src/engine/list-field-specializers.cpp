@@ -1,14 +1,12 @@
-/* Inherited `_data` specialization callbacks of igObjectList (0x002bd830) and igIntList
- * (0x002cac20).  Each clones the `_data` memory-reference descriptor inherited from the parent
- * list class, retypes the clone's element provider, publishes the clone's descriptor cell and
- * swaps the clone in for the parent's descriptor, so the parent's shared descriptor is never
- * mutated.  See docs/engine/list-descriptor-copy.md ("Actual inherited `_data`
- * specialization"). */
+/* Inherited `_data` specialization callbacks of igObjectList and igIntList. Each clones the
+ * `_data` memory-reference descriptor inherited from the parent list class, retypes the clone's
+ * element provider, publishes the clone's descriptor cell and swaps the clone in for the parent's
+ * descriptor, so the parent's shared descriptor is never mutated. */
 #include "dw4/reflected.h"
 
 /* ABI projection of the descriptor object for the virtual Clone call (vtable offset 84 of the
- * igMemoryRefMetaField vtable at 0x532a50). The leading slots are placeholders that only position
- * Clone; do not instantiate it. */
+ * igMemoryRefMetaField vtable). The leading slots are placeholders that only position Clone; do
+ * not instantiate it. */
 class DescriptorCloneView {public:
 virtual void slot0();
 virtual void slot1();
@@ -38,7 +36,6 @@ extern "C" int igIntMetaField_GetDefaultDescriptor();
 extern "C" void igMetaObject_FinalizeAndReplaceField(igMetaObject *,int,igMetaField *);
 extern "C" void igObject_Destroy(void *);
 
-/* Class handles of the two list classes (slot holding the published igMetaObject pointer). */
 extern "C" int g_igObjectList_metaObject[4];
 extern "C" int g_igIntList_metaObject[4];
 /* Name of the inherited field that is specialized: "_data". */
@@ -61,7 +58,6 @@ extern "C" void igObjectList_InitFields(){
     dataField->_memSize=0;
     dataField->_externalEnumStorage=(int)g_igObjectList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta,fieldIndex,(igMetaField *)dataField);
-    /* release the clone-owned temporary reference */
     --((igObject *)dataField)->_refCount;
     if(!(((igObject *)dataField)->_refCount&IG_REF_COUNT_MASK))igObject_Destroy(dataField);
 }
@@ -76,7 +72,6 @@ extern "C" void igIntList_InitFields(){
     dataField->_memSize=0;
     dataField->_externalEnumStorage=(int)g_igIntList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta,fieldIndex,(igMetaField *)dataField);
-    /* release the clone-owned temporary reference */
     --((igObject *)dataField)->_refCount;
     if(!(((igObject *)dataField)->_refCount&IG_REF_COUNT_MASK))igObject_Destroy(dataField);
 }

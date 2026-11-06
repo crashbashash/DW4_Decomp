@@ -1,7 +1,3 @@
-/* Stack copy of a 29-word pointer table (struct assignment: lq loop plus float tail), NULL-
- * terminated walk; alternate compiler -O3,p */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct Tb { int p[29]; } Tb;
 extern Tb DAT_004cf820;
@@ -43,4 +39,4 @@ void FUN_00425fb0(W *arg0) {
     beMessenger_AppendString(arg0->f12, DAT_0051af58);
     beMessenger_DispatchSelected(arg0->f12, DAT_0051af40);
 }
-} /* extern "C" */
+}

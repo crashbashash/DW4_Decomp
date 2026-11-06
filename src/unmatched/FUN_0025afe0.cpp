@@ -98,7 +98,6 @@ public:
     virtual void d32();
     virtual void v140();
 };
-/* hypothesis: the application record whose first member is the igInsightCore (arg0 of the scene-loop callers); not a reflected class */
 struct Holder { igInsightCore *p; };
 extern "C" {
 void *FUN_00236f80(...);

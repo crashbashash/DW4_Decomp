@@ -1,6 +1,5 @@
-/* Run the class's static initialiser (FUN_003c60b0) unless its meta object record is already
- * marked ready (flag 4 of the word at +36), then return the record. Same shape as the sibling
- * *_GetReadyMetaObject units. */
+/* Runs the class's static initialiser (FUN_003c60b0) unless its meta object record is already
+ * marked ready (flag 4 of the word at +36), then returns the record. */
 extern "C" {
 void FUN_003c60b0(void);
 extern struct G *DAT_0058bcc8[4];

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beLua__RunNamedChunk(int, int *, int);
 int TextOrder_PublishLine(beNDMWLoadIntf2TextOrder *, int, int, int);
@@ -67,4 +65,4 @@ void beNDMWLoadIntf2TextOrder_PublishIdLines(beNDMWLoadIntf2TextOrder *arg0, int
         }
     }
 }
-} /* extern "C" */
+}

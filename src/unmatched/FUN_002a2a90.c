@@ -12,7 +12,6 @@ struct Player2a2a90 {
     void *ring;                           /* +4892: channel 0 ring (4872 + 20) */
 };
 
-/* Accumulates the ring's current FUN_0029eaf8 value and the two given amounts into the 64-bit totals at +2432..+2448. */
 void FUN_002a2a90(struct Player2a2a90 *player, int amount1, int amount2) {
     void *ring = player->ring;
     int a;

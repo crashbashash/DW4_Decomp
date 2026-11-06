@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x003a7300 - 164 bytes. Inline bool predicates (C++ struct members), callee prototyped with a bool third parameter; alternate compiler -O4,p. */
 extern "C" {
 int FUN_003323a0(int, int, bool);
 int FUN_003a7300(void *arg0);

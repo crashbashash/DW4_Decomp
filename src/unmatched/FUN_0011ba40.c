@@ -1,8 +1,4 @@
-/* FUN_0011ba40 -- fdlibm __ieee754_atan2(y, x): quadrant-correct arctangent.
- * Evidence: the special-case ladder on the high/low words of both arguments (NaN test, x == 1.0
- * shortcut to atan, y == 0, x == 0, x or y infinite), the k = (iy - ix) >> 20 exponent-gap split at
- * +-60, and the final switch on m = 2*sign(x) + sign(y) giving z, -z, pi - (z - pi_lo) or
- * (z - pi_lo) - pi. The literals are the pooled doubles at 0x4d2e68..0x4d2ee8. */
+/* fdlibm __ieee754_atan2(y, x). */
 #include "dw4/ieee_words.h"
 
 extern double FUN_00121cf0(double);     /* atan */

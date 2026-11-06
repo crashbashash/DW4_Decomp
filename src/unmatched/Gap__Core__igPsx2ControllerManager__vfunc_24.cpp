@@ -36,7 +36,6 @@ extern unsigned char GPR_00554c14;
 }
 extern "C" void Gap__Core__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int arg1);
 void Gap__Core__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int arg1) {
-//D<
     igObject *sp8C;
     void *al;
     char *s0;
@@ -53,7 +52,6 @@ void Gap__Core__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0,
     igObject *q;
     int sp80;
     int sp7C;
-//D>
     if (GPR_00554b18 == 0) {
         GPR_00554b18 = 1;
         arg0->_validControllerManager = 1;

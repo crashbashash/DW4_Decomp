@@ -1,4 +1,3 @@
-/* Array walk with a three-way result; alternate compiler. */
 extern "C" { int FUN_001e04c0(...); }
 struct L { char p[8]; int n; char q[4]; int *arr; };
 struct S { char p[28]; L *f28; };

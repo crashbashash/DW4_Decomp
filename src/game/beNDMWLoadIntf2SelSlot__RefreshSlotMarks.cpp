@@ -1,13 +1,9 @@
-/* 0x003e3070 - beNDMWLoadIntf2SelSlot__RefreshSlotMarks (2832 bytes). beNDMWLoadIntf2SelSlot helper ("ss_select" in docs/engine/load-intf2.md):
- * per-frame refresh of the memory-card slot rows. For each mark row (2 when _mode == 0, else 5) it asks the
- * messenger target whether the row's message is registered, then registers (or updates) it while the row's
- * memory-card slot reports _isConnect (the row being selected, arg1, counts as not connected), and unregisters
- * it otherwise; finally it raises/clears the _mcStat "on" flag with a text-order notification.
- * Receiver, _commonIntf -> _mcUtilCtrl -> _slot -> _data[] -> _isConnect are reflected fields; the _comMdlCtrl target
- * (vec3 at +28) has no reflected class. Function and helper names are not recovered. */
+/* Per-frame refresh of the memory-card slot rows. For each mark row (2 when _mode == 0, else 5) it
+ * asks the messenger target whether the row's message is registered, then registers (or updates)
+ * it while the row's memory-card slot reports _isConnect (the row being selected, arg1, counts as
+ * not connected), and unregisters it otherwise; finally it raises/clears the _mcStat "on" flag
+ * with a text-order notification. The _comMdlCtrl target (vec3 at +28) has no reflected class. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 unsigned char beNDMWLoadIntf2ComMdlCtrl__IsRunning(struct Target *, int, char *);
 int beNDMWLoadIntf2ComMdlCtrl__StartAt(struct Target *, int, char *, char *, struct Vec3 *, int);
@@ -194,4 +190,4 @@ void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int 
     case 1: case 2: break;
     }
 }
-} /* extern "C" */
+}

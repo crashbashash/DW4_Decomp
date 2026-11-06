@@ -42,7 +42,6 @@ void FUN_0025a8c0(App *arg0);
 }
 struct Ref {
     Tm *p;
-    /* Holds the object FUN_002b79d0(slot) returns for the frame-timing section; the dtor copy 0x150a70 releases it. */
     /* matching construct: layout — the write-only state byte lives in the inlined ctor so its frame slot (168) falls below the holder's (172) and the byte store precedes the call, as in retail; the range then starts after the first member call. */
     Ref(int a) { volatile char spA8[1]; spA8[0] = 0; p = FUN_002b79d0(a); }
     ~Ref() {

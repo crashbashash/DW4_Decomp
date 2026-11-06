@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beMessenger_AppendString(int, int *);
 int beMessenger_DispatchSelected(int, int *);
@@ -30,4 +28,4 @@ void FUN_003ce890(O *arg0) {
         }
     }
 }
-} /* extern "C" */
+}

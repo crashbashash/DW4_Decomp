@@ -1,4 +1,3 @@
-/* Char stores at +38, local for a call result before a constant store, declaration order. */
 int FUN_002d3890();
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();

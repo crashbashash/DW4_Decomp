@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* Receivers: t is a beNDMWLoadIntf2MesWin (the matched load and save masters pass their message window), the pad object a bePadData. */
 extern "C" {
 int TextOrder_ClearFont(...);
 int beNDMWLoadIntf2TextOrder_PublishIdLines(...);

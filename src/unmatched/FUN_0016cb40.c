@@ -1,5 +1,3 @@
-/* Per-entry fix-up loop with a status switch; first call also passes the receiver; alternate
- * compiler. */
 #include "dw4/reflected.h"
 int FUN_00177010();
 int FUN_001e96d0();

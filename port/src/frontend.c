@@ -33,9 +33,8 @@
 #include <time.h>
 #include <unistd.h>
 
-/* SLUS startup action data: OPEN waits 15 ticks; WAIT fades IN 30,
- * holds 150, fades OUT 30. Rating WAIT repeats at JOINTSET 10 and 20
- * with a 30-tick hidden gap. See boot-contract.md for asset provenance. */
+/* SLUS startup action data: OPEN waits 15 ticks; WAIT fades IN 30, holds 150, fades OUT 30. Rating
+ * WAIT repeats at JOINTSET 10 and 20 with a 30-tick hidden gap. */
 static int present_boot_cards(dw4_mount *mnt, dw4_window *win, dw4_vk *vk)
 {
     dw4_frontui *bandai = dw4_frontui_open_card(mnt, 1, 600, "j_bandailogo");
@@ -90,7 +89,6 @@ done:
     dw4_frontui_close(rating); dw4_frontui_close(bandai);
     return rc;
 }
-
 
 /* ------------------------------------------------------------------ be: API subset ------------- */
 

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int TextOrder_ClearFont(int, int *, int, int);
 int TextOrder_PublishLineListOnly(int, int);
@@ -31,4 +29,4 @@ void FUN_003da5f0(beNDMWLoadIntf2DegiState *arg0) {
     }
     TextOrder_PublishLineListOnly(arg0->_textOrder, (arg0->_plNo << 0x10) | 0x110);
 }
-} /* extern "C" */
+}

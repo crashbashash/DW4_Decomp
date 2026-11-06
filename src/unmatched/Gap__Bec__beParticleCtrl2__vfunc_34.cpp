@@ -1,4 +1,3 @@
-/* 0x0039bca0 - beParticleCtrl2 vfunc 34 (messenger handler, 8-entry jump table). Alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 extern "C" {
 int igMatrix44f_SetIdentity(...);
@@ -42,9 +41,8 @@ struct Rel { static inline void go(igObject *object) {
     }
 } };
 struct V3 { float x; float y; float z; };
-/* Owning stack reference to the new particle work record: constructed from the freshly created record and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the
- * retail body 0x0034be40 (config/SLUS-20836/unit-objects.json, duplicate __dt__7WorkRefFv). */
+/* Owning stack reference to the new particle work record; released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class WorkRef {
 public:
     beParticleCtrl2InfoWork *p;

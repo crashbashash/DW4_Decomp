@@ -1,4 +1,3 @@
-/* Re-initialisation sequence: copies the field at +468 to +464, then runs the five set-up helpers with the three arguments. */
 typedef struct Obj { char pad[464]; int f464; int f468; } Obj;
 extern void FUN_00295808(void);
 extern void FUN_002954c8(Obj *);

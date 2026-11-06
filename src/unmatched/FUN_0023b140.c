@@ -1,5 +1,3 @@
-/* Recursive type dispatch with a counted release of an out-parameter; the release works on a copy;
- * alternate compiler. */
 int FUN_0018de10();
 int FUN_0023ac20();
 int FUN_0023b110();

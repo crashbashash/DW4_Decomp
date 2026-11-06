@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beMessenger_AppendInt(int, int);
 int beMessenger_DispatchSelected(int, int *);
@@ -24,4 +22,4 @@ void FUN_00445c60(beNDMWMdlPEBase *arg0, struct A1 *arg1, beNDMWMdlPEBaseInfoWor
         beMessenger_PopArgContext(arg0->_messenger);
     }
 }
-} /* extern "C" */
+}

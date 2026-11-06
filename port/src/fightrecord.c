@@ -1,7 +1,6 @@
-/* Source: beNDMWGameRam::vfunc_34 (0x3fca10), its beDataObjInt/IntList
- * projections, and beNDMWGameRam_FindTechniqueRow (0x3fc6f0). The recovered
- * four-byte references resolve in the owning arena. Checks: check-fightrecords,
- * check-fightrecords-retail and check-fieldstage (docs/combat.md). */
+/* Source: beNDMWGameRam::vfunc_34 (0x3fca10), its beDataObjInt/IntList projections, and
+ * beNDMWGameRam_FindTechniqueRow (0x3fc6f0). The recovered four-byte references resolve in the
+ * owning arena. */
 #include "fightrecord.h"
 #include "dw4/reflected.h"
 

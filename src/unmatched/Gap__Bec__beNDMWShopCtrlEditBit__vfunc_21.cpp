@@ -1,6 +1,4 @@
-/* 0x004332d0 - Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21
- * Build: alt combat compiler, -O3,p -Cpp_exceptions off -Iinclude, unit-objects entry for the RP destructor duplicate.
- * The volatile read of _st2 in jump-table case 4 keeps the compiler from reusing the switch value (retail reloads it). */
+/* The volatile read of _st2 in jump-table case 4 keeps the compiler from reusing the switch value. */
 #include "dw4/reflected.h"
 extern "C" {
 int sprintf(...);
@@ -68,9 +66,8 @@ extern unsigned char GPR_00554c14;
 
 void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self);
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]): releases the token on
- * scope exit. The out-of-line copy the exception table names is the retail body StringRef_Destruct_00130720
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     char *p;
@@ -78,7 +75,6 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
-/* intern `text` (the pool singleton is created on first use) and append the token to the list */
 #define INTERN_APPEND(lst, text) { \
     char *tok; \
     if ((text) == 0) { \
@@ -98,8 +94,8 @@ extern "C" int StringList_AppendRetained(int, const StringRef &);
     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 
 typedef igObject Rc;
-/* Scope holder for a freshly built window: its destructor releases the reference. Retail keeps one out-of-line destructor
- * per holder (kind 0..2 = 0x41f110, 0x411080, 0x428710). */
+/* Scope holder for a freshly built window: its destructor releases the reference. One class per
+ * kind (0..2), so each gets its own out-of-line destructor. */
 template <int kind> struct RP {
     Rc *p;
     RP(Rc *x) { p = x; }
@@ -108,7 +104,6 @@ template <int kind> struct RP {
 };
 #define W(p, off) (*(int *)((int)(p) + (off)))
 #define REL(o) { Rc *rr = (o); if (rr != 0) { *(int *)&rr->_refCount = *(int *)&rr->_refCount - 1; if (((unsigned long long)((long long)*(int *)&rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-
 
 void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
     char sp50[20];

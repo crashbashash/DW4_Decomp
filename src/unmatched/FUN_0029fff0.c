@@ -4,7 +4,6 @@ void *FUN_002b17d8();
 void FUN_002b18a0();
 int FUN_002b19f0();
 
-/* Reads one value through a temporary FUN_002b17d8 handle; 0 when unavailable. */
 int FUN_0029fff0(void) {
     void *handle;
     int value;

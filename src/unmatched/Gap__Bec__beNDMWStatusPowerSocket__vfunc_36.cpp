@@ -10,12 +10,10 @@ extern int DAT_004cf6d8[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* object created by FUN_003baf10 and bound as a child window; class not identified */
 struct UnidentifiedChildWindow { int word0; int references; char p8[92]; igDataList *list; int f104; char f108; char pad109; char f110; };
 extern "C" UnidentifiedChildWindow *FUN_003baf10(...);
-/* Owning stack reference to the new child window: constructed from the object and released on scope exit
- * (reference count in the low 23 bits of references).  The out-of-line copy the exception table names is
- * the retail body 0x00414420 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the new child window; released on scope exit (reference count in the
+ * low 23 bits of references). */
 class ObjectRef {
 public:
     UnidentifiedChildWindow *p;
@@ -34,7 +32,6 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_36(beNDMWStatusPowerSocket *arg0) 
     } else {
         a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
     }
-    /* The window is owned by the stack reference until the sub-window list has taken its own reference. */
     ObjectRef child(FUN_003baf10(a));
     beNDMWWindow_BindContext(child.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained(arg0->_subWindow, child.p);

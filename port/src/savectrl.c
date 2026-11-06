@@ -1,4 +1,4 @@
-/* beNDMWSaveCtrl update 407120 (phases 1-3). See dw4/savectrl.h and port/docs/save-keeper.md. */
+/* beNDMWSaveCtrl update 407120 (phases 1-3). */
 #include "dw4/savectrl.h"
 #include <stddef.h>
 static void next(dw4_savectrl *c){c->sub++;c->subsub=0;}

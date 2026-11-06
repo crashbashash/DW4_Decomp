@@ -13,10 +13,9 @@ int FUN_001fe100();
 int FUN_001fe260();
 int FUN_001fe320();
 int *Gap__Bec__ParticleArray__vfunc_24();
-/* The shared decoded-particle record at 0x560ac0, one symbol per output the
- * unpack helpers fill, each passed as its own absolute address (the form that
- * matches retail), so they stay separate symbols.  The address in a name gives
- * its offset from the record base. */
+/* The shared decoded-particle record, one symbol per output the unpack helpers fill, each passed
+ * as its own absolute address, so they stay separate symbols. The address in a name gives its
+ * offset from the record base. */
 extern int g_decodedParticle_00560ac0[4];
 extern int g_decodedParticle_00560acc[4];
 extern int g_decodedParticle_00560ad8[4];

@@ -1,5 +1,5 @@
 /* Sets six 64-bit flags (DAT_0049da38 … DAT_0049da88, 16 bytes apart) to 1. */
-/* Each store materialises the full address (lui/addiu/sd 0): the flags are volatile. */
+/* Volatile: each store materialises the full address (lui/addiu/sd 0). */
 extern volatile long long DAT_0049da38;
 extern volatile long long DAT_0049da48;
 extern volatile long long DAT_0049da58;

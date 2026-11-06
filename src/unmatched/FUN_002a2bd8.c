@@ -1,6 +1,5 @@
 /* Resets a stream parameter block: handles and counters to 0, times to LONG_MAX/INT_MAX, unknown
  * fields to -1. */
-/* Stream parameter block reset to "unknown" values. */
 struct Params {
     int handle;
     int f4;

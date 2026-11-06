@@ -1,28 +1,17 @@
-/* dw4/sfp.h — CRI "ps2_" sound banks (the `.sfp` container inside a stage's sound pack).
- *
- * A stage is delivered as a pair of NDMW.AFS entries: the bigger is the model/setup pack,
- * the smaller is its **sound + SE pack**.  That pack is an igBinary container
- * whose *content pool* holds six `ps2_DTPK` banks — one per entity, named by
- * the pack's `beCriSfpData` records (`e_goburi.sfp`, `common_blst.sfp`, …).
- *
- * A bank is three chunks at fixed offsets:
- *
- *   +0x000  ps2_DTPK   16-byte header: {magic, 0x4102, pcm_size, field_10,
- *                                       0, vag_size, header_size}
- *   +0x060  ps2_TBLD   {magic, 0x4102, length}, decode tables, then a trailing
- *                      table of 16-byte per-entry records {u16 0, u16 rate, u32 a,
- *                      u32 end, u32 0} — the `end` fields are the entry boundaries
- *   +0x800  ps2_VAGD   {magic, 0x4102, vag_size}, 0x20-byte header, then ADPCM
- *
- * All fields above are little-endian, including the record sample rate.
- *
- * The ADPCM is Sony **VAG** with a 16-byte frame, but with a twist ffmpeg's decoder
- * confirms: byte 0 is shift (low nibble) / filter (high nibble), byte 1 is a *control*
- * byte (0x07 = silence / end of entry), and the 28 samples are the nibbles of bytes
- * 2..15 (low nibble first).  The predictor keeps the **unclamped** sample; only the
- * output is clamped to int16.  `dw4_vag_decode` reproduces ffmpeg's `adpcm_psx` output
- * sample-for-sample over all six banks (tools/verify_sound.py).
- */
+/* dw4/sfp.h — CRI "ps2_" sound banks (the `.sfp` container inside a stage's sound pack). A stage
+ * is delivered as a pair of NDMW.AFS entries: the bigger is the model/setup pack, the smaller is
+ * its **sound + SE pack**. That pack is an igBinary container whose *content pool* holds six
+ * `ps2_DTPK` banks — one per entity, named by the pack's `beCriSfpData` records (`e_goburi.sfp`,
+ * `common_blst.sfp`, …). A bank is three chunks at fixed offsets: +0x000 ps2_DTPK 16-byte header:
+ * {magic, 0x4102, pcm_size, field_10, 0, vag_size, header_size} +0x060 ps2_TBLD {magic, 0x4102,
+ * length}, decode tables, then a trailing table of 16-byte per-entry records {u16 0, u16 rate, u32
+ * a, u32 end, u32 0} — the `end` fields are the entry boundaries +0x800 ps2_VAGD {magic, 0x4102,
+ * vag_size}, 0x20-byte header, then ADPCM All fields above are little-endian, including the record
+ * sample rate. The ADPCM is Sony **VAG** with a 16-byte frame, but with a twist ffmpeg's decoder
+ * confirms: byte 0 is shift (low nibble) / filter (high nibble), byte 1 is a *control* byte (0x07
+ * = silence / end of entry), and the 28 samples are the nibbles of bytes 2..15 (low nibble first).
+ * The predictor keeps the **unclamped** sample; only the output is clamped to int16.
+ * `dw4_vag_decode` reproduces ffmpeg's `adpcm_psx` output sample-for-sample over all six banks. */
 #ifndef DW4_SFP_H
 #define DW4_SFP_H
 

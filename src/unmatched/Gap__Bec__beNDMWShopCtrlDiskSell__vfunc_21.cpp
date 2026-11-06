@@ -1,4 +1,3 @@
-/* 0x00436ac0 - Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21 (typed attempt 1) */
 #include "dw4/reflected.h"
 extern "C" {
 struct S_ref { char pad4[4]; int f4; };
@@ -82,9 +81,9 @@ struct U { static inline char *InternStr(char *text) {
     }
     return StringPool_Intern(DAT_00586f20[0], text);
 } };
-/* Owning stack reference to a pooled string token (count at p[-1], chunk header at p[-2]).  Interning for a
- * text list yields one: the list takes its own share and the token is a temporary released at the end of the
- * statement.  Out-of-line copy: retail 0x00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (count at p[-1], chunk header at p[-2]).
+ * Interning for a text list yields one: the list takes its own share and the token is a temporary
+ * released at the end of the statement. */
 class StringRef {
 public:
     char *p;
@@ -98,10 +97,9 @@ extern "C" int StringList_AppendRetained(int, const StringRef &);
     a = igObject_GetAllocator(self); \
     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 
-/* Owning stack references to the sub-windows and the decide list while their set-up runs: each releases its
- * object on scope exit (reference count in the low 23 bits of _refCount).  One class per retail destructor
- * copy: SelectE1Ref 0x00411100, DecideListRef 0x00226990, QuantityRef 0x0041d240, ConfirmRef 0x00411080,
- * ResultRef 0x00428710 (duplicates in config/SLUS-20836/unit-objects.json). */
+/* Owning stack references to the sub-windows and the decide list while their set-up runs; each
+ * releases its object on scope exit (reference count in the low 23 bits of _refCount). One class
+ * per destructor copy. */
 class SelectE1Ref {
 public:
     igObject *p;

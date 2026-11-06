@@ -1,8 +1,3 @@
-/* CRI ADXT handle: when the handle has an attached object (+8) and passes the
- * FUN_0026bd20 check, dispatch on the signed byte at +2 (jump table at
- * 0x4eee40, five entries): kinds 0 and 1 forward the stream (+4) only when
- * the +8 object reports 3, kind 2 forwards it unconditionally, 3 and 4 do
- * nothing. */
 typedef struct Adxt {
     char used;
     signed char state;

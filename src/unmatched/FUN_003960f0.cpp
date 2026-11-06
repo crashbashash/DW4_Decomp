@@ -11,9 +11,8 @@ extern int DAT_00586f20[4];
 extern int DAT_00588e20[4];
 int FUN_003960f0(int arg0, beModelCtrlInfoWork *self);
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     char *p;
@@ -21,9 +20,8 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int FUN_001cafc0(int list, StringRef *key, int);
-/* retail hands the copied token back by hidden return pointer */
+/* The copied token is returned through a hidden return pointer. */
 extern "C" StringRef StringList_CopyRetained(int list, int index);
-
 
 struct Obj { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); int pad; int nm; };
 

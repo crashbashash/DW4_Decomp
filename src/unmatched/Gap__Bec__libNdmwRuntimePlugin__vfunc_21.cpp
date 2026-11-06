@@ -1,10 +1,6 @@
-/* Build the plugin's 21 sub-objects (each factory takes the object's memory allocator: the
- * object's own pool or, when GPR_00554c14 is zero, the selector-108 default pool), dropping any
- * previous reference, then register every non-null sub-object with the owner passed in arg1
- * (vfunc_22 is the matching teardown that walks the same fields). */
+/* Each factory takes the object's memory allocator: the object's own pool or, when GPR_00554c14 is
+ * zero, the selector-108 default pool. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 void *FUN_003cae00(int allocator);
 void *FUN_003bbda0(int allocator);
@@ -34,7 +30,6 @@ int Memory_GetAllocatorBySelector(int);
 extern int DAT_00587108[4];
 extern unsigned char GPR_00554c14;
 
-/* drop one reference to a sub-object; free it when the 23-bit count reaches zero */
 #define RELEASE(field) { igObject *old = (igObject *)(field); if (old != 0) { old->_refCount = old->_refCount - 1; if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(old); } } }
 #define ALLOC(a) { a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587108[0]); }
 #define CREATE(field, factory) { ALLOC(alloc) RELEASE(arg0->field) arg0->field = (int)factory(alloc); }
@@ -85,4 +80,4 @@ void Gap__Bec__libNdmwRuntimePlugin__vfunc_21(libNdmwRuntimePlugin *arg0, int ar
     REGISTER(_mdlPlayer)
     REGISTER(_mdlEnemy)
 }
-} /* extern "C" */
+}

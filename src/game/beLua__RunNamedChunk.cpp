@@ -1,18 +1,10 @@
-/* beLua__RunNamedChunk 0x00389ff0, 732 bytes: beLua script lookup-and-run.
- *
- * Resolves a script name through the interned-string pool (the given name, or "<stage>/lua"
- * when none is given), walks every beLuaInfo in the receiver's info list and every beLuaData
- * in that info's data list, and runs the first data object whose name equals `name` through
- * the Lua state's buffer-run virtual (slot 100).  When nothing ran (-1), it builds
- * "<interned>/<name>" and runs that path through the Lua state's file-run virtual (slot 96).
- * Receiver fields come from the reflected beLua / beLuaInfo / beLuaData / beLuaDataObject.
- *
- * Build profile: alternate combat compiler, -O3,p -Cpp_exceptions off -Iinclude, with
- * unit-objects duplicate __dt__9LuaStrRefFv = 0x00130720 (the shared string-reference destructor
- * retail keeps once) and external __dl__FPv = 0x00100610.
+/* Resolves a script name through the interned-string pool (the given name, or "<stage>/lua" when none
+ * is given), walks every beLuaInfo in the receiver's info list and every beLuaData in that info's data
+ * list, and runs the first data object whose name equals `name` through the Lua state's buffer-run
+ * virtual (slot 100). When nothing ran (-1), it builds "<interned>/<name>" and runs that path through
+ * the file-run virtual (slot 96).
  * Matching constructs: the interned-name holder's inline destructor releases the string on every
- * exit, as retail's one protected range does; the `unsigned size` parameter fixes the lw a2/a1 load
- * order. */
+ * exit; the `unsigned size` parameter fixes the lw a2/a1 load order. */
 #include "dw4/reflected.h"
 
 /* matching construct: 22 dummy virtuals put Run at vtable offset 96 and RunBuffer at 100 */

@@ -1,5 +1,3 @@
-/* stack-object GetVTable accessor.py. C++ translation unit: the unit compiled with exceptions on
- * and retail keeps this function's exception index record, which only the C++ front end emits. */
 struct Obj { int *vt; char pad[8]; };
 extern "C" {
 int igObject_InitHeader(void *);

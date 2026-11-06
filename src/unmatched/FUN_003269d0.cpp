@@ -5,7 +5,7 @@ extern "C" {
 void FUN_003269d0(O *arg0, int arg1, int arg2);
 }
 void FUN_003269d0(O *arg0, int arg1, int arg2) {
-    int t = (arg0->flags & 8) != 0; /* the flag test is normalised to 0/1 first: under the unit compiler (combat build) a `bool t = flags & 8` idiom drops retail's sltu */
+    int t = (arg0->flags & 8) != 0; /* The flag test is normalised to 0/1 first; a `bool t = flags & 8` idiom would drop the sltu. */
     if (t) {
         DAT_00587218[0]->v56();
     } else {

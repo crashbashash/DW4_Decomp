@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 struct T { int w0; int refs; };
 int FUN_00100610(T **);
@@ -21,4 +19,4 @@ struct T **FUN_003d1c60(struct T **arg0, short arg1) {
     }
     return arg0;
 }
-} /* extern "C" */
+}

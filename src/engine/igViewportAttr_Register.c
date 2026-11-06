@@ -1,6 +1,3 @@
-/* 0x00130580 igViewportAttr_Register: registers class igViewportAttr with the object system, derived from igVisualAttribute.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualAttribute_Register[];
 extern char igViewportAttr_GetVTable[];
 extern char thunk_igViewportAttr_GetMetaObject[];
@@ -15,16 +12,16 @@ int igViewportAttr_InitFields();
 void igViewportAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igViewportAttr_metaObject,              /* published MetaObject slot */
-        igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igViewportAttr_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        igViewportAttr_className,               /* class name */
-        0x28,                                              /* instance size */
-        igViewportAttr_GetVTable,                          /* vtable getter */
-        &igViewportAttr_InitFields,                        /* field adder */
-        0,                                                 /* extra callback item */
-        g_igViewportAttr_callbackList             /* callback list */
+        0, /* abstract */
+        g_igViewportAttr_metaObject,
+        igVisualAttribute_Register,
+        igVisualAttribute_GetPublishedMetaObject,
+        thunk_igViewportAttr_GetMetaObject,
+        igViewportAttr_className,
+        0x28, /* instance size */
+        igViewportAttr_GetVTable,
+        &igViewportAttr_InitFields,
+        0, /* extra callback item */
+        g_igViewportAttr_callbackList /* callback list */
     );
 }

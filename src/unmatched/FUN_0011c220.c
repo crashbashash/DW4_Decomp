@@ -1,5 +1,4 @@
-/* FUN_0011c220 -- fdlibm __ieee754_fmod(x, y): exact floating remainder by shift-and-subtract on the
- * integer words of both operands. */
+/* fdlibm __ieee754_fmod(x, y). */
 #include "dw4/ieee_words.h"
 
 extern const double D_004d2fd0[]; /* Zero[] = { 0.0, -0.0 } */

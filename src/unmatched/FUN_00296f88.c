@@ -1,4 +1,4 @@
-/* Returns a Sofdec handle's output pan for a channel (its error string names it mwSfdGetOutPan): 0
+/* Returns a Sofdec handle's output pan for a channel: 0
  * for an invalid handle, otherwise FUN_00295e40's value. */
 extern int FUN_002968c0(void *sfd);
 extern void FUN_0029a320(const char *msg);

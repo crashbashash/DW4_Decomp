@@ -1,5 +1,5 @@
 /* Reentrant sprintf: formats into a caller buffer through a string stream bound to the given reent
- * block and terminates it (newlib _sprintf_r shape; name is a hypothesis). */
+ * block and terminates it. */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))

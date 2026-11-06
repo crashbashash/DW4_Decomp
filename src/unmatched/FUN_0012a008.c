@@ -1,6 +1,5 @@
 /* Stream write hook: for an append-mode stream (flag 0x100) first seeks to the end through
- * FUN_00125fc8, clears the offset-valid flag 0x1000 and writes through FUN_0012fe90. The shape of
- * newlib's __swrite (hypothesis; installed by FUN_00124f28). */
+ * FUN_00125fc8, clears the offset-valid flag 0x1000 and writes through FUN_0012fe90. */
 typedef struct Stream12a008 {
     char pad0[12];
     unsigned short flags;   /* +12: 0x100 append, 0x1000 offset valid */

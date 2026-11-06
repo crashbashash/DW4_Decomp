@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int Memory_GetAllocatorBySelector(int);
 int igMetaObject_Create(int);
@@ -11,4 +9,4 @@ int FUN_003c9810(void) {
     }
     return DAT_0058bfe8[0];
 }
-} /* extern "C" */
+}

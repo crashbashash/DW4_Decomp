@@ -1,6 +1,3 @@
-/* 0x0044c690 igRendererOrderedList_Register: registers class igRendererOrderedList with the object system, derived from igDependencyOrderedList.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igDependencyOrderedList_GetPublishedMetaObject[];
 extern char igDependencyOrderedList_Register[];
 extern char igRendererOrderedList_GetVTable[];
@@ -14,16 +11,16 @@ int GuiLibrary_MarkRegistered();
 void igRendererOrderedList_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igRendererOrderedList_metaObject,             /* published MetaObject slot */
-        igDependencyOrderedList_Register,                        /* base class registrar */
-        igDependencyOrderedList_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igRendererOrderedList_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        igRendererOrderedList_className,              /* class name */
-        0x1C,                                                    /* instance size */
-        igRendererOrderedList_GetVTable,                         /* vtable getter */
-        0,                                                       /* field adder */
-        0,                                                       /* extra callback item */
-        g_igRendererOrderedList_callbackList            /* callback list */
+        0, /* abstract */
+        g_igRendererOrderedList_metaObject,
+        igDependencyOrderedList_Register,
+        igDependencyOrderedList_GetPublishedMetaObject,
+        thunk_igRendererOrderedList_GetMetaObject,
+        igRendererOrderedList_className,
+        0x1C, /* instance size */
+        igRendererOrderedList_GetVTable,
+        0,
+        0, /* extra callback item */
+        g_igRendererOrderedList_callbackList /* callback list */
     );
 }

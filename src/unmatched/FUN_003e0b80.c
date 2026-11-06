@@ -1,4 +1,3 @@
-/* Receiver is the beNDMWLoadIntf2SelSlot record (ss_clear). */
 #include "dw4/reflected.h"
 
 void FUN_003e0b80(beNDMWLoadIntf2SelSlot *arg0) {

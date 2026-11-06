@@ -17,8 +17,9 @@ size_t dw4_databases_count(const dw4_databases *);
 /* Native DATABASE/name/GETDATABASE result. First equal name, matching receiver
  * order. Object results are not encoded as Lua numbers or four-byte pointers. */
 const dw4_database *dw4_databases_get(const dw4_databases *,const char *name);
-/* The same first-equal-name database as a typed table: the decomp's beDataBase instance in the owner's arena (docs/arena-object-model.md,
- * P1/P2). Valid until the owner is closed; an invalid (zero) table when the name is unknown. The fight rules read their data through it. */
+/* The same first-equal-name database as a typed table: the decomp's beDataBase instance in the
+ * owner's arena. Valid until the owner is closed; an invalid (zero) table when the name is
+ * unknown. The fight rules read their data through it. */
 dw4_dbtable dw4_databases_table(const dw4_databases *,const char *name);
 /* The typed twin of a host database (an invalid table for NULL). Same lifetime as the owner. */
 dw4_dbtable dw4_database_typed(const dw4_database *);

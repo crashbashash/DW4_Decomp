@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* Receiver: the beNDMWLoadIntf2MesWin the matched masters pass (hex-named offsets: +31 _isSystemMes, +34 _isCtrl, +35 _isDisp, +36 _kindCtrl, +48 _curPoint, +52 _mesNo). */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_003ecad0(beNDMWLoadIntf2MesWin *, int);
 int FUN_003ecae0(beNDMWLoadIntf2MesWin *, int, int);
@@ -27,4 +24,4 @@ void beNDMWLoadIntf2MesWin__EndSystemMessage(beNDMWLoadIntf2MesWin *arg0) {
         beNDMWLoadIntf2MesWin__RequestMesErase(arg0, 1);
     }
 }
-} /* extern "C" */
+}

@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* Sizes the geometry attribute for a glyph run (3 vertices per glyph, plus two glyphs of slack
- * when arg3 is set) and rebuilds its vertex array through FUN_00383910 when the current one is
- * missing or too small. The vertex array is retained for the check in an owning stack reference. */
 /* matching construct: dummy-virtual class supplies the retail vtable slot offset for igGeometryAttr's configure virtual (vtable slot 39) */
 class GeomAttrVirtual {
 public:
@@ -15,10 +12,8 @@ int FUN_004553e0(int, int);
 int igObject_Destroy(igVertexArray *);
 void FUN_00383ab0(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3);
 }
-/* Owning stack reference to the attribute's vertex array: constructed from the attribute's current array
- * and released on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the
- * exception table names is the retail body 0x001338d0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to the attribute's vertex array (reference count in the low 23 bits of
+ * _refCount); released on scope exit. */
 class ObjectRef {
 public:
     igVertexArray *p;

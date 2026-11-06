@@ -1,4 +1,3 @@
-/* 0x0020d400 - 192 bytes. Insert into a singly linked list of relative offsets (each node stores its distance from the previous one); typed nodes, locals in a searched order; alternate compiler -O3. */
 struct N { int pad0; int f4; struct N *f8; };
 extern struct N *DAT_0056c290[4];
 void FUN_0020d400(struct N *arg0, int arg1) {

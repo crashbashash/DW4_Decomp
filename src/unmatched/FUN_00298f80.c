@@ -1,4 +1,4 @@
-/* Starts seamless playback (its error string names it mwPlyStartSeamless): rejects an invalid
+/* Starts seamless playback: rejects an invalid
  * handle, then FUN_002995e0(ply, 1), mwSfdStartSj (FUN_00295788) on the +468 joint, FUN_00295ab8,
  * FUN_00277210 on +76, vtable slot +20 of the +464 joint, and FUN_00291d30. */
 typedef struct SjObj SjObj;

@@ -1,4 +1,3 @@
-// 0x00174e20 - 108 bytes. Set a state byte (count repeats in a global) and notify the matching handler; alternate compiler -O3.
 struct S { char p[1260]; int f1260; char q[24]; int f1288; };
 extern "C" {
 int FUN_001e74b0(int);

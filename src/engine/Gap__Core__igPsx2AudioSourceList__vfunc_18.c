@@ -1,7 +1,5 @@
-/* 0x00145c30
- * Shrink the audio-source list's storage to its element count: when `_count` is below
- * `_capacity`, List_Reserve (0x002d6680) resizes the buffer to hold `_count`
- * elements of 0x24 (36) bytes each. */
+/* Shrinks the list's storage to its element count: when `_count` is below `_capacity`,
+ * List_Reserve resizes the buffer to hold `_count` elements of 0x24 (36) bytes each. */
 #include "dw4/reflected.h"
 int List_Reserve();
 

@@ -1,5 +1,4 @@
-/* Object list destructor; element virtual (vptr at +8) via a class with two leading ints; typed
- * first parameter keeps the parameter-copy order. Alternate -O3. */
+/* The first parameter is typed to keep the parameter-copy order. */
 extern "C" {
 int Memory_FreeBufferAliasB(void *);
 void igObject_Destroy(void *);

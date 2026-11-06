@@ -1,8 +1,6 @@
-/* 0x003010f0 — Gap__Core__igObjectDirEntry__vfunc_12
- * Drop the entry's object reference: virtual slot 92 (vfunc_23) is the setter of
- * _ref (+24) that retains the new value and releases the old one (0x003016f0), so
- * calling it with 0 releases the held object; the igObject default of this slot
- * (an empty stub) then runs. */
+/* Drop the entry's object reference: virtual slot 92 (vfunc_23) is the setter of _ref (+24) that
+ * retains the new value and releases the old one, so calling it with 0 releases the held object;
+ * the igObject default of this slot (an empty stub) then runs. */
 #include "dw4/reflected.h"
 extern "C" {
 int Gap__Core__igObject__vfunc_10(...);

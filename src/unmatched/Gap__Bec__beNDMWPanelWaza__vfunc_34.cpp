@@ -33,9 +33,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *, beNDMWPanelWazaInfoRam *, beMessengerWork *);
 }
-/* Owning stack reference to the freshly created panel work: constructed from the object and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table
- * names is the retail body 0x003bd940 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created panel work; released on scope exit (reference
+ * count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;
@@ -59,8 +58,6 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
     if (work == 0) {
         alloc = igObject_GetAllocator(self);
         alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        /* The new work record is owned by the stack reference while the ram takes its own reference and the
-         * three panels are hooked up; the reference is released at the end of this block. */
         ObjectRef created((igObject *)FUN_003bdb10(alloc));
         { igObject *n = created.p; RET(n) { igObject *o = (igObject *)ram->_work; REL(o) } ram->_work = (int)n; }
         work = (beNDMWPanelWazaInfoWork *)created.p;

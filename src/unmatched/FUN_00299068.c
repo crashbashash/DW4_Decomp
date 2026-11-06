@@ -1,4 +1,4 @@
-/* Starts looped playback of a file (its error strings name it mwPlyStartFnameLp): rejects an
+/* Starts looped playback of a file: rejects an
  * invalid handle or a NULL name, otherwise opens the name (FUN_00295b68), resets the +76 stream,
  * applies the +440 setting, enables looping and starts. */
 extern int FUN_002968c0(void *ply);

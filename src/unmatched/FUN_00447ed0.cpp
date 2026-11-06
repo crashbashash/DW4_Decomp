@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct A6 { int v[6]; } A6;
 #include "dw4/reflected.h"
@@ -38,4 +36,4 @@ int FUN_00447ed0(beNDMWItemRevisionPocketBase *arg0, int arg1, int arg2) {
     }
     return var_v0;
 }
-} /* extern "C" */
+}

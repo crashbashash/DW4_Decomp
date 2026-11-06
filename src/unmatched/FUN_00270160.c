@@ -1,6 +1,5 @@
 /* Requests a write through the device interface (entry +36) of a file-system handle; a NULL handle
- * or missing entry is reported through FUN_0026f530 and returns 0. Its error strings name it
- * cvFsReqWr (CRI), a name hypothesis. */
+ * or missing entry is reported through FUN_0026f530 and returns 0. */
 typedef struct CvFsDevice_270160 {
     void *pad0[9];
     int (*req_wr)(int file, int sectors, void *buffer);  /* 0x24 */

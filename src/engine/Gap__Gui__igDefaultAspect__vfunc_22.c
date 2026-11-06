@@ -1,7 +1,5 @@
 extern int g_igDefaultAspect_metaObject[4];
 
-/* Virtual slot 22 of igDefaultAspect: returns the igDefaultAspect MetaObject handle (first word of
- * the class's MetaObject global, the one its `_GetMetaObject` accessor fills). */
 int Gap__Gui__igDefaultAspect__vfunc_22(void) {
     return g_igDefaultAspect_metaObject[0];
 }

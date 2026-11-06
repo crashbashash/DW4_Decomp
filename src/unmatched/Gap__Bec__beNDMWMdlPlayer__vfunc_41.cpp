@@ -1,8 +1,3 @@
-/* beNDMWMdlPlayer::vfunc_41 (0x003d4240, 316 bytes): per-ram model-player update hook.
- *
- * Make sure the ram has a data list (create one on demand, pooled allocator unless the global
- * selector flag is clear), then, when the named property's work record has its one-shot flag set,
- * clear it and send the named message for this ram. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(igObject *);
@@ -21,10 +16,8 @@ extern int DAT_00585be0[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the
- * exception table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list; released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

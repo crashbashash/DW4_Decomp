@@ -2,8 +2,6 @@
 /* Receiver: beNDMWLoadIntf2DataSelIntf; host is its _commonIntf. _flagWork holds the per-player beNDMWLoadSavePlWork records
  * (_isCtrl, _haveSaveData, a beNDMWLoadSlotPlayer whose _saveDataList holds the four save areas); _gameUseData is a
  * beNDMWDegiDataList of the per-player Digimon records. The class behind _statDisp is not reflected. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 #define PLW(common, i) (((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)(common)->_flagWork)->_data)[i])
 #define DEGI(common, i) (((beNDMWDegiData **)((beNDMWDegiDataList *)(common)->_gameUseData)->_data)[i])
@@ -210,4 +208,4 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
     }
     return r;
 }
-} /* extern "C" */
+}

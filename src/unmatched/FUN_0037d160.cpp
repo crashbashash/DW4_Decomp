@@ -1,6 +1,5 @@
 /* Forwards three floats to FUN_003a7590 for the beCri handle (the BGM or ambience stream handle,
- * then the effect list) whose 64-bit play id equals arg1; alternate compiler. Receivers by the
- * matched beSound::vfunc_34 (case 5 passes the beCri). */
+ * then the effect list) whose 64-bit play id equals arg1. */
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_003a7590(int, int, float, float, float);

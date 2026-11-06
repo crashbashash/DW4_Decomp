@@ -14,7 +14,7 @@ struct AdxfReader {
     const AdxfReaderMethods *methods;
 };
 
-/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
+/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8). */
 typedef struct AdxfHandle {
     signed char used;
     signed char f1;

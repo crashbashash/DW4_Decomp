@@ -112,8 +112,8 @@ static int sound(void *user,const char *method,const dw4_script_value *a,size_t 
     dw4_script_value *r,char *error,size_t cap)
 {
     dw4_hubruntime *h=user;int rc=dw4_lobby_sound_service(h->world,method,a,n,r,error,cap);
-    /* Field stages name events of banks the front-end audio adapter does not load yet. Count them and play nothing;
-     * stage audio is not claimed (docs/combat.md). */
+    /* Field stages name events of banks the front-end audio adapter does not load yet. Count them
+     * and play nothing; stage audio is not claimed. */
     if(rc && h->field){h->field_sounds++;error[0]=0;*r=(dw4_script_value){0};return 0;}
     return rc;
 }
@@ -651,7 +651,8 @@ static int status_preview(void *user,int32_t player,int on,char *error,size_t ca
 }
 /* Field worlds (overworld/fortress stages): the lobby loader opens them as ordinary worlds without the hub's windows. */
 int dw4_field_stage(const char *stage){return dw4_lobby_field_world(stage);}
-/* The field stages whose runtime is brought up (docs/combat.md): the chain towards the Goblin Fortress's Leomon room. */
+/* The field stages whose runtime is brought up: the chain towards the Goblin Fortress's Leomon
+ * room. */
 int dw4_field_stage_ready(const char *stage)
 {
     static const char *const ready[]={"stag0001","stag0101","stagGF01","stagGF02","stagGF03","dng101b1","dng101b2","dng102b1","dng102b2","dng102b3","stag0102"};
@@ -925,7 +926,7 @@ int dw4_hubruntime_tick(dw4_hubruntime *h,uint64_t ns)
     int rc_sd=dw4_scriptservices_tick(h->sd,ns),rc_eng=0,rc_ctl=0,rc_lob=0,rc_dlg=0;
     if(!rc_sd)rc_eng=dw4_scriptengine_tick(h->scripts);
     if(!rc_sd && !rc_eng && h->combat && !frozen) {
-        /* The players' status manager runs before the model tick, as the enemies' does inside it (docs/combat.md "Status wiring"). */
+        /* The players' status manager runs before the model tick, as the enemies' does inside it. */
         dw4_modelctrl *players[4];party_models(h,players);
         if(dw4_combat_tick(h->combat,(int64_t)gns,players,h->error,sizeof h->error) ||
            dw4_combat_status_tick(h->combat,players,h->error,sizeof h->error))return -1;
@@ -974,9 +975,10 @@ int dw4_hubruntime_tick(dw4_hubruntime *h,uint64_t ns)
         if(dw4_fieldgen_tick(h->gen,(int64_t)gns,(const float (*)[3])player,np,h->error,sizeof h->error))return -1;
     }
     if(h->combat && !h->gameover_started && !frozen) {
-        /* KO flow (docs/combat.md "KO, the capsule and game over"): a player at 0 HP gets its PLAYER2 capsule (BKCHIP stash) after the measured delay; the
-         * capsule's tick finds no living PLAYER once every joined player is down, and the engine's end chunk (end_g_000bcaps.lua: GAMEOVER fade, message,
-         * NEXTSTAGE stagML11) runs. */
+        /* KO flow: a player at 0 HP gets its PLAYER2 capsule (BKCHIP stash) after the measured
+         * delay; the capsule's tick finds no living PLAYER once every joined player is down, and
+         * the engine's end chunk (end_g_000bcaps.lua: GAMEOVER fade, message, NEXTSTAGE stagML11)
+         * runs. */
         int over=0;
         if(dw4_combat_ko_tick(h->combat,h->stage,&over)){snprintf(h->error,sizeof h->error,"KO flow: %.200s",dw4_combat_error(h->combat));return -1;}
         if(over){

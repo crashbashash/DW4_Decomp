@@ -1,8 +1,8 @@
 #include "dw4/reflected.h"
-/* FUN_00392be0: movement query on the work's beModelCtrlMoveObjectList (_moveObjectList, +200):
-   the list is "enabled" when _count != 0 and _data holds four beModelCtrlMoveObject handles
-   (0 move, 1 rotation, 2 turn-Y/landing, 3 fourth channel); selector 5 also clears entry 1
-   (_isRun and _speed). _data is an array of arena handles, so entries are reached via casts. */
+/* Movement query on the work's beModelCtrlMoveObjectList (_moveObjectList, +200): the list is
+ * enabled when _count != 0 and _data holds four beModelCtrlMoveObject handles (0 move, 1 rotation,
+ * 2 turn-Y/landing, 3 fourth channel); selector 5 also clears entry 1 (_isRun and _speed). _data
+ * is an array of arena handles, so entries are reached via casts. */
 unsigned char FUN_00392be0(int unused0, int unused1, beModelCtrlInfoWork *owner, unsigned int sel) {
     beModelCtrlMoveObjectList *p;
     beModelCtrlMoveObject **l;

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_002eb010(int);
 int StringChunk_ReleaseHeader(int, int *);
@@ -91,4 +89,4 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_23(beNDMWStatusSubSlot *w, int arg1)
     l2->_count = 0;
     beNDMWWindow_ClearQueuedText(w);
 }
-} /* extern "C" */
+}

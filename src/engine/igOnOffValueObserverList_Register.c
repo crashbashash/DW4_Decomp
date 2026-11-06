@@ -1,6 +1,3 @@
-/* 0x0044c970 igOnOffValueObserverList_Register: registers class igOnOffValueObserverList with the object system, derived from igObjectList.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObjectList_GetPublishedMetaObject[];
 extern char igObjectList_Register[];
 extern char igOnOffValueObserverList_GetVTable[];
@@ -14,16 +11,16 @@ int GuiLibrary_MarkRegistered();
 void igOnOffValueObserverList_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igOnOffValueObserverList_metaObject, /* published MetaObject slot */
-        igObjectList_Register,                          /* base class registrar */
-        igObjectList_GetPublishedMetaObject,            /* base class MetaObject accessor */
-        thunk_igOnOffValueObserverList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igOnOffValueObserverList_className,  /* class name */
-        0x14,                                           /* instance size */
-        igOnOffValueObserverList_GetVTable,             /* vtable getter */
-        0,                                              /* field adder */
-        0,                                              /* extra callback item */
-        g_igOnOffValueObserverList_callbackList  /* callback list */
+        0, /* abstract */
+        g_igOnOffValueObserverList_metaObject,
+        igObjectList_Register,
+        igObjectList_GetPublishedMetaObject,
+        thunk_igOnOffValueObserverList_GetMetaObject,
+        igOnOffValueObserverList_className,
+        0x14, /* instance size */
+        igOnOffValueObserverList_GetVTable,
+        0,
+        0, /* extra callback item */
+        g_igOnOffValueObserverList_callbackList /* callback list */
     );
 }

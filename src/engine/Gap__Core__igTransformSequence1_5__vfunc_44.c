@@ -1,7 +1,6 @@
 /* Overwrites rotation key `index` (a 16-byte quaternion of _quatList) with the four floats at
  * `quaternion`. Ignored unless channel bit 2 of _drivenChannels is set and the index is inside the
- * list (retail instructions; the sibling accessors vfunc_42/vfunc_48 gate their lists on
- * _drivenChannels the same way). */
+ * list (the sibling accessors vfunc_42/vfunc_48 gate their lists on _drivenChannels the same way). */
 #include "dw4/reflected.h"
 void Gap__Core__igTransformSequence1_5__vfunc_44(igTransformSequence1_5 *self, int index, void *quaternion) {
     int count;

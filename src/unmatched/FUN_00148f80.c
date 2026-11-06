@@ -1,4 +1,3 @@
-/* 0x00148f80 - 164 bytes. Set a string member through a lazily created string pool, releasing the old string; alternate compiler -O3. */
 int FUN_002eb010();
 int StringChunk_ReleaseHeader();
 int StringPool_Construct();

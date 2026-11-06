@@ -17,7 +17,6 @@ void FUN_002a55a0(void *handle, SfdFrame *frame, int a, int b) {
 
     if (enabled == 0) {
         if (a >= 0 || frame->f48 == 0 || frame->f87 != 0
-            /* a2 still holds 1 here; FUN_002a5680 may read it as a third argument */
             || (b != 0 && FUN_002a5680(handle, frame) != 0)) {
             enabled = 1;
             FUN_002ada78(handle, 52, 1);

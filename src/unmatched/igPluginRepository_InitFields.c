@@ -1,4 +1,3 @@
-/* The pointer store after GetFieldAt needs the call result in a local. */
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();

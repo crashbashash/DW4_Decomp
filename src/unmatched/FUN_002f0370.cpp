@@ -1,4 +1,3 @@
-// 0x002f0370 - 232 bytes. Register a memory pool in one of two pool-info lists (by pool kind); alternate compiler -O3.
 extern "C" {
 struct PL { void **d; int n; };
 int igMemoryPoolInfoList_Append(...);

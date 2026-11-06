@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 struct Rb { char pad[12]; unsigned char b; };
 struct Ri { char pad[12]; int n; };
@@ -52,4 +50,4 @@ void FUN_003f9570(beNDMWGameRam *arg0, int arg1, int arg2) {
     } while (i < 4);
     igProperty_GetRecord(s1, &DAT_00518760[0])->n = cnt;
 }
-} /* extern "C" */
+}

@@ -3,8 +3,7 @@
  * descriptor with `count * _num` elements. */
 #include "dw4/reflected.h"
 extern "C" {
-/* Returns the shared igBoolMetaField descriptor (global 0x00586990), registering
- * the class on first use; same shape as igIntMetaField_GetDefaultDescriptor. */
+/* Returns the shared igBoolMetaField descriptor, registering the class on first use. */
 void **FUN_002cce00(...);
 void Gap__Core__igBoolArrayMetaField__vfunc_52(igBoolArrayMetaField *self, int buffer, int count);
 }

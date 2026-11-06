@@ -1,4 +1,4 @@
-/* Switches a playback handle's audio on or off (its error string names it mwPlySetAudioSw): sets
+/* Switches a playback handle's audio on or off: sets
  * stream parameter 6 through FUN_002ad950, rejecting an invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);

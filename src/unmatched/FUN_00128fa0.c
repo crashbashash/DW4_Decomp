@@ -1,5 +1,5 @@
 /* Steps the 64-bit linear congruential generator kept in the reent block and returns its top 31
- * bits (newlib rand shape; name is a hypothesis). */
+ * bits. */
 typedef struct Reent {
     char f0[168];
     unsigned long randomNext;

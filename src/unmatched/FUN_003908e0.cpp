@@ -20,9 +20,8 @@ extern int DAT_0050ef10[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the per-slot working box: constructed from the freshly created box and released on scope
- * exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the
- * retail body 0x00198190 (config/SLUS-20836/unit-objects.json, duplicate __dt__8AABoxRefFv). */
+/* Owning stack reference to the per-slot working box (reference count in the low 23 bits of
+ * _refCount); released on scope exit. */
 class AABoxRef {
 public:
     igAABox *p;

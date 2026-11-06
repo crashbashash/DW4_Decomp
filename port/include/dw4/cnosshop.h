@@ -1,5 +1,5 @@
 /* Native NPC item converter: retail beNDMWShopCtrl40 update 429630..42a2d8 (SUBWND mode 4, "CNOS")
- * over the shared beNDMWStatusCtrlD0 item list. Evidence and open boundaries: port/docs/cnos-shop.md. */
+ * over the shared beNDMWStatusCtrlD0 item list. */
 #ifndef DW4_CNOSSHOP_H
 #define DW4_CNOSSHOP_H
 #include "dw4/statusview.h"

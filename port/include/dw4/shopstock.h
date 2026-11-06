@@ -1,6 +1,5 @@
-/* Native shop stock for SUBWND modes 6 WPU, 7 APU, 8 CHIP and 9 JUNK: the recovered stock selection
- * of 3d8740..3d9bd0 (docs/engine/subwindow-preparation.md) with the item initializers 4482e0 /
- * 448430 / 448580 / 448660. Evidence and open boundaries: port/docs/equipment-shops.md. */
+/* Native shop stock for SUBWND modes 6 WPU, 7 APU, 8 CHIP and 9 JUNK: the stock selection of
+ * 3d8740..3d9bd0 with the item initializers 4482e0 / 448430 / 448580 / 448660. */
 #ifndef DW4_SHOPSTOCK_H
 #define DW4_SHOPSTOCK_H
 #include "dw4/database.h"

@@ -1,4 +1,4 @@
-/* Comparison written with the local on the left so the slt result stays in at.py. */
+/* The comparison is written with the local on the left so the slt result stays in at. */
 #include "dw4/reflected.h"
 extern "C" {
 float FUN_003a7810();

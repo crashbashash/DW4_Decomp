@@ -1,5 +1,5 @@
 /* Runs the registered exit handlers newest first, then the reent cleanup hook, then terminates
- * through thunk_FUN_001145c8 (newlib exit shape; name is a hypothesis). */
+ * through thunk_FUN_001145c8. */
 typedef struct ExitHandlerBlock {
     struct ExitHandlerBlock *next;
     int count;

@@ -19,10 +19,8 @@ extern unsigned char GPR_00554c14;
 void FUN_0037e890(beDemoManager *arg0, int arg1, int arg2);
 }
 
-/* Owning stack reference to a keep-message.  Its destructor releases the
- * object (reference count in the low 23 bits of _refCount); the out-of-line
- * copy the exception table points at is the retail body 0x0037e250
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__10KeepMesRefFv). */
+/* Owning stack reference to a keep-message; its destructor releases the object (reference count in
+ * the low 23 bits of _refCount). */
 class KeepMesRef {
 public:
     beDemoKeepMes *p;

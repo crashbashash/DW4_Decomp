@@ -1,7 +1,5 @@
-/* 0x0031f410 — Gap__Core__igArenaMemoryPool__vfunc_04
- * Pool hook: run the class's virtual slot 392 on the receiver, then the igObject
- * default for this slot (0x002ff0c0, an empty stub).  What slot 392 does is not
- * established; the arena pool binds it to the 0x0031e8b0 body. */
+/* Pool hook: runs the class's virtual slot 392 on the receiver, then the igObject default for this
+ * slot (an empty stub). */
 #include "dw4/reflected.h"
 extern "C" {
 int Gap__Core__igObject__vfunc_02(...);

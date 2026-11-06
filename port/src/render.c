@@ -259,25 +259,12 @@ static void plot(dw4_fb *fb, int x, int y, float z, uint8_t r, uint8_t g, uint8_
     fb->rgba[4 * i + 3] = 255;
 }
 
-/* --- the light rig ----------------------------------------------------------------------------
- *
- * Glossary: N is the surface normal, L the unit direction from the surface toward the light, V the
- * direction toward the eye, H = normalize(L + V).  The terms are the ones the LIGHT program names
- * state (docs/engine/p2-lighting.md).
- *
- * The default rig below is the game's own live rig, **re-fitted against a corrected
- * reference**.  The packs' `igLightAttr` records (* `scripts/pack_lights.py --emit`) share the directions but not the colours, and the values the
- * game actually feeds p2lighting are not on the disc at all, so the rig is a *fit*, not a decode.
- * Read mid-render from the live descriptors it was ambient (0.25, 0.20, 0.35) plus one directional
- * light of (1.20, 1.15, 1.20) along (0.3214, -0.866, 0.383) -- but that fit was scored against a
- * reference whose vertical scale was wrong (#573: the 640x480 savestate screenshot is the 448-line
- * framebuffer stretched), and it was driven by the floor and wall alone.  Re-fitted on the corrected
- * reference, and with the **props** (whose faces supply up/radial/down normals the floor does not)
- * in the objective, the rig is ambient (0.3005, 0.2444, 0.2986) plus one directional light of
- * (0.7931, 0.7938, 1.3141) along (0.3482, -0.9370, 0.0272) -- `scripts/fit_light_rig.py` fits it,
- * and it improves every measured region (whole 19.26 -> 17.97, wall 19.81 -> 16.60, barrel 22.57 ->
- * 20.99, crate 29.33 -> 25.03, floor 9.45 -> 9.39).  A material whose
- * `igLightingStateAttr._enabled = 0` really does want no term at all is drawn with `--unlit`. */
+/* The light rig. Glossary: N is the surface normal, L the unit direction from the surface toward
+ * the light, V the direction toward the eye, H = normalize(L + V). The default rig below is a fit,
+ * not a decode: the values the game feeds p2lighting are not on the disc. It is an ambient light
+ * plus one directional light of (0.7931, 0.7938, 1.3141) along (0.3482, -0.9370, 0.0272). A
+ * material whose `igLightingStateAttr._enabled = 0` really does want no term at all and is drawn
+ * with `--unlit`. */
 static dw4_light g_lights[DW4_MAX_LIGHTS];
 static int g_nlights;                       /* 0 = use the built-in game rig */
 static float g_ambient[3] = { 0.3005f, 0.2444f, 0.2986f };   /* re-fitted live rig */
@@ -407,9 +394,9 @@ void dw4_render_set_two_sided(int on) { g_two_sided = on ? 1 : 0; }
 int dw4_render_two_sided(void) { return g_two_sided; }
 
 /* Unlit: the material is drawn with no light term at all, so the fragment colour is the texel
- * multiplied by the per-draw `tint` (the `igLightingStateAttr._enabled = 0` materials of finding
- * #563).  It is a global knob (`--unlit`), not a default: measured, it is a
- * regression on the Goblin Pass frame, whose meshes the engine lights per vertex. */
+ * multiplied by the per-draw `tint` (the `igLightingStateAttr._enabled = 0` materials). It is a
+ * global knob (`--unlit`), not a default: measured, it is a regression on the Goblin Pass frame,
+ * whose meshes the engine lights per vertex. */
 static int g_unlit;
 
 void dw4_render_set_unlit(int on) { g_unlit = on ? 1 : 0; }
@@ -442,14 +429,11 @@ void dw4_render_set_lights(const dw4_light *lights, int n)
 
 int dw4_render_light_count(void) { return g_nlights; }
 
-/* The game's light rig, read mid-render from the live p2lighting descriptors and
- * re-fitted against the corrected reference with the props in the objective.
- * It is an *ambient* light (0.2846,0.2355,0.2976, carried by `g_ambient`) and one directional key
- * light (0.7931,0.7938,1.3141) along (0.3482,-0.9370,0.0272).  `scripts/fit_light_rig.py` fits
- * it and `--lights` takes the original live read; the values do not
- * exist anywhere on the disc, which is why they are baked in here as the default.  Measured on the
- * camera-matched Goblin Pass frame: whole-frame mean abs difference 19.26 -> 18.00 (the 27.09 ->
- * 24.73 figure this comment used to carry was scored against a wrongly-scaled reference, #573). */
+/* The game's light rig, fitted against the live p2lighting descriptors: an ambient light
+ * (0.2846,0.2355,0.2976, carried by `g_ambient`) and one directional key light
+ * (0.7931,0.7938,1.3141) along (0.3482,-0.9370,0.0272). `--lights` takes the original live read;
+ * the values do not exist anywhere on the disc, which is why they are baked in here as the
+ * default. */
 static int builtin_rig(dw4_light *out, int max)
 {
     dw4_light *l;
@@ -558,7 +542,6 @@ static void set_eye_view(void)
     g_eye[2] = -(g_view[2] * t[0] + g_view[6] * t[1] + g_view[10] * t[2]);
     g_eye_valid = 1;
 }
-
 
 /* ---- near-plane clipping ----------------------------------------------------------------
  * The camera sits *inside* the stage's ground and wall geometry, so a triangle that straddles the near plane is
@@ -703,13 +686,11 @@ static inline const uint8_t *texel_p(const dw4_tex *t, int x, int y, int wrap, i
     return t->rgba + 4 * ((size_t)y * t->w + x);
 }
 
-/* --- the 2D UI overlay (`scripts/gs_ui.py`) ------------------------------------------------ *
- * The game's HUD and every other 2D element are drawn straight to the GS in screen space, unlit,
- * with a constant per-vertex colour and the texture as a MODULATE, over the scene with
- * `ALPHA A0 B1 C0 D1`.  The port has no UI system, so `--ui` replays the draws a `.gs` dump
- * recorded: this rasterises one such triangle into the framebuffer already holding the scene.
- * It is a *reproduction* path (like the calibration wires), not the native UI a port needs; it
- * exists so the frame can be closed and so the 2D blend is pinned by measurement. */
+/* The 2D UI overlay. The game's HUD and every other 2D element are drawn straight to the GS in
+ * screen space, unlit, with a constant per-vertex colour and the texture as a MODULATE, over the
+ * scene with `ALPHA A0 B1 C0 D1`. The port has no UI system, so `--ui` replays the draws a `.gs`
+ * dump recorded: this rasterises one such triangle into the framebuffer already holding the scene.
+ * It is a reproduction path, not the native UI a port needs. */
 /* The GS's per-pixel output, `Cv = ((A-B)*As + (C*Ad)) + D` with Ad = 0 (the menu's framebuffer is
  * 24-bit), clamped.  Three cases appear in the front-end's draws:
  *
@@ -741,10 +722,10 @@ static void ui_out(uint8_t *d, float r, float g, float b, float as, uint8_t blen
 }
 
 /* The two kernels below are the per-triangle work; `dw4_render_ui_draws` drives them over a whole
- * draw list.  `ylo`/`yhi` clip the rows this call may touch, which is what lets the replay be split
- * across threads by horizontal band: a draw only ever writes pixels inside its own bbox, so a band
- * sees exactly the writes it would have seen in the serial pass, in the same order -- the result is
- * bit-identical, not just similar (asserted in tools/verify_render.py). */
+ * draw list. `ylo`/`yhi` clip the rows this call may touch, which lets the replay be split across
+ * threads by horizontal band: a draw only ever writes pixels inside its own bbox, so a band sees
+ * exactly the writes it would have seen in the serial pass, in the same order, and the result is
+ * bit-identical. */
 static void ui_tri_stq(dw4_fb *fb, const float v0[5], const float v1[5], const float v2[5],
                        const uint8_t rgba[3][4], const dw4_tex *tex, uint8_t blend,
                        int ylo, int yhi, const float *tz, int aref, const float *tf, int no_depth_write, int straight_rgb, const uint8_t *fog_color, int gs_raster,int depth_always,int filter,unsigned color_mask)
@@ -1045,16 +1026,11 @@ void dw4_render_ui_tri_stq(dw4_fb *fb, const float v0[5], const float v1[5], con
     ui_tri_stq(fb, v0, v1, v2, rgba, tex, blend, 0, (int)fb->h - 1, NULL, dw4_render_aref, NULL, 0, 0, NULL, 0,0,0,0);
 }
 
-/* --- replaying a whole draw list, across threads ------------------------------------------------
- *
- * The UI replay is a list of independent draws that must be applied in order (the blends compose), so
- * the parallel axis cannot be the draws.  It is the *rows*: every band replays the whole list, each
- * draw clipped to that band.  Because a draw only writes pixels inside its own bbox, a band sees
- * exactly the writes it would have seen serially, in the same order, so the bands can run
- * concurrently and the frame is bit-identical (tools/verify_render.py asserts 1 thread == many).
- *
- * Bands are handed out by an atomic counter so a band full of large triangles cannot leave the other
- * threads idle. */
+/* Replaying a whole draw list across threads. The UI replay is a list of independent draws that
+ * must be applied in order (the blends compose), so the parallel axis is the rows: every band
+ * replays the whole list, each draw clipped to that band. The frame is bit-identical to the serial
+ * pass. Bands are handed out by an atomic counter so a band full of large triangles cannot leave
+ * the other threads idle. */
 typedef struct {
     dw4_fb *fb;
     const dw4_ui_draw *draws;
@@ -1227,9 +1203,9 @@ static void raster_tri(dw4_fb *fb, const rvert *A, const rvert *B, const rvert *
     pc.x = (pa.x + pb.x + pd.x) / 3.0f;
     pc.y = (pa.y + pb.y + pd.y) / 3.0f;
     pc.z = (pa.z + pb.z + pd.z) / 3.0f;
-    /* Two-sided only: face the eye, so an un-culled back face is lit too.  One-sided keeps the
-     * authored winding, which is what lets a surface the light does not reach go dark (finding
-     * #560) -- the engine draws front faces only, and a front face's normal is its wound one. */
+    /* Two-sided only: face the eye, so an un-culled back face is lit too. One-sided keeps the
+     * authored winding, which is what lets a surface the light does not reach go dark -- the
+     * engine draws front faces only, and a front face's normal is its wound one. */
     if (g_two_sided && g_eye_valid) {
         float fd = n.x * (g_eye[0] - pc.x) + n.y * (g_eye[1] - pc.y)
                  + n.z * (g_eye[2] - pc.z);
@@ -1367,10 +1343,10 @@ static void raster_tri(dw4_fb *fb, const rvert *A, const rvert *B, const rvert *
                 bb = (uint8_t)((tb * bb) / 255);
             }
             {
-                /* fog (the VU1 FOG family = the GS fog stage): the GS interpolates the per-vertex
-                 * fog value AFFINELY in screen space (like the vertex colour -- it has no Q), then
-                 * lerps the fragment toward FOGCOL by it.  `f` is 1 clear, 0 at full fog, so the
-                 * blend is out = C*(F/255) + FOGCOL*(1 - F/255), the finding-#603 model. */
+                /* Fog (the VU1 FOG family = the GS fog stage): the GS interpolates the per-vertex
+                 * fog value affinely in screen space (like the vertex colour -- it has no Q), then
+                 * lerps the fragment toward FOGCOL by it. `f` is 1 clear, 0 at full fog, so the
+                 * blend is out = C*(F/255) + FOGCOL*(1 - F/255). */
                 float f = w2 * sfa + w1 * sfb + w0 * sfc;
                 if (g_fog.mode && f < 1.0f) {
                     float fr = g_fog.color[0] * 255.0f, fg = g_fog.color[1] * 255.0f;
@@ -1488,7 +1464,6 @@ int dw4_render_mesh(dw4_fb *fb, const uint8_t *pos, const uint8_t *uv, uint32_t 
     return dw4_render_mesh_n(fb, pos, NULL, NULL, nverts, tris, ntris, yaw, pitch, tint, NULL);
 }
 
-
 void dw4_render_wire(dw4_fb *fb, const uint8_t *pos, uint32_t nverts, const uint32_t *tris,
                      uint32_t ntris, float yaw, float pitch, int width, uint8_t r, uint8_t g,
                      uint8_t b)
@@ -1544,12 +1519,9 @@ void dw4_render_wire(dw4_fb *fb, const uint8_t *pos, uint32_t nverts, const uint
     free(view); free(sx); free(sy); free(sz);
 }
 
-/* --- a readout on the frame ---------------------------------------------------------------------
- *
- * See include/dw4/render.h.  A 5x7 bitmap font covering only what a diagnostic readout needs
- * (`0-9 . : f p s m x space`); anything else is a blank.  Each glyph row is 5 bits, leftmost pixel
- * in bit 4.  This is not the game's font -- the engine builds its text from `bectext.igb` (finding
- * #608) and none of that is wired up here. */
+/* A readout on the frame. A 5x7 bitmap font covering only what a diagnostic readout needs (`0-9 .
+ * : f p s m x space`); anything else is a blank. Each glyph row is 5 bits, leftmost pixel in bit
+ * 4. This is not the game's font. */
 
 static const char font_chars[] = "0123456789.:fpsmx";
 

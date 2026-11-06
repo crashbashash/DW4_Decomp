@@ -1,4 +1,3 @@
-/* 0x00154b80 - 272 bytes. Eleven-case switch (one store per case) with a shared tail; alternate compiler -O3 produces the compare chain and the stubs. */
 int FUN_00154b80(int arg0, int arg1, int *arg2, int *arg3) {
     switch (arg0) {
     case 0x0: *arg3 = 1; break;

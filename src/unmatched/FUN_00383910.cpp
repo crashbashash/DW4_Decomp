@@ -11,10 +11,8 @@ extern unsigned char GPR_00554c14;
 extern int DAT_00587110[4];
 void FUN_00383910(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3);
 }
-/* Owning stack reference to a vertex array: first the attribute's current array, then the newly created one
- * (reference count in the low 23 bits of _refCount); released on scope exit.  The out-of-line copy the
- * exception table names is the retail body 0x001338d0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to a vertex array: first the attribute's current array, then the newly
+ * created one (reference count in the low 23 bits of _refCount); released on scope exit. */
 class ObjectRef {
 public:
     igVertexArray *p;
@@ -33,7 +31,6 @@ void FUN_00383910(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3) {
     }
     al = igObject_GetAllocator(arg0);
     al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-    /* Re-point the reference at the new array: the borrowed current array is released first. */
     t = va.p;
     if (t != 0) {
         t->_refCount = t->_refCount - 1;

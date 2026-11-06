@@ -1,6 +1,4 @@
-/* Stack object, vtable slot read through the object plus a runtime offset. Matches only with the
- * alternate (combat) compiler build. C++ translation unit: the unit compiled with exceptions on
- * and retail keeps this function's exception index record, which only the C++ front end emits. */
+/* Stack object, vtable slot read through the object plus a runtime offset. */
 typedef struct { int *vt; int pad[7]; } Obj;
 extern "C" {
 int igObject_InitHeader(Obj *);

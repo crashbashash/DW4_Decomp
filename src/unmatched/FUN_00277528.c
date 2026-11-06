@@ -5,7 +5,7 @@ typedef struct LscEntry_277528 {
     int pad4[5];
     int f24;        /* 0x18 */
     int pad_end[1];
-} LscEntry_277528;      /* 0x20 bytes */
+} LscEntry_277528;
 
 typedef struct Lsc_277528 {
     char pad0[56];

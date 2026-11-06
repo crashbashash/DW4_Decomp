@@ -1,5 +1,3 @@
-/* dvCiReqRd: queues a CI read request of nsct sectors into buf (strings
- * "E0092912:handl is null." / "E0092913:nsct < 0.(dvCiReqRd)" / "E0092914:buf is null.(dvCiReqRd)"). */
 typedef struct DvCiHandle {
     char b0, b1;
     char state;         /* 2 */

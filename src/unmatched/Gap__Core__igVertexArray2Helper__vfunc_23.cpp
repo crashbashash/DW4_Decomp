@@ -1,13 +1,11 @@
-/* igVertexArray2Helper slot 23: build the stream objects of a new vertex array. When the helper
- * has no igVertexArray2 yet (+12 == 0) it creates one and, for every stream kind requested in the
- * layout word *arg1, creates a data list of `arg2` elements and wraps it in a stream record (kind
- * in +16) that is appended to the array's stream list (+16): bit 0 / bit 1 / bit 2 kinds 1 / 3 / 2
- * (12 / 12 / 4 byte elements) bits 16..19 (count) kind 4, one record per index (8 byte elements,
- * index in +20) bits 4..7 (count) kind 5, arg2 * count 4-byte elements, count in +24 bits 8..11
- * (count) kind 6, arg2 * count 1-byte elements, count in +24 bits 20..21 (mode) kind 9, mode 1 =
- * 4-byte list, mode 2 = 8-byte list bit 22 / bit 23 kinds 7 / 8 (12 byte elements) Returns arg2,
- * or 0 when the helper already has an array. The reference-counted locals (array, record, list)
- * release themselves when their scope ends. */
+/* Builds the stream objects of a new vertex array. When the helper has no igVertexArray2 yet (+12
+ * == 0) it creates one and, for every stream kind requested in the layout word *arg1, creates a
+ * data list of `arg2` elements and wraps it in a stream record (kind in +16) appended to the
+ * array's stream list (+16): bit 0 / bit 1 / bit 2 give kinds 1 / 3 / 2 (12 / 12 / 4 byte
+ * elements); bits 16..19 (count) kind 4, one record per index (8 byte elements, index in +20);
+ * bits 4..7 (count) kind 5, arg2 * count 4-byte elements, count in +24; bits 8..11 (count) kind 6,
+ * arg2 * count 1-byte elements, count in +24; bits 20..21 (mode) kind 9, mode 1 = 4-byte list,
+ * mode 2 = 8-byte list; bit 22 / bit 23 kinds 7 / 8 (12 byte elements). */
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_0014a780(...);
@@ -34,9 +32,7 @@ struct StreamRec { int vt; int rc; int pad8; DataList *list; int kind; int index
 struct RP { RC *p; ~RP() {} };
 
 #define REL(x) { RC *q_ = (x); if (q_ != 0) { q_->rc = q_->rc - 1; if (((unsigned long long)((long long)q_->rc << 0x29) >> 0x29) == 0) igObject_Destroy(q_); } }
-/* size a freshly created list to n elements (a negative count leaves it untouched) */
 #define SIZE_LIST(lst, n, esz) { DataList *dl_ = (lst); if ((n) >= 0) { if ((n) <= dl_->cap) { dl_->count = (n); } else { List_Resize(dl_, (n), (esz)); } } }
-/* replace the record slot with a new record created from the object's allocator, then attach `list` to it */
 #define ATTACH(rec, lst) { RC *l_ = (RC *)(lst); StreamRec *r_ = (rec); if (l_ != 0) l_->rc = l_->rc + 1; REL((RC *)r_->list) r_->list = (DataList *)l_; }
 
 int Gap__Core__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigned int *arg1, int arg2) {

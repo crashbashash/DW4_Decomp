@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
-/* The request record is the beSoundData of the cue (the matched beSound::vfunc_34 passes its data-list element): _type, _fnameIdx, _memoryIdx (-1 for an ADX file), _volume, _priority. */
+/* The request record is the cue's beSoundData: _type, _fnameIdx, _memoryIdx (-1 for an ADX file),
+ * _volume, _priority. */
 
 #define SLOTS ((igObjectList *)self->_hdSEs)
 #define ENTS ((igObjectList *)self->_lsBinObjs)

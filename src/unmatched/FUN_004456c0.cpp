@@ -1,8 +1,6 @@
 #include "dw4/reflected.h"
-/* Receivers by the matched caller beNDMWMdlPEBase::vfunc_47: self is the PEBase model controller (_messenger), obj a beBaseInfoRam (_ramNo)
- * and the work record a beNDMWMdlPEBaseInfoWork (_isPlayer, _downDataList). */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record); the code keeps C linkage
- * and owns its one stack object through the ObjectRef below. */
+/* self is the PEBase model controller (_messenger), obj a beBaseInfoRam (_ramNo) and the work
+ * record a beNDMWMdlPEBaseInfoWork (_isPlayer, _downDataList). */
 typedef struct Rc { int w0; int references; } Rc;
 typedef struct List { int w0; int references; int size; int cap; int *data; } List;
 typedef struct Obj { char pad[12]; Rc *f12; } Obj;
@@ -28,9 +26,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInfoWork *arg2);
 }
-/* Owning stack reference to the freshly created down-data list: constructed from the object and released
- * on scope exit (reference count in the low 23 bits of references).  The out-of-line copy the exception
- * table names is the retail body 0x00150eb0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created down-data list, released on scope exit (reference
+ * count in the low 23 bits of references). */
 class ObjectRef {
 public:
     List *p;

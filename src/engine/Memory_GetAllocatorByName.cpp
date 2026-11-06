@@ -1,10 +1,7 @@
-/* 0x002f8920
- * Ask the current memory context (Memory_GetCurrentContextAlias, a jump to
- * 0x002f8680) for an allocator by name: virtual call through vtable slot 24
- * (+0x60) of the context, passing the context and the name.  Callers use the
- * result as the allocator of a new object.
- * The context's first 24 virtuals are placeholders; the declared return type
- * is void, as matched (the result stays in v0). */
+/* Ask the current memory context (Memory_GetCurrentContextAlias) for an allocator by name: virtual
+ * call through vtable slot 24 (+0x60) of the context, passing the context and the name. Callers
+ * use the result as the allocator of a new object. The context's first 24 virtuals are
+ * placeholders; the declared return type is void (the result stays in v0). */
 extern "C" {
 void **Memory_GetCurrentContextAlias(...);
 void Memory_GetAllocatorByName(int name);

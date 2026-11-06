@@ -8,7 +8,7 @@ typedef struct Slot_272d60 {
     char pad3[41];
     int dma_id;             /* 0x2c */
     char pad48[16];
-} Slot_272d60;              /* 0x40 bytes */
+} Slot_272d60;
 
 extern Slot_272d60 DAT_004a9310[32];
 int sceSifDmaStat(unsigned int id);

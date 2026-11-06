@@ -1,8 +1,3 @@
-/* Shop sales confirm step. With arg1 == 1 and a selected sales item, two scratch objects
- * (FUN_003c90f0) are handed to the per-kind fill helpers (FUN_0043a450 before, FUN_0043a660 after
- * the player data is re-fetched) and the item becomes the first entry of its kind list; otherwise
- * the sales-cancel message is dispatched. The scratch objects live on the stack in owning
- * references whose releases the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 struct Rec { char pad[12]; int f12; };
@@ -37,9 +32,8 @@ struct ShopAlloc {
     static int Pool(beNDMWShopCtrlSales *self) { int a = igObject_GetAllocator(self); if (GPR_00554c14 != 0) return a; return Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 };
 
-/* Owning stack reference to one scratch object: constructed from the creating call and released on scope exit
- * (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the
- * retail body 0x003b6090 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to one scratch object; released on scope exit (reference count in the low
+ * 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

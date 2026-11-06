@@ -1,6 +1,3 @@
-/* 0x001a2300 igEnbayaAnimationSource_Register: registers class igEnbayaAnimationSource with the object system, derived from igObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 #include "dw4/reflected.h"
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igEnbayaAnimationSource_GetVTable[];
@@ -14,18 +11,18 @@ int igMetaObject_RegisterClass();
 int igEnbayaAnimationSource_InitFields();
 
 void igEnbayaAnimationSource_Register(void) {
-    SceneGraphLibrary_MarkRegistered(); /* sets this module's one-shot guard byte at 0x00554b80 (.sbss) */
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igEnbayaAnimationSource_metaObject, /* published MetaObject slot */
-        igObject_Register,                             /* base class registrar */
-        igObject_GetMetaObject_ParentAccessor,         /* base class MetaObject accessor */
-        thunk_igEnbayaAnimationSource_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igEnbayaAnimationSource_className,  /* class name */
-        sizeof(igEnbayaAnimationSource),               /* instance size (reflected struct, include/dw4/reflected.h) */
-        igEnbayaAnimationSource_GetVTable,             /* vtable getter */
-        &igEnbayaAnimationSource_InitFields,           /* field adder */
-        FUN_001a24d0,                                  /* extra callback item */
-        0                                              /* callback list */
+        0, /* abstract */
+        g_igEnbayaAnimationSource_metaObject,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
+        thunk_igEnbayaAnimationSource_GetMetaObject,
+        igEnbayaAnimationSource_className,
+        sizeof(igEnbayaAnimationSource),               /* Instance size. */
+        igEnbayaAnimationSource_GetVTable,
+        &igEnbayaAnimationSource_InitFields,
+        FUN_001a24d0, /* extra callback item */
+        0 /* callback list */
     );
 }

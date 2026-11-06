@@ -1,7 +1,6 @@
 /* Registers a file-system device: checks the device name and interface-function pointer, adds the
  * device (FUN_0026f7b8) and, when its interface has an error-callback entry (+4), installs
- * FUN_0026f500 there; failures are reported through FUN_0026f530. Its error strings name it
- * cvFsAddDev (CRI), a name hypothesis. */
+ * FUN_0026f500 there; failures are reported through FUN_0026f530. */
 typedef struct CvFsDevice_26f728 {
     void *pad0;
     void (*entry_err_func)(void (*callback)(), int object);  /* 0x04 */

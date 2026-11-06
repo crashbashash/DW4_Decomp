@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* Receivers: self is the beNDMWLoadIntf2Diffselect (declared by the matched load master), the pad object a bePadData (_lTrg/_lRpt held, _trigger/_repeat edges). */
+/* The pad object is a bePadData: _lTrg/_lRpt are held, _trigger/_repeat are edges. */
 typedef struct VecSrc { char p0[28]; float x, y, z; } VecSrc;
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__StartAt(...);
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__Play(...);

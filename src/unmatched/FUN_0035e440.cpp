@@ -1,6 +1,5 @@
-/* FUN_0035e440 (0x0035e440): lazily creates the singleton when it is missing or its ready flag
- * (bit 2 of the word at +36) is clear, then returns it. Needs the pinned alternate compiler with
- * -O3,p: its branch-target alignment gives the extra nop of the retail body. */
+/* Lazily creates the singleton when it is missing or its ready flag (bit 2 of the word at +36) is
+ * clear, then returns it. */
 extern "C" {
 int FUN_0035e520();
 extern void * DAT_005893e8[4];

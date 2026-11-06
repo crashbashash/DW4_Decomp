@@ -1,4 +1,3 @@
-/* Matches only with the alternate (combat) compiler build. */
 int FUN_00460be0();
 int ObjectList_AppendRetained();
 int ObjectList_RemoveFirstRetained();

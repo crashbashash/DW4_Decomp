@@ -1,4 +1,4 @@
-/* 0x003b2730 - 272 bytes. InitFields: refcount read at +4 is an int read (the long long form gives ldl/ldr); alternate compiler -O3,p. */
+/* The refcount at +4 is read as an int; a long long read would give ldl/ldr. */
 extern "C" {
 int ObjectPointerList_FindIndex(...);
 int igMetaObject_CreateFields(...);

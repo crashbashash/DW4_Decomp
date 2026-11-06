@@ -1,4 +1,5 @@
-/* 0x002eb2b0 - igLocationTable vfunc 25: fetches one 20-byte entry (value, two names, value, value); alternate compiler -O3; the call result is tested where it is assigned (a separate local copy puts the argument move before the branch). */
+/* The call result is tested where it is assigned; a separate local copy would put the argument
+ * move before the branch. */
 int strncpy();
 int FUN_0030d1d0();
 extern int DAT_004fb410[4];

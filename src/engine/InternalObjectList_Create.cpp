@@ -1,8 +1,7 @@
-/* The factory for the internal object list (the 16-byte raw/retaining list behind
- * __internalObjectList). With the object system active it registers the class and
- * creates the instance through its metaobject; otherwise it allocates 16 bytes and runs the
- * concrete constructor plus the post-construction virtual hooks, the same two branches as the
- * other descriptor factories. */
+/* Factory for the internal object list (the 16-byte raw/retaining list behind
+ * __internalObjectList). With the object system active it registers the class and creates the
+ * instance through its metaobject; otherwise it allocates 16 bytes and runs the concrete
+ * constructor plus the post-construction virtual hooks. */
 extern "C" {
 int __internalObjectList_EnsureRegistered(...);
 void **InternalObjectList_Construct(...);
@@ -19,7 +18,7 @@ void **InternalObjectList_Create(int allocator) {
     void **list;
 
     if (*g_objectSystem[0] != 0) {
-        __internalObjectList_EnsureRegistered(); /* class registration guard: RunStaticInit(__internalObjectList_Register) */
+        __internalObjectList_EnsureRegistered();
         list = (void **)(igMetaObject_CreateInstance(g___internalObjectList_metaObject[0], allocator));
     } else {
         list = (void **)(igObject_AllocateRawStorage(0x10, 0, allocator));

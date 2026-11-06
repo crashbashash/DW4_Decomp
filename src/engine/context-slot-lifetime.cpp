@@ -1,15 +1,11 @@
 #include "dw4/reflected.h"
-/* igMemoryPoolContextInfo: the destructor and the retained-allocator slot setter.
- *
- * A context holds 46 records of 144 bytes starting at +0x14 (clearing them is
- * the 6,624-byte memset in the destructor).  Each record is the allocator bound
- * to that slot, a 128-byte inline name, a descriptor and flag words.  The object
- * header is the igObject vtable word and reference word, followed by a count at
- * +8 (30 after construction, then the highest populated slot + 1), a flag word at
- * +12 and a parent object at +16 that the destructor releases with the igObject
- * reference-count idiom.
- * Evidence: docs/engine/context-lifecycle.md.
- * The views below describe the observed 32-bit layout, not the original C++ spelling. */
+/* IgMemoryPoolContextInfo: the destructor and the retained-allocator slot setter. A context holds
+ * 46 records of 144 bytes starting at +0x14 (clearing them is the 6,624-byte memset in the
+ * destructor). Each record is the allocator bound to that slot, a 128-byte inline name, a
+ * descriptor and flag words. The object header is the igObject vtable word and reference word,
+ * followed by a count at +8 (30 after construction, then the highest populated slot + 1), a flag
+ * word at +12 and a parent object at +16 that the destructor releases with the igObject reference-
+ * count idiom. The views below describe the observed 32-bit layout, not the original C++ spelling. */
 
 struct ContextRecord {
     void *allocator;       /* retained by the slot setter */
@@ -18,9 +14,9 @@ struct ContextRecord {
     unsigned storageFlags, flags;
 };
 
-/* Dispatch-only view of the context's virtual table: the dummies pad the table so
- * that InitializeRecordNames lands on vtable offset 180 and Clear on offset 212
- * (docs/engine/context-lifecycle.md; the other slots are never called here). */
+/* Dispatch-only view of the context's virtual table: the dummies pad the table so that
+ * InitializeRecordNames lands on vtable offset 180 and Clear on offset 212 (the other slots are
+ * never called here). */
 class ContextVirtuals {
 public:
     virtual void slot0();  virtual void slot1();  virtual void slot2();  virtual void slot3();
@@ -34,7 +30,7 @@ public:
     virtual void slot32(); virtual void slot33(); virtual void slot34(); virtual void slot35();
     virtual void slot36(); virtual void slot37(); virtual void slot38(); virtual void slot39();
     virtual void slot40(); virtual void slot41(); virtual void slot42();
-    virtual void InitializeRecordNames();  /* 0x002f49e0, vtable offset 180 */
+    virtual void InitializeRecordNames();  /* vtable offset 180 */
     virtual void slot44(); virtual void slot45(); virtual void slot46(); virtual void slot47();
     virtual void slot48(); virtual void slot49(); virtual void slot50();
     virtual void Clear(int index);         /* vtable offset 212: release the allocator of one record */
@@ -47,16 +43,15 @@ struct ContextView : igObject {
     ContextRecord records[46];
 };
 
-/* vtable of igMemoryPoolContextInfo (published by the constructor at 0x002f25d0) */
+/* vtable of igMemoryPoolContextInfo (published by the constructor) */
 extern "C" char g_igMemoryPoolContextInfo_vtable[];
 extern "C" void memset(void *, int, unsigned);
 extern "C" void igObject_Destroy(void *);
 extern "C" void igMemoryPoolContextInfo_DeleteAllocation(void *);
 
-/* 0x002f28d0 (vtable offset 100)
- * Bind `value` to record `index` (0..45).  Re-binding the same object is a
- * no-op; a different old binding is released through Clear first.  The new
- * object is retained, and a non-null binding raises the used-record count. */
+/* (vtable offset 100) Bind `value` to record `index` (0..45). Re-binding the same object is a no-
+ * op; a different old binding is released through Clear first. The new object is retained, and a
+ * non-null binding raises the used-record count. */
 extern "C" void Gap__Core__igMemoryPoolContextInfo__vfunc_53(ContextView *self, int index, igObject *value) {
     if (index >= 0 && index < 46) {
         /* record address spelled as index * 144 + self (+ 20 for the allocator word); the
@@ -75,11 +70,9 @@ extern "C" void Gap__Core__igMemoryPoolContextInfo__vfunc_53(ContextView *self, 
     }
 }
 
-/* 0x002f2670
- * Destructor: republish the vtable, clear the reference word and all records,
- * rebuild the 46 record names, release the parent, and free the allocation when
- * the low 16 bits of `deleteFlags` are positive (deleting destructor).  Per
- * docs/engine/context-lifecycle.md the parent word is left in place. */
+/* Destructor: republish the vtable, clear the reference word and all records, rebuild the 46
+ * record names, release the parent, and free the allocation when the low 16 bits of `deleteFlags`
+ * are positive (deleting destructor). The parent word is left in place. */
 extern "C" void *igMemoryPoolContextInfo_Destruct(ContextView *self, long long deleteFlags) {
     if (self) {
         self->_vtable = (int)g_igMemoryPoolContextInfo_vtable; self->_refCount = 0;

@@ -1,8 +1,8 @@
 struct R { int w0; int refs; int f8; int w12; int *f16; };
 extern "C" int igObject_Destroy(...);
 extern "C" int StringChunk_ReleaseHeader(...);
-/* Engine-object reference returned by value from the owner's slot 24 (retail destructor copy 0x001c6460).  Retail kept the copy of
- * a translation unit compiled without exceptions; the owner unit's inline releases read the pointer again after the count store. */
+/* Engine-object reference returned by value from the owner's slot 24. The owner unit's inline
+ * releases read the pointer again after the count store. */
 struct Ref {
     R *p;
     Ref() {}
@@ -21,7 +21,7 @@ struct Ref {
 #endif
     }
 };
-/* Interned-string share (count at p[-1], header at p[-2]); destructor copy 0x00130720. */
+/* Interned-string share (count at p[-1], header at p[-2]). */
 struct StringRef {
     int *p;
     StringRef() {}

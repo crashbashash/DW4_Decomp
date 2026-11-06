@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x003a73b0 - 244 bytes. Inline bool predicates; the second call argument is the scratch holding f16 (arg1 when f8 == 0); alternate -O3,p. */
 extern "C" {
 int FUN_00332370(int, int);
 int FUN_003323a0(int);

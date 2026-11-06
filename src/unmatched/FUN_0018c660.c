@@ -1,7 +1,7 @@
-void FUN_0018cc10(void); /* address-taken; signature not recovered */
-void FUN_0018d110(void); /* address-taken; signature not recovered */
-void FUN_0018d160(void); /* address-taken; signature not recovered */
-void thunk_FUN_0018c820(void); /* address-taken; signature not recovered */
+void FUN_0018cc10(void);
+void FUN_0018d110(void);
+void FUN_0018d160(void);
+void thunk_FUN_0018c820(void);
 void FUN_0018cf20(void);
 int igSphere_GetMetaObject();
 int igAABox_GetMetaObject();

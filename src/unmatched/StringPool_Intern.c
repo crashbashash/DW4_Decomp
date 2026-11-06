@@ -1,4 +1,3 @@
-/* Return the pooled copy of a name, creating it on first use; 0x002eaf60, 172 bytes. */
 typedef struct StringPool {
     int table;  /* name -> token table */
     int chunks; /* chunk store the copies are carved from */

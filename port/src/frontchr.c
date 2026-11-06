@@ -1141,7 +1141,6 @@ void dw4_frontchr_draw(dw4_frontchr *o, dw4_fb *fb, int sel, const dw4_fefont *f
         }
 
         if (o->phase == DW4_CHR_CREATED) {
-            /* Starter values recovered in docs/engine/front-end-boot.md. */
             static const int hp[4] = {170, 180, 160, 150};
             static const int mp[4] = {60, 50, 70, 80};
             char value[8];

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record); the function
- * keeps C linkage, the record reference is a C++ stack object (ObjectRef below). */
 extern "C" {
 int FUN_002eb010(int);
 int Memory_GetAllocatorBySelector(int);
@@ -15,7 +13,7 @@ int beMessenger_SendNamed(int, int *, int, int, int);
 int igObject_Destroy(beLoadIntf2ComMdlData *);
 int igObject_GetAllocator(beNDMWLoadIntf2ComMdlCtrl *);
 beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int);
-/* Messenger group "MODELCTRL" and message "GENERATE" (data/strings.json). */
+/* Messenger group "MODELCTRL" and message "GENERATE". */
 extern int MODELCTRL[4];
 extern int GENERATE[4];
 extern int g_stringPool[4];
@@ -33,10 +31,9 @@ typedef struct StringTokenHeader {
 } StringTokenHeader;
 }
 
-/* Owning stack reference to the new open-request record: constructed from the object and released on
- * scope exit, after the open list has retained it (reference count in the low 23 bits of _refCount).
- * The out-of-line copy the exception table names is the retail body 0x003e3d80
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the new open-request record: constructed from the object and released
+ * on scope exit, after the open list has retained it (reference count in the low 23 bits of
+ * _refCount). Its destructor is emitted out of line. */
 class ObjectRef {
 public:
     beLoadIntf2ComMdlData *p;
@@ -44,13 +41,11 @@ public:
     ~ObjectRef() { beLoadIntf2ComMdlData *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
-/* 0x003e3e00: ask the MODELCTRL receivers named (infoName, ramNo) to GENERATE
- * at `position`, then send them `openSQ` as a named message.  When
- * `recordOpen` is 1 the request is also remembered as a
- * beLoadIntf2ComMdlData record (ram number, info name, open sequence) on the
- * controller's open list; the two names are interned in the shared string
- * pool, releasing whatever the fresh record held; the creating reference is
- * released when the block ends. */
+/* Ask the MODELCTRL receivers named (infoName, ramNo) to GENERATE at `position`, then send them
+ * `openSQ` as a named message. When `recordOpen` is 1 the request is also remembered as a
+ * beLoadIntf2ComMdlData record (ram number, info name, open sequence) on the controller's open
+ * list; the two names are interned in the shared string pool, releasing whatever the fresh record
+ * held; the creating reference is released when the block ends. */
 extern "C" void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, int infoName, int openSQ, float *position, int recordOpen) {
     struct { float x, y, z; } v3;
     StringTokenHeader *oldNameHeader;

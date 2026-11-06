@@ -1,5 +1,3 @@
-/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
- * exception index record, which only the C++ front end emits. */
 struct Obj { int *vt; int w[15]; };
 extern "C" {
 int igObject_InitHeader(struct Obj *);

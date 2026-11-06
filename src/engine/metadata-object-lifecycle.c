@@ -1,11 +1,9 @@
-/* igMetaObject lifecycle: construction, copy-construction, list release and
- * registry index assignment (0x002d3060 and the 0x002fd8xx-0x002fe7xx run).
- * Behaviour is documented in docs/engine/metadata-bootstrap.md; the metadata
- * member offsets come from reflection (include/dw4/reflected.h). */
+/* IgMetaObject lifecycle: construction, copy-construction, list release and registry index
+ * assignment. */
 #include "dw4/reflected.h"
 
-/* The object system whose pointer lives at 0x00586dc8: only the metadata
- * registry (a pointer list of every registered igMetaObject, +24) is used. */
+/* The object system: only the metadata registry (a pointer list of every registered igMetaObject,
+ * +24) is used. */
 typedef struct ObjectSystemRecord {
     char unknown0[24];
     int metaRegistry;
@@ -66,10 +64,8 @@ void igMetaObject_ReleaseLists(igMetaObject *meta){
     }
 }
 
-/* Give the metaobject its registry index (_index): search the object system's
- * registry; when absent (-1) append it and search again, since appending can
- * replace the registry (docs/engine/metadata-bootstrap.md, "Registry index
- * assignment"). */
+/* Give the metaobject its registry index (_index): search the object system's registry; when
+ * absent (-1) append it and search again, since appending can replace the registry. */
 void igMetaObject_AssignTypeId(igMetaObject *meta){
     meta->_index=ObjectPointerList_FindIndex(((ObjectSystemRecord *)g_objectSystem[0])->metaRegistry,meta);
     if(meta->_index==-1){

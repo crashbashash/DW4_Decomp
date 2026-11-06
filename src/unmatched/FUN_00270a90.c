@@ -1,6 +1,5 @@
 /* Returns the maximum byte rate through the device interface (entry +76) of a file-system handle;
- * a NULL handle or missing entry is reported through FUN_0026f530 and returns 0. Its error strings
- * name it cvFsGetMaxByteRate (CRI), a name hypothesis. */
+ * a NULL handle or missing entry is reported through FUN_0026f530 and returns 0. */
 typedef struct CvFsDevice_270a90 {
     void *pad0[19];
     int (*get_max_byte_rate)(int file);  /* 0x4c */

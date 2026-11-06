@@ -13,7 +13,6 @@ int igObject_Destroy(...);
 void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B *arg4, B *arg5, float fparg0);
 }
 extern "C" void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B *arg4, B *arg5, float fparg0) {
-//D<
     int temp_s1_2;
     int temp_s1;
     int spA0[4];
@@ -29,7 +28,6 @@ extern "C" void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B *arg
     int temp_s7_2;
     int temp_s1_4;
     int temp_s7;
-//D>
 
     temp_f20 = fparg0 * fparg0;
     if (arg5 != 0) {

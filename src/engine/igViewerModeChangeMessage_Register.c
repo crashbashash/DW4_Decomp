@@ -1,6 +1,3 @@
-/* 0x0045a590 igViewerModeChangeMessage_Register: registers class igViewerModeChangeMessage with the object system, derived from igMessage.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igMessage_GetPublishedMetaObject[];
 extern char igMessage_Register[];
 extern char igViewerModeChangeMessage_GetVTable[];
@@ -14,16 +11,16 @@ int igViewerModeChangeMessage_InitFields();
 void igViewerModeChangeMessage_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igViewerModeChangeMessage_metaObject, /* published MetaObject slot */
-        igMessage_Register,                              /* base class registrar */
-        igMessage_GetPublishedMetaObject,       /* base class MetaObject accessor */
-        thunk_igViewerModeChangeMessage_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igViewerModeChangeMessage_className,  /* class name */
-        0x10,                                            /* instance size */
-        igViewerModeChangeMessage_GetVTable,             /* vtable getter */
-        &igViewerModeChangeMessage_InitFields,           /* field adder */
-        0,                                               /* extra callback item */
-        0                                                /* callback list */
+        0, /* abstract */
+        g_igViewerModeChangeMessage_metaObject,
+        igMessage_Register,
+        igMessage_GetPublishedMetaObject,
+        thunk_igViewerModeChangeMessage_GetMetaObject,
+        igViewerModeChangeMessage_className,
+        0x10, /* instance size */
+        igViewerModeChangeMessage_GetVTable,
+        &igViewerModeChangeMessage_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

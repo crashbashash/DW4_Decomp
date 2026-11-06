@@ -1,9 +1,7 @@
-/* 0x002d1590 — igAliasMemoryPool_CopyConstruct
- * Copy-construct counterpart of igAliasMemoryPool_Initialize: runs the base-pool
- * copy-construct step (igMemoryPool_CopyConstruct: igObject_CopyConstructHeader, then the 0x0052f620
- * base vtable), publishes the igAliasMemoryPool vtable 0x005313a0 and clears the
- * allocation lock, event tracker and aliased-pool references
- * (docs/engine/allocator-builder.md, alias pool backend trace).  Returns `self`. */
+/* Copy-construct counterpart of igAliasMemoryPool_Initialize: runs the base-pool copy-construct
+ * step (igMemoryPool_CopyConstruct: igObject_CopyConstructHeader, then the base vtable), publishes
+ * the igAliasMemoryPool vtable and clears the allocation lock, event tracker and aliased-pool
+ * references. Returns `self`. */
 #include "dw4/reflected.h"
 int igMemoryPool_CopyConstruct();
 /* Vtable image of igAliasMemoryPool; the array form keeps the address load absolute. */

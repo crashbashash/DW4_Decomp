@@ -1,6 +1,3 @@
-/* 0x00133a40 igShadeModelAttr_Register: registers class igShadeModelAttr with the object system, derived from igVisualAttribute.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualAttribute_Register[];
 extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igShadeModelAttr_GetVTable[];
@@ -14,16 +11,16 @@ int igShadeModelAttr_InitFields();
 void igShadeModelAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igShadeModelAttr_metaObject,            /* published MetaObject slot */
-        igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igShadeModelAttr_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        igShadeModelAttr_className,             /* class name */
-        0x10,                                              /* instance size */
-        igShadeModelAttr_GetVTable,                        /* vtable getter */
-        &igShadeModelAttr_InitFields,                      /* field adder */
-        0,                                                 /* extra callback item */
-        0                                                  /* callback list */
+        0, /* abstract */
+        g_igShadeModelAttr_metaObject,
+        igVisualAttribute_Register,
+        igVisualAttribute_GetPublishedMetaObject,
+        thunk_igShadeModelAttr_GetMetaObject,
+        igShadeModelAttr_className,
+        0x10, /* instance size */
+        igShadeModelAttr_GetVTable,
+        &igShadeModelAttr_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

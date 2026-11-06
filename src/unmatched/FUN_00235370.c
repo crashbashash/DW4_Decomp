@@ -1,14 +1,10 @@
-/* Command-line parser of an Alchemy model-viewer style application (hypothesis: the option names
- * are the strings at 0x4e88b8..0x4e9560 in data/strings.json, and the callers 0x233c10 /
- * 0x234470..0x2348b0 are the matching option-name helpers). Each recognised "--option value" is
- * parsed into `opts` and echoed into the block `opts->applied` points at. "--help" prints the
- * usage text and exits, "--" or "-n" ends the option scan, any other "-x" token is reported as
- * unrecognised. The second loop collects the remaining tokens as model files, each with its "-n N"
- * repeat count. Compiler: needs the pinned "combat" mwccps2 at -O3; with the default compiler the
- * callee-saved registers are assigned in a different order. The re-read of the list count in the
- * in-capacity increment is spelled with a volatile read, as in beMessengerArgs.c (retail loads the
- * count a second time instead of reusing the index). `modelFile` lives in memory in retail (its
- * stack slot is the highest), hence volatile. */
+/* Command-line parser of an Alchemy model-viewer style application. Each recognised '--option
+ * value' is parsed into `opts` and echoed into the block `opts->applied` points at. '--help'
+ * prints the usage text and exits, '--' or '-n' ends the option scan, any other '-x' token is
+ * reported as unrecognised. The second loop collects the remaining tokens as model files, each
+ * with its '-n N' repeat count. The re-read of the list count in the in-capacity increment is
+ * spelled with a volatile read (the count is loaded a second time instead of reusing the index).
+ * `modelFile` lives in memory (its stack slot is the highest), hence volatile. */
 
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
@@ -166,8 +162,8 @@ extern const char allocateVisualContextInScratchpad[16];
 
 #include "dw4/fun_00235370_refs.h"
 
-/* The object smart-pointer destructor: the held pointer is copied once (its slot is a plain
- * field, so retail reads it once), then released with the shared sequence. */
+/* The object smart-pointer destructor: the held pointer is copied once (its slot is a plain field,
+ * so it is read once), then released with the shared sequence. */
 #define ReleaseObject(obj) do { igObject *held = (obj); IG_OBJECT_RELEASE(held); } while (0)
 
 void FUN_00235370(ViewerOptions *opts, StringList *args)

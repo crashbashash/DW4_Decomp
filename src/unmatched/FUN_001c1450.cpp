@@ -1,4 +1,5 @@
-/* 0x001c1450 - 260 bytes. Two nested list loops releasing children through the allocator vtable; the element is loaded into a local before the allocator call (otherwise the load sinks into the jalr delay slot); locals declared in the colouring order; alternate -O3. */
+/* The element is loaded into a local before the allocator call; otherwise the load sinks into the
+ * jalr delay slot. */
 extern "C" {
 int Gap__Core__igObject__vfunc_02(void *);
 }

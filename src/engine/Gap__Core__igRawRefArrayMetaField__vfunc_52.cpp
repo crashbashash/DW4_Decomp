@@ -1,13 +1,9 @@
-/* 0x003051b0
- * igRawRefArrayMetaField slot 52: forwards (item, count * _num) to slot 50 of the
- * element type's default descriptor, so an array field of _num elements covers
- * _num times the requested count.  The descriptor is the lazily created object
- * cached at 0x00585a88 (the cell sits between the igRawRefMetaField and
- * igRawRefArrayMetaField class handles, the same layout as the confirmed
- * default-descriptor getters). */
+/* Forwards (item, count * _num) to slot 50 of the element type's default descriptor, so an array
+ * field of _num elements covers _num times the requested count. The descriptor is the element
+ * type's lazily created default descriptor. */
 #include "dw4/reflected.h"
 extern "C" {
-void **igRawRefMetaField_GetDefaultDescriptor(...);  /* igRawRefMetaField default-descriptor getter (name inferred, not confirmed) */
+void **igRawRefMetaField_GetDefaultDescriptor(...);
 void Gap__Core__igRawRefArrayMetaField__vfunc_52(igRawRefArrayMetaField *self, int item, int count);
 }
 /* Placeholder vtable: only the call through slot 50 of the descriptor is used. */

@@ -10,7 +10,6 @@ struct Status2a1770 {
 };
 struct Status2a1770 *FUN_002a17d0();
 
-/* Returns whether position equals f8 + f12 of the FUN_002a17d0 status (0 while f16/f20 are pending and f0 is clear). */
 int FUN_002a1770(void *source, int position) {
     struct Status2a1770 *status = FUN_002a17d0(source);
 

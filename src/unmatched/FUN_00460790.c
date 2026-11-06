@@ -1,6 +1,4 @@
-/* Recursive scene-node walk (children count via kids pointer), second branch appends the children
- * to a retained list; counted do-while loops use 0 < n, locals declared n, i, off; alternate
- * compiler -O3,p. */
+/* Counted do-while loops use `0 < n`, and the locals are declared in the order n, i, off. */
 #include "dw4/reflected.h"
 int igObject_IsKindOf();
 int ObjectList_AppendUniqueRetained();

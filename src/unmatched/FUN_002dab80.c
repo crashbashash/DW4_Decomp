@@ -1,4 +1,3 @@
-/* 0x002dab80 - 176 bytes. Read chunks into a 4 KiB stack buffer, cut each at the first ';' and forward it. */
 int strlen();
 int FUN_002da770();
 int FUN_002dada0();

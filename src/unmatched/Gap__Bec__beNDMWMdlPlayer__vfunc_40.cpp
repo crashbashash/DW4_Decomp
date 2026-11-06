@@ -1,6 +1,5 @@
-/* 0x003d40f0 - beNDMWMdlPlayer vfunc 40: creates the ram object's data list on first use (held in an ObjectRef whose
- * destructor the exception table names), then consumes a one-shot flag in the player payload by sending a named
- * message. */
+/* BeNDMWMdlPlayer vfunc 40: creates the ram object's data list on first use, then consumes a one-
+ * shot flag in the player payload by sending a named message. */
 #include "dw4/reflected.h"
 extern "C" {
 int Memory_GetAllocatorBySelector(int);
@@ -19,9 +18,8 @@ struct UnidentifiedArg1Object { char pad[8]; int f8; char pad2[28]; igObject *f4
 igObject *beBaseInfoDataList_Create(int);
 struct PropertyRecord *igProperty_FindByName(igObject *, int, int *);
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released on scope
- * exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the
- * retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list; released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

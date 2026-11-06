@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beMessenger_AppendBool(int, int);
 int beMessenger_AppendFloat(int, float);
@@ -32,4 +30,4 @@ void FUN_004412c0(struct A0 *arg0, int arg1, int arg2) {
     beMessenger_AppendBool(arg0->f20, 1);
     beMessenger_EnqueueSelected(arg0->f20, &DAT_0051ce88[0], 1);
 }
-} /* extern "C" */
+}

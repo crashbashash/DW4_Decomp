@@ -4,7 +4,6 @@ int beMessenger_SendNamed(int, int *, int, int, int);
 extern int DAT_004e0858[4];
 extern int DAT_0050eff8[4];
 }
-/* arg0 beModelCtrl, arg1 beModelCtrlInfo, arg2 beBaseInfoRam, arg3 the beModelCtrlACTION element (caller FUN_00394bf0 -> FUN_00395250) */
 extern "C" {
 int FUN_00391fe0(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2, beModelCtrlACTION *arg3);
 }

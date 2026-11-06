@@ -23,7 +23,6 @@ extern int StringChunk_ReleaseHeader(int, int *);
 extern int igObject_Destroy(void *);
 extern int DAT_00586f20[4];
 void *FUN_00308fb0(W *arg0, int arg1) {
-//D<
     Res *volatile sp5C;
     Obj *sp58;
     Res *r;
@@ -31,7 +30,6 @@ void *FUN_00308fb0(W *arg0, int arg1) {
     int *old;
     int pool;
     void *res;
-//D>
 
     FUN_003087a0(&sp58, arg0, arg1);
     r = (Res *)sp58;

@@ -1,4 +1,5 @@
-/* 0x002fbb40 - 116 bytes. Linear search of an enum's value list; the list pointer member is volatile (retail reloads it per iteration), loop tested at the bottom via goto, locals declared a4, n, i. */
+/* The list pointer member is volatile so it is reloaded per iteration, the loop is tested at the
+ * bottom via goto, and the locals are declared in the order a4, n, i. */
 struct L { char pad0[8]; int cnt; char pad12[4]; int *data; };
 struct E { char pad0[12]; int f12; struct L * volatile f16; };
 int StringList_CopyRetained();

@@ -1,5 +1,3 @@
-/* Backward scan for a path separator, then a framed call; pointer declared before the base;
- * alternate compiler. */
 int FUN_0030b3c0();
 void FUN_0030ba20(int *arg0) {
     char *p;

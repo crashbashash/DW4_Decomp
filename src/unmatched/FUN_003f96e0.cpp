@@ -1,9 +1,3 @@
-/* FUN_003f96e0 (0x003f96e0, 720 bytes): beNDMWGameRam — store a player's selected name text.
- *
- * Build an 8-character beUnicodeObj (pooled allocator unless the global selector flag is clear), copy
- * the selected name (looked up through the insight by *arg3) into it, clear the player's name list
- * (releasing every entry) and append the new text, which the list retains; the creating reference is
- * released on scope exit. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(beUnicodeObj *);
@@ -22,10 +16,8 @@ extern int DAT_00587108[4];
 extern int DAT_00589678[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the new name text: constructed from the object and released on scope
- * exit, after the name list has retained it (reference count in the low 23 bits of _refCount).  The
- * out-of-line copy the exception table names is the retail body 0x003832d0 (config/SLUS-20836/unit-objects.json,
- * duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the new name text; released on scope exit, after the name list has
+ * retained it (reference count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     beUnicodeObj *p;
@@ -49,8 +41,8 @@ extern "C" void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg
     ObjectRef rb(FUN_003614f0(al));
     beUnicodeObj_AllocateBuffer(rb.p, 8);
     {
-        /* The looked-up name is an out-parameter the lookup retains for us; it is released by hand
-         * (retail has no destroy action for this slot). */
+        /* The looked-up name is an out-parameter the lookup retains; it is released by hand rather
+         * than by a destructor. */
         beUnicodeObj *ra;
         int sel = *(volatile int *)arg3;
         FUN_00382eb0(&ra, FUN_00236f80(arg0->_insight, DAT_00589678[0]), sel);

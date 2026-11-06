@@ -1,9 +1,9 @@
-/* Player technique panel and cast (R1): the part of the retail beNDMWPanelWaza manager (group NDMWPANEL, one state machine per player) and of the
- * player's control hook (beNDMWMdlPlayer::vfunc_38) that opens the list, moves its cursor, fires a technique, charges its MP and starts SQ_WAZA with
- * the pcTech LABEL, plus the port's stand-in for the cast's bullet (a timed volume, see technique.c). Page 0 (techniques) only; the item and status
- * pages (L1, R2) are not ported. One panel per player slot (0..3), each with its own cursor, FIRE lock and MP.
- * Recovered rules and every assumption: docs/combat.md "Technique firing (R1 panel)". Self-consistency tested only (`check-fieldstage technique`);
- * not compared against a running retail game. */
+/* Player technique panel and cast (R1): the part of the retail beNDMWPanelWaza manager (group
+ * NDMWPANEL, one state machine per player) and of the player's control hook
+ * (beNDMWMdlPlayer::vfunc_38) that opens the list, moves its cursor, fires a technique, charges
+ * its MP and starts SQ_WAZA with the pcTech LABEL, plus the port's stand-in for the cast's bullet
+ * (a timed volume, see technique.c). Page 0 (techniques) only; the item and status pages (L1, R2)
+ * are not ported. One panel per player slot (0..3), each with its own cursor, FIRE lock and MP. */
 #ifndef DW4_TECHNIQUE_H
 #define DW4_TECHNIQUE_H
 #include "dw4/database.h"

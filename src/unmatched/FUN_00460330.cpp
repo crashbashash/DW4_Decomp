@@ -34,7 +34,6 @@ void FUN_00460330(A *arg0);
     } \
     l->count = 0; }
 void FUN_00460330(A *arg0) {
-//D<
     Obj * volatile sp7C;
     Obj * volatile sp78;
     volatile char sp74[1];
@@ -48,7 +47,6 @@ void FUN_00460330(A *arg0) {
     Mk *s2;
     int s0;
     Obj *tq;
-//D>
     a1 = arg0->f48;
     v1 = a1->l28;
     if (v1 != 0) {

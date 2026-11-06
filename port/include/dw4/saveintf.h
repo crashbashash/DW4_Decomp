@@ -1,8 +1,8 @@
-/* beNDMWSaveIntf: the shared character-data-select interface (stagIS12's SaveIntfInfo; the same pack serves the
- * Save Keeper and the title's Game Start slot screen). Recovered from update 4081a0 (vfunc_31), the GENERATE handler
- * 40c220 (vfunc_34) and the 85 helpers 3d9de0..3f1460. Every messenger/Lua/pad/card interaction of the retail
- * bodies is a host callback, so the order of the retail sends is the order the tests assert.
- * Evidence, state map and boundaries: port/docs/save-keeper.md. */
+/* beNDMWSaveIntf: the shared character-data-select interface (stagIS12's SaveIntfInfo; the same
+ * pack serves the Save Keeper and the title's Game Start slot screen). Recovered from update
+ * 4081a0 (vfunc_31), the GENERATE handler 40c220 (vfunc_34) and the 85 helpers 3d9de0..3f1460.
+ * Every messenger/Lua/pad/card interaction of the retail bodies is a host callback, so the order
+ * of the retail sends is the order the tests assert. */
 #ifndef DW4_SAVEINTF_H
 #define DW4_SAVEINTF_H
 #include <stddef.h>

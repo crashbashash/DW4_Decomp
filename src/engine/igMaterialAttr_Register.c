@@ -1,6 +1,3 @@
-/* 0x00135c80 igMaterialAttr_Register: registers class igMaterialAttr with the object system, derived from igVisualAttribute.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualAttribute_Register[];
 extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igMaterialAttr_GetVTable[];
@@ -14,16 +11,16 @@ int igMaterialAttr_InitFields();
 void igMaterialAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMaterialAttr_metaObject,              /* published MetaObject slot */
-        igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igMaterialAttr_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        igMaterialAttr_className,               /* class name */
-        0x54,                                              /* instance size */
-        igMaterialAttr_GetVTable,                          /* vtable getter */
-        &igMaterialAttr_InitFields,                        /* field adder */
-        0,                                                 /* extra callback item */
-        0                                                  /* callback list */
+        0, /* abstract */
+        g_igMaterialAttr_metaObject,
+        igVisualAttribute_Register,
+        igVisualAttribute_GetPublishedMetaObject,
+        thunk_igMaterialAttr_GetMetaObject,
+        igMaterialAttr_className,
+        0x54, /* instance size */
+        igMaterialAttr_GetVTable,
+        &igMaterialAttr_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

@@ -1,21 +1,15 @@
-/* 0x001c66c0 - FUN_001c66c0 (2268 bytes): resolve the scene-node handle (+32) of a named child
- * (companion of FUN_001c6520, which refreshes the cached parent handle +28).
- * With force == 0 and a cached handle (+32) it returns 1 at once.  Otherwise it refreshes the
- * parent (FUN_001c6520), drops the old handle, resets the interned label (+36, +40), looks up
- * child index idx = FUN_00306360(parent, name), reads two attributes of the child (a string and
- * an object-name string, FUN_00306910) into the stack holders, resolves both through
- * FUN_001ce400 and, when their text differs (thunk_FUN_0012a110), builds a fresh handle
- * (FUN_001cd150) - else it reuses the parent.  The handle's own child index goes to +40 and the
- * resolved string to +36.  Every return path releases the four stack holders.
- * Evidence: asm/FUN_001c66c0.s; the explicit release expansions follow FUN_001c6520 / FUN_001cce60.
- * Profile: combat compiler, -O3 -Cpp_exceptions off.  Matching constructs (each measured):
- * sp40/sp44 are RP holders (empty-destructor stack objects stay in memory, so the
- * `sp44 = 0; if (sp44) ++refs` pair is a store then a reload); sp3C/sp38/sp34 are the
- * address-taken out-parameter temporaries, released through their own memory slot (REL_TMP,
- * re-read after the decrement); a smart-pointer assignment holds the new value in a local
- * (`n`) between the retain and the store; sp40's pointer is read into `o40` before the
- * `a = ...f8` test so the load fills the branch delay slot.  Needs the RP destructor
- * duplicate row in config/SLUS-20836/unit-objects.json like its siblings. */
+/* Resolve the scene-node handle (+32) of a named child. With force == 0 and a cached handle (+32) it
+ * returns 1 at once. Otherwise it refreshes the parent, drops the old handle, resets the interned
+ * label (+36, +40), looks up the child index, reads two attributes of the child (a string and an
+ * object-name string) into the stack holders, resolves both and, when their text differs, builds a
+ * fresh handle, else it reuses the parent. The handle's own child index goes to +40 and the resolved
+ * string to +36. Every return path releases the four stack holders.
+ * Matching constructs: sp40/sp44 are RP holders (empty-destructor stack objects stay in memory, so
+ * the `sp44 = 0; if (sp44) ++refs` pair is a store then a reload); sp3C/sp38/sp34 are the
+ * address-taken out-parameter temporaries, released through their own memory slot (REL_TMP, re-read
+ * after the decrement); a smart-pointer assignment holds the new value in a local (`n`) between the
+ * retain and the store; sp40's pointer is read into `o40` before the `a = ...f8` test so the load
+ * fills the branch delay slot. */
 struct Obj {
     int vt;
     union {
@@ -29,7 +23,7 @@ struct RP { Obj *p; ~RP() {} };
 
 struct Node {
     char pad0[24];
-    char *f24;      /* name string (reference count at -4, chunk header at -8) */
+    char *f24;
     Obj *f28;       /* parent handle */
     Obj *f32;       /* resolved handle (reference counted) */
     char *f36;      /* interned label string */

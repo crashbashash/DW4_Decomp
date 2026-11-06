@@ -3,8 +3,7 @@
  * igMemoryRefMetaField descriptor with `count * _num` elements. */
 #include "dw4/reflected.h"
 extern "C" {
-/* Returns the shared igMemoryRefMetaField descriptor (global 0x00585d88), registering
- * the class on first use; same shape as igIntMetaField_GetDefaultDescriptor. */
+/* Returns the shared igMemoryRefMetaField descriptor, registering the class on first use. */
 void **FUN_002bfa60(...);
 void Gap__Core__igMemoryRefArrayMetaField__vfunc_52(igMemoryRefArrayMetaField *self, int buffer, int count);
 }

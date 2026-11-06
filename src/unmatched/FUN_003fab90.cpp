@@ -1,31 +1,10 @@
-/* FUN_003fab90 (0x003fab90, 6,872 bytes): recompute one player's derived stats. `self` is the
- * GAMERAM object; `index` selects the player record out of its player list and `apply` says
- * whether the equipment/chip/skill modifiers are applied on top of the database/UPDATA/DOWNDATA
- * base values. The function - rewrites MHP/MMP (clamped to 99999) and initialises or clamps HP and
- * MP, - rewrites the five attributes (TSUYOSA, MAMORI, KASHIKOSA, SEISHIN, SUBAYASA) and the four
- * element resistances, each clamped to 1..9999, - rebuilds WAZALIST from the six TECHn level/skill
- * thresholds of the species' database row and rewrites NEXTEXP from the level, - when `apply` is
- * set also rewrites ATTACKDELAY, the hit, critical, paralysis, evade, guard, bit, experience and
- * luck rates, the paralysis/poison resistances, the weapon element, HP/MP drain and the weapon
- * record/skill numbers, and refreshes POWERSOCKETNAME from the MODEL string of every power socket.
- * The property record names (DAT_0051xxxx) are read from the retail image; the PROP_* aliases
- * below give them their literal text. The callees whose behaviour is not recovered yet keep their
- * FUN_ names. Matching notes. Everything here is a compiler-pinned spelling; the choices that
- * matter for the register colouring and stack layout are: - the player pointer and the DIGIMONNO /
- * LEVEL reads go through the tiny inline accessors StatHelpers::GetPlayer() and GetProp(); their
- * result temporaries are created late, so the register colouring orders the player pointer, index
- * and spill slots as in retail; - the helpers are static members of a struct because
- * tools/units.py splits a unit at its top-level definitions and would drop free helper functions;
- * - locals are declared where they are first set, one variable per loop; - the two threshold tests
- * are written as `record <= value` and the delay clamp as `> 70`, the forms that keep the compare
- * in `at`; - the new WAZALIST object is an IntListRef (a stack-resident reference whose destructor
- * is the emitted body at 0x003fc670, shared with the nearby query that is compiled in the same
- * unit); - the interned MODEL string handed to StringList_AppendRetained is a StringRef whose
- * destructor is the retail copy at 0x00130720 (a duplicate in config/SLUS-20836/unit-
- * objects.json). The unit also owns that query (0x003fc780) and the reference destructor
- * (0x003fc670) through config/SLUS-20836/unit-objects.json; the query lives in the included .inc
- * so that one object holds all three bodies. The include path is relative to the repository root
- * (the compiler's working directory). */
+/* Recomputes one player's derived stats; `apply` says whether the equipment, chip and skill
+ * modifiers are applied on top of the database/UPDATA/DOWNDATA base values. MHP/MMP are clamped to
+ * 99999 and the attributes and element resistances to 1..9999. The player pointer and the
+ * DIGIMONNO / LEVEL reads go through the tiny inline accessors StatHelpers::GetPlayer() and
+ * GetProp(), whose result temporaries are created late so the register colouring comes out right;
+ * locals are declared where they are first set, one variable per loop; the two threshold tests are
+ * written `record <= value` and the delay clamp as `> 70` to keep the compare in `at`. */
 #include "src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc"
 
 #define PROP_DIGIMONNO       DAT_00518848
@@ -130,11 +109,11 @@ extern const char *beNDMWItemBase_GetRecordString(beNDMWItemBase *, beNDMWGameRa
 extern int DAT_00586f20[4];   /* interned-string pool */
 extern int DAT_00587108[4];   /* allocator selector */
 extern const char *DAT_004cf290[6];     /* "TECH1".."TECH6" */
-extern const char *DAT_004cf2b0[6];     /* "TECH1_LEVEL".. */
-extern const char *DAT_004cf2d0[6][5];  /* "TECH1_SKILL1".. */
+extern const char *DAT_004cf2b0[6];     /* "TECH1_LEVEL". */
+extern const char *DAT_004cf2d0[6][5];  /* "TECH1_SKILL1". */
 extern const char *DAT_004cf350[4];     /* "fire", "ice", "thunder", "dark" */
 }
-/* Interned-string reference (count at p[-1], header at p[-2]); its destructor copy is the retail StringRef at 0x00130720. */
+/* Interned-string reference (count at p[-1], header at p[-2]). */
 struct StringRef {
     char *p;
     StringRef(char *s) { p = s; }
@@ -146,7 +125,7 @@ struct StringRef {
     }
 };
 
-/* The helpers are static members so the one-function unit split keeps them. */
+/* The helpers are static members so a split of the unit at its top-level definitions keeps them. */
 struct StatHelpers {
     static inline void release_ref(igObject *object)
     {
@@ -157,7 +136,6 @@ struct StatHelpers {
         }
     }
 
-    /* Lazily fetched database handles, cached on the GAMERAM object. */
     static inline igObject *shinka(beNDMWGameRam *g)
     {
         if (!g->_dBShinka) {
@@ -227,7 +205,6 @@ extern "C" void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply
     if (curHp == 0) first = 1;
     if (curHp == 0 || mhp < curHp) igProperty_GetRecord(player, PROP_HP)->value = mhp;
 
-    /* MMP / MP: a fresh player (HP was unset) also gets full MP */
     int mmp = FUN_003fa3b0(self, index, -1, 0);
     if (apply) {
         FUN_003fa120(self, player, &mmp, PROP_MAXMP, 0);
@@ -238,7 +215,6 @@ extern "C" void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply
     int curMp = igProperty_GetRecord(player, PROP_MP)->value;
     if (first || mmp < curMp) igProperty_GetRecord(player, PROP_MP)->value = mmp;
 
-    /* attributes: database value (+ UPDATA - DOWNDATA) then the modifiers */
     int tsuyosa = FUN_003fa850(self, index, -1, 0);
     tsuyosa += FUN_003a9250(player, PROP_UPDATA)->obj->v[4];
     tsuyosa -= FUN_003a9250(player, PROP_DOWNDATA)->obj->v[4];
@@ -295,7 +271,6 @@ extern "C" void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply
     CLAMP_ATTR(subayasa)
     igProperty_GetRecord(player, PROP_SUBAYASA)->value = subayasa;
 
-    /* element resistances: species row + UPCNT + UPDATA, then the modifiers */
     int fire = beDataBase_GetRecordInt(SHINKA(self), species, PROP_RES_FIRE);
     fire += FUN_003a9250(player, PROP_UPCNT)->obj->v[7];
     fire += FUN_003a9250(player, PROP_UPDATA)->obj->v[7];
@@ -337,8 +312,6 @@ extern "C" void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply
     CLAMP_ATTR(dark)
     igProperty_GetRecord(player, PROP_YAMITEIKO)->value = dark;
 
-    /* WAZALIST: drop the old technique objects, then add the highest unlocked
-     * rank of every technique whose level threshold is reached. */
     {
         igObjectList *list = igProperty_GetRecordFolder(player, PROP_WAZALIST)->list;
         int oldCount = list->_count;
@@ -416,8 +389,6 @@ extern "C" void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply
         FUN_003fa2c0(self, player, &luckRate, PROP_LUCKRITSU, 0);
         igProperty_GetRecord(player, PROP_LUCKRITSU)->value = luckRate;
 
-        /* weapon element: index of the first equipped power pocket item whose
-         * ZOKUSEI names one of fire/ice/thunder/dark, otherwise -1 */
         { IntRec *zokusei = igProperty_GetRecord(player, PROP_ATTACKZOKUSEI); zokusei->value = -1; }
         found = 0;
         int pocketCount = igProperty_GetRecordFolder(player, PROP_POWERPOCKET)->list->_count;
@@ -463,8 +434,6 @@ extern "C" void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply
         igProperty_GetRecord(player, PROP_WEAPONRECNO)->value = weaponRec;
         igProperty_GetRecord(player, PROP_WEAPONSKILLNO)->value = weaponSkill;
 
-        /* POWERSOCKETNAME: replace every old name with an empty interned
-         * string, then store the MODEL string of each socket item. */
         sockets = igProperty_GetRecordFolder(player, PROP_POWERSOCKET)->list;
         names = FUN_003a9310(player, PROP_POWERSOCKETNAME)->list;
         int nameCount = names->_count;

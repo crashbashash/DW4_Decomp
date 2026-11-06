@@ -21,19 +21,17 @@ extern unsigned char GPR_00554c14;
 #define RETAIN_REF(q) { igObject *rr = (q); if (rr) ++rr->_refCount; }
 #define RELEASE_REF(q) { igObject *rr = (q); \
     if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
-/* Owning stack reference to the receiver group: holds the found (retained) or freshly created group
- * for the duration of the registration and releases it on scope exit (reference count in the low 23
- * bits of _refCount).  The out-of-line copy the exception table names is the retail body 0x0038d7a0
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__8GroupRefFv). */
+/* Owning stack reference to the receiver group: holds the found (retained) or freshly created
+ * group for the duration of the registration and releases it on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class GroupRef {
 public:
     beMessengerGroup *p;
     GroupRef(beMessengerGroup *g) : p(g) {}
     ~GroupRef() { beMessengerGroup *g = p; if (g != 0) { --g->_refCount; if ((g->_refCount & 0x7fffff) == 0) igObject_Destroy(g); } }
 };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     const char *p;
@@ -41,7 +39,6 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" void StringList_AppendRetained(void *, const StringRef &);
-/* string-pool intern (the pool singleton is created on first use) */
 struct Str { static inline const char *intern(const char *text) {
     const char *token;
     if (text == 0) {
@@ -67,7 +64,6 @@ extern "C" void beMessenger_RegisterReceiver(beMessenger *self, void *recv, cons
     if (grp.p == 0) {
         allocator = igObject_GetAllocator(self);
         allocator = GPR_00554c14 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        /* no group of that name yet: drop the (null) found reference and take over the new group */
         RELEASE_REF((igObject *)grp.p)
         grp.p = (beMessengerGroup *)beMessengerGroup_Create(allocator);
         igNamedObject_SetName(grp.p, name);
@@ -75,7 +71,6 @@ extern "C" void beMessenger_RegisterReceiver(beMessenger *self, void *recv, cons
     }
     ObjectList_AppendRetained((void *)grp.p->_ramList, recv);
     {
-        /* the group's name list takes its own share of the interned text */
         const char *token = Str::intern(text);
         StringList_AppendRetained((void *)grp.p->_infoNameList, StringRef(token));
     }

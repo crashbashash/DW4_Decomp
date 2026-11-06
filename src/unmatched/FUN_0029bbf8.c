@@ -1,5 +1,3 @@
-/* Walks 18-byte records until FUN_0026d2e8 reports a hit (sets *found) or length is exhausted;
- * returns the byte offset reached. */
 int FUN_0026d2e8();
 
 /* Scans `length` bytes of 18-byte records; stops at the first one FUN_0026d2e8 accepts. */

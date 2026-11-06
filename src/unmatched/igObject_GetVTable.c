@@ -1,4 +1,3 @@
-/* stack-object GetVTable accessor without vtable store.py. */
 int igObject_InitHeader(void *);
 extern void * DAT_00586dc8[4];
 int igObject_GetVTable(void) {

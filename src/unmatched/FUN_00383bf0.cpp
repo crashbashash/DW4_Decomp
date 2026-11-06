@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* Receiver by the matched caller FUN_00383420 (it passes its beFont): +36 _fonts (glyph list), +40 _fontIdx, +48 _lineFeedList, +52 _alignList. */
+/* arg0 is the beFont: +36 _fonts (glyph list), +40 _fontIdx, +48 _lineFeedList, +52 _alignList. */
 extern "C" {
 typedef union U { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U;
 typedef struct IntList { char p0[8]; int count; int cap; int *data; } IntList;

@@ -20,7 +20,7 @@ void FUN_0027e748(int svtype, unsigned int id, void *function, void *object) {
     if (id >= 6) {
         FUN_0027e398(text_1071201_SVM_SetCbSvrId_illegal_id);
     }
-    if (svtype < 0 || (int)id >= 8) {   /* the retail bytes test id here, not svtype */
+    if (svtype < 0 || (int)id >= 8) {   /* Retail tests id here, not svtype. */
         FUN_0027e398(text_1071202_SVM_SetCbSvrId_illegal_svtype);
     }
     FUN_0027e1c0();

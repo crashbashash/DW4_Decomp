@@ -1,4 +1,5 @@
-/* 0x003734b0 - 264 bytes. Sibling of DMchkSD_44 with one argument less: dispatches a name to one of two modes (two accepted spellings each); alternate compiler -O3,p. */
+/* Sibling of DMchkSD_44 with one argument less: dispatches a name to one of two modes (two
+ * accepted spellings each). */
 extern "C" {
 int FUN_0037e3a0(int, int, int, int, int, int, int, int);
 int igStrCmp(int *, int);

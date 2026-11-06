@@ -1,4 +1,5 @@
-/* 0x002dd000 - igEventTracker vfunc_24. Busy flag read through a volatile access into a boolean local; 0 <= cap and !(0 < cnt) spellings give the slt at / slt v0 forms; vcall at 100. Alternate -O3. */
+/* The busy flag is read through a volatile access into a boolean local; the spellings `0 <= cap`
+ * and `!(0 < cnt)` give the slt at / slt v0 forms. */
 extern "C" {
 int FUN_002d3950(int);
 int FUN_002dcaa0(void *, int);

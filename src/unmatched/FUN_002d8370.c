@@ -1,4 +1,4 @@
-/* 0x002d8370 - 64 bytes. Bounds-checked table lookup; the lower bound is spelled `arg1 <= -1` so it fuses to slti at. */
+/* The lower bound is spelled `arg1 <= -1` so it fuses into slti at. */
 int FUN_002d8370(void *arg0, int arg1) {
     void *temp_a0;
     if (!(arg1 <= -1)) {

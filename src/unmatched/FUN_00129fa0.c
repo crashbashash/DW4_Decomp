@@ -1,6 +1,5 @@
 /* Stream read hook: reads through FUN_00129008 on the stream's file and, on success, advances the
- * stream's offset (+80); on failure clears the offset-valid flag 0x1000. The shape of newlib's
- * __sread (hypothesis; installed by FUN_00124f28). */
+ * stream's offset (+80); on failure clears the offset-valid flag 0x1000. */
 typedef struct Stream129fa0 {
     char pad0[12];
     unsigned short flags;   /* +12: 0x1000 = offset (+80) is valid */

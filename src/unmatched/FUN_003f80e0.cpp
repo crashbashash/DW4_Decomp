@@ -1,7 +1,7 @@
 /* Index of the evolution-database record whose name string is the interned copy of arg1 (0..15),
  * or 0; the database object is fetched from the messenger on first use. The interned name lives in
  * a StringRef for the whole search (released at both exits); the record compare is a pointer
- * compare of the pooled tokens. alternate compiler -O3,p */
+ * compare of the pooled tokens. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(int);
@@ -19,9 +19,8 @@ extern int DAT_00519438[4];
 extern int DAT_00586f20[4];
 int FUN_003f80e0(beNDMWGameRam *arg0, int arg1);
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     char *p;

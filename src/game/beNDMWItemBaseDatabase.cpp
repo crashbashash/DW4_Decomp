@@ -1,20 +1,7 @@
-/* src/game/beNDMWItemBaseDatabase.cpp — the beNDMWItemBase database accessors, one translation
- * unit in retail address order: 0x00447bc0 beNDMWItemBase_RequestDataBase ask the status messenger
- * for the item DATABASE 0x00447c10 beNDMWItemBase_GetRecordInt record value lookups through the
- * 0x00447c60 beNDMWItemBase_GetRecordBool database-for-status virtual 0x00447cb0
- * beNDMWItemBase_GetRecordString 0x00448640 Gap__Bec__beNDMWItemAbilityChip__vfunc_21 the "abChip"
- * database selector The retail unit at 0x00447bc0 was C++ with exceptions on (its four functions
- * keep exception index records). RequestDataBase and the AbilityChip selector used to live in
- * beNDMWItemBaseDatabase.c; they now compile here as C++ under that profile, which also reproduces
- * RequestDataBase's record. The AbilityChip selector belongs to a separate retail unit
- * (beNDMWItemAbilityChip_448640 in config/SLUS-20836/units.tsv); the build resolves each
- * function's profile by address. The whole unit keeps C linkage. Return contracts are explicit.
- * The selector's empty assembler directive retains JAL/return rather than a tail transfer without
- * emitting a word (matching construct). The dispatch-only class models raw vtable slot 92; it does
- * not claim the original class declaration or field layout. */
+/* The selector's empty assembler directive keeps JAL/return rather than a tail transfer without
+ * emitting a word (matching construct). */
 #include "dw4/reflected.h"
 extern "C" {
-/* "DATABASE", "GETDATABASE" and "abChip" (strings read from the ELF). */
 extern char DATABASE_2[], GETDATABASE_2[], abChip[];
 void beMessenger_SendNamed(void *, const char *, const char *, int, const char *);
 void *beMessenger_GetObject(void *, int);
@@ -54,8 +41,8 @@ class ItemDatabaseDispatch {
     virtual beDataBase *databaseForStatus(beNDMWStatus *);
 };
 
-/* 0x00447bc0: send "DATABASE <name>" / "GETDATABASE" to the status messenger and return
- * the database object it answers with. */
+/* Send "DATABASE <name>" / "GETDATABASE" to the status messenger and return the database object it
+ * answers with. */
 beDataBase *beNDMWItemBase_RequestDataBase(beNDMWItemBase *self, beNDMWStatus *status,
                                            const char *name) {
     void *messenger = (void *)status->_messenger;
@@ -63,26 +50,23 @@ beDataBase *beNDMWItemBase_RequestDataBase(beNDMWItemBase *self, beNDMWStatus *s
     return (beDataBase *)beMessenger_GetObject(messenger, 0);
 }
 
-/* 0x00447c10 */
 long long beNDMWItemBase_GetRecordInt(beNDMWItemBase *self, beNDMWStatus *status, const char *key) {
     return beDataBase_GetRecordInt(((ItemDatabaseDispatch *)self)->databaseForStatus(status),
                                    self->_recNo, key);
 }
 
-/* 0x00447c60 */
 unsigned long long beNDMWItemBase_GetRecordBool(beNDMWItemBase *self, beNDMWStatus *status,
                                                 const char *key) {
     return beDataBase_GetRecordBool(((ItemDatabaseDispatch *)self)->databaseForStatus(status),
                                     self->_recNo, key);
 }
 
-/* 0x00447cb0 */
 char *beNDMWItemBase_GetRecordString(beNDMWItemBase *self, beNDMWStatus *status, const char *key) {
     return beDataBase_GetRecordString(((ItemDatabaseDispatch *)self)->databaseForStatus(status),
                                       self->_recNo, key);
 }
 
-/* 0x00448640: the ability-chip item's database is the "abChip" table. */
+/* The ability-chip item's database is the "abChip" table. */
 beDataBase *Gap__Bec__beNDMWItemAbilityChip__vfunc_21(beNDMWItemAbilityChip *self,
                                                       beNDMWStatus *status) {
     beDataBase *result = beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, abChip);

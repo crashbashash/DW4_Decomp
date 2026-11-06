@@ -1,6 +1,3 @@
-/* 0x001a6460 igAppearance_Register: registers class igAppearance with the object system, derived from igNamedObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igNamedObject_GetPublishedMetaObject[];
 extern char igAppearance_GetVTable[];
 extern char thunk_igAppearance_GetMetaObject[];
@@ -15,16 +12,16 @@ int igAppearance_InitFields();
 void igAppearance_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAppearance_metaObject,            /* published MetaObject slot */
-        igNamedObject_Register,                        /* base class registrar */
-        igNamedObject_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igAppearance_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        igAppearance_className,             /* class name */
-        0x20,                                          /* instance size */
-        igAppearance_GetVTable,                        /* vtable getter */
-        &igAppearance_InitFields,                      /* field adder */
-        0,                                             /* extra callback item */
-        g_igAppearance_callbackList           /* callback list */
+        0, /* abstract */
+        g_igAppearance_metaObject,
+        igNamedObject_Register,
+        igNamedObject_GetPublishedMetaObject,
+        thunk_igAppearance_GetMetaObject,
+        igAppearance_className,
+        0x20, /* instance size */
+        igAppearance_GetVTable,
+        &igAppearance_InitFields,
+        0, /* extra callback item */
+        g_igAppearance_callbackList /* callback list */
     );
 }

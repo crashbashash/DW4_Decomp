@@ -4,7 +4,6 @@ int FUN_00236f80(int, int);
 int igObject_Destroy(igDataList *);
 extern int DAT_00589208[4];
 }
-/* _wkMatOnList/_wkMatOldOnList are igDataList-layout lists (hypothesis): +4 refcount, +8 count */
 extern "C" {
 void Gap__Bec__beMatCtrl__vfunc_32(beMatCtrl *arg0);
 }

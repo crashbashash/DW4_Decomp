@@ -6,7 +6,7 @@ typedef struct Object_261c88 {
     signed char state;  /* 0x01: 2 = running (FUN_00262118 is called first) */
     char pad2[2];
     void *handle;       /* 0x04 */
-    char rest[60];      /* record is 0x44 bytes */
+    char rest[60];
 } Object_261c88;
 
 void FUN_00260c20(int event, int phase, void *object, int a3, int a4);

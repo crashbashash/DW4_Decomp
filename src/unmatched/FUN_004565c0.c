@@ -1,4 +1,3 @@
-/* Recursive walk to the first node whose entry has the flag byte set. */
 void *FUN_004565c0(int arg0, void *arg1) {
     if (arg1 == 0) {
         return 0;

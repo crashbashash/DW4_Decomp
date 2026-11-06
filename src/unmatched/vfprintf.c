@@ -1,5 +1,5 @@
 /* Binds the stream to the current reent block and runs the one-time stdio setup if needed, then
- * formats through FUN_0012d640 (newlib vfprintf with CHECK_INIT). */
+ * formats through FUN_0012d640. */
 typedef __builtin_va_list va_list;
 
 typedef struct Reent {

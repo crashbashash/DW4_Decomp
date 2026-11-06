@@ -2,7 +2,6 @@
 int memset();
 int Gap__Core__igProgramFile__vfunc_23();
 
-/* igElfFile vtable slot 23 (reset): receiver is igElfFile. */
 void FUN_00320af0(igElfFile *arg0) {
     Gap__Core__igProgramFile__vfunc_23();
     memset(arg0->_header, 0, 0x34);

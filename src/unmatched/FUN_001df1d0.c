@@ -1,6 +1,5 @@
-/* Divides two fixed-point rates read as unsigned (value >> 18 converted unsigned-int to float,
- * which yields the srl/andi/or fixup), stores the integer quotient and quotient+1 and the
- * fractional part via the float helper; alternate compiler -O3. */
+/* The rates are read as unsigned, so the unsigned-int to float conversion yields the srl/andi/or
+ * fixup. */
 typedef struct B { char pad[16]; long long *p; } B;
 typedef struct A { char pad[56]; B *b; } A;
 float FUN_00123658(float, float);

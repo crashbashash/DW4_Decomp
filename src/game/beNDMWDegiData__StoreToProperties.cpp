@@ -1,11 +1,7 @@
-/* Copy a saved-record block (arg0->saved) into the property tree arg1. Build: alternate (combat)
- * compiler, "-O3,p -Iinclude"; unit-objects row with the two holder destructor copies and the
- * exception record. Matching constructs (not original source): the held item/chunk objects are
- * RAII holders (ChunkRef, ItemRef) so the unwind table names retail's destructor copies; the sp184
- * slot is volatile so each use reloads from the stack; the list-empty test reads `count` through a
- * volatile int so the loop-bound load stays separate. The property folders/arrays are reflected
- * igObjectList / igUnsignedCharList / igIntList (the _data arena handle is cast to the element
- * pointer at each use). */
+/* Copy a saved-record block (arg0->saved) into the property tree arg1.
+ * Matching constructs: the held item/chunk objects are RAII holders (ChunkRef, ItemRef) so the unwind
+ * table names the right destructors; the sp184 slot is volatile so each use reloads from the stack;
+ * the list-empty test reads `count` through a volatile int so the loop-bound load stays separate. */
 #include "dw4/reflected.h"
 extern "C" {
 struct Obj { int word0; int references; };

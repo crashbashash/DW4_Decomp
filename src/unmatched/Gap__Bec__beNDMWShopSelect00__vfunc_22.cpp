@@ -11,10 +11,9 @@ extern int DAT_0051c4a0[4];
 extern int DAT_0051c4b0[4];
 extern int DAT_00586f20[4];
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit; the second constructor takes a new share of an existing token.
- * The out-of-line copy the exception table names is the retail body StringRef_Destruct_00130720
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]): releases the token on scope exit; the second constructor takes a new share of an
+ * existing token. */
 class StringRef {
 public:
     char *p;
@@ -23,7 +22,6 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
-/* string-pool intern (the pool singleton is created on first use) and the release of a stored token */
 struct Str { static inline int intern(int *s) {
     int ref;
     int pool;

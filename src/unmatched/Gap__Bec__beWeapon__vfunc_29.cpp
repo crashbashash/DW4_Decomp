@@ -1,7 +1,6 @@
-/* Register the weapon with the messenger. On the first call the attach-data list (FUN_0033f8b0
- * creates it) is built with four attach-data objects (FUN_0033fa80) before the receiver is
- * registered from the weapon's info table. The new list and each new element live on the stack in
- * owning references whose releases the retail exception table records. */
+/* Registers the weapon with the messenger. On the first call the attach-data list is built with
+ * four attach-data objects before the receiver is registered from the weapon's info table. The new
+ * list and each new element live on the stack in owning references. */
 #include "dw4/reflected.h"
 extern "C" {
 igObject *FUN_0033f8b0(int);
@@ -15,18 +14,15 @@ extern int DAT_0050fbf0[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the new attach-data list: constructed from the creating call and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table
- * names is the retail body 0x0033f6d0 (config/SLUS-20836/unit-objects.json, duplicate __dt__7ListRefFv). */
+/* Owning stack reference to the new attach-data list, released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class ListRef {
 public:
     igObject *p;
     ListRef(igObject *o) : p(o) {}
     ~ListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to one new attach-data element: released at the end of each loop pass.  The
- * out-of-line copy the exception table names is the retail body 0x003a19d0 (config/SLUS-20836/unit-objects.json,
- * duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to one new attach-data element, released at the end of each loop pass. */
 class ObjectRef {
 public:
     igObject *p;

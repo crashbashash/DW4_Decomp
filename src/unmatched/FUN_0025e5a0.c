@@ -1,6 +1,6 @@
 /* Reports the frames produced since the last report (f148 minus f244, wrapped into 0..0x7FFFFFFF)
  * and the byte size from f144 to the callback in f252, then records f148 as reported. */
-/* CRI ADX decoder block as this function touches it; field meanings are not yet known */
+/* CRI ADX decoder block, limited to the fields this function touches. */
 typedef struct DecoderBlock {
     short f0;
     short state;

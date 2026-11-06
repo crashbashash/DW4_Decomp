@@ -1,4 +1,4 @@
-/* 0x0015e160 - 224 bytes. Packs three flag bits and three nibbles; in-place `t &= 0xFF; t <<= n;` and `v &= mask; v |= t;` keep one web per variable. */
+/* In-place `t &= 0xFF; t <<= n;` and `v &= mask; v |= t;` keep one web per variable. */
 int FUN_0015e130();
 void FUN_0015e160(unsigned int *arg0, unsigned int arg1) {
     unsigned int v;

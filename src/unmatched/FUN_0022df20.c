@@ -1,4 +1,3 @@
-/* 0x0022df20 - 188 bytes. Two dynamic casts (null-or-wrong-class gives 0) then a copy between the two objects' fields. */
 int igObject_IsKindOf();
 extern int DAT_00586598[4];
 int FUN_0022df20(void *arg0, int arg1, void *arg2, int arg3) {

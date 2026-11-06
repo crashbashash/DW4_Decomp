@@ -40,15 +40,15 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow.
 
-**1,140** of the 16,864 matched functions are readable: **199,224** code bytes, **5.8 %** of the code.
+**1,938** of the 16,864 matched functions are readable: **285,636** code bytes, **8.2 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 11,957 | 1,528,236 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 13,396 | 1,961,644 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,598 | 1,875,232 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,249 | 852,316 |
 | it sits in its class or module file, not `src/unmatched/` | 12,083 | 1,762,044 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 9,576 | 1,720,960 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 9,561 | 1,720,600 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,513 | 1,202,608 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,045 | 700,148 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,115 | 367,336 |
@@ -86,7 +86,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 5,676 | 5,670 | -6 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 43 | 43 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 76,141 | 76,122 | -19 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 76,141 | 76,077 | -64 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 369 | 369 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 84,160 | 84,160 | 0 | bytes of those |
 | `orphan.bytes` | 17,832 | 17,832 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |

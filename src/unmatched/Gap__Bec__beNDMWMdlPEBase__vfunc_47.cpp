@@ -38,10 +38,8 @@ class VC140 { public: virtual void d0(); virtual void d1(); virtual void d2(); v
 #define SETB(L, I, V) if (((BList *)(L))->size != 0 && (I) >= 0 && (I) < ((BList *)(L))->size) ((BList *)(L))->data[I] = (V);
 #define RELEASE(o) if ((o) != 0) { (o)->references = (o)->references - 1; if (((unsigned long long)((long long)(o)->references << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
 #define GI(i) beMessenger_GetInt(self->_messenger, i)
-/* Owning stack reference to the freshly created property data list: constructed from the object and
- * released at the end of the full expression that stores it (reference count in the low 23 bits of
- * references).  The out-of-line copy the exception table names is the retail body 0x0033e9c0
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__7ListRefFv). */
+/* Owning stack reference to the freshly created property data list; released at the end of the
+ * full expression that stores it (reference count in the low 23 bits of references). */
 class ListRef {
 public:
     List *p;
@@ -50,15 +48,14 @@ public:
 };
 /* Owning stack reference that carries each new int list of the work while it is sized and filled:
  * starts empty, is handed one created list after another (MKLIST drops the previous one first) and
- * releases the last on scope exit.  The out-of-line copy the exception table names is the retail body
- * 0x00150eb0 (config/SLUS-20836/unit-objects.json, duplicate __dt__10IntListRefFv). */
+ * releases the last on scope exit. */
 class IntListRef {
 public:
     List *p;
     IntListRef(List *o) : p(o) {}
     ~IntListRef() { List *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Same role for the work's bool list; retail body 0x00226990 (duplicate __dt__11BoolListRefFv). */
+/* Same role for the work's bool list. */
 class BoolListRef {
 public:
     List *p;
@@ -76,8 +73,6 @@ struct DataList { static inline void store(Model *obj, const ListRef &list) {
     RELEASE(old)
     obj->props = created;
 } };
-/* create a list with CT in the holder H (dropping the list H held before, as retail does before the
- * create call) and give the work field F its own share of it */
 #define MKLIST(H, F, CT) { int a = igObject_GetAllocator(self); a = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); { List *u = H.p; RELEASE(u) } H.p = (List *)CT(a); { List *c = H.p; if (c != 0) c->references = c->references + 1; { List *old = W(F); RELEASE(old) } w->F = (int)c; } }
 #define SIZEIT(F, N, ES) { List *l = W(F); if (l->size < (N) + 1) List_Reserve(l, N, ES); } { List *l = W(F); if (l->cap >= (N)) l->size = N; else List_Resize(l, N, ES); }
 #define FILLI(F, DAT) { int n = W(F)->size; int *d = W(F)->data; int j; for (j = 0; j < n; j++) d[j] = DAT[0]; }

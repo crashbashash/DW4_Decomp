@@ -1,15 +1,6 @@
 #include "dw4/reflected.h"
-/* 0x003a8580 FUN_003a8580 (472 bytes): remove the property named `name` from the
- * list stored at +40 of the receiver.  The list is created on demand (dead in
- * retail because the outer test already requires it), the property is looked up
- * with igProperty_FindByName, its slot is found with an inlined linear IndexOf
- * (the inline return is what makes retail's 'bne; nop; b' layout), released,
- * removed and the vacated tail slot cleared.
- * Build: unit profile (combat -O3,p, exceptions on); the unit-objects entry names
- * the releasing RP destructor copy (retail 0x0033e9c0) as a duplicate. */
-/* Receiver beBaseInfoRam (_dataList at +40, a 4-byte handle to an igObjectList of
- * refcounted igProperty records; _data is the igMemoryRef element array).  The
- * inlined linear IndexOf is a member-less helper over the reflected list. */
+/* Receiver beBaseInfoRam: _dataList at +40 is a 4-byte handle to an igObjectList of refcounted
+ * igProperty records; _data is the igMemoryRef element array. */
 /* matching construct: volatile stack slot -- retail keeps the looked-up property in a frame slot (sw 72(sp)) that
  * holds no reference, so it has no cleanup action; the slot is read once, after the empty-list guard, and the read
  * is hoisted out of the search loop (lw 72(sp) before the loop head). */
@@ -42,7 +33,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 struct RP { igObject *p; RP(igObject *x) { p = x; } ~RP() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
-/* Stack slot that keeps the looked-up property addressable; it holds no reference, so retail has no cleanup for it. */
+/* Stack slot that keeps the looked-up property addressable; it holds no reference, so it needs no
+ * cleanup. */
 extern "C" void FUN_003a8580(beBaseInfoRam *self, char *name) {
     igObjectList *l1;
     int idx;

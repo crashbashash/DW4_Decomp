@@ -1,6 +1,4 @@
-/* FUN_00121cf0 -- fdlibm atan(x): arctangent. The argument is reduced to |x| < 7/16 with
- * atan(0.5), atan(1.0), atan(1.5), atan(inf) offsets, then an 11-term polynomial is split into odd and
- * even parts (s1, s2). Tables at 0x4d3bb0 (atanhi), 0x4d3bd0 (atanlo), 0x4d3bf0 (aT). */
+/* fdlibm atan(x). */
 #include "dw4/ieee_words.h"
 
 extern double FUN_00122538(double); /* fabs */

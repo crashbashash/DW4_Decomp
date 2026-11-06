@@ -1,4 +1,4 @@
-/* 2 KiB stack buffer; the limit is compared as '> 0x7FF' so the slti result stays in at. */
+/* The limit is compared as `> 0x7FF` so the slti result stays in at. */
 int FUN_0012fde0();
 int FUN_0030b320();
 

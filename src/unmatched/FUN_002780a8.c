@@ -1,6 +1,6 @@
 /* Opens a file by name: rejects a NULL name or a non-zero rw mode, takes a free handle
  * (FUN_00277fc0), copies the name to +28 and initialises it (FUN_00278038); failures are reported
- * through FUN_00277de8 and return 0. Its error strings name it mfCiOpen (CRI), a name hypothesis. */
+ * through FUN_00277de8 and return 0. */
 typedef struct MfCi_2780a8 {
     char pad0[28];
     char name[1];   /* 0x1c */

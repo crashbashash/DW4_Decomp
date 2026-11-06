@@ -1,6 +1,7 @@
-/* Speed / Power / Resist buff receiver of the player and enemy model work (beNDMWMdlPEBase): message handler Gap::Bec::beNDMWMdlPEBase::vfunc_47
- * (0x445d10, messages SETSPEEDUP / SETPOWERUP / SETREFRACT) and per-frame update vfunc_46 (0x443bd0), from retail disassembly. Self-consistency
- * tested only (`check-fieldstage buffapply`); not compared against a running game. docs/combat.md, "Buff application, timers and expiry". */
+/* Speed / Power / Resist buff receiver of the player and enemy model work (beNDMWMdlPEBase):
+ * message handler Gap::Bec::beNDMWMdlPEBase::vfunc_47 (0x445d10, messages SETSPEEDUP / SETPOWERUP
+ * / SETREFRACT) and per-frame update vfunc_46 (0x443bd0), from retail disassembly. Self-
+ * consistency tested only; not compared against a running game. */
 #ifndef DW4_BUFFAPPLY_H
 #define DW4_BUFFAPPLY_H
 #include <stddef.h>

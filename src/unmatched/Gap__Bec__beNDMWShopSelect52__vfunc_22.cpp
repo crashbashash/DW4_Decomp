@@ -1,8 +1,4 @@
 #include "dw4/reflected.h"
-/* String-pool intern, old name read after the intern call, typed members; alternate compiler
- * -O3,p. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_002eb010(int);
 int StringChunk_ReleaseHeader(int, int *);
@@ -38,4 +34,4 @@ void Gap__Bec__beNDMWShopSelect52__vfunc_22(beNDMWShopSelect52 *arg0) {
     arg0->_startPoint = arg0->_entCode - 1;
     arg0->_isNoCancel = 0;
 }
-} /* extern "C" */
+}

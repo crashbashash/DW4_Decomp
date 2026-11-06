@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_00236f80(int, int);
 int igObject_IsKindOf(int, int);
@@ -13,4 +11,4 @@ void beNDMWWindow_RunMessageScript(int *arg0, int arg1, int arg2) {
     DAT_0058a220[0] = arg2;
     beLua__RunNamedChunk(var_s0, arg1, 0);
 }
-} /* extern "C" */
+}

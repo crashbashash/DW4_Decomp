@@ -1,10 +1,7 @@
-/* 0x00145040 — igPsx2AudioContext slot 53: store a 64-byte-aligned value in
- * word 1 of one entry of the context's shared 36-byte table (the table that
- * the other audio slots index by the same entry number, e.g. FUN_00144030).
- * A value that is not a multiple of 64 is ignored; the mask on the store is
- * then a no-op but is kept as retail has it.  FUN_00144030 later sends that
- * word shifted left by 8 in an IOP RPC command, so it is an address-like
- * quantity, not a count. */
+/* Stores a 64-byte-aligned value in word 1 of one entry of the context's shared 36-byte table (the
+ * table the other audio slots index by the same entry number). A value that is not a multiple of
+ * 64 is ignored; the mask on the store is then a no-op but is kept. The word is later sent shifted
+ * left by 8 in an IOP RPC command, so it is an address-like quantity, not a count. */
 
 /* One 36-byte table entry; only word 1 is touched here. */
 typedef struct AudioTableEntry {
@@ -13,9 +10,9 @@ typedef struct AudioTableEntry {
     char unknown8[28];
 } AudioTableEntry;
 
-/* The table owner: the table's base address sits at +16.  It is kept as a byte
- * pointer because the retail instruction order (load base, then scale the
- * index) only comes out of byte-offset arithmetic, not entries[index]. */
+/* The table owner: the table's base address sits at +16. It is kept as a byte pointer because the
+ * instruction order (load base, then scale the index) only comes out of byte-offset arithmetic,
+ * not entries[index]. */
 typedef struct AudioTableOwner {
     char unknown0[16];
     char *entries;

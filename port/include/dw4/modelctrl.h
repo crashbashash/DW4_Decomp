@@ -188,9 +188,10 @@ int64_t dw4_modelctrl_time(const dw4_modelctrl *);
 const char *dw4_modelctrl_error(const dw4_modelctrl *);
 int dw4_modelctrl_service(void *,const char *,const dw4_script_value *,size_t,
     dw4_script_value *,char *,size_t);
-/* Status ailments (beNDMWMdlPEBase work; docs/combat.md "Status wiring"). Enemies and players own a dw4_status; the SETxxx / CLEARSTATUS /
- * ALLCLEARSTATUS service messages and the CHECKSTATUS query reach it, the sequence-change hook (FUN_00445200) runs after every sequence set.
- * NULL for models without one (objects, NPCs, bullets). */
+/* Status ailments (beNDMWMdlPEBase work). Enemies and players own a dw4_status; the SETxxx /
+ * CLEARSTATUS / ALLCLEARSTATUS service messages and the CHECKSTATUS query reach it, the sequence-
+ * change hook (FUN_00445200) runs after every sequence set. NULL for models without one (objects,
+ * NPCs, bullets). */
 const dw4_status *dw4_modelctrl_status(const dw4_modelctrl *);
 /* A player's stat lists live in its game-RAM record: the host loads them into the status before every message/tick/hook and stores them
  * back (and recalculates the player) afterwards. `store` gets the message or tick result (recalc_player, killed). Borrowed; NULL detaches. */

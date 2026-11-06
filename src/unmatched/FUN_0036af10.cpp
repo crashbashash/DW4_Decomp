@@ -4,7 +4,6 @@ void FUN_0036afa0(void);
 extern igMetaObject *DAT_00589e00[4];
 void *FUN_0036af10(void);
 }
-/* beBaseInfoDataList's class meta-object, registering it first unless validity bit 2 says it is ready. */
 void *FUN_0036af10(void) {
     igMetaObject *g = DAT_00589e00[0];
     int ready;

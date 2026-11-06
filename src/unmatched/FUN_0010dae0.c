@@ -1,4 +1,3 @@
-/* Calls FUN_0010d460, then clears the word D_00481e70. */
 void FUN_0010d460(void);
 extern int D_00481e70;
 

@@ -1,6 +1,6 @@
 /* Resets a record: three 64-bit fields to 0, INT64_MAX, 0 and the word at +24 to 0. */
 
-/* The sd stores show 64-bit members (long is 64-bit under EE GCC). */
+/* Members are 64-bit (long is 64-bit under EE GCC). */
 struct Rec1C {
     long f0;
     long f8;                              /* reset to the largest positive 64-bit value */

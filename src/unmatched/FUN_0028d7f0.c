@@ -1,6 +1,3 @@
-/* Walks the slot table of the global manager and runs FUN_0028dc28 on every slot that
- * is not in state 1, then performs the two follow-up steps. (Hypothesis: the CRI
- * per-instance table; slot stride is 256 bytes, the count is at +12 of the manager.) */
 typedef struct Slot { int state; char pad[252]; } Slot;
 typedef struct Mgr { char pad[12]; int count; Slot slot[1]; } Mgr;
 

@@ -1,6 +1,6 @@
-/* beDataBase lookups (retail 0x3a93a0 / 0x3a9460 / 0x3a9540 / 0x3a9580) and beDBManager 0x3a9780, over the decomp's typed beDataBase
- * instances in the owner's arena (docs/arena-object-model.md, P1-P3; the accessors are src/arenadb.c). A database holds no copy of
- * its data. See docs/databases.md. Host bounds checks reject retail-unsafe indices. */
+/* beDataBase lookups (retail 0x3a93a0 / 0x3a9460 / 0x3a9540 / 0x3a9580) and beDBManager 0x3a9780,
+ * over the typed beDataBase instances in the owner's arena. A database holds no copy of its data.
+ * Host bounds checks reject retail-unsafe indices. */
 #include "dw4/database.h"
 #include "dw4/arenapack.h"
 #include <stdio.h>
@@ -8,8 +8,8 @@
 #include <string.h>
 
 struct dw4_database {dw4_dbtable typed;char *name;dw4_script_object view;uint64_t token;};
-/* The typed beDataBase instances live in the session arena (docs/arena-object-model.md); the owner returns every block it allocated when
- * it closes. The closure of one database is about 200 KB. */
+/* The typed beDataBase instances live in the session arena; the owner returns every block it
+ * allocated when it closes. The closure of one database is about 200 KB. */
 struct dw4_databases {dw4_database *items;size_t count;dw4_scriptservices *sd;dw4_arena *arena;dw4_arena_owned owned;};
 static char *copy(const char *s)
 {size_t n=strlen(s)+1;char *p=malloc(n);if(p)memcpy(p,s,n);return p;}

@@ -1,12 +1,8 @@
-/* Player HP / MP gauge updates; 0x003f9c80 (408 bytes) and 0x003f9e20 (344 bytes).
- * Both clamp the player's property between 0 and its maximum, then publish the
- * new value to the HUD through METERCTRL (percent) and NUMBERCTRL (value).
- * HP accepts an absolute value (anything but -1) or a delta; a delta on a dead
- * player (HP 0) is ignored and reports failure.  MP is delta only.
- */
+/* Player HP / MP gauge updates. Both clamp the player's property between 0 and its maximum, then
+ * publish the new value to the HUD through METERCTRL (percent) and NUMBERCTRL (value). HP accepts
+ * an absolute value (anything but -1) or a delta; a delta on a dead player (HP 0) is ignored and
+ * reports failure. MP is delta only. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 
 typedef struct PropertyRecord {
@@ -34,7 +30,7 @@ extern const char mpnm[]; /* mpnm */
 /* Sentinel for the `absolute` argument of the HP update: apply `delta` instead. */
 #define NO_ABSOLUTE_HP (-1)
 
-/* 0x003f9c80: HP update.  Returns 0 when a delta is applied to a dead player (HP 0), else 1. */
+/* HP update. Returns 0 when a delta is applied to a dead player (HP 0), else 1. */
 int FUN_003f9c80(beNDMWGameRam *self, int player_index, int delta, int absolute)
 {
     int hp;
@@ -65,7 +61,7 @@ int FUN_003f9c80(beNDMWGameRam *self, int player_index, int delta, int absolute)
     return 1;
 }
 
-/* 0x003f9e20: MP update by delta. */
+/* MP update by delta. */
 void FUN_003f9e20(beNDMWGameRam *self, int player_index, int delta)
 {
     int mp;
@@ -88,4 +84,4 @@ void FUN_003f9e20(beNDMWGameRam *self, int player_index, int delta)
     beMessenger_AppendInt(self->_messenger, mp);
     beMessenger_DispatchSelected(self->_messenger, SETVALUE);
 }
-} /* extern "C" */
+}

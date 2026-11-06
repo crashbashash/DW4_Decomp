@@ -7,7 +7,6 @@ int FUN_0029f880();
 int FUN_0029fb20();
 int FUN_0029fd18();
 
-/* Runs the state-update stages in order and stops at the first one that reports a result. */
 /* matching construct: manual — declared int with no return statement (implicit-int style), which keeps the final call a jal */
 int FUN_0029f200(void *owner, int index, void *state) {
     FUN_0029f2b0(state);

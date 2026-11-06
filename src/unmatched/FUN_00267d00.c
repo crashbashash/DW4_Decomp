@@ -8,7 +8,7 @@ typedef struct Entry_267d00 {
     char pad24[112];
     void *resource;     /* 0x88 */
     char pad140[4];
-} Entry_267d00;         /* 0x90 bytes */
+} Entry_267d00;
 
 extern Entry_267d00 DAT_004a75f0[16];
 void *FUN_00267bb8(int owner);

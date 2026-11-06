@@ -1,4 +1,3 @@
-/* 0x002f2d20 - igMemoryPoolContextInfo vfunc_60: sibling of vfunc_61, child vcall at slot 100. Alternate -O3. */
 extern "C" {
 void *FUN_002c01f0(int);
 void igObject_Destroy(void *);

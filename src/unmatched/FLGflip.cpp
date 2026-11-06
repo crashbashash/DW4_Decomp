@@ -1,5 +1,4 @@
-/* Bounds-checked byte set chosen by the current byte; the byte table is read through a local
- * pointer, the store index added first; alternate compiler -O3,p. */
+/* Bounds-checked byte set chosen by the current byte. */
 #include "dw4/reflected.h"
 extern "C" {
 struct Rec { char pad[12]; igUnsignedCharList *f12; };

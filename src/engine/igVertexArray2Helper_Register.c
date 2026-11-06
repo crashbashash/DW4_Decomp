@@ -1,6 +1,3 @@
-/* 0x0014a650 igVertexArray2Helper_Register: registers class igVertexArray2Helper with the object system, derived from igNamedObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVertexArray2Helper_GetVTable[];
 extern char thunk_igVertexArray2Helper_GetMetaObject[];
 extern char igNamedObject_GetPublishedMetaObject[];
@@ -15,16 +12,16 @@ int igVertexArray2Helper_InitFields();
 void igVertexArray2Helper_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igVertexArray2Helper_metaObject,    /* published MetaObject slot */
-        igNamedObject_Register,                        /* base class registrar */
-        igNamedObject_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igVertexArray2Helper_GetMetaObject,      /* own MetaObject accessor (stored at +0x54) */
-        igVertexArray2Helper_className,     /* class name */
-        0x10,                                          /* instance size */
-        igVertexArray2Helper_GetVTable,                /* vtable getter */
-        &igVertexArray2Helper_InitFields,              /* field adder */
-        0,                                             /* extra callback item */
-        g_igVertexArray2Helper_callbackList   /* callback list */
+        0, /* abstract */
+        g_igVertexArray2Helper_metaObject,
+        igNamedObject_Register,
+        igNamedObject_GetPublishedMetaObject,
+        thunk_igVertexArray2Helper_GetMetaObject,
+        igVertexArray2Helper_className,
+        0x10, /* instance size */
+        igVertexArray2Helper_GetVTable,
+        &igVertexArray2Helper_InitFields,
+        0, /* extra callback item */
+        g_igVertexArray2Helper_callbackList /* callback list */
     );
 }

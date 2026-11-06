@@ -1,6 +1,3 @@
-/* FUN_003baf50 (0x003baf50): lazily creates the singleton when it is missing or its ready flag
- * (bit 2 of the word at +36) is clear, then returns it. Needs the pinned alternate compiler with
- * -O3,p: its branch-target alignment gives the extra nop of the retail body. */
 extern "C" {
 int FUN_003bb040();
 extern void * DAT_0058af98[4];

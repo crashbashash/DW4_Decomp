@@ -1,8 +1,6 @@
-/* 0x00160dc0
- * Predicate on the bound vertex array: true when its igVertexStream exists
- * and that stream's _accessMode is 2 (docs/engine/igvertexarray2helper.md,
- * slot 27).  The enum behind _accessMode is not named in the reflection
- * data, so the value stays a literal. */
+/* Predicate on the bound vertex array: true when its igVertexStream exists and that stream's
+ * _accessMode is 2. The enum behind _accessMode is not named in the reflection data, so the value
+ * stays a literal. */
 #include "dw4/reflected.h"
 int Gap__Core__igVertexArray2Helper__vfunc_27(igVertexArray2Helper *self) {
     int result;

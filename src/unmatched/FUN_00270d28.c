@@ -1,10 +1,10 @@
 /* Returns the name of the device a file-system handle uses, found by matching its interface in the
  * 32-entry device table DAT_0056e220; a NULL handle is reported through FUN_0026f530 and returns
- * 0. Its error string names it cvFsGetDevName (CRI), a name hypothesis. */
+ * 0. */
 typedef struct CvFsDevEntry_270d28 {
     void *device;   /* 0x00: interface table */
     char name[12];  /* 0x04 */
-} CvFsDevEntry_270d28;  /* 0x10 bytes */
+} CvFsDevEntry_270d28;
 
 typedef struct CvFsHandle_270d28 {
     void *device;   /* 0x00 */

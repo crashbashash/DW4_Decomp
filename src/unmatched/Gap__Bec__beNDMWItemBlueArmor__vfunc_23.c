@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x004484b0 - 76 bytes. Same flag-word shape as the yellow armor; alternate compiler -O3,p. */
 int Gap__Bec__beNDMWItemBlueArmor__vfunc_23(beNDMWItemBlueArmor *arg0) {
     int v;
     int r = arg0->_recNo;

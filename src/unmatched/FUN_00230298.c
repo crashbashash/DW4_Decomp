@@ -1,5 +1,5 @@
 /* Widens a float to a double by unpacking it and repacking the fraction 30 bits higher with
- * FUN_00230e20 (fp-bit __extendsfdf2 shape; name is a hypothesis). */
+ * FUN_00230e20. */
 typedef unsigned int USItype __attribute__((mode(SI)));
 typedef unsigned int UDItype __attribute__((mode(DI)));
 typedef float SFtype __attribute__((mode(SF)));

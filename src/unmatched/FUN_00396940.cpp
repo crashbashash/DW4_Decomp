@@ -1,8 +1,6 @@
 #include "dw4/reflected.h"
-/* receiver evidence: arg1 is a beModelCtrlNode2 (+12 _bound ref, +32 _m matrix; the callers pass O3 = node->_node); the lazily created
- * bound is an igAABox (+8 _min, +20 _max), copied from arg2 (an igAABox, e.g. a property's _baseAABox); arg0 is the owning beModelCtrl.
- * igAABox's _min / _max are the reflected igVec3f fields (float[3] in include/dw4/reflected.h), copied as floats.
- * _bound stays a 4-byte handle, so it is cast to igAABox *.  The new box is installed through an owning stack reference. */
+/* _bound stays a 4-byte handle, so it is cast to igAABox *; _min and _max are float[3] and are
+ * copied as floats. */
 extern "C" {
 void igObject_Destroy(igAABox *);
 igAABox *FUN_0018a660(...);
@@ -20,10 +18,8 @@ struct Rel { static inline void go(igAABox *object) {
             igObject_Destroy(object);
     }
 } };
-/* Owning stack reference to the freshly created bound box: constructed from the creating call and released
- * on scope exit once the node holds its own reference (reference count in the low 23 bits of _refCount).
- * The out-of-line copy the exception table names is the retail body 0x00198190 (config/SLUS-20836/unit-objects.json,
- * duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created bound box; released on scope exit once the node
+ * holds its own reference (reference count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igAABox *p;

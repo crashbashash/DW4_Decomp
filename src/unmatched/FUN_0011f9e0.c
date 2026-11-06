@@ -1,6 +1,4 @@
-/* FUN_0011f9e0 -- fdlibm __kernel_cos(x, y): cosine of x + y on |x| <= pi/4 by an even degree-14
- * polynomial (C1..C6); for |x| > 0.3 the result is split around qx = x/4 (or 0.28125) to keep
- * the rounding error below 1 ulp. */
+/* fdlibm __kernel_cos(x, y). */
 #include "dw4/ieee_words.h"
 
 #define one 1.00000000000000000000e+00

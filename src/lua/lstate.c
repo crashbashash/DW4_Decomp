@@ -1,9 +1,7 @@
-/* lstate.c - Lua 4.0.1's global state as the game rewrote it.
- * See Copyright Notice in src/third_party/lua/lua.h.
- *
- * The one change from stock is lua_open's second argument, the memory pool the state allocates
- * from (the only caller is beLuaState's setup). Stock lua.h declares the one-argument lua_open,
- * so this definition is an overload of that declaration. */
+/* lstate.c - Lua 4.0.1's global state as the game rewrote it. See Copyright Notice in lua.h. The
+ * one change from stock is lua_open's second argument, the memory pool the state allocates from
+ * (the only caller is beLuaState's setup). Stock lua.h declares the one-argument lua_open, so this
+ * definition is an overload of that declaration. */
 #include <stdio.h>
 
 #include "lua.h"
@@ -18,7 +16,6 @@
 #include "ltm.h"
 #include "dw4/lua_game_state.h"
 
-
 /*
 ** built-in implementation for ERRORMESSAGE. In a "correct" environment
 ** ERRORMESSAGE should have an external definition, and so this function
@@ -30,7 +27,6 @@ static int errormessage (lua_State *L) {
   fprintf(stderr, "error: %s\n", s);
   return 0;
 }
-
 
 /*
 ** open parts that may cause memory-allocation errors
@@ -50,7 +46,6 @@ static void f_luaopen (lua_State *L, void *ud) {
   lua_ref(L, 1);  /* create registry */
   lua_register(L, LUA_ERRORMESSAGE, errormessage);
 }
-
 
 lua_State *lua_open (int stacksize, igMemoryPoolView *pool) {
   GameLuaState *L = luaM_new(NULL, GameLuaState);
@@ -85,7 +80,6 @@ lua_State *lua_open (int stacksize, igMemoryPoolView *pool) {
   L->GCthreshold = 2*L->nblocks;
   return L;
 }
-
 
 void lua_close (lua_State *L) {
   luaC_collect(L, 1);  /* collect all elements */

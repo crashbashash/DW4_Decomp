@@ -5,7 +5,6 @@ extern "C" void FUN_001af510(void *, long long);
 extern "C" int FUN_003a7e90(void *, int *);
 extern "C" void beAction2_StartComponents(void *, void *);
 extern "C" int DAT_0050dfd8[4];
-/* hypothesis: beAction2._insight points at a clock-carrying object with its 64-bit time at +80; igInsight is not reflected */
 struct WcClock { char p[80]; long long time; };
 
 /* matching construct: the reflected reference fields are 4-byte ints; the casts give the typed views (no layout effect) */

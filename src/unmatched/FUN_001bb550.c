@@ -1,10 +1,10 @@
-void FUN_001bbae0(void); /* address-taken; signature not recovered */
-void FUN_001bc0e0(void); /* address-taken; signature not recovered */
-void FUN_001bc1e0(void); /* address-taken; signature not recovered */
-void FUN_001bcdf0(void); /* address-taken; signature not recovered */
-void FUN_001bce40(void); /* address-taken; signature not recovered */
-void FUN_001bcf70(void); /* address-taken; signature not recovered */
-void FUN_001bd0e0(void); /* address-taken; signature not recovered */
+void FUN_001bbae0(void);
+void FUN_001bc0e0(void);
+void FUN_001bc1e0(void);
+void FUN_001bcdf0(void);
+void FUN_001bce40(void);
+void FUN_001bcf70(void);
+void FUN_001bd0e0(void);
 void FUN_001bcd80(void);
 void FUN_001bcd90(void);
 void FUN_001bcda0(void);

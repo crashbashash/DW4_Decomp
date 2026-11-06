@@ -1,7 +1,7 @@
 extern "C" {
 typedef struct S0 { char pad48[48]; int f30; int f34; int f38; } S0;
 int Memory_FreeBufferWithAllocator(int, int);
-int igObject_GetAllocator(S0 *); /* takes the object; the C draft dropped the argument at the first site */
+int igObject_GetAllocator(S0 *);
 
 void Gap__igAdxFile__vfunc_02(S0 *arg0) {
     if (arg0->f30 != 0) {

@@ -121,7 +121,7 @@ static void pick_pal(dw4_skin *sk, uint32_t a, void *ctx)
     if (!cc)
         return;
     sk->pcount = cc;
-    /* keep the pool in *object* address order (the same order live_skin.py lists) */
+    /* keep the pool in *object* address order */
     int i = sk->npal;
     while (i > 0 && sk->pcache[i - 1] > a) {
         sk->pcache[i] = sk->pcache[i - 1];
@@ -269,8 +269,8 @@ int dw4_skin_default_palette(const dw4_skin *sk)
     return 0;
 }
 
-/* `obj` is the igBlendMatricesAttr object; its `_matrixCache` (+0xc) is the data.  The stored
- * matrix is float32; widening to double makes the arithmetic match live_skin.py exactly. */
+/* `obj` is the igBlendMatricesAttr object; its `_matrixCache` (+0xc) is the data. The stored matrix
+ * is float32. */
 static void mat4(const dw4_skin *sk, uint32_t obj, int idx, double m[16])
 {
     uint32_t cache = sk_u32(sk, obj + 0x0c);

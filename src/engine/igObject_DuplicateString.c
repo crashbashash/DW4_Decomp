@@ -1,8 +1,7 @@
-/* 0x00300fa0
- * Copy a C string into storage owned by `self`: allocate strlen + 1 bytes with
- * the igObject storage allocator (vtable slot 216, igObject_AllocateStorage),
- * strcpy into it and return the copy. */
-int strcpy(int, int);  /* strcpy(dst, src): copies through the NUL, returns dst */
+/* Copy a C string into storage owned by `self`: allocate strlen + 1 bytes with the igObject
+ * storage allocator (vtable slot 216, igObject_AllocateStorage), strcpy into it and return the
+ * copy. */
+int strcpy(int, int);
 int strlen(int);  /* strlen(str) */
 int igObject_AllocateStorage(int, int);
 

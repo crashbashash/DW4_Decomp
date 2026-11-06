@@ -1,18 +1,11 @@
-/* Gap__Bec__beNDMWShopCtrl30__vfunc_21: the ShopCtrl30 (bank deposit/withdraw) update. Four-level
- * state machine on _st0 (open / run / close / wait-close), _st1 (sub-state 0..6), _st2 (step) and
- * _st3 (timer); _bankMenu is the deposit/withdraw mode (0/1), _retCode the child window's result.
- * Build requirements (same as beNDMWShopCtrl40::vfunc_21, 0x00429630): the alternate compiler with
- * "-O3,p -Cpp_exceptions off"; the WindowRef destructors the exception table names are the retail
- * bodies 0x00428710, 0x00414420, 0x00411080 and this unit's own 0x004295b0. Compiler shapes that
- * were needed: the st0 increment of case 0 reads _st0 through a volatile lvalue (else the switch
- * scrutinee register is reused); the window-search body reads _subWindow through a volatile lvalue
- * in st1 2/3 step 3 (else the list pointer is shared with the count test); the folder list
- * pointers are loaded after the second folder lookup (la, then fb, st1, retCode, lb); function-
- * level locals pl/x/y are declared in the order amt, pl, x, y to fix the saved-register order.
- * Windows are beNDMWStatusCtrlD0 (handle 0x58af98, the igObject_IsKindOf class test), lists
- * igObjectList, list items beNDMWItemBase, the new windows igObject / beNDMWShopSelect01
- * (0x58abc0); _refCount is read as a signed int (lwu otherwise). Rec/Fld stay local views of the
- * igProperty records (no reflected class). */
+/* Bank deposit/withdraw update: four-level state machine on _st0 (open / run / close / wait-
+ * close), _st1 (sub-state 0..6), _st2 (step) and _st3 (timer); _bankMenu is the deposit/withdraw
+ * mode (0/1), _retCode the child window's result. The st0 increment of case 0 reads _st0 through a
+ * volatile lvalue (else the switch scrutinee register is reused); the window-search body reads
+ * _subWindow through a volatile lvalue in st1 2/3 step 3 (else the list pointer is shared with the
+ * count test); the folder list pointers are loaded after the second folder lookup; function-level
+ * locals pl/x/y are declared in the order amt, pl, x, y to fix the saved-register order. _refCount
+ * is read as a signed int (lwu otherwise). Rec/Fld stay local views of the igProperty records. */
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_IsKindOf(void *, int);
@@ -46,11 +39,8 @@ extern int DAT_0051b398[4], DAT_0051b3b0[4], DAT_0051b3c0[4], DAT_0051b3e8[4], D
     DAT_0051b560[4], DAT_0051b568[4], DAT_00587110[4], DAT_0058af98[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to a freshly created sub-window of one class (kind 0 the select window
- * 0x3b4d90, 3 the status window 0x3baf10, 4 the item window 0x3b4f50, 5 the window 0x3b7520):
- * released on scope exit, so the exception table protects it from after the bind call. Out-of-line
- * destructor copies are the retail bodies 0x00428710, 0x00414420, 0x00411080 and (this unit's own)
- * 0x004295b0. */
+/* Owning stack reference to a freshly created sub-window of one class (kind 0 the select window, 3
+ * the status window, 4 the item window, 5 the window); released on scope exit. */
 template <int kind> struct WindowRef {
     igObject *p;
     WindowRef(igObject *w) : p(w) {}

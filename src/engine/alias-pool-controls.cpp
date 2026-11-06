@@ -1,5 +1,5 @@
 /* igAliasMemoryPool binding and disable: the setter that retains the aliased pool and records
- * whether it accepts this pool, and the disable callback. Functions are in retail address order. */
+ * whether it accepts this pool, and the disable callback. */
 #include "dw4/reflected.h"
 /* Retail ABI views, not original class definitions. Virtual tables include
  * an eight-byte header; Object projects slot376. Never instantiate these views. */
@@ -11,12 +11,10 @@ void Gap__Core__igAliasMemoryPool__vfunc_32(igAliasMemoryPool *self);
 }
 class DW4VC_124_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual int vX(); };
 
-/* 0x002d0560: bind `alias` as the pool this one forwards to.  The new alias is
- * retained before the previous one is released (so assigning the same object is
- * safe); the previous alias is destroyed when its reference count drops to
- * zero.  The alias is then asked (virtual slot 376) whether it accepts this
- * pool and the low byte of the answer becomes _isReassignable; a null alias
- * clears it.  See docs/engine/alias-pool-binding.md, "Binding lifetime". */
+/* Bind `alias` as the pool this one forwards to. The new alias is retained before the previous one
+ * is released (so assigning the same object is safe); the previous alias is destroyed when its
+ * reference count drops to zero. The alias is then asked (virtual slot 376) whether it accepts
+ * this pool and the low byte of the answer becomes _isReassignable; a null alias clears it. */
 extern "C" void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, Object *alias) {
     Object *old;
     if (alias) alias->refs++;
@@ -31,9 +29,8 @@ extern "C" void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, Object *a
     else self->_isReassignable = 0;
 }
 
-/* 0x002d0640: disable the pool: run the receiver's virtual at vtable offset
- * 124 (the reset callback), then clear _isActive afterwards, even if the
- * callback wrote it (docs/engine/alias-pool-binding.md, accounting block). */
+/* Disable the pool: run the receiver's virtual at vtable offset 124 (the reset callback), then
+ * clear _isActive afterwards, even if the callback wrote it. */
 void Gap__Core__igAliasMemoryPool__vfunc_32(igAliasMemoryPool *self) {
     ((DW4VC_124_0 *)(((char *)(self) + 0)))->vX();
     self->_isActive = 0;

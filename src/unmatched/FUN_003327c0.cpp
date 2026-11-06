@@ -1,5 +1,4 @@
 extern "C" {
-/* Matches only with the alternate (combat) compiler build. */
 int memset(int *, int, int);
 int strcpy(int *, int);
 extern int DAT_005873d0[4];

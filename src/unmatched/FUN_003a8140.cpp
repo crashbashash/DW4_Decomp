@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* igProperty has no reflected struct: its fields stay a local layout */
 struct Prop { char pad40[40]; long long f40; long long f48; float f56; };
 typedef igObject Rc;
 typedef beAction2InfoRam A;

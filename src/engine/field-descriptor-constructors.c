@@ -1,9 +1,9 @@
 /* Constructor / initializer chains of the reflection field descriptors (igMetaField and its Int,
- * UnsignedInt, Ref, ObjectRef and String subclasses). Every class has two entry
- * points. <Class>_Construct builds the base part, stamps the class vtable and, when the object
- * exists, runs <Class>_Init. <Class>_Init runs the base Init, stamps the vtable again (so a
- * subclass vtable is replaced by the more derived one) and sets that class's field defaults.
- * Reflected members are proven offsets; the leading vtable word is an explicit ABI projection. */
+ * UnsignedInt, Ref, ObjectRef and String subclasses). Every class has two entry points.
+ * <Class>_Construct builds the base part, stamps the class vtable and, when the object exists,
+ * runs <Class>_Init. <Class>_Init runs the base Init, stamps the vtable again (so a subclass
+ * vtable is replaced by the more derived one) and sets that class's field defaults. The leading
+ * vtable word is an explicit ABI projection. */
 #include "dw4/reflected.h"
 void *igObject_ConstructHeader(void *);
 igMetaField *igMetaField_Init(igMetaField *);

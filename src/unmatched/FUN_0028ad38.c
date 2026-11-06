@@ -1,6 +1,5 @@
 /* Resets a 101-byte stream-information block to its defaults. */
 
-/* Members of the block; roles not yet recovered. */
 struct Info0028ad38 {
     int f0; /* +0 */
     int f4; /* +4 */

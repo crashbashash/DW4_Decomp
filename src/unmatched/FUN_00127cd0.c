@@ -1,5 +1,4 @@
-/* Compares two big integers by word count and then word by word from the top; returns <0, 0 or >0
- * (newlib mprec __mcmp shape; name is a hypothesis). */
+/* Compares two big integers by word count and then word by word from the top; returns <0, 0 or >0. */
 typedef struct BigInt {
     struct BigInt *next;
     int k;

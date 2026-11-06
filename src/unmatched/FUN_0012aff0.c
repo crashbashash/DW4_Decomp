@@ -1,5 +1,4 @@
-/* Returns the first occurrence of the needle string inside the haystack string, or 0 (newlib
- * strstr shape; name is a hypothesis). */
+/* Returns the first occurrence of the needle string inside the haystack string, or 0. */
 char *FUN_0012aff0(const char *haystack, const char *needle) {
     if (*haystack == 0) {
         if (*needle) {

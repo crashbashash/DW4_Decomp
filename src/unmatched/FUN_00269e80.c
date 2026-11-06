@@ -6,7 +6,7 @@ typedef struct Entry_269e80 {
     char pad1[73];
     signed char f74; /* 0x4a */
     char pad75[21];
-} Entry_269e80;         /* 0x60 bytes */
+} Entry_269e80;
 
 extern int DAT_004a7ef8;
 extern int DAT_004a7efc;

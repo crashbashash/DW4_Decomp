@@ -1,5 +1,3 @@
-/* Lazily created child with smart-pointer swap (volatile pointer local read once per use) and
- * string-pool interned name; default compiler. */
 typedef struct Ob { int w0; unsigned refs; int w2; } Ob;
 typedef struct Hd { int w[5]; int f20; int w6[2]; Ob *f32; } Hd;
 typedef struct Pn { Hd h; } Pn;

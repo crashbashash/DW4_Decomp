@@ -12,7 +12,7 @@ struct Ctx00281d80 {
 };
 
 extern struct Ctx00281d80 *DAT_004bb114;
-extern int DAT_00571700; /* cleared before interrupts are re-enabled */
+extern int DAT_00571700;
 
 void FUN_00281d80(struct Message00281d80 *message) {
     struct Message00281d80 copy;

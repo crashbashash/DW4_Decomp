@@ -8,8 +8,7 @@ int FUN_002eb010(int);
 int StringPool_Construct(int);
 void *StringPool_Intern(int,int);
 int StringChunk_ReleaseHeader(int,void *);
-/* igMetaObject vtable (docs/engine/metadata-bootstrap.md, vtable 532bb0) and the shared string
- * pool singleton; array form keeps the load absolute. */
+/* IgMetaObject vtable and the shared string pool singleton; array form keeps the load absolute. */
 extern int g_igMetaObject_vtable[4],g_stringPool[4];
 igMetaObject *igMetaObject_Init(igMetaObject *meta){
     int pool,oldName,refCount;int *oldHeader;void *emptyToken;

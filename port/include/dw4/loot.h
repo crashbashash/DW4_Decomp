@@ -1,9 +1,10 @@
-/* Loot delivery: what a field drop is, how its item is rolled and what picking it up does to the player records.
- * Recovered from beNDMWMdlItem (vfunc_36 builds the item, vfunc_38 the walk-over delivery of unnamed models and the
- * label lock of named ones, vfunc_45 the button pickup of named ones), FUN_00384800 (the model a drop spawns),
- * beNDMWItemInstant::vfunc_22 (BIT / x-data / UPCNT) and FUN_004480a0 / FUN_00448190 (revision and pocket rolls).
- * See docs/dungeon-floors.md "Loot delivery". Item identity is the native dw4_item_record, not the packed id word
- * (recNo | equipped << 10 | kind << 12 | pocket << 16 | revision << 20, which only the save image needs). */
+/* Loot delivery: what a field drop is, how its item is rolled and what picking it up does to the
+ * player records. Retail sources: beNDMWMdlItem (vfunc_36 builds the item, vfunc_38 the walk-over
+ * delivery of unnamed models and the label lock of named ones, vfunc_45 the button pickup of named
+ * ones), FUN_00384800 (the model a drop spawns), beNDMWItemInstant::vfunc_22 (BIT / x-data /
+ * UPCNT) and FUN_004480a0 / FUN_00448190 (revision and pocket rolls). Item identity is the native
+ * dw4_item_record, not the packed id word (recNo | equipped << 10 | kind << 12 | pocket << 16 |
+ * revision << 20, which only the save image needs). */
 #ifndef DW4_LOOT_H
 #define DW4_LOOT_H
 #include "dw4/playerrecords.h"

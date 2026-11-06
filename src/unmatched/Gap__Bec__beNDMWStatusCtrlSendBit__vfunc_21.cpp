@@ -1,7 +1,7 @@
-/* 0x0041de40 Gap__Bec__beNDMWStatusCtrlSendBit__vfunc_21: state-machine update of the send-bit status window.
- * Build: alternate combat compiler, "-O3,p -Cpp_exceptions off -Iinclude"; unit-objects: emitted __dt__3RefFv at 0x0041f110, external __dl__FPv.
- * Matching construct: the first dispatch on the player-number list count is 'switch (t) { case 1: default: ...; case 2: ...; case 3: ... }'.
- * The double label makes the default arm a join point, which is why retail re-materialises 'move a0,s0' there (and only there). */
+/* State-machine update of the send-bit status window.
+ * Matching construct: the first dispatch on the player-number list count is
+ * 'switch (t) { case 1: default: ...; case 2: ...; case 3: ... }'; the double label makes the
+ * default arm a join point. */
 #include "dw4/reflected.h"
 #pragma inline_depth(8)
 extern "C" {
@@ -91,7 +91,7 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 typedef igObject RefObj;
-/* One releasing holder class per retail destructor copy: RefX 0x001363f0, RefB 0x00411100, Ref 0x0041f110 (emitted with this unit), RefA 0x00411080. */
+/* One releasing holder class per destructor copy. */
 struct Ref {
     RefObj *p;
     Ref(void *x) { p = (RefObj *)x; }
@@ -140,7 +140,7 @@ struct RefA {
         }
     }
 };
-/* Interned-string reference (count at p[-1], header at p[-2]); the retail destructor copy is StringRef at 0x00130720. */
+/* Interned-string reference (count at p[-1], header at p[-2]). */
 struct StringRef {
     void *p;
     StringRef(void *x) { p = x; }
@@ -153,7 +153,6 @@ struct StringRef {
         }
     }
 };
-
 
 #define SEL(d) beMessenger_SelectGroup(p->_messenger, d)
 #define APS(d) beMessenger_AppendString(p->_messenger, d)

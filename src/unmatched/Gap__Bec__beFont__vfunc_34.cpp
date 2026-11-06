@@ -78,8 +78,8 @@ public:
     unsigned int ref; int f8; int f12; igObjectList *f16; int f20; int f24; igObjectList *f28; igObjectList *f32; int f36;
 };
 struct Vec { float x; float y; float z; float w; };
-/* Scope holder whose destructor releases the reference. Retail keeps one out-of-line destructor per holder
- * (kind 0..3 = 0x382d70, 0x1353b0, 0x1363f0, 0x1489a0), which is why the holder is a template on the kind. */
+/* Scope holder whose destructor releases the reference; it is a template on the kind because each
+ * kind needs its own out-of-line destructor. */
 template <int kind> struct RP {
     N *p;
     RP(N *x) { p = x; }

@@ -1,6 +1,5 @@
-/* Debug print with virtual getters; evaluating FUN_0031d370/390 (128-bit returns) inside the call
- * argument list spills them like retail (a named __int128 local gets paddub registers); alternate
- * compiler. */
+/* The 128-bit returns are evaluated inside the call argument list, which spills them; a named
+ * __int128 local would use paddub registers. */
 extern "C" {
 int FUN_002cd990(); int FUN_002cd9f0(); int FUN_002cda50();
 void FUN_002f08d0();

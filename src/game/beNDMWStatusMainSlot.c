@@ -1,9 +1,8 @@
-/* src/game/beNDMWStatusMainSlot.c - the beNDMWStatusMainSlot methods (main-equipment slot view of
- * the NDMW status screen), in retail address order. vfunc_30 is the equipment eligibility test:
+/* Main-equipment slot view of the NDMW status screen. vfunc_30 is the equipment eligibility test:
  * the item at a list index may be equipped when the player's LEVEL property is at least the item's
- * LVPOINT record. Each function is matched on its own. */
+ * LVPOINT record. */
 #include "dw4/reflected.h"
-/* A property record: the value sits at +12 (docs/engine/property-system.md, SYSgetPlayerLevel). */
+/* A property record: the value sits at +12. */
 typedef struct PropertyRecord { char pad0[12]; int value; } PropertyRecord;
 extern int g_beNDMWStatusMainSlot_metaObject[4];
 extern int g_beNDMWStatus_metaObject[4];
@@ -14,14 +13,13 @@ int FUN_00236f80();
 PropertyRecord *igProperty_GetRecord();
 int beNDMWItemBase_GetRecordInt();
 
-/* 0x00415870 - enter state 1; the later state levels restart at 0 */
+/* Enter state 1; the later state levels restart at 0 */
 void Gap__Bec__beNDMWStatusMainSlot__vfunc_25(beNDMWStatusMainSlot *self) {
     self->_st1 = 1;
     self->_st3 = 0;
     self->_st2 = 0;
 }
 
-/* 0x004164d0 - may the item at list index `index` be equipped: player LEVEL >= item LVPOINT */
 int Gap__Bec__beNDMWStatusMainSlot__vfunc_30(beNDMWStatusMainSlot *self, int index) {
     int player_level;
     int item;
@@ -33,7 +31,7 @@ int Gap__Bec__beNDMWStatusMainSlot__vfunc_30(beNDMWStatusMainSlot *self, int ind
     return player_level >= beNDMWItemBase_GetRecordInt(item, status, LVPOINT);
 }
 
-/* 0x00423390 - class metaObject accessor */
+/* Class metaObject accessor */
 int Gap__Bec__beNDMWStatusMainSlot__vfunc_20(void) {
     return g_beNDMWStatusMainSlot_metaObject[0];
 }

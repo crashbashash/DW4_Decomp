@@ -1,12 +1,7 @@
-/* src/sfp.c — the `ps2_DTPK` / `ps2_TBLD` / `ps2_VAGD` sound bank reader.
- *
- * The layout and the decoder are documented in include/dw4/sfp.h.  The decoder is the
- * only nontrivial part; it was recovered by matching ffmpeg's `adpcm_psx` output
- * sample-for-sample on the real banks (tools/verify_sound.py), which pinned three
- * details a plain VAG decoder gets wrong: byte 1 is a control byte (0x07 silences the
- * frame and resets the predictor), the samples are bytes 2..15, and the predictor
- * feeds back the unclamped sample.
- */
+/* The `ps2_DTPK` / `ps2_TBLD` / `ps2_VAGD` sound bank reader. The decoder is the only nontrivial
+ * part. Details a plain VAG decoder gets wrong: byte 1 is a control byte (0x07 silences the frame
+ * and resets the predictor), the samples are bytes 2..15, and the predictor feeds back the
+ * unclamped sample. */
 #include "dw4/sfp.h"
 
 #include <stdio.h>

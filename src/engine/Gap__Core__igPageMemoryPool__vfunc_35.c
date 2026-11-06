@@ -1,7 +1,6 @@
-/* igPageMemoryPool vtable slot 35: status leaf. On igMallocMemoryPool this slot sets _size; the
+/* IgPageMemoryPool vtable slot 35: status leaf. On igMallocMemoryPool this slot sets _size; the
  * page pool has no such field. Ignores the pool and writes the engine's failure-status word (the
- * word at 0x004fb418, the one an allocation failure publishes) through the output-first
- * argument.md and docs/engine/array-storage.md. */
+ * one an allocation failure publishes) through the output-first argument. */
 extern int g_allocatorFailureStatus[4];
 void Gap__Core__igPageMemoryPool__vfunc_35(int *statusOut) {
     *statusOut = g_allocatorFailureStatus[0];

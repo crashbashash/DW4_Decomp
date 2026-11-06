@@ -1,6 +1,3 @@
-/* Streams in a record's resource: loads it when none is held, otherwise refreshes it and marks the
- * shared header; returns whether the resource is ready; alternate compiler -O3; C++ bool result
- * (daddiu flag, no andi), byte flag at +28, shared header pointer loaded once. */
 typedef struct Q { char p[20]; int f20; char p2[4]; unsigned char f28; } Q;
 typedef struct R { int f0; Q *f4; int f8; int f12; int f16; int f20; } R;
 typedef struct A1 { char p[16]; R *f16; } A1;

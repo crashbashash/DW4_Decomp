@@ -1,6 +1,3 @@
-/* Sibling of FUN_0043a950 (name table at 0x4cf6a0, vector -83/148); alternate compiler -O3,p. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct Tbl { const char *s[12]; } __attribute__((aligned(16))) Tbl;
 extern Tbl DAT_004cf6a0;
@@ -35,4 +32,4 @@ void FUN_004115c0(int *arg0, int arg1) {
         beMessenger_SendNamed(arg0[3], DAT_00519a90, DAT_00519d88, 0, DAT_00519a58);
     }
 }
-} /* extern "C" */
+}

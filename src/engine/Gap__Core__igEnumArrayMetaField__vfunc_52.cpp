@@ -3,8 +3,7 @@
  * descriptor with `count * _num` elements. */
 #include "dw4/reflected.h"
 extern "C" {
-/* Returns the shared igEnumMetaField descriptor (global 0x005865a0), registering
- * the class on first use; same shape as igIntMetaField_GetDefaultDescriptor. */
+/* Returns the shared igEnumMetaField descriptor, registering the class on first use. */
 void **igEnumMetaField_GetDefaultDescriptor(...);
 void Gap__Core__igEnumArrayMetaField__vfunc_52(igEnumArrayMetaField *self, int buffer, int count);
 }

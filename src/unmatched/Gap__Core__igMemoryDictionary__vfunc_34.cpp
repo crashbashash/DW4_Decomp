@@ -1,4 +1,5 @@
-/* 0x002eeae0 - igMemoryDictionary vfunc_34 (rehash). Smart pointer kept in a volatile stack slot with plain copies for the tests; allocator call before the field reload; vcall at 124 with a discarded R; alternate -O3. */
+/* The smart pointer is kept in a volatile stack slot with plain copies for the tests, and the
+ * allocator call comes before the field reload. */
 extern "C" {
 extern char DAT_004c2158[];
 void *FUN_002ca260(int);

@@ -1,5 +1,3 @@
-/* Stack key object lookup (destructor copy at 0x002e2300, see
- * Gap__Core__igVisualContextCapabilityManager__vfunc_38). */
 struct RefObj { int w0; int references; int count; int capacity; void **data; };
 extern "C" {
 void FUN_002ed5c0(void *);

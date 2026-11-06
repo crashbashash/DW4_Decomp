@@ -1,7 +1,6 @@
-/* adxf_CreateAdxFs (name from the error strings at DAT_004edb58/DAT_004edb90): takes a free ADXF
- * handle, opens its stream with FUN_00269f50 and initialises it; reports through FUN_002607e8 and
- * returns 0 on failure. */
-/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
+/* adxf_CreateAdxFs: takes a free ADXF handle, opens its stream with FUN_00269f50 and initialises
+ * it; reports through FUN_002607e8 and returns 0 on failure. */
+/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8). */
 typedef struct AdxfHandle {
     signed char used;
     signed char f1;

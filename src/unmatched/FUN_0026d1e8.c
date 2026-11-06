@@ -1,6 +1,3 @@
-/* CRI ADXT_GetDecDtLen: null handle reports "E04041901 ADXT_GetDecDtLen:
- * parameter error" (string at 0x4eec20) and yields -1, otherwise the call is
- * forwarded to the stream-handle routine with the stream stored at +4. */
 typedef struct Adxt {
     char used;
     signed char state;

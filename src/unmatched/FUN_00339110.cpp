@@ -5,7 +5,7 @@ extern "C" {
 int igObject_Destroy(...);
 void FUN_00339110(igMovieManager *arg0, igObject **arg1);
 }
-/* retained share of an engine object held across the codec call (retail destructor copy 0x00130140) */
+/* Retained share of an engine object held across the codec call. */
 struct ObjectShare {
     igObject *p;
     ObjectShare(igObject *o) : p(o) { if (p != 0) p->_refCount = p->_refCount + 1; }

@@ -19,10 +19,9 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1);
 }
-/* Owning stack reference to the texture attribute object created per matching property: constructed
- * from the object and released on scope exit, after the attribute set has retained it (reference
- * count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the
- * retail body 0x0019aa10 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the texture attribute object created per matching property; released
+ * on scope exit, after the attribute set has retained it (reference count in the low 23 bits of
+ * _refCount). */
 class ObjectRef {
 public:
     NewObjectVirtual *p;

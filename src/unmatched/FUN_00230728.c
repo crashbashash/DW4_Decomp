@@ -1,5 +1,5 @@
 /* Soft-float double subtraction: unpacks both operands, flips the sign of the second, adds the
- * parts with FUN_00230470 and repacks the result (fp-bit sub shape; name is a hypothesis). */
+ * parts with FUN_00230470 and repacks the result. */
 typedef unsigned int USItype __attribute__((mode(SI)));
 typedef unsigned int UDItype __attribute__((mode(DI)));
 typedef float DFtype __attribute__((mode(DF)));

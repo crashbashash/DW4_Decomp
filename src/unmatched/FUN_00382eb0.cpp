@@ -1,6 +1,3 @@
-/* Two-pass conversion of a Shift-JIS string: pass one counts the characters found in a 425-entry
- * code table (copied onto the stack) while streaming the raw bytes to a buffer object; pass two
- * fills a pooled 16-bit string object, which is returned through a reference slot. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);

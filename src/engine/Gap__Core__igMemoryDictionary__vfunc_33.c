@@ -1,6 +1,5 @@
-/* 0x002eeab0
- * Hash-bucket index for `key`: key modulo the table capacity (`_capacity`), or 0
- * for an empty table. */
+/* Hash-bucket index for `key`: key modulo the table capacity (`_capacity`), or 0 for an empty
+ * table. */
 #include "dw4/reflected.h"
 unsigned int Gap__Core__igMemoryDictionary__vfunc_33(igMemoryDictionary *self, unsigned int key) {
     unsigned int capacity;

@@ -1,5 +1,3 @@
-/* Stack object with an inlined smart-pointer release. Matches only with the alternate (combat)
- * compiler build. */
 typedef struct { int *vt; int p1; int p2; void *str; int pad[12]; } Obj;
 int FUN_002d4da0();
 int StringChunk_ReleaseHeader();

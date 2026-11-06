@@ -1,5 +1,4 @@
-/* Returns the first character of the string that is one of the accept characters, or 0 (newlib
- * strpbrk shape; name is a hypothesis). */
+/* Returns the first character of the string that is one of the accept characters, or 0. */
 char *FUN_0012af18(const char *string, const char *accept) {
     const char *candidate = accept;
 

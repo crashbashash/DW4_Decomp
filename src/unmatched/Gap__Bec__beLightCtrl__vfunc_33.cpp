@@ -1,6 +1,4 @@
-/* Set a light from three messenger vectors: property lookup by name, then virtual slots 31/30/32
- * (dummy-virtual class) with a 4-float stack vector; the result is a switch so the zero return
- * sits behind the one. Alternate compiler -O3,p. */
+/* The result is a switch so the zero return sits behind the one. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_0035bfb0();

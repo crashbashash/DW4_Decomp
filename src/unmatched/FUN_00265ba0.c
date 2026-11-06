@@ -1,4 +1,3 @@
-/* CRI thunk: forwards the sub-object stored at +12 to the worker at 0x27a0e0. */
 typedef struct CriObj {
     int pad[3];
     int inner;

@@ -8,6 +8,5 @@ void FUN_002a34d0(void *handle, int b, int c, int d) {
         FUN_002a0bb8(0, 0xFF000185, c, d);
         return;
     }
-    /* a2/a3 still hold c/d from the hoisted error-path setup; FUN_002a3558 may read them */
     FUN_002a3558(handle, b);
 }

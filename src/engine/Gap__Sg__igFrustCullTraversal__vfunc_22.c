@@ -1,6 +1,4 @@
-/* 0x001e31e0
- * Metaobject accessor: returns the class handle of igFrustCullTraversal (slot 0 of
- * g_igFrustCullTraversal_metaObject), without the lazy registration of the *_GetMetaObject helpers. */
+/* Returns the class handle directly, without the lazy registration the *_GetMetaObject helpers do. */
 extern int g_igFrustCullTraversal_metaObject[4];
 int Gap__Sg__igFrustCullTraversal__vfunc_22(void) {
     return g_igFrustCullTraversal_metaObject[0];

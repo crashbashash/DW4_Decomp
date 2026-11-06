@@ -1,4 +1,3 @@
-/* Virtual call arguments typed (two floats).py. */
 extern "C" {
 int FUN_00174850(...);
 void FUN_00174090(void *arg0);

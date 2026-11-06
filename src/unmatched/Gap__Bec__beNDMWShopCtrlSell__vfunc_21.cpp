@@ -1,19 +1,13 @@
-/* 0x00434790 - Gap__Bec__beNDMWShopCtrlSell__vfunc_21 (2360 bytes): sell-menu state machine.
- * State 0 asks the player's inventory (DEVICEFOLDER / DISKFOLDER record folders) what is sellable:
- * with something to sell it enters branch _st1 = 0 (the ShopSelectB0 chooser, window 0x3b3f40) and
- * _st3 picks its two-entry decide list (1 = no devices, 2 = no disks); with nothing to sell it
- * enters branch _st1 = 3 (ShopSelect00 with script 0x628).  The chooser's _retCode then selects
- * branch 1 (device sell sub-window 0x3b70e0) or 2 (disk sell sub-window 0x3b6e60), which return to
- * state 0 when they end.  State 2 closes the sub-windows, state 3 waits for the close to finish
- * and clears _isRun.
- * Evidence: (decide-list constants 554a50..5c, windows 3b3f40/3b70e0/3b6e60/3b4f50),
- * asm/Gap__Bec__beNDMWShopCtrlSell__vfunc_21.s.
- * Profile: combat compiler, -O3,p -Cpp_exceptions off; the exception table names the WindowRef/ListRef
- * destructor copies listed in config/SLUS-20836/unit-objects.json (three are this unit's own, emitted after the function).  Matching constructs (each measured): the
- * state switch reads _st0 through a volatile access (retail reloads _st0 in case 0); the disk-scan
- * count is read through a volatile access (retail re-reads the list count every iteration);
- * `case 1: case 2:` in that order gives the 2-then-1 compare chain; the decide-list pointers live
- * in stack WindowRef/ListRef holders and are re-read per use; hasDevice/hasDisk are bool.  */
+/* Sell-menu state machine. State 0 asks the player's inventory (DEVICEFOLDER / DISKFOLDER record
+ * folders) what is sellable: with something to sell it enters branch _st1 = 0 (the ShopSelectB0
+ * chooser) and _st3 picks its two-entry decide list (1 = no devices, 2 = no disks); with nothing to
+ * sell it enters branch _st1 = 3 (ShopSelect00 with script 0x628). The chooser's _retCode then
+ * selects branch 1 (device sell sub-window) or 2 (disk sell sub-window), which return to state 0 when
+ * they end. State 2 closes the sub-windows, state 3 waits for the close to finish and clears _isRun.
+ * Matching constructs: the state switch reads _st0 through a volatile access so case 0 reloads it;
+ * the disk-scan count is read through a volatile access so every iteration re-reads it;
+ * `case 1: case 2:` in that order gives the 2-then-1 compare chain; the decide-list pointers live in
+ * stack WindowRef/ListRef holders and are re-read per use; hasDevice/hasDisk are bool. */
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
 extern "C" {
@@ -57,10 +51,8 @@ extern unsigned char GPR_00554a5c;
 extern unsigned char GPR_00554c14;
 void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self);
 }
-/* Owning stack references: kind 0..4 one per window class created here (0 chooser 0x3b3f40, 1
- * device sell 0x3b70e0, 2 disk sell 0x3b6e60, 4 item window 0x3b4f50), ListRef the bool decide
- * lists. The out-of-line destructor copies are retail 0x004351d0, 0x00435150, 0x004350d0,
- * 0x00411080 and 0x00226990. */
+/* Owning stack references: kind 0..4 one per window class created here (0 chooser, 1 device sell,
+ * 2 disk sell, 4 item window), ListRef the bool decide lists. */
 template <int kind> struct WindowRef {
     igObject *p;
     WindowRef(igObject *w) : p(w) {}

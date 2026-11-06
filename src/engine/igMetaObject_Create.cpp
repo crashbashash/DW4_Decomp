@@ -1,17 +1,15 @@
 /* Factory for an igMetaObject (100-byte instance). Once the object system is live, ensure the
- * class is registered (igMetaObject_EnsureRegistered runs
- * igMetaObject_RunStaticInit(igMetaObject_Register)) and let its MetaObject create the instance
- * with the given allocator. Before that, allocate by hand, construct in place (second argument 1
- * is the flag retail passes) and run the post-construction hooks, vfunc_09 then vfunc_07(0). Same
- * factory shape as the other metafield factories in src/engine/field-descriptor-factories.cpp. */
+ * class is registered and let its MetaObject create the instance with the given allocator. Before
+ * that, allocate by hand, construct in place (second argument 1) and run the post-construction
+ * hooks, vfunc_09 then vfunc_07(0). */
 extern "C" {
 int igMetaObject_EnsureRegistered(...);
 void **igObject_AllocateRawStorage(...);
 void **igMetaObject_Construct(...);
 void **igMetaObject_CreateInstance(...);
 extern int g_igMetaObject_metaObject[4];
-/* Pointer to the object-system state; its first byte is nonzero once the
- * reflection system is live (docs/engine/field-factories.md, "Factory modes"). */
+/* Pointer to the object-system state; its first byte is nonzero once the reflection system is
+ * live. */
 extern unsigned char * g_objectSystem[4];
 void **igMetaObject_Create(int allocator);
 }

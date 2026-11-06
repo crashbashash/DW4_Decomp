@@ -1,7 +1,7 @@
 /* beNDMWSaveCtrl: the controller that runs the data-select / save scene (stagIS12's SaveCtrlInfo).
- * Recovered from update 407120..407a60 (vfunc_31) and the SAVECTRL GENERATE handler 407aa0 (vfunc_34);
- * every messenger call of the retail body is a host callback so the sequencing is exactly the retail order.
- * Evidence, the retail call table and the boundaries: port/docs/save-keeper.md. */
+ * Recovered from update 407120..407a60 (vfunc_31) and the SAVECTRL GENERATE handler 407aa0
+ * (vfunc_34); every messenger call of the retail body is a host callback so the sequencing is
+ * exactly the retail order. */
 #ifndef DW4_SAVECTRL_H
 #define DW4_SAVECTRL_H
 #define DW4_SAVECTRL_PLAYERS 4

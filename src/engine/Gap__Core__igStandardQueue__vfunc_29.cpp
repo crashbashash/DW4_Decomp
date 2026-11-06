@@ -1,10 +1,5 @@
-/* 0x00328930
- * True when the queue's `_capacity` equals the value returned by the no-argument
- * virtual at vtable byte offset 120 (slot 28) of its `_queueSema`.
- * Evidence: the function's machine code loads +20 (igStandardQueue::_queueSema),
- * calls the virtual at 120, and compares the result with +24 (_capacity)
- * (xor, sltiu 1).  The meaning of the slot, and so of the test, is not
- * established; igStandardQueue::vfunc_31 is the plain `_capacity` getter. */
+/* True when the queue's `_capacity` equals the value returned by the no-argument virtual at vtable
+ * byte offset 120 (slot 28) of its `_queueSema`. */
 #include "dw4/reflected.h"
 extern "C" {
 

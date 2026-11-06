@@ -1,9 +1,9 @@
-/* igAliasMemoryPool constructor. Runs the base-class constructor, publishes the pool's vtable
- * (0x5313a0) and clears the lock, event-tracker and aliased-pool references (offsets 116, 152,
- * 180), then calls igAliasMemoryPool_Initialize on a non-null receiver and returns it. */
+/* igAliasMemoryPool constructor. Runs the base-class constructor, publishes the pool's vtable and
+ * clears the lock, event-tracker and aliased-pool references (offsets 116, 152, 180), then calls
+ * igAliasMemoryPool_Initialize on a non-null receiver and returns it. */
 #include "dw4/reflected.h"
 int igAliasMemoryPool_Initialize();
-int FUN_002effb0();  /* base-pool constructor: igObject header init (0x2ff010), base vtable 0x52f620 */
+int FUN_002effb0();  /* Base-pool constructor: igObject header init, then the base vtable. */
 /* Vtable image of igAliasMemoryPool; the array form keeps the address load absolute. */
 extern int g_igAliasMemoryPool_vtable[4];
 void *igAliasMemoryPool_Construct(igAliasMemoryPool *self) {

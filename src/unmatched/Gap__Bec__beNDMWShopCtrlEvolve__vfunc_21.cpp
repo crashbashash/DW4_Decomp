@@ -97,15 +97,15 @@ struct DummyVirtual {
     virtual void v24(void *, void *); virtual int v25(); virtual int v26();
 };
 
-/* Owning stack reference to a freshly created sub-window of one class (kind 0 the page selector
- * 0x3b51b0, 1 the select window 0x3b4d90, 2 the item window 0x3b4f50); out-of-line destructor
- * copies are the retail bodies 0x00411100, 0x00428710 and 0x00411080. */
+/* Owning stack reference to a freshly created sub-window of one class (kind 0 the page selector, 1
+ * the select window, 2 the item window). */
 template <int kind> struct WindowRef {
     Rc *p;
     WindowRef(Rc *w) : p(w) {}
     ~WindowRef() { Rc *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-/* The interned text handed to a string list as a temporary; its destructor drops the interning share (retail body 0x00130720). */
+/* The interned text handed to a string list as a temporary; its destructor drops the interning
+ * share. */
 struct StringRef {
     char *p;
     StringRef(char *s) : p(s) {}

@@ -1,5 +1,5 @@
 /* Allocates the reent signal-handler table on first use and sets every entry to the default
- * handler; returns -1 when allocation fails (newlib _init_signal_r shape; name is a hypothesis). */
+ * handler; returns -1 when allocation fails. */
 typedef void (*SignalHandler)(int);
 
 typedef struct Reent {

@@ -1,5 +1,3 @@
-/* Warning: missing "jr $ra" in last block of FUN_003ad950 (.L003ADA50). */
-
 extern "C" {
 int sceMtapGetConnection(int);
 extern int DAT_0058a800[4];

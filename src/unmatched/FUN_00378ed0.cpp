@@ -1,4 +1,3 @@
-/* BeCameraCtrl per-frame update (receiver beCameraCtrl, argument a camera-owning actor) */
 #include "dw4/reflected.h"
 #pragma inline_depth(8)
 extern "C" {
@@ -47,13 +46,14 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act);
 #define ALLOC(a, o) { a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 #define F(x) (*(float *)&(x))
 
-/* arena handles (4-byte ints in the reflected structs) are followed with an explicit cast */
+/* Arena handles (4-byte ints in the reflected structs) are followed with an explicit cast. */
 #define LIST(p) ((igObjectList *)(p))
 #define XFORM(l, i) ((igTransform *)((int *)LIST(l)->_data)[i])
 
 struct Slot16 { int v; int pad[3]; };
 
-/* Releasing holders: the range starts where each is constructed (`RPD h(create(...))`), so only calls after construction are covered; one class per retail dtor copy (RPD = 0x33e9c0, RPE = 0x3699a0). */
+/* The exception range starts where each holder is constructed (`RPD h(create(...))`), so only
+ * calls after construction are covered; one class per destructor copy is needed. */
 struct RPD { igObject *p; RPD(void *x) { p = (igObject *)x; } ~RPD() { igObject *q = p; if (q != 0) { q->_refCount = q->_refCount - 1; if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q); } } };
 struct RPE { igObject *p; RPE(void *x) { p = (igObject *)x; } ~RPE() { igObject *q = p; if (q != 0) { q->_refCount = q->_refCount - 1; if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q); } } };
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }

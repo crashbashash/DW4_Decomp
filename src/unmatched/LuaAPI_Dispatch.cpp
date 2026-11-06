@@ -1,4 +1,6 @@
-/* LuaAPI_Dispatch - 0x00370780. Lua native-API dispatcher: fn->id (short at +40) selects one of 116 API functions through a jump table; arguments are read from the Lua argument array (24-byte slots, first value at +16) and results are pushed on the Lua state. Alternate compiler, -O3,p -Iinclude. */
+/* Lua native-API dispatcher: fn->id (short at +40) selects one of 116 API functions through a jump
+ * table; arguments are read from the Lua argument array (24-byte slots, first value at +16) and
+ * results are pushed on the Lua state. */
 extern "C" {
 struct LuaV { union { int i; unsigned char b; float f; long long l; } u; char pad[16]; };
 struct LuaArgs { char pad[16]; struct LuaV v[8]; };

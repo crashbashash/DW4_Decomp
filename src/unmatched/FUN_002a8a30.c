@@ -21,7 +21,6 @@ struct Player2a8a30 {
     void *context;                        /* +8120 */
 };
 
-/* Picks the best and second-best slots holding a picture (state 2 or 4), ranked by FUN_002a8b30. */
 /* matching construct: manual — out-parameters and the context link are void * (same alias set), which keeps the clearing stores after the context load */
 void FUN_002a8a30(struct Player2a8a30 *player, void **best, void **second) {
     struct Context *context;

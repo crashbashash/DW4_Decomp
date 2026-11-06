@@ -1,5 +1,5 @@
 /* Accepts only the "C" or "" locale, records category and locale in the reent block and returns
- * "C"; any other locale returns 0 (newlib _setlocale_r shape; name is a hypothesis). */
+ * "C"; any other locale returns 0. */
 typedef struct Reent {
     char f0[48];
     int currentCategory;

@@ -1,7 +1,3 @@
-/* Gap__Bec__beNDMWMdlPlayer2__vfunc_36 (0x003d4a20): apply a ram to the second-player model controller.
- * The ram's data list is created on demand and a fresh value object (FUN_003bf560) replaces the named
- * property's value; after the model refresh the stage name and the model's translation are written into
- * the player's slot of the two record lists the messenger returns. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(igObject *);
@@ -39,7 +35,6 @@ struct Rel { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-/* string-pool intern (the pool singleton is created on first use) and the release of a stored token */
 struct Str { static inline int *intern(int s) {
     int *ref;
     if (s == 0) {
@@ -58,27 +53,23 @@ static inline void release(int *q) {
     if (q) { int *hd = q - 2; int c = q[-1] - 1; q[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*hd, hd); }
 } };
 struct V3 { float x, y, z; };
-/* Owning stack reference to the freshly created data list: constructed from the object and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
+ * _refCount); released on scope exit. */
 class ObjectRef {
 public:
     igObject *p;
     ObjectRef(igObject *o) : p(o) {}
     ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the new property value object: same release shape.  The out-of-line copy
- * the exception table names is this unit's own retail body 0x003d4e20 (config/SLUS-20836/unit-objects.json,
- * emitted __dt__8ValueRefFv). */
+/* Owning stack reference to the new property value object; released on scope exit. */
 class ValueRef {
 public:
     igObject *p;
     ValueRef(igObject *o) : p(o) {}
     ~ValueRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     int *p;
@@ -100,8 +91,6 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        /* The new list is owned by the stack reference while it is retained into the ram and the old
-         * list is released; the reference's own release runs at the block end. */
         ObjectRef list(beBaseInfoDataList_Create(a));
         igObject *s0 = list.p;
         if (s0 != 0) {
@@ -130,8 +119,6 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        /* The new value object is owned by the stack reference while it replaces the record's value;
-         * released at the block end, before the model refresh. */
         ValueRef value(FUN_003bf560(a));
         igObject *n = value.p;
         if (n != 0) {
@@ -152,8 +139,6 @@ void Gap__Bec__beNDMWMdlPlayer2__vfunc_36(beNDMWMdlPlayer2 *arg0, beBaseInfoRam 
     s2 = cfg->_stageName;
     s1 = arg1->_ramNo;
     {
-        /* the interned stage name is owned by the stack reference while the player's slot of the name
-         * list takes its own share of it (retain the new token, release the old one) */
         int *tok = Str::intern(s2);
         StringRef name(tok);
         igIntList *l = (igIntList *)s4->_data;

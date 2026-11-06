@@ -1,4 +1,3 @@
-/* Initialises the 1000-byte state block at D_004bec28 (field +4 = 8), then runs the three follow-up steps; the last is a tail call. */
 extern void *memset(void *, int, unsigned int);
 extern int D_004bec28[];
 extern void FUN_002b3b78(int);

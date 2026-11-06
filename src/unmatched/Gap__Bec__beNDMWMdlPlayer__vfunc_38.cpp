@@ -1,24 +1,8 @@
-/* beNDMWMdlPlayer::vfunc_38 (0x003d22f0, 3700 bytes): per-frame lobby player update.
- *
- * Matching notes
- *  - Verified MATCH with the content-pinned alternate compiler and -O3,p (the same
- *    pair config/SLUS-20836/unit-compilers.tsv / config/SLUS-20836/unit-flags.tsv give the neighbouring
- *    beNDMWMdlPlayer bodies); this address is not listed there yet, so adopting the
- *    file needs those two table rows.  It does not match with the global compiler.
- *  - C++ unit (bool `full`); every callee is extern "C".
- *  - Two owning references are live across calls (retail exception table 0x544590, 28 bytes):
- *    the lobby property list built by CreateProps (PropsRef, the ObjectRef copy at 0x33e9c0,
- *    slot 244) and the sub-command object (NamedRef, the copy emitted behind this function at
- *    0x3d3170, slot 252); the unreferenced result slot of the view transform sits between
- *    them (slot 248).  Frame-slot order is a compiler constraint, see "matching construct" below.
- *  - The typed prefixes (PlayerArg, IntList, RefHdr, PropRec) project only the offsets
- *    used here; beNDMWMdlPlayerInfoWork / bePadData / beNDMWMdlPlayer are the reflected
- *    layouts.  The arena refs reached through the player are cast to their reflected
- *    classes: _viewerSIManager -> igViewerSceneInfoManager (_parameters, +20, then
- *    igViewerParameters::_viewMatrix, +0x6C), _system -> beSystem (_frameTimeF, +40),
- *    _gameRam -> beNDMWGameRam (_playerDataListList, +68).  Raw casts remain only for the
- *    nine-field object built for the sub-command.
- */
+/* Per-frame lobby player update. Two owning references are live across calls: the lobby property
+ * list built by CreateProps (PropsRef) and the sub-command object (NamedRef); the unreferenced result
+ * slot of the view transform sits between them. Frame-slot order is a compiler constraint, see the
+ * "matching construct" notes below. PlayerArg, IntList, RefHdr and PropRec project only the offsets
+ * used here. */
 #include "dw4/reflected.h"
 
 typedef struct RefHdr { int vt; int refs; } RefHdr;
@@ -102,8 +86,6 @@ extern unsigned char GPR_00554c14;
 
 }
 
-/* Releasing holders: PropsRef is the retail ObjectRef copy at 0x33e9c0, NamedRef the copy emitted
- * right behind the owner at 0x3d3170. */
 struct PropsRef {
     RefHdr *p;
     PropsRef(RefHdr *x) { p = x; }

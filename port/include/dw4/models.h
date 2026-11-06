@@ -1,33 +1,18 @@
-/* dw4/models.h — offline model-geometry reader for a stage's model pack.
- *
- * A model pack states its own addressing, so geometry comes out of the file with no running
- * game, no RAM dump and no load replay.  The chain is documented in
- * DW4_Decomp/docs/engine/model-format.md; the decoder it was recovered with is
- * DW4_Decomp/scripts/igb_models.py, and this is the port's C reader for the same rules:
- *
- *   igGeometryAttr1_5   _vertexArray   (+0x0c)  -> an igObjectRef id
- *                       _indexArray    (+0x10)  -> 0 (NULL; there is no index buffer)
- *                       _primType      (+0x14)  -> 3 list / 4 strip
- *                       _numPrims      (+0x18)
- *                       _stripLengths  (+0x30)  -> igPrimLengthArray1_1
- *     igVertexArray1_1  _vdata         (+0x08)  -> a memory block listing this array's streams
- *                       _numVerts      (+0x0c)
- *     igPrimLengthArray1_1
- *                       _lengthData    (+0x08)  -> the u32 primitive lengths
- *                       _numStrips     (+0x0c)  -> their count
- *
- * The offsets are the ones data/reflection.json gives (a base class declares its own fields,
- * at absolute offsets within the object, so `igGeometryAttr`/`igVertexArray`/
- * `igPrimLengthArray` hold most of them).
- *
- * A stream block's `_memSize` is its content size exactly — `12*_numVerts` for the positions,
- * `8*_numVerts` for the UVs — and the pool places every block on a 4-byte boundary
- * (`offset(id) = pool_start + sum(align4(_memSize) ...)`), so a stream starts at
- * its block's offset and no search is needed.  Every value read below is then checked with the
- * format's own arithmetic — the `_vdata` block must list a stream of exactly `12*_numVerts`
- * bytes and the lengths must sum to `_numVerts` — so a wrong offset shows up as a skipped
- * attribute rather than as bad geometry.
- */
+/* dw4/models.h — offline model-geometry reader for a stage's model pack. A model pack states its
+ * own addressing, so geometry comes out of the file with no running game, no RAM dump and no load
+ * replay. The chain: igGeometryAttr1_5 _vertexArray (+0x0c) -> an igObjectRef id _indexArray
+ * (+0x10) -> 0 (NULL; there is no index buffer) _primType (+0x14) -> 3 list / 4 strip _numPrims
+ * (+0x18) _stripLengths (+0x30) -> igPrimLengthArray1_1 igVertexArray1_1 _vdata (+0x08) -> a
+ * memory block listing this array's streams _numVerts (+0x0c) igPrimLengthArray1_1 _lengthData
+ * (+0x08) -> the u32 primitive lengths _numStrips (+0x0c) -> their count The offsets are the
+ * reflection schema's (a base class declares its own fields, at absolute offsets within the
+ * object, so `igGeometryAttr`/`igVertexArray`/ `igPrimLengthArray` hold most of them). A stream
+ * block's `_memSize` is its content size exactly — `12*_numVerts` for the positions, `8*_numVerts`
+ * for the UVs — and the pool places every block on a 4-byte boundary (`offset(id) = pool_start +
+ * sum(align4(_memSize) ...)`), so a stream starts at its block's offset and no search is needed.
+ * Every value read below is then checked with the format's own arithmetic — the `_vdata` block
+ * must list a stream of exactly `12*_numVerts` bytes and the lengths must sum to `_numVerts` — so
+ * a wrong offset shows up as a skipped attribute rather than as bad geometry. */
 #ifndef DW4_MODELS_H
 #define DW4_MODELS_H
 

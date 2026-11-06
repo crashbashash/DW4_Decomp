@@ -1,4 +1,3 @@
-/* Dropped leading parameter: lua_touserdata takes (arg0, n). */
 int __floatsidf();
 int FUN_00230d80();
 int FUN_002467a0();

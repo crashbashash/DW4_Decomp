@@ -1,13 +1,10 @@
-/* beNDMWDegiData__LoadFromProperties (0x003ee6d0, 2824 B): property-record loader. Copies the scalar, string, id-list and index-list records of the
- * property set arg1 into the data block of the beNDMWDegiData arg0 (its _data field, +28; the master passes an element of
- * the common interface's _gameUseData list). PropDest is a private view of that block, which has no reflected class.
- * Afterwards it calls beNDMWDegiData__UpdateFieldsFromData(arg0).
- * MATCH under the alternate compiler: local/mwcps2/combat/mwccps2.exe, flags "-O3,p -Iinclude" (unit profile).
- * Config row needed: config/SLUS-20836/unit-objects.json entry duplicates {__dt__2RPFv: 0x0033e9c0}, externals {__dl__FPv: 0x00100610}
- * (the string holder's release destructor; retail's exception table is header-only because no call happens while a holder lives).
- * matching constructs: KeyHolder is a volatile int so the search key is spilled to a stack slot as in retail; the SEARCH/FIND*
- * macros are one search loop spelled with explicit induction locals because their register order (key < constant -1;
- * count < offset < pointer < data pointer) is decided by declaration order. */
+/* Property-record loader. Copies the scalar, string, id-list and index-list records of the property
+ * set arg1 into the data block of the beNDMWDegiData arg0 (its _data field, +28), then calls
+ * beNDMWDegiData__UpdateFieldsFromData(arg0). PropDest is a private view of that block.
+ * Matching constructs: KeyHolder is a volatile int so the search key is spilled to a stack slot; the
+ * SEARCH/FIND* macros are one search loop spelled with explicit induction locals because their
+ * register order (key < constant -1; count < offset < pointer < data pointer) is decided by
+ * declaration order. */
 #include "dw4/reflected.h"
 class IdObject {
 public:

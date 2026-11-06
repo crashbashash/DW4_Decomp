@@ -1,4 +1,3 @@
-/* 0x00374180 - 68 bytes. Padding nop before the call (asm nop); alternate compiler -O3,p. */
 extern "C" {
 extern char *DAT_0058a214[4];
 int igStrCmp(char *, char *);

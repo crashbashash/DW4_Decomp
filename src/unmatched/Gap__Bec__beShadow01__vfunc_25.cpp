@@ -1,4 +1,3 @@
-/* 0x0039e290 - 212 bytes. Shadow hit handler: typed float stores (22.5f, +-100.0f), alternate compiler -O3,p (integral float literals as IEEE bits). */
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_IsKindOf(beShadow01Info *, int);

@@ -1,5 +1,3 @@
-/* Receiver is a beNDMWLoadIntf2MesWin: the only reflected class with seven bool fields at +28..+34
- * (_isWinOpen.._isCtrl). */
 #include "dw4/reflected.h"
 
 void beNDMWLoadIntf2MesWin__RequestOpen(beNDMWLoadIntf2MesWin *arg0) {

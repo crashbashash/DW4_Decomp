@@ -151,52 +151,42 @@ int dw4_fight_p2e_expup(dw4_playerrecords *records,const dw4_databases *database
 }
 
 /* ---- enemy-to-player rules ---- */
-/* Enemy-to-player FIGHTCALC rules (GAMERAM command FIGHTCALC, FightCom E2PISHITCHECK, E2PDAMAGE, E2PDAMAGERANK), ported from the
- * reviewed source of beNDMWGameRam::vfunc_34 (src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp cases 0, 3, 4 of the FIGHTCALC
- * switch on sp494; retail 0x00401e68 E2PDAMAGE, 0x00402ec0 E2PDAMAGERANK). Compared with the retail Mammothmon reads of 2026-11-01 (check-fieldstage e2pboss, findings
- * #2984, #3021): the hit check's dependence on the player's SUBAYASA and the plain TYPE 0 damage ranges agree; the contact criticals do not fully. Every random draw uses the one engine stream (beSystem::_random, system+0x30) as `next % n`, unsigned.
- *
- * Strings resolved from the retail ELF (virtual address -> text):
- *   eneatk columns: 0x5191d0 TYPE, 0x5191d8 SEQUENCE, 0x518950 MEICHURITSU, 0x5188b0 TSUYOSA, 0x518960 CHIMEIRITSU, 0x519018 ZOKUSEI
- *   enemy columns:  0x5188d8 SUBAYASA, 0x5188b0 TSUYOSA, 0x518960 CHIMEIRITSU, 0x5188c0 KASHIKOSA
- *   player (target) properties: 0x518990 BOUGYORITSU, 0x5188d8 SUBAYASA, 0x518980 KAIHIRITSU, 0x5188b8 MAMORI, 0x5188c0 KASHIKOSA,
- *     0x5188d0 SEISHIN, 0x518898 MHP, 0x5188e8 HONOOTEIKO, 0x5188f8 KOORITEIKO, 0x518908 KAMINARITEIKO, 0x518918 YAMITEIKO
- *   ZOKUSEI values: 0x518fa8 fire, 0x518fb0 ice, 0x518fb8 thunder, 0x518fc0 dark (0x519160 poison is not tested by E2PDAMAGE)
- *   lazy fetch: 0x5194b0/0x519488 DATABASE, 0x5194a8 eneatk, 0x519480 enemy, 0x519498/0x519470 GETDATABASE
- *   E2PDAMAGERANK object property: 0x5191e8 ONE
- *   (for reference) 0x4cf360 = {RES_FIRE,RES_ICE,RES_THUNDER,RES_DARK,RES_POISON}, 0x4cf380 = {RES_FIRE,..,RES_DARK} (P2E only)
- *
- * case 0 E2PISHITCHECK  args GetInt(0)=player index, GetInt(1)=enemy row, GetInt(2)=attack (eneatk row = attack % 10000); no object.
- *   t = eneatk.TYPE. t != 0: hit. t == 0:
- *     draw#1 r1 = next % 100; if player.BOUGYORITSU > r1: miss (guarded; no second draw)
- *     else draw#2 r2 = next % 100; hit iff r2 < (eneatk.MEICHURITSU * enemy.SUBAYASA) / (player.SUBAYASA * (player.KAIHIRITSU + 100) / 100)
- *   Output: ClearBool, AppendBool(hit).
- * case 3 E2PDAMAGE  args GetInt(0)=player, GetInt(1)=enemy row, GetInt(2)=attack; GetObject(0)=the ENEMY's beNDMWMdlPEBaseInfoWork
- *   (its _downDataList first entry: [4] subtracted from enemy.TSUYOSA, [1] subtracted from enemy.CHIMEIRITSU; 0 when the list is empty).
- *   dmg = 0, element = -1; switch eneatk.TYPE:
- *   TYPE 0: dmg = clamp(((enemy.TSUYOSA - down[4]) * eneatk.TSUYOSA) / player.MAMORI)
- *     element/res from eneatk.ZOKUSEI (fire->HONOOTEIKO 0, ice->KOORITEIKO 1, thunder->KAMINARITEIKO 2, dark->YAMITEIKO 3, else res 0, -1)
- *     if res != 0: draw r = next % 1000; if res/5 <= r: dmg += res<1001 ? dmg*((1000-res)/20+50)/100 : res<5001 ? dmg*((5000-res)/80)/100 : 0
- *     if dmg != 0: c = enemy.CHIMEIRITSU - down[1]; a = eneatk.CHIMEIRITSU; draw r = next % 10000;
- *       if (100-c)*(100-a) <= r: dmg += dmg*(a/2+90)/100
- *   TYPE 1: v = eneatk.TSUYOSA; if v != 0:
- *     dmg = clamp((enemy.KASHIKOSA * v) / player.SEISHIN); element/res as above (no draw);
- *     if res != 0: dmg = res<1001 ? dmg*((1000-res)/20+50)/100 : res<4201 ? dmg*((5000-res)/80)/100 : dmg/10   (replaces, not adds)
- *     if dmg != 0 && (a = eneatk.CHIMEIRITSU) != 0: thr = res<1001 ? (1000-res)+a*100 : a*100-(res-1000)/10; draw r = next % 10000;
- *       if thr <= r: dmg += (dmg + (a/2+90))/100   (retail ADDS here, `addu s3,s3,v1` at 0x402994, unlike TYPE 0's multiply)
- *   TYPE 2: dmg = clamp((player.MHP * eneatk.TSUYOSA) / 100); element/res as above (no draw);
- *     if res != 0: res<1001: dmg += dmg*((1000-res)/20+50)/100; else res<5001: dmg += dmg*((5000-res)/80)/100; else unchanged
- *   other TYPE: dmg 0, element -1.
- *   Then clamp; if dmg != 0: roll = next & 3; spread = next % (unsigned)(dmg*25);
- *     dmg = (int)(spread + dmg*{950,975,1000,1025}[roll]) / 1000 (unsigned sum, cast to int, signed /); high = roll == 3. Clamp.
- *   clamp = [0, 0x1869F]. Output: ClearInt, AppendInt(dmg), AppendInt(element), AppendInt(high).
- * case 4 E2PDAMAGERANK  args GetInt(0)=player, GetInt(1)=attack, GetInt(2)=player HP after the hit (<= 0 -> 3), GetInt(3)=damage,
- *   GetObject(0)=an object whose +0x28 property list holds ONE (see dw4_fight_e2p_damage_rank).
- *   hp <= 0: rank 3 (no reads). Else: reads eneatk.TSUYOSA, eneatk.SEQUENCE, player.MHP (always, in that order), switch SEQUENCE:
- *     0: TSUYOSA == 0 ? -1 : (q = damage*100/MHP) < 10 ? 0 : q < 40 ? 1 : 2;  1: -1;  2: 0;  3: 2;  4: 1;  other: 0.
- *   rank == 2 and ONE flag set: rank 1. Output: ClearInt, AppendInt(rank). No draws.
- * Status cases 7-12 (stun, poison, sleep, bind, attack-down, power-down times) live in src/fightstatus_e2p.c.
- * Division by zero: retail divides without a check; the port returns -1 instead of producing the EE's undefined quotient. */
+/* Enemy-to-player FIGHTCALC rules (GAMERAM command FIGHTCALC, FightCom E2PISHITCHECK, E2PDAMAGE,
+ * E2PDAMAGERANK), ported from beNDMWGameRam::vfunc_34 (cases 0, 3, 4 of the FIGHTCALC switch on
+ * sp494; retail 0x00401e68 E2PDAMAGE, 0x00402ec0 E2PDAMAGERANK). Every random draw uses the one
+ * engine stream (beSystem::_random, system+0x30) as `next % n`, unsigned. case 0 E2PISHITCHECK
+ * args GetInt(0)=player index, GetInt(1)=enemy row, GetInt(2)=attack (eneatk row = attack %
+ * 10000); no object. t = eneatk.TYPE. t != 0: hit. t == 0: draw#1 r1 = next % 100; if
+ * player.BOUGYORITSU > r1: miss (guarded; no second draw) else draw#2 r2 = next % 100; hit iff r2
+ * < (eneatk.MEICHURITSU * enemy.SUBAYASA) / (player.SUBAYASA * (player.KAIHIRITSU + 100) / 100)
+ * Output: ClearBool, AppendBool(hit). case 3 E2PDAMAGE args GetInt(0)=player, GetInt(1)=enemy row,
+ * GetInt(2)=attack; GetObject(0)=the ENEMY's beNDMWMdlPEBaseInfoWork (its _downDataList first
+ * entry: [4] subtracted from enemy.TSUYOSA, [1] subtracted from enemy.CHIMEIRITSU; 0 when the list
+ * is empty). dmg = 0, element = -1; switch eneatk.TYPE: TYPE 0: dmg = clamp(((enemy.TSUYOSA -
+ * down[4]) * eneatk.TSUYOSA) / player.MAMORI) element/res from eneatk.ZOKUSEI (fire->HONOOTEIKO 0,
+ * ice->KOORITEIKO 1, thunder->KAMINARITEIKO 2, dark->YAMITEIKO 3, else res 0, -1) if res != 0:
+ * draw r = next % 1000; if res/5 <= r: dmg += res<1001 ? dmg*((1000-res)/20+50)/100 : res<5001 ?
+ * dmg*((5000-res)/80)/100 : 0 if dmg != 0: c = enemy.CHIMEIRITSU - down[1]; a =
+ * eneatk.CHIMEIRITSU; draw r = next % 10000; if (100-c)*(100-a) <= r: dmg += dmg*(a/2+90)/100 TYPE
+ * 1: v = eneatk.TSUYOSA; if v != 0: dmg = clamp((enemy.KASHIKOSA * v) / player.SEISHIN);
+ * element/res as above (no draw); if res != 0: dmg = res<1001 ? dmg*((1000-res)/20+50)/100 :
+ * res<4201 ? dmg*((5000-res)/80)/100 : dmg/10 (replaces, not adds) if dmg != 0 && (a =
+ * eneatk.CHIMEIRITSU) != 0: thr = res<1001 ? (1000-res)+a*100 : a*100-(res-1000)/10; draw r = next
+ * % 10000; if thr <= r: dmg += (dmg + (a/2+90))/100 (retail ADDS here, `addu s3,s3,v1` at
+ * 0x402994, unlike TYPE 0's multiply) TYPE 2: dmg = clamp((player.MHP * eneatk.TSUYOSA) / 100);
+ * element/res as above (no draw); if res != 0: res<1001: dmg += dmg*((1000-res)/20+50)/100; else
+ * res<5001: dmg += dmg*((5000-res)/80)/100; else unchanged other TYPE: dmg 0, element -1. Then
+ * clamp; if dmg != 0: roll = next & 3; spread = next % (unsigned)(dmg*25); dmg = (int)(spread +
+ * dmg*{950,975,1000,1025}[roll]) / 1000 (unsigned sum, cast to int, signed /); high = roll == 3.
+ * Clamp. clamp = [0, 0x1869F]. Output: ClearInt, AppendInt(dmg), AppendInt(element),
+ * AppendInt(high). case 4 E2PDAMAGERANK args GetInt(0)=player, GetInt(1)=attack, GetInt(2)=player
+ * HP after the hit (<= 0 -> 3), GetInt(3)=damage, GetObject(0)=an object whose +0x28 property list
+ * holds ONE (see dw4_fight_e2p_damage_rank). hp <= 0: rank 3 (no reads). Else: reads
+ * eneatk.TSUYOSA, eneatk.SEQUENCE, player.MHP (always, in that order), switch SEQUENCE: 0: TSUYOSA
+ * == 0 ? -1 : (q = damage*100/MHP) < 10 ? 0 : q < 40 ? 1 : 2; 1: -1; 2: 0; 3: 2; 4: 1; other: 0.
+ * rank == 2 and ONE flag set: rank 1. Output: ClearInt, AppendInt(rank). No draws. Division by
+ * zero: retail divides without a check; the port returns -1 instead of producing the EE's
+ * undefined quotient. */
 static int e2p_num(dw4_property_folder *f,const char *name,int32_t *v){return dw4_fight_record_number(f,name,v);}
 static int e2p_enemy_int(const dw4_fight_e2p_ctx *c,int32_t row,const char *col,int32_t *v){return dw4_dbt_number(c->enemy,row,col,v)?-1:0;}
 static int e2p_atk_int(const dw4_fight_e2p_ctx *c,int32_t attack,const char *col,int32_t *v)

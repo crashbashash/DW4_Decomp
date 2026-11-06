@@ -1,12 +1,8 @@
-/* The Alchemy viewer's usage / option help printer. Prints the banner ("USAGE: %s [option1 ...")
- * and then one help entry per command-line option: name, description and the option's default
- * value, through five typed helpers (bool, int, float, vec3, vec4) that format the entry with
- * printf. Evidence: the strings at 0x004e87c0..0x004e9590 (data/strings.json), the helper call
- * shapes (FUN_002342b0 prints "true"/"false" from its flag, FUN_002342e0 an int, FUN_00234300 a
- * float, FUN_00234350 a float[3], FUN_002343d0 a float[4]). Each entry is guarded by `if (name)`:
- * retail tests the literal's address against zero, so the guard comes from the option macro, not
- * from the data. Argument: the program name for the USAGE line. Build: default compiler, -O3
- * -Iinclude. */
+/* The Alchemy viewer's usage / option help printer: prints the banner and then one help entry per
+ * command-line option (name, description and default value) through five typed helpers (bool, int,
+ * float, vec3, vec4) that format the entry with printf. Each entry is guarded by `if (name)`: the
+ * literal's address is tested against zero, so the guard comes from the option macro, not from the
+ * data. Argument: the program name for the USAGE line. */
 extern int printf(const char *, ...);
 extern void FUN_002342b0(const char *name, const char *help, int defaultValue);   /* bool option */
 extern void FUN_002342e0(const char *name, const char *help, int defaultValue);   /* int option */
@@ -122,9 +118,9 @@ extern const float g_vec3Zero[4];
 extern const float g_vec4Zero[4];
 
 /* Small-data float literals the retail code reads through gp (value in the comment). */
-extern float GPR_005548c8; /* 0.001f  default --invalid-normals-precision */
-extern float GPR_00554948; /* 0.1f    default --near-plane and --alpha-test-reference */
-extern float GPR_00554968; /* 0.2f    default --clear-color red/green/blue */
+extern float GPR_005548c8;
+extern float GPR_00554948;
+extern float GPR_00554968;
 
 #define OPTION_BOOL(name, help, value)  if (name) FUN_002342b0(name, help, value)
 #define OPTION_INT(name, help, value)   if (name) FUN_002342e0(name, help, value)

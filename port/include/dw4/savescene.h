@@ -1,7 +1,7 @@
-/* Interface-scene host for stagIS12 (the data-select / save screen): original Lua pack 810 and its stage data run
- * through the same file-list/stage-object/controller/dialogue owners as a hub, without the lobby. The native
- * controllers are beNDMWSaveCtrl (dw4/savectrl.h) and beNDMWSaveIntf (dw4/saveintf.h) over a host memory card
- * (dw4/memcard.h). Evidence and boundaries: port/docs/save-keeper.md. */
+/* Interface-scene host for stagIS12 (the data-select / save screen): original Lua pack 810 and its
+ * stage data run through the same file-list/stage-object/controller/dialogue owners as a hub,
+ * without the lobby. The native controllers are beNDMWSaveCtrl (dw4/savectrl.h) and beNDMWSaveIntf
+ * (dw4/saveintf.h) over a host memory card (dw4/memcard.h). */
 #ifndef DW4_SAVESCENE_H
 #define DW4_SAVESCENE_H
 #include "dw4/mount.h"

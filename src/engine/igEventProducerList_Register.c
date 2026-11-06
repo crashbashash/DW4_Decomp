@@ -1,6 +1,3 @@
-/* 0x001461a0 igEventProducerList_Register: registers class igEventProducerList with the object system, derived from igObjectList.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObjectList_GetPublishedMetaObject[];
 extern char igEventProducerList_GetVTable[];
 extern char thunk_igEventProducerList_GetMetaObject[];
@@ -14,16 +11,16 @@ int igMetaObject_RegisterClass();
 void igEventProducerList_Register(void) {
     WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igEventProducerList_metaObject, /* published MetaObject slot */
-        igObjectList_Register,                     /* base class registrar */
-        igObjectList_GetPublishedMetaObject,       /* base class MetaObject accessor */
-        thunk_igEventProducerList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igEventProducerList_className,  /* class name */
-        0x14,                                      /* instance size */
-        igEventProducerList_GetVTable,             /* vtable getter */
-        0,                                         /* field adder */
-        0,                                         /* extra callback item */
-        g_igEventProducerList_callbackList  /* callback list */
+        0, /* abstract */
+        g_igEventProducerList_metaObject,
+        igObjectList_Register,
+        igObjectList_GetPublishedMetaObject,
+        thunk_igEventProducerList_GetMetaObject,
+        igEventProducerList_className,
+        0x14, /* instance size */
+        igEventProducerList_GetVTable,
+        0,
+        0, /* extra callback item */
+        g_igEventProducerList_callbackList /* callback list */
     );
 }

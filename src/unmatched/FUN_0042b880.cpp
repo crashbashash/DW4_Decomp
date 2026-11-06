@@ -1,9 +1,4 @@
-/* Sends a named message, reads a record count from the database and posts two string-table
- * messages (9 - reserved - used, and that times the record value); alternate compiler -O3,p. */
 #include "dw4/reflected.h"
-/* Receiver by the matched caller beNDMWShopCtrl50::vfunc_21: offsets +12/+48/+88/+92 are _messenger/_retCode/_conItemNo/_diskCnt. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int sprintf(char *, int *, int);
 int beDataBase_GetRecordInt(int, int, int *, int, int);
@@ -47,4 +42,4 @@ void FUN_0042b880(beNDMWShopCtrl50 *owner) {
     beMessenger_AppendString(me->_messenger, sp40);
     beMessenger_DispatchSelected(me->_messenger, &DAT_0051b6b0[0]);
 }
-} /* extern "C" */
+}

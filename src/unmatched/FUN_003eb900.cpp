@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_00100610(void **);
 int igObject_Destroy(int *);
@@ -21,4 +19,4 @@ void **FUN_003eb900(void **arg0, int arg1) {
     }
     return arg0;
 }
-} /* extern "C" */
+}

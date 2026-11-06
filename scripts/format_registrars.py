@@ -22,28 +22,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCOPE = ("engine", "game", "audio", "menu", "movie", "lua")
 CALL = re.compile(r"igMetaObject_RegisterClass\((?P<args>[^;()]+)\);")
-BANNER = re.compile(r"\A/\*.*?\*/\n", re.S)
-ROLES = (
-    "abstract state (0: the vtable getter runs, 1: abstract class)",
-    "published MetaObject slot",
-    "base class registrar",
-    "base class MetaObject accessor",
-    "own MetaObject accessor (stored at +0x54)",
-    "class name",
-    "instance size",
-    "vtable getter",
-    "field adder",
-    "extra callback item",
-    "callback list",
-)
-
-
-def header(cls, args, addr):
-    base = re.fullmatch(r"(\w+)_Register", args[2])
-    return ("/* 0x%s %s_Register: registers class %s with the object system%s.\n"
-            " * The igMetaObject_RegisterClass arguments are laid out per\n"
-            " * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */\n"
-            % (addr, cls, cls, ", derived from %s" % base.group(1) if base else ""))
+ROLES = {0: "abstract", 6: "instance size", 9: "extra callback item", 10: "callback list"}
 
 
 def rewrite(text, cls, lists):
@@ -60,18 +39,14 @@ def rewrite(text, cls, lists):
     if cb:
         args[10] = "g_%s_callbackList_%s" % (cls, cb.group(1))
         lists[int(cb.group(1), 16)] = args[10]
-    pad = max(len(a) for a in args[:-1]) + 1
     rows = []
-    for i, (a, role) in enumerate(zip(args, ROLES)):
-        sep = "," if i < 10 else " "
-        rows.append("%s    %-*s /* %s */" % (indent, pad, a + sep, role))
+    for i, a in enumerate(args):
+        role = " /* %s */" % ROLES[i] if i in ROLES and a[0].isdigit() else ""
+        rows.append("%s    %s%s%s" % (indent, a, "," if i < 10 else "", role))
     call = "igMetaObject_RegisterClass(\n%s\n%s);" % ("\n".join(rows), indent)
     text = text[:m.start()] + call + text[m.end():]
     if old_list:
         text = re.sub(r"\b%s\b" % old_list, args[10], text)
-    addr = re.match(r"/\* 0x([0-9a-f]{8})", text)
-    if addr:
-        text = header(cls, args, addr.group(1)) + text[BANNER.match(text).end():]
     return text
 
 

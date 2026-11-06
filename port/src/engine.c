@@ -243,34 +243,19 @@ static int engine_frame(unsigned frame, uint32_t *last_header, uint32_t *last_fl
     return 0;
 }
 
-/* --- boot: the engine's own main, phase by phase --------------------------------------------------
- *
- * `FUN_002595e0` (the game's `main`) is undecompiled, but the call graph is mapped in
- * `docs/engine/engine-boot.md` and every callee on the manager path is decompiled
- * and byte-matched in the decompilation repo.  This runs the boot in the engine's own order and
- * constructs the parts the port has a model for:
- *
- *   phase                 engine call            port
- *   --------------------  ---------------------  ----------------------------------------------
- *   process/argv setup    0x259a20 / 0x259cd0    no argv model yet
- *   core init             0x2d16a0               represented (matched in the decomp; it builds a
- *                                                928-byte engine core object, not modelled yet)
- *   app object            0x234900 / 0x234d70    app config struct (not yet)
- *   managers              0x1a1ae0 / 0x1a7cc0 / ** constructed here **
- *                         0x1a67c0
- *   frame object          0x1007e0 / 0x238110   frame counter at `+0xe8`
- *   loop                  0x25a580 / 0x25a8c0   update/present split
- *   shutdown              0x25a330 / 0x234b90 / not yet
- *                         0x2d1770
- *
- * The manager trio is the engine's Insight core: `main` acquires the current core (`FUN_002f8a20`),
- * releases the old manager, calls the class's `_Create` and stores the result in the class's
- * global.  Each `_Create` is `igMetaObject_RunStaticInit(<Class>_Register)` followed by
- * `igMetaObject_CreateInstance(<Class> MetaObject, owner)`; both are already matched in the decomp
- * (`0x1a1ae0`/`0x1a7cc0`/`0x1a67c0`), so the port reproduces exactly that: allocate an instance of
- * the class's reflected size, run `igObject_InitHeader` on it, stamp its vtable.  It is
- * `igMetaObject_CreateInstance` at the semantic level -- the port's object model is the schema the
- * decompilation recovered, so no guest MetaObject pointer is needed to identify the class. */
+/* Boot: the engine's own main, phase by phase, in the engine's own order, constructing the parts
+ * the port has a model for. Phases (engine call -> port): process/argv setup 0x259a20 / 0x259cd0
+ * -> no argv model yet; core init 0x2d16a0 -> represented (it builds a 928-byte engine core
+ * object, not modelled yet); app object 0x234900 / 0x234d70 -> app config struct (not yet);
+ * managers 0x1a1ae0 / 0x1a7cc0 / 0x1a67c0 -> constructed here; frame object 0x1007e0 / 0x238110 ->
+ * frame counter at +0xe8; loop 0x25a580 / 0x25a8c0 -> update/present split; shutdown 0x25a330 /
+ * 0x234b90 / 0x2d1770 -> not yet. The manager trio is the engine's Insight core: main
+ * (FUN_002595e0) acquires the current core (FUN_002f8a20), releases the old manager, calls the
+ * class's _Create and stores the result in the class's global. Each _Create is
+ * igMetaObject_RunStaticInit(<Class>_Register) followed by igMetaObject_CreateInstance(<Class>
+ * MetaObject, owner), so the port allocates an instance of the class's reflected size, runs
+ * igObject_InitHeader on it and stamps its vtable. No guest MetaObject pointer is needed to
+ * identify the class. */
 typedef struct {
     const char *cls;       /* the class whose MetaObject global the engine's `_Create` uses */
     uint32_t    global;    /* the guest global `main` stores the constructed manager in */
@@ -1767,9 +1752,9 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
         printf("  backdrop: stagml11.igb unavailable; drawing the dark field only\n");
 
     BOOT_MARK("stagml11 backdrop decoded");
-    /* The front-end trail layer, generated from the pack's own model controller (findings
-     * #610/#614/#619): AREA.AFS entry 620's `j_startback` graph, its JOINTSET schedule and its
-     * `sback00` texture.  No capture and no flag: the asset root supplies it. */
+    /* The front-end trail layer, generated from the pack's own model controller: AREA.AFS entry
+     * 620's `j_startback` graph, its JOINTSET schedule and its `sback00` texture. No capture and
+     * no flag: the asset root supplies it. */
     flayer = front.layer;
     if (flayer)
         printf("  front-end layer: j_startback, %d mesh(es)%s\n", dw4_frontlayer_meshes(flayer),
@@ -2339,7 +2324,6 @@ int dw4_engine_boot(const dw4_engine_opts *o, const char *input_script,
         }
 
         dw4_input_menu_axes(&in, &menu_lx, &menu_ly);
-
 
         /* The title.  Buttons are edge-triggered: one press is one action (the key
          * that skipped the movie is still down when the title loop starts, and a level-triggered read

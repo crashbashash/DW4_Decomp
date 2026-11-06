@@ -1,6 +1,6 @@
-/* 0x00399940 - beModelCtrlSCEffect vfunc 21: asks the gene model for its ram number, then dispatches the effect
- * request (owner name, sequence, lock target, offset, rotation, position lock) to the selected receivers. The ram
- * object's data list is created on first use and held in an ObjectRef whose destructor the exception table names. */
+/* BeModelCtrlSCEffect vfunc 21: asks the gene model for its ram number, then dispatches the effect
+ * request (owner name, sequence, lock target, offset, rotation, position lock) to the selected
+ * receivers. The ram object's data list is created on first use. */
 #include "dw4/reflected.h"
 extern "C" {
 struct PropertyEntry { char pad[20]; struct PropertyValueObj *f20; };
@@ -13,7 +13,7 @@ int beMessenger_AppendInt(int, int);
 int beMessenger_AppendString(int, ...); /* string argument is a name pointer or a 4-byte arena handle (_seqName) */
 int beMessenger_AppendVec3(int, Vec3f *);
 int beMessenger_DispatchSelected(int, int *);
-beBaseInfoRam *beMessenger_GetObject(int, int); /* hypothesis: the receiver objects are the matched beBaseInfoRam entries of beMessengerWork._findRamList */
+beBaseInfoRam *beMessenger_GetObject(int, int);
 int beMessenger_GetObjectCount(int);
 int beMessenger_SelectReceivers(int, int *, int, int);
 int beMessenger_SendNamed(int, int *, int, int, int *);
@@ -29,9 +29,8 @@ extern int DAT_00585be0[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released on scope
- * exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the
- * retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list; released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

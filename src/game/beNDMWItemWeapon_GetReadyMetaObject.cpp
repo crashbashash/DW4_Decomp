@@ -1,9 +1,5 @@
-/* beNDMWItemWeapon_GetReadyMetaObject (0x003c8cd0): lazily creates the singleton when it is
- * missing or its ready flag (bit 2 of the word at +36) is clear, then returns it. Needs the pinned
- * alternate compiler with -O3,p: its branch-target alignment gives the extra nop of the retail
- * body. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
+/* Lazily creates the singleton when it is missing or its ready flag (bit 2 of the word at +36) is
+ * clear, then returns it. */
 extern "C" {
 int FUN_003c8d60();
 extern void * DAT_0058bf60[4];
@@ -17,4 +13,4 @@ void *beNDMWItemWeapon_GetReadyMetaObject(void) {
 done:
     return DAT_0058bf60[0];
 }
-} /* extern "C" */
+}

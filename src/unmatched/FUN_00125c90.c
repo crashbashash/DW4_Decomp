@@ -1,11 +1,10 @@
 /* Walks every stream on the state block's stream lists and ORs together the callback's result for
- * each stream whose flags (+12) are non-zero. The shape of newlib's _fwalk (hypothesis; the list
- * is the one FUN_00125138 builds at +472). */
+ * each stream whose flags (+12) are non-zero. */
 typedef struct Stream125c90 {
     char pad0[12];
     short flags;                    /* +12: 0 = slot unused */
     char pad14[74];
-} Stream125c90;                     /* 88 bytes */
+} Stream125c90;
 
 typedef struct StreamList125c90 {
     struct StreamList125c90 *next;  /* +0 */

@@ -1,5 +1,4 @@
-/* Lowercases the string in place using the ctype table's upper-case bit and returns it (newlib
- * strlwr shape; name is a hypothesis). */
+/* Lowercases the string in place using the ctype table's upper-case bit and returns it. */
 extern const char DAT_004d3d10[]; /* ctype class table; entry c + 1 classifies character c */
 
 #define CTYPE_UPPER 0x01

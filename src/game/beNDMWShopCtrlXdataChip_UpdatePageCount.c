@@ -1,6 +1,4 @@
-/* Chip list pagination: refresh maximum pages and return current row count. Two original NOPs plus
- * balanced assembler scheduling directives preserve the conditional branches. -O3,p reproduces
- * constant-division lowering. */
+/* Chip list pagination: refresh maximum pages and return current row count. */
 #include "dw4/reflected.h"
 int beNDMWShopCtrlXdataChip_UpdatePageCount(beNDMWShopCtrlXdataChip *self){
     int count=((igObjectList *)self->_itemBaseList)->_count,pages,remaining,result;

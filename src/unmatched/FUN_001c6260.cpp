@@ -1,4 +1,3 @@
-/* 0x001c6260 - 172 bytes. "Every element accepts" list walk (typed list, class with vtable dummies); alternate compiler -O3. */
 extern "C" {
 int FUN_001c6260(void *arg0);
 }

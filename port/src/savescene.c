@@ -21,9 +21,10 @@
 #include <strings.h>
 #include <math.h>
 
-/* Card result codes the SaveIntf flows branch on (item state 4): 2 OK, 4 no game file (retail FILEFIND on a card without one: LoadIntf2 shows
- * "This memory card (PS2) contains no Digimon World 4 game file."), 5 no card, 7 unformatted,
- * 9/10 write/read failure. The retail numbering beyond these is not recovered; see save-keeper.md. */
+/* Card result codes the SaveIntf flows branch on (item state 4): 2 OK, 4 no game file (retail
+ * FILEFIND on a card without one: LoadIntf2 shows "This memory card (PS2) contains no Digimon
+ * World 4 game file."), 5 no card, 7 unformatted, 9/10 write/read failure. The retail numbering
+ * beyond these is not recovered. */
 enum {R_OK=2,R_NO_FILE=4,R_NO_CARD=5,R_BAD_READ=10,R_BAD_WRITE=9};
 
 struct dw4_savescene {
@@ -239,10 +240,11 @@ static int h_restore(void *u,int player,int card_slot,int area)
     if(dw4_memcard_restore(s->card,s->players,s->databases,player,area,error,sizeof error)){snprintf(s->error,sizeof s->error,"loading the character: %s",error);return -1;}
     return 0;
 }
-/* LoadIntf2 Create: GAMEDATAINIT + GAMESTART for the typed name and the chosen starter, then UNIQUE. The record is built by the
- * native fresh-character owner (dw4_playerrecords_create, 3f7310), which takes the name as text: the NameSel's full-width codes
- * (U+FF01..U+FF5E) become their ASCII forms, U+30FC and U+30FB (the symbol row's long-vowel mark and middle dot) become '-' and
- * '.'. The retail conversion of a name object in GAMESTART (3f96e0 -> 382eb0) is not recovered; see port/docs/load-scene.md. */
+/* LoadIntf2 Create: GAMEDATAINIT + GAMESTART for the typed name and the chosen starter, then
+ * UNIQUE. The record is built by the native fresh-character owner (dw4_playerrecords_create),
+ * which takes the name as text: the NameSel's full-width codes (U+FF01..U+FF5E) become their ASCII
+ * forms, U+30FC and U+30FB (the symbol row's long-vowel mark and middle dot) become '-' and '.'.
+ * The retail conversion of a name object in GAMESTART is not recovered. */
 static int h_create(void *u,int player,const char *model,const uint16_t name[8],int32_t unique)
 {
     dw4_savescene *s=u;char text[9]={0},error[256]="";size_t n=0;

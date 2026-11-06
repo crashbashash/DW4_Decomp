@@ -1,7 +1,7 @@
 /* Runs FUN_002acb98 over each of `count` consecutive 0xDD8-byte records. */
 int FUN_002acb98();
 
-/* One 3544-byte (0xDD8) record; members as read by FUN_002ad2e0..FUN_002ad870. */
+/* One 0xDD8-byte record; only the members read by FUN_002ad2e0 through FUN_002ad870 are known. */
 struct Rec0DD8 {
     int f0;
     int f4;                               /* fallback value (FUN_002ad870) */

@@ -1,6 +1,6 @@
-/* Native boundary for the unchanged recovered title controller.
- * Common-model queues use the recovered reference. Model action execution
- * remains a bounded interpretation of the title packs; see docs/title-controller.md. */
+/* Native boundary for the unchanged recovered title controller. Common-model queues use the
+ * recovered reference. Model action execution remains a bounded interpretation of the title
+ * packs.. */
 #ifndef DW4_TITLEHOST_H
 #define DW4_TITLEHOST_H
 #include "title-menu.h"

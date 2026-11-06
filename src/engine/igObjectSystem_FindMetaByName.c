@@ -1,8 +1,6 @@
-/* 0x002d3070 — look a registered metaobject up by class name.  The object
- * system's metadata registry (the pointer list at +24) is searched on the
- * `_name` field of igMetaObject; an inactive object system (flag byte at +0
- * clear) finds nothing.  See docs/engine/allocator-builder.md, "Metadata
- * selection and backing policies". */
+/* Looks a registered metaobject up by class name. The object system's metadata registry (the
+ * pointer list at +24) is searched on the `_name` field of igMetaObject; an inactive object system
+ * (flag byte at +0 clear) finds nothing. */
 #include "dw4/reflected.h"
 
 /* The object system behind g_objectSystem: only the activity flag

@@ -1,6 +1,3 @@
-/* 0x002ccf70 igBoolArrayMetaField_Register: registers class igBoolArrayMetaField with the object system, derived from igBoolMetaField.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igBoolMetaField_Register[];
 extern char igBoolArrayMetaField_GetVTable[];
 extern char thunk_igBoolArrayMetaField_GetMetaObject[];
@@ -15,16 +12,16 @@ int igBoolArrayMetaField_InitFields();
 void igBoolArrayMetaField_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
-        0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igBoolArrayMetaField_metaObject,      /* published MetaObject slot */
-        igBoolMetaField_Register,                        /* base class registrar */
-        igBoolMetaField_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igBoolArrayMetaField_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        igBoolArrayMetaField_className,       /* class name */
-        0x38,                                            /* instance size */
-        igBoolArrayMetaField_GetVTable,                  /* vtable getter */
-        &igBoolArrayMetaField_InitFields,                /* field adder */
-        0,                                               /* extra callback item */
-        g_igBoolArrayMetaField_callbackList     /* callback list */
+        0, /* abstract */
+        g_igBoolArrayMetaField_metaObject,
+        igBoolMetaField_Register,
+        igBoolMetaField_GetPublishedMetaObject,
+        thunk_igBoolArrayMetaField_GetMetaObject,
+        igBoolArrayMetaField_className,
+        0x38, /* instance size */
+        igBoolArrayMetaField_GetVTable,
+        &igBoolArrayMetaField_InitFields,
+        0, /* extra callback item */
+        g_igBoolArrayMetaField_callbackList /* callback list */
     );
 }

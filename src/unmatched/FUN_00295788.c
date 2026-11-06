@@ -1,4 +1,4 @@
-/* Starts a Sofdec handle on a stream-joint source (its error string names it mwSfdStartSj):
+/* Starts a Sofdec handle on a stream-joint source:
  * rejects an invalid handle, otherwise resets it, records the source, sets state 2, clears the
  * counters and kicks playback. */
 extern int FUN_002968c0(void *sfd);

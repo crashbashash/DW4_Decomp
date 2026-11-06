@@ -1,6 +1,5 @@
-/* ADXT_StartFnameRangeLp (name from the error string at DAT_004ee1d8): resets the play handle file
- * list, enters the name range with FUN_00263768, enables looping on the list and starts playback
- * with FUN_002638a0. */
+/* ADXT_StartFnameRangeLp: resets the play handle file list, enters the name range with
+ * FUN_00263768, enables looping on the list and starts playback with FUN_002638a0. */
 typedef struct AdxtHandle {
     char f0[148];
     void *fileList;

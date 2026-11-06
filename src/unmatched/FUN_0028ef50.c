@@ -3,7 +3,6 @@
 int FUN_002913f8(void *handle); /* handle check; non-zero rejects */
 int FUN_0028eb38(void *handle, int error);
 
-/* Members of the handle used here; roles not yet recovered. */
 struct Handle0028ef50 {
     char pad0[680];
     int f680; /* +680 */

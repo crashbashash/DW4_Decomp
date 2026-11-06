@@ -1,4 +1,3 @@
-/* stack-object GetVTable accessor with zeroed members and a trailing destructor call.py. */
 typedef struct { int *vt; int w[15]; } Obj;
 int igObject_InitHeader(void *);
 int FUN_00195970(void *, int);

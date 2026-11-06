@@ -35,8 +35,7 @@ extern int DAT_0051b358[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* One releasing holder class per retail destructor copy (each block-local holder below has its own copy):
- * RefA 0x00427020, RefB 0x0040ed60, RefC 0x0040ece0, RefD 0x003b7fe0, RefE 0x00426fa0, RefF 0x003b90a0. */
+/* One releasing holder class per block-local holder, so each gets its own destructor copy. */
 struct RefA {
     S_ref *p;
     RefA(S_ref *q) : p(q) {}

@@ -1,4 +1,3 @@
-/* 0x00431760 - Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21 (typed) */
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_00236f80(...);
@@ -65,12 +64,12 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self);
 #define ALLOC(a, self) { a = igObject_GetAllocator(self); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 
 struct Rec12 { char p[12]; int f12; };
-/* owning reference to a freshly created window: the destructor drops one reference and destroys at zero.  One class per window
- * kind (the compiler emits one out-of-line destructor per class; retail keeps the copies listed in config/SLUS-20836/unit-objects.json). */
+/* Owning reference to a freshly created window: the destructor drops one reference and destroys at
+ * zero. One class per window kind, since the compiler emits one out-of-line destructor per class. */
 template <int K> struct WindowRef { igObject *p; WindowRef(igObject *o) : p(o) {} ~WindowRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } operator igObject *() { return p; } };
-/* owning reference to an interned string token (reference count at p[-1], chunk header at p[-2]); retail destructor 0x130720 */
+/* Owning reference to an interned string token (reference count at p[-1], chunk header at p[-2]). */
 struct StringRef { char *p; StringRef(char *s) : p(s) {} ~StringRef() { char *s = p; if (s != 0) { int *hd = (int *)s - 2; int cnt = ((int *)s)[-1] - 1; ((int *)s)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } } };
-/* retail returns the copied token through a hidden result pointer */
+/* The copied token is returned through a hidden result pointer. */
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 
 #define SUBN(self) (((igObjectList *)(self)->_subWindow)->_count)

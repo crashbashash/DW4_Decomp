@@ -1,8 +1,7 @@
-/* 0x002fddb0 igMetaObject_SetName: give a metaobject its (interned) class name.
- * The shared string pool is created on first use even for a null name; the new name
- * is interned first, then the metaobject's previous name token is released (token
- * reference count at -4, owning chunk at -8) and the interned token is published
- * (docs/engine/metadata-bootstrap.md, "Names and ownership"). */
+/* igMetaObject_SetName: give a metaobject its (interned) class name. The shared string pool is
+ * created on first use even for a null name; the new name is interned first, then the metaobject's
+ * previous name token is released (token reference count at -4, owning chunk at -8) and the
+ * interned token is published. */
 #include "dw4/reflected.h"
 int FUN_002eb010(int);
 int StringPool_Construct(int);

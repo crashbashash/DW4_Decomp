@@ -1,8 +1,6 @@
-/* 0x00180e40
- * Release the bound vertex array: drop one reference on it (destroying it
- * when the 23-bit count in the low bits of the _refCount word reaches zero,
- * the same inline release as igParticleAttr::vfunc_32) and clear
- * _vertexArray (docs/engine/igvertexarray2helper.md, slot 55). */
+/* Release the bound vertex array: drop one reference on it (destroying it when the 23-bit count in
+ * the low bits of the _refCount word reaches zero, the same inline release as
+ * igParticleAttr::vfunc_32) and clear _vertexArray. */
 #include "dw4/reflected.h"
 int igObject_Destroy();
 

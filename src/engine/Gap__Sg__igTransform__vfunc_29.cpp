@@ -1,10 +1,9 @@
-/* 0x001dd080
- * If the transform has an input object (_transformInput, +104), call that
- * object's virtual method at vtable offset 132, then reset the transform's own matrix (_m, +32)
- * to identity with igMatrix44f_SetIdentity. */
+/* If the transform has an input object (_transformInput, +104), call that object's virtual method
+ * at vtable offset 132, then reset the transform's own matrix (_m, +32) to identity with
+ * igMatrix44f_SetIdentity. */
 #include "dw4/reflected.h"
 extern "C" {
-int igMatrix44f_SetIdentity(...);  /* sets a 4x4 float matrix to identity (asm/igMatrix44f_SetIdentity.s) */
+int igMatrix44f_SetIdentity(...);  /* Sets a 4x4 float matrix to identity. */
 void Gap__Sg__igTransform__vfunc_29(igTransform *self);
 }
 /* Stand-in class that gives the virtual call its C++ calling sequence

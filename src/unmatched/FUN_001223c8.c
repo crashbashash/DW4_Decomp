@@ -1,4 +1,4 @@
-/* Returns x with the sign bit of y (newlib copysign shape; name is a hypothesis). */
+/* Returns x with the sign bit of y. */
 typedef union DoubleWords {
     double value;
     struct {

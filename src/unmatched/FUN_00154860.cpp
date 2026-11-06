@@ -1,5 +1,3 @@
-/* 27-entry string-table loop through a virtual call (C++ unit, T27 struct copies); alternate
- * compiler. */
 extern "C" int sprintf(char *, const char *, int);
 extern "C" int FUN_002d9740(int, int, int, char *);
 struct T27 { int v[27]; };

@@ -1,9 +1,3 @@
-/* Attach the enemy info work to a RAM slot. Creates the slot's data list on first use, replaces
- * the info-work record found by name with a new beNDMWMdlEnemyInfoWork (FUN_003c1910 creates it),
- * seeds its record number and HP from the messenger's int arguments, queues the delayed "enemy
- * appears" selection when the record asks for one, and hands the slot to the common attach step
- * FUN_00396740. Both created objects live on the stack in owning references whose releases the
- * retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 void *beBaseInfoDataList_Create(...);
@@ -35,7 +29,7 @@ extern int DAT_00585be0[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* property record: reference at +20 (class not recovered) */
+/* Property record: reference at +20. */
 struct Holder { char pad[20]; igObject *f20; };
 /* matching construct: inline static helper reproduces the retail release sequence */
 struct Rel {
@@ -46,26 +40,21 @@ struct Rel {
         }
     }
 };
-/* Owning stack reference to the slot's new data list: constructed from the created object and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body ObjectRef_Destruct_0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__11DataListRefFv). */
+/* Owning stack reference to the slot's new data list; released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class DataListRef {
 public:
     igObject *p;
     DataListRef(igObject *o) : p(o) {}
     ~DataListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the new enemy info work: released on scope exit.  The out-of-line copy the
- * exception table names is the retail body 0x003d1c60 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__11InfoWorkRefFv). */
+/* Owning stack reference to the new enemy info work; released on scope exit. */
 class InfoWorkRef {
 public:
     igObject *p;
     InfoWorkRef(igObject *o) : p(o) {}
     ~InfoWorkRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* store a new data list in the RAM slot: the slot takes its own reference and drops the old one */
 struct Slot { static inline void setDataList(beBaseInfoRam *ram, const DataListRef &r) {
     igObject *t = r.p;
     if (t != 0) t->_refCount = t->_refCount + 1;

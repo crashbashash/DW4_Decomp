@@ -5,7 +5,6 @@ struct Entry0028dac0 {
     char pad4[256 - 4];
 };
 
-/* Shared state reached through DAT_004bcc68 (only the members used here). */
 struct State0028dac0 {
     char pad0[12];
     int count;                      /* +12 */

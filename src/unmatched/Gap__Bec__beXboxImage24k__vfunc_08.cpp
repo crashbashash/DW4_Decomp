@@ -1,4 +1,4 @@
-/* Member field accessed through the class so the base register is not folded.py. */
+/* Member field accessed through the class so the base register is not folded. */
 extern "C" {
 int Gap__Core__igObject__vfunc_08__002ff0f0(...);
 int Memory_FreeBuffer(...);

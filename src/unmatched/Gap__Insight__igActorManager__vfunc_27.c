@@ -1,4 +1,4 @@
-/* 0x00466f80 - igActorManager vfunc 27. If arg1 is an igActorInfo (meta-object check), calls FUN_00467030(arg0, item) for every entry of its list at +24; the list pointer is re-read (volatile) in the body and the loop test, 0 < n guard; alternate compiler -O3,p. */
+/* The list pointer is re-read (volatile) in the body and in the loop test, with a `0 < n` guard. */
 typedef struct L { char pad[8]; int n; int p; int *arr; } L;
 typedef struct A { char pad[24]; L *f24; } A;
 int igObject_IsKindOf(A *, int);

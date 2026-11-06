@@ -72,7 +72,7 @@ int dw4_magic_buff_targets(const dw4_magic_group *g,int32_t caster,int32_t out[4
     if(!g || !out || caster<0 || caster>3)return -1;
     n=dw4_magic_area_collect(g,caster,g->pos[caster],out);
     if(n<0)return -1;
-    out[n++]=caster;   /* RecoveryList::append of the caster, after the area members (docs/combat.md "Support technique wiring") */
+    out[n++]=caster;   /* RecoveryList::append of the caster, after the area members */
     return n;
 }
 int dw4_magic_apply_raise_refund(dw4_playerrecords *r,int32_t slot,int32_t percent)

@@ -1,5 +1,3 @@
-/* Closes the eight handles in DAT_004beadc and shuts the sub-systems down; returns the
- * FUN_002afca0 error if any, else the last close status. */
 void FUN_0029d4b8();
 void FUN_002a0e10();
 void FUN_002a0e48();
@@ -9,11 +7,10 @@ void FUN_002ae020();
 int FUN_002afca0();
 extern void *DAT_004beadc[8];
 
-/* Sub-system block at DAT_004bea88. */
 struct Block2a0ae0 {
-    char f0[12];                          /* shut down by FUN_002ae020 */
-    char f12[4];                          /* shut down by FUN_0029d4b8 */
-    char f16[4];                          /* shut down by FUN_002afca0 */
+    char f0[12];
+    char f12[4];
+    char f16[4];
 };
 extern struct Block2a0ae0 DAT_004bea88;
 

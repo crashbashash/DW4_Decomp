@@ -1,10 +1,3 @@
-/* 0x003392a0 - igMovieManager slot 25: register a movie (igMovieInfo) with the manager.
- * Finds or creates the codec object named by the movie's codec string, attaches it to
- * the movie, lazily creates the audio/renderer/list helpers and, when the codec
- * accepts the movie and the manager accepts it, adds it to the movie list.
- * Evidence: the reflected igMovieManager fields (+16 movie list, +20 audio disabled,
- * +24 audio, +28 codec list, +32 renderer, +36 renderer list), the three "once"
- * diagnostics guarded by gp flags, and the retail vtable offsets. */
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_Destroy(...);
@@ -58,7 +51,8 @@ struct RC { int vt; int rc; };
 struct R4 { int x; };
 /* igMovieManager._movieRenderer: only the owner back-reference at +12 is used here */
 struct MovieRenderer { int pad[3]; int owner; };
-/* same vtable layout, slot 22 returns a 4-byte struct through a hidden pointer (retail passes the buffer in a0) */
+/* Same vtable layout; slot 22 returns a 4-byte struct through a hidden pointer (the buffer is
+ * passed in a0). */
 class VS {
 public:
     virtual int v0(...); virtual int v1(...); virtual int v2(...); virtual int v3(...); virtual int v4(...);
@@ -67,7 +61,6 @@ public:
     virtual int v15(...); virtual int v16(...); virtual int v17(...); virtual int v18(...); virtual int v19(...);
     virtual int v20(...); virtual int v21(...); virtual R4 s22();
 };
-/* stack smart pointer: the inline destructor drops one reference and destroys the object at zero (the release the protected ranges of the exception table split around) */
 struct RP { RC *p; ~RP() { RC *o = p; if (o != 0) { o->rc = o->rc - 1; if ((o->rc & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct ListHead {
     int a; int b; int count; int cap; int *data;
@@ -87,7 +80,7 @@ struct ListHead {
         return -1;
     }
 };
-/* igMovieInfo: name +8, mode +24 (2 = no manager check), codec name +68, codec ref +72 (class not in the reflection data; offsets from the retail accesses) */
+/* igMovieInfo: name +8, mode +24 (2 = no manager check), codec name +68, codec ref +72. */
 struct MovieInfo { int vt; int rc; const char *name; int pad[3]; int mode; int pad2[10]; const char *codecName; int codec; };
 
 #define REL(x) { RC *q = (x); if (q != 0) { q->rc = q->rc - 1; if (((unsigned long long)((long long)q->rc << 0x29) >> 0x29) == 0) igObject_Destroy(q); } }

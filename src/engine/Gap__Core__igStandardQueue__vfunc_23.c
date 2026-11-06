@@ -1,4 +1,4 @@
-/* 0x00328670: allocate the queue's element storage, one 4-byte slot per entry of _capacity. */
+/* Allocate the queue's element storage, one 4-byte slot per entry of _capacity. */
 #include "dw4/reflected.h"
 int igObject_AllocateStorage();
 

@@ -1,9 +1,6 @@
-/* 0x00167210
- * Capability query forwarded to the owned igVisualContext: calls the context's
- * virtual at vtable byte offset 148 (35 slots precede it) and returns its
- * answer, or 0 while no context is attached.  The igGenericCapabilityManager
- * version of this slot (0x00155330) just returns 1, so the slot is a
- * yes/no style query; what exactly the context is asked is not recovered. */
+/* Capability query forwarded to the owned igVisualContext: calls the context's virtual at vtable
+ * byte offset 148 (35 slots precede it) and returns its answer, or 0 while no context is attached.
+ * The igGenericCapabilityManager version of this slot just returns 1. */
 #include "dw4/reflected.h"
 extern "C" {
 

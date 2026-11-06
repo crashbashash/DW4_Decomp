@@ -1,5 +1,5 @@
 /* Reentrant variadic print: forwards (state, format, ...) to FUN_0012d640 with the state block's
- * output stream (+8) and a va_list. The shape of newlib's _printf_r (hypothesis). */
+ * output stream (+8) and a va_list. */
 typedef __builtin_va_list va_list;
 
 typedef struct LibState1284c8 {

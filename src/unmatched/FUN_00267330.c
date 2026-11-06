@@ -1,5 +1,3 @@
-/* CRI ADXT handle thunk: forwards the stream handle stored at +4 to the
- * worker at 0x25db60. */
 typedef struct Adxt {
     char used;
     signed char state;

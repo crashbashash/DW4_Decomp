@@ -1,7 +1,7 @@
-/* Gap__Bec__beNDMWStatusMainSlot__vfunc_29 (0x00416250): open the item page (beNDMWStatusCtrlD0) under
- * the status main slot: bind it, register its close text type/name, run its message script, add the one
- * kind to its kind list and set the equip/unknown-disable flags with auto-close off.  The new window is
- * owned by a stack reference until the end of the function; the two interned names are temporaries. */
+/* Opens the item page (beNDMWStatusCtrlD0) under the status main slot: binds it, registers its
+ * close text type/name, runs its message script, adds the one kind to its kind list and sets the
+ * equip/unknown-disable flags with auto-close off. The new window is owned by a stack reference
+ * until the end of the function; the two interned names are temporaries. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(int);
@@ -24,18 +24,16 @@ extern int DAT_00586f20[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the item page window created here: released on scope exit (reference count
- * in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the retail body
- * 0x00414420 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the item page window created here, released on scope exit (reference
+ * count in the low 23 bits of _refCount). */
 class WindowRef {
 public:
     beNDMWStatusCtrlD0 *p;
     WindowRef(beNDMWStatusCtrlD0 *w) : p(w) {}
     ~WindowRef() { beNDMWStatusCtrlD0 *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     int *p;
@@ -43,7 +41,6 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
-/* string-pool intern (the pool singleton is created on first use) */
 struct Str { static inline int *intern(int *s) {
     int *ref;
     if (s == 0) {

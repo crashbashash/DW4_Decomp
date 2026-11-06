@@ -1,6 +1,5 @@
-/* 0x0022b440 — igMessageInterface slot 13: run the base-class hook
- * (Gap::Core::igObject::vfunc_11, a bare `jr ra` at 0x002ff130), then point
- * _messageInterface at the object itself: the message interface is its own
+/* IgMessageInterface slot 13: run the base-class hook (Gap::Core::igObject::vfunc_11, a bare
+ * return), then point _messageInterface at the object itself: the message interface is its own
  * message-interface member. */
 #include "dw4/reflected.h"
 int Gap__Core__igObject__vfunc_11();

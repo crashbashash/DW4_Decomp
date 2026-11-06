@@ -1,6 +1,6 @@
-/* ADXF_ReadSj32 (name from the error strings at DAT_004edc00..DAT_004edc58): validates the handle,
- * sector count and buffer, then starts a read with FUN_00261da0 unless one is already running
- * (state 2) and flags the handle busy. Returns the sectors requested, 0, or -3 on a bad argument. */
+/* ADXF_ReadSj32: validates the handle, sector count and buffer, then starts a read with
+ * FUN_00261da0 unless one is already running (state 2) and flags the handle busy. Returns the
+ * sectors requested, 0, or -3 on a bad argument. */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {
@@ -14,7 +14,7 @@ struct AdxfReader {
     const AdxfReaderMethods *methods;
 };
 
-/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
+/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8). */
 typedef struct AdxfHandle {
     signed char used;
     signed char f1;

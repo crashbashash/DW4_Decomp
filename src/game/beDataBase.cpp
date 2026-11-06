@@ -13,8 +13,7 @@
 /* Index returned by beDataBase_FindRecordValueIndex when the key has no column. */
 #define BEDATABASE_NO_INDEX (-1)
 
-/* C++ unit with exceptions on (retail keeps exception index records for the
- * lookup functions); the C-ABI names stay unmangled through this block. */
+/* C++ with exceptions on; the C-ABI names stay unmangled through this block. */
 extern "C" {
 extern int g_beDataBase_metaObject[4];
 long long igProperty_FindByName(void *, void *, const char *);
@@ -26,8 +25,8 @@ extern char emptyString[];
 int Gap__Bec__beDataBase__vfunc_20(void);
 int beDataBase_FindRecordValueIndex(beDataBase *, int, const char *, igDataList *);
 long long beDataBase_GetRecordInt(beDataBase *, int, const char *);
-/* 0x003a9540: boolean cell (one byte) for (record, key).  The index is used
- * unchecked, as in retail, so the key must name a bool column. */
+/* Boolean cell (one byte) for (record, key). The index is used unchecked, as in retail, so the key
+ * must name a bool column. */
 unsigned long long beDataBase_GetRecordBool(beDataBase *, int, const char *);
 /* string cell for (record, key): the characters of the stored igStringObj, or an empty string when
  * the cell is null. */
@@ -35,14 +34,12 @@ char *beDataBase_GetRecordString(beDataBase *, int, const char *);
 int beDataBase_GetRecordCount(beDataBase *);
 }
 
-/* 0x0036f130: metadata (igMetaObject) getter of the beDataBase class. */
 int Gap__Bec__beDataBase__vfunc_20(void) { return g_beDataBase_metaObject[0]; }
 
-/* 0x003a93a0: flat index of the cell for (record, key) in the data list that
- * pairs with the offset list `columns`.  The key is resolved to a column name
- * through igProperty_FindByName, then located among the list entries; the
- * result is columnCount * record + columnPosition, or -1 when the list has no
- * columns or does not contain the key. */
+/* Flat index of the cell for (record, key) in the data list that pairs with the offset list
+ * `columns`. The key is resolved to a column name through igProperty_FindByName, then located
+ * among the list entries; the result is columnCount * record + columnPosition, or -1 when the list
+ * has no columns or does not contain the key. */
 int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *key,
                                     igDataList *columns) {
     /* matching construct: volatile forces the match-cell reload order */
@@ -128,8 +125,8 @@ index_done:
     return column;
 }
 
-/* 0x003a9460: integer cell for (record, key).  Tries the char, short and int
- * columns in turn (sign-extending each) and yields 0 when the key is in none. */
+/* Integer cell for (record, key). Tries the char, short and int columns in turn (sign-extending
+ * each) and yields 0 when the key is in none. */
 long long beDataBase_GetRecordInt(beDataBase *self, int record, const char *key) {
     long long result;
     int index =
@@ -156,8 +153,8 @@ long long beDataBase_GetRecordInt(beDataBase *self, int record, const char *key)
     return result;
 }
 
-/* 0x003a9540: boolean cell (one byte) for (record, key).  The index is used
- * unchecked, as in retail, so the key must name a bool column. */
+/* Boolean cell (one byte) for (record, key). The index is used unchecked, as in retail, so the key
+ * must name a bool column. */
 unsigned long long beDataBase_GetRecordBool(beDataBase *self, int record, const char *key) {
     int index = (int)beDataBase_FindRecordValueIndex(self, record, key,
                                                      (igDataList *)self->_boolOffsetList);
@@ -173,9 +170,8 @@ char *beDataBase_GetRecordString(beDataBase *self, int record, const char *key) 
     return text ? text : emptyString;
 }
 
-/* 0x003a95e0: number of records, i.e. data-list length divided by column
- * count, taken from the first populated type in the order string, char,
- * short, int, float, bool; 0 when the table has no columns. */
+/* Number of records, i.e. data-list length divided by column count, taken from the first populated
+ * type in the order string, char, short, int, float, bool; 0 when the table has no columns. */
 int beDataBase_GetRecordCount(beDataBase *self) {
     int columns, result;
     columns = ((igDataList *)self->_stringOffsetList)->_count;

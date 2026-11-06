@@ -1,8 +1,9 @@
-/* 0x00399c50 - beModelCtrlSCSound vfunc 21. Asks the messenger of arg1->f16 for a long long value (group select, append string, dispatch, get long); stores it into arg0->f24 when it is neither -1 nor 0 and the int result is 4; typed structs, alternate compiler -O3,p. */
+/* Asks the messenger of arg1->f16 for a long long value (group select, append string, dispatch,
+ * get long); stores it into arg0->f24 when it is neither -1 nor 0 and the int result is 4. */
 #include "dw4/reflected.h"
-/* unidentified owner object: only its messenger word at +20 is read */
+/* Only the messenger word at +20 of the owner object is read. */
 typedef struct MessengerOwnerView { char pad[20]; int f20; } MessengerOwnerView;
-/* unidentified context object: only the owner pointer at +16 is read */
+/* Only the owner pointer at +16 of the context object is read. */
 typedef struct OwnerContextView { char pad[16]; MessengerOwnerView *f16; } OwnerContextView;
 extern "C" {
 int beMessenger_AppendString(int, int);

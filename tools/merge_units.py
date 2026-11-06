@@ -20,9 +20,9 @@ time:
   `extern`.  Declarations have no effect on codegen, so this changes nothing the
   matcher sees, and the conflict disappears.
 
-  merge_units.py --out src/lua/api.c --title "the Lua native-API implementations" \
+  merge_units.py --out src/lua/api.c \
       src/Lua/*.c
-  merge_units.py --out src/lua/api.c --title ... --remove src/Lua/*.c   # and delete
+  merge_units.py --out src/lua/api.c --remove src/Lua/*.c   # and delete
 """
 import argparse
 import collections
@@ -85,7 +85,6 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--title", required=True, help="one line, goes in the header comment")
     ap.add_argument("--symbols", default="config/SLUS-20836/symbols.txt")
     ap.add_argument("--remove", action="store_true", help="delete the input files after writing")
     ap.add_argument("files", nargs="+")
@@ -123,13 +122,7 @@ def main(argv=None):
                     seen.add(t)
                     hoisted.append(t)
 
-    parts = ["/* %s — %s" % (os.path.relpath(a.out), a.title),
-             " *",
-             " * One translation unit: %d functions, in retail address order.  Folded" % len(items),
-             " * from the per-function units by tools/merge_units.py; the matching build",
-             " * splits a function back out with tools/units.py, so `make check` still",
-             " * verifies one function at a time. */"]
-    parts += hoisted + [""]
+    parts = hoisted + [""]
     localized = 0
     for va, name, f, text, chunks in items:
         d = units.definitions(text)[0]

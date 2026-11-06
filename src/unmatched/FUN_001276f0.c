@@ -1,5 +1,4 @@
-/* Counts the leading zero bits of a 32-bit word, 32 for zero (newlib mprec hi0bits shape; name is
- * a hypothesis). */
+/* Counts the leading zero bits of a 32-bit word, 32 for zero. */
 int FUN_001276f0(unsigned int x) {
     int count = 0;
 

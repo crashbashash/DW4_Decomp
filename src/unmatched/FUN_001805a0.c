@@ -25,7 +25,6 @@ void FUN_001805a0(O *arg0, Q *arg1, int arg2) {
     Obj * volatile spA4;
     Obj * volatile spA8;
     Obj * volatile spAC;
-    //D<
     Obj *s0o;
     Obj *t8;
     Lst *ll;
@@ -36,7 +35,6 @@ void FUN_001805a0(O *arg0, Q *arg1, int arg2) {
     Obj *s2;
     int s0;
     Obj *s1;
-//D>
     s0 = arg1->f20;
     spAC = 0;
     s2 = 0;

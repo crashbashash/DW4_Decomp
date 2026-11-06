@@ -1,8 +1,6 @@
-/* IgEventTracker vfunc 33: counts the matching events of one kind after skipping arg1 entries
- * (slot 32 steps, slot 25 reads the record into a stack Ev). Default compiler. The status
- * temporary is read through an inline Code() into a local, the summed value is read through a
- * volatile view so the load precedes the accumulator load, and the loop counter is initialised
- * before the position. */
+/* The status temporary is read through an inline Code() into a local, the summed value is read
+ * through a volatile view so its load precedes the accumulator load, and the loop counter is
+ * initialised before the position. */
 extern "C" {
 int FUN_002e2130(void *);
 int FUN_002e2300(void *, int);

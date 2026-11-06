@@ -1,5 +1,5 @@
 /* Reports DAT_004eea68 for a null handle; otherwise clears the counters at 96, 100, 104 and 106. */
-/* Handle layout shared by FUN_0026bb38 … FUN_0026ebf8 (offsets from their accesses). */
+/* Handle layout shared by FUN_0026bb38 through FUN_0026ebf8. */
 typedef struct Source_26bbc0 Source_26bbc0;
 typedef struct SourceTable_26bbc0 {
     void *slot0[3];

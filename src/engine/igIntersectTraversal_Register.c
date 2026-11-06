@@ -1,6 +1,3 @@
-/* 0x0019e450 igIntersectTraversal_Register: registers class igIntersectTraversal with the object system, derived from igTraversal.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igTraversal_Register[];
 extern char igIntersectTraversal_GetVTable[];
 extern char thunk_igIntersectTraversal_GetMetaObject[];
@@ -16,16 +13,16 @@ int FUN_0019e640();
 void igIntersectTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igIntersectTraversal_metaObject,  /* published MetaObject slot */
-        igTraversal_Register,                        /* base class registrar */
-        igTraversal_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igIntersectTraversal_GetMetaObject,    /* own MetaObject accessor (stored at +0x54) */
-        igIntersectTraversal_className,   /* class name */
-        0x40,                                        /* instance size */
-        igIntersectTraversal_GetVTable,              /* vtable getter */
-        &igIntersectTraversal_InitFields,            /* field adder */
-        &FUN_0019e640,                               /* extra callback item */
-        g_igIntersectTraversal_callbackList  /* callback list */
+        0, /* abstract */
+        g_igIntersectTraversal_metaObject,
+        igTraversal_Register,
+        igTraversal_GetPublishedMetaObject,
+        thunk_igIntersectTraversal_GetMetaObject,
+        igIntersectTraversal_className,
+        0x40, /* instance size */
+        igIntersectTraversal_GetVTable,
+        &igIntersectTraversal_InitFields,
+        &FUN_0019e640, /* extra callback item */
+        g_igIntersectTraversal_callbackList /* callback list */
     );
 }

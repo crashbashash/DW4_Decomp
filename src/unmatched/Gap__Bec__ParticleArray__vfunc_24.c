@@ -1,6 +1,4 @@
-/* Matched with tools/dispatcher/regalloc.py: the replay showed the +36 field load needs a higher
- * node id than the product's operands, so the product is computed into a local first and the field
- * is added to it. */
+/* The product is computed into a local first and the +36 field is added to it. */
 #include "dw4/reflected.h"
 int Gap__Bec__ParticleArray__vfunc_24(ParticleArray *arg0, unsigned int arg1) {
     int prod;

@@ -1,6 +1,3 @@
-/* 0x00452460 igBoxComponent_Register: registers class igBoxComponent with the object system, derived from igGuiComponent.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igGuiComponent_Register[];
 extern char igBoxComponent_GetVTable[];
 extern char thunk_igBoxComponent_GetMetaObject[];
@@ -13,16 +10,16 @@ int GuiLibrary_MarkRegistered();
 void igBoxComponent_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igBoxComponent_metaObject,           /* published MetaObject slot */
-        igGuiComponent_Register,                        /* base class registrar */
-        igGuiComponent_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igBoxComponent_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        igBoxComponent_className,            /* class name */
-        0x24,                                           /* instance size */
-        igBoxComponent_GetVTable,                       /* vtable getter */
-        0,                                              /* field adder */
-        0,                                              /* extra callback item */
-        0                                               /* callback list */
+        0, /* abstract */
+        g_igBoxComponent_metaObject,
+        igGuiComponent_Register,
+        igGuiComponent_GetPublishedMetaObject,
+        thunk_igBoxComponent_GetMetaObject,
+        igBoxComponent_className,
+        0x24, /* instance size */
+        igBoxComponent_GetVTable,
+        0,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

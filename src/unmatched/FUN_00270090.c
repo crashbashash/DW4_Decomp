@@ -1,6 +1,5 @@
 /* Moves the file position through the device interface (entry +24) of a file-system handle; a NULL
- * handle or missing entry is reported through FUN_0026f530 and returns 0. Its error strings name
- * it cvFsSeek (CRI), a name hypothesis. */
+ * handle or missing entry is reported through FUN_0026f530 and returns 0. */
 typedef struct CvFsDevice_270090 {
     void *pad0[6];
     int (*seek)(int file, int offset, int origin);  /* 0x18 */

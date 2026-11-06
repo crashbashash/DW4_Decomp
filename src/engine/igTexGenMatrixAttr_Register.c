@@ -1,6 +1,3 @@
-/* 0x001332a0 igTexGenMatrixAttr_Register: registers class igTexGenMatrixAttr with the object system, derived from igVisualAttribute.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualAttribute_Register[];
 extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igTexGenMatrixAttr_GetVTable[];
@@ -14,16 +11,16 @@ int igTexGenMatrixAttr_InitFields();
 void igTexGenMatrixAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igTexGenMatrixAttr_metaObject,          /* published MetaObject slot */
-        igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igTexGenMatrixAttr_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        igTexGenMatrixAttr_className,           /* class name */
-        0x50,                                              /* instance size */
-        igTexGenMatrixAttr_GetVTable,                      /* vtable getter */
-        &igTexGenMatrixAttr_InitFields,                    /* field adder */
-        0,                                                 /* extra callback item */
-        0                                                  /* callback list */
+        0, /* abstract */
+        g_igTexGenMatrixAttr_metaObject,
+        igVisualAttribute_Register,
+        igVisualAttribute_GetPublishedMetaObject,
+        thunk_igTexGenMatrixAttr_GetMetaObject,
+        igTexGenMatrixAttr_className,
+        0x50, /* instance size */
+        igTexGenMatrixAttr_GetVTable,
+        &igTexGenMatrixAttr_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

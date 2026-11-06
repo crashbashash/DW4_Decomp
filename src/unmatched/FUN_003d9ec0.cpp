@@ -1,9 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x003d9ec0 - save-slot panel text refresh (one panel half; companion of FUN_003da5f0).  For a used slot the
- * saved name (up to 8 UTF-16 chars, zero padded) is published through a fresh text object, then the model name
- * from the record string table, level, HP and MP; an unused slot gets the id lines.  Side 1 uses the second set
- * of text ids.  The text object lives on the stack in an owning reference whose release the retail exception
- * table records (one per side). */
 extern "C" {
 beUnicodeObj *FUN_003614f0(int);
 int beUnicodeObj_AllocateBuffer(beUnicodeObj *, int);
@@ -32,16 +27,13 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 
 }
-/* Minimal local layouts (no reflected struct covers this class); field names are hypotheses from the
- * port's SELSLOT panel notes: one half of the save-slot panel pair (side 0/1) showing a saved area or the live display. */
 struct SlotDisplay { char p0[40]; unsigned char used; char p2[7]; int model; char p3[4]; int level; int hp; int maxHp; int mp; int maxMp; };
 struct AreaCell { char p[12]; igObjectList *displays; };
 struct AreaRow { char p[32]; AreaCell *cell; };
 struct SlotBackend { char p[36]; igObjectList *ownDisplays; igObjectList *areas; };
 struct SlotPanel { char p0[8]; int messenger; char p1[4]; int textCtrl; SlotBackend *backend; int player; int side; char p2[8]; int source; int index; };
-/* Owning stack reference to the slot's text object: constructed from the creating call and released on scope
- * exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is
- * the retail body 0x003832d0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the slot's text object; released on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class ObjectRef {
 public:
     beUnicodeObj *p;

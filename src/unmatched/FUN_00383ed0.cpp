@@ -1,6 +1,5 @@
 #include "dw4/reflected.h"
 typedef unsigned int u32;
-/* Vertex lock-info stack struct filled by FUN_00384010 (count/data/stride); no reflected class covers it */
 struct Vec3Table { char p0[16]; char *base; int stride; };
 extern "C" void FUN_00383ed0(beFont *self, int unused, beFontInfoData *par, Vec3Table *tab) {
     float ref = par->_width;

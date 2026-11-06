@@ -1,6 +1,6 @@
-/* ADXF_GetFsizeSct (name from the error string at DAT_004ede90): returns the file size in sectors,
- * first asking the stream to resolve it with FUN_0026abb0 when the cached size is still the
- * 0x7FFFF800 placeholder (-5 when the stream then reports state 4). */
+/* ADXF_GetFsizeSct: returns the file size in sectors, first asking the stream to resolve it with
+ * FUN_0026abb0 when the cached size is still the 0x7FFFF800 placeholder (-5 when the stream then
+ * reports state 4). */
 typedef struct AdxfReader AdxfReader;
 
 typedef struct AdxfReaderMethods {
@@ -14,7 +14,7 @@ struct AdxfReader {
     const AdxfReaderMethods *methods;
 };
 
-/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8); field meanings beyond the ones set here are not yet known */
+/* ADXF file handle, 68 bytes (16 of them at DAT_00499de8). */
 typedef struct AdxfHandle {
     signed char used;
     signed char f1;

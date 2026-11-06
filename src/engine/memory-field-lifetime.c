@@ -1,5 +1,4 @@
-/* Exact memory-field reference lifetime. RefHeader and DefaultPointerView are
- * observed ABI projections, not original C++ declarations. */
+/* RefHeader and DefaultPointerView are observed ABI projections, not original C++ declarations. */
 #include "dw4/reflected.h"
 typedef struct {int vtable;unsigned refs;} RefHeader;
 int igObject_IsKindOf(void *,int);

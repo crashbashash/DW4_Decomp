@@ -1,5 +1,3 @@
-/* Fetch the rotation key at index arg2 from the sequence's quaternion list, or blend keys
- * arg2/arg3 by the method in _interpolationMethod[1]. */
 #include "dw4/reflected.h"
 int FUN_00192ab0();
 int FUN_00192cc0();

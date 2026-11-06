@@ -1,4 +1,4 @@
-/* 0x0030bee0 - 192 bytes. Trims whitespace (ctype-table bit 8) from both ends of a duplicated string. The first callee takes the forwarded receiver; the table is declared 260 bytes so it is not gp-relative; alternate compiler -O3. */
+/* The ctype table is declared 260 bytes so it is not addressed gp-relative. */
 struct S { char pad0[8]; int f8; };
 int strlen(char *);
 int FUN_0030b3c0(struct S *, char *);

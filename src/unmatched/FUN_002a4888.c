@@ -10,8 +10,8 @@ void FUN_002ae248();
 
 struct Clock2a4888 {
     char pad0[60];
-    char f60[104 - 60];                   /* reset by FUN_002ae248 */
-    char f104[352 - 104];                 /* reset by FUN_002ae248 */
+    char f60[104 - 60];
+    char f104[352 - 104];
     int f352;
 };
 struct Context2a4888 {

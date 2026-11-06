@@ -1,8 +1,8 @@
-/* dw4/ramp.h — the retail volume ramp of a beCri handle fade: FUN_003a7590 arms it, FUN_003a7890 evaluates it once per frame (through
- * FUN_003a7810) over two 60-entry ease tables (0x004c8fc0 rising, 0x004c90b0 falling). Values are Emotion Engine single-precision bit
- * patterns (recovered/frontend/eefloat.h). The level it yields is in 0.1 dB units, base + volume + (int)(210 * factor) - 210, and a
- * fade to 0 ends at -999 (silence). tools/verify_ramp.py compares both entry points with the original instructions.
- */
+/* The retail volume ramp of a beCri handle fade: FUN_003a7590 arms it, FUN_003a7890 evaluates it
+ * once per frame (through FUN_003a7810) over two 60-entry ease tables (0x004c8fc0 rising,
+ * 0x004c90b0 falling). Values are Emotion Engine single-precision bit patterns. The level it
+ * yields is in 0.1 dB units, base + volume + (int)(210 factor) - 210, and a fade to 0 ends at -999
+ * (silence). */
 #ifndef DW4_RAMP_H
 #define DW4_RAMP_H
 #include "eefloat.h"

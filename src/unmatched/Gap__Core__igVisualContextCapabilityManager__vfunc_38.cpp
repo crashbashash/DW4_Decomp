@@ -1,5 +1,5 @@
-/* The lookup key lives in a stack object with a destructor (kept in memory, load hoisted), emitted
- * dtor is the retail copy at 0x002e2300 (config/SLUS-20836/unit-objects.json duplicates). */
+/* The lookup key lives in a stack object with a destructor, so it is kept in memory and its load
+ * is hoisted. */
 struct RefObj { int w0; int references; int count; int capacity; void **data; };
 extern "C" {
 int Gap__Core__igObject__vfunc_10(void *);

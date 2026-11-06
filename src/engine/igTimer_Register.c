@@ -1,6 +1,3 @@
-/* 0x002b7ac0 igTimer_Register: registers class igTimer with the object system, derived from igObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igTimer_GetMetaObject[];
 extern char igObject_Register[];
@@ -12,16 +9,16 @@ void FUN_002b7b40(void);
 void igTimer_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
-        1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igTimer_metaObject,         /* published MetaObject slot */
-        igObject_Register,                     /* base class registrar */
-        igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
-        thunk_igTimer_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        igTimer_className,          /* class name */
-        8,                                     /* instance size */
-        0,                                     /* vtable getter */
-        FUN_002b7b40,                      /* field adder */
-        0,                                     /* extra callback item */
-        0                                      /* callback list */
+        1, /* abstract */
+        g_igTimer_metaObject,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
+        thunk_igTimer_GetMetaObject,
+        igTimer_className,
+        8, /* instance size */
+        0,
+        FUN_002b7b40,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

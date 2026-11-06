@@ -1,4 +1,3 @@
-/* Matches only with the alternate (combat) compiler build. */
 extern int DAT_004c22f0[4];
 int FUN_002d9710(void *arg0, int arg1) {
     int var_v0;

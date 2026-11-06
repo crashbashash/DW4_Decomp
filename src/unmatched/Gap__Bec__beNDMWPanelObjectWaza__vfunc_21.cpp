@@ -1,6 +1,5 @@
 #include "dw4/reflected.h"
 
-/* 0x003ce960 - beNDMWPanelObjectWaza vfunc 21 (refresh the technique list panel). Alternate compiler -O3,p. */
 extern "C" {
 void igObject_Destroy(igObject *);
 int sprintf(...);

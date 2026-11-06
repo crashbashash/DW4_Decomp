@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int StringChunk_ReleaseHeader(int, int *);
 
@@ -37,4 +35,4 @@ void FUN_003cc490(igDataList *arg0, char **arg1) {
         } while (var_s0 < temp_s2);
     }
 }
-} /* extern "C" */
+}

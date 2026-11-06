@@ -1,5 +1,5 @@
 /* Takes a big-integer block of 2^k words from the reent free list, allocating the list or a fresh
- * block with FUN_00123798 when needed (newlib _Balloc shape; name is a hypothesis). */
+ * block with FUN_00123798 when needed. */
 typedef struct BigInt {
     struct BigInt *next;
     int k;

@@ -14,8 +14,6 @@ extern int DAT_00585be0[4];
 }
 struct V3 { float x, y, z; };
 extern "C" V3 *DAT_0058a218[4];
-/* arg0 beModelCtrl, arg1 beModelCtrlInfo, arg2 beBaseInfoRam, arg3 beModelCtrlInfoWork,
- * arg4 beModelCtrlMSGBOX (the message-box AIM command). */
 extern "C" int FUN_00394920(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2, beModelCtrlInfoWork *arg3, beModelCtrlMSGBOX *arg4) {
     V3 vec;
     int i;

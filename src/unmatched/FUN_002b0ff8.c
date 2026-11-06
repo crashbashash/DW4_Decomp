@@ -22,7 +22,8 @@ struct ListHeader {
     int mode;                             /* +16: 8 rejects changes; passed to FUN_0029dcc8 */
 };
 
-/* FUN_002a0dd8(handle) records the handle in a global and returns -1 when it is null or its word at +72 is clear (asm/FUN_002a0dd8.s). */
+/* FUN_002a0dd8(handle) records the handle in a global and returns -1 when it is null or its word
+ * at +72 is clear. */
 int FUN_002b0ff8(char *obj, int index, int a, int b) {
     struct ListHeader *header = (struct ListHeader *)(obj + 8520);
     int mode;

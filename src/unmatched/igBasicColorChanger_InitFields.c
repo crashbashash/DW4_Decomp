@@ -1,4 +1,4 @@
-/* The constant store after GetFieldAt needs the call result in a local. */
+/* The call result is kept in a local for the constant store after GetFieldAt. */
 int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();

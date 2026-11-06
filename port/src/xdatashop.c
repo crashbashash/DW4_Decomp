@@ -1,7 +1,6 @@
-/* beNDMWShopCtrl10 update 4270a0..42860c over native selector windows.
- * Field names follow docs/engine/xdata-controller.md: primary state 28 is the
- * window state, 32/36/40 are main/sub/flag, 84 is _xdataMenu, 88 is _parameter and
- * 48 is _retCode (the selector's GETSELECT, published into the arena owner). */
+/* beNDMWShopCtrl10 update 4270a0..42860c over native selector windows. Field names: primary state
+ * 28 is the window state, 32/36/40 are main/sub/flag, 84 is _xdataMenu, 88 is _parameter and 48 is
+ * _retCode (the selector's GETSELECT, published into the arena owner). */
 #include "dw4/xdatashop.h"
 #include "arenalist.h"
 #include "dw4/statusui.h"

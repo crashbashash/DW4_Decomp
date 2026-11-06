@@ -9,8 +9,7 @@ int FUN_002eb010(int);
 int StringPool_Construct(int);
 void *StringPool_Intern(int,int);
 int StringChunk_ReleaseHeader(int,void *);
-/* igMetaField vtable (docs: stamped at +0 by igMetaField_Construct) and the shared string pool
- * singleton; array form keeps the load absolute. */
+/* igMetaField vtable and the shared string pool singleton; array form keeps the load absolute. */
 extern int g_igMetaField_vtable[4];
 extern int g_stringPool[4];
 igMetaField *igMetaField_Init(igMetaField *field){

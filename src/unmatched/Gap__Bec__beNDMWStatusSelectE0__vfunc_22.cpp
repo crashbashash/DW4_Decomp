@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_002eb010(int);
 int FUN_003f5410(beNDMWStatusSelectE0 *, int *, int *, int *, int *);
@@ -56,4 +54,4 @@ void Gap__Bec__beNDMWStatusSelectE0__vfunc_22(beNDMWStatusSelectE0 *arg0) {
     arg0->_startPoint = 0;
     arg0->_isNoCancel = 0;
 }
-} /* extern "C" */
+}

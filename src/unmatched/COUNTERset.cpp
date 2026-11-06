@@ -1,4 +1,3 @@
-/* Padding nop after the guarded store (asm nop) reproduces the retail block end. */
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_003a9250(int, int *);

@@ -1,6 +1,3 @@
-/* 0x00198e40 igShaderInfo_Register: registers class igShaderInfo with the object system, derived from igInfo.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igInfo_GetPublishedMetaObject[];
 extern char igShaderInfo_GetVTable[];
 extern char thunk_igShaderInfo_GetMetaObject[];
@@ -16,16 +13,16 @@ int igShaderInfo_InitFields();
 void igShaderInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igShaderInfo_metaObject,     /* published MetaObject slot */
-        igInfo_Register,                        /* base class registrar */
-        igInfo_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igShaderInfo_GetMetaObject,       /* own MetaObject accessor (stored at +0x54) */
-        igShaderInfo_className,      /* class name */
-        0x18,                                   /* instance size */
-        igShaderInfo_GetVTable,                 /* vtable getter */
-        &igShaderInfo_InitFields,               /* field adder */
-        thunk_FUN_001d8ab0,                     /* extra callback item */
-        g_igShaderInfo_callbackList    /* callback list */
+        0, /* abstract */
+        g_igShaderInfo_metaObject,
+        igInfo_Register,
+        igInfo_GetPublishedMetaObject,
+        thunk_igShaderInfo_GetMetaObject,
+        igShaderInfo_className,
+        0x18, /* instance size */
+        igShaderInfo_GetVTable,
+        &igShaderInfo_InitFields,
+        thunk_FUN_001d8ab0, /* extra callback item */
+        g_igShaderInfo_callbackList /* callback list */
     );
 }

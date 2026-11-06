@@ -1,5 +1,3 @@
-/* Validate two word arrays with a first-pass shortcut; result kept in a variable, early -1
- * returns; alternate compiler -O3. */
 int FUN_001ea9c0(int);
 int FUN_001eab60(int);
 int FUN_00206540();

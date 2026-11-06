@@ -643,22 +643,10 @@ def orders(decls, compiler):
 
 # ----------------------------------------------------------------------------- emission
 
-def render(unit, protos, cast_fix, order, cxx, note):
+def render(unit, protos, cast_fix, order, cxx):
     fn = unit.fn
     out = []
-    if unit.head:
-        head = list(unit.head)
-        if note:
-            # append the retarget note inside the closing comment
-            last = head[-1]
-            if last.rstrip().endswith("*/"):
-                head[-1] = last.rstrip()[:-2].rstrip()
-                head.append(" * " + note + " */")
-            else:
-                head.append("/* " + note + " */")
-        out += head
-    elif note:
-        out.append("/* " + note + " */")
+    out += unit.head
     out += unit.includes
     out += unit.types
     decl_lines = []
@@ -748,10 +736,6 @@ def retarget(path, out_dir=None, order_mode="auto", do_verify=False, dry_run=Fal
     compiler = os.path.basename(os.path.dirname(res.profile.compiler))
     cxx = res.profile.exceptions == "on"
     protos, cast_fix, typer = infer_prototypes(unit)
-    note = None
-    if cxx and not path.endswith(".cpp"):
-        note = ("C++ translation unit (tools/initfields_gen.py): the unit compiled with exceptions on and retail "
-                "keeps this function's exception index record, which only the C++ front end emits.")
     ext = ".cpp" if cxx else ".c"
     folder = out_dir or os.path.dirname(os.path.abspath(path))
     target = os.path.join(folder, name + ext)
@@ -761,7 +745,7 @@ def retarget(path, out_dir=None, order_mode="auto", do_verify=False, dry_run=Fal
     tmp = target if out_dir else os.path.join(folder, name + ".retarget" + ext)
     last = None
     for n, order in enumerate(cand[:max_tries]):
-        src = render(unit, protos, cast_fix, order, cxx, note)
+        src = render(unit, protos, cast_fix, order, cxx)
         if dry_run:
             return "dry-run", target
         open(tmp, "w").write(src)

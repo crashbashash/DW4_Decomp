@@ -1,22 +1,8 @@
-/* FUN_003f8c90 (0x003f8c90, 1,832 bytes): select the equipped power sockets of one player.
- *
- * `self` is the GAMERAM object, `index` selects the player record from its player list and
- * `apply` chooses the mode (the argument is tested as `apply & 0xff`, so it is an int here).
- *   - apply == 0: release and clear the POWERSOCKET list, blank the POWERSOCKETNAME strings,
- *     then walk the POWERPOCKET items and, while fewer than three sockets are filled, append
- *     every unused item (and its interned MODEL name) and mark it selected.
- *   - apply != 0: clear the selected flag of the unused pocket items, reset the socket list and
- *     names, then pick the unused pocket item that fits the species (1 << DIGIMONNO against the
- *     item's species mask), whose required skill level is met by the player's SKILL table and
- *     whose TSUYOSA bonus is highest; put it in socket 0 and add its MODEL name.
- * Matching notes: alt compiler, -O3,p.  The apply branch declares `bit`, the SKILL table, the
- * name list, the two item reads and the socket list at the top of the block in that order (stack
- * slots follow declaration order; `bit` declared before the loop locals keeps the hoisted mask
- * in a register and spills the two item reads); the socket-0 store is guarded by
- * `sc != 0 && zero < sc` so the compare is a slt, not a blez; `count2` is declared before `k`.
- * The interned MODEL token handed to the name list is a StringRef temporary bound to the append
- * call in both branches; the retail exception table records the two releases.
- */
+/* `apply` is tested as `apply & 0xff`, so it is an int here. The apply branch declares `bit`, the
+ * SKILL table, the name list, the two item reads and the socket list at the top of the block in
+ * that order (stack slots follow declaration order); the socket-0 store is guarded by `sc != 0 &&
+ * zero < sc` so the compare is a slt, not a blez; `count2` is declared before `k`. With apply != 0
+ * the chosen item must fit the species (1 << DIGIMONNO against the item's species mask). */
 #include "dw4/reflected.h"
 
 #define PROP_DIGIMONNO       DAT_00518848
@@ -56,9 +42,8 @@ extern const char *beNDMWItemBase_GetRecordString(beNDMWItemBase *, beNDMWGameRa
 extern int DAT_00586f20[4];
 }
 
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     char *p;

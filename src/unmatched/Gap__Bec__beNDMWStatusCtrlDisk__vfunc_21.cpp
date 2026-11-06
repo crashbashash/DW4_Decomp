@@ -1,5 +1,3 @@
-/* 0x0041acf0 Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21: update state machine of the status-screen
- * disk sub-menu. */
 #include "dw4/reflected.h"
 
 extern "C" {

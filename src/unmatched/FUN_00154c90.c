@@ -1,6 +1,4 @@
-/* Copies the header fields of arg1 into arg0 (releasing the old buffer at +20 first through
- * FUN_00300f50, which keeps arg0 in a0), optionally cloning the buffer; the size is read volatile
- * first so it is loaded before the buffer pointer; alternate compiler -O3. */
+/* The size is read volatile first so it is loaded before the buffer pointer. */
 #include "dw4/reflected.h"
 int memcpy(int, int, int);
 int FUN_00300db0(igClut *, int, int);

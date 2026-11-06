@@ -1,6 +1,3 @@
-/* 0x001528f0 igPsx2LongList_Register: registers class igPsx2LongList with the object system, derived from igDataList.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igDataList_GetPublishedMetaObject[];
 extern char igPsx2LongList_GetVTable[];
 extern char thunk_igPsx2LongList_GetMetaObject[];
@@ -13,15 +10,15 @@ extern int igPsx2LongList_InitFields_00152970[4];
 void igPsx2LongList_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
-        0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2LongList_metaObject,   /* published MetaObject slot */
-        igDataList_Register,                    /* base class registrar */
-        igDataList_GetPublishedMetaObject,      /* base class MetaObject accessor */
-        thunk_igPsx2LongList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        igPsx2LongList_className,    /* class name */
-        0x14,                                   /* instance size */
-        igPsx2LongList_GetVTable,               /* vtable getter */
-        &igPsx2LongList_InitFields_00152970[0], /* field adder (post_init in data/reflection.json) */
+        0, /* abstract */
+        g_igPsx2LongList_metaObject,
+        igDataList_Register,
+        igDataList_GetPublishedMetaObject,
+        thunk_igPsx2LongList_GetMetaObject,
+        igPsx2LongList_className,
+        0x14, /* instance size */
+        igPsx2LongList_GetVTable,
+        &igPsx2LongList_InitFields_00152970[0], /* Field adder. */
         0,                                      /* extra callback-vector item (none) */
         0                                       /* zero-terminated callback-vector item list (none) */
     );

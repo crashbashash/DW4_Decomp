@@ -1,6 +1,3 @@
-/* Matched with tools/dispatcher/regalloc.py: the replay wanted the first loaded value to get a
- * lower node id than the constant 1 stored to the init flag, which the flag store placed after the
- * first data store gives (retail: li v0,1 / lw a3,... / sb v0,flag). */
 extern int DAT_00560730[4];
 extern int DAT_00560734[4];
 extern int DAT_00560738[4];

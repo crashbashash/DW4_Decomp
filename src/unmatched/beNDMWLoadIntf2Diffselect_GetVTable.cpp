@@ -1,5 +1,3 @@
-/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
- * exception index record, which only the C++ front end emits. */
 struct F { int *vt; char pad[4]; int *str; char pad2[68]; };
 extern "C" {
 void StringChunk_ReleaseHeader(int, int *);

@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* refcount header of an igObject (+4); igObject has no reflected struct */
+/* Reference count at +4 of an igObject. */
 typedef struct RefCountedObject { char pad[4]; int f4; } RefCountedObject;
 extern "C" {
 int igObject_Destroy(RefCountedObject *);

@@ -1,8 +1,3 @@
-/* Five-slot table fill: case 1 issues five identical bind calls, case 0 builds a pooled value
- * object per slot (allocator chosen by a global flag), copies one 16-bit table entry into it and
- * binds it. The object lives on the stack in a Ref whose destructor is a compiler-emitted
- * duplicate of the retail reference destructor (config/SLUS-20836/unit-objects.json, duplicates);
- * exceptions off. Alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);
@@ -18,10 +13,8 @@ extern int DAT_00516f20[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the slot's text object: constructed from the freshly created object and
- * released on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy
- * the exception table names is the retail body 0x003832d0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to the slot's text object; released on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class ObjectRef {
 public:
     beUnicodeObj *p;

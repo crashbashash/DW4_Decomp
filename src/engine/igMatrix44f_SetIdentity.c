@@ -1,5 +1,3 @@
-/* 0x00190380: reset a 4x4 float matrix (igMatrix44f, 16 consecutive floats, row
- * major) to the identity. */
 void igMatrix44f_SetIdentity(float matrix[16]) {
     matrix[0] = 1.0f;
     matrix[1] = 0.0f;

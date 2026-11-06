@@ -7,7 +7,6 @@ struct Obj003C {
 };
 
 int FUN_002b4b58(struct Obj003C *obj) {
-    /* Both floats are read into locals first, which gives retail's register assignment. */
     float a = obj->f60;
     float b = obj->f64;
     int nonzero = 1;

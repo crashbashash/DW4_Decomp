@@ -31,7 +31,6 @@ extern int DAT_0056bad8[4];
 extern int FUN_001f64a0(unsigned int, int, int);
 extern long long DAT_00569248[4];
 void FUN_001f2d90(unsigned int arg0, int arg1) {
-//D<
     unsigned int s3;
     int s2;
     int s1;
@@ -43,7 +42,6 @@ void FUN_001f2d90(unsigned int arg0, int arg1) {
     int t;
     int fl;
     int t3;
-//D>
 
     s3 = arg0;
     s2 = arg1;

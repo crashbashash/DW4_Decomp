@@ -1,4 +1,3 @@
-/* 0x0043aae0 - Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21 (Xdata chip shop controller update). */
 #include "dw4/reflected.h"
 extern "C" {
 int sprintf(...);

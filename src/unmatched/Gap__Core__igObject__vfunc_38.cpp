@@ -1,8 +1,7 @@
-/* Gap::Core::igObject::vfunc_38 (0x00391b40, 420 bytes): beModelCtrl per-instance hook.
- *
- * Make sure the ram has a data list (create one on demand, pooled allocator unless the global
- * selector flag is clear), then dispatch on which named property the parent info carries:
- * FUN_00390f80 when the first property's node is armed, FUN_003915a0 for the second property. */
+/* beModelCtrl per-instance hook. Makes sure the ram has a data list (created on demand, pooled
+ * allocator unless the global selector flag is clear), then dispatches on which named property the
+ * parent info carries: FUN_00390f80 when the first property's node is armed, FUN_003915a0 for the
+ * second property. */
 #include "dw4/reflected.h"
 /* Minimal view of the property node: only the word at +8 is tested here. */
 struct NodeView { int _vtable; unsigned int _refCount; int f8; };
@@ -22,10 +21,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void Gap__Core__igObject__vfunc_38(int arg0, beBaseInfoRam *arg1);
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the
- * exception table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list; released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

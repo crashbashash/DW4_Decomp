@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 struct NamePair { int unused; char *name; };
 int sprintf(char *, char *, int);
@@ -172,4 +170,4 @@ void FUN_00430d20(beNDMWShopCtrlEvolve *ctl, int sendNames, int sendStats) {
         }
     }
 }
-} /* extern "C" */
+}

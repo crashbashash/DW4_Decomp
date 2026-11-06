@@ -1,15 +1,10 @@
-/* Traversal procedure of beResetNode (registered for the node class by FUN_0039c8c0 through the
- * thunk FUN_0039c430, which swaps the two arguments). While its children are traversed it
- * temporarily replaces the traversal's model-view rotation/scale and/or time: _isResetRotAndScale:
- * a pooled igModelViewMatrixAttr receives the traversal's view matrix with the translation of the
- * current model-view attribute, and is pushed on the model-view attribute stack; _isResetTime: a
- * pooled igTimeAttr takes the root time (first entry of the time stack), the traversal's time is
- * set to it and the attribute is pushed on the time attribute stack. After the children
- * (FUN_001e07a0) both attributes are popped again and the time is restored; the result is 2 only
- * when the children asked for it. The code has no object with a destructor, so the retail
- * exception record is the 8-byte header only. Unit profile: combat -O3,p -Iinclude
- * (config/SLUS-20836/units.tsv row 0x0039c430). Formerly an asm body; reproduces only under the
- * combat -O3,p unit profile. */
+/* Traversal procedure of beResetNode. While its children are traversed it temporarily replaces the
+ * traversal's model-view rotation/scale and/or time. _isResetRotAndScale: a pooled
+ * igModelViewMatrixAttr receives the traversal's view matrix with the translation of the current
+ * model-view attribute, and is pushed on the model-view attribute stack. _isResetTime: a pooled
+ * igTimeAttr takes the root time (first entry of the time stack), the traversal's time is set to
+ * it and the attribute is pushed on the time attribute stack. After the children both attributes
+ * are popped again and the time is restored; the result is 2 only when the children asked for it. */
 #include "dw4/reflected.h"
 extern "C" {
 void igMatrix44f_SetIdentity(float *);
@@ -20,8 +15,8 @@ void FUN_001dca40(igObjectPool *, void (*)(void));         /* pool growth, takes
 void List_Resize(void *, int, int);
 void FUN_001b1490(igAttrStackManager *, igAttrStack *, int); /* marks the attribute stack changed */
 int FUN_001e07a0(igCommonTraversal *, beResetNode *);         /* traverse the children, 2 = stop */
-void FUN_001356b0(void);                                      /* igModelViewMatrixAttr factory (class handle 0x55efe8) */
-void FUN_00130f20(void);                                      /* igTimeAttr factory (class handle 0x55ec80) */
+void FUN_001356b0(void);                                      /* igModelViewMatrixAttr factory. */
+void FUN_00130f20(void);                                      /* igTimeAttr factory. */
 extern igMetaObject *DAT_0055efe8[4];                         /* igModelViewMatrixAttr meta object */
 int FUN_0039c460(beResetNode *node, igCommonTraversal *trav);
 }
@@ -77,7 +72,7 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
         timeItem = (igAttr *)timeAttr;
         int n = st->_count;
         if (n < st->_capacity)
-            st->_count = *(volatile int *)&st->_count + 1; /* count is re-read: the list header is volatile-read in retail */
+            st->_count = *(volatile int *)&st->_count + 1; /* The count is re-read because the list header is volatile. */
         else
             List_Resize(st, n + 1, 4);
         ((igAttr **)st->_data)[n] = timeItem;

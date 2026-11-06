@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record); the code keeps C linkage
- * and owns its one stack object through the ObjectRef below. */
 extern "C" {
 int igObject_IsKindOf(beNDMWWindow *, int);
 void *FUN_003b3ac0(int);
@@ -15,9 +13,8 @@ extern int DAT_0058ab68[4];
 extern unsigned char GPR_00554c14;
 void FUN_00433120(beNDMWWindow *arg0, int arg1);
 }
-/* Owning stack reference to the new sub-window: constructed from the object and released on scope exit
- * (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is
- * the retail body 0x0040ed60 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the new sub-window, released on scope exit (reference count in the low
+ * 23 bits of _refCount). */
 class ObjectRef {
 public:
     beNDMWWindow *p;

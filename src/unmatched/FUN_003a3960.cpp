@@ -1,8 +1,6 @@
 #include "dw4/reflected.h"
-/* Timed message start: advances the clock record, takes the next pooled item, registers it with
- * its target list and undoes it again around the callback. Alternate -O3,p (flags row); stack word
- * volatile read once, count read volatile into its own variable, item field addresses held in
- * short pointers; declaration order by hill climbing. */
+/* The stack word is volatile and read once, the count is read volatile into its own variable, and
+ * the item field addresses are held in short pointers. */
 extern "C" {
 int FUN_001b1490(...);
 int FUN_001b9530(void *, void *);
@@ -19,7 +17,7 @@ class Obj { public:
     virtual void v30(long long);
     virtual void v31();
 };
-/* arg0 is a ParticleTimer, arg1 an igCommonTraversal (FUN_003a3850 checks them against these metas); arena references (4-byte handles) are cast to pointers at the use */
+/* Arena references (4-byte handles) are cast to pointers at the use. */
 extern "C" int FUN_003a3960(ParticleTimer *arg0, igCommonTraversal *arg1)
 {
     igTimeAttr * volatile spAC;

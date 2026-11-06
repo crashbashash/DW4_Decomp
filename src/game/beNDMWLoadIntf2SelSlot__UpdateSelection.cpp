@@ -1,15 +1,11 @@
-/* 0x003e1760 - beNDMWLoadIntf2SelSlot__UpdateSelection (4888 bytes): per-player option-menu cursor controller step.
- * Build: alternate (combat) compiler, "-O3,p -Iinclude".
- * Compiler-shape notes (each one measured):
- *  - the outer switch on the mode has "default:" laid out first with the body, "case 1: case 2: break;" last: that gives the
- *    retail compare order (2 then 1) and the unfilled delay slots;
- *  - the first button flag is an unsigned char temp (t = 1; if (...) t = 0) so the li becomes daddiu and the store gets andi;
- *  - the option-list pointer is its own local (ls) so the panel and list registers interfere as in retail;
- *  - the done paths jump to one common "return done" (goto out), the state switch (cases 0 to 2) has no default.
- */
+/* Per-player option-menu cursor controller step. Shape notes: the outer switch on the mode has
+ * "default:" laid out first with the body and "case 1: case 2: break;" last, which gives the
+ * compare order (2 then 1) and the unfilled delay slots; the first button flag is an unsigned char
+ * temp (t = 1; if (...) t = 0) so the li becomes daddiu and the store gets andi; the option-list
+ * pointer is its own local (ls) so the panel and list registers interfere correctly; the done
+ * paths jump to one common "return done" (goto out); the state switch (cases 0 to 2) has no
+ * default. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beNDMWLoadIntf2ComMdlCtrl__IsRunning(int, int, int *);
 unsigned char beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(int);
@@ -461,4 +457,4 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
 out:
     return self->_isSelect;
 }
-} /* extern "C" */
+}

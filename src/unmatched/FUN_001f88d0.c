@@ -1,6 +1,3 @@
-/* 0x001f88d0 — 156 bytes. Registry walker: indexes `DAT_0056af40[arg0]` (element
- * stride 4, the +0x80 flag), bumps the DAT_0056aef0/f8 counters for a +0x7c == 1
- * entry, and sets the DAT_00491270/00491478 flags. */
 extern int DAT_00491270[4];
 extern int DAT_00491478[4];
 extern int DAT_0056aef0[4];

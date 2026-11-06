@@ -19,7 +19,6 @@ extern int DAT_0051bde8[4];
 extern int DAT_0058b028[4];
 }
 struct Rec { char pad[12]; int f12; };
-/* Rec: the igProperty record (value at +12); no reflected class for it. */
 /* matching construct: the retail bool result (daddiu) comes from an inline member function with early returns */
 struct SalesChk {
     static bool Chk(beNDMWShopCtrlSales *self, beNDMWItemBase *arg1, int obj) {

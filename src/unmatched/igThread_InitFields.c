@@ -6,7 +6,7 @@ void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
 void FUN_002b7dc0(void);
-void thunk_igPsx2Thread_GetMetaObject(void); /* address-taken; signature not recovered */
+void thunk_igPsx2Thread_GetMetaObject(void);
 extern int DAT_004bf420[4];
 extern int DAT_004bf450[4];
 extern int DAT_004bf480[4];

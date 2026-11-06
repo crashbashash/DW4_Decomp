@@ -1,4 +1,4 @@
-/* Allocates `size` bytes for the Sofdec work area (its error string names it MWSFD_Malloc):
+/* Allocates `size` bytes for the Sofdec work area:
  * refuses once 32 blocks are held, allocates through FUN_002935a8 or FUN_002935e0 depending on the
  * +512 mode word, and records each block in the +532 table. */
 extern void *FUN_002935a8(void *work, int size);

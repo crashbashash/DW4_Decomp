@@ -1,5 +1,3 @@
-/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
- * exception index record, which only the C++ front end emits. */
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U { int vt; int w[8]; void *p[8]; char b[32]; };
 extern "C" {

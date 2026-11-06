@@ -1,10 +1,11 @@
 #include "menurecord.h"
 #include "arenalist.h"
-/* The card album window tree (SUBWND mode 10): ShopCtrlA0 update 42c810 (root), ShopCtrlA1 42d450 (a player's menu and the
- * album viewer, with the helpers 42df70/42e330/42e9e0) and ShopCtrlA2 42eb80 (the Booster Pack opening). Field names follow the
- * other shop controllers: the window state is the primary state (+1c), main/sub are +20/+24, +30 is _retCode (written into
- * ret.selection by the child selectors, and by A2 into its parent's), +50 the child-count snapshot. Completion of a child is a
- * change in the child count, as in retail. Evidence and boundaries: port/docs/card-album.md. */
+/* The card album window tree (SUBWND mode 10): ShopCtrlA0 update 42c810 (root), ShopCtrlA1 42d450
+ * (a player's menu and the album viewer, with the helpers 42df70/42e330/42e9e0) and ShopCtrlA2
+ * 42eb80 (the Booster Pack opening). Field names follow the other shop controllers: the window
+ * state is the primary state (+1c), main/sub are +20/+24, +30 is _retCode (written into
+ * ret.selection by the child selectors, and by A2 into its parent's), +50 the child-count
+ * snapshot. Completion of a child is a change in the child count, as in retail. */
 #include "dw4/cardshop.h"
 #include "dw4/statusui.h"
 #include "dw4/playertransactions.h"

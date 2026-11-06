@@ -1,6 +1,3 @@
-/* 0x0045c340 igPickMode_Register: registers class igPickMode with the object system, derived from igViewMode.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igViewMode_GetPublishedMetaObject[];
 extern char igPickMode_GetVTable[];
 extern char thunk_igPickMode_GetMetaObject[];
@@ -15,16 +12,16 @@ int igPickMode_InitFields();
 void igPickMode_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPickMode_metaObject,           /* published MetaObject slot */
-        igViewMode_Register,                        /* base class registrar */
-        igViewMode_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igPickMode_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        igPickMode_className,            /* class name */
-        0xBC,                                       /* instance size */
-        igPickMode_GetVTable,                       /* vtable getter */
-        &igPickMode_InitFields,                     /* field adder */
-        0,                                          /* extra callback item */
-        g_igPickMode_callbackList          /* callback list */
+        0, /* abstract */
+        g_igPickMode_metaObject,
+        igViewMode_Register,
+        igViewMode_GetPublishedMetaObject,
+        thunk_igPickMode_GetMetaObject,
+        igPickMode_className,
+        0xBC, /* instance size */
+        igPickMode_GetVTable,
+        &igPickMode_InitFields,
+        0, /* extra callback item */
+        g_igPickMode_callbackList /* callback list */
     );
 }

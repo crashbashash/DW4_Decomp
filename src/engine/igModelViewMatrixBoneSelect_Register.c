@@ -1,6 +1,3 @@
-/* 0x0019d500 igModelViewMatrixBoneSelect_Register: registers class igModelViewMatrixBoneSelect with the object system, derived from igGroup.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igGroup_GetPublishedMetaObject[];
 extern char igModelViewMatrixBoneSelect_GetVTable[];
 extern char thunk_igModelViewMatrixBoneSelect_GetMetaObject[];
@@ -14,16 +11,16 @@ int igModelViewMatrixBoneSelect_InitFields();
 void igModelViewMatrixBoneSelect_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igModelViewMatrixBoneSelect_metaObject, /* published MetaObject slot */
-        igGroup_Register,                                  /* base class registrar */
-        igGroup_GetPublishedMetaObject,           /* base class MetaObject accessor */
-        thunk_igModelViewMatrixBoneSelect_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igModelViewMatrixBoneSelect_className,  /* class name */
-        0x24,                                              /* instance size */
-        igModelViewMatrixBoneSelect_GetVTable,             /* vtable getter */
-        &igModelViewMatrixBoneSelect_InitFields,           /* field adder */
-        0,                                                 /* extra callback item */
-        0                                                  /* callback list */
+        0, /* abstract */
+        g_igModelViewMatrixBoneSelect_metaObject,
+        igGroup_Register,
+        igGroup_GetPublishedMetaObject,
+        thunk_igModelViewMatrixBoneSelect_GetMetaObject,
+        igModelViewMatrixBoneSelect_className,
+        0x24, /* instance size */
+        igModelViewMatrixBoneSelect_GetVTable,
+        &igModelViewMatrixBoneSelect_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

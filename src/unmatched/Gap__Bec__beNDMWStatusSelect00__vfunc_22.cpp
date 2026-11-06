@@ -16,9 +16,8 @@ extern int DAT_0051a9d0[4];
 extern int DAT_0051a9e0[4];
 extern void *DAT_00586f20[4];
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     const char *p;
@@ -27,7 +26,6 @@ public:
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
 struct Sh { char p[60]; int f60; int f64; char q[12]; const char *f80; int f84; int f88; int f92; int f96; int pad100; char f104; };
-/* intern `text` (the pool singleton is created on first use) and append the token to `field` */
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \

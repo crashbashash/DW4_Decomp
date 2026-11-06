@@ -32,8 +32,7 @@ struct VO {
     virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
     virtual int vX();
 };
-/* Owning stack reference to a pooled string token (count at p[-1], chunk header at p[-2]); the out-of-line copy the
- * exception table names is retail 0x00130720 (duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (count at p[-1], chunk header at p[-2]). */
 struct StringRef { int *p; StringRef() {} StringRef(const StringRef &o) : p(o.p) {} ~StringRef() { int *s = p; if (s != 0) { int *h = s - 2; int r = s[-1] - 1; s[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } } };
 /* Returns its pooled string through the hidden result pointer (a0), so the copy is owned from the call on. */
 extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);

@@ -12,7 +12,6 @@ struct Ring {
     struct RingOps *ops;
 };
 
-/* Writes length bytes into the ring in up to two pieces when there is room; counts short second writes. */
 int FUN_002a1f28(struct Ring *ring, char *data, int length) {
     int written;
 

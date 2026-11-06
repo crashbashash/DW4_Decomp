@@ -4,7 +4,7 @@ int FUN_00273820();
 extern int DAT_005707c0[4]; /* request send buffer shared by the 0x0027d... wrappers */
 
 void FUN_0027d9c0(int arg0, int arg1, int *pair) {
-    int first = pair[0]; /* read before the buffer stores, as retail schedules it */
+    int first = pair[0];
 
     DAT_005707c0[0] = arg0;
     DAT_005707c0[1] = arg1;

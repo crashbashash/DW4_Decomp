@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 /* reference-counted engine object header: refcount word at +4 */
 struct RC { int vt; int rc; };
-/* message record: only the enum value name at +20 is read; its class is not established */
+/* Message record: only the enum value name at +20 is read. */
 struct MsgArg { char pad20[20]; int f20; };
 /* matching construct: element of the list reached through the COMMONINTF object (+40 -> +16 array of flag holders); no reflected class established */
 struct PropZ { char pad13[13]; unsigned char f13; };
@@ -55,9 +55,9 @@ extern int DAT_00589208[4];
 extern unsigned char GPR_00554c14;
 int Gap__Bec__beNDMWSaveIntf__vfunc_34(beNDMWSaveIntf *arg0, beBaseInfoRam *arg1, MsgArg *arg2);
 }
-/* Owning stack reference to a request or window object; one instantiation per object class (0 the data list, 1 the control data,
- * 2 text order, 3 model control, 4 message window, 5 slot selector, 6 state control, 7 state data, 8 data selector), so the out-of-line
- * destructor copies the exception table names stay distinct (config/SLUS-20836/unit-objects.json emitted/duplicates __dt__5RP<k>Fv). */
+/* Owning stack reference to a request or window object; one instantiation per object class (0 the
+ * data list, 1 the control data, 2 text order, 3 model control, 4 message window, 5 slot selector,
+ * 6 state control, 7 state data, 8 data selector), so each gets its own out-of-line destructor. */
 template <int kind> struct RP {
     RC *p;
     RP(RC *q) : p(q) {}

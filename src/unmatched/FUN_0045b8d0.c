@@ -1,4 +1,3 @@
-/* Matches only with the alternate (combat) compiler build. */
 int Memory_GetAllocatorBySelector();
 int igMetaObject_Create();
 extern int DAT_00587040[4];

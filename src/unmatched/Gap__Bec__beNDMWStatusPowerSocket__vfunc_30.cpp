@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct PropertyRecord { char p12[12]; int f12; } PropertyRecord;
 typedef struct PropertyRecordTable { char p16[16]; int *data; } PropertyRecordTable;
@@ -35,4 +33,4 @@ int Gap__Bec__beNDMWStatusPowerSocket__vfunc_30(beNDMWStatusPowerSocket *arg0, i
     }
     return 0;
 }
-} /* extern "C" */
+}

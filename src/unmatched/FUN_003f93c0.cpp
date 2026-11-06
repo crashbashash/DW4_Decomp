@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 extern int DAT_00518848[4];
 extern int DAT_00518860[4];
@@ -46,4 +44,4 @@ int FUN_003f93c0(beNDMWGameRam *arg0, int arg1, int arg2) {
     }
     return 0;
 }
-} /* extern "C" */
+}

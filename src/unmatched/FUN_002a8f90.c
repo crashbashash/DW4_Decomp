@@ -20,7 +20,6 @@ struct Stream {
     int f84;
 };
 
-/* Consumes count bytes from the stream under its semaphore; hangs if more were consumed than buffered. */
 int FUN_002a8f90(struct Stream *stream, int count) {
     WaitSema(stream->sema);
     stream->f20 -= count;

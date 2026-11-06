@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* Unaligned int store narrowed to the byte store retail uses.py. */
+/* Unaligned int store narrowed to the byte store retail uses. */
 int FUN_002b9390();
 int FUN_002b9540();
 int FUN_002bb030();

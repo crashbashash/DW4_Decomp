@@ -1,6 +1,3 @@
-/* 0x00451210 igEventReceiverOrderedList_Register: registers class igEventReceiverOrderedList with the object system, derived from igDependencyOrderedList.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igDependencyOrderedList_GetPublishedMetaObject[];
 extern char igDependencyOrderedList_Register[];
 extern char igEventReceiverOrderedList_GetVTable[];
@@ -14,16 +11,16 @@ int GuiLibrary_MarkRegistered();
 void igEventReceiverOrderedList_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igEventReceiverOrderedList_metaObject,        /* published MetaObject slot */
-        igDependencyOrderedList_Register,                        /* base class registrar */
-        igDependencyOrderedList_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igEventReceiverOrderedList_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        igEventReceiverOrderedList_className,         /* class name */
-        0x1C,                                                    /* instance size */
-        igEventReceiverOrderedList_GetVTable,                    /* vtable getter */
-        0,                                                       /* field adder */
-        0,                                                       /* extra callback item */
-        g_igEventReceiverOrderedList_callbackList       /* callback list */
+        0, /* abstract */
+        g_igEventReceiverOrderedList_metaObject,
+        igDependencyOrderedList_Register,
+        igDependencyOrderedList_GetPublishedMetaObject,
+        thunk_igEventReceiverOrderedList_GetMetaObject,
+        igEventReceiverOrderedList_className,
+        0x1C, /* instance size */
+        igEventReceiverOrderedList_GetVTable,
+        0,
+        0, /* extra callback item */
+        g_igEventReceiverOrderedList_callbackList /* callback list */
     );
 }

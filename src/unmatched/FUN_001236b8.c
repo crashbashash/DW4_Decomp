@@ -1,5 +1,5 @@
 /* Raises signal 6 through FUN_00129ba0 and then exits with status 1 through thunk_FUN_001145c8
- * (exit), never returning. The shape of newlib's abort() (hypothesis: SIGABRT = 6). */
+ * (exit), never returning. */
 void FUN_00129ba0(int sig);
 void thunk_FUN_001145c8(int status) __attribute__((noreturn));
 

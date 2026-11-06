@@ -1,17 +1,8 @@
-/* Complete nearby-query object and its emitted deleting destructor.
- * The class/vector/list names project the recovered ABI and operation order;
- * original C++ template and qualifier spellings are not established.
- * config/SLUS-20836/unit-objects.json owns both code bodies and their external alias.
- * This file is included by src/unmatched/FUN_003fab90.cpp (extension .inc so the
- * unit scanner does not treat it as a second owner): the stat recompute uses the
- * same stack-resident reference class, so both functions and its single emitted
- * destructor form one compiler unit.
- */
+/* Nearby-query object and its emitted deleting destructor. The stat recompute uses the same stack-
+ * resident reference class, so both functions share its single emitted destructor. */
 #include "dw4/reflected.h"
 struct Vec3 { float x,y,z; };
 struct Mat44 { float m[16]; };
-/* Growable int array object: vtable word, reference word, then count/capacity/data.
- * The count reloads are observable in the original instructions. */
 struct IntList { int vtable_word, reference_word; volatile int count; int capacity; int *data; };
 /* Squared radius of the query: members closer than 30 units to the centre qualify. */
 #define NEARBY_RADIUS_SQUARED 900.0f
@@ -56,9 +47,8 @@ public:
         }
     }
 };
-/* The query's own working reference: its destructor is a separate retail copy (0x00150eb0.json
- * duplicates), while the by-value result handed back to the caller is the IntListRef whose
- * destructor is 0x003fc670. */
+/* The query's own working reference. Its destructor is a separate copy from that of the by-value
+ * IntListRef result handed back to the caller. */
 class NearbyListRef {
 public:
     IntList *value;
@@ -73,13 +63,10 @@ public:
     }
 };
 inline IntListRef::IntListRef(const NearbyListRef &p):value(p.value) { if(value) ++value->reference_word; }
-/* 0x003fc780
- * Collect the ids of the members of messenger group `group` that are within
- * 30 units of `center` (compared on GETMATRIX translations), skip `excluded`,
- * and keep those whose GETHP reply is nonzero (GETHP: docs/engine/property-system.md).
- * The result list comes from the
- * object's own allocator when the global byte flag is set, otherwise from the
- * allocator selected by g_defaultAllocatorSelector[0]. */
+/* Collects the ids of the members of messenger group `group` that are within 30 units of `center`
+ * (compared on GETMATRIX translations), skips `excluded`, and keeps those whose GETHP reply is
+ * nonzero. The result list comes from the object's own allocator when the global byte flag is set,
+ * otherwise from the allocator selected by g_defaultAllocatorSelector[0]. */
 extern "C" IntListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const char *group,int excluded,const Vec3 *center) {
     int entry_index;
     int member_id;

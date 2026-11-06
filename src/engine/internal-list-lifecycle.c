@@ -1,12 +1,8 @@
-/* Lifecycle of the engine-internal pointer lists: construction, resizing,
- * indexed store, and the "retained" variants that keep a reference count on
- * the stored object.
- *
- * Every function is byte-matched; the shapes below are exactly the retail ones
- * (a duplicated capacity computation in each resizing function, the release
- * of the old entry written out inline).  The reflected lists in
- * include/dw4/reflected.h are 20 bytes; these internal lists use the exact
- * 16-byte layout below, so they are not the reflected public classes. */
+/* Lifecycle of the engine-internal pointer lists: construction, resizing, indexed store, and the
+ * "retained" variants that keep a reference count on the stored object. The resizing functions
+ * each compute the capacity twice and write the release of the old entry out inline. The reflected
+ * lists are 20 bytes; these internal lists use the exact 16-byte layout below, so they are not the
+ * reflected public classes. */
 
 /* Exact 16-byte list ABI projection: object header, element block, count. */
 typedef struct PointerList {

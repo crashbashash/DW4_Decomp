@@ -1,4 +1,3 @@
-/* Virtual callees take a float (lwc1). */
 #include "dw4/reflected.h"
 extern "C" {
 

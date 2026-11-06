@@ -1,6 +1,5 @@
 #include "dw4/reflected.h"
-/* igSorter::_lightAttrs target and its list at +12: classes not recovered (the list has
-   the 4-byte-element _count/_capacity/_data layout); the count is volatile for the retail reload. */
+/* The count is volatile so it is reloaded. */
 struct L { char p0[8]; volatile int cnt; int cap; int *data; };
 struct LA { char p0[12]; struct L *l; };
 extern igMetaObject *DAT_0055efe8[4];

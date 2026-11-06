@@ -14,14 +14,13 @@ struct Config2a0a10 {
     int f0;
     int f4;
 };
-/* Global state block at DAT_004be8d8 (members named by offset). */
 struct State2a0a10 {
     char f0[400];                         /* zeroed (137 bytes), then copied from DAT_004f4ea0 */
     char f400[8];                         /* copy of the first 8 bytes of the config */
     int f408;
-    char f412[432 - 412];                 /* initialised by FUN_002a0b88 */
-    char f432[444 - 432];                 /* initialised by FUN_002ae010 */
-    char f444[516 - 444];                 /* initialised by FUN_0029d4a0 */
+    char f412[432 - 412];
+    char f432[444 - 432];
+    char f444[516 - 444];
     int f516[8];
 };
 extern struct State2a0a10 DAT_004be8d8;

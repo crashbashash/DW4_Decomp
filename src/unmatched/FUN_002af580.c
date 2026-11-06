@@ -7,7 +7,8 @@ struct Obj0920 {
     char pad[2336];
     int rateIndex;                        /* +2336 (0x920): index into DAT_004f5060 */
 };
-/* FUN_002a0dd8(handle) records the handle in a global and returns -1 when it is null or its word at +72 is clear (asm/FUN_002a0dd8.s). */
+/* FUN_002a0dd8(handle) records the handle in a global and returns -1 when it is null or its word
+ * at +72 is clear. */
 int FUN_002af580(struct Obj0920 *handle, int *rate) {
     int index;
     *rate = -1;

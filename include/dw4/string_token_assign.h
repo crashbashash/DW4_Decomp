@@ -1,7 +1,7 @@
-/* string_token_assign.h - the interned-string member assignment used by FUN_002f31b0.
- * (Header because tools/units.py cannot split a unit around a file-scope multi-line macro.
- * Expects the caller to declare: const char *text; StringToken *token, *old; StringTokenHeader *header; int poolObj;
- * and the extern pool/token declarations.) */
+/* The interned-string member assignment (handle.field = interned(text)), kept in a header because
+ * a unit cannot be split around a file-scope multi-line macro. Expects the caller to declare:
+ * const char *text; StringToken *token, *old; StringTokenHeader *header; int poolObj; and the
+ * extern pool/token declarations. */
 /* handle.field = interned(text), releasing the previous token (shared pool created on first use) */
 #define ASSIGN_TOKEN(field, source)                                           \
     text = (source);                                                          \

@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Status application on a model. Every rule cites the retail address it was read from (instruction level, see
- * port/docs/combat.md "Status application on models"):
- *   0x443bd0 beNDMWMdlPEBase::vfunc_46  per-frame update   0x445d10 beNDMWMdlPEBase::vfunc_47  SETxxx / CHECKSTATUS / CLEARxxx messages
- *   0x4456c0 / 0x445990  lazy _downDataList / _upDataList  0x445c60  player recalculation   0x3a7a20 / 0x3a7e90 / 0x3a8580  named timers */
+/* Status application on a model. Retail sources: 0x443bd0 beNDMWMdlPEBase::vfunc_46 per-frame
+ * update; 0x445d10 beNDMWMdlPEBase::vfunc_47 SETxxx / CHECKSTATUS / CLEARxxx messages; 0x4456c0 /
+ * 0x445990 lazy _downDataList / _upDataList; 0x445c60 player recalculation; 0x3a7a20 / 0x3a7e90 /
+ * 0x3a8580 named timers. */
 
 static const char *const names[11]={"POISON","ATTACKDOWN","POWERDOWN","BIND","REFRACT","SPEEDUP","POWERUP","METAL","SLEEP","STUN","RARE"};
 

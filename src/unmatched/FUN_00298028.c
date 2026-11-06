@@ -1,5 +1,3 @@
-/* Handle-checked setter: when FUN_002968c0 accepts the handle the value is forwarded through two helpers, otherwise the error text at D_004f42c8
- * ("E306091: MWSFSFX_SetOutBufSize: handle is invalid.", CRI Sofdec) is reported through FUN_0029a320. */
 extern int FUN_002968c0(void *);
 extern void *FUN_00297810(void *);
 extern void FUN_0029a320(const char *);

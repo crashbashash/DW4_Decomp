@@ -1,8 +1,4 @@
-/* Receiver: beNDMWMcUtilCtrl (reflected +8 _messenger, +12 _isUseUtil; callers pass
- * beNDMWLoadCtrl2CommonIntf::_mcUtilCtrl, +52). */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beMessenger_AppendInt(int, int);
 int beMessenger_DispatchSelected(int, int *);
@@ -20,4 +16,4 @@ void FUN_003f1270(beNDMWMcUtilCtrl *arg0) {
         arg0->_isUseUtil = 0;
     }
 }
-} /* extern "C" */
+}

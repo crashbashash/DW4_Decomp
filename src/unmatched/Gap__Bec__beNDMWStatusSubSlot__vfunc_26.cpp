@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_00236f80(int, int);
 int beMessenger_AppendString(int, int *);
@@ -46,4 +44,4 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_26(beNDMWStatusSubSlot *a) {
     beMessenger_AppendString(a->_messenger, var_s1_2);
     beMessenger_DispatchSelected(a->_messenger, &DAT_00519b08[0]);
 }
-} /* extern "C" */
+}

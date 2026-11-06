@@ -3,7 +3,7 @@
 typedef struct Entry_267bb8 {
     signed char used;   /* 0x00 */
     char pad1[11];
-} Entry_267bb8;         /* 0x0c bytes */
+} Entry_267bb8;
 
 extern Entry_267bb8 DAT_004a7530[16];
 

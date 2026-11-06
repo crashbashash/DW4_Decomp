@@ -21,7 +21,6 @@ struct Player2a8500 {
     struct Context *context;              /* +8120 */
 };
 
-/* Counts slots in state 2 or 4 under the guard; -1 instead of 0 when context f124 is 1. */
 int FUN_002a8500(struct Player2a8500 *player) {
     char guard[16];
     struct Context *context;

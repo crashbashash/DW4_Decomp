@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_00236f80(int, int);
 extern int DAT_00587d08[4];
@@ -15,4 +13,4 @@ void Gap__Bec__beNDMWLogo__vfunc_32(beNDMWLogo *arg0) {
         asm { nop }
     }
 }
-} /* extern "C" */
+}

@@ -21,18 +21,16 @@ struct Item { char p[24]; int f24; };
 struct List { char p[8]; int n; int pad; Item **data; };
 struct Sh { char p[8]; int f8; char p2[8]; int f20; char p3[28]; int f52; char p4[28]; int f84; char p5[4]; int f92; char p6[4]; List *f100; };
 struct Win { int w0; int refs; char p[52]; int f60; int f64; char p2[16]; int f84; int f88; int f92; int f96; int f100; };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     const char *p;
     StringRef(const char *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
-/* Owning stack reference to the sub-window created here: released on scope exit (reference count in
- * the low 23 bits of refs).  The out-of-line copy the exception table names is the retail body
- * 0x00411100 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the sub-window created here; released on scope exit (reference count
+ * in the low 23 bits of refs). */
 class WindowRef {
 public:
     Win *p;

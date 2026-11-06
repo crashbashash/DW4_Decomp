@@ -1,5 +1,4 @@
-/* 0x0013b860 — calls the base initialiser, then copies the +8 field of the object returned by virtual slot 88 into the
- * 16-bit field at +8 of this. The int temporary keeps the word load (a direct short store would narrow it to lh). */
+/* The int temporary keeps the word load; a direct short store would narrow it to lh. */
 extern "C" {
 void FUN_002ff130(void *);
 void FUN_0013b860(void *);

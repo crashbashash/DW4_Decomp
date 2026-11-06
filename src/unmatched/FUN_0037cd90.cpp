@@ -7,7 +7,6 @@ extern int DAT_004e0858[4];
 void FUN_0037cd90(beCri *arg0, int arg1);
 }
 
-/* hypothesis: arg0 is the beCri (beSound::_cri): +32/+36/+40 = _hdBGM/_hdENV/_hdSEs; the hd refs are beCriHandle (+8 _name, +12 _audio), _hdSEs a beCriHandleList */
 void FUN_0037cd90(beCri *arg0, int arg1) {
     int i;
     int off;

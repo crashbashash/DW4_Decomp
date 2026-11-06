@@ -1,6 +1,5 @@
 /* Lays out a frame buffer at base for width x height: 64-byte aligned luma/chroma strides and the
  * plane addresses. */
-/* Frame buffer layout: luma and chroma plane addresses and their 64-byte aligned strides. */
 struct Planes {
     char *luma;
     char *chroma;

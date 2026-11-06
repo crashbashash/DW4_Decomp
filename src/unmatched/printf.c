@@ -1,5 +1,5 @@
 /* Points the stdout stream at the current reent block and formats the arguments to it through
- * vfprintf (newlib printf shape). */
+ * vfprintf. */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))

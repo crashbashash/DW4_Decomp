@@ -12,9 +12,8 @@
 #include <string.h>
 #include "dw4/platform.h"
 
-/* one row per igPsx2 class that sits under a generic interface.  The field count is
- * the *generic interface's* serialised field count, recovered from reflection -- it is what a host
- * implementation has to fill in, and tools/verify_platform.py pins the totals. */
+/* One row per igPsx2 class that sits under a generic interface. The field count is the generic
+ * interface's serialised field count; it is what a host implementation has to fill in. */
 const dw4_iface dw4_ifaces[] = {
     { "igPsx2AudioContext", "igAudioContext", 1, DW4_IF_STUB },
     { "igPsx2AudioSourceList", "igDataList", 3, DW4_IF_STUB },

@@ -4,7 +4,7 @@
  * records (beNDMWDegiData_Create), fills it from the read save data (FUN_003f0e30), appends it to
  * _slotSaveData and copies each used Digimon's name (up to 8 UTF-16 chars, zero padded) from its
  * unicode text through FUN_00382eb0. The slot player and the Digimon records live on the stack in
- * owning references whose releases the retail exception table records. */
+ * owning references. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_00236f80(...);
@@ -25,9 +25,7 @@ extern unsigned char GPR_00554c14;
 typedef igObject Rc;
 /* matching construct: the code reads the reference count as a signed int (igObject._refCount is reflected unsigned) */
 #define REFS(o) (*(int *)&(o)->_refCount)
-/* hypothesis: the _flagWork list holds per-player control records whose st0..st3 sit at +36 (beNDMWLoadIntf2CtrlData / beNDMWSaveIntfCtrlData share this layout; the common class is not established) */
 struct Node { int p[8]; int f32; int st0; int st1; int st2; int st3; };
-/* hypothesis: class of McUtilCtrl._svData is not established */
 struct Meta { int p[2]; int f8; };
 #define NODE(s, i) (((Node **)((igObjectList *)(s)->_flagWork)->_data)[i])
 #define CFG(s) ((beNDMWMcUtilCtrl *)(s)->_mcUtilCtrl)
@@ -40,18 +38,18 @@ struct Meta { int p[2]; int f8; };
 
 int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, int idx, int unused, int val, int mode);
 }
-/* Owning stack reference to the new slot player: constructed from the creating call and released on scope exit
- * (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the
- * retail body 0x003edba0 (config/SLUS-20836/unit-objects.json, duplicate __dt__13SlotPlayerRefFv). */
+/* Owning stack reference to the new slot player: constructed from the creating call and released
+ * on scope exit (reference count in the low 23 bits of _refCount). Its destructor is emitted out
+ * of line. */
 class SlotPlayerRef {
 public:
     Rc *p;
     SlotPlayerRef(Rc *o) : p(o) {}
     ~SlotPlayerRef() { Rc *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to one Digimon record (a new one appended to the slot player, then each one re-read
- * from its list): released at the end of each loop pass.  The out-of-line copy the exception table names is the
- * retail body ObjectRef_Destruct_003e9010 (config/SLUS-20836/unit-objects.json, duplicate __dt__11DegiDataRefFv). */
+/* Owning stack reference to one Digimon record (a new one appended to the slot player, then each
+ * one re-read from its list): released at the end of each loop pass. Its destructor is emitted out
+ * of line. */
 class DegiDataRef {
 public:
     Rc *p;

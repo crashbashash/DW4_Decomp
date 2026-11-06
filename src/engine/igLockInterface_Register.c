@@ -1,6 +1,3 @@
-/* 0x00226a20 igLockInterface_Register: registers class igLockInterface with the object system, derived from igInterface.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igInterface_GetPublishedMetaObject[];
 extern char igLockInterface_GetVTable[];
 extern char thunk_igLockInterface_GetMetaObject[];
@@ -15,16 +12,16 @@ int igLockInterface_InitFields();
 void igLockInterface_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igLockInterface_metaObject,       /* published MetaObject slot */
-        igInterface_Register,                        /* base class registrar */
-        igInterface_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igLockInterface_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        igLockInterface_className,        /* class name */
-        0x2C,                                        /* instance size */
-        igLockInterface_GetVTable,                   /* vtable getter */
-        &igLockInterface_InitFields,                 /* field adder */
-        0,                                           /* extra callback item */
-        g_igLockInterface_callbackList      /* callback list */
+        0, /* abstract */
+        g_igLockInterface_metaObject,
+        igInterface_Register,
+        igInterface_GetPublishedMetaObject,
+        thunk_igLockInterface_GetMetaObject,
+        igLockInterface_className,
+        0x2C, /* instance size */
+        igLockInterface_GetVTable,
+        &igLockInterface_InitFields,
+        0, /* extra callback item */
+        g_igLockInterface_callbackList /* callback list */
     );
 }

@@ -1,5 +1,5 @@
-/* Thunk address spelled as a function declaration (absolute lui/addiu, not gp-relative); byte
- * store at +38. */
+/* The thunk address is spelled as a function declaration so it is addressed absolutely (lui/addiu)
+ * rather than gp-relative. */
 int FUN_002d3890();
 int FUN_002dc7a0();
 int FUN_002ea4b0();

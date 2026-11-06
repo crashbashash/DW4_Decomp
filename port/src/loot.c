@@ -1,8 +1,8 @@
 #include "dw4/loot.h"
 #include "dw4/shopstock.h"
 #include <string.h>
-/* Loot delivery rules (docs/dungeon-floors.md "Loot delivery"). Every rule cites the retail function it was read from;
- * the item databases are reached through the caller's accessors so the rules run on fixed tables in tests. */
+/* Loot delivery rules. The item databases are reached through the caller's accessors so the rules
+ * run on fixed tables in tests. */
 static const char *const category_name[DW4_LOOT_CATEGORIES]={"conItem","insItem","impItem","weapon","armor1","armor2","abChip"};
 /* The table at 0x4c8f30 (pairs: category string, model or NULL for "read MODEL from the record"). */
 static const char *const category_model[DW4_LOOT_CATEGORIES]={NULL,NULL,"g_000key","g_000weapon","g_000armor","g_000armor","g_000access"};

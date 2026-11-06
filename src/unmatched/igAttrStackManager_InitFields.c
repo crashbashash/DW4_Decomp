@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* Thunk address typed as a function so it is built with lui/addiu.py. */
+/* The thunk address is typed as a function so it is built with lui/addiu. */
 int FUN_0013aab0();
 int FUN_0013ad40();
 int FUN_0013af00();

@@ -1,7 +1,7 @@
 /* Per-update step: runs FUN_00266dc8 while field 160 is positive, dispatches on the state (2:
  * FUN_00266c70, 1: FUN_002662f8), then runs FUN_00266f18 while field 164 is positive; each guarded
  * call sits between FUN_0025f2d0 and FUN_0025f2e8. */
-/* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
+/* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0. */
 typedef struct Object_265fb0 {
     char f0;
     char state;         /* 0x01: 1 after FUN_00266298, 0 after FUN_002662c8, 2 in FUN_00266d20 */

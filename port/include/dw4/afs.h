@@ -1,17 +1,6 @@
-/* dw4/afs.h — CRI AFS archive reader.
- *
- * The container is documented in DW4_Decomp/docs/engine/afs-archives.md:
- *
- *   offset 0 : magic "AFS\0"
- *   offset 4 : u32 entry count
- *   offset 8 : entries[count] * { u32 offset, u32 size }   (absolute file offsets)
- *   ...      : file data
- *
- * This is the port's *reader*, not the game's: the engine parses the same bytes in
- * `igIGBFile`/`igFile`, and the port may replace this with that path later.  Keeping
- * it separate means the asset side (textures, models, audio) can be written and
- * tested without waiting for the loader path to be decompiled.
- */
+/* CRI AFS archive reader. Layout: offset 0 magic "AFS\0"; offset 4 u32 entry count; offset 8
+ * entries[count] of { u32 offset, u32 size } (absolute file offsets); then the file data. This is
+ * the port's reader, not the game's: the engine parses the same bytes in `igIGBFile`/`igFile`. */
 #ifndef DW4_AFS_H
 #define DW4_AFS_H
 

@@ -1,4 +1,5 @@
-/* 0x002ee970 - igMemoryDictionary vfunc_32. Open-addressing remove; hidden-return R, find vcall at 132, success tail shared by goto; table base re-read through a volatile access; local order e, next, t. Alternate -O3. */
+/* The success tail is shared by goto, the table base is re-read through a volatile access, and the
+ * locals are declared in the order e, next, t. */
 extern "C" {
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];

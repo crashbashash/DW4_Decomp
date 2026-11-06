@@ -1,7 +1,6 @@
-/* 0x0030d8f0
- * Construct the value of a struct field: when the field carries a C++ constructor
- * (_cppConstructor), run it on the member at `instance + _offset`; otherwise fall back
- * to the generic igMetaField_ConstructValue. */
+/* Construct the value of a struct field: when the field carries a C++ constructor
+ * (_cppConstructor), run it on the member at `instance + _offset`; otherwise fall back to the
+ * generic igMetaField_ConstructValue. */
 #include "dw4/reflected.h"
 int igMetaField_ConstructValue();
 

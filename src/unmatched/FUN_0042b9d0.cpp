@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* Receiver by the matched caller beNDMWShopCtrl50::vfunc_21: offset +12 is _messenger. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int beMessenger_DispatchSelected(int, int *);
 int beMessenger_SelectGroup(int, int *);
@@ -30,4 +27,4 @@ void FUN_0042b9d0(beNDMWShopCtrl50 *arg0) {
     beMessenger_AppendString(arg0->_messenger, &DAT_0051b550[0]);
     beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b558[0]);
 }
-} /* extern "C" */
+}

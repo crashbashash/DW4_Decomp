@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 int FUN_00100610(void **);
@@ -22,4 +20,4 @@ void **FUN_004584f0(void **arg0, short arg1) {
     }
     return arg0;
 }
-} /* extern "C" */
+}

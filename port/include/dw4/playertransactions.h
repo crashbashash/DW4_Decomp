@@ -115,7 +115,7 @@ int dw4_playertransactions_shop_buy(dw4_playerrecords *,int32_t player,const dw4
 /* Junk-shop donation: debit BIT by amount and raise the common COUNTER[1] investment together. *result 0
  * for a non-positive amount or one above BIT; -1 for invalid records. */
 int dw4_playertransactions_junk_donate(dw4_playerrecords *,int32_t player,int32_t amount,int *result);
-/* Equip-candidate stat preview (439f30): see port/docs/equipment-shops.md. */
+/* Equip-candidate stat preview (439f30). */
 int dw4_playertransactions_equip_preview(dw4_playerrecords *,int32_t player,const dw4_item_record *candidate,
     dw4_player_recalculate recalc,void *recalcuser,dw4_player_preview_visit visit,void *visituser);
 int dw4_playertransactions_chip_upgrade(dw4_playerrecords *,int32_t,size_t index,

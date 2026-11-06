@@ -1,13 +1,7 @@
-/* 0x002fc0e0 igMetaField_CopyConstruct: the copy constructor of a field
- * descriptor.  The fields it copies are the reflected igMetaField members in
- * include/dw4/reflected.h; the reference-counted name string is shared with the
+/* Copy constructor of a field descriptor. The reference-counted name string is shared with the
  * source, and a fresh default-value buffer is allocated for the copy.
- * Walkthrough: docs/engine/list-descriptor-copy.md.
- *
- * DefaultPointerView projects the default-value pointer at +32 (reflected as
- * the int `_default`) as a real pointer: with an int, MWCC changes the load
- * schedule and the bytes differ.  It is a matching construct, not an original
- * C++ class declaration. */
+ * DefaultPointerView (matching construct) projects the default-value pointer at +32 as a real pointer:
+ * with an int, the load schedule changes. */
 #include "dw4/reflected.h"
 void *igObject_CopyConstructHeader(void *, void *);
 void *igObject_AllocateStorage(void *, int);
@@ -65,8 +59,8 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
     dest->_isAlikeShallowMethod = source->_isAlikeShallowMethod;
     dest->_persistent = source->_persistent;
 
-    /* Allocate the copy's own default-value storage, then copy the bytes.  Size
-     * and pointers are re-read after the allocation on purpose (see the doc). */
+    /* Allocate the copy's own default-value storage, then copy the bytes. Size and pointers are
+     * re-read after the allocation on purpose. */
     ((DefaultPointerView *)dest)->value = igObject_AllocateStorage(dest, dest->_size);
     defaultSize = dest->_size;
     defaultBuffer = ((DefaultPointerView *)dest)->value;

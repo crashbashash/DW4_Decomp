@@ -1,7 +1,4 @@
-/* 0x00420230 FUN_00420230 - MATCH (verify.py).
- * Build: alternate compiler local/mwcps2/combat/mwccps2.exe, flags "-O3,p -Iinclude"
- * (also matches with "-O3,p -Cpp_exceptions off -Iinclude"); no unit-objects entry.
- * Matching constructs:
+/* Matching constructs:
  *  - char *text (an int local lets the alternate compiler hoist the two string constants out of the loop)
  *  - declaration order list,row,name,font,offs,text (alternate compiler: later declared = lower s-register)
  *  - offs = index * 4 kept as a separate local (CSE'd record offset in s0)
@@ -9,8 +6,6 @@
  *  - index = nowPage << 3; index += retCode (operand order of the addu)
  */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 void sprintf(char *, int *, int);
 int FUN_00236f80(int, int);
@@ -162,4 +157,4 @@ void FUN_00420230(beNDMWStatusCtrlSkill *self, int refreshRows, int refreshText)
         }
     }
 }
-} /* extern "C" */
+}

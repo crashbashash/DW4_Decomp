@@ -1,12 +1,10 @@
-/* 0x0040f720 Gap__Bec__beNDMWStatusCtrlBaseEquip__vfunc_21 (6484 B): per-frame state machine of the base equip status window - MATCH (verify.py).
- * Build: alternate combat compiler local/mwcps2/combat/mwccps2.exe, flags "-O3,p -Cpp_exceptions off -Iinclude".
- * unit-objects: emitted {"__dt__4RefAFv": "0x00411080", "__dt__4RefBFv": "0x00411100"}, duplicates {"__dt__4RefCFv": "0x00226990", "__dt__9StringRefFv": "0x00130720"}, externals {"__dl__FPv": "0x00100610"}.
+/* Per-frame state machine of the base equip status window.
  * Matching constructs:
  *  - 'default: return;' first in the outer _st0 switch: with it the scheduler stops hoisting successors into delay slots for the
- *    whole function (retail's nop-in-delay-slot layout); two-way splits on _st1 are a switch (case 0 / default), not if/else.
+ *    whole function; two-way splits on _st1 are a switch (case 0 / default), not if/else.
  *  - class VC with 22 dummy virtuals, then v96..v164 for the virtual calls through the +96..+164 slots.
- *  - four holder classes, one per retail destructor copy (RefA 0x411080: the case-12 window; RefB 0x411100: the select windows;
- *    RefC 0x226990: the decide list; StringRef 0x130720: the player-name string), each built at its use site so the cleanup range
+ *  - four holder classes (RefA: the case-12 window; RefB: the select windows; RefC: the decide list;
+ *    StringRef: the player-name string), each built at its use site so the cleanup range
  *    starts there; the string holder lives in an inline helper (H::SendName) so its slot is allocated after the holders, and
  *    `#pragma inline_depth(8)` keeps that helper's destructor inline (otherwise a jal __dt__ appears).
  *  - found-window search: for loop over the list with a volatile re-read of _subWindow in the body and a cast-self-assign then arm.
@@ -14,7 +12,6 @@
  *  - list-owner assignment (hl into hw+108) uses int locals declared in the block; the powerSocket slot swap is a switch on
  *    _retCode (case 0/1/2) with locals declared a,b,ps,pos,off and 'b' read before 'a'.
  *  - list byte pushes/sets are macros so the global byte is read at the store, after the bounds test. */
-/* Gap__Bec__beNDMWStatusCtrlBaseEquip__vfunc_21 (0x0040f720) */
 #include "dw4/reflected.h"
 #pragma inline_depth(8)
 extern "C" {
@@ -85,7 +82,7 @@ typedef igObject Obj;
 struct RefA { Obj *p; RefA(void *x) { p = (Obj *)x; } ~RefA() { Obj *o; if ((o = p) != 0) { --o->_refCount; if (((unsigned long long)(long long)(int)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } } };
 struct RefB { Obj *p; RefB(void *x) { p = (Obj *)x; } ~RefB() { Obj *o; if ((o = p) != 0) { --o->_refCount; if (((unsigned long long)(long long)(int)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } } };
 struct RefC { Obj *p; RefC(void *x) { p = (Obj *)x; } ~RefC() { Obj *o; if ((o = p) != 0) { --o->_refCount; if (((unsigned long long)(long long)(int)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } } };
-/* Interned-string reference (count at p[-1], header at p[-2]); the retail destructor copy is StringRef at 0x00130720. */
+/* Interned-string reference (count at p[-1], header at p[-2]). */
 struct StringRef { void *p; StringRef(void *x) { p = x; } ~StringRef() { if (p != 0) { int *hd = (int *)((char *)p - 8); int c = *(int *)((char *)p - 4) - 1; *(int *)((char *)p - 4) = c; if (c == 0) StringChunk_ReleaseHeader(*hd, hd); } } };
 extern "C" StringRef StringList_CopyRetained(int, int);
 #define SEL(d) beMessenger_SelectGroup(p->_messenger, d)

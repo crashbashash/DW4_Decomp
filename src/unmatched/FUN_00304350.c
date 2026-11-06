@@ -1,4 +1,3 @@
-/* Typed refcount release (-= 1 with the 23-bit mask).py. */
 typedef struct Q { char pad4[4]; int f4; } Q;
 int igObject_Destroy();
 extern Q * DAT_005871b0[4];

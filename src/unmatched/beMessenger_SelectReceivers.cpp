@@ -1,16 +1,11 @@
-/* beMessenger_SelectReceivers — 0x0038d860, 2036 bytes. Selects the receivers of a messenger send.
- * The messenger keeps a stack of work records (_workStack); the record whose group name
- * (category), info name and ram number match is moved to the front (index 0). If none matches, the
- * oldest record (the last one) is recycled: its names and ram number are replaced, its two result
- * lists are cleared, and it is moved to the front. When the front record has no ram receivers yet,
- * they are looked up in the messenger group registered under the record's group name and copied,
- * one per info name that matches the record's info name. The views below project only the reviewed
- * fields (reflected fields are named in the comments; offsets are bytes). Class names are readable
- * labels, not original spellings. Several helpers are written in an unusual way on purpose: each
- * form is the one that reproduces retail's instruction stream, register allocation and delay-slot
- * schedule, and each is marked. The exception-unwind table of the retail function (two destroy
- * actions for the stack references at +172 and +168) is not part of this source; the unit builds
- * with exceptions off. */
+/* Selects the receivers of a messenger send. The messenger keeps a stack of work records
+ * (_workStack); the record whose group name (category), info name and ram number match is moved to
+ * the front. If none matches, the oldest record (the last one) is recycled: its names and ram
+ * number are replaced, its two result lists are cleared, and it is moved to the front. When the
+ * front record has no ram receivers yet, they are looked up in the messenger group registered
+ * under the record's group name and copied, one per info name that matches the record's info name.
+ * Several helpers are written in an unusual way on purpose: each form is the one that reproduces
+ * the instruction stream, register allocation and delay-slot schedule, and each is marked. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);
@@ -39,8 +34,7 @@ typedef igObject Obj;
 #define POOL() if (!DAT_00586f20[0]) { int p_ = FUN_002eb010(16); if (p_) p_ = StringPool_Construct(p_); DAT_00586f20[0] = p_; }
 
 typedef beMessengerWork Work;
-/* Stack reference: retains on construction, releases when it leaves scope.
- * Its destructor is the emitted function at 0x0038c410. */
+/* Stack reference: retains on construction, releases when it leaves scope. */
 struct Ref {
     Obj *p;
     Work *operator->() { return (Work *)p; }
@@ -57,12 +51,10 @@ typedef igObjectList List;
 
 /* beMessengerWork: the work record, reflected fields _groupName, _infoName,
  * _ramNo, _findRamNoList and _findRamList. */
-/* A second reader of the info name; retail does not reuse the first
- * load for the null-handling comparison, and this access path does not
- * either. */
+/* A second reader of the info name; the first load is not reused for the null-handling comparison,
+ * and this access path does not either. */
 struct WorkOps {
 static inline char *InfoName2(Work *w) { return (char *)((volatile Work *)w)->_infoName; }
-/* The interned-string pool is created on first use. */
 static inline char *Intern(char *text) {
     POOL();
     return StringPool_Intern(DAT_00586f20[0], text);
@@ -74,12 +66,10 @@ static inline void SetInfoName(Work *w, char *n) { char *s; s = Intern(n); char 
 typedef beMessengerGroup Group;
 typedef beMessenger Messenger;
 
-/* A retained word that lives on the stack and is then stored into a list by
- * address.  It has no destructor: the list takes the reference.  The
- * constructor reads its own stored word back through a laundered pointer and
- * fetches the work-stack handle between that read and the null test; that is
- * the shape that makes retail's address register, delay slot and stack
- * layout come out (same form as beMessenger_PushArgContext). */
+/* A retained word that lives on the stack and is then stored into a list by address. It has no
+ * destructor: the list takes the reference. The constructor reads its own stored word back through
+ * a laundered pointer and fetches the work-stack handle between that read and the null test; that
+ * shape makes the address register, delay slot and stack layout come out. */
 struct RefTmp {
     Obj * volatile value;
     RefTmp(Obj *p, Messenger *m, int &out) : value(p) {
@@ -90,7 +80,6 @@ struct RefTmp {
         RefTmp *r = s;
         (void)r;
     }
-    /* Insert a retained reference at the front of the work stack. */
     static void PushFront(Messenger *m, Obj *obj) {
         int dst;
         RefTmp tmp(obj, m, dst);
@@ -120,8 +109,6 @@ extern "C" void beMessenger_SelectReceivers(Messenger *self, char *category, cha
     if (!self->_isMemoryAssign) beMessenger_InitializeMemory(self);
     else beMessengerArgData_Clear((void *)self->_argData);
 
-    /* Find a record with the same group name and info name (a missing name
-     * only matches a missing name) and move it to the front. */
     found = 0;
     n = ((List *)self->_workStack)->_count;
     for (i = 0; i < n; i++) {
@@ -143,7 +130,6 @@ extern "C" void beMessenger_SelectReceivers(Messenger *self, char *category, cha
         found = 1;
         break;
     }
-    /* No match: recycle the last record, then move it to the front. */
     if (found == 0) {
         lastIdx = ((List *)self->_workStack)->_count - 1;
         Ref item(LDATA((List *)self->_workStack)[lastIdx]);
@@ -175,7 +161,6 @@ extern "C" void beMessenger_SelectReceivers(Messenger *self, char *category, cha
         }
     }
 
-    /* Fill the front record's receivers from its group. */
     work = (Work *)LDATA((List *)self->_workStack)[0];
     if (((List *)work->_findRamList)->_count == 0) {
         g = (Group *)igProperty_FindByName((void *)self->_groupList, DAT_00585be0[0], (char *)work->_groupName);

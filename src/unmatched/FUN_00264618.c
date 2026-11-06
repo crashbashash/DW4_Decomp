@@ -1,6 +1,6 @@
 /* Creates and starts the thread running FUN_00263fc0 on the 4 KB stack DAT_004a02b0 and sets its
  * priority from DAT_0049d9a0. */
-/* EE kernel thread creation block (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_t) */
+/* EE kernel thread creation block (ee_thread_t). */
 typedef struct ThreadParam {
     int status;
     void (*entry)(void);

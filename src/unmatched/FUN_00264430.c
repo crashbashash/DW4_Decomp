@@ -1,6 +1,6 @@
 /* Creates and starts the ADX server thread (FUN_00263dc8 on the 2 KB stack DAT_0049dab0), suspends
  * it again with FUN_002643d0 and sets its working priority from DAT_0049d994. */
-/* EE kernel thread creation block (ps2sdk reference: ee/kernel/include/kernel.h, ee_thread_t) */
+/* EE kernel thread creation block (ee_thread_t). */
 typedef struct ThreadParam {
     int status;
     void (*entry)(void);

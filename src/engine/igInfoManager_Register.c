@@ -1,6 +1,3 @@
-/* 0x00233920 igInfoManager_Register: registers class igInfoManager with the object system, derived from igNamedObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igNamedObject_GetPublishedMetaObject[];
 extern char thunk_igInfoManager_GetMetaObject[];
 extern char igNamedObject_Register[];
@@ -14,16 +11,16 @@ int igInfoManager_InitFields();
 void igInfoManager_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igInfoManager_metaObject,           /* published MetaObject slot */
-        igNamedObject_Register,                        /* base class registrar */
-        igNamedObject_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igInfoManager_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        igInfoManager_className,            /* class name */
-        0x10,                                          /* instance size */
-        0,                                             /* vtable getter */
-        &igInfoManager_InitFields,                     /* field adder */
-        0,                                             /* extra callback item */
-        g_igInfoManager_callbackList          /* callback list */
+        1, /* abstract */
+        g_igInfoManager_metaObject,
+        igNamedObject_Register,
+        igNamedObject_GetPublishedMetaObject,
+        thunk_igInfoManager_GetMetaObject,
+        igInfoManager_className,
+        0x10, /* instance size */
+        0,
+        &igInfoManager_InitFields,
+        0, /* extra callback item */
+        g_igInfoManager_callbackList /* callback list */
     );
 }

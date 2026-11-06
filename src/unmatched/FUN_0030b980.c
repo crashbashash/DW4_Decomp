@@ -1,5 +1,3 @@
-/* Strip the last path component: backwards scan for a slash or backslash (bottom-tested comma
- * loop), terminate the string, re-run the setter; alternate compiler -O3. */
 struct P { int a; int b; char *path; int len; };
 int FUN_0030b3c0();
 extern int DAT_004c22f0[4];

@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* _flagWork is the per-player beNDMWLoadSavePlWorkList; _mcUtilCtrl -> _slot is the memory-card slot list. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 #define PLW(common, i) (((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)(common)->_flagWork)->_data)[i])
 #define MCU(common) ((beNDMWMcUtilCtrl *)(common)->_mcUtilCtrl)
@@ -91,4 +88,4 @@ int FUN_003ed2e0(beNDMWLoadCtrl2CommonIntf *arg0, int arg1, int arg2, int arg3, 
     }
     return s1;
 }
-} /* extern "C" */
+}

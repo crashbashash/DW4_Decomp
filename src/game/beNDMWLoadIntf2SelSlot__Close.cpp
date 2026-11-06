@@ -1,10 +1,8 @@
-/* 0x003e2b10 - slot-selection screen mark finish (stage 2). Build: alternate (combat) compiler, "-O3,p -Iinclude".
- * Shape note: the kind switch is written 'case 0: default: <phase switch>; ... case 1: case 2: break;'. The extra
- * 'case 0:' label (its compare folds away) puts a second edge into the default block, so the constant 1 kept in v0 by
- * 'return 1' is not reused for the phase compare and call argument (they get their own t0), as in retail. */
+/* Slot-selection screen mark finish (stage 2). The kind switch is written 'case 0: default: <phase
+ * switch>; ... case 1: case 2: break;'. The extra 'case 0:' label (its compare folds away) puts a
+ * second edge into the default block, so the constant 1 kept in v0 by 'return 1' is not reused for
+ * the phase compare and call argument (they get their own t0). */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 
 extern int DAT_00516d30[4];
@@ -17,7 +15,6 @@ extern void beNDMWLoadIntf2ComMdlCtrl__Close(int, int, void *, void *, int);
 extern unsigned char beNDMWLoadIntf2ComMdlCtrl__IsRunning(int, int, void *);
 extern unsigned char beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(int);
 extern void TextOrder_PublishLineListOnly(int, int);
-
 
 unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
     if (self->_st0 != 2) return 0;
@@ -104,4 +101,4 @@ unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
     }
     return self->_isEnd;
 }
-} /* extern "C" */
+}

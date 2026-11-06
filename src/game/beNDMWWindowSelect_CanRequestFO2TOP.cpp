@@ -1,4 +1,3 @@
-/* Exact full-width SELECTCTRL ISFO2TOP negation. */
 #include "dw4/reflected.h"
 extern "C" void beMessenger_SendNamed(void *,const char *,long long,long long,const char *);
 extern "C" long long beMessenger_GetBool(void *,int);

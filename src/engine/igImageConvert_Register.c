@@ -1,8 +1,3 @@
-/* 0x0014dbc0 igImageConvert_Register: registers class igImageConvert with the object system, derived from igImageUtils.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json.
- * The post-init hook is a three-instruction stub that stores thunk_igPsx2ImageConvert_GetMetaObject
- * (the PS2 implementation) in this MetaObject's `_abstractProxy` (igMetaObject +0x3c). */
 extern char igImageUtils_GetPublishedMetaObject[];
 extern char thunk_igImageConvert_GetMetaObject[];
 extern char igImageUtils_Register[];
@@ -14,16 +9,16 @@ extern int igImageConvert_SetAbstractProxy_0014dc40[4];
 void igImageConvert_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
-        1,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igImageConvert_metaObject,         /* published MetaObject slot */
-        igImageUtils_Register,                        /* base class registrar */
-        igImageUtils_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igImageConvert_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        igImageConvert_className,          /* class name */
-        8,                                            /* instance size */
-        0,                                            /* vtable getter */
+        1, /* abstract */
+        g_igImageConvert_metaObject,
+        igImageUtils_Register,
+        igImageUtils_GetPublishedMetaObject,
+        thunk_igImageConvert_GetMetaObject,
+        igImageConvert_className,
+        8, /* instance size */
+        0,
         &igImageConvert_SetAbstractProxy_0014dc40[0], /* post-init hook */
-        0,                                            /* extra callback item */
-        0                                             /* callback list */
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

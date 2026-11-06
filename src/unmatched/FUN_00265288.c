@@ -1,10 +1,10 @@
 /* While the wake request DAT_0049d9dc is pending (1), wakes the thread DAT_0049da28 if it is
  * waiting (THS_WAIT or THS_WAITSUSPEND) and clears the request once WakeupThread succeeds. */
-/* Status block filled by ReferThreadStatus; ps2sdk reference: ee/kernel/include/kernel.h (ee_thread_status_t, THS_*). */
+/* Status block filled by ReferThreadStatus (ee_thread_status_t, THS_*). */
 typedef struct ThreadStatus_265288 {
     int status;     /* 0x00 */
     int pad4[11];
-} ThreadStatus_265288;  /* 0x30 bytes */
+} ThreadStatus_265288;
 
 #define THS_WAIT        0x04
 #define THS_WAITSUSPEND 0x0c

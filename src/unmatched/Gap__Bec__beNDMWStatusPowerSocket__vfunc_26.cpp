@@ -24,9 +24,7 @@ extern int DAT_00587d08[4];
 extern int DAT_0058b028[4];
 void Gap__Bec__beNDMWStatusPowerSocket__vfunc_26(beNDMWStatusPowerSocket *a);
 }
-/* Retained share of the system's global string object (retail destructor copy 0x001489a0.json
- * duplicates); the cleanup range of the decoded retail table 0x5456a4 spans the string-build calls
- * only. */
+/* Retained share of the system's global string object. */
 struct GlobalStrRef {
     Str *p;
     GlobalStrRef(Str *o) : p(o) { if (p != 0) p->refs = p->refs + 1; }

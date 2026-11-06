@@ -1,4 +1,4 @@
-/* 0x001e32f0: getter for the reflected `_channels` member (igUnsignedCharMetaField at +56). */
+/* Getter for the reflected `_channels` member (igUnsignedCharMetaField at +56). */
 #include "dw4/reflected.h"
 
 unsigned char Gap__Core__igCompressedAnimationSequenceQS__vfunc_34(igCompressedAnimationSequenceQS *self) {

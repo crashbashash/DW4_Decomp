@@ -1,6 +1,5 @@
-/* ADXT_EntryFnameRange (name from the error string at DAT_004ee0d0): adds a file-name range to the
- * play handle file list through FUN_00277038, reporting "Can't entry file" with the name through
- * FUN_00260840 on failure. */
+/* ADXT_EntryFnameRange: adds a file-name range to the play handle file list through FUN_00277038,
+ * reporting "Can't entry file" with the name through FUN_00260840 on failure. */
 typedef struct AdxtHandle {
     char f0[148];
     void *fileList;

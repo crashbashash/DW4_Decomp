@@ -1,10 +1,5 @@
-/* igb.c — igBinary container reader.  See dw4/igb.h.
- *
- * The walk and the record decode mirror DW4_Decomp/scripts/igb_dir.py and
- * igb_inst.py, including the two properties that make them self-checking:
- * the directory walk validates every triple, and a record decode must land exactly
- * on its own `recordSize`.
- */
+/* igBinary container reader. The walk and the record decode are self-checking: the directory walk
+ * validates every triple, and a record decode must land exactly on its own `recordSize`. */
 #include "dw4/igb.h"
 
 #include <stdio.h>

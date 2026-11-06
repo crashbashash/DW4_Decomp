@@ -1,8 +1,9 @@
-/* The generic shop root (SUBWND modes 1 and 3..9): retail beNDMWShopCtrl00 update 4267b0..426f94. State 0 creates the five
- * common widgets in order (ShopTitle00 the j_shback backdrop, StatusTitle01 the player panel, StatusTitle02 the message
- * window, StatusTitle03 the Select/Confirm/Cancel legend, ShopTitle01 the i_sttitle header); state 1 waits for the message window's opening
- * sequence, creates the service selected by the entry code and then waits for its completion (a change of the child count);
- * state 2 closes every widget. Evidence and boundaries: port/docs/shop-root.md. */
+/* The generic shop root (SUBWND modes 1 and 3..9): retail beNDMWShopCtrl00 update 4267b0..426f94.
+ * State 0 creates the five common widgets in order (ShopTitle00 the j_shback backdrop,
+ * StatusTitle01 the player panel, StatusTitle02 the message window, StatusTitle03 the
+ * Select/Confirm/Cancel legend, ShopTitle01 the i_sttitle header); state 1 waits for the message
+ * window's opening sequence, creates the service selected by the entry code and then waits for its
+ * completion (a change of the child count); state 2 closes every widget. */
 #ifndef DW4_SHOPROOT_H
 #define DW4_SHOPROOT_H
 #include "dw4/statusview.h"

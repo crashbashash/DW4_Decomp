@@ -1,4 +1,5 @@
-/* 0x00207470 - 232 bytes. Pushes four words of register state into a command buffer; the 31-bit address word is a bitfield (31 + 1 bits) instead of shift arithmetic, the low half is stored through a short pointer from an int local; alternate compiler -O3. */
+/* The 31-bit address word is a bit-field rather than shift arithmetic, and the low half is stored
+ * through a short pointer from an int local. */
 struct C { char pad0[48]; int *f48; };
 struct W { unsigned addr : 31; unsigned flag : 1; };
 int FUN_00208120();

@@ -6,7 +6,7 @@ typedef struct Status_273c60 {
     int f0;
     int busy;       /* 0x04 */
     int pad8[10];
-} Status_273c60;    /* 0x30 bytes */
+} Status_273c60;
 
 extern char DAT_004ab300[];
 int FUN_00274e30(void *obj, Status_273c60 *status);

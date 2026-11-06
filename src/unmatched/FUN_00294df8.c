@@ -22,7 +22,7 @@ typedef struct {
     int f0;
     int active;   /* 4: 1 while the slot is in use */
     char rest[688];
-} PlySlot;        /* 696 bytes */
+} PlySlot;
 
 void FUN_00294df8(void) {
     char *work = FUN_00294a30();

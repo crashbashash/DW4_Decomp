@@ -1,6 +1,5 @@
-/* Metaobject singleton accessor: create when the cached object is null or its flag 4 is clear.
- * Retail keeps the flag test as a materialised C++ bool (sltu) with a padding nop before the call:
- * `ok = !!(f & 4)` tested with `!= false`, the null case jumping straight to the call. */
+/* The flag test is a materialised C++ bool (sltu) with a padding nop before the call: `ok = !!(f &
+ * 4)` tested with `!= false`, the null case jumping straight to the call. */
 struct S { char p[36]; unsigned f; };
 extern "C" {
 int FUN_003471f0();

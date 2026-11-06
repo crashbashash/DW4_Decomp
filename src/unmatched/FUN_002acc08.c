@@ -2,7 +2,7 @@
 int FUN_0029feb8();
 int FUN_002ae248();
 
-/* Sub-block at +2208: the two sd stores show 64-bit members at +24 and +32. */
+/* Sub-block at +2208 with 64-bit members at +24 and +32. */
 struct Block08A0 {
     int f0, f4, f8, f12, f16, f20;
     long f24;

@@ -1,5 +1,3 @@
-/* Debug listing loop over 46 slots with virtual getters; parameter reused in place for the default
- * string (default compiler). */
 extern "C" {
 int FUN_00304430(...);
 int FUN_00304680();

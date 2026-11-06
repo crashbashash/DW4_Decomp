@@ -1,7 +1,3 @@
-/* CRI ADXT handle accessor: reports the ADXT_GetHdrLen parameter error for a
- * null handle ("E02080822 ADXT_GetHdrLen: parameter error", string at 0x4ee6d0),
- * returns 0 until the handle reaches state 2, else forwards the stream
- * handle stored at +4. */
 typedef struct Adxt {
     char used;
     signed char state;

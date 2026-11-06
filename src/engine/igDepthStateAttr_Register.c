@@ -1,6 +1,3 @@
-/* 0x00138580 igDepthStateAttr_Register: registers class igDepthStateAttr with the object system, derived from igVisualAttribute.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualAttribute_Register[];
 extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igDepthStateAttr_GetVTable[];
@@ -14,16 +11,16 @@ int igDepthStateAttr_InitFields();
 void igDepthStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igDepthStateAttr_metaObject,            /* published MetaObject slot */
-        igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igDepthStateAttr_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        igDepthStateAttr_className,             /* class name */
-        0x10,                                              /* instance size */
-        igDepthStateAttr_GetVTable,                        /* vtable getter */
-        &igDepthStateAttr_InitFields,                      /* field adder */
-        0,                                                 /* extra callback item */
-        0                                                  /* callback list */
+        0, /* abstract */
+        g_igDepthStateAttr_metaObject,
+        igVisualAttribute_Register,
+        igVisualAttribute_GetPublishedMetaObject,
+        thunk_igDepthStateAttr_GetMetaObject,
+        igDepthStateAttr_className,
+        0x10, /* instance size */
+        igDepthStateAttr_GetVTable,
+        &igDepthStateAttr_InitFields,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

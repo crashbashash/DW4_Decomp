@@ -21,7 +21,6 @@ int igObject_Destroy(...);
 void FUN_00185c80(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A *arg5, float fparg0);
 }
 void FUN_00185c80(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A *arg5, float fparg0) {
-//D<
 float spBC;
 V3 spB0;
 V4 spA0;
@@ -42,7 +41,6 @@ int c2;
 int d2;
 int e2;
 int f2;
-//D>
     unsigned i = arg1;
     f20 = fparg0 * fparg0;
     if (arg5 != 0) {

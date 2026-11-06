@@ -1,8 +1,6 @@
 /* Constructor of the equipment page of the status window controller. The base constructors stamp
  * their own vtable and null their reference cells in turn, so the object ends up stamped with each
- * ancestor table before its final one (retail RTTI; the Window and WindowCtrl pair is described in
- * docs/engine/window-object-lifetime.md). The "Construct" name is descriptive, not an original
- * method spelling. */
+ * ancestor table before its final one. */
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_InitHeader();

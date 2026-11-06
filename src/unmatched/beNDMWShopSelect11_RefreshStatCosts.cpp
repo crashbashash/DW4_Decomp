@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 
 typedef struct PropertyRecord {
@@ -32,7 +30,6 @@ extern const NameTab DAT_004cfad0;
 extern const LimitTab DAT_004cfaf0;
 extern const NameTab DAT_004cfb10;
 
-/* 0x0043fb70 */
 void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self)
 {
     int col[3];
@@ -98,4 +95,4 @@ void beNDMWShopSelect11_RefreshStatCosts(beNDMWShopSelect11 *self)
         i++; pp++; pl++; pf++;
     } while (i < 7);
 }
-} /* extern "C" */
+}

@@ -1,7 +1,3 @@
-/* CRI ADX stream-owner poll: when a stream handle (+28) is attached, take the
- * library lock, query its state and settle the owner (kind byte at +2) for the
- * three terminal states 0, 3 and 9 (jump table at 0x4f01c0, ten entries),
- * then release the handle; the lock is dropped on every non-null path. */
 typedef struct AdxOwner {
     char used;
     char pad0;

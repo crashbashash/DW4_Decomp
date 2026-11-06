@@ -1,20 +1,16 @@
-/* Gap__Bec__beNDMWStatusSubMenu__vfunc_21: update state machine of the status-screen sub-menu
- * (_st0 open / run / close / wait-close, _st1 menu choice 0..3, _st2 step, _st3 argument). Build
- * requirements (same family as ShopCtrl40::vfunc_21, 0x00429630): alternate compiler with "-O3,p
- * -Cpp_exceptions off"; the empty RP destructor (__dt__2RPFv) is a duplicate of the retail body at
- * 0x002e2300 and operator delete is external. Codegen notes (all measured): - RP slots are the
- * memory-resident smart-pointer temporaries (the empty destructor keeps them on the stack); the
- * interned-string temporaries tk0..tk11 and the Ref temporaries r1xx are address-taken locals. -
- * The branch-delay hoisting of the pool-init 'li a0,16' / 'move a0,v0' words only turns off when
- * the post-RA jump optimiser deletes at least one jump to the next block. Retail gets that from
- * the player-count presentation switch: its default body comes first (case 1 + default share it),
- * so the compare chain falls into it without a trailing jump. Keep `case 1: default:` first. -
- * Helpers::AppendBoth is the inlined two-list append used twice (same registers both times). -
- * DAT_004cf790 is the compiler's own image of a local const char *[3] initialiser; declaring it as
- * an extern Str3 object gives the retail ld/lwc1 block move. DAT_004cf760 (12 model-name pointers)
- * is copied with three quadword loads then three stores. - Locals of the case-3 step 0 block are
- * declared in the order rec, i, nN, item, lL, ctx, flag; that order (not the macro form) decides
- * the saved-register colouring of the list append. */
+/* Update state machine of the status-screen sub-menu (_st0 open / run / close / wait-close, _st1
+ * menu choice 0..3, _st2 step, _st3 argument). RP slots are the memory-resident smart-pointer
+ * temporaries (the empty destructor keeps them on the stack); the interned-string temporaries
+ * tk0..tk11 and the Ref temporaries r1xx are address-taken locals. The branch-delay hoisting of
+ * the pool-init `li a0,16` / `move a0,v0` words only turns off when the post-RA jump optimiser
+ * deletes at least one jump to the next block; the player-count presentation switch provides that
+ * when its default body comes first (case 1 + default share it), so the compare chain falls into
+ * it without a trailing jump. Keep `case 1: default:` first. Helpers::AppendBoth is the inlined
+ * two-list append used twice (same registers both times). DAT_004cf790 is the compiler's own image
+ * of a local const char *[3] initialiser; declaring it as an extern Str3 object gives the ld/lwc1
+ * block move. DAT_004cf760 (12 model-name pointers) is copied with three quadword loads then three
+ * stores. Locals of the case-3 step 0 block are declared in the order rec, i, nN, item, lL, ctx,
+ * flag; that order (not the macro form) decides the saved-register colouring of the list append. */
 #include "dw4/reflected.h"
 
 extern "C" {
@@ -133,9 +129,9 @@ struct RP { igObject *p; ~RP() {} };
     if (held != 0) { int *hd = (int *)held - 2; \
         int cnt = ((int *)held)[-1] - 1; ((int *)held)[-1] = cnt; \
         if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
-/* The select windows made here are beNDMWStatusSelectE1 (FUN_003b51b0 -> metaobject 0x58abd8) and
- * beNDMWStatusSelectE0 (FUN_003b5370 -> 0x58abe0); their +84/+88/+100 words are _selectMax,
- * _offsetPos (an igVec3f: two floats and a zero word, reflected as int[3]) and _startPoint. */
+/* The select windows made here are beNDMWStatusSelectE1 and beNDMWStatusSelectE0; their
+ * +84/+88/+100 words are _selectMax, _offsetPos (an igVec3f: two floats and a zero word, reflected
+ * as int[3]) and _startPoint. */
 #define WSETI84(T, w, v) { T *wt = (T *)(w); wt->_selectMax = (v); }
 #define WSETI100(T, w, v) { T *wt = (T *)(w); wt->_startPoint = (v); }
 #define WSETPOS(T, w, x, y, z) { T *wt = (T *)(w); *(float *)&wt->_offsetPos[0] = (x); *(float *)&wt->_offsetPos[1] = (y); wt->_offsetPos[2] = (z); }

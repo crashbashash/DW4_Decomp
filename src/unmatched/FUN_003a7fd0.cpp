@@ -11,7 +11,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 long long FUN_003a7fd0(beBaseInfoRam *arg0, int arg1);
 }
-/* owning reference to the freshly created data list; the destructor (retail cleanup 0x33e9c0) drops one reference and destroys at zero */
+/* Owning reference to the freshly created data list; the destructor drops one reference and
+ * destroys at zero. */
 struct ObjectRef {
     igObject *p;
     ObjectRef(igObject *o) : p(o) {}

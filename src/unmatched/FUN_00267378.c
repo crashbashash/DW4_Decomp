@@ -1,6 +1,6 @@
 /* Returns FUN_0025db78 of the object handle when FUN_0025db70 reports a positive value and the
  * state is 2 or 3, else 0. */
-/* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0 (offsets from their accesses). */
+/* Object layout shared by FUN_00265fb0, FUN_00266298, FUN_002662c8 and FUN_00266be0. */
 typedef struct Object_265fb0 {
     char f0;
     char state;         /* 0x01: 1 after FUN_00266298, 0 after FUN_002662c8, 2 in FUN_00266d20 */
@@ -21,8 +21,8 @@ typedef struct Object_265fb0 {
     int f160;           /* 0xa0 */
     int f164;           /* 0xa4 */
 } Object_265fb0;
-int FUN_0025db70(void *handle);    /* 0x25db70: returns the word at offset 204 */
-short FUN_0025db78(void *handle);  /* 0x25db78: returns the halfword at offset 224 */
+int FUN_0025db70(void *handle);    /* Returns the word at offset 204 */
+short FUN_0025db78(void *handle);  /* Returns the halfword at offset 224 */
 
 int FUN_00267378(Object_265fb0 *object) {
     if (FUN_0025db70(object->handle) > 0 && (object->state == 2 || object->state == 3)) {

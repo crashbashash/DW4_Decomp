@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* Receiver by the matched caller beNDMWShopCtrlDiskSell::vfunc_21: +12 _messenger, +48 _retCode, +92 _maxSell, +100 _tanka. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int sprintf(char *, int *, int);
 int beMessenger_AppendString(int, const char *);
@@ -31,4 +28,4 @@ void FUN_00437f50(beNDMWShopCtrlDiskSell *arg0) {
     beMessenger_AppendString(arg0->_messenger, sp30);
     beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b6b0[0]);
 }
-} /* extern "C" */
+}

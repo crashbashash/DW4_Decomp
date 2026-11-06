@@ -1,4 +1,4 @@
-/* Interned-string wrapper cleanup identified by GAMERAM's retail unwind table. */
+/* Interned-string wrapper cleanup. */
 typedef struct StringRefWord { char *value; } StringRefWord;
 void StringChunk_ReleaseHeader(void *,int);
 void FUN_00100610(void *);

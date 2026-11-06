@@ -12,7 +12,7 @@ typedef struct LscEntry_2779d8 {
     int size;           /* 0x14 */
     int status;         /* 0x18 */
     int done_bytes;     /* 0x1c */
-} LscEntry_2779d8;      /* 0x20 bytes */
+} LscEntry_2779d8;
 
 typedef struct Lsc_2779d8 {
     signed char pad0;

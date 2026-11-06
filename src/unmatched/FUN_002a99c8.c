@@ -13,7 +13,6 @@ struct Player2a99c8 {
     struct Context2a99c8 *context;        /* +8120 */
 };
 
-/* Latches an 8-byte event record into DAT_00585680 and the context, then reports it as 0xFF000F40. */
 int FUN_002a99c8(void *unused, void *record, struct Player2a99c8 *player) {
     DAT_00585678 = 1;
     __builtin_memcpy(DAT_00585680, record, 8);

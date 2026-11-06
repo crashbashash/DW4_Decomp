@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_00236b10(int, int);
 
@@ -112,4 +110,4 @@ void Gap__Bec__libNdmwRuntimePlugin__vfunc_22(libNdmwRuntimePlugin *arg0, int ar
         FUN_00236b10(arg1, temp_a1_21);
     }
 }
-} /* extern "C" */
+}

@@ -8,7 +8,7 @@ struct Source2a4958 {
     int f36;                              /* +3464 */
     char pad40[44 - 40];
     int active;                           /* +3472 */
-    char f48[4];                          /* +3476: read by FUN_002a5a50 */
+    char f48[4];
 };
 struct Player2a4958 {
     char pad0[3428];

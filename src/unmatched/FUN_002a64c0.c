@@ -1,5 +1,3 @@
-/* Returns 1 when nothing is pending for picture kind 1..3 (word +8/+12/+16 of the block at +2564),
- * and 1 for any other kind. */
 struct Pending2a64c0 {
     char pad0[8];
     int f8;                               /* +2572 */
@@ -11,7 +9,8 @@ struct Player2a64c0 {
     struct Pending2a64c0 pending;         /* +2564 */
 };
 
-/* Returns 1 when nothing is pending for picture kind 1..3 (2 for other kinds). */
+/* Returns 1 when nothing is pending for picture kind 1..3 (word +8/+12/+16 of the block at +2564),
+ * and 1 for any other kind. */
 int FUN_002a64c0(struct Player2a64c0 *player, unsigned int kind) {
     struct Pending2a64c0 *pending = &player->pending;
 

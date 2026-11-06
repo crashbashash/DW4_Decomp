@@ -1,8 +1,7 @@
-/* Stops the IPU_TO DMA channel, clears its MADR/QWC/TADR and deletes the stream semaphore. */
 int DeleteSema();
 void FUN_002a8c08();
 
-/* EE DMAC channel 4 (IPU_TO) registers (addresses as in ps2sdk reference: common/include/ee_regs.h). */
+/* EE DMAC channel 4 (IPU_TO) registers. */
 #define D4_MADR ((volatile unsigned int *)0x1000B410)
 #define D4_QWC  ((volatile unsigned int *)0x1000B420)
 #define D4_TADR ((volatile unsigned int *)0x1000B430)

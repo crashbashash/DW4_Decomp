@@ -1,9 +1,3 @@
-/* 0x003dcc60 - DATASELINTF save-area opener: step 0 starts the four area models for the player's selected entry (the
- * area kind picked by name from the 16-entry table, idle areas get the empty kind) and opens the status window; step 1
- * waits for the models and the status data, then publishes each area's eight-character digimon name through a text
- * object held in an ObjectRef (destructor named by the exception table) or the "no data" id line.  Receiver is
- * beNDMWLoadIntf2DataSelIntf; _commonIntf is the beNDMWLoadCtrl2CommonIntf whose _flagWork lists the per-player
- * beNDMWLoadSavePlWork records (arena handles are 4-byte ints cast to pointers where followed). */
 #include "dw4/reflected.h"
 extern "C" {
 int beNDMWLoadIntf2ComMdlCtrl__StartAt(...);
@@ -27,9 +21,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 struct V3 { float x, y, z; };
-/* Owning stack reference to the area's text object: constructed from the object and released on scope exit
- * (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the retail
- * body 0x003832d0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the area's text object; released on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class ObjectRef {
 public:
     beUnicodeObj *p;

@@ -1,4 +1,3 @@
-/* 0x001d86f0 - 184 bytes. Replaces a ref-counted element of a list (retain new, release old, bounds-checked store); typed list and ref records; alternate compiler -O3. */
 #include "dw4/reflected.h"
 struct S { char pad0[8]; igObjectList *f8; };
 int igObject_Destroy(igObject *);

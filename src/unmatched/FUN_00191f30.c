@@ -1,5 +1,4 @@
-/* Normalise 4x4 rows by 1/len; sign bit cleared through a byte bitfield union, byte-offset loop
- * indexing; alternate compiler -O3 */
+/* The sign bit is cleared through a byte bit-field union. */
 typedef union U { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U;
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];

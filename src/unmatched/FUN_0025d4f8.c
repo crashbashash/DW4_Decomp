@@ -8,7 +8,7 @@ typedef struct Rec25d4f8 {
     char pad2[6];
     void *handle;       /* +8: released through FUN_0026f010 */
     char pad12[248];
-} Rec25d4f8;            /* 260 bytes */
+} Rec25d4f8;
 
 void FUN_0025d4f8(Rec25d4f8 *rec) {
     if (rec != 0) {

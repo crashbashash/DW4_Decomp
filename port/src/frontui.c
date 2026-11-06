@@ -14,23 +14,18 @@
 #define UI_AREA_ENTRY  620
 #define UI_REF_H       448.0f     /* the front-end's reference height (one model unit = one pixel) */
 
-/* --- the recovered controller schedule (the pack's own `beAction2` data, AREA.AFS 620) ----------
- *
- * `beNDMWTitle2` drives each UI graph with `MODELCTRL <graph> GENERATE <seq>`, the
- * same mechanism `j_startback` uses.  Each graph's action-2 `OPEN`/`CLOSE` step carries a
- * `beAction2JOINTSET` (a *time range* in 60 fps frames -> `frames*1e9/60` ns) and a
- * `beAction2FADESET` (its fade time, in frames).  Recovered per graph (scripts/modelctrl_dump.py):
- *
- *   j_startlogo    OPEN  JOINTSET  0..30 'OS'   FADESET IN 10 frames, CLOSE FADESET OUT 30 frames
- *   j_startmenu01  OPEN  JOINTSET  0..15 'OS'   FADESET IN  1 frame,  CLOSE FADESET OUT  1 frame
- *   j_startmenu02  OPEN  JOINTSET  0..15 'OS'   FADESET IN  1 frame,  CLOSE FADESET OUT  1 frame
- *                  row steps: LINEON00 110..125, LINEDW01 50..70, LINEUP00 80..100, LINEON01 170..185
- *
- * A node's `_time` advances with the engine clock and is rebased onto the window;
- * `OS` clamps at `_endTime`.  The `select` node of `j_startmenu02` is the moving row
- * indicator: its sequence keys map `y` -60 (LINEDW01 start) -> -84 -> -108 (down) and the reverse
- * (LINEUP00), so the two rest positions are samples of that one sequence.
- */
+/* The controller schedule (the pack's own `beAction2` data, AREA.AFS 620). `beNDMWTitle2` drives
+ * each UI graph with `MODELCTRL <graph> GENERATE <seq>`, the same mechanism `j_startback` uses.
+ * Each graph's action-2 `OPEN`/`CLOSE` step carries a `beAction2JOINTSET` (a *time range* in 60
+ * fps frames -> `frames*1e9/60` ns) and a `beAction2FADESET` (its fade time, in frames). Per
+ * graph: j_startlogo OPEN JOINTSET 0..30 'OS' FADESET IN 10 frames, CLOSE FADESET OUT 30 frames
+ * j_startmenu01 OPEN JOINTSET 0..15 'OS' FADESET IN 1 frame, CLOSE FADESET OUT 1 frame
+ * j_startmenu02 OPEN JOINTSET 0..15 'OS' FADESET IN 1 frame, CLOSE FADESET OUT 1 frame row steps:
+ * LINEON00 110..125, LINEDW01 50..70, LINEUP00 80..100, LINEON01 170..185 A node's `_time`
+ * advances with the engine clock and is rebased onto the window; `OS` clamps at `_endTime`. The
+ * `select` node of `j_startmenu02` is the moving row indicator: its sequence keys map `y` -60
+ * (LINEDW01 start) -> -84 -> -108 (down) and the reverse (LINEUP00), so the two rest positions are
+ * samples of that one sequence. */
 #define UI_FRAME_NS    16666666LL                 /* floor(1e9/60) */
 #define UI_OPEN_LOGO   (30LL * 1000000000LL / 60) /* j_startlogo   OPEN JOINTSET 0..30 OS -> ns */
 #define UI_OPEN_MENU   (15LL * 1000000000LL / 60) /* j_startmenu01/02 OPEN JOINTSET 0..15 OS -> ns */

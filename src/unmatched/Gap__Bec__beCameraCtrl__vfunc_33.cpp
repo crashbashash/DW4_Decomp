@@ -1,8 +1,8 @@
-/* BeCameraCtrl message handler (ResolveEnumValue over the camera message table). Per message: 0/1
- * camera box on/off, 2 report the average position, 3/4 arm / disarm the info, 5 reset, 6 arm
- * unless another camera info of the same manager has the named camera, 7 report the info name, 8
- * poll for a finished shake, 9 start a shake record (SHAKEONE / SHAKEALL), 10/11 freeze toggles on
- * the camera mode, 12..14 debug zoom. Returns 1 when the message was handled. */
+/* Message handler (ResolveEnumValue over the camera message table). Per message: 0/1 camera box
+ * on/off, 2 report the average position, 3/4 arm / disarm the info, 5 reset, 6 arm unless another
+ * camera info of the same manager has the named camera, 7 report the info name, 8 poll for a
+ * finished shake, 9 start a shake record (SHAKEONE / SHAKEALL), 10/11 freeze toggles on the camera
+ * mode, 12..14 debug zoom. Returns 1 when the message was handled. */
 #include "dw4/reflected.h"
 #pragma inline_depth(8)
 extern "C" {
@@ -60,7 +60,7 @@ struct CamInfoPtr { char pad[8]; char *_name; };
 #define ALLOC_OF(owner, a) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 #define NAME_OR_EMPTY(n) ((n) != 0 ? (n) : DAT_004e0858)
-/* holder whose destructor drops the construction reference (the retail code releases at block exit) */
+/* Holder whose destructor drops the construction reference at block exit. */
 struct RPD { igObject *p; RPD(void *x) { p = (igObject *)x; } ~RPD() { igObject *q = p; if (q != 0) { q->_refCount = q->_refCount - 1; if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q); } } };
 struct RPE { igObject *p; RPE(void *x) { p = (igObject *)x; } ~RPE() { igObject *q = p; if (q != 0) { q->_refCount = q->_refCount - 1; if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q); } } };
 /* create the per-info data list on first use (same shape as the matched per-frame update FUN_00378ed0).
@@ -189,7 +189,6 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
         return 1;
     case 9:
         if (FUN_00378e40(self, info) != 0) {
-            /* data list for the camera info (inline-expanded; see UP::Ensure) */
             if (ram->_dataList == 0) {
                 void *alloc;
                 ALLOC_OF(self, alloc)

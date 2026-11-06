@@ -1,18 +1,9 @@
 #define _POSIX_C_SOURCE 200809L   /* mkstemp */
-/* dw4asset.c — the port's asset CLI.
- *
- *   dw4asset afs <archive>                       entry table summary
- *   dw4asset cat <archive> <index> <out>         extract one entry
- *   dw4asset igb <file> [--at OFF]               igBinary header + class directory
- *   dw4asset igb --afs A --entry N [--at OFF]    the same, for an AFS entry
- *   dw4asset records <file> [--at OFF] [--class NAME]
- *   dw4asset reflect <file>|--afs A --entry N [--class NAME] [--limit N] [--json]
- *                       construct each record as a reflection-typed igObject (P2.6)
- *
- * It is deliberately a thin shell over libdw4asset: the point of the port's asset
- * layer is the library, and the CLI is how it is checked against the repository's
- * Python decoders (see tools/crosscheck.sh).
- */
+/* dw4asset.c -- the port's asset CLI. dw4asset afs <archive>: entry table summary. dw4asset cat
+ * <archive> <index> <out>: extract one entry. dw4asset igb <file> [--at OFF]: igBinary header +
+ * class directory. dw4asset igb --afs A --entry N [--at OFF]: the same, for an AFS entry. dw4asset
+ * records <file> [--at OFF] [--class NAME]. dw4asset reflect <file>|--afs A --entry N [--class
+ * NAME] [--limit N] [--json]: construct each record as a reflection-typed igObject. */
 #include "dw4/afs.h"
 #include "dw4/platform.h"
 #include "dw4/igb.h"
@@ -249,10 +240,9 @@ static int cmd_records(const uint8_t *blob, size_t len, const char *label)
     return 0;
 }
 
-/* The runtime object model (P2.6): decode a pack's records and construct each as a `dw4_object`,
- * then read its fields back **by name** through the reflection schema.  This is the get/set path
- * a running engine needs; `tools/verify_object.py` diffs the output against the decompilation
- * repo's own decoder (`scripts/igb_inst.py`), field for field. */
+/* The runtime object model: decode a pack's records and construct each as a `dw4_object`, then
+ * read its fields back by name through the reflection schema. This is the get/set path a running
+ * engine needs. */
 static int cmd_reflect(const uint8_t *blob, size_t len, const char *label)
 {
     dw4_igb g;
@@ -432,7 +422,6 @@ static int cmd_refs(const uint8_t *blob, size_t len, const char *label)
     return 0;
 }
 
-
 /* Resolve a manifest part name (the manifest spells them lower-case) against a
  * directory of the extracted archives (which are upper-case). */
 static int open_part_archive(dw4_afs *a, const char *dir, const char *part)
@@ -568,7 +557,6 @@ static int cmd_find(const char *manifest, const char *roms, const char *name,
     return 0;
 }
 
-
 static int cmd_mount(const char *roms, const char *sub, const char *arg, const char *out)
 {
     dw4_mount m;
@@ -646,7 +634,6 @@ static int cmd_mount(const char *roms, const char *sub, const char *arg, const c
     return bad ? 1 : 0;
 }
 
-
 /* Which entries of the mounted archives contain a class?  A pack announces itself with an
  * igBinary directory, so this is a directory walk per entry, not a record decode. */
 static int cmd_scan(const char *roms, const char *cls)
@@ -707,10 +694,9 @@ static int cmd_scan(const char *roms, const char *cls)
     return total ? 0 : 1;
 }
 
-
-/* Media export. Sofdec contains MPEG-1 video and ADX audio and ffmpeg reads it
- * directly. Standalone ADX music also lives in NDMW.AFS; resident sound effects
- * use the native ps2_ bank reader. See docs/audio-playback.md. */
+/* Media export. Sofdec contains MPEG-1 video and ADX audio and ffmpeg reads it directly.
+ * Standalone ADX music also lives in NDMW.AFS; resident sound effects use the native ps2_ bank
+ * reader. */
 static int cmd_media(const char *roms, const char *verb, const char *name, const char *out,
                      int argc, char **argv)
 {
@@ -779,15 +765,11 @@ static int cmd_media(const char *roms, const char *verb, const char *name, const
     return rc == 0 ? 0 : 1;
 }
 
-
-/* The stage sound packs.  A stage's `[0.620]` pack is an igBinary container whose
- * content pool holds six `ps2_DTPK` banks; each bank is VAG ADPCM and
- * decodes to a WAV.  The banks are listed by index; the pack's `beCriSfpData` records
- * name them (e_goburi.sfp, ...), and tools/verify_sound.py matches that name set.
- *
- *   dw4asset sfp <file>|--afs A --entry N                 list the banks
- *   dw4asset sfp ... [--bank K] [--sound S] --wav OUT     decode one bank (or one sound)
- */
+/* The stage sound packs. A stage's `[0.620]` pack is an igBinary container whose content pool
+ * holds six `ps2_DTPK` banks; each bank is VAG ADPCM and decodes to a WAV. The banks are listed by
+ * index; the pack's `beCriSfpData` records name them (e_goburi.sfp, ...). dw4asset sfp
+ * <file>|--afs A --entry N lists the banks; dw4asset sfp ... [--bank K] [--sound S] --wav OUT
+ * decodes one bank (or one sound). */
 static int cmd_sfp(const uint8_t *blob, size_t len, const char *label, int argc, char **argv)
 {
     dw4_sfp_bank banks[64];
@@ -911,10 +893,8 @@ static int cmd_sfp(const uint8_t *blob, size_t len, const char *label, int argc,
     return 0;
 }
 
-/* Decode an indexed texture from explicit inputs.  The buffers cannot be located
- * offline yet (a memory ref is a load-time ordinal), so the CLI takes
- * the index and palette bytes directly: the decode half is what the renderer needs,
- * and it is testable on its own (tools/verify_texture.py). */
+/* Decode an indexed texture from explicit inputs. The buffers cannot be located offline yet (a
+ * memory ref is a load-time ordinal), so the CLI takes the index and palette bytes directly. */
 static int cmd_texture(const char *src_path, const char *png_path, int argc, char **argv)
 {
     uint8_t *src = NULL, *pal = NULL, *rgba;
@@ -1063,9 +1043,8 @@ static int cmd_livetex(int argc, char **argv)
     return rc;
 }
 
-/* A skinned character mesh from the same kind of dump: the runtime blend stream, the bone map
- * and the matrix palette, skinned in C.  This is the counterpart of
- * `scripts/live_skin.py`; `tools/verify_skin.py` diffs the two OBJs. */
+/* A skinned character mesh from a dump: the runtime blend stream, the bone map and the matrix
+ * palette, skinned in C. */
 static int cmd_skin(int argc, char **argv)
 {
     const char *out = NULL, *bind = NULL, *ram = NULL;
@@ -1325,14 +1304,11 @@ static int cmd_models(const uint8_t *blob, size_t len, const char *label, int ar
     return rc;
 }
 
-/* --- the scene loader: a pack in the guest arena, handed out as renderer-ready meshes -------
- *
- *   dw4asset scene <roms-dir> <name.igb>     the engine-shaped route (manifest -> archive)
- *   dw4asset scene --afs A --entry N         one archive entry
- *   dw4asset scene <file>                    a file on disk
- *
- * `--check` validates the loader's own output (the ids tile the arena and every payload is the
- * file's bytes, every mesh handle resolves), which is what `tools/verify_scene.py` asserts. */
+/* The scene loader: a pack in the guest arena, handed out as renderer-ready meshes. dw4asset scene
+ * <roms-dir> <name.igb> is the engine-shaped route (manifest -> archive); dw4asset scene --afs A
+ * --entry N loads one archive entry; dw4asset scene <file> loads a file on disk. `--check`
+ * validates the loader's own output (the ids tile the arena, every payload is the file's bytes,
+ * every mesh handle resolves). */
 /* dw4asset chr <roms-dir> --t SECONDS [--sel N] [--out F.png]: the Game Start slot screen at one clock
  * (every layer on the same time), for calibrating `src/frontchr.c` against retail captures. */
 static int cmd_chr(int argc, char **argv)
@@ -1647,10 +1623,9 @@ static int cmd_scene(int argc, char **argv)
         goto done;
     }
     if (world_tsv) {
-        /* A `--scene` capture built from the pack's OWN scene graph: one row per geometry node (its
-         * DCC name + composed world matrix) at the current time, so `render --scene` poses the pack
-         * without a live capture.  This is how the front-end's animated scenes are drawn (finding
-         * #610/#611). */
+        /* A `--scene` capture built from the pack's own scene graph: one row per geometry node
+         * (its DCC name + composed world matrix) at the current time, so `render --scene` poses
+         * the pack without a live capture. This is how the front end's animated scenes are drawn. */
         for (j = 0; j < sc.nnode; j++) {
             const dw4_scene_node *n = &sc.node[j];
             float wm[16];
@@ -1765,9 +1740,9 @@ static float mesh_local_extent(const float *pos, uint32_t n)
     }
 }
 
-/* The scene TSV's texture column names live textures (`texture_map.py`), which live in the stage's
- * texture packs.  A cache decodes each name once, trying every pack the caller listed; a name that
- * is nowhere is remembered as a miss so the packs are scanned once, not once per row. */
+/* The scene TSV's texture column names live textures, which live in the stage's texture packs. A
+ * cache decodes each name once, trying every pack the caller listed; a name that is nowhere is
+ * remembered as a miss so the packs are scanned once, not once per row. */
 #define DW4_SCENE_TEXMAX 64
 typedef struct {
     char name[64];
@@ -1785,15 +1760,11 @@ typedef struct {
 } dw4_texcache;
 
 /* An inline pack texture (the destructible objects' material is an igAttrSet in the stage pack,
- * not a texture pack: `scripts/pack_inline_tex.py` decodes it to `<name>.rgba`, a tiny
- * {u32 w}{u32 h}{rgba} file, so the scene path can sample it too).
- *
- * The file is the pack's own image order (row 0 = the first row the index data stores, which is
- * the GS's v=0), but the sampler indexes with `(1 - tv)` and so wants the
- * array bottom-up -- exactly what `dw4_texpack_rgba` produces for the texture packs, by reading
- * `grid + (h - 1 - y) * w`.  Flip the file here so both texture sources meet the sampler in one
- * convention; writing the .rgba pre-flipped instead is what made the props sample the mirrored
- * texel and the barrel's metal trim read pale. */
+ * not a texture pack): it is decoded to `<name>.rgba`, a tiny {u32 w}{u32 h}{rgba} file, so the
+ * scene path can sample it too. The file is the pack's own image order (row 0 = the first row the
+ * index data stores, which is the GS's v=0), but the sampler indexes with `(1 - tv)` and so wants
+ * the array bottom-up -- exactly what `dw4_texpack_rgba` produces for the texture packs. Flip the
+ * file here so both texture sources meet the sampler in one convention. */
 static void rgba_flip_rows(uint8_t *rgba, uint32_t w, uint32_t h)
 {
     uint32_t y;
@@ -1861,8 +1832,8 @@ static dw4_tex *texcache_get(dw4_texcache *tc, const char *name)
     st->rgba = NULL;
     st->t.rgba = NULL;
     st->t.w = st->t.h = 0;
-    /* A live dump first: it is the source that actually has a character/world material (finding
-     * #525's residual), and a texture pack only holds the stage's environment images. */
+    /* A live dump first: it is the source that actually has a character/world material, and a
+     * texture pack only holds the stage's environment images. */
     if (tc->live) {
         uint8_t *rgba = NULL;
         int tw = 0, th = 0;
@@ -1917,15 +1888,12 @@ static void texcache_free(dw4_texcache *tc)
  * reproduces) are the only shade on the mesh, so a scene row defaults to white.  `--tint R,G,B`
  * still applies one constant colour to every row for an experiment. */
 
-/* The light SPEC format (DW4_Port renderer P4.4) and its parser live in render.c
- * (`dw4_render_parse_light` / `dw4_render_load_lights`), so the software path, the GPU path and
- * the `dw4` host all consume exactly the same rig:
- *
- *   <dir|point|spot>,px,py,pz,dx,dy,dz,dr,dg,db,sr,sg,sb,range,shininess,falloff_deg,cutoff_deg
- *
+/* The light SPEC format and its parser live in render.c (`dw4_render_parse_light` /
+ * `dw4_render_load_lights`), so the software path, the GPU path and the `dw4` host all consume
+ * exactly the same rig:
+ * <dir|point|spot>,px,py,pz,dx,dy,dz,dr,dg,db,sr,sg,sb,range,shininess,falloff_deg,cutoff_deg.
  * `falloff`/`cutoff` are the inner/outer cone half-angles in degrees; an all-zero specular is
- * `_NOSPEC`.  A rig recovered later (e.g. by reading the populated `0x56AF40` list -- finding
- * #499) loads through `--lights FILE` with no code change. */
+ * `_NOSPEC`. A rig loads through `--lights FILE` with no code change. */
 
 /* The mean face normal of one mesh, area-weighted -- the ground/wall split for the stage-material
  * fallback.  A mesh with no usable normal is treated as a wall. */
@@ -1957,13 +1925,12 @@ static void mesh_mean_normal(const uint8_t *pos, uint32_t nv, const uint32_t *tr
     }
 }
 
-/* --- the 2D UI overlay: replay the HUD a `.gs` dump recorded (`scripts/gs_ui.py`) ---------- *
- * One TSV row is one screen-space triangle: `TEX\tx y u v r g b a\t...` three times, where `TEX`
- * is a `<name>.rgba` in `texdir` or `-` for an untextured overlay.  The rows are drawn in file
- * order over the scene (the exporter emits them in the GS's draw order), with the blend
- * `dw4_render_ui_tri` implements.  Returns the triangle count, or -1 if the file cannot be read. */
+/* The 2D UI overlay: replay the HUD a `.gs` dump recorded. One TSV row is one screen-space
+ * triangle: `TEX<tab>x y u v r g b a<tab>...` three times, where `TEX` is a `<name>.rgba` in
+ * `texdir` or `-` for an untextured overlay. The rows are drawn in file order over the scene (the
+ * exporter emits them in the GS's draw order), with the blend `dw4_render_ui_tri` implements.
+ * Returns the triangle count, or -1 if the file cannot be read. */
 /* One `ui.tsv` vertex: `nf` floats (`x y u v`, or `x y s t q` in the `#stq` form) then 4 ints. */
-
 
 /* How many threads a replay uses: --ui-threads, else one per core (dw4_ui_draw_file's default). */
 static int ui_threads = 0;
@@ -1981,7 +1948,6 @@ static int ui_seq_draw(dw4_fb *fb, const char *dir, const char *texdir, double s
         return -1;
     return dw4_uiseq_draw_at(ui_seq, fb, secs, fps, ui_threads);
 }
-
 
 /* A mesh's per-vertex bone-index block: a pool block of exactly `num_verts` bytes whose bytes
  * are all small bone numbers.  Found by size, which is unique in the player's pack 861
@@ -2027,7 +1993,7 @@ static int cmd_render(int argc, char **argv)
                                                       * cannot name */
     const char *live_path = NULL;
     const char *texdir = NULL;   /* --texdir: <name>.rgba for inline pack textures */
-    const char *ui_path = NULL;  /* --ui: scripts/gs_ui.py's ui.tsv, drawn over the scene */
+    const char *ui_path = NULL;  /* --ui: the ui.tsv replay, drawn over the scene. */
     const char *ui_only = NULL;  /* --ui-only: draw one replay TSV alone (no scene) and exit */
     const char *ui_texdir = NULL;/* --uitex: where --ui's <name>.rgba files live */
     const char *ui_seq_dir = NULL; /* --ui-seq: a directory of per-frame animated-layer TSVs */

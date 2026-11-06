@@ -1,13 +1,11 @@
-/* src/lua/combat.c: the combat half of the Lua BLT/BLP script API. Each BLT* (bullet-versus-
- * target, player attacks enemy) and BLP* (enemy attacks player) helper is a thin caller of the
- * native FIGHTCALC object: it selects the GAMERAM message group, appends a command key and the
- * cached MDL/bullet fields as arguments, dispatches, and reads the answer back. The damage
- * formulas live in the FIGHTCALC callback, not here. 13 functions in retail address order. The
- * matching build splits a function back out with tools/units.py, so `make check` still verifies
- * one function at a time. */
+/* The combat half of the Lua BLT/BLP script API. Each BLT* (bullet versus target, player attacks
+ * enemy) and BLP* (enemy attacks player) helper is a thin caller of the native FIGHTCALC object:
+ * it selects the GAMERAM message group, appends a command key and the cached MDL/bullet fields as
+ * arguments, dispatches, and reads the answer back. The damage formulas live in the FIGHTCALC
+ * callback, not here. */
 
-/* Attack codes.  The cached bullet kind is divided by 10000 to get its group;
- * group 4 marks a technique (docs/systems/combat-damage.md, P2EISCRITICAL). */
+/* Attack codes. The cached bullet kind is divided by 10000 to get its group; group 4 marks a
+ * technique. */
 #define BULLET_KIND_GROUP_SIZE 10000
 #define BULLET_KIND_TECHNIQUE_GROUP 4
 /* Groups 2 and 3 raise a low damage rank by one (BLTgetDamageRank). */
@@ -21,8 +19,8 @@
 #define PLAYER_BULLET_RANGE_A_END 60000
 #define PLAYER_BULLET_RANGE_B_BEGIN 80000
 #define PLAYER_BULLET_RANGE_B_END 90000
-/* Required bulletKind % 10000 for each status-timer helper; any other attack
- * returns 0 without messaging (docs/systems/combat-lua-api.md, timer table). */
+/* Required bulletKind % 10000 for each status-timer helper; any other attack returns 0 without
+ * messaging. */
 #define BULLET_SUBKIND_POISON 0x14
 #define BULLET_SUBKIND_ATTACK_DOWN 0x46
 #define BULLET_SUBKIND_POWER_DOWN 0x55
@@ -41,15 +39,13 @@ void beMessenger_SelectGroup(int, const char *);
 void beMessenger_SendNamed(int, const char *, int, int, const char *);
 int beMessenger_GetInt(int, int);
 
-/* Strings the messenger is addressed with: the GAMERAM group, the FIGHTCALC
- * receiver, and the ENEMY / GETPEBASEWORK pair used to fetch a named
- * object's base work (data/strings.json). */
+/* Strings the messenger is addressed with: the GAMERAM group, the FIGHTCALC receiver, and the
+ * ENEMY / GETPEBASEWORK pair used to fetch a named object's base work. */
 extern char GAMERAM[];
 extern char ENEMY[];
 extern char GETPEBASEWORK[];
 extern char FIGHTCALC[];
-/* FIGHTCALC command keys (docs/systems/combat-inventory.md, switch commands):
- * P2E* = player to enemy, E2P* = enemy to player. */
+/* FIGHTCALC command keys: P2E* = player to enemy, E2P* = enemy to player. */
 extern char P2EISHITCHECK[];
 extern char P2EDAMAGE[];
 extern char P2EPOISONTIME[];
@@ -61,7 +57,7 @@ extern char E2PDAMAGE[];
 extern char E2PDAMAGERANK[];
 extern char E2PSTUNTIME[];
 
-/* The MDL / bullet cache block at 0x0058a1c0..0x0058a340. */
+/* The MDL / bullet cache block. */
 /* Main game object, a Gap::Bec::beMessenger. */
 extern int g_beMessenger[4];
 /* Focused Digimon model entity. */
@@ -73,8 +69,7 @@ extern int g_mdlInfoName[4];
  * BULLET_KIND_GROUP_SIZE above) and g_bltShootRamNo are declared
  * inside each function: the status-timer helpers read them as unsigned,
  * the others as int, and the two declarations must not meet in one scope. */
-/* BLP/BLT status fields (docs/engine/game-state.md lists them only as
- * "status field"); passed through to FIGHTCALC as arguments. */
+/* BLP/BLT status fields, passed through to FIGHTCALC as arguments. */
 extern int g_statusFieldA[4];
 extern int g_blpStatus[4];
 /* Results cached by the damage wrappers from the FIGHTCALC reply: damage, attribute index (into
@@ -82,9 +77,8 @@ extern int g_blpStatus[4];
 extern int g_damageResult[4];
 extern int g_attackZokusei[4];
 extern int g_damageFlag[4];
-/* Attribute names: "common" (fallback for an out-of-range index) at 0x004c8800
- * and "fire", "ice", "thunder", "dark" at 0x004c8804..0x004c8810 (pointers to
- * strings at 0x0050de18..0x0050de38). */
+/* Attribute names: "common" (fallback for an out-of-range index), then "fire", "ice", "thunder",
+ * "dark". */
 extern char *g_attributeNameDefault[4];
 extern char *g_attributeNames[4];
 int BLTisPlayerBullet(void);
@@ -102,16 +96,15 @@ int BLPgetDamageRank(int scriptArg1, int scriptArg2);
 int BLPgetStunTime(int scriptArg1, int scriptArg2);
 }
 
-/* is the cached attack code a player bullet? True below 1000, for 10000..59999 and for
- * 80000..89999. The cached code is signed and not range-checked, so a negative code also counts. */
+/* True below 1000, for 10000..59999 and for 80000..89999. The cached code is signed and not range-
+ * checked, so a negative code also counts. */
 int BLTisPlayerBullet(void) {
     extern int g_mdlBulletKind[4];
     if (g_mdlBulletKind[0] < BULLET_KIND_GROUP_SIZE) {
         if (g_mdlBulletKind[0] < PLAYER_BULLET_WEAPON_END) {
             return 1;
         }
-        /* shape kept for the match: the early return and this jump are not
-         * interchangeable with a plain `return 0` */
+        /* The early return and this jump are not interchangeable with a plain `return 0`. */
         goto notPlayerBullet;
     }
     if (g_mdlBulletKind[0] < PLAYER_BULLET_RANGE_A_END) {
@@ -124,9 +117,9 @@ notPlayerBullet:
     return 0;
 }
 
-/* 0x00374890: ask FIGHTCALC (P2EISHITCHECK) whether the cached player attack
- * hits.  When an InfoName is cached, the named ENEMY object's base work
- * (GETPEBASEWORK reply, index 1) is passed to FIGHTCALC as an object argument. */
+/* Ask FIGHTCALC (P2EISHITCHECK) whether the cached player attack hits. When an InfoName is cached,
+ * the named ENEMY object's base work (GETPEBASEWORK reply, index 1) is passed to FIGHTCALC as an
+ * object argument. */
 int BLTisHitCheck(void) {
     extern int g_mdlRecNo[4];
     extern int g_mdlBulletKind[4];
@@ -150,8 +143,8 @@ int BLTisHitCheck(void) {
     return beMessenger_GetBool(g_beMessenger[0], 0);
 }
 
-/* P2EDAMAGE. The Lua caller supplies the critical flag (masked to 8 bits.md, arg3). The reply's
- * three integers (damage, attribute index, rank flag) are cached for BLTgetDamageRank and
+/* P2EDAMAGE. The Lua caller supplies the critical flag (masked to 8 bits, arg3). The reply's three
+ * integers (damage, attribute index, rank flag) are cached for BLTgetDamageRank and
  * BLTgetAttributeStr, and the damage is returned. */
 int BLTgetDamageValue(int criticalFlag) {
     extern int g_mdlRecNo[4];
@@ -180,12 +173,11 @@ int BLTgetDamageValue(int criticalFlag) {
     return g_damageResult[0];
 }
 
-/* damage rank 0..3 of the last BLTgetDamageValue result. `currentHp` is what the script passes
- * (BLTgetDamageRank(MDLgetHp(), ...) in lua/11-bosses/04-boss04-devimon-1_e751/017-boss-
- * devl1e.lua); a nonpositive value is rank 3. Otherwise the damage / max-HP fraction picks rank 2
- * above one half, rank 1 above one quarter, else 0. A rank of 0 or 1 is raised by one when the
- * cached rank flag is 1 (rank 0 only), when `rankBonus` is set, or for attack groups 2 and 3. The
- * comparisons stay negated as in retail. */
+/* Damage rank 0..3 of the last BLTgetDamageValue result. `currentHp` is what the script passes
+ * (BLTgetDamageRank(MDLgetHp(), ...)); a nonpositive value is rank 3. Otherwise the damage / max-
+ * HP fraction picks rank 2 above one half, rank 1 above one quarter, else 0. A rank of 0 or 1 is
+ * raised by one when the cached rank flag is 1 (rank 0 only), when `rankBonus` is set, or for
+ * attack groups 2 and 3. */
 int BLTgetDamageRank(int currentHp, int rankBonus) {
     extern int g_mdlBulletKind[4];
     float damageFraction;
@@ -217,9 +209,8 @@ int BLTgetDamageRank(int currentHp, int rankBonus) {
     return rank;
 }
 
-/* 0x00374cc0: name of the cached damage attribute ("fire", "ice", "thunder",
- * "dark"); any index of 4 or more gives "common".  Scripts build the
- * "SQ_LDMG/<attribute>" sequence label from it. */
+/* Name of the cached damage attribute ("fire", "ice", "thunder", "dark"); any index of 4 or more
+ * gives "common". Scripts build the "SQ_LDMG/<attribute>" sequence label from it. */
 char *BLTgetAttributeStr(void)
 {
     if (g_attackZokusei[0] >= 4)
@@ -232,7 +223,7 @@ char *BLTgetAttributeStr(void)
  * command is sent to FIGHTCALC with the cached arguments and its first integer is the duration.
  * Poison, attack-down and power-down also pass the script's `effectKey` string. */
 
-/* 0x00374de0: poison duration (P2EPOISONTIME). */
+/* Poison duration (P2EPOISONTIME). */
 int BLTgetPoisonTime(const char *effectKey) {
     extern int g_mdlRecNo[4];
     extern int g_mdlBulletKind[4];
@@ -253,7 +244,7 @@ int BLTgetPoisonTime(const char *effectKey) {
     return beMessenger_GetInt(g_beMessenger[0], 0);
 }
 
-/* 0x00374f00: sleep duration (P2ESLEEPTIME). */
+/* Sleep duration (P2ESLEEPTIME). */
 int BLTgetSleepTime(void) {
     extern int g_mdlRecNo[4];
     extern int g_mdlBulletKind[4];
@@ -273,7 +264,7 @@ int BLTgetSleepTime(void) {
     return beMessenger_GetInt(g_beMessenger[0], 0);
 }
 
-/* 0x00375010: bind duration (P2EBINDTIME). */
+/* Bind duration (P2EBINDTIME). */
 int BLTgetBindTime(void) {
     extern int g_mdlRecNo[4];
     extern int g_mdlBulletKind[4];
@@ -293,7 +284,7 @@ int BLTgetBindTime(void) {
     return beMessenger_GetInt(g_beMessenger[0], 0);
 }
 
-/* 0x00375120: attack-down duration (P2EATKDWNTIME). */
+/* Attack-down duration (P2EATKDWNTIME). */
 int BLTgetAttackDownTime(const char *effectKey) {
     extern int g_mdlRecNo[4];
     extern int g_mdlBulletKind[4];
@@ -314,7 +305,7 @@ int BLTgetAttackDownTime(const char *effectKey) {
     return beMessenger_GetInt(g_beMessenger[0], 0);
 }
 
-/* 0x00375240: power-down duration (P2EPOWDWNTIME). */
+/* Power-down duration (P2EPOWDWNTIME). */
 int BLTgetPowerDownTime(const char *effectKey) {
     extern int g_mdlRecNo[4];
     extern int g_mdlBulletKind[4];
@@ -362,10 +353,8 @@ int BLPgetDamageValue(void) {
     return g_damageResult[0];
 }
 
-/* 0x00375730: E2PDAMAGERANK.  The reply's rank is raised from 0 to 1 when the
- * cached rank flag from the last E2PDAMAGE is 1.  The two integers are the
- * script's arguments, appended unchanged (by analogy with BLTgetDamageRank
- * they are probably the current HP and a rank bonus; no Lua caller found). */
+/* E2PDAMAGERANK. The reply's rank is raised from 0 to 1 when the cached rank flag from the last
+ * E2PDAMAGE is 1. The two integers are the script's arguments, appended unchanged. */
 int BLPgetDamageRank(int scriptArg1, int scriptArg2) {
     extern int g_mdlBulletKind[4];
     int rank;
@@ -385,9 +374,8 @@ int BLPgetDamageRank(int scriptArg1, int scriptArg2) {
     return rank;
 }
 
-/* 0x00375830: E2PSTUNTIME.  `scriptArg1`/`scriptArg2` are appended unchanged
- * (no Lua caller found to name them); the reply's first integer is the stun
- * duration. */
+/* E2PSTUNTIME. `scriptArg1`/`scriptArg2` are appended unchanged; the reply's first integer is the
+ * stun duration. */
 int BLPgetStunTime(int scriptArg1, int scriptArg2) {
     extern int g_mdlBulletKind[4];
     extern int g_bltShootRamNo[4];

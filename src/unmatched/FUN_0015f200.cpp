@@ -1,6 +1,3 @@
-/* Allocates the per-vertex-array streams (size from the format flags), storing the allocator
- * results through precomputed destination pointers; dummy-virtual classes for the vtable slots (23
- * and 52). Alternate compiler -O3. */
 struct Alloc {
     virtual void a0();
     virtual void a1();

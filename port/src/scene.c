@@ -25,9 +25,9 @@
 #define SHAPE_ATTRS_ORD    8u     /* igGeometry's igAttrList id */
 #define ATTRLIST_ARRAY    0x10u   /* igAttrList._array */
 #define ATTRLIST_COUNT    0x08u   /* igAttrList._count */
-/* The material -> texture chain (findings: the front-end title's UI textures are inline in the
- * pack).  The ordinals are the classes' own descriptor slots, read from the pack's class triples
- * (not guessed): igAttrSet._attributes, igTextureBindAttr._texture, igTextureAttr._image,
+/* The material -> texture chain (the front-end title's UI textures are inline in the pack). The
+ * ordinals are the classes' own descriptor slots, read from the pack's class triples (not
+ * guessed): igAttrSet._attributes, igTextureBindAttr._texture, igTextureAttr._image,
  * igImage._px/_py/_imageSize/_pImage/_pClut/_bytesPerRow/_pNameString, igClut._pData. */
 /* `igTransformSequence1_5`'s two `igVec3fList` slots (the class' descriptor order). */
 #define SEQ_TRANS_ORD        2u
@@ -836,9 +836,9 @@ const dw4_scene_image *dw4_scene_image_of(const dw4_scene *s, uint32_t image_id)
     return NULL;
 }
 
-/* The loader's id -> pointer pass.  Every object record's `igObjectRef` and
- * `igMemoryRef` values become handles; the kind is the value's own descriptor type id (finding
- * #482), so no table is involved.  A NULL stays NULL. */
+/* The loader's id -> pointer pass. Every object record's `igObjectRef` and `igMemoryRef` values
+ * become handles; the kind is the value's own descriptor type id, so no table is involved. A NULL
+ * stays NULL. */
 static void materialise(dw4_scene *s, const dw4_igb *g)
 {
     uint32_t i;

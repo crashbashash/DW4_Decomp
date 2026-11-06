@@ -1,6 +1,5 @@
-/* Location table clear-and-visit: reserve/resize the index list, fill it with the default word,
- * then walk the 20-byte entries calling a virtual per entry (division of the pointer difference by
- * 20 keeps the div); capacity test spelled arg1 <= cap; default compiler. */
+/* The pointer difference is divided by 20 (the division is kept) and the capacity test is spelled
+ * `arg1 <= cap`. */
 
 struct E { int w[5]; };
 struct IL { int p[2]; int cnt; int cap; int *arr; };

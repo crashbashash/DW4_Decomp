@@ -1,7 +1,6 @@
 /* Model-window reset: clears the two close-info string lists and the ram-number list, selects a
  * model-name string by the player's record field (16 arms) and presents the model at the fixed
- * window origin. The selected name lives on the stack in a StringRef that each arm reassigns; the
- * retail exception table records its release. alternate compiler -O3,p. */
+ * window origin. The selected name lives on the stack in a StringRef that each arm reassigns. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(int);
@@ -35,11 +34,9 @@ extern int DAT_0051aeb0[4];
 extern int DAT_00586f20[4];
 }
 struct Rec { char pad[12]; unsigned int sel; };
-/* create the shared string pool on first use (open-coded in the two clear loops: the inline Str::intern there
- * swaps the s0/s1 colouring of the first loop's counter and token) */
+/* Creates the shared string pool on first use; open-coded in the two clear loops because the
+ * inline Str::intern there would change their register allocation. */
 #define ENSURE_POOL() if (DAT_00586f20[0] == 0) { v = FUN_002eb010(0x10); if (v != 0) { v = StringPool_Construct(v); } DAT_00586f20[0] = v; }
-/* string-pool intern of one of the model names (the pool singleton is created on first use) and the release of a
- * stored token */
 struct Str {
     static inline int *intern(const char *s) {
         if (DAT_00586f20[0] == 0) {
@@ -58,10 +55,8 @@ struct Str {
         }
     }
 };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit; set() drops the held token for a new one.  The out-of-line copy the
- * exception table names is the retail body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json,
- * duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]): releases the token on scope exit; set() drops the held token for a new one. */
 class StringRef {
 public:
     int *p;

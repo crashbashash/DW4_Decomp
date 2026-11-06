@@ -1,6 +1,3 @@
-/* Scheduler/semaphore bring-up: copy the 24-byte semaphore descriptor from the template (lq/ld, a
- * 16-byte aligned struct), create three semaphores with different count/max pairs, register two
- * handlers, reset the state words. Alternate compiler -O3. */
 typedef long long s128;
 int CreateSema();
 int FUN_001f0410();

@@ -1,14 +1,11 @@
-/* Hex dump of a memory range (hypothesis name: Memory_HexDump). Parameters: size = bytes per
- * element (clamped to 1..8), perLine = elements per row, digits = address digits shown in the row
- * prefix (0 = no prefix), addr/length = range, name = optional output file name; the dump goes to
- * a file object (open mode "w") when a name is given and to the console otherwise. Evidence:
- * format strings at 0x4f9ca0..0x4f9cf8 ("0x%0*x: ", "0x%08x: ", "%02x ", "%04x ", "%06x ", "%08x
- * ", "%010lx", "%012lx", "%014lx", "%016lx"), a "\n" row terminator at 0x4f95c8 and the open mode
- * "w" at 0x4f92f0. */
+/* Hex dump of a memory range. size is bytes per element (clamped to 1..8), perLine elements per
+ * row, digits the address digits shown in the row prefix (0 means no prefix), addr/length the
+ * range and name an optional output file name; the dump goes to a file object (open mode 'w') when
+ * a name is given and to the console otherwise. */
 extern "C" {
 int FUN_00304430(...);   /* console printf */
 int FUN_00304680();      /* console flush after each print */
-void *FUN_002c4ca0(int); /* creates the file object for an allocator */
+void *FUN_002c4ca0(int);
 int Memory_GetAllocatorBySelector(int);
 void igObject_Destroy(void *);
 extern char DAT_004f92f0[], DAT_004f95c8[], DAT_004f9ca0[], DAT_004f9cb0[], DAT_004f9cc0[],
@@ -18,7 +15,7 @@ extern unsigned char GPR_00554c14;
 extern int DAT_00587028[], DAT_00587060[];
 }
 
-/* Unused vtable slots, declared only so the used ones land at their retail offsets. */
+/* Unused vtable slots, declared only so the used ones land at their real offsets. */
 #define PAD(n) virtual void pad##n();
 class DumpFile {
 public:
@@ -32,7 +29,6 @@ public:
     int refs; /* +4 */
 };
 
-/* Print through the file object when one was opened, else to the console. */
 #define EMIT(...) \
     do { \
         if (file) { file->Print(__VA_ARGS__); } \
@@ -60,8 +56,6 @@ void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned int digits,
         end = (unsigned long long)addr + length;
         unsigned int mask;
         unsigned int i;
-/* One case of the element-size switch: print one row per pass (address prefix, then
- * perLine elements of N bytes each) until the cursor reaches the end of the range. */
 #define DUMP_CASE(N, FMT, VALUE) \
         mask = (1 << (digits * 4)) - 1; \
         while (more) { \

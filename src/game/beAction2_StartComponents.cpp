@@ -1,4 +1,4 @@
-/* beAction2 component Start driver, 0x00377700. Each action carries a list of timeline components
+/* Start driver for beAction2 components. Each action carries a list of timeline components
  * (MOTIONSET, JOINTSET, FADESET, WAITCHECK, FLASHSET); this walks the list from the saved position
  * and starts them one by one. */
 #include "dw4/reflected.h"
@@ -52,8 +52,8 @@ public:
     virtual int GetMetaObject();
 };
 
-/* resume at work._comIndex and start components until one handler returns false or the list is
- * exhausted, then save the position back into work._comIndex. The component kind is identified by
+/* Resumes at work._comIndex and starts components until one handler returns false or the list is
+ * exhausted, then saves the position back into work._comIndex. The component kind is identified by
  * comparing its virtual GetMetaObject() result with the published metadata handle of each *_Start
  * handler's class. */
 void beAction2_StartComponents(int manager, void *info)

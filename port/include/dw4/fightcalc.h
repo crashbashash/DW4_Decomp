@@ -1,8 +1,8 @@
-/* Player-to-enemy FIGHTCALC rules (GAMERAM command FIGHTCALC, FightCom P2EISHITCHECK, P2EISCRITICAL, P2EDAMAGE, P2EEXPUP),
- * ported from the reviewed source of beNDMWGameRam::vfunc_34 (src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp cases 1, 2, 5, 6 of
- * the FIGHTCALC switch). Weapon hits and, with `tech` set, technique hits (attack number / 10000 == 4: the player's WAZALIST row, its element and skill).
- * Every random draw uses the one engine stream as retail (`next % n`, unsigned). Not yet compared against retail instructions or
- * a live savestate; the formulas are the matched source's. docs/combat.md. */
+/* Player-to-enemy FIGHTCALC rules (GAMERAM command FIGHTCALC, FightCom P2EISHITCHECK,
+ * P2EISCRITICAL, P2EDAMAGE, P2EEXPUP), ported from beNDMWGameRam::vfunc_34 (cases 1, 2, 5, 6 of
+ * the FIGHTCALC switch). Weapon hits and, with `tech` set, technique hits (attack number / 10000
+ * == 4: the player's WAZALIST row, its element and skill). Every random draw uses the one engine
+ * stream as retail (`next % n`, unsigned). */
 #ifndef DW4_FIGHTCALC_H
 #define DW4_FIGHTCALC_H
 #include "dw4/playerrecords.h"

@@ -1,7 +1,5 @@
-/* Message list dispatcher: appends each message item to its target list (pointer-walk loop
- * forward), then undoes the additions in reverse running the list callback. Alternate -O3; spAC is
- * a volatile stack word read once into a local, the first count read is volatile so the increment
- * reloads it. */
+/* spAC is a volatile stack word read once into a local, and the first count read is volatile so
+ * the increment reloads it. */
 #include "dw4/reflected.h"
 int FUN_001b0440();
 int FUN_001b1490();
@@ -11,7 +9,6 @@ int List_Resize();
 
 typedef int (*CB)(void *, int, void *);
 
-/* arg0: igCompileTraversal (caller FUN_001bcf70 also reaches +496/+504); arg1: igAttrSet (_attributes +32, _trigger +36). */
 int FUN_001b9320(igCompileTraversal *arg0, igAttrSet *arg1) {
     igAttr *a0;
     igAttr *a3;

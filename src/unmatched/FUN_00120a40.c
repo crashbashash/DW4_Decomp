@@ -1,6 +1,4 @@
-/* FUN_00120a40 -- fdlibm __kernel_tan(x, y, iy): tangent of x + y on |x| <= pi/4 by a degree-27 odd
- * polynomial (T[0..12]); for |x| >= 0.6744 the argument is folded around pi/4 and the result is
- * recovered with tan(pi/4 - x) identities. iy == -1 returns -1/tan (the cotangent branch). */
+/* fdlibm __kernel_tan(x, y, iy); iy == -1 returns -1/tan (the cotangent branch). */
 #include "dw4/ieee_words.h"
 
 extern double FUN_00122538(double); /* fabs */

@@ -1,5 +1,5 @@
-/* DVCI file-cache probe: looks up each name of a packed list on the device and
- * records its 8-byte location; strings "DVCI: \"%s\" found." etc. */
+/* DVCI file-cache probe: looks up each name of a packed list on the device and records its 8-byte
+ * location. */
 typedef struct DvciList {
     int w0, w4;
     int count;      /* 8: number of entries (location records come first) */

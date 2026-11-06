@@ -1,5 +1,3 @@
-/* Five exact original forwarding bodies; named semantics are documented in
- * docs/engine/messenger-dispatch.md. */
 extern "C" void beMessenger_SelectGroupRam(void *,const char *,int);
 extern "C" void beMessenger_SelectGroup(void *,const char *);
 extern "C" void beMessenger_SelectReceivers(void *,const char *,const char *,int);

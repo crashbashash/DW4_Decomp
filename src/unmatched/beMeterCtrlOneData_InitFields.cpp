@@ -1,6 +1,4 @@
-/* Float second argument (mtc1 zero) of the field-init helper. C++ translation unit: the unit
- * compiled with exceptions on and retail keeps this function's exception index record, which only
- * the C++ front end emits. */
+/* The field-init helper takes a float second argument. */
 extern "C" {
 int FUN_002e3810(void *, float);
 int FUN_00356cc0(void);

@@ -1,17 +1,14 @@
 /* Storage for a new object. Reserves size + prefix_size bytes from the given allocator, falls back
  * to the default allocator (looked up by selector) when none is passed, and to the global heap
- * (FUN_00126308) when there is no allocator at all. It returns the address prefix_size bytes into
- * the block, so a header can precede the object. The object factories in src/unmatched call it
- * with prefix_size 0. The allocator method called is vtable offset 216 (vfunc_54), the allocate-
- * bytes slot. */
+ * when there is no allocator at all. It returns the address prefix_size bytes into the block, so a
+ * header can precede the object. The allocator method called is vtable offset 216 (vfunc_54), the
+ * allocate-bytes slot. */
 extern "C" {
-/* libc-style allocation fallback taking the total size (docs/engine/field-factories.md,
- * "Raw allocation"). */
+/* Libc-style allocation fallback taking the total size. */
 char *FUN_00126308(int);
 /* Default allocator provider: selector in, allocator object (or null) out. */
 void **Memory_GetAllocatorBySelector(...);
-/* Selector word the provider is queried with when no allocator is passed
- * (docs/engine/allocator-builder.md, global 0x587018). */
+/* Selector word the provider is queried with when no allocator is passed. */
 extern int g_allocatorSelector[4];
 char *igObject_AllocateRawStorage(int size, int prefix_size, void **requested_allocator);
 }

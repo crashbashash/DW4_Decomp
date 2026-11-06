@@ -1,6 +1,3 @@
-/* 0x00228a30 igInterfaced_Register: registers class igInterfaced with the object system, derived from igObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igInterfaced_GetMetaObject[];
 extern char igObject_Register[];
@@ -14,16 +11,16 @@ int igInterfaced_InitFields();
 void igInterfaced_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igInterfaced_metaObject,    /* published MetaObject slot */
-        igObject_Register,                     /* base class registrar */
-        igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
-        thunk_igInterfaced_GetMetaObject,      /* own MetaObject accessor (stored at +0x54) */
-        igInterfaced_className,     /* class name */
-        0x20,                                  /* instance size */
-        0,                                     /* vtable getter */
-        &igInterfaced_InitFields,              /* field adder */
-        0,                                     /* extra callback item */
-        g_igInterfaced_callbackList   /* callback list */
+        1, /* abstract */
+        g_igInterfaced_metaObject,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
+        thunk_igInterfaced_GetMetaObject,
+        igInterfaced_className,
+        0x20, /* instance size */
+        0,
+        &igInterfaced_InitFields,
+        0, /* extra callback item */
+        g_igInterfaced_callbackList /* callback list */
     );
 }

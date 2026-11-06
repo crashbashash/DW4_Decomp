@@ -5,8 +5,8 @@ void FUN_002753a8(void) {
     count = 0x1FFF;
     do {
         count -= 32;
-        /* asm-body: reason=an empty C loop is deleted by GCC; one explicit nop keeps the delay loop (ee-gcc
-           then adds its four r5900 short-loop pad nops) tried=empty do/while and for loops (deleted), asm("") (4 nops) */
+        /* An empty C loop is deleted by GCC, so one explicit nop keeps the delay loop (ee-gcc then
+         * adds its four r5900 short-loop pad nops). */
         __asm__ volatile("nop");
     } while (count >= 0);
 }

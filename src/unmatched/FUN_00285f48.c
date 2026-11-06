@@ -1,7 +1,6 @@
 /* Chooses the decoder mode at +56: 1 for progressive or field-structured (1/2) pictures, otherwise
  * 3 when +308 is 1, else 2. */
 
-/* Members of the decoder object used here. */
 struct Decoder00285f48 {
     char pad0[56];
     int mode; /* +56 */

@@ -1,5 +1,3 @@
-/* Vertex element set from a converted value: result of the converter stored word-wise or copied
- * bytewise from a stack union; virtual type test; default compiler. */
 #include "dw4/reflected.h"
 extern "C" {
 void *igVertexArray2__FindVertexData(...);

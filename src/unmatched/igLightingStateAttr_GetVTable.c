@@ -1,4 +1,4 @@
-/* stack-object GetVTable accessor.py. */
+/* Stack-object GetVTable accessor. */
 int igObject_InitHeader(void *);
 extern int DAT_005235e0[4];
 extern void * DAT_00586dc8[4];

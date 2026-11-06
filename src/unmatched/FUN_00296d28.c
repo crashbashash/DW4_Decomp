@@ -1,5 +1,4 @@
-/* Reads a Sofdec handle's playback time as a count/unit pair (its error strings name it
- * mwSfdGetTime); an invalid handle, a failed read or a negative count all report 0/1. */
+/* Reads a Sofdec handle's playback time as a count/unit pair; an invalid handle, a failed read or a negative count all report 0/1. */
 extern int FUN_002968c0(void *sfd);
 extern void FUN_0029a320(const char *msg);
 extern int FUN_002ae7b0(int stream, int *count, int *unit);

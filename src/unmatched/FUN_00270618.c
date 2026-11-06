@@ -1,6 +1,5 @@
 /* Returns the sector length through the device interface (entry +48) of a file-system handle; a
- * NULL handle or missing entry is reported through FUN_0026f530 and returns 0. Its error strings
- * name it cvFsGetSctLen (CRI), a name hypothesis. */
+ * NULL handle or missing entry is reported through FUN_0026f530 and returns 0. */
 typedef struct CvFsDevice_270618 {
     void *pad0[12];
     int (*get_sct_len)(int file);  /* 0x30 */

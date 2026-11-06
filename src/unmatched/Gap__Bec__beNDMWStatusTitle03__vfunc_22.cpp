@@ -1,7 +1,5 @@
-/* Two interned strings appended to message lists (pool created on first use, refcount released
- * inline) then the message script; the constant string address is still tested (if-else layout
- * with the null arm first); price switch with an uninitialised default; alternate compiler -O3,p,
- * C++ without exceptions. */
+/* The constant string address is still tested (if-else layout with the null arm first), and the
+ * price switch has an uninitialised default. */
 extern "C" {
 void *FUN_002eb010(int);
 void *StringPool_Construct(void *);
@@ -16,9 +14,8 @@ extern int DAT_0051acb0[4];
 extern int DAT_0051ad60[4];
 extern void *DAT_00586f20[4];
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     const char *p;
@@ -27,7 +24,6 @@ public:
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
 struct Sh { char p[44]; unsigned f44; char q[12]; int f60; int f64; };
-/* intern `text` (the pool singleton is created on first use) and append the token to `field` */
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \

@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-struct TextureCtrlWork { char header[8]; int f8; int f12; }; /* the _work object: two list handles at +8/+12, class not recovered */
+struct TextureCtrlWork { char header[8]; int f8; int f12; }; /* The _work object: two list handles at +8 and +12. */
 struct TextureCtrlSource { char pad[12]; struct TextureCtrlSource *f12; char pad1[12]; unsigned char f28; char pad2[3]; igObjectList *f32; };
 extern "C" {
 struct TextureCtrlWork *FUN_00342630(int);

@@ -1,18 +1,13 @@
-/* dw4/frontend.h — the front-end boot: engine -> logos -> opening -> title/menu (porting §4).
- *
- * The front-end is not one function.  It is a chain of `NDMW.AFS` **stage entries** (800
- * menu-database, 802 bandai-logo -> scene `stagis09`, 804 opening -> `stagis10`, 806 title-screen
- * -> `stagML11`), each a set of Lua chunks run in order, driven by the script's own `be:` API
- * (`DMsetSD("STAGECTL", …, "NEXTSTAGE", stage, mode)` + `DMrun()`, gated by `PADINPUT ENABLE 29`).
- * See `DW4_Decomp/docs/engine/front-end-boot.md`.
- *
- * The port now loads original chunks into Lua 4.0.1 and executes shared definitions.
- * Scene orchestration still uses a **native stage/script sequencer** with the
- * `be:` API subset the front-end uses and a hard-coded, disc-checked four-stage plan.  The plan's
- * stage directives are not taken on trust: each entry is loaded from the disc and its own bytes are
- * scanned for the `NEXTSTAGE`/`PADINPUT`/`TITLE2` tokens the Lua bytecode carries, so a disc that
- * disagrees fails verification instead of silently "working".
- */
+/* The front-end boot: engine -> logos -> opening -> title/menu. The front-end is not one function.
+ * It is a chain of `NDMW.AFS` **stage entries** (800 menu-database, 802 bandai-logo -> scene
+ * `stagis09`, 804 opening -> `stagis10`, 806 title-screen -> `stagML11`), each a set of Lua chunks
+ * run in order, driven by the script's own `be:` API (`DMsetSD("STAGECTL", …, "NEXTSTAGE", stage,
+ * mode)` + `DMrun()`, gated by `PADINPUT ENABLE 29`). The port now loads original chunks into Lua
+ * 4.0.1 and executes shared definitions. Scene orchestration still uses a **native stage/script
+ * sequencer** with the `be:` API subset the front-end uses and a hard-coded, disc-checked four-
+ * stage plan. The plan's stage directives are not taken on trust: each entry is loaded from the
+ * disc and its own bytes are scanned for the `NEXTSTAGE`/`PADINPUT`/`TITLE2` tokens the Lua
+ * bytecode carries, so a disc that disagrees fails verification instead of silently "working". */
 #ifndef DW4_FRONTEND_H
 #define DW4_FRONTEND_H
 

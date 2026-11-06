@@ -1,19 +1,10 @@
-/* dw4/window.h — the host window/present backend (porting P4.1/P4.3, task item "a host GPU/window
- * backend").
- *
- * This is the *present* half of a host renderer: it takes the framebuffer the port's rasteriser
- * produced and shows it, either in an SDL2 window or headlessly (the SDL "dummy" video driver) so
- * the same code path can run in a check.  It is deliberately separate from the rasteriser
- * (`render.c`), which is where the game's shading model lives.
- *
- * It is **not** a GS and it does not run the VU1 microcode: per `port/docs/project/README.md` §*Renderer and
- * audio* the pipeline is reimplemented, and the microcode map is the specification.  The GPU
- * implementation of the LIGHT/TRANS/CLIP/... families is the next step; this file is the window
- * seam it will present through.
- *
- * SDL2 is optional: without `DW4_ENABLE_SDL2` every entry point fails cleanly, so the default
- * `make` needs no SDL2 and `make check` can skip the window test.
- */
+/* The host window/present backend. This is the present half of a host renderer: it takes the
+ * framebuffer the port's rasteriser produced and shows it, either in an SDL2 window or headlessly
+ * (the SDL "dummy" video driver) so the same code path can run in a check. It is separate from the
+ * rasteriser (`render.c`), where the game's shading model lives. It is not a GS and it does not
+ * run the VU1 microcode: the pipeline is reimplemented. SDL2 is optional: without
+ * `DW4_ENABLE_SDL2` every entry point fails cleanly, so the default `make` needs no SDL2 and `make
+ * check` can skip the window test. */
 #ifndef DW4_WINDOW_H
 #define DW4_WINDOW_H
 

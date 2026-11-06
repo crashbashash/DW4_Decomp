@@ -31,7 +31,6 @@ extern int DAT_0056bad8[4];
 extern int FUN_001f64a0(unsigned int, int, int);
 extern long long DAT_00569248[4];
 void FUN_001f3550(unsigned int arg0, int arg1) {
-//D<
     int s1;
     unsigned int s0;
     unsigned int a2;
@@ -40,7 +39,6 @@ void FUN_001f3550(unsigned int arg0, int arg1) {
     int a3;
     int t;
     int fl;
-//D>
 
     a2 = DAT_00562c70[DAT_00569330[0]];
     fl = (a2 >> 0x1B) & 1;

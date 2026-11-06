@@ -18,7 +18,6 @@ struct V { virtual void d0(); virtual void d1(); virtual void d2(); virtual void
 template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct ItemRefLast { igObject *p; ItemRefLast(igObject *o) : p(o) {} ~ItemRefLast() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct Mk {
-    /* allocator selection shared by the five constructions (retail inlines it five times) */
     static inline int allocator(int arg1) {
         int alloc = igObject_GetAllocator(arg1);
         int a;

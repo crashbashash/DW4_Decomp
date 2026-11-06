@@ -50,7 +50,7 @@ public:
 struct SceneList { int vtbl, refs, count, capacity; int *data; };
 class GfxScene { public: int vtbl, refs, w8, mode; int w16, w20, w24, w28; SceneList *items; };
 struct Ref { int vtbl; int refs; };
-struct Lens {                             /* the object at 0x562900 / 0x562940 */
+struct Lens {
   int vtbl, refs, w8, mode;
   Vec4 color;                             /* +16 */
   int w32, w36, w40, w44;

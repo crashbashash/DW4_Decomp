@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_003e0b80();
 
@@ -27,4 +25,4 @@ void beNDMWLoadIntf2SelSlot__Init(beNDMWLoadIntf2SelSlot *arg0) {
         break;
     }
 }
-} /* extern "C" */
+}

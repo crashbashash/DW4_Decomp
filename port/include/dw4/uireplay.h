@@ -1,16 +1,11 @@
-/* dw4/uireplay.h — replay a captured GS frame's 2D layer (an analysis path, `dw4asset` only).
- *
- * A replay file is one `scripts/gs_ui.py` TSV: one screen-space triangle per row, in the GS's own
- * draw order, `TEX<TAB>x y u v r g b a<TAB>...` three times, where `TEX` names a `<TEX>.rgba` in
- * `texdir` (`-` = an untextured overlay).  The reader serves `dw4asset render --ui/--ui-only/--ui-seq`
- * for analysis; the shipped `dw4` host generates the front-end layer from the pack instead
- * (`src/frontlayer.c`) and no longer uses this path.
- *
- * A captured frame of the front-end menu carries the whole screen: the logo, the menu rows, the
- * cursor, the copyright and the streaming additive light trails.  `hide` is a
- * comma-separated texture-key list (NULL draws everything), so an analysis render can isolate a
- * layer.
- */
+/* Replay a captured GS frame's 2D layer (an analysis path, `dw4asset` only). A replay file is one
+ * TSV: one screen-space triangle per row, in the GS's own draw order, `TEX<TAB>x y u v r g b
+ * a<TAB>...` three times, where `TEX` names a `<TEX>.rgba` in `texdir` (`-` = an untextured
+ * overlay). The reader serves `dw4asset render --ui/--ui-only/--ui-seq` for analysis; the shipped
+ * `dw4` host generates the front-end layer from the pack instead and no longer uses this path. A
+ * captured frame of the front-end menu carries the whole screen: the logo, the menu rows, the
+ * cursor, the copyright and the streaming additive light trails. `hide` is a comma-separated
+ * texture-key list (NULL draws everything), so an analysis render can isolate a layer. */
 #ifndef DW4_UIREPLAY_H
 #define DW4_UIREPLAY_H
 

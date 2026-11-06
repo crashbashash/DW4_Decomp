@@ -1,6 +1,4 @@
-/* FUN_0011f198 -- fdlibm __ieee754_logf(x): single-precision natural logarithm. Same algorithm as the
- * double version: scale x to [sqrt(2)/2, sqrt(2)), f = x - 1, log(1+f) = f - s*(f - R) with
- * s = f/(2+f) and R an even/odd polynomial in s*s (Lg1..Lg7), plus k*ln2. */
+/* fdlibm __ieee754_logf(x). */
 #include "dw4/ieee_words.h"
 
 static const float ln2_hi = 6.9313812256e-01F,

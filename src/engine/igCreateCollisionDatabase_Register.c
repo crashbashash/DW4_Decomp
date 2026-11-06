@@ -1,6 +1,3 @@
-/* 0x002395c0 igCreateCollisionDatabase_Register: registers class igCreateCollisionDatabase with the object system, derived from igOptBase.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igOptBase_GetPublishedMetaObject[];
 extern char igOptBase_Register[];
 extern char igCreateCollisionDatabase_GetVTable[];
@@ -15,16 +12,16 @@ int igCreateCollisionDatabase_InitFields();
 void igCreateCollisionDatabase_Register(void) {
     CollisionLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igCreateCollisionDatabase_metaObject, /* published MetaObject slot */
-        igOptBase_Register,                              /* base class registrar */
-        igOptBase_GetPublishedMetaObject,       /* base class MetaObject accessor */
-        thunk_igCreateCollisionDatabase_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igCreateCollisionDatabase_className,  /* class name */
-        0x44,                                            /* instance size */
-        igCreateCollisionDatabase_GetVTable,             /* vtable getter */
-        &igCreateCollisionDatabase_InitFields,           /* field adder */
-        0,                                               /* extra callback item */
-        g_igCreateCollisionDatabase_callbackList  /* callback list */
+        0, /* abstract */
+        g_igCreateCollisionDatabase_metaObject,
+        igOptBase_Register,
+        igOptBase_GetPublishedMetaObject,
+        thunk_igCreateCollisionDatabase_GetMetaObject,
+        igCreateCollisionDatabase_className,
+        0x44, /* instance size */
+        igCreateCollisionDatabase_GetVTable,
+        &igCreateCollisionDatabase_InitFields,
+        0, /* extra callback item */
+        g_igCreateCollisionDatabase_callbackList /* callback list */
     );
 }

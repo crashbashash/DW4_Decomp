@@ -1,6 +1,5 @@
 /* When FUN_00299f88 reports 1, calls the hook at +32 of the table from FUN_00299f68 (if both
- * exist) with the handle's +20 value (read before the hook checks, as retail schedules it) and the
- * two arguments. */
+ * exist) with the handle's +20 value and the two arguments. */
 struct Hooks00299b50 {
     char pad0[32];
     void (*hook)(int value, int a, int b); /* +32 */

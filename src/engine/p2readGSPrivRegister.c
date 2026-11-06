@@ -1,13 +1,11 @@
-/* 0x001f8050 p2readGSPrivRegister: read one of the Graphics Synthesizer privileged
- * registers by register number.  The numbers are the GS register-map indices; the
- * memory-mapped address is 0x12000000 + (index << 4) for the display block and
- * 0x12001000 + ((index - 0x40) << 4) for the status block (public PS2 hardware map).
- * An index the function does not serve is reported through printf using the
- * format string "p2readGSPrivRegister(%d)\n" and reads as 0. */
+/* Reads one of the Graphics Synthesizer privileged registers by register number. The numbers are
+ * the GS register-map indices; the memory-mapped address is 0x12000000 + (index << 4) for the
+ * display block and 0x12001000 + ((index - 0x40) << 4) for the status block. An index the function
+ * does not serve is reported through printf with the format string "p2readGSPrivRegister(%d)\n"
+ * and reads as 0. */
 extern char text_p2readGSPrivRegister[];
 int printf();
 
-/* Register numbers served by the switch below. */
 enum GsPrivRegister {
     GSPRIV_PMODE = 0x0,
     GSPRIV_SMODE2 = 0x2,

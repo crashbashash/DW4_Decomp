@@ -1,6 +1,3 @@
-/* adxt_trap_entry (hypothesis): the only string in the body is
- * "E8101201 adxt_trap_entry: not enough data" (D_004eedd0). Pulls the next
- * block from the stream joint, re-primes the ring and bumps the entry counter. */
 typedef struct SjObj SjObj;
 typedef struct SjChunk { void *ptr; int len; } SjChunk;
 typedef struct SjVT {

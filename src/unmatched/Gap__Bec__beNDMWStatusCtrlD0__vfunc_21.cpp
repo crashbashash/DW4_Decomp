@@ -1,16 +1,12 @@
-/* 0x00418090 - Gap__Bec__beNDMWStatusCtrlD0__vfunc_21 (2600 bytes): update state machine of the
- * status-screen item page (D0 = the 12-row page list: devices or the bank folder).
- * State 0 registers the page-turn text/script names, opens the list window (FUN_003b51b0), sets
- * its decide list and the page offset and queues the model; state 1 handles the page / cursor
- * choice (_st1 0 = prepare, 1 = wait for the window and act on _retCode, 2 = rebuild the list
- * window for the new page); state 2 closes everything and re-sends the page-name text groups
- * for the 12 rows; state 3 waits for the close and clears _isRun.
- * Evidence: asm/Gap__Bec__beNDMWStatusCtrlD0__vfunc_21.s, sibling Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21.
- * Profile: combat compiler, -O3,p -Cpp_exceptions off (see FUN_00418ac0, same receiver); needs the
- * RP destructor duplicate row in config/SLUS-20836/unit-objects.json like its siblings.  Matching constructs:
- * HA::Add fixes the operand order of page*12+ret, `list->_count <= x` gives the slt-at branch, the
- * record folder is held in a block-local per arm (delay-slot fill), and the window pointers stay in
- * memory-resident RP holders that are re-read for each field store. */
+/* Update state machine of the status-screen item page (D0 = the 12-row page list: devices or the
+ * bank folder). State 0 registers the page-turn text/script names, opens the list window, sets its
+ * decide list and the page offset and queues the model; state 1 handles the page / cursor choice
+ * (_st1 0 = prepare, 1 = wait for the window and act on _retCode, 2 = rebuild the list window for the
+ * new page); state 2 closes everything and re-sends the page-name text groups for the 12 rows;
+ * state 3 waits for the close and clears _isRun.
+ * Matching constructs: HA::Add fixes the operand order of page*12+ret, `list->_count <= x` gives the
+ * slt-at branch, the record folder is held in a block-local per arm (delay-slot fill), and the window
+ * pointers stay in memory-resident RP holders that are re-read for each field store. */
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_002eb010(int);
@@ -73,18 +69,16 @@ extern int DAT_0051a0c8[4];
 }
 
 typedef igObject RefHeader;
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     const char *p;
     StringRef(const char *s) : p(s) {}
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
-/* Owning stack reference to a sub-window created here: released on scope exit (reference count in
- * the low 23 bits of _refCount).  The out-of-line copy the exception table names is the retail body
- * 0x00411100 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to a sub-window created here; released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class WindowRef {
 public:
     RefHeader *p;

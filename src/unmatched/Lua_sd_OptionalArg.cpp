@@ -1,6 +1,6 @@
-/* Alternate (combat) compiler, -O3,p -Iinclude (also matches with -Cpp_exceptions off). Splits a
- * '/'-separated optional-argument string and appends each part to the messenger as a string, or a
- * typed value for 'I<n>' int, 'L<n>' long, 'V<x,y,z>' vec3 and 'F<expr>' float parts. */
+/* Splits a '/'-separated optional-argument string and appends each part to the messenger as a
+ * string, or as a typed value for 'I<n>' int, 'L<n>' long, 'V<x,y,z>' vec3 and 'F<expr>' float
+ * parts. */
 #include "dw4/reflected.h"
 extern "C" {
 unsigned strlen(char *);

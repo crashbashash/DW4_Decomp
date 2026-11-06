@@ -1,4 +1,3 @@
-/* 0x002c6050 - 116 bytes. Returns the call results (the ctor result lands in the jal delay slot). */
 int igEnumMetaField_EnsureRegistered();
 int FUN_002dc940();
 int igObject_AllocateRawStorageDefault();

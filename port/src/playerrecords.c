@@ -1,26 +1,23 @@
-/* Session-owned GAMERAM property folders on typed arena objects (docs/arena-object-model.md, P3).
- *
- * A folder is the decomp's `beDataObjList` (an igObjectList) of named property records, held in the session arena. The record classes
- * are the recovered beDataObj family (`_name` at +8 from igNamedObject, `_data` at +12):
- *
- *   number   beDataObjInt         `_data` is the value
- *   string   beDataObjString      `_data` -> NUL-terminated string block (0 = NULL string)
- *   array    beDataObjIntList     `_data` -> igIntList
- *   bytes    beDataObjBoolList    `_data` -> igBoolList
- *   floats   beDataObjFloatList   `_data` -> igFloatList
- *   strings  beDataObjStringList  `_data` -> igStringRefList of string blocks (0 = NULL entry)
- *   items    beDataObjObjectList  `_data` -> beNDMWItemBaseList of beNDMWItem* objects (a NULL element is a null slot, kind -1)
- *   unicode  beDataObjObjectList  `_data` -> beUnicodeObjList of beUnicodeObj ({u32 count}{u16 codes...} buffer; a NULL element is absent)
- *   folder   beDataObjObjectList  `_data` -> beDataObjList (the child folder)
- *
- * The object-list records share one class; the class of the list that `_data` points at tells folders, items and unicode arrays apart
- * even when empty. Item kinds follow the port's records and the class hierarchy (0 Weapon, 1 BlueArmor, 2 YellowArmor, 3 AbilityChip,
- * 4 Disk, 9 Waza; other kinds are held in a beNDMWItemInstant with their `_kindNo`): `_kindNo` +8, `_recNo` +12, `_isEquip` +16 (a byte),
- * `_revision` / `_baseNo` / `_kazu` / `_value` +20, `_pocket` +24.
- *
- * Behavior is that of the earlier host implementation: setters copy, a record keeps its kind, borrowed arrays and strings live until the
- * record is replaced, nested folder addresses are stable, common FLAG/FLAGFOLDER/COUNTER alias player zero's BASE_* rows, commits swap
- * payloads after a complete preflight. Folder host structs stay outside the arena (they hold an arena pointer and a handle). */
+/* Session-owned GAMERAM property folders on typed arena objects. A folder is the decomp's
+ * `beDataObjList` (an igObjectList) of named property records, held in the session arena. The
+ * record classes are the recovered beDataObj family (`_name` at +8 from igNamedObject, `_data` at
+ * +12): number beDataObjInt `_data` is the value string beDataObjString `_data` -> NUL-terminated
+ * string block (0 = NULL string) array beDataObjIntList `_data` -> igIntList bytes
+ * beDataObjBoolList `_data` -> igBoolList floats beDataObjFloatList `_data` -> igFloatList strings
+ * beDataObjStringList `_data` -> igStringRefList of string blocks (0 = NULL entry) items
+ * beDataObjObjectList `_data` -> beNDMWItemBaseList of beNDMWItem* objects (a NULL element is a
+ * null slot, kind -1) unicode beDataObjObjectList `_data` -> beUnicodeObjList of beUnicodeObj
+ * ({u32 count}{u16 codes...} buffer; a NULL element is absent) folder beDataObjObjectList `_data`
+ * -> beDataObjList (the child folder) The object-list records share one class; the class of the
+ * list that `_data` points at tells folders, items and unicode arrays apart even when empty. Item
+ * kinds follow the port's records and the class hierarchy (0 Weapon, 1 BlueArmor, 2 YellowArmor, 3
+ * AbilityChip, 4 Disk, 9 Waza; other kinds are held in a beNDMWItemInstant with their `_kindNo`):
+ * `_kindNo` +8, `_recNo` +12, `_isEquip` +16 (a byte), `_revision` / `_baseNo` / `_kazu` /
+ * `_value` +20, `_pocket` +24. Behavior is that of the earlier host implementation: setters copy,
+ * a record keeps its kind, borrowed arrays and strings live until the record is replaced, nested
+ * folder addresses are stable, common FLAG/FLAGFOLDER/COUNTER alias player zero's BASE_* rows,
+ * commits swap payloads after a complete preflight. Folder host structs stay outside the arena
+ * (they hold an arena pointer and a handle). */
 #include "dw4/playerrecords.h"
 #include "dw4/arena.h"
 #include "dw4/object.h"

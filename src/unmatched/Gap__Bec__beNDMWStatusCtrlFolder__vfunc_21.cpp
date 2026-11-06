@@ -1,12 +1,6 @@
-/* Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21 (0x004196c0, 3256 B): MATCH under the alternate compiler (local/mwcps2/combat/mwccps2.exe).
- * Needs, exactly like Gap__Bec__beNDMWShopDevice__vfunc_21 (0x0043cc20), these overlay rows:
- *   config/SLUS-20836/unit-compilers.tsv  0x004196c0  local/mwcps2/combat/mwccps2.exe  <sha256 of the combat compiler>
- *   config/SLUS-20836/unit-flags.tsv      0x004196c0  -O3,p -Cpp_exceptions off -Iinclude
- *   config/SLUS-20836/unit-objects.json   0x004196c0  duplicates {__dt__5RP<0>Fv: 0x0040f6a0, <1>: 0x0040f620, <2>: 0x00414420,
- *                              <3>: 0x0041a380, <4>: 0x003b90a0}, externals {__dl__FPv: 0x00100610}
- * Each sub-window holder is a scope object whose destructor releases the reference (retail's protected ranges split around the
- * inlined release call, which a hand-spelled release cannot reproduce); the constructor takes the allocation result so the range
- * starts after that call. */
+/* Each sub-window holder is a scope object whose destructor releases the reference (the protected
+ * range splits around the inlined release call, which a hand-spelled release cannot reproduce);
+ * the constructor takes the allocation result so the range starts after that call. */
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_003b3530(void *);
@@ -50,8 +44,8 @@ extern int DAT_0058af98[4];
 extern unsigned char GPR_00554c14;
 void Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21(beNDMWStatusCtrlFolder *arg0);
 }
-/* Scope holder for a freshly built sub-window: its destructor releases the reference. Retail keeps one out-of-line
- * destructor per holder (kind 0..4 = 0x40f6a0, 0x40f620, 0x414420, 0x41a380, 0x3b90a0). */
+/* Scope holder for a freshly built sub-window: its destructor releases the reference. One class
+ * per kind (0..4), so each gets its own out-of-line destructor. */
 template <int kind> struct RP {
     igObject *p;
     RP(igObject *x) { p = x; }

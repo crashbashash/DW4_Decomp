@@ -1,6 +1,4 @@
-/* lmem.c - Lua 4.0.1's memory manager as the game rewrote it.
- * See Copyright Notice in src/third_party/lua/lua.h.
- *
+/* lmem.c - Lua 4.0.1's memory manager as the game rewrote it. See Copyright Notice in lua.h.
  * luaM_growaux is stock. luaM_realloc replaces the C library calls: a state with a pool allocates
  * from that pool, and everything else goes through the engine's default buffer functions. */
 #include <stdlib.h>
@@ -19,7 +17,6 @@ void *thunk_Memory_ReallocateBuffer(void *block, size_t size);
 void Memory_FreeBufferAliasA(void *block);
 }
 
-
 void *luaM_growaux (lua_State *L, void *block, size_t nelems,
                int inc, size_t size, const char *errormsg, size_t limit) {
   size_t newn = nelems+inc;
@@ -30,7 +27,6 @@ void *luaM_growaux (lua_State *L, void *block, size_t nelems,
   else  /* it crossed a power-of-2 boundary; grow to next power */
     return luaM_realloc(L, block, luaO_power2(newn)*size);
 }
-
 
 /*
 ** generic allocation routine.

@@ -1,14 +1,8 @@
-/* beSound::vfunc_31 (0x0039e870, 928 bytes) - per-frame state machine of the sound manager (arg1 is the beBaseInfoRam record;
- * its _st0 at +24 is the state).
- * State 0: asks the messenger (SendGroup with DAT_0050f9b0/DAT_0050f9c0); with at least one reply object, takes reply object 0 and walks its
- *   list, removing every element whose name (fallback DAT_004e0858) differs from DAT_0050f9d0 after clearing that element's own list
- *   (release, zero, count 0, reserve 4 if empty); the index advances only on kept elements.  Then FUN_0037dc60(cri, DAT_0050f9d8),
- *   _st0 += 1, _st1.._st3 = 0 and fall into state 1 (with no reply object it leaves at once).
- * State 1: drops the playing-SE entries whose _time is older than the insight world time (ObjectList_RemoveFirstRetained).
- * Matching notes: needs the pinned alternate compiler with -O3,p -Cpp_exceptions off (its unit profile). The address-taken scratch slot `sp`
- * (the out-parameter of ObjectList_RemoveFirstRetained, a plain struct: no destructor, so retail's exception table has no cleanup
- * actions) keeps arg1 spilled to the stack (reloaded at every use) and gives the case labels their 8-byte padding. Local declaration order fixes the s-register
- * colouring (found by a random walk over declaration orders). */
+/* Per-frame state machine of the sound manager (arg1 is the beBaseInfoRam record; its _st0 at +24
+ * is the state). The address-taken scratch slot `sp` (the out-parameter of
+ * ObjectList_RemoveFirstRetained, a plain struct with no destructor) keeps arg1 spilled to the
+ * stack (reloaded at every use) and gives the case labels their 8-byte padding. Local declaration
+ * order fixes the s-register colouring. */
 #include "dw4/reflected.h"
 extern "C" {
 int beMessenger_SendGroup(...);

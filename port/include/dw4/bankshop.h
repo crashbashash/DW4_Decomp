@@ -1,6 +1,5 @@
-/* Native NPC bank: retail beNDMWShopCtrl30 update 428790..429628 (SUBWND mode 3, "BANK"),
- * its beNDMWShopCtrlEditBit amount editor (4332d0) and the shared beNDMWStatusCtrlD0 item list.
- * Evidence and open boundaries: port/docs/bank-shop.md. */
+/* Native NPC bank: retail beNDMWShopCtrl30 update 428790..429628 (SUBWND mode 3, "BANK"), its
+ * beNDMWShopCtrlEditBit amount editor (4332d0) and the shared beNDMWStatusCtrlD0 item list. */
 #ifndef DW4_BANKSHOP_H
 #define DW4_BANKSHOP_H
 #include "dw4/statusview.h"

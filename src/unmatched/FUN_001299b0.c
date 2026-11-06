@@ -1,5 +1,5 @@
 /* Installs a handler for a signal in the reent table and returns the previous one; sets EINVAL and
- * returns SIG_ERR for an out-of-range signal (newlib _signal_r shape; name is a hypothesis). */
+ * returns SIG_ERR for an out-of-range signal. */
 typedef void (*SignalHandler)(int);
 
 typedef struct Reent {

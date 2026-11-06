@@ -1,5 +1,3 @@
-/* Stack key lookup (destructor copy at 0x002e2300), two 16-byte message objects, member pointer
- * kept in a local. */
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_002ed5c0(void *);

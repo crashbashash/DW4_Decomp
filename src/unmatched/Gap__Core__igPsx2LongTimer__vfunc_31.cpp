@@ -1,4 +1,3 @@
-/* Virtual call returning long long (sd store). */
 #include "dw4/reflected.h"
 extern "C" {
 

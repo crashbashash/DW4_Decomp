@@ -21,7 +21,7 @@ struct Owner3628 {
     struct Rec0DD8 *record;               /* +13864 (0x3628) */
 };
 
-/* Returns the stored value; the int return keeps v0 live and gives retail's epilogue order. */
+/* The int return keeps v0 live. */
 int FUN_002ad870(struct Owner3628 *owner) {
     struct Rec0DD8 *record = owner->record;
     int value = record->f3536;

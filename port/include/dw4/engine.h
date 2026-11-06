@@ -1,17 +1,11 @@
-/* dw4/engine.h — the native host runtime (porting P2.1/P2.6/P6.1).
- *
- * The port has been a set of asset readers; this is the **engine host**: a `main` that boots, loads
- * a stage, constructs its object graph through the reflection object model, and then runs a frame
- * loop -- the layer the plan says is the difference between a set of loaders and a running engine
- * (`port/docs/project/tasks.md` P2.6: "without it there is no `main` to speak of").
- *
- * The engine's *own* boot lives in the EE binary: the CRT entry (`0x100008`) calls
- * `FUN_002595e0` (the game's `main`), which builds the app, creates the managers and enters the
- * frame loop in `FUN_0025a580`/`FUN_0025a8c0`.  That code is not decompiled yet, so this host runs
- * the parts that are real now -- the object model, the ported `igObject_InitHeader` engine function,
- * and the renderer -- over the same loaded data, in the same init/update/present shape.  Engine
- * functions are ported into `dw4_engine_frame` as their decompilation lands.
- */
+/* The native host runtime: a `main` that boots, loads a stage, constructs its object graph through
+ * the reflection object model, and then runs a frame loop. The engine's own boot lives in the EE
+ * binary: the CRT entry (`0x100008`) calls `FUN_002595e0` (the game's `main`), which builds the
+ * app, creates the managers and enters the frame loop in `FUN_0025a580`/`FUN_0025a8c0`. That code
+ * is not decompiled yet, so this host runs the parts that are real now -- the object model, the
+ * ported `igObject_InitHeader` engine function, and the renderer -- over the same loaded data, in
+ * the same init/update/present shape. Engine functions are ported into `dw4_engine_frame` as their
+ * decompilation lands. */
 #ifndef DW4_ENGINE_H
 #define DW4_ENGINE_H
 

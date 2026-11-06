@@ -1,5 +1,4 @@
-/* Shifts the trailing zero bits out of *word and returns how many there were, 32 for zero (newlib
- * mprec lo0bits shape; name is a hypothesis). */
+/* Shifts the trailing zero bits out of *word and returns how many there were, 32 for zero. */
 int FUN_00127770(unsigned int *word) {
     int count;
     unsigned int x = *word;

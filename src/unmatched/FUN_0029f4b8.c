@@ -5,7 +5,6 @@ void FUN_0028d4a8();
 void *FUN_0028da88();
 int FUN_0028dc28();
 
-/* Filled by FUN_0028d4a8; only +12 is read here. */
 struct Info29f4b8 {
     int f0, f4, f8;
     int f12;

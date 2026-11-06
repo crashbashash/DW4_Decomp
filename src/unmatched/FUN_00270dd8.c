@@ -1,6 +1,6 @@
 /* Calls the device option function 1 through the device interface (entry +96) of a file-system
  * handle; a NULL handle or missing entry is reported through FUN_0026f530 and returns 0. Its error
- * strings name it cvFsOptFn1 (CRI), a name hypothesis. */
+ * strings name it cvFsOptFn1 (CRI). */
 typedef struct CvFsDevice_270dd8 {
     void *pad0[24];
     int (*opt_fn1)(int file, int code, int arg);  /* 0x60 */

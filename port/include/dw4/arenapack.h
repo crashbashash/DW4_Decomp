@@ -1,13 +1,12 @@
-/* dw4/arenapack.h — a pack's objects as typed instances in the game arena (porting P1 of docs/arena-object-model.md).
- *
- * Each pack object becomes an arena block laid out as the decomp's struct for its class (include/dw4/reflected.h: values at the
- * reflected offsets, the engine's header from igObject_InitHeader, the class's vtable word at +0). Reference fields (descriptor type
- * 0 object ids, type 7 pool-block ids) are rewritten from the pack's ids into four-byte arena handles, string fields become handles
- * to NUL-terminated arena blocks, and every pool block is copied into an arena block. A NULL id (0xffffffff), or one the pack does
- * not define, becomes the NULL handle. Nothing in the arena points back into the pack, so the pack and its mount can be released.
- *
- * Unlike dw4_scene (a render-oriented view of a stage pack), these are the game's own typed objects, the ones the retargeted
- * matched C reads. */
+/* A pack's objects as typed instances in the game arena. Each pack object becomes an arena block
+ * laid out as the decomp's struct for its class (values at the reflected offsets, the engine's
+ * header from igObject_InitHeader, the class's vtable word at +0). Reference fields (descriptor
+ * type 0 object ids, type 7 pool-block ids) are rewritten from the pack's ids into four-byte arena
+ * handles, string fields become handles to NUL-terminated arena blocks, and every pool block is
+ * copied into an arena block. A NULL id (0xffffffff), or one the pack does not define, becomes the
+ * NULL handle. Nothing in the arena points back into the pack, so the pack and its mount can be
+ * released. Unlike dw4_scene (a render-oriented view of a stage pack), these are the game's own
+ * typed objects, the ones the retargeted matched C reads. */
 #ifndef DW4_ARENAPACK_H
 #define DW4_ARENAPACK_H
 

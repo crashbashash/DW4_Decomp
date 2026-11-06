@@ -1,7 +1,5 @@
 #include "dw4/reflected.h"
 /* igObject header: vtable and reference count (the count is not a reflected field) */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 extern int Gap__Core__igObject__vfunc_08__002ff0f0(beNDMWMdlPEBaseInfoWork *);
 extern int beMessenger_SendNamed(int, int *, int, int, int *);
@@ -13,7 +11,6 @@ extern int DAT_0051d3a8[4];
 extern int DAT_0051d3e8[4];
 void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *arg0);
 void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *arg0) {
-//D<
     igIntList *l;
     igIntList *l2;
     int n;
@@ -26,7 +23,6 @@ void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *arg0) {
     int off;
     int *p;
     igObject *o;
-//D>
 
     if (arg0->_messenger != 0 && arg0->_dispRamNoList != 0) {
         if (arg0->_isPlayer != 0) {
@@ -82,4 +78,4 @@ void Gap__Bec__beNDMWMdlPEBaseInfoWork__vfunc_8(beNDMWMdlPEBaseInfoWork *arg0) {
     }
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
-} /* extern "C" */
+}

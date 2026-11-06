@@ -1,6 +1,5 @@
-/* Walks the 46 slots, asks each device for its resource through virtual slot 87 and notifies the
- * first holder of each resource. The flag tests are `((x & m) ? 1 : 0) &&` (the ternary gives the
- * materialised sltu); the two later virtual slots are dummy-virtual stubs. Alternate -O3. */
+/* The flag tests are `((x & m) ? 1 : 0) &&`; the ternary gives the materialised sltu. The two
+ * later virtual slots are dummy-virtual stubs. */
 struct Res {
     virtual void r0();
     virtual void r1();

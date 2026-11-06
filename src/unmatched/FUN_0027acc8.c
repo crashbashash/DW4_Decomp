@@ -4,7 +4,7 @@
 typedef struct Entry_27acc8 {
     signed char state;  /* 0x00 */
     char pad1[99];
-} Entry_27acc8;         /* 0x64 bytes */
+} Entry_27acc8;
 
 extern int DAT_004b1dc8;
 extern int DAT_004b1dc0;

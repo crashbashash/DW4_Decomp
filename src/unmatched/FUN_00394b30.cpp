@@ -1,5 +1,3 @@
-/* Leading unused parameter, default-name select as a conditional expression, intern then release
- * the old name; alternate compiler -O3,p. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(int);

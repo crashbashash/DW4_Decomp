@@ -1,7 +1,8 @@
-/* Application of the P2PKOUKAMAGIC numbers (fightmagic.h) to the players: the PLAYER area query of beNDMWGameRam_CollectNearbyNonzeroHp (0x3fc780), the Heal
- * HP delta (FUN_003f9c80), the Cure poison draw (FUN_00447b00 / 0x447b40) and the Raise receiver (PLAYER2 handler 0x3d50c0). The caller supplies the
- * positions (retail: the GETMATRIX translation of each group member) and the group membership. Self-consistency tested only
- * (`check-fieldstage magicapply`), not compared against retail. docs/combat.md "Area queries and heal/cure/raise application". */
+/* Application of the P2PKOUKAMAGIC numbers (fightmagic.h) to the players: the PLAYER area query of
+ * beNDMWGameRam_CollectNearbyNonzeroHp (0x3fc780), the Heal HP delta (FUN_003f9c80), the Cure
+ * poison draw (FUN_00447b00 / 0x447b40) and the Raise receiver (PLAYER2 handler 0x3d50c0). The
+ * caller supplies the positions (retail: the GETMATRIX translation of each group member) and the
+ * group membership. */
 #ifndef DW4_MAGICAPPLY_H
 #define DW4_MAGICAPPLY_H
 #include "dw4/fightmagic.h"

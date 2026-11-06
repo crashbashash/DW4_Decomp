@@ -1,16 +1,13 @@
-/* FUN_0012bfe0 -- newlib _strtol_r(reent, nptr, endptr, base) on a 64-bit long.
- * Evidence: the character-class table at 0x4d3d10 (indexed from +1, bit 0x8 space, 0x4 digit,
- * 0x3 letter, 0x1 upper), the overflow cutoff/cutlim split through the 64-bit modulo/divide
- * helpers, and errno = ERANGE (34) stored at reent+0. */
+/* newlib _strtol_r(reent, nptr, endptr, base) on a 64-bit long. */
 typedef struct Reent { int _errno; } Reent;
 
 #define LONG_MAX_64 0x7fffffffffffffffL
 #define LONG_MIN_64 (-0x7fffffffffffffffL - 1)
 
 extern const unsigned char D_004d3d10[]; /* newlib _ctype_ */
-extern unsigned long __udivdi3(unsigned long, unsigned long); /* FUN_0022f1e0 */
+extern unsigned long __udivdi3(unsigned long, unsigned long);
 extern unsigned long __umoddi3(unsigned long, unsigned long);
-extern unsigned long __muldi3(unsigned long, unsigned long); /* FUN_0022e440 */
+extern unsigned long __muldi3(unsigned long, unsigned long);
 
 #define CT(c) (D_004d3d10 + 1)[c]
 #define CT_UPPER 0x1

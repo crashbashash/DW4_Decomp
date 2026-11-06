@@ -1,9 +1,7 @@
-/* 0x0032fbf0 — igPsx2Thread vfunc 46: suspend the thread.
- * Calls the SDK SuspendThread on the thread's kernel id (_threadID) and
- * reports the outcome through the first (hidden return-slot) argument: a
- * negative SDK result publishes the engine's failure status word, anything
- * else the success word.  Both words are set once at engine start-up
- * (docs/engine/array-storage.md: 0x4fb410 = 0, 0x4fb418 = 1). */
+/* Suspends the thread. Calls the SDK SuspendThread on the thread's kernel id (_threadID) and
+ * reports the outcome through the first (hidden return-slot) argument: a negative SDK result
+ * publishes the engine's failure status word, anything else the success word. Both words are set
+ * once at engine start-up (0 and 1). */
 #include "dw4/reflected.h"
 
 extern int g_statusSucceeded[4];

@@ -1,10 +1,6 @@
-/* 0x00166400 - resets a visual context to its default render state (hypothesis: the
- * Gap::Core::igPsx2VisualContext "set defaults" entry; the flags select which state groups).
- * Evidence: every call is a virtual call through the context's vtable (lw t9,0(obj); lw t9,off(t9);
- * jalr), the registry lookups name "shadingMode", "cullEnable", "cullMode", "fillMode"
- * (strings at 0x4df0c8..0x4df0f8) and the texture-unit loop clamps vfunc_35(8) to 1..16.
- * Vtable entries are 4 bytes starting at +8, so slot N is at offset 8 + 4*N; slots are named by
- * index because the methods have no recovered names yet. Argument types follow the registers. */
+/* Resets a visual context to its default render state; the flags select which state groups. Vtable
+ * entries are 4 bytes starting at +8, so slot N is at offset 8 + 4*N; slots are named by index
+ * because the methods are unnamed. */
 struct Vec4 { float x, y, z, w; };
 
 class igVisualContext {

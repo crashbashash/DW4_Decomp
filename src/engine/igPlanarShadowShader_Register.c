@@ -1,6 +1,3 @@
-/* 0x0019c400 igPlanarShadowShader_Register: registers class igPlanarShadowShader with the object system, derived from igAttrSet.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igPlanarShadowShader_GetVTable[];
 extern char thunk_igPlanarShadowShader_GetMetaObject[];
 extern char igAttrSet_GetPublishedMetaObject[];
@@ -15,16 +12,16 @@ int igPlanarShadowShader_InitFields();
 void igPlanarShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPlanarShadowShader_metaObject, /* published MetaObject slot */
-        igAttrSet_Register,                         /* base class registrar */
-        igAttrSet_GetPublishedMetaObject,  /* base class MetaObject accessor */
-        thunk_igPlanarShadowShader_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igPlanarShadowShader_className,  /* class name */
-        0x70,                                       /* instance size */
-        igPlanarShadowShader_GetVTable,             /* vtable getter */
-        &igPlanarShadowShader_InitFields,           /* field adder */
-        0,                                          /* extra callback item */
-        g_igPlanarShadowShader_callbackList  /* callback list */
+        0, /* abstract */
+        g_igPlanarShadowShader_metaObject,
+        igAttrSet_Register,
+        igAttrSet_GetPublishedMetaObject,
+        thunk_igPlanarShadowShader_GetMetaObject,
+        igPlanarShadowShader_className,
+        0x70, /* instance size */
+        igPlanarShadowShader_GetVTable,
+        &igPlanarShadowShader_InitFields,
+        0, /* extra callback item */
+        g_igPlanarShadowShader_callbackList /* callback list */
     );
 }

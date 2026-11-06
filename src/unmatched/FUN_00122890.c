@@ -1,4 +1,4 @@
-/* Returns 1 when the double argument is an infinity (newlib isinf shape; name is a hypothesis). */
+/* Returns 1 when the double argument is an infinity. */
 typedef union DoubleWords {
     double value;
     struct {

@@ -6,7 +6,6 @@ struct Area2a8b50 {
     int f8;
 };
 
-/* Sector index (2048-byte units) of position from the area base, or 0 at the area's end address. */
 int FUN_002a8b50(struct Area2a8b50 *area, int position) {
     if (position == ((area->f8 * 16 + area->f4 + 16) & 0x0FFFFFFF)) {
         return 0;

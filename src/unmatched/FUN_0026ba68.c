@@ -2,7 +2,7 @@
  * applies DAT_004a8e48 through FUN_0026a300, resets it (FUN_0026a2f0, FUN_0026a140, FUN_0026a238,
  * FUN_0026a0a0), starts it with FUN_00269ff0 and FUN_0026a1b0, then calls FUN_0026b978(object,
  * field 16). */
-/* Request layout shared by FUN_00269ff0 … FUN_0026a300 (offsets from their accesses). */
+/* Request layout shared by FUN_00269ff0 through FUN_0026a300. */
 typedef struct Request_269ff0 {
     char used;          /* 0x00: entries of DAT_004a7f10 with used == 1 are serviced by FUN_0026a908 */
     char state;         /* 0x01: 2 or 3 after FUN_0026a178 (by sectors), polled for 1 by FUN_0026a2a0 */

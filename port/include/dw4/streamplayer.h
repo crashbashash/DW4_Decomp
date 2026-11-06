@@ -1,10 +1,9 @@
-/* dw4/streamplayer.h — what the retail stream player does with one music or ambience request (beCri, FUN_0037c2c0), as a pure function.
- *
- * A request carries a beSoundData type (1 music, 2 ambience; the player only handles those) and memory index (-1 for an ADX file). When the
- * slot's voice is still playing the request does not start: it arms a fade-down of the playing track (only if no ramp runs) and returns 0,
- * and the caller retries later. Otherwise it sets the voice level to volume + base, starts the file and, on success, returns the next
- * request id. tools/verify_streamplayer.py compares this function with the original instructions.
- */
+/* What the retail stream player does with one music or ambience request (beCri, FUN_0037c2c0), as
+ * a pure function. A request carries a beSoundData type (1 music, 2 ambience; the player only
+ * handles those) and memory index (-1 for an ADX file). When the slot's voice is still playing the
+ * request does not start: it arms a fade-down of the playing track (only if no ramp runs) and
+ * returns 0, and the caller retries later. Otherwise it sets the voice level to volume + base,
+ * starts the file and, on success, returns the next request id. */
 #ifndef DW4_STREAMPLAYER_H
 #define DW4_STREAMPLAYER_H
 #include <stdint.h>

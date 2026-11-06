@@ -326,10 +326,11 @@ int dw4_combat_tick(dw4_combat *c,int64_t now_ns,dw4_modelctrl *const players[4]
     if(c->binding_failed){snprintf(error,cap,"combat: %.140s",c->error);return -1;}
     return 0;
 }
-/* Technique bullet volume (docs/combat.md "Technique firing"): an attack number 40000+base goes to the enemy and prop receivers through the same
- * player-bullet rules as a weapon volume. A support number (80000+base) is the caster's own: it is offered to the caster's body as an enemy-group
- * bullet (the player's hit data takes that group only) so hit_p_<species>.lua runs its 80000 branch, which reaches BLPcalcKoukaMagic (p2p_magic).
- * Returns the contacts, or -1. */
+/* Technique bullet volume: an attack number 40000+base goes to the enemy and prop receivers
+ * through the same player-bullet rules as a weapon volume. A support number (80000+base) is the
+ * caster's own: it is offered to the caster's body as an enemy-group bullet (the player's hit data
+ * takes that group only) so hit_p_<species>.lua runs its 80000 branch, which reaches
+ * BLPcalcKoukaMagic (p2p_magic). Returns the contacts, or -1. */
 int dw4_combat_fire(dw4_combat *c,int64_t now_ns,int32_t slot,dw4_modelctrl *caster,int32_t attack,const float world[16],const float offset[3],const float size[3],char *error,size_t cap)
 {
     if(!c || slot<0 || slot>3)return 0;
@@ -401,10 +402,13 @@ static int erase_model(dw4_combat *c,int32_t slot)
     if(dw4_modelctrl_service(p,"sd",rm,4,&r,error,sizeof error)){snprintf(c->error,sizeof c->error,"KO: erasing player %d: %.100s",(int)slot,error);return -1;}
     return 0;
 }
-/* The Raise receiver (0x3d50c0) generates the PLAYER model at the caster's matrix with SQ_CMBK. The KO flow erased the model with the capsule, so the revive is
- * the same GENERATE (caster position and yaw, sequence): SQ_CMBK is `MUTEKI 120`, the REVE*1 action, JUMP SQ_CMBK02 (REVE*2), then SQ_WAIT, in the weapon section of
- * the player's SQ_WAIT. A model that was never erased (a fixture's set_downed) is moved and sent the sequence instead; a pack without SQ_CMBK falls back to SQ_WAIT.
- * The sparkle ring at the capsule is not reproduced: no recovered code or script names it (docs/combat.md "KO, the capsule and game over"). */
+/* The Raise receiver (0x3d50c0) generates the PLAYER model at the caster's matrix with SQ_CMBK.
+ * The KO flow erased the model with the capsule, so the revive is the same GENERATE (caster
+ * position and yaw, sequence): SQ_CMBK is `MUTEKI 120`, the REVE*1 action, JUMP SQ_CMBK02
+ * (REVE*2), then SQ_WAIT, in the weapon section of the player's SQ_WAIT. A model that was never
+ * erased (a fixture's set_downed) is moved and sent the sequence instead; a pack without SQ_CMBK
+ * falls back to SQ_WAIT. The sparkle ring at the capsule is not reproduced: no recovered code or
+ * script names it. */
 static int revive_model(dw4_combat *c,int32_t slot,int32_t caster,const float where[3])
 {
     dw4_modelctrl *p=c->players[slot],*cm=c->players[caster];
@@ -491,8 +495,9 @@ int dw4_combat_cast_support(dw4_combat *c,int32_t receiver,int32_t shooter,int32
     dw4_combat_view own;dw4_magic m;dw4_magic_group g;
     if(!c || !result || receiver<0 || receiver>3 || shooter<0 || shooter>3){if(c)snprintf(c->error,sizeof c->error,"support: invalid slots %d/%d",(int)receiver,(int)shooter);return -1;}
     c->error[0]=0;
-    /* Case 20 appends 1 only for a self hit; for receiver != shooter nothing is appended and the first integer (the receiver) is read back. The
-     * script passes the number on to BLTcalcSkillUp, which ignores it. The read-back value is an inference (docs/combat.md). */
+    /* Case 20 appends 1 only for a self hit; for receiver != shooter nothing is appended and the
+     * first integer (the receiver) is read back. The script passes the number on to
+     * BLTcalcSkillUp, which ignores it. The read-back value is an inference. */
     *result=receiver==shooter?1:receiver;
     if(receiver!=shooter)return 0;
     if(!view){dw4_combat_view_current(c,&own);view=&own;}

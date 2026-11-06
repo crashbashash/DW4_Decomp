@@ -14,7 +14,7 @@ extern int DAT_00586f20[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* owning reference to the new message; the destructor drops one reference and destroys at zero (retail 0x37e250, the table's cleanup) */
+/* Owning reference to the new message; the destructor drops one reference and destroys at zero. */
 struct RP { beDemoKeepMes *p; ~RP() { beDemoKeepMes *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 #define POOL(v) if (DAT_00586f20[0] == 0) { v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); DAT_00586f20[0] = v; }
 #define SETSTR(fld, arg) { int *nw; beDemoKeepMes *c = e.p; POOL(v) nw = (int *)StringPool_Intern(DAT_00586f20[0], arg); old = (int *)c->fld; if (old != 0) { hd = old - 2; r = old[-1] - 1; old[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } c->fld = (int)nw; }

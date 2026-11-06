@@ -1,6 +1,4 @@
-/* FUN_0011e300 -- fdlibm __ieee754_sqrt(x): correctly rounded square root, generated bit by bit on the
- * integer words (an upper-half pass over [q] then a lower-half pass over [q1]), with a floating
- * add to pick the rounding direction. */
+/* fdlibm __ieee754_sqrt(x). */
 #include "dw4/ieee_words.h"
 
 #define one 1.0

@@ -1,7 +1,6 @@
 /* Stores an ADXT handle's output balance (+70) clamped to -15..15 and applies it to its renderer
  * (+12) with FUN_00265df8, or -128 while the override DAT_0049c8e8 is set; a NULL handle is
- * reported through FUN_002607e8. Its error string names it ADXT_SetOutBalance (CRI), a name
- * hypothesis. */
+ * reported through FUN_002607e8. */
 typedef struct Adxt_26c5a8 {
     char pad0[12];
     int renderer;       /* 0x0c */

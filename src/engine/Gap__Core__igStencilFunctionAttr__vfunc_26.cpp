@@ -1,8 +1,5 @@
-/* 0x001403e0
- * Copy step between two stencil-function attributes: two virtual getters on `source`
- * (vtable byte offsets 648 and 656) are passed to two setters on `self` (offsets 128
- * and 136). The attribute's stencil-state fields are in include/dw4/reflected.h
- * (igStencilFunctionAttr); which field each slot pair maps to is not established. */
+/* Copy step between two stencil-function attributes: two virtual getters on `source` (vtable byte
+ * offsets 648 and 656) are passed to two setters on `self` (offsets 128 and 136). */
 #include "dw4/reflected.h"
 extern "C" {
 

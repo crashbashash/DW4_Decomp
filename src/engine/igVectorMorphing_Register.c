@@ -1,6 +1,3 @@
-/* 0x00186e50 igVectorMorphing_Register: registers class igVectorMorphing with the object system, derived from igObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igVectorMorphing_GetVTable[];
 extern char thunk_igVectorMorphing_GetMetaObject_00186ec0[];
@@ -12,17 +9,17 @@ int FUN_00186a40();
 int igMetaObject_RegisterClass();
 
 void igVectorMorphing_Register(void) {
-    FUN_00186a40();  /* set-once guard (gp-relative byte flag) that chains to sibling registrars (asm/FUN_00186a40.s) */
+    FUN_00186a40();  /* Set-once guard (gp-relative byte flag) that chains to sibling registrars. */
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igVectorMorphing_metaObject,        /* published MetaObject slot */
-        igObject_Register,                             /* base class registrar */
-        igObject_GetMetaObject_ParentAccessor,         /* base class MetaObject accessor */
-        thunk_igVectorMorphing_GetMetaObject_00186ec0, /* own MetaObject accessor (stored at +0x54) */
-        igVectorMorphing_className,         /* class name */
-        8,                                             /* instance size */
-        igVectorMorphing_GetVTable,                    /* vtable getter */
-        0,                                             /* field adder */
+        0, /* abstract */
+        g_igVectorMorphing_metaObject,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
+        thunk_igVectorMorphing_GetMetaObject_00186ec0,
+        igVectorMorphing_className,
+        8, /* instance size */
+        igVectorMorphing_GetVTable,
+        0,
         FUN_00186ed0,                                  /* static-initializer callback item (appended on fresh configuration) */
         0                                              /* 0-terminated dependency-callback list */
     );

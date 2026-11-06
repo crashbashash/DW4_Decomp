@@ -8,7 +8,7 @@ int igMetaObject_CreateFields();
 void *igMetaObject_GetFieldAt();
 int igMetaObject_GetFieldCount();
 int igMetaObject_NameFields();
-void thunk_igGeometryAttr1_5_GetMetaObject(void); /* address-taken; signature not recovered */
+void thunk_igGeometryAttr1_5_GetMetaObject(void);
 extern int DAT_004865a0[4];
 extern int DAT_004865d0[4];
 extern int DAT_00486600[4];

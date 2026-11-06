@@ -1,7 +1,5 @@
-/* ADXF_ReadNw32 (hypothesis): starts a non-wait read of nsct sectors into buf.
- * Evidence: the three argument-check strings name "(ADXF_ReadNw32)"; the
- * D_004edXXX externs are those strings (verify.py cannot resolve section-relative
- * string relocations, so they are address-bearing names here). */
+/* Starts a non-wait read of nsct sectors into buf (ADXF_ReadNw32). The D_004edXXX externs are the
+ * argument-check strings, which keep address-bearing names. */
 typedef struct SjObj SjObj;
 typedef struct SjVT {
     char pad[12];

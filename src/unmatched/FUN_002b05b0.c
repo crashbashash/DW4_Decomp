@@ -1,7 +1,7 @@
 /* Unless paused (+12), advances the 64-bit accumulator at +296 by f304 * rate->f0 / rate->f8
  * (64-bit; GCC emits __muldi3 at 0x0022e440 and __divdi3). */
 
-/* long is 64-bit under EE GCC; the ld/sd accesses show these members are 64-bit. */
+/* long is 64-bit under EE GCC, so these members are 64-bit. */
 struct Accum {
     char pad[12];
     int f12;                              /* non-zero: no advance */

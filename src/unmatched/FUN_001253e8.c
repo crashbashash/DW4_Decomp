@@ -1,5 +1,4 @@
-/* FUN_001253e8 -- newlib _free_r(reent, mem): return a chunk to the allocator, merging with free
- * neighbours and the top chunk (see newlib_mallocr.h). */
+/* newlib _free_r(reent, mem). */
 #include "dw4/newlib_mallocr.h"
 
 void FUN_001253e8(Reent *reent_ptr, void *mem)

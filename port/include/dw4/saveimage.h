@@ -1,6 +1,6 @@
-/* PS2 save-file translation: the 81,920-byte BASLUS-20836savedata image (two mirrored 0xA000 blocks) and one
- * player's GAMERAM records. Serializer 3ee6d0 (records -> deliver struct) and loader 3ef5d0 (struct -> records),
- * item ids from the beNDMWItem* vfunc_23/24 pairs. Layout and evidence: port/docs/save-image.md. */
+/* PS2 save-file translation: the 81,920-byte BASLUS-20836savedata image (two mirrored 0xA000
+ * blocks) and one player's GAMERAM records. Serializer 3ee6d0 (records -> deliver struct) and
+ * loader 3ef5d0 (struct -> records), item ids from the beNDMWItem* vfunc_23/24 pairs. */
 #ifndef DW4_SAVEIMAGE_H
 #define DW4_SAVEIMAGE_H
 #include "dw4/playerrecords.h"

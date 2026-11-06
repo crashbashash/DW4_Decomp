@@ -1,6 +1,6 @@
 /* Parses three 16-bit values out of a string with FUN_0025d0b8 and stores them in f160/f162/f164
  * of the decoder block. */
-/* CRI ADX decoder block as this function touches it; field meanings are not yet known */
+/* CRI ADX decoder block, limited to the fields this function touches. */
 typedef struct DecoderBlock {
     short f0;
     short state;

@@ -1,5 +1,3 @@
-/* Typed struct fields (no address CSE of base+16) and a typed element array for the stride-4
- * table. */
 typedef struct N { int pad[3]; int f12; int f16; struct N *f20; } N;
 extern N *DAT_00568f60[];
 extern int DAT_005691b8[4];

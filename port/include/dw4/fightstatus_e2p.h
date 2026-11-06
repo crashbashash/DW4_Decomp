@@ -1,9 +1,10 @@
-/* Enemy-to-player status rules of FIGHTCALC (FightCom E2PSTUNTIME, E2PPOISONTIME, E2PSLEEPTIME, E2PBINDTIME, E2PATKDWNTIME,
- * E2PPOWDWNTIME; source cases 7-12 of the second switch of beNDMWGameRam::vfunc_34). Formulas and unresolved items: docs/combat.md,
- * "Enemy-to-player status rules". Every random draw uses the one engine stream as `next % n`, unsigned, in source order.
- * Not compared against a retail run. Return value of every rule: -1 on missing data or a zero divisor, 0 with *out set to the
- * integer the retail rule appends to the messenger, 1 when the retail rule appends nothing (unrecognised mode string). Where the
- * retail rule yields 0 for an effect that failed to land, `*out` is 0; where an effect landed but rounds to 0 it is -1. */
+/* Enemy-to-player status rules of FIGHTCALC (FightCom E2PSTUNTIME, E2PPOISONTIME, E2PSLEEPTIME,
+ * E2PBINDTIME, E2PATKDWNTIME, E2PPOWDWNTIME; source cases 7-12 of the second switch of
+ * beNDMWGameRam::vfunc_34). Every random draw uses the one engine stream as `next % n`, unsigned,
+ * in source order. Return value of every rule: -1 on missing data or a zero divisor, 0 with *out
+ * set to the integer the retail rule appends to the messenger, 1 when the retail rule appends
+ * nothing (unrecognised mode string). Where the retail rule yields 0 for an effect that failed to
+ * land, `*out` is 0; where an effect landed but rounds to 0 it is -1. */
 #ifndef DW4_FIGHTSTATUS_E2P_H
 #define DW4_FIGHTSTATUS_E2P_H
 #include "dw4/fightcalc.h"
@@ -30,6 +31,6 @@ int dw4_fight_e2p_status_bind(const dw4_fight_e2p_ctx *,int32_t row,int32_t atta
 int dw4_fight_e2p_status_atkdown(const dw4_fight_status_ctx *,const char *mode,int32_t row,int32_t attack,int32_t *out);
 /* Case 12 E2PPOWDWNTIME, mode "TIME" | "TSUYOSA" | "MAMORI". */
 int dw4_fight_e2p_status_powdown(const dw4_fight_status_ctx *,const char *mode,int32_t row,int32_t attack,int32_t *out);
-/* Retail tables 0x4cf5d8/e0/e8/f0: one word each, zero in the retail image (see docs/combat.md). */
+/* Retail tables 0x4cf5d8/e0/e8/f0: one word each, zero in the retail image. */
 extern const int32_t dw4_fight_status_down_value[4];
 #endif

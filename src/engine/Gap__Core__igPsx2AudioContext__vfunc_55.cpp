@@ -1,10 +1,7 @@
-/* 0x001452b0 — igPsx2AudioContext vtable slot 55.
- * Forwards the request to FUN_00300db0 (its asm fetches an object through
- * 0x301000 and calls that object's method at vtable offset 220 with the same
- * arguments), passing the context itself, the caller's value, and the result
- * of the context's own virtual method at vtable offset 132 as the third
- * argument.  The result is returned with bit 29 (0x20000000) set; the meaning
- * of that tag is not established, so it is kept as the literal. */
+/* IgPsx2AudioContext vtable slot 55. Forwards the request to FUN_00300db0, passing the context
+ * itself, the caller's value, and the result of the context's own virtual method at vtable offset
+ * 132 as the third argument. The result is returned with bit 29 (0x20000000) set; the meaning of
+ * that tag is not established, so it is kept as the literal. */
 extern "C" {
 int FUN_00300db0(...);
 int Gap__Core__igPsx2AudioContext__vfunc_55(void **self, int value);

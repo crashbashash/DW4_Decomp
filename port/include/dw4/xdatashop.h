@@ -1,5 +1,4 @@
-/* Native XDATA shop controller: retail beNDMWShopCtrl10 update 4270a0..42860c.
- * Evidence and open boundaries: port/docs/xdata-shop.md. */
+/* Native XDATA shop controller: retail beNDMWShopCtrl10 update 4270a0..42860c. */
 #ifndef DW4_XDATASHOP_H
 #define DW4_XDATASHOP_H
 #include "dw4/statusview.h"

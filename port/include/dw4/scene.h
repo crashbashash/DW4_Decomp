@@ -273,9 +273,9 @@ uint32_t dw4_scene_node_mesh(const dw4_scene *s, uint32_t node);
 /* The `igImage` id the node's material binds: the node's nearest `igAttrSet` ancestor's
  * `_attributes` chain (igTextureBindAttr -> igTextureAttr -> igImage), or 0 when it binds none.
  * This is the pack's own binding, not a name convention. */
-/* The texture-coordinate offset a node inherits from an `igTransform` whose `_target` is 9 (finding
- * #716): the translation of that transform's local matrix at the scene's current time.  Returns 1 and
- * fills `*du`/`*dv` when the node has such an ancestor, else 0 (and 0, 0). */
+/* The texture-coordinate offset a node inherits from an `igTransform` whose `_target` is 9: the
+ * translation of that transform's local matrix at the scene's current time. Returns 1 and fills
+ * `*du`/`*dv` when the node has such an ancestor, else 0 (and 0, 0). */
 int dw4_scene_node_uv_offset(const dw4_scene *s, uint32_t node, float *du, float *dv);
 
 /* Whether the GS fog stage applies to a node: its own or nearest ancestor's `igFogStateAttr._enabled`.

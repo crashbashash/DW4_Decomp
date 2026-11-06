@@ -1,5 +1,5 @@
-/* Sibling of FUN_002f1e30; the unsigned __int128 argument and the allocator-alias virtual call are
- * written inline in the call (spills the 128-bit value like retail); alternate compiler. */
+/* The unsigned __int128 argument and the allocator-alias virtual call are written inline in the
+ * call, which spills the 128-bit value. */
 extern "C" {
 int FUN_002e2190(int *, int, int, int, unsigned __int128, int, int, int, long long, long long, long long, long long);
 int FUN_002e2300(...);

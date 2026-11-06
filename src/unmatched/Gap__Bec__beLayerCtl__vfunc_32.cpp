@@ -1,7 +1,6 @@
 #include "dw4/reflected.h"
-/* list-like object at +28 of the layer switch; count at +8 (class not identified) */
+/* List-like object at +28 of the layer switch, with its count at +8. */
 typedef struct UnidentifiedCountedList { char pad[8]; int cnt; } UnidentifiedCountedList;
-/* the object held in beLayerCtl._layerSwt (no reflected class found for it) */
 typedef struct LayerSwtObject { int w0; int refs; char pad[20]; UnidentifiedCountedList *list; } LayerSwtObject;
 extern "C" {
 int FUN_001dc9a0(LayerSwtObject *, int);

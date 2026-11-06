@@ -1,6 +1,4 @@
-/* Class-handle getter: returns the metaobject pointer cached in the global at 0x55fa90 (the
- * igVertexArray1_1 handle slot, filled in by its registrar). Same accessor idiom as the other
- * `*_metaObject_<addr>` getters in this folder. */
+/* Returns the metaobject of igVertexArray1_1, not of igVertexArray2. */
 extern int g_igVertexArray1_1_metaObject[4];
 int Gap__Core__igVertexArray2__vfunc_50(void) {
     return g_igVertexArray1_1_metaObject[0];

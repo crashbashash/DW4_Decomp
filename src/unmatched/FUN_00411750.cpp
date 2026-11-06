@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_003f5410(int *, int *, int *, int *, int *);
 extern int * DAT_004cf670[4];
@@ -31,4 +29,4 @@ void FUN_00411750(int *arg0) {
     FUN_003f5410(arg0, &DAT_00519db0[0], &DAT_00519dd8[0], &DAT_00519b60[0], &DAT_00519b68[0]);
     FUN_003f5410(arg0, &DAT_00519b50[0], &DAT_00519d98[0], &DAT_00519b60[0], &DAT_00519b68[0]);
 }
-} /* extern "C" */
+}

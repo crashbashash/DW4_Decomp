@@ -1,5 +1,5 @@
-/* 0x0038d820 — registers the receiver of an info record (falling back to the default receiver) with the messenger. C++ keeps the
- * call a real jal (the C front end turns a trailing call into a tail jump); the ternary gives the empty-then / branch-over shape. */
+/* C++ keeps the call a real jal (C turns a trailing call into a tail jump); the ternary gives the
+ * empty-then / branch-over shape. */
 #include "dw4/reflected.h"
 extern "C" {
 int beMessenger_RegisterReceiver(int, beBaseInfoRam *, int, int *, int);

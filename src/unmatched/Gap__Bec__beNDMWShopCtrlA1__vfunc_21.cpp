@@ -65,11 +65,9 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0);
 }
-/* Owning stack reference to a sub-window of one of the four window classes opened here (kind 0..3 in
- * textual order: FUN_003b4b10, FUN_003b7a40, FUN_003b4950, FUN_003b4250): constructed from the factory
- * result and released on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line
- * copies the exception table names are the retail bodies 0x0042d350, 0x0042def0, 0x0042de70 and
- * 0x0042ddf0 (config/SLUS-20836/unit-objects.json, duplicates __dt__12WindowRef<0>Fv .. __dt__12WindowRef<3>Fv). */
+/* Owning stack reference to a sub-window of one of the four window classes opened here (kind 0..3
+ * in textual order); constructed from the factory result and released on scope exit (reference
+ * count in the low 23 bits of _refCount). */
 template <int kind> class WindowRef {
 public:
     igObject *p;

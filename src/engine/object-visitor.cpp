@@ -1,4 +1,4 @@
-/* Exact callback-driven object/field traversal; virtual types project observed ABI slots. */
+/* Callback-driven object and field traversal; the virtual types project observed ABI slots. */
 #include "dw4/reflected.h"
 class VisitorObjectView {public:
 virtual void o0();

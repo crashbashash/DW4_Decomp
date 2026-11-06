@@ -1,8 +1,7 @@
-/* 0x00458180
- * Model type check: asks whether `model` is an igGuiComponentModel (or a
- * subclass), via igObject_IsKindOf, the generic class-membership test.  The result
- * is not used here; it stays in the return register (v0).  Same body as
- * igGuiComponentController::vfunc_23 (slot 23 of both vtables). */
+/* Model type check: asks whether `model` is an igGuiComponentModel (or a subclass), via
+ * igObject_IsKindOf, the generic class-membership test. The result is not used here; it stays in
+ * the return register (v0). Same body as igGuiComponentController::vfunc_23 (slot 23 of both
+ * vtables). */
 #include "dw4/reflected.h"
 int igObject_IsKindOf();
 int igGuiComponentModel_GetMetaObject();

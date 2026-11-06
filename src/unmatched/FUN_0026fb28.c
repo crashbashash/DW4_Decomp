@@ -3,7 +3,7 @@
 typedef struct CvFsDevEntry_26fb28 {
     void *device;   /* 0x00: interface table */
     char name[12];  /* 0x04 */
-} CvFsDevEntry_26fb28;  /* 0x10 bytes */
+} CvFsDevEntry_26fb28;
 
 extern CvFsDevEntry_26fb28 DAT_0056e220[32];
 int FUN_0012aba0(const char *a, const char *b, int length);

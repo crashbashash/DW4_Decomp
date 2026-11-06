@@ -1,5 +1,3 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 long long __divdi3(long long, int);
 int beMessenger_AppendFloat(int, float);
@@ -26,7 +24,7 @@ extern int DAT_00515a80[4];
 extern int DAT_00515a88[4];
 extern int DAT_00515a98[4];
 #include "dw4/reflected.h"
-/* property record: integer value at +12 (record class not recovered) */
+/* Property record: integer value at +12. */
 struct PropertyRecordInt { char p[12]; int value; };
 void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2) {
     int temp_s2;
@@ -65,4 +63,4 @@ void Gap__Bec__beNDMWPanelObjectWaza__vfunc_22(beNDMWPanelObjectWaza *arg0, int 
     beMessenger_AppendString(arg0->_messenger, &DAT_00515a98[0]);
     beMessenger_DispatchSelected(arg0->_messenger, &DAT_005159d8[0]);
 }
-} /* extern "C" */
+}

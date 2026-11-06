@@ -1,9 +1,7 @@
-/* Checked-cast helper shared by the field-copy accessors (FUN_0022ce90 family).
- * `FUN_00300cd0(obj, meta)` is the runtime "is this object of that meta type"
- * test (igObject::isOfType); the helper returns the object when the test passes
- * and null otherwise.  It must stay an inlined static helper in a header: the
- * retail code has the test expanded inline (a `b` over the null arm), and
- * `tools/units.py` drops static helpers that sit in a unit file. */
+/* Checked-cast helper shared by the field-copy accessors. `FUN_00300cd0(obj, meta)` is the runtime
+ * "is this object of that meta type" test (igObject::isOfType); the helper returns the object when
+ * the test passes and null otherwise. It must stay an inlined static helper in a header: the
+ * retail code has the test expanded inline (a `b` over the null arm). */
 #ifndef DW4_TYPECAST_H
 #define DW4_TYPECAST_H
 #ifdef __cplusplus

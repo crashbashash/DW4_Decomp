@@ -1,6 +1,4 @@
 /* reference-counted engine object header: refcount word at +4 */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct RefCountedHeader { char pad4[4]; int f4; } RefCountedHeader;
 #include "dw4/reflected.h"
@@ -26,4 +24,4 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_32(beNDMWSaveIntf *arg0) {
         arg0->_padManager = (int)temp_v0;
     }
 }
-} /* extern "C" */
+}

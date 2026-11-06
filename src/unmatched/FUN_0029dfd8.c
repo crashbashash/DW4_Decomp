@@ -17,7 +17,6 @@ struct Reader29dfd8 {
     struct Cursor cursor;                 /* +24 */
 };
 
-/* Drops the cursor when it no longer points into either mapped chunk of the ring. */
 void FUN_0029dfd8(struct Reader29dfd8 *reader) {
     struct Cursor *cursor = &reader->cursor;
     struct Chunk first;

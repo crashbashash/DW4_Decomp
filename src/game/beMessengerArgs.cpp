@@ -1,12 +1,8 @@
-/* src/game/beMessengerArgs.cpp - beMessenger argument append and string getters Siblings of the
- * result-channel accessors in beMessengerResults.cpp: each Append* grows one typed list of the
- * messenger's beMessengerArgData (bool/int/float/vec3/matrix/string) by one element. The unit is
- * C++ with exceptions on (retail keeps an exception index record for every function here), built
- * by the combat compiler with `-O3,p`; the ordinary compiler lacks the original branch-alignment
- * word after the in-capacity increment. The C-ABI names stay unmangled through the extern "C"
- * block. AppendInt/AppendFloat re-read the list count for the in-capacity increment (retail loads
- * it a second time rather than reusing the index), which is spelled with a volatile read.
- * Functions are in retail address order. */
+/* Siblings of the result-channel accessors: each Append* grows one typed list of the messenger's
+ * beMessengerArgData (bool/int/float/vec3/matrix/string) by one element. C++ with exceptions on;
+ * the C-ABI names stay unmangled through the extern "C" block. AppendInt/AppendFloat re-read the
+ * list count for the in-capacity increment (retail loads it a second time rather than reusing the
+ * index), which is spelled with a volatile read. */
 #include "dw4/reflected.h"
 
 /* Header in front of every interned string token: the owning chunk, then the token's reference
@@ -24,7 +20,6 @@ int FUN_002eb010(int);   /* allocator for the 16-byte string pool object */
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
 void StringChunk_ReleaseHeader(int, void *);
-/* The shared string pool, created on first use. */
 extern int g_stringPool[4];
 void beMessenger_AppendBool(beMessenger *self, char value);
 void beMessenger_AppendInt(beMessenger *self, int value);
@@ -35,10 +30,9 @@ void beMessenger_AppendString(beMessenger *self, const char *text);
 int beMessenger_GetString(beMessenger *self, int index);
 }
 
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  AppendString binds one to the list-append call as a temporary;
- * the out-of-line copy its exception table names is the retail body StringRef_Destruct_00130720
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]): releases the token on scope exit. AppendString binds one to the list-append call as a
+ * temporary. Its destructor is emitted out of line. */
 class StringRef {
 public:
     int p;
@@ -48,7 +42,6 @@ public:
 /* The list takes its own reference to the token it is handed. */
 extern "C" void StringList_AppendRetained(void *, const StringRef &);
 
-/* 0x0038f150: append value to the messenger's bool list, growing it when full. */
 void beMessenger_AppendBool(beMessenger *self, char value)
 {
     int index;
@@ -63,7 +56,6 @@ void beMessenger_AppendBool(beMessenger *self, char value)
     ((char *)list->_data)[index] = value;
 }
 
-/* 0x0038f250: append value to the messenger's int list, growing it when full. */
 void beMessenger_AppendInt(beMessenger *self, int value)
 {
     int index;
@@ -78,7 +70,6 @@ void beMessenger_AppendInt(beMessenger *self, int value)
     ((int *)list->_data)[index] = value;
 }
 
-/* 0x0038f350: append value to the messenger's float list, growing it when full. */
 void beMessenger_AppendFloat(beMessenger *self, float value)
 {
     int index;
@@ -93,7 +84,6 @@ void beMessenger_AppendFloat(beMessenger *self, float value)
     ((float *)list->_data)[index] = value;
 }
 
-/* 0x0038f4b0: append value to the messenger's vec3 list (copies three floats), growing it when full. */
 void beMessenger_AppendVec3(beMessenger *self, float *value)
 {
     int index;
@@ -112,7 +102,6 @@ void beMessenger_AppendVec3(beMessenger *self, float *value)
     slot[2] = value[2];
 }
 
-/* 0x0038f5b0: append value to the messenger's matrix list (copies 64 bytes with Matrix44_Copy), growing it when full. */
 void beMessenger_AppendMatrix(beMessenger *self, void *value)
 {
     int index;
@@ -127,9 +116,9 @@ void beMessenger_AppendMatrix(beMessenger *self, void *value)
     Matrix44_Copy((char *)list->_data + index * 64, value);
 }
 
-/* 0x0038f830: intern the text in the shared string pool, append the token to
- * the string list (which takes its own reference) and drop the temporary one
- * when the StringRef bound to the call goes out of scope. */
+/* Intern the text in the shared string pool, append the token to the string list (which takes its
+ * own reference) and drop the temporary one when the StringRef bound to the call goes out of
+ * scope. */
 void beMessenger_AppendString(beMessenger *self, const char *text)
 {
     int token;
@@ -149,8 +138,8 @@ void beMessenger_AppendString(beMessenger *self, const char *text)
     StringList_AppendRetained((void *)((beMessengerArgData *)self->_argData)->_stringList, StringRef(token));
 }
 
-/* 0x0038f8f0: return the string token at index.  The list copy is retained
- * and released again here, so the result is borrowed from the list. */
+/* Return the string token at index. The list copy is retained and released again here, so the
+ * result is borrowed from the list. */
 int beMessenger_GetString(beMessenger *self, int index)
 {
     int slot;

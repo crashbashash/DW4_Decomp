@@ -1,6 +1,5 @@
 /* Runs FUN_00124e10 over every stream of the state block through the walker FUN_00125c90;
- * installed as the block's cleanup hook by FUN_00125138. The shape of newlib's _cleanup_r
- * (hypothesis). */
+ * installed as the block's cleanup hook by FUN_00125138. */
 void FUN_00125c90(void *state, int (*fn)());
 int FUN_00124e10();
 

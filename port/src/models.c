@@ -1,4 +1,3 @@
-/* dw4/models.c — see include/dw4/models.h for the format and the findings behind it. */
 #include "dw4/models.h"
 
 #include "dw4/mesh.h"
@@ -27,7 +26,6 @@ static uint32_t rd32(const uint8_t *p)
     return (uint32_t)p[0] | ((uint32_t)p[1] << 8) | ((uint32_t)p[2] << 16) |
            ((uint32_t)p[3] << 24);
 }
-
 
 /* Does the record at `rec` have this class?  The class index is the record's first word. */
 static int class_is(const dw4_models *m, uint32_t rec, const char *name)
@@ -282,8 +280,8 @@ int dw4_models_tris(const dw4_models *m, const dw4_model *g, uint32_t **tris, ui
     const uint8_t *lengths = NULL;
     uint32_t off = 0, len = 0;
 
-    /* The triangle rule and the OBJ text live in src/mesh.c, shared with the scene loader so the
-     * two front ends cannot drift (the check in tools/verify_scene.py diffs them). */
+    /* The triangle rule and the OBJ text live in mesh.c, shared with the scene loader so the two
+     * front ends cannot drift. */
     if (g->prim_type == 4 && g->lengths_id &&
         dw4_igb_ref(&m->igb, g->lengths_id, &off, &len) == 1)
         lengths = m->b + off;

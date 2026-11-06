@@ -1,7 +1,3 @@
-/* Look an enum value up by its name; 0x002fba30, 260 bytes.
- * Walks the names list, comparing each retained name with igStrCmp. On a hit the
- * matching entry of the values list is stored through `value` and the success
- * status is written to `status`; otherwise the not-found status is written. */
 #include "dw4/reflected.h"
 
 typedef struct NameList {

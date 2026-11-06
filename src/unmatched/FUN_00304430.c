@@ -1,4 +1,3 @@
-/* 0x00304430 - 100 bytes. Varargs forwarder (va_start via __builtin_args_info/next_arg); alternate compiler -O3. */
 int FUN_003044a0();
 void FUN_00304430(int arg0, ...) {
     int n = __builtin_args_info(2);

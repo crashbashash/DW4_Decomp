@@ -1,9 +1,8 @@
-/* FUN_0039a250 (0x0039a250, 560 bytes): beModelCtrlSubCom — append an effect sub-command.
- *
- * Build a beModelCtrlSCEffect (pooled allocator unless the global selector flag is clear), intern the
- * model and sequence names into it (releasing whatever the fresh record held), copy the offset and
- * rotation vectors, the two flags and the start frame, then append the record to the sub-command
- * list, which retains it; the creating reference is released on scope exit. */
+/* Appends an effect sub-command: builds a beModelCtrlSCEffect (pooled allocator unless the global
+ * selector flag is clear), interns the model and sequence names into it (releasing whatever the
+ * fresh record held), copies the offset and rotation vectors, the two flags and the start frame,
+ * then appends the record to the sub-command list, which retains it. The creating reference is
+ * released on scope exit. */
 #include "dw4/reflected.h"
 struct V { float x, y, z; };
 extern "C" {
@@ -21,9 +20,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, struct V *vb, char c1, char c2, float f);
 }
-/* Owning stack reference to the new effect record: constructed from the object and released on scope
- * exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table
- * names is the retail body 0x0039a480 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the new effect record, released on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class ObjectRef {
 public:
     beModelCtrlSCEffect *p;

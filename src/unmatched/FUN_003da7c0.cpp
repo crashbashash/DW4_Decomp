@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* 0x003da7c0 - panel slot step (companion of FUN_003dc590). Alternate compiler -O3,p. */
 extern "C" {
 int FUN_003d9ec0(...);
 int FUN_003da5f0(...);

@@ -7,7 +7,7 @@ typedef struct LscEntry_277b00 {
     int pad4[5];
     int status;         /* 0x18 */
     int done_bytes;     /* 0x1c */
-} LscEntry_277b00;      /* 0x20 bytes */
+} LscEntry_277b00;
 
 typedef struct Lsc_277b00 {
     signed char pad0;

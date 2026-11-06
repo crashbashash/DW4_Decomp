@@ -11,7 +11,6 @@ struct Stream2aa9f0 {
     int kind;                             /* +76 */
 };
 
-/* Advances the stream state once FUN_002aaab0 reports both inputs ready; returns the new state. */
 int FUN_002aa9f0(struct Stream2aa9f0 *stream) {
     int state = stream->state;
     int kind = stream->kind;

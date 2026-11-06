@@ -1,5 +1,5 @@
-/* beActionStarter::vfunc_34 - receiver lookup in two nested lists, then a messenger dispatch. C++ for the real virtual call (slot 20 dummies), the
- * volatile guard read keeps the second count load, the flag is declared before the loop index. Alternate compiler -O3,p. */
+/* The volatile guard read keeps the second count load, and the flag is declared before the loop
+ * index. Compiled as C++ for the real virtual call (20 dummy slots). */
 #include "dw4/reflected.h"
 extern "C" {
 void beMessenger_AppendBool(int, unsigned char);

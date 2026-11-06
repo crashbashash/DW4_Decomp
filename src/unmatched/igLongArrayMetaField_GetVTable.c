@@ -1,4 +1,3 @@
-/* stack-object GetVTable accessor with an inlined string release.py. */
 typedef struct { int *vt; int p1; int p2; char *str; int pad[12]; } Obj;
 int igMetaField_Init(void *);
 int StringChunk_ReleaseHeader();

@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 extern unsigned char GPR_00554a68;
 extern unsigned char GPR_00554a6c;
@@ -76,4 +74,4 @@ int FUN_00439aa0(beNDMWShopCtrlSales *self) {
     }
     return s1;
 }
-} /* extern "C" */
+}

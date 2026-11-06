@@ -1,9 +1,3 @@
-/* Load a Lua script file into the state's buffer and run it. Resolves the script name through a
- * locator object (FUN_00362f90 / FUN_0037f1b0; 2 = not found), opens it through a reader object
- * (FUN_00334dc0; v23 = open, v25 = read, v24 = close), reads the whole file into a fresh _lp
- * buffer, replaces the "[EOF]" marker's bracket by '0' to terminate the chunk and runs the text
- * with igLuaState_RunBuffer; -1 on any failure. Both helper objects live on the stack in owning
- * references whose releases the retail exception table records. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(igObject *);
@@ -25,18 +19,15 @@ extern unsigned char GPR_00554c14;
 }
 /* matching construct: dummy-virtual receiver for the reader's vtable calls */
 class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int v23(int, int *); virtual void v24(); virtual void v25(int, int, int); };
-/* Owning stack reference to the script locator (FUN_00362f90): released on scope exit (reference count
- * in the low 23 bits of _refCount).  The out-of-line copy the exception table names is the retail body
- * 0x0038abf0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the script locator; released on scope exit (reference count in the low
+ * 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;
     ObjectRef(igObject *o) : p(o) {}
     ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the script reader (FUN_00334dc0; hypothesis: a file stream, see the open /
- * read / close vtable calls): released on scope exit.  The out-of-line copy the exception table names is
- * the retail body 0x0038ab70 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ReaderRefFv). */
+/* Owning stack reference to the script reader; released on scope exit. */
 class ReaderRef {
 public:
     igObject *p;

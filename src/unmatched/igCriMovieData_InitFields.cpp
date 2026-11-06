@@ -1,6 +1,4 @@
-/* The draft's int stores at odd offset +38 are char stores. C++ translation unit: the unit
- * compiled with exceptions on and retail keeps this function's exception index record, which only
- * the C++ front end emits. */
+/* The stores at odd offset +38 are char stores. */
 #include "dw4/reflected.h"
 extern "C" {
 int igMetaObject_CreateFields(void *, int *, int);

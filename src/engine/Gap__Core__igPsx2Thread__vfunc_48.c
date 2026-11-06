@@ -1,10 +1,8 @@
-/* 0x0032fc40 — igPsx2Thread vfunc 48: resume the thread.
- * Calls the SDK ResumeThread on the thread's kernel id (_threadID) and
- * reports the outcome through the first (hidden return-slot) argument: a
- * negative SDK result publishes the engine's failure status word, anything
- * else the success word.  Both words are set once at engine start-up
- * (docs/engine/array-storage.md: 0x4fb410 = 0, 0x4fb418 = 1).
- * Vfunc 49 is the same body calling iResumeThread (interrupt-handler variant). */
+/* IgPsx2Thread vfunc 48: resume the thread. Calls the SDK ResumeThread on the thread's kernel id
+ * (_threadID) and reports the outcome through the first (hidden return-slot) argument: a negative
+ * SDK result publishes the engine's failure status word (1), anything else the success word (0).
+ * Both words are set once at engine start-up. Vfunc 49 is the same body calling iResumeThread
+ * (interrupt-handler variant). */
 #include "dw4/reflected.h"
 
 extern int g_statusSucceeded[4];

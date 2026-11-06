@@ -1,4 +1,4 @@
-/* Returning the value keeps the index web in v0; the base load reuses arg0. */
+/* Returning the value keeps the index in v0. */
 int FUN_00127488(int arg0, int arg1) {
     int v;
     if (arg1 != 0) {

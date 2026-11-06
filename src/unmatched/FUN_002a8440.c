@@ -25,7 +25,6 @@ struct Player2a8440 {
     struct Context *context;              /* +8120 */
 };
 
-/* Returns the slot whose record body is `body`, or 0. */
 struct Slot *FUN_002a8440(struct Player2a8440 *player, char *body) {
     struct Record *record = player->records;
     struct Slot *slot = player->context->slots;

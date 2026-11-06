@@ -1,6 +1,7 @@
-/* Host memory card: the native stand-in for retail's SAVEUTILITY receiver (beNDMWMcUtilCtrl) and the slot scan of
- * beNDMWSaveCtrl (update 407120). A card is a directory holding one BASLUS-20836savedata image of four character
- * slots. It never creates the directory and never writes outside it. Evidence and boundaries: port/docs/save-keeper.md. */
+/* Host memory card: the native stand-in for retail's SAVEUTILITY receiver (beNDMWMcUtilCtrl) and
+ * the slot scan of beNDMWSaveCtrl (update 407120). A card is a directory holding one
+ * BASLUS-20836savedata image of four character slots. It never creates the directory and never
+ * writes outside it. */
 #ifndef DW4_MEMCARD_H
 #define DW4_MEMCARD_H
 #include "dw4/saveimage.h"

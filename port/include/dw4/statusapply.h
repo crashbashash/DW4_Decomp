@@ -4,11 +4,12 @@
 #include <stddef.h>
 #include "dw4/arena.h"
 
-/* Per-model status state: the part of beNDMWMdlPEBaseInfoWork that the retail status manager keeps for one enemy or player model
- * (_timerList, _isFirstList, _poisonDamage, _poisonEndurance, _downDataList, _upDataList, icon slots) and the per-frame rules of
- * beNDMWMdlPEBase::vfunc_46 (0x443bd0, tick) and vfunc_47 (0x445d10, SETxxx / CHECKSTATUS / CLEARSTATUS / ALLCLEARSTATUS messages).
- * Evidence and open items: docs section "Status application on models" in port/docs/combat.md. The state has no knowledge of
- * damage formulas: the caller (the hit script's MDLsetSD / MDLsetSeq / MDLisStatus) passes the already computed times. */
+/* Per-model status state: the part of beNDMWMdlPEBaseInfoWork that the retail status manager keeps
+ * for one enemy or player model (_timerList, _isFirstList, _poisonDamage, _poisonEndurance,
+ * _downDataList, _upDataList, icon slots) and the per-frame rules of beNDMWMdlPEBase::vfunc_46
+ * (0x443bd0, tick) and vfunc_47 (0x445d10, SETxxx / CHECKSTATUS / CLEARSTATUS / ALLCLEARSTATUS
+ * messages). The state has no knowledge of damage formulas: the caller (the hit script's MDLsetSD
+ * / MDLsetSeq / MDLisStatus) passes the already computed times. */
 
 /* Index into the timer list == the status enum (0x4ca9a0): the same numbers key _timerList and the CHECKSTATUS names. */
 enum {
@@ -98,9 +99,10 @@ int32_t dw4_status_up(const dw4_status *,int slot);
  * image and never found written, so the timer slot is cleared: an ASSUMPTION about the run-time value). Returns 1 when poison was set and is now
  * cleared, 0 when it was not set. */
 int dw4_status_cure_poison(dw4_status *);
-/* FUN_003a7e90, the named-timer completion test: a timer that does not exist reads complete, otherwise `duration < elapsed` (strict) with both
- * clock samples first truncated to 2^18 ns steps. The Bind / Speed / Power / Resist blocks of the tick use it (their disassembly is the verified one);
- * the other statuses still compare unquantised, see docs/combat.md "Support technique wiring". */
+/* FUN_003a7e90, the named-timer completion test: a timer that does not exist reads complete,
+ * otherwise `duration < elapsed` (strict) with both clock samples first truncated to 2^18 ns
+ * steps. The Bind / Speed / Power / Resist blocks of the tick use it; the other statuses still
+ * compare unquantised. */
 int dw4_status_timer_complete(int armed,int64_t start_ns,int64_t duration_ns,int64_t now_ns);
 /* CLEARSTATUS (sleep, stun and bind, then SQ_WAIT) and ALLCLEARSTATUS (every timed status and both lists). */
 void dw4_status_clear_basic(dw4_status *,dw4_status_tick_result *out);

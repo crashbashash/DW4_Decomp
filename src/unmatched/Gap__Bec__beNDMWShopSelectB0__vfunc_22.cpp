@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* _decideList target: count at +8, byte flags at +16 (class not identified from the reflection) */
+/* _decideList target: count at +8, byte flags at +16. */
 typedef struct DecideFlagList { char p0[8]; int count; char p12[4]; unsigned char *data; } DecideFlagList;
 extern "C" {
 int FUN_002eb010(int);
@@ -24,9 +24,8 @@ extern int DAT_0051c848[4];
 extern int DAT_00586f20[4];
 void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0);
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     void *p;
@@ -34,7 +33,6 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
-/* intern `text` (the pool singleton is created on first use) and append the token to `field` */
 #define INTERN_APPEND(field, text) { \
     void *tok; \
     if ((text) == 0) { tok = (void *)0; } else { \

@@ -1,13 +1,5 @@
-/* Enemy-to-player status rules (see include/dw4/fightstatus_e2p.h and docs/combat.md). Ported from the reviewed source of
- * beNDMWGameRam::vfunc_34 (src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp, cases 7-12 of the FIGHTCALC second switch).
- *
- * Strings resolved from the retail ELF (virtual address -> text):
- *   eneatk columns: 0x5191d0 TYPE, 0x5191f0 KOUKA, 0x519200 KOUKARANK, 0x519210 KOUKATIME, 0x519228 GEDOKU, 0x518970 MAHIRITSU
- *   enemy columns:  0x518970 MAHIRITSU, 0x5188c0 KASHIKOSA
- *   player properties: 0x518898 MHP, 0x5189a0 MAHITEIKOU, 0x5189b0 DOKUTEIKOU, 0x5188d0 SEISHIN, 0x5188d8 SUBAYASA, 0x518950 MEICHURITSU,
- *     0x5188b0 TSUYOSA, 0x5188b8 MAMORI, 0x518b78 DOWNDATA (list)
- *   KOUKA values: 0x5191f8 doku, 0x519230 sleep, 0x519238 ashidome (bind), 0x519248 freeze, 0x519250 powerdown
- *   mode strings: 0x5191b8 TIME, 0x519220 DAMAGE, 0x519228 GEDOKU */
+/* Enemy-to-player status rules, ported from beNDMWGameRam::vfunc_34, cases 7-12 of the FIGHTCALC
+ * second switch. */
 #include "fightrecord.h"
 #include <string.h>
 #include "dw4/fightstatus_e2p.h"

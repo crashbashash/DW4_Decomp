@@ -1,8 +1,9 @@
-/* Player-to-enemy status-time rules of the FIGHTCALC switch (GAMERAM command FIGHTCALC, FightCom P2EPOISONTIME, P2ESLEEPTIME, P2EBINDTIME,
- * P2EATKDWNTIME, P2EPOWDWNTIME), ported from src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp (cases 15-19 of the second switch). The
- * context is the one of fightcalc.h; `tech` (pcTech) is required. All take the attack number (the technique's base number is
- * attack % 10000) and find the pcTech row through the player's WAZALIST. Time results are frames; -1 = no status applied (chance draw failed).
- * Not compared against retail; the formulas are the matched source's. docs/combat.md, "Status times". */
+/* Player-to-enemy status-time rules of the FIGHTCALC switch (GAMERAM command FIGHTCALC, FightCom
+ * P2EPOISONTIME, P2ESLEEPTIME, P2EBINDTIME, P2EATKDWNTIME, P2EPOWDWNTIME), ported from
+ * beNDMWGameRam::vfunc_34 (cases 15-19 of the second switch). The context is the one of
+ * fightcalc.h; `tech` (pcTech) is required. All take the attack number (the technique's base
+ * number is attack % 10000) and find the pcTech row through the player's WAZALIST. Time results
+ * are frames; -1 = no status applied (chance draw failed). */
 #ifndef DW4_FIGHTSTATUS_H
 #define DW4_FIGHTSTATUS_H
 #include "dw4/fightcalc.h"

@@ -1,6 +1,5 @@
-/* Exact metadata field builders. FieldPointerStorage and RefHeader are
- * observed ABI views, not original type names. Virtual views declare byte slots
- * and must not be instantiated. Reflected field types come from dw4/reflected.h. */
+/* Exact metadata field builders. FieldPointerStorage and RefHeader are observed ABI views, not
+ * original type names. Virtual views declare byte slots and must not be instantiated. */
 #include "dw4/reflected.h"
 struct FieldPointerStorage { int prefix[2]; igMetaField **data; int count; };
 struct RefHeader { int vtable; unsigned refs; };

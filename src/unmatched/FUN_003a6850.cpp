@@ -1,4 +1,3 @@
-/* 0x003a6850 - 100 bytes. Lazily-computed global float with a stack vector; alternate compiler -O3,p. */
 extern "C" {
 float FUN_00123640(float, float);
 int FUN_00192f50(float *, int *, int *);

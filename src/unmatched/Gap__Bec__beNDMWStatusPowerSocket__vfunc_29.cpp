@@ -1,8 +1,3 @@
-/* Open the power-socket item page. Creates the D0 item-page window (FUN_003baf10), binds it as a
- * sub-window, registers its close text type and name, runs its message script, restricts it to one
- * item kind and disables the equip / unknown rows. The window lives on the stack in an owning
- * reference; the two interned tokens are temporaries bound to the list-append calls. The retail
- * exception table records all three releases. */
 #include "dw4/reflected.h"
 extern "C" {
 /* igObject header: the reference count at +4 is not a reflected field */
@@ -25,9 +20,8 @@ extern int DAT_00586f20[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     int *p;
@@ -36,16 +30,14 @@ public:
 };
 /* The list takes its own reference to the token it is handed. */
 extern "C" int StringList_AppendRetained(int, const StringRef &);
-/* Owning stack reference to the new item-page window: constructed from the creating call and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body 0x00414420 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the new item-page window; released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class WindowRef {
 public:
     beNDMWStatusCtrlD0 *p;
     WindowRef(beNDMWStatusCtrlD0 *w) : p(w) {}
     ~WindowRef() { beNDMWStatusCtrlD0 *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)w); } }
 };
-/* string-pool intern (the pool singleton is created on first use) */
 struct Str { static inline int *intern(const char *s) {
     int *token;
     if (s == 0) {

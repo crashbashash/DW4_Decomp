@@ -1,6 +1,4 @@
-/* FUN_0011acc0 -- fdlibm __ieee754_acos(x): arccosine. |x| < 0.5 uses pio2 - (x - (pio2_lo - x*r)); for
- * |x| > 0.5 it halves the argument, takes the square root (split into high/low words for the
- * correction term c) and doubles the result; rational r = p(z)/q(z) from pS0..pS5, qS1..qS4. */
+/* fdlibm __ieee754_acos(x). */
 #include "dw4/ieee_words.h"
 
 extern double FUN_0011e300(double); /* __ieee754_sqrt */

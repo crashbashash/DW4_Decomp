@@ -1,4 +1,4 @@
-/* Selects a playback handle's video channel (its error strings name it mwPlySetVideoCh) through
+/* Selects a playback handle's video channel through
  * FUN_002aa628 on the +64 stream, reporting an invalid handle or channel number. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);

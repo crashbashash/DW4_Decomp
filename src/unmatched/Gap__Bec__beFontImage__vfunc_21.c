@@ -1,8 +1,7 @@
-/* Glyph layout loop with a stack float pair, declaration order, inverted compare for the at-
- * register temp; alternate compiler -O3. */
+/* The compare is inverted for the at-register temporary. */
 struct GlyphPos { float x; float y; };
 struct GlyphMetricsRecord { char pad[4]; float f4; };
-/* glyph-metrics list header: record buffer pointer at +16 (list class not recovered) */
+/* Glyph-metrics list header: the record buffer pointer is at +16. */
 struct GlyphMetricsList { char pad[16]; char *f16; };
 #include "dw4/reflected.h"
 struct GlyphVertexBuffer { char pad[12]; int f12; };

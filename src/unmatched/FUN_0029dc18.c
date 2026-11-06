@@ -11,10 +11,10 @@ struct Span24 {
 };
 struct ChannelBuf {
     struct Span24 source;                 /* +0 */
-    char f24[8];                          /* initialised by FUN_0029dcb8 */
+    char f24[8];
     int f32;
     int f36;
-    char f40[8];                          /* initialised by FUN_002ac6d0 */
+    char f40[8];
 };
 struct Channel {
     int state;

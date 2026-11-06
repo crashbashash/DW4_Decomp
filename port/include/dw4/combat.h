@@ -1,7 +1,8 @@
-/* Native combat owner of a field stage: delivers the attackers' timed HITBOX volumes to enemy receivers and serves the BLT/MDL combat calls
- * of the original hit_<model>.lua chunks through the FIGHTCALC rules (fightcalc.h). One owner per world, keyed by player slot (0..3) so
- * damage, EXP and skill attribution follow the shooter. HITBOX activation/removal follows the recovered per-model scheduler;
- * remaining delivery and gameplay fidelity limits are documented in docs/combat.md. */
+/* Native combat owner of a field stage: delivers the attackers' timed HITBOX volumes to enemy
+ * receivers and serves the BLT/MDL combat calls of the original hit_<model>.lua chunks through the
+ * FIGHTCALC rules (fightcalc.h). One owner per world, keyed by player slot (0..3) so damage, EXP
+ * and skill attribution follow the shooter. HITBOX activation/removal follows the recovered per-
+ * model scheduler. */
 #ifndef DW4_COMBAT_H
 #define DW4_COMBAT_H
 #include "dw4/controllers.h"
@@ -15,8 +16,9 @@ void dw4_combat_close(dw4_combat *);
 /* Sample session time and refresh player bindings before the model-manager
  * pass; delivery is synchronous in each model update. Repeated calls do not emit. */
 int dw4_combat_tick(dw4_combat *,int64_t now_ns,dw4_modelctrl *const players[4],char *error,size_t cap);
-/* One frame of the status manager for the given player models (record HP in, record HP out; poison, sleep, stun, bind and the stat-list expiries,
- * docs/combat.md "Status wiring"). Run once per simulation tick before the controllers' tick, which does the same for the enemies. */
+/* One frame of the status manager for the given player models (record HP in, record HP out;
+ * poison, sleep, stun, bind and the stat-list expiries). Run once per simulation tick before the
+ * controllers' tick, which does the same for the enemies. */
 int dw4_combat_status_tick(dw4_combat *,dw4_modelctrl *const players[4],char *error,size_t cap);
 /* Seams for tests and for the technique firing: the combat rules as a dw4_model_fight table (user = this owner), and one synthetic enemy bullet of
  * `kind` (attack number 7xxxx) from enemy row `enemy_row` in RAM slot `enemy_slot` offered to the player model of `slot` through the real
@@ -29,11 +31,13 @@ int dw4_combat_fire(dw4_combat *,int64_t now_ns,int32_t slot,dw4_modelctrl *cast
 /* Scene script engine and SD scope that the player models' hit callbacks run in. Call once, before the first tick. */
 void dw4_combat_scripts(dw4_combat *,dw4_scriptengine *,uint64_t scope);
 
-/* Support techniques (Heal Lt / Heal, Cure Lt / Cure, Raise, Speed, Resist, Power; docs/combat.md "Support technique wiring"). An 80000..89999
- * volume strikes the caster's own body, the original hit_p_<species>.lua runs its support branch and reaches BLPcalcKoukaMagic, which the
- * dw4_model_fight.p2p_magic callback answers through dw4_combat_cast_support.
- * The membership of the PLAYER (and downed PLAYER2) groups the area queries read: `joined` = a player model answers, `downed` = a PLAYER2 capsule
- * exists, `running` = the PLAYER model is running (a Raise skips the HP write for it), `pos` = the GETMATRIX translation. */
+/* Support techniques (Heal Lt / Heal, Cure Lt / Cure, Raise, Speed, Resist, Power). An
+ * 80000..89999 volume strikes the caster's own body, the original hit_p_<species>.lua runs its
+ * support branch and reaches BLPcalcKoukaMagic, which the dw4_model_fight.p2p_magic callback
+ * answers through dw4_combat_cast_support. The membership of the PLAYER (and downed PLAYER2)
+ * groups the area queries read: `joined` = a player model answers, `downed` = a PLAYER2 capsule
+ * exists, `running` = the PLAYER model is running (a Raise skips the HP write for it), `pos` = the
+ * GETMATRIX translation. */
 typedef struct {int joined[4];int downed[4];int running[4];float pos[4][3];
     int young[4];   /* downed capsule whose ONE counter is still below 10: its RAISE handler returns early (0x3d50c0), so it is not revived (0 = ready, the default) */
 } dw4_combat_view;
@@ -47,11 +51,14 @@ void dw4_combat_view_current(const dw4_combat *,dw4_combat_view *out);
  * this by itself; this seam is for tests. */
 void dw4_combat_set_downed(dw4_combat *,int32_t slot,int downed,const float pos[3]);
 
-/* Player KO flow (docs/combat.md "KO, the capsule and game over"). Every joined player whose record HP reaches 0 after having been seen above 0 is KO'd;
- * DW4_KO_CAPSULE_DELAY ticks later (measured live, the BKCHIP* record is written ~120 frames after the KO) its PLAYER2 capsule is created at the
- * player's feet position: BKCHIPSTAGE/BKCHIPPOS (beNDMWMdlPlayer2::vfunc_36), then BKCHIPBITEXP (beNDMWMdlPlayer::vfunc_43). The player is then no longer a PLAYER
- * (not joined, not running for the area queries, its body takes no hits). Every capsule ticks once per frame (vfunc_38): the ONE counter counts to 10,
- * the SQ_SWON/SQ_SWOF state follows the distance to the nearest living player, and with no living player left the end chunk (end_g_000bcaps.lua) is due. */
+/* Player KO flow. Every joined player whose record HP reaches 0 after having been seen above 0 is
+ * KO'd; DW4_KO_CAPSULE_DELAY ticks later (measured live, the BKCHIP* record is written ~120 frames
+ * after the KO) its PLAYER2 capsule is created at the player's feet position:
+ * BKCHIPSTAGE/BKCHIPPOS (beNDMWMdlPlayer2::vfunc_36), then BKCHIPBITEXP
+ * (beNDMWMdlPlayer::vfunc_43). The player is then no longer a PLAYER (not joined, not running for
+ * the area queries, its body takes no hits). Every capsule ticks once per frame (vfunc_38): the
+ * ONE counter counts to 10, the SQ_SWON/SQ_SWOF state follows the distance to the nearest living
+ * player, and with no living player left the end chunk (end_g_000bcaps.lua) is due. */
 #define DW4_KO_CAPSULE_DELAY 120       /* ticks between the KO and the capsule: measured, not recovered from code */
 #define DW4_CAPSULE_READY_TICKS 10     /* Raise needs the capsule's ONE counter >= 10 (0x3d50c0); vfunc_38 counts it up to 10 */
 #define DW4_CAPSULE_NEAR_SQ 900.0f     /* vfunc_38 compares the nearest-PLAYER distance (units inferred as squared) with 900.0 */

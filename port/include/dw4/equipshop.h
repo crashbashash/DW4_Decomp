@@ -1,7 +1,7 @@
-/* Native weapon / armor / chip / junk shops: SUBWND modes 6 WPU, 7 APU, 8 CHIP (retail beNDMWShopDevice 43cc20)
- * and 9 JUNK (beNDMWShopJunk 42bc70), with their shared goods list beNDMWShopCtrlSales (438160). The sell branch
- * is ShopCtrlSell and the donation editor ShopCtrlEditBit mode 2, both shared with DISK and BANK.
- * Evidence and open boundaries: port/docs/equipment-shops.md. */
+/* Native weapon / armor / chip / junk shops: SUBWND modes 6 WPU, 7 APU, 8 CHIP (retail
+ * beNDMWShopDevice 43cc20) and 9 JUNK (beNDMWShopJunk 42bc70), with their shared goods list
+ * beNDMWShopCtrlSales (438160). The sell branch is ShopCtrlSell and the donation editor
+ * ShopCtrlEditBit mode 2, both shared with DISK and BANK. */
 #ifndef DW4_EQUIPSHOP_H
 #define DW4_EQUIPSHOP_H
 #include "dw4/statusview.h"

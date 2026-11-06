@@ -22,7 +22,7 @@ void FUN_002c62b0(void) {
             if ((o[1] & 0x7FFFFF) == 0) {
                 igObject_Destroy(o);
             }
-            count = *(int *)((char *)FUN_002fc250() + 12); /* read as a whole word first: the unit compiler (3.0.3) narrows a direct `short = int - 1` store to an lh */
+            count = *(int *)((char *)FUN_002fc250() + 12); /* Read as a whole word first; a direct `short = int - 1` store would be narrowed to an lh. */
             *(short *)((char *)DAT_005865a0[0] + 18) = count - 1;
             igMetaField_FinalizeDescriptor(DAT_005865a0[0]);
         }

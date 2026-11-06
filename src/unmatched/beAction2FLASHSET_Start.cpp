@@ -17,10 +17,10 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 int beAction2FLASHSET_Start(int arg0, beAction2InfoRam *arg1);
 }
-/* Retail keeps one out-of-line holder destructor per attribute kind (0x19ab10, 0x1d21b0, 0x239200: the three
- * attribute types are distinct classes), so the holder is a template on the kind. Its constructor registers the
- * fresh attribute (retail's protected range starts after the allocation call and covers the list registration);
- * the destructor releases the reference. */
+/* The holder is a template on the kind because the three attribute types are distinct classes,
+ * each with its own out-of-line destructor. Its constructor registers the fresh attribute (the
+ * protected range starts after the allocation call and covers the list registration); the
+ * destructor releases the reference. */
 template <int kind> struct AttrRef {
     RefObj *p;
     AttrRef(RefObj *o) { p = o; }

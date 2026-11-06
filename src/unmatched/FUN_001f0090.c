@@ -1,4 +1,3 @@
-/* Typed struct list walk; declaration order temp, var, head fixes the a1/a2 colours. */
 typedef struct N { int pad0; struct N *next; int pad2[4]; struct N *head; } N;
 typedef struct L { int pad0; N *f4; } L;
 extern N *DAT_00568f60[];

@@ -1,6 +1,3 @@
-/* 0x001525f0 igPsx2VertexArray1_1_Register: registers class igPsx2VertexArray1_1 with the object system, derived from igVertexArray1_1.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVertexArray1_1_Register[];
 extern char thunk_igPsx2VertexArray1_1_GetMetaObject[];
 extern char igPsx2VertexArray1_1_GetVTable[];
@@ -15,16 +12,16 @@ int igPsx2VertexArray1_1_InitFields();
 void igPsx2VertexArray1_1_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
-        0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2VertexArray1_1_metaObject,       /* published MetaObject slot */
-        igVertexArray1_1_Register,                        /* base class registrar */
-        igVertexArray1_1_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igPsx2VertexArray1_1_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        igPsx2VertexArray1_1_className,        /* class name */
-        0x90,                                             /* instance size */
-        igPsx2VertexArray1_1_GetVTable,                   /* vtable getter */
-        &igPsx2VertexArray1_1_InitFields,                 /* field adder */
-        0,                                                /* extra callback item */
-        g_igPsx2VertexArray1_1_callbackList      /* callback list */
+        0, /* abstract */
+        g_igPsx2VertexArray1_1_metaObject,
+        igVertexArray1_1_Register,
+        igVertexArray1_1_GetPublishedMetaObject,
+        thunk_igPsx2VertexArray1_1_GetMetaObject,
+        igPsx2VertexArray1_1_className,
+        0x90, /* instance size */
+        igPsx2VertexArray1_1_GetVTable,
+        &igPsx2VertexArray1_1_InitFields,
+        0, /* extra callback item */
+        g_igPsx2VertexArray1_1_callbackList /* callback list */
     );
 }

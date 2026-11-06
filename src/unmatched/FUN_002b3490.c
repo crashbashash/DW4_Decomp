@@ -1,5 +1,3 @@
-/* Transition check for the state field at +60 against the requested state k: returns 0 for the terminal state 100, for requested states 1, 4, 5, 21, 22 and
- * (unless FUN_002b30e8(+52) reports 1) 2 when they equal the current state; 1 otherwise. */
 typedef struct Obj { char pad[52]; int f52; int pad2; int f60; } Obj;
 extern int FUN_002b30e8(int);
 int FUN_002b3490(Obj *o, unsigned int k)

@@ -1,5 +1,5 @@
-/* Native Digi-Lab service: retail beNDMWShopCtrlDigilabo update 431760..432950 (SUBWND mode 2, "LABO") with its
- * beNDMWShopCtrlEvolve child (42f710..430d20). Evidence and open boundaries: port/docs/labo-shop.md. */
+/* Native Digi-Lab service: retail beNDMWShopCtrlDigilabo update 431760..432950 (SUBWND mode 2,
+ * "LABO") with its beNDMWShopCtrlEvolve child (42f710..430d20). */
 #ifndef DW4_LABOSHOP_H
 #define DW4_LABOSHOP_H
 #include "dw4/statusgear.h"

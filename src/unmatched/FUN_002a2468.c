@@ -8,7 +8,7 @@ struct Params {
     int f60;
 };
 struct Params;
-/* Block at +8044 in the player (handles shared by FUN_002a2248..FUN_002a2620). */
+/* Block at +8044 in the player. */
 struct Streams {
     int f0;
     int f4;

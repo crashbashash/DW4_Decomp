@@ -1,8 +1,3 @@
-/* Sorted insert of an object into slot arg2 of a list of priority-ordered object lists: finds the
- * first element with a higher priority, appends or inserts (retained through a volatile stack
- * slot, which retail re-reads), then bumps or clamps the per-slot index in the index list with the
- * bounds-checked store idiom; one index-list pointer per section (separate webs), the next index
- * is computed before the test; alternate compiler -O3. */
 typedef struct IL { int p0, p1; int count; int cap; int *data; } IL;
 typedef struct X { char p0[12]; int w12; } X;
 typedef struct It { int p0; int refs; char p8[4]; X *x; char p16[32]; int prio; } It;

@@ -1,5 +1,3 @@
-/* C++ translation unit: the unit compiled with exceptions on and retail keeps this function's
- * exception index record, which only the C++ front end emits. */
 union U { int vt; int w[8]; void *p[8]; char b[32]; };
 extern "C" {
 int FUN_0033ec80(int *, int);

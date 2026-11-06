@@ -1,5 +1,4 @@
-/* Selector is an igMetaField; the containing object list stores object pointers. Corrected from
- * the refuted offset-list interpretation. */
+/* Selector is an igMetaField; the containing object list stores object pointers. */
 #include "dw4/reflected.h"
 typedef struct {int header[2];void **data;int count;} PointerList;
 int igStrCmp(const char *,const char *);

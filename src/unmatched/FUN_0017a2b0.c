@@ -1,4 +1,3 @@
-/* Two-table lookup selected by a flag bit; alternate compiler. */
 extern int DAT_0048ac40[];
 extern int DAT_0048acb0[];
 int FUN_0017a2b0(int arg0) {

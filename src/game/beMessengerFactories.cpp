@@ -1,7 +1,6 @@
-/* Messenger class factories and their lazy-registration wrappers, in retail order (beMessengerWork
- * 0x358070, Group 0x3584e0, Delay 0x358950, ArgData 0x358d80). Each factory makes sure the class
- * is registered, reloads the class handle and creates an instance from the caller's allocator.
- * Return and allocator signatures follow the original call/return registers. */
+/* Messenger class factories and their lazy-registration wrappers. Each factory makes sure the
+ * class is registered, reloads the class handle and creates an instance from the caller's
+ * allocator. */
 
 /* Structural ABI view of the static-init callback list the registrars return; never defined here. */
 struct StaticInitCallbacks;
@@ -17,9 +16,7 @@ extern "C" void beMessengerGroup_EnsureRegistered();
 extern "C" void beMessengerDelay_EnsureRegistered();
 extern "C" void beMessengerArgData_EnsureRegistered();
 
-/* Published class handles (slot holding each class's igMetaObject pointer), named by the
- * class-handle rule of docs/engine/naming.md; the addresses are the handles listed in
- * include/dw4/reflected.h and the metadata table of docs/engine/object-creation.md. */
+/* Published class handles (slot holding each class's igMetaObject pointer). */
 extern "C" int g_beMessengerWork_metaObject[4];
 extern "C" int g_beMessengerGroup_metaObject[4];
 extern "C" int g_beMessengerDelay_metaObject[4];

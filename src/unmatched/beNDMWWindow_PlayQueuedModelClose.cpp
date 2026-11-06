@@ -1,8 +1,5 @@
-/* beNDMWWindow_PlayQueuedModelClose - 0x003f5f80.  Plays the queued model-close sequences: for each entry of the
- * model-close info-name list it fetches the info name and the sequence name (retained interned strings), looks up the
- * RAM number at the same index and sends the model sequence; each string is released before the send (the text itself
- * stays valid because the lists keep their own reference).  The strings are held in int locals: that is the form whose
- * virtual-register order reproduces retail's colouring (pointer-typed copies of the stack slots take later ids). */
+/* The strings are held in int locals: pointer-typed copies of the stack slots take later register
+ * ids, which changes the colouring. */
 #include "dw4/reflected.h"
 extern "C" {
 void StringList_CopyRetained(char **, int, int);

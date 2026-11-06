@@ -1,8 +1,3 @@
-/* Put the equipment item at slot `slot` of `slotList` into the status panel's equipment slot
- * `equipIdx`, unequipping whatever held it before. When the incoming item is of kind 3 (a
- * wearable), every other held item that carries one of the eight equipment-category record names
- * is unequipped first. Idioms (inline string interning, refcount release, bounded list clear)
- * follow the matched Gap__Bec__beNDMWShopCtrl50__vfunc_21. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(...);
@@ -49,10 +44,9 @@ struct StatusPanel {
     ItemList *_equipList;   /* +0x78 */
 };
 struct StrList;
-/* Owning stack reference to a pooled string token (count at p[-1], chunk header at p[-2]).  Interning for a text
- * list yields one: the list takes its own share and the token is a temporary released at the end of the statement;
- * copying a list entry out yields one in the caller's frame.  Out-of-line copy: retail 0x00130720
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (count at p[-1], chunk header at p[-2]).
+ * Interning for a text list yields one: the list takes its own share and the token is a temporary
+ * released at the end of the statement; copying a list entry out yields one in the caller's frame. */
 class StringRef {
 public:
     char *p;
@@ -64,9 +58,9 @@ public:
 extern "C" int StringList_AppendRetained(void *, const StringRef &);
 /* The copy comes back through the hidden result pointer, so it is owned from the call on. */
 extern "C" StringRef StringList_CopyRetained(void *list, int index);
-/* Owning stack references to the equipment-category name list and the scratch int list of the unequip pass: each
- * releases its object on scope exit (reference count in the low 23 bits of _refCount).  Retail destructor copies:
- * NameListRef 0x001c6460, IntListRef 0x00150eb0 (duplicates in config/SLUS-20836/unit-objects.json). */
+/* Owning stack references to the equipment-category name list and the scratch int list of the
+ * unequip pass; each releases its object on scope exit (reference count in the low 23 bits of
+ * _refCount). */
 class NameListRef {
 public:
     igObject *p;
@@ -106,7 +100,6 @@ struct U { static inline char *InternStr(char *text) {
 } };
 #define INTERN_APPEND(lst, text) { char *tok = U::InternStr((char *)(text)); StringList_AppendRetained(lst, StringRef(tok)); }
 #define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-/* drop list element i: release it, then null the slot when i is in range */
 #define LIST_CLEAR_AT(L, i) { REL((L)->_data[i]); \
     if ((L)->_count != 0 && (i) >= 0 && (i) < (L)->_count) (L)->_data[i] = 0; }
 

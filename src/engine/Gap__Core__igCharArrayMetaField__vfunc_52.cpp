@@ -3,8 +3,7 @@
  * descriptor with `count * _num` elements. */
 #include "dw4/reflected.h"
 extern "C" {
-/* Returns the shared igCharMetaField descriptor (global 0x00586938), registering
- * the class on first use; same shape as igIntMetaField_GetDefaultDescriptor. */
+/* Returns the shared igCharMetaField descriptor, registering the class on first use. */
 void **FUN_002cc2c0(...);
 void Gap__Core__igCharArrayMetaField__vfunc_52(igCharArrayMetaField *self, int buffer, int count);
 }

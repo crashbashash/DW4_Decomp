@@ -1,4 +1,3 @@
-/* Stores the two words at +96/+100 of the object. */
 typedef struct Pair { int a; int b; } Pair;
 void FUN_002b40b0(char *arg0, int arg1, int arg2)
 {

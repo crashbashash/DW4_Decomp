@@ -1,4 +1,3 @@
-/* 0x00244650 - 132 bytes. Iterator begin: {cur, key, index} fields are reloaded each round, so the loop is a plain while over typed fields. */
 struct It { int cur; int key; unsigned int idx; };
 extern unsigned int DAT_004986a8[4];
 extern int DAT_0056dea0[4];

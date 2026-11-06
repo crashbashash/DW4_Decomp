@@ -1,4 +1,4 @@
-/* Selects a playback handle's audio channel (its error strings name it mwPlySetAudioCh) through
+/* Selects a playback handle's audio channel through
  * FUN_002aa5b8 on the +64 stream, reporting an invalid handle or channel number. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);

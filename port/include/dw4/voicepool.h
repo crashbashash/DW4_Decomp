@@ -1,10 +1,8 @@
-/* dw4/voicepool.h — the retail resident-effect handle allocator (beCri, FUN_0037c130), as a pure function.
- *
- * Retail keeps one pool of effect handles: 4 streamed-ADX handles and 48 sound-bank handles (FUN_0037d310). A play request
- * takes the first idle handle of the right kind; when none is idle it stops and reuses the playing handle with the lowest
- * priority that is not above the request's priority, the oldest first; when none qualifies the play fails. tools/
- * verify_voicepool.py compares this function with the original instructions.
- */
+/* The retail resident-effect handle allocator (beCri, FUN_0037c130), as a pure function. Retail
+ * keeps one pool of effect handles: 4 streamed-ADX handles and 48 sound-bank handles
+ * (FUN_0037d310). A play request takes the first idle handle of the right kind; when none is idle
+ * it stops and reuses the playing handle with the lowest priority that is not above the request's
+ * priority, the oldest first; when none qualifies the play fails. */
 #ifndef DW4_VOICEPOOL_H
 #define DW4_VOICEPOOL_H
 #include <stdint.h>

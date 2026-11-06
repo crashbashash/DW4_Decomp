@@ -1,5 +1,5 @@
 /* Maps the bytes available on one side of a ring (ops slot 36) as up to two chunks via slot 24,
- * releasing each with slot 28; returns the byte count. */
+ * the second covering the wrap, releasing each with slot 28; returns the byte count. */
 struct Chunk {
     char *data;
     int size;
@@ -16,7 +16,6 @@ struct Ring {
     struct RingOps *ops;
 };
 
-/* Maps the available bytes of side `side` as up to two chunks (the second covers the wrap). */
 int FUN_0029e068(struct Ring *ring, int side, struct Chunk *first, struct Chunk *second) {
     int available = ring->ops->fn36(ring);
 

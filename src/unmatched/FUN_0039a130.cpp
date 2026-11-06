@@ -1,6 +1,5 @@
 #include "dw4/reflected.h"
-/* arg0 is a beModelCtrlSubCom (_comList +8 -> igObjectList); the owner is beModelCtrlInfoWork._subCommand (+228) in the caller FUN_00394fa0.
- * The list elements are objects with virtual slots 88 and 100, so VC stays a vtable-only view. */
+/* The list elements are objects with virtual slots 88 and 100, so VC stays a vtable-only view. */
 extern "C" {
 int List_RemoveWordAt(...);
 void igObject_Destroy(igObject *);

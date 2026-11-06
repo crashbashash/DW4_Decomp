@@ -1,7 +1,5 @@
-/* 0x002432c0 — 40 bytes. Wrapper over lua_touserdata: forwards its own first argument (in a0)
- * as lua_touserdata's FIRST argument and passes the literal 1 as the second. Retail
- * leaves a0 untouched and emits `li a1,1`; the naive one-argument C spelling emits
- * `li a0,1` and misses by one register. */
+/* The first argument is forwarded untouched in a0 and the literal 1 goes in a1; the one-argument
+ * spelling would load 1 into a0. */
 int FUN_001005f0();
 int lua_touserdata();
 

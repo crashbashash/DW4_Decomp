@@ -1,10 +1,9 @@
-/* Vfunc_31, the per-frame master update of the Game Start interface for one player (`host`): it
- * looks up the named working set under host->_dataList (COMMONINTF, CTRL, MAKECHR, ...), samples
- * that player's pad, and advances the CtrlData screen state machine (join, new or load, Digimon
- * choice, name, slot, save data, start) plus the per-player card-utility stages. See
- * docs/engine/load-intf2.md for the state and ownership contracts. The local declaration groups
- * preserve the original allocation. Explicit snapshots retain the observed ordering of published
- * controller reads. LoadVec3 is three floats; reference parameter homes remain 16 bytes apart. */
+/* Per-frame master update of the Game Start interface for one player (`host`): looks up the named
+ * working set under host->_dataList (COMMONINTF, CTRL, MAKECHR, ...), samples that player's pad,
+ * and advances the CtrlData screen state machine (join, new or load, Digimon choice, name, slot,
+ * save data, start) plus the per-player card-utility stages. The local declaration groups preserve
+ * the original allocation, and explicit snapshots keep the observed ordering of controller reads.
+ * LoadVec3 is three floats; reference parameter homes remain 16 bytes apart. */
 #include "dw4/reflected.h"
 #pragma inline_depth(1)
 struct LoadVec3 {
@@ -177,9 +176,8 @@ extern int g_beFont_metaObject[4];
 extern int DAT_0058a1e0[4];
 extern unsigned char GPR_00554c14;
 }
-/* Retail copies the 4-byte value returned by FUN_003e9360 into a temporary
- * reference before handing it to ObjectRef_Assign_003e92b0; these two classes
- * reproduce that copy/destroy pair. */
+/* The 4-byte value returned by FUN_003e9360 is copied into a temporary reference before it is
+ * handed to ObjectRef_Assign_003e92b0; these two classes reproduce that copy/destroy pair. */
 class RecoveryCopiedRef {
 public:
   void *value;
@@ -197,9 +195,8 @@ struct DW4Fresh {
   }
 };
 extern "C" void igObject_Destroy(void *);
-/* Release half of the ref-counted handle: decrement _refCount and destroy the
- * object when its low 23 bits reach zero (same test as the release in
- * src/game/beSystemUpdate.c). */
+/* Release half of the ref-counted handle: decrement _refCount and destroy the object when its low
+ * 23 bits reach zero. */
 struct RecoveryTarget {
   int word0;
   int references;
@@ -212,9 +209,8 @@ struct RecoveryTarget {
     }
   }
 };
-/* Scoped holder for a ref-counted object: optionally retains on construction
- * and releases on scope exit. The template index only keeps the instances
- * apart so each scope gets its own destructor, as in the retail code. */
+/* Scoped holder for a ref-counted object: optionally retains on construction and releases on scope
+ * exit. The template index only keeps the instances apart so each scope gets its own destructor. */
 template <int I> class RecoveryRef {
 public:
   void *value;
@@ -233,11 +229,10 @@ struct DW4ListRec {
   volatile int count;
   int cap;
 };
-/* Pad bits as read from bePadData::_trigger/_repeat (the PS2 libpad button
- * layout). Cross confirms and Circle cancels in the slot/portrait/difficulty
- * screens (docs/engine/load-intf2.md, "Face-button semantics"). The stick
- * bits of _lTrg/_lRpt are paired with the D-pad bit of the same direction in
- * every test below, so they are named by direction. */
+/* Pad bits as read from bePadData::_trigger/_repeat (the PS2 libpad button layout). Cross confirms
+ * and Circle cancels in the slot/portrait/difficulty screens. The stick bits of _lTrg/_lRpt are
+ * paired with the D-pad bit of the same direction in every test below, so they are named by
+ * direction. */
 enum LoadPadMask {
   kPadStart = 0x0008,
   kPadUp = 0x0010,
@@ -253,12 +248,9 @@ enum LoadStickMask {
   kStickDown = 0x4,
   kStickLeft = 0x8
 };
-/* Step bookkeeping for the CtrlData record (docs/engine/load-intf2.md,
- * "Object model": _st0.._st3). _st0 is the screen state, _st1 the step inside
- * it, _st2 and _st3 finer sub-steps. Moving to a new level always clears the
- * levels below it, in the order _st3, _st2, _st1 that the retail code stores.
- * Single-line comma expressions: tools/units.py misreads braces and line
- * continuations inside a #define as the start of a function body. */
+/* Step bookkeeping for the CtrlData record: _st0 is the screen state, _st1 the step inside it,
+ * _st2 and _st3 finer sub-steps. Moving to a new level always clears the levels below it, in the
+ * order _st3, _st2, _st1. */
 /* clang-format off */
 #define LOAD_ENTER_STATE(c, n) ((c)->_st0 = (n), (c)->_st3 = 0, (c)->_st2 = 0, (c)->_st1 = 0)
 #define LOAD_NEXT_STEP(c) ((c)->_st1 = ((c)->_st1 + 1), (c)->_st3 = 0, (c)->_st2 = 0)
@@ -269,10 +261,8 @@ enum LoadStickMask {
  * (_sysStat0.._sysStat3). */
 #define PLAYER_SET_STEP(w, n) ((w)->_sysStat1 = (n), (w)->_sysStat3 = 0, (w)->_sysStat2 = 0)
 #define PLAYER_ENTER_STAGE(w, n) ((w)->_sysStat0 = (n), (w)->_sysStat3 = 0, (w)->_sysStat2 = 0, (w)->_sysStat1 = 0)
-/* Message/text-order ids: the player number (_ramNo) in the high half and the
- * message token in the low bits (docs/engine/load-intf2.md, "text-order
- * helpers": a control id is (high << 16) | token, matched against the id
- * table at 0x004cda40). */
+/* Message/text-order ids: the player number (_ramNo) in the high half and the message token in the
+ * low bits (a control id is (high << 16) | token). */
 #define LOAD_TEXT_ID(h, token) (((h)->_ramNo << 0x10) | (token))
 /* clang-format on */
 /* Accessors the retail code inlined at each use. */
@@ -304,11 +294,9 @@ struct LoadHelpers {
       return 0;
   }
 };
-/* Offsets of members the reflection dump does not list (no field names are
- * recorded for them): the typed-name text buffer inside NameSel, the 8-char
- * text pointer inside the name object sized by beUnicodeObj_AllocateBuffer, and the byte
- * flag inside an igProperty record (docs/engine/load-intf2.md, NAMESEL and
- * GAMERAM ISUSE). Single-line #defines. */
+/* Offsets of members the reflection dump does not list: the typed-name text buffer inside NameSel,
+ * the 8-char text pointer inside the name object sized by beUnicodeObj_AllocateBuffer, and the
+ * byte flag inside an igProperty record. */
 #define NAMESEL_TEXT_OFFSET 236
 #define NAME_OBJECT_TEXT_OFFSET 12
 #define PROPERTY_RECORD_BYTE_OFFSET 12
@@ -1584,8 +1572,6 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                       {
                         RecoveryRef<1> nameRef(nameObject);
                         beUnicodeObj_AllocateBuffer(nameRef.value, 8);
-                        /* Hypothesis: the word at nameRef+12 points at the
-                         * 8-character buffer sized by beUnicodeObj_AllocateBuffer(nameRef, 8). */
                         NameCopyHelper::Copy(
                             (unsigned short *)*(int *)((char *)nameRef.value +
                                                        NAME_OBJECT_TEXT_OFFSET),

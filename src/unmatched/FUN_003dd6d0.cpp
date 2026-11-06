@@ -1,8 +1,4 @@
-/* 0x003dd6d0 - DATASELINTF area selector: every player sharing the selected entry returns its four areas to idle.
- * Receiver is beNDMWLoadIntf2DataSelIntf (_comMdlCtrl, _textOrder, _commonIntf, _plNo, _st0.._st3). _commonIntf is the
- * beNDMWLoadCtrl2CommonIntf whose _flagWork is a beNDMWLoadSavePlWorkList; each work record's _haveSaveData is a
- * beNDMWLoadSlotPlayer (_saveDataList = beNDMWDegiDataList of the four areas, _accessPlList = igIntList of the players
- * that share the entry). Arena handles are 4-byte ints and are cast to pointers where followed. */
+/* Arena handles are 4-byte ints and are cast to pointers where followed. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);
@@ -22,9 +18,8 @@ extern int DAT_00516dc8[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the area's text object: constructed from the object and released on scope
- * exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table
- * names is the retail body 0x003832d0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the area's text object; released on scope exit (reference count in the
+ * low 23 bits of _refCount). */
 class ObjectRef {
 public:
     beUnicodeObj *p;

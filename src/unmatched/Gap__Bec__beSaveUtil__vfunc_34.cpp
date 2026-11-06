@@ -1,9 +1,3 @@
-/* 0x003af150 - beSaveUtil slot 34: messenger receiver for the save-utility
- * service.  The message names an enum value (type from FUN_00346c20); each case
- * either builds a request object and hands it to FUN_003ae680 (cases 2-8), or
- * answers a query/updates the info record's state (cases 0, 1, 9, 11-15).
- * Evidence: switch jump table at 0x510750 (18 entries), the repeated
- * allocator/Create/Release shape, and the message-argument helpers 0x38f0f0..0x38f800. */
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_00348c70(...);
@@ -33,9 +27,8 @@ extern unsigned char GPR_00554c14;
 
 /* reference-counted engine object header: refcount word at +4 */
 struct RC { int vt; int rc; };
-/* Owning stack reference to a request object; one instantiation per request kind (case), so the seven
- * out-of-line destructor copies retail keeps (0x003afdf0 .. 0x003afaf0, one per case in source order) stay
- * distinct (config/SLUS-20836/unit-objects.json emitted __dt__5RP<k>Fv). */
+/* Owning stack reference to a request object; one instantiation per request kind (case), so each
+ * case gets its own out-of-line destructor. */
 template <int kind> struct RP {
     RC *p;
     RP(RC *q) : p(q) {}
@@ -43,7 +36,7 @@ template <int kind> struct RP {
 };
 /* message record: only the enum value name at +20 is read */
 struct MsgArg { char pad20[20]; int f20; };
-/* the info record's +48 object (beSaveUtilInfoRam._deliver); class not established */
+/* The info record's +48 object (beSaveUtilInfoRam._deliver). */
 struct Deliver {
     int pad0[2];
     int f8;                 /* object argument forwarded to the request */
@@ -62,10 +55,9 @@ struct Deliver {
 #define DELIVER(r) ((Deliver *)(r)->_deliver)
 #define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); } }
 
-/* Every request case starts the same way: build the request object, then reset the
- * record's slot to -1 and take the first integer argument of the message as the slot
- * (the one-case switch is how the original source tested "first argument"; a plain
- * if (i == 0) compiles to different branch code). */
+/* Every request case starts the same way: build the request object, then reset the record's slot
+ * to -1 and take the first integer argument of the message as the slot (the one-case switch tests
+ * the first argument; a plain if (i == 0) compiles to different branch code). */
 #define NEW_REQUEST(r, kind, create) ALLOC(a, self); RP<kind> r((RC *)create(a));
 #define TAKE_SLOT_ARGUMENT(self, info) \
     DELIVER(info)->slot = -1; \

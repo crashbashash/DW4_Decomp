@@ -1,11 +1,7 @@
-/* Cached GAMERAM Message metadata enum, 0x003c9c40; 22 command names and ids.
- * Matching compiler requirement: config/SLUS-20836/unit-compilers.tsv.
- */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
+/* Cached GAMERAM Message metadata enum: 22 command names and ids. */
 extern "C" {
 struct Enum;
-/* igMetaEnum_Create(name, names[], values[], count): see config/SLUS-20836/names/ObjectModel.tsv */
+/* igMetaEnum_Create(name, names[], values[], count). */
 struct Enum *igMetaEnum_Create(const char *, const char *const *, const int *, int);
 extern const char Message[];
 extern const char *const g_GameRamMessage_commandNames[22];
@@ -19,4 +15,4 @@ struct Enum *GameRamMessage_GetMetaEnum(void)
                                           g_GameRamMessage_commandIds, 22);
     return g_GameRamMessage_metaEnum[0];
 }
-} /* extern "C" */
+}

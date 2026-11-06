@@ -1,5 +1,5 @@
 /* Formats a va_list into a caller buffer through a string stream with unbounded space and
- * terminates it (newlib vsprintf shape; name is a hypothesis). */
+ * terminates it. */
 /* ee-gcc ships no stdarg.h here: the compiler builtins stand in for it. */
 typedef __builtin_va_list va_list;
 

@@ -1,5 +1,5 @@
-/* Singleton (pointer array form, not gp-relative) vcalls at 120/124; the third parameter of the
- * 120 slot is unsigned, which fixes the argument load order. Alternate -O3. */
+/* The third parameter of the slot-120 virtual is unsigned, which fixes the argument load order.
+ * The singleton is declared as an array so it is not addressed gp-relative. */
 extern "C" {
 int FUN_0017c7a0(...);
 void FUN_00141410(void *arg0, int arg1);

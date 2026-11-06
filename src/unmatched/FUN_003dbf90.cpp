@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* _statDisp's class is not reflected; its first-level links are private views. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct M { void *f0; void *f4; } M;
 typedef struct L { char p[16]; M *n16; } L;
@@ -74,4 +71,4 @@ unsigned char FUN_003dbf90(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     }
     return r;
 }
-} /* extern "C" */
+}

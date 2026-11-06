@@ -1,5 +1,4 @@
-/* Releases the current frame of a Sofdec playback handle (its error string names it
- * mwPlyRelCurFrm): rejects an invalid handle, otherwise frees the frame through FUN_002ac600 when
+/* Releases the current frame of a Sofdec playback handle: rejects an invalid handle, otherwise frees the frame through FUN_002ac600 when
  * one is held and advances the frame counters. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);

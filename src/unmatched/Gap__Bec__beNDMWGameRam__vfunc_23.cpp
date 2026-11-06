@@ -1,6 +1,6 @@
-/* Gap__Bec__beNDMWGameRam__vfunc_23 (0x003f77b0): after the base igObject hook, give the game ram a fresh
- * common data list (FUN_00364050) and a fresh per-player data-list list (FUN_00363e80), each retained into
- * its field in place of the old one, then initialise the four player slots (FUN_003f7310). */
+/* After the base igObject hook, gives the game ram a fresh common data list and a fresh per-player
+ * data-list list, each retained into its field in place of the old one, then initialises the four
+ * player slots. */
 #include "dw4/reflected.h"
 extern "C" {
 igObject *FUN_00363e80(int);
@@ -21,18 +21,15 @@ struct ReleaseRef { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-/* Owning stack reference to the new common data list: constructed from the object and released on scope
- * exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names
- * is the retail body 0x003ba350 (config/SLUS-20836/unit-objects.json, duplicate __dt__17CommonDataListRefFv). */
+/* Owning stack reference to the new common data list, released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class CommonDataListRef {
 public:
     igObject *p;
     CommonDataListRef(igObject *o) : p(o) {}
     ~CommonDataListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to the new per-player data-list list: same release shape.  The out-of-line copy
- * the exception table names is the retail body 0x003c9ef0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__21PlayerDataListListRefFv). */
+/* Owning stack reference to the new per-player data-list list, released the same way. */
 class PlayerDataListListRef {
 public:
     igObject *p;

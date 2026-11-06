@@ -1,4 +1,4 @@
-/* 0x001fc350 - 220 bytes. Latches the previous-frame copies of a global record; the record pointer is re-read from the global for each group of copies (typed record, one assignment of the pointer per group). Default compiler. */
+/* The record pointer is re-read from the global for each group of copies. */
 struct G { char pad0[136]; short s136, s138, s140, s142, s144, s146, s148, s150; char pad152[104]; int i256, i260, i264, i268; char pad272[40]; int i312, i316, i320, i324; char pad328[8]; int i336, i340, i344, i348, i352, i356, i360, i364, i368, i372, i376, i380; };
 extern int DAT_00491478[4];
 extern struct G *DAT_0056ad80[4];

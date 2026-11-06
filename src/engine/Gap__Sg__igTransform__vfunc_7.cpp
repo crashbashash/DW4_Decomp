@@ -1,7 +1,5 @@
-/* 0x001dcf40
- * Reset step: runs the shared base step (FUN_001d33a0 receives self and the flag
- * unchanged in a0/a1), then, when `flag` is 0, makes the virtual call at vtable byte
- * offset 112 with (2, 1). */
+/* Reset step: runs the shared base step (FUN_001d33a0 receives self and the flag unchanged in
+ * a0/a1), then, when `flag` is 0, makes the virtual call at vtable byte offset 112 with (2, 1). */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_001d33a0(...);

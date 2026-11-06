@@ -1,8 +1,5 @@
-/* Axis-angle rotation matrix (Rodrigues) from a 3-vector and an angle: identity when |angle| is
- * below a threshold (sign bit cleared through a byte bit-field union), otherwise sin and cos
- * helper calls and the nine entries; temporaries declared in the retail id order, the 1.0 constant
- * is its own variable, partial products split so the adds keep the operand order; alternate
- * compiler -O3. */
+/* Axis-angle rotation matrix (Rodrigues); the sign bit is cleared through a byte bit-field union,
+ * and partial products are split so the adds keep their operand order. */
 typedef union U { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U;
 extern float GPR_0055495c;
 float FUN_00123138(float);

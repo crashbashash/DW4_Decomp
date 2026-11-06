@@ -1,4 +1,3 @@
-/* 0x0030b7e0 - 96 bytes. Varargs forwarder with two named arguments; alternate compiler -O3. */
 int FUN_0030b840();
 void FUN_0030b7e0(int arg0, int arg1, ...) {
     int n = __builtin_args_info(2);

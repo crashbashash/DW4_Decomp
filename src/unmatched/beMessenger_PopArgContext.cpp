@@ -1,8 +1,3 @@
-/* beMessenger argument-context pop: the active arg-data object is cleared,
- * appended to the push/pop stack and replaced by the stack's front entry.
- * Reference-count shapes are inferred from the retained-reference sequences;
- * the popped object is kept alive across the list update by an owning stack
- * reference (see ObjectRef). */
 #include "dw4/reflected.h"
 typedef igObject RefObj;
 extern "C" {
@@ -19,7 +14,6 @@ struct Ref {
                 igObject_Destroy(o);
         }
     }
-    /* reference-field assignment: retain the incoming object, release the outgoing one */
     static void assign(RefObj **dest, RefObj *incoming) {
         RefObj *outgoing;
         if (incoming) ++incoming->_refCount;
@@ -28,10 +22,9 @@ struct Ref {
         *dest = incoming;
     }
 };
-/* Owning stack reference to the popped arg-data object: starts empty, takes the object by assignment
- * (retain new, release old) and releases it on scope exit (reference count in the low 23 bits of
- * _refCount).  The out-of-line copy the exception table names is the retail body 0x00357a90
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the popped arg-data object: starts empty, takes the object by
+ * assignment (retain new, release old) and releases it on scope exit (reference count in the low
+ * 23 bits of _refCount). */
 class ObjectRef {
 public:
     RefObj *p;

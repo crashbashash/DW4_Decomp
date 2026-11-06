@@ -15,10 +15,8 @@ extern int DAT_0051d1f8[4];
 extern int DAT_00587110[4];
 void FUN_004432a0(beNDMWShinkaCtrl *self);
 }
-/* Owning stack reference to the evolution entry under construction: constructed from the object and
- * released on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the
- * exception table names is the retail body 0x00443540 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to the evolution entry under construction; released on scope exit
+ * (reference count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;
@@ -68,9 +66,8 @@ void FUN_004432a0(beNDMWShinkaCtrl *self) {
             } else {
                 alloc = Memory_GetAllocatorBySelector(DAT_00587110[0]);
             }
-            /* The entry is owned by the stack reference until the list has taken its own reference. */
             ObjectRef entry(FUN_003c99a0(alloc));
-            igObject *slotB; /* retained word handed to List_InsertWords; the list takes the reference */
+            igObject *slotB;
             FUN_004435c0(entry.p, self->_gameRam, self->_playerNo, idx);
             if (idx == 3) {
                 l4 = (igObjectList *)self->_list;

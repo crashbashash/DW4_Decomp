@@ -1,4 +1,3 @@
-/* stack-object GetVTable accessor with an inlined member release.py. */
 typedef struct Q { char pad4[4]; int f4; } Q;
 int igObject_Destroy(void *);
 typedef struct { int *vt; int w[3]; Q *s; } Obj;

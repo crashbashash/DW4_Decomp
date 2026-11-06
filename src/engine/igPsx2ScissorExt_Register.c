@@ -1,6 +1,3 @@
-/* 0x00153010 igPsx2ScissorExt_Register: registers class igPsx2ScissorExt with the object system, derived from igScissorExt.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igScissorExt_Register[];
 extern char thunk_igPsx2ScissorExt_GetMetaObject[];
 extern char igPsx2ScissorExt_GetVTable[];
@@ -15,16 +12,16 @@ int igPsx2ScissorExt_InitFields();
 void igPsx2ScissorExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
-        0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2ScissorExt_metaObject,       /* published MetaObject slot */
-        igScissorExt_Register,                        /* base class registrar */
-        igScissorExt_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igPsx2ScissorExt_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        igPsx2ScissorExt_className,        /* class name */
-        0x2C,                                         /* instance size */
-        igPsx2ScissorExt_GetVTable,                   /* vtable getter */
-        &igPsx2ScissorExt_InitFields,                 /* field adder */
-        0,                                            /* extra callback item */
-        g_igPsx2ScissorExt_callbackList      /* callback list */
+        0, /* abstract */
+        g_igPsx2ScissorExt_metaObject,
+        igScissorExt_Register,
+        igScissorExt_GetPublishedMetaObject,
+        thunk_igPsx2ScissorExt_GetMetaObject,
+        igPsx2ScissorExt_className,
+        0x2C, /* instance size */
+        igPsx2ScissorExt_GetVTable,
+        &igPsx2ScissorExt_InitFields,
+        0, /* extra callback item */
+        g_igPsx2ScissorExt_callbackList /* callback list */
     );
 }

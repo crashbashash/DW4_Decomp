@@ -1,7 +1,6 @@
-/* 0x001a67c0
- * Factory for igAnimationStatePool: make sure the class is registered (static
- * init), then instantiate its metaobject with the given allocator
- * (igMetaObject_CreateInstance(metaObject, allocator)). */
+/* Factory for igAnimationStatePool: make sure the class is registered (static init), then
+ * instantiate its metaobject with the given allocator (igMetaObject_CreateInstance(metaObject,
+ * allocator)). */
 extern int g_igAnimationStatePool_metaObject[4];
 int igAnimationStatePool_RunStaticInit();
 int igMetaObject_CreateInstance(int, int);

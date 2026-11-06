@@ -1,10 +1,6 @@
-/* Gap__Bec__beNDMWStatusCtrl00__vfunc_21 (0x0040de80, 3160 B): MATCH under the alternate compiler (local/mwcps2/combat/mwccps2.exe).
- * Same profile as Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21 (0x004196c0):
- *   config/SLUS-20836/unit-compilers.tsv  0x0040de80  local/mwcps2/combat/mwccps2.exe  <sha256 of the combat compiler>
- *   config/SLUS-20836/unit-flags.tsv      0x0040de80  -O3,p -Cpp_exceptions off -Iinclude
- *   config/SLUS-20836/unit-objects.json   0x0040de80  emitted {WinRef<1..7> destructors 0x40ede0..0x40eae0}, duplicates {__dt__9ObjectRefFv: 0x003b7fe0}, externals {__dl__FPv: 0x00100610}
- * The window holders are memory-resident stack objects (slots sp3C..sp20 = declaration order w1..w8); each releases its window in its destructor.
- * The offset/index/count loop locals are declared in the order n, i, off with c before them (register allocation). */
+/* The window holders are memory-resident stack objects (slots in declaration order w1..w8); each
+ * releases its window in its destructor. The offset/index/count loop locals are declared in the
+ * order n, i, off with c before them. */
 #include "dw4/reflected.h"
 typedef igObject Obj;
 extern "C" {
@@ -57,9 +53,8 @@ extern unsigned char GPR_00554c14;
 void Gap__Bec__beNDMWStatusCtrl00__vfunc_21(beNDMWStatusCtrl00 *self);
 }
 
-/* owning reference to a freshly created window: the destructor drops one reference and destroys at zero.  Each window kind is
- * its own class, so the compiler emits one destructor per kind (retail 0x40eae0..0x40ede0, directly behind this function);
- * the Obj holder shares the out-of-line copy retail keeps once (0x3b7fe0). */
+/* Owning reference to a freshly created window: the destructor drops one reference and destroys at
+ * zero. Each window kind is its own class, so the compiler emits one destructor per kind. */
 struct ObjectRef { Obj *p; ObjectRef(Obj *o) : p(o) {} ~ObjectRef() { Obj *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } operator Obj *() { return p; } };
 template <int K> struct WinRef { Obj *p; WinRef(Obj *o) : p(o) {} ~WinRef() { Obj *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } operator Obj *() { return p; } };
 

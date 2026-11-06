@@ -1,10 +1,8 @@
 /* Resolves an external info reference of a directory being loaded: finds the info named _infoName
- * (igDirectory_FindInfoByName) in external directory
- * number _directoryIndex of `directory` (_externalDirectoryList, whose _data holds one pointer per
- * directory), asks it for the value stored under _key (virtual slot 22) and writes that into entry
- * _index of `directory` (FUN_002d7da0). A missing info
- * stores 0. Field roles from include/dw4/reflected.h (igExternalInfoEntry, igDirectory,
- * igDirectoryList). */
+ * (igDirectory_FindInfoByName) in external directory number _directoryIndex of `directory`
+ * (_externalDirectoryList, whose _data holds one pointer per directory), asks it for the value
+ * stored under _key (virtual slot 22) and writes that into entry _index of `directory`
+ * (FUN_002d7da0). A missing info stores 0. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002d7da0(...);

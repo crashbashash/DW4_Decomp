@@ -1,6 +1,4 @@
-/* FUN_00122d90 -- fdlibm atanf(x): single-precision arctangent; same reduction to |x| < 7/16 with
- * atan(0.5), atan(1.0), atan(1.5), atan(inf) offsets as the double version, an 11-term polynomial
- * split into odd/even parts. Tables at 0x4d3cb8 (atanhi), 0x4d3cc8 (atanlo), 0x4d3cd8 (aT). */
+/* fdlibm atanf(x). */
 #include "dw4/ieee_words.h"
 
 extern float FUN_00123210(float); /* fabsf */

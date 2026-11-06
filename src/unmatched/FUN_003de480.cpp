@@ -1,9 +1,5 @@
-/* Three-slot sibling of FUN_003de7a0: case 1 binds slots 0..2, case 0 builds a pooled value object
- * per slot from table entry (index-1 wrapped to f44-1 when below f48, index, index+1 wrapped to
- * f48 at f44) and binds it. Each object lives in a scoped ObjectRef whose destructor is the retail
- * reference-destructor duplicate 0x003832d0; exceptions off. Alternate compiler -O3,p. The last
- * wrap must be written as if/else on the unwrapped n (if (n >= f44) s0 = f48; else s0 = n;): the
- * if-without-else spelling pads the join label with a nop. */
+/* The last wrap must be written as if/else on the unwrapped n (if (n >= f44) s0 = f48; else s0 =
+ * n;): the if-without-else spelling pads the join label with a nop. */
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);
@@ -20,10 +16,8 @@ extern int DAT_00516f10[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the slot's text object: constructed from the freshly created object and
- * released on scope exit (reference count in the low 23 bits of refs).  The out-of-line copy the
- * exception table names is the retail body 0x003832d0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv); the three slots share the one class, so the table names it three times. */
+/* Owning stack reference to the slot's text object; released on scope exit (reference count in the
+ * low 23 bits of refs). */
 class ObjectRef {
 public:
     Obj *p;

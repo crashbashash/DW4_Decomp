@@ -9,7 +9,6 @@ extern float DAT_0048da38[4];
 extern float DAT_0048da40[4];
 extern unsigned char GPR_00554988;
 }
-/* receiver class not established (no reflected class matches +44..+56); lists are typed by their creators FUN_002c9740 (igFloatList) and FUN_002c99b0 (igUnsignedCharList) */
 struct Self { char pad[44]; igObject *f44; igFloatList *f48; igFloatList *f52; igUnsignedCharList *f56; };
 struct Src { char pad[20]; int f20; };
 #define REL3(p) { igObject *t = p; if (t) { t->_refCount = t->_refCount - 1; igObject *u = p; if (((unsigned long long)((long long)(int)u->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(u); } }

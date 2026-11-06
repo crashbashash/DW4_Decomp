@@ -9,7 +9,6 @@ struct Handle00291318 {
     char pad404[1024 - 404];
 };
 
-/* Global block at DAT_00573f18 (only the members used here). */
 struct Pool00291318 {
     char pad0[84];
     int count;                      /* +84 */

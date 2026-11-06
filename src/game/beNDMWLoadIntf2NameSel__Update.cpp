@@ -1,11 +1,11 @@
-/* 0x003def80 - NameSel update: one step of the name-entry state machine (_st0 selects the phase, _st1 the step inside it).
- * Phases: 0 open the windows, 1 typing (D-pad moves the cursor, Cross enters, Circle erases, START leaves), 2 close,
- * 3 question (_isQuestion until _isAnswer), 4 leave early, 5 shut every window and set _isEnd. Returns _isEnd.
- * The receiver is the reflected beNDMWLoadIntf2NameSel (288 bytes registered); reflection lists its fields up to +100 and
- * the per-cell save area below is the unlisted tail of the same object (+104..), so NameSelRam is that tail laid over it. */
+/* NameSel update: one step of the name-entry state machine (_st0 selects the phase, _st1 the step
+ * inside it). Phases: 0 open the windows, 1 typing (D-pad moves the cursor, Cross enters, Circle
+ * erases, START leaves), 2 close, 3 question (_isQuestion until _isAnswer), 4 leave early, 5 shut
+ * every window and set _isEnd. Returns _isEnd. The receiver is the reflected
+ * beNDMWLoadIntf2NameSel (288 bytes registered); reflection lists its fields up to +100 and the
+ * per-cell save area below is the unlisted tail of the same object (+104..), so NameSelRam is that
+ * tail laid over it. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 typedef struct Vec3f { float x, y, z; } Vec3f;
 typedef struct NameSelSave { int tate, yoko, cur; } NameSelSave;
@@ -360,4 +360,4 @@ unsigned char beNDMWLoadIntf2NameSel__Update(NameSelRam *s, int arg1) {
     }
     return NS._isEnd;
 }
-} /* extern "C" */
+}

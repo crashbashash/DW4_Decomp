@@ -1,6 +1,3 @@
-/* 0x00238ee0 igSearchSceneGraph_Register: registers class igSearchSceneGraph with the object system, derived from igNamedObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igNamedObject_GetPublishedMetaObject[];
 extern char igSearchSceneGraph_GetVTable[];
 extern char thunk_igSearchSceneGraph_GetMetaObject[];
@@ -15,16 +12,16 @@ int igSearchSceneGraph_InitFields();
 void igSearchSceneGraph_Register(void) {
     SceneSearchLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igSearchSceneGraph_metaObject,      /* published MetaObject slot */
-        igNamedObject_Register,                        /* base class registrar */
-        igNamedObject_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igSearchSceneGraph_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        igSearchSceneGraph_className,       /* class name */
-        0x1C,                                          /* instance size */
-        igSearchSceneGraph_GetVTable,                  /* vtable getter */
-        &igSearchSceneGraph_InitFields,                /* field adder */
-        0,                                             /* extra callback item */
-        g_igSearchSceneGraph_callbackList     /* callback list */
+        0, /* abstract */
+        g_igSearchSceneGraph_metaObject,
+        igNamedObject_Register,
+        igNamedObject_GetPublishedMetaObject,
+        thunk_igSearchSceneGraph_GetMetaObject,
+        igSearchSceneGraph_className,
+        0x1C, /* instance size */
+        igSearchSceneGraph_GetVTable,
+        &igSearchSceneGraph_InitFields,
+        0, /* extra callback item */
+        g_igSearchSceneGraph_callbackList /* callback list */
     );
 }

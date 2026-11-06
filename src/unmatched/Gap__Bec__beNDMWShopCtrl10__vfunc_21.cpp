@@ -44,16 +44,15 @@ struct RefCountedObject { int vt; int rc; };
 struct Tbl7 { int v[7]; };
 extern Tbl7 DAT_004cf950, DAT_004cf970;
 
-/* Scope holder for a freshly built window: its destructor releases the reference. Retail keeps one out-of-line destructor per
- * holder class (kind 0..3 = 0x428710, 0x428690, 0x411080, 0x428610). */
+/* Scope holder for a freshly built window: its destructor releases the reference. One class per
+ * kind, so each kind gets its own out-of-line destructor. */
 template <int kind> struct RP {
     RefCountedObject *p;
     RP(RefCountedObject *x) { p = x; }
     ~RP() { RefCountedObject *o = p; if (o != 0) { o->rc = o->rc - 1; if ((o->rc & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]): releases the token on
- * scope exit. The out-of-line copy the exception table names is the retail body StringRef_Destruct_00130720
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     const char *p;
@@ -62,14 +61,11 @@ public:
 };
 extern "C" void StringList_AppendRetained(int, const StringRef &);
 
-/* intern `text` (the pool singleton is created on first use) and append the token to `list`; the token is a temporary
- * StringRef, destroyed after the call */
 #define APPENDSTR(list, text) { const char *tok; if ((text) == 0) { tok = 0; } else { if (DAT_00586f20[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); DAT_00586f20[0] = pool; } tok = (const char *)StringPool_Intern(DAT_00586f20[0], (void *)(text)); } StringList_AppendRetained(list, StringRef(tok)); }
 
 #define DEREF(o) if (o) { (o)->rc = (o)->rc - 1; if (((unsigned long long)((long long)(o)->rc << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
 
 #define NEWWIN(kind, w, ctor, code) int alloc; int a; alloc = igObject_GetAllocator(self); a = GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]); RP<kind> w((RefCountedObject *)ctor(a)); beNDMWWindow_BindContext(w.p, self, self->_insight, self->_playerNo, code); ObjectList_AppendRetained(self->_subWindow, w.p);
-
 
 #define INC(l, n) { int ix = n; int cnt; int *dp; int *pp; int nv; dp = (int *)(l)->_data; pp = &dp[ix]; cnt = (l)->_count; nv = *pp + 1; if (cnt != 0 && ix < cnt) *pp = nv; }
 #define CEILD(dst, e) { int m = (e); int r = (m - 45) % 5; int q = (m - 45 - r) / 5; dst = q + (r != 0); }

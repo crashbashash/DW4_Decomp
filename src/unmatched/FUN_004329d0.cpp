@@ -1,8 +1,6 @@
-/* Per player slot 0..3 query the messenger and gather values and lists. The per-player weapon-
- * number list is held in an RP (owning reference) whose destructor the exception table names
- * (retail body 0x00150eb0.json duplicate __dt__2RPFv). Register-id notes: the byte-offset
- * induction variable shares the function-level `idx` (the first append's index web, then the
- * offset web), which gives it a later node id than the stack reload of the new list pointer. */
+/* The byte-offset induction variable shares the function-level `idx` (the first append's index
+ * web, then the offset web), which gives it a later register id than the stack reload of the new
+ * list pointer. */
 #include "dw4/reflected.h"
 extern "C" {
 extern int beMessenger_SendGroup(...);
@@ -15,7 +13,6 @@ extern int igObject_Destroy(...);
 extern int FUN_002caa70(...);
 extern void *Memory_GetAllocatorBySelector(...);
 extern void *igObject_GetAllocator(...);
-/* property-record views: igProperty_* return records of no reflected class, so these stay local (hypothesis) */
 struct Item { int p[3]; int f12; };
 struct Rec { int p[3]; igObjectList *f12; };
 struct RecB { int p[3]; unsigned char f12; };
@@ -35,9 +32,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void FUN_004329d0(beNDMWShopCtrlDigilabo *self);
 }
-/* Owning stack reference to the new weapon-number list: constructed from the freshly created list and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception table names is
- * the retail body 0x00150eb0 (config/SLUS-20836/unit-objects.json, duplicate __dt__2RPFv). */
+/* Owning stack reference to the new weapon-number list; released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class RP {
 public:
     igIntList *p;

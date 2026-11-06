@@ -1,10 +1,7 @@
-/* 0x002ea220 — igIntArrayMetaField vfunc 52: forward to the element type.
- * An array field is a run of _num elements of one scalar field type, so its
- * slot-52 query is answered by the element type's default descriptor
- * (igIntMetaField_GetDefaultDescriptor) with the per-element amount scaled by
- * _num.  Slot 52 itself is not named yet (hypothesis: a size/count query);
- * the call goes through the DW4VC_208_2 projection of that descriptor's
- * vtable (virtual ABI projections describe observed slots only). */
+/* Forwards to the element type. An array field is a run of _num elements of one scalar field type,
+ * so this query is answered by the element type's default descriptor with the per-element amount
+ * scaled by _num. The call goes through the DW4VC_208_2 projection of that descriptor's vtable
+ * (ABI projections describe observed slots only). */
 #include "dw4/reflected.h"
 extern "C" {
 void **igIntMetaField_GetDefaultDescriptor(...);

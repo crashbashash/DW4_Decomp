@@ -1,7 +1,5 @@
-/* Runs the due timer-queue entries (those with the head's key), recycles them to the free list,
- * then signals the semaphore if its counters differ and calls FUN_001f0310(1/2). The status block
- * is a 32-byte struct (only two words used) so the frame matches; the loop test is `!((head != 0)
- * ^ 1)` and the head is re-read at the top of each pass. Alternate compiler -O3. */
+/* The status block is a 32-byte struct (only two words used) so the stack frame size matches; the
+ * loop test is `!((head != 0) ^ 1)` and the head is re-read at the top of each pass. */
 struct Node { int w0; struct Node *next; long long key; void (*fn)(struct Node *, int); int arg; };
 extern int DAT_0056bf38[4];
 extern struct Node *DAT_0056bf40[4];

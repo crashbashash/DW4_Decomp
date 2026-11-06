@@ -1,14 +1,10 @@
-/* 0x00144680
- * Issue IOP audio RPC command 0x10000 on the context's connection and return
- * the 32-byte reply block it fills.  The block is allocated from the
- * context's own allocator (igObject_GetAllocator reads the allocator index
- * from the object in a0, which is still `self` at that call, so the
- * argument-less spelling is the one that matches).  The allocator's virtual
- * at vtable byte offset 220 takes size 32 and alignment 16, because the RPC
- * wrapper FUN_0032d6d0 requires 16-byte-aligned buffers and sizes (its asm
- * tests each with `andi 0xf`).  The caller owns the returned block.
- * The sibling vfunc_52 sends command 0xE0000 and unpacks four ints; the
- * layout of this reply is not recovered. */
+/* Issue IOP audio RPC command 0x10000 on the context's connection and return the 32-byte reply
+ * block it fills. The block is allocated from the context's own allocator (igObject_GetAllocator
+ * reads the allocator index from the object in a0, which is still `self` at that call, so the
+ * argument-less spelling is needed). The allocator's virtual at vtable byte offset 220 takes size
+ * 32 and alignment 16, because the RPC wrapper FUN_0032d6d0 requires 16-byte-aligned buffers and
+ * sizes. The caller owns the returned block. The sibling vfunc_52 sends command 0xE0000 and
+ * unpacks four ints. */
 #include "dw4/reflected.h"
 extern "C" {
 void **igObject_GetAllocator(...);

@@ -1,6 +1,5 @@
 #include "menurecord.h"
-/* Retail 40ee60/4196c0/41f190 scalar flow, with required owned view leaves.
- * Provenance and controlled-oracle boundaries: docs/status-submenus.md. */
+/* Retail 40ee60/4196c0/41f190 scalar flow, with required owned view leaves. */
 #include "dw4/statussubmenu.h"
 #include <stdlib.h>
 #include <stdio.h>

@@ -1,9 +1,5 @@
-/* Clear four flag bytes, then set the flag of every item listed by each entry whose id equals the
- * index of a zero-byte slot; the owner pointer is read volatile so the slot list is reloaded on
- * each use. Alternate compiler -O3,p. */
+/* The owner pointer is read volatile so the slot list is reloaded on each use. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_003f1490(int);
 void FUN_003ecc60(beNDMWLoadCtrl2CommonIntf *arg0) {
@@ -29,4 +25,4 @@ void FUN_003ecc60(beNDMWLoadCtrl2CommonIntf *arg0) {
         }
     }
 }
-} /* extern "C" */
+}

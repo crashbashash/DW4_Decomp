@@ -1,5 +1,3 @@
-/* Eight-argument setup, member address kept in a pointer local for the later read; alternate
- * compiler -O3. */
 int FUN_0010b7d8(int, int);
 int FUN_0032d6d0(int *, int, int, void *, int, void *, int, int);
 struct T { int f0, f4, f8, f12, f16, f20, f24, f28, f32; };

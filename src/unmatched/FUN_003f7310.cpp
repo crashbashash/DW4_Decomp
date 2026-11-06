@@ -33,18 +33,15 @@ extern int DAT_00587108[4];
 extern unsigned char GPR_005549e8;
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the new player data object: constructed from the creating call and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body 0x003ba350 (config/SLUS-20836/unit-objects.json, duplicate __dt__13PlayerDataRefFv). */
+/* Owning stack reference to the new player data object, released on scope exit (reference count in
+ * the low 23 bits of _refCount). */
 class PlayerDataRef {
 public:
     igObject *p;
     PlayerDataRef(igObject *o) : p(o) {}
     ~PlayerDataRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to one new item record: released at the end of each loop pass.  The
- * out-of-line copy the exception table names is the retail body 0x003b9ba0 (config/SLUS-20836/unit-objects.json,
- * duplicate __dt__7ItemRefFv). */
+/* Owning stack reference to one new item record, released at the end of each loop pass. */
 class ItemRef {
 public:
     igObject *p;

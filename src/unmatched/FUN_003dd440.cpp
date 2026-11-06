@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-/* Receiver: the shared data-selection interface object (beNDMWLoadIntf2DataSelIntf), called by the matched beNDMWSaveIntf::vfunc_31. */
 extern "C" {
 extern int DAT_00516d30[4];
 extern int DAT_00516d70[4];
@@ -12,7 +11,6 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(int, int, int *, int *, int);
 unsigned char beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(int);
 void TextOrder_ClearFont(int, int *, int, int);
 }
-
 
 extern "C" unsigned char FUN_003dd440(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     int s3; int s2; bool s1; int s0;

@@ -1,6 +1,4 @@
-/* igStringRefList_Register: static-init registration of igStringRefList (an igDataList of string-
- * reference elements) with the object system. The igMetaObject_RegisterClass arguments are laid
- * out per docs/engine/reflection-metadata.md section 1; names from data/reflection.json.
+/* Static-init registration of igStringRefList (an igDataList of string-reference elements).
  * FUN_002b5d50 is the set-once latch every registrar of this group calls first (a gp byte flag
  * guards a few shared one-time registrations). */
 extern char igDataList_GetPublishedMetaObject[];
@@ -15,16 +13,16 @@ extern int igStringRefList_InitFields_002b9290[4];
 void igStringRefList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
-        0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igStringRefList_metaObject,   /* published MetaObject slot */
+        0, /* abstract */
+        g_igStringRefList_metaObject,
         igDataList_Register,                     /* base class registrar (igDataList) */
-        igDataList_GetPublishedMetaObject,       /* base class MetaObject accessor */
-        thunk_igStringRefList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        igStringRefList_className,    /* class name */
-        0x14,                                    /* instance size */
-        igStringRefList_GetVTable,               /* vtable getter */
+        igDataList_GetPublishedMetaObject,
+        thunk_igStringRefList_GetMetaObject,
+        igStringRefList_className,
+        0x14, /* instance size */
+        igStringRefList_GetVTable,
         &igStringRefList_InitFields_002b9290[0], /* field adder (class InitFields) */
-        0,                                       /* extra callback item */
-        0                                        /* callback list */
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

@@ -1,8 +1,3 @@
-/* MDLisSeqName (0x003742e0, 304 bytes).
- *
- * Answer whether the first model-control info ram's sequence code name equals the given string.
- * When the ram has no data list yet, create one (pooled allocator unless the global selector flag
- * is clear), retain it into the ram and release the creating reference on scope exit. */
 #include "dw4/reflected.h"
 extern "C" {
 igObject *beBaseInfoDataList_Create(...);
@@ -18,10 +13,8 @@ extern int DAT_0050dd40[4];
 extern unsigned char GPR_00554c14;
 int MDLisSeqName(char *arg0);
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released
- * on scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the
- * exception table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate
- * __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list; released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

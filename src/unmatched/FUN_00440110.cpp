@@ -1,7 +1,4 @@
 #include "dw4/reflected.h"
-/* Receiver by the matched caller beNDMWShopCtrlEditBit::vfunc_21: +12 is _messenger. */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int sprintf(char *, int *, int);
 int strlen(char *);
@@ -66,4 +63,4 @@ void FUN_00440110(beNDMWShopCtrlEditBit *arg0, int arg1, int arg2) {
         } while (j > -1);
     }
 }
-} /* extern "C" */
+}

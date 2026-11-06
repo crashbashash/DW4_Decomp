@@ -1,11 +1,6 @@
-/* 0x00406fe0
- * Lazily creates the global string pool (the cache at
- * 0x00586f20): allocates 16 bytes and runs StringPool_Construct on them only
- * while the cache is null.  An allocation failure stores and returns null, so
- * a later call retries.  FUN_002eb010 is the engine's default
- * allocator (size in a0). */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
+/* Lazily creates the global string pool: allocates 16 bytes and runs StringPool_Construct on them
+ * only while the cache is null. An allocation failure stores and returns null, so a later call
+ * retries. FUN_002eb010 is the engine's default allocator (size in a0). */
 extern "C" {
 int FUN_002eb010(int);
 int StringPool_Construct(int);
@@ -22,4 +17,4 @@ int StringPool_GetInstance(void) {
     }
     return g_stringPool[0];
 }
-} /* extern "C" */
+}

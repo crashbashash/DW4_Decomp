@@ -13,9 +13,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 int FUN_003a7d80(beBaseInfoRam *arg0, int arg1);
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
+ * _refCount); released on scope exit. */
 class ObjectRef {
 public:
     igObject *p;
@@ -46,9 +45,8 @@ int FUN_003a7d80(beBaseInfoRam *arg0, int arg1) {
                 old->_refCount = old->_refCount - 1;
                 if ((old->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(old);
-                    /* asm-body: reason=retail pads this release with a second nop (0x003a7e24) that the unit's
-                     * profile never schedules from C/C++ tried=same release spelling without the nop (268 of 272
-                     * bytes), the stack-reference rewrite of this unit */
+                    /* Retail pads this release with a second nop that the compiler never schedules
+                     * from C. */
                     asm { nop }
                 }
             }

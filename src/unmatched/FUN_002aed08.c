@@ -8,7 +8,8 @@ struct Obj0D40 {
     int f3392;
 };
 
-/* FUN_002a0dd8(handle) records the handle in a global and returns -1 when it is null or its word at +72 is clear (asm/FUN_002a0dd8.s). */
+/* FUN_002a0dd8(handle) records the handle in a global and returns -1 when it is null or its word
+ * at +72 is clear. */
 int FUN_002aed08(struct Obj0D40 *handle, int value) {
     if (FUN_002a0dd8(handle) != 0) {
         return FUN_002a0bb8(0, 0xFF000124);

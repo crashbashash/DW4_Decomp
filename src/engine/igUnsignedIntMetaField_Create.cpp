@@ -1,18 +1,15 @@
 /* Factory for an igUnsignedIntMetaField (52-byte instance). Once the object system is live, ensure
- * the class is registered (igUnsignedIntMetaField_EnsureRegistered runs
- * igMetaObject_RunStaticInit(igUnsignedIntMetaField_Register)) and let its MetaObject create the
- * instance with the given allocator. Before that, allocate by hand, construct in place (second
- * argument 1 is the flag retail passes) and run the post-construction hooks, vfunc_09 then
- * vfunc_07(0). Same factory shape as the other metafield factories in src/engine/field-descriptor-
- * factories.cpp. */
+ * the class is registered and let its MetaObject create the instance with the given allocator.
+ * Before that, allocate by hand, construct in place (second argument 1) and run the post-
+ * construction hooks, vfunc_09 then vfunc_07(0). */
 extern "C" {
 int igUnsignedIntMetaField_EnsureRegistered(...);
 void **igObject_AllocateRawStorage(...);
 void **igUnsignedIntMetaField_Construct(...);
 void **igMetaObject_CreateInstance(...);
 extern int g_igUnsignedIntMetaField_metaObject[4];
-/* Pointer to the object-system state; its first byte is nonzero once the
- * reflection system is live (docs/engine/field-factories.md, "Factory modes"). */
+/* Pointer to the object-system state; its first byte is nonzero once the reflection system is
+ * live. */
 extern unsigned char * g_objectSystem[4];
 void **igUnsignedIntMetaField_Create(int allocator);
 }

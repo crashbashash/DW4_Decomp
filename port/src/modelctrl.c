@@ -1694,10 +1694,11 @@ const dw4_modelctrl_hitbox *dw4_modelctrl_hitboxes(const dw4_modelctrl *m,unsign
 static int model_bullet_hit_impl(dw4_modelctrl *m,const float world[16],const dw4_model_bullet *b)
 {
     if(!m || !world || !b)return -1;
-    /* ASSUMPTION (docs/combat.md "Support technique wiring"): a support volume (attack numbers 80000..89999, an enemy-group bullet on the caster's own body)
-     * ignores the MUTEKI counter. The port's player carries a positive count on the very tick the cast starts (observed in `check-fieldstage supportcast`; its
-     * source was not traced) and a damage sequence leaves 30 frames of it, so honouring it would drop a Heal cast at the start of the sequence or right after a
-     * hit; the gate of 0x396a80 case 6 for these kinds was not read. */
+    /* ASSUMPTION: a support volume (attack numbers 80000..89999, an enemy-group bullet on the
+     * caster's own body) ignores the MUTEKI counter. The port's player carries a positive count on
+     * the very tick the cast starts (observed; its source was not traced) and a damage sequence
+     * leaves 30 frames of it, so honouring it would drop a Heal cast at the start of the sequence
+     * or right after a hit; the gate of 0x396a80 case 6 for these kinds was not read. */
     int support=b->group==DW4_BULLET_ENEMY && b->kind>=80000 && b->kind<90000;
     if(!model_ram(m)->_isRun || !model_work(m)->_isOnCtrl || !m->nhit_boxes || (!support && ee_f32_cmp(model_float_bits(&model_work(m)->_mutekiCount),0)) || !strcmp(dw4_modelctrl_sequence(m),"SQ_ERAS"))return 0;
     if(!(b->group==DW4_BULLET_PLAYER?m->hit_player_bullet:m->hit_enemy_bullet))return 0;

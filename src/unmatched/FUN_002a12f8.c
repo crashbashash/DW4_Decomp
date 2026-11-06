@@ -6,7 +6,6 @@ struct Player2a12f8 {
     char pad[8060];
     int f8060;
 };
-/* Filled by FUN_0029dd98 (same layout FUN_0029c258 reads). */
 struct Info2a12f8 {
     int f0;
     int f4;

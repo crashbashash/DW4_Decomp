@@ -1,5 +1,3 @@
-/* Stack object, vtable slot read through the object plus a runtime offset. Matches only with the
- * alternate (combat) compiler build. */
 typedef struct { int *vt; int pad[7]; } Obj;
 int igObject_InitHeader();
 extern int DAT_0052ab90[4];

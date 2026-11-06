@@ -1,10 +1,6 @@
-/* 0x00140d60
- * Forwards to the bound texture: when `_texture` is set, call the virtual at
- * vtable byte offset 116 (slot 27) of that object, with no arguments.
- * Evidence: the function's machine code is lw a0,12(a0); null guard; lw t9,116(t9);
- * jalr, and +12 is igTextureBindAttr::_texture (include/dw4/reflected.h).  The
- * sibling vfunc_28 forwards the neighbouring slot.  What the slot does is not
- * established, so the call is spelled through the stand-in `vX` below. */
+/* Forwards to the bound texture: when `_texture` is set, call the virtual at vtable byte offset
+ * 116 (slot 27) of that object, with no arguments. The sibling vfunc_28 forwards the neighbouring
+ * slot. The call is spelled through the stand-in `vX` below. */
 #include "dw4/reflected.h"
 extern "C" {
 

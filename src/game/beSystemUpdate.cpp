@@ -1,9 +1,8 @@
-/* beSystem update, 0x003a0020: frame clock and staged-directory publication. */
+/* Frame clock and staged-directory publication. */
 #include "dw4/reflected.h"
 
-/* The engine-wide context object whose pointer lives at 0x00586dd0.  Only the
- * members this update touches are named: the two allocator references that
- * are retargeted before a stage directory is requested. */
+/* The engine-wide context object. Only the members this update touches are named: the two
+ * allocator references that are retargeted before a stage directory is requested. */
 struct GlobalContextRecord {
     char unknown0[60];
     igObject *allocator60;
@@ -17,8 +16,7 @@ typedef struct StringTokenHeader {
     int refCount;
 } StringTokenHeader;
 
-/* C++ unit with exceptions on (retail keeps an exception index record for this
- * update); the C-ABI names stay unmangled through this block. */
+/* C++ with exceptions on; the C-ABI names stay unmangled through this block. */
 extern "C" {
 int FUN_002eb010(int);
 void *Memory_GetAllocatorBySelector(int);
@@ -38,9 +36,9 @@ extern int g_defaultAllocatorSelector[4];
 /* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used as returned instead
  * of the selector. */
 extern unsigned char GPR_00554c14;
-/* File-context calls, named by FUN_003092f0 requests a directory by name,
- * FUN_00309740 tells whether it has loaded, FUN_00309750 releases the request, FUN_00308e00 closes
- * the context; __floatdisf converts the 64-bit frame delta to float (Int64ToFloat). */
+/* File-context calls: FUN_003092f0 requests a directory by name, FUN_00309740 tells whether it has
+ * loaded, FUN_00309750 releases the request, FUN_00308e00 closes the context; __floatdisf converts
+ * the 64-bit frame delta to float. */
 float __floatdisf(long long);
 int FUN_00308c80(struct GlobalContextRecord *);
 igDirectory *FUN_003092f0(struct GlobalContextRecord *, int name);

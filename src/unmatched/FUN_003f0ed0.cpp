@@ -1,6 +1,5 @@
-/* FUN_003f0ed0 (0x003f0ed0): bind a memory-card utility controller to its messenger and fill its slot list
- * with 5, 2 or 9 slot windows according to arg2 (each case creates one slot class: FUN_003c5ee0,
- * FUN_003c5cf0, FUN_003c5aa0).  Every new slot is retained by the list and released by its stack
+/* Binds a memory-card utility controller to its messenger and fills its slot list with 5, 2 or 9
+ * slot windows according to arg2. Every new slot is retained by the list and released by its stack
  * reference at the end of the loop body (a for loop: the release precedes the index increment). */
 #include "dw4/reflected.h"
 
@@ -16,11 +15,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 
-/* Owning stack reference to a new slot window of one of the three slot classes (kind 0..2 follows the
- * arg2 case): constructed from the factory result and released on scope exit (reference count in the
- * low 23 bits of _refCount).  The out-of-line copies the exception table names are this unit's own
- * retail bodies 0x003f11f0, 0x003f1170 and 0x003f10f0 (config/SLUS-20836/unit-objects.json, emitted
- * __dt__10SlotRef<0>Fv, __dt__10SlotRef<1>Fv, __dt__10SlotRef<2>Fv). */
+/* Owning stack reference to a new slot window of one of the three slot classes (kind 0..2 follows
+ * the arg2 case), released on scope exit (reference count in the low 23 bits of _refCount). */
 template <int kind> class SlotRef {
 public:
     igObject *p;

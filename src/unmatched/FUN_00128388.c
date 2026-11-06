@@ -1,5 +1,4 @@
-/* Returns 10^digits, from the powers-of-ten table below 24 and by repeated multiplication above
- * (newlib _mprec_log10 shape; name is a hypothesis). */
+/* Returns 10^digits, from the powers-of-ten table below 24 and by repeated multiplication above. */
 extern double DAT_004d3f38[]; /* 1e0 .. 1e23 */
 
 double FUN_00128388(int digits) {

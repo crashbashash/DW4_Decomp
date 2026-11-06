@@ -1,23 +1,12 @@
-/* dw4/livetex.h — textures read from a live EE RAM dump.
- *
- * The asset layer reads textures out of a *texture pack* (`texpack.c`), but a stage's world and
- * character textures are not always in one: the material graph the live engine builds points at
- * `igPsx2Image` objects whose `_pImage`/`_pClut` are **ordinary pointers at runtime** (finding
- * #433: in a pack they are load-time ordinals).  So the same EE RAM dump that supplies the scene
- * placement (`--scene`, `scripts/capture_scene.py`) also supplies the pixels.
- *
- * The object walked here is the reflective `igPsx2Image` (the runtime class of `igImage`):
- *
- *   _px +0x08   _py +0x0c   _imageSize +0x30   _pImage +0x34   _pClut +0x44
- *   _bitsIdx +0x48   _bytesPerRow +0x4c   _pNameString +0x58
- *
- * and its `igClut` (`_numEntries` +0x0c, `_stride` +0x10, `_pData` +0x14).  This is the same
- * chain a live read walks through PINE, resolved offline against a dump.
- *
- * The dump's base is auto-detected: a 31 MB image is EE RAM from 0x00100000 (the low 1 MB is
- * kernel), a 32 MB image is the whole RAM from 0.  A `p2s_ram.py` extraction is the 32 MB form,
- * so trim it to 0x00100000 first — see `scripts/livedump.py`.
- */
+/* Textures read from a live EE RAM dump. A stage's world and character textures are not always in
+ * a texture pack: the material graph the live engine builds points at `igPsx2Image` objects whose
+ * `_pImage`/`_pClut` are ordinary pointers at runtime (in a pack they are load-time ordinals). So
+ * the same EE RAM dump that supplies the scene placement (`--scene`) also supplies the pixels. The
+ * object walked here is the reflective `igPsx2Image` (the runtime class of `igImage`): _px +0x08,
+ * _py +0x0c, _imageSize +0x30, _pImage +0x34, _pClut +0x44, _bitsIdx +0x48, _bytesPerRow +0x4c,
+ * _pNameString +0x58; and its `igClut` (`_numEntries` +0x0c, `_stride` +0x10, `_pData` +0x14). The
+ * dump's base is auto-detected: a 31 MB image is EE RAM from 0x00100000 (the low 1 MB is kernel),
+ * a 32 MB image is the whole RAM from 0. A 32 MB extraction should be trimmed to 0x00100000 first. */
 #ifndef DW4_LIVETEX_H
 #define DW4_LIVETEX_H
 

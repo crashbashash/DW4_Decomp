@@ -59,14 +59,14 @@ struct DummyVirtual {
     virtual void v24(void *, void *); virtual int v25(); virtual int v26();
 };
 
-/* owning reference to a freshly created window: the destructor drops one reference and destroys at zero.  One class per window
- * kind (the compiler emits one out-of-line destructor per class; retail keeps the copies named in config/SLUS-20836/unit-objects.json). */
+/* Owning reference to a freshly created window: the destructor drops one reference and destroys at
+ * zero. One class per window kind, since the compiler emits one out-of-line destructor per class. */
 template <int K> struct WindowRef {
     RefCountedObject *p;
     WindowRef(RefCountedObject *o) : p(o) {}
     ~WindowRef() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* owning reference to an interned string token (reference count at p[-1], chunk header at p[-2]); retail destructor 0x130720 */
+/* Owning reference to an interned string token (reference count at p[-1], chunk header at p[-2]). */
 struct StringRef {
     const char *p;
     StringRef(const char *s) : p(s) {}

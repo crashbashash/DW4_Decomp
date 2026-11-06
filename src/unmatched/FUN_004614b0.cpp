@@ -1,16 +1,3 @@
-/* 0x004614b0 - FUN_004614b0 = igViewerSceneInfoManager setup: copy the viewer "frame" defaults into the
- * parameters, hook the parameters into the three renderers and the application controller, size the
- * disable list, then bind the thirteen hot-key names (igGuiFactory lookup -> igHotKeyReceiver.set*).
- *
- * Evidence: the leading frame-singleton block (FUN_001007e0(0xF0) / FUN_00238110 construct, +232 use
- * count, string releases through StringChunk_ReleaseHeader) is the one in the matched neighbour
- * FUN_00462670; the three `parameters -> renderer +12` retained assignments, the application controller
- * link (+16 = viewer renderer, +12 = manager), FUN_00457e90, the disable-list resize (FUN_001b1e50 / memset
- * of count * 4) and thirteen (factory lookup FUN_0045ec90 -> receiver bind FUN_004573c0 / FUN_004573d0 /
- * FUN_004573f0) pairs each followed by an inline release of the looked-up object.
- *
- * Compiler: alternate (combat) MWCC, -O3,p -Iinclude (same as the neighbouring FUN_00462670 / FUN_00462ac0).
- **/
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
 

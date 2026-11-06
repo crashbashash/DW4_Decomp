@@ -8,9 +8,9 @@ extern int DAT_0050f4b0[4];
 extern int DAT_0050f4b8[4];
 }
 #include "dw4/reflected.h"
-/* unidentified owner object: only its messenger word at +20 is read */
+/* Only the messenger word at +20 of the owner object is read. */
 struct MessengerOwnerView { char pad[20]; int msg; };
-/* unidentified context object: only the owner pointer at +16 is read */
+/* Only the owner pointer at +16 of the context object is read. */
 struct OwnerContextView { char pad[16]; struct MessengerOwnerView *m; };
 extern "C" {
 void Gap__Bec__beModelCtrlSCSound__vfunc_23(beModelCtrlSCSound *arg0, struct OwnerContextView *arg1);

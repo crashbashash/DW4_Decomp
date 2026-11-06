@@ -1,13 +1,9 @@
-/* 0x0030e9f0
- * igUnsignedLongArrayMetaField slot 52: forwards (item, count * _num) to slot 50 of the
- * element type's default descriptor, so an array field of _num elements covers
- * _num times the requested count.  The descriptor is the lazily created object
- * cached at 0x00585718 (the cell sits between the igUnsignedLongMetaField and
- * igUnsignedLongArrayMetaField class handles, the same layout as the confirmed
- * default-descriptor getters). */
+/* Forwards (item, count * _num) to slot 50 of the element type's default descriptor, so an array
+ * field of _num elements covers _num times the requested count. The descriptor is the element
+ * type's lazily created default descriptor. */
 #include "dw4/reflected.h"
 extern "C" {
-void **FUN_002b69f0(...);  /* igUnsignedLongMetaField default-descriptor getter (name inferred, not confirmed) */
+void **FUN_002b69f0(...);
 void Gap__Core__igUnsignedLongArrayMetaField__vfunc_52(igUnsignedLongArrayMetaField *self, int item, int count);
 }
 /* Placeholder vtable: only the call through slot 50 of the descriptor is used. */

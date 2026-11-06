@@ -14,9 +14,11 @@ typedef struct {float hp_percent[4];int32_t hp_value[4];unsigned updates;} dw4_h
 /* The floating numbers (FUN_00373ef0) the field has spawned: per row (0 damage, 1 exp, 3 player damage) the count, plus the last spawned sequence and value, and the digit-plate vertices drawn so far. */
 typedef struct {unsigned spawned[5],refused,digit_vertices;int32_t last_value;char last_sequence[16];} dw4_hubruntime_popups;
 const dw4_hubruntime_popups *dw4_hubruntime_popup_stats(const dw4_hubruntime *);
-/* The drop presentation (FUN_00384800 / beNDMWMdlItem, see docs/dungeon-floors.md "Drop models"): item models generated and ended, 'got item' effects and
- * name labels sent. `unmodelled` counts drops whose model name has no controller in the stage (kept record-only; `missing` is the last such name), `lost` drops
- * whose model pool was full (retail's GENERATE reaches no free instance, so no item exists), `expired` models that ended before anyone took them. */
+/* The drop presentation (FUN_00384800 / beNDMWMdlItem): item models generated and ended, 'got
+ * item' effects and name labels sent. `unmodelled` counts drops whose model name has no controller
+ * in the stage (kept record-only; `missing` is the last such name), `lost` drops whose model pool
+ * was full (retail's GENERATE reaches no free instance, so no item exists), `expired` models that
+ * ended before anyone took them. */
 typedef struct {
     unsigned spawned,unmodelled,lost,failed,expired,erased,effects,labels_on,labels_off,dropitems;
     char missing[16],last_effect_panel[20],last_effect_sequence[16],last_label[64];int last_effect_slot,last_label_slot;

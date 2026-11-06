@@ -1,16 +1,16 @@
-void FUN_0018afa0(void); /* address-taken; signature not recovered */
-void FUN_0018b050(void); /* address-taken; signature not recovered */
-void FUN_0018b110(void); /* address-taken; signature not recovered */
-void FUN_0018b170(void); /* address-taken; signature not recovered */
-void FUN_0018b300(void); /* address-taken; signature not recovered */
-void FUN_0018b350(void); /* address-taken; signature not recovered */
-void FUN_0018b450(void); /* address-taken; signature not recovered */
-void FUN_0018b540(void); /* address-taken; signature not recovered */
-void FUN_0018b630(void); /* address-taken; signature not recovered */
-void FUN_0018b6b0(void); /* address-taken; signature not recovered */
-void FUN_0018b890(void); /* address-taken; signature not recovered */
-void thunk_FUN_0018ac80(void); /* address-taken; signature not recovered */
-void FUN_0018b990(void); /* address-taken; signature not recovered */
+void FUN_0018afa0(void);
+void FUN_0018b050(void);
+void FUN_0018b110(void);
+void FUN_0018b170(void);
+void FUN_0018b300(void);
+void FUN_0018b350(void);
+void FUN_0018b450(void);
+void FUN_0018b540(void);
+void FUN_0018b630(void);
+void FUN_0018b6b0(void);
+void FUN_0018b890(void);
+void thunk_FUN_0018ac80(void);
+void FUN_0018b990(void);
 void FUN_0018b730(void);
 void FUN_0018b7d0(void);
 void FUN_0018b940(void);

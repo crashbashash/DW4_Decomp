@@ -20,9 +20,8 @@ extern int DAT_00585be0[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-/* Owning stack reference to the freshly created data list: constructed from the object and released on
- * scope exit (reference count in the low 23 bits of _refCount).  The out-of-line copy the exception
- * table names is the retail body 0x0033e9c0 (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
+ * _refCount); released on scope exit. */
 class ObjectRef {
 public:
     igObject *p;
@@ -47,8 +46,6 @@ void FUN_00396740(beModelCtrl *arg0, beBaseInfoRam *arg1) {
             var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
         {
-            /* The new list is owned by the stack reference while it is retained into the ram and the old
-             * list is released; the reference's own release runs at the block end. */
             ObjectRef r(beBaseInfoDataList_Create(var_v0));
             s1 = r.p;
             if (s1 != 0) {

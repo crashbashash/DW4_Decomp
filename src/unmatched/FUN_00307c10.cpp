@@ -9,7 +9,7 @@ int igStrCmp(int, int);
 int thunk_FUN_0012a110(int, int);
 extern int DAT_004c22f0[4];
 }
-/* arena handles (4-byte refs) of the reflected int fields are followed through casts to the recovered classes */
+/* Arena handles (4-byte refs) of the reflected int fields are followed through casts. */
 struct Ref {
     igRegistryValue *p;
     ~Ref() {

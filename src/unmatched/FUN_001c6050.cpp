@@ -1,4 +1,3 @@
-/* 0x001c6050 - 192 bytes. Index search of a list member (volatile, reloaded per iteration) with a bool found flag (daddiu), then an inline release of a volatile stack ref; C++ unit, alternate compiler -O3. */
 extern "C" {
 struct Ref { char pad0[4]; int f4; };
 struct L { char pad0[8]; unsigned cnt; char pad12[4]; int *data; };

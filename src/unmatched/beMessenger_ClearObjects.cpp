@@ -1,6 +1,6 @@
 /* reference-counted engine object header: refcount word at +4 */
 typedef struct RefCountedHeader { int pad; int f4; } RefCountedHeader;
-/* element-buffer list header: count at +8, buffer at +16 (list class not recovered) */
+/* Element-buffer list header: count at +8, buffer at +16. */
 typedef struct ElementBufferList { char pad[8]; int f8; int pad2; RefCountedHeader **f16; } ElementBufferList;
 #include "dw4/reflected.h"
 extern "C" {

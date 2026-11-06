@@ -1,8 +1,9 @@
-/* Enemy generator registry and spawner of a field stage (GENERATER START/STOP/...).
- * Authored beGeneraterData records come from the stage's difficulty pack; the service tracks which generators the stage scripts
- * started and, each world tick, runs the recovered spawn rules (docs/systems/enemy-spawn-system.md): start mode direct/radar/timer,
- * first wave (one tick, up to the concurrent count) then fill mode add/wipeout/timer, per-player-count wave sizes, position/facing cursor. A spawn is a MODELCTRL GENERATE of the row's model
- * (enemy database column MODEL). Retail is not measured for the timing; see docs/combat.md. */
+/* Enemy generator registry and spawner of a field stage (GENERATER START/STOP/...). Authored
+ * beGeneraterData records come from the stage's difficulty pack; the service tracks which
+ * generators the stage scripts started and, each world tick, runs the recovered spawn rules: start
+ * mode direct/radar/timer, first wave (one tick, up to the concurrent count) then fill mode
+ * add/wipeout/timer, per-player-count wave sizes, position/facing cursor. A spawn is a MODELCTRL
+ * GENERATE of the row's model (enemy database column MODEL). Retail timing is not measured. */
 #ifndef DW4_FIELDGEN_H
 #define DW4_FIELDGEN_H
 #include <stdio.h>

@@ -1,8 +1,8 @@
-/* Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21 (0x0041a400): update state machine of the status-screen flag
- * (important item) page.  State 0 collects the owned important items, registers the close text
- * type/name, sends the row text groups, opens the list window (FUN_003b51b0: one row per item, at least
- * one) with its own close texts and message script, and queues the model; state 1 waits for the window
- * and reacts to the cursor; state 2 closes everything; state 3 waits for the close and clears _isRun. */
+/* Update state machine of the status-screen flag (important item) page. State 0 collects the owned
+ * important items, registers the close text type/name, sends the row text groups, opens the list
+ * window (one row per item, at least one) with its own close texts and message script, and queues
+ * the model; state 1 waits for the window and reacts to the cursor; state 2 closes everything;
+ * state 3 waits for the close and clears _isRun. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(int);
@@ -50,9 +50,8 @@ extern unsigned char GPR_00554c14;
 }
 typedef struct PropertyRecordList { int p0, p4; int cnt; int cap; unsigned char *data; } PropertyRecordList;
 typedef struct PropertyRecord { char p[12]; PropertyRecordList *f12; } PropertyRecord;
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]):
- * releases the token on scope exit.  The out-of-line copy the exception table names is the retail
- * body StringRef_Destruct_00130720 (config/SLUS-20836/unit-objects.json, duplicate __dt__9StringRefFv). */
+/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
+ * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
     int *p;
@@ -60,16 +59,14 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
-/* Owning stack reference to the list window created here: released on scope exit (reference count in
- * the low 23 bits of _refCount).  The out-of-line copy the exception table names is the retail body
- * 0x00411100 (config/SLUS-20836/unit-objects.json, duplicate __dt__9WindowRefFv). */
+/* Owning stack reference to the list window created here, released on scope exit (reference count
+ * in the low 23 bits of _refCount). */
 class WindowRef {
 public:
     beNDMWWindowSelect *p;
     WindowRef(beNDMWWindowSelect *w) : p(w) {}
     ~WindowRef() { beNDMWWindowSelect *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-/* string-pool intern (the pool singleton is created on first use) */
 struct Str { static inline int *intern(int *s) {
     int *ref;
     if (s == 0) {

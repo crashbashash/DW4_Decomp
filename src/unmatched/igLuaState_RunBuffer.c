@@ -1,4 +1,3 @@
-/* Pinned alternate compiler (-O3) keeps the branch delay slot empty; arg3 is the fourth parameter. */
 #include "dw4/reflected.h"
 int FUN_002467a0();
 int lua_dobuffer();

@@ -1,5 +1,5 @@
-/* Pointer web joined across the stride multiply (p = idx*12; p = base + p) with the base as first
- * addend. */
+/* The pointer is reused across the stride multiply (p = idx*12; p = base + p) with the base as the
+ * first addend. */
 #include "dw4/reflected.h"
 void FUN_0015d700(igPsx2PointSpriteExt *arg0, int arg1, void *arg2) {
     int temp_a0;

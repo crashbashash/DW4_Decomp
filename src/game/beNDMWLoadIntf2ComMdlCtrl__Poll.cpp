@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 unsigned char beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWLoadIntf2ComMdlCtrl *, int, int, int);
 unsigned char beNDMWLoadIntf2ComMdlCtrl__IsRunning(beNDMWLoadIntf2ComMdlCtrl *, int, int);
@@ -51,4 +49,4 @@ void beNDMWLoadIntf2ComMdlCtrl__Poll(beNDMWLoadIntf2ComMdlCtrl *self) {
         }
     }
 }
-} /* extern "C" */
+}

@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* The info's _node target: class not recovered, only its list handle at +136 is read. */
+/* The info's _node target: only its list handle at +136 is read. */
 extern "C" {
 typedef struct Action2NodeList136 { char pad[136]; int list; } Action2NodeList136;
 int FUN_003a7e90(beAction2InfoRam *, int *);

@@ -1,5 +1,4 @@
-/* Allocates a one-word big integer through FUN_001273e0 and sets it to `value`. The shape of
- * newlib's _i2b over Balloc (hypothesis). */
+/* Allocates a one-word big integer through FUN_001273e0 and sets it to `value`. */
 typedef struct BigInt127830 {
     struct BigInt127830 *next;  /* +0 */
     int k;                      /* +4 */

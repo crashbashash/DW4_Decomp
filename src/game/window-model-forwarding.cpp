@@ -1,5 +1,4 @@
-/* Exact model-presentation forwards. The external float objects are original default-origin
- * constants; full-width words preserve the EE ABI. */
+/* The external float objects are default-origin constants; full-width words preserve the EE ABI. */
 #include "dw4/reflected.h"
 extern float D_004e1058[],D_004e105c[],D_004e1060[];
 extern char D_00518738[];

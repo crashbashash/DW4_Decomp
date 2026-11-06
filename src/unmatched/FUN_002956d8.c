@@ -1,4 +1,4 @@
-/* Starts a Sofdec handle on a memory buffer (its error string names it mwSfdStartMem): rejects an
+/* Starts a Sofdec handle on a memory buffer: rejects an
  * invalid handle, otherwise resets it, releases the previous stream joint through its vtable slot
  * +12, wraps the buffer in a new one (FUN_0027b408) and kicks playback. */
 extern int FUN_002968c0(void *sfd);

@@ -1,5 +1,4 @@
 extern "C" {
-/* Matches only with the alternate (combat) compiler build. */
 int Memory_GetAllocatorBySelector(int);
 int igMetaObject_Create(int);
 extern int DAT_00587040[4];

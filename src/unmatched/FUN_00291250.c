@@ -14,7 +14,6 @@ struct Handle00291250 {
     Callback00291250 callbacks[1]; /* +400 */
 };
 
-/* Global block at DAT_00573f18 (only the member used here). */
 struct Pool00291250 {
     Callback00291250 callbacks[1]; /* +0: defaults for new handles */
 };

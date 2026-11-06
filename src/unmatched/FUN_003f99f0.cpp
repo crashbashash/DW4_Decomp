@@ -1,13 +1,10 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_003f9570(beNDMWGameRam *);
 extern char DAT_00518828[];
 int FUN_003a9340(int, char *);
 int ObjectList_AppendRetained(igObjectList *, int);
 int igObject_Destroy(igObject *);
-/* igProperty_GetRecordFolder result: a record whose +12 is an igObjectList; no reflected class */
 struct W { char pad[12]; igObjectList *f12; };
 void FUN_003f99f0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg3) {
     igObjectList *l;
@@ -40,4 +37,4 @@ void FUN_003f99f0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg3) {
     }
     ObjectList_AppendRetained(l, *arg3);
 }
-} /* extern "C" */
+}

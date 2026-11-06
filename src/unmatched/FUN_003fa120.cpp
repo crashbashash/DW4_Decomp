@@ -1,11 +1,6 @@
-/* Adds one equipment-style bonus to *out: the first element of the property folder's list gives
- * GetRecordInt(record, gameram, name), and when `with_flat` is set the record's own field at +20
- * is added too. Matching note: the +20 read is volatile -- it is created before the *out reload so
- * the register colouring puts the field in a0 and the running total in v1 (alternate compiler,
- * -O3,p). */
+/* The +20 read is volatile: it is created before the *out reload so the register colouring puts
+ * the field in a0 and the running total in v1. */
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 struct BonusFolder { char pad[12]; igObjectList *list; };
 int beNDMWItemBase_GetRecordInt(beNDMWItemBase *, beNDMWGameRam *, const char *);
@@ -23,4 +18,4 @@ void FUN_003fa120(beNDMWGameRam *gameram, void *player, int *out, const char *na
         }
     }
 }
-} /* extern "C" */
+}

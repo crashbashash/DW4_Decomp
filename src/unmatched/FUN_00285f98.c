@@ -1,7 +1,6 @@
 /* Advances the field counter (+968, parity into +964) for field pictures or resets both for frame
  * pictures (structure 3), then loads two per-mode table words indexed by +276. */
 
-/* Members of the decoder object used here. */
 struct Decoder00285f98 {
     char pad0[276];
     int tableIndex; /* +276 */

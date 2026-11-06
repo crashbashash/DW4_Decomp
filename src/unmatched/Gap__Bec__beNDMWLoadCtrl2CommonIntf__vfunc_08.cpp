@@ -1,7 +1,5 @@
 #include "dw4/reflected.h"
 /* igObject header: vtable and reference count (the count is not a reflected field) */
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int igObject_Destroy(igObject *);
 void Gap__Core__igObject__vfunc_08__002ff0f0(beNDMWLoadCtrl2CommonIntf *);
@@ -58,4 +56,4 @@ void Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08(beNDMWLoadCtrl2CommonIntf *ar
     }
     Gap__Core__igObject__vfunc_08__002ff0f0(arg0);
 }
-} /* extern "C" */
+}

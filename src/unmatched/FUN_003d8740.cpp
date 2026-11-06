@@ -1,13 +1,10 @@
-/* SUBWND service-menu work creation, BIT/XDATA caps and shop-stock list preparation. owner =
- * beNDMWStatus (the SUBWND manager), ram = its beNDMWStatusInfoRam; _subWndNo 6..9 selects weapon
- * / armor / chip / junk stock (WPU / APU / CHIP / JUNK). Build profile: alternate combat compiler,
- * -O3,p -Cpp_exceptions off, plus a unit-objects entry for the work holder's shared destructor
- * (duplicate 0x3b5cf0) and the four item-holder destructors (emitted 0x3d9bd0..0x3d9d50). Match-
- * critical shapes: Lst::count is volatile (retail re-reads it for the reserve test); caps use '>'
- * compares and a separate record local; the level tier chains are else-if chains; row8 is declared
- * before the loop counters (register colouring); each item holder is constructed at its use site
- * from the new object and released by its destructor at scope exit; the dispatch switches list
- * their arms in ascending order. */
+/* SUBWND service-menu work creation, BIT/XDATA caps and shop-stock list preparation. owner is
+ * beNDMWStatus (the SUBWND manager) and ram is its beNDMWStatusInfoRam; _subWndNo 6..9 selects
+ * weapon / armor / chip / junk stock (WPU / APU / CHIP / JUNK). Lst::count is volatile so it is
+ * re-read for the reserve test; the caps use '>' compares and a separate record local; the level
+ * tier chains are else-if chains; row8 is declared before the loop counters; each item holder is
+ * constructed at its use site from the new object and released by its destructor at scope exit;
+ * the dispatch switches list their arms in ascending order. */
 #include "dw4/reflected.h"
 extern "C" {
 struct Rec { int p[3]; int f12; };
@@ -61,9 +58,8 @@ extern unsigned char GPR_00554c14;
 
 void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram);
 }
-/* owning reference to a freshly created object: the destructor drops one reference and destroys at zero.  The work
- * holder uses the shared out-of-line copy (retail 0x3b5cf0); every item kind is its own class, so the compiler emits one
- * destructor per kind (retail 0x3d9bd0..0x3d9d50, directly behind this function). */
+/* Owning reference to a freshly created object: the destructor drops one reference and destroys at
+ * zero. Every item kind is its own class, so the compiler emits one destructor per kind. */
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct U { static inline void Reserve(volatile igObjectList *l) { if (l->_count < 37) List_Reserve(l, 36, 4); } };

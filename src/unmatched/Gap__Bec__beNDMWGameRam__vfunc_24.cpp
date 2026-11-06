@@ -1,11 +1,9 @@
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int List_Reserve(int, int, int);
 int igObject_Destroy(struct RefCountedHeader *);
 /* reference-counted engine object header: refcount word at +4 */
 typedef struct RefCountedHeader { int p0; unsigned refs; } RefCountedHeader;
-/* object-reference list header: count at +8, capacity at +12, buffer at +16 (list class not recovered) */
+/* Object-reference list header: count at +8, capacity at +12, buffer at +16. */
 typedef struct ObjectRefList { char p[8]; int count; int cap; RefCountedHeader **data; } ObjectRefList;
 #include "dw4/reflected.h"
 void Gap__Bec__beNDMWGameRam__vfunc_24(beNDMWGameRam *arg0) {
@@ -66,4 +64,4 @@ void Gap__Bec__beNDMWGameRam__vfunc_24(beNDMWGameRam *arg0) {
     l2->count = 0;
     if (!(0 < ((ObjectRefList *)arg0->_playerDataListList)->count)) List_Reserve(arg0->_playerDataListList, 0, 4);
 }
-} /* extern "C" */
+}

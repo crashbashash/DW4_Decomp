@@ -1,10 +1,9 @@
 #include "dw4/reflected.h"
-/* Publishes a model-control event to the Lua side. Receivers by the matched caller
- * beModelCtrl::vfunc_33: arg0 is the beModelCtrl (_luaManager), arg1 a beBaseInfoRam (_ramNo,
- * _dataList = the property list, created lazily and installed through an owning stack reference).
- * The event arguments are staged in the DAT_0058a1e0 block, the chunk name is formatted from
- * arg2/arg4 and run; the second cell of the property is refreshed from the block afterwards when
- * the chunk left it untouched. */
+/* Publishes a model-control event to the Lua side. arg0 is the beModelCtrl (_luaManager), arg1 a
+ * beBaseInfoRam (_ramNo, _dataList = the property list, created lazily and installed through an
+ * owning stack reference). The event arguments are staged in a fixed block, the chunk name is
+ * formatted from arg2/arg4 and run; the second cell of the property is refreshed from the block
+ * afterwards when the chunk left it untouched. */
 typedef struct Cell { char pad12[12]; int value; } Cell;
 typedef struct PropData { char pad8[8]; Cell *first; Cell *second; int third; } PropData;
 typedef struct Prop { char pad16[16]; int base; PropData *data; } Prop;
@@ -37,10 +36,8 @@ extern int DAT_0058a214[4];
 extern unsigned char GPR_00554c14;
 void FUN_00394400(beModelCtrl *arg0, beBaseInfoRam *arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9);
 }
-/* Owning stack reference to the freshly created property list: constructed from the creating call and
- * released on scope exit once the ram holds its own reference (reference count in the low 23 bits of
- * _refCount).  The out-of-line copy the exception table names is the retail body 0x0033e9c0
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created property list; released on scope exit once the ram
+ * holds its own reference (reference count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

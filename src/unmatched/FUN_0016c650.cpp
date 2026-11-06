@@ -1,6 +1,5 @@
 #include "dw4/reflected.h"
-/* Container teardown: virtual per-element release loop (s0 > -1 for the slti/beqz test), string-
- * pool reset and member release; alternate compiler. */
+/* The loop test is `s0 > -1` for the slti/beqz. */
 extern "C" {
 int FUN_002eb010(int);
 int StringPool_Construct(int);

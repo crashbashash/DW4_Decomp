@@ -1,6 +1,6 @@
 /* Returns the number of bytes transferred through the device interface (entry +56) of a file-
  * system handle; a NULL handle or missing entry is reported through FUN_0026f530 and returns 0.
- * Its error strings name it cvFsGetNumTr (CRI), a name hypothesis. */
+ * */
 typedef struct CvFsDevice_2706d8 {
     void *pad0[14];
     int (*get_num_tr)(int file);  /* 0x38 */

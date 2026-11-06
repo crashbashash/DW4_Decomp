@@ -1,6 +1,3 @@
-/* 0x002bb680 igRegistryValue_Register: registers class igRegistryValue with the object system, derived from igObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igRegistryValue_GetVTable[];
 extern char thunk_igRegistryValue_GetMetaObject[];
@@ -15,16 +12,16 @@ int igRegistryValue_InitFields();
 void igRegistryValue_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
-        0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igRegistryValue_metaObject, /* published MetaObject slot */
-        igObject_Register,                     /* base class registrar */
-        igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
-        thunk_igRegistryValue_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igRegistryValue_className,  /* class name */
-        0x14,                                  /* instance size */
-        igRegistryValue_GetVTable,             /* vtable getter */
-        &igRegistryValue_InitFields,           /* field adder */
-        0,                                     /* extra callback item */
-        g_igRegistryValue_callbackList  /* callback list */
+        0, /* abstract */
+        g_igRegistryValue_metaObject,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
+        thunk_igRegistryValue_GetMetaObject,
+        igRegistryValue_className,
+        0x14, /* instance size */
+        igRegistryValue_GetVTable,
+        &igRegistryValue_InitFields,
+        0, /* extra callback item */
+        g_igRegistryValue_callbackList /* callback list */
     );
 }

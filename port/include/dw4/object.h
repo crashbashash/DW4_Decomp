@@ -1,23 +1,13 @@
-/* dw4/object.h — a runtime object model (porting P2.6).
- *
- * The asset layer loads a pack into an arena of opaque payloads; this is the layer that turns a
- * pack **record** into a typed `igObject` whose fields can be read and written by name.  It is the
- * engine's shape, not a new one:
- *
- *   * a class is an `igMetaObject` (its MetaField list and instance size),
- *   * a field is an `igMetaField` (name, type, absolute offset),
- *   * an instance stores its fields at those offsets and its class at `+0`,
- *   * a pack record is `{u32 classIndex}{u32 recordSize}{value per descriptor}` (findings
- *     #417/#418), and a descriptor is `{type, ordinal, size}` with `ordinal = declaredIndex + K + 1`
- *.  `K` is the inherited-slot count; construction recovers it by the type match that
- *     `DW4_Decomp/scripts/igb_inst.py:find_K` uses, so the port names the same fields the Python
- *     reference does.
- *
- * The schema (class names, field names, offsets, descriptor types) is generated from
- * `DW4_Decomp/data/reflection.json` by `tools/gen_reflection.py` into `src/reflection_data.c`; the
- * pack supplies the *values*.  Pointer-model option (b): fields hold 32-bit ids/handles, and a
- * string field holds a borrowed pointer into the blob (`dw4_object_get_str`).
- */
+/* A runtime object model. The asset layer loads a pack into an arena of opaque payloads; this is
+ * the layer that turns a pack record into a typed `igObject` whose fields can be read and written
+ * by name. It follows the engine's shape: a class is an `igMetaObject` (its MetaField list and
+ * instance size), a field is an `igMetaField` (name, type, absolute offset), an instance stores
+ * its fields at those offsets and its class at `+0`, a pack record is `{u32 classIndex}{u32
+ * recordSize}{value per descriptor}`, and a descriptor is `{type, ordinal, size}` with `ordinal =
+ * declaredIndex + K + 1`. `K` is the inherited-slot count; construction recovers it by a type
+ * match. The schema (class names, field names, offsets, descriptor types) is generated; the pack
+ * supplies the values. Fields hold 32-bit ids/handles, and a string field holds a borrowed pointer
+ * into the blob (`dw4_object_get_str`). */
 #ifndef DW4_OBJECT_H
 #define DW4_OBJECT_H
 

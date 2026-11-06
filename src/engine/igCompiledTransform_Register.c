@@ -1,6 +1,3 @@
-/* 0x001a3710 igCompiledTransform_Register: registers class igCompiledTransform with the object system, derived from igObject.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igCompiledTransform_GetVTable[];
 extern char thunk_igCompiledTransform_GetMetaObject[];
@@ -15,16 +12,16 @@ int igCompiledTransform_InitFields();
 void igCompiledTransform_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igCompiledTransform_metaObject, /* published MetaObject slot */
-        igObject_Register,                         /* base class registrar */
-        igObject_GetMetaObject_ParentAccessor,     /* base class MetaObject accessor */
-        thunk_igCompiledTransform_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        igCompiledTransform_className,  /* class name */
-        0x24,                                      /* instance size */
-        igCompiledTransform_GetVTable,             /* vtable getter */
-        &igCompiledTransform_InitFields,           /* field adder */
-        0,                                         /* extra callback item */
-        g_igCompiledTransform_callbackList  /* callback list */
+        0, /* abstract */
+        g_igCompiledTransform_metaObject,
+        igObject_Register,
+        igObject_GetMetaObject_ParentAccessor,
+        thunk_igCompiledTransform_GetMetaObject,
+        igCompiledTransform_className,
+        0x24, /* instance size */
+        igCompiledTransform_GetVTable,
+        &igCompiledTransform_InitFields,
+        0, /* extra callback item */
+        g_igCompiledTransform_callbackList /* callback list */
     );
 }

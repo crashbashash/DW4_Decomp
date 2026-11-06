@@ -1,14 +1,11 @@
-/* Read one GS/frame statistic as a per-frame rate. FUN_001f6f50 snapshots ~50 GS-side counters
- * into a 464-byte block of 58 long long The game keeps the current block at 0x560d20 and the block
- * taken at the last reset at 0x560b50 (0x1d0 apart, which is the block size). The function turns
- * `id` into a number: - elapsed = current[5] - previous[5] (frame-length counter); nothing is
- * computed when it is not positive, - most ids return (current[k] - previous[k]) / elapsed, some
- * scaled to milliseconds (x 1000 / 9216000 ticks per second) or by 16, - ids 44..56 return a
- * small-integer query FUN_00204840(n), - ids 58, 59, 16, 17, 20, 24 consume a free-running
- * accumulator and clear it, - ids 60..186 consume the per-id event counters at 0x5607d0 (unsigned)
- * and clear them, - ids 42 and 43 take a fresh snapshot and return one raw field of it. The result
- * is -1.0f for an unknown id. The meaning of each counter slot is not established, so slots are
- * addressed by index. */
+/* Reads one GS/frame statistic as a per-frame rate. The game keeps the current statistics block
+ * (58 long long, 0x1d0 bytes) and the block taken at the last reset. `id` selects the number:
+ * elapsed = current[5] - previous[5] (frame-length counter), nothing is computed when it is not
+ * positive; most ids return (current[k] - previous[k]) / elapsed, some scaled to milliseconds (x
+ * 1000 / 9216000 ticks per second) or by 16; ids 44..56 return a small-integer query
+ * FUN_00204840(n); ids 58, 59, 16, 17, 20, 24 consume a free-running accumulator and clear it; ids
+ * 60..186 consume the per-id event counters (unsigned) and clear them; ids 42 and 43 take a fresh
+ * snapshot and return one raw field of it. The result is -1.0f for an unknown id. */
 typedef struct GsStatBlock { long long c[58]; } GsStatBlock;
 
 extern GsStatBlock g_gsStatCurrent;

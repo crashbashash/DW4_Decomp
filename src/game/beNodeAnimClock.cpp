@@ -1,14 +1,11 @@
-/* advance the base node animation clock, or return its locked time. See docs/engine/stage-
- * loading.md and docs/engine/action2-timing.md for the clock model: the engine clock counts
- * nanoseconds and every consumer scales it in 2^18 ns ticks. A nonzero _stopTime is returned
- * unchanged. Otherwise the time since the previous update is added to _playTime; when it exceeds
- * 33,333,333 ns the excess is taken off _timeBias, so a long stall does not jump the animation.
- * The node's local time is (ticks * _timeScale) << 18 plus _timeBias; once it reaches the loop end
- * (_loop2Time) the code subtracts the loop end while the time is strictly greater (the equality
- * behaviour is retail's), adds the loop start (_loop1Time) and rebases through FUN_0039a960.
+/* The engine clock counts nanoseconds and every consumer scales it in 2^18 ns ticks. A nonzero
+ * _stopTime is returned unchanged. Otherwise the time since the previous update is added to _playTime;
+ * when it exceeds 33,333,333 ns the excess is taken off _timeBias, so a long stall does not jump the
+ * animation. The node's local time is (ticks * _timeScale) << 18 plus _timeBias; once it reaches the
+ * loop end (_loop2Time) the code subtracts the loop end while the time is strictly greater, adds the
+ * loop start (_loop1Time) and rebases.
  * Matching constructs: preserve the incoming timestamp and old play count in const locals before
- * reusing the incoming parameter as the elapsed delta. The switch retains the original locked-time
- * branch layout. */
+ * reusing the incoming parameter as the elapsed delta. */
 #include "dw4/reflected.h"
 
 /* The clock is read in 2^18 ns ticks. */
@@ -17,11 +14,11 @@
 /* Longest per-update step that still advances the animation (about 1/30 s). */
 #define NODE_ANIM_MAX_STEP_NS 33333333
 
-/* float -> int64 conversion (docs/engine/action2-timing.md: a2_f32_to_s64). */
+/* float -> int64 conversion. */
 extern "C" {
 long long FUN_00230110(float);
 }
-/* Rebases _timeBias against the scaled clock (docs/engine/stage-loading.md, 0x0039a960). */
+/* Rebases _timeBias against the scaled clock. */
 extern "C" {
 void FUN_0039a960(beNodeAnim *, long long, long long);
 long long FUN_0039a9e0(beNodeAnim *self, long long elapsed);

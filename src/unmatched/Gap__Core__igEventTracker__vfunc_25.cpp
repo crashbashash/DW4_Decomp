@@ -1,6 +1,5 @@
-/* Smart-pointer local kept in memory (volatile pointer read once into a temporary before each
- * test), one-word struct virtual returns, !(0 > x) for slt/bnez with the store arm first;
- * alternate compiler. */
+/* The smart-pointer local is kept in memory (a volatile pointer read once into a temporary before
+ * each test); `!(0 > x)` gives slt/bnez with the store arm first. */
 extern "C" {
 int FUN_002d3a20(int);
 int FUN_0030d050(int);

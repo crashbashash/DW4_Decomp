@@ -1,6 +1,4 @@
-/* Flushes a pending gather list through FUN_001258b0 and resets it; the shape of newlib's vfprintf
- * helper __sprint (hypothesis: printf-family copy; FUN_001258b0 reads uio->resid at +8 as
- * __sfvwrite does). */
+/* Flushes a pending gather list through FUN_001258b0 and resets it. */
 typedef struct GatherList {
     void *iov;      /* +0: vector of {base, len} */
     int iovcnt;     /* +4: entries in use */

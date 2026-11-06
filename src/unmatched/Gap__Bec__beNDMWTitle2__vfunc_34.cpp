@@ -1,6 +1,4 @@
 #include "dw4/reflected.h"
-/* The retail unit was C++ with exceptions on (it keeps an exception index record);
- * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
 int FUN_003b2840();
 int beMessenger_ResolveEnumValue(int, int, int);
@@ -26,4 +24,4 @@ int Gap__Bec__beNDMWTitle2__vfunc_34(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, vo
     }
     return 1;
 }
-} /* extern "C" */
+}

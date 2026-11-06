@@ -1,6 +1,3 @@
-/* 0x00145df0 igWindow_Register: registers class igWindow with the object system, derived from igEventProducer.
- * The igMetaObject_RegisterClass arguments are laid out per
- * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char thunk_igWindow_GetMetaObject[];
 extern char igEventProducer_GetPublishedMetaObject[];
 extern char igEventProducer_Register[];
@@ -12,16 +9,16 @@ void FUN_00145e80(void);
 void igWindow_Register(void) {
     WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igWindow_metaObject,                  /* published MetaObject slot */
-        igEventProducer_Register,                        /* base class registrar */
-        igEventProducer_GetPublishedMetaObject, /* base class MetaObject accessor */
-        thunk_igWindow_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        igWindow_className,                   /* class name */
-        8,                                               /* instance size */
-        0,                                               /* vtable getter */
-        FUN_00145e80,                                /* field adder */
-        0,                                               /* extra callback item */
-        0                                                /* callback list */
+        1, /* abstract */
+        g_igWindow_metaObject,
+        igEventProducer_Register,
+        igEventProducer_GetPublishedMetaObject,
+        thunk_igWindow_GetMetaObject,
+        igWindow_className,
+        8, /* instance size */
+        0,
+        FUN_00145e80,
+        0, /* extra callback item */
+        0 /* callback list */
     );
 }

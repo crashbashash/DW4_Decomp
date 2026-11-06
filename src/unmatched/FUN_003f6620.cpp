@@ -1,4 +1,3 @@
-/* FUN_003f6620: build one attribute list per 12-byte descriptor entry (type, count, name) until the -1 terminator. */
 #include "dw4/reflected.h"
 
 extern "C" {

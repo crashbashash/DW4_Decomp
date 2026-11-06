@@ -1,11 +1,8 @@
-/* 0x00176760 — igPsx2ParticleArray vfunc 12: release the PS2 particle buffer.
- * Frees the raw PS2-format particle block (_ps2ParticleFormat) if one was
- * built.  A synchronised array (_bSynchronize) first calls FUN_001f05a0 with
- * its _lSequence number (asm/FUN_001f05a0.s: a wait loop on a semaphore until
- * the 64-bit counter at index 1 of a global table reaches that number), so
- * the block is presumably not freed while still in use.  The shared
- * ParticleArray teardown (vfunc 10: frees _particleArray, drops the
- * point-sprite vertex array) then runs unconditionally. */
+/* IgPsx2ParticleArray vfunc 12: release the PS2 particle buffer. Frees the raw PS2-format particle
+ * block (_ps2ParticleFormat) if one was built. A synchronised array (_bSynchronize) first calls
+ * FUN_001f05a0 with its _lSequence number (a wait loop on a semaphore until the 64-bit counter at
+ * index 1 of a global table reaches that number). The shared ParticleArray teardown (vfunc 10:
+ * frees _particleArray, drops the point-sprite vertex array) then runs unconditionally. */
 #include "dw4/reflected.h"
 
 int FUN_001f05a0();

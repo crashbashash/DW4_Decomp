@@ -1,5 +1,4 @@
-/* Enters a file name with a range into the playback list (its error string names it
- * mwPlyEntryFnameRange): forwards (a, 0, b, c) to FUN_00277038 on the +76 stream, rejecting an
+/* Enters a file name with a range into the playback list: forwards (a, 0, b, c) to FUN_00277038 on the +76 stream, rejecting an
  * invalid handle. */
 extern int FUN_002968c0(void *ply);
 extern void FUN_0029a320(const char *msg);

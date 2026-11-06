@@ -1,5 +1,5 @@
 /* Reflection creation helpers. StaticInitCallbacks is a structural ABI view, not an original type
- * name. Byte verification preserves the physical callback register flow. */
+ * name. */
 extern "C" void *Memory_GetDefaultAllocator();
 extern "C" void *igMetaObject_CreateInstance(void *,void *);
 extern "C" void *igMetaObject_CreateInstanceDefault(void *meta){return igMetaObject_CreateInstance(meta,Memory_GetDefaultAllocator());}

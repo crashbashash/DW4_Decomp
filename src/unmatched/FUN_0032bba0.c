@@ -1,4 +1,3 @@
-/* 0x0032bba0 - 212 bytes. Varargs formatter into a 16 KiB stack buffer, appended to a growable buffer; alternate compiler -O3. */
 struct S { char p[44]; int f44; int p2; int f52; int f56; int f60; };
 int memcpy();
 int FUN_0012fde0();

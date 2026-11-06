@@ -6,7 +6,6 @@ int FUN_00306e50(...);
 int Gap__Core__igObject__vfunc_09(...);
 int ObjectList_ResizeRetained(...);
 int igObject_GetAllocator(...);
-/* the object-system global (0x586dc8) has no reflected class; +56 stays a local layout */
 struct G { char p[56]; int f56; };
 extern int DAT_004f9680[4];
 extern G *DAT_00586dc8[4];

@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-/* the timer record returned by igProperty_FindByName: no reflected class established, +32 is the int64 duration */
+/* The timer record returned by igProperty_FindByName; +32 is the int64 duration. */
 struct P { char pad[32]; long long f32; };
 extern "C" {
 igObject *beBaseInfoDataList_Create(...);
@@ -13,10 +13,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 int FUN_003a7e90(beAction2InfoRam *arg0, int arg1);
 }
-/* Owning stack reference to the freshly created property list: constructed from the creating call and
- * released on scope exit once the ram holds its own reference (reference count in the low 23 bits of
- * _refCount).  The out-of-line copy the exception table names is the retail body 0x0033e9c0
- * (config/SLUS-20836/unit-objects.json, duplicate __dt__9ObjectRefFv). */
+/* Owning stack reference to the freshly created property list; released on scope exit once the ram
+ * holds its own reference (reference count in the low 23 bits of _refCount). */
 class ObjectRef {
 public:
     igObject *p;

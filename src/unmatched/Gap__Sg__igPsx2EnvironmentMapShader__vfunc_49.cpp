@@ -1,4 +1,3 @@
-/* 0x001e08b0 - igPsx2EnvironmentMapShader vfunc 49: lazily builds the eleven shared shader state objects. Default compiler -O3. */
 extern "C" {
 struct T { int word0; int references; int f8; int f12; };
 T *FUN_00131390(...);

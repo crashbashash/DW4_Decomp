@@ -1,8 +1,4 @@
-/* FUN_00423000: stable ascending sort (by key at +12) of the object list held by arg1->list, via a temporary list.
- * Selection pass moves the minimum-key element to the temporary list each round; then the original list is
- * emptied (references released, slots zeroed) and refilled from the temporary list in order. */
 #include "dw4/reflected.h"
-/* element class not established: only the key word at +12 is read through this layout */
 struct SortItem { int w0; int references; int f8; int key; };
 /* matching construct: the count is read through a volatile lvalue so it is reloaded at every test, as retail does */
 typedef igObjectList VList;
@@ -20,8 +16,7 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void FUN_00423000(void *arg0, SortOwner *arg1);
 }
-/* Owning stack reference to the temporary list: releases it on scope exit.  The out-of-line copy the exception
- * table names is retail 0x003b6090 (config/SLUS-20836/unit-objects.json, duplicate __dt__2RPFv). */
+/* Owning stack reference to the temporary list; releases it on scope exit. */
 struct RP { VList *p; RP(VList *x) : p(x) {} ~RP() { igObject *o = (igObject *)p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 void FUN_00423000(void *arg0, SortOwner *arg1) {
     int al;

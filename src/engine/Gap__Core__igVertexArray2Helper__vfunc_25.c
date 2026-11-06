@@ -1,9 +1,6 @@
-/* 0x001624e0
- * Same as slot 24 for the stream with component type 6, index 0: look it up
- * with igVertexArray2__FindVertexData and pass it to FUN_00162ca0 (same shape as FUN_00162b50
- * with fewer data-list classes), whose component count is left in v0.  The
- * declared return type is void, as matched.
- * docs/engine/igvertexarray2helper.md, slot 25. */
+/* Same as slot 24 for the stream with component type 6, index 0: looks it up with
+ * igVertexArray2__FindVertexData and passes it to FUN_00162ca0 (same shape as FUN_00162b50 with
+ * fewer data-list classes), whose component count is left in v0. The declared return type is void. */
 #include "dw4/reflected.h"
 int igVertexArray2__FindVertexData(int vertexArray, int componentType, int componentIndex);
 int FUN_00162ca0(int vertexData);

@@ -1,5 +1,4 @@
-/* Variadic front end: forwards (stream, format, ...) to vfprintf as a va_list, the shape of
- * fprintf. */
+/* Variadic front end: forwards (stream, format, ...) to vfprintf as a va_list. */
 typedef __builtin_va_list va_list;
 
 int vfprintf(void *stream, const char *format, va_list args);

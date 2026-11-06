@@ -1,6 +1,6 @@
 /* Copy constructors of the reference-field descriptors (igRefMetaField and its subclass
  * igMemoryRefMetaField), the two upper layers of the descriptor copy chain igMemoryRefMetaField ->
- * igRefMetaField -> igMetaField. Functions are in retail address order. */
+ * igRefMetaField -> igMetaField. */
 #include "dw4/reflected.h"
 igMetaField *igMetaField_CopyConstruct(igMetaField *, igMetaField *);
 igRefMetaField *igRefMetaField_CopyConstruct(igRefMetaField *, igRefMetaField *);
@@ -8,9 +8,9 @@ igRefMetaField *igRefMetaField_CopyConstruct(igRefMetaField *, igRefMetaField *)
 extern int g_igRefMetaField_vtable[4];
 extern int g_igMemoryRefMetaField_vtable[4];
 
-/* 0x002fb9a0 — Copy the reference layer, stamp the memory-reference vtable and
- * clear the two borrowed references (_memTypeRef, _poolName), then copy the
- * ref-counting, memory type/size, reset, release and alignment settings. */
+/* Copy the reference layer, stamp the memory-reference vtable and clear the two borrowed
+ * references (_memTypeRef, _poolName), then copy the ref-counting, memory type/size, reset,
+ * release and alignment settings. */
 igMemoryRefMetaField *igMemoryRefMetaField_CopyConstruct(igMemoryRefMetaField *self, igMemoryRefMetaField *source) {
     igRefMetaField_CopyConstruct((igRefMetaField *)self, (igRefMetaField *)source);
     self->_vtable = (int)g_igMemoryRefMetaField_vtable;
@@ -26,8 +26,8 @@ igMemoryRefMetaField *igMemoryRefMetaField_CopyConstruct(igMemoryRefMetaField *s
     return self;
 }
 
-/* 0x00305c70 — Copy the base metadata field, stamp the reference-field vtable
- * and copy the construct/destruct flags. */
+/* Copy the base metadata field, stamp the reference-field vtable and copy the construct/destruct
+ * flags. */
 igRefMetaField *igRefMetaField_CopyConstruct(igRefMetaField *self, igRefMetaField *source) {
     igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
     self->_vtable = (int)g_igRefMetaField_vtable;
