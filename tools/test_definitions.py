@@ -34,6 +34,12 @@ class KAndR(unittest.TestCase):
     def test_prototypes_and_bare_blocks_are_not_definitions(self):
         self.assertEqual(names("int f(a, b);\nint x;\nstruct s { int y; };\n"), [])
 
+    def test_extract_keeps_an_inline_helper(self):
+        text = "static inline int one(void) { return 1; }\nint two(void) { return one(); }\nint three(void) { }\n"
+        kept = units.extract(text, "two")
+        self.assertIn("return 1", kept)
+        self.assertNotIn("three", kept)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -14,8 +14,8 @@
   "code_only.other.functions": 4,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "foreign_profile.bytes": 84160,
-  "foreign_profile.functions": 369,
+  "foreign_profile.bytes": 83984,
+  "foreign_profile.functions": 368,
   "fun_dat_refs": 76087,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
@@ -26,10 +26,7 @@
   "name_defect.bytes": 1236,
   "name_defect.functions": 3,
   "orphan.bytes": 17832,
-  "raw_casts.reflected": {
-   "reason": "naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class",
-   "value": 174
-  },
+  "raw_casts.reflected": 173,
   "struct.a": 141,
   "struct.b": {
    "reason": "naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class",

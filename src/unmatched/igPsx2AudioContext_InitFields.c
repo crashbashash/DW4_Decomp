@@ -16,13 +16,14 @@ extern void * DAT_0055f550[4];
 int thunk_igAudioContext_GetMetaObject();
 
 void igPsx2AudioContext_InitFields(void) {
-    void *temp_s0;
+    /* matching construct: declaration-order sweep — this order sets the saved registers */
     void *temp_s1;
-    void *temp_s1_2;
     void *temp_s1_3;
-    void *temp_s1_4;
+    void *temp_s1_2;
     void *temp_s1_5;
     int temp_s2;
+    void *temp_s1_4;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_0055f550[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

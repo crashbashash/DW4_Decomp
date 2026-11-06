@@ -260,8 +260,20 @@ now spelled:
 The dw4-ps2-ai project builds Alchemy `-O4,s` and the game `-O4,p`, both 3.0b52 with
 `-sdatathreshold 1`. These sweeps do not separate `-O3` from `-O4`.
 
+**Audio is the first library on that profile:** every unit of `0x142f10`-`0x145ce0` is 3.0b52 `-O4,s
+-sdatathreshold 1`. Moving it took three respellings, and they should carry to other libraries:
+
+* `_GetMetaObject` calls `igMetaObject_IsRegistered` (`include/dw4/meta_object.h`) and compares it with
+  `false`.
+* `_InitFields` declares the meta pointer last, which puts it in `s0`.
+* A library's registered flag is a scalar byte: `-sdatathreshold 1` keeps one-byte data gp-relative,
+  so a `[4]` declaration no longer reaches it.
+
+`Gap__igPsx2AudioContext__vfunc_24` still differs under the profile in its stack layout and keeps its
+override.
+
 ## Open questions
 
-* **One compiler.** `_GetMetaObject` and `_InitFields` have not been respelled, so 3.0b52 is untested on
-  them across the tree, and the units still carry their old profiles. Whether b52 or b50 built which
+* **One compiler.** Outside Audio, `_GetMetaObject` and `_InitFields` have not been respelled, so 3.0b52 is
+  untested on them, and the units still carry their old profiles. Whether b52 or b50 built which
   library, and `-O3` or `-O4`, are open.

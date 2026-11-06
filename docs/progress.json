@@ -80,16 +80,16 @@
     "functions": 0
    },
    "foreign-profile": {
-    "bytes": 84160,
-    "functions": 369
+    "bytes": 83984,
+    "functions": 368
    },
    "inventory-gap": {
     "bytes": 0,
     "functions": 0
    },
    "match": {
-    "bytes": 2241096,
-    "functions": 16864
+    "bytes": 2241272,
+    "functions": 16865
    },
    "mismatch": {
     "bytes": 0,
@@ -120,8 +120,8 @@
   },
   "foreign_orphan_bytes": 17832,
   "fully_verified": {
-   "bytes": 2241096,
-   "functions": 16864
+   "bytes": 2241272,
+   "functions": 16865
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -129,7 +129,7 @@
  },
  "code_bytes": {
   "asm_body": 0,
-  "fully_verified": 2241096,
+  "fully_verified": 2241272,
   "functions_asm_body": 0,
   "matched": 2355288,
   "total": 3464192
@@ -207,11 +207,11 @@
    },
    "foreign_profile.bytes": {
     "reason": null,
-    "value": 84160
+    "value": 83984
    },
    "foreign_profile.functions": {
     "reason": null,
-    "value": 369
+    "value": 368
    },
    "fun_dat_refs": {
     "reason": null,
@@ -254,8 +254,8 @@
     "value": 17832
    },
    "raw_casts.reflected": {
-    "reason": "naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class",
-    "value": 174
+    "reason": null,
+    "value": 173
    },
    "struct.a": {
     "reason": null,
@@ -293,8 +293,8 @@
    "code_only.other.functions": 4,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "foreign_profile.bytes": 84160,
-   "foreign_profile.functions": 369,
+   "foreign_profile.bytes": 83984,
+   "foreign_profile.functions": 368,
    "fun_dat_refs": 76087,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
@@ -314,7 +314,7 @@
   }
  },
  "functions": {
-  "fully_verified": 16864,
+  "fully_verified": 16865,
   "matched": 17248,
   "named": 8829,
   "named_semantic": 1560,
@@ -407,32 +407,32 @@
   "bytes": 285636,
   "failing": {
    "addresses": {
-    "bytes": 1867116,
-    "functions": 12423
+    "bytes": 1867292,
+    "functions": 12424
    },
    "fields": {
     "bytes": 700148,
     "functions": 3045
    },
    "idioms": {
-    "bytes": 1202608,
-    "functions": 5513
+    "bytes": 1202784,
+    "functions": 5514
    },
    "name": {
     "bytes": 1528236,
     "functions": 11957
    },
    "placed": {
-    "bytes": 1674940,
-    "functions": 11120
+    "bytes": 1675116,
+    "functions": 11121
    },
    "references": {
-    "bytes": 1720616,
-    "functions": 9566
+    "bytes": 1720792,
+    "functions": 9567
    },
    "types": {
-    "bytes": 852316,
-    "functions": 3249
+    "bytes": 852492,
+    "functions": 3250
    },
    "virtuals": {
     "bytes": 367352,
@@ -440,7 +440,7 @@
    }
   },
   "functions": 1938,
-  "matched_functions": 16864
+  "matched_functions": 16865
  },
  "regions": [
   {
@@ -575,10 +575,10 @@
  "typed": {
   "error": null,
   "offset_casts": 5815,
-  "pct": 44.0,
-  "recovered": 24677,
+  "pct": 43.99,
+  "recovered": 24675,
   "synthetic": 8418,
-  "total": 56090,
+  "total": 56088,
   "typeable": 173,
   "typeable_pct": 0.31
  }

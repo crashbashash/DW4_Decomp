@@ -4,8 +4,8 @@ A snapshot of how much of `game.elf` has been rebuilt as matching C. Regenerated
 
 ```
 fully verified C/C++
-  functions  ████████████████████░░░░  83.4 %   16,864 / 20,214
-  code bytes ████████████████░░░░░░░░  64.7 %   2,241,096 / 3,464,192   (make check `match`: code bytes, exception metadata and symbol rules)
+  functions  ████████████████████░░░░  83.4 %   16,865 / 20,214
+  code bytes ████████████████░░░░░░░░  64.7 %   2,241,272 / 3,464,192   (make check `match`: code bytes, exception metadata and symbol rules)
 decompiled as C/C++ (code bytes identical, verification debt included — see below)
   functions  ████████████████████░░░░  85.3 %   17,248 / 20,214
   code bytes ████████████████░░░░░░░░  68.0 %   2,355,288 / 3,464,192
@@ -22,10 +22,10 @@ The function count is flattered by small functions: the ones done have a median 
 
 | category | functions | code bytes | % of code bytes | meaning |
 | --- | ---: | ---: | ---: | --- |
-| **`match`** | 16,864 | 2,241,096 | 64.7 | code bytes, exception metadata and symbol rules all pass — fully verified |
+| **`match`** | 16,865 | 2,241,272 | 64.7 | code bytes, exception metadata and symbol rules all pass — fully verified |
 | `code-only` | 12 | 28,796 | 0.8 | code bytes identical; exception metadata not reproduced (compile mode or cleanup scope) |
 | `name-defect` | 3 | 1,236 | 0.0 | code bytes identical; a symbol name is wrong for its address |
-| `foreign-profile` | 369 | 84,160 | 2.4 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
+| `foreign-profile` | 368 | 83,984 | 2.4 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
 
 The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
@@ -40,16 +40,16 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow.
 
-**1,938** of the 16,864 matched functions are readable: **285,636** code bytes, **8.2 %** of the code.
+**1,938** of the 16,865 matched functions are readable: **285,636** code bytes, **8.2 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 11,957 | 1,528,236 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,423 | 1,867,116 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,249 | 852,316 |
-| it sits in its class or module file, not `src/unmatched/` | 11,120 | 1,674,940 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 9,566 | 1,720,616 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,513 | 1,202,608 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,424 | 1,867,292 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,250 | 852,492 |
+| it sits in its class or module file, not `src/unmatched/` | 11,121 | 1,675,116 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 9,567 | 1,720,792 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,514 | 1,202,784 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,045 | 700,148 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,111 | 367,352 |
 
@@ -85,10 +85,10 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.b` | 291 | 291 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class |
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 5,670 | 5,670 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 174 | 173 | -1 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) — increase recorded: naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class |
+| `raw_casts.reflected` | 173 | 173 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
 | `fun_dat_refs` | 76,087 | 76,087 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
-| `foreign_profile.functions` | 369 | 369 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
-| `foreign_profile.bytes` | 84,160 | 84,160 | 0 | bytes of those |
+| `foreign_profile.functions` | 368 | 368 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
+| `foreign_profile.bytes` | 83,984 | 83,984 | 0 | bytes of those |
 | `orphan.bytes` | 17,832 | 17,832 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 10,528 | 10,528 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 
@@ -171,7 +171,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 190 tables, 3,099 entries, in 150 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 24,677 of 56,090 (44.00 %) |
+| field accesses using a **recovered** type (not an offset cast) | 24,675 of 56,088 (43.99 %) |
 | functions in the retail split (`asm/`, generated) | 20,214 |
 
 ## How these numbers are produced

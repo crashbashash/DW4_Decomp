@@ -1043,7 +1043,7 @@
 00143020	igAudioContext_Register	match	-
 00143090	thunk_igAudioContext_GetMetaObject	match	-
 001430a0	igAudioContext_InitFields	match	-
-001431a0	igPsx2AudioContext_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2AudioContext (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001431a0	igPsx2AudioContext_GetVTable	match	-
 00143250	FUN_00143250	match	-
 001432d0	FUN_001432d0	match	-
 00143350	FUN_00143350	match	-
@@ -1062,7 +1062,7 @@
 00143840	FUN_00143840	match	-
 00143880	FUN_00143880	match	-
 00143950	Gap__igPsx2AudioContext__vfunc_12	match	-
-001439d0	Gap__igPsx2AudioContext__vfunc_24	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2AudioContext_143730 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001439d0	Gap__igPsx2AudioContext__vfunc_24	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2AudioContext_143730 (local/mwcps2/3.0b52-030722/mwccps2.exe '-O4,s -sdatathreshold 1 -Iinclude -Cpp_exceptions off') they are not
 00143c30	Gap__igPsx2AudioContext__vfunc_61	match	-
 00143c90	Gap__igPsx2AudioContext__vfunc_28	match	-
 00143d80	Gap__igPsx2AudioContext__vfunc_29	match	-

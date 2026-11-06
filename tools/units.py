@@ -9,9 +9,9 @@ of them removed, so any single function can be compiled on its own.
 
 The removal is by blanking, not by rebuilding the file: every byte outside the
 dropped definitions is kept, so `#include`s, prototypes, `extern` declarations,
-`typedef`s and file-scope `static` *declarations* survive.  (A `static` function
-that a sibling calls would be dropped with its definition; keep shared helpers
-non-static, in a header, so a unit stays self-contained.)
+`typedef`s, file-scope `static` *declarations* and `inline` helpers survive.  (A plain
+`static` function that a sibling calls would be dropped with its definition; make it
+`inline` or put it in a header, so a unit stays self-contained.)
 
 This is deliberately a text transform, not a C parser: the code being split is
 machine-generated and regular, and the compiler remains the authority on whether
@@ -239,6 +239,8 @@ def extract(text, name):
     for nm, s, e in definitions(text):
         if nm == name:
             kept = True
+            continue
+        if re.search(r"\binline\b", text[s:text.index("{", s)]):
             continue
         for k in range(s, e):
             if buf[k] != "\n":
