@@ -111,7 +111,7 @@ Copy the "work ms" and "over/s" columns for each stage; those are the figures to
 2. **Install**: a C compiler and GNU make; `python3`; `pkg-config`. For the window and GPU paths add the development packages
    for SDL2, EGL/GLES and Vulkan. Each backend is probed and compiles out cleanly when its headers are missing, so a machine without
    them still builds and runs the headless checks (window/present tests are skipped). For the Python tools that decode or compare
-   images install Pillow and numpy (`verify_present.py`, `verify_options_menu.py`, `verify_title_mesh_gpu.py` and
+   images install Pillow and numpy (`verify_present.py` also needs Xvfb and ImageMagick; `verify_options_menu.py`, `verify_title_mesh_gpu.py` and
    `test_dialogue_e2e.py` import them; `frame_metric.py` skips itself without them). A few analysis-only tools also want scipy.
 3. **Extract the assets** (above): `python3 tools/extract_iso.py <iso> --out <dir> --skip OUTER.DAT`.
 4. **Build and test** from `port/`: `DW4_ROMS=<dir> make -j"$(nproc)" check`. Use `-j4` or less on a small machine; the full run

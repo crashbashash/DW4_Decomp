@@ -1,149 +1,139 @@
 #!/usr/bin/env python3
-"""verify_present.py -- the two present backends must put the same pixels on the screen.
+"""verify_present.py -- the SDL and Vulkan backends must put the same pixels on the screen.
 
-The strongest claim to make about the Vulkan path (src/vk_present.c) is that it changes *nothing*
-about the picture: the frame is CPU-rasterised, so the swapchain is a transport.  This renders the
-same static frame through `--window` (SDL's renderer) and `--vulkan` (the swapchain) at the display's
-own size and compares what the screen actually shows.  Both known failure modes are loud in that
-comparison -- a B,G,R,A swapchain presents the red logo blue, an sRGB one gamma-shifts every tone --
-which is why this is a measurement rather than an assertion about the code.
-
-Uses native X11/XWayland window capture with xdotool and ImageMagick import.
-The measured processes use SDL's X11 driver so Wayland sessions expose capturable
-XWayland windows; selection is scoped to the launched process. Prints a skip
-without the display/tools, so `make check` can always run it.
+The frame is CPU-rasterised, so the Vulkan swapchain must change nothing about the picture. A B,G,R,A
+swapchain would show red as blue, and an sRGB one would gamma-shift every tone. This shows a built-in
+test frame through each backend on a private Xvfb display and compares the screen with the expected
+pixels. It needs no game data or GPU and opens nothing on the desktop. What is missing is skipped,
+or fails under --require.
 """
 import argparse
-import atexit
 import os
+import select
 import shutil
-import shlex
 import subprocess
 import sys
 import tempfile
 import time
-_PATH_HERE = os.path.dirname(os.path.abspath(__file__))
-_PATH_REPO = os.path.dirname(os.path.dirname(_PATH_HERE))
-_PATH_WS = os.path.dirname(_PATH_REPO)
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-
-_TMP = tempfile.mkdtemp(prefix="dw4present-")     # one scratch dir, removed on the way out
-_N = iter(range(1000))
-atexit.register(lambda: shutil.rmtree(_TMP, ignore_errors=True))
+W, H = 256, 224
+START_TIMEOUT = 20.0
+SETTLE = 0.5
 
 
-def capture(cmd, env):
-    out = os.path.join(_TMP, "shot-%d.png" % next(_N))
-    if cmd:
-        command = [*shlex.split(cmd), "--out", out]
-    else:
-        wid = env.get("DW4_WINDOW_ID")
-        if not wid:
-            search = ["xdotool", "search", "--all", "--onlyvisible"]
-            if env.get("DW4_CAPTURE_PID"):
-                search += ["--pid", env["DW4_CAPTURE_PID"]]
-            search += ["--name", env.get("DW4_WINDOW_PATTERN", "^dw4$")]
-            windows = subprocess.run(search, capture_output=True, text=True, env=env)
-            ids = windows.stdout.splitlines()
-            if windows.returncode != 0 or len(ids) != 1:
-                print("  present: expected one game window; set DW4_WINDOW_ID")
-                return None
-            wid = ids[0]
-        command = ["import", "-window", wid, out]
-    result = subprocess.run(command, capture_output=True, text=True, env=env)
-    if result.returncode != 0:
-        return None
-    return out if os.path.exists(out) else None
+def expected_frame():
+    out = bytearray()
+    for y in range(H):
+        for x in range(W):
+            out += bytes(((x * 7 + y) & 255, (x + y * 5) & 255, (x * 3 + y * 11) & 255))
+    return bytes(out)
 
 
-def run_and_grab(tool, run, out, flags, env, grab):
-    """Start one windowed run, let it map and settle, grab the screen, tear it down."""
-    os.makedirs(out, exist_ok=True)
-    logpath = os.path.join(out, "log.txt")
-    with open(logpath, "w") as log:
-        proc = subprocess.Popen([tool] + run + flags, cwd=ROOT, env=env,
-                                stdout=log, stderr=subprocess.STDOUT)
+def start_display():
+    """Returns the Xvfb process and its display name, or (None, None)."""
+    read_end, write_end = os.pipe()
+    server = subprocess.Popen(
+        ["Xvfb", "-displayfd", str(write_end), "-screen", "0", "%dx%dx24" % (W, H), "-nolisten", "tcp"],
+        pass_fds=(write_end,), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    os.close(write_end)
+    ready, _, _ = select.select([read_end], [], [], START_TIMEOUT)
+    number = os.read(read_end, 32).decode().strip() if ready else ""
+    os.close(read_end)
+    if not number:
+        server.terminate()
+        server.wait()
+        return None, None
+    return server, ":" + number
+
+
+def wait_presenting(proc, log):
+    """True once the tool has shown its first frame."""
+    deadline = time.monotonic() + START_TIMEOUT
+    while time.monotonic() < deadline and proc.poll() is None:
+        with open(log) as text:
+            if "presenting\n" in text.read():
+                return True
+        time.sleep(0.05)
+    return False
+
+
+def show_and_capture(tool, backend, env, path):
+    """Returns the screen's RGB bytes, or an exit code: 2 for an unavailable backend, 1 for a failure."""
+    log = path + ".log"
+    with open(log, "w") as out:
+        proc = subprocess.Popen([tool, "hold-" + backend], env=env, stdout=out,
+                                stderr=subprocess.STDOUT)
+    try:
+        if not wait_presenting(proc, log):
+            return 2 if proc.poll() == 2 else 1
+        time.sleep(SETTLE)
+        if subprocess.run(["import", "-window", "root", path], env=env,
+                          capture_output=True).returncode != 0:
+            return 1
+    finally:
+        proc.terminate()
         try:
-            time.sleep(8.0)                  # mapping + a few frames before the grab
-            shot = grab(cmd=env["DW4_CAPTURE"], env=dict(env, DW4_CAPTURE_PID=str(proc.pid)))
-        finally:
-            proc.terminate()
-            try:
-                proc.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                proc.kill()
-    return shot, open(logpath).read()
+            proc.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            proc.wait()
+    from PIL import Image
+    image = Image.open(path).convert("RGB")
+    return image.tobytes() if image.size == (W, H) else 1
+
+
+def compare(name, got, want):
+    pixels = W * H
+    exact = sum(got[i:i + 3] == want[i:i + 3] for i in range(0, 3 * pixels, 3))
+    mean = sum(abs(a - b) for a, b in zip(got, want)) / (3.0 * pixels)
+    ok = exact == pixels
+    print("  present: %s %.3f%% as expected, mean |delta| %.3f  %s"
+          % (name, 100.0 * exact / pixels, mean, "ok" if ok else "BAD"))
+    return ok
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--tool", default=os.path.join(ROOT, "build", "dw4"))
-    ap.add_argument("--roms", default=os.environ.get("DW4_ROMS", os.path.join(_PATH_WS, "local/extracted")))
-    ap.add_argument("--stage", default="stagml11.igb")
-    ap.add_argument("--ref", default="0")
-    a = ap.parse_args()
+    ap.add_argument("--tool", default="build/test_gpu_present")
+    ap.add_argument("--require", action="store_true", help="fail instead of skipping")
+    args = ap.parse_args()
 
-    env = dict(os.environ)
-    env["DW4_CAPTURE"] = env.get("DW4_CAPTURE", "")
-    env.setdefault("DW4_WINDOW_PATTERN", "^dw4$")
-    if not env["DW4_CAPTURE"]:
-        env["SDL_VIDEODRIVER"] = "x11"
-    missing = [n for n in ("DISPLAY",) if not env.get(n)]
-    if missing or not os.path.exists(a.tool) or not os.path.isdir(a.roms):
-        print("  present: no X11/XWayland session or missing tool/roms (%s), skipped"
-              % (",".join(missing) or "paths"))
-        return 0
+    def skipped(reason):
+        print("  present: %s, %s" % (reason, "REQUIRED" if args.require else "skipped"))
+        return 1 if args.require else 0
+
     try:
-        from PIL import Image
+        import PIL  # noqa: F401
     except ImportError:
-        print("  present: skipped (no Pillow)")
-        return 0
-    required = ("xdotool", shlex.split(env["DW4_CAPTURE"])[0]) if env["DW4_CAPTURE"] else ("xdotool", "import")
-    if any(not shutil.which(name) for name in required):
-        print("  present: X11 capture utilities unavailable, skipped")
-        return 0
-    # Query the desktop before starting the game; no game window exists yet.
-    dimensions = subprocess.run(["xdotool", "getdisplaygeometry"], capture_output=True,
-                                text=True, env=env)
+        return skipped("no Pillow")
+    missing = [name for name in ("Xvfb", "import") if not shutil.which(name)]
+    if missing:
+        return skipped("%s not installed" % " and ".join(missing))
+    if not os.path.exists(args.tool):
+        return skipped("no %s" % args.tool)
+
+    server, display = start_display()
+    if not server:
+        return skipped("Xvfb did not start")
+    env = {k: v for k, v in os.environ.items() if k not in ("WAYLAND_DISPLAY", "XAUTHORITY")}
+    env.update(DISPLAY=display, SDL_VIDEODRIVER="x11", SDL_AUDIODRIVER="dummy")
+    want = expected_frame()
+    status = 0
     try:
-        dw, dh = map(int, dimensions.stdout.split())
-    except ValueError:
-        print("  present: display geometry unavailable, skipped")
-        return 0
-    run = ["--roms", a.roms, "--stage", a.stage, "--ref", a.ref, "--camera",
-           "--w", str(dw), "--h", str(dh), "--frames", "100000"]
-
-    shots = {}
-    for name, flags in (("sdl", ["--window"]), ("vulkan", ["--vulkan"])):
-        shot, log = run_and_grab(a.tool, run, os.path.join(_TMP, name),
-                                 flags, env, capture)
-        if "vulkan: presenting" in log and name == "sdl":
-            print("  present: BAD (the SDL run presented through Vulkan)")
-            return 1
-        if "vulkan: unavailable" in log:
-            print("  present: skipped (no Vulkan backend in this build)")
-            return 0
-        if not shot:
-            print("  present: BAD (%s run gave no capture; see log)" % name)
-            return 1
-        shots[name] = Image.open(shot).convert("RGB")
-
-    a_img, b_img = shots["sdl"], shots["vulkan"]
-    if a_img.size != b_img.size:
-        print("  present: BAD (capture sizes differ, %s vs %s)" % (a_img.size, b_img.size))
-        return 1
-    d = [(abs(p[0] - q[0]), abs(p[1] - q[1]), abs(p[2] - q[2]))
-         for p, q in zip(a_img.getdata(), b_img.getdata())]
-    n = len(d)
-    exact = sum(1 for t in d if t == (0, 0, 0))
-    mean = sum(sum(t) for t in d) / (3.0 * n)
-    # the compositor owns a few pixels (cursor, indicators), and both runs are timing-independent
-    ok = exact >= 0.99 * n and mean <= 1.0
-    print("  present: SDL vs Vulkan %.3f%% identical, mean |delta| %.3f  %s"
-          % (100.0 * exact / n, mean, "ok" if ok else "BAD"))
-    return 0 if ok else 1
+        with tempfile.TemporaryDirectory(prefix="dw4present-") as tmp:
+            for name, backend in (("SDL", "sdl"), ("Vulkan", "vk")):
+                got = show_and_capture(args.tool, backend, env, os.path.join(tmp, backend + ".png"))
+                if got == 2:
+                    status |= skipped("%s unavailable on the virtual display" % name)
+                elif got == 1 or isinstance(got, int):
+                    print("  present: BAD (%s run gave no capture)" % name)
+                    status = 1
+                elif not compare(name, got, want):
+                    status = 1
+    finally:
+        server.terminate()
+        server.wait()
+    return status
 
 
 if __name__ == "__main__":

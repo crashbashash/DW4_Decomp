@@ -1246,12 +1246,12 @@ explicit:
 
 Where the surface offers `VK_FORMAT_R8G8B8A8_UNORM` (37) the picker lands on it with no swizzle.
 
-**Verified by comparison, not by assertion:** `tools/verify_present.py` renders the same static frame
-through both backends at the display's own size and compares what the screen actually shows —
-`present: SDL vs Vulkan 100.000% identical, mean |delta| 0.000 ok`. (The same frame was also compared
-against the PNG written from the framebuffer: 1,228,706 of 1,228,800 px identical, mean |delta| 0.01.)
-`make check` covers it as `host vulkan: loader + device ok (…)`, which runs with SDL's dummy driver —
-the device-only path needs no display, and `verify_present.py` skips when the harness has none. Without
+**Verified by comparison, not by assertion:** `make check-present` shows a built-in test frame through
+both backends on a private virtual display and compares the screen with the expected pixels, so it needs
+no game data or GPU and opens nothing on the desktop. It needs Xvfb, ImageMagick and Pillow, and a
+software Vulkan driver such as lavapipe for the Vulkan half; it skips what is missing unless run as
+`make check-present PRESENT_FLAGS=--require`. `make check` also covers the device path as
+`host vulkan: loader + device ok (…)`, which runs with SDL's dummy driver. Without
 the Vulkan or SDL2 development packages the module compiles to no-ops and the caller keeps the SDL path.
 
 ### The frame-rate readout (`--fps`, `--osd-text`)

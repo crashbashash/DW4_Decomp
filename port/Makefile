@@ -95,6 +95,11 @@ $(BUILD)/test_gpu_present: tools/test_gpu_present.c $(OBJ)
 check-gpu-entries: $(BUILD)/dw4 $(BUILD)/test_gpu_present
 	python3 tools/verify_gpu_entries.py $(ROMS) --tool $(BUILD)/dw4 --present-tool $(BUILD)/test_gpu_present
 .PHONY: check-gpu-entries
+# PRESENT_FLAGS=--require makes a missing virtual display or backend a failure instead of a skip.
+check-present: $(BUILD)/test_gpu_present
+	python3 tools/verify_present.py --tool $(BUILD)/test_gpu_present $(PRESENT_FLAGS)
+check: check-present
+.PHONY: check-present
 
 $(BUILD)/test_options: tools/test_options.c src/options.c include/dw4/options.h | $(BUILD)
 	$(CC) $(CFLAGS) tools/test_options.c src/options.c -o $@ $(LDLIBS)
@@ -322,7 +327,6 @@ check: $(BUILD)/test_lobby_gpu $(BUILD)/test_lobbyui $(BUILD)/test_menu_gpu $(BU
 	python3 tools/verify_object.py --entry 621 $(ROMS)
 	python3 tools/verify_host.py $(ROMS)
 	python3 tools/verify_frontend.py $(ROMS)
-	python3 tools/verify_present.py
 	python3 tools/frame_metric.py --self-test
 
 clean:
