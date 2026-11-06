@@ -10,10 +10,10 @@ The class-record chain is self-delimiting only via the *next* record's name (no
 count is stored), so records are recovered with a greedy walk: from a name at
 offset o, the next name must sit exactly at align2(o + len(name) + 1) + 6N.
 
-Note the chain is NOT the whole of the header region the blob labels
-(`hdr[7]..hdr[5]`). In the NDMW 0x6300 pack the walk yields 135 records over
-0x2604..0x4034, and every triple in every one of them decodes to a known type with
-that type's size. At 0x4034 the region switches structure: `{u32 336, u32 46}` then
+No header word points at the directory: the walk starts at its opening `igObject`
+record and its length should equal the class count `hdr[3]`. In the NDMW 0x6300 pack
+the walk yields 207 records over 0x1a3a..0x4034, and every triple in every one of them
+decodes to a known type with that type's size. At 0x4034 the structure changes: `{u32 336, u32 46}` then
 the igMemory type-name pool (`Bootstrap`, `Default`, `Current`, `NonTracked`,
 `System`, `MetaData`, `String`, `Fast`, `List`, `Temp`, ...). Those pool names are
 identifier-shaped, so a walk that does not validate its triples reads them as
@@ -44,6 +44,10 @@ import json
 import re
 import struct
 import sys
+
+from igb_inst import find_directory_start
+
+DIRECTORY_SEARCH = 0x10000
 
 # Canonical element size per ig*MetaField id, observed constant across the NDMW
 # 0x6300 directory. Sized entries only; None = never observed.
@@ -131,8 +135,8 @@ def main(argv=None):
     ap.add_argument("afs", help="archive containing the blob (e.g. NDMW.AFS)")
     ap.add_argument("--blob", required=True,
                     help="blob file offset, e.g. 0x1055b000 (NDMW 0x6300 pack)")
-    ap.add_argument("--start", type=lambda s: int(s, 0), default=0x2604)
-    ap.add_argument("--end", type=lambda s: int(s, 0), default=0x7105)
+    ap.add_argument("--start", type=lambda s: int(s, 0))
+    ap.add_argument("--end", type=lambda s: int(s, 0))
     ap.add_argument("--class", dest="classes", action="append", default=[])
     ap.add_argument("--reflection")
     ap.add_argument("--json")
@@ -142,8 +146,12 @@ def main(argv=None):
     base = int(a.blob, 0) if isinstance(a.blob, str) else a.blob
     with open(a.afs, "rb") as fh:
         fh.seek(base)
-        blob = fh.read(a.end + 0x1000)
+        blob = fh.read((a.end or DIRECTORY_SEARCH) + 0x1000)
 
+    if a.start is None:
+        a.start = find_directory_start(blob)
+    if a.end is None:
+        a.end = min(len(blob), a.start + DIRECTORY_SEARCH)
     magic = struct.unpack_from("<I", blob, 0)[0]
     names = read_type_names(blob)
     records = walk(blob, a.start, a.end)
@@ -156,8 +164,10 @@ def main(argv=None):
                 bad.append((name, k, t, o, s, "type id out of range"))
             elif t in SIZE and s != SIZE[t]:
                 bad.append((name, k, t, o, s, f"expected size {SIZE[t]}"))
+    classes = struct.unpack_from("<I", blob, 0xc)[0]
     print(f"{a.afs} blob 0x{base:x} magic 0x{magic:x}: "
-          f"{len(records)} records, {sum(len(t) for _, _, t in records)} triples")
+          f"{len(records)} records of {classes} classes, "
+          f"{sum(len(t) for _, _, t in records)} triples")
     if a.verify:
         print(f"structural check: {len(bad)} bad triples (0 = every triple a known type "
               f"with its expected size)")

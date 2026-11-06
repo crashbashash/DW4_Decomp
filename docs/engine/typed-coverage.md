@@ -363,8 +363,8 @@ arrays and field-descriptor initialization. References in the authoritative stru
 integers. Typed views retain the original access widths, signed extensions, volatile reads and
 compiler-specific virtual-call scaffolding where byte matching requires them.
 
-Class identity remains separate evidence: a byte match verifies code generation, so 92 receiver
-interpretations rest on layout alone and are not confirmed class identities. In particular, the
+Class identity remains separate evidence: a byte match verifies code generation, so receiver
+interpretations that rest on layout alone are not confirmed class identities. In particular, the
 unchanged symbols
 `Gap__Core__igObject__vfunc_26` and `Gap__Core__igVertexArray2__vfunc_48` are viewed through
 `beBaseInfoManager` and `igVertexArray1_1` layouts respectively; their symbol/receiver ownership
@@ -506,7 +506,7 @@ The order that pays:
   [Port-critical closure helpers](#port-critical-closure-helpers) stay partly or wholly untyped
   until their receiver or neighbouring record has a reflected class or a typed caller.
 - The symbol/receiver ownership discrepancies of `Gap__Core__igObject__vfunc_26` and
-  `Gap__Core__igVertexArray2__vfunc_48`, and the 92 receiver interpretations resting on layout alone, are
+  `Gap__Core__igVertexArray2__vfunc_48`, and the receiver interpretations resting on layout alone, are
   unresolved.
 - The item cluster's per-class record setters (`FUN_004482c0` and five siblings) have a class but
   no role source, so they are unnamed.

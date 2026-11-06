@@ -215,13 +215,21 @@ FUN_00386780): rays at `y + downRange`,
 `r = 1.42 * halfWidth`, three broad rays, a stage-1 push back along the heading
 by `2r - dmin` (no slide) and a stage-2 push along the hit's face normal by
 `r - dist` (the slide), one-sided (a triangle blocks only when
-`n . dir < -5e-7`, `n = (v1-v0)x(v2-v0)`), and no query on a tick where x and z
+`n . dir < -5e-7`, `n` the unit normal of `(v1-v0)x(v2-v0)`), and no query on a tick where x and z
 did not change. The floor half is the bounded solver.
 
-The retail ray/triangle test is `FUN_0018b9e0`. Beyond the one-sided check (strip
-parity corrected), it requires `0 <= t <= length` and an inside test of three
-same-sign cross products. Only triangle lists and strips are tested, and every hit
-is collected.
+The retail ray/triangle test is `FUN_0018b9e0(ray, v0, v1, v2, hit, normal, faceType)`. It takes the
+unit normal `n` of `(v1-v0)x(v2-v0)` and `d = n . dir`, with `dir` unit length. Face type 0 rejects
+`d >= 0`, 1 rejects `d < 0`, 2 tests both sides; types 0 and 1 also reject `|d| <= 5e-7`. Every HitLand
+ray uses type 0 (`FUN_00388640`), so a triangle blocks only when `d < -5e-7`. It then requires
+`0 <= t <= length` (the lower bound is a sign-bit test) and that the three cross products about the hit
+point, dotted with `n`, share a sign bit. It returns `t`, or -2, -3 or -4 for facing, range and outside.
+
+`FUN_001cef70` walks the geometry. Only triangle lists and strips are tested, and geometry whose vertex
+format has bits in `0xf00` or `0xf0` is skipped. Odd strip triangles swap their last two vertices unless
+the face type is 2; odd means the position in the whole geometry, not within the strip. `FUN_001ceab0`
+resumes after each hit, and the hit procedure `FUN_00386030` appends the hit to the order and returns 0,
+so every hit is collected.
 
 Not ported: the previous-hit latch that skips the broad test, the
 `_checkSwitch` initial bits, `HITWALLFULL` for ride-on models, and the stage-2

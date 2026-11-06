@@ -9,13 +9,15 @@ remains disabled until concrete submenu and restoration integration is verified.
 
 ## Ownership and inputs
 
-The `GAMERAM RECALCPLAYER` bool is optional and defaults to true: the receiver (`3fcb80`)
-passes `GetBoolCount > 0 ? GetBool(0) : TRUE` as `3fab90`'s third argument. That argument
-gates every equipment-bonus helper: eleven per-stat sites and the two tail sections.
+The `GAMERAM RECALCPLAYER` bool is optional and defaults to true: case 11 of
+`beNDMWGameRam::vfunc_34` (`0x3fcb80`) passes `beMessenger_GetInt(0)` as the player and
+`beMessenger_GetBoolCount > 0 ? beMessenger_GetBool(0) : TRUE` as `FUN_003fab90`'s third argument. That
+argument gates thirteen blocks: the eleven per-stat equipment-bonus sites and two tail sections. Every
+other caller passes true.
 
 `dw4_playerstats_recalculate_base` is retail `3fab90` with its third argument clear
 (`GAMERAM RECALCPLAYER` with an explicit false): no equipment bonus is applied and the
-delay/accuracy/extras and element/weapon/model sections are skipped, leaving the stats,
+delay/accuracy/element/extras and weapon/model sections are skipped, leaving the stats,
 HP/MP, `WAZALIST` and `NEXTEXP`. It matches retail on 440 authored cases; the XDATA shop uses it
 to price stats (see [XDATA shop](xdata-shop.md)).
 

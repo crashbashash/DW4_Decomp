@@ -9,8 +9,7 @@ model) serializes its data as **igBinary**. Three flavors appear:
 | `AREA.AFS` entry 9 (430 KB) | text/data table — **no magic**, but shares the string-table + object structures |
 | `NDMW.AFS` entries | "stage packs" = `[igBinary reflection metadata][Lua 4.0.1 chunks…]` |
 
-Parser: `scripts/igb_parse.py` (header + string table + type names +
-file refs — the object graph is not yet decoded) for the header, and
+Parser: `scripts/igb_parse.py` for the header, string table and file references, and
 `scripts/igb_dir.py` for the type directory's class records and their field
 descriptors.
 
@@ -189,7 +188,7 @@ declared fields is what makes the rule look broken.
 
 The test is: search `K` per class and require every descriptor with `ordinal > K` to
 match a distinct declared field, by `ig*MetaField` type, in strictly increasing
-declared-index order, with `ordinal - 1 - declaredIndex == K`. Of the 135 records, 93
+declared-index order, with `ordinal - 1 - declaredIndex == K`. Of the 135 records from `0x2604` on, 93
 have reflection fields and **87 satisfy the rule while 6 do not** (K = 1 for 8
 classes, 2 for 21, 3 for 30, 4 for 1, 6 for 12, 7 for 4, 9 for 1, 10 for 8, 11 for
 2). Of the 87, **48 are confirmed by two or more independently matched descriptors**

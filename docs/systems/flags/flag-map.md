@@ -5,8 +5,7 @@ their recorded offsets. §3, §4, §6, §7, §9 and §10 quote the current Lua. 
 signed decoder showed `FLGset(N,1)` as `FLGset(N-1,0)` and `FLGset(N,0)` as
 `FLGset(N-1,-1)`: the original Apocalymon write is **flag 67 = 1**, not flag 66 = 0,
 and difficulty is **0/1/2**, not -1/0/1. A Lua-to-save inversion does not exist.
-Labels attached to save bytes, the folder labels among them, and the Lua references
-in §5 need revalidation before use in runtime/save logic; see the
+Labels attached to save bytes need revalidation before use in runtime/save logic; see the
 [numeric audit](../../engine/lua-numeric-audit.md) and the
 [script gates](../critical-path.md).
 
@@ -107,30 +106,28 @@ Notes:
 
 ## 4. Persistent folder flags (`BASE_FLAGFOLDER`, save byte `0x01` = SET)
 
-Observed chronological accumulation:
+Folders are the `impItem` records: the important-item page lists them, and scripts use
+`SYSctlFlagFolder` for `impItem` entries. The boss keys arrive as rate-10000 drops.
 
-| folder | set at | meaning |
+| folder | set at | item (`impItem` record) |
 | --- | --- | --- |
-| 0 | `prog_humid_cave` | World 1 dungeon 1 (Humid Cave / Blossomon) |
-| 1 | `prog_cliff_dungeon` | World 1 dungeon 2 (Cliff Dungeon / Mammothmon) |
-| 2 | `prog_leomon_save` | Saved Leomon from Goblin Fortress (W1 story event) |
-| 3 | `prog_ophanimon_key` | Ophanimon key obtained (hub invasion) |
-| 4 | `prog_sand_labrynth` | World 2 dungeon 1 (Sand Labrynth / SkullGrey ID) |
-| 5 | `prog_ancient_ruins` | World 2 dungeon 2 (Ancient Ruins / Scorpio ID) |
-| 6 | `prog_gecko_path` | World 3 dungeon 1 (Gecko Path / Shogun ID) |
-| 7 | `prog_vine_tunnel` | World 3 dungeon 2 (Vine Tunnel / MRS04 ID) |
-| 8 | `prog_vein` | World 3 dungeon 3 (Vein / **Diaboro ID** = key card 1) |
-| 9 | `prog_mecha_nest` | World 4 dungeon 1 (Mecha Nest / **MRE05 ID** = key card 2) |
-| 10 | `prog_electro_mine` | World 4 dungeon 2 (Electro Mine / **LordKnight ID**) |
-
-*(The accumulation is **8 = Diaboro (W3), 9 = Mecha Rogue 05 (W4),
-10 = LordKnightmon (W4)** — not "folder 8 = Mecha Rogue 05, folder 9 =
-LordKnightmon".)*
+| 0 | `prog_humid_cave` | Blosso ID, Blossomon's drop (`dng101b2`) |
+| 1 | `prog_cliff_dungeon` | Mammothmon ID (`dng102b3`) |
+| 2 | `prog_leomon_save` | Boat Key, given in the Commander Room after Leomon's rescue |
+| 3 | `prog_ophanimon_key` | Ophanimon ID; no gameplay writer found |
+| 4 | `prog_sand_labrynth` | SkullGrey ID (`dng204b2`) |
+| 5 | `prog_ancient_ruins` | Scorpio ID (`dng205b3`) |
+| 6 | `prog_gecko_path` | Shogun ID (`dng307b2`) |
+| 7 | `prog_vine_tunnel` | MRS04 ID (Vine Tunnel) |
+| 8 | `prog_vein` | Diaboro ID (`dng309b4`) |
+| 9 | `prog_mecha_nest` | MRE05 ID (`dng411b3`, `e_mecha5`) |
+| 10 | `prog_electro_mine` | LordKnight ID (`dng412b4`, `e_ldknight`) |
+| 11 | quest scripts | Offering; cleared on load and not restored |
 
 *(Note: the W1 boss defeat — `prog_world1` — sets flag 67 (save bytes 66 and 67
-both flip) but **no** folder; folder 2 is the earlier Leomon-rescue story beat.)*
+both flip) but **no** folder; folder 2 is the earlier Boat Key.)*
 
-**The final-boss security gate requires folders 9 AND 10 SET.**
+**Flag 905 needs folders 9 and 10 SET.**
 `lua/05-city-overworld/01-stag0403-city-quest-hub_e709/034-layer-setup-2.lua:102`:
 ```lua
 if be:SYSctlFlagFolder("IS", 9) == 1 and be:SYSctlFlagFolder("IS", 10) == 1 then
@@ -139,9 +136,10 @@ if be:SYSctlFlagFolder("IS", 9) == 1 and be:SYSctlFlagFolder("IS", 10) == 1 then
 end
 ```
 
-So flag 905 is set when both folders are set. The chunk does not write flag 904, and 905 is not a
+So flag 905 is set when both folders are set, in the stage's layer setup and in `026-flag-905.lua`,
+which plays its sequence while 905 is clear. The chunk does not write flag 904, and 905 is not a
 gate-closed marker; an `IS 8`/`IS 9`, `FLGset(904, 0)` reading is the old decoder's off-by-one. Script
-folders 9 and 10 have not been re-checked against the save-observed table above.
+folders 9 and 10 are the same folders as the table: MRE05 ID and LordKnight ID.
 
 The game's own "everything done" snapshot (`lua/14-misc/01-stage-select-list_e603/075-flag-1-7.lua`) sets
 **folders 0–10** and the flags 67,68,69,70,83,86 to `1`. That is the post-game
@@ -152,22 +150,23 @@ below for the observed World-4 end state).
 
 ## 5. Chapter / intro step flags
 
-- **700-series = per-difficulty mirror backups** of the intro/chapter flags
-  (see §7): `700–705` = mirror of intro `1–6`, `706/707` = mirror of
-  `19/20`. In the checkpoint diffs they read as a one-hot world
-  chapter — 701=W1 era → 702 (got Ophanimon key) → 703 (key used / W2) → 704 (W3)
-  → 705 (W4), with advance points matching the folder table above — because
-  "chapter" and "mirror" are the same bytes; §7's table is the authoritative
-  interpretation.
-- **0–6 series = tutorial marker + chapter one-hot** (NOT a 0→1→2… sequence):
-  - flag **1** = tutorial in progress — the true fresh state
-    (`test_base_save.ps2` = flag 1 ticked). `entry_0816/chunk_0096` sets it
-    when flags 2–6 and 86 are all clear (no chapter active).
-  - flag **0** stays ticked post-tutorial (op_base/world1 = flag 0 + flag 2).
-    **flag 0 = 1 with flags 1–6 all `0` = LOCKED** (no NPC chat, no levels,
-    can't talk to Ophanimon) — not a playable pre-intro state.
-  - flags **2–6** = the current chapter, one at a time:
-    2 (W1) → 3 (post-W1 key) → 4 (W2) → 5 (W3) → 6 (W4).
+- **700-series = per-difficulty mirror backups** of the intro/chapter flags (see §7): on Normal,
+  `700–705` mirror `1–6` and `706/707` mirror `19/20`. In the checkpoint diffs they read as a one-hot
+  world chapter — 701 = W1 era → 702 (got Ophanimon key) → 703 (key used / W2) → 704 (W3) → 705 (W4),
+  with advance points matching the folder table above — because "chapter" and "mirror" are the same
+  bytes; §7's table is the authoritative interpretation.
+- **1–6 = chapter one-hot, then 86** (NOT a 0→1→2… sequence):
+  - flag **1** = tutorial in progress, the fresh state.
+    `lua/01-lobby-hub/04-lobby-ofanimon-seraphimon_e816/096-layer-setup-3.lua` and the Terminal's
+    `lua/01-lobby-hub/05-lobby-quests_e820/009-layer-setup.lua` set it on arrival when flags 2–6 and 86
+    are all clear, so a state with no chapter flag does not last past those stages.
+  - flags **2–6** = the current chapter, one at a time: 2 (W1) → 3 (post-W1 key) → 4 (W2) → 5 (W3) →
+    6 (W4). Ophanimon sets 2 and moves 2 → 3 (flags 20 and 67), Seraphimon moves 3 → 4 (flag 324) and
+    4 → 5 (flag 335), and Ophanimon moves 5 → 6 (flag 69).
+  - flag **86** = story cleared. The Terminal clears 6 and sets 86 once flag 70 is on; on Hard and Very
+    Hard the final boss script also sets it.
+- flag **0** is not story state. Field-stage layer setups and talk scripts write it (to 1 and to 0), no
+  script reads it, and the title restore leaves it alone, so saves usually show it set.
 
 ---
 
@@ -176,7 +175,7 @@ below for the observed World-4 end state).
 - `376–380` quests 1–5, `381` final quest gate — quest-chain, **not** required
   for the main story (see `entry_0820`/`entry_0824`).
 - `409, 571, 424, 385, 389` — quest sub-state, written by the quest NPCs.
-- `905` — final-gate-open marker (set when folders 9 and 10 are both set).
+- `905` — set when folders 9 and 10 are both set.
 - `904` — set in the stage-select final snapshot (world 4 reached).
 - `49, 82, 334, 383, 320–327, 329–333, 335` — story sub-state copied by the
   title-screen restore (`entry_0806/chunk_0006`) from per-difficulty mirror
@@ -220,7 +219,7 @@ Active ← mirror, per difficulty:
 | 334 | 810 | 811 | 812 |
 
 and folders `N ← mirror(518+N)` (Normal), `530+N` (Hard), `542+N` (Very Hard),
-where folder SET ⇔ mirror byte `0x01` (direct copy).
+where folder SET ⇔ mirror byte `0x01` (direct copy). The title script restores folders 0–10 only.
 
 `entry_0810` (character select) does the reverse copy (active → mirror) on
 save. That's why diffs show changes in both the active and mirror ranges

@@ -53,7 +53,5 @@ observations with a correction notice.
   The quest-board completion script writes **folder 11**.
 - Counter and difficulty literals also changed with the signed correction.
 
-Curated runtime IDs and thresholds were corrected in the generators. Existing
-save-derived folder names remain observations rather than newly verified
-script semantics. See the [numeric audit](../../engine/lua-numeric-audit.md)
+Curated runtime IDs and thresholds were corrected in the generators. See the [numeric audit](../../engine/lua-numeric-audit.md)
 before using older prose as an implementation contract.

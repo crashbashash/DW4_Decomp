@@ -235,19 +235,21 @@ listed under [Gate pads](#gate-pads).
 
 ## Name labels and the travel prompt
 
-- **Labels.** The `matf*` material regions of every hub stage run their original scripts, which
-  call `PintmessOpen`: the bottom band (`i_stpnl06`) shows the object's name and the arrow
+- **Labels.** The `matf*` material regions of the Terminal, Central and Shop Area run their original
+  scripts, which call `PintmessOpen` (the Commander Room's only label is `matg00`; its `matf*` regions
+  are event triggers): the bottom band (`i_stpnl06`) shows the object's name and the arrow
   `i_pointcur` stands over it ("Gate to Outside World", "Gate to Commander Room", "Heal Circle",
   "Emergency Gate", "Call Keeper" in the Terminal; the Save, Bank, Digi-Lab, Data, Card and
   Appraisal Keepers in Central; the Disk, Weapon, Armor, Chip and Junk Shops and the Bank Keeper
-  in the Shop Area). The Shop Area's Junk Shop region is only reachable at height 90. The label
+  in the Shop Area). The Shop Area's Junk Shop region spans y 0..300, so any height limit there comes from the floor. The label
   text sits within 1 px of retail on four compared Terminal labels.
 - **Opening a label.** `PintmessOpen` opens `i_stpnl06` with `SQ_OPEN` (instance 4 for the single
   player), writes the name centred into `POINTFONT00/font04` and generates `i_pointcur` on the WN00
   layer at the target's world position (`V<pos>/V<rot>/SQ_OPEN4`). Leaving the region closes both.
   The Terminal's regions are `matf00` Gate to Outside World, `matf01` Gate to Commander Room,
-  `matf02` Heal Circle, `matf03` Emergency Gate and `matf04` Call Keeper; `mate01` and `mate02` are
-  the Commander Room and emergency travel triggers. Only `i_pointcur` is projected with the scene
+  `matf02` Heal Circle, `matf03` Emergency Gate and `matf04` Call Keeper; `mate00` and `mate01` are
+  the field-list and Commander Room travel triggers, `mate02` the emergency travel trigger and `mate03`
+  the heal pad; `matf04` has no pad. Only `i_pointcur` is projected with the scene
   camera; the other WN models keep their screen layout.
 - **Draw order.** The lobby UI's models (the HUD) are drawn first and the window-layer models
   after them. The label text (the original's FONT layer) draws between the window layers: after

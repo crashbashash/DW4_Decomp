@@ -2,7 +2,7 @@
 
 **Status:** format solved and **live-verified**. The Guard Room
 (`stagGF01`) box drop tables are read out in §5.
-**Method:** the pack is parsed as igBinary ([`../../scripts/igb_parse.py`](../../scripts/igb_parse.py))
+**Method:** the pack is parsed as igBinary ([`../../scripts/igb_inst.py`](../../scripts/igb_inst.py))
 and the tables are read out of the RAM of a save state.
 
 ---
@@ -151,8 +151,8 @@ A generator pack is igBinary:
 `[type directory][object directory][object data][list-data pool]`, with
 `hdr[4]` = object-data bytes, `hdr[5]` = object count, `hdr[6]` = pool bytes
 (all three verified exactly: the objects tile `hdr[4]`, and the pool is the last
-`hdr[6]` bytes). The type directory can be parsed with [`../../scripts/igb_parse.py`](../../scripts/igb_parse.py),
-which walks the whole object graph; resolving generator → `_playerDataList` → item tables goes
+`hdr[6]` bytes). The type directory can be parsed with [`../../scripts/igb_dir.py`](../../scripts/igb_dir.py)
+and the object records with [`../../scripts/igb_inst.py`](../../scripts/igb_inst.py); resolving generator → `_playerDataList` → item tables goes
 through the pack's id remap table (§6).
 
 The object **payloads** decode cleanly (names, rows, rates all coherent). The

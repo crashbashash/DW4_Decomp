@@ -1,52 +1,60 @@
 #!/usr/bin/env python3
 """
-igb_parse.py — partial parser for the Insomniac-style igBinary (IGB) format
-used by Digimon World 4 (Gap::Core engine, derived from the Insomniac `ig`
-object model).
+igb_parse.py — print an igBinary (IGB) blob's header, string table and file references.
 
-Reverse-engineered from NDMW.IGB (see docs/engine/igbinary-format.md).  This parses the
-header, the string table, and extracts the type-name / file-reference strings.
-The full object graph is not yet decoded (see docs).
+The format is described in docs/engine/igbinary-format.md. `igb_dir.py` decodes the type
+directory and `igb_inst.py` the object records.
 
 Usage:
   igb_parse.py <file.igb>            # print header + extracted strings
   igb_parse.py <file.igb> --dump section   # hexdump a section
 """
+import re
 import struct
 import sys
+
+
+VALIDITY = 0xfada
 
 
 class IGB:
     def __init__(self, data):
         self.d = data
         self.hdr = struct.unpack_from("<12I", data, 0)
-        self.magic = self.hdr[0]
-        assert self.magic == 0x00000100, f"bad magic 0x{self.magic:08x}"
+        assert self.hdr[10] == VALIDITY, f"bad validity word 0x{self.hdr[10]:08x}"
 
     # --- header fields (reverse-engineered; see docs/engine/igbinary-format.md) ---
     @property
-    def version(self):
+    def section1_records(self):
         return self.hdr[1]
 
     @property
-    def n_strings(self):
-        return self.hdr[9]
+    def class_count(self):
+        return self.hdr[3]
+
+    @property
+    def object_stream_bytes(self):
+        return self.hdr[4]
+
+    @property
+    def section2_records(self):
+        return self.hdr[5]
+
+    @property
+    def content_pool_bytes(self):
+        return self.hdr[6]
+
+    @property
+    def memory_blocks(self):
+        return self.hdr[7]
 
     @property
     def ofs_interface_name(self):
         return self.hdr[8]
 
     @property
-    def ofs_type_dir(self):
-        return self.hdr[5]
-
-    @property
-    def ofs_int_array(self):
-        return self.hdr[6]
-
-    @property
-    def ofs_file_refs(self):
-        return self.hdr[10]
+    def n_strings(self):
+        return self.hdr[9]
 
     def parse_string_table(self):
         """String table: descriptors {u32 len, u32=1, u32=0} then concatenated
@@ -63,36 +71,19 @@ class IGB:
             i += ln
         return strings_start, out
 
-    def strings_near(self, offset, limit=256):
-        """Extract null-terminated ASCII strings starting at offset (best effort)."""
-        out = []
-        i = offset
-        end = min(len(self.d), offset + limit)
-        while i < end:
-            if 32 <= self.d[i] < 127:
-                j = self.d.find(b"\x00", i, end)
-                if j < 0:
-                    break
-                s = self.d[i:j]
-                if 3 <= len(s) <= 64:
-                    out.append((i, s))
-                i = j + 1
-            else:
-                i += 1
-        return out
-
     def report(self):
         h = self.hdr
-        print(f"magic  0x{h[0]:08x}  version {h[1]}")
-        print(f"hdr[2]={h[2]} (0x{h[2]:x})  hdr[3]={h[3]} (0x{h[3]:x})")
-        print(f"ofs_file_refsA  0x{h[4]:x}  ({h[4]})")
-        print(f"ofs_type_dir    0x{h[5]:x}  ({h[5]})")
-        print(f"ofs_int_array   0x{h[6]:x}  ({h[6]})")
-        print(f"hdr[7]          0x{h[7]:x}  ({h[7]})")
-        print(f"ofs_iface_name  0x{h[8]:x}  ({h[8]})")
-        print(f"n_strings       {h[9]}  (0x{h[9]:x})")
-        print(f"ofs_file_refsB  0x{h[10]:x}  ({h[10]})")
-        print(f"flags           0x{h[11]:08x}")
+        print(f"hdr[0]          0x{h[0]:x}")
+        print(f"section 1       {self.section1_records} records")
+        print(f"hdr[2]          0x{h[2]:x}")
+        print(f"classes         {self.class_count}")
+        print(f"object stream   0x{self.object_stream_bytes:x} bytes")
+        print(f"section 2       {self.section2_records} records")
+        print(f"content pool    0x{self.content_pool_bytes:x} bytes")
+        print(f"memory blocks   {self.memory_blocks}")
+        print(f"interface name  @0x{self.ofs_interface_name:x}")
+        print(f"strings         {self.n_strings}")
+        print(f"flags           0x{h[11]:08x} (version {h[11] & 0xffff})")
 
         start, strs = self.parse_string_table()
         print(f"\nstring table: {len(strs)} strings @ 0x{start:x}")
@@ -101,16 +92,9 @@ class IGB:
 
         print(f"\ninterface name @0x{self.ofs_interface_name:x}: "
               f"{self._cstr(self.ofs_interface_name)!r}")
-        print(f"type dir strings near 0x{self.ofs_type_dir:x}:")
-        for off, s in self.strings_near(self.ofs_type_dir, 512):
-            print(f"  0x{off:x}: {s.decode('ascii','replace')!r}")
-        print(f"file-ref strings near 0x{self.ofs_file_refs:x} & 0x{h[4]:x}:")
-        seen = set()
-        for base in (self.ofs_file_refs, h[4]):
-            for off, s in self.strings_near(base, 512):
-                if s.endswith(b".igb") and off not in seen:
-                    seen.add(off)
-                    print(f"  0x{off:x}: {s.decode('ascii','replace')!r}")
+        print("file references:")
+        for m in re.finditer(rb"[\x20-\x7e]{1,128}\.igb(?=\x00)", self.d):
+            print(f"  0x{m.start():x}: {m.group().decode('ascii')!r}")
 
     def _cstr(self, off):
         j = self.d.find(b"\x00", off)

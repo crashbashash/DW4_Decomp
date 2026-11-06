@@ -115,29 +115,22 @@ string found).
 Every blob shares the tail `{hdr[8]=0x656, hdr[9]=0x30, hdr[10]=0xfada,
 hdr[11]=0xf0000006|0xb0000006}`. The head (0..7) is file/type-specific.
 
-**NDMW.AFS blob (`0x6300`)** — `0x1055b000`:
-```
-hdr[0]=0x6300   magic
-hdr[1]=0x37b    MetaField type-name list (48 names, NUL-terminated)
-hdr[2]=0x3960   type directory  ({name}{u32 descriptors})
-hdr[3]=0xcf     type-index table (bytes)
-hdr[4]=0xf86bc  OBJECT DATA (serialized instances)
-hdr[5]=0x7105   second object section's record count (28,933)
-hdr[6]=0x1b8330 0xff padding (empty)
-hdr[7]=0x2604   field-descriptor table
-```
+The head holds sizes and counts, not offsets
+([header field map](../engine/igbinary-format.md#blob-header-field-map)):
 
-**AREA.AFS blob (`0x12a8`)** — `0x72ed000`:
-```
-hdr[5]=0x134d   second object section's record count (4,941)
-hdr[7]=0x685    type-name strings (VertexArrayData, ImageData, …)
-hdr[6]=0x33060  float/font data
-hdr[4]=0x34420  object data
-```
+| Word | Meaning | NDMW.AFS blob (`0x1055b000`) | AREA.AFS blob (`0x72ed000`) |
+| --- | --- | --- | --- |
+| `hdr[0]` | meaning not established | `0x6300` | `0x12a8` |
+| `hdr[1]` | first object section's record count | 891 | 168 |
+| `hdr[3]` | class count | 207 | 66 |
+| `hdr[4]` | object stream bytes | `0xf86bc` | `0x34420` |
+| `hdr[5]` | second object section's record count | 28,933 | 4,941 |
+| `hdr[6]` | content pool bytes | `0x1b8330` | `0x33060` |
+| `hdr[7]` | memory block count | 9,732 | 1,669 |
 
 ### Type directory records
 
-`{ NUL-terminated type name }{ u32 descriptors... }`, names 4-byte aligned.
+`{ NUL-terminated type name }{ 6-byte descriptors... }`, names 2-byte aligned.
 
 ### Field descriptor encoding
 
