@@ -117,8 +117,7 @@ Remaining boundaries include scalar singleton publication and wider type-system
 initialization, type-query services, feature initialization, allocator/owner/byte
 services, the parent child-list factory and beBaseInfoRam's gameplay schema. Actual
 Work/list instance construction and complete teardown, memory/array value methods
-and other Lua-dependent gameplay receivers remain active work. Native gameplay
-is unchanged.
+and other Lua-dependent gameplay receivers remain active work.
 
 The [memory-value follow-up](memory-field-values.md) now connects this metadata
 to actual Work and child-list instances, populates strings/integers/retained

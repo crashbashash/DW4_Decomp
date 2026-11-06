@@ -13,7 +13,7 @@ needed to read it:
                                  the geometry attr (0x005238c0) are the mesh this node draws
 
 Emitted as one row per node: the composed world matrix, the model name, and the geometry attribute
-addresses it draws, so the port's renderer can place real geometry:
+addresses it draws:
 
     name<TAB>m0 m1 ... m15<TAB>attr-addresses (comma)
 
@@ -21,8 +21,8 @@ The *name* is only a DCC label and is neither unique nor complete: a pack holds 
 named `polySurfaceShape1`, and the largest environment meshes carry no name at all, so a name
 join over-draws and drops the stage shell.  `--pack` closes that by matching each live
 geometry attribute to the pack mesh with the *same vertex buffer* (the loader copies the pack
-geometry byte-for-byte), and writing the pack attribute's id as a fifth column.  That id is
-exactly `dw4_scene_mesh.attr_id` in the port, so the renderer can join on identity, not a label.
+geometry byte-for-byte), and writing the pack attribute's id as a fifth column.  That id
+identifies the geometry where a name cannot.
 
 Usage
 -----
@@ -153,8 +153,7 @@ def attrs_of(ram, shape):
 def load_pack_map(afs, entry, decomp):
     """Vextex-buffer tuple -> pack geometry-attribute id, for one model pack.
 
-    The port's `dw4_scene_mesh.attr_id` is the pack's `igGeometryAttr1_5` object id, so this is
-    the identity the renderer joins on.  Identical vertex buffers (a reused primitive) collapse
+    The id is the pack's `igGeometryAttr1_5` object id.  Identical vertex buffers (a reused primitive) collapse
     to the same key, which is harmless: the geometry is the same.
     """
     sys.path.insert(0, os.path.join(decomp, "scripts"))

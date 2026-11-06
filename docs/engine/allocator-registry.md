@@ -108,5 +108,4 @@ handling, not a claim that that candidate matches retail.
 The bootstrap/context recovery also covers registry-list lifetime
 and global publication. Remaining work includes compiler residuals, context-record
 initialization/stack/special delegation, actual allocator virtual implementations,
-scalar/type publication, object cloning and broader Lua gameplay receivers. Native gameplay
-is unchanged.
+scalar/type publication, object cloning and broader Lua gameplay receivers.

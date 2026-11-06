@@ -12,7 +12,7 @@ the factory52 and registration wrapper32 were under anonymous `FUN_` names,
 alongside Register100 and GetMetaObject28. They are named and their return/callback
 ABIs corrected with no additional matching credit. The newly classified parent
 getter contributes **one function /12 matched bytes**. The vtable getter116 matches in [beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp).
-This is metadata recovery, not working shop transactions or native UI acceptance.
+This is metadata recovery, not working shop transactions.
 
 ## Factory and published metadata
 
@@ -124,11 +124,10 @@ complete behavioral recovery. The116 metadata bytes and the six runtime bodies
 match. Continue with actual shop
 subcontrollers, price/item services and transaction results. The
 [full hub goal](../systems/hub-recovery.md), dedicated LABO/CARD roots and separate
-Save Keeper stagIS12 route remain open. This work does not expand the native port.
+Save Keeper stagIS12 route remain open.
 
 A separate 192 exact bytes cover that complete base-controller
 cleanup dependency. Its seven member helper calls and signed deletion flag are
 readable source; it contains one explicit return-register copy and original NOP.
 The seven-body metadata accounting above is416/416 exact bytes: the new
-cleanup body is outside that block. Header and member-cell services
-and native integration remain open boundaries.
+cleanup body is outside that block. Header and member-cell services remain open boundaries.

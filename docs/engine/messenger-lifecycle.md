@@ -13,7 +13,7 @@ Three forwarding bodies (192 bytes) have exact source in
 send at `38ecf0` adds **84 matched bytes**; named-delayed send and group preparation
 were existing matches and now have explicit, corrected signatures. Six more bodies
 (3,312 bytes) match in one-function files under `src/unmatched/`; the expiry update
-`38d0a0` (`beMessenger::vfunc_27`, 972 bytes) has no C source yet. No native gameplay implementation changes are implied.
+`38d0a0` (`beMessenger::vfunc_27`, 972 bytes) has no C source yet.
 
 ## Entry points and storage
 
@@ -132,7 +132,7 @@ all other RAM and ordered leaf calls are compared.
 List mutation/reserve, pool/interner, allocator/delete, memory initialization,
 registry/factories and concrete receiver callbacks remain controlled leaves.
 This validates the engine lifecycle itself; it does not prove those lower
-contracts, concurrency, a real wall-clock unit or complete native gameplay.
+contracts, concurrency or a real wall-clock unit.
 Real list/pool/chunk composition remains a next integration step. Concrete
 virtual receiver implementations and group registry behavior remain recovery
 work, together with the expiry update `38d0a0`, which has no C source yet, and broader

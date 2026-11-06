@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """livedump.py — an EE RAM image the offline tools can address, from a PCSX2 savestate.
 
-The tools that read a live capture (`capture_scene.py`, `camera_match.py`, `texture_map.py`,
-`extract_live_models.py`, and the port's `--livedump`) all assume the dump
+The tools that read a live capture (`capture_scene.py`, `texture_map.py`,
+`extract_live_models.py`) all assume the dump
 **starts at EE 0x00100000** (the kernel owns the low megabyte).  `scripts/p2s_ram.py` writes the
 whole 32 MB `eeMemory.bin` starting at 0, so feeding it straight to a tool shifts every address by
 0x100000 — an object resolves at 0x001…… where the tool looks at 0x000……, and the graph comes back
@@ -13,12 +13,6 @@ tools expect:
 
     # then, no emulator needed:
     python3 scripts/capture_scene.py --from out.bin --pack ../local/extracted/NDMW.AFS:614 --tsv s.tsv
-    python3 scripts/camera_match.py --from out.bin --pack ../local/extracted/NDMW.AFS:614 \\
-        --target 421.83 72 -110.07 --character auto --tsv cam.tsv --textures
-    port/build/dw4asset livetex out.bin --list
-
-The port's `livetex.c` accepts both sizes (it auto-detects the base), so only the Python tools need
-the trim.
 """
 import argparse
 import os

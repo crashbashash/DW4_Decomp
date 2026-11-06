@@ -101,7 +101,6 @@ initialization, special context delegation and stack control remain bounded.
 The later --context-lifecycle mode constructs and releases original context records
 and46 retained bindings (210 checkpoints); the slot204 builder remains external. See [allocator contracts](allocator-registry.md). The beBaseInfoRam
 gameplay schema and other unexecuted content paths remain open.
-Native gameplay is unchanged.
 
 ## Verification
 

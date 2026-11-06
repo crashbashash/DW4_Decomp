@@ -78,7 +78,7 @@ The exact ones name the pipeline's vocabulary directly: `0x1` COMPRESS, `0x100` 
 
 ## What each bit means
 
-Each bit's meaning is read off the *names*: a boolean condition over the words in the program names (words present, words absent, combined with OR) that reproduces the bit's program set **exactly, over all 201 records** — so it is a proof, not a reading. **25 of 29 bits** have such a condition; the rest are combinations of capabilities rather than one feature, and for those the exact program set is given, which is what a port needs anyway.
+Each bit's meaning is read off the *names*: a boolean condition over the words in the program names (words present, words absent, combined with OR) that reproduces the bit's program set **exactly, over all 201 records** — so it is a proof, not a reading. **25 of 29 bits** have such a condition; the rest are combinations of capabilities rather than one feature, and for those the exact program set is given.
 
 | bit | programs | meaning (proven by set equality) |
 | --- | --- | --- |

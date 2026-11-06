@@ -18,7 +18,7 @@ lives in the
 [chip text](../../src/game/beNDMWShopCtrlXdataChip_RefreshText.cpp).
 The primary7,232-byte chip transaction update has
 [separate behavioral recovery](chip-controller.md) and still retains
-assembly. These checkpoints do not establish native rendering or complete chip
+assembly. These checkpoints do not establish rendering or complete chip
 dependency execution.
 
 ## Fields and inherited interface
@@ -150,7 +150,7 @@ oracles retain their original service boundaries.
 
 The [item/database lookup checkpoint](item-database.md) now explicitly
 recovers the adjacent wrappers' value returns and status forwarding, preserving
-their matched bytes. Database delivery/loading and full transaction/native
+their matched bytes. Database delivery/loading and full transaction
 acceptance remain separate boundaries.
 
 The text helper's previous1,064-byte split used Ghidra's occupied-byte sum and
@@ -174,7 +174,7 @@ aliased count storage, null/stale rows and descriptions, single-byte page labels
 full-width flags/costs, and callback changes to page/list/font/messenger. Pad-record
 lookup executes its recovered body; model generation, property queries, text
 packet delivery and formatting are controlled. UI state is an observation model,
-not accepted native rendering. Original instructions and recovered C run from
+not rendering. Original instructions and recovered C run from
 independent input state; no retail output is copied into the expectation.
 
 Next: match the full chip transaction update at43aae0, connect the recovered item

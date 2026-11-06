@@ -1,8 +1,8 @@
 # Compiler object ownership and exception settings
 
 These are measured properties of MWCCPS2
-3.0 build011126 and the matching pipeline. They do not change native-port
-exception policy or mark a behavioral adapter as byte-matched source.
+3.0 build011126 and the matching pipeline. They do not mark a behavioral adapter
+as byte-matched source.
 
 ## Exact alias-pool tail calls
 

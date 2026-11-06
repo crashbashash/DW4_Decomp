@@ -83,8 +83,8 @@ selection/delivery/primitive storage, enum construction, factories/registry,
 formatting, string/list services and generic object destruction are also
 controlled boundaries. A default initializer supplies owner fields directly.
 The actual ShopSelect initializers, fonts, Lua execution and XDATA transactions
-still need to join this call tree. Full script/dispatch closure, nonempty close
-queues and native gameplay acceptance remain separate work.
+still need to join this call tree. Full script/dispatch closure and nonempty close
+queues remain separate work.
 
 See the [selector contracts](shop-selectors.md), [manager/input contracts](selectctrl.md),
 [window presentation](window-presentation.md) and [full hub completion contract](../systems/hub-recovery.md).

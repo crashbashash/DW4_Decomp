@@ -259,14 +259,14 @@ It also labels each class's field-table and ctor-table addresses `reflect_<Class
   siblings `beNDMWStatusInfoRam` (1 field) and `beNDMWStatusInfoWork` (7) carry only manager data,
   so the stat record is not driven by this class's MetaField table.
 
-- **The 47 shared vfunc bodies** (tracker **T7**). The ctor tables are per-*field*
+- **The 47 shared vfunc bodies.** The ctor tables are per-*field*
   factories, not method tables; they carry no virtual-method names. Names for the ambiguous vfunc
   bodies need a different route.
 - **`__ct` / `__dt` / `__as` / `__eq`.** These are *not* per-class method names: they occur exactly
   once each, at `0x004fde68`+, in a MWCC **name-mangling/operator lookup table** (beside
   `operator==`, `operator<<`, `>=`, …). Reading them as class method
   metadata is wrong.
-- **`{X,Y}` igBinary field descriptors** (tracker **T2**/`D2`). The field metadata above is the
+- **`{X,Y}` igBinary field descriptors.** The field metadata above is the
   *source* those descriptors index, so this is testable — decode a pack's type directory and
   correlate `{X,Y}` against a known class's field list. Still open.
 

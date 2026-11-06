@@ -197,8 +197,7 @@ Stream #0:1: Video: mpeg1video, 640x480, 29.97 fps
 ```
 
 **MPEG-1**, not MPEG-2, and the audio is **ADX carried inside the container** — so the movies need no
-reverse engineering at all: stock ffmpeg decodes both streams. (The port's `media convert` does exactly
-that.)
+reverse engineering at all: stock ffmpeg decodes both streams.
 
 A stage's resident sound effects are CRI `ps2_` banks inside its **sound pack** (the smaller of its pair
 of AFS entries), and those decode offline — see [`sound-format.md`](sound-format.md). Music and ambience

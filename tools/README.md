@@ -33,7 +33,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`progress.py`](progress.py) | the repo's progress numbers, computed from committed files only |
 | [`datamap.py`](datamap.py) | how much of the binary's *data* the repo has identified |
 | [`typed_coverage.py`](typed_coverage.py) | Measure typed coverage: how much of the decompiled C speaks in structs |
-| [`typed_scope.py`](typed_scope.py) | Typed coverage of the port-relevant game layer |
+| [`typed_scope.py`](typed_scope.py) | Typed coverage of the game layer |
 
 ## Naming and tree maintenance
 

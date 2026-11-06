@@ -27,7 +27,7 @@ Matching source is in [beDataBase.c](../../src/game/beDataBase.cpp) and the
 All290 non-padding module words execute; two padding words are checked as zero.
 Composed cases also execute all47 words of the existing property-name search,
 for337 executed instruction addresses in total. No retail output is copied into
-expectations. These are synthetic-memory tests, not live-game or native acceptance.
+expectations. These are synthetic-memory tests, not live-game tests.
 
 ## Item and virtual-selector contract
 

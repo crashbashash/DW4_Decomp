@@ -132,4 +132,4 @@ guest-word pointers in that analysis-only context to agree with reflected
 four-byte fields. These are machine-ABI projections, not original template names.
 The [three immediate helpers](combat-helpers.md), including the nearby query,
 now match too. The full [calculation callback](combat-damage.md) matches as
-`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`. No native gameplay integration is included.
+`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.

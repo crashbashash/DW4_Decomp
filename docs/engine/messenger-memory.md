@@ -110,8 +110,8 @@ Object factories, registry behavior, list resize/reserve/mutation, pool/interner
 allocator/delete and concrete receiver handlers remain controlled. Factory
 fixtures supply layouts required by the callers; they are not recovered factory
 implementations. In particular, transitive constructor/destructor ownership and
-allocation failure policy remain open. Native gameplay and complete engine
-recovery are not established by this subgroup. Next work includes actual
+allocation failure policy remain open. Complete engine recovery is not
+established by this subgroup. Next work includes actual
 factories/registry, lower-service composition and concrete receivers.
 
 The subsequent [creation recovery](object-creation.md) executes the original

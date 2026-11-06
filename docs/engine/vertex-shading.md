@@ -50,12 +50,12 @@ material or of the props.
 
 The `0.5` is **not** a dimmed capture. The GS modulates with `(Cv * Ct) >> 7`, i.e.
 `2 · Cv · Ct / 255`, so a `0.5` vertex colour times a full-brightness texel is the full-brightness
-result — exactly the port's own `tex * clamp(amb + dif · max(0, N·L)) / 255`. The frames confirm it:
+result: `tex * clamp(amb + dif · max(0, N·L)) / 255`. The frames confirm it:
 the dump's own embedded framebuffer (raw RGBA in the `.gs` header) and the reference screenshot
 differ by only `1.17` mean absolute, and their frame means (`53.8` vs `53.9`) and floor means
 (`68.3` vs `68.5`) match. A second dump captured from the same state is identical in brightness. So
-the `0.5` is the GS's half-scale vertex-colour convention and a renderer uses the model at scale
-`1.0` — which is what the port already does.
+the `0.5` is the GS's half-scale vertex-colour convention and the model's effective scale is
+`1.0`.
 
 (Reading the `0.5` as a capture-time fade, because `127` looks too small against the
 reference's `164`, is refuted as: the `2×` in the modulate is where the missing factor
@@ -73,28 +73,28 @@ is uniform where it matters:
   No per-material rig is warranted by this data.
 * **The filter is linear.** `TEX1` is `MMAG 1 MMIN 1` for every draw. It is never rewritten in the
   record stream, so an analyser that reads only `A_D` writes reports `MMAG 0` — read `TEX1` from the
-  **freeze state**. This confirms the port's linear default.
+  **freeze state**.
 * **The opaque lit draws** are `PRIM` with `TME 1 ABE 0 IIP 1`, `ALPHA A0 B1 C0 D1` (the GS's
   `(Cs−Cd)·C + Cd`), `TEST ATE 1 ATST 6` (GREATER) `AREF 0xc ZTE 1 ZTST 2`, `TEXCLUT 1`.
 * **The world's enabled blend is effectively opaque.** The ground palettes (`P11G00n`, `P10G00n`,
   `P11G00s`, `TA01GM02`) are constant alpha `0x80`, which the GS treats as 1.0, so with
   `igBlendStateAttr._enabled` 1 and `_src` 4, `_dst` 5 the blend reduces to a copy. It does not explain
-  the wall's colour, and the port needs no blending for this geometry.
+  the wall's colour.
 * **The unlit overlays** (HUD, shadows, the wall's blue light dash) carry a **constant** RGBA of
-  `127` (full) or `0` (black) with `ABE 1` — these are the draws a renderer must *not* shade.
+  `127` (full) or `0` (black) with `ABE 1` — these draws are *not* shaded.
 
 The state reaches the GS **through VU1 transfers**, not through EE register writes
 ([`p2-renderer.md`](p2-renderer.md) finds only two GS accessors in the whole `p2` layer), so the
 material → register mapping itself is VU1-microcode-side; the EE-side surface is texture upload, GS
 readback, swap and lighting.
 
-## What this means for a renderer
+## What the model settles
 
 * The **model form** is recovered: `clamp(ambient + diffuse · max(0, N·L), 0, 1)`, one-sided, with
-  `L` the negation of the light's travel direction, at scale `1.0`. The port's `shade()` is already
-  this (equivalently `2 · 0.5 · clamp(...)`).
+  `L` the negation of the light's travel direction, at scale `1.0`
+  (equivalently `2 · 0.5 · clamp(...)`).
 * The **constants** are the *captured* frame's. Using the dump's live rig against the reference
-  screenshot scores worse than the port's baked rig (`17.66 → 18.88` on the whole frame with the
+  screenshot scores worse than a rig fitted to that frame (`17.66 → 18.88` on the whole frame with the
   textures correct), and a re-fit inside the one-sided form is no better than the existing fit. So
   the reference frame's constants remain a **fit**; the model is decoded, the numbers are not.
 * The metal trim's residual is **not** a rig value and not the light model. It is the **texture
@@ -113,10 +113,10 @@ and the dump's **framebuffer** decoded out of VRAM (the **output**).
 
 Two results, measured on the maps:
 
-* The **texel** map reproduces the port's unlit world render essentially exactly — region ratio
+* The **texel** map matches an unlit render of the pack's world essentially exactly — region ratio
   `1.000/1.000/0.999` over the whole frame, mean `|Δ|` `1.07`. The world's UV / filter / texture
   path carries no remaining error, wall included.
-* The floor's **shade** is exact under the game's own per-vertex (Gouraud) path: the port's
+* The floor's **shade** is exact under the game's own per-vertex (Gouraud) path: a
   live-Gouraud floor shade is `224.3, 211.1, 230.0` against the map's `224.2, 214.1, 231.0` —
   ratio `1.001/0.986/0.996`, with **no** region excluded. The per-pixel path instead carries a
   `+4 %R / +7 %B` hue bias, which is why a fitted rig can out-score the decoded one on the whole
@@ -195,30 +195,20 @@ above is read from. The `gsdump` reader they build on (`scripts/gsdump.py`) walk
 register cycle; its `--draws` prints each draw's TEX0/PRIM/ALPHA and `--tex` extracts the texture the
 GS actually sampled out of VRAM.
 
-The model and the before/after evidence are drawn in the port's live-camera capture set as
-`barrel-shading-gs-model.png` and `inline-texture-vflip-fix.png`.
-
 ### The 2D half of the frame
 
 The dump also carries the **2D overlays** -- the HUD and the other screen-space elements -- which the
 3D scene path knows nothing about because the engine draws them straight to the GS.  They are the
 draws that are **alpha-blended** (`PRIM.ABE`), **unlit** (one constant per-vertex RGBA; every lit
 draw's colour varies across its vertices) and whose vertices stay inside the framebuffer; those three
-properties separate them from the lit 3D draws without a texture list.  `scripts/gs_ui.py` exports
-them as screen-space triangles with the GS's own UV (`STQ / Q`), each TEX0's texture decoded out of
-the dump's VRAM, and the port's `--ui` replays them over the scene with the GS's `(Cs-Cd)*As+Cd`
-blend and `(Ct*Cv)>>7` modulate:
-
-```sh
-python3 scripts/gs_ui.py --dump dumps/goblin_pass_ref.gs.zst --out /tmp/ui
-# then, in the port:  dw4asset render <the scene> --ui /tmp/ui/ui.tsv --out-dir DIR
-```
+properties separate them from the lit 3D draws without a texture list.  Replaying them as
+screen-space triangles with the GS's own UV (`STQ / Q`), each TEX0's texture decoded out of the dump's
+VRAM, under the GS's `(Cs-Cd)*As+Cd` blend and `(Ct*Cv)>>7` modulate pins the 2D blend and the
+screen-space mapping by measurement.
 
 In the Goblin Pass frame that is the HUD atlas (`0x40071a05553078cc`, the ring/portrait/orb arc), the
-`LV` glyphs and the HP/MP number strips: 516 draws, 2920 triangles, 8 textures, and replaying them
-halves the frame's largest remaining error region.  The overlay's *content* is per-frame state, so
-this is a reproduction path and not the native UI a port needs -- but it pins the 2D blend and the
-screen-space mapping by measurement, which is what the UI implementation will be checked against.
+`LV` glyphs and the HP/MP number strips: 516 draws, 2920 triangles, 8 textures.  The overlay's *content*
+is per-frame state.
 
 ### The HUD digits have no hidden per-glyph UV
 
@@ -230,19 +220,14 @@ samples glyph 9's window.  The strip textures decode as 0-9 palettes (ten glyphs
 **mirrored when read left-to-right** — the drawn digit order runs right-to-left), and the dump's
 own embedded screenshot plus the live savestate screenshot both show the clean digits.
 
-Two measured facts about the *reference*, worth knowing before trusting the HUD metric:
+Two measured facts about the *reference*:
 
-* The port's replay matches the native framebuffer's digit **placement** (column peaks align) and
+* A replay of the overlay draws matches the native framebuffer's digit **placement** (column peaks align) and
   **ink level** (158 vs 154 G).  The dump screenshot's digits sit ~3.5 px right of the fb's and are
   brighter (185 G) — a display-path offset.
 * The native fb's digit rows alternate bright (~248 G) and dim (~125 G) rows that the displayed
   image does not carry — identical in both FBP twins and byte-identically in a second dump, so a
-  deterministic fb-HUD artifact a progressive render cannot and should not reproduce (drawing the
-  UI twice regresses: strips 54.9 → 81.8 against the screenshot).
-
-So the HUD box's remaining 16.4 is that artifact plus the world background error, not a glyph
-defect.
-
+  deterministic fb-HUD artifact.
 
 ## The framebuffer excess is not a global response curve
 
@@ -299,7 +284,7 @@ That reproduces the frame to the mean, per channel and per region:
 | wall box | (16.5, 15.2, 18.1) | (39.9, 35.7, 41.2) | (39.9, 36.0, 41.3) |
 | barrel box | (52.3, 38.7, 24.2) | (66.9, 52.5, 41.6) | (67.5, 53.0, 41.8) |
 
-Under a 5x5 blur — the regime the port's metric uses — the whole-frame mean `|d|` falls from
+Under a 5x5 blur the whole-frame mean `|d|` falls from
 `(17.4, 15.2, 17.3)` to `(8.2, 7.0, 6.9)`, and the wall box reaches the ~2-3 bar (`23.5 -> 2.4`).
 This also explains the crate's constant-colour dark face that motivated the "combine, not a curve"
 reading: fog `F` varies per vertex, so the face diverges from `Cv*texel/128` even though its vertex
@@ -309,8 +294,8 @@ Reading fog as dead (`F = 0`) is an **extraction artifact**: `F = (XYZ[2] >> 24)
 the 24-bit `Z` dword, which is structurally 0.  The deviation is baked into the framebuffer, not applied
 by a display or post pass.
 
-**Consequence for the renderer:** implement the GS fog stage against the per-vertex `F`; do not
-implement a response curve and do not un-fit the light rig on this basis.  Two region-mean residuals
+**Consequence:** the excess comes from the GS fog stage on the per-vertex `F`, not from a response
+curve.  Two region-mean residuals
 are left to chase: the floor box reads *below* `pred` (it is overlay-covered, not a clean floor
 sample), and the bright character group (TBP `0x37c000`) is over-predicted.  The per-pixel scatter
 around the correct mean is pred/sampler (winner-raster + bilinear) noise, not a second combine.
@@ -320,8 +305,8 @@ around the correct mean is pred/sampler (winner-raster + bilinear) noise, not a 
 * **Whether the GS alpha test matters on the lit draws.** Unproven, from one Goblin Pass census: `ATE 1
   ATST 6 AREF 0xc` looks inert on the opaque lit draws, because the barrel, crate, world, floor-sized and
   terrain textures each read alpha 128 on every texel, so it would only bite on the unlit `ABE` overlays
-  (the 32x32 HUD draw `0x40071a05553078cc` has 34.9 % of texels at alpha 12 or below). Check other stages
-  before leaving the cutout out of the scene renderer.
+  (the 32x32 HUD draw `0x40071a05553078cc` has 34.9 % of texels at alpha 12 or below). Other stages are
+  unchecked.
 * **The 128x128 draw `0x40063405dd30b160`.** It matched neither pack's `P11G00s` in that comparison
   (palette intact, indices scrambled), which looks like a TBW or swizzle mismatch in the extractor.
 * **Whether a dump's embedded screenshot renders its own command stream during fast transitions.**
@@ -337,4 +322,4 @@ around the correct mean is pred/sampler (winner-raster + bilinear) noise, not a 
   crate came from the resampled 640x480 reference plus the retail framebuffer's ordered dither of about
   +-4 per channel: against the native 640x448 framebuffer with a 1.2 px blur, the crate mask is rig- and
   path-independent (all four cells 18.38-18.44). At blur 0 the dither inflates every per-pixel score against
-  the dither-free port render.
+  a dither-free render.

@@ -4,7 +4,7 @@ How a stage's camera is read from its pack, the stage projection, and the runtim
 
 ## Composing a stage's camera
 
-A stage's camera is found by composing a camera node's ancestor chain and inverting the result (`dw4asset scene --cam`).
+A stage's camera is found by composing a camera node's ancestor chain and inverting the result.
 The order is child x parent, leaf leftmost, in the row-vector convention.
 
 stag0102's chain, root first:
@@ -37,15 +37,14 @@ Framing alone does not identify a camera: any sufficiently distant camera with a
 only the combination with a projection of the framebuffer's aspect discriminates. stag0102's pack camera with this projection
 puts 389 of 702 live placements on screen.
 
-## Which camera the tools use
+## The authored stage camera
 
 The stage camera is the first `igCamera` in node order whose composed world is not the identity: a graph-path-root camera has
-no ancestors, so its world is the identity and it must be skipped. `dw4asset render --camera [NAME]` and `dw4 --camera [NAME]`
-take view = the inverse of that world, fov 0.6912 rad, aspect 0.7 * width / height.
+no ancestors, so its world is the identity and it must be skipped. The view is the inverse of that world, fov 0.6912 rad,
+aspect 0.7 * width / height.
 
 That is the pack's authored camera, not the gameplay view: on stag0101 it does not reproduce the live frame, and the gameplay
-view is the inverse of the live eye world matrix. Passing an identity world as the view gives a smear. `--span N` is a clip
-around `--cam`, not a framing control.
+view is the inverse of the live eye world matrix. Passing an identity world as the view gives a smear.
 
 ## The runtime controller
 
@@ -65,8 +64,7 @@ around `--cam`, not a framing control.
 | +0x54 | `_eyeMatrix` |
 | +0x94 | `_intMatrix` |
 
-`beCameraCtrl::vfunc_31` (`0x379c40`) is the per-frame update: `FUN_00378ed0` is the box path when the camera mode is valid
-(see [authored box-camera transitions](../../port/docs/box-camera.md)), else `FUN_00379a90` is the demo path.
+`beCameraCtrl::vfunc_31` (`0x379c40`) is the per-frame update: `FUN_00378ed0` is the box path when the camera mode is valid, else `FUN_00379a90` is the demo path.
 
 `beCameraCtrlInfo._data` (+0x1c) is a `beCameraBoxData` (`_switch` +8, `_geometryList` +0xc, `_transformList` +0x10,
 `_eyePosList` +0x14, `_intPosList` +0x18) or a `beCameraDemoData`.

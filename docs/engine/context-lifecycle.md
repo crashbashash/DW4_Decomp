@@ -100,5 +100,5 @@ modes retain their113/114/116 counts.
 
 Twenty-one dependency tests verify constructor/destructor sites, concrete slots100/
 180/208/212 and reviewed roots. Retail objdump confirms the complete shapes.
-Native gameplay is unchanged. Next: context configuration/stack
+Next: context configuration/stack
 control, actual allocator/tracker backends and remaining Lua gameplay receivers.

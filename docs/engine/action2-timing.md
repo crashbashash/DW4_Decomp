@@ -226,24 +226,11 @@ The interpreter checks itself first on hand-assembled programs (64-bit variable 
   unless another writer says otherwise.
 - **The `R` WAITCHECK mode's** purpose (a beat-aligned wait is the arithmetic's shape)
   is a hypothesis.
-- The native port imports these files for logo completion. It supplies a provisional
-  clock pending a verified scheduling/reset contract; FADESET presentation, native action
-  replacement/sequence dispatch and other models remain outside this recovery.
+- FADESET presentation, action replacement/sequence dispatch and other models remain
+  outside this recovery.
   The duration was checked in stock-emulator savestates; complete timing equivalence was not.
 
-## Native integration
+## Logo components
 
-The logo's Action2 components are extracted from AREA 620, including the original
-frame values as f32 bit patterns. A bounded native adapter runs this reference's
-component walker, frame update and ISCOMEND query over those components. WAIT
-property storage is retained across replacement; action-state initialization,
-allocation, metadata and FADESET remain native boundaries. The port's default
-clock advances by 16,666,667 ns per model tick; callers can supply an absolute
-clock and hold it unchanged. This removes the fixed 30-tick completion decision,
-not the uncertainty about the system clock or EE arithmetic.
-
-The integration oracle descends into the original Action2 instructions and
-compares ordered calls/stores plus the complete native arena every tick.
-Large-clock lifecycle regressions round absolute clock values before subtracting;
-the initial verifier mistakenly rounded their difference and counted five
-exempt addresses as covered. Both review findings are corrected.
+The logo's Action2 components are in AREA 620, with their frame values stored as
+f32 bit patterns.

@@ -78,7 +78,7 @@ case retains its controlled boundary rather than inventing lower failure behavio
 
 Merge is **68 matching code bytes**. Construction/destruction/deletion sources
 match with their incoming arguments
-explicit and a short deletion-flag cast. Root matching, typed and byte-identical
+explicit and a short deletion-flag cast. Matching, typed and byte-identical
 link gates remain required. Open: the four bodies without C source and allocator/delete/
 synchronization contracts, then composing original producers and stage receivers
 through this storage. This subgroup does not complete the allocator platform layer

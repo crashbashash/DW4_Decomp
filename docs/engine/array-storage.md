@@ -69,4 +69,4 @@ reviewed memory-construction root; this checkpoint adds no speculative roots.
 The subsequent [memory-copy/buffer checkpoint](memory-field-copy.md) recovers
 copying, size and free dispatch. Allocator internals, owner registry search, type
 queries/publication, object cloning and other gameplay receivers remain open. This is evidence for these
-storage contracts, not native gameplay completion.
+storage contracts.

@@ -268,7 +268,7 @@ class TextureMap:
         **one** texture bind and **one** shape list, so the binding is per shape.  The live shape's
         vertex buffer is drained, so the content match cannot reach it; the shape's
         ``_primType``/``_numPrims`` can, and ``key2ids`` is the pack's ``(primType, numPrims) ->
-        [id]`` map from `camera_match.pack_shape_keys`.  A key shared by several pack ids (the
+        [id]`` map.  A key shared by several pack ids (the
         small props) assigns the texture to all of them; the caller prefers the distinctive keys.
         """
         out = {}

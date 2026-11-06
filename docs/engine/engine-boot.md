@@ -1,9 +1,7 @@
 # The engine boot chain — from the CRT entry to the frame loop
 
-This is the `main` a native port has to stand in for (porting P2.6/P6.1).  `main`, the SDK init and
-both frame functions are matched C in `src/unmatched/`; for the rest, the addresses and the call graph
-are the deliverable.  Everything here is in the EE runtime / Alchemy-core region, which is why a
-source-level port cannot run it until those functions are ported.
+`main`, the SDK init and both frame functions are matched C in `src/unmatched/`; for the rest, the
+addresses and the call graph are the deliverable.  Everything here is in the EE runtime / Alchemy-core region.
 
 ## The CRT entry (`entry`, `0x00100008`)
 
@@ -73,10 +71,9 @@ and the MetaObject global the class's own `_GetMetaObject` accessor lazily fills
 | `0x1a7cc0` | `igAnimationCombinerBoneInfoPool_Create` | `0x1a7d90` | `0x562250` | `0x562528` |
 | `0x1a67c0` | `igAnimationStatePool_Create` | `0x1a6890` | `0x5620d8` | `0x562540` |
 
-All six are matched C (`config/SLUS-20836/names/Managers.tsv`, `src/engine/`).  A port reproduces them as
-`igMetaObject_CreateInstance` at the semantic level — allocate the class's reflected size (0x20),
-run `igObject_InitHeader`, stamp the vtable — because its class schema is the recovered reflection,
-so no guest MetaObject pointer is needed to identify the class (`DW4_Port` `src/engine.c`).
+All six are matched C (`config/SLUS-20836/names/Managers.tsv`, `src/engine/`).  At the semantic level each is
+`igMetaObject_CreateInstance`: allocate the class's reflected size (0x20),
+run `igObject_InitHeader`, stamp the vtable.
 
 ## The frame functions (`FUN_0025a580` / `FUN_0025a8c0`)
 
@@ -124,16 +121,3 @@ object; the update loop itself is inside the body.
 flag effect: in a minimal MWCC test a two-parameter function with a `short` second parameter gets
 `s1` = arg0, `s0` = arg1 only when the first call in the body takes no argument, and passing a pointer
 to that call flips them.
-
-## What the port does with this
-
-The native host (`DW4_Port`, `include/dw4/engine.h`) is the same shape — **init → object graph →
-per-frame update → present** — over the parts that are portable today: the platform-seam inventory,
-the reflection object model, the ported `igObject_InitHeader` (`0x2fef20`) and the renderer.  The
-functions above are the target list to port into `dw4_engine_frame`, in this order:
-
-1. `igObject_InitHeader` (`0x2fef20`) — **ported** (all 4-byte offsets).
-2. the manager construction trio and the app object (`0x234900`/`0x234d70`,
-   `0x1a1ae0`/`0x1a7cc0`/`0x1a67c0`);
-3. the frame functions `0x25a580`/`0x25a8c0` (they need the renderer seam and the manager state);
-4. `FUN_002595e0` itself once its callees exist.

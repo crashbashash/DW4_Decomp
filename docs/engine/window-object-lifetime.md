@@ -34,8 +34,7 @@ After those calls, only a positive **signed low16** deletion flag invokes the
 existing deallocation thunk at `0x002ff810`. The function always returns its
 original receiver address, including after that deallocation request. It adds
 no field clearing, child traversal, model-close messages or other cleanup policy.
-The cell helpers remain separate dependencies; matching this caller does not
-establish their complete port implementation or native shop acceptance.
+The cell helpers remain separate dependencies.
 
 ## Code generation and verification
 
@@ -59,4 +58,4 @@ The metadata oracle's117 cases still treat this cleanup call as a controlled
 leaf. Exact verification separately covers this entire original cleanup body;
 it is not a claim that the two portable adapters now compose end to end.
 The original helper/source and whole-section byte checks are the acceptance
-for this PS2 matching body. Native lifecycle validation remains separate.
+for this PS2 matching body.

@@ -1,9 +1,7 @@
 # Stage loading cards and node animation
 
 The USA game chooses a stage-specific loading scene, whose texture already
-contains the preview and localized stage name. The native hub transition
-uses that scene and the recovered node-animation clock; see the
-[native adapter](../../port/docs/stage-loading.md).
+contains the preview and localized stage name.
 
 ## Stage and language lookup
 
@@ -35,8 +33,7 @@ NDMW.IGB's inherited `igFileName._pathList` (serialized ordinal 3) disambiguates
 identical loading filenames. For `ldagml11.igb`, directory `loadingusa` selects
 AREA.AFS **1321**; `loadingeng` selects **831**. A basename-first lookup
 therefore selects a different regional card. USA ML02 is entry
-1320. The native resolver preserves directory components and performs
-case-insensitive qualified lookup while retaining basename behavior.
+1320.
 
 ## Byte-matched clock update
 
@@ -56,8 +53,7 @@ produces the entire retail body without inline assembly or compiler changes.
 
 The full matching check has zero mismatches and the relink is
 byte-identical. The reference/retail loading-node oracle also passes
-all **2,631 comparisons** below. This recovery does not add a native stage-loading
-or whole-scene parity claim.
+all **2,631 comparisons** below.
 
 ## Complete contiguous runtime group
 
@@ -96,10 +92,7 @@ A nonzero stop time returns immediately without advancing play time.
 
 The USA ML11 asset serializes start 16,666,666 ns, loop1 1,666,666,666 ns,
 loop2 4,666,666,666 ns, lock 4,733,333,333 ns, and play limit
-1,666,666,666 ns. The native adapter retains the original reveal/play-limit
-wait before a successful handoff, and presents the lock sample before entering
-the destination. A longer inspection hold continues animation until its hold
-expires; it does not repeatedly restart the opening.
+1,666,666,666 ns.
 
 ## Geometry, title and preview
 
@@ -129,17 +122,14 @@ positions, so sorting solely on transform Z loses this composition.
 destination 1; its target-9 parent animates the atlas offset through the authored
 hexagon outlines. The hexagon fill, scrolling bands and edge lights also inherit
 this additive blend, while preview/name and black cover use 4/5 ordinary alpha.
-The native renderer resolves these inherited blends, evaluates the sign-magnitude
-time keys, honors target-9 UV offsets, and sorts by transformed mesh depth.
-Visible trace phases were inspected from the original asset; direction and exact
-retail raster parity have not been compared with a running PS2 capture. Exact compressed-sampler
-EE rounding and complete retail GS material/blend/frame parity remain
-unverified. This recovery establishes asset selection, visible content and
-node-runtime behavior, not screenshot equality with PCSX2.
+Visible trace phases were inspected from the original asset; their direction has
+not been compared with a running PS2 capture. Exact compressed-sampler EE rounding
+remains unverified. This recovery establishes asset selection, visible content and
+node-runtime behavior.
 
 ## Reproduction and boundaries
 
-From the decompilation repository:
+From the repository root:
 
 ```sh
 python3 scripts/verify_loadingnode.py --elf orig/SLUS-20836/SLUS_208.36

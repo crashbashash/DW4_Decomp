@@ -5,7 +5,7 @@ NDMW.AFS (Digimon World 4). Prints a compact per-chunk summary and writes a
 JSONL with the full per-chunk string tables for later grep.
 
 Usage:
-  python3 lua_extract.py local/extracted/NDMW.AFS /tmp/dw4_lua_strings.jsonl
+  python3 scripts/lua_extract.py ../local/extracted/NDMW.AFS /tmp/dw4_lua_strings.jsonl
 """
 import struct
 import sys

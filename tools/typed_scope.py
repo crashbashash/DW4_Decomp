@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Typed coverage of the port-relevant game layer.
+"""Typed coverage of the game layer.
 
 `tools/typed_coverage.py` counts every function in `src/`, most of which is `ig*` middleware, vendor
-code and registration boilerplate the port replaces. The port only needs structs for the game logic it
-reimplements, so this measures that slice:
+code and registration boilerplate. This measures the slice that is game logic:
 
   scope = functions named `Gap__Bec__*` or `be<Upper>*` (game classes), minus registration boilerplate
           (`*_GetMetaObject`, `*_Register`, `*_InitFields`, `*_GetVTable`, `*_GetMetaEnum`),
@@ -103,7 +102,7 @@ def main():
     else:
         funcs = measure()
     s = summarize(funcs)
-    print("typed coverage, port-relevant game layer")
+    print("typed coverage, game layer")
     print("  functions in scope:        %d" % s["functions"])
     print("  accesses in scope:         %d" % s["accesses"])
     print("    typed (recovered class): %5d (%.1f%%)   <- the goal's number, stop at 80%%" % (s["typed"], s["typed_pct"]))
@@ -123,7 +122,7 @@ def main():
             for (path, name), (sc, _) in sorted(funcs.items(), key=lambda kv: kv[0][1]):
                 fh.write("%s\t%s\t%s\n" % (name, class_of(name), sc))
     if a.update_baseline:
-        json.dump(dict(note="Baseline for tools/typed_scope.py: the port-relevant game layer. Record deliberately "
+        json.dump(dict(note="Baseline for tools/typed_scope.py: the game layer. Record deliberately "
                             "with --update-baseline.", **s), open(BASELINE, "w"), indent=1, sort_keys=True)
         print("recorded %s" % os.path.relpath(BASELINE, ROOT))
 

@@ -3,16 +3,15 @@
 
 `p2-lighting.md` recorded the light values as "not in the disc": the *runtime* globals
 (`0x56AF40`, `0x56AF94`) are empty in a savestate because they are populated only during the render
-pass.  But the **source** objects are ordinary `igLightAttr` records in the common packs -- the
-earlier `dw4asset scan Light` looked at class *directories* and found 0, missing them.  Every common
+pass.  But the **source** objects are ordinary `igLightAttr` records in the common packs -- a
+scan of class *directories* finds 0 and misses them.  Every common
 pack (179/187/195/203/210/218 ...) carries the same three lights, i.e. the engine's standard rig:
 
     lightType 0  ambient  (0.4, 0.4, 0.45)          -- the ambient term
     lightType 0  diffuse  (0.8, 0.8, 1.1)           -- bluish key, dir (0.2424, -0.8192, -0.5198)
     lightType 2  diffuse  (1, 1, 1)                 -- white overhead spot at (0, 90, 0), 30 deg
 
-Emit the port's `--lights` file (one SPEC per line) and the `--ambient` value with
-`--emit`; the port's built-in default already carries the same rig (DW4_Port/src/render.c).
+Write the lights (one SPEC per line) and the ambient value with `--emit`.
 
     python3 pack_lights.py --pack <roms>/NDMW.AFS:187 --list
     python3 pack_lights.py --pack <roms>/NDMW.AFS:187 --emit /tmp/rig.txt
@@ -70,7 +69,7 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pack", required=True, metavar="AFS:ENTRY")
     ap.add_argument("--list", action="store_true")
-    ap.add_argument("--emit", metavar="FILE", help="write the port's --lights file")
+    ap.add_argument("--emit", metavar="FILE", help="write the lights to FILE")
     ap.add_argument("--decomp", default=DECOMP)
     a = ap.parse_args()
 

@@ -112,7 +112,7 @@ other system services remain controlled. Runtime CreateInstance is still a lower
 boundary in this module's standalone oracle. Other generic descriptors in the
 registration suite remain synthetic. Full object-system bootstrap, original
 instance composition, further schemas, memory/array fields and gameplay receivers
-remain required work. Native gameplay is unchanged.
+remain required work.
 
 The `--internal-lists` registration mode now also executes the original internal
 field-list factory, constructor, buffer allocation and growth. See

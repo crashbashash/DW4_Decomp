@@ -9,7 +9,7 @@ image.  At runtime the `p2` backend parses it once (`0x20d790`: it splits the st
 and keeps the token base at `0x57c2b0`), because the engine looks a program up *by name* and jumps
 the VU1 to its offset.
 
-So this file is what a port needs in order to know what the VU1 pipeline can do and how big each
+So this file says what the VU1 pipeline can do and how big each
 piece is: 237 entry points, of which many share a start offset (an alias: `LIGHT_SHARED` is the same
 code as `LIGHT_N_DIFFUSE_AMBIENT_DIRECTIONAL`).  The ranges nest, which is the point -- the shared
 one is the outer envelope.
@@ -177,7 +177,7 @@ def cap_conditions(meta, depth=4):
     A bit's program set is read as a boolean condition over the *words* in the program names:
     conjunctive terms (words present, words absent) combined with OR.  A condition that reproduces
     the set exactly, over all 201 records, is a proof that the bit means that; where no condition
-    matches, the set itself is reported, because for a port the set IS the meaning.
+    matches, the set itself is reported, because the set IS the meaning.
 
     Terms are **deduplicated by the set they select** before the OR search -- thousands of terms
     collapse to a few dozen distinct sets, which is what makes an exhaustive search cheap.
@@ -389,7 +389,7 @@ def main():
       "names (words present, words absent, combined with OR) that reproduces the bit's program set "
       "**exactly, over all %d records** — so it is a proof, not a reading. **%d of %d bits** have "
       "such a condition; the rest are combinations of capabilities rather than one feature, and for "
-      "those the exact program set is given, which is what a port needs anyway.\n"
+      "those the exact program set is given.\n"
       % (len(meta), proven, len(conds)))
     w("| bit | programs | meaning (proven by set equality) |")
     w("| --- | --- | --- |")

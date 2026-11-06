@@ -7,8 +7,8 @@ leaves. This tests guest semantics, not native gameplay or hardware concurrency.
 import argparse,ctypes as C,itertools,subprocess,sys,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/'port/tools'))
-from verify_scriptservices_retail import World,Selector,BASE,MSG,SYS,CTX,CACHE,QUEUE,REG,RECORD,NAMES,IDS,RECEIVERS,BYTE,INTS,CIDS,CRECV,CHECK,HANDLE
+sys.path.insert(0,str(ROOT/'scripts'))
+from script_world import World,Selector,BASE,MSG,SYS,CTX,CACHE,QUEUE,REG,RECORD,NAMES,IDS,RECEIVERS,BYTE,INTS,CIDS,CRECV,CHECK,HANDLE
 from ee_core import MASK
 from test_messenger_results_retail import Api,READ,WRITE,CALL
 ENTRIES=(0x38d470,0x38d4a0,0x38d560,0x38d7a0,0x38d820,0x38d860,

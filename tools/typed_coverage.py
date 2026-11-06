@@ -4,7 +4,7 @@
 Byte-matching is the repo's outward oracle; this is the inward one. m2c's C reproduces
 retail instruction-for-instruction while spelling every field as
 `*(int *)((char *)p + 12)`, which satisfies the matching build and is useless to another
-compiler on another machine -- the port's prerequisite. Two numbers come
+compiler on another machine. Two numbers come
 out of here:
 
   * **typed** -- field accesses written as a member of a *recovered* class (one that
@@ -426,7 +426,7 @@ def main():
     print("typed coverage")
     print("  field accesses in matched C: %d" % total)
     print("    offset casts (untyped):        %5d (%.1f%%)" % (t["offset_casts"], 100.0 * t["offset_casts"] / max(1, total)))
-    print("    members on a *recovered* class:%5d (%.1f%%)   <- the port's number" % (recovered, t["recovered_pct"]))
+    print("    members on a *recovered* class:%5d (%.1f%%)" % (recovered, t["recovered_pct"]))
     print("    members on a synthetic layout:%5d (%.1f%%)   (automatch's `struct G`)" % (t["synthetic"], 100.0 * t["synthetic"] / max(1, total)))
     print("    other member accesses:        %5d (%.1f%%)" % (t["other_members"], 100.0 * t["other_members"] / max(1, total)))
     print("  raw casts on the named receiver at a reflected offset (mechanically convertible): %d (%.1f%% of accesses)"

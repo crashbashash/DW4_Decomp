@@ -123,7 +123,7 @@ requires; no host bounds or fallback behavior is substituted.
 Registry, list, intern, allocator/delete, argument clearing, object factories and
 virtual receiver handlers remain controlled leaves in this oracle. Their tests
 establish this block's own behavior against those contracts, not complete
-receiver implementation or native gameplay. Lower list/string services have
+receiver implementation. Lower list/string services have
 [separate recovered bodies](list-services.md) and deeper
 [result-channel composition](messenger-results.md); integrating those real
 services into this selection oracle remains open. The other nine bodies match in

@@ -12,8 +12,8 @@ import subprocess
 import sys
 import tempfile
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/'port/tools'))
-from verify_scriptservices_retail import World
+sys.path.insert(0,str(ROOT/'scripts'))
+from script_world import World
 SELF,RAM,INFO,WORK,RUN,PAIR,FIRST,SECOND,MATERIALS=range(0x1800000,0x1800900,0x100)
 NEW_WORK,NEW_RUN,NEW_PAIR,NEW_FIRST,NEW_SECOND=range(0x1810000,0x1810500,0x100)
 STACK=0x1fff000

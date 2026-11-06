@@ -86,7 +86,7 @@ Answers that stop a repeated search:
 - **Destructibles** — the practice stage's props are `MODELCTRL ... GENERATE` `KIND_OBJECT` models with
   no `enemy` row and the shared object default of 100 HP. A hit runs the pack's `hit_<model>.lua`,
   which subtracts a fixed amount (`MDLaddHp` -20, -34 or -50), not a fraction of max and unrelated to
-  the attacker's strength. [`../../port/docs/combat.md`](../../port/docs/combat.md).
+  the attacker's strength.
 - **Drop tables: the pack-internal id/`X` encoding** — element arrays read with no live reference;
   a stage's three difficulty-tier packs carry the same drop table.
   [`drop-tables.md`](drop-tables.md) §6.

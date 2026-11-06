@@ -3,8 +3,8 @@
 import argparse,ctypes as C,subprocess,sys,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/'port/tools'))
-from verify_scriptservices_retail import World
+sys.path.insert(0,str(ROOT/'scripts'))
+from script_world import World
 BASE=0x1800000
 READ=C.CFUNCTYPE(C.c_uint32,C.c_void_p,C.c_uint32)
 WRITE=C.CFUNCTYPE(None,C.c_void_p,C.c_uint32,C.c_uint32)

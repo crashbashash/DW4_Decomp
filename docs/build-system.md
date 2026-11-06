@@ -44,9 +44,9 @@ percentage is a diff measure, the matching oracle remains `tools/check.py` and `
 
 ## Private inputs
 
-`orig/` holds one folder per version with a `.gitkeep`; everything else in it is ignored. Link or
-copy the retail executable there (for example `ln -s ../../roms/dw4/game.elf orig/SLUS-20836/SLUS_208.36`);
-the CI oracle creates the same link from its runner environment. `config.yml` records the
+`orig/` holds one folder per version with a `.gitkeep`; everything else in it is ignored. Put a disc
+image there and `make` extracts the executable, or link or copy the executable in yourself; the CI
+oracle links it from its runner environment. `config.yml` records the
 executable's SHA-1 so a wrong file is caught before any comparison.
 
 `asm/`, the per-function split of the retail code, is the other private input, and a generated

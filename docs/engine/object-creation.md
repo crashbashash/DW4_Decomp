@@ -121,7 +121,7 @@ changes two words. CW's `dmove` emits the original64-bit DADDU and carries copy
 dataflow; `move` emits32-bit ADDU, while generic `daddu` also changes call setup.
 No original-source spelling or all-C++ claim is made: this matching body contains
 one explicit register-copy instruction and C++ lifecycle logic. The existing
-portable adapter remains unchanged. No new native implementation is implied.
+portable adapter remains unchanged.
 
 ## Validation and remaining work
 
@@ -159,8 +159,8 @@ registrar, concrete MetaField construction/reset/zero operations, remaining clea
 helpers, registry and concrete receiver handlers stay controlled. These fixtures
 validate the recovered shared path; they do not establish the original class
 registrars, exact field-descriptor tables or transitive concrete field ownership.
-Recovering and composing those bodies is still required. Native gameplay is
-unchanged and full Lua-dependent engine recovery remains open.
+Recovering and composing those bodies is still required. Full Lua-dependent
+engine recovery remains open.
 
 The subsequent [registry integration](object-lists.md) replaces whole registry and
 object/generic list leaves through this creation path. Its concrete fields,

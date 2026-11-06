@@ -1,7 +1,0 @@
-build/
-*.o
-render.png
-frame_0000.png
-__pycache__/
-*.pyc
-/frame_*.png

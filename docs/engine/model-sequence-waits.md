@@ -54,10 +54,9 @@ and `0x00395250` remain explicit leaves. The test verifies caller behavior, not
 the original implementation of those leaves. No animation clock, rendering,
 audio, or whole-menu equivalence follows from these checks.
 
-## Native logo integration
+## Logo sequence program
 
-The native port imports the reference unchanged. Its logo program is generated
-from AREA entry 620's `j_startlogo` model-controller records:
+AREA entry 620's `j_startlogo` model-controller records give the logo's program:
 
 ```
 SQ_OPEN:  ACTION OPEN;  WCHECK Action; JUMP SQ_WAIT
@@ -65,16 +64,7 @@ SQ_CLOSE: ACTION CLOSE; WCHECK Action; JUMP SQ_ERAS
 SQ_WAIT:  (empty)
 ```
 
-A narrow native dispatcher walks that extracted program and invokes recovered
-WCHECK/JUMP; the logo has no hardcoded successor/removal branch.
-The port comparison executes original JUMP/WCHECK instructions on the oracle
-side and compares their ordered calls/stores plus full title/queue/logo state
-on **2,933 ticks**, including OPEN/CLOSE interruption and re-entry.
-
-The dispatcher and virtual sequence-selection/removal behavior remain native
-boundaries, shared by the two sides. **The port's Action2 completion is a
-30-tick approximation** (the retail completion chain is recovered in
-[`action2-timing.md`](action2-timing.md) and is not imported by the port), and all other title models retain bounded schedules.
+The retail Action2 completion chain is recovered in [`action2-timing.md`](action2-timing.md).
 The strict timer/joint comparisons, shared-clock conversion, generic dispatcher
 `0x00395250`, and full ISSEQNAME/ISRUN semantics still need independent recovery
 and validation. This slice does not establish retail action timing or pixels.
@@ -83,10 +73,6 @@ and validation. This slice does not establish retail action timing or pixels.
 
 `make check` reports zero mismatches and every split unit round-trips;
 `make link` is BYTE-IDENTICAL and `make typed-check` matches its baseline.
-Native `make check` and `make check-retail`
-pass, as do address/undefined-behavior sanitizer title tests (leak detection
-disabled). The load-interface verifier retains 11 direct + 432 message + 1,045
+The load-interface verifier retains 11 direct + 432 message + 1,045
 update cases, including, two-argument `0x003de260`, and Cross/Circle behavior.
-Window presentation and live-dump pose/fog tests skip without their prerequisites,
-and the host Vulkan test reports its backend unavailable where there is none.
 No console comparison covers this slice.

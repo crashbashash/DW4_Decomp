@@ -2,7 +2,7 @@
 
 Run commands from the repository root. `scripts/` owns binary/asset analysis,
 retail capture and evidence collection. The matching build remains in `tools/`;
-regression tests live in `testing/` and native checks in `port/tools/`.
+regression tests live in `testing/`.
 
 | Purpose | Entry points |
 | --- | --- |
@@ -22,7 +22,7 @@ regression tests live in `testing/` and native checks in `port/tools/`.
 | Shared list and reference recovery | [seed_names_list_services.py](seed_names_list_services.py) names verified [list operations](../docs/engine/list-services.md), preserving the unresolved shared default's generic name |
 | Pooled strings and ordered table | [seed_names_string_pool.py](seed_names_string_pool.py) names fifteen verified [pool/table operations](../docs/engine/string-pool.md) |
 | Packed string chunks | [seed_names_string_chunks.py](seed_names_string_chunks.py) names twelve verified [allocation/coalescing operations](../docs/engine/string-chunks.md) |
-| Model and texture evidence | [livedump.py](livedump.py), [extract_live_models.py](extract_live_models.py), [name_live_models.py](name_live_models.py), [capture_scene.py](capture_scene.py), [camera_match.py](camera_match.py) |
+| Model and texture evidence | [livedump.py](livedump.py), [extract_live_models.py](extract_live_models.py), [name_live_models.py](name_live_models.py), [capture_scene.py](capture_scene.py) |
 | GS and rendering analysis | [gsdump.py](gsdump.py), `gs_*.py`, [pack_inline_tex.py](pack_inline_tex.py), [pack_lights.py](pack_lights.py) |
 | Save-format and item-ID probes | [ps2mc_extract.py](ps2mc_extract.py), [probe_items.py](probe_items.py), [probe_items2.py](probe_items2.py), [save_probe.py](save_probe.py), [diff_story.py](diff_story.py); [save format](../docs/systems/save-format.md) |
 
@@ -33,7 +33,6 @@ python3 testing/test_name_live_models.py
 python3 testing/test_story_state.py
 ```
 
-Native desktop setup reporting lives at `port/tools/port_display.py`.
 A contributor's own game data stays in `../local/`.
 
 Story comparison accepts extracted 81920-byte USA savedata with no extra package.

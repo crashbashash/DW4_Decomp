@@ -1,6 +1,6 @@
 # Behavioral reconstructions
 
-These sources expose recovered behavior for analysis and port work. They are
+These sources expose recovered behavior for analysis. They are
 **not byte-matched translation units** and are excluded from `src/`, the relink,
 and matching-progress counts. Each module states its boundary and verification.
 

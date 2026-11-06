@@ -232,9 +232,6 @@ using only the first socket's weapon contribution. The name path `0x003f96e0`
 runs the US converter `0x00382eb0`, copies up to eight resulting codes into a
 Unicode object and zero-pads it before replacing PLAYERNAME's object list.
 
-See [native character initialization](../../port/docs/player-records.md#fresh-character-name-and-stats)
-for the implemented fresh-character boundary and controlled retail comparisons.
-
 ## Not yet resolved
 - Which object-system operations `0x38d860`/`0x38e060` and `0x38e6b0`/`0x38e8f0`
   actually perform (create-vs-lookup, and what the second call in each pair does),

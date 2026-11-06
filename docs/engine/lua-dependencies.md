@@ -17,8 +17,7 @@ There are **337 unresolved register-transfer sites** and
 This is not the complete gameplay dependency graph. Virtual dispatch, SD receiver
 selection, Lua callbacks, queued updates and data-held function pointers require
 separate evidence. A switch's register jump also appears as an unresolved frontier.
-The closure includes platform/middleware code; presence does not mean it should
-be ported instead of replaced at its documented platform boundary.
+The closure includes platform and middleware code.
 
 Machine-readable edges and unresolved sites: [`../../data/lua-dependencies.json`](../../data/lua-dependencies.json).
 

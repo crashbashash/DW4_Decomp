@@ -55,7 +55,7 @@ If you changed `tools/` or the tables in `config/`, use `make check-fresh` and `
 ## Opening an issue
 
 1. Go to the [issues page](https://github.com/crashbashash/DW4_Decomp/issues) and click "New issue".
-2. Add a clear title, like "Save screen hangs after loading slot 2 in the port".
+2. Add a clear title, like "Save screen hangs after loading slot 2".
 3. Say what you saw or found, and how to see it yourself.
 
 ## Please keep these out

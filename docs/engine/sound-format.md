@@ -6,9 +6,7 @@ Music and ambience can instead be standalone ADX streams in
 entries 53, 19 and 18. The three `.sfd` movies are MPEG-1 video with ADX audio in a
 CRI Sofdec container.
 
-This page is the format; the port's reader is the executable spec (the `DW4_Port` repository's
-`src/sfp.c`, CLI `dw4asset sfp`), and its `port/tools/verify_sound.py` proves the decoder against
-ffmpeg sample-for-sample.
+This page is the format.
 
 ## Where a pack's sound lives
 
@@ -74,7 +72,7 @@ Everything is little-endian; the sample rate is a u16 (24000 = `c0 5d` on disk).
 
 +0x800  ps2_VAGD
          +0x08  0x00004102
-         +0x0c  vag_size    must equal the DTPK's (the reader self-checks this)
+         +0x0c  vag_size    must equal the DTPK's
          +0x20  the ADPCM
 ```
 
@@ -131,32 +129,28 @@ The list `_fnameIdx` indexes is the stage's `beSoundInfo._fnameList`, read live 
 ```
 
 (`allse.sfp` is a 64-sound **global** bank in `sbiallse.igb`, NDMW entry 897;
-the four `[pt.entry]` slots are (part, entry) pairs: `[0.55]` is `NDMW.AFS` entry 55.) The original CLI
-reader does not decode the filename list, so it matches each
+the four `[pt.entry]` slots are (part, entry) pairs: `[0.55]` is `NDMW.AFS` entry 55.) Matching each
 `_fnameIdx` group to the one bank whose entry count equals the group's size — which is unique on every
-shipped pack — and leaves a group that matches no bank external. The result names the 33 stage
+shipped pack — and leaving a group that matches no bank external names the 33 stage
 sequence selectors (`goDEAD01`/`goNATK01`… for `e_goburi`, `og*` for `e_ogre`, `bl*` for
 `e_blosso`, the four blasts in `common_blst`, the stage objects `TARU_BLST01`/`OBJ_TORCH_CRASH`/… in
-`stag0102.sfp`). The CLI diagnostic still labels sequence numbers as entries;
-that label does not establish waveform identity. Native front-end playback uses
-the full selector resolution described under
+`stag0102.sfp`). A sequence number does not establish waveform identity; the
+full selector resolution is described under
 [Resident sequence-to-waveform resolution](#resident-sequence-to-waveform-resolution).
 
 ## What this does and does not settle
 
-**Settled:** every bank decodes to PCM offline, so the port can play SE/BGM with no emulator, and
+**Settled:** every bank decodes to PCM offline, and
 every stage sound is **named**. All six
-banks of entry 620 decode sample-for-sample identical to ffmpeg — **773,472 samples, 0 differences** —
-and `port/tools/verify_sound.py` also asserts the bank names and that no entry is left unnamed.
+banks of entry 620 decode sample-for-sample identical to ffmpeg — **773,472 samples, 0 differences**.
 
 **Global bank recovered:** `sbiallse.igb` contains `allse.sfp` at an unaligned
 DTPK offset, `0xecc7`, with 64 entry records. Four-byte-aligned scans miss it.
-The native front-end audio adapter also decodes `beSoundInfo._fnameList`: its
+`beSoundInfo._fnameList` decodes as follows: its
 slot 7 references an `igNamedObjectList`, whose slot 4 points to a pool block of
 little-endian named-object IDs. `_fnameIdx` indexes this list, removing the need
-for group-size matching in the adapter. It resolves global cursor/window effects
-and the embedded `STAGIS10.sfp` start cue. See the port's
-[native playback record](../../port/docs/audio-playback.md).
+for group-size matching. It resolves global cursor/window effects
+and the embedded `STAGIS10.sfp` start cue.
 
 **Open:** the meaning of the `TBLD` record table's `x`/`a` fields and of `DTPK`
 `field_10`. The resident sequence selector is described under
@@ -191,11 +185,11 @@ are separate. Available `CURSOR_CHANGE` and `CURSOR_DECIDE3` clips have no
 `beSeData` selection mapping in this pack and are not substitutes.
 
 Run `python3 scripts/verify_sectl.py --elf orig/SLUS-20836/SLUS_208.36` from the
-decomp repository: **392 retail/C comparisons**, 150 instruction addresses,
+repository root: **392 retail/C comparisons**, 150 instruction addresses,
 ordered stores/calls, duplicate model/action rows, absent/null names, initialization,
 and signed delay extremes. The oracle stubs messaging and integer-to-float leaves;
 it verifies dispatch, not downstream audible timing or mixing. This is behavioral
-recovery for immediate port work and adds no byte-matched `src/` coverage.
+recovery and adds no byte-matched `src/` coverage.
 
 ## Resident sequence-to-waveform resolution
 
@@ -220,11 +214,8 @@ START at 2.0524/4.1075/16.1024 seconds (minimum correlation 0.985), six
 DECIDE cues (minimum 0.895), four OPEN cues (minimum 0.886), and two CLOSE
 cues (minimum 0.879). DECIDE is allse waveform 29; OPEN/CLOSE are 24/25.
 These comparisons tolerate the captured music/AAC mix and do not establish
-absolute gain, envelope or native action-to-audio timing.
+absolute gain, envelope or action-to-audio timing.
 
-The native reader resolves bank data instead of a hardcoded menu map.
-`port/tools/verify_menu_capture.py` reproduces all 15 comparisons; the audio
-harness verifies each resolved cue and rejects unsupported/malformed inputs.
 The lobby terminal sequence 7 resolves to waveform 7.
 
 ## Repeat admission and stream levels
@@ -247,33 +238,15 @@ Every one of its 1,000 words equals `floor(256 * 10^(level / 200))`.
 
 NDMW805 and NDMW819 both store base volume **-30**. For the currently used
 tracks, the combined levels are `ST_CHARA=-40`, `AM_TITLE/AM_START=-30`,
-`ST_LOBBY=-50` and `AM_LOBBY=-160`. The port applies the corresponding normalized
-Q8 ratios **161/256**, **181/256**, **143/256**, **40/256**. Resident SFP playback
+`ST_LOBBY=-50` and `AM_LOBBY=-160`. The corresponding normalized
+Q8 ratios are **161/256**, **181/256**, **143/256**, **40/256**. Resident SFP playback
 is a separate SFX master/per-voice path, including `_sndfVolume=75`; applying
 this stream attenuation to resident cues would be unjustified.
 
-From the repository root, run
-`python3 port/tools/verify_frontaudio_rules.py --elf orig/SLUS-20836/SLUS_208.36`.
-It executes original admission and deadline-store regions for **473 cases**,
-all **1,000** original table packet writes, and the original level clamp at
-boundary values. It compares the actual native helper code. It does not recover
-the complete dispatcher as executable C, nor validate downstream IOP output,
-extra channel offsets, fades, positional mixing, or audible scheduling.
-The asset-backed `test_audio` checks adapter admission and `verify_audio.py`
-checks loaded gains. No additional byte-matched source is claimed.
-
 ## Recovering it
 
-The container is decoded by `dw4asset sfp` and checked by `make check` in the port tree:
-
-```sh
-build/dw4asset sfp --afs NDMW.AFS --entry 620
-build/dw4asset sfp --afs NDMW.AFS --entry 620 --bank 0 --wav e_goburi.wav
-```
-
-`port/tools/verify_sound.py` re-derives the banks from the pack, wraps each VAGD stream in a `VAGp` header
-for ffmpeg, and compares the two decodes sample-for-sample. A new pack is decoded with no changes: the
-scan finds the `ps2_DTPK` magics, and every offset is self-checked against the VAGD size field.
+The `ps2_DTPK` magics locate a pack's banks, and every offset can be checked against the VAGD size
+field. The ffmpeg comparison wraps each VAGD stream in a `VAGp` header.
 
 See also [`afs-archives.md`](afs-archives.md) for the archive/container level and
 [`igbinary-format.md`](igbinary-format.md) for the pack that holds the banks.
@@ -287,8 +260,7 @@ set as `beSoundData` records (8,855 cues, 68 to 134 per pack; 326 streamed track
 sequence 7 of group 2 (`WINDOW_OPEN2`, with a `00 82 02` wait between its notes; one per pack, the only resident cue silent in all 96). Two cases a reader has to handle: a pack's
 bank names assigned by size swap for the equal-size `mcannon`/`scannon` pair (the cue's group tag, unique per bank,
 selects the right one), and a bank's entry-record table can hold 48000 Hz records among 24000 Hz ones (`stag0403.sfp`, nine
-entries, the fifth at 48 kHz). The port's reader and its
-measurements are in [audio playback](../../port/docs/audio-playback.md#stage-sound-catalogue-and-the-gameplay-set).
+entries, the fifth at 48 kHz).
 
 ## beSound runtime: PLAY, stop commands and the voice pool
 
@@ -341,5 +313,4 @@ route sets level 127 and stores `_volume` as the handle maximum. The sound-bank 
 sequence number, volume = command 4), so the event byte, the `00 82 02` wait of `WINDOW_OPEN2` and the handle maximum are
 interpreted on the IOP side and are not recoverable from the EE program. `beSoundData._channel` (+24) is 1 for resident effects and 2 for
 streamed tracks in all 8,855 cue records, except three type 3 ADX effects that carry 2. The EE program reads cue records only at offsets 8,
-16, 18, 20, 26 and 28, so `_channel` is a data-side tag there; whether the sound IOP module uses it is not known. See the port's
-[audio notes](../../port/docs/audio-playback.md#stage-sound-catalogue-and-the-gameplay-set).
+16, 18, 20, 26 and 28, so `_channel` is a data-side tag there; whether the sound IOP module uses it is not known.

@@ -64,7 +64,7 @@ thirteen keep their existing compiler. See
 [compiler requirements](../engine/unit-compilers.md). All code words, including
 interior zeros, and every relocation must match; close sizes are insufficient.
 `make check` verifies each complete body, and `make link` verifies the rebuilt
-retail section. No new gameplay implementation or native integration is added.
+retail section.
 
 The callback's post-module string-pool accessor also now has 76 bytes of matching
 C at [`StringPool_GetInstance`](../../src/engine/StringPool_GetInstance.cpp).

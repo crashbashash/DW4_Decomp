@@ -15,8 +15,7 @@ construction branches. These exclusions are checked independently. All five
 bodies match (`src/unmatched/Gap__Bec__beNDMWShopCtrl10__vfunc_21.cpp`,
 `src/unmatched/FUN_00428610.cpp`, `src/unmatched/FUN_00428690.cpp`,
 `src/unmatched/FUN_00428710.cpp` and
-`src/unmatched/beNDMWWindow_RunMessageScript.cpp`); no native UI functionality
-is claimed. Widget/input, player recalculation, lookup, pool/list, formatting,
+`src/unmatched/beNDMWWindow_RunMessageScript.cpp`). Widget/input, player recalculation, lookup, pool/list, formatting,
 text/model receivers and Lua execution remain explicit services.
 
 ## Owner and primary state

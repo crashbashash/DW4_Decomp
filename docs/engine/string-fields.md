@@ -145,4 +145,4 @@ Existing cold-messenger payload constructors remain explicit controlled boundari
 this owned-string class does not substitute synthetic metadata for the retail
 class-descriptor recovery still required. Original string/memory descriptor setup,
 other memory fields, the two raw-value bodies without C source and concrete gameplay receivers remain
-part of the full Lua-dependent engine goal. Native gameplay is unchanged.
+part of the full Lua-dependent engine goal.

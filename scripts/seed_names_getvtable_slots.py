@@ -17,9 +17,8 @@ index.  The generator is
 idempotent and skips anything already named.
 
 The names are middleware (`ig*`) classes: the game's own `Gap::Bec::be*` classes all carry RTTI,
-so their slots were named by the RTTI pass already.  Naming these is T6 coverage; they are
-deliberately **not** fed to the receiver-typing rule, which the port plan scopes to game code
-.
+so their slots were named by the RTTI pass already.  They are deliberately **not** fed to the
+receiver-typing rule, which covers game code.
 
   scripts/seed_names_getvtable_slots.py                 # print the rows
   scripts/seed_names_getvtable_slots.py --out config/SLUS-20836/names/GetVTableSlots.tsv
@@ -63,7 +62,7 @@ def main():
     ap.add_argument("--out", default=None)
     ap.add_argument("--json", default=None,
                     help="also write the vtable -> {class, slots} map for the RTTI-less "
-                         "vtables (the port's method-dispatch table, P2.6)")
+                         "vtables")
     ap.add_argument("--check", action="store_true")
     a = ap.parse_args()
 

@@ -3,10 +3,8 @@
 How *Digimon World 4* (USA, `SLUS-20836`) works under the hood: the engine, the data formats and the
 game systems, as recovered from the binary and from the game's own Lua.
 
-Matching recovery and the native port share one repository. The
-[build system](build-system.md) covers the layout (config/<GAMEID>/, orig/<GAMEID>/) and objdiff. Native implementation contracts are
-indexed in [port documentation](../port/docs/README.md), with priorities in
-[porting tasks](../port/docs/project/tasks.md).
+The repository is a matching decompilation: recovered source that rebuilds the retail executable byte
+for byte. The [build system](build-system.md) covers the layout (config/<GAMEID>/, orig/<GAMEID>/) and objdiff.
 
 Everything here is a recovery. The retail game shipped without symbols, so each page says what is
 known and how sure it is. Anything unproven is marked as an open question, and approaches that failed
@@ -65,37 +63,23 @@ Each folder also has its own `README.md` listing what is in it.
 | How much is done — the code and data numbers | [`engine/progress-metrics.md`](engine/progress-metrics.md), [`../PROGRESS.md`](../PROGRESS.md) |
 | The debt ratchet — the counters that may only go down, and how to re-record them | [`engine/debt-ratchet.md`](engine/debt-ratchet.md) (`tools/progress.py --debt-check`, `config/debt-baseline.json`) |
 | What all the non-code bytes are | [`engine/data-regions.md`](engine/data-regions.md) |
-| Which code is the Sony SDK, and what a port has to replace | [`engine/platform-boundary.md`](engine/platform-boundary.md) |
-| How much of the C is typed rather than casts, and why it matters for a port | [`engine/typed-coverage.md`](engine/typed-coverage.md) |
+| Which code is the Sony SDK | [`engine/platform-boundary.md`](engine/platform-boundary.md) |
+| How much of the C is typed rather than casts | [`engine/typed-coverage.md`](engine/typed-coverage.md) |
 | What is still unknown, with status | [`systems/open-questions.md`](systems/open-questions.md) |
 | Original loading-card selection and node timing | [Stage loading recovery](engine/stage-loading.md) |
-| Native lobby loading screen and responsive stage preparation | [Stage loading](../port/docs/stage-loading.md) |
-| Native Main Lobby NPC acceleration, routes and departure | [Lobby choreography](../port/docs/lobby-choreography.md) |
-| Hard/Soft lighting and shadows | [Retail recovery](engine/light-modes.md), [native option](../port/docs/lobby-rendering.md#hardsoft-option) |
-| Native Main Lobby rendering and retail frame comparison | [Lobby rendering](../port/docs/lobby-rendering.md) |
-| Native port release scope and technical requirements | [Port technical specification](../port/docs/technical-spec.md) |
-| Native main-menu stat text, cursors and retail fidelity | [Main-menu fidelity](../port/docs/main-menu-fidelity.md) |
-| GPU-only normal rendering and remaining CPU graphics paths | [GPU rendering](../port/docs/gpu-rendering.md) |
-| Native FMV sound, title music and menu/character cues | [Native audio playback](../port/docs/audio-playback.md) |
-| Native equipment/inventory/skill record transactions | [Player transactions](../port/docs/player-transactions.md) |
-| Native player stat and technique recalculation | [Player stats](../port/docs/player-stats.md) |
-| Native prepared DBBase and STATUS species-name lookup | [String databases](../port/docs/databases.md) |
-| Native Main Lobby movement, collision and original startup | [Lobby gameplay](../port/docs/lobby-gameplay.md) |
-| Native Main Lobby message windows, portrait and greeting typography | [Lobby greeting UI](../port/docs/lobby-greeting-ui.md) |
+| Hard/Soft lighting and shadows | [Retail recovery](engine/light-modes.md) |
 | Workspace drop-table and enemy-stat analysis tools | [Analysis tools](../scripts/analysis/README.md) |
 | Host dynamic-testing instructions and tools | [Testing](../testing/README.md) |
 | The overall engine, and its two state systems | [`engine/architecture.md`](engine/architecture.md) |
-| How the game boots to the title menu, and what a port must stand in | [`engine/front-end-boot.md`](engine/front-end-boot.md), [`engine/engine-boot.md`](engine/engine-boot.md) |
+| How the game boots to the title menu | [`engine/front-end-boot.md`](engine/front-end-boot.md), [`engine/engine-boot.md`](engine/engine-boot.md) |
 | Complete matching title/menu/options controller, behavioral oracle and remaining engine boundaries | [`engine/title-menu-controller.md`](engine/title-menu-controller.md), [`engine/common-model-controller.md`](engine/common-model-controller.md), [`../recovered/frontend/README.md`](../recovered/frontend/README.md) |
 | The Game Start slot/character/name/difficulty/card controller family | [`engine/load-intf2.md`](engine/load-intf2.md) |
 | When a model-controller ACTION completes — WAIT/WAITCHECK, the named timer, JOINTSET completion, the node clock and the EE float arithmetic under them | [`engine/system-clock.md`](engine/system-clock.md), [`engine/action2-timing.md`](engine/action2-timing.md), [`engine/action2-jointset.md`](engine/action2-jointset.md), [`engine/model-sequence-waits.md`](engine/model-sequence-waits.md) |
 | How the binary was built, or how to import it into Ghidra | [`engine/binary.md`](engine/binary.md), [`engine/toolchain.md`](engine/toolchain.md) |
 | A kernel syscall, its number, or a `libkernel` stub | [`engine/binary.md`](engine/binary.md) §Kernel syscall stubs, `../config/SLUS-20836/syscalls.txt` |
-| Native original-bytecode execution and DM scheduling verification | [Lua integration](../port/docs/lua-integration.md) |
 | Corrected Lua numeric recovery and affected progression evidence | [Lua numeric audit](engine/lua-numeric-audit.md) |
 | The Lua native API and its calling convention | [`engine/script-engine-lua.md`](engine/script-engine-lua.md) |
-| Engine code required by Lua and unresolved indirect dependencies | [Dependency inventory](engine/lua-dependencies.md), [material-contact recovery](engine/material-contact.md), [indirect-transfer frontier of the port-critical closure](engine/indirect-frontier.md) |
-| Which retail functions the native port needs, and how far each is matched, typed and named | [Port-critical dependency map](../port/docs/project/critical-dependency-map.md) (`scripts/port_critical_map.py`) |
+| Engine code required by Lua and unresolved indirect dependencies | [Dependency inventory](engine/lua-dependencies.md), [material-contact recovery](engine/material-contact.md) |
 | Messenger byte/int/float/long/vector/matrix/object/string channels | [Result-channel recovery](engine/messenger-results.md) |
 | Matrix copying, alignment/aliasing and translation | [Matrix primitive recovery](engine/matrix-primitives.md) |
 | List capacity/growth, mutation/search and string/object ownership | [List service recovery](engine/list-services.md) |
@@ -197,8 +181,7 @@ Committed files, and the gitignored working directories the analysis writes to. 
 | `../config/*.txt` | The build's generated tables: `symbols.txt` (the split), `layout.txt`, `jumptables.txt` (the `switch` tables), `syscalls.txt` (the 80 kernel syscall stubs and their numbers) | `tools/{split,layout,jumptables,syscalls}.py` |
 | `../local/` *(local)* | Your copies of what cannot be committed: `wibo`, `mwcps2/`, `m2c/`, `decomp-permuter/`, `permuter-venv/`. The `DW4_*` variables default here | you |
 | `../ghidra-projects/dw4/` *(local)* | The analysed Ghidra project and the live dump outputs | the `dump_*` scripts |
-| `../roms/`, `../bios/` *(local)* | Your own copy of the game — the ISO and the extracted `game.elf` — and a PS2 BIOS image if you run it | — |
-| `../pcsx2/` *(local)* | Emulator data: memory cards, `sstates/`, logs | PCSX2 |
+| `../orig/<GAMEID>/` *(local)* | Your own copy of the game: the disc image and the extracted executable | `make` |
 | `../../local/extracted/` *(local)* | Extracted archives | the analysis scripts |
 
 ## Conventions
@@ -232,7 +215,8 @@ Committed files, and the gitignored working directories the analysis writes to. 
   code, docs, test fixtures or a commit message. The hard rules, the pre-commit/commit-msg hooks
   (`scripts/install_git_hooks.sh`), the CI job and `make hygiene` are in [host details policy](host-details-policy.md).
 - **The repo is self-contained.** Everything it points at is either committed here or a gitignored
-  working directory of this tree (`roms/`, `build/`, `states/`, `local/` for your toolchain copies).
+  working directory of this tree (`orig/`, `build/`, `states/`, `local/` for your toolchain copies), apart
+  from the extracted disc in the sibling `../local/extracted/`.
   Reference paths relative to the project root, never a home directory or a machine-specific
   location, and keep machine-specific environment and setup notes out of the docs — a reader clones this
   onto their own machine. Saying a thing is *not* redistributed here (the compiler, the game) is

@@ -3,7 +3,7 @@
 # Columns (tab-separated):  name <TAB> return-type <TAB> parameter-types (comma) <TAB> evidence
 #
 # WHY THIS FILE EXISTS
-#   Typed coverage (repo task T10 / port task P1.2) needs to know what a call
+#   Typed coverage needs to know what a call
 #   RESULT points at, not only what the calling function's name implies.  Measured:
 #   of 1,389 offset casts inside class-named matched functions, only 46 apply the
 #   offset to the receiver; the rest apply it to a temporary holding a call result.
@@ -12,8 +12,8 @@
 # RULES
 #   * A row is only added when the type is RECOVERED, never guessed.  A wrong
 #     return type would not break the build (the code is byte-identical either
-#     way) but would put a wrong struct name in the C, which is worse for the port
-#     than leaving it raw.
+#     way) but would put a wrong struct name in the C, which is worse than leaving
+#     it raw.
 #   * The evidence column names the fact that settles it.
 #   * Consumed by scripts/retype_initfields.py (via tools), which uses
 #     `igMetaObject_GetFieldAt` to type the field objects the `<Class>_InitFields`

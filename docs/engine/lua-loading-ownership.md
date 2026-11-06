@@ -1,10 +1,6 @@
 # Lua loading and ownership
 
 This document records the retail startup, lookup and cleanup contracts.
-The native [scoped named cache](../../port/docs/lua-integration.md#scoped-named-chunks-and-lobby-unload)
-remains a host lifetime policy. The native ordered-info loader, startup milestones
-and coordinated scene reset now implement the contracts below; see
-[native implementation and limits](../../port/docs/lua-integration.md#recovered-retail-loading-and-ownership).
 
 ## Boot, shared definitions and scene startup
 
@@ -16,7 +12,7 @@ and Lua-info data. Loading objects and executing Lua are separate operations.
 `beLua::vfunc_25` (`0x0038a420`) accepts `beLuaInfo` objects and appends them to
 `_infoList` at `+0x14`; the archive collector `0x003810c0` routes these objects
 through `0x00237030`. This preserves collection order rather than sorting by
-logical script name or assigning host session/stage tokens.
+logical script name.
 
 `beFileListInfoManager::vfunc_27` (`0x0037fa30`) drives startup. Its `_proc` is
 at `+0x3c`. It does nothing while `beSystem+0x58` is positive. Relevant phases:
@@ -35,9 +31,8 @@ at `+0x3c`. It does nothing while `beSystem+0x58` is positive. Relevant phases:
 
 The four scripts are **executed by name**, not executed in their serialized pack
 order. Stage `func.lua` supplies the shared helper definitions in a fresh scene
-VM. The native adapter's session-owned title helpers therefore do not establish
-retail global persistence. The loader does not inspect the script return status
-before advancing these phases; native Retry/Back is a separate host failure policy.
+VM. The loader does not inspect the script return status before advancing these
+phases.
 The phase 0/1 resource list describes native supporting assets, not an additional
 permanent shared Lua global environment.
 
@@ -51,9 +46,8 @@ written by a chunk. Actual destruction depends on the recovered reference count;
 this release does not prove immediate destruction if another native owner holds
 an extra reference.
 
-VM recreation is separate from native session state. It must not reset the
-shared retail RNG, save fields or progression just because Lua globals are gone;
-those remain owned by their recovered native systems.
+VM recreation is separate from session state. It does not reset the shared RNG,
+save fields or progression; the engine's own systems own those.
 
 ## Duplicate names and fallback
 
@@ -83,8 +77,7 @@ not the search across collected infos.
 `0x0037f1b0`, reads the file into owned scratch, locates `[EOF]`, and passes the
 preceding bytes to RunBuffer. Availability failure returns 2; open/allocation or
 missing-marker failures return -1. This path is distinct from cached original
-binary chunks. The native logical `dofile` hook remains an adapter; this recovery
-has not established its equivalence to every retail base-library file call.
+binary chunks.
 
 ## Coordinated chunk, DM and SD teardown
 
@@ -108,27 +101,12 @@ DM has a real deferral branch: when `_disableRemoveAll` (`+0x21`) equals 1,
 RemoveAll only sets `_calledRemoveAll` (`+0x22`). Active and unfinished groups
 remain intact. The ordinary branch clears both, resetting `+0x20` and `+0x22`.
 At the end of its tick, `0x0037f138..0x0037f154` clears `_disableRemoveAll`,
-checks `_calledRemoveAll` and calls the RemoveAll slot if requested. This is not
-the host’s per-scope active-group cancellation algorithm.
+checks `_calledRemoveAll` and calls the RemoveAll slot if requested.
 
 Lua-info cleanup alone cannot cancel timed SD work; DM cleanup alone cannot
 remove arbitrary Lua globals. The retail boundary coordinates all three managers.
-The host must likewise invalidate event publishers, cancel SD/receivers and DM,
-and replace the scene VM before publishing the destination. The exact retail
-order above belongs to the non-reentrant boundary; safely handling a host callback
-that requests unload still needs its tested deferred-release policy.
 
-## Evidence and reproduction
-
-Run from the repository root:
-
-```sh
-python3 port/tools/verify_scriptownership_retail.py \
-  --elf ../local/extracted/SLUS_208.36 \
-  --state <logo-close-start+50ms>.p2s \
-  --state <logo-close-start+434ms>.p2s \
-  --state <in-world>.p2s
-```
+## Evidence
 
 The 85 contract samples execute original MIPS instructions: 48 lookup/fallback
 cases, eight startup/gating cases, twenty-two Lua/DM/SD cleanup cases and seven
@@ -152,6 +130,4 @@ cleanup slots are 3/7/8 in all three states. These are independent loaded-world
 captures, not a measured transition history or a new emulator playthrough.
 Unseen scenes may collect multiple infos; the duplicate rules are established
 by original-instruction fixtures rather than an observed duplicate in these
-three captures. Native ordered infos, startup milestones, VM recreation and
-coordinated title/lobby boundaries are implemented and tested. General host
-file-list loading and complete scene outcomes remain separate work.
+three captures.

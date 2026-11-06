@@ -114,4 +114,4 @@ Existing string delete wrappers keep their exact alias targets.
 The subsequent [allocator-registry checkpoint](allocator-registry.md) recovers
 owner traversal and encoding plus complete allocation wrappers. Compiler residuals,
 registry bootstrap, allocator virtual implementations/slot240, object cloning,
-per-object print, scalar/type publication and broader gameplay remain open. Native gameplay is unchanged.
+per-object print, scalar/type publication and broader gameplay remain open.

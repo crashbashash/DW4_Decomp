@@ -10,7 +10,7 @@ matching source in `src/engine/` and `src/unmatched/` (category `match` in
 [compiler evidence](compiler-object-verification.md). Teardown108 adds **108 matched bytes** here.
 The eight newly classified bodies add980 bytes to the code denominator, not
 matched progress. Parent allocators, metadata, synchronization and file services
-remain explicit dependencies; no native gameplay integration is claimed.
+remain explicit dependencies.
 
 This run excludes the earlier reflection/registration block at2cd210..2cd5b8
 and inherited implementations outside the run. Those remain separate dependency
@@ -147,7 +147,7 @@ statistics deltas, all12 logger arguments, output-first statuses and file failur
 The shared interpreter's virtual tail transfers execute the original delay slot.
 Its backing allocator, base constructors, actual locks, file/print and ownership
 services remain controlled leaves. Complete-body instruction coverage does not
-establish complete game-state, hardware-threading or native gameplay coverage.
+establish complete game-state or hardware-threading coverage.
 
 All54 bodies /4,160 bytes match. The typed backend740 is
 `src/unmatched/igAliasMemoryPool_ManageAllocation.cpp`, lock484 is
@@ -160,4 +160,4 @@ patches or fixed instruction encodings are inserted into C to count a match.
 Active resume: close the parent allocator/ownership services
 needed by the [full hub recovery contract](../systems/hub-recovery.md). Keep hub
 SD receiver, service-menu, portal/progression and save closure visible alongside
-this shared engine work. Native port acceptance remains separate.
+this shared engine work.

@@ -57,12 +57,10 @@ data progress advances.
 two. It counts accesses written as a member of a recovered class (`igMetaObject *g; g->_validity`)
 against accesses written as an offset cast (`*(int *)((char *)p + 36)`), and it is the *inward*
 metric: matched bytes say how much of the binary is verified, this says how much of it is
-**portable**. m2c's C matches retail while encoding 4-byte pointers and hand-computed offsets, which
-is exactly what another compiler cannot use — the port's prerequisite (tracker T10, page
-[`typed-coverage.md`](typed-coverage.md)).
+**typed**. m2c's C matches retail while encoding 4-byte pointers and hand-computed offsets, which
+is exactly what another compiler cannot use (see [`typed-coverage.md`](typed-coverage.md)).
 
-It was measured **neutral for matching**, and that is not a contradiction: it buys nothing in
-the matched-byte percentage and everything for the second goal. The number also has a *ceiling*
+It was measured **neutral for matching**: it buys nothing in the matched-byte percentage. The number also has a *ceiling*
 worth watching — only 1.4 % of accesses are typeable from the receiver class alone, because most
 matched C is address-named, so **typed coverage advances with naming**: the two loops are the same
 work seen from two sides.

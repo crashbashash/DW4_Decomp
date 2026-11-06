@@ -70,7 +70,7 @@ help:
 	@echo "make progress — regenerate PROGRESS.md + docs/progress.json (no game or compiler needed)"
 	@echo "make typed    — typed-coverage report: how much of src/ speaks in recovered structs"
 	@echo "make typed-check — fail if typed coverage differs from config/typed-coverage.json (CI runs this)"
-	@echo "make typed-scope — typed share of the port-relevant game layer (config/typed-scope*.tsv)"
+	@echo "make typed-scope — typed share of the game layer (config/typed-scope*.tsv)"
 	@echo "make reflected-check — compile include/dw4/reflected.h with the host compiler and verify every field offset, struct size and field type"
 	@echo "make vtable-slots-check — fail if a local dummy-vtable view names a slot vfunc_NN at a position other than NN"
 	@echo "make struct-report — report (not a gate) local struct views that disagree with each other or with reflected.h"
@@ -143,9 +143,8 @@ check-fresh: asm-ensure
 # --- the derived-rule fixtures (no toolchain; the pack paths are pointed at your copies) ----
 # The texture pack's pool order and the model pack's offline geometry chain are re-derived from
 # the pack and diffed against their committed tables under docs/engine/.  See
-# docs/engine/texture-packs.md and docs/engine/model-format.md; the port's own reader is checked
-# against these decoders by DW4_Port's `make check`.
-AFS ?= roms/NDMW.AFS
+# docs/engine/texture-packs.md and docs/engine/model-format.md.
+AFS ?= ../local/extracted/NDMW.AFS
 TEXTURE_ENTRY ?= 625
 MODEL_ENTRY ?= 621
 CHAR_MODEL_ENTRY ?= 861
@@ -206,7 +205,7 @@ report: asm-ensure
 progress:
 	python3 tools/progress.py
 
-# Typed coverage: the inward metric, and the port's. `typed-check` compares against
+# Typed coverage: the inward metric. `typed-check` compares against
 # the recorded baseline in config/typed-coverage.json -- the gate is on the *count* of recovered
 # accesses, never the percentage, because the m2c loop keeps adding matched (and so untyped) C and
 # the ratio can fall while the count only grows. After a batch that adds coverage, re-record it:
@@ -220,11 +219,9 @@ typed-check:
 typed-baseline:
 	python3 tools/typed_coverage.py --update-baseline
 
-# The generated structs must be plain C the port's host compiler reads with the same layout
-# (technical specification: source-level retarget, four-byte references in an arena).
+# The generated structs must be plain C any host compiler reads with the same layout.
 reflected-check:
 	python3 scripts/check_reflected_layout.py
-	python3 scripts/check_port_struct_duplicates.py
 	python3 scripts/check_scope_headers.py
 
 # Local dummy-vtable views name a slot `vfunc_NN` only when it is the NN-th declared virtual

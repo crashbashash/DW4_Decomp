@@ -192,7 +192,7 @@ class Pack:
                 out[nm] = struct.unpack_from("<I", self.blob, r["off"] + q)[0]; q += 4
         return out
 
-    # -- scene graph (the port's rule, scene.c build_graph) -----------------------------
+    # -- scene graph ---------------------------------------------------------------------
     def scene_root(self, sceneinfo_id):
         r = self.rec(sceneinfo_id)
         if r is None:
@@ -226,7 +226,7 @@ class Pack:
         """Triangle count for an igGeometry node: its igAttrList array -> igGeometryAttr1_5.
 
         list (primType 3): `_numPrims` triangles; strip (primType 4): sum(len_i - 2) over
-        the `_stripLengths` -> igPrimLengthArray1_1 length block (the port's dw4_mesh_tris)."""
+        the `_stripLengths` -> igPrimLengthArray1_1 length block."""
         r = self.rec(gid)
         if r is None:
             return None

@@ -60,9 +60,7 @@ return *(int *)((char *)(*(int *)((char *)(arg0) + 52)) + 8);   /* matches retai
 ```
 
 That satisfies the matching oracle and is useless to another compiler: it encodes 4-byte pointers and
-hand-computed offsets, which is what a port has to undo by hand (the port plan's `port/docs/project/README.md` §*What a native
-build changes about the constraints*). Typing is measured as **neutral for matching** and is
-essential for the port — same work, different objective.
+hand-computed offsets. Typing is measured as **neutral for matching**.
 
 ## The gate
 
@@ -105,8 +103,7 @@ these rules that keep them honest:
 - **A struct carries its ancestors' fields too** (`data/class-hierarchy.tsv`, recovered from the
   registrar's base MetaObject). Reflection lists only a class's *own* fields, so a subclass whose
   fields are all inherited — `igVec3fList`, whose `_count`/`_capacity`/`_data` come from `igDataList`
-  — would otherwise have **no struct at all** and could not be declared, which is what a port needs
-  and what typing an object-graph walk needs (`((igVec3fList *)p)->_count`). Because a base sits at
+  — would otherwise have **no struct at all** and could not be declared, which is what typing an object-graph walk needs (`((igVec3fList *)p)->_count`). Because a base sits at
   offset 0 the layout is unchanged. The header defines 1,040 structs; its opening comment states the
   class and field totals.
 - **The offsets are the authority for where a field sits.** Gaps become explicit `char _padN[K];`,
@@ -138,7 +135,7 @@ The generator takes **type and size from the kind**, through three tables:
 - `ARRAY`: an `ig*ArrayMetaField` → its element type, with the count from the span.
 
 `igStringMetaField` stays `int` by decision — the 4-byte handle of an interned string, like the
-object references, because the port keeps four-byte references in an arena and `const char *`
+object references, because `const char *`
 would widen the field on a 64-bit host. `igStructMetaField` (an inline struct reflection does not
 describe) keeps the distance-to-next-field rule.
 
@@ -263,8 +260,7 @@ Three rules keep it from inventing anything, and everything skipped is counted a
   `igMetaObject_GetFieldAt`, not the class the function is named for; using the function-name class
   there would produce wrong member names that happen to compile.
 
-`--class-regex` scopes a pass to matching class names. The port plan scopes typed coverage
-to game code because the engine middleware is replaced wholesale on a port, so `--class-regex be`
+`--class-regex` scopes a pass to matching class names: `--class-regex be`
 restricts a pass to the **game** classes. The names it produces are real, not placeholders:
 `Gap__Bec__beNDMWItemWeapon__vfunc_24` unpacks to `arg0->_recNo` / `_isEquip` / `_kindNo` /
 `_pocket` / `_revision`, and `Gap__Bec__beCameraMode__vfunc_08` reads `arg0->_model`.
@@ -349,8 +345,8 @@ reuse, unrelated reassignment, and real type errors both before and after reuse.
 `<Class>_GetVTable` function, taking the map from the 478 RTTI vtables to
 **958 / 980 classes**, and names the **1,177** unmatched unique slots of the 499 non-RTTI vtables
 (`config/SLUS-20836/names/GetVTableSlots.tsv`). All of them are `ig*` engine classes — the game's `be*`
-classes all carry RTTI — so this is T6 naming, not game typing. For the port's method dispatch the
-same generator emits `data/vtables-getvtable.json` (vtable → class + slots, P2.6). The names feed
+classes all carry RTTI — so this is engine naming, not game typing. The
+same generator emits `data/vtables-getvtable.json` (vtable → class + slots). The names feed
 the receiver rule above.
 
 ### The 316-file typing pass
@@ -384,9 +380,9 @@ files with
 compiler profiles and emitted-function ownership still come from the committed configuration. The
 source initializer audit is `python3 scripts/retype_initfields.py --check` (above).
 
-### Port-critical closure helpers
+### Helper typing
 
-Thirty-odd `FUN_` helpers of the port-critical closure are typed by taking
+Thirty-odd `FUN_` helpers are typed by taking
 each receiver from evidence rather than from the offsets alone: a typed matched caller
 (`dw4/reflected.h` casts or prototypes), the matched dispatcher that passes the object, or an exact
 multi-field offset match against a reflected class. Practical findings, all verified with
@@ -399,15 +395,12 @@ multi-field offset match against a reflected class. Practical findings, all veri
 
 An exact offset-and-width scan of every private struct view in `src/unmatched` against
 `include/dw4/reflected.h` returns no further game-region match except one that agrees on widths
-only (`FUN_00464540`, outside the closure). The live list of untyped closure functions is the
-generated
-[closure's untyped list](../../port/docs/project/critical-dependency-map.md#what-is-left-to-type-biggest-first);
-these entries stay untyped for a recorded reason:
+only (`FUN_00464540`). These entries stay untyped for a recorded reason:
 
 | Function | Why it stays |
 |---|---|
 | `LuaAPI_Dispatch` | its views are the Lua 4.0 argument stack (24-byte value slots); no reflected class describes it |
-| `MemoryContext_*`, `igMemoryRefMetaField_DeepCopy` | Alchemy memory and meta-field middleware, which the port replaces |
+| `MemoryContext_*`, `igMemoryRefMetaField_DeepCopy` | Alchemy memory and meta-field middleware, outside the game layer |
 | `beNDMWDegiData__LoadFromProperties` (`0x003ee6d0`), `beNDMWDegiData__UpdateFieldsFromData` (`0x003ee4d0`) | typed up to the 2.6 KB property block of a `beNDMWDegiData`, which has no reflected class |
 | `beNDMWLoadIntf2ComMdlCtrl__StartAt` (`0x003e3e00`), `FUN_003a8140`, `FUN_00394400` | typed except for `igProperty` records and string-chunk headers, which are not reflected classes |
 | `beNDMWLoadIntf2NameSel__Update` (`0x003def80`) | typed through `beNDMWLoadIntf2NameSel`; the per-cell save area after it is unreflected |
@@ -469,7 +462,7 @@ accumulate known wrong types or to discard the recovered model:
 
 - apply a type when it unlocks exact code generation, establishes an ABI or signature, identifies a
   receiver or module, completes the module currently being recovered, or directly serves current
-  mod/port work;
+  mod work;
 - keep the recovered-access count monotonic with `make typed-check`; the percentage may fall as the
   matching loop adds raw C;
 - type a completed module while its evidence and calling relationships are still fresh, rather than
@@ -502,8 +495,8 @@ The order that pays:
 
 ## Open items
 
-- The closure functions in the table under
-  [Port-critical closure helpers](#port-critical-closure-helpers) stay partly or wholly untyped
+- The functions in the table under
+  [Helper typing](#helper-typing) stay partly or wholly untyped
   until their receiver or neighbouring record has a reflected class or a typed caller.
 - The symbol/receiver ownership discrepancies of `Gap__Core__igObject__vfunc_26` and
   `FUN_0015e2b0`, and the receiver interpretations resting on layout alone, are

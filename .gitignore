@@ -1,8 +1,6 @@
 # =============================================================================
 # Discs, ROMs, BIOS dumps, memory cards and game binaries — NEVER committed.
-# They are large, copyrighted, and must stay outside the repo: the pristine
-# master is roms/PS2/Digimon World 4 (USA).iso, the BIOS lives in
-# bios/, and memcards/savestates live in pcsx2/.
+# They are large, copyrighted, and must stay outside the repo.
 # These extensions are the enforcement; keep the list complete when adding new tooling.
 # =============================================================================
 *.iso
@@ -147,11 +145,10 @@ sstates
 /mods/
 /extras/
 
-# Host/editor metadata and native presentation output.
+# Host/editor metadata.
 .idea/
 .agents/
 .serena/
-/port/frame_*.png
 *.afs
 *.AFS
 *.sfd
@@ -161,17 +158,15 @@ sstates
 *.gs
 *.gs.zst
 
-# Retired shared-tool folder: use scripts/, testing/ and port/tools/.
+# Retired shared-tool folder: use scripts/ and testing/.
 /dw4-tools/
 
 # Retired top-level topic folders; use their owning script/doc/data directories.
 /analysis/
 /reference/
-/porting/
 
 # Generated document exports, reference captures and retired running handoffs.
 /docs/**/*.pdf
-/port/screenshots/
 /todo_temp.txt
 
 # Retail executables, one folder per version (dtk-template convention): private, never committed.

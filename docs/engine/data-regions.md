@@ -32,7 +32,7 @@ Two consequences worth stating:
 * **The IOP modules are not stored here.** The SDK strings suggest otherwise, but an IRX image
   would carry the `0x7fELF` magic and the whole image contains exactly one such word, outside these
   regions. What is here is the *library version strings* the SDK registers — relevant to
-  [`binary.md`](binary.md) and to the IOP question in the tracker (T5).
+  [`binary.md`](binary.md).
 * **The data percentage is a floor set by the dumps, not by what is known.** Three of these five
   are mechanically recoverable: the vtable region by enumerating `[rtti|0, 0, codeptr…]` runs (which
   would extend `data/vtables.json` well beyond its RTTI-only 478), the reflection metadata from

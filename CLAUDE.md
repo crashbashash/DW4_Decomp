@@ -1,14 +1,12 @@
-# Digimon World 4 — decompilation and native port
+# Digimon World 4 — decompilation
 
 Guidance for AI coding agents (and a summary for people) working in this repository. The method
 contributors follow is in [CONTRIBUTING.md](CONTRIBUTING.md); read it first. This file holds the
 strict form of it: what makes a function matched and readable, and the rules for driving the build,
 delegating work and reporting a result.
 
-Two goals: (1) recover the PS2 release of **Digimon World 4** — USA `SLUS-20836` — as readable,
-evidence-named source that rebuilds to a byte-identical retail ELF; (2) build a **complete native PC
-port** on that recovery, preserving original gameplay with the controls and display options the port
-specification agrees. Run every command from the repository root; paths here are repository-relative.
+The goal: recover the PS2 release of **Digimon World 4** — USA `SLUS-20836` — as readable,
+evidence-named source that rebuilds to a byte-identical retail ELF. Run every command from the repository root; paths here are repository-relative.
 
 ## Hard rules
 
@@ -25,7 +23,7 @@ specification agrees. Run every command from the repository root; paths here are
   generated `asm/` tree is gitignored and a function's retail instructions are never committed in any
   wrapper. Recovered metadata is fine. The retail executable is reached through the gitignored
   `orig/<GAMEID>/`. Never force-add, and never modify a disc image: work on a copy.
-- **Scope.** The repository holds the decompilation, the native port and what they need: source,
+- **Scope.** The repository holds the decompilation and what it needs: source,
   build tables, tools, evidence and reference documentation. These do not belong in it and go to the
   workspace's archive outside Git: agent handoffs, session logs and per-wave or per-shard work
   reports; changelogs and accounts of how the repository was reorganised; player-facing guides and
@@ -46,7 +44,7 @@ specification agrees. Run every command from the repository root; paths here are
   (`reflected.h` is generated), `tools/` build and matching tools ([README](tools/README.md)),
   `scripts/` analysis, `data/` recovered data, `lua/` the game's Lua scripts decompiled and filed by
   stage (`scripts/lua_tree.py` resolves a pack entry and chunk to its file), `docs/` the
-  documentation ([index](docs/README.md)), `port/` the native implementation.
+  documentation ([index](docs/README.md)).
 - The build follows the [dtk-template](https://github.com/encounter/dtk-template) layout
   ([build system](docs/build-system.md)): each version's address-bearing tables live in
   `config/<GAMEID>/` (`config.yml`, `symbols.txt`, `units.tsv` as the splits, `regions.tsv`, `unit-*`, `exceptions.txt`,
@@ -174,24 +172,6 @@ command with flags, compiler path and SHA-256, the verifier's last line, and any
 the match needs. The integrator re-runs that command before promoting anything and treats an unreproduced
 claim as unmatched. Brief sub-agents with what matched and readable mean; they never run full builds and never write into the
 repository.
-
-## Native port
-
-- Before work in `port/`, read the [technical specification](port/docs/technical-spec.md) in full, then the
-  [porting plan](port/docs/project/README.md) and [tasks](port/docs/project/tasks.md). Agreed requirements
-  bind; proposed architecture and unresolved decisions remain proposals. When requirements change, update the
-  specification and its decision record with the work. The first release delivers the complete original game,
-  including progression, content and local co-op within the agreed scope.
-- Use the [boot contract](port/docs/boot-contract.md) for current implementation boundaries; the specification
-  describes the target. Update the owning subsystem docs and `port/docs/project/tasks.md` together when a
-  milestone or resume point changes.
-- Preserve the decompilation's byte-identity oracle; validate native behaviour separately against recovered
-  contracts and retail evidence. Include decomp headers rather than redefining types.
-- Verification matches the change: the full `make -C port check` only for shared/core modules (collision, scene,
-  model control, stage objects, script engine, build files), unknown dependents, or once before a merge of many
-  commits; otherwise the focused `check-*` targets for tests that include or link the module, `make hygiene`,
-  and the sanitizer run on the changed tests. Doc/data-only changes need only `make hygiene`. Say in
-  the commit or report which tests ran.
 
 ## Retail-game work
 

@@ -1,6 +1,6 @@
 /* Complete original SUBWND work ownership, record caps and stock preparation.
  * This guest-memory reference preserves service calls and reference lifetimes;
- * it is not an exact compiler unit or a host shop implementation. See finding907.
+ * it is not an exact compiler unit. See finding907.
  */
 #include "subwindow-preparation.h"
 #define P(p) ((uint32_t)a->read(a->user,(p),4))

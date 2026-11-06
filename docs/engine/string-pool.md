@@ -120,7 +120,7 @@ Concrete field/registrar, allocator/free, byte/string comparison/length and
 synchronization primitives remain controlled. Remaining field-cleanup leaves mean
 this test does not claim that resetting messenger objects releases every concrete
 owned name. It proves the original interning/storage path through the tested
-engine operations; it does not establish hardware concurrency or native gameplay.
+engine operations; it does not establish hardware concurrency.
 The standalone oracles retain their explicitly documented service boundaries.
 
 `StringTable_EraseAt` matches **104 code bytes** in
@@ -132,7 +132,7 @@ byte count; this is not a claim about the original SDK prototype. A typed
 three-parameter declaration emits an extra temporary and does not match.
 No forced instruction padding or binary patching is used.
 
-All fifteen bodies in this family match (2,228 bytes). Root matching, typed coverage and relink are validated
+All fifteen bodies in this family match (2,228 bytes). Matching, typed coverage and relink are validated
 separately from these behavioral comparisons. Run:
 
 ```sh

@@ -95,8 +95,8 @@ subscript), never the fold.
 
 ## Decision: link-verbatim where no source matches
 
-A `*_GetVTable` that no C or C++ source reproduces stays as retail bytes reassembled from `asm/`. These are per-class type-metadata accessors; no matched or
-native code depends on them being C, the port reimplements behaviour from recovered contracts, and the only other way to match one is
+A `*_GetVTable` that no C or C++ source reproduces stays as retail bytes reassembled from `asm/`. These are per-class type-metadata accessors; no matched
+code depends on them being C, and the only other way to match one is
 whole-function inline assembly, which recovers no source and would only inflate the percentage. If a C or C++ spelling of the fold under
 the default compiler is ever found (the stack-offset fold is the open question) they can be matched mechanically; until then do not spend matching time on that spelling.
 

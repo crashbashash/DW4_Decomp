@@ -224,7 +224,7 @@ def main():
     s.set_defaults(func=cmd_seq)
     t = sub.add_parser("sites", help="enumerate Lua SYSgetRandom call sites")
     t.add_argument("afs", nargs="?",
-                   default="local/extracted/NDMW.AFS")
+                   default="../local/extracted/NDMW.AFS")
     t.add_argument("--tsv", default=None)
     t.set_defaults(func=cmd_sites)
     args = ap.parse_args()

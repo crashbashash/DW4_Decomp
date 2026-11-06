@@ -19,7 +19,7 @@ confirmation/decline, four players, fresh commit prices/balances, wrapped record
 writes, and callback timing. Selected cases run actual page-count and parent
 binding bodies beneath the controller. Item factories/getters, recalculation,
 messages, strings/lists, selectors, rendering and script execution remain
-controlled services. This is neither native-port acceptance nor a live-game test.
+controlled services. This is not a live-game test.
 
 ## Retained data and selection
 
@@ -84,7 +84,7 @@ its special dialog text and advances to closure on completion. Error entry40 is
 read after allocation, and private reference cells are reloaded around callbacks.
 
 Exact matching of this update, its real item/pricing/status/recalculation
-services, selector/message/script composition, and retail/native behavior remain
+services and selector/message/script composition remain
 open. Other lobby services and their script outcomes retain the scope in the
 [hub inventory](../systems/hub-recovery.md).
 

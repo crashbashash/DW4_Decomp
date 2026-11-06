@@ -30,8 +30,8 @@ retain the original `slt`/branch sequence. Object reference counts are word-size
 and the active/first-frame flags are byte-sized; the clock fields are 64-bit.
 The entire 1,300-byte body, including 75 relocations, matches retail. The full
 matching build has zero mismatches and the relink is byte-identical.
-This source recovery does not close the separate runtime cadence, pause routing
-or native stage-transition acceptance questions below.
+This source recovery does not close the separate runtime cadence or pause routing
+questions below.
 
 ## Ownership and the writer chain
 
@@ -159,21 +159,15 @@ Not established:
 - **FADE timer start.** In the first state its start equals that state's clock, unlike WAIT.
   Not analysed.
 
-## Supplying the clock to the port
+## Clock steps and consumers
 
-Use the existing explicit absolute-nanosecond clock adapter. Its fixed 16,666,667 ns
-step remains a labeled simulation model. The observed source has variable steps;
-there is no measured fixed replacement step that establishes 1:1 behavior.
-
-A host elapsed-time source quantized to 100 ns would be a native implementation choice,
-not a reproduction of the EE Timer 0 conversion. The recovered sample/scheduler path
-does advance `_worldTime` before normal Action2 updates. Starting at zero and mapping
-game pause to the timer flag still require initialization and caller evidence.
+The observed source has variable steps; there is no measured fixed step that establishes 1:1 behavior.
+The recovered sample/scheduler path advances `_worldTime` before normal Action2 updates. Starting at
+zero and mapping game pause to the timer flag still require initialization and caller evidence.
 Resume's rebase arithmetic is verified; the pause-button routing is not.
 
-For deterministic comparison, retain and replay an actual sequence of absolute retail
-clock samples. The live sample above kept only aggregate statistics, **not** a replay
-sequence. Consumers must continue to perform their own
+The live sample above kept only aggregate statistics, **not** a replay
+sequence. Consumers perform their own
 `>>18` conversion. At these small absolute tick values the 1,908-tick threshold applies;
 large-clock float rounding follows the qualifications in [Action2 timing](action2-timing.md).
 
@@ -303,7 +297,7 @@ reads, renderer frames and Action2 scheduler invocations are distinct counts.
 These outer bodies are not single-frame functions:
 they contain repetition and lifecycle setup/teardown.
 
-### Verification and port use
+### Verification
 
 ```sh
 python3 scripts/verify_systemclock.py --elf orig/SLUS-20836/SLUS_208.36 --mutations
@@ -317,13 +311,9 @@ seen by ordered Action2 dispatch. Four deliberately wrong variants are rejected:
 logical shift, lost frozen elapsed time, cleared world time on start, and callbacks
 before the clock write. No retail bytes are embedded.
 
-For the port, maintain separate raw source time, timer lifecycle state, last
-sample/delta, and accumulated world time. Feed the Action2 adapter the accumulated
-value after the sample/update, and retain it across render-only passes. Preserve
-explicit samples for deterministic comparisons. The existing fixed-step source
-remains a simulation; this recovery does not make a fixed step or host elapsed
-clock reproduce Timer 0. Do not freeze/reset the world clock merely because a
-menu or stage changed without recovering that caller's routing.
+Raw source time, timer lifecycle state, the last sample/delta and accumulated world time are
+separate state. Action2 reads the accumulated value after the sample/update, and it is retained
+across render-only passes.
 
 Open: allocation/default initialization of the core and timer; all callers
 of reset/pause/restart, especially game pause and stage loads; exact Timer 0

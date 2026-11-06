@@ -337,12 +337,12 @@ def collect():
     from_c = done_b + jtbl_b                    # the compiler regenerates the jump tables
     from_asm_body = asm_body_b + jtbl_asm_b
     # Typed coverage: how much of the matched C speaks in recovered structs rather than
-    # offset casts.  It is the port's metric, not the matching build's.
+    # offset casts.  It is not a measure of the matching build.
     try:
         sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
         from typed_coverage import measure as measure_types
         typed = measure_types()
-    except Exception as exc:               # never let the port metric break the build metric
+    except Exception as exc:               # never let this metric break the build metric
         typed = dict(error=str(exc), recovered=0, total=0, recovered_pct=0.0)
     link = dict(section_bytes=SECTION_BYTES,
                 from_c_bytes=from_c, from_c_units=len(matched),

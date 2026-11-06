@@ -13,7 +13,7 @@ Numeric loops pair with their own FORLOOP back edge; an empty-loop jump can be
 threaded beyond the immediate loop end. Cleaned filenames containing numeric
 IDs carry the corrected numbers; original entry/chunk numbers are stable.
 
-From the decompilation repository root:
+From the repository root:
 
 ```sh
 python3 scripts/lua_decompile.py <NDMW.AFS> --out=build/lua_decompiled
@@ -26,7 +26,7 @@ python3 scripts/flag_meanings.py lua docs/systems/flags
 Verification checks signed/jump/PUSHNILJMP/nested-for fixtures, **81,856**
 branch targets, **2,805** numeric loops, and exact agreement between regenerated
 text and the generator. It does not prove every reconstructed conditional or
-control-flow heuristic. Native integration runs original bytecode.
+control-flow heuristic.
 
 ## Audited examples and documentation boundaries
 
@@ -53,8 +53,8 @@ mirror/restore system, the world-4 end state, side-quest flags and rewards, and 
 raw observations but are unconfirmed where they combine those observations with off-by-one Lua numbers.
 The [save-flag map](../systems/flags/flag-map.md) retains its historical evidence
 with a correction notice: its claimed Lua-to-save inversion is invalid, and
-old boss/quest labels must not guide runtime implementation. This audit does
+old boss/quest labels must not be relied on. This audit does
 not relocate observed save bytes or prove a new persistent-folder meaning.
 
 Other older prose may contain Lua-derived literals; recheck a claim
-against original entry/chunk evidence before importing it into the native port.
+against original entry/chunk evidence before relying on it.

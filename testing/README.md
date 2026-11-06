@@ -31,7 +31,6 @@ explicit-path options with synthetic fixtures.
 python3 testing/test_name_live_models.py
 python3 testing/test_story_state.py
 python3 testing/test_gs_framebuffer.py
-python3 testing/test_status_composition.py
 python3 testing/test_lua_engine_dependencies.py
 python3 testing/test_material_contact_retail.py
 python3 testing/test_material_runtime_retail.py
@@ -256,7 +255,7 @@ span and its full return. See [scope and remaining work](../docs/engine/subwindo
 Save Keeper script ownership: `python3 testing/test_savekeeper_script_retail.py`
 reads the private NDMW.AFS without extraction/writes, resolves the actual Lua-info
 list/data-object/memory graph and checks the original delayed stagIS12 instruction
-sequence. The real-input host check passes; no save UI or persistence is accepted.
+sequence. No save UI or persistence is established.
 See [the owned dependency edge](../docs/systems/hub-recovery.md#save-keeper-named-script-edge).
 
 The [concrete SELECTCTRL oracle](../docs/engine/selectctrl.md) runs with
@@ -264,7 +263,7 @@ The [concrete SELECTCTRL oracle](../docs/engine/selectctrl.md) runs with
 RAM/ordered-call cases for both complete update/general receiver bodies.
 All 1,187 non-padding words execute; 19 padding words are checked separately.
 Registry/factory/pad/messenger/model/format/string services remain controlled;
-this does not establish native shop acceptance or physical input/render timing.
+this does not establish shop behaviour or physical input/render timing.
 
 That same SELECTCTRL command additionally runs201 direct pad-record selection
 cases and216 real manager/lookup compositions:4,506 total comparisons and all

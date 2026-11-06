@@ -11,7 +11,7 @@ in the generated [reviewed extents](../../data/function-extents.json).
 This is behavioral recovery, with **zero new matching bytes**. Database access,
 record lookup, item construction/initialization, list operations, allocation and
 destruction are controlled services. It does not implement prices, buy/sell,
-service transactions, NPC menus or native shop functionality.
+service transactions or NPC menus.
 
 ## Work, currency and player selection
 
@@ -102,7 +102,7 @@ all11 modes, both allocators, work construction/publication, reference-count
 boundaries, nonempty-list caching, callback-changed list/property/temporary
 storage and full-width item IDs. Persistent open/tick/close cases execute both
 the original preparation and lifecycle, compared with both recovered bodies.
-The expected execution does not copy retail output into the native result.
+The expected execution does not copy retail output into the recovered result.
 
 The original compiler's exact output remains unbanked. Adjacent128-byte scoped
 reference cleanup candidates reproduce body size and all but five instruction

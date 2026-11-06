@@ -3,10 +3,8 @@
 must sit at the offset the reflection metadata recorded, every struct must have the size its class
 registers, and every field's type must be the one its MetaField kind prescribes.
 
-Why: the technical specification retargets recovered code to a host build that keeps four-byte
-references (an arena of 32-bit handles, port/docs/project/pointer-model.md). That only holds if the
-generated structs are portable C and their layout does not depend on the compiler that reads them. The
-offsets and sizes in the comments of reflected.h are the authority (data/reflection.json and the
+Why: the generated structs must be portable C whose layout does not depend on the compiler that
+reads them, with references kept at four bytes. The offsets and sizes in the comments of reflected.h are the authority (data/reflection.json and the
 registered instance size from asm/<Class>_Register.s); this turns each into
 `_Static_assert(offsetof(Class, field) == N)` / `_Static_assert(sizeof(Class) == N)` and compiles the lot
 with `cc -std=c11`. A struct that fails here would silently shift every field after it on the host.

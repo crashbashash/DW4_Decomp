@@ -105,7 +105,7 @@ selector publication and the wider descriptor-copy protocol remain lower bounds.
 Thirteen dependency regressions independently connect selector metadata, wrapper
 instructions, specialization call sites and original registrar callback literals,
 plus the original Work dependency table. Two reviewed helper roots expose this
-path without inventing generic indirect-call edges. Native gameplay is unchanged.
+path without inventing generic indirect-call edges.
 
 The [descriptor-copy follow-up](list-descriptor-copy.md) now recovers both native
 specialization bodies and the complete cold memory-descriptor copy chain. The

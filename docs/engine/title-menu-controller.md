@@ -94,7 +94,7 @@ The complete build relinks byte-identically; the live function figures are in
 Two negative ownership configurations are rejected: selecting the adjacent
 exception-index record, and redirecting CTRL cleanup to the byte-identical
 `0x3f2bc0` body. In the latter test all code bodies still match, but the exception
-table correctly fails its cleanup-identity comparison. Native engine outcomes,
+table correctly fails its cleanup-identity comparison. Engine outcomes,
 rendering and timing retain their separate verification boundaries.
 
 ## The four state fields
@@ -133,8 +133,7 @@ START (`0x0008`), Cross (`0x4000`) and Circle (`0x2000`) use `+0x48` alone.
 This describes the controller's consumption; it does not by itself establish
 physical D-pad behavior or repeat timing.
 
-- Only START advances the press-start wait. The port's additional Cross acceptance
-  is an approximation, not behavior of this handler.
+- Only START advances the press-start wait.
 - Menu priority is Up, Down, Cross, Circle. Up clamps on Game Start; Down clamps on
   Option. Even an attempted move past an end enters the tracked-operation wait.
 - An actual move plays `SQ_LINEUP00` or `SQ_LINEDW01`. Confirm plays `SQ_LINEON00`
@@ -188,8 +187,8 @@ US title-menu interaction.
 has no entries; `0x003e44d0` does the same for `+0x18`. These are two separate
 queues. The reconstruction calls them `opening_done` and `closing_done`, with
 opening also covering played sequences. `0x003e44f0` updates the model controller
-before the input/state dispatch. These queries must not be replaced by one
-fixed delay if the port is to preserve the original transitions.
+before the input/state dispatch. The original transitions depend on these
+queries, not on one fixed delay.
 
 The reference deliberately delegates the model/text/messenger implementations.
 A call-order match with stubbed replies does not establish their real timing,
@@ -293,22 +292,18 @@ The title runtime is closed. A remaining controller target is the
 6,076-byte `beNDMWLogo::vfunc_31` at `0x449030`.
 The downstream 18,616-byte `beNDMWLoadIntf2` update at `0x3e4750` matches as
 [`src/game/beNDMWLoadIntf2Update.cpp`](../../src/game/beNDMWLoadIntf2Update.cpp); its message handler at `0x3e9430`
-has matching C++. See [the port-critical seeds](asm-body-matches.md#the-port-critical-seeds)
+has matching C++. See [asm-body matches](asm-body-matches.md)
 and [the load-interface contracts](load-intf2.md).
 
 ### Common-model boundary
 
 The shared `0x003e3b80..0x003e46a4` helper group has a verified
-[common-model reference](common-model-controller.md), and the native port uses
-it for title/Options queues. Original title plus queue instructions agree with
-native integration for 2,921 ticks at the same bounded model-execution boundary.
+[common-model reference](common-model-controller.md).
 The action interpreter, exact sequence/running predicates, timing, rendering and
-audio remain outside that equivalence claim. See `load-intf2.md` for the
+audio remain outside its equivalence claim. See `load-intf2.md` for the
 master/slot behavioral references and their seeded-queue limitation.
 
 ### Logo sequence
 
 [Model-sequence waits](model-sequence-waits.md) recover the next contiguous
-JUMP/WCHECK group. The port uses the extracted logo command program and
-executes original helper instructions in the 2,933-tick integration oracle.
-Action2 timing and the native dispatcher remain shared, unverified boundaries.
+JUMP/WCHECK group. Action2 timing remains an unverified boundary.

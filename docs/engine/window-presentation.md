@@ -18,7 +18,7 @@ match as `src/unmatched/beNDMWWindow_ClearQueuedText.cpp`,
 `src/unmatched/beNDMWWindow_PlayQueuedModelClose.cpp`,
 `src/unmatched/beNDMWWindow_PollCloseComplete.cpp` and
 `src/unmatched/Gap__Bec__beNDMWWindowTitle__vfunc_21.cpp`.
-This does not establish shop transactions or native UI operation.
+This does not establish shop transactions or UI operation.
 
 The run extends backward with the 144-byte
 [message-script dispatcher](xdata-controller.md#script-call-number-and-pack-ownership)
@@ -112,7 +112,7 @@ Tests compose the real generic shop root, common window tree, shared title updat
 and all presentation helpers on both sides. Factories create controlled widgets;
 title-specific byte96 initialization and concrete text/model receiver services
 remain leaves. This proves the lifecycle interaction, not real rendering, animation,
-input or transaction parity.
+input or transactions.
 
 ## Span and coverage evidence
 

@@ -112,8 +112,8 @@ Twenty dependency tests independently check startup/teardown call sites, global
 publication, list dispatch slots, context constructor/vtable receiver bindings and
 prior engine contracts. Four reviewed producer/receiver roots add these required
 paths without inventing virtual edges. Retail objdump also confirms their shapes.
-Root matching, relink and typed checks remain independent of these behavioral
-oracles. Native gameplay is unchanged.
+Matching, relink and typed checks remain independent of these behavioral
+oracles.
 
 The subsequent context lifecycle recovery covers original record-name initialization,
 retained slot updates, and special208/212 delegation/removal. The slot204 builder,

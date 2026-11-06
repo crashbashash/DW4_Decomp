@@ -68,14 +68,8 @@ and animation timing are not verified by this test. Coverage of all ten bodies
 is not a claim that every possible engine-side mutation or allocation failure
 has been verified.
 
-The native port imports this source unchanged and uses these queues for
-title/Options. Its model executor still supplies bounded action durations and
-sequence/running queries. A separate integration comparison executes the original
-title and queue bodies against that same lower executor for 2,921 ticks, comparing
-controller/options, queues, model state, text, handoff and attract state every tick.
-This establishes integration at that boundary, not rendering, audio or timing
-identity with a running console. The Game Start slot verifier still seeds its
-queues; integrating the recovered submissions there is separate work.
+The Game Start slot verifier seeds its queues rather than running the recovered
+submissions.
 
 ## Caller wait flags
 
@@ -94,16 +88,8 @@ strengthens call equivalence but does not replace that harness's queue seeds.
 - No matched-code coverage is claimed for this group.
 - Behavioral checks: common-model 2,676; title 55,264; load controller 1,624;
   load interface 11 direct + 432 message + 1,045 update cases, including.
-- Native `make check` and `make check-retail` pass. Address/undefined-behavior
-  sanitizer checks pass for title/queue tests, including storage reuse and
-  overflow. Leak detection is unavailable under the test runner's tracing.
-- Window-presentation and live-dump pose/fog tests skip without their required
-  session/capture inputs. No synchronized console/native frame or audio
-  comparison exists.
 
 ## Logo sequence
 
 [Model-sequence waits](model-sequence-waits.md) recover the next contiguous
-JUMP/WCHECK group. The port uses the extracted logo command program and
-executes original helper instructions in the 2,933-tick integration oracle.
-Action2 timing and the native dispatcher remain shared, unverified boundaries.
+JUMP/WCHECK group. Action2 timing remains an unverified boundary.

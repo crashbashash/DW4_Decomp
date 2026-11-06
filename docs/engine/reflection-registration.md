@@ -173,8 +173,8 @@ and table checks validate those roots; the inventory does not invent direct
 edges for generic indirect calls. Original base/type/vtable/field factories,
 callback vectors, allocation, system/profile and interner primitives remain open.
 Other messenger class schemas, concrete memory/array fields, full instance
-composition and gameplay receivers remain required work. Native gameplay and full
-Lua-dependent engine completion are not claimed.
+composition and gameplay receivers remain required work. Full Lua-dependent engine
+completion is not claimed.
 
 The optional `--object-storage` oracle mode now composes original encoded lookup
 and allocation/free wrappers beneath these same 487 cases. See

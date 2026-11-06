@@ -69,9 +69,26 @@ MND_INI DEX_INI` (stat index 0..4), and `FUN_003fa850` reads
 for MHP and `UPCNT[species*11+1]` for MMP; `FUN_003fab90` reads
 `UPCNT[species*11+7..10]` for the four resistances. Each stat is clamped to
 **1..9999** after the final equipment/temporary additions (HP/MP instead
-cap above at 99999). Growth factors are piecewise tables, not the raw level;
-see the recovered [growth table and recalculation contract](../../port/docs/player-stats.md).
-The displayed formulas above describe the base helpers before equipment.
+cap above at 99999). The displayed formulas above describe the base helpers
+before equipment.
+
+Growth factors are piecewise tables, not the raw level. Both helpers take the
+first row whose ceiling is at least the current level, then compute
+`factor = offset + rate * (level - origin)`. The six parallel `int[12]` tables
+hold ten used rows followed by two zero rows:
+
+| Ceiling (`0x004cf130`) | Origin (`0x004cf190`) | HP/MP offset (`0x004cf160`) | HP/MP rate (`0x004cf1c0`) | Stat offset (`0x004cf1f0`) | Stat rate (`0x004cf220`) |
+| --- | --- | --- | --- | --- | --- |
+| 5 | 1 | 0 | 10 | 0 | 10 |
+| 10 | 5 | 40 | 20 | 40 | 9 |
+| 20 | 10 | 140 | 50 | 85 | 8 |
+| 30 | 20 | 640 | 80 | 165 | 7 |
+| 50 | 30 | 1440 | 120 | 235 | 6 |
+| 70 | 50 | 3840 | 180 | 355 | 5 |
+| 110 | 70 | 7440 | 260 | 455 | 4 |
+| 150 | 110 | 17840 | 180 | 615 | 3 |
+| 230 | 150 | 25040 | 120 | 735 | 2 |
+| 999 | 230 | 34640 | 80 | 895 | 1 |
 
 ### Technique → SKILL slot (all 9 CONFIRMED by dynamic probe)
 

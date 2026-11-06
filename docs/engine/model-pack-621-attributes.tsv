@@ -6,8 +6,7 @@
 # own offset.  `_stripLengths` gives the primitive lengths, validated by sum == _numVerts.
 # columns: vertexArray  primType  numPrims  numVerts  vdata  numLengths  stream ids  name
 # scripts/verify_models_layout.py re-derives every row from the pack; the extraction is
-# compared against the live game's models by ../testing/verify_models_offline.py and against
-# the port's C reader by port/tools/verify_models.py.
+# compared against the live game's models by ../testing/verify_models_offline.py.
 # The name comes from the shape -> attribute link (an igGeometry's ordinal-2 DCC name and its
 # ordinal-8 igAttrList, whose array block holds that shape's attribute ids), found by ordinal
 # because a record's byte offsets shift with the length of its name string.

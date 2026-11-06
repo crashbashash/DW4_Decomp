@@ -11,7 +11,7 @@
  * exactly where reflection recorded it. A field's *type and size* come from its MetaField
  * kind: a bool is one byte (igMetaField has a bool at +38 and a char at +39), a vector is
  * float[2]/[3]/[4], a matrix float[16], a string or object reference a 4-byte handle
- * (`int`, the port's arena reference), and an inline array takes its element type from
+ * (`int`), and an inline array takes its element type from
  * the kind and its count from the distance to the next field. The struct's size is the
  * instance size the class registers (`li t2,N` in asm/<Class>_Register.s), which sizes a
  * trailing array and the tail padding; `sizeof N` in each struct's comment records it and

@@ -4,8 +4,7 @@
 Reuses `gs_barrel_shading.py`'s pairing (the pack's `igPrimLengthArray` strip lengths vs the GS's
 one-packet-per-strip draws, in order) but keeps the whole vertex record, so it can answer, for a
 draw: are the mesh's **UVs** the ST the GS sampled, or was a texture matrix (UV offset/scale)
-applied?  Are the positions the same?  Is the colour the fit?  Those three are the port's only
-inputs besides the light rig.
+applied?  Are the positions the same?  Is the colour the fit?
 
     python3 scripts/gs_draw_pair.py --dump <dump>.gs.zst \\
         --tex0 0x4007950555307ca4 --afs ../local/extracted/NDMW.AFS --entry 614 \\

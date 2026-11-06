@@ -462,6 +462,6 @@ way: 380/383/386/389/392 in 622, 379/382/385/388/391 in 623, 381/384/387/390/393
   them at the reflection offsets gives the row's values: `_geneEnemyId`, `_startModeStr`
   (`"direct"`), `_startData` (150.0), `_fillModeStr` (`"wipeout"`). The live works resolve
   `_geneEnemyName` → `"e_goburi"` with `_geneEnemyRecNo` 5 and `_geneEnemyMHp` 649, exactly
-  the stat-table values for `e_goburi` RecNo 5. So the D1 data can be read without
+  the stat-table values for `e_goburi` RecNo 5. So the generator rows can be read without
   the igBinary decode — **the values, not the format** — per loaded stage and with the
-  emulator up, which makes it a cross-check for T2's decode rather than a replacement.
+  emulator up, which makes it a cross-check for the decode rather than a replacement.

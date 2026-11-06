@@ -21,7 +21,7 @@ unrecovered; naming it is the module loop's job).  Width-checked, so `make check
 `make link` must both stay green.
 
 The middleware set is deliberately excluded (`--game-only`, the module map's game region
-0x334000..0x460000): a port replaces it wholesale.
+0x334000..0x460000).
 
 Usage:
     scripts/retype_block_receiver.py                 # report (all)

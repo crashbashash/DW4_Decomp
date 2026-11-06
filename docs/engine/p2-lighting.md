@@ -165,8 +165,8 @@ stag0001 values; the generalisation and the event model are unconfirmed):
    holds a different buffer half and was not read at that address.)
 
 So after a fresh upload `l0 = -L x V` (eye space); the first `CALC` turns it into the object-space light `-L` (the usual, correct
-result, k = 0), and every further `CALC` without a re-upload multiplies by `V^T` again: `l_k = -L (V^T)^k`. Folded into the normal
-the port already computes, a draw seen k extra times lights with `n_eff = n_world . (V3 . R)^k` (row-vector form, `V3` the view's
+result, k = 0), and every further `CALC` without a re-upload multiplies by `V^T` again: `l_k = -L (V^T)^k`. Folded into the world
+normal, a draw seen k extra times lights with `n_eff = n_world . (V3 . R)^k` (row-vector form, `V3` the view's
 upper-left 3x3, `R` the node's world 3x3), `ndl = max(0, -L_world . n_eff)`, ambient and diffuse unchanged.
 
 **What stag0001 shows** (BG02 floor, depth-first draw order 2174, 2176, 2179, 2180, 2184, 2186, 2189, 2191): the retail packet stream
@@ -174,19 +174,14 @@ has the flag record before the first BG02 draw (fresh block), before node 2184 (
 (transform 2185, k = 2) and before 2189 (the restore to identity on leaving the texture-matrix scope, k = 3), and none before 2176,
 2179, 2180 (k stays 0) or 2191 (k stays 3). With the retail floats `ndl` is 0.4181, 0.0354 and 0.0545, i.e. vertex colours
 (95/96, 86/87, 108/109), (37, 30, 50) and (40, 33, 52/53) against the dump's (96,87,109), (37,30,50), (40,33,53). The rule has no
-free parameter; the 1-count residuals are quantiser rounding, and the port's floor quantiser is deliberately left alone (it is
-exact on the ground00 and Main Lobby vertices that are k = 0).
+free parameter; the 1-count residuals are quantiser rounding.
 
-**The port's rule** (`dw4_scene_node_light_rot` in `port/src/scene.c`, applied in `lobby_vertex_color`): per `BG02` root, depth first,
+**The rule.** Per `BG02` root, depth first,
 a boolean `pending`, a `fresh` bit and a counter; root start and the enter and leave of a target-0 `igTransform` set pending and
 fresh, a target-9 (texture) `igTransform` and a texture-matrix scope (`igTextureMatrixStateAttr`) set pending; at a mesh, if pending
-then `k = fresh ? 0 : k + 1` and pending clears. Two event models (transform enter/leave, and scope enter/exit plus transform enter)
-are run side by side and k is kept only where they agree. Safe scope: static meshes of a `BG02` root in field stages (never the
-Main Lobby hubs), world 3x3 identity, and a root made only of attribute sets, groups, geometries and transforms.
+then `k = fresh ? 0 : k + 1` and pending clears.
 
-**Other stages.** Outside the practice stage and the hubs the port's lighting agrees with retail at the same camera and position:
-mean luminance ratios 0.97-1.01 on Goblin Pass floor and walls, 0.992-0.998 on the dng101b2 tiles, back wall and checker band. Only
-environment regions were compared. This shows no visible brightness error, not that k > 0 draws occur there; no stage beyond the
+**Other stages.** No stage beyond the
 practice stage with stag0001's BG02 overlay pattern has been found.
 
 **Not established (unconfirmed):** a second retail dump with k > 0 (the three practice-stage dumps are the only constant dim additive draws in
@@ -207,8 +202,7 @@ skips its upload).
 * **The runtime descriptor's class.** It is a 160-byte bss structure, not the reflected
   `igLightAttr`; the reflection layout is used only as the semantic vocabulary.
 * **The VU1 arithmetic** (beyond `CALC_INFINITE_4`'s in-place light rotation, decoded above). The programs are the specification (LIGHT 91 programs, 82 % of the
-  pipeline); this page records what the EE *hands them*, not what they compute. That is the
-  renderer's reimplementation brief, not a decompilation.
+  pipeline); this page records what the EE *hands them*, not what they compute.
 
 ## Reproducing the static decode
 

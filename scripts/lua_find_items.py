@@ -5,7 +5,7 @@ Reports chunks whose number constants include any of the known device-folder
 item IDs (0, 25, 50, 75, 1293, 1298, 1299, 8213, ...) plus their surrounding
 numbers — used to locate the shop/item lists and recover the item order.
 
-Usage: python3 lua_find_items.py local/extracted/NDMW.AFS
+Usage: python3 scripts/lua_find_items.py ../local/extracted/NDMW.AFS
 """
 import struct
 import sys

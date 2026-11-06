@@ -82,5 +82,5 @@ underneath descriptor registration. It asserts that all four storage entries
 execute and compares original-instruction memory and callback traces. Concrete
 allocator virtual methods, capacity queries, factories, interning, type records,
 callback vectors and system services remain controlled. This removes the wrapper
-boundary, not the full allocator or metadata-bootstrap boundary. Native gameplay
-is unchanged; other Lua-dependent engine modules remain required work.
+boundary, not the full allocator or metadata-bootstrap boundary. Other Lua-dependent
+engine modules remain required work.

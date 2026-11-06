@@ -134,4 +134,4 @@ child-list factory and Work's child-type metadata remain controlled boundaries.
 This proves original base/Work metadata and field construction, not complete live
 Work instance creation. Next dependencies include real `igIntList` metadata at
 `586880`, `beBaseInfoRamList` metadata at `589d20`, their inherited storage fields,
-and remaining type/allocator services. Native gameplay is unchanged.
+and remaining type/allocator services.

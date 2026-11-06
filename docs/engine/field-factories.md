@@ -129,7 +129,7 @@ services remain controlled in that composition. Generic test-only descriptors in
 other registration cases remain synthetic. This establishes the Work descriptor
 construction path, not full original object-system bootstrap or live Work instance
 creation. Memory/array fields, further class schemas and gameplay receivers remain
-required. Native gameplay is unchanged.
+required.
 
 The [base bootstrap recovery](object-base.md) extends the adapter/oracle with
 `igUnsignedIntMetaField` factory/constructor/initializer (276 existing exact bytes).

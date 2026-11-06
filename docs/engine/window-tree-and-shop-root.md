@@ -16,7 +16,7 @@ NOP holes. The old occupied-byte size ended after restoring ra at426f80, losing
 saved-s1/s0 restores, return and stack-release delay slot. Generated ranges and
 split/layout now include the full sequence. This adds16 classified code bytes
 and removes16 data bytes; **zero new matching bytes**. All six bodies retain
-assembly. Native menus and transactions are not accepted by this recovery.
+assembly.
 
 ## Window ownership and context
 
@@ -173,4 +173,4 @@ missing the executed retail NOP after destruction; it is not banked. Child-close
 source-shape probes also remain mismatched. No assembler placeholders or matching
 credit are added. Continue exact matching and recover the concrete selected
 service controllers, presentation/close helpers, actual prices/transactions and
-[remaining hub scope](../systems/hub-recovery.md). This does not expand the port.
+[remaining hub scope](../systems/hub-recovery.md).

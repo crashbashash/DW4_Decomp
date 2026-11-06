@@ -48,7 +48,6 @@ allocation, the entire engine's input sampling, or visual equivalence.
 
 ## Scope still open
 
-- Implementing/verifying the model queue, text, and messenger callbacks in a port.
 - The downstream `beNDMWLoadCtrl2` and `beNDMWLoadIntf2` modules, including slot
   selection, character creation, name entry, difficulty, memory-card paths, and
   their subordinate helpers. The Game Start path's first module
@@ -233,7 +232,7 @@ passes 9,431 retail/C calls, covers all 585 reachable body instruction addresses
 and rejects four wrong implementations. The final Action2 update, other external
 callbacks, Timer 0 and software-double leaves remain boundaries. An offline probe
 checks that the two logo captures use the recovered scheduler path. See the
-[clock contract and native integration guidance](../../docs/engine/system-clock.md#executable-lifecycle-and-scheduling-contracts).
+[clock contract](../../docs/engine/system-clock.md#executable-lifecycle-and-scheduling-contracts).
 
 ### Loading-card node runtime
 

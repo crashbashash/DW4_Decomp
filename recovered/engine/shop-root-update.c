@@ -1,4 +1,4 @@
-/* Original generic service-root state machine; no host shop replacement. */
+/* Original generic service-root state machine. */
 #include "shop-root-update.h"
 #define P(p) ((uint32_t)a->read(a->user,(p),4))
 #define B(p) ((uint32_t)a->read(a->user,(p),1))

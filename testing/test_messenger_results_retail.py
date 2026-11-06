@@ -7,8 +7,8 @@ leaves. List, matrix, pool, table and packed chunk bodies execute recovered C.
 import argparse,ctypes as C,subprocess,sys,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/'port/tools'))
-from verify_scriptservices_retail import World
+sys.path.insert(0,str(ROOT/'scripts'))
+from script_world import World
 from ee_core import MASK
 SELF,CONTEXT,SOURCE,OUTPUT,OBJECT,STRING=range(0x1800000,0x1800600,0x100)
 STORAGE=0x19a0000

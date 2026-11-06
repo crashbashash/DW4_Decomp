@@ -101,7 +101,7 @@ status publication and the authoritative metadata name-field descriptor.
 The dispatcher and its dependencies are not the complete allocator backend.
 Next: actual proxy/allocator factories and virtual resize/backing/apply/enable
 implementations, context configuration/stack control and the remaining Lua
-gameplay receivers. Native gameplay is unchanged.
+gameplay receivers.
 
 
 ## Alias pool backend trace
@@ -126,5 +126,4 @@ The vtable also exposes starts `0x2d0ae0`, `0x2d0b00`, `0x2d0c00`, `0x2d0d80`,
 their function boundaries. This trace is static analysis, not a behavioral or
 exact-matching result: the recovery of the contiguous alias pool
 factory/binding/backend module is in [alias-pool binding](alias-pool-binding.md)
-and [alias-pool runtime](alias-pool-runtime.md). Do not infer production
-native-port integration from the recovered adapters.
+and [alias-pool runtime](alias-pool-runtime.md).

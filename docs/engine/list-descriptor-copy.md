@@ -135,9 +135,8 @@ Element descriptor providers, type queries, interning, allocator/owner services,
 runtime CreateInstance and generic copy contents remain controlled. The existing
 78-checkpoint deferred-callback oracle still treats complete child registration
 as a boundary. Fourteen independent dependency tests check reviewed callback
-extents and the original memory-clone/copy-chain instruction targets. Native
-gameplay is unchanged; full child-list bootstrap and Work instance creation remain
-active work.
+extents and the original memory-clone/copy-chain instruction targets. Full
+child-list bootstrap and Work instance creation remain active work.
 
 The [list registration follow-up](list-registration.md) now composes these callbacks
 with the original three-field `igDataList` schema and all four list registrars under

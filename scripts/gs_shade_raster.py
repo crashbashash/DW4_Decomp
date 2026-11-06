@@ -11,8 +11,7 @@ Builds a draw (by TEX0) as triangles in GS screen space and rasterises them with
   * `frame`  — the dump's **framebuffer** decoded out of VRAM (PSMCT32, the `CTXT0.FRAME` register)
 
 The three together separate the two halves of the pixel pipeline: `shade` is what the VU1 lighting
-produced, `texel` is what the sampler read, and `frame` is the result.  Comparing `shade`/`texel`
-against the port isolates *which* half is wrong.
+produced, `texel` is what the sampler read, and `frame` is the result.
 
 Usage:
 

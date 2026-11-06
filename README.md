@@ -1,19 +1,14 @@
-# Digimon World 4 — matching decompilation and native port
+# Digimon World 4 — matching decompilation
 
-**This is a work in progress:** the decompilation is incomplete and the native port is not yet playable
-from start to finish.
+A work-in-progress matching decompilation of the PS2 release of *Digimon World 4* (USA, `SLUS-20836`):
+readable, evidence-named source that rebuilds the retail executable byte for byte. The repository also
+holds the analysis tools, tests and reference evidence that support the recovery.
 
-This repository contains both the matching PS2 recovery and the native PC port,
-plus analysis tools, tests and reference evidence that support those two goals. The matching
-build remains at the repository root; the native build lives in `port/`.
-
-The project recovers the PS2 USA release (`SLUS-20836`).
-
-| Work | Start here | Build and validation |
-| --- | --- | --- |
-| Retail recovery (PS2) | [Progress](PROGRESS.md), [recovery documentation](docs/README.md) | `make check`, `make link`, `make typed-check` |
-| Native PC port | [Technical specification](port/docs/technical-spec.md), [boot contract](port/docs/boot-contract.md), [port tasks](port/docs/project/tasks.md) | `make -C port`, `make -C port check check-retail -j8` |
-| Shared tools and evidence | [Source layout](src/README.md), [build tools](tools/README.md), [Analysis](scripts/analysis/README.md), [analysis and capture scripts](scripts/README.md), [testing](testing/README.md), [reference](docs/reference/README.md) | Commands in each topic's documentation |
+| Start here | |
+| --- | --- |
+| Status and findings | [Progress](PROGRESS.md), [documentation](docs/README.md) |
+| Source and tools | [Source layout](src/README.md), [build tools](tools/README.md), [analysis](scripts/analysis/README.md), [analysis and capture scripts](scripts/README.md), [testing](testing/README.md), [reference](docs/reference/README.md) |
+| Build and validation | `make check`, `make link`, `make typed-check` |
 
 Run commands from the repository root. Game data and toolchains are never committed: see
 [Installation](#installation) for where they go. Progress:
@@ -50,7 +45,6 @@ compilers are fetched from their public releases by `tools/download_tools.py`.
 
 ## Quick Start
 
-This builds the decompilation; the native port has its own [setup](port/docs/README.md#setting-up-a-machine-from-a-disc-image).
 You need an x86-64 Linux machine and your own *Digimon World 4* (USA, `SLUS-20836`) disc image.
 
 **1. Install the prerequisites** for your distribution. The Sony EE GCC is a 32-bit program, so each
@@ -165,21 +159,17 @@ of the same release works as long as the executable is identical. The disc image
 afterwards. If you already have the executable, put it at `orig/SLUS-20836/SLUS_208.36` directly. The
 build never writes to it.
 
-Nothing from the game is ever committed: `orig/` keeps only its `.gitkeep` files, and the other working
-folders are gitignored, so real game data can live next to the analysis:
+Nothing from the game is ever committed: `orig/` keeps only its `.gitkeep` files, the other working
+folders are gitignored, and extracted game data sits beside the repository in `../local/`:
 
 | Directory | Holds |
 |---|---|
 | `orig/<GAMEID>/` | your disc image and the extracted executable |
 | `asm/` | the retail code as assembly, one file per function, generated from your executable (`make asm`) |
-| `roms/` | other game data (the full disc extraction the native port reads) |
-| `bios/` | a PS2 BIOS image, if you run the game |
-| `pcsx2/` | emulator data: memory cards, `sstates/`, logs |
+| `../local/extracted/` | the full disc extraction, which the analysis scripts and `make rules` read |
 | `ghidra-projects/` | the analysed Ghidra project (`ghidra-projects/dw4/`) |
 
-For the native port, extract all disc files with `python3 port/tools/extract_iso.py <iso> --out <dir>`
-(see [port documentation](port/docs/README.md#setting-up-a-machine-from-a-disc-image)); `DW4_ROMS=<dir>`
-points `make -C port` at them.
+To extract all disc files, run `python3 tools/extract_iso.py <iso> --out ../local/extracted`.
 
 #### Step 3: Build
 
@@ -266,10 +256,6 @@ the size bands, where in the binary the work has reached, and what metadata has 
 | Documentation | [`docs/README.md`](docs/README.md) — the index of everything recovered so far |
 
 ## License and reuse
-
-The native tree under `port/` includes game-derived behavioral references and vendored
-third-party sources; consult their own notices. The root CC0 dedication does not extend
-to material outside its stated scope.
 
 This project's own work — the build system, the tooling in `tools/` and `scripts/`, and the
 documentation in `docs/` — is dedicated to the public domain under [CC0 1.0](LICENSE): use it,

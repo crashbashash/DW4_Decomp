@@ -6,8 +6,7 @@ IOP), the DMA controller, the VIF/GIF (to the VU and the GS), the timers, the
 interrupt controller, the CDVD interface -- and through IOP RPC calls that those
 registers carry.  A function that forms an address in one of those ranges is
 *platform* code by construction: it cannot work on another machine without being
-replaced.  That set, and its extent, is the port's replacement surface (tracker
-T9); it also separates the statically linked Sony SDK from game logic, which the
+replaced.  That set also separates the statically linked Sony SDK from game logic, which the
 empty `.symtab` cannot do.
 
 Method: scan every instruction word for a `lui rt, hi` and look a few instructions

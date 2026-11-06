@@ -1,7 +1,7 @@
 /* recovered/frontend/selslot.c — behavioral reconstruction of the
  * Gap::Bec::beNDMWLoadIntf2SelSlot per-screen helpers.
  *
- * NOT a matching decompilation and not in src/.  A port-facing behavioral
+ * NOT a matching decompilation and not in src/.  A behavioral
  * reference, checked by scripts/verify_loadintf2.py, which runs the original
  * MIPS instructions of the master update (0x003e4750) AND, for these helpers,
  * the original MIPS of the helper itself through the restricted R5900

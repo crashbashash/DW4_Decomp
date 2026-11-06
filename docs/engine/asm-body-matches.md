@@ -73,17 +73,16 @@ assembler treats a sequence; the notes below were measured that way and stay as 
   marks them `truncated`, e.g. `FUN_00108078` 0x138 vs 0x110) stay retained assembly units until a reviewed
   row in `data/function-extents.json` corrects the extent.
 
-## The port-critical seeds
+## Functions with no starting definition
 
-[`port/docs/project/critical-dependency-map.md`](../../port/docs/project/critical-dependency-map.md) names 587 seed functions the
-port depends on directly. 131 of them (345,096 bytes) had no definition in `src/` to start from, 32 of
+131 functions (345,096 bytes) had no definition in `src/` to start from, 32 of
 them with jump tables (the largest: `beNDMWLoadIntf2::vfunc_31`, 18,616 bytes, two tables; `beNDMWSaveIntf::vfunc_31`, 16,352 bytes,
-two tables), and a runtime audit added `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes) to the map. All of these are typed C/C++
+two tables), and `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes) joins them. All of these are typed C/C++
 except one, which has no C: `beMatCtrl::vfunc_31` (**3,064 bytes**).
 
-### Recovered seeds and the rows they need
+### Recovered functions and the rows they need
 
-Every recovery is verified independently under its own build profile. Of the 37 seeds with a reflected receiver class and no jump
+Every recovery is verified independently under its own build profile. Of the 37 with a reflected receiver class and no jump
 table, **34** are typed C/C++ in `src/unmatched/`:
 
 * `beDBManager::vfunc_33`, `beMessenger_ResolveEnumValue`, `igAliasMemoryPool_Dump`, `igObject::vfunc_31`,
@@ -100,12 +99,12 @@ Nearly all need the alternate combat compiler and `-O3,p` (some with
 `-Cpp_exceptions off`), and the C++ ones an entry in `config/SLUS-20836/unit-objects.json` for an empty-destructor duplicate; the rows are in
 `config/SLUS-20836/unit-compilers.tsv`, `config/SLUS-20836/unit-flags.tsv` and `config/SLUS-20836/unit-objects.json`.
 
-The other seeds went through the same recovery, with the verifier run under each one's own profile. A unit that emits an
+The others went through the same recovery, with the verifier run under each one's own profile. A unit that emits an
 empty-destructor duplicate (`__dt__2RPFv` at 0x002e2300, `__dt__3RefFv` at 0x003d9bd0 or 0x00130140, `__dt__9LuaStrRefFv`) matches only
-with that duplicate named in its unit-objects entry; seven seeds fail the independent check without it.
+with that duplicate named in its unit-objects entry; seven fail the independent check without it.
 
-Beyond the seeds, the 34 closure functions that had no definition at all and 4 untyped asm helpers are typed C, and 130 closure
-files are typed onto the reflected structs (see the tracker).
+A further 34 functions that had no definition at all and 4 untyped asm helpers are typed C, and 130 more
+files are typed onto the reflected structs.
 
 ### Source shapes that fix near-misses
 

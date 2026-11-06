@@ -9,8 +9,8 @@ whose chain
         -> igTextureAttr._image -> igImage._pImage / _pClut
 
 ends at an **inline pool block** — a small indexed image plus a 256-entry palette, stored in the
-pack's own content pool.  That is why `texture_map.py` (the live dump) and `dw4asset texpack` (the
-texture-pack entries 618/619) both come back empty for `M_BK19a0_boxShape` / `M_BK17v1_barrelsShape`.
+pack's own content pool.  That is why `texture_map.py` (the live dump) and the texture-pack entries
+618/619 both come back empty for `M_BK19a0_boxShape` / `M_BK17v1_barrelsShape`.
 
 Palette entries are **R G B A** here (unlike the texture packs, whose clut is `A R G B`), so the
 decoder reads bytes 0..2 as colour.
@@ -20,8 +20,8 @@ decoder reads bytes 0..2 as colour.
     python3 pack_inline_tex.py --pack ... --list        # every material set that carries a texture
 
 The `.rgba` is the pack's own image order (top-down, as stored and as the GS samples it), which is
-what `--png` shows too.  The port owns the orientation: `dw4asset`'s texdir loader flips rows on
-load, exactly as its texture-pack decoder does, because the sampler indexes with `(1 - tv)`.  So write the .rgba **unflipped** here.
+what `--png` shows too.  A reader sampling with `(1 - tv)` flips rows on load, so the .rgba stays
+**unflipped** here.
 """
 import argparse
 import os
@@ -159,10 +159,7 @@ def write_png(path, rgba, w, h):
 
 
 def write_rgba(path, rgba, w, h):
-    """Write `<u32 w><u32 h><RGBA>` in the pack's own (top-down) image order.
-
-    The port flips this on load (`dw4asset.c`: `rgba_flip_rows`), matching its texture-pack decoder,
-    so the .rgba must stay unflipped here.  See the module docstring."""
+    """Write `<u32 w><u32 h><RGBA>` in the pack's own (top-down) image order."""
     open(path, "wb").write(struct.pack("<II", w, h) + rgba)
 
 
@@ -172,7 +169,7 @@ def main():
     ap.add_argument("--pack", required=True, metavar="AFS:ENTRY")
     ap.add_argument("--material", help="the igAttrSet name, e.g. g_woodencasez01")
     ap.add_argument("--png")
-    ap.add_argument("--rgba", help="write <u32 w><u32 h><RGBA> for `dw4asset render --texdir`")
+    ap.add_argument("--rgba", help="write <u32 w><u32 h><RGBA>")
     ap.add_argument("--list", action="store_true", help="every material set with a texture")
     ap.add_argument("--decomp", default=DECOMP)
     a = ap.parse_args()

@@ -2,8 +2,7 @@
 
 Objective: readable, evidence-backed and byte-verified recovery
 of the Terminal Area, Central Areas, Shop Area and Commander Room, including
-their original scripts and native game-code dependencies. Native port operation
-is a separate milestone; a bounded working lobby does not close this recovery.
+their original scripts and native game-code dependencies.
 
 ## Scope and accounting
 
@@ -91,19 +90,18 @@ retail route observations in the game reference remain separate evidence.
 | Scene and script ownership | Authored pack/manager roster, named-chunk resolution, startup/update/unload and both Central variants | Four core packs inventoried; full scene/receiver closure open |
 | Scripts and progression | Reviewed original-bytecode control flow for conversations, flags, quests, difficulty and return visits | Readable corpus available; exhaustive hub branch validation open |
 | Shared Lua/SD/DM engine | Complete producers/receivers, object lifetime and callback paths, matching C for game bodies | Substantial behavioral recovery; direct and indirect frontier still open |
-| Actors, collision, camera and materials | Complete relevant controller bodies and retail state comparisons | Terminal port supports bounded movement, jumps, arrival, gates/heal and box camera; complete recovery open |
+| Actors, collision, camera and materials | Complete relevant controller bodies and retail state comparisons | Complete recovery open |
 | Portals and stage lifecycle | Every hub transition, travel selection, return point, cancellation, preparation failure and unload | General portal services/transitions open |
 | Shop services | WPU/APU/CHIP/DISK/JUNK controller trees, stock, price, eligibility, buy/sell, results, preview, close and errors | Scripts and stock-selection preparation recovered; transactions/controllers remain open |
 | Central services | BANK/CNOS/LABO/XDATA, card/album, NPC interaction and associated record transactions | Partial shared records/menu foundations; dedicated service recovery open |
-| Saving | Save Keeper control flow, persistent payload/results, cancellation/error and reload evidence | Save format, save library and the hosted `stagIS12` save scene implemented and headless-tested; `stagIS11` (CARD) / `stagIS13` (LOADCTRL2) interface scenes and a retail post-save trace open |
+| Saving | Save Keeper control flow, persistent payload/results, cancellation/error and reload evidence | Save format recovered; `stagIS12` save scene, `stagIS11` (CARD) / `stagIS13` (LOADCTRL2) interface scenes and a retail post-save trace open |
 | Matching verification | Zero mismatches, recovered-access baseline retained, byte-identical retail section | Required at each recovery checkpoint |
 | Behavioral coverage | Controlled fresh/return/progression/difficulty and one-to-four-player hub cases | Exhaustive hub matrix open; multiplayer stock and ownership must be included |
 
 Recovery closure requires all reachable relevant game-code bodies to be readable
-and matched, all unresolved dispatch sites classified or resolved, and the
-documented platform substitutions explicitly bounded. A passing narrow oracle,
-source definition, decompiler output or native playable demonstration alone does
-not establish completion. Preserve original behavior; do not introduce a
+and matched and all unresolved dispatch sites classified or resolved. A passing
+narrow oracle, source definition or decompiler output alone does not establish
+completion. Preserve original behavior; do not introduce a
 replacement hub or modernize the original scripts to satisfy this goal.
 
 ## Current work queue
@@ -127,7 +125,7 @@ replacement hub or modernize the original scripts to satisfy this goal.
    [command receiver](../engine/subwindow-command.md) has272 retail cases, including status/preview snapshots and full all-mode
    lifecycle composition. All11 manager bodies /17,616 bytes are behaviorally
    recovered and all 11 match. Concrete
-   service outcomes remain open; no new native menu functionality is implied.
+   service outcomes remain open.
    CARD has a literal front-end caller in entry808; its name does not by itself
    identify Booster Pack/album or Save Keeper behavior. Track all ten
    non-STATUS modes, including CARD and saved/card-return paths, rather than
@@ -161,11 +159,7 @@ replacement hub or modernize the original scripts to satisfy this goal.
    `src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp`), plus the 76 exact metadata bytes. Their SELECTCTRL
    input/receiver and chip dependencies have behavioral recovery (sections below); the
    recalculation contract remains open. Review the corresponding script branches.
-4. Close every hub transition, progression state and multiplayer-dependent branch;
-   retain a separate native integration queue in the port's owning docs.
-
-This work adds recovery and evidence; it does not expand native gameplay
-acceptance.
+4. Close every hub transition, progression state and multiplayer-dependent branch.
 
 ### SELECTCTRL manager, handler and pad selection
 
@@ -200,8 +194,7 @@ Two complete dependency bodies match, **460 exact bytes**: generic object teardo
 268 and base window-controller cleanup 192. Each retains a single explicit
 four-byte register copy within readable C/C++ logic; window cleanup also retains
 its original NOP. Exact source and the byte-identical relink separately verify
-the original bodies. Existing portable adapter boundaries and native acceptance
-are unaffected.
+the original bodies. Existing portable adapter boundaries are unaffected.
 
 ### Owner/manager protocol composition
 
@@ -226,10 +219,9 @@ assembly-free or original-declaration claim. The reviewed extents include the
 helpers' full return spans (8 bytes), without changing the retail image.
 
 This closes utility dependencies, not chip pricing/recalculation/debit outcomes,
-native UI or native rendering acceptance, and it does not close the full lobby
-goal. Chip transaction matching under its unit profile (the update is
+and it does not close the full lobby goal. Chip transaction matching under its unit profile (the update is
 `foreign-profile`), actual item/status/recalculation/receiver/script
-execution and other lobby services remain open; native acceptance is separate.
+execution and other lobby services remain open.
 
 ### Chip transaction controller
 
@@ -239,7 +231,7 @@ non-padding words execute; 47 padding/static-dead words are checked. Actual page
 count and context binding compose in 18 cases. Inventory rebuilding, equipped
 preview restoration, notice/confirmation, current-record increment and fresh
 XDATA debit are recovered. Item/status/recalculation/message/script and selector
-execution remain controlled dependencies; full hub/native acceptance remains open.
+execution remain controlled dependencies; full hub acceptance remains open.
 The update is `foreign-profile` in `data/check-categories.tsv`
 (`src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`): its code bytes
 are identical to retail only under a provisional compiler override, not under its unit profile.

@@ -113,8 +113,7 @@ def main():
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--class-regex", default=None,
                     help="only retype receivers whose class matches this regex (e.g. 'be' for the "
-                         "game classes; the engine `ig*` set is the port plan's out-of-scope "
-                         "middleware)")
+                         "game classes; the engine `ig*` set is middleware)")
     args = ap.parse_args()
 
     header = load_header(args.header)

@@ -128,8 +128,7 @@ def main():
       "functions in source order) can be attributed to a library. The regions come from "
       "`config/SLUS-20836/regions.tsv`, which `tools/check_regions.py` tests against the image.\n")
     w("**Why it matters:** of the 2,097 raw casts applied to a function's receiver, "
-      "**1,676 (85%) are in third-party middleware**, not game code. Naming vendor internals buys "
-      "nothing for either goal -- a port replaces the middleware wholesale -- so P1.3's queue is the "
+      "**1,676 (85%) are in third-party middleware**, not game code. The typing queue is the "
       "game-code remainder.\n")
     w("## Regions\n")
     w("| range | size | funcs | unnamed | region |")

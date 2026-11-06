@@ -1,6 +1,6 @@
 # The front-end boot: engine → logos → opening → title → menu
 
-How the game gets from power-on to the title menu, and what a port must stand in. The *engine* boot
+How the game gets from power-on to the title menu. The *engine* boot
 below it (CRT → heap → managers → frame loop) is [`engine-boot.md`](engine-boot.md); the script VM
 and its native API are [`script-engine-lua.md`](script-engine-lua.md); the decompiled scripts are in
 [`lua-tree-layout.md`](lua-tree-layout.md).
@@ -131,18 +131,15 @@ first — the game's order is backdrop → `j_startback` layer → UI. That pack
 lights, colours or textures, so its exact VU1 tone (and the mirrored "DIGIMON WORLD" reflection) is
 engine runtime state that the pack does not encode and is not recovered.
 
-Verified against the game's own menu framebuffer: the logo quad's red frame lands at **x 41…416 in
-both**, and the copyright quad at x 165…475 / y 367…432. `DW4_Port/tools/verify_frontend.py` pins the
-resolved item count, the three pack texture names (`logo.png`, `mojips.png`, `cursor.png`), the
-`logo.png` binding, the logo rectangle (to ±0.5 px at any framebuffer size), the recovered `OPEN`
-pop-in (a degenerate logo quad at `t=0` settling to the rest rectangle) and the `stagML11` backdrop
-composed under the layer.
+Verified against the game's own menu framebuffer: the logo quad's red frame lands at **x 41…416**,
+and the copyright quad at x 165…475 / y 367…432. The recovered `OPEN` is a pop-in: a degenerate logo
+quad at `t=0` settling to the rest rectangle.
 
 **How the controller addresses them.** `beNDMWTitle2`'s own message/target table in
 `.data` runs `… TEXTORDER`, `j_startlogo`, `SQ_OPEN`, `j_startmenu01`, `MODELCTRL`, `SQ_LINESL00`,
 `ISSEQNAME`, `i_fadewn01`, `GENERATE`, `SQ_BLOUT30`, `ISRUN` — so the graphs are named targets of
 `MODELCTRL … GENERATE <seq>` exactly like `j_startback`, which is why the recovered layout *is* the
-title's rendering path (the port plays the same `SQ_*` mechanism).
+title's rendering path.
 
 ## The title's two states
 
@@ -156,32 +153,24 @@ at v 0.1…0.45 — and the game shows the two menu zones **mutually exclusively
   (highlighted) / "Option" and the `select` highlight bar. The "Press START button" line is gone.
 
 The game advances on the
-pad's **START** (Cross skips the opening FMV instead). The port models this as
-`DW4_FRONTUI_PRESS_START` → `DW4_FRONTUI_MENU` (`src/frontui.c`), drawing `j_startmenu01` only in the
-first state and `j_startmenu02` only in the second, with the rows' own recovered OPEN (`JOINTSET
-0..15`) rebased onto the START tick.
+pad's **START** (Cross skips the opening FMV instead).
 
 The opening effect runs first, on its own — see *The opening: traces, a white flash, then the UI* below.
 
-## Title input, skipping and the Option screen (port behaviour)
+## Title input, skipping and the Option screen
 
 The controller is recovered as [executable behavioral C](title-menu-controller.md). Its press-start gate accepts START alone. Option edits change displayed working values immediately and commit camera/light
 after closing; Circle accepts those changes. The comparison covers state and engine-call order,
 not framebuffer equivalence.
 
-- **Buttons are edge-triggered.** One press is one action. The key that skips the movie is still down when
-  the title loop starts, and a level-triggered read takes it for START and then for Cross, straight into
-  Game Start (loading the `stagML02` level while the traces are still playing).
 - **The opening cannot be skipped** (retail behaviour, reported by the project owner). The recovered
   title controller agrees: `beNDMWTitle2Ctrl` reads the START bit only in `_st0=1/_st1=2/_st2=1`, after
   `opening_done` has returned for the logo's and `j_startmenu01`'s `SQ_OPEN`, so no button is read earlier
-  (`port/recovered/frontend/title-menu.c`). The stage script agrees
+  (`recovered/frontend/title-menu.c`). The stage script agrees
   (`lua/00-title-menus/04-title-screen_e806/004-layer-setup-2.lua`): it generates `j_startback`
   `SQ_OPEN`, waits for that sequence to finish, plays the white fade, and only then sends `TITLE2 RUN` (the
-  controller's `_st0=0` gate) and `STAGECTL PADINPUT ENABLE 30`. The port's `eng_ns < dw4_frontlayer_open_ns()`
-  check is the equivalent of that wait. Not yet confirmed by a live retail run. Presses during the blue-trace opening are ignored until `SQ_OPEN` ends and the
-  "Press START button" screen is up. Headless scripted runs (`--headless`) still skip on a press so that
-  their short input scripts stay valid; windowed play never does. (The opening FMV before it remains
+  controller's `_st0=0` gate) and `STAGECTL PADINPUT ENABLE 30`. Not yet confirmed by a live retail run. Presses during the blue-trace opening are ignored until `SQ_OPEN` ends and the
+  "Press START button" screen is up. (The opening FMV before it remains
   skippable with Start or Cross.)
 - **START opens the Game Start / Option rows** once the opening is over; before that
   START does nothing.
@@ -190,9 +179,8 @@ not framebuffer equivalence.
   three-slot pass of their sequences, with the front-end font's glyph quads over them. Rows: **Dungeon camera**
   (Near / Far), **Light** (Hard / Soft; power-on defaults Near and **Hard**) and **Return to Menu**. Up/Down
   moves the cursor (it slides over 10 frames), Left/Right flips the highlighted value and applies at once,
-  Circle (or Cross on Return) closes, Start does nothing, and the menu comes back on Game Start. The values
-  live in `dw4_options` (`include/dw4/options.h`), unconsumed and unpersisted. Not reproduced: the white flash and
-  logo fade around open and close.
+  Circle (or Cross on Return) closes, Start does nothing, and the menu comes back on Game Start. A white flash and a
+  logo fade run around open and close.
 
 ## Game Start: the slot screen and character creation (static map and live captures)
 
@@ -246,14 +234,8 @@ attribute roots include `j_slotbase`, `j_slotcursor`, `j_slotmark01/02`, `j_chrs
 Veemon `p_vmon` 160 / 70, Guilmon `p_girumon` 150 / 80, all Lv 1 (HP + MP = 230 for each). The
 `_id` word at +44 is a hash (`0x5AAA67E4`, `0xE5AB8488`, `0xECBB18CC`, `0x5BEEB640` in that order).
 
-**Port behaviour.** Game Start opens the slot screen from pack 806
-(`port/src/frontchr.c`): the four panels, the two windows and the text, offline-checked against
-a retail capture of the settled slot screen to within 5 per channel on the panel bodies
-(`tools/verify_frontend.py` run 2c). Up/Down moves the highlight, Cross on Create goes on to the
-existing character-select hand-off, Cross on Call only logs. The dome behind the panels, the
-panel-assembly intro, the species list, the name entry, the created card and the memory-card
-screens are not drawn yet. The panels' rest key is the first 1.167 s of their sequence; later keys
-(`(100,10)` at 2.167 s, `(90,-100)` at 2.5 s) are the exit pass the port does not play.
+The panels' rest key is the first 1.167 s of their sequence; later keys
+(`(100,10)` at 2.167 s, `(90,-100)` at 2.5 s) are the exit pass.
 
 Not yet recovered: the state machine that picks the windows, and how the panel palettes are chosen.
 
@@ -272,14 +254,13 @@ finished. Watched live, frame by frame (a no-input boot):
 | at the same tick | the **title UI** (logo + "Press START button" + copyright) over the tunnel |
 
 The capture cadence is the emulator's screenshot hotkey (~5.2 fps), so those times are the order and
-a rough length, not frame-exact. The port times its title UI from the layer's `SQ_OPEN`
-(`beAction2JOINTSET 0.0 → 209.0`, 60 fps, then `SQ_WAIT`; 3.48 s) — the same stretch — and the UI
+a rough length, not frame-exact. The layer's `SQ_OPEN`
+(`beAction2JOINTSET 0.0 → 209.0`, 60 fps, then `SQ_WAIT`; 3.48 s) covers the same stretch, and the UI
 nodes stay degenerate (sequence scale 0, not drawn) until it elapses.
 
 **The traces are `j_startback` geometry** (see the title layer
 below): the ring and trace strips of that graph, not a separate graph or loader screen. Its animated parent
-groups carry **no scale keys and no keyframe before t≈2.0 s** (checked with the port's
-`DW4_FL_DEBUG=1` dump), so the layer is static for the opening's first two seconds. The flash is
+groups carry **no scale keys and no keyframe before t≈2.0 s**, so the layer is static for the opening's first two seconds. The flash is
 `i_fadewn01`'s `SQ_WTIN60` —
 *not* the layer's one-frame node 895 `group9`, which is a different thing in a different model.
 
@@ -297,13 +278,12 @@ startmenu02`).
 
 The controller block at `0x3f4d80` does generate `j_startlogo` with `SQ_OPEN`, wait on `0x3e4280`,
 then issue `MODELCTRL j_startmenu01 ISRUN` — but which state enters that block, and whether it is
-gated on the layer's action, is **not yet recovered**; the port therefore times the gate from the
-pack sequence rather than from a recovered controller state.
+gated on the layer's action, is **not yet recovered**.
 
-## What the port needs
+## What the front end depends on
 
-1. **A stage/script sequencer** — load a front-end entry's chunk set, run the chunks in order, and
-   drive that entry's scene stage pack plus its fade. The front-end entries are ordinary stage
+1. **A stage/script sequencer** — a front-end entry's chunk set is loaded, the chunks run in order,
+   and they drive that entry's scene stage pack plus its fade. The front-end entries are ordinary stage
    entries in the same loader the world stages use; there is no separate menu code path.
 2. **The `be:` API subset the front-end uses** — `sd` / `DMsetSD` / `DMchkSD` / `DMrun`, `FLGset` /
    `FLGisOn` / `COUNTERset`, `SYSgetArea` / `SYSgetDifficulty` / `SYSctlFlagFolder`,
@@ -312,10 +292,6 @@ pack sequence rather than from a recovered controller state.
    and the title menu rows.
 4. **The input gate** — the title's "Press START" state; in the recorded test the *pad*'s START does not
    reach PCSX2, so it has to be rebound.
-
-A first slice that gets the port itself booting from a blank slate can hard-code this four-stage
-front-end (menu-database → logo → opening → title/menu) and defer the Lua VM until the rest of the
-game needs it.
 
 ## The title layer: `j_startback`
 
@@ -398,7 +374,7 @@ recoverable from data:
 | `igAlphaStateAttr` / `igBlendStateAttr` | `_enabled=1` | both on |
 | `igLightingStateAttr` | `_enabled=0` | lighting **off**; entry 620 has no `igLightAttr` for the layer |
 | `igMaterialAttr` | `_diffuse=[1,1,1,1] _ambient=[1,1,1,1]` | white, unlit |
-| `igColorAttr` ×265 | `_color=[0.9, 0.9, 0.9, 0.95]` | on the **265 font attribute sets** (`font00`, `font01`, … `font000`…): the UI text tint. *Not* the layer — verified with the port's own loader, 265 of 301 `igAttrSet`s resolve one and all are `font*`; none of the layer's 16 meshes does |
+| `igColorAttr` ×265 | `_color=[0.9, 0.9, 0.9, 0.95]` | on the **265 font attribute sets** (`font00`, `font01`, … `font000`…): the UI text tint. *Not* the layer — 265 of 301 `igAttrSet`s resolve one and all are `font*`; none of the layer's 16 meshes does |
 | `igTextureAttr` ×12 | filter/wrap = 1 | `_image` → `sback00.png`, `logo.png`, `base*.png`, `moji*.png`, `cursor.png` |
 
 `igShadeModelAttr _mode=1`, `igCullFaceAttr _enabled=0`, `igDepthStateAttr`, `igFogStateAttr` (one
@@ -411,11 +387,10 @@ own or the nearest ancestor `igAttrSet`. In `j_startback`, nodes 867-891 (`pCube
 record A (additive). `pCylinderShape3`, the tunnel, has no blend attribute and draws ordinary; that
 default comes from the capture, not engine code. This is also the draw order.
 
-Consequence for the port: the layer's *shade* is not pack data, but the
-pack does bind the blend/alpha/test state and **a texture per node** (`dw4_scene_node_texture`):
+The layer's *shade* is not pack data, but the
+pack does bind the blend/alpha/test state and **a texture per node**:
 `sback00.png` for the layer's 16 meshes, `logo.png` for `polySurfaceShape2`, `mojips.png` for the
-panels, `cursor.png` for the ticks. The port's `src/frontlayer.c` shades the layer per vertex with
-`fl_lit_color` (see *Open questions*); `DW4_FL_FLATCOLOR=1` gives the flat `72,72,77,127` instead.
+panels, `cursor.png` for the ticks.
 
 ### GS draw state
 
@@ -446,7 +421,7 @@ over 640x448, writing colour and Z=0. A 256-pixel CT32 target at FBP 419 is also
   exactly; truncation fits and rounding does not. `igFogStateAttr _enabled=1` is on node 862 only and 0
   on BG02, PromotedAttr and WN01, which gives the stream's FGE split under nearest-ancestor lookup. The
   near/far values are not in this pack and were fitted from one scene.
-- **Registration.** Stream y sits 0.873 px below the port's projection (empirical, dx -0.03). Later
+- **Registration.** Stream y sits 0.873 px below the pure projection's centre at 448 lines (empirical, dx -0.03). Later
   tunnel phases and UI are unchecked against these rules.
 - **Title UI.** The logo, Press START text, the five-quad translucent band and the copyright quad share
   one GS state: ALPHA 0x44, TEST GREATER AREF 12, TEX1 linear, REPEAT wrap, vertex colour
@@ -468,19 +443,6 @@ tunnel is submitted; the covering batch is the ordinary meshes (`pCubeShape4` 19
 181/181, `pCubeShape8` 4/4); the ALPHA 0x48 runs are `polySurfaceShape101`, `pCubeShape3` and
 `pCylinderShape6`. The order matches the mesh order.
 
-### Render workbench
-
-A title frame in about a second, no window:
-
-    python3 - <<'EOF'                      # a sparse roms dir straight from the ISO
-    ...
-    EOF
-    ./build/dw4 --roms <roms> --boot --headless --frames 600 --out-dir out/
-
-`DW4_TITLE_LAYER=0` / `DW4_TITLE_BACKDROP=0` isolate each composite; `DW4_FL_TEXDUMP=1` writes the
-decoded `sback00`; `DW4_FL_DEBUG=1` lists the 16 drawn nodes and their meshes; `DW4_FL_COLOR=r,g,b,a`
-overrides the layer shade.
-
 ## Open questions
 
 - **What starts the very first entry** (the power-on `menu-database` stage) is not pinned yet; the
@@ -492,7 +454,7 @@ overrides the layer shade.
   0x80 domain. A fit over 4,494 stream vertices gives ambient (0.5, 0.5, 0.55), L = (0.297, 0.414,
   0.861) and diffuse about 1.5 x (1, 1, 0.875), RMS 17 levels. It is not recovered data: entry 620 has
   no `igLightAttr` for the layer, the diffuse rests on about 100 vertices and the light's space is
-  unsettled. The port's `fl_lit_color` uses this fit.
+  unsettled.
 
 ## What didn't work
 
@@ -508,7 +470,7 @@ What does not hide the tunnel during the trace phase:
   `_overrideAttrList` is empty.
 - **Undriven channels as scale 0.** Blackens the whole layer.
 - **Off-screen placement.** Its X/Y bounds cover the screen.
-- **Pose.** The stream's silhouette agrees with the port's at IoU 0.90.
+- **Pose.** The stream's silhouette agrees with a render of the pack's pose at IoU 0.90.
 
 Sampling the layer's texture u-mirrored only appeared to work, because of rendering at t=0 with clamped
 lookups.

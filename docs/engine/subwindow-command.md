@@ -14,8 +14,7 @@ bytes. All 11 bodies /17,616 bytes match (`src/game/beNDMWStatus.c`,
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_31.cpp`,
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_32.cpp`,
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_34.cpp` and
-`src/unmatched/FUN_003d8740.cpp`). This checkpoint
-adds no native menu functionality.
+`src/unmatched/FUN_003d8740.cpp`).
 
 ## Dispatch and command contract
 
@@ -139,7 +138,7 @@ Generate → actual lifecycle/preparation → UPDATE → preview → restoration
 results → removal → actual lifecycle finalization for every service mode.
 Formatting, enum lookup, messages, records, list resizing and other concrete
 controllers remain controlled services. Expected execution does not copy retail
-output into the recovered result. Live/native UI, transactions and persistence
+output into the recovered result. Live UI, transactions and persistence
 are not accepted by these tests.
 
 The generated extent changes the previous dispatcher-grown9,824-byte split to

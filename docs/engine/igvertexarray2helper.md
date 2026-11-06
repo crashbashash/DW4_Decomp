@@ -112,14 +112,13 @@ alternate compiler.
   struct for the `{count, data}` list layout and a C++ class with the target `virtual` at
   slot 22, as in `vfunc_42`.
 
-## Port relevance
+## Vertex stream addressing
 
 The helper and `FUN_0015f580` define how a model's vertex streams are addressed by
 `(componentType, componentIndex)` — i.e. how the engine turns the `igVertexArray2`
-object graph into the typed position/normal/UV/colour buffers the port reads
-(`docs/engine/model-format.md`). The element stride/component
-count returned by `FUN_00162b50`/`FUN_00162ca0` is what the port's stream walker must
-reproduce.
+object graph into typed position/normal/UV/colour buffers
+(`docs/engine/model-format.md`). `FUN_00162b50`/`FUN_00162ca0` return the element
+stride/component count.
 
 ## Open questions
 

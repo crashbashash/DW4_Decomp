@@ -139,7 +139,6 @@ def extract_executable(cfg, iso_path, path):
     """Copy SYSTEM.CNF and the boot executable out of a disc image into the executable's folder.
     Another dump of the same release can differ elsewhere on the disc, so the identity that
     matters is the executable's own SHA-1 in config.yml."""
-    sys.path.insert(0, os.path.join(ROOT, "port/tools"))
     from extract_iso import Iso
     iso = Iso(iso_path)
     try:

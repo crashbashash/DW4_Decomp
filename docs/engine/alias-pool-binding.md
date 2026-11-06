@@ -69,7 +69,7 @@ make link
 ```
 
 The [behavioral adapter](../../recovered/engine/alias-pool-binding.c) is a
-guest-reference oracle, separate from matching C and from the native port.
+guest-reference oracle, separate from matching C.
 The 178 original-instruction RAM/ordered-call cases exercise all116 instructions
 in the ten bodies. They cover null/replacement/same aliases, low23-bit reference
 boundaries, reference-word overflow, zero/nonzero/truncated query results, callback-time publication
@@ -82,5 +82,4 @@ The [alias-pool runtime](alias-pool-runtime.md) composes init1500/constructor154
 factory, lock/event services and backend2d1210, and classifies the vtable
 targets listed in the [alias pool backend trace](allocator-builder.md#alias-pool-backend-trace).
 It has286 comparisons for54 bodies and carries their matching status.
-The [hub recovery objective](../systems/hub-recovery.md) remains open. No production
-native-port allocator or gameplay integration is claimed.
+The [hub recovery objective](../systems/hub-recovery.md) remains open.

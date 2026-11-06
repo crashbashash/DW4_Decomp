@@ -7,15 +7,13 @@ The nine bodies span **2,532 bytes**. The readable
 passes **1,072 original-instruction RAM/return/ordered-call cases** for all eleven
 service modes and four owning-player arguments. This is behavioral recovery;
 only the two pre-existing metadata getters /24 bytes are matching source.
-No new matched C bytes or native menu functionality are claimed here.
+No new matched C bytes are claimed here.
 
 The whole manager region has eleven bodies /17,616 code bytes. Its9,820-byte
 [command receiver](subwindow-command.md) and the5,264-byte
 [preparation body](subwindow-preparation.md) now have complete behavioral recovery
 with272 and843 retail cases respectively, including composition with this lifecycle.
 Menu-specific controllers, transactions and Lua callbacks also remain open.
-The [native STATUS contract](../../port/docs/status-menu.md) still supports its
-documented mode-zero scope and does not establish working NPC shop/card/lab menus.
 
 ## Correct function span
 
@@ -142,14 +140,13 @@ reference boundaries, private temporary replacement, callback-mutated owner/mode
 messenger/state/participants, CARD reset and per-mode persistent open/tick/close.
 Snapshots compare counts/publication at callback time, not just final RAM.
 Incoming private-frame storage is translated from input state for persistent
-ticks; no retail output is copied into the expected native result.
+ticks; no retail output is copied into the expected result.
 
 Preparation, real constructors/root initialization/tree update, messenger,
 record lookup/mutation, destruction and Lua execution are controlled leaves.
 This proves the lifecycle body under those contracts, not actual shop stock,
-prices, purchases, appraisal, bank/lab/X Data/card/save outcomes or UI parity.
-Live gameplay, native factories and multiplayer menu ownership are not accepted
-by these tests. No emulator or pristine disc is modified.
+prices, purchases, appraisal, bank/lab/X Data/card/save outcomes or UI behaviour.
+Live gameplay and multiplayer menu ownership are not accepted by these tests. No emulator or pristine disc is modified.
 
 Continue exact matching and the concrete
 service-controller/result dependencies for the [full hub goal](../systems/hub-recovery.md).

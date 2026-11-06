@@ -76,9 +76,8 @@ validation. Retain raw save diffs separately from script-derived labels.
 
 Generated [flag cross-references](flags/flag-xref.tsv) contain all 11,866
 operations and their original entry/chunk/line evidence. Numeric source
-regeneration is checked by `scripts/verify_lua_decode.py`. The native runtime
-executes original bytecode; these readable scripts remain analysis output with
-best-effort control-flow reconstruction. Progression outcomes still require
+regeneration is checked by `scripts/verify_lua_decode.py`. These readable scripts
+remain analysis output with best-effort control-flow reconstruction. Progression outcomes still require
 matched retail state/input comparisons.
 
 ## Open questions

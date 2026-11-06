@@ -504,7 +504,7 @@ and the live world has 72 live `beGeneraterData` instances, so it is `stag0102`'
 packs come in triples of identical size (183/184/185, 622/623/624, …) — the row-tier variants of a stage's
 generator pack, not language copies; see [`enemy-spawn-system.md`](../systems/enemy-spawn-system.md).
 
-### Looking back at the load-level replay (tracker T14) — closed
+### Looking back at the load-level replay — closed
 
 The replay is not needed. The ids resolve from the pack's own remap table (§*References are pack-local
 ids*), so a pack's generator rows, drop rows, spawn positions/rotations **and now every object-to-object
@@ -563,8 +563,8 @@ What it makes readable with no emulator and no running game: the per-stage **gen
 rows** (`_pos`, `_geneEnemyId`, `_startModeStr`/`_fillModeStr`, the frame timer
 `_startData`, `_callLua` per GENE-xx/GBOX-xx entry), the **drop rows**
 (`beGeneraterItemDataOne._id`/`_rank`/`_rate`, one per category), the **spawn positions and
-rotations** and every other list's contents (the content pool, `--lists`) — D1 and D2 in
-the tracker. The decoded field set and the `"direct"`/`"wipeout"` values match the live
+rotations** and every other list's contents (the content pool, `--lists`).
+The decoded field set and the `"direct"`/`"wipeout"` values match the live
 `beGeneraterData` reads exactly, and the pool was verified cell-for-cell
 against the running game.
 
@@ -596,7 +596,7 @@ in 621; `E_mummy01.png` in 642). **The boundary is pack membership, not a name t
 name `e_mummy` is present in *both* packs, but only as a row of the global 986-entry
 `beAsTargetModelData` table; 621 has no `beModelCtrlInfo e_mummy` and no mummy asset —
 exactly the "row latches, geometry lookup finds nothing" behaviour. Making a
-model spawn in a stage it was not authored for therefore means porting its records into
+model spawn in a stage it was not authored for therefore means copying its records into
 that pack — a content edit (copy the subgraph, or overwrite a resident model's assets), not
 a spawn-row change.
 

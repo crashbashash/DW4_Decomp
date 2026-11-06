@@ -4,7 +4,7 @@
  *   0x003f1a80  vfunc_31  the per-frame update           (2512 bytes)
  *   0x003f2490  vfunc_34  the RUN/GAMESTART message handler (1820 bytes)
  *
- * NOT a matching decompilation and not in src/. A port-facing behavioral
+ * NOT a matching decompilation and not in src/. A behavioral
  * reference, checked by scripts/verify_loadctrl.py, which runs the original MIPS
  * instructions of both functions through a restricted R5900 interpreter and
  * compares the ordered engine calls and the object writes.  Every engine call is

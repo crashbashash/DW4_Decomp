@@ -31,9 +31,7 @@ RGB-for-RGB.
 
 That matters because PS2-era samplers commonly index their texture array with `1 - v` (the GS's `v`
 increasing downward against a bottom-up array), and a renderer that does so must **flip the rows when
-it decodes the image**. The port does exactly this: `src/texpack.c` reads the texture-pack grids as
-`grid + (h - 1 - y) * w`, and `src/dw4asset.c`'s inline-texture loader mirrors that with
-`rgba_flip_rows`. Writing the decoded image out **pre-flipped** instead sampled the mirrored texel,
+it decodes the image**. Writing the decoded image out **pre-flipped** instead sampled the mirrored texel,
 which is what made the barrel's metal trim read pale (see
 [`vertex-shading.md`](vertex-shading.md) for the shading side): the trim sampled a bright part of the
 atlas instead of the dark hoop band.
@@ -46,5 +44,5 @@ same RGB written with alpha `255` is a decode difference, not a colour one — t
 ## Where the decoded data is consumed
 
 `scripts/pack_inline_tex.py` decodes a material set by name to a PNG (the natural top-down image)
-or to a `<u32 w><u32 h><RGBA>` blob for a renderer's `--texdir`. It writes the **pack's own
-top-down order**; the renderer owns the flip, so the blob stays a faithful dump of the pack.
+or to a `<u32 w><u32 h><RGBA>` blob. It writes the **pack's own top-down order**, so the blob
+stays a faithful dump of the pack.

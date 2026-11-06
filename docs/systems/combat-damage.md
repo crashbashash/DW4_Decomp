@@ -50,7 +50,7 @@ tables, unresolved relocations and preserved layout gaps.
 These drafts remain private, outside `src/`; removing
 or initializing incoming registers requires the path checks below. The per-case
 addresses below are interior labels, not independently
-bankable functions. No native port implementation is part of this recovery.
+bankable functions.
 
 The full callback also needs its unused middle ABI argument preserved: receiver
 is `a0`, command object is `a2`, and omitting the `a1` slot shifts the command to
@@ -182,7 +182,7 @@ The handler returns damage, element index (−1 for none) and the high-roll flag
 ## What `S` is
 
 `WEAPONSKILLNO` is a slot number 0–8 copied from the equipped weapon's `SKILL` attribute when stats are
-recalculated (`port/src/playerstats.c`). `SKILL` is the player's 9-slot integer array
+recalculated. `SKILL` is the player's 9-slot integer array
 ([`techniques.md`](techniques.md)); Bash is slot 3. `S` is the player's value in that slot, not the
 weapon type itself.
 

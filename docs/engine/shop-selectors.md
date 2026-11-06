@@ -17,7 +17,6 @@ files under `src/unmatched/`, and the shared update4233f0 /772 bytes is `foreign
 [Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp](../../src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp) (code bytes
 identical; the build-profile check is open). Receiver/input, pool/list,
 lookup/recalculation, formatting, text/model and Lua services remain boundaries.
-No native shop UI or input parity is accepted here.
 
 The76-byte lazy shop metadata
 accessor is exact source as well, using the repository's explicit-padding convention.

@@ -12,8 +12,8 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "port/tools"))
-from verify_scriptservices_retail import World
+sys.path.insert(0, str(ROOT/"scripts"))
+from script_world import World
 
 SELF, NOW, OLD, DATA = 0x1800000, 0x1810000, 0x1820000, 0x1830000
 READ = C.CFUNCTYPE(C.c_uint32, C.c_void_p, C.c_uint32, C.c_uint)

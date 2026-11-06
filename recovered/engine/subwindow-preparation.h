@@ -5,6 +5,6 @@
  * frame, including column strings and scoped reference cells. Constructors,
  * item initialization, databases, lists, allocator and message services remain
  * callbacks. The return value is unused (the retail routine returns void).
- * This is not a host shop or a matching-progress translation unit. */
+ * This is not a matching-progress translation unit. */
 uint64_t dw4_subwindow_preparation(const Dw4MessengerResultsApi *,const uint64_t args[8],uint32_t scratch);
 #endif

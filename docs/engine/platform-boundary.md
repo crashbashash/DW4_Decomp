@@ -1,10 +1,9 @@
 # The platform boundary
 
 Which functions talk to the EE's hardware, which are the statically linked Sony SDK, and how
-much of the game depends on either. This is the map a port needs: every function on it must be
-*replaced* rather than recompiled, and nothing else in the image has to be.
+much of the game depends on either. This page maps that code.
 
-It is also the only handle we have on the SDK. The image ships an **empty `.symtab`** (0
+The map is also the only handle we have on the SDK. The image ships an **empty `.symtab`** (0
 entries), so SDK code cannot be identified by name — it has to be identified by what it does.
 
 ## Method
@@ -79,7 +78,7 @@ library's unnamed body, immediately followed by the platform timer cluster at `0
 name that is *not* platform code is `igStrCmp`, at `0x12a4a4`.
 
 So the region `[0x100008, 0x1137a8)` — 75,268 bytes, 410 functions — is the EE's own runtime, and
-the call surface into it is the port's shim list:
+this is the call surface into it:
 
 | region | entry points called from outside | sites | calling functions |
 | --- | --- | --- | --- |
@@ -89,8 +88,8 @@ the call surface into it is the port's shim list:
 **41 of those 127 entry points are kernel syscall stubs** — `config/SLUS-20836/syscalls.txt` already lists them,
 because they are the `li $v1, N; syscall` wrappers — and 39 carry a recovered name, most of them the
 OS API (`CreateThread`, `WaitSema`, `SignalSema`, `CreateSema`, `AddIntcHandler`, `AddDmacHandler`,
-`ChangeThreadPriority`, `EnableCache`, `ExitDeleteThread`, …). That named subset is the part of the
-surface a port must *implement*; the rest is the C runtime below it.
+`ChangeThreadPriority`, `EnableCache`, `ExitDeleteThread`, …). That named subset is the OS-facing part of the
+surface; the rest is the C runtime below it.
 
 **The region's extent is not a guess.** `tools/syscalls.py` finds the kernel stubs at
 `0x100008..0x114698` — spread across the whole front of the image, the first one being the entry
@@ -100,14 +99,14 @@ starts at `0x1146a8` continues it. The stretch after the named kernel
 60 external call sites, saves `a1,a2,a3,t0,t1,t2` into a stack buffer and installs the buffer in a
 global — the `va_list` prologue of the **printf family**.
 
-The named half of that list is what a port replaces first, and it is named for us: `SignalSema`
+The named half of that list is the OS API surface: `SignalSema`
 (56 sites), `ChangeThreadPriority` (28), `WaitSema` (24), `sceSifSetDma`, `FlushCache`,
-`AddIntcHandler`, `CreateThread` — the OS API surface.
+`AddIntcHandler`, `CreateThread`.
 
-**Not all of the block is platform code**, which matters for the port's accounting:
+**Not all of the block is platform code**:
 `FUN_001007e0` and `FUN_00101380` materialise the typeinfo names `std::bad_alloc` and
-`std::bad_exception`, i.e. the block also holds the **C++ runtime**, which a port replaces wholesale
-with the host's rather than shimming. 150 of the 177 head functions have no string evidence at all,
+`std::bad_exception`, i.e. the block also holds the **C++ runtime**.
+150 of the 177 head functions have no string evidence at all,
 so the rest is unmeasured by this method.
 
 ## Naming the SDK
@@ -164,7 +163,7 @@ same map finds it again in clusters:
 
 ## The platform-side inventory
 
-What a port replaces, with the evidence for each — nothing here is inferred from shape.
+The platform-side components, with the evidence for each — nothing here is inferred from shape.
 
 | component | evidence | measured size |
 | --- | --- | --- |
@@ -238,8 +237,7 @@ Disassembly also confirms what the pointer alone suggested: `0x104478` follows
 with an MMI mask idiom (`pnor`/`psrlh`/`psllh`). Both are argument-taking MMI block-copy kernels of
 the kind a DMA driver has, not data tables.
 
-Two further things live in the same window and are recorded because the port needs them, not the
-decompilation: the **VU1 microcode's own symbol table** at `0x491910` — about 150
+Two further things live in the same window: the **VU1 microcode's own symbol table** at `0x491910` — about 150
 `vu1_entry_*`/`vu1_end_*` pairs with byte offsets, the complete map of the renderer's microcode from
 `UCODE_BEGIN;0` to `UCODE_END;109184` — and the middleware's build strings (`SJ/PS2EE
 Ver.6.28`, `ADXRT Ver.2810`, `PL2ENC Ver.1.01`, all built 2004-10-06).
@@ -251,43 +249,33 @@ written against **generic** platform classes, and the PS2 implementations sit un
 **32 classes named `igPsx2*`, and 32 of 32 derive from a non-PS2 base** (recovered from the
 registrar's `fn2` base, `data/class-hierarchy.tsv`).
 
-| area | the engine calls | the PS2 class | so a port implements |
-| --- | --- | --- | --- |
-| threads, sync | `igThread`, `igSemaphore`, `igThreadManager` | `igPsx2*` | pthreads |
-| time | `igLongTimer` | `igPsx2LongTimer` | a monotonic clock |
-| files, media | `igFile`, `igFolder`, `igMedia` | `igPsx2File`, `igPsx2Folder`, `igPsx2Media` | POSIX + an ISO reader |
-| input | `igController`, `igControllerManager` | `igPsx2*` | SDL2 gamepads |
-| audio | `igAudioContext` | `igPsx2AudioContext` | SDL2 / OpenAL |
-| graphics | `igVisualContext`, `igWindow`, `igImage`, `igClut`, `igImageConvert`, `igIndexArray`, `igVertexArray1_1`, `igVertexArray2`, `igVertexStream`, + the `*Ext` shader family | `igPsx2*` | the new renderer |
-| EE ↔ IOP RPC | — (`igPsx2IopRpcConnection`'s base is `igObject`, so it *is* the seam, not an implementation) | `igPsx2IopRpcConnection` | *deleted*: the IOP modules become native code |
+| area | the engine calls | the PS2 class |
+| --- | --- | --- |
+| threads, sync | `igThread`, `igSemaphore`, `igThreadManager` | `igPsx2*` |
+| time | `igLongTimer` | `igPsx2LongTimer` |
+| files, media | `igFile`, `igFolder`, `igMedia` | `igPsx2File`, `igPsx2Folder`, `igPsx2Media` |
+| input | `igController`, `igControllerManager` | `igPsx2*` |
+| audio | `igAudioContext` | `igPsx2AudioContext` |
+| graphics | `igVisualContext`, `igWindow`, `igImage`, `igClut`, `igImageConvert`, `igIndexArray`, `igVertexArray1_1`, `igVertexArray2`, `igVertexStream`, + the `*Ext` shader family | `igPsx2*` |
+| EE ↔ IOP RPC | — (`igPsx2IopRpcConnection`'s base is `igObject`, so it *is* the seam, not an implementation) | `igPsx2IopRpcConnection` |
 
-**This is the port's real boundary, and it is narrow.** The game and the engine talk to the generic
-bases, so implementing those 32 interfaces for the host is what a port does — the engine's own logic
-then runs unchanged. The seam is ~32 classes wide, *not* 18,661 functions and *not* the 127 SDK entry
-points this page measures elsewhere.
+**This is the game's real platform boundary, and it is narrow.** The game and the engine talk to the
+generic bases, and the engine's own logic sits above them. The seam is ~32 classes wide, *not* 18,661
+functions and *not* the 127 SDK entry points this page measures elsewhere.
 
-It also answers the two questions a port actually asks:
+The SDK is used for threading and synchronisation, timers, files and CD media, controller input, audio,
+and graphics — the areas in the table. The hardware driver functions (libdma, libgraph, libipu) are
+reached *from* these classes rather than from game code.
 
-* **What is the SDK used for?** Threading and synchronisation, timers, files and CD media, controller
-  input, audio, and graphics — the areas in the table. The hardware driver functions (libdma,
-  libgraph, libipu) are reached *from* these classes rather than from game code.
-* **What replaces libdma?** Nothing Linux-native, because it is not a Linux-shaped dependency. libdma
-  drives the EE's DMA controller: it moves chain lists to VIF1/GIF (rendering), SIF0–2 (the EE↔IOP
-  path that carries pad, file, audio and memory-card traffic), IPU (MPEG FMV) and the scratchpad. A
-  port has no bus to move data across, so the "transfer" becomes an ordinary call that consumes the
-  same chain data out of RAM and dispatches to the sink — a new renderer for VIF1/GIF, native code
-  where the IOP modules were, `ffmpeg` for the IPU path, and no sync semantics at all (`libdma: sync
-  timeout` has no counterpart when the call is synchronous).
-
-The correlated consequence is stated plainly in the naming section above: the *names* of SDK
-functions are largely irrelevant to a port, because a port replaces the classes that call them.
+libdma drives the EE's DMA controller: it moves chain lists to VIF1/GIF (rendering), SIF0–2 (the EE↔IOP
+path that carries pad, file, audio and memory-card traffic), IPU (MPEG FMV) and the scratchpad.
 
 ## Open questions
 
 * **How much of the surface is libc rather than kernel?** The extent is settled (the syscall stubs
   span it) and 41 of the 127 entries are syscall stubs, but the remaining ~86 are split between libc
-  / the C++ runtime — which a port replaces with the host's and never shims — and SDK library
-  internals it must. Separating them needs the printf/string/math families identified by shape, not
+  / the C++ runtime and SDK library
+  internals. Separating them needs the printf/string/math families identified by shape, not
   by address.
 * **Who calls the runtime?** Of the 1,364 call sites into the region, only **2 come from functions
   with a recovered engine name** (the `ig*`/`Gap*`/`be*` names); the rest come from functions that are
@@ -296,7 +284,7 @@ functions are largely irrelevant to a port, because a port replaces the classes 
   instance, are themselves callers).
 * **The GS is mostly programmed elsewhere.** Only four EE functions touch GS registers, while the
   VIF/DMA blocks are busy: this game, like most PS2 titles, sends its rendering through DMA chains
-  into the VU1 microcode. A port's renderer therefore depends on the *VU1 program and the packet
+  into the VU1 microcode. Rendering therefore depends on the *VU1 program and the packet
   formats*, not on EE register code — the EE-side work is the smaller half.
 * **Timer functions may be game code.** The `timer` block is the largest by function count, and
   the game plausibly reads the timers itself (profiling, frame timing). Splitting SDK timing from
@@ -309,4 +297,4 @@ functions are largely irrelevant to a port, because a port replaces the classes 
   rather than recovery; the descriptors cannot supply them either. What *is* recoverable is
   **attribution**, and the one bounded naming route left is the cdvd join: those 16 names are
   `cdvdman`'s exports by number, and the EE-side `libcdvd` wrappers call them by RPC command number,
-  so the two match up by number (T12).
+  so the two match up by number.

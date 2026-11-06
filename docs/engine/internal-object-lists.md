@@ -126,7 +126,7 @@ class/type queries and other bootstrap services remain controlled. The allocator
 fixture reports explicit requested sizes; this does not infer retail allocator
 rounding. Base/other class metadata remain synthetic where previously documented.
 Full instance composition, concrete memory/array fields and gameplay receivers
-remain required. Native gameplay is unchanged.
+remain required.
 
 **Append return hypothesis:** a matching `int` implementation returns the
 old count left physically in `v0`. The direct call sites examined do not explicitly consume that value (two lead

@@ -84,8 +84,7 @@ normals are unit length.  **`_vdata[1]` is 0 for most meshes and there is then n
 all.**  Of the 669 extracted live models 130 carry unit-length normals and **539 carry none** (221
 strip + 318 list).  (That split is a property of the **live** object graph, not of the pack: read
 straight from the file, *every* mesh of a stage's drawn set in `NDMW.AFS:614` carries a unit-length
-second `12*numVerts` stream — the six big terrain meshes, the floor, the props and the character — which is
-why a port can shade them smoothly.)  The buffer layout in the loader's packed pool is
+second `12*numVerts` stream — the six big terrain meshes, the floor, the props and the character.)  The buffer layout in the loader's packed pool is
 
     [positions: 12*n][tag + pad][optional normals: 12*n][tag + pad][uv: 8*n]
 
@@ -182,8 +181,7 @@ rather than as bad geometry.
 for the UVs — verified over all 549 vertex arrays of entry 621.  So a stream is found with no search:
 its id gives its offset and its `_memSize` gives its length.
 
-The extractor is `scripts/igb_models.py` (`--list`, `--tsv`, `--obj ID`, `--out-dir`), and the port has
-the same reader in C (`dw4asset models`, `port/src/models.c`).  It pulls **all 549** of entry 621's
+The extractor is `scripts/igb_models.py` (`--list`, `--tsv`, `--obj ID`, `--out-dir`).  It pulls **all 549** of entry 621's
 geometry attributes, and **450 of them are byte-identical to a live-extracted model**
 (`scripts/extract_live_models.py`; the check is `testing/verify_models_offline.py`).  Of the rest, 52
 have a vertex count the live session never held and 47 are same-count models from another part of the
@@ -198,9 +196,8 @@ so `igb_models.py --entry 861` yields the player's three `igGeometryAttr1_5` —
 named `P_susanoo_Skin0Shape0/1/2`; `docs/engine/model-pack-861-attributes.tsv` is that
 fixture, re-derived by the same `make rules` check.
 
-Note this is an **offline extractor** route — a port does not need it, because it runs the engine's own
-loader over a host `igFile`, which allocates the pool itself.  What the port does need is the
-addressing, and that is the same file-derived chain on both sides.
+Note this is an **offline extractor** route: the engine's own loader allocates the pool itself over
+`igFile`, and its addressing is the same file-derived chain.
 
 ## Names in the pack
 
@@ -239,8 +236,7 @@ Geometry nodes and their transforms are in these graphs, not in the model-contro
 children; its `igAttrList` is empty in every record, so it holds no geometry attribute directly.  The
 `*InfoRam*` classes are referenced by no record and are built at run time (all 1,075
 `beModelCtrlInfoRamData` have no parent).  Walking `_sceneGraph` on `stag0102`'s pack gives 18 scenes,
-11,736 nodes and 2,724 named `igGeometry` nodes; `dw4asset scene --world-tsv` emits each with its
-composed world matrix.
+11,736 nodes and 2,724 named `igGeometry` nodes.
 
 `igGeometryAttr1_5` has no material reference: ordinals 5, 9, 11 and 12 are NULL in all 549 attributes of
 entry 621, and only 4 (`igVertexArray1_1`) and 13 (`igPrimLengthArray1_1`) are ever set.  Texture-side
@@ -385,8 +381,8 @@ Pass capture the player's skin is `P_susanoo_Skin0Shape0/1/2` (Susanoomon), the 
 `numVerts` 0 / `vdata` 0 in the capture because the actor builds its geometry through the actor graph —
 but the pack itself is complete: entry 861 decodes and yields its three `igGeometryAttr1_5`, all named
 `P_susanoo_Skin0Shape0/1/2`, which are the actor's **three LODs** (354 / 3,580 / 2,018 verts) and each
-spans the whole humanoid.  A port loads `p_susanoo.igb`; a renderer can also read the actor's
-`_attachedGraphs`.  Reaching the pack needs the every-offset chain scan (the character packs'
+spans the whole humanoid.  The model loads from `p_susanoo.igb`, and the actor's `_attachedGraphs` also
+reach it.  Reaching the pack needs the every-offset chain scan (the character packs'
 records sit at the odd alignment).
 
 **A material can hang off the parent node.**  A shape's own `+0x20` list is geometry only, but a mesh's

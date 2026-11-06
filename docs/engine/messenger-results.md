@@ -79,7 +79,7 @@ recovered chunk construction, allocation, split/coalescing and release. Persiste
 fresh/cached/retrieval cases include growth beyond the starting block. One existing
 upper-layer null-pool failure case keeps its controlled chunk boundary; allocator
 failure/exception behavior remains unverified. The original 1,178-case matrix is
-retained within this broader set. No production gameplay change is claimed.
+retained within this broader set.
 
 `python3 testing/test_messenger_results_retail.py` passes **1,178 cases covering
 every one of the 32 entry bodies**, comparing scalar/FPU return registers,
@@ -93,13 +93,12 @@ pool/table bodies now execute the [recovered string services](string-pool.md).
 Their allocator/chunk/byte/synchronization dependencies remain controlled;
 matrix copying executes the
 [recovered primitive](matrix-primitives.md) against original instructions.
-This does not establish complete SD dispatch
-or native scene behavior.
+This does not establish complete SD dispatch.
 
 Recovered float get, matrix get and object append add **104 matched code bytes**.
 Both C++ wrappers require the original frame-preserving language mode. The other
 seventeen source bodies were already matched; naming/folding preserves their
-bytes. Full root matching checks, typed baseline and byte-identical relink are
+bytes. Full matching checks, typed baseline and byte-identical relink are
 required after the module fold.
 
 Next recover the list metadata/allocator,

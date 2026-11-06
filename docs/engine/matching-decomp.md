@@ -11,10 +11,7 @@ is verified and placed; unregistered extra code remains an error.
 
 **Goal: rebuild `game.elf` from C with the original compiler, and prove every function
 byte-for-byte.** This is a *matching* decomp — matching is the success condition, not
-"the code looks equivalent". It is the stated goal of the repo, and it is
-what makes a future port to another system tractable: once the game's code is real C
-with known semantics, retargeting is an engineering problem instead of an archaeology
-problem.
+"the code looks equivalent". It is the stated goal of the repo.
 
 Toolchain identity and how it was found: [`toolchain.md`](toolchain.md). In one line —
 **MWCCPS2 3.0, build `011126` (CRC32 `C82F0A93`)**, driven by **wibo** (Wine fails its
@@ -22,31 +19,20 @@ FLEXlm license check).
 
 ## What this is for
 
-The project has two downstream goals, and they are not the same finish line.
+The downstream goal is a decompilation someone can change and rebuild onto a PS2. This is possible
+at the current coverage: `make link` rebuilds the whole section from a mix of decompiled C and the
+generated split assembly, byte-identically, so any function can be edited — C where it is decompiled,
+assembly where it is not — and everything else relinks bit-exact. What is missing here is **tooling,
+not percentage**: an ISO relayout step (a rebuilt ELF changes size, and the current patchers
+byte-patch precisely to avoid that) and a documented edit → build → burn recipe.
 
-* **Moddable, and recompilable onto a PS2.** A decompilation someone can change and rebuild onto
-  hardware. This is possible at the current coverage: `make link` rebuilds the whole section
-  from a mix of decompiled C and the generated split assembly, byte-identically, so any function can
-  be edited — C where it is decompiled, assembly where it is not — and everything else relinks
-  bit-exact. What is missing here is **tooling, not percentage**: an ISO relayout step (a rebuilt
-  ELF changes size, and the current patchers byte-patch precisely to avoid that) and a documented
-  edit → build → burn recipe.
-* **Running natively on Linux/Windows.** A much larger downstream project, for which the
-  decompilation is a prerequisite rather than the whole thing. On top of matching code, a port needs
-  **typed** code (m2c's output matches retail while spelling everything
-  `*(int *)((char *)p + 8)` — which no other compiler can use), a replacement for the Sony/CRI SDK
-  that is statically linked *inside* this image plus the VU0/VU1 and GS path, a renderer, and asset
-  loaders. The 5,291 decompiled Lua chunks, by contrast, hand a port the game's scripted logic
-  outright.
-
-**The consequence for this repository: typing is not decoration.** Reproducing the structs and
-signatures the original had is what makes matching code *portable*, so the recovered metadata —
-`data/reflection.json`'s 659 classes and 3,680 fields, the object-model field maps, the vtable slot
-signatures — is a first-class deliverable. It
-measures as *neutral for matching*, and that is exactly as expected: it buys nothing in
-the matched-byte percentage and everything for the second goal. The same reasoning excludes the
-SDK/IOP modules from decompilation scope (they get *replaced* on a port) and puts the SDK boundary
-itself on the list (**T9**).
+**Typing is not decoration.** m2c's output matches retail while spelling everything
+`*(int *)((char *)p + 8)`, so reproducing the structs and signatures the original had is separate
+work, and the recovered metadata — `data/reflection.json`'s 659 classes and 3,680 fields, the
+object-model field maps, the vtable slot signatures — is a first-class deliverable. It measures as
+*neutral for matching*, and that is exactly as expected: it buys nothing in the matched-byte
+percentage. The SDK/IOP modules are outside decompilation scope, and the
+[SDK boundary](platform-boundary.md) is recorded instead.
 
 ## Layout
 
@@ -464,7 +450,7 @@ code bytes.
    is about the ELF container. The build proves the 4,541,184-byte main section; it does not
    rebuild the ELF headers, program headers and `.reginfo` around it, which a from-source
    `game.elf` would need (entry `0x100008`, the single merged section at `0x100000`).
-2. **Naming (tracker T6).** The current counts — any recovered name versus a *semantic*
+2. **Naming.** The current counts — any recovered name versus a *semantic*
    name — are the "Recovered metadata" rows of `PROGRESS.md`. Most functions still carry an
    address-derived or role name; decompiling them is possible, organising the work by module is
    what naming buys. Re-run `scripts/sync_data.sh` before trusting `data/functions.json`'s

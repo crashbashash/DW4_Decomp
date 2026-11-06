@@ -79,8 +79,7 @@ SCALAR = {
     "igDoubleMetaField": ("double", 8),
     "igObjectRefMetaField": ("int", 4),
     # Decision: a string field is the 4-byte handle of an interned string, emitted as `int` like the
-    # object references -- the port keeps four-byte references in an arena (port/docs/project/
-    # pointer-model.md), `const char *` would widen the field on a 64-bit host, and the matched C
+    # object references -- `const char *` would widen the field on a 64-bit host, and the matched C
     # reads it as a word.  Readers cast at the use site: `(const char *)self->_name`.
     "igStringMetaField": ("int", 4),
     "igRawRefMetaField": ("int", 4),
@@ -271,8 +270,8 @@ def main():
 
     # A class's struct carries its **ancestors' fields too**.  Reflection lists only a class's
     # own fields, so `igVec3fList` (whose `_count`/`_capacity`/`_data` come from `igDataList`)
-    # had *no struct at all* -- you could not declare a pointer to it, which is what a port
-    # needs and what typing an object-graph walk needs (`((igVec3fList *)p)->_count`).  The
+    # had *no struct at all* -- you could not declare a pointer to it, which is what typing
+    # an object-graph walk needs (`((igVec3fList *)p)->_count`).  The
     # layout does not change: a base sits at offset 0, so inherited fields keep their
     # absolute offsets.
     cache = {}
@@ -288,7 +287,7 @@ def main():
         cache[cls] = out
         return out
 
-    # The port-relevant game layer (config/typed-scope.tsv, tools/typed_scope.py): its classes always get a
+    # The game layer (config/typed-scope.tsv, tools/typed_scope.py): its classes always get a
     # struct, even a field-less one (igObject's header words only), so a pointer to any of them can be declared.
     scope_classes = set()
     scope_tsv = os.path.join(os.path.dirname(os.path.abspath(args.reflection)), "..", "config", "typed-scope.tsv")
@@ -331,7 +330,7 @@ def main():
         " * exactly where reflection recorded it. A field's *type and size* come from its MetaField",
         " * kind: a bool is one byte (igMetaField has a bool at +38 and a char at +39), a vector is",
         " * float[2]/[3]/[4], a matrix float[16], a string or object reference a 4-byte handle",
-        " * (`int`, the port's arena reference), and an inline array takes its element type from",
+        " * (`int`), and an inline array takes its element type from",
         " * the kind and its count from the distance to the next field. The struct's size is the",
         " * instance size the class registers (`li t2,N` in asm/<Class>_Register.s), which sizes a",
         " * trailing array and the tail padding; `sizeof N` in each struct's comment records it and",

@@ -107,7 +107,7 @@ def main():
         # the most-derived class is the last vtable stamped
         cls = vtable_class[stamps[-1]]
         if not cls.startswith("be"):
-            continue          # the port replaces the middleware (Alchemy `ig*`) wholesale
+            continue          # game classes only, not the middleware (Alchemy `ig*`)
         rows.append((start, cls))
 
     # one `<Class>_Construct` per class, then `_Construct2`, ... by address

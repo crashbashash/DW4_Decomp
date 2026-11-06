@@ -141,8 +141,7 @@ cold-messenger integrations retain their prior controlled payload constructors
 and concrete cleanup boundaries. Original registrar/descriptor recovery and
 composition into those actual class layouts remain necessary. Serialization
 helpers, concrete string/memory fields and broader Lua gameplay receivers also
-remain open. These verified families do not establish complete native gameplay
-or complete Lua-dependent engine recovery.
+remain open. These verified families do not establish complete Lua-dependent engine recovery.
 
 Six reviewed virtual roots are now listed in `config/SLUS-20836/lua-dependency-roots.tsv`:
 size, construct, destruct, zero, clear/reset and construct-flag entries from the

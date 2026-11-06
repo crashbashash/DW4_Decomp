@@ -135,7 +135,7 @@ object-list destruction is controlled; the cold composition executes the recover
 shared object lifetime path with its remaining cleanup leaves. Actual pool/chunk
 composition, concrete class descriptors/fields/receivers and lower service contracts
 remain work. Remove-first (`302000`) has no C source yet; naming, recovery and these comparisons do not establish complete
-Lua-dependent engine recovery or new native gameplay.
+Lua-dependent engine recovery.
 
 The [interned-registry composition](string-pool.md#cold-registry-interning-and-erase-byte-match)
 replaces whole pool/table/chunk interning and release leaves through this cold

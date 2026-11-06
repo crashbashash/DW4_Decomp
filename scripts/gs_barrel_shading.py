@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """gs_barrel_shading.py — recover a mesh's per-vertex shading from a GS dump, camera-free.
 
-The pixel fits (`DW4_Port/tools/fit_light_rig.py`) are confounded by the texture, the geometry
+Fits to rendered pixels are confounded by the texture, the geometry
 and whatever is behind the object.  A PCSX2 `.gs` dump instead carries the **per-vertex colour the
 VU1 lighting produced**, with the texture not yet applied, and the pack mesh carries the normals
 that colour was computed from.  Pairing the two turns "which light rig?" into a small exact linear

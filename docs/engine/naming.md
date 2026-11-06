@@ -229,8 +229,8 @@ reads it alongside function names. It is a type overlay: it never renames anythi
 | `vtable-slot` | The function is a slot of one class family's vtables (`data/vtables.json`, `data/vtables-getvtable.json`). The owner is the nearest common ancestor (`data/class-hierarchy.tsv`); bare `igObject` is rejected (a shared stub), and every offset applied to `arg0` must be a reflected field of the owner or an ancestor (offset 0 is the vtable pointer). |
 | `vtable-stamp` | The function stores exactly one vtable at `+0` of its receiver and no other rodata address. A function that stamps several vtables is an inlined base-constructor chain and is excluded. |
 
-All overlay rows are `ig*` middleware, which the port plan scopes out, so this raises
-the typed count without adding port-relevant structure. Propagating classes through callers
+All overlay rows are `ig*` middleware, so this raises
+the typed count without adding game-layer structure. Propagating classes through callers
 reaches almost nothing further ([measured](#what-didnt-work)): most remaining receivers are stack
 temporaries or game structs that reflection does not describe, and need struct recovery.
 The retyper does not check callee prototypes: thirteen files fail `make check` after it

@@ -9,8 +9,7 @@ position** (median residual < 0.1 px), and the UV is then used to *check* the pa
 it: every pack candidate at the same (position, quantised UV) gives the same model colour, so the
 pairing is unambiguous.
 
-The projection must mirror `DW4_Port/src/render.c` exactly, including the sign convention
-(`dw4asset.c` negates the view's third row because `cam_project` divides by `+z`); the *un*-negated
+The projection negates the view's third row because it divides by `+z`; the *un*-negated
 form is the classic mistake and puts the whole scene behind the near plane.
 
     python3 scripts/gs_world_shading.py --dump <dump>.gs.zst \\
@@ -21,7 +20,7 @@ The census reports the fit of the recovered model `rgb8 = floor(255 * 0.5 * clam
 diffuse*max(0,N.L), 0, 1))` with the live-read rig, both one- and two-sided and at scale 1.0, over
 every GS world vertex it can pair.  For Goblin Pass the one-sided 0.5 model is exact within 1/255
 on all 332 paired vertices (100 %), and every pack candidate at the paired (position, UV) gives that
-same colour -- so the port's world normals *are* the game's.
+same colour.
 """
 import argparse
 import collections
@@ -40,8 +39,8 @@ LIVE_L = (-0.3214, 0.8660, -0.3830)
 LIVE_AMB = (0.25, 0.20, 0.35)
 LIVE_DIF = (1.20, 1.15, 1.20)
 
-# The supplied view the Goblin Pass frame is rendered through.  `dw4asset.c` negates the third row
-# (indices 8..11) before handing it to `dw4_render_set_view`, so do that here too.
+# The supplied view the Goblin Pass frame is rendered through.  The third row
+# (indices 8..11) is negated before use.
 VIEW_RAW = [0.5, 0.495845, 0.710027, 0,
             0, 0.819868, -0.572552, 0,
             -0.866025, 0.286276, 0.409934, 0,

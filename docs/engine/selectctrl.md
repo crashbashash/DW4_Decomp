@@ -145,7 +145,7 @@ recovery through the 16-count wait. The named model sequences are
 Factories/allocators, registry lookup, pad-state acquisition, messenger services,
 formatting, interning and destruction are bounded leaves. This proves the two
 manager bodies at those boundaries. It does not establish real pad sampling,
-rendering, physical animation timing, native shop integration or the original
+rendering, physical animation timing or the original
 scripts' complete outcomes. The 576-case shop-selector oracle
 controls its SELECTCTRL receiver responses. The separate
 [joint common-owner oracle](selector-manager-composition.md) executes the
@@ -188,7 +188,7 @@ values, plus null and high-bit result pointers. Composed cases exercise all
 four players and the fallback record through orientation/direction/confirm/
 cancel paths. They compare complete RAM and ordered calls, without replacing
 the getter's result with a fixture return. Pad record contents are
-controlled input; this does not recover device sampling or native controls.
+controlled input; this does not recover device sampling.
 
 A read-only matching pass scored all347 missing direct hub functions:
 zero automatic matches,265 mismatches,70 compile failures,8 SDK

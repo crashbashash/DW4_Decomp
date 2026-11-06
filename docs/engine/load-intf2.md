@@ -546,21 +546,18 @@ than it is:
   helpers.
 - The common-model submissions and poller are stubbed in this harness, so queues
   are seeded and not filled by the screen. That group has its own verified
-  [behavioural reference](common-model-controller.md), which is integrated into
-  the native title/Options adapter.
+  [behavioural reference](common-model-controller.md).
 
-## Use in the native port
+## Call and Create flows
 
-The port's title scene runs these states over `src/saveintf.c`
-([Save Keeper](../../port/docs/save-keeper.md)):
+The title's two character flows run these states:
 
 - **Call Digimon**: control states 6, 7 and 8 in order — the
   memory-card chooser (SelSlot, text `0x1009`), the card-access notice
   (`0x1004`) while item state 5 checks and reads the card, the data select
   (`0x513`), the difficulty window and the log-in prompt (`0x51D`).
 - **Create**: states 3 (Create/Call), 4 (`MakeChr`), 5 (`NameSel`)
-  and the new-character commit of state 8
-  ([creating a character on the title](../../port/docs/save-keeper.md#creating-a-character-on-the-title-port)).
+  and the new-character commit of state 8.
 
 ## Open items
 

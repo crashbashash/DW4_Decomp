@@ -35,8 +35,7 @@ The two texture packs contain the same 18 logical names, with mode-specific
 index grids and palettes. Changing only the light colors is insufficient:
 that produced a Soft environment error of 18.88/255. Selecting pack 822 as well
 reduces it to 1.12/255. Offline loaded palettes for `ML01GR00_n` match the
-respective pack RGB byte-for-byte; the GS alpha conversion is documented in
-[the native rendering record](../../port/docs/lobby-rendering.md).
+respective pack RGB byte-for-byte.
 
 ## Shadows
 
@@ -53,7 +52,7 @@ including the light position. Relevant fields are:
 | +212..224 | bounds | ±100 |
 
 Retail receiver draws use GS PRIM 93 and ALPHA 0x46 in both captures. Each
-mode matches 1,936 receiver instances in the native projection oracle: UV
+mode matches 1,936 receiver instances in a projection oracle: UV
 mean absolute error `2.482729e-7`, screen maximum error `0.088389` pixels.
 These observations establish no mode-dependent shadow blur or projection in
 this arrival. They do not cover later action poses or other shadow controllers.
@@ -72,5 +71,4 @@ all paired named texture RGB hashes agree exactly. Fog agrees exactly in both.
 Environment screenshot MAE is **1.119/255 Soft** and **1.340/255 Hard**.
 Actor animation and greeting clocks are not synchronized, so the environment
 metric and held-world vertex oracle exclude actor/UI regions. This is bounded
-visual verification, not whole-frame identity. Commands and the native option
-handoff are in [lobby rendering](../../port/docs/lobby-rendering.md#hardsoft-option).
+visual verification, not whole-frame identity.

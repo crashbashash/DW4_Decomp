@@ -3,7 +3,7 @@
  *
  *   0x003e9430  vfunc_34  the family message handler      (8,252 bytes)
  *
- * NOT a matching decompilation and not in src/.  A port-facing behavioral
+ * NOT a matching decompilation and not in src/.  A behavioral
  * reference, checked by scripts/verify_loadintf2.py, which runs the original
  * MIPS instructions through a restricted R5900 interpreter and compares the
  * ordered engine calls (with their meaningful arguments) and every non-stack

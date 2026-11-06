@@ -2,9 +2,7 @@
 
 `p2` is Intrinsic Alchemy's PS2/EE backend: the code that turns a render list into VU1 programs and GS
 packets. It occupies **`0x1f0000`-`0x20d000` (169 functions, every one of them still named `FUN_*`)**
-in [`module-map.md`](module-map.md)'s region table, and it is the interface a native renderer has to
-stand in for — which is why the port's settled strategy is to reimplement it rather than emulate the
-GS (see `port/docs/project/README.md`).
+in [`module-map.md`](module-map.md)'s region table.
 
 ## The hardware boundary is six functions
 
@@ -131,24 +129,22 @@ The layer's lighting is one function, **`p2lighting` (`0x001fb710`, 980 bytes)**
 tails into: it packs the engine's light list into the VU1's 16-byte constant records, and the LIGHT
 microcode does the arithmetic. The record stream, the runtime state and light tables, the light
 matrix and the call chain are decoded on their own page — [`p2-lighting.md`](p2-lighting.md)
- — and that page is what a reimplemented renderer consumes: the pair (LIGHT family,
+: the pair (LIGHT family,
 capability bits) states *what* each program computes, and `p2lighting` states *what it is handed*.
 
 The packs carry serialised `igLightAttr` records (`scripts/pack_lights.py`), but they are prototypes
 rather than the running values: the runtime list reads empty at a frame boundary and in every saved
-state, and the live rig's colours differ from the records. The shading *model* to implement is the one
+state, and the live rig's colours differ from the records. The shading *model* is the one
 above; [`vertex-shading.md`](vertex-shading.md) has the rig read from a live frame.
 
-## What this gives the port
+## What the engine asks for
 
-For a reimplemented renderer the questions are "what does the engine ask for, and in what units", and
-this answers them at the seam:
+At the seam, what the engine asks for and in what units:
 
 * the **unit of work is a 48-byte program record** addressed by an index, with a type at `+28` that
   decides code vs data and a size at `+40` — so "which VU program runs" is a table index, and the
   237 names in [`vu1-microcode.md`](vu1-microcode.md) are what those indices select;
-* **state reaches the VU1 as a transfer**, not as calls — so a port replaces the uploader with a
-  "here is program N and its constants" entry point and never needs VIF1 or SPR DMA;
+* **state reaches the VU1 as a transfer**, not as calls;
 * the layer's outside face is small and named: texture upload, GS readback, swap, and lighting.
 
 ## Reproducing the measurements

@@ -53,10 +53,8 @@ loads retain the existing interpreter model. This does not claim a complete
 R5900/MMI implementation or change the documented float model.
 
 The messenger oracle now descends into the original copy routine and delegates
-the native side to recovered C, rather than supplying a controlled matrix-copy
-result. All **1,178 messenger cases** still pass. The broader native retail
-contract suite passes after the shared oracle correction; optional/private-input
-limits remain as reported by that suite. Root matching/typed/link gates preserve
+the reference side to recovered C, rather than supplying a controlled matrix-copy
+result. All **1,178 messenger cases** still pass. Matching/typed/link gates preserve
 the byte-identity oracle.
 
 ## Remaining work

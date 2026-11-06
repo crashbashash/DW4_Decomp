@@ -1,4 +1,4 @@
-# Functions outside the be* name rule that belong to the port-relevant game layer (tools/typed_scope.py).
+# Functions outside the be* name rule that belong to the game layer (tools/typed_scope.py).
 # <function>	<reason>
 FUN_00190380	combat recovery (docs/systems/combat-*.md)
 FUN_003a9250	combat recovery (docs/systems/combat-*.md)

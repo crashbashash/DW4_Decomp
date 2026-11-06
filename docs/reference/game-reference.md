@@ -38,7 +38,7 @@ confirms, Circle cancels.
 > stick-only. In the world the D-pad moves the player **0.000** units for 45-frame holds in all four directions while the
 > stick moves it ~26 units; in the title and STATUS menus the D-pad moves the cursor exactly as the stick does, and on
 > the main menu Up/Down move the highlight between `Game Start` and `Option` (captures `padstart-03-dpad-down.png` /
-> `padstart-04-dpad-up.png`). The native port matches this (`dw4_input_walk_axes`).
+> `padstart-04-dpad-up.png`).
 >
 > Movement is on/off with no walk/run. Menu overlays: L1/R1 toggle, R2 opens status, Square opens a disk-list
 > overlay.

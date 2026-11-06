@@ -120,7 +120,7 @@ with a diagnostic. `python3 testing/test_story_state.py` checks this behavior of
 | `scripts/decompile_funcs.py` | **PyGhidra decompile by address**. Run as `ghidra-post <elf> --project-path <project-dir> --project-name dw4 --no-analysis -postScript scripts/decompile_funcs.py`. **Run `ghidra-post` calls sequentially** — concurrent calls fail with a project `LockException`. |
 | `scripts/p2s_ram.py` | Extract `eeMemory.bin` (and other entries) from a PCSX2 2.x `.p2s` **offline**, without the emulator. A 2.x `.p2s` is a zip whose entries are **zstd** (method 93) — `unzip` rejects it (`rc=81`), so the script walks the zip by hand and calls libzstd via ctypes. EEK addresses are identical to `pi-pine` addresses. |
 | `scripts/xrefs_multi.py` | Dump incoming xrefs for several addresses in one Ghidra session. |
-| `scripts/live_skin.py` | **Export a skinned character mesh (bind + posed) from a paused EE RAM dump.** The per-vertex blend stream is runtime-only, so it is not in the model pack: reads `igVertexArray1_1._blendWeights` (+0x20) / `_blendIndices` (+0x24), the `igBlendMatrixSelect._blendMatrixIndices` bone→slot map and the `igBlendMatricesAttr._matrixCache` palette, and skins `v' = M[slot[bone]] * v` (row-major, translation in elements 12..14). `DW4_Port`'s `dw4asset skin` is the C mirror and `tools/verify_skin.py` diffs the two OBJs. |
+| `scripts/live_skin.py` | **Export a skinned character mesh (bind + posed) from a paused EE RAM dump.** The per-vertex blend stream is runtime-only, so it is not in the model pack: reads `igVertexArray1_1._blendWeights` (+0x20) / `_blendIndices` (+0x24), the `igBlendMatrixSelect._blendMatrixIndices` bone→slot map and the `igBlendMatricesAttr._matrixCache` palette, and skins `v' = M[slot[bone]] * v` (row-major, translation in elements 12..14). |
 
 The general rule: **read a savestate offline where possible** — it is far faster and safer than
 PINE reads, and the emulator cannot get stuck.
@@ -173,7 +173,7 @@ mipsel-linux-gnu-objdump -d --start-address=0x00123400 --stop-address=0x00123500
     orig/SLUS-20836/SLUS_208.36
 ```
 
-## Asset-layer tools (port side)
+## Framebuffer and live-model tools
 
 GS framebuffer checks: `python3 testing/test_gs_framebuffer.py` validates the
 PSMCT32 block/column address map used by `scripts/gs_shade_raster.py`. Within a
@@ -181,17 +181,10 @@ block, columnTable32 interleaves two rows at a time; words are not row-major.
 Inspect both framebuffer bases and the captured screenshot before identifying
 the displayed image: FRAME may address a partly rendered back buffer.
 
-The native asset readers and their checks live in [`../port`](../port/README.md):
+Models can be read out of a paused game or a saved EE-RAM dump:
 
 | command | what it does |
 | --- | --- |
-| `cd port && make` | builds `port/build/dw4asset` (C99, no dependencies) |
-| `cd port && make check` | the regression suite: the C readers vs this repo's Python decoders on real archives, plus the media and texture checks (~1 min) |
-| `port/build/dw4asset mount <roms> ls [substr]` | every name in `NDMW.IGB` with its archive, entry and size — the fastest way to find which AFS entry a file is |
-| `... mount <roms> refs <stage>.igb` | a stage's `[pt.entry]` pack references resolved to entries and sizes (`[0.621]` = `NDMW.AFS` entry 621) |
-| `... scan <roms> <class>` | which AFS entries contain a class (a directory walk per entry, ~1.6 s for both archives) |
-| `... media <roms> probe\|convert <name>` | the 3 `.sfd` movies through ffprobe/ffmpeg |
-| `... texture <src.raw> <out.png> --w --h --bits 8\|4 --pal <clut.raw> [--flip]` | indexed texture → PNG |
 | `python3 scripts/extract_live_models.py --list` | every live `igGeometryAttr1_5` with vertex/prim counts (needs a **paused** game — the heap mutates every frame otherwise) |
 | `... --out-dir <out-dir>` | extract them all as OBJ (669 from the loaded `stag0102` scene, ~3.7 MB; `vn`/`vt` written when present) |
 | `... --from <ee-dump>.bin --out-dir dir/` | re-extract with **no emulator** from a saved paused EE-RAM dump (0.15 s for all 669) |

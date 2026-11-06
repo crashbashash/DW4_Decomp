@@ -1,13 +1,12 @@
 # Typed game layer: scope, metric and reference targets
 
-Struct recovery for the port-relevant game layer (technical specification: source-level retarget with four-byte arena
-references). The matched C of the `Gap::Bec` game classes is typed through the generated
+Struct recovery for the game layer. The matched C of the `Gap::Bec` game classes is typed through the generated
 `include/dw4/reflected.h`; every edit is verified codegen-identical with `tools/verify.py` (the dispatcher with
 `tools/dispatcher/full_verify.py`).
 
 ## Scope and metric
 
-`tools/typed_scope.py` measures the slice the port reimplements: functions named `Gap__Bec__*` or `be<Upper>*`, minus
+`tools/typed_scope.py` measures the game layer: functions named `Gap__Bec__*` or `be<Upper>*`, minus
 registration boilerplate (`*_GetMetaObject`, `*_Register`, `*_InitFields`, `*_GetVTable`, `*_GetMetaEnum`), plus the
 combat helpers in `config/typed-scope-extra.tsv`; the function list is `config/typed-scope.tsv`. Each member access falls
 in one bucket: **typed** (member of a reflected class, ancestors merged), **local** (file-private struct), **synthetic**
@@ -22,8 +21,7 @@ The scope measures **9,356 / 10,570 typed (88.51 %) over 1,160 functions**; `con
 `config/typed-scope.tsv` record that source set, and the 80 % scope target is satisfied. The figure includes the
 316-file typing pass ([typed coverage](typed-coverage.md#the-316-file-typing-pass))
 and the [title update recovery](title-menu-controller.md) (one function, 304 recovered accesses). The wider global gain
-of the 316-file pass primarily concerns engine code and registration functions excluded here; it does not imply another
-native subsystem has been retargeted. Receiver hypotheses are explicitly unconfirmed. Source recovery
+of the 316-file pass primarily concerns engine code and registration functions excluded here. Receiver hypotheses are explicitly unconfirmed. Source recovery
 continues from the remaining byte-focused module work, not from extending the blanket typing pass.
 
 ## The `igObject` header
@@ -38,34 +36,14 @@ destructor classes make the rewrite change codegen. The retail code reads the co
 as unsigned (`lwu` where the value is widened to 64 bits) in others, so the field is unsigned and signed sites read it
 through `(int)`.
 
-## The port includes the authoritative header
+`igObject_InitHeader` (`0x2fef20`, `src/unmatched/igObject_InitHeader.c`) writes the vtable reference at +0, then sets the
+23-bit count to 1, clears the flag bit and zeroes the top byte (retail result: vtable `0x52f0f0`, header word 1).
 
-* **Include path and guards.** `port/Makefile` adds `-I../include`, so port sources include `dw4/reflected.h` with their own
-  `-std=c99 -Wall -Wextra` flags. `make -C port check-decomp-headers` (`port/tools/test_decomp_headers.c`) asserts the layout the
-  arena model relies on (`igObject` is two words, subclass fields keep their reflected offsets, a reference field is as wide
-  as the port's `dw4_handle`).
-* **No duplicates, enforced.** `scripts/check_port_struct_duplicates.py` (part of `make reflected-check`) fails if anything in
-  `port/include`, `port/src` or `port/tools` defines a struct under the name of a reflected class (380 files scanned, 1,040
-  classes). The port's own types use the `dw4_` prefix. The port's generated reflection tables come from the same
-  `data/reflection.json`.
-* **First retargeted function.** `dw4_object_init_header` (`port/src/object.c`), the first engine function the port runs,
-  ports `igObject_InitHeader` (`0x2fef20`). It is written on the authoritative `igObject`
-  from the matched C (`src/unmatched/igObject_InitHeader.c`: vtable reference at +0, then the 23-bit count set to 1, the flag
-  bit cleared and the top byte zeroed). `make -C port check-igobject-header` (`port/tools/test_igobject_header.c`) shows it
-  agrees with a byte-arithmetic reference implementation on every header pattern tried and with the retail result (vtable
-  `0x52f0f0`, header word 1); the database and player-init tests pass with it.
-* **Every in-scope class has a struct.** The generator emits a struct for each class in `config/typed-scope.tsv` even when it has
-  no field of its own (`beCountry`, `beFile`, `beUnicode` hold the `igObject` header). The two remaining name groups in the scope
-  list are not classes: `FUN` (unnamed combat helpers) and `bePlayer` (the helper `bePlayer_GetStruct`, no reflected class).
+## Rules the edits follow
 
-What remains is the wider retarget: porting more functions from their matched C onto these types and the arena handle
-accessors, each with a behavior check against retail. The fight status/calc rules are the next natural candidate.
-
-## Rules the edits follow (spec alignment)
-
-* References stay four-byte `int` and are only named; the port's handle type lives in a port header, not in `reflected.h`.
+* References stay four-byte `int` and are only named.
 * No new `sizeof(void *) == 4` assumptions; constructs that exist only to steer the matching compiler carry a
-  `/* matching construct: <why> */` comment so the retarget step can tell them from game logic.
+  `/* matching construct: <why> */` comment so they can be told from game logic.
 * Reflected classes come only from `#include "dw4/reflected.h"`; helper structs for non-reflected records are named for
   what they are.
 * A pointer-typed local declared first is the safe spelling for a followed reference: casting an `int` field at every use
@@ -74,7 +52,7 @@ accessors, each with a behavior check against retail. The fight status/calc rule
 
 ## Reference-field targets
 
-Each row says which class a reference field (`igObjectRefMetaField`) points at; the port's typed handle accessors need it.
+Each row says which class a reference field (`igObjectRefMetaField`) points at.
 Evidence is the class's `_InitFields` metaobject getter (handle resolved through `data/reflection.json`) unless noted.
 
 | class.field | target class | evidence |
@@ -270,7 +248,11 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 
 ## Header coverage
 
-`scripts/check_scope_headers.py` (run by `make reflected-check`) verifies that every class named in `config/typed-scope.tsv` has its authoritative struct in `include/dw4/reflected.h`: **460 of 460** in-scope classes (`FUN` and `bePlayer` are not classes). The port includes that one header (`port/include/dw4/arena.h` consumers, `playerrecords.c`, `stageobjects.c`, `fightcalc.h`), and `scripts/check_port_struct_duplicates.py` guarantees no port struct redefines a reflected class.
+`scripts/check_scope_headers.py` (run by `make reflected-check`) verifies that every class named in `config/typed-scope.tsv` has its authoritative struct in `include/dw4/reflected.h`: **460 of 460** in-scope classes (`FUN` and `bePlayer` are not classes).
+
+The generator emits a struct for each class in `config/typed-scope.tsv` even when it has no field of its own (`beCountry`,
+`beFile`, `beUnicode` hold the `igObject` header). The two remaining name groups in the scope list are not classes: `FUN`
+(unnamed combat helpers) and `bePlayer` (the helper `bePlayer_GetStruct`, no reflected class).
 
 ## Open questions
 
