@@ -1,7 +1,6 @@
 # Progress: the code number and the data number
 
-Decompilations are read on **two** numbers, code and data. `decomp.dev` presents a project as
-two bars — and
+Decompilations are read on **two** numbers, code and data, and
 a README that gives only the code figure silently hides a quarter of the image. This page
 defines both numbers for this repo, and where each comes from.
 
@@ -70,7 +69,7 @@ work seen from two sides.
 
 ## Fully linked
 
-`decomp.dev` publishes **two** headlines — *decompiled* and *fully linked* — and for a
+Two headlines matter, *decompiled* and *fully linked*, and for a
 translation-unit build they differ: Twilight Princess reports 12.07 % decompiled against
 8.12 % fully linked, and was announced as *"100 % decompiled, but not fully linked yet"*. The
 reason is granularity: such a build links either the unit's C or the unit's asm stub, so the
@@ -90,7 +89,7 @@ linkgen: linked from asm     11199 units    3034924 bytes   89.8 %
 linkgen: compiler tables                      11044 bytes    0.3 %
 ```
 
-The decomp.dev-comparable headline is the same accounting against the **whole image**
+The headline is the same accounting against the **whole image**
 (code + data), because the data half is still linked from `asm/`: **7.2 %** — the matched code
 plus the jump tables the compiler regenerates. That is the number `PROGRESS.md` shows as the
 `fully linked` bar, with the code-only reading (9.9 %, equal to matched) explained next to it.

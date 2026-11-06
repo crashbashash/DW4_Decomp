@@ -27,8 +27,7 @@ CROSS_AS ?= mipsel-linux-gnu-as
 ELF    ?= orig/SLUS-20836/SLUS_208.36
 FLAGS  ?= -O3 -Iinclude
 
-# The tables live in config/<GAMEID>/ and the retail executable in orig/<GAMEID>/
-# (the dtk-template layout).
+# The tables live in config/<GAMEID>/ and the retail executable in orig/<GAMEID>/.
 GAMEID := SLUS-20836
 
 BUILD  := build
@@ -52,7 +51,7 @@ C_OBJ   := $(patsubst $(SRC)/%.c,$(BUILD)/src/%.o,$(C_SRC)) \
 
 export MWCIncludes := $(SRC)
 
-.PHONY: iso all symbols asm asm-ensure objs objs-build check report verify link progress clean help rules hygiene check-fresh link-fresh vtable-slots-check struct-report inventory-check
+.PHONY: iso all symbols asm asm-ensure executable objdiff objs objs-build check report verify link progress clean help rules hygiene check-fresh link-fresh vtable-slots-check struct-report inventory-check
 
 # The default target builds AND compares, the way a matching build should: a plain
 # `make` answers "does this tree still reproduce retail?". `make objs` is the
@@ -66,6 +65,7 @@ help:
 	@echo "make objs     — assemble $(ASM)/ and compile $(SRC)/ into $(BUILD)/"
 	@echo "make check    — verify the split round-trips AND every C function matches retail"
 	@echo "make verify VA=0x... SRC=src/<name>.c  — one function, relocation-aware, verbose"
+	@echo "make objdiff  — objdiff.json and the objects for the objdiff diff tool"
 	@echo "make report   — coverage only (how much is decompiled)"
 	@echo "make progress — regenerate PROGRESS.md + docs/progress.json (no game or compiler needed)"
 	@echo "make typed    — typed-coverage report: how much of src/ speaks in recovered structs"
@@ -106,8 +106,12 @@ asm: $(CONFIG)/symbols.txt
 
 # asm/ is generated and gitignored: written when it is missing, or when the executable, the
 # symbol map or tools/split.py changed since it was generated.
-asm-ensure: $(CONFIG)/symbols.txt
+asm-ensure: executable $(CONFIG)/symbols.txt
 	python3 tools/split.py --ensure --elf "$(ELF)"
+
+# Checks the executable's hash, or extracts it from a disc image in orig/<GAMEID>/.
+executable:
+	python3 tools/project.py executable --version $(GAMEID) --elf "$(ELF)"
 
 # ASM_SRC is read when the Makefile is parsed, so the objects are built by a second make
 # that sees the generated tree.
@@ -169,9 +173,9 @@ link:
 	python3 tools/linkgen.py --all
 	mipsel-linux-gnu-ld -T build/link.ld -G0 --no-warn-mismatch -o build/game.elf
 	python3 tools/linkcheck.py build/game.elf
+	python3 tools/project.py image --version $(GAMEID) build/game.elf
 
 iso: link
-	python3 tools/project.py image --version $(GAMEID) build/game.elf
 	python3 tools/make_iso.py --version $(GAMEID) $(if $(DISC),--disc "$(DISC)")
 
 link-fresh:
@@ -179,6 +183,16 @@ link-fresh:
 	python3 tools/linkgen.py --all --no-cache
 	mipsel-linux-gnu-ld -T build/link.ld -G0 --no-warn-mismatch -o build/game.elf
 	python3 tools/linkcheck.py build/game.elf
+	python3 tools/project.py image --version $(GAMEID) build/game.elf
+
+# objdiff.json and the base and target objects for the diff tool. The tool runs
+# `make objdiff <object>`, so the pattern rule accepts the object it names.
+objdiff: asm-ensure
+	python3 tools/project.py objdiff --version $(GAMEID)
+	$(MAKE) -f $(BUILD)/$(GAMEID)/objdiff.mk -j$(shell nproc) objects
+
+$(BUILD)/$(GAMEID)/obj/%.o: objdiff
+	@:
 
 report: asm-ensure
 	python3 tools/check.py --wibo "$(WIBO)" --mwcc "$(MWCC)" --elf "$(ELF)" \

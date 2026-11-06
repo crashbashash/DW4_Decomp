@@ -65,8 +65,8 @@ itself on the list (**T9**).
 | `scripts/match_func.py` | one-off: compile a candidate and diff it against a target | — |
 
 `asm/` is **generated and not committed**: it is the retail code as text, so every clone
-writes it from its own executable. `make asm` regenerates it; `make check`, `make report` and
-`configure.py` do so when the tree is missing or stale (`tools/split.py --ensure`, about half a
+writes it from its own executable. `make asm` regenerates it; `make check` and `make report`
+do so when the tree is missing or stale (`tools/split.py --ensure`, about half a
 minute). Never hand-edit it. It is not committed because publishing it publishes the game's code.
 
 Eight names occur at several distinct addresses (SDK-style stubs: `AddDmacHandler`,

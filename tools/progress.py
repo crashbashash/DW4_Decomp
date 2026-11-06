@@ -302,7 +302,7 @@ def collect():
     dm = datamap.summarise(datamap.build())
 
     # ---- "fully linked" (what the link step actually emits from source) ----
-    # decomp.dev publishes two numbers: *decompiled* (bytes matched) and *fully linked*
+    # Two numbers are published: *decompiled* (bytes matched) and *fully linked*
     # (bytes inside units so complete that the build links C instead of the asm stub).
     # They differ for a translation-unit build (TP: 12.07 % / 8.12 %, and "100 %
     # decompiled but not fully linked") because a unit's stub can only be dropped when
@@ -906,14 +906,14 @@ def render_md(d):
         A("**(categories not recorded)** — %s. The headline above is therefore the decompiled "
           "(code-bytes-identical) figure, not the fully verified one." % cats.get("warning", "no table"))
     A("")
-    A("**Fully linked** is the sibling number a WIP decomp is read on, and the bar above is the "
-      "decomp.dev-comparable reading: bytes built from recovered C/C++ over the **%s-byte "
+    A("**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures "
+      "bytes built from recovered C/C++ over the **%s-byte "
       "section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, "
       "code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the "
       "link never emits it, so it is not in the denominator. The **asm bodies** are not "
       "counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in "
       "a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would "
-      "overstate the decompilation. On `decomp.dev` the two "
+      "overstate the decompilation. Elsewhere the two "
       "headlines differ (Twilight Princess: 12.07 %% decompiled, 8.12 %% fully linked) since "
       "a translation-unit build can only drop a unit's asm stub once the *whole* unit is "
       "decompiled. Counting **code alone**, this repo's two numbers are identical — "
@@ -982,8 +982,8 @@ def render_md(d):
 
     A("## The data half")
     A("")
-    A("A decompilation is read on two numbers, code and data (that is how `decomp.dev` presents ")
-    A("a project: code bytes and data bytes, each with its own bar). The image here is a single ")
+    A("A decompilation is read on two numbers, code and data: code bytes and data bytes, ")
+    A("each with its own bar. The image here is a single ")
     A("merged section, so \"data\" is what `tools/layout.py` tiles *between* the functions; ")
     A("`tools/datamap.py` then classifies those bytes from the metadata the repo has recovered. ")
     A("Bytes in `?` are not a failure — they are alignment, tables whose extent is not pinned ")

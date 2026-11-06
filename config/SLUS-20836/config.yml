@@ -1,6 +1,4 @@
-# Digimon World 4 (USA) — build configuration in the dtk-template layout (configure.py --version SLUS-20836).
-# decomp-toolkit cannot split a MIPS ELF, so tools/project.py reads this file and drives the
-# repository tools (tools/check.py, tools/linkgen.py) instead of dtk; see docs/build-system.md.
+# Digimon World 4 (USA) — build configuration, read by tools/project.py; see docs/build-system.md.
 name: Digimon World 4 (USA)
 boot_file: SLUS_208.36
 # The retail executable (private, gitignored); hash is its SHA-1.

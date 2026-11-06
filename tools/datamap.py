@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """datamap.py — how much of the binary's *data* the repo has identified.
 
-Decomp projects are usually read on two numbers, code and data: decomp.dev shows a
-code bar and a data bar
+Decomp projects are usually read on two numbers, code and data: a code bar and a data bar
 against 1.50 MB of data. This repo reported **only code**, which made a quarter of the
 image invisible — and it is not untouched: the strings, the RTTI vtables, the jump
 tables and the class handles have all been recovered, they are just not *code*, so

@@ -16,7 +16,7 @@ RUN apt-get update \
  && dpkg --add-architecture i386 \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        binutils-mipsel-linux-gnu ninja-build make git python3 libc6:i386 gcc-multilib \
+        binutils-mipsel-linux-gnu make git python3 libc6:i386 gcc-multilib \
  && rm -rf /var/lib/apt/lists/*
 
 # ee-as copies with an overlapping memcpy; this makes that call safe.

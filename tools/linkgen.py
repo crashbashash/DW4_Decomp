@@ -585,7 +585,7 @@ def main(argv=None):
         if kind == "code" and not a.no_c:
             csrc = src_index.get(name)
         use_c = csrc is not None
-        # The "fully linked" accounting: a decomp.dev-style project can only drop a
+        # The "fully linked" accounting: a translation-unit project can only drop a
         # unit's asm stub when the *whole* translation unit is decompiled, so its
         # matched and fully-linked percentages differ. Here the units are functions
         # (`tools/layout.py` tiles per function), so C replaces retail one function at

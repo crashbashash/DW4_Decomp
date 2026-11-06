@@ -31,8 +31,7 @@ specification agrees. Run every command from the repository root; paths here are
   reports; changelogs and accounts of how the repository was reorganised; player-facing guides and
   catalogues; tools that drive or read a running emulator, and
   their captures. Write what a wave learned into the topic's document, not a dated log.
-- **One build at a time.** At most one full build (`make check`/`make link`, `ninja`, `ninja check`,
-  `ninja objdiff`, `ninja report`) runs on a host, from the integrating session, never from a sub-agent.
+- **One build at a time.** At most one full build (`make check`, `make link`, `make objdiff`) runs on a host, from the integrating session, never from a sub-agent.
   Where several sessions share a host, take a lock: `flock <shared lock file> make check`.
 - **Sub-agents write only to a scratch directory outside the repository**, never `src/`, `config/`, `asm/`,
   `docs/` or the repository root. The integrator promotes work (see Delegated work).
@@ -42,7 +41,7 @@ specification agrees. Run every command from the repository root; paths here are
 
 - `src/` recovered source (`src/third_party/` is stock zlib, libpng and Lua, never edited;
   [README](src/third_party/README.md)), `asm/` the retail split, one unit per function, generated from
-  your executable and never committed (`make asm`; `make check` and `configure.py` write it when it is
+  your executable and never committed (`make asm`; `make check` writes it when it is
   missing or stale), `include/dw4/` shared headers
   (`reflected.h` is generated), `tools/` build and matching tools ([README](tools/README.md)),
   `scripts/` analysis, `data/` recovered data, `lua/` the game's Lua scripts decompiled and filed by
@@ -51,10 +50,9 @@ specification agrees. Run every command from the repository root; paths here are
 - The build follows the [dtk-template](https://github.com/encounter/dtk-template) layout
   ([build system](docs/build-system.md)): each version's address-bearing tables live in
   `config/<GAMEID>/` (`config.yml`, `symbols.txt`, `units.tsv` as the splits, `unit-*`, `exceptions.txt`,
-  `names/`, `build.sha1`); project-wide policy files stay in `config/` (`debt-baseline.json`, `typed-*`); `python3 configure.py [--version GAMEID]` writes the uncommitted
-  `build.ninja` and `objdiff.json` and extracts the executable from a disc image in `orig/<GAMEID>/`;
-  `python3 tools/download_tools.py` fetches the pinned compilers into `local/`. The `make` targets run the
-  same tools and remain the gate commands.
+  `names/`, `build.sha1`); project-wide policy files stay in `config/` (`debt-baseline.json`, `typed-*`); `make` extracts the
+  executable from a disc image in `orig/<GAMEID>/`, and `python3 tools/download_tools.py` fetches the
+  pinned compilers into `local/`.
 - Keep documentation with its topic and index it from the owning folder's README. A document states the
   current state: no dated sections, update notes or accounts of how a result was reached (Git keeps the
   history); when something changes, rewrite the passage that describes it. Preserve unrelated changes.
@@ -157,10 +155,9 @@ Update topic documents, generated views and prose in the same commit.
   `mipsel-linux-gnu-objdump`; decompiler output alone is not proof.
 - `python3 tools/m2c_batch.py --jobs 8 …`; never invoke imported `m2c.main` concurrently. `make check`/`make link`
   already run in parallel.
-- objdiff: `python3 configure.py`, then `ninja objdiff` (one unit per function; base = the function compiled as
-  `tools/check.py` extracts it, target = its retail words with relocations from `tools/target_asm.py`);
-  `ninja report` writes `build/<GAMEID>/report.json` for decomp.dev. Functions without source are
-  target-only units there, so they read as unmatched. objdiff's percentage is a diff aid; `tools/check.py` and `tools/linkcheck.py`
+- objdiff: `make objdiff` (one unit per function; base = the function compiled as
+  `tools/check.py` extracts it, target = its retail words with relocations from `tools/target_asm.py`).
+  Functions without source are target-only units there, so they read as unmatched. objdiff's percentage is a diff aid; `tools/check.py` and `tools/linkcheck.py`
   are the oracle.
 - Callers and callees of retail functions: grep `asm/` and `src/` for the symbol, or the Ghidra xref scripts
   (`scripts/dump_xrefs.py`, `scripts/xrefs_multi.py`).

@@ -11,7 +11,7 @@ What a function without C looks like:
 * It has **no file in `src/`**. The relink places its bytes from the retail image
   (`tools/linkgen.py` builds that unit from the layout), so `make link` is unaffected.
 * It reads from **`asm/<name>.s`**, the per-function split `tools/split.py` generates from your own
-  executable. `asm/` is gitignored; `make check`, `make asm` and `configure.py` write it when it is
+  executable. `asm/` is gitignored; `make check` and `make asm` write it when it is
   missing or stale.
 * It is in the **work queue**: every symbol of `config/SLUS-20836/symbols.txt` without a definition in
   `src/`. `python3 tools/m2c_batch.py` drafts from that queue (gcc target for Sony EE GCC units).

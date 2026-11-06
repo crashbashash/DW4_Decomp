@@ -4,8 +4,7 @@ How *Digimon World 4* (USA, `SLUS-20836`) works under the hood: the engine, the 
 game systems, as recovered from the binary and from the game's own Lua.
 
 Matching recovery and the native port share one repository. The
-[build system](build-system.md) maps the dtk-template layout (config/<GAMEID>/, orig/<GAMEID>/,
-configure.py, objdiff). Native implementation contracts are
+[build system](build-system.md) covers the layout (config/<GAMEID>/, orig/<GAMEID>/) and objdiff. Native implementation contracts are
 indexed in [port documentation](../port/docs/README.md), with priorities in
 [porting tasks](../port/docs/project/tasks.md).
 

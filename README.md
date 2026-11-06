@@ -61,14 +61,14 @@ Ubuntu:
 ```sh
 sudo dpkg --add-architecture i386
 sudo apt update
-sudo apt install -y binutils-mipsel-linux-gnu ninja-build make git python3 libc6:i386
+sudo apt install -y binutils-mipsel-linux-gnu make git python3 libc6:i386
 ```
 
 Fedora has no `mipsel-linux-gnu` binutils package, so build it from source (`mips64-linux-gnu` does not
 work here):
 
 ```sh
-sudo dnf install -y gcc make texinfo ninja-build git python3 glibc.i686 tar xz
+sudo dnf install -y gcc make texinfo git python3 glibc.i686 tar xz
 curl -LO https://ftpmirror.gnu.org/binutils/binutils-2.44.tar.xz
 tar xf binutils-2.44.tar.xz
 cd binutils-2.44
@@ -82,7 +82,7 @@ Arch: enable the `[multilib]` repository in `/etc/pacman.conf`, then install the
 the AUR (`makepkg` checks its signature, so import the key it names or add `--skippgpcheck`):
 
 ```sh
-sudo pacman -Syu --needed base-devel git ninja python lib32-glibc
+sudo pacman -Syu --needed base-devel git python lib32-glibc
 git clone https://aur.archlinux.org/mipsel-linux-gnu-binutils.git
 cd mipsel-linux-gnu-binutils
 makepkg -si
@@ -100,15 +100,14 @@ python3 tools/download_tools.py
 
 **3. Add your disc image** to `orig/SLUS-20836/` (any name ending in `.iso`).
 
-**4. Build and verify.** `configure.py` extracts and checks `SLUS_208.36` from the disc image.
+**4. Build and verify.** `make` extracts and checks `SLUS_208.36` from the disc image.
 
 ```sh
-python3 configure.py
-ninja            # relink the executable and compare it with retail
-ninja check      # verify every decompiled function
+make check       # verify every decompiled function
+make link        # relink the executable and compare it with retail
 ```
 
-`ninja` ends with `BYTE-IDENTICAL`, and `ninja check` reports `0 mismatch`. To make a disc from the build,
+`make check` reports `0 mismatch`, and `make link` ends with `BYTE-IDENTICAL`. To make a disc from the build,
 see [`make iso`](#step-3-build).
 
 ### Building in a container
@@ -120,7 +119,7 @@ the repository root:
 ```sh
 docker build -t dw4-decomp docker/
 docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/work dw4-decomp \
-    sh -c 'python3 tools/download_tools.py && python3 configure.py && ninja && ninja check'
+    sh -c 'python3 tools/download_tools.py && make check && make link'
 ```
 
 The image holds tools only. Your repository and disc stay on your machine, mounted while it runs.
@@ -131,7 +130,7 @@ The image holds tools only. Your repository and disc stay on your machine, mount
 
 #### Step 1: Install dependencies
 
-The build needs `mipsel-linux-gnu` binutils, Python 3, ninja (or GNU make) and the
+The build needs `mipsel-linux-gnu` binutils, Python 3, GNU make and the
 [wibo](https://github.com/decompals/wibo) Windows-binary loader (the Metrowerks compiler is a
 Windows executable; Wine dies on its FLEXlm license check).
 
@@ -160,7 +159,7 @@ point the build at them with `DW4_WIBO`, `DW4_MWCC` and the other `DW4_*` variab
 
 #### Step 2: Supply the game
 
-Copy your disc image of the USA release into `orig/SLUS-20836/` (any `*.iso`). `python3 configure.py`
+Copy your disc image of the USA release into `orig/SLUS-20836/` (any `*.iso`). `make`
 extracts `SLUS_208.36` from it and checks its hash against `config/SLUS-20836/config.yml`; another dump
 of the same release works as long as the executable is identical. The disc image can be deleted
 afterwards. If you already have the executable, put it at `orig/SLUS-20836/SLUS_208.36` directly. The
@@ -184,11 +183,7 @@ points `make -C port` at them.
 
 #### Step 3: Build
 
-The layout follows [dtk-template](https://github.com/encounter/dtk-template): `python3 configure.py`
-writes `build.ninja` and `objdiff.json` for a version (`--version SLUS-20836`, the default), and
-`ninja`, `ninja check`, `ninja objdiff` and `ninja report` run the relink, the per-unit check, the
-objdiff objects and the decomp.dev report; see [build system](docs/build-system.md). The Make targets
-below run the same tools.
+See [build system](docs/build-system.md) for how the tree is laid out.
 
 Run `make`. It generates the retail split in `asm/` from your executable when that folder is
 missing or stale, then does two things, in order: reassembles the split and checks that it

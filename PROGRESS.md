@@ -34,7 +34,7 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 | `missing` | 8 | 4,144 | retail keeps an exception record the unit does not produce |
 | `other` | 4 | 24,652 | the unit's first diagnostic line does not name the exception reason (a deferred duplicate, or a table/index line comes first); see its row in data/check-categories.tsv |
 
-**Fully linked** is the sibling number a WIP decomp is read on, and the bar above is the decomp.dev-comparable reading: bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. On `decomp.dev` the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical — **68.0 %** C/C++ — and that is a property of the pipeline, not a coincidence: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. `make link` prints the accounting from the link itself — **17,248 units / 2,362,812 bytes from C/C++ (7,524 of them compiler-generated jump tables), 0 units / 0 bytes of asm bodies, 1,108,904 bytes from `asm/`** — and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
+**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. Elsewhere the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical — **68.0 %** C/C++ — and that is a property of the pipeline, not a coincidence: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. `make link` prints the accounting from the link itself — **17,248 units / 2,362,812 bytes from C/C++ (7,524 of them compiler-generated jump tables), 0 units / 0 bytes of asm bodies, 1,108,904 bytes from `asm/`** — and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
 
 ## Readable
 
@@ -94,8 +94,8 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 
 ## The data half
 
-A decompilation is read on two numbers, code and data (that is how `decomp.dev` presents 
-a project: code bytes and data bytes, each with its own bar). The image here is a single 
+A decompilation is read on two numbers, code and data: code bytes and data bytes, 
+each with its own bar. The image here is a single 
 merged section, so "data" is what `tools/layout.py` tiles *between* the functions; 
 `tools/datamap.py` then classifies those bytes from the metadata the repo has recovered. 
 Bytes in `?` are not a failure — they are alignment, tables whose extent is not pinned 

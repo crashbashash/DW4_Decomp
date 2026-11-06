@@ -41,7 +41,7 @@ python3 tools/check.py --function 0xVA --cand src/unmatched/FUN_XXXXXXXX.c
 ```
 
 Read everything it prints, because the first line isn't always the real problem. For a side-by-side
-view, run `python3 configure.py && ninja objdiff` and open the folder in
+view, run `make objdiff` and open the folder in
 [objdiff](https://github.com/encounter/objdiff).
 
 Before opening a pull request, run all four of these:

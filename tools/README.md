@@ -22,9 +22,8 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`unitflags.py`](unitflags.py) | per-unit compiler-flag overrides (config/SLUS-20836/unit-flags.tsv) |
 | [`unitcompilers.py`](unitcompilers.py) | Content-pinned compiler selection for proven matching units |
 | [`cc.py`](cc.py) | the one place a compile command is built: MWCC under wibo, or the Sony EE GCC for a unit pinned to it; verify, check and linkgen all go through it |
-| [`project.py`](project.py) | the generator behind `configure.py` (dtk-template layout): `build.ninja` (link, check, objdiff, report) and `objdiff.json` for one version; also compiles one objdiff base unit and writes the merged image checked against `config/<GAMEID>/build.sha1` ([build system](../docs/build-system.md)) |
+| [`project.py`](project.py) | per-version build helpers behind the Makefile: the executable check and disc extraction, the image hash check, and `objdiff.json` with the rules for the objdiff objects |
 | [`target_asm.py`](target_asm.py) | objdiff target assembly: the retail words of a function with their relocations restored (`.reloc` + masked `.word`) |
-| [`ninja_syntax.py`](ninja_syntax.py) | the ninja file writer (Apache-2.0, from the ninja project via dtk-template) |
 | [`eegcc_compile.py`](eegcc_compile.py) | compile one C file with the Sony EE GCC 2.96 (`-S` then the sibling `ee-as`, with the symbol table repaired for GNU ld) — the Sony-built library units |
 | [`unitobjects.py`](unitobjects.py) | Explicit ownership of additional functions emitted by a compiler unit |
 | [`unitprofiles.py`](unitprofiles.py) | resolve a function's translation-unit build profile (config/SLUS-20836/units.tsv) and tell a provisional per-function override from it |

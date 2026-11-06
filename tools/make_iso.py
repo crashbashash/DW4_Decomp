@@ -75,7 +75,7 @@ def main(argv=None):
     cfg = project.read_config(a.version)
     image_path = os.path.join(ROOT, "build", a.version, "main.bin")
     if not os.path.exists(image_path):
-        raise SystemExit(f"build/{a.version}/main.bin is missing: run `make iso` or `ninja` first")
+        raise SystemExit(f"build/{a.version}/main.bin is missing: run `make iso` first")
     with open(image_path, "rb") as handle:
         image = handle.read()
     disc = a.disc or find_disc(a.version)

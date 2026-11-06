@@ -1,19 +1,16 @@
-"""project.py — the build generator behind configure.py (the dtk-template layout for a PS2 ELF).
+"""project.py — per-version build helpers behind the Makefile.
 
-The template (github.com/encounter/dtk-template) keeps one folder per game version:
-config/<GAMEID>/config.yml with symbols.txt, splits.txt and build.sha1, the private retail
-executable in orig/<GAMEID>/, a configure.py that writes build.ninja, objdiff.json for the
-diff tool and a progress report for decomp.dev. Its generator drives decomp-toolkit, which
-only splits PowerPC DOL/REL files; here the same layout drives the repository's own MIPS
-tools instead:
+Each game version keeps its tables in config/<GAMEID>/ (config.yml, symbols.txt, units.tsv,
+build.sha1) and its private retail executable in orig/<GAMEID>/.
 
-  check    tools/check.py (every unit verified byte-for-byte against retail)
-  link     tools/layout.py + tools/linkgen.py + GNU ld + tools/linkcheck.py, then the merged
-           load image is written to build/<GAMEID>/main.bin and compared with build.sha1
-  objdiff  one objdiff unit per function: the base object is its definition compiled under its
-           unit profile (config/<GAMEID>/units.tsv) exactly as tools/check.py extracts it, the
-           target object its retail instructions with the relocations restored (tools/target_asm.py)
-  report   objdiff-cli report generate -> build/<GAMEID>/report.json (the decomp.dev format)
+  executable  check orig/<GAMEID>/<boot file>, or extract it from a disc image beside it
+  image       write the merged load image of a relink to build/<GAMEID>/main.bin and compare it
+              with build.sha1
+  objdiff     write objdiff.json and build/<GAMEID>/objdiff.mk, the rules for one objdiff unit per
+              function: the base object is its definition compiled under its unit profile
+              (config/<GAMEID>/units.tsv) exactly as tools/check.py extracts it, the target object
+              its retail instructions with the relocations restored (tools/target_asm.py)
+  cc          compile one base object (a rule of objdiff.mk)
 
 config.yml is a flat `key: value` file with one nested `image:` block; the reader below
 accepts exactly that subset, so no YAML package is needed.
@@ -100,7 +97,6 @@ def _units(cfg):
 def compile_unit(version, name, source, out):
     """Compile one function the way tools/check.py does: its definition extracted from `source`
     (units.standalone; an emitted member builds its owner) under its unit profile."""
-    import subprocess
     import cc
     import unitobjects
     import units
@@ -170,117 +166,83 @@ def extract_executable(cfg, iso_path, path):
             fh.write(data)
 
 
-def ensure_executable(version):
-    """Make sure orig/<GAMEID>/<boot file> exists: extract it from a disc image placed in
-    orig/<GAMEID>/ (any *.iso), as the template does with its disc. The executable's SHA-1 is
-    checked against config.yml; the disc image may be deleted afterwards."""
+def ensure_executable(version, elf=None):
+    """Make sure the retail executable exists: extract it from a disc image placed in
+    orig/<GAMEID>/ (any *.iso) when it is missing. Its SHA-1 is checked against config.yml; the
+    disc image may be deleted afterwards."""
     cfg = read_config(version)
-    path = os.path.join(ROOT, cfg["object"])
+    path = os.path.join(ROOT, elf or cfg["object"])
     if os.path.exists(path):
         if sha1_file(path) != cfg["hash"]:
-            raise SystemExit(f"{cfg['object']}: SHA-1 differs from config/{version}/config.yml; "
+            raise SystemExit(f"{elf or cfg['object']}: SHA-1 differs from config/{version}/config.yml; "
                              "this is not the retail executable of this version")
         return
     folder = os.path.dirname(path)
     discs = sorted(f for f in os.listdir(folder) if f.lower().endswith(".iso")) if os.path.isdir(folder) else []
     if not discs:
         raise SystemExit(f"{cfg['object']} is missing: put your {cfg['name']} disc image (.iso) in "
-                         f"orig/{version}/ and run configure.py again (see docs/build-system.md)")
-    print(f"configure: extracting {cfg['boot_file']} from orig/{version}/{discs[0]}")
+                         f"orig/{version}/ and run make again (see docs/build-system.md)")
+    print(f"make: extracting {cfg['boot_file']} from {os.path.relpath(os.path.join(folder, discs[0]), ROOT)}")
     extract_executable(cfg, os.path.join(folder, discs[0]), path)
 
 
-def generate(version, verbose=False):
-    """Write build.ninja and objdiff.json for `version`."""
-    import ninja_syntax
-    ensure_executable(version)
+def write_objdiff(version):
+    """Write objdiff.json and build/<GAMEID>/objdiff.mk for `version`."""
     cfg = read_config(version)
-    # asm/ (the objdiff targets' input) is generated from the executable and never committed
-    subprocess.check_call([sys.executable, os.path.join(HERE, "split.py"), "--ensure",
-                           "--elf", os.path.join(ROOT, cfg["object"])])
-    build = os.path.join("build", version)
-    lines = []
-    n = ninja_syntax.Writer(_Lines(lines), width=120)
-    n.comment(f"GENERATED by configure.py --version {version}; do not edit.")
-    n.variable("ninja_required_version", "1.3")
-    n.variable("python", sys.executable if verbose else "python3")
-    n.newline()
-    n.rule("check", "$python tools/split.py --ensure --elf {0} && $python tools/check.py --elf {0}".format(cfg["object"]),
-           description="CHECK every unit against retail", pool="console")
-    n.rule("link", " && ".join([
-        "$python tools/layout.py >/dev/null", "$python tools/linkgen.py --all",
-        "mipsel-linux-gnu-ld -T build/link.ld -G0 --no-warn-mismatch -o build/game.elf",
-        "$python tools/linkcheck.py build/game.elf",
-        f"$python tools/project.py image --version {version} build/game.elf"]),
-           description="LINK and compare the merged image", pool="console")
-    n.rule("progress", "$python tools/progress.py",
-           description="PROGRESS")
-    n.rule("cc", f"$python tools/project.py cc --version {version} $name $in $out", description="CC $out")
-    n.rule("as", "mipsel-linux-gnu-as -march=r5900 -EL -o $out $in", description="AS $out")
-    n.rule("target_asm", "$python tools/target_asm.py $out $names $base",
-           description="TARGET $out")
-    n.rule("report", "objdiff-cli report generate -p . -o $out", description="REPORT $out",
-           pool="console")
-    n.newline()
-    n.build("check", "phony", "build/.check")
-    n.build("build/.check", "check")
-    n.build("link", "phony", "build/.link")
-    n.build("build/.link", "link")
-    n.build("progress", "phony", "build/.progress")
-    n.build("build/.progress", "progress")
-    units, objects = [], []
+    build = f"build/{version}"
+    obj = f"{build}/obj"
+    for folder in ("base", "target", "target/asm"):
+        os.makedirs(os.path.join(ROOT, obj, folder), exist_ok=True)
+    rules, units, objects = [], [], []
+
+    def target_rules(name, target_s, target, base=None):
+        flag = f" --base {base}" if base else ""
+        after = f" {base}" if base else ""
+        rules.append(f"{target_s}: asm/{name}.s tools/target_asm.py {cfg['symbols']}{after}\n"
+                     f"\t@python3 tools/target_asm.py $@ {name}{flag}\n")
+        rules.append(f"{target}: {target_s}\n\t@mipsel-linux-gnu-as -march=r5900 -EL -o $@ $<\n")
+
     sources = _units(cfg)
     verified = _categories()
     for source, fns in sources:
-        for name, va in fns:
+        for name, _va in fns:
             if verified.get(name) == "asm-body":
                 continue
-            base = f"{build}/obj/base/{name}.o"
-            target_s, target = f"{build}/obj/target/{name}.s", f"{build}/obj/target/{name}.o"
-            n.build(base, "cc", source, implicit=["tools/project.py"], variables={"name": name})
-            n.build(target_s, "target_asm", f"asm/{name}.s", implicit=["tools/target_asm.py", cfg["symbols"], base],
-                    variables={"names": name, "base": f"--base {base}"})
-            n.build(target, "as", target_s)
+            base = f"{obj}/base/{name}.o"
+            target_s, target = f"{obj}/target/{name}.s", f"{obj}/target/{name}.o"
+            rules.append(f"{base}: {source} tools/project.py\n"
+                         f"\t@python3 tools/project.py cc --version {version} {name} {source} $@\n")
+            target_rules(name, target_s, target, base)
             objects += [base, target]
             units.append({"name": f"{os.path.splitext(source)[0]}/{name}" if len(fns) > 1
                           else os.path.splitext(source)[0],
                           "target_path": target, "base_path": base,
                           "metadata": {"source_path": source, "complete": verified.get(name) == "match",
-                                       "progress_categories": [_category(source)],
                                        "auto_generated": source.startswith("src/unmatched/")}})
     # functions with no source yet, and asm bodies, which compile to the target by construction and
-    # would read as matched: target-only units, so the report's total is the whole image
+    # would read as matched: target-only units, shown as unmatched
     import verify
     by_name, _ = verify.load_symbols(os.path.join(ROOT, cfg["symbols"]))
     have = {name for _source, fns in sources for name, _va in fns if verified.get(name) != "asm-body"}
     for name, (va, _size) in sorted(by_name.items(), key=lambda kv: kv[1][0]):
         if name in have:
             continue
-        target_s, target = f"{build}/obj/target/asm/{name}.s", f"{build}/obj/target/asm/{name}.o"
-        n.build(target_s, "target_asm", f"asm/{name}.s", implicit=["tools/target_asm.py", cfg["symbols"]],
-                variables={"names": name})
-        n.build(target, "as", target_s)
+        target_s, target = f"{obj}/target/asm/{name}.s", f"{obj}/target/asm/{name}.o"
+        target_rules(name, target_s, target)
         objects.append(target)
-        units.append({"name": f"asm/{name}", "target_path": target,
-                      "metadata": {"complete": False, "progress_categories": ["unmatched"]}})
-    n.build("objdiff", "phony", objects)
-    n.build(f"{build}/report.json", "report", objects + ["objdiff.json"])
-    n.build("report", "phony", f"{build}/report.json")
-    n.default("link")
-    with open(os.path.join(ROOT, "build.ninja"), "w") as fh:
-        fh.write("".join(lines))
+        units.append({"name": f"asm/{name}", "target_path": target, "metadata": {"complete": False}})
+    with open(os.path.join(ROOT, build, "objdiff.mk"), "w") as fh:
+        fh.write(f"# GENERATED by tools/project.py objdiff --version {version}; do not edit.\n")
+        fh.write("objects:" + "".join(f" \\\n  {o}" for o in objects) + "\n\n")
+        fh.write("".join(rules))
     project = {"$schema": "https://raw.githubusercontent.com/encounter/objdiff/main/config.schema.json",
-               "custom_make": "ninja", "custom_args": ["objdiff"], "build_target": False,
+               "custom_make": "make", "custom_args": ["objdiff"], "build_target": False,
                "build_base": True, "watch_patterns": ["*.c", "*.cpp", "*.h", "*.inc"],
-               "progress_categories": [{"id": c, "name": c} for c in CATEGORIES],
                "units": units}
     with open(os.path.join(ROOT, "objdiff.json"), "w") as fh:
         json.dump(project, fh, indent=1)
         fh.write("\n")
-    print(f"configure: {version} ({cfg['name']}): build.ninja, objdiff.json ({len(units)} units)")
-
-
-CATEGORIES = ["game", "engine", "sdk", "unmatched"]
+    print(f"objdiff: {version} ({cfg['name']}): {len(units)} units")
 
 
 def _categories():
@@ -297,23 +259,6 @@ def _categories():
     return out
 
 
-def _category(source):
-    parts = source.split("/")
-    if len(parts) > 1 and parts[1] in ("game", "engine"):
-        return parts[1]
-    if len(parts) > 1 and parts[1] in ("sdk", "asmbody"):
-        return "sdk"
-    return "unmatched"
-
-
-class _Lines:
-    def __init__(self, lines):
-        self.lines = lines
-
-    def write(self, text):
-        self.lines.append(text)
-
-
 def main(argv):
     if argv[:1] == ["cc"]:
         version = argv[argv.index("--version") + 1]
@@ -322,7 +267,13 @@ def main(argv):
     if argv[:1] == ["image"]:
         version = argv[argv.index("--version") + 1]
         return write_image(version, argv[-1])
-    raise SystemExit("usage: project.py image --version GAMEID LINKED | cc --version GAMEID NAME SOURCE OUT")
+    if argv[:1] == ["executable"]:
+        version = argv[argv.index("--version") + 1]
+        return ensure_executable(version, argv[argv.index("--elf") + 1] if "--elf" in argv else None)
+    if argv[:1] == ["objdiff"]:
+        return write_objdiff(argv[argv.index("--version") + 1])
+    raise SystemExit("usage: project.py image --version GAMEID LINKED | cc --version GAMEID NAME SOURCE OUT"
+                     " | executable --version GAMEID [--elf PATH] | objdiff --version GAMEID")
 
 
 if __name__ == "__main__":
