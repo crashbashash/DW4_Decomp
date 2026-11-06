@@ -9,11 +9,11 @@ extern char g_igViewerAction_callbackList[];
 extern char igViewerAction_className[];
 extern char g_igViewerAction_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_00458680();
+int ViewerLibrary_MarkRegistered();
 int igViewerAction_InitFields();
 
 void igViewerAction_Register(void) {
-    GpFlag_SetOnce_00458680();
+    ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igViewerAction_metaObject,     /* published MetaObject slot */

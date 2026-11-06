@@ -8,12 +8,12 @@ extern char igController_GetPublishedMetaObject[];
 extern char g_igPsx2Controller_callbackList[];
 extern char igPsx2Controller_className[];
 extern char g_igPsx2Controller_metaObject[];
-int GpFlag_SetOnce_00145ce0();
+int WindowInputLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igPsx2Controller_InitFields();
 
 void igPsx2Controller_Register(void) {
-    GpFlag_SetOnce_00145ce0();
+    WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igPsx2Controller_metaObject,       /* published MetaObject slot */

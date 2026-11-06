@@ -8,12 +8,12 @@ extern char igObject_Register[];
 extern char g_igAnimationModifier_callbackList[];
 extern char igAnimationModifier_className[];
 extern char g_igAnimationModifier_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igAnimationModifier_InitFields();
 
 void igAnimationModifier_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAnimationModifier_metaObject, /* published MetaObject slot */

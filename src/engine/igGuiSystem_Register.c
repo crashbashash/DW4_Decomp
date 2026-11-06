@@ -9,11 +9,11 @@ extern char g_igGuiSystem_callbackList[];
 extern char igGuiSystem_className[];
 extern char g_igGuiSystem_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igGuiSystem_InitFields();
 
 void igGuiSystem_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igGuiSystem_metaObject,               /* published MetaObject slot */

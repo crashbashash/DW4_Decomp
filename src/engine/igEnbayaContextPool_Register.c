@@ -8,12 +8,12 @@ extern char igObject_Register[];
 extern char g_igEnbayaContextPool_callbackList[];
 extern char igEnbayaContextPool_className[];
 extern char g_igEnbayaContextPool_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igEnbayaContextPool_InitFields();
 
 void igEnbayaContextPool_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igEnbayaContextPool_metaObject, /* published MetaObject slot */

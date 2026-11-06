@@ -196,5 +196,7 @@ retain six own fields to isolate the registrar and descriptor builders.
 
 ## Open questions
 
-* Fifteen 24-byte `GpFlag_SetOnce_*` functions are run-once latches on a gp-relative flag byte, and 606
-  `be*` class registrars call `GpFlag_SetOnce_0033c8e0` first. What each flag guards is not established.
+* Each of the fifteen 24-byte `<Library>Library_MarkRegistered` latches heads one library's block of classes, and
+  every class registrar calls the latch of its own block first (303 for `BecLibrary_MarkRegistered`, 163 for
+  `NdmwLibrary_MarkRegistered`). Nothing but the latch reads its `g_<Library>Library_registered` byte, so what the
+  flag was for in the original libraries is not established.

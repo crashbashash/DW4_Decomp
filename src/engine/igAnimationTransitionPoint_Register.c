@@ -8,12 +8,12 @@ extern char igObject_Register[];
 extern char g_igAnimationTransitionPoint_callbackList[];
 extern char igAnimationTransitionPoint_className[];
 extern char g_igAnimationTransitionPoint_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igAnimationTransitionPoint_InitFields();
 
 void igAnimationTransitionPoint_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAnimationTransitionPoint_metaObject, /* published MetaObject slot */

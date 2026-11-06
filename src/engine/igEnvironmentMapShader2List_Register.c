@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igEnvironmentMapShader2List_callbackList[];
 extern char igEnvironmentMapShader2List_className[];
 extern char g_igEnvironmentMapShader2List_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igEnvironmentMapShader2List_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igEnvironmentMapShader2List_metaObject, /* published MetaObject slot */

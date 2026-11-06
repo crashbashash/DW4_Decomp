@@ -7,12 +7,12 @@ extern char igTextureCoordSourceAttr_GetVTable[];
 extern char thunk_igTextureCoordSourceAttr_GetMetaObject[];
 extern char igTextureCoordSourceAttr_className[];
 extern char g_igTextureCoordSourceAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igTextureCoordSourceAttr_InitFields();
 
 void igTextureCoordSourceAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTextureCoordSourceAttr_metaObject,    /* published MetaObject slot */

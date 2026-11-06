@@ -8,12 +8,12 @@ extern char igEventReceiver_Register[];
 extern char g_igWindowResizeEventReceiver_callbackList[];
 extern char igWindowResizeEventReceiver_className[];
 extern char g_igWindowResizeEventReceiver_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igWindowResizeEventReceiver_InitFields();
 
 void igWindowResizeEventReceiver_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igWindowResizeEventReceiver_metaObject, /* published MetaObject slot */

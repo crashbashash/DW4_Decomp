@@ -8,11 +8,11 @@ extern char g_igFont_callbackList[];
 extern char igFont_className[];
 extern char g_igFont_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igFont_InitFields();
 
 void igFont_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igFont_metaObject,                  /* published MetaObject slot */

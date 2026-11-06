@@ -9,11 +9,11 @@ extern char g_igHotKeyBinding_callbackList[];
 extern char igHotKeyBinding_className[];
 extern char g_igHotKeyBinding_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igHotKeyBinding_InitFields();
 
 void igHotKeyBinding_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igHotKeyBinding_metaObject, /* published MetaObject slot */

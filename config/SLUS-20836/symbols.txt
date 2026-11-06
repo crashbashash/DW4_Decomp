@@ -815,7 +815,7 @@
 0012fe38 000054 FUN_0012fe38
 0012fe90 000060 FUN_0012fe90
 0012fef0 00010c FUN_0012fef0
-00130000 000018 GpFlag_SetOnce_00130000
+00130000 000018 AttrsLibrary_MarkRegistered
 00130020 000034 FUN_00130020
 00130060 000048 igVisualContextAttrDefaultManager_GetMetaObject
 001300b0 00008c igVisualContextAttrDefaultManager_GetVTable
@@ -1759,7 +1759,7 @@
 00142d90 000080 FUN_00142d90
 00142e10 000080 FUN_00142e10
 00142e90 000080 FUN_00142e90
-00142f10 000018 GpFlag_SetOnce_00142f10
+00142f10 000018 AudioLibrary_MarkRegistered
 00142f30 000034 FUN_00142f30
 00142f70 000048 FUN_00142f70
 00142fc0 000048 igAudioContext_GetMetaObject
@@ -1838,7 +1838,7 @@
 00145c20 000008 Gap__Core__igPsx2AudioSourceList__vfunc_23 Gap::Core::igPsx2AudioSourceList::vfunc_23
 00145c30 000030 Gap__Core__igPsx2AudioSourceList__vfunc_18 Gap::Core::igPsx2AudioSourceList::vfunc_18
 00145c60 000080 FUN_00145c60
-00145ce0 000018 GpFlag_SetOnce_00145ce0
+00145ce0 000018 WindowInputLibrary_MarkRegistered
 00145d00 000034 FUN_00145d00
 00145d40 000048 FUN_00145d40
 00145d90 000048 igWindow_GetMetaObject
@@ -3814,7 +3814,7 @@
 001942f0 000030 FUN_001942f0
 00194320 000030 FUN_00194320
 00194350 000030 FUN_00194350
-00194380 000018 GpFlag_SetOnce_00194380
+00194380 000018 SceneGraphLibrary_MarkRegistered
 001943a0 00000c FUN_001943a0
 001943b0 000048 igTraversal_GetMetaObject
 00194400 00008c igTraversal_GetVTable
@@ -5586,7 +5586,7 @@
 001e3e70 000080 FUN_001e3e70
 001e3ef0 000080 FUN_001e3ef0
 001e3f70 000080 FUN_001e3f70
-001e3ff0 000018 GpFlag_SetOnce_001e3ff0
+001e3ff0 000018 DataPumpLibrary_MarkRegistered
 001e4010 000048 FUN_001e4010
 001e4060 000048 igLongStack_GetMetaObject
 001e40b0 00003c igLongStack_GetVTable
@@ -6232,7 +6232,7 @@
 00225620 00006c sceMtapGetConnection
 00225690 000070 sceMtapChangeThreadPriority
 00225700 000064 sceMtapGetModVersion
-00225770 000018 GpFlag_SetOnce_00225770
+00225770 000018 BaseLibrary_MarkRegistered
 00225790 0000d4 FUN_00225790
 00225870 000048 igCompoundList_GetMetaObject
 002258c0 00003c igCompoundList_GetVTable
@@ -6573,7 +6573,7 @@
 00230e20 00002c FUN_00230e20
 00230e50 000054 FUN_00230e50
 00230ea8 0000a0 FUN_00230ea8
-00230f50 000018 GpFlag_SetOnce_00230f50
+00230f50 000018 InsightLibrary_MarkRegistered
 00230f70 000094 FUN_00230f70
 00231010 00000c FUN_00231010
 00231020 00000c FUN_00231020
@@ -6825,7 +6825,7 @@
 00238d20 00000c FUN_00238d20
 00238d30 00000c FUN_00238d30
 00238d40 000008 thunk_FUN_00238ed0
-00238d50 000018 GpFlag_SetOnce_00238d50
+00238d50 000018 SceneSearchLibrary_MarkRegistered
 00238d70 000054 FUN_00238d70
 00238dd0 000048 igSearchSceneGraph_GetMetaObject
 00238e20 0000a4 igSearchSceneGraph_GetVTable
@@ -6839,7 +6839,7 @@
 00239300 000080 FUN_00239300
 00239380 00000c Gap__Core__igSearchSceneGraph__vfunc_22 Gap::Core::igSearchSceneGraph::vfunc_22
 00239390 00005c FUN_00239390
-002393f0 000018 GpFlag_SetOnce_002393f0
+002393f0 000018 CollisionLibrary_MarkRegistered
 00239410 000048 igCreateCollisionDatabase_GetMetaObject
 00239460 0000c4 igCreateCollisionDatabase_GetVTable
 00239530 000080 FUN_00239530
@@ -6929,7 +6929,7 @@
 0023c410 00000c FUN_0023c410
 0023c420 00000c FUN_0023c420
 0023c430 00000c Gap__Core__igCollisionGroupList__vfunc_24 Gap::Core::igCollisionGroupList::vfunc_24
-0023c440 000018 GpFlag_SetOnce_0023c440
+0023c440 000018 LuaLibrary_MarkRegistered
 0023c460 000048 igLuaState_GetMetaObject
 0023c4b0 0000d4 igLuaState_GetVTable
 0023c590 00000c FUN_0023c590
@@ -13722,7 +13722,7 @@
 00334360 000008 Gap__igAdxFile__vfunc_32 Gap::igAdxFile::vfunc_32
 00334370 000030 FUN_00334370
 003343a0 00009c FUN_003343a0
-00334440 000018 GpFlag_SetOnce_00334440
+00334440 000018 AdxMovieLibrary_MarkRegistered
 00334460 00004c FUN_00334460
 003344b0 00003c igAdx_GetVTable
 003344f0 000020 FUN_003344f0
@@ -13930,7 +13930,7 @@
 0033bf10 000024 Gap__igMoviePlugin__vfunc_22 Gap::igMoviePlugin::vfunc_22
 0033bf40 00000c Gap__igMoviePlugin__vfunc_20 Gap::igMoviePlugin::vfunc_20
 0033bf50 00098c FUN_0033bf50
-0033c8e0 000018 GpFlag_SetOnce_0033c8e0
+0033c8e0 000018 BecLibrary_MarkRegistered
 0033c900 00004c FUN_0033c900
 0033c950 0003c4 libBecRuntimePlugin_GetVTable
 0033cd20 000080 FUN_0033cd20
@@ -17256,7 +17256,7 @@
 003b02c0 000210 Gap__Bec__beTextureCtrl__vfunc_31 Gap::Bec::beTextureCtrl::vfunc_31
 003b04d0 00000c Gap__Bec__beTextureCtrl__vfunc_20 Gap::Bec::beTextureCtrl::vfunc_20
 003b04e0 00052c FUN_003b04e0
-003b0a10 000018 GpFlag_SetOnce_003b0a10
+003b0a10 000018 NdmwLibrary_MarkRegistered
 003b0a30 00004c FUN_003b0a30
 003b0a80 00025c libNdmwRuntimePlugin_GetVTable
 003b0ce0 000080 FUN_003b0ce0
@@ -19234,7 +19234,7 @@
 0044b290 000290 Gap__Bec__beNDMWMdlMapCursor__vfunc_36 Gap::Bec::beNDMWMdlMapCursor::vfunc_36
 0044b520 00032c Gap__Bec__beNDMWMdlMapCursor__vfunc_46 Gap::Bec::beNDMWMdlMapCursor::vfunc_46
 0044b850 00000c Gap__Bec__beNDMWMdlMapCursor__vfunc_20 Gap::Bec::beNDMWMdlMapCursor::vfunc_20
-0044b860 000018 GpFlag_SetOnce_0044b860
+0044b860 000018 GuiLibrary_MarkRegistered
 0044b880 000048 FUN_0044b880
 0044b8d0 000048 igNonRefCountedViewList_GetMetaObject
 0044b920 00003c igNonRefCountedViewList_GetVTable
@@ -19784,7 +19784,7 @@
 00458610 00000c FUN_00458610
 00458620 00000c FUN_00458620
 00458630 000044 FUN_00458630
-00458680 000018 GpFlag_SetOnce_00458680
+00458680 000018 ViewerLibrary_MarkRegistered
 004586a0 000044 FUN_004586a0
 004586f0 00004c igViewerStatisticsManager_GetMetaObject
 00458740 000120 igViewerStatisticsManager_GetVTable

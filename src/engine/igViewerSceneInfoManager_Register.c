@@ -9,10 +9,10 @@ extern char g_igViewerSceneInfoManager_callbackList[];
 extern char igViewerSceneInfoManager_className[];
 extern char g_igViewerSceneInfoManager_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_00458680();
+int ViewerLibrary_MarkRegistered();
 extern int igViewerSceneInfoManager_InitFields_00459ee0[4];
 void igViewerSceneInfoManager_Register(void) {
-    GpFlag_SetOnce_00458680();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
+    ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
     igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igViewerSceneInfoManager_metaObject, /* published MetaObject slot */

@@ -8,11 +8,11 @@ extern char igNonRefCountedObjectList_Register[];
 extern char g_igNonRefCountedAttrStackManagerList_callbackList[];
 extern char igNonRefCountedAttrStackManagerList_className[];
 extern char g_igNonRefCountedAttrStackManagerList_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igNonRefCountedAttrStackManagerList_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igNonRefCountedAttrStackManagerList_metaObject, /* published MetaObject slot */

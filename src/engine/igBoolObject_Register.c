@@ -7,12 +7,12 @@ extern char thunk_igBoolObject_GetMetaObject[];
 extern char igObject_Register[];
 extern char igBoolObject_className[];
 extern char g_igBoolObject_metaObject[];
-int GpFlag_SetOnce_001e3ff0();
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igBoolObject_InitFields();
 
 void igBoolObject_Register(void) {
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igBoolObject_metaObject,    /* published MetaObject slot */

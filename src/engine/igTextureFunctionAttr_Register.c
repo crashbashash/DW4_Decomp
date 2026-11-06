@@ -9,12 +9,12 @@ extern char thunk_igTextureFunctionAttr_GetMetaObject[];
 void FUN_00131f70(void);
 extern char igTextureFunctionAttr_className[];
 extern char g_igTextureFunctionAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igTextureFunctionAttr_InitFields();
 
 void igTextureFunctionAttr_Register(void) {
-    GpFlag_SetOnce_00130000(); /* sets this module's one-shot guard byte at 0x00554b00 (.sbss) */
+    AttrsLibrary_MarkRegistered(); /* sets this module's one-shot guard byte at 0x00554b00 (.sbss) */
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTextureFunctionAttr_metaObject,       /* published MetaObject slot */

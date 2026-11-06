@@ -7,12 +7,12 @@ extern char igObject_Register[];
 extern char g_igInterfaced_callbackList[];
 extern char igInterfaced_className[];
 extern char g_igInterfaced_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igInterfaced_InitFields();
 
 void igInterfaced_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igInterfaced_metaObject,    /* published MetaObject slot */

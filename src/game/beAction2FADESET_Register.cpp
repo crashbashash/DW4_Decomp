@@ -5,7 +5,7 @@
  * with exceptions on and retail keeps this function's exception index record. */
 struct igMetaObject;
 extern "C" {
-void GpFlag_SetOnce_0033c8e0(void);
+void BecLibrary_MarkRegistered(void);
 void *igMetaObject_RegisterClass(
         int abstractState,
         igMetaObject **slot,
@@ -29,7 +29,7 @@ void *beAction2FADESET_Register(void);
 }
 
 void *beAction2FADESET_Register(void) {
-    GpFlag_SetOnce_0033c8e0();
+    BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_beAction2FADESET_metaObject,         /* published MetaObject slot */

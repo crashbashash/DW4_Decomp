@@ -7,12 +7,12 @@ extern char igMultiPassStateAttr_GetVTable[];
 extern char thunk_igMultiPassStateAttr_GetMetaObject[];
 extern char igMultiPassStateAttr_className[];
 extern char g_igMultiPassStateAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igMultiPassStateAttr_InitFields();
 
 void igMultiPassStateAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMultiPassStateAttr_metaObject,        /* published MetaObject slot */

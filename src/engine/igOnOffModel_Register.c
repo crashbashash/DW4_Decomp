@@ -8,11 +8,11 @@ extern char igGuiComponentModel_Register[];
 extern char igOnOffModel_className[];
 extern char g_igOnOffModel_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igOnOffModel_InitFields();
 
 void igOnOffModel_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igOnOffModel_metaObject,                  /* published MetaObject slot */

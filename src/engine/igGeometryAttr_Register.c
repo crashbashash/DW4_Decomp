@@ -7,12 +7,12 @@ extern char thunk_igGeometryAttr_GetMetaObject[];
 extern char g_igGeometryAttr_callbackList[];
 extern char igGeometryAttr_className[];
 extern char g_igGeometryAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igGeometryAttr_InitFields();
 
 void igGeometryAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igGeometryAttr_metaObject,              /* published MetaObject slot */

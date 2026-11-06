@@ -8,12 +8,12 @@ extern char igInterface_Register[];
 extern char g_igLockInterface_callbackList[];
 extern char igLockInterface_className[];
 extern char g_igLockInterface_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igLockInterface_InitFields();
 
 void igLockInterface_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igLockInterface_metaObject,       /* published MetaObject slot */

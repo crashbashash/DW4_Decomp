@@ -7,12 +7,12 @@ extern char igMatrixOptStateAttr_GetVTable[];
 extern char thunk_igMatrixOptStateAttr_GetMetaObject[];
 extern char igMatrixOptStateAttr_className[];
 extern char g_igMatrixOptStateAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igMatrixOptStateAttr_InitFields();
 
 void igMatrixOptStateAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMatrixOptStateAttr_metaObject,        /* published MetaObject slot */

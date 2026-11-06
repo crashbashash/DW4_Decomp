@@ -7,12 +7,12 @@ extern char igDepthWriteStateAttr_GetVTable[];
 extern char thunk_igDepthWriteStateAttr_GetMetaObject[];
 extern char igDepthWriteStateAttr_className[];
 extern char g_igDepthWriteStateAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igDepthWriteStateAttr_InitFields();
 
 void igDepthWriteStateAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igDepthWriteStateAttr_metaObject,       /* published MetaObject slot */

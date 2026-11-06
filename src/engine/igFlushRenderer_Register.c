@@ -7,11 +7,11 @@ extern char thunk_igFlushRenderer_GetMetaObject[];
 extern char igRenderer_Register[];
 extern char igFlushRenderer_className[];
 extern char g_igFlushRenderer_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igFlushRenderer_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igFlushRenderer_metaObject,      /* published MetaObject slot */

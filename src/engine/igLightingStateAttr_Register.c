@@ -7,12 +7,12 @@ extern char igLightingStateAttr_GetVTable[];
 extern char thunk_igLightingStateAttr_GetMetaObject[];
 extern char igLightingStateAttr_className[];
 extern char g_igLightingStateAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igLightingStateAttr_InitFields();
 
 void igLightingStateAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igLightingStateAttr_metaObject,         /* published MetaObject slot */

@@ -8,13 +8,13 @@ extern char igObject_Register[];
 extern char g_igInsightCore_callbackList[];
 extern char igInsightCore_className[];
 extern char g_igInsightCore_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int thunk_FUN_00236140[4];
 int igInsightCore_InitFields();
 
 void igInsightCore_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igInsightCore_metaObject,   /* published MetaObject slot */

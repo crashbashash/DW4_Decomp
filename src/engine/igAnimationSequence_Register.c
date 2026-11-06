@@ -6,11 +6,11 @@ extern char igTransformSource_GetPublishedMetaObject[];
 extern char thunk_igAnimationSequence_GetMetaObject[];
 extern char igAnimationSequence_className[];
 extern char g_igAnimationSequence_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igAnimationSequence_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAnimationSequence_metaObject,         /* published MetaObject slot */

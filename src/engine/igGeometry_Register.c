@@ -8,14 +8,14 @@ extern char igAttrSet_Register[];
 extern char g_igGeometry_callbackList[];
 extern char igGeometry_className[];
 extern char g_igGeometry_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 /* Code in the gap after this function; the 9th and 10th registration
  * arguments, as igXxx_InitFields and the thunk are for sibling classes. */
 extern int igGeometry_InitFields_0019fca0[4];
 extern int igGeometry_PostInit_0019fdd0[4];
 void igGeometry_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igGeometry_metaObject,          /* published MetaObject slot */

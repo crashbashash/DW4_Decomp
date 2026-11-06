@@ -6,12 +6,12 @@ extern char thunk_igAnimationHierarchy_GetMetaObject[];
 extern char igNamedObject_Register[];
 extern char igAnimationHierarchy_className[];
 extern char g_igAnimationHierarchy_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igAnimationHierarchy_InitFields();
 
 void igAnimationHierarchy_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAnimationHierarchy_metaObject,    /* published MetaObject slot */

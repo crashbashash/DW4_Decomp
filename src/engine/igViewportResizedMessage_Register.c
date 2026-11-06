@@ -7,12 +7,12 @@ extern char igViewportResizedMessage_GetVTable[];
 extern char thunk_igViewportResizedMessage_GetMetaObject[];
 extern char igViewportResizedMessage_className[];
 extern char g_igViewportResizedMessage_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igViewportResizedMessage_InitFields();
 
 void igViewportResizedMessage_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igViewportResizedMessage_metaObject, /* published MetaObject slot */

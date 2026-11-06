@@ -9,11 +9,11 @@ extern char g_igFlyMode_callbackList[];
 extern char igFlyMode_className[];
 extern char g_igFlyMode_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_00458680();
+int ViewerLibrary_MarkRegistered();
 int igFlyMode_InitFields();
 
 void igFlyMode_Register(void) {
-    GpFlag_SetOnce_00458680();
+    ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igFlyMode_metaObject,            /* published MetaObject slot */

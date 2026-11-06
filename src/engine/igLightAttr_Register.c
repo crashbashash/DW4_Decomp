@@ -8,12 +8,12 @@ extern char thunk_igLightAttr_GetMetaObject[];
 extern char g_igLightAttr_callbackList[];
 extern char igLightAttr_className[];
 extern char g_igLightAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igLightAttr_InitFields();
 
 void igLightAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igLightAttr_metaObject,                 /* published MetaObject slot */

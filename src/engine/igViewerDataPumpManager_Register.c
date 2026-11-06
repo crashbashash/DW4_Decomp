@@ -9,10 +9,10 @@ extern char g_igViewerDataPumpManager_callbackList[];
 extern char igViewerDataPumpManager_className[];
 extern char g_igViewerDataPumpManager_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_00458680();
+int ViewerLibrary_MarkRegistered();
 extern int igViewerDataPumpManager_InitFields_0045c040[4];
 void igViewerDataPumpManager_Register(void) {
-    GpFlag_SetOnce_00458680();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
+    ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igViewerDataPumpManager_metaObject, /* published MetaObject slot */

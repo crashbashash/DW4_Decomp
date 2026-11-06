@@ -8,12 +8,12 @@ extern char igShaderData_Register[];
 extern char g_igTransientShaderData_callbackList[];
 extern char igTransientShaderData_className[];
 extern char g_igTransientShaderData_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igTransientShaderData_InitFields();
 
 void igTransientShaderData_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTransientShaderData_metaObject,  /* published MetaObject slot */

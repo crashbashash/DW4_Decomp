@@ -7,12 +7,12 @@ extern char thunk_igLogInterface_GetMetaObject[];
 extern char igInterface_Register[];
 extern char igLogInterface_className[];
 extern char g_igLogInterface_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igLogInterface_InitFields();
 
 void igLogInterface_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igLogInterface_metaObject,        /* published MetaObject slot */

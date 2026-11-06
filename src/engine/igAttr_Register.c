@@ -7,12 +7,12 @@ extern char FUN_0013b240[];
 extern char igObject_Register[];
 extern char igAttr_className[];
 extern char g_igAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igAttr_InitFields();
 
 void igAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAttr_metaObject,          /* published MetaObject slot */

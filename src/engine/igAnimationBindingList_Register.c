@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igAnimationBindingList_callbackList[];
 extern char igAnimationBindingList_className[];
 extern char g_igAnimationBindingList_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igAnimationBindingList_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAnimationBindingList_metaObject, /* published MetaObject slot */

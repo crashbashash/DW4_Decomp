@@ -8,12 +8,12 @@ extern char thunk_igIterateDerived_GetMetaObject[];
 extern char g_igIterateDerived_callbackList[];
 extern char igIterateDerived_className[];
 extern char g_igIterateDerived_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igIterateDerived_InitFields();
 
 void igIterateDerived_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igIterateDerived_metaObject,     /* published MetaObject slot */

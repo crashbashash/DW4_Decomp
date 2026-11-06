@@ -8,12 +8,12 @@ extern char igMessageReceiver_GetPublishedMetaObject[];
 extern char g_igMessageDefaultReceiver_callbackList[];
 extern char igMessageDefaultReceiver_className[];
 extern char g_igMessageDefaultReceiver_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igMessageDefaultReceiver_InitFields();
 
 void igMessageDefaultReceiver_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMessageDefaultReceiver_metaObject,    /* published MetaObject slot */

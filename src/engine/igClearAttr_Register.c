@@ -7,12 +7,12 @@ extern char igClearAttr_GetVTable[];
 extern char thunk_igClearAttr_GetMetaObject[];
 extern char igClearAttr_className[];
 extern char g_igClearAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igClearAttr_InitFields();
 
 void igClearAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igClearAttr_metaObject,                 /* published MetaObject slot */

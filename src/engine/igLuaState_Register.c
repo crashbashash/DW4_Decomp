@@ -8,12 +8,12 @@ extern char igNamedObject_Register[];
 extern char g_igLuaState_callbackList[];
 extern char igLuaState_className[];
 extern char g_igLuaState_metaObject[];
-int GpFlag_SetOnce_0023c440();
+int LuaLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igLuaState_InitFields();
 
 void igLuaState_Register(void) {
-    GpFlag_SetOnce_0023c440();
+    LuaLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igLuaState_metaObject,              /* published MetaObject slot */

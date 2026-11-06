@@ -9,12 +9,12 @@ extern char igAudioContext_GetPublishedMetaObject[];
 extern char g_igPsx2AudioContext_callbackList[];
 extern char igPsx2AudioContext_className[];
 extern char g_igPsx2AudioContext_metaObject[];
-int GpFlag_SetOnce_00142f10();
+int AudioLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igPsx2AudioContext_InitFields();
 
 void igPsx2AudioContext_Register(void) {
-    GpFlag_SetOnce_00142f10(); /* sets this module's one-shot guard byte at 0x00554b10 (.sbss) */
+    AudioLibrary_MarkRegistered(); /* sets this module's one-shot guard byte at 0x00554b10 (.sbss) */
     igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igPsx2AudioContext_metaObject,       /* published MetaObject slot */

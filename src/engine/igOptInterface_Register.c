@@ -8,12 +8,12 @@ extern char igInterface_Register[];
 extern char g_igOptInterface_callbackList[];
 extern char igOptInterface_className[];
 extern char g_igOptInterface_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igOptInterface_InitFields();
 
 void igOptInterface_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igOptInterface_metaObject,        /* published MetaObject slot */

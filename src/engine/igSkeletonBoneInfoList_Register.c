@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igSkeletonBoneInfoList_callbackList[];
 extern char igSkeletonBoneInfoList_className[];
 extern char g_igSkeletonBoneInfoList_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igSkeletonBoneInfoList_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igSkeletonBoneInfoList_metaObject, /* published MetaObject slot */

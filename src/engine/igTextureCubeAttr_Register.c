@@ -8,12 +8,12 @@ extern char igTextureAttr_Register[];
 extern char g_igTextureCubeAttr_callbackList[];
 extern char igTextureCubeAttr_className[];
 extern char g_igTextureCubeAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igTextureCubeAttr_InitFields();
 
 void igTextureCubeAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTextureCubeAttr_metaObject,       /* published MetaObject slot */

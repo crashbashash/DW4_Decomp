@@ -8,12 +8,12 @@ extern char igObject_Register[];
 extern char g_igCollisionGrid_callbackList[];
 extern char igCollisionGrid_className[];
 extern char g_igCollisionGrid_metaObject[];
-int GpFlag_SetOnce_002393f0();
+int CollisionLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igCollisionGrid_InitFields();
 
 void igCollisionGrid_Register(void) {
-    GpFlag_SetOnce_002393f0();
+    CollisionLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igCollisionGrid_metaObject, /* published MetaObject slot */

@@ -7,12 +7,12 @@ extern char igMersenneTwisterRandomNumber_GetVTable[];
 extern char igRandomNumber_GetPublishedMetaObject[];
 extern char igMersenneTwisterRandomNumber_className[];
 extern char g_igMersenneTwisterRandomNumber_metaObject[];
-int GpFlag_SetOnce_001e3ff0();
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igMersenneTwisterRandomNumber_InitFields();
 
 void igMersenneTwisterRandomNumber_Register(void) {
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMersenneTwisterRandomNumber_metaObject, /* published MetaObject slot */

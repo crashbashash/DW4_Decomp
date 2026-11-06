@@ -8,13 +8,13 @@ extern char igAnimationSystem_GetPublishedMetaObject[];
 extern char g_igAnimationCombiner_callbackList[];
 extern char igAnimationCombiner_className[];
 extern char g_igAnimationCombiner_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int thunk_FUN_001abca0[4];
 int igAnimationCombiner_InitFields();
 
 void igAnimationCombiner_Register(void) {
-    GpFlag_SetOnce_00194380();  /* shared set-once latch run before every registration of this family (asm/GpFlag_SetOnce_00194380.s) */
+    SceneGraphLibrary_MarkRegistered();  /* shared set-once latch run before every registration of this family (asm/SceneGraphLibrary_MarkRegistered.s) */
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAnimationCombiner_metaObject,         /* published MetaObject slot */

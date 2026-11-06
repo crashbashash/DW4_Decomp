@@ -6,11 +6,11 @@ extern char igEventProducer_GetPublishedMetaObject[];
 extern char igEventProducer_Register[];
 extern char igWindow_className[];
 extern char g_igWindow_metaObject[];
-int GpFlag_SetOnce_00145ce0();
+int WindowInputLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 void FUN_00145e80(void);
 void igWindow_Register(void) {
-    GpFlag_SetOnce_00145ce0();
+    WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igWindow_metaObject,                  /* published MetaObject slot */

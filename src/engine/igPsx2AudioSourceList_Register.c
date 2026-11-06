@@ -7,11 +7,11 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igDataList_Register[];
 extern char igPsx2AudioSourceList_className[];
 extern char g_igPsx2AudioSourceList_metaObject[];
-int GpFlag_SetOnce_00142f10();
+int AudioLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igPsx2AudioSourceList_Register(void) {
-    GpFlag_SetOnce_00142f10();
+    AudioLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igPsx2AudioSourceList_metaObject, /* published MetaObject slot */

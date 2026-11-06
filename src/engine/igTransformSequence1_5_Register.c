@@ -9,13 +9,13 @@ extern char igTransformSequence_Register[];
 extern char g_igTransformSequence1_5_callbackList[];
 extern char igTransformSequence1_5_className[];
 extern char g_igTransformSequence1_5_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int thunk_FUN_001ddfd0[4];
 int igTransformSequence1_5_InitFields();
 
 void igTransformSequence1_5_Register(void) {
-    GpFlag_SetOnce_00194380();  /* shared set-once latch run before every registration of this family (asm/GpFlag_SetOnce_00194380.s) */
+    SceneGraphLibrary_MarkRegistered();  /* shared set-once latch run before every registration of this family (asm/SceneGraphLibrary_MarkRegistered.s) */
     igMetaObject_RegisterClass(
         0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTransformSequence1_5_metaObject,        /* published MetaObject slot */

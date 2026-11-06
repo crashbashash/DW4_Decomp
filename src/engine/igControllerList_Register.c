@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igControllerList_callbackList[];
 extern char igControllerList_className[];
 extern char g_igControllerList_metaObject[];
-int GpFlag_SetOnce_00145ce0();
+int WindowInputLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igControllerList_Register(void) {
-    GpFlag_SetOnce_00145ce0();
+    WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igControllerList_metaObject, /* published MetaObject slot */

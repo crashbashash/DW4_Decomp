@@ -8,11 +8,11 @@ extern char igNonRefCountedObjectList_Register[];
 extern char g_igNonRefCountedMatrixObjectList_callbackList[];
 extern char igNonRefCountedMatrixObjectList_className[];
 extern char g_igNonRefCountedMatrixObjectList_metaObject[];
-int GpFlag_SetOnce_001e3ff0();
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igNonRefCountedMatrixObjectList_Register(void) {
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igNonRefCountedMatrixObjectList_metaObject,     /* published MetaObject slot */

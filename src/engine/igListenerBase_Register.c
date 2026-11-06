@@ -7,11 +7,11 @@ extern char thunk_igListenerBase_GetMetaObject[];
 extern char igBase_Register[];
 extern char igListenerBase_className[];
 extern char g_igListenerBase_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igListenerBase_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igListenerBase_metaObject,   /* published MetaObject slot */

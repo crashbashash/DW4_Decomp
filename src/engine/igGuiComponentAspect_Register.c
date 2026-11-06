@@ -8,11 +8,11 @@ extern char g_igGuiComponentAspect_callbackList[];
 extern char igGuiComponentAspect_className[];
 extern char g_igGuiComponentAspect_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igGuiComponentAspect_InitFields();
 
 void igGuiComponentAspect_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igGuiComponentAspect_metaObject, /* published MetaObject slot */

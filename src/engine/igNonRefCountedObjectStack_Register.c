@@ -7,11 +7,11 @@ extern char thunk_igNonRefCountedObjectStack_GetMetaObject[];
 extern char igDataList_Register[];
 extern char igNonRefCountedObjectStack_className[];
 extern char g_igNonRefCountedObjectStack_metaObject[];
-int GpFlag_SetOnce_001e3ff0();
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int igNonRefCountedObjectStack_InitFields_001e44c0[4];
 void igNonRefCountedObjectStack_Register(void) {
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igNonRefCountedObjectStack_metaObject,   /* published MetaObject slot */

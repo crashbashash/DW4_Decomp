@@ -9,11 +9,11 @@ extern char g_igTextElement_callbackList[];
 extern char igTextElement_className[];
 extern char g_igTextElement_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igTextElement_InitFields();
 
 void igTextElement_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTextElement_metaObject,               /* published MetaObject slot */

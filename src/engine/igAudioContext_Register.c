@@ -6,12 +6,12 @@ extern char thunk_igAudioContext_GetMetaObject[];
 extern char igObject_Register[];
 extern char igAudioContext_className[];
 extern char g_igAudioContext_metaObject[];
-int GpFlag_SetOnce_00142f10();
+int AudioLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igAudioContext_InitFields();
 
 void igAudioContext_Register(void) {
-    GpFlag_SetOnce_00142f10();
+    AudioLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAudioContext_metaObject,  /* published MetaObject slot */

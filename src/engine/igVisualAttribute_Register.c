@@ -6,11 +6,11 @@ extern char igAttr_GetPublishedMetaObject[];
 extern char igAttr_Register[];
 extern char igVisualAttribute_className[];
 extern char g_igVisualAttribute_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igVisualAttribute_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igVisualAttribute_metaObject, /* published MetaObject slot */

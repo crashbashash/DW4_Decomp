@@ -7,12 +7,12 @@ extern char thunk_igEnvironmentMapShader2_GetMetaObject[];
 extern char g_igEnvironmentMapShader2_callbackList[];
 extern char igEnvironmentMapShader2_className[];
 extern char g_igEnvironmentMapShader2_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igEnvironmentMapShader2_InitFields();
 
 void igEnvironmentMapShader2_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igEnvironmentMapShader2_metaObject, /* published MetaObject slot */

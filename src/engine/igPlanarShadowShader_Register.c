@@ -8,12 +8,12 @@ extern char igAttrSet_Register[];
 extern char g_igPlanarShadowShader_callbackList[];
 extern char igPlanarShadowShader_className[];
 extern char g_igPlanarShadowShader_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igPlanarShadowShader_InitFields();
 
 void igPlanarShadowShader_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igPlanarShadowShader_metaObject, /* published MetaObject slot */

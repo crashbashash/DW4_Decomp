@@ -9,10 +9,10 @@ extern char g_igViewList_callbackList[];
 extern char igViewList_className[];
 extern char g_igViewList_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 
 void igViewList_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igViewList_metaObject,    /* published MetaObject slot */

@@ -6,11 +6,11 @@ extern char thunk_igInsightPlugin_GetMetaObject[];
 extern char igObject_Register[];
 extern char igInsightPlugin_className[];
 extern char g_igInsightPlugin_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igInsightPlugin_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igInsightPlugin_metaObject, /* published MetaObject slot */

@@ -7,12 +7,12 @@ extern char igMaterialAttr_GetVTable[];
 extern char thunk_igMaterialAttr_GetMetaObject[];
 extern char igMaterialAttr_className[];
 extern char g_igMaterialAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igMaterialAttr_InitFields();
 
 void igMaterialAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMaterialAttr_metaObject,              /* published MetaObject slot */

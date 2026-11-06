@@ -8,12 +8,12 @@ extern char igInsightScheduler_Register[];
 extern char g_igSerialScheduler_callbackList[];
 extern char igSerialScheduler_className[];
 extern char g_igSerialScheduler_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igSerialScheduler_InitFields();
 
 void igSerialScheduler_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igSerialScheduler_metaObject,            /* published MetaObject slot */

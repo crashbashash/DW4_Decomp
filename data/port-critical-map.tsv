@@ -113,7 +113,7 @@
 0x0030b0c0	igStringMetaField_DestructValue	80	c	1	0	lua	Lua root	1	3	0
 0x00331660	igIntList_GetMetaObject_Virtual	12	c	1	0	lua	Lua root	0	0	0
 0x00331d60	igIntList_TrimCapacity	48	c	1	0	lua	Lua root	2	0	0
-0x0033c8e0	GpFlag_SetOnce_0033c8e0	24	c	1	1	-	Lua root	0	0	0
+0x0033c8e0	BecLibrary_MarkRegistered	24	c	1	1	-	Lua root	0	0	0
 0x0033e9c0	ObjectRef_Destruct_0033e9c0	128	c	1	1	-	fightcalc.c	0	3	0
 0x0033ec00	FUN_0033ec00	128	c	0	1	-	Lua root	3	0	0
 0x00344250	FUN_00344250	84	c	0	1	-	audio-playback.md	0	0	0
@@ -596,7 +596,7 @@
 0x003a9580	beDataBase_GetRecordString	88	c	1	0	port	database.c	4	1	0
 0x003a95e0	beDataBase_GetRecordCount	296	c	1	1	-	cardshop.c	22	0	0
 0x003a9780	Gap__Bec__beDBManager__vfunc_33	128	c	1	0	port	database.c	4	0	0
-0x003b0a10	GpFlag_SetOnce_003b0a10	24	c	1	1	-	Lua root	0	0	0
+0x003b0a10	NdmwLibrary_MarkRegistered	24	c	1	1	-	Lua root	0	0	0
 0x003b1d70	FUN_003b1d70	84	c	0	1	-	Lua root	0	0	0
 0x003b2c00	FUN_003b2c00	52	c	0	1	-	cardshop.c	0	0	0
 0x003b2f30	FUN_003b2f30	128	c	0	2	-	Lua root	0	0	0

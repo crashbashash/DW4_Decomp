@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igDataPumpList_callbackList[];
 extern char igDataPumpList_className[];
 extern char g_igDataPumpList_metaObject[];
-int GpFlag_SetOnce_001e3ff0();
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igDataPumpList_Register(void) {
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                    /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igDataPumpList_metaObject, /* published MetaObject slot */

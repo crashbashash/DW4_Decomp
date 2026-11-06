@@ -8,11 +8,11 @@ extern char igCompoundMetaField_Register[];
 extern char g_igItemDataBaseField_callbackList[];
 extern char igItemDataBaseField_className[];
 extern char g_igItemDataBaseField_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igItemDataBaseField_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igItemDataBaseField_metaObject,           /* published MetaObject slot */

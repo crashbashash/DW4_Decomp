@@ -7,12 +7,12 @@ extern char thunk_igObjectPool_GetMetaObject[];
 extern char igObjectList_Register[];
 extern char igObjectPool_className[];
 extern char g_igObjectPool_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igObjectPool_InitFields();
 
 void igObjectPool_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igObjectPool_metaObject,  /* published MetaObject slot */

@@ -8,12 +8,12 @@ extern char thunk_igCreateCollisionDatabase_GetMetaObject[];
 extern char g_igCreateCollisionDatabase_callbackList[];
 extern char igCreateCollisionDatabase_className[];
 extern char g_igCreateCollisionDatabase_metaObject[];
-int GpFlag_SetOnce_002393f0();
+int CollisionLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igCreateCollisionDatabase_InitFields();
 
 void igCreateCollisionDatabase_Register(void) {
-    GpFlag_SetOnce_002393f0();
+    CollisionLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igCreateCollisionDatabase_metaObject, /* published MetaObject slot */

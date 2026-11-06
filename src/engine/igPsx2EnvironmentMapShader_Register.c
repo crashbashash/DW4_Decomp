@@ -8,12 +8,12 @@ extern char igEnvironmentMapShader2_GetPublishedMetaObject[];
 extern char g_igPsx2EnvironmentMapShader_callbackList[];
 extern char igPsx2EnvironmentMapShader_className[];
 extern char g_igPsx2EnvironmentMapShader_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igPsx2EnvironmentMapShader_InitFields();
 
 void igPsx2EnvironmentMapShader_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igPsx2EnvironmentMapShader_metaObject,        /* published MetaObject slot */

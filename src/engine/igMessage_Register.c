@@ -7,11 +7,11 @@ extern char thunk_igMessage_GetMetaObject[];
 extern char igObject_Register[];
 extern char igMessage_className[];
 extern char g_igMessage_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igMessage_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMessage_metaObject,       /* published MetaObject slot */

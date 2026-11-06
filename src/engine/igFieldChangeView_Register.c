@@ -9,11 +9,11 @@ extern char g_igFieldChangeView_callbackList[];
 extern char igFieldChangeView_className[];
 extern char g_igFieldChangeView_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igFieldChangeView_InitFields();
 
 void igFieldChangeView_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igFieldChangeView_metaObject, /* published MetaObject slot */

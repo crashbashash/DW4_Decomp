@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igMessageList_callbackList[];
 extern char igMessageList_className[];
 extern char g_igMessageList_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igMessageList_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMessageList_metaObject, /* published MetaObject slot */

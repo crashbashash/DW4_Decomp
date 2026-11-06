@@ -6,11 +6,11 @@ extern char thunk_igDataPumpInterface_GetMetaObject[];
 extern char igObject_Register[];
 extern char igDataPumpInterface_className[];
 extern char g_igDataPumpInterface_metaObject[];
-int GpFlag_SetOnce_001e3ff0();
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igDataPumpInterface_Register(void) {
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igDataPumpInterface_metaObject, /* published MetaObject slot */

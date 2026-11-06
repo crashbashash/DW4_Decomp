@@ -8,11 +8,11 @@ extern char igColorChanger_Register[];
 extern char igBasicColorChanger_className[];
 extern char g_igBasicColorChanger_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igBasicColorChanger_InitFields();
 
 void igBasicColorChanger_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igBasicColorChanger_metaObject,      /* published MetaObject slot */

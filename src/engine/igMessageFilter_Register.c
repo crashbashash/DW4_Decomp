@@ -8,12 +8,12 @@ extern char igObject_Register[];
 extern char g_igMessageFilter_callbackList[];
 extern char igMessageFilter_className[];
 extern char g_igMessageFilter_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igMessageFilter_InitFields();
 
 void igMessageFilter_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMessageFilter_metaObject, /* published MetaObject slot */

@@ -8,13 +8,13 @@ extern char igTraversal_GetPublishedMetaObject[];
 extern char g_igIntersectTraversal_callbackList[];
 extern char igIntersectTraversal_className[];
 extern char g_igIntersectTraversal_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igIntersectTraversal_InitFields();
 int FUN_0019e640();
 
 void igIntersectTraversal_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igIntersectTraversal_metaObject,  /* published MetaObject slot */

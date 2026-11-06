@@ -7,12 +7,12 @@ extern char igProjectionMatrixAttr_GetVTable[];
 extern char thunk_igProjectionMatrixAttr_GetMetaObject[];
 extern char igProjectionMatrixAttr_className[];
 extern char g_igProjectionMatrixAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igProjectionMatrixAttr_InitFields();
 
 void igProjectionMatrixAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igProjectionMatrixAttr_metaObject,      /* published MetaObject slot */

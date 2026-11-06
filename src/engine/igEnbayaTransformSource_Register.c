@@ -9,12 +9,12 @@ void thunk_FUN_001a18b0(void);
 extern char g_igEnbayaTransformSource_callbackList[];
 extern char igEnbayaTransformSource_className[];
 extern char g_igEnbayaTransformSource_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igEnbayaTransformSource_InitFields();
 
 void igEnbayaTransformSource_Register(void) {
-    GpFlag_SetOnce_00194380(); /* sets this module's one-shot guard byte at 0x00554b80 (.sbss) */
+    SceneGraphLibrary_MarkRegistered(); /* sets this module's one-shot guard byte at 0x00554b80 (.sbss) */
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igEnbayaTransformSource_metaObject,     /* published MetaObject slot */

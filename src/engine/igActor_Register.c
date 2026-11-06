@@ -8,12 +8,12 @@ extern char thunk_igActor_GetMetaObject[];
 extern char g_igActor_callbackList[];
 extern char igActor_className[];
 extern char g_igActor_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igActor_InitFields();
 
 void igActor_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igActor_metaObject,           /* published MetaObject slot */

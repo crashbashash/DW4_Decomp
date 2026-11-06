@@ -8,12 +8,12 @@ extern char igInfo_Register[];
 extern char g_igDataPumpInfo_callbackList[];
 extern char igDataPumpInfo_className[];
 extern char g_igDataPumpInfo_metaObject[];
-int GpFlag_SetOnce_001e3ff0();
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igDataPumpInfo_InitFields();
 
 void igDataPumpInfo_Register(void) {
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igDataPumpInfo_metaObject,   /* published MetaObject slot */

@@ -8,12 +8,12 @@ extern char igNamedObject_Register[];
 extern char g_igSearchSceneGraph_callbackList[];
 extern char igSearchSceneGraph_className[];
 extern char g_igSearchSceneGraph_metaObject[];
-int GpFlag_SetOnce_00238d50();
+int SceneSearchLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igSearchSceneGraph_InitFields();
 
 void igSearchSceneGraph_Register(void) {
-    GpFlag_SetOnce_00238d50();
+    SceneSearchLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igSearchSceneGraph_metaObject,      /* published MetaObject slot */

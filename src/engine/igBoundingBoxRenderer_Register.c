@@ -9,11 +9,11 @@ extern char g_igBoundingBoxRenderer_callbackList[];
 extern char igBoundingBoxRenderer_className[];
 extern char g_igBoundingBoxRenderer_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_00458680();
+int ViewerLibrary_MarkRegistered();
 int igBoundingBoxRenderer_InitFields();
 
 void igBoundingBoxRenderer_Register(void) {
-    GpFlag_SetOnce_00458680();
+    ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igBoundingBoxRenderer_metaObject, /* published MetaObject slot */

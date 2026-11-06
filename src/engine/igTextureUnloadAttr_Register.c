@@ -8,12 +8,12 @@ extern char thunk_igTextureUnloadAttr_GetMetaObject[];
 extern char g_igTextureUnloadAttr_callbackList[];
 extern char igTextureUnloadAttr_className[];
 extern char g_igTextureUnloadAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igTextureUnloadAttr_InitFields();
 
 void igTextureUnloadAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTextureUnloadAttr_metaObject,         /* published MetaObject slot */

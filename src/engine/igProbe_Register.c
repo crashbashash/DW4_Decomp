@@ -8,12 +8,12 @@ extern char igObject_Register[];
 extern char g_igProbe_callbackList[];
 extern char igProbe_className[];
 extern char g_igProbe_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igProbe_InitFields();
 
 void igProbe_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igProbe_metaObject,         /* published MetaObject slot */

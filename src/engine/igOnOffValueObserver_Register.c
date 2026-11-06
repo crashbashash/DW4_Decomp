@@ -9,11 +9,11 @@ extern char g_igOnOffValueObserver_callbackList[];
 extern char igOnOffValueObserver_className[];
 extern char g_igOnOffValueObserver_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igOnOffValueObserver_InitFields();
 
 void igOnOffValueObserver_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igOnOffValueObserver_metaObject, /* published MetaObject slot */

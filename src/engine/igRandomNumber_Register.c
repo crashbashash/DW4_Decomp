@@ -6,13 +6,13 @@ extern char thunk_igRandomNumber_GetMetaObject[];
 extern char igObject_Register[];
 extern char igRandomNumber_className[];
 extern char g_igRandomNumber_metaObject[];
-/* Run-once guard shared by the registrars: sets a gp-relative flag byte (asm/GpFlag_SetOnce_001e3ff0.s). */
-int GpFlag_SetOnce_001e3ff0();
+/* Run-once guard shared by the registrars: sets a gp-relative flag byte (asm/DataPumpLibrary_MarkRegistered.s). */
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 /* Code in the gap after this function: the class's no-argument field adder (10th registration argument). */
 extern int igRandomNumber_InitFields_001e4370[4];
 void igRandomNumber_Register(void) {
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igRandomNumber_metaObject,   /* published MetaObject slot */

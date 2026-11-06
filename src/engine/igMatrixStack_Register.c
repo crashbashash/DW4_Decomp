@@ -7,13 +7,13 @@ extern char thunk_igMatrixStack_GetMetaObject[];
 extern char igDataList_Register[];
 extern char igMatrixStack_className[];
 extern char g_igMatrixStack_metaObject[];
-int GpFlag_SetOnce_001e3ff0();
+int DataPumpLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int igMatrixStack_InitFields_001e48b0[4];
 void igMatrixStack_Register(void) {
     /* Once-only static-init guard for this unit: the first call sets a gp-relative flag byte and
      * (in some units) chains the RunStaticInit thunks of related classes; per its asm, not a registrar. */
-    GpFlag_SetOnce_001e3ff0();
+    DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMatrixStack_metaObject,   /* published MetaObject slot */

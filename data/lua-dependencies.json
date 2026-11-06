@@ -18010,9 +18010,9 @@
     },
     {
       "address": 3393760,
-      "name": "GpFlag_SetOnce_0033c8e0",
+      "name": "BecLibrary_MarkRegistered",
       "size": 24,
-      "source": "src/game/GpFlag_SetOnce_0033c8e0.c",
+      "source": "src/game/BecLibrary_MarkRegistered.c",
       "direct": [],
       "indirect": []
     },
@@ -27145,9 +27145,9 @@
     },
     {
       "address": 3869200,
-      "name": "GpFlag_SetOnce_003b0a10",
+      "name": "NdmwLibrary_MarkRegistered",
       "size": 24,
-      "source": "src/game/GpFlag_SetOnce_003b0a10.c",
+      "source": "src/game/NdmwLibrary_MarkRegistered.c",
       "direct": [],
       "indirect": []
     },

@@ -9,11 +9,11 @@ extern char g_igMouseCursor_callbackList[];
 extern char igMouseCursor_className[];
 extern char g_igMouseCursor_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igMouseCursor_InitFields();
 
 void igMouseCursor_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMouseCursor_metaObject,   /* published MetaObject slot */

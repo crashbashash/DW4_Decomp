@@ -9,11 +9,11 @@ extern char thunk_igMessageDispatcher_GetMetaObject[];
 extern char igObject_Register[];
 extern char igMessageDispatcher_className[];
 extern char g_igMessageDispatcher_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int igMessageDispatcher_SetAbstractProxy_002321e0[4];
 void igMessageDispatcher_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMessageDispatcher_metaObject,         /* published MetaObject slot */

@@ -7,12 +7,12 @@ extern char thunk_igControllerManager_GetMetaObject[];
 extern char g_igControllerManager_callbackList[];
 extern char igControllerManager_className[];
 extern char g_igControllerManager_metaObject[];
-int GpFlag_SetOnce_00145ce0();
+int WindowInputLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igControllerManager_InitFields();
 
 void igControllerManager_Register(void) {
-    GpFlag_SetOnce_00145ce0();
+    WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igControllerManager_metaObject,       /* published MetaObject slot */

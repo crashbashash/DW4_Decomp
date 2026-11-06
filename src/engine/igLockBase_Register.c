@@ -6,11 +6,11 @@ extern char thunk_igLockBase_GetMetaObject[];
 extern char igInterfaced_Register[];
 extern char igLockBase_className[];
 extern char g_igLockBase_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igLockBase_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igLockBase_metaObject,             /* published MetaObject slot */

@@ -8,10 +8,10 @@ extern char igBasicColorChanger_Register[];
 extern char igOnOffColorChanger_className[];
 extern char g_igOnOffColorChanger_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 
 void igOnOffColorChanger_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igOnOffColorChanger_metaObject,           /* published MetaObject slot */

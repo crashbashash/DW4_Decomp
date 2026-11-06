@@ -8,11 +8,11 @@ extern char g_igRenderer_callbackList[];
 extern char igRenderer_className[];
 extern char g_igRenderer_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igRenderer_InitFields();
 
 void igRenderer_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igRenderer_metaObject,      /* published MetaObject slot */

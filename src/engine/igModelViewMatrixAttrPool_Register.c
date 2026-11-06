@@ -8,11 +8,11 @@ extern char thunk_igModelViewMatrixAttrPool_GetMetaObject[];
 extern char g_igModelViewMatrixAttrPool_callbackList[];
 extern char igModelViewMatrixAttrPool_className[];
 extern char g_igModelViewMatrixAttrPool_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igModelViewMatrixAttrPool_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igModelViewMatrixAttrPool_metaObject, /* published MetaObject slot */

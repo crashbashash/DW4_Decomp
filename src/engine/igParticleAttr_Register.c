@@ -8,12 +8,12 @@ extern char thunk_igParticleAttr_GetMetaObject[];
 extern char g_igParticleAttr_callbackList[];
 extern char igParticleAttr_className[];
 extern char g_igParticleAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igParticleAttr_InitFields();
 
 void igParticleAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igParticleAttr_metaObject,              /* published MetaObject slot */

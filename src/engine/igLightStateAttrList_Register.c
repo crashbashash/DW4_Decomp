@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igLightStateAttrList_callbackList[];
 extern char igLightStateAttrList_className[];
 extern char g_igLightStateAttrList_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igLightStateAttrList_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igLightStateAttrList_metaObject, /* published MetaObject slot */

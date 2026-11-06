@@ -8,12 +8,12 @@ extern char igAttr_Register[];
 extern char g_igDisplayListAttr_callbackList[];
 extern char igDisplayListAttr_className[];
 extern char g_igDisplayListAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igDisplayListAttr_InitFields();
 
 void igDisplayListAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igDisplayListAttr_metaObject, /* published MetaObject slot */

@@ -8,13 +8,13 @@ extern char igInfo_Register[];
 extern char g_igShaderInfo_callbackList[];
 extern char igShaderInfo_className[];
 extern char g_igShaderInfo_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int thunk_FUN_001d8ab0[4];
 int igShaderInfo_InitFields();
 
 void igShaderInfo_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igShaderInfo_metaObject,     /* published MetaObject slot */

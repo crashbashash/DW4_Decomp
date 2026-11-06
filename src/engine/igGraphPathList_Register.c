@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igGraphPathList_callbackList[];
 extern char igGraphPathList_className[];
 extern char g_igGraphPathList_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igGraphPathList_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igGraphPathList_metaObject, /* published MetaObject slot */

@@ -8,12 +8,12 @@ extern char igObject_Register[];
 extern char g_igBoundingSphereMaker_callbackList[];
 extern char igBoundingSphereMaker_className[];
 extern char g_igBoundingSphereMaker_metaObject[];
-int GpFlag_SetOnce_002393f0();
+int CollisionLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igBoundingSphereMaker_InitFields();
 
 void igBoundingSphereMaker_Register(void) {
-    GpFlag_SetOnce_002393f0();
+    CollisionLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igBoundingSphereMaker_metaObject, /* published MetaObject slot */

@@ -7,12 +7,12 @@ extern char igStencilFunctionAttr_GetVTable[];
 extern char thunk_igStencilFunctionAttr_GetMetaObject[];
 extern char igStencilFunctionAttr_className[];
 extern char g_igStencilFunctionAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igStencilFunctionAttr_InitFields();
 
 void igStencilFunctionAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igStencilFunctionAttr_metaObject,       /* published MetaObject slot */

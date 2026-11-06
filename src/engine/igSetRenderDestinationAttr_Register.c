@@ -8,12 +8,12 @@ extern char thunk_igSetRenderDestinationAttr_GetMetaObject[];
 extern char g_igSetRenderDestinationAttr_callbackList[];
 extern char igSetRenderDestinationAttr_className[];
 extern char g_igSetRenderDestinationAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igSetRenderDestinationAttr_InitFields();
 
 void igSetRenderDestinationAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igSetRenderDestinationAttr_metaObject,  /* published MetaObject slot */

@@ -8,12 +8,12 @@ extern char igNamedObject_Register[];
 extern char g_igAppearance_callbackList[];
 extern char igAppearance_className[];
 extern char g_igAppearance_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igAppearance_InitFields();
 
 void igAppearance_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAppearance_metaObject,            /* published MetaObject slot */

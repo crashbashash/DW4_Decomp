@@ -203,7 +203,7 @@
 0012fde0	FUN_0012fde0	match	-
 0012fe38	FUN_0012fe38	match	-
 0012fe90	FUN_0012fe90	match	-
-00130000	GpFlag_SetOnce_00130000	match	-
+00130000	AttrsLibrary_MarkRegistered	match	-
 00130020	FUN_00130020	match	-
 00130060	igVisualContextAttrDefaultManager_GetMetaObject	match	-
 001300b0	igVisualContextAttrDefaultManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igVisualContextAttrDefaultManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
@@ -1035,7 +1035,7 @@
 00142d90	FUN_00142d90	match	-
 00142e10	FUN_00142e10	match	-
 00142e90	FUN_00142e90	match	-
-00142f10	GpFlag_SetOnce_00142f10	match	-
+00142f10	AudioLibrary_MarkRegistered	match	-
 00142f30	FUN_00142f30	match	-
 00142f70	FUN_00142f70	match	-
 00142fc0	igAudioContext_GetMetaObject	match	-
@@ -1101,7 +1101,7 @@
 00145c20	Gap__Core__igPsx2AudioSourceList__vfunc_23	match	-
 00145c30	Gap__Core__igPsx2AudioSourceList__vfunc_18	match	-
 00145c60	FUN_00145c60	match	-
-00145ce0	GpFlag_SetOnce_00145ce0	match	-
+00145ce0	WindowInputLibrary_MarkRegistered	match	-
 00145d00	FUN_00145d00	match	-
 00145d40	FUN_00145d40	match	-
 00145d90	igWindow_GetMetaObject	match	-
@@ -2758,7 +2758,7 @@
 001942f0	FUN_001942f0	match	-
 00194320	FUN_00194320	match	-
 00194350	FUN_00194350	match	-
-00194380	GpFlag_SetOnce_00194380	match	-
+00194380	SceneGraphLibrary_MarkRegistered	match	-
 001943b0	igTraversal_GetMetaObject	match	-
 00194400	igTraversal_GetVTable	match	-
 00194490	FUN_00194490	match	-
@@ -4313,7 +4313,7 @@
 001e3e70	FUN_001e3e70	match	-
 001e3ef0	FUN_001e3ef0	match	-
 001e3f70	FUN_001e3f70	match	-
-001e3ff0	GpFlag_SetOnce_001e3ff0	match	-
+001e3ff0	DataPumpLibrary_MarkRegistered	match	-
 001e4010	FUN_001e4010	match	-
 001e4060	igLongStack_GetMetaObject	match	-
 001e40b0	igLongStack_GetVTable	match	-
@@ -4833,7 +4833,7 @@
 002252a0	zcalloc	match	-
 002252b0	zcfree	match	-
 002252d8	FUN_002252d8	match	-
-00225770	GpFlag_SetOnce_00225770	match	-
+00225770	BaseLibrary_MarkRegistered	match	-
 00225790	FUN_00225790	match	-
 00225870	igCompoundList_GetMetaObject	match	-
 002258c0	igCompoundList_GetVTable	match	-
@@ -5129,7 +5129,7 @@
 00230298	FUN_00230298	match	-
 002306d0	__adddf3	match	-
 00230728	FUN_00230728	match	-
-00230f50	GpFlag_SetOnce_00230f50	match	-
+00230f50	InsightLibrary_MarkRegistered	match	-
 00230f70	FUN_00230f70	match	-
 00231030	FUN_00231030	match	-
 002310e0	igSerialScheduler_GetMetaObject	match	-
@@ -5359,7 +5359,7 @@
 00238d20	FUN_00238d20	match	-
 00238d30	FUN_00238d30	match	-
 00238d40	thunk_FUN_00238ed0	match	-
-00238d50	GpFlag_SetOnce_00238d50	match	-
+00238d50	SceneSearchLibrary_MarkRegistered	match	-
 00238d70	FUN_00238d70	match	-
 00238dd0	igSearchSceneGraph_GetMetaObject	match	-
 00238e20	igSearchSceneGraph_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSearchSceneGraph (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
@@ -5373,7 +5373,7 @@
 00239300	FUN_00239300	match	-
 00239380	Gap__Core__igSearchSceneGraph__vfunc_22	match	-
 00239390	FUN_00239390	match	-
-002393f0	GpFlag_SetOnce_002393f0	match	-
+002393f0	CollisionLibrary_MarkRegistered	match	-
 00239410	igCreateCollisionDatabase_GetMetaObject	match	-
 00239460	igCreateCollisionDatabase_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCreateCollisionDatabase (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
 00239530	FUN_00239530	match	-
@@ -5460,7 +5460,7 @@
 0023c410	FUN_0023c410	match	-
 0023c420	FUN_0023c420	match	-
 0023c430	Gap__Core__igCollisionGroupList__vfunc_24	match	-
-0023c440	GpFlag_SetOnce_0023c440	match	-
+0023c440	LuaLibrary_MarkRegistered	match	-
 0023c460	igLuaState_GetMetaObject	match	-
 0023c4b0	igLuaState_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igLuaState (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
 0023c590	FUN_0023c590	match	-
@@ -10962,7 +10962,7 @@
 00334360	Gap__igAdxFile__vfunc_32	match	-
 00334370	FUN_00334370	match	exception index 0x547424: matches retail (packed)
 003343a0	FUN_003343a0	match	exception index 0x547430: matches retail (packed)
-00334440	GpFlag_SetOnce_00334440	match	-
+00334440	AdxMovieLibrary_MarkRegistered	match	-
 00334460	FUN_00334460	match	exception index 0x54743c: matches retail (packed)
 003344b0	igAdx_GetVTable	match	exception index 0x547448: matches retail (packed)
 003344f0	FUN_003344f0	match	exception index 0x547454: matches retail (packed)
@@ -11158,7 +11158,7 @@
 0033bf10	Gap__igMoviePlugin__vfunc_22	match	exception index 0x547be0: matches retail (packed)
 0033bf40	Gap__igMoviePlugin__vfunc_20	match	-
 0033bf50	FUN_0033bf50	match	exception index 0x547bec: matches retail (packed)
-0033c8e0	GpFlag_SetOnce_0033c8e0	match	-
+0033c8e0	BecLibrary_MarkRegistered	match	-
 0033c900	FUN_0033c900	match	exception index 0x547bf8: matches retail (packed)
 0033c950	libBecRuntimePlugin_GetVTable	code-only	exception metadata: retail keeps an index record at 0x547c04 (table 0x542e3c 488 bytes) that the object does not produce (its unit was C++ with exceptions on)
 0033cd20	FUN_0033cd20	match	exception index 0x547c10: matches retail (packed)
@@ -14402,7 +14402,7 @@
 003b02c0	Gap__Bec__beTextureCtrl__vfunc_31	match	DEFERRED duplicate 0x19aa10 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 003b04d0	Gap__Bec__beTextureCtrl__vfunc_20	match	-
 003b04e0	FUN_003b04e0	match	exception index 0x54fa94: matches retail (packed)
-003b0a10	GpFlag_SetOnce_003b0a10	match	-
+003b0a10	NdmwLibrary_MarkRegistered	match	-
 003b0a30	FUN_003b0a30	match	exception index 0x54faa0: matches retail (packed)
 003b0a80	libNdmwRuntimePlugin_GetVTable	code-only	exception metadata: retail keeps an index record at 0x54faac (table 0x543fc8 248 bytes) that the object does not produce (its unit was C++ with exceptions on)
 003b0ce0	FUN_003b0ce0	match	exception index 0x54fab8: matches retail (packed)
@@ -16340,7 +16340,7 @@
 0044b290	Gap__Bec__beNDMWMdlMapCursor__vfunc_36	match	-
 0044b520	Gap__Bec__beNDMWMdlMapCursor__vfunc_46	match	-
 0044b850	Gap__Bec__beNDMWMdlMapCursor__vfunc_20	match	-
-0044b860	GpFlag_SetOnce_0044b860	match	-
+0044b860	GuiLibrary_MarkRegistered	match	-
 0044b880	FUN_0044b880	match	-
 0044b8d0	igNonRefCountedViewList_GetMetaObject	match	-
 0044b920	igNonRefCountedViewList_GetVTable	match	-
@@ -16864,7 +16864,7 @@
 00458610	FUN_00458610	match	-
 00458620	FUN_00458620	match	-
 00458630	FUN_00458630	match	exception index 0x55481c: matches retail (packed)
-00458680	GpFlag_SetOnce_00458680	match	-
+00458680	ViewerLibrary_MarkRegistered	match	-
 004586a0	FUN_004586a0	match	-
 004586f0	igViewerStatisticsManager_GetMetaObject	match	-
 00458740	igViewerStatisticsManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igViewerStatisticsManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not

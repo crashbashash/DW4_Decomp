@@ -8,13 +8,13 @@ extern char igObject_Register[];
 extern char g_igAttrStackManager_callbackList[];
 extern char igAttrStackManager_className[];
 extern char g_igAttrStackManager_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 void FUN_001a58e0(void);
 int igAttrStackManager_InitFields();
 
 void igAttrStackManager_Register(void) {
-    GpFlag_SetOnce_00194380();  /* shared set-once latch run before every registration of this family (asm/GpFlag_SetOnce_00194380.s) */
+    SceneGraphLibrary_MarkRegistered();  /* shared set-once latch run before every registration of this family (asm/SceneGraphLibrary_MarkRegistered.s) */
     igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAttrStackManager_metaObject, /* published MetaObject slot */

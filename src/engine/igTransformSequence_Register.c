@@ -7,12 +7,12 @@ extern char igTransformSource_GetPublishedMetaObject[];
 extern char g_igTransformSequence_callbackList[];
 extern char igTransformSequence_className[];
 extern char g_igTransformSequence_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igTransformSequence_InitFields();
 
 void igTransformSequence_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTransformSequence_metaObject,         /* published MetaObject slot */

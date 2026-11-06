@@ -8,12 +8,12 @@ extern char igAnimationSequence_Register[];
 extern char g_igCompressedAnimationSequenceQS_callbackList[];
 extern char igCompressedAnimationSequenceQS_className[];
 extern char g_igCompressedAnimationSequenceQS_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igCompressedAnimationSequenceQS_InitFields();
 
 void igCompressedAnimationSequenceQS_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igCompressedAnimationSequenceQS_metaObject, /* published MetaObject slot */

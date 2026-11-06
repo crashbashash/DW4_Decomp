@@ -7,12 +7,12 @@ extern char igCamera_GetVTable[];
 extern char thunk_igCamera_GetMetaObject[];
 extern char igCamera_className[];
 extern char g_igCamera_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igCamera_InitFields();
 
 void igCamera_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igCamera_metaObject,         /* published MetaObject slot */

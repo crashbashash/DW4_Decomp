@@ -8,10 +8,10 @@ extern char thunk_igCharMetricsList_GetMetaObject[];
 extern char igCharMetricsList_className[];
 extern char g_igCharMetricsList_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 void FUN_00452900(void);
 void igCharMetricsList_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igCharMetricsList_metaObject, /* published MetaObject slot */

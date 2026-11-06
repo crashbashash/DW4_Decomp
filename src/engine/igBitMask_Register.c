@@ -7,12 +7,12 @@ extern char igUnsignedIntList_GetPublishedMetaObject[];
 extern char igUnsignedIntList_Register[];
 extern char igBitMask_className[];
 extern char g_igBitMask_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igBitMask_InitFields();
 
 void igBitMask_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igBitMask_metaObject,                   /* published MetaObject slot */

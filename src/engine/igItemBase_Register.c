@@ -6,11 +6,11 @@ extern char thunk_igItemBase_GetMetaObject[];
 extern char igBase_Register[];
 extern char igItemBase_className[];
 extern char g_igItemBase_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igItemBase_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igItemBase_metaObject,       /* published MetaObject slot */

@@ -8,11 +8,11 @@ extern char igModel_Register[];
 extern char igRadioGroupModel_className[];
 extern char g_igRadioGroupModel_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 int igRadioGroupModel_InitFields();
 
 void igRadioGroupModel_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igRadioGroupModel_metaObject, /* published MetaObject slot */

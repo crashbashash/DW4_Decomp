@@ -8,13 +8,13 @@ extern char thunk_igTextureBindAttr_GetMetaObject[];
 extern char g_igTextureBindAttr_callbackList[];
 extern char igTextureBindAttr_className[];
 extern char g_igTextureBindAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int thunk_FUN_00140f40[4];
 int igTextureBindAttr_InitFields();
 
 void igTextureBindAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igTextureBindAttr_metaObject,           /* published MetaObject slot */

@@ -7,11 +7,11 @@ extern char thunk_igLuaGlue_GetMetaObject[];
 extern char igObject_Register[];
 extern char igLuaGlue_className[];
 extern char g_igLuaGlue_metaObject[];
-int GpFlag_SetOnce_0023c440();
+int LuaLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igLuaGlue_Register(void) {
-    GpFlag_SetOnce_0023c440();
+    LuaLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igLuaGlue_metaObject,       /* published MetaObject slot */

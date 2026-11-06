@@ -8,11 +8,11 @@ extern char igObjectList_Register[];
 extern char g_igListenerListList_callbackList[];
 extern char igListenerListList_className[];
 extern char g_igListenerListList_metaObject[];
-int GpFlag_SetOnce_00225770();
+int BaseLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igListenerListList_Register(void) {
-    GpFlag_SetOnce_00225770();
+    BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igListenerListList_metaObject, /* published MetaObject slot */

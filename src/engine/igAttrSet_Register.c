@@ -8,12 +8,12 @@ extern char thunk_igAttrSet_GetMetaObject[];
 extern char g_igAttrSet_callbackList[];
 extern char igAttrSet_className[];
 extern char g_igAttrSet_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igAttrSet_InitFields();
 
 void igAttrSet_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAttrSet_metaObject,         /* published MetaObject slot */

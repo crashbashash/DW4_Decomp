@@ -7,12 +7,12 @@ extern char igColorAttr_GetVTable[];
 extern char thunk_igColorAttr_GetMetaObject[];
 extern char igColorAttr_className[];
 extern char g_igColorAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igColorAttr_InitFields();
 
 void igColorAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igColorAttr_metaObject,                 /* published MetaObject slot */

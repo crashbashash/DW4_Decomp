@@ -6,11 +6,11 @@ extern char thunk_igAttrDefaultManager_GetMetaObject[];
 extern char igObject_Register[];
 extern char igAttrDefaultManager_className[];
 extern char g_igAttrDefaultManager_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 
 void igAttrDefaultManager_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAttrDefaultManager_metaObject, /* published MetaObject slot */

@@ -8,11 +8,11 @@ extern char thunk_igInsightScheduler_GetMetaObject[];
 extern char igObject_Register[];
 extern char igInsightScheduler_className[];
 extern char g_igInsightScheduler_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 extern int igInsightScheduler_SetAbstractProxy_002325a0[4];
 void igInsightScheduler_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igInsightScheduler_metaObject,         /* published MetaObject slot */

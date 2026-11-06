@@ -5,7 +5,7 @@
  * with exceptions on and retail keeps this function's exception index record. */
 struct igMetaObject;
 extern "C" {
-void GpFlag_SetOnce_00334440(void);
+void AdxMovieLibrary_MarkRegistered(void);
 void *igMetaObject_RegisterClass(
         int abstractState,
         igMetaObject **slot,
@@ -29,7 +29,7 @@ void *igAdxAfsFileList_Register(void);
 }
 
 void *igAdxAfsFileList_Register(void) {
-    GpFlag_SetOnce_00334440();
+    AdxMovieLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAdxAfsFileList_metaObject,    /* published MetaObject slot */

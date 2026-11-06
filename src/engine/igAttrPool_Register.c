@@ -8,13 +8,13 @@ extern char igObject_Register[];
 extern char g_igAttrPool_callbackList[];
 extern char igAttrPool_className[];
 extern char g_igAttrPool_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 void FUN_0013aa90(void);
 int igAttrPool_InitFields();
 
 void igAttrPool_Register(void) {
-    GpFlag_SetOnce_00130000();  /* set-once latch: writes a gp-relative byte flag only if it is clear (asm/GpFlag_SetOnce_00130000.s) */
+    AttrsLibrary_MarkRegistered();  /* set-once latch: writes a gp-relative byte flag only if it is clear (asm/AttrsLibrary_MarkRegistered.s) */
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igAttrPool_metaObject,      /* published MetaObject slot */

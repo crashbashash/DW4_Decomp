@@ -7,12 +7,12 @@ extern char igVertexBlendMatrixAttr_GetVTable[];
 extern char thunk_igVertexBlendMatrixAttr_GetMetaObject[];
 extern char igVertexBlendMatrixAttr_className[];
 extern char g_igVertexBlendMatrixAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igVertexBlendMatrixAttr_InitFields();
 
 void igVertexBlendMatrixAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igVertexBlendMatrixAttr_metaObject,     /* published MetaObject slot */

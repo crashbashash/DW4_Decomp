@@ -9,12 +9,12 @@ extern char igWindow_GetPublishedMetaObject[];
 extern char g_igPsx2Window_callbackList[];
 extern char igPsx2Window_className[];
 extern char g_igPsx2Window_metaObject[];
-int GpFlag_SetOnce_00145ce0();
+int WindowInputLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igPsx2Window_InitFields();
 
 void igPsx2Window_Register(void) {
-    GpFlag_SetOnce_00145ce0(); /* sets this module's one-shot guard byte at 0x00554b14 (.sbss) */
+    WindowInputLibrary_MarkRegistered(); /* sets this module's one-shot guard byte at 0x00554b14 (.sbss) */
     igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igPsx2Window_metaObject,       /* published MetaObject slot */

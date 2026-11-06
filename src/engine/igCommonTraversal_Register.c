@@ -8,13 +8,13 @@ extern char thunk_igCommonTraversal_GetMetaObject[];
 extern char g_igCommonTraversal_callbackList[];
 extern char igCommonTraversal_className[];
 extern char g_igCommonTraversal_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igCommonTraversal_InitFields();
 int FUN_001a44d0();
 
 void igCommonTraversal_Register(void) {
-    GpFlag_SetOnce_00194380();
+    SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igCommonTraversal_metaObject,     /* published MetaObject slot */

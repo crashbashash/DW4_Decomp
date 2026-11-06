@@ -8,10 +8,10 @@ extern char thunk_igEventReceiver_GetMetaObject[];
 extern char igEventReceiver_className[];
 extern char g_igEventReceiver_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_0044b860();
+int GuiLibrary_MarkRegistered();
 
 void igEventReceiver_Register(void) {
-    GpFlag_SetOnce_0044b860();
+    GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igEventReceiver_metaObject, /* published MetaObject slot */

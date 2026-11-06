@@ -8,11 +8,11 @@ extern char thunk_igViewerLoadingFileMessage_GetMetaObject[];
 extern char igViewerLoadingFileMessage_className[];
 extern char g_igViewerLoadingFileMessage_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_00458680();
+int ViewerLibrary_MarkRegistered();
 int igViewerLoadingFileMessage_InitFields();
 
 void igViewerLoadingFileMessage_Register(void) {
-    GpFlag_SetOnce_00458680();
+    ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igViewerLoadingFileMessage_metaObject, /* published MetaObject slot */

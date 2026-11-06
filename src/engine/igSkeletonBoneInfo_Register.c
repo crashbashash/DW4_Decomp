@@ -7,12 +7,12 @@ extern char thunk_igSkeletonBoneInfo_GetMetaObject_00198ac0[];
 extern char igNamedObject_Register[];
 extern char igSkeletonBoneInfo_className[];
 extern char g_igSkeletonBoneInfo_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igSkeletonBoneInfo_InitFields();
 
 void igSkeletonBoneInfo_Register(void) {
-    GpFlag_SetOnce_00194380();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
+    SceneGraphLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igSkeletonBoneInfo_metaObject,      /* published MetaObject slot */

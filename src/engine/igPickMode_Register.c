@@ -9,11 +9,11 @@ extern char g_igPickMode_callbackList[];
 extern char igPickMode_className[];
 extern char g_igPickMode_metaObject[];
 int igMetaObject_RegisterClass();
-int GpFlag_SetOnce_00458680();
+int ViewerLibrary_MarkRegistered();
 int igPickMode_InitFields();
 
 void igPickMode_Register(void) {
-    GpFlag_SetOnce_00458680();
+    ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igPickMode_metaObject,           /* published MetaObject slot */

@@ -7,12 +7,12 @@ extern char igNamedObject_Register[];
 extern char g_igInfoManager_callbackList[];
 extern char igInfoManager_className[];
 extern char g_igInfoManager_metaObject[];
-int GpFlag_SetOnce_00230f50();
+int InsightLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igInfoManager_InitFields();
 
 void igInfoManager_Register(void) {
-    GpFlag_SetOnce_00230f50();
+    InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igInfoManager_metaObject,           /* published MetaObject slot */

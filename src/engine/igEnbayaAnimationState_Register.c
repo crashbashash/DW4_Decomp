@@ -9,12 +9,12 @@ void FUN_001a2190(void);
 extern char igAnimationState_Register[];
 extern char igEnbayaAnimationState_className[];
 extern char g_igEnbayaAnimationState_metaObject[];
-int GpFlag_SetOnce_00194380();
+int SceneGraphLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igEnbayaAnimationState_InitFields();
 
 void igEnbayaAnimationState_Register(void) {
-    GpFlag_SetOnce_00194380(); /* sets this module's one-shot guard byte at 0x00554b80 (.sbss) */
+    SceneGraphLibrary_MarkRegistered(); /* sets this module's one-shot guard byte at 0x00554b80 (.sbss) */
     igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igEnbayaAnimationState_metaObject,     /* published MetaObject slot */

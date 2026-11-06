@@ -7,12 +7,12 @@ extern char igPolygonModeAttr_GetVTable[];
 extern char thunk_igPolygonModeAttr_GetMetaObject[];
 extern char igPolygonModeAttr_className[];
 extern char g_igPolygonModeAttr_metaObject[];
-int GpFlag_SetOnce_00130000();
+int AttrsLibrary_MarkRegistered();
 int igMetaObject_RegisterClass();
 int igPolygonModeAttr_InitFields();
 
 void igPolygonModeAttr_Register(void) {
-    GpFlag_SetOnce_00130000();
+    AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igPolygonModeAttr_metaObject,           /* published MetaObject slot */
