@@ -103,7 +103,7 @@ static struct outcome run_case(dw4_mount *mount,const dw4_hubruntime_source *sou
                 else{o.kind=FAILED;snprintf(o.detail,sizeof o.detail,"save scene did not finish (stage '%s', %u ticks)",stage,t);}
                 dw4_hubruntime_close(scene);
             }
-            char file[700];snprintf(file,sizeof file,"%s/%s",dir,"BASLUS-20836savedata");remove(file);snprintf(file,sizeof file,"%s.bak",file);remove(file);rmdir(dir);unsetenv("DW4_SAVE_DIR");
+            char file[700];snprintf(file,sizeof file,"%s/%s",dir,"BASLUS-20836savedata");remove(file);snprintf(file,sizeof file,"%s/%s.bak",dir,"BASLUS-20836savedata");remove(file);rmdir(dir);unsetenv("DW4_SAVE_DIR");
             dw4_hubruntime_close(h);return o;
         }
         if(travel->pending){o.kind=STAGE;snprintf(o.detail,sizeof o.detail,"%s",travel->destination);dw4_hubruntime_close(h);return o;}

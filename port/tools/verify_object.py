@@ -15,6 +15,7 @@ import os
 import struct
 import subprocess
 import sys
+import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PORT = os.path.dirname(HERE)
@@ -60,13 +61,16 @@ def main():
 
     # the independent reference (all records; --class is applied exactly below, since igb_inst's
     # own --class is a substring match)
-    ref_cmd = [sys.executable, os.path.join(args.decomp, "scripts", "igb_inst.py"), afs,
-               "--blob", hex(off), "--json", "/tmp/verify_obj_ref.json", "--quiet"]
-    r = subprocess.run(ref_cmd, capture_output=True, text=True)
-    if r.returncode != 0:
-        print("  igb_inst.py failed: %s" % (r.stderr.strip() or r.stdout.strip()))
-        return 1
-    ref = json.load(open("/tmp/verify_obj_ref.json"))
+    with tempfile.TemporaryDirectory(prefix="dw4-verify-object-") as tmp:
+        ref_json = os.path.join(tmp, "ref.json")
+        ref_cmd = [sys.executable, os.path.join(args.decomp, "scripts", "igb_inst.py"), afs,
+                   "--blob", hex(off), "--json", ref_json, "--quiet"]
+        r = subprocess.run(ref_cmd, capture_output=True, text=True)
+        if r.returncode != 0:
+            print("  igb_inst.py failed: %s" % (r.stderr.strip() or r.stdout.strip()))
+            return 1
+        with open(ref_json) as fh:
+            ref = json.load(fh)
     if args.cls:
         ref = [rec for rec in ref if rec["class"] == args.cls]
 

@@ -107,10 +107,9 @@ echo "   ok"
 echo "== NDMW.IGB manifest table (name -> archive entry), C vs Python"
 "$tool" manifest "$roms/NDMW.IGB" --all | sort > "$tmp/c.tsv"
 python3 - "$repo" "$roms/NDMW.IGB" "$tmp/py.tsv" <<'PY'
-import json, os, subprocess, sys, tempfile
+import json, os, subprocess, sys
 repo, igb, out = sys.argv[1], sys.argv[2], sys.argv[3]
-with tempfile.NamedTemporaryFile(suffix='.json', delete=False) as f:
-    js = f.name
+js = out + '.json'
 subprocess.run([sys.executable, os.path.join(repo, 'scripts', 'igb_inst.py'), igb,
                 '--blob', '0', '--class', 'igAdxAfsFile',
                 '--reflection', os.path.join(repo, 'data', 'reflection.json'),
@@ -123,7 +122,6 @@ for r in json.load(open(js)):
         continue
     rows.append('%s\t%d\t%d' % (name, val['_ptNumber'], val['_fileNumber']))
 open(out, 'w').write('\n'.join(sorted(rows)) + '\n')
-os.unlink(js)
 PY
 if ! diff -q "$tmp/c.tsv" "$tmp/py.tsv" >/dev/null; then
     echo "   MISMATCH:" >&2

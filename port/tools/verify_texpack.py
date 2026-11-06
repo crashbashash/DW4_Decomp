@@ -12,6 +12,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PORT = os.path.dirname(HERE)
@@ -94,13 +95,14 @@ def main():
             return 1
         # pixel-exact: decode the first texture with both and compare the bytes
         name = sorted(want)[0]
-        tmp = "/tmp/dw4_texpack_%d.raw" % entry
-        subprocess.run([args.tool, "texpack", "--afs", args.afs, "--entry", str(entry),
-                        "--decode", name, "--out", tmp], capture_output=True, check=True)
+        with tempfile.TemporaryDirectory(prefix="dw4-texpack-") as tmp:
+            raw = os.path.join(tmp, "decoded.raw")
+            subprocess.run([args.tool, "texpack", "--afs", args.afs, "--entry", str(entry),
+                            "--decode", name, "--out", raw], capture_output=True, check=True)
+            with open(raw, "rb") as fh:
+                cpx = fh.read()
         d = [x for x in TP.image_records(b) if x["name"] == name][0]
         _w, _h, px = TP.decode_rgba(b, layout, d["image"], pal[d["image"]])
-        cpx = open(tmp, "rb").read()
-        os.unlink(tmp)
         if cpx != px:
             print("  entry %d: %s decodes differently (%d vs %d bytes)"
                   % (entry, name, len(cpx), len(px)))

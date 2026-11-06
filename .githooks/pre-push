@@ -200,6 +200,7 @@ done
 if [ "$rc" -ne 0 ]; then
     echo "pre-push: REFUSED — see the lines above"
 else
+    rm -rf "$logdir"
     echo "pre-push: PASS — the byte oracle is the runner's verdict on the pushed commit (.github/workflows/oracle.yml)"
 fi
 exit $rc

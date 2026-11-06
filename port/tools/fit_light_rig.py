@@ -26,8 +26,10 @@ in the objective (repeat a name to weight it); `--wide` frees the three diffuse 
 scaling one key colour.  The result prints as a SPEC plus the default rig's source values.
 """
 import argparse
+import atexit
 import math
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -66,6 +68,7 @@ def main():
     here = os.path.dirname(os.path.abspath(__file__))
     port = os.path.dirname(here)
     work = tempfile.mkdtemp(prefix="fit_rig_")
+    atexit.register(shutil.rmtree, work, ignore_errors=True)
     # `{out}` is a directory: the render's scene path writes `frame_0000.png` into `--out-dir`.  A
     # single-model render, which takes `--out FILE`, lands in the same place if pointed at it.
     cmd = a.cmd.replace("{out}", work)

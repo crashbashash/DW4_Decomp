@@ -15,7 +15,7 @@ Two jobs, both driven by the Ghidra function dump:
 The generated assembly is `.word` per instruction with the disassembly in a
 comment: it reassembles byte-for-byte with `mipsel-linux-gnu-as`, and reads as
 the original code for review. `asm/` is GENERATED and not committed (it is the retail
-code as text): never hand-edit it; re-run this. `make` and `configure.py` call
+code as text): never hand-edit it; re-run this. `make` calls
 `split.py --ensure`, which writes the tree when it is missing or stale.
 
 Usage:
@@ -47,6 +47,7 @@ import struct
 import sys
 import subprocess
 import sys
+import tempfile
 
 VADDR_BASE, FILE_BASE = 0x100000, 0x80
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1169,13 +1170,13 @@ def disassemble_range(img, lo, hi):
     one subprocess per function (which is what makes 15k functions tractable).
     """
     import re
-    tmp = "/tmp/split_raw_%d.bin" % os.getpid()
-    with open(tmp, "wb") as fh:
-        fh.write(va_bytes(img, lo, hi - lo))
-    out = subprocess.run(
-        ["mipsel-linux-gnu-objdump", "-D", "-b", "binary",
-         "-m", "mips:5900", "-EL", "--adjust-vma", hex(lo), tmp],
-        capture_output=True, text=True).stdout
+    with tempfile.NamedTemporaryFile(prefix="split_raw_", suffix=".bin") as raw:
+        raw.write(va_bytes(img, lo, hi - lo))
+        raw.flush()
+        out = subprocess.run(
+            ["mipsel-linux-gnu-objdump", "-D", "-b", "binary",
+             "-m", "mips:5900", "-EL", "--adjust-vma", hex(lo), raw.name],
+            capture_output=True, text=True).stdout
     table = {}
     for ln in out.splitlines():
         m = re.match(r"^\s*([0-9a-f]+):\s+([0-9a-f]{8})\s+(.*)$", ln)

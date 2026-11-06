@@ -16,6 +16,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 ROUTE = ('5:start,70:start,130:cross,300:cross,345:cross,395:cross,410:right,420:right,432:cross,448:start,500:cross,530:cross,580:start')
 
@@ -31,9 +32,9 @@ a = p.parse_args()
 script = ROUTE + ''.join(',%d:cross' % f for f in range(a.frames - 400, a.frames, 60))
 env = dict(os.environ, DW4_FRAME_TRACE='1')
 cmd = [a.tool, '--roms', a.roms, '--boot', '--window', '--headless', '--w', '1280', '--h', '960',
-       '--frames', str(a.frames), '--loading-min-seconds', '0', '--input-script', script, '--out-dir', '/tmp/dw4-profile']
-os.makedirs('/tmp/dw4-profile', exist_ok=True)
-r = subprocess.run(cmd, env=env, capture_output=True, text=True)
+       '--frames', str(a.frames), '--loading-min-seconds', '0', '--input-script', script]
+with tempfile.TemporaryDirectory(prefix='dw4-profile-') as out_dir:
+    r = subprocess.run(cmd + ['--out-dir', out_dir], env=env, capture_output=True, text=True)
 if r.returncode != 0:
     sys.exit('run failed (%d):\n%s' % (r.returncode, r.stderr[-2000:]))
 lines = (r.stdout + r.stderr).splitlines()

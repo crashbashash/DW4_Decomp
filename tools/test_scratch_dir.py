@@ -11,7 +11,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import cc
 
-TOOLS = ("verify.py", "check.py", "linkgen.py", "automatch.py", "m2c_batch.py", "m2c_one.py")
+TOOLS = ("verify.py", "check.py", "linkgen.py", "automatch.py", "m2c_batch.py", "m2c_one.py", "split.py")
 
 
 class ScratchDir(unittest.TestCase):
