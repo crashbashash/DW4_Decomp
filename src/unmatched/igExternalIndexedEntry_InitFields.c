@@ -11,10 +11,10 @@ extern int DAT_004c0c90[4];
 extern int DAT_004c0cb0[4];
 extern int DAT_00586418[4];
 void igExternalIndexedEntry_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00586418[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

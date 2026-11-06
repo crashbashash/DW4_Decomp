@@ -7,8 +7,7 @@ igMetaObject *igFloatList_GetMetaObject(void);
 igMetaObject *igFloatList_GetMetaObject(void)
 {
     igMetaObject *g = g_igFloatList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c9860();
     return g_igFloatList_metaObject[0];
 }

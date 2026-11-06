@@ -9,8 +9,8 @@ extern int DAT_004bf358[4];
 extern int DAT_004bf360[4];
 extern int DAT_00585770[4];
 void igUnsignedCharArrayMetaField_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00585770[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

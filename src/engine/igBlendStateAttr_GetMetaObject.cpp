@@ -7,8 +7,7 @@ igMetaObject *igBlendStateAttr_GetMetaObject(void);
 igMetaObject *igBlendStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igBlendStateAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00139720();
     return g_igBlendStateAttr_metaObject[0];
 }

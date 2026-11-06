@@ -7,8 +7,7 @@ igMetaObject *igMemoryPoolInfoList_GetMetaObject(void);
 igMetaObject *igMemoryPoolInfoList_GetMetaObject(void)
 {
     igMetaObject *g = g_igMemoryPoolInfoList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002bfe40();
     return g_igMemoryPoolInfoList_metaObject[0];
 }

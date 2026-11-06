@@ -7,8 +7,7 @@ igMetaObject *igDirectoryList_GetMetaObject(void);
 igMetaObject *igDirectoryList_GetMetaObject(void)
 {
     igMetaObject *g = g_igDirectoryList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c7230();
     return g_igDirectoryList_metaObject[0];
 }

@@ -14,9 +14,9 @@ extern int DAT_0055f738[4];
 int FUN_00146d90();
 
 void igPsx2ControllerManager_InitFields(void) {
-    void *temp_s0;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f738[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

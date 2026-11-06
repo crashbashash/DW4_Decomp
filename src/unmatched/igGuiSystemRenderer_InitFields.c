@@ -13,12 +13,12 @@ extern int DAT_004d02a0[4];
 extern int DAT_004d02b0[4];
 extern int DAT_0058c338[4];
 void igGuiSystemRenderer_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s1_4;
     int temp_s2;
+    void *temp_s1_4;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058c338[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

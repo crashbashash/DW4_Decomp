@@ -7,8 +7,8 @@ extern int DAT_004861f0[4];
 extern int DAT_004861f8[4];
 extern int DAT_0055efc0[4];
 void igNormalizeNormalsStateAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055efc0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

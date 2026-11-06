@@ -7,8 +7,7 @@ igMetaObject *igCharMetricsList_GetMetaObject(void);
 igMetaObject *igCharMetricsList_GetMetaObject(void)
 {
     igMetaObject *g = g_igCharMetricsList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igCharMetricsList_RunStaticInit();
     return g_igCharMetricsList_metaObject[0];
 }

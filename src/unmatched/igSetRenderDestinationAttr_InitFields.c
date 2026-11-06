@@ -10,9 +10,9 @@ extern int DAT_00485f50[4];
 extern int DAT_00485f58[4];
 extern int DAT_0055eea0[4];
 void igSetRenderDestinationAttr_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055eea0[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

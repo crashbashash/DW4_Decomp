@@ -16,11 +16,11 @@ extern int DAT_00586710[4];
 int FUN_002c7780();
 
 void igDirEntry_InitFields(void) {
-    void *temp_s0;
-    void *temp_v0;
-    void *temp_v0_2;
-    void *temp_v0_3;
     int temp_s2;
+    void *temp_v0_3;
+    void *temp_v0_2;
+    void *temp_v0;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00586710[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

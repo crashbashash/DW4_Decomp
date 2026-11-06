@@ -10,9 +10,9 @@ extern int DAT_0048a0f0[4];
 extern void * DAT_00560610[4];
 extern void thunk_igClut_GetMetaObject(void);
 void igPsx2Clut_InitFields(void) {
-    void *temp_s0;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s0;
     temp_s0 = (void *)(DAT_00560610[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_0048a0d8[0], 2);

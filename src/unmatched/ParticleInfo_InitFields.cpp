@@ -25,9 +25,9 @@ extern int DAT_0058a0e0[4];
 void ParticleInfo_InitFields(void);
 }
 void ParticleInfo_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *f;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058a0e0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

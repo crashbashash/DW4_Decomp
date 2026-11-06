@@ -16,11 +16,11 @@ extern int DAT_0056dc60[4];
 int FUN_00238d70();
 
 void igSearchSceneGraph_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0056dc60[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

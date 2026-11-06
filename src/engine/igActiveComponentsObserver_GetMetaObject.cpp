@@ -7,8 +7,7 @@ igMetaObject *igActiveComponentsObserver_GetMetaObject(void);
 igMetaObject *igActiveComponentsObserver_GetMetaObject(void)
 {
     igMetaObject *g = g_igActiveComponentsObserver_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igActiveComponentsObserver_RunStaticInit();
     return g_igActiveComponentsObserver_metaObject[0];
 }

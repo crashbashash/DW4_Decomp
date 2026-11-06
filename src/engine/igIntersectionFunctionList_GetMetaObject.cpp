@@ -7,8 +7,7 @@ igMetaObject *igIntersectionFunctionList_GetMetaObject(void);
 igMetaObject *igIntersectionFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igIntersectionFunctionList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00189910();
     return g_igIntersectionFunctionList_metaObject[0];
 }

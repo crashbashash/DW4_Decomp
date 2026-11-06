@@ -7,8 +7,7 @@ igMetaObject *igShortListList_GetMetaObject(void);
 igMetaObject *igShortListList_GetMetaObject(void)
 {
     igMetaObject *g = g_igShortListList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c9cf0();
     return g_igShortListList_metaObject[0];
 }

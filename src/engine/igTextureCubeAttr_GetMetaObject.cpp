@@ -7,8 +7,7 @@ igMetaObject *igTextureCubeAttr_GetMetaObject(void);
 igMetaObject *igTextureCubeAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igTextureCubeAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00132420();
     return g_igTextureCubeAttr_metaObject[0];
 }

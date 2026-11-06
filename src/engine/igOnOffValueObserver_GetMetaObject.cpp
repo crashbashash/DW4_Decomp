@@ -7,8 +7,7 @@ igMetaObject *igOnOffValueObserver_GetMetaObject(void);
 igMetaObject *igOnOffValueObserver_GetMetaObject(void)
 {
     igMetaObject *g = g_igOnOffValueObserver_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igOnOffValueObserver_EnsureRegistered();
     return g_igOnOffValueObserver_metaObject[0];
 }

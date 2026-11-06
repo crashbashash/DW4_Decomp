@@ -16,13 +16,13 @@ extern int DAT_0048b7e0[4];
 extern int DAT_005615e0[4];
 void igSceneInfo_InitFields(void) {
     struct V3 v;
-    void *temp_s0;
     int temp_s1;
     void *temp_a0;
     void *temp_s2;
     void *temp_s2_2;
     void *temp_s2_3;
     void *temp_s2_4;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005615e0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

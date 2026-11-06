@@ -7,8 +7,7 @@ igMetaObject *igListenerList_GetMetaObject(void);
 igMetaObject *igListenerList_GetMetaObject(void)
 {
     igMetaObject *g = g_igListenerList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002271d0();
     return g_igListenerList_metaObject[0];
 }

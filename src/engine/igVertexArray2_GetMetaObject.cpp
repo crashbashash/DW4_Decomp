@@ -7,8 +7,7 @@ igMetaObject *igVertexArray2_GetMetaObject(void);
 igMetaObject *igVertexArray2_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexArray2_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014ab70();
     return g_igVertexArray2_metaObject[0];
 }

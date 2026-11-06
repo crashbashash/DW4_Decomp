@@ -9,8 +9,8 @@ extern int DAT_004bf9a0[4];
 extern int DAT_004bf9a8[4];
 extern int DAT_00585a90[4];
 void igRawRefArrayMetaField_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00585a90[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

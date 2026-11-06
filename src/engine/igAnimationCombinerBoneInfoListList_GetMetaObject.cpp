@@ -7,8 +7,7 @@ igMetaObject *igAnimationCombinerBoneInfoListList_GetMetaObject(void);
 igMetaObject *igAnimationCombinerBoneInfoListList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationCombinerBoneInfoListList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a7f00();
     return g_igAnimationCombinerBoneInfoListList_metaObject[0];
 }

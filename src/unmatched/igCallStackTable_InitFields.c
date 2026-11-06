@@ -11,10 +11,10 @@ extern int DAT_004c1550[4];
 extern int DAT_004c1560[4];
 extern int DAT_00586960[4];
 void igCallStackTable_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00586960[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

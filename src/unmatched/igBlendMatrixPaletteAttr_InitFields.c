@@ -11,10 +11,10 @@ extern int DAT_00486a30[4];
 extern int DAT_00486a40[4];
 extern int DAT_0055f360[4];
 void igBlendMatrixPaletteAttr_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f360[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

@@ -12,9 +12,9 @@ extern void * DAT_00586be8[4];
 extern void thunk_igElfFile_GetMetaObject(void);
 
 void igProgramFile_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     ((igMetaObject *)(DAT_00586be8[0]))->_persistent = 0;
     temp_s0 = (void *)(DAT_00586be8[0]);

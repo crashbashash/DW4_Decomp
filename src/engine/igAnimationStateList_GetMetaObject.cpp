@@ -7,8 +7,7 @@ igMetaObject *igAnimationStateList_GetMetaObject(void);
 igMetaObject *igAnimationStateList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationStateList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a6a00();
     return g_igAnimationStateList_metaObject[0];
 }

@@ -7,8 +7,7 @@ igMetaObject *igUnsignedCharList_GetMetaObject(void);
 igMetaObject *igUnsignedCharList_GetMetaObject(void)
 {
     igMetaObject *g = g_igUnsignedCharList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c9a80();
     return g_igUnsignedCharList_metaObject[0];
 }

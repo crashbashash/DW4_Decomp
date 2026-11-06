@@ -16,10 +16,10 @@ struct F { char p[20]; short f20; char p1[14]; char f36; char p2; char f38; char
 void igVertexArray1_1_InitFields(void) {
     void *temp_s1;
     struct F *temp_s2;
-    struct F *temp_s2_2;
     struct F *temp_s2_3;
     struct F *temp_s2_4;
     int temp_s0;
+    struct F *temp_s2_2;
 
     temp_s1 = (void *)(DAT_0055fa90[0]);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

@@ -7,8 +7,8 @@ extern int DAT_00498228[4];
 extern int DAT_00498230[4];
 extern int DAT_0056dc10[4];
 void igViewportResizedMessage_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0056dc10[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

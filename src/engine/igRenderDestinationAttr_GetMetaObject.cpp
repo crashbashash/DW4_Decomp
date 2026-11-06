@@ -7,8 +7,7 @@ igMetaObject *igRenderDestinationAttr_GetMetaObject(void);
 igMetaObject *igRenderDestinationAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igRenderDestinationAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00134370();
     return g_igRenderDestinationAttr_metaObject[0];
 }

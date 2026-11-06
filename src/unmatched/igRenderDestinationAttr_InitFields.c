@@ -21,7 +21,6 @@ int FUN_00149b00();
 
 void igRenderDestinationAttr_InitFields(void) {
     int temp_s0;
-    void *temp_s1;
     void *temp_s2;
     void *temp_s2_2;
     void *temp_v0;
@@ -35,6 +34,7 @@ void igRenderDestinationAttr_InitFields(void) {
     void *temp_v0_7;
     void *temp_v0_8;
     void *temp_v0_9;
+    void *temp_s1;
 
     temp_s1 = (void *)DAT_0055eed8[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

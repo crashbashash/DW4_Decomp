@@ -7,8 +7,7 @@ igMetaObject *igCreateCollisionDatabase_GetMetaObject(void);
 igMetaObject *igCreateCollisionDatabase_GetMetaObject(void)
 {
     igMetaObject *g = g_igCreateCollisionDatabase_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002395b0();
     return g_igCreateCollisionDatabase_metaObject[0];
 }

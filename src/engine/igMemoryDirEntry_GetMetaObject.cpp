@@ -7,8 +7,7 @@ igMetaObject *igMemoryDirEntry_GetMetaObject(void);
 igMetaObject *igMemoryDirEntry_GetMetaObject(void)
 {
     igMetaObject *g = g_igMemoryDirEntry_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c0ea0();
     return g_igMemoryDirEntry_metaObject[0];
 }

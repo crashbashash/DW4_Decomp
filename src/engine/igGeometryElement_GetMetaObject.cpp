@@ -7,8 +7,7 @@ igMetaObject *igGeometryElement_GetMetaObject(void);
 igMetaObject *igGeometryElement_GetMetaObject(void)
 {
     igMetaObject *g = g_igGeometryElement_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igGeometryElement_EnsureRegistered();
     return g_igGeometryElement_metaObject[0];
 }

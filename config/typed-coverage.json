@@ -461,7 +461,7 @@
   "igMetaEnum": 5,
   "igMetaField": 393,
   "igMetaFieldList": 3,
-  "igMetaObject": 697,
+  "igMetaObject": 699,
   "igModel": 1,
   "igModelViewMatrixAttr": 4,
   "igMousePosObserver": 18,
@@ -606,13 +606,13 @@
    "total": 3
   },
   "engine": {
-   "files": 2986,
-   "offset_casts": 427,
-   "other_members": 1502,
-   "recovered": 1799,
-   "recovered_pct": 38.08,
-   "synthetic": 996,
-   "total": 4724
+   "files": 2020,
+   "offset_casts": 112,
+   "other_members": 332,
+   "recovered": 1377,
+   "recovered_pct": 75.25,
+   "synthetic": 9,
+   "total": 1830
   },
   "game": {
    "files": 1590,
@@ -624,13 +624,13 @@
    "total": 2907
   },
   "lua": {
-   "files": 8,
-   "offset_casts": 0,
-   "other_members": 56,
+   "files": 10,
+   "offset_casts": 1,
+   "other_members": 37,
    "recovered": 1,
-   "recovered_pct": 1.75,
+   "recovered_pct": 2.56,
    "synthetic": 0,
-   "total": 57
+   "total": 39
   },
   "menu": {
    "files": 3,
@@ -660,19 +660,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 11432,
-   "offset_casts": 5333,
-   "other_members": 11593,
-   "recovered": 20366,
-   "recovered_pct": 45.65,
-   "synthetic": 7323,
-   "total": 44615
+   "files": 12400,
+   "offset_casts": 5648,
+   "other_members": 12766,
+   "recovered": 20790,
+   "recovered_pct": 43.76,
+   "synthetic": 8310,
+   "total": 47514
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 5815,
- "recovered": 24675,
+ "offset_casts": 5816,
+ "recovered": 24677,
  "synthetic": 8418,
- "total": 56088,
- "typeable": 173
+ "total": 56075,
+ "typeable": 43
 }

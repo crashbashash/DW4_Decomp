@@ -7,8 +7,7 @@ igMetaObject *igTextElement_GetMetaObject(void);
 igMetaObject *igTextElement_GetMetaObject(void)
 {
     igMetaObject *g = g_igTextElement_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igTextElement_EnsureRegistered();
     return g_igTextElement_metaObject[0];
 }

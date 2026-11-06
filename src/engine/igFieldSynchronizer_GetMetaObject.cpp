@@ -7,8 +7,7 @@ igMetaObject *igFieldSynchronizer_GetMetaObject(void);
 igMetaObject *igFieldSynchronizer_GetMetaObject(void)
 {
     igMetaObject *g = g_igFieldSynchronizer_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igFieldSynchronizer_EnsureRegistered();
     return g_igFieldSynchronizer_metaObject[0];
 }

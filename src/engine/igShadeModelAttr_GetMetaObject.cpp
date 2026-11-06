@@ -7,8 +7,7 @@ igMetaObject *igShadeModelAttr_GetMetaObject(void);
 igMetaObject *igShadeModelAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igShadeModelAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00133a30();
     return g_igShadeModelAttr_metaObject[0];
 }

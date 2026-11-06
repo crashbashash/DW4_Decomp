@@ -7,8 +7,7 @@ igMetaObject *igStandardQueue_GetMetaObject(void);
 igMetaObject *igStandardQueue_GetMetaObject(void)
 {
     igMetaObject *g = g_igStandardQueue_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002cf0e0();
     return g_igStandardQueue_metaObject[0];
 }

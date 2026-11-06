@@ -15,10 +15,10 @@ extern void thunk_FUN_0030e540(void);
 extern void thunk_igPsx2ThreadManager_GetMetaObject(void);
 
 void igThreadManager_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     ((igMetaObject *)(DAT_00585790[0]))->_volatile = 1;
     temp_s0 = (void *)(DAT_00585790[0]);

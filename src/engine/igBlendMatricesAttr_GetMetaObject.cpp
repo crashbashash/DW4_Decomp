@@ -7,8 +7,7 @@ igMetaObject *igBlendMatricesAttr_GetMetaObject(void);
 igMetaObject *igBlendMatricesAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igBlendMatricesAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00139ce0();
     return g_igBlendMatricesAttr_metaObject[0];
 }

@@ -11,11 +11,11 @@ extern int DAT_004c1440[4];
 extern int DAT_004c1450[4];
 extern int DAT_005868c8[4];
 void igContextExtInfo_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005868c8[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

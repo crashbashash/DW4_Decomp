@@ -7,8 +7,7 @@ igMetaObject *igErrorHandler_GetMetaObject(void);
 igMetaObject *igErrorHandler_GetMetaObject(void)
 {
     igMetaObject *g = g_igErrorHandler_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c5ee0();
     return g_igErrorHandler_metaObject[0];
 }

@@ -7,8 +7,7 @@ igMetaObject *igMatrixObjectPool_GetMetaObject(void);
 igMetaObject *igMatrixObjectPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igMatrixObjectPool_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00199db0();
     return g_igMatrixObjectPool_metaObject[0];
 }

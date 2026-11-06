@@ -7,8 +7,7 @@ igMetaObject *igExternalInfoEntry_GetMetaObject(void);
 igMetaObject *igExternalInfoEntry_GetMetaObject(void)
 {
     igMetaObject *g = g_igExternalInfoEntry_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c50a0();
     return g_igExternalInfoEntry_metaObject[0];
 }

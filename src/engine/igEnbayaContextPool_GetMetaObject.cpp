@@ -7,8 +7,7 @@ igMetaObject *igEnbayaContextPool_GetMetaObject(void);
 igMetaObject *igEnbayaContextPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igEnbayaContextPool_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igEnbayaContextPool_RunStaticInit();
     return g_igEnbayaContextPool_metaObject[0];
 }

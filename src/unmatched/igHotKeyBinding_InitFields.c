@@ -15,11 +15,11 @@ extern int DAT_004d0178[4];
 extern int DAT_004d0180[4];
 extern int DAT_0058c2c0[4];
 void igHotKeyBinding_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_v0;
-    void *temp_v0_2;
     int temp_s2;
+    void *temp_v0_2;
+    void *temp_v0;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058c2c0[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

@@ -7,8 +7,7 @@ igMetaObject *igIterateGraph_GetMetaObject(void);
 igMetaObject *igIterateGraph_GetMetaObject(void)
 {
     igMetaObject *g = g_igIterateGraph_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00227620();
     return g_igIterateGraph_metaObject[0];
 }

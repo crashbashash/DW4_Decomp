@@ -11,8 +11,8 @@ int thunk_FUN_002ef9d0();
 int thunk_igFile_GetMetaObject();
 
 void igMemoryFile_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_00585f18[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

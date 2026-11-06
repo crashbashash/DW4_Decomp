@@ -9,8 +9,8 @@ extern int DAT_0048ad80[4];
 extern int DAT_0048ad88[4];
 extern int DAT_00560f48[4];
 void igVec4fArrayMetaField_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00560f48[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

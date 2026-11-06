@@ -7,8 +7,8 @@ extern int DAT_0048db30[4];
 extern int DAT_0048db38[4];
 extern int DAT_00562bc0[4];
 void igMatrixObject_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00562bc0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -10,12 +10,12 @@ extern int DAT_0048c480[4];
 extern int DAT_0048c4b0[4];
 extern int DAT_00561be0[4];
 void igCompressedTransformSequence1_5Data_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s1_4;
     int temp_s2;
+    void *temp_s1_4;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561be0[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

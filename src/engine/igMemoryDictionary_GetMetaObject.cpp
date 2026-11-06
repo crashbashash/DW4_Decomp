@@ -7,8 +7,7 @@ igMetaObject *igMemoryDictionary_GetMetaObject(void);
 igMetaObject *igMemoryDictionary_GetMetaObject(void)
 {
     igMetaObject *g = g_igMemoryDictionary_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c1190();
     return g_igMemoryDictionary_metaObject[0];
 }

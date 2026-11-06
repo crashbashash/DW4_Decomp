@@ -7,8 +7,7 @@ igMetaObject *igShaderData_GetMetaObject(void);
 igMetaObject *igShaderData_GetMetaObject(void)
 {
     igMetaObject *g = g_igShaderData_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00199760();
     return g_igShaderData_metaObject[0];
 }

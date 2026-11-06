@@ -7,8 +7,7 @@ igMetaObject *igRegistry_GetMetaObject(void);
 igMetaObject *igRegistry_GetMetaObject(void)
 {
     igMetaObject *g = g_igRegistry_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002bb200();
     return g_igRegistry_metaObject[0];
 }

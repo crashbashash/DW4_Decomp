@@ -12,12 +12,12 @@ extern int DAT_0048cdd0[4];
 extern int DAT_0048cdf0[4];
 extern int DAT_00562030[4];
 void igAttrStack_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_s1_4;
     int temp_s2;
+    void *temp_s1_4;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00562030[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

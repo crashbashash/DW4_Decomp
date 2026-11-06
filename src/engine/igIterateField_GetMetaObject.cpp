@@ -7,8 +7,7 @@ igMetaObject *igIterateField_GetMetaObject(void);
 igMetaObject *igIterateField_GetMetaObject(void)
 {
     igMetaObject *g = g_igIterateField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002278a0();
     return g_igIterateField_metaObject[0];
 }

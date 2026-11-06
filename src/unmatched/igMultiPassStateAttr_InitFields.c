@@ -7,8 +7,8 @@ extern int DAT_00486210[4];
 extern int DAT_00486218[4];
 extern int DAT_0055efd0[4];
 void igMultiPassStateAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055efd0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -18,10 +18,10 @@ int FUN_002c4c40();
 int thunk_igPsx2File_GetMetaObject();
 
 void igFile_InitFields(void) {
-    void *temp_s0;
-    void *temp_v0;
-    void *temp_v0_2;
     int temp_s2;
+    void *temp_v0_2;
+    void *temp_v0;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_005863b0[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

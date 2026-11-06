@@ -7,8 +7,8 @@ extern int DAT_004bf970[4];
 extern int DAT_004bf978[4];
 extern int DAT_00585a60[4];
 void igRefMetaField_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00585a60[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

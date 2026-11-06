@@ -7,8 +7,7 @@ igMetaObject *igClippingStateAttr_GetMetaObject(void);
 igMetaObject *igClippingStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igClippingStateAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00139250();
     return g_igClippingStateAttr_metaObject[0];
 }

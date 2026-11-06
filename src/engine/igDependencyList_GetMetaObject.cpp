@@ -7,8 +7,7 @@ igMetaObject *igDependencyList_GetMetaObject(void);
 igMetaObject *igDependencyList_GetMetaObject(void)
 {
     igMetaObject *g = g_igDependencyList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c7e20();
     return g_igDependencyList_metaObject[0];
 }

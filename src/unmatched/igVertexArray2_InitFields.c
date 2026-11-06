@@ -13,11 +13,11 @@ extern int DAT_00488550[4];
 extern void * DAT_0055f9e0[4];
 extern int DAT_00587198[4];
 void igVertexArray2_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_0055f9e0[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

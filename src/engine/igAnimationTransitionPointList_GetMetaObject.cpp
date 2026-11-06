@@ -7,8 +7,7 @@ igMetaObject *igAnimationTransitionPointList_GetMetaObject(void);
 igMetaObject *igAnimationTransitionPointList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationTransitionPointList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a9910();
     return g_igAnimationTransitionPointList_metaObject[0];
 }

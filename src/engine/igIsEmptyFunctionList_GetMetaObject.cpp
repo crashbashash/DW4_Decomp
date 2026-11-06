@@ -7,8 +7,7 @@ igMetaObject *igIsEmptyFunctionList_GetMetaObject(void);
 igMetaObject *igIsEmptyFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igIsEmptyFunctionList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00188b50();
     return g_igIsEmptyFunctionList_metaObject[0];
 }

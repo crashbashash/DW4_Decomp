@@ -9,8 +9,8 @@ extern int DAT_0048bce8[4];
 extern int DAT_0048bcf0[4];
 extern int DAT_00561888[4];
 void igModelViewMatrixBoneSelect_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561888[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -11,8 +11,8 @@ extern void * DAT_00585ea0[4];
 extern void thunk_igArenaMemoryPool_GetMetaObject(void);
 
 void igMemoryPool_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_00585ea0[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

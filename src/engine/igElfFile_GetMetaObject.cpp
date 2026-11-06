@@ -7,8 +7,7 @@ igMetaObject *igElfFile_GetMetaObject(void);
 igMetaObject *igElfFile_GetMetaObject(void)
 {
     igMetaObject *g = g_igElfFile_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002ced70();
     return g_igElfFile_metaObject[0];
 }

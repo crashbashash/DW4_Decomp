@@ -7,8 +7,7 @@ igMetaObject *igFloatMetaField_GetMetaObject(void);
 igMetaObject *igFloatMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igFloatMetaField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c4710();
     return g_igFloatMetaField_metaObject[0];
 }

@@ -12,14 +12,14 @@ extern int DAT_004860f0[4];
 extern int DAT_004860f8[4];
 extern int DAT_0055ef50[4];
 void igProjectionMatrixAttr_InitFields(void) {
-    struct V o5;
-    struct V o4;
-    struct V o3;
-    struct V o2;
-    struct M o1;
-    void *temp_s0;
-    int temp_s1;
     int temp_s2;
+    int temp_s1;
+    void *temp_s0;
+    struct M o1;
+    struct V o2;
+    struct V o3;
+    struct V o4;
+    struct V o5;
 
     temp_s0 = (void *)DAT_0055ef50[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

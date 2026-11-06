@@ -10,11 +10,11 @@ extern int DAT_00489cc0[4];
 extern int DAT_00489cf0[4];
 extern int DAT_00560420[4];
 void igPsx2VertexStream_InitFields(void) {
-    void *temp_s0;
     void *temp_s1;
     int temp_s2;
     void *f;
     void *temp_s1_2;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00560420[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

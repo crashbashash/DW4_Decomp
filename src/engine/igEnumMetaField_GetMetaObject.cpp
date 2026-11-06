@@ -7,8 +7,7 @@ igMetaObject *igEnumMetaField_GetMetaObject(void);
 igMetaObject *igEnumMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igEnumMetaField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igEnumMetaField_EnsureRegistered();
     return g_igEnumMetaField_metaObject[0];
 }

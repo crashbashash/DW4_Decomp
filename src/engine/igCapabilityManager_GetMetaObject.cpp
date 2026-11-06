@@ -7,8 +7,7 @@ igMetaObject *igCapabilityManager_GetMetaObject(void);
 igMetaObject *igCapabilityManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igCapabilityManager_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014fde0();
     return g_igCapabilityManager_metaObject[0];
 }

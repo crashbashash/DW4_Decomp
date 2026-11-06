@@ -14,8 +14,8 @@ extern int DAT_00588700[4];
 void beNodeAnim_InitFields(void);
 }
 void beNodeAnim_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588700[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

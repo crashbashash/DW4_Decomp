@@ -12,11 +12,11 @@ extern int DAT_00489de0[4];
 extern int DAT_00489df0[4];
 extern int DAT_005604d0[4];
 void igPsx2UserUCodeExt_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
     int temp_s2;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005604d0[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

@@ -13,7 +13,6 @@ extern int DAT_00498500[4];
 extern int DAT_00498540[4];
 extern int DAT_0056dd40[4];
 void igCollisionGrid_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_s2;
     void *temp_s2_2;
@@ -23,6 +22,7 @@ void igCollisionGrid_InitFields(void) {
     void *temp_s2_6;
     void *temp_s2_7;
     void *temp_s2_8;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0056dd40[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

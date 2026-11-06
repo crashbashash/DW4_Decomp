@@ -13,14 +13,14 @@ extern int DAT_004869a0[4];
 extern int DAT_004869c0[4];
 extern int DAT_0055f308[4];
 void igClearAttr_InitFields(void) {
-    struct V v2;
-    struct V v1;
-    int temp_s0;
-    void *temp_s1;
-    void *temp_a0;
-    void *temp_a0_2;
-    void *temp_v0;
     void *temp_v0_2;
+    void *temp_v0;
+    void *temp_a0_2;
+    void *temp_a0;
+    void *temp_s1;
+    int temp_s0;
+    struct V v1;
+    struct V v2;
 
     temp_s1 = (void *)DAT_0055f308[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

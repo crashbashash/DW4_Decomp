@@ -1,6 +1,6 @@
-extern unsigned char g_WindowInputLibrary_registered[4];
+extern unsigned char g_WindowInputLibrary_registered;
 void WindowInputLibrary_MarkRegistered(void) {
-    if (g_WindowInputLibrary_registered[0] == 0) {
-        g_WindowInputLibrary_registered[0] = 1;
+    if (g_WindowInputLibrary_registered == 0) {
+        g_WindowInputLibrary_registered = 1;
     }
 }

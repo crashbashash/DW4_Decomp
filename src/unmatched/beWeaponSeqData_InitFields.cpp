@@ -10,8 +10,8 @@ extern int DAT_00587a50[4];
 void beWeaponSeqData_InitFields(void);
 }
 void beWeaponSeqData_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00587a50[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

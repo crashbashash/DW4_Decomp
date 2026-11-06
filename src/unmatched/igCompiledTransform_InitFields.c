@@ -13,12 +13,12 @@ extern int DAT_0048c720[4];
 extern int DAT_0048c740[4];
 extern int DAT_00561d30[4];
 void igCompiledTransform_InitFields(void) {
-    void *temp_s0;
-    struct Fld *temp_s1;
-    struct Fld *temp_s1_2;
-    struct Fld *temp_v0;
-    struct Fld *temp_v0_2;
     int temp_s2;
+    struct Fld *temp_v0_2;
+    struct Fld *temp_v0;
+    struct Fld *temp_s1_2;
+    struct Fld *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561d30[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

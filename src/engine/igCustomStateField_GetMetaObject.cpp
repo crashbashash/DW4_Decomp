@@ -7,8 +7,7 @@ igMetaObject *igCustomStateField_GetMetaObject(void);
 igMetaObject *igCustomStateField_GetMetaObject(void)
 {
     igMetaObject *g = g_igCustomStateField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014ecd0();
     return g_igCustomStateField_metaObject[0];
 }

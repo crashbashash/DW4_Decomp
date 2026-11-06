@@ -7,8 +7,7 @@ igMetaObject *igBoundingBoxesMaker_GetMetaObject(void);
 igMetaObject *igBoundingBoxesMaker_GetMetaObject(void)
 {
     igMetaObject *g = g_igBoundingBoxesMaker_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a4970();
     return g_igBoundingBoxesMaker_metaObject[0];
 }

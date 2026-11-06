@@ -9,9 +9,9 @@ extern int DAT_004d0850[4];
 extern int DAT_004d0858[4];
 extern int DAT_0058c5f0[4];
 void igBasicColorChanger_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *f;
+    void *temp_s0;
     temp_s0 = (void *)DAT_0058c5f0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004d0840[0], 2);

@@ -9,8 +9,8 @@ extern int DAT_00486738[4];
 extern int DAT_00486740[4];
 extern int DAT_0055f218[4];
 void igDepthWriteStateAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f218[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

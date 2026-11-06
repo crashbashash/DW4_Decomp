@@ -11,11 +11,11 @@ extern int DAT_0048d300[4];
 extern int DAT_0048d320[4];
 extern int DAT_00562268[4];
 void igAnimationCombinerBoneInfo_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00562268[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

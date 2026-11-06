@@ -7,8 +7,7 @@ igMetaObject *igSearchSceneGraph_GetMetaObject(void);
 igMetaObject *igSearchSceneGraph_GetMetaObject(void)
 {
     igMetaObject *g = g_igSearchSceneGraph_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00238ed0();
     return g_igSearchSceneGraph_metaObject[0];
 }

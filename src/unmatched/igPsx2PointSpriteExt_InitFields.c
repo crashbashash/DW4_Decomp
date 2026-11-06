@@ -10,9 +10,9 @@ extern int DAT_00489ea0[4];
 extern int DAT_00489ea8[4];
 extern int DAT_00560530[4];
 void igPsx2PointSpriteExt_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00560530[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

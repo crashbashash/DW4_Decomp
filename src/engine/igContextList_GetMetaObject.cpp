@@ -7,8 +7,7 @@ igMetaObject *igContextList_GetMetaObject(void);
 igMetaObject *igContextList_GetMetaObject(void)
 {
     igMetaObject *g = g_igContextList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002cbad0();
     return g_igContextList_metaObject[0];
 }

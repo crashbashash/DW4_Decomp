@@ -7,8 +7,7 @@ igMetaObject *igMemoryRefMetaField_GetMetaObject(void);
 igMetaObject *igMemoryRefMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igMemoryRefMetaField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igMemoryRefMetaField_EnsureRegistered();
     return g_igMemoryRefMetaField_metaObject[0];
 }

@@ -16,11 +16,11 @@ extern int DAT_00488db8[4];
 extern void * DAT_0055fd28[4];
 void igIndexArray_InitFields(void);
 void igIndexArray_InitFields(void) {
-    void *temp_s0;
     void *temp_s1;
     void *temp_s1_2;
     int temp_s2;
     void *temp_v0;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_0055fd28[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

@@ -12,8 +12,8 @@ extern int DAT_00588840[4];
 void beModelCtrlSubComBase_InitFields(void);
 }
 void beModelCtrlSubComBase_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588840[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

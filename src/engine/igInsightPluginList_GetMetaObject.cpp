@@ -7,8 +7,7 @@ igMetaObject *igInsightPluginList_GetMetaObject(void);
 igMetaObject *igInsightPluginList_GetMetaObject(void)
 {
     igMetaObject *g = g_igInsightPluginList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002326a0();
     return g_igInsightPluginList_metaObject[0];
 }

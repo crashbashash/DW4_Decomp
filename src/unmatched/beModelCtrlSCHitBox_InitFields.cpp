@@ -10,8 +10,8 @@ extern int DAT_005887c8[4];
 void beModelCtrlSCHitBox_InitFields(void);
 }
 void beModelCtrlSCHitBox_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005887c8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

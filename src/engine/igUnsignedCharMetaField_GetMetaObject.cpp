@@ -7,8 +7,7 @@ igMetaObject *igUnsignedCharMetaField_GetMetaObject(void);
 igMetaObject *igUnsignedCharMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igUnsignedCharMetaField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igUnsignedCharMetaField_EnsureRegistered();
     return g_igUnsignedCharMetaField_metaObject[0];
 }

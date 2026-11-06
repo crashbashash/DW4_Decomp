@@ -7,8 +7,7 @@ igMetaObject *igItemBase_GetMetaObject(void);
 igMetaObject *igItemBase_GetMetaObject(void)
 {
     igMetaObject *g = g_igItemBase_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00228950();
     return g_igItemBase_metaObject[0];
 }

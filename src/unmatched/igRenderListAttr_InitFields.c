@@ -11,10 +11,10 @@ extern int DAT_00485f80[4];
 extern int DAT_0055eeb0[4];
 struct F { char pad[38]; unsigned char b38; unsigned char b39; unsigned char b40; char pad2[3]; unsigned char b44; char pad3[11]; int f56; };
 void igRenderListAttr_InitFields(void) {
-    void *temp_s0;
-    struct F *temp_s1;
-    struct F *temp_v0;
     int temp_s2;
+    struct F *temp_v0;
+    struct F *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055eeb0[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

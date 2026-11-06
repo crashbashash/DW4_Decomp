@@ -11,10 +11,10 @@ extern int DAT_004bff68[4];
 extern int DAT_004bff78[4];
 extern int DAT_00585d60[4];
 void igMetaEnum_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00585d60[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

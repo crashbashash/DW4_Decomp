@@ -7,8 +7,7 @@ igMetaObject *igPluginRepository_GetMetaObject(void);
 igMetaObject *igPluginRepository_GetMetaObject(void)
 {
     igMetaObject *g = g_igPluginRepository_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002bca90();
     return g_igPluginRepository_metaObject[0];
 }

@@ -11,10 +11,10 @@ extern int DAT_004bfa98[4];
 extern int DAT_004bfaa0[4];
 extern int DAT_00585b08[4];
 void igObjectStringMap_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00585b08[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

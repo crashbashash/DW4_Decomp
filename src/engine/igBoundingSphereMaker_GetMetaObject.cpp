@@ -7,8 +7,7 @@ igMetaObject *igBoundingSphereMaker_GetMetaObject(void);
 igMetaObject *igBoundingSphereMaker_GetMetaObject(void)
 {
     igMetaObject *g = g_igBoundingSphereMaker_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0023aaf0();
     return g_igBoundingSphereMaker_metaObject[0];
 }

@@ -7,8 +7,7 @@ igMetaObject *igDoubleArrayMetaField_GetMetaObject(void);
 igMetaObject *igDoubleArrayMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igDoubleArrayMetaField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c6f40();
     return g_igDoubleArrayMetaField_metaObject[0];
 }

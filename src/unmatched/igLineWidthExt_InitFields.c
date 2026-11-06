@@ -9,8 +9,8 @@ extern int DAT_00488d20[4];
 extern int DAT_00488d28[4];
 extern int DAT_0055fd18[4];
 void igLineWidthExt_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055fd18[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

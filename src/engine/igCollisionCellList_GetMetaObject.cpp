@@ -7,8 +7,7 @@ igMetaObject *igCollisionCellList_GetMetaObject(void);
 igMetaObject *igCollisionCellList_GetMetaObject(void)
 {
     igMetaObject *g = g_igCollisionCellList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0023a650();
     return g_igCollisionCellList_metaObject[0];
 }

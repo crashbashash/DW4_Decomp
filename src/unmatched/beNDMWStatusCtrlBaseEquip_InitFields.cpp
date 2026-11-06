@@ -16,7 +16,6 @@ void beNDMWStatusCtrlBaseEquip_InitFields(void);
 }
 void beNDMWStatusCtrlBaseEquip_InitFields(void) {
     int temp_s0;
-    void *temp_s1;
     void *temp_s2;
     void *temp_s2_2;
     void *temp_s2_3;
@@ -24,6 +23,7 @@ void beNDMWStatusCtrlBaseEquip_InitFields(void) {
     void *temp_s2_5;
     void *temp_s2_6;
     void *temp_s2_7;
+    void *temp_s1;
 
     temp_s1 = (void *)DAT_0058af30[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

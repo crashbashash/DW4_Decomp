@@ -7,8 +7,7 @@ igMetaObject *igContainsVecFunctionList_GetMetaObject(void);
 igMetaObject *igContainsVecFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igContainsVecFunctionList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00188f70();
     return g_igContainsVecFunctionList_metaObject[0];
 }

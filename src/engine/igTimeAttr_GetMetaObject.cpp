@@ -7,8 +7,7 @@ igMetaObject *igTimeAttr_GetMetaObject(void);
 igMetaObject *igTimeAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igTimeAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00131040();
     return g_igTimeAttr_metaObject[0];
 }

@@ -7,8 +7,8 @@ extern int DAT_00486670[4];
 extern int DAT_00486678[4];
 extern int DAT_0055f1c8[4];
 void igFogStateAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f1c8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

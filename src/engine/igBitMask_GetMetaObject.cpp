@@ -7,8 +7,7 @@ igMetaObject *igBitMask_GetMetaObject(void);
 igMetaObject *igBitMask_GetMetaObject(void)
 {
     igMetaObject *g = g_igBitMask_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a4e70();
     return g_igBitMask_metaObject[0];
 }

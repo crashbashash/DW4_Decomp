@@ -13,9 +13,9 @@ extern int DAT_0055ef70[4];
 int FUN_00149800();
 
 void igPixelPipelineModeAttr_InitFields(void) {
-    void *temp_s0;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055ef70[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

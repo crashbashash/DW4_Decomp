@@ -12,8 +12,8 @@ extern void * DAT_00586cd8[4];
 int thunk_igSemaphore_GetMetaObject();
 
 void igPsx2Semaphore_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_00586cd8[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

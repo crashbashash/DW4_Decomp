@@ -19,16 +19,16 @@ extern int DAT_00561a50[4];
 extern void thunk_FUN_001c45d0(void);
 
 void igFrustCullTraversal_InitFields(void) {
-    struct V o5;
-    struct V o4;
-    struct V o3;
-    struct V o2;
-    struct M o1;
-    int temp_s0;
-    void *temp_s1;
-    void *temp_s2;
-    void *temp_s2_2;
     void *temp_s2_3;
+    void *temp_s2_2;
+    void *temp_s2;
+    void *temp_s1;
+    int temp_s0;
+    struct M o1;
+    struct V o2;
+    struct V o3;
+    struct V o4;
+    struct V o5;
 
     temp_s1 = (void *)DAT_00561a50[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

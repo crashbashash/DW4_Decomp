@@ -7,8 +7,7 @@ igMetaObject *igPointSpriteExt_GetMetaObject(void);
 igMetaObject *igPointSpriteExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igPointSpriteExt_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014c670();
     return g_igPointSpriteExt_metaObject[0];
 }

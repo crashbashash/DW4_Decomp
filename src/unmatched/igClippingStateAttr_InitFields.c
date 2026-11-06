@@ -9,8 +9,8 @@ extern int DAT_00486948[4];
 extern int DAT_00486950[4];
 extern int DAT_0055f2f8[4];
 void igClippingStateAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f2f8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

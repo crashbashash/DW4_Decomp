@@ -21,7 +21,6 @@ extern int DAT_00561f98[4];
 int thunk_FUN_001afb00();
 
 void igAttrStackManager_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_s2;
     void *temp_s2_10;
@@ -35,6 +34,7 @@ void igAttrStackManager_InitFields(void) {
     void *temp_s2_7;
     void *temp_s2_8;
     void *temp_s2_9;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561f98[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

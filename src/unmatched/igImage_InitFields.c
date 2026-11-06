@@ -21,12 +21,12 @@ int FUN_001499e0();
 extern void thunk_igPsx2Image_GetMetaObject(void);
 
 void igImage_InitFields(void) {
-    void *temp_s0;
     void *temp_s1;
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1_3;
     void *temp_v0;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_0055fd80[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

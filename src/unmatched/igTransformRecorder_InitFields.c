@@ -7,8 +7,8 @@ extern int DAT_0048b150[4];
 extern int DAT_0048b158[4];
 extern int DAT_00561280[4];
 void igTransformRecorder_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561280[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -7,8 +7,7 @@ igMetaObject *igFont_GetMetaObject(void);
 igMetaObject *igFont_GetMetaObject(void)
 {
     igMetaObject *g = g_igFont_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igFont_EnsureRegistered();
     return g_igFont_metaObject[0];
 }

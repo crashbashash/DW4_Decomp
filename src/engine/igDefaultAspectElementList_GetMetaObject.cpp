@@ -7,8 +7,7 @@ igMetaObject *igDefaultAspectElementList_GetMetaObject(void);
 igMetaObject *igDefaultAspectElementList_GetMetaObject(void)
 {
     igMetaObject *g = g_igDefaultAspectElementList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igDefaultAspectElementList_EnsureRegistered();
     return g_igDefaultAspectElementList_metaObject[0];
 }

@@ -13,9 +13,9 @@ extern int DAT_00561ea0[4];
 int FUN_001a47d0();
 
 void igCamera_InitFields(void) {
-    void *temp_s0;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561ea0[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

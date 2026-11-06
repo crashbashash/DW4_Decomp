@@ -7,8 +7,7 @@ igMetaObject *igFolder_GetMetaObject(void);
 igMetaObject *igFolder_GetMetaObject(void)
 {
     igMetaObject *g = g_igFolder_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c44c0();
     return g_igFolder_metaObject[0];
 }

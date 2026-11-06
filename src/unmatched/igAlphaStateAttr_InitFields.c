@@ -7,8 +7,8 @@ extern int DAT_00486c80[4];
 extern int DAT_00486c88[4];
 extern int DAT_0055f480[4];
 void igAlphaStateAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f480[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

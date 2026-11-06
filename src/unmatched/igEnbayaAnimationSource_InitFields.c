@@ -21,8 +21,8 @@ void igEnbayaAnimationSource_InitFields(void) {
     igLongMetaField *temp_v0_2;
     igUnsignedCharArrayMetaField *tf;
     igEnumMetaField *tf2;
-    int temp_s0;
     void *temp_s1;
+    int temp_s0;
     temp_s1 = (void *)DAT_00561ba0[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &DAT_0048c3a0[0], 6);

@@ -7,8 +7,7 @@ igMetaObject *igCompressedTransformSequence1_5Data_GetMetaObject(void);
 igMetaObject *igCompressedTransformSequence1_5Data_GetMetaObject(void)
 {
     igMetaObject *g = g_igCompressedTransformSequence1_5Data_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a2640();
     return g_igCompressedTransformSequence1_5Data_metaObject[0];
 }

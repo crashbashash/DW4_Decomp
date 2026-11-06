@@ -9,8 +9,8 @@ extern void * DAT_00586368[4];
 int thunk_igPsx2Folder_GetMetaObject();
 
 void igFolder_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_00586368[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

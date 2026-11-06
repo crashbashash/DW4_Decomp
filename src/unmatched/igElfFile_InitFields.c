@@ -9,13 +9,13 @@ extern int DAT_004c1b90[4];
 extern int DAT_004c1bc0[4];
 extern void * DAT_00586c00[4];
 void igElfFile_InitFields(void) {
-    void *temp_s0;
     void *temp_v0;
     void *temp_v0_2;
     void *temp_v0_3;
     void *temp_v0_4;
     void *temp_v0_5;
     int temp_s1;
+    void *temp_s0;
 
     ((igMetaObject *)DAT_00586c00[0])->_persistent = 0;
     temp_s0 = (void *)(DAT_00586c00[0]);

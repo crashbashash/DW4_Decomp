@@ -9,8 +9,8 @@ extern int DAT_00486540[4];
 extern int DAT_00486548[4];
 extern int DAT_0055f148[4];
 void igGeometryMaskAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f148[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -7,8 +7,7 @@ igMetaObject *igPsx2Folder_GetMetaObject(void);
 igMetaObject *igPsx2Folder_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2Folder_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002d0110();
     return g_igPsx2Folder_metaObject[0];
 }

@@ -7,8 +7,7 @@ igMetaObject *igVertexBlendMatrixAttrPool_GetMetaObject(void);
 igMetaObject *igVertexBlendMatrixAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexBlendMatrixAttrPool_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019a090();
     return g_igVertexBlendMatrixAttrPool_metaObject[0];
 }

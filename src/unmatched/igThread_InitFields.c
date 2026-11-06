@@ -22,11 +22,11 @@ int FUN_002b7ee0();
 
 void igThread_InitFields(void) {
     int temp_s0;
-    void *temp_s1;
     void *temp_v0;
     void *temp_v0_2;
     void *temp_v0_3;
     void *temp_v0_4;
+    void *temp_s1;
 
     temp_s1 = (void *)(DAT_005857c8[0]);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

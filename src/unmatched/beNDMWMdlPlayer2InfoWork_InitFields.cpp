@@ -10,8 +10,8 @@ extern int DAT_0058b378[4];
 void beNDMWMdlPlayer2InfoWork_InitFields(void);
 }
 void beNDMWMdlPlayer2InfoWork_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058b378[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

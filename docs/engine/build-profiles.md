@@ -243,37 +243,36 @@ libraries test the validity bit with an `sltu`. Viewer's 24 are the same with on
 and AdxMovie's 483 are a bare call: the game's macro, not Alchemy's. So Viewer is Alchemy source built
 with the game's flags, and AdxMovie was written alongside the game.
 
-**The kinds split by spelling.** The `sltu` comes from comparing an inline `bool` helper with `false`:
-`isRegistered(meta) == false` matches under 3.0, 3.0.3, b38, b50 and b52 alike, where `!isRegistered(meta)`
-matches under none. `_GetVTable` is the same: `igNamedObject_GetVTable` differs under 3.0.3 by two
-swapped registers as a `union`, and matches under 3.0.3 and b38 as a `struct`.
+**The kinds split by spelling.** The `sltu` comes from comparing a `bool` with `false`:
+`((g->_validity & 4) != 0) == false` matches under 3.0, 3.0.3, b38, b50 and b52 alike, where
+`!(t = g->_validity & 4)` matches only under 3.0 and 3.0.3. `_GetVTable` is the same:
+`igNamedObject_GetVTable` differs under 3.0.3 by two swapped registers as a `union`, and matches under
+3.0.3 and b38 as a `struct`.
 
-**3.0b52 with `-sdatathreshold 1` fits every library.** Of the functions any candidate reproduces, as
-now spelled:
+**3.0b52 with `-sdatathreshold 1` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
+runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. The dw4-ps2-ai project builds the same way.
+`-O4,p` and `-O3,p` differ on four functions, too few to separate them; every stock library verifies at
+`-O4`. 3,999 of the 4,786 MWCC units carry this profile. A unit moved only when every member matched
+under it, so the rest keep their earlier profile.
 
-| | Flags | Methods | `_GetVTable` |
-| --- | --- | --- | --- |
-| `-O3` Alchemy libraries | `-O3`, `-O3,s` or `-O4,s` | 96 % | 100 % |
-| Viewer | `-O3,p` or `-O4,p` | 99 % | 100 % |
-| Bec, Ndmw, AdxMovie, `main`, runtime | `-O3,p` or `-O4,p` | 93 % | 100 % |
+Three respellings carry a unit across:
 
-The dw4-ps2-ai project builds Alchemy `-O4,s` and the game `-O4,p`, both 3.0b52 with
-`-sdatathreshold 1`. These sweeps do not separate `-O3` from `-O4`.
-
-**Audio is the first library on that profile:** every unit of `0x142f10`-`0x145ce0` is 3.0b52 `-O4,s
--sdatathreshold 1`. Moving it took three respellings, and they should carry to other libraries:
-
-* `_GetMetaObject` calls `igMetaObject_IsRegistered` (`include/dw4/meta_object.h`) and compares it with
-  `false`.
+* `_GetMetaObject` compares the validity test with `false`, as above.
 * `_InitFields` declares the meta pointer last, which puts it in `s0`.
 * A library's registered flag is a scalar byte: `-sdatathreshold 1` keeps one-byte data gp-relative,
   so a `[4]` declaration no longer reaches it.
 
-`Gap__igPsx2AudioContext__vfunc_24` still differs under the profile in its stack layout and keeps its
-override.
+A unit holding the retail copy of a `duplicates` entry in `unit-objects.json` stays on its profile:
+`tools/check.py` compares every emitted copy under that unit's profile, so moving it changes what
+other units must match.
+
+**Status objects are returned by value.** The functions that yield `g_statusSucceeded` return a one-word
+class through a hidden pointer, which is why retail passes a stack slot as the first argument and
+reads it back through its address. `Gap__igPsx2AudioContext__vfunc_24` matches only when written that
+way, with `operator!=` as a member. 132 source files use that constant and may hide the same shape.
 
 ## Open questions
 
-* **One compiler.** Outside Audio, `_GetMetaObject` and `_InitFields` have not been respelled, so 3.0b52 is
-  untested on them, and the units still carry their old profiles. Whether b52 or b50 built which
-  library, and `-O3` or `-O4`, are open.
+* **The remaining units.** 787 MWCC units stay on 3.0, 3.0.3, b38 or 2.4, most for one or two members
+  that differ under b52. Whether they respell, as the status objects did, is untested.
+* **b50 or b52, `-O3` or `-O4`** are not separated by anything measured so far.

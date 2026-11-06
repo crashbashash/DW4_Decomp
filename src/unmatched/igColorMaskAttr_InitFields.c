@@ -9,8 +9,8 @@ extern int DAT_004868e0[4];
 extern int DAT_00486900[4];
 extern int DAT_0055f2b0[4];
 void igColorMaskAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f2b0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

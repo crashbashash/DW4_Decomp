@@ -7,8 +7,7 @@ igMetaObject *igVolumeList_GetMetaObject(void);
 igMetaObject *igVolumeList_GetMetaObject(void)
 {
     igMetaObject *g = g_igVolumeList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00186d20();
     return g_igVolumeList_metaObject[0];
 }

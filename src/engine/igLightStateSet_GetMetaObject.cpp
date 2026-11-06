@@ -7,8 +7,7 @@ igMetaObject *igLightStateSet_GetMetaObject(void);
 igMetaObject *igLightStateSet_GetMetaObject(void)
 {
     igMetaObject *g = g_igLightStateSet_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019da60();
     return g_igLightStateSet_metaObject[0];
 }

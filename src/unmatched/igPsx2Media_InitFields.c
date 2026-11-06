@@ -13,10 +13,10 @@ extern int DAT_004c1d90[4];
 extern int DAT_004c1db0[4];
 extern void * DAT_00586cf8[4];
 void igPsx2Media_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_s2;
     igRawRefMetaField *t5;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00586cf8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

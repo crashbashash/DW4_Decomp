@@ -10,8 +10,8 @@ extern int DAT_0048b1f0[4];
 extern int DAT_0048b200[4];
 extern int DAT_005612e8[4];
 void igObjectPool_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005612e8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

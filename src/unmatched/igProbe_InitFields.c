@@ -12,11 +12,11 @@ extern int DAT_0048beb0[4];
 extern int DAT_0048bec0[4];
 extern int DAT_00561970[4];
 void igProbe_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
     int temp_s2;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561970[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

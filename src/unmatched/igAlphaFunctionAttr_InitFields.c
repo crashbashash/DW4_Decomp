@@ -13,9 +13,9 @@ extern int DAT_0055f490[4];
 int FUN_001496e0();
 
 void igAlphaFunctionAttr_InitFields(void) {
-    void *temp_s0;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f490[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

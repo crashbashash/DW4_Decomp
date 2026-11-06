@@ -7,8 +7,7 @@ igMetaObject *igTransformSequence_GetMetaObject(void);
 igMetaObject *igTransformSequence_GetMetaObject(void)
 {
     igMetaObject *g = g_igTransformSequence_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00195580();
     return g_igTransformSequence_metaObject[0];
 }

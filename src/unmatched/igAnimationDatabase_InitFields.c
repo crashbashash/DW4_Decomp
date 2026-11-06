@@ -15,12 +15,12 @@ extern int DAT_0048d280[4];
 extern int DAT_00562220[4];
 void igAnimationDatabase_InitFields(void) {
     int temp_s0;
-    void *temp_s1;
     void *temp_s2;
     void *temp_s2_2;
     void *temp_s2_3;
     void *temp_s2_4;
     void *temp_s2_5;
+    void *temp_s1;
 
     temp_s1 = (void *)DAT_00562220[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

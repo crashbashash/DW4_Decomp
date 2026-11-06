@@ -7,8 +7,7 @@ igMetaObject *igThreadManager_GetMetaObject(void);
 igMetaObject *igThreadManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igThreadManager_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002b7c00();
     return g_igThreadManager_metaObject[0];
 }

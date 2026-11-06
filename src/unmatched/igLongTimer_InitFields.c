@@ -10,8 +10,8 @@ extern int DAT_004c04d0[4];
 extern void * DAT_00586028[4];
 extern void thunk_igPsx2LongTimer_GetMetaObject(void);
 void igLongTimer_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
     temp_s0 = (void *)(DAT_00586028[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &DAT_004c04a0[0], 4);

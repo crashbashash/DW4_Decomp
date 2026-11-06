@@ -10,8 +10,8 @@ extern int DAT_00587fd0[4];
 void beSeData_InitFields(void);
 }
 void beSeData_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00587fd0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

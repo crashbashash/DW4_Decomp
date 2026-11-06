@@ -7,8 +7,7 @@ igMetaObject *igAnimationHierarchy_GetMetaObject(void);
 igMetaObject *igAnimationHierarchy_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationHierarchy_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a71a0();
     return g_igAnimationHierarchy_metaObject[0];
 }

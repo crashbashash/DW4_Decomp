@@ -7,8 +7,7 @@ igMetaObject *igEventReceiverOrderedList_GetMetaObject(void);
 igMetaObject *igEventReceiverOrderedList_GetMetaObject(void)
 {
     igMetaObject *g = g_igEventReceiverOrderedList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igEventReceiverOrderedList_EnsureRegistered();
     return g_igEventReceiverOrderedList_metaObject[0];
 }

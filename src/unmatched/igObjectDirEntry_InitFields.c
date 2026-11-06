@@ -25,14 +25,14 @@ extern int DAT_00585b98[4];
 extern int DAT_00587040[4];
 extern int DAT_00587198[4];
 void igObjectDirEntry_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_v0;
-    void *temp_v0_2;
-    int temp_s1_2;
-    int temp_s2;
-    int temp_s3;
     int var_a1;
+    int temp_s3;
+    int temp_s2;
+    int temp_s1_2;
+    void *temp_v0_2;
+    void *temp_v0;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_00585b70[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

@@ -7,8 +7,7 @@ igMetaObject *igIntersectTraversal_GetMetaObject(void);
 igMetaObject *igIntersectTraversal_GetMetaObject(void)
 {
     igMetaObject *g = g_igIntersectTraversal_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019e440();
     return g_igIntersectTraversal_metaObject[0];
 }

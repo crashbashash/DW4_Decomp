@@ -7,8 +7,8 @@ extern int DAT_00497c70[4];
 extern int DAT_00497c78[4];
 extern int DAT_0056d8c8[4];
 void igLogInterface_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0056d8c8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

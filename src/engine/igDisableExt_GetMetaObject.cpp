@@ -7,8 +7,7 @@ igMetaObject *igDisableExt_GetMetaObject(void);
 igMetaObject *igDisableExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igDisableExt_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014f810();
     return g_igDisableExt_metaObject[0];
 }

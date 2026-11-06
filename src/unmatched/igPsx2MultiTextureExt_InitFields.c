@@ -22,8 +22,8 @@ int FUN_00153690();
 
 void igPsx2MultiTextureExt_InitFields(void) {
     void *f;
-    int base;
     void *m;
+    int base;
 
     m = (void *)DAT_00560588[0];
     base = igMetaObject_GetFieldCount(m);

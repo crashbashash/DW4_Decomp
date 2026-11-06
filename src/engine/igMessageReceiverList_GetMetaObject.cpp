@@ -7,8 +7,7 @@ igMetaObject *igMessageReceiverList_GetMetaObject(void);
 igMetaObject *igMessageReceiverList_GetMetaObject(void)
 {
     igMetaObject *g = g_igMessageReceiverList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00231870();
     return g_igMessageReceiverList_metaObject[0];
 }

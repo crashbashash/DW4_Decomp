@@ -15,16 +15,16 @@ extern int DAT_0048b1b0[4];
 extern int DAT_0048b1c0[4];
 extern int DAT_005612b0[4];
 void igTransform_InitFields(void) {
-    struct V o5;
-    struct V o4;
-    struct V o3;
-    struct V o2;
-    struct M o1;
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
     int temp_s2;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
+    struct M o1;
+    struct V o2;
+    struct V o3;
+    struct V o4;
+    struct V o5;
 
     temp_s0 = (void *)DAT_005612b0[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

@@ -7,8 +7,7 @@ igMetaObject *igLibraryLoader_GetMetaObject(void);
 igMetaObject *igLibraryLoader_GetMetaObject(void)
 {
     igMetaObject *g = g_igLibraryLoader_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c2330();
     return g_igLibraryLoader_metaObject[0];
 }

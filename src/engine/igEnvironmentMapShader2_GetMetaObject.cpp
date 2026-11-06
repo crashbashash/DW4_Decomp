@@ -7,8 +7,7 @@ igMetaObject *igEnvironmentMapShader2_GetMetaObject(void);
 igMetaObject *igEnvironmentMapShader2_GetMetaObject(void)
 {
     igMetaObject *g = g_igEnvironmentMapShader2_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a15a0();
     return g_igEnvironmentMapShader2_metaObject[0];
 }

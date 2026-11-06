@@ -10,9 +10,9 @@ extern int DAT_00489030[4];
 extern int DAT_00489038[4];
 extern int DAT_0055fe50[4];
 void igCustomStateField_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055fe50[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

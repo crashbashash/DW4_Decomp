@@ -10,16 +10,16 @@ extern int DAT_004862b0[4];
 extern int DAT_004862d0[4];
 extern int DAT_0055f010[4];
 void igMaterialAttr_InitFields(void) {
-    struct V v4;
-    struct V v3;
-    struct V v2;
-    struct V v1;
-    int temp_a0;
-    int temp_a0_2;
-    int temp_a0_3;
-    int temp_a0_4;
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
+    int temp_a0_4;
+    int temp_a0_3;
+    int temp_a0_2;
+    int temp_a0;
+    struct V v1;
+    struct V v2;
+    struct V v3;
+    struct V v4;
 
     temp_s0 = (void *)DAT_0055f010[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

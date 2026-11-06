@@ -13,11 +13,11 @@ extern int DAT_00587760[4];
 void igCriMovieData_InitFields(void);
 }
 void igCriMovieData_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_v0;
     void *temp_v0_2;
     void *temp_v0_3;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00587760[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

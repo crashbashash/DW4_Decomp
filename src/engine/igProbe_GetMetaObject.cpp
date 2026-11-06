@@ -7,8 +7,7 @@ igMetaObject *igProbe_GetMetaObject(void);
 igMetaObject *igProbe_GetMetaObject(void)
 {
     igMetaObject *g = g_igProbe_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019e890();
     return g_igProbe_metaObject[0];
 }

@@ -7,8 +7,8 @@ extern int DAT_004c1df0[4];
 extern int DAT_004c1e00[4];
 extern int DAT_00586d48[4];
 void igPsx2IopRpcConnection_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00586d48[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

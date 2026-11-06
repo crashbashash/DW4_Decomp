@@ -7,8 +7,7 @@ igMetaObject *igVertexStream_GetMetaObject(void);
 igMetaObject *igVertexStream_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexStream_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014af80();
     return g_igVertexStream_metaObject[0];
 }

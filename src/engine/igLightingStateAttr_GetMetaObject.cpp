@@ -7,8 +7,7 @@ igMetaObject *igLightingStateAttr_GetMetaObject(void);
 igMetaObject *igLightingStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igLightingStateAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00135f40();
     return g_igLightingStateAttr_metaObject[0];
 }

@@ -18,11 +18,11 @@ int FUN_00136c80();
 struct F { char p[38]; char f38; char f39; char f40; char p2[3]; char f44; char p3[7]; int f52; int f56; };
 void igGeometrySetAttr_InitFields(void) {
     int temp_s0;
-    void *temp_s1;
     struct F *temp_s2;
     struct F *temp_s2_2;
     struct F *temp_v0;
     struct F *temp_v0_2;
+    void *temp_s1;
 
     temp_s1 = (void *)DAT_0055f118[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

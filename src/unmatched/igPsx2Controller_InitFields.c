@@ -19,11 +19,11 @@ int FUN_00147030();
 int FUN_002d1870();
 
 void igPsx2Controller_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_s2;
     void *temp_v0;
     void *temp_v0_2;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f760[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

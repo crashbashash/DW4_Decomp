@@ -10,9 +10,9 @@ extern int DAT_00497d98[4];
 extern int DAT_00497da0[4];
 extern int DAT_0056d968[4];
 void igIterateField_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0056d968[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

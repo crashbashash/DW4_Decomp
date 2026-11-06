@@ -8,8 +8,8 @@ extern int DAT_004c0f80[4];
 extern int DAT_004c0f88[4];
 extern int DAT_00586598[4];
 void igEnumMetaField_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00586598[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

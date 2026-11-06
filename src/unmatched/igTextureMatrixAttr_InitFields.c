@@ -16,15 +16,15 @@ extern int DAT_00485b50[4];
 extern int DAT_0055ecd8[4];
 
 void igTextureMatrixAttr_InitFields(void) {
-    void *temp_s0;
-    struct V o5;
-    struct V o4;
-    void *temp_s1;
-    struct Fld *fld;
-    struct V o3;
-    struct V o2;
-    int temp_s2;
     struct M o1;
+    int temp_s2;
+    struct V o2;
+    struct V o3;
+    struct Fld *fld;
+    void *temp_s1;
+    struct V o4;
+    struct V o5;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055ecd8[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

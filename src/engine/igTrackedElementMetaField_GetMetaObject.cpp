@@ -7,8 +7,7 @@ igMetaObject *igTrackedElementMetaField_GetMetaObject(void);
 igMetaObject *igTrackedElementMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igTrackedElementMetaField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014e4a0();
     return g_igTrackedElementMetaField_metaObject[0];
 }

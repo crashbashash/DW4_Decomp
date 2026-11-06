@@ -7,8 +7,7 @@ igMetaObject *igTgaLoader_GetMetaObject(void);
 igMetaObject *igTgaLoader_GetMetaObject(void)
 {
     igMetaObject *g = g_igTgaLoader_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00150200();
     return g_igTgaLoader_metaObject[0];
 }

@@ -7,8 +7,7 @@ igMetaObject *igParticleAttr_GetMetaObject(void);
 igMetaObject *igParticleAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igParticleAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00134e50();
     return g_igParticleAttr_metaObject[0];
 }

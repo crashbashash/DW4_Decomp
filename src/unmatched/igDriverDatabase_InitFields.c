@@ -20,7 +20,6 @@ extern int DAT_005865d0[4];
 int FUN_002c66f0();
 
 void igDriverDatabase_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_s2;
     void *temp_s2_2;
@@ -32,6 +31,7 @@ void igDriverDatabase_InitFields(void) {
     void *temp_v0;
     void *temp_v0_2;
     void *temp_v0_3;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005865d0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

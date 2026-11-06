@@ -15,12 +15,12 @@ extern int DAT_00585cc8[4];
 struct Fld { char p0[38]; char f38; char f39; char f40; char p41[12]; char f53; char p54[2]; int f56; char f60; char p61[3]; char f64; char f65; };
 void igMetaField_InitFields(void) {
     int temp_s0;
-    void *temp_s1;
     struct Fld *temp_s2;
     struct Fld *temp_v0_3;
     struct Fld *temp_v0_4;
     struct Fld *temp_v0;
     struct Fld *temp_v0_2;
+    void *temp_s1;
 
     temp_s1 = (void *)DAT_00585cc8[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

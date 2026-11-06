@@ -11,10 +11,10 @@ extern int DAT_0048bef0[4];
 extern int DAT_0048bef8[4];
 extern int DAT_00561990[4];
 void igInterpretedShaderData_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561990[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

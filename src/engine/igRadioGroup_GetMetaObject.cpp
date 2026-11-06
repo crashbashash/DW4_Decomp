@@ -7,8 +7,7 @@ igMetaObject *igRadioGroup_GetMetaObject(void);
 igMetaObject *igRadioGroup_GetMetaObject(void)
 {
     igMetaObject *g = g_igRadioGroup_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igRadioGroup_EnsureRegistered();
     return g_igRadioGroup_metaObject[0];
 }

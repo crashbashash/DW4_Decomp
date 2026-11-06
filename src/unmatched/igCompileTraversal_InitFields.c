@@ -19,7 +19,6 @@ extern int DAT_00561cc0[4];
 int thunk_FUN_001bb230();
 
 void igCompileTraversal_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_s2;
     void *temp_s2_2;
@@ -28,6 +27,7 @@ void igCompileTraversal_InitFields(void) {
     void *temp_s2_5;
     void *temp_s2_6;
     void *temp_s2_7;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561cc0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

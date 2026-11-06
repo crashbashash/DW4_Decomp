@@ -7,8 +7,7 @@ igMetaObject *igProjectionMatrixAttrPool_GetMetaObject(void);
 igMetaObject *igProjectionMatrixAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igProjectionMatrixAttrPool_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019a200();
     return g_igProjectionMatrixAttrPool_metaObject[0];
 }

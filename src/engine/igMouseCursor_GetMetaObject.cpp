@@ -7,8 +7,7 @@ igMetaObject *igMouseCursor_GetMetaObject(void);
 igMetaObject *igMouseCursor_GetMetaObject(void)
 {
     igMetaObject *g = g_igMouseCursor_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igMouseCursor_RunStaticInit();
     return g_igMouseCursor_metaObject[0];
 }

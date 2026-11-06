@@ -7,8 +7,7 @@ igMetaObject *igAnimationBinding_GetMetaObject(void);
 igMetaObject *igAnimationBinding_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationBinding_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a8df0();
     return g_igAnimationBinding_metaObject[0];
 }

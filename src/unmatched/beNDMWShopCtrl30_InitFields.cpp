@@ -10,8 +10,8 @@ extern int DAT_0058adf8[4];
 void beNDMWShopCtrl30_InitFields(void);
 }
 void beNDMWShopCtrl30_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058adf8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

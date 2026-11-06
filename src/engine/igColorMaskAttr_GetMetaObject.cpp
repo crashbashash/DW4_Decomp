@@ -7,8 +7,7 @@ igMetaObject *igColorMaskAttr_GetMetaObject(void);
 igMetaObject *igColorMaskAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igColorMaskAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00138d80();
     return g_igColorMaskAttr_metaObject[0];
 }

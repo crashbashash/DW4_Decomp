@@ -7,8 +7,7 @@ igMetaObject *igWindowResizeEventReceiver_GetMetaObject(void);
 igMetaObject *igWindowResizeEventReceiver_GetMetaObject(void)
 {
     igMetaObject *g = g_igWindowResizeEventReceiver_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00233160();
     return g_igWindowResizeEventReceiver_metaObject[0];
 }

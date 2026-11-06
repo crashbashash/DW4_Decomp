@@ -7,8 +7,7 @@ igMetaObject *igNodeList_GetMetaObject(void);
 igMetaObject *igNodeList_GetMetaObject(void)
 {
     igMetaObject *g = g_igNodeList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019ccc0();
     return g_igNodeList_metaObject[0];
 }

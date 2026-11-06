@@ -18,7 +18,6 @@ extern int DAT_005622b8[4];
 
 struct Fld { char p0[38]; char f38; char p39[13]; char f52; char f53; char p54[2]; int f56; int f60; char f64; char f65; };
 void igAnimationCombiner_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     struct Fld *temp_s2;
     struct Fld *temp_s2_2;
@@ -27,6 +26,7 @@ void igAnimationCombiner_InitFields(void) {
     struct Fld *temp_s2_5;
     struct Fld *temp_s2_6;
     struct Fld *temp_s2_7;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005622b8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -13,10 +13,10 @@ extern int DAT_00485c48[4];
 extern int DAT_00485c58[4];
 extern int DAT_0055ed48[4];
 void igTextureCubeAttr_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055ed48[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

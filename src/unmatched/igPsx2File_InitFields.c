@@ -11,10 +11,10 @@ extern void * DAT_00586d70[4];
 int thunk_igFile_GetMetaObject();
 
 void igPsx2File_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    int temp_s2;
     void *temp_a0;
+    int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)(DAT_00586d70[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

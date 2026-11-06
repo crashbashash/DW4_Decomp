@@ -7,8 +7,7 @@ igMetaObject *igModelViewMatrixBoneSelectList_561880_GetMetaObject(void);
 igMetaObject *igModelViewMatrixBoneSelectList_561880_GetMetaObject(void)
 {
     igMetaObject *g = g_igModelViewMatrixBoneSelectList_metaObject_00561880[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019d360();
     return g_igModelViewMatrixBoneSelectList_metaObject_00561880[0];
 }

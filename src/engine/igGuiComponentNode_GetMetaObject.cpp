@@ -7,8 +7,7 @@ igMetaObject *igGuiComponentNode_GetMetaObject(void);
 igMetaObject *igGuiComponentNode_GetMetaObject(void)
 {
     igMetaObject *g = g_igGuiComponentNode_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igGuiComponentNode_RunStaticInit();
     return g_igGuiComponentNode_metaObject[0];
 }

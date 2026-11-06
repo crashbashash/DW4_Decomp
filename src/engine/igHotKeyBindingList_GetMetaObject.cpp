@@ -7,8 +7,7 @@ igMetaObject *igHotKeyBindingList_GetMetaObject(void);
 igMetaObject *igHotKeyBindingList_GetMetaObject(void)
 {
     igMetaObject *g = g_igHotKeyBindingList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igHotKeyBindingList_RunStaticInit();
     return g_igHotKeyBindingList_metaObject[0];
 }

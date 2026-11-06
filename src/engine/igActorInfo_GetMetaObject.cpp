@@ -7,8 +7,7 @@ igMetaObject *igActorInfo_GetMetaObject(void);
 igMetaObject *igActorInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_igActorInfo_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001aa410();
     return g_igActorInfo_metaObject[0];
 }

@@ -20,7 +20,6 @@ extern int DAT_004bf830[4];
 extern int DAT_00585978[4];
 void igResource_InitFields(void) {
     int temp_s0;
-    void *temp_s1;
     void *temp_s2;
     void *temp_s2_2;
     void *temp_s2_3;
@@ -30,6 +29,7 @@ void igResource_InitFields(void) {
     void *temp_s2_7;
     void *temp_s2_8;
     void *temp_s2_9;
+    void *temp_s1;
 
     temp_s1 = (void *)DAT_00585978[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);

@@ -219,7 +219,7 @@
 00130420	thunk_igVisualAttribute_GetMetaObject	match	-
 00130440	FUN_00130440	match	-
 00130490	igViewportAttr_GetMetaObject	match	-
-001304e0	igViewportAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igViewportAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001304e0	igViewportAttr_GetVTable	match	-
 00130570	FUN_00130570	match	-
 00130580	igViewportAttr_Register	match	-
 00130600	thunk_igViewportAttr_GetMetaObject	match	-
@@ -233,7 +233,7 @@
 001308c0	igVertexBlendStateAttr_InitFields	match	-
 00130930	FUN_00130930	match	-
 00130970	igVertexBlendMatrixListAttr_GetMetaObject	match	-
-001309c0	igVertexBlendMatrixListAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igVertexBlendMatrixListAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001309c0	igVertexBlendMatrixListAttr_GetVTable	match	-
 00130a70	FUN_00130a70	match	-
 00130a80	igVertexBlendMatrixListAttr_Register	match	-
 00130b00	thunk_igVertexBlendMatrixListAttr_GetMetaObject	match	-
@@ -372,7 +372,7 @@
 00133ac0	igShadeModelAttr_InitFields	match	-
 00133b70	FUN_00133b70	match	-
 00133bc0	igSetRenderDestinationAttr_GetMetaObject	match	-
-00133c10	igSetRenderDestinationAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSetRenderDestinationAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00133c10	igSetRenderDestinationAttr_GetVTable	match	-
 00133ca0	FUN_00133ca0	match	-
 00133d20	FUN_00133d20	match	-
 00133d30	igSetRenderDestinationAttr_Register	match	-
@@ -380,7 +380,7 @@
 00133dc0	igSetRenderDestinationAttr_InitFields	match	-
 00133e50	FUN_00133e50	match	-
 00133ea0	igRenderListAttr_GetMetaObject	match	-
-00133ef0	igRenderListAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igRenderListAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00133ef0	igRenderListAttr_GetVTable	match	-
 00133f80	FUN_00133f80	match	-
 00133f90	igRenderListAttr_Register	match	-
 00134010	thunk_igRenderListAttr_GetMetaObject	match	-
@@ -390,7 +390,7 @@
 001341b0	FUN_001341b0	match	-
 001341f0	FUN_001341f0	match	-
 00134240	igRenderDestinationAttr_GetMetaObject	match	-
-00134290	igRenderDestinationAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igRenderDestinationAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00134290	igRenderDestinationAttr_GetVTable	match	-
 00134370	FUN_00134370	match	-
 00134380	igRenderDestinationAttr_Register	match	-
 00134400	thunk_igRenderDestinationAttr_GetMetaObject	match	-
@@ -488,7 +488,7 @@
 001361b0	FUN_001361b0	match	-
 001361f0	FUN_001361f0	match	-
 00136240	igLightStateAttr_GetMetaObject	match	-
-00136290	igLightStateAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igLightStateAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00136290	igLightStateAttr_GetVTable	match	-
 00136370	FUN_00136370	match	-
 001363f0	ObjectRef_Destruct_001363f0	match	-
 00136470	FUN_00136470	match	-
@@ -510,7 +510,7 @@
 00136920	igLightAttr_InitFields	match	-
 00136c80	FUN_00136c80	match	-
 00136ce0	igGeometrySetAttr_GetMetaObject	match	-
-00136d30	igGeometrySetAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igGeometrySetAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00136d30	igGeometrySetAttr_GetVTable	match	-
 00136e10	FUN_00136e10	match	-
 00136e90	FUN_00136e90	match	-
 00136ea0	igGeometrySetAttr_Register	match	-
@@ -592,7 +592,7 @@
 001388f0	FUN_001388f0	match	-
 00138950	FUN_00138950	match	-
 001389a0	igCopyRenderDestinationAttr_GetMetaObject	match	-
-001389f0	igCopyRenderDestinationAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCopyRenderDestinationAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001389f0	igCopyRenderDestinationAttr_GetVTable	match	-
 00138b20	FUN_00138b20	match	-
 00138b30	igCopyRenderDestinationAttr_Register	match	-
 00138bb0	thunk_igCopyRenderDestinationAttr_GetMetaObject	match	-
@@ -680,7 +680,7 @@
 0013a630	thunk_igGeometryAttrList_GetMetaObject	match	-
 0013a640	FUN_0013a640	match	-
 0013a680	igAttrPool_GetMetaObject	match	-
-0013a6d0	igAttrPool_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAttrPool (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0013a6d0	igAttrPool_GetVTable	match	-
 0013a800	FUN_0013a800	match	-
 0013a880	FUN_0013a880	match	-
 0013a900	FUN_0013a900	match	-
@@ -1062,7 +1062,7 @@
 00143840	FUN_00143840	match	-
 00143880	FUN_00143880	match	-
 00143950	Gap__igPsx2AudioContext__vfunc_12	match	-
-001439d0	Gap__igPsx2AudioContext__vfunc_24	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2AudioContext_143730 (local/mwcps2/3.0b52-030722/mwccps2.exe '-O4,s -sdatathreshold 1 -Iinclude -Cpp_exceptions off') they are not
+001439d0	Gap__igPsx2AudioContext__vfunc_24	match	-
 00143c30	Gap__igPsx2AudioContext__vfunc_61	match	-
 00143c90	Gap__igPsx2AudioContext__vfunc_28	match	-
 00143d80	Gap__igPsx2AudioContext__vfunc_29	match	-
@@ -1129,7 +1129,7 @@
 001463e0	FUN_001463e0	match	-
 001463f0	igControllerList_Register	match	-
 00146460	thunk_igControllerList_GetMetaObject	match	-
-001464c0	igDefaultInterfaceManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDefaultInterfaceManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001464c0	igDefaultInterfaceManager_GetVTable	match	-
 00146560	FUN_00146560	match	-
 00146570	igDefaultInterfaceManager_Register	match	-
 001465f0	igDefaultInterfaceManager_InitFields	match	-
@@ -1146,20 +1146,20 @@
 00146980	thunk_igController_GetMetaObject	match	-
 00146990	igController_InitFields	match	-
 00146a50	thunk_igPsx2Controller_GetMetaObject	match	-
-00146ab0	igPsx2Window_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2Window (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00146ab0	igPsx2Window_GetVTable	match	-
 00146b80	FUN_00146b80	match	-
 00146b90	igPsx2Window_Register	match	-
 00146c20	igPsx2Window_InitFields	match	-
 00146d90	FUN_00146d90	match	-
 00146df0	igPsx2ControllerManager_GetMetaObject	match	-
-00146e40	igPsx2ControllerManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2ControllerManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00146e40	igPsx2ControllerManager_GetVTable	match	-
 00146ee0	FUN_00146ee0	match	-
 00146ef0	igPsx2ControllerManager_Register	match	-
 00146f70	igPsx2ControllerManager_InitFields	match	-
 00147030	FUN_00147030	match	-
 00147090	FUN_00147090	match	-
 001470d0	igPsx2Controller_GetMetaObject	match	-
-00147120	igPsx2Controller_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2Controller (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00147120	igPsx2Controller_GetVTable	match	-
 001471b0	FUN_001471b0	match	-
 001471c0	igPsx2Controller_Register	match	-
 00147250	igPsx2Controller_InitFields	match	-
@@ -1284,7 +1284,7 @@
 0014a4c0	thunk_igPsx2VisualContext_GetMetaObject	match	-
 0014a4d0	FUN_0014a4d0	match	-
 0014a510	igVertexArray2Helper_GetMetaObject	match	-
-0014a560	igVertexArray2Helper_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igVertexArray2Helper (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+0014a560	igVertexArray2Helper_GetVTable	match	-
 0014a640	FUN_0014a640	match	-
 0014a650	igVertexArray2Helper_Register	match	-
 0014a6d0	thunk_igVertexArray2Helper_GetMetaObject	match	-
@@ -1292,7 +1292,7 @@
 0014a780	FUN_0014a780	match	-
 0014a7c0	FUN_0014a7c0	match	-
 0014a810	igVertexArray2_GetMetaObject	match	-
-0014a860	igVertexArray2_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igVertexArray2 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0014a860	igVertexArray2_GetVTable	match	-
 0014a910	FUN_0014a910	match	-
 0014aa70	FUN_0014aa70	match	-
 0014aaf0	FUN_0014aaf0	match	-
@@ -1304,7 +1304,7 @@
 0014adc0	FUN_0014adc0	match	-
 0014ae00	FUN_0014ae00	match	-
 0014ae50	igVertexStream_GetMetaObject	match	-
-0014aea0	igVertexStream_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igVertexStream (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0014aea0	igVertexStream_GetVTable	match	-
 0014af80	FUN_0014af80	match	-
 0014af90	igVertexStream_Register	match	-
 0014b010	thunk_igVertexStream_GetMetaObject	match	-
@@ -1319,7 +1319,7 @@
 0014b320	thunk_igVertexDataList_GetMetaObject	match	-
 0014b390	FUN_0014b390	match	-
 0014b3d0	igVertexData_GetMetaObject	match	-
-0014b420	igVertexData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igVertexData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0014b420	igVertexData_GetVTable	match	-
 0014b500	FUN_0014b500	match	-
 0014b510	igVertexData_Register	match	-
 0014b590	thunk_igVertexData_GetMetaObject	match	-
@@ -1374,7 +1374,7 @@
 0014c910	thunk_igPsx2PointSpriteExt_GetMetaObject	match	-
 0014c980	FUN_0014c980	match	-
 0014c9d0	igParticleArray_GetMetaObject	match	-
-0014ca20	igParticleArray_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igParticleArray (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0014ca20	igParticleArray_GetVTable	match	-
 0014caf0	FUN_0014caf0	match	-
 0014cc90	FUN_0014cc90	match	-
 0014cd10	FUN_0014cd10	match	-
@@ -1442,7 +1442,7 @@
 0014e280	thunk_igPsx2Image_GetMetaObject	match	-
 0014e290	thunk_FUN_00156300	match	-
 0014e300	igTrackedElementMetaField_GetMetaObject	match	-
-0014e350	igTrackedElementMetaField_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igTrackedElementMetaField (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0014e350	igTrackedElementMetaField_GetVTable	match	-
 0014e420	FUN_0014e420	match	-
 0014e4a0	FUN_0014e4a0	match	-
 0014e4b0	igTrackedElementMetaField_Register	match	-
@@ -1458,7 +1458,7 @@
 0014ead0	thunk_igCustomStateFieldList_GetMetaObject	match	-
 0014eae0	FUN_0014eae0	match	-
 0014eb20	igCustomStateField_GetMetaObject	match	-
-0014eb70	igCustomStateField_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCustomStateField (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0014eb70	igCustomStateField_GetVTable	match	-
 0014ec50	FUN_0014ec50	match	-
 0014ecd0	FUN_0014ecd0	match	-
 0014ece0	igCustomStateField_Register	match	-
@@ -1564,7 +1564,7 @@
 001511b0	igPsx2VisualContext_Register	match	-
 00151240	igPsx2VisualContext_InitFields	match	-
 00151f20	igPsx2VertexStream_GetMetaObject	match	-
-00151f70	igPsx2VertexStream_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2VertexStream (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00151f70	igPsx2VertexStream_GetVTable	match	-
 00152050	FUN_00152050	match	-
 00152060	igPsx2VertexStream_Register	match	-
 001520f0	igPsx2VertexStream_InitFields	match	-
@@ -1588,7 +1588,7 @@
 001528f0	igPsx2LongList_Register	match	-
 00152960	thunk_igPsx2LongList_GetMetaObject	match	-
 00152a30	igPsx2UserUCodeExt_GetMetaObject	match	-
-00152a80	igPsx2UserUCodeExt_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2UserUCodeExt (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00152a80	igPsx2UserUCodeExt_GetVTable	match	-
 00152b10	FUN_00152b10	match	-
 00152c10	FUN_00152c10	match	-
 00152c90	FUN_00152c90	match	-
@@ -1597,7 +1597,7 @@
 00152db0	igPsx2UserUCodeExt_InitFields	match	-
 00152e80	FUN_00152e80	match	-
 00152ed0	igPsx2ScissorExt_GetMetaObject	match	-
-00152f20	igPsx2ScissorExt_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2ScissorExt (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00152f20	igPsx2ScissorExt_GetVTable	match	-
 00153000	FUN_00153000	match	-
 00153010	igPsx2ScissorExt_Register	match	-
 001530a0	igPsx2ScissorExt_InitFields	match	-
@@ -1615,7 +1615,7 @@
 00153630	FUN_00153630	match	-
 00153690	FUN_00153690	match	-
 001536f0	igPsx2MultiTextureExt_GetMetaObject	match	-
-00153740	igPsx2MultiTextureExt_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2MultiTextureExt (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+00153740	igPsx2MultiTextureExt_GetVTable	match	-
 00153820	FUN_00153820	match	-
 00153830	igPsx2MultiTextureExt_Register	match	-
 001538c0	igPsx2MultiTextureExt_InitFields	match	-
@@ -1628,16 +1628,16 @@
 00153c80	FUN_00153c80	match	-
 00153c90	igPsx2ImageConvert_Register	match	-
 00153d30	igPsx2Image_GetMetaObject	match	-
-00153d80	igPsx2Image_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2Image (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00153d80	igPsx2Image_GetVTable	match	-
 00153e60	FUN_00153e60	match	-
 00153e70	igPsx2Image_Register	match	-
 00153f10	igPsx2DisableExt_GetMetaObject	match	-
-00153f60	igPsx2DisableExt_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2DisableExt (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00153f60	igPsx2DisableExt_GetVTable	match	-
 00154040	FUN_00154040	match	-
 00154050	igPsx2DisableExt_Register	match	-
 001540e0	igPsx2DisableExt_InitFields	match	-
 00154180	igPsx2DecalExt_GetMetaObject	match	-
-001541d0	igPsx2DecalExt_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2DecalExt (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001541d0	igPsx2DecalExt_GetVTable	match	-
 001542b0	FUN_001542b0	match	-
 001542c0	igPsx2DecalExt_Register	match	-
 00154350	igPsx2DecalExt_InitFields	match	-
@@ -1647,7 +1647,7 @@
 001544a0	igPsx2Clut_Register	match	-
 00154520	igPsx2Clut_InitFields	match	-
 001545e0	igPsx2BlendEquationExt_GetMetaObject	match	-
-00154630	igPsx2BlendEquationExt_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2BlendEquationExt (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00154630	igPsx2BlendEquationExt_GetVTable	match	-
 00154710	FUN_00154710	match	-
 00154720	igPsx2BlendEquationExt_Register	match	-
 001547b0	igPsx2BlendEquationExt_InitFields	match	-
@@ -2795,7 +2795,7 @@
 00195580	FUN_00195580	match	-
 00195590	igTransformSequence_Register	match	-
 00195600	thunk_igTransformSequence_GetMetaObject	match	-
-00195620	igTransformSequence_InitFields	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igTransformSequence (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00195620	igTransformSequence_InitFields	match	-
 001957c0	FUN_001957c0	match	-
 00195810	igTransformRecorder_GetMetaObject	match	-
 00195860	igTransformRecorder_GetVTable	match	-
@@ -2853,7 +2853,7 @@
 00196b70	igSwitch_InitFields	match	-
 00196c10	FUN_00196c10	match	-
 00196c60	igSorter_GetMetaObject	match	-
-00196cb0	igSorter_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSorter (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00196cb0	igSorter_GetVTable	match	-
 00196f60	FUN_00196f60	match	-
 00196fe0	FUN_00196fe0	match	-
 00197060	FUN_00197060	match	-
@@ -2888,7 +2888,7 @@
 00197ab0	FUN_00197ab0	match	-
 00197af0	FUN_00197af0	match	-
 00197b40	igRenderPackage_GetMetaObject	match	-
-00197b90	igRenderPackage_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igRenderPackage (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00197b90	igRenderPackage_GetVTable	match	-
 00197cc0	FUN_00197cc0	match	-
 00197cd0	igRenderPackage_Register	match	-
 00197d50	thunk_igRenderPackage_GetMetaObject	match	-
@@ -2914,7 +2914,7 @@
 001984c0	FUN_001984c0	match	-
 001984d0	igSkeletonList_Register	match	-
 00198540	thunk_igSkeletonList_GetMetaObject	match	-
-001985a0	igSkeleton_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSkeleton (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001985a0	igSkeleton_GetVTable	match	-
 00198680	FUN_00198680	match	-
 00198690	igSkeleton_Register	match	-
 00198730	igSkeleton_InitFields	match	-
@@ -2924,7 +2924,7 @@
 001988d0	FUN_001988d0	match	-
 001988e0	igSkeletonBoneInfoList_Register	match	-
 00198950	thunk_igSkeletonBoneInfoList_GetMetaObject	match	-
-001989b0	igSkeletonBoneInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSkeletonBoneInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001989b0	igSkeletonBoneInfo_GetVTable	match	-
 00198a40	FUN_00198a40	match	-
 00198a50	igSkeletonBoneInfo_Register	match	-
 00198ad0	igSkeletonBoneInfo_InitFields	match	-
@@ -2936,7 +2936,7 @@
 00198cb0	thunk_igShaderProcessor_GetMetaObject	match	-
 00198cc0	FUN_00198cc0	match	-
 00198d00	igShaderInfo_GetMetaObject	match	-
-00198d50	igShaderInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igShaderInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00198d50	igShaderInfo_GetVTable	match	-
 00198e30	FUN_00198e30	match	-
 00198e40	igShaderInfo_Register	match	-
 00198ec0	thunk_igShaderInfo_GetMetaObject	match	-
@@ -2951,7 +2951,7 @@
 00199100	thunk_igShaderFactoryList_GetMetaObject	match	-
 00199170	FUN_00199170	match	-
 001991c0	igShaderFactory_GetMetaObject	match	-
-00199210	igShaderFactory_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igShaderFactory (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00199210	igShaderFactory_GetVTable	match	-
 00199330	FUN_00199330	match	-
 00199450	FUN_00199450	match	-
 001994d0	FUN_001994d0	match	-
@@ -2959,7 +2959,7 @@
 00199560	thunk_igShaderFactory_GetMetaObject	match	-
 00199570	igShaderFactory_InitFields	match	-
 00199660	igShaderData_GetMetaObject	match	-
-001996b0	igShaderData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igShaderData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001996b0	igShaderData_GetVTable	match	-
 00199760	FUN_00199760	match	-
 00199770	igShaderData_Register	match	-
 001997f0	thunk_igShaderData_GetMetaObject	match	-
@@ -3057,7 +3057,7 @@
 0019aea0	FUN_0019aea0	match	-
 0019aee0	FUN_0019aee0	match	-
 0019af30	igSceneInfo_GetMetaObject	match	-
-0019af80	igSceneInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSceneInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0019af80	igSceneInfo_GetVTable	match	-
 0019b040	FUN_0019b040	match	-
 0019b1f0	FUN_0019b1f0	match	-
 0019b270	FUN_0019b270	match	-
@@ -3074,7 +3074,7 @@
 0019b890	thunk_igProjectiveShadowShader_GetMetaObject	match	-
 0019b8a0	igProjectiveShadowShader_InitFields	match	-
 0019bf00	igPlanarShadowShader_GetMetaObject	match	-
-0019bf50	igPlanarShadowShader_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPlanarShadowShader (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0019bf50	igPlanarShadowShader_GetVTable	match	-
 0019c0e0	FUN_0019c0e0	match	-
 0019c1a0	FUN_0019c1a0	match	-
 0019c220	FUN_0019c220	match	-
@@ -3118,7 +3118,7 @@
 0019cd40	thunk_igNodeList_GetMetaObject	match	-
 0019cd50	FUN_0019cd50	match	-
 0019cda0	igNode_GetMetaObject	match	-
-0019cdf0	igNode_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igNode (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0019cdf0	igNode_GetVTable	match	-
 0019cf10	FUN_0019cf10	match	-
 0019cf20	igNode_Register	match	-
 0019cfa0	thunk_igNode_GetMetaObject	match	-
@@ -3178,21 +3178,21 @@
 0019e680	FUN_0019e680	match	-
 0019e6c0	FUN_0019e6c0	match	-
 0019e710	igProbe_GetMetaObject	match	-
-0019e760	igProbe_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igProbe (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0019e760	igProbe_GetVTable	match	-
 0019e890	FUN_0019e890	match	-
 0019e8a0	igProbe_Register	match	-
 0019e920	thunk_igProbe_GetMetaObject	match	-
 0019e930	igProbe_InitFields	match	-
 0019ea00	FUN_0019ea00	match	-
 0019ea50	igInterpretedShaderData_GetMetaObject	match	-
-0019eaa0	igInterpretedShaderData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igInterpretedShaderData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0019eaa0	igInterpretedShaderData_GetVTable	match	-
 0019eb40	FUN_0019eb40	match	-
 0019ebc0	FUN_0019ebc0	match	-
 0019ebd0	igInterpretedShaderData_Register	match	-
 0019ec50	thunk_igInterpretedShaderData_GetMetaObject	match	-
 0019ec70	igInterpretedShaderData_InitFields	match	-
 0019ed20	igIniShaderFactory_GetMetaObject	match	-
-0019ed70	igIniShaderFactory_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igIniShaderFactory (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0019ed70	igIniShaderFactory_GetVTable	match	-
 0019eeb0	FUN_0019eeb0	match	-
 0019ef30	FUN_0019ef30	match	-
 0019efb0	FUN_0019efb0	match	-
@@ -3287,13 +3287,13 @@
 001a1a30	igEnbayaTransformSource_InitFields	match	-
 001a1ae0	igEnbayaContextPool_Create	match	-
 001a1b20	igEnbayaContextPool_GetMetaObject	match	-
-001a1b70	igEnbayaContextPool_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igEnbayaContextPool (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a1b70	igEnbayaContextPool_GetVTable	match	-
 001a1ca0	igEnbayaContextPool_RunStaticInit	match	-
 001a1cb0	igEnbayaContextPool_Register	match	-
 001a1d30	thunk_igEnbayaContextPool_GetMetaObject	match	-
 001a1d40	igEnbayaContextPool_InitFields	match	-
 001a1e30	igEnbayaAnimationState_GetMetaObject	match	-
-001a1e80	igEnbayaAnimationState_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igEnbayaAnimationState (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a1e80	igEnbayaAnimationState_GetVTable	match	-
 001a1fb0	FUN_001a1fb0	match	-
 001a2030	FUN_001a2030	match	-
 001a2040	igEnbayaAnimationState_Register	match	-
@@ -3326,14 +3326,14 @@
 001a2c60	FUN_001a2c60	match	-
 001a2c70	FUN_001a2c70	match	-
 001a2cb0	igBlendListRecord_GetMetaObject	match	-
-001a2d00	igBlendListRecord_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igBlendListRecord (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a2d00	igBlendListRecord_GetVTable	match	-
 001a2d90	FUN_001a2d90	match	-
 001a2da0	igBlendListRecord_Register	match	-
 001a2e20	thunk_igBlendListRecord_GetMetaObject	match	-
 001a2e30	igBlendListRecord_InitFields	match	-
 001a2ef0	FUN_001a2ef0	match	-
 001a2f30	igCompileTraversal_GetMetaObject	match	-
-001a2f80	igCompileTraversal_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCompileTraversal (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a2f80	igCompileTraversal_GetVTable	match	-
 001a30c0	FUN_001a30c0	match	-
 001a3140	FUN_001a3140	match	-
 001a3150	FUN_001a3150	match	-
@@ -3352,14 +3352,14 @@
 001a3580	thunk_igCompiledTransformList_GetMetaObject	match	-
 001a3590	FUN_001a3590	match	-
 001a35d0	igCompiledTransform_GetMetaObject	match	-
-001a3620	igCompiledTransform_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCompiledTransform (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a3620	igCompiledTransform_GetVTable	match	-
 001a3700	FUN_001a3700	match	-
 001a3710	igCompiledTransform_Register	match	-
 001a3790	thunk_igCompiledTransform_GetMetaObject	match	-
 001a37a0	igCompiledTransform_InitFields	match	-
 001a38e0	FUN_001a38e0	match	-
 001a3930	igCommonTraversal_GetMetaObject	match	-
-001a3980	igCommonTraversal_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCommonTraversal (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a3980	igCommonTraversal_GetVTable	match	-
 001a3c60	FUN_001a3c60	match	-
 001a3c70	FUN_001a3c70	match	-
 001a3c80	FUN_001a3c80	match	-
@@ -3398,13 +3398,13 @@
 001a47d0	FUN_001a47d0	match	-
 001a4830	FUN_001a4830	match	-
 001a4870	igBoundingBoxesMaker_GetMetaObject	match	-
-001a48c0	igBoundingBoxesMaker_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igBoundingBoxesMaker (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a48c0	igBoundingBoxesMaker_GetVTable	match	-
 001a4970	FUN_001a4970	match	-
 001a4980	igBoundingBoxesMaker_Register	match	-
 001a4a00	thunk_igBoundingBoxesMaker_GetMetaObject	match	-
 001a4a10	igBoundingBoxesMaker_InitFields	match	-
 001a4b50	igBlendMatrixSelect_GetMetaObject	match	-
-001a4ba0	igBlendMatrixSelect_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igBlendMatrixSelect (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a4ba0	igBlendMatrixSelect_GetVTable	match	-
 001a4c50	FUN_001a4c50	match	-
 001a4c60	igBlendMatrixSelect_Register	match	-
 001a4ce0	thunk_igBlendMatrixSelect_GetMetaObject	match	-
@@ -3430,7 +3430,7 @@
 001a5320	thunk_igNonRefCountedAttrStackManagerList_GetMetaObject	match	-
 001a5330	FUN_001a5330	match	-
 001a5380	igAttrStackManager_GetMetaObject	match	-
-001a53d0	igAttrStackManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAttrStackManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a53d0	igAttrStackManager_GetVTable	match	-
 001a5540	FUN_001a5540	match	-
 001a55c0	FUN_001a55c0	match	-
 001a5640	FUN_001a5640	match	-
@@ -3446,7 +3446,7 @@
 001a5a60	thunk_igAttrStackList_GetMetaObject	match	-
 001a5a70	FUN_001a5a70	match	-
 001a5ab0	igAttrStack_GetMetaObject	match	-
-001a5b00	igAttrStack_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAttrStack (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a5b00	igAttrStack_GetVTable	match	-
 001a5b90	FUN_001a5b90	match	-
 001a5ba0	igAttrStack_Register	match	-
 001a5c20	thunk_igAttrStack_GetMetaObject	match	-
@@ -3467,7 +3467,7 @@
 001a6140	thunk_igAppearanceList_GetMetaObject	match	-
 001a6150	FUN_001a6150	match	-
 001a61a0	igAppearance_GetMetaObject	match	-
-001a61f0	igAppearance_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAppearance (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a61f0	igAppearance_GetVTable	match	-
 001a62d0	FUN_001a62d0	match	-
 001a6350	FUN_001a6350	match	-
 001a63d0	FUN_001a63d0	match	-
@@ -3498,7 +3498,7 @@
 001a6bb0	FUN_001a6bb0	match	-
 001a6bf0	FUN_001a6bf0	match	-
 001a6c40	igAnimationState_GetMetaObject	match	-
-001a6c90	igAnimationState_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAnimationState (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a6c90	igAnimationState_GetVTable	match	-
 001a6dc0	FUN_001a6dc0	match	-
 001a6dd0	igAnimationState_Register	match	-
 001a6e50	thunk_igAnimationState_GetMetaObject	match	-
@@ -3528,7 +3528,7 @@
 001a76a0	igAnimationModifier_InitFields	match	-
 001a7780	FUN_001a7780	match	-
 001a77d0	igAnimationDatabase_GetMetaObject	match	-
-001a7820	igAnimationDatabase_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAnimationDatabase (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a7820	igAnimationDatabase_GetVTable	match	-
 001a7900	FUN_001a7900	match	-
 001a7980	FUN_001a7980	match	-
 001a7a00	FUN_001a7a00	match	-
@@ -3556,7 +3556,7 @@
 001a80a0	thunk_igAnimationCombinerBoneInfoList_GetMetaObject	match	-
 001a80b0	FUN_001a80b0	match	-
 001a80f0	igAnimationCombinerBoneInfo_GetMetaObject	match	-
-001a8140	igAnimationCombinerBoneInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAnimationCombinerBoneInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a8140	igAnimationCombinerBoneInfo_GetVTable	match	-
 001a8220	FUN_001a8220	match	-
 001a8230	igAnimationCombinerBoneInfo_Register	match	-
 001a82b0	thunk_igAnimationCombinerBoneInfo_GetMetaObject	match	-
@@ -3567,7 +3567,7 @@
 001a8490	FUN_001a8490	match	-
 001a84a0	igAnimationCombinerList_Register	match	-
 001a8510	thunk_igAnimationCombinerList_GetMetaObject	match	-
-001a8570	igAnimationCombiner_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAnimationCombiner (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a8570	igAnimationCombiner_GetVTable	match	-
 001a8620	FUN_001a8620	match	-
 001a8700	FUN_001a8700	match	-
 001a8780	FUN_001a8780	match	-
@@ -3584,7 +3584,7 @@
 001a8c20	thunk_igAnimationBindingList_GetMetaObject	match	-
 001a8c30	FUN_001a8c30	match	-
 001a8c70	igAnimationBinding_GetMetaObject	match	-
-001a8cc0	igAnimationBinding_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAnimationBinding (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a8cc0	igAnimationBinding_GetVTable	match	-
 001a8df0	FUN_001a8df0	match	-
 001a8e00	igAnimationBinding_Register	match	-
 001a8e80	thunk_igAnimationBinding_GetMetaObject	match	-
@@ -3598,7 +3598,7 @@
 001a90f0	FUN_001a90f0	match	-
 001a9130	FUN_001a9130	match	-
 001a9180	igAnimation_GetMetaObject	match	-
-001a91d0	igAnimation_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAnimation (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a91d0	igAnimation_GetVTable	match	-
 001a9290	FUN_001a9290	match	-
 001a92a0	igAnimation_Register	match	-
 001a9320	thunk_igAnimation_GetMetaObject	match	-
@@ -3610,7 +3610,7 @@
 001a9510	igAnimationTransitionDefinitionList_Register	match	-
 001a9580	thunk_igAnimationTransitionDefinitionList_GetMetaObject	match	-
 001a9590	igAnimationTransitionDefinition_GetMetaObject	match	-
-001a95e0	igAnimationTransitionDefinition_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAnimationTransitionDefinition (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a95e0	igAnimationTransitionDefinition_GetVTable	match	-
 001a96c0	FUN_001a96c0	match	-
 001a96d0	igAnimationTransitionDefinition_Register	match	-
 001a9750	thunk_igAnimationTransitionDefinition_GetMetaObject	match	-
@@ -3641,13 +3641,13 @@
 001a9e80	igAnimationTrackList_Register	match	-
 001a9ef0	thunk_igAnimationTrackList_GetMetaObject	match	-
 001a9f00	igAnimationTrack_GetMetaObject	match	-
-001a9f50	igAnimationTrack_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igAnimationTrack (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001a9f50	igAnimationTrack_GetVTable	match	-
 001aa030	FUN_001aa030	match	-
 001aa040	igAnimationTrack_Register	match	-
 001aa0c0	thunk_igAnimationTrack_GetMetaObject	match	-
 001aa0d0	igAnimationTrack_InitFields	match	-
 001aa160	igActorInfo_GetMetaObject	match	-
-001aa1b0	igActorInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igActorInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001aa1b0	igActorInfo_GetVTable	match	-
 001aa290	FUN_001aa290	match	-
 001aa310	FUN_001aa310	match	-
 001aa390	FUN_001aa390	match	-
@@ -4394,14 +4394,14 @@
 001e5650	FUN_001e5650	match	-
 001e5690	FUN_001e5690	match	-
 001e56e0	igDataPumpInfo_GetMetaObject	match	-
-001e5730	igDataPumpInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDataPumpInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+001e5730	igDataPumpInfo_GetVTable	match	-
 001e5810	FUN_001e5810	match	-
 001e5820	igDataPumpInfo_Register	match	-
 001e58a0	thunk_igDataPumpInfo_GetMetaObject	match	-
 001e58b0	igDataPumpInfo_InitFields	match	-
 001e5950	FUN_001e5950	match	-
 001e5990	igDataPump_GetMetaObject	match	-
-001e59e0	igDataPump_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDataPump (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001e59e0	igDataPump_GetVTable	match	-
 001e5ab0	FUN_001e5ab0	match	-
 001e5ac0	igDataPump_Register	match	-
 001e5b40	thunk_igDataPump_GetMetaObject	match	-
@@ -4843,7 +4843,7 @@
 00225990	igCompoundList_InitFields	match	-
 00225a40	FUN_00225a40	match	-
 00225a90	igOptInterface_GetMetaObject	match	-
-00225ae0	igOptInterface_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-base_225770 (local/mwcps2/3.0.3-020716/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00225ae0	igOptInterface_GetVTable	match	-
 00225b90	FUN_00225b90	match	-
 00225c10	FUN_00225c10	match	-
 00225c20	igOptInterface_Register	match	-
@@ -4887,7 +4887,7 @@
 00226750	igLogInterface_InitFields	match	-
 002267c0	FUN_002267c0	match	-
 00226810	igLockInterface_GetMetaObject	match	-
-00226860	igLockInterface_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igLockInterface (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00226860	igLockInterface_GetVTable	match	-
 00226990	FUN_00226990	match	-
 00226a10	FUN_00226a10	match	-
 00226a20	igLockInterface_Register	match	-
@@ -4899,7 +4899,7 @@
 00226c50	thunk_igLockBase_GetMetaObject	match	-
 00226c60	FUN_00226c60	match	-
 00226cb0	igListenerInterface_GetMetaObject	match	-
-00226d00	igListenerInterface_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igListenerInterface (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00226d00	igListenerInterface_GetVTable	match	-
 00226db0	FUN_00226db0	match	-
 00226e30	FUN_00226e30	match	-
 00226e40	igListenerInterface_Register	match	-
@@ -4928,14 +4928,14 @@
 00227460	FUN_00227460	match	-
 002274a0	FUN_002274a0	match	-
 002274f0	igIterateGraph_GetMetaObject	match	-
-00227540	igIterateGraph_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igIterateGraph (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+00227540	igIterateGraph_GetVTable	match	-
 00227620	FUN_00227620	match	-
 00227630	igIterateGraph_Register	match	-
 002276b0	thunk_igIterateGraph_GetMetaObject	match	-
 002276c0	igIterateGraph_InitFields	match	-
 00227780	FUN_00227780	match	-
 002277c0	igIterateField_GetMetaObject	match	-
-00227810	igIterateField_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igIterateField (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00227810	igIterateField_GetVTable	match	-
 002278a0	FUN_002278a0	match	-
 002278b0	igIterateField_Register	match	-
 00227930	thunk_igIterateField_GetMetaObject	match	-
@@ -4949,7 +4949,7 @@
 00227b90	igIterateDerived_InitFields	match	-
 00227c20	FUN_00227c20	match	-
 00227c70	igItemInterface_GetMetaObject	match	-
-00227cc0	igItemInterface_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igItemInterface (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00227cc0	igItemInterface_GetVTable	match	-
 00227d70	FUN_00227d70	match	-
 00227df0	FUN_00227df0	match	-
 00227e70	FUN_00227e70	match	-
@@ -4965,7 +4965,7 @@
 00228210	thunk_igItemDataBaseList_GetMetaObject	match	-
 00228230	igItemDataBaseList_InitFields	match	-
 002282f0	igItemDataBaseField_GetMetaObject	match	-
-00228340	igItemDataBaseField_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igItemDataBaseField (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00228340	igItemDataBaseField_GetVTable	match	-
 00228410	FUN_00228410	match	-
 00228420	igItemDataBaseField_Register	match	-
 00228490	thunk_igItemDataBaseField_GetMetaObject	match	-
@@ -4993,7 +4993,7 @@
 00228e50	thunk_igFileInfoList_GetMetaObject	match	-
 00228e60	FUN_00228e60	match	-
 00228eb0	igFileInfo_GetMetaObject	match	-
-00228f00	igFileInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igFileInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00228f00	igFileInfo_GetVTable	match	-
 00228fc0	FUN_00228fc0	match	-
 00229040	FUN_00229040	match	-
 002290c0	FUN_002290c0	match	-
@@ -5133,7 +5133,7 @@
 00230f70	FUN_00230f70	match	-
 00231030	FUN_00231030	match	-
 002310e0	igSerialScheduler_GetMetaObject	match	-
-00231130	igSerialScheduler_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSerialScheduler (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+00231130	igSerialScheduler_GetVTable	match	-
 00231210	FUN_00231210	match	-
 00231290	FUN_00231290	match	-
 002312a0	igSerialScheduler_Register	match	-
@@ -5169,13 +5169,13 @@
 00231b30	thunk_igMessageFilterList_GetMetaObject	match	-
 00231b40	FUN_00231b40	match	-
 00231b80	igMessageFilter_GetMetaObject	match	-
-00231bd0	igMessageFilter_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMessageFilter (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00231bd0	igMessageFilter_GetVTable	match	-
 00231cb0	FUN_00231cb0	match	-
 00231cc0	igMessageFilter_Register	match	-
 00231d40	thunk_igMessageFilter_GetMetaObject	match	-
 00231d50	igMessageFilter_InitFields	match	-
 00231e10	igFilterMessageDispatcher_GetMetaObject	match	-
-00231e60	igFilterMessageDispatcher_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igFilterMessageDispatcher (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00231e60	igFilterMessageDispatcher_GetVTable	match	-
 00231f40	FUN_00231f40	match	-
 00231f50	igFilterMessageDispatcher_Register	match	-
 00231fd0	thunk_igFilterMessageDispatcher_GetMetaObject	match	-
@@ -5210,7 +5210,7 @@
 00232800	FUN_00232800	match	-
 00232840	FUN_00232840	match	-
 00232890	igInsightCore_GetMetaObject	match	-
-002328e0	igInsightCore_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igInsightCore (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002328e0	igInsightCore_GetVTable	match	-
 00232a60	FUN_00232a60	match	-
 00232ae0	FUN_00232ae0	match	-
 00232b60	FUN_00232b60	match	-
@@ -5362,12 +5362,12 @@
 00238d50	SceneSearchLibrary_MarkRegistered	match	-
 00238d70	FUN_00238d70	match	-
 00238dd0	igSearchSceneGraph_GetMetaObject	match	-
-00238e20	igSearchSceneGraph_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSearchSceneGraph (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00238e20	igSearchSceneGraph_GetVTable	match	-
 00238ed0	FUN_00238ed0	match	-
 00238ee0	igSearchSceneGraph_Register	match	-
 00238f60	thunk_igSearchSceneGraph_GetMetaObject	match	-
 00238f70	igSearchSceneGraph_InitFields	match	-
-00239070	FUN_00239070	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSearchSceneGraph (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+00239070	FUN_00239070	match	-
 00239200	FUN_00239200	match	-
 00239280	FUN_00239280	match	-
 00239300	FUN_00239300	match	-
@@ -5375,7 +5375,7 @@
 00239390	FUN_00239390	match	-
 002393f0	CollisionLibrary_MarkRegistered	match	-
 00239410	igCreateCollisionDatabase_GetMetaObject	match	-
-00239460	igCreateCollisionDatabase_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCreateCollisionDatabase (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00239460	igCreateCollisionDatabase_GetVTable	match	-
 00239530	FUN_00239530	match	-
 002395b0	FUN_002395b0	match	-
 002395c0	igCreateCollisionDatabase_Register	match	-
@@ -5383,7 +5383,7 @@
 00239650	igCreateCollisionDatabase_InitFields	match	-
 002397a0	FUN_002397a0	match	-
 002397e0	igCollisionInfo_GetMetaObject	match	-
-00239830	igCollisionInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCollisionInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00239830	igCollisionInfo_GetVTable	match	-
 00239910	FUN_00239910	match	-
 00239920	igCollisionInfo_Register	match	-
 002399a0	thunk_igCollisionInfo_GetMetaObject	match	-
@@ -5401,7 +5401,7 @@
 00239d10	thunk_igCollisionGroup_GetMetaObject	match	-
 00239d20	igCollisionGroup_InitFields	match	-
 00239db0	igCollisionGridHelper_GetMetaObject	match	-
-00239e00	igCollisionGridHelper_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCollisionGridHelper (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00239e00	igCollisionGridHelper_GetVTable	match	-
 00239ee0	FUN_00239ee0	match	-
 00239ef0	igCollisionGridHelper_Register	match	-
 00239f70	thunk_igCollisionGridHelper_GetMetaObject	match	-
@@ -5409,7 +5409,7 @@
 0023a040	FUN_0023a040	match	-
 0023a080	FUN_0023a080	match	-
 0023a0d0	igCollisionGrid_GetMetaObject	match	-
-0023a120	igCollisionGrid_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCollisionGrid (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0023a120	igCollisionGrid_GetVTable	match	-
 0023a240	FUN_0023a240	match	-
 0023a2c0	FUN_0023a2c0	match	-
 0023a340	FUN_0023a340	match	-
@@ -5424,14 +5424,14 @@
 0023a6d0	thunk_igCollisionCellList_GetMetaObject	match	-
 0023a6e0	FUN_0023a6e0	match	-
 0023a720	igCollisionCell_GetMetaObject	match	-
-0023a770	igCollisionCell_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCollisionCell (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+0023a770	igCollisionCell_GetVTable	match	-
 0023a850	FUN_0023a850	match	-
 0023a860	igCollisionCell_Register	match	-
 0023a8e0	thunk_igCollisionCell_GetMetaObject	match	-
 0023a8f0	igCollisionCell_InitFields	match	-
 0023a9d0	FUN_0023a9d0	match	-
 0023aa10	igBoundingSphereMaker_GetMetaObject	match	-
-0023aa60	igBoundingSphereMaker_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igBoundingSphereMaker (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0023aa60	igBoundingSphereMaker_GetVTable	match	-
 0023aaf0	FUN_0023aaf0	match	-
 0023ab00	igBoundingSphereMaker_Register	match	-
 0023ab80	thunk_igBoundingSphereMaker_GetMetaObject	match	-
@@ -5462,7 +5462,7 @@
 0023c430	Gap__igCollisionGroupList__vfunc_24	match	-
 0023c440	LuaLibrary_MarkRegistered	match	-
 0023c460	igLuaState_GetMetaObject	match	-
-0023c4b0	igLuaState_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igLuaState (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0023c4b0	igLuaState_GetVTable	match	-
 0023c590	FUN_0023c590	match	-
 0023c5a0	igLuaState_Register	match	-
 0023c620	thunk_igLuaState_GetMetaObject	match	-
@@ -8126,7 +8126,7 @@
 002b84f0	thunk_igThreadList_GetMetaObject	match	-
 002b8500	FUN_002b8500	match	-
 002b8540	igSymbolTable_GetMetaObject	match	-
-002b8590	igSymbolTable_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSymbolTable (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002b8590	igSymbolTable_GetVTable	match	-
 002b8640	FUN_002b8640	match	-
 002b86c0	FUN_002b86c0	match	-
 002b8740	FUN_002b8740	match	-
@@ -8144,7 +8144,7 @@
 002b8d50	FUN_002b8d50	match	-
 002b8d90	FUN_002b8d90	match	-
 002b8de0	igStringTable_GetMetaObject	match	-
-002b8e30	igStringTable_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igStringTable (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+002b8e30	igStringTable_GetVTable	match	-
 002b8f10	FUN_002b8f10	match	-
 002b8f90	FUN_002b8f90	match	-
 002b8fa0	igStringTable_Register	match	-
@@ -8219,7 +8219,7 @@
 002ba9f0	FUN_002ba9f0	match	-
 002baa30	FUN_002baa30	match	-
 002baa80	igResource_GetMetaObject	match	-
-002baad0	igResource_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igResource (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002baad0	igResource_GetVTable	match	-
 002bac40	FUN_002bac40	match	-
 002bacc0	FUN_002bacc0	match	-
 002bad40	FUN_002bad40	match	-
@@ -8229,7 +8229,7 @@
 002baff0	FUN_002baff0	match	-
 002bb030	FUN_002bb030	match	-
 002bb080	igRegistry_GetMetaObject	match	-
-002bb0d0	igRegistry_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igRegistry (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002bb0d0	igRegistry_GetVTable	match	-
 002bb200	FUN_002bb200	match	-
 002bb210	igRegistry_Register	match	-
 002bb290	thunk_igRegistry_GetMetaObject	match	-
@@ -8242,7 +8242,7 @@
 002bb4f0	thunk_igRegistryValueList_GetMetaObject	match	-
 002bb500	FUN_002bb500	match	-
 002bb540	igRegistryValue_GetMetaObject	match	-
-002bb590	igRegistryValue_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igRegistryValue (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002bb590	igRegistryValue_GetVTable	match	-
 002bb670	FUN_002bb670	match	-
 002bb680	igRegistryValue_Register	match	-
 002bb700	thunk_igRegistryValue_GetMetaObject	match	-
@@ -8279,7 +8279,7 @@
 002bc2f0	thunk_igStandardQueue_GetMetaObject	match	-
 002bc300	FUN_002bc300	match	-
 002bc340	igPluginHelper_GetMetaObject	match	-
-002bc390	igPluginHelper_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPluginHelper (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002bc390	igPluginHelper_GetVTable	match	-
 002bc440	FUN_002bc440	match	-
 002bc4c0	FUN_002bc4c0	match	-
 002bc540	FUN_002bc540	match	-
@@ -8302,7 +8302,7 @@
 002bcb20	igPluginRepository_InitFields	match	-
 002bcbb0	FUN_002bcbb0	match	-
 002bcc00	igObjectStringMap_GetMetaObject	match	-
-002bcc50	igObjectStringMap_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igObjectStringMap (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002bcc50	igObjectStringMap_GetVTable	match	-
 002bcd30	FUN_002bcd30	match	-
 002bcd40	igObjectStringMap_Register	match	-
 002bcdc0	thunk_igObjectStringMap_GetMetaObject	match	-
@@ -8335,7 +8335,7 @@
 002bd830	igObjectList_InitFields	match	-
 002bd8f0	FUN_002bd8f0	match	-
 002bd930	igObjectDirEntry_GetMetaObject	match	-
-002bd980	igObjectDirEntry_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igObjectDirEntry (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002bd980	igObjectDirEntry_GetVTable	match	-
 002bda10	FUN_002bda10	match	-
 002bda20	igObjectDirEntry_Register	match	-
 002bdaa0	thunk_igObjectDirEntry_GetMetaObject	match	-
@@ -8346,7 +8346,7 @@
 002bdd40	igNonRefCountedObjectList_Register	match	-
 002bddb0	thunk_igNonRefCountedObjectList_GetMetaObject	match	-
 002bde90	igNamedObjectInfo_GetMetaObject	match	-
-002bdee0	igNamedObjectInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igNamedObjectInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002bdee0	igNamedObjectInfo_GetVTable	match	-
 002bdfc0	FUN_002bdfc0	match	-
 002bdfd0	igNamedObjectInfo_Register	match	-
 002be050	thunk_igNamedObjectInfo_GetMetaObject	match	-
@@ -8360,7 +8360,7 @@
 002be270	FUN_002be270	match	-
 002be2b0	FUN_002be2b0	match	-
 002be300	igNamedObject_GetMetaObject	match	-
-002be350	igNamedObject_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igNamedObject (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002be350	igNamedObject_GetVTable	match	-
 002be3d0	FUN_002be3d0	match	-
 002be3e0	igNamedObject_Register	match	-
 002be450	thunk_igNamedObject_GetMetaObject	match	-
@@ -8376,7 +8376,7 @@
 002be7f0	igMetaObject_InitFields	match	-
 002bea90	FUN_002bea90	match	-
 002bead0	igMetaFieldInfo_GetMetaObject	match	-
-002beb20	igMetaFieldInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMetaFieldInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002beb20	igMetaFieldInfo_GetVTable	match	-
 002bebb0	FUN_002bebb0	match	-
 002bebc0	igMetaFieldInfo_Register	match	-
 002bec30	thunk_igMetaFieldInfo_GetMetaObject	match	-
@@ -8388,7 +8388,7 @@
 002bedd0	igMetaField_InitFields	match	-
 002befe0	FUN_002befe0	match	-
 002bf020	igMetaEnum_GetMetaObject	match	-
-002bf070	igMetaEnum_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMetaEnum (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002bf070	igMetaEnum_GetVTable	match	-
 002bf190	FUN_002bf190	match	-
 002bf1a0	igMetaEnum_Register	match	-
 002bf220	thunk_igMetaEnum_GetMetaObject	match	-
@@ -8419,14 +8419,14 @@
 002bfec0	thunk_igMemoryPoolInfoList_GetMetaObject	match	-
 002bfed0	FUN_002bfed0	match	-
 002bff10	igMemoryPoolInfo_GetMetaObject	match	-
-002bff60	igMemoryPoolInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMemoryPoolInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002bff60	igMemoryPoolInfo_GetVTable	match	-
 002c00f0	FUN_002c00f0	match	-
 002c0100	igMemoryPoolInfo_Register	match	-
 002c0170	thunk_igMemoryPoolInfo_GetMetaObject	match	-
 002c0180	igMemoryPoolInfo_InitFields	match	-
 002c01f0	FUN_002c01f0	match	-
 002c0230	igMemoryPoolContextInfo_GetMetaObject	match	-
-002c0280	igMemoryPoolContextInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMemoryPoolContextInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c0280	igMemoryPoolContextInfo_GetVTable	match	-
 002c0360	FUN_002c0360	match	-
 002c0370	igMemoryPoolContextInfo_Register	match	-
 002c03f0	thunk_igMemoryPoolContextInfo_GetMetaObject	match	-
@@ -8457,14 +8457,14 @@
 002c0b50	thunk_igMemoryFileEntryList_GetMetaObject	match	-
 002c0b60	FUN_002c0b60	match	-
 002c0ba0	igMemoryFileEntry_GetMetaObject	match	-
-002c0bf0	igMemoryFileEntry_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMemoryFileEntry (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c0bf0	igMemoryFileEntry_GetVTable	match	-
 002c0c80	FUN_002c0c80	match	-
 002c0c90	igMemoryFileEntry_Register	match	-
 002c0d00	thunk_igMemoryFileEntry_GetMetaObject	match	-
 002c0d10	igMemoryFileEntry_InitFields	match	-
 002c0d80	FUN_002c0d80	match	-
 002c0dc0	igMemoryDirEntry_GetMetaObject	match	-
-002c0e10	igMemoryDirEntry_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMemoryDirEntry (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c0e10	igMemoryDirEntry_GetVTable	match	-
 002c0ea0	FUN_002c0ea0	match	-
 002c0eb0	igMemoryDirEntry_Register	match	-
 002c0f30	thunk_igMemoryDirEntry_GetMetaObject	match	-
@@ -8516,7 +8516,7 @@
 002c1ed0	FUN_002c1ed0	match	-
 002c1fa0	FUN_002c1fa0	match	-
 002c1ff0	igLocationTable_GetMetaObject	match	-
-002c2040	igLocationTable_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igLocationTable (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c2040	igLocationTable_GetVTable	match	-
 002c20f0	FUN_002c20f0	match	-
 002c2100	igLocationTable_Register	match	-
 002c2180	thunk_igLocationTable_GetMetaObject	match	-
@@ -8579,7 +8579,7 @@
 002c3530	igInfoList_Register	match	-
 002c35a0	thunk_igInfoList_GetMetaObject	match	-
 002c35b0	igInfo_GetMetaObject	match	-
-002c3600	igInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igInfo_2c35b0 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c3600	igInfo_GetVTable	match	-
 002c3690	FUN_002c3690	match	-
 002c36a0	igInfo_Register	match	-
 002c3720	thunk_igInfo_GetMetaObject	match	-
@@ -8602,7 +8602,7 @@
 002c3e90	igIGBFile_InitFields	match	-
 002c43b0	FUN_002c43b0	match	-
 002c43f0	igFolder_GetMetaObject	match	-
-002c4440	igFolder_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igFolder_2c43f0 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c4440	igFolder_GetVTable	match	-
 002c44c0	FUN_002c44c0	match	-
 002c44d0	igFolder_Register	match	-
 002c4540	thunk_igFolder_GetMetaObject	match	-
@@ -8634,19 +8634,19 @@
 002c4f70	thunk_igPsx2File_GetMetaObject	match	-
 002c4f80	FUN_002c4f80	match	-
 002c4fc0	igExternalInfoEntry_GetMetaObject	match	-
-002c5010	igExternalInfoEntry_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igExternalInfoEntry (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c5010	igExternalInfoEntry_GetVTable	match	-
 002c50a0	FUN_002c50a0	match	-
 002c50b0	igExternalInfoEntry_Register	match	-
 002c5120	thunk_igExternalInfoEntry_GetMetaObject	match	-
 002c5130	igExternalInfoEntry_InitFields	match	-
 002c51f0	igExternalIndexedEntry_GetMetaObject	match	-
-002c5240	igExternalIndexedEntry_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igExternalIndexedEntry (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c5240	igExternalIndexedEntry_GetVTable	match	-
 002c52d0	FUN_002c52d0	match	-
 002c52e0	igExternalIndexedEntry_Register	match	-
 002c5360	thunk_igExternalIndexedEntry_GetMetaObject	match	-
 002c5370	igExternalIndexedEntry_InitFields	match	-
 002c5450	igExternalDirEntry_GetMetaObject	match	-
-002c54a0	igExternalDirEntry_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igExternalDirEntry (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c54a0	igExternalDirEntry_GetVTable	match	-
 002c5550	FUN_002c5550	match	-
 002c5560	igExternalDirEntry_Register	match	-
 002c55e0	thunk_igExternalDirEntry_GetMetaObject	match	-
@@ -8686,7 +8686,7 @@
 002c66f0	FUN_002c66f0	match	-
 002c6750	FUN_002c6750	match	-
 002c6790	igDriverDatabase_GetMetaObject	match	-
-002c67e0	igDriverDatabase_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDriverDatabase (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c67e0	igDriverDatabase_GetVTable	match	-
 002c68f0	FUN_002c68f0	match	-
 002c6900	igDriverDatabase_Register	match	-
 002c6980	thunk_igDriverDatabase_GetMetaObject	match	-
@@ -8714,7 +8714,7 @@
 002c72c0	FUN_002c72c0	match	-
 002c7300	FUN_002c7300	match	-
 002c7350	igDirectory_GetMetaObject	match	-
-002c73a0	igDirectory_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDirectory (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c73a0	igDirectory_GetVTable	match	-
 002c74b0	FUN_002c74b0	match	-
 002c74c0	igDirectory_Register	match	-
 002c7540	thunk_igDirectory_GetMetaObject	match	-
@@ -8723,13 +8723,13 @@
 002c7780	FUN_002c7780	match	-
 002c77e0	FUN_002c77e0	match	-
 002c7820	igDirEntry_GetMetaObject	match	-
-002c7870	igDirEntry_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDirEntry (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c7870	igDirEntry_GetVTable	match	-
 002c7900	FUN_002c7900	match	-
 002c7910	igDirEntry_Register	match	-
 002c7980	thunk_igDirEntry_GetMetaObject	match	-
 002c7990	igDirEntry_InitFields	match	-
 002c7aa0	igDependencyOrderedList_GetMetaObject	match	-
-002c7af0	igDependencyOrderedList_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDependencyOrderedList (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c7af0	igDependencyOrderedList_GetVTable	match	-
 002c7ba0	FUN_002c7ba0	match	-
 002c7bb0	igDependencyOrderedList_Register	match	-
 002c7c30	thunk_igDependencyOrderedList_GetMetaObject	match	-
@@ -8741,7 +8741,7 @@
 002c7e30	igDependencyList_Register	match	-
 002c7ea0	thunk_igDependencyList_GetMetaObject	match	-
 002c7f70	igDependencyMetaField_GetMetaObject	match	-
-002c7fc0	igDependencyMetaField_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDependencyMetaField (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002c7fc0	igDependencyMetaField_GetVTable	match	-
 002c8090	FUN_002c8090	match	-
 002c80a0	igDependencyMetaField_Register	match	-
 002c8110	thunk_igDependencyMetaField_GetMetaObject	match	-
@@ -8922,7 +8922,7 @@
 002cb650	thunk_igContextExtInfoList_GetMetaObject	match	-
 002cb660	FUN_002cb660	match	-
 002cb6a0	igContextExtInfo_GetMetaObject	match	-
-002cb6f0	igContextExtInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igContextExtInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002cb6f0	igContextExtInfo_GetVTable	match	-
 002cb7c0	FUN_002cb7c0	match	-
 002cb7d0	igContextExtInfo_Register	match	-
 002cb850	thunk_igContextExtInfo_GetMetaObject	match	-
@@ -8974,7 +8974,7 @@
 002cc7d0	thunk_igPsx2CallStackTracer_GetMetaObject	match	-
 002cc7e0	FUN_002cc7e0	match	-
 002cc830	igCallStackTable_GetMetaObject	match	-
-002cc880	igCallStackTable_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCallStackTable (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002cc880	igCallStackTable_GetVTable	match	-
 002cc960	FUN_002cc960	match	-
 002cc970	igCallStackTable_Register	match	-
 002cc9f0	thunk_igCallStackTable_GetMetaObject	match	-
@@ -9036,13 +9036,13 @@
 002ce440	thunk_igMallocMemoryPool_GetMetaObject	match	-
 002ce450	igMallocMemoryPool_InitFields	match	-
 002ce5b0	igMemoryDescriptorMetaField_GetMetaObject	match	-
-002ce600	igMemoryDescriptorMetaField_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMemoryDescriptorMetaField (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002ce600	igMemoryDescriptorMetaField_GetVTable	match	-
 002ce6d0	FUN_002ce6d0	match	-
 002ce6e0	igMemoryDescriptorMetaField_Register	match	-
 002ce750	thunk_igMemoryDescriptorMetaField_GetMetaObject	match	-
 002ce830	Gap__Core__igMemoryDescriptorMetaField__vfunc_25	match	-
 002ce960	igProgramFile_GetMetaObject	match	-
-002ce9b0	igProgramFile_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igProgramFile (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002ce9b0	igProgramFile_GetVTable	match	-
 002cea80	FUN_002cea80	match	-
 002cea90	igProgramFile_Register	match	-
 002ceb10	thunk_igProgramFile_GetMetaObject	match	-
@@ -9050,12 +9050,12 @@
 002cebf0	thunk_igElfFile_GetMetaObject	match	-
 002cec00	FUN_002cec00	match	-
 002cec40	igElfFile_GetMetaObject	match	-
-002cec90	igElfFile_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igElfFile (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002cec90	igElfFile_GetVTable	match	-
 002ced70	FUN_002ced70	match	-
 002ced80	igElfFile_Register	match	-
 002cee00	igElfFile_InitFields	match	-
 002cef40	igStandardQueue_GetMetaObject	match	-
-002cef90	igStandardQueue_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igStandardQueue (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002cef90	igStandardQueue_GetVTable	match	-
 002cf040	FUN_002cf040	match	-
 002cf0e0	FUN_002cf0e0	match	-
 002cf0f0	igStandardQueue_Register	match	-
@@ -9065,7 +9065,7 @@
 002cf360	FUN_002cf360	match	-
 002cf370	igPsx2ThreadManager_Register	match	-
 002cf410	igPsx2Thread_GetMetaObject	match	-
-002cf460	igPsx2Thread_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2Thread_2cf410 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002cf460	igPsx2Thread_GetVTable	match	-
 002cf540	FUN_002cf540	match	-
 002cf550	igPsx2Thread_Register	match	-
 002cf5e0	igPsx2Thread_InitFields	match	-
@@ -9076,7 +9076,7 @@
 002cf830	igPsx2Semaphore_InitFields	match	-
 002cf900	FUN_002cf900	match	-
 002cf940	igPsx2Media_GetMetaObject	match	-
-002cf990	igPsx2Media_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2Media (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002cf990	igPsx2Media_GetVTable	match	-
 002cfac0	FUN_002cfac0	match	-
 002cfad0	igPsx2Media_Register	match	-
 002cfb60	igPsx2Media_InitFields	match	-
@@ -9093,7 +9093,7 @@
 002cffb0	thunk_igPsx2IopRpcConnection_GetMetaObject	match	-
 002cffc0	igPsx2IopRpcConnection_InitFields	match	-
 002d0030	igPsx2Folder_GetMetaObject	match	-
-002d0080	igPsx2Folder_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2Folder (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+002d0080	igPsx2Folder_GetVTable	match	-
 002d0110	FUN_002d0110	match	-
 002d0120	igPsx2Folder_Register	match	-
 002d01a0	FUN_002d01a0	match	-
@@ -9259,7 +9259,7 @@
 002d5c80	FUN_002d5c80	match	-
 002d5c90	FUN_002d5c90	match	-
 002d5d10	FUN_002d5d10	match	-
-002d5df0	FUN_002d5df0	match	DEFERRED duplicate 0x130720 __dt__14RecoveryStringFv 116B (compared under the profile of its retail unit)
+002d5df0	FUN_002d5df0	match	-
 002d6090	FUN_002d6090	match	-
 002d60a0	FUN_002d60a0	match	-
 002d60b0	FUN_002d60b0	match	-
@@ -10059,7 +10059,7 @@
 00305580	igRefMetaField_ReadRawFieldMem	match	-
 003057a0	FUN_003057a0	match	-
 003057b0	FUN_003057b0	match	-
-00305800	FUN_00305800	match	DEFERRED duplicate 0x130720 __dt__14RecoveryStringFv 116B (compared under the profile of its retail unit)
+00305800	FUN_00305800	match	-
 00305aa0	FUN_00305aa0	match	-
 00305bd0	FUN_00305bd0	match	-
 00305bf0	igRefMetaField_Construct	match	-
@@ -10096,7 +10096,7 @@
 00308770	FUN_00308770	match	-
 003087a0	FUN_003087a0	match	-
 00308850	FUN_00308850	match	-
-00308860	FUN_00308860	match	DEFERRED duplicate 0x1363f0 __dt__4Ref2Fv 128B (compared under the profile of its retail unit)
+00308860	FUN_00308860	match	-
 00308a90	FUN_00308a90	match	-
 00308c00	FUN_00308c00	match	-
 00308c80	FUN_00308c80	match	-
@@ -10276,7 +10276,7 @@
 003123b0	FUN_003123b0	match	-
 00312520	FUN_00312520	match	-
 00312580	FUN_00312580	match	-
-00315050	FUN_00315050	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O4 -Iinclude'); under the unit profile of igArenaMemoryPool_3125d0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00315050	FUN_00315050	match	-
 0031cd50	Gap__Core__igArenaMemoryPool__vfunc_30	match	-
 0031cdf0	Gap__Core__igArenaMemoryPool__vfunc_31	match	-
 0031ce60	Gap__Core__igArenaMemoryPool__vfunc_32	match	-
@@ -10337,7 +10337,7 @@
 00320930	FUN_00320930	match	-
 00320960	FUN_00320960	match	-
 003209a0	FUN_003209a0	match	DEFERRED duplicate 0x320960 FUN_00320960 52B (compared under the profile of its retail unit)
-00320a20	FUN_00320a20	match	-
+00320a20	FUN_00320a20	match	DEFERRED duplicate 0x320960 FUN_00320960 52B (compared under the profile of its retail unit)
 00320aa0	FUN_00320aa0	match	DEFERRED duplicate 0x320960 FUN_00320960 52B (compared under the profile of its retail unit)
 00320af0	Gap__Core__igElfFile__vfunc_23	match	-
 00320b50	Gap__Core__igElfFile__vfunc_24	match	-
@@ -11267,7 +11267,7 @@
 0033f0e0	beWeaponSeqDataList_Register	match	exception index 0x547f10: matches retail (packed)
 0033f150	beWeaponSeqDataList_GetMetaObject	match	exception index 0x547f1c: matches retail (packed)
 0033f170	FUN_0033f170	match	exception index 0x547f28: matches retail (packed)
-0033f1c0	beWeaponSeqData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beWeaponSeqData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0033f1c0	beWeaponSeqData_GetVTable	match	exception index 0x547f34: matches retail (packed)
 0033f290	FUN_0033f290	match	exception index 0x547f40: matches retail (packed)
 0033f2b0	beWeaponSeqData_Register	match	exception index 0x547f4c: matches retail (packed)
 0033f320	beWeaponSeqData_GetMetaObject	match	exception index 0x547f58: matches retail (packed)
@@ -11293,7 +11293,7 @@
 0033fa60	beWeaponAttachDataList_GetMetaObject	match	exception index 0x548048: matches retail (packed)
 0033fa80	FUN_0033fa80	match	exception index 0x548054: matches retail (packed)
 0033fac0	FUN_0033fac0	match	exception index 0x548060: matches retail (packed)
-0033fb10	beWeaponAttachData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beWeaponAttachData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0033fb10	beWeaponAttachData_GetVTable	match	exception index 0x54806c: matches retail (packed)
 0033fbf0	FUN_0033fbf0	match	exception index 0x548078: matches retail (packed)
 0033fc10	beWeaponAttachData_Register	match	exception index 0x548084: matches retail (packed)
 0033fc90	beWeaponAttachData_GetMetaObject	match	exception index 0x548090: matches retail (packed)
@@ -11566,7 +11566,7 @@
 00345e10	beSeInfo_Register	match	exception index 0x548d14: matches retail (packed)
 00345e80	beSeInfo_GetMetaObject	match	exception index 0x548d20: matches retail (packed)
 00345ea0	FUN_00345ea0	match	exception index 0x548d2c: matches retail (packed)
-00345ef0	beSeInfoData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSeInfoData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00345ef0	beSeInfoData_GetVTable	match	exception index 0x548d38: matches retail (packed)
 00345fd0	FUN_00345fd0	match	exception index 0x548d44: matches retail (packed)
 00345ff0	beSeInfoData_Register	match	exception index 0x548d50: matches retail (packed)
 00346070	beSeInfoData_GetMetaObject	match	exception index 0x548d5c: matches retail (packed)
@@ -11578,7 +11578,7 @@
 00346220	beSeDataList_Register	match	exception index 0x548da4: matches retail (packed)
 00346290	beSeDataList_GetMetaObject	match	exception index 0x548db0: matches retail (packed)
 003462b0	FUN_003462b0	match	exception index 0x548dbc: matches retail (packed)
-00346300	beSeData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSeData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00346300	beSeData_GetVTable	match	exception index 0x548dc8: matches retail (packed)
 003463d0	FUN_003463d0	match	exception index 0x548dd4: matches retail (packed)
 003463f0	beSeData_Register	match	exception index 0x548de0: matches retail (packed)
 00346460	beSeData_GetMetaObject	match	exception index 0x548dec: matches retail (packed)
@@ -11962,7 +11962,7 @@
 0034f160	beMovie_InitFields	match	exception index 0x549fa4: matches retail (packed)
 0034f210	FUN_0034f210	match	exception index 0x549fb0: matches retail (packed)
 0034f260	FUN_0034f260	match	exception index 0x549fbc: matches retail (packed)
-0034f2b0	beModelCtrlSubCom_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlSubCom (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034f2b0	beModelCtrlSubCom_GetVTable	match	exception index 0x549fc8: matches retail (packed)
 0034f340	FUN_0034f340	match	exception index 0x549fd4: matches retail (packed)
 0034f360	beModelCtrlSubCom_Register	match	exception index 0x549fe0: matches retail (packed)
 0034f3e0	beModelCtrlSubCom_GetMetaObject	match	exception index 0x549fec: matches retail (packed)
@@ -12236,7 +12236,7 @@
 003563c0	beModelCtrlLABEL_Register	match	exception index 0x54ac34: matches retail (packed)
 00356430	beModelCtrlLABEL_GetMetaObject	match	exception index 0x54ac40: matches retail (packed)
 00356450	FUN_00356450	match	exception index 0x54ac4c: matches retail (packed)
-003564a0	beModelCtrlLUACALL_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlLUACALL (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003564a0	beModelCtrlLUACALL_GetVTable	match	exception index 0x54ac58: matches retail (packed)
 00356570	FUN_00356570	match	exception index 0x54ac64: matches retail (packed)
 00356590	beModelCtrlLUACALL_Register	match	exception index 0x54ac70: matches retail (packed)
 00356600	beModelCtrlLUACALL_GetMetaObject	match	exception index 0x54ac7c: matches retail (packed)
@@ -12248,7 +12248,7 @@
 003567b0	beModelCtrlDataList_GetMetaObject	match	exception index 0x54acc4: matches retail (packed)
 003567d0	FUN_003567d0	match	exception index 0x54acd0: matches retail (packed)
 00356820	FUN_00356820	match	exception index 0x54acdc: matches retail (packed)
-00356870	beModelCtrlData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00356870	beModelCtrlData_GetVTable	match	exception index 0x54ace8: matches retail (packed)
 00356950	FUN_00356950	match	exception index 0x54acf4: matches retail (packed)
 00356970	beModelCtrlData_Register	match	exception index 0x54ad00: matches retail (packed)
 003569f0	beModelCtrlData_GetMetaObject	match	exception index 0x54ad0c: matches retail (packed)
@@ -12369,7 +12369,7 @@
 00359480	FUN_00359480	match	exception index 0x54b270: matches retail (packed)
 003594c0	FUN_003594c0	match	exception index 0x54b27c: matches retail (packed)
 00359510	FUN_00359510	match	exception index 0x54b288: matches retail (packed)
-00359560	beMatCtrlInfoWork_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beMatCtrlInfoWork (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00359560	beMatCtrlInfoWork_GetVTable	match	exception index 0x54b294: matches retail (packed)
 00359640	FUN_00359640	match	exception index 0x54b2a0: matches retail (packed)
 00359660	beMatCtrlInfoWork_Register	match	exception index 0x54b2ac: matches retail (packed)
 003596e0	beMatCtrlInfoWork_GetMetaObject	match	exception index 0x54b2b8: matches retail (packed)
@@ -12426,7 +12426,7 @@
 0035aa20	FUN_0035aa20	match	exception index 0x54b51c: matches retail (packed)
 0035aa60	FUN_0035aa60	match	exception index 0x54b528: matches retail (packed)
 0035aab0	FUN_0035aab0	match	exception index 0x54b534: matches retail (packed)
-0035ab00	beLuaState_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beLuaState_35ab00 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035ab00	beLuaState_GetVTable	match	exception index 0x54b540: matches retail (packed)
 0035abe0	FUN_0035abe0	match	exception index 0x54b54c: matches retail (packed)
 0035ac00	beLuaState_Register	match	exception index 0x54b558: matches retail (packed)
 0035ac70	beLuaState_GetMetaObject	match	exception index 0x54b564: matches retail (packed)
@@ -12662,7 +12662,7 @@
 00360020	beGeneraterPlayerDataList_Register	match	exception index 0x54c038: matches retail (packed)
 00360090	beGeneraterPlayerDataList_GetMetaObject	match	exception index 0x54c044: matches retail (packed)
 003600b0	FUN_003600b0	match	exception index 0x54c050: matches retail (packed)
-00360100	beGeneraterPlayerData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beGeneraterPlayerData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00360100	beGeneraterPlayerData_GetVTable	match	exception index 0x54c05c: matches retail (packed)
 003601e0	FUN_003601e0	match	exception index 0x54c068: matches retail (packed)
 00360200	beGeneraterPlayerData_Register	match	exception index 0x54c074: matches retail (packed)
 00360280	beGeneraterPlayerData_GetMetaObject	match	exception index 0x54c080: matches retail (packed)
@@ -12852,14 +12852,14 @@
 00364450	beDataObjFloatList_InitFields	match	exception index 0x54c920: matches retail (packed)
 003644f0	FUN_003644f0	match	exception index 0x54c92c: matches retail (packed)
 00364530	FUN_00364530	match	exception index 0x54c938: matches retail (packed)
-00364580	beDataObjObjectList_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDataObjObjectList (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00364580	beDataObjObjectList_GetVTable	match	exception index 0x54c944: matches retail (packed)
 00364660	FUN_00364660	match	exception index 0x54c950: matches retail (packed)
 00364680	beDataObjObjectList_Register	match	exception index 0x54c95c: matches retail (packed)
 00364700	beDataObjObjectList_GetMetaObject	match	exception index 0x54c968: matches retail (packed)
 00364720	beDataObjObjectList_InitFields	match	exception index 0x54c974: matches retail (packed)
 003647c0	FUN_003647c0	match	exception index 0x54c980: matches retail (packed)
 00364800	FUN_00364800	match	exception index 0x54c98c: matches retail (packed)
-00364850	beDataObjStringList_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDataObjStringList (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00364850	beDataObjStringList_GetVTable	match	exception index 0x54c998: matches retail (packed)
 00364930	FUN_00364930	match	exception index 0x54c9a4: matches retail (packed)
 00364950	beDataObjStringList_Register	match	exception index 0x54c9b0: matches retail (packed)
 003649d0	beDataObjStringList_GetMetaObject	match	exception index 0x54c9bc: matches retail (packed)
@@ -12887,7 +12887,7 @@
 003651d0	beDataObjBool_InitFields	match	exception index 0x54cac4: matches retail (packed)
 00365240	FUN_00365240	match	exception index 0x54cad0: matches retail (packed)
 00365280	FUN_00365280	match	exception index 0x54cadc: matches retail (packed)
-003652d0	beDataObjIntList_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDataObjIntList (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003652d0	beDataObjIntList_GetVTable	match	exception index 0x54cae8: matches retail (packed)
 003653b0	FUN_003653b0	match	exception index 0x54caf4: matches retail (packed)
 003653d0	beDataObjIntList_Register	match	exception index 0x54cb00: matches retail (packed)
 00365450	beDataObjIntList_GetMetaObject	match	exception index 0x54cb0c: matches retail (packed)
@@ -13019,7 +13019,7 @@
 00368260	beCopyModelCtrl2_InitFields	match	exception index 0x54d0f4: matches retail (packed)
 003682f0	FUN_003682f0	match	exception index 0x54d100: matches retail (packed)
 00368310	FUN_00368310	match	exception index 0x54d10c: matches retail (packed)
-00368360	beChangePosTransformInfoRam_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beChangePosTransformInfoRam (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00368360	beChangePosTransformInfoRam_GetVTable	match	exception index 0x54d118: matches retail (packed)
 00368450	FUN_00368450	match	exception index 0x54d124: matches retail (packed)
 00368470	beChangePosTransformInfoRam_Register	match	exception index 0x54d130: matches retail (packed)
 003684f0	beChangePosTransformInfoRam_GetMetaObject	match	exception index 0x54d13c: matches retail (packed)
@@ -13052,7 +13052,7 @@
 00368ed0	beCameraCtrlInfo_GetMetaObject	match	exception index 0x54d280: matches retail (packed)
 00368ef0	beCameraCtrlInfo_InitFields	match	exception index 0x54d28c: matches retail (packed)
 00368f80	FUN_00368f80	match	exception index 0x54d298: matches retail (packed)
-00368fd0	beCameraDemoData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beCameraDemoData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00368fd0	beCameraDemoData_GetVTable	match	exception index 0x54d2a4: matches retail (packed)
 00369060	FUN_00369060	match	exception index 0x54d2b0: matches retail (packed)
 00369080	beCameraDemoData_Register	match	exception index 0x54d2bc: matches retail (packed)
 00369100	beCameraDemoData_GetMetaObject	match	exception index 0x54d2c8: matches retail (packed)
@@ -13186,7 +13186,7 @@
 0036bd60	beActionStarterDataList_Register	match	exception index 0x54d8c8: matches retail (packed)
 0036bdd0	beActionStarterDataList_GetMetaObject	match	exception index 0x54d8d4: matches retail (packed)
 0036bdf0	FUN_0036bdf0	match	exception index 0x54d8e0: matches retail (packed)
-0036be40	beActionStarterData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beActionStarterData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036be40	beActionStarterData_GetVTable	match	exception index 0x54d8ec: matches retail (packed)
 0036bf10	FUN_0036bf10	match	exception index 0x54d8f8: matches retail (packed)
 0036bf30	beActionStarterData_Register	match	exception index 0x54d904: matches retail (packed)
 0036bfa0	beActionStarterData_GetMetaObject	match	exception index 0x54d910: matches retail (packed)
@@ -14941,7 +14941,7 @@
 003bc680	beSaveIntfComMdlDataList_Register	match	exception index 0x5512ac: matches retail (packed)
 003bc6f0	beSaveIntfComMdlDataList_GetMetaObject	match	exception index 0x5512b8: matches retail (packed)
 003bc710	FUN_003bc710	match	exception index 0x5512c4: matches retail (packed)
-003bc760	beSaveIntfComMdlData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSaveIntfComMdlData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003bc760	beSaveIntfComMdlData_GetVTable	match	exception index 0x5512d0: matches retail (packed)
 003bc820	FUN_003bc820	match	exception index 0x5512dc: matches retail (packed)
 003bc840	beSaveIntfComMdlData_Register	match	exception index 0x5512e8: matches retail (packed)
 003bc8b0	beSaveIntfComMdlData_GetMetaObject	match	exception index 0x5512f4: matches retail (packed)
@@ -16360,7 +16360,7 @@
 0044bc40	igView_InitFields	match	-
 0044bce0	FUN_0044bce0	match	-
 0044bd30	igTextElement_GetMetaObject	match	-
-0044bd80	igTextElement_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igTextElement (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044bd80	igTextElement_GetVTable	match	-
 0044be30	FUN_0044be30	match	-
 0044bf10	FUN_0044bf10	match	-
 0044bf90	igTextElement_EnsureRegistered	match	-
@@ -16371,7 +16371,7 @@
 0044c1c0	FUN_0044c1c0	match	-
 0044c250	FUN_0044c250	match	-
 0044c2a0	igClearRenderer_GetMetaObject	match	-
-0044c2f0	igClearRenderer_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igClearRenderer (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044c2f0	igClearRenderer_GetVTable	match	-
 0044c390	igClearRenderer_EnsureRegistered	match	-
 0044c3a0	igClearRenderer_Register	match	-
 0044c410	thunk_igClearRenderer_GetMetaObject	match	-
@@ -16410,20 +16410,20 @@
 0044cd50	igRadioGroupSelectedObserver_InitFields	match	-
 0044cdf0	FUN_0044cdf0	match	-
 0044ce40	igRadioGroup_GetMetaObject	match	-
-0044ce90	igRadioGroup_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igRadioGroup (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044ce90	igRadioGroup_GetVTable	match	-
 0044cfc0	igRadioGroup_EnsureRegistered	match	-
 0044cfd0	igRadioGroup_Register	match	-
 0044d050	thunk_igRadioGroup_GetMetaObject	match	-
 0044d060	igRadioGroup_InitFields	match	-
 0044d170	FUN_0044d170	match	-
 0044d1c0	igRadioGroupModel_GetMetaObject	match	-
-0044d210	igRadioGroupModel_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igRadioGroupModel (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044d210	igRadioGroupModel_GetVTable	match	-
 0044d2b0	igRadioGroupModel_RunStaticInit	match	-
 0044d2c0	igRadioGroupModel_Register	match	-
 0044d330	thunk_igRadioGroupModel_GetMetaObject	match	-
 0044d350	igRadioGroupModel_InitFields	match	-
 0044d3e0	igOnOffModel_GetMetaObject	match	-
-0044d430	igOnOffModel_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igOnOffModel (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044d430	igOnOffModel_GetVTable	match	-
 0044d4d0	igOnOffModel_RunStaticInit	match	-
 0044d4e0	igOnOffModel_Register	match	-
 0044d550	thunk_igOnOffModel_GetMetaObject	match	-
@@ -16437,7 +16437,7 @@
 0044d7a0	igModel_InitFields	match	-
 0044d840	FUN_0044d840	match	-
 0044d890	igHotKeyEventReceiver_GetMetaObject	match	-
-0044d8e0	igHotKeyEventReceiver_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igHotKeyEventReceiver (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044d8e0	igHotKeyEventReceiver_GetVTable	match	-
 0044d970	igHotKeyEventReceiver_RunStaticInit	match	-
 0044d980	igHotKeyEventReceiver_Register	match	-
 0044da00	thunk_igHotKeyEventReceiver_GetMetaObject	match	-
@@ -16457,7 +16457,7 @@
 0044dde0	igHotKeyBinding_InitFields	match	-
 0044ded0	FUN_0044ded0	match	-
 0044df20	igGuiSystem_GetMetaObject	match	-
-0044df70	igGuiSystem_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igGuiSystem (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044df70	igGuiSystem_GetVTable	match	-
 0044e060	FUN_0044e060	match	-
 0044e0e0	FUN_0044e0e0	match	-
 0044e160	FUN_0044e160	match	-
@@ -16475,21 +16475,21 @@
 0044e600	igMouseCursor_InitFields	match	-
 0044e6b0	FUN_0044e6b0	match	-
 0044e700	igGuiSystemRenderer_GetMetaObject	match	-
-0044e750	igGuiSystemRenderer_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igGuiSystemRenderer (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044e750	igGuiSystemRenderer_GetVTable	match	-
 0044e810	igGuiSystemRenderer_RunStaticInit	match	-
 0044e820	igGuiSystemRenderer_Register	match	-
 0044e8a0	thunk_igGuiSystemRenderer_GetMetaObject	match	-
 0044e8b0	igGuiSystemRenderer_InitFields	match	-
 0044e990	FUN_0044e990	match	-
 0044e9d0	igActiveComponentsObserver_GetMetaObject	match	-
-0044ea20	igActiveComponentsObserver_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igActiveComponentsObserver (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044ea20	igActiveComponentsObserver_GetVTable	match	-
 0044eb50	igActiveComponentsObserver_RunStaticInit	match	-
 0044eb60	igActiveComponentsObserver_Register	match	-
 0044ebe0	thunk_igActiveComponentsObserver_GetMetaObject	match	-
 0044ebf0	igActiveComponentsObserver_InitFields	match	-
 0044ecb0	FUN_0044ecb0	match	-
 0044ecf0	igMousePosObserver_GetMetaObject	match	-
-0044ed40	igMousePosObserver_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMousePosObserver (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044ed40	igMousePosObserver_GetVTable	match	-
 0044ee80	FUN_0044ee80	match	-
 0044ef00	igMousePosObserver_RunStaticInit	match	-
 0044ef10	igMousePosObserver_Register	match	-
@@ -16542,7 +16542,7 @@
 0044ff30	thunk_igGuiComponentList_GetMetaObject	match	-
 0044ff40	FUN_0044ff40	match	-
 0044ff90	igGuiComponent_GetMetaObject	match	-
-0044ffe0	igGuiComponent_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igGuiComponent (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044ffe0	igGuiComponent_GetVTable	match	-
 00450090	FUN_00450090	match	-
 004501f0	FUN_004501f0	match	-
 00450270	FUN_00450270	match	-
@@ -16599,7 +16599,7 @@
 004513a0	thunk_igEventReceiver_GetMetaObject	match	-
 004513b0	FUN_004513b0	match	-
 00451400	igEventDispatcher_GetMetaObject	match	-
-00451450	igEventDispatcher_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igEventDispatcher (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00451450	igEventDispatcher_GetVTable	match	-
 00451580	igEventDispatcher_EnsureRegistered	match	-
 00451590	igEventDispatcher_Register	match	-
 00451610	thunk_igEventDispatcher_GetMetaObject	match	-
@@ -16618,7 +16618,7 @@
 00451a40	igDefaultAspectElementList_Register	match	-
 00451ab0	thunk_igDefaultAspectElementList_GetMetaObject	match	-
 00451b20	igDefaultAspectElement_GetMetaObject	match	-
-00451b70	igDefaultAspectElement_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igDefaultAspectElement (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00451b70	igDefaultAspectElement_GetVTable	match	-
 00451ca0	igDefaultAspectElement_EnsureRegistered	match	-
 00451cb0	igDefaultAspectElement_Register	match	-
 00451d30	thunk_igDefaultAspectElement_GetMetaObject	match	-
@@ -16650,7 +16650,7 @@
 004524d0	thunk_igBoxComponent_GetMetaObject	match	-
 004524f0	FUN_004524f0	match	-
 00452540	igBitmapFont_GetMetaObject	match	-
-00452590	igBitmapFont_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igBitmapFont (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00452590	igBitmapFont_GetVTable	match	-
 00452620	igBitmapFont_RunStaticInit	match	-
 00452630	igBitmapFont_Register	match	-
 004526b0	thunk_igBitmapFont_GetMetaObject	match	-
@@ -16662,7 +16662,7 @@
 00452880	igCharMetricsList_Register	match	-
 004528f0	thunk_igCharMetricsList_GetMetaObject	match	-
 004529c0	igCharMetricsMetaField_GetMetaObject	match	-
-00452a10	igCharMetricsMetaField_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCharMetricsMetaField (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00452a10	igCharMetricsMetaField_GetVTable	match	-
 00452ae0	igCharMetricsMetaField_RunStaticInit	match	-
 00452af0	igCharMetricsMetaField_Register	match	-
 00452b60	thunk_igCharMetricsMetaField_GetMetaObject	match	-
@@ -16930,7 +16930,7 @@
 00459ed0	thunk_igViewerSceneInfoManager_GetMetaObject	match	-
 0045a450	FUN_0045a450	match	-
 0045a4a0	igViewerModeChangeMessage_GetMetaObject	match	-
-0045a4f0	igViewerModeChangeMessage_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igViewerModeChangeMessage (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0045a4f0	igViewerModeChangeMessage_GetVTable	match	-
 0045a580	FUN_0045a580	match	-
 0045a590	igViewerModeChangeMessage_Register	match	-
 0045a600	thunk_igViewerModeChangeMessage_GetMetaObject	match	-
@@ -17013,7 +17013,7 @@
 0045c710	igRotateMode_InitFields	match	-
 0045c8e0	FUN_0045c8e0	match	-
 0045c920	igFlyMode_GetMetaObject	match	-
-0045c970	igFlyMode_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igFlyMode (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0045c970	igFlyMode_GetVTable	match	-
 0045ca20	FUN_0045ca20	match	-
 0045ca30	igFlyMode_Register	match	-
 0045cab0	thunk_igFlyMode_GetMetaObject	match	-

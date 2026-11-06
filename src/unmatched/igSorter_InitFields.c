@@ -18,7 +18,6 @@ extern int DAT_0048b390[4];
 extern int DAT_0048b420[4];
 extern int DAT_00561318[4];
 void igSorter_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_s2;
     void *temp_s2_10;
@@ -46,6 +45,7 @@ void igSorter_InitFields(void) {
     void *temp_s2_7;
     void *temp_s2_8;
     void *temp_s2_9;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00561318[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

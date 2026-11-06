@@ -10,8 +10,8 @@ extern int DAT_0058af08[4];
 void beNDMWStatusCtrlFolder_InitFields(void);
 }
 void beNDMWStatusCtrlFolder_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058af08[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

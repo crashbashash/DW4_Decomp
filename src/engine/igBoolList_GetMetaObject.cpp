@@ -7,8 +7,7 @@ igMetaObject *igBoolList_GetMetaObject(void);
 igMetaObject *igBoolList_GetMetaObject(void)
 {
     igMetaObject *g = g_igBoolList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002cb1f0();
     return g_igBoolList_metaObject[0];
 }

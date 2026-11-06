@@ -7,8 +7,7 @@ igMetaObject *igCallStackTable_GetMetaObject(void);
 igMetaObject *igCallStackTable_GetMetaObject(void)
 {
     igMetaObject *g = g_igCallStackTable_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002cc960();
     return g_igCallStackTable_metaObject[0];
 }

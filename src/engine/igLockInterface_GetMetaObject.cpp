@@ -7,8 +7,7 @@ igMetaObject *igLockInterface_GetMetaObject(void);
 igMetaObject *igLockInterface_GetMetaObject(void)
 {
     igMetaObject *g = g_igLockInterface_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00226a10();
     return g_igLockInterface_metaObject[0];
 }

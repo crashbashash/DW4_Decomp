@@ -7,8 +7,7 @@ igMetaObject *igPolygonModeAttr_GetMetaObject(void);
 igMetaObject *igPolygonModeAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igPolygonModeAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00134a20();
     return g_igPolygonModeAttr_metaObject[0];
 }

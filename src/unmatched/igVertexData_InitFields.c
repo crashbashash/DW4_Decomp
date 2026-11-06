@@ -14,10 +14,10 @@ extern int DAT_00488720[4];
 extern int DAT_00488738[4];
 extern int DAT_0055fa58[4];
 void igVertexData_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_v0;
     int temp_s2;
+    void *temp_v0;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055fa58[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

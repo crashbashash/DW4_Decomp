@@ -7,8 +7,7 @@ igMetaObject *igVirtualCFuncMetaField_GetMetaObject(void);
 igMetaObject *igVirtualCFuncMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igVirtualCFuncMetaField_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002b5e80();
     return g_igVirtualCFuncMetaField_metaObject[0];
 }

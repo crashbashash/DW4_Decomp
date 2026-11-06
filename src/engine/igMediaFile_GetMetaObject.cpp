@@ -7,8 +7,7 @@ igMetaObject *igMediaFile_GetMetaObject(void);
 igMetaObject *igMediaFile_GetMetaObject(void)
 {
     igMetaObject *g = g_igMediaFile_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002c1430();
     return g_igMediaFile_metaObject[0];
 }

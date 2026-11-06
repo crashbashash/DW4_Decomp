@@ -7,8 +7,7 @@ igMetaObject *igHotKeyEventReceiver_GetMetaObject(void);
 igMetaObject *igHotKeyEventReceiver_GetMetaObject(void)
 {
     igMetaObject *g = g_igHotKeyEventReceiver_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igHotKeyEventReceiver_RunStaticInit();
     return g_igHotKeyEventReceiver_metaObject[0];
 }

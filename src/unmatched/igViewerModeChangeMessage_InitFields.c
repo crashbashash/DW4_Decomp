@@ -7,8 +7,8 @@ extern int DAT_004d0e28[4];
 extern int DAT_004d0e30[4];
 extern int DAT_0058c8f8[4];
 void igViewerModeChangeMessage_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058c8f8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

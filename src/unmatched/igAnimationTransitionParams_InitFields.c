@@ -7,8 +7,8 @@ extern int DAT_0048d640[4];
 extern int DAT_0048d650[4];
 extern int DAT_00562400[4];
 void igAnimationTransitionParams_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00562400[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

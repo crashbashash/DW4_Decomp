@@ -12,8 +12,8 @@ extern int DAT_00588630[4];
 void beNumberCtrlInfoWork_InitFields(void);
 }
 void beNumberCtrlInfoWork_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588630[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

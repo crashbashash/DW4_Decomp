@@ -7,8 +7,7 @@ igMetaObject *igAttrDefaultManager_GetMetaObject(void);
 igMetaObject *igAttrDefaultManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igAttrDefaultManager_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0013ab50();
     return g_igAttrDefaultManager_metaObject[0];
 }

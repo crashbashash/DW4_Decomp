@@ -10,9 +10,9 @@ extern int DAT_00498208[4];
 extern int DAT_00498210[4];
 extern int DAT_0056dc00[4];
 void igWindowResizeEventReceiver_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0056dc00[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

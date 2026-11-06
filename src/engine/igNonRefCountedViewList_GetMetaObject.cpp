@@ -7,8 +7,7 @@ igMetaObject *igNonRefCountedViewList_GetMetaObject(void);
 igMetaObject *igNonRefCountedViewList_GetMetaObject(void)
 {
     igMetaObject *g = g_igNonRefCountedViewList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igNonRefCountedViewList_EnsureRegistered();
     return g_igNonRefCountedViewList_metaObject[0];
 }

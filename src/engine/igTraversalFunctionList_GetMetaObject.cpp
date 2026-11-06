@@ -7,8 +7,7 @@ igMetaObject *igTraversalFunctionList_GetMetaObject(void);
 igMetaObject *igTraversalFunctionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igTraversalFunctionList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019a800();
     return g_igTraversalFunctionList_metaObject[0];
 }

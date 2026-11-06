@@ -7,8 +7,8 @@ extern int DAT_004862f8[4];
 extern int DAT_00486300[4];
 extern int DAT_0055f048[4];
 void igLightingStateAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055f048[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

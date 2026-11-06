@@ -16,11 +16,11 @@ extern int DAT_00498340[4];
 extern int DAT_00498360[4];
 extern int DAT_0056dc88[4];
 void igCreateCollisionDatabase_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
     int temp_s2;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0056dc88[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

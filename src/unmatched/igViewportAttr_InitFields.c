@@ -11,9 +11,9 @@ extern int DAT_00485980[4];
 extern int DAT_004859a0[4];
 extern int DAT_0055ebd8[4];
 void igViewportAttr_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055ebd8[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

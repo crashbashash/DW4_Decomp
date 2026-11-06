@@ -7,8 +7,7 @@ igMetaObject *igGuiSystemRenderer_GetMetaObject(void);
 igMetaObject *igGuiSystemRenderer_GetMetaObject(void)
 {
     igMetaObject *g = g_igGuiSystemRenderer_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igGuiSystemRenderer_RunStaticInit();
     return g_igGuiSystemRenderer_metaObject[0];
 }

@@ -7,8 +7,7 @@ igMetaObject *igPsx2ImageConvert_GetMetaObject(void);
 igMetaObject *igPsx2ImageConvert_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2ImageConvert_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00153c80();
     return g_igPsx2ImageConvert_metaObject[0];
 }

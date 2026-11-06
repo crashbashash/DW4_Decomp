@@ -7,8 +7,7 @@ igMetaObject *igRenderer_GetMetaObject(void);
 igMetaObject *igRenderer_GetMetaObject(void)
 {
     igMetaObject *g = g_igRenderer_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igRenderer_EnsureRegistered();
     return g_igRenderer_metaObject[0];
 }

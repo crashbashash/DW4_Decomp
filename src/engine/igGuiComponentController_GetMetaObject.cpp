@@ -7,8 +7,7 @@ igMetaObject *igGuiComponentController_GetMetaObject(void);
 igMetaObject *igGuiComponentController_GetMetaObject(void)
 {
     igMetaObject *g = g_igGuiComponentController_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         igGuiComponentController_EnsureRegistered();
     return g_igGuiComponentController_metaObject[0];
 }

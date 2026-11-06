@@ -7,8 +7,7 @@ igMetaObject *igDepthWriteStateAttr_GetMetaObject(void);
 igMetaObject *igDepthWriteStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igDepthWriteStateAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00138380();
     return g_igDepthWriteStateAttr_metaObject[0];
 }

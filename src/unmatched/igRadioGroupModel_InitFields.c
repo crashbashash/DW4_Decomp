@@ -9,8 +9,8 @@ extern int DAT_004d00a8[4];
 extern int DAT_004d00b0[4];
 extern int DAT_0058c278[4];
 void igRadioGroupModel_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058c278[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -10,8 +10,8 @@ extern int DAT_004c0c20[4];
 extern int DAT_004c0c30[4];
 extern int DAT_005863f8[4];
 void igExternalInfoEntry_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005863f8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

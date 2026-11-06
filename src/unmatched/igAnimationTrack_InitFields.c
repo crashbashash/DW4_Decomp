@@ -10,9 +10,9 @@ extern int DAT_0048d690[4];
 extern int DAT_0048d6a0[4];
 extern int DAT_00562430[4];
 void igAnimationTrack_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00562430[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

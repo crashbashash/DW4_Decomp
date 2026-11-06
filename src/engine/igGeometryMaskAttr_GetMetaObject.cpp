@@ -7,8 +7,7 @@ igMetaObject *igGeometryMaskAttr_GetMetaObject(void);
 igMetaObject *igGeometryMaskAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igGeometryMaskAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00137140();
     return g_igGeometryMaskAttr_metaObject[0];
 }

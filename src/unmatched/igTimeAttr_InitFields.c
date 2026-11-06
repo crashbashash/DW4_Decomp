@@ -9,8 +9,8 @@ extern int DAT_00485aa0[4];
 extern int DAT_00485aa8[4];
 extern int DAT_0055ec80[4];
 void igTimeAttr_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0055ec80[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

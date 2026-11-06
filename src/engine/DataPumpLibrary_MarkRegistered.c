@@ -1,6 +1,6 @@
-extern unsigned char g_DataPumpLibrary_registered[4];
+extern unsigned char g_DataPumpLibrary_registered;
 void DataPumpLibrary_MarkRegistered(void) {
-    if (g_DataPumpLibrary_registered[0] == 0) {
-        g_DataPumpLibrary_registered[0] = 1;
+    if (g_DataPumpLibrary_registered == 0) {
+        g_DataPumpLibrary_registered = 1;
     }
 }

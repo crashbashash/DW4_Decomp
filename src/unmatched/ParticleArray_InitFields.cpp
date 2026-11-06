@@ -15,10 +15,10 @@ extern int DAT_0058a040[4];
 void ParticleArray_InitFields(void);
 }
 void ParticleArray_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058a040[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

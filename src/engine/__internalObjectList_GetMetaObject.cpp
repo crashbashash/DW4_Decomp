@@ -7,8 +7,7 @@ igMetaObject *__internalObjectList_GetMetaObject(void);
 igMetaObject *__internalObjectList_GetMetaObject(void)
 {
     igMetaObject *g = g___internalObjectList_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         __internalObjectList_EnsureRegistered();
     return g___internalObjectList_metaObject[0];
 }

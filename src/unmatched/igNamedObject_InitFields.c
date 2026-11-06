@@ -9,8 +9,8 @@ extern int DAT_004bfbe8[4];
 extern int DAT_004bfbf0[4];
 extern int DAT_00585bd8[4];
 void igNamedObject_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00585bd8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

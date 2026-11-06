@@ -7,8 +7,7 @@ igMetaObject *igModelViewMatrixAttr_GetMetaObject(void);
 igMetaObject *igModelViewMatrixAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igModelViewMatrixAttr_metaObject[0];
-    bool t;
-    if (!g || !(t = g->_validity & 4))
+    if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001357e0();
     return g_igModelViewMatrixAttr_metaObject[0];
 }
