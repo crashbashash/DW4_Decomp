@@ -147,7 +147,8 @@ Probing every one of the 272 files as written, with the unit tables disabled
 | 3.0.3 `-O3` | 0 |
 
 Every one of the 272 is reproduced by the 2003 beta and none by the default build; the
-3.0.3-020716 build mismatches all 272. The units' other members (the
+3.0.3-020716 build mismatches all 272 as written, but that is their spelling: 3.0.3 folds too, and
+`igNamedObject_GetVTable` matches under it as a `struct`, as under b38 ([what each library was built with](build-profiles.md#what-each-library-was-built-with)). The units' other members (the
 `_Register`/`_InitFields`/`_GetMetaObject` siblings) verify under the unit profile, and none of them
 reproduces under combat: that holds for all 8,677 undecided (function, candidate) pairs over the pins
 of every provisional unit. So the unit profiles stand, and the 272 stay `foreign-profile` overrides,

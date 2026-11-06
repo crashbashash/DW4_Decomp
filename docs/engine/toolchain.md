@@ -6,7 +6,8 @@ its identity is not proof of the exact original compiler build. The complete
 combat Lua run also needs a content-pinned alternate compiler for thirteen
 of its bodies, and many other units build under a pinned alternate. See
 [per-unit requirements](unit-compilers.md) and [build profiles](build-profiles.md).
-No single original build is established.
+No single original build is established; [what each library was built with](build-profiles.md#what-each-library-was-built-with)
+says what the available builds can and cannot explain.
 
 ## Summary
 

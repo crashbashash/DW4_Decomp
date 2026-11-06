@@ -214,3 +214,54 @@ pieces that MWCC reproduces and the Sony compiler does not. The debt baseline's 
 values are `foreign_profile.functions = 705` and `foreign_profile.bytes = 345,216`;
 `orphan.bytes` is 23,524 (the 97 foreign-profile overrides
 that still emit metadata retail lacks).
+
+## What each library was built with
+
+`scripts/analysis/profile_sweep.py` compiles every matched MWCC function under each candidate profile
+with the unit tables disabled. Functions that all candidates reproduce say nothing, so these figures
+are over the ones where candidates disagree.
+
+**The optimisation flags split by library.** Metrowerks' runtime, `main`, AdxMovie, Bec, Ndmw and
+Viewer are `-O3,p`; every other Alchemy library is `-O3`. Of 8,700 functions in the `-O3` libraries, 5
+reproduce only with `,p`; of 5,870 in the `-O3,p` libraries, 1 reproduces only without it.
+
+**The compilers split by kind of function, not by library.**
+
+| Kind | `-O3` libraries: 3.0 / 3.0.3 / b38 | `-O3,p` libraries: 3.0 / 3.0.3 / b38 |
+| --- | --- | --- |
+| `_GetVTable` | 0 / 69 / 100 | 0 / 58 / 100 |
+| `_GetMetaObject` | 100 / 100 / 4 | 60 / 60 / 40 |
+| `_InitFields` | 93 / 93 / 7 | 63 / 63 / 37 |
+| methods | 63 / 70 / 91 | 18 / 19 / 82 |
+
+`combat` is the 3.0b38 build; b50, b52 and 3.0b22-020926 behave like it, and every 3.0.1 build from b51
+to b151 reproduces none of the three generated kinds. The table measures the source as written, not
+the compilers: these files were spelled against the build that first matched them.
+
+**`_GetMetaObject` has three retail shapes, and they follow the source.** All 550 in the `-O3` Alchemy
+libraries test the validity bit with an `sltu`. Viewer's 24 are the same with one more `nop`. Bec, Ndmw
+and AdxMovie's 483 are a bare call: the game's macro, not Alchemy's. So Viewer is Alchemy source built
+with the game's flags, and AdxMovie was written alongside the game.
+
+**The kinds split by spelling.** The `sltu` comes from comparing an inline `bool` helper with `false`:
+`isRegistered(meta) == false` matches under 3.0, 3.0.3, b38, b50 and b52 alike, where `!isRegistered(meta)`
+matches under none. `_GetVTable` is the same: `igNamedObject_GetVTable` differs under 3.0.3 by two
+swapped registers as a `union`, and matches under 3.0.3 and b38 as a `struct`.
+
+**3.0b52 with `-sdatathreshold 1` fits every library.** Of the functions any candidate reproduces, as
+now spelled:
+
+| | Flags | Methods | `_GetVTable` |
+| --- | --- | --- | --- |
+| `-O3` Alchemy libraries | `-O3`, `-O3,s` or `-O4,s` | 96 % | 100 % |
+| Viewer | `-O3,p` or `-O4,p` | 99 % | 100 % |
+| Bec, Ndmw, AdxMovie, `main`, runtime | `-O3,p` or `-O4,p` | 93 % | 100 % |
+
+The dw4-ps2-ai project builds Alchemy `-O4,s` and the game `-O4,p`, both 3.0b52 with
+`-sdatathreshold 1`. These sweeps do not separate `-O3` from `-O4`.
+
+## Open questions
+
+* **One compiler.** `_GetMetaObject` and `_InitFields` have not been respelled, so 3.0b52 is untested on
+  them across the tree, and the units still carry their old profiles. Whether b52 or b50 built which
+  library, and `-O3` or `-O4`, are open.
