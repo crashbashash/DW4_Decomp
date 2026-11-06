@@ -1,8 +1,9 @@
 # Digimon World 4 — decompilation and native port
 
 Guidance for AI coding agents (and a summary for people) working in this repository. The method
-every change follows is in [CONTRIBUTING.md](CONTRIBUTING.md); read it first. This file adds the
-rules that matter when an agent drives the build, delegates work or reports a result.
+contributors follow is in [CONTRIBUTING.md](CONTRIBUTING.md); read it first. This file holds the
+strict form of it: the gate a function must pass and the rules for driving the build, delegating work
+and reporting a result.
 
 Two goals: (1) recover the PS2 release of **Digimon World 4** — USA `SLUS-20836` — as readable,
 evidence-named source that rebuilds to a byte-identical retail ELF; (2) build a **complete native PC
@@ -60,8 +61,8 @@ specification agrees. Run every command from the repository root; paths here are
 
 ## Decompilation
 
-Read [naming](docs/engine/naming.md), [asm-body matches](docs/engine/asm-body-matches.md) and the gate in
-[CONTRIBUTING.md](CONTRIBUTING.md#the-gate-when-a-function-is-done) before module work. Work a contiguous module
+Read [naming](docs/engine/naming.md), [asm-body matches](docs/engine/asm-body-matches.md) and the gate
+below before module work. Work a contiguous module
 through recovery, naming and verification. Byte identity and readability are **one gate**: a count that
 grows while readability falls is not progress.
 
@@ -90,6 +91,37 @@ grows while readability falls is not progress.
 - **Names** come from evidence; a guess is a hypothesis in the findings register, not a name. Apply overlays with
   `tools/apply_names.py` (dry run, then `--apply --check`). What confirms a finding is defined in the
   [documentation conventions](docs/README.md#conventions).
+
+### The gate: when a function is done
+
+Byte identity and readability are one gate. A function counts as done when all of these hold:
+
+1. It verifies byte-identical under its **translation unit's profile** in `config/SLUS-20836/units.tsv`
+   (compiler, flags, exception mode; [build profiles](docs/engine/build-profiles.md)), including the
+   C++ exception metadata. A function that matches only under a per-function override in
+   `config/SLUS-20836/unit-flags.tsv` / `unit-compilers.tsv` is `foreign-profile` debt, not a match.
+2. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.
+3. Every identifier is a recovered name, from evidence (RTTI, strings, callers), never a guess. What
+   it does should make the name obvious, so source never justifies a name: a hypothesis and its
+   evidence go in the findings register. A name
+   holding an address is not recovered: it says where a thing is, not what it is. That goes for
+   functions, variables, structs and classes alike; a type also needs a real name, not a placeholder
+   such as `S`, `Obj` or `Info176`.
+4. No m2c idioms (`temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`) and no raw offset casts where
+   `include/dw4/reflected.h` names the field; real structs, enums and control flow; a comment
+   appears only when it is necessary, for what the code cannot say, and it stands alone: no pointer
+   to another document, finding or tool, and no account of how the code was recovered.
+5. A shape found by a permuter, flag sweep or random walk carries
+   `/* matching construct: <tool> — <what moved> */` at the affected line.
+
+When two spellings match the same bytes, keep the more readable one. A function that cannot be
+written as C yet stays without a file: its retail instructions wrapped in an `asm` function recover
+nothing and are not committed ([asm-body matches](docs/engine/asm-body-matches.md)).
+
+C++ cleanup scopes are written as RAII holder classes whose destructor copies
+`config/SLUS-20836/unit-objects.json` names ([emitted functions](docs/engine/emitted-functions.md)).
+Strings are named by their text, with no prefix; offset members are decimal `fNN` and temporary; one shared definition
+per class lives under `include/dw4/`.
 
 ### Completion and regression
 

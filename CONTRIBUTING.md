@@ -1,97 +1,95 @@
 # Contributing
 
-Thanks for helping recover *Digimon World 4*. This page is the method every change follows; the
-[README](README.md#installation) covers setup and the [documentation index](docs/README.md) the
-engine, formats and recovery notes.
+Thanks for wanting to help recover *Digimon World 4*! You don't need to know the whole project to
+be useful here. Picking one small function and making it read well is a real contribution.
 
-## Finding work
+Start with the [README](README.md#installation) to get a build working. The
+[documentation index](docs/README.md) is there when you want to dig into how the engine works.
 
-- `PROGRESS.md` and `data/check-categories.tsv` (written by `make check`) show what is matched and
-  what is still debt: `code-only` (code matches, exception metadata does not), `foreign-profile`
-  (matches only under a per-function compiler override), `name-defect`.
-- A symbol with no definition in `src/` has no C yet: that list is the work queue, and
-  `tools/m2c_batch.py` drafts from it ([m2c bulk](docs/engine/m2c-bulk.md)). Read such a function
-  in `asm/`, which `make` generates from your executable; it is never committed.
-- The [findings register](docs/findings/README.md) holds the evidence, the
-  open hypotheses and what has been ruled out. Read the relevant entries before repeating an approach.
-- Open an issue or comment on one before starting a large module, so two people do not take the
-  same one.
+## Finding something to work on
 
-## The gate: when a function is done
+Functions that have no C yet are the main to-do list. `tools/m2c_batch.py` will draft a starting
+point for you ([how that works](docs/engine/m2c-bulk.md)), and you can read the original instructions
+in `asm/`, which the build generates from your own copy of the game.
 
-Byte identity and readability are one gate. A function counts as done when all of these hold:
+There's plenty to do on code that already matches, too. [PROGRESS.md](PROGRESS.md) shows what's done,
+and the Readable section lists the most common things still to tidy up. Renaming a mystery function,
+or giving a struct real fields, helps everyone who reads that code afterwards.
 
-1. It verifies byte-identical under its **translation unit's profile** in `config/SLUS-20836/units.tsv`
-   (compiler, flags, exception mode; [build profiles](docs/engine/build-profiles.md)), including the
-   C++ exception metadata. A function that matches only under a per-function override in
-   `config/SLUS-20836/unit-flags.tsv` / `unit-compilers.tsv` is `foreign-profile` debt, not a match.
-2. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.
-3. Every identifier is a recovered name, from evidence (RTTI, strings, callers), never a guess. What
-   it does should make the name obvious, so source never justifies a name: a hypothesis and its
-   evidence go in the findings register. A name
-   holding an address is not recovered: it says where a thing is, not what it is. That goes for
-   functions, variables, structs and classes alike; a type also needs a real name, not a placeholder
-   such as `S`, `Obj` or `Info176`.
-4. No m2c idioms (`temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`) and no raw offset casts where
-   `include/dw4/reflected.h` names the field; real structs, enums and control flow; a comment
-   appears only when it is necessary, for what the code cannot say, and it stands alone: no pointer
-   to another document, finding or tool, and no account of how the code was recovered.
-5. A shape found by a permuter, flag sweep or random walk carries
-   `/* matching construct: <tool> — <what moved> */` at the affected line.
+Before you try something, have a look through the [findings](docs/findings/README.md). That's where we
+keep what we've learned, including what didn't work, so you might save yourself an evening. If you're
+planning something big, open an issue first so two people don't end up on the same module.
 
-When two spellings match the same bytes, keep the more readable one. A function that cannot be
-written as C yet stays without a file: its retail instructions wrapped in an `asm` function recover
-nothing and are not committed ([asm-body matches](docs/engine/asm-body-matches.md)).
+## What good code looks like here
 
-C++ cleanup scopes are written as RAII holder classes whose destructor copies
-`config/SLUS-20836/unit-objects.json` names ([emitted functions](docs/engine/emitted-functions.md)).
-Strings are named by their text, with no prefix; offset members are decimal `fNN` and temporary; one shared definition
-per class lives under `include/dw4/`.
+There are two things we're after, and they count equally: the compiled code has to match the original
+byte for byte, and a person has to be able to read it. A match nobody can follow isn't finished.
+
+- **Name things for what they are.** A name should come from something you can point to: a string,
+  type information, how it's called. If you're only guessing, leave the name alone and write the
+  guess up in the findings instead. Good names don't need explaining, and an address is never a name.
+- **Clean up after the decompiler.** Rename things like `temp_s0` and `sp5C` to what they actually
+  are, use real structs instead of pointer maths, and write loops and conditions the way a person
+  would.
+- **Keep comments for what the code can't tell the reader.** If someone would have to open another
+  file to understand your comment, it isn't helping.
+- **Flag anything odd that's only there to match.** If you had to write something strange to get the
+  bytes right, say so with `/* matching construct: <what and why> */`, so nobody tidies it away.
+- **When two versions match, keep the nicer one.**
+
+Put code in the file for its class or module, in the same order the functions appear in the game. If
+you can't get a function into C yet, that's fine, just leave it out. It keeps building from the
+original until someone cracks it, and please don't wrap its instructions in an `asm` block to count it
+as done.
+
+Getting a match sometimes depends on the compiler and flags in `config/SLUS-20836/units.tsv`.
+Everything in a file should build with the same settings, so if one function only matches with
+different ones, it's worth finding out why. [Build profiles](docs/engine/build-profiles.md) explains
+more.
 
 ## Checking your work
 
+To try one function:
+
 ```sh
-python3 tools/check.py --function 0xVA --cand src/unmatched/FUN_XXXXXXXX.c   # one function, every diagnostic line
-python3 configure.py && ninja objdiff                                            # then open the folder in objdiff
+python3 tools/check.py --function 0xVA --cand src/unmatched/FUN_XXXXXXXX.c
 ```
 
-Read every line `tools/check.py` prints; the first one is not always the blocker. objdiff is a diff
-aid; `tools/check.py` and `tools/linkcheck.py` are the oracle.
+Read everything it prints, because the first line isn't always the real problem. For a side-by-side
+view, run `python3 configure.py && ninja objdiff` and open the folder in
+[objdiff](https://github.com/encounter/objdiff). It's great for chasing a difference, but `tools/check.py`
+has the final say.
 
-Before opening a pull request, run on your final tree and paste these four lines into the description:
+Before you open a pull request, run these and include the results:
 
-1. `make check` — the `cover :` summary with `0 mismatch` in any `(N not matched: M mismatch, D debt)`
-   line, and no fewer `match` functions than before.
-2. `make link` — `linkcheck: BYTE-IDENTICAL — the relinked section matches retail exactly`.
-3. `make typed-check` — `typed coverage: N recovered accesses, baseline matches`.
-4. `make hygiene` — `check_host_details: clean`.
+```sh
+make check        # every function still matches, and none were lost
+make link         # the rebuilt game is byte-identical to the original
+make typed-check  # struct field coverage didn't slip
+make hygiene      # nothing private is about to be published
+```
 
-Run `make check-fresh` and `make link-fresh` instead when the change touches `config/<GAMEID>/units.tsv`,
-`unit-*`, `extent-overrides.tsv`, `jumptables.txt`, `compiler-runtime-symbols.tsv` or `tools/`. A drop in
-the matched count is a regression to find, never to explain away.
+If you changed `tools/` or the build tables in `config/`, use `make check-fresh` and `make link-fresh`
+so nothing stale from the cache hides a problem. If the matched count goes down, something broke, so
+please track it down before you open the PR. These checks also run automatically on everything pushed.
 
-The pre-push hook does not run these gates a second time: it checks the pushed lines and commit
-messages for host details, and the oracle-change rule when the oracle's own files change. The
-[oracle runner](docs/engine/oracle-runner.md) runs all four on every pushed commit.
+## A few things that can't go in the repo
 
-## Rules for every change
+- **Nothing from the game itself.** That means disc images, executables, BIOS files, saves, extracted
+  assets, screenshots and the game's code as assembly. Names, offsets and notes we've worked out are
+  fine.
+- **Nothing about your own machine.** Paths with your username in them, hardware details, email
+  addresses and passwords all stay out, including from commit messages. Run
+  `scripts/install_git_hooks.sh` once and the hooks will catch these for you. Please don't skip them
+  with `--no-verify`; our [host details policy](docs/host-details-policy.md) has the reasoning.
+- **Generated files shouldn't be edited by hand.** That covers `PROGRESS.md`, most of `data/` and the
+  symbol tables in `config/`. Change what they're generated from, then run `make progress`.
 
-- **No game data.** Never commit disc images, executables, BIOS, saves, savestates, extracted assets,
-  screenshots of the game, or the retail code as assembly (the generated `asm/`, or a function's
-  instructions in an `asm` wrapper). Recovered metadata is fine. Never force-add.
-- **No host details.** Nothing that identifies your machine or account (home paths, user or host
-  names, hardware, e-mail addresses, credentials) goes into files, findings or commit messages
-  ([host details policy](docs/host-details-policy.md)). Install the hooks once with
-  `scripts/install_git_hooks.sh`; they run `make hygiene`. Never use `--no-verify`.
-- **Regenerate, never hand-edit** generated files: `config/<GAMEID>/{symbols,layout,jumptables,syscalls}.txt`,
-  `data/`, `PROGRESS.md` and the progress blocks (`make progress`).
-- **Record what you learn.** A name hypothesis, a compiler constraint or a dead end goes into the
-  findings register with repository-relative evidence in the same change (`python3 scripts/findings.py next`).
-- Changes to extents or symbol splits state the before/after function and byte
-  counts in the commit message.
+If you learn something useful, like what a value means or why an approach failed, add it to the
+findings in the same change. `python3 scripts/findings.py next` gives you the next number. That's what
+saves the next person from starting over.
 
 ## Licence
 
-By contributing you agree that your own work (tools, scripts, build files, documentation) is dedicated
-to the public domain under CC0 1.0, as described in [LICENSE](LICENSE); the game-derived material
-stays as described there.
+Your own work here (tools, scripts, build files, documentation) is dedicated to the public domain under
+CC0 1.0, as described in [LICENSE](LICENSE). Game-derived material stays as described there.
