@@ -102,4 +102,19 @@ class RelocationOrder(unittest.TestCase):
             actual=verify.object_section(str(linked),'.text')[position:position+size]
             self.assertEqual(actual,verify.va_bytes(verify.read_elf(verify.ELF_DEFAULT),va,size))
 
+class CompileError(unittest.TestCase):
+    OUTPUT=("### mwccps2.exe Compiler:\r\n#    File: ..\\tmp\\unit.c\r\n# ------\r\n"
+            "#       2: return missing_name;\r\n#   Error:        ^^^^\r\n"
+            "#   undefined identifier 'missing_name'\r\n\r\nErrors caused tool to abort.\r\n")
+
+    def test_the_message_survives(self):
+        self.assertEqual(verify.compile_error(self.OUTPUT),
+                         "2: return missing_name; | undefined identifier 'missing_name'")
+
+    def test_the_host_path_does_not(self):
+        self.assertNotIn("tmp",verify.compile_error(self.OUTPUT))
+
+    def test_silence_is_reported(self):
+        self.assertEqual(verify.compile_error(""),"no output")
+
 if __name__=='__main__':unittest.main()

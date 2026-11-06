@@ -1403,6 +1403,18 @@ def isolate_emitted_body(obj, requested, records, group, symbols):
         raise ValueError("emitted body extraction changed relocation ownership or order")
 
 
+def compile_error(output):
+    """The compiler's diagnostics on one line. The `File:` line is dropped: it holds a host path."""
+    kept = []
+    for line in output.splitlines():
+        text = line.lstrip("# ").rstrip()
+        if (line.startswith("###") or text.startswith(("File:", "Errors caused")) or not text.strip("-^ ")
+                or re.fullmatch(r"(Error|Warning):\s*\^*", text)):
+            continue
+        kept.append(text)
+    return " | ".join(kept) or "no output"
+
+
 def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
                symbols="config/SLUS-20836/symbols.txt", mwcc=MWCC_DEFAULT, wibo=WIBO_DEFAULT,
                gp_override=None, verbose=False, jumptables=None,
@@ -1458,8 +1470,7 @@ def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
         r = subprocess.run(cc.compile_argv(wibo, profile.compiler, cmd_flags, source, obj),
                            capture_output=True, text=True, env=env)
         if not os.path.exists(obj):
-            return False, "compile failed: " + (r.stdout + r.stderr).strip().splitlines()[0] \
-                if (r.stdout + r.stderr).strip() else "compile failed"
+            return False, "compile failed: " + compile_error(r.stdout + r.stderr)
         if group:
             def recompile(twin_compiler, twin_flags, out):
                 subprocess.run(cc.compile_argv(wibo, twin_compiler, twin_flags, source, out),
