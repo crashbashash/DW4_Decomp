@@ -4,9 +4,9 @@
 extern char igMemoryImage_Register[];
 extern char thunk_igPsx2Image_GetMetaObject[];
 extern char igPsx2Image_GetVTable[];
-extern char igMemoryImage_GetPublishedMetaObject_00153ee0[];
-extern char s_igPsx2Image_className_004de608[];
-extern char g_igPsx2Image_metaObject_005605e0[];
+extern char igMemoryImage_GetPublishedMetaObject[];
+extern char igPsx2Image_className[];
+extern char g_igPsx2Image_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 extern int igPsx2Image_InitFields_00153ef0[4];
@@ -14,11 +14,11 @@ void igPsx2Image_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2Image_metaObject_005605e0,             /* published MetaObject slot */
+        g_igPsx2Image_metaObject,             /* published MetaObject slot */
         igMemoryImage_Register,                        /* base class registrar */
-        igMemoryImage_GetPublishedMetaObject_00153ee0, /* base class MetaObject accessor */
+        igMemoryImage_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igPsx2Image_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_igPsx2Image_className_004de608,              /* class name */
+        igPsx2Image_className,              /* class name */
         0x5C,                                          /* instance size */
         igPsx2Image_GetVTable,                         /* vtable getter */
         &igPsx2Image_InitFields_00153ef0[0],           /* field adder (post_init in data/reflection.json) */

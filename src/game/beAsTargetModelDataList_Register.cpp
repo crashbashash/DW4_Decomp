@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beAsTargetModelDataList_metaObject_00589e30[];
+extern igMetaObject *g_beAsTargetModelDataList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beAsTargetModelDataList_GetMetaObject(void);
-extern const char s_beAsTargetModelDataList_className_00505f60[];
+extern const char beAsTargetModelDataList_className[];
 int beAsTargetModelDataList_GetVTable(void);
-extern char g_beAsTargetModelDataList_callbackList_004c7dc8[];
+extern char g_beAsTargetModelDataList_callbackList[];
 void *beAsTargetModelDataList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beAsTargetModelDataList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beAsTargetModelDataList_metaObject_00589e30,    /* published MetaObject slot */
+        g_beAsTargetModelDataList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                            /* base class registrar */
         igObjectList_GetPublishedMetaObject,              /* base class MetaObject accessor */
         beAsTargetModelDataList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beAsTargetModelDataList_className_00505f60,     /* class name */
+        beAsTargetModelDataList_className,     /* class name */
         0x14,                                             /* instance size */
         beAsTargetModelDataList_GetVTable,                /* vtable getter */
         0,                                                /* field adder */
         0,                                                /* extra callback item */
-        g_beAsTargetModelDataList_callbackList_004c7dc8  /* callback list */
+        g_beAsTargetModelDataList_callbackList  /* callback list */
     );
 }

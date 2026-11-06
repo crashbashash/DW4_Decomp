@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMemory_metaObject_00589090[];
+extern igMetaObject *g_beMemory_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beMemory_GetMetaObject(void);
-extern const char s_beMemory_className_005045d8[];
+extern const char beMemory_className[];
 int beMemory_GetVTable(void);
 void beMemory_InitFields(void);
-extern char g_beMemory_callbackList_004c5f38[];
+extern char g_beMemory_callbackList[];
 void *beMemory_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beMemory_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMemory_metaObject_00589090,                 /* published MetaObject slot */
+        g_beMemory_metaObject,                 /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beMemory_GetMetaObject,                         /* own MetaObject accessor (stored at +0x54) */
-        s_beMemory_className_005045d8,                  /* class name */
+        beMemory_className,                  /* class name */
         0x24,                                           /* instance size */
         beMemory_GetVTable,                             /* vtable getter */
         beMemory_InitFields,                            /* field adder */
         0,                                              /* extra callback item */
-        g_beMemory_callbackList_004c5f38               /* callback list */
+        g_beMemory_callbackList               /* callback list */
     );
 }

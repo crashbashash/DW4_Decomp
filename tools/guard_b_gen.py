@@ -32,6 +32,7 @@ import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
+import verify  # noqa: E402
 import unitprofiles  # noqa: E402
 
 DEFAULT_COMPILER = "local/mwcps2/3.0-011126/mwccps2.exe"
@@ -56,10 +57,14 @@ def load_syms():
 
 def names_in_unit(name):
     """{address: identifier} for the address-bearing identifiers the current translation unit uses."""
-    names = {}
+    names, table = {}, verify.data_symbols()
     for path in glob.glob(os.path.join(ROOT, "src", "*", name + ".c*")):
-        for m in re.finditer(r"\b([A-Za-z_]\w*?_([0-9a-f]{8}))\b", open(path).read()):
+        text = open(path).read()
+        for m in re.finditer(r"\b([A-Za-z_]\w*?_([0-9a-f]{8}))\b", text):
             names.setdefault(int(m.group(2), 16), m.group(1))
+        for m in re.finditer(r"\b[A-Za-z_]\w*\b", text):
+            if m.group(0) in table:
+                names.setdefault(table[m.group(0)], m.group(0))
     return names
 
 

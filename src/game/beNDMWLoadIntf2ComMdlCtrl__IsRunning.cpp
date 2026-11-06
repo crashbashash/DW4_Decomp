@@ -9,10 +9,10 @@
 extern "C" {
 int beMessenger_GetBool(int, int);
 int beMessenger_SendNamed(int, int *, int, int, int *);
-extern int s_MODELCTRL_005171f8[4];
-extern int s_ISRUN_00517228[4];
+extern int MODELCTRL[4];
+extern int ISRUN[4];
 int beNDMWLoadIntf2ComMdlCtrl__IsRunning(beNDMWLoadIntf2ComMdlCtrl *self, int slot, int name) {
-    beMessenger_SendNamed(self->_messenger, &s_MODELCTRL_005171f8[0], name, slot, &s_ISRUN_00517228[0]);
+    beMessenger_SendNamed(self->_messenger, &MODELCTRL[0], name, slot, &ISRUN[0]);
     return beMessenger_GetBool(self->_messenger, 0);
 }
 } /* extern "C" */

@@ -18,7 +18,7 @@ void igMetaField_EnsureDefaultStorage(igMetaField *);
 int StringChunk_ReleaseHeader();
 void igMetaField_SetFieldName(igMetaField *, void **);
 /* The shared string pool, created on first use (finding #1035). */
-extern int g_stringPool_00586f20[4];
+extern int g_stringPool[4];
 int memcpy(int, int, unsigned short);
 
 /* 0x002fc2c0 */
@@ -33,15 +33,15 @@ void igMetaField_Configure(igMetaField *self, int fieldName, int externalEnumSto
     if (fieldName == 0) {
         name = 0;
     } else {
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             /* Lazily build the pool: FUN_002eb010 allocates 0x10 bytes. */
             pool = FUN_002eb010(0x10);
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
-            g_stringPool_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        name = StringPool_Intern(g_stringPool_00586f20[0], fieldName);
+        name = StringPool_Intern(g_stringPool[0], fieldName);
     }
     internedName = name;
     igMetaField_SetFieldName(self, &internedName);

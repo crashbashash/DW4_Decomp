@@ -9,7 +9,7 @@ typedef struct Handle_2784d0 {
     int count;      /* 0x18 */
 } Handle_2784d0;
 
-extern char s_E0040302_handl_is_null_004f0e60[]; /* 'E0040302:handl is null.' */
+extern char E0040302_handl_is_null[]; /* 'E0040302:handl is null.' */
 void FUN_00277de8(Handle_2784d0 *handle, const char *message);
 
 void FUN_002784d0(Handle_2784d0 *handle, int unit) {
@@ -17,7 +17,7 @@ void FUN_002784d0(Handle_2784d0 *handle, int unit) {
     int position;
 
     if (handle == 0) {
-        FUN_00277de8(handle, s_E0040302_handl_is_null_004f0e60);
+        FUN_00277de8(handle, E0040302_handl_is_null);
         return;
     }
     position = handle->position;

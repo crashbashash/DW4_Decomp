@@ -5,8 +5,8 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igPsx2IopRpcConnection_GetVTable[];
 extern char thunk_igPsx2IopRpcConnection_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igPsx2IopRpcConnection_className_004f8fc0[];
-extern char g_igPsx2IopRpcConnection_metaObject_00586d48[];
+extern char igPsx2IopRpcConnection_className[];
+extern char g_igPsx2IopRpcConnection_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igPsx2IopRpcConnection_InitFields();
@@ -15,11 +15,11 @@ void igPsx2IopRpcConnection_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2IopRpcConnection_metaObject_00586d48, /* published MetaObject slot */
+        g_igPsx2IopRpcConnection_metaObject, /* published MetaObject slot */
         igObject_Register,                            /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,        /* base class MetaObject accessor */
         thunk_igPsx2IopRpcConnection_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igPsx2IopRpcConnection_className_004f8fc0,  /* class name */
+        igPsx2IopRpcConnection_className,  /* class name */
         0x14,                                         /* instance size */
         igPsx2IopRpcConnection_GetVTable,             /* vtable getter */
         &igPsx2IopRpcConnection_InitFields,           /* field adder */

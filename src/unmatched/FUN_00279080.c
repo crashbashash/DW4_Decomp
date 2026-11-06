@@ -24,21 +24,21 @@ struct Adxt279 {
 
 extern void FUN_002607e8(const char *message);
 extern void FUN_00278d58(int resource);
-extern const char s_E2003091605_NULL_pointer_is_specified_004f14a8[];
-extern const char s_E2003091606_ADXT_handle_must_be_created_for_3D_sound_004f14d8[];
+extern const char E2003091605_NULL_pointer_is_specified[];
+extern const char E2003091606_ADXT_handle_must_be_created_for_3D_sound[];
 
 void FUN_00279080(struct Adxt279 *adxt, int param236, int param240) {
     struct Sound279 *sound;
     int resource;
 
     if (adxt == 0) {
-        FUN_002607e8(s_E2003091605_NULL_pointer_is_specified_004f14a8);
+        FUN_002607e8(E2003091605_NULL_pointer_is_specified);
         return;
     }
     sound = adxt->stream->sound;
     resource = sound->resource;
     if (adxt->state < 2 || resource == 0) {
-        FUN_002607e8(s_E2003091606_ADXT_handle_must_be_created_for_3D_sound_004f14d8);
+        FUN_002607e8(E2003091606_ADXT_handle_must_be_created_for_3D_sound);
         return;
     }
     FUN_00278d58(resource);

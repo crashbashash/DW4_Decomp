@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWMdlItem_metaObject_0058b4a8[];
+extern igMetaObject *g_beNDMWMdlItem_metaObject[];
 void *beModelCtrl_Register(void);
-igMetaObject *beModelCtrl_GetPublishedMetaObject_003bf4b0(void);
+igMetaObject *beModelCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWMdlItem_GetMetaObject(void);
-extern const char s_beNDMWMdlItem_className_00512518[];
+extern const char beNDMWMdlItem_className[];
 int beNDMWMdlItem_GetVTable(void);
 void beNDMWMdlItem_InitFields(void);
-extern char g_beNDMWMdlItem_callbackList_004cab48[];
+extern char g_beNDMWMdlItem_callbackList[];
 void *beNDMWMdlItem_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWMdlItem_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWMdlItem_metaObject_0058b4a8,          /* published MetaObject slot */
+        g_beNDMWMdlItem_metaObject,          /* published MetaObject slot */
         beModelCtrl_Register,                         /* base class registrar */
-        beModelCtrl_GetPublishedMetaObject_003bf4b0,  /* base class MetaObject accessor */
+        beModelCtrl_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWMdlItem_GetMetaObject,                  /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWMdlItem_className_00512518,           /* class name */
+        beNDMWMdlItem_className,           /* class name */
         0x34,                                         /* instance size */
         beNDMWMdlItem_GetVTable,                      /* vtable getter */
         beNDMWMdlItem_InitFields,                     /* field adder */
         0,                                            /* extra callback item */
-        g_beNDMWMdlItem_callbackList_004cab48        /* callback list */
+        g_beNDMWMdlItem_callbackList        /* callback list */
     );
 }

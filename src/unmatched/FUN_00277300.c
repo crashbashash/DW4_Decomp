@@ -4,12 +4,12 @@ typedef struct Lsc_277300 {
     char flag;  /* 0x04 */
 } Lsc_277300;
 
-extern char s_E0003_Illigal_parameter_lsc_NULL_004f0b08[]; /* 'E0003: Illigal parameter lsc=NULL\n' */
+extern char E0003_Illigal_parameter_lsc_NULL[]; /* 'E0003: Illigal parameter lsc=NULL\n' */
 int FUN_002777f8(const char *format, ...);
 
 void FUN_00277300(Lsc_277300 *lsc, int flag) {
     if (lsc == 0) {
-        FUN_002777f8(s_E0003_Illigal_parameter_lsc_NULL_004f0b08);
+        FUN_002777f8(E0003_Illigal_parameter_lsc_NULL);
         return;
     }
     if (flag == 1) {

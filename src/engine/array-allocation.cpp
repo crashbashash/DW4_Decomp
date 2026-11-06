@@ -91,14 +91,14 @@ extern "C" int igObject_IsKindOf(void *,int);
 extern "C" void memset(void *,int,int);
 /* Class handle of igRefMetaField, and the two status words reported to callers
  * (success / failure, docs/engine/array-storage.md); array form keeps the load absolute. */
-extern "C" int g_igRefMetaField_metaObject_00585a60[4],g_statusSucceeded_004fb410[4],g_statusFailed_004fb418[4];
+extern "C" int g_igRefMetaField_metaObject[4],g_statusSucceeded[4],g_allocatorFailureStatus[4];
 extern "C" void igMetaField_AllocateArray(int *outStatus,igMemoryRefMetaField *field,void *object,int count,AlignedAllocatorView *allocator){
     unsigned int bytes=(unsigned int)count*(unsigned short)((ElementLayoutView *)field->_memType)->Size();
     int alignment=(unsigned short)((ElementLayoutView *)field->_memType)->Alignment();
     void *data=allocator->Allocate(bytes,alignment);
-    if(!data){*outStatus=g_statusFailed_004fb418[0];return;}
+    if(!data){*outStatus=g_allocatorFailureStatus[0];return;}
     /* Reference-typed elements start zeroed; other element types keep the allocator's contents. */
-    if(igObject_IsKindOf((void *)field->_memType,g_igRefMetaField_metaObject_00585a60[0]))memset(data,0,bytes);
+    if(igObject_IsKindOf((void *)field->_memType,g_igRefMetaField_metaObject[0]))memset(data,0,bytes);
     *(void **)((char *)object+field->_offset)=data;
-    *outStatus=g_statusSucceeded_004fb410[0];
+    *outStatus=g_statusSucceeded[0];
 }

@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igDataList_Register[];
 extern char igPointerList_GetVTable[];
 extern char thunk_igPointerList_GetMetaObject[];
-extern char s_igPointerList_className_004f8518[];
-extern char g_igPointerList_metaObject_005867e0[];
+extern char igPointerList_className[];
+extern char g_igPointerList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 extern int igPointerList_InitFields_002c92e0[4];
@@ -14,11 +14,11 @@ void igPointerList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPointerList_metaObject_005867e0,   /* published MetaObject slot */
+        g_igPointerList_metaObject,   /* published MetaObject slot */
         igDataList_Register,                   /* base class registrar */
         igDataList_GetPublishedMetaObject,     /* base class MetaObject accessor */
         thunk_igPointerList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igPointerList_className_004f8518,    /* class name */
+        igPointerList_className,    /* class name */
         0x14,                                  /* instance size */
         igPointerList_GetVTable,               /* vtable getter */
         &igPointerList_InitFields_002c92e0[0], /* field adder (post_init in data/reflection.json) */

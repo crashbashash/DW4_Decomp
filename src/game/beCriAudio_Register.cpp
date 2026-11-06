@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCriAudio_metaObject_00589a88[];
+extern igMetaObject *g_beCriAudio_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beCriAudio_GetMetaObject(void);
-extern const char s_beCriAudio_className_00505928[];
+extern const char beCriAudio_className[];
 int beCriAudio_GetVTable(void);
 void beCriAudio_InitFields(void);
-extern char g_beCriAudio_callbackList_004c75b0[];
+extern char g_beCriAudio_callbackList[];
 void *beCriAudio_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beCriAudio_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCriAudio_metaObject_00589a88,       /* published MetaObject slot */
+        g_beCriAudio_metaObject,       /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beCriAudio_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_beCriAudio_className_00505928,        /* class name */
+        beCriAudio_className,        /* class name */
         0x18,                                   /* instance size */
         beCriAudio_GetVTable,                   /* vtable getter */
         beCriAudio_InitFields,                  /* field adder */
         0,                                      /* extra callback item */
-        g_beCriAudio_callbackList_004c75b0     /* callback list */
+        g_beCriAudio_callbackList     /* callback list */
     );
 }

@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igBlendMatrixPaletteAttrList_GetVTable[];
 extern char thunk_igBlendMatrixPaletteAttrList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igBlendMatrixPaletteAttrList_callbackList_00486a00[];
-extern char s_igBlendMatrixPaletteAttrList_className_004d5a40[];
-extern char g_igBlendMatrixPaletteAttrList_metaObject_0055f358[];
+extern char g_igBlendMatrixPaletteAttrList_callbackList[];
+extern char igBlendMatrixPaletteAttrList_className[];
+extern char g_igBlendMatrixPaletteAttrList_metaObject[];
 int GpFlag_SetOnce_00130000();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igBlendMatrixPaletteAttrList_Register(void) {
     GpFlag_SetOnce_00130000();
     igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igBlendMatrixPaletteAttrList_metaObject_0055f358, /* published MetaObject slot */
+        g_igBlendMatrixPaletteAttrList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                              /* base class registrar */
         igObjectList_GetPublishedMetaObject,                /* base class MetaObject accessor */
         thunk_igBlendMatrixPaletteAttrList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igBlendMatrixPaletteAttrList_className_004d5a40,  /* class name */
+        igBlendMatrixPaletteAttrList_className,  /* class name */
         0x14,                                               /* instance size */
         igBlendMatrixPaletteAttrList_GetVTable,             /* vtable getter */
         0,                                                  /* field adder */
         0,                                                  /* extra callback item */
-        g_igBlendMatrixPaletteAttrList_callbackList_00486a00  /* callback list */
+        g_igBlendMatrixPaletteAttrList_callbackList  /* callback list */
     );
 }

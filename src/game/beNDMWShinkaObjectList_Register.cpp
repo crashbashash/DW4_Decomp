@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShinkaObjectList_metaObject_0058bfe8[];
+extern igMetaObject *g_beNDMWShinkaObjectList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beNDMWShinkaObjectList_GetMetaObject(void);
-extern const char s_beNDMWShinkaObjectList_className_005133b0[];
+extern const char beNDMWShinkaObjectList_className[];
 int beNDMWShinkaObjectList_GetVTable(void);
-extern char g_beNDMWShinkaObjectList_callbackList_004cc208[];
+extern char g_beNDMWShinkaObjectList_callbackList[];
 void *beNDMWShinkaObjectList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beNDMWShinkaObjectList_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShinkaObjectList_metaObject_0058bfe8,    /* published MetaObject slot */
+        g_beNDMWShinkaObjectList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                           /* base class registrar */
         igObjectList_GetPublishedMetaObject,             /* base class MetaObject accessor */
         beNDMWShinkaObjectList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShinkaObjectList_className_005133b0,     /* class name */
+        beNDMWShinkaObjectList_className,     /* class name */
         0x14,                                            /* instance size */
         beNDMWShinkaObjectList_GetVTable,                /* vtable getter */
         0,                                               /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWShinkaObjectList_callbackList_004cc208  /* callback list */
+        g_beNDMWShinkaObjectList_callbackList  /* callback list */
     );
 }

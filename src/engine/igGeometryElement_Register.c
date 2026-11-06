@@ -4,9 +4,9 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igObject_Register[];
 extern char thunk_igGeometryElement_GetMetaObject[];
-extern char g_igGeometryElement_callbackList_004d0620[];
-extern char s_igGeometryElement_className_0051e450[];
-extern char g_igGeometryElement_metaObject_0058c4e8[];
+extern char g_igGeometryElement_callbackList[];
+extern char igGeometryElement_className[];
+extern char g_igGeometryElement_metaObject[];
 int igMetaObject_RegisterClass();
 int GpFlag_SetOnce_0044b860();
 int igGeometryElement_InitFields();
@@ -15,15 +15,15 @@ void igGeometryElement_Register(void) {
     GpFlag_SetOnce_0044b860();
     igMetaObject_RegisterClass(
         1,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igGeometryElement_metaObject_0058c4e8, /* published MetaObject slot */
+        g_igGeometryElement_metaObject, /* published MetaObject slot */
         igObject_Register,                       /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,   /* base class MetaObject accessor */
         thunk_igGeometryElement_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igGeometryElement_className_0051e450,  /* class name */
+        igGeometryElement_className,  /* class name */
         0x2C,                                    /* instance size */
         0,                                       /* vtable getter */
         &igGeometryElement_InitFields,           /* field adder */
         0,                                       /* extra callback item */
-        g_igGeometryElement_callbackList_004d0620  /* callback list */
+        g_igGeometryElement_callbackList  /* callback list */
     );
 }

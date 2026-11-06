@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_001e4620(void);
-extern igMetaObject *g_igMersenneTwisterRandomNumber_metaObject_00562b88[4];
+extern igMetaObject *g_igMersenneTwisterRandomNumber_metaObject[4];
 igMetaObject *igMersenneTwisterRandomNumber_GetMetaObject(void);
 }
 
 igMetaObject *igMersenneTwisterRandomNumber_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igMersenneTwisterRandomNumber_metaObject_00562b88[0] != 0) {
-        ready = (g_igMersenneTwisterRandomNumber_metaObject_00562b88[0]->_validity & 4) != 0;
+    if (g_igMersenneTwisterRandomNumber_metaObject[0] != 0) {
+        ready = (g_igMersenneTwisterRandomNumber_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_001e4620();
 done:
-    return g_igMersenneTwisterRandomNumber_metaObject_00562b88[0];
+    return g_igMersenneTwisterRandomNumber_metaObject[0];
 }

@@ -14,13 +14,13 @@ typedef struct ObjectSystemRecord {
     char unknown0[52];
     void *allocator;
 } ObjectSystemRecord;
-extern ObjectSystemRecord *g_objectSystem_00586dc8[4];
+extern ObjectSystemRecord *g_objectSystem[4];
 
 void *Memory_AllocateBufferDirect(int,void *);
 /* Reallocate an existing buffer: allocates afresh when the buffer is null, otherwise
  * asks the owning allocator (Memory_FindOwningAllocator, virtual slot 232) to resize
  * it.  See docs/engine/metadata-callback-services.md. */
-void *FUN_002ed330(void *,int);
+void *Memory_ReallocateBuffer(void *,int);
 void Memory_FreeBuffer(void *);
 /* Delete the array object itself (alias of Memory_FreeBuffer). */
 void FUN_002ed5c0(void *);
@@ -39,8 +39,8 @@ void igArray_Append(CallbackArray *array,int item){
     if(array->count==capacity){
         if(capacity==0)array->capacity=4;
         else array->capacity*=((capacity*3)/2);
-        if(array->data==0)array->data=Memory_AllocateBufferDirect(array->capacity*4,g_objectSystem_00586dc8[0]->allocator);
-        else array->data=FUN_002ed330(array->data,array->capacity*4);
+        if(array->data==0)array->data=Memory_AllocateBufferDirect(array->capacity*4,g_objectSystem[0]->allocator);
+        else array->data=Memory_ReallocateBuffer(array->data,array->capacity*4);
     }
     array->data[array->count++]=item;
 }

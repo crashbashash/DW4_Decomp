@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igAdxFile_metaObject_00587668[];
+extern igMetaObject *g_igAdxFile_metaObject[];
 void *igFile_Register(void);
-igMetaObject *igFile_GetPublishedMetaObject_002c0930(void);
+igMetaObject *igFile_GetPublishedMetaObject(void);
 igMetaObject *igAdxFile_GetMetaObject(void);
-extern const char s_igAdxFile_className_005001c8[];
+extern const char igAdxFile_className[];
 int igAdxFile_GetVTable(void);
 void igAdxFile_InitFields(void);
 void FUN_003350b0(void);
@@ -33,11 +33,11 @@ void *igAdxFile_Register(void) {
     GpFlag_SetOnce_00334440();
     return igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAdxFile_metaObject_00587668,         /* published MetaObject slot */
+        g_igAdxFile_metaObject,         /* published MetaObject slot */
         igFile_Register,                         /* base class registrar */
-        igFile_GetPublishedMetaObject_002c0930,  /* base class MetaObject accessor */
+        igFile_GetPublishedMetaObject,  /* base class MetaObject accessor */
         igAdxFile_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_igAdxFile_className_005001c8,          /* class name */
+        igAdxFile_className,          /* class name */
         0x68,                                    /* instance size */
         igAdxFile_GetVTable,                     /* vtable getter */
         igAdxFile_InitFields,                    /* field adder */

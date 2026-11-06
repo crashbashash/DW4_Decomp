@@ -4,10 +4,10 @@
 extern char igImageLoader_Register[];
 extern char igTgaLoader_GetVTable[];
 extern char thunk_igTgaLoader_GetMetaObject[];
-extern char igImageLoader_GetPublishedMetaObject_001502a0[];
-extern char g_igTgaLoader_callbackList_00489140[];
-extern char s_igTgaLoader_className_004dce38[];
-extern char g_igTgaLoader_metaObject_0055ff10[];
+extern char igImageLoader_GetPublishedMetaObject[];
+extern char g_igTgaLoader_callbackList[];
+extern char igTgaLoader_className[];
+extern char g_igTgaLoader_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 int igTgaLoader_InitFields();
@@ -16,15 +16,15 @@ void igTgaLoader_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igTgaLoader_metaObject_0055ff10,             /* published MetaObject slot */
+        g_igTgaLoader_metaObject,             /* published MetaObject slot */
         igImageLoader_Register,                        /* base class registrar */
-        igImageLoader_GetPublishedMetaObject_001502a0, /* base class MetaObject accessor */
+        igImageLoader_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igTgaLoader_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_igTgaLoader_className_004dce38,              /* class name */
+        igTgaLoader_className,              /* class name */
         0x30,                                          /* instance size */
         igTgaLoader_GetVTable,                         /* vtable getter */
         &igTgaLoader_InitFields,                       /* field adder */
         0,                                             /* extra callback item */
-        g_igTgaLoader_callbackList_00489140            /* callback list */
+        g_igTgaLoader_callbackList            /* callback list */
     );
 }

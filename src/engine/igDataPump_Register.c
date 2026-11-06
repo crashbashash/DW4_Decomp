@@ -5,9 +5,9 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igDataPump_GetVTable[];
 extern char thunk_igDataPump_GetMetaObject[];
 extern char igObject_Register[];
-extern char g_igDataPump_callbackList_0048dbe0[];
-extern char s_igDataPump_className_004e4a18[];
-extern char g_igDataPump_metaObject_00562c20[];
+extern char g_igDataPump_callbackList[];
+extern char igDataPump_className[];
+extern char g_igDataPump_metaObject[];
 int GpFlag_SetOnce_001e3ff0();
 int igMetaObject_RegisterClass();
 int igDataPump_InitFields();
@@ -16,15 +16,15 @@ void igDataPump_Register(void) {
     GpFlag_SetOnce_001e3ff0();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igDataPump_metaObject_00562c20,      /* published MetaObject slot */
+        g_igDataPump_metaObject,      /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igDataPump_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        s_igDataPump_className_004e4a18,       /* class name */
+        igDataPump_className,       /* class name */
         0x1C,                                  /* instance size */
         igDataPump_GetVTable,                  /* vtable getter */
         &igDataPump_InitFields,                /* field adder */
         0,                                     /* extra callback item */
-        g_igDataPump_callbackList_0048dbe0     /* callback list */
+        g_igDataPump_callbackList     /* callback list */
     );
 }

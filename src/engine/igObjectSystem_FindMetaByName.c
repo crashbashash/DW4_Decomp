@@ -5,7 +5,7 @@
  * selection and backing policies". */
 #include "dw4/reflected.h"
 
-/* The object system behind g_objectSystem_00586dc8: only the activity flag
+/* The object system behind g_objectSystem: only the activity flag
  * and the metadata registry are used here. */
 typedef struct ObjectSystemView {
     unsigned char active;
@@ -15,11 +15,11 @@ typedef struct ObjectSystemView {
 
 void *ObjectPointerList_FindByStringField(void *list, igMetaField *selector, const char *name);
 /* Field descriptor of igMetaObject::_name (+28): the selector for the search. */
-extern igMetaField *g_igMetaObjectNameField_00585c28[4];
+extern igMetaField *g_igMetaObjectNameField[4];
 
 int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *className) {
     if (objectSystem->active != 0) {
-        return (int)ObjectPointerList_FindByStringField(objectSystem->metaRegistry, g_igMetaObjectNameField_00585c28[0], className);
+        return (int)ObjectPointerList_FindByStringField(objectSystem->metaRegistry, g_igMetaObjectNameField[0], className);
     }
     return 0;
 }

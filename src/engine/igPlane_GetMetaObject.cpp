@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_00188520(void);
-extern igMetaObject *g_igPlane_metaObject_00560fe0[4];
+extern igMetaObject *g_igPlane_metaObject[4];
 igMetaObject *igPlane_GetMetaObject(void);
 }
 
 igMetaObject *igPlane_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igPlane_metaObject_00560fe0[0] != 0) {
-        ready = (g_igPlane_metaObject_00560fe0[0]->_validity & 4) != 0;
+    if (g_igPlane_metaObject[0] != 0) {
+        ready = (g_igPlane_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00188520();
 done:
-    return g_igPlane_metaObject_00560fe0[0];
+    return g_igPlane_metaObject[0];
 }

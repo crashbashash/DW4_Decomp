@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igEmptyFunctionList_GetVTable[];
 extern char thunk_igEmptyFunctionList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igEmptyFunctionList_className_004e0b50[];
-extern char g_igEmptyFunctionList_metaObject_00561028[];
+extern char igEmptyFunctionList_className[];
+extern char g_igEmptyFunctionList_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 
@@ -14,11 +14,11 @@ void igEmptyFunctionList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igEmptyFunctionList_metaObject_00561028, /* published MetaObject slot */
+        g_igEmptyFunctionList_metaObject, /* published MetaObject slot */
         igDataList_Register,                       /* base class registrar */
         igDataList_GetPublishedMetaObject,         /* base class MetaObject accessor */
         thunk_igEmptyFunctionList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igEmptyFunctionList_className_004e0b50,  /* class name */
+        igEmptyFunctionList_className,  /* class name */
         0x14,                                      /* instance size */
         igEmptyFunctionList_GetVTable,             /* vtable getter */
         0,                                         /* field adder */

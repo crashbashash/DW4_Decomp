@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWGameRam_metaObject_0058c0a0[];
+extern igMetaObject *g_beNDMWGameRam_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beNDMWGameRam_GetMetaObject(void);
-extern const char s_beNDMWGameRam_className_00513748[];
+extern const char beNDMWGameRam_className[];
 int beNDMWGameRam_GetVTable(void);
 void beNDMWGameRam_InitFields(void);
-extern char g_beNDMWGameRam_callbackList_004cc4d0[];
+extern char g_beNDMWGameRam_callbackList[];
 void *beNDMWGameRam_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWGameRam_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWGameRam_metaObject_0058c0a0,                /* published MetaObject slot */
+        g_beNDMWGameRam_metaObject,                /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWGameRam_GetMetaObject,                        /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWGameRam_className_00513748,                 /* class name */
+        beNDMWGameRam_className,                 /* class name */
         0x4c,                                               /* instance size */
         beNDMWGameRam_GetVTable,                            /* vtable getter */
         beNDMWGameRam_InitFields,                           /* field adder */
         0,                                                  /* extra callback item */
-        g_beNDMWGameRam_callbackList_004cc4d0              /* callback list */
+        g_beNDMWGameRam_callbackList              /* callback list */
     );
 }

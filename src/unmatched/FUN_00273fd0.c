@@ -7,14 +7,14 @@ typedef struct File_273fd0 {
     int pending;    /* 0x14 */
 } File_273fd0;
 
-extern char s_E0092912_handl_is_null_004f0348[]; /* 'E0092912:handl is null.' */
+extern char E0092912_handl_is_null[]; /* 'E0092912:handl is null.' */
 void FUN_002739b8(File_273fd0 *file, const char *message);
 
 int FUN_00273fd0(File_273fd0 *file, int offset, int origin) {
     int position;
 
     if (file == 0) {
-        FUN_002739b8(file, s_E0092912_handl_is_null_004f0348);
+        FUN_002739b8(file, E0092912_handl_is_null);
         return 0;
     }
     if (origin == 0) {

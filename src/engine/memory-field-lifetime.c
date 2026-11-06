@@ -10,7 +10,7 @@ void Memory_FreeOwnedBufferUnchecked(void *);
 void *Memory_DuplicateBuffer(void *);
 void igMemoryRefMetaField_AddElementRefs(igMemoryRefMetaField *,void *);
 void igMemoryRefMetaField_ReleaseElementRefs(igMemoryRefMetaField *,void *);
-extern int g_igObjectRefMetaField_metaObject_00585b20[4];
+extern int g_igObjectRefMetaField_metaObject[4];
 
 void igMemoryRefMetaField_DestructValue(igMemoryRefMetaField *field,void *object){
     if(field->_destruct){
@@ -24,7 +24,7 @@ void igMemoryRefMetaField_AddElementRefs(igMemoryRefMetaField *field,void *objec
     RefHeader *value;RefHeader **data;int i,n;
     if(!field->_refCounted)return;
     if(!field->_memType)return;
-    if(!igObject_IsKindOf((void *)field->_memType,g_igObjectRefMetaField_metaObject_00585b20[0]))return;
+    if(!igObject_IsKindOf((void *)field->_memType,g_igObjectRefMetaField_metaObject[0]))return;
     data=*(RefHeader ***)((char *)object+field->_offset);
     if(!data)return;
     n=Memory_GetBufferSize(data)>>2;
@@ -35,7 +35,7 @@ void igMemoryRefMetaField_ReleaseElementRefs(igMemoryRefMetaField *field,void *o
     int i,n;RefHeader **data;
     if(!field->_refCounted)return;
     if(!field->_memType)return;
-    if(!igObject_IsKindOf((void *)field->_memType,g_igObjectRefMetaField_metaObject_00585b20[0]))return;
+    if(!igObject_IsKindOf((void *)field->_memType,g_igObjectRefMetaField_metaObject[0]))return;
     data=*(RefHeader ***)((char *)object+field->_offset);
     if(!data)return;
     n=Memory_GetBufferSize(data)>>2;

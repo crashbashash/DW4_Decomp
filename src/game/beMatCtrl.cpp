@@ -4,8 +4,8 @@
  * Verified byte-identical in C++ mode with the original compiler. */
 #include "dw4/reflected.h"
 extern "C" int beMessenger_RegisterReceiver(int, int, int, int, int);
-extern int s_MATCTRL_0050ed58[4];
+extern int MATCTRL[4];
 extern "C" void Gap__Bec__beMatCtrl__vfunc_29(beMatCtrl *self, int selector)
 {
-    beMessenger_RegisterReceiver(self->_messenger, selector, (int)s_MATCTRL_0050ed58, 0, -1);
+    beMessenger_RegisterReceiver(self->_messenger, selector, (int)MATCTRL, 0, -1);
 }

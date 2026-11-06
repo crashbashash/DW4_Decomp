@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlInfoHitBody_metaObject_00588b00[];
+extern igMetaObject *g_beModelCtrlInfoHitBody_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beModelCtrlInfoHitBody_GetMetaObject(void);
-extern const char s_beModelCtrlInfoHitBody_className_005039a0[];
+extern const char beModelCtrlInfoHitBody_className[];
 int beModelCtrlInfoHitBody_GetVTable(void);
 void beModelCtrlInfoHitBody_InitFields(void);
-extern char g_beModelCtrlInfoHitBody_callbackList_004c52e8[];
+extern char g_beModelCtrlInfoHitBody_callbackList[];
 void *beModelCtrlInfoHitBody_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beModelCtrlInfoHitBody_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlInfoHitBody_metaObject_00588b00,    /* published MetaObject slot */
+        g_beModelCtrlInfoHitBody_metaObject,    /* published MetaObject slot */
         igObject_Register,                               /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,           /* base class MetaObject accessor */
         beModelCtrlInfoHitBody_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlInfoHitBody_className_005039a0,     /* class name */
+        beModelCtrlInfoHitBody_className,     /* class name */
         0x30,                                            /* instance size */
         beModelCtrlInfoHitBody_GetVTable,                /* vtable getter */
         beModelCtrlInfoHitBody_InitFields,               /* field adder */
         0,                                               /* extra callback item */
-        g_beModelCtrlInfoHitBody_callbackList_004c52e8  /* callback list */
+        g_beModelCtrlInfoHitBody_callbackList  /* callback list */
     );
 }

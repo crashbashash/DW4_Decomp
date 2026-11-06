@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igMovieRenderer_metaObject_00587860[];
+extern igMetaObject *g_igMovieRenderer_metaObject[];
 void *igRenderer_Register(void);
-igMetaObject *igRenderer_GetPublishedMetaObject_00231010(void);
+igMetaObject *igRenderer_GetPublishedMetaObject(void);
 igMetaObject *igMovieRenderer_GetMetaObject(void);
-extern const char s_igMovieRenderer_className_00500670[];
+extern const char igMovieRenderer_className[];
 int igMovieRenderer_GetVTable(void);
 void igMovieRenderer_InitFields(void);
-extern char g_igMovieRenderer_callbackList_004c2b60[];
+extern char g_igMovieRenderer_callbackList[];
 void *igMovieRenderer_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *igMovieRenderer_Register(void) {
     GpFlag_SetOnce_00334440();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMovieRenderer_metaObject_00587860,       /* published MetaObject slot */
+        g_igMovieRenderer_metaObject,       /* published MetaObject slot */
         igRenderer_Register,                         /* base class registrar */
-        igRenderer_GetPublishedMetaObject_00231010,  /* base class MetaObject accessor */
+        igRenderer_GetPublishedMetaObject,  /* base class MetaObject accessor */
         igMovieRenderer_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_igMovieRenderer_className_00500670,        /* class name */
+        igMovieRenderer_className,        /* class name */
         0x10,                                        /* instance size */
         igMovieRenderer_GetVTable,                   /* vtable getter */
         igMovieRenderer_InitFields,                  /* field adder */
         0,                                           /* extra callback item */
-        g_igMovieRenderer_callbackList_004c2b60     /* callback list */
+        g_igMovieRenderer_callbackList     /* callback list */
     );
 }

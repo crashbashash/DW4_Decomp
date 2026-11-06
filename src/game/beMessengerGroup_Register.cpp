@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMessengerGroup_metaObject_00588fc8[];
+extern igMetaObject *g_beMessengerGroup_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beMessengerGroup_GetMetaObject(void);
-extern const char s_beMessengerGroup_className_00504460[];
+extern const char beMessengerGroup_className[];
 int beMessengerGroup_GetVTable(void);
 void beMessengerGroup_InitFields(void);
-extern char g_beMessengerGroup_callbackList_004c5d60[];
+extern char g_beMessengerGroup_callbackList[];
 void *beMessengerGroup_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beMessengerGroup_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMessengerGroup_metaObject_00588fc8,         /* published MetaObject slot */
+        g_beMessengerGroup_metaObject,         /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beMessengerGroup_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beMessengerGroup_className_00504460,          /* class name */
+        beMessengerGroup_className,          /* class name */
         0x18,                                           /* instance size */
         beMessengerGroup_GetVTable,                     /* vtable getter */
         beMessengerGroup_InitFields,                    /* field adder */
         0,                                              /* extra callback item */
-        g_beMessengerGroup_callbackList_004c5d60       /* callback list */
+        g_beMessengerGroup_callbackList       /* callback list */
     );
 }

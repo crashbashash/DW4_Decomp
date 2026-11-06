@@ -4,10 +4,10 @@
 extern char igUnsignedShortMetaField_Register[];
 extern char igUnsignedShortArrayMetaField_GetVTable[];
 extern char thunk_igUnsignedShortArrayMetaField_GetMetaObject[];
-extern char igUnsignedShortMetaField_GetPublishedMetaObject_002b6530[];
-extern char g_igUnsignedShortArrayMetaField_callbackList_004bf2b0[];
-extern char s_igUnsignedShortArrayMetaField_className_004f5ae0[];
-extern char g_igUnsignedShortArrayMetaField_metaObject_005856f8[];
+extern char igUnsignedShortMetaField_GetPublishedMetaObject[];
+extern char g_igUnsignedShortArrayMetaField_callbackList[];
+extern char igUnsignedShortArrayMetaField_className[];
+extern char g_igUnsignedShortArrayMetaField_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igUnsignedShortArrayMetaField_InitFields();
@@ -16,15 +16,15 @@ void igUnsignedShortArrayMetaField_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igUnsignedShortArrayMetaField_metaObject_005856f8,      /* published MetaObject slot */
+        g_igUnsignedShortArrayMetaField_metaObject,      /* published MetaObject slot */
         igUnsignedShortMetaField_Register,                        /* base class registrar */
-        igUnsignedShortMetaField_GetPublishedMetaObject_002b6530, /* base class MetaObject accessor */
+        igUnsignedShortMetaField_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igUnsignedShortArrayMetaField_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        s_igUnsignedShortArrayMetaField_className_004f5ae0,       /* class name */
+        igUnsignedShortArrayMetaField_className,       /* class name */
         0x38,                                                     /* instance size */
         igUnsignedShortArrayMetaField_GetVTable,                  /* vtable getter */
         &igUnsignedShortArrayMetaField_InitFields,                /* field adder */
         0,                                                        /* extra callback item */
-        g_igUnsignedShortArrayMetaField_callbackList_004bf2b0     /* callback list */
+        g_igUnsignedShortArrayMetaField_callbackList     /* callback list */
     );
 }

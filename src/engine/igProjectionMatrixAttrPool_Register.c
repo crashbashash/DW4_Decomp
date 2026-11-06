@@ -2,12 +2,12 @@
  * The igMetaObject_RegisterClass arguments are laid out per
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObjectPool_Register[];
-extern char igObjectPool_GetPublishedMetaObject_00197aa0[];
+extern char igObjectPool_GetPublishedMetaObject[];
 extern char igProjectionMatrixAttrPool_GetVTable[];
 extern char thunk_igProjectionMatrixAttrPool_GetMetaObject[];
-extern char g_igProjectionMatrixAttrPool_callbackList_0048b738[];
-extern char s_igProjectionMatrixAttrPool_className_004e1d80[];
-extern char g_igProjectionMatrixAttrPool_metaObject_005615a8[];
+extern char g_igProjectionMatrixAttrPool_callbackList[];
+extern char igProjectionMatrixAttrPool_className[];
+extern char g_igProjectionMatrixAttrPool_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igProjectionMatrixAttrPool_Register(void) {
     GpFlag_SetOnce_00194380();
     igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igProjectionMatrixAttrPool_metaObject_005615a8, /* published MetaObject slot */
+        g_igProjectionMatrixAttrPool_metaObject, /* published MetaObject slot */
         igObjectPool_Register,                            /* base class registrar */
-        igObjectPool_GetPublishedMetaObject_00197aa0,     /* base class MetaObject accessor */
+        igObjectPool_GetPublishedMetaObject,     /* base class MetaObject accessor */
         thunk_igProjectionMatrixAttrPool_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igProjectionMatrixAttrPool_className_004e1d80,  /* class name */
+        igProjectionMatrixAttrPool_className,  /* class name */
         0x20,                                             /* instance size */
         igProjectionMatrixAttrPool_GetVTable,             /* vtable getter */
         0,                                                /* field adder */
         0,                                                /* extra callback item */
-        g_igProjectionMatrixAttrPool_callbackList_0048b738  /* callback list */
+        g_igProjectionMatrixAttrPool_callbackList  /* callback list */
     );
 }

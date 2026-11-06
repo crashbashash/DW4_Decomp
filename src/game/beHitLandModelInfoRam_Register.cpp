@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beHitLandModelInfoRam_metaObject_00589318[];
+extern igMetaObject *g_beHitLandModelInfoRam_metaObject[];
 void *beBaseInfoRam_Register(void);
-igMetaObject *beBaseInfoRam_GetPublishedMetaObject_0033eaf0(void);
+igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 igMetaObject *beHitLandModelInfoRam_GetMetaObject(void);
-extern const char s_beHitLandModelInfoRam_className_00504ac0[];
+extern const char beHitLandModelInfoRam_className[];
 int beHitLandModelInfoRam_GetVTable(void);
 void *beHitLandModelInfoRam_Register(void);
 }
@@ -31,11 +31,11 @@ void *beHitLandModelInfoRam_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beHitLandModelInfoRam_metaObject_00589318,    /* published MetaObject slot */
+        g_beHitLandModelInfoRam_metaObject,    /* published MetaObject slot */
         beBaseInfoRam_Register,                         /* base class registrar */
-        beBaseInfoRam_GetPublishedMetaObject_0033eaf0,  /* base class MetaObject accessor */
+        beBaseInfoRam_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beHitLandModelInfoRam_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beHitLandModelInfoRam_className_00504ac0,     /* class name */
+        beHitLandModelInfoRam_className,     /* class name */
         0x2c,                                           /* instance size */
         beHitLandModelInfoRam_GetVTable,                /* vtable getter */
         0,                                              /* field adder */

@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWWindowSelect_metaObject_0058abf8[];
+extern igMetaObject *g_beNDMWWindowSelect_metaObject[];
 void *beNDMWWindow_Register(void);
-igMetaObject *beNDMWWindow_GetPublishedMetaObject_003b3f30(void);
+igMetaObject *beNDMWWindow_GetPublishedMetaObject(void);
 igMetaObject *beNDMWWindowSelect_GetMetaObject(void);
-extern const char s_beNDMWWindowSelect_className_00511080[];
+extern const char beNDMWWindowSelect_className[];
 void beNDMWWindowSelect_InitFields(void);
-extern char g_beNDMWWindowSelect_callbackList_004c97b8[];
+extern char g_beNDMWWindowSelect_callbackList[];
 void *beNDMWWindowSelect_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beNDMWWindowSelect_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         1,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWWindowSelect_metaObject_0058abf8,      /* published MetaObject slot */
+        g_beNDMWWindowSelect_metaObject,      /* published MetaObject slot */
         beNDMWWindow_Register,                         /* base class registrar */
-        beNDMWWindow_GetPublishedMetaObject_003b3f30,  /* base class MetaObject accessor */
+        beNDMWWindow_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWWindowSelect_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWWindowSelect_className_00511080,       /* class name */
+        beNDMWWindowSelect_className,       /* class name */
         0x70,                                          /* instance size */
         0,                                             /* vtable getter */
         beNDMWWindowSelect_InitFields,                 /* field adder */
         0,                                             /* extra callback item */
-        g_beNDMWWindowSelect_callbackList_004c97b8    /* callback list */
+        g_beNDMWWindowSelect_callbackList    /* callback list */
     );
 }

@@ -4,11 +4,11 @@
 #include "dw4/reflected.h"
 extern char igTransformSequence1_5_GetVTable[];
 void thunk_FUN_00194ef0(void);  /* code at 0x195320, passed by address (was DAT_195320; docs/engine/function-inventory.md) */
-extern char igTransformSequence_GetPublishedMetaObject_00195330[];
+extern char igTransformSequence_GetPublishedMetaObject[];
 extern char igTransformSequence_Register[];
-extern char g_igTransformSequence1_5_callbackList_0048afa0[];
-extern char s_igTransformSequence1_5_className_004e1300[];
-extern char g_igTransformSequence1_5_metaObject_005611d8[];
+extern char g_igTransformSequence1_5_callbackList[];
+extern char igTransformSequence1_5_className[];
+extern char g_igTransformSequence1_5_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 extern int thunk_FUN_001ddfd0[4];
@@ -18,15 +18,15 @@ void igTransformSequence1_5_Register(void) {
     GpFlag_SetOnce_00194380();  /* shared set-once latch run before every registration of this family (asm/GpFlag_SetOnce_00194380.s) */
     igMetaObject_RegisterClass(
         0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igTransformSequence1_5_metaObject_005611d8,        /* published MetaObject slot */
+        g_igTransformSequence1_5_metaObject,        /* published MetaObject slot */
         igTransformSequence_Register,                        /* base class registrar */
-        igTransformSequence_GetPublishedMetaObject_00195330, /* base class MetaObject accessor */
+        igTransformSequence_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_FUN_00194ef0,                                        /* own MetaObject accessor (stored at +0x54) */
-        s_igTransformSequence1_5_className_004e1300,         /* class name */
+        igTransformSequence1_5_className,         /* class name */
         sizeof(igTransformSequence1_5),                      /* instance size (reflected struct, include/dw4/reflected.h) */
         igTransformSequence1_5_GetVTable,                    /* vtable getter */
         &igTransformSequence1_5_InitFields,                  /* field adder */
         thunk_FUN_001ddfd0,                                  /* extra callback item */
-        g_igTransformSequence1_5_callbackList_0048afa0       /* callback list */
+        g_igTransformSequence1_5_callbackList       /* callback list */
     );
 }

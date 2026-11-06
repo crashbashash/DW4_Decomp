@@ -5,16 +5,16 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beFontImageList_metaObject_00589650[4];
-extern int g_beFontImage_metaObject_00589658[4];
+extern int g_beFontImageList_metaObject[4];
+extern int g_beFontImage_metaObject[4];
 /* 0x0036f2a0 */
 int Gap__Bec__beFontImageList__vfunc_20(void)
 {
-    return g_beFontImageList_metaObject_00589650[0];
+    return g_beFontImageList_metaObject[0];
 }
 
 /* 0x003704f0 */
 int Gap__Bec__beFontImageList__vfunc_22(void)
 {
-    return g_beFontImage_metaObject_00589658[0];
+    return g_beFontImage_metaObject[0];
 }

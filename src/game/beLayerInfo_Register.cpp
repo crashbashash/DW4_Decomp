@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLayerInfo_metaObject_00589268[];
+extern igMetaObject *g_beLayerInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beLayerInfo_GetMetaObject(void);
-extern const char s_beLayerInfo_className_00504920[];
+extern const char beLayerInfo_className[];
 int beLayerInfo_GetVTable(void);
 void beLayerInfo_InitFields(void);
-extern char g_beLayerInfo_callbackList_004c6378[];
+extern char g_beLayerInfo_callbackList[];
 void *beLayerInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beLayerInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLayerInfo_metaObject_00589268,           /* published MetaObject slot */
+        g_beLayerInfo_metaObject,           /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLayerInfo_GetMetaObject,                   /* own MetaObject accessor (stored at +0x54) */
-        s_beLayerInfo_className_00504920,            /* class name */
+        beLayerInfo_className,            /* class name */
         0x20,                                        /* instance size */
         beLayerInfo_GetVTable,                       /* vtable getter */
         beLayerInfo_InitFields,                      /* field adder */
         0,                                           /* extra callback item */
-        g_beLayerInfo_callbackList_004c6378         /* callback list */
+        g_beLayerInfo_callbackList         /* callback list */
     );
 }

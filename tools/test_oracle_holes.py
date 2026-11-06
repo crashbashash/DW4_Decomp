@@ -117,6 +117,57 @@ class SharedResolver(unittest.TestCase):
         self.assertEqual(self.resolve("DAT_00004000"), 0x4000)         # kernel area
         self.assertIsNone(self.resolve("no_address_here"))
 
+    def data_table(self, rows):
+        """Write `rows` as the data-names.tsv of a fresh folder; returns its symbols.txt path."""
+        folder = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, folder)
+        symbols = os.path.join(folder, "symbols.txt")
+        with open(self.table.name) as source, open(symbols, "w") as out:
+            out.write(source.read())
+        with open(os.path.join(folder, "data-names.tsv"), "w") as out:
+            out.writelines("0x%08x\t%s\t%s\n" % row for row in rows)
+        return symbols
+
+    def test_a_recovered_data_name_resolves_from_the_table(self):
+        symbols = self.data_table([(0x586dc8, "g_objectSystem", "class-handle")])
+        self.assertEqual(verify.sym_address("g_objectSystem", self.by_name, symbols), 0x586dc8)
+        self.assertEqual(verify.sym_address("g_objectSystem+4", self.by_name, symbols), 0x586dc8)
+
+    def test_a_bare_name_outside_the_table_stays_unresolved(self):
+        symbols = self.data_table([(0x586dc8, "g_objectSystem", "class-handle")])
+        self.assertIsNone(verify.sym_address("g_otherSystem", self.by_name, symbols))
+
+    def test_a_table_name_inside_code_is_refused(self):
+        symbols = self.data_table([(0x2d3074, "g_inCode", "class-handle")])
+        with self.assertRaises(verify.SymbolError):
+            verify.sym_address("g_inCode", self.by_name, symbols)
+
+    def test_a_string_name_at_a_function_start_is_refused(self):
+        symbols = self.data_table([(0x2d3070, "ISUSE", "string-literal")])
+        with self.assertRaises(verify.SymbolError):
+            verify.sym_address("ISUSE", self.by_name, symbols)
+
+    def test_a_function_symbol_row_does_not_resolve(self):
+        symbols = self.data_table([(0x586dc8, "OldFunctionName", "function-symbol")])
+        self.assertIsNone(verify.sym_address("OldFunctionName", self.by_name, symbols))
+
+    def test_a_table_with_two_addresses_for_a_name_is_refused(self):
+        symbols = self.data_table([(0x586dc8, "g_twice", "class-handle"), (0x586dcc, "g_twice", "class-handle")])
+        with self.assertRaises(ValueError):
+            verify.data_symbols(symbols)
+
+    def test_a_row_spelling_another_address_is_refused(self):
+        symbols = self.data_table([(0x586dc8, "g_liar_00586dcc", "class-handle")])
+        with self.assertRaises(ValueError):
+            verify.data_symbols(symbols)
+
+    def test_defining_a_bare_table_name_is_still_smuggling(self):
+        name = next(iter(verify.data_symbols())) if verify.data_symbols() else None
+        if name is None:
+            self.skipTest("no recovered data names")
+        found = verify.defined_outside({name: (1, 0, 4)}, [], [(0x100000, 0x100004)])
+        self.assertEqual(found, [(name, verify.data_symbols()[name])])
+
     def test_linkgen_shares_the_resolver(self):
         import linkgen
         source = Path(linkgen.__file__).read_text()

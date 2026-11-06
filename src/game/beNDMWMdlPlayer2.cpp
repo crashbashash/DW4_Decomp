@@ -8,8 +8,8 @@
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
-extern int g_bePadManager_metaObject_00588518[4];
-extern int g_beNDMWMdlPlayer2_metaObject_0058b368[4];
+extern int g_bePadManager_metaObject[4];
+extern int g_beNDMWMdlPlayer2_metaObject[4];
 /* Looks up the insight's object list for the entry whose class metaObject is the
  * second argument (hypothesis: igInsightCore::FindObjectByMetaObject, finding #3188;
  * the matched body is src/unmatched/FUN_00236f80.cpp). */
@@ -22,12 +22,12 @@ int Gap__Core__igObject__vfunc_23();
  * (docs/engine/typed-game-layer.md). */
 void Gap__Bec__beNDMWMdlPlayer2__vfunc_23(beNDMWMdlPlayer2 *self) {
     Gap__Core__igObject__vfunc_23();
-    self->_padManager = FUN_00236f80(self->_insight, g_bePadManager_metaObject_00588518[0]);
+    self->_padManager = FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
 }
 
 /* 0x003d58e0 — slot 20: the class's metaObject handle (0x58b368). */
 int Gap__Bec__beNDMWMdlPlayer2__vfunc_20(void)
 {
-    return g_beNDMWMdlPlayer2_metaObject_0058b368[0];
+    return g_beNDMWMdlPlayer2_metaObject[0];
 }
 } /* extern "C" */

@@ -18,7 +18,7 @@ typedef struct Lsc_277b00 {
     LscEntry_277b00 entries[16];    /* 0x38 */
 } Lsc_277b00;
 
-extern char s_E0007_lsc_fp_NULL_004f0c38[]; /* 'E0007: lsc->fp=NULL\n' */
+extern char E0007_lsc_fp_NULL[]; /* 'E0007: lsc->fp=NULL\n' */
 void FUN_002777f8(const char *format, ...);
 int FUN_0026a138(int transfer);
 int FUN_0026a160(int transfer);
@@ -27,7 +27,7 @@ void FUN_00277b00(Lsc_277b00 *lsc) {
     LscEntry_277b00 *entry;
 
     if (lsc->transfer == 0) {
-        FUN_002777f8(s_E0007_lsc_fp_NULL_004f0c38);
+        FUN_002777f8(E0007_lsc_fp_NULL);
         return;
     }
     entry = &lsc->entries[lsc->head];

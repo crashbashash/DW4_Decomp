@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beParticleCtrl2Info_metaObject_005884e0[];
+extern igMetaObject *g_beParticleCtrl2Info_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beParticleCtrl2Info_GetMetaObject(void);
-extern const char s_beParticleCtrl2Info_className_00502db0[];
+extern const char beParticleCtrl2Info_className[];
 int beParticleCtrl2Info_GetVTable(void);
 void beParticleCtrl2Info_InitFields(void);
-extern char g_beParticleCtrl2Info_callbackList_004c4628[];
+extern char g_beParticleCtrl2Info_callbackList[];
 void *beParticleCtrl2Info_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beParticleCtrl2Info_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beParticleCtrl2Info_metaObject_005884e0,    /* published MetaObject slot */
+        g_beParticleCtrl2Info_metaObject,    /* published MetaObject slot */
         beBaseInfo_Register,                          /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,   /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,   /* base class MetaObject accessor */
         beParticleCtrl2Info_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beParticleCtrl2Info_className_00502db0,     /* class name */
+        beParticleCtrl2Info_className,     /* class name */
         0x30,                                         /* instance size */
         beParticleCtrl2Info_GetVTable,                /* vtable getter */
         beParticleCtrl2Info_InitFields,               /* field adder */
         0,                                            /* extra callback item */
-        g_beParticleCtrl2Info_callbackList_004c4628  /* callback list */
+        g_beParticleCtrl2Info_callbackList  /* callback list */
     );
 }

@@ -5,9 +5,9 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beCameraCtrlInfoRamShake_metaObject_00589c38[4];
+extern int g_beCameraCtrlInfoRamShake_metaObject[4];
 /* 0x0036efc0 */
 int Gap__Bec__beCameraCtrlInfoRamShake__vfunc_20(void)
 {
-    return g_beCameraCtrlInfoRamShake_metaObject_00589c38[0];
+    return g_beCameraCtrlInfoRamShake_metaObject[0];
 }

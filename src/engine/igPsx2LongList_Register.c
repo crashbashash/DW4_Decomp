@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igPsx2LongList_GetVTable[];
 extern char thunk_igPsx2LongList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igPsx2LongList_className_004ddff8[];
-extern char g_igPsx2LongList_metaObject_005604c0[];
+extern char igPsx2LongList_className[];
+extern char g_igPsx2LongList_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 extern int igPsx2LongList_InitFields_00152970[4];
@@ -14,11 +14,11 @@ void igPsx2LongList_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2LongList_metaObject_005604c0,   /* published MetaObject slot */
+        g_igPsx2LongList_metaObject,   /* published MetaObject slot */
         igDataList_Register,                    /* base class registrar */
         igDataList_GetPublishedMetaObject,      /* base class MetaObject accessor */
         thunk_igPsx2LongList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igPsx2LongList_className_004ddff8,    /* class name */
+        igPsx2LongList_className,    /* class name */
         0x14,                                   /* instance size */
         igPsx2LongList_GetVTable,               /* vtable getter */
         &igPsx2LongList_InitFields_00152970[0], /* field adder (post_init in data/reflection.json) */

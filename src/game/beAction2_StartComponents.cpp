@@ -10,11 +10,11 @@ int beAction2FLASHSET_Start(...);
 int beAction2JOINTSET_Start(...);
 int beAction2MOTIONSET_Start(...);
 int beAction2WAITCHECK_Start(...);
-extern int g_beAction2FLASHSET_metaObject_00589f98[4];
-extern int g_beAction2WAITCHECK_metaObject_00589fa0[4];
-extern int g_beAction2FADESET_metaObject_00589fb0[4];
-extern int g_beAction2JOINTSET_metaObject_00589fc8[4];
-extern int g_beAction2MOTIONSET_metaObject_00589fe8[4];
+extern int g_beAction2FLASHSET_metaObject[4];
+extern int g_beAction2WAITCHECK_metaObject[4];
+extern int g_beAction2FADESET_metaObject[4];
+extern int g_beAction2JOINTSET_metaObject[4];
+extern int g_beAction2MOTIONSET_metaObject[4];
 void beAction2_StartComponents(int manager, void *info);
 }
 
@@ -72,19 +72,19 @@ void beAction2_StartComponents(int manager, void *info)
 next_component:
         keepGoing = true;
         component = (((Action2ComponentList *)data->_comList)->_data)[index];
-        if (g_beAction2MOTIONSET_metaObject_00589fe8[0] == component->GetMetaObject()) {
+        if (g_beAction2MOTIONSET_metaObject[0] == component->GetMetaObject()) {
             keepGoing = beAction2MOTIONSET_Start(manager, info, component) & 0xFF;
             index += 1;
-        } else if (g_beAction2JOINTSET_metaObject_00589fc8[0] == component->GetMetaObject()) {
+        } else if (g_beAction2JOINTSET_metaObject[0] == component->GetMetaObject()) {
             keepGoing = beAction2JOINTSET_Start(manager, info, component) & 0xFF;
             index += 1;
-        } else if (g_beAction2FADESET_metaObject_00589fb0[0] == component->GetMetaObject()) {
+        } else if (g_beAction2FADESET_metaObject[0] == component->GetMetaObject()) {
             keepGoing = beAction2FADESET_Start(manager, info, component) & 0xFF;
             index += 1;
-        } else if (g_beAction2WAITCHECK_metaObject_00589fa0[0] == component->GetMetaObject()) {
+        } else if (g_beAction2WAITCHECK_metaObject[0] == component->GetMetaObject()) {
             keepGoing = beAction2WAITCHECK_Start(manager, info, component) & 0xFF;
             index += 1;
-        } else if (g_beAction2FLASHSET_metaObject_00589f98[0] == component->GetMetaObject()) {
+        } else if (g_beAction2FLASHSET_metaObject[0] == component->GetMetaObject()) {
             keepGoing = beAction2FLASHSET_Start(manager, info, component) & 0xFF;
             index += 1;
             /* matching construct: preserve the retail scheduler's inner-branch padding. */

@@ -4,9 +4,9 @@ typedef struct MfCi_2780a8 {
     char name[1];   /* 0x1c */
 } MfCi_2780a8;
 
-extern char s_E01100301_fname_is_null_mfCiOpen_004f0d08[];                 /* 'E01100301:fname is null.(mfCiOpen)' */
-extern char s_E01100302_rw_is_illigal_mfCiOpen_004f0d30[];                 /* 'E01100302:rw is illigal.(mfCiOpen)' */
-extern char s_E01100303_not_enough_handle_resource_mfCiOpen_004f0d58[];    /* 'E01100303:not enough handle resource.(mfCiOpen)' */
+extern char E01100301_fname_is_null_mfCiOpen[];                 /* 'E01100301:fname is null.(mfCiOpen)' */
+extern char E01100302_rw_is_illigal_mfCiOpen[];                 /* 'E01100302:rw is illigal.(mfCiOpen)' */
+extern char E01100303_not_enough_handle_resource_mfCiOpen[];    /* 'E01100303:not enough handle resource.(mfCiOpen)' */
 void FUN_00277de8(void *handle, const char *message);
 MfCi_2780a8 *FUN_00277fc0(void);
 void FUN_00278038(MfCi_2780a8 *handle);
@@ -16,16 +16,16 @@ MfCi_2780a8 *FUN_002780a8(const char *fname, int reserved, int rw) {
     MfCi_2780a8 *handle;
 
     if (fname == 0) {
-        FUN_00277de8(0, s_E01100301_fname_is_null_mfCiOpen_004f0d08);
+        FUN_00277de8(0, E01100301_fname_is_null_mfCiOpen);
         return 0;
     }
     if (rw != 0) {
-        FUN_00277de8(0, s_E01100302_rw_is_illigal_mfCiOpen_004f0d30);
+        FUN_00277de8(0, E01100302_rw_is_illigal_mfCiOpen);
         return 0;
     }
     handle = FUN_00277fc0();
     if (handle == 0) {
-        FUN_00277de8(0, s_E01100303_not_enough_handle_resource_mfCiOpen_004f0d58);
+        FUN_00277de8(0, E01100303_not_enough_handle_resource_mfCiOpen);
         return 0;
     }
     strcpy(handle->name, fname);

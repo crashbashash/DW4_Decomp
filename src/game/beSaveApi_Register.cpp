@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSaveApi_metaObject_00588298[];
+extern igMetaObject *g_beSaveApi_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beSaveApi_GetMetaObject(void);
-extern const char s_beSaveApi_className_00502950[];
+extern const char beSaveApi_className[];
 void beSaveApi_InitFields(void);
-extern char g_beSaveApi_callbackList_004c4158[];
+extern char g_beSaveApi_callbackList[];
 void *beSaveApi_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beSaveApi_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         1,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSaveApi_metaObject_00588298,        /* published MetaObject slot */
+        g_beSaveApi_metaObject,        /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beSaveApi_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beSaveApi_className_00502950,         /* class name */
+        beSaveApi_className,         /* class name */
         0x40,                                   /* instance size */
         0,                                      /* vtable getter */
         beSaveApi_InitFields,                   /* field adder */
         0,                                      /* extra callback item */
-        g_beSaveApi_callbackList_004c4158      /* callback list */
+        g_beSaveApi_callbackList      /* callback list */
     );
 }

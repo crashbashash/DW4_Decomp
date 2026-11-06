@@ -9,18 +9,18 @@ typedef struct CvFsHandle_2701c8 {
     int file;                  /* 0x04 */
 } CvFsHandle_2701c8;
 
-extern char s_cvFsStopTr_1_handle_error_004ef1d0[]; /* 'cvFsStopTr #1:handle error' */
-extern char s_cvFsStopTr_2_vtbl_error_004ef1f0[]; /* 'cvFsStopTr #2:vtbl error' */
+extern char cvFsStopTr_1_handle_error[]; /* 'cvFsStopTr #1:handle error' */
+extern char cvFsStopTr_2_vtbl_error[]; /* 'cvFsStopTr #2:vtbl error' */
 void FUN_0026f530(const char *message);
 
 void FUN_002701c8(CvFsHandle_2701c8 *handle) {
     if (handle == 0) {
-        FUN_0026f530(s_cvFsStopTr_1_handle_error_004ef1d0);
+        FUN_0026f530(cvFsStopTr_1_handle_error);
         return;
     }
     if (handle->device->stop_tr != 0) {
         handle->device->stop_tr(handle->file);
         return;
     }
-    FUN_0026f530(s_cvFsStopTr_2_vtbl_error_004ef1f0);
+    FUN_0026f530(cvFsStopTr_2_vtbl_error);
 }

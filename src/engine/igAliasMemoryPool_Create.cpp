@@ -10,8 +10,8 @@
 class FactoryPoolView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void Set(int); virtual void d8(); virtual void Init(); };
 extern "C" {
 /* Object-system pointer; its byte 0 is the "object system active" flag. */
-extern unsigned char *g_objectSystem_00586dc8[4];
-extern void *g_igAliasMemoryPool_metaObject_005869b0[4];
+extern unsigned char *g_objectSystem[4];
+extern void *g_igAliasMemoryPool_metaObject[4];
 /* Runs the static initialisation of the igAliasMemoryPool class (igMetaObject_RunStaticInit
  * applied to igAliasMemoryPool_Register). */
 void igAliasMemoryPool_EnsureRegistered();
@@ -21,9 +21,9 @@ FactoryPoolView *igAliasMemoryPool_Construct(FactoryPoolView *,int);
 }
 extern "C" FactoryPoolView *igAliasMemoryPool_Create(void *allocator) {
     FactoryPoolView *pool;
-    if (*g_objectSystem_00586dc8[0]) {
+    if (*g_objectSystem[0]) {
         igAliasMemoryPool_EnsureRegistered();
-        pool=igMetaObject_CreateInstance(g_igAliasMemoryPool_metaObject_005869b0[0],allocator);
+        pool=igMetaObject_CreateInstance(g_igAliasMemoryPool_metaObject[0],allocator);
     } else {
         pool=FUN_002f0040(184,0,allocator);
         if(pool)pool=igAliasMemoryPool_Construct(pool,1);

@@ -32,7 +32,7 @@ int StringPool_Intern(int, int);
 void StringChunk_ReleaseHeader(int, void *);
 /* The shared string pool, created on first use (finding #1035,
  * docs/engine/messenger-results.md). */
-extern int g_stringPool_00586f20[4];
+extern int g_stringPool[4];
 void beMessenger_AppendBool(beMessenger *self, char value);
 void beMessenger_AppendInt(beMessenger *self, int value);
 void beMessenger_AppendFloat(beMessenger *self, float value);
@@ -145,13 +145,13 @@ void beMessenger_AppendString(beMessenger *self, const char *text)
     if (text == 0) {
         token = 0;
     } else {
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = FUN_002eb010(16);
             if (pool)
                 pool = StringPool_Construct(pool);
-            g_stringPool_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        token = StringPool_Intern(g_stringPool_00586f20[0], (int)text);
+        token = StringPool_Intern(g_stringPool[0], (int)text);
     }
     StringList_AppendRetained((void *)((beMessengerArgData *)self->_argData)->_stringList, StringRef(token));
 }

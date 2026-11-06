@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igMessageReceiverList_GetVTable[];
 extern char thunk_igMessageReceiverList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igMessageReceiverList_callbackList_00497fd8[];
-extern char s_igMessageReceiverList_className_004e8440[];
-extern char g_igMessageReceiverList_metaObject_0056dae0[];
+extern char g_igMessageReceiverList_callbackList[];
+extern char igMessageReceiverList_className[];
+extern char g_igMessageReceiverList_metaObject[];
 int GpFlag_SetOnce_00230f50();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igMessageReceiverList_Register(void) {
     GpFlag_SetOnce_00230f50();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMessageReceiverList_metaObject_0056dae0, /* published MetaObject slot */
+        g_igMessageReceiverList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                       /* base class registrar */
         igObjectList_GetPublishedMetaObject,         /* base class MetaObject accessor */
         thunk_igMessageReceiverList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igMessageReceiverList_className_004e8440,  /* class name */
+        igMessageReceiverList_className,  /* class name */
         0x14,                                        /* instance size */
         igMessageReceiverList_GetVTable,             /* vtable getter */
         0,                                           /* field adder */
         0,                                           /* extra callback item */
-        g_igMessageReceiverList_callbackList_00497fd8  /* callback list */
+        g_igMessageReceiverList_callbackList  /* callback list */
     );
 }

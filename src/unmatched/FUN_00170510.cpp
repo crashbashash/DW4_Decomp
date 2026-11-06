@@ -2,7 +2,7 @@
 extern "C" {
 int FUN_002eb010(int);
 void Memory_FreeBuffer(void *);
-void Memory_FreeBufferAlias_002ed5c0(void *);
+void Memory_FreeBufferAliasB(void *);
 void StringChunk_ReleaseHeader(void *, int);
 int StringPool_Construct(int);
 char *StringPool_Intern(int, char *);
@@ -130,12 +130,12 @@ extern "C" void FUN_00170510(Obj *o, int arg1) {
             if (&t->str != 0) {
                 STR_RELEASE(t->str);
             }
-            Memory_FreeBufferAlias_002ed5c0(t);
+            Memory_FreeBufferAliasB(t);
         }
         o->t = 0;
         Memory_FreeBuffer(DAT_00560858[0]);
         if (o->f1344 != 0) {
-            Memory_FreeBufferAlias_002ed5c0(o->f1344);
+            Memory_FreeBufferAliasB(o->f1344);
         }
     }
 }

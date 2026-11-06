@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beDemoManager_metaObject_00589790[];
+extern igMetaObject *g_beDemoManager_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beDemoManager_GetMetaObject(void);
-extern const char s_beDemoManager_className_005053d8[];
+extern const char beDemoManager_className[];
 int beDemoManager_GetVTable(void);
 void beDemoManager_InitFields(void);
-extern char g_beDemoManager_callbackList_004c6fa0[];
+extern char g_beDemoManager_callbackList[];
 void *beDemoManager_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beDemoManager_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beDemoManager_metaObject_00589790,            /* published MetaObject slot */
+        g_beDemoManager_metaObject,            /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beDemoManager_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        s_beDemoManager_className_005053d8,             /* class name */
+        beDemoManager_className,             /* class name */
         0x24,                                           /* instance size */
         beDemoManager_GetVTable,                        /* vtable getter */
         beDemoManager_InitFields,                       /* field adder */
         0,                                              /* extra callback item */
-        g_beDemoManager_callbackList_004c6fa0          /* callback list */
+        g_beDemoManager_callbackList          /* callback list */
     );
 }

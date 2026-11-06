@@ -5,17 +5,17 @@ typedef struct Handle_27b5f8 {
     int value;  /* 0x08 */
 } Handle_27b5f8;
 
-extern char s_E2004090233_NULL_pointer_is_specified_004f1ad8[]; /* 'E2004090233 : NULL pointer is specified.' */
-extern char s_E2004090234_Specified_handle_is_invalid_004f1b08[]; /* 'E2004090234 : Specified handle is invalid.' */
+extern char E2004090233_NULL_pointer_is_specified[]; /* 'E2004090233 : NULL pointer is specified.' */
+extern char E2004090234_Specified_handle_is_invalid[]; /* 'E2004090234 : Specified handle is invalid.' */
 int FUN_0027b2e0(const char *message);
 
 int FUN_0027b5f8(Handle_27b5f8 *handle) {
     if (handle == 0) {
-        FUN_0027b2e0(s_E2004090233_NULL_pointer_is_specified_004f1ad8);
+        FUN_0027b2e0(E2004090233_NULL_pointer_is_specified);
         return 0;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(s_E2004090234_Specified_handle_is_invalid_004f1b08);
+        FUN_0027b2e0(E2004090234_Specified_handle_is_invalid);
         return 0;
     }
     return handle->value;

@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadIntf2MesWin_metaObject_0058bd98[];
+extern igMetaObject *g_beNDMWLoadIntf2MesWin_metaObject[];
 void *beBaseInfoData_Register(void);
-igMetaObject *beBaseInfoData_GetPublishedMetaObject_00343c80(void);
+igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
 igMetaObject *beNDMWLoadIntf2MesWin_GetMetaObject(void);
-extern const char s_beNDMWLoadIntf2MesWin_className_00512ff0[];
+extern const char beNDMWLoadIntf2MesWin_className[];
 int beNDMWLoadIntf2MesWin_GetVTable(void);
 void beNDMWLoadIntf2MesWin_InitFields(void);
-extern char g_beNDMWLoadIntf2MesWin_callbackList_004cbd80[];
+extern char g_beNDMWLoadIntf2MesWin_callbackList[];
 void *beNDMWLoadIntf2MesWin_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWLoadIntf2MesWin_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadIntf2MesWin_metaObject_0058bd98,     /* published MetaObject slot */
+        g_beNDMWLoadIntf2MesWin_metaObject,     /* published MetaObject slot */
         beBaseInfoData_Register,                         /* base class registrar */
-        beBaseInfoData_GetPublishedMetaObject_00343c80,  /* base class MetaObject accessor */
+        beBaseInfoData_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWLoadIntf2MesWin_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadIntf2MesWin_className_00512ff0,      /* class name */
+        beNDMWLoadIntf2MesWin_className,      /* class name */
         0x40,                                            /* instance size */
         beNDMWLoadIntf2MesWin_GetVTable,                 /* vtable getter */
         beNDMWLoadIntf2MesWin_InitFields,                /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWLoadIntf2MesWin_callbackList_004cbd80   /* callback list */
+        g_beNDMWLoadIntf2MesWin_callbackList   /* callback list */
     );
 }

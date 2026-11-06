@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_003c41e0(void);
-extern igMetaObject *g_beNDMWLoadIntf2MakeChr_metaObject_0058ba00[4];
+extern igMetaObject *g_beNDMWLoadIntf2MakeChr_metaObject[4];
 igMetaObject *beNDMWLoadIntf2MakeChr_ResolveMetaObject(void);
 }
 
 igMetaObject *beNDMWLoadIntf2MakeChr_ResolveMetaObject(void)
 {
     unsigned char ready;
-    if (g_beNDMWLoadIntf2MakeChr_metaObject_0058ba00[0] != 0) {
-        ready = (g_beNDMWLoadIntf2MakeChr_metaObject_0058ba00[0]->_validity & 4) != 0;
+    if (g_beNDMWLoadIntf2MakeChr_metaObject[0] != 0) {
+        ready = (g_beNDMWLoadIntf2MakeChr_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_003c41e0();
 done:
-    return g_beNDMWLoadIntf2MakeChr_metaObject_0058ba00[0];
+    return g_beNDMWLoadIntf2MakeChr_metaObject[0];
 }

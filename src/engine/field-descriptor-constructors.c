@@ -19,16 +19,16 @@ void *igObjectRefMetaField_Init(igObjectRefMetaField *);
 void *igStringMetaField_Init(igStringMetaField *);
 void *igUnsignedIntMetaField_Init(igMetaField *self);
 /* class vtables, named after the <Class>_Init that stamps each one */
-extern int g_igMetaField_vtable_0052f230[4];
-extern int g_igRefMetaField_vtable_0052ec50[4];
-extern int g_igIntMetaField_vtable_00532670[4];
-extern int g_igObjectRefMetaField_vtable_00532c80[4];
-extern int g_igStringMetaField_vtable_00533180[4];
-extern int g_igUnsignedIntMetaField_vtable_00533430[4];
+extern int g_igMetaField_vtable[4];
+extern int g_igRefMetaField_vtable[4];
+extern int g_igIntMetaField_vtable[4];
+extern int g_igObjectRefMetaField_vtable[4];
+extern int g_igStringMetaField_vtable[4];
+extern int g_igUnsignedIntMetaField_vtable[4];
 
 void *igIntMetaField_Construct(igMetaField *self) {
     igMetaField_Construct(self);
-    self->_vtable = (int)g_igIntMetaField_vtable_00532670;
+    self->_vtable = (int)g_igIntMetaField_vtable;
     if (self) {
         igIntMetaField_Init(self);
     }
@@ -37,13 +37,13 @@ void *igIntMetaField_Construct(igMetaField *self) {
 
 void *igIntMetaField_Init(igMetaField *self) {
     igMetaField_Init(self);
-    self->_vtable = (int)g_igIntMetaField_vtable_00532670;
+    self->_vtable = (int)g_igIntMetaField_vtable;
     return self;
 }
 
 void *igMetaField_Construct(igMetaField *self) {
     igObject_ConstructHeader(self);
-    self->_vtable = (int)g_igMetaField_vtable_0052f230;
+    self->_vtable = (int)g_igMetaField_vtable;
     self->_fieldName = 0;
     if (self) {
         igMetaField_Init(self);
@@ -53,7 +53,7 @@ void *igMetaField_Construct(igMetaField *self) {
 
 void *igObjectRefMetaField_Construct(igObjectRefMetaField *self) {
     igRefMetaField_Construct((igRefMetaField *)self);
-    self->_vtable = (int)g_igObjectRefMetaField_vtable_00532c80;
+    self->_vtable = (int)g_igObjectRefMetaField_vtable;
     self->_poolName = 0;
     if (self) {
         igObjectRefMetaField_Init(self);
@@ -63,7 +63,7 @@ void *igObjectRefMetaField_Construct(igObjectRefMetaField *self) {
 
 void *igObjectRefMetaField_Init(igObjectRefMetaField *self) {
     igRefMetaField_Init((igRefMetaField *)self);
-    self->_vtable = (int)g_igObjectRefMetaField_vtable_00532c80;
+    self->_vtable = (int)g_igObjectRefMetaField_vtable;
     self->_poolName = 0;
     self->_refCounted = 1;
     self->_metaObject = 0;
@@ -72,7 +72,7 @@ void *igObjectRefMetaField_Init(igObjectRefMetaField *self) {
 
 void *igRefMetaField_Construct(igRefMetaField *self) {
     igMetaField_Construct((igMetaField *)self);
-    self->_vtable = (int)g_igRefMetaField_vtable_0052ec50;
+    self->_vtable = (int)g_igRefMetaField_vtable;
     if (self) {
         igRefMetaField_Init(self);
     }
@@ -81,7 +81,7 @@ void *igRefMetaField_Construct(igRefMetaField *self) {
 
 void *igRefMetaField_Init(igRefMetaField *self) {
     igMetaField_Init((igMetaField *)self);
-    self->_vtable = (int)g_igRefMetaField_vtable_0052ec50;
+    self->_vtable = (int)g_igRefMetaField_vtable;
     self->_construct = 0;
     self->_destruct = 0;
     return self;
@@ -89,7 +89,7 @@ void *igRefMetaField_Init(igRefMetaField *self) {
 
 void *igStringMetaField_Construct(igStringMetaField *self) {
     igRefMetaField_Construct((igRefMetaField *)self);
-    self->_vtable = (int)g_igStringMetaField_vtable_00533180;
+    self->_vtable = (int)g_igStringMetaField_vtable;
     if (self) {
         igStringMetaField_Init(self);
     }
@@ -98,7 +98,7 @@ void *igStringMetaField_Construct(igStringMetaField *self) {
 
 void *igStringMetaField_Init(igStringMetaField *self) {
     igRefMetaField_Init((igRefMetaField *)self);
-    self->_vtable = (int)g_igStringMetaField_vtable_00533180;
+    self->_vtable = (int)g_igStringMetaField_vtable;
     self->_refCounted = 1;
     self->_shallowCopyMethod = 2;
     self->_destruct = 1;
@@ -107,7 +107,7 @@ void *igStringMetaField_Init(igStringMetaField *self) {
 
 void *igUnsignedIntMetaField_Construct(igMetaField *self) {
     igMetaField_Construct(self);
-    self->_vtable = (int)g_igUnsignedIntMetaField_vtable_00533430;
+    self->_vtable = (int)g_igUnsignedIntMetaField_vtable;
     if (self) {
         igUnsignedIntMetaField_Init(self);
     }
@@ -116,6 +116,6 @@ void *igUnsignedIntMetaField_Construct(igMetaField *self) {
 
 void *igUnsignedIntMetaField_Init(igMetaField *self) {
     igMetaField_Init(self);
-    self->_vtable = (int)g_igUnsignedIntMetaField_vtable_00533430;
+    self->_vtable = (int)g_igUnsignedIntMetaField_vtable;
     return self;
 }

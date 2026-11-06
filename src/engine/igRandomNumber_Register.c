@@ -4,8 +4,8 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igRandomNumber_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igRandomNumber_className_004e48d0[];
-extern char g_igRandomNumber_metaObject_00562b70[];
+extern char igRandomNumber_className[];
+extern char g_igRandomNumber_metaObject[];
 /* Run-once guard shared by the registrars: sets a gp-relative flag byte (asm/GpFlag_SetOnce_001e3ff0.s). */
 int GpFlag_SetOnce_001e3ff0();
 int igMetaObject_RegisterClass();
@@ -15,11 +15,11 @@ void igRandomNumber_Register(void) {
     GpFlag_SetOnce_001e3ff0();
     igMetaObject_RegisterClass(
         1,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igRandomNumber_metaObject_00562b70,   /* published MetaObject slot */
+        g_igRandomNumber_metaObject,   /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         thunk_igRandomNumber_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igRandomNumber_className_004e48d0,    /* class name */
+        igRandomNumber_className,    /* class name */
         8,                                      /* instance size */
         0,                                      /* vtable getter */
         &igRandomNumber_InitFields_001e4370[0], /* field adder */

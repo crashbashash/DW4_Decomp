@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_be_metaObject_0058a030[];
+extern igMetaObject *g_be_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *be_GetMetaObject(void);
-extern const char s_be_className_00506358[];
+extern const char be_className[];
 int be_GetVTable(void);
 void be_InitFields(void);
-extern char g_be_callbackList_004c8230[];
+extern char g_be_callbackList[];
 void *be_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *be_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_be_metaObject_0058a030,                       /* published MetaObject slot */
+        g_be_metaObject,                       /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         be_GetMetaObject,                               /* own MetaObject accessor (stored at +0x54) */
-        s_be_className_00506358,                        /* class name */
+        be_className,                        /* class name */
         0x14,                                           /* instance size */
         be_GetVTable,                                   /* vtable getter */
         be_InitFields,                                  /* field adder */
         0,                                              /* extra callback item */
-        g_be_callbackList_004c8230                     /* callback list */
+        g_be_callbackList                     /* callback list */
     );
 }

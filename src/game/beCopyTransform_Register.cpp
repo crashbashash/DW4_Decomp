@@ -18,15 +18,15 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCopyTransform_metaObject_00589b48[];
+extern igMetaObject *g_beCopyTransform_metaObject[];
 void *igTransform_Register(void);
-igMetaObject *igTransform_GetPublishedMetaObject_0019de30(void);
+igMetaObject *igTransform_GetPublishedMetaObject(void);
 igMetaObject *beCopyTransform_GetMetaObject(void);
-extern const char s_beCopyTransform_className_00505a10[];
+extern const char beCopyTransform_className[];
 int beCopyTransform_GetVTable(void);
 void beCopyTransform_InitFields(void);
 void FUN_00368090(void);
-extern char g_beCopyTransform_callbackList_004c7720[];
+extern char g_beCopyTransform_callbackList[];
 void *beCopyTransform_Register(void);
 }
 
@@ -34,15 +34,15 @@ void *beCopyTransform_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCopyTransform_metaObject_00589b48,        /* published MetaObject slot */
+        g_beCopyTransform_metaObject,        /* published MetaObject slot */
         igTransform_Register,                         /* base class registrar */
-        igTransform_GetPublishedMetaObject_0019de30,  /* base class MetaObject accessor */
+        igTransform_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beCopyTransform_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beCopyTransform_className_00505a10,         /* class name */
+        beCopyTransform_className,         /* class name */
         0x70,                                         /* instance size */
         beCopyTransform_GetVTable,                    /* vtable getter */
         beCopyTransform_InitFields,                   /* field adder */
         FUN_00368090,                                 /* extra callback item */
-        g_beCopyTransform_callbackList_004c7720      /* callback list */
+        g_beCopyTransform_callbackList      /* callback list */
     );
 }

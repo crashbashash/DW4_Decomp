@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCountry_metaObject_00589b40[];
+extern igMetaObject *g_beCountry_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beCountry_GetMetaObject(void);
-extern const char s_beCountry_className_005059f8[];
+extern const char beCountry_className[];
 int beCountry_GetVTable(void);
 void *beCountry_Register(void);
 }
@@ -31,11 +31,11 @@ void *beCountry_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCountry_metaObject_00589b40,        /* published MetaObject slot */
+        g_beCountry_metaObject,        /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beCountry_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beCountry_className_005059f8,         /* class name */
+        beCountry_className,         /* class name */
         8,                                      /* instance size */
         beCountry_GetVTable,                    /* vtable getter */
         0,                                      /* field adder */

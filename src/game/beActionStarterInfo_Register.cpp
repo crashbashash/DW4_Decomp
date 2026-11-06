@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beActionStarterInfo_metaObject_00589e20[];
+extern igMetaObject *g_beActionStarterInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beActionStarterInfo_GetMetaObject(void);
-extern const char s_beActionStarterInfo_className_00505f30[];
+extern const char beActionStarterInfo_className[];
 int beActionStarterInfo_GetVTable(void);
 void beActionStarterInfo_InitFields(void);
-extern char g_beActionStarterInfo_callbackList_004c7da0[];
+extern char g_beActionStarterInfo_callbackList[];
 void *beActionStarterInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beActionStarterInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beActionStarterInfo_metaObject_00589e20,    /* published MetaObject slot */
+        g_beActionStarterInfo_metaObject,    /* published MetaObject slot */
         beBaseInfo_Register,                          /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,   /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,   /* base class MetaObject accessor */
         beActionStarterInfo_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beActionStarterInfo_className_00505f30,     /* class name */
+        beActionStarterInfo_className,     /* class name */
         0x20,                                         /* instance size */
         beActionStarterInfo_GetVTable,                /* vtable getter */
         beActionStarterInfo_InitFields,               /* field adder */
         0,                                            /* extra callback item */
-        g_beActionStarterInfo_callbackList_004c7da0  /* callback list */
+        g_beActionStarterInfo_callbackList  /* callback list */
     );
 }

@@ -4,7 +4,7 @@
  * src/engine/igUnsignedIntArrayMetaField_Register.c; the same shape as igObjectList_GetPublishedMetaObject
  * (rule `published-accessor`, docs/engine/naming.md). The slot is read through the
  * array extern so the load stays absolute. */
-extern int g_igUnsignedIntArrayMetaField_metaObject_00585748[4];
+extern int g_igUnsignedIntArrayMetaField_metaObject[4];
 int Gap__Core__igUnsignedIntArrayMetaField__vfunc_22(void) {
-    return g_igUnsignedIntArrayMetaField_metaObject_00585748[0];
+    return g_igUnsignedIntArrayMetaField_metaObject[0];
 }

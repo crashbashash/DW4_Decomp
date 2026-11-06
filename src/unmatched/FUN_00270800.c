@@ -4,9 +4,9 @@ typedef struct CvFsDevice_270800 {
     int (*is_exist_file)(const char *name);  /* 0x40 */
 } CvFsDevice_270800;
 
-extern char s_cvFsIsExistFile_1_illegal_file_name_004ef558[]; /* 'cvFsIsExistFile #1:illegal file name' */
-extern char s_cvFsIsExistFile_3_device_not_found_004ef5a8[]; /* 'cvFsIsExistFile #3:device not found' */
-extern char s_cvFsIsExistFile_4_vtbl_error_004ef5d0[]; /* 'cvFsIsExistFile #4:vtbl error' */
+extern char cvFsIsExistFile_1_illegal_file_name[]; /* 'cvFsIsExistFile #1:illegal file name' */
+extern char cvFsIsExistFile_3_device_not_found[]; /* 'cvFsIsExistFile #3:device not found' */
+extern char cvFsIsExistFile_4_vtbl_error[]; /* 'cvFsIsExistFile #4:vtbl error' */
 void FUN_0026f530(const char *message);
 void FUN_0026fe00(char *device_name, char *file_name, const char *path);
 CvFsDevice_270800 *FUN_0026fbb8(const char *device_name, const char *file_name, const char *path);
@@ -18,17 +18,17 @@ int FUN_00270800(const char *path) {
 
     FUN_0026fe00(device_name, file_name, path);
     if (file_name[0] == 0) {
-        FUN_0026f530(s_cvFsIsExistFile_1_illegal_file_name_004ef558);
+        FUN_0026f530(cvFsIsExistFile_1_illegal_file_name);
         return 0;
     }
     device = FUN_0026fbb8(device_name, file_name, path);
     if (device == 0) {
         /* Retail reports the miss and still reads the interface entry. */
-        FUN_0026f530(s_cvFsIsExistFile_3_device_not_found_004ef5a8);
+        FUN_0026f530(cvFsIsExistFile_3_device_not_found);
     }
     if (device->is_exist_file != 0) {
         return device->is_exist_file(file_name);
     }
-    FUN_0026f530(s_cvFsIsExistFile_4_vtbl_error_004ef5d0);
+    FUN_0026f530(cvFsIsExistFile_4_vtbl_error);
     return 0;
 }

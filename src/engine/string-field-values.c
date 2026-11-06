@@ -18,7 +18,7 @@ int StringPool_Construct();
 void *StringPool_Intern();
 int FUN_002eb010();
 int StringChunk_ReleaseHeader();
-extern int g_stringPool_00586f20[4];
+extern int g_stringPool[4];
 int igStrCmp(int, int);
 #include "dw4/reflected.h"
 
@@ -45,14 +45,14 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
     if (text == 0) {
         interned = 0;
     } else {
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = FUN_002eb010(0x10); /* allocate the 16-byte StringPool object */
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
-            g_stringPool_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        interned = StringPool_Intern(g_stringPool_00586f20[0], text);
+        interned = StringPool_Intern(g_stringPool[0], text);
     }
     token = interned;
     igStringMetaField_AssignRetainedToken(self, object, &token);

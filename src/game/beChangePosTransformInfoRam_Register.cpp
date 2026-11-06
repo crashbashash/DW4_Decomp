@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beChangePosTransformInfoRam_metaObject_00589b68[];
+extern igMetaObject *g_beChangePosTransformInfoRam_metaObject[];
 void *beBaseInfoRam_Register(void);
-igMetaObject *beBaseInfoRam_GetPublishedMetaObject_0033eaf0(void);
+igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 igMetaObject *beChangePosTransformInfoRam_GetMetaObject(void);
-extern const char s_beChangePosTransformInfoRam_className_00505a60[];
+extern const char beChangePosTransformInfoRam_className[];
 int beChangePosTransformInfoRam_GetVTable(void);
 void beChangePosTransformInfoRam_InitFields(void);
-extern char g_beChangePosTransformInfoRam_callbackList_004c7770[];
+extern char g_beChangePosTransformInfoRam_callbackList[];
 void *beChangePosTransformInfoRam_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beChangePosTransformInfoRam_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                    /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beChangePosTransformInfoRam_metaObject_00589b68,    /* published MetaObject slot */
+        g_beChangePosTransformInfoRam_metaObject,    /* published MetaObject slot */
         beBaseInfoRam_Register,                               /* base class registrar */
-        beBaseInfoRam_GetPublishedMetaObject_0033eaf0,        /* base class MetaObject accessor */
+        beBaseInfoRam_GetPublishedMetaObject,        /* base class MetaObject accessor */
         beChangePosTransformInfoRam_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beChangePosTransformInfoRam_className_00505a60,     /* class name */
+        beChangePosTransformInfoRam_className,     /* class name */
         0x30,                                                 /* instance size */
         beChangePosTransformInfoRam_GetVTable,                /* vtable getter */
         beChangePosTransformInfoRam_InitFields,               /* field adder */
         0,                                                    /* extra callback item */
-        g_beChangePosTransformInfoRam_callbackList_004c7770  /* callback list */
+        g_beChangePosTransformInfoRam_callbackList  /* callback list */
     );
 }

@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beActionStarterData_metaObject_00589e60[];
+extern igMetaObject *g_beActionStarterData_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beActionStarterData_GetMetaObject(void);
-extern const char s_beActionStarterData_className_00505fe0[];
+extern const char beActionStarterData_className[];
 int beActionStarterData_GetVTable(void);
 void beActionStarterData_InitFields(void);
 void *beActionStarterData_Register(void);
@@ -32,11 +32,11 @@ void *beActionStarterData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beActionStarterData_metaObject_00589e60,      /* published MetaObject slot */
+        g_beActionStarterData_metaObject,      /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beActionStarterData_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beActionStarterData_className_00505fe0,       /* class name */
+        beActionStarterData_className,       /* class name */
         0x24,                                           /* instance size */
         beActionStarterData_GetVTable,                  /* vtable getter */
         beActionStarterData_InitFields,                 /* field adder */

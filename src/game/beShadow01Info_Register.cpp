@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beShadow01Info_metaObject_00587ef0[];
+extern igMetaObject *g_beShadow01Info_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beShadow01Info_GetMetaObject(void);
-extern const char s_beShadow01Info_className_00502128[];
+extern const char beShadow01Info_className[];
 int beShadow01Info_GetVTable(void);
 void beShadow01Info_InitFields(void);
-extern char g_beShadow01Info_callbackList_004c39f0[];
+extern char g_beShadow01Info_callbackList[];
 void *beShadow01Info_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beShadow01Info_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beShadow01Info_metaObject_00587ef0,        /* published MetaObject slot */
+        g_beShadow01Info_metaObject,        /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beShadow01Info_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beShadow01Info_className_00502128,         /* class name */
+        beShadow01Info_className,         /* class name */
         0x28,                                        /* instance size */
         beShadow01Info_GetVTable,                    /* vtable getter */
         beShadow01Info_InitFields,                   /* field adder */
         0,                                           /* extra callback item */
-        g_beShadow01Info_callbackList_004c39f0      /* callback list */
+        g_beShadow01Info_callbackList      /* callback list */
     );
 }

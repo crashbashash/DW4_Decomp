@@ -118,11 +118,11 @@ is the one resolver that checks it; `tools/linkgen.py` resolves its
 `PROVIDE` lines through the same function, not through a regex of its own.
 
 * A **defined** symbol whose address-bearing name points outside the object's
-  own bodies fails: `object defines g_objectSystem_00586dc8, which names retail
+  own bodies fails: `object defines g_objectSystem, which names retail
   address 0x586dc8 outside the function`. Such a candidate smuggles the datum
   (counterexample 2); references to it still relocate to the real address.
 * `FUN_`/`thunk_` names resolve only to a recorded function start.
-* Data names (`D_`, `DAT_`, `g_`, `s_`, `GPR_`, `PTR_`, `UNK_`, `FLOAT_`,
+* Data names (`D_`, `DAT_`, `g_`, `GPR_`, `PTR_`, `UNK_`, `FLOAT_`,
   `DOUBLE_`, `BYTE_`, `WORD_`, `DWORD_`, `QWORD_`, `data_`, `str_`) resolve only
   to an address that is not inside any function's code extent.
 * Any other name resolves to a function start or to data, never to an address
@@ -185,9 +185,9 @@ with a `!! debt:` prefix.
   `igObjectSystem_FindMetaByName` at 0x2d3070) still matches. The relocation
   resolves because 0x2d3070 is a recorded function start, and the retail
   bytes are the same `j 0x2d3070` either way; bytes cannot tell what the
-  caller called it. Readability review has to catch it: a source that calls a
-  mapped function by a made-up address name instead of its map name is wrong
-  even when it matches.
+  caller called it. The readability test catches it: a name holding an address fails
+  `carries_address` in `tools/progress.py`, so such a source matches but is not
+  readable.
 * **A wrong data base compensated by an index** (counterexample 3,
   `g_notTheObjectSystem_00586dc4[1]` for the datum at 0x586dc8) also still
   matches: the compiler folds the +4 into the relocation addend and the bytes

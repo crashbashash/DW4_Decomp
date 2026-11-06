@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWPanelWazaInfoRam_metaObject_0058b1f0[];
+extern igMetaObject *g_beNDMWPanelWazaInfoRam_metaObject[];
 void *beBaseInfoRam_Register(void);
-igMetaObject *beBaseInfoRam_GetPublishedMetaObject_0033eaf0(void);
+igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 igMetaObject *beNDMWPanelWazaInfoRam_GetMetaObject(void);
-extern const char s_beNDMWPanelWazaInfoRam_className_00511dc0[];
+extern const char beNDMWPanelWazaInfoRam_className[];
 int beNDMWPanelWazaInfoRam_GetVTable(void);
 void beNDMWPanelWazaInfoRam_InitFields(void);
-extern char g_beNDMWPanelWazaInfoRam_callbackList_004ca458[];
+extern char g_beNDMWPanelWazaInfoRam_callbackList[];
 void *beNDMWPanelWazaInfoRam_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWPanelWazaInfoRam_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWPanelWazaInfoRam_metaObject_0058b1f0,    /* published MetaObject slot */
+        g_beNDMWPanelWazaInfoRam_metaObject,    /* published MetaObject slot */
         beBaseInfoRam_Register,                          /* base class registrar */
-        beBaseInfoRam_GetPublishedMetaObject_0033eaf0,   /* base class MetaObject accessor */
+        beBaseInfoRam_GetPublishedMetaObject,   /* base class MetaObject accessor */
         beNDMWPanelWazaInfoRam_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWPanelWazaInfoRam_className_00511dc0,     /* class name */
+        beNDMWPanelWazaInfoRam_className,     /* class name */
         0x30,                                            /* instance size */
         beNDMWPanelWazaInfoRam_GetVTable,                /* vtable getter */
         beNDMWPanelWazaInfoRam_InitFields,               /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWPanelWazaInfoRam_callbackList_004ca458  /* callback list */
+        g_beNDMWPanelWazaInfoRam_callbackList  /* callback list */
     );
 }

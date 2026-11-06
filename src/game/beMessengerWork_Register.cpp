@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMessengerWork_metaObject_00588f88[];
+extern igMetaObject *g_beMessengerWork_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beMessengerWork_GetMetaObject(void);
-extern const char s_beMessengerWork_className_005043d0[];
+extern const char beMessengerWork_className[];
 int beMessengerWork_GetVTable(void);
 void beMessengerWork_InitFields(void);
-extern char g_beMessengerWork_callbackList_004c5cc8[];
+extern char g_beMessengerWork_callbackList[];
 void *beMessengerWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beMessengerWork_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMessengerWork_metaObject_00588f88,    /* published MetaObject slot */
+        g_beMessengerWork_metaObject,    /* published MetaObject slot */
         igObject_Register,                        /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,    /* base class MetaObject accessor */
         beMessengerWork_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beMessengerWork_className_005043d0,     /* class name */
+        beMessengerWork_className,     /* class name */
         0x20,                                     /* instance size */
         beMessengerWork_GetVTable,                /* vtable getter */
         beMessengerWork_InitFields,               /* field adder */
         0,                                        /* extra callback item */
-        g_beMessengerWork_callbackList_004c5cc8  /* callback list */
+        g_beMessengerWork_callbackList  /* callback list */
     );
 }

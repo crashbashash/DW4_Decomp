@@ -22,15 +22,15 @@ typedef struct PropertyIntArray {
 } PropertyIntArray;
 PropertyRecord *igProperty_GetRecord(int, const char *);
 PropertyIntArray *FUN_003a9250(int, const char *);
-extern const char s_DIGIMONNO_00518848[]; /* DIGIMONNO */
-extern const char s_LEVEL_00518858[]; /* LEVEL */
-extern const char s_SKILL_00518860[]; /* SKILL */
-extern const char s_UPCNT_00518868[]; /* UPCNT */
-extern const char s_EXP_00518880[]; /* EXP */
-extern const char s_BASE_LEVEL_00518b30[]; /* BASE_LEVEL */
-extern const char s_BASE_EXP_00518b40[]; /* BASE_EXP */
-extern const char s_BASE_SKILL_00518b50[]; /* BASE_SKILL */
-extern const char s_BASE_UPCNT_00518b60[]; /* BASE_UPCNT */
+extern const char DIGIMONNO_2[]; /* DIGIMONNO */
+extern const char LEVEL_2[]; /* LEVEL */
+extern const char SKILL[]; /* SKILL */
+extern const char UPCNT[]; /* UPCNT */
+extern const char EXP[]; /* EXP */
+extern const char BASE_LEVEL[]; /* BASE_LEVEL */
+extern const char BASE_EXP[]; /* BASE_EXP */
+extern const char BASE_SKILL[]; /* BASE_SKILL */
+extern const char BASE_UPCNT[]; /* BASE_UPCNT */
 
 void FUN_003f8760(beNDMWGameRam *self, int player_index)
 {
@@ -50,27 +50,27 @@ void FUN_003f8760(beNDMWGameRam *self, int player_index)
 
     player_list = (igIntList *)self->_playerDataListList;
     player = ((int *)player_list->_data)[player_index];
-    species = igProperty_GetRecord(player, s_DIGIMONNO_00518848)->value;
-    value = igProperty_GetRecord(player, s_LEVEL_00518858)->value;
-    level_list = FUN_003a9250(player, s_BASE_LEVEL_00518b30)->list;
+    species = igProperty_GetRecord(player, DIGIMONNO_2)->value;
+    value = igProperty_GetRecord(player, LEVEL_2)->value;
+    level_list = FUN_003a9250(player, BASE_LEVEL)->list;
     if (level_list->_count != 0 && species >= 0 && species < level_list->_count)
         ((int *)level_list->_data)[species] = value;
-    value = igProperty_GetRecord(player, s_EXP_00518880)->value;
-    exp_list = FUN_003a9250(player, s_BASE_EXP_00518b40)->list;
+    value = igProperty_GetRecord(player, EXP)->value;
+    exp_list = FUN_003a9250(player, BASE_EXP)->list;
     if (exp_list->_count != 0 && species >= 0 && species < exp_list->_count)
         ((int *)exp_list->_data)[species] = value;
     skill_base = species * 9;
     for (skill_index = 0; skill_index < 9; ++skill_index) {
-        skill = ((int *)FUN_003a9250(player, s_SKILL_00518860)->list->_data)[skill_index];
-        base_array = FUN_003a9250(player, s_BASE_SKILL_00518b50);
+        skill = ((int *)FUN_003a9250(player, SKILL)->list->_data)[skill_index];
+        base_array = FUN_003a9250(player, BASE_SKILL);
         if (base_array->list->_count != 0 && skill_base + skill_index >= 0 &&
             skill_base + skill_index < base_array->list->_count)
             ((int *)base_array->list->_data)[skill_base + skill_index] = skill;
     }
     upcnt_base = species * 11;
     for (upcnt_index = 0; upcnt_index < 11; ++upcnt_index) {
-        upcnt = ((int *)FUN_003a9250(player, s_UPCNT_00518868)->list->_data)[upcnt_index];
-        base_array = FUN_003a9250(player, s_BASE_UPCNT_00518b60);
+        upcnt = ((int *)FUN_003a9250(player, UPCNT)->list->_data)[upcnt_index];
+        base_array = FUN_003a9250(player, BASE_UPCNT);
         if (base_array->list->_count != 0 && upcnt_base + upcnt_index >= 0 &&
             upcnt_base + upcnt_index < base_array->list->_count)
             ((int *)base_array->list->_data)[upcnt_base + upcnt_index] = upcnt;

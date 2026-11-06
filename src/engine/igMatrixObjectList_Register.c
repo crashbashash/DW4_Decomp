@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igMatrixObjectList_GetVTable[];
 extern char thunk_igMatrixObjectList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igMatrixObjectList_callbackList_0048db18[];
-extern char s_igMatrixObjectList_className_004e4960[];
-extern char g_igMatrixObjectList_metaObject_00562bb8[];
+extern char g_igMatrixObjectList_callbackList[];
+extern char igMatrixObjectList_className[];
+extern char g_igMatrixObjectList_metaObject[];
 int GpFlag_SetOnce_001e3ff0();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igMatrixObjectList_Register(void) {
     GpFlag_SetOnce_001e3ff0();
     igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMatrixObjectList_metaObject_00562bb8, /* published MetaObject slot */
+        g_igMatrixObjectList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                    /* base class registrar */
         igObjectList_GetPublishedMetaObject,      /* base class MetaObject accessor */
         thunk_igMatrixObjectList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igMatrixObjectList_className_004e4960,  /* class name */
+        igMatrixObjectList_className,  /* class name */
         0x14,                                     /* instance size */
         igMatrixObjectList_GetVTable,             /* vtable getter */
         0,                                        /* field adder */
         0,                                        /* extra callback item */
-        g_igMatrixObjectList_callbackList_0048db18  /* callback list */
+        g_igMatrixObjectList_callbackList  /* callback list */
     );
 }

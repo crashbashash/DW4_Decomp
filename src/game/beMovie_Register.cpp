@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMovie_metaObject_00588788[];
+extern igMetaObject *g_beMovie_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beMovie_GetMetaObject(void);
-extern const char s_beMovie_className_005032a0[];
+extern const char beMovie_className[];
 int beMovie_GetVTable(void);
 void beMovie_InitFields(void);
-extern char g_beMovie_callbackList_004c4b90[];
+extern char g_beMovie_callbackList[];
 void *beMovie_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beMovie_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMovie_metaObject_00588788,                      /* published MetaObject slot */
+        g_beMovie_metaObject,                      /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beMovie_GetMetaObject,                              /* own MetaObject accessor (stored at +0x54) */
-        s_beMovie_className_005032a0,                       /* class name */
+        beMovie_className,                       /* class name */
         0x28,                                               /* instance size */
         beMovie_GetVTable,                                  /* vtable getter */
         beMovie_InitFields,                                 /* field adder */
         0,                                                  /* extra callback item */
-        g_beMovie_callbackList_004c4b90                    /* callback list */
+        g_beMovie_callbackList                    /* callback list */
     );
 }

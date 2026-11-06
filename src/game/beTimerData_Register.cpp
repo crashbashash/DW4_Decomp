@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beTimerData_metaObject_00587c50[];
+extern igMetaObject *g_beTimerData_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beTimerData_GetMetaObject(void);
-extern const char s_beTimerData_className_00501ad0[];
+extern const char beTimerData_className[];
 int beTimerData_GetVTable(void);
 void beTimerData_InitFields(void);
 void *beTimerData_Register(void);
@@ -32,11 +32,11 @@ void *beTimerData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beTimerData_metaObject_00587c50,      /* published MetaObject slot */
+        g_beTimerData_metaObject,      /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beTimerData_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beTimerData_className_00501ad0,       /* class name */
+        beTimerData_className,       /* class name */
         0x20,                                   /* instance size */
         beTimerData_GetVTable,                  /* vtable getter */
         beTimerData_InitFields,                 /* field adder */

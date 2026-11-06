@@ -13,12 +13,12 @@ void **igObjectRefMetaField_Construct(...);
 void **igIntMetaField_Construct(...);
 void **igMetaObject_CreateInstance(...);
 void Gap__Core__igObject__vfunc_09(void *);
-extern int g_igStringMetaField_metaObject_00585908[4];
-extern int g_igObjectRefMetaField_metaObject_00585b20[4];
-extern int g_igIntMetaField_metaObject_005860f8[4];
+extern int g_igStringMetaField_metaObject[4];
+extern int g_igObjectRefMetaField_metaObject[4];
+extern int g_igIntMetaField_metaObject[4];
 /* Pointer to the object-system state; its first byte is nonzero once the
  * reflection system is live (docs/engine/field-factories.md, "Factory modes"). */
-extern unsigned char * g_objectSystemState_00586dc8[4];
+extern unsigned char * g_objectSystem[4];
 void **igStringMetaField_Create(int allocator);
 void **igObjectRefMetaField_Create(int allocator);
 void **igIntMetaField_Create(int allocator);
@@ -42,9 +42,9 @@ class igObjectSlot33 { public: virtual void d0(); virtual void d1(); virtual voi
 void **igStringMetaField_Create(int allocator) {
     void **field;
 
-    if (*g_objectSystemState_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         igStringMetaField_EnsureRegistered();
-        field = igMetaObject_CreateInstance(g_igStringMetaField_metaObject_00585908[0], allocator);
+        field = igMetaObject_CreateInstance(g_igStringMetaField_metaObject[0], allocator);
     } else {
         field = igObject_AllocateRawStorage(0x3C, 0, allocator);
         if (field != 0) {
@@ -61,9 +61,9 @@ void **igStringMetaField_Create(int allocator) {
 void **igObjectRefMetaField_Create(int allocator) {
     void **field;
 
-    if (*g_objectSystemState_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         igObjectRefMetaField_EnsureRegistered();
-        field = igMetaObject_CreateInstance(g_igObjectRefMetaField_metaObject_00585b20[0], allocator);
+        field = igMetaObject_CreateInstance(g_igObjectRefMetaField_metaObject[0], allocator);
     } else {
         field = igObject_AllocateRawStorage(0x44, 0, allocator);
         if (field != 0) {
@@ -80,9 +80,9 @@ void **igObjectRefMetaField_Create(int allocator) {
 void **igIntMetaField_Create(int allocator) {
     void **field;
 
-    if (*g_objectSystemState_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         igIntMetaField_EnsureRegistered();
-        field = igMetaObject_CreateInstance(g_igIntMetaField_metaObject_005860f8[0], allocator);
+        field = igMetaObject_CreateInstance(g_igIntMetaField_metaObject[0], allocator);
     } else {
         field = igObject_AllocateRawStorage(0x34, 0, allocator);
         if (field != 0) {

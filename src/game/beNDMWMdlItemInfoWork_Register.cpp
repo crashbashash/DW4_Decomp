@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWMdlItemInfoWork_metaObject_0058b4c0[];
+extern igMetaObject *g_beNDMWMdlItemInfoWork_metaObject[];
 void *beModelCtrlInfoWork_Register(void);
-igMetaObject *beModelCtrlInfoWork_GetPublishedMetaObject_003bf7b0(void);
+igMetaObject *beModelCtrlInfoWork_GetPublishedMetaObject(void);
 igMetaObject *beNDMWMdlItemInfoWork_GetMetaObject(void);
-extern const char s_beNDMWMdlItemInfoWork_className_00512540[];
+extern const char beNDMWMdlItemInfoWork_className[];
 int beNDMWMdlItemInfoWork_GetVTable(void);
 void beNDMWMdlItemInfoWork_InitFields(void);
-extern char g_beNDMWMdlItemInfoWork_callbackList_004cab78[];
+extern char g_beNDMWMdlItemInfoWork_callbackList[];
 void *beNDMWMdlItemInfoWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWMdlItemInfoWork_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                    /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWMdlItemInfoWork_metaObject_0058b4c0,          /* published MetaObject slot */
+        g_beNDMWMdlItemInfoWork_metaObject,          /* published MetaObject slot */
         beModelCtrlInfoWork_Register,                         /* base class registrar */
-        beModelCtrlInfoWork_GetPublishedMetaObject_003bf7b0,  /* base class MetaObject accessor */
+        beModelCtrlInfoWork_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWMdlItemInfoWork_GetMetaObject,                  /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWMdlItemInfoWork_className_00512540,           /* class name */
+        beNDMWMdlItemInfoWork_className,           /* class name */
         0x10c,                                                /* instance size */
         beNDMWMdlItemInfoWork_GetVTable,                      /* vtable getter */
         beNDMWMdlItemInfoWork_InitFields,                     /* field adder */
         0,                                                    /* extra callback item */
-        g_beNDMWMdlItemInfoWork_callbackList_004cab78        /* callback list */
+        g_beNDMWMdlItemInfoWork_callbackList        /* callback list */
     );
 }

@@ -21,7 +21,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 /* "DATABASE", "GETDATABASE" and "abChip" (strings read from the ELF). */
-extern char s_DATABASE_0051d550[], s_GETDATABASE_0051d560[], s_abChip_0051d598[];
+extern char DATABASE_2[], GETDATABASE_2[], abChip[];
 void beMessenger_SendNamed(void *, const char *, const char *, int, const char *);
 void *beMessenger_GetObject(void *, int);
 long long beDataBase_GetRecordInt(beDataBase *, int, const char *);
@@ -65,7 +65,7 @@ class ItemDatabaseDispatch {
 beDataBase *beNDMWItemBase_RequestDataBase(beNDMWItemBase *self, beNDMWStatus *status,
                                            const char *name) {
     void *messenger = (void *)status->_messenger;
-    beMessenger_SendNamed(messenger, s_DATABASE_0051d550, name, 0, s_GETDATABASE_0051d560);
+    beMessenger_SendNamed(messenger, DATABASE_2, name, 0, GETDATABASE_2);
     return (beDataBase *)beMessenger_GetObject(messenger, 0);
 }
 
@@ -91,7 +91,7 @@ char *beNDMWItemBase_GetRecordString(beNDMWItemBase *self, beNDMWStatus *status,
 /* 0x00448640: the ability-chip item's database is the "abChip" table. */
 beDataBase *Gap__Bec__beNDMWItemAbilityChip__vfunc_21(beNDMWItemAbilityChip *self,
                                                       beNDMWStatus *status) {
-    beDataBase *result = beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, s_abChip_0051d598);
+    beDataBase *result = beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, abChip);
 
     asm {
         .set reorder

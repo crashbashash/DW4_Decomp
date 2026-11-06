@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvPlatDataXbox_metaObject_00588040[];
+extern igMetaObject *g_beSvPlatDataXbox_metaObject[];
 void *beSvPlatBaseData_Register(void);
-igMetaObject *beSvPlatBaseData_GetPublishedMetaObject_003472a0(void);
+igMetaObject *beSvPlatBaseData_GetPublishedMetaObject(void);
 igMetaObject *beSvPlatDataXbox_GetMetaObject(void);
-extern const char s_beSvPlatDataXbox_className_00502520[];
+extern const char beSvPlatDataXbox_className[];
 int beSvPlatDataXbox_GetVTable(void);
 void beSvPlatDataXbox_InitFields(void);
-extern char g_beSvPlatDataXbox_callbackList_004c3d18[];
+extern char g_beSvPlatDataXbox_callbackList[];
 void *beSvPlatDataXbox_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSvPlatDataXbox_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvPlatDataXbox_metaObject_00588040,            /* published MetaObject slot */
+        g_beSvPlatDataXbox_metaObject,            /* published MetaObject slot */
         beSvPlatBaseData_Register,                         /* base class registrar */
-        beSvPlatBaseData_GetPublishedMetaObject_003472a0,  /* base class MetaObject accessor */
+        beSvPlatBaseData_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSvPlatDataXbox_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        s_beSvPlatDataXbox_className_00502520,             /* class name */
+        beSvPlatDataXbox_className,             /* class name */
         0x2c,                                              /* instance size */
         beSvPlatDataXbox_GetVTable,                        /* vtable getter */
         beSvPlatDataXbox_InitFields,                       /* field adder */
         0,                                                 /* extra callback item */
-        g_beSvPlatDataXbox_callbackList_004c3d18          /* callback list */
+        g_beSvPlatDataXbox_callbackList          /* callback list */
     );
 }

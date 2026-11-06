@@ -12,15 +12,15 @@ void *StringPool_Intern(int,int);
 int StringChunk_ReleaseHeader(int,void *);
 /* igMetaField vtable (docs: stamped at +0 by igMetaField_Construct) and the shared
  * string pool singleton (finding #1035); array form keeps the load absolute. */
-extern int g_igMetaField_vtable_0052f230[4];
-extern int g_stringPool_00586f20[4];
+extern int g_igMetaField_vtable[4];
+extern int g_stringPool[4];
 igMetaField *igMetaField_Init(igMetaField *field){
     int pool;
     void *emptyToken;
     int oldName,refCount;
     int *oldHeader;
     igObject_InitHeader(field);
-    field->_vtable=(int)g_igMetaField_vtable_0052f230;
+    field->_vtable=(int)g_igMetaField_vtable;
     field->_fieldName=0;
     field->_offset=0;
     field->_isRunTime=0;
@@ -29,12 +29,12 @@ igMetaField *igMetaField_Init(igMetaField *field){
     field->_size=0;
     field->_default=0;
     field->_externalEnumStorage=0;
-    if(g_stringPool_00586f20[0]==0){
+    if(g_stringPool[0]==0){
         pool=FUN_002eb010(16);
         if(pool)pool=StringPool_Construct(pool);
-        g_stringPool_00586f20[0]=pool;
+        g_stringPool[0]=pool;
     }
-    emptyToken=StringPool_Intern(g_stringPool_00586f20[0],0);
+    emptyToken=StringPool_Intern(g_stringPool[0],0);
     /* Interned strings carry a header in front of the characters: owner chunk at -8,
      * reference count at -4 (docs/engine/messenger-results.md). */
     oldName=field->_fieldName;

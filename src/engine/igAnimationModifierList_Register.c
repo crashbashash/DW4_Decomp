@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igAnimationModifierList_GetVTable[];
 extern char thunk_igAnimationModifierList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igAnimationModifierList_callbackList_0048d180[];
-extern char s_igAnimationModifierList_className_004e3c30[];
-extern char g_igAnimationModifierList_metaObject_005621f0[];
+extern char g_igAnimationModifierList_callbackList[];
+extern char igAnimationModifierList_className[];
+extern char g_igAnimationModifierList_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igAnimationModifierList_Register(void) {
     GpFlag_SetOnce_00194380();
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAnimationModifierList_metaObject_005621f0, /* published MetaObject slot */
+        g_igAnimationModifierList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                         /* base class registrar */
         igObjectList_GetPublishedMetaObject,           /* base class MetaObject accessor */
         thunk_igAnimationModifierList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igAnimationModifierList_className_004e3c30,  /* class name */
+        igAnimationModifierList_className,  /* class name */
         0x14,                                          /* instance size */
         igAnimationModifierList_GetVTable,             /* vtable getter */
         0,                                             /* field adder */
         0,                                             /* extra callback item */
-        g_igAnimationModifierList_callbackList_0048d180  /* callback list */
+        g_igAnimationModifierList_callbackList  /* callback list */
     );
 }

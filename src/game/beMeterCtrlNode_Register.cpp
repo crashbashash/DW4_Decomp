@@ -18,15 +18,15 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMeterCtrlNode_metaObject_00588e78[];
+extern igMetaObject *g_beMeterCtrlNode_metaObject[];
 void *igGroup_Register(void);
-igMetaObject *igGroup_GetPublishedMetaObject_001943a0(void);
+igMetaObject *igGroup_GetPublishedMetaObject(void);
 igMetaObject *beMeterCtrlNode_GetMetaObject(void);
-extern const char s_beMeterCtrlNode_className_00504160[];
+extern const char beMeterCtrlNode_className[];
 int beMeterCtrlNode_GetVTable(void);
 void beMeterCtrlNode_InitFields(void);
 void FUN_00356f40(void);
-extern char g_beMeterCtrlNode_callbackList_004c5a58[];
+extern char g_beMeterCtrlNode_callbackList[];
 void *beMeterCtrlNode_Register(void);
 }
 
@@ -34,15 +34,15 @@ void *beMeterCtrlNode_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMeterCtrlNode_metaObject_00588e78,    /* published MetaObject slot */
+        g_beMeterCtrlNode_metaObject,    /* published MetaObject slot */
         igGroup_Register,                         /* base class registrar */
-        igGroup_GetPublishedMetaObject_001943a0,  /* base class MetaObject accessor */
+        igGroup_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beMeterCtrlNode_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beMeterCtrlNode_className_00504160,     /* class name */
+        beMeterCtrlNode_className,     /* class name */
         0x34,                                     /* instance size */
         beMeterCtrlNode_GetVTable,                /* vtable getter */
         beMeterCtrlNode_InitFields,               /* field adder */
         FUN_00356f40,                             /* extra callback item */
-        g_beMeterCtrlNode_callbackList_004c5a58  /* callback list */
+        g_beMeterCtrlNode_callbackList  /* callback list */
     );
 }

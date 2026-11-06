@@ -5,9 +5,9 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beChangePosTransformInfoRam_metaObject_00589b68[4];
+extern int g_beChangePosTransformInfoRam_metaObject[4];
 /* 0x0036f010 */
 int Gap__Bec__beChangePosTransformInfoRam__vfunc_20(void)
 {
-    return g_beChangePosTransformInfoRam_metaObject_00589b68[0];
+    return g_beChangePosTransformInfoRam_metaObject[0];
 }

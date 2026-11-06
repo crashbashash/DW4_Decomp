@@ -22,12 +22,13 @@ Only files the game linked are here. `lua/lib/` keeps upstream's split, and `lua
   configuration, passed with `-prefix` so upstream's text stays untouched. A `-prefix` file is named
   bare and found through `-I`.
 
-## Lua's six game functions
+## Lua's two game files
 
-The game rewrote `lmem.c` and `lstate.c`: `lua_open` takes an allocator argument, and `luaM_realloc`
-calls an allocator object's virtual functions. Those two files are therefore not here. Their six
-functions keep ordinary units: `luaM_growaux`, `errormessage`, `f_luaopen` and `lua_open` in `src/lua/`,
-`luaM_realloc` and `lua_close` in `src/engine/`.
+The game rewrote `lmem.c` and `lstate.c`: `lua_open` takes a memory pool, and `luaM_realloc` calls
+that pool's virtual functions. Those two files are therefore not stock and not here. They live in
+`src/lua/lmem.c` and `src/lua/lstate.c`, keep upstream's text wherever the game did, and build as
+whole-file units under the library's profile. `include/dw4/lua_game_state.h` adds the pool to
+`lua_State` without touching `lstate.h`.
 
 ## Rows
 

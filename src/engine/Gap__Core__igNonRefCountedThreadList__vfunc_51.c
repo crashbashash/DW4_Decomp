@@ -3,7 +3,7 @@
  * 0x00585740 is the descriptor filled lazily by igUnsignedIntMetaField_GetDefaultDescriptor via
  * igUnsignedIntMetaField_EnsureRegistered.  Same pattern as the
  * igUnsignedCharMetaField_descriptor at 0x00585768. */
-extern int g_igUnsignedIntMetaField_descriptor_00585740[4];
+extern int g_igUnsignedIntMetaField_descriptor[4];
 int Gap__Core__igNonRefCountedThreadList__vfunc_51(void) {
-    return g_igUnsignedIntMetaField_descriptor_00585740[0];
+    return g_igUnsignedIntMetaField_descriptor[0];
 }

@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSelectCtrlInfoRamData_metaObject_00587f30[];
+extern igMetaObject *g_beSelectCtrlInfoRamData_metaObject[];
 void *beBaseInfoData_Register(void);
-igMetaObject *beBaseInfoData_GetPublishedMetaObject_00343c80(void);
+igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
 igMetaObject *beSelectCtrlInfoRamData_GetMetaObject(void);
-extern const char s_beSelectCtrlInfoRamData_className_005021d0[];
+extern const char beSelectCtrlInfoRamData_className[];
 int beSelectCtrlInfoRamData_GetVTable(void);
 void beSelectCtrlInfoRamData_InitFields(void);
-extern char s_0X4_004c3a68[];
+extern char text_0X4[];
 void *beSelectCtrlInfoRamData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSelectCtrlInfoRamData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSelectCtrlInfoRamData_metaObject_00587f30,   /* published MetaObject slot */
+        g_beSelectCtrlInfoRamData_metaObject,   /* published MetaObject slot */
         beBaseInfoData_Register,                         /* base class registrar */
-        beBaseInfoData_GetPublishedMetaObject_00343c80,  /* base class MetaObject accessor */
+        beBaseInfoData_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSelectCtrlInfoRamData_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        s_beSelectCtrlInfoRamData_className_005021d0,    /* class name */
+        beSelectCtrlInfoRamData_className,    /* class name */
         0x20,                                            /* instance size */
         beSelectCtrlInfoRamData_GetVTable,               /* vtable getter */
         beSelectCtrlInfoRamData_InitFields,              /* field adder */
         0,                                               /* extra callback item */
-        s_0X4_004c3a68                                  /* callback list */
+        text_0X4                                  /* callback list */
     );
 }

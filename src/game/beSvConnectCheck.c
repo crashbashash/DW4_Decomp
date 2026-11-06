@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beSvConnectCheck_metaObject_005881d8[4];
+extern int g_beSvConnectCheck_metaObject[4];
 /* 0x003adf20 */
 void Gap__Bec__beSvConnectCheck__vfunc_21(void)
 {
@@ -24,5 +24,5 @@ void Gap__Bec__beSvConnectCheck__vfunc_23(void)
 /* 0x003adf50 */
 int Gap__Bec__beSvConnectCheck__vfunc_20(void)
 {
-    return g_beSvConnectCheck_metaObject_005881d8[0];
+    return g_beSvConnectCheck_metaObject[0];
 }

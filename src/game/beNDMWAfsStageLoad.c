@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beNDMWAfsStageLoad_metaObject_0058c140[4];
+extern int g_beNDMWAfsStageLoad_metaObject[4];
 /* 0x003cdec0 */
 void Gap__Bec__beNDMWAfsStageLoad__vfunc_21(void)
 {
@@ -14,5 +14,5 @@ void Gap__Bec__beNDMWAfsStageLoad__vfunc_21(void)
 /* 0x003cded0 */
 int Gap__Bec__beNDMWAfsStageLoad__vfunc_20(void)
 {
-    return g_beNDMWAfsStageLoad_metaObject_0058c140[0];
+    return g_beNDMWAfsStageLoad_metaObject[0];
 }

@@ -9,11 +9,11 @@ void *igObject_AllocateRawStorageDefault();
 int igObject_CloneViaMetadata();
 igMemoryRefMetaField *igMemoryRefMetaField_CopyConstruct(igMemoryRefMetaField *, igMemoryRefMetaField *);
 /* object-system runtime pointer; byte 0 is the "object system active" flag */
-extern unsigned char * g_objectSystem_00586dc8[4];
+extern unsigned char * g_objectSystem[4];
 igMemoryRefMetaField *igMemoryRefMetaField_Clone(igMemoryRefMetaField *source, int copyMode) {
     igMemoryRefMetaField *clone;
 
-    if (*g_objectSystem_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         igMemoryRefMetaField_EnsureRegistered();
         return (igMemoryRefMetaField *)igObject_CloneViaMetadata(source, copyMode);
     }

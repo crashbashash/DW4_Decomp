@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadIntf2_metaObject_0058bac8[];
+extern igMetaObject *g_beNDMWLoadIntf2_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beNDMWLoadIntf2_GetMetaObject(void);
-extern const char s_beNDMWLoadIntf2_className_00512b90[];
+extern const char beNDMWLoadIntf2_className[];
 int beNDMWLoadIntf2_GetVTable(void);
 void beNDMWLoadIntf2_InitFields(void);
-extern char g_beNDMWLoadIntf2_callbackList_004cb750[];
+extern char g_beNDMWLoadIntf2_callbackList[];
 void *beNDMWLoadIntf2_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWLoadIntf2_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadIntf2_metaObject_0058bac8,              /* published MetaObject slot */
+        g_beNDMWLoadIntf2_metaObject,              /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWLoadIntf2_GetMetaObject,                      /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadIntf2_className_00512b90,               /* class name */
+        beNDMWLoadIntf2_className,               /* class name */
         0x30,                                               /* instance size */
         beNDMWLoadIntf2_GetVTable,                          /* vtable getter */
         beNDMWLoadIntf2_InitFields,                         /* field adder */
         0,                                                  /* extra callback item */
-        g_beNDMWLoadIntf2_callbackList_004cb750            /* callback list */
+        g_beNDMWLoadIntf2_callbackList            /* callback list */
     );
 }

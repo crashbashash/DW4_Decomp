@@ -5,7 +5,7 @@ Every `<Class>_Register` is the same body (docs/engine/reflection-metadata.md se
 `GpFlag_SetOnce_*` call, then `igMetaObject_RegisterClass` with eight register arguments (a0..t3) and three
 stack arguments (sp+0, sp+8, sp+16).  The generator reads the retail words, resolves every address through
 config/SLUS-20836/symbols.txt (functions) or the naming convention of the existing files (`g_<Class>_metaObject_<addr>`,
-`s_<Class>_className_<addr>`, `g_<Class>_callbackList_<addr>`), and keeps any identifier the existing
+`<Class>_className`, `g_<Class>_callbackList_<addr>`), and keeps any identifier the existing
 translation unit already uses for the same address, so hand-recovered names survive a regeneration.
 
 Build profile (phase 3b, docs/engine/build-profiles.md): the unit profile of the function decides the
@@ -25,6 +25,7 @@ import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
+import verify  # noqa: E402
 import unitprofiles  # noqa: E402
 
 SP = 29
@@ -132,10 +133,14 @@ def trace(w, syms):
 
 def existing_names(cls):
     """{address: identifier} for every address-bearing identifier the current translation unit uses."""
-    names = {}
+    names, table = {}, verify.data_symbols()
     for path in glob.glob(os.path.join(ROOT, "src", "*", cls + "_Register.c*")):
-        for m in re.finditer(r"\b([A-Za-z_]\w*?_([0-9a-f]{8}))\b", open(path).read()):
+        text = open(path).read()
+        for m in re.finditer(r"\b([A-Za-z_]\w*?_([0-9a-f]{8}))\b", text):
             names.setdefault(int(m.group(2), 16), m.group(1))
+        for m in re.finditer(r"\b[A-Za-z_]\w*\b", text):
+            if m.group(0) in table:
+                names.setdefault(table[m.group(0)], m.group(0))
     return names
 
 
@@ -155,7 +160,7 @@ def spell(cls, idx, arg, syms, old):
         name = old.get(value) or "g_%s_metaObject_%08x" % (cls, value)
         return name, "extern igMetaObject *%s[];" % name
     if idx == 5:
-        name = old.get(value) or "s_%s_className_%08x" % (cls, value)
+        name = old.get(value) or "%s_className" % cls
         return name, "extern const char %s[];" % name
     if idx == 10:
         name = pick_name(syms.get(value), old.get(value)) or "g_%s_callbackList_%08x" % (cls, value)

@@ -4,9 +4,9 @@
 extern char igCallStackTracer_Register[];
 extern char thunk_igPsx2CallStackTracer_GetMetaObject[];
 extern char igPsx2CallStackTracer_GetVTable[];
-extern char igCallStackTracer_GetPublishedMetaObject_002d0520[];
-extern char s_igPsx2CallStackTracer_className_004f9030[];
-extern char g_igPsx2CallStackTracer_metaObject_00586db8[];
+extern char igCallStackTracer_GetPublishedMetaObject[];
+extern char igPsx2CallStackTracer_className[];
+extern char g_igPsx2CallStackTracer_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 extern int igPsx2CallStackTracer_InitFields_002d0530[4];
@@ -14,11 +14,11 @@ void igPsx2CallStackTracer_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2CallStackTracer_metaObject_00586db8,       /* published MetaObject slot */
+        g_igPsx2CallStackTracer_metaObject,       /* published MetaObject slot */
         igCallStackTracer_Register,                        /* base class registrar */
-        igCallStackTracer_GetPublishedMetaObject_002d0520, /* base class MetaObject accessor */
+        igCallStackTracer_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igPsx2CallStackTracer_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        s_igPsx2CallStackTracer_className_004f9030,        /* class name */
+        igPsx2CallStackTracer_className,        /* class name */
         0x14,                                              /* instance size */
         igPsx2CallStackTracer_GetVTable,                   /* vtable getter */
         &igPsx2CallStackTracer_InitFields_002d0530[0],     /* field adder (post_init in data/reflection.json) */

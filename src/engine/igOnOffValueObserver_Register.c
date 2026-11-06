@@ -4,10 +4,10 @@
 extern char igView_Register[];
 extern char igOnOffValueObserver_GetVTable[];
 extern char thunk_igOnOffValueObserver_GetMetaObject[];
-extern char igView_GetPublishedMetaObject_0044cb20[];
-extern char g_igOnOffValueObserver_callbackList_004cffc0[];
-extern char s_igOnOffValueObserver_className_0051de10[];
-extern char g_igOnOffValueObserver_metaObject_0058c220[];
+extern char igView_GetPublishedMetaObject[];
+extern char g_igOnOffValueObserver_callbackList[];
+extern char igOnOffValueObserver_className[];
+extern char g_igOnOffValueObserver_metaObject[];
 int igMetaObject_RegisterClass();
 int GpFlag_SetOnce_0044b860();
 int igOnOffValueObserver_InitFields();
@@ -16,15 +16,15 @@ void igOnOffValueObserver_Register(void) {
     GpFlag_SetOnce_0044b860();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igOnOffValueObserver_metaObject_0058c220, /* published MetaObject slot */
+        g_igOnOffValueObserver_metaObject, /* published MetaObject slot */
         igView_Register,                            /* base class registrar */
-        igView_GetPublishedMetaObject_0044cb20,     /* base class MetaObject accessor */
+        igView_GetPublishedMetaObject,     /* base class MetaObject accessor */
         thunk_igOnOffValueObserver_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igOnOffValueObserver_className_0051de10,  /* class name */
+        igOnOffValueObserver_className,  /* class name */
         0x10,                                       /* instance size */
         igOnOffValueObserver_GetVTable,             /* vtable getter */
         &igOnOffValueObserver_InitFields,           /* field adder */
         0,                                          /* extra callback item */
-        g_igOnOffValueObserver_callbackList_004cffc0  /* callback list */
+        g_igOnOffValueObserver_callbackList  /* callback list */
     );
 }

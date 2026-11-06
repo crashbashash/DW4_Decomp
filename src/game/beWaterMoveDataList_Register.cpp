@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beWaterMoveDataList_metaObject_00587bb8[];
+extern igMetaObject *g_beWaterMoveDataList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beWaterMoveDataList_GetMetaObject(void);
-extern const char s_beWaterMoveDataList_className_005019e0[];
+extern const char beWaterMoveDataList_className[];
 int beWaterMoveDataList_GetVTable(void);
-extern char g_beWaterMoveDataList_callbackList_004c32f8[];
+extern char g_beWaterMoveDataList_callbackList[];
 void *beWaterMoveDataList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beWaterMoveDataList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beWaterMoveDataList_metaObject_00587bb8,    /* published MetaObject slot */
+        g_beWaterMoveDataList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                        /* base class registrar */
         igObjectList_GetPublishedMetaObject,          /* base class MetaObject accessor */
         beWaterMoveDataList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beWaterMoveDataList_className_005019e0,     /* class name */
+        beWaterMoveDataList_className,     /* class name */
         0x14,                                         /* instance size */
         beWaterMoveDataList_GetVTable,                /* vtable getter */
         0,                                            /* field adder */
         0,                                            /* extra callback item */
-        g_beWaterMoveDataList_callbackList_004c32f8  /* callback list */
+        g_beWaterMoveDataList_callbackList  /* callback list */
     );
 }

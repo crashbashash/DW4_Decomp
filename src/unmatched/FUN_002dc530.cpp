@@ -1,5 +1,5 @@
 extern "C" {
-int Memory_FreeBufferAlias_002ed5c0(void *);
+int Memory_FreeBufferAliasB(void *);
 void igObject_Destroy(void *);
 extern int DAT_005305e8[4];
 extern int DAT_00530618[4];
@@ -49,7 +49,7 @@ void *FUN_002dc530(S *arg0, long long arg1) {
             arg0->vt = (int)&DAT_00530618[0];
         }
         if ((short)arg1 > 0) {
-            Memory_FreeBufferAlias_002ed5c0(arg0);
+            Memory_FreeBufferAliasB(arg0);
         }
     }
     return arg0;

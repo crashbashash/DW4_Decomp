@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igMovieInfoList_metaObject_00587790[];
+extern igMetaObject *g_igMovieInfoList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *igMovieInfoList_GetMetaObject(void);
-extern const char s_igMovieInfoList_className_00500420[];
+extern const char igMovieInfoList_className[];
 int igMovieInfoList_GetVTable(void);
-extern char g_igMovieInfoList_callbackList_004c2948[];
+extern char g_igMovieInfoList_callbackList[];
 void *igMovieInfoList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *igMovieInfoList_Register(void) {
     GpFlag_SetOnce_00334440();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMovieInfoList_metaObject_00587790,    /* published MetaObject slot */
+        g_igMovieInfoList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                    /* base class registrar */
         igObjectList_GetPublishedMetaObject,      /* base class MetaObject accessor */
         igMovieInfoList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_igMovieInfoList_className_00500420,     /* class name */
+        igMovieInfoList_className,     /* class name */
         0x14,                                     /* instance size */
         igMovieInfoList_GetVTable,                /* vtable getter */
         0,                                        /* field adder */
         0,                                        /* extra callback item */
-        g_igMovieInfoList_callbackList_004c2948  /* callback list */
+        g_igMovieInfoList_callbackList  /* callback list */
     );
 }

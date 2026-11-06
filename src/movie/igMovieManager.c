@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_igMovieManager_metaObject_00587870[4];
+extern int g_igMovieManager_metaObject[4];
 /* 0x003390d0 */
 void Gap__igMovieManager__vfunc_21(void)
 {
@@ -29,5 +29,5 @@ void Gap__igMovieManager__vfunc_27(void)
 /* 0x0033be50 */
 int Gap__igMovieManager__vfunc_20(void)
 {
-    return g_igMovieManager_metaObject_00587870[0];
+    return g_igMovieManager_metaObject[0];
 }

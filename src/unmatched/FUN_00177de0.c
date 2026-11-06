@@ -16,18 +16,18 @@
  * established, so slots are addressed by index. */
 typedef struct GsStatBlock { long long c[58]; } GsStatBlock;
 
-extern GsStatBlock g_gsStatCurrent_00560d20;
-extern GsStatBlock g_gsStatPrevious_00560b50;
-extern unsigned int g_gsEventCount_005607d0[];
+extern GsStatBlock g_gsStatCurrent;
+extern GsStatBlock g_gsStatPrevious;
+extern unsigned int g_gsEventCount[];
 extern long long g_gsAccumulator_005608a0[4];
 extern long long g_gsAccumulator_00560660[4];
 extern long long g_gsAccumulator_00560668[4];
-extern long long g_gsRawCounter_00560ef8[4];
+extern long long g_gsRawCounter[4];
 int FUN_001f6f50(GsStatBlock *out);
 int FUN_00204840(int index);
 
-#define CUR g_gsStatCurrent_00560d20.c
-#define PREV g_gsStatPrevious_00560b50.c
+#define CUR g_gsStatCurrent.c
+#define PREV g_gsStatPrevious.c
 #define DELTA(k) ((float)(CUR[k] - PREV[k]))
 #define TICKS_PER_SECOND 9216000
 
@@ -46,7 +46,7 @@ float FUN_00177de0(void *unused, int id) {
         case 2: result = DELTA(2) / elapsed; break;
         case 36: result = DELTA(26) / elapsed; break;
         case 37: result = DELTA(25) / elapsed; break;
-        case 3: result = (float)g_gsRawCounter_00560ef8[0]; break;
+        case 3: result = (float)g_gsRawCounter[0]; break;
         case 30: result = (1000.0f * (DELTA(30) / (float)TICKS_PER_SECOND)) / elapsed; break;
         case 31: result = (16.0f * DELTA(29)) / elapsed; break;
         case 32: result = DELTA(27) / elapsed; break;
@@ -91,8 +91,8 @@ float FUN_00177de0(void *unused, int id) {
         case 190: result = DELTA(56) / elapsed; break;
         }
         if (id >= 60 && id < 187) {
-            result = (float)g_gsEventCount_005607d0[id] / elapsed;
-            g_gsEventCount_005607d0[id] = 0;
+            result = (float)g_gsEventCount[id] / elapsed;
+            g_gsEventCount[id] = 0;
         }
     }
     if (result == -1.0f) {

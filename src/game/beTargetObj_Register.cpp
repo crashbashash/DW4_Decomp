@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beTargetObj_metaObject_00587ce8[];
+extern igMetaObject *g_beTargetObj_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beTargetObj_GetMetaObject(void);
-extern const char s_beTargetObj_className_00501c28[];
+extern const char beTargetObj_className[];
 int beTargetObj_GetVTable(void);
 void beTargetObj_InitFields(void);
-extern char g_beTargetObj_callbackList_004c3530[];
+extern char g_beTargetObj_callbackList[];
 void *beTargetObj_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beTargetObj_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beTargetObj_metaObject_00587ce8,              /* published MetaObject slot */
+        g_beTargetObj_metaObject,              /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beTargetObj_GetMetaObject,                      /* own MetaObject accessor (stored at +0x54) */
-        s_beTargetObj_className_00501c28,               /* class name */
+        beTargetObj_className,               /* class name */
         0x1c,                                           /* instance size */
         beTargetObj_GetVTable,                          /* vtable getter */
         beTargetObj_InitFields,                         /* field adder */
         0,                                              /* extra callback item */
-        g_beTargetObj_callbackList_004c3530            /* callback list */
+        g_beTargetObj_callbackList            /* callback list */
     );
 }

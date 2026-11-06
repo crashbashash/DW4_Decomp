@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlMUTEKI_metaObject_00588d50[];
+extern igMetaObject *g_beModelCtrlMUTEKI_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlMUTEKI_GetMetaObject(void);
-extern const char s_beModelCtrlMUTEKI_className_00503e00[];
+extern const char beModelCtrlMUTEKI_className[];
 int beModelCtrlMUTEKI_GetVTable(void);
 void beModelCtrlMUTEKI_InitFields(void);
 void *beModelCtrlMUTEKI_Register(void);
@@ -32,11 +32,11 @@ void *beModelCtrlMUTEKI_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlMUTEKI_metaObject_00588d50,        /* published MetaObject slot */
+        g_beModelCtrlMUTEKI_metaObject,        /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beModelCtrlMUTEKI_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlMUTEKI_className_00503e00,         /* class name */
+        beModelCtrlMUTEKI_className,         /* class name */
         0x10,                                           /* instance size */
         beModelCtrlMUTEKI_GetVTable,                    /* vtable getter */
         beModelCtrlMUTEKI_InitFields,                   /* field adder */

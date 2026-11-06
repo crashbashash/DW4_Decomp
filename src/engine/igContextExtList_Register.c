@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igObjectList_Register[];
 extern char igContextExtList_GetVTable[];
 extern char thunk_igContextExtList_GetMetaObject[];
-extern char g_igContextExtList_callbackList_004c1408[];
-extern char s_igContextExtList_className_004f8680[];
-extern char g_igContextExtList_metaObject_005868b8[];
+extern char g_igContextExtList_callbackList[];
+extern char igContextExtList_className[];
+extern char g_igContextExtList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igContextExtList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igContextExtList_metaObject_005868b8, /* published MetaObject slot */
+        g_igContextExtList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                  /* base class registrar */
         igObjectList_GetPublishedMetaObject,    /* base class MetaObject accessor */
         thunk_igContextExtList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igContextExtList_className_004f8680,  /* class name */
+        igContextExtList_className,  /* class name */
         0x14,                                   /* instance size */
         igContextExtList_GetVTable,             /* vtable getter */
         0,                                      /* field adder */
         0,                                      /* extra callback item */
-        g_igContextExtList_callbackList_004c1408  /* callback list */
+        g_igContextExtList_callbackList  /* callback list */
     );
 }

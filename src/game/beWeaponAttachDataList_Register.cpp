@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beWeaponAttachDataList_metaObject_00587a78[];
+extern igMetaObject *g_beWeaponAttachDataList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beWeaponAttachDataList_GetMetaObject(void);
-extern const char s_beWeaponAttachDataList_className_00501720[];
+extern const char beWeaponAttachDataList_className[];
 int beWeaponAttachDataList_GetVTable(void);
-extern char g_beWeaponAttachDataList_callbackList_004c3040[];
+extern char g_beWeaponAttachDataList_callbackList[];
 void *beWeaponAttachDataList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beWeaponAttachDataList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beWeaponAttachDataList_metaObject_00587a78,    /* published MetaObject slot */
+        g_beWeaponAttachDataList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                           /* base class registrar */
         igObjectList_GetPublishedMetaObject,             /* base class MetaObject accessor */
         beWeaponAttachDataList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beWeaponAttachDataList_className_00501720,     /* class name */
+        beWeaponAttachDataList_className,     /* class name */
         0x14,                                            /* instance size */
         beWeaponAttachDataList_GetVTable,                /* vtable getter */
         0,                                               /* field adder */
         0,                                               /* extra callback item */
-        g_beWeaponAttachDataList_callbackList_004c3040  /* callback list */
+        g_beWeaponAttachDataList_callbackList  /* callback list */
     );
 }

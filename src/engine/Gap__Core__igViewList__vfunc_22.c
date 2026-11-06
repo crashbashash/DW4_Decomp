@@ -3,7 +3,7 @@
  * 0x58c1b8 (the igViewList handle slot, filled in by its registrar; see
  * docs/engine/reflection-metadata.md).  Same accessor idiom as the other
  * `*_metaObject_<addr>` getters in this folder. */
-extern int g_igViewList_metaObject_0058c1b8[4];
+extern int g_igViewList_metaObject[4];
 int Gap__Core__igViewList__vfunc_22(void) {
-    return g_igViewList_metaObject_0058c1b8[0];
+    return g_igViewList_metaObject[0];
 }

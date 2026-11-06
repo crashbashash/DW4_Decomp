@@ -7,8 +7,8 @@ A finding is one of three things:
   of some code);
 - **refuted**: an idea that was tried and is wrong, kept so nobody repeats it.
 
-Documents and source comments cite a finding as `#N`. In a document the citation is a link; in a
-source comment it is plain text.
+Documents cite a finding as `#N`, as a link. Source does not cite findings: a finding cites the
+source instead.
 
 ## Finding an entry
 

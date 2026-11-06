@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beXboxImage24k_metaObject_00588070[];
+extern igMetaObject *g_beXboxImage24k_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beXboxImage24k_GetMetaObject(void);
-extern const char s_beXboxImage24k_className_00502580[];
+extern const char beXboxImage24k_className[];
 int beXboxImage24k_GetVTable(void);
 void beXboxImage24k_InitFields(void);
 void *beXboxImage24k_Register(void);
@@ -32,11 +32,11 @@ void *beXboxImage24k_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beXboxImage24k_metaObject_00588070,   /* published MetaObject slot */
+        g_beXboxImage24k_metaObject,   /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beXboxImage24k_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        s_beXboxImage24k_className_00502580,    /* class name */
+        beXboxImage24k_className,    /* class name */
         0x10,                                   /* instance size */
         beXboxImage24k_GetVTable,               /* vtable getter */
         beXboxImage24k_InitFields,              /* field adder */

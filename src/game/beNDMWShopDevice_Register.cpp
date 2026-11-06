@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShopDevice_metaObject_0058aca8[];
+extern igMetaObject *g_beNDMWShopDevice_metaObject[];
 void *beNDMWListCtrl_Register(void);
-igMetaObject *beNDMWListCtrl_GetPublishedMetaObject_003b68a0(void);
+igMetaObject *beNDMWListCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWShopDevice_GetMetaObject(void);
-extern const char s_beNDMWShopDevice_className_00511220[];
+extern const char beNDMWShopDevice_className[];
 int beNDMWShopDevice_GetVTable(void);
 void beNDMWShopDevice_InitFields(void);
-extern char g_beNDMWShopDevice_callbackList_004c9938[];
+extern char g_beNDMWShopDevice_callbackList[];
 void *beNDMWShopDevice_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWShopDevice_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShopDevice_metaObject_0058aca8,          /* published MetaObject slot */
+        g_beNDMWShopDevice_metaObject,          /* published MetaObject slot */
         beNDMWListCtrl_Register,                         /* base class registrar */
-        beNDMWListCtrl_GetPublishedMetaObject_003b68a0,  /* base class MetaObject accessor */
+        beNDMWListCtrl_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWShopDevice_GetMetaObject,                  /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShopDevice_className_00511220,           /* class name */
+        beNDMWShopDevice_className,           /* class name */
         0x64,                                            /* instance size */
         beNDMWShopDevice_GetVTable,                      /* vtable getter */
         beNDMWShopDevice_InitFields,                     /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWShopDevice_callbackList_004c9938        /* callback list */
+        g_beNDMWShopDevice_callbackList        /* callback list */
     );
 }

@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlInfoDataSeq_metaObject_00588be8[];
+extern igMetaObject *g_beModelCtrlInfoDataSeq_metaObject[];
 void *beBaseInfoData_Register(void);
-igMetaObject *beBaseInfoData_GetPublishedMetaObject_00343c80(void);
+igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlInfoDataSeq_GetMetaObject(void);
-extern const char s_beModelCtrlInfoDataSeq_className_00503b40[];
+extern const char beModelCtrlInfoDataSeq_className[];
 int beModelCtrlInfoDataSeq_GetVTable(void);
 void beModelCtrlInfoDataSeq_InitFields(void);
-extern char g_beModelCtrlInfoDataSeq_callbackList_004c54c8[];
+extern char g_beModelCtrlInfoDataSeq_callbackList[];
 void *beModelCtrlInfoDataSeq_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beModelCtrlInfoDataSeq_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlInfoDataSeq_metaObject_00588be8,    /* published MetaObject slot */
+        g_beModelCtrlInfoDataSeq_metaObject,    /* published MetaObject slot */
         beBaseInfoData_Register,                         /* base class registrar */
-        beBaseInfoData_GetPublishedMetaObject_00343c80,  /* base class MetaObject accessor */
+        beBaseInfoData_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beModelCtrlInfoDataSeq_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlInfoDataSeq_className_00503b40,     /* class name */
+        beModelCtrlInfoDataSeq_className,     /* class name */
         0x14,                                            /* instance size */
         beModelCtrlInfoDataSeq_GetVTable,                /* vtable getter */
         beModelCtrlInfoDataSeq_InitFields,               /* field adder */
         0,                                               /* extra callback item */
-        g_beModelCtrlInfoDataSeq_callbackList_004c54c8  /* callback list */
+        g_beModelCtrlInfoDataSeq_callbackList  /* callback list */
     );
 }

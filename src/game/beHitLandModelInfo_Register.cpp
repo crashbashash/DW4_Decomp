@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beHitLandModelInfo_metaObject_00589320[];
+extern igMetaObject *g_beHitLandModelInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beHitLandModelInfo_GetMetaObject(void);
-extern const char s_beHitLandModelInfo_className_00504ae0[];
+extern const char beHitLandModelInfo_className[];
 int beHitLandModelInfo_GetVTable(void);
 void beHitLandModelInfo_InitFields(void);
-extern char g_beHitLandModelInfo_callbackList_004c6550[];
+extern char g_beHitLandModelInfo_callbackList[];
 void *beHitLandModelInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beHitLandModelInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beHitLandModelInfo_metaObject_00589320,    /* published MetaObject slot */
+        g_beHitLandModelInfo_metaObject,    /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beHitLandModelInfo_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beHitLandModelInfo_className_00504ae0,     /* class name */
+        beHitLandModelInfo_className,     /* class name */
         0x2c,                                        /* instance size */
         beHitLandModelInfo_GetVTable,                /* vtable getter */
         beHitLandModelInfo_InitFields,               /* field adder */
         0,                                           /* extra callback item */
-        g_beHitLandModelInfo_callbackList_004c6550  /* callback list */
+        g_beHitLandModelInfo_callbackList  /* callback list */
     );
 }

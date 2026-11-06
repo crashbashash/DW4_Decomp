@@ -12,17 +12,17 @@ typedef struct Handle_27b930 {
     int error_object;                           /* 0x20 */
 } Handle_27b930;
 
-extern char s_E2004090243_NULL_pointer_is_specified_004f1c58[];   /* 'E2004090243 : NULL pointer is specified.' */
-extern char s_E2004090244_Specified_handle_is_invalid_004f1c88[]; /* 'E2004090244 : Specified handle is invalid.' */
+extern char E2004090243_NULL_pointer_is_specified[];   /* 'E2004090243 : NULL pointer is specified.' */
+extern char E2004090244_Specified_handle_is_invalid[]; /* 'E2004090244 : Specified handle is invalid.' */
 int FUN_0027b2e0(const char *message);
 
 void FUN_0027b930(Handle_27b930 *handle, int mode, Chunk_27b930 *chunk) {
     if (handle == 0) {
-        FUN_0027b2e0(s_E2004090243_NULL_pointer_is_specified_004f1c58);
+        FUN_0027b2e0(E2004090243_NULL_pointer_is_specified);
         return;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(s_E2004090244_Specified_handle_is_invalid_004f1c88);
+        FUN_0027b2e0(E2004090244_Specified_handle_is_invalid);
         return;
     }
     if (chunk->length > 0 && chunk->data != 0 && mode != 0 && mode != 1) {

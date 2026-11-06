@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beAsTargetModelData_metaObject_00589e38[];
+extern igMetaObject *g_beAsTargetModelData_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beAsTargetModelData_GetMetaObject(void);
-extern const char s_beAsTargetModelData_className_00505f80[];
+extern const char beAsTargetModelData_className[];
 int beAsTargetModelData_GetVTable(void);
 void beAsTargetModelData_InitFields(void);
-extern char g_beAsTargetModelData_callbackList_004c7dd0[];
+extern char g_beAsTargetModelData_callbackList[];
 void *beAsTargetModelData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beAsTargetModelData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beAsTargetModelData_metaObject_00589e38,      /* published MetaObject slot */
+        g_beAsTargetModelData_metaObject,      /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beAsTargetModelData_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beAsTargetModelData_className_00505f80,       /* class name */
+        beAsTargetModelData_className,       /* class name */
         0x10,                                           /* instance size */
         beAsTargetModelData_GetVTable,                  /* vtable getter */
         beAsTargetModelData_InitFields,                 /* field adder */
         0,                                              /* extra callback item */
-        g_beAsTargetModelData_callbackList_004c7dd0    /* callback list */
+        g_beAsTargetModelData_callbackList    /* callback list */
     );
 }

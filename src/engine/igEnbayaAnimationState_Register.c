@@ -4,11 +4,11 @@
 #include "dw4/reflected.h"
 extern char igEnbayaAnimationState_GetVTable[];
 extern char thunk_igEnbayaAnimationState_GetMetaObject[];
-extern char igAnimationState_GetPublishedMetaObject_001a20d0[];
+extern char igAnimationState_GetPublishedMetaObject[];
 void FUN_001a2190(void);  /* code at 0x1a2190, passed by address (was DAT_1a2190; docs/engine/function-inventory.md) */
 extern char igAnimationState_Register[];
-extern char s_igEnbayaAnimationState_className_004e2aa0[];
-extern char g_igEnbayaAnimationState_metaObject_00561b80[];
+extern char igEnbayaAnimationState_className[];
+extern char g_igEnbayaAnimationState_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 int igEnbayaAnimationState_InitFields();
@@ -17,11 +17,11 @@ void igEnbayaAnimationState_Register(void) {
     GpFlag_SetOnce_00194380(); /* sets this module's one-shot guard byte at 0x00554b80 (.sbss) */
     igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igEnbayaAnimationState_metaObject_00561b80,     /* published MetaObject slot */
+        g_igEnbayaAnimationState_metaObject,     /* published MetaObject slot */
         igAnimationState_Register,                        /* base class registrar */
-        igAnimationState_GetPublishedMetaObject_001a20d0, /* base class MetaObject accessor */
+        igAnimationState_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igEnbayaAnimationState_GetMetaObject,       /* own MetaObject accessor (stored at +0x54) */
-        s_igEnbayaAnimationState_className_004e2aa0,      /* class name */
+        igEnbayaAnimationState_className,      /* class name */
         sizeof(igEnbayaAnimationState),                   /* instance size (reflected struct, include/dw4/reflected.h) */
         igEnbayaAnimationState_GetVTable,                 /* vtable getter */
         &igEnbayaAnimationState_InitFields,               /* field adder */

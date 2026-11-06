@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWMdlPEBaseInfoWork_metaObject_0058b430[];
+extern igMetaObject *g_beNDMWMdlPEBaseInfoWork_metaObject[];
 void *beModelCtrlInfoWork_Register(void);
-igMetaObject *beModelCtrlInfoWork_GetPublishedMetaObject_003bf7b0(void);
+igMetaObject *beModelCtrlInfoWork_GetPublishedMetaObject(void);
 igMetaObject *beNDMWMdlPEBaseInfoWork_GetMetaObject(void);
-extern const char s_beNDMWMdlPEBaseInfoWork_className_005123f0[];
+extern const char beNDMWMdlPEBaseInfoWork_className[];
 int beNDMWMdlPEBaseInfoWork_GetVTable(void);
 void beNDMWMdlPEBaseInfoWork_InitFields(void);
-extern char g_beNDMWMdlPEBaseInfoWork_callbackList_004caa80[];
+extern char g_beNDMWMdlPEBaseInfoWork_callbackList[];
 void *beNDMWMdlPEBaseInfoWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWMdlPEBaseInfoWork_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                    /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWMdlPEBaseInfoWork_metaObject_0058b430,        /* published MetaObject slot */
+        g_beNDMWMdlPEBaseInfoWork_metaObject,        /* published MetaObject slot */
         beModelCtrlInfoWork_Register,                         /* base class registrar */
-        beModelCtrlInfoWork_GetPublishedMetaObject_003bf7b0,  /* base class MetaObject accessor */
+        beModelCtrlInfoWork_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWMdlPEBaseInfoWork_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWMdlPEBaseInfoWork_className_005123f0,         /* class name */
+        beNDMWMdlPEBaseInfoWork_className,         /* class name */
         0x114,                                                /* instance size */
         beNDMWMdlPEBaseInfoWork_GetVTable,                    /* vtable getter */
         beNDMWMdlPEBaseInfoWork_InitFields,                   /* field adder */
         0,                                                    /* extra callback item */
-        g_beNDMWMdlPEBaseInfoWork_callbackList_004caa80      /* callback list */
+        g_beNDMWMdlPEBaseInfoWork_callbackList      /* callback list */
     );
 }

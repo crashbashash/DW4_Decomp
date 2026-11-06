@@ -20,12 +20,12 @@
 /* C++ unit with exceptions on (retail keeps exception index records for the
  * lookup functions); the C-ABI names stay unmangled through this block. */
 extern "C" {
-extern int g_beDataBase_metaObject_005898d0[4];
+extern int g_beDataBase_metaObject[4];
 long long igProperty_FindByName(void *, void *, const char *);
 /* Descriptor of the property record's name member (src/engine/property.cpp). */
-extern int g_propertyNameField_00585be0[4];
+extern int g_propertyNameField[4];
 /* Empty string returned for a null string cell (finding #794); verified zero bytes in the ELF. */
-extern char s_emptyString_004e0858[];
+extern char emptyString[];
 
 int Gap__Bec__beDataBase__vfunc_20(void);
 int beDataBase_FindRecordValueIndex(beDataBase *, int, const char *, igDataList *);
@@ -40,7 +40,7 @@ int beDataBase_GetRecordCount(beDataBase *);
 }
 
 /* 0x0036f130: metadata (igMetaObject) getter of the beDataBase class. */
-int Gap__Bec__beDataBase__vfunc_20(void) { return g_beDataBase_metaObject_005898d0[0]; }
+int Gap__Bec__beDataBase__vfunc_20(void) { return g_beDataBase_metaObject[0]; }
 
 /* 0x003a93a0: flat index of the cell for (record, key) in the data list that
  * pairs with the offset list `columns`.  The key is resolved to a column name
@@ -73,7 +73,7 @@ int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *ke
         }
 
     }
-    found = igProperty_FindByName(columns, (void *)g_propertyNameField_00585be0[0], key);
+    found = igProperty_FindByName(columns, (void *)g_propertyNameField[0], key);
     if (!found) {
         column = -1;
         goto index_done;
@@ -174,7 +174,7 @@ char *beDataBase_GetRecordString(beDataBase *self, int record, const char *key) 
     int index = (int)beDataBase_FindRecordValueIndex(self, record, key,
                                                      (igDataList *)self->_stringOffsetList);
     char *text = (char *)((igStringObj *)*(int *)(((igDataList *)self->_stringData)->_data + index * 4))->_buffer;
-    return text ? text : s_emptyString_004e0858;
+    return text ? text : emptyString;
 }
 
 /* 0x003a95e0: number of records, i.e. data-list length divided by column

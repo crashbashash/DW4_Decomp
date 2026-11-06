@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igMovieManager_metaObject_00587870[];
+extern igMetaObject *g_igMovieManager_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *igMovieManager_GetMetaObject(void);
-extern const char s_igMovieManager_className_00500690[];
+extern const char igMovieManager_className[];
 int igMovieManager_GetVTable(void);
 void igMovieManager_InitFields(void);
-extern char g_igMovieManager_callbackList_004c2b90[];
+extern char g_igMovieManager_callbackList[];
 void *igMovieManager_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *igMovieManager_Register(void) {
     GpFlag_SetOnce_00334440();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMovieManager_metaObject_00587870,           /* published MetaObject slot */
+        g_igMovieManager_metaObject,           /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         igMovieManager_GetMetaObject,                   /* own MetaObject accessor (stored at +0x54) */
-        s_igMovieManager_className_00500690,            /* class name */
+        igMovieManager_className,            /* class name */
         0x28,                                           /* instance size */
         igMovieManager_GetVTable,                       /* vtable getter */
         igMovieManager_InitFields,                      /* field adder */
         0,                                              /* extra callback item */
-        g_igMovieManager_callbackList_004c2b90         /* callback list */
+        g_igMovieManager_callbackList         /* callback list */
     );
 }

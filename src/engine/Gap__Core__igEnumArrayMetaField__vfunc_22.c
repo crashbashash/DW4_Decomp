@@ -4,7 +4,7 @@
  * the slot the class registration fills (see igEnumArrayMetaField_Register.c).
  * Same accessor idiom as the other `*_metaObject_<addr>` getters in this folder; the array extern
  * keeps the load absolute. */
-extern int g_igEnumArrayMetaField_metaObject_005865b0[4];
+extern int g_igEnumArrayMetaField_metaObject[4];
 int Gap__Core__igEnumArrayMetaField__vfunc_22(void) {
-    return g_igEnumArrayMetaField_metaObject_005865b0[0];
+    return g_igEnumArrayMetaField_metaObject[0];
 }

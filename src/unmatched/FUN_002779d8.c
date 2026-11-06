@@ -26,7 +26,7 @@ typedef struct Lsc_2779d8 {
     LscEntry_2779d8 entries[16];    /* 0x38 */
 } Lsc_2779d8;
 
-extern char s_E0013_s_is_different_from_entry_file_name_LSC_ExecServer_004f0bf8[]; /* "E0013: '%s' is different from entry file name.(LSC_ExecServer)\n" */
+extern char E0013_s_is_different_from_entry_file_name_LSC_ExecServer[]; /* "E0013: '%s' is different from entry file name.(LSC_ExecServer)\n" */
 void FUN_002777f8(const char *format, ...);
 unsigned int strlen(const char *s);
 void FUN_0026a238(void *transfer);
@@ -56,7 +56,7 @@ void FUN_002779d8(Lsc_2779d8 *lsc) {
         sum += (unsigned char)name[i];
     }
     if (sum != entry->key) {
-        FUN_002777f8(s_E0013_s_is_different_from_entry_file_name_LSC_ExecServer_004f0bf8, entry->name);
+        FUN_002777f8(E0013_s_is_different_from_entry_file_name_LSC_ExecServer, entry->name);
         return;
     }
     FUN_00269ff0(lsc->transfer, entry->name, entry->start, entry->f16, entry->size);

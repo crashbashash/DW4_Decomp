@@ -3,10 +3,10 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igCharListNoClean_GetVTable[];
 extern char thunk_igCharListNoClean_GetMetaObject[];
-extern char igCharList_GetPublishedMetaObject_002cae50[];
+extern char igCharList_GetPublishedMetaObject[];
 extern char igCharList_Register[];
-extern char s_igCharListNoClean_className_004f8640[];
-extern char g_igCharListNoClean_metaObject_00586890[];
+extern char igCharListNoClean_className[];
+extern char g_igCharListNoClean_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 
@@ -14,11 +14,11 @@ void igCharListNoClean_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igCharListNoClean_metaObject_00586890,    /* published MetaObject slot */
+        g_igCharListNoClean_metaObject,    /* published MetaObject slot */
         igCharList_Register,                        /* base class registrar */
-        igCharList_GetPublishedMetaObject_002cae50, /* base class MetaObject accessor */
+        igCharList_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igCharListNoClean_GetMetaObject,      /* own MetaObject accessor (stored at +0x54) */
-        s_igCharListNoClean_className_004f8640,     /* class name */
+        igCharListNoClean_className,     /* class name */
         0x14,                                       /* instance size */
         igCharListNoClean_GetVTable,                /* vtable getter */
         0,                                          /* field adder */

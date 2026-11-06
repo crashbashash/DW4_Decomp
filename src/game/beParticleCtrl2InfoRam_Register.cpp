@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beParticleCtrl2InfoRam_metaObject_005884a8[];
+extern igMetaObject *g_beParticleCtrl2InfoRam_metaObject[];
 void *beBaseInfoRam_Register(void);
-igMetaObject *beBaseInfoRam_GetPublishedMetaObject_0033eaf0(void);
+igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 igMetaObject *beParticleCtrl2InfoRam_GetMetaObject(void);
-extern const char s_beParticleCtrl2InfoRam_className_00502d10[];
+extern const char beParticleCtrl2InfoRam_className[];
 int beParticleCtrl2InfoRam_GetVTable(void);
 void beParticleCtrl2InfoRam_InitFields(void);
-extern char g_beParticleCtrl2InfoRam_callbackList_004c45b0[];
+extern char g_beParticleCtrl2InfoRam_callbackList[];
 void *beParticleCtrl2InfoRam_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beParticleCtrl2InfoRam_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beParticleCtrl2InfoRam_metaObject_005884a8,    /* published MetaObject slot */
+        g_beParticleCtrl2InfoRam_metaObject,    /* published MetaObject slot */
         beBaseInfoRam_Register,                          /* base class registrar */
-        beBaseInfoRam_GetPublishedMetaObject_0033eaf0,   /* base class MetaObject accessor */
+        beBaseInfoRam_GetPublishedMetaObject,   /* base class MetaObject accessor */
         beParticleCtrl2InfoRam_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beParticleCtrl2InfoRam_className_00502d10,     /* class name */
+        beParticleCtrl2InfoRam_className,     /* class name */
         0x38,                                            /* instance size */
         beParticleCtrl2InfoRam_GetVTable,                /* vtable getter */
         beParticleCtrl2InfoRam_InitFields,               /* field adder */
         0,                                               /* extra callback item */
-        g_beParticleCtrl2InfoRam_callbackList_004c45b0  /* callback list */
+        g_beParticleCtrl2InfoRam_callbackList  /* callback list */
     );
 }

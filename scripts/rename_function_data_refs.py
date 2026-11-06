@@ -59,7 +59,7 @@ def function_start_name(ident):
     """Symbol name of the function `ident` (a data-style name) points at, or None."""
     if not verify.DATA_STYLE.match(ident):
         return None
-    va = verify.address_in_name(ident)
+    va = verify.spelled_address(ident)
     if va is None:
         return None
     owner = verify.code_owner(va, SYMBOLS)

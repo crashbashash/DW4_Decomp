@@ -39,27 +39,27 @@ extern "C" void igMetaObject_FinalizeAndReplaceField(igMetaObject *,int,igMetaFi
 extern "C" void igObject_Destroy(void *);
 
 /* Class handles of the two list classes (slot holding the published igMetaObject pointer). */
-extern "C" int g_igObjectList_metaObject_00585b60[4];
-extern "C" int g_igIntList_metaObject_00586880[4];
+extern "C" int g_igObjectList_metaObject[4];
+extern "C" int g_igIntList_metaObject[4];
 /* Name of the inherited field that is specialized: "_data". */
-extern "C" char s_data_004f5eb0[];
+extern "C" char data[];
 /* Descriptor-publication cells written to the clone's `_externalEnumStorage` (+28), one per
  * list class, 8 bytes after that class's handle (docs/engine/list-descriptor-copy.md). */
-extern "C" int g_igObjectList_dataDescriptorCell_00585b68[4];
-extern "C" int g_igIntList_dataDescriptorCell_00586888[4];
+extern "C" int g_igObjectList_dataDescriptorCell[4];
+extern "C" int g_igIntList_dataDescriptorCell[4];
 
 /* Low 23 bits of igObject::_refCount hold the count; the object is destroyed when they reach 0. */
 #define IG_REF_COUNT_MASK 0x7fffff
 
 extern "C" void igObjectList_InitFields(){
     igMemoryRefMetaField *dataField;
-    igMetaObject *meta=(igMetaObject *)g_igObjectList_metaObject_00585b60[0];
-    dataField=(igMemoryRefMetaField *)igMetaObject_FindFieldByName(meta,s_data_004f5eb0);
+    igMetaObject *meta=(igMetaObject *)g_igObjectList_metaObject[0];
+    dataField=(igMemoryRefMetaField *)igMetaObject_FindFieldByName(meta,data);
     int fieldIndex=ObjectPointerList_FindIndex((void *)meta->_metaFields,dataField);
     dataField=(igMemoryRefMetaField *)((DescriptorCloneView *)dataField)->Clone(1);
     dataField->_memType=igObjectRefMetaField_GetDefaultDescriptor();
     dataField->_memSize=0;
-    dataField->_externalEnumStorage=(int)g_igObjectList_dataDescriptorCell_00585b68;
+    dataField->_externalEnumStorage=(int)g_igObjectList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta,fieldIndex,(igMetaField *)dataField);
     /* release the clone-owned temporary reference */
     --((igObject *)dataField)->_refCount;
@@ -68,13 +68,13 @@ extern "C" void igObjectList_InitFields(){
 
 extern "C" void igIntList_InitFields(){
     igMemoryRefMetaField *dataField;
-    igMetaObject *meta=(igMetaObject *)g_igIntList_metaObject_00586880[0];
-    dataField=(igMemoryRefMetaField *)igMetaObject_FindFieldByName(meta,s_data_004f5eb0);
+    igMetaObject *meta=(igMetaObject *)g_igIntList_metaObject[0];
+    dataField=(igMemoryRefMetaField *)igMetaObject_FindFieldByName(meta,data);
     int fieldIndex=ObjectPointerList_FindIndex((void *)meta->_metaFields,dataField);
     dataField=(igMemoryRefMetaField *)((DescriptorCloneView *)dataField)->Clone(1);
     dataField->_memType=igIntMetaField_GetDefaultDescriptor();
     dataField->_memSize=0;
-    dataField->_externalEnumStorage=(int)g_igIntList_dataDescriptorCell_00586888;
+    dataField->_externalEnumStorage=(int)g_igIntList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta,fieldIndex,(igMetaField *)dataField);
     /* release the clone-owned temporary reference */
     --((igObject *)dataField)->_refCount;

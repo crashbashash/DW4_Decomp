@@ -371,7 +371,7 @@ are typed prototypes, not K&R `int f();`:
 
 * `tools/register_gen.py` regenerates `_Register` from `asm/`, resolving every argument through
   `config/SLUS-20836/symbols.txt` or the naming convention of the slot (`g_<Class>_metaObject_<addr>`), the
-  class name (`s_<Class>_className_<addr>`) and the callback list, and keeping any identifier the
+  class name (`<Class>_className`) and the callback list, and keeping any identifier the
   existing file already uses for the same address. The one declaration of
   `igMetaObject_RegisterClass` names each parameter after §1 (`abstractState`, `slot`,
   `baseRegister`, `baseMetaObject`, `getMetaObject`, `className`, `instanceSize`, `getVTable`,

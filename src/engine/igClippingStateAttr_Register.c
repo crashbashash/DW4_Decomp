@@ -2,11 +2,11 @@
  * The igMetaObject_RegisterClass arguments are laid out per
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualAttribute_Register[];
-extern char igVisualAttribute_GetPublishedMetaObject_00130610[];
+extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igClippingStateAttr_GetVTable[];
 extern char thunk_igClippingStateAttr_GetMetaObject[];
-extern char s_igClippingStateAttr_className_004d59c0[];
-extern char g_igClippingStateAttr_metaObject_0055f2f8[];
+extern char igClippingStateAttr_className[];
+extern char g_igClippingStateAttr_metaObject[];
 int GpFlag_SetOnce_00130000();
 int igMetaObject_RegisterClass();
 int igClippingStateAttr_InitFields();
@@ -15,11 +15,11 @@ void igClippingStateAttr_Register(void) {
     GpFlag_SetOnce_00130000();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igClippingStateAttr_metaObject_0055f2f8,         /* published MetaObject slot */
+        g_igClippingStateAttr_metaObject,         /* published MetaObject slot */
         igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject_00130610, /* base class MetaObject accessor */
+        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igClippingStateAttr_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        s_igClippingStateAttr_className_004d59c0,          /* class name */
+        igClippingStateAttr_className,          /* class name */
         0x10,                                              /* instance size */
         igClippingStateAttr_GetVTable,                     /* vtable getter */
         &igClippingStateAttr_InitFields,                   /* field adder */

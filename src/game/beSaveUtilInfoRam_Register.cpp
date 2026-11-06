@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSaveUtilInfoRam_metaObject_00587ff8[];
+extern igMetaObject *g_beSaveUtilInfoRam_metaObject[];
 void *beBaseInfoRam_Register(void);
-igMetaObject *beBaseInfoRam_GetPublishedMetaObject_0033eaf0(void);
+igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 igMetaObject *beSaveUtilInfoRam_GetMetaObject(void);
-extern const char s_beSaveUtilInfoRam_className_00502360[];
+extern const char beSaveUtilInfoRam_className[];
 int beSaveUtilInfoRam_GetVTable(void);
 void beSaveUtilInfoRam_InitFields(void);
-extern char g_beSaveUtilInfoRam_callbackList_004c3c20[];
+extern char g_beSaveUtilInfoRam_callbackList[];
 void *beSaveUtilInfoRam_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSaveUtilInfoRam_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSaveUtilInfoRam_metaObject_00587ff8,        /* published MetaObject slot */
+        g_beSaveUtilInfoRam_metaObject,        /* published MetaObject slot */
         beBaseInfoRam_Register,                         /* base class registrar */
-        beBaseInfoRam_GetPublishedMetaObject_0033eaf0,  /* base class MetaObject accessor */
+        beBaseInfoRam_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSaveUtilInfoRam_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beSaveUtilInfoRam_className_00502360,         /* class name */
+        beSaveUtilInfoRam_className,         /* class name */
         0x34,                                           /* instance size */
         beSaveUtilInfoRam_GetVTable,                    /* vtable getter */
         beSaveUtilInfoRam_InitFields,                   /* field adder */
         0,                                              /* extra callback item */
-        g_beSaveUtilInfoRam_callbackList_004c3c20      /* callback list */
+        g_beSaveUtilInfoRam_callbackList      /* callback list */
     );
 }

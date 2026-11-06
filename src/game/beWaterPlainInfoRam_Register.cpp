@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beWaterPlainInfoRam_metaObject_00587aa8[];
+extern igMetaObject *g_beWaterPlainInfoRam_metaObject[];
 void *beBaseInfoRam_Register(void);
-igMetaObject *beBaseInfoRam_GetPublishedMetaObject_0033eaf0(void);
+igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 igMetaObject *beWaterPlainInfoRam_GetMetaObject(void);
-extern const char s_beWaterPlainInfoRam_className_005017d0[];
+extern const char beWaterPlainInfoRam_className[];
 int beWaterPlainInfoRam_GetVTable(void);
 void beWaterPlainInfoRam_InitFields(void);
-extern char g_beWaterPlainInfoRam_callbackList_004c3090[];
+extern char g_beWaterPlainInfoRam_callbackList[];
 void *beWaterPlainInfoRam_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beWaterPlainInfoRam_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beWaterPlainInfoRam_metaObject_00587aa8,      /* published MetaObject slot */
+        g_beWaterPlainInfoRam_metaObject,      /* published MetaObject slot */
         beBaseInfoRam_Register,                         /* base class registrar */
-        beBaseInfoRam_GetPublishedMetaObject_0033eaf0,  /* base class MetaObject accessor */
+        beBaseInfoRam_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beWaterPlainInfoRam_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beWaterPlainInfoRam_className_005017d0,       /* class name */
+        beWaterPlainInfoRam_className,       /* class name */
         0xb8,                                           /* instance size */
         beWaterPlainInfoRam_GetVTable,                  /* vtable getter */
         beWaterPlainInfoRam_InitFields,                 /* field adder */
         0,                                              /* extra callback item */
-        g_beWaterPlainInfoRam_callbackList_004c3090    /* callback list */
+        g_beWaterPlainInfoRam_callbackList    /* callback list */
     );
 }

@@ -89,9 +89,9 @@ virtual void b50();
 virtual int Owns(void *);};
 /* Growable pointer list of allocators: data, signed count, capacity (same layout as igMemoryPoolInfoList). */
 struct AllocatorRegistry {AllocatorLookupView **data;int count;int capacity;};
-extern "C" AllocatorRegistry *g_primaryAllocatorList_00586f58[4],*g_secondaryAllocatorList_00586f60[4];
+extern "C" AllocatorRegistry *g_primaryAllocatorList[4],*g_secondaryAllocatorList[4];
 /* Object-system runtime pointer; byte 0 is the "object system active" flag. */
-extern "C" unsigned char *g_objectSystem_00586dc8[4];
+extern "C" unsigned char *g_objectSystem[4];
 extern "C" int igMemoryPoolInfoList_IndexOf(AllocatorRegistry *,AllocatorLookupView *);
 /* Index of `allocator` in the list, or -1 when absent. */
 extern "C" int igMemoryPoolInfoList_IndexOf(AllocatorRegistry *list,AllocatorLookupView *allocator){
@@ -104,8 +104,8 @@ extern "C" int igMemoryPoolInfoList_IndexOf(AllocatorRegistry *list,AllocatorLoo
  * index << 1 | 1); 0 when the object system is inactive.  An absent allocator
  * is not rejected, it encodes the -1 from IndexOf. */
 extern "C" int igAllocator_EncodeIndex(AllocatorLookupView *allocator){
-    if(*g_objectSystem_00586dc8[0]&&!allocator->Kind())return (unsigned)igMemoryPoolInfoList_IndexOf(g_primaryAllocatorList_00586f58[0],allocator)<<1;
+    if(*g_objectSystem[0]&&!allocator->Kind())return (unsigned)igMemoryPoolInfoList_IndexOf(g_primaryAllocatorList[0],allocator)<<1;
     unsigned char result=0;
-    if(*g_objectSystem_00586dc8[0])return ((unsigned)igMemoryPoolInfoList_IndexOf(g_secondaryAllocatorList_00586f60[0],allocator)<<1)|1;
+    if(*g_objectSystem[0])return ((unsigned)igMemoryPoolInfoList_IndexOf(g_secondaryAllocatorList[0],allocator)<<1)|1;
     return result;
 }

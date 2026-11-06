@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvPlatDataPS2_metaObject_00588088[];
+extern igMetaObject *g_beSvPlatDataPS2_metaObject[];
 void *beSvPlatBaseData_Register(void);
-igMetaObject *beSvPlatBaseData_GetPublishedMetaObject_003472a0(void);
+igMetaObject *beSvPlatBaseData_GetPublishedMetaObject(void);
 igMetaObject *beSvPlatDataPS2_GetMetaObject(void);
-extern const char s_beSvPlatDataPS2_className_005025a0[];
+extern const char beSvPlatDataPS2_className[];
 int beSvPlatDataPS2_GetVTable(void);
 void beSvPlatDataPS2_InitFields(void);
-extern char g_beSvPlatDataPS2_callbackList_004c3d80[];
+extern char g_beSvPlatDataPS2_callbackList[];
 void *beSvPlatDataPS2_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSvPlatDataPS2_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvPlatDataPS2_metaObject_00588088,             /* published MetaObject slot */
+        g_beSvPlatDataPS2_metaObject,             /* published MetaObject slot */
         beSvPlatBaseData_Register,                         /* base class registrar */
-        beSvPlatBaseData_GetPublishedMetaObject_003472a0,  /* base class MetaObject accessor */
+        beSvPlatBaseData_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSvPlatDataPS2_GetMetaObject,                     /* own MetaObject accessor (stored at +0x54) */
-        s_beSvPlatDataPS2_className_005025a0,              /* class name */
+        beSvPlatDataPS2_className,              /* class name */
         0xd8,                                              /* instance size */
         beSvPlatDataPS2_GetVTable,                         /* vtable getter */
         beSvPlatDataPS2_InitFields,                        /* field adder */
         0,                                                 /* extra callback item */
-        g_beSvPlatDataPS2_callbackList_004c3d80           /* callback list */
+        g_beSvPlatDataPS2_callbackList           /* callback list */
     );
 }

@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWMdlPEBase_metaObject_0058b428[];
+extern igMetaObject *g_beNDMWMdlPEBase_metaObject[];
 void *beModelCtrl_Register(void);
-igMetaObject *beModelCtrl_GetPublishedMetaObject_003bf4b0(void);
+igMetaObject *beModelCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWMdlPEBase_GetMetaObject(void);
-extern const char s_beNDMWMdlPEBase_className_005123e0[];
+extern const char beNDMWMdlPEBase_className[];
 void *beNDMWMdlPEBase_Register(void);
 }
 
@@ -30,11 +30,11 @@ void *beNDMWMdlPEBase_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         1,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWMdlPEBase_metaObject_0058b428,        /* published MetaObject slot */
+        g_beNDMWMdlPEBase_metaObject,        /* published MetaObject slot */
         beModelCtrl_Register,                         /* base class registrar */
-        beModelCtrl_GetPublishedMetaObject_003bf4b0,  /* base class MetaObject accessor */
+        beModelCtrl_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWMdlPEBase_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWMdlPEBase_className_005123e0,         /* class name */
+        beNDMWMdlPEBase_className,         /* class name */
         0x2c,                                         /* instance size */
         0,                                            /* vtable getter */
         0,                                            /* field adder */

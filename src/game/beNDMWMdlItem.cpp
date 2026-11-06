@@ -8,8 +8,8 @@
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
-extern int g_beNDMWMdlItem_metaObject_0058b4a8[4];
-extern int g_igViewerSceneInfoManager_metaObject_0058c790[4];
+extern int g_beNDMWMdlItem_metaObject[4];
+extern int g_igViewerSceneInfoManager_metaObject[4];
 /* Looks up the insight's object list for the entry whose class metaObject is the
  * second argument (hypothesis: igInsightCore::FindObjectByMetaObject, finding #3188;
  * the matched body is src/unmatched/FUN_00236f80.cpp). */
@@ -22,12 +22,12 @@ int Gap__Core__igObject__vfunc_23();
  * (docs/engine/typed-game-layer.md). */
 void Gap__Bec__beNDMWMdlItem__vfunc_23(beNDMWMdlItem *self) {
     Gap__Core__igObject__vfunc_23();
-    self->_viewerSIManager = FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject_0058c790[0]);
+    self->_viewerSIManager = FUN_00236f80(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
 }
 
 /* 0x00443100 — slot 20: the class's metaObject handle (0x58b4a8). */
 int Gap__Bec__beNDMWMdlItem__vfunc_20(void)
 {
-    return g_beNDMWMdlItem_metaObject_0058b4a8[0];
+    return g_beNDMWMdlItem_metaObject[0];
 }
 } /* extern "C" */

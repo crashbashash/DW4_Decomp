@@ -27,7 +27,7 @@ int StringChunk_DeleteObject(int);
 /* 0x0030c760: delete wrapper, forwards to the delete service at 0x002ed4b0. */
 int StringTable_DeleteObject(int object)
 {
-    return Memory_FreeBufferAlias_002ed4b0(object);
+    return Memory_FreeBufferAliasA(object);
 }
 
 /* 0x0030c770: chunk constructor.  The cache starts unknown (-1) and the chunk
@@ -87,5 +87,5 @@ int StringChunk_MergeBlocks(StringChunk *chunk, unsigned short *previous,
 /* 0x0030cd00: delete wrapper, same target as StringTable_DeleteObject. */
 int StringChunk_DeleteObject(int object)
 {
-    return Memory_FreeBufferAlias_002ed4b0(object);
+    return Memory_FreeBufferAliasA(object);
 }

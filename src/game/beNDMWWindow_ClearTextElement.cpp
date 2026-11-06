@@ -11,14 +11,14 @@ extern "C" {
 int beMessenger_SelectReceivers(int, int *, int, int);
 int beMessenger_DispatchSelected(int, int *);
 int beMessenger_AppendString(int, int *);
-extern int s_TEXTCTL_00518700[4];
-extern int s_SWITCH_00518720[4];
-extern int s_CLR_00518730[4];
+extern int TEXTCTL_2[4];
+extern int SWITCH[4];
+extern int CLR[4];
 void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName) {
-    beMessenger_SelectReceivers(self->_messenger, &s_TEXTCTL_00518700[0], 0, -1);
+    beMessenger_SelectReceivers(self->_messenger, &TEXTCTL_2[0], 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
-    beMessenger_AppendString(self->_messenger, &s_CLR_00518730[0]);
-    beMessenger_DispatchSelected(self->_messenger, &s_SWITCH_00518720[0]);
+    beMessenger_AppendString(self->_messenger, &CLR[0]);
+    beMessenger_DispatchSelected(self->_messenger, &SWITCH[0]);
 }
 } /* extern "C" */

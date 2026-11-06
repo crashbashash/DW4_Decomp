@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_00133290(void);
-extern igMetaObject *g_igTexGenMatrixAttr_metaObject_0055ee28[4];
+extern igMetaObject *g_igTexGenMatrixAttr_metaObject[4];
 igMetaObject *igTexGenMatrixAttr_GetMetaObject(void);
 }
 
 igMetaObject *igTexGenMatrixAttr_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igTexGenMatrixAttr_metaObject_0055ee28[0] != 0) {
-        ready = (g_igTexGenMatrixAttr_metaObject_0055ee28[0]->_validity & 4) != 0;
+    if (g_igTexGenMatrixAttr_metaObject[0] != 0) {
+        ready = (g_igTexGenMatrixAttr_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00133290();
 done:
-    return g_igTexGenMatrixAttr_metaObject_0055ee28[0];
+    return g_igTexGenMatrixAttr_metaObject[0];
 }

@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNumVerData_metaObject_00588690[];
+extern igMetaObject *g_beNumVerData_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beNumVerData_GetMetaObject(void);
-extern const char s_beNumVerData_className_00503088[];
+extern const char beNumVerData_className[];
 int beNumVerData_GetVTable(void);
 void beNumVerData_InitFields(void);
-extern char g_beNumVerData_callbackList_004c49d0[];
+extern char g_beNumVerData_callbackList[];
 void *beNumVerData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNumVerData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNumVerData_metaObject_00588690,     /* published MetaObject slot */
+        g_beNumVerData_metaObject,     /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beNumVerData_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        s_beNumVerData_className_00503088,      /* class name */
+        beNumVerData_className,      /* class name */
         0x10,                                   /* instance size */
         beNumVerData_GetVTable,                 /* vtable getter */
         beNumVerData_InitFields,                /* field adder */
         0,                                      /* extra callback item */
-        g_beNumVerData_callbackList_004c49d0   /* callback list */
+        g_beNumVerData_callbackList   /* callback list */
     );
 }

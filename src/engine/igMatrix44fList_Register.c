@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igMatrix44fList_GetVTable[];
 extern char thunk_igMatrix44fList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igMatrix44fList_className_004e0c90[];
-extern char g_igMatrix44fList_metaObject_00561078[];
+extern char igMatrix44fList_className[];
+extern char g_igMatrix44fList_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 extern int igMatrix44fList_InitFields_00189b10[4];
@@ -16,11 +16,11 @@ void igMatrix44fList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMatrix44fList_metaObject_00561078,   /* published MetaObject slot */
+        g_igMatrix44fList_metaObject,   /* published MetaObject slot */
         igDataList_Register,                     /* base class registrar */
         igDataList_GetPublishedMetaObject,       /* base class MetaObject accessor */
         thunk_igMatrix44fList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igMatrix44fList_className_004e0c90,    /* class name */
+        igMatrix44fList_className,    /* class name */
         0x14,                                    /* instance size */
         igMatrix44fList_GetVTable,               /* vtable getter */
         &igMatrix44fList_InitFields_00189b10[0], /* field adder */

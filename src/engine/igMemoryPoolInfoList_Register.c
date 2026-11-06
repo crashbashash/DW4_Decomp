@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igObjectList_Register[];
 extern char igMemoryPoolInfoList_GetVTable[];
 extern char thunk_igMemoryPoolInfoList_GetMetaObject[];
-extern char g_igMemoryPoolInfoList_callbackList_004c0050[];
-extern char s_igMemoryPoolInfoList_className_004f69c0[];
-extern char g_igMemoryPoolInfoList_metaObject_00585df8[];
+extern char g_igMemoryPoolInfoList_callbackList[];
+extern char igMemoryPoolInfoList_className[];
+extern char g_igMemoryPoolInfoList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igMemoryPoolInfoList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMemoryPoolInfoList_metaObject_00585df8, /* published MetaObject slot */
+        g_igMemoryPoolInfoList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                      /* base class registrar */
         igObjectList_GetPublishedMetaObject,        /* base class MetaObject accessor */
         thunk_igMemoryPoolInfoList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igMemoryPoolInfoList_className_004f69c0,  /* class name */
+        igMemoryPoolInfoList_className,  /* class name */
         0x14,                                       /* instance size */
         igMemoryPoolInfoList_GetVTable,             /* vtable getter */
         0,                                          /* field adder */
         0,                                          /* extra callback item */
-        g_igMemoryPoolInfoList_callbackList_004c0050  /* callback list */
+        g_igMemoryPoolInfoList_callbackList  /* callback list */
     );
 }

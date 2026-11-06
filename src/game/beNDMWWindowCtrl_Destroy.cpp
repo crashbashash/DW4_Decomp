@@ -8,8 +8,8 @@
  * deletion-branch delay slots, and the `nop` after the last cleanup call is the original padding. */
 #include "dw4/reflected.h"
 extern "C" {
-extern int g_beNDMWWindowCtrl_vtable_0053daa0[4];
-extern int g_beNDMWWindow_vtable_0053dc30[4];
+extern int g_beNDMWWindowCtrl_vtable[4];
+extern int g_beNDMWWindow_vtable[4];
 extern void ObjectRef_Destruct_00150eb0(int *, int);
 extern void ObjectRef_Destruct_001c6460(int *, int);
 extern void FUN_003b2f30(int *, int);
@@ -20,9 +20,9 @@ beNDMWWindowCtrl *beNDMWWindowCtrl_Destroy(beNDMWWindowCtrl *self, long long fla
 
 beNDMWWindowCtrl *beNDMWWindowCtrl_Destroy(beNDMWWindowCtrl *self, long long flags) {
     if (self) {
-        self->_vtable = (int)g_beNDMWWindowCtrl_vtable_0053daa0;
+        self->_vtable = (int)g_beNDMWWindowCtrl_vtable;
         if (self) {
-            self->_vtable = (int)g_beNDMWWindow_vtable_0053dc30;
+            self->_vtable = (int)g_beNDMWWindow_vtable;
             ObjectRef_Destruct_001c6460(&self->_modelCloseSeqNameList, -1);
             ObjectRef_Destruct_00150eb0(&self->_modelCloseRamNoList, -1);
             ObjectRef_Destruct_001c6460(&self->_modelCloseInfoNameList, -1);

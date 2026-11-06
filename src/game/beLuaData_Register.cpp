@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLuaData_metaObject_005891d8[];
+extern igMetaObject *g_beLuaData_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beLuaData_GetMetaObject(void);
-extern const char s_beLuaData_className_00504830[];
+extern const char beLuaData_className[];
 int beLuaData_GetVTable(void);
 void beLuaData_InitFields(void);
-extern char g_beLuaData_callbackList_004c6288[];
+extern char g_beLuaData_callbackList[];
 void *beLuaData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beLuaData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLuaData_metaObject_005891d8,                /* published MetaObject slot */
+        g_beLuaData_metaObject,                /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLuaData_GetMetaObject,                        /* own MetaObject accessor (stored at +0x54) */
-        s_beLuaData_className_00504830,                 /* class name */
+        beLuaData_className,                 /* class name */
         0x10,                                           /* instance size */
         beLuaData_GetVTable,                            /* vtable getter */
         beLuaData_InitFields,                           /* field adder */
         0,                                              /* extra callback item */
-        g_beLuaData_callbackList_004c6288              /* callback list */
+        g_beLuaData_callbackList              /* callback list */
     );
 }

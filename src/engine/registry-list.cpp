@@ -1,7 +1,7 @@
 /* The growable pointer list shared by the allocator registries (igMemoryPoolInfoList,
  * finding #363): data, signed count, capacity.  Initial capacity 64 entries,
  * growing four at a time.  The allocator used for the storage is the one the
- * object system keeps at +48 (g_objectSystem_00586dc8).  The classes are
+ * object system keeps at +48 (g_objectSystem).  The classes are
  * observed ABI projections of the allocator's virtual slots (a0.. are padding). */
 struct RegistryList {void **data;int count,capacity;};
 class RegistryAllocatorView {public:
@@ -70,20 +70,20 @@ virtual void b6();
 virtual void Free(void *);};
 /* Object system as seen from here: only its allocator reference (+48) is used. */
 struct BootstrapSystem {char prefix[48];RegistryAllocatorView *allocator;};
-extern "C" BootstrapSystem *g_objectSystem_00586dc8[4];
+extern "C" BootstrapSystem *g_objectSystem[4];
 extern "C" void memset(void *,int,unsigned);
 extern "C" void igMemoryPoolInfoList_Delete(void *);
 /* Start an empty list with 64 zeroed slots. */
 extern "C" RegistryList *igMemoryPoolInfoList_Init(RegistryList *list){
     list->capacity=64;list->count=0;
-    list->data=(void **)g_objectSystem_00586dc8[0]->allocator->Allocate((unsigned)list->capacity*4);
+    list->data=(void **)g_objectSystem[0]->allocator->Allocate((unsigned)list->capacity*4);
     memset(list->data,0,(unsigned)list->capacity*4);
     return list;
 }
 /* Free the slot storage; destroy the list object itself only when deleteFlag is positive. */
 extern "C" RegistryList *igMemoryPoolInfoList_Release(RegistryList *list,int deleteFlag){
     if(list){
-        if(list->data)g_objectSystem_00586dc8[0]->allocator->Free(list->data);
+        if(list->data)g_objectSystem[0]->allocator->Free(list->data);
         if((short)deleteFlag>0)igMemoryPoolInfoList_Delete(list);
     }
     return list;
@@ -92,7 +92,7 @@ extern "C" RegistryList *igMemoryPoolInfoList_Release(RegistryList *list,int del
 extern "C" void igMemoryPoolInfoList_Append(RegistryList *list,void *entry){
     if(list->count>=list->capacity){
         list->capacity+=4;
-        list->data=(void **)g_objectSystem_00586dc8[0]->allocator->Reallocate(list->data,(unsigned)list->capacity*4);
+        list->data=(void **)g_objectSystem[0]->allocator->Reallocate(list->data,(unsigned)list->capacity*4);
         memset(list->data+(list->capacity-4),0,16);
     }
     list->data[list->count++]=entry;

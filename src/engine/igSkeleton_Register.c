@@ -4,11 +4,11 @@
 #include "dw4/reflected.h"
 extern char igSkeleton_GetVTable[];
 void thunk_FUN_00198550(void);  /* code at 0x198710, passed by address (was DAT_198710; docs/engine/function-inventory.md) */
-extern char igAnimationHierarchy_GetPublishedMetaObject_00198720[];
+extern char igAnimationHierarchy_GetPublishedMetaObject[];
 extern char igAnimationHierarchy_Register[];
-extern char g_igSkeleton_callbackList_0048b588[];
-extern char s_igSkeleton_className_004e1a98[];
-extern char g_igSkeleton_metaObject_005614b0[];
+extern char g_igSkeleton_callbackList[];
+extern char igSkeleton_className[];
+extern char g_igSkeleton_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 int igSkeleton_InitFields();
@@ -17,15 +17,15 @@ void igSkeleton_Register(void) {
     GpFlag_SetOnce_00194380(); /* sets this module's one-shot guard byte at 0x00554b80 (.sbss) */
     igMetaObject_RegisterClass(
         0,                                                    /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igSkeleton_metaObject_005614b0,                     /* published MetaObject slot */
+        g_igSkeleton_metaObject,                     /* published MetaObject slot */
         igAnimationHierarchy_Register,                        /* base class registrar */
-        igAnimationHierarchy_GetPublishedMetaObject_00198720, /* base class MetaObject accessor */
+        igAnimationHierarchy_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_FUN_00198550,                                         /* own MetaObject accessor (stored at +0x54) */
-        s_igSkeleton_className_004e1a98,                      /* class name */
+        igSkeleton_className,                      /* class name */
         sizeof(igSkeleton),                                   /* instance size (reflected struct, include/dw4/reflected.h) */
         igSkeleton_GetVTable,                                 /* vtable getter */
         &igSkeleton_InitFields,                               /* field adder */
         0,                                                    /* extra callback item */
-        g_igSkeleton_callbackList_0048b588                    /* callback list */
+        g_igSkeleton_callbackList                    /* callback list */
     );
 }

@@ -18,7 +18,7 @@
  * offset the lookup adds to each record to reach its name string
  * (docs/engine/property-system.md, "Registry object").  Array form keeps the load
  * absolute (lui/lw). */
-extern "C" int g_propertyNameField_00585be0[4];
+extern "C" int g_propertyNameField[4];
 
 extern "C" {
 int igProperty_FindByName(int container, int nameField, char *key);
@@ -31,23 +31,23 @@ int igProperty_GetRecordFolder(int container, char *key, int unused);
 /* 0x003a9220 */
 int igProperty_GetRecord(int container, char *key, int unused)
 {
-    return igProperty_FindByName(container, g_propertyNameField_00585be0[0], key);
+    return igProperty_FindByName(container, g_propertyNameField[0], key);
 }
 
 /* 0x003a9280 */
 int igProperty_GetRecordByte(int container, char *key, int unused)
 {
-    return igProperty_FindByName(container, g_propertyNameField_00585be0[0], key);
+    return igProperty_FindByName(container, g_propertyNameField[0], key);
 }
 
 /* 0x003a92b0 */
 int igProperty_GetRecordArray(int container, char *key, int unused)
 {
-    return igProperty_FindByName(container, g_propertyNameField_00585be0[0], key);
+    return igProperty_FindByName(container, g_propertyNameField[0], key);
 }
 
 /* 0x003a9340 */
 int igProperty_GetRecordFolder(int container, char *key, int unused)
 {
-    return igProperty_FindByName(container, g_propertyNameField_00585be0[0], key);
+    return igProperty_FindByName(container, g_propertyNameField[0], key);
 }

@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShopCtrl50_metaObject_0058adb8[];
+extern igMetaObject *g_beNDMWShopCtrl50_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWShopCtrl50_GetMetaObject(void);
-extern const char s_beNDMWShopCtrl50_className_005114a0[];
+extern const char beNDMWShopCtrl50_className[];
 int beNDMWShopCtrl50_GetVTable(void);
 void beNDMWShopCtrl50_InitFields(void);
 void *beNDMWShopCtrl50_Register(void);
@@ -32,11 +32,11 @@ void *beNDMWShopCtrl50_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShopCtrl50_metaObject_0058adb8,   /* published MetaObject slot */
+        g_beNDMWShopCtrl50_metaObject,   /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWShopCtrl50_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShopCtrl50_className_005114a0,    /* class name */
+        beNDMWShopCtrl50_className,    /* class name */
         0x68,                                     /* instance size */
         beNDMWShopCtrl50_GetVTable,               /* vtable getter */
         beNDMWShopCtrl50_InitFields,              /* field adder */

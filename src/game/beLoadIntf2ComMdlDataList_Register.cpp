@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLoadIntf2ComMdlDataList_metaObject_0058be68[];
+extern igMetaObject *g_beLoadIntf2ComMdlDataList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beLoadIntf2ComMdlDataList_GetMetaObject(void);
-extern const char s_beLoadIntf2ComMdlDataList_className_005130e0[];
+extern const char beLoadIntf2ComMdlDataList_className[];
 int beLoadIntf2ComMdlDataList_GetVTable(void);
-extern char g_beLoadIntf2ComMdlDataList_callbackList_004cbf20[];
+extern char g_beLoadIntf2ComMdlDataList_callbackList[];
 void *beLoadIntf2ComMdlDataList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beLoadIntf2ComMdlDataList_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLoadIntf2ComMdlDataList_metaObject_0058be68,    /* published MetaObject slot */
+        g_beLoadIntf2ComMdlDataList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                              /* base class registrar */
         igObjectList_GetPublishedMetaObject,                /* base class MetaObject accessor */
         beLoadIntf2ComMdlDataList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beLoadIntf2ComMdlDataList_className_005130e0,     /* class name */
+        beLoadIntf2ComMdlDataList_className,     /* class name */
         0x14,                                               /* instance size */
         beLoadIntf2ComMdlDataList_GetVTable,                /* vtable getter */
         0,                                                  /* field adder */
         0,                                                  /* extra callback item */
-        g_beLoadIntf2ComMdlDataList_callbackList_004cbf20  /* callback list */
+        g_beLoadIntf2ComMdlDataList_callbackList  /* callback list */
     );
 }

@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igAnimationTransitionDefinitionList_GetVTable[];
 extern char thunk_igAnimationTransitionDefinitionList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igAnimationTransitionDefinitionList_callbackList_0048d590[];
-extern char s_igAnimationTransitionDefinitionList_className_004e4180[];
-extern char g_igAnimationTransitionDefinitionList_metaObject_005623b8[];
+extern char g_igAnimationTransitionDefinitionList_callbackList[];
+extern char igAnimationTransitionDefinitionList_className[];
+extern char g_igAnimationTransitionDefinitionList_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igAnimationTransitionDefinitionList_Register(void) {
     GpFlag_SetOnce_00194380();
     igMetaObject_RegisterClass(
         0,                                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAnimationTransitionDefinitionList_metaObject_005623b8, /* published MetaObject slot */
+        g_igAnimationTransitionDefinitionList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                                     /* base class registrar */
         igObjectList_GetPublishedMetaObject,                       /* base class MetaObject accessor */
         thunk_igAnimationTransitionDefinitionList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igAnimationTransitionDefinitionList_className_004e4180,  /* class name */
+        igAnimationTransitionDefinitionList_className,  /* class name */
         0x14,                                                      /* instance size */
         igAnimationTransitionDefinitionList_GetVTable,             /* vtable getter */
         0,                                                         /* field adder */
         0,                                                         /* extra callback item */
-        g_igAnimationTransitionDefinitionList_callbackList_0048d590  /* callback list */
+        g_igAnimationTransitionDefinitionList_callbackList  /* callback list */
     );
 }

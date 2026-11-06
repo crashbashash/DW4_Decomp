@@ -6,8 +6,8 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igInsightScheduler_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igInsightScheduler_className_004e8570[];
-extern char g_igInsightScheduler_metaObject_0056db48[];
+extern char igInsightScheduler_className[];
+extern char g_igInsightScheduler_metaObject[];
 int GpFlag_SetOnce_00230f50();
 int igMetaObject_RegisterClass();
 extern int igInsightScheduler_SetAbstractProxy_002325a0[4];
@@ -15,11 +15,11 @@ void igInsightScheduler_Register(void) {
     GpFlag_SetOnce_00230f50();
     igMetaObject_RegisterClass(
         1,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igInsightScheduler_metaObject_0056db48,         /* published MetaObject slot */
+        g_igInsightScheduler_metaObject,         /* published MetaObject slot */
         igObject_Register,                                /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,            /* base class MetaObject accessor */
         thunk_igInsightScheduler_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        s_igInsightScheduler_className_004e8570,          /* class name */
+        igInsightScheduler_className,          /* class name */
         8,                                                /* instance size */
         0,                                                /* vtable getter */
         &igInsightScheduler_SetAbstractProxy_002325a0[0], /* post-init hook */

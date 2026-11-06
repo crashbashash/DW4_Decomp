@@ -14,10 +14,10 @@
  * still verifies one function at a time. */
 #include "dw4/reflected.h"
 extern "C" {
-extern int g_beNDMWLoadCtrl2Info_metaObject_0058baf0[4];
-extern int g_beNDMWLoadCtrl2_metaObject_0058bef0[4];
-extern int g_bePadManager_metaObject_00588518[4];
-extern int s_LOADCTRL2_00518290[4];
+extern int g_beNDMWLoadCtrl2Info_metaObject[4];
+extern int g_beNDMWLoadCtrl2_metaObject[4];
+extern int g_bePadManager_metaObject[4];
+extern int LOADCTRL2[4];
 /* Looks up the insight's object list for the entry whose class metaObject is the
  * second argument (hypothesis: igInsightCore::FindObjectByMetaObject; the matched
  * body is src/unmatched/FUN_00236f80.cpp). */
@@ -42,7 +42,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_32(beNDMWLoadCtrl2 *self) {
     igObject *found;
     igObject *previous;
     if (self->_padManager == 0) {
-        found = (igObject *)FUN_00236f80(self->_insight, g_bePadManager_metaObject_00588518[0]);
+        found = (igObject *)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
         if (found != 0) {
             found->_refCount = found->_refCount + 1;
             asm { nop }
@@ -63,7 +63,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_32(beNDMWLoadCtrl2 *self) {
 /* 0x003f2450: slot 30, class metaObject accessor of the load controller's info record */
 int Gap__Bec__beNDMWLoadCtrl2__vfunc_30(void)
 {
-    return g_beNDMWLoadCtrl2Info_metaObject_0058baf0[0];
+    return g_beNDMWLoadCtrl2Info_metaObject[0];
 }
 
 /* 0x003f2460 — slot 29: register the load controller with its messenger as the
@@ -71,11 +71,11 @@ int Gap__Bec__beNDMWLoadCtrl2__vfunc_30(void)
  * wrapper shape as beNDMWTitle2 slot 29). */
 void Gap__Bec__beNDMWLoadCtrl2__vfunc_29(beNDMWLoadCtrl2 *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &s_LOADCTRL2_00518290[0]);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &LOADCTRL2[0]);
 }
 
 /* 0x003f2d40: slot 20, class metaObject accessor (RTTI handle at 0x0058bef0) */
 int Gap__Bec__beNDMWLoadCtrl2__vfunc_20(void)
 {
-    return g_beNDMWLoadCtrl2_metaObject_0058bef0[0];
+    return g_beNDMWLoadCtrl2_metaObject[0];
 }

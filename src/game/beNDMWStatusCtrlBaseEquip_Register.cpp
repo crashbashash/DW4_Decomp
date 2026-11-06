@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWStatusCtrlBaseEquip_metaObject_0058af30[];
+extern igMetaObject *g_beNDMWStatusCtrlBaseEquip_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWStatusCtrlBaseEquip_GetMetaObject(void);
-extern const char s_beNDMWStatusCtrlBaseEquip_className_005117d0[];
+extern const char beNDMWStatusCtrlBaseEquip_className[];
 void beNDMWStatusCtrlBaseEquip_InitFields(void);
-extern char s_pA6_004c9e90[];
+extern char pA6_2[];
 void *beNDMWStatusCtrlBaseEquip_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beNDMWStatusCtrlBaseEquip_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         1,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWStatusCtrlBaseEquip_metaObject_0058af30,  /* published MetaObject slot */
+        g_beNDMWStatusCtrlBaseEquip_metaObject,  /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                        /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,          /* base class MetaObject accessor */
         beNDMWStatusCtrlBaseEquip_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWStatusCtrlBaseEquip_className_005117d0,   /* class name */
+        beNDMWStatusCtrlBaseEquip_className,   /* class name */
         0x7c,                                             /* instance size */
         0,                                                /* vtable getter */
         beNDMWStatusCtrlBaseEquip_InitFields,             /* field adder */
         0,                                                /* extra callback item */
-        s_pA6_004c9e90                                   /* callback list */
+        pA6_2                                   /* callback list */
     );
 }

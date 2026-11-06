@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beDBManagerInfo_metaObject_00589938[];
+extern igMetaObject *g_beDBManagerInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beDBManagerInfo_GetMetaObject(void);
-extern const char s_beDBManagerInfo_className_00505710[];
+extern const char beDBManagerInfo_className[];
 int beDBManagerInfo_GetVTable(void);
 void beDBManagerInfo_InitFields(void);
-extern char g_beDBManagerInfo_callbackList_004c7320[];
+extern char g_beDBManagerInfo_callbackList[];
 void *beDBManagerInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beDBManagerInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beDBManagerInfo_metaObject_00589938,       /* published MetaObject slot */
+        g_beDBManagerInfo_metaObject,       /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beDBManagerInfo_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_beDBManagerInfo_className_00505710,        /* class name */
+        beDBManagerInfo_className,        /* class name */
         0x20,                                        /* instance size */
         beDBManagerInfo_GetVTable,                   /* vtable getter */
         beDBManagerInfo_InitFields,                  /* field adder */
         0,                                           /* extra callback item */
-        g_beDBManagerInfo_callbackList_004c7320     /* callback list */
+        g_beDBManagerInfo_callbackList     /* callback list */
     );
 }

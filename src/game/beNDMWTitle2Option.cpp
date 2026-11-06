@@ -7,23 +7,23 @@
 /* The retail unit was C++ with exceptions on (it keeps an exception index record);
  * the code is C, so the whole unit keeps C linkage. */
 extern "C" {
-extern int g_beNDMWTitle2Option_metaObject_0058aa58[4];
+extern int g_beNDMWTitle2Option_metaObject[4];
 #include "dw4/reflected.h"
 int beMessenger_SendGroup(int, int *, int *);
 int beMessenger_GetObject(int, int);
 void *igProperty_GetRecord(int, int *);
-extern int s_GAMERAM_00518310[4];
-extern int s_GETCOMMON_00518318[4];
-extern int s_CAMERAMODE_00518328[4];
-extern int s_LIGHTMODE_00518338[4];
+extern int GAMERAM_3[4];
+extern int GETCOMMON_2[4];
+extern int CAMERAMODE_2[4];
+extern int LIGHTMODE_2[4];
 /* Set once the title settings are valid (docs/engine/title-menu-controller.md,
  * "Options"; finding #729): InitSettings restores the saved modes only then. */
-extern unsigned char g_titleSettingsValid_00554e70;
+extern unsigned char g_commonSettingsValid;
 
 /* 0x003cc6f0 */
 int Gap__Bec__beNDMWTitle2Option__vfunc_20(void)
 {
-    return g_beNDMWTitle2Option_metaObject_0058aa58[0];
+    return g_beNDMWTitle2Option_metaObject[0];
 }
 
 /* 0x003f2d50
@@ -36,11 +36,11 @@ void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger) {
     int commonSettings;
 
     self->_messenger = messenger;
-    if (g_titleSettingsValid_00554e70 == 1) {
-        beMessenger_SendGroup(self->_messenger, &s_GAMERAM_00518310[0], &s_GETCOMMON_00518318[0]);
+    if (g_commonSettingsValid == 1) {
+        beMessenger_SendGroup(self->_messenger, &GAMERAM_3[0], &GETCOMMON_2[0]);
         commonSettings = beMessenger_GetObject(self->_messenger, 0);
-        self->_comConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, &s_CAMERAMODE_00518328[0])) + 12));
-        self->_lightConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, &s_LIGHTMODE_00518338[0])) + 12));
+        self->_comConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, &CAMERAMODE_2[0])) + 12));
+        self->_lightConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, &LIGHTMODE_2[0])) + 12));
         self->_selLang = 0;
         return;
     }

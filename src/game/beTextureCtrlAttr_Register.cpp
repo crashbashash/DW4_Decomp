@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beTextureCtrlAttr_metaObject_00587c98[];
+extern igMetaObject *g_beTextureCtrlAttr_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beTextureCtrlAttr_GetMetaObject(void);
-extern const char s_beTextureCtrlAttr_className_00501b70[];
+extern const char beTextureCtrlAttr_className[];
 int beTextureCtrlAttr_GetVTable(void);
 void beTextureCtrlAttr_InitFields(void);
-extern char g_beTextureCtrlAttr_callbackList_004c3490[];
+extern char g_beTextureCtrlAttr_callbackList[];
 void *beTextureCtrlAttr_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beTextureCtrlAttr_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beTextureCtrlAttr_metaObject_00587c98,        /* published MetaObject slot */
+        g_beTextureCtrlAttr_metaObject,        /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beTextureCtrlAttr_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beTextureCtrlAttr_className_00501b70,         /* class name */
+        beTextureCtrlAttr_className,         /* class name */
         0x10,                                           /* instance size */
         beTextureCtrlAttr_GetVTable,                    /* vtable getter */
         beTextureCtrlAttr_InitFields,                   /* field adder */
         0,                                              /* extra callback item */
-        g_beTextureCtrlAttr_callbackList_004c3490      /* callback list */
+        g_beTextureCtrlAttr_callbackList      /* callback list */
     );
 }

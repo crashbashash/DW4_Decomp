@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCameraDemoData_metaObject_00589be8[];
+extern igMetaObject *g_beCameraDemoData_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beCameraDemoData_GetMetaObject(void);
-extern const char s_beCameraDemoData_className_00505b30[];
+extern const char beCameraDemoData_className[];
 int beCameraDemoData_GetVTable(void);
 void beCameraDemoData_InitFields(void);
-extern char g_beCameraDemoData_callbackList_004c7878[];
+extern char g_beCameraDemoData_callbackList[];
 void *beCameraDemoData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beCameraDemoData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCameraDemoData_metaObject_00589be8,    /* published MetaObject slot */
+        g_beCameraDemoData_metaObject,    /* published MetaObject slot */
         igObject_Register,                         /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,     /* base class MetaObject accessor */
         beCameraDemoData_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beCameraDemoData_className_00505b30,     /* class name */
+        beCameraDemoData_className,     /* class name */
         0x20,                                      /* instance size */
         beCameraDemoData_GetVTable,                /* vtable getter */
         beCameraDemoData_InitFields,               /* field adder */
         0,                                         /* extra callback item */
-        g_beCameraDemoData_callbackList_004c7878  /* callback list */
+        g_beCameraDemoData_callbackList  /* callback list */
     );
 }

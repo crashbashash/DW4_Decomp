@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_00194a90(void);
-extern igMetaObject *g_igTransientShaderData_metaObject_005611a8[4];
+extern igMetaObject *g_igTransientShaderData_metaObject[4];
 igMetaObject *igTransientShaderData_GetMetaObject(void);
 }
 
 igMetaObject *igTransientShaderData_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igTransientShaderData_metaObject_005611a8[0] != 0) {
-        ready = (g_igTransientShaderData_metaObject_005611a8[0]->_validity & 4) != 0;
+    if (g_igTransientShaderData_metaObject[0] != 0) {
+        ready = (g_igTransientShaderData_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00194a90();
 done:
-    return g_igTransientShaderData_metaObject_005611a8[0];
+    return g_igTransientShaderData_metaObject[0];
 }

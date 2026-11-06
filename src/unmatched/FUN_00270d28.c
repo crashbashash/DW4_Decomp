@@ -10,14 +10,14 @@ typedef struct CvFsHandle_270d28 {
 } CvFsHandle_270d28;
 
 extern CvFsDevEntry_270d28 DAT_0056e220[32];
-extern char s_cvFsGetDevName_1_vtbl_error_004ef800[]; /* 'cvFsGetDevName #1:vtbl error' */
+extern char cvFsGetDevName_1_vtbl_error[]; /* 'cvFsGetDevName #1:vtbl error' */
 void FUN_0026f530(const char *message);
 
 char *FUN_00270d28(CvFsHandle_270d28 *handle) {
     int i;
 
     if (handle == 0) {
-        FUN_0026f530(s_cvFsGetDevName_1_vtbl_error_004ef800);
+        FUN_0026f530(cvFsGetDevName_1_vtbl_error);
         return 0;
     }
     for (i = 0; i < 32; i++) {

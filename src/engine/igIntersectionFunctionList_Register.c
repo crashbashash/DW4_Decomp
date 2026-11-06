@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igIntersectionFunctionList_GetVTable[];
 extern char thunk_igIntersectionFunctionList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igIntersectionFunctionList_className_004e0c70[];
-extern char g_igIntersectionFunctionList_metaObject_00561070[];
+extern char igIntersectionFunctionList_className[];
+extern char g_igIntersectionFunctionList_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 
@@ -14,11 +14,11 @@ void igIntersectionFunctionList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igIntersectionFunctionList_metaObject_00561070, /* published MetaObject slot */
+        g_igIntersectionFunctionList_metaObject, /* published MetaObject slot */
         igDataList_Register,                              /* base class registrar */
         igDataList_GetPublishedMetaObject,                /* base class MetaObject accessor */
         thunk_igIntersectionFunctionList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igIntersectionFunctionList_className_004e0c70,  /* class name */
+        igIntersectionFunctionList_className,  /* class name */
         0x14,                                             /* instance size */
         igIntersectionFunctionList_GetVTable,             /* vtable getter */
         0,                                                /* field adder */

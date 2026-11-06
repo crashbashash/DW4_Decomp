@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beParticleCtrl2InfoWork_metaObject_005884c8[];
+extern igMetaObject *g_beParticleCtrl2InfoWork_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beParticleCtrl2InfoWork_GetMetaObject(void);
-extern const char s_beParticleCtrl2InfoWork_className_00502d50[];
+extern const char beParticleCtrl2InfoWork_className[];
 int beParticleCtrl2InfoWork_GetVTable(void);
 void beParticleCtrl2InfoWork_InitFields(void);
-extern char g_beParticleCtrl2InfoWork_callbackList_004c4600[];
+extern char g_beParticleCtrl2InfoWork_callbackList[];
 void *beParticleCtrl2InfoWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beParticleCtrl2InfoWork_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beParticleCtrl2InfoWork_metaObject_005884c8,    /* published MetaObject slot */
+        g_beParticleCtrl2InfoWork_metaObject,    /* published MetaObject slot */
         igObject_Register,                                /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,            /* base class MetaObject accessor */
         beParticleCtrl2InfoWork_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beParticleCtrl2InfoWork_className_00502d50,     /* class name */
+        beParticleCtrl2InfoWork_className,     /* class name */
         0x18,                                             /* instance size */
         beParticleCtrl2InfoWork_GetVTable,                /* vtable getter */
         beParticleCtrl2InfoWork_InitFields,               /* field adder */
         0,                                                /* extra callback item */
-        g_beParticleCtrl2InfoWork_callbackList_004c4600  /* callback list */
+        g_beParticleCtrl2InfoWork_callbackList  /* callback list */
     );
 }

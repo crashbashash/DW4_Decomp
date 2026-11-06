@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWMdlPlayer_metaObject_0058b3a8[];
+extern igMetaObject *g_beNDMWMdlPlayer_metaObject[];
 void *beNDMWMdlPEBase_Register(void);
-igMetaObject *beNDMWMdlPEBase_GetPublishedMetaObject_003bfba0(void);
+igMetaObject *beNDMWMdlPEBase_GetPublishedMetaObject(void);
 igMetaObject *beNDMWMdlPlayer_GetMetaObject(void);
-extern const char s_beNDMWMdlPlayer_className_00512140[];
+extern const char beNDMWMdlPlayer_className[];
 int beNDMWMdlPlayer_GetVTable(void);
 void beNDMWMdlPlayer_InitFields(void);
-extern char g_beNDMWMdlPlayer_callbackList_004ca860[];
+extern char g_beNDMWMdlPlayer_callbackList[];
 void *beNDMWMdlPlayer_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWMdlPlayer_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWMdlPlayer_metaObject_0058b3a8,            /* published MetaObject slot */
+        g_beNDMWMdlPlayer_metaObject,            /* published MetaObject slot */
         beNDMWMdlPEBase_Register,                         /* base class registrar */
-        beNDMWMdlPEBase_GetPublishedMetaObject_003bfba0,  /* base class MetaObject accessor */
+        beNDMWMdlPEBase_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWMdlPlayer_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWMdlPlayer_className_00512140,             /* class name */
+        beNDMWMdlPlayer_className,             /* class name */
         0x38,                                             /* instance size */
         beNDMWMdlPlayer_GetVTable,                        /* vtable getter */
         beNDMWMdlPlayer_InitFields,                       /* field adder */
         0,                                                /* extra callback item */
-        g_beNDMWMdlPlayer_callbackList_004ca860          /* callback list */
+        g_beNDMWMdlPlayer_callbackList          /* callback list */
     );
 }

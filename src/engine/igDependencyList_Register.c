@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igDependencyList_GetVTable[];
 extern char thunk_igDependencyList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igDependencyList_className_004f8400[];
-extern char g_igDependencyList_metaObject_00586768[];
+extern char igDependencyList_className[];
+extern char g_igDependencyList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 void FUN_002c7eb0(void);  /* code at 0x2c7eb0, passed by address (was DAT_2c7eb0; docs/engine/function-inventory.md) */
@@ -14,11 +14,11 @@ void igDependencyList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igDependencyList_metaObject_00586768, /* published MetaObject slot */
+        g_igDependencyList_metaObject, /* published MetaObject slot */
         igDataList_Register,                    /* base class registrar */
         igDataList_GetPublishedMetaObject,      /* base class MetaObject accessor */
         thunk_igDependencyList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igDependencyList_className_004f8400,  /* class name */
+        igDependencyList_className,  /* class name */
         0x14,                                   /* instance size */
         igDependencyList_GetVTable,             /* vtable getter */
         FUN_002c7eb0,                       /* field adder */

@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCameraCtrlInfo_metaObject_00589bd8[];
+extern igMetaObject *g_beCameraCtrlInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beCameraCtrlInfo_GetMetaObject(void);
-extern const char s_beCameraCtrlInfo_className_00505b10[];
+extern const char beCameraCtrlInfo_className[];
 int beCameraCtrlInfo_GetVTable(void);
 void beCameraCtrlInfo_InitFields(void);
-extern char g_beCameraCtrlInfo_callbackList_004c7850[];
+extern char g_beCameraCtrlInfo_callbackList[];
 void *beCameraCtrlInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beCameraCtrlInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCameraCtrlInfo_metaObject_00589bd8,      /* published MetaObject slot */
+        g_beCameraCtrlInfo_metaObject,      /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beCameraCtrlInfo_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beCameraCtrlInfo_className_00505b10,       /* class name */
+        beCameraCtrlInfo_className,       /* class name */
         0x20,                                        /* instance size */
         beCameraCtrlInfo_GetVTable,                  /* vtable getter */
         beCameraCtrlInfo_InitFields,                 /* field adder */
         0,                                           /* extra callback item */
-        g_beCameraCtrlInfo_callbackList_004c7850    /* callback list */
+        g_beCameraCtrlInfo_callbackList    /* callback list */
     );
 }

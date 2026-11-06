@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beFileChkObj_metaObject_00589780[];
+extern igMetaObject *g_beFileChkObj_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beFileChkObj_GetMetaObject(void);
-extern const char s_beFileChkObj_className_005053c0[];
+extern const char beFileChkObj_className[];
 int beFileChkObj_GetVTable(void);
 void beFileChkObj_InitFields(void);
-extern char g_beFileChkObj_callbackList_004c6f78[];
+extern char g_beFileChkObj_callbackList[];
 void *beFileChkObj_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beFileChkObj_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beFileChkObj_metaObject_00589780,     /* published MetaObject slot */
+        g_beFileChkObj_metaObject,     /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beFileChkObj_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        s_beFileChkObj_className_005053c0,      /* class name */
+        beFileChkObj_className,      /* class name */
         0xc,                                    /* instance size */
         beFileChkObj_GetVTable,                 /* vtable getter */
         beFileChkObj_InitFields,                /* field adder */
         0,                                      /* extra callback item */
-        g_beFileChkObj_callbackList_004c6f78   /* callback list */
+        g_beFileChkObj_callbackList   /* callback list */
     );
 }

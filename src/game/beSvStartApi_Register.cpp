@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvStartApi_metaObject_005881f0[];
+extern igMetaObject *g_beSvStartApi_metaObject[];
 void *beSaveApi_Register(void);
-igMetaObject *beSaveApi_GetPublishedMetaObject_003485e0(void);
+igMetaObject *beSaveApi_GetPublishedMetaObject(void);
 igMetaObject *beSvStartApi_GetMetaObject(void);
-extern const char s_beSvStartApi_className_005027e8[];
+extern const char beSvStartApi_className[];
 int beSvStartApi_GetVTable(void);
 void beSvStartApi_InitFields(void);
 void *beSvStartApi_Register(void);
@@ -32,11 +32,11 @@ void *beSvStartApi_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvStartApi_metaObject_005881f0,         /* published MetaObject slot */
+        g_beSvStartApi_metaObject,         /* published MetaObject slot */
         beSaveApi_Register,                         /* base class registrar */
-        beSaveApi_GetPublishedMetaObject_003485e0,  /* base class MetaObject accessor */
+        beSaveApi_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSvStartApi_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beSvStartApi_className_005027e8,          /* class name */
+        beSvStartApi_className,          /* class name */
         0x40,                                       /* instance size */
         beSvStartApi_GetVTable,                     /* vtable getter */
         beSvStartApi_InitFields,                    /* field adder */

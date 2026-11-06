@@ -5,16 +5,16 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beTextureCtrlInfoList_metaObject_00587c78[4];
-extern int g_beTextureCtrlInfo_metaObject_00587c80[4];
+extern int g_beTextureCtrlInfoList_metaObject[4];
+extern int g_beTextureCtrlInfo_metaObject[4];
 /* 0x00370260 */
 int Gap__Bec__beTextureCtrlInfoList__vfunc_20(void)
 {
-    return g_beTextureCtrlInfoList_metaObject_00587c78[0];
+    return g_beTextureCtrlInfoList_metaObject[0];
 }
 
 /* 0x003706a0 */
 int Gap__Bec__beTextureCtrlInfoList__vfunc_22(void)
 {
-    return g_beTextureCtrlInfo_metaObject_00587c80[0];
+    return g_beTextureCtrlInfo_metaObject[0];
 }

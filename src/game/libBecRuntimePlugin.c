@@ -5,9 +5,9 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_libBecRuntimePlugin_metaObject_005878e0[4];
+extern int g_libBecRuntimePlugin_metaObject[4];
 /* 0x003a3840 */
 int Gap__Bec__libBecRuntimePlugin__vfunc_20(void)
 {
-    return g_libBecRuntimePlugin_metaObject_005878e0[0];
+    return g_libBecRuntimePlugin_metaObject[0];
 }

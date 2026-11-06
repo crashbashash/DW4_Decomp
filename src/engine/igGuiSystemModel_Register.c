@@ -1,13 +1,13 @@
 /* 0x0044f380 igGuiSystemModel_Register: registers class igGuiSystemModel with the object system, derived from igModel.
  * The igMetaObject_RegisterClass arguments are laid out per
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
-extern char igModel_GetPublishedMetaObject_0044d340[];
+extern char igModel_GetPublishedMetaObject[];
 extern char igModel_Register[];
 extern char igGuiSystemModel_GetVTable[];
 extern char thunk_igGuiSystemModel_GetMetaObject[];
-extern char g_igGuiSystemModel_callbackList_004d03b0[];
-extern char s_igGuiSystemModel_className_0051e1f0[];
-extern char g_igGuiSystemModel_metaObject_0058c3c8[];
+extern char g_igGuiSystemModel_callbackList[];
+extern char igGuiSystemModel_className[];
+extern char g_igGuiSystemModel_metaObject[];
 int igMetaObject_RegisterClass();
 int GpFlag_SetOnce_0044b860();
 int igGuiSystemModel_InitFields();
@@ -16,15 +16,15 @@ void igGuiSystemModel_Register(void) {
     GpFlag_SetOnce_0044b860();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igGuiSystemModel_metaObject_0058c3c8,  /* published MetaObject slot */
+        g_igGuiSystemModel_metaObject,  /* published MetaObject slot */
         igModel_Register,                        /* base class registrar */
-        igModel_GetPublishedMetaObject_0044d340, /* base class MetaObject accessor */
+        igModel_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igGuiSystemModel_GetMetaObject,    /* own MetaObject accessor (stored at +0x54) */
-        s_igGuiSystemModel_className_0051e1f0,   /* class name */
+        igGuiSystemModel_className,   /* class name */
         0xB8,                                    /* instance size */
         igGuiSystemModel_GetVTable,              /* vtable getter */
         &igGuiSystemModel_InitFields,            /* field adder */
         0,                                       /* extra callback item */
-        g_igGuiSystemModel_callbackList_004d03b0  /* callback list */
+        g_igGuiSystemModel_callbackList  /* callback list */
     );
 }

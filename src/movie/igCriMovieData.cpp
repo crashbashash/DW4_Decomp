@@ -6,7 +6,7 @@
  * verifies one function at a time. */
 #include "dw4/reflected.h"
 extern "C" {
-extern int g_igCriMovieData_metaObject_00587760[4];
+extern int g_igCriMovieData_metaObject[4];
 /* igObject's vfunc 11 default: an empty body in retail (a bare `jr ra`). */
 int Gap__Core__igObject__vfunc_11();
 
@@ -24,6 +24,6 @@ void Gap__igCriMovieData__vfunc_11(igCriMovieData *self) {
  * Metaobject accessor: the class's metaobject handle at 0x00587760. */
 int Gap__igCriMovieData__vfunc_20(void)
 {
-    return g_igCriMovieData_metaObject_00587760[0];
+    return g_igCriMovieData_metaObject[0];
 }
 }

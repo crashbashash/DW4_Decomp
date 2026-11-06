@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLuaDataObject_metaObject_005891f0[];
+extern igMetaObject *g_beLuaDataObject_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beLuaDataObject_GetMetaObject(void);
-extern const char s_beLuaDataObject_className_00504870[];
+extern const char beLuaDataObject_className[];
 int beLuaDataObject_GetVTable(void);
 void beLuaDataObject_InitFields(void);
 void *beLuaDataObject_Register(void);
@@ -32,11 +32,11 @@ void *beLuaDataObject_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLuaDataObject_metaObject_005891f0,  /* published MetaObject slot */
+        g_beLuaDataObject_metaObject,  /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beLuaDataObject_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_beLuaDataObject_className_00504870,   /* class name */
+        beLuaDataObject_className,   /* class name */
         0x10,                                   /* instance size */
         beLuaDataObject_GetVTable,              /* vtable getter */
         beLuaDataObject_InitFields,             /* field adder */

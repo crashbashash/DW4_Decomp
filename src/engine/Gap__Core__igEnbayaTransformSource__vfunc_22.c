@@ -4,7 +4,7 @@
  * the slot the class registration fills (see igEnbayaTransformSource_Register.c).
  * Same accessor idiom as the other `*_metaObject_<addr>` getters in this folder; the array extern
  * keeps the load absolute. */
-extern int g_igEnbayaTransformSource_metaObject_00561b48[4];
+extern int g_igEnbayaTransformSource_metaObject[4];
 int Gap__Core__igEnbayaTransformSource__vfunc_22(void) {
-    return g_igEnbayaTransformSource_metaObject_00561b48[0];
+    return g_igEnbayaTransformSource_metaObject[0];
 }

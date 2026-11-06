@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLoadingNode_metaObject_005886e8[];
+extern igMetaObject *g_beLoadingNode_metaObject[];
 void *beNodeAnim_Register(void);
-igMetaObject *beNodeAnim_GetPublishedMetaObject_0034e7d0(void);
+igMetaObject *beNodeAnim_GetPublishedMetaObject(void);
 igMetaObject *beLoadingNode_GetMetaObject(void);
-extern const char s_beLoadingNode_className_00503188[];
+extern const char beLoadingNode_className[];
 int beLoadingNode_GetVTable(void);
 void beLoadingNode_InitFields(void);
 void FUN_0034e850(void);
@@ -33,11 +33,11 @@ void *beLoadingNode_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLoadingNode_metaObject_005886e8,         /* published MetaObject slot */
+        g_beLoadingNode_metaObject,         /* published MetaObject slot */
         beNodeAnim_Register,                         /* base class registrar */
-        beNodeAnim_GetPublishedMetaObject_0034e7d0,  /* base class MetaObject accessor */
+        beNodeAnim_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLoadingNode_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beLoadingNode_className_00503188,          /* class name */
+        beLoadingNode_className,          /* class name */
         0x80,                                        /* instance size */
         beLoadingNode_GetVTable,                     /* vtable getter */
         beLoadingNode_InitFields,                    /* field adder */

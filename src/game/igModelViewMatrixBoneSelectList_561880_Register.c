@@ -5,8 +5,8 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igModelViewMatrixBoneSelectList_561880_GetVTable[];
 extern char thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igModelViewMatrixBoneSelectList_561880_callbackList_0048bcd0[];
-extern char s_igModelViewMatrixBoneSelectList_className_004e23e0[];
+extern char g_igModelViewMatrixBoneSelectList_561880_callbackList[];
+extern char igModelViewMatrixBoneSelectList_className[];
 extern char g_igModelViewMatrixBoneSelectList_metaObject_00561880[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
@@ -19,11 +19,11 @@ void igModelViewMatrixBoneSelectList_561880_Register(void) {
         igObjectList_Register,                                      /* base class registrar */
         igObjectList_GetPublishedMetaObject,                        /* base class MetaObject accessor */
         thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject, /* own MetaObject accessor (stored at +0x54) */
-        s_igModelViewMatrixBoneSelectList_className_004e23e0,       /* class name */
+        igModelViewMatrixBoneSelectList_className,       /* class name */
         0x14,                                                       /* instance size */
         igModelViewMatrixBoneSelectList_561880_GetVTable,           /* vtable getter */
         0,                                                          /* field adder */
         0,                                                          /* extra callback item */
-        g_igModelViewMatrixBoneSelectList_561880_callbackList_0048bcd0  /* callback list */
+        g_igModelViewMatrixBoneSelectList_561880_callbackList  /* callback list */
     );
 }

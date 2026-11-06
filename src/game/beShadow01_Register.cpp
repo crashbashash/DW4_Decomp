@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beShadow01_metaObject_00587f10[];
+extern igMetaObject *g_beShadow01_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beShadow01_GetMetaObject(void);
-extern const char s_beShadow01_className_00502178[];
+extern const char beShadow01_className[];
 int beShadow01_GetVTable(void);
 void beShadow01_InitFields(void);
-extern char g_beShadow01_callbackList_004c3a40[];
+extern char g_beShadow01_callbackList[];
 void *beShadow01_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beShadow01_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beShadow01_metaObject_00587f10,                   /* published MetaObject slot */
+        g_beShadow01_metaObject,                   /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beShadow01_GetMetaObject,                           /* own MetaObject accessor (stored at +0x54) */
-        s_beShadow01_className_00502178,                    /* class name */
+        beShadow01_className,                    /* class name */
         0x30,                                               /* instance size */
         beShadow01_GetVTable,                               /* vtable getter */
         beShadow01_InitFields,                              /* field adder */
         0,                                                  /* extra callback item */
-        g_beShadow01_callbackList_004c3a40                 /* callback list */
+        g_beShadow01_callbackList                 /* callback list */
     );
 }

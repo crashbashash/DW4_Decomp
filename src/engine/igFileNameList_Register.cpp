@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igFileNameList_metaObject_00587650[];
+extern igMetaObject *g_igFileNameList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *igFileNameList_GetMetaObject(void);
-extern const char s_igFileNameList_className_00500198[];
+extern const char igFileNameList_className[];
 int igFileNameList_GetVTable(void);
-extern char s_pL3_004c2690[];
+extern char pL3[];
 void *igFileNameList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *igFileNameList_Register(void) {
     GpFlag_SetOnce_00334440();
     return igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igFileNameList_metaObject_00587650,  /* published MetaObject slot */
+        g_igFileNameList_metaObject,  /* published MetaObject slot */
         igObjectList_Register,                 /* base class registrar */
         igObjectList_GetPublishedMetaObject,   /* base class MetaObject accessor */
         igFileNameList_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_igFileNameList_className_00500198,   /* class name */
+        igFileNameList_className,   /* class name */
         0x14,                                  /* instance size */
         igFileNameList_GetVTable,              /* vtable getter */
         0,                                     /* field adder */
         0,                                     /* extra callback item */
-        s_pL3_004c2690                        /* callback list */
+        pL3                        /* callback list */
     );
 }

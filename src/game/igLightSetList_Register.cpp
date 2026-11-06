@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igLightSetList_metaObject_00589230[];
+extern igMetaObject *g_igLightSetList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *igLightSetList_GetMetaObject(void);
-extern const char s_igLightSetList_className_005048b8[];
+extern const char igLightSetList_className[];
 int igLightSetList_GetVTable(void);
-extern char g_igLightSetList_callbackList_004c6340[];
+extern char g_igLightSetList_callbackList[];
 void *igLightSetList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *igLightSetList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igLightSetList_metaObject_00589230,    /* published MetaObject slot */
+        g_igLightSetList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                   /* base class registrar */
         igObjectList_GetPublishedMetaObject,     /* base class MetaObject accessor */
         igLightSetList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_igLightSetList_className_005048b8,     /* class name */
+        igLightSetList_className,     /* class name */
         0x14,                                    /* instance size */
         igLightSetList_GetVTable,                /* vtable getter */
         0,                                       /* field adder */
         0,                                       /* extra callback item */
-        g_igLightSetList_callbackList_004c6340  /* callback list */
+        g_igLightSetList_callbackList  /* callback list */
     );
 }

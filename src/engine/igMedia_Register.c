@@ -5,8 +5,8 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igMedia_GetMetaObject[];
 extern char thunk_FUN_002ebcf0[];
 extern char igObject_Register[];
-extern char s_igMedia_className_004f6e90[];
-extern char g_igMedia_metaObject_00586020[];
+extern char igMedia_className[];
+extern char g_igMedia_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 extern int igMedia_InitFields_002c1810[4];
@@ -16,11 +16,11 @@ void igMedia_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMedia_metaObject_00586020,         /* published MetaObject slot */
+        g_igMedia_metaObject,         /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igMedia_GetMetaObject,           /* own MetaObject accessor (stored at +0x54) */
-        s_igMedia_className_004f6e90,          /* class name */
+        igMedia_className,          /* class name */
         8,                                     /* instance size */
         0,                                     /* vtable getter */
         &igMedia_InitFields_002c1810[0],       /* field adder */

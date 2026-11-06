@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beTimer_metaObject_00587c18[];
+extern igMetaObject *g_beTimer_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beTimer_GetMetaObject(void);
-extern const char s_beTimer_className_00501aa8[];
+extern const char beTimer_className[];
 int beTimer_GetVTable(void);
 void beTimer_InitFields(void);
-extern char g_beTimer_callbackList_004c3380[];
+extern char g_beTimer_callbackList[];
 void *beTimer_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beTimer_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beTimer_metaObject_00587c18,                  /* published MetaObject slot */
+        g_beTimer_metaObject,                  /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beTimer_GetMetaObject,                          /* own MetaObject accessor (stored at +0x54) */
-        s_beTimer_className_00501aa8,                   /* class name */
+        beTimer_className,                   /* class name */
         0x28,                                           /* instance size */
         beTimer_GetVTable,                              /* vtable getter */
         beTimer_InitFields,                             /* field adder */
         0,                                              /* extra callback item */
-        g_beTimer_callbackList_004c3380                /* callback list */
+        g_beTimer_callbackList                /* callback list */
     );
 }

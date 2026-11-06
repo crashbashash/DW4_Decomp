@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvPs2McImage128k_metaObject_00588148[];
+extern igMetaObject *g_beSvPs2McImage128k_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beSvPs2McImage128k_GetMetaObject(void);
-extern const char s_beSvPs2McImage128k_className_005026d0[];
+extern const char beSvPs2McImage128k_className[];
 int beSvPs2McImage128k_GetVTable(void);
 void beSvPs2McImage128k_InitFields(void);
 void *beSvPs2McImage128k_Register(void);
@@ -32,11 +32,11 @@ void *beSvPs2McImage128k_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvPs2McImage128k_metaObject_00588148,  /* published MetaObject slot */
+        g_beSvPs2McImage128k_metaObject,  /* published MetaObject slot */
         igObject_Register,                         /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,     /* base class MetaObject accessor */
         beSvPs2McImage128k_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_beSvPs2McImage128k_className_005026d0,   /* class name */
+        beSvPs2McImage128k_className,   /* class name */
         0x10,                                      /* instance size */
         beSvPs2McImage128k_GetVTable,              /* vtable getter */
         beSvPs2McImage128k_InitFields,             /* field adder */

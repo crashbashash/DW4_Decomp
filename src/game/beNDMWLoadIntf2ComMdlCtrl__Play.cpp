@@ -18,10 +18,10 @@ int *StringPool_Intern(int, int *);
 int beMessenger_SendNamed(int, int *, int *, int, int *);
 int igObject_Destroy(beLoadIntf2ComMdlData *);
 int igObject_GetAllocator(beNDMWLoadIntf2ComMdlCtrl *);
-extern int s_MODELCTRL_005171f8[4];
-extern int g_stringPool_00586f20[4];
+extern int MODELCTRL[4];
+extern int g_stringPool[4];
 /* Default allocator selector (docs/engine/subwindow-preparation.md). */
-extern int g_defaultAllocatorSelector_00587110[4];
+extern int g_defaultAllocatorSelector[4];
 /* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used
  * as returned instead of the selector (docs/engine/xdata-controller.md). */
 extern unsigned char GPR_00554c14;
@@ -48,27 +48,27 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
     int *oldToken;
     int *oldTokenHeader;
     int refCount;
-    beMessenger_SendNamed(self->_messenger, s_MODELCTRL_005171f8, modelName, slot, sequenceName);
+    beMessenger_SendNamed(self->_messenger, MODELCTRL, modelName, slot, sequenceName);
     if ((wait & 0xFF) == WAIT_TRACKED) {
         objectAllocator = igObject_GetAllocator(self);
         if (GPR_00554c14 != 0) {
             allocator = objectAllocator;
         } else {
-            allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector_00587110[0]);
+            allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
         ObjectRef trackedEntry((beLoadIntf2ComMdlData *)beLoadIntf2ComMdlData__Create(allocator));
         trackedEntry.p->_ramNo = slot;
         entry = trackedEntry.p;
         /* Lazily create the shared string pool, intern the model name and
          * drop the entry's previous token (owner at -8, count at -4). */
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = FUN_002eb010(16);
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
-            g_stringPool_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        interned = StringPool_Intern(g_stringPool_00586f20[0], modelName);
+        interned = StringPool_Intern(g_stringPool[0], modelName);
         oldToken = (int *)entry->_infoName;
         if (oldToken != 0) {
             oldTokenHeader = oldToken - 2;
@@ -81,14 +81,14 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
         entry->_infoName = (int)interned;
         entry = trackedEntry.p;
         /* Same for the sequence name. */
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = FUN_002eb010(16);
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
-            g_stringPool_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        interned = StringPool_Intern(g_stringPool_00586f20[0], sequenceName);
+        interned = StringPool_Intern(g_stringPool[0], sequenceName);
         oldToken = (int *)entry->_openSQ;
         if (oldToken != 0) {
             oldTokenHeader = oldToken - 2;

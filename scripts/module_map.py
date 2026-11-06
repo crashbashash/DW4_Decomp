@@ -34,11 +34,12 @@ ROOT = os.path.join(HERE, "..")
 # Judgement calls about the evidence strings, ordered by address.  Each is checked by reading the
 # strings printed beside it; a wrong one shows up as a run whose evidence contradicts its label.
 LABELS = [
-    (0x100000, 0x141000, "Sony SDK + C runtime",
+    (0x100000, 0x130000, "Sony SDK + C runtime",
      "libdma / libmpeg / libipu / libcdvd / libsd / sio2+padman+mtapman, and libc: malloc's "
      "`max system bytes`, vfprintf's `bug in vfprintf: bad base`"),
-    (0x141000, 0x1F0000, "Intrinsic Alchemy core (graphics, math, shaders, GS/VU1)",
-     "`IG_GFX_*` capability constants, shader attribute names, the VU1 ucode symbol table"),
+    (0x130000, 0x1F0000, "Intrinsic Alchemy core (graphics, math, shaders, GS/VU1)",
+     "`IG_GFX_*` capability constants, shader attribute names, the VU1 ucode symbol table; "
+     "`ig*` class functions from 0x130060"),
     (0x1F0000, 0x20D000, "Alchemy `p2` -- the PS2/EE renderer backend",
      "`p2LoadTexture`, `p2lighting`, `p2readGSPrivRegister`, `swapbuffersPredicate`"),
     (0x20D000, 0x221870, "libpng",
@@ -54,15 +55,18 @@ LABELS = [
     (0x25D000, 0x2B0000, "CRIWARE (ADX, Sofdec/SFD, MPS, SUD, PS2RNA)",
      "`E9040801:partition ID is range outside.(adxf_ChkPrmPt)`, `CRI M2V/PS2EE Ver.1.945`, "
      "`PS2RNA Ver.1.30`"),
-    (0x2B0000, 0x2D1000, "CRI audio (SNDF / SUD / MWSFD)",
+    (0x2B0000, 0x2B5DA0, "CRI audio (SNDF / SUD / MWSFD)",
      "`SNDF Ver.2.09c`, `sfxcnv_MakeTable`, `MWSFD/PS2EE Ver.3.33s281`"),
+    (0x2B5DA0, 0x2D1000, "Alchemy metafields and reflection",
+     "`ig*MetaField` class functions from `igVirtualCFuncMetaField` at 0x2b5da0"),
     (0x2D1000, 0x310000, "Alchemy core (registry, ini, memory pools)",
      "`Intrinsic Alchemy  v3.2 -0810`, `drivers.ini`, `alchemy.ini`, `igContextExt`"),
-    (0x310000, 0x334000, "Alchemy memory pools + IOP module loader",
+    (0x310000, 0x338C00, "Alchemy memory pools + IOP module loader",
      "`igArenaMemoryPool::checkHeap(E71)`, `Pool igStackMemoryPool`, `\\MODULES\\%s`"),
-    (0x334000, 0x460000, "GAME + engine (be*/ig* objects, MODELCTRL, STAGECTL, menus)",
-     "`MODELCTRL`, `GETMATRIX`, `GAMERAM`, `STAGECTL`, `font000`, the menu `SQ_*` states"),
-    (0x460000, 0x540000, "engine scene / overlay / actor managers",
+    (0x338C00, 0x44B860, "GAME (be* objects, MODELCTRL, STAGECTL, menus)",
+     "`MODELCTRL`, `GETMATRIX`, `GAMERAM`, `STAGECTL`, `font000`, the menu `SQ_*` states; "
+     "the start is a run boundary in the unnamed gap before the first `be*` at 0x33e880"),
+    (0x44B860, 0x540000, "Alchemy scene, GUI, overlay and actor managers",
      "`Actor manager`, `Scenes done`, `Overlays done`, `current view matrix`"),
 ]
 
@@ -96,10 +100,12 @@ def strings_by_function():
 
 
 def runs_of(table):
-    """Maximal runs of consecutive symbols -- a run is the original translation unit."""
+    """Maximal runs of consecutive symbols inside one region -- a run is the original translation
+    unit. The region edge matters as well as the gap: the symbols now tile most of the image, so
+    the gap alone would join whole regions into one run."""
     out, cur = [], []
     for a, size, name in table:
-        if cur and a - (cur[-1][0] + cur[-1][1]) > 16:
+        if cur and (a - (cur[-1][0] + cur[-1][1]) > 16 or label_of(a) != label_of(cur[0][0])):
             out.append(cur)
             cur = []
         cur.append((a, size, name))

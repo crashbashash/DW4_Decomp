@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beStaticInfoCtl_metaObject_00587e10[];
+extern igMetaObject *g_beStaticInfoCtl_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beStaticInfoCtl_GetMetaObject(void);
-extern const char s_beStaticInfoCtl_className_00501e70[];
+extern const char beStaticInfoCtl_className[];
 int beStaticInfoCtl_GetVTable(void);
 void beStaticInfoCtl_InitFields(void);
-extern char g_beStaticInfoCtl_callbackList_004c3798[];
+extern char g_beStaticInfoCtl_callbackList[];
 void *beStaticInfoCtl_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beStaticInfoCtl_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beStaticInfoCtl_metaObject_00587e10,              /* published MetaObject slot */
+        g_beStaticInfoCtl_metaObject,              /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beStaticInfoCtl_GetMetaObject,                      /* own MetaObject accessor (stored at +0x54) */
-        s_beStaticInfoCtl_className_00501e70,               /* class name */
+        beStaticInfoCtl_className,               /* class name */
         0x24,                                               /* instance size */
         beStaticInfoCtl_GetVTable,                          /* vtable getter */
         beStaticInfoCtl_InitFields,                         /* field adder */
         0,                                                  /* extra callback item */
-        g_beStaticInfoCtl_callbackList_004c3798            /* callback list */
+        g_beStaticInfoCtl_callbackList            /* callback list */
     );
 }

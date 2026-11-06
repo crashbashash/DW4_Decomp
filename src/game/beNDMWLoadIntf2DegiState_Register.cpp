@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadIntf2DegiState_metaObject_0058b978[];
+extern igMetaObject *g_beNDMWLoadIntf2DegiState_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beNDMWLoadIntf2DegiState_GetMetaObject(void);
-extern const char s_beNDMWLoadIntf2DegiState_className_00512a60[];
+extern const char beNDMWLoadIntf2DegiState_className[];
 int beNDMWLoadIntf2DegiState_GetVTable(void);
 void beNDMWLoadIntf2DegiState_InitFields(void);
-extern char g_beNDMWLoadIntf2DegiState_callbackList_004cb4b0[];
+extern char g_beNDMWLoadIntf2DegiState_callbackList[];
 void *beNDMWLoadIntf2DegiState_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWLoadIntf2DegiState_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadIntf2DegiState_metaObject_0058b978,    /* published MetaObject slot */
+        g_beNDMWLoadIntf2DegiState_metaObject,    /* published MetaObject slot */
         igObject_Register,                                 /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,             /* base class MetaObject accessor */
         beNDMWLoadIntf2DegiState_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadIntf2DegiState_className_00512a60,     /* class name */
+        beNDMWLoadIntf2DegiState_className,     /* class name */
         0x44,                                              /* instance size */
         beNDMWLoadIntf2DegiState_GetVTable,                /* vtable getter */
         beNDMWLoadIntf2DegiState_InitFields,               /* field adder */
         0,                                                 /* extra callback item */
-        g_beNDMWLoadIntf2DegiState_callbackList_004cb4b0  /* callback list */
+        g_beNDMWLoadIntf2DegiState_callbackList  /* callback list */
     );
 }

@@ -4,9 +4,9 @@
 extern char igMemoryRefMetaField_Register[];
 extern char igMemoryRefArrayMetaField_GetVTable[];
 extern char thunk_igMemoryRefArrayMetaField_GetMetaObject[];
-extern char igMemoryRefMetaField_GetPublishedMetaObject_002bfbf0[];
-extern char g_igMemoryRefArrayMetaField_callbackList_004c0028[];
-extern char s_igMemoryRefArrayMetaField_className_004f69a0[];
+extern char igMemoryRefMetaField_GetPublishedMetaObject[];
+extern char g_igMemoryRefArrayMetaField_callbackList[];
+extern char igMemoryRefArrayMetaField_className[];
 extern char g_igMemoryRefArrayMetaField_metaObject_00585de0[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
@@ -18,13 +18,13 @@ void igMemoryRefArrayMetaField_Register(void) {
         0,                                                    /* abstract state (0: the vtable getter runs, 1: abstract class) */
         g_igMemoryRefArrayMetaField_metaObject_00585de0,      /* published MetaObject slot */
         igMemoryRefMetaField_Register,                        /* base class registrar */
-        igMemoryRefMetaField_GetPublishedMetaObject_002bfbf0, /* base class MetaObject accessor */
+        igMemoryRefMetaField_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igMemoryRefArrayMetaField_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        s_igMemoryRefArrayMetaField_className_004f69a0,       /* class name */
+        igMemoryRefArrayMetaField_className,       /* class name */
         0x54,                                                 /* instance size */
         igMemoryRefArrayMetaField_GetVTable,                  /* vtable getter */
         &igMemoryRefArrayMetaField_InitFields,                /* field adder */
         0,                                                    /* extra callback item */
-        g_igMemoryRefArrayMetaField_callbackList_004c0028     /* callback list */
+        g_igMemoryRefArrayMetaField_callbackList     /* callback list */
     );
 }

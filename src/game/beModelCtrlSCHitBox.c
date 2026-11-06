@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beModelCtrlSCHitBox_metaObject_005887c8[4];
+extern int g_beModelCtrlSCHitBox_metaObject[4];
 /* 0x0036f8c0 */
 void Gap__Bec__beModelCtrlSCHitBox__vfunc_23(void)
 {
@@ -14,5 +14,5 @@ void Gap__Bec__beModelCtrlSCHitBox__vfunc_23(void)
 /* 0x0039a920 */
 int Gap__Bec__beModelCtrlSCHitBox__vfunc_20(void)
 {
-    return g_beModelCtrlSCHitBox_metaObject_005887c8[0];
+    return g_beModelCtrlSCHitBox_metaObject[0];
 }

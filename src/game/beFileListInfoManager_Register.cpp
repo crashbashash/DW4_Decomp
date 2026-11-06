@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beFileListInfoManager_metaObject_005896f8[];
+extern igMetaObject *g_beFileListInfoManager_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beFileListInfoManager_GetMetaObject(void);
-extern const char s_beFileListInfoManager_className_005052f0[];
+extern const char beFileListInfoManager_className[];
 int beFileListInfoManager_GetVTable(void);
 void beFileListInfoManager_InitFields(void);
-extern char g_beFileListInfoManager_callbackList_004c6e70[];
+extern char g_beFileListInfoManager_callbackList[];
 void *beFileListInfoManager_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beFileListInfoManager_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beFileListInfoManager_metaObject_005896f8,    /* published MetaObject slot */
+        g_beFileListInfoManager_metaObject,    /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beFileListInfoManager_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beFileListInfoManager_className_005052f0,     /* class name */
+        beFileListInfoManager_className,     /* class name */
         0x40,                                           /* instance size */
         beFileListInfoManager_GetVTable,                /* vtable getter */
         beFileListInfoManager_InitFields,               /* field adder */
         0,                                              /* extra callback item */
-        g_beFileListInfoManager_callbackList_004c6e70  /* callback list */
+        g_beFileListInfoManager_callbackList  /* callback list */
     );
 }

@@ -2,11 +2,11 @@
  * The igMetaObject_RegisterClass arguments are laid out per
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualAttribute_Register[];
-extern char igVisualAttribute_GetPublishedMetaObject_00130610[];
+extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igProjectionMatrixAttr_GetVTable[];
 extern char thunk_igProjectionMatrixAttr_GetMetaObject[];
-extern char s_igProjectionMatrixAttr_className_004d5240[];
-extern char g_igProjectionMatrixAttr_metaObject_0055ef50[];
+extern char igProjectionMatrixAttr_className[];
+extern char g_igProjectionMatrixAttr_metaObject[];
 int GpFlag_SetOnce_00130000();
 int igMetaObject_RegisterClass();
 int igProjectionMatrixAttr_InitFields();
@@ -15,11 +15,11 @@ void igProjectionMatrixAttr_Register(void) {
     GpFlag_SetOnce_00130000();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igProjectionMatrixAttr_metaObject_0055ef50,      /* published MetaObject slot */
+        g_igProjectionMatrixAttr_metaObject,      /* published MetaObject slot */
         igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject_00130610, /* base class MetaObject accessor */
+        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igProjectionMatrixAttr_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        s_igProjectionMatrixAttr_className_004d5240,       /* class name */
+        igProjectionMatrixAttr_className,       /* class name */
         0x4C,                                              /* instance size */
         igProjectionMatrixAttr_GetVTable,                  /* vtable getter */
         &igProjectionMatrixAttr_InitFields,                /* field adder */

@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWStatusMainSlot_metaObject_0058af20[];
+extern igMetaObject *g_beNDMWStatusMainSlot_metaObject[];
 void *beNDMWStatusCtrlBaseEquip_Register(void);
-igMetaObject *beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject_003ba750(void);
+igMetaObject *beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject(void);
 igMetaObject *beNDMWStatusMainSlot_GetMetaObject(void);
-extern const char s_beNDMWStatusMainSlot_className_00511790[];
+extern const char beNDMWStatusMainSlot_className[];
 int beNDMWStatusMainSlot_GetVTable(void);
 void *beNDMWStatusMainSlot_Register(void);
 }
@@ -31,11 +31,11 @@ void *beNDMWStatusMainSlot_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWStatusMainSlot_metaObject_0058af20,                 /* published MetaObject slot */
+        g_beNDMWStatusMainSlot_metaObject,                 /* published MetaObject slot */
         beNDMWStatusCtrlBaseEquip_Register,                         /* base class registrar */
-        beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject_003ba750,  /* base class MetaObject accessor */
+        beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWStatusMainSlot_GetMetaObject,                         /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWStatusMainSlot_className_00511790,                  /* class name */
+        beNDMWStatusMainSlot_className,                  /* class name */
         0x7c,                                                       /* instance size */
         beNDMWStatusMainSlot_GetVTable,                             /* vtable getter */
         0,                                                          /* field adder */

@@ -5,7 +5,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 int beMessenger_RegisterReceiverFromInfo(int, int, int *);
-extern int s_LOGO_0051db38[4];
+extern int LOGO[4];
 void Gap__Bec__beNDMWLogo__vfunc_29(beNDMWLogo *, int);
 }
 
@@ -14,5 +14,5 @@ void Gap__Bec__beNDMWLogo__vfunc_29(beNDMWLogo *, int);
  * beNDMWTitle2 and beFont slot 29 (finding #645). */
 void Gap__Bec__beNDMWLogo__vfunc_29(beNDMWLogo *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &s_LOGO_0051db38[0]);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &LOGO[0]);
 }

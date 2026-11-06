@@ -4,7 +4,7 @@
  * the slot the class registration fills (see igExternalIndexedEntry_Register.c).
  * Same accessor idiom as the other `*_metaObject_<addr>` getters in this folder; the array extern
  * keeps the load absolute. */
-extern int g_igExternalIndexedEntry_metaObject_00586418[4];
+extern int g_igExternalIndexedEntry_metaObject[4];
 int Gap__Core__igExternalIndexedEntry__vfunc_22(void) {
-    return g_igExternalIndexedEntry_metaObject_00586418[0];
+    return g_igExternalIndexedEntry_metaObject[0];
 }

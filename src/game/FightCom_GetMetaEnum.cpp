@@ -8,16 +8,16 @@ extern "C" {
 struct Enum;
 /* igMetaEnum_Create(name, names[], values[], count): see config/SLUS-20836/names/ObjectModel.tsv */
 struct Enum *igMetaEnum_Create(const char *, const char *const *, const int *, int);
-extern const char s_FightCom_005135f0[];
-extern const char *const g_FightCom_commandNames_004cc350[22];
-extern const int g_FightCom_commandIds_004cc3b0[22];
-extern struct Enum *g_FightCom_metaEnum_0058c090[4];
+extern const char FightCom[];
+extern const char *const g_FightCom_commandNames[22];
+extern const int g_FightCom_commandIds[22];
+extern struct Enum *g_FightCom_metaEnum[4];
 
 struct Enum *FightCom_GetMetaEnum(void)
 {
-    if (!g_FightCom_metaEnum_0058c090[0])
-        g_FightCom_metaEnum_0058c090[0] = igMetaEnum_Create(s_FightCom_005135f0, g_FightCom_commandNames_004cc350,
-                                          g_FightCom_commandIds_004cc3b0, 22);
-    return g_FightCom_metaEnum_0058c090[0];
+    if (!g_FightCom_metaEnum[0])
+        g_FightCom_metaEnum[0] = igMetaEnum_Create(FightCom, g_FightCom_commandNames,
+                                          g_FightCom_commandIds, 22);
+    return g_FightCom_metaEnum[0];
 }
 } /* extern "C" */

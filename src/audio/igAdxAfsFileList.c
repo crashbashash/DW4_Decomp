@@ -5,16 +5,16 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_igAdxAfsFileList_metaObject_00587630[4];
-extern int g_igAdxAfsFile_metaObject_00587638[4];
+extern int g_igAdxAfsFileList_metaObject[4];
+extern int g_igAdxAfsFile_metaObject[4];
 /* 0x003373b0 */
 int Gap__igAdxAfsFileList__vfunc_20(void)
 {
-    return g_igAdxAfsFileList_metaObject_00587630[0];
+    return g_igAdxAfsFileList_metaObject[0];
 }
 
 /* 0x003373f0 */
 int Gap__igAdxAfsFileList__vfunc_22(void)
 {
-    return g_igAdxAfsFile_metaObject_00587638[0];
+    return g_igAdxAfsFile_metaObject[0];
 }

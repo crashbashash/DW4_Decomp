@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beOptInfo_metaObject_00588608[];
+extern igMetaObject *g_beOptInfo_metaObject[];
 void *igInfo_Register(void);
-igMetaObject *igInfo_GetPublishedMetaObject_00131c50(void);
+igMetaObject *igInfo_GetPublishedMetaObject(void);
 igMetaObject *beOptInfo_GetMetaObject(void);
-extern const char s_beOptInfo_className_00502f88[];
+extern const char beOptInfo_className[];
 int beOptInfo_GetVTable(void);
 void beOptInfo_InitFields(void);
 void *beOptInfo_Register(void);
@@ -32,11 +32,11 @@ void *beOptInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beOptInfo_metaObject_00588608,         /* published MetaObject slot */
+        g_beOptInfo_metaObject,         /* published MetaObject slot */
         igInfo_Register,                         /* base class registrar */
-        igInfo_GetPublishedMetaObject_00131c50,  /* base class MetaObject accessor */
+        igInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beOptInfo_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beOptInfo_className_00502f88,          /* class name */
+        beOptInfo_className,          /* class name */
         0x24,                                    /* instance size */
         beOptInfo_GetVTable,                     /* vtable getter */
         beOptInfo_InitFields,                    /* field adder */

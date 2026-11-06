@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWStatusCtrlFolder_metaObject_0058af08[];
+extern igMetaObject *g_beNDMWStatusCtrlFolder_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWStatusCtrlFolder_GetMetaObject(void);
-extern const char s_beNDMWStatusCtrlFolder_className_00511740[];
+extern const char beNDMWStatusCtrlFolder_className[];
 int beNDMWStatusCtrlFolder_GetVTable(void);
 void beNDMWStatusCtrlFolder_InitFields(void);
 void *beNDMWStatusCtrlFolder_Register(void);
@@ -32,11 +32,11 @@ void *beNDMWStatusCtrlFolder_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWStatusCtrlFolder_metaObject_0058af08,  /* published MetaObject slot */
+        g_beNDMWStatusCtrlFolder_metaObject,  /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                     /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,       /* base class MetaObject accessor */
         beNDMWStatusCtrlFolder_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWStatusCtrlFolder_className_00511740,   /* class name */
+        beNDMWStatusCtrlFolder_className,   /* class name */
         0x58,                                          /* instance size */
         beNDMWStatusCtrlFolder_GetVTable,              /* vtable getter */
         beNDMWStatusCtrlFolder_InitFields,             /* field adder */

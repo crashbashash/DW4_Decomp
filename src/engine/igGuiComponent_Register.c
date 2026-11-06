@@ -5,9 +5,9 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igObject_Register[];
 extern char igGuiComponent_GetVTable[];
 extern char thunk_igGuiComponent_GetMetaObject[];
-extern char g_igGuiComponent_callbackList_004d0580[];
-extern char s_igGuiComponent_className_0051e418[];
-extern char g_igGuiComponent_metaObject_0058c4a8[];
+extern char g_igGuiComponent_callbackList[];
+extern char igGuiComponent_className[];
+extern char g_igGuiComponent_metaObject[];
 int igMetaObject_RegisterClass();
 int GpFlag_SetOnce_0044b860();
 int igGuiComponent_InitFields();
@@ -16,15 +16,15 @@ void igGuiComponent_Register(void) {
     GpFlag_SetOnce_0044b860();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igGuiComponent_metaObject_0058c4a8,  /* published MetaObject slot */
+        g_igGuiComponent_metaObject,  /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igGuiComponent_GetMetaObject,    /* own MetaObject accessor (stored at +0x54) */
-        s_igGuiComponent_className_0051e418,   /* class name */
+        igGuiComponent_className,   /* class name */
         0x24,                                  /* instance size */
         igGuiComponent_GetVTable,              /* vtable getter */
         &igGuiComponent_InitFields,            /* field adder */
         0,                                     /* extra callback item */
-        g_igGuiComponent_callbackList_004d0580  /* callback list */
+        g_igGuiComponent_callbackList  /* callback list */
     );
 }

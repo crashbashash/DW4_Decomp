@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadIntf2TextOrder_metaObject_0058be90[];
+extern igMetaObject *g_beNDMWLoadIntf2TextOrder_metaObject[];
 void *beBaseInfoData_Register(void);
-igMetaObject *beBaseInfoData_GetPublishedMetaObject_00343c80(void);
+igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
 igMetaObject *beNDMWLoadIntf2TextOrder_GetMetaObject(void);
-extern const char s_beNDMWLoadIntf2TextOrder_className_00513120[];
+extern const char beNDMWLoadIntf2TextOrder_className[];
 int beNDMWLoadIntf2TextOrder_GetVTable(void);
 void beNDMWLoadIntf2TextOrder_InitFields(void);
-extern char g_beNDMWLoadIntf2TextOrder_callbackList_004cbf68[];
+extern char g_beNDMWLoadIntf2TextOrder_callbackList[];
 void *beNDMWLoadIntf2TextOrder_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWLoadIntf2TextOrder_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadIntf2TextOrder_metaObject_0058be90,    /* published MetaObject slot */
+        g_beNDMWLoadIntf2TextOrder_metaObject,    /* published MetaObject slot */
         beBaseInfoData_Register,                           /* base class registrar */
-        beBaseInfoData_GetPublishedMetaObject_00343c80,    /* base class MetaObject accessor */
+        beBaseInfoData_GetPublishedMetaObject,    /* base class MetaObject accessor */
         beNDMWLoadIntf2TextOrder_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadIntf2TextOrder_className_00513120,     /* class name */
+        beNDMWLoadIntf2TextOrder_className,     /* class name */
         0x18,                                              /* instance size */
         beNDMWLoadIntf2TextOrder_GetVTable,                /* vtable getter */
         beNDMWLoadIntf2TextOrder_InitFields,               /* field adder */
         0,                                                 /* extra callback item */
-        g_beNDMWLoadIntf2TextOrder_callbackList_004cbf68  /* callback list */
+        g_beNDMWLoadIntf2TextOrder_callbackList  /* callback list */
     );
 }

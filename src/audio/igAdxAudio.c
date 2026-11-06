@@ -5,9 +5,9 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_igAdxAudio_metaObject_005876e0[4];
+extern int g_igAdxAudio_metaObject[4];
 /* 0x00331f80 */
 int Gap__igAdxAudio__vfunc_20(void)
 {
-    return g_igAdxAudio_metaObject_005876e0[0];
+    return g_igAdxAudio_metaObject[0];
 }

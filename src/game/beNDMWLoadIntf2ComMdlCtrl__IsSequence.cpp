@@ -12,12 +12,12 @@ int beMessenger_AppendString(int, int);
 int beMessenger_DispatchSelected(int, int *);
 int beMessenger_GetBool(int, int);
 int beMessenger_SelectReceivers(int, int *, int, int);
-extern int s_MODELCTRL_005171f8[4];
-extern int s_ISSEQNAME_00517218[4];
+extern int MODELCTRL[4];
+extern int ISSEQNAME[4];
 void beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, int infoName, int sqName) {
-    beMessenger_SelectReceivers(self->_messenger, &s_MODELCTRL_005171f8[0], infoName, ramNo);
+    beMessenger_SelectReceivers(self->_messenger, &MODELCTRL[0], infoName, ramNo);
     beMessenger_AppendString(self->_messenger, sqName);
-    beMessenger_DispatchSelected(self->_messenger, &s_ISSEQNAME_00517218[0]);
+    beMessenger_DispatchSelected(self->_messenger, &ISSEQNAME[0]);
     beMessenger_GetBool(self->_messenger, 0);
 }
 } /* extern "C" */

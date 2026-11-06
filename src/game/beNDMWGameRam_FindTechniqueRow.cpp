@@ -13,7 +13,7 @@ typedef struct TechniqueListProperty {
     igObjectList *list;
 } TechniqueListProperty;
 TechniqueListProperty *igProperty_GetRecordFolder(void *, const char *);
-extern const char s_WAZALIST_00518928[16]; /* WAZALIST */
+extern const char WAZALIST[16]; /* WAZALIST */
 
 void beNDMWGameRam_FindTechniqueRow(beNDMWGameRam *receiver, void *player,
                                    int base_no, int *output)
@@ -23,7 +23,7 @@ void beNDMWGameRam_FindTechniqueRow(beNDMWGameRam *receiver, void *player,
     beNDMWItemWaza *item;
     int count;
 
-    list = igProperty_GetRecordFolder(player, s_WAZALIST_00518928)->list;
+    list = igProperty_GetRecordFolder(player, WAZALIST)->list;
     count = list->_count;
     index = 0;
     for (; index < count; ++index) {

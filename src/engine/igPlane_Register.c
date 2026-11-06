@@ -2,12 +2,12 @@
  * The igMetaObject_RegisterClass arguments are laid out per
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVolume_Register[];
-extern char igVolume_GetPublishedMetaObject_00187fd0[];
+extern char igVolume_GetPublishedMetaObject[];
 extern char igPlane_GetVTable[];
 extern char thunk_igPlane_GetMetaObject[];
 extern char thunk_FUN_0018c660[];
-extern char s_igPlane_className_004e0ac8[];
-extern char g_igPlane_metaObject_00560fe0[];
+extern char igPlane_className[];
+extern char g_igPlane_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 int igPlane_InitFields();
@@ -16,11 +16,11 @@ void igPlane_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPlane_metaObject_00560fe0,            /* published MetaObject slot */
+        g_igPlane_metaObject,            /* published MetaObject slot */
         igVolume_Register,                        /* base class registrar */
-        igVolume_GetPublishedMetaObject_00187fd0, /* base class MetaObject accessor */
+        igVolume_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igPlane_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_igPlane_className_004e0ac8,             /* class name */
+        igPlane_className,             /* class name */
         0x1C,                                     /* instance size */
         igPlane_GetVTable,                        /* vtable getter */
         &igPlane_InitFields,                      /* field adder */

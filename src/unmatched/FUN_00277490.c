@@ -10,15 +10,15 @@ typedef struct Lsc_277490 {
     LscEntry_277490 entries[16];    /* 0x38 */
 } Lsc_277490;
 
-extern char s_E0003_Illigal_parameter_lsc_NULL_004f0b08[];   /* 'E0003: Illigal parameter lsc=NULL\n' */
-extern char s_E0012_Can_not_find_stream_ID_d_004f0b78[];       /* 'E0012: Can not find stream ID =%d\n' */
+extern char E0003_Illigal_parameter_lsc_NULL[];   /* 'E0003: Illigal parameter lsc=NULL\n' */
+extern char E0012_Can_not_find_stream_ID_d[];       /* 'E0012: Can not find stream ID =%d\n' */
 void FUN_002777f8(const char *format, ...);
 
 int FUN_00277490(Lsc_277490 *lsc, int id) {
     int i;
 
     if (lsc == 0) {
-        FUN_002777f8(s_E0003_Illigal_parameter_lsc_NULL_004f0b08);
+        FUN_002777f8(E0003_Illigal_parameter_lsc_NULL);
         return 0;
     }
     for (i = 0; i < 16; i++) {
@@ -27,7 +27,7 @@ int FUN_00277490(Lsc_277490 *lsc, int id) {
         }
     }
     if (i == 16) {
-        FUN_002777f8(s_E0012_Can_not_find_stream_ID_d_004f0b78, id);
+        FUN_002777f8(E0012_Can_not_find_stream_ID_d, id);
         return 0;
     }
     return lsc->entries[i].f4;

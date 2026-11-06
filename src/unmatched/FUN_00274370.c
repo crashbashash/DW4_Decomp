@@ -12,11 +12,11 @@ struct Handle274 {
 };
 
 extern void FUN_002739b8(int detail, const char *message);
-extern const char s_E0092912_handl_is_null_004f0348[];
+extern const char E0092912_handl_is_null[];
 
 int FUN_00274370(struct Handle274 *handle) {
     if (handle == 0) {
-        FUN_002739b8(0, s_E0092912_handl_is_null_004f0348);
+        FUN_002739b8(0, E0092912_handl_is_null);
         return 0;
     }
     if (handle->state == 1) {

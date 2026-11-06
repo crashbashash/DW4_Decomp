@@ -2,7 +2,7 @@
 """findings.py — read and check the findings register under docs/findings/.
 
 The register is plain Markdown, edited by hand. A finding is an open hypothesis, a confirmed fact
-with its evidence, or a refuted idea worth remembering; documents and source comments cite one as
+with its evidence, or a refuted idea worth remembering; documents cite one as
 `#N`. Finding N lives in the file for its block of 250 (`findings-0001-0250.md`, ...), in id order:
 
     <a id="fN"></a>

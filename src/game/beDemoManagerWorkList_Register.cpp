@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beDemoManagerWorkList_metaObject_005897d0[];
+extern igMetaObject *g_beDemoManagerWorkList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beDemoManagerWorkList_GetMetaObject(void);
-extern const char s_beDemoManagerWorkList_className_00505460[];
+extern const char beDemoManagerWorkList_className[];
 int beDemoManagerWorkList_GetVTable(void);
-extern char s_096_004c7040[];
+extern char text_096[];
 void *beDemoManagerWorkList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beDemoManagerWorkList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beDemoManagerWorkList_metaObject_005897d0,  /* published MetaObject slot */
+        g_beDemoManagerWorkList_metaObject,  /* published MetaObject slot */
         igObjectList_Register,                        /* base class registrar */
         igObjectList_GetPublishedMetaObject,          /* base class MetaObject accessor */
         beDemoManagerWorkList_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_beDemoManagerWorkList_className_00505460,   /* class name */
+        beDemoManagerWorkList_className,   /* class name */
         0x14,                                         /* instance size */
         beDemoManagerWorkList_GetVTable,              /* vtable getter */
         0,                                            /* field adder */
         0,                                            /* extra callback item */
-        s_096_004c7040                               /* callback list */
+        text_096                               /* callback list */
     );
 }

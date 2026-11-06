@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWStatusCtrlFlag_metaObject_0058aef8[];
+extern igMetaObject *g_beNDMWStatusCtrlFlag_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWStatusCtrlFlag_GetMetaObject(void);
-extern const char s_beNDMWStatusCtrlFlag_className_00511710[];
+extern const char beNDMWStatusCtrlFlag_className[];
 int beNDMWStatusCtrlFlag_GetVTable(void);
 void beNDMWStatusCtrlFlag_InitFields(void);
-extern char g_beNDMWStatusCtrlFlag_callbackList_004c9e48[];
+extern char g_beNDMWStatusCtrlFlag_callbackList[];
 void *beNDMWStatusCtrlFlag_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWStatusCtrlFlag_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWStatusCtrlFlag_metaObject_0058aef8,    /* published MetaObject slot */
+        g_beNDMWStatusCtrlFlag_metaObject,    /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                     /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,       /* base class MetaObject accessor */
         beNDMWStatusCtrlFlag_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWStatusCtrlFlag_className_00511710,     /* class name */
+        beNDMWStatusCtrlFlag_className,     /* class name */
         0x58,                                          /* instance size */
         beNDMWStatusCtrlFlag_GetVTable,                /* vtable getter */
         beNDMWStatusCtrlFlag_InitFields,               /* field adder */
         0,                                             /* extra callback item */
-        g_beNDMWStatusCtrlFlag_callbackList_004c9e48  /* callback list */
+        g_beNDMWStatusCtrlFlag_callbackList  /* callback list */
     );
 }

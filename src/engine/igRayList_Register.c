@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igRayList_GetVTable[];
 extern char thunk_igRayList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igRayList_callbackList_0048adc0[];
-extern char s_igRayList_className_004e0a98[];
-extern char g_igRayList_metaObject_00560fb8[];
+extern char g_igRayList_callbackList[];
+extern char igRayList_className[];
+extern char g_igRayList_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igRayList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igRayList_metaObject_00560fb8,     /* published MetaObject slot */
+        g_igRayList_metaObject,     /* published MetaObject slot */
         igObjectList_Register,               /* base class registrar */
         igObjectList_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igRayList_GetMetaObject,       /* own MetaObject accessor (stored at +0x54) */
-        s_igRayList_className_004e0a98,      /* class name */
+        igRayList_className,      /* class name */
         0x14,                                /* instance size */
         igRayList_GetVTable,                 /* vtable getter */
         0,                                   /* field adder */
         0,                                   /* extra callback item */
-        g_igRayList_callbackList_0048adc0    /* callback list */
+        g_igRayList_callbackList    /* callback list */
     );
 }

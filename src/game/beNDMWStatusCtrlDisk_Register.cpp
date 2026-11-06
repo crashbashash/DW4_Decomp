@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWStatusCtrlDisk_metaObject_0058aec0[];
+extern igMetaObject *g_beNDMWStatusCtrlDisk_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWStatusCtrlDisk_GetMetaObject(void);
-extern const char s_beNDMWStatusCtrlDisk_className_005116c0[];
+extern const char beNDMWStatusCtrlDisk_className[];
 int beNDMWStatusCtrlDisk_GetVTable(void);
 void beNDMWStatusCtrlDisk_InitFields(void);
-extern char g_beNDMWStatusCtrlDisk_callbackList_004c9dc0[];
+extern char g_beNDMWStatusCtrlDisk_callbackList[];
 void *beNDMWStatusCtrlDisk_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWStatusCtrlDisk_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWStatusCtrlDisk_metaObject_0058aec0,    /* published MetaObject slot */
+        g_beNDMWStatusCtrlDisk_metaObject,    /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                     /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,       /* base class MetaObject accessor */
         beNDMWStatusCtrlDisk_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWStatusCtrlDisk_className_005116c0,     /* class name */
+        beNDMWStatusCtrlDisk_className,     /* class name */
         0x6c,                                          /* instance size */
         beNDMWStatusCtrlDisk_GetVTable,                /* vtable getter */
         beNDMWStatusCtrlDisk_InitFields,               /* field adder */
         0,                                             /* extra callback item */
-        g_beNDMWStatusCtrlDisk_callbackList_004c9dc0  /* callback list */
+        g_beNDMWStatusCtrlDisk_callbackList  /* callback list */
     );
 }

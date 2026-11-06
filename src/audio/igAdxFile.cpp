@@ -40,7 +40,7 @@ void Gap__igAdxFile__vfunc_24(char * p0)
  * verifies one function at a time. */
 #include "dw4/reflected.h"
 extern "C" {
-extern int g_igAdxFile_metaObject_00587668[4];
+extern int g_igAdxFile_metaObject[4];
 /* Takes the handle held at +96 of the file object (past the reflected fields);
  * returns -3 after logging when it is null, else the value at handle+20. */
 int FUN_00262510(int);
@@ -48,7 +48,7 @@ int FUN_00262510(int);
 /* 0x003338c0: slot 20, class meta-object handle getter */
 int Gap__igAdxFile__vfunc_20(void)
 {
-    return g_igAdxFile_metaObject_00587668[0];
+    return g_igAdxFile_metaObject[0];
 }
 
 /* 0x003341a0: stub, returns -1 */

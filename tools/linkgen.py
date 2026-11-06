@@ -670,7 +670,7 @@ def main(argv=None):
     script.append("  _gp = 0x%08x;" % reginfo_gp(a.elf))
     # A symbol a C unit referenced but no unit defines: resolved by the one rule
     # tools/verify.py applies (`verify.sym_address`): the symbol map, the compiler
-    # runtime table, or an honest address-bearing name. A name that fails the
+    # runtime table, data-names.tsv, or an honest address-bearing name. A name that fails the
     # naming rules (a `DAT_` name for a function's address, a `FUN_` name for
     # unlisted code) is still provided at the address it spells, so the relink
     # stays byte-identical, but it is counted and named here: `make check` fails
@@ -682,7 +682,7 @@ def main(argv=None):
             address = verify.sym_address(sym, by_name, a.symbols)
         except verify.SymbolError as error:
             dishonest.append(str(error))
-            address = verify.address_in_name(sym)
+            address = verify.spelled_address(sym, a.symbols)
         if address is not None and sym not in by_name:
             script.append("  PROVIDE(%s = 0x%08x);" % (sym, address))
     script.append("}")

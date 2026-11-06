@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_ParticleTimer_metaObject_0058a0a0[];
+extern igMetaObject *g_ParticleTimer_metaObject[];
 void *igGeometry_Register(void);
-igMetaObject *igGeometry_GetPublishedMetaObject_0019d1e0(void);
+igMetaObject *igGeometry_GetPublishedMetaObject(void);
 igMetaObject *ParticleTimer_GetMetaObject(void);
-extern const char s_ParticleTimer_className_00506448[];
+extern const char ParticleTimer_className[];
 int ParticleTimer_GetVTable(void);
 void ParticleTimer_InitFields(void);
 void FUN_0036e860(void);
@@ -33,11 +33,11 @@ void *ParticleTimer_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_ParticleTimer_metaObject_0058a0a0,         /* published MetaObject slot */
+        g_ParticleTimer_metaObject,         /* published MetaObject slot */
         igGeometry_Register,                         /* base class registrar */
-        igGeometry_GetPublishedMetaObject_0019d1e0,  /* base class MetaObject accessor */
+        igGeometry_GetPublishedMetaObject,  /* base class MetaObject accessor */
         ParticleTimer_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_ParticleTimer_className_00506448,          /* class name */
+        ParticleTimer_className,          /* class name */
         0x40,                                        /* instance size */
         ParticleTimer_GetVTable,                     /* vtable getter */
         ParticleTimer_InitFields,                    /* field adder */

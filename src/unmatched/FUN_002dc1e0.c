@@ -1,7 +1,7 @@
 typedef struct T { int word0; int references; } T;
 typedef struct O { T *a; T *b; int *vt; } O;
 void igObject_Destroy(T *);
-void Memory_FreeBufferAlias_002ed5c0(void *);
+void Memory_FreeBufferAliasB(void *);
 extern int DAT_00530608[4];
 O *FUN_002dc1e0(O *self, int delete_storage) {
     T *p;
@@ -18,7 +18,7 @@ O *FUN_002dc1e0(O *self, int delete_storage) {
         if (((unsigned long long)(long long)q->references & 0x7fffffULL) == 0)
             igObject_Destroy(q);
         self->b = 0;
-        if ((short)delete_storage > 0) Memory_FreeBufferAlias_002ed5c0(self);
+        if ((short)delete_storage > 0) Memory_FreeBufferAliasB(self);
     }
     return self;
 }

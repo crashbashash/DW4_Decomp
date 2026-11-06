@@ -9,19 +9,19 @@ typedef struct Handle_27bb68 {
     int error_object;                           /* 0x20 */
 } Handle_27bb68;
 
-extern char s_E2004090247_NULL_pointer_is_specified_004f1d18[];   /* 'E2004090247 : NULL pointer is specified.' */
-extern char s_E2004090248_Specified_handle_is_invalid_004f1d48[]; /* 'E2004090248 : Specified handle is invalid.' */
+extern char E2004090247_NULL_pointer_is_specified[];   /* 'E2004090247 : NULL pointer is specified.' */
+extern char E2004090248_Specified_handle_is_invalid[]; /* 'E2004090248 : Specified handle is invalid.' */
 int FUN_0027b2e0(const char *message);
 
 int FUN_0027bb68(Handle_27bb68 *handle, int mode, int request, int *granted) {
     int amount;
 
     if (handle == 0) {
-        FUN_0027b2e0(s_E2004090247_NULL_pointer_is_specified_004f1d18);
+        FUN_0027b2e0(E2004090247_NULL_pointer_is_specified);
         return 0;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(s_E2004090248_Specified_handle_is_invalid_004f1d48);
+        FUN_0027b2e0(E2004090248_Specified_handle_is_invalid);
         return 0;
     }
     switch (mode) {

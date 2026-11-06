@@ -12,10 +12,10 @@ int igMetaObject_EnsureRegistered(...);
 void **igObject_AllocateRawStorage(...);
 void **igMetaObject_Construct(...);
 void **igMetaObject_CreateInstance(...);
-extern int g_igMetaObject_metaObject_00585be8[4];
+extern int g_igMetaObject_metaObject[4];
 /* Pointer to the object-system state; its first byte is nonzero once the
  * reflection system is live (docs/engine/field-factories.md, "Factory modes"). */
-extern unsigned char * g_objectSystemState_00586dc8[4];
+extern unsigned char * g_objectSystem[4];
 void **igMetaObject_Create(int allocator);
 }
 
@@ -26,9 +26,9 @@ class igObjectSlot07 { public: virtual void d0(); virtual void d1(); virtual voi
 void **igMetaObject_Create(int allocator) {
     void **metaObject;
 
-    if (*g_objectSystemState_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         igMetaObject_EnsureRegistered();
-        metaObject = (void **)(igMetaObject_CreateInstance(g_igMetaObject_metaObject_00585be8[0], allocator));
+        metaObject = (void **)(igMetaObject_CreateInstance(g_igMetaObject_metaObject[0], allocator));
     } else {
         metaObject = (void **)(igObject_AllocateRawStorage(0x64, 0, allocator));
         if (metaObject != 0) {

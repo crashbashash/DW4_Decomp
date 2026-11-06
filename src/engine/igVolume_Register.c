@@ -8,8 +8,8 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igVolume_GetMetaObject[];
 extern char FUN_00186bc0[];
 extern char igObject_Register[];
-extern char s_igVolume_className_004e0978[];
-extern char g_igVolume_metaObject_00560f08[];
+extern char igVolume_className[];
+extern char g_igVolume_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 extern int igVolume_InitFields_00186bb0[4];
@@ -17,11 +17,11 @@ void igVolume_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igVolume_metaObject_00560f08,        /* published MetaObject slot */
+        g_igVolume_metaObject,        /* published MetaObject slot */
         igObject_Register,                     /* base class registrar (igObject) */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igVolume_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_igVolume_className_004e0978,         /* class name */
+        igVolume_className,         /* class name */
         8,                                     /* instance size */
         0,                                     /* vtable getter */
         &igVolume_InitFields_00186bb0[0],      /* field adder (class InitFields) */

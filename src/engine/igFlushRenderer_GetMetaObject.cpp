@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_00233b80(void);
-extern igMetaObject *g_igFlushRenderer_metaObject_0056dc48[4];
+extern igMetaObject *g_igFlushRenderer_metaObject[4];
 igMetaObject *igFlushRenderer_GetMetaObject(void);
 }
 
 igMetaObject *igFlushRenderer_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igFlushRenderer_metaObject_0056dc48[0] != 0) {
-        ready = (g_igFlushRenderer_metaObject_0056dc48[0]->_validity & 4) != 0;
+    if (g_igFlushRenderer_metaObject[0] != 0) {
+        ready = (g_igFlushRenderer_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00233b80();
 done:
-    return g_igFlushRenderer_metaObject_0056dc48[0];
+    return g_igFlushRenderer_metaObject[0];
 }

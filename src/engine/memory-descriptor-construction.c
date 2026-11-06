@@ -9,14 +9,14 @@ void *igRefMetaField_Init(igRefMetaField *);
 igMemoryRefMetaField *igMemoryRefMetaField_Init(igMemoryRefMetaField *);
 /* vtable of igMemoryRefMetaField (the 0x532a50 table whose slot 124 builds the
  * memory value; see docs/engine/lua-dependencies.md). */
-extern int g_igMemoryRefMetaField_vtable_00532a50[4];
+extern int g_igMemoryRefMetaField_vtable[4];
 
 /* Run the base-class constructor, point the descriptor at its own vtable and
  * clear the two reference members, then (for a live object) apply the field
  * defaults with igMemoryRefMetaField_Init. */
 igMemoryRefMetaField *igMemoryRefMetaField_Construct(igMemoryRefMetaField *self) {
     igRefMetaField_Construct((igRefMetaField *)self);
-    self->_vtable = (int)g_igMemoryRefMetaField_vtable_00532a50;
+    self->_vtable = (int)g_igMemoryRefMetaField_vtable;
     self->_memTypeRef = 0;
     self->_poolName = 0;
     if (self) igMemoryRefMetaField_Init(self);
@@ -28,7 +28,7 @@ igMemoryRefMetaField *igMemoryRefMetaField_Construct(igMemoryRefMetaField *self)
  * type -1 and shallow-copy method 2. */
 igMemoryRefMetaField *igMemoryRefMetaField_Init(igMemoryRefMetaField *self) {
     igRefMetaField_Init((igRefMetaField *)self);
-    self->_vtable = (int)g_igMemoryRefMetaField_vtable_00532a50;
+    self->_vtable = (int)g_igMemoryRefMetaField_vtable;
     self->_memTypeRef = 0;
     self->_poolName = 0;
     self->_refCounted = 1;

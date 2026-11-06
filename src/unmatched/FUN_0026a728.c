@@ -19,7 +19,7 @@ typedef struct Stmf_26a728 {
     int offset;                 /* 0x54 */
 } Stmf_26a728;
 
-extern char s_E02110501_adxstmf_stat_exec_can_t_open_004ee460[]; /* "E02110501 adxstmf_stat_exec: can't open " */
+extern char E02110501_adxstmf_stat_exec_can_t_open[]; /* "E02110501 adxstmf_stat_exec: can't open " */
 void FUN_0026ffb0(void *file);
 void FUN_0027e1c0(void);
 void FUN_0027e1d8(void);
@@ -59,7 +59,7 @@ void FUN_0026a728(Stmf_26a728 *stmf) {
             if (stmf->file == 0) {
                 stmf->file = FUN_0026fc60(stmf->name, stmf->offset, 0);
                 if (stmf->file == 0) {
-                    FUN_00260840(s_E02110501_adxstmf_stat_exec_can_t_open_004ee460, stmf->name);
+                    FUN_00260840(E02110501_adxstmf_stat_exec_can_t_open, stmf->name);
                     stmf->state = 4;
                     stmf->opened = 0;
                     stmf->open_request = 0;

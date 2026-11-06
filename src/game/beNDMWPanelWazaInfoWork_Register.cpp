@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWPanelWazaInfoWork_metaObject_0058b200[];
+extern igMetaObject *g_beNDMWPanelWazaInfoWork_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beNDMWPanelWazaInfoWork_GetMetaObject(void);
-extern const char s_beNDMWPanelWazaInfoWork_className_00511de0[];
+extern const char beNDMWPanelWazaInfoWork_className[];
 int beNDMWPanelWazaInfoWork_GetVTable(void);
 void beNDMWPanelWazaInfoWork_InitFields(void);
-extern char g_beNDMWPanelWazaInfoWork_callbackList_004ca480[];
+extern char g_beNDMWPanelWazaInfoWork_callbackList[];
 void *beNDMWPanelWazaInfoWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWPanelWazaInfoWork_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWPanelWazaInfoWork_metaObject_0058b200,    /* published MetaObject slot */
+        g_beNDMWPanelWazaInfoWork_metaObject,    /* published MetaObject slot */
         igObject_Register,                                /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,            /* base class MetaObject accessor */
         beNDMWPanelWazaInfoWork_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWPanelWazaInfoWork_className_00511de0,     /* class name */
+        beNDMWPanelWazaInfoWork_className,     /* class name */
         0x30,                                             /* instance size */
         beNDMWPanelWazaInfoWork_GetVTable,                /* vtable getter */
         beNDMWPanelWazaInfoWork_InitFields,               /* field adder */
         0,                                                /* extra callback item */
-        g_beNDMWPanelWazaInfoWork_callbackList_004ca480  /* callback list */
+        g_beNDMWPanelWazaInfoWork_callbackList  /* callback list */
     );
 }

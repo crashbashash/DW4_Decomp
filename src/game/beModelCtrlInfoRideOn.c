@@ -5,11 +5,11 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beModelCtrlInfoRideOn_metaObject_00588aa8[4];
+extern int g_beModelCtrlInfoRideOn_metaObject[4];
 /* 0x0036f870 */
 int Gap__Bec__beModelCtrlInfoRideOn__vfunc_20(void)
 {
-    return g_beModelCtrlInfoRideOn_metaObject_00588aa8[0];
+    return g_beModelCtrlInfoRideOn_metaObject[0];
 }
 
 /* 0x0036f880 */

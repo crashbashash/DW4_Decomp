@@ -27,11 +27,11 @@ int FUN_00350f90();
 int FUN_00350fa0();
 int igObject_InitHeader();
 /* vtables: data/vtables.json 0x537ee0 = Gap::Bec::beModelCtrlInfoWork, 0x540520 = this class */
-extern int g_beModelCtrlInfoWork_vtable_00537ee0[4];
-extern int g_beNDMWMdlPEBaseInfoWork_vtable_00540520[4];
+extern int g_beModelCtrlInfoWork_vtable[4];
+extern int g_beNDMWMdlPEBaseInfoWork_vtable[4];
 void *beNDMWMdlPEBaseInfoWork_Construct(beNDMWMdlPEBaseInfoWork *self) {
     igObject_InitHeader();
-    self->_vtable = (int)(&g_beModelCtrlInfoWork_vtable_00537ee0[0]);
+    self->_vtable = (int)(&g_beModelCtrlInfoWork_vtable[0]);
     FUN_00350fa0(&self->_mHp);
     FUN_00350fa0(&self->_hp);
     FUN_00229270(&self->_seqCodeName);
@@ -65,7 +65,7 @@ void *beNDMWMdlPEBaseInfoWork_Construct(beNDMWMdlPEBaseInfoWork *self) {
     FUN_00229270(&self->_hitParentName);
     FUN_00350f10(&self->_subCommand);
     FUN_001a1090(&self->_baseAABox);
-    self->_vtable = (int)(&g_beNDMWMdlPEBaseInfoWork_vtable_00540520[0]);
+    self->_vtable = (int)(&g_beNDMWMdlPEBaseInfoWork_vtable[0]);
     self->_dispRamNoList = 0;
     self->_dispPosNoList = 0;
     self->_timerList = 0;

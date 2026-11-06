@@ -26,11 +26,16 @@ Byte identity and readability are one gate. A function counts as done when all o
    C++ exception metadata. A function that matches only under a per-function override in
    `config/SLUS-20836/unit-flags.tsv` / `unit-compilers.tsv` is `foreign-profile` debt, not a match.
 2. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.
-3. Every identifier is a recovered name or carries a finding id (`/* #NNNN */`) saying why the name
-   is a hypothesis. Names come from evidence (RTTI, strings, callers), never from guesses.
-4. No m2c idioms (`temp_*`, `var_*`, `argN`) and no raw offset casts where
-   `include/dw4/reflected.h` names the field; real structs, enums and control flow; comments explain
-   intent and cite evidence (finding ids, addresses, docs).
+3. Every identifier is a recovered name, from evidence (RTTI, strings, callers), never a guess. What
+   it does should make the name obvious, so source never justifies a name: a hypothesis and its
+   evidence go in the findings register. A name
+   holding an address is not recovered: it says where a thing is, not what it is. That goes for
+   functions, variables, structs and classes alike; a type also needs a real name, not a placeholder
+   such as `S`, `Obj` or `Info176`.
+4. No m2c idioms (`temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`) and no raw offset casts where
+   `include/dw4/reflected.h` names the field; real structs, enums and control flow; a comment
+   appears only when it is necessary, for what the code cannot say, and it stands alone: no pointer
+   to another document, finding or tool, and no account of how the code was recovered.
 5. A shape found by a permuter, flag sweep or random walk carries
    `/* matching construct: <tool> — <what moved> */` at the affected line.
 
@@ -40,7 +45,7 @@ nothing and are not committed ([asm-body matches](docs/engine/asm-body-matches.m
 
 C++ cleanup scopes are written as RAII holder classes whose destructor copies
 `config/SLUS-20836/unit-objects.json` names ([emitted functions](docs/engine/emitted-functions.md)).
-Strings use `s_<TEXT>_<addr>`; offset members are decimal `fNN` and temporary; one shared definition
+Strings are named by their text, with no prefix; offset members are decimal `fNN` and temporary; one shared definition
 per class lives under `include/dw4/`.
 
 ## Checking your work

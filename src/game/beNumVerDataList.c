@@ -5,16 +5,16 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beNumVerDataList_metaObject_00588688[4];
-extern int g_beNumVerData_metaObject_00588690[4];
+extern int g_beNumVerDataList_metaObject[4];
+extern int g_beNumVerData_metaObject[4];
 /* 0x0036fc80 */
 int Gap__Bec__beNumVerDataList__vfunc_20(void)
 {
-    return g_beNumVerDataList_metaObject_00588688[0];
+    return g_beNumVerDataList_metaObject[0];
 }
 
 /* 0x00370630 */
 int Gap__Bec__beNumVerDataList__vfunc_22(void)
 {
-    return g_beNumVerData_metaObject_00588690[0];
+    return g_beNumVerData_metaObject[0];
 }

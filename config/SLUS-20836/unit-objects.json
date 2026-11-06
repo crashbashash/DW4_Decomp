@@ -5213,5 +5213,52 @@
       "zffilbuf__FP3zio"
     ],
     "symbol": "zmfilbuf__FP3zio"
+  },
+  "0x00250150": {
+    "whole_file": true,
+    "emitted": {
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200"
+    },
+    "data": {
+      "@53": "0x004eba10"
+    },
+    "externals": {
+      "luaD_breakrun__FP9lua_Statei": "0x0024ccb0",
+      "luaO_power2__FUi": "0x00250310",
+      "lua_error__FP9lua_StatePCc": "0x0024cc70"
+    },
+    "symbol": "luaM_growaux__FP9lua_StatePvUiiUiPCcUi"
+  },
+  "0x00252f70": {
+    "whole_file": true,
+    "emitted": {
+      "f_luaopen__FP9lua_StatePv": "0x00252fc0",
+      "lua_open__FiP16igMemoryPoolView": "0x00253070",
+      "lua_close__FP9lua_State": "0x00253170"
+    },
+    "data": {
+      "@16": "0x004ebe58",
+      "@17": "0x004ebe68",
+      "@30": "0x004ebe78",
+      "_impure_ptr": "0x004854a0"
+    },
+    "externals": {
+      "fprintf": "0x00125220",
+      "luaC_collect__FP9lua_Statei": "0x0024db90",
+      "luaD_init__FP9lua_Statei": "0x0024c2e0",
+      "luaD_runprotected__FP9lua_StatePFP9lua_StatePv_vPv": "0x0024cd10",
+      "luaH_new__FP9lua_Statei": "0x00255b80",
+      "luaM_realloc__FP9lua_StatePvUi": "0x00250200",
+      "luaS_freeall__FP9lua_State": "0x002532f0",
+      "luaS_init__FP9lua_State": "0x00253270",
+      "luaT_init__FP9lua_State": "0x00256210",
+      "luaX_init__FP9lua_State": "0x0024dc80",
+      "lua_newtable__FP9lua_State": "0x002478b0",
+      "lua_pushcclosure__FP9lua_StatePFP9lua_State_ii": "0x002474b0",
+      "lua_ref__FP9lua_Statei": "0x00247af0",
+      "lua_setglobal__FP9lua_StatePCc": "0x00247910",
+      "lua_tostring__FP9lua_Statei": "0x00247160"
+    },
+    "symbol": "errormessage__FP9lua_State"
   }
 }

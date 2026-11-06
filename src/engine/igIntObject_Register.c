@@ -5,8 +5,8 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igIntObject_GetVTable[];
 extern char thunk_igIntObject_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igIntObject_className_004e4990[];
-extern char g_igIntObject_metaObject_00562bd0[];
+extern char igIntObject_className[];
+extern char g_igIntObject_metaObject[];
 int GpFlag_SetOnce_001e3ff0();
 int igMetaObject_RegisterClass();
 int igIntObject_InitFields();
@@ -15,11 +15,11 @@ void igIntObject_Register(void) {
     GpFlag_SetOnce_001e3ff0();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igIntObject_metaObject_00562bd0,     /* published MetaObject slot */
+        g_igIntObject_metaObject,     /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igIntObject_GetMetaObject,       /* own MetaObject accessor (stored at +0x54) */
-        s_igIntObject_className_004e4990,      /* class name */
+        igIntObject_className,      /* class name */
         0xC,                                   /* instance size */
         igIntObject_GetVTable,                 /* vtable getter */
         &igIntObject_InitFields,               /* field adder */

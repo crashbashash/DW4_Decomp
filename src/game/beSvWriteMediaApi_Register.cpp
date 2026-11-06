@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvWriteMediaApi_metaObject_00588220[];
+extern igMetaObject *g_beSvWriteMediaApi_metaObject[];
 void *beSaveApi_Register(void);
-igMetaObject *beSaveApi_GetPublishedMetaObject_003485e0(void);
+igMetaObject *beSaveApi_GetPublishedMetaObject(void);
 igMetaObject *beSvWriteMediaApi_GetMetaObject(void);
-extern const char s_beSvWriteMediaApi_className_00502850[];
+extern const char beSvWriteMediaApi_className[];
 int beSvWriteMediaApi_GetVTable(void);
 void beSvWriteMediaApi_InitFields(void);
-extern char g_beSvWriteMediaApi_callbackList_004c4068[];
+extern char g_beSvWriteMediaApi_callbackList[];
 void *beSvWriteMediaApi_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSvWriteMediaApi_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvWriteMediaApi_metaObject_00588220,    /* published MetaObject slot */
+        g_beSvWriteMediaApi_metaObject,    /* published MetaObject slot */
         beSaveApi_Register,                         /* base class registrar */
-        beSaveApi_GetPublishedMetaObject_003485e0,  /* base class MetaObject accessor */
+        beSaveApi_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSvWriteMediaApi_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beSvWriteMediaApi_className_00502850,     /* class name */
+        beSvWriteMediaApi_className,     /* class name */
         0x4c,                                       /* instance size */
         beSvWriteMediaApi_GetVTable,                /* vtable getter */
         beSvWriteMediaApi_InitFields,               /* field adder */
         0,                                          /* extra callback item */
-        g_beSvWriteMediaApi_callbackList_004c4068  /* callback list */
+        g_beSvWriteMediaApi_callbackList  /* callback list */
     );
 }

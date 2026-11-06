@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadIntf2DegiStateCtrl_metaObject_0058b958[];
+extern igMetaObject *g_beNDMWLoadIntf2DegiStateCtrl_metaObject[];
 void *beBaseInfoData_Register(void);
-igMetaObject *beBaseInfoData_GetPublishedMetaObject_00343c80(void);
+igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
 igMetaObject *beNDMWLoadIntf2DegiStateCtrl_GetMetaObject(void);
-extern const char s_beNDMWLoadIntf2DegiStateCtrl_className_00512a00[];
+extern const char beNDMWLoadIntf2DegiStateCtrl_className[];
 int beNDMWLoadIntf2DegiStateCtrl_GetVTable(void);
 void beNDMWLoadIntf2DegiStateCtrl_InitFields(void);
-extern char g_beNDMWLoadIntf2DegiStateCtrl_callbackList_004cb480[];
+extern char g_beNDMWLoadIntf2DegiStateCtrl_callbackList[];
 void *beNDMWLoadIntf2DegiStateCtrl_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWLoadIntf2DegiStateCtrl_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadIntf2DegiStateCtrl_metaObject_0058b958,    /* published MetaObject slot */
+        g_beNDMWLoadIntf2DegiStateCtrl_metaObject,    /* published MetaObject slot */
         beBaseInfoData_Register,                               /* base class registrar */
-        beBaseInfoData_GetPublishedMetaObject_00343c80,        /* base class MetaObject accessor */
+        beBaseInfoData_GetPublishedMetaObject,        /* base class MetaObject accessor */
         beNDMWLoadIntf2DegiStateCtrl_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadIntf2DegiStateCtrl_className_00512a00,     /* class name */
+        beNDMWLoadIntf2DegiStateCtrl_className,     /* class name */
         0x14,                                                  /* instance size */
         beNDMWLoadIntf2DegiStateCtrl_GetVTable,                /* vtable getter */
         beNDMWLoadIntf2DegiStateCtrl_InitFields,               /* field adder */
         0,                                                     /* extra callback item */
-        g_beNDMWLoadIntf2DegiStateCtrl_callbackList_004cb480  /* callback list */
+        g_beNDMWLoadIntf2DegiStateCtrl_callbackList  /* callback list */
     );
 }

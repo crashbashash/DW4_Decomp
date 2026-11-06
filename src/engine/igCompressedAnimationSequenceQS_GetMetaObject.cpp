@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_001a2940(void);
-extern igMetaObject *g_igCompressedAnimationSequenceQS_metaObject_00561c38[4];
+extern igMetaObject *g_igCompressedAnimationSequenceQS_metaObject[4];
 igMetaObject *igCompressedAnimationSequenceQS_GetMetaObject(void);
 }
 
 igMetaObject *igCompressedAnimationSequenceQS_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igCompressedAnimationSequenceQS_metaObject_00561c38[0] != 0) {
-        ready = (g_igCompressedAnimationSequenceQS_metaObject_00561c38[0]->_validity & 4) != 0;
+    if (g_igCompressedAnimationSequenceQS_metaObject[0] != 0) {
+        ready = (g_igCompressedAnimationSequenceQS_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_001a2940();
 done:
-    return g_igCompressedAnimationSequenceQS_metaObject_00561c38[0];
+    return g_igCompressedAnimationSequenceQS_metaObject[0];
 }

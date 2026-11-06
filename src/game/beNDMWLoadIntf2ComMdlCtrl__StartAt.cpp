@@ -16,11 +16,11 @@ int igObject_Destroy(beLoadIntf2ComMdlData *);
 int igObject_GetAllocator(beNDMWLoadIntf2ComMdlCtrl *);
 beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int);
 /* Messenger group "MODELCTRL" and message "GENERATE" (data/strings.json). */
-extern int s_MODELCTRL_005171f8[4];
-extern int s_GENERATE_00517208[4];
-extern int g_stringPool_00586f20[4];
+extern int MODELCTRL[4];
+extern int GENERATE[4];
+extern int g_stringPool[4];
 /* Default allocator selector (docs/engine/subwindow-preparation.md). */
-extern int g_defaultAllocatorSelector_00587110[4];
+extern int g_defaultAllocatorSelector[4];
 /* Byte flag at gp-relative 0x554c14: when nonzero the object allocator is used
  * as returned instead of the selector (docs/engine/xdata-controller.md). */
 extern unsigned char GPR_00554c14;
@@ -66,27 +66,27 @@ extern "C" void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *se
     void *oldOpenSQ;
     beLoadIntf2ComMdlData *record;
 
-    beMessenger_SelectReceivers(self->_messenger, &s_MODELCTRL_005171f8[0], infoName, ramNo);
+    beMessenger_SelectReceivers(self->_messenger, &MODELCTRL[0], infoName, ramNo);
     v3.x = position[0];
     v3.y = position[1];
     v3.z = position[2];
     beMessenger_AppendVec3(self->_messenger, (float*)&v3);
-    beMessenger_DispatchSelected(self->_messenger, &s_GENERATE_00517208[0]);
-    beMessenger_SendNamed(self->_messenger, &s_MODELCTRL_005171f8[0], infoName, ramNo, openSQ);
+    beMessenger_DispatchSelected(self->_messenger, &GENERATE[0]);
+    beMessenger_SendNamed(self->_messenger, &MODELCTRL[0], infoName, ramNo, openSQ);
     if ((recordOpen & 0xFF) == 1) {
         int objectAllocator = igObject_GetAllocator(self);
-        if (GPR_00554c14 != 0) { allocator = objectAllocator; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector_00587110[0]); }
+        if (GPR_00554c14 != 0) { allocator = objectAllocator; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
         ObjectRef newRecord(beLoadIntf2ComMdlData__Create(allocator));
         newRecord.p->_ramNo = ramNo;
         record = newRecord.p;
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool = FUN_002eb010(0x10);
             if (pool != 0) {
                 pool = StringPool_Construct(pool);
             }
-            g_stringPool_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        internedInfoName = (void *)(StringPool_Intern(g_stringPool_00586f20[0], infoName));
+        internedInfoName = (void *)(StringPool_Intern(g_stringPool[0], infoName));
         oldInfoName = (void *)(record->_infoName);
         if (oldInfoName != 0) {
             oldNameHeader = (StringTokenHeader *)((char *)oldInfoName - 8);
@@ -98,14 +98,14 @@ extern "C" void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *se
         }
         record->_infoName = (int)(internedInfoName);
         record = newRecord.p;
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             pool2 = FUN_002eb010(0x10);
             if (pool2 != 0) {
                 pool2 = StringPool_Construct(pool2);
             }
-            g_stringPool_00586f20[0] = pool2;
+            g_stringPool[0] = pool2;
         }
-        internedOpenSQ = (void *)(StringPool_Intern(g_stringPool_00586f20[0], openSQ));
+        internedOpenSQ = (void *)(StringPool_Intern(g_stringPool[0], openSQ));
         oldOpenSQ = (void *)(record->_openSQ);
         if (oldOpenSQ != 0) {
             oldOpenSQHeader = (StringTokenHeader *)((char *)oldOpenSQ - 8);

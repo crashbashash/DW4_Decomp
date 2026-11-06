@@ -4,10 +4,10 @@
 extern char igBlendEquationExt_Register[];
 extern char thunk_igPsx2BlendEquationExt_GetMetaObject[];
 extern char igPsx2BlendEquationExt_GetVTable[];
-extern char igBlendEquationExt_GetPublishedMetaObject_001547a0[];
-extern char g_igPsx2BlendEquationExt_callbackList_0048a0f8[];
-extern char s_igPsx2BlendEquationExt_className_004de680[];
-extern char g_igPsx2BlendEquationExt_metaObject_00560628[];
+extern char igBlendEquationExt_GetPublishedMetaObject[];
+extern char g_igPsx2BlendEquationExt_callbackList[];
+extern char igPsx2BlendEquationExt_className[];
+extern char g_igPsx2BlendEquationExt_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 int igPsx2BlendEquationExt_InitFields();
@@ -16,15 +16,15 @@ void igPsx2BlendEquationExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2BlendEquationExt_metaObject_00560628,       /* published MetaObject slot */
+        g_igPsx2BlendEquationExt_metaObject,       /* published MetaObject slot */
         igBlendEquationExt_Register,                        /* base class registrar */
-        igBlendEquationExt_GetPublishedMetaObject_001547a0, /* base class MetaObject accessor */
+        igBlendEquationExt_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igPsx2BlendEquationExt_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        s_igPsx2BlendEquationExt_className_004de680,        /* class name */
+        igPsx2BlendEquationExt_className,        /* class name */
         0x30,                                               /* instance size */
         igPsx2BlendEquationExt_GetVTable,                   /* vtable getter */
         &igPsx2BlendEquationExt_InitFields,                 /* field adder */
         0,                                                  /* extra callback item */
-        g_igPsx2BlendEquationExt_callbackList_0048a0f8      /* callback list */
+        g_igPsx2BlendEquationExt_callbackList      /* callback list */
     );
 }

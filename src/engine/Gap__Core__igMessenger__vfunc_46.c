@@ -4,7 +4,7 @@
  * data/reflection.json).  Why igMessenger answers with igInfoManager's metaobject
  * is unproven; the vtable is attributed to igMessenger by its GetVTable accessor
  * (config/SLUS-20836/names/GetVTableSlots.tsv).  The receiver is not touched. */
-extern int g_igInfoManager_metaObject_0056dc38[4];
+extern int g_igInfoManager_metaObject[4];
 int Gap__Core__igMessenger__vfunc_46(void) {
-    return g_igInfoManager_metaObject_0056dc38[0];
+    return g_igInfoManager_metaObject[0];
 }

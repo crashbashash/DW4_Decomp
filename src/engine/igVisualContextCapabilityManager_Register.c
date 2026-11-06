@@ -3,11 +3,11 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igVisualContextCapabilityManager_GetVTable[];
 extern char thunk_igVisualContextCapabilityManager_GetMetaObject[];
-extern char igCapabilityManager_GetPublishedMetaObject_00149df0[];
+extern char igCapabilityManager_GetPublishedMetaObject[];
 extern char igCapabilityManager_Register[];
-extern char g_igVisualContextCapabilityManager_callbackList_004882d0[];
-extern char s_igVisualContextCapabilityManager_className_004db6a0[];
-extern char g_igVisualContextCapabilityManager_metaObject_0055f8d0[];
+extern char g_igVisualContextCapabilityManager_callbackList[];
+extern char igVisualContextCapabilityManager_className[];
+extern char g_igVisualContextCapabilityManager_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 int igVisualContextCapabilityManager_InitFields();
@@ -16,15 +16,15 @@ void igVisualContextCapabilityManager_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0,                                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igVisualContextCapabilityManager_metaObject_0055f8d0, /* published MetaObject slot */
+        g_igVisualContextCapabilityManager_metaObject, /* published MetaObject slot */
         igCapabilityManager_Register,                           /* base class registrar */
-        igCapabilityManager_GetPublishedMetaObject_00149df0,    /* base class MetaObject accessor */
+        igCapabilityManager_GetPublishedMetaObject,    /* base class MetaObject accessor */
         thunk_igVisualContextCapabilityManager_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igVisualContextCapabilityManager_className_004db6a0,  /* class name */
+        igVisualContextCapabilityManager_className,  /* class name */
         0xC,                                                    /* instance size */
         igVisualContextCapabilityManager_GetVTable,             /* vtable getter */
         &igVisualContextCapabilityManager_InitFields,           /* field adder */
         0,                                                      /* extra callback item */
-        g_igVisualContextCapabilityManager_callbackList_004882d0  /* callback list */
+        g_igVisualContextCapabilityManager_callbackList  /* callback list */
     );
 }

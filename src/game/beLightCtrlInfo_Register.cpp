@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLightCtrlInfo_metaObject_00589238[];
+extern igMetaObject *g_beLightCtrlInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beLightCtrlInfo_GetMetaObject(void);
-extern const char s_beLightCtrlInfo_className_005048d0[];
+extern const char beLightCtrlInfo_className[];
 int beLightCtrlInfo_GetVTable(void);
 void beLightCtrlInfo_InitFields(void);
-extern char g_beLightCtrlInfo_callbackList_004c6348[];
+extern char g_beLightCtrlInfo_callbackList[];
 void *beLightCtrlInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beLightCtrlInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLightCtrlInfo_metaObject_00589238,       /* published MetaObject slot */
+        g_beLightCtrlInfo_metaObject,       /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLightCtrlInfo_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_beLightCtrlInfo_className_005048d0,        /* class name */
+        beLightCtrlInfo_className,        /* class name */
         0x20,                                        /* instance size */
         beLightCtrlInfo_GetVTable,                   /* vtable getter */
         beLightCtrlInfo_InitFields,                  /* field adder */
         0,                                           /* extra callback item */
-        g_beLightCtrlInfo_callbackList_004c6348     /* callback list */
+        g_beLightCtrlInfo_callbackList     /* callback list */
     );
 }

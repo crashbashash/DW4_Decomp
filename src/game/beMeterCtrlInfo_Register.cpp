@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMeterCtrlInfo_metaObject_00588ea0[];
+extern igMetaObject *g_beMeterCtrlInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beMeterCtrlInfo_GetMetaObject(void);
-extern const char s_beMeterCtrlInfo_className_005041c0[];
+extern const char beMeterCtrlInfo_className[];
 int beMeterCtrlInfo_GetVTable(void);
 void beMeterCtrlInfo_InitFields(void);
-extern char g_beMeterCtrlInfo_callbackList_004c5aa8[];
+extern char g_beMeterCtrlInfo_callbackList[];
 void *beMeterCtrlInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beMeterCtrlInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMeterCtrlInfo_metaObject_00588ea0,       /* published MetaObject slot */
+        g_beMeterCtrlInfo_metaObject,       /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beMeterCtrlInfo_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_beMeterCtrlInfo_className_005041c0,        /* class name */
+        beMeterCtrlInfo_className,        /* class name */
         0x20,                                        /* instance size */
         beMeterCtrlInfo_GetVTable,                   /* vtable getter */
         beMeterCtrlInfo_InitFields,                  /* field adder */
         0,                                           /* extra callback item */
-        g_beMeterCtrlInfo_callbackList_004c5aa8     /* callback list */
+        g_beMeterCtrlInfo_callbackList     /* callback list */
     );
 }

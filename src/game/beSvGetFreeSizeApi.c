@@ -5,9 +5,9 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beSvGetFreeSizeApi_metaObject_00588200[4];
+extern int g_beSvGetFreeSizeApi_metaObject[4];
 /* 0x003ae110 */
 int Gap__Bec__beSvGetFreeSizeApi__vfunc_20(void)
 {
-    return g_beSvGetFreeSizeApi_metaObject_00588200[0];
+    return g_beSvGetFreeSizeApi_metaObject[0];
 }

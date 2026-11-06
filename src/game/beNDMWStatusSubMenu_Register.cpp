@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWStatusSubMenu_metaObject_0058ae38[];
+extern igMetaObject *g_beNDMWStatusSubMenu_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWStatusSubMenu_GetMetaObject(void);
-extern const char s_beNDMWStatusSubMenu_className_005115c0[];
+extern const char beNDMWStatusSubMenu_className[];
 int beNDMWStatusSubMenu_GetVTable(void);
 void beNDMWStatusSubMenu_InitFields(void);
-extern char g_beNDMWStatusSubMenu_callbackList_004c9c70[];
+extern char g_beNDMWStatusSubMenu_callbackList[];
 void *beNDMWStatusSubMenu_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWStatusSubMenu_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWStatusSubMenu_metaObject_0058ae38,    /* published MetaObject slot */
+        g_beNDMWStatusSubMenu_metaObject,    /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                    /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,      /* base class MetaObject accessor */
         beNDMWStatusSubMenu_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWStatusSubMenu_className_005115c0,     /* class name */
+        beNDMWStatusSubMenu_className,     /* class name */
         0x68,                                         /* instance size */
         beNDMWStatusSubMenu_GetVTable,                /* vtable getter */
         beNDMWStatusSubMenu_InitFields,               /* field adder */
         0,                                            /* extra callback item */
-        g_beNDMWStatusSubMenu_callbackList_004c9c70  /* callback list */
+        g_beNDMWStatusSubMenu_callbackList  /* callback list */
     );
 }

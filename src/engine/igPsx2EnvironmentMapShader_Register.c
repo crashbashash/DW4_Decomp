@@ -4,10 +4,10 @@
 extern char igEnvironmentMapShader2_Register[];
 extern char thunk_igPsx2EnvironmentMapShader_GetMetaObject[];
 extern char igPsx2EnvironmentMapShader_GetVTable[];
-extern char igEnvironmentMapShader2_GetPublishedMetaObject_001ab5d0[];
-extern char g_igPsx2EnvironmentMapShader_callbackList_0048d870[];
-extern char s_igPsx2EnvironmentMapShader_className_004e4460[];
-extern char g_igPsx2EnvironmentMapShader_metaObject_005624f8[];
+extern char igEnvironmentMapShader2_GetPublishedMetaObject[];
+extern char g_igPsx2EnvironmentMapShader_callbackList[];
+extern char igPsx2EnvironmentMapShader_className[];
+extern char g_igPsx2EnvironmentMapShader_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 int igPsx2EnvironmentMapShader_InitFields();
@@ -16,15 +16,15 @@ void igPsx2EnvironmentMapShader_Register(void) {
     GpFlag_SetOnce_00194380();
     igMetaObject_RegisterClass(
         0,                                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2EnvironmentMapShader_metaObject_005624f8,        /* published MetaObject slot */
+        g_igPsx2EnvironmentMapShader_metaObject,        /* published MetaObject slot */
         igEnvironmentMapShader2_Register,                        /* base class registrar */
-        igEnvironmentMapShader2_GetPublishedMetaObject_001ab5d0, /* base class MetaObject accessor */
+        igEnvironmentMapShader2_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igPsx2EnvironmentMapShader_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_igPsx2EnvironmentMapShader_className_004e4460,         /* class name */
+        igPsx2EnvironmentMapShader_className,         /* class name */
         0x7C,                                                    /* instance size */
         igPsx2EnvironmentMapShader_GetVTable,                    /* vtable getter */
         &igPsx2EnvironmentMapShader_InitFields,                  /* field adder */
         0,                                                       /* extra callback item */
-        g_igPsx2EnvironmentMapShader_callbackList_0048d870       /* callback list */
+        g_igPsx2EnvironmentMapShader_callbackList       /* callback list */
     );
 }

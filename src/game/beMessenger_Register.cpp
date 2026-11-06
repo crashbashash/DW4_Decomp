@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMessenger_metaObject_00588f38[];
+extern igMetaObject *g_beMessenger_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beMessenger_GetMetaObject(void);
-extern const char s_beMessenger_className_00504318[];
+extern const char beMessenger_className[];
 int beMessenger_GetVTable(void);
 void beMessenger_InitFields(void);
-extern char g_beMessenger_callbackList_004c5c20[];
+extern char g_beMessenger_callbackList[];
 void *beMessenger_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beMessenger_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMessenger_metaObject_00588f38,              /* published MetaObject slot */
+        g_beMessenger_metaObject,              /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beMessenger_GetMetaObject,                      /* own MetaObject accessor (stored at +0x54) */
-        s_beMessenger_className_00504318,               /* class name */
+        beMessenger_className,               /* class name */
         0x38,                                           /* instance size */
         beMessenger_GetVTable,                          /* vtable getter */
         beMessenger_InitFields,                         /* field adder */
         0,                                              /* extra callback item */
-        g_beMessenger_callbackList_004c5c20            /* callback list */
+        g_beMessenger_callbackList            /* callback list */
     );
 }

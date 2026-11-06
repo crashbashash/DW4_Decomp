@@ -9,18 +9,18 @@ typedef struct CvFsHandle_270680 {
     int file;                  /* 0x04 */
 } CvFsHandle_270680;
 
-extern char s_cvFsSetSctLen_3_handle_error_004ef440[]; /* 'cvFsSetSctLen #3:handle error' */
-extern char s_cvFsSetSctLen_4_vtbl_error_004ef460[]; /* 'cvFsSetSctLen #4:vtbl error' */
+extern char cvFsSetSctLen_3_handle_error[]; /* 'cvFsSetSctLen #3:handle error' */
+extern char cvFsSetSctLen_4_vtbl_error[]; /* 'cvFsSetSctLen #4:vtbl error' */
 void FUN_0026f530(const char *message);
 
 void FUN_00270680(CvFsHandle_270680 *handle, int length) {
     if (handle == 0) {
-        FUN_0026f530(s_cvFsSetSctLen_3_handle_error_004ef440);
+        FUN_0026f530(cvFsSetSctLen_3_handle_error);
         return;
     }
     if (handle->device->set_sct_len != 0) {
         handle->device->set_sct_len(handle->file, length);
         return;
     }
-    FUN_0026f530(s_cvFsSetSctLen_4_vtbl_error_004ef460);
+    FUN_0026f530(cvFsSetSctLen_4_vtbl_error);
 }

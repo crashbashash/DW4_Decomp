@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShopCtrlDiskSell_metaObject_0058ace0[];
+extern igMetaObject *g_beNDMWShopCtrlDiskSell_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWShopCtrlDiskSell_GetMetaObject(void);
-extern const char s_beNDMWShopCtrlDiskSell_className_005112b0[];
+extern const char beNDMWShopCtrlDiskSell_className[];
 int beNDMWShopCtrlDiskSell_GetVTable(void);
 void beNDMWShopCtrlDiskSell_InitFields(void);
-extern char g_beNDMWShopCtrlDiskSell_callbackList_004c99b8[];
+extern char g_beNDMWShopCtrlDiskSell_callbackList[];
 void *beNDMWShopCtrlDiskSell_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWShopCtrlDiskSell_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShopCtrlDiskSell_metaObject_0058ace0,    /* published MetaObject slot */
+        g_beNDMWShopCtrlDiskSell_metaObject,    /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                       /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,         /* base class MetaObject accessor */
         beNDMWShopCtrlDiskSell_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShopCtrlDiskSell_className_005112b0,     /* class name */
+        beNDMWShopCtrlDiskSell_className,     /* class name */
         0x68,                                            /* instance size */
         beNDMWShopCtrlDiskSell_GetVTable,                /* vtable getter */
         beNDMWShopCtrlDiskSell_InitFields,               /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWShopCtrlDiskSell_callbackList_004c99b8  /* callback list */
+        g_beNDMWShopCtrlDiskSell_callbackList  /* callback list */
     );
 }

@@ -8,11 +8,11 @@ int Memory_AllocateBufferDirect();
 int Memory_GetAllocatorBySelector();
 /* Allocator selector used for metadata objects (queried here and before every
  * igMetaObject_Create); docs/engine/object-base.md calls it "allocator key 587040". */
-extern int g_metadataAllocatorSelector_00587040[4];
+extern int g_metadataAllocatorKey[4];
 int igObject_CreateEmptyInitCallbacks(void) {
     int callbacks;
 
-    callbacks = Memory_AllocateBufferDirect(0xC, Memory_GetAllocatorBySelector(g_metadataAllocatorSelector_00587040[0]));
+    callbacks = Memory_AllocateBufferDirect(0xC, Memory_GetAllocatorBySelector(g_metadataAllocatorKey[0]));
     if (callbacks != 0) {
         callbacks = igArray_Construct(callbacks);
     }

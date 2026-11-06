@@ -4,10 +4,10 @@
 extern char igIntMetaField_Register[];
 extern char igIntArrayMetaField_GetVTable[];
 extern char thunk_igIntArrayMetaField_GetMetaObject[];
-extern char igIntMetaField_GetPublishedMetaObject_002c3290[];
-extern char g_igIntArrayMetaField_callbackList_004c05e8[];
-extern char s_igIntArrayMetaField_className_004f6ff0[];
-extern char g_igIntArrayMetaField_metaObject_00586108[];
+extern char igIntMetaField_GetPublishedMetaObject[];
+extern char g_igIntArrayMetaField_callbackList[];
+extern char igIntArrayMetaField_className[];
+extern char g_igIntArrayMetaField_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igIntArrayMetaField_InitFields();
@@ -16,15 +16,15 @@ void igIntArrayMetaField_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igIntArrayMetaField_metaObject_00586108,      /* published MetaObject slot */
+        g_igIntArrayMetaField_metaObject,      /* published MetaObject slot */
         igIntMetaField_Register,                        /* base class registrar */
-        igIntMetaField_GetPublishedMetaObject_002c3290, /* base class MetaObject accessor */
+        igIntMetaField_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igIntArrayMetaField_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        s_igIntArrayMetaField_className_004f6ff0,       /* class name */
+        igIntArrayMetaField_className,       /* class name */
         0x38,                                           /* instance size */
         igIntArrayMetaField_GetVTable,                  /* vtable getter */
         &igIntArrayMetaField_InitFields,                /* field adder */
         0,                                              /* extra callback item */
-        g_igIntArrayMetaField_callbackList_004c05e8     /* callback list */
+        g_igIntArrayMetaField_callbackList     /* callback list */
     );
 }

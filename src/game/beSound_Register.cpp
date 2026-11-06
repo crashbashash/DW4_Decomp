@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSound_metaObject_00587ea8[];
+extern igMetaObject *g_beSound_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beSound_GetMetaObject(void);
-extern const char s_beSound_className_005020b8[];
+extern const char beSound_className[];
 int beSound_GetVTable(void);
 void beSound_InitFields(void);
-extern char g_beSound_callbackList_004c3970[];
+extern char g_beSound_callbackList[];
 void *beSound_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSound_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSound_metaObject_00587ea8,                      /* published MetaObject slot */
+        g_beSound_metaObject,                      /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSound_GetMetaObject,                              /* own MetaObject accessor (stored at +0x54) */
-        s_beSound_className_005020b8,                       /* class name */
+        beSound_className,                       /* class name */
         0x2c,                                               /* instance size */
         beSound_GetVTable,                                  /* vtable getter */
         beSound_InitFields,                                 /* field adder */
         0,                                                  /* extra callback item */
-        g_beSound_callbackList_004c3970                    /* callback list */
+        g_beSound_callbackList                    /* callback list */
     );
 }

@@ -48,7 +48,7 @@ struct ContextView : igObject {
 };
 
 /* vtable of igMemoryPoolContextInfo (published by the constructor at 0x002f25d0) */
-extern "C" char g_igMemoryPoolContextInfo_vtable_0052f510[];
+extern "C" char g_igMemoryPoolContextInfo_vtable[];
 extern "C" void memset(void *, int, unsigned);
 extern "C" void igObject_Destroy(void *);
 extern "C" void igMemoryPoolContextInfo_DeleteAllocation(void *);
@@ -82,7 +82,7 @@ extern "C" void Gap__Core__igMemoryPoolContextInfo__vfunc_53(ContextView *self, 
  * docs/engine/context-lifecycle.md the parent word is left in place. */
 extern "C" void *igMemoryPoolContextInfo_Destruct(ContextView *self, long long deleteFlags) {
     if (self) {
-        self->_vtable = (int)g_igMemoryPoolContextInfo_vtable_0052f510; self->_refCount = 0;
+        self->_vtable = (int)g_igMemoryPoolContextInfo_vtable; self->_refCount = 0;
         memset(self->records, 0, 6624); ((ContextVirtuals *)self)->InitializeRecordNames();
         if ((char *)self + 16) {
             igObject *parent = self->parent;

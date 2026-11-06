@@ -34,14 +34,14 @@
 #define BUTTON_RIGHT 0x20
 #define BUTTON_LEFT 0x80
 extern "C" {
-extern int g_beNDMWListCtrl_metaObject_0058aff0[4];
+extern int g_beNDMWListCtrl_metaObject[4];
 /* Model names (the list's page-arrow cursors) and the sequences they are driven with:
  * SQ_HIDE keeps an arrow invisible, SQ_SELECT shows it, SQ_CLOSE is queued as the close
  * sequence, SQ_MOVEEND / SQ_MOVENEXT animate a page turn (docs/engine/window-presentation.md;
  * strings read from the ELF). */
-extern char s_i_stcursorleft_00519a40[], s_SQ_HIDE_00519a50[], s_SQ_CLOSE_00519a58[],
-    s_i_stcursorright_00519a70[], s_SQ_SELECT_00519a80[], s_MODELCTRL_00519a90[],
-    s_SQ_MOVEEND_00519aa0[], s_SQ_MOVENEXT_00519ab0[];
+extern char i_stcursorleft[], SQ_HIDE[], SQ_CLOSE_3[],
+    i_stcursorright[], SQ_SELECT[], MODELCTRL_3[],
+    SQ_MOVEEND[], SQ_MOVENEXT[];
 /* beNDMWWindow_PresentModel(window, modelName, ramNo, sequence, closeSequence, position) */
 void beNDMWWindow_PresentModel(beNDMWListCtrl *, const char *, int, const char *, const char *, float *);
 bePadData *bePadManager_GetPadForPlayer(int, int);
@@ -59,10 +59,10 @@ void Gap__Bec__beNDMWListCtrl__vfunc_22(beNDMWListCtrl *self,const float *leftAr
     float rightHiddenPos[4],rightShownPos[4],leftPos[4];
     const char *modelName;
     leftPos[0]=leftArrowPos[0];leftPos[1]=leftArrowPos[1];leftPos[2]=leftArrowPos[2];
-    beNDMWWindow_PresentModel(self,s_i_stcursorleft_00519a40,0,s_SQ_HIDE_00519a50,s_SQ_CLOSE_00519a58,leftPos);
+    beNDMWWindow_PresentModel(self,i_stcursorleft,0,SQ_HIDE,SQ_CLOSE_3,leftPos);
     if(self->_maxPage<=1)goto single_page;
     rightShownPos[0]=rightArrowPos[0];rightShownPos[1]=rightArrowPos[1];rightShownPos[2]=rightArrowPos[2];
-    beNDMWWindow_PresentModel(self,s_i_stcursorright_00519a70,0,s_SQ_SELECT_00519a80,s_SQ_CLOSE_00519a58,rightShownPos);
+    beNDMWWindow_PresentModel(self,i_stcursorright,0,SQ_SELECT,SQ_CLOSE_3,rightShownPos);
     /* Preserve the original join and its delay/alignment NOPs. */
     asm { .set noreorder
         b arrows_done
@@ -76,7 +76,7 @@ single_page:
     asm { lui a1,0x52 }
     asm { dmove modelName,a1 };
     rightHiddenPos[0]=rightArrowPos[0];rightHiddenPos[1]=rightArrowPos[1];rightHiddenPos[2]=rightArrowPos[2];
-    beNDMWWindow_PresentModel(self,modelName-26000,0,s_SQ_HIDE_00519a50,s_SQ_CLOSE_00519a58,rightHiddenPos);
+    beNDMWWindow_PresentModel(self,modelName-26000,0,SQ_HIDE,SQ_CLOSE_3,rightHiddenPos);
 arrows_done:;
 }
 
@@ -103,16 +103,16 @@ bool Gap__Bec__beNDMWListCtrl__vfunc_23(beNDMWListCtrl *self){
     if(self->_nowPage>0&&leftPressed&&!upDownHeld){
         self->_nowPage--;changed=true;
         if(self->_nowPage)goto previous_notFirst;
-        beMessenger_SendNamed(self->_messenger,s_MODELCTRL_00519a90,s_i_stcursorleft_00519a40,0,s_SQ_MOVEEND_00519aa0);/* Join the opposite-arrow request, retaining unreachable padding. */
+        beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_MOVEEND);/* Join the opposite-arrow request, retaining unreachable padding. */
         asm { .set noreorder
             b previous_selectNext
             nop
             nop
             .set reorder }
 previous_notFirst:
-        beMessenger_SendNamed(self->_messenger,s_MODELCTRL_00519a90,s_i_stcursorleft_00519a40,0,s_SQ_MOVENEXT_00519ab0);asm { nop }
+        beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_MOVENEXT);asm { nop }
 previous_selectNext:;
-        beMessenger_SendNamed(self->_messenger,s_MODELCTRL_00519a90,s_i_stcursorright_00519a70,0,s_SQ_SELECT_00519a80);asm { nop }
+        beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_SELECT);asm { nop }
     }
     return changed;
 }
@@ -143,7 +143,7 @@ bool Gap__Bec__beNDMWListCtrl__vfunc_24(beNDMWListCtrl *self){
     if(page<(self->_maxPage-1)&&rightPressed&&!upDownHeld){
         self->_nowPage=(page+1);changed=true;
         if(self->_nowPage!=(self->_maxPage-1))goto next_notLast;
-        beMessenger_SendNamed(self->_messenger,s_MODELCTRL_00519a90,s_i_stcursorright_00519a70,0,s_SQ_MOVEEND_00519aa0);
+        beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_MOVEEND);
         /* Same original join/padding sequence as previous-page. */
         asm { .set noreorder
             b next_selectPrevious
@@ -151,9 +151,9 @@ bool Gap__Bec__beNDMWListCtrl__vfunc_24(beNDMWListCtrl *self){
             nop
             .set reorder }
 next_notLast:
-        beMessenger_SendNamed(self->_messenger,s_MODELCTRL_00519a90,s_i_stcursorright_00519a70,0,s_SQ_MOVENEXT_00519ab0);asm { nop }
+        beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorright,0,SQ_MOVENEXT);asm { nop }
 next_selectPrevious:;
-        beMessenger_SendNamed(self->_messenger,s_MODELCTRL_00519a90,s_i_stcursorleft_00519a40,0,s_SQ_SELECT_00519a80);asm { nop }
+        beMessenger_SendNamed(self->_messenger,MODELCTRL_3,i_stcursorleft,0,SQ_SELECT);asm { nop }
     }
     asm { dmove v0,changed }
     return changed;
@@ -162,5 +162,5 @@ next_selectPrevious:;
 /* 0x004233e0: metadata (igMetaObject) getter of the beNDMWListCtrl class. */
 int Gap__Bec__beNDMWListCtrl__vfunc_20(void)
 {
-    return g_beNDMWListCtrl_metaObject_0058aff0[0];
+    return g_beNDMWListCtrl_metaObject[0];
 }

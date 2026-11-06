@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMessengerDelayList_metaObject_00588fe8[];
+extern igMetaObject *g_beMessengerDelayList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beMessengerDelayList_GetMetaObject(void);
-extern const char s_beMessengerDelayList_className_005044b0[];
+extern const char beMessengerDelayList_className[];
 int beMessengerDelayList_GetVTable(void);
-extern char g_beMessengerDelayList_callbackList_004c5db0[];
+extern char g_beMessengerDelayList_callbackList[];
 void *beMessengerDelayList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beMessengerDelayList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMessengerDelayList_metaObject_00588fe8,    /* published MetaObject slot */
+        g_beMessengerDelayList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                         /* base class registrar */
         igObjectList_GetPublishedMetaObject,           /* base class MetaObject accessor */
         beMessengerDelayList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beMessengerDelayList_className_005044b0,     /* class name */
+        beMessengerDelayList_className,     /* class name */
         0x14,                                          /* instance size */
         beMessengerDelayList_GetVTable,                /* vtable getter */
         0,                                             /* field adder */
         0,                                             /* extra callback item */
-        g_beMessengerDelayList_callbackList_004c5db0  /* callback list */
+        g_beMessengerDelayList_callbackList  /* callback list */
     );
 }

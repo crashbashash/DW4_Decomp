@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_bePlaySE_metaObject_00587ed0[];
+extern igMetaObject *g_bePlaySE_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *bePlaySE_GetMetaObject(void);
-extern const char s_bePlaySE_className_005020f0[];
+extern const char bePlaySE_className[];
 int bePlaySE_GetVTable(void);
 void bePlaySE_InitFields(void);
 void *bePlaySE_Register(void);
@@ -32,11 +32,11 @@ void *bePlaySE_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_bePlaySE_metaObject_00587ed0,         /* published MetaObject slot */
+        g_bePlaySE_metaObject,         /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         bePlaySE_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_bePlaySE_className_005020f0,          /* class name */
+        bePlaySE_className,          /* class name */
         0x18,                                   /* instance size */
         bePlaySE_GetVTable,                     /* vtable getter */
         bePlaySE_InitFields,                    /* field adder */

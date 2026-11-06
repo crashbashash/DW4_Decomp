@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igDataList_Register[];
 extern char igCharMetricsList_GetVTable[];
 extern char thunk_igCharMetricsList_GetMetaObject[];
-extern char s_igCharMetricsList_className_0051e780[];
-extern char g_igCharMetricsList_metaObject_0058c638[];
+extern char igCharMetricsList_className[];
+extern char g_igCharMetricsList_metaObject[];
 int igMetaObject_RegisterClass();
 int GpFlag_SetOnce_0044b860();
 void FUN_00452900(void);  /* code at 0x452900, passed by address (was DAT_452900; docs/engine/function-inventory.md) */
@@ -14,11 +14,11 @@ void igCharMetricsList_Register(void) {
     GpFlag_SetOnce_0044b860();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igCharMetricsList_metaObject_0058c638, /* published MetaObject slot */
+        g_igCharMetricsList_metaObject, /* published MetaObject slot */
         igDataList_Register,                     /* base class registrar */
         igDataList_GetPublishedMetaObject,       /* base class MetaObject accessor */
         thunk_igCharMetricsList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igCharMetricsList_className_0051e780,  /* class name */
+        igCharMetricsList_className,  /* class name */
         0x14,                                    /* instance size */
         igCharMetricsList_GetVTable,             /* vtable getter */
         FUN_00452900,                        /* field adder */

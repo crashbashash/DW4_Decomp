@@ -5,8 +5,8 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igObject_Register[];
 extern char igColorChanger_GetVTable[];
 extern char thunk_igColorChanger_GetMetaObject[];
-extern char s_igColorChanger_className_0051e720[];
-extern char g_igColorChanger_metaObject_0058c608[];
+extern char igColorChanger_className[];
+extern char g_igColorChanger_metaObject[];
 int igMetaObject_RegisterClass();
 int GpFlag_SetOnce_0044b860();
 
@@ -14,11 +14,11 @@ void igColorChanger_Register(void) {
     GpFlag_SetOnce_0044b860();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igColorChanger_metaObject_0058c608,  /* published MetaObject slot */
+        g_igColorChanger_metaObject,  /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igColorChanger_GetMetaObject,    /* own MetaObject accessor (stored at +0x54) */
-        s_igColorChanger_className_0051e720,   /* class name */
+        igColorChanger_className,   /* class name */
         8,                                     /* instance size */
         igColorChanger_GetVTable,              /* vtable getter */
         0,                                     /* field adder */

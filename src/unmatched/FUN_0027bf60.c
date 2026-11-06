@@ -16,17 +16,17 @@ typedef struct Handle_27bf60 {
     int f52;    /* 0x34 */
 } Handle_27bf60;
 
-extern char s_E2004090207_NULL_pointer_is_specified_004f1df8[];   /* 'E2004090207 : NULL pointer is specified.' */
-extern char s_E2004090208_Specified_handle_is_invalid_004f1e28[]; /* 'E2004090208 : Specified handle is invalid.' */
+extern char E2004090207_NULL_pointer_is_specified[];   /* 'E2004090207 : NULL pointer is specified.' */
+extern char E2004090208_Specified_handle_is_invalid[]; /* 'E2004090208 : Specified handle is invalid.' */
 int FUN_0027b2e0(const char *message);
 
 void FUN_0027bf60(Handle_27bf60 *handle) {
     if (handle == 0) {
-        FUN_0027b2e0(s_E2004090207_NULL_pointer_is_specified_004f1df8);
+        FUN_0027b2e0(E2004090207_NULL_pointer_is_specified);
         return;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(s_E2004090208_Specified_handle_is_invalid_004f1e28);
+        FUN_0027b2e0(E2004090208_Specified_handle_is_invalid);
         return;
     }
     handle->current = handle->start;

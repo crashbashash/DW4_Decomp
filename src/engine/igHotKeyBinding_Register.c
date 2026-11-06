@@ -5,9 +5,9 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igObject_Register[];
 extern char igHotKeyBinding_GetVTable[];
 extern char thunk_igHotKeyBinding_GetMetaObject[];
-extern char g_igHotKeyBinding_callbackList_004d0130[];
-extern char s_igHotKeyBinding_className_0051df70[];
-extern char g_igHotKeyBinding_metaObject_0058c2c0[];
+extern char g_igHotKeyBinding_callbackList[];
+extern char igHotKeyBinding_className[];
+extern char g_igHotKeyBinding_metaObject[];
 int igMetaObject_RegisterClass();
 int GpFlag_SetOnce_0044b860();
 int igHotKeyBinding_InitFields();
@@ -16,15 +16,15 @@ void igHotKeyBinding_Register(void) {
     GpFlag_SetOnce_0044b860();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igHotKeyBinding_metaObject_0058c2c0, /* published MetaObject slot */
+        g_igHotKeyBinding_metaObject, /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igHotKeyBinding_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igHotKeyBinding_className_0051df70,  /* class name */
+        igHotKeyBinding_className,  /* class name */
         0x14,                                  /* instance size */
         igHotKeyBinding_GetVTable,             /* vtable getter */
         &igHotKeyBinding_InitFields,           /* field adder */
         0,                                     /* extra callback item */
-        g_igHotKeyBinding_callbackList_004d0130  /* callback list */
+        g_igHotKeyBinding_callbackList  /* callback list */
     );
 }

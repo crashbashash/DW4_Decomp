@@ -4,9 +4,9 @@
 extern char igVertexArray2_Register[];
 extern char thunk_igPsx2VertexArray2_GetMetaObject_0014acf0[];
 extern char igPsx2VertexArray2_GetVTable[];
-extern char igVertexArray2_GetPublishedMetaObject_00152340[];
-extern char s_igPsx2VertexArray2_className_004ddf50[];
-extern char g_igPsx2VertexArray2_metaObject_00560478[];
+extern char igVertexArray2_GetPublishedMetaObject[];
+extern char igPsx2VertexArray2_className[];
+extern char g_igPsx2VertexArray2_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 extern int igPsx2VertexArray2_InitFields_00152350[4];
@@ -14,11 +14,11 @@ void igPsx2VertexArray2_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2VertexArray2_metaObject_00560478,        /* published MetaObject slot */
+        g_igPsx2VertexArray2_metaObject,        /* published MetaObject slot */
         igVertexArray2_Register,                         /* base class registrar */
-        igVertexArray2_GetPublishedMetaObject_00152340,  /* base class MetaObject accessor */
+        igVertexArray2_GetPublishedMetaObject,  /* base class MetaObject accessor */
         thunk_igPsx2VertexArray2_GetMetaObject_0014acf0, /* own MetaObject accessor (stored at +0x54) */
-        s_igPsx2VertexArray2_className_004ddf50,         /* class name */
+        igPsx2VertexArray2_className,         /* class name */
         0x18,                                            /* instance size */
         igPsx2VertexArray2_GetVTable,                    /* vtable getter */
         &igPsx2VertexArray2_InitFields_00152350[0],      /* field adder (post_init in data/reflection.json) */

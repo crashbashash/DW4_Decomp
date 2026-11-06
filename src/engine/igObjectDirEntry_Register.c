@@ -3,11 +3,11 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 extern char igObjectDirEntry_GetVTable[];
 extern char thunk_igObjectDirEntry_GetMetaObject[];
-extern char igDirEntry_GetPublishedMetaObject_002bdab0[];
+extern char igDirEntry_GetPublishedMetaObject[];
 extern char igDirEntry_Register[];
-extern char g_igObjectDirEntry_callbackList_004bfb20[];
-extern char s_igObjectDirEntry_className_004f6490[];
-extern char g_igObjectDirEntry_metaObject_00585b70[];
+extern char g_igObjectDirEntry_callbackList[];
+extern char igObjectDirEntry_className[];
+extern char g_igObjectDirEntry_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igObjectDirEntry_InitFields();
@@ -16,15 +16,15 @@ void igObjectDirEntry_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igObjectDirEntry_metaObject_00585b70,     /* published MetaObject slot */
+        g_igObjectDirEntry_metaObject,     /* published MetaObject slot */
         igDirEntry_Register,                        /* base class registrar */
-        igDirEntry_GetPublishedMetaObject_002bdab0, /* base class MetaObject accessor */
+        igDirEntry_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igObjectDirEntry_GetMetaObject,       /* own MetaObject accessor (stored at +0x54) */
-        s_igObjectDirEntry_className_004f6490,      /* class name */
+        igObjectDirEntry_className,      /* class name */
         0x34,                                       /* instance size */
         igObjectDirEntry_GetVTable,                 /* vtable getter */
         &igObjectDirEntry_InitFields,               /* field adder */
         0,                                          /* extra callback item */
-        g_igObjectDirEntry_callbackList_004bfb20    /* callback list */
+        g_igObjectDirEntry_callbackList    /* callback list */
     );
 }

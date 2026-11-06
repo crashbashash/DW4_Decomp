@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igLongStack_GetVTable[];
 extern char thunk_igLongStack_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igLongStack_className_004e48b8[];
-extern char g_igLongStack_metaObject_00562b60[];
+extern char igLongStack_className[];
+extern char g_igLongStack_metaObject[];
 int GpFlag_SetOnce_001e3ff0();
 int igMetaObject_RegisterClass();
 extern int igLongStack_InitFields_001e4180[4];
@@ -16,11 +16,11 @@ void igLongStack_Register(void) {
     GpFlag_SetOnce_001e3ff0();
     igMetaObject_RegisterClass(
         0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igLongStack_metaObject_00562b60,   /* published MetaObject slot */
+        g_igLongStack_metaObject,   /* published MetaObject slot */
         igDataList_Register,                 /* base class registrar */
         igDataList_GetPublishedMetaObject,   /* base class MetaObject accessor */
         thunk_igLongStack_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igLongStack_className_004e48b8,    /* class name */
+        igLongStack_className,    /* class name */
         0x14,                                /* instance size */
         igLongStack_GetVTable,               /* vtable getter */
         &igLongStack_InitFields_001e4180[0], /* field adder */

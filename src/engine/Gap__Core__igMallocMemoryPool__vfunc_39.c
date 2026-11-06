@@ -4,8 +4,8 @@
 #include "dw4/reflected.h"
 /* Success status word at 0x004fb410, zero in the pristine ELF (docs/engine/array-storage.md);
  * the array form keeps the load absolute (lui/lw). */
-extern int g_statusSucceeded_004fb410[4];
+extern int g_statusSucceeded[4];
 void Gap__Core__igMallocMemoryPool__vfunc_39(int *status, igMallocMemoryPool *self, int elementSize) {
     self->_elementSize = elementSize;
-    *status = g_statusSucceeded_004fb410[0];
+    *status = g_statusSucceeded[0];
 }

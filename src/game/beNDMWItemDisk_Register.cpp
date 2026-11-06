@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWItemDisk_metaObject_0058bf38[];
+extern igMetaObject *g_beNDMWItemDisk_metaObject[];
 void *beNDMWItemBase_Register(void);
-igMetaObject *beNDMWItemBase_GetPublishedMetaObject_003c81c0(void);
+igMetaObject *beNDMWItemBase_GetPublishedMetaObject(void);
 igMetaObject *beNDMWItemDisk_GetMetaObject(void);
-extern const char s_beNDMWItemDisk_className_00513220[];
+extern const char beNDMWItemDisk_className[];
 int beNDMWItemDisk_GetVTable(void);
 void beNDMWItemDisk_InitFields(void);
 void *beNDMWItemDisk_Register(void);
@@ -32,11 +32,11 @@ void *beNDMWItemDisk_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWItemDisk_metaObject_0058bf38,            /* published MetaObject slot */
+        g_beNDMWItemDisk_metaObject,            /* published MetaObject slot */
         beNDMWItemBase_Register,                         /* base class registrar */
-        beNDMWItemBase_GetPublishedMetaObject_003c81c0,  /* base class MetaObject accessor */
+        beNDMWItemBase_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWItemDisk_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWItemDisk_className_00513220,             /* class name */
+        beNDMWItemDisk_className,             /* class name */
         0x18,                                            /* instance size */
         beNDMWItemDisk_GetVTable,                        /* vtable getter */
         beNDMWItemDisk_InitFields,                       /* field adder */

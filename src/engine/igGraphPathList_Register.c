@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igGraphPathList_GetVTable[];
 extern char thunk_igGraphPathList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igGraphPathList_callbackList_0048c000[];
-extern char s_igGraphPathList_className_004e26b0[];
-extern char g_igGraphPathList_metaObject_00561a08[];
+extern char g_igGraphPathList_callbackList[];
+extern char igGraphPathList_className[];
+extern char g_igGraphPathList_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igGraphPathList_Register(void) {
     GpFlag_SetOnce_00194380();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igGraphPathList_metaObject_00561a08, /* published MetaObject slot */
+        g_igGraphPathList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                 /* base class registrar */
         igObjectList_GetPublishedMetaObject,   /* base class MetaObject accessor */
         thunk_igGraphPathList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igGraphPathList_className_004e26b0,  /* class name */
+        igGraphPathList_className,  /* class name */
         0x14,                                  /* instance size */
         igGraphPathList_GetVTable,             /* vtable getter */
         0,                                     /* field adder */
         0,                                     /* extra callback item */
-        g_igGraphPathList_callbackList_0048c000  /* callback list */
+        g_igGraphPathList_callbackList  /* callback list */
     );
 }

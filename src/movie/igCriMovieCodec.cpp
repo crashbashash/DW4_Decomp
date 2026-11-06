@@ -26,7 +26,7 @@ void Gap__igCriMovieCodec__vfunc_02(void)
  * verifies one function at a time. */
 #include "dw4/reflected.h"
 extern "C" {
-extern int g_igCriMovieCodec_metaObject_00587740[4];
+extern int g_igCriMovieCodec_metaObject[4];
 int FUN_002934c0(int (*)(), int (*)(), igCriMovieCodec *);
 int Gap__Core__igObject__vfunc_01();
 int FUN_00338d60();
@@ -55,6 +55,6 @@ int Gap__igCriMovieCodec__vfunc_21(void)
  * igCriMovieCodec MetaObject handle at 0x587740. */
 int Gap__igCriMovieCodec__vfunc_20(void)
 {
-    return g_igCriMovieCodec_metaObject_00587740[0];
+    return g_igCriMovieCodec_metaObject[0];
 }
 }

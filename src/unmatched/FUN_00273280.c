@@ -3,7 +3,7 @@
    Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
 extern int sprintf(char *buffer, const char *format, ...);
 extern volatile int DAT_004a9b24;
-extern const char s_Hello_from_EE_d_004f00b0[];
+extern const char Hello_from_EE_d[];
 
 void FUN_00273280(int unused, char *buffer, int size) {
     int i;
@@ -11,6 +11,6 @@ void FUN_00273280(int unused, char *buffer, int size) {
     for (i = 0; i < size; i++) {
         buffer[i] = 0xAA;
     }
-    sprintf(buffer, s_Hello_from_EE_d_004f00b0, DAT_004a9b24);
+    sprintf(buffer, Hello_from_EE_d, DAT_004a9b24);
     DAT_004a9b24++;
 }

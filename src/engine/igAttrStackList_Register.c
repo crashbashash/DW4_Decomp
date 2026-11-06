@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igAttrStackList_GetVTable[];
 extern char thunk_igAttrStackList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igAttrStackList_callbackList_0048cd78[];
-extern char s_igAttrStackList_className_004e3640[];
-extern char g_igAttrStackList_metaObject_00562028[];
+extern char g_igAttrStackList_callbackList[];
+extern char igAttrStackList_className[];
+extern char g_igAttrStackList_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igAttrStackList_Register(void) {
     GpFlag_SetOnce_00194380();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAttrStackList_metaObject_00562028, /* published MetaObject slot */
+        g_igAttrStackList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                 /* base class registrar */
         igObjectList_GetPublishedMetaObject,   /* base class MetaObject accessor */
         thunk_igAttrStackList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igAttrStackList_className_004e3640,  /* class name */
+        igAttrStackList_className,  /* class name */
         0x14,                                  /* instance size */
         igAttrStackList_GetVTable,             /* vtable getter */
         0,                                     /* field adder */
         0,                                     /* extra callback item */
-        g_igAttrStackList_callbackList_0048cd78  /* callback list */
+        g_igAttrStackList_callbackList  /* callback list */
     );
 }

@@ -19,19 +19,19 @@ struct Handle27c {
 };
 
 extern void FUN_0027b2e0(const char *message);
-extern const char s_E2004090269_NULL_pointer_is_specified_004f21c8[];
-extern const char s_E2004090270_Specified_handle_is_invalid_004f21f8[];
+extern const char E2004090269_NULL_pointer_is_specified[];
+extern const char E2004090270_Specified_handle_is_invalid[];
 
 int FUN_0027ccd0(struct Handle27c *handle, unsigned int lane) {
     struct Node27c *node;
     int total;
 
     if (handle == 0) {
-        FUN_0027b2e0(s_E2004090269_NULL_pointer_is_specified_004f21c8);
+        FUN_0027b2e0(E2004090269_NULL_pointer_is_specified);
         return 0;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(s_E2004090270_Specified_handle_is_invalid_004f21f8);
+        FUN_0027b2e0(E2004090270_Specified_handle_is_invalid);
         return 0;
     }
     if (lane >= 4) {

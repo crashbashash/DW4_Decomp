@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlInfoRideOn3_metaObject_00588a58[];
+extern igMetaObject *g_beModelCtrlInfoRideOn3_metaObject[];
 void *beModelCtrlInfoRideOn_Register(void);
-igMetaObject *beModelCtrlInfoRideOn_GetPublishedMetaObject_00351660(void);
+igMetaObject *beModelCtrlInfoRideOn_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlInfoRideOn3_GetMetaObject(void);
-extern const char s_beModelCtrlInfoRideOn3_className_00503880[];
+extern const char beModelCtrlInfoRideOn3_className[];
 int beModelCtrlInfoRideOn3_GetVTable(void);
 void beModelCtrlInfoRideOn3_InitFields(void);
 void *beModelCtrlInfoRideOn3_Register(void);
@@ -32,11 +32,11 @@ void *beModelCtrlInfoRideOn3_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlInfoRideOn3_metaObject_00588a58,           /* published MetaObject slot */
+        g_beModelCtrlInfoRideOn3_metaObject,           /* published MetaObject slot */
         beModelCtrlInfoRideOn_Register,                         /* base class registrar */
-        beModelCtrlInfoRideOn_GetPublishedMetaObject_00351660,  /* base class MetaObject accessor */
+        beModelCtrlInfoRideOn_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beModelCtrlInfoRideOn3_GetMetaObject,                   /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlInfoRideOn3_className_00503880,            /* class name */
+        beModelCtrlInfoRideOn3_className,            /* class name */
         0x70,                                                   /* instance size */
         beModelCtrlInfoRideOn3_GetVTable,                       /* vtable getter */
         beModelCtrlInfoRideOn3_InitFields,                      /* field adder */

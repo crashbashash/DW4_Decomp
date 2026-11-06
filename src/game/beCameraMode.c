@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 #include "dw4/reflected.h"
-extern int g_beCameraMode_metaObject_00589b90[4];
+extern int g_beCameraMode_metaObject[4];
 int FUN_004577f0(int, void *);
 int Gap__Core__igObject__vfunc_08__002ff0f0(void *);
 
@@ -13,7 +13,7 @@ int Gap__Core__igObject__vfunc_08__002ff0f0(void *);
  * beCameraMode MetaObject handle at 0x589b90. */
 int Gap__Bec__beCameraMode__vfunc_20(void)
 {
-    return g_beCameraMode_metaObject_00589b90[0];
+    return g_beCameraMode_metaObject[0];
 }
 
 /* 0x0037aa70 — slot 23: empty body. */

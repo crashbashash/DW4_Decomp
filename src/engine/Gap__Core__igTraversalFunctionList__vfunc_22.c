@@ -4,7 +4,7 @@
  * src/engine/igTraversalFunctionList_Register.c; the same shape as igObjectList_GetPublishedMetaObject
  * (rule `published-accessor`, docs/engine/naming.md). The slot is read through the
  * array extern so the load stays absolute. */
-extern int g_igTraversalFunctionList_metaObject_005615c8[4];
+extern int g_igTraversalFunctionList_metaObject[4];
 int Gap__Core__igTraversalFunctionList__vfunc_22(void) {
-    return g_igTraversalFunctionList_metaObject_005615c8[0];
+    return g_igTraversalFunctionList_metaObject[0];
 }

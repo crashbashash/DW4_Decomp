@@ -16,11 +16,11 @@ int StringChunk_ReleaseHeader(...);
 int ObjectList_AppendRetained(...);
 int beMessenger_SendNamed(...);
 /* "MODELCTRL", the messenger receiver name (also in src/game/beNDMWLoadIntf2ComMdlCtrl__StartAt.c) */
-extern int s_MODELCTRL_005171f8[4];
+extern int MODELCTRL[4];
 /* lazily created shared string pool (finding #1035) */
-extern int g_stringPool_00586f20[4];
+extern int g_stringPool[4];
 /* default allocator selector, used when byte 0x554c14 is zero (docs/engine/subwindow-preparation.md) */
-extern int g_defaultAllocatorSelector_00587110[4];
+extern int g_defaultAllocatorSelector[4];
 extern unsigned char GPR_00554c14;
 void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSequence, unsigned char trackClose);
 }
@@ -37,7 +37,7 @@ public:
 /* drop one reference on an interned string token; its header (owner, refCount) sits just before the text */
 #define RELEASE_STR(s) { int *q = (int *)(s); if (q) { int *h = q - 2; int c = q[-1] - 1; q[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*h, h); } }
 void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSequence, unsigned char trackClose) {
-    beMessenger_SendNamed((void *)self->_messenger, &s_MODELCTRL_005171f8[0], infoName, ramNo, openSequence);
+    beMessenger_SendNamed((void *)self->_messenger, &MODELCTRL[0], infoName, ramNo, openSequence);
     if (trackClose == 1) {
         int base = igObject_GetAllocator(self); /* used as-is when GPR_00554c14 is set, else the default selector's allocator */
         int allocator;
@@ -45,25 +45,25 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
         beLoadIntf2ComMdlData *infoOwner;
         const char *openSequenceToken;
         beLoadIntf2ComMdlData *sequenceOwner;
-        if (GPR_00554c14 != 0) { allocator = base; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector_00587110[0]); }
+        if (GPR_00554c14 != 0) { allocator = base; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
         ObjectRef record((beLoadIntf2ComMdlData *)beLoadIntf2ComMdlData__Create(allocator));
         record.p->_ramNo = ramNo;
         infoOwner = record.p;
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int pool = FUN_002eb010(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
-            g_stringPool_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        infoNameToken = StringPool_Intern(g_stringPool_00586f20[0], infoName);
+        infoNameToken = StringPool_Intern(g_stringPool[0], infoName);
         RELEASE_STR(infoOwner->_infoName)
         infoOwner->_infoName = (int)infoNameToken;
         sequenceOwner = record.p;
-        if (g_stringPool_00586f20[0] == 0) {
+        if (g_stringPool[0] == 0) {
             int pool = FUN_002eb010(0x10);
             if (pool != 0) pool = StringPool_Construct(pool);
-            g_stringPool_00586f20[0] = pool;
+            g_stringPool[0] = pool;
         }
-        openSequenceToken = StringPool_Intern(g_stringPool_00586f20[0], openSequence);
+        openSequenceToken = StringPool_Intern(g_stringPool[0], openSequence);
         RELEASE_STR(sequenceOwner->_openSQ)
         sequenceOwner->_openSQ = (int)openSequenceToken;
         ObjectList_AppendRetained((void *)self->_closeDataList, record.p);

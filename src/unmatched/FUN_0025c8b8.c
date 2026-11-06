@@ -2,11 +2,11 @@
  * FUN_00127004 compares like memcmp (pointer, pointer, length). Sony EE GCC 2.96 unit (docs/engine/sd-prologue.md). */
 int FUN_00127004(const void *a, const void *b, unsigned int size);
 
-extern const char s__snd_004ecfb8[];
-extern const char s__sd_004ecfc0[];
+extern const char _snd[];
+extern const char _sd[];
 
 int FUN_0025c8b8(const char *header) {
-    if (FUN_00127004(header, s__snd_004ecfb8, 4) == 0 || FUN_00127004(header, s__sd_004ecfc0, 4) == 0) {
+    if (FUN_00127004(header, _snd, 4) == 0 || FUN_00127004(header, _sd, 4) == 0) {
         return 1;
     }
     return 0;

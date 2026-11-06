@@ -7,14 +7,14 @@
 #include "dw4/reflected.h"
 /* A property record: the value sits at +12 (docs/engine/property-system.md, SYSgetPlayerLevel). */
 typedef struct PropertyRecord { char pad0[12]; int value; } PropertyRecord;
-extern int g_beNDMWStatusSubSlot_metaObject_0058af18[4];
-extern char s_LEVEL_00519ff8[];
-extern char s_LVPOINT_0051a000[];
+extern int g_beNDMWStatusSubSlot_metaObject[4];
+extern char LEVEL_3[];
+extern char LVPOINT[];
 /* Finds the object of the given class (metaObject) in an insight's object list; here the beNDMWStatus. */
 int FUN_00236f80();
 PropertyRecord *igProperty_GetRecord();
 int beNDMWItemBase_GetRecordInt();
-extern int g_beNDMWStatus_metaObject_0058b028[4];
+extern int g_beNDMWStatus_metaObject[4];
 
 /* 0x004176b0: reset the slot's state counters; st1 and st3 end up 1, st2 0
  * (the _st3 = 0 store is dead but is part of the retail sequence). */
@@ -34,9 +34,9 @@ int Gap__Bec__beNDMWStatusSubSlot__vfunc_30(beNDMWStatusSubSlot *self, int entry
     int status;
 
     entry = *(int *)(((beNDMWItemBaseList *)self->_deviceFolder)->_data + (entryIndex * 4));
-    status = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject_0058b028[0]);
-    playerLevel = igProperty_GetRecord(self->_playerList, s_LEVEL_00519ff8)->value;
-    return playerLevel >= beNDMWItemBase_GetRecordInt(entry, status, s_LVPOINT_0051a000);
+    status = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
+    playerLevel = igProperty_GetRecord(self->_playerList, LEVEL_3)->value;
+    return playerLevel >= beNDMWItemBase_GetRecordInt(entry, status, LVPOINT);
 }
 
 /* 0x00417ff0: empty virtual slot (the sub-slot has no behaviour here) */
@@ -77,5 +77,5 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_38(void)
 /* 0x00423380: class meta-object handle getter */
 int Gap__Bec__beNDMWStatusSubSlot__vfunc_20(void)
 {
-    return g_beNDMWStatusSubSlot_metaObject_0058af18[0];
+    return g_beNDMWStatusSubSlot_metaObject[0];
 }

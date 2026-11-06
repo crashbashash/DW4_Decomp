@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beKeyboardReceiver_metaObject_00589308[];
+extern igMetaObject *g_beKeyboardReceiver_metaObject[];
 void *igEventReceiver_Register(void);
-igMetaObject *igEventReceiver_GetPublishedMetaObject_00233200(void);
+igMetaObject *igEventReceiver_GetPublishedMetaObject(void);
 igMetaObject *beKeyboardReceiver_GetMetaObject(void);
-extern const char s_beKeyboardReceiver_className_00504a90[];
+extern const char beKeyboardReceiver_className[];
 int beKeyboardReceiver_GetVTable(void);
 void beKeyboardReceiver_InitFields(void);
-extern char g_beKeyboardReceiver_callbackList_004c6528[];
+extern char g_beKeyboardReceiver_callbackList[];
 void *beKeyboardReceiver_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beKeyboardReceiver_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beKeyboardReceiver_metaObject_00589308,         /* published MetaObject slot */
+        g_beKeyboardReceiver_metaObject,         /* published MetaObject slot */
         igEventReceiver_Register,                         /* base class registrar */
-        igEventReceiver_GetPublishedMetaObject_00233200,  /* base class MetaObject accessor */
+        igEventReceiver_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beKeyboardReceiver_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beKeyboardReceiver_className_00504a90,          /* class name */
+        beKeyboardReceiver_className,          /* class name */
         0xc,                                              /* instance size */
         beKeyboardReceiver_GetVTable,                     /* vtable getter */
         beKeyboardReceiver_InitFields,                    /* field adder */
         0,                                                /* extra callback item */
-        g_beKeyboardReceiver_callbackList_004c6528       /* callback list */
+        g_beKeyboardReceiver_callbackList       /* callback list */
     );
 }

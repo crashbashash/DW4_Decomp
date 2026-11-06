@@ -4,8 +4,8 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igVertexArray_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igVertexArray_className_004dbe48[];
-extern char g_igVertexArray_metaObject_0055fac8[];
+extern char igVertexArray_className[];
+extern char g_igVertexArray_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 int igVertexArray_InitFields();
@@ -14,11 +14,11 @@ void igVertexArray_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igVertexArray_metaObject_0055fac8,   /* published MetaObject slot */
+        g_igVertexArray_metaObject,   /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igVertexArray_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igVertexArray_className_004dbe48,    /* class name */
+        igVertexArray_className,    /* class name */
         0x18,                                  /* instance size */
         0,                                     /* vtable getter */
         &igVertexArray_InitFields,             /* field adder */

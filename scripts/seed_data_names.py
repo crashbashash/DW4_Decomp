@@ -6,10 +6,9 @@ name `DAT_<addr>`.  Most of those are not mysterious: the address is a function
 that is passed as a callback, the class-name string or the class-handle slot a
 `<Class>_Register` function stores through, a reflection field/constructor table,
 or a plain string literal.  Each of those has hard evidence in the image, so each
-gets a name that says what it is.  The build resolves a data symbol by the address
-at the end of its name (`tools/verify.py:ADDR_IN_NAME`, `tools/linkgen.py`), so a
-recovered name keeps `_<addr>` as a suffix; a function reference needs no suffix
-and takes the function's own symbol.
+gets a name that says what it is.  The build resolves a recovered name through this
+table (`tools/verify.py:data_symbols`), so the name carries no address; a function
+reference takes the function's own symbol.
 
   python3 scripts/seed_data_names.py > config/SLUS-20836/data-names.tsv.new && mv config/SLUS-20836/data-names.tsv.new config/SLUS-20836/data-names.tsv
 
@@ -107,6 +106,25 @@ def ident(cls):
     return re.sub(r"\W", "_", cls)
 
 
+def string_name(text, syms):
+    """A string's name is its text, unless that cannot name it: a leading digit, or a function's name."""
+    return "text_" + text if text[0].isdigit() or text in syms.values() else text
+
+
+def unique(name, va, rows, copies=False):
+    """`name`, or a spelling no other row holds. Copies of one string take an ordinal; two different
+    data under one name keep the address, which marks them as still needing a recovered name."""
+    used = {row[0] for other, row in rows.items() if other != va}
+    if name not in used:
+        return name
+    if not copies:
+        return "%s_%08x" % (name, va)
+    number = 2
+    while "%s_%d" % (name, number) in used:
+        number += 1
+    return "%s_%d" % (name, number)
+
+
 def referenced():
     found = set()
     for mod in SCOPE:
@@ -138,27 +156,27 @@ def main():
     print("# Data symbols named from the image: function entries, reflection slots/strings/tables, string text.")
     print("# <va>\t<name>\t<rule>")
     for va, cls in sorted(handle.items()):      # also read by absolute address: `*(int *)0x58a0e0`
-        rows.setdefault(va, ("g_%s_metaObject_%08x" % (ident(cls), va), "class-handle"))
+        rows.setdefault(va, (unique("g_%s_metaObject" % ident(cls), va, rows), "class-handle"))
     for va in referenced():
         sym = syms.get(va)
         if sym:
             name, rule = sym, "function-symbol"
         elif va in handle:
-            name, rule = "g_%s_metaObject_%08x" % (ident(handle[va]), va), "class-handle"
+            name, rule = unique("g_%s_metaObject" % ident(handle[va]), va, rows), "class-handle"
         elif va in name_str:
-            name, rule = "s_%s_className_%08x" % (ident(name_str[va]), va), "class-name"
+            name, rule = unique("%s_className" % ident(name_str[va]), va, rows, copies=True), "class-name"
         elif va in field_tab:
-            name, rule = "g_%s_fieldTable_%08x" % (ident(field_tab[va]), va), "field-table"
+            name, rule = unique("g_%s_fieldTable" % ident(field_tab[va]), va, rows), "field-table"
         elif va in ctor_tab:
-            name, rule = "g_%s_ctorTable_%08x" % (ident(ctor_tab[va]), va), "ctor-table"
+            name, rule = unique("g_%s_ctorTable" % ident(ctor_tab[va]), va, rows), "ctor-table"
         elif (slot := returned_slot(image, va)) and slot[0] + slot[1] in handle:
-            name, rule = "%s_GetPublishedMetaObject_%08x" % (ident(handle[slot[0] + slot[1]]), va), "published-accessor"
+            name, rule = unique("%s_GetPublishedMetaObject" % ident(handle[slot[0] + slot[1]]), va, rows), "published-accessor"
         else:
             text = c_string(image, va)
             s = slug(text) if text else None
             if not s:
                 continue
-            name, rule = "s_%s_%08x" % (s, va), "string-literal"
+            name, rule = unique(string_name(s, syms), va, rows, copies=True), "string-literal"
         rows[va] = (name, rule)
     for va in sorted(rows):
         print("0x%08x\t%s\t%s" % (va, rows[va][0], rows[va][1]))

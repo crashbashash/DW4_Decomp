@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCriVolume_metaObject_00589960[];
+extern igMetaObject *g_beCriVolume_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beCriVolume_GetMetaObject(void);
-extern const char s_beCriVolume_className_00505750[];
+extern const char beCriVolume_className[];
 int beCriVolume_GetVTable(void);
 void beCriVolume_InitFields(void);
 void *beCriVolume_Register(void);
@@ -32,11 +32,11 @@ void *beCriVolume_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCriVolume_metaObject_00589960,      /* published MetaObject slot */
+        g_beCriVolume_metaObject,      /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beCriVolume_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beCriVolume_className_00505750,       /* class name */
+        beCriVolume_className,       /* class name */
         0x20,                                   /* instance size */
         beCriVolume_GetVTable,                  /* vtable getter */
         beCriVolume_InitFields,                 /* field adder */

@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_libNdmwRuntimePlugin_metaObject_0058a8f8[];
+extern igMetaObject *g_libNdmwRuntimePlugin_metaObject[];
 void *igInsightPlugin_Register(void);
-igMetaObject *igInsightPlugin_GetPublishedMetaObject_00337290(void);
+igMetaObject *igInsightPlugin_GetPublishedMetaObject(void);
 igMetaObject *libNdmwRuntimePlugin_GetMetaObject(void);
-extern const char s_libNdmwRuntimePlugin_className_005108f0[];
+extern const char libNdmwRuntimePlugin_className[];
 int libNdmwRuntimePlugin_GetVTable(void);
 void libNdmwRuntimePlugin_InitFields(void);
-extern char g_libNdmwRuntimePlugin_callbackList_004c9230[];
+extern char g_libNdmwRuntimePlugin_callbackList[];
 void *libNdmwRuntimePlugin_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *libNdmwRuntimePlugin_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_libNdmwRuntimePlugin_metaObject_0058a8f8,       /* published MetaObject slot */
+        g_libNdmwRuntimePlugin_metaObject,       /* published MetaObject slot */
         igInsightPlugin_Register,                         /* base class registrar */
-        igInsightPlugin_GetPublishedMetaObject_00337290,  /* base class MetaObject accessor */
+        igInsightPlugin_GetPublishedMetaObject,  /* base class MetaObject accessor */
         libNdmwRuntimePlugin_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_libNdmwRuntimePlugin_className_005108f0,        /* class name */
+        libNdmwRuntimePlugin_className,        /* class name */
         0x5c,                                             /* instance size */
         libNdmwRuntimePlugin_GetVTable,                   /* vtable getter */
         libNdmwRuntimePlugin_InitFields,                  /* field adder */
         0,                                                /* extra callback item */
-        g_libNdmwRuntimePlugin_callbackList_004c9230     /* callback list */
+        g_libNdmwRuntimePlugin_callbackList     /* callback list */
     );
 }

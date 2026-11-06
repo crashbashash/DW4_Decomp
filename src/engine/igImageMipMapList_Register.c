@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igImageMipMapList_GetVTable[];
 extern char thunk_igImageMipMapList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igImageMipMapList_callbackList_00485e20[];
-extern char s_igImageMipMapList_className_004d4e60[];
-extern char g_igImageMipMapList_metaObject_0055ee20[];
+extern char g_igImageMipMapList_callbackList[];
+extern char igImageMipMapList_className[];
+extern char g_igImageMipMapList_metaObject[];
 int GpFlag_SetOnce_00130000();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igImageMipMapList_Register(void) {
     GpFlag_SetOnce_00130000();
     igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igImageMipMapList_metaObject_0055ee20, /* published MetaObject slot */
+        g_igImageMipMapList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                   /* base class registrar */
         igObjectList_GetPublishedMetaObject,     /* base class MetaObject accessor */
         thunk_igImageMipMapList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igImageMipMapList_className_004d4e60,  /* class name */
+        igImageMipMapList_className,  /* class name */
         0x14,                                    /* instance size */
         igImageMipMapList_GetVTable,             /* vtable getter */
         0,                                       /* field adder */
         0,                                       /* extra callback item */
-        g_igImageMipMapList_callbackList_00485e20  /* callback list */
+        g_igImageMipMapList_callbackList  /* callback list */
     );
 }

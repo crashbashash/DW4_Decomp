@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igCustomStateFieldList_GetVTable[];
 extern char thunk_igCustomStateFieldList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igCustomStateFieldList_callbackList_00489010[];
-extern char s_igCustomStateFieldList_className_004dcc50[];
-extern char g_igCustomStateFieldList_metaObject_0055fe48[];
+extern char g_igCustomStateFieldList_callbackList[];
+extern char igCustomStateFieldList_className[];
+extern char g_igCustomStateFieldList_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igCustomStateFieldList_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igCustomStateFieldList_metaObject_0055fe48, /* published MetaObject slot */
+        g_igCustomStateFieldList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                        /* base class registrar */
         igObjectList_GetPublishedMetaObject,          /* base class MetaObject accessor */
         thunk_igCustomStateFieldList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igCustomStateFieldList_className_004dcc50,  /* class name */
+        igCustomStateFieldList_className,  /* class name */
         0x14,                                         /* instance size */
         igCustomStateFieldList_GetVTable,             /* vtable getter */
         0,                                            /* field adder */
         0,                                            /* extra callback item */
-        g_igCustomStateFieldList_callbackList_00489010  /* callback list */
+        g_igCustomStateFieldList_callbackList  /* callback list */
     );
 }

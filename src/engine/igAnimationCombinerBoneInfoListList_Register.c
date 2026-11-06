@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igAnimationCombinerBoneInfoListList_GetVTable[];
 extern char thunk_igAnimationCombinerBoneInfoListList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igAnimationCombinerBoneInfoListList_callbackList_0048d2a0[];
-extern char s_igAnimationCombinerBoneInfoListList_className_004e3d50[];
-extern char g_igAnimationCombinerBoneInfoListList_metaObject_00562258[];
+extern char g_igAnimationCombinerBoneInfoListList_callbackList[];
+extern char igAnimationCombinerBoneInfoListList_className[];
+extern char g_igAnimationCombinerBoneInfoListList_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igAnimationCombinerBoneInfoListList_Register(void) {
     GpFlag_SetOnce_00194380();
     igMetaObject_RegisterClass(
         0,                                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAnimationCombinerBoneInfoListList_metaObject_00562258, /* published MetaObject slot */
+        g_igAnimationCombinerBoneInfoListList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                                     /* base class registrar */
         igObjectList_GetPublishedMetaObject,                       /* base class MetaObject accessor */
         thunk_igAnimationCombinerBoneInfoListList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igAnimationCombinerBoneInfoListList_className_004e3d50,  /* class name */
+        igAnimationCombinerBoneInfoListList_className,  /* class name */
         0x14,                                                      /* instance size */
         igAnimationCombinerBoneInfoListList_GetVTable,             /* vtable getter */
         0,                                                         /* field adder */
         0,                                                         /* extra callback item */
-        g_igAnimationCombinerBoneInfoListList_callbackList_0048d2a0  /* callback list */
+        g_igAnimationCombinerBoneInfoListList_callbackList  /* callback list */
     );
 }

@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igObjectList_Register[];
 extern char igShortListList_GetVTable[];
 extern char thunk_igShortListList_GetMetaObject[];
-extern char g_igShortListList_callbackList_004c1400[];
-extern char s_igShortListList_className_004f8580[];
-extern char g_igShortListList_metaObject_00586828[];
+extern char g_igShortListList_callbackList[];
+extern char igShortListList_className[];
+extern char g_igShortListList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igShortListList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igShortListList_metaObject_00586828, /* published MetaObject slot */
+        g_igShortListList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                 /* base class registrar */
         igObjectList_GetPublishedMetaObject,   /* base class MetaObject accessor */
         thunk_igShortListList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igShortListList_className_004f8580,  /* class name */
+        igShortListList_className,  /* class name */
         0x14,                                  /* instance size */
         igShortListList_GetVTable,             /* vtable getter */
         0,                                     /* field adder */
         0,                                     /* extra callback item */
-        g_igShortListList_callbackList_004c1400  /* callback list */
+        g_igShortListList_callbackList  /* callback list */
     );
 }

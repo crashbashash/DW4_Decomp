@@ -3,7 +3,7 @@
  * allocation failure publishes) through the output-first argument; the same
  * leaf as igPsx2Window slot 40 (docs/engine/allocator-registry.md,
  * docs/engine/array-storage.md). */
-extern int g_failureStatusWord_004fb418[4];
+extern int g_allocatorFailureStatus[4];
 void Gap__Core__igProgramFile__vfunc_29(int *status_out) {
-    *status_out = g_failureStatusWord_004fb418[0];
+    *status_out = g_allocatorFailureStatus[0];
 }

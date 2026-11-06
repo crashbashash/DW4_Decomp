@@ -5,11 +5,11 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beNDMWPanelObjectStat_metaObject_0058b260[4];
+extern int g_beNDMWPanelObjectStat_metaObject[4];
 /* 0x003d1440 */
 int Gap__Bec__beNDMWPanelObjectStat__vfunc_20(void)
 {
-    return g_beNDMWPanelObjectStat_metaObject_0058b260[0];
+    return g_beNDMWPanelObjectStat_metaObject[0];
 }
 
 /* 0x003d1450 */

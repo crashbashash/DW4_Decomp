@@ -27,7 +27,7 @@ typedef struct ContextPrefixedRecord {
 } ContextPrefixedRecord;
 
 int strncpy();
-extern int g_memoryContextNames_004c2170[4];
+extern int g_memoryContextNames[4];
 
 void igMemoryPoolContextInfo_InitializeRecordNames(igMemoryPoolContextInfo *self) {
     int index;
@@ -36,7 +36,7 @@ void igMemoryPoolContextInfo_InitializeRecordNames(igMemoryPoolContextInfo *self
     index = 0;
     do {
         entry = (ContextPrefixedRecord *)((char *)self + index * sizeof(ContextRecord));
-        strncpy(entry->record.name, g_memoryContextNames_004c2170[index], CONTEXT_NAME_LIMIT);
+        strncpy(entry->record.name, g_memoryContextNames[index], CONTEXT_NAME_LIMIT);
         index += 1;
         entry->record.name[CONTEXT_NAME_LIMIT] = 0;
     } while (index < CONTEXT_RECORD_COUNT);

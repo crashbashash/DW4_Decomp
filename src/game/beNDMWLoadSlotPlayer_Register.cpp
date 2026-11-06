@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadSlotPlayer_metaObject_0058bd00[];
+extern igMetaObject *g_beNDMWLoadSlotPlayer_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beNDMWLoadSlotPlayer_GetMetaObject(void);
-extern const char s_beNDMWLoadSlotPlayer_className_00512f00[];
+extern const char beNDMWLoadSlotPlayer_className[];
 int beNDMWLoadSlotPlayer_GetVTable(void);
 void beNDMWLoadSlotPlayer_InitFields(void);
-extern char g_beNDMWLoadSlotPlayer_callbackList_004cbc20[];
+extern char g_beNDMWLoadSlotPlayer_callbackList[];
 void *beNDMWLoadSlotPlayer_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWLoadSlotPlayer_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadSlotPlayer_metaObject_0058bd00,    /* published MetaObject slot */
+        g_beNDMWLoadSlotPlayer_metaObject,    /* published MetaObject slot */
         igObject_Register,                             /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,         /* base class MetaObject accessor */
         beNDMWLoadSlotPlayer_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadSlotPlayer_className_00512f00,     /* class name */
+        beNDMWLoadSlotPlayer_className,     /* class name */
         0x14,                                          /* instance size */
         beNDMWLoadSlotPlayer_GetVTable,                /* vtable getter */
         beNDMWLoadSlotPlayer_InitFields,               /* field adder */
         0,                                             /* extra callback item */
-        g_beNDMWLoadSlotPlayer_callbackList_004cbc20  /* callback list */
+        g_beNDMWLoadSlotPlayer_callbackList  /* callback list */
     );
 }

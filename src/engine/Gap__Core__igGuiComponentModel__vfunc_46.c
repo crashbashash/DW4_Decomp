@@ -3,7 +3,7 @@
  * igMetaObject of igGeometryElement (global named below), not of igGuiComponentModel itself;
  * presumably the metaclass of its element/companion type (hypothesis, from
  * the global's name only). */
-extern int g_igGeometryElement_metaObject_0058c4e8[4];
+extern int g_igGeometryElement_metaObject[4];
 int Gap__Core__igGuiComponentModel__vfunc_46(void) {
-    return g_igGeometryElement_metaObject_0058c4e8[0];
+    return g_igGeometryElement_metaObject[0];
 }

@@ -7,14 +7,14 @@ typedef struct Adxt_26c918 {
     short reload_sectors;   /* 0x3e */
 } Adxt_26c918;
 
-extern char s_E02080839_ADXT_SetReloadSct_parameter_error_004ee910[]; /* 'E02080839 ADXT_SetReloadSct: parameter error' */
+extern char E02080839_ADXT_SetReloadSct_parameter_error[]; /* 'E02080839 ADXT_SetReloadSct: parameter error' */
 void FUN_002607e8(const char *message);
 void FUN_0026a9d8(void *stream, int reload_bytes, int buffer_bytes);
 
 /* matching construct: int parameter — retail narrows the 16-bit count only where it is scaled, not on entry */
 void FUN_0026c918(Adxt_26c918 *adxt, int sectors) {
     if (adxt == 0) {
-        FUN_002607e8(s_E02080839_ADXT_SetReloadSct_parameter_error_004ee910);
+        FUN_002607e8(E02080839_ADXT_SetReloadSct_parameter_error);
         return;
     }
     adxt->reload_sectors = sectors;

@@ -13,7 +13,7 @@ void *igObject_CopyConstructHeader(void *, void *);
 void *igObject_AllocateStorage(void *, int);
 void *memcpy(void *, const void *, unsigned int);
 void StringChunk_ReleaseHeader(int, void *);
-extern int g_igMetaField_vtable_0052f230[4];
+extern int g_igMetaField_vtable[4];
 typedef struct {
     char prefix[32];
     void *value;
@@ -27,7 +27,7 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
     void *defaultBuffer;
 
     igObject_CopyConstructHeader(dest, source);
-    dest->_vtable = (int)g_igMetaField_vtable_0052f230;
+    dest->_vtable = (int)g_igMetaField_vtable;
     dest->_fieldName = 0;
     dest->_offset = source->_offset;
     dest->_isRunTime = source->_isRunTime;

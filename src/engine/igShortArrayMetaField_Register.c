@@ -4,10 +4,10 @@
 extern char igShortMetaField_Register[];
 extern char igShortArrayMetaField_GetVTable[];
 extern char thunk_igShortArrayMetaField_GetMetaObject[];
-extern char igShortMetaField_GetPublishedMetaObject_002ba4e0[];
-extern char g_igShortArrayMetaField_callbackList_004bf6f0[];
-extern char s_igShortArrayMetaField_className_004f5f90[];
-extern char g_igShortArrayMetaField_metaObject_00585958[];
+extern char igShortMetaField_GetPublishedMetaObject[];
+extern char g_igShortArrayMetaField_callbackList[];
+extern char igShortArrayMetaField_className[];
+extern char g_igShortArrayMetaField_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igShortArrayMetaField_InitFields();
@@ -16,15 +16,15 @@ void igShortArrayMetaField_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igShortArrayMetaField_metaObject_00585958,      /* published MetaObject slot */
+        g_igShortArrayMetaField_metaObject,      /* published MetaObject slot */
         igShortMetaField_Register,                        /* base class registrar */
-        igShortMetaField_GetPublishedMetaObject_002ba4e0, /* base class MetaObject accessor */
+        igShortMetaField_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igShortArrayMetaField_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        s_igShortArrayMetaField_className_004f5f90,       /* class name */
+        igShortArrayMetaField_className,       /* class name */
         0x38,                                             /* instance size */
         igShortArrayMetaField_GetVTable,                  /* vtable getter */
         &igShortArrayMetaField_InitFields,                /* field adder */
         0,                                                /* extra callback item */
-        g_igShortArrayMetaField_callbackList_004bf6f0     /* callback list */
+        g_igShortArrayMetaField_callbackList     /* callback list */
     );
 }

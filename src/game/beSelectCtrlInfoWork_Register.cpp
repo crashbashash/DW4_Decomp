@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSelectCtrlInfoWork_metaObject_00587f60[];
+extern igMetaObject *g_beSelectCtrlInfoWork_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beSelectCtrlInfoWork_GetMetaObject(void);
-extern const char s_beSelectCtrlInfoWork_className_00502230[];
+extern const char beSelectCtrlInfoWork_className[];
 int beSelectCtrlInfoWork_GetVTable(void);
 void beSelectCtrlInfoWork_InitFields(void);
-extern char g_beSelectCtrlInfoWork_callbackList_004c3ab0[];
+extern char g_beSelectCtrlInfoWork_callbackList[];
 void *beSelectCtrlInfoWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSelectCtrlInfoWork_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSelectCtrlInfoWork_metaObject_00587f60,    /* published MetaObject slot */
+        g_beSelectCtrlInfoWork_metaObject,    /* published MetaObject slot */
         igObject_Register,                             /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,         /* base class MetaObject accessor */
         beSelectCtrlInfoWork_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beSelectCtrlInfoWork_className_00502230,     /* class name */
+        beSelectCtrlInfoWork_className,     /* class name */
         0x24,                                          /* instance size */
         beSelectCtrlInfoWork_GetVTable,                /* vtable getter */
         beSelectCtrlInfoWork_InitFields,               /* field adder */
         0,                                             /* extra callback item */
-        g_beSelectCtrlInfoWork_callbackList_004c3ab0  /* callback list */
+        g_beSelectCtrlInfoWork_callbackList  /* callback list */
     );
 }

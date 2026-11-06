@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igTraversalFunctionList_GetVTable[];
 extern char thunk_igTraversalFunctionList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igTraversalFunctionList_className_004e1df0[];
-extern char g_igTraversalFunctionList_metaObject_005615c8[];
+extern char igTraversalFunctionList_className[];
+extern char g_igTraversalFunctionList_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 
@@ -14,11 +14,11 @@ void igTraversalFunctionList_Register(void) {
     GpFlag_SetOnce_00194380();
     igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igTraversalFunctionList_metaObject_005615c8, /* published MetaObject slot */
+        g_igTraversalFunctionList_metaObject, /* published MetaObject slot */
         igDataList_Register,                           /* base class registrar */
         igDataList_GetPublishedMetaObject,             /* base class MetaObject accessor */
         thunk_igTraversalFunctionList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igTraversalFunctionList_className_004e1df0,  /* class name */
+        igTraversalFunctionList_className,  /* class name */
         0x14,                                          /* instance size */
         igTraversalFunctionList_GetVTable,             /* vtable getter */
         0,                                             /* field adder */

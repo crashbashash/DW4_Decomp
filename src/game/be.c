@@ -5,7 +5,7 @@
  * address order. */
 
 /* Reflected metaobject of `be` (handle 0x58a030 in include/dw4/reflected.h). */
-extern int g_be_metaObject_0058a030[4];
+extern int g_be_metaObject[4];
 
 /* 0x00371a10: default body of slot 21, does nothing. */
 void Gap__Bec__be__vfunc_21(void)
@@ -36,5 +36,5 @@ void Gap__Bec__be__vfunc_27(void)
  * accessor shape as the ParticleInfo override). */
 int Gap__Bec__be__vfunc_20(void)
 {
-    return g_be_metaObject_0058a030[0];
+    return g_be_metaObject[0];
 }

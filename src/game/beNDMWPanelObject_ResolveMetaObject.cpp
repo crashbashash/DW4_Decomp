@@ -6,13 +6,13 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_003bec70(void);
-extern igMetaObject *g_beNDMWPanelObject_metaObject_0058b2c8[4];
+extern igMetaObject *g_beNDMWPanelObject_metaObject[4];
 igMetaObject *beNDMWPanelObject_ResolveMetaObject(void);
 }
 
 igMetaObject *beNDMWPanelObject_ResolveMetaObject(void)
 {
-    igMetaObject *meta = g_beNDMWPanelObject_metaObject_0058b2c8[0];
+    igMetaObject *meta = g_beNDMWPanelObject_metaObject[0];
     bool ready;
     if (meta) {
         if (ready = meta->_validity & 4) goto done;
@@ -20,5 +20,5 @@ igMetaObject *beNDMWPanelObject_ResolveMetaObject(void)
     }
     FUN_003bec70();
 done:
-    return g_beNDMWPanelObject_metaObject_0058b2c8[0];
+    return g_beNDMWPanelObject_metaObject[0];
 }

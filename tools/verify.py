@@ -85,7 +85,7 @@ ADDR_IN_NAME = re.compile(r"(?:^|[^0-9a-fA-F])([0-9a-fA-F]{6,8})$")
 BOOTSTRAP_NAME = re.compile(r"(?:^|[^0-9a-fA-F])(0[01][0-9a-fA-F]{6})$")
 # Bootstrap names say what they point at: a `FUN_`/`thunk_` name is a function and
 # may resolve only to a recorded function start; a data name (`D_`, `DAT_`, `g_`,
-# `s_`, `GPR_`, `PTR_`, ...) may resolve only to an address that is not inside any
+# `GPR_`, `PTR_`, ...) may resolve only to an address that is not inside any
 # function's code. A name of neither style is a function start or data, never an
 # address inside a function body (see `sym_address`).
 FUNCTION_STYLE = re.compile(r"^(?:thunk_)*FUN_")
@@ -309,6 +309,63 @@ def address_in_name(name):
     """The retail address a bootstrap name carries (`D_0056df30` -> 0x56df30), or None."""
     m = ADDR_IN_NAME.search(name)
     return int(m.group(1), 16) if m else None
+
+
+_DATA_SYMBOLS = {}
+_STRING_NAMES = {}
+
+
+def data_symbols(symbols="config/SLUS-20836/symbols.txt"):
+    """{name: va} for the recovered data names, from the data-names.tsv beside `symbols`.
+
+    `function-symbol` rows are left out: those names live in the symbol map, and a row kept after
+    a function's rename must not resolve. A name given two addresses, or a row whose name spells
+    another address, stops the run rather than picking one.
+    """
+    path = os.path.join(ROOT, os.path.dirname(symbols), "data-names.tsv")
+    if path in _DATA_SYMBOLS:
+        return _DATA_SYMBOLS[path]
+    out = {}
+    if os.path.exists(path):
+        with open(path) as fh:
+            for ln in fh:
+                if not ln.startswith("0x"):
+                    continue
+                va, name, rule = ln.rstrip("\n").split("\t")[:3]
+                if rule == "function-symbol":
+                    continue
+                va = int(va, 16)
+                spelled = BOOTSTRAP_NAME.search(name)
+                if spelled and int(spelled.group(1), 16) != va:
+                    raise ValueError(f"{path}: {name} is recorded at 0x{va:x} but spells {spelled.group(1)}")
+                if out.setdefault(name, va) != va:
+                    raise ValueError(f"{path}: {name} has two addresses, 0x{out[name]:x} and 0x{va:x}")
+    _DATA_SYMBOLS[path] = out
+    return out
+
+
+def is_string_name(name, symbols="config/SLUS-20836/symbols.txt"):
+    """True when data-names.tsv records `name` as a string. A string's name has no prefix to mark
+    it as data, so its row does: it may never resolve into code."""
+    path = os.path.join(ROOT, os.path.dirname(symbols), "data-names.tsv")
+    if path not in _STRING_NAMES:
+        names = set()
+        if os.path.exists(path):
+            with open(path) as fh:
+                for ln in fh:
+                    fields = ln.rstrip("\n").split("\t")
+                    if ln.startswith("0x") and fields[2] in ("string-literal", "class-name"):
+                        names.add(fields[1])
+        _STRING_NAMES[path] = names
+    return name in _STRING_NAMES[path]
+
+
+def spelled_address(name, symbols="config/SLUS-20836/symbols.txt"):
+    """The retail address a name stands for without the symbol map: its data-names.tsv row, else
+    the address it carries (`D_0056df30` -> 0x56df30), else None."""
+    base = name.split("+")[0].strip()
+    table = data_symbols(symbols)
+    return table[base] if base in table else address_in_name(base)
 
 
 def sanitize(nm):
@@ -544,10 +601,10 @@ def compiler_runtime_symbols():
 def sym_address(name, sym_by_name, symbols="config/SLUS-20836/symbols.txt"):
     """Retail address for a relocation's symbol, or None; `SymbolError` when dishonest.
 
-    Functions come from the layout; data is resolved from an address-bearing name
-    (the bootstrap convention: `D_0056df30`, `DAT_0056df30`, `g_0056df30`,
-    `FUN_00100240`). A name with no address in it and no definition in the project
-    cannot be resolved yet — that is what a fuller symbol map would fix.
+    Functions come from the layout; recovered data names from data-names.tsv; anything
+    else from an address-bearing name (the bootstrap convention: `D_0056df30`,
+    `DAT_0056df30`, `g_0056df30`, `FUN_00100240`). A name in none of these cannot be
+    resolved yet — that is what a fuller symbol map would fix.
 
     The name's own claims are checked against `symbols` (the map `sym_by_name`
     was loaded from), the one resolver shared with tools/linkgen.py:
@@ -555,8 +612,8 @@ def sym_address(name, sym_by_name, symbols="config/SLUS-20836/symbols.txt"):
     * a mapped name that carries an address must carry its own (`thunk_FUN_x`
       names its target by convention and is exempt);
     * a `FUN_`/`thunk_` name resolves only to a recorded function start;
-    * a data-style name (`D_`, `DAT_`, `g_`, `s_`, `GPR_`, `PTR_`, ...) resolves
-      only to an address outside every function's code;
+    * a data-style name (`D_`, `DAT_`, `g_`, `GPR_`, `PTR_`, ...) or a string in
+      data-names.tsv resolves only to an address outside every function's code;
     * any other name resolves to a function start or to data, never to an
       address inside a function body (`Foo_002d3074` for a call to 0x2d3070+4);
     * no range check: scratchpad, hardware register and kernel addresses are
@@ -577,7 +634,7 @@ def sym_address(name, sym_by_name, symbols="config/SLUS-20836/symbols.txt"):
     if name in compiler_runtime_symbols():
         return compiler_runtime_symbols()[name]
     base = name.split("+")[0].strip()
-    claimed = address_in_name(base)
+    claimed = spelled_address(base, symbols)
     if claimed is None:
         return None
     # No address bound: the EE's scratchpad (0x70000000), hardware registers
@@ -589,7 +646,7 @@ def sym_address(name, sym_by_name, symbols="config/SLUS-20836/symbols.txt"):
                               + (f" (inside {owner[1]})" if owner
                                  else " (no recorded function covers it: a symbol-map gap)"),
                               "extent" if owner else "gap")
-    elif DATA_STYLE.match(base):
+    elif DATA_STYLE.match(base) or is_string_name(base, symbols):
         if owner is not None:
             raise SymbolError(f"data name {base} points at 0x{claimed:x} inside the code of "
                               f"{owner[1]} (0x{owner[0]:x})", "name" if owner[0] == claimed else "extent")
@@ -704,7 +761,7 @@ def solve_gp(text, relocs, resolve, retail, base_va):
 
 
 def defined_outside(syms, headers, spans, exempt=()):
-    """Defined symbols whose address-bearing name points outside the object's own bodies.
+    """Defined symbols whose name stands for an address outside the object's own bodies.
 
     A candidate that DEFINES `g_objectSystem_00586dc8` instead of referencing it
     smuggles the datum: its relocations then resolve to the object's own copy and
@@ -717,7 +774,7 @@ def defined_outside(syms, headers, spans, exempt=()):
     for name, (section, _value, _size) in syms.items():
         if not isinstance(section, int) or name in names or name in exempt or name.startswith("."):
             continue
-        claimed = address_in_name(name)
+        claimed = spelled_address(name)
         if claimed is None or any(start <= claimed < end for start, end in spans):
             continue
         out.append((name, claimed))
@@ -1012,7 +1069,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                 # Still compare the bytes at the address the name spells (what the
                 # relink provides), so a naming defect is told apart from a mismatch.
                 dishonest[name] = error
-                return address_in_name(name.split("+")[0].strip())
+                return spelled_address(name, symbols)
         return resolve
 
     for compiler_name, (address, section, size) in records.items():
@@ -1218,7 +1275,7 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
                     except SymbolError as error:
                         lines.append(f"  symbol {symbol!r}: {error}")
                         twin_refusals.append(error)
-                        return address_in_name(symbol.split("+")[0].strip())
+                        return spelled_address(symbol, symbols)
 
                 patched, _, unresolved = apply_relocs(
                     object_section(twin, ".text", section),
@@ -1543,7 +1600,7 @@ def _verify_standalone(obj, va, name, size, retail, img, by_name, symbols, tabs,
             # Still compare the bytes at the address the name spells (what the
             # relink provides), so a naming defect is told apart from a mismatch.
             dishonest[nm] = error
-            return address_in_name(nm.split("+")[0].strip())
+            return spelled_address(nm, symbols)
         if base is not None:
             return base
         if nm == ".rodata" and len(table_bases) == 1:

@@ -29,22 +29,22 @@ char *beNDMWItemBase_GetRecordString(int, long long, char *);
 void beMessenger_AppendString(int, char *); /* matching construct: a char * (not const char *) parameter keeps the retail argument load order */
 void beMessenger_DispatchSelected(int, char *);
 void beMessenger_SelectGroup(int, char *);
-extern char *g_fontNames_004cf8a0[];   /* "font000".."font011" row fonts, then font000, font030 */
-extern char *g_fontName1_004cf8a4[];   /* the same table at +4: "font001" */
-extern char s_TEXTCTL_0051b3c0[];
-extern char s_STWINFONT14_0051b3c8[];
-extern char s_percent_d_0051b468[];
-extern char s_STWINFONT29_0051b470[];
-extern char s_DISPOFF_0051b550[];
-extern char s_SWITCH_0051b558[];
-extern char s_NAME_0051b678[];
-extern char s_STWINFONT17_0051b680[];
-extern char s_TXT_0051b6a8[];
-extern char s_TEXTSET_0051b6b0[];
-extern char s_DISPON_0051b6b8[];
-extern char s_STWINFONT30_0051bd60[];
-extern char s_NEXTX_0051be38[];
-extern int g_beNDMWStatus_metaObject_0058b028[];
+extern char *g_fontNames[];   /* "font000".."font011" row fonts, then font000, font030 */
+extern char *g_fontName1[];   /* the same table at +4: "font001" */
+extern char TEXTCTL_3[];
+extern char STWINFONT14[];
+extern char percent_d[];
+extern char STWINFONT29[];
+extern char DISPOFF[];
+extern char SWITCH_2[];
+extern char NAME_2[];
+extern char STWINFONT17[];
+extern char TXT[];
+extern char TEXTSET[];
+extern char DISPON[];
+extern char STWINFONT30[];
+extern char NEXTX[];
+extern int g_beNDMWStatus_metaObject[];
 
 // clang-format off
 void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long long refreshRows,
@@ -66,14 +66,14 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
     char *visibility;
 
     /* Status is captured even when neither refresh flag is set. */
-    status = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject_0058b028[0]);
+    status = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
     asm {
         dmove s4,status
     }
     if (refreshRows != 0) {
         row = 0;
 
-        font = (char **)(&g_fontNames_004cf8a0[0]);
+        font = (char **)(&g_fontNames[0]);
         asm {
             dmove s3,row
         }
@@ -96,19 +96,19 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
                     dmove s1,item
                 }
                 if (item != 0) {
-                    name = (char *)(beNDMWItemBase_GetRecordString(item, status, &s_NAME_0051b678[0]));
+                    name = (char *)(beNDMWItemBase_GetRecordString(item, status, &NAME_2[0]));
 
-                    nextX = beNDMWItemBase_GetRecordInt(item, status, &s_NEXTX_0051be38[0]);
-                    beMessenger_SelectGroup(self->_messenger, &s_TEXTCTL_0051b3c0[0]);
+                    nextX = beNDMWItemBase_GetRecordInt(item, status, &NEXTX[0]);
+                    beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
                     asm {
                         dmove s2,name
                     }
-                    beMessenger_AppendString(self->_messenger, &s_STWINFONT14_0051b3c8[0]);
+                    beMessenger_AppendString(self->_messenger, &STWINFONT14[0]);
                     beMessenger_AppendString(self->_messenger, *font);
                     beMessenger_AppendString(self->_messenger, name);
-                    beMessenger_DispatchSelected(self->_messenger, &s_TEXTSET_0051b6b0[0]);
+                    beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
                     if (nextX > 0) {
-                        sprintf(priceText, &s_percent_d_0051b468[0], nextX);
+                        sprintf(priceText, &percent_d[0], nextX);
                         asm {
                             .set noreorder
                             b price_done
@@ -145,12 +145,12 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
                         }
                     }
                 price_done: /* Keep each font/messenger read live across callbacks. */
-                    beMessenger_SelectGroup(self->_messenger, &s_TEXTCTL_0051b3c0[0]);
-                    beMessenger_AppendString(self->_messenger, &s_STWINFONT17_0051b680[0]);
+                    beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
+                    beMessenger_AppendString(self->_messenger, &STWINFONT17[0]);
                     beMessenger_AppendString(self->_messenger, *font);
                     beMessenger_AppendString(self->_messenger, priceText);
-                    beMessenger_DispatchSelected(self->_messenger, &s_TEXTSET_0051b6b0[0]);
-                    visibility = (char *)(&s_DISPON_0051b6b8[0]);
+                    beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
+                    visibility = (char *)(&DISPON[0]);
                     asm {
                         b row_visibility
                         .set noreorder
@@ -160,18 +160,18 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
                 }
             }
             else {
-                visibility = (char *)(&s_DISPOFF_0051b550[0]);
+                visibility = (char *)(&DISPOFF[0]);
             row_visibility:
-                beMessenger_SelectGroup(self->_messenger, &s_TEXTCTL_0051b3c0[0]);
-                beMessenger_AppendString(self->_messenger, &s_STWINFONT14_0051b3c8[0]);
+                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
+                beMessenger_AppendString(self->_messenger, &STWINFONT14[0]);
                 beMessenger_AppendString(self->_messenger, *font);
                 beMessenger_AppendString(self->_messenger, visibility);
-                beMessenger_DispatchSelected(self->_messenger, &s_SWITCH_0051b558[0]);
-                beMessenger_SelectGroup(self->_messenger, &s_TEXTCTL_0051b3c0[0]);
-                beMessenger_AppendString(self->_messenger, &s_STWINFONT17_0051b680[0]);
+                beMessenger_DispatchSelected(self->_messenger, &SWITCH_2[0]);
+                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
+                beMessenger_AppendString(self->_messenger, &STWINFONT17[0]);
                 beMessenger_AppendString(self->_messenger, *font);
                 beMessenger_AppendString(self->_messenger, visibility);
-                beMessenger_DispatchSelected(self->_messenger, &s_SWITCH_0051b558[0]);
+                beMessenger_DispatchSelected(self->_messenger, &SWITCH_2[0]);
             }
             row += 1;
             font += 1;
@@ -193,10 +193,10 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
 
         page[0] = pageValue;
         beMessenger_SelectGroup(self->_messenger, (char *)(textGroup - 19520));
-        beMessenger_AppendString(self->_messenger, &s_STWINFONT30_0051bd60[0]);
-        beMessenger_AppendString(self->_messenger, g_fontNames_004cf8a0[0]);
+        beMessenger_AppendString(self->_messenger, &STWINFONT30[0]);
+        beMessenger_AppendString(self->_messenger, g_fontNames[0]);
         beMessenger_AppendString(self->_messenger, page);
-        beMessenger_DispatchSelected(self->_messenger, &s_TEXTSET_0051b6b0[0]);
+        beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
         pageValue = self->_maxPage;
         asm {
             lui a1,0x52
@@ -205,10 +205,10 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
         }
         page[0] = pageValue + '0';
         beMessenger_SelectGroup(self->_messenger, (char *)(textGroup - 19520));
-        beMessenger_AppendString(self->_messenger, &s_STWINFONT30_0051bd60[0]);
-        beMessenger_AppendString(self->_messenger, g_fontName1_004cf8a4[0]);
+        beMessenger_AppendString(self->_messenger, &STWINFONT30[0]);
+        beMessenger_AppendString(self->_messenger, g_fontName1[0]);
         beMessenger_AppendString(self->_messenger, page);
-        beMessenger_DispatchSelected(self->_messenger, &s_TEXTSET_0051b6b0[0]);
+        beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
         asm {
             nop
         }
@@ -240,18 +240,18 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
                     nop
                     .set reorder
                 }
-                description = (char *)(beNDMWItemBase_GetRecordString(selectedItem, status, &s_TXT_0051b6a8[0]));
+                description = (char *)(beNDMWItemBase_GetRecordString(selectedItem, status, &TXT[0]));
 
-                beMessenger_SelectGroup(self->_messenger, &s_TEXTCTL_0051b3c0[0]);
-                beMessenger_AppendString(self->_messenger, &s_STWINFONT29_0051b470[0]);
-                beMessenger_AppendString(self->_messenger, g_fontNames_004cf8a0[0]);
+                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
+                beMessenger_AppendString(self->_messenger, &STWINFONT29[0]);
+                beMessenger_AppendString(self->_messenger, g_fontNames[0]);
                 beMessenger_AppendString(self->_messenger, description);
-                beMessenger_DispatchSelected(self->_messenger, &s_TEXTSET_0051b6b0[0]);
-                beMessenger_SelectGroup(self->_messenger, &s_TEXTCTL_0051b3c0[0]);
-                beMessenger_AppendString(self->_messenger, &s_STWINFONT29_0051b470[0]);
-                beMessenger_AppendString(self->_messenger, g_fontNames_004cf8a0[0]);
-                beMessenger_AppendString(self->_messenger, &s_DISPON_0051b6b8[0]);
-                beMessenger_DispatchSelected(self->_messenger, &s_SWITCH_0051b558[0]);
+                beMessenger_DispatchSelected(self->_messenger, &TEXTSET[0]);
+                beMessenger_SelectGroup(self->_messenger, &TEXTCTL_3[0]);
+                beMessenger_AppendString(self->_messenger, &STWINFONT29[0]);
+                beMessenger_AppendString(self->_messenger, g_fontNames[0]);
+                beMessenger_AppendString(self->_messenger, &DISPON[0]);
+                beMessenger_DispatchSelected(self->_messenger, &SWITCH_2[0]);
                 asm {
                     nop
                 }

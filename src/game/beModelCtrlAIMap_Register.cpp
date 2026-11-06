@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlAIMap_metaObject_00588ca0[];
+extern igMetaObject *g_beModelCtrlAIMap_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlAIMap_GetMetaObject(void);
-extern const char s_beModelCtrlAIMap_className_00503cf0[];
+extern const char beModelCtrlAIMap_className[];
 int beModelCtrlAIMap_GetVTable(void);
 void beModelCtrlAIMap_InitFields(void);
-extern char g_beModelCtrlAIMap_callbackList_004c55f0[];
+extern char g_beModelCtrlAIMap_callbackList[];
 void *beModelCtrlAIMap_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beModelCtrlAIMap_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlAIMap_metaObject_00588ca0,         /* published MetaObject slot */
+        g_beModelCtrlAIMap_metaObject,         /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beModelCtrlAIMap_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlAIMap_className_00503cf0,          /* class name */
+        beModelCtrlAIMap_className,          /* class name */
         0x34,                                           /* instance size */
         beModelCtrlAIMap_GetVTable,                     /* vtable getter */
         beModelCtrlAIMap_InitFields,                    /* field adder */
         0,                                              /* extra callback item */
-        g_beModelCtrlAIMap_callbackList_004c55f0       /* callback list */
+        g_beModelCtrlAIMap_callbackList       /* callback list */
     );
 }

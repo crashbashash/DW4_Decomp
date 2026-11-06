@@ -5,8 +5,8 @@ extern char igPsx2AudioSourceList_GetVTable[];
 extern char thunk_igPsx2AudioSourceList_GetMetaObject[];
 extern char igDataList_GetPublishedMetaObject[];
 extern char igDataList_Register[];
-extern char s_igPsx2AudioSourceList_className_004d5f60[];
-extern char g_igPsx2AudioSourceList_metaObject_0055f5a8[];
+extern char igPsx2AudioSourceList_className[];
+extern char g_igPsx2AudioSourceList_metaObject[];
 int GpFlag_SetOnce_00142f10();
 int igMetaObject_RegisterClass();
 
@@ -14,11 +14,11 @@ void igPsx2AudioSourceList_Register(void) {
     GpFlag_SetOnce_00142f10();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPsx2AudioSourceList_metaObject_0055f5a8, /* published MetaObject slot */
+        g_igPsx2AudioSourceList_metaObject, /* published MetaObject slot */
         igDataList_Register,                         /* base class registrar */
         igDataList_GetPublishedMetaObject,           /* base class MetaObject accessor */
         thunk_igPsx2AudioSourceList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igPsx2AudioSourceList_className_004d5f60,  /* class name */
+        igPsx2AudioSourceList_className,  /* class name */
         0x14,                                        /* instance size */
         igPsx2AudioSourceList_GetVTable,             /* vtable getter */
         0,                                           /* field adder */

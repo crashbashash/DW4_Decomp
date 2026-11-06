@@ -168,7 +168,7 @@ def build_inputs_sha(elf, symbols, unit_objects=None, extra_files=()):
     # row for one unit must not invalidate the others, so each result's key carries its own unit's rows instead
     # (unit_profile_sha). The tables every unit's resolution reads are hashed whole: the switch tables, the layout, the retail
     # exception records and the compiler runtime addresses.
-    for name in ("jumptables.txt", "layout.txt", "exceptions.txt", "compiler-runtime-symbols.tsv"):
+    for name in ("jumptables.txt", "layout.txt", "exceptions.txt", "compiler-runtime-symbols.tsv", "data-names.tsv"):
         parts += [name, file_sha(os.path.join(cfg, name))]
     for p in extra_files:
         parts += [os.path.basename(p), file_sha(p)]

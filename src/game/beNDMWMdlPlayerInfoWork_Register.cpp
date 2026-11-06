@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWMdlPlayerInfoWork_metaObject_0058b3c8[];
+extern igMetaObject *g_beNDMWMdlPlayerInfoWork_metaObject[];
 void *beNDMWMdlPEBaseInfoWork_Register(void);
-igMetaObject *beNDMWMdlPEBaseInfoWork_GetPublishedMetaObject_003c0340(void);
+igMetaObject *beNDMWMdlPEBaseInfoWork_GetPublishedMetaObject(void);
 igMetaObject *beNDMWMdlPlayerInfoWork_GetMetaObject(void);
-extern const char s_beNDMWMdlPlayerInfoWork_className_00512170[];
+extern const char beNDMWMdlPlayerInfoWork_className[];
 int beNDMWMdlPlayerInfoWork_GetVTable(void);
 void beNDMWMdlPlayerInfoWork_InitFields(void);
-extern char g_beNDMWMdlPlayerInfoWork_callbackList_004ca8b0[];
+extern char g_beNDMWMdlPlayerInfoWork_callbackList[];
 void *beNDMWMdlPlayerInfoWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWMdlPlayerInfoWork_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWMdlPlayerInfoWork_metaObject_0058b3c8,            /* published MetaObject slot */
+        g_beNDMWMdlPlayerInfoWork_metaObject,            /* published MetaObject slot */
         beNDMWMdlPEBaseInfoWork_Register,                         /* base class registrar */
-        beNDMWMdlPEBaseInfoWork_GetPublishedMetaObject_003c0340,  /* base class MetaObject accessor */
+        beNDMWMdlPEBaseInfoWork_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWMdlPlayerInfoWork_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWMdlPlayerInfoWork_className_00512170,             /* class name */
+        beNDMWMdlPlayerInfoWork_className,             /* class name */
         0x130,                                                    /* instance size */
         beNDMWMdlPlayerInfoWork_GetVTable,                        /* vtable getter */
         beNDMWMdlPlayerInfoWork_InitFields,                       /* field adder */
         0,                                                        /* extra callback item */
-        g_beNDMWMdlPlayerInfoWork_callbackList_004ca8b0          /* callback list */
+        g_beNDMWMdlPlayerInfoWork_callbackList          /* callback list */
     );
 }

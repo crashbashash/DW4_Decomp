@@ -3,7 +3,7 @@
  * ParticleInfo in include/dw4/reflected.h.  Functions are in retail address order. */
 #include "dw4/reflected.h"
 extern "C" {
-extern int g_ParticleInfo_metaObject_0058a0e0[4];
+extern int g_ParticleInfo_metaObject[4];
 int igStrCmp(int, int);
 int igObject_GetFieldValueByName(void *, int);  /* reflected-field lookup by name (see vfunc_22) */
 int memset(int, int, int);  /* memset(dst, byte, size); returns dst */
@@ -27,7 +27,7 @@ int Gap__Bec__ParticleInfo__vfunc_22(ParticleInfo *self, int name) {
 /* 0x0036edd0 */
 int Gap__Bec__ParticleInfo__vfunc_20(void)
 {
-    return g_ParticleInfo_metaObject_0058a0e0[0];
+    return g_ParticleInfo_metaObject[0];
 }
 
 /* 0x0036ede0

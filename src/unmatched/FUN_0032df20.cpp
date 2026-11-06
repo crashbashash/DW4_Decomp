@@ -21,8 +21,8 @@ struct Pool {
 };
 struct Arg { int a0, a4, a8, ac; Obj *r; int p14, p18; Pool *pool; };
 extern "C" {
-void *FUN_002ed330(void *, int);
-void *thunk_FUN_002ed330(void *, int);
+void *Memory_ReallocateBuffer(void *, int);
+void *thunk_Memory_ReallocateBuffer(void *, int);
 void memset(void *, int, int);
 unsigned short FUN_0032df20(Arg *self) {
     Pool *p;
@@ -31,10 +31,10 @@ unsigned short FUN_0032df20(Arg *self) {
     p = self->pool;
     if (p->nfree == 0) {
         int i;
-        p->items = (char*)thunk_FUN_002ed330(p->items, (p->count + 4) * 12);
+        p->items = (char*)thunk_Memory_ReallocateBuffer(p->items, (p->count + 4) * 12);
         memset(p->items + p->count * 12, 0, 48);
         if (p->cap < 4) {
-            p->ids = (unsigned short*)FUN_002ed330(p->ids, 8);
+            p->ids = (unsigned short*)Memory_ReallocateBuffer(p->ids, 8);
             p->cap = 4;
         }
         i = 0; do { p->ids[i] = p->count + i; i++; } while (i < 4);

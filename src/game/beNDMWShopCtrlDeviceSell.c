@@ -5,9 +5,9 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beNDMWShopCtrlDeviceSell_metaObject_0058ad10[4];
+extern int g_beNDMWShopCtrlDeviceSell_metaObject[4];
 /* 0x0043d0f0 */
 int Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_20(void)
 {
-    return g_beNDMWShopCtrlDeviceSell_metaObject_0058ad10[0];
+    return g_beNDMWShopCtrlDeviceSell_metaObject[0];
 }

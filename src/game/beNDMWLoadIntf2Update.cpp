@@ -118,67 +118,67 @@ int igObject_GetAllocator(...);
 void *igProperty_GetRecord(...);
 void *igProperty_GetRecordByte(...);
 int igStrCmp(...);
-extern int g_starterPreviewModelName_004cd0d0[4];
+extern int text_0rQ[4];
 extern int g_starterPlayerModelName_004cd0e0[4];
-extern int g_playerModelRow_004cec70[4];
-extern int g_playerModelRowOpenSeq_004cec74[4];
-extern int g_playerModelRowSeq_004cec78[4];
-extern int s_DATABASE_00516c50[4];
-extern int s_shinka_00516c60[4];
-extern int s_GETDATABASE_00516c68[4];
-extern int s_NAME_00516c78[4];
-extern int s_j_digifacewin_00516ca8[4];
-extern int s_j_mainstatuswin_00516cc0[4];
-extern int s_SQ_OPEN_00516cd0[4];
-extern int s_SQ_CLOSE_00516d30[4];
-extern int s_SQ_LINEON00_00516d40[4];
-extern int s_SQ_CANCEL_00516d50[4];
-extern int s_SQ_LINESL00_00516dd8[4];
-extern int s_SQ_LINEON01_00516e18[4];
-extern int s_j_linewin02_00516eb0[4];
-extern int s_SQ_LINEUP00_00516ed0[4];
-extern int s_SQ_LINEDW01_00516ef0[4];
-extern int s_SQ_ON00_00517028[4];
-extern int s_MODELCTRL_005171f8[4];
-extern int s_GENERATE_00517208[4];
-extern int s_ISRUN_00517228[4];
-extern int s_COMMONINTF_005172a0[4];
-extern int s_CTRL_005172b0[4];
-extern int s_MAKECHR_005172b8[4];
-extern int s_COMMDLCTRL_005172c0[4];
-extern int s_MESWIN_005172d0[4];
-extern int s_SELSLOT_005172d8[4];
-extern int s_NAMESEL_005172e0[4];
-extern int s_TEXTORDER_005172e8[4];
-extern int s_DEGISTATECTRL_005172f8[4];
-extern int s_DATASELINTF_00517308[4];
-extern int s_DIFFSELECT_00517318[4];
-extern int s_j_chrselbase_00517328[4];
-extern int s_GAMERAM_00517338[4];
-extern int s_GETPLAYER_00517340[4];
-extern int s_ISUSE_00517350[4];
-extern int s_j_chrselmesswin_00517360[4];
-extern int s_j_linewin01_00517370[4];
-extern int s_j_digiselcursorleft_00517380[4];
-extern int s_j_digiselcursorright_005173a0[4];
-extern int s_j_namewin02_005173b8[4];
-extern int s_CHRSELFONT14_005173c8[4];
-extern int s_MOVETRANS_005173d8[4];
-extern int s_SQ_ENTR_005173e8[4];
-extern int s_SQ_EXIT_005173f0[4];
-extern int s_SQ_LINECG00_005173f8[4];
-extern int s_GAMEDATAINIT_00517408[4];
-extern int s_GAMESTART_00517418[4];
-extern int s_UNIQUE_00517428[4];
-extern int s_BASE2CURRENT_00517430[4];
-extern int s_RECALCPLAYER_00517440[4];
-extern int s_hostLoad_lua_00517450[4];
+extern int g_playerModelRow[4];
+extern int g_playerModelRowOpenSeq[4];
+extern int g_playerModelRowSeq[4];
+extern int DATABASE[4];
+extern int shinka[4];
+extern int GETDATABASE[4];
+extern int NAME[4];
+extern int j_digifacewin[4];
+extern int j_mainstatuswin[4];
+extern int SQ_OPEN[4];
+extern int SQ_CLOSE[4];
+extern int SQ_LINEON00[4];
+extern int SQ_CANCEL[4];
+extern int SQ_LINESL00[4];
+extern int SQ_LINEON01[4];
+extern int j_linewin02[4];
+extern int SQ_LINEUP00[4];
+extern int SQ_LINEDW01[4];
+extern int SQ_ON00[4];
+extern int MODELCTRL[4];
+extern int GENERATE[4];
+extern int ISRUN[4];
+extern int COMMONINTF[4];
+extern int CTRL[4];
+extern int MAKECHR[4];
+extern int COMMDLCTRL[4];
+extern int MESWIN[4];
+extern int SELSLOT[4];
+extern int NAMESEL[4];
+extern int TEXTORDER[4];
+extern int DEGISTATECTRL[4];
+extern int DATASELINTF[4];
+extern int DIFFSELECT[4];
+extern int j_chrselbase[4];
+extern int GAMERAM_2[4];
+extern int GETPLAYER[4];
+extern int ISUSE_2[4];
+extern int j_chrselmesswin[4];
+extern int j_linewin01[4];
+extern int j_digiselcursorleft[4];
+extern int j_digiselcursorright[4];
+extern int j_namewin02[4];
+extern int CHRSELFONT14[4];
+extern int MOVETRANS[4];
+extern int SQ_ENTR[4];
+extern int SQ_EXIT[4];
+extern int SQ_LINECG00[4];
+extern int GAMEDATAINIT[4];
+extern int GAMESTART[4];
+extern int UNIQUE[4];
+extern int BASE2CURRENT[4];
+extern int RECALCPLAYER[4];
+extern int hostLoad_lua[4];
 extern int DAT_00585be0[4];
-extern int g_ndmwAllocatorSelector_00587108[4];
-extern int g_defaultAllocatorSelector_00587110[4];
-extern int g_bePadManager_metaObject_00588518[4];
-extern int g_beLua_metaObject_00589208[4];
-extern int g_beFont_metaObject_00589678[4];
+extern int g_ndmwAllocatorSelector[4];
+extern int g_defaultAllocatorSelector[4];
+extern int g_bePadManager_metaObject[4];
+extern int g_beLua_metaObject[4];
+extern int g_beFont_metaObject[4];
 extern int DAT_0058a1e0[4];
 extern unsigned char GPR_00554c14;
 }
@@ -197,7 +197,7 @@ extern "C" int *ObjectRef_Assign_003e92b0(void *, const RecoveryCopiedRef &);
 struct DW4Fresh {
   static int *Assign(void *obj, int alloc) {
     RecoveryCopiedRef c(FUN_003e9360(Memory_SelectAllocator_003e9370(
-        &g_defaultAllocatorSelector_00587110[0], alloc)));
+        &g_defaultAllocatorSelector[0], alloc)));
     return ObjectRef_Assign_003e92b0(obj, c);
   }
 };
@@ -293,7 +293,7 @@ struct LoadHelpers {
   }
   static bePadData *GetPad(beNDMWLoadIntf2 *owner, beBaseInfoRam *host) {
     int manager =
-        FUN_00236f80(owner->_insight, g_bePadManager_metaObject_00588518[0]);
+        FUN_00236f80(owner->_insight, g_bePadManager_metaObject[0]);
     return (bePadData *)bePadManager_GetPadForPlayer(manager, host->_ramNo);
   }
   static int Selector(const int *sel, int fb) {
@@ -565,76 +565,76 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
     }
     common = (beNDMWLoadCtrl2CommonIntf *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_COMMONINTF_005172a0[0]));
+        &COMMONINTF[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     control = (beNDMWLoadIntf2CtrlData *)(FUN_003e9280(
-        FUN_003e92a0(&host->_dataList), DAT_00585be0[0], &s_CTRL_005172b0[0]));
+        FUN_003e92a0(&host->_dataList), DAT_00585be0[0], &CTRL[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     creation = (beNDMWLoadIntf2MakeChr *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_MAKECHR_005172b8[0]));
+        &MAKECHR[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     models = (beNDMWLoadIntf2ComMdlCtrl *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_COMMDLCTRL_005172c0[0]));
+        &COMMDLCTRL[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     messages = (beNDMWLoadIntf2MesWin *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_MESWIN_005172d0[0]));
+        &MESWIN[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     slots = (beNDMWLoadIntf2SelSlot *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_SELSLOT_005172d8[0]));
+        &SELSLOT[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     nameEntry = (beNDMWLoadIntf2NameSel *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_NAMESEL_005172e0[0]));
+        &NAMESEL[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     textOrder = (beNDMWLoadIntf2TextOrder *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_TEXTORDER_005172e8[0]));
+        &TEXTORDER[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     status = (beNDMWLoadIntf2DegiStateCtrl *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_DEGISTATECTRL_005172f8[0]));
+        &DEGISTATECTRL[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     dataSelection = (beNDMWLoadIntf2DataSelIntf *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_DATASELINTF_00517308[0]));
+        &DATASELINTF[0]));
     dataListRef = FUN_003e93b0(&host->_dataList);
     if (dataListRef == 0) {
       DW4Fresh::Assign(&host->_dataList, igObject_GetAllocator(host));
     }
     difficulty = (beNDMWLoadIntf2Diffselect *)(FUN_003e9280(
         FUN_003e92a0(&host->_dataList), DAT_00585be0[0],
-        &s_DIFFSELECT_00517318[0]));
+        &DIFFSELECT[0]));
     beNDMWLoadIntf2ComMdlCtrl__Poll(models);
     beNDMWLoadIntf2MesWin__Update(messages);
     /* This frame's input for the player: pad trigger/repeat bits plus the
@@ -715,8 +715,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             switch ((unsigned int)st1Now_2) {
             case 0:
               LoadVec3 chrSelBasePos(*(LoadVec3 *)(&models->_pos));
-              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &s_j_chrselbase_00517328[0],
-                           &s_SQ_OPEN_00516cd0[0], chrSelBasePos, 1);
+              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &j_chrselbase[0],
+                           &SQ_OPEN[0], chrSelBasePos, 1);
               LOAD_NEXT_STEP(control);
               break;
             case 1:
@@ -725,14 +725,14 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               }
               break;
             case 2:
-              beMessenger_SelectGroup(self->_messenger, &s_GAMERAM_00517338[0]);
+              beMessenger_SelectGroup(self->_messenger, &GAMERAM_2[0]);
               beMessenger_AppendInt(self->_messenger, host->_ramNo);
               beMessenger_DispatchSelected(self->_messenger,
-                                           &s_GETPLAYER_00517340[0]);
+                                           &GETPLAYER[0]);
               gamePlayer = beMessenger_GetObject(self->_messenger, 0);
               /* ISUSE: the GAMERAM record already holds a character. */
               if (*(unsigned char *)((char *)(igProperty_GetRecordByte(
-                                         gamePlayer, &s_ISUSE_00517350[0])) +
+                                         gamePlayer, &ISUSE_2[0])) +
                                      PROPERTY_RECORD_BYTE_OFFSET) == 1) {
                 beNDMWDegiData__LoadFromProperties(ObjectList_GetAt_003e9260(common->_gameUseData,
                                                        host->_ramNo),
@@ -751,8 +751,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               break;
             case 3:
               LoadVec3 chrSelMessWinPos(*(LoadVec3 *)(&models->_pos));
-              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &s_j_chrselmesswin_00517360[0],
-                           &s_SQ_OPEN_00516cd0[0], chrSelMessWinPos, 1);
+              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &j_chrselmesswin[0],
+                           &SQ_OPEN[0], chrSelMessWinPos, 1);
               beNDMWLoadIntf2MesWin__RequestOpen(messages);
               LoadHelpers::FlagAt(common, host)->_isEntry = 1;
               LOAD_NEXT_STEP(control);
@@ -781,8 +781,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             switch ((unsigned int)st1Now_3) {
             case 0:
               LoadVec3 lineWin01Pos(*(LoadVec3 *)(&models->_pos));
-              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &s_j_linewin01_00517370[0],
-                           &s_SQ_OPEN_00516cd0[0], lineWin01Pos, 1);
+              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &j_linewin01[0],
+                           &SQ_OPEN[0], lineWin01Pos, 1);
               LOAD_NEXT_STEP(control);
               break;
             case 1:
@@ -808,11 +808,11 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               }
               if ((decided & 0xFF) == 1) {
                 if (control->_isEntry == 1) {
-                  beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &s_j_linewin01_00517370[0],
-                               &s_SQ_LINEON00_00516d40[0], 1);
+                  beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &j_linewin01[0],
+                               &SQ_LINEON00[0], 1);
                 } else {
-                  beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &s_j_linewin01_00517370[0],
-                               &s_SQ_CLOSE_00516d30[0], 1);
+                  beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &j_linewin01[0],
+                               &SQ_CLOSE[0], 1);
                 }
                 TextOrder_PublishLineListOnly(textOrder, LOAD_TEXT_ID(host, 0x400));
                 LOAD_NEXT_STEP(control);
@@ -839,23 +839,23 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               if (control->_isMesWin == 0) {
                 LoadVec3 chrSelMessWinPos(*(LoadVec3 *)(&models->_pos));
                 beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo,
-                             &s_j_chrselmesswin_00517360[0],
-                             &s_SQ_OPEN_00516cd0[0], chrSelMessWinPos, 1);
+                             &j_chrselmesswin[0],
+                             &SQ_OPEN[0], chrSelMessWinPos, 1);
                 beNDMWLoadIntf2MesWin__RequestOpen(messages);
                 control->_isMesWin = 1U;
               }
               LoadHelpers::FlagAt(common, host)->_isEntry = 1;
               LoadVec3 lineWin02Pos(*(LoadVec3 *)(&models->_pos));
-              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &s_j_linewin02_00516eb0[0],
-                           &s_SQ_OPEN_00516cd0[0], lineWin02Pos, 1);
+              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &j_linewin02[0],
+                           &SQ_OPEN[0], lineWin02Pos, 1);
               control->_newLoadSel = 0;
               LOAD_NEXT_STEP(control);
               break;
             case 1:
               if ((control->_st2 == 0) &&
                   !(beNDMWLoadIntf2ComMdlCtrl__IsSequence(models, host->_ramNo,
-                                 &s_j_linewin02_00516eb0[0],
-                                 &s_SQ_OPEN_00516cd0[0]) &
+                                 &j_linewin02[0],
+                                 &SQ_OPEN[0]) &
                     0xFF)) {
                 beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, LOAD_TEXT_ID(host, 0x401), 0);
                 LOAD_NEXT_SUBSTEP(control);
@@ -880,8 +880,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     nextSel = 0;
                   } else {
                     beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
-                                 &s_j_linewin02_00516eb0[0],
-                                 &s_SQ_LINEUP00_00516ed0[0], 1);
+                                 &j_linewin02[0],
+                                 &SQ_LINEUP00[0], 1);
                   }
                   control->_newLoadSel = nextSel;
                   LOAD_NEXT_SUBSTEP(control);
@@ -891,30 +891,30 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     nextSel_2 = 1;
                   } else {
                     beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
-                                 &s_j_linewin02_00516eb0[0],
-                                 &s_SQ_LINEDW01_00516ef0[0], 1);
+                                 &j_linewin02[0],
+                                 &SQ_LINEDW01[0], 1);
                   }
                   control->_newLoadSel = nextSel_2;
                   LOAD_NEXT_SUBSTEP(control);
                 } else if (padTrigger & kPadCross) {
                   if (control->_newLoadSel == 0) {
                     beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
-                                 &s_j_linewin02_00516eb0[0],
-                                 &s_SQ_LINEON00_00516d40[0], 1);
+                                 &j_linewin02[0],
+                                 &SQ_LINEON00[0], 1);
                   } else {
                     beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
-                                 &s_j_linewin02_00516eb0[0],
-                                 &s_SQ_LINEON01_00516e18[0], 1);
+                                 &j_linewin02[0],
+                                 &SQ_LINEON01[0], 1);
                   }
                   LOAD_NEXT_STEP(control);
                 } else if (padTrigger & kPadCircle) {
                   ramNo = host->_ramNo;
                   if (ramNo != 0) {
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, ramNo, &s_j_linewin02_00516eb0[0],
-                                 &s_SQ_CANCEL_00516d50[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, ramNo, &j_linewin02[0],
+                                 &SQ_CANCEL[0], 1);
                     beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo,
-                                 &s_j_chrselmesswin_00517360[0],
-                                 &s_SQ_CLOSE_00516d30[0], 1);
+                                 &j_chrselmesswin[0],
+                                 &SQ_CLOSE[0], 1);
                     TextOrder_PublishLineListOnly(textOrder, LOAD_TEXT_ID(host, 0x401));
                     beNDMWLoadIntf2MesWin__RequestClose(messages);
                     control->_st1 = (control->_st1 + 2);
@@ -961,23 +961,23 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             case 0:
               LoadVec3 cursorLeftPos(*(LoadVec3 *)(&models->_pos));
               beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo,
-                           &s_j_digiselcursorleft_00517380[0],
-                           &s_SQ_OPEN_00516cd0[0], cursorLeftPos, 1);
+                           &j_digiselcursorleft[0],
+                           &SQ_OPEN[0], cursorLeftPos, 1);
               LoadVec3 cursorRightPos(*(LoadVec3 *)(&models->_pos));
               beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo,
-                           &s_j_digiselcursorright_005173a0[0],
-                           &s_SQ_OPEN_00516cd0[0], cursorRightPos, 1);
+                           &j_digiselcursorright[0],
+                           &SQ_OPEN[0], cursorRightPos, 1);
               LoadVec3 nameWin02Pos(*(LoadVec3 *)(&models->_pos));
-              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &s_j_namewin02_005173b8[0],
-                           &s_SQ_OPEN_00516cd0[0], nameWin02Pos, 1);
+              beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, &j_namewin02[0],
+                           &SQ_OPEN[0], nameWin02Pos, 1);
               creation->_chaSelDegi = 3;
               FUN_003ecad0(messages, LOAD_TEXT_ID(host, 0x511));
-              beMessenger_SendNamed(self->_messenger, &s_DATABASE_00516c50[0],
-                                    &s_shinka_00516c60[0], 0,
-                                    &s_GETDATABASE_00516c68[0]);
+              beMessenger_SendNamed(self->_messenger, &DATABASE[0],
+                                    &shinka[0], 0,
+                                    &GETDATABASE[0]);
               shinkaDb = beMessenger_GetObject(self->_messenger, 0);
               rowIndex = 0;
-              rowCursor = (int *)(&g_playerModelRow_004cec70[0]);
+              rowCursor = (int *)(&g_playerModelRow[0]);
             findRow:
               if (igStrCmp(*rowCursor, g_starterPlayerModelName_004cd0e0
                                            [creation->_chaSelDegi]) == 0) {
@@ -989,44 +989,44 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   goto findRow;
                 }
               }
-              TextOrder_ConfigureFont(textOrder, &s_CHRSELFONT14_005173c8[0], host->_ramNo,
+              TextOrder_ConfigureFont(textOrder, &CHRSELFONT14[0], host->_ramNo,
                            0,
                            beDataBase_GetRecordString(shinkaDb, shinkaRow,
-                                                      &s_NAME_00516c78[0]),
+                                                      &NAME[0]),
                            1, 0);
               LoadVec3 faceWinPos(*(LoadVec3 *)(&models->_pos));
               beNDMWLoadIntf2ComMdlCtrl__StartAt(
-                  models, host->_ramNo, &s_j_digifacewin_00516ca8[0],
+                  models, host->_ramNo, &j_digifacewin[0],
                   (void *)
-                      g_playerModelRowOpenSeq_004cec74[creation->_chaSelDegi *
+                      g_playerModelRowOpenSeq[creation->_chaSelDegi *
                                                        3],
                   faceWinPos, 1);
               beMessenger_SendNamed(
-                  self->_messenger, &s_MODELCTRL_005171f8[0],
-                  g_starterPreviewModelName_004cd0d0[creation->_chaSelDegi],
-                  host->_ramNo, &s_GENERATE_00517208[0]);
+                  self->_messenger, &MODELCTRL[0],
+                  text_0rQ[creation->_chaSelDegi],
+                  host->_ramNo, &GENERATE[0]);
               beMessenger_SendNamed(
-                  self->_messenger, &s_MODELCTRL_005171f8[0],
-                  g_starterPreviewModelName_004cd0d0[creation->_chaSelDegi],
-                  host->_ramNo, &s_ISRUN_00517228[0]);
+                  self->_messenger, &MODELCTRL[0],
+                  text_0rQ[creation->_chaSelDegi],
+                  host->_ramNo, &ISRUN[0]);
               modelIsRun = LoadHelpers::GetBool(self);
               if ((modelIsRun & 0xFF) == 1) {
                 FUN_001ae1a0(moveTransA, 0.0f, 0.0f, 0.0f);
                 FUN_001ae1a0(moveTransB, 0.0f, 0.0f, 0.0f);
                 beMessenger_SelectReceivers(
-                    self->_messenger, &s_MODELCTRL_005171f8[0],
-                    g_starterPreviewModelName_004cd0d0[creation->_chaSelDegi],
+                    self->_messenger, &MODELCTRL[0],
+                    text_0rQ[creation->_chaSelDegi],
                     host->_ramNo);
                 LoadVec3 moveTransArgA(*(LoadVec3 *)(moveTransA));
                 beMessenger_AppendVec3(self->_messenger, moveTransArgA);
                 LoadVec3 moveTransArgB(*(LoadVec3 *)(moveTransB));
                 beMessenger_AppendVec3(self->_messenger, moveTransArgB);
                 beMessenger_DispatchSelected(self->_messenger,
-                                             &s_MOVETRANS_005173d8[0]);
+                                             &MOVETRANS[0]);
                 beMessenger_SendNamed(
-                    self->_messenger, &s_MODELCTRL_005171f8[0],
-                    g_starterPreviewModelName_004cd0d0[creation->_chaSelDegi],
-                    host->_ramNo, &s_SQ_ENTR_005173e8[0]);
+                    self->_messenger, &MODELCTRL[0],
+                    text_0rQ[creation->_chaSelDegi],
+                    host->_ramNo, &SQ_ENTR[0]);
                 control->_isNoSelMdl = 0U;
               } else {
                 control->_isNoSelMdl = 1U;
@@ -1037,9 +1037,9 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             case 1:
               if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
                 beMessenger_SendNamed(self->_messenger,
-                                      &s_MODELCTRL_005171f8[0],
-                                      &s_j_namewin02_005173b8[0], host->_ramNo,
-                                      &s_SQ_LINESL00_00516dd8[0]);
+                                      &MODELCTRL[0],
+                                      &j_namewin02[0], host->_ramNo,
+                                      &SQ_LINESL00[0]);
                 LOAD_NEXT_STEP(control);
               }
               break;
@@ -1050,17 +1050,17 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 if (moveRight) {
                   if (control->_isNoSelMdl == 0) {
                     beMessenger_SendNamed(
-                        self->_messenger, &s_MODELCTRL_005171f8[0],
-                        g_starterPreviewModelName_004cd0d0[creation
+                        self->_messenger, &MODELCTRL[0],
+                        text_0rQ[creation
                                                                ->_chaSelDegi],
-                        host->_ramNo, &s_ISRUN_00517228[0]);
+                        host->_ramNo, &ISRUN[0]);
                     if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) ==
                         1) {
                       beMessenger_SendNamed(
-                          self->_messenger, &s_MODELCTRL_005171f8[0],
-                          g_starterPreviewModelName_004cd0d0[creation
+                          self->_messenger, &MODELCTRL[0],
+                          text_0rQ[creation
                                                                  ->_chaSelDegi],
-                          host->_ramNo, &s_SQ_EXIT_005173f0[0]);
+                          host->_ramNo, &SQ_EXIT[0]);
                     }
                   }
                   nextDegi = creation->_chaSelDegi + 1;
@@ -1069,11 +1069,11 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   }
                   creation->_chaSelDegi = nextDegi;
                   beMessenger_SendNamed(
-                      self->_messenger, &s_DATABASE_00516c50[0],
-                      &s_shinka_00516c60[0], 0, &s_GETDATABASE_00516c68[0]);
+                      self->_messenger, &DATABASE[0],
+                      &shinka[0], 0, &GETDATABASE[0]);
                   shinkaDb_2 = beMessenger_GetObject(self->_messenger, 0);
                   rowIndex_2 = 0;
-                  rowCursor_2 = (int *)(&g_playerModelRow_004cec70[0]);
+                  rowCursor_2 = (int *)(&g_playerModelRow[0]);
                 findRow_2:
                   if (igStrCmp(*rowCursor_2,
                                g_starterPlayerModelName_004cd0e0
@@ -1087,34 +1087,34 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     }
                   }
                   TextOrder_ConfigureFont(
-                      textOrder, &s_CHRSELFONT14_005173c8[0], host->_ramNo, 0,
+                      textOrder, &CHRSELFONT14[0], host->_ramNo, 0,
                       beDataBase_GetRecordString(shinkaDb_2, shinkaRow_2,
-                                                 &s_NAME_00516c78[0]),
+                                                 &NAME[0]),
                       1, 0);
                   beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
-                               &s_j_digiselcursorright_005173a0[0],
-                               &s_SQ_ON00_00517028[0], 1);
-                  beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, &s_j_namewin02_005173b8[0],
-                               &s_SQ_LINECG00_005173f8[0], 0);
+                               &j_digiselcursorright[0],
+                               &SQ_ON00[0], 1);
+                  beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, &j_namewin02[0],
+                               &SQ_LINECG00[0], 0);
                   beNDMWLoadIntf2ComMdlCtrl__Play(
-                      models, host->_ramNo, &s_j_digifacewin_00516ca8[0],
-                      g_playerModelRowSeq_004cec78[creation->_chaSelDegi * 3],
+                      models, host->_ramNo, &j_digifacewin[0],
+                      g_playerModelRowSeq[creation->_chaSelDegi * 3],
                       0);
                   LOAD_NEXT_SUBSTEP(control);
                 } else if (moveLeft) {
                   if (control->_isNoSelMdl == 0) {
                     beMessenger_SendNamed(
-                        self->_messenger, &s_MODELCTRL_005171f8[0],
-                        g_starterPreviewModelName_004cd0d0[creation
+                        self->_messenger, &MODELCTRL[0],
+                        text_0rQ[creation
                                                                ->_chaSelDegi],
-                        host->_ramNo, &s_ISRUN_00517228[0]);
+                        host->_ramNo, &ISRUN[0]);
                     if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) ==
                         1) {
                       beMessenger_SendNamed(
-                          self->_messenger, &s_MODELCTRL_005171f8[0],
-                          g_starterPreviewModelName_004cd0d0[creation
+                          self->_messenger, &MODELCTRL[0],
+                          text_0rQ[creation
                                                                  ->_chaSelDegi],
-                          host->_ramNo, &s_SQ_EXIT_005173f0[0]);
+                          host->_ramNo, &SQ_EXIT[0]);
                     }
                   }
                   prevDegi = creation->_chaSelDegi - 1;
@@ -1123,11 +1123,11 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   }
                   creation->_chaSelDegi = prevDegi;
                   beMessenger_SendNamed(
-                      self->_messenger, &s_DATABASE_00516c50[0],
-                      &s_shinka_00516c60[0], 0, &s_GETDATABASE_00516c68[0]);
+                      self->_messenger, &DATABASE[0],
+                      &shinka[0], 0, &GETDATABASE[0]);
                   shinkaDb_3 = beMessenger_GetObject(self->_messenger, 0);
                   rowIndex_3 = 0;
-                  rowCursor_3 = (int *)(&g_playerModelRow_004cec70[0]);
+                  rowCursor_3 = (int *)(&g_playerModelRow[0]);
                 findRow_3:
                   if (igStrCmp(*rowCursor_3,
                                g_starterPlayerModelName_004cd0e0
@@ -1141,26 +1141,26 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     }
                   }
                   TextOrder_ConfigureFont(
-                      textOrder, &s_CHRSELFONT14_005173c8[0], host->_ramNo, 0,
+                      textOrder, &CHRSELFONT14[0], host->_ramNo, 0,
                       beDataBase_GetRecordString(shinkaDb_3, shinkaRow_3,
-                                                 &s_NAME_00516c78[0]),
+                                                 &NAME[0]),
                       1, 0);
                   beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
-                               &s_j_digiselcursorleft_00517380[0],
-                               &s_SQ_ON00_00517028[0], 1);
-                  beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, &s_j_namewin02_005173b8[0],
-                               &s_SQ_LINECG00_005173f8[0], 0);
+                               &j_digiselcursorleft[0],
+                               &SQ_ON00[0], 1);
+                  beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, &j_namewin02[0],
+                               &SQ_LINECG00[0], 0);
                   beNDMWLoadIntf2ComMdlCtrl__Play(
-                      models, host->_ramNo, &s_j_digifacewin_00516ca8[0],
-                      g_playerModelRowSeq_004cec78[creation->_chaSelDegi * 3],
+                      models, host->_ramNo, &j_digifacewin[0],
+                      g_playerModelRowSeq[creation->_chaSelDegi * 3],
                       0);
                   LOAD_NEXT_SUBSTEP(control);
                 } else {
                   modelReady = 0;
                   beMessenger_SendNamed(
-                      self->_messenger, &s_MODELCTRL_005171f8[0],
-                      g_starterPreviewModelName_004cd0d0[creation->_chaSelDegi],
-                      host->_ramNo, &s_ISRUN_00517228[0]);
+                      self->_messenger, &MODELCTRL[0],
+                      text_0rQ[creation->_chaSelDegi],
+                      host->_ramNo, &ISRUN[0]);
                   if (beMessenger_GetBoolCount(self->_messenger) > 0) {
                     modelReady =
                         beMessenger_GetBool(self->_messenger, 0) & 0xFF;
@@ -1176,22 +1176,22 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     }
                   } else {
                     beMessenger_SendNamed(
-                        self->_messenger, &s_MODELCTRL_005171f8[0],
-                        g_starterPreviewModelName_004cd0d0[creation
+                        self->_messenger, &MODELCTRL[0],
+                        text_0rQ[creation
                                                                ->_chaSelDegi],
-                        host->_ramNo, &s_GENERATE_00517208[0]);
+                        host->_ramNo, &GENERATE[0]);
                     beMessenger_SendNamed(
-                        self->_messenger, &s_MODELCTRL_005171f8[0],
-                        g_starterPreviewModelName_004cd0d0[creation
+                        self->_messenger, &MODELCTRL[0],
+                        text_0rQ[creation
                                                                ->_chaSelDegi],
-                        host->_ramNo, &s_ISRUN_00517228[0]);
+                        host->_ramNo, &ISRUN[0]);
                     modelIsRun_2 = LoadHelpers::GetBool(self);
                     if ((modelIsRun_2 & 0xFF) == 1) {
                       FUN_001ae1a0(moveTransC, 0, 0, 0);
                       FUN_001ae1a0(moveTransD, 0, 0, 0);
                       beMessenger_SelectReceivers(
-                          self->_messenger, &s_MODELCTRL_005171f8[0],
-                          g_starterPreviewModelName_004cd0d0[creation
+                          self->_messenger, &MODELCTRL[0],
+                          text_0rQ[creation
                                                                  ->_chaSelDegi],
                           host->_ramNo);
                       LoadVec3 moveTransArgC(*(LoadVec3 *)(moveTransC));
@@ -1199,12 +1199,12 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                       LoadVec3 moveTransArgD(*(LoadVec3 *)(moveTransD));
                       beMessenger_AppendVec3(self->_messenger, moveTransArgD);
                       beMessenger_DispatchSelected(self->_messenger,
-                                                   &s_MOVETRANS_005173d8[0]);
+                                                   &MOVETRANS[0]);
                       beMessenger_SendNamed(
-                          self->_messenger, &s_MODELCTRL_005171f8[0],
-                          g_starterPreviewModelName_004cd0d0[creation
+                          self->_messenger, &MODELCTRL[0],
+                          text_0rQ[creation
                                                                  ->_chaSelDegi],
-                          host->_ramNo, &s_SQ_ENTR_005173e8[0]);
+                          host->_ramNo, &SQ_ENTR[0]);
                       control->_isNoSelMdl = 0U;
                     } else {
                       control->_isNoSelMdl = 1U;
@@ -1221,19 +1221,19 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               break;
             case 3:
               if (control->_isCansel != 0) {
-                beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &s_j_namewin02_005173b8[0],
-                             &s_SQ_CANCEL_00516d50[0], 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &j_namewin02[0],
+                             &SQ_CANCEL[0], 1);
               } else {
-                beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &s_j_namewin02_005173b8[0],
-                             &s_SQ_LINEON00_00516d40[0], 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &j_namewin02[0],
+                             &SQ_LINEON00[0], 1);
               }
               if (control->_isNoSelMdl == 0) {
                 beNDMWLoadIntf2ComMdlCtrl__Close(
                     models, host->_ramNo,
-                    g_starterPreviewModelName_004cd0d0[creation->_chaSelDegi],
-                    &s_SQ_EXIT_005173f0[0], 1);
+                    text_0rQ[creation->_chaSelDegi],
+                    &SQ_EXIT[0], 1);
               }
-              TextOrder_ClearFont(textOrder, &s_CHRSELFONT14_005173c8[0], host->_ramNo,
+              TextOrder_ClearFont(textOrder, &CHRSELFONT14[0], host->_ramNo,
                            0);
               LOAD_NEXT_STEP(control);
               break;
@@ -1243,14 +1243,14 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               }
               break;
             case 5:
-              beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &s_j_digifacewin_00516ca8[0],
-                           &s_SQ_CLOSE_00516d30[0], 1);
+              beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &j_digifacewin[0],
+                           &SQ_CLOSE[0], 1);
               beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo,
-                           &s_j_digiselcursorleft_00517380[0],
-                           &s_SQ_CLOSE_00516d30[0], 1);
+                           &j_digiselcursorleft[0],
+                           &SQ_CLOSE[0], 1);
               beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo,
-                           &s_j_digiselcursorright_005173a0[0],
-                           &s_SQ_CLOSE_00516d30[0], 1);
+                           &j_digiselcursorright[0],
+                           &SQ_CLOSE[0], 1);
               LOAD_NEXT_STEP(control);
               break;
             case 6:
@@ -1545,7 +1545,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               case 1:
                 if ((FUN_003dbf90(dataSelection, 0) & 0xFF) == 1) {
                   allocator = LoadHelpers::Selector(
-                      &g_defaultAllocatorSelector_00587110[0],
+                      &g_defaultAllocatorSelector[0],
                       igObject_GetAllocator(self));
                   {
                     RecoveryRef<0> freshDataRef(
@@ -1578,12 +1578,12 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   if (control->_isRdyCancel == 1) {
                     if (control->_isNewMake == 1) {
                       beMessenger_SelectGroup(self->_messenger,
-                                              &s_GAMERAM_00517338[0]);
+                                              &GAMERAM_2[0]);
                       beMessenger_AppendInt(self->_messenger, host->_ramNo);
                       beMessenger_DispatchSelected(self->_messenger,
-                                                   &s_GAMEDATAINIT_00517408[0]);
+                                                   &GAMEDATAINIT[0]);
                       allocator_2 = LoadHelpers::Selector(
-                          &g_ndmwAllocatorSelector_00587108[0],
+                          &g_ndmwAllocatorSelector[0],
                           igObject_GetAllocator(self));
                       nameObject = (void *)FUN_003614f0(allocator_2);
                       {
@@ -1596,29 +1596,29 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                                                        NAME_OBJECT_TEXT_OFFSET),
                             nameEntry);
                         beMessenger_SelectGroup(self->_messenger,
-                                                &s_GAMERAM_00517338[0]);
+                                                &GAMERAM_2[0]);
                         beMessenger_AppendInt(self->_messenger, host->_ramNo);
                         beMessenger_AppendString(
                             self->_messenger,
-                            g_playerModelRow_004cec70[creation->_chaSelDegi *
+                            g_playerModelRow[creation->_chaSelDegi *
                                                       3]);
                         beMessenger_AppendObject(self->_messenger,
                                                  nameRef.value);
                         beMessenger_DispatchSelected(self->_messenger,
-                                                     &s_GAMESTART_00517418[0]);
+                                                     &GAMESTART[0]);
                       }
                       beMessenger_SelectGroup(self->_messenger,
-                                              &s_GAMERAM_00517338[0]);
+                                              &GAMERAM_2[0]);
                       beMessenger_AppendInt(self->_messenger, host->_ramNo);
                       beMessenger_DispatchSelected(self->_messenger,
-                                                   &s_GETPLAYER_00517340[0]);
+                                                   &GETPLAYER[0]);
                       newPlayer = beMessenger_GetObject(self->_messenger, 0);
                       /* Stamp the new character with the low word of the world
                        * clock as its UNIQUE property. */
                       worldTime = ((igInsightCore *)self->_insight)->_worldTime;
                       {
                         void *record = igProperty_GetRecord(
-                            newPlayer, &s_UNIQUE_00517428[0]);
+                            newPlayer, &UNIQUE[0]);
                         *(int *)((char *)record + 12) = (int)worldTime;
                       }
                       beNDMWDegiData__LoadFromProperties(ObjectList_GetAt_003e9260(
@@ -1626,10 +1626,10 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                                    newPlayer);
                     } else {
                       beMessenger_SelectGroup(self->_messenger,
-                                              &s_GAMERAM_00517338[0]);
+                                              &GAMERAM_2[0]);
                       beMessenger_AppendInt(self->_messenger, host->_ramNo);
                       beMessenger_DispatchSelected(self->_messenger,
-                                                   &s_GAMEDATAINIT_00517408[0]);
+                                                   &GAMEDATAINIT[0]);
                       saveAreaIndex = *(volatile const int *)&dataSelection
                                            ->_svDataSelPoint;
                       {
@@ -1650,13 +1650,13 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                         beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(common, host->_ramNo);
                       }
                       beMessenger_SelectGroup(self->_messenger,
-                                              &s_GAMERAM_00517338[0]);
+                                              &GAMERAM_2[0]);
                       beMessenger_AppendInt(self->_messenger, host->_ramNo);
                       beMessenger_DispatchSelected(self->_messenger,
-                                                   &s_GETPLAYER_00517340[0]);
+                                                   &GETPLAYER[0]);
                       loadedPlayer = beMessenger_GetObject(self->_messenger, 0);
                       font = FUN_00236f80(self->_insight,
-                                          g_beFont_metaObject_00589678[0]);
+                                          g_beFont_metaObject[0]);
                       beNDMWDegiData__StoreToProperties(ObjectList_GetAt_003e9260(
                                        common->_gameUseData, host->_ramNo),
                                    loadedPlayer, font);
@@ -1664,16 +1664,16 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                                       common->_gameUseData, host->_ramNo))
                                      ->_dmkind;
                       beMessenger_SelectGroup(self->_messenger,
-                                              &s_GAMERAM_00517338[0]);
+                                              &GAMERAM_2[0]);
                       beMessenger_AppendInt(self->_messenger, host->_ramNo);
                       beMessenger_AppendString(self->_messenger, kindName);
                       beMessenger_DispatchSelected(self->_messenger,
-                                                   &s_BASE2CURRENT_00517430[0]);
+                                                   &BASE2CURRENT[0]);
                       beMessenger_SelectGroup(self->_messenger,
-                                              &s_GAMERAM_00517338[0]);
+                                              &GAMERAM_2[0]);
                       beMessenger_AppendInt(self->_messenger, host->_ramNo);
                       beMessenger_DispatchSelected(self->_messenger,
-                                                   &s_RECALCPLAYER_00517440[0]);
+                                                   &RECALCPLAYER[0]);
                     }
                   }
                   needsDifficulty = 0;
@@ -1683,8 +1683,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     self->_difficultMax = 0;
                     DAT_0058a1e0[0] = 0;
                     beLua__RunNamedChunk(FUN_00236f80(self->_insight,
-                                              g_beLua_metaObject_00589208[0]),
-                                 &s_hostLoad_lua_00517450[0], 0);
+                                              g_beLua_metaObject[0]),
+                                 &hostLoad_lua[0], 0);
                     difficultMax = self->_difficultMax;
                     switch ((unsigned int)difficultMax) {
                     case 0:
@@ -1724,7 +1724,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                        0xFF) == 1) {
                     if (difficulty->_isCancel == 1) {
                       allocator_3 = LoadHelpers::Selector(
-                          &g_defaultAllocatorSelector_00587110[0],
+                          &g_defaultAllocatorSelector[0],
                           igObject_GetAllocator(self));
                       {
                         RecoveryRef<0> freshDataRef_2(
@@ -1902,8 +1902,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               switch ((unsigned int)st2Now_8) {
               case 0:
                 beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo,
-                             &s_j_mainstatuswin_00516cc0[0],
-                             &s_SQ_CANCEL_00516d50[0], 1);
+                             &j_mainstatuswin[0],
+                             &SQ_CANCEL[0], 1);
                 LOAD_NEXT_SUBSTEP(control);
                 break;
               case 1:
@@ -1925,7 +1925,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                     beNDMWLoadIntf2NameSel__Init(nameEntry, 0);
                   } else {
                     allocator_4 = LoadHelpers::Selector(
-                        &g_defaultAllocatorSelector_00587110[0],
+                        &g_defaultAllocatorSelector[0],
                         igObject_GetAllocator(self));
                     {
                       RecoveryRef<0> freshDataRef_3(
@@ -2026,8 +2026,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             PLAYER_SET_STEP(exitWork, 1);
             break;
           case 8:
-            beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &s_j_chrselmesswin_00517360[0],
-                         &s_SQ_CLOSE_00516d30[0], 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &j_chrselmesswin[0],
+                         &SQ_CLOSE[0], 1);
             beNDMWLoadIntf2MesWin__RequestClose(messages);
             FUN_003d9e90(ObjectList_GetAt_003e9260(status->_statDataList, 0));
             exitWork = (beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(
@@ -2035,8 +2035,8 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             PLAYER_SET_STEP(exitWork, 2);
             break;
           }
-          beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &s_j_chrselbase_00517328[0],
-                       &s_SQ_CLOSE_00516d30[0], 1);
+          beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, &j_chrselbase[0],
+                       &SQ_CLOSE[0], 1);
           break;
         case 1:
           if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {

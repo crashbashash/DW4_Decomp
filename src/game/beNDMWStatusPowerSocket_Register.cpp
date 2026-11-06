@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWStatusPowerSocket_metaObject_0058af28[];
+extern igMetaObject *g_beNDMWStatusPowerSocket_metaObject[];
 void *beNDMWStatusCtrlBaseEquip_Register(void);
-igMetaObject *beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject_003ba750(void);
+igMetaObject *beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject(void);
 igMetaObject *beNDMWStatusPowerSocket_GetMetaObject(void);
-extern const char s_beNDMWStatusPowerSocket_className_005117b0[];
+extern const char beNDMWStatusPowerSocket_className[];
 int beNDMWStatusPowerSocket_GetVTable(void);
 void *beNDMWStatusPowerSocket_Register(void);
 }
@@ -31,11 +31,11 @@ void *beNDMWStatusPowerSocket_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWStatusPowerSocket_metaObject_0058af28,              /* published MetaObject slot */
+        g_beNDMWStatusPowerSocket_metaObject,              /* published MetaObject slot */
         beNDMWStatusCtrlBaseEquip_Register,                         /* base class registrar */
-        beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject_003ba750,  /* base class MetaObject accessor */
+        beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWStatusPowerSocket_GetMetaObject,                      /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWStatusPowerSocket_className_005117b0,               /* class name */
+        beNDMWStatusPowerSocket_className,               /* class name */
         0x7c,                                                       /* instance size */
         beNDMWStatusPowerSocket_GetVTable,                          /* vtable getter */
         0,                                                          /* field adder */

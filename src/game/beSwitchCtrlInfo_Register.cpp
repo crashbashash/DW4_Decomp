@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSwitchCtrlInfo_metaObject_00587de0[];
+extern igMetaObject *g_beSwitchCtrlInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beSwitchCtrlInfo_GetMetaObject(void);
-extern const char s_beSwitchCtrlInfo_className_00501e10[];
+extern const char beSwitchCtrlInfo_className[];
 int beSwitchCtrlInfo_GetVTable(void);
 void beSwitchCtrlInfo_InitFields(void);
-extern char g_beSwitchCtrlInfo_callbackList_004c3758[];
+extern char g_beSwitchCtrlInfo_callbackList[];
 void *beSwitchCtrlInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSwitchCtrlInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSwitchCtrlInfo_metaObject_00587de0,      /* published MetaObject slot */
+        g_beSwitchCtrlInfo_metaObject,      /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSwitchCtrlInfo_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beSwitchCtrlInfo_className_00501e10,       /* class name */
+        beSwitchCtrlInfo_className,       /* class name */
         0x20,                                        /* instance size */
         beSwitchCtrlInfo_GetVTable,                  /* vtable getter */
         beSwitchCtrlInfo_InitFields,                 /* field adder */
         0,                                           /* extra callback item */
-        g_beSwitchCtrlInfo_callbackList_004c3758    /* callback list */
+        g_beSwitchCtrlInfo_callbackList    /* callback list */
     );
 }

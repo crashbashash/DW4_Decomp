@@ -9,21 +9,21 @@ typedef struct CvFsHandle_270280 {
     int file;                  /* 0x04 */
 } CvFsHandle_270280;
 
-extern char s_cvFsGetStat_1_handle_error_004ef210[]; /* 'cvFsGetStat #1:handle error' */
-extern char s_cvFsGetStat_2_vtbl_error_004ef230[]; /* 'cvFsGetStat #2:vtbl error' */
+extern char cvFsGetStat_1_handle_error[]; /* 'cvFsGetStat #1:handle error' */
+extern char cvFsGetStat_2_vtbl_error[]; /* 'cvFsGetStat #2:vtbl error' */
 void FUN_0026f530(const char *message);
 
 int FUN_00270280(CvFsHandle_270280 *handle) {
     int result = 3; /* error status */
 
     if (handle == 0) {
-        FUN_0026f530(s_cvFsGetStat_1_handle_error_004ef210);
+        FUN_0026f530(cvFsGetStat_1_handle_error);
         return 3;
     }
     if (handle->device->get_stat != 0) {
         result = handle->device->get_stat(handle->file);
     } else {
-        FUN_0026f530(s_cvFsGetStat_2_vtbl_error_004ef230);
+        FUN_0026f530(cvFsGetStat_2_vtbl_error);
     }
     return result;
 }

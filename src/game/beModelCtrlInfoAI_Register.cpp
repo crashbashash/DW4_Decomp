@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlInfoAI_metaObject_00588ad0[];
+extern igMetaObject *g_beModelCtrlInfoAI_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beModelCtrlInfoAI_GetMetaObject(void);
-extern const char s_beModelCtrlInfoAI_className_00503950[];
+extern const char beModelCtrlInfoAI_className[];
 int beModelCtrlInfoAI_GetVTable(void);
 void beModelCtrlInfoAI_InitFields(void);
 void *beModelCtrlInfoAI_Register(void);
@@ -32,11 +32,11 @@ void *beModelCtrlInfoAI_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlInfoAI_metaObject_00588ad0,  /* published MetaObject slot */
+        g_beModelCtrlInfoAI_metaObject,  /* published MetaObject slot */
         igObject_Register,                        /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,    /* base class MetaObject accessor */
         beModelCtrlInfoAI_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlInfoAI_className_00503950,   /* class name */
+        beModelCtrlInfoAI_className,   /* class name */
         0x24,                                     /* instance size */
         beModelCtrlInfoAI_GetVTable,              /* vtable getter */
         beModelCtrlInfoAI_InitFields,             /* field adder */

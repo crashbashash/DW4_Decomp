@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShopCtrlXdataChip_metaObject_0058acb8[];
+extern igMetaObject *g_beNDMWShopCtrlXdataChip_metaObject[];
 void *beNDMWListCtrl_Register(void);
-igMetaObject *beNDMWListCtrl_GetPublishedMetaObject_003b68a0(void);
+igMetaObject *beNDMWListCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWShopCtrlXdataChip_GetMetaObject(void);
-extern const char s_beNDMWShopCtrlXdataChip_className_00511250[];
+extern const char beNDMWShopCtrlXdataChip_className[];
 int beNDMWShopCtrlXdataChip_GetVTable(void);
 void beNDMWShopCtrlXdataChip_InitFields(void);
-extern char g_beNDMWShopCtrlXdataChip_callbackList_004c9960[];
+extern char g_beNDMWShopCtrlXdataChip_callbackList[];
 void *beNDMWShopCtrlXdataChip_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWShopCtrlXdataChip_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShopCtrlXdataChip_metaObject_0058acb8,    /* published MetaObject slot */
+        g_beNDMWShopCtrlXdataChip_metaObject,    /* published MetaObject slot */
         beNDMWListCtrl_Register,                          /* base class registrar */
-        beNDMWListCtrl_GetPublishedMetaObject_003b68a0,   /* base class MetaObject accessor */
+        beNDMWListCtrl_GetPublishedMetaObject,   /* base class MetaObject accessor */
         beNDMWShopCtrlXdataChip_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShopCtrlXdataChip_className_00511250,     /* class name */
+        beNDMWShopCtrlXdataChip_className,     /* class name */
         0x64,                                             /* instance size */
         beNDMWShopCtrlXdataChip_GetVTable,                /* vtable getter */
         beNDMWShopCtrlXdataChip_InitFields,               /* field adder */
         0,                                                /* extra callback item */
-        g_beNDMWShopCtrlXdataChip_callbackList_004c9960  /* callback list */
+        g_beNDMWShopCtrlXdataChip_callbackList  /* callback list */
     );
 }

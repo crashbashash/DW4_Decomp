@@ -15,7 +15,7 @@ extern void FUN_002725a0(int marker);
 extern int FUN_00272918(int fd);
 extern void FUN_00265928(const char *message);
 extern void FUN_002759b8(struct Handle275 *handle);
-extern const char s_HTCI_Failed_sceClose_004f0838[];
+extern const char HTCI_Failed_sceClose[];
 
 void FUN_00275b50(struct Handle275 *handle) {
     int result;
@@ -29,7 +29,7 @@ void FUN_00275b50(struct Handle275 *handle) {
             result = FUN_00272918(handle->fd);
             FUN_002725a0(0x5001);
             if (result < 0) {
-                FUN_00265928(s_HTCI_Failed_sceClose_004f0838);
+                FUN_00265928(HTCI_Failed_sceClose);
             }
         }
         handle->used = 0;

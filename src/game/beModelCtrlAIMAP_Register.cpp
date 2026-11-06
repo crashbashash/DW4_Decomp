@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlAIMAP_metaObject_00588d60[];
+extern igMetaObject *g_beModelCtrlAIMAP_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlAIMAP_GetMetaObject(void);
-extern const char s_beModelCtrlAIMAP_className_00503e20[];
+extern const char beModelCtrlAIMAP_className[];
 int beModelCtrlAIMAP_GetVTable(void);
 void *beModelCtrlAIMAP_Register(void);
 }
@@ -31,11 +31,11 @@ void *beModelCtrlAIMAP_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlAIMAP_metaObject_00588d60,         /* published MetaObject slot */
+        g_beModelCtrlAIMAP_metaObject,         /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beModelCtrlAIMAP_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlAIMAP_className_00503e20,          /* class name */
+        beModelCtrlAIMAP_className,          /* class name */
         0xc,                                            /* instance size */
         beModelCtrlAIMAP_GetVTable,                     /* vtable getter */
         0,                                              /* field adder */

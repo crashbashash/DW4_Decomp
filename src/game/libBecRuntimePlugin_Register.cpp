@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_libBecRuntimePlugin_metaObject_005878e0[];
+extern igMetaObject *g_libBecRuntimePlugin_metaObject[];
 void *igInsightPlugin_Register(void);
-igMetaObject *igInsightPlugin_GetPublishedMetaObject_00337290(void);
+igMetaObject *igInsightPlugin_GetPublishedMetaObject(void);
 igMetaObject *libBecRuntimePlugin_GetMetaObject(void);
-extern const char s_libBecRuntimePlugin_className_00501400[];
+extern const char libBecRuntimePlugin_className[];
 int libBecRuntimePlugin_GetVTable(void);
 void libBecRuntimePlugin_InitFields(void);
-extern char g_libBecRuntimePlugin_callbackList_004c2c60[];
+extern char g_libBecRuntimePlugin_callbackList[];
 void *libBecRuntimePlugin_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *libBecRuntimePlugin_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_libBecRuntimePlugin_metaObject_005878e0,        /* published MetaObject slot */
+        g_libBecRuntimePlugin_metaObject,        /* published MetaObject slot */
         igInsightPlugin_Register,                         /* base class registrar */
-        igInsightPlugin_GetPublishedMetaObject_00337290,  /* base class MetaObject accessor */
+        igInsightPlugin_GetPublishedMetaObject,  /* base class MetaObject accessor */
         libBecRuntimePlugin_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_libBecRuntimePlugin_className_00501400,         /* class name */
+        libBecRuntimePlugin_className,         /* class name */
         0xa4,                                             /* instance size */
         libBecRuntimePlugin_GetVTable,                    /* vtable getter */
         libBecRuntimePlugin_InitFields,                   /* field adder */
         0,                                                /* extra callback item */
-        g_libBecRuntimePlugin_callbackList_004c2c60      /* callback list */
+        g_libBecRuntimePlugin_callbackList      /* callback list */
     );
 }

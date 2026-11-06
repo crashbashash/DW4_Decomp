@@ -5,9 +5,9 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beMessengerWork_metaObject_00588f88[4];
+extern int g_beMessengerWork_metaObject[4];
 /* 0x0036f600 */
 int beMessengerWork_GetMetaObject_Virtual(void)
 {
-    return g_beMessengerWork_metaObject_00588f88[0];
+    return g_beMessengerWork_metaObject[0];
 }

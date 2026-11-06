@@ -7,8 +7,8 @@
 
 #include "dw4/reflected.h"
 extern "C" {
-extern int g_beSelectCtrlInfo_metaObject_00587f28[4];
-extern int g_beSelectCtrl_metaObject_00587f98[4];
+extern int g_beSelectCtrlInfo_metaObject[4];
+extern int g_beSelectCtrl_metaObject[4];
 int FUN_00236f80(int insight, int metaObject);
 extern int D_00588518[];
 }
@@ -33,11 +33,11 @@ void beSelectCtrl_EnsurePadManager(beSelectCtrl *self)
 /* 0x0039cbb0 */
 int Gap__Bec__beSelectCtrl__vfunc_30(void)
 {
-    return g_beSelectCtrlInfo_metaObject_00587f28[0];
+    return g_beSelectCtrlInfo_metaObject[0];
 }
 
 /* 0x0039ded0 */
 int Gap__Bec__beSelectCtrl__vfunc_20(void)
 {
-    return g_beSelectCtrl_metaObject_00587f98[0];
+    return g_beSelectCtrl_metaObject[0];
 }

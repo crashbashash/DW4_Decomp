@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igAABoxList_GetVTable[];
 extern char thunk_igAABoxList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igAABoxList_callbackList_0048ae50[];
-extern char s_igAABoxList_className_004e0cf8[];
-extern char g_igAABoxList_metaObject_005610d8[];
+extern char g_igAABoxList_callbackList[];
+extern char igAABoxList_className[];
+extern char g_igAABoxList_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igAABoxList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAABoxList_metaObject_005610d8,   /* published MetaObject slot */
+        g_igAABoxList_metaObject,   /* published MetaObject slot */
         igObjectList_Register,               /* base class registrar */
         igObjectList_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igAABoxList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igAABoxList_className_004e0cf8,    /* class name */
+        igAABoxList_className,    /* class name */
         0x14,                                /* instance size */
         igAABoxList_GetVTable,               /* vtable getter */
         0,                                   /* field adder */
         0,                                   /* extra callback item */
-        g_igAABoxList_callbackList_0048ae50  /* callback list */
+        g_igAABoxList_callbackList  /* callback list */
     );
 }

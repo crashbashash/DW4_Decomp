@@ -16,11 +16,11 @@ struct Lsc277 {
 };
 
 extern void FUN_002777f8(const char *message);
-extern const char s_E0003_Illigal_parameter_lsc_NULL_004f0b08[];
+extern const char E0003_Illigal_parameter_lsc_NULL[];
 
 void FUN_00277768(struct Lsc277 *lsc, int value) {
     if (lsc == 0) {
-        FUN_002777f8(s_E0003_Illigal_parameter_lsc_NULL_004f0b08);
+        FUN_002777f8(E0003_Illigal_parameter_lsc_NULL);
         return;
     }
     lsc->f3 = value;

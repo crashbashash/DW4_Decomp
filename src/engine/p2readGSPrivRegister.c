@@ -4,7 +4,7 @@
  * 0x12001000 + ((index - 0x40) << 4) for the status block (public PS2 hardware map).
  * An index the function does not serve is reported through printf using the
  * format string "p2readGSPrivRegister(%d)\n" and reads as 0. */
-extern char s_p2readGSPrivRegister_004e5130[];
+extern char text_p2readGSPrivRegister[];
 int printf();
 
 /* Register numbers served by the switch below. */
@@ -72,7 +72,7 @@ long long p2readGSPrivRegister(int registerIndex) {
     case GSPRIV_SIGLBLID:
         return GS_SIGLBLID;
     default:
-        printf(s_p2readGSPrivRegister_004e5130, registerIndex);
+        printf(text_p2readGSPrivRegister, registerIndex);
         return 0;
     }
 }

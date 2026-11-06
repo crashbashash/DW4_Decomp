@@ -3,12 +3,12 @@
  * docs/engine/reflection-metadata.md section 1; names from data/reflection.json. */
 #include "dw4/reflected.h"
 extern char igVisualAttribute_Register[];
-extern char igVisualAttribute_GetPublishedMetaObject_00130610[];
+extern char igVisualAttribute_GetPublishedMetaObject[];
 extern char igTextureFunctionAttr_GetVTable[];
 extern char thunk_igTextureFunctionAttr_GetMetaObject[];
 void FUN_00131f70(void);  /* code at 0x131f70, passed by address (was DAT_131f70; docs/engine/function-inventory.md) */
-extern char s_igTextureFunctionAttr_className_004d4c90[];
-extern char g_igTextureFunctionAttr_metaObject_0055ed00[];
+extern char igTextureFunctionAttr_className[];
+extern char g_igTextureFunctionAttr_metaObject[];
 int GpFlag_SetOnce_00130000();
 int igMetaObject_RegisterClass();
 int igTextureFunctionAttr_InitFields();
@@ -17,11 +17,11 @@ void igTextureFunctionAttr_Register(void) {
     GpFlag_SetOnce_00130000(); /* sets this module's one-shot guard byte at 0x00554b00 (.sbss) */
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igTextureFunctionAttr_metaObject_0055ed00,       /* published MetaObject slot */
+        g_igTextureFunctionAttr_metaObject,       /* published MetaObject slot */
         igVisualAttribute_Register,                        /* base class registrar */
-        igVisualAttribute_GetPublishedMetaObject_00130610, /* base class MetaObject accessor */
+        igVisualAttribute_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igTextureFunctionAttr_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        s_igTextureFunctionAttr_className_004d4c90,        /* class name */
+        igTextureFunctionAttr_className,        /* class name */
         sizeof(igTextureFunctionAttr),                     /* instance size (reflected struct, include/dw4/reflected.h) */
         igTextureFunctionAttr_GetVTable,                   /* vtable getter */
         &igTextureFunctionAttr_InitFields,                 /* field adder */

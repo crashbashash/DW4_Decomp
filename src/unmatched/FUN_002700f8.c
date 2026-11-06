@@ -9,22 +9,22 @@ typedef struct CvFsHandle_2700f8 {
     int file;                  /* 0x04 */
 } CvFsHandle_2700f8;
 
-extern char s_cvFsReqRd_1_handle_error_004ef160[]; /* 'cvFsReqRd #1:handle error' */
-extern char s_cvFsReqRd_2_vtbl_error_004ef180[]; /* 'cvFsReqRd #2:vtbl error' */
+extern char cvFsReqRd_1_handle_error[]; /* 'cvFsReqRd #1:handle error' */
+extern char cvFsReqRd_2_vtbl_error[]; /* 'cvFsReqRd #2:vtbl error' */
 void FUN_0026f530(const char *message);
 
 int FUN_002700f8(CvFsHandle_2700f8 *handle, int sectors, void *buffer) {
     int result;
 
     if (handle == 0) {
-        FUN_0026f530(s_cvFsReqRd_1_handle_error_004ef160);
+        FUN_0026f530(cvFsReqRd_1_handle_error);
         return 0;
     }
     if (handle->device->req_rd != 0) {
         result = handle->device->req_rd(handle->file, sectors, buffer);
     } else {
         result = 0;
-        FUN_0026f530(s_cvFsReqRd_2_vtbl_error_004ef180);
+        FUN_0026f530(cvFsReqRd_2_vtbl_error);
     }
     return result;
 }

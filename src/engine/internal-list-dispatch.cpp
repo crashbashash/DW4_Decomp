@@ -14,7 +14,7 @@ int ObjectPointerList_Init(...);
 int igObject_ConstructHeader(...);
 void **igObject_GetAllocator(...);
 /* vtable of the raw pointer list (finding #882) */
-extern int g_ObjectPointerList_vtable_00532770[4];
+extern int g_ObjectPointerList_vtable[4];
 void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self);
 }
 /* ABI view of the allocator: slot 216 allocates the requested number of bytes. */
@@ -23,7 +23,7 @@ void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self) {
     void **allocator;
 
     igObject_ConstructHeader(self);
-    self->_vtable = (int)(&g_ObjectPointerList_vtable_00532770[0]);
+    self->_vtable = (int)(&g_ObjectPointerList_vtable[0]);
     if (self != 0) {
         ObjectPointerList_Init(self);
     }

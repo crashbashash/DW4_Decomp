@@ -13,7 +13,7 @@ char *FUN_00126308(int);
 void **Memory_GetAllocatorBySelector(...);
 /* Selector word the provider is queried with when no allocator is passed
  * (docs/engine/allocator-builder.md, global 0x587018). */
-extern int g_allocatorSelector_00587018[4];
+extern int g_allocatorSelector[4];
 char *igObject_AllocateRawStorage(int size, int prefix_size, void **requested_allocator);
 }
 /* matching construct: dummy-virtual allocator class; only vtable offset 216 (vfunc_54) is called */
@@ -25,7 +25,7 @@ char *igObject_AllocateRawStorage(int size, int prefix_size, void **requested_al
     allocator = requested_allocator;
     total_size = size + prefix_size;
     if (allocator == 0) {
-        allocator = (void **)Memory_GetAllocatorBySelector(g_allocatorSelector_00587018[0]);
+        allocator = (void **)Memory_GetAllocatorBySelector(g_allocatorSelector[0]);
     }
     if (allocator == 0) {
         /* no allocator at all: the prefix is not added on this path (retail behaviour) */

@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlInfoRideOn_metaObject_00588aa8[];
+extern igMetaObject *g_beModelCtrlInfoRideOn_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beModelCtrlInfoRideOn_GetMetaObject(void);
-extern const char s_beModelCtrlInfoRideOn_className_00503910[];
+extern const char beModelCtrlInfoRideOn_className[];
 int beModelCtrlInfoRideOn_GetVTable(void);
 void beModelCtrlInfoRideOn_InitFields(void);
-extern char g_beModelCtrlInfoRideOn_callbackList_004c5228[];
+extern char g_beModelCtrlInfoRideOn_callbackList[];
 void *beModelCtrlInfoRideOn_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beModelCtrlInfoRideOn_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlInfoRideOn_metaObject_00588aa8,    /* published MetaObject slot */
+        g_beModelCtrlInfoRideOn_metaObject,    /* published MetaObject slot */
         igObject_Register,                              /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,          /* base class MetaObject accessor */
         beModelCtrlInfoRideOn_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlInfoRideOn_className_00503910,     /* class name */
+        beModelCtrlInfoRideOn_className,     /* class name */
         0x54,                                           /* instance size */
         beModelCtrlInfoRideOn_GetVTable,                /* vtable getter */
         beModelCtrlInfoRideOn_InitFields,               /* field adder */
         0,                                              /* extra callback item */
-        g_beModelCtrlInfoRideOn_callbackList_004c5228  /* callback list */
+        g_beModelCtrlInfoRideOn_callbackList  /* callback list */
     );
 }

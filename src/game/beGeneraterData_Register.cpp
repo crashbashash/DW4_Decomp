@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beGeneraterData_metaObject_005894f0[];
+extern igMetaObject *g_beGeneraterData_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beGeneraterData_GetMetaObject(void);
-extern const char s_beGeneraterData_className_00504e80[];
+extern const char beGeneraterData_className[];
 int beGeneraterData_GetVTable(void);
 void beGeneraterData_InitFields(void);
-extern char g_beGeneraterData_callbackList_004c69b0[];
+extern char g_beGeneraterData_callbackList[];
 void *beGeneraterData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beGeneraterData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beGeneraterData_metaObject_005894f0,          /* published MetaObject slot */
+        g_beGeneraterData_metaObject,          /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beGeneraterData_GetMetaObject,                  /* own MetaObject accessor (stored at +0x54) */
-        s_beGeneraterData_className_00504e80,           /* class name */
+        beGeneraterData_className,           /* class name */
         0x44,                                           /* instance size */
         beGeneraterData_GetVTable,                      /* vtable getter */
         beGeneraterData_InitFields,                     /* field adder */
         0,                                              /* extra callback item */
-        g_beGeneraterData_callbackList_004c69b0        /* callback list */
+        g_beGeneraterData_callbackList        /* callback list */
     );
 }

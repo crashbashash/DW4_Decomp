@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrl_metaObject_00588e58[];
+extern igMetaObject *g_beModelCtrl_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrl_GetMetaObject(void);
-extern const char s_beModelCtrl_className_00504140[];
+extern const char beModelCtrl_className[];
 void beModelCtrl_InitFields(void);
-extern char g_beModelCtrl_callbackList_004c5a08[];
+extern char g_beModelCtrl_callbackList[];
 void *beModelCtrl_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beModelCtrl_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         1,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrl_metaObject_00588e58,                  /* published MetaObject slot */
+        g_beModelCtrl_metaObject,                  /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beModelCtrl_GetMetaObject,                          /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrl_className_00504140,                   /* class name */
+        beModelCtrl_className,                   /* class name */
         0x2c,                                               /* instance size */
         0,                                                  /* vtable getter */
         beModelCtrl_InitFields,                             /* field adder */
         0,                                                  /* extra callback item */
-        g_beModelCtrl_callbackList_004c5a08                /* callback list */
+        g_beModelCtrl_callbackList                /* callback list */
     );
 }

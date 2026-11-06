@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igDataList_Register[];
 extern char igFloatList_GetVTable[];
 extern char thunk_igFloatList_GetMetaObject[];
-extern char s_igFloatList_className_004f8550[];
-extern char g_igFloatList_metaObject_00586808[];
+extern char igFloatList_className[];
+extern char g_igFloatList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 extern int igFloatList_InitFields_002c98f0[4];
@@ -16,11 +16,11 @@ void igFloatList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igFloatList_metaObject_00586808,   /* published MetaObject slot */
+        g_igFloatList_metaObject,   /* published MetaObject slot */
         igDataList_Register,                 /* base class registrar */
         igDataList_GetPublishedMetaObject,   /* base class MetaObject accessor */
         thunk_igFloatList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igFloatList_className_004f8550,    /* class name */
+        igFloatList_className,    /* class name */
         0x14,                                /* instance size */
         igFloatList_GetVTable,               /* vtable getter */
         &igFloatList_InitFields_002c98f0[0], /* field adder */

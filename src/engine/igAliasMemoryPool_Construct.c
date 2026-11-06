@@ -7,10 +7,10 @@
 int igAliasMemoryPool_Initialize();
 int FUN_002effb0();  /* base-pool constructor: igObject header init (0x2ff010), base vtable 0x52f620 */
 /* Vtable image of igAliasMemoryPool; the array form keeps the address load absolute. */
-extern int g_igAliasMemoryPool_vtable_005313a0[4];
+extern int g_igAliasMemoryPool_vtable[4];
 void *igAliasMemoryPool_Construct(igAliasMemoryPool *self) {
     FUN_002effb0();
-    self->_vtable = (int)(&g_igAliasMemoryPool_vtable_005313a0[0]);
+    self->_vtable = (int)(&g_igAliasMemoryPool_vtable[0]);
     self->_allocationLock = 0;
     self->_eventTracker = 0;
     self->_aliasedMemoryPool = 0;

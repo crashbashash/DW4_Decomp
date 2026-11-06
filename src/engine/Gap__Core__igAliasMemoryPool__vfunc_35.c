@@ -3,7 +3,7 @@
  * #504) through the output-first argument; same leaf as the 2d0690 entry of the accounting
  * control block table in docs/engine/alias-pool-binding.md and the concrete alias pool of
  * docs/engine/alias-pool-runtime.md (finding #902). */
-extern int g_statusFailed_004fb418[4];
+extern int g_allocatorFailureStatus[4];
 void Gap__Core__igAliasMemoryPool__vfunc_35(int *statusOut) {
-    *statusOut = g_statusFailed_004fb418[0];
+    *statusOut = g_allocatorFailureStatus[0];
 }

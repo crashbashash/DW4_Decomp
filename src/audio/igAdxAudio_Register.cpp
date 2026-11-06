@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igAdxAudio_metaObject_005876e0[];
+extern igMetaObject *g_igAdxAudio_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *igAdxAudio_GetMetaObject(void);
-extern const char s_igAdxAudio_className_005002c8[];
+extern const char igAdxAudio_className[];
 int igAdxAudio_GetVTable(void);
 void igAdxAudio_InitFields(void);
 void *igAdxAudio_Register(void);
@@ -32,11 +32,11 @@ void *igAdxAudio_Register(void) {
     GpFlag_SetOnce_00334440();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAdxAudio_metaObject_005876e0,       /* published MetaObject slot */
+        g_igAdxAudio_metaObject,       /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         igAdxAudio_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_igAdxAudio_className_005002c8,        /* class name */
+        igAdxAudio_className,        /* class name */
         0x30,                                   /* instance size */
         igAdxAudio_GetVTable,                   /* vtable getter */
         igAdxAudio_InitFields,                  /* field adder */

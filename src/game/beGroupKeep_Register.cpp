@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beGroupKeep_metaObject_00589470[];
+extern igMetaObject *g_beGroupKeep_metaObject[];
 void *igGroup_Register(void);
-igMetaObject *igGroup_GetPublishedMetaObject_001943a0(void);
+igMetaObject *igGroup_GetPublishedMetaObject(void);
 igMetaObject *beGroupKeep_GetMetaObject(void);
-extern const char s_beGroupKeep_className_00504d70[];
+extern const char beGroupKeep_className[];
 int beGroupKeep_GetVTable(void);
 void *beGroupKeep_Register(void);
 }
@@ -31,11 +31,11 @@ void *beGroupKeep_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beGroupKeep_metaObject_00589470,        /* published MetaObject slot */
+        g_beGroupKeep_metaObject,        /* published MetaObject slot */
         igGroup_Register,                         /* base class registrar */
-        igGroup_GetPublishedMetaObject_001943a0,  /* base class MetaObject accessor */
+        igGroup_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beGroupKeep_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beGroupKeep_className_00504d70,         /* class name */
+        beGroupKeep_className,         /* class name */
         0x20,                                     /* instance size */
         beGroupKeep_GetVTable,                    /* vtable getter */
         0,                                        /* field adder */

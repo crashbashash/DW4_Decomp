@@ -17,8 +17,8 @@ typedef struct Adxt_278f20 {
     Source_278f20 *source;      /* 0x04 */
 } Adxt_278f20;
 
-extern char s_E2003091101_ADXT_handle_must_be_created_for_stereo_output_004f1430[]; /* 'E2003091101 : ADXT handle must be created for stereo output.' */
-extern char s_E2003091002_Fail_to_attach_Dolby_Pro_Logic_II_004f1470[]; /* 'E2003091002 : Fail to attach Dolby Pro Logic II.' */
+extern char E2003091101_ADXT_handle_must_be_created_for_stereo_output[]; /* 'E2003091101 : ADXT handle must be created for stereo output.' */
+extern char E2003091002_Fail_to_attach_Dolby_Pro_Logic_II[]; /* 'E2003091002 : Fail to attach Dolby Pro Logic II.' */
 extern void *DAT_004a8e68;
 extern void *DAT_00498c6c;
 extern void *DAT_00498c70;
@@ -43,7 +43,7 @@ void FUN_00278f20(Adxt_278f20 *adxt, int a, int b) {
     void *stream;
 
     if (adxt->channels < 2) {
-        FUN_002607e8(s_E2003091101_ADXT_handle_must_be_created_for_stereo_output_004f1430);
+        FUN_002607e8(E2003091101_ADXT_handle_must_be_created_for_stereo_output);
         return;
     }
     FUN_0026bc60(adxt);
@@ -54,7 +54,7 @@ void FUN_00278f20(Adxt_278f20 *adxt, int a, int b) {
     FUN_00265068();
     stream = FUN_00278780(a, b);
     if (stream == 0) {
-        FUN_002607e8(s_E2003091002_Fail_to_attach_Dolby_Pro_Logic_II_004f1470);
+        FUN_002607e8(E2003091002_Fail_to_attach_Dolby_Pro_Logic_II);
         return;
     }
     FUN_00278d58(stream, renderer->f236, renderer->f240);

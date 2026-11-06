@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWStatusCtrlSkill_metaObject_0058ae68[];
+extern igMetaObject *g_beNDMWStatusCtrlSkill_metaObject[];
 void *beNDMWListCtrl_Register(void);
-igMetaObject *beNDMWListCtrl_GetPublishedMetaObject_003b68a0(void);
+igMetaObject *beNDMWListCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWStatusCtrlSkill_GetMetaObject(void);
-extern const char s_beNDMWStatusCtrlSkill_className_00511640[];
+extern const char beNDMWStatusCtrlSkill_className[];
 int beNDMWStatusCtrlSkill_GetVTable(void);
 void beNDMWStatusCtrlSkill_InitFields(void);
-extern char g_beNDMWStatusCtrlSkill_callbackList_004c9cf8[];
+extern char g_beNDMWStatusCtrlSkill_callbackList[];
 void *beNDMWStatusCtrlSkill_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWStatusCtrlSkill_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWStatusCtrlSkill_metaObject_0058ae68,     /* published MetaObject slot */
+        g_beNDMWStatusCtrlSkill_metaObject,     /* published MetaObject slot */
         beNDMWListCtrl_Register,                         /* base class registrar */
-        beNDMWListCtrl_GetPublishedMetaObject_003b68a0,  /* base class MetaObject accessor */
+        beNDMWListCtrl_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWStatusCtrlSkill_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWStatusCtrlSkill_className_00511640,      /* class name */
+        beNDMWStatusCtrlSkill_className,      /* class name */
         0x6c,                                            /* instance size */
         beNDMWStatusCtrlSkill_GetVTable,                 /* vtable getter */
         beNDMWStatusCtrlSkill_InitFields,                /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWStatusCtrlSkill_callbackList_004c9cf8   /* callback list */
+        g_beNDMWStatusCtrlSkill_callbackList   /* callback list */
     );
 }

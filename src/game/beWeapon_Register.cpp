@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beWeapon_metaObject_00587a68[];
+extern igMetaObject *g_beWeapon_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beWeapon_GetMetaObject(void);
-extern const char s_beWeapon_className_00501700[];
+extern const char beWeapon_className[];
 int beWeapon_GetVTable(void);
 void beWeapon_InitFields(void);
-extern char g_beWeapon_callbackList_004c3018[];
+extern char g_beWeapon_callbackList[];
 void *beWeapon_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beWeapon_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beWeapon_metaObject_00587a68,                     /* published MetaObject slot */
+        g_beWeapon_metaObject,                     /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beWeapon_GetMetaObject,                             /* own MetaObject accessor (stored at +0x54) */
-        s_beWeapon_className_00501700,                      /* class name */
+        beWeapon_className,                      /* class name */
         0x24,                                               /* instance size */
         beWeapon_GetVTable,                                 /* vtable getter */
         beWeapon_InitFields,                                /* field adder */
         0,                                                  /* extra callback item */
-        g_beWeapon_callbackList_004c3018                   /* callback list */
+        g_beWeapon_callbackList                   /* callback list */
     );
 }

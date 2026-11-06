@@ -6,14 +6,14 @@ typedef struct Adxt_26c5a8 {
     short balance;      /* 0x46 */
 } Adxt_26c5a8;
 
-extern char s_E02080870_ADXT_SetOutBalance_parameter_error_004ee7c0[]; /* 'E02080870 ADXT_SetOutBalance: parameter error' */
+extern char E02080870_ADXT_SetOutBalance_parameter_error[]; /* 'E02080870 ADXT_SetOutBalance: parameter error' */
 extern int DAT_0049c8e8;
 void FUN_002607e8(const char *message);
 void FUN_00265df8(int renderer, int balance);
 
 void FUN_0026c5a8(Adxt_26c5a8 *adxt, int balance) {
     if (adxt == 0) {
-        FUN_002607e8(s_E02080870_ADXT_SetOutBalance_parameter_error_004ee7c0);
+        FUN_002607e8(E02080870_ADXT_SetOutBalance_parameter_error);
         return;
     }
     if (balance < -15) {

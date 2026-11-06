@@ -4,8 +4,8 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igLibrary_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igLibrary_className_004f6f60[];
-extern char g_igLibrary_metaObject_005860c0[];
+extern char igLibrary_className[];
+extern char g_igLibrary_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igLibrary_InitFields();
@@ -14,11 +14,11 @@ void igLibrary_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igLibrary_metaObject_005860c0,       /* published MetaObject slot */
+        g_igLibrary_metaObject,       /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igLibrary_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        s_igLibrary_className_004f6f60,        /* class name */
+        igLibrary_className,        /* class name */
         0xC,                                   /* instance size */
         0,                                     /* vtable getter */
         &igLibrary_InitFields,                 /* field adder */

@@ -109,7 +109,8 @@ section remains besides `.text` and the owner's tables.
 ## Whole-file units
 
 A stock library file (zlib, libpng, Lua) is kept as upstream wrote it and compiles whole, so its
-row covers the file rather than one function:
+row covers the file rather than one function. Lua's `lmem.c` and `lstate.c`, which the game rewrote,
+are whole-file units too, from `src/lua/`:
 
 ```json
 {

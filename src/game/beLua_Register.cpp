@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLua_metaObject_00589208[];
+extern igMetaObject *g_beLua_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beLua_GetMetaObject(void);
-extern const char s_beLua_className_00504880[];
+extern const char beLua_className[];
 int beLua_GetVTable(void);
 void beLua_InitFields(void);
-extern char g_beLua_callbackList_004c62e0[];
+extern char g_beLua_callbackList[];
 void *beLua_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beLua_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLua_metaObject_00589208,                    /* published MetaObject slot */
+        g_beLua_metaObject,                    /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLua_GetMetaObject,                            /* own MetaObject accessor (stored at +0x54) */
-        s_beLua_className_00504880,                     /* class name */
+        beLua_className,                     /* class name */
         0x20,                                           /* instance size */
         beLua_GetVTable,                                /* vtable getter */
         beLua_InitFields,                               /* field adder */
         0,                                              /* extra callback item */
-        g_beLua_callbackList_004c62e0                  /* callback list */
+        g_beLua_callbackList                  /* callback list */
     );
 }

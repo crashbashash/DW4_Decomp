@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igMatrixStack_GetVTable[];
 extern char thunk_igMatrixStack_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igMatrixStack_className_004e4930[];
-extern char g_igMatrixStack_metaObject_00562ba0[];
+extern char igMatrixStack_className[];
+extern char g_igMatrixStack_metaObject[];
 int GpFlag_SetOnce_001e3ff0();
 int igMetaObject_RegisterClass();
 extern int igMatrixStack_InitFields_001e48b0[4];
@@ -16,11 +16,11 @@ void igMatrixStack_Register(void) {
     GpFlag_SetOnce_001e3ff0();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMatrixStack_metaObject_00562ba0,   /* published MetaObject slot */
+        g_igMatrixStack_metaObject,   /* published MetaObject slot */
         igDataList_Register,                   /* base class registrar */
         igDataList_GetPublishedMetaObject,     /* base class MetaObject accessor */
         thunk_igMatrixStack_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igMatrixStack_className_004e4930,    /* class name */
+        igMatrixStack_className,    /* class name */
         0x14,                                  /* instance size */
         igMatrixStack_GetVTable,               /* vtable getter */
         &igMatrixStack_InitFields_001e48b0[0], /* field adder */

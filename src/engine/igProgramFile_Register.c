@@ -5,9 +5,9 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igProgramFile_GetVTable[];
 extern char thunk_igProgramFile_GetMetaObject[];
 extern char igObject_Register[];
-extern char g_igProgramFile_callbackList_004c1b00[];
-extern char s_igProgramFile_className_004f8cd0[];
-extern char g_igProgramFile_metaObject_00586be8[];
+extern char g_igProgramFile_callbackList[];
+extern char igProgramFile_className[];
+extern char g_igProgramFile_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igProgramFile_InitFields();
@@ -16,15 +16,15 @@ void igProgramFile_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igProgramFile_metaObject_00586be8,   /* published MetaObject slot */
+        g_igProgramFile_metaObject,   /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igProgramFile_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igProgramFile_className_004f8cd0,    /* class name */
+        igProgramFile_className,    /* class name */
         0x10,                                  /* instance size */
         igProgramFile_GetVTable,               /* vtable getter */
         &igProgramFile_InitFields,             /* field adder */
         0,                                     /* extra callback item */
-        g_igProgramFile_callbackList_004c1b00  /* callback list */
+        g_igProgramFile_callbackList  /* callback list */
     );
 }

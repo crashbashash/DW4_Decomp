@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beBkColor_metaObject_00589d10[];
+extern igMetaObject *g_beBkColor_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beBkColor_GetMetaObject(void);
-extern const char s_beBkColor_className_00505d98[];
+extern const char beBkColor_className[];
 int beBkColor_GetVTable(void);
 void beBkColor_InitFields(void);
 void *beBkColor_Register(void);
@@ -32,11 +32,11 @@ void *beBkColor_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beBkColor_metaObject_00589d10,                    /* published MetaObject slot */
+        g_beBkColor_metaObject,                    /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beBkColor_GetMetaObject,                            /* own MetaObject accessor (stored at +0x54) */
-        s_beBkColor_className_00505d98,                     /* class name */
+        beBkColor_className,                     /* class name */
         0x24,                                               /* instance size */
         beBkColor_GetVTable,                                /* vtable getter */
         beBkColor_InitFields,                               /* field adder */

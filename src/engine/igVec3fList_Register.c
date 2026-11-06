@@ -7,8 +7,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igVec3fList_GetVTable[];
 extern char thunk_igVec3fList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igVec3fList_className_004e0cd8[];
-extern char g_igVec3fList_metaObject_005610b8[];
+extern char igVec3fList_className[];
+extern char g_igVec3fList_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 extern int igVec3fList_InitFields_0018a210[4];
@@ -16,11 +16,11 @@ void igVec3fList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igVec3fList_metaObject_005610b8,   /* published MetaObject slot */
+        g_igVec3fList_metaObject,   /* published MetaObject slot */
         igDataList_Register,                 /* base class registrar (igDataList) */
         igDataList_GetPublishedMetaObject,   /* base class MetaObject accessor */
         thunk_igVec3fList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igVec3fList_className_004e0cd8,    /* class name */
+        igVec3fList_className,    /* class name */
         0x14,                                /* instance size */
         igVec3fList_GetVTable,               /* vtable getter */
         &igVec3fList_InitFields_0018a210[0], /* field adder (class InitFields) */

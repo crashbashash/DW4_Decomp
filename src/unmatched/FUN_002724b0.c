@@ -8,28 +8,28 @@ typedef struct Srd_2724b0 {
 extern Srd_2724b0 DAT_004a9288;
 extern int DAT_004a92c4;
 extern volatile int DAT_004a92dc;
-extern char s_SRD_SRD_Info_004efd58[];                   /* 'SRD: SRD Info.\n' */
-extern char s_srd_enter_fg_d_004efd68[];                 /* ' srd_enter_fg       = %d\n' */
-extern char s_srd_debug_geterror_d_004efd88[];           /* ' srd_debug_geterror = %d\n' */
-extern char s_srd_obj_stat_d_004efda8[];                 /* ' srd_obj.stat       = %d\n' */
-extern char s_srd_obj_devtype_DVD_004efdc8[];            /* ' srd_obj.devtype    = DVD\n' */
-extern char s_srd_obj_devtype_HOST_004efde8[];           /* ' srd_obj.devtype    = HOST\n' */
-extern char s_Read_Status_DVD_2_HST_1_d_004efe08[];      /* ' Read Status(DVD=2/HST=1) = %d\n' */
+extern char SRD_SRD_Info[];                   /* 'SRD: SRD Info.\n' */
+extern char srd_enter_fg_d[];                 /* ' srd_enter_fg       = %d\n' */
+extern char srd_debug_geterror_d[];           /* ' srd_debug_geterror = %d\n' */
+extern char srd_obj_stat_d[];                 /* ' srd_obj.stat       = %d\n' */
+extern char srd_obj_devtype_DVD[];            /* ' srd_obj.devtype    = DVD\n' */
+extern char srd_obj_devtype_HOST[];           /* ' srd_obj.devtype    = HOST\n' */
+extern char Read_Status_DVD_2_HST_1_d[];      /* ' Read Status(DVD=2/HST=1) = %d\n' */
 void FUN_0010d108(const char *format, ...);
 int FUN_00272460(void);
 
 int FUN_002724b0(void) {
-    FUN_0010d108(s_SRD_SRD_Info_004efd58);
-    FUN_0010d108(s_srd_enter_fg_d_004efd68, DAT_004a92c4);
-    FUN_0010d108(s_srd_debug_geterror_d_004efd88, DAT_004a92dc);
-    FUN_0010d108(s_srd_obj_stat_d_004efda8, DAT_004a9288.stat);
+    FUN_0010d108(SRD_SRD_Info);
+    FUN_0010d108(srd_enter_fg_d, DAT_004a92c4);
+    FUN_0010d108(srd_debug_geterror_d, DAT_004a92dc);
+    FUN_0010d108(srd_obj_stat_d, DAT_004a9288.stat);
     if (DAT_004a9288.devtype == 1) {
-        FUN_0010d108(s_srd_obj_devtype_DVD_004efdc8);
+        FUN_0010d108(srd_obj_devtype_DVD);
     }
     if (DAT_004a9288.devtype == 2) {
-        FUN_0010d108(s_srd_obj_devtype_HOST_004efde8);
+        FUN_0010d108(srd_obj_devtype_HOST);
     }
-    FUN_0010d108(s_Read_Status_DVD_2_HST_1_d_004efe08, FUN_00272460());
+    FUN_0010d108(Read_Status_DVD_2_HST_1_d, FUN_00272460());
     return 0;
 }
 

@@ -4,7 +4,7 @@
  * the slot the class registration fills (see igFieldChangeViewList_Register.c).
  * Same accessor idiom as the other `*_metaObject_<addr>` getters in this folder; the array extern
  * keeps the load absolute. */
-extern int g_igFieldChangeViewList_metaObject_0058c548[4];
+extern int g_igFieldChangeViewList_metaObject[4];
 int Gap__Core__igFieldChangeViewList__vfunc_22(void) {
-    return g_igFieldChangeViewList_metaObject_0058c548[0];
+    return g_igFieldChangeViewList_metaObject[0];
 }

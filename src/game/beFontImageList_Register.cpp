@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beFontImageList_metaObject_00589650[];
+extern igMetaObject *g_beFontImageList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beFontImageList_GetMetaObject(void);
-extern const char s_beFontImageList_className_00505150[];
+extern const char beFontImageList_className[];
 int beFontImageList_GetVTable(void);
-extern char g_beFontImageList_callbackList_004c6c98[];
+extern char g_beFontImageList_callbackList[];
 void *beFontImageList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beFontImageList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beFontImageList_metaObject_00589650,    /* published MetaObject slot */
+        g_beFontImageList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                    /* base class registrar */
         igObjectList_GetPublishedMetaObject,      /* base class MetaObject accessor */
         beFontImageList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beFontImageList_className_00505150,     /* class name */
+        beFontImageList_className,     /* class name */
         0x14,                                     /* instance size */
         beFontImageList_GetVTable,                /* vtable getter */
         0,                                        /* field adder */
         0,                                        /* extra callback item */
-        g_beFontImageList_callbackList_004c6c98  /* callback list */
+        g_beFontImageList_callbackList  /* callback list */
     );
 }

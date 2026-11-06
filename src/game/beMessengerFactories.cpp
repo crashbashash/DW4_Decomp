@@ -22,19 +22,19 @@ extern "C" void beMessengerArgData_EnsureRegistered();
 /* Published class handles (slot holding each class's igMetaObject pointer), named by the
  * class-handle rule of docs/engine/naming.md; the addresses are the handles listed in
  * include/dw4/reflected.h and the metadata table of docs/engine/object-creation.md. */
-extern "C" int g_beMessengerWork_metaObject_00588f88[4];
-extern "C" int g_beMessengerGroup_metaObject_00588fc8[4];
-extern "C" int g_beMessengerDelay_metaObject_00588ff0[4];
-extern "C" int g_beMessengerArgData_metaObject_00589038[4];
+extern "C" int g_beMessengerWork_metaObject[4];
+extern "C" int g_beMessengerGroup_metaObject[4];
+extern "C" int g_beMessengerDelay_metaObject[4];
+extern "C" int g_beMessengerArgData_metaObject[4];
 
-extern "C" void *beMessengerWork_Create(void *allocator){beMessengerWork_EnsureRegistered();return igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject_00588f88[0],allocator);}
+extern "C" void *beMessengerWork_Create(void *allocator){beMessengerWork_EnsureRegistered();return igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject[0],allocator);}
 extern "C" void beMessengerWork_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerWork_Register);}
 
-extern "C" void *beMessengerGroup_Create(void *allocator){beMessengerGroup_EnsureRegistered();return igMetaObject_CreateInstance((void *)g_beMessengerGroup_metaObject_00588fc8[0],allocator);}
+extern "C" void *beMessengerGroup_Create(void *allocator){beMessengerGroup_EnsureRegistered();return igMetaObject_CreateInstance((void *)g_beMessengerGroup_metaObject[0],allocator);}
 extern "C" void beMessengerGroup_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerGroup_Register);}
 
-extern "C" void *beMessengerDelay_Create(void *allocator){beMessengerDelay_EnsureRegistered();return igMetaObject_CreateInstance((void *)g_beMessengerDelay_metaObject_00588ff0[0],allocator);}
+extern "C" void *beMessengerDelay_Create(void *allocator){beMessengerDelay_EnsureRegistered();return igMetaObject_CreateInstance((void *)g_beMessengerDelay_metaObject[0],allocator);}
 extern "C" void beMessengerDelay_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerDelay_Register);}
 
-extern "C" void *beMessengerArgData_Create(void *allocator){beMessengerArgData_EnsureRegistered();return igMetaObject_CreateInstance((void *)g_beMessengerArgData_metaObject_00589038[0],allocator);}
+extern "C" void *beMessengerArgData_Create(void *allocator){beMessengerArgData_EnsureRegistered();return igMetaObject_CreateInstance((void *)g_beMessengerArgData_metaObject[0],allocator);}
 extern "C" void beMessengerArgData_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerArgData_Register);}

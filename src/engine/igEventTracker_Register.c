@@ -5,9 +5,9 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igEventTracker_GetVTable[];
 extern char thunk_igEventTracker_GetMetaObject[];
 extern char igObject_Register[];
-extern char g_igEventTracker_callbackList_004c0d10[];
-extern char s_igEventTracker_className_004f7bd8[];
-extern char g_igEventTracker_metaObject_00586480[];
+extern char g_igEventTracker_callbackList[];
+extern char igEventTracker_className[];
+extern char g_igEventTracker_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igEventTracker_InitFields();
@@ -16,15 +16,15 @@ void igEventTracker_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igEventTracker_metaObject_00586480,  /* published MetaObject slot */
+        g_igEventTracker_metaObject,  /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igEventTracker_GetMetaObject,    /* own MetaObject accessor (stored at +0x54) */
-        s_igEventTracker_className_004f7bd8,   /* class name */
+        igEventTracker_className,   /* class name */
         0x2530,                                /* instance size */
         igEventTracker_GetVTable,              /* vtable getter */
         &igEventTracker_InitFields,            /* field adder */
         0,                                     /* extra callback item */
-        g_igEventTracker_callbackList_004c0d10  /* callback list */
+        g_igEventTracker_callbackList  /* callback list */
     );
 }

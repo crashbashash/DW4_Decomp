@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNumberCtrlInfo_metaObject_005886d0[];
+extern igMetaObject *g_beNumberCtrlInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beNumberCtrlInfo_GetMetaObject(void);
-extern const char s_beNumberCtrlInfo_className_00503120[];
+extern const char beNumberCtrlInfo_className[];
 int beNumberCtrlInfo_GetVTable(void);
 void *beNumberCtrlInfo_Register(void);
 }
@@ -31,11 +31,11 @@ void *beNumberCtrlInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNumberCtrlInfo_metaObject_005886d0,      /* published MetaObject slot */
+        g_beNumberCtrlInfo_metaObject,      /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNumberCtrlInfo_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beNumberCtrlInfo_className_00503120,       /* class name */
+        beNumberCtrlInfo_className,       /* class name */
         0x1c,                                        /* instance size */
         beNumberCtrlInfo_GetVTable,                  /* vtable getter */
         0,                                           /* field adder */

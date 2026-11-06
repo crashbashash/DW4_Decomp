@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void igStringMetaField_EnsureRegistered(void);
-extern igMetaObject *g_igStringMetaField_metaObject_00585908[4];
+extern igMetaObject *g_igStringMetaField_metaObject[4];
 igMetaObject *igStringMetaField_GetMetaObject(void);
 }
 
 igMetaObject *igStringMetaField_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igStringMetaField_metaObject_00585908[0] != 0) {
-        ready = (g_igStringMetaField_metaObject_00585908[0]->_validity & 4) != 0;
+    if (g_igStringMetaField_metaObject[0] != 0) {
+        ready = (g_igStringMetaField_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     igStringMetaField_EnsureRegistered();
 done:
-    return g_igStringMetaField_metaObject_00585908[0];
+    return g_igStringMetaField_metaObject[0];
 }

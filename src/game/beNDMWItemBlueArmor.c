@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 #include "dw4/reflected.h"
-extern int g_beNDMWItemBlueArmor_metaObject_0058bf58[4];
+extern int g_beNDMWItemBlueArmor_metaObject[4];
 
 /* Inventory word layout shared by every beNDMWItem* subclass: bits 0-9 record
  * number, bit 10 equipped flag, bits 12-15 item kind (see beNDMWItemDisk.c;
@@ -34,5 +34,5 @@ void Gap__Bec__beNDMWItemBlueArmor__vfunc_24(beNDMWItemBlueArmor *self, int pack
  * MetaObject accessor: returns the class's reflection handle (0x0058bf58). */
 int Gap__Bec__beNDMWItemBlueArmor__vfunc_20(void)
 {
-    return g_beNDMWItemBlueArmor_metaObject_0058bf58[0];
+    return g_beNDMWItemBlueArmor_metaObject[0];
 }

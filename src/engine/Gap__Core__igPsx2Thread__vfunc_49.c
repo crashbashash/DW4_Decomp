@@ -7,17 +7,17 @@
  * 0x4fb410 = 0, 0x4fb418 = 1). */
 #include "dw4/reflected.h"
 
-extern int g_statusSuccess_004fb410[4];
-extern int g_statusFailure_004fb418[4];
+extern int g_statusSucceeded[4];
+extern int g_allocatorFailureStatus[4];
 int iResumeThread(int);
 
 void Gap__Core__igPsx2Thread__vfunc_49(int *status, igPsx2Thread *self) {
     int *word;
 
     if (iResumeThread(self->_threadID) < 0) {
-        word = g_statusFailure_004fb418;
+        word = g_allocatorFailureStatus;
     } else {
-        word = g_statusSuccess_004fb410;
+        word = g_statusSucceeded;
     }
     *status = *word;
 }

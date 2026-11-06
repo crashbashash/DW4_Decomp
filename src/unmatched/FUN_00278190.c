@@ -5,7 +5,7 @@ typedef struct File_278190 {
     int position;   /* 0x10 */
 } File_278190;
 
-extern char s_E01100305_handl_is_null_004f0d88[]; /* 'E01100305:handl is null.' */
+extern char E01100305_handl_is_null[]; /* 'E01100305:handl is null.' */
 void FUN_00277de8(File_278190 *file, const char *message);
 void FUN_00277da0(void);
 void FUN_00277db8(void);
@@ -14,7 +14,7 @@ int FUN_00278190(File_278190 *file, int offset, int origin) {
     int position;
 
     if (file == 0) {
-        FUN_00277de8(file, s_E01100305_handl_is_null_004f0d88);
+        FUN_00277de8(file, E01100305_handl_is_null);
         return 0;
     }
     FUN_00277da0();

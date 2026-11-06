@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMessengerArgDataList_metaObject_00589030[];
+extern igMetaObject *g_beMessengerArgDataList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beMessengerArgDataList_GetMetaObject(void);
-extern const char s_beMessengerArgDataList_className_00504500[];
+extern const char beMessengerArgDataList_className[];
 int beMessengerArgDataList_GetVTable(void);
-extern char g_beMessengerArgDataList_callbackList_004c5e40[];
+extern char g_beMessengerArgDataList_callbackList[];
 void *beMessengerArgDataList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beMessengerArgDataList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMessengerArgDataList_metaObject_00589030,    /* published MetaObject slot */
+        g_beMessengerArgDataList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                           /* base class registrar */
         igObjectList_GetPublishedMetaObject,             /* base class MetaObject accessor */
         beMessengerArgDataList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beMessengerArgDataList_className_00504500,     /* class name */
+        beMessengerArgDataList_className,     /* class name */
         0x14,                                            /* instance size */
         beMessengerArgDataList_GetVTable,                /* vtable getter */
         0,                                               /* field adder */
         0,                                               /* extra callback item */
-        g_beMessengerArgDataList_callbackList_004c5e40  /* callback list */
+        g_beMessengerArgDataList_callbackList  /* callback list */
     );
 }

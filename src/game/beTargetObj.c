@@ -10,7 +10,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 #include "dw4/reflected.h"
-extern int g_beTargetObj_metaObject_00587ce8[4];
+extern int g_beTargetObj_metaObject[4];
 
 /* 0x003a5a60: slot 24, empty override. */
 void Gap__Bec__beTargetObj__vfunc_24(void)
@@ -33,5 +33,5 @@ void Gap__Bec__beTargetObj__vfunc_27(beTargetObj *self) {
 /* 0x003a6940: slot 20, MetaObject return (class handle at 0x00587ce8). */
 int Gap__Bec__beTargetObj__vfunc_20(void)
 {
-    return g_beTargetObj_metaObject_00587ce8[0];
+    return g_beTargetObj_metaObject[0];
 }

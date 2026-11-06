@@ -5,8 +5,8 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igMessage_GetVTable[];
 extern char thunk_igMessage_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igMessage_className_004e8428[];
-extern char g_igMessage_metaObject_0056dad8[];
+extern char igMessage_className[];
+extern char g_igMessage_metaObject[];
 int GpFlag_SetOnce_00230f50();
 int igMetaObject_RegisterClass();
 
@@ -14,11 +14,11 @@ void igMessage_Register(void) {
     GpFlag_SetOnce_00230f50();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMessage_metaObject_0056dad8,       /* published MetaObject slot */
+        g_igMessage_metaObject,       /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igMessage_GetMetaObject,         /* own MetaObject accessor (stored at +0x54) */
-        s_igMessage_className_004e8428,        /* class name */
+        igMessage_className,        /* class name */
         8,                                     /* instance size */
         igMessage_GetVTable,                   /* vtable getter */
         0,                                     /* field adder */

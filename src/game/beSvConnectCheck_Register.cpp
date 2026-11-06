@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvConnectCheck_metaObject_005881d8[];
+extern igMetaObject *g_beSvConnectCheck_metaObject[];
 void *beSaveApi_Register(void);
-igMetaObject *beSaveApi_GetPublishedMetaObject_003485e0(void);
+igMetaObject *beSaveApi_GetPublishedMetaObject(void);
 igMetaObject *beSvConnectCheck_GetMetaObject(void);
-extern const char s_beSvConnectCheck_className_005027b0[];
+extern const char beSvConnectCheck_className[];
 int beSvConnectCheck_GetVTable(void);
 void *beSvConnectCheck_Register(void);
 }
@@ -31,11 +31,11 @@ void *beSvConnectCheck_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvConnectCheck_metaObject_005881d8,     /* published MetaObject slot */
+        g_beSvConnectCheck_metaObject,     /* published MetaObject slot */
         beSaveApi_Register,                         /* base class registrar */
-        beSaveApi_GetPublishedMetaObject_003485e0,  /* base class MetaObject accessor */
+        beSaveApi_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSvConnectCheck_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        s_beSvConnectCheck_className_005027b0,      /* class name */
+        beSvConnectCheck_className,      /* class name */
         0x90,                                       /* instance size */
         beSvConnectCheck_GetVTable,                 /* vtable getter */
         0,                                          /* field adder */

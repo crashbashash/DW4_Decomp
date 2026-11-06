@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShopCtrlDigilabo_metaObject_0058ad40[];
+extern igMetaObject *g_beNDMWShopCtrlDigilabo_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWShopCtrlDigilabo_GetMetaObject(void);
-extern const char s_beNDMWShopCtrlDigilabo_className_00511380[];
+extern const char beNDMWShopCtrlDigilabo_className[];
 int beNDMWShopCtrlDigilabo_GetVTable(void);
 void beNDMWShopCtrlDigilabo_InitFields(void);
-extern char g_beNDMWShopCtrlDigilabo_callbackList_004c9a80[];
+extern char g_beNDMWShopCtrlDigilabo_callbackList[];
 void *beNDMWShopCtrlDigilabo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWShopCtrlDigilabo_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShopCtrlDigilabo_metaObject_0058ad40,    /* published MetaObject slot */
+        g_beNDMWShopCtrlDigilabo_metaObject,    /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                       /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,         /* base class MetaObject accessor */
         beNDMWShopCtrlDigilabo_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShopCtrlDigilabo_className_00511380,     /* class name */
+        beNDMWShopCtrlDigilabo_className,     /* class name */
         0x6c,                                            /* instance size */
         beNDMWShopCtrlDigilabo_GetVTable,                /* vtable getter */
         beNDMWShopCtrlDigilabo_InitFields,               /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWShopCtrlDigilabo_callbackList_004c9a80  /* callback list */
+        g_beNDMWShopCtrlDigilabo_callbackList  /* callback list */
     );
 }

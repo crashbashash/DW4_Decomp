@@ -9,22 +9,22 @@ typedef struct CvFsHandle_270090 {
     int file;                  /* 0x04 */
 } CvFsHandle_270090;
 
-extern char s_cvFsSeek_1_handle_error_004ef128[]; /* 'cvFsSeek #1:handle error' */
-extern char s_cvFsSeek_2_vtbl_error_004ef148[]; /* 'cvFsSeek #2:vtbl error' */
+extern char cvFsSeek_1_handle_error[]; /* 'cvFsSeek #1:handle error' */
+extern char cvFsSeek_2_vtbl_error[]; /* 'cvFsSeek #2:vtbl error' */
 void FUN_0026f530(const char *message);
 
 int FUN_00270090(CvFsHandle_270090 *handle, int offset, int origin) {
     int result;
 
     if (handle == 0) {
-        FUN_0026f530(s_cvFsSeek_1_handle_error_004ef128);
+        FUN_0026f530(cvFsSeek_1_handle_error);
         return 0;
     }
     if (handle->device->seek != 0) {
         result = handle->device->seek(handle->file, offset, origin);
     } else {
         result = 0;
-        FUN_0026f530(s_cvFsSeek_2_vtbl_error_004ef148);
+        FUN_0026f530(cvFsSeek_2_vtbl_error);
     }
     return result;
 }

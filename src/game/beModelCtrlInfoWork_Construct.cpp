@@ -5,12 +5,12 @@
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_InitHeader();
-extern int g_beModelCtrlInfoWork_vtable_00537ee0[4];
+extern int g_beModelCtrlInfoWork_vtable[4];
 void *beModelCtrlInfoWork_Construct(beModelCtrlInfoWork *self);
 }
 void *beModelCtrlInfoWork_Construct(beModelCtrlInfoWork *self) {
     igObject_InitHeader();
-    self->_vtable = (int)(&g_beModelCtrlInfoWork_vtable_00537ee0[0]);
+    self->_vtable = (int)(&g_beModelCtrlInfoWork_vtable[0]);
     self->_mHp = 0;
     self->_hp = 0;
     self->_seqCodeName = 0;

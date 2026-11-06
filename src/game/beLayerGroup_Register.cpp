@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLayerGroup_metaObject_00589280[];
+extern igMetaObject *g_beLayerGroup_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beLayerGroup_GetMetaObject(void);
-extern const char s_beLayerGroup_className_00504958[];
+extern const char beLayerGroup_className[];
 int beLayerGroup_GetVTable(void);
 void *beLayerGroup_Register(void);
 }
@@ -31,11 +31,11 @@ void *beLayerGroup_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLayerGroup_metaObject_00589280,             /* published MetaObject slot */
+        g_beLayerGroup_metaObject,             /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLayerGroup_GetMetaObject,                     /* own MetaObject accessor (stored at +0x54) */
-        s_beLayerGroup_className_00504958,              /* class name */
+        beLayerGroup_className,              /* class name */
         0xc,                                            /* instance size */
         beLayerGroup_GetVTable,                         /* vtable getter */
         0,                                              /* field adder */

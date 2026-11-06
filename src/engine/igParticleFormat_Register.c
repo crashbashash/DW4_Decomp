@@ -5,8 +5,8 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igParticleFormat_GetVTable[];
 extern char thunk_igParticleFormat_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igParticleFormat_className_004dc4e0[];
-extern char g_igParticleFormat_metaObject_0055fca0[];
+extern char igParticleFormat_className[];
+extern char g_igParticleFormat_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 int igParticleFormat_InitFields();
@@ -15,11 +15,11 @@ void igParticleFormat_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igParticleFormat_metaObject_0055fca0, /* published MetaObject slot */
+        g_igParticleFormat_metaObject, /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         thunk_igParticleFormat_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igParticleFormat_className_004dc4e0,  /* class name */
+        igParticleFormat_className,  /* class name */
         0x30,                                   /* instance size */
         igParticleFormat_GetVTable,             /* vtable getter */
         &igParticleFormat_InitFields,           /* field adder */

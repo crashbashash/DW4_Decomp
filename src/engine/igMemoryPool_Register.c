@@ -4,19 +4,19 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igMemoryPool_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igMemoryPool_className_004f6b40[];
-extern char g_igMemoryPool_metaObject_00585ea0[];
+extern char igMemoryPool_className[];
+extern char g_igMemoryPool_metaObject[];
 int igMetaObject_RegisterClass();
 int igMemoryPool_InitFields();
 
 void igMemoryPool_Register(void) {
     igMetaObject_RegisterClass(
         1,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMemoryPool_metaObject_00585ea0,    /* published MetaObject slot */
+        g_igMemoryPool_metaObject,    /* published MetaObject slot */
         igObject_Register,                     /* base class registrar */
         igObject_GetMetaObject_ParentAccessor, /* base class MetaObject accessor */
         thunk_igMemoryPool_GetMetaObject,      /* own MetaObject accessor (stored at +0x54) */
-        s_igMemoryPool_className_004f6b40,     /* class name */
+        igMemoryPool_className,     /* class name */
         0x70,                                  /* instance size */
         0,                                     /* vtable getter */
         &igMemoryPool_InitFields,              /* field adder */

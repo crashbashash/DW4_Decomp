@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLuaState_metaObject_005891b0[];
+extern igMetaObject *g_beLuaState_metaObject[];
 void *igLuaState_Register(void);
-igMetaObject *igLuaState_GetPublishedMetaObject_0035ac90(void);
+igMetaObject *igLuaState_GetPublishedMetaObject(void);
 igMetaObject *beLuaState_GetMetaObject(void);
-extern const char s_beLuaState_className_005047f8[];
+extern const char beLuaState_className[];
 int beLuaState_GetVTable(void);
 void beLuaState_InitFields(void);
 void *beLuaState_Register(void);
@@ -32,11 +32,11 @@ void *beLuaState_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLuaState_metaObject_005891b0,            /* published MetaObject slot */
+        g_beLuaState_metaObject,            /* published MetaObject slot */
         igLuaState_Register,                         /* base class registrar */
-        igLuaState_GetPublishedMetaObject_0035ac90,  /* base class MetaObject accessor */
+        igLuaState_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLuaState_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        s_beLuaState_className_005047f8,             /* class name */
+        beLuaState_className,             /* class name */
         0x18,                                        /* instance size */
         beLuaState_GetVTable,                        /* vtable getter */
         beLuaState_InitFields,                       /* field adder */

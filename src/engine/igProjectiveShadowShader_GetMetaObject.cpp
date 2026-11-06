@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_0019b800(void);
-extern igMetaObject *g_igProjectiveShadowShader_metaObject_00561620[4];
+extern igMetaObject *g_igProjectiveShadowShader_metaObject[4];
 igMetaObject *igProjectiveShadowShader_GetMetaObject(void);
 }
 
 igMetaObject *igProjectiveShadowShader_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igProjectiveShadowShader_metaObject_00561620[0] != 0) {
-        ready = (g_igProjectiveShadowShader_metaObject_00561620[0]->_validity & 4) != 0;
+    if (g_igProjectiveShadowShader_metaObject[0] != 0) {
+        ready = (g_igProjectiveShadowShader_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_0019b800();
 done:
-    return g_igProjectiveShadowShader_metaObject_00561620[0];
+    return g_igProjectiveShadowShader_metaObject[0];
 }

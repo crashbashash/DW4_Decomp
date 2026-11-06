@@ -6,7 +6,7 @@
  * verifies one function at a time. */
 
 #include "dw4/reflected.h"
-extern int g_ParticleArray_metaObject_0058a040[4];
+extern int g_ParticleArray_metaObject[4];
 
 /* 0x0015c830 */
 int Gap__Bec__ParticleArray__vfunc_30(ParticleArray *p)
@@ -29,5 +29,5 @@ void Gap__Bec__ParticleArray__vfunc_37(ParticleArray *a0, int a1)
 /* 0x003a4910 */
 int Gap__Bec__ParticleArray__vfunc_20(void)
 {
-    return g_ParticleArray_metaObject_0058a040[0];
+    return g_ParticleArray_metaObject[0];
 }

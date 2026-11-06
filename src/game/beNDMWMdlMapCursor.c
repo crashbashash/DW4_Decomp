@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beNDMWMdlMapCursor_metaObject_0058b498[4];
+extern int g_beNDMWMdlMapCursor_metaObject[4];
 /* 0x00390f70 */
 void Gap__Bec__beNDMWMdlMapCursor__vfunc_37(void)
 {
@@ -14,5 +14,5 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_37(void)
 /* 0x0044b850 */
 int Gap__Bec__beNDMWMdlMapCursor__vfunc_20(void)
 {
-    return g_beNDMWMdlMapCursor_metaObject_0058b498[0];
+    return g_beNDMWMdlMapCursor_metaObject[0];
 }

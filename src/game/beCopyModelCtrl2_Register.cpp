@@ -18,15 +18,15 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCopyModelCtrl2_metaObject_00589b58[];
+extern igMetaObject *g_beCopyModelCtrl2_metaObject[];
 void *igTransform_Register(void);
-igMetaObject *igTransform_GetPublishedMetaObject_0019de30(void);
+igMetaObject *igTransform_GetPublishedMetaObject(void);
 igMetaObject *beCopyModelCtrl2_GetMetaObject(void);
-extern const char s_beCopyModelCtrl2_className_00505a30[];
+extern const char beCopyModelCtrl2_className[];
 int beCopyModelCtrl2_GetVTable(void);
 void beCopyModelCtrl2_InitFields(void);
 void FUN_003682f0(void);
-extern char g_beCopyModelCtrl2_callbackList_004c7748[];
+extern char g_beCopyModelCtrl2_callbackList[];
 void *beCopyModelCtrl2_Register(void);
 }
 
@@ -34,15 +34,15 @@ void *beCopyModelCtrl2_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCopyModelCtrl2_metaObject_00589b58,       /* published MetaObject slot */
+        g_beCopyModelCtrl2_metaObject,       /* published MetaObject slot */
         igTransform_Register,                         /* base class registrar */
-        igTransform_GetPublishedMetaObject_0019de30,  /* base class MetaObject accessor */
+        igTransform_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beCopyModelCtrl2_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_beCopyModelCtrl2_className_00505a30,        /* class name */
+        beCopyModelCtrl2_className,        /* class name */
         0x70,                                         /* instance size */
         beCopyModelCtrl2_GetVTable,                   /* vtable getter */
         beCopyModelCtrl2_InitFields,                  /* field adder */
         FUN_003682f0,                                 /* extra callback item */
-        g_beCopyModelCtrl2_callbackList_004c7748     /* callback list */
+        g_beCopyModelCtrl2_callbackList     /* callback list */
     );
 }

@@ -1,6 +1,6 @@
 /* 0x0030c670 — StringTable_InsertAt. Retyped m2c draft, verified byte-identical to retail by tools/verify.py (wave5 shard 8). */
 int memmove();
-int FUN_002ed330();
+int Memory_ReallocateBuffer();
 struct S { char pad[4]; volatile unsigned cnt; unsigned f8; int f12; char *f16; };
 
 void StringTable_InsertAt(struct S *arg0, int arg1, int arg2) {
@@ -13,7 +13,7 @@ void StringTable_InsertAt(struct S *arg0, int arg1, int arg2) {
     temp_v1 = arg0->f12;
     if (arg0->cnt == temp_v1) {
         int nc = temp_v1 * 2;
-        arg0->f16 = (char *)FUN_002ed330(arg0->f16, nc * 4);
+        arg0->f16 = (char *)Memory_ReallocateBuffer(arg0->f16, nc * 4);
         arg0->f12 = nc;
     }
     temp_s0 = arg2 * 4;

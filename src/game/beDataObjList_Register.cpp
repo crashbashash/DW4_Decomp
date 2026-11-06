@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beDataObjList_metaObject_00589840[];
+extern igMetaObject *g_beDataObjList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beDataObjList_GetMetaObject(void);
-extern const char s_beDataObjList_className_00505518[];
+extern const char beDataObjList_className[];
 int beDataObjList_GetVTable(void);
-extern char g_beDataObjList_callbackList_004c7108[];
+extern char g_beDataObjList_callbackList[];
 void *beDataObjList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beDataObjList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beDataObjList_metaObject_00589840,    /* published MetaObject slot */
+        g_beDataObjList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                  /* base class registrar */
         igObjectList_GetPublishedMetaObject,    /* base class MetaObject accessor */
         beDataObjList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beDataObjList_className_00505518,     /* class name */
+        beDataObjList_className,     /* class name */
         0x14,                                   /* instance size */
         beDataObjList_GetVTable,                /* vtable getter */
         0,                                      /* field adder */
         0,                                      /* extra callback item */
-        g_beDataObjList_callbackList_004c7108  /* callback list */
+        g_beDataObjList_callbackList  /* callback list */
     );
 }

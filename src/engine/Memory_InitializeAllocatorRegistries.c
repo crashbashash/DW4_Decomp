@@ -9,8 +9,8 @@
 int igMemoryPoolInfoList_Allocate();
 int igMemoryPoolInfoList_Append();
 int igMemoryPoolInfoList_Init();
-extern int g_primaryAllocatorList_00586f58[4];
-extern int g_secondaryAllocatorList_00586f60[4];
+extern int g_primaryAllocatorList[4];
+extern int g_secondaryAllocatorList[4];
 void Memory_InitializeAllocatorRegistries(igObject *rootAllocator) {
     int secondaryList;
     int primaryList;
@@ -19,12 +19,12 @@ void Memory_InitializeAllocatorRegistries(igObject *rootAllocator) {
     if (primaryList != 0) {
         primaryList = igMemoryPoolInfoList_Init(primaryList);
     }
-    g_primaryAllocatorList_00586f58[0] = primaryList;
+    g_primaryAllocatorList[0] = primaryList;
     igMemoryPoolInfoList_Append(primaryList, rootAllocator);
     ((char *)&rootAllocator->_refCount)[3] = 0;
     secondaryList = igMemoryPoolInfoList_Allocate(0xC);
     if (secondaryList != 0) {
         secondaryList = igMemoryPoolInfoList_Init(secondaryList);
     }
-    g_secondaryAllocatorList_00586f60[0] = secondaryList;
+    g_secondaryAllocatorList[0] = secondaryList;
 }

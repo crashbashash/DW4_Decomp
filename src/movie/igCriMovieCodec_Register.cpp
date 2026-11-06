@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igCriMovieCodec_metaObject_00587740[];
+extern igMetaObject *g_igCriMovieCodec_metaObject[];
 void *igMovieCodec_Register(void);
-igMetaObject *igMovieCodec_GetPublishedMetaObject_00335a70(void);
+igMetaObject *igMovieCodec_GetPublishedMetaObject(void);
 igMetaObject *igCriMovieCodec_GetMetaObject(void);
-extern const char s_igCriMovieCodec_className_00500390[];
+extern const char igCriMovieCodec_className[];
 int igCriMovieCodec_GetVTable(void);
 void igCriMovieCodec_InitFields(void);
-extern char g_igCriMovieCodec_callbackList_004c2880[];
+extern char g_igCriMovieCodec_callbackList[];
 void *igCriMovieCodec_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *igCriMovieCodec_Register(void) {
     GpFlag_SetOnce_00334440();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igCriMovieCodec_metaObject_00587740,         /* published MetaObject slot */
+        g_igCriMovieCodec_metaObject,         /* published MetaObject slot */
         igMovieCodec_Register,                         /* base class registrar */
-        igMovieCodec_GetPublishedMetaObject_00335a70,  /* base class MetaObject accessor */
+        igMovieCodec_GetPublishedMetaObject,  /* base class MetaObject accessor */
         igCriMovieCodec_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_igCriMovieCodec_className_00500390,          /* class name */
+        igCriMovieCodec_className,          /* class name */
         0x18,                                          /* instance size */
         igCriMovieCodec_GetVTable,                     /* vtable getter */
         igCriMovieCodec_InitFields,                    /* field adder */
         0,                                             /* extra callback item */
-        g_igCriMovieCodec_callbackList_004c2880       /* callback list */
+        g_igCriMovieCodec_callbackList       /* callback list */
     );
 }

@@ -10,8 +10,8 @@ typedef struct Handle_27d400 {
     Node_27d400 *head;          /* 0x14 */
 } Handle_27d400;
 
-extern char s_E2004090281_NULL_pointer_is_specified_004f2408[];   /* 'E2004090281 : NULL pointer is specified.' */
-extern char s_E2004090282_Specified_handle_is_invalid_004f2438[]; /* 'E2004090282 : Specified handle is invalid.' */
+extern char E2004090281_NULL_pointer_is_specified[];   /* 'E2004090281 : NULL pointer is specified.' */
+extern char E2004090282_Specified_handle_is_invalid[]; /* 'E2004090282 : Specified handle is invalid.' */
 int FUN_0027b2e0(const char *message);
 
 int FUN_0027d400(Handle_27d400 *handle) {
@@ -19,11 +19,11 @@ int FUN_0027d400(Handle_27d400 *handle) {
     int count;
 
     if (handle == 0) {
-        FUN_0027b2e0(s_E2004090281_NULL_pointer_is_specified_004f2408);
+        FUN_0027b2e0(E2004090281_NULL_pointer_is_specified);
         return 0;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(s_E2004090282_Specified_handle_is_invalid_004f2438);
+        FUN_0027b2e0(E2004090282_Specified_handle_is_invalid);
         return 0;
     }
     count = 0;

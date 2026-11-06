@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beWeaponSeqData_metaObject_00587a50[];
+extern igMetaObject *g_beWeaponSeqData_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beWeaponSeqData_GetMetaObject(void);
-extern const char s_beWeaponSeqData_className_005016b0[];
+extern const char beWeaponSeqData_className[];
 int beWeaponSeqData_GetVTable(void);
 void beWeaponSeqData_InitFields(void);
 void *beWeaponSeqData_Register(void);
@@ -32,11 +32,11 @@ void *beWeaponSeqData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beWeaponSeqData_metaObject_00587a50,          /* published MetaObject slot */
+        g_beWeaponSeqData_metaObject,          /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beWeaponSeqData_GetMetaObject,                  /* own MetaObject accessor (stored at +0x54) */
-        s_beWeaponSeqData_className_005016b0,           /* class name */
+        beWeaponSeqData_className,           /* class name */
         0x10,                                           /* instance size */
         beWeaponSeqData_GetVTable,                      /* vtable getter */
         beWeaponSeqData_InitFields,                     /* field adder */

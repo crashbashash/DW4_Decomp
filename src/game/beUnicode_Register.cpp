@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beUnicode_metaObject_00587c00[];
+extern igMetaObject *g_beUnicode_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beUnicode_GetMetaObject(void);
-extern const char s_beUnicode_className_00501a70[];
+extern const char beUnicode_className[];
 int beUnicode_GetVTable(void);
 void *beUnicode_Register(void);
 }
@@ -31,11 +31,11 @@ void *beUnicode_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beUnicode_metaObject_00587c00,        /* published MetaObject slot */
+        g_beUnicode_metaObject,        /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beUnicode_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beUnicode_className_00501a70,         /* class name */
+        beUnicode_className,         /* class name */
         8,                                      /* instance size */
         beUnicode_GetVTable,                    /* vtable getter */
         0,                                      /* field adder */

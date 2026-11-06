@@ -12,19 +12,19 @@ typedef struct Lsc_277400 {
     LscEntry_277400 entries[16];    /* 0x38 */
 } Lsc_277400;
 
-extern char s_E0003_Illigal_parameter_lsc_NULL_004f0b08[];   /* 'E0003: Illigal parameter lsc=NULL\n' */
-extern char s_E0009_Illigal_parameter_no_d_004f0b58[];       /* 'E0009: Illigal parameter no=%d\n' */
+extern char E0003_Illigal_parameter_lsc_NULL[];   /* 'E0003: Illigal parameter lsc=NULL\n' */
+extern char E0009_Illigal_parameter_no_d[];       /* 'E0009: Illigal parameter no=%d\n' */
 void FUN_002777f8(const char *format, ...);
 
 int FUN_00277400(Lsc_277400 *lsc, int no) {
     int slot;
 
     if (lsc == 0) {
-        FUN_002777f8(s_E0003_Illigal_parameter_lsc_NULL_004f0b08);
+        FUN_002777f8(E0003_Illigal_parameter_lsc_NULL);
         return -1;
     }
     if (no < 0 || no >= lsc->count) {
-        FUN_002777f8(s_E0009_Illigal_parameter_no_d_004f0b58, no);
+        FUN_002777f8(E0009_Illigal_parameter_no_d, no);
         return -1;
     }
     slot = (lsc->head + no) % 16;

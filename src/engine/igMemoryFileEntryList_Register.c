@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igObjectList_Register[];
 extern char igMemoryFileEntryList_GetVTable[];
 extern char thunk_igMemoryFileEntryList_GetMetaObject[];
-extern char g_igMemoryFileEntryList_callbackList_004c02d0[];
-extern char s_igMemoryFileEntryList_className_004f6d30[];
-extern char g_igMemoryFileEntryList_metaObject_00585f40[];
+extern char g_igMemoryFileEntryList_callbackList[];
+extern char igMemoryFileEntryList_className[];
+extern char g_igMemoryFileEntryList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igMemoryFileEntryList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igMemoryFileEntryList_metaObject_00585f40, /* published MetaObject slot */
+        g_igMemoryFileEntryList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                       /* base class registrar */
         igObjectList_GetPublishedMetaObject,         /* base class MetaObject accessor */
         thunk_igMemoryFileEntryList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igMemoryFileEntryList_className_004f6d30,  /* class name */
+        igMemoryFileEntryList_className,  /* class name */
         0x14,                                        /* instance size */
         igMemoryFileEntryList_GetVTable,             /* vtable getter */
         0,                                           /* field adder */
         0,                                           /* extra callback item */
-        g_igMemoryFileEntryList_callbackList_004c02d0  /* callback list */
+        g_igMemoryFileEntryList_callbackList  /* callback list */
     );
 }

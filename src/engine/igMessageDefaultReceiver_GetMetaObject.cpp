@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_00232320(void);
-extern igMetaObject *g_igMessageDefaultReceiver_metaObject_0056db30[4];
+extern igMetaObject *g_igMessageDefaultReceiver_metaObject[4];
 igMetaObject *igMessageDefaultReceiver_GetMetaObject(void);
 }
 
 igMetaObject *igMessageDefaultReceiver_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igMessageDefaultReceiver_metaObject_0056db30[0] != 0) {
-        ready = (g_igMessageDefaultReceiver_metaObject_0056db30[0]->_validity & 4) != 0;
+    if (g_igMessageDefaultReceiver_metaObject[0] != 0) {
+        ready = (g_igMessageDefaultReceiver_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00232320();
 done:
-    return g_igMessageDefaultReceiver_metaObject_0056db30[0];
+    return g_igMessageDefaultReceiver_metaObject[0];
 }

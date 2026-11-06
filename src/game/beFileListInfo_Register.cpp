@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beFileListInfo_metaObject_00589760[];
+extern igMetaObject *g_beFileListInfo_metaObject[];
 void *igInfo_Register(void);
-igMetaObject *igInfo_GetPublishedMetaObject_00131c50(void);
+igMetaObject *igInfo_GetPublishedMetaObject(void);
 igMetaObject *beFileListInfo_GetMetaObject(void);
-extern const char s_beFileListInfo_className_00505398[];
+extern const char beFileListInfo_className[];
 int beFileListInfo_GetVTable(void);
 void beFileListInfo_InitFields(void);
-extern char g_beFileListInfo_callbackList_004c6f50[];
+extern char g_beFileListInfo_callbackList[];
 void *beFileListInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beFileListInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beFileListInfo_metaObject_00589760,    /* published MetaObject slot */
+        g_beFileListInfo_metaObject,    /* published MetaObject slot */
         igInfo_Register,                         /* base class registrar */
-        igInfo_GetPublishedMetaObject_00131c50,  /* base class MetaObject accessor */
+        igInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beFileListInfo_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beFileListInfo_className_00505398,     /* class name */
+        beFileListInfo_className,     /* class name */
         0x1c,                                    /* instance size */
         beFileListInfo_GetVTable,                /* vtable getter */
         beFileListInfo_InitFields,               /* field adder */
         0,                                       /* extra callback item */
-        g_beFileListInfo_callbackList_004c6f50  /* callback list */
+        g_beFileListInfo_callbackList  /* callback list */
     );
 }

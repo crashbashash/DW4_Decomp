@@ -1,7 +1,7 @@
 int memset();
 int FUN_00245080();
 int Memory_AllocateDefaultBuffer();
-int Memory_FreeBufferAlias_002ed4b0();
+int Memory_FreeBufferAliasA();
 extern unsigned int DAT_004986b0[4];
 extern unsigned int DAT_004986b8[4];
 extern unsigned int DAT_0056deb8[4];
@@ -24,7 +24,7 @@ void FUN_002450c0(void) {
     }
     if (DAT_0056dec8[0] == 0) {
         if (DAT_0056deb8[0] == 0) {
-            Memory_FreeBufferAlias_002ed4b0(DAT_0056dec0[0], DAT_0056deb8[0]);
+            Memory_FreeBufferAliasA(DAT_0056dec0[0], DAT_0056deb8[0]);
             DAT_0056dec0[0] = 0;
             DAT_004986b8[0] = 0x100;
             return;
@@ -55,7 +55,7 @@ void FUN_002450c0(void) {
             }
             DAT_004986b8[0] = temp_s2;
             DAT_004986b0[0] = var_s3;
-            Memory_FreeBufferAlias_002ed4b0(DAT_0056dec0[0]);
+            Memory_FreeBufferAliasA(DAT_0056dec0[0]);
             DAT_0056dec0[0] = temp_v0;
         }
     }

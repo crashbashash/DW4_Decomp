@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beWaterPlain_metaObject_00587bf8[];
+extern igMetaObject *g_beWaterPlain_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beWaterPlain_GetMetaObject(void);
-extern const char s_beWaterPlain_className_00501a60[];
+extern const char beWaterPlain_className[];
 int beWaterPlain_GetVTable(void);
 void *beWaterPlain_Register(void);
 }
@@ -31,11 +31,11 @@ void *beWaterPlain_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beWaterPlain_metaObject_00587bf8,                 /* published MetaObject slot */
+        g_beWaterPlain_metaObject,                 /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beWaterPlain_GetMetaObject,                         /* own MetaObject accessor (stored at +0x54) */
-        s_beWaterPlain_className_00501a60,                  /* class name */
+        beWaterPlain_className,                  /* class name */
         0x20,                                               /* instance size */
         beWaterPlain_GetVTable,                             /* vtable getter */
         0,                                                  /* field adder */

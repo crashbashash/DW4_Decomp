@@ -295,11 +295,11 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 84160,
    "foreign_profile.functions": 369,
-   "fun_dat_refs": 76141,
+   "fun_dat_refs": 76122,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 5676,
+   "m2c_idiom.units": 5670,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 1236,
@@ -316,9 +316,9 @@
  "functions": {
   "fully_verified": 16864,
   "matched": 17248,
-  "named": 7822,
-  "named_semantic": 1559,
-  "named_semantic_matched": 1424,
+  "named": 7823,
+  "named_semantic": 1560,
+  "named_semantic_matched": 1425,
   "total": 20214
  },
  "largest": [
@@ -394,11 +394,11 @@
   "asm_units": 20214,
   "classes_with_fields": 659,
   "fields": 3680,
-  "findings": 2286,
+  "findings": 2290,
   "findings_by_status": {
-   "confirmed": 1433,
+   "confirmed": 1438,
    "refuted": 92,
-   "unconfirmed": 761
+   "unconfirmed": 760
   },
   "lua_chunks": 5291,
   "metaobjects": 1075,
@@ -410,34 +410,42 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 288684,
+  "bytes": 199224,
   "failing": {
+   "addresses": {
+    "bytes": 1961644,
+    "functions": 13396
+   },
    "fields": {
-    "bytes": 700572,
-    "functions": 3047
+    "bytes": 700148,
+    "functions": 3045
    },
    "idioms": {
-    "bytes": 1151396,
-    "functions": 5485
+    "bytes": 1202608,
+    "functions": 5513
    },
    "name": {
-    "bytes": 1528352,
-    "functions": 11958
+    "bytes": 1528236,
+    "functions": 11957
    },
    "placed": {
-    "bytes": 1762052,
-    "functions": 12084
+    "bytes": 1762044,
+    "functions": 12083
    },
    "references": {
-    "bytes": 1722184,
-    "functions": 9583
+    "bytes": 1720960,
+    "functions": 9576
+   },
+   "types": {
+    "bytes": 852316,
+    "functions": 3249
    },
    "virtuals": {
-    "bytes": 31288,
-    "functions": 201
+    "bytes": 367336,
+    "functions": 1115
    }
   },
-  "functions": 1966,
+  "functions": 1140,
   "matched_functions": 16864
  },
  "regions": [
@@ -572,11 +580,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 5816,
-  "pct": 44.01,
+  "offset_casts": 5815,
+  "pct": 44.0,
   "recovered": 24677,
   "synthetic": 8418,
-  "total": 56075,
+  "total": 56090,
   "typeable": 43,
   "typeable_pct": 0.08
  }

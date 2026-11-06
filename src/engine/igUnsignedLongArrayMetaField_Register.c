@@ -4,10 +4,10 @@
 extern char igUnsignedLongMetaField_Register[];
 extern char igUnsignedLongArrayMetaField_GetVTable[];
 extern char thunk_igUnsignedLongArrayMetaField_GetMetaObject[];
-extern char igUnsignedLongMetaField_GetPublishedMetaObject_002b6bb0[];
-extern char g_igUnsignedLongArrayMetaField_callbackList_004bf2e0[];
-extern char s_igUnsignedLongArrayMetaField_className_004f5b30[];
-extern char g_igUnsignedLongArrayMetaField_metaObject_00585720[];
+extern char igUnsignedLongMetaField_GetPublishedMetaObject[];
+extern char g_igUnsignedLongArrayMetaField_callbackList[];
+extern char igUnsignedLongArrayMetaField_className[];
+extern char g_igUnsignedLongArrayMetaField_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 int igUnsignedLongArrayMetaField_InitFields();
@@ -16,15 +16,15 @@ void igUnsignedLongArrayMetaField_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igUnsignedLongArrayMetaField_metaObject_00585720,      /* published MetaObject slot */
+        g_igUnsignedLongArrayMetaField_metaObject,      /* published MetaObject slot */
         igUnsignedLongMetaField_Register,                        /* base class registrar */
-        igUnsignedLongMetaField_GetPublishedMetaObject_002b6bb0, /* base class MetaObject accessor */
+        igUnsignedLongMetaField_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igUnsignedLongArrayMetaField_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        s_igUnsignedLongArrayMetaField_className_004f5b30,       /* class name */
+        igUnsignedLongArrayMetaField_className,       /* class name */
         0x38,                                                    /* instance size */
         igUnsignedLongArrayMetaField_GetVTable,                  /* vtable getter */
         &igUnsignedLongArrayMetaField_InitFields,                /* field adder */
         0,                                                       /* extra callback item */
-        g_igUnsignedLongArrayMetaField_callbackList_004bf2e0     /* callback list */
+        g_igUnsignedLongArrayMetaField_callbackList     /* callback list */
     );
 }

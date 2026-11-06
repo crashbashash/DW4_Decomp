@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadIntf2ChrDataSel_metaObject_0058b6b0[];
+extern igMetaObject *g_beNDMWLoadIntf2ChrDataSel_metaObject[];
 void *beBaseInfoData_Register(void);
-igMetaObject *beBaseInfoData_GetPublishedMetaObject_00343c80(void);
+igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
 igMetaObject *beNDMWLoadIntf2ChrDataSel_GetMetaObject(void);
-extern const char s_beNDMWLoadIntf2ChrDataSel_className_00512820[];
+extern const char beNDMWLoadIntf2ChrDataSel_className[];
 int beNDMWLoadIntf2ChrDataSel_GetVTable(void);
 void beNDMWLoadIntf2ChrDataSel_InitFields(void);
-extern char g_beNDMWLoadIntf2ChrDataSel_callbackList_004caf00[];
+extern char g_beNDMWLoadIntf2ChrDataSel_callbackList[];
 void *beNDMWLoadIntf2ChrDataSel_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWLoadIntf2ChrDataSel_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadIntf2ChrDataSel_metaObject_0058b6b0,    /* published MetaObject slot */
+        g_beNDMWLoadIntf2ChrDataSel_metaObject,    /* published MetaObject slot */
         beBaseInfoData_Register,                            /* base class registrar */
-        beBaseInfoData_GetPublishedMetaObject_00343c80,     /* base class MetaObject accessor */
+        beBaseInfoData_GetPublishedMetaObject,     /* base class MetaObject accessor */
         beNDMWLoadIntf2ChrDataSel_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadIntf2ChrDataSel_className_00512820,     /* class name */
+        beNDMWLoadIntf2ChrDataSel_className,     /* class name */
         0x4c,                                               /* instance size */
         beNDMWLoadIntf2ChrDataSel_GetVTable,                /* vtable getter */
         beNDMWLoadIntf2ChrDataSel_InitFields,               /* field adder */
         0,                                                  /* extra callback item */
-        g_beNDMWLoadIntf2ChrDataSel_callbackList_004caf00  /* callback list */
+        g_beNDMWLoadIntf2ChrDataSel_callbackList  /* callback list */
     );
 }

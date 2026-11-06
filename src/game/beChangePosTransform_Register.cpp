@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beChangePosTransform_metaObject_00589b80[];
+extern igMetaObject *g_beChangePosTransform_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beChangePosTransform_GetMetaObject(void);
-extern const char s_beChangePosTransform_className_00505aa0[];
+extern const char beChangePosTransform_className[];
 int beChangePosTransform_GetVTable(void);
 void beChangePosTransform_InitFields(void);
 void *beChangePosTransform_Register(void);
@@ -32,11 +32,11 @@ void *beChangePosTransform_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beChangePosTransform_metaObject_00589b80,         /* published MetaObject slot */
+        g_beChangePosTransform_metaObject,         /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beChangePosTransform_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beChangePosTransform_className_00505aa0,          /* class name */
+        beChangePosTransform_className,          /* class name */
         0x2c,                                               /* instance size */
         beChangePosTransform_GetVTable,                     /* vtable getter */
         beChangePosTransform_InitFields,                    /* field adder */

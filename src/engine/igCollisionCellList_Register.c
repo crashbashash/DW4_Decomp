@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igCollisionCellList_GetVTable[];
 extern char thunk_igCollisionCellList_GetMetaObject[];
 extern char igObjectList_Register[];
-extern char g_igCollisionCellList_callbackList_00498580[];
-extern char s_igCollisionCellList_className_004ea0f0[];
-extern char g_igCollisionCellList_metaObject_0056ddc0[];
+extern char g_igCollisionCellList_callbackList[];
+extern char igCollisionCellList_className[];
+extern char g_igCollisionCellList_metaObject[];
 int GpFlag_SetOnce_002393f0();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igCollisionCellList_Register(void) {
     GpFlag_SetOnce_002393f0();
     igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igCollisionCellList_metaObject_0056ddc0, /* published MetaObject slot */
+        g_igCollisionCellList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                     /* base class registrar */
         igObjectList_GetPublishedMetaObject,       /* base class MetaObject accessor */
         thunk_igCollisionCellList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igCollisionCellList_className_004ea0f0,  /* class name */
+        igCollisionCellList_className,  /* class name */
         0x14,                                      /* instance size */
         igCollisionCellList_GetVTable,             /* vtable getter */
         0,                                         /* field adder */
         0,                                         /* extra callback item */
-        g_igCollisionCellList_callbackList_00498580  /* callback list */
+        g_igCollisionCellList_callbackList  /* callback list */
     );
 }

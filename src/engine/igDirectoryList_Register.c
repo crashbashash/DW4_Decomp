@@ -5,9 +5,9 @@ extern char igObjectList_GetPublishedMetaObject[];
 extern char igObjectList_Register[];
 extern char igDirectoryList_GetVTable[];
 extern char thunk_igDirectoryList_GetMetaObject[];
-extern char g_igDirectoryList_callbackList_004c10e8[];
-extern char s_igDirectoryList_className_004f8140[];
-extern char g_igDirectoryList_metaObject_00586660[];
+extern char g_igDirectoryList_callbackList[];
+extern char igDirectoryList_className[];
+extern char g_igDirectoryList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 
@@ -15,15 +15,15 @@ void igDirectoryList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                     /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igDirectoryList_metaObject_00586660, /* published MetaObject slot */
+        g_igDirectoryList_metaObject, /* published MetaObject slot */
         igObjectList_Register,                 /* base class registrar */
         igObjectList_GetPublishedMetaObject,   /* base class MetaObject accessor */
         thunk_igDirectoryList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igDirectoryList_className_004f8140,  /* class name */
+        igDirectoryList_className,  /* class name */
         0x14,                                  /* instance size */
         igDirectoryList_GetVTable,             /* vtable getter */
         0,                                     /* field adder */
         0,                                     /* extra callback item */
-        g_igDirectoryList_callbackList_004c10e8  /* callback list */
+        g_igDirectoryList_callbackList  /* callback list */
     );
 }

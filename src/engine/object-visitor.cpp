@@ -63,7 +63,7 @@ virtual void f39();
 virtual void Visit(void *,Visitor,void *);};
 struct FieldVector {int vt,refs;VisitorFieldView **data;int count;};
 extern "C" int igMetaObject_GetFieldCount(igMetaObject *);
-extern "C" int g_igObject_metaObject_00587198[4];
+extern "C" int g_igObject_metaObject[4];
 extern "C" void igObject_VisitFields(VisitorObjectView *object,Visitor callback,void *context){
     VisitorFieldView *field;
     int i;
@@ -73,7 +73,7 @@ extern "C" void igObject_VisitFields(VisitorObjectView *object,Visitor callback,
     object->Prepare();
     fields=(FieldVector *)object->Meta()->_metaFields;
     count=fields->count;
-    for(i=igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject_00587198[0]);i<count;++i){
+    for(i=igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject[0]);i<count;++i){
         field=fields->data[i];
         if(callback(object,field,context)!=1)field->Visit(object,callback,context);
     }

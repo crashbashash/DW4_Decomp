@@ -5,16 +5,16 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beParticleCtrl2Info_metaObject_005884e0[4];
-extern int g_beParticleCtrl2_metaObject_00588510[4];
+extern int g_beParticleCtrl2Info_metaObject[4];
+extern int g_beParticleCtrl2_metaObject[4];
 /* 0x0039bbf0 */
 int Gap__Bec__beParticleCtrl2__vfunc_30(void)
 {
-    return g_beParticleCtrl2Info_metaObject_005884e0[0];
+    return g_beParticleCtrl2Info_metaObject[0];
 }
 
 /* 0x0039c150 */
 int Gap__Bec__beParticleCtrl2__vfunc_20(void)
 {
-    return g_beParticleCtrl2_metaObject_00588510[0];
+    return g_beParticleCtrl2_metaObject[0];
 }

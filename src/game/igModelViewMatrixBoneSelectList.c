@@ -5,12 +5,12 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_igModelViewMatrixBoneSelect_metaObject_00561888[4];
+extern int g_igModelViewMatrixBoneSelect_metaObject[4];
 extern int g_igModelViewMatrixBoneSelectList_metaObject_00587aa0[4];
 /* 0x001e3c20 */
 int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_22(void)
 {
-    return g_igModelViewMatrixBoneSelect_metaObject_00561888[0];
+    return g_igModelViewMatrixBoneSelect_metaObject[0];
 }
 
 /* 0x003703a0 */

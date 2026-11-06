@@ -2,16 +2,16 @@
  * byte-identical to retail. The SHAPE matched; the types come from the recovered
  * reflection metadata (igMetaObject, whose +36 field `_validity` this tests). */
 #include "dw4/reflected.h"
-extern igMetaObject *g_igIterateDerived_metaObject_0056d980[4];
+extern igMetaObject *g_igIterateDerived_metaObject[4];
 extern "C" {
 void FUN_00227af0(void);
 igMetaObject *igIterateDerived_GetMetaObject(void);
 }
 igMetaObject *igIterateDerived_GetMetaObject(void)
 {
-    igMetaObject *g = g_igIterateDerived_metaObject_0056d980[0];
+    igMetaObject *g = g_igIterateDerived_metaObject[0];
     bool t;
     if (!g || !(t = g->_validity & 4))
         FUN_00227af0();
-    return g_igIterateDerived_metaObject_0056d980[0];
+    return g_igIterateDerived_metaObject[0];
 }

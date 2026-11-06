@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_igAdx_metaObject_00587628[];
+extern igMetaObject *g_igAdx_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *igAdx_GetMetaObject(void);
-extern const char s_igAdx_className_00500148[];
+extern const char igAdx_className[];
 int igAdx_GetVTable(void);
 void igAdx_InitFields(void);
 void FUN_003345d0(void);
@@ -33,11 +33,11 @@ void *igAdx_Register(void) {
     GpFlag_SetOnce_00334440();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAdx_metaObject_00587628,            /* published MetaObject slot */
+        g_igAdx_metaObject,            /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         igAdx_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        s_igAdx_className_00500148,             /* class name */
+        igAdx_className,             /* class name */
         8,                                      /* instance size */
         igAdx_GetVTable,                        /* vtable getter */
         igAdx_InitFields,                       /* field adder */

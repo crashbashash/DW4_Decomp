@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beFontGeomAttrPair_metaObject_005896d8[];
+extern igMetaObject *g_beFontGeomAttrPair_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beFontGeomAttrPair_GetMetaObject(void);
-extern const char s_beFontGeomAttrPair_className_005052b0[];
+extern const char beFontGeomAttrPair_className[];
 int beFontGeomAttrPair_GetVTable(void);
 void beFontGeomAttrPair_InitFields(void);
-extern char g_beFontGeomAttrPair_callbackList_004c6e20[];
+extern char g_beFontGeomAttrPair_callbackList[];
 void *beFontGeomAttrPair_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beFontGeomAttrPair_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beFontGeomAttrPair_metaObject_005896d8,    /* published MetaObject slot */
+        g_beFontGeomAttrPair_metaObject,    /* published MetaObject slot */
         igObject_Register,                           /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,       /* base class MetaObject accessor */
         beFontGeomAttrPair_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beFontGeomAttrPair_className_005052b0,     /* class name */
+        beFontGeomAttrPair_className,     /* class name */
         0x14,                                        /* instance size */
         beFontGeomAttrPair_GetVTable,                /* vtable getter */
         beFontGeomAttrPair_InitFields,               /* field adder */
         0,                                           /* extra callback item */
-        g_beFontGeomAttrPair_callbackList_004c6e20  /* callback list */
+        g_beFontGeomAttrPair_callbackList  /* callback list */
     );
 }

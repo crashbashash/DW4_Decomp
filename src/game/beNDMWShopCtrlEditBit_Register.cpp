@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShopCtrlEditBit_metaObject_0058ad28[];
+extern igMetaObject *g_beNDMWShopCtrlEditBit_metaObject[];
 void *beNDMWWindowCtrl_Register(void);
 igMetaObject *beNDMWWindowCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWShopCtrlEditBit_GetMetaObject(void);
-extern const char s_beNDMWShopCtrlEditBit_className_00511340[];
+extern const char beNDMWShopCtrlEditBit_className[];
 int beNDMWShopCtrlEditBit_GetVTable(void);
 void beNDMWShopCtrlEditBit_InitFields(void);
 void *beNDMWShopCtrlEditBit_Register(void);
@@ -32,11 +32,11 @@ void *beNDMWShopCtrlEditBit_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShopCtrlEditBit_metaObject_0058ad28,  /* published MetaObject slot */
+        g_beNDMWShopCtrlEditBit_metaObject,  /* published MetaObject slot */
         beNDMWWindowCtrl_Register,                    /* base class registrar */
         beNDMWWindowCtrl_GetPublishedMetaObject,      /* base class MetaObject accessor */
         beNDMWShopCtrlEditBit_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShopCtrlEditBit_className_00511340,   /* class name */
+        beNDMWShopCtrlEditBit_className,   /* class name */
         0x5c,                                         /* instance size */
         beNDMWShopCtrlEditBit_GetVTable,              /* vtable getter */
         beNDMWShopCtrlEditBit_InitFields,             /* field adder */

@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlAIMapList_metaObject_00588c98[];
+extern igMetaObject *g_beModelCtrlAIMapList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlAIMapList_GetMetaObject(void);
-extern const char s_beModelCtrlAIMapList_className_00503cd0[];
+extern const char beModelCtrlAIMapList_className[];
 int beModelCtrlAIMapList_GetVTable(void);
-extern char g_beModelCtrlAIMapList_callbackList_004c55e8[];
+extern char g_beModelCtrlAIMapList_callbackList[];
 void *beModelCtrlAIMapList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beModelCtrlAIMapList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlAIMapList_metaObject_00588c98,    /* published MetaObject slot */
+        g_beModelCtrlAIMapList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                         /* base class registrar */
         igObjectList_GetPublishedMetaObject,           /* base class MetaObject accessor */
         beModelCtrlAIMapList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlAIMapList_className_00503cd0,     /* class name */
+        beModelCtrlAIMapList_className,     /* class name */
         0x14,                                          /* instance size */
         beModelCtrlAIMapList_GetVTable,                /* vtable getter */
         0,                                             /* field adder */
         0,                                             /* extra callback item */
-        g_beModelCtrlAIMapList_callbackList_004c55e8  /* callback list */
+        g_beModelCtrlAIMapList_callbackList  /* callback list */
     );
 }

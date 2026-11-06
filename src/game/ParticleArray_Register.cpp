@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_ParticleArray_metaObject_0058a040[];
+extern igMetaObject *g_ParticleArray_metaObject[];
 void *igParticleArray_Register(void);
-igMetaObject *igParticleArray_GetPublishedMetaObject_001534e0(void);
+igMetaObject *igParticleArray_GetPublishedMetaObject(void);
 igMetaObject *ParticleArray_GetMetaObject(void);
-extern const char s_ParticleArray_className_00506370[];
+extern const char ParticleArray_className[];
 int ParticleArray_GetVTable(void);
 void ParticleArray_InitFields(void);
-extern char g_ParticleArray_callbackList_004c8258[];
+extern char g_ParticleArray_callbackList[];
 void *ParticleArray_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *ParticleArray_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_ParticleArray_metaObject_0058a040,              /* published MetaObject slot */
+        g_ParticleArray_metaObject,              /* published MetaObject slot */
         igParticleArray_Register,                         /* base class registrar */
-        igParticleArray_GetPublishedMetaObject_001534e0,  /* base class MetaObject accessor */
+        igParticleArray_GetPublishedMetaObject,  /* base class MetaObject accessor */
         ParticleArray_GetMetaObject,                      /* own MetaObject accessor (stored at +0x54) */
-        s_ParticleArray_className_00506370,               /* class name */
+        ParticleArray_className,               /* class name */
         0x7c,                                             /* instance size */
         ParticleArray_GetVTable,                          /* vtable getter */
         ParticleArray_InitFields,                         /* field adder */
         0,                                                /* extra callback item */
-        g_ParticleArray_callbackList_004c8258            /* callback list */
+        g_ParticleArray_callbackList            /* callback list */
     );
 }

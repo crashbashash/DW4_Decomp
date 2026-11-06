@@ -4,10 +4,10 @@
 extern char igVec4fMetaField_Register[];
 extern char igVec4fArrayMetaField_GetVTable[];
 extern char thunk_igVec4fArrayMetaField_GetMetaObject[];
-extern char igVec4fMetaField_GetPublishedMetaObject_00187720[];
-extern char g_igVec4fArrayMetaField_callbackList_0048ad68[];
-extern char s_igVec4fArrayMetaField_className_004e0a20[];
-extern char g_igVec4fArrayMetaField_metaObject_00560f48[];
+extern char igVec4fMetaField_GetPublishedMetaObject[];
+extern char g_igVec4fArrayMetaField_callbackList[];
+extern char igVec4fArrayMetaField_className[];
+extern char g_igVec4fArrayMetaField_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 int igVec4fArrayMetaField_InitFields();
@@ -16,15 +16,15 @@ void igVec4fArrayMetaField_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                                /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igVec4fArrayMetaField_metaObject_00560f48,      /* published MetaObject slot */
+        g_igVec4fArrayMetaField_metaObject,      /* published MetaObject slot */
         igVec4fMetaField_Register,                        /* base class registrar */
-        igVec4fMetaField_GetPublishedMetaObject_00187720, /* base class MetaObject accessor */
+        igVec4fMetaField_GetPublishedMetaObject, /* base class MetaObject accessor */
         thunk_igVec4fArrayMetaField_GetMetaObject,        /* own MetaObject accessor (stored at +0x54) */
-        s_igVec4fArrayMetaField_className_004e0a20,       /* class name */
+        igVec4fArrayMetaField_className,       /* class name */
         0x38,                                             /* instance size */
         igVec4fArrayMetaField_GetVTable,                  /* vtable getter */
         &igVec4fArrayMetaField_InitFields,                /* field adder */
         0,                                                /* extra callback item */
-        g_igVec4fArrayMetaField_callbackList_0048ad68     /* callback list */
+        g_igVec4fArrayMetaField_callbackList     /* callback list */
     );
 }

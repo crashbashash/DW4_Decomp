@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMeterCtrlOneData_metaObject_00588eb0[];
+extern igMetaObject *g_beMeterCtrlOneData_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beMeterCtrlOneData_GetMetaObject(void);
-extern const char s_beMeterCtrlOneData_className_005041e0[];
+extern const char beMeterCtrlOneData_className[];
 int beMeterCtrlOneData_GetVTable(void);
 void beMeterCtrlOneData_InitFields(void);
-extern char g_beMeterCtrlOneData_callbackList_004c5ad0[];
+extern char g_beMeterCtrlOneData_callbackList[];
 void *beMeterCtrlOneData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beMeterCtrlOneData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMeterCtrlOneData_metaObject_00588eb0,       /* published MetaObject slot */
+        g_beMeterCtrlOneData_metaObject,       /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beMeterCtrlOneData_GetMetaObject,               /* own MetaObject accessor (stored at +0x54) */
-        s_beMeterCtrlOneData_className_005041e0,        /* class name */
+        beMeterCtrlOneData_className,        /* class name */
         0x48,                                           /* instance size */
         beMeterCtrlOneData_GetVTable,                   /* vtable getter */
         beMeterCtrlOneData_InitFields,                  /* field adder */
         0,                                              /* extra callback item */
-        g_beMeterCtrlOneData_callbackList_004c5ad0     /* callback list */
+        g_beMeterCtrlOneData_callbackList     /* callback list */
     );
 }

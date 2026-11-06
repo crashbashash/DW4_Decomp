@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWMcSlotXbox_metaObject_0058bc98[];
+extern igMetaObject *g_beNDMWMcSlotXbox_metaObject[];
 void *beNDMWMcSlot_Register(void);
-igMetaObject *beNDMWMcSlot_GetPublishedMetaObject_003c5c70(void);
+igMetaObject *beNDMWMcSlot_GetPublishedMetaObject(void);
 igMetaObject *beNDMWMcSlotXbox_GetMetaObject(void);
-extern const char s_beNDMWMcSlotXbox_className_00512e20[];
+extern const char beNDMWMcSlotXbox_className[];
 int beNDMWMcSlotXbox_GetVTable(void);
 void beNDMWMcSlotXbox_InitFields(void);
 void *beNDMWMcSlotXbox_Register(void);
@@ -32,11 +32,11 @@ void *beNDMWMcSlotXbox_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWMcSlotXbox_metaObject_0058bc98,        /* published MetaObject slot */
+        g_beNDMWMcSlotXbox_metaObject,        /* published MetaObject slot */
         beNDMWMcSlot_Register,                         /* base class registrar */
-        beNDMWMcSlot_GetPublishedMetaObject_003c5c70,  /* base class MetaObject accessor */
+        beNDMWMcSlot_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWMcSlotXbox_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWMcSlotXbox_className_00512e20,         /* class name */
+        beNDMWMcSlotXbox_className,         /* class name */
         0x1c,                                          /* instance size */
         beNDMWMcSlotXbox_GetVTable,                    /* vtable getter */
         beNDMWMcSlotXbox_InitFields,                   /* field adder */

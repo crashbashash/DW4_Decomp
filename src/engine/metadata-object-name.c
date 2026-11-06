@@ -9,19 +9,19 @@ int StringPool_Construct(int);
 int StringPool_Intern(int,int);
 int StringChunk_ReleaseHeader(int,void *);
 /* Shared string pool singleton (finding #1035); array form keeps the load absolute. */
-extern int g_stringPool_00586f20[4];
+extern int g_stringPool[4];
 void igMetaObject_SetName(igMetaObject *meta, int name) {
     int pool, internedName, oldName, refCount;
     int *oldHeader;
 
-    if (g_stringPool_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = FUN_002eb010(16);
         if (pool) {
             pool = StringPool_Construct(pool);
         }
-        g_stringPool_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    internedName = StringPool_Intern(g_stringPool_00586f20[0], name);
+    internedName = StringPool_Intern(g_stringPool[0], name);
     oldName = meta->_name;
     if (oldName) {
         oldHeader = (int *)(oldName - 8);

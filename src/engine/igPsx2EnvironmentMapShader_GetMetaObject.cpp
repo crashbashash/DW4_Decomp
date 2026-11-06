@@ -2,16 +2,16 @@
  * byte-identical to retail. The SHAPE matched; the types come from the recovered
  * reflection metadata (igMetaObject, whose +36 field `_validity` this tests). */
 #include "dw4/reflected.h"
-extern igMetaObject *g_igPsx2EnvironmentMapShader_metaObject_005624f8[4];
+extern igMetaObject *g_igPsx2EnvironmentMapShader_metaObject[4];
 extern "C" {
 void FUN_001ab540(void);
 igMetaObject *igPsx2EnvironmentMapShader_GetMetaObject(void);
 }
 igMetaObject *igPsx2EnvironmentMapShader_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2EnvironmentMapShader_metaObject_005624f8[0];
+    igMetaObject *g = g_igPsx2EnvironmentMapShader_metaObject[0];
     bool t;
     if (!g || !(t = g->_validity & 4))
         FUN_001ab540();
-    return g_igPsx2EnvironmentMapShader_metaObject_005624f8[0];
+    return g_igPsx2EnvironmentMapShader_metaObject[0];
 }

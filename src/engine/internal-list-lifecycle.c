@@ -38,12 +38,12 @@ void igObject_Destroy(void *);
 /* Vtables stored into offset 0: the plain pointer list (finding #3187) and
  * the derived internal object list that the InternalObjectList_* functions
  * below install over it. */
-extern int g_ObjectPointerList_vtable_00532770[4];
-extern int g_InternalObjectList_vtable_005327d0[4];
+extern int g_ObjectPointerList_vtable[4];
+extern int g_InternalObjectList_vtable[4];
 
 PointerList *ObjectPointerList_Init(PointerList *list) {
     igObject_InitHeader(list);
-    *(int *)list = (int)g_ObjectPointerList_vtable_00532770;
+    *(int *)list = (int)g_ObjectPointerList_vtable;
     list->data = 0;
     list->count = 0;
     return list;
@@ -81,19 +81,19 @@ void ObjectPointerList_SetAt(PointerList *list, int index, int value) {
 
 void *InternalObjectList_Construct(PointerList *list) {
     ObjectPointerList_Construct(list);
-    *(int *)list = (int)g_InternalObjectList_vtable_005327d0;
+    *(int *)list = (int)g_InternalObjectList_vtable;
     return list;
 }
 
 void *InternalObjectList_Init(PointerList *list) {
     ObjectPointerList_Init(list);
-    *(int *)list = (int)g_InternalObjectList_vtable_005327d0;
+    *(int *)list = (int)g_InternalObjectList_vtable;
     return list;
 }
 
 void *InternalObjectList_CopyConstruct(PointerList *list, PointerList *source) {
     ObjectPointerList_CopyConstruct(list, source);
-    *(int *)list = (int)g_InternalObjectList_vtable_005327d0;
+    *(int *)list = (int)g_InternalObjectList_vtable;
     return list;
 }
 

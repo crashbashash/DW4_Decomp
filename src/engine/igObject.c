@@ -13,7 +13,7 @@
  * names are distinct bodies the vtable pass resolved to the same slot. */
 
 #include "dw4/reflected.h"
-extern int g_beModelCtrlInfo_metaObject_00588ba0[4];
+extern int g_beModelCtrlInfo_metaObject[4];
 
 /* 0x00142ba0 — default slot 21: constant 4. */
 int Gap__Core__igObject__vfunc_21(void)
@@ -178,7 +178,7 @@ void Gap__Core__igObject__vfunc_24(void)
  * MetaObject record (see src/game/beModelCtrlInfo.c, which has the same body). */
 int Gap__Core__igObject__vfunc_30(void)
 {
-    return g_beModelCtrlInfo_metaObject_00588ba0[0];
+    return g_beModelCtrlInfo_metaObject[0];
 }
 
 /* 0x00394f90 — slot 39 default: empty. */

@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWItemInstant_metaObject_0058bf28[];
+extern igMetaObject *g_beNDMWItemInstant_metaObject[];
 void *beNDMWItemBase_Register(void);
-igMetaObject *beNDMWItemBase_GetPublishedMetaObject_003c81c0(void);
+igMetaObject *beNDMWItemBase_GetPublishedMetaObject(void);
 igMetaObject *beNDMWItemInstant_GetMetaObject(void);
-extern const char s_beNDMWItemInstant_className_00513200[];
+extern const char beNDMWItemInstant_className[];
 int beNDMWItemInstant_GetVTable(void);
 void beNDMWItemInstant_InitFields(void);
 void *beNDMWItemInstant_Register(void);
@@ -32,11 +32,11 @@ void *beNDMWItemInstant_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWItemInstant_metaObject_0058bf28,         /* published MetaObject slot */
+        g_beNDMWItemInstant_metaObject,         /* published MetaObject slot */
         beNDMWItemBase_Register,                         /* base class registrar */
-        beNDMWItemBase_GetPublishedMetaObject_003c81c0,  /* base class MetaObject accessor */
+        beNDMWItemBase_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWItemInstant_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWItemInstant_className_00513200,          /* class name */
+        beNDMWItemInstant_className,          /* class name */
         0x18,                                            /* instance size */
         beNDMWItemInstant_GetVTable,                     /* vtable getter */
         beNDMWItemInstant_InitFields,                    /* field adder */

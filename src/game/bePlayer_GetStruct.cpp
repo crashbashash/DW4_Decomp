@@ -6,15 +6,15 @@
  * GETPLAYER4, so 0 selects the shared record and 1..4 select a player.
  * (The fetched object is not returned; callers read it back through the messenger.) */
 extern "C" {
-extern char s_GAMERAM_0050d940[];
+extern char GAMERAM[];
 int beMessenger_SendNamed(int, char *, int, int, char *);
 int beMessenger_GetObject(int, int);
-extern char *g_getRecordCommands_004c8720[5];
-extern int g_beMessenger_0058a1c0[4];
+extern char *g_getRecordCommands[5];
+extern int g_beMessenger[4];
 void bePlayer_GetStruct(int playerNo);
 }
 
 void bePlayer_GetStruct(int playerNo) {
-    beMessenger_SendNamed(g_beMessenger_0058a1c0[0], s_GAMERAM_0050d940, 0, 0, g_getRecordCommands_004c8720[playerNo]);
-    beMessenger_GetObject(g_beMessenger_0058a1c0[0], 0);
+    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, g_getRecordCommands[playerNo]);
+    beMessenger_GetObject(g_beMessenger[0], 0);
 }

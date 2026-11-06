@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_bePadManager_metaObject_00588518[];
+extern igMetaObject *g_bePadManager_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *bePadManager_GetMetaObject(void);
-extern const char s_bePadManager_className_00502e50[];
+extern const char bePadManager_className[];
 int bePadManager_GetVTable(void);
 void bePadManager_InitFields(void);
-extern char g_bePadManager_callbackList_004c46b0[];
+extern char g_bePadManager_callbackList[];
 void *bePadManager_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *bePadManager_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_bePadManager_metaObject_00588518,             /* published MetaObject slot */
+        g_bePadManager_metaObject,             /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         bePadManager_GetMetaObject,                     /* own MetaObject accessor (stored at +0x54) */
-        s_bePadManager_className_00502e50,              /* class name */
+        bePadManager_className,              /* class name */
         0x20,                                           /* instance size */
         bePadManager_GetVTable,                         /* vtable getter */
         bePadManager_InitFields,                        /* field adder */
         0,                                              /* extra callback item */
-        g_bePadManager_callbackList_004c46b0           /* callback list */
+        g_bePadManager_callbackList           /* callback list */
     );
 }

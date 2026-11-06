@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvFileMakeApi_metaObject_00588280[];
+extern igMetaObject *g_beSvFileMakeApi_metaObject[];
 void *beSaveApi_Register(void);
-igMetaObject *beSaveApi_GetPublishedMetaObject_003485e0(void);
+igMetaObject *beSaveApi_GetPublishedMetaObject(void);
 igMetaObject *beSvFileMakeApi_GetMetaObject(void);
-extern const char s_beSvFileMakeApi_className_00502930[];
+extern const char beSvFileMakeApi_className[];
 int beSvFileMakeApi_GetVTable(void);
 void beSvFileMakeApi_InitFields(void);
-extern char g_beSvFileMakeApi_callbackList_004c4128[];
+extern char g_beSvFileMakeApi_callbackList[];
 void *beSvFileMakeApi_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSvFileMakeApi_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvFileMakeApi_metaObject_00588280,      /* published MetaObject slot */
+        g_beSvFileMakeApi_metaObject,      /* published MetaObject slot */
         beSaveApi_Register,                         /* base class registrar */
-        beSaveApi_GetPublishedMetaObject_003485e0,  /* base class MetaObject accessor */
+        beSaveApi_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSvFileMakeApi_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beSvFileMakeApi_className_00502930,       /* class name */
+        beSvFileMakeApi_className,       /* class name */
         0x418,                                      /* instance size */
         beSvFileMakeApi_GetVTable,                  /* vtable getter */
         beSvFileMakeApi_InitFields,                 /* field adder */
         0,                                          /* extra callback item */
-        g_beSvFileMakeApi_callbackList_004c4128    /* callback list */
+        g_beSvFileMakeApi_callbackList    /* callback list */
     );
 }

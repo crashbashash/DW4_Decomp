@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWMdlMapCursor_metaObject_0058b498[];
+extern igMetaObject *g_beNDMWMdlMapCursor_metaObject[];
 void *beModelCtrl_Register(void);
-igMetaObject *beModelCtrl_GetPublishedMetaObject_003bf4b0(void);
+igMetaObject *beModelCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWMdlMapCursor_GetMetaObject(void);
-extern const char s_beNDMWMdlMapCursor_className_005124e0[];
+extern const char beNDMWMdlMapCursor_className[];
 int beNDMWMdlMapCursor_GetVTable(void);
 void *beNDMWMdlMapCursor_Register(void);
 }
@@ -31,11 +31,11 @@ void *beNDMWMdlMapCursor_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWMdlMapCursor_metaObject_0058b498,     /* published MetaObject slot */
+        g_beNDMWMdlMapCursor_metaObject,     /* published MetaObject slot */
         beModelCtrl_Register,                         /* base class registrar */
-        beModelCtrl_GetPublishedMetaObject_003bf4b0,  /* base class MetaObject accessor */
+        beModelCtrl_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWMdlMapCursor_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWMdlMapCursor_className_005124e0,      /* class name */
+        beNDMWMdlMapCursor_className,      /* class name */
         0x2c,                                         /* instance size */
         beNDMWMdlMapCursor_GetVTable,                 /* vtable getter */
         0,                                            /* field adder */

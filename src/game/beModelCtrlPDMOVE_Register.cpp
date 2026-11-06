@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlPDMOVE_metaObject_00588d70[];
+extern igMetaObject *g_beModelCtrlPDMOVE_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlPDMOVE_GetMetaObject(void);
-extern const char s_beModelCtrlPDMOVE_className_00503e60[];
+extern const char beModelCtrlPDMOVE_className[];
 int beModelCtrlPDMOVE_GetVTable(void);
 void beModelCtrlPDMOVE_InitFields(void);
 void *beModelCtrlPDMOVE_Register(void);
@@ -32,11 +32,11 @@ void *beModelCtrlPDMOVE_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlPDMOVE_metaObject_00588d70,        /* published MetaObject slot */
+        g_beModelCtrlPDMOVE_metaObject,        /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beModelCtrlPDMOVE_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlPDMOVE_className_00503e60,         /* class name */
+        beModelCtrlPDMOVE_className,         /* class name */
         0x14,                                           /* instance size */
         beModelCtrlPDMOVE_GetVTable,                    /* vtable getter */
         beModelCtrlPDMOVE_InitFields,                   /* field adder */

@@ -9,10 +9,10 @@ int __internalObjectList_EnsureRegistered(...);
 void **InternalObjectList_Construct(...);
 void **igObject_AllocateRawStorage(...);
 void **igMetaObject_CreateInstance(...);
-extern int g___internalObjectList_metaObject_005860d0[4];
+extern int g___internalObjectList_metaObject[4];
 /* object-system runtime pointer; its byte 0 is the "object system active" flag
  * (docs/engine/allocator-registry.md) */
-extern unsigned char * g_objectSystem_00586dc8[4];
+extern unsigned char * g_objectSystem[4];
 void **InternalObjectList_Create(int allocator);
 }
 class DW4VC_36_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual int vX(int); };
@@ -20,9 +20,9 @@ class DW4VC_44_0 { public: virtual void d0(); virtual void d1(); virtual void d2
 void **InternalObjectList_Create(int allocator) {
     void **list;
 
-    if (*g_objectSystem_00586dc8[0] != 0) {
+    if (*g_objectSystem[0] != 0) {
         __internalObjectList_EnsureRegistered(); /* class registration guard: RunStaticInit(__internalObjectList_Register) */
-        list = (void **)(igMetaObject_CreateInstance(g___internalObjectList_metaObject_005860d0[0], allocator));
+        list = (void **)(igMetaObject_CreateInstance(g___internalObjectList_metaObject[0], allocator));
     } else {
         list = (void **)(igObject_AllocateRawStorage(0x10, 0, allocator));
         if (list != 0) {

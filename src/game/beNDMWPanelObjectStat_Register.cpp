@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWPanelObjectStat_metaObject_0058b260[];
+extern igMetaObject *g_beNDMWPanelObjectStat_metaObject[];
 void *beNDMWPanelObject_Register(void);
-igMetaObject *beNDMWPanelObject_GetPublishedMetaObject_003be420(void);
+igMetaObject *beNDMWPanelObject_GetPublishedMetaObject(void);
 igMetaObject *beNDMWPanelObjectStat_GetMetaObject(void);
-extern const char s_beNDMWPanelObjectStat_className_00511eb0[];
+extern const char beNDMWPanelObjectStat_className[];
 int beNDMWPanelObjectStat_GetVTable(void);
 void beNDMWPanelObjectStat_InitFields(void);
-extern char g_beNDMWPanelObjectStat_callbackList_004ca560[];
+extern char g_beNDMWPanelObjectStat_callbackList[];
 void *beNDMWPanelObjectStat_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWPanelObjectStat_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWPanelObjectStat_metaObject_0058b260,        /* published MetaObject slot */
+        g_beNDMWPanelObjectStat_metaObject,        /* published MetaObject slot */
         beNDMWPanelObject_Register,                         /* base class registrar */
-        beNDMWPanelObject_GetPublishedMetaObject_003be420,  /* base class MetaObject accessor */
+        beNDMWPanelObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWPanelObjectStat_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWPanelObjectStat_className_00511eb0,         /* class name */
+        beNDMWPanelObjectStat_className,         /* class name */
         0x48,                                               /* instance size */
         beNDMWPanelObjectStat_GetVTable,                    /* vtable getter */
         beNDMWPanelObjectStat_InitFields,                   /* field adder */
         0,                                                  /* extra callback item */
-        g_beNDMWPanelObjectStat_callbackList_004ca560      /* callback list */
+        g_beNDMWPanelObjectStat_callbackList      /* callback list */
     );
 }

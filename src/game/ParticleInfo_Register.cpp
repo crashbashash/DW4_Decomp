@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_ParticleInfo_metaObject_0058a0e0[];
+extern igMetaObject *g_ParticleInfo_metaObject[];
 void *igSceneInfo_Register(void);
-igMetaObject *igSceneInfo_GetPublishedMetaObject_0036ebb0(void);
+igMetaObject *igSceneInfo_GetPublishedMetaObject(void);
 igMetaObject *ParticleInfo_GetMetaObject(void);
-extern const char s_ParticleInfo_className_00506690[];
+extern const char ParticleInfo_className[];
 int ParticleInfo_GetVTable(void);
 void ParticleInfo_InitFields(void);
-extern char g_ParticleInfo_callbackList_004c83e8[];
+extern char g_ParticleInfo_callbackList[];
 void *ParticleInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *ParticleInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_ParticleInfo_metaObject_0058a0e0,           /* published MetaObject slot */
+        g_ParticleInfo_metaObject,           /* published MetaObject slot */
         igSceneInfo_Register,                         /* base class registrar */
-        igSceneInfo_GetPublishedMetaObject_0036ebb0,  /* base class MetaObject accessor */
+        igSceneInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         ParticleInfo_GetMetaObject,                   /* own MetaObject accessor (stored at +0x54) */
-        s_ParticleInfo_className_00506690,            /* class name */
+        ParticleInfo_className,            /* class name */
         0x400,                                        /* instance size */
         ParticleInfo_GetVTable,                       /* vtable getter */
         ParticleInfo_InitFields,                      /* field adder */
         0,                                            /* extra callback item */
-        g_ParticleInfo_callbackList_004c83e8         /* callback list */
+        g_ParticleInfo_callbackList         /* callback list */
     );
 }

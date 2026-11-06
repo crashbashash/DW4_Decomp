@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_00132cf0(void);
-extern igMetaObject *g_igTextureAttr_metaObject_0055eda0[4];
+extern igMetaObject *g_igTextureAttr_metaObject[4];
 igMetaObject *igTextureAttr_GetMetaObject(void);
 }
 
 igMetaObject *igTextureAttr_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igTextureAttr_metaObject_0055eda0[0] != 0) {
-        ready = (g_igTextureAttr_metaObject_0055eda0[0]->_validity & 4) != 0;
+    if (g_igTextureAttr_metaObject[0] != 0) {
+        ready = (g_igTextureAttr_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00132cf0();
 done:
-    return g_igTextureAttr_metaObject_0055eda0[0];
+    return g_igTextureAttr_metaObject[0];
 }

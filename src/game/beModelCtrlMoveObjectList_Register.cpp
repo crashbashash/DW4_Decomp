@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlMoveObjectList_metaObject_00588b40[];
+extern igMetaObject *g_beModelCtrlMoveObjectList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlMoveObjectList_GetMetaObject(void);
-extern const char s_beModelCtrlMoveObjectList_className_00503a10[];
+extern const char beModelCtrlMoveObjectList_className[];
 int beModelCtrlMoveObjectList_GetVTable(void);
-extern char g_beModelCtrlMoveObjectList_callbackList_004c5380[];
+extern char g_beModelCtrlMoveObjectList_callbackList[];
 void *beModelCtrlMoveObjectList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beModelCtrlMoveObjectList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlMoveObjectList_metaObject_00588b40,    /* published MetaObject slot */
+        g_beModelCtrlMoveObjectList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                              /* base class registrar */
         igObjectList_GetPublishedMetaObject,                /* base class MetaObject accessor */
         beModelCtrlMoveObjectList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlMoveObjectList_className_00503a10,     /* class name */
+        beModelCtrlMoveObjectList_className,     /* class name */
         0x14,                                               /* instance size */
         beModelCtrlMoveObjectList_GetVTable,                /* vtable getter */
         0,                                                  /* field adder */
         0,                                                  /* extra callback item */
-        g_beModelCtrlMoveObjectList_callbackList_004c5380  /* callback list */
+        g_beModelCtrlMoveObjectList_callbackList  /* callback list */
     );
 }

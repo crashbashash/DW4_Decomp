@@ -5,9 +5,9 @@ extern char igObject_GetMetaObject_ParentAccessor[];
 extern char igAttrStackManager_GetVTable[];
 extern char thunk_igAttrStackManager_GetMetaObject[];
 extern char igObject_Register[];
-extern char g_igAttrStackManager_callbackList_0048cc10[];
-extern char s_igAttrStackManager_className_004e34b0[];
-extern char g_igAttrStackManager_metaObject_00561f98[];
+extern char g_igAttrStackManager_callbackList[];
+extern char igAttrStackManager_className[];
+extern char g_igAttrStackManager_metaObject[];
 int GpFlag_SetOnce_00194380();
 int igMetaObject_RegisterClass();
 void FUN_001a58e0(void);  /* code at 0x1a58e0, passed by address (was DAT_1a58e0; docs/engine/function-inventory.md) */
@@ -17,15 +17,15 @@ void igAttrStackManager_Register(void) {
     GpFlag_SetOnce_00194380();  /* shared set-once latch run before every registration of this family (asm/GpFlag_SetOnce_00194380.s) */
     igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igAttrStackManager_metaObject_00561f98, /* published MetaObject slot */
+        g_igAttrStackManager_metaObject, /* published MetaObject slot */
         igObject_Register,                        /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,    /* base class MetaObject accessor */
         thunk_igAttrStackManager_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igAttrStackManager_className_004e34b0,  /* class name */
+        igAttrStackManager_className,  /* class name */
         0x4C,                                     /* instance size */
         igAttrStackManager_GetVTable,             /* vtable getter */
         &igAttrStackManager_InitFields,           /* field adder */
         FUN_001a58e0,                         /* static-initializer callback item (appended on fresh configuration) */
-        g_igAttrStackManager_callbackList_0048cc10  /* 0-terminated dependency-callback list */
+        g_igAttrStackManager_callbackList  /* 0-terminated dependency-callback list */
     );
 }

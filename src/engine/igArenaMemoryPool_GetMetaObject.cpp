@@ -6,18 +6,18 @@
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_002cdcf0(void);
-extern igMetaObject *g_igArenaMemoryPool_metaObject_00586a88[4];
+extern igMetaObject *g_igArenaMemoryPool_metaObject[4];
 igMetaObject *igArenaMemoryPool_GetMetaObject(void);
 }
 
 igMetaObject *igArenaMemoryPool_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igArenaMemoryPool_metaObject_00586a88[0] != 0) {
-        ready = (g_igArenaMemoryPool_metaObject_00586a88[0]->_validity & 4) != 0;
+    if (g_igArenaMemoryPool_metaObject[0] != 0) {
+        ready = (g_igArenaMemoryPool_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_002cdcf0();
 done:
-    return g_igArenaMemoryPool_metaObject_00586a88[0];
+    return g_igArenaMemoryPool_metaObject[0];
 }

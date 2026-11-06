@@ -19,11 +19,11 @@ typedef struct Dtx_273338 {
 } Dtx_273338;               /* 0x44 bytes */
 
 extern Dtx_273338 DAT_004a9b30[16];
-extern char s_eewk_is_not_alignment_64_byte_004f00c8[];          /* 'eewk is not alignment 64 byte\n' */
-extern char s_iopwk_is_not_alignment_32_byte_004f00e8[];         /* 'iopwk is not alignment 32 byte\n' */
-extern char s_wklen_d_is_not_64_N_004f0108[];                    /* 'wklen=%d is not 64*N\n' */
-extern char s_illeagal_ID_d_004f0120[];                          /* 'illeagal ID (%d) \n' */
-extern char s_DTX_Create_can_t_create_DTX_of_server_004f0138[];  /* "DTX_Create: can't create DTX of server\n" */
+extern char eewk_is_not_alignment_64_byte[];          /* 'eewk is not alignment 64 byte\n' */
+extern char iopwk_is_not_alignment_32_byte[];         /* 'iopwk is not alignment 32 byte\n' */
+extern char wklen_d_is_not_64_N[];                    /* 'wklen=%d is not 64*N\n' */
+extern char illeagal_ID_d[];                          /* 'illeagal ID (%d) \n' */
+extern char DTX_Create_can_t_create_DTX_of_server[];  /* "DTX_Create: can't create DTX of server\n" */
 void FUN_002659a0(const char *format, ...);
 int FUN_002731a8(unsigned int id, char *eewk, int iopwk, int wklen);
 void *memset(void *dst, int value, unsigned int n);
@@ -37,19 +37,19 @@ Dtx_273338 *FUN_00273338(unsigned int id, char *eewk, int iopwk, int wklen) {
     int size;
 
     if ((int)eewk & 63) {
-        FUN_002659a0(s_eewk_is_not_alignment_64_byte_004f00c8);
+        FUN_002659a0(eewk_is_not_alignment_64_byte);
         return 0;
     }
     if (iopwk & 31) {
-        FUN_002659a0(s_iopwk_is_not_alignment_32_byte_004f00e8);
+        FUN_002659a0(iopwk_is_not_alignment_32_byte);
         return 0;
     }
     if (wklen & 63) {
-        FUN_002659a0(s_wklen_d_is_not_64_N_004f0108, wklen);
+        FUN_002659a0(wklen_d_is_not_64_N, wklen);
         return 0;
     }
     if (id >= 16) {
-        FUN_002659a0(s_illeagal_ID_d_004f0120, id);
+        FUN_002659a0(illeagal_ID_d, id);
         return 0;
     }
     dtx = &DAT_004a9b30[id];
@@ -58,7 +58,7 @@ Dtx_273338 *FUN_00273338(unsigned int id, char *eewk, int iopwk, int wklen) {
     }
     dtx->server = FUN_002731a8(id, eewk, iopwk, wklen);
     if (dtx->server == 0) {
-        FUN_002659a0(s_DTX_Create_can_t_create_DTX_of_server_004f0138);
+        FUN_002659a0(DTX_Create_can_t_create_DTX_of_server);
         return 0;
     }
     size = wklen - 64;

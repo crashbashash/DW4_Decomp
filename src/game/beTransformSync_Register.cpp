@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beTransformSync_metaObject_00587c08[];
+extern igMetaObject *g_beTransformSync_metaObject[];
 void *igTransform_Register(void);
-igMetaObject *igTransform_GetPublishedMetaObject_0019de30(void);
+igMetaObject *igTransform_GetPublishedMetaObject(void);
 igMetaObject *beTransformSync_GetMetaObject(void);
-extern const char s_beTransformSync_className_00501a80[];
+extern const char beTransformSync_className[];
 int beTransformSync_GetVTable(void);
 void beTransformSync_InitFields(void);
-extern char g_beTransformSync_callbackList_004c3350[];
+extern char g_beTransformSync_callbackList[];
 void *beTransformSync_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beTransformSync_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beTransformSync_metaObject_00587c08,        /* published MetaObject slot */
+        g_beTransformSync_metaObject,        /* published MetaObject slot */
         igTransform_Register,                         /* base class registrar */
-        igTransform_GetPublishedMetaObject_0019de30,  /* base class MetaObject accessor */
+        igTransform_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beTransformSync_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beTransformSync_className_00501a80,         /* class name */
+        beTransformSync_className,         /* class name */
         0x70,                                         /* instance size */
         beTransformSync_GetVTable,                    /* vtable getter */
         beTransformSync_InitFields,                   /* field adder */
         0,                                            /* extra callback item */
-        g_beTransformSync_callbackList_004c3350      /* callback list */
+        g_beTransformSync_callbackList      /* callback list */
     );
 }

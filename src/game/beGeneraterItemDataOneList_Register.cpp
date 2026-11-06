@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beGeneraterItemDataOneList_metaObject_005895a0[];
+extern igMetaObject *g_beGeneraterItemDataOneList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beGeneraterItemDataOneList_GetMetaObject(void);
-extern const char s_beGeneraterItemDataOneList_className_00505030[];
+extern const char beGeneraterItemDataOneList_className[];
 int beGeneraterItemDataOneList_GetVTable(void);
-extern char g_beGeneraterItemDataOneList_callbackList_004c6b00[];
+extern char g_beGeneraterItemDataOneList_callbackList[];
 void *beGeneraterItemDataOneList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beGeneraterItemDataOneList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                   /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beGeneraterItemDataOneList_metaObject_005895a0,    /* published MetaObject slot */
+        g_beGeneraterItemDataOneList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                               /* base class registrar */
         igObjectList_GetPublishedMetaObject,                 /* base class MetaObject accessor */
         beGeneraterItemDataOneList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beGeneraterItemDataOneList_className_00505030,     /* class name */
+        beGeneraterItemDataOneList_className,     /* class name */
         0x14,                                                /* instance size */
         beGeneraterItemDataOneList_GetVTable,                /* vtable getter */
         0,                                                   /* field adder */
         0,                                                   /* extra callback item */
-        g_beGeneraterItemDataOneList_callbackList_004c6b00  /* callback list */
+        g_beGeneraterItemDataOneList_callbackList  /* callback list */
     );
 }

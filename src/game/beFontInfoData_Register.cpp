@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beFontInfoData_metaObject_005895f8[];
+extern igMetaObject *g_beFontInfoData_metaObject[];
 void *beBaseInfoData_Register(void);
-igMetaObject *beBaseInfoData_GetPublishedMetaObject_00343c80(void);
+igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
 igMetaObject *beFontInfoData_GetMetaObject(void);
-extern const char s_beFontInfoData_className_005050e8[];
+extern const char beFontInfoData_className[];
 int beFontInfoData_GetVTable(void);
 void beFontInfoData_InitFields(void);
-extern char g_beFontInfoData_callbackList_004c6be0[];
+extern char g_beFontInfoData_callbackList[];
 void *beFontInfoData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beFontInfoData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beFontInfoData_metaObject_005895f8,            /* published MetaObject slot */
+        g_beFontInfoData_metaObject,            /* published MetaObject slot */
         beBaseInfoData_Register,                         /* base class registrar */
-        beBaseInfoData_GetPublishedMetaObject_00343c80,  /* base class MetaObject accessor */
+        beBaseInfoData_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beFontInfoData_GetMetaObject,                    /* own MetaObject accessor (stored at +0x54) */
-        s_beFontInfoData_className_005050e8,             /* class name */
+        beFontInfoData_className,             /* class name */
         0x2c,                                            /* instance size */
         beFontInfoData_GetVTable,                        /* vtable getter */
         beFontInfoData_InitFields,                       /* field adder */
         0,                                               /* extra callback item */
-        g_beFontInfoData_callbackList_004c6be0          /* callback list */
+        g_beFontInfoData_callbackList          /* callback list */
     );
 }

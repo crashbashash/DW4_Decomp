@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beFont_metaObject_00589678[];
+extern igMetaObject *g_beFont_metaObject[];
 void *beBaseInfoManager_Register(void);
-igMetaObject *beBaseInfoManager_GetPublishedMetaObject_0033f810(void);
+igMetaObject *beBaseInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beFont_GetMetaObject(void);
-extern const char s_beFont_className_005051f8[];
+extern const char beFont_className[];
 int beFont_GetVTable(void);
 void beFont_InitFields(void);
-extern char g_beFont_callbackList_004c6d40[];
+extern char g_beFont_callbackList[];
 void *beFont_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beFont_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beFont_metaObject_00589678,                       /* published MetaObject slot */
+        g_beFont_metaObject,                       /* published MetaObject slot */
         beBaseInfoManager_Register,                         /* base class registrar */
-        beBaseInfoManager_GetPublishedMetaObject_0033f810,  /* base class MetaObject accessor */
+        beBaseInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beFont_GetMetaObject,                               /* own MetaObject accessor (stored at +0x54) */
-        s_beFont_className_005051f8,                        /* class name */
+        beFont_className,                        /* class name */
         0x48,                                               /* instance size */
         beFont_GetVTable,                                   /* vtable getter */
         beFont_InitFields,                                  /* field adder */
         0,                                                  /* extra callback item */
-        g_beFont_callbackList_004c6d40                     /* callback list */
+        g_beFont_callbackList                     /* callback list */
     );
 }

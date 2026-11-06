@@ -9,14 +9,14 @@ typedef struct FsHandle_26ffb0 {
     int file;                   /* 0x04 */
 } FsHandle_26ffb0;
 
-extern char s_cvFsClose_1_handle_error_004ef0b8[]; /* 'cvFsClose #1:handle error' */
-extern char s_cvFsClose_2_vtbl_error_004ef0d8[];   /* 'cvFsClose #2:vtbl error' */
+extern char cvFsClose_1_handle_error[]; /* 'cvFsClose #1:handle error' */
+extern char cvFsClose_2_vtbl_error[];   /* 'cvFsClose #2:vtbl error' */
 void FUN_0026f530(const char *message);
 void FUN_0026fdf0(FsHandle_26ffb0 *handle);
 
 void FUN_0026ffb0(FsHandle_26ffb0 *handle) {
     if (handle == 0) {
-        FUN_0026f530(s_cvFsClose_1_handle_error_004ef0b8);
+        FUN_0026f530(cvFsClose_1_handle_error);
         return;
     }
     if (handle->device->close != 0) {
@@ -24,5 +24,5 @@ void FUN_0026ffb0(FsHandle_26ffb0 *handle) {
         FUN_0026fdf0(handle);
         return;
     }
-    FUN_0026f530(s_cvFsClose_2_vtbl_error_004ef0d8);
+    FUN_0026f530(cvFsClose_2_vtbl_error);
 }

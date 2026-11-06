@@ -118,58 +118,58 @@ int igObject_Destroy(igObject *object);
 int printf(const char *format, ...);
 int FUN_00124d60(int status);
 
-extern const char s_help_004e9700[16];
-extern const char s_n_004e9708[8];
-extern const char s_dashdash_004e9710[8];
-extern const char s_unrecognized_004e9720[32];
-extern const char s_showBbox_004e88b8[16];
-extern const char s_showNormals_004e88f8[16];
-extern const char s_normalsColor_004e8930[16];
-extern const char s_invalidStoredNormalsColor_004e8960[16];
-extern const char s_scaledNormalsColor_004e89b0[16];
-extern const char s_invalidNormalsPrecision_004e89f0[16];
-extern const char s_autoSelectCamera_004e8a40[16];
-extern const char s_hfov_004e8a90[16];
-extern const char s_autoPlanes_004e8ac8[16];
-extern const char s_nearPlane_004e8b10[16];
-extern const char s_farPlane_004e8b48[16];
-extern const char s_upVector_004e8b88[16];
-extern const char s_autoSceneLights_004e8be0[16];
-extern const char s_autoHeadLight_004e8c30[16];
-extern const char s_useSceneLights_004e8c80[16];
-extern const char s_useHeadLight_004e8cd0[16];
-extern const char s_useHeadLightSpecular_004e8d20[16];
-extern const char s_headLightDiffuse_004e8d60[16];
-extern const char s_headLightSpecular_004e8db0[16];
-extern const char s_headLightAmbient_004e8e00[16];
-extern const char s_clearColor_004e8e50[16];
-extern const char s_wireframeMode_004e8e80[16];
-extern const char s_forceWireframe_004e8ec0[16];
-extern const char s_backfaceCullingMode_004e8f10[16];
-extern const char s_forceBackfaceCulling_004e8f50[16];
-extern const char s_alphaTest_004e8fa0[16];
-extern const char s_forceAlphaTest_004e8fd0[16];
-extern const char s_alphaTestReference_004e9020[16];
-extern const char s_maximumFrameRate_004e9060[16];
-extern const char s_optimizeTextures_004e90c0[16];
-extern const char s_halfBuffer_004e9100[16];
-extern const char s_palVideoMode_004e9130[16];
-extern const char s_width_004e9168[16];
-extern const char s_height_004e9188[16];
-extern const char s_swapInterval_004e91c0[16];
-extern const char s_colorBits_004e9200[16];
-extern const char s_alphaBits_004e9240[16];
-extern const char s_depthBits_004e9280[16];
-extern const char s_stencilBits_004e92c0[16];
-extern const char s_reportVideoFormat_004e9300[16];
-extern const char s_showLogo_004e9358[16];
-extern const char s_showUi_004e9388[16];
-extern const char s_enableMayaControls_004e93c0[16];
-extern const char s_benchmark_004e9408[16];
-extern const char s_benchmarkSkipFrames_004e9450[16];
-extern const char s_benchmarkFrames_004e94b0[16];
-extern const char s_columnStatistics_004e9500[16];
-extern const char s_allocateVisualContextInScratchpad_004e9560[16];
+extern const char help[16];
+extern const char n[8];
+extern const char dashdash[8];
+extern const char unrecognized[32];
+extern const char showBbox[16];
+extern const char showNormals[16];
+extern const char normalsColor[16];
+extern const char invalidStoredNormalsColor[16];
+extern const char scaledNormalsColor[16];
+extern const char invalidNormalsPrecision[16];
+extern const char autoSelectCamera[16];
+extern const char hfov[16];
+extern const char autoPlanes[16];
+extern const char nearPlane[16];
+extern const char farPlane[16];
+extern const char upVector[16];
+extern const char autoSceneLights[16];
+extern const char autoHeadLight[16];
+extern const char useSceneLights[16];
+extern const char useHeadLight[16];
+extern const char useHeadLightSpecular[16];
+extern const char headLightDiffuse[16];
+extern const char headLightSpecular[16];
+extern const char headLightAmbient[16];
+extern const char clearColor[16];
+extern const char wireframeMode[16];
+extern const char forceWireframe[16];
+extern const char backfaceCullingMode[16];
+extern const char forceBackfaceCulling[16];
+extern const char alphaTest[16];
+extern const char forceAlphaTest[16];
+extern const char alphaTestReference[16];
+extern const char maximumFrameRate[16];
+extern const char optimizeTextures[16];
+extern const char halfBuffer[16];
+extern const char palVideoMode[16];
+extern const char width[16];
+extern const char height[16];
+extern const char swapInterval[16];
+extern const char colorBits[16];
+extern const char alphaBits[16];
+extern const char depthBits[16];
+extern const char stencilBits[16];
+extern const char reportVideoFormat[16];
+extern const char showLogo[16];
+extern const char showUi[16];
+extern const char enableMayaControls[16];
+extern const char benchmark[16];
+extern const char benchmarkSkipFrames[16];
+extern const char benchmarkFrames[16];
+extern const char columnStatistics[16];
+extern const char allocateVisualContextInScratchpad[16];
 
 #include "dw4/fun_00235370_refs.h"
 
@@ -200,7 +200,7 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
     index = 1;
 
     while (index < argc) {
-        if (FUN_00234470(args, &index, s_help_004e9700)) {
+        if (FUN_00234470(args, &index, help)) {
             StringList_CopyRetained(&helpRef, args, 0);
             FUN_00233c10(helpRef);
             ReleaseString(helpRef);
@@ -218,137 +218,137 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
             }
             ReleaseString(applied->modelName);
             applied->modelName = opts->modelName;
-        } else if (FUN_00234770(args, &index, s_showBbox_004e88b8, &opts->showBbox)) {
+        } else if (FUN_00234770(args, &index, showBbox, &opts->showBbox)) {
             opts->applied->showBbox = opts->showBbox;
-        } else if (FUN_00234770(args, &index, s_showNormals_004e88f8, &opts->showNormals)) {
+        } else if (FUN_00234770(args, &index, showNormals, &opts->showNormals)) {
             opts->applied->showNormals = opts->showNormals;
-        } else if (FUN_002348b0(args, &index, s_normalsColor_004e8930, &opts->normalsColor[0])) {
+        } else if (FUN_002348b0(args, &index, normalsColor, &opts->normalsColor[0])) {
             applied = opts->applied;
             applied->normalsColor[0] = opts->normalsColor[0];
             applied->normalsColor[1] = opts->normalsColor[1];
             applied->normalsColor[2] = opts->normalsColor[2];
             applied->normalsColor[3] = opts->normalsColor[3];
-        } else if (FUN_002348b0(args, &index, s_invalidStoredNormalsColor_004e8960, &opts->invalidStoredNormalsColor[0])) {
+        } else if (FUN_002348b0(args, &index, invalidStoredNormalsColor, &opts->invalidStoredNormalsColor[0])) {
             applied = opts->applied;
             applied->invalidStoredNormalsColor[0] = opts->invalidStoredNormalsColor[0];
             applied->invalidStoredNormalsColor[1] = opts->invalidStoredNormalsColor[1];
             applied->invalidStoredNormalsColor[2] = opts->invalidStoredNormalsColor[2];
             applied->invalidStoredNormalsColor[3] = opts->invalidStoredNormalsColor[3];
-        } else if (FUN_002348b0(args, &index, s_scaledNormalsColor_004e89b0, &opts->scaledNormalsColor[0])) {
+        } else if (FUN_002348b0(args, &index, scaledNormalsColor, &opts->scaledNormalsColor[0])) {
             applied = opts->applied;
             applied->scaledNormalsColor[0] = opts->scaledNormalsColor[0];
             applied->scaledNormalsColor[1] = opts->scaledNormalsColor[1];
             applied->scaledNormalsColor[2] = opts->scaledNormalsColor[2];
             applied->scaledNormalsColor[3] = opts->scaledNormalsColor[3];
-        } else if (FUN_00234810(args, &index, s_invalidNormalsPrecision_004e89f0, &opts->invalidNormalsPrecision)) {
+        } else if (FUN_00234810(args, &index, invalidNormalsPrecision, &opts->invalidNormalsPrecision)) {
             opts->applied->invalidNormalsPrecision = opts->invalidNormalsPrecision;
-        } else if (FUN_00234770(args, &index, s_autoSelectCamera_004e8a40, &opts->autoSelectCamera)) {
+        } else if (FUN_00234770(args, &index, autoSelectCamera, &opts->autoSelectCamera)) {
             opts->applied->autoSelectCamera = opts->autoSelectCamera;
-        } else if (FUN_00234810(args, &index, s_hfov_004e8a90, &opts->hfov)) {
+        } else if (FUN_00234810(args, &index, hfov, &opts->hfov)) {
             opts->applied->hfov = opts->hfov;
-        } else if (FUN_00234770(args, &index, s_autoPlanes_004e8ac8, &opts->autoPlanes)) {
+        } else if (FUN_00234770(args, &index, autoPlanes, &opts->autoPlanes)) {
             opts->applied->autoPlanes = opts->autoPlanes;
-        } else if (FUN_00234810(args, &index, s_nearPlane_004e8b10, &opts->nearPlane)) {
+        } else if (FUN_00234810(args, &index, nearPlane, &opts->nearPlane)) {
             opts->applied->nearPlane = opts->nearPlane;
-        } else if (FUN_00234810(args, &index, s_farPlane_004e8b48, &opts->farPlane)) {
+        } else if (FUN_00234810(args, &index, farPlane, &opts->farPlane)) {
             opts->applied->farPlane = opts->farPlane;
-        } else if (FUN_00234860(args, &index, s_upVector_004e8b88, &opts->upVector[0])) {
+        } else if (FUN_00234860(args, &index, upVector, &opts->upVector[0])) {
             applied = opts->applied;
             applied->upVector[0] = opts->upVector[0];
             applied->upVector[1] = opts->upVector[1];
             applied->upVector[2] = opts->upVector[2];
-        } else if (FUN_00234770(args, &index, s_autoSceneLights_004e8be0, &opts->autoSceneLights)) {
+        } else if (FUN_00234770(args, &index, autoSceneLights, &opts->autoSceneLights)) {
             opts->applied->autoSceneLights = opts->autoSceneLights;
-        } else if (FUN_00234770(args, &index, s_autoHeadLight_004e8c30, &opts->autoHeadLight)) {
+        } else if (FUN_00234770(args, &index, autoHeadLight, &opts->autoHeadLight)) {
             opts->applied->autoHeadLight = opts->autoHeadLight;
-        } else if (FUN_00234770(args, &index, s_useSceneLights_004e8c80, &opts->useSceneLights)) {
+        } else if (FUN_00234770(args, &index, useSceneLights, &opts->useSceneLights)) {
             opts->applied->useSceneLights = opts->useSceneLights;
-        } else if (FUN_00234770(args, &index, s_useHeadLight_004e8cd0, &opts->useHeadLight)) {
+        } else if (FUN_00234770(args, &index, useHeadLight, &opts->useHeadLight)) {
             opts->applied->useHeadLight = opts->useHeadLight;
-        } else if (FUN_00234770(args, &index, s_useHeadLightSpecular_004e8d20, &opts->useHeadLightSpecular)) {
+        } else if (FUN_00234770(args, &index, useHeadLightSpecular, &opts->useHeadLightSpecular)) {
             opts->applied->useHeadLightSpecular = opts->useHeadLightSpecular;
-        } else if (FUN_002348b0(args, &index, s_headLightDiffuse_004e8d60, &opts->headLightDiffuse[0])) {
+        } else if (FUN_002348b0(args, &index, headLightDiffuse, &opts->headLightDiffuse[0])) {
             applied = opts->applied;
             applied->headLightDiffuse[0] = opts->headLightDiffuse[0];
             applied->headLightDiffuse[1] = opts->headLightDiffuse[1];
             applied->headLightDiffuse[2] = opts->headLightDiffuse[2];
             applied->headLightDiffuse[3] = opts->headLightDiffuse[3];
-        } else if (FUN_002348b0(args, &index, s_headLightSpecular_004e8db0, &opts->headLightSpecular[0])) {
+        } else if (FUN_002348b0(args, &index, headLightSpecular, &opts->headLightSpecular[0])) {
             applied = opts->applied;
             applied->headLightSpecular[0] = opts->headLightSpecular[0];
             applied->headLightSpecular[1] = opts->headLightSpecular[1];
             applied->headLightSpecular[2] = opts->headLightSpecular[2];
             applied->headLightSpecular[3] = opts->headLightSpecular[3];
-        } else if (FUN_002348b0(args, &index, s_headLightAmbient_004e8e00, &opts->headLightAmbient[0])) {
+        } else if (FUN_002348b0(args, &index, headLightAmbient, &opts->headLightAmbient[0])) {
             applied = opts->applied;
             applied->headLightAmbient[0] = opts->headLightAmbient[0];
             applied->headLightAmbient[1] = opts->headLightAmbient[1];
             applied->headLightAmbient[2] = opts->headLightAmbient[2];
             applied->headLightAmbient[3] = opts->headLightAmbient[3];
-        } else if (FUN_002348b0(args, &index, s_clearColor_004e8e50, &opts->clearColor[0])) {
+        } else if (FUN_002348b0(args, &index, clearColor, &opts->clearColor[0])) {
             applied = opts->applied;
             applied->clearColor[0] = opts->clearColor[0];
             applied->clearColor[1] = opts->clearColor[1];
             applied->clearColor[2] = opts->clearColor[2];
             applied->clearColor[3] = opts->clearColor[3];
-        } else if (FUN_00234770(args, &index, s_wireframeMode_004e8e80, &opts->wireframeMode)) {
+        } else if (FUN_00234770(args, &index, wireframeMode, &opts->wireframeMode)) {
             opts->applied->wireframeMode = opts->wireframeMode;
-        } else if (FUN_00234770(args, &index, s_forceWireframe_004e8ec0, &opts->forceWireframe)) {
+        } else if (FUN_00234770(args, &index, forceWireframe, &opts->forceWireframe)) {
             opts->applied->forceWireframe = opts->forceWireframe;
-        } else if (FUN_00234770(args, &index, s_backfaceCullingMode_004e8f10, &opts->backfaceCullingMode)) {
+        } else if (FUN_00234770(args, &index, backfaceCullingMode, &opts->backfaceCullingMode)) {
             opts->applied->backfaceCullingMode = opts->backfaceCullingMode;
-        } else if (FUN_00234770(args, &index, s_forceBackfaceCulling_004e8f50, &opts->forceBackfaceCulling)) {
+        } else if (FUN_00234770(args, &index, forceBackfaceCulling, &opts->forceBackfaceCulling)) {
             opts->applied->forceBackfaceCulling = opts->forceBackfaceCulling;
-        } else if (FUN_00234770(args, &index, s_alphaTest_004e8fa0, &opts->alphaTest)) {
+        } else if (FUN_00234770(args, &index, alphaTest, &opts->alphaTest)) {
             opts->applied->alphaTest = opts->alphaTest;
-        } else if (FUN_00234770(args, &index, s_forceAlphaTest_004e8fd0, &opts->forceAlphaTest)) {
+        } else if (FUN_00234770(args, &index, forceAlphaTest, &opts->forceAlphaTest)) {
             opts->applied->forceAlphaTest = opts->forceAlphaTest;
-        } else if (FUN_00234810(args, &index, s_alphaTestReference_004e9020, &opts->alphaTestReference)) {
+        } else if (FUN_00234810(args, &index, alphaTestReference, &opts->alphaTestReference)) {
             opts->applied->alphaTestReference = opts->alphaTestReference;
-        } else if (FUN_00234810(args, &index, s_maximumFrameRate_004e9060, &opts->maximumFrameRate)) {
+        } else if (FUN_00234810(args, &index, maximumFrameRate, &opts->maximumFrameRate)) {
             opts->applied->maximumFrameRate = opts->maximumFrameRate;
-        } else if (FUN_00234770(args, &index, s_optimizeTextures_004e90c0, &opts->optimizeTextures)) {
+        } else if (FUN_00234770(args, &index, optimizeTextures, &opts->optimizeTextures)) {
             opts->applied->optimizeTextures = opts->optimizeTextures;
-        } else if (FUN_00234770(args, &index, s_halfBuffer_004e9100, &opts->halfBuffer)) {
+        } else if (FUN_00234770(args, &index, halfBuffer, &opts->halfBuffer)) {
             opts->applied->halfBuffer = opts->halfBuffer;
-        } else if (FUN_00234770(args, &index, s_palVideoMode_004e9130, &opts->palVideoMode)) {
+        } else if (FUN_00234770(args, &index, palVideoMode, &opts->palVideoMode)) {
             opts->applied->palVideoMode = opts->palVideoMode;
-        } else if (thunk_FUN_00234510(args, &index, s_width_004e9168, &opts->width)) {
+        } else if (thunk_FUN_00234510(args, &index, width, &opts->width)) {
             opts->applied->width = opts->width;
-        } else if (thunk_FUN_00234510(args, &index, s_height_004e9188, &opts->height)) {
+        } else if (thunk_FUN_00234510(args, &index, height, &opts->height)) {
             opts->applied->height = opts->height;
-        } else if (thunk_FUN_00234510(args, &index, s_swapInterval_004e91c0, &opts->swapInterval)) {
+        } else if (thunk_FUN_00234510(args, &index, swapInterval, &opts->swapInterval)) {
             opts->applied->swapInterval = opts->swapInterval;
-        } else if (thunk_FUN_00234510(args, &index, s_colorBits_004e9200, &opts->colorBits)) {
+        } else if (thunk_FUN_00234510(args, &index, colorBits, &opts->colorBits)) {
             opts->applied->colorBits = opts->colorBits;
-        } else if (thunk_FUN_00234510(args, &index, s_alphaBits_004e9240, &opts->alphaBits)) {
+        } else if (thunk_FUN_00234510(args, &index, alphaBits, &opts->alphaBits)) {
             opts->applied->alphaBits = opts->alphaBits;
-        } else if (thunk_FUN_00234510(args, &index, s_depthBits_004e9280, &opts->depthBits)) {
+        } else if (thunk_FUN_00234510(args, &index, depthBits, &opts->depthBits)) {
             opts->applied->depthBits = opts->depthBits;
-        } else if (thunk_FUN_00234510(args, &index, s_stencilBits_004e92c0, &opts->stencilBits)) {
+        } else if (thunk_FUN_00234510(args, &index, stencilBits, &opts->stencilBits)) {
             opts->applied->stencilBits = opts->stencilBits;
-        } else if (FUN_00234770(args, &index, s_reportVideoFormat_004e9300, &opts->reportVideoFormat)) {
+        } else if (FUN_00234770(args, &index, reportVideoFormat, &opts->reportVideoFormat)) {
             opts->applied->reportVideoFormat = opts->reportVideoFormat;
-        } else if (FUN_00234770(args, &index, s_showLogo_004e9358, &opts->showLogo)) {
+        } else if (FUN_00234770(args, &index, showLogo, &opts->showLogo)) {
             opts->applied->showLogo = opts->showLogo;
-        } else if (FUN_00234770(args, &index, s_showUi_004e9388, &opts->showUi)) {
+        } else if (FUN_00234770(args, &index, showUi, &opts->showUi)) {
             opts->applied->showUi = opts->showUi;
-        } else if (FUN_00234770(args, &index, s_enableMayaControls_004e93c0, &opts->enableMayaControls)) {
+        } else if (FUN_00234770(args, &index, enableMayaControls, &opts->enableMayaControls)) {
             opts->applied->enableMayaControls = opts->enableMayaControls;
-        } else if (FUN_00234770(args, &index, s_benchmark_004e9408, &opts->benchmark)) {
+        } else if (FUN_00234770(args, &index, benchmark, &opts->benchmark)) {
             opts->applied->benchmark = opts->benchmark;
-        } else if (thunk_FUN_00234510(args, &index, s_benchmarkSkipFrames_004e9450, &opts->benchmarkSkipFrames)) {
+        } else if (thunk_FUN_00234510(args, &index, benchmarkSkipFrames, &opts->benchmarkSkipFrames)) {
             opts->applied->benchmarkSkipFrames = opts->benchmarkSkipFrames;
-        } else if (thunk_FUN_00234510(args, &index, s_benchmarkFrames_004e94b0, &opts->benchmarkFrames)) {
+        } else if (thunk_FUN_00234510(args, &index, benchmarkFrames, &opts->benchmarkFrames)) {
             opts->applied->benchmarkFrames = opts->benchmarkFrames;
-        } else if (FUN_00234770(args, &index, s_columnStatistics_004e9500, &opts->columnStatistics)) {
+        } else if (FUN_00234770(args, &index, columnStatistics, &opts->columnStatistics)) {
             opts->applied->columnStatistics = opts->columnStatistics;
-        } else if (FUN_00234770(args, &index, s_allocateVisualContextInScratchpad_004e9560, &opts->allocateVisualContextInScratchpad)) {
+        } else if (FUN_00234770(args, &index, allocateVisualContextInScratchpad, &opts->allocateVisualContextInScratchpad)) {
             opts->applied->allocateVisualContextInScratchpad = opts->allocateVisualContextInScratchpad;
-        } else if (FUN_00234470(args, &index, s_n_004e9708)) {
+        } else if (FUN_00234470(args, &index, n)) {
             index = index - 1;
             break;
-        } else if (FUN_00234470(args, &index, s_dashdash_004e9710)) {
+        } else if (FUN_00234470(args, &index, dashdash)) {
             break;
         } else {
             int isOption;
@@ -359,7 +359,7 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
                 break;
             }
             StringList_CopyRetained(&printRef, args, index);
-            printf(s_unrecognized_004e9720, printRef);
+            printf(unrecognized, printRef);
             ReleaseString(printRef);
             StringList_CopyRetained(&helpRef2, args, 0);
             FUN_00233c10(helpRef2);
@@ -373,7 +373,7 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
     }
 
     while (index < argc) {
-        if (!FUN_00234510(args, &index, s_n_004e9708, &repeat)) {
+        if (!FUN_00234510(args, &index, n, &repeat)) {
             StringList_CopyRetained(&currentRef, args, index);
             if (currentRef != 0) {
                 ((int *)currentRef)[-1]++;

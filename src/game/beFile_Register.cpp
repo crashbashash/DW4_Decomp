@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beFile_metaObject_00589778[];
+extern igMetaObject *g_beFile_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beFile_GetMetaObject(void);
-extern const char s_beFile_className_005053b8[];
+extern const char beFile_className[];
 int beFile_GetVTable(void);
 void *beFile_Register(void);
 }
@@ -31,11 +31,11 @@ void *beFile_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beFile_metaObject_00589778,           /* published MetaObject slot */
+        g_beFile_metaObject,           /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beFile_GetMetaObject,                   /* own MetaObject accessor (stored at +0x54) */
-        s_beFile_className_005053b8,            /* class name */
+        beFile_className,            /* class name */
         8,                                      /* instance size */
         beFile_GetVTable,                       /* vtable getter */
         0,                                      /* field adder */

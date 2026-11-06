@@ -9,17 +9,17 @@ typedef struct CvFsHandle_270a90 {
     int file;                  /* 0x04 */
 } CvFsHandle_270a90;
 
-extern char s_cvFsGetMaxByteRate_1_handle_error_004ef5f0[]; /* 'cvFsGetMaxByteRate #1:handle error' */
-extern char s_cvFsGetMaxByteRate_2_vtbl_error_004ef618[]; /* 'cvFsGetMaxByteRate #2:vtbl error' */
+extern char cvFsGetMaxByteRate_1_handle_error[]; /* 'cvFsGetMaxByteRate #1:handle error' */
+extern char cvFsGetMaxByteRate_2_vtbl_error[]; /* 'cvFsGetMaxByteRate #2:vtbl error' */
 void FUN_0026f530(const char *message);
 
 int FUN_00270a90(CvFsHandle_270a90 *handle) {
     if (handle == 0) {
-        FUN_0026f530(s_cvFsGetMaxByteRate_1_handle_error_004ef5f0);
+        FUN_0026f530(cvFsGetMaxByteRate_1_handle_error);
     } else if (handle->device->get_max_byte_rate != 0) {
         return handle->device->get_max_byte_rate(handle->file);
     } else {
-        FUN_0026f530(s_cvFsGetMaxByteRate_2_vtbl_error_004ef618);
+        FUN_0026f530(cvFsGetMaxByteRate_2_vtbl_error);
     }
     return 0;
 }

@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShinkaObject_metaObject_0058bff0[];
+extern igMetaObject *g_beNDMWShinkaObject_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beNDMWShinkaObject_GetMetaObject(void);
-extern const char s_beNDMWShinkaObject_className_005133d0[];
+extern const char beNDMWShinkaObject_className[];
 int beNDMWShinkaObject_GetVTable(void);
 void beNDMWShinkaObject_InitFields(void);
 void *beNDMWShinkaObject_Register(void);
@@ -32,11 +32,11 @@ void *beNDMWShinkaObject_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                         /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShinkaObject_metaObject_0058bff0,  /* published MetaObject slot */
+        g_beNDMWShinkaObject_metaObject,  /* published MetaObject slot */
         igObject_Register,                         /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,     /* base class MetaObject accessor */
         beNDMWShinkaObject_GetMetaObject,          /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShinkaObject_className_005133d0,   /* class name */
+        beNDMWShinkaObject_className,   /* class name */
         0x54,                                      /* instance size */
         beNDMWShinkaObject_GetVTable,              /* vtable getter */
         beNDMWShinkaObject_InitFields,             /* field adder */

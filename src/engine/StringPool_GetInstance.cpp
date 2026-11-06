@@ -9,17 +9,17 @@
 extern "C" {
 int FUN_002eb010(int);
 int StringPool_Construct(int);
-extern int g_stringPool_00586f20[4];
+extern int g_stringPool[4];
 int StringPool_GetInstance(void) {
     int pool;
 
-    if (g_stringPool_00586f20[0] == 0) {
+    if (g_stringPool[0] == 0) {
         pool = FUN_002eb010(0x10);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
-        g_stringPool_00586f20[0] = pool;
+        g_stringPool[0] = pool;
     }
-    return g_stringPool_00586f20[0];
+    return g_stringPool[0];
 }
 } /* extern "C" */

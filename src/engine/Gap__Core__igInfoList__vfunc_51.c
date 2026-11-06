@@ -4,7 +4,7 @@
  * cell as igIntMetaField_GetDefaultDescriptor in list-metadata-access.c).  An
  * igInfoList is a count/capacity/data list like igDataList, so its slot hands out
  * the int descriptor. */
-extern int g_igIntMetaField_descriptor_00586100[4];
+extern int g_igIntMetaField_descriptor[4];
 int Gap__Core__igInfoList__vfunc_51(void) {
-    return g_igIntMetaField_descriptor_00586100[0];
+    return g_igIntMetaField_descriptor[0];
 }

@@ -8,7 +8,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_beMemory_metaObject_00589090[4];
+extern int g_beMemory_metaObject[4];
 /* 0x003afe80: slot 21, empty override. */
 void Gap__Bec__beMemory__vfunc_21(void)
 {
@@ -47,5 +47,5 @@ void Gap__Bec__beMemory__vfunc_27(void)
 /* 0x003afef0: slot 20, MetaObject return (class handle at 0x00589090). */
 int Gap__Bec__beMemory__vfunc_20(void)
 {
-    return g_beMemory_metaObject_00589090[0];
+    return g_beMemory_metaObject[0];
 }

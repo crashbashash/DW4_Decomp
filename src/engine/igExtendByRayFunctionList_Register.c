@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igExtendByRayFunctionList_GetVTable[];
 extern char thunk_igExtendByRayFunctionList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igExtendByRayFunctionList_className_004e0bf0[];
-extern char g_igExtendByRayFunctionList_metaObject_00561050[];
+extern char igExtendByRayFunctionList_className[];
+extern char g_igExtendByRayFunctionList_metaObject[];
 int FUN_00186a40();
 int igMetaObject_RegisterClass();
 
@@ -14,11 +14,11 @@ void igExtendByRayFunctionList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igExtendByRayFunctionList_metaObject_00561050, /* published MetaObject slot */
+        g_igExtendByRayFunctionList_metaObject, /* published MetaObject slot */
         igDataList_Register,                             /* base class registrar */
         igDataList_GetPublishedMetaObject,               /* base class MetaObject accessor */
         thunk_igExtendByRayFunctionList_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igExtendByRayFunctionList_className_004e0bf0,  /* class name */
+        igExtendByRayFunctionList_className,  /* class name */
         0x14,                                            /* instance size */
         igExtendByRayFunctionList_GetVTable,             /* vtable getter */
         0,                                               /* field adder */

@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beResetNode_metaObject_00588460[];
+extern igMetaObject *g_beResetNode_metaObject[];
 void *igGroup_Register(void);
-igMetaObject *igGroup_GetPublishedMetaObject_001943a0(void);
+igMetaObject *igGroup_GetPublishedMetaObject(void);
 igMetaObject *beResetNode_GetMetaObject(void);
-extern const char s_beResetNode_className_00502c30[];
+extern const char beResetNode_className[];
 int beResetNode_GetVTable(void);
 void beResetNode_InitFields(void);
 void FUN_0034b690(void);
@@ -33,11 +33,11 @@ void *beResetNode_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beResetNode_metaObject_00588460,        /* published MetaObject slot */
+        g_beResetNode_metaObject,        /* published MetaObject slot */
         igGroup_Register,                         /* base class registrar */
-        igGroup_GetPublishedMetaObject_001943a0,  /* base class MetaObject accessor */
+        igGroup_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beResetNode_GetMetaObject,                /* own MetaObject accessor (stored at +0x54) */
-        s_beResetNode_className_00502c30,         /* class name */
+        beResetNode_className,         /* class name */
         0x24,                                     /* instance size */
         beResetNode_GetVTable,                    /* vtable getter */
         beResetNode_InitFields,                   /* field adder */

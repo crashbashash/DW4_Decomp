@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beMatCtrlSearchList_metaObject_00589108[];
+extern igMetaObject *g_beMatCtrlSearchList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beMatCtrlSearchList_GetMetaObject(void);
-extern const char s_beMatCtrlSearchList_className_00504690[];
+extern const char beMatCtrlSearchList_className[];
 int beMatCtrlSearchList_GetVTable(void);
-extern char g_beMatCtrlSearchList_callbackList_004c6070[];
+extern char g_beMatCtrlSearchList_callbackList[];
 void *beMatCtrlSearchList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beMatCtrlSearchList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                            /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beMatCtrlSearchList_metaObject_00589108,    /* published MetaObject slot */
+        g_beMatCtrlSearchList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                        /* base class registrar */
         igObjectList_GetPublishedMetaObject,          /* base class MetaObject accessor */
         beMatCtrlSearchList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beMatCtrlSearchList_className_00504690,     /* class name */
+        beMatCtrlSearchList_className,     /* class name */
         0x14,                                         /* instance size */
         beMatCtrlSearchList_GetVTable,                /* vtable getter */
         0,                                            /* field adder */
         0,                                            /* extra callback item */
-        g_beMatCtrlSearchList_callbackList_004c6070  /* callback list */
+        g_beMatCtrlSearchList_callbackList  /* callback list */
     );
 }

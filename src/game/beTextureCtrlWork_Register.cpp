@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beTextureCtrlWork_metaObject_00587cd0[];
+extern igMetaObject *g_beTextureCtrlWork_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beTextureCtrlWork_GetMetaObject(void);
-extern const char s_beTextureCtrlWork_className_00501bf0[];
+extern const char beTextureCtrlWork_className[];
 int beTextureCtrlWork_GetVTable(void);
 void beTextureCtrlWork_InitFields(void);
-extern char g_beTextureCtrlWork_callbackList_004c3508[];
+extern char g_beTextureCtrlWork_callbackList[];
 void *beTextureCtrlWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beTextureCtrlWork_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beTextureCtrlWork_metaObject_00587cd0,    /* published MetaObject slot */
+        g_beTextureCtrlWork_metaObject,    /* published MetaObject slot */
         igObject_Register,                          /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,      /* base class MetaObject accessor */
         beTextureCtrlWork_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beTextureCtrlWork_className_00501bf0,     /* class name */
+        beTextureCtrlWork_className,     /* class name */
         0x10,                                       /* instance size */
         beTextureCtrlWork_GetVTable,                /* vtable getter */
         beTextureCtrlWork_InitFields,               /* field adder */
         0,                                          /* extra callback item */
-        g_beTextureCtrlWork_callbackList_004c3508  /* callback list */
+        g_beTextureCtrlWork_callbackList  /* callback list */
     );
 }

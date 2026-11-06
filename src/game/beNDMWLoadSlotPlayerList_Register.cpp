@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadSlotPlayerList_metaObject_0058bcf8[];
+extern igMetaObject *g_beNDMWLoadSlotPlayerList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beNDMWLoadSlotPlayerList_GetMetaObject(void);
-extern const char s_beNDMWLoadSlotPlayerList_className_00512ee0[];
+extern const char beNDMWLoadSlotPlayerList_className[];
 int beNDMWLoadSlotPlayerList_GetVTable(void);
-extern char g_beNDMWLoadSlotPlayerList_callbackList_004cbc18[];
+extern char g_beNDMWLoadSlotPlayerList_callbackList[];
 void *beNDMWLoadSlotPlayerList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beNDMWLoadSlotPlayerList_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadSlotPlayerList_metaObject_0058bcf8,    /* published MetaObject slot */
+        g_beNDMWLoadSlotPlayerList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                             /* base class registrar */
         igObjectList_GetPublishedMetaObject,               /* base class MetaObject accessor */
         beNDMWLoadSlotPlayerList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadSlotPlayerList_className_00512ee0,     /* class name */
+        beNDMWLoadSlotPlayerList_className,     /* class name */
         0x14,                                              /* instance size */
         beNDMWLoadSlotPlayerList_GetVTable,                /* vtable getter */
         0,                                                 /* field adder */
         0,                                                 /* extra callback item */
-        g_beNDMWLoadSlotPlayerList_callbackList_004cbc18  /* callback list */
+        g_beNDMWLoadSlotPlayerList_callbackList  /* callback list */
     );
 }

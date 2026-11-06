@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNodeAnim_metaObject_00588700[];
+extern igMetaObject *g_beNodeAnim_metaObject[];
 void *igGroup_Register(void);
-igMetaObject *igGroup_GetPublishedMetaObject_001943a0(void);
+igMetaObject *igGroup_GetPublishedMetaObject(void);
 igMetaObject *beNodeAnim_GetMetaObject(void);
-extern const char s_beNodeAnim_className_005031b8[];
+extern const char beNodeAnim_className[];
 int beNodeAnim_GetVTable(void);
 void beNodeAnim_InitFields(void);
 void FUN_0034eaf0(void);
@@ -33,11 +33,11 @@ void *beNodeAnim_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNodeAnim_metaObject_00588700,         /* published MetaObject slot */
+        g_beNodeAnim_metaObject,         /* published MetaObject slot */
         igGroup_Register,                         /* base class registrar */
-        igGroup_GetPublishedMetaObject_001943a0,  /* base class MetaObject accessor */
+        igGroup_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNodeAnim_GetMetaObject,                 /* own MetaObject accessor (stored at +0x54) */
-        s_beNodeAnim_className_005031b8,          /* class name */
+        beNodeAnim_className,          /* class name */
         0x70,                                     /* instance size */
         beNodeAnim_GetVTable,                     /* vtable getter */
         beNodeAnim_InitFields,                    /* field adder */

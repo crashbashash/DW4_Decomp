@@ -631,27 +631,40 @@ def _walk(top, ext):
             if f.endswith(ext):
                 yield os.path.join(dirpath, f)
 
-# The README's breakdown by code region (the regions of docs/engine/module-map.md, folded to the
-# libraries a reader recognises). Address ranges for the vendor libraries; inside the engine/game
-# span a function belongs to the game when its class is a `be*` one.
+# The README's breakdown by code region. A class name says which library a function belongs to, so
+# it decides first: the linker interleaved a few `be*` and `ig*` functions outside their main blocks.
+# Everything else goes by address. The table covers the whole image, so nothing falls into a region by
+# default. It follows docs/engine/module-map.md; only the start of the game block is a judgement, a run
+# boundary in the unnamed gap between 0x337df0 (`ig*`) and 0x33e880 (`be*`).
+GAME, ALCHEMY, LUA = "Game", "Alchemy engine", "Lua 4.0.1 interpreter"
+CRI, PNG, SONY = "CRI middleware (ADX, Sofdec, audio)", "libpng and zlib", "Sony SDK and libc"
 REGION_RANGES = [
-    (0x100000, 0x141000, "Sony SDK and libc"),
-    (0x20D000, 0x2252D8, "libpng and zlib"),
-    (0x246D30, 0x2590C0, "Lua 4.0.1"),
-    (0x25D000, 0x2D1000, "CRI middleware (ADX, Sofdec, audio)"),
+    (0x100000, 0x130000, SONY),
+    (0x130000, 0x20D000, ALCHEMY),
+    (0x20D000, 0x2252D8, PNG),
+    (0x2252D8, 0x226000, SONY),
+    (0x226000, 0x246D30, ALCHEMY),
+    (0x246D30, 0x2590C0, LUA),
+    (0x2590C0, 0x25D000, ALCHEMY),
+    (0x25D000, 0x2B5DA0, CRI),
+    (0x2B5DA0, 0x338C00, ALCHEMY),
+    (0x338C00, 0x44B860, GAME),
+    (0x44B860, 0x600000, ALCHEMY),
 ]
-REGION_ORDER = ["Game (`be*` classes)", "Alchemy engine", "Lua 4.0.1", "CRI middleware (ADX, Sofdec, audio)",
-                "libpng and zlib", "Sony SDK and libc"]
-GAME_NAME_RE = re.compile(r"^(be[A-Z]|Gap__Bec__|thunk_be[A-Z])")
+REGION_ORDER = [GAME, ALCHEMY, LUA, CRI, PNG, SONY]
+GAME_NAME_RE = re.compile(r"^(?:thunk_)*(?:be[A-Z]|Gap__Bec__)")
+ALCHEMY_NAME_RE = re.compile(r"^(?:thunk_)*(?:ig[A-Z]|Gap__)")
 
 
 def region_of(va, name):
+    if GAME_NAME_RE.match(name):
+        return GAME
+    if ALCHEMY_NAME_RE.match(name):
+        return ALCHEMY
     for lo, hi, label in REGION_RANGES:
         if lo <= va < hi:
             return label
-    if GAME_NAME_RE.match(name) or (0x334000 <= va < 0x460000 and name.startswith("FUN_")):
-        return "Game (`be*` classes)"
-    return "Alchemy engine"
+    raise ValueError("0x%x is outside every region" % va)
 
 
 # ---- readable: the second half of the work -------------------------------------------
@@ -661,17 +674,40 @@ def region_of(va, name):
 SLOT_NAME_RE = re.compile(r"vfunc_\d+(?:__[0-9a-f]{8})?$")
 # A virtual call that is still a slot number: `Class__vfunc_23(...)`, `->vfunc_23(`, `->slot_4(`, `->vf7(`,
 # or a call through a cast to a function-pointer table.
-SLOT_REF_RE = re.compile(r"vfunc_\d+\b|(?:->|\.)\s*(?:slot_?\d+|vf\d+)\s*\(|\(\s*\*+\s*\(\s*[\w\s\*]+\(\s*\*+\s*\)")
+SLOT_REF_RE = re.compile(r"vfunc_\d+\b|(?:->|\.)\s*(?:slot_?\d+|vf\d+|v\d+|vX)\s*\(|\(\s*\*+\s*\(\s*[\w\s\*]+\(\s*\*+\s*\)")
 OFFSET_MEMBER_RE = re.compile(r"(?:->|\.)\s*(?:f\d+|unk_?[0-9A-Fa-f]+|field_?[0-9A-Fa-fx]+)\b")
 OFFSET_CAST_RE = re.compile(r"\(\s*(?:unsigned\s+|signed\s+)?(?:char|u8|s8|int|u32|s32|void)\s*\*\s*\)\s*\(?\s*\w+\s*\)?"
                             r"\s*\+\s*(?:0x[0-9a-fA-F]+|\d+)")
+# Leftovers beyond M2C_IDIOM_RE, which the debt ratchet shares: stack-offset locals (`sp5C`, upper-case
+# hex so `spec` stays a word) and the other generated spellings of a local.
+LOCAL_IDIOM_RE = re.compile(r"\b(?:sp[0-9A-F]{1,4}|phi_\w+|saved_reg_\w+|local_[0-9a-f]+|[a-z]{1,2}Var\d+|"
+                            r"a?[a-z]Stack\w+|param_\d+)\b")
+# A type defined in a source file, and the shapes that name nothing: one or two letters with any digits
+# (`S`, `VC`, `V3`), a word with a size or offset on the end (`Info176`, `Obj0060`), `Obj`, `DW4VC_232_2`.
+TYPE_DEFINITION_RE = re.compile(r"\b(?:struct|class|union|enum)\s+([A-Za-z_]\w*)\s*(?::[^{;]*)?\{|\}\s*([A-Za-z_]\w*)\s*;")
+PLACEHOLDER_TYPE_RE = re.compile(r"[A-Za-z]{1,2}\d*|[A-Za-z]{3}\d+|\w*[A-Za-z_]\d{3,}|Obj|DW4\w*")
+IDENTIFIER_RE = re.compile(r"\b[A-Za-z_]\w*\b")
+HEX_PART_RE = re.compile(r"(?:0x)?[0-9a-fA-F]{6,8}$")
+IMAGE_LO, IMAGE_HI = 0x100000, 0x600000
+
+
+def carries_address(identifier):
+    """True when a `_`-separated part of `identifier` is an address in the image. An address says
+    where something is, not what it is, so a name holding one is not recovered, whatever surrounds
+    it: `thunk_FUN_002ed330`, `Memory_FreeBufferAlias_002ed4b0`, `GAMERAM_004f1234`."""
+    return any(HEX_PART_RE.fullmatch(part) and IMAGE_LO <= int(part, 16) < IMAGE_HI
+               for part in identifier.split("_"))
+
+
 READABLE_CHECKS = [
     ("name", "the function has a recovered name, not `FUN_<address>` or a numbered virtual slot"),
+    ("addresses", "no name holds an address: not the function's own, nor any function, variable or type it uses"),
+    ("types", "the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2`"),
     ("placed", "it sits in its class or module file, not `src/unmatched/`"),
     ("references", "what it calls and reads is named: no `FUN_`/`DAT_` references"),
-    ("idioms", "no decompiler leftovers: `temp_*`, `var_*`, `argN`"),
+    ("idioms", "no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`"),
     ("fields", "fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset"),
-    ("virtuals", "virtual calls go through a named method, not a slot number or a cast function pointer"),
+    ("virtuals", "virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer"),
 ]
 _READABLE = {}
 
@@ -708,9 +744,15 @@ def readable_failures(name, path, cache):
         failed.append("name")
     if "/unmatched/" in path.replace(os.sep, "/"):
         failed.append("placed")
+    if carries_address(name) or any(carries_address(i) for i in IDENTIFIER_RE.findall(body)):
+        failed.append("addresses")
+    used = set(IDENTIFIER_RE.findall(body))
+    defined = {a or b for a, b in TYPE_DEFINITION_RE.findall(whole)}
+    if any(PLACEHOLDER_TYPE_RE.fullmatch(t) for t in defined & used):
+        failed.append("types")
     if FUN_DAT_RE.search(body):
         failed.append("references")
-    if M2C_IDIOM_RE.search(body):
+    if M2C_IDIOM_RE.search(body) or LOCAL_IDIOM_RE.search(body):
         failed.append("idioms")
     if OFFSET_MEMBER_RE.search(body) or OFFSET_CAST_RE.search(body):
         failed.append("fields")

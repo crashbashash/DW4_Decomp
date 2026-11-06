@@ -9,7 +9,7 @@ extern "C" {
 void Gap__Core__igObject__vfunc_23(void);
 void Gap__Bec__beFont__vfunc_23(void);
 int beMessenger_RegisterReceiver(int, int, int *, int, int);
-extern int s_TEXTCTL_0050e728[4];
+extern int TEXTCTL[4];
 void Gap__Bec__beFont__vfunc_29(beFont *, int);
 }
 
@@ -26,5 +26,5 @@ void Gap__Bec__beFont__vfunc_23(void)
  * text argument and -1 as the last argument. */
 void Gap__Bec__beFont__vfunc_29(beFont *self, int receiver)
 {
-    beMessenger_RegisterReceiver(self->_messenger, receiver, &s_TEXTCTL_0050e728[0], 0, -1);
+    beMessenger_RegisterReceiver(self->_messenger, receiver, &TEXTCTL[0], 0, -1);
 }

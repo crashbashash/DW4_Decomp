@@ -15022,7 +15022,7 @@
       "address": 2425344,
       "name": "luaM_realloc",
       "size": 268,
-      "source": "src/engine/luaM_realloc.cpp",
+      "source": "src/lua/lmem.c",
       "direct": [
         {
           "site": 2425380,
@@ -16977,9 +16977,9 @@
     },
     {
       "address": 3068720,
-      "name": "FUN_002ed330",
+      "name": "Memory_ReallocateBuffer",
       "size": 116,
-      "source": "src/engine/FUN_002ed330.cpp",
+      "source": "src/engine/Memory_ReallocateBuffer.cpp",
       "direct": [
         {
           "site": 3068748,
@@ -17004,9 +17004,9 @@
     },
     {
       "address": 3068992,
-      "name": "thunk_FUN_002ed330",
+      "name": "thunk_Memory_ReallocateBuffer",
       "size": 8,
-      "source": "src/unmatched/thunk_FUN_002ed330.c",
+      "source": "src/engine/thunk_Memory_ReallocateBuffer.c",
       "direct": [
         {
           "site": 3068992,
@@ -17040,9 +17040,9 @@
     },
     {
       "address": 3069104,
-      "name": "Memory_FreeBufferAlias_002ed4b0",
+      "name": "Memory_FreeBufferAliasA",
       "size": 8,
-      "source": "src/engine/Memory_FreeBufferAlias_002ed4b0.c",
+      "source": "src/engine/Memory_FreeBufferAliasA.c",
       "direct": [
         {
           "site": 3069104,
@@ -17076,9 +17076,9 @@
     },
     {
       "address": 3069376,
-      "name": "Memory_FreeBufferAlias_002ed5c0",
+      "name": "Memory_FreeBufferAliasB",
       "size": 8,
-      "source": "src/engine/Memory_FreeBufferAlias_002ed5c0.c",
+      "source": "src/engine/Memory_FreeBufferAliasB.c",
       "direct": [
         {
           "site": 3069376,

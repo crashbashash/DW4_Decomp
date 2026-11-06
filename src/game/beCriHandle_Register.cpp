@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCriHandle_metaObject_005899c8[];
+extern igMetaObject *g_beCriHandle_metaObject[];
 void *igNamedObject_Register(void);
-igMetaObject *igNamedObject_GetPublishedMetaObject_0014a6e0(void);
+igMetaObject *igNamedObject_GetPublishedMetaObject(void);
 igMetaObject *beCriHandle_GetMetaObject(void);
-extern const char s_beCriHandle_className_005057f0[];
+extern const char beCriHandle_className[];
 int beCriHandle_GetVTable(void);
 void beCriHandle_InitFields(void);
-extern char g_beCriHandle_callbackList_004c7418[];
+extern char g_beCriHandle_callbackList[];
 void *beCriHandle_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beCriHandle_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCriHandle_metaObject_005899c8,              /* published MetaObject slot */
+        g_beCriHandle_metaObject,              /* published MetaObject slot */
         igNamedObject_Register,                         /* base class registrar */
-        igNamedObject_GetPublishedMetaObject_0014a6e0,  /* base class MetaObject accessor */
+        igNamedObject_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beCriHandle_GetMetaObject,                      /* own MetaObject accessor (stored at +0x54) */
-        s_beCriHandle_className_005057f0,               /* class name */
+        beCriHandle_className,               /* class name */
         0x28,                                           /* instance size */
         beCriHandle_GetVTable,                          /* vtable getter */
         beCriHandle_InitFields,                         /* field adder */
         0,                                              /* extra callback item */
-        g_beCriHandle_callbackList_004c7418            /* callback list */
+        g_beCriHandle_callbackList            /* callback list */
     );
 }

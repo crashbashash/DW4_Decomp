@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWAfsSetupDataList_metaObject_0058c128[];
+extern igMetaObject *g_beNDMWAfsSetupDataList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beNDMWAfsSetupDataList_GetMetaObject(void);
-extern const char s_beNDMWAfsSetupDataList_className_005138a0[];
+extern const char beNDMWAfsSetupDataList_className[];
 int beNDMWAfsSetupDataList_GetVTable(void);
-extern char g_beNDMWAfsSetupDataList_callbackList_004cc5d0[];
+extern char g_beNDMWAfsSetupDataList_callbackList[];
 void *beNDMWAfsSetupDataList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beNDMWAfsSetupDataList_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWAfsSetupDataList_metaObject_0058c128,    /* published MetaObject slot */
+        g_beNDMWAfsSetupDataList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                           /* base class registrar */
         igObjectList_GetPublishedMetaObject,             /* base class MetaObject accessor */
         beNDMWAfsSetupDataList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWAfsSetupDataList_className_005138a0,     /* class name */
+        beNDMWAfsSetupDataList_className,     /* class name */
         0x14,                                            /* instance size */
         beNDMWAfsSetupDataList_GetVTable,                /* vtable getter */
         0,                                               /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWAfsSetupDataList_callbackList_004cc5d0  /* callback list */
+        g_beNDMWAfsSetupDataList_callbackList  /* callback list */
     );
 }

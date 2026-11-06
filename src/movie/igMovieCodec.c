@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 
-extern int g_igMovieCodec_metaObject_00587738[4];
+extern int g_igMovieCodec_metaObject[4];
 
 /* The igMovieCodec base class declares slots 21-29 as default bodies: every
  * one returns 0 (slot 22 returns nothing), and the concrete codec
@@ -60,5 +60,5 @@ int Gap__igMovieCodec__vfunc_29(void) {
  * igMovieCodec MetaObject handle at 0x587738. */
 int Gap__igMovieCodec__vfunc_20(void)
 {
-    return g_igMovieCodec_metaObject_00587738[0];
+    return g_igMovieCodec_metaObject[0];
 }

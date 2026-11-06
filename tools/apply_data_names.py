@@ -5,7 +5,7 @@ The data counterpart of `apply_names.py`.  A data symbol has no layout entry or
 `asm/` unit, so a rename only touches the C that mentions it: every `DAT_<addr>`
 in the chosen modules becomes the overlay name (word-boundary match, so
 `DAT_0013b120` never matches inside a longer name).  The build still finds the
-symbol's address because a recovered name ends in `_<addr>` or is a function
+symbol's address because a recovered name has a row in that table or is a function
 symbol (`tools/verify.py:sym_address`, `tools/linkgen.py`).
 
 A `function-symbol` row names a callback passed by address.  Its old declaration

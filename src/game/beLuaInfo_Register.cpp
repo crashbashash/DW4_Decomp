@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLuaInfo_metaObject_005891c0[];
+extern igMetaObject *g_beLuaInfo_metaObject[];
 void *beBaseInfo_Register(void);
-igMetaObject *beBaseInfo_GetPublishedMetaObject_0033eef0(void);
+igMetaObject *beBaseInfo_GetPublishedMetaObject(void);
 igMetaObject *beLuaInfo_GetMetaObject(void);
-extern const char s_beLuaInfo_className_00504810[];
+extern const char beLuaInfo_className[];
 int beLuaInfo_GetVTable(void);
 void beLuaInfo_InitFields(void);
-extern char g_beLuaInfo_callbackList_004c6258[];
+extern char g_beLuaInfo_callbackList[];
 void *beLuaInfo_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beLuaInfo_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLuaInfo_metaObject_005891c0,             /* published MetaObject slot */
+        g_beLuaInfo_metaObject,             /* published MetaObject slot */
         beBaseInfo_Register,                         /* base class registrar */
-        beBaseInfo_GetPublishedMetaObject_0033eef0,  /* base class MetaObject accessor */
+        beBaseInfo_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLuaInfo_GetMetaObject,                     /* own MetaObject accessor (stored at +0x54) */
-        s_beLuaInfo_className_00504810,              /* class name */
+        beLuaInfo_className,              /* class name */
         0x20,                                        /* instance size */
         beLuaInfo_GetVTable,                         /* vtable getter */
         beLuaInfo_InitFields,                        /* field adder */
         0,                                           /* extra callback item */
-        g_beLuaInfo_callbackList_004c6258           /* callback list */
+        g_beLuaInfo_callbackList           /* callback list */
     );
 }

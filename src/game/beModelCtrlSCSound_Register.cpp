@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beModelCtrlSCSound_metaObject_005887b0[];
+extern igMetaObject *g_beModelCtrlSCSound_metaObject[];
 void *beModelCtrlSubComBase_Register(void);
-igMetaObject *beModelCtrlSubComBase_GetPublishedMetaObject_0034f670(void);
+igMetaObject *beModelCtrlSubComBase_GetPublishedMetaObject(void);
 igMetaObject *beModelCtrlSCSound_GetMetaObject(void);
-extern const char s_beModelCtrlSCSound_className_005032f0[];
+extern const char beModelCtrlSCSound_className[];
 int beModelCtrlSCSound_GetVTable(void);
 void beModelCtrlSCSound_InitFields(void);
 void *beModelCtrlSCSound_Register(void);
@@ -32,11 +32,11 @@ void *beModelCtrlSCSound_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beModelCtrlSCSound_metaObject_005887b0,               /* published MetaObject slot */
+        g_beModelCtrlSCSound_metaObject,               /* published MetaObject slot */
         beModelCtrlSubComBase_Register,                         /* base class registrar */
-        beModelCtrlSubComBase_GetPublishedMetaObject_0034f670,  /* base class MetaObject accessor */
+        beModelCtrlSubComBase_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beModelCtrlSCSound_GetMetaObject,                       /* own MetaObject accessor (stored at +0x54) */
-        s_beModelCtrlSCSound_className_005032f0,                /* class name */
+        beModelCtrlSCSound_className,                /* class name */
         0x20,                                                   /* instance size */
         beModelCtrlSCSound_GetVTable,                           /* vtable getter */
         beModelCtrlSCSound_InitFields,                          /* field adder */

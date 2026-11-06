@@ -18,15 +18,15 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beLOA_metaObject_005892b0[];
+extern igMetaObject *g_beLOA_metaObject[];
 void *igGroup_Register(void);
-igMetaObject *igGroup_GetPublishedMetaObject_001943a0(void);
+igMetaObject *igGroup_GetPublishedMetaObject(void);
 igMetaObject *beLOA_GetMetaObject(void);
-extern const char s_beLOA_className_00504a00[];
+extern const char beLOA_className[];
 int beLOA_GetVTable(void);
 void beLOA_InitFields(void);
 void FUN_0035d050(void);
-extern char g_beLOA_callbackList_004c6450[];
+extern char g_beLOA_callbackList[];
 void *beLOA_Register(void);
 }
 
@@ -34,15 +34,15 @@ void *beLOA_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                        /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beLOA_metaObject_005892b0,              /* published MetaObject slot */
+        g_beLOA_metaObject,              /* published MetaObject slot */
         igGroup_Register,                         /* base class registrar */
-        igGroup_GetPublishedMetaObject_001943a0,  /* base class MetaObject accessor */
+        igGroup_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beLOA_GetMetaObject,                      /* own MetaObject accessor (stored at +0x54) */
-        s_beLOA_className_00504a00,               /* class name */
+        beLOA_className,               /* class name */
         0x60,                                     /* instance size */
         beLOA_GetVTable,                          /* vtable getter */
         beLOA_InitFields,                         /* field adder */
         FUN_0035d050,                             /* extra callback item */
-        g_beLOA_callbackList_004c6450            /* callback list */
+        g_beLOA_callbackList            /* callback list */
     );
 }

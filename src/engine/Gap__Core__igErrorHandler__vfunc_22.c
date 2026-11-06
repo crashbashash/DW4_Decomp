@@ -4,7 +4,7 @@
  * the slot the class registration fills (see igErrorHandler_Register.c).
  * Same accessor idiom as the other `*_metaObject_<addr>` getters in this folder; the array extern
  * keeps the load absolute. */
-extern int g_igErrorHandler_metaObject_00586590[4];
+extern int g_igErrorHandler_metaObject[4];
 int Gap__Core__igErrorHandler__vfunc_22(void) {
-    return g_igErrorHandler_metaObject_00586590[0];
+    return g_igErrorHandler_metaObject[0];
 }

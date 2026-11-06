@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beWeaponAttachData_metaObject_00587a80[];
+extern igMetaObject *g_beWeaponAttachData_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beWeaponAttachData_GetMetaObject(void);
-extern const char s_beWeaponAttachData_className_00501740[];
+extern const char beWeaponAttachData_className[];
 int beWeaponAttachData_GetVTable(void);
 void beWeaponAttachData_InitFields(void);
-extern char g_beWeaponAttachData_callbackList_004c3048[];
+extern char g_beWeaponAttachData_callbackList[];
 void *beWeaponAttachData_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beWeaponAttachData_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beWeaponAttachData_metaObject_00587a80,    /* published MetaObject slot */
+        g_beWeaponAttachData_metaObject,    /* published MetaObject slot */
         igObject_Register,                           /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,       /* base class MetaObject accessor */
         beWeaponAttachData_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beWeaponAttachData_className_00501740,     /* class name */
+        beWeaponAttachData_className,     /* class name */
         0x10,                                        /* instance size */
         beWeaponAttachData_GetVTable,                /* vtable getter */
         beWeaponAttachData_InitFields,               /* field adder */
         0,                                           /* extra callback item */
-        g_beWeaponAttachData_callbackList_004c3048  /* callback list */
+        g_beWeaponAttachData_callbackList  /* callback list */
     );
 }

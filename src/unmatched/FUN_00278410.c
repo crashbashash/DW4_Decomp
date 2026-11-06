@@ -9,11 +9,11 @@ struct Handle278 {
 extern void FUN_00277de8(int detail, const char *message);
 extern void FUN_00277da0(void);
 extern void FUN_00277db8(void);
-extern const char s_E0092912_handl_is_null_004f0e30[];
+extern const char E0092912_handl_is_null_2[];
 
 void FUN_00278410(struct Handle278 *handle) {
     if (handle == 0) {
-        FUN_00277de8(0, s_E0092912_handl_is_null_004f0e30);
+        FUN_00277de8(0, E0092912_handl_is_null_2);
         return;
     }
     FUN_00277da0();

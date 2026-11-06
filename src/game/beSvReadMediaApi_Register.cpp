@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvReadMediaApi_metaObject_00588238[];
+extern igMetaObject *g_beSvReadMediaApi_metaObject[];
 void *beSaveApi_Register(void);
-igMetaObject *beSaveApi_GetPublishedMetaObject_003485e0(void);
+igMetaObject *beSaveApi_GetPublishedMetaObject(void);
 igMetaObject *beSvReadMediaApi_GetMetaObject(void);
-extern const char s_beSvReadMediaApi_className_00502890[];
+extern const char beSvReadMediaApi_className[];
 int beSvReadMediaApi_GetVTable(void);
 void beSvReadMediaApi_InitFields(void);
-extern char g_beSvReadMediaApi_callbackList_004c40a0[];
+extern char g_beSvReadMediaApi_callbackList[];
 void *beSvReadMediaApi_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beSvReadMediaApi_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvReadMediaApi_metaObject_00588238,     /* published MetaObject slot */
+        g_beSvReadMediaApi_metaObject,     /* published MetaObject slot */
         beSaveApi_Register,                         /* base class registrar */
-        beSaveApi_GetPublishedMetaObject_003485e0,  /* base class MetaObject accessor */
+        beSaveApi_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSvReadMediaApi_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        s_beSvReadMediaApi_className_00502890,      /* class name */
+        beSvReadMediaApi_className,      /* class name */
         0x58,                                       /* instance size */
         beSvReadMediaApi_GetVTable,                 /* vtable getter */
         beSvReadMediaApi_InitFields,                /* field adder */
         0,                                          /* extra callback item */
-        g_beSvReadMediaApi_callbackList_004c40a0   /* callback list */
+        g_beSvReadMediaApi_callbackList   /* callback list */
     );
 }

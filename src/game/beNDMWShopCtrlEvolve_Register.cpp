@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWShopCtrlEvolve_metaObject_0058ae08[];
+extern igMetaObject *g_beNDMWShopCtrlEvolve_metaObject[];
 void *beNDMWListCtrl_Register(void);
-igMetaObject *beNDMWListCtrl_GetPublishedMetaObject_003b68a0(void);
+igMetaObject *beNDMWListCtrl_GetPublishedMetaObject(void);
 igMetaObject *beNDMWShopCtrlEvolve_GetMetaObject(void);
-extern const char s_beNDMWShopCtrlEvolve_className_00511540[];
+extern const char beNDMWShopCtrlEvolve_className[];
 int beNDMWShopCtrlEvolve_GetVTable(void);
 void beNDMWShopCtrlEvolve_InitFields(void);
-extern char g_beNDMWShopCtrlEvolve_callbackList_004c9c28[];
+extern char g_beNDMWShopCtrlEvolve_callbackList[];
 void *beNDMWShopCtrlEvolve_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWShopCtrlEvolve_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                               /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWShopCtrlEvolve_metaObject_0058ae08,      /* published MetaObject slot */
+        g_beNDMWShopCtrlEvolve_metaObject,      /* published MetaObject slot */
         beNDMWListCtrl_Register,                         /* base class registrar */
-        beNDMWListCtrl_GetPublishedMetaObject_003b68a0,  /* base class MetaObject accessor */
+        beNDMWListCtrl_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWShopCtrlEvolve_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWShopCtrlEvolve_className_00511540,       /* class name */
+        beNDMWShopCtrlEvolve_className,       /* class name */
         0x64,                                            /* instance size */
         beNDMWShopCtrlEvolve_GetVTable,                  /* vtable getter */
         beNDMWShopCtrlEvolve_InitFields,                 /* field adder */
         0,                                               /* extra callback item */
-        g_beNDMWShopCtrlEvolve_callbackList_004c9c28    /* callback list */
+        g_beNDMWShopCtrlEvolve_callbackList    /* callback list */
     );
 }

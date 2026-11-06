@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beDemoKeepMes_metaObject_005897f8[];
+extern igMetaObject *g_beDemoKeepMes_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beDemoKeepMes_GetMetaObject(void);
-extern const char s_beDemoKeepMes_className_005054d8[];
+extern const char beDemoKeepMes_className[];
 int beDemoKeepMes_GetVTable(void);
 void beDemoKeepMes_InitFields(void);
 void *beDemoKeepMes_Register(void);
@@ -32,11 +32,11 @@ void *beDemoKeepMes_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                      /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beDemoKeepMes_metaObject_005897f8,    /* published MetaObject slot */
+        g_beDemoKeepMes_metaObject,    /* published MetaObject slot */
         igObject_Register,                      /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,  /* base class MetaObject accessor */
         beDemoKeepMes_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beDemoKeepMes_className_005054d8,     /* class name */
+        beDemoKeepMes_className,     /* class name */
         0x30,                                   /* instance size */
         beDemoKeepMes_GetVTable,                /* vtable getter */
         beDemoKeepMes_InitFields,               /* field adder */

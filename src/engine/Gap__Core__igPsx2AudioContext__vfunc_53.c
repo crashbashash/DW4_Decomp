@@ -21,10 +21,10 @@ typedef struct AudioTableOwner {
     char *entries;
 } AudioTableOwner;
 
-extern AudioTableOwner *g_audioTableOwner_0055f5d0[4];
+extern AudioTableOwner *g_audioTableOwner[4];
 
 void Gap__Core__igPsx2AudioContext__vfunc_53(int unusedReceiver, int entryIndex, int value) {
     if (!(value & 0x3F)) {
-        ((AudioTableEntry *)(g_audioTableOwner_0055f5d0[0]->entries + entryIndex * 0x24))->word1 = value & ~0x3F;
+        ((AudioTableEntry *)(g_audioTableOwner[0]->entries + entryIndex * 0x24))->word1 = value & ~0x3F;
     }
 }

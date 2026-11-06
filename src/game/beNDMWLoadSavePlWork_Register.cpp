@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWLoadSavePlWork_metaObject_0058bc18[];
+extern igMetaObject *g_beNDMWLoadSavePlWork_metaObject[];
 void *igObject_Register(void);
 igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 igMetaObject *beNDMWLoadSavePlWork_GetMetaObject(void);
-extern const char s_beNDMWLoadSavePlWork_className_00512d30[];
+extern const char beNDMWLoadSavePlWork_className[];
 int beNDMWLoadSavePlWork_GetVTable(void);
 void beNDMWLoadSavePlWork_InitFields(void);
-extern char g_beNDMWLoadSavePlWork_callbackList_004cba50[];
+extern char g_beNDMWLoadSavePlWork_callbackList[];
 void *beNDMWLoadSavePlWork_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWLoadSavePlWork_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                             /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWLoadSavePlWork_metaObject_0058bc18,    /* published MetaObject slot */
+        g_beNDMWLoadSavePlWork_metaObject,    /* published MetaObject slot */
         igObject_Register,                             /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,         /* base class MetaObject accessor */
         beNDMWLoadSavePlWork_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWLoadSavePlWork_className_00512d30,     /* class name */
+        beNDMWLoadSavePlWork_className,     /* class name */
         0x34,                                          /* instance size */
         beNDMWLoadSavePlWork_GetVTable,                /* vtable getter */
         beNDMWLoadSavePlWork_InitFields,               /* field adder */
         0,                                             /* extra callback item */
-        g_beNDMWLoadSavePlWork_callbackList_004cba50  /* callback list */
+        g_beNDMWLoadSavePlWork_callbackList  /* callback list */
     );
 }

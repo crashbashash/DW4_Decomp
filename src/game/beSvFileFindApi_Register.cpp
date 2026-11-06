@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beSvFileFindApi_metaObject_00588278[];
+extern igMetaObject *g_beSvFileFindApi_metaObject[];
 void *beSaveApi_Register(void);
-igMetaObject *beSaveApi_GetPublishedMetaObject_003485e0(void);
+igMetaObject *beSaveApi_GetPublishedMetaObject(void);
 igMetaObject *beSvFileFindApi_GetMetaObject(void);
-extern const char s_beSvFileFindApi_className_00502920[];
+extern const char beSvFileFindApi_className[];
 int beSvFileFindApi_GetVTable(void);
 void *beSvFileFindApi_Register(void);
 }
@@ -31,11 +31,11 @@ void *beSvFileFindApi_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                          /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beSvFileFindApi_metaObject_00588278,      /* published MetaObject slot */
+        g_beSvFileFindApi_metaObject,      /* published MetaObject slot */
         beSaveApi_Register,                         /* base class registrar */
-        beSaveApi_GetPublishedMetaObject_003485e0,  /* base class MetaObject accessor */
+        beSaveApi_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beSvFileFindApi_GetMetaObject,              /* own MetaObject accessor (stored at +0x54) */
-        s_beSvFileFindApi_className_00502920,       /* class name */
+        beSvFileFindApi_className,       /* class name */
         0x54,                                       /* instance size */
         beSvFileFindApi_GetVTable,                  /* vtable getter */
         0,                                          /* field adder */

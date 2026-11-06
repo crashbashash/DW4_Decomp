@@ -5,8 +5,8 @@ extern char igDataList_GetPublishedMetaObject[];
 extern char igNonRefCountedObjectList_GetVTable[];
 extern char thunk_igNonRefCountedObjectList_GetMetaObject[];
 extern char igDataList_Register[];
-extern char s_igNonRefCountedObjectList_className_004f6530[];
-extern char g_igNonRefCountedObjectList_metaObject_00585bb0[];
+extern char igNonRefCountedObjectList_className[];
+extern char g_igNonRefCountedObjectList_metaObject[];
 int FUN_002b5d50();
 int igMetaObject_RegisterClass();
 extern int igNonRefCountedObjectList_InitFields_002bddc0[4];
@@ -16,11 +16,11 @@ void igNonRefCountedObjectList_Register(void) {
     FUN_002b5d50();
     igMetaObject_RegisterClass(
         0,                                                 /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igNonRefCountedObjectList_metaObject_00585bb0,   /* published MetaObject slot */
+        g_igNonRefCountedObjectList_metaObject,   /* published MetaObject slot */
         igDataList_Register,                               /* base class registrar */
         igDataList_GetPublishedMetaObject,                 /* base class MetaObject accessor */
         thunk_igNonRefCountedObjectList_GetMetaObject,     /* own MetaObject accessor (stored at +0x54) */
-        s_igNonRefCountedObjectList_className_004f6530,    /* class name */
+        igNonRefCountedObjectList_className,    /* class name */
         0x14,                                              /* instance size */
         igNonRefCountedObjectList_GetVTable,               /* vtable getter */
         &igNonRefCountedObjectList_InitFields_002bddc0[0], /* field adder */

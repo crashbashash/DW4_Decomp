@@ -7,7 +7,7 @@
  * handle word; slots 21 to 32 are empty overrides that return 0. */
 
 /* Reflected class handle of beKeyboardReceiver (0x589308). */
-extern int g_beKeyboardReceiver_metaObject_00589308[4];
+extern int g_beKeyboardReceiver_metaObject[4];
 
 /* 0x00238b50: slot 22, empty override returning 0. */
 int Gap__Bec__beKeyboardReceiver__vfunc_22(void) {
@@ -72,5 +72,5 @@ int Gap__Bec__beKeyboardReceiver__vfunc_21(void) {
 /* 0x00389070: slot 20, GetMetaObject. */
 int Gap__Bec__beKeyboardReceiver__vfunc_20(void)
 {
-    return g_beKeyboardReceiver_metaObject_00589308[0];
+    return g_beKeyboardReceiver_metaObject[0];
 }

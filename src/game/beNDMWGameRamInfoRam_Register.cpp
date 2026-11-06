@@ -18,11 +18,11 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWGameRamInfoRam_metaObject_0058c100[];
+extern igMetaObject *g_beNDMWGameRamInfoRam_metaObject[];
 void *beBaseInfoRam_Register(void);
-igMetaObject *beBaseInfoRam_GetPublishedMetaObject_0033eaf0(void);
+igMetaObject *beBaseInfoRam_GetPublishedMetaObject(void);
 igMetaObject *beNDMWGameRamInfoRam_GetMetaObject(void);
-extern const char s_beNDMWGameRamInfoRam_className_00513820[];
+extern const char beNDMWGameRamInfoRam_className[];
 int beNDMWGameRamInfoRam_GetVTable(void);
 void *beNDMWGameRamInfoRam_Register(void);
 }
@@ -31,11 +31,11 @@ void *beNDMWGameRamInfoRam_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWGameRamInfoRam_metaObject_0058c100,     /* published MetaObject slot */
+        g_beNDMWGameRamInfoRam_metaObject,     /* published MetaObject slot */
         beBaseInfoRam_Register,                         /* base class registrar */
-        beBaseInfoRam_GetPublishedMetaObject_0033eaf0,  /* base class MetaObject accessor */
+        beBaseInfoRam_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWGameRamInfoRam_GetMetaObject,             /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWGameRamInfoRam_className_00513820,      /* class name */
+        beNDMWGameRamInfoRam_className,      /* class name */
         0x2c,                                           /* instance size */
         beNDMWGameRamInfoRam_GetVTable,                 /* vtable getter */
         0,                                              /* field adder */

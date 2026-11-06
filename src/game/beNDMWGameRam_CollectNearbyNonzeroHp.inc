@@ -33,9 +33,9 @@ void beMessenger_SelectReceivers(int,const char *,const char *,int);
 void beMessenger_SetRunCheck(int,unsigned char);
 void beMessenger_DispatchSelected(int,const char *);
 void beMessenger_PopArgContext(int);
-extern char s_GETMATRIX_00519030[],s_GETHP_00519040[];
+extern char GETMATRIX[],GETHP[];
 /* Default allocator selector (docs/engine/subwindow-preparation.md). */
-extern int g_defaultAllocatorSelector_00587110[4];
+extern int g_defaultAllocatorSelector[4];
 extern unsigned char GPR_00554c14;
 }
 /* Stack-resident counted reference to an IntList (the low 23 bits of the reference
@@ -78,15 +78,15 @@ inline IntListRef::IntListRef(const NearbyListRef &p):value(p.value) { if(value)
  * and keep those whose GETHP reply is nonzero (GETHP: docs/engine/property-system.md).
  * The result list comes from the
  * object's own allocator when the global byte flag is set, otherwise from the
- * allocator selected by g_defaultAllocatorSelector_00587110[0]. */
+ * allocator selected by g_defaultAllocatorSelector[0]. */
 extern "C" IntListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const char *group,int excluded,const Vec3 *center) {
     int entry_index;
     int member_id;
     int append_index;
     IntList *list;
     int selfAllocator=igObject_GetAllocator(self);
-    NearbyListRef result(FUN_002caa70(GPR_00554c14 ? selfAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector_00587110[0])));
-    beMessenger_SendGroup(self->_messenger,group,s_GETMATRIX_00519030);
+    NearbyListRef result(FUN_002caa70(GPR_00554c14 ? selfAllocator : Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0])));
+    beMessenger_SendGroup(self->_messenger,group,GETMATRIX);
     int count=beMessenger_GetIntCount(self->_messenger);
     Vec3 delta;
     Mat44 matrix;
@@ -102,7 +102,7 @@ extern "C" IntListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,c
                 beMessenger_PushArgContext(self->_messenger);
                 beMessenger_SelectReceivers(self->_messenger,group,0,member_id);
                 beMessenger_SetRunCheck(self->_messenger,1);
-                beMessenger_DispatchSelected(self->_messenger,s_GETHP_00519040);
+                beMessenger_DispatchSelected(self->_messenger,GETHP);
                 if(beMessenger_GetInt(self->_messenger,0)) {
                     list=result.value;
                     append_index=list->count;

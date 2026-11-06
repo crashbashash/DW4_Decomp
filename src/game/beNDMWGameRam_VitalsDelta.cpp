@@ -18,18 +18,18 @@ void beMessenger_SelectReceivers(int, const char *, const char *, int);
 void beMessenger_AppendFloat(int, float);
 void beMessenger_AppendInt(int, int);
 void beMessenger_DispatchSelected(int, const char *);
-extern const char s_HP_00518890[]; /* HP */
-extern const char s_MHP_00518898[]; /* MHP */
-extern const char s_MP_005188a0[]; /* MP */
-extern const char s_MMP_005188a8[]; /* MMP */
-extern const char s_METERCTRL_00518c28[]; /* METERCTRL */
-extern const char s_hpmt_00518c38[]; /* hpmt */
-extern const char s_SETPERCENT_00518c40[]; /* SETPERCENT */
-extern const char s_NUMBERCTRL_00518c50[]; /* NUMBERCTRL */
-extern const char s_hpnm_00518c60[]; /* hpnm */
-extern const char s_SETVALUE_00518c68[]; /* SETVALUE */
-extern const char s_mpmt_00518c78[]; /* mpmt */
-extern const char s_mpnm_00518c80[]; /* mpnm */
+extern const char HP[]; /* HP */
+extern const char MHP[]; /* MHP */
+extern const char MP[]; /* MP */
+extern const char MMP[]; /* MMP */
+extern const char METERCTRL[]; /* METERCTRL */
+extern const char hpmt[]; /* hpmt */
+extern const char SETPERCENT[]; /* SETPERCENT */
+extern const char NUMBERCTRL[]; /* NUMBERCTRL */
+extern const char hpnm[]; /* hpnm */
+extern const char SETVALUE[]; /* SETVALUE */
+extern const char mpmt[]; /* mpmt */
+extern const char mpnm[]; /* mpnm */
 
 /* Sentinel for the `absolute` argument of the HP update: apply `delta` instead. */
 #define NO_ABSOLUTE_HP (-1)
@@ -42,8 +42,8 @@ int FUN_003f9c80(beNDMWGameRam *self, int player_index, int delta, int absolute)
     int max_hp;
 
     player = ((int *)((igIntList *)self->_playerDataListList)->_data)[player_index];
-    max_hp = igProperty_GetRecord(player, s_MHP_00518898)->value;
-    hp = igProperty_GetRecord(player, s_HP_00518890)->value;
+    max_hp = igProperty_GetRecord(player, MHP)->value;
+    hp = igProperty_GetRecord(player, HP)->value;
     if (absolute == NO_ABSOLUTE_HP) {
         if (hp == 0)
             return 0;
@@ -55,13 +55,13 @@ int FUN_003f9c80(beNDMWGameRam *self, int player_index, int delta, int absolute)
         hp = 0;
     if (hp > max_hp)
         hp = max_hp;
-    igProperty_GetRecord(player, s_HP_00518890)->value = hp;
-    beMessenger_SelectReceivers(self->_messenger, s_METERCTRL_00518c28, s_hpmt_00518c38, player_index);
+    igProperty_GetRecord(player, HP)->value = hp;
+    beMessenger_SelectReceivers(self->_messenger, METERCTRL, hpmt, player_index);
     beMessenger_AppendFloat(self->_messenger, 100.0f * (float)hp / (float)max_hp);
-    beMessenger_DispatchSelected(self->_messenger, s_SETPERCENT_00518c40);
-    beMessenger_SelectReceivers(self->_messenger, s_NUMBERCTRL_00518c50, s_hpnm_00518c60, player_index);
+    beMessenger_DispatchSelected(self->_messenger, SETPERCENT);
+    beMessenger_SelectReceivers(self->_messenger, NUMBERCTRL, hpnm, player_index);
     beMessenger_AppendInt(self->_messenger, hp);
-    beMessenger_DispatchSelected(self->_messenger, s_SETVALUE_00518c68);
+    beMessenger_DispatchSelected(self->_messenger, SETVALUE);
     return 1;
 }
 
@@ -73,19 +73,19 @@ void FUN_003f9e20(beNDMWGameRam *self, int player_index, int delta)
     int max_mp;
 
     player = ((int *)((igIntList *)self->_playerDataListList)->_data)[player_index];
-    max_mp = igProperty_GetRecord(player, s_MMP_005188a8)->value;
-    mp = igProperty_GetRecord(player, s_MP_005188a0)->value;
+    max_mp = igProperty_GetRecord(player, MMP)->value;
+    mp = igProperty_GetRecord(player, MP)->value;
     mp += delta;
     if (mp < 0)
         mp = 0;
     if (mp > max_mp)
         mp = max_mp;
-    igProperty_GetRecord(player, s_MP_005188a0)->value = mp;
-    beMessenger_SelectReceivers(self->_messenger, s_METERCTRL_00518c28, s_mpmt_00518c78, player_index);
+    igProperty_GetRecord(player, MP)->value = mp;
+    beMessenger_SelectReceivers(self->_messenger, METERCTRL, mpmt, player_index);
     beMessenger_AppendFloat(self->_messenger, 100.0f * (float)mp / (float)max_mp);
-    beMessenger_DispatchSelected(self->_messenger, s_SETPERCENT_00518c40);
-    beMessenger_SelectReceivers(self->_messenger, s_NUMBERCTRL_00518c50, s_mpnm_00518c80, player_index);
+    beMessenger_DispatchSelected(self->_messenger, SETPERCENT);
+    beMessenger_SelectReceivers(self->_messenger, NUMBERCTRL, mpnm, player_index);
     beMessenger_AppendInt(self->_messenger, mp);
-    beMessenger_DispatchSelected(self->_messenger, s_SETVALUE_00518c68);
+    beMessenger_DispatchSelected(self->_messenger, SETVALUE);
 }
 } /* extern "C" */

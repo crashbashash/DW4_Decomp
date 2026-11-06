@@ -18,13 +18,13 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beGeneraterPlayerDataList_metaObject_00589558[];
+extern igMetaObject *g_beGeneraterPlayerDataList_metaObject[];
 void *igObjectList_Register(void);
 igMetaObject *igObjectList_GetPublishedMetaObject(void);
 igMetaObject *beGeneraterPlayerDataList_GetMetaObject(void);
-extern const char s_beGeneraterPlayerDataList_className_00504f60[];
+extern const char beGeneraterPlayerDataList_className[];
 int beGeneraterPlayerDataList_GetVTable(void);
-extern char g_beGeneraterPlayerDataList_callbackList_004c6a80[];
+extern char g_beGeneraterPlayerDataList_callbackList[];
 void *beGeneraterPlayerDataList_Register(void);
 }
 
@@ -32,15 +32,15 @@ void *beGeneraterPlayerDataList_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                                  /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beGeneraterPlayerDataList_metaObject_00589558,    /* published MetaObject slot */
+        g_beGeneraterPlayerDataList_metaObject,    /* published MetaObject slot */
         igObjectList_Register,                              /* base class registrar */
         igObjectList_GetPublishedMetaObject,                /* base class MetaObject accessor */
         beGeneraterPlayerDataList_GetMetaObject,            /* own MetaObject accessor (stored at +0x54) */
-        s_beGeneraterPlayerDataList_className_00504f60,     /* class name */
+        beGeneraterPlayerDataList_className,     /* class name */
         0x14,                                               /* instance size */
         beGeneraterPlayerDataList_GetVTable,                /* vtable getter */
         0,                                                  /* field adder */
         0,                                                  /* extra callback item */
-        g_beGeneraterPlayerDataList_callbackList_004c6a80  /* callback list */
+        g_beGeneraterPlayerDataList_callbackList  /* callback list */
     );
 }

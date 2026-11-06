@@ -5,7 +5,7 @@
  * splits a function back out with tools/units.py, so `make check` still
  * verifies one function at a time. */
 #include "dw4/reflected.h"
-extern int g_beNDMWItemAbilityChip_metaObject_0058bf48[4];
+extern int g_beNDMWItemAbilityChip_metaObject[4];
 
 /* 0x004486c0
  * Unpack a packed item word into the reflected fields: bits 0-9 are the
@@ -23,5 +23,5 @@ void Gap__Bec__beNDMWItemAbilityChip__vfunc_24(beNDMWItemAbilityChip *self, int 
  * MetaObject accessor: returns the class's reflection handle (0x58bf48). */
 int Gap__Bec__beNDMWItemAbilityChip__vfunc_20(void)
 {
-    return g_beNDMWItemAbilityChip_metaObject_0058bf48[0];
+    return g_beNDMWItemAbilityChip_metaObject[0];
 }

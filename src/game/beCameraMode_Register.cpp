@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beCameraMode_metaObject_00589b90[];
+extern igMetaObject *g_beCameraMode_metaObject[];
 void *igViewMode_Register(void);
-igMetaObject *igViewMode_GetPublishedMetaObject_00368c80(void);
+igMetaObject *igViewMode_GetPublishedMetaObject(void);
 igMetaObject *beCameraMode_GetMetaObject(void);
-extern const char s_beCameraMode_className_00505ab8[];
+extern const char beCameraMode_className[];
 int beCameraMode_GetVTable(void);
 void beCameraMode_InitFields(void);
-extern char g_beCameraMode_callbackList_004c77c0[];
+extern char g_beCameraMode_callbackList[];
 void *beCameraMode_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beCameraMode_Register(void) {
     GpFlag_SetOnce_0033c8e0();
     return igMetaObject_RegisterClass(
         0,                                           /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beCameraMode_metaObject_00589b90,          /* published MetaObject slot */
+        g_beCameraMode_metaObject,          /* published MetaObject slot */
         igViewMode_Register,                         /* base class registrar */
-        igViewMode_GetPublishedMetaObject_00368c80,  /* base class MetaObject accessor */
+        igViewMode_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beCameraMode_GetMetaObject,                  /* own MetaObject accessor (stored at +0x54) */
-        s_beCameraMode_className_00505ab8,           /* class name */
+        beCameraMode_className,           /* class name */
         0x78,                                        /* instance size */
         beCameraMode_GetVTable,                      /* vtable getter */
         beCameraMode_InitFields,                     /* field adder */
         0,                                           /* extra callback item */
-        g_beCameraMode_callbackList_004c77c0        /* callback list */
+        g_beCameraMode_callbackList        /* callback list */
     );
 }

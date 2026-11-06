@@ -5,17 +5,17 @@
  * are both zero in the pristine ELF (docs/engine/array-storage.md, allocator-registry.md). */
 #include "dw4/reflected.h"
 /* Status words reported to callers; array form keeps the load absolute (lui/lw). */
-extern int g_statusSucceeded_004fb410[4];
-extern int g_statusFailed_004fb418[4];
+extern int g_statusSucceeded[4];
+extern int g_allocatorFailureStatus[4];
 int FUN_0010bea8(int);
 
 void Gap__Core__igPsx2Thread__vfunc_47(int *status, igPsx2Thread *thread) {
     int *word;
 
     if (FUN_0010bea8(thread->_threadID) < 0) {
-        word = g_statusFailed_004fb418;
+        word = g_allocatorFailureStatus;
     } else {
-        word = g_statusSucceeded_004fb410;
+        word = g_statusSucceeded;
     }
     *status = *word;
 }

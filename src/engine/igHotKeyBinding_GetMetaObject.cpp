@@ -2,16 +2,16 @@
  * byte-identical to retail. The SHAPE matched; the types come from the recovered
  * reflection metadata (igMetaObject, whose +36 field `_validity` this tests). */
 #include "dw4/reflected.h"
-extern igMetaObject *g_igHotKeyBinding_metaObject_0058c2c0[4];
+extern igMetaObject *g_igHotKeyBinding_metaObject[4];
 extern "C" {
 void igHotKeyBinding_RunStaticInit(void);
 igMetaObject *igHotKeyBinding_GetMetaObject(void);
 }
 igMetaObject *igHotKeyBinding_GetMetaObject(void)
 {
-    igMetaObject *g = g_igHotKeyBinding_metaObject_0058c2c0[0];
+    igMetaObject *g = g_igHotKeyBinding_metaObject[0];
     bool t;
     if (!g || !(t = g->_validity & 4))
         igHotKeyBinding_RunStaticInit();
-    return g_igHotKeyBinding_metaObject_0058c2c0[0];
+    return g_igHotKeyBinding_metaObject[0];
 }

@@ -8,7 +8,7 @@
 /* Allocator failure-status word at 0x004fb418: the value every allocator
  * status leaf publishes (docs/engine/allocator-builder.md, allocator-registry.md).
  * Paired with the success word at 0x004fb410. */
-extern int g_allocatorFailureStatus_004fb418[4];
+extern int g_allocatorFailureStatus[4];
 
 /* 0x002d0600: slot 30, reset the allocation counters and mark the pool active (docs/engine/alias-pool-binding.md). */
 void Gap__Core__igAliasMemoryPool__vfunc_30(igAliasMemoryPool *self) {
@@ -41,7 +41,7 @@ int Gap__Core__igAliasMemoryPool__vfunc_26(void) {
 
 /* 0x002d0690: slot 24, output the allocator failure-status word. */
 void Gap__Core__igAliasMemoryPool__vfunc_24(int *outStatus) {
-    *outStatus = g_allocatorFailureStatus_004fb418[0];
+    *outStatus = g_allocatorFailureStatus[0];
 }
 
 /* 0x002d06a0: slot 25, fixed result 0. */

@@ -20,8 +20,8 @@ int ObjectPointerList_FindIndex(int,igMetaObject *);
 void MetaRefList_AppendRetained(void *,void *);
 void igObjectSystem_AppendMetaObject(void *,igMetaObject *);
 /* igMetaObject's vtable (RTTI-named; docs/engine/rtti-and-vtables.md). */
-extern int g_igMetaObject_vtable_00532bb0[4];
-extern void *g_objectSystem_00586dc8[4];
+extern int g_igMetaObject_vtable[4];
+extern void *g_objectSystem[4];
 
 /* Register a metaobject in the object system's registry, retaining it. */
 void igObjectSystem_AppendMetaObject(void *system,igMetaObject *meta){
@@ -32,7 +32,7 @@ void igObjectSystem_AppendMetaObject(void *system,igMetaObject *meta){
  * name, and an empty field list. */
 void *igMetaObject_Construct(igMetaObject *meta){
     igObject_ConstructHeader(meta);
-    meta->_vtable=(int)g_igMetaObject_vtable_00532bb0;
+    meta->_vtable=(int)g_igMetaObject_vtable;
     meta->_name=0;
     meta->_poolName=0;
     if(meta)igMetaObject_Init(meta);
@@ -44,7 +44,7 @@ void *igMetaObject_Construct(igMetaObject *meta){
  * metadata members are not copied here. */
 void *igMetaObject_CopyConstruct(igMetaObject *meta,void *source){
     igObject_CopyConstructHeader(meta,source);
-    meta->_vtable=(int)g_igMetaObject_vtable_00532bb0;
+    meta->_vtable=(int)g_igMetaObject_vtable;
     meta->_name=0;
     meta->_poolName=0;
     return meta;
@@ -71,9 +71,9 @@ void igMetaObject_ReleaseLists(igMetaObject *meta){
  * replace the registry (docs/engine/metadata-bootstrap.md, "Registry index
  * assignment"). */
 void igMetaObject_AssignTypeId(igMetaObject *meta){
-    meta->_index=ObjectPointerList_FindIndex(((ObjectSystemRecord *)g_objectSystem_00586dc8[0])->metaRegistry,meta);
+    meta->_index=ObjectPointerList_FindIndex(((ObjectSystemRecord *)g_objectSystem[0])->metaRegistry,meta);
     if(meta->_index==-1){
-        igObjectSystem_AppendMetaObject(g_objectSystem_00586dc8[0],meta);
-        meta->_index=ObjectPointerList_FindIndex(((ObjectSystemRecord *)g_objectSystem_00586dc8[0])->metaRegistry,meta);
+        igObjectSystem_AppendMetaObject(g_objectSystem[0],meta);
+        meta->_index=ObjectPointerList_FindIndex(((ObjectSystemRecord *)g_objectSystem[0])->metaRegistry,meta);
     }
 }

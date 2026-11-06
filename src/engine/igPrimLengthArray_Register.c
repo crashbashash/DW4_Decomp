@@ -4,8 +4,8 @@
 extern char igObject_GetMetaObject_ParentAccessor[];
 extern char thunk_igPrimLengthArray_GetMetaObject[];
 extern char igObject_Register[];
-extern char s_igPrimLengthArray_className_004dbee0[];
-extern char g_igPrimLengthArray_metaObject_0055fb10[];
+extern char igPrimLengthArray_className[];
+extern char g_igPrimLengthArray_metaObject[];
 int FUN_00149bc0();
 int igMetaObject_RegisterClass();
 int igPrimLengthArray_InitFields();
@@ -14,11 +14,11 @@ void igPrimLengthArray_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1,                                       /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_igPrimLengthArray_metaObject_0055fb10, /* published MetaObject slot */
+        g_igPrimLengthArray_metaObject, /* published MetaObject slot */
         igObject_Register,                       /* base class registrar */
         igObject_GetMetaObject_ParentAccessor,   /* base class MetaObject accessor */
         thunk_igPrimLengthArray_GetMetaObject,   /* own MetaObject accessor (stored at +0x54) */
-        s_igPrimLengthArray_className_004dbee0,  /* class name */
+        igPrimLengthArray_className,  /* class name */
         0x14,                                    /* instance size */
         0,                                       /* vtable getter */
         &igPrimLengthArray_InitFields,           /* field adder */

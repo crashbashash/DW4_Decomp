@@ -10,16 +10,16 @@ struct Handle27c {
 };
 
 extern void FUN_0027b2e0(const char *message);
-extern const char s_E2004090265_NULL_pointer_is_specified_004f2108[];
-extern const char s_E2004090266_Specified_handle_is_invalid_004f2138[];
+extern const char E2004090265_NULL_pointer_is_specified[];
+extern const char E2004090266_Specified_handle_is_invalid[];
 
 void FUN_0027cb40(struct Handle27c *handle, int first, int second) {
     if (handle == 0) {
-        FUN_0027b2e0(s_E2004090265_NULL_pointer_is_specified_004f2108);
+        FUN_0027b2e0(E2004090265_NULL_pointer_is_specified);
         return;
     }
     if (handle->used == 0) {
-        FUN_0027b2e0(s_E2004090266_Specified_handle_is_invalid_004f2138);
+        FUN_0027b2e0(E2004090266_Specified_handle_is_invalid);
         return;
     }
     handle->first = first;

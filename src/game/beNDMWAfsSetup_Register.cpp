@@ -18,14 +18,14 @@ void *igMetaObject_RegisterClass(
         void (*initFields)(void),
         void (*callbackItem)(void),
         void *callbackList);
-extern igMetaObject *g_beNDMWAfsSetup_metaObject_0058c158[];
+extern igMetaObject *g_beNDMWAfsSetup_metaObject[];
 void *igInfoManager_Register(void);
-igMetaObject *igInfoManager_GetPublishedMetaObject_002310d0(void);
+igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 igMetaObject *beNDMWAfsSetup_GetMetaObject(void);
-extern const char s_beNDMWAfsSetup_className_00513910[];
+extern const char beNDMWAfsSetup_className[];
 int beNDMWAfsSetup_GetVTable(void);
 void beNDMWAfsSetup_InitFields(void);
-extern char g_beNDMWAfsSetup_callbackList_004cc630[];
+extern char g_beNDMWAfsSetup_callbackList[];
 void *beNDMWAfsSetup_Register(void);
 }
 
@@ -33,15 +33,15 @@ void *beNDMWAfsSetup_Register(void) {
     GpFlag_SetOnce_003b0a10();
     return igMetaObject_RegisterClass(
         0,                                              /* abstract state (0: the vtable getter runs, 1: abstract class) */
-        g_beNDMWAfsSetup_metaObject_0058c158,           /* published MetaObject slot */
+        g_beNDMWAfsSetup_metaObject,           /* published MetaObject slot */
         igInfoManager_Register,                         /* base class registrar */
-        igInfoManager_GetPublishedMetaObject_002310d0,  /* base class MetaObject accessor */
+        igInfoManager_GetPublishedMetaObject,  /* base class MetaObject accessor */
         beNDMWAfsSetup_GetMetaObject,                   /* own MetaObject accessor (stored at +0x54) */
-        s_beNDMWAfsSetup_className_00513910,            /* class name */
+        beNDMWAfsSetup_className,            /* class name */
         0x20,                                           /* instance size */
         beNDMWAfsSetup_GetVTable,                       /* vtable getter */
         beNDMWAfsSetup_InitFields,                      /* field adder */
         0,                                              /* extra callback item */
-        g_beNDMWAfsSetup_callbackList_004cc630         /* callback list */
+        g_beNDMWAfsSetup_callbackList         /* callback list */
     );
 }
