@@ -291,7 +291,5 @@ non-affiliation and trademark statement. No game binaries are distributed here â
 
 ## Contributing
 
-Pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) is the place to start: where to find work, the
-gate a function has to pass (byte identity under its unit's profile and readable, evidence-named source),
-how to check it, and the four result lines to paste into a pull request. The documentation index is
+Pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) is the place to start. The documentation index is
 [`docs/README.md`](docs/README.md).
