@@ -1,0 +1,4 @@
+extern int DAT_0055fe68[4];
+int Gap__Core__igCustomStateCollectionList__vfunc_22(void) {
+    return DAT_0055fe68[0];
+}

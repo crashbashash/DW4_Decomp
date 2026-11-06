@@ -215,7 +215,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 76141
+    "value": 76087
    },
    "inventory.unsymbolised_bytes": {
     "reason": null,
@@ -231,7 +231,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 5676
+    "value": 5670
    },
    "mismatch.bytes": {
     "reason": null,
@@ -254,16 +254,16 @@
     "value": 17832
    },
    "raw_casts.reflected": {
-    "reason": null,
-    "value": 43
+    "reason": "naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class",
+    "value": 174
    },
    "struct.a": {
     "reason": null,
     "value": 141
    },
    "struct.b": {
-    "reason": null,
-    "value": 274
+    "reason": "naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class",
+    "value": 291
    },
    "struct.c": {
     "reason": null,
@@ -295,7 +295,7 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 84160,
    "foreign_profile.functions": 369,
-   "fun_dat_refs": 76102,
+   "fun_dat_refs": 76087,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
@@ -305,9 +305,9 @@
    "name_defect.bytes": 1236,
    "name_defect.functions": 3,
    "orphan.bytes": 17832,
-   "raw_casts.reflected": 42,
+   "raw_casts.reflected": 174,
    "struct.a": 141,
-   "struct.b": 273,
+   "struct.b": 291,
    "struct.c": 287,
    "unmatched.bytes": 1108904,
    "unmatched.functions": 2966
@@ -316,7 +316,7 @@
  "functions": {
   "fully_verified": 16864,
   "matched": 17248,
-  "named": 7722,
+  "named": 8825,
   "named_semantic": 1560,
   "named_semantic_matched": 1425,
   "total": 20214
@@ -407,8 +407,8 @@
   "bytes": 285636,
   "failing": {
    "addresses": {
-    "bytes": 1877800,
-    "functions": 12661
+    "bytes": 1865516,
+    "functions": 12405
    },
    "fields": {
     "bytes": 700148,
@@ -423,20 +423,20 @@
     "functions": 11957
    },
    "placed": {
-    "bytes": 1763420,
-    "functions": 12148
+    "bytes": 1706884,
+    "functions": 11247
    },
    "references": {
-    "bytes": 1720880,
-    "functions": 9569
+    "bytes": 1720616,
+    "functions": 9566
    },
    "types": {
     "bytes": 852316,
     "functions": 3249
    },
    "virtuals": {
-    "bytes": 366716,
-    "functions": 1106
+    "bytes": 367352,
+    "functions": 1111
    }
   },
   "functions": 1938,
@@ -579,7 +579,7 @@
   "recovered": 24677,
   "synthetic": 8418,
   "total": 56090,
-  "typeable": 42,
-  "typeable_pct": 0.07
+  "typeable": 174,
+  "typeable_pct": 0.31
  }
 }

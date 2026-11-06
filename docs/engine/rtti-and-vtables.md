@@ -18,7 +18,7 @@ Output: `ghidra-projects/dw4/vtables.json`, `ghidra-projects/dw4/reflection.json
 auto-analysis produced **15,167 functions of which 112 were named**, all PS2 SDK
 syscall stubs. A stripped C++ binary *is* its vtable graph, and MWCCPS2 also
 emits RTTI alongside every vtable, with the **class name as a rodata string**.
-Recovering that graph is what turns `FUN_001e6b80` into something readable.
+Recovering that graph is what turns `Gap__Core__igMersenneTwisterRandomNumber__vfunc_13` into something readable.
 
 Digimon World 4 was built with **Metrowerks CodeWarrior for PS2 2.4.1.01**
 (see [`toolchain.md`](toolchain.md)), which is why the layout below is

@@ -536,7 +536,7 @@ The Goblin Pass crate/barrel capture.
   by `(primType, numPrims)`. The world materials are built at load time and are not in the
   pack (`beTextureCtrlInfo` → `beTextureCtrlAttr._attrSet`; 90 sets in the Goblin Pass dump, read by
   `scripts/live_materials.py`). `FUN_00169840` (`igPsx2VisualContext`, vtable `0x525870`) and
-  `FUN_00140060` (`igSetRenderDestinationAttr`, vtable `0x522f50`) with `_pBufList` (+0x364) and
+  `Gap__Core__igSetRenderDestinationAttr__vfunc_24` (`igSetRenderDestinationAttr`, vtable `0x522f50`) with `_pBufList` (+0x364) and
   `_pTexList` (+0x144) are render-to-texture/destination setup, not the world-mesh source binding.
   The GS command stream is not in EE RAM, so per-draw state comes from a PCSX2
   `.gs` dump parsed by `scripts/gsdump.py`, which reads the dump's freeze state and walks the packed

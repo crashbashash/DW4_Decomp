@@ -213,7 +213,7 @@ Strict scan for the RNG-chain idiom (`lw rX,16(obj)` … `lw rY,48(rX)` …
 
 **No reseed.** The same strict scan for a slot‑23 (`sgenrand`) or slot‑22 call on
 the RNG chain returns **0** sites. The look-alike calls of §5 are false positives:
-`FUN_00330040` (`0x330158`/`0x3301B8`, slots 23/24/25 on `*(s0+0x30)`) is
+`Gap__Core__igPsx2Thread__vfunc_30` (`0x330158`/`0x3301B8`, slots 23/24/25 on `*(s0+0x30)`) is
 `CreateThread`/`_StartThread` — the thread subsystem — and the `*(0x5871D0)`
 slot‑24 call at `0x3300F8` is the same thread manager. The 116-function Lua API
 has no set-seed either. So `sgenrand` runs only from `Reset()` (hard-coded

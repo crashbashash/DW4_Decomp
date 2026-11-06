@@ -164,7 +164,7 @@ in §5 are only part of the picture.
 **No reseed exists in code.** A strict scan for a slot‑23 (`sgenrand`) or
 slot‑22 call on that same `object+0x10 → +0x30` chain returns **zero** sites.
 The `0x330158`/`0x3301B8` calls to slots 23/24/25 on `*(s0+0x30)` are the
-**thread subsystem** (`FUN_00330040` is `CreateThread`/`_StartThread`), and the
+**thread subsystem** (`Gap__Core__igPsx2Thread__vfunc_30` is `CreateThread`/`_StartThread`), and the
 `*(0x5871D0)` slot‑24 call at `0x3300F8` is the same thread manager — neither is
 the RNG. Likewise the 116-function Lua API has no `SYSsetRandom`. So `sgenrand`
 is called only from `Reset()` (slot 13) via the generic object-init path, with

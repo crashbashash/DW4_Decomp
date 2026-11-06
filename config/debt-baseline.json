@@ -16,19 +16,25 @@
   "compile.functions": 0,
   "foreign_profile.bytes": 84160,
   "foreign_profile.functions": 369,
-  "fun_dat_refs": 76141,
+  "fun_dat_refs": 76087,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
-  "m2c_idiom.units": 5676,
+  "m2c_idiom.units": 5670,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 1236,
   "name_defect.functions": 3,
   "orphan.bytes": 17832,
-  "raw_casts.reflected": 43,
+  "raw_casts.reflected": {
+   "reason": "naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class",
+   "value": 174
+  },
   "struct.a": 141,
-  "struct.b": 274,
+  "struct.b": {
+   "reason": "naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class",
+   "value": 291
+  },
   "struct.c": 287,
   "unmatched.bytes": {
    "reason": "asm bodies are no longer kept in the repository (owner decision): the 1,206 functions that were asm bodies have no file in src/ and count as unmatched, so unmatched.* rises by what asm_body.* falls; no C source was removed",

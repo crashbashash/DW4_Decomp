@@ -957,7 +957,7 @@ t9` — so compiled as C, **zero** functions with a `jalr t9` match. The gap is 
 symbolizer or the width model: it is the language the
 source is written in. 211 of the 1,449 carry a recovered name.
 
-The mechanism is proven, not inferred. `FUN_0013c260` (0x13c260, 80 B) is a call through a
+The mechanism is proven, not inferred. `Gap__Core__igBlendFunctionAttr__vfunc_12` (0x13c260, 80 B) is a call through a
 function pointer held in the object at `+88`, its result fed to `igMetaObject_CountInstances`,
 then `Gap::Core::igObject::vfunc_10(arg0)`. As C it is **3 instructions off**, all three in the
 call (`lw v0,0(a0); lw v0,88(v0); jalr v0` against retail's `lw t9,0(a0); lw t9,88(t9); jalr
@@ -967,13 +967,13 @@ t9`). As C++ it is **byte-identical**:
 extern "C" {
   int Gap__Core__igObject__vfunc_10(void *);
   int igMetaObject_CountInstances(int, int);
-  void FUN_0013c260(void *arg0);          /* extern "C": a plain C++ decl mangles the name */
+  void Gap__Core__igBlendFunctionAttr__vfunc_12(void *arg0);          /* extern "C": a plain C++ decl mangles the name */
 }
 class C { public:
   virtual void v0(); ... virtual void v19();   /* 20 preceding slots put the target at +88 */
   virtual int vX();
 };
-void FUN_0013c260(void *arg0) {              /* arg0 IS the object: retail loads the vptr from a0 */
+void Gap__Core__igBlendFunctionAttr__vfunc_12(void *arg0) {              /* arg0 IS the object: retail loads the vptr from a0 */
   if (igMetaObject_CountInstances(((C *)arg0)->vX(), 1) == 0) { DAT_0055f4c0[0] = 0; }
   Gap__Core__igObject__vfunc_10(arg0);
 }
@@ -1089,7 +1089,7 @@ fail-closed and does not infer the duplicate from its position alone.
 The two residuals are different mechanisms, not more struct-return shapes. In
 `Gap::Core::igAlphaFunctionAttr::vfunc_26`, a nested slot returns a `float` in `f0` and retail passes
 it to the outer call in `f12`, while the synthetic virtual class still declares every slot as
-integer-returning. `FUN_0013c350` differs only in instruction scheduling around its final virtual
+integer-returning. `Gap__Core__igBlendFunctionAttr__vfunc_26` differs only in instruction scheduling around its final virtual
 call: retail materialises the address in the `jalr` delay slot, while the compiler moves `this`
 there for the available source spelling. Neither is reached by the transform; each needs its own
 mechanism.

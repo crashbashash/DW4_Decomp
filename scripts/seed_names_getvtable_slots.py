@@ -8,9 +8,10 @@ has its own `<Class>_GetVTable` function, and that function builds the class's v
 uses for the MetaField subclasses).  Resolving those gives **958 distinct vtables /
 980 classes**, of which **499 are not RTTI records** — and each one's slots are unnamed.
 
-A slot body that (a) is an unmatched `FUN_`, (b) is used by exactly one class's vtable, and
-(c) is not inherited from a resolved ancestor's vtable, is that class's own override, so it is
-named `<Namespace>::<Class>::vfunc_N`.  Nothing is guessed from the body: the class comes from
+A table ends where code loads the address of the next one. A slot body that (a) is an unmatched
+`FUN_`, (b) is used by exactly one class's vtable and pointed at by nothing else, (c) is not
+inherited from a resolved ancestor's vtable and (d) is linked in the class's own library, is that
+class's own override, so it is named `<Namespace>::<Class>::vfunc_N`.  Nothing is guessed from the body: the class comes from
 the class's own `GetVTable`, the namespace from the nearest RTTI ancestor of the recovered
 hierarchy (`class-hierarchy.tsv`), and the role from the slot index.  The generator is
 idempotent and skips anything already named.
@@ -31,11 +32,16 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
+sys.path.insert(0, os.path.join(REPO, "tools"))
+
+import regions  # noqa: E402
+
 ELF_DEFAULT = os.environ.get("DW4_ELF", os.path.join(REPO, "orig", "SLUS-20836", "SLUS_208.36"))
 SYMBOLS = os.path.join(REPO, "config", "SLUS-20836", "symbols.txt")
 MODULE = "engine"
 VADDR_BASE, FILE_BASE = 0x100000, 0x80
 VLO, VHI = 0x500000, 0x580000          # .rodata / .data, where a vtable lives
+DATA_LO, DATA_HI = 0x4833C8, 0x554B00  # every word that could point at a slot body
 MAX_SLOT = 62
 
 
@@ -151,7 +157,14 @@ def main():
     # the vtables the RTTI pass already covered are named; the rest are the queue
     rtti_addrs = {int(k, 16) for k in rtti_vtables}
     unique = {v: cs[0] for v, cs in vtable_of.items() if len(cs) == 1}
-    slots_of = {c: [word(v + 4 * s) for s in range(MAX_SLOT)] for v, c in unique.items()}
+    table_starts = loaded_addresses()
+
+    def table_slots(v):
+        """How many slots a table has: it ends where code loads the address of the next table."""
+        return next((s for s in range(1, MAX_SLOT) if v + 4 * s in table_starts), MAX_SLOT)
+
+    slots_of = {c: [word(v + 4 * s) if s < table_slots(v) else None for s in range(MAX_SLOT)]
+                for v, c in unique.items()}
 
     # a body used by more than one class is a shared default, not this class's override (T7)
     users = {}
@@ -168,11 +181,19 @@ def main():
             out.append(c)
         return out
 
-    table_starts = loaded_addresses()
+    bodies = {addr for addr, _s, _n in rows}
+    pointers = {}
+    for at in range(DATA_LO, DATA_HI, 4):
+        if word(at) in bodies:
+            pointers.setdefault(word(at), []).append(at)
+    home = {n[:-len("_Register")]: regions.of(addr).id for addr, _s, n in rows
+            if n.endswith("_Register") and not n.startswith("thunk_")}
 
-    def table_slots(v):
-        """How many slots a table has: it ends where code loads the address of the next table."""
-        return next((s for s in range(1, MAX_SLOT) if v + 4 * s in table_starts), MAX_SLOT)
+    def owned(body, cls, v):
+        """Only this table points at the body, and it is linked in the class's library."""
+        end = v + 4 * table_slots(v)
+        return (all(v <= p < end for p in pointers.get(body, ()))
+                and home.get(cls, regions.of(body).id) == regions.of(body).id)
 
     out, skipped_ns = [], 0
     for v, cls in sorted(unique.items(), key=lambda kv: (kv[1], kv[0])):
@@ -193,7 +214,7 @@ def main():
             if body in ambiguous or (n.startswith("FUN_") is False
                                      and n != gen.replace("::", "__")):
                 continue
-            if len(users.get(body, set())) != 1:
+            if len(users.get(body, set())) != 1 or not owned(body, cls, v):
                 continue                              # shared body (inherited default)
             if any(c in slots_of and slots_of[c][s] == body for c in ancestors(cls)):
                 continue                              # inherited from a resolved ancestor
