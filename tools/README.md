@@ -26,6 +26,8 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`target_asm.py`](target_asm.py) | objdiff target assembly: the retail words of a function with their relocations restored (`.reloc` + masked `.word`) |
 | [`eegcc_compile.py`](eegcc_compile.py) | compile one C file with the Sony EE GCC 2.96 (`-S` then the sibling `ee-as`, with the symbol table repaired for GNU ld) — the Sony-built library units |
 | [`unitobjects.py`](unitobjects.py) | Explicit ownership of additional functions emitted by a compiler unit |
+| [`regions.py`](regions.py) | read config/SLUS-20836/regions.tsv, the record of what each part of the image is |
+| [`check_regions.py`](check_regions.py) | test that table against the retail image |
 | [`unitprofiles.py`](unitprofiles.py) | resolve a function's translation-unit build profile (config/SLUS-20836/units.tsv) and tell a provisional per-function override from it |
 | [`gen_unit_profiles.py`](gen_unit_profiles.py) | derive config/SLUS-20836/units.tsv from the pins, the sweeps and the retail exception evidence; rewrites the per-function tables so only dissenting members keep a row |
 | [`progress.py`](progress.py) | the repo's progress numbers, computed from committed files only |
@@ -84,7 +86,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Tests
 
-`test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
+`test_regions.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
 
 ## Subfolders
 

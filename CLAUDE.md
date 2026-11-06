@@ -49,7 +49,7 @@ specification agrees. Run every command from the repository root; paths here are
   documentation ([index](docs/README.md)), `port/` the native implementation.
 - The build follows the [dtk-template](https://github.com/encounter/dtk-template) layout
   ([build system](docs/build-system.md)): each version's address-bearing tables live in
-  `config/<GAMEID>/` (`config.yml`, `symbols.txt`, `units.tsv` as the splits, `unit-*`, `exceptions.txt`,
+  `config/<GAMEID>/` (`config.yml`, `symbols.txt`, `units.tsv` as the splits, `regions.tsv`, `unit-*`, `exceptions.txt`,
   `names/`, `build.sha1`); project-wide policy files stay in `config/` (`debt-baseline.json`, `typed-*`); `make` extracts the
   executable from a disc image in `orig/<GAMEID>/`, and `python3 tools/download_tools.py` fetches the
   pinned compilers into `local/`.

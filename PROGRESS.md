@@ -45,9 +45,9 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 11,957 | 1,528,236 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,598 | 1,875,232 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,603 | 1,875,380 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,249 | 852,316 |
-| it sits in its class or module file, not `src/unmatched/` | 12,083 | 1,762,044 |
+| it sits in its class or module file, not `src/unmatched/` | 12,095 | 1,762,512 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 9,561 | 1,720,600 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,513 | 1,202,608 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,045 | 700,148 |
@@ -164,7 +164,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 7,823 of 20,214 |
+| functions with a recovered name (any: role names included) | 7,809 of 20,214 |
 | functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 1,560 of 20,214 (1,425 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |

@@ -9,8 +9,9 @@ rebuild with it through `tools/cc.py` / `tools/eegcc_compile.py`, pinned per uni
 without source: it links from the retail image and reads from the generated `asm/`.
 
 * **Population:** 1,698-1,701 non-leaf functions (about 417 KB) in six contiguous blocks that hold 3,304 functions / 530 KB in total:
-  `0x1029f8..0x12fef0` (Sony libdma, libipu/libmpeg, libpad, libmc, kernel syscall stubs), `0x225300..0x225700` (libmtap), `0x22e4b8..0x230c78`
-  (CRI helper), `0x25b248..0x27edb0` (CRI ADX/AFS/ADXF), `0x280b98..0x2b5848` (CRI CFT/M2V/MPS/MPV/Sofdec), `0x4820d0..0x4831e8` (SDK tail).
+  `0x1029f8..0x130000` (Sony libdma, libipu/libmpeg, libpad, libmc, kernel syscall stubs), `0x2252d8..0x225770` (libmtap), `0x22e4b8..0x230f50`
+  (libgcc), `0x25b248..0x27ede0` (CRI ADX/AFS/ADXF), `0x280b98..0x2b5da0` (CRI CFT/M2V/MPS/MPV/Sofdec), `0x4820d0..0x4833c8` (Sony kernel-mode code,
+  linked at `0x80074000` and up). `config/SLUS-20836/regions.tsv` holds these bounds.
 * **Evidence:** the ELF carries `GCC2096 SCE2810` stamps beside each CRI library's build string; no `sq` saves and no `slt/sltu` into `at` inside the
   blocks; branch-likely instructions at 13.8 per 1000 words in the blocks and none in the 15,568 game functions; half the function starts are 8 mod 16
   (MWCC aligns to 16); `movn/movz` use 228 against 8 in the MWCC reference set.
@@ -88,6 +89,9 @@ disabling ASLR change nothing.
   `__muldf3` where ee-gcc calls `dp*`. About twenty `-m`/`-f` flags change none of these, so functions
   with these signs have no source until that build is available. `0x11acc0..0x12fe90` uses the normal
   8-byte spacing.
+* **`FUN_002252d8`** is libmtap's no-op printf: every libmtap error string is passed to it. It verifies under MWCC (`combat -O4,p`) and
+  under ee-gcc at `-O1 -G0 -msoft-float` with a 32-byte local, and neither is proven: its start is 8 mod 16, which MWCC never emits, and the
+  rest of libmtap has no source to set a profile. It keeps the MWCC row until that library builds.
 * **`FUN_0010d0d0`**, a printf-family wrapper into `FUN_0010cad8` inside the Sony block, has no source.
   Under MWCC, `void f(int a0,...) { char d[48]; FUN_0010cad8(a0, (char*)__builtin_next_arg(d) - 56); }`
   reproduces the frame (144, `ra` at `sp+0`, spills `sp+88..136`, `a0` unhomed) and differs only in the

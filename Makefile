@@ -155,6 +155,7 @@ rules:
 	python3 scripts/verify_models_layout.py --afs $(AFS) --entry $(CHAR_MODEL_ENTRY) \
 	    --table docs/engine/model-pack-861-attributes.tsv
 	python3 scripts/verify_field_kinds.py --afs $(AFS)
+	python3 tools/check_regions.py
 	python3 scripts/module_map.py --check
 	python3 scripts/vu1_microcode.py --check
 	python3 scripts/gen_platform_seam.py --check

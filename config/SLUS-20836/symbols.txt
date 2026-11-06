@@ -8746,25 +8746,25 @@
 00280330 000270 FUN_00280330
 002805a0 000270 FUN_002805a0
 00280810 000028 FUN_00280810
-00280840 00004c Gap__Lua__igLuaState__vfunc_38 Gap::Lua::igLuaState::vfunc_38
-00280890 000060 Gap__Lua__igLuaState__vfunc_30 Gap::Lua::igLuaState::vfunc_30
+00280840 00004c FUN_00280840
+00280890 000060 FUN_00280890
 002808f0 000030 FUN_002808f0
-00280920 000074 Gap__Lua__igLuaState__vfunc_31 Gap::Lua::igLuaState::vfunc_31
-002809a0 000008 Gap__Lua__igLuaState__vfunc_35 Gap::Lua::igLuaState::vfunc_35
-002809b0 000008 Gap__Lua__igLuaState__vfunc_32 Gap::Lua::igLuaState::vfunc_32
-002809c0 000008 Gap__Lua__igLuaState__vfunc_33 Gap::Lua::igLuaState::vfunc_33
-002809d0 000008 Gap__Lua__igLuaState__vfunc_34 Gap::Lua::igLuaState::vfunc_34
+00280920 000074 FUN_00280920
+002809a0 000008 FUN_002809a0
+002809b0 000008 FUN_002809b0
+002809c0 000008 FUN_002809c0
+002809d0 000008 FUN_002809d0
 002809e0 000008 FUN_002809e0
 002809f0 000008 FUN_002809f0
 00280a00 000070 FUN_00280a00
 00280a70 000054 FUN_00280a70
-00280ad0 00004c Gap__Lua__igLuaState__vfunc_54 Gap::Lua::igLuaState::vfunc_54
-00280b20 000030 Gap__Lua__igLuaState__vfunc_46 Gap::Lua::igLuaState::vfunc_46
-00280b50 000008 Gap__Lua__igLuaState__vfunc_47 Gap::Lua::igLuaState::vfunc_47
-00280b60 000008 Gap__Lua__igLuaState__vfunc_48 Gap::Lua::igLuaState::vfunc_48
-00280b70 00000c Gap__Lua__igLuaState__vfunc_49 Gap::Lua::igLuaState::vfunc_49
-00280b80 00000c Gap__Lua__igLuaState__vfunc_50 Gap::Lua::igLuaState::vfunc_50
-00280b90 000008 Gap__Lua__igLuaState__vfunc_51 Gap::Lua::igLuaState::vfunc_51
+00280ad0 00004c FUN_00280ad0
+00280b20 000030 FUN_00280b20
+00280b50 000008 FUN_00280b50
+00280b60 000008 FUN_00280b60
+00280b70 00000c FUN_00280b70
+00280b80 00000c FUN_00280b80
+00280b90 000008 FUN_00280b90
 00280b98 000188 FUN_00280b98
 00280d20 000024 FUN_00280d20
 00280d48 0000ec FUN_00280d48

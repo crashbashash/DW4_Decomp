@@ -26,12 +26,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "scripts"))
 import progress          # noqa: E402
+import regions           # noqa: E402
 import typed_coverage    # noqa: E402
 import units             # noqa: E402
 import verify            # noqa: E402
 from lua_engine_dependencies import transfers  # noqa: E402
 
-GAME_LO, GAME_HI = 0x334000, 0x540000     # docs/engine/module-map.md: GAME + engine, scene / overlay / actor managers
+GAME_LO, GAME_HI = regions.named("adx-movie").lo, regions.named("static-initialisers").hi
 DOC = ROOT / "port/docs/project/critical-dependency-map.md"
 TSV = ROOT / "data/port-critical-map.tsv"
 SKIP_DOCS = {"arena-migration-backlog.md", "critical-dependency-map.md"}

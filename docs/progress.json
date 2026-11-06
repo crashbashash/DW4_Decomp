@@ -316,7 +316,7 @@
  "functions": {
   "fully_verified": 16864,
   "matched": 17248,
-  "named": 7823,
+  "named": 7809,
   "named_semantic": 1560,
   "named_semantic_matched": 1425,
   "total": 20214
@@ -407,8 +407,8 @@
   "bytes": 285636,
   "failing": {
    "addresses": {
-    "bytes": 1875232,
-    "functions": 12598
+    "bytes": 1875380,
+    "functions": 12603
    },
    "fields": {
     "bytes": 700148,
@@ -423,8 +423,8 @@
     "functions": 11957
    },
    "placed": {
-    "bytes": 1762044,
-    "functions": 12083
+    "bytes": 1762512,
+    "functions": 12095
    },
    "references": {
     "bytes": 1720600,

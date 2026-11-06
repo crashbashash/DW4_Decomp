@@ -155,9 +155,9 @@ reported as such and never counted. A unit that did move to the combat profile w
 `_GetVTable` a `tools/getvtable_stack_gen.py --retarget` away from `match` (the 26 + 75 `code-only`
 rows need the `.cpp` form).
 
-The 273rd, `igOptInterface_GetVTable` (0x225ae0), lies inside the `libpng_225700` unit (3.0.3,
-exceptions off): a library run that swallowed an engine class — a unit boundary to cut, case 1 of
-the review list.
+The 273rd, `igOptInterface_GetVTable` (0x225ae0), lies inside the `alchemy-base_225770` unit (3.0.3,
+exceptions off), a run of the Base library whose profile it does not share: case 1 of the review
+list.
 
 ### Reproducing
 

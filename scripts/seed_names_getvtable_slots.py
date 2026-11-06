@@ -31,6 +31,10 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
+sys.path.insert(0, os.path.join(REPO, "tools"))
+
+import regions  # noqa: E402
+
 ELF_DEFAULT = os.environ.get("DW4_ELF", os.path.join(REPO, "orig", "SLUS-20836", "SLUS_208.36"))
 SYMBOLS = os.path.join(REPO, "config", "SLUS-20836", "symbols.txt")
 MODULE = "engine"
@@ -150,6 +154,7 @@ def main():
             out.append(c)
         return out
 
+    enbaya = range(regions.named("enbaya").lo, regions.named("enbaya").hi)
     out, skipped_ns = [], 0
     for v, cls in sorted(unique.items(), key=lambda kv: (kv[1], kv[0])):
         if v in rtti_addrs:
@@ -160,8 +165,8 @@ def main():
             continue
         for s in range(2, MAX_SLOT):
             body = slots_of[cls][s]
-            if not body:
-                continue
+            if not body or body in enbaya:
+                continue                              # the read ran into Enbaya's own table
             gen = "%s::%s::vfunc_%02d" % (ns, cls, s)
             n = syms.get(body, "")
             # `FUN_` before the batch; after `apply_names.py` the symbol carries the generated

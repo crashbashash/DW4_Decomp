@@ -4673,16 +4673,16 @@
 0020d830	FUN_0020d830	match	-
 0020d900	FUN_0020d900	match	-
 0020df00	FUN_0020df00	match	-
-0020df10	FUN_0020df10	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of libpng_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
+0020df10	FUN_0020df10	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-p2_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
 0020dfd0	FUN_0020dfd0	match	-
 0020e060	FUN_0020e060	match	-
 0020e3c0	FUN_0020e3c0	match	-
 0020e3d0	FUN_0020e3d0	match	-
 0020e3e0	FUN_0020e3e0	match	-
 0020e3f0	FUN_0020e3f0	match	-
-0020e400	FUN_0020e400	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of libpng_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
-0020e4a0	FUN_0020e4a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of libpng_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
-0020e6a0	FUN_0020e6a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of libpng_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
+0020e400	FUN_0020e400	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-p2_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
+0020e4a0	FUN_0020e4a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-p2_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
+0020e6a0	FUN_0020e6a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-p2_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
 0020e750	png_set_sig_bytes	match	-
 0020e7b0	png_sig_cmp	match	-
 0020e840	png_zalloc	match	-
@@ -4843,7 +4843,7 @@
 00225990	igCompoundList_InitFields	match	-
 00225a40	FUN_00225a40	match	-
 00225a90	igOptInterface_GetMetaObject	match	-
-00225ae0	igOptInterface_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of libpng_225700 (local/mwcps2/3.0.3-020716/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00225ae0	igOptInterface_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-base_225770 (local/mwcps2/3.0.3-020716/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
 00225b90	FUN_00225b90	match	-
 00225c10	FUN_00225c10	match	-
 00225c20	igOptInterface_Register	match	-
@@ -6870,25 +6870,25 @@
 002800d0	FUN_002800d0	match	-
 00280240	FUN_00280240	match	-
 00280810	FUN_00280810	match	-
-00280840	Gap__Lua__igLuaState__vfunc_38	match	-
-00280890	Gap__Lua__igLuaState__vfunc_30	match	-
+00280840	FUN_00280840	match	-
+00280890	FUN_00280890	match	-
 002808f0	FUN_002808f0	match	-
-00280920	Gap__Lua__igLuaState__vfunc_31	match	-
-002809a0	Gap__Lua__igLuaState__vfunc_35	match	-
-002809b0	Gap__Lua__igLuaState__vfunc_32	match	-
-002809c0	Gap__Lua__igLuaState__vfunc_33	match	-
-002809d0	Gap__Lua__igLuaState__vfunc_34	match	-
+00280920	FUN_00280920	match	-
+002809a0	FUN_002809a0	match	-
+002809b0	FUN_002809b0	match	-
+002809c0	FUN_002809c0	match	-
+002809d0	FUN_002809d0	match	-
 002809e0	FUN_002809e0	match	-
 002809f0	FUN_002809f0	match	-
 00280a00	FUN_00280a00	match	-
 00280a70	FUN_00280a70	match	-
-00280ad0	Gap__Lua__igLuaState__vfunc_54	match	-
-00280b20	Gap__Lua__igLuaState__vfunc_46	match	-
-00280b50	Gap__Lua__igLuaState__vfunc_47	match	-
-00280b60	Gap__Lua__igLuaState__vfunc_48	match	-
-00280b70	Gap__Lua__igLuaState__vfunc_49	match	-
-00280b80	Gap__Lua__igLuaState__vfunc_50	match	-
-00280b90	Gap__Lua__igLuaState__vfunc_51	match	-
+00280ad0	FUN_00280ad0	match	-
+00280b20	FUN_00280b20	match	-
+00280b50	FUN_00280b50	match	-
+00280b60	FUN_00280b60	match	-
+00280b70	FUN_00280b70	match	-
+00280b80	FUN_00280b80	match	-
+00280b90	FUN_00280b90	match	-
 00280d20	FUN_00280d20	match	-
 00280f10	FUN_00280f10	match	-
 00280f60	FUN_00280f60	match	-
@@ -17237,7 +17237,7 @@
 004670e0	FUN_004670e0	match	-
 004670f0	FUN_004670f0	match	-
 00467100	FUN_00467100	match	-
-004831a0	FUN_004831a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-tail_4820d0 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not; orphan 12 bytes
+004831a0	FUN_004831a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-kernel_4820d0 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not; orphan 12 bytes
 005208f0	FUN_005208f0	match	-
 00520cf0	FUN_00520cf0	match	-
 005210d0	FUN_005210d0	match	-

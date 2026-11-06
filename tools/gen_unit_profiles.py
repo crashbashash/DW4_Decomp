@@ -10,8 +10,8 @@ members keep a row, marked `provisional`.
 
 Unit boundaries, in priority order (a unit never crosses a function):
 
-  1. the Sony EE GCC blocks of docs/engine/sd-prologue.md and the libpng / Lua regions of
-     docs/engine/module-map.md, cut at that document's address-contiguous runs (a run of
+  1. the Sony EE GCC blocks and stock libraries of config/SLUS-20836/regions.tsv, cut at
+     docs/engine/module-map.md's address-contiguous runs (a run of
      functions separated from the next by data is the closest proxy for the library's
      object files);
   2. an address-contiguous **class run**: consecutive functions carrying the same class
@@ -61,6 +61,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import exceptions as exception_records  # noqa: E402
+import regions  # noqa: E402
 import unitcompilers  # noqa: E402
 import unitflags  # noqa: E402
 import unitobjects  # noqa: E402
@@ -81,14 +82,9 @@ COMPILERS = collections.OrderedDict([
     ("ee-gcc", "local/ee-gcc2.96/bin/ee-gcc"),
 ])
 COMPILER_ID = {v: k for k, v in COMPILERS.items()}
-# The six Sony EE GCC blocks (docs/engine/sd-prologue.md, "Population").
-SONY_BLOCKS = [(0x1029f8, 0x12fef0, "sony-sdk"), (0x225300, 0x225700, "sony-libmtap"),
-               (0x22e4b8, 0x230c78, "cri-helper"), (0x25b248, 0x27edb0, "cri-adx"),
-               (0x280b98, 0x2b5848, "cri-sofdec"), (0x4820d0, 0x4831e8, "sony-tail")]
-# Library regions of docs/engine/module-map.md whose object files are unlabeled.
-# (the bounds are those of the map's first and last run of each library, so that the Alchemy
-# code before Lua at 0x246d30 is not swept into the Lua block)
-LIBRARY_REGIONS = [(0x20d040, 0x225cb0, "libpng"), (0x246d30, 0x2590c0, "lua")]
+# The Sony EE GCC blocks and the stock libraries whose object files are unlabeled.
+SONY_BLOCKS = [(r.lo, r.hi, r.id) for r in regions.load() if r.build == "gcc"]
+LIBRARY_REGIONS = [(r.lo, r.hi, r.id) for r in regions.load() if r.id in ("libpng", "zlib", "lua")]
 MODULE_MAP = os.path.join(ROOT, "docs", "engine", "module-map.md")
 CATEGORIES = os.path.join(ROOT, "data", "check-categories.tsv")
 CODE_OK = {"match", "code-only", "name-defect", "inventory-gap"}
@@ -316,7 +312,7 @@ def build_units(functions):
         piece, piece_run, piece_kind = [], None, None
         for f in [f for f in functions if lo <= f.va < hi]:
             run = next(((s, e) for s, e, _r in runs if s <= f.va <= e), None)
-            kind = f.prologue if tag.startswith(("sony", "cri")) else None
+            kind = f.prologue if (lo, hi, tag) in SONY_BLOCKS else None
             if piece and (run != piece_run or (kind and piece_kind and kind != piece_kind)):
                 take_piece(take, tag, lo, hi, piece, piece_run, piece_kind)
                 piece, piece_kind = [], None

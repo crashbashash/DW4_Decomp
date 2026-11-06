@@ -32,11 +32,13 @@ Usage:
   progress.py --debt-baseline [--allow-increase "<reason>"]   # re-record the debt floor
 """
 import argparse
+import collections
 import json
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import regions
 import units
 from unitprofiles import asm_body_names
 import datamap
@@ -619,40 +621,19 @@ def _walk(top, ext):
             if f.endswith(ext):
                 yield os.path.join(dirpath, f)
 
-# The README's breakdown by code region. A class name says which library a function belongs to, so
-# it decides first: the linker interleaved a few `be*` and `ig*` functions outside their main blocks.
-# Everything else goes by address. The table covers the whole image, so nothing falls into a region by
-# default. It follows docs/engine/module-map.md; only the start of the game block is a judgement, a run
-# boundary in the unnamed gap between 0x337df0 (`ig*`) and 0x33e880 (`be*`).
-GAME, ALCHEMY, LUA = "Game", "Alchemy engine", "Lua 4.0.1 interpreter"
-CRI, PNG, SONY = "CRI middleware (ADX, Sofdec, audio)", "libpng and zlib", "Sony SDK and libc"
-REGION_RANGES = [
-    (0x100000, 0x130000, SONY),
-    (0x130000, 0x20D000, ALCHEMY),
-    (0x20D000, 0x2252D8, PNG),
-    (0x2252D8, 0x226000, SONY),
-    (0x226000, 0x246D30, ALCHEMY),
-    (0x246D30, 0x2590C0, LUA),
-    (0x2590C0, 0x25D000, ALCHEMY),
-    (0x25D000, 0x2B5DA0, CRI),
-    (0x2B5DA0, 0x338C00, ALCHEMY),
-    (0x338C00, 0x44B860, GAME),
-    (0x44B860, 0x600000, ALCHEMY),
-]
-REGION_ORDER = [GAME, ALCHEMY, LUA, CRI, PNG, SONY]
-GAME_NAME_RE = re.compile(r"^(?:thunk_)*(?:be[A-Z]|Gap__Bec__)")
-ALCHEMY_NAME_RE = re.compile(r"^(?:thunk_)*(?:ig[A-Z]|Gap__)")
+# The README's breakdown by code region, from config/SLUS-20836/regions.tsv.
+REGION_LABELS = collections.OrderedDict([
+    ("Game", "Game"), ("Alchemy", "Alchemy engine"), ("Lua", "Lua 4.0.1 interpreter"),
+    ("CRI", "CRI middleware (ADX, Sofdec, audio)"), ("PNG", "libpng and zlib"),
+    ("Sony", "Sony SDK and C runtime")])
+REGION_ORDER = list(REGION_LABELS.values())
 
 
-def region_of(va, name):
-    if GAME_NAME_RE.match(name):
-        return GAME
-    if ALCHEMY_NAME_RE.match(name):
-        return ALCHEMY
-    for lo, hi, label in REGION_RANGES:
-        if lo <= va < hi:
-            return label
-    raise ValueError("0x%x is outside every region" % va)
+def region_of(va):
+    row = regions.of(va)
+    if row is None or row.group not in REGION_LABELS:
+        raise ValueError("0x%x is outside every code region" % va)
+    return REGION_LABELS[row.group]
 
 
 # ---- readable: the second half of the work -------------------------------------------
@@ -786,7 +767,7 @@ def region_table():
     clear = readable(syms, paths, cats)["names"]
     rows = {r: [0, 0, 0] for r in REGION_ORDER}      # total, matched, readable
     for va, size, name in syms:
-        row = rows[region_of(va, name)]
+        row = rows[region_of(va)]
         row[0] += size
         if name in paths and cats.get(va, ("",))[0] == "match":
             row[1] += size

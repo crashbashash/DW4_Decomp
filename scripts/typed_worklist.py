@@ -41,7 +41,7 @@ sys.path.insert(0, os.path.join(HERE, "..", "tools"))
 import typed_coverage as TC      # noqa: E402
 import module_map as MM          # noqa: E402  (region labels; see docs/engine/module-map.md)
 
-GAME_REGIONS = ("GAME + engine", "engine scene / overlay / actor managers")
+GAME_REGIONS = tuple(r.label for r in MM.regions.load() if r.group == "Game")
 
 ASSIGN_RE = "\\b%s\\s*=\\s*([^;]+);"
 CALL_RE = re.compile(r"\b([A-Za-z_]\w*)\s*\(")
