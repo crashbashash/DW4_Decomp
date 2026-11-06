@@ -9,11 +9,11 @@ uses for the MetaField subclasses).  Resolving those gives **958 distinct vtable
 980 classes**, of which **499 are not RTTI records** — and each one's slots are unnamed.
 
 A table ends where code loads the address of the next one. A slot body that (a) is an unmatched
-`FUN_`, (b) is used by exactly one class's vtable and pointed at by nothing else, (c) is not
-inherited from a resolved ancestor's vtable and (d) is linked in the class's own library, is that
-class's own override, so it is named `<Namespace>::<Class>::vfunc_N`.  Nothing is guessed from the body: the class comes from
-the class's own `GetVTable`, the namespace from the nearest RTTI ancestor of the recovered
-hierarchy (`class-hierarchy.tsv`), and the role from the slot index.  The generator is
+`FUN_`, (b) is used by exactly one class's vtable and pointed at by nothing else, and (c) is not
+inherited from a resolved ancestor's vtable, is that class's own override, so it is named `<Namespace>::<Class>::vfunc_N`.  Nothing is guessed from the body: the class comes from
+the class's own `GetVTable`, the namespace from retail strings or the class's row in
+`config/SLUS-20836/regions.tsv` (`Gap` alone when neither gives one), and the role from the slot
+index.  The generator is
 idempotent and skips anything already named.
 
 The names are middleware (`ig*`) classes: the game's own `Gap::Bec::be*` classes all carry RTTI,
@@ -27,6 +27,7 @@ deliberately **not** fed to the receiver-typing rule, which the port plan scopes
 import argparse
 import json
 import os
+import re
 import struct
 import sys
 
@@ -131,12 +132,9 @@ def main():
         if v:
             vtable_of.setdefault(v, []).append(n[:-len("_GetVTable")])
 
-    # namespace from the nearest RTTI ancestor (the RTTI record carries `Gap::Core::` etc.)
-    ns_of = {}
-    for _k, o in rtti_by_addr.items():
-        nm = o["name"]
-        if "::" in nm:
-            ns_of.setdefault(nm.split("::")[-1], "::".join(nm.split("::")[:-1]))
+    retail = regions.retail_namespaces(image)
+    registrar = {n[:-len("_Register")]: addr for addr, _s, n in rows
+                 if n.endswith("_Register") and not n.startswith("thunk_")}
     parent = {}
     for ln in open(os.path.join(REPO, "data", "class-hierarchy.tsv")):
         if ln.startswith("#") or not ln.strip():
@@ -144,15 +142,6 @@ def main():
         p = ln.rstrip("\n").split("\t")
         if len(p) >= 2:
             parent[p[0]] = p[1]
-
-    def namespace(cls):
-        seen = set()
-        while cls and cls not in seen:
-            if cls in ns_of:
-                return ns_of[cls]
-            seen.add(cls)
-            cls = parent.get(cls)
-        return None
 
     # the vtables the RTTI pass already covered are named; the rest are the queue
     rtti_addrs = {int(k, 16) for k in rtti_vtables}
@@ -186,23 +175,16 @@ def main():
     for at in range(DATA_LO, DATA_HI, 4):
         if word(at) in bodies:
             pointers.setdefault(word(at), []).append(at)
-    home = {n[:-len("_Register")]: regions.of(addr).id for addr, _s, n in rows
-            if n.endswith("_Register") and not n.startswith("thunk_")}
-
-    def owned(body, cls, v):
-        """Only this table points at the body, and it is linked in the class's library."""
+    def owned(body, v):
+        """Only this table points at the body."""
         end = v + 4 * table_slots(v)
-        return (all(v <= p < end for p in pointers.get(body, ()))
-                and home.get(cls, regions.of(body).id) == regions.of(body).id)
+        return all(v <= p < end for p in pointers.get(body, ()))
 
-    out, skipped_ns = [], 0
+    out = []
     for v, cls in sorted(unique.items(), key=lambda kv: (kv[1], kv[0])):
-        if v in rtti_addrs:
-            continue                                  # the RTTI pass owns this vtable
-        ns = namespace(cls)
-        if not ns:
-            skipped_ns += 1
-            continue
+        if v in rtti_addrs or re.search(r"_[0-9a-f]{6}$", cls):
+            continue                                  # RTTI owns this vtable, or the class is unnamed
+        ns = regions.class_namespace(cls, retail, registrar)
         for s in range(2, table_slots(v)):
             body = slots_of[cls][s]
             if not body:
@@ -214,7 +196,7 @@ def main():
             if body in ambiguous or (n.startswith("FUN_") is False
                                      and n != gen.replace("::", "__")):
                 continue
-            if len(users.get(body, set())) != 1 or not owned(body, cls, v):
+            if len(users.get(body, set())) != 1 or not owned(body, v):
                 continue                              # shared body (inherited default)
             if any(c in slots_of and slots_of[c][s] == body for c in ancestors(cls)):
                 continue                              # inherited from a resolved ancestor
@@ -236,9 +218,7 @@ def main():
         for v, cls in sorted(unique.items(), key=lambda kv: kv[1]):
             if v in rtti_addrs:
                 continue
-            ns = namespace(cls)
-            if not ns:
-                continue
+            ns = regions.class_namespace(cls, retail, registrar)
             slots = slots_of[cls]
             m["0x%06x" % v] = {
                 "class": "%s::%s" % (ns, cls),
@@ -258,8 +238,7 @@ def main():
         return 0
     if a.out:
         open(a.out, "w").write(text)
-        print("seed_names_getvtable_slots: wrote %s (%d name(s); %d vtable(s) with no namespace "
-              "skipped)" % (a.out, len(seen), skipped_ns))
+        print("seed_names_getvtable_slots: wrote %s (%d name(s))" % (a.out, len(seen)))
     else:
         sys.stdout.write(text)
     print("%d name(s) over %d RTTI-less vtable(s)" % (len(seen), len(unique)),

@@ -54,7 +54,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
 }
 
 /* Output-first retained copy: *output = *sourceCell, taking one more reference on the token. */
-void Gap__Core__igStringArrayMetaField__vfunc_57(void **output, void *field, void **sourceCell) {
+void Gap__Core__igStringMetaField__vfunc_57(void **output, void *field, void **sourceCell) {
     void *token;
     StringTokenHeader *header;
 
@@ -77,13 +77,13 @@ void igStringMetaField_SwapValue(void) {
 }
 
 /* no-op value hook. */
-void Gap__Core__igStringArrayMetaField__vfunc_53(void) {
+void Gap__Core__igStringMetaField__vfunc_53(void) {
 
 }
 
 /* Null-aware lexical comparison: two nulls compare equal, null sorts before non-null, otherwise
  * igStrCmp. */
-int Gap__Core__igStringArrayMetaField__vfunc_44(igStringArrayMetaField *self, int objectA, int objectB) {
+int Gap__Core__igStringMetaField__vfunc_44(igStringArrayMetaField *self, int objectA, int objectB) {
     int tokenA;
     int tokenB;
     int offset;

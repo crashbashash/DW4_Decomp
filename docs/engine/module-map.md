@@ -174,5 +174,6 @@ sonyModulePath = MODULE`; `atstream:!-5150` |
 
 * **AdxMovie's origin.** It wraps CRI, sits directly in `Gap::` and shares the `-O3,p` build of Bec, Ndmw and `main`, so it counts with the game; Viewer shares that build too, so the build alone does not prove it was written for this title.
 * **Enbaya's classes.** The code at `0x27ede0` has vtables at `0x52d6d0` and `0x52d6f0` and no RTTI, so its classes are unnamed; that it is the codec rather than other Enbaya code is an inference.
+* **Namespaces.** A class no retail string places takes its row's namespace, an inference that every class retail does place agrees with; for Attrs, Gfx and Viewer that is one class each.
 * **Region names.** Audio, WindowInput, Base, SceneSearch, Collision, AdxMovie and maths describe their classes; no retail string gives them.
-* **Vtable slot names.** `scripts/seed_names_getvtable_slots.py` now requires that only one table points at a body and that it is linked in the class's library. 78 committed names fail that test and 82 candidates stay unnamed for the same reason; which class owns those bodies is open.
+* **Inherited vtable slots.** 78 bodies sit in a table that only an ancestor can own, but no retail evidence says which ancestor, so they keep `FUN_` names. They belong to the parents of `igPsx2VertexArray1_1`, `igPsx2IndexArray`, `igPsx2EnvironmentMapShader`, `igPsx2VisualContext`, `igFileImagePng`, `igTransformSequence1_5` and a few others.

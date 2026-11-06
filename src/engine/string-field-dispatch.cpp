@@ -19,7 +19,7 @@ extern "C" int igMetaField_WritePersistentValue(igMetaField *field,void *object,
     return (((FieldWriteDispatchView *)field)->Write((char *)object+field->_offset,output,context,swap)+3)&~3;
 }
 
-extern "C" bool Gap__Core__igStringArrayMetaField__vfunc_45(igStringMetaField *field,const void *one,const void *two){
+extern "C" bool Gap__Core__igStringMetaField__vfunc_45(igStringMetaField *field,const void *one,const void *two){
     int offset=field->_offset;
     const char *left=*(const char **)((const char *)one+offset);
     const char *right=*(const char **)((const char *)two+offset);
@@ -28,7 +28,7 @@ extern "C" bool Gap__Core__igStringArrayMetaField__vfunc_45(igStringMetaField *f
     return !bool(igStrCmp(left,right));
 }
 
-extern "C" bool Gap__Core__igStringArrayMetaField__vfunc_46(igStringMetaField *field,const void *one,const void *two){
+extern "C" bool Gap__Core__igStringMetaField__vfunc_46(igStringMetaField *field,const void *one,const void *two){
     int offset=field->_offset;
     const char *left=*(const char **)((const char *)one+offset);
     const char *right=*(const char **)((const char *)two+offset);
@@ -37,7 +37,7 @@ extern "C" bool Gap__Core__igStringArrayMetaField__vfunc_46(igStringMetaField *f
     return !bool(igStrCmp(left,right));
 }
 
-extern "C" bool Gap__Core__igStringArrayMetaField__vfunc_47(igStringMetaField *field,const void *one,const void *two){
+extern "C" bool Gap__Core__igStringMetaField__vfunc_47(igStringMetaField *field,const void *one,const void *two){
     int offset=field->_offset;
     const char *left=*(const char **)((const char *)one+offset);
     const char *right=*(const char **)((const char *)two+offset);

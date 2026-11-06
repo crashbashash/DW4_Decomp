@@ -305,7 +305,7 @@
    "name_defect.bytes": 1236,
    "name_defect.functions": 3,
    "orphan.bytes": 17832,
-   "raw_casts.reflected": 174,
+   "raw_casts.reflected": 173,
    "struct.a": 141,
    "struct.b": 291,
    "struct.c": 287,
@@ -316,7 +316,7 @@
  "functions": {
   "fully_verified": 16864,
   "matched": 17248,
-  "named": 8825,
+  "named": 8829,
   "named_semantic": 1560,
   "named_semantic_matched": 1425,
   "total": 20214
@@ -407,8 +407,8 @@
   "bytes": 285636,
   "failing": {
    "addresses": {
-    "bytes": 1865516,
-    "functions": 12405
+    "bytes": 1867116,
+    "functions": 12423
    },
    "fields": {
     "bytes": 700148,
@@ -423,8 +423,8 @@
     "functions": 11957
    },
    "placed": {
-    "bytes": 1706884,
-    "functions": 11247
+    "bytes": 1674940,
+    "functions": 11120
    },
    "references": {
     "bytes": 1720616,
@@ -579,7 +579,7 @@
   "recovered": 24677,
   "synthetic": 8418,
   "total": 56090,
-  "typeable": 174,
+  "typeable": 173,
   "typeable_pct": 0.31
  }
 }

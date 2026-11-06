@@ -422,7 +422,7 @@ these entries stay untyped for a recorded reason:
   `struct igObject`.
 - The reference release has one spelling. `include/dw4/igobject_release.h` holds
   `IG_OBJECT_RELEASE(obj)`, whose expansion is the retail sequence, and all five users
-  (`Gap__Insight__igViewerSceneInfoManager__vfunc_13`, `FUN_00235370`, `FUN_00164f50`,
+  (`Gap__Viewer__igViewerSceneInfoManager__vfunc_13`, `FUN_00235370`, `FUN_00164f50`,
   `Gap__Bec__beNDMWShopCtrlSell__vfunc_21`, `beAction2FADESET_Start`) match through it. The
   argument is evaluated more than once on purpose (a stack slot whose address escaped must be
   re-read, as retail does); a unit whose source holds the pointer in a smart-pointer temporary

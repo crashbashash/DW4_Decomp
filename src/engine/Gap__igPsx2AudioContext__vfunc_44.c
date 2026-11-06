@@ -1,0 +1,4 @@
+/* Empty override (a bare return, `jr ra; nop`) in slot 44 of igPsx2AudioContext. */
+#include "dw4/reflected.h"
+void Gap__igPsx2AudioContext__vfunc_44(igPsx2AudioContext *self) {
+}

@@ -2,8 +2,9 @@
 """check_regions.py — test config/SLUS-20836/regions.tsv against the retail image.
 
 Fails when the rows stop tiling the image, an anchor is not at its row's start, a library latch
-or its registrars leave their row, or a function's saved registers disagree with its row's build:
-GCC saves s registers with `sd`, MWCC with `sq`, and MWCC starts every function on 16 bytes.
+or its registrars leave their row, a class's retail namespace disagrees with its row, or a
+function's saved registers disagree with its row's build: GCC saves s registers with `sd`, MWCC
+with `sq`, and MWCC starts every function on 16 bytes.
 
   python3 tools/check_regions.py
 """
@@ -104,6 +105,18 @@ def check_latches(symbols, word, path=regions.DEFAULT_PATH):
     return errors
 
 
+def check_namespaces(symbols, retail, path=regions.DEFAULT_PATH):
+    """A class retail places in a namespace is registered in a row that says the same."""
+    errors = []
+    for va, _size, name in symbols:
+        cls = name[:-len("_Register")]
+        if name.endswith("_Register") and not name.startswith("thunk_") and cls in retail:
+            row = regions.of(va, path)
+            if row.namespace != (retail[cls] or "-"):
+                errors.append("%s: retail has %s in namespace %r" % (row.id, cls, retail[cls]))
+    return errors
+
+
 def main():
     image = open(ELF, "rb").read()
 
@@ -113,7 +126,8 @@ def main():
     rows = regions.load()
     symbols = load_symbols()
     errors = (check_tiling(rows) + check_anchors(rows, symbols)
-              + check_build(rows, symbols, word) + check_latches(symbols, word))
+              + check_build(rows, symbols, word) + check_latches(symbols, word)
+              + check_namespaces(symbols, regions.retail_namespaces(image)))
     for e in errors:
         print("check_regions: " + e)
     if errors:
