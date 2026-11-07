@@ -40,5 +40,24 @@ class Repair(unittest.TestCase):
         self.assertIsNone(m2c_batch.repair_error("x\n", "compile failed: 2: x | illegal use of keyword"))
 
 
+class ArgumentVariants(unittest.TestCase):
+    def test_an_unused_first_parameter_comes_back(self):
+        out = m2c_batch.argument_variants("int f(int arg1, int arg2) {\n    return g(arg1, arg2);\n}\n", "")
+        self.assertTrue(any("int f(int arg0, int arg1, int arg2) {" in x for x in out))
+
+    def test_a_value_left_in_a_register_reaches_the_callee(self):
+        out = m2c_batch.argument_variants("void f(void) {\n    g(0xFF);\n}\n", "")
+        self.assertTrue(any("void f(int p0) {" in x and "g(p0, 0xFF);" in x for x in out))
+
+    def test_a_tail_call_keeps_its_delay_slot_argument(self):
+        asm = "/* 0 */ j g\n/* 4 */ lw $a0, 52($a0)\n"
+        out = m2c_batch.argument_variants("void f(void) {\n    g();\n}\n", asm)
+        self.assertTrue(any("g(*(int *)((char *)arg0 + 52));" in x and "void *arg0" in x for x in out))
+
+    def test_a_word_stored_narrower_is_loaded_whole(self):
+        src = "void f(void *a) {\n    *(short *)a = (short) *(short *)((char *)a + 4);\n}\n"
+        self.assertTrue(any("(short) *(int *)" in x for x in m2c_batch.argument_variants(src, "")))
+
+
 if __name__ == "__main__":
     unittest.main()

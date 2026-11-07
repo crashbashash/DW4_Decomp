@@ -1,19 +1,9 @@
-void FUN_001b4500(void *arg0) {
-    void *temp_a1;
-
-    temp_a1 = (void *)(*(int *)((char *)(arg0) + 136));
-    if (temp_a1 != 0) {
-        int k;
-        if ((k = *(int *)((char *)(temp_a1) + 12)) == 1) {
-            *(float *)((char *)(arg0) + 56) = (float) *(float *)((char *)(temp_a1) + 116);
-            *(float *)((char *)(arg0) + 60) = (float) *(float *)((char *)(temp_a1) + 120);
-            *(float *)((char *)(arg0) + 64) = (float) *(float *)((char *)(temp_a1) + 124);
-            *(int *)((char *)(arg0) + 68) = 0x3F800000;
-            return;
-        }
-        *(float *)((char *)(arg0) + 56) = (float) *(float *)((char *)(temp_a1) + 128);
-        *(float *)((char *)(arg0) + 60) = (float) *(float *)((char *)(temp_a1) + 132);
-        *(float *)((char *)(arg0) + 64) = (float) *(float *)((char *)(temp_a1) + 136);
-        *(int *)((char *)(arg0) + 68) = 0;
+struct S { char p0[12]; int k; char p1[100]; float firstX,firstY,firstZ,secondX,secondY,secondZ; };
+struct O { char p0[56]; float x,y,z; int w; char p1[64]; struct S *s; };
+void FUN_001b4500(struct O *o, struct S *s, int b) {
+    s = o->s;
+    if (s != 0) {
+        if (s->k == 1) { o->x = s->firstX; o->y = s->firstY; o->z = s->firstZ; o->w = 0x3F800000; return; }
+        o->x = s->secondX; o->y = s->secondY; o->z = s->secondZ; o->w = 0;
     }
 }

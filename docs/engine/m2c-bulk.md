@@ -94,6 +94,8 @@ instruction or register C cannot express, such as the MMI `qfsrv` and `pextlb`, 
 
 `expand_asm` rewrites instructions m2c does not know before it drafts: `adda.s` and `madd.s` become a sum of products, which C writes as `a + b + c * d`; `c1` with function 4 is `sqrt.s`; and `ldl`/`ldr` and `sdl`/`sdr` pairs become 64-bit moves, though they are really a whole-struct copy of a type under 8-byte alignment, so such a draft needs its struct written by hand.
 
+`argument_variants` restores what m2c loses when a value only passes through registers, which retail states outright: an unused first parameter, a value left in `a0` for the callee, a tail call's delay-slot argument, and a word loaded but stored narrower. Nearly all near misses of one or two instructions had one of these causes, and random mutation found almost none of them.
+
 ## The EE ABI: `mipsee`, `a4-a7`, and the 168 registrar trampolines
 
 The R5900 passes integer arguments 5–8 in the hardware registers **`t0-t3`**, not on the stack

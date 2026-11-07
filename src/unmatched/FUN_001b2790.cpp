@@ -7,8 +7,6 @@ int igObject_IsKindOf(void *, int);
 void *FUN_00301000(void *);
 int igObject_Destroy(void *);
 extern int DAT_00561230[4];
-extern float GPR_0055490c;
-extern float GPR_00554910;
 }
 struct Obj { int vt; int rc; float f8, f12, f16, f20, f24, f28; };
 struct Ref {
@@ -37,8 +35,8 @@ extern "C" int FUN_001b2790(Obj *arg0, Dev *arg1) {
         FUN_00190060(a.o, arg0);
         Ref b((Obj *)FUN_0018a660(FUN_00301000(arg0)));
         Obj *p = b.o;
-        p->f8 = p->f12 = p->f16 = GPR_0055490c;
-        p->f20 = p->f24 = p->f28 = GPR_00554910;
+        p->f8 = p->f12 = p->f16 = 3.402823466e+38f;
+        p->f20 = p->f24 = p->f28 = -3.402823466e+38f;
         unsigned n;
         unsigned i;
         n = arg1->count();
@@ -48,12 +46,12 @@ extern "C" int FUN_001b2790(Obj *arg0, Dev *arg1) {
             arg1->get(i, sp50);
             FUN_0018ac80(arg0, sp50);
             FUN_00190060(b.o, arg0);
-            arg0->f8 = arg0->f12 = arg0->f16 = GPR_0055490c;
-            arg0->f20 = arg0->f24 = arg0->f28 = GPR_00554910;
+            arg0->f8 = arg0->f12 = arg0->f16 = 3.402823466e+38f;
+            arg0->f20 = arg0->f24 = arg0->f28 = -3.402823466e+38f;
             FUN_00190060(arg0, a.o);
         }
-        arg0->f8 = arg0->f12 = arg0->f16 = GPR_0055490c;
-        arg0->f20 = arg0->f24 = arg0->f28 = GPR_00554910;
+        arg0->f8 = arg0->f12 = arg0->f16 = 3.402823466e+38f;
+        arg0->f20 = arg0->f24 = arg0->f28 = -3.402823466e+38f;
         FUN_00190060(arg0, b.o);
         return 1;
     }

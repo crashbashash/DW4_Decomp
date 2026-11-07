@@ -26,7 +26,6 @@
 0x0017c560	-O4 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2UserUCodeExt_1767c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0017c7a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2UserUCodeExt_1767c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0017d540	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2VertexArray1_1_17d0b0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x001b4500	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igObject_1b2750 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x001bb880	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igCompileTraversal_1bb310 profile default -O3 -Iinclude exceptions off does not reproduce it
 0x001e14d0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2EnvironmentMapShader_1e08b0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0020df10	-O3 -Iinclude -Cpp_exceptions on	provisional	unit alchemy-p2_20d9e0 profile combat -O3,p -Iinclude exceptions off does not reproduce it

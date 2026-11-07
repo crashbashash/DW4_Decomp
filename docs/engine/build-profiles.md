@@ -284,6 +284,8 @@ the source writes the value ([literals](compiler-object-verification.md#compiler
 
 These respellings carry a unit across:
 
+* A parameter may be reassigned: `FUN_001b4500` takes a second argument only to overwrite it, which is why its pointer sits in `a1`.
+* A float constant is a literal, not `extern float`, and a chain such as `a = b = c = 1.0f` keeps its order.
 * `_GetMetaObject`, and every accessor of the same shape, compares the validity test with `false`, as
   above. The `asm { nop }` the older spelling needed goes away.
 * `_InitFields` declares the meta pointer last, which puts it in `s0`.
@@ -308,6 +310,7 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
   99 in Alchemy, 22 in the game, and `FUN_002252d8` in libmtap, which has MWCC's shape in a GCC library.
   Most hold one or two members that differ under b52, and a randomised search over spelling leaves 160
   such functions unmatched. `tools/roll_profile.py` lists the members.
+* **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it. The `goto` guards and one clamp keep their `nop` for now.
 * **`-O3` or `-O4`.** Neither level fits every function. Four matched functions pass only at `-O4`
   (`FUN_001ef9b0`, `FUN_002094c0`, `FUN_00315050`, `FUN_003a7300`), and 34 pass only at `-O3`, in spite of
   the same search at the other level. Descending load orders in some of them suggest struct copies or

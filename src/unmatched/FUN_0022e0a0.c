@@ -1,23 +1,14 @@
 int igObject_IsKindOf();
 extern int DAT_00586930[4];
+static inline void * cast0(void * o) { if (o != 0 && igObject_IsKindOf(o, DAT_00586930[0]) != 0) { return o; } return 0; }
 int FUN_0022e0a0(void *arg0, int arg1, void *arg2, int arg3) {
     int var_v0;
-    if ((arg0 != 0) && (igObject_IsKindOf(arg0, DAT_00586930[0]) != 0)) {
-        asm { nop }
-    } else {
-        arg0 = (void *)(0);
-        
-    }
-    if ((arg2 != 0) && (igObject_IsKindOf(arg2, DAT_00586930[0]) != 0)) {
-        asm { nop }
-    } else {
-        arg2 = (void *)(0);
-        
-    }
-    var_v0 = 0;
+    arg0 = cast0(arg0);
+    arg2 = cast0(arg2);
     if ((arg0 != 0) && (arg2 != 0)) {
         var_v0 = 1;
         *(char *)(arg3 + *(int *)((char *)(arg2) + 8)) = *(char *)(arg1 + *(int *)((char *)(arg0) + 8));
     }
+    else { var_v0 = 0; }
     return var_v0;
 }

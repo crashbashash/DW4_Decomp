@@ -4,6 +4,7 @@ struct R *FUN_001c5990();
 int igObject_IsKindOf();
 int igObject_Destroy();
 extern int DAT_00561EA0[4];
+static inline void * cast0(void * o) { if (o != 0 && igObject_IsKindOf(o, DAT_00561EA0[0]) != 0) { return o; } return 0; }
 void FUN_00465260(struct O *self, struct R *arg1) {
     struct R *o;
     struct R *v;
@@ -20,11 +21,7 @@ void FUN_00465260(struct O *self, struct R *arg1) {
         }
         self->f76 = arg1;
         v = FUN_001c5990(arg1);
-        if (v != 0 && igObject_IsKindOf(v, DAT_00561EA0[0]) != 0) {
-            asm { nop }
-        } else {
-            v = 0;
-        }
+        v = cast0(v);
         if (v != 0) {
             v->references = v->references + 1;
         }

@@ -7,16 +7,13 @@ int FUN_0026cf70(int);
 int FUN_00295468(V *);
 int igObject_IsKindOf(D *, int);
 extern int DAT_00587760[4];
+static inline D * cast0(D * o) { if (o != 0 && igObject_IsKindOf(o, DAT_00587760[0]) != 0) { return o; } return 0; }
 int Gap__igCriMovieCodec__vfunc_25(int arg0, A *arg1) {
     V *temp_a0;
     D *var_s0;
 
     var_s0 = arg1->f96;
-    if ((var_s0 != 0) && (igObject_IsKindOf(var_s0, DAT_00587760[0]) != 0)) {
-        asm { nop }
-    } else {
-        var_s0 = 0;
-    }
+    var_s0 = cast0(var_s0);
     if (var_s0 != 0) {
         arg1->f76 = 0;
         if (arg1->f24 == 2) {

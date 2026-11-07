@@ -24,7 +24,6 @@
 0x0015e7b0	local/mwcps2/3.0-011126/mwccps2.exe	0e16a5d6205101f840f85c02664f21cd63b39a0dec2dff417b3a61b4477f0e00	provisional	unit igPsx2VertexArray1_1 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0017c7a0	local/mwcps2/3.0-011126/mwccps2.exe	0e16a5d6205101f840f85c02664f21cd63b39a0dec2dff417b3a61b4477f0e00	provisional	unit igPsx2UserUCodeExt_1767c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0017d540	local/mwcps2/3.0-011126/mwccps2.exe	0e16a5d6205101f840f85c02664f21cd63b39a0dec2dff417b3a61b4477f0e00	provisional	unit igPsx2VertexArray1_1_17d0b0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x001b4500	local/mwcps2/3.0-011126/mwccps2.exe	0e16a5d6205101f840f85c02664f21cd63b39a0dec2dff417b3a61b4477f0e00	provisional	unit igObject_1b2750 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x001bb880	local/mwcps2/combat/mwccps2.exe	acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a	provisional	unit igCompileTraversal_1bb310 profile default -O3 -Iinclude exceptions off does not reproduce it
 0x001e14d0	local/mwcps2/3.0-011126/mwccps2.exe	0e16a5d6205101f840f85c02664f21cd63b39a0dec2dff417b3a61b4477f0e00	provisional	unit igPsx2EnvironmentMapShader_1e08b0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0020e4a0	local/mwcps2/3.0-011126/mwccps2.exe	0e16a5d6205101f840f85c02664f21cd63b39a0dec2dff417b3a61b4477f0e00	provisional	unit libpng_20d9e0 profile combat -O3,p -Iinclude exceptions off does not reproduce it

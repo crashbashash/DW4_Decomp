@@ -13,6 +13,7 @@ extern Y *DAT_00586dc8[4];
 extern int DAT_00585cc8[4];
 int Gap__Core__igMetaFieldInfo__vfunc_23(VA *arg0, int arg1, void *arg2);
 }
+static inline X * cast0(X * o) { if (o != 0 && igObject_IsKindOf(o, DAT_00585cc8[0]) != 0) { return o; } return 0; }
 int Gap__Core__igMetaFieldInfo__vfunc_23(VA *arg0, int arg1, void *arg2) {
     /* matching construct: variant search — decl order [5, 4, 3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
     X *var_s0;
@@ -28,11 +29,7 @@ int Gap__Core__igMetaFieldInfo__vfunc_23(VA *arg0, int arg1, void *arg2) {
         t->f4 = t->f4 + 1;
     }
     var_s0 = sp7C;
-    if (var_s0 != 0 && igObject_IsKindOf(var_s0, DAT_00585cc8[0]) != 0) {
-        asm { nop }
-    } else {
-        var_s0 = 0;
-    }
+    var_s0 = cast0(var_s0);
     temp_s1 = Memory_GetDefaultAllocator();
     if (var_s0 != 0) {
         temp_s0 = igMetaField_GetMangledName(var_s0, temp_s1);

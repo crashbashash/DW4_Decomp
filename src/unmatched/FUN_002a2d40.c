@@ -1,0 +1,5 @@
+int FUN_002a0bb8();
+
+void FUN_002a2d40(int p0) {
+    FUN_002a0bb8(p0, 0xFF000D0B);
+}

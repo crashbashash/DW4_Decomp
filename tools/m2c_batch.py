@@ -1241,6 +1241,76 @@ def expand_asm(asm):
     return "\n".join(out)
 
 
+def _last_definition(c):
+    return list(re.finditer(r"^([\w ]*?[\w*] ?\*?)(\w+)\(([^()\n]*)\) \{", c, re.M))[-1:]
+
+
+def _with_params(c, m, params):
+    return c[:m.start(3)] + params + c[m.end(3):]
+
+
+def _tail_argument(asm):
+    """The C for an argument a tail call computes in its delay slot, or None."""
+    lines = [l.split("*/")[-1].strip() for l in asm.split("\n") if "*/" in l]
+    if len(lines) < 2 or not re.match(r"j\s", lines[-2]):
+        return None
+    m = re.match(r"lw\s+\$a(\d),\s*(-?(?:0x)?[0-9a-fA-F]+)\(\$a(\d)\)", lines[-1])
+    if m:
+        return int(m.group(1)), int(m.group(3)), "*(int *)((char *)arg%s + %d)" % (m.group(3), int(m.group(2), 0))
+    m = re.match(r"addiu\s+\$a(\d),\s*\$a(\d),\s*(-?(?:0x)?[0-9a-fA-F]+)", lines[-1])
+    if m:
+        return int(m.group(1)), int(m.group(2)), "(int)((char *)arg%s + %d)" % (m.group(2), int(m.group(3), 0))
+    m = re.match(r"move\s+\$a(\d),\s*\$zero", lines[-1])
+    if m:
+        return int(m.group(1)), None, "0"
+    return None
+
+
+def argument_variants(c, asm):
+    """Drafts restoring what m2c loses when an argument only passes through registers.
+
+    Retail states these outright: an unused first parameter, a value left in `a0` for the callee,
+    a tail call's delay-slot argument, and a word loaded but stored narrower.
+    """
+    found = _last_definition(c)
+    if not found:
+        return []
+    m = found[0]
+    params = m.group(3).strip()
+    out = []
+    named = [int(x) for x in re.findall(r"\barg(\d)\b", params)]
+    if named and named[0] > 0:
+        lead = ", ".join("int arg%d" % i for i in range(named[0]))
+        out.append(_with_params(c, m, lead + ", " + params))
+    body = c[m.end():]
+    calls = [x for x in re.finditer(r"\b(\w+)\(([^;{}]*)\);", body)
+             if x.group(1) not in ("if", "while", "switch", "return", "sizeof")]
+    if params in ("", "void") and len(calls) == 1:
+        call = calls[0]
+        for k in (1, 2, 3):
+            names = ["p%d" % i for i in range(k)]
+            args = ", ".join(names + ([call.group(2)] if call.group(2).strip() else []))
+            text = c[:m.end()] + body[:call.start(2)] + args + body[call.end(2):]
+            out.append(_with_params(text, m, ", ".join("int " + n for n in names)))
+    tail = _tail_argument(asm)
+    if tail and len(calls) >= 1:
+        reg, base, expr = tail
+        call = calls[-1]
+        have = [x.strip() for x in call.group(2).split(",") if x.strip()]
+        if len(have) <= reg:
+            have += ["0"] * (reg - len(have)) + [expr]
+            text = c[:m.end()] + body[:call.start(2)] + ", ".join(have) + body[call.end(2):]
+            if base is not None and "arg%d" % base not in params:
+                need = ", ".join("void *arg%d" % i for i in range(base + 1))
+                text = _with_params(text, m, need)
+            out.append(text)
+    for narrow in ("short", "unsigned short", "char", "unsigned char"):
+        widened = c.replace("(%s) *(%s *)" % (narrow, narrow), "(%s) *(int *)" % narrow)
+        if widened != c:
+            out.append(widened)
+    return out
+
+
 def _error_line(src, rep):
     """The line a compile report blames, as an index into `src`, which the report numbers from 2."""
     head = rep.splitlines()[0]
@@ -1355,6 +1425,10 @@ def score_candidate(cand):
             sret = virtualize_calls(base, name, sret=True)
             if sret and all(sret != v for v, _ in variants):
                 variants.append((sret, tag + "+sretvcpp"))
+        for base, tag in list(variants):
+            for i, extra in enumerate(argument_variants(base, asm)):
+                if all(extra != v for v, _ in variants):
+                    variants.append((extra, "%s+a%d" % (tag, i)))
         for base, tag in list(variants):
             fixed = repair(base)
             if fixed != base:
