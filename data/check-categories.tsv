@@ -7145,6 +7145,7 @@
 0027ed50	FUN_0027ed50	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of cri-adx_27eb68 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
 0027ed68	FUN_0027ed68	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of cri-adx_27eb68 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
 0027ed80	FUN_0027ed80	match	-
+0027edb0	FUN_0027edb0	match	-
 0027ede0	FUN_0027ede0	match	-
 0027ee00	FUN_0027ee00	match	-
 0027eed0	FUN_0027eed0	match	-
@@ -8385,6 +8386,10 @@
 002b5758	FUN_002b5758	match	-
 002b5770	FUN_002b5770	match	-
 002b5838	FUN_002b5838	match	-
+002b5b38	FUN_002b5b38	match	-
+002b5b68	FUN_002b5b68	match	-
+002b5b80	FUN_002b5b80	match	-
+002b5ce0	FUN_002b5ce0	match	-
 002b5d50	FUN_002b5d50	match	-
 002b5da0	igVirtualCFuncMetaField_GetMetaObject	match	-
 002b5df0	igVirtualCFuncMetaField_GetVTable	match	-

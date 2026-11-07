@@ -250,9 +250,15 @@ with the game's flags, and AdxMovie was written alongside the game.
 3.0.3 and b38 as a `struct`.
 
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
-runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. 4,680 of the 4,838 MWCC units are on
+runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. 4,697 of the 4,840 MWCC units are on
 b52, 29 of them at `-O3` or `-O3,p` because their members pass only there. A unit moved only when every member matched under it, so the rest keep their earlier profile.
 zlib and libpng are the exception that is settled: they build with `combat` and fail under `b52`.
+
+**A library is one build, so a unit never crosses a library boundary.** Retail records two of the builds.
+Alchemy carries one stamp, `Intrinsic Alchemy v3.2 -0810 (Static/Release)`, dated 10 August 2004. CRI's
+module strings fall into two batches on 6 October 2004, Sofdec from 11:36:10 to 11:36:36 and ADX from
+11:47:17 to 11:47:45, each with `Append: GCC2096 SCE2810`. A static initialiser follows the library that
+owns it: `FUN_00521600` calls AdxMovie and matches only with `,p`, unlike Alchemy's own.
 
 **The data threshold comes from the stock libraries and the small-data block.** zlib, libpng and Lua are
 the only code with its original declarations, and they verify at thresholds 1 and 2 and fail at 4 and
@@ -288,11 +294,16 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
 
 ## Open questions
 
-* **The remaining units.** 137 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, combat or 2.4:
-  122 in Alchemy and the game, 9 that cross a region boundary and 6 in the Sony and CRI libraries.
+* **The remaining units.** 122 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, combat or 2.4:
+  99 in Alchemy, 22 in the game, and `FUN_002252d8` in libmtap, which has MWCC's shape in a GCC library.
   Most hold one or two members that differ under b52, and a randomised search over spelling leaves 160
   such functions unmatched. `tools/roll_profile.py` lists the members.
 * **`-O3` or `-O4`.** Neither level fits every function. Four matched functions pass only at `-O4`
   (`FUN_001ef9b0`, `FUN_002094c0`, `FUN_00315050`, `FUN_003a7300`), and 34 pass only at `-O3`, in spite of
   the same search at the other level. Descending load orders in some of them suggest struct copies or
   inlined vector methods, which that search cannot write. b50 and b52 are not separated.
+* **Library boundaries.** `sony-sdk` holds several libraries from at least two SDK releases: the descriptors
+  say `2800`, libmc `2810`. Their boundaries are not recovered. `SNDF Ver.2.09c` was built on 4 October 2004
+  and its string sits between the ADX and Sofdec data, so which library holds it is unknown. Viewer takes
+  `,p` although the Alchemy stamp suggests one build, and whether `enbaya` and `p2` belong to that build is
+  not established.

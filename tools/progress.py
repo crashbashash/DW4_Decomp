@@ -629,8 +629,9 @@ def _walk(top, ext):
 # The README's breakdown by code region, from config/SLUS-20836/regions.tsv.
 REGION_LABELS = collections.OrderedDict([
     ("Game", "Game"), ("Alchemy", "Alchemy engine"), ("Lua", "Lua 4.0.1 interpreter"),
-    ("CRI", "CRI middleware (ADX, Sofdec, audio)"), ("PNG", "libpng and zlib"),
-    ("Sony", "Sony SDK and C runtime")])
+    ("CRI ADX", "CRI ADX"), ("CRI Sofdec", "CRI Sofdec"), ("PNG", "libpng and zlib"),
+    ("Sony", "Sony SDK"), ("libgcc", "libgcc"), ("Metrowerks", "Metrowerks runtime"),
+    ("Static", "Static initialisers")])
 REGION_ORDER = list(REGION_LABELS.values())
 
 
