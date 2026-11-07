@@ -82,6 +82,16 @@ The range matters and is **not** the relinked section: the section is `0x100000.
 reads it from the program headers. Hard-coding the section end silently leaves every global above
 it as a literal; a sweep with the section end hard-coded had 6,976 compile failures.
 
+### Repairing a draft that does not compile
+
+`repair` runs as one more variant of every candidate, so a draft that already compiles is unaffected
+and `tools/verify.py` still decides each match. It turns m2c's `(bitwise T)` and `(unaligned T)`
+annotations into C, casts a loaded word before calling it, fixes a double dereference, drops an `int`
+stack placeholder beside a typed local, and gives a builtin's wrapper back the arguments it left in
+registers. `repair_error` then follows the compiler: it reads the line a report blames, mends that line
+and compiles again, for up to twelve rounds. A draft holding `M2C_ERROR` or `saved_reg_` uses an
+instruction or register C cannot express, such as the MMI `qfsrv` and `pextlb`, and stays out of reach.
+
 ## The EE ABI: `mipsee`, `a4-a7`, and the 168 registrar trampolines
 
 The R5900 passes integer arguments 5–8 in the hardware registers **`t0-t3`**, not on the stack

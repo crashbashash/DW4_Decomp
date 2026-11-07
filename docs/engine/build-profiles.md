@@ -262,6 +262,12 @@ module. The second data section keeps the Sony and newlib strings in code order,
 `config/SLUS-20836/regions.tsv` divides that block, and the descriptors say `2800` except libmc's `2810`.
 A static initialiser follows the library that owns it: `FUN_00521600` calls AdxMovie and matches only with `,p`, unlike Alchemy's own.
 
+**The size or speed mode follows the library, without exception.** Compiled both ways at `-O4`, every function
+that passes in only one mode agrees with its library: all of Alchemy, `p2` and `enbaya` need `,s`, and the
+Metrowerks runtime, `main`, AdxMovie, Bec, Ndmw and Viewer need `,p`. Only the static initialisers mix,
+since each follows its owner. An emitted group cannot be tested this way when a shared copy's retail home
+is in a library of the other mode: forcing one mode everywhere breaks that copy.
+
 **The data threshold comes from the stock libraries and the small-data block.** zlib, libpng and Lua are
 the only code with its original declarations, and they verify at thresholds 1 and 2 and fail at 4 and
 above. Retail's small data, `0x554880`-`0x554e80`, holds one-byte objects and one `short` in `.sbss`
@@ -304,5 +310,5 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
   (`FUN_001ef9b0`, `FUN_002094c0`, `FUN_00315050`, `FUN_003a7300`), and 34 pass only at `-O3`, in spite of
   the same search at the other level. Descending load orders in some of them suggest struct copies or
   inlined vector methods, which that search cannot write. b50 and b52 are not separated.
-* **Library boundaries.** Viewer takes `,p` although the Alchemy stamp suggests one build, and whether
-  `enbaya` and `p2` belong to that build is not established.
+* **Why Viewer takes `,p`.** Its build settings are the game's, not Alchemy's, though nothing in the image
+  says why.

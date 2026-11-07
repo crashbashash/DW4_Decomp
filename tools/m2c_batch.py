@@ -1078,6 +1078,181 @@ def virtualize_calls(c, name, sret=False):
             + "\n".join(cls) + "\n" + rest)
 
 
+REPAIR_ROUNDS = 12
+_BUILTIN_ARGS = {"memcpy": 3, "memmove": 3, "memset": 3, "memcmp": 3, "strcmp": 2, "strcpy": 2,
+                 "strncmp": 3, "strncpy": 3, "strcat": 2, "strlen": 1, "strchr": 2}
+_BITWISE_FROM = {"float": "int", "double": "long long", "int": "float", "unsigned int": "float",
+                 "long long": "double", "unsigned long long": "double"}
+
+
+def _operand_end(c, i):
+    """The end of the unary operand starting at c[i]: a parenthesis, or a word and its indexing."""
+    while c[i] in "*&":
+        i += 1
+    if c[i] == "(":
+        i = _match_paren(c, i)
+    else:
+        m = re.compile(r"[\w.]+").match(c, i)
+        i = m.end() if m else i
+    while i < len(c) and c[i] == "[":
+        i = c.index("]", i) + 1
+    return i
+
+
+def _repair_bitwise(c):
+    used = {}
+    pat = re.compile(r"\(bitwise ([\w ]+?)\) ?")
+    while True:
+        m = pat.search(c)
+        if not m:
+            break
+        kind = m.group(1)
+        if kind not in _BITWISE_FROM:
+            return c
+        end = _operand_end(c, m.end())
+        helper = "bitwise_" + kind.replace(" ", "_")
+        used[helper] = kind
+        c = c[:m.start()] + helper + "(" + c[m.end():end] + ")" + c[end:]
+    head = "".join("static inline %s %s(%s x) { union { %s a; %s b; } u; u.a = x; return u.b; }\n"
+                   % (k, h, _BITWISE_FROM[k], _BITWISE_FROM[k], k) for h, k in sorted(used.items()))
+    return head + c
+
+
+def _repair_calls(c):
+    """`*(int *)(x)(args)` calls the loaded word, so the cast belongs around the load."""
+    key = "*(int *)("
+    i = c.find(key)
+    while i >= 0:
+        close = _match_paren(c, i + len(key) - 1)
+        nxt = i + len(key)
+        if c[close:close + 1] == "(" and c[i - 1:i] != ")":
+            call = "((int (*)())" + c[i:close] + ")"
+            c = c[:i] + call + c[close:]
+            nxt = i + len(call)
+        i = c.find(key, nxt)
+    return c
+
+
+def _repair_types(c):
+    """Cast where m2c mixes a pointer with an integer, which C++-strict MWCC refuses."""
+    kinds = {}
+    for m in re.finditer(r"^\s*(?:unsigned )?(int|char|short|void|long long|float|s128)\s*(\*+)?\s*(\w+);$", c, re.M):
+        kinds[m.group(3)] = "ptr" if m.group(2) else "int" if m.group(1) != "float" else "float"
+    for m in re.finditer(r"[(,]\s*(?:unsigned )?(?:int|char|short|void)\s*(\*+)?\s*(arg\d+)", c):
+        kinds[m.group(2)] = "ptr" if m.group(1) else "int"
+
+    def operands(m):
+        a, op, b = m.group(1), m.group(2), m.group(3)
+        if kinds.get(a) == "ptr" and kinds.get(b) == "int":
+            return "(int)%s %s %s" % (a, op, b)
+        if kinds.get(a) == "int" and kinds.get(b) == "ptr":
+            return "%s %s (int)%s" % (a, op, b)
+        return m.group(0)
+    c = re.sub(r"\b(\w+) (==|!=|<=|>=|<|>|-) (\w+)\b", operands, c)
+    c = re.sub(r" - &(\w+\[0\])", r" - (int)&\1", c)
+    head = re.search(r"^(\w[\w ]*\*+)\s*\w+\(", c, re.M)
+    if head:
+        kind = head.group(1).strip()
+        c = re.sub(r"^(\s*)return (?!\(%s\))(?!0;)(.+);$" % re.escape(kind),
+                   lambda m: "%sreturn (%s)(%s);" % (m.group(1), kind, m.group(2)), c, flags=re.M)
+    return c
+
+
+def _repair_duplicates(c):
+    """m2c gives one stack slot an `int` placeholder and a typed local: keep the typed one."""
+    typed = set(re.findall(r"^\s*[\w ]+\*+\s*(sp\w*);$", c, re.M))
+    return re.sub(r"^\s*int (sp\w*);\n", lambda m: "" if m.group(1) in typed else m.group(0), c, flags=re.M)
+
+
+def _repair_wrapper(c):
+    """A wrapper leaves leading arguments in registers, so m2c drops them from a builtin's call."""
+    m = re.search(r"^(\w+ \*?)(\w+)\(void\) \{", c, re.M)
+    if not m:
+        return c
+    for name, want in _BUILTIN_ARGS.items():
+        call = re.search(r"\b%s\(([^;()]*)\)" % name, c[m.end():])
+        if not call:
+            continue
+        have = [x for x in call.group(1).split(",") if x.strip()]
+        missing = ["a", "b", "c"][:want - len(have)]
+        if not missing:
+            continue
+        at = m.end() + call.start(1)
+        c = c[:at] + ", ".join(missing + [x.strip() for x in have]) + c[m.end() + call.end(1):]
+        return c[:m.start(2) + len(m.group(2))] + "(" + ", ".join("int " + x for x in missing) + ")" \
+            + c[m.end() - 2:]
+    return c
+
+
+def repair(c):
+    """The spellings MWCC or gcc refuse in a draft. A variant only: verify still decides."""
+    c = re.sub(r"\(unaligned ([\w ]+?\*?)\)", r"(\1)", c)
+    c = c.replace("**(int *)(", "**(int **)(").replace("*(*(int *)(", "*(*(int **)(")
+    if "s128" in c:
+        c = "typedef struct { int word[4]; } s128;\n" + c
+    for step in (_repair_bitwise, _repair_calls, _repair_duplicates, _repair_types, _repair_wrapper):
+        c = step(c)
+    return c
+
+
+def _error_line(src, rep):
+    """The line a compile report blames, as an index into `src`, which the report numbers from 2."""
+    head = rep.splitlines()[0]
+    m = re.search(r"compile failed: (\d+): (.*?) \| ", head) or re.search(r"\.c:(\d+): ()", head.split(" | ")[1] if " | " in head else "")
+    if not m:
+        return None
+    lines = src.splitlines()
+    n = int(m.group(1)) - 2
+    frag = m.group(2).strip()
+    for k in (n, n - 1, n + 1, n - 2, n + 2):
+        if 0 <= k < len(lines) and frag in lines[k]:
+            return k
+    return None
+
+
+def _cast_sides(line):
+    m = re.match(r"^(\s*(?:\} else )?if \()(.+?) (==|!=|<=|>=|<|>) (.+)(\) \{)$", line)
+    if m:
+        return "%s(int)(%s) %s (int)(%s)%s" % m.groups()
+    m = re.match(r"^(\s*[^=]+ = )(.+) (-|\+) (.+);$", line)
+    if m:
+        return "%s(int)(%s) %s (int)(%s);" % m.groups()
+    return None
+
+
+def repair_error(src, rep):
+    """Mend the one line a compile report blames; None when the report offers no safe change."""
+    head = rep.splitlines()[0]
+    undefined = re.search(r"undefined identifier '(sp\w*)'|`(sp\w*)' undeclared", head)
+    if undefined:
+        name = undefined.group(1) or undefined.group(2)
+        return re.sub(r"^(\w[^\n]*\) \{\n)", lambda m: m.group(1) + "    int %s;\n" % name, src, count=1, flags=re.M)
+    k = _error_line(src, rep)
+    if k is None:
+        return None
+    lines = src.splitlines()
+    line = lines[k]
+    conv = re.search(r"illegal implicit conversion from '[^']*' to \| ?'([^']*)'|illegal implicit conversion from '[^']*' to '([^']*)'", head)
+    new = None
+    if conv:
+        kind = conv.group(1) or conv.group(2)
+        if "struct" in kind:
+            return None
+        m = re.match(r"^(\s*(?:return|[^=(]+ =) )(.+);$", line)
+        if m:
+            new = "%s(%s)(%s);" % (m.group(1), kind, m.group(2))
+    elif "illegal operand" in head or "invalid operands" in head:
+        new = _cast_sides(line)
+    elif "pointer/array required" in head or "invalid type argument" in head:
+        new = re.sub(r"(?<![\w)*])\*(\w+)\b", r"*(int *)\1", line, count=1)
+        if new == line:
+            new = re.sub(r"\b(\w+)\[", r"((int *)\1)[", line, count=1)
+    if new is None or new == line:
+        return None
+    lines[k] = new
+    return "\n".join(lines) + "\n"
+
+
 def score_candidate(cand):
     """Run one candidate end to end; returns (row, ok, src, report, kind).
 
@@ -1133,10 +1308,23 @@ def score_candidate(cand):
             sret = virtualize_calls(base, name, sret=True)
             if sret and all(sret != v for v, _ in variants):
                 variants.append((sret, tag + "+sretvcpp"))
+        for base, tag in list(variants):
+            fixed = repair(base)
+            if fixed != base:
+                variants.append((fixed, tag + "+r"))
         for vsrc, vmode in variants:
-            tmp = os.path.join(cc.scratch_dir(), "m2c_batch_%s%s" % (_tag(), ".cpp" if vmode.endswith("vcpp") else ".c"))
+            tmp = os.path.join(cc.scratch_dir(), "m2c_batch_%s%s" % (_tag(), ".cpp" if "vcpp" in vmode else ".c"))
             open(tmp, "w").write("/* %s */\n" % name + vsrc)
             good, rep = vfy.verify_one(va, tmp, symbols=ctx["symbols"], elf=ctx["elf"])
+            for _ in range(REPAIR_ROUNDS if "+r" in vmode else 0):
+                if "compile failed" not in rep.splitlines()[0]:
+                    break
+                mended = repair_error(vsrc, rep)
+                if mended is None:
+                    break
+                vsrc = mended
+                open(tmp, "w").write("/* %s */\n" % name + vsrc)
+                good, rep = vfy.verify_one(va, tmp, symbols=ctx["symbols"], elf=ctx["elf"])
             if "compile failed" in rep.splitlines()[0]:
                 nb = 10 ** 9        # a compile failure is NOT a 0-diff candidate
             else:

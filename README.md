@@ -19,8 +19,8 @@ Run commands from the repository root. Game data and toolchains are never commit
 | Game | 1106 KB | 86.6 % | 6.0 % |
 | Alchemy engine | 1563 KB | 61.1 % | 3.3 % |
 | Lua 4.0.1 interpreter | 70 KB | 100.0 % | 100.0 % |
-| CRI ADX | 138 KB | 43.2 % | 0.0 % |
-| CRI Sofdec | 204 KB | 45.9 % | 0.0 % |
+| CRI ADX | 138 KB | 43.3 % | 0.0 % |
+| CRI Sofdec | 204 KB | 46.2 % | 0.0 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
 | Sony SDK | 96 KB | 1.4 % | 0.0 % |
 | newlib | 84 KB | 25.8 % | 0.0 % |
