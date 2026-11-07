@@ -22,13 +22,10 @@
 0x001367f0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igLightAttr profile default -O3 -Iinclude exceptions off does not reproduce it
 0x00139fb0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igBlendFunctionAttr profile default -O3 -Iinclude exceptions off does not reproduce it
 0x0013e0a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igGeometryAttr1_5_13d460 profile combat -O4 -Iinclude exceptions off does not reproduce it
-0x0015cb60	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPrimLengthArray1_1_15cb50 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0015e7b0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2VertexArray1_1 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0017c560	-O4 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2UserUCodeExt_1767c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0017c7a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2UserUCodeExt_1767c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x0017d540	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2VertexArray1_1_17d0b0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x00198070	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igSkin profile default -O3 -Iinclude exceptions off does not reproduce it
-0x0019e070	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igIntersectTraversal profile default -O3 -Iinclude exceptions off does not reproduce it
 0x001b4500	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igObject_1b2750 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x001bb880	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igCompileTraversal_1bb310 profile default -O3 -Iinclude exceptions off does not reproduce it
 0x001e14d0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2EnvironmentMapShader_1e08b0 profile combat -O3 -Iinclude exceptions off does not reproduce it
@@ -64,7 +61,6 @@
 0x002f8420	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMemoryPoolContextInfo_2f25d0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x002fab40	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMemoryRefMetaField_2fa9d0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x002fabf0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMemoryRefMetaField_2fa9d0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002fcce0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMetaField_2fc630 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x002fdf40	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMetaObject_2fd7c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x002fe000	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMetaObject_2fd7c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x002fe810	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMetaObject_2fe470 profile default -O3 -Iinclude exceptions off does not reproduce it
@@ -80,10 +76,7 @@
 0x00329e70	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2CallStackTracer_328e00 profile combat -O3 -Iinclude exceptions off does not reproduce it
 0x00330570	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2ThreadManager_330460 profile default -O3 -Iinclude exceptions off does not reproduce it
 0x00336580	-O3 -Iinclude	provisional	unit igMovieInfo profile combat -O3,p -Iinclude exceptions on does not reproduce it
-0x0035e6b0	-O3,p -Iinclude	provisional	unit beHitLandDelivInfoRam profile default -O3 -Iinclude exceptions on does not reproduce it
 0x00377990	-O3,p -Iinclude -Cpp_exceptions off	provisional	unit beAction2_377700 profile default -O3,p -Iinclude exceptions on does not reproduce it
-0x0038c410	-O3,p -Iinclude -Cpp_exceptions off	provisional	emitted body of compiler unit 0x38d860: pin kept, untested under unit beMessenger_38bee0
-0x0038e530	-O3 -Iinclude	provisional	emitted body of compiler unit 0x38e060: pin kept, untested under unit beMessenger_38cff0
 0x003bd850	-O3,p -Iinclude	provisional	unit beNDMWPanelWazaInfoRam profile default -O3 -Iinclude exceptions on does not reproduce it
 0x003bd940	-O3,p -Iinclude	provisional	unit beNDMWPanelWazaInfoRam profile default -O3 -Iinclude exceptions on does not reproduce it
 0x003bf2f0	-O3,p -Iinclude	provisional	unit beNDMWMdlPlayer2 profile 3.0.3 -O3 -Iinclude exceptions on does not reproduce it
@@ -91,11 +84,8 @@
 0x003c0640	-O3,p -Iinclude	provisional	unit beNDMWMdlPEBaseInfoWork_3c05f0 profile default -O3 -Iinclude exceptions on does not reproduce it
 0x003ca610	-O3,p -Iinclude	provisional	unit beNDMWAfsSetupInfo profile default -O3 -Iinclude exceptions on does not reproduce it
 0x003cafa0	-O3,p -Iinclude	provisional	unit beNDMWAfsSetup profile default -O3 -Iinclude exceptions on does not reproduce it
-0x003fc670	-O3 -Iinclude	provisional	emitted body of compiler unit 0x3fab90: pin kept, untested under unit beNDMWGameRam_3f77b0
-0x003fc780	-O3 -Iinclude	provisional	emitted body of compiler unit 0x3fab90: pin kept, untested under unit beNDMWGameRam_3f77b0
 0x00414e70	-O3 -Iinclude	provisional	unit beNDMWStatusPowerSocket_412cc0 profile combat -O3,p -Iinclude exceptions on does not reproduce it
 0x004164d0	-O3 -Iinclude	provisional	unit beNDMWStatusMainSlot_414ee0 profile combat -O3,p -Iinclude exceptions on does not reproduce it
 0x00417f40	-O3 -Iinclude	provisional	unit beNDMWStatusSubSlot_417160 profile combat -O3,p -Iinclude exceptions on does not reproduce it
 0x004233f0	-O3,p -Iinclude	provisional	unit beNDMWWindowSelect_4233f0 profile default -O3 -Iinclude exceptions on does not reproduce it
-0x0044f830	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igGuiComponentModel profile default -O3 -Iinclude exceptions off does not reproduce it
 0x004831a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit sony-kernel_4820d0 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it

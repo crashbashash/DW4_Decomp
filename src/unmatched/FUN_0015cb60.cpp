@@ -15,22 +15,22 @@ class O { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 
 extern "C" int FUN_0015cb60(O *arg0, A1 *arg1, int *arg2, unsigned int arg3, int arg4);
 extern "C" int FUN_0015cb60(O *arg0, A1 *arg1, int *arg2, unsigned int arg3, int arg4) {
-    volatile int sp9C;
-    V2 sp80;
-    V2 sp88;
+    Rc *a0;
     V2 sp90;
-    unsigned int s6;
+    volatile int sp9C;
+    V2 sp88;
+    V2 sp80;
     int s5;
     int s3;
-    unsigned int i;
-    unsigned char t;
-    int r1;
-    int t2;
-    Rc *a0;
-    int x;
+    unsigned int s6;
     int m;
+    int r1;
+    unsigned char t;
+    int t2;
+    int x;
+    unsigned int i;
 
-    if (arg1 != 0) {
+    if (0 != arg1) {
         arg1->u.w = arg1->u.w + 1;
     }
     a0 = (Rc *)arg0->f24;
@@ -45,40 +45,39 @@ extern "C" int FUN_0015cb60(O *arg0, A1 *arg1, int *arg2, unsigned int arg3, int
     if ((((unsigned int)(*arg2 & 0xF0000) >> 0x10) & 0xFF) == 0) {
         t2 = sp9C & 0xFFF0FFFF;
         sp9C = t2;
-        sp9C = sp9C | 0x10000;
+        sp9C = 0x10000 | sp9C;
     }
     s6 = arg3 * 6;
     arg4 = arg0->f24->v96((int *)&sp9C, s6, arg4, 0);
     s5 = arg3 * 12;
     arg0->f24->f8->f64 = ((Al *)Memory_GetAllocatorBySelector(DAT_00587020[0]))->v216(s5);
-    t = ((unsigned int)(*arg2 & 0x300000) >> 0x14) & 0xFF;
-    arg4 = arg4 + s5;
+    t = 0xFF & ((unsigned int)(*arg2 & 0x300000) >> 0x14);
+    arg4 = s5 + arg4;
     if (t != 0) {
-        x = arg0->f24->f8->f60;
         m = arg3 * 24;
+        x = arg0->f24->f8->f60;
         s5 = m * (t & 0xFF);
         if (x != 0) {
             Memory_FreeBuffer(x);
-            arg4 = arg4 - s5;
+            arg4 -= s5;
             arg0->f24->f8->f60 = 0;
         }
-        s5 = arg3 * ((((unsigned int)(*arg2 & 0x300000) >> 0x14) & 0xFF) * 4);
+        s5 = ((((unsigned int)(*arg2 & 0x300000) >> 0x14) & 0xFF) * 4) * arg3;
         r1 = arg1->f24->v216(s5);
-        arg4 = arg4 + s5;
+        arg4 += s5;
         arg0->f24->f8->f60 = r1;
     }
     if (*arg2 & 0x01000000) {
         x = arg0->f24->f8->f76;
         s5 = arg3 * 24;
-        if (x != 0) {
+        if (0 != x) {
             Memory_FreeBuffer(x);
             arg4 = arg4 - s5;
             arg0->f24->f8->f76 = 0;
         }
         s3 = arg3 * 4;
-        r1 = arg1->f24->v216(s3);
-        arg4 = arg4 + s3;
-        arg0->f24->f8->f76 = r1;
+        arg0->f24->f8->f76 = (arg1->f24->v216(s3));
+        arg4 += s3;
     }
     for (i = 0; i < s6; i++) {
         sp90.a = 0;

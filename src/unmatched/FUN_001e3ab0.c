@@ -1,17 +1,17 @@
 struct L { char pad[8]; int cnt; int pad2; int *items; };
 int FUN_001e3ab0(struct L *arg0, int *arg1) {
-    int cnt;
-    int mid;
-    int a;
-    int b;
-    int hi;
     int lo;
+    int hi;
+    int mid;
+    int b;
+    int cnt;
+    int a;
     cnt = arg0->cnt;
-    lo = 0;
     hi = cnt - 1;
+    lo = 0;
     while (lo < hi) {
-        mid = (lo + hi) >> 1;
         b = *arg1;
+        mid = (lo + hi) >> 1;
         a = arg0->items[mid];
         if (a < b) {
             lo = mid + 1;
@@ -21,8 +21,8 @@ int FUN_001e3ab0(struct L *arg0, int *arg1) {
             return mid;
         }
     }
-    if (cnt == 0) {
+    if (!cnt) {
         return 0;
     }
-    return arg0->items[lo] < *arg1 ? lo + 1 : lo;
+    return arg0->items[lo] < *arg1 ? 1 + lo : lo;
 }

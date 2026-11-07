@@ -3,7 +3,7 @@ struct G { char p0[8]; int f8; };
 struct S { char p0[12]; unsigned char f12; unsigned char f13; char p14[2]; int f16; int f20; struct Src *f24; };
 extern struct G *DAT_00562bc8[4];
 int FUN_001419f0(void *, void *, void *);
-int FUN_00180030(int, int, int);
+int Gap__Gfx__igPsx2VisualContext__vfunc_197(int, int, int);
 int FUN_001904f0(int, void *, int);
 int FUN_00300db0(void *, int, int);
 int Matrix44_Copy(int, int);
@@ -30,5 +30,5 @@ void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_24(struct S *arg0, int arg1)
             Matrix44_Copy(arg0->f16 + (i << 6), o + DAT_00562bc8[0]->f8);
         }
     }
-    FUN_00180030(arg1, n, arg0->f16);
+    Gap__Gfx__igPsx2VisualContext__vfunc_197(arg1, n, arg0->f16);
 }

@@ -4,8 +4,8 @@ A snapshot of how much of `game.elf` has been rebuilt as matching C. Regenerated
 
 ```
 fully verified C/C++
-  functions  ████████████████████░░░░  84.8 %   17,137 / 20,214
-  code bytes ████████████████░░░░░░░░  66.3 %   2,297,924 / 3,464,192   (make check `match`: code bytes, exception metadata and symbol rules)
+  functions  ████████████████████░░░░  84.8 %   17,144 / 20,214
+  code bytes ████████████████░░░░░░░░  66.4 %   2,300,308 / 3,464,192   (make check `match`: code bytes, exception metadata and symbol rules)
 decompiled as C/C++ (code bytes identical, verification debt included — see below)
   functions  ████████████████████░░░░  85.3 %   17,248 / 20,214
   code bytes ████████████████░░░░░░░░  68.0 %   2,355,288 / 3,464,192
@@ -22,10 +22,10 @@ The function count is flattered by small functions: the ones done have a median 
 
 | category | functions | code bytes | % of code bytes | meaning |
 | --- | ---: | ---: | ---: | --- |
-| **`match`** | 17,137 | 2,297,924 | 66.3 | code bytes, exception metadata and symbol rules all pass — fully verified |
+| **`match`** | 17,144 | 2,300,308 | 66.4 | code bytes, exception metadata and symbol rules all pass — fully verified |
 | `code-only` | 12 | 28,796 | 0.8 | code bytes identical; exception metadata not reproduced (compile mode or cleanup scope) |
 | `name-defect` | 3 | 1,236 | 0.0 | code bytes identical; a symbol name is wrong for its address |
-| `foreign-profile` | 96 | 27,332 | 0.8 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
+| `foreign-profile` | 89 | 24,948 | 0.7 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
 
 The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
@@ -40,18 +40,18 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow.
 
-**1,938** of the 17,137 matched functions are readable: **285,636** code bytes, **8.2 %** of the code.
+**1,938** of the 17,144 matched functions are readable: **285,636** code bytes, **8.2 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 11,965 | 1,530,244 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,663 | 1,922,628 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,508 | 906,096 |
-| it sits in its class or module file, not `src/unmatched/` | 11,347 | 1,726,780 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 9,836 | 1,777,132 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,649 | 1,230,948 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,136 | 719,956 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,115 | 368,284 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 11,968 | 1,531,740 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,455 | 1,913,996 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,514 | 907,988 |
+| it sits in its class or module file, not `src/unmatched/` | 11,047 | 1,693,508 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 9,820 | 1,777,572 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,655 | 1,233,112 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,140 | 721,432 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,136 | 370,484 |
 
 ## Debt
 
@@ -82,14 +82,14 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `unmatched.functions` | 2,966 | 2,966 | 0 | functions in the layout with no definition in src/ — increase recorded: asm bodies are no longer kept in the repository (owner decision): the 1,206 functions that were asm bodies have no file in src/ and count as unmatched, so unmatched.* rises by what asm_body.* falls; no C source was removed |
 | `unmatched.bytes` | 1,108,904 | 1,108,904 | 0 | bytes of those — increase recorded: asm bodies are no longer kept in the repository (owner decision): the 1,206 functions that were asm bodies have no file in src/ and count as unmatched, so unmatched.* rises by what asm_body.* falls; no C source was removed |
 | `struct.a` | 141 | 141 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 293 | 293 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: struct.b 291 to 293: 53 newly named vtable slots make the checker attribute existing local views of other objects (the object system, a returned object, list nodes) to the slot's class; no source got worse |
+| `struct.b` | 294 | 294 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12 |
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 5,670 | 5,670 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 177 | 177 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) — increase recorded: struct.b 291 to 293: 53 newly named vtable slots make the checker attribute existing local views of other objects (the object system, a returned object, list nodes) to the slot's class; no source got worse |
-| `fun_dat_refs` | 76,085 | 76,085 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
-| `foreign_profile.functions` | 96 | 96 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
-| `foreign_profile.bytes` | 27,332 | 27,332 | 0 | bytes of those |
-| `orphan.bytes` | 15,100 | 15,100 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
+| `raw_casts.reflected` | 309 | 309 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12 |
+| `fun_dat_refs` | 75,999 | 75,999 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `foreign_profile.functions` | 89 | 89 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
+| `foreign_profile.bytes` | 24,948 | 24,948 | 0 | bytes of those |
+| `orphan.bytes` | 14,096 | 14,096 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 10,528 | 10,528 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 
 ## The data half
@@ -164,14 +164,14 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 8,882 of 20,214 |
+| functions with a recovered name (any: role names included) | 9,237 of 20,214 |
 | functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 1,560 of 20,214 (1,425 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 190 tables, 3,099 entries, in 150 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 24,677 of 56,089 (44.00 %) |
+| field accesses using a **recovered** type (not an offset cast) | 24,677 of 56,080 (44.00 %) |
 | functions in the retail split (`asm/`, generated) | 20,214 |
 
 ## How these numbers are produced

@@ -119,7 +119,8 @@ cannot be scattered over its entries. `verify.fold_literals` takes each entry's 
 instruction, requires it to lie in the pool, be aligned and hold exactly the literal's bytes, writes the
 immediate into the object and clears the relocation. Every entry of the section must be used by a proven
 reference, so a literal cannot carry data in. The verifier and `tools/linkgen.py` share this step; the
-link discards the sections and the pool stays retail data. Emitted groups do not fold yet.
+link discards the sections and the pool stays retail data. An emitted group folds across all its
+bodies; a whole-file unit keeps its literals as declared `data` rows.
 
 ### Symbol identity
 

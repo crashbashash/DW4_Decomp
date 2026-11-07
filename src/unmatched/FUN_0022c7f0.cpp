@@ -10,16 +10,16 @@ extern "C" int FUN_0022c150(int, B *, Rc *, int, Ent *, A *);
 extern "C" int igObject_Destroy(Rc *);
 extern char DAT_004e7ea8[16];
 extern "C" int FUN_0022c7f0(A *arg0, int arg1, B *arg2, int arg3) {
-    volatile char spB8[4];
+    bool found;
     Rc *volatile spBC;
-    char *nm;
-    Ent *e;
+    Lst *l;
     unsigned int n;
     unsigned int i;
-    bool found;
-    Lst *l;
+    volatile char spB8[4];
     Rc *t;
     spB8[0] = 0;
+    char *nm;
+    Ent *e;
     spBC = FUN_002b9500(0);
     l = arg0->getObj()->lst;
     found = 0;
@@ -33,14 +33,14 @@ extern "C" int FUN_0022c7f0(A *arg0, int arg1, B *arg2, int arg3) {
             found = 1;
         } else if (*nm == 0x5f) {
             FUN_0030b3c0(spBC, e->name + 1);
-            if (FUN_0022c150(arg1, arg2, spBC, arg3, e, arg0) != 0) found = 1;
+            if (0 != FUN_0022c150(arg1, arg2, spBC, arg3, e, arg0)) found = 1;
         }
     }
     if (found) arg2->put(DAT_004e7ea8);
     t = spBC;
-    if (t != 0) {
-        t->refs = t->refs - 1;
-        if ((t->refs & 0x7fffff) == 0) igObject_Destroy(t);
+    if (t) {
+        t->refs -= 1;
+        if (0 == (t->refs & 0x7fffff)) igObject_Destroy(t);
     }
     return 1;
 }

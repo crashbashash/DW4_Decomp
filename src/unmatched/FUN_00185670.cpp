@@ -21,23 +21,23 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B *arg4, B *arg5,
 }
 struct V4 { float x, y, z, w; };
 extern "C" void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B *arg4, B *arg5, float fparg0) {
-    V2 spB8;
-    V2 spC0;
-    V2 spC8;
-    V3 spD0;
-    V4 spA0;
-    float temp_f20;
     unsigned end;
-    B *t;
+    float temp_f20;
+    V3 spD0;
     int e;
+    V2 spC8;
+    V4 spA0;
+    B *t;
+    V2 spC0;
+    V2 spB8;
     int p, r;
     temp_f20 = fparg0 * fparg0;
-    if (arg5 != 0) {
-        if (arg4 != 0) {
+    if (arg5) {
+        if (0 != arg4) {
             arg4->f4 = arg4->f4 + 1;
         }
         t = arg5->f24;
-        if (t != 0) {
+        if (0 != t) {
             t->f4 = t->f4 - 1;
             if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(t);
@@ -58,7 +58,7 @@ extern "C" void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B *arg
         t = arg5->f24;
         if (t != 0) {
             t->f4 = t->f4 - 1;
-            if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
+            if (0 == ((unsigned long long)((long long)t->f4 << 0x29) >> 0x29)) {
                 igObject_Destroy(t);
             }
         }

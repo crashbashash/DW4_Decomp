@@ -19,11 +19,11 @@ extern int DAT_004ea840[4];
 extern int DAT_004ea880[4];
 extern int DAT_004ea8e0[4];
 int FUN_00244ad0(int arg0) {
-    int (*var_s0)(int);
-    int *temp_v0_2;
     T *temp_v0;
+    int *temp_v0_2;
+    int (*var_s0)(int);
 
-    if (lua_type(arg0, 1) != 4) {
+    if (4 != lua_type(arg0, 1)) {
         FUN_002467a0(&DAT_004ea840[0]);
     }
     do {
@@ -31,7 +31,7 @@ int FUN_00244ad0(int arg0) {
         lua_rawget(arg0, -2);
     } while (lua_type(arg0, -1) == 4);
     temp_v0 = lua_touserdata(arg0, -1);
-    if (temp_v0 == 0) {
+    if (0 == temp_v0) {
         FUN_002467a0(&DAT_004ea880[0]);
         return 0;
     }
@@ -47,7 +47,7 @@ int FUN_00244ad0(int arg0) {
         lua_pushstring(arg0, temp_v0->fc);
         lua_rawget(arg0, -2);
         var_s0 = (int (*)(int))(lua_tocfunction(arg0, -1));
-        if (var_s0 == 0) {
+        if (!var_s0) {
             FUN_002467a0(&DAT_004ea8e0[0], temp_v0->fc);
             return 0;
         }

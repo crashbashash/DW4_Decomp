@@ -7,12 +7,12 @@ int ObjectList_AppendRetained();
 int igObject_Destroy();
 
 void FUN_001d9ac0(struct A *arg0, int arg1, int arg2) {
-    int i;
-    int j;
-    int n1;
-    int n2;
-    L *l;
     R *p;
+    L *l;
+    int n1;
+    int i;
+    int n2;
+    int j;
 
     ObjectList_AppendRetained(arg0->b->list);
     FUN_001db720(arg0, arg0->b, arg2);
@@ -20,9 +20,9 @@ void FUN_001d9ac0(struct A *arg0, int arg1, int arg2) {
     n1 = l->cnt;
     for (i = 0; i < n1; i++) {
         p = l->arr[i];
-        if (p != 0) {
-            p->refs = p->refs - 1;
-            if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
+        if (p) {
+            p->refs -= 1;
+            if (0 == ((unsigned long long)((long long)p->refs << 0x29) >> 0x29)) {
                 igObject_Destroy(p);
             }
         }

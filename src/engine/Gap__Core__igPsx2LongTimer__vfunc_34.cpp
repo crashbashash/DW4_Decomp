@@ -16,11 +16,10 @@ class DW4VC_140_0 { public: virtual void d0(); virtual void d1(); virtual void d
 #define NANOSECONDS_PER_SECOND 0x3B9ACA00 /* 1e9 */
 void Gap__Core__igPsx2LongTimer__vfunc_34(void **self) {
     int remainderNsAsDouble; /* the EE soft-float helpers pass doubles as integer register pairs */
-    int fractionSeconds;
     int presetNs;
+    int fractionSeconds;
 
     presetNs = ((DW4VC_140_0 *)(self))->vX();
-    remainderNsAsDouble = __floatdidf(__moddi3(presetNs, NANOSECONDS_PER_SECOND));
-    fractionSeconds = __divdf3(remainderNsAsDouble, __floatsidf(NANOSECONDS_PER_SECOND));
+    fractionSeconds = __divdf3((__floatdidf(__moddi3(presetNs, NANOSECONDS_PER_SECOND))), __floatsidf(NANOSECONDS_PER_SECOND));
     __adddf3(__floatdidf(__divdi3(presetNs, NANOSECONDS_PER_SECOND)), fractionSeconds);
 }

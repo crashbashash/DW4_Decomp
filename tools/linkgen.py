@@ -459,7 +459,7 @@ def main(argv=None):
                 return va, {"fatal": f"{name}: {error}"}
             from_group = group_placement(records_, va)
         if not group:
-            _folded, literal_errors = verify.fold_literals(stage, va, name, retail_image, retail_gp)
+            _folded, literal_errors = verify.fold_literals(stage, {name: va}, retail_image, retail_gp)
             if literal_errors:
                 os.remove(stage)
                 return va, {"fatal": f"{name}: {literal_errors[0]}"}

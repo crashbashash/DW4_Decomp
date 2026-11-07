@@ -16,10 +16,10 @@ struct AA { char pad[8]; unsigned int n; };
 struct EE { char pad[24]; void *f24; };
 void FUN_001d6790(OO *arg0, AA *arg1) {
     long long temp_v1;
-    long long var_s0;
-    long long temp_s1;
-    unsigned int var_s2;
     unsigned int temp_s3;
+    unsigned int var_s2;
+    long long temp_s1;
+    long long var_s0;
     void *temp_s6;
     EE *temp_v0;
 
@@ -29,7 +29,7 @@ void FUN_001d6790(OO *arg0, AA *arg1) {
     var_s2 = 0;
     while (var_s2 < temp_s3) {
         temp_v0 = FUN_002d7e90(arg1, var_s2);
-        if (igObject_IsKindOf(temp_v0, DAT_00585b70[0]) != 0) {
+        if (0 != igObject_IsKindOf(temp_v0, DAT_00585b70[0])) {
             temp_s6 = temp_v0->f24;
             if (igObject_IsKindOf(temp_s6, DAT_005611d0[0]) != 0) {
                 temp_s1 = ((DW4VC_124_0 *)(temp_s6))->vX();

@@ -1,13 +1,13 @@
 /* The first field read is volatile so it is loaded from a0 before the copy to s1. */
-int FUN_001751b0(int, int);
-int FUN_00175140(int, float);
-int FUN_00175220(int, void *);
-int FUN_00175310(int, float);
-int FUN_00175380(int, float);
+int Gap__Gfx__igPsx2VisualContext__vfunc_245(int, int);
+int Gap__Gfx__igPsx2VisualContext__vfunc_243(int, float);
+int Gap__Gfx__igPsx2VisualContext__vfunc_247(int, void *);
+int Gap__Gfx__igPsx2VisualContext__vfunc_249(int, float);
+int Gap__Gfx__igPsx2VisualContext__vfunc_251(int, float);
 void Gap__Attrs__igFogAttr__vfunc_24(char *arg0, int arg1) {
-    FUN_001751b0(arg1, *(volatile int *)(arg0 + 12));
-    FUN_00175140(arg1, *(float *)(arg0 + 24));
-    FUN_00175220(arg1, arg0 + 0x1C);
-    FUN_00175310(arg1, *(float *)(arg0 + 16));
-    FUN_00175380(arg1, *(float *)(arg0 + 20));
+    Gap__Gfx__igPsx2VisualContext__vfunc_245(arg1, *(volatile int *)(arg0 + 12));
+    Gap__Gfx__igPsx2VisualContext__vfunc_243(arg1, *(float *)(arg0 + 24));
+    Gap__Gfx__igPsx2VisualContext__vfunc_247(arg1, arg0 + 0x1C);
+    Gap__Gfx__igPsx2VisualContext__vfunc_249(arg1, *(float *)(arg0 + 16));
+    Gap__Gfx__igPsx2VisualContext__vfunc_251(arg1, *(float *)(arg0 + 20));
 }

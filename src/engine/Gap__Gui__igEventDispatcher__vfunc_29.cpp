@@ -4,8 +4,8 @@ struct M { char p0[8]; L *list; };
 struct O { char p0[12]; M *m; };
 extern "C" void Gap__Gui__igEventDispatcher__vfunc_29(O *arg0, int arg1, int arg2, int arg3);
 void Gap__Gui__igEventDispatcher__vfunc_29(O *arg0, int arg1, int arg2, int arg3) {
-    int i;
     int n = arg0->m->list->count;
+    int i;
     for (i = 0; i < n; i++) {
         if (arg0->m->list->items[i]->vX(arg2, arg3) & 0xFF) break;
     }

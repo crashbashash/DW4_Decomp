@@ -27,10 +27,10 @@ struct Rel { static inline void go(T *object) {
 extern "C" void FUN_00236140(void);
 void FUN_00236140(void) {
     T * volatile sp3C;
-    T *s0;
     T *t;
     int *old;
     int *s1;
+    T *s0;
     int v;
     sp3C = FUN_002c43b0(Memory_GetAllocatorBySelector(DAT_00587038[0]));
     s0 = sp3C;

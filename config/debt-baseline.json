@@ -14,9 +14,9 @@
   "code_only.other.functions": 4,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "foreign_profile.bytes": 27332,
-  "foreign_profile.functions": 96,
-  "fun_dat_refs": 76085,
+  "foreign_profile.bytes": 24948,
+  "foreign_profile.functions": 89,
+  "fun_dat_refs": 75999,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
@@ -25,15 +25,15 @@
   "mismatch.functions": 0,
   "name_defect.bytes": 1236,
   "name_defect.functions": 3,
-  "orphan.bytes": 15100,
+  "orphan.bytes": 14096,
   "raw_casts.reflected": {
-   "reason": "struct.b 291 to 293: 53 newly named vtable slots make the checker attribute existing local views of other objects (the object system, a returned object, list nodes) to the slot's class; no source got worse",
-   "value": 177
+   "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12",
+   "value": 309
   },
   "struct.a": 141,
   "struct.b": {
-   "reason": "struct.b 291 to 293: 53 newly named vtable slots make the checker attribute existing local views of other objects (the object system, a returned object, list nodes) to the slot's class; no source got worse",
-   "value": 293
+   "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12",
+   "value": 294
   },
   "struct.c": 287,
   "unmatched.bytes": {

@@ -1,5 +1,5 @@
-int FUN_001d33a0();
+int Gap__Sg__igNode__vfunc_09();
 
-void thunk_FUN_001d33a0(void) {
-    FUN_001d33a0();
+void thunk_Gap__Sg__igNode__vfunc_09(void) {
+    Gap__Sg__igNode__vfunc_09();
 }

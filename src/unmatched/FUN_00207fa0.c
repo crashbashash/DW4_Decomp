@@ -11,8 +11,8 @@ extern int DAT_0056c164[4];
 extern volatile int DAT_0056d670[4];
 extern volatile int DAT_0056d678[4];
 void FUN_00207fa0(unsigned int arg0) {
-    long long sp20;
     long long sp28;
+    long long sp20;
     FUN_00208120();
     FUN_00113f20();
     DAT_0056d670[0] |= 8;
@@ -28,8 +28,8 @@ body:
 test:
     if (DAT_0056bfc0[0] < arg0) goto body;
     FUN_00113f20();
-    DAT_0056d670[0] &= ~8;
+    DAT_0056d670[0] = DAT_0056d670[0] & ~8;
     DAT_0056d678[0] &= ~8;
     FUN_00113f78();
-    DAT_0056bfd8[0] -= 1;
+    DAT_0056bfd8[0] = DAT_0056bfd8[0] - 1;
 }

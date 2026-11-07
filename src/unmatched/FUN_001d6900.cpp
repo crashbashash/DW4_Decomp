@@ -12,12 +12,12 @@ class DW4VCSR_128_3 { public: virtual void d0(); virtual void d1(); virtual void
 struct Rf { int w0; int references; };
 extern "C" int FUN_001d6900(Rf **arg0) {
     float v[18];
-    DW4SR4 r;
     Rf * volatile op;
+    DW4SR4 r;
     int i;
     op = (Rf *)FUN_00137810(FUN_002f8a20());
     r.w0 = 0;
-    r.w0 |= 1;
+    r.w0 = 1 | r.w0;
     ((DW4VCSR_128_3 *)op)->vX(&r, 6, 0, 0);
     ((DW4VC_156_3 *)op)->vX(3, 2, 0);
     v[2] = 0.0f;
@@ -36,8 +36,8 @@ extern "C" int FUN_001d6900(Rf **arg0) {
     v[12] = -1.0f;
     v[16] = -1.0f;
     v[13] = 1.0f;
-    v[15] = 1.0f;
     v[14] = 0.0f;
+    v[15] = 1.0f;
     v[17] = 0.0f;
     do {
         ((DW4VC_116_2 *)(*(void ***)((char *)op + 12)))->vX(i, (int)&v[i * 3]);
@@ -45,11 +45,11 @@ extern "C" int FUN_001d6900(Rf **arg0) {
     } while (i < 6);
     *arg0 = op;
     Rf *t = *arg0;
-    if (t != 0) {
+    if (t) {
         t->references = t->references + 1;
     }
     Rf *u = op;
-    if (u != 0) {
+    if (u) {
         u->references = u->references - 1;
         if (((unsigned long long)(long long)u->references & 0x7fffffULL) == 0)
             igObject_Destroy(u);

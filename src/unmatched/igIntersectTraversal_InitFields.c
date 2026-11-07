@@ -18,8 +18,8 @@ extern int DAT_00561930[4];
 int thunk_FUN_001ce740();
 
 void igIntersectTraversal_InitFields(void) {
-    int temp_s0;
     void *temp_s1;
+    int temp_s0;
     void *temp_s2;
     void *temp_s2_2;
     void *temp_s2_3;
@@ -39,7 +39,7 @@ void igIntersectTraversal_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0019e6c0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 5);
-    ((igMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)))->_persistent = 0;
+    ((igMetaField *)(igMetaObject_GetFieldAt(temp_s1, 4 + temp_s0)))->_persistent = 0;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_00186c40();
     ((igMetaField *)temp_s2_4)->_persistent = 0;

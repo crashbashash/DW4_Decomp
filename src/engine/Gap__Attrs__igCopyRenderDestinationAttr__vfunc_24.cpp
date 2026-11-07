@@ -88,8 +88,8 @@ struct S {
     int f44, f48;
 };
 extern "C" {
-int FUN_00169c50(Q*, int, int, int, int, int, int, int, long long);
-int FUN_00169e30(Q*, int, int, int, int, int, int);
+int Gap__Gfx__igPsx2VisualContext__vfunc_171(Q*, int, int, int, int, int, int, int, long long);
+int Gap__Gfx__igPsx2VisualContext__vfunc_172(Q*, int, int, int, int, int, int);
 void Gap__Attrs__igCopyRenderDestinationAttr__vfunc_24(S *arg0, Q *arg1) {
     int v;
     if (arg0->f16 != 0) v = arg0->f16->f20;
@@ -97,10 +97,10 @@ void Gap__Attrs__igCopyRenderDestinationAttr__vfunc_24(S *arg0, Q *arg1) {
     switch (arg0->mode) {
     case 1:
         if (arg0->f24->f36 < 0) arg0->f24->touch(arg1);
-        FUN_00169c50(arg1, v, arg0->f24->f36, arg0->f28, arg0->f32, arg0->f44, arg0->f48, arg0->f36, (long long)arg0->f40);
+        Gap__Gfx__igPsx2VisualContext__vfunc_171(arg1, v, arg0->f24->f36, arg0->f28, arg0->f32, arg0->f44, arg0->f48, arg0->f36, (long long)arg0->f40);
         return;
     case 2:
-        FUN_00169e30(arg1, v, arg0->f20, arg0->f28, arg0->f32, arg0->f44, arg0->f48);
+        Gap__Gfx__igPsx2VisualContext__vfunc_172(arg1, v, arg0->f20, arg0->f28, arg0->f32, arg0->f44, arg0->f48);
         break;
     case 0:
         break;

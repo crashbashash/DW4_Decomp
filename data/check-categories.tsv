@@ -744,7 +744,7 @@
 0013b820	FUN_0013b820	match	-
 0013b860	FUN_0013b860	match	-
 0013b8a0	FUN_0013b8a0	match	-
-0013b900	FUN_0013b900	match	-
+0013b900	Gap__Attrs__igAttrDefaultManager__vfunc_23	match	-
 0013bfe0	FUN_0013bfe0	match	-
 0013c060	FUN_0013c060	match	-
 0013c110	FUN_0013c110	match	-
@@ -863,7 +863,7 @@
 00140610	Gap__Attrs__igTextureAttr__vfunc_37	match	-
 00140740	Gap__Attrs__igTextureAttr__vfunc_38	match	-
 001408a0	Gap__Attrs__igTextureAttr__vfunc_26	match	-
-001408b0	FUN_001408b0	match	-
+001408b0	Gap__Attrs__igTextureAttr__vfunc_17	match	-
 00140ad0	FUN_00140ad0	match	-
 00140c00	FUN_00140c00	match	-
 00140c30	Gap__Attrs__igTextureAttr__vfunc_12	match	-
@@ -918,7 +918,7 @@
 00142280	Gap__Attrs__igViewportAttr__vfunc_32	match	-
 001422a0	FUN_001422a0	match	-
 001422b0	FUN_001422b0	match	-
-001422c0	FUN_001422c0	match	-
+001422c0	Gap__Attrs__igVisualAttribute__vfunc_28	match	-
 001422d0	FUN_001422d0	match	-
 001422e0	FUN_001422e0	match	-
 001422f0	Gap__Attrs__igVertexBlendStateAttr__vfunc_22	match	-
@@ -1016,7 +1016,7 @@
 00142b40	igDataList_GetMetaObject_Virtual	match	-
 00142b50	Gap__Attrs__igImageMipMapList__vfunc_22	match	-
 00142b60	Gap__Core__igNamedObject__vfunc_22	match	-
-00142b70	FUN_00142b70	match	-
+00142b70	Gap__Core__igObjectList__vfunc_24	match	-
 00142b80	Gap__Attrs__igNonRefCountedAttrList__vfunc_24	match	-
 00142b90	Gap__igVec3fList__vfunc_23	match	-
 00142ba0	Gap__Core__igObject__vfunc_21	match	-
@@ -1238,7 +1238,7 @@
 00149380	Gap__igEventProducerList__vfunc_22	match	-
 00149390	Gap__igControllerList__vfunc_24	match	-
 001493a0	Gap__igEventProducerList__vfunc_24	match	-
-001493b0	FUN_001493b0	match	-
+001493b0	Gap__igNonRefCountedObjectStack__vfunc_18	match	-
 001493e0	FUN_001493e0	match	-
 00149440	FUN_00149440	match	-
 001494a0	FUN_001494a0	match	-
@@ -1651,14 +1651,14 @@
 00154710	FUN_00154710	match	-
 00154720	igPsx2BlendEquationExt_Register	match	-
 001547b0	igPsx2BlendEquationExt_InitFields	match	-
-00154860	FUN_00154860	match	-
+00154860	Gap__Gfx__igCapabilityManager__vfunc_24	match	-
 00154980	Gap__Gfx__igClut__vfunc_25	match	-
 00154a80	Gap__Gfx__igClut__vfunc_24	match	-
 00154b40	FUN_00154b40	match	-
 00154b80	FUN_00154b80	match	-
 00154c90	FUN_00154c90	match	-
 00154d40	FUN_00154d40	match	-
-00154e00	FUN_00154e00	match	-
+00154e00	Gap__Gfx__igClut__vfunc_12	match	-
 00154e40	FUN_00154e40	match	-
 00154ea0	Gap__Gfx__igClut__vfunc_23	match	-
 00154f30	FUN_00154f30	match	DEFERRED duplicate 0x3d9bd0 __dt__3RefFv 128B (compared under the profile of its retail unit)
@@ -1748,7 +1748,7 @@
 0015c900	Gap__Bec__ParticleArray__vfunc_15	match	-
 0015ca40	Gap__Bec__ParticleArray__vfunc_36	match	-
 0015cb50	FUN_0015cb50	match	-
-0015cb60	FUN_0015cb60	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPrimLengthArray1_1_15cb50 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 20 bytes
+0015cb60	FUN_0015cb60	match	-
 0015ce90	FUN_0015ce90	match	-
 0015cfb0	FUN_0015cfb0	match	-
 0015d050	FUN_0015d050	match	-
@@ -1801,10 +1801,10 @@
 0015f430	FUN_0015f430	match	-
 0015f460	FUN_0015f460	match	-
 0015f4a0	FUN_0015f4a0	match	-
-0015f510	FUN_0015f510	match	DEFERRED duplicate 0x15f460 FUN_0015f460 56B (compared under the profile of its retail unit)
+0015f510	FUN_0015f510	match	-
 0015f580	igVertexArray2__FindVertexData	match	-
 0015f660	FUN_0015f660	match	-
-0015f730	FUN_0015f730	match	-
+0015f730	Gap__Gfx__igVertexArray2__vfunc_25	match	-
 0015feb0	Gap__Gfx__igVertexStream__vfunc_27	match	-
 0015ff10	Gap__Gfx__igVertexArray2Helper__vfunc_23	match	DEFERRED duplicate 0x2e2300 __dt__2RPFv 68B (compared under the profile of its retail unit)
 00160dc0	Gap__Gfx__igVertexArray2Helper__vfunc_27	match	-
@@ -1909,27 +1909,27 @@
 00169bb0	Gap__Gfx__igPsx2VisualContext__vfunc_50	match	-
 00169bc0	Gap__Gfx__igPsx2VisualContext__vfunc_51	match	-
 00169be0	FUN_00169be0	match	-
-00169c20	FUN_00169c20	match	-
-00169c50	FUN_00169c50	match	-
-0016a050	FUN_0016a050	match	-
-0016a100	FUN_0016a100	match	-
-0016a130	FUN_0016a130	match	-
-0016a300	FUN_0016a300	match	-
-0016a330	FUN_0016a330	match	-
-0016a370	FUN_0016a370	match	-
-0016a380	FUN_0016a380	match	-
-0016a450	FUN_0016a450	match	-
-0016a460	FUN_0016a460	match	-
-0016a470	FUN_0016a470	match	-
+00169c20	Gap__Gfx__igPsx2VisualContext__vfunc_176	match	-
+00169c50	Gap__Gfx__igPsx2VisualContext__vfunc_171	match	-
+0016a050	Gap__Gfx__igPsx2VisualContext__vfunc_185	match	-
+0016a100	Gap__Gfx__igPsx2VisualContext__vfunc_186	match	-
+0016a130	Gap__Gfx__igPsx2VisualContext__vfunc_187	match	-
+0016a300	Gap__Gfx__igPsx2VisualContext__vfunc_178	match	-
+0016a330	Gap__Gfx__igPsx2VisualContext__vfunc_180	match	-
+0016a370	Gap__Gfx__igPsx2VisualContext__vfunc_179	match	-
+0016a380	Gap__Gfx__igPsx2VisualContext__vfunc_181	match	-
+0016a450	Gap__Gfx__igPsx2VisualContext__vfunc_182	match	-
+0016a460	Gap__Gfx__igPsx2VisualContext__vfunc_183	match	-
+0016a470	Gap__Gfx__igPsx2VisualContext__vfunc_184	match	-
 0016a480	Gap__Gfx__igPsx2VisualContext__vfunc_54	match	-
 0016a4a0	Gap__Gfx__igPsx2VisualContext__vfunc_55	match	-
 0016a4c0	Gap__Gfx__igPsx2VisualContext__vfunc_56	match	-
 0016a4e0	Gap__Gfx__igPsx2VisualContext__vfunc_57	match	-
 0016a500	Gap__Gfx__igPsx2VisualContext__vfunc_58	match	-
 0016a520	FUN_0016a520	match	-
-0016a780	FUN_0016a780	match	-
-0016a7c0	FUN_0016a7c0	match	-
-0016a7f0	FUN_0016a7f0	match	-
+0016a780	Gap__Gfx__igPsx2VisualContext__vfunc_188	match	-
+0016a7c0	Gap__Gfx__igPsx2VisualContext__vfunc_189	match	-
+0016a7f0	Gap__Gfx__igPsx2VisualContext__vfunc_190	match	-
 0016a800	FUN_0016a800	match	-
 0016a860	FUN_0016a860	match	-
 0016a9f0	FUN_0016a9f0	match	-
@@ -1943,11 +1943,11 @@
 0016b8f0	Gap__Gfx__igPsx2VisualContext__vfunc_10	match	-
 0016c4a0	Gap__Gfx__igPsx2VisualContext__vfunc_35	match	-
 0016c650	FUN_0016c650	match	-
-0016c790	FUN_0016c790	match	-
-0016c8f0	FUN_0016c8f0	match	-
-0016cab0	FUN_0016cab0	match	-
-0016caf0	FUN_0016caf0	match	-
-0016cb40	FUN_0016cb40	match	-
+0016c790	Gap__Gfx__igPsx2VisualContext__vfunc_192	match	-
+0016c8f0	Gap__Gfx__igPsx2VisualContext__vfunc_193	match	-
+0016cab0	Gap__Gfx__igPsx2VisualContext__vfunc_194	match	-
+0016caf0	Gap__Gfx__igPsx2VisualContext__vfunc_195	match	-
+0016cb40	Gap__Gfx__igPsx2VisualContext__vfunc_196	match	-
 0016cc50	FUN_0016cc50	match	-
 0016cc60	FUN_0016cc60	match	-
 0016cd10	FUN_0016cd10	match	-
@@ -1955,21 +1955,21 @@
 0016cdd0	FUN_0016cdd0	match	-
 0016cde0	FUN_0016cde0	match	-
 0016cdf0	Gap__Gfx__igPsx2DisableExt__vfunc_29	match	-
-0016cfb0	FUN_0016cfb0	match	-
-0016d010	FUN_0016d010	match	-
-0016d130	FUN_0016d130	match	-
-0016d170	FUN_0016d170	match	-
-0016d180	FUN_0016d180	match	-
+0016cfb0	Gap__Gfx__igPsx2VisualContext__vfunc_66	match	-
+0016d010	Gap__Gfx__igPsx2VisualContext__vfunc_67	match	-
+0016d130	Gap__Gfx__igPsx2VisualContext__vfunc_68	match	-
+0016d170	Gap__Gfx__igPsx2VisualContext__vfunc_69	match	-
+0016d180	Gap__Gfx__igPsx2VisualContext__vfunc_70	match	-
 0016d190	Gap__Gfx__igPsx2VisualContext__vfunc_59	match	-
 0016d240	Gap__Gfx__igPsx2VisualContext__vfunc_61	match	-
-0016d250	FUN_0016d250	match	-
-0016d2f0	FUN_0016d2f0	match	-
+0016d250	Gap__Gfx__igPsx2VisualContext__vfunc_63	match	-
+0016d2f0	Gap__Gfx__igPsx2VisualContext__vfunc_64	match	-
 0016d300	Gap__Gfx__igPsx2VisualContext__vfunc_60	match	-
-0016d3a0	FUN_0016d3a0	match	-
-0016d660	FUN_0016d660	match	-
-0016dbe0	FUN_0016dbe0	match	-
-0016dca0	FUN_0016dca0	match	-
-0016ddd0	FUN_0016ddd0	match	-
+0016d3a0	Gap__Gfx__igPsx2VisualContext__vfunc_62	match	-
+0016d660	Gap__Gfx__igPsx2VisualContext__vfunc_74	match	-
+0016dbe0	Gap__Gfx__igPsx2VisualContext__vfunc_173	match	-
+0016dca0	Gap__Gfx__igPsx2VisualContext__vfunc_174	match	-
+0016ddd0	Gap__Gfx__igPsx2VisualContext__vfunc_175	match	-
 0016e140	FUN_0016e140	match	-
 0016e180	Gap__Gfx__igPsx2BlendEquationExt__vfunc_29	match	-
 0016e290	FUN_0016e290	match	-
@@ -2008,131 +2008,131 @@
 001701e0	Gap__Gfx__igPsx2ScissorExt__vfunc_33	match	-
 00170210	FUN_00170210	match	-
 00170510	FUN_00170510	match	-
-001706d0	FUN_001706d0	match	-
-00170740	FUN_00170740	match	-
-00170750	FUN_00170750	match	-
-001708e0	FUN_001708e0	match	-
-001709d0	FUN_001709d0	match	-
-00170b00	FUN_00170b00	match	-
-00170b20	FUN_00170b20	match	-
-00170b40	FUN_00170b40	match	-
-00170c30	FUN_00170c30	match	-
-00170d80	FUN_00170d80	match	-
-00171100	FUN_00171100	match	-
-00171220	FUN_00171220	match	-
-001712e0	FUN_001712e0	match	-
-001714e0	FUN_001714e0	match	-
-00171520	FUN_00171520	match	-
-00171560	FUN_00171560	match	-
-001715a0	FUN_001715a0	match	-
-001715e0	FUN_001715e0	match	-
-00171620	FUN_00171620	match	-
-00171630	FUN_00171630	match	-
-00171670	FUN_00171670	match	-
+001706d0	Gap__Gfx__igPsx2VisualContext__vfunc_75	match	-
+00170740	Gap__Gfx__igPsx2VisualContext__vfunc_76	match	-
+00170750	Gap__Gfx__igPsx2VisualContext__vfunc_77	match	-
+001708e0	Gap__Gfx__igPsx2VisualContext__vfunc_78	match	-
+001709d0	Gap__Gfx__igPsx2VisualContext__vfunc_79	match	-
+00170b00	Gap__Gfx__igPsx2VisualContext__vfunc_80	match	-
+00170b20	Gap__Gfx__igPsx2VisualContext__vfunc_81	match	-
+00170b40	Gap__Gfx__igPsx2VisualContext__vfunc_82	match	-
+00170c30	Gap__Gfx__igPsx2VisualContext__vfunc_86	match	-
+00170d80	Gap__Gfx__igPsx2VisualContext__vfunc_84	match	-
+00171100	Gap__Gfx__igPsx2VisualContext__vfunc_88	match	-
+00171220	Gap__Gfx__igPsx2VisualContext__vfunc_92	match	-
+001712e0	Gap__Gfx__igPsx2VisualContext__vfunc_94	match	-
+001714e0	Gap__Gfx__igPsx2VisualContext__vfunc_83	match	-
+00171520	Gap__Gfx__igPsx2VisualContext__vfunc_85	match	-
+00171560	Gap__Gfx__igPsx2VisualContext__vfunc_87	match	-
+001715a0	Gap__Gfx__igPsx2VisualContext__vfunc_89	match	-
+001715e0	Gap__Gfx__igPsx2VisualContext__vfunc_91	match	-
+00171620	Gap__Gfx__igPsx2VisualContext__vfunc_95	match	-
+00171630	Gap__Gfx__igPsx2VisualContext__vfunc_97	match	-
+00171670	Gap__Gfx__igPsx2VisualContext__vfunc_93	match	-
 00171690	FUN_00171690	match	-
 001716c0	FUN_001716c0	match	-
-001717a0	FUN_001717a0	match	-
-00171870	FUN_00171870	match	-
-001718a0	FUN_001718a0	match	-
-001719e0	FUN_001719e0	match	-
-00171a10	FUN_00171a10	match	-
-00171ae0	FUN_00171ae0	match	-
-00171b10	FUN_00171b10	match	-
-00171c50	FUN_00171c50	match	-
-00171c80	FUN_00171c80	match	-
-00171cc0	FUN_00171cc0	match	-
-00171cd0	FUN_00171cd0	match	-
+001717a0	Gap__Gfx__igPsx2VisualContext__vfunc_102	match	-
+00171870	Gap__Gfx__igPsx2VisualContext__vfunc_103	match	-
+001718a0	Gap__Gfx__igPsx2VisualContext__vfunc_106	match	-
+001719e0	Gap__Gfx__igPsx2VisualContext__vfunc_107	match	-
+00171a10	Gap__Gfx__igPsx2VisualContext__vfunc_104	match	-
+00171ae0	Gap__Gfx__igPsx2VisualContext__vfunc_105	match	-
+00171b10	Gap__Gfx__igPsx2VisualContext__vfunc_108	match	-
+00171c50	Gap__Gfx__igPsx2VisualContext__vfunc_109	match	-
+00171c80	Gap__Gfx__igPsx2VisualContext__vfunc_98	match	-
+00171cc0	Gap__Gfx__igPsx2VisualContext__vfunc_99	match	-
+00171cd0	Gap__Gfx__igPsx2VisualContext__vfunc_112	match	-
 001720d0	FUN_001720d0	match	-
-00172220	FUN_00172220	match	-
-00172230	FUN_00172230	match	-
-00172300	FUN_00172300	match	-
+00172220	Gap__Gfx__igPsx2VisualContext__vfunc_101	match	-
+00172230	Gap__Gfx__igPsx2VisualContext__vfunc_115	match	-
+00172300	Gap__Gfx__igPsx2VisualContext__vfunc_116	match	-
 00172330	FUN_00172330	match	-
-00172370	FUN_00172370	match	-
-00172550	FUN_00172550	match	-
-00172600	FUN_00172600	match	-
-00172910	FUN_00172910	match	-
-00172b00	FUN_00172b00	match	-
-00173900	FUN_00173900	match	-
-00173b30	FUN_00173b30	match	-
-00173d60	FUN_00173d60	match	-
+00172370	Gap__Gfx__igPsx2VisualContext__vfunc_199	match	-
+00172550	Gap__Gfx__igPsx2VisualContext__vfunc_200	match	-
+00172600	Gap__Gfx__igPsx2VisualContext__vfunc_201	match	-
+00172910	Gap__Gfx__igPsx2VisualContext__vfunc_202	match	-
+00172b00	Gap__Gfx__igPsx2VisualContext__vfunc_203	match	-
+00173900	Gap__Gfx__igPsx2VisualContext__vfunc_206	match	-
+00173b30	Gap__Gfx__igPsx2VisualContext__vfunc_207	match	-
+00173d60	Gap__Gfx__igPsx2VisualContext__vfunc_208	match	-
 00173ed0	FUN_00173ed0	match	-
 00173fd0	FUN_00173fd0	match	-
-00174030	FUN_00174030	match	-
+00174030	Gap__Gfx__igPsx2VisualContext__vfunc_209	match	-
 00174090	FUN_00174090	match	-
-00174140	FUN_00174140	match	-
-00174300	FUN_00174300	match	-
-00174360	FUN_00174360	match	-
-00174370	FUN_00174370	match	-
-001743b0	FUN_001743b0	match	-
-001743c0	FUN_001743c0	match	-
-00174430	FUN_00174430	match	-
-00174440	FUN_00174440	match	-
-00174470	FUN_00174470	match	-
-001744a0	FUN_001744a0	match	-
-001744b0	FUN_001744b0	match	-
-001744c0	FUN_001744c0	match	-
+00174140	Gap__Gfx__igPsx2VisualContext__vfunc_216	match	-
+00174300	Gap__Gfx__igPsx2VisualContext__vfunc_113	match	-
+00174360	Gap__Gfx__igPsx2VisualContext__vfunc_114	match	-
+00174370	Gap__Gfx__igPsx2VisualContext__vfunc_211	match	-
+001743b0	Gap__Gfx__igPsx2VisualContext__vfunc_212	match	-
+001743c0	Gap__Gfx__igPsx2VisualContext__vfunc_152	match	-
+00174430	Gap__Gfx__igPsx2VisualContext__vfunc_153	match	-
+00174440	Gap__Gfx__igPsx2VisualContext__vfunc_154	match	-
+00174470	Gap__Gfx__igPsx2VisualContext__vfunc_156	match	-
+001744a0	Gap__Gfx__igPsx2VisualContext__vfunc_155	match	-
+001744b0	Gap__Gfx__igPsx2VisualContext__vfunc_157	match	-
+001744c0	Gap__Gfx__igPsx2VisualContext__vfunc_158	match	-
 00174510	FUN_00174510	match	-
 00174640	FUN_00174640	match	-
-00174760	FUN_00174760	match	-
-00174770	FUN_00174770	match	-
-001747a0	FUN_001747a0	match	-
-001747b0	FUN_001747b0	match	-
-001747e0	FUN_001747e0	match	-
+00174760	Gap__Gfx__igPsx2VisualContext__vfunc_218	match	-
+00174770	Gap__Gfx__igPsx2VisualContext__vfunc_219	match	-
+001747a0	Gap__Gfx__igPsx2VisualContext__vfunc_220	match	-
+001747b0	Gap__Gfx__igPsx2VisualContext__vfunc_221	match	-
+001747e0	Gap__Gfx__igPsx2VisualContext__vfunc_222	match	-
 001747f0	FUN_001747f0	match	-
 00174850	FUN_00174850	match	-
 001748c0	FUN_001748c0	match	-
-001748d0	FUN_001748d0	match	-
-00174940	FUN_00174940	match	-
+001748d0	Gap__Gfx__igPsx2VisualContext__vfunc_223	match	-
+00174940	Gap__Gfx__igPsx2VisualContext__vfunc_224	match	-
 00174950	FUN_00174950	match	-
-00174990	FUN_00174990	match	-
-001749c0	FUN_001749c0	match	-
-001749f0	FUN_001749f0	match	-
-00174a60	FUN_00174a60	match	-
-00174a70	FUN_00174a70	match	-
-00174b00	FUN_00174b00	match	-
-00174b10	FUN_00174b10	match	-
-00174bb0	FUN_00174bb0	match	-
-00174bc0	FUN_00174bc0	match	-
-00174c40	FUN_00174c40	match	-
-00174c50	FUN_00174c50	match	-
-00174d60	FUN_00174d60	match	-
-00174d70	FUN_00174d70	match	-
-00174da0	FUN_00174da0	match	-
+00174990	Gap__Gfx__igPsx2VisualContext__vfunc_225	match	-
+001749c0	Gap__Gfx__igPsx2VisualContext__vfunc_226	match	-
+001749f0	Gap__Gfx__igPsx2VisualContext__vfunc_227	match	-
+00174a60	Gap__Gfx__igPsx2VisualContext__vfunc_228	match	-
+00174a70	Gap__Gfx__igPsx2VisualContext__vfunc_229	match	-
+00174b00	Gap__Gfx__igPsx2VisualContext__vfunc_230	match	-
+00174b10	Gap__Gfx__igPsx2VisualContext__vfunc_231	match	-
+00174bb0	Gap__Gfx__igPsx2VisualContext__vfunc_232	match	-
+00174bc0	Gap__Gfx__igPsx2VisualContext__vfunc_233	match	-
+00174c40	Gap__Gfx__igPsx2VisualContext__vfunc_234	match	-
+00174c50	Gap__Gfx__igPsx2VisualContext__vfunc_235	match	-
+00174d60	Gap__Gfx__igPsx2VisualContext__vfunc_236	match	-
+00174d70	Gap__Gfx__igPsx2VisualContext__vfunc_237	match	-
+00174da0	Gap__Gfx__igPsx2VisualContext__vfunc_238	match	-
 00174db0	FUN_00174db0	match	-
-00174e20	FUN_00174e20	match	-
-00174e90	FUN_00174e90	match	-
-00174ea0	FUN_00174ea0	match	-
-00174ed0	FUN_00174ed0	match	-
-00174ee0	FUN_00174ee0	match	jump table 0x4df670: 8 entries, 32 bytes, matches retail
-00174f90	FUN_00174f90	match	-
-00174fa0	FUN_00174fa0	match	-
-00174fb0	FUN_00174fb0	match	-
-00174fc0	FUN_00174fc0	match	-
-00174fd0	FUN_00174fd0	match	-
-00174fe0	FUN_00174fe0	match	-
-00174ff0	FUN_00174ff0	match	-
-00175000	FUN_00175000	match	-
-00175080	FUN_00175080	match	-
+00174e20	Gap__Gfx__igPsx2VisualContext__vfunc_159	match	-
+00174e90	Gap__Gfx__igPsx2VisualContext__vfunc_160	match	-
+00174ea0	Gap__Gfx__igPsx2VisualContext__vfunc_161	match	-
+00174ed0	Gap__Gfx__igPsx2VisualContext__vfunc_162	match	-
+00174ee0	Gap__Gfx__igPsx2VisualContext__vfunc_163	match	jump table 0x4df670: 8 entries, 32 bytes, matches retail
+00174f90	Gap__Gfx__igPsx2VisualContext__vfunc_164	match	-
+00174fa0	Gap__Gfx__igPsx2VisualContext__vfunc_165	match	-
+00174fb0	Gap__Gfx__igPsx2VisualContext__vfunc_166	match	-
+00174fc0	Gap__Gfx__igPsx2VisualContext__vfunc_167	match	-
+00174fd0	Gap__Gfx__igPsx2VisualContext__vfunc_168	match	-
+00174fe0	Gap__Gfx__igPsx2VisualContext__vfunc_169	match	-
+00174ff0	Gap__Gfx__igPsx2VisualContext__vfunc_170	match	-
+00175000	Gap__Gfx__igPsx2VisualContext__vfunc_239	match	-
+00175080	Gap__Gfx__igPsx2VisualContext__vfunc_240	match	-
 00175090	FUN_00175090	match	-
-001750c0	FUN_001750c0	match	-
-00175130	FUN_00175130	match	-
-00175140	FUN_00175140	match	-
-001751a0	FUN_001751a0	match	-
-001751b0	FUN_001751b0	match	-
-00175210	FUN_00175210	match	-
-00175220	FUN_00175220	match	-
-00175310	FUN_00175310	match	-
-00175370	FUN_00175370	match	-
-00175380	FUN_00175380	match	-
-001753e0	FUN_001753e0	match	-
-001753f0	FUN_001753f0	match	-
-00175470	FUN_00175470	match	-
+001750c0	Gap__Gfx__igPsx2VisualContext__vfunc_241	match	-
+00175130	Gap__Gfx__igPsx2VisualContext__vfunc_242	match	-
+00175140	Gap__Gfx__igPsx2VisualContext__vfunc_243	match	-
+001751a0	Gap__Gfx__igPsx2VisualContext__vfunc_244	match	-
+001751b0	Gap__Gfx__igPsx2VisualContext__vfunc_245	match	-
+00175210	Gap__Gfx__igPsx2VisualContext__vfunc_246	match	-
+00175220	Gap__Gfx__igPsx2VisualContext__vfunc_247	match	-
+00175310	Gap__Gfx__igPsx2VisualContext__vfunc_249	match	-
+00175370	Gap__Gfx__igPsx2VisualContext__vfunc_250	match	-
+00175380	Gap__Gfx__igPsx2VisualContext__vfunc_251	match	-
+001753e0	Gap__Gfx__igPsx2VisualContext__vfunc_252	match	-
+001753f0	Gap__Gfx__igPsx2VisualContext__vfunc_253	match	-
+00175470	Gap__Gfx__igPsx2VisualContext__vfunc_254	match	-
 001754b0	FUN_001754b0	match	-
 00175510	FUN_00175510	match	-
 001755e0	FUN_001755e0	match	-
 00175640	FUN_00175640	match	-
 00175670	FUN_00175670	match	-
-00175730	FUN_00175730	match	-
+00175730	Gap__Gfx__igPsx2VisualContext__vfunc_145	match	-
 00175790	FUN_00175790	match	-
 001757c0	FUN_001757c0	match	-
 00175ba0	Gap__Gfx__igPsx2ParticleArray__vfunc_29	match	-
@@ -2163,8 +2163,8 @@
 00176f20	FUN_00176f20	match	-
 00176f70	FUN_00176f70	match	-
 00176fc0	FUN_00176fc0	match	-
-001779e0	FUN_001779e0	match	-
-00177de0	FUN_00177de0	match	-
+001779e0	Gap__Gfx__igPsx2VisualContext__vfunc_258	match	-
+00177de0	Gap__Gfx__igPsx2VisualContext__vfunc_259	match	-
 001788a0	FUN_001788a0	match	-
 001788e0	FUN_001788e0	match	-
 00179e00	FUN_00179e00	match	DEFERRED duplicate 0x164970 __dt__3RefFv 128B (compared under the profile of its retail unit)
@@ -2174,33 +2174,33 @@
 0017a300	FUN_0017a300	match	-
 0017a7e0	FUN_0017a7e0	match	-
 0017a870	FUN_0017a870	match	-
-0017a8e0	FUN_0017a8e0	match	-
-0017a8f0	FUN_0017a8f0	match	-
-0017a9d0	FUN_0017a9d0	match	-
-0017aa00	FUN_0017aa00	match	-
+0017a8e0	Gap__Gfx__igPsx2VisualContext__vfunc_142	match	-
+0017a8f0	Gap__Gfx__igPsx2VisualContext__vfunc_117	match	-
+0017a9d0	Gap__Gfx__igPsx2VisualContext__vfunc_118	match	-
+0017aa00	Gap__Gfx__igPsx2VisualContext__vfunc_120	match	-
 0017aa10	thunk_FUN_0017aa20	match	-
-0017af40	FUN_0017af40	match	-
-0017b180	FUN_0017b180	match	-
-0017b190	FUN_0017b190	match	-
-0017b9f0	FUN_0017b9f0	match	-
-0017bda0	FUN_0017bda0	match	-
-0017c4d0	FUN_0017c4d0	match	-
-0017c4f0	FUN_0017c4f0	match	-
-0017c500	FUN_0017c500	match	-
-0017c560	FUN_0017c560	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O4 -Iinclude'); under the unit profile of igPsx2UserUCodeExt_1767c0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
-0017c5c0	FUN_0017c5c0	match	-
-0017c5e0	FUN_0017c5e0	match	-
-0017c600	FUN_0017c600	match	-
-0017c6a0	FUN_0017c6a0	match	-
+0017af40	Gap__Gfx__igPsx2VisualContext__vfunc_124	match	-
+0017b180	Gap__Gfx__igPsx2VisualContext__vfunc_126	match	-
+0017b190	Gap__Gfx__igPsx2VisualContext__vfunc_125	match	-
+0017b9f0	Gap__Gfx__igPsx2VisualContext__vfunc_129	match	-
+0017bda0	Gap__Gfx__igPsx2VisualContext__vfunc_260	match	-
+0017c4d0	Gap__Gfx__igPsx2VisualContext__vfunc_135	match	-
+0017c4f0	Gap__Gfx__igPsx2VisualContext__vfunc_134	match	-
+0017c500	Gap__Gfx__igPsx2VisualContext__vfunc_138	match	-
+0017c560	Gap__Gfx__igPsx2VisualContext__vfunc_140	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O4 -Iinclude'); under the unit profile of igPsx2UserUCodeExt_1767c0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0017c5c0	Gap__Gfx__igPsx2VisualContext__vfunc_139	match	-
+0017c5e0	Gap__Gfx__igPsx2VisualContext__vfunc_141	match	-
+0017c600	Gap__Gfx__igPsx2VisualContext__vfunc_136	match	-
+0017c6a0	Gap__Gfx__igPsx2VisualContext__vfunc_137	match	-
 0017c6e0	FUN_0017c6e0	match	-
 0017c710	FUN_0017c710	match	-
 0017c790	FUN_0017c790	match	-
-0017c7a0	FUN_0017c7a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2UserUCodeExt_1767c0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
-0017c980	FUN_0017c980	match	-
-0017c9b0	FUN_0017c9b0	match	-
-0017cb40	FUN_0017cb40	match	-
+0017c7a0	Gap__Gfx__igPsx2VisualContext__vfunc_148	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2UserUCodeExt_1767c0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0017c980	Gap__Gfx__igPsx2VisualContext__vfunc_149	match	-
+0017c9b0	Gap__Gfx__igPsx2VisualContext__vfunc_150	match	-
+0017cb40	Gap__Gfx__igPsx2VisualContext__vfunc_151	match	-
 0017cb80	FUN_0017cb80	match	-
-0017cee0	FUN_0017cee0	match	-
+0017cee0	Gap__Gfx__igPsx2VisualContext__vfunc_122	match	-
 0017cef0	Gap__Gfx__igPsx2UserUCodeExt__vfunc_29	match	-
 0017d010	Gap__Gfx__igPsx2VisualContext__vfunc_22	match	-
 0017d020	thunk_Gap__Core__igObject__vfunc_09	match	-
@@ -2227,7 +2227,7 @@
 0017dd20	Gap__Gfx__igPsx2VertexArray1_1__vfunc_28	match	-
 0017dd30	Gap__Gfx__igPsx2VertexArray1_1__vfunc_19	match	-
 0017dde0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_20	match	-
-0017dea0	FUN_0017dea0	match	-
+0017dea0	Gap__Gfx__igPsx2VisualContext__vfunc_261	match	-
 0017e590	FUN_0017e590	match	-
 0017e980	FUN_0017e980	match	-
 0017eb90	FUN_0017eb90	match	-
@@ -2235,17 +2235,17 @@
 0017f5a0	FUN_0017f5a0	match	-
 0017f630	Gap__Gfx__igPsx2VertexStream__vfunc_15	match	-
 0017f6c0	Gap__Gfx__igPsx2VertexStream__vfunc_17	match	-
-0017fd70	FUN_0017fd70	match	-
+0017fd70	Gap__Gfx__igPsx2VisualContext__vfunc_147	match	-
 0017fd80	FUN_0017fd80	match	-
 0017fe50	Gap__Gfx__igPsx2VertexStream__vfunc_24	match	-
 0017ff60	Gap__Gfx__igPsx2VertexStream__vfunc_27	match	-
-00180010	FUN_00180010	match	-
+00180010	Gap__Gfx__igVertexStream__vfunc_23	match	-
 00180020	FUN_00180020	match	-
-00180030	FUN_00180030	match	-
+00180030	Gap__Gfx__igPsx2VisualContext__vfunc_197	match	-
 00180060	FUN_00180060	match	-
 001805a0	FUN_001805a0	match	-
 00180bb0	Gap__Gfx__igPsx2VertexStream__vfunc_22	match	-
-00180bc0	FUN_00180bc0	match	-
+00180bc0	Gap__Gfx__igVertexStream__vfunc_25	match	-
 00180bd0	Gap__Gfx__igPsx2VertexArray2__vfunc_22	match	-
 00180be0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_22	match	-
 00180bf0	Gap__Gfx__igPsx2UserUCodeExt__vfunc_22	match	-
@@ -2271,9 +2271,9 @@
 00180d30	Gap__Gfx__igPsx2VisualContext__vfunc_43	match	-
 00180d40	Gap__Gfx__igPsx2VisualContext__vfunc_44	match	-
 00180d50	Gap__Gfx__igPsx2VisualContext__vfunc_45	match	-
-00180d60	FUN_00180d60	match	-
-00180d70	FUN_00180d70	match	-
-00180d80	FUN_00180d80	match	-
+00180d60	Gap__Gfx__igPsx2VisualContext__vfunc_111	match	-
+00180d70	Gap__Gfx__igPsx2VisualContext__vfunc_121	match	-
+00180d80	Gap__Gfx__igPsx2VisualContext__vfunc_210	match	-
 00180d90	FUN_00180d90	match	-
 00180da0	FUN_00180da0	match	-
 00180db0	FUN_00180db0	match	-
@@ -2901,7 +2901,7 @@
 00197fc0	thunk_igSkinList_GetMetaObject	match	-
 00197fd0	FUN_00197fd0	match	-
 00198020	igSkin_GetMetaObject	match	-
-00198070	igSkin_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igSkin (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00198070	igSkin_GetVTable	match	-
 00198190	FUN_00198190	match	-
 00198210	FUN_00198210	match	-
 00198290	FUN_00198290	match	-
@@ -3165,7 +3165,7 @@
 0019df50	FUN_0019df50	match	-
 0019dfd0	FUN_0019dfd0	match	-
 0019e020	igIntersectTraversal_GetMetaObject	match	-
-0019e070	igIntersectTraversal_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igIntersectTraversal (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0019e070	igIntersectTraversal_GetVTable	match	-
 0019e150	FUN_0019e150	match	-
 0019e340	FUN_0019e340	match	-
 0019e3c0	FUN_0019e3c0	match	-
@@ -3686,14 +3686,14 @@
 001ab770	FUN_001ab770	match	-
 001ab8b0	FUN_001ab8b0	match	-
 001ab920	FUN_001ab920	match	-
-001ab990	FUN_001ab990	match	-
+001ab990	Gap__Sg__igTransformSequence1_5__vfunc_68	match	-
 001aba00	Gap__Sg__igTransformSequence1_5__vfunc_50	match	-
-001aba30	FUN_001aba30	match	-
-001abaa0	FUN_001abaa0	match	-
+001aba30	Gap__Sg__igTransformSequence1_5__vfunc_67	match	-
+001abaa0	Gap__Sg__igTransformSequence1_5__vfunc_65	match	-
 001abab0	Gap__Sg__igTransformSequence1_5__vfunc_56	match	-
 001abad0	Gap__Sg__igTransformSequence1_5__vfunc_42	match	-
 001abb00	Gap__Sg__igTransformSequence1_5__vfunc_41	match	-
-001abb20	FUN_001abb20	match	-
+001abb20	Gap__Sg__igTransformSequence1_5__vfunc_69	match	-
 001abb40	Gap__Sg__igTransformSequence1_5__vfunc_60	match	-
 001abb50	FUN_001abb50	match	-
 001abc20	FUN_001abc20	match	-
@@ -3723,13 +3723,13 @@
 001af610	Gap__Sg__igAnimationState__vfunc_26	match	-
 001af7a0	FUN_001af7a0	match	-
 001af7b0	FUN_001af7b0	match	-
-001af7e0	FUN_001af7e0	match	-
+001af7e0	Gap__Sg__igAttrSet__vfunc_31	match	-
 001af860	FUN_001af860	match	-
 001af890	Gap__Sg__igAttrStackManager__vfunc_23	match	-
 001af920	Gap__Sg__igAttrStackManager__vfunc_09	match	-
 001afa30	Gap__Sg__igAttrStackManager__vfunc_10	match	-
 001afb00	FUN_001afb00	match	-
-001afb60	FUN_001afb60	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+001afb60	FUN_001afb60	match	-
 001b0000	FUN_001b0000	match	-
 001b0250	FUN_001b0250	match	-
 001b0440	FUN_001b0440	match	-
@@ -3911,10 +3911,10 @@
 001c6050	FUN_001c6050	match	-
 001c6110	FUN_001c6110	match	-
 001c6230	FUN_001c6230	match	-
-001c6260	FUN_001c6260	match	-
+001c6260	Gap__Sg__igGroup__vfunc_26	match	-
 001c6310	Gap__Sg__igNode__vfunc_26	match	-
 001c6340	FUN_001c6340	match	-
-001c63d0	FUN_001c63d0	match	-
+001c63d0	Gap__Sg__igNode__vfunc_27	match	-
 001c63e0	FUN_001c63e0	match	-
 001c6460	ObjectRef_Destruct_001c6460	match	-
 001c64e0	StringList_CopyRetained	match	-
@@ -3955,7 +3955,7 @@
 001d02e0	Gap__Sg__igLightSet__vfunc_09	match	-
 001d0330	Gap__Sg__igLightSet__vfunc_31	match	-
 001d03b0	Gap__Sg__igLightSet__vfunc_27	match	-
-001d0490	thunk_FUN_001d33a0	match	-
+001d0490	thunk_Gap__Sg__igNode__vfunc_09	match	-
 001d07e0	Gap__Sg__igLod__vfunc_31	match	-
 001d0850	Gap__Sg__igLod__vfunc_17	match	-
 001d0890	Gap__Sg__igLod__vfunc_27	match	-
@@ -3974,10 +3974,10 @@
 001d3250	Gap__Core__igObject__vfunc_32	match	-
 001d32f0	FUN_001d32f0	match	-
 001d3390	Gap__Core__igObject__vfunc_08__001d3390	match	-
-001d33a0	FUN_001d33a0	match	-
+001d33a0	Gap__Sg__igNode__vfunc_09	match	-
 001d3400	FUN_001d3400	match	-
 001d3550	FUN_001d3550	match	-
-001d3590	FUN_001d3590	match	-
+001d3590	Gap__Sg__igNode__vfunc_17	match	-
 001d35d0	FUN_001d35d0	match	-
 001d3650	FUN_001d3650	match	-
 001d36d0	FUN_001d36d0	match	-
@@ -4021,15 +4021,15 @@
 001d82f0	FUN_001d82f0	match	-
 001d8310	FUN_001d8310	match	-
 001d8330	FUN_001d8330	match	-
-001d8470	FUN_001d8470	match	-
-001d84d0	FUN_001d84d0	match	-
+001d8470	Gap__Sg__igShaderData__vfunc_24	match	-
+001d84d0	Gap__Sg__igShaderData__vfunc_25	match	-
 001d86f0	FUN_001d86f0	match	-
 001d87b0	FUN_001d87b0	match	-
 001d8870	FUN_001d8870	match	-
-001d8930	FUN_001d8930	match	-
+001d8930	Gap__Sg__igShaderData__vfunc_17	match	-
 001d8980	Gap__Sg__igShaderFactory__vfunc_23	match	-
 001d8a30	Gap__Sg__igShaderFactory__vfunc_24	match	-
-001d8a60	FUN_001d8a60	match	-
+001d8a60	Gap__Sg__igShaderFactory__vfunc_25	match	-
 001d8aa0	Gap__Sg__igShaderFactory__vfunc_26	match	-
 001d8ab0	FUN_001d8ab0	match	-
 001d8b90	FUN_001d8b90	match	-
@@ -4067,19 +4067,19 @@
 001dce70	FUN_001dce70	match	-
 001dcf40	Gap__Sg__igTransform__vfunc_7	match	-
 001dcf90	Gap__Sg__igTransform__vfunc_24	match	-
-001dd000	FUN_001dd000	match	-
+001dd000	Gap__Sg__igTransformSource__vfunc_29	match	-
 001dd010	Gap__Sg__igTransform__vfunc_25	match	-
-001dd060	FUN_001dd060	match	-
+001dd060	Gap__Sg__igTransformSource__vfunc_30	match	-
 001dd070	Gap__Sg__igTransform__vfunc_28	match	-
 001dd080	Gap__Sg__igTransform__vfunc_29	match	-
-001dd0d0	FUN_001dd0d0	match	-
+001dd0d0	Gap__Sg__igTransformSource__vfunc_33	match	-
 001dd250	FUN_001dd250	match	-
 001dd370	FUN_001dd370	match	-
 001dd3e0	FUN_001dd3e0	match	-
 001dd4b0	FUN_001dd4b0	match	-
-001dd570	FUN_001dd570	match	-
+001dd570	Gap__Sg__igTransformSequence1_5__vfunc_66	match	-
 001dd690	Gap__Sg__igTransformSequence1_5__vfunc_45	match	-
-001dd820	FUN_001dd820	match	-
+001dd820	Gap__Sg__igTransformSequence1_5__vfunc_62	match	-
 001dda90	Gap__Sg__igTransformSequence1_5__vfunc_37	match	-
 001ddfd0	FUN_001ddfd0	match	-
 001de470	Gap__Sg__igTransformSequence1_5__vfunc_59	match	-
@@ -4124,15 +4124,15 @@
 001e2b30	Gap__Sg__igTransformSequence1_5__vfunc_44	match	-
 001e2ba0	Gap__Sg__igTransformSequence1_5__vfunc_47	match	-
 001e2bf0	Gap__Sg__igTransformSequence1_5__vfunc_49	match	-
-001e2c60	FUN_001e2c60	match	-
-001e2c70	FUN_001e2c70	match	-
+001e2c60	Gap__Sg__igTransformSequence1_5__vfunc_63	match	-
+001e2c70	Gap__Sg__igTransformSequence1_5__vfunc_64	match	-
 001e2ce0	FUN_001e2ce0	match	-
 001e2cf0	FUN_001e2cf0	match	-
 001e2d00	FUN_001e2d00	match	-
 001e2d10	FUN_001e2d10	match	-
 001e2d80	Gap__Core__igObject__vfunc_35	match	-
 001e2d90	Gap__Core__igObject__vfunc_36	match	-
-001e2da0	FUN_001e2da0	match	-
+001e2da0	Gap__Sg__igNode__vfunc_31	match	-
 001e2db0	Gap__Sg__igShaderProcessor__vfunc_23	match	-
 001e2dc0	Gap__Sg__igSwitch__vfunc_22	match	-
 001e2dd0	Gap__Sg__igSwitch__vfunc_36	match	-
@@ -4148,7 +4148,7 @@
 001e2eb0	Gap__Sg__igSceneInfo__vfunc_22	match	-
 001e2ec0	Gap__Sg__igPlanarShadowShader__vfunc_31	match	-
 001e3120	Gap__Bec__ParticleTimer__vfunc_36	match	-
-001e3130	FUN_001e3130	match	-
+001e3130	Gap__Sg__igNode__vfunc_25	match	-
 001e3140	Gap__Bec__ParticleTimer__vfunc_34	match	-
 001e3150	Gap__Sg__igLod__vfunc_22	match	-
 001e3160	Gap__Sg__igLod__vfunc_36	match	-
@@ -4278,7 +4278,7 @@
 001e3a70	Gap__Sg__igNonRefCountedNodeList__vfunc_24	match	-
 001e3a80	Gap__Sg__igTraversalFunctionList__vfunc_23	match	-
 001e3a90	Gap__Core__igDoubleList__vfunc_23	match	-
-001e3aa0	FUN_001e3aa0	match	-
+001e3aa0	Gap__Core__igUnsignedIntList__vfunc_23	match	-
 001e3ab0	FUN_001e3ab0	match	-
 001e3b50	Gap__Sg__igActorList__vfunc_24	match	-
 001e3b60	Gap__Sg__igAnimationCombinerList__vfunc_24	match	-
@@ -4305,7 +4305,7 @@
 001e3cb0	Gap__Sg__igTransformList__vfunc_24	match	-
 001e3cc0	Gap__Sg__igNodeListList__vfunc_24	match	-
 001e3cd0	Gap__Sg__igNodeList__vfunc_24	match	-
-001e3ce0	FUN_001e3ce0	match	-
+001e3ce0	Gap__Core__igUnsignedIntList__vfunc_18	match	-
 001e3d10	Gap__Core__igDoubleList__vfunc_18	match	-
 001e3d40	Gap__Sg__igTraversalFunctionList__vfunc_18	match	-
 001e3d70	FUN_001e3d70	match	-
@@ -4649,7 +4649,7 @@
 0020a590	FUN_0020a590	match	-
 0020b110	FUN_0020b110	match	-
 0020b270	FUN_0020b270	match	-
-0020b280	FUN_0020b280	match	DEFERRED duplicate 0x2082b0 FUN_002082b0 60B (compared under the profile of its retail unit)
+0020b280	FUN_0020b280	match	-
 0020b650	FUN_0020b650	match	-
 0020b7f0	FUN_0020b7f0	match	-
 0020b9d0	FUN_0020b9d0	match	-
@@ -5088,7 +5088,7 @@
 0022cb50	Gap__igInterface__vfunc_22	match	-
 0022cb60	Gap__igMessageBase__vfunc_22	match	-
 0022cb70	Gap__igListenerBase__vfunc_22	match	-
-0022cb80	FUN_0022cb80	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off'); under the unit profile of igItemDataBaseList_22cad0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0022cb80	FUN_0022cb80	match	-
 0022cd70	Gap__igMessageList__vfunc_24	match	-
 0022cd80	Gap__igListenerListList__vfunc_24	match	-
 0022cd90	Gap__igListenerList__vfunc_24	match	-
@@ -5326,7 +5326,7 @@
 00238b10	Gap__Insight__igMessageDefaultReceiver__vfunc_22	match	-
 00238b20	Gap__Insight__igInsightCore__vfunc_22	match	-
 00238b30	Gap__Insight__igWindowResizeEventReceiver__vfunc_22	match	-
-00238b40	FUN_00238b40	match	-
+00238b40	Gap__Gui__igEventReceiver__vfunc_23	match	-
 00238b50	Gap__Bec__beKeyboardReceiver__vfunc_22	match	-
 00238b60	Gap__Bec__beKeyboardReceiver__vfunc_23	match	-
 00238b70	Gap__Bec__beKeyboardReceiver__vfunc_24	match	-
@@ -8308,7 +8308,7 @@
 002bcdc0	thunk_igObjectStringMap_GetMetaObject	match	-
 002bcdd0	igObjectStringMap_InitFields	match	-
 002bce90	igObjectRefMetaField_Create	match	-
-002bcf30	FUN_002bcf30	match	-
+002bcf30	Gap__Core__igObjectRefMetaField__vfunc_21	match	-
 002bcfb0	igObjectRefMetaField_GetMetaObject	match	-
 002bd000	igObjectRefMetaField_GetVTable	match	-
 002bd0c0	igObjectRefMetaField_EnsureRegistered	match	-
@@ -9107,7 +9107,7 @@
 002d0460	igPsx2CallStackTracer_GetVTable	match	-
 002d04a0	FUN_002d04a0	match	-
 002d04b0	igPsx2CallStackTracer_Register	match	-
-002d0550	FUN_002d0550	match	-
+002d0550	Gap__Core__igAliasMemoryPool__vfunc_99	match	-
 002d0560	igAliasMemoryPool_AssignAlias	match	-
 002d0600	Gap__Core__igAliasMemoryPool__vfunc_30	match	-
 002d0620	Gap__Core__igAliasMemoryPool__vfunc_31	match	-
@@ -9130,8 +9130,8 @@
 002d0990	Gap__Core__igAliasMemoryPool__vfunc_46	match	-
 002d09a0	Gap__Core__igAliasMemoryPool__vfunc_47	match	-
 002d09b0	Gap__Core__igAliasMemoryPool__vfunc_48	match	-
-002d09c0	FUN_002d09c0	match	-
-002d09d0	FUN_002d09d0	match	-
+002d09c0	Gap__Core__igAliasMemoryPool__vfunc_101	match	-
+002d09d0	Gap__Core__igAliasMemoryPool__vfunc_102	match	-
 002d09e0	Gap__Core__igAliasMemoryPool__vfunc_49	match	-
 002d09f0	Gap__Core__igAliasMemoryPool__vfunc_53	match	-
 002d0a10	igAliasMemoryPool_Lock	match	-
@@ -9143,10 +9143,10 @@
 002d0b70	Gap__Core__igAliasMemoryPool__vfunc_57	match	-
 002d0be0	Gap__Core__igAliasMemoryPool__vfunc_58	match	-
 002d0c00	Gap__Core__igAliasMemoryPool__vfunc_59	match	-
-002d0c10	FUN_002d0c10	match	-
-002d0cd0	FUN_002d0cd0	match	-
-002d0d10	FUN_002d0d10	match	-
-002d0d50	FUN_002d0d50	match	-
+002d0c10	Gap__Core__igAliasMemoryPool__vfunc_65	match	-
+002d0cd0	Gap__Core__igAliasMemoryPool__vfunc_62	match	-
+002d0d10	Gap__Core__igAliasMemoryPool__vfunc_63	match	-
+002d0d50	Gap__Core__igAliasMemoryPool__vfunc_64	match	-
 002d0d80	igAliasMemoryPool_Free	match	-
 002d0da0	igAliasMemoryPool_OwnsAllocation	match	-
 002d0e30	igAliasMemoryPool_GetAllocationSize	match	-
@@ -9286,12 +9286,12 @@
 002d7760	FUN_002d7760	match	-
 002d7840	FUN_002d7840	match	-
 002d78e0	FUN_002d78e0	match	-
-002d7990	FUN_002d7990	match	-
-002d79a0	FUN_002d79a0	match	-
-002d79b0	FUN_002d79b0	match	-
+002d7990	Gap__Core__igDirEntry__vfunc_27	match	-
+002d79a0	Gap__Core__igDirEntry__vfunc_28	match	-
+002d79b0	Gap__Core__igDirEntry__vfunc_26	match	-
 002d79c0	Gap__Core__igDirEntry__vfunc_42	match	-
-002d79d0	FUN_002d79d0	match	-
-002d79e0	FUN_002d79e0	match	-
+002d79d0	Gap__Core__igDirEntry__vfunc_29	match	-
+002d79e0	Gap__Core__igDirEntry__vfunc_30	match	-
 002d79f0	Gap__Core__igDirEntry__vfunc_41	match	-
 002d7a00	Gap__Core__igDirEntry__vfunc_40	match	-
 002d7a10	Gap__Core__igDirEntry__vfunc_38	match	-
@@ -9299,16 +9299,16 @@
 002d7a30	Gap__Core__igDirEntry__vfunc_35	match	-
 002d7a40	Gap__Core__igDirEntry__vfunc_36	match	-
 002d7a50	Gap__Core__igDirEntry__vfunc_37	match	-
-002d7a60	FUN_002d7a60	match	-
+002d7a60	Gap__Core__igDirEntry__vfunc_33	match	-
 002d7a70	Gap__Core__igDirEntry__vfunc_34	match	-
-002d7a80	FUN_002d7a80	match	-
-002d7a90	FUN_002d7a90	match	-
-002d7aa0	FUN_002d7aa0	match	-
-002d7ad0	FUN_002d7ad0	match	-
-002d7ae0	FUN_002d7ae0	match	-
-002d7af0	FUN_002d7af0	match	-
+002d7a80	Gap__Core__igDirEntry__vfunc_32	match	-
+002d7a90	Gap__Core__igDirEntry__vfunc_31	match	-
+002d7aa0	Gap__Core__igDirEntry__vfunc_11	match	-
+002d7ad0	Gap__Core__igDirEntry__vfunc_23	match	-
+002d7ae0	Gap__Core__igDirEntry__vfunc_24	match	-
+002d7af0	Gap__Core__igDirEntry__vfunc_25	match	-
 002d7b00	FUN_002d7b00	match	-
-002d7b60	FUN_002d7b60	match	-
+002d7b60	Gap__Core__igDirectory__vfunc_12	match	-
 002d7c50	FUN_002d7c50	match	-
 002d7d50	thunk_FUN_002d7e90	match	-
 002d7d60	FUN_002d7d60	match	-
@@ -9332,7 +9332,7 @@
 002d8f10	FUN_002d8f10	match	-
 002d8f20	FUN_002d8f20	match	-
 002d8fe0	FUN_002d8fe0	match	-
-002d9080	FUN_002d9080	match	-
+002d9080	Gap__Core__igDirectory__vfunc_25	match	-
 002d9120	FUN_002d9120	match	-
 002d9130	FUN_002d9130	match	-
 002d9330	FUN_002d9330	match	-
@@ -9341,7 +9341,7 @@
 002d9460	Gap__Core__igDoubleMetaField__vfunc_57	match	-
 002d94f0	Gap__Core__igDoubleMetaField__vfunc_25	match	-
 002d9500	FUN_002d9500	match	-
-002d9530	FUN_002d9530	match	-
+002d9530	Gap__Core__igDoubleMetaField__vfunc_27	match	-
 002d9540	Gap__Core__igDriverDatabase__vfunc_11	match	-
 002d96c0	Gap__Core__igDriverDatabase__vfunc_12	match	-
 002d96f0	FUN_002d96f0	match	-
@@ -9430,13 +9430,13 @@
 002e24c0	FUN_002e24c0	match	-
 002e24e0	FUN_002e24e0	match	-
 002e2520	FUN_002e2520	match	-
-002e25a0	FUN_002e25a0	match	-
+002e25a0	Gap__Core__igExternalDirEntry__vfunc_31	match	-
 002e26b0	FUN_002e26b0	match	-
-002e2750	FUN_002e2750	match	-
+002e2750	Gap__Core__igExternalDirEntry__vfunc_23	match	-
 002e27d0	Gap__Core__igExternalDirEntry__vfunc_44	match	-
 002e2950	Gap__Core__igExternalDirEntry__vfunc_43	match	-
 002e2bc0	Gap__Core__igExternalDirEntry__vfunc_11	match	-
-002e2bf0	FUN_002e2bf0	match	-
+002e2bf0	Gap__Core__igExternalDirEntry__vfunc_12	match	-
 002e2c30	Gap__Core__igExternalIndexedEntry__vfunc_32	match	-
 002e2ca0	Gap__Core__igExternalInfoEntry__vfunc_31	match	-
 002e2fb0	FUN_002e2fb0	match	-
@@ -9456,8 +9456,8 @@
 002e3760	Gap__Core__igFloatArrayMetaField__vfunc_57	match	-
 002e3800	Gap__Core__igFloatMetaField__vfunc_25	match	-
 002e3810	FUN_002e3810	match	-
-002e3840	FUN_002e3840	match	-
-002e3950	FUN_002e3950	match	-
+002e3840	Gap__Core__igFloatMetaField__vfunc_27	match	-
+002e3950	Gap__Core__igFolder__vfunc_23	match	-
 002e3a10	FUN_002e3a10	match	-
 002e3cb0	FUN_002e3cb0	match	-
 002e3d30	FUN_002e3d30	match	-
@@ -9823,7 +9823,7 @@
 002fca40	FUN_002fca40	match	-
 002fca50	FUN_002fca50	match	-
 002fca80	FUN_002fca80	match	-
-002fcce0	FUN_002fcce0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMetaField_2fc630 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 20 bytes
+002fcce0	FUN_002fcce0	match	-
 002fcdb0	FUN_002fcdb0	match	-
 002fcea0	igMetaField_Write	match	-
 002fcec0	igMetaField_IsAlikeByTechnique	match	-
@@ -9997,10 +9997,10 @@
 003030e0	Gap__Core__igObjectRefArrayMetaField__vfunc_45	match	-
 003031a0	Gap__Core__igObjectRefArrayMetaField__vfunc_46	match	-
 00303260	Gap__Core__igObjectRefArrayMetaField__vfunc_47	match	-
-00303320	FUN_00303320	match	-
+00303320	Gap__Core__igObjectRefMetaField__vfunc_12	match	-
 00303350	igObjectRefMetaField_InitDefaults	match	-
 00303390	igObjectRefMetaField_Assign	match	-
-00303440	FUN_00303440	match	-
+00303440	Gap__Core__igObjectRefMetaField__vfunc_24	match	-
 00303450	igObjectRefMetaField_GetTypeSize	match	-
 00303460	FUN_00303460	match	-
 003034e0	Gap__Core__igObjectRefMetaField__vfunc_51	match	-
@@ -10020,9 +10020,9 @@
 00303bc0	igObjectRefMetaField_Construct	match	-
 00303c10	igObjectRefMetaField_Init	match	-
 00303c60	FUN_00303c60	match	-
-00303cc0	FUN_00303cc0	match	-
+00303cc0	Gap__Core__igObjectRefMetaField__vfunc_02	match	-
 00303d70	FUN_00303d70	match	-
-00303dc0	FUN_00303dc0	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+00303dc0	FUN_00303dc0	match	-
 00303e50	FUN_00303e50	match	-
 00303e60	FUN_00303e60	match	-
 00303e80	FUN_00303e80	match	-
@@ -10269,13 +10269,13 @@
 0030f030	Gap__Core__igVirtualCFuncMetaField__vfunc_27	match	-
 0030f040	FUN_0030f040	match	-
 00310b60	FUN_00310b60	match	-
-00311990	FUN_00311990	match	-
+00311990	Gap__Core__igArenaMemoryPool__vfunc_111	match	-
 00312020	igMetaEnum_GetNamesByMask	match	-
 00312140	igMetaEnum_GetValueName	match	-
-003121c0	FUN_003121c0	match	-
-003123b0	FUN_003123b0	match	-
-00312520	FUN_00312520	match	-
-00312580	FUN_00312580	match	-
+003121c0	Gap__Core__igArenaMemoryPool__vfunc_87	match	-
+003123b0	Gap__Core__igArenaMemoryPool__vfunc_96	match	-
+00312520	Gap__Core__igArenaMemoryPool__vfunc_102	match	-
+00312580	Gap__Core__igArenaMemoryPool__vfunc_103	match	-
 00315050	FUN_00315050	match	-
 0031cd50	Gap__Core__igArenaMemoryPool__vfunc_30	match	-
 0031cdf0	Gap__Core__igArenaMemoryPool__vfunc_31	match	-
@@ -10299,46 +10299,46 @@
 0031d320	Gap__Core__igArenaMemoryPool__vfunc_46	match	-
 0031d330	Gap__Core__igArenaMemoryPool__vfunc_47	match	-
 0031d340	Gap__Core__igArenaMemoryPool__vfunc_48	match	-
-0031d350	FUN_0031d350	match	-
-0031d360	FUN_0031d360	match	-
+0031d350	Gap__Core__igArenaMemoryPool__vfunc_99	match	-
+0031d360	Gap__Core__igArenaMemoryPool__vfunc_100	match	-
 0031d370	FUN_0031d370	match	-
 0031d390	FUN_0031d390	match	-
-0031d3a0	FUN_0031d3a0	match	-
+0031d3a0	Gap__Core__igArenaMemoryPool__vfunc_101	match	-
 0031d3c0	Gap__Core__igArenaMemoryPool__vfunc_49	match	-
 0031d3f0	FUN_0031d3f0	match	-
 0031d430	FUN_0031d430	match	-
 0031d460	FUN_0031d460	match	-
 0031d580	Gap__Core__igArenaMemoryPool__vfunc_57	match	-
-0031e020	FUN_0031e020	match	-
-0031e670	FUN_0031e670	match	-
-0031e8b0	FUN_0031e8b0	match	-
+0031e020	Gap__Core__igArenaMemoryPool__vfunc_63	match	-
+0031e670	Gap__Core__igArenaMemoryPool__vfunc_97	match	-
+0031e8b0	Gap__Core__igArenaMemoryPool__vfunc_98	match	-
 0031eb90	FUN_0031eb90	match	-
 0031ebd0	FUN_0031ebd0	match	-
 0031ec20	FUN_0031ec20	match	-
 0031ec60	Gap__Core__igArenaMemoryPool__vfunc_02	match	-
-0031eda0	FUN_0031eda0	match	-
-0031edb0	FUN_0031edb0	match	-
+0031eda0	Gap__Core__igArenaMemoryPool__vfunc_83	match	-
+0031edb0	Gap__Core__igArenaMemoryPool__vfunc_84	match	-
 0031eec0	igArenaMemoryPool_SetPoolOptionFlags	match	-
-0031ef70	FUN_0031ef70	match	-
-0031ef80	FUN_0031ef80	match	-
-0031f010	FUN_0031f010	match	-
-0031f020	FUN_0031f020	match	-
-0031f030	FUN_0031f030	match	-
-0031f1c0	FUN_0031f1c0	match	-
-0031f230	FUN_0031f230	match	-
+0031ef70	Gap__Core__igArenaMemoryPool__vfunc_89	match	-
+0031ef80	Gap__Core__igArenaMemoryPool__vfunc_90	match	-
+0031f010	Gap__Core__igArenaMemoryPool__vfunc_86	match	-
+0031f020	Gap__Core__igArenaMemoryPool__vfunc_91	match	-
+0031f030	Gap__Core__igArenaMemoryPool__vfunc_92	match	-
+0031f1c0	Gap__Core__igArenaMemoryPool__vfunc_94	match	-
+0031f230	Gap__Core__igArenaMemoryPool__vfunc_95	match	-
 0031f2f0	Gap__Core__igArenaMemoryPool__vfunc_03	match	-
 0031f410	Gap__Core__igArenaMemoryPool__vfunc_04	match	-
 0031f450	Gap__Core__igArenaMemoryPool__vfunc_13	match	-
-00320780	FUN_00320780	match	-
-00320830	FUN_00320830	match	-
-003208c0	FUN_003208c0	match	-
-003208d0	FUN_003208d0	match	-
-00320900	FUN_00320900	match	-
+00320780	Gap__Core__igArenaMemoryPool__vfunc_105	match	-
+00320830	Gap__Core__igArenaMemoryPool__vfunc_106	match	-
+003208c0	Gap__Core__igArenaMemoryPool__vfunc_108	match	-
+003208d0	Gap__Core__igArenaMemoryPool__vfunc_109	match	-
+00320900	Gap__Core__igArenaMemoryPool__vfunc_110	match	-
 00320930	FUN_00320930	match	-
 00320960	FUN_00320960	match	-
-003209a0	FUN_003209a0	match	DEFERRED duplicate 0x320960 FUN_00320960 52B (compared under the profile of its retail unit)
-00320a20	FUN_00320a20	match	DEFERRED duplicate 0x320960 FUN_00320960 52B (compared under the profile of its retail unit)
-00320aa0	FUN_00320aa0	match	DEFERRED duplicate 0x320960 FUN_00320960 52B (compared under the profile of its retail unit)
+003209a0	FUN_003209a0	match	-
+00320a20	FUN_00320a20	match	-
+00320aa0	FUN_00320aa0	match	-
 00320af0	Gap__Core__igElfFile__vfunc_23	match	-
 00320b50	Gap__Core__igElfFile__vfunc_24	match	-
 00320e10	Gap__Core__igElfFile__vfunc_25	match	-
@@ -10366,30 +10366,30 @@
 003227a0	Gap__Core__igMallocMemoryPool__vfunc_46	match	-
 003227b0	Gap__Core__igMallocMemoryPool__vfunc_47	match	-
 003227c0	Gap__Core__igMallocMemoryPool__vfunc_48	match	-
-003227d0	FUN_003227d0	match	-
-003227e0	FUN_003227e0	match	-
+003227d0	Gap__Core__igMallocMemoryPool__vfunc_99	match	-
+003227e0	Gap__Core__igMallocMemoryPool__vfunc_100	match	-
 003227f0	Gap__Core__igMallocMemoryPool__vfunc_49	match	-
 00322820	FUN_00322820	match	-
 00322860	FUN_00322860	match	-
 00322890	FUN_00322890	match	-
 003229b0	Gap__Core__igMallocMemoryPool__vfunc_57	match	-
-00323400	FUN_00323400	match	-
+00323400	Gap__Core__igMallocMemoryPool__vfunc_63	match	-
 00323490	Gap__Core__igMallocMemoryPool__vfunc_13	match	-
-003234c0	FUN_003234c0	match	-
+003234c0	Gap__Core__igMallocMemoryPool__vfunc_97	match	-
 003235c0	FUN_003235c0	match	-
 00323600	FUN_00323600	match	-
 00323640	Gap__Core__igMallocMemoryPool__vfunc_02	match	-
-003244c0	FUN_003244c0	match	-
-00324560	FUN_00324560	match	-
-00324570	FUN_00324570	match	-
-003247a0	FUN_003247a0	match	-
-003247b0	FUN_003247b0	match	-
+003244c0	Gap__Core__igMallocMemoryPool__vfunc_85	match	-
+00324560	Gap__Core__igMallocMemoryPool__vfunc_83	match	-
+00324570	Gap__Core__igMallocMemoryPool__vfunc_84	match	-
+003247a0	Gap__Core__igMallocMemoryPool__vfunc_89	match	-
+003247b0	Gap__Core__igMallocMemoryPool__vfunc_90	match	-
 00324840	igMallocMemoryPool_Dump	match	DEFERRED duplicate 0x38c410 __dt__3RefFv 128B (compared under the profile of its retail unit)
-003249a0	FUN_003249a0	match	-
-003249b0	FUN_003249b0	match	-
-003249c0	FUN_003249c0	match	-
-00324ae0	FUN_00324ae0	match	-
-00324b50	FUN_00324b50	match	-
+003249a0	Gap__Core__igMallocMemoryPool__vfunc_91	match	-
+003249b0	Gap__Core__igMallocMemoryPool__vfunc_92	match	-
+003249c0	Gap__Core__igMallocMemoryPool__vfunc_93	match	-
+00324ae0	Gap__Core__igMallocMemoryPool__vfunc_94	match	-
+00324b50	Gap__Core__igMallocMemoryPool__vfunc_95	match	-
 00324bd0	Gap__Core__igMallocMemoryPool__vfunc_33	match	-
 003257d0	FUN_003257d0	match	-
 00325810	FUN_00325810	match	-
@@ -10417,33 +10417,33 @@
 00326010	Gap__Core__igPageMemoryPool__vfunc_46	match	-
 00326020	Gap__Core__igPageMemoryPool__vfunc_47	match	-
 00326030	Gap__Core__igPageMemoryPool__vfunc_48	match	-
-00326040	FUN_00326040	match	-
-00326050	FUN_00326050	match	-
-00326060	FUN_00326060	match	-
+00326040	Gap__Core__igPageMemoryPool__vfunc_99	match	-
+00326050	Gap__Core__igPageMemoryPool__vfunc_100	match	-
+00326060	Gap__Core__igPageMemoryPool__vfunc_101	match	-
 00326070	Gap__Core__igPageMemoryPool__vfunc_49	match	-
 00326080	Gap__Core__igPageMemoryPool__vfunc_53	match	-
 00326090	FUN_00326090	match	-
 003260d0	FUN_003260d0	match	-
 003261f0	Gap__Core__igPageMemoryPool__vfunc_57	match	-
-003262b0	FUN_003262b0	match	-
-003262c0	FUN_003262c0	match	-
-003262d0	FUN_003262d0	match	-
-00326310	FUN_00326310	match	-
+003262b0	Gap__Core__igPageMemoryPool__vfunc_62	match	-
+003262c0	Gap__Core__igPageMemoryPool__vfunc_63	match	-
+003262d0	Gap__Core__igPageMemoryPool__vfunc_64	match	-
+00326310	Gap__Core__igPageMemoryPool__vfunc_83	match	-
 00326330	FUN_00326330	match	-
-00326340	FUN_00326340	match	-
-00326350	FUN_00326350	match	-
-003263e0	FUN_003263e0	match	-
-003263f0	FUN_003263f0	match	-
-00326400	FUN_00326400	match	-
+00326340	Gap__Core__igPageMemoryPool__vfunc_89	match	-
+00326350	Gap__Core__igPageMemoryPool__vfunc_90	match	-
+003263e0	Gap__Core__igPageMemoryPool__vfunc_86	match	-
+003263f0	Gap__Core__igPageMemoryPool__vfunc_91	match	-
+00326400	Gap__Core__igPageMemoryPool__vfunc_92	match	-
 00326920	FUN_00326920	match	-
 003269d0	FUN_003269d0	match	-
 00326a80	FUN_00326a80	match	-
 00326b80	FUN_00326b80	match	-
-00326c30	FUN_00326c30	match	-
-00326c90	FUN_00326c90	match	-
-00327010	FUN_00327010	match	-
-00327120	FUN_00327120	match	-
-00327130	FUN_00327130	match	-
+00326c30	Gap__Core__igPageMemoryPool__vfunc_103	match	-
+00326c90	Gap__Core__igPageMemoryPool__vfunc_104	match	-
+00327010	Gap__Core__igPageMemoryPool__vfunc_88	match	-
+00327120	Gap__Core__igPageMemoryPool__vfunc_87	match	-
+00327130	Gap__Core__igPageMemoryPool__vfunc_96	match	-
 00327140	Gap__Core__igProgramFile__vfunc_23	match	-
 00327210	Gap__Core__igProgramFile__vfunc_24	match	-
 00327380	Gap__Core__igProgramFile__vfunc_25	match	-
@@ -10477,14 +10477,14 @@
 003279d0	Gap__Core__igStackMemoryPool__vfunc_55	match	-
 00327bb0	Gap__Core__igStackMemoryPool__vfunc_58	match	-
 00327c70	Gap__Core__igStackMemoryPool__vfunc_59	match	-
-003280e0	FUN_003280e0	match	-
-00328170	FUN_00328170	match	-
-003283e0	FUN_003283e0	match	-
-003283f0	FUN_003283f0	match	-
-00328480	FUN_00328480	match	-
-003284b0	FUN_003284b0	match	-
-003284c0	FUN_003284c0	match	-
-003284d0	FUN_003284d0	match	-
+003280e0	Gap__Core__igStackMemoryPool__vfunc_84	match	-
+00328170	Gap__Core__igStackMemoryPool__vfunc_85	match	-
+003283e0	Gap__Core__igStackMemoryPool__vfunc_89	match	-
+003283f0	Gap__Core__igStackMemoryPool__vfunc_90	match	-
+00328480	Gap__Core__igStackMemoryPool__vfunc_86	match	-
+003284b0	Gap__Core__igStackMemoryPool__vfunc_91	match	-
+003284c0	Gap__Core__igStackMemoryPool__vfunc_92	match	-
+003284d0	Gap__Core__igStackMemoryPool__vfunc_96	match	-
 00328590	Gap__Core__igStandardQueue__vfunc_11	match	-
 00328620	Gap__Core__igStandardQueue__vfunc_12	match	-
 00328670	Gap__Core__igStandardQueue__vfunc_23	match	-
@@ -10683,13 +10683,13 @@
 00330e80	Gap__Core__igPsx2File__vfunc_22	match	-
 00330e90	Gap__Core__igPsx2File__vfunc_11	match	-
 00330f30	Gap__Core__igPsx2CallStackTracer__vfunc_22	match	-
-00330f40	FUN_00330f40	match	-
+00330f40	Gap__Core__igUnsignedIntListNoClean__vfunc_18	match	-
 00330f50	Gap__Core__igStandardQueue__vfunc_22	match	-
 00330f60	Gap__Core__igStackMemoryPool__vfunc_22	match	-
 00330f70	Gap__Core__igStackMemoryPool__vfunc_25	match	-
 00330f80	Gap__Core__igStackMemoryPool__vfunc_29	match	-
 00330f90	Gap__Core__igStackMemoryPool__vfunc_41	match	-
-00330fa0	FUN_00330fa0	match	-
+00330fa0	Gap__Core__igStackMemoryPool__vfunc_83	match	-
 00330fb0	Gap__Core__igProgramFile__vfunc_22	match	-
 00330fc0	Gap__Core__igElfFile__vfunc_22	match	-
 00330fd0	Gap__Core__igVirtualCFuncMetaField__vfunc_22	match	-
@@ -10775,7 +10775,7 @@
 00331530	Gap__Core__igArenaMemoryPool__vfunc_22	match	-
 00331540	Gap__Core__igPageMemoryPool__vfunc_22	match	-
 00331550	Gap__Core__igAliasMemoryPool__vfunc_22	match	-
-00331560	FUN_00331560	match	-
+00331560	Gap__Core__igAliasMemoryPool__vfunc_83	match	-
 00331570	FUN_00331570	match	-
 00331580	FUN_00331580	match	-
 00331590	FUN_00331590	match	-
@@ -10861,8 +10861,8 @@
 00331b20	Gap__Core__igUnsignedCharList__vfunc_23	match	-
 00331b30	Gap__Core__igShortList__vfunc_23	match	-
 00331b40	Gap__Core__igUnsignedShortList__vfunc_23	match	-
-00331b50	FUN_00331b50	match	-
-00331b60	FUN_00331b60	match	-
+00331b50	Gap__Core__igIntList__vfunc_23	match	-
+00331b60	Gap__Core__igCharList__vfunc_23	match	-
 00331b70	Gap__Core__igBoolList__vfunc_23	match	-
 00331b80	Gap__Core__igStringRefList__vfunc_23	match	-
 00331b90	Gap__Core__igContextExtList__vfunc_24	match	-
@@ -11143,7 +11143,7 @@
 00339200	FUN_00339200	match	exception index 0x547b5c: matches retail (packed)
 00339280	Gap__igMovieManager__vfunc_23	match	-
 00339290	Gap__igMovieManager__vfunc_24	match	-
-003392a0	Gap__igMovieManager__vfunc_25	match	-
+003392a0	Gap__igMovieManager__vfunc_25	match	DEFERRED duplicate 0x336440 __dt__2RPFv 128B (compared under the profile of its retail unit)
 00339eb0	Gap__igMovieManager__vfunc_26	match	exception index 0x547b80: matches retail (packed)
 0033bbc0	Gap__igMovieManager__vfunc_27	match	-
 0033bbd0	FUN_0033bbd0	match	exception index 0x547b98: matches retail (packed)
@@ -12591,7 +12591,7 @@
 0035e5b0	beHitLandResultData_GetMetaObject	match	exception index 0x54bce4: matches retail (packed)
 0035e5d0	beHitLandResultData_InitFields	match	exception index 0x54bcf0: matches retail (packed)
 0035e660	FUN_0035e660	match	exception index 0x54bcfc: matches retail (packed)
-0035e6b0	beHitLandDelivInfoRam_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beHitLandDelivInfoRam (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035e6b0	beHitLandDelivInfoRam_GetVTable	match	exception index 0x54bd08: matches retail (table 0x543310 8 bytes)
 0035e7a0	FUN_0035e7a0	match	exception index 0x54bd14: matches retail (packed)
 0035e7c0	beHitLandDelivInfoRam_Register	match	exception index 0x54bd20: matches retail (packed)
 0035e840	beHitLandDelivInfoRam_GetMetaObject	match	exception index 0x54bd2c: matches retail (packed)
@@ -13470,7 +13470,7 @@
 0036f880	Gap__Bec__beModelCtrlInfoRideOn__vfunc_21	match	-
 0036f890	Gap__Bec__beModelCtrlInfoWork__vfunc_20	match	-
 0036f8a0	Gap__Bec__beModelCtrlNode2__vfunc_20	match	-
-0036f8b0	FUN_0036f8b0	match	-
+0036f8b0	Gap__Bec__beModelCtrlSubComBase__vfunc_24	match	-
 0036f8c0	Gap__Bec__beModelCtrlSCHitBox__vfunc_23	match	-
 0036f8d0	Gap__Bec__beModelCtrlSubCom__vfunc_20	match	-
 0036f8e0	Gap__Bec__beMovieInfoData__vfunc_20	match	-
@@ -13788,9 +13788,9 @@
 00378e40	FUN_00378e40	match	exception index 0x54e564: matches retail (packed)
 00378e80	FUN_00378e80	match	exception index 0x54e570: matches retail (packed)
 00378ec0	FUN_00378ec0	match	-
-00378ed0	FUN_00378ed0	match	-
+00378ed0	FUN_00378ed0	match	DEFERRED duplicate 0x33e9c0 __dt__3RPDFv 128B (compared under the profile of its retail unit)
 00379c40	Gap__Bec__beCameraCtrl__vfunc_31	match	exception index 0x54e594: matches retail (packed)
-00379ce0	Gap__Bec__beCameraCtrl__vfunc_33	match	-
+00379ce0	Gap__Bec__beCameraCtrl__vfunc_33	match	DEFERRED duplicate 0x33e9c0 __dt__3RPDFv 128B (compared under the profile of its retail unit)
 0037a600	FUN_0037a600	match	exception index 0x54e5ac: matches retail (packed)
 0037a680	Gap__Bec__beCameraCtrl__vfunc_20	match	-
 0037a690	FUN_0037a690	match	exception index 0x54e5b8: matches retail (packed)
@@ -13826,7 +13826,7 @@
 0037d270	FUN_0037d270	match	exception index 0x54e6fc: matches retail (packed)
 0037d2a0	FUN_0037d2a0	match	exception index 0x54e708: matches retail (packed)
 0037d2f0	FUN_0037d2f0	match	exception index 0x54e714: matches retail (packed)
-0037d310	FUN_0037d310	match	-
+0037d310	FUN_0037d310	match	DEFERRED duplicate 0x367a20 __dt__3RefFv 128B (compared under the profile of its retail unit)
 0037d4a0	FUN_0037d4a0	match	exception index 0x54e72c: matches retail (packed)
 0037d570	FUN_0037d570	match	exception index 0x54e738: matches retail (packed)
 0037d680	FUN_0037d680	match	exception index 0x54e744: matches retail (packed)
@@ -13841,7 +13841,7 @@
 0037e110	FUN_0037e110	match	exception index 0x54e7a4: matches retail (packed)
 0037e180	FUN_0037e180	match	-
 0037e250	FUN_0037e250	match	exception index 0x54e7bc: matches retail (packed)
-0037e2d0	FUN_0037e2d0	match	DEFERRED duplicate 0x37e250 __dt__10KeepMesRefFv 128B (compared under the profile of its retail unit)
+0037e2d0	FUN_0037e2d0	match	-
 0037e3a0	FUN_0037e3a0	match	-
 0037e6e0	FUN_0037e6e0	match	-
 0037e890	FUN_0037e890	match	-
@@ -13951,7 +13951,7 @@
 0038b080	FUN_0038b080	match	exception index 0x54eb94: matches retail (table 0x543888 8 bytes)
 0038bdf0	Gap__Bec__beMatCtrl__vfunc_34	match	jump table 0x50eda0: 6 entries, 24 bytes, matches retail
 0038bed0	Gap__Bec__beMatCtrl__vfunc_20	match	-
-0038bee0	beMessenger_InitializeMemory	match	DEFERRED duplicate 0x38c410 __dt__7WorkRefFv 128B (compared under the profile of its retail unit)
+0038bee0	beMessenger_InitializeMemory	match	-
 0038c390	FUN_0038c390	match	-
 0038c410	FUN_0038c410	match	-
 0038c490	beMessenger_ResetMemory	match	exception index 0x54ebdc: matches retail (packed)
@@ -14029,7 +14029,7 @@
 00390de0	Gap__Bec__beModelCtrl__vfunc_25	match	exception index 0x54ee1c: matches retail (packed)
 00390e80	Gap__Core__igObject__vfunc_29	match	exception index 0x54ee28: matches retail (packed)
 00390f70	Gap__Bec__beNDMWMdlMapCursor__vfunc_37	match	-
-00390f80	FUN_00390f80	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00390f80	FUN_00390f80	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 00391a10	FUN_00391a10	match	exception index 0x54ee4c: matches retail (packed)
 00391b40	Gap__Core__igObject__vfunc_38	match	-
 00391cf0	FUN_00391cf0	match	exception index 0x54ee64: matches retail (packed)
@@ -14038,14 +14038,14 @@
 003921a0	FUN_003921a0	match	exception index 0x54ee88: matches retail (packed)
 00392200	Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21	match	exception index 0x54ee94: matches retail (packed)
 00392240	Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21	match	exception index 0x54eea0: matches retail (packed)
-003926d0	FUN_003926d0	match	-
+003926d0	FUN_003926d0	match	DEFERRED duplicate 0x350d90 __dt__9RideOnRefFv 128B (compared under the profile of its retail unit)
 00392be0	FUN_00392be0	match	jump table 0x50f080: 6 entries, 24 bytes, matches retail
 00392d20	FUN_00392d20	match	-
 00392d90	FUN_00392d90	match	exception index 0x54eec4: matches retail (packed)
 00392e10	FUN_00392e10	match	jump table 0x50f0a0: 6 entries, 24 bytes, matches retail
-00392fa0	FUN_00392fa0	match	-
-00393260	FUN_00393260	match	-
-00393aa0	FUN_00393aa0	match	-
+00392fa0	FUN_00392fa0	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+00393260	FUN_00393260	match	DEFERRED duplicate 0x33e9c0 __dt__11DataListRefFv 128B (compared under the profile of its retail unit)
+00393aa0	FUN_00393aa0	match	DEFERRED duplicate 0x33e9c0 __dt__11DataListRefFv 128B (compared under the profile of its retail unit)
 00393b20	FUN_00393b20	match	exception index 0x54ef00: matches retail (packed)
 00393c80	FUN_00393c80	match	DEFERRED duplicate 0x150eb0 __dt__3RPAFv 128B (compared under the profile of its retail unit)
 003943c0	FUN_003943c0	match	exception index 0x54ef18: matches retail (packed)
@@ -14085,7 +14085,7 @@
 00398e80	FUN_00398e80	match	exception index 0x54f020: matches retail (packed)
 00398ef0	FUN_00398ef0	match	exception index 0x54f02c: matches retail (table 0x543c24 8 bytes)
 003993a0	FUN_003993a0	match	exception index 0x54f038: matches retail (packed)
-003993e0	Gap__Bec__beModelCtrlSCHitBox__vfunc_21	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
+003993e0	Gap__Bec__beModelCtrlSCHitBox__vfunc_21	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 003998f0	Gap__Bec__beModelCtrlSCHitBox__vfunc_22	match	exception index 0x54f050: matches retail (packed)
 00399940	Gap__Bec__beModelCtrlSCEffect__vfunc_21	match	-
 00399bf0	Gap__Bec__beModelCtrlSCEffect__vfunc_23	match	exception index 0x54f068: matches retail (packed)
@@ -14269,9 +14269,9 @@
 003a79a0	FUN_003a79a0	match	exception index 0x54f644: matches retail (table 0x543e54 8 bytes)
 003a7a20	FUN_003a7a20	match	-
 003a7d00	FUN_003a7d00	match	exception index 0x54f65c: matches retail (packed)
-003a7d80	FUN_003a7d80	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003a7d80	FUN_003a7d80	match	-
 003a7e90	FUN_003a7e90	match	-
-003a7fd0	FUN_003a7fd0	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003a7fd0	FUN_003a7fd0	match	-
 003a8140	FUN_003a8140	match	-
 003a82f0	FUN_003a82f0	match	-
 003a84a0	FUN_003a84a0	match	exception index 0x54f6a4: matches retail (table 0x543ed4 8 bytes)
@@ -15581,9 +15581,9 @@
 003cb220	Gap__Bec__beNDMWShinkaObjectList__vfunc_20	match	-
 003cb230	Gap__Bec__beNDMWShinkaCtrl__vfunc_20	match	-
 003cb240	Gap__Bec__beNDMWItemBaseList__vfunc_20	match	-
-003cb250	FUN_003cb250	match	-
-003cb260	FUN_003cb260	match	-
-003cb270	FUN_003cb270	match	-
+003cb250	Gap__Bec__beNDMWItemBase__vfunc_24	match	-
+003cb260	Gap__Bec__beNDMWItemBase__vfunc_25	match	-
+003cb270	Gap__Bec__beNDMWItemBase__vfunc_26	match	-
 003cb280	Gap__Bec__beNDMWLoadCtrl2CtrlData__vfunc_20	match	-
 003cb290	Gap__Bec__beNDMWLoadIntf2TextOrder__vfunc_20	match	-
 003cb2a0	Gap__Bec__beLoadIntf2ComMdlData__vfunc_20	match	-
@@ -15733,22 +15733,22 @@
 003d2230	Gap__Bec__beNDMWMdlPlayer__vfunc_23	match	exception index 0x5532d4: matches retail (packed)
 003d2290	Gap__Bec__beNDMWMdlPlayer__vfunc_35	match	exception index 0x5532e0: matches retail (packed)
 003d22c0	Gap__Bec__beNDMWMdlPlayer__vfunc_37	match	exception index 0x5532ec: matches retail (packed)
-003d22f0	Gap__Bec__beNDMWMdlPlayer__vfunc_38	match	-
-003d3170	FUN_003d3170	match	-
-003d31f0	Gap__Bec__beNDMWMdlPlayer__vfunc_39	match	-
+003d22f0	Gap__Bec__beNDMWMdlPlayer__vfunc_38	match	DEFERRED duplicate 0x33e9c0 __dt__8PropsRefFv 128B (compared under the profile of its retail unit)
+003d3170	FUN_003d3170	match	DEFERRED duplicate 0x33e9c0 __dt__8PropsRefFv 128B (compared under the profile of its retail unit)
+003d31f0	Gap__Bec__beNDMWMdlPlayer__vfunc_39	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 003d3640	Gap__Bec__beNDMWMdlPlayer__vfunc_36	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
-003d40f0	Gap__Bec__beNDMWMdlPlayer__vfunc_40	match	-
-003d4240	Gap__Bec__beNDMWMdlPlayer__vfunc_41	match	-
-003d4390	Gap__Bec__beNDMWMdlPlayer__vfunc_44	match	-
-003d45f0	Gap__Bec__beNDMWMdlPlayer__vfunc_43	match	-
-003d4820	Gap__Bec__beNDMWMdlPlayer__vfunc_42	match	-
+003d40f0	Gap__Bec__beNDMWMdlPlayer__vfunc_40	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d4240	Gap__Bec__beNDMWMdlPlayer__vfunc_41	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d4390	Gap__Bec__beNDMWMdlPlayer__vfunc_44	match	DEFERRED duplicate 0x33e9c0 __dt__3TmpFv 128B (compared under the profile of its retail unit)
+003d45f0	Gap__Bec__beNDMWMdlPlayer__vfunc_43	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d4820	Gap__Bec__beNDMWMdlPlayer__vfunc_42	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 003d4970	Gap__Bec__beNDMWMdlPlayer__vfunc_20	match	-
 003d4980	Gap__Bec__beNDMWMdlPlayer2__vfunc_23	match	exception index 0x553364: matches retail (packed)
 003d49c0	Gap__Bec__beNDMWMdlPlayer2__vfunc_35	match	exception index 0x553370: matches retail (packed)
 003d49f0	Gap__Bec__beNDMWMdlPlayer2__vfunc_37	match	exception index 0x55337c: matches retail (packed)
-003d4a20	Gap__Bec__beNDMWMdlPlayer2__vfunc_36	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003d4e20	FUN_003d4e20	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003d4ea0	Gap__Bec__beNDMWMdlPlayer2__vfunc_38	match	-
+003d4a20	Gap__Bec__beNDMWMdlPlayer2__vfunc_36	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d4e20	FUN_003d4e20	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d4ea0	Gap__Bec__beNDMWMdlPlayer2__vfunc_38	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 003d50c0	Gap__Bec__beNDMWMdlPlayer2__vfunc_47	code-only	exception index 0x5533ac: matches retail (table 0x544678 52 bytes); orphan 20 bytes
 003d58e0	Gap__Bec__beNDMWMdlPlayer2__vfunc_20	match	-
 003d58f0	Gap__Bec__beNDMWStatus__vfunc_32	match	exception index 0x5533b8: matches retail (packed)
@@ -15802,7 +15802,7 @@
 003e4030	beNDMWLoadIntf2ComMdlCtrl__Play	match	-
 003e4210	beNDMWLoadIntf2ComMdlCtrl__IsSequence	match	exception index 0x553574: matches retail (packed)
 003e4280	beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty	match	-
-003e42a0	beNDMWLoadIntf2ComMdlCtrl__Close	match	-
+003e42a0	beNDMWLoadIntf2ComMdlCtrl__Close	match	DEFERRED duplicate 0x3e3d80 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 003e4480	beNDMWLoadIntf2ComMdlCtrl__IsRunning	match	exception index 0x55358c: matches retail (packed)
 003e44d0	beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty	match	-
 003e44f0	beNDMWLoadIntf2ComMdlCtrl__Poll	match	exception index 0x553598: matches retail (packed)
@@ -15932,7 +15932,7 @@
 003f7210	FUN_003f7210	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f7290	FUN_003f7290	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f7310	FUN_003f7310	match	-
-003f77b0	Gap__Bec__beNDMWGameRam__vfunc_23	match	-
+003f77b0	Gap__Bec__beNDMWGameRam__vfunc_23	match	DEFERRED duplicate 0x3ba350 __dt__17CommonDataListRefFv 128B (compared under the profile of its retail unit)
 003f7980	Gap__Bec__beNDMWGameRam__vfunc_24	match	exception index 0x553a30: matches retail (packed)
 003f7c50	Gap__Bec__beNDMWGameRam__vfunc_32	match	exception index 0x553a3c: matches retail (packed)
 003f7e40	Gap__Bec__beNDMWGameRam__vfunc_25	match	-
@@ -15942,11 +15942,11 @@
 003f80e0	FUN_003f80e0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f82a0	FUN_003f82a0	match	exception index 0x553a78: matches retail (table 0x544f2c 8 bytes)
 003f8760	FUN_003f8760	match	exception index 0x553a84: matches retail (packed)
-003f8990	FUN_003f8990	match	-
+003f8990	FUN_003f8990	match	DEFERRED duplicate 0x3d9d50 __dt__14RecoveryRef<1>Fv 128B (compared under the profile of its retail unit)
 003f8c90	FUN_003f8c90	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f93c0	FUN_003f93c0	match	exception index 0x553aa8: matches retail (table 0x544f64 8 bytes)
 003f9570	FUN_003f9570	match	exception index 0x553ab4: matches retail (packed)
-003f96e0	FUN_003f96e0	match	-
+003f96e0	FUN_003f96e0	match	DEFERRED duplicate 0x3832d0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 003f99f0	FUN_003f99f0	match	exception index 0x553acc: matches retail (packed)
 003f9bb0	FUN_003f9bb0	match	exception index 0x553ad8: matches retail (packed)
 003f9c80	FUN_003f9c80	match	exception index 0x553ae4: matches retail (table 0x544f7c 8 bytes)
@@ -16077,7 +16077,7 @@
 00418ac0	FUN_00418ac0	match	DEFERRED duplicate 0x1489a0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 004191f0	FUN_004191f0	match	exception index 0x553fa0: matches retail (table 0x545904 8 bytes)
 00419680	FUN_00419680	match	-
-004196c0	Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21	match	-
+004196c0	Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21	match	DEFERRED duplicate 0x414420 __dt__5RP<2>Fv 128B (compared under the profile of its retail unit)
 0041a380	FUN_0041a380	match	exception index 0x553fb8: matches retail (packed)
 0041a400	Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0041aaa0	FUN_0041aaa0	match	exception index 0x553fd0: matches retail (table 0x545994 8 bytes)
@@ -16095,8 +16095,8 @@
 0041f190	Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00420230	FUN_00420230	match	exception index 0x554060: matches retail (table 0x545c38 8 bytes)
 004207a0	Gap__Bec__beNDMWStatusSubMenu__vfunc_21	code-only	DEFERRED duplicate 0x2e2300 __dt__2RPFv 68B (compared under the profile of its retail unit)
-00422c00	FUN_00422c00	match	-
-00423000	FUN_00423000	match	-
+00422c00	FUN_00422c00	match	DEFERRED duplicate 0x3b6090 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+00423000	FUN_00423000	match	DEFERRED duplicate 0x3b6090 __dt__2RPFv 128B (compared under the profile of its retail unit)
 00423300	Gap__Bec__beNDMWStatusSubMenu__vfunc_20	match	-
 00423310	Gap__Bec__beNDMWStatusCtrlSkill__vfunc_20	match	-
 00423320	Gap__Bec__beNDMWStatusCtrlSendBit__vfunc_20	match	-
@@ -16145,9 +16145,9 @@
 00428610	FUN_00428610	match	exception index 0x554180: matches retail (packed)
 00428690	FUN_00428690	match	exception index 0x55418c: matches retail (packed)
 00428710	FUN_00428710	match	exception index 0x554198: matches retail (packed)
-00428790	Gap__Bec__beNDMWShopCtrl30__vfunc_21	match	-
-004295b0	FUN_004295b0	match	-
-00429630	Gap__Bec__beNDMWShopCtrl40__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00428790	Gap__Bec__beNDMWShopCtrl30__vfunc_21	match	DEFERRED duplicate 0x414420 __dt__12WindowRef<3>Fv 128B (compared under the profile of its retail unit)
+004295b0	FUN_004295b0	match	DEFERRED duplicate 0x414420 __dt__12WindowRef<3>Fv 128B (compared under the profile of its retail unit)
+00429630	Gap__Bec__beNDMWShopCtrl40__vfunc_21	match	DEFERRED duplicate 0x414420 __dt__12WindowRef<1>Fv 128B (compared under the profile of its retail unit)
 0042a2e0	Gap__Bec__beNDMWShopCtrl50__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0042b800	FUN_0042b800	match	exception index 0x5541d4: matches retail (packed)
 0042b880	FUN_0042b880	match	exception index 0x5541e0: matches retail (packed)
@@ -16265,8 +16265,8 @@
 00443540	FUN_00443540	match	exception index 0x5545c4: matches retail (packed)
 004435c0	FUN_004435c0	match	exception index 0x5545d0: matches retail (packed)
 00443900	FUN_00443900	match	-
-00443bd0	Gap__Bec__beNDMWMdlPEBase__vfunc_46	match	-
-00445200	FUN_00445200	match	-
+00443bd0	Gap__Bec__beNDMWMdlPEBase__vfunc_46	match	DEFERRED duplicate 0x33e9c0 __dt__7ListRefFv 128B (compared under the profile of its retail unit)
+00445200	FUN_00445200	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 004456c0	FUN_004456c0	match	DEFERRED duplicate 0x150eb0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 00445990	FUN_00445990	match	DEFERRED duplicate 0x150eb0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 00445c60	FUN_00445c60	match	exception index 0x554618: matches retail (packed)
@@ -16517,7 +16517,7 @@
 0044f6f0	igGuiComponentNode_InitFields	match	-
 0044f790	FUN_0044f790	match	-
 0044f7e0	igGuiComponentModel_GetMetaObject	match	-
-0044f830	igGuiComponentModel_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igGuiComponentModel (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0044f830	igGuiComponentModel_GetVTable	match	-
 0044f8d0	igGuiComponentModel_RunStaticInit	match	-
 0044f8e0	igGuiComponentModel_Register	match	-
 0044f960	thunk_igGuiComponentModel_GetMetaObject	match	-
@@ -16717,9 +16717,9 @@
 004552e0	FUN_004552e0	match	-
 00455370	FUN_00455370	match	-
 004553e0	FUN_004553e0	match	-
-00455440	FUN_00455440	match	-
+00455440	Gap__Gui__igGuiComponent__vfunc_13	match	-
 00455470	FUN_00455470	match	-
-004554d0	FUN_004554d0	match	-
+004554d0	Gap__Gui__igGuiComponent__vfunc_10	match	-
 00455510	FUN_00455510	match	-
 004555e0	FUN_004555e0	match	-
 004555f0	FUN_004555f0	match	-
@@ -16778,9 +16778,9 @@
 004575d0	Gap__Gui__igHotKeyEventReceiver__vfunc_23	match	-
 00457650	Gap__Gui__igHotKeyEventReceiver__vfunc_27	match	-
 004576d0	FUN_004576d0	match	-
-004577f0	FUN_004577f0	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+004577f0	FUN_004577f0	match	-
 004578c0	FUN_004578c0	match	-
-00457950	FUN_00457950	match	-
+00457950	Gap__Gui__igModel__vfunc_10	match	-
 004579d0	Gap__Gui__igRadioGroup__vfunc_13	match	-
 00457a10	FUN_00457a10	match	-
 00457ab0	FUN_00457ab0	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)

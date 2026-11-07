@@ -15,24 +15,24 @@ struct RecoveryString {
 struct List { char pad[8]; int count; int pad2; int **data; };
 
 extern "C" int FUN_0022cb80(List *arg0, int **arg1) {
-    RecoveryString h;
     int *x;
-    int **s0;
-    int mid;
-    int hi = arg0->count - 1;
+    RecoveryString h;
     int lo = 0;
+    int hi = arg0->count - 1;
+    int mid;
+    int **s0;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
         s0 = &arg0->data[mid];
         x = *s0;
-        if (x != 0) *(int *)((char *)x - 4) = *(int *)((char *)x - 4) + 1;
+        if (x) *(int *)((char *)x - 4) = *(int *)((char *)x - 4) + 1;
         {
             int *q = h.p;
-            if (q != 0) {
+            if (q) {
                 int *t = (int *)((char *)q - 8);
                 int v = t[1] - 1;
                 t[1] = v;
-                if (v == 0) StringChunk_ReleaseHeader(*t, t);
+                if (0 == v) StringChunk_ReleaseHeader(*t, t);
             }
         }
         h.p = *s0;
@@ -47,6 +47,6 @@ extern "C" int FUN_0022cb80(List *arg0, int **arg1) {
         }
     }
     if (arg0->count == 0) return 0;
-    if ((unsigned)((char *)arg0->data[lo] - (char *)8) < (unsigned)((char *)*arg1 - (char *)8)) return lo + 1;
+    if ((unsigned)((char *)arg0->data[lo] - (char *)8) < (unsigned)((char *)*arg1 - (char *)8)) return 1 + lo;
     return lo;
 }

@@ -752,8 +752,8 @@ def literal_error(address, data, img):
     return None
 
 
-def fold_literals(obj, va, name, img, gp):
-    """Point the `R_MIPS_LITERAL` references of `name`'s body at the retail pool.
+def fold_literals(obj, bodies, img, gp):
+    """Point the `R_MIPS_LITERAL` references of `bodies` ({name: retail address}) at the retail pool.
 
     MWCC gives each object its own `.lit4`/`.lit8`, and the linker cannot scatter one section
     over the entries of a shared pool. The retail instruction names the entry, so each
@@ -779,11 +779,14 @@ def fold_literals(obj, va, name, img, gp):
                         if n in LITERAL_SECTIONS and sections[i][5]}
     if not literal_sections:
         return [], []
-    body = object_sym(obj, name)
-    if body[1] is None or not isinstance(body[2], int):
-        return [], [f"object defines no symbol {name!r}"]
-    start, _size, text_index = body
-    used, patches, cleared, errors = set(), [], [], []
+    spans, errors = {}, []
+    for name, va in bodies.items():
+        start, size, index = object_sym(obj, name)
+        if size is None or not isinstance(index, int):
+            errors.append(f"object defines no symbol {name!r}")
+        else:
+            spans.setdefault(index, []).append((start, start + size, va))
+    used, patches, cleared = set(), [], []
     for section in sections:
         if section[1] != 9:                                  # SHT_REL
             continue
@@ -792,15 +795,17 @@ def fold_literals(obj, va, name, img, gp):
             offset, info = struct.unpack_from("<II", data, at)
             if info & 0xff != R_LITERAL:
                 continue
-            if section[7] != text_index:
-                errors.append(f"literal reference outside {name} (section {section[7]})")
+            owner = [(start, va) for start, end, va in spans.get(section[7], ()) if start <= offset < end]
+            if not owner:
+                errors.append(f"literal reference at +0x{offset:x} of section {section[7]} is in no known body")
                 continue
+            start, va = owner[0]
             value, _sz, _info, _other, index = struct.unpack_from("<IIBBH", data, symbols[4] + (info >> 8) * 16 + 4)
             width = literal_sections.get(index)
             if width is None:
                 errors.append(f"literal reference at +0x{offset:x} is not into .lit4 or .lit8")
                 continue
-            word_at = sections[text_index][4] + offset
+            word_at = sections[section[7]][4] + offset
             word, = struct.unpack_from("<I", data, word_at)
             entry = value + (word & 0xffff)
             retail, = struct.unpack("<I", va_bytes(img, va + offset - start, 4))
@@ -817,7 +822,7 @@ def fold_literals(obj, va, name, img, gp):
     for index, width in literal_sections.items():
         for entry in range(0, sections[index][5], width):
             if (index, entry) not in used:
-                errors.append(f"{names[index]} entry +0x{entry:x} is not referenced by {name}")
+                errors.append(f"{names[index]} entry +0x{entry:x} is not referenced by a known body")
     if errors:
         return [], errors
     for at, word in patches:
@@ -1066,6 +1071,13 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         aliases = dict(group.externals)
         if any(address not in by_va for address in group.members + tuple(aliases.values())):
             raise ValueError("emitted body or external alias has no retail function")
+        literal_sections = []
+        if not group.whole_file:
+            literal_sections, literal_errors = fold_literals(
+                obj, {member: address for member, address in members if member not in deferred}, image,
+                gp_override if gp_override is not None else reginfo_gp(elf))
+            if literal_errors:
+                raise ValueError(literal_errors[0])
         records, sections = {}, set()
         for compiler_name, address in members:
             section, value, size = syms.get(compiler_name, (None, None, None))
@@ -1104,7 +1116,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         executable = {i for i, (_, h) in enumerate(headers) if h[2] & 4 and h[5] and i not in dropped}
         named_text = {i for i, (name, h) in enumerate(headers)
                       if name == ".text" and h[5] and i not in dropped}
-        auxiliary = (table_sections | set(data_sections)
+        auxiliary = (table_sections | set(data_sections) | set(literal_sections)
                      | {i for pair in exc_sections.values() for i in pair if i is not None})
         if (allocated != sections | auxiliary or executable != sections
                 or named_text != sections):
@@ -1484,7 +1496,8 @@ def isolate_emitted_body(obj, requested, records, group, symbols):
     subprocess.run(arguments + [obj], check=True, capture_output=True)
     final_headers = elf_section_headers(obj)
     allocated = [name for name, h in final_headers if h[2] & 2 and h[5]]
-    if any(name not in (".text", ".rodata") and name not in kept.values() for name in allocated):
+    if any(name not in (".text", ".rodata") and name not in kept.values() and name not in LITERAL_SECTIONS
+           for name in allocated):
         raise ValueError("emitted body extraction left unplaced allocated data")
     text = [(i, h) for i, (name, h) in enumerate(final_headers) if name == ".text" and h[5]]
     if len(text) != 1 or text[0][1][5] != records[selected][2]:
@@ -1662,7 +1675,7 @@ def _verify_standalone(obj, va, name, size, retail, img, by_name, symbols, tabs,
     if symsize <= 0 or off + symsize > len(all_text):
         return False, f"object symbol {name!r} has an invalid .text extent"
     literal_sections, literal_errors = fold_literals(
-        obj, va, name, img, gp_override if gp_override is not None else reginfo_gp(elf))
+        obj, {name: va}, img, gp_override if gp_override is not None else reginfo_gp(elf))
     all_text = object_section(obj, ".text", ndx)
     object_relocs(obj)      # rejects unsupported relocation types in any section
     text = all_text[off:off + symsize]

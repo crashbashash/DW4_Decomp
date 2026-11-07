@@ -39,22 +39,22 @@ extern "C" void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned i
                              unsigned int addr, long long length, const char *name);
 void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned int digits,
                   unsigned int addr, long long length, const char *name) {
-    DumpFile *file = 0;
+    bool showAddr = digits;
     unsigned char more = 1;
+    DumpFile *file = 0;
     unsigned long long end;
-    bool showAddr = digits != 0;
-    if (size == 0) size = 1;
+    if (!size) size = 1;
     else if (size > 8) size = 8;
-    if (name != 0) {
+    if (0 != name) {
         int alloc;
-        if (GPR_00554c14 != 0) alloc = Memory_GetAllocatorBySelector(DAT_00587028[0]);
+        if (GPR_00554c14) alloc = Memory_GetAllocatorBySelector(DAT_00587028[0]);
         else alloc = Memory_GetAllocatorBySelector(DAT_00587060[0]);
         file = (DumpFile *)FUN_002c4ca0(alloc);
-        if (file->Open(name, DAT_004f92f0) == 0) goto done;
+        if (0 == file->Open(name, DAT_004f92f0)) goto done;
     }
     {
-        end = (unsigned long long)addr + length;
         unsigned int mask;
+        end = (unsigned long long)addr + length;
         unsigned int i;
 #define DUMP_CASE(N, FMT, VALUE) \
         mask = (1 << (digits * 4)) - 1; \
@@ -65,7 +65,7 @@ void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned int digits,
             } \
             for (i = 0; i < perLine; i++) { \
                 EMIT(FMT, VALUE); \
-                addr += N; \
+                addr = addr + N; \
                 if ((unsigned long long)addr >= end) { more = 0; break; } \
             } \
             EMIT(DAT_004f95c8); \
@@ -84,7 +84,7 @@ void FUN_002ed610(unsigned int size, unsigned int perLine, unsigned int digits,
     }
     if (file) {
         file->Close();
-        if (--file->refs, (file->refs & 0x7FFFFF) == 0) igObject_Destroy(file);
+        if (--file->refs, 0 == (0x7FFFFF & file->refs)) igObject_Destroy(file);
     }
 done:;
 }

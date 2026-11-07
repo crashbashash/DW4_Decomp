@@ -250,8 +250,8 @@ with the game's flags, and AdxMovie was written alongside the game.
 3.0.3 and b38 as a `struct`.
 
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
-runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. 4,504 of the 4,838 MWCC units are on
-b52, 14 of them at `-O3` or `-O3,p` because their members pass only there. A unit moved only when every member matched under it, so the rest keep their earlier profile.
+runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. 4,680 of the 4,838 MWCC units are on
+b52, 29 of them at `-O3` or `-O3,p` because their members pass only there. A unit moved only when every member matched under it, so the rest keep their earlier profile.
 zlib and libpng are the exception that is settled: they build with `combat` and fail under `b52`.
 
 **The data threshold comes from the stock libraries and the small-data block.** zlib, libpng and Lua are
@@ -288,9 +288,11 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
 
 ## Open questions
 
-* **The remaining units.** 313 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, b38 or 2.4,
-  most for one or two members that differ under b52. `tools/roll_profile.py` lists the members.
-  Eleven of those functions read the literal pool from an emitted group, which does not fold yet.
-* **`-O3` or `-O4`.** Four matched functions need `-O4` (`FUN_001ef9b0`, `FUN_002094c0`, `FUN_00315050`,
-  `FUN_003a7300`), and about twenty failing ones pass only at `-O3`, so neither level fits every function
-  as currently spelled. b50 and b52 are not separated.
+* **The remaining units.** 137 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, combat or 2.4:
+  122 in Alchemy and the game, 9 that cross a region boundary and 6 in the Sony and CRI libraries.
+  Most hold one or two members that differ under b52, and a randomised search over spelling leaves 160
+  such functions unmatched. `tools/roll_profile.py` lists the members.
+* **`-O3` or `-O4`.** Neither level fits every function. Four matched functions pass only at `-O4`
+  (`FUN_001ef9b0`, `FUN_002094c0`, `FUN_00315050`, `FUN_003a7300`), and 34 pass only at `-O3`, in spite of
+  the same search at the other level. Descending load orders in some of them suggest struct copies or
+  inlined vector methods, which that search cannot write. b50 and b52 are not separated.

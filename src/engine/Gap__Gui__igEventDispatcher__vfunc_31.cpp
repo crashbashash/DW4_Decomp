@@ -5,12 +5,12 @@ struct M { char p0[8]; L *list; };
 struct O { char p0[12]; M *m; };
 extern "C" void Gap__Gui__igEventDispatcher__vfunc_31(O *arg0, V104 *arg1);
 void Gap__Gui__igEventDispatcher__vfunc_31(O *arg0, V104 *arg1) {
+    int n = arg0->m->list->count;
     int found = 0;
     int i = 0;
-    int n = arg0->m->list->count;
     for (; i < n; i++) {
-        found = arg0->m->list->items[i]->vX() & 0xFF;
+        found = 0xFF & arg0->m->list->items[i]->vX();
         if (found != 0) break;
     }
-    if (found == 0) arg1->vY();
+    if (!found) arg1->vY();
 }

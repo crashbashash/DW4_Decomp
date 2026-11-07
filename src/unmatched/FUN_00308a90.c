@@ -17,18 +17,18 @@ void igObject_Destroy(void *);
 int FUN_00308850(O *, Hd *);
 Hd *FUN_00308a90(O *arg0) {
     Ob *volatile sp4C;
+    int *hd;
     Ob *t;
     Ob *a0;
-    Hd *s0;
-    int s2;
-    int old;
     int v;
-    int *hd;
+    int s2;
+    Hd *s0;
+    int old;
     if (arg0->f12 == 0) {
         sp4C = FUN_002c72c0(FUN_00301000());
         t = sp4C;
-        if (t != 0) {
-            t->refs = t->refs + 1;
+        if (0 != t) {
+            t->refs = 1 + t->refs;
         }
         a0 = (Ob *)arg0->f12;
         if (a0 != 0) {
@@ -42,12 +42,12 @@ Hd *FUN_00308a90(O *arg0) {
         if (t != 0) {
             t->refs = t->refs - 1;
             a0 = sp4C;
-            if ((a0->refs & 0x7fffff) == 0) {
+            if ((0x7fffff & a0->refs) == 0) {
                 igObject_Destroy(a0);
             }
         }
         s0 = arg0->f12;
-        if (DAT_00586f20[0] == 0) {
+        if (0 == DAT_00586f20[0]) {
             v = FUN_002eb010(16);
             if (v != 0) {
                 v = StringPool_Construct(v);

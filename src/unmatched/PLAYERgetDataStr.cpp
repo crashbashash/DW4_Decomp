@@ -18,10 +18,10 @@ int *PLAYERgetDataStr(int arg0, int arg1, float fparg0);
 }
 
 int *PLAYERgetDataStr(int arg0, int arg1, float fparg0) {
+    float ang;
+    float v[3];
     float mat[16];
     float t[3];
-    float v[3];
-    float ang;
     int c, b, a;
 
     beMessenger_SelectGroup(DAT_0058a1c0[0], &DAT_0050dd58[0]);
@@ -32,9 +32,6 @@ int *PLAYERgetDataStr(int arg0, int arg1, float fparg0) {
     Matrix44_GetTranslation(mat, t);
     FUN_00192f50(v, &DAT_004e1098[0], mat);
     ang = FUN_00123640(v[0], v[2]);
-    a = FUN_00230298(t[0]);
-    b = FUN_00230298(t[1]);
-    c = FUN_00230298(t[2]);
-    sprintf(&DAT_0058a2b0[0], &DAT_0050dd90[0], a, b, c, FUN_00230298((57.29578f * ang) + fparg0));
+    sprintf(&DAT_0058a2b0[0], &DAT_0050dd90[0], (FUN_00230298(t[0])), (FUN_00230298(t[1])), (FUN_00230298(t[2])), FUN_00230298((57.29578f * ang) + fparg0));
     return &DAT_0058a2b0[0];
 }

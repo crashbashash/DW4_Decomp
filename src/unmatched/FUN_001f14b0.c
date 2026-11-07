@@ -28,29 +28,29 @@ extern int DAT_00569300[4];
 extern int DAT_00569330[4];
 extern int DAT_0056bad8[4];
 void FUN_001f14b0(unsigned int arg0) {
-    int temp_a0;
-    int var_a0;
-    int var_a0_2;
+    int var_s3;
     int var_a0_3;
-    int var_a1;
     int var_a1_2;
-    unsigned int temp_s0;
     int b27;
+    int var_a1;
+    int var_a0_2;
+    unsigned int var_s2;
+    unsigned int var_s1;
+    int var_v1_4;
+    int temp_a0;
+    unsigned int temp_s0;
     int var_v1;
     int var_v1_2;
     int var_v1_3;
-    int var_v1_4;
     unsigned int temp_a2;
-    int fl;
     unsigned long long temp_a1;
-    unsigned int var_s2;
-    unsigned int var_s1;
-    int var_s3;
+    int fl;
+    int var_a0;
 
     var_s1 = arg0;
     temp_a2 = DAT_00562c70[DAT_00569330[0]];
-    b27 = (temp_a2 >> 0x1B) & 1;
-    if (DAT_00491480[0] != 1) {
+    b27 = 1 & (temp_a2 >> 0x1B);
+    if (1 != DAT_00491480[0]) {
         DAT_00491480[0] = 1;
         DAT_00491478[0] |= 9;
         DAT_005692a0[0] += 1;
@@ -59,12 +59,12 @@ void FUN_001f14b0(unsigned int arg0) {
     temp_a0 = var_a1 == 0;
     if ((DAT_00569240[0] ^ temp_a0) != 0) {
         DAT_00569240[0] = temp_a0;
-        DAT_00491478[0] |= 0x11;
+        DAT_00491478[0] = DAT_00491478[0] | 0x11;
         DAT_00569298[0] += 1;
     }
     if (DAT_00569228[0] & 0x20) {
         DAT_00569228[0] &= ~7;
-        if (var_a1 != 0) {
+        if (var_a1) {
             var_a0 = 2;
         } else {
             var_a0 = 0;
@@ -84,21 +84,21 @@ void FUN_001f14b0(unsigned int arg0) {
         FUN_00201a90();
         DAT_00569238[0] = FUN_001f4100;
     } else {
-        if ((temp_a2 >> 0x16) & 1) {
+        if (1 & (temp_a2 >> 0x16)) {
             DAT_00569228[0] &= ~7;
-            if (var_a1 != 0) {
+            if (var_a1) {
                 var_a1_2 = 2;
             } else {
                 var_a1_2 = 0;
             }
             DAT_00569228[0] |= var_a1_2;
-            if (DAT_005692b0[0] != 0) {
+            if (0 != DAT_005692b0[0]) {
                 var_a1 = 1;
             } else {
                 var_a1 = 0;
             }
             DAT_00569228[0] |= var_a1;
-            if (DAT_005692c0[0] != 0) {
+            if (0 != DAT_005692c0[0]) {
                 var_a0_3 = 4;
             } else {
                 var_a0_3 = 0;
@@ -117,13 +117,13 @@ void FUN_001f14b0(unsigned int arg0) {
     }
     DAT_00569250[0] += arg0;
     fl = DAT_0056bad8[0];
-    if (fl & 1) {
+    if (1 & fl) {
         DAT_00569270[0] += arg0;
     }
-    if (fl & 2) {
+    if (2 & fl) {
         DAT_00569280[0] += arg0;
     }
-    if (fl & 4) {
+    if (4 & fl) {
         DAT_00569278[0] += arg0;
     }
     if (fl & 8) {
@@ -134,7 +134,7 @@ void FUN_001f14b0(unsigned int arg0) {
     }
     var_s3 = 0;
     temp_s0 = DAT_004914a6[0] & ~1;
-    while (var_s1 != 0) {
+    while (var_s1) {
         var_s2 = var_s1;
         if (temp_s0 < var_s1) {
             var_s2 = temp_s0;
