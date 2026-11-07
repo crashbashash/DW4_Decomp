@@ -207,15 +207,15 @@
    },
    "foreign_profile.bytes": {
     "reason": null,
-    "value": 24848
+    "value": 17744
    },
    "foreign_profile.functions": {
     "reason": null,
-    "value": 88
+    "value": 61
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 77321
+    "value": 79787
    },
    "inline_asm.hardware": {
     "reason": null,
@@ -239,7 +239,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 5853
+    "value": 6000
    },
    "mismatch.bytes": {
     "reason": null,
@@ -259,11 +259,11 @@
    },
    "orphan.bytes": {
     "reason": null,
-    "value": 14096
+    "value": 8708
    },
    "raw_casts.reflected": {
     "reason": null,
-    "value": 329
+    "value": 366
    },
    "struct.a": {
     "reason": null,
@@ -279,11 +279,11 @@
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 1085784
+    "value": 1005768
    },
    "unmatched.functions": {
     "reason": null,
-    "value": 2388
+    "value": 2112
    }
   },
   "counters": {

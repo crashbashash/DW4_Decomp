@@ -81,17 +81,17 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.hardware` | 11 | 11 | 0 | `asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py) |
 | `inline_asm.other` | 94 | 94 | 0 | every other `asm` statement: each has to show its function fails without it |
-| `unmatched.functions` | 2,388 | 2,112 | -276 | functions in the layout with no definition in src/ |
-| `unmatched.bytes` | 1,085,784 | 1,005,768 | -80016 | bytes of those |
+| `unmatched.functions` | 2,112 | 2,112 | 0 | functions in the layout with no definition in src/ |
+| `unmatched.bytes` | 1,005,768 | 1,005,768 | 0 | bytes of those |
 | `struct.a` | 141 | 141 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 294 | 294 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12 |
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 5,853 | 6,000 | **+147** | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 329 | 366 | **+37** | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 77,321 | 79,787 | **+2466** | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
-| `foreign_profile.functions` | 88 | 61 | -27 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
-| `foreign_profile.bytes` | 24,848 | 17,744 | -7104 | bytes of those |
-| `orphan.bytes` | 14,096 | 8,708 | -5388 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
+| `m2c_idiom.units` | 6,000 | 6,000 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `raw_casts.reflected` | 366 | 366 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
+| `fun_dat_refs` | 79,787 | 79,787 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `foreign_profile.functions` | 61 | 61 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
+| `foreign_profile.bytes` | 17,744 | 17,744 | 0 | bytes of those |
+| `orphan.bytes` | 8,708 | 8,708 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 10,528 | 10,528 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 
 ## The data half
