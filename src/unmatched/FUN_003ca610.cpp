@@ -1,8 +1,10 @@
-/* Deleting destructor; the deletion flag is a signed short. */
-typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
-typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
+struct ObjectRefTarget { int word0; int references; };
+struct ObjectRefWord { ObjectRefTarget *value; };
+extern "C" {
 void igObject_Destroy(ObjectRefTarget *);
 void FUN_00100610(void *);
+ObjectRefWord *FUN_003ca610(ObjectRefWord *self,int delete_storage);
+}
 ObjectRefWord *FUN_003ca610(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;

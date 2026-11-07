@@ -1,6 +1,7 @@
+extern "C" {
 #include "dw4/reflected.h"
-int FUN_00100610();
-int igObject_Destroy();
+int FUN_00100610(void *);
+int igObject_Destroy(void *);
 igObject **FUN_003cafa0(igObject **arg0, short arg1) {
     igObject *temp_a0;
 
@@ -17,4 +18,5 @@ igObject **FUN_003cafa0(igObject **arg0, short arg1) {
         }
     }
     return arg0;
+}
 }

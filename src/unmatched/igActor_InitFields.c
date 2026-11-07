@@ -1,5 +1,5 @@
-struct V { int x; int y; int z; int w; };
-struct M { int m[16]; };
+struct ActorVectorWords { int x; int y; int z; int w; };
+struct ActorMatrixWords { int m[16]; };
 #include "dw4/reflected.h"
 int FUN_00130e90();
 int FUN_001888e0();
@@ -19,14 +19,14 @@ extern int DAT_0048d7f0[4];
 extern int DAT_0048d830[4];
 extern int DAT_00562488[4];
 void igActor_InitFields(void) {
-    struct V c5, c4, c3, c2;
-    struct M c1;
-    struct V b5, b4, b3, b2;
-    struct M b1;
-    struct V a5, a4, a3, a2;
-    struct M a1;
-    void *temp_s0;
+    struct ActorMatrixWords a1;
+    struct ActorVectorWords a2, a3, a4, a5;
+    struct ActorMatrixWords b1;
+    struct ActorVectorWords b2, b3, b4, b5;
+    struct ActorMatrixWords c1;
+    struct ActorVectorWords c2, c3, c4, c5;
     int temp_s1;
+    void *temp_s0;
     void *temp_s2;
     void *temp_s2_2;
     void *temp_s2_3;

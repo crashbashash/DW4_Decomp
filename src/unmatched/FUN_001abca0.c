@@ -1,21 +1,21 @@
-typedef struct RT { int w0; int references; char pad[20]; char f28; } RT;
-RT *FUN_001a90f0();
+typedef struct AnimationPoolObject { int w0; int references; char pad[20]; char f28; } AnimationPoolObject;
+AnimationPoolObject *FUN_001a90f0();
 int FUN_00306e50();
 int Memory_GetAllocatorBySelector();
-RT *igAnimationCombinerBoneInfoPool_Create();
-RT *igAnimationStatePool_Create();
-int igObject_Destroy(RT *);
+AnimationPoolObject *igAnimationCombinerBoneInfoPool_Create();
+AnimationPoolObject *igAnimationStatePool_Create();
+int igObject_Destroy(AnimationPoolObject *);
 extern int DAT_004e44e0[4];
-extern RT * DAT_00562528[4];
-extern RT * DAT_00562540[4];
-extern RT * DAT_00562558[4];
+extern AnimationPoolObject * DAT_00562528[4];
+extern AnimationPoolObject * DAT_00562540[4];
+extern AnimationPoolObject * DAT_00562558[4];
 extern int * DAT_00586dc8[4];
 extern int DAT_00587038[4];
-extern int GPR_00554b84;
+extern char GPR_00554b84;
 
 void FUN_001abca0(void) {
     int s0;
-    RT *t;
+    AnimationPoolObject *t;
     s0 = Memory_GetAllocatorBySelector(DAT_00587038[0]);
     t = DAT_00562528[0];
     if (t != 0) {

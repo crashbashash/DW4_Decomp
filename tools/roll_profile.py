@@ -3,8 +3,7 @@
 
 config/SLUS-20836/units.tsv is maintained, not regenerated: the sweeps tools/gen_unit_profiles.py
 drew its first version from are not in the repository. This is how a unit changes profile. A unit
-moves only when each function with source keeps its category (a `foreign-profile` member may
-improve), and a unit holding the retail copy of a `duplicates` entry stays, since check.py compares
+moves only when each function with source keeps its category or verifies there, and a unit holding the retail copy of a `duplicates` entry stays, since check.py compares
 every emitted copy under that unit's profile. Overrides of the moved functions go with it.
 
   python3 tools/roll_profile.py --regions bec,ndmw --flags "-O4,p -sdatathreshold 2 -Iinclude"
@@ -17,7 +16,9 @@ import json
 import multiprocessing
 import os
 import re
+import shutil
 import sys
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
@@ -28,11 +29,6 @@ import verify  # noqa: E402
 CONFIG = "config/SLUS-20836/"
 UNITS = CONFIG + "units.tsv"
 OVERRIDES = (CONFIG + "unit-flags.tsv", CONFIG + "unit-compilers.tsv")
-
-
-def compilers():
-    with open(UNITS) as fh:
-        return {f[1]: f[2] for f in (line.rstrip("\n").split("\t") for line in fh) if f[0] == "@compiler"}
 
 
 def rows():
@@ -64,19 +60,20 @@ def duplicate_holders():
 
 
 def check(task):
-    flags = task["flags"] + (" -Cpp_exceptions off" if task["exceptions"] == "off" else "")
     source, temporary = unitfiles.standalone(task["path"], task["name"], symbols=CONFIG + "symbols.txt",
                                              unit_objects=None)
+    tables = task["tables"]
     try:
-        ok, report = verify.verify_one(task["va"], source, flags=flags, mwcc=task["compiler"],
-                                       unit_flags="/dev/null", unit_compilers="/dev/null", units="/dev/null",
-                                       unit_objects=None)
+        # every candidate unit already moved, so a compiler-emitted copy is compared under the
+        # profile its retail unit would have
+        ok, report = verify.verify_one(task["va"], source, units=tables[0], unit_flags=tables[1],
+                                       unit_compilers=tables[2])
     finally:
         if temporary:
             os.remove(temporary)
     found = re.search(r"\bcat=([\w-]+)", (report or "").partition("\n")[0])
     kind = found[1] if found else None
-    return dict(task, passed=kind == task["category"] or (bool(ok) and task["category"] == "foreign-profile"))
+    return dict(task, passed=kind == task["category"] or bool(ok))
 
 
 def main():
@@ -88,7 +85,6 @@ def main():
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
     wanted = set(args.regions.split(","))
-    compiler = compilers()[args.compiler]
     units = rows()
     starts = [unit[0] for unit in units]
     holders = duplicate_holders()
@@ -99,6 +95,23 @@ def main():
                 and "-lang" not in flags and not any(start <= held < end for held in holders)):
             targets[index] = units[index]
     paths = unitfiles.scan("src")
+    scratch = tempfile.mkdtemp(prefix="roll_profile_")
+    keys = {units[index][0] for index in targets}
+    tables = [os.path.join(scratch, os.path.basename(path)) for path in (UNITS,) + OVERRIDES]
+    with open(UNITS) as fh:
+        lines = fh.readlines()
+    for number, line in enumerate(lines):
+        f = line.rstrip("\n").split("\t")
+        if line[0] not in "#@" and len(f) > 6 and f[0].startswith("0x") and int(f[0], 16) in keys:
+            f[3], f[4] = args.compiler, args.flags
+            lines[number] = "\t".join(f) + "\n"
+    with open(tables[0], "w") as fh:
+        fh.writelines(lines)
+    inside = [(units[index][0], units[index][1]) for index in targets]
+    for path, copy in zip(OVERRIDES, tables[1:]):
+        with open(path) as fh, open(copy, "w") as out:
+            out.writelines(line for line in fh if not (line.startswith("0x") and any(
+                lo <= int(line.split("\t")[0], 16) < hi for lo, hi in inside)))
     tasks = []
     with open("data/check-categories.tsv") as fh:
         for line in fh:
@@ -109,9 +122,10 @@ def main():
             index = bisect.bisect_right(starts, va) - 1
             if index in targets and va < units[index][1] and name in paths:
                 tasks.append(dict(va=va, name=name, path=paths[name], category=category, unit=index,
-                                  exceptions=units[index][5], flags=args.flags, compiler=compiler))
+                                  tables=tables))
     with multiprocessing.Pool(args.jobs) as pool:
         results = pool.map(check, tasks, chunksize=4)
+    shutil.rmtree(scratch)
     members = collections.defaultdict(list)
     for result in results:
         members[result["unit"]].append(result)

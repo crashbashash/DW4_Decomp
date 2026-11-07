@@ -1,13 +1,13 @@
-struct B { char p[8]; unsigned int *data; };
-struct S { char p0[8]; struct B *b; unsigned int count; unsigned int f16_pad; int f20; int pad24; int f28; char pad32[32]; long long f64; };
+struct VertexColorBuffer { char p[8]; unsigned int *data; };
+struct VertexArrayColorView { char p0[8]; struct VertexColorBuffer *b; unsigned int count; unsigned int f16_pad; int f20; int pad24; int f28; char pad32[32]; long long f64; };
 int FUN_0017d2b0();
 int FUN_001f05a0(int, long long);
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_19(struct S *s) {
-    unsigned int hi;
-    unsigned int x;
-    unsigned int *p;
+void Gap__Gfx__igPsx2VertexArray1_1__vfunc_19(struct VertexArrayColorView *s) {
     unsigned int i;
+    unsigned int *p;
+    unsigned int x;
+    unsigned int hi;
     if (s->f20 & 4) {
         FUN_001f05a0(1, s->f64);
     }

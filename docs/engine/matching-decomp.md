@@ -355,6 +355,21 @@ Retail shapes that only one spelling reproduces:
   inline `sync` statement: the barrier sits after the call's delay slot and before the frame
   restore. `FUN_0010c008` adds a trailing `ei` and a zero return. Inline `sync` and `ei`
   compile to the exact retail words.
+* **A function address stored repeatedly** goes through a function-pointer member, such as
+  `void (*getEnum)(void)`, assigned the plain function. An `int` member with an `(int)fn` cast lets
+  b52 keep the address in a saved register. Data names aliasing the function are rejected as
+  `name-defect`, and this form needs none.
+* **A loop invariant retail leaves inside the body** means b52 has hoisted the written form. Use
+  labels: `i = 0; goto test; top: ...; i++; test: if (cond) goto top;`.
+* **A guarded table store** reads the count twice:
+  `if (t->count != 0 && i >= 0 && i < t->count) t->data[i] = v;` in a `static inline`. A local
+  count changes the registers. A `const int &v` parameter keeps the value's load after the test.
+* **Swapped operands of a commutative operation:** load into the variable, then use a compound
+  operator: `v = p[0]; v |= p[1] << 8;`.
+* **`movz` from a ternary** comes from enum constants, `b ? kOff : kOn`. Plain integers fold to
+  `sltu` and `xori`.
+* **A 24-bit mask under b52** is `unsigned int` with `& 0xFFFFFF`; `dsll32` and `dsrl32` are how
+  it masks a 32-bit value. A `ULL` constant adds extensions.
 
 decomp-permuter's assembler rejects EE MMI opcodes (`opcode not supported on this processor:
 mips3`), so a function containing `lq`/`sq` cannot become a permuter project.

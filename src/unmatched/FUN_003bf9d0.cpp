@@ -1,6 +1,7 @@
-int StringChunk_ReleaseHeader();
-int igObject_Destroy();
-int thunk_FUN_002ed460__002ff810();
+extern "C" {
+int StringChunk_ReleaseHeader(int, void *);
+int igObject_Destroy(void *);
+int thunk_FUN_002ed460__002ff810(void *);
 extern int DAT_00524950[4];
 extern int DAT_0052cf80[4];
 extern int DAT_0053a0d0[4];
@@ -55,4 +56,5 @@ O *FUN_003bf9d0(O *arg0, short arg1) {
         }
     }
     return arg0;
+}
 }

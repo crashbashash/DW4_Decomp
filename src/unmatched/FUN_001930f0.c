@@ -1,7 +1,7 @@
-struct V { int a, b, c, d; };
-void FUN_00192f00(struct V *o, float t, struct V *a, struct V *b);
-void FUN_001930f0(struct V *out, struct V *p1, struct V *p2, struct V *p3, struct V *p4, float t) {
-    struct V v5, v4, v3, v2, v1;
+struct CurvePoint4 { int a, b, c, d; };
+void FUN_00192f00(struct CurvePoint4 *o, float t, struct CurvePoint4 *a, struct CurvePoint4 *b);
+void FUN_001930f0(struct CurvePoint4 *out, struct CurvePoint4 *p1, struct CurvePoint4 *p2, struct CurvePoint4 *p3, struct CurvePoint4 *p4, float t) {
+    struct CurvePoint4 v1, v2, v3, v4, v5;
     FUN_00192f00(&v1, t, p1, p2);
     FUN_00192f00(&v2, t, p2, p3);
     FUN_00192f00(&v3, t, p3, p4);

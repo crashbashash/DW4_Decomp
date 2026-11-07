@@ -11,11 +11,11 @@ extern int DAT_0048c030[4];
 extern int DAT_0048c040[4];
 extern int DAT_00561a10[4];
 void igGraphPath_InitFields(void) {
-    void *temp_s0;
+    int temp_s2;
     void *temp_a0;
     void *temp_s1;
+    void *temp_s0;
     struct { int a; int b; int c; } z;
-    int temp_s2;
 
     temp_s0 = (void *)DAT_00561a10[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

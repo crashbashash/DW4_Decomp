@@ -1,12 +1,8 @@
-/* The parameter is reused for the loaded index and then for the scaled index, which fills the
- * branch delay slot. */
-extern int *DAT_00561148[4];
+typedef struct ValueTable { int pad0[2]; int count; int capacity; int *data; } ValueTable;
+extern ValueTable *DAT_00561148;
+static inline void setAt(ValueTable *t, int i, int v) {
+    if (t->count != 0 && i >= 0 && i < t->count) { t->data[i] = v; }
+}
 void FUN_0018fdd0(int arg0, int arg1) {
-    int *list = DAT_00561148[0];
-    int n = list[2];
-    arg0 = *(int *)(arg0 + 8);
-    if (n != 0 && arg0 >= 0 && arg0 < n) {
-        arg0 = arg0 * 4;
-        *(int *)(list[4] + arg0) = arg1;
-    }
+    setAt(DAT_00561148, *(int *)(arg0 + 8), arg1);
 }

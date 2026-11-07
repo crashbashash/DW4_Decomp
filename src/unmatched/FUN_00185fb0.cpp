@@ -1,11 +1,11 @@
-struct V2 { float a, b; };
-class B { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int v116(unsigned, float *); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int v144(unsigned, float *); virtual void d35(); virtual int v152(unsigned, int); virtual void d37(); virtual void d38(); virtual int v164(unsigned, int); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual int v212(unsigned, float); virtual void d52(); virtual int v220(unsigned, V2 *);
- int f4; char pad8[16]; B *f24; };
+struct TexCoordPair { float a, b; };
+class VertexSink { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int v116(unsigned, float *); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int v144(unsigned, float *); virtual void d35(); virtual int v152(unsigned, int); virtual void d37(); virtual void d38(); virtual int v164(unsigned, int); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual int v212(unsigned, float); virtual void d52(); virtual int v220(unsigned, TexCoordPair *);
+ int f4; char pad8[16]; VertexSink *f24; };
 extern "C" {
-int FUN_0015db00(B *, unsigned, V2 *);
+int FUN_0015db00(VertexSink *, unsigned, TexCoordPair *);
 int FUN_00181840(int);
 int FUN_00181850(int);
-void FUN_00181810(V2 *, int, int, float);
+void FUN_00181810(TexCoordPair *, int, int, float);
 int FUN_001818a0(int);
 int FUN_001818b0(int);
 int FUN_001820f0(int);
@@ -16,30 +16,31 @@ void FUN_00183f60(float *, int, int, int, float, float);
 void FUN_00182440(float *, int, int, int, float, float);
 int FUN_001931b0(float *, int);
 int igObject_Destroy(...);
-void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, B *arg4, B *arg5, float fparg0);
+void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4, VertexSink *arg5, float fparg0);
 }
-extern "C" void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, B *arg4, B *arg5, float fparg0) {
-    B *t;
-    B *t2;
+extern "C" void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4, VertexSink *arg5, float fparg0) {
+    VertexSink *t;
+    VertexSink *t2;
     float temp_f20;
-    float spA0[4];
-    V2 spB8;
-    V2 spC0;
-    V2 spC8;
     float spD0[3];
-    int e1;
-    int e2;
-    int c2;
-    int c1;
+    int i2;
+    TexCoordPair spC8;
+    float spA0[4];
+    TexCoordPair spC0;
+    unsigned end;
+    int i1;
     int b2;
     int b1;
     int f1;
-    int i1;
+    int c1;
+    int c2;
     int f2;
     int d1;
-    int i2;
+    int e1;
+    TexCoordPair spB8;
     int d2;
-    unsigned end, end2;
+    int e2;
+    unsigned end2;
 
     temp_f20 = fparg0 * fparg0;
     if (arg5 != 0) {

@@ -4,7 +4,7 @@ extern int DAT_0048dae0[4];
 extern int DAT_004e4830[4];
 extern int DAT_004e4850[4];
 extern void * DAT_00586dc8[4];
-extern int GPR_00554b9c;
+extern char GPR_00554b9c;
 
 int FUN_001d81e0(void) {
     int temp_s0;

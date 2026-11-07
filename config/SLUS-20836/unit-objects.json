@@ -5396,5 +5396,131 @@
     "externals": {
       "__dl__FPv": "0x00100610"
     }
+  },
+  "0x001afa30": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x001c51d0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__11FieldHolderFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x001c17e0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__14PoolListHolderFv": "0x002e2300"
+    },
+    "externals": {
+      "__dl__FPv": "0x002ed5c0"
+    }
+  },
+  "0x001c0ba0": {
+    "emitted": {},
+    "duplicates": {
+      "FUN_001c0ae0": "0x001c0ae0"
+    }
+  },
+  "0x003c0640": {
+    "externals": {
+      "__ct__8InfoBaseFv": "0x003bf650",
+      "__dt__8InfoBaseFv": "0x00350410",
+      "__ct__14ObjectRefFieldFv": "0x001510d0",
+      "__dt__14ObjectRefFieldFv": "0x00150eb0",
+      "__ct__15PEBaseListFieldFv": "0x003c0760",
+      "__dt__15PEBaseListFieldFv": "0x00226990",
+      "__dl__FPv": "0x00100610"
+    },
+    "exceptions": {
+      "index": "0x005519b4",
+      "table": "0x0054439c",
+      "table_size": "0x4c"
+    },
+    "stripped": [
+      "__dt__17PEBaseInfoWorkObjFv"
+    ]
+  },
+  "0x001aa7d0": {
+    "externals": {
+      "__ct__12igObjectViewFv": "0x002fef20",
+      "__ct__15igMatrix44fViewFv": "0x00190380",
+      "__dt__10igNodeViewFv": "0x00195a90",
+      "__dt__20ActorAnimSystemFieldFv": "0x001aa8d0",
+      "__dt__20ActorAppearanceFieldFv": "0x001aa950",
+      "__dt__18ActorDatabaseFieldFv": "0x001aa390",
+      "__dt__18ActorModifierFieldFv": "0x001aa9d0"
+    },
+    "stripped": [
+      "__dt__11igActorViewFv"
+    ]
+  },
+  "0x001e16a0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9EnvMapRefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001e1e70": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9EnvMapRefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001e22c0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9EnvMapRefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "stripped": [
+      "__dt__13EnvMapTempRefFv"
+    ]
+  },
+  "0x001de040": {
+    "emitted": {},
+    "stripped": [
+      "__dt__10SeqTempRefFv"
+    ]
+  },
+  "0x001de4e0": {
+    "emitted": {},
+    "stripped": [
+      "__dt__10SeqTempRefFv"
+    ]
+  },
+  "0x001d7120": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9ShadowRefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001d4480": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__9ShadowRefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
   }
 }

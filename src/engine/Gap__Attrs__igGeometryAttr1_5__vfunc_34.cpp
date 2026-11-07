@@ -1,24 +1,19 @@
-class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void v108(void *,int); virtual void v112(void *,int); };
+class GeometryVertexSource { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void v108(void *,int); virtual void v112(void *,int); };
 extern "C" {
-extern float DAT_00554914;
-extern float DAT_00554918;
 int FUN_0015db90(...);
 }
-struct Acc { int f0; int f4; int f8; unsigned int cnt; char *data; int stride; };
-struct G { char pad0[12]; VC *f12; char pad1[12]; int f28; };
-extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_34(G *arg0, float *arg1, float *arg2);
-void Gap__Attrs__igGeometryAttr1_5__vfunc_34(G *arg0, float *arg1, float *arg2) {
-    Acc acc;
-    float mz = DAT_00554914;
+struct VertexRangeAccess { int f0; int f4; int f8; unsigned int cnt; char *data; int stride; };
+struct GeometryAttrView { char pad0[12]; GeometryVertexSource *f12; char pad1[12]; int f28; };
+extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1, float *arg2);
+void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1, float *arg2) {
+    VertexRangeAccess acc;
+    float mz = 1e20f;
     float my = mz;
     float mx = mz;
-    float nz = DAT_00554918;
+    float nz = -1e20f;
     float ny = nz;
     float nx = nz;
     unsigned int i;
-    int st;
-    char *d;
-    unsigned int n;
     volatile float *p;
     float t;
     FUN_0015db90(&acc);
@@ -27,11 +22,8 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_34(G *arg0, float *arg1, float *arg2) 
     acc.f8 = arg0->f28;
     acc.cnt = 0;
     arg0->f12->v108(&acc, 0);
-    n = acc.cnt;
-    st = acc.stride;
-    d = acc.data;
-    for (i = 0; i < n; i++) {
-        p = (volatile float *)(d + i * st);
+    for (i = 0; i < acc.cnt; i++) {
+        p = (volatile float *)(acc.data + i * acc.stride);
         t = p[0];
         if (!(mx <= t)) { mx = t; }
         t = p[1];

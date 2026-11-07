@@ -7,13 +7,13 @@ int png_set_read_user_transform_fn();
 int png_set_packing();
 void FUN_001673a0(void);
 int FUN_001681c0(int arg0, int arg1, int arg2) {
-    int sp44;
-    int sp48;
-    int sp4C;
-    int sp50;
-    int sp54;
-    int sp58;
     int sp5C;
+    int sp58;
+    int sp54;
+    int sp50;
+    int sp4C;
+    int sp48;
+    int sp44;
 
     png_get_IHDR(arg1, arg2, &sp5C, &sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
     png_set_strip_16(arg1);

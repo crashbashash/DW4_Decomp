@@ -1,23 +1,23 @@
-typedef struct M { float m[16]; } M;
-typedef struct V4 { float v[4]; } V4;
-typedef struct C { char pad[8]; struct D *f8; char pad2[64]; int f76; int f80; } C;
-typedef struct D { char pad[12]; float f12; char p2[136]; long long f152; } D;
-int igMatrix44f_SetIdentity(M *);
-int FUN_00190ed0(M *, float, float, float);
-int FUN_00191230(M *, float *, float *, float *);
-int FUN_00191e30(void *, void *, M *);
-int FUN_001c5b30(int, M *, long long);
-int FUN_004578c0(D *, int *);
-int Matrix44_GetTranslation(M *, V4 *);
-int Matrix44_SetTranslation(M *, V4 *);
+typedef struct ViewerMatrix { float m[16]; } ViewerMatrix;
+typedef struct ViewerVector4 { float v[4]; } ViewerVector4;
+typedef struct ViewerPickView { char pad[8]; struct ViewerPickTarget *f8; char pad2[64]; int f76; int f80; } ViewerPickView;
+typedef struct ViewerPickTarget { char pad[12]; float f12; char p2[136]; long long f152; } ViewerPickTarget;
+int igMatrix44f_SetIdentity(ViewerMatrix *);
+int FUN_00190ed0(ViewerMatrix *, float, float, float);
+int FUN_00191230(ViewerMatrix *, float *, float *, float *);
+int FUN_00191e30(void *, void *, ViewerMatrix *);
+int FUN_001c5b30(int, ViewerMatrix *, long long);
+int FUN_004578c0(ViewerPickTarget *, int *);
+int Matrix44_GetTranslation(ViewerMatrix *, ViewerVector4 *);
+int Matrix44_SetTranslation(ViewerMatrix *, ViewerVector4 *);
 extern int DAT_0058cd38[4];
-void FUN_004654d0(C *arg0) {
-    int sp30[4];
-    M sp40;
-    V4 sp80;
+void FUN_004654d0(ViewerPickView *arg0) {
+    float a, b, c;
     int sp90;
-    float c, b, a;
-    D *d;
+    ViewerVector4 sp80;
+    ViewerMatrix sp40;
+    int sp30[4];
+    ViewerPickTarget *d;
     if (arg0->f80 != 0) {
         igMatrix44f_SetIdentity(&sp40);
         d = arg0->f8;

@@ -1,7 +1,3 @@
-/* Registers the class first when the slot is empty or its igMetaObject._validity (+36) lacks the
- * ready bit (mask 4), then returns the published MetaObject. The dead nop the null-test branch
- * lands on is written as `asm { nop }`; the flag test is kept as a value so the `sltu` is
- * materialised. */
 #include "dw4/reflected.h"
 extern "C" {
 void FUN_003bec70(void);
@@ -12,12 +8,8 @@ igMetaObject *beNDMWPanelObject_ResolveMetaObject(void);
 igMetaObject *beNDMWPanelObject_ResolveMetaObject(void)
 {
     igMetaObject *meta = g_beNDMWPanelObject_metaObject[0];
-    bool ready;
-    if (meta) {
-        if (ready = meta->_validity & 4) goto done;
-        asm { nop }  /* matching construct: guard variant B — the dead word the null-test branch skips */
+    if (!meta || ((meta->_validity & 4) != 0) == false) {
+        FUN_003bec70();
     }
-    FUN_003bec70();
-done:
     return g_beNDMWPanelObject_metaObject[0];
 }

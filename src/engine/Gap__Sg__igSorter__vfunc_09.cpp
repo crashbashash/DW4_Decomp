@@ -4,7 +4,7 @@ int FUN_001db500();
 int List_Resize(...);
 extern int DAT_0048dae8[4];
 }
-struct Dev {
+struct SorterDevice {
     virtual void d0();
     virtual void d1();
     virtual void d2();
@@ -38,14 +38,16 @@ struct Dev {
     virtual void f30(int);
     virtual void f31(int);
 };
-struct List { int pad[2]; int count; int cap; int *items; };
-struct Obj { char pad[64]; Dev *a; Dev *b; Dev *c; int pad2; List *l80; List *l84; List *l88; };
-extern "C" void Gap__Sg__igSorter__vfunc_09(Obj *o, int arg1) {
-    List *s2;
+struct SorterList { int pad[2]; int count; int cap; int *items; };
+struct SorterState { char pad[64]; SorterDevice *a; SorterDevice *b; SorterDevice *c; int pad2; SorterList *l80; SorterList *l84; SorterList *l88; };
+static inline void setRef(SorterList *l, int i, const int &v) {
+    if (l->count != 0 && i >= 0 && i < l->count) { l->items[i] = v; }
+}
+extern "C" void Gap__Sg__igSorter__vfunc_09(SorterState *o, int arg1) {
     int s3;
-    List *s0;
-    List *l;
-    int c;
+    SorterList *s2;
+    SorterList *s0;
+    SorterList *l;
     if (arg1 == 0) {
         FUN_001db500();
         o->a->f30(0);
@@ -69,10 +71,6 @@ extern "C" void Gap__Sg__igSorter__vfunc_09(Obj *o, int arg1) {
         } else {
             List_Resize(l, 1, 4);
         }
-        l = o->l88;
-        c = l->count;
-        if (c != 0 && 0 < c) {
-            *l->items = DAT_0048dae8[0];
-        }
+        setRef(o->l88, 0, DAT_0048dae8[0]);
     }
 }

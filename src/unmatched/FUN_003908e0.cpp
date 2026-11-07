@@ -4,7 +4,7 @@
  * igAABox's _min / _max are the reflected igVec3f fields (float[3] in include/dw4/reflected.h), read and written as floats here.
  * matching construct: the first-loop minuend is spelled `*(float *)&pc[0]`; other spellings change MWCC's operand/load order and swap the arg0 and i registers.
  * Arena refs stay 4-byte handles in the reflected structs, so each list is reached through a cast of the handle to its list class. */
-struct V3 { float x, y, z; };
+struct AABoxExtent { float x, y, z; };
 extern "C" {
 void igObject_Destroy(igAABox *);
 igAABox *FUN_0018a660(int);
@@ -28,7 +28,6 @@ public:
     AABoxRef(igAABox *o) : p(o) {}
     ~AABoxRef() { igAABox *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-struct PP { static inline float *At(float *b, int i) { return &b[i]; } };
 extern "C" igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int arg2, long long arg3);
 igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int arg2, long long arg3) {
     if (arg0->_isFirst != 0) {
@@ -61,7 +60,7 @@ igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int
                 igDataList *l = (igDataList *)arg0->_AABoxMinList;
                 k = l->_count;
                 if (k < l->_capacity) l->_count = k + 1; else List_Resize(l, k + 1, 12);
-                V3 *p = &((V3 *)l->_data)[k];
+                AABoxExtent *p = &((AABoxExtent *)l->_data)[k];
                 p->x = e1[0]; p->y = e1[1]; p->z = e1[2];
             }
             {
@@ -69,7 +68,7 @@ igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int
                 igDataList *l = (igDataList *)arg0->_AABoxMaxList;
                 k = l->_count;
                 if (k < l->_capacity) l->_count = k + 1; else List_Resize(l, k + 1, 12);
-                V3 *p = &((V3 *)l->_data)[k];
+                AABoxExtent *p = &((AABoxExtent *)l->_data)[k];
                 p->x = e2[0]; p->y = e2[1]; p->z = e2[2];
             }
             {
@@ -94,16 +93,14 @@ igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int
             float e1[3];
             float e2[3];
             int k;
-            for (k = 0; k < 3; k++) { float *a = PP::At(dst->_min, k); float *b = PP::At(dst->_max, k); *a = src->_min[k]; *b = src->_max[k]; }
+            for (k = 0; k < 3; k++) { float *a = &dst->_min[k]; float *b = &dst->_max[k]; *a = src->_min[k]; *b = src->_max[k]; }
             thunk_FUN_0018ac80(dst, arg2);
             c[0] = (dst->_min[0]) * 0.5f + (dst->_max[0]) * 0.5f;
             c[1] = (dst->_min[1]) * 0.5f + (dst->_max[1]) * 0.5f;
             c[2] = (dst->_min[2]) * 0.5f + (dst->_max[2]) * 0.5f;
-            *(V3 *)e1 = ((V3 *)((igDataList *)arg0->_AABoxMinList)->_data)[i];
-            *(V3 *)e2 = ((V3 *)((igDataList *)arg0->_AABoxMaxList)->_data)[i];
-            k = 0;
-            { float *a = PP::At(dst->_min, k); float *b = PP::At(dst->_max, k); *a = c[0] - e1[0]; *b = c[0] + e2[0]; }
-            for (k = 1; k < 3; k++) { float *a = PP::At(dst->_min, k); float *b = PP::At(dst->_max, k); *a = c[k] - e1[k]; *b = c[k] + e2[k]; }
+            *(AABoxExtent *)e1 = ((AABoxExtent *)((igDataList *)arg0->_AABoxMinList)->_data)[i];
+            *(AABoxExtent *)e2 = ((AABoxExtent *)((igDataList *)arg0->_AABoxMaxList)->_data)[i];
+            for (k = 0; k < 3; k++) { float *a = &dst->_min[k]; float *b = &dst->_max[k]; *a = c[k] - e1[k]; *b = c[k] + e2[k]; }
         }
     }
     return (igAABoxList *)arg0->_AABoxList;

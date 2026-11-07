@@ -1,14 +1,15 @@
-typedef struct Obj { int w0; int references; } Obj;
-typedef struct S { char p0[48]; Obj *f48; Obj *f52; Obj **f56; unsigned int f60; char p64[8]; void *f72; } S;
+typedef struct BufferEntryRef { int w0; int references; } BufferEntryRef;
+typedef struct BufferSetView { char p0[48]; BufferEntryRef *f48; BufferEntryRef *f52; BufferEntryRef **f56; unsigned int f60; char p64[8]; void *f72; } BufferSetView;
 int Memory_FreeBuffer();
 int igObject_Destroy();
 
-void FUN_0017a180(S *arg0) {
-    /* matching construct: variant search — decl order [3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
+void FUN_0017a180(int self) {
     int r;
-    Obj *o;
-    Obj **slot;
+    BufferEntryRef *o;
+    BufferEntryRef **slot;
+    BufferSetView *arg0;
     unsigned int i;
+    arg0 = (BufferSetView *)self;
     o = arg0->f52;
     if (o != 0) {
         o->references = o->references - 1;

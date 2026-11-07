@@ -25,3 +25,28 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_32(beNDMWStatusSubSlot *self, char *in
 {
     FUN_00412600(self, self->_subSlot, self->_kindListPos, index);
 }
+
+/* A property record: the value sits at +12. */
+typedef struct PropertyRecord { char pad0[12]; int value; } PropertyRecord;
+extern "C" {
+extern char LEVEL_3[];
+extern char LVPOINT[];
+/* Finds the object of the given class (metaObject) in an insight's object list; here the beNDMWStatus. */
+int FUN_00236f80(int, int);
+PropertyRecord *igProperty_GetRecord(int, char *);
+int beNDMWItemBase_GetRecordInt(int, int, char *);
+extern int g_beNDMWStatus_metaObject[4];
+
+/* True when the player's LEVEL is at least the LVPOINT record of device folder entry `entryIndex`;
+ * the same check is in beNDMWStatusMainSlot. */
+int Gap__Bec__beNDMWStatusSubSlot__vfunc_30(beNDMWStatusSubSlot *self, int entryIndex) {
+    int status;
+    int entry;
+    int playerLevel;
+
+    entry = *(int *)(((beNDMWItemBaseList *)self->_deviceFolder)->_data + (entryIndex * 4));
+    status = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
+    playerLevel = igProperty_GetRecord(self->_playerList, LEVEL_3)->value;
+    return playerLevel >= beNDMWItemBase_GetRecordInt(entry, status, LVPOINT);
+}
+}

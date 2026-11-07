@@ -12,8 +12,8 @@ class DW4VC_172_0 { public: virtual void d0(); virtual void d1(); virtual void d
 extern "C" int FUN_001bab30(int a0, void **arg1) {
     void *arg0 = (void *)a0;
     int temp_s0;
-    int temp_s0_2;
     int temp_s1;
+    int temp_s0_2;
 
     if ((((DW4VC_148_0 *)(arg1))->vX() != 0) && (((DW4VC_152_1 *)(arg1))->vX((int)(*(int *)((char *)(arg0) + 32))) == 0)) {
         return FUN_001e07a0(arg0, arg1);

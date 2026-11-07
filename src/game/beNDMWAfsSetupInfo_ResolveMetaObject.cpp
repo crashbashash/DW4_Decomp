@@ -1,17 +1,13 @@
 extern "C" {
 void FUN_003ca690(void);
-extern struct G *DAT_0058c110[4];
+extern struct MetaObjectValidityView *DAT_0058c110[4];
 void *beNDMWAfsSetupInfo_ResolveMetaObject(void);
 }
-struct G { int pad[9]; int f; };
+struct MetaObjectValidityView { int pad[9]; int f; };
 void *beNDMWAfsSetupInfo_ResolveMetaObject(void) {
-    struct G *g = DAT_0058c110[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    struct MetaObjectValidityView *g = DAT_0058c110[0];
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_003ca690();
     }
-    FUN_003ca690();
-end:
     return DAT_0058c110[0];
 }

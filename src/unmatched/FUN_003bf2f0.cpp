@@ -1,17 +1,20 @@
-typedef struct R { int w0; int refs; } R;
-struct O { int *vt; char pad0[4]; char *str; char pad[12]; R *ref; };
-int StringChunk_ReleaseHeader();
-int igObject_Destroy();
-int thunk_FUN_002ed460__002ff810();
+typedef struct RefCountedHeader { int w0; int refs; } RefCountedHeader;
+struct NamedRefObject { int *vt; char pad0[4]; char *str; char pad[12]; RefCountedHeader *ref; };
+extern "C" {
+int StringChunk_ReleaseHeader(int, int *);
+int igObject_Destroy(RefCountedHeader *);
+int thunk_FUN_002ed460__002ff810(struct NamedRefObject *);
+struct NamedRefObject *FUN_003bf2f0(struct NamedRefObject *arg0, long long arg1);
+}
 extern int DAT_00524950[4];
 extern int DAT_0052cf80[4];
 extern int DAT_0053a0d0[4];
 extern int DAT_0053adb0[4];
-struct O *FUN_003bf2f0(struct O *arg0, long long arg1) {
+struct NamedRefObject *FUN_003bf2f0(struct NamedRefObject *arg0, long long arg1) {
     int *temp_a1;
     int temp_v0;
     int *temp_v1;
-    R *temp_a0;
+    RefCountedHeader *temp_a0;
 
     if (arg0 != 0) {
         arg0->vt = &DAT_0053adb0[0];

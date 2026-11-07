@@ -10,16 +10,16 @@ int igObject_Destroy(void *);
 extern int DAT_0058c410[4];
 extern void *DAT_0058c678[4];
 /* vtable-call shim for the intersect traversal (slot 23 = vtable offset 100); not a data layout */
-struct VO { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(int); };
+struct IntersectTraversalCalls { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(int); };
 
 /* matching construct: the *Ref fields are 4-byte arena handles in the reflected structs; the casts give the typed views (no layout effect) */
 extern "C" void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
+    float v2[3];
+    float v1[3];
     int sp[3];
     igObject *s0 = 0;
     if (b->_rootComponent != 0) {
-        float v1[3];
-        float v2[3];
-        float y, x;
+        float x, y;
         igObject *t;
         FUN_001ce970((void *)a->_intersectTraversal);
         x = ((float *)b->_mousePosition)[0];
@@ -39,7 +39,7 @@ extern "C" void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
         }
         a->_hitPath = 0;
         DAT_0058c678[0] = a;
-        ((VO *)a->_intersectTraversal)->v23(((igGuiComponent *)b->_rootComponent)->_node);
+        ((IntersectTraversalCalls *)a->_intersectTraversal)->v23(((igGuiComponent *)b->_rootComponent)->_node);
         DAT_0058c678[0] = 0;
         if (a->_hit != 0) {
             s0 = (igObject *)FUN_00455510((void *)a->_hitPath);

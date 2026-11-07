@@ -6,12 +6,8 @@ void *beNDMWAfsSetup_ResolveMetaObject(void);
 struct G { int pad[9]; int f; };
 void *beNDMWAfsSetup_ResolveMetaObject(void) {
     struct G *g = DAT_0058c158[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_003cb020();
     }
-    FUN_003cb020();
-end:
     return DAT_0058c158[0];
 }

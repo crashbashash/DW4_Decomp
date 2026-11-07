@@ -1,8 +1,8 @@
 int FUN_001abc20(int *arg0, int arg1) {
-    int *t;
-    int *bits;
-    unsigned int idx;
     int r;
+    int *t;
+    unsigned int idx;
+    int *bits;
 
     t = (int *)arg0[6];
     idx = arg1 * 2;

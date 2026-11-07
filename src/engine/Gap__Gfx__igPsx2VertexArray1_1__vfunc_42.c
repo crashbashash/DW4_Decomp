@@ -1,7 +1,6 @@
-extern float DAT_005548e0;
-typedef struct B { char pad[8]; unsigned int *f8; } B;
-typedef struct A { char pad[8]; B *f8; } A;
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_42(A *arg0, int arg1, float *c) {
+typedef struct ColorStreamView { char pad[8]; unsigned int *f8; } ColorStreamView;
+typedef struct ColorArrayView { char pad[8]; ColorStreamView *f8; } ColorArrayView;
+void Gap__Gfx__igPsx2VertexArray1_1__vfunc_42(ColorArrayView *arg0, int arg1, float *c) {
     float s;
     float a;
     float b;
@@ -18,7 +17,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_42(A *arg0, int arg1, float *c) {
     g = c[1];
     b = c[2];
     if (!(a <= 1.0f)) {
-        s = DAT_005548e0;
+        s = 127.9f;
     }
     ta = (unsigned int)(s * a) << 24;
     tb = (unsigned int)(255.0f * b) << 16;

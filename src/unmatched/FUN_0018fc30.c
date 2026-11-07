@@ -1,20 +1,19 @@
-void FUN_0018fc30(void *arg0, void *arg1, int arg2) {
-    int temp_v1;
-    int var_a0;
-    unsigned int temp_a0;
-    unsigned int temp_a3;
-    void *temp_a1;
-
-    temp_a3 = *(int *)((char *)arg0 + 8);
-    temp_a0 = *(int *)((char *)arg1 + 8);
-    if (temp_a3 < temp_a0) {
-        var_a0 = (temp_a0 * (temp_a0 + 2)) - temp_a3;
+struct IndexedWordTable { char pad[8]; int count; char pad2[4]; int *data; };
+struct IndexedWordKey { char pad[8]; unsigned int idx; };
+extern struct IndexedWordTable *DAT_00561120;
+static inline void setEntry(struct IndexedWordTable *g, int idx, int v) {
+    if (g->count != 0 && idx >= 0 && idx < g->count) {
+        g->data[idx] = v;
+    }
+}
+void FUN_0018fc30(struct IndexedWordKey *arg0, struct IndexedWordKey *arg1, int arg2) {
+    unsigned int a = arg0->idx;
+    unsigned int b = arg1->idx;
+    int i;
+    if (a < b) {
+        i = b * (b + 2) - a;
     } else {
-        var_a0 = temp_a0 + (temp_a3 * temp_a3);
+        i = b + a * a;
     }
-    temp_a1 = *(void **)0x561120;
-    temp_v1 = *(int *)((char *)temp_a1 + 8);
-    if ((temp_v1 != 0) && (var_a0 >= 0) && (var_a0 < temp_v1)) {
-        *(int *)(*(int *)((char *)temp_a1 + 16) + (var_a0 * 4)) = arg2;
-    }
+    setEntry(DAT_00561120, i, arg2);
 }

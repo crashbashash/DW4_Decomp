@@ -1,40 +1,44 @@
-typedef struct Obj { int w0; int references; int w8; struct Obj *f12; int f16; int f20; int f24; int f28; } Obj;
-typedef struct O { char pad[644]; int f644; char pad2[692]; unsigned char f1340; char pad3[83]; unsigned char f1424; } O;
-typedef struct Lst { int w0; int references; int count; int cap; } Lst;
-typedef struct Q { char pad[20]; int f20; } Q;
-extern Obj *FUN_0014b390(int);
-extern Obj *FUN_0015f4a0(int, int, int);
-extern Obj *FUN_0015f510(int, int, int, int);
-extern int FUN_00162ca0(Obj *);
-extern int FUN_00180020(Q *);
-extern int FUN_00180060(O *);
-extern int FUN_00180ab0(O *, Obj *, Obj *, Obj *, Obj *, Obj *, Obj *, int);
-extern Obj *FUN_0018a060(int);
-extern int List_Resize(Obj *, int, int);
-extern int ObjectList_AppendRetained(int, Obj *);
-extern int igObject_Destroy(Obj *);
-#define REL(x) { Obj *q = (x); if (q != 0) { q->references = q->references - 1; if (((unsigned long long)((long long)q->references << 0x29) >> 0x29) == 0) igObject_Destroy(q); } }
-#define RELF(x, f) { Obj *q = (x); f[0] = 0; if (q != 0) { q->references = q->references - 1; if (((unsigned long long)((long long)q->references << 0x29) >> 0x29) == 0) igObject_Destroy(q); } }
-#define INC(x) { Obj *q = (x); if (q != 0) q->references = q->references + 1; }
-void FUN_001805a0(O *arg0, Q *arg1, int arg2) {
-    volatile char sp90[1];
-    volatile char sp94[1];
-    volatile char sp98[1];
+typedef struct BuildResource { int w0; int references; int w8; struct BuildResource *f12; int f16; int f20; int f24; int f28; } BuildResource;
+typedef struct ResourceBuilder { char pad[644]; int f644; char pad2[692]; unsigned char f1340; char pad3[83]; unsigned char f1424; } ResourceBuilder;
+typedef struct ResourceList { int w0; int references; int count; int cap; } ResourceList;
+typedef struct ResourceSource { char pad[20]; int f20; } ResourceSource;
+extern BuildResource *FUN_0014b390(int);
+extern BuildResource *FUN_0015f4a0(int, int, int);
+extern BuildResource *FUN_0015f510(int, int, int, int);
+extern int FUN_00162ca0(BuildResource *);
+extern int FUN_00180020(ResourceSource *);
+extern int FUN_00180060(ResourceBuilder *);
+extern int FUN_00180ab0(ResourceBuilder *, BuildResource *, BuildResource *, BuildResource *, BuildResource *, BuildResource *, BuildResource *, int);
+extern BuildResource *FUN_0018a060(int);
+extern int List_Resize(BuildResource *, int, int);
+extern int ObjectList_AppendRetained(int, BuildResource *);
+extern int igObject_Destroy(BuildResource *);
+#define REL(x) { BuildResource *q = (x); if (q != 0) { q->references = q->references - 1; if (((unsigned long long)((long long)q->references << 0x29) >> 0x29) == 0) igObject_Destroy(q); } }
+#define RELF(x, f) { BuildResource *q = (x); f[0] = 0; if (q != 0) { q->references = q->references - 1; if (((unsigned long long)((long long)q->references << 0x29) >> 0x29) == 0) igObject_Destroy(q); } }
+#define INC(x) { BuildResource *q = (x); if (q != 0) q->references = q->references + 1; }
+void FUN_001805a0(ResourceBuilder *self_, ResourceSource *arg1, int count_) {
+    BuildResource * volatile spAC;
+    BuildResource * volatile spA8;
+    BuildResource * volatile spA4;
+    BuildResource * volatile spA0;
     volatile char sp9C[1];
-    Obj * volatile spA0;
-    Obj * volatile spA4;
-    Obj * volatile spA8;
-    Obj * volatile spAC;
-    Obj *s0o;
-    Obj *t8;
-    Lst *ll;
-    Obj *s7;
-    Obj *s5;
-    Obj *v;
-    Obj *t4;
-    Obj *s2;
+    volatile char sp98[1];
+    volatile char sp94[1];
+    volatile char sp90[1];
+    BuildResource *s1;
+    BuildResource *s2;
+    BuildResource *v;
+    BuildResource *s5;
     int s0;
-    Obj *s1;
+    BuildResource *s7;
+    BuildResource *s0o;
+    BuildResource *t4;
+    ResourceList *ll;
+    BuildResource *t8;
+    ResourceBuilder *arg0;
+    int arg2;
+    arg0 = (ResourceBuilder *)(int)self_;
+    arg2 = (int)count_;
     s0 = arg1->f20;
     spAC = 0;
     s2 = 0;
@@ -52,10 +56,10 @@ void FUN_001805a0(O *arg0, Q *arg1, int arg2) {
         if (spA8 == 0) {
             sp9C[0] = 0;
             spA4 = FUN_0018a060(0);
-            ll = (Lst *)spA4;
+            ll = (ResourceList *)spA4;
             if (arg2 >= 0) {
                 if (arg2 <= ll->cap) ll->count = arg2;
- else List_Resize((Obj *)ll, arg2, 12);
+ else List_Resize((BuildResource *)ll, arg2, 12);
             }
             RELF(spA8, sp98);
             spA8 = FUN_0014b390(0);
@@ -82,10 +86,10 @@ void FUN_001805a0(O *arg0, Q *arg1, int arg2) {
     if (spAC == 0) {
         sp94[0] = 0;
         spA0 = FUN_0018a060(0);
-        ll = (Lst *)spA0;
+        ll = (ResourceList *)spA0;
             if (arg2 >= 0) {
                 if (arg2 <= ll->cap) ll->count = arg2;
- else List_Resize((Obj *)ll, arg2, 12);
+ else List_Resize((BuildResource *)ll, arg2, 12);
             }
         RELF(spAC, sp90);
         spAC = FUN_0014b390(0);

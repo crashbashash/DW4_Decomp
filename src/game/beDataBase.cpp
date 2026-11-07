@@ -16,9 +16,27 @@
 /* C++ with exceptions on; the C-ABI names stay unmangled through this block. */
 extern "C" {
 extern int g_beDataBase_metaObject[4];
-long long igProperty_FindByName(void *, void *, const char *);
+int igProperty_FindByName(void *, void *, const char *);
 /* Descriptor of the property record's name member. */
 extern int g_propertyNameField[4];
+static inline int findColumn(igDataList *columns, const volatile int &name) {
+    int i = 0;
+    int count = columns->_count;
+    if (i < count) {
+        int *entry = (int *)columns->_data;
+        int wanted = name;
+        do {
+            if (wanted == *entry) {
+                return i;
+            }
+            i++;
+            entry++;
+        } while (i < count);
+    }
+    return -1;
+}
+static inline int columnsOf(igDataList *list) { return list->_count; }
+
 /* Empty string returned for a null string cell. */
 extern char emptyString[];
 
@@ -42,85 +60,21 @@ int Gap__Bec__beDataBase__vfunc_20(void) { return g_beDataBase_metaObject[0]; }
  * has no columns or does not contain the key. */
 int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *key,
                                     igDataList *columns) {
-    /* matching construct: volatile forces the match-cell reload order */
-    volatile int foundCell;
-    int *entry, liveCount, wantedName, column, columnCount = columns->_count;
-    long long found;
-
-    /* matching construct: hand-placed instruction/delay-slot padding */
-
-    ;
+    int found;
+    /* matching construct: retail keeps the found name in a stack slot */
+    volatile int cell;
+    int columnCount = columnsOf(columns);
 
     if (!columnCount) {
-        column = -1;
-
-        /* matching construct: hand-placed instruction/delay-slot padding */
-
-        asm {
-            b index_done
-            .set noreorder
-            nop
-            .set reorder
-        }
-
+        return -1;
     }
     found = igProperty_FindByName(columns, (void *)g_propertyNameField[0], key);
     if (!found) {
-        column = -1;
-        goto index_done;
+        return -1;
     }
-    foundCell = (int)found;
-    liveCount = columns->_count;
-    column = 0;
-    if (column < liveCount) {
-
-        /* matching construct: hand-placed instruction/delay-slot padding */
-
-        asm {
-            dmove a1,liveCount
-        }
-
-        entry = (int *)columns->_data;
-        wantedName = foundCell;
-
-        /* matching construct: hand-placed instruction/delay-slot padding */
-
-        asm {
-            dmove a0,entry
-            nop
-        }
-
-        do {
-            if (wantedName == *entry) {
-
-                /* matching construct: hand-placed instruction/delay-slot padding */
-
-                asm {
-                    .set noreorder
-                    b found_column
-                    nop
-                    nop
-                    .set reorder
-                }
-
-            }
-            column++;
-            entry++;
-        }
-        while (column < liveCount);
-    }
-    column = -1;
-
-    /* matching construct: hand-placed instruction/delay-slot padding */
-
-    asm {
-        nop
-    }
-
-found_column:
-    column = (int)((unsigned)columnCount * (unsigned)record + (unsigned)column);
-index_done:
-    return column;
+    cell = found;
+    int column = findColumn(columns, cell);
+    return column + columnCount * record;
 }
 
 /* Integer cell for (record, key). Tries the char, short and int columns in turn (sign-extending
@@ -171,7 +125,7 @@ char *beDataBase_GetRecordString(beDataBase *self, int record, const char *key) 
 /* Number of records, i.e. data-list length divided by column count, taken from the first populated
  * type in the order string, char, short, int, float, bool; 0 when the table has no columns. */
 int beDataBase_GetRecordCount(beDataBase *self) {
-    int columns, result;
+    int columns;
     columns = ((igDataList *)self->_stringOffsetList)->_count;
     if (columns)
         return ((igDataList *)self->_stringData)->_count / columns;
@@ -187,30 +141,9 @@ int beDataBase_GetRecordCount(beDataBase *self) {
     columns = ((igDataList *)self->_floatOffsetList)->_count;
     if (columns)
         return ((igDataList *)self->_floatData)->_count / columns;
-
-    /* matching construct: hand-placed instruction/delay-slot padding */
-
-    asm {
-        .set noreorder
-        lw v0,40(self)
-        lw columns,8(v0)
-        .set reorder
-    }
-
-    result = 0;
-    if (columns) {
-        result = ((igDataList *)self->_boolData)->_count / columns;
-
-        /* matching construct: hand-placed instruction/delay-slot padding */
-
-        asm {
-            .set noreorder
-            b count_done
-            .set reorder
-        }
-
-    }
-count_done:
-    return result;
+    columns = ((igDataList *)self->_boolOffsetList)->_count;
+    if (columns)
+        return ((igDataList *)self->_boolData)->_count / columns;
+    return 0;
 }
 // clang-format on

@@ -7,7 +7,7 @@ void FUN_00181860(float *, int, int, float);
 void FUN_00181810(float *, int, int, float);
 void igObject_Destroy(void *);
 }
-class Ref {
+class CountedVertexWriter {
 public:
     virtual void d0();
     virtual void d1();
@@ -65,15 +65,23 @@ public:
     virtual void v220(unsigned, float *);
     unsigned refs;
     char pad[16];
-    Ref *f24;
+    CountedVertexWriter *f24;
 };
-extern "C" void FUN_0015db00(Ref *, unsigned, float *);
-extern "C" void FUN_001815b0(int n, unsigned i, int base, int stride, Ref *a4, Ref *a5, float f) {
-    int x; unsigned end; int p; int x2; int p2; float D[2]; float C[2]; float B[2]; float A[3];
+extern "C" void FUN_0015db00(CountedVertexWriter *, unsigned, float *);
+extern "C" void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *a4, CountedVertexWriter *a5, float f) {
+    int p2;
+    int p;
+    int x2;
+    float A[3];
+    unsigned end;
+    float B[2];
+    float C[2];
+    float D[2];
+    int x;
     if (a5 != 0) {
         if (a4 != 0) ++a4->refs;
         {
-            Ref *old = a5->f24;
+            CountedVertexWriter *old = a5->f24;
             if (old != 0) {
                 --old->refs;
                 if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
@@ -93,7 +101,7 @@ extern "C" void FUN_001815b0(int n, unsigned i, int base, int stride, Ref *a4, R
             FUN_0015db00(a5, i, C);
         }
         {
-            Ref *old = a5->f24;
+            CountedVertexWriter *old = a5->f24;
             if (old != 0) {
                 --old->refs;
                 if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);

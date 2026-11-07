@@ -317,7 +317,7 @@
 00131d80	FUN_00131d80	match	-
 00131d90	igTextureFunctionAttr_Register	match	-
 00131e10	thunk_igTextureFunctionAttr_GetMetaObject	match	-
-00131e20	igTextureFunctionAttr_InitFields	name-defect	symbol 'DAT_00141250': data name DAT_00141250 points at 0x141250 inside the code of FUN_00141250 (0x141250)
+00131e20	igTextureFunctionAttr_InitFields	match	-
 00131f70	FUN_00131f70	match	-
 00131f80	FUN_00131f80	match	-
 00131fe0	FUN_00131fe0	match	-
@@ -386,7 +386,7 @@
 001336e0	FUN_001336e0	match	-
 001336f0	igStencilFunctionAttr_Register	match	-
 00133760	thunk_igStencilFunctionAttr_GetMetaObject	match	-
-00133770	igStencilFunctionAttr_InitFields	name-defect	symbol 'DAT_001494a0': data name DAT_001494a0 points at 0x1494a0 inside the code of FUN_001494a0 (0x1494a0)
+00133770	igStencilFunctionAttr_InitFields	match	-
 001338d0	FUN_001338d0	match	-
 00133950	FUN_00133950	match	-
 001339a0	igShadeModelAttr_GetMetaObject	match	-
@@ -529,7 +529,7 @@
 00136740	thunk_igLightList_GetMetaObject	match	-
 00136750	FUN_00136750	match	-
 001367a0	igLightAttr_GetMetaObject	match	-
-001367f0	igLightAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igLightAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001367f0	igLightAttr_GetVTable	match	-
 00136880	FUN_00136880	match	-
 00136890	igLightAttr_Register	match	-
 00136910	thunk_igLightAttr_GetMetaObject	match	-
@@ -687,11 +687,11 @@
 00139ed0	FUN_00139ed0	match	-
 00139f10	FUN_00139f10	match	-
 00139f60	igBlendFunctionAttr_GetMetaObject	match	-
-00139fb0	igBlendFunctionAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igBlendFunctionAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00139fb0	igBlendFunctionAttr_GetVTable	match	-
 0013a040	FUN_0013a040	match	-
 0013a050	igBlendFunctionAttr_Register	match	-
 0013a0d0	thunk_igBlendFunctionAttr_GetMetaObject	match	-
-0013a0e0	igBlendFunctionAttr_InitFields	name-defect	symbol 'DAT_00139e70': data name DAT_00139e70 points at 0x139e70 inside the code of FUN_00139e70 (0x139e70)
+0013a0e0	igBlendFunctionAttr_InitFields	match	-
 0013a320	FUN_0013a320	match	-
 0013a360	FUN_0013a360	match	-
 0013a3b0	igTextureList_GetMetaObject	match	-
@@ -841,7 +841,7 @@
 0013d180	Gap__Attrs__igGeometryAttr1_5__vfunc_20	match	-
 0013d460	Gap__Attrs__igGeometryAttr1_5__vfunc_39	match	-
 0013de80	Gap__Attrs__igGeometryAttr1_5__vfunc_40	match	-
-0013e0a0	Gap__Attrs__igGeometryAttr1_5__vfunc_34	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igGeometryAttr1_5_13d460 (local/mwcps2/combat/mwccps2.exe '-O4 -Iinclude -Cpp_exceptions off') they are not; orphan 20 bytes
+0013e0a0	Gap__Attrs__igGeometryAttr1_5__vfunc_34	match	-
 0013e230	Gap__Attrs__igGeometryAttr1_5__vfunc_17	match	-
 0013e440	Gap__Attrs__igGeometryAttr1_5__vfunc_37	match	-
 0013e550	Gap__Attrs__igGeometryAttr1_5__vfunc_38	match	-
@@ -1935,7 +1935,7 @@
 0015e4d0	FUN_0015e4d0	match	-
 0015e4e0	FUN_0015e4e0	match	-
 0015e7a0	FUN_0015e7a0	match	-
-0015e7b0	FUN_0015e7b0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2VertexArray1_1 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+0015e7b0	FUN_0015e7b0	match	-
 0015e940	FUN_0015e940	match	-
 0015e9c0	FUN_0015e9c0	match	-
 0015ea30	FUN_0015ea30	match	-
@@ -2364,7 +2364,7 @@
 0017c4d0	Gap__Gfx__igPsx2VisualContext__vfunc_135	match	-
 0017c4f0	Gap__Gfx__igPsx2VisualContext__vfunc_134	match	-
 0017c500	Gap__Gfx__igPsx2VisualContext__vfunc_138	match	-
-0017c560	Gap__Gfx__igPsx2VisualContext__vfunc_140	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O4 -Iinclude'); under the unit profile of igPsx2UserUCodeExt_1767c0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0017c560	Gap__Gfx__igPsx2VisualContext__vfunc_140	match	-
 0017c5c0	Gap__Gfx__igPsx2VisualContext__vfunc_139	match	-
 0017c5e0	Gap__Gfx__igPsx2VisualContext__vfunc_141	match	-
 0017c600	Gap__Gfx__igPsx2VisualContext__vfunc_136	match	-
@@ -2372,7 +2372,7 @@
 0017c6e0	FUN_0017c6e0	match	-
 0017c710	FUN_0017c710	match	-
 0017c790	FUN_0017c790	match	-
-0017c7a0	Gap__Gfx__igPsx2VisualContext__vfunc_148	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2UserUCodeExt_1767c0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0017c7a0	Gap__Gfx__igPsx2VisualContext__vfunc_148	match	-
 0017c880	FUN_0017c880	match	-
 0017c980	Gap__Gfx__igPsx2VisualContext__vfunc_149	match	-
 0017c9b0	Gap__Gfx__igPsx2VisualContext__vfunc_150	match	-
@@ -2392,7 +2392,7 @@
 0017d4a0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_32	match	-
 0017d4e0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_33	match	-
 0017d520	Gap__Gfx__igPsx2VertexArray1_1__vfunc_34	match	-
-0017d540	Gap__Gfx__igPsx2VertexArray1_1__vfunc_41	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2VertexArray1_1_17d0b0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0017d540	Gap__Gfx__igPsx2VertexArray1_1__vfunc_41	match	-
 0017d580	Gap__Gfx__igPsx2VertexArray1_1__vfunc_42	match	-
 0017d710	Gap__Gfx__igPsx2VertexArray1_1__vfunc_43	match	-
 0017d760	Gap__Gfx__igPsx2VertexArray1_1__vfunc_44	match	-
@@ -2416,7 +2416,7 @@
 0017f6c0	Gap__Gfx__igPsx2VertexStream__vfunc_17	match	-
 0017fd70	Gap__Gfx__igPsx2VisualContext__vfunc_147	match	-
 0017fd80	FUN_0017fd80	match	-
-0017fe50	Gap__Gfx__igPsx2VertexStream__vfunc_24	match	-
+0017fe50	Gap__Gfx__igPsx2VertexStream__vfunc_24	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
 0017ff60	Gap__Gfx__igPsx2VertexStream__vfunc_27	match	-
 00180010	Gap__Gfx__igVertexStream__vfunc_23	match	-
 00180020	FUN_00180020	match	-
@@ -3004,6 +3004,7 @@
 00194e70	FUN_00194e70	match	-
 00194e80	igTransformSource_Register	match	-
 00194ee0	thunk_igTransformSource_GetMetaObject	match	-
+00194ef0	FUN_00194ef0	match	-
 00194f40	igTransformSequence1_5_GetVTable	match	-
 00195030	FUN_00195030	match	-
 00195190	FUN_00195190	match	-
@@ -3139,6 +3140,7 @@
 001984c0	FUN_001984c0	match	-
 001984d0	igSkeletonList_Register	match	-
 00198540	thunk_igSkeletonList_GetMetaObject	match	-
+00198550	FUN_00198550	match	-
 001985a0	igSkeleton_GetVTable	match	-
 00198680	FUN_00198680	match	-
 00198690	igSkeleton_Register	match	-
@@ -3151,6 +3153,7 @@
 001988d0	FUN_001988d0	match	-
 001988e0	igSkeletonBoneInfoList_Register	match	-
 00198950	thunk_igSkeletonBoneInfoList_GetMetaObject	match	-
+00198960	FUN_00198960	match	-
 001989b0	igSkeletonBoneInfo_GetVTable	match	-
 00198a40	FUN_00198a40	match	-
 00198a50	igSkeletonBoneInfo_Register	match	-
@@ -3521,6 +3524,7 @@
 001a1620	thunk_igEnvironmentMapShader2_GetMetaObject	match	-
 001a1630	igEnvironmentMapShader2_InitFields	match	-
 001a18a0	thunk_igPsx2EnvironmentMapShader_GetMetaObject	match	-
+001a18b0	FUN_001a18b0	match	-
 001a1900	igEnbayaTransformSource_GetVTable	match	-
 001a1990	FUN_001a1990	match	-
 001a19a0	igEnbayaTransformSource_Register	match	-
@@ -3818,6 +3822,7 @@
 001a8490	FUN_001a8490	match	-
 001a84a0	igAnimationCombinerList_Register	match	-
 001a8510	thunk_igAnimationCombinerList_GetMetaObject	match	-
+001a8520	FUN_001a8520	match	-
 001a8570	igAnimationCombiner_GetVTable	match	-
 001a8620	FUN_001a8620	match	-
 001a8700	FUN_001a8700	match	-
@@ -3916,6 +3921,7 @@
 001aa720	thunk_igActorList_GetMetaObject	match	-
 001aa730	FUN_001aa730	match	-
 001aa780	igActor_GetMetaObject	match	-
+001aa7d0	igActor_GetVTable	match	-
 001aa8d0	FUN_001aa8d0	match	-
 001aa950	FUN_001aa950	match	-
 001aa9d0	FUN_001aa9d0	match	-
@@ -3955,39 +3961,52 @@
 001abdf0	FUN_001abdf0	match	-
 001abed0	FUN_001abed0	match	-
 001ac040	FUN_001ac040	match	-
+001acb10	FUN_001acb10	match	-
+001acb50	FUN_001acb50	match	-
 001ad300	Gap__Sg__igAnimationCombiner__vfunc_26	match	-
 001ad310	FUN_001ad310	match	-
+001ad380	Gap__Sg__igCompressedAnimationSequenceQS__vfunc_24	match	-
 001ad390	Gap__Bec__beHitLandModelTraversal__vfunc_24	match	-
+001ad3d0	Gap__Sg__igAnimationCombiner__vfunc_17	match	-
 001ad5c0	FUN_001ad5c0	match	-
 001ad770	FUN_001ad770	match	-
 001ad860	FUN_001ad860	match	-
 001adec0	FUN_001adec0	match	-
+001adf70	FUN_001adf70	match	-
 001ae1a0	FUN_001ae1a0	match	-
 001ae1b0	FUN_001ae1b0	match	-
 001ae1d0	FUN_001ae1d0	match	-
 001ae250	FUN_001ae250	match	-
+001ae2d0	FUN_001ae2d0	match	-
 001ae660	FUN_001ae660	match	-
 001ae6f0	Gap__Sg__igAnimationCombiner__vfunc_10	match	-
 001ae740	Gap__Sg__igAnimationCombiner__vfunc_23	match	-
 001ae750	FUN_001ae750	match	-
+001ae780	FUN_001ae780	match	-
 001aea60	Gap__Sg__igAnimationDatabase__vfunc_24	match	-
+001aedd0	FUN_001aedd0	match	-
+001aefe0	Gap__Sg__igAnimationDatabase__vfunc_23	match	-
+001af510	FUN_001af510	match	-
 001af5e0	Gap__Sg__igAnimationState__vfunc_23	match	-
 001af5f0	Gap__Sg__igAnimationState__vfunc_24	match	-
 001af600	Gap__Sg__igAnimationState__vfunc_25	match	-
 001af610	Gap__Sg__igAnimationState__vfunc_26	match	-
+001af620	FUN_001af620	match	-
 001af7a0	FUN_001af7a0	match	-
 001af7b0	FUN_001af7b0	match	-
 001af7e0	Gap__Sg__igAttrSet__vfunc_31	match	-
 001af860	FUN_001af860	match	-
 001af890	Gap__Sg__igAttrStackManager__vfunc_23	match	-
 001af920	Gap__Sg__igAttrStackManager__vfunc_09	match	-
-001afa30	Gap__Sg__igAttrStackManager__vfunc_10	match	-
+001afa30	Gap__Sg__igAttrStackManager__vfunc_10	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
 001afb00	FUN_001afb00	match	-
 001afb60	FUN_001afb60	match	-
+001afc90	FUN_001afc90	match	-
 001b0000	FUN_001b0000	match	-
 001b0250	FUN_001b0250	match	-
 001b0440	FUN_001b0440	match	-
 001b0450	FUN_001b0450	match	-
+001b0aa0	FUN_001b0aa0	match	-
 001b0dc0	FUN_001b0dc0	match	-
 001b0ea0	FUN_001b0ea0	match	-
 001b1030	FUN_001b1030	match	-
@@ -4009,6 +4028,7 @@
 001b2790	FUN_001b2790	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
 001b2ed0	FUN_001b2ed0	match	-
 001b2f30	FUN_001b2f30	match	-
+001b2fa0	Gap__Sg__igCommonTraversal__vfunc_26	match	-
 001b3ad0	FUN_001b3ad0	match	-
 001b3c90	FUN_001b3c90	match	-
 001b3ff0	FUN_001b3ff0	match	-
@@ -4017,13 +4037,16 @@
 001b4120	FUN_001b4120	match	-
 001b4130	FUN_001b4130	match	-
 001b4220	FUN_001b4220	match	-
+001b42c0	FUN_001b42c0	match	-
 001b4500	FUN_001b4500	match	-
 001b4bb0	FUN_001b4bb0	match	-
 001b68b0	FUN_001b68b0	match	-
+001b68c0	FUN_001b68c0	match	-
 001b6b30	Gap__Sg__igCommonTraversal__vfunc_09	match	-
 001b6be0	FUN_001b6be0	match	-
 001b6c50	FUN_001b6c50	match	-
 001b6ca0	Gap__Core__igObject__vfunc_08	match	-
+001b6cb0	Gap__Sg__igCommonTraversal__vfunc_30	match	-
 001b6cd0	FUN_001b6cd0	match	-
 001b6ce0	FUN_001b6ce0	match	-
 001b6e20	Gap__Sg__igCommonTraversal__vfunc_31	match	-
@@ -4032,15 +4055,21 @@
 001b7010	Gap__Sg__igCommonTraversal__vfunc_28	match	-
 001b7330	FUN_001b7330	match	-
 001b73d0	FUN_001b73d0	match	-
+001b73e0	Gap__Sg__igCommonTraversal__vfunc_23	match	-
 001b75b0	Gap__Sg__igCommonTraversal__vfunc_32	match	-
 001b7630	Gap__Sg__igCommonTraversal__vfunc_24	match	-
 001b7720	Gap__Sg__igCommonTraversal__vfunc_33	match	-
 001b7740	FUN_001b7740	match	-
+001b7770	FUN_001b7770	match	-
+001b7920	FUN_001b7920	match	-
 001b7af0	FUN_001b7af0	match	-
+001b7b90	FUN_001b7b90	match	-
 001b7c70	FUN_001b7c70	match	-
 001b7ce0	FUN_001b7ce0	match	-
 001b7d70	FUN_001b7d70	match	-
+001b7f50	FUN_001b7f50	match	-
 001b85c0	FUN_001b85c0	match	-
+001b8740	Gap__Sg__igActor__vfunc_37	match	-
 001b89b0	FUN_001b89b0	match	-
 001b8a00	FUN_001b8a00	match	-
 001b8a10	FUN_001b8a10	match	-
@@ -4050,10 +4079,14 @@
 001b8cf0	FUN_001b8cf0	match	-
 001b8de0	FUN_001b8de0	match	-
 001b8f20	FUN_001b8f20	match	-
+001b90e0	FUN_001b90e0	match	-
 001b9320	FUN_001b9320	match	-
+001b99d0	FUN_001b99d0	match	-
 001b9d40	FUN_001b9d40	match	-
+001b9d90	FUN_001b9d90	match	-
 001b9f00	FUN_001b9f00	match	-
 001b9fc0	FUN_001b9fc0	match	-
+001ba080	FUN_001ba080	match	-
 001ba1a0	FUN_001ba1a0	match	-
 001ba200	FUN_001ba200	match	-
 001ba650	FUN_001ba650	match	-
@@ -4061,10 +4094,12 @@
 001ba880	FUN_001ba880	match	-
 001ba9f0	Gap__Sg__igTransformRecorder__vfunc_38	match	-
 001baa00	Gap__Sg__igTransformRecorder__vfunc_37	match	-
+001baa10	FUN_001baa10	match	-
 001bab30	FUN_001bab30	match	-
 001bac30	FUN_001bac30	match	-
 001bac90	FUN_001bac90	match	-
 001bacf0	FUN_001bacf0	match	-
+001bae20	FUN_001bae20	match	-
 001bafb0	FUN_001bafb0	match	-
 001bb090	FUN_001bb090	match	-
 001bb1f0	FUN_001bb1f0	match	-
@@ -4074,10 +4109,11 @@
 001bb310	Gap__Sg__igCompileTraversal__vfunc_31	match	-
 001bb510	Gap__Sg__igCompileTraversal__vfunc_10	match	-
 001bb550	FUN_001bb550	match	-
-001bb880	Gap__Sg__igCompileTraversal__vfunc_23	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igCompileTraversal_1bb310 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 20 bytes
+001bb880	Gap__Sg__igCompileTraversal__vfunc_23	match	-
 001bba70	Gap__Sg__igCompileTraversal__vfunc_24	match	-
 001bbae0	FUN_001bbae0	match	-
 001bc050	FUN_001bc050	match	-
+001bc0e0	FUN_001bc0e0	match	-
 001bcd60	FUN_001bcd60	match	-
 001bcd70	FUN_001bcd70	match	-
 001bcd80	FUN_001bcd80	match	-
@@ -4101,7 +4137,10 @@
 001bf3e0	Gap__Sg__igTransformSequence1_5__vfunc_43	match	-
 001bf3f0	Gap__Sg__igTransformSequence1_5__vfunc_39	match	-
 001bf400	FUN_001bf400	match	-
+001bf560	FUN_001bf560	match	-
+001bf690	Gap__Sg__igCompressedAnimationSequenceQS__vfunc_46	match	-
 001bf790	Gap__Sg__igCompressedAnimationSequenceQS__vfunc_42	match	-
+001bf7d0	FUN_001bf7d0	match	-
 001bfa60	Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23	match	-
 001bfc60	Gap__Sg__igCompressedAnimationSequenceQS__vfunc_35	match	-
 001bfc70	FUN_001bfc70	match	-
@@ -4116,7 +4155,12 @@
 001c07e0	FUN_001c07e0	match	-
 001c07f0	Gap__Sg__igEnbayaAnimationSource__vfunc_13	match	-
 001c0810	Gap__Sg__igEnbayaAnimationSource__vfunc_23	match	-
+001c0880	Gap__Sg__igEnbayaAnimationSource__vfunc_24	match	-
+001c08a0	Gap__Sg__igEnbayaAnimationSource__vfunc_25	match	-
 001c0ae0	FUN_001c0ae0	match	-
+001c0b80	Gap__Sg__igEnbayaAnimationSource__vfunc_26	match	-
+001c0ba0	Gap__Sg__igEnbayaAnimationSource__vfunc_27	match	-
+001c0e50	Gap__Sg__igEnbayaAnimationSource__vfunc_28	match	-
 001c0e70	Gap__Sg__igEnbayaAnimationSource__vfunc_17	match	-
 001c0ea0	FUN_001c0ea0	match	-
 001c0f00	FUN_001c0f00	match	-
@@ -4128,11 +4172,17 @@
 001c1240	Gap__Sg__igEnbayaAnimationState__vfunc_24	match	-
 001c1280	Gap__Sg__igEnbayaAnimationState__vfunc_25	match	-
 001c1290	Gap__Sg__igEnbayaAnimationState__vfunc_26	match	-
+001c12d0	Gap__Sg__igEnbayaContextPool__vfunc_13	match	-
 001c1450	Gap__Sg__igEnbayaContextPool__vfunc_04	match	-
 001c1560	FUN_001c1560	match	-
+001c17e0	FUN_001c17e0	match	-
 001c1a80	FUN_001c1a80	match	-
 001c1b50	Gap__Sg__igEnbayaTransformSource__vfunc_23	match	-
 001c1b80	Gap__Sg__igEnbayaTransformSource__vfunc_24	match	-
+001c1bb0	Gap__Sg__igEnbayaTransformSource__vfunc_25	match	-
+001c1bd0	Gap__Sg__igEnbayaTransformSource__vfunc_26	match	-
+001c1bf0	Gap__Sg__igEnbayaTransformSource__vfunc_27	match	-
+001c1c10	Gap__Sg__igEnbayaTransformSource__vfunc_28	match	-
 001c1c30	Gap__Sg__igEnbayaTransformSource__vfunc_31	match	-
 001c1c40	Gap__Sg__igEnbayaTransformSource__vfunc_32	match	-
 001c1c50	FUN_001c1c50	match	-
@@ -4142,6 +4192,7 @@
 001c1f90	FUN_001c1f90	match	-
 001c20b0	FUN_001c20b0	match	-
 001c2880	FUN_001c2880	match	-
+001c2be0	FUN_001c2be0	match	-
 001c2eb0	FUN_001c2eb0	match	-
 001c2f50	FUN_001c2f50	match	-
 001c2fd0	FUN_001c2fd0	match	-
@@ -4151,6 +4202,7 @@
 001c3080	FUN_001c3080	match	-
 001c3090	FUN_001c3090	match	-
 001c31d0	FUN_001c31d0	match	-
+001c3fd0	FUN_001c3fd0	match	-
 001c4590	FUN_001c4590	match	-
 001c45a0	FUN_001c45a0	match	-
 001c45d0	FUN_001c45d0	match	-
@@ -4159,9 +4211,11 @@
 001c4700	FUN_001c4700	match	-
 001c4790	Gap__Sg__igFrustCullTraversal__vfunc_24	match	-
 001c47a0	FUN_001c47a0	match	-
+001c4ac0	FUN_001c4ac0	match	-
 001c5030	FUN_001c5030	match	-
 001c5160	FUN_001c5160	match	-
 001c51b0	FUN_001c51b0	match	-
+001c51d0	FUN_001c51d0	match	DEFERRED duplicate 0x2e2300 __dt__11FieldHolderFv 68B (compared under the profile of its retail unit)
 001c5310	Gap__Bec__ParticleTimer__vfunc_15	match	-
 001c5380	Gap__Bec__ParticleTimer__vfunc_27	match	-
 001c53d0	Gap__Bec__ParticleTimer__vfunc_26	match	-
@@ -4179,6 +4233,7 @@
 001c59f0	FUN_001c59f0	match	-
 001c5b20	Gap__Sg__igNode__vfunc_22	match	-
 001c5b30	FUN_001c5b30	match	-
+001c5b80	FUN_001c5b80	match	-
 001c5d10	FUN_001c5d10	match	-
 001c5d70	FUN_001c5d70	match	-
 001c5e20	FUN_001c5e20	match	-
@@ -4195,6 +4250,7 @@
 001c64e0	StringList_CopyRetained	match	-
 001c6520	FUN_001c6520	match	-
 001c66c0	FUN_001c66c0	match	DEFERRED duplicate 0x2e2300 __dt__2RPFv 68B (compared under the profile of its retail unit)
+001c6fa0	FUN_001c6fa0	match	-
 001c70d0	Gap__Sg__igIniShaderFactory__vfunc_24	match	-
 001c7600	FUN_001c7600	match	-
 001c8c00	igStringMetaField_AssignRetainedToken	match	-
@@ -4202,16 +4258,19 @@
 001ca6b0	FUN_001ca6b0	match	-
 001cafb0	Gap__Sg__igShaderProcessor__vfunc_22	match	-
 001cafc0	FUN_001cafc0	match	-
+001cb010	FUN_001cb010	match	-
 001cb1f0	FUN_001cb1f0	match	-
 001cb2d0	FUN_001cb2d0	match	-
 001ccb20	FUN_001ccb20	match	-
 001ccb50	Gap__Sg__igIniShaderFactory__vfunc_23	match	-
 001ccd00	Gap__Sg__igIniShaderFactory__vfunc_26	match	-
+001ccd10	FUN_001ccd10	match	-
 001cce60	Gap__Sg__igIniShaderFactory__vfunc_27	match	-
 001cd0c0	Gap__Sg__igIniShaderFactory__vfunc_17	match	-
 001cd110	Gap__Sg__igIniShaderFactory__vfunc_18	match	-
 001ce350	FUN_001ce350	match	-
 001ce3d0	Gap__Core__igFolder__vfunc_25	match	-
+001ce400	FUN_001ce400	match	-
 001ce640	FUN_001ce640	match	-
 001ce660	FUN_001ce660	match	-
 001ce670	Gap__Bec__beHitLandModelTraversal__vfunc_07	match	-
@@ -4223,23 +4282,31 @@
 001ce970	FUN_001ce970	match	-
 001cea90	Gap__Bec__beHitLandModelTraversal__vfunc_21	match	-
 001ceaa0	Gap__Bec__beHitLandModelTraversal__vfunc_22	match	-
+001ceab0	FUN_001ceab0	match	-
 001cf950	FUN_001cf950	match	-
 001cf990	FUN_001cf990	match	-
+001cfaa0	FUN_001cfaa0	match	-
 001cfc60	FUN_001cfc60	match	-
 001d0120	Gap__Sg__igGeometry__vfunc_22	match	-
+001d0130	FUN_001d0130	match	-
 001d02d0	Gap__Sg__igLightSet__vfunc_30	match	-
 001d02e0	Gap__Sg__igLightSet__vfunc_09	match	-
 001d0330	Gap__Sg__igLightSet__vfunc_31	match	-
 001d03b0	Gap__Sg__igLightSet__vfunc_27	match	-
 001d0490	thunk_Gap__Sg__igNode__vfunc_09	match	-
+001d04a0	Gap__Sg__igLightStateSet__vfunc_31	match	-
+001d0520	FUN_001d0520	match	-
 001d07e0	Gap__Sg__igLod__vfunc_31	match	-
 001d0850	Gap__Sg__igLod__vfunc_17	match	-
 001d0890	Gap__Sg__igLod__vfunc_27	match	-
 001d08d0	FUN_001d08d0	match	-
 001d1550	FUN_001d1550	match	-
+001d15a0	FUN_001d15a0	match	-
 001d1760	FUN_001d1760	match	-
+001d17a0	FUN_001d17a0	match	-
 001d18a0	FUN_001d18a0	match	-
 001d1a80	FUN_001d1a80	match	-
+001d1da0	FUN_001d1da0	match	-
 001d21b0	FUN_001d21b0	match	-
 001d2230	FUN_001d2230	match	-
 001d3090	FUN_001d3090	match	-
@@ -4252,6 +4319,7 @@
 001d3390	Gap__Core__igObject__vfunc_08__001d3390	match	-
 001d33a0	Gap__Sg__igNode__vfunc_09	match	-
 001d3400	FUN_001d3400	match	-
+001d3410	FUN_001d3410	match	-
 001d3550	FUN_001d3550	match	-
 001d3590	Gap__Sg__igNode__vfunc_17	match	-
 001d35d0	FUN_001d35d0	match	-
@@ -4265,6 +4333,7 @@
 001d4180	FUN_001d4180	match	-
 001d4420	Gap__Sg__igProjectiveShadowShader__vfunc_09	match	-
 001d4470	Gap__Sg__igProjectiveShadowShader__vfunc_22	match	-
+001d4480	FUN_001d4480	match	DEFERRED duplicate 0x130140 __dt__9ShadowRefFv 128B (compared under the profile of its retail unit)
 001d5430	FUN_001d5430	match	-
 001d5a10	Gap__Sg__igProjectiveShadowShader__vfunc_10	match	-
 001d5a70	FUN_001d5a70	match	-
@@ -4288,7 +4357,9 @@
 001d68f0	FUN_001d68f0	match	-
 001d6900	FUN_001d6900	match	-
 001d6a70	FUN_001d6a70	match	-
+001d7120	FUN_001d7120	match	DEFERRED duplicate 0x130140 __dt__9ShadowRefFv 128B (compared under the profile of its retail unit)
 001d7630	FUN_001d7630	match	-
+001d7910	FUN_001d7910	match	-
 001d7b10	FUN_001d7b10	match	-
 001d7b70	FUN_001d7b70	match	-
 001d81e0	FUN_001d81e0	match	-
@@ -4313,6 +4384,7 @@
 001d8cf0	Gap__Sg__igShaderInfo__vfunc_24	match	-
 001d8d50	Gap__Sg__igShaderProcessor__vfunc_24	match	-
 001d9080	Gap__Sg__igShaderProcessor__vfunc_25	match	-
+001d9200	Gap__Sg__igSkeleton__vfunc_23	match	-
 001d94f0	Gap__Sg__igSkeleton__vfunc_24	match	-
 001d9500	Gap__Sg__igSkeleton__vfunc_27	match	-
 001d95a0	Gap__Sg__igSkeleton__vfunc_29	match	-
@@ -4323,10 +4395,13 @@
 001d97f0	FUN_001d97f0	match	-
 001d9870	FUN_001d9870	match	-
 001d98f0	Gap__Bec__ParticleTimer__vfunc_35	match	-
+001d9970	FUN_001d9970	match	-
 001d99d0	FUN_001d99d0	match	-
+001d9a30	FUN_001d9a30	match	-
 001d9ac0	FUN_001d9ac0	match	-
 001d9bb0	FUN_001d9bb0	match	-
 001da6e0	FUN_001da6e0	match	-
+001da790	FUN_001da790	match	-
 001da8b0	Gap__Sg__igSorter__vfunc_09	match	-
 001db500	FUN_001db500	match	-
 001db5d0	Gap__Sg__igSorter__vfunc_24	match	-
@@ -4341,6 +4416,7 @@
 001dc9a0	FUN_001dc9a0	match	-
 001dca40	FUN_001dca40	match	-
 001dcb80	FUN_001dcb80	match	-
+001dcc80	FUN_001dcc80	match	-
 001dce70	FUN_001dce70	match	-
 001dcf40	Gap__Sg__igTransform__vfunc_7	match	-
 001dcf90	Gap__Sg__igTransform__vfunc_24	match	-
@@ -4350,6 +4426,7 @@
 001dd070	Gap__Sg__igTransform__vfunc_28	match	-
 001dd080	Gap__Sg__igTransform__vfunc_29	match	-
 001dd0d0	Gap__Sg__igTransformSource__vfunc_33	match	-
+001dd0e0	FUN_001dd0e0	match	-
 001dd250	FUN_001dd250	match	-
 001dd370	FUN_001dd370	match	-
 001dd3e0	FUN_001dd3e0	match	-
@@ -4357,9 +4434,12 @@
 001dd570	Gap__Sg__igTransformSequence1_5__vfunc_66	match	-
 001dd690	Gap__Sg__igTransformSequence1_5__vfunc_45	match	-
 001dd820	Gap__Sg__igTransformSequence1_5__vfunc_62	match	-
+001dd830	Gap__Sg__igTransformSequence1_5__vfunc_34	match	-
 001dda90	Gap__Sg__igTransformSequence1_5__vfunc_37	match	-
 001ddfd0	FUN_001ddfd0	match	-
+001de040	Gap__Sg__igTransformSequence1_5__vfunc_57	match	-
 001de470	Gap__Sg__igTransformSequence1_5__vfunc_59	match	-
+001de4e0	Gap__Sg__igTransformSequence1_5__vfunc_58	match	-
 001de9c0	Gap__Sg__igTransformSequence1_5__vfunc_61	match	-
 001deb20	Gap__Sg__igTransformSequence1_5__vfunc_48	match	-
 001deb50	FUN_001deb50	match	-
@@ -4367,6 +4447,9 @@
 001df1d0	FUN_001df1d0	match	-
 001df6e0	Gap__Sg__igTransformSequence1_5__vfunc_31	match	-
 001df740	Gap__Sg__igTransformSequence1_5__vfunc_32	match	-
+001df7a0	Gap__Sg__igTransformSequence1_5__vfunc_27	match	-
+001dfd60	Gap__Sg__igTransformSequence1_5__vfunc_25	match	-
+001e0240	Gap__Sg__igTransformSequence1_5__vfunc_29	match	-
 001e02e0	FUN_001e02e0	match	-
 001e02f0	FUN_001e02f0	match	-
 001e0380	Gap__Sg__igTraversal__vfunc_09	match	-
@@ -4384,9 +4467,12 @@
 001e0f20	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_50	match	-
 001e1210	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51	match	-
 001e1400	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_52	match	-
-001e14d0	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_45	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2EnvironmentMapShader_1e08b0 (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+001e14d0	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_45	match	-
 001e1580	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_48	match	-
+001e16a0	FUN_001e16a0	match	DEFERRED duplicate 0x130140 __dt__9EnvMapRefFv 128B (compared under the profile of its retail unit)
 001e1ac0	FUN_001e1ac0	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
+001e1e70	FUN_001e1e70	match	DEFERRED duplicate 0x130140 __dt__9EnvMapRefFv 128B (compared under the profile of its retail unit)
+001e22c0	FUN_001e22c0	match	DEFERRED duplicate 0x130140 __dt__9EnvMapRefFv 128B (compared under the profile of its retail unit)
 001e2800	Gap__Sg__igPsx2EnvironmentMapShader__vfunc_46	match	-
 001e2810	FUN_001e2810	match	-
 001e2820	FUN_001e2820	match	-
@@ -4397,6 +4483,9 @@
 001e2880	Gap__Sg__igTraversal__vfunc_22	match	-
 001e2890	Gap__Bec__beHitLandModelTraversal__vfunc_25	match	-
 001e28a0	Gap__Sg__igTransformSequence1_5__vfunc_22	match	-
+001e28b0	Gap__Sg__igTransformSequence1_5__vfunc_53	match	-
+001e28c0	Gap__Sg__igTransformSequence1_5__vfunc_54	match	-
+001e28d0	Gap__Sg__igTransformSequence1_5__vfunc_36	match	-
 001e2970	Gap__Sg__igTransformSequence1_5__vfunc_38	match	-
 001e2a80	Gap__Sg__igTransformSequence1_5__vfunc_55	match	-
 001e2ac0	Gap__Sg__igTransformSequence1_5__vfunc_40	match	-
@@ -4405,10 +4494,13 @@
 001e2bf0	Gap__Sg__igTransformSequence1_5__vfunc_49	match	-
 001e2c60	Gap__Sg__igTransformSequence1_5__vfunc_63	match	-
 001e2c70	Gap__Sg__igTransformSequence1_5__vfunc_64	match	-
+001e2cd0	FUN_001e2cd0	match	-
 001e2ce0	FUN_001e2ce0	match	-
 001e2cf0	FUN_001e2cf0	match	-
 001e2d00	FUN_001e2d00	match	-
 001e2d10	FUN_001e2d10	match	-
+001e2d60	FUN_001e2d60	match	-
+001e2d70	FUN_001e2d70	match	-
 001e2d80	Gap__Core__igObject__vfunc_35	match	-
 001e2d90	Gap__Core__igObject__vfunc_36	match	-
 001e2da0	Gap__Sg__igNode__vfunc_31	match	-
@@ -4959,16 +5051,16 @@
 0020d830	FUN_0020d830	match	-
 0020d900	FUN_0020d900	match	-
 0020df00	FUN_0020df00	match	-
-0020df10	FUN_0020df10	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-p2_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
+0020df10	FUN_0020df10	match	-
 0020dfd0	FUN_0020dfd0	match	-
 0020e060	FUN_0020e060	match	-
 0020e3c0	FUN_0020e3c0	match	-
 0020e3d0	FUN_0020e3d0	match	-
 0020e3e0	FUN_0020e3e0	match	-
 0020e3f0	FUN_0020e3f0	match	-
-0020e400	FUN_0020e400	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-p2_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
-0020e4a0	FUN_0020e4a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-p2_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
-0020e6a0	FUN_0020e6a0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of alchemy-p2_20d9e0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off') they are not
+0020e400	FUN_0020e400	match	-
+0020e4a0	FUN_0020e4a0	match	-
+0020e6a0	FUN_0020e6a0	match	-
 0020e750	png_set_sig_bytes	match	-
 0020e7b0	png_sig_cmp	match	-
 0020e840	png_zalloc	match	-
@@ -15860,7 +15952,7 @@
 003bf1f0	FUN_003bf1f0	match	exception index 0x5517a4: matches retail (packed)
 003bf240	beNDMWMdlPlayer2_ResolveMetaObject	match	exception index 0x5517b0: matches retail (packed)
 003bf290	beNDMWMdlPlayer2_GetVTable	match	exception index 0x5517bc: matches retail (packed)
-003bf2f0	FUN_003bf2f0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWMdlPlayer2 (local/mwcps2/3.0.3-020716/mwccps2.exe '-O3 -Iinclude') they are not
+003bf2f0	FUN_003bf2f0	match	exception index 0x5517c8: matches retail (packed)
 003bf3f0	FUN_003bf3f0	match	exception index 0x5517d4: matches retail (packed)
 003bf410	beNDMWMdlPlayer2_Register	match	exception index 0x5517e0: matches retail (packed)
 003bf490	beNDMWMdlPlayer2_GetMetaObject	match	exception index 0x5517ec: matches retail (packed)
@@ -15880,7 +15972,7 @@
 003bf8d0	FUN_003bf8d0	match	exception index 0x55187c: matches retail (packed)
 003bf920	beNDMWMdlPlayer_ResolveMetaObject	match	exception index 0x551888: matches retail (packed)
 003bf970	beNDMWMdlPlayer_GetVTable	match	exception index 0x551894: matches retail (packed)
-003bf9d0	FUN_003bf9d0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWMdlPlayer (local/mwcps2/3.0.3-020716/mwccps2.exe '-O3 -Iinclude') they are not
+003bf9d0	FUN_003bf9d0	match	exception index 0x5518a0: matches retail (packed)
 003bfae0	FUN_003bfae0	match	exception index 0x5518ac: matches retail (packed)
 003bfb00	beNDMWMdlPlayer_Register	match	exception index 0x5518b8: matches retail (packed)
 003bfb80	beNDMWMdlPlayer_GetMetaObject	match	exception index 0x5518c4: matches retail (packed)
@@ -15905,7 +15997,7 @@
 003c0570	beNDMWMdlPEBase_Register	match	exception index 0x551990: matches retail (packed)
 003c05d0	beNDMWMdlPEBase_GetMetaObject	match	exception index 0x55199c: matches retail (packed)
 003c05f0	beNDMWMdlPEBaseInfoWork_ResolveMetaObject	match	exception index 0x5519a8: matches retail (packed)
-003c0640	beNDMWMdlPEBaseInfoWork_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWMdlPEBaseInfoWork_3c05f0 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003c0640	beNDMWMdlPEBaseInfoWork_GetVTable	match	-
 003c0760	FUN_003c0760	match	-
 003c0770	FUN_003c0770	match	exception index 0x5519c0: matches retail (packed)
 003c0790	beNDMWMdlPEBaseInfoWork_Register	match	exception index 0x5519cc: matches retail (packed)
@@ -16360,8 +16452,8 @@
 003ca4a0	beNDMWGameRamInfo_Register	match	exception index 0x552e9c: matches retail (packed)
 003ca510	beNDMWGameRamInfo_GetMetaObject	match	exception index 0x552ea8: matches retail (packed)
 003ca530	beNDMWAfsSetupInfo_ResolveMetaObject	match	exception index 0x552eb4: matches retail (packed)
-003ca580	beNDMWAfsSetupInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWAfsSetupInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
-003ca610	FUN_003ca610	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWAfsSetupInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003ca580	beNDMWAfsSetupInfo_GetVTable	match	exception index 0x552ec0: matches retail (packed)
+003ca610	FUN_003ca610	match	exception index 0x552ecc: matches retail (packed)
 003ca690	FUN_003ca690	match	exception index 0x552ed8: matches retail (packed)
 003ca6b0	beNDMWAfsSetupInfo_Register	match	exception index 0x552ee4: matches retail (packed)
 003ca730	beNDMWAfsSetupInfo_GetMetaObject	match	exception index 0x552ef0: matches retail (packed)
@@ -16388,8 +16480,8 @@
 003cae00	FUN_003cae00	match	exception index 0x552fe0: matches retail (packed)
 003cae40	FUN_003cae40	match	exception index 0x552fec: matches retail (packed)
 003cae90	beNDMWAfsSetup_ResolveMetaObject	match	exception index 0x552ff8: matches retail (packed)
-003caee0	beNDMWAfsSetup_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWAfsSetup (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
-003cafa0	FUN_003cafa0	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWAfsSetup (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003caee0	beNDMWAfsSetup_GetVTable	match	exception index 0x553004: matches retail (packed)
+003cafa0	FUN_003cafa0	match	exception index 0x553010: matches retail (packed)
 003cb020	FUN_003cb020	match	exception index 0x55301c: matches retail (packed)
 003cb040	beNDMWAfsSetup_Register	match	exception index 0x553028: matches retail (packed)
 003cb0c0	beNDMWAfsSetup_GetMetaObject	match	exception index 0x553034: matches retail (packed)
@@ -16526,7 +16618,7 @@
 003d0760	FUN_003d0760	match	exception index 0x553208: matches retail (packed)
 003d08f0	FUN_003d08f0	match	exception index 0x553214: matches retail (table 0x5444e8 8 bytes)
 003d0a90	FUN_003d0a90	match	exception index 0x553220: matches retail (packed)
-003d0bc0	Gap__Bec__beNDMWPanelWaza__vfunc_34	match	-
+003d0bc0	Gap__Bec__beNDMWPanelWaza__vfunc_34	match	DEFERRED duplicate 0x3bd940 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 003d1430	Gap__Bec__beNDMWPanelWaza__vfunc_20	match	-
 003d1440	Gap__Bec__beNDMWPanelObjectStat__vfunc_20	match	-
 003d1450	Gap__Bec__beNDMWPanelObjectStat__vfunc_22	match	-
@@ -16871,12 +16963,12 @@
 00415870	Gap__Bec__beNDMWStatusMainSlot__vfunc_25	match	-
 00416130	Gap__Bec__beNDMWStatusMainSlot__vfunc_28	match	exception index 0x553e80: matches retail (packed)
 00416250	Gap__Bec__beNDMWStatusMainSlot__vfunc_29	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-004164d0	Gap__Bec__beNDMWStatusMainSlot__vfunc_30	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWStatusMainSlot_414ee0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude') they are not
+004164d0	Gap__Bec__beNDMWStatusMainSlot__vfunc_30	match	exception index 0x553e98: matches retail (packed)
 00416550	Gap__Bec__beNDMWStatusMainSlot__vfunc_31	match	exception index 0x553ea4: matches retail (packed)
 004165a0	Gap__Bec__beNDMWStatusMainSlot__vfunc_39	match	exception index 0x553eb0: matches retail (packed)
 00416b50	Gap__Bec__beNDMWStatusMainSlot__vfunc_34	match	exception index 0x553ed4: matches retail (packed)
 00416c80	Gap__Bec__beNDMWStatusMainSlot__vfunc_35	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
-00416f90	Gap__Bec__beNDMWStatusMainSlot__vfunc_36	match	-
+00416f90	Gap__Bec__beNDMWStatusMainSlot__vfunc_36	match	DEFERRED duplicate 0x414420 __dt__9WindowRefFv 128B (compared under the profile of its retail unit)
 004170c0	Gap__Bec__beNDMWStatusMainSlot__vfunc_37	match	exception index 0x553ef8: matches retail (packed)
 004170f0	Gap__Bec__beNDMWStatusMainSlot__vfunc_38	match	exception index 0x553f04: matches retail (packed)
 00417160	Gap__Bec__beNDMWStatusSubSlot__vfunc_23	match	exception index 0x553f10: matches retail (table 0x545864 8 bytes)
@@ -16886,7 +16978,7 @@
 00417880	Gap__Bec__beNDMWStatusSubSlot__vfunc_27	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
 00417ba0	Gap__Bec__beNDMWStatusSubSlot__vfunc_28	match	exception index 0x553f4c: matches retail (packed)
 00417cc0	Gap__Bec__beNDMWStatusSubSlot__vfunc_29	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00417f40	Gap__Bec__beNDMWStatusSubSlot__vfunc_30	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWStatusSubSlot_417160 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude') they are not
+00417f40	Gap__Bec__beNDMWStatusSubSlot__vfunc_30	match	exception index 0x553f64: matches retail (packed)
 00417fc0	Gap__Bec__beNDMWStatusSubSlot__vfunc_31	match	exception index 0x553f70: matches retail (packed)
 00417ff0	Gap__Bec__beNDMWStatusSubSlot__vfunc_39	match	-
 00418000	Gap__Bec__beNDMWStatusSubSlot__vfunc_32	match	exception index 0x553f7c: matches retail (packed)
@@ -16935,7 +17027,7 @@
 004233c0	Gap__Bec__beNDMWStatusCtrlEquip__vfunc_20	match	-
 004233d0	Gap__Bec__beNDMWStatusCtrl00__vfunc_20	match	-
 004233e0	Gap__Bec__beNDMWListCtrl__vfunc_20	match	-
-004233f0	Gap__Bec__beNDMWWindowSelect__vfunc_21	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWWindowSelect_4233f0 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+004233f0	Gap__Bec__beNDMWWindowSelect__vfunc_21	match	exception index 0x554090: matches retail (packed)
 00423700	beNDMWWindowSelect_CanRequestFO2TOP	match	exception index 0x55409c: matches retail (packed)
 00423760	Gap__Bec__beNDMWStatusSelect00__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00423bf0	Gap__Bec__beNDMWStatusSelect01__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)

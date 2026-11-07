@@ -1,14 +1,14 @@
-struct V2 { float x, y; };
-struct V4 { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8(); virtual void a9(); virtual void a10(); virtual void a11(); virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15(); virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19(); virtual void a20(); virtual void a21(); virtual void a22(); virtual void a23(); virtual void a24(); virtual void a25(); virtual void a26();  virtual void v116(unsigned, int *); virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10();  virtual void v164(unsigned, int); virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); virtual void c4(); virtual void c5(); virtual void c6(); virtual void c7(); virtual void c8(); virtual void c9(); virtual void c10(); virtual void c11(); virtual void c12();  virtual void v220(unsigned, V2 *); int refs; };
-struct V5 { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33();  virtual void v144(unsigned, int *); virtual void d35(); virtual void v152(unsigned, int); int pad[5]; V4 *f24; };
+struct TexCoordPairXY { float x, y; };
+struct PackedVertexWriter { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8(); virtual void a9(); virtual void a10(); virtual void a11(); virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15(); virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19(); virtual void a20(); virtual void a21(); virtual void a22(); virtual void a23(); virtual void a24(); virtual void a25(); virtual void a26();  virtual void v116(unsigned, int *); virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10();  virtual void v164(unsigned, int); virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); virtual void c4(); virtual void c5(); virtual void c6(); virtual void c7(); virtual void c8(); virtual void c9(); virtual void c10(); virtual void c11(); virtual void c12();  virtual void v220(unsigned, TexCoordPairXY *); int refs; };
+struct VertexArrayWriter { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33();  virtual void v144(unsigned, int *); virtual void d35(); virtual void v152(unsigned, int); int pad[5]; PackedVertexWriter *f24; };
 extern "C" {
-int FUN_0015db00(V5 *, unsigned, V2 *);
+int FUN_0015db00(VertexArrayWriter *, unsigned, TexCoordPairXY *);
 int FUN_00181840(int);
 int FUN_00181850(int);
 int FUN_001818a0(int);
 int FUN_001818b0(int);
 int FUN_00181b50(int);
-int FUN_00181df0(V2 *, int, int, int, float, float);
+int FUN_00181df0(TexCoordPairXY *, int, int, int, float, float);
 int FUN_001820f0(int);
 int FUN_00182100(int);
 int FUN_00182440(void *, int, int, int, float, float);
@@ -17,19 +17,19 @@ int FUN_00183f60(void *, int, int, int, float, float);
 int FUN_00183fc0(int);
 int FUN_001931b0(void *, int);
 int igObject_Destroy(void *);
-void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, V4 *arg4, V5 *arg5, float fparg0);
+void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexWriter *arg4, VertexArrayWriter *arg5, float fparg0);
 }
-void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, V4 *arg4, V5 *arg5, float fparg0) {
-    int spA0[4];
-    V2 spB8;
-    V2 spC0;
-    V2 spC8;
+void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexWriter *arg4, VertexArrayWriter *arg5, float fparg0) {
     int spD0[3];
+    int spA0[4];
+    TexCoordPairXY spC8;
+    TexCoordPairXY spC0;
+    TexCoordPairXY spB8;
     float f20;
     unsigned s5;
     unsigned s7;
     int s1;
-    V4 *o;
+    PackedVertexWriter *o;
     s5 = arg1;
     f20 = fparg0 * fparg0;
     if (arg5 != 0) {

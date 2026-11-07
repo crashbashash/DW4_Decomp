@@ -4,21 +4,22 @@ int ObjectList_AppendRetained();
 int igObject_Destroy();
 int igObject_GetAllocator();
 int FUN_00455ad0();
-struct R { int w0; int rc; };
-struct L { int w0; int w4; volatile int cnt; int cap; int *data; };
-struct X { int w0; int rc; int w8; int a; struct L *list; };
-struct M { char pad[40]; struct R *ref; int flags; int fn; };
-struct O { char pad[16]; struct M *m; int f20; };
-struct X *FUN_0019e680();
-void Gap__Gui__igMousePosObserver__vfunc_13(struct O *arg0) {
-    struct X * volatile sp4C;
-    struct X *q;
-    struct L *l;
+struct ObserverRefView { int w0; int rc; };
+struct ObserverIntListView { int w0; int w4; volatile int cnt; int cap; int *data; };
+struct ObserverEventView { int w0; int rc; int w8; int a; struct ObserverIntListView *list; };
+struct ObserverModelView { char pad[40]; struct ObserverRefView *ref; int flags; int fn; };
+struct MousePosObserverView { char pad[16]; struct ObserverModelView *m; int f20; };
+struct ObserverEventView *FUN_0019e680();
+void Gap__Gui__igMousePosObserver__vfunc_13(struct MousePosObserverView *arg0) {
+    struct ObserverEventView * volatile sp4C;
+    struct ObserverEventView *q;
+    struct ObserverEventView *r;
+    struct ObserverIntListView *l;
     int n;
-    struct M *m;
-    struct R *old;
-    struct X *t;
-    struct M *m2;
+    struct ObserverModelView *m;
+    struct ObserverRefView *old;
+    struct ObserverEventView *t;
+    struct ObserverModelView *m2;
     Gap__Core__igObject__vfunc_11();
     sp4C = FUN_0019e680(igObject_GetAllocator(arg0));
     q = sp4C;
@@ -31,10 +32,10 @@ void Gap__Gui__igMousePosObserver__vfunc_13(struct O *arg0) {
         List_Resize(l, n + 1, 4);
     }
     l->data[n] = 2;
-    q = sp4C;
+    r = sp4C;
     m = arg0->m;
-    if (q != 0) {
-        q->rc = q->rc + 1;
+    if (r != 0) {
+        r->rc = r->rc + 1;
     }
     old = m->ref;
     if (old != 0) {
@@ -43,7 +44,7 @@ void Gap__Gui__igMousePosObserver__vfunc_13(struct O *arg0) {
             igObject_Destroy(old);
         }
     }
-    m->ref = (struct R *)q;
+    m->ref = (struct ObserverRefView *)r;
     arg0->m->flags = 0;
     m2 = arg0->m;
     m2->flags = m2->flags | 4;

@@ -1,43 +1,43 @@
-struct V2 { float a, b; };
-class B { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int v116(unsigned, int *); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int v144(unsigned, int *); virtual void d35(); virtual int v152(unsigned, int); virtual void d37(); virtual void d38(); virtual int v164(unsigned, int); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual int v212(unsigned, float); virtual void d52(); virtual int v220(unsigned, V2 *);
- int f4; char pad8[16]; B *f24; };
+struct TexCoordPair { float a, b; };
+class VertexArrayTargetEx { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int v116(unsigned, int *); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int v144(unsigned, int *); virtual void d35(); virtual int v152(unsigned, int); virtual void d37(); virtual void d38(); virtual int v164(unsigned, int); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual int v212(unsigned, float); virtual void d52(); virtual int v220(unsigned, TexCoordPair *);
+ int f4; char pad8[16]; VertexArrayTargetEx *f24; };
 extern "C" {
-int FUN_0015db00(B *, unsigned, V2 *);
+int FUN_0015db00(VertexArrayTargetEx *, unsigned, TexCoordPair *);
 int FUN_00181840(int);
 int FUN_00181850(int);
 int FUN_00181860(int *, int, int, float);
 int FUN_001818a0(int);
 int FUN_001818b0(int);
 int FUN_00181b50(int);
-int FUN_00181df0(V2 *, int, int, int, float, float);
+int FUN_00181df0(TexCoordPair *, int, int, int, float, float);
 int FUN_00182090(int *, int, int, float);
 int FUN_001820f0(int);
 int FUN_00182100(int);
 int FUN_001931b0(int *, int);
 int igObject_Destroy(...);
-void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, B *arg4, B *arg5, float fparg0);
+void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTargetEx *arg4, VertexArrayTargetEx *arg5, float fparg0);
 }
-extern "C" void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, B *arg4, B *arg5, float fparg0) {
-    int temp_s1_5;
-    float temp_f20;
-    int temp_s0;
-    int temp_s1_2;
-    B *t2;
-    int temp_s2;
+extern "C" void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTargetEx *arg4, VertexArrayTargetEx *arg5, float fparg0) {
+    int spC0[3];
+    TexCoordPair spB8;
+    TexCoordPair spB0;
+    TexCoordPair spA8;
     int sp90[4];
-    unsigned end;
-    int temp_s0_2;
-    V2 spA8;
-    B *t;
-    V2 spB0;
-    V2 spB8;
-    int temp_s0_3;
-    int temp_s1_3;
-    int temp_s1;
+    float temp_f20;
+    VertexArrayTargetEx *t;
     unsigned end2;
+    unsigned end;
+    VertexArrayTargetEx *t2;
+    int temp_s2;
+    int temp_s1;
+    int temp_s1_2;
+    int temp_s1_3;
     int temp_s2_2;
     int temp_s1_4;
-    int spC0[3];
+    int temp_s0;
+    int temp_s0_2;
+    int temp_s0_3;
+    int temp_s1_5;
 
     temp_f20 = fparg0 * fparg0;
     if (arg5 != 0) {

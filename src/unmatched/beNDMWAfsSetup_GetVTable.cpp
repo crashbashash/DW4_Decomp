@@ -1,9 +1,10 @@
+extern "C" {
 struct Obj { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; };
 int igObject_InitHeader(struct Obj *);
-int FUN_001d35d0();
-int FUN_00231030();
-int FUN_0025a2b0();
-int FUN_003cafa0();
+int FUN_001d35d0(void *, int);
+int FUN_00231030(void *, int);
+int FUN_0025a2b0(void *, int);
+int FUN_003cafa0(void *, int);
 extern int DAT_0053dfa0[4];
 extern void * DAT_00586dc8[4];
 int beNDMWAfsSetup_GetVTable(void) {
@@ -24,4 +25,5 @@ int beNDMWAfsSetup_GetVTable(void) {
     FUN_001d35d0(&obj.w4, -1);
     FUN_00231030(&obj, 0);
     return t;
+}
 }

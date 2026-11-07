@@ -6,12 +6,8 @@ void *beNDMWMdlPEBaseInfoWork_ResolveMetaObject(void);
 struct G { int pad[9]; int f; };
 void *beNDMWMdlPEBaseInfoWork_ResolveMetaObject(void) {
     struct G *g = DAT_0058b430[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_003c0770();
     }
-    FUN_003c0770();
-end:
     return DAT_0058b430[0];
 }

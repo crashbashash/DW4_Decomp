@@ -1,5 +1,5 @@
 void FUN_00192dd0(float *arg0, float *arg1, float *arg2) {
-    float a1; float b2; float a2; float b1; float a0; float b0;
+    float b0; float a0; float b1; float a2; float b2; float a1;
     a0 = arg1[0];
     b0 = arg2[0];
     b2 = arg2[2];

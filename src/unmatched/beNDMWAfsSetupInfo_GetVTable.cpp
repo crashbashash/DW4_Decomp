@@ -1,3 +1,4 @@
+extern "C" {
 struct W { int *vt; int f[7]; };
 int igObject_InitHeader(struct W *);
 int FUN_003ca610(void *, int);
@@ -19,4 +20,5 @@ int beNDMWAfsSetupInfo_GetVTable(void) {
     FUN_00333760(&o.f[4], -1);
     FUN_00131b20(&o, 0);
     return r;
+}
 }

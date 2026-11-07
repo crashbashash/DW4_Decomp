@@ -15,11 +15,7 @@ int FUN_001c0ae0(float *arg0, float fparg0, float fparg1) {
     var_f1 = fparg0 - ((float)temp_f0 * fparg1);
     DAT_005626f0[0] = fparg1;
     DAT_00562700[0] = var_f1;
-    if (!(var_f1 <= 0.0f)) {
-        asm { nop }
-    } else {
-        var_f1 = 0.0f;
-    }
+    var_f1 = (var_f1 > 0.0f) ? var_f1 : 0.0f;
     DAT_00562700[0] = var_f1;
     *arg0 = var_f1;
     DAT_005626f8[0] = temp_f0;
