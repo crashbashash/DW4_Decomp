@@ -1195,6 +1195,52 @@ def repair(c):
     return c
 
 
+_BRANCH_LINE = re.compile(r"\b(?:b\w*|j|jr|jal|jalr)\s")
+
+
+def expand_asm(asm):
+    """Rewrite instructions m2c does not know as ones it does, for the draft only.
+
+    `adda.s` and `madd.s` keep a sum in the accumulator, which C writes as `a + b + c * d`.
+    `c1` is an undecoded `sqrt.s`. An `ldl`/`ldr` or `sdl`/`sdr` pair is one unaligned word, and
+    `pcpyld rd,zero,rt` only widens a 64-bit value. verify compares the result with retail.
+    """
+    if "adda.s" in asm and ("$f30" in asm or "$f31" in asm):
+        return asm
+    out = []
+    for line in asm.split("\n"):
+        body = line.split("#")[0]
+        m = re.search(r"\badda\.s\s+(\$f\d+),\s*(\$f\d+)", body)
+        if m:
+            out.append(line[:m.start()] + "add.s $f31, %s, %s" % m.groups())
+            continue
+        m = re.search(r"\bmadd\.s\s+(\$f\d+),\s*(\$f\d+),\s*(\$f\d+)", body)
+        if m and not (out and _BRANCH_LINE.search(out[-1].split("#")[0])):
+            pre = line[:m.start()]
+            out.append(pre + "mul.s $f30, %s, %s" % (m.group(2), m.group(3)))
+            out.append(pre + "add.s %s, $f31, $f30" % m.group(1))
+            continue
+        m = re.search(r"\bc1\s+0x([0-9a-fA-F]+)", body)
+        if m and int(m.group(1), 16) & 63 == 4:
+            word = int(m.group(1), 16)
+            out.append(line[:m.start()] + "sqrt.s $f%d, $f%d" % ((word >> 6) & 31, (word >> 16) & 31))
+            continue
+        m = re.search(r"\b(ldl|sdl)\s", body)
+        if m:
+            out.append(line[:m.start()] + "nop")
+            continue
+        m = re.search(r"\b(ldr|sdr)\s", body)
+        if m:
+            out.append(line[:m.start()] + ("ld " if m.group(1) == "ldr" else "sd ") + line[m.end():])
+            continue
+        m = re.search(r"\bpcpyld\s+(\$\w+),\s*\$zero,\s*(\$\w+)", body)
+        if m:
+            out.append(line[:m.start()] + "move %s, %s" % m.groups())
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
 def _error_line(src, rep):
     """The line a compile report blames, as an index into `src`, which the report numbers from 2."""
     head = rep.splitlines()[0]
@@ -1265,6 +1311,7 @@ def score_candidate(cand):
         return (name, "0x%08x" % va, sz, "sdk", -1, ""), False, None, "", "sdk"
     asm = m2c_one.asm_for(va, name, sz, ctx["table"], ctx["names"], bounds=ctx["bounds"],
                           jtables=ctx["jtabs"].get(va, {}), gp=ctx["gp"])
+    asm = expand_asm(asm)
     # a Sony EE GCC unit (config/SLUS-20836/units.tsv) is decompiled for gcc, everything else for MWCC
     target = "mipsee-gcc-c" if va in ctx.get("eegcc", ()) else "mipsee-mwcc-c"
     try:

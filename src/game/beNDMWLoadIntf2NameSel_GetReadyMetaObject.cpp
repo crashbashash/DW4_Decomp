@@ -12,7 +12,6 @@ void *beNDMWLoadIntf2NameSel_GetReadyMetaObject(void) {
          * unit profile (exceptions on); `if (ready = ...)` folds it away */
         ready = g->f & 4;
         if (ready != false) goto end;
-        asm { nop }
     }
     FUN_003c28e0();
 end:

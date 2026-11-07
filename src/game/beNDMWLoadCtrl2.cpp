@@ -20,11 +20,6 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_29(beNDMWLoadCtrl2 *, int);
 int Gap__Bec__beNDMWLoadCtrl2__vfunc_20(void);
 }
 
-/* 0x003f19e0: lazily acquire the pad manager.  The first call finds the bePadManager
- * registered with the insight, takes a reference on it and stores it in _padManager
- * (the generated release of the previous value is the shared smart-pointer idiom of
- * the low 23 bits of _refCount are the count).  The `asm { nop }`
- * statements reproduce retail's delay-slot nops (matching constructs). */
 void Gap__Bec__beNDMWLoadCtrl2__vfunc_32(beNDMWLoadCtrl2 *self) {
     igObject *found;
     igObject *previous;
@@ -32,18 +27,15 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_32(beNDMWLoadCtrl2 *self) {
         found = (igObject *)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
         if (found != 0) {
             found->_refCount = found->_refCount + 1;
-            asm { nop }
         }
         previous = (igObject *)self->_padManager;
         if (previous != 0) {
             previous->_refCount = previous->_refCount - 1;
             if ((previous->_refCount & 0x7fffff) == 0) {
                 FUN_002ff820();
-                asm { nop }
             }
         }
         self->_padManager = (int)found;
-        asm { nop }
     }
 }
 

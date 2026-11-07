@@ -45,7 +45,6 @@ long long FUN_003a7fd0(beBaseInfoRam *arg0, int arg1) {
             temp_a0->_refCount = (int)temp_a0->_refCount - 1;
             if (((unsigned long long)((long long)(int)temp_a0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(temp_a0);
-                asm { nop }
             }
         }
         arg0->_dataList = (int)o;

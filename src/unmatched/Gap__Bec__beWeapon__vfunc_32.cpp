@@ -12,7 +12,6 @@ void Gap__Bec__beWeapon__vfunc_32(beWeapon *arg0) {
         temp_a0[1] = temp_a0[1] - 1;
         if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
             igObject_Destroy(temp_a0);
-            asm { nop } /* matching construct: retail padding nop after igObject_Destroy */
         }
     }
     arg0->_attachDataList = 0;

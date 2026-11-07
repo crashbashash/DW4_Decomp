@@ -14,7 +14,6 @@ void *beNDMWMcSlot_GetReadyMetaObject(void) {
          * unit profile (3.0 -O3, exceptions on); a member-function spelling matched only under the combat -O3,p override */
         ready = g->f & 4;
         if (ready != false) goto end;
-        asm { nop }
     }
     FUN_003c60b0();
 end:

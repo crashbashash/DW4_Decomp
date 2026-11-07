@@ -1,5 +1,3 @@
-/* The flag test is a materialised C++ bool (sltu) with a padding nop before the call: `ok = !!(f &
- * 4)` tested with `!= false`, the null case jumping straight to the call. */
 struct S { char p[36]; unsigned f; };
 extern "C" {
 int FUN_00336f10();
@@ -11,7 +9,6 @@ void *FUN_00336c60(void) {
     if (DAT_00587870[0] == 0) goto make;
     ok = !!(DAT_00587870[0]->f & 4);
     if (ok != false) goto done;
-    asm { nop }
 make:
     FUN_00336f10();
 done:;

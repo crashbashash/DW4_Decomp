@@ -262,6 +262,8 @@ module. The second data section keeps the Sony and newlib strings in code order,
 `config/SLUS-20836/regions.tsv` divides that block, and the descriptors say `2800` except libmc's `2810`.
 A static initialiser follows the library that owns it: `FUN_00521600` calls AdxMovie and matches only with `,p`, unlike Alchemy's own.
 
+**Part of newlib's maths library builds with `-g`.** `ceil`, `floor` and the units before them match only with it. Its signs are a `nop` after each `jal`, saves kept apart from the body, and code larger than the same source without `-g`.
+
 **The size or speed mode follows the library, without exception.** Compiled both ways at `-O4`, every function
 that passes in only one mode agrees with its library: all of Alchemy, `p2` and `enbaya` need `,s`, and the
 Metrowerks runtime, `main`, AdxMovie, Bec, Ndmw and Viewer need `,p`. Only the static initialisers mix,

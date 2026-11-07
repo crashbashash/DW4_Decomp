@@ -1,8 +1,8 @@
 # The `p2` layer — the EE-side renderer
 
 `p2` is Intrinsic Alchemy's PS2/EE backend: the code that turns a render list into VU1 programs and GS
-packets. It occupies **`0x1f0000`-`0x20d000` (169 functions, every one of them still named `FUN_*`)**
-in [`module-map.md`](module-map.md)'s region table.
+packets. It occupies `0x1eb410`-`0x20e750` in [`module-map.md`](module-map.md)'s region table; the census
+below covers its 169 functions from `0x1f0000` to `0x20d000`.
 
 ## The hardware boundary is six functions
 

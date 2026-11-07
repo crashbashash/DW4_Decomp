@@ -16,14 +16,12 @@ void Gap__Viewer__igViewerRenderer__vfunc_23(Q *arg0) {
     Rc *temp_v0 = (Rc *)arg0->f8->v104(&DAT_0051faa8[0]);
     if (temp_v0 != 0) {
         temp_v0->rc = temp_v0->rc + 1;
-        asm { nop }
     }
     Rc *temp_a0_2 = arg0->f88;
     if (temp_a0_2 != 0) {
         temp_a0_2->rc = temp_a0_2->rc - 1;
         if (((unsigned long long)((long long)temp_a0_2->rc << 0x29) >> 0x29) == 0) {
             igObject_Destroy(temp_a0_2);
-            asm { nop }
         }
     }
     arg0->f88 = temp_v0;

@@ -22,7 +22,6 @@ int FUN_00460c80(R *arg0, A *arg1) {
         t = sp38;
         if (t != 0) {
             t->f4 = t->f4 + 1;
-            asm { nop }
         }
         FUN_0013ba30(&sp3C, FUN_0013c060(), &sp38);
         t = sp38;

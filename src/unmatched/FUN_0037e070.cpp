@@ -20,7 +20,6 @@ void FUN_0037e070(void) {
         asm { nop }
     } else {
         var_s0 = 0;
-        asm { nop }
     }
     igMemoryRefMetaField_SetAlignmentType(var_s0, &DAT_0050e490[0]);
 }

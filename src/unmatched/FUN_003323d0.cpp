@@ -8,7 +8,6 @@ void FUN_003323d0(S *arg0);
 void FUN_003323d0(S *arg0) {
     if (arg0->f44 != 0) {
         FUN_0026b728(arg0->f44);
-        asm { nop }
     }
     if (arg0->f8 != 0) {
         Memory_FreeBufferWithAllocator(arg0->f8, igObject_GetAllocator(arg0));

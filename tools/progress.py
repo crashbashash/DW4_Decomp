@@ -40,6 +40,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import regions
 import units
+import inline_asm
 from unitprofiles import asm_body_names
 import datamap
 import re
@@ -429,6 +430,8 @@ DEBT_COUNTERS = [
     ("compile.bytes", "bytes of those"),
     ("asm_body.functions", "functions kept as an `asm` body (content classification)"),
     ("asm_body.bytes", "bytes of those"),
+    ("inline_asm.hardware", "`asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py)"),
+    ("inline_asm.other", "every other `asm` statement: each has to show its function fails without it"),
     ("unmatched.functions", "functions in the layout with no definition in src/"),
     ("unmatched.bytes", "bytes of those"),
     ("struct.a", "struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py)"),
@@ -497,6 +500,9 @@ def debt_summary(d, syms, matched, asm_body, paths, typed):
         c["code_only.%s.bytes" % r] = exc[r]["bytes"] if rec else None
     c["asm_body.functions"] = len(asm_body)
     c["asm_body.bytes"] = sum(s[1] for s in asm_body)
+    inline = inline_asm.counts()
+    c["inline_asm.hardware"] = inline["hardware"]
+    c["inline_asm.other"] = inline["other"]
     left = [s for s in syms if s[2] not in paths]
     c["unmatched.functions"] = len(left)
     c["unmatched.bytes"] = sum(s[1] for s in left)

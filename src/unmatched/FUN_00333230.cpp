@@ -9,7 +9,6 @@ void FUN_00333230(R *arg0) {
     if (arg0 != 0) {
         if (arg0 != 0) {
             arg0->rc = arg0->rc + 1;
-            asm { nop }
         }
         old = DAT_00587620[0];
         if (old != 0) {

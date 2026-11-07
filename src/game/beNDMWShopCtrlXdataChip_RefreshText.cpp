@@ -55,9 +55,6 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
 
     /* Status is captured even when neither refresh flag is set. */
     status = FUN_00236f80(self->_insight, g_beNDMWStatus_metaObject[0]);
-    asm {
-        dmove s4,status
-    }
     if (refreshRows != 0) {
         row = 0;
 
@@ -80,9 +77,6 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
                     .set reorder
                 }
                 item = *(int *)(((beNDMWItemBaseList *)self->_itemBaseList)->_data + (index * 4));
-                asm {
-                    dmove s1,item
-                }
                 if (item != 0) {
                     name = (char *)(beNDMWItemBase_GetRecordString(item, status, &NAME_2[0]));
 
@@ -174,9 +168,6 @@ void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *self, long lon
             dmove textGroup,a1
         }
         pageValue = (int)((unsigned)self->_nowPage + '1');
-        asm {
-            dmove pageValue,pageValue
-        }
 
         page[0] = pageValue;
         beMessenger_SelectGroup(self->_messenger, (char *)(textGroup - 19520));

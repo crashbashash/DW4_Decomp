@@ -49,9 +49,7 @@ int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *ke
 
     /* matching construct: hand-placed instruction/delay-slot padding */
 
-    asm {
-        dmove s1,columnCount
-    }
+    ;
 
     if (!columnCount) {
         column = -1;

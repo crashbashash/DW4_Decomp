@@ -100,18 +100,14 @@ The variant correlates with the shape of the *callee*: the A guards call 3-instr
 
 Under the default compiler the dead `nop` is written: `asm { nop }` after the flag
 branch inside `if (g) { ... }`, with the call outside it and a `goto` to the return.
-The `asm` statement is marked as a matching construct.
-`src/unmatched/FUN_00334460.cpp`:
+Under b52 the comparison with `false` gives the same bytes with no `asm`
+(`src/unmatched/FUN_00334460.cpp`):
 
 ```cpp
 struct G *g = DAT_00587628[0];
-bool t;
-if (g) {
-    if (t = g->f & 4) goto end;
-    asm { nop }
+if (!g || ((g->f & 4) != 0) == false) {
+    FUN_003344f0();
 }
-FUN_003344f0();
-end:
 return DAT_00587628[0];
 ```
 

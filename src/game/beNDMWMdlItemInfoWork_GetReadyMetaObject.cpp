@@ -9,7 +9,6 @@ S *beNDMWMdlItemInfoWork_GetReadyMetaObject(void) {
     if (g != 0) {
         int b = !!(g->flags & 4);
         if (b) goto done;
-        asm { nop }
     }
     FUN_003c15b0();
 done:

@@ -24,7 +24,6 @@ void FUN_00465260(struct O *self, struct R *arg1) {
             asm { nop }
         } else {
             v = 0;
-            asm { nop }
         }
         if (v != 0) {
             v->references = v->references + 1;

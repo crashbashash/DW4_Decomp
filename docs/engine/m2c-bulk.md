@@ -92,6 +92,8 @@ registers. `repair_error` then follows the compiler: it reads the line a report 
 and compiles again, for up to twelve rounds. A draft holding `M2C_ERROR` or `saved_reg_` uses an
 instruction or register C cannot express, such as the MMI `qfsrv` and `pextlb`, and stays out of reach.
 
+`expand_asm` rewrites instructions m2c does not know before it drafts: `adda.s` and `madd.s` become a sum of products, which C writes as `a + b + c * d`; `c1` with function 4 is `sqrt.s`; and `ldl`/`ldr` and `sdl`/`sdr` pairs become 64-bit moves, though they are really a whole-struct copy of a type under 8-byte alignment, so such a draft needs its struct written by hand.
+
 ## The EE ABI: `mipsee`, `a4-a7`, and the 168 registrar trampolines
 
 The R5900 passes integer arguments 5–8 in the hardware registers **`t0-t3`**, not on the stack

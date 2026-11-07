@@ -17,7 +17,6 @@ void beSelectCtrl_EnsurePadManager(beSelectCtrl *self)
 {
     if (self->_padManager == 0) {
         self->_padManager = FUN_00236f80(self->_insight, D_00588518[0]);
-        asm { nop }
     }
 }
 

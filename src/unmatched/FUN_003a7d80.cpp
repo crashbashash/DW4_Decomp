@@ -45,9 +45,7 @@ int FUN_003a7d80(beBaseInfoRam *arg0, int arg1) {
                 old->_refCount = old->_refCount - 1;
                 if ((old->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(old);
-                    /* Retail pads this release with a second nop that the compiler never schedules
-                     * from C. */
-                    asm { nop }
+                    ;
                 }
             }
             arg0->_dataList = (int)p;

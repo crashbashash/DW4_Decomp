@@ -9,7 +9,6 @@ S *beNDMWPanelObjectWaza_ResolveMetaObject(void) {
     if (g != 0) {
         int b = !!(g->flags & 4);
         if (b) goto done;
-        asm { nop }
     }
     FUN_003bea10();
 done:

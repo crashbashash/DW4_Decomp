@@ -71,9 +71,6 @@ beDataBase *Gap__Bec__beNDMWItemAbilityChip__vfunc_21(beNDMWItemAbilityChip *sel
                                                       beNDMWStatus *status) {
     beDataBase *result = beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, abChip);
 
-    asm {
-        .set reorder
-    }
 
     return result;
 }

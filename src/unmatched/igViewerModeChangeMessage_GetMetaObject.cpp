@@ -9,7 +9,6 @@ S *igViewerModeChangeMessage_GetMetaObject(void) {
     if (g != 0) {
         int b = !!(g->flags & 4);
         if (b) goto done;
-        asm { nop }
     }
     FUN_0045a580();
 done:

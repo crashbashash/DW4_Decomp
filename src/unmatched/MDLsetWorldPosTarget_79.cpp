@@ -17,6 +17,5 @@ void MDLsetWorldPosTarget_79(int arg0) {
         t->x = a;
         t->y = b;
         t->z = c;
-        asm { nop }
     }
 }

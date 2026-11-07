@@ -35,6 +35,7 @@ as zero.
 | `inventory_gap.*` | `data/check-categories.tsv` | code bytes match; a reference lands in a symbol-map gap or inside another function's extent |
 | `mismatch.*`, `compile.*` | `data/check-categories.tsv` | units whose bytes differ, or that do not compile (both 0 on a tree that passed `make check`) |
 | `asm_body.functions` / `.bytes` | content of `src/` (an `asm` definition under `#pragma optimization_level 0`) | functions kept as an `asm` body — retail instructions kept as source, not recovered C, and in no matched figure |
+| `inline_asm.hardware`, `inline_asm.other` | `tools/inline_asm.py`, over `src/` and `include/dw4/` | `asm` statements inside C: `sync` and `ei`, which C cannot spell, and every other one. A statement passes the byte check whether or not C could produce the same bytes, so `tools/inline_asm.py --test <source>` has to show its function fails without it |
 | `unmatched.functions` / `.bytes` | `config/SLUS-20836/symbols.txt` minus the definitions in `src/` | functions still linked from `asm/` |
 | `struct.a`, `struct.b`, `struct.c` | `scripts/check_struct_conflicts.py` (imported, not re-implemented) | report groups: (a) the same view name with clashing layouts across units, (b) a receiver view disagreeing with the reflected class, (c) an offset-named member (`fNN`) whose number is not its offset |
 | `m2c_idiom.units` | the matched units' source, comments and strings blanked, asm bodies excluded | files still carrying m2c spellings: `temp_*`, `var_*`, or an `argN` identifier |

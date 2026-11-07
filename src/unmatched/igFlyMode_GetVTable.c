@@ -22,7 +22,6 @@ int igFlyMode_GetVTable(void) {
             t[1] = t[1] - 1;
             if ((t[1] & 0x7FFFFF) == 0) {
                 igObject_Destroy(t);
-                asm { nop }
             }
         }
     }

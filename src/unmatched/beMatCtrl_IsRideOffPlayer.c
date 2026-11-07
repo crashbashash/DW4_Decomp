@@ -8,7 +8,6 @@ int beMatCtrl_IsRideOffPlayer(beMatCtrl *arg0, int arg1) {
         r = 1;
     else {
         r = 0;
-        asm { nop } /* matching construct: retail padding nop on the false path */
     }
     return r;
 }

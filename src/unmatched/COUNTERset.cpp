@@ -18,6 +18,5 @@ void COUNTERset(int arg0, int arg1) {
     temp_v1 = temp_a1->_count;
     if ((temp_v1 != 0) && (arg0 >= 0) && (arg0 < temp_v1)) {
         *(int *)(temp_a1->_data + (arg0 * 4)) = arg1;
-        asm { nop }
     }
 }

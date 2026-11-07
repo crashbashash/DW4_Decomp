@@ -16,7 +16,6 @@ int Gap__igCriMovieCodec__vfunc_25(int arg0, A *arg1) {
         asm { nop }
     } else {
         var_s0 = 0;
-        asm { nop }
     }
     if (var_s0 != 0) {
         arg1->f76 = 0;

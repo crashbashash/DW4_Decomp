@@ -12,7 +12,6 @@ void *beNDMWDegiData_GetReadyMetaObject(void) {
          * unit profile (exceptions on); `if (ready = ...)` folds it away */
         ready = g->f & 4;
         if (ready != false) goto end;
-        asm { nop }
     }
     beNDMWDegiData_RunStaticInit();
 end:

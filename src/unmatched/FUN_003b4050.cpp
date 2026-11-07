@@ -40,7 +40,6 @@ void *FUN_003b4050(struct S *arg0, short arg1) {
                 p->rc = p->rc - 1;
                 if ((p->rc & 0x7FFFFF) == 0) {
                     igObject_Destroy(p);
-                    asm { nop }
                 }
             }
         }
@@ -52,7 +51,6 @@ void *FUN_003b4050(struct S *arg0, short arg1) {
                 h[-1] = rc;
                 if (rc == 0) {
                     StringChunk_ReleaseHeader(*a1, a1);
-                    asm { nop }
                 }
             }
         }
@@ -65,7 +63,6 @@ void *FUN_003b4050(struct S *arg0, short arg1) {
             ObjectRef_Destruct_001c6460(&arg0->f60, -1);
             FUN_003b2f30(&arg0->f56, -1);
             FUN_003b2fb0(&arg0->f52, -1);
-            asm { nop }
         }
         if (arg1 > 0) {
             thunk_FUN_002ed460__002ff810(arg0);

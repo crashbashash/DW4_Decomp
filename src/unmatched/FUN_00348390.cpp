@@ -23,7 +23,6 @@ void *FUN_00348390(struct S *arg0, short arg1) {
                 p->rc = p->rc - 1;
                 if ((p->rc & 0x7FFFFF) == 0) {
                     igObject_Destroy(p);
-                    asm { nop }
                 }
             }
         }

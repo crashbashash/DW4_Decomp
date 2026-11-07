@@ -9,7 +9,6 @@ S *FUN_00341be0(void) {
     if (g != 0) {
         int b = !!(g->flags & 4);
         if (b) goto done;
-        asm { nop }
     }
     FUN_00341cb0();
 done:

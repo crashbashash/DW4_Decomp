@@ -83,6 +83,10 @@ make it read well. Either can be done alone.
   definition in `src/`: `python3 tools/m2c_batch.py` drafts them (gcc target for Sony EE GCC units;
   `--write` adds a draft only when the C verifies). When a compiler is added, re-attempt the functions in
   its blocks first. Blocks built by a compiler build the project does not have stay without source.
+- **No new inline `asm`.** An `asm` statement inside C passes the byte check whether or not C could produce
+  the same bytes, so it can hide a spelling nobody found. Find the C. `tools/progress.py --debt-check`
+  fails on any rise in `inline_asm.*`; only the owner agrees one, and only `sync` and `ei` have no C
+  spelling. `tools/inline_asm.py --test <source>` shows which existing statements can go.
 - **Names** come from evidence; a guess goes in the topic document's open questions, not into a name. Apply overlays with
   `tools/apply_names.py` (dry run, then `--apply --check`).
 

@@ -35,6 +35,5 @@ void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger) {
     self->_comConf = 0;
     self->_lightConf = 1;
     self->_selLang = 0;
-    asm { nop }
 }
 }

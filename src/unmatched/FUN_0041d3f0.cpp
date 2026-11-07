@@ -19,7 +19,6 @@ void FUN_0041d3f0(igObjectList *arg0, int arg1, int arg2) {
                 temp_a0->_refCount = temp_a0->_refCount - 1;
                 if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(temp_a0);
-                    asm { nop }
                 }
             }
             var_s1 += 1;

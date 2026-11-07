@@ -4,6 +4,5 @@ void FUN_0045eda0(void **arg0) {
     temp_a0 = (void *)(*arg0);
     if (temp_a0 != 0) {
         *(int *)((char *)(temp_a0) + 4) = (int)((int) (*(int *)((char *)(temp_a0) + 4) + 1));
-        asm { nop }
     }
 }

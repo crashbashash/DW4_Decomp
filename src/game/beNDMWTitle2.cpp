@@ -123,11 +123,6 @@ void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *, int);
 int Gap__Bec__beNDMWTitle2__vfunc_20(void);
 }
 
-/* Resolves the pad manager on first use, and releases the cached memory-card utility controller.
- * References are counted in the low 23 bits of _refCount. The `asm { nop }` statements reproduce
- * retail's delay-slot nops after each call and store, and the repeated null test on the held
- * reference reproduces retail's inlined release-then-clear sequence; they are matching constructs,
- * not code. */
 void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
     igObject *padManager;
     igObject *held;
@@ -135,18 +130,15 @@ void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
         padManager = (igObject *)FUN_00236f80(self->_insight, g_bePadManager_metaObject[0]);
         if (padManager != 0) {
             padManager->_refCount = padManager->_refCount + 1;
-            asm { nop }
         }
         held = (igObject *)self->_padManager;
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
             if ((held->_refCount & 0x7fffff) == 0) {
                 FUN_002ff820();
-                asm { nop }
             }
         }
         self->_padManager = (int)padManager;
-        asm { nop }
     }
     held = (igObject *)self->_mcUtilCtrl;
     if (held != 0) {
@@ -154,11 +146,9 @@ void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
             held->_refCount = held->_refCount - 1;
             if ((held->_refCount & 0x7fffff) == 0) {
                 FUN_002ff820();
-                asm { nop }
             }
         }
         self->_mcUtilCtrl = 0;
-        asm { nop }
     }
 }
 /* Outer state, CTRL._st0. */

@@ -35484,7 +35484,8 @@
 004d2ce8 000150 jtbl jtbl_004d2ce8 FUN_0011b3e8
 004d2e38 000030 data data_004d2e38
 004d2e68 000080 jtbl jtbl_004d2e68 FUN_0011ba40
-004d2ee8 0000f8 data data_004d2ee8
+004d2ee8 0000e0 jtbl jtbl_004d2ee8 FUN_0011bd80
+004d2fc8 000018 data data_004d2fc8
 004d2fe0 0000e0 jtbl jtbl_004d2fe0 FUN_0011c640
 004d30c0 000478 data data_004d30c0
 004d3538 000030 jtbl jtbl_004d3538 FUN_0011f198
@@ -35501,7 +35502,7 @@
 004d3d0c 000374 data data_004d3d0c
 004d4080 0000b8 jtbl jtbl_004d4080 FUN_0012b078
 004d4138 000098 data data_004d4138
-004d41d0 000164 jtbl jtbl_004d41d0 FUN_0012c858
+004d41d0 000164 jtbl jtbl_004d41d0 FUN_0012c8d0
 004d4334 0000ac data data_004d4334
 004d43e0 000164 jtbl jtbl_004d43e0 FUN_0012d640
 004d4544 00003c data data_004d4544
@@ -35524,14 +35525,24 @@
 004df070 00002c jtbl jtbl_004df070 FUN_00164d60
 004df09c 000234 data data_004df09c
 004df2d0 000034 jtbl jtbl_004df2d0 FUN_00168570
-004df304 00029c data data_004df304
+004df304 00018c data data_004df304
+004df490 000074 jtbl jtbl_004df490 Gap__Gfx__igPsx2VisualContext__vfunc_37
+004df504 00001c data data_004df504
+004df520 000034 jtbl jtbl_004df520 Gap__Gfx__igPsx2DisableExt__vfunc_30
+004df554 00000c data data_004df554
+004df560 000034 jtbl jtbl_004df560 Gap__Gfx__igPsx2DisableExt__vfunc_31
+004df594 00000c data data_004df594
 004df5a0 000018 jtbl jtbl_004df5a0 Gap__Gfx__igPsx2VisualContext__vfunc_71
 004df5b8 000048 data data_004df5b8
 004df600 000030 jtbl jtbl_004df600 FUN_0016fea0
-004df630 000040 data data_004df630
+004df630 000020 data data_004df630
+004df650 000018 jtbl jtbl_004df650 Gap__Gfx__igPsx2VisualContext__vfunc_100
+004df668 000008 data data_004df668
 004df670 000020 jtbl jtbl_004df670 Gap__Gfx__igPsx2VisualContext__vfunc_163
 004df690 000018 jtbl jtbl_004df690 FUN_001762d0
-004df6a8 001178 data data_004df6a8
+004df6a8 000028 data data_004df6a8
+004df6d0 0002fc jtbl jtbl_004df6d0 Gap__Gfx__igPsx2VisualContext__vfunc_257
+004df9cc 000e54 data data_004df9cc
 004e0820 000028 jtbl jtbl_004e0820 Gap__Gfx__igPsx2VertexArray1_1__vfunc_27
 004e0848 0004d8 data data_004e0848
 004e0d20 000020 jtbl jtbl_004e0d20 FUN_0018ab70
@@ -35614,7 +35625,7 @@
 004f505c 000334 data data_004f505c
 004f5390 000020 jtbl jtbl_004f5390 FUN_002b2db0
 004f53b0 000070 data data_004f53b0
-004f5420 000194 jtbl jtbl_004f5420 FUN_002b3300
+004f5420 000194 jtbl jtbl_004f5420 FUN_002b3318
 004f55b4 00000c data data_004f55b4
 004f55c0 000194 jtbl jtbl_004f55c0 FUN_002b3490
 004f5754 0040bc data data_004f5754

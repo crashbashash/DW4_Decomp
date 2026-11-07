@@ -16,19 +16,27 @@
   "compile.functions": 0,
   "foreign_profile.bytes": 24948,
   "foreign_profile.functions": 89,
-  "fun_dat_refs": 75999,
+  "fun_dat_refs": {
+   "reason": null,
+   "value": 77224
+  },
+  "inline_asm.hardware": 11,
+  "inline_asm.other": 120,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
-  "m2c_idiom.units": 5670,
+  "m2c_idiom.units": {
+   "reason": null,
+   "value": 5819
+  },
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 1236,
   "name_defect.functions": 3,
   "orphan.bytes": 14096,
   "raw_casts.reflected": {
-   "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12",
-   "value": 309
+   "reason": null,
+   "value": 324
   },
   "struct.a": 141,
   "struct.b": {
@@ -36,14 +44,8 @@
    "value": 294
   },
   "struct.c": 287,
-  "unmatched.bytes": {
-   "reason": "asm bodies are no longer kept in the repository (owner decision): the 1,206 functions that were asm bodies have no file in src/ and count as unmatched, so unmatched.* rises by what asm_body.* falls; no C source was removed",
-   "value": 1108904
-  },
-  "unmatched.functions": {
-   "reason": "asm bodies are no longer kept in the repository (owner decision): the 1,206 functions that were asm bodies have no file in src/ and count as unmatched, so unmatched.* rises by what asm_body.* falls; no C source was removed",
-   "value": 2966
-  }
+  "unmatched.bytes": 1087516,
+  "unmatched.functions": 2444
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }
