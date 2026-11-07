@@ -13,10 +13,10 @@ class DW4VC_104_1 { public: virtual void d0(); virtual void d1(); virtual void d
 int FUN_001ab770(void *arg0, void **arg1, void **arg2) {
     int temp_v0_2;
     int temp_a0;
-    int var_s0;
-    int temp_s1;
-    int var_s2;
     void *temp_v0;
+    int var_s2;
+    int temp_s1;
+    int var_s0;
     temp_v0 = (void *)(FUN_001a8c30(igObject_GetAllocator()));
     FUN_001abb50(temp_v0, arg1);
     temp_s1 = ((DW4VC_96_0 *)(arg1))->vX();

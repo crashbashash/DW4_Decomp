@@ -3,8 +3,8 @@ struct L { char p0[8]; int count; char pc[4]; V **items; };
 struct O { char p0[8]; L *list; };
 extern "C" void FUN_001474a0(O *arg0, int arg1);
 void FUN_001474a0(O *arg0, int arg1) {
-    int i;
     int n;
+    int i;
     n = arg0->list->count;
     for (i = 0; i < n; i++) {
         arg0->list->items[i]->vX(arg1);

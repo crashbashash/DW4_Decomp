@@ -8,9 +8,9 @@ struct P *lua_touserdata(int, int);
 extern char DAT_004ea6b0[];
 extern char DAT_004ea6d0[];
 int FUN_002433a0(int arg0) {
-    int temp_s0_2;
     struct P *temp_s0;
     char *temp_s1;
+    int temp_s0_2;
     temp_s0 = lua_touserdata(arg0, -1);
     if (lua_type(arg0, 2) != 2) {
         FUN_002467a0(DAT_004ea6b0, temp_s0->f12);

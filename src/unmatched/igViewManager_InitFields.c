@@ -12,11 +12,11 @@ extern int DAT_004d16d0[4];
 extern int DAT_004d16e0[4];
 extern int DAT_0058cd08[4];
 void igViewManager_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
     int temp_s2;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058cd08[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

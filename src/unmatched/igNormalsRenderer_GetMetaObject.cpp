@@ -6,12 +6,8 @@ void *igNormalsRenderer_GetMetaObject(void);
 struct G { int pad[9]; int f; };
 void *igNormalsRenderer_GetMetaObject(void) {
     struct G *g = DAT_0058cda0[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_0045d9f0();
     }
-    FUN_0045d9f0();
-end:
     return DAT_0058cda0[0];
 }

@@ -5,8 +5,8 @@ class DW4VC_124_0 { public: virtual void d0(); virtual void d1(); virtual void d
 struct L { char pad[8]; int n; int pad2; DW4VC_124_0 **arr; };
 struct S { char pad[52]; L *list; };
 void FUN_002d5020(S *arg0, int arg1) {
-    L *l;
     int i;
+    L *l;
     i = 0;
     while (l = arg0->list, i < l->n) {
         l->arr[i]->vX(arg1);

@@ -15,8 +15,8 @@ class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2
 extern "C" void igPrimLengthArray1_1_InitFields(void) {
     void **temp_v0;
     T *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
 
     temp_s1 = (void *)(DAT_0055fb00[0]);
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &DAT_004dbec8[0]));

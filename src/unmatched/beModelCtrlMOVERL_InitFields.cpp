@@ -10,8 +10,8 @@ extern int DAT_00588d88[4];
 void beModelCtrlMOVERL_InitFields(void);
 }
 void beModelCtrlMOVERL_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588d88[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

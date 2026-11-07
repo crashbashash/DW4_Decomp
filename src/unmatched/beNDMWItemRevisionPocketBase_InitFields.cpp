@@ -10,8 +10,8 @@ extern int DAT_0058bf68[4];
 void beNDMWItemRevisionPocketBase_InitFields(void);
 }
 void beNDMWItemRevisionPocketBase_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058bf68[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

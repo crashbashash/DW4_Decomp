@@ -10,8 +10,8 @@ extern int DAT_00587638[4];
 void igAdxAfsFile_InitFields(void);
 }
 void igAdxAfsFile_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00587638[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

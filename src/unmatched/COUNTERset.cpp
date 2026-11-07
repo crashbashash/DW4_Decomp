@@ -11,8 +11,8 @@ void COUNTERset(int arg0, int arg1);
 }
 
 void COUNTERset(int arg0, int arg1) {
-    int temp_v1;
     igIntList *temp_a1;
+    int temp_v1;
     beMessenger_SendNamed(DAT_0058a1c0[0], &DAT_0050d940[0], 0, 0, &DAT_0050d8f0[0]);
     temp_a1 = (igIntList *)(*(int *)((char *)(FUN_003a9250(beMessenger_GetObject(DAT_0058a1c0[0], 0), &DAT_0050daf8[0])) + 12));
     temp_v1 = temp_a1->_count;

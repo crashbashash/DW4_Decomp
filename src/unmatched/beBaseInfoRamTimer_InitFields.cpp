@@ -12,8 +12,8 @@ extern int DAT_00589d78[4];
 void beBaseInfoRamTimer_InitFields(void);
 }
 void beBaseInfoRamTimer_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00589d78[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -10,8 +10,8 @@ struct Cx { char pad40[40]; Lst *f40; char pad44[68]; int f112; char pad116[8]; 
 extern "C" void FUN_002e4e60(int *arg0, Cx *arg1) {
     int temp_v0;
     int var_s0;
-    int var_s0_2;
     int var_s3;
+    int var_s0_2;
 
     arg1->f124 = 0;
     arg1->f112 = arg1->f40->n;

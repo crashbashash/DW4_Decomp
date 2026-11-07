@@ -7,9 +7,9 @@ int igObject_Destroy();
 int igObject_GetAllocator();
 
 void Gap__Core__igObjectRefArrayMetaField__vfunc_31(struct A *arg0, int arg1) {
-    int var_s0;
-    int var_s1;
     struct T *temp_v0;
+    int var_s1;
+    int var_s0;
     char *temp_a0;
 
     if (arg0->f34 != 0) {

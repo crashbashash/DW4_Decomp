@@ -11,8 +11,8 @@ void FLGset(int arg0, char arg1);
 }
 
 void FLGset(int arg0, char arg1) {
-    int temp_v1;
     igDataList *temp_a0;
+    int temp_v1;
 
     beMessenger_SendNamed(DAT_0058a1c0[0], &DAT_0050d940[0], 0, 0, &DAT_0050d8f0[0]);
     temp_a0 = (igDataList *)(*(int *)((char *)(igProperty_GetRecordArray(beMessenger_GetObject(DAT_0058a1c0[0], 0), &DAT_0050d9f0[0])) + 12));

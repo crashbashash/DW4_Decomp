@@ -3,8 +3,8 @@
  * list (the sibling accessors vfunc_42/vfunc_48 gate their lists on _drivenChannels the same way). */
 #include "dw4/reflected.h"
 void Gap__Sg__igTransformSequence1_5__vfunc_44(igTransformSequence1_5 *self, int index, void *quaternion) {
-    int count;
     igQuaternionfList *quatList;
+    int count;
     void *key;
 
     if (self->_drivenChannels & 2) {

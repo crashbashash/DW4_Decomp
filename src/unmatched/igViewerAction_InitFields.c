@@ -9,10 +9,10 @@ extern int DAT_004d0ad0[4];
 extern int DAT_004d0ad8[4];
 extern int DAT_0058c770[4];
 void igViewerAction_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    int temp_s2;
     void *f2;
+    int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058c770[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

@@ -6,10 +6,10 @@ extern int DAT_00585b20[4];
 typedef struct F { char p0[8]; int base; char p1[26]; unsigned char f38; char p2[21]; int f60; char p3[4]; int f68; } F;
 typedef struct F2 { char p[66]; unsigned char f66; } F2;
 int igMemoryRefMetaField_Write(F *f, int off, int a2) {
-    int s0;
-    int s1;
-    int p;
     unsigned int n;
+    int p;
+    int s1;
+    int s0;
     if (f->f38 == 0) return -1;
     p = *(int *)(off + f->base);
     if (p == 0) return -1;

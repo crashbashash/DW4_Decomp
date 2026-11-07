@@ -8,8 +8,8 @@ void *igObject_GetAllocator();
 
 void FUN_0015e050(struct S_arg0 *arg0) {
     int temp_a0;
-    int temp_s0;
     int temp_v0;
+    int temp_s0;
     struct S_temp_v0_2 *temp_a0_2;
     struct S_temp_v0_2 *temp_v0_2;
 

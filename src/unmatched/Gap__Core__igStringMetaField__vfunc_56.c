@@ -8,9 +8,9 @@ void Gap__Core__igStringMetaField__vfunc_56(int arg0, int a1, int arg2) {
     int *temp_a1;
     int temp_v0;
     int var_v0;
-    void *temp_s0;
     void *temp_v1;
     void **arg1;
+    void *temp_s0;
 
     arg1 = (void **)a1;
     if (DAT_00586f20[0] == 0) {

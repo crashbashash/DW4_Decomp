@@ -6,8 +6,8 @@
 /* _drivenChannels bit for the scale channel (vfunc_50 tests it before reading _scaleList) */
 #define TRANSFORM_CHANNEL_SCALE 8
 void Gap__Sg__igTransformSequence1_5__vfunc_49(igTransformSequence1_5 *self, int index, void *scale) {
-    int count;
     igVec3fList *scaleList;
+    int count;
     float *key;
     float *src;
 

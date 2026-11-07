@@ -10,8 +10,8 @@ extern int DAT_00589998[4];
 void beCriSfpData_InitFields(void);
 }
 void beCriSfpData_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00589998[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

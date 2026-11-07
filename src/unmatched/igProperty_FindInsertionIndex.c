@@ -1,7 +1,7 @@
 int igProperty_FindInsertionIndex(void *arg0, void *arg1, unsigned int arg2) {
     int n;
-    int hi;
     int lo;
+    int hi;
     int mid;
     unsigned int key;
     int e;

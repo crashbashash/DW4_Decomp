@@ -17,11 +17,11 @@ extern int DAT_0058b570[4];
 void beNDMWLogo_InitFields(void);
 }
 void beNDMWLogo_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
     int temp_s2;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058b570[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

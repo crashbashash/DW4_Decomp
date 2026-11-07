@@ -4,8 +4,8 @@
  * vfunc_44 (quaternion list, bit 1) and vfunc_49 (scale list, bit 3). */
 #include "dw4/reflected.h"
 void Gap__Sg__igTransformSequence1_5__vfunc_40(igTransformSequence1_5 *self, int index, float *translation) {
-    int count;
     igVec3fList *xlateList;
+    int count;
     float *entry;
 
     if (self->_drivenChannels & 1) {

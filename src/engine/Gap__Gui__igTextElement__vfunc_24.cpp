@@ -4,8 +4,8 @@ struct M { char p0[12]; V168 *obj; };
 struct O { char p0[24]; char buf[1]; char p1[23]; M *m; };
 extern "C" void Gap__Gui__igTextElement__vfunc_24(O *arg0);
 void Gap__Gui__igTextElement__vfunc_24(O *arg0) {
-    int i;
     int n;
+    int i;
     struct Q *q = (struct Q *)arg0->m->obj;
     if (q != 0) {
         n = q->count;

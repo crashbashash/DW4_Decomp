@@ -4,10 +4,10 @@ int FUN_002dada0();
 int FUN_0030b460();
 void FUN_002dab80(void *arg0, int arg1) {
     char buf[4096];
-    int s1;
     char *s2;
-    int c;
+    int s1;
     char *p;
+    int c;
     FUN_002da770(arg0);
     while (FUN_002dada0(arg0, &arg1, buf, 0x1000) != 0) {
         p = buf;

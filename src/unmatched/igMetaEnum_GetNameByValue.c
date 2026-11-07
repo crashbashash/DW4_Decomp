@@ -4,9 +4,9 @@ struct L { char pad0[8]; int cnt; char pad12[4]; int *data; };
 struct E { char pad0[12]; int f12; struct L * volatile f16; };
 int StringList_CopyRetained();
 void igMetaEnum_GetNameByValue(int *arg0, struct E *arg1, int arg2) {
-    int a4;
-    int n;
     int i;
+    int n;
+    int a4;
     a4 = arg1->f12;
     if (a4 != 0) {
         n = arg1->f16->cnt;

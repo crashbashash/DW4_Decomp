@@ -13,8 +13,8 @@ extern int DAT_00588348[4];
 void beSvSlotXbox_InitFields(void);
 }
 void beSvSlotXbox_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588348[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -1,8 +1,8 @@
 extern void * DAT_00561118[4];
 int FUN_0018fa80(void *arg0, void *arg1) {
     int var_v0;
-    unsigned int temp_v1;
     unsigned int temp_a0;
+    unsigned int temp_v1;
 
     temp_a0 = *(int *)((char *)(arg0) + 8);
     temp_v1 = *(int *)((char *)(arg1) + 8);

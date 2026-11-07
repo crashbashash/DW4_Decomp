@@ -10,8 +10,8 @@ int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 }
 extern "C" int FUN_001b23e0(int arg0, Y *arg1) {
-    V3 sp30;
     V3 sp40;
+    V3 sp30;
     X *volatile sp4C;
     X *t;
     int temp_s0;

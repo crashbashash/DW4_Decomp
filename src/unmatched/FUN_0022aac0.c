@@ -3,8 +3,8 @@ typedef struct { char pad[12]; L *l12; L *l16; } T;
 int List_Resize();
 int FUN_0022aac0(T *arg0, int arg1) {
     L *a;
-    L *b;
     int n;
+    L *b;
     a = arg0->l12;
     if (0 <= a->cap) {
         a->cnt = 0;

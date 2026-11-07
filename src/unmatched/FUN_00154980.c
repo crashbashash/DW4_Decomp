@@ -6,8 +6,8 @@ int FUN_00154e40();
 int FUN_00300db0();
 int FUN_00300f50();
 int FUN_00154980(struct S *arg0, int arg1, int arg2, int arg3) {
-    int sp58;
     int sp5C;
+    int sp58;
     if (arg3 != 0 && arg0->f20 == arg3 && arg1 == arg0->f8 && arg1 != -1) {
         FUN_00154e40(arg0, arg2);
         return 1;

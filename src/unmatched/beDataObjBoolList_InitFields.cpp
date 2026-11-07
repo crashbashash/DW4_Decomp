@@ -13,9 +13,9 @@ extern int DAT_00589888[4];
 void beDataObjBoolList_InitFields(void);
 }
 void beDataObjBoolList_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00589888[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

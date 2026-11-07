@@ -3,8 +3,8 @@ class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 struct L { int pad[2]; unsigned int n; int pad2; VC **a; };
 struct O { char pad[28]; L *l; };
 extern "C" void Gap__Sg__igLightSet__vfunc_31(O *arg0) {
-    unsigned int i;
     unsigned int n;
+    unsigned int i;
     n = arg0->l->n;
     for (i = 0; i < n; i++) {
         arg0->l->a[i]->vX();

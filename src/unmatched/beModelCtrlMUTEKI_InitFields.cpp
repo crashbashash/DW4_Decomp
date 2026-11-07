@@ -10,8 +10,8 @@ extern int DAT_00588d50[4];
 void beModelCtrlMUTEKI_InitFields(void);
 }
 void beModelCtrlMUTEKI_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588d50[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -1,10 +1,10 @@
 struct S { char pad[8]; int f8; char pad2[4]; long long *f16; };
 int FUN_001002f0(long long, long long);
 int FUN_001dce70(struct S *arg0, long long arg1) {
-    int temp_s0;
-    int temp_s1;
-    int var_s2;
     int var_s3;
+    int var_s2;
+    int temp_s1;
+    int temp_s0;
 
     var_s3 = 0;
     temp_s0 = arg0->f8;

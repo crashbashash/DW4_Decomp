@@ -10,8 +10,8 @@ void FUN_004576d0(igContext *arg0, VC *arg1) {
     igObjectList *l;
     int i;
     int n;
-    int k;
     int cnt;
+    int k;
     int r;
 
     key = 0;

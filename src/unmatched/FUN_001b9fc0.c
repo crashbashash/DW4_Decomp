@@ -6,8 +6,8 @@ int FUN_001b0aa0();
 int FUN_001e07a0();
 
 int FUN_001b9fc0(struct A *arg0, struct B *arg1) {
-    int s0;
     int s1;
+    int s0;
 
     s0 = arg1->f32->n;
     for (s1 = 0; s1 < s0; s1++) {

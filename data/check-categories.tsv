@@ -2135,7 +2135,7 @@
 00175730	FUN_00175730	match	-
 00175790	FUN_00175790	match	-
 001757c0	FUN_001757c0	match	-
-00175ba0	Gap__Gfx__igPsx2ParticleArray__vfunc_29	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPsx2ParticleArray_175860 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+00175ba0	Gap__Gfx__igPsx2ParticleArray__vfunc_29	match	-
 00175c70	Gap__Gfx__igPsx2ParticleArray__vfunc_24	match	-
 00175cb0	Gap__Gfx__igPsx2ParticleArray__vfunc_26	match	-
 00175df0	Gap__Gfx__igPsx2ParticleArray__vfunc_27	match	-
@@ -3141,7 +3141,7 @@
 0019d570	thunk_igModelViewMatrixBoneSelect_GetMetaObject	match	-
 0019d580	igModelViewMatrixBoneSelect_InitFields	match	-
 0019d610	igLod_GetMetaObject	match	-
-0019d660	igLod_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igLod (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0019d660	igLod_GetVTable	match	-
 0019d710	FUN_0019d710	match	-
 0019d720	igLod_Register	match	-
 0019d7a0	thunk_igLod_GetMetaObject	match	-
@@ -3954,7 +3954,7 @@
 001d02d0	Gap__Sg__igLightSet__vfunc_30	match	-
 001d02e0	Gap__Sg__igLightSet__vfunc_09	match	-
 001d0330	Gap__Sg__igLightSet__vfunc_31	match	-
-001d03b0	Gap__Sg__igLightSet__vfunc_27	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igLightSet_1d02d0 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 20 bytes
+001d03b0	Gap__Sg__igLightSet__vfunc_27	match	-
 001d0490	thunk_FUN_001d33a0	match	-
 001d07e0	Gap__Sg__igLod__vfunc_31	match	-
 001d0850	Gap__Sg__igLod__vfunc_17	match	-
@@ -4122,7 +4122,7 @@
 001e2a80	Gap__Sg__igTransformSequence1_5__vfunc_55	match	-
 001e2ac0	Gap__Sg__igTransformSequence1_5__vfunc_40	match	-
 001e2b30	Gap__Sg__igTransformSequence1_5__vfunc_44	match	-
-001e2ba0	Gap__Sg__igTransformSequence1_5__vfunc_47	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igTransformSequence1_5_1e28b0 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+001e2ba0	Gap__Sg__igTransformSequence1_5__vfunc_47	match	-
 001e2bf0	Gap__Sg__igTransformSequence1_5__vfunc_49	match	-
 001e2c60	FUN_001e2c60	match	-
 001e2c70	FUN_001e2c70	match	-
@@ -9774,7 +9774,7 @@
 002fb190	igMetaField_AllocateArray	match	-
 002fb3d0	igMemoryRefMetaField_Write	match	-
 002fb550	FUN_002fb550	match	-
-002fb570	igMemoryRefMetaField_IsAlikeDeep	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMemoryRefMetaField_2fb280 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+002fb570	igMemoryRefMetaField_IsAlikeDeep	match	-
 002fb760	igMemoryRefMetaField_IsAlikeShallow	match	-
 002fb830	igMemoryRefMetaField_SetPoolName	match	-
 002fb8d0	igMemoryRefMetaField_GetPoolName	match	-
@@ -9976,7 +9976,7 @@
 00301ee0	ObjectList_ResizeRetained	match	-
 00302100	ObjectList_RemoveAllRetained	match	-
 00302240	ObjectList_AppendUniqueRetained	match	-
-003022c0	igProperty_FindByName	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igProperty (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+003022c0	igProperty_FindByName	match	-
 00302380	igProperty_FindByPointer	match	-
 003023f0	igProperty_FindBySortedKey	match	-
 00302480	igProperty_FindInsertionIndex	match	-
@@ -10978,7 +10978,7 @@
 00334710	igAdxAfsFileList_Register	match	exception index 0x5474cc: matches retail (packed)
 00334780	igAdxAfsFileList_GetMetaObject	match	exception index 0x5474d8: matches retail (packed)
 003347a0	FUN_003347a0	match	exception index 0x5474e4: matches retail (packed)
-003347f0	igAdxAfsFile_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igAdxAfsFile (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003347f0	igAdxAfsFile_GetVTable	match	exception index 0x5474f0: matches retail (packed)
 003348d0	FUN_003348d0	match	exception index 0x5474fc: matches retail (packed)
 003348f0	igAdxAfsFile_Register	match	exception index 0x547508: matches retail (packed)
 00334960	igAdxAfsFile_GetMetaObject	match	exception index 0x547514: matches retail (packed)
@@ -10989,7 +10989,7 @@
 00334ab0	igFileNameList_Register	match	exception index 0x547550: matches retail (packed)
 00334b20	igFileNameList_GetMetaObject	match	exception index 0x54755c: matches retail (packed)
 00334b40	FUN_00334b40	match	exception index 0x547568: matches retail (packed)
-00334b90	igFileName_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igFileName (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00334b90	igFileName_GetVTable	match	exception index 0x547574: matches retail (packed)
 00334c70	FUN_00334c70	match	exception index 0x547580: matches retail (packed)
 00334c90	igFileName_Register	match	exception index 0x54758c: matches retail (packed)
 00334d10	igFileName_GetMetaObject	match	exception index 0x547598: matches retail (packed)
@@ -11006,7 +11006,7 @@
 003350f0	FUN_003350f0	match	exception index 0x54761c: matches retail (packed)
 00335130	FUN_00335130	match	exception index 0x547628: matches retail (packed)
 00335180	FUN_00335180	match	exception index 0x547634: matches retail (packed)
-003351d0	igAdxAudio_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igAdxAudio (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003351d0	igAdxAudio_GetVTable	match	exception index 0x547640: matches retail (packed)
 00335260	FUN_00335260	match	exception index 0x54764c: matches retail (packed)
 00335280	igAdxAudio_Register	match	exception index 0x547658: matches retail (packed)
 003352f0	igAdxAudio_GetMetaObject	match	exception index 0x547664: matches retail (packed)
@@ -11084,7 +11084,7 @@
 00336fb0	igMovieManager_GetMetaObject	match	exception index 0x5479c4: matches retail (packed)
 00336fd0	igMovieManager_InitFields	match	exception index 0x5479d0: matches retail (packed)
 003370f0	FUN_003370f0	match	exception index 0x5479dc: matches retail (packed)
-00337140	igMoviePlugin_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igMoviePlugin (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00337140	igMoviePlugin_GetVTable	match	exception index 0x5479e8: matches retail (packed)
 003371d0	FUN_003371d0	match	exception index 0x5479f4: matches retail (packed)
 003371f0	igMoviePlugin_Register	match	exception index 0x547a00: matches retail (packed)
 00337270	igMoviePlugin_GetMetaObject	match	exception index 0x547a0c: matches retail (packed)
@@ -11320,7 +11320,7 @@
 00340380	beWaterPlainInfoRam_InitFields	match	exception index 0x54818c: matches retail (packed)
 00340490	FUN_00340490	match	exception index 0x548198: matches retail (packed)
 003404e0	FUN_003404e0	match	exception index 0x5481a4: matches retail (packed)
-00340530	beWaterMove_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beWaterMove (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00340530	beWaterMove_GetVTable	match	exception index 0x5481b0: matches retail (packed)
 003405c0	FUN_003405c0	match	exception index 0x5481bc: matches retail (packed)
 003405e0	beWaterMove_Register	match	exception index 0x5481c8: matches retail (packed)
 00340660	beWaterMove_GetMetaObject	match	exception index 0x5481d4: matches retail (packed)
@@ -11332,7 +11332,7 @@
 00340820	beWaterMoveDataList_Register	match	exception index 0x54821c: matches retail (packed)
 00340890	beWaterMoveDataList_GetMetaObject	match	exception index 0x548228: matches retail (packed)
 003408b0	FUN_003408b0	match	exception index 0x548234: matches retail (packed)
-00340900	beWaterMoveData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beWaterMoveData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00340900	beWaterMoveData_GetVTable	match	exception index 0x548240: matches retail (packed)
 00340990	FUN_00340990	match	exception index 0x54824c: matches retail (packed)
 003409b0	beWaterMoveData_Register	match	exception index 0x548258: matches retail (packed)
 00340a30	beWaterMoveData_GetMetaObject	match	exception index 0x548264: matches retail (packed)
@@ -11365,7 +11365,7 @@
 00341340	FUN_00341340	match	exception index 0x5483a8: matches retail (packed)
 00341380	FUN_00341380	match	exception index 0x5483b4: matches retail (packed)
 003413d0	FUN_003413d0	match	exception index 0x5483c0: matches retail (packed)
-00341420	beTimer_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beTimer (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00341420	beTimer_GetVTable	match	exception index 0x5483cc: matches retail (packed)
 00341500	FUN_00341500	match	exception index 0x5483d8: matches retail (packed)
 00341520	beTimer_Register	match	exception index 0x5483e4: matches retail (packed)
 003415a0	beTimer_GetMetaObject	match	exception index 0x5483f0: matches retail (packed)
@@ -11377,7 +11377,7 @@
 003417b0	beTimerDataList_Register	match	exception index 0x548438: matches retail (packed)
 00341820	beTimerDataList_GetMetaObject	match	exception index 0x548444: matches retail (packed)
 00341840	FUN_00341840	match	exception index 0x548450: matches retail (packed)
-00341890	beTimerData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beTimerData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00341890	beTimerData_GetVTable	match	exception index 0x54845c: matches retail (packed)
 00341950	FUN_00341950	match	exception index 0x548468: matches retail (packed)
 00341970	beTimerData_Register	match	exception index 0x548474: matches retail (packed)
 003419e0	beTimerData_GetMetaObject	match	exception index 0x548480: matches retail (packed)
@@ -11394,13 +11394,13 @@
 00341d50	beTextureCtrlInfo_GetMetaObject	match	exception index 0x548504: matches retail (packed)
 00341d70	beTextureCtrlInfo_InitFields	match	exception index 0x548510: matches retail (packed)
 00341e10	FUN_00341e10	match	exception index 0x54851c: matches retail (packed)
-00341e60	beTextureCtrlAttr_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beTextureCtrlAttr (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00341e60	beTextureCtrlAttr_GetVTable	match	exception index 0x548528: matches retail (packed)
 00341f40	FUN_00341f40	match	exception index 0x548534: matches retail (packed)
 00341f60	beTextureCtrlAttr_Register	match	exception index 0x548540: matches retail (packed)
 00341fe0	beTextureCtrlAttr_GetMetaObject	match	exception index 0x54854c: matches retail (packed)
 00342000	beTextureCtrlAttr_InitFields	match	exception index 0x548558: matches retail (packed)
 00342090	FUN_00342090	match	exception index 0x548564: matches retail (packed)
-003420e0	beTextureCtrlData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beTextureCtrlData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003420e0	beTextureCtrlData_GetVTable	match	exception index 0x548570: matches retail (packed)
 003421c0	FUN_003421c0	match	exception index 0x54857c: matches retail (packed)
 003421e0	beTextureCtrlData_Register	match	exception index 0x548588: matches retail (packed)
 00342260	beTextureCtrlData_GetMetaObject	match	exception index 0x548594: matches retail (packed)
@@ -11417,7 +11417,7 @@
 00342630	FUN_00342630	match	exception index 0x548618: matches retail (packed)
 00342670	FUN_00342670	match	exception index 0x548624: matches retail (packed)
 003426c0	FUN_003426c0	match	exception index 0x548630: matches retail (packed)
-00342710	beTextureCtrlWork_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beTextureCtrlWork (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00342710	beTextureCtrlWork_GetVTable	match	exception index 0x54863c: matches retail (packed)
 003427f0	FUN_003427f0	match	exception index 0x548648: matches retail (packed)
 00342810	beTextureCtrlWork_Register	match	exception index 0x548654: matches retail (packed)
 00342890	beTextureCtrlWork_GetMetaObject	match	exception index 0x548660: matches retail (packed)
@@ -11425,7 +11425,7 @@
 00342970	FUN_00342970	match	exception index 0x548678: matches retail (packed)
 003429b0	FUN_003429b0	match	exception index 0x548684: matches retail (packed)
 00342a00	FUN_00342a00	match	exception index 0x548690: matches retail (packed)
-00342a50	beTargetObj_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beTargetObj (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00342a50	beTargetObj_GetVTable	match	exception index 0x54869c: matches retail (packed)
 00342b00	FUN_00342b00	match	exception index 0x5486a8: matches retail (packed)
 00342b20	beTargetObj_Register	match	exception index 0x5486b4: matches retail (packed)
 00342ba0	beTargetObj_GetMetaObject	match	exception index 0x5486c0: matches retail (packed)
@@ -11474,7 +11474,7 @@
 00343c60	beBinDataObject_GetMetaObject	match	exception index 0x5488c4: matches retail (packed)
 00343c90	beBinDataObject_InitFields	match	exception index 0x5488d0: matches retail (packed)
 00343d20	FUN_00343d20	match	exception index 0x5488dc: matches retail (packed)
-00343d70	beSoundInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beSoundInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00343d70	beSoundInfo_GetVTable	match	exception index 0x5488e8: matches retail (packed)
 00343e00	FUN_00343e00	match	exception index 0x5488f4: matches retail (packed)
 00343e20	beSoundInfo_Register	match	exception index 0x548900: matches retail (packed)
 00343ea0	beSoundInfo_GetMetaObject	match	exception index 0x54890c: matches retail (packed)
@@ -11546,7 +11546,7 @@
 00345680	FUN_00345680	match	exception index 0x548c24: matches retail (packed)
 003456c0	FUN_003456c0	match	exception index 0x548c30: matches retail (packed)
 00345710	FUN_00345710	match	exception index 0x548c3c: matches retail (packed)
-00345760	beSelectCtrlInfoWork_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSelectCtrlInfoWork (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00345760	beSelectCtrlInfoWork_GetVTable	match	exception index 0x548c48: matches retail (packed)
 00345830	FUN_00345830	match	exception index 0x548c54: matches retail (packed)
 00345850	beSelectCtrlInfoWork_Register	match	exception index 0x548c60: matches retail (packed)
 003458d0	beSelectCtrlInfoWork_GetMetaObject	match	exception index 0x548c6c: matches retail (packed)
@@ -11555,7 +11555,7 @@
 00345a00	FUN_00345a00	match	exception index 0x548c90: matches retail (packed)
 00345a40	FUN_00345a40	match	exception index 0x548c9c: matches retail (packed)
 00345a90	FUN_00345a90	match	exception index 0x548ca8: matches retail (packed)
-00345ae0	beSelectCtrl_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSelectCtrl (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00345ae0	beSelectCtrl_GetVTable	match	exception index 0x548cb4: matches retail (packed)
 00345bc0	FUN_00345bc0	match	exception index 0x548cc0: matches retail (packed)
 00345be0	beSelectCtrl_Register	match	exception index 0x548ccc: matches retail (packed)
 00345c60	beSelectCtrl_GetMetaObject	match	exception index 0x548cd8: matches retail (packed)
@@ -11586,13 +11586,13 @@
 003464f0	FUN_003464f0	match	exception index 0x548e04: matches retail (packed)
 00346530	FUN_00346530	match	exception index 0x548e10: matches retail (packed)
 00346580	FUN_00346580	match	exception index 0x548e1c: matches retail (packed)
-003465d0	beSeCtl_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSeCtl (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003465d0	beSeCtl_GetVTable	match	exception index 0x548e28: matches retail (packed)
 003466b0	FUN_003466b0	match	exception index 0x548e34: matches retail (packed)
 003466d0	beSeCtl_Register	match	exception index 0x548e40: matches retail (packed)
 00346750	beSeCtl_GetMetaObject	match	exception index 0x548e4c: matches retail (packed)
 00346770	beSeCtl_InitFields	match	exception index 0x548e58: matches retail (packed)
 00346810	FUN_00346810	match	exception index 0x548e64: matches retail (packed)
-00346860	beSaveUtilInfoRam_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSaveUtilInfoRam (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00346860	beSaveUtilInfoRam_GetVTable	match	exception index 0x548e70: matches retail (packed)
 00346950	FUN_00346950	match	exception index 0x548e7c: matches retail (packed)
 00346970	beSaveUtilInfoRam_Register	match	exception index 0x548e88: matches retail (packed)
 003469f0	beSaveUtilInfoRam_GetMetaObject	match	exception index 0x548e94: matches retail (packed)
@@ -11668,14 +11668,14 @@
 00348870	beSvEndApi_InitFields	match	exception index 0x5491dc: matches retail (packed)
 00348930	FUN_00348930	match	exception index 0x5491e8: matches retail (packed)
 00348970	FUN_00348970	match	exception index 0x5491f4: matches retail (packed)
-003489c0	beSvStartApi_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSvStartApi (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003489c0	beSvStartApi_GetVTable	match	exception index 0x549200: matches retail (table 0x543064 8 bytes)
 00348b00	FUN_00348b00	match	exception index 0x54920c: matches retail (packed)
 00348b20	beSvStartApi_Register	match	exception index 0x549218: matches retail (packed)
 00348b90	beSvStartApi_GetMetaObject	match	exception index 0x549224: matches retail (packed)
 00348bb0	beSvStartApi_InitFields	match	exception index 0x549230: matches retail (packed)
 00348c70	FUN_00348c70	match	exception index 0x54923c: matches retail (packed)
 00348cb0	FUN_00348cb0	match	exception index 0x549248: matches retail (packed)
-00348d00	beSvGetFreeSizeApi_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSvGetFreeSizeApi (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00348d00	beSvGetFreeSizeApi_GetVTable	match	exception index 0x549254: matches retail (table 0x54306c 8 bytes)
 00348e40	FUN_00348e40	match	exception index 0x549260: matches retail (packed)
 00348e60	beSvGetFreeSizeApi_Register	match	exception index 0x54926c: matches retail (packed)
 00348ed0	beSvGetFreeSizeApi_GetMetaObject	match	exception index 0x549278: matches retail (packed)
@@ -11716,7 +11716,7 @@
 00349d50	beSvFileFindApi_GetMetaObject	match	exception index 0x54941c: matches retail (packed)
 00349d70	FUN_00349d70	match	exception index 0x549428: matches retail (packed)
 00349db0	FUN_00349db0	match	exception index 0x549434: matches retail (packed)
-00349e00	beSvFileMakeApi_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beSvFileMakeApi (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00349e00	beSvFileMakeApi_GetVTable	match	exception index 0x549440: matches retail (table 0x54309c 8 bytes)
 00349e90	FUN_00349e90	match	exception index 0x54944c: matches retail (packed)
 00349eb0	beSvFileMakeApi_Register	match	exception index 0x549458: matches retail (packed)
 00349f30	beSvFileMakeApi_GetMetaObject	match	exception index 0x549464: matches retail (packed)
@@ -11729,7 +11729,7 @@
 0034a150	beSaveApi_InitFields	match	exception index 0x5494b8: matches retail (packed)
 0034a210	FUN_0034a210	match	exception index 0x5494c4: matches retail (packed)
 0034a260	FUN_0034a260	match	exception index 0x5494d0: matches retail (packed)
-0034a2b0	beSvPlatBaseData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSvPlatBaseData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034a2b0	beSvPlatBaseData_GetVTable	match	exception index 0x5494dc: matches retail (packed)
 0034a340	FUN_0034a340	match	exception index 0x5494e8: matches retail (packed)
 0034a360	beSvPlatBaseData_Register	match	exception index 0x5494f4: matches retail (packed)
 0034a3e0	beSvPlatBaseData_GetMetaObject	match	exception index 0x549500: matches retail (packed)
@@ -11751,7 +11751,7 @@
 0034a830	beSvSlotGC_Register	match	exception index 0x5495c0: matches retail (packed)
 0034a8a0	beSvSlotGC_GetMetaObject	match	exception index 0x5495cc: matches retail (packed)
 0034a8c0	FUN_0034a8c0	match	exception index 0x5495d8: matches retail (packed)
-0034a910	beSvSlotXbox_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beSvSlotXbox (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034a910	beSvSlotXbox_GetVTable	match	exception index 0x5495e4: matches retail (packed)
 0034a9a0	FUN_0034a9a0	match	exception index 0x5495f0: matches retail (packed)
 0034a9c0	beSvSlotXbox_Register	match	exception index 0x5495fc: matches retail (packed)
 0034aa30	beSvSlotXbox_GetMetaObject	match	exception index 0x549608: matches retail (packed)
@@ -11778,7 +11778,7 @@
 0034b040	beSaveDataDeliver_InitFields	match	exception index 0x549704: matches retail (packed)
 0034b0d0	FUN_0034b0d0	match	exception index 0x549710: matches retail (packed)
 0034b120	FUN_0034b120	match	exception index 0x54971c: matches retail (packed)
-0034b170	beSvDeliver_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beSvDeliver (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034b170	beSvDeliver_GetVTable	match	exception index 0x549728: matches retail (table 0x5430a4 8 bytes)
 0034b260	FUN_0034b260	match	exception index 0x549734: matches retail (packed)
 0034b280	beSvDeliver_Register	match	exception index 0x549740: matches retail (packed)
 0034b300	beSvDeliver_GetMetaObject	match	exception index 0x54974c: matches retail (packed)
@@ -11801,7 +11801,7 @@
 0034b9e0	FUN_0034b9e0	match	exception index 0x549818: matches retail (packed)
 0034ba20	FUN_0034ba20	match	exception index 0x549824: matches retail (packed)
 0034ba70	FUN_0034ba70	match	exception index 0x549830: matches retail (packed)
-0034bac0	bePoint01_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of bePoint01 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034bac0	bePoint01_GetVTable	match	exception index 0x54983c: matches retail (packed)
 0034bba0	FUN_0034bba0	match	exception index 0x549848: matches retail (packed)
 0034bbc0	bePoint01_Register	match	exception index 0x549854: matches retail (packed)
 0034bc30	bePoint01_GetMetaObject	match	exception index 0x549860: matches retail (packed)
@@ -11824,7 +11824,7 @@
 0034c2d0	beParticleCtrl2InfoWork_GetMetaObject	match	exception index 0x54992c: matches retail (packed)
 0034c2f0	beParticleCtrl2InfoWork_InitFields	match	exception index 0x549938: matches retail (packed)
 0034c380	FUN_0034c380	match	exception index 0x549944: matches retail (packed)
-0034c3d0	beParticleCtrl2Info_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beParticleCtrl2Info (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034c3d0	beParticleCtrl2Info_GetVTable	match	exception index 0x549950: matches retail (packed)
 0034c460	FUN_0034c460	match	exception index 0x54995c: matches retail (packed)
 0034c480	beParticleCtrl2Info_Register	match	exception index 0x549968: matches retail (packed)
 0034c500	beParticleCtrl2Info_GetMetaObject	match	exception index 0x549974: matches retail (packed)
@@ -11861,7 +11861,7 @@
 0034cfb0	bePadData_GetMetaObject	match	exception index 0x549ae8: matches retail (packed)
 0034cfd0	bePadData_InitFields	match	exception index 0x549af4: matches retail (packed)
 0034d080	FUN_0034d080	match	exception index 0x549b00: matches retail (packed)
-0034d0d0	beOptInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beOptInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034d0d0	beOptInfo_GetVTable	match	exception index 0x549b0c: matches retail (packed)
 0034d160	FUN_0034d160	match	exception index 0x549b18: matches retail (packed)
 0034d180	beOptInfo_Register	match	exception index 0x549b24: matches retail (packed)
 0034d1f0	beOptInfo_GetMetaObject	match	exception index 0x549b30: matches retail (packed)
@@ -11889,7 +11889,7 @@
 0034d9f0	beNumVerDataList_Register	match	exception index 0x549c38: matches retail (packed)
 0034da60	beNumVerDataList_GetMetaObject	match	exception index 0x549c44: matches retail (packed)
 0034da80	FUN_0034da80	match	exception index 0x549c50: matches retail (packed)
-0034dad0	beNumVerData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNumVerData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034dad0	beNumVerData_GetVTable	match	exception index 0x549c5c: matches retail (packed)
 0034db60	FUN_0034db60	match	exception index 0x549c68: matches retail (packed)
 0034db80	beNumVerData_Register	match	exception index 0x549c74: matches retail (packed)
 0034dc00	beNumVerData_GetMetaObject	match	exception index 0x549c80: matches retail (packed)
@@ -11946,7 +11946,7 @@
 0034ebf0	beMovieInfo_Register	match	exception index 0x549ee4: matches retail (packed)
 0034ec60	beMovieInfo_GetMetaObject	match	exception index 0x549ef0: matches retail (packed)
 0034ec80	FUN_0034ec80	match	exception index 0x549efc: matches retail (packed)
-0034ecd0	beMovieInfoData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beMovieInfoData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034ecd0	beMovieInfoData_GetVTable	match	exception index 0x549f08: matches retail (packed)
 0034ed80	FUN_0034ed80	match	exception index 0x549f14: matches retail (packed)
 0034eda0	beMovieInfoData_Register	match	exception index 0x549f20: matches retail (packed)
 0034ee20	beMovieInfoData_GetMetaObject	match	exception index 0x549f2c: matches retail (packed)
@@ -11955,7 +11955,7 @@
 0034ef30	FUN_0034ef30	match	exception index 0x549f50: matches retail (packed)
 0034ef70	FUN_0034ef70	match	exception index 0x549f5c: matches retail (packed)
 0034efc0	FUN_0034efc0	match	exception index 0x549f68: matches retail (packed)
-0034f010	beMovie_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beMovie (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034f010	beMovie_GetVTable	match	exception index 0x549f74: matches retail (packed)
 0034f0a0	FUN_0034f0a0	match	exception index 0x549f80: matches retail (packed)
 0034f0c0	beMovie_Register	match	exception index 0x549f8c: matches retail (packed)
 0034f140	beMovie_GetMetaObject	match	exception index 0x549f98: matches retail (packed)
@@ -11969,7 +11969,7 @@
 0034f400	beModelCtrlSubCom_InitFields	match	exception index 0x549ff8: matches retail (packed)
 0034f4a0	FUN_0034f4a0	match	exception index 0x54a004: matches retail (packed)
 0034f4e0	FUN_0034f4e0	match	exception index 0x54a010: matches retail (packed)
-0034f530	beModelCtrlSCSound_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlSCSound (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034f530	beModelCtrlSCSound_GetVTable	match	exception index 0x54a01c: matches retail (packed)
 0034f5c0	FUN_0034f5c0	match	exception index 0x54a028: matches retail (packed)
 0034f5e0	beModelCtrlSCSound_Register	match	exception index 0x54a034: matches retail (packed)
 0034f650	beModelCtrlSCSound_GetMetaObject	match	exception index 0x54a040: matches retail (packed)
@@ -11983,7 +11983,7 @@
 0034f870	beModelCtrlSCHitBox_InitFields	match	exception index 0x54a0a0: matches retail (packed)
 0034f8e0	FUN_0034f8e0	match	exception index 0x54a0ac: matches retail (packed)
 0034f920	FUN_0034f920	match	exception index 0x54a0b8: matches retail (packed)
-0034f970	beModelCtrlSCEffect_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlSCEffect (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0034f970	beModelCtrlSCEffect_GetVTable	match	exception index 0x54a0c4: matches retail (packed)
 0034fa30	FUN_0034fa30	match	exception index 0x54a0d0: matches retail (packed)
 0034fa50	beModelCtrlSCEffect_Register	match	exception index 0x54a0dc: matches retail (packed)
 0034fac0	beModelCtrlSCEffect_GetMetaObject	match	exception index 0x54a0e8: matches retail (packed)
@@ -12057,7 +12057,7 @@
 00352140	FUN_00352140	match	exception index 0x54a3d0: matches retail (packed)
 00352180	FUN_00352180	match	exception index 0x54a3dc: matches retail (packed)
 003521d0	FUN_003521d0	match	exception index 0x54a3e8: matches retail (packed)
-00352220	beModelCtrlInfoAI_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlInfoAI (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00352220	beModelCtrlInfoAI_GetVTable	match	exception index 0x54a3f4: matches retail (packed)
 003522b0	FUN_003522b0	match	exception index 0x54a400: matches retail (packed)
 003522d0	beModelCtrlInfoAI_Register	match	exception index 0x54a40c: matches retail (packed)
 00352340	beModelCtrlInfoAI_GetMetaObject	match	exception index 0x54a418: matches retail (packed)
@@ -12065,7 +12065,7 @@
 003523d0	FUN_003523d0	match	exception index 0x54a430: matches retail (packed)
 00352410	FUN_00352410	match	exception index 0x54a43c: matches retail (packed)
 00352460	FUN_00352460	match	exception index 0x54a448: matches retail (packed)
-003524b0	beModelCtrlInfoHitBody_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlInfoHitBody (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003524b0	beModelCtrlInfoHitBody_GetVTable	match	exception index 0x54a454: matches retail (packed)
 003525e0	FUN_003525e0	match	exception index 0x54a460: matches retail (packed)
 00352600	beModelCtrlInfoHitBody_Register	match	exception index 0x54a46c: matches retail (packed)
 00352680	beModelCtrlInfoHitBody_GetMetaObject	match	exception index 0x54a478: matches retail (packed)
@@ -12152,20 +12152,20 @@
 003547d0	beModelCtrlAIDataList_Register	match	exception index 0x54a844: matches retail (packed)
 00354840	beModelCtrlAIDataList_GetMetaObject	match	exception index 0x54a850: matches retail (packed)
 00354860	FUN_00354860	match	exception index 0x54a85c: matches retail (packed)
-003548b0	beModelCtrlAIData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlAIData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003548b0	beModelCtrlAIData_GetVTable	match	exception index 0x54a868: matches retail (packed)
 00354940	FUN_00354940	match	exception index 0x54a874: matches retail (packed)
 00354960	beModelCtrlAIData_Register	match	exception index 0x54a880: matches retail (packed)
 003549d0	beModelCtrlAIData_GetMetaObject	match	exception index 0x54a88c: matches retail (packed)
 003549f0	beModelCtrlAIData_InitFields	match	exception index 0x54a898: matches retail (packed)
 00354a60	FUN_00354a60	match	exception index 0x54a8a4: matches retail (packed)
 00354aa0	FUN_00354aa0	match	exception index 0x54a8b0: matches retail (packed)
-00354af0	beModelCtrlHITBOX_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlHITBOX (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00354af0	beModelCtrlHITBOX_GetVTable	match	exception index 0x54a8bc: matches retail (packed)
 00354b80	FUN_00354b80	match	exception index 0x54a8c8: matches retail (packed)
 00354ba0	beModelCtrlHITBOX_Register	match	exception index 0x54a8d4: matches retail (packed)
 00354c10	beModelCtrlHITBOX_GetMetaObject	match	exception index 0x54a8e0: matches retail (packed)
 00354c30	beModelCtrlHITBOX_InitFields	match	exception index 0x54a8ec: matches retail (packed)
 00354ca0	FUN_00354ca0	match	exception index 0x54a8f8: matches retail (packed)
-00354cf0	beModelCtrlMUTEKI_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlMUTEKI (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00354cf0	beModelCtrlMUTEKI_GetVTable	match	exception index 0x54a904: matches retail (packed)
 00354d80	FUN_00354d80	match	exception index 0x54a910: matches retail (packed)
 00354da0	beModelCtrlMUTEKI_Register	match	exception index 0x54a91c: matches retail (packed)
 00354e10	beModelCtrlMUTEKI_GetMetaObject	match	exception index 0x54a928: matches retail (packed)
@@ -12181,25 +12181,25 @@
 00355130	beModelCtrlWCHECK_Register	match	exception index 0x54a9a0: matches retail (packed)
 003551a0	beModelCtrlWCHECK_GetMetaObject	match	exception index 0x54a9ac: matches retail (packed)
 003551c0	FUN_003551c0	match	exception index 0x54a9b8: matches retail (packed)
-00355210	beModelCtrlPDMOVE_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlPDMOVE (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00355210	beModelCtrlPDMOVE_GetVTable	match	exception index 0x54a9c4: matches retail (packed)
 003552a0	FUN_003552a0	match	exception index 0x54a9d0: matches retail (packed)
 003552c0	beModelCtrlPDMOVE_Register	match	exception index 0x54a9dc: matches retail (packed)
 00355330	beModelCtrlPDMOVE_GetMetaObject	match	exception index 0x54a9e8: matches retail (packed)
 00355350	beModelCtrlPDMOVE_InitFields	match	exception index 0x54a9f4: matches retail (packed)
 003553c0	FUN_003553c0	match	exception index 0x54aa00: matches retail (packed)
-00355410	beModelCtrlMOVERL_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlMOVERL (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00355410	beModelCtrlMOVERL_GetVTable	match	exception index 0x54aa0c: matches retail (packed)
 00355520	FUN_00355520	match	exception index 0x54aa18: matches retail (packed)
 00355540	beModelCtrlMOVERL_Register	match	exception index 0x54aa24: matches retail (packed)
 003555b0	beModelCtrlMOVERL_GetMetaObject	match	exception index 0x54aa30: matches retail (packed)
 003555d0	beModelCtrlMOVERL_InitFields	match	exception index 0x54aa3c: matches retail (packed)
 00355640	FUN_00355640	match	exception index 0x54aa48: matches retail (packed)
-00355690	beModelCtrlMOVEEX_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlMOVEEX (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00355690	beModelCtrlMOVEEX_GetVTable	match	exception index 0x54aa54: matches retail (packed)
 00355720	FUN_00355720	match	exception index 0x54aa60: matches retail (packed)
 00355740	beModelCtrlMOVEEX_Register	match	exception index 0x54aa6c: matches retail (packed)
 003557b0	beModelCtrlMOVEEX_GetMetaObject	match	exception index 0x54aa78: matches retail (packed)
 003557d0	beModelCtrlMOVEEX_InitFields	match	exception index 0x54aa84: matches retail (packed)
 00355840	FUN_00355840	match	exception index 0x54aa90: matches retail (packed)
-00355890	beModelCtrlMOVE_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlMOVE (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00355890	beModelCtrlMOVE_GetVTable	match	exception index 0x54aa9c: matches retail (packed)
 00355920	FUN_00355920	match	exception index 0x54aaa8: matches retail (packed)
 00355940	beModelCtrlMOVE_Register	match	exception index 0x54aab4: matches retail (packed)
 003559b0	beModelCtrlMOVE_GetMetaObject	match	exception index 0x54aac0: matches retail (packed)
@@ -12225,7 +12225,7 @@
 00355ff0	beModelCtrlACTION_Register	match	exception index 0x54abb0: matches retail (packed)
 00356060	beModelCtrlACTION_GetMetaObject	match	exception index 0x54abbc: matches retail (packed)
 00356080	FUN_00356080	match	exception index 0x54abc8: matches retail (packed)
-003560d0	beModelCtrlLABELCTRL_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beModelCtrlLABELCTRL (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003560d0	beModelCtrlLABELCTRL_GetVTable	match	exception index 0x54abd4: matches retail (packed)
 003561a0	FUN_003561a0	match	exception index 0x54abe0: matches retail (packed)
 003561c0	beModelCtrlLABELCTRL_Register	match	exception index 0x54abec: matches retail (packed)
 00356230	beModelCtrlLABELCTRL_GetMetaObject	match	exception index 0x54abf8: matches retail (packed)
@@ -12314,7 +12314,7 @@
 00358050	beMessengerWorkList_GetMetaObject	match	exception index 0x54afdc: matches retail (packed)
 00358070	beMessengerWork_Create	match	exception index 0x54afe8: matches retail (packed)
 003580b0	FUN_003580b0	match	exception index 0x54aff4: matches retail (packed)
-00358100	beMessengerWork_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beMessengerWork (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00358100	beMessengerWork_GetVTable	match	exception index 0x54b000: matches retail (table 0x5432b4 8 bytes)
 003581d0	beMessengerWork_EnsureRegistered	match	exception index 0x54b00c: matches retail (packed)
 003581f0	beMessengerWork_Register	match	exception index 0x54b018: matches retail (packed)
 00358270	beMessengerWork_GetMetaObject	match	exception index 0x54b024: matches retail (packed)
@@ -12327,7 +12327,7 @@
 003584c0	beMessengerGroupList_GetMetaObject	match	exception index 0x54b078: matches retail (packed)
 003584e0	beMessengerGroup_Create	match	exception index 0x54b084: matches retail (packed)
 00358520	FUN_00358520	match	exception index 0x54b090: matches retail (packed)
-00358570	beMessengerGroup_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beMessengerGroup (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00358570	beMessengerGroup_GetVTable	match	exception index 0x54b09c: matches retail (packed)
 00358620	beMessengerGroup_EnsureRegistered	match	exception index 0x54b0a8: matches retail (packed)
 00358640	beMessengerGroup_Register	match	exception index 0x54b0b4: matches retail (packed)
 003586c0	beMessengerGroup_GetMetaObject	match	exception index 0x54b0c0: matches retail (packed)
@@ -12361,7 +12361,7 @@
 00359060	beMessengerArgData_InitFields	match	exception index 0x54b210: matches retail (packed)
 003591e0	FUN_003591e0	match	exception index 0x54b21c: matches retail (packed)
 00359230	FUN_00359230	match	exception index 0x54b228: matches retail (packed)
-00359280	beMemory_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beMemory (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00359280	beMemory_GetVTable	match	exception index 0x54b234: matches retail (packed)
 00359310	FUN_00359310	match	exception index 0x54b240: matches retail (packed)
 00359330	beMemory_Register	match	exception index 0x54b24c: matches retail (packed)
 003593b0	beMemory_GetMetaObject	match	exception index 0x54b258: matches retail (packed)
@@ -12397,7 +12397,7 @@
 00359fd0	beMatCtrlSearchList_GetMetaObject	match	exception index 0x54b3c0: matches retail (packed)
 00359ff0	FUN_00359ff0	match	exception index 0x54b3cc: matches retail (packed)
 0035a040	FUN_0035a040	match	exception index 0x54b3d8: matches retail (packed)
-0035a090	beMatCtrlSearch_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beMatCtrlSearch (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035a090	beMatCtrlSearch_GetVTable	match	exception index 0x54b3e4: matches retail (packed)
 0035a120	FUN_0035a120	match	exception index 0x54b3f0: matches retail (packed)
 0035a140	beMatCtrlSearch_Register	match	exception index 0x54b3fc: matches retail (packed)
 0035a1c0	beMatCtrlSearch_GetMetaObject	match	exception index 0x54b408: matches retail (packed)
@@ -12409,7 +12409,7 @@
 0035a3a0	beMatCtrlDataList_Register	match	exception index 0x54b450: matches retail (packed)
 0035a410	beMatCtrlDataList_GetMetaObject	match	exception index 0x54b45c: matches retail (packed)
 0035a430	FUN_0035a430	match	exception index 0x54b468: matches retail (packed)
-0035a480	beMatCtrlData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beMatCtrlData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035a480	beMatCtrlData_GetVTable	match	exception index 0x54b474: matches retail (packed)
 0035a560	FUN_0035a560	match	exception index 0x54b480: matches retail (packed)
 0035a580	beMatCtrlData_Register	match	exception index 0x54b48c: matches retail (packed)
 0035a600	beMatCtrlData_GetMetaObject	match	exception index 0x54b498: matches retail (packed)
@@ -12445,7 +12445,7 @@
 0035b0c0	beLuaDataList_Register	match	exception index 0x54b600: matches retail (packed)
 0035b130	beLuaDataList_GetMetaObject	match	exception index 0x54b60c: matches retail (packed)
 0035b150	FUN_0035b150	match	exception index 0x54b618: matches retail (packed)
-0035b1a0	beLuaData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beLuaData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035b1a0	beLuaData_GetVTable	match	exception index 0x54b624: matches retail (packed)
 0035b280	FUN_0035b280	match	exception index 0x54b630: matches retail (packed)
 0035b2a0	beLuaData_Register	match	exception index 0x54b63c: matches retail (packed)
 0035b320	beLuaData_GetMetaObject	match	exception index 0x54b648: matches retail (packed)
@@ -12527,7 +12527,7 @@
 0035cc90	beLayerCtl_GetMetaObject	match	exception index 0x54b9d8: matches retail (packed)
 0035ccb0	beLayerCtl_InitFields	match	exception index 0x54b9e4: matches retail (packed)
 0035cd40	FUN_0035cd40	match	exception index 0x54b9f0: matches retail (packed)
-0035cd90	beLOA_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beLOA (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035cd90	beLOA_GetVTable	match	exception index 0x54b9fc: matches retail (table 0x5432d4 8 bytes)
 0035ce60	FUN_0035ce60	match	exception index 0x54ba08: matches retail (packed)
 0035ce80	beLOA_Register	match	exception index 0x54ba14: matches retail (packed)
 0035cf00	beLOA_GetMetaObject	match	exception index 0x54ba20: matches retail (packed)
@@ -12535,7 +12535,7 @@
 0035d050	FUN_0035d050	match	exception index 0x54ba38: matches retail (packed)
 0035d070	FUN_0035d070	match	exception index 0x54ba44: matches retail (packed)
 0035d0c0	FUN_0035d0c0	match	exception index 0x54ba50: matches retail (packed)
-0035d110	beKeyboardReceiver_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beKeyboardReceiver_35d110 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035d110	beKeyboardReceiver_GetVTable	match	exception index 0x54ba5c: matches retail (packed)
 0035d1a0	FUN_0035d1a0	match	exception index 0x54ba68: matches retail (packed)
 0035d1c0	beKeyboardReceiver_Register	match	exception index 0x54ba74: matches retail (packed)
 0035d240	beKeyboardReceiver_GetMetaObject	match	exception index 0x54ba80: matches retail (packed)
@@ -12546,7 +12546,7 @@
 0035d410	beHitLandModelInfoRam_Register	match	exception index 0x54babc: matches retail (packed)
 0035d480	beHitLandModelInfoRam_GetMetaObject	match	exception index 0x54bac8: matches retail (packed)
 0035d4a0	FUN_0035d4a0	match	exception index 0x54bad4: matches retail (packed)
-0035d4f0	beHitLandModelInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beHitLandModelInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035d4f0	beHitLandModelInfo_GetVTable	match	exception index 0x54bae0: matches retail (packed)
 0035d5a0	FUN_0035d5a0	match	exception index 0x54baec: matches retail (packed)
 0035d5c0	beHitLandModelInfo_Register	match	exception index 0x54baf8: matches retail (packed)
 0035d640	beHitLandModelInfo_GetMetaObject	match	exception index 0x54bb04: matches retail (packed)
@@ -12585,7 +12585,7 @@
 0035e3e0	beHitLandResultDataList_GetMetaObject	match	exception index 0x54bc9c: matches retail (packed)
 0035e400	FUN_0035e400	match	exception index 0x54bca8: matches retail (packed)
 0035e440	FUN_0035e440	match	exception index 0x54bcb4: matches retail (packed)
-0035e490	beHitLandResultData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beHitLandResultData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035e490	beHitLandResultData_GetVTable	match	exception index 0x54bcc0: matches retail (table 0x543308 8 bytes)
 0035e520	FUN_0035e520	match	exception index 0x54bccc: matches retail (packed)
 0035e540	beHitLandResultData_Register	match	exception index 0x54bcd8: matches retail (packed)
 0035e5b0	beHitLandResultData_GetMetaObject	match	exception index 0x54bce4: matches retail (packed)
@@ -12623,7 +12623,7 @@
 0035f100	FUN_0035f100	match	exception index 0x54be64: matches retail (packed)
 0035f140	FUN_0035f140	match	exception index 0x54be70: matches retail (packed)
 0035f190	FUN_0035f190	match	exception index 0x54be7c: matches retail (packed)
-0035f1e0	beGeneraterInfoWork_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beGeneraterInfoWork (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0035f1e0	beGeneraterInfoWork_GetVTable	match	exception index 0x54be88: matches retail (packed)
 0035f2b0	FUN_0035f2b0	match	exception index 0x54be94: matches retail (packed)
 0035f2d0	beGeneraterInfoWork_Register	match	exception index 0x54bea0: matches retail (packed)
 0035f350	beGeneraterInfoWork_GetMetaObject	match	exception index 0x54beac: matches retail (packed)
@@ -12674,7 +12674,7 @@
 00360460	beGeneraterItemDataList_Register	match	exception index 0x54c0c8: matches retail (packed)
 003604d0	beGeneraterItemDataList_GetMetaObject	match	exception index 0x54c0d4: matches retail (packed)
 003604f0	FUN_003604f0	match	exception index 0x54c0e0: matches retail (packed)
-00360540	beGeneraterItemData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beGeneraterItemData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00360540	beGeneraterItemData_GetVTable	match	exception index 0x54c0ec: matches retail (packed)
 00360620	FUN_00360620	match	exception index 0x54c0f8: matches retail (packed)
 00360640	beGeneraterItemData_Register	match	exception index 0x54c104: matches retail (packed)
 003606c0	beGeneraterItemData_GetMetaObject	match	exception index 0x54c110: matches retail (packed)
@@ -12686,7 +12686,7 @@
 00360880	beGeneraterItemDataOneList_Register	match	exception index 0x54c158: matches retail (packed)
 003608f0	beGeneraterItemDataOneList_GetMetaObject	match	exception index 0x54c164: matches retail (packed)
 00360910	FUN_00360910	match	exception index 0x54c170: matches retail (packed)
-00360960	beGeneraterItemDataOne_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beGeneraterItemDataOne (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00360960	beGeneraterItemDataOne_GetVTable	match	exception index 0x54c17c: matches retail (packed)
 003609f0	FUN_003609f0	match	exception index 0x54c188: matches retail (packed)
 00360a10	beGeneraterItemDataOne_Register	match	exception index 0x54c194: matches retail (packed)
 00360a80	beGeneraterItemDataOne_GetMetaObject	match	exception index 0x54c1a0: matches retail (packed)
@@ -12695,7 +12695,7 @@
 00360b70	FUN_00360b70	match	exception index 0x54c1c4: matches retail (packed)
 00360bb0	FUN_00360bb0	match	exception index 0x54c1d0: matches retail (packed)
 00360c00	FUN_00360c00	match	exception index 0x54c1dc: matches retail (packed)
-00360c50	beGenerater_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beGenerater (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00360c50	beGenerater_GetVTable	match	exception index 0x54c1e8: matches retail (packed)
 00360d30	FUN_00360d30	match	exception index 0x54c1f4: matches retail (packed)
 00360d50	beGenerater_Register	match	exception index 0x54c200: matches retail (packed)
 00360dd0	beGenerater_GetMetaObject	match	exception index 0x54c20c: matches retail (packed)
@@ -12708,7 +12708,7 @@
 00361080	beFontInfo_GetMetaObject	match	exception index 0x54c260: matches retail (packed)
 003610a0	beFontInfo_InitFields	match	exception index 0x54c26c: matches retail (packed)
 00361130	FUN_00361130	match	exception index 0x54c278: matches retail (packed)
-00361180	beFontInfoData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beFontInfoData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00361180	beFontInfoData_GetVTable	match	exception index 0x54c284: matches retail (packed)
 00361210	FUN_00361210	match	exception index 0x54c290: matches retail (packed)
 00361230	beFontInfoData_Register	match	exception index 0x54c29c: matches retail (packed)
 003612b0	beFontInfoData_GetMetaObject	match	exception index 0x54c2a8: matches retail (packed)
@@ -12721,7 +12721,7 @@
 003614d0	beUnicodeObjList_GetMetaObject	match	exception index 0x54c2fc: matches retail (packed)
 003614f0	FUN_003614f0	match	exception index 0x54c308: matches retail (packed)
 00361530	FUN_00361530	match	exception index 0x54c314: matches retail (packed)
-00361580	beUnicodeObj_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beUnicodeObj (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00361580	beUnicodeObj_GetVTable	match	exception index 0x54c320: matches retail (packed)
 00361610	FUN_00361610	match	exception index 0x54c32c: matches retail (packed)
 00361630	beUnicodeObj_Register	match	exception index 0x54c338: matches retail (packed)
 003616a0	beUnicodeObj_GetMetaObject	match	exception index 0x54c344: matches retail (packed)
@@ -12761,7 +12761,7 @@
 003624d0	beFontGeomAttrPairList_GetMetaObject	match	exception index 0x54c4dc: matches retail (packed)
 003624f0	FUN_003624f0	match	exception index 0x54c4e8: matches retail (packed)
 00362530	FUN_00362530	match	exception index 0x54c4f4: matches retail (packed)
-00362580	beFontGeomAttrPair_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beFontGeomAttrPair (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00362580	beFontGeomAttrPair_GetVTable	match	exception index 0x54c500: matches retail (packed)
 00362690	FUN_00362690	match	exception index 0x54c50c: matches retail (packed)
 003626b0	beFontGeomAttrPair_Register	match	exception index 0x54c518: matches retail (packed)
 00362730	beFontGeomAttrPair_GetMetaObject	match	exception index 0x54c524: matches retail (packed)
@@ -12769,13 +12769,13 @@
 003627f0	FUN_003627f0	match	exception index 0x54c53c: matches retail (packed)
 00362830	FUN_00362830	match	exception index 0x54c548: matches retail (packed)
 00362880	FUN_00362880	match	exception index 0x54c554: matches retail (packed)
-003628d0	beFileListInfoManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beFileListInfoManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003628d0	beFileListInfoManager_GetVTable	match	exception index 0x54c560: matches retail (table 0x543328 8 bytes)
 003629b0	FUN_003629b0	match	exception index 0x54c56c: matches retail (packed)
 003629d0	beFileListInfoManager_Register	match	exception index 0x54c578: matches retail (packed)
 00362a50	beFileListInfoManager_GetMetaObject	match	exception index 0x54c584: matches retail (packed)
 00362a70	beFileListInfoManager_InitFields	match	exception index 0x54c590: matches retail (packed)
 00362c00	FUN_00362c00	match	exception index 0x54c59c: matches retail (packed)
-00362c50	beFileListInfo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beFileListInfo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00362c50	beFileListInfo_GetVTable	match	exception index 0x54c5a8: matches retail (packed)
 00362ce0	FUN_00362ce0	match	exception index 0x54c5b4: matches retail (packed)
 00362d00	beFileListInfo_Register	match	exception index 0x54c5c0: matches retail (packed)
 00362d80	beFileListInfo_GetMetaObject	match	exception index 0x54c5cc: matches retail (packed)
@@ -12787,7 +12787,7 @@
 00362f70	beFile_GetMetaObject	match	exception index 0x54c614: matches retail (packed)
 00362f90	FUN_00362f90	match	exception index 0x54c620: matches retail (packed)
 00362fd0	FUN_00362fd0	match	exception index 0x54c62c: matches retail (packed)
-00363020	beFileChkObj_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beFileChkObj (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00363020	beFileChkObj_GetVTable	match	exception index 0x54c638: matches retail (packed)
 003630b0	FUN_003630b0	match	exception index 0x54c644: matches retail (packed)
 003630d0	beFileChkObj_Register	match	exception index 0x54c650: matches retail (packed)
 00363150	beFileChkObj_GetMetaObject	match	exception index 0x54c65c: matches retail (packed)
@@ -12811,7 +12811,7 @@
 003637c0	FUN_003637c0	match	exception index 0x54c734: matches retail (packed)
 00363800	FUN_00363800	match	exception index 0x54c740: matches retail (packed)
 00363850	FUN_00363850	match	exception index 0x54c74c: matches retail (packed)
-003638a0	beDemoManagerWork_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDemoManagerWork (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003638a0	beDemoManagerWork_GetVTable	match	exception index 0x54c758: matches retail (packed)
 00363930	FUN_00363930	match	exception index 0x54c764: matches retail (packed)
 00363950	beDemoManagerWork_Register	match	exception index 0x54c770: matches retail (packed)
 003639d0	beDemoManagerWork_GetMetaObject	match	exception index 0x54c77c: matches retail (packed)
@@ -12824,7 +12824,7 @@
 00363c00	beDemoKeepMesList_GetMetaObject	match	exception index 0x54c7d0: matches retail (packed)
 00363c20	FUN_00363c20	match	exception index 0x54c7dc: matches retail (packed)
 00363c60	FUN_00363c60	match	exception index 0x54c7e8: matches retail (packed)
-00363cb0	beDemoKeepMes_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beDemoKeepMes (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00363cb0	beDemoKeepMes_GetVTable	match	exception index 0x54c7f4: matches retail (table 0x543330 8 bytes)
 00363d60	FUN_00363d60	match	exception index 0x54c800: matches retail (packed)
 00363d80	beDemoKeepMes_Register	match	exception index 0x54c80c: matches retail (packed)
 00363df0	beDemoKeepMes_GetMetaObject	match	exception index 0x54c818: matches retail (packed)
@@ -12845,7 +12845,7 @@
 00364200	beDataObjList_GetMetaObject	match	exception index 0x54c8cc: matches retail (packed)
 00364220	FUN_00364220	match	exception index 0x54c8d8: matches retail (packed)
 00364260	FUN_00364260	match	exception index 0x54c8e4: matches retail (packed)
-003642b0	beDataObjFloatList_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDataObjFloatList (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003642b0	beDataObjFloatList_GetVTable	match	exception index 0x54c8f0: matches retail (packed)
 00364390	FUN_00364390	match	exception index 0x54c8fc: matches retail (packed)
 003643b0	beDataObjFloatList_Register	match	exception index 0x54c908: matches retail (packed)
 00364430	beDataObjFloatList_GetMetaObject	match	exception index 0x54c914: matches retail (packed)
@@ -12866,21 +12866,21 @@
 003649f0	beDataObjStringList_InitFields	match	exception index 0x54c9c8: matches retail (packed)
 00364a90	FUN_00364a90	match	exception index 0x54c9d4: matches retail (packed)
 00364ad0	FUN_00364ad0	match	exception index 0x54c9e0: matches retail (packed)
-00364b20	beDataObjString_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDataObjString (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00364b20	beDataObjString_GetVTable	match	exception index 0x54c9ec: matches retail (packed)
 00364bf0	FUN_00364bf0	match	exception index 0x54c9f8: matches retail (packed)
 00364c10	beDataObjString_Register	match	exception index 0x54ca04: matches retail (packed)
 00364c80	beDataObjString_GetMetaObject	match	exception index 0x54ca10: matches retail (packed)
 00364ca0	beDataObjString_InitFields	match	exception index 0x54ca1c: matches retail (packed)
 00364d30	FUN_00364d30	match	exception index 0x54ca28: matches retail (packed)
 00364d70	FUN_00364d70	match	exception index 0x54ca34: matches retail (packed)
-00364dc0	beDataObjBoolList_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDataObjBoolList (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00364dc0	beDataObjBoolList_GetVTable	match	exception index 0x54ca40: matches retail (packed)
 00364ea0	FUN_00364ea0	match	exception index 0x54ca4c: matches retail (packed)
 00364ec0	beDataObjBoolList_Register	match	exception index 0x54ca58: matches retail (packed)
 00364f40	beDataObjBoolList_GetMetaObject	match	exception index 0x54ca64: matches retail (packed)
 00364f60	beDataObjBoolList_InitFields	match	exception index 0x54ca70: matches retail (packed)
 00365000	FUN_00365000	match	exception index 0x54ca7c: matches retail (packed)
 00365040	FUN_00365040	match	exception index 0x54ca88: matches retail (packed)
-00365090	beDataObjBool_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDataObjBool (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00365090	beDataObjBool_GetVTable	match	exception index 0x54ca94: matches retail (packed)
 00365120	FUN_00365120	match	exception index 0x54caa0: matches retail (packed)
 00365140	beDataObjBool_Register	match	exception index 0x54caac: matches retail (packed)
 003651b0	beDataObjBool_GetMetaObject	match	exception index 0x54cab8: matches retail (packed)
@@ -12895,7 +12895,7 @@
 00365510	FUN_00365510	match	exception index 0x54cb24: matches retail (packed)
 00365550	FUN_00365550	match	exception index 0x54cb30: matches retail (packed)
 003655a0	FUN_003655a0	match	exception index 0x54cb3c: matches retail (packed)
-003655f0	beDataObjInt_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beDataObjInt (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003655f0	beDataObjInt_GetVTable	match	exception index 0x54cb48: matches retail (packed)
 00365680	FUN_00365680	match	exception index 0x54cb54: matches retail (packed)
 003656a0	beDataObjInt_Register	match	exception index 0x54cb60: matches retail (packed)
 00365710	beDataObjInt_GetMetaObject	match	exception index 0x54cb6c: matches retail (packed)
@@ -12907,7 +12907,7 @@
 003658c0	beDataBaseList_GetMetaObject	match	exception index 0x54cbb4: matches retail (packed)
 003658e0	FUN_003658e0	match	exception index 0x54cbc0: matches retail (packed)
 00365930	FUN_00365930	match	exception index 0x54cbcc: matches retail (packed)
-00365980	beDataBase_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beDataBase (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00365980	beDataBase_GetVTable	match	exception index 0x54cbd8: matches retail (table 0x543338 8 bytes)
 00365b00	FUN_00365b00	match	exception index 0x54cbe4: matches retail (packed)
 00365b20	beDataBase_Register	match	exception index 0x54cbf0: matches retail (packed)
 00365ba0	beDataBase_GetMetaObject	match	exception index 0x54cbfc: matches retail (packed)
@@ -12935,7 +12935,7 @@
 003664b0	beCriVolume_GetMetaObject	match	exception index 0x54cd04: matches retail (packed)
 003664d0	beCriVolume_InitFields	match	exception index 0x54cd10: matches retail (packed)
 00366540	FUN_00366540	match	exception index 0x54cd1c: matches retail (packed)
-00366590	beCriSfpData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beCriSfpData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00366590	beCriSfpData_GetVTable	match	exception index 0x54cd28: matches retail (packed)
 00366620	FUN_00366620	match	exception index 0x54cd34: matches retail (packed)
 00366640	beCriSfpData_Register	match	exception index 0x54cd40: matches retail (packed)
 003666c0	beCriSfpData_GetMetaObject	match	exception index 0x54cd4c: matches retail (packed)
@@ -12950,7 +12950,7 @@
 00366910	FUN_00366910	match	exception index 0x54cdb8: matches retail (packed)
 00366950	FUN_00366950	match	exception index 0x54cdc4: matches retail (packed)
 003669a0	FUN_003669a0	match	exception index 0x54cdd0: matches retail (packed)
-003669f0	beCriHandle_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beCriHandle (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003669f0	beCriHandle_GetVTable	match	exception index 0x54cddc: matches retail (packed)
 00366b20	FUN_00366b20	match	exception index 0x54cde8: matches retail (packed)
 00366b40	beCriHandle_Register	match	exception index 0x54cdf4: matches retail (packed)
 00366bc0	beCriHandle_GetMetaObject	match	exception index 0x54ce00: matches retail (packed)
@@ -12971,7 +12971,7 @@
 00367130	beCriFxXbData_InitFields	match	exception index 0x54ceb4: matches retail (packed)
 003671a0	FUN_003671a0	match	exception index 0x54cec0: matches retail (packed)
 003671f0	FUN_003671f0	match	exception index 0x54cecc: matches retail (packed)
-00367240	beCriAudio_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beCriAudio (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00367240	beCriAudio_GetVTable	match	exception index 0x54ced8: matches retail (packed)
 00367320	FUN_00367320	match	exception index 0x54cee4: matches retail (packed)
 00367340	beCriAudio_Register	match	exception index 0x54cef0: matches retail (packed)
 003673c0	beCriAudio_GetMetaObject	match	exception index 0x54cefc: matches retail (packed)
@@ -13032,7 +13032,7 @@
 00368710	FUN_00368710	match	exception index 0x54d190: matches retail (packed)
 00368750	FUN_00368750	match	exception index 0x54d19c: matches retail (packed)
 003687a0	FUN_003687a0	match	exception index 0x54d1a8: matches retail (packed)
-003687f0	beChangePosTransform_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beChangePosTransform (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003687f0	beChangePosTransform_GetVTable	match	exception index 0x54d1b4: matches retail (packed)
 003688d0	FUN_003688d0	match	exception index 0x54d1c0: matches retail (packed)
 003688f0	beChangePosTransform_Register	match	exception index 0x54d1cc: matches retail (packed)
 00368960	beChangePosTransform_GetMetaObject	match	exception index 0x54d1d8: matches retail (packed)
@@ -13040,7 +13040,7 @@
 003689f0	FUN_003689f0	match	exception index 0x54d1f0: matches retail (packed)
 00368a30	FUN_00368a30	match	exception index 0x54d1fc: matches retail (packed)
 00368a80	FUN_00368a80	match	exception index 0x54d208: matches retail (packed)
-00368ad0	beCameraMode_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beCameraMode (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00368ad0	beCameraMode_GetVTable	match	exception index 0x54d214: matches retail (table 0x543368 8 bytes)
 00368bc0	FUN_00368bc0	match	exception index 0x54d220: matches retail (packed)
 00368be0	beCameraMode_Register	match	exception index 0x54d22c: matches retail (packed)
 00368c60	beCameraMode_GetMetaObject	match	exception index 0x54d238: matches retail (packed)
@@ -13058,7 +13058,7 @@
 00369100	beCameraDemoData_GetMetaObject	match	exception index 0x54d2c8: matches retail (packed)
 00369120	beCameraDemoData_InitFields	match	exception index 0x54d2d4: matches retail (packed)
 003691b0	FUN_003691b0	match	exception index 0x54d2e0: matches retail (packed)
-00369200	beCameraBoxData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beCameraBoxData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00369200	beCameraBoxData_GetVTable	match	exception index 0x54d2ec: matches retail (table 0x543370 8 bytes)
 003692d0	FUN_003692d0	match	exception index 0x54d2f8: matches retail (packed)
 003692f0	beCameraBoxData_Register	match	exception index 0x54d304: matches retail (packed)
 00369370	beCameraBoxData_GetMetaObject	match	exception index 0x54d310: matches retail (packed)
@@ -13089,7 +13089,7 @@
 00369dc0	FUN_00369dc0	match	exception index 0x54d43c: matches retail (packed)
 00369e00	FUN_00369e00	match	exception index 0x54d448: matches retail (packed)
 00369e50	FUN_00369e50	match	exception index 0x54d454: matches retail (packed)
-00369ea0	beBkColor_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beBkColor (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+00369ea0	beBkColor_GetVTable	match	exception index 0x54d460: matches retail (packed)
 00369f80	FUN_00369f80	match	exception index 0x54d46c: matches retail (packed)
 00369fa0	beBkColor_Register	match	exception index 0x54d478: matches retail (packed)
 0036a010	beBkColor_GetMetaObject	match	exception index 0x54d484: matches retail (packed)
@@ -13102,14 +13102,14 @@
 0036a210	beBaseInfoRamList_GetMetaObject	match	exception index 0x54d4d8: matches retail (packed)
 0036a230	FUN_0036a230	match	exception index 0x54d4e4: matches retail (packed)
 0036a280	FUN_0036a280	match	exception index 0x54d4f0: matches retail (packed)
-0036a2d0	beBaseInfoRam_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beBaseInfoRam (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036a2d0	beBaseInfoRam_GetVTable	match	exception index 0x54d4fc: matches retail (packed)
 0036a360	FUN_0036a360	match	exception index 0x54d508: matches retail (packed)
 0036a380	beBaseInfoRam_Register	match	exception index 0x54d514: matches retail (packed)
 0036a400	beBaseInfoRam_GetMetaObject	match	exception index 0x54d520: matches retail (packed)
 0036a420	beBaseInfoRam_InitFields	match	exception index 0x54d52c: matches retail (packed)
 0036a510	FUN_0036a510	match	exception index 0x54d538: matches retail (packed)
 0036a550	FUN_0036a550	match	exception index 0x54d544: matches retail (packed)
-0036a5a0	beBaseInfoRamTimer_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beBaseInfoRamTimer (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036a5a0	beBaseInfoRamTimer_GetVTable	match	exception index 0x54d550: matches retail (packed)
 0036a630	FUN_0036a630	match	exception index 0x54d55c: matches retail (packed)
 0036a650	beBaseInfoRamTimer_Register	match	exception index 0x54d568: matches retail (packed)
 0036a6c0	beBaseInfoRamTimer_GetMetaObject	match	exception index 0x54d574: matches retail (packed)
@@ -13168,13 +13168,13 @@
 0036b700	beAsTargetModelDataList_Register	match	exception index 0x54d7f0: matches retail (packed)
 0036b770	beAsTargetModelDataList_GetMetaObject	match	exception index 0x54d7fc: matches retail (packed)
 0036b790	FUN_0036b790	match	exception index 0x54d808: matches retail (packed)
-0036b7e0	beAsTargetModelData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beAsTargetModelData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036b7e0	beAsTargetModelData_GetVTable	match	exception index 0x54d814: matches retail (packed)
 0036b8c0	FUN_0036b8c0	match	exception index 0x54d820: matches retail (packed)
 0036b8e0	beAsTargetModelData_Register	match	exception index 0x54d82c: matches retail (packed)
 0036b960	beAsTargetModelData_GetMetaObject	match	exception index 0x54d838: matches retail (packed)
 0036b980	beAsTargetModelData_InitFields	match	exception index 0x54d844: matches retail (packed)
 0036ba10	FUN_0036ba10	match	exception index 0x54d850: matches retail (packed)
-0036ba60	beActionStarterData2_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beActionStarterData2 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036ba60	beActionStarterData2_GetVTable	match	exception index 0x54d85c: matches retail (packed)
 0036bb30	FUN_0036bb30	match	exception index 0x54d868: matches retail (packed)
 0036bb50	beActionStarterData2_Register	match	exception index 0x54d874: matches retail (packed)
 0036bbc0	beActionStarterData2_GetMetaObject	match	exception index 0x54d880: matches retail (packed)
@@ -13232,25 +13232,25 @@
 0036cf10	beAction2FLASHSET_Register	match	exception index 0x54daf0: matches retail (packed)
 0036cf80	beAction2FLASHSET_GetMetaObject	match	exception index 0x54dafc: matches retail (packed)
 0036cfa0	FUN_0036cfa0	match	exception index 0x54db08: matches retail (packed)
-0036cff0	beAction2WAITCHECK_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beAction2WAITCHECK (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036cff0	beAction2WAITCHECK_GetVTable	match	exception index 0x54db14: matches retail (packed)
 0036d080	FUN_0036d080	match	exception index 0x54db20: matches retail (packed)
 0036d0a0	beAction2WAITCHECK_Register	match	exception index 0x54db2c: matches retail (packed)
 0036d110	beAction2WAITCHECK_GetMetaObject	match	exception index 0x54db38: matches retail (packed)
 0036d130	beAction2WAITCHECK_InitFields	match	exception index 0x54db44: matches retail (packed)
 0036d1a0	FUN_0036d1a0	match	exception index 0x54db50: matches retail (packed)
-0036d1f0	beAction2FADESET_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beAction2FADESET (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036d1f0	beAction2FADESET_GetVTable	match	exception index 0x54db5c: matches retail (packed)
 0036d280	FUN_0036d280	match	exception index 0x54db68: matches retail (packed)
 0036d2a0	beAction2FADESET_Register	match	exception index 0x54db74: matches retail (packed)
 0036d310	beAction2FADESET_GetMetaObject	match	exception index 0x54db80: matches retail (packed)
 0036d330	beAction2FADESET_InitFields	match	exception index 0x54db8c: matches retail (packed)
 0036d3a0	FUN_0036d3a0	match	exception index 0x54db98: matches retail (packed)
-0036d3f0	beAction2JOINTSET_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beAction2JOINTSET (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036d3f0	beAction2JOINTSET_GetVTable	match	exception index 0x54dba4: matches retail (packed)
 0036d4c0	FUN_0036d4c0	match	exception index 0x54dbb0: matches retail (packed)
 0036d4e0	beAction2JOINTSET_Register	match	exception index 0x54dbbc: matches retail (packed)
 0036d550	beAction2JOINTSET_GetMetaObject	match	exception index 0x54dbc8: matches retail (packed)
 0036d570	beAction2JOINTSET_InitFields	match	exception index 0x54dbd4: matches retail (packed)
 0036d5e0	FUN_0036d5e0	match	exception index 0x54dbe0: matches retail (packed)
-0036d630	beAction2MOTIONSET_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beAction2MOTIONSET (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036d630	beAction2MOTIONSET_GetVTable	match	exception index 0x54dbec: matches retail (packed)
 0036d740	FUN_0036d740	match	exception index 0x54dbf8: matches retail (packed)
 0036d760	beAction2MOTIONSET_Register	match	exception index 0x54dc04: matches retail (packed)
 0036d7d0	beAction2MOTIONSET_GetMetaObject	match	exception index 0x54dc10: matches retail (packed)
@@ -13263,7 +13263,7 @@
 0036d9d0	beAction2DataList_GetMetaObject	match	exception index 0x54dc64: matches retail (packed)
 0036d9f0	FUN_0036d9f0	match	exception index 0x54dc70: matches retail (packed)
 0036da40	FUN_0036da40	match	exception index 0x54dc7c: matches retail (packed)
-0036da90	beAction2Data_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beAction2Data (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+0036da90	beAction2Data_GetVTable	match	exception index 0x54dc88: matches retail (packed)
 0036db70	FUN_0036db70	match	exception index 0x54dc94: matches retail (packed)
 0036db90	beAction2Data_Register	match	exception index 0x54dca0: matches retail (packed)
 0036dc10	beAction2Data_GetMetaObject	match	exception index 0x54dcac: matches retail (packed)
@@ -14683,7 +14683,7 @@
 003b6b20	beNDMWShopCtrlXdataChip_InitFields	match	exception index 0x550694: matches retail (packed)
 003b6bc0	FUN_003b6bc0	match	exception index 0x5506a0: matches retail (packed)
 003b6c00	FUN_003b6c00	match	exception index 0x5506ac: matches retail (packed)
-003b6c50	beNDMWShopCtrlSales_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWShopCtrlSales (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003b6c50	beNDMWShopCtrlSales_GetVTable	match	exception index 0x5506b8: matches retail (table 0x544148 8 bytes)
 003b6cf0	FUN_003b6cf0	match	exception index 0x5506c4: matches retail (packed)
 003b6d10	beNDMWShopCtrlSales_Register	match	exception index 0x5506d0: matches retail (packed)
 003b6d90	beNDMWShopCtrlSales_GetMetaObject	match	exception index 0x5506dc: matches retail (packed)
@@ -14717,7 +14717,7 @@
 003b76e0	beNDMWShopCtrlEditBit_InitFields	match	exception index 0x55082c: matches retail (packed)
 003b7750	FUN_003b7750	match	exception index 0x550838: matches retail (packed)
 003b7790	FUN_003b7790	match	exception index 0x550844: matches retail (packed)
-003b77e0	beNDMWShopCtrlDigilabo_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWShopCtrlDigilabo (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003b77e0	beNDMWShopCtrlDigilabo_GetVTable	match	exception index 0x550850: matches retail (table 0x544170 8 bytes)
 003b78a0	FUN_003b78a0	match	exception index 0x55085c: matches retail (packed)
 003b78c0	beNDMWShopCtrlDigilabo_Register	match	exception index 0x550868: matches retail (packed)
 003b7940	beNDMWShopCtrlDigilabo_GetMetaObject	match	exception index 0x550874: matches retail (packed)
@@ -14730,7 +14730,7 @@
 003b7be0	beNDMWShopCtrlA2_GetMetaObject	match	exception index 0x5508c8: matches retail (packed)
 003b7c00	FUN_003b7c00	match	exception index 0x5508d4: matches retail (packed)
 003b7c40	FUN_003b7c40	match	exception index 0x5508e0: matches retail (packed)
-003b7c90	beNDMWShopCtrlA1_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWShopCtrlA1 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003b7c90	beNDMWShopCtrlA1_GetVTable	match	exception index 0x5508ec: matches retail (table 0x544180 8 bytes)
 003b7d30	FUN_003b7d30	match	exception index 0x5508f8: matches retail (packed)
 003b7d50	beNDMWShopCtrlA1_Register	match	exception index 0x550904: matches retail (packed)
 003b7dd0	beNDMWShopCtrlA1_GetMetaObject	match	exception index 0x550910: matches retail (packed)
@@ -14795,7 +14795,7 @@
 003b91e0	beNDMWStatusSubMenu_InitFields	match	exception index 0x550bd4: matches retail (packed)
 003b92b0	FUN_003b92b0	match	exception index 0x550be0: matches retail (packed)
 003b92f0	FUN_003b92f0	match	exception index 0x550bec: matches retail (packed)
-003b9340	beNDMWStatusCtrlSkill_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWStatusCtrlSkill (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003b9340	beNDMWStatusCtrlSkill_GetVTable	match	exception index 0x550bf8: matches retail (table 0x5441c8 8 bytes)
 003b93e0	FUN_003b93e0	match	exception index 0x550c04: matches retail (packed)
 003b9400	beNDMWStatusCtrlSkill_Register	match	exception index 0x550c10: matches retail (packed)
 003b9480	beNDMWStatusCtrlSkill_GetMetaObject	match	exception index 0x550c1c: matches retail (packed)
@@ -14871,7 +14871,7 @@
 003baea0	beNDMWStatusCtrlEquip_InitFields	match	exception index 0x550f64: matches retail (packed)
 003baf10	FUN_003baf10	match	exception index 0x550f70: matches retail (packed)
 003baf50	FUN_003baf50	match	exception index 0x550f7c: matches retail (packed)
-003bafa0	beNDMWStatusCtrlD0_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWStatusCtrlD0 (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003bafa0	beNDMWStatusCtrlD0_GetVTable	match	exception index 0x550f88: matches retail (table 0x544218 8 bytes)
 003bb040	FUN_003bb040	match	exception index 0x550f94: matches retail (packed)
 003bb060	beNDMWStatusCtrlD0_Register	match	exception index 0x550fa0: matches retail (packed)
 003bb0e0	beNDMWStatusCtrlD0_GetMetaObject	match	exception index 0x550fac: matches retail (packed)
@@ -14917,7 +14917,7 @@
 003bbda0	FUN_003bbda0	match	exception index 0x55118c: matches retail (packed)
 003bbde0	FUN_003bbde0	match	exception index 0x551198: matches retail (packed)
 003bbe30	FUN_003bbe30	match	exception index 0x5511a4: matches retail (packed)
-003bbe80	beNDMWStageCtl_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWStageCtl (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003bbe80	beNDMWStageCtl_GetVTable	match	exception index 0x5511b0: matches retail (packed)
 003bbf60	FUN_003bbf60	match	exception index 0x5511bc: matches retail (packed)
 003bbf80	beNDMWStageCtl_Register	match	exception index 0x5511c8: matches retail (packed)
 003bbff0	beNDMWStageCtl_GetMetaObject	match	exception index 0x5511d4: matches retail (packed)
@@ -15038,7 +15038,7 @@
 003bee90	FUN_003bee90	match	exception index 0x551738: matches retail (packed)
 003beed0	FUN_003beed0	match	exception index 0x551744: matches retail (packed)
 003bef20	beNDMWPanelWaza_ResolveMetaObject	match	exception index 0x551750: matches retail (packed)
-003bef70	beNDMWPanelWaza_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWPanelWaza (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003bef70	beNDMWPanelWaza_GetVTable	match	exception index 0x55175c: matches retail (packed)
 003bf050	FUN_003bf050	match	exception index 0x551768: matches retail (packed)
 003bf070	beNDMWPanelWaza_Register	match	exception index 0x551774: matches retail (packed)
 003bf0f0	beNDMWPanelWaza_GetMetaObject	match	exception index 0x551780: matches retail (packed)
@@ -15290,7 +15290,7 @@
 003c51c0	FUN_003c51c0	match	exception index 0x5522f0: matches retail (packed)
 003c5200	FUN_003c5200	match	exception index 0x5522fc: matches retail (packed)
 003c5250	beNDMWMcUtilCtrl_ResolveMetaObject	match	exception index 0x552308: matches retail (packed)
-003c52a0	beNDMWMcUtilCtrl_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWMcUtilCtrl (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003c52a0	beNDMWMcUtilCtrl_GetVTable	match	exception index 0x552314: matches retail (packed)
 003c5380	FUN_003c5380	match	exception index 0x552320: matches retail (packed)
 003c53a0	beNDMWMcUtilCtrl_Register	match	exception index 0x55232c: matches retail (packed)
 003c5420	beNDMWMcUtilCtrl_GetMetaObject	match	exception index 0x552338: matches retail (packed)
@@ -15348,7 +15348,7 @@
 003c6360	FUN_003c6360	match	exception index 0x5525a8: matches retail (packed)
 003c63a0	FUN_003c63a0	match	exception index 0x5525b4: matches retail (packed)
 003c63f0	beNDMWLoadSlotPlayer_GetReadyMetaObject	match	exception index 0x5525c0: matches retail (packed)
-003c6440	beNDMWLoadSlotPlayer_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWLoadSlotPlayer (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003c6440	beNDMWLoadSlotPlayer_GetVTable	match	exception index 0x5525cc: matches retail (packed)
 003c6520	FUN_003c6520	match	exception index 0x5525d8: matches retail (packed)
 003c6540	beNDMWLoadSlotPlayer_Register	match	exception index 0x5525e4: matches retail (packed)
 003c65c0	beNDMWLoadSlotPlayer_GetMetaObject	match	exception index 0x5525f0: matches retail (packed)
@@ -15391,21 +15391,21 @@
 003c7430	beLoadIntf2ComMdlDataList_GetMetaObject	match	exception index 0x5527ac: matches retail (packed)
 003c7450	beLoadIntf2ComMdlData__Create	match	exception index 0x5527b8: matches retail (packed)
 003c7490	beLoadIntf2ComMdlData_GetReadyMetaObject	match	exception index 0x5527c4: matches retail (packed)
-003c74e0	beLoadIntf2ComMdlData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beLoadIntf2ComMdlData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003c74e0	beLoadIntf2ComMdlData_GetVTable	match	exception index 0x5527d0: matches retail (packed)
 003c75a0	FUN_003c75a0	match	exception index 0x5527dc: matches retail (packed)
 003c75c0	beLoadIntf2ComMdlData_Register	match	exception index 0x5527e8: matches retail (packed)
 003c7630	beLoadIntf2ComMdlData_GetMetaObject	match	exception index 0x5527f4: matches retail (packed)
 003c7650	beLoadIntf2ComMdlData_InitFields	match	exception index 0x552800: matches retail (packed)
 003c76c0	beNDMWLoadIntf2TextOrder_Create	match	exception index 0x55280c: matches retail (packed)
 003c7700	FUN_003c7700	match	exception index 0x552818: matches retail (packed)
-003c7750	beNDMWLoadIntf2TextOrder_GetReadyMetaObject	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWLoadIntf2TextOrder (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude') they are not
+003c7750	beNDMWLoadIntf2TextOrder_GetReadyMetaObject	match	exception index 0x552824: matches retail (packed)
 003c77a0	beNDMWLoadIntf2TextOrder_GetVTable	match	exception index 0x552830: matches retail (packed)
 003c7830	FUN_003c7830	match	exception index 0x55283c: matches retail (packed)
 003c7850	beNDMWLoadIntf2TextOrder_Register	match	exception index 0x552848: matches retail (packed)
 003c78d0	beNDMWLoadIntf2TextOrder_GetMetaObject	match	exception index 0x552854: matches retail (packed)
 003c78f0	beNDMWLoadIntf2TextOrder_InitFields	match	exception index 0x552860: matches retail (packed)
 003c7a40	FUN_003c7a40	match	exception index 0x55286c: matches retail (packed)
-003c7a80	beNDMWLoadCtrl2CtrlData_GetReadyMetaObject	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWLoadCtrl2CtrlData (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude') they are not
+003c7a80	beNDMWLoadCtrl2CtrlData_GetReadyMetaObject	match	exception index 0x552878: matches retail (packed)
 003c7ad0	beNDMWLoadCtrl2CtrlData_GetVTable	match	exception index 0x552884: matches retail (packed)
 003c7b60	FUN_003c7b60	match	exception index 0x552890: matches retail (packed)
 003c7b80	beNDMWLoadCtrl2CtrlData_Register	match	exception index 0x55289c: matches retail (packed)
@@ -15497,7 +15497,7 @@
 003c9410	beNDMWItemBase_InitFields	match	exception index 0x552ca4: matches retail (packed)
 003c9480	FUN_003c9480	match	exception index 0x552cb0: matches retail (packed)
 003c94d0	beNDMWShinkaCtrl_ResolveMetaObject	match	exception index 0x552cbc: matches retail (packed)
-003c9520	beNDMWShinkaCtrl_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWShinkaCtrl (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003c9520	beNDMWShinkaCtrl_GetVTable	match	exception index 0x552cc8: matches retail (packed)
 003c9650	FUN_003c9650	match	exception index 0x552cd4: matches retail (packed)
 003c9670	beNDMWShinkaCtrl_Register	match	exception index 0x552ce0: matches retail (packed)
 003c96f0	beNDMWShinkaCtrl_GetMetaObject	match	exception index 0x552cec: matches retail (packed)
@@ -15552,7 +15552,7 @@
 003ca900	beNDMWAfsSetupDataList_Register	match	exception index 0x552f38: matches retail (packed)
 003ca970	beNDMWAfsSetupDataList_GetMetaObject	match	exception index 0x552f44: matches retail (packed)
 003ca990	beNDMWAfsSetupData_ResolveMetaObject	match	exception index 0x552f50: matches retail (packed)
-003ca9e0	beNDMWAfsSetupData_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWAfsSetupData (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003ca9e0	beNDMWAfsSetupData_GetVTable	match	exception index 0x552f5c: matches retail (packed)
 003caa70	FUN_003caa70	match	exception index 0x552f68: matches retail (packed)
 003caa90	beNDMWAfsSetupData_Register	match	exception index 0x552f74: matches retail (packed)
 003cab00	beNDMWAfsSetupData_GetMetaObject	match	exception index 0x552f80: matches retail (packed)
@@ -16867,8 +16867,8 @@
 00458680	ViewerLibrary_MarkRegistered	match	-
 004586a0	FUN_004586a0	match	-
 004586f0	igViewerStatisticsManager_GetMetaObject	match	-
-00458740	igViewerStatisticsManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igViewerStatisticsManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
-00458860	FUN_00458860	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igViewerStatisticsManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+00458740	igViewerStatisticsManager_GetVTable	match	-
+00458860	FUN_00458860	match	-
 004588e0	FUN_004588e0	match	-
 004588f0	igViewerStatisticsManager_Register	match	-
 00458970	thunk_igViewerStatisticsManager_GetMetaObject	match	-
@@ -16992,13 +16992,13 @@
 0045bcb0	igViewerGuiFactory_InitFields	match	-
 0045be30	FUN_0045be30	match	-
 0045be70	igViewerDataPumpManager_GetMetaObject	match	-
-0045bec0	igViewerDataPumpManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igViewerDataPumpManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0045bec0	igViewerDataPumpManager_GetVTable	match	-
 0045bfa0	FUN_0045bfa0	match	-
 0045bfb0	igViewerDataPumpManager_Register	match	-
 0045c030	thunk_igViewerDataPumpManager_GetMetaObject	match	-
 0045c170	FUN_0045c170	match	-
 0045c1b0	igPickMode_GetMetaObject	match	-
-0045c200	igPickMode_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igPickMode (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0045c200	igPickMode_GetVTable	match	-
 0045c330	FUN_0045c330	match	-
 0045c340	igPickMode_Register	match	-
 0045c3c0	thunk_igPickMode_GetMetaObject	match	-
@@ -17034,21 +17034,21 @@
 0045d090	igViewMode_InitFields	match	-
 0045d100	FUN_0045d100	match	-
 0045d150	igViewManager_GetMetaObject	match	-
-0045d1a0	igViewManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igViewManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0045d1a0	igViewManager_GetVTable	match	-
 0045d2f0	FUN_0045d2f0	match	-
 0045d300	igViewManager_Register	match	-
 0045d380	thunk_igViewManager_GetMetaObject	match	-
 0045d390	igViewManager_InitFields	match	-
 0045d470	FUN_0045d470	match	-
 0045d4c0	igViewModel_GetMetaObject	match	-
-0045d510	igViewModel_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igViewModel (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0045d510	igViewModel_GetVTable	match	-
 0045d5c0	FUN_0045d5c0	match	-
 0045d5d0	igViewModel_Register	match	-
 0045d640	thunk_igViewModel_GetMetaObject	match	-
 0045d650	igViewModel_InitFields	match	-
 0045d830	FUN_0045d830	match	-
 0045d880	igNormalsRenderer_GetMetaObject	match	-
-0045d8d0	igNormalsRenderer_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igNormalsRenderer (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0045d8d0	igNormalsRenderer_GetVTable	match	-
 0045d9f0	FUN_0045d9f0	match	-
 0045da00	igNormalsRenderer_Register	match	-
 0045da80	thunk_igNormalsRenderer_GetMetaObject	match	-
@@ -17069,15 +17069,15 @@
 0045e0f0	igBoundingBoxRenderer_InitFields	match	-
 0045e230	FUN_0045e230	match	-
 0045e270	igActorManager_GetMetaObject	match	-
-0045e2c0	igActorManager_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igActorManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
-0045e420	FUN_0045e420	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igActorManager (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not; orphan 12 bytes
+0045e2c0	igActorManager_GetVTable	match	-
+0045e420	FUN_0045e420	match	-
 0045e4a0	FUN_0045e4a0	match	-
 0045e4b0	igActorManager_Register	match	-
 0045e530	thunk_igActorManager_GetMetaObject	match	-
 0045e540	igActorManager_InitFields	match	-
 0045e6f0	FUN_0045e6f0	match	-
 0045e740	igActorManagerParams_GetMetaObject	match	-
-0045e790	igActorManagerParams_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of igActorManagerParams (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude -Cpp_exceptions off') they are not
+0045e790	igActorManagerParams_GetVTable	match	-
 0045e830	FUN_0045e830	match	-
 0045e840	igActorManagerParams_Register	match	-
 0045e8b0	thunk_igActorManagerParams_GetMetaObject	match	-

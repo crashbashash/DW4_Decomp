@@ -10,8 +10,8 @@ extern int DAT_00589fc8[4];
 void beAction2JOINTSET_InitFields(void);
 }
 void beAction2JOINTSET_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00589fc8[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

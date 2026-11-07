@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 void Gap__Sg__igTransformSequence1_5__vfunc_55(igTransformSequence1_5 *arg0, int arg1, long long arg2) {
-    int temp_v1;
     void *temp_a3;
+    int temp_v1;
 
     temp_a3 = (void *)(arg0->_timeListLong);
     temp_v1 = *(int *)((char *)(temp_a3) + 8);

@@ -12,12 +12,12 @@ extern int DAT_00588550[4];
 void bePadData_InitFields(void);
 }
 void bePadData_InitFields(void) {
-    int sp30[2];
     int sp38[2];
+    int sp30[2];
     int temp_a0;
     int temp_a0_2;
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588550[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

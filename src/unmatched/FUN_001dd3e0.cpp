@@ -10,8 +10,8 @@ class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 struct F { char p[44]; float a; float b; float c; };
 void FUN_001dd3e0(void *arg0, int arg1) {
     int sp50[16];
-    int i;
     int n;
+    int i;
     n = ((V *)arg0)->vCount();
     for (i = 0; i < n; i++) {
         igMatrix44f_SetIdentity(sp50);

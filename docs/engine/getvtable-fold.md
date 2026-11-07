@@ -130,35 +130,13 @@ was a real C++ class temporary (`Class tmp; return tmp.vtable slot`) whose destr
 needs the class with its destructor declared, which is model recovery, not retargeting. They are
 left as they are.
 
-### `foreign-profile` (273 units): the stack-offset fold is the profile question
+### `foreign-profile`: the stack-offset fold is the profile
 
-272 of the 273 sit in units whose profile is the default compiler (3.0-011126), and the code bytes
-are reproduced only under their provisional `combat` override. This is exactly the measured wall
-above: the default compiler never folds the frame temporary's offset into the final load, so no
-spelling can make these functions match under the unit profile. The question is therefore the
-profile, not the source ([build profiles, reviewing a provisional unit, case 3](build-profiles.md#reviewing-a-provisional-unit)).
-Probing every one of the 272 files as written, with the unit tables disabled
-(`tools/verify.py --units /dev/null --unit-flags /dev/null --unit-compilers /dev/null --mwcc … --flags …`):
-
-| compiler, flags (unit's exception mode) | reproduces the code bytes |
-| --- | --- |
-| combat `-O3` | 173 (147 `match`, 26 `code-only`: `.c` in an exceptions-on unit) |
-| combat `-O3,p` (the 99 the row above misses) | 99 (24 `match`, 75 `code-only`) |
-| 3.0.3 `-O3` | 0 |
-
-Every one of the 272 is reproduced by the 2003 beta and none by the default build; the
-3.0.3-020716 build mismatches all 272 as written, but that is their spelling: 3.0.3 folds too, and
-`igNamedObject_GetVTable` matches under it as a `struct`, as under b38 ([what each library was built with](build-profiles.md#what-each-library-was-built-with)). The units' other members (the
-`_Register`/`_InitFields`/`_GetMetaObject` siblings) verify under the unit profile, and none of them
-reproduces under combat: that holds for all 8,677 undecided (function, candidate) pairs over the pins
-of every provisional unit. So the unit profiles stand, and the 272 stay `foreign-profile` overrides,
-reported as such and never counted. A unit that did move to the combat profile would have its
-`_GetVTable` a `tools/getvtable_stack_gen.py --retarget` away from `match` (the 26 + 75 `code-only`
-rows need the `.cpp` form).
-
-The 273rd, `igOptInterface_GetVTable` (0x225ae0), lies inside the `alchemy-base_225770` unit (3.0.3,
-exceptions off), a run of the Base library whose profile it does not share: case 1 of the review
-list.
+The default compiler (3.0-011126) never folds the frame temporary's offset into the final load, so
+no spelling reaches these functions under it. 3.0b52 does fold it, and an accessor in a `b52` unit
+matches once it is `.cpp` (`tools/getvtable_stack_gen.py --retarget`). The accessors still listed
+as `foreign-profile` sit in units that have not moved to `b52`, because another member of the unit
+does not match there yet ([build profiles](build-profiles.md#open-questions)).
 
 ### Reproducing
 

@@ -6,12 +6,8 @@ void *igPickMode_GetMetaObject(void);
 struct G { int pad[9]; int f; };
 void *igPickMode_GetMetaObject(void) {
     struct G *g = DAT_0058cb88[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_0045c330();
     }
-    FUN_0045c330();
-end:
     return DAT_0058cb88[0];
 }

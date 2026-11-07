@@ -10,8 +10,8 @@ extern int DAT_0058b060[4];
 void beNDMWStageCtl_InitFields(void);
 }
 void beNDMWStageCtl_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_0058b060[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

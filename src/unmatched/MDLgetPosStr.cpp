@@ -15,10 +15,10 @@ char *MDLgetPosStr(float fparg0, float fparg1, float fparg2);
 
 char *MDLgetPosStr(float fparg0, float fparg1, float fparg2) {
     struct M m;
-    struct V3 a;
     struct V3 b;
-    int s0;
+    struct V3 a;
     int s1;
+    int s0;
 
     igMatrix44f_SetIdentity(&m);
     Matrix44_Copy(&m, DAT_0058a1e8[0]);

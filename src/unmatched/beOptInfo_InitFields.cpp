@@ -12,8 +12,8 @@ extern int DAT_00588608[4];
 void beOptInfo_InitFields(void);
 }
 void beOptInfo_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588608[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

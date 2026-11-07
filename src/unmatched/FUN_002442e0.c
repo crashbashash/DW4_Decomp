@@ -7,9 +7,9 @@ void *lua_touserdata();
 extern int DAT_004ea980[4];
 extern int DAT_004ea9a0[4];
 int FUN_002442e0(int arg0) {
-    int temp_s0_2;
     void *temp_s0;
     void *temp_s1;
+    int temp_s0_2;
 
     temp_s0 = (void *)(lua_touserdata(arg0, -1));
     if (lua_type(arg0, 2) != 2) {

@@ -13,9 +13,9 @@ extern int DAT_00588760[4];
 void beMovieInfoData_InitFields(void);
 }
 void beMovieInfoData_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
     int temp_s2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588760[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

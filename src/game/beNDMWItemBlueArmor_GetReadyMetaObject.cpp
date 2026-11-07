@@ -6,12 +6,8 @@ void *beNDMWItemBlueArmor_GetReadyMetaObject(void);
 struct G { int pad[9]; int f; };
 void *beNDMWItemBlueArmor_GetReadyMetaObject(void) {
     struct G *g = DAT_0058bf58[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_003c8bd0();
     }
-    FUN_003c8bd0();
-end:
     return DAT_0058bf58[0];
 }

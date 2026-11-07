@@ -80,16 +80,16 @@
     "functions": 0
    },
    "foreign-profile": {
-    "bytes": 49208,
-    "functions": 211
+    "bytes": 27332,
+    "functions": 96
    },
    "inventory-gap": {
     "bytes": 0,
     "functions": 0
    },
    "match": {
-    "bytes": 2276048,
-    "functions": 17022
+    "bytes": 2297924,
+    "functions": 17137
    },
    "mismatch": {
     "bytes": 0,
@@ -118,10 +118,10 @@
     "functions": 4
    }
   },
-  "foreign_orphan_bytes": 15928,
+  "foreign_orphan_bytes": 15100,
   "fully_verified": {
-   "bytes": 2276048,
-   "functions": 17022
+   "bytes": 2297924,
+   "functions": 17137
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -129,7 +129,7 @@
  },
  "code_bytes": {
   "asm_body": 0,
-  "fully_verified": 2276048,
+  "fully_verified": 2297924,
   "functions_asm_body": 0,
   "matched": 2355288,
   "total": 3464192
@@ -293,8 +293,8 @@
    "code_only.other.functions": 4,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "foreign_profile.bytes": 49208,
-   "foreign_profile.functions": 211,
+   "foreign_profile.bytes": 27332,
+   "foreign_profile.functions": 96,
    "fun_dat_refs": 76087,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
@@ -304,7 +304,7 @@
    "mismatch.functions": 0,
    "name_defect.bytes": 1236,
    "name_defect.functions": 3,
-   "orphan.bytes": 15928,
+   "orphan.bytes": 15100,
    "raw_casts.reflected": 173,
    "struct.a": 141,
    "struct.b": 291,
@@ -314,7 +314,7 @@
   }
  },
  "functions": {
-  "fully_verified": 17022,
+  "fully_verified": 17137,
   "matched": 17248,
   "named": 8829,
   "named_semantic": 1560,
@@ -407,40 +407,40 @@
   "bytes": 285636,
   "failing": {
    "addresses": {
-    "bytes": 1902068,
-    "functions": 12581
+    "bytes": 1923688,
+    "functions": 12694
    },
    "fields": {
-    "bytes": 713376,
-    "functions": 3104
+    "bytes": 719956,
+    "functions": 3136
    },
    "idioms": {
-    "bytes": 1219672,
-    "functions": 5589
+    "bytes": 1230948,
+    "functions": 5649
    },
    "name": {
-    "bytes": 1529504,
-    "functions": 11960
+    "bytes": 1530244,
+    "functions": 11965
    },
    "placed": {
-    "bytes": 1709292,
-    "functions": 11277
+    "bytes": 1730948,
+    "functions": 11389
    },
    "references": {
-    "bytes": 1755568,
-    "functions": 9724
+    "bytes": 1777188,
+    "functions": 9837
    },
    "types": {
-    "bytes": 885644,
-    "functions": 3401
+    "bytes": 906096,
+    "functions": 3508
    },
    "virtuals": {
-    "bytes": 367744,
-    "functions": 1112
+    "bytes": 368228,
+    "functions": 1114
    }
   },
   "functions": 1938,
-  "matched_functions": 17022
+  "matched_functions": 17137
  },
  "regions": [
   {

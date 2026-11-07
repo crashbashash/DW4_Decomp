@@ -6,8 +6,8 @@ int igObject_Destroy();
 
 void FUN_004574f0(T *arg0, int arg1) {
     E *temp_a0;
-    LST *temp_s0;
     int var_s1;
+    LST *temp_s0;
 
     for (var_s1 = arg0->f8->f8 - 1; var_s1 >= 0; var_s1 -= 1) {
         temp_s0 = arg0->f8;

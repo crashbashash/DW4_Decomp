@@ -1,7 +1,7 @@
 int igProperty_FindByPointer(void *arg0, void *arg1, int arg2) {
     int temp_v0;
-    int n;
     int i;
+    int n;
 
     n = *(int *)((char *)(arg0) + 8);
     if (arg1 == 0) {

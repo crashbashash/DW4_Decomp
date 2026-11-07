@@ -13,10 +13,10 @@ extern int DAT_005884e0[4];
 void beParticleCtrl2Info_InitFields(void);
 }
 void beParticleCtrl2Info_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005884e0[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

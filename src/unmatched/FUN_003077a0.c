@@ -6,10 +6,10 @@ int igObject_Destroy();
 
 void FUN_003077a0(struct A *arg0) {
     int n2;
-    int i;
-    int n1;
     int j;
     L *l;
+    int n1;
+    int i;
     R *p;
 
     l = arg0->list;

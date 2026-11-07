@@ -6,12 +6,8 @@ void *FUN_0034da80(void);
 struct G { int pad[9]; int f; };
 void *FUN_0034da80(void) {
     struct G *g = DAT_00588690[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_0034db60();
     }
-    FUN_0034db60();
-end:
     return DAT_00588690[0];
 }

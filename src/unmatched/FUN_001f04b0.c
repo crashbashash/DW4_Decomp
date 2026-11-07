@@ -1,8 +1,8 @@
 extern char DAT_00568f00[];
 extern char DAT_00568f60[];
 int FUN_001f04b0(int arg0, int arg1) {
-    int temp_a0;
     int temp_a2;
+    int temp_a0;
     int var_v0;
 
     temp_a0 = arg0 * 4;

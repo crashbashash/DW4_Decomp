@@ -15,9 +15,9 @@ extern int DAT_004fb418[4]; /* not-found status */
 
 void igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, int *value)
 {
-    int count;
-    int match;
     int index;
+    int match;
+    int count;
     int retained;
     int *header;
 

@@ -8,9 +8,9 @@ extern int DAT_00562890[4];
 typedef struct A { char pad[208]; unsigned char f208; } A;
 
 void FUN_001d5f70(A *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
-    int sp50[16];
-    int sp90[4];
     int spA0[4];
+    int sp90[4];
+    int sp50[16];
 
     Matrix44_Copy(arg4);
     FUN_001904f0(arg4, arg4, arg2);

@@ -9,8 +9,8 @@ int FUN_002d87b0(Ctx *, int, int, int);
 int FUN_002d8520(int arg0, VC *arg1, Ctx *arg2);
 }
 int FUN_002d8520(int arg0, VC *arg1, Ctx *arg2) {
-    int n;
     int i;
+    int n;
     if (arg0 == 0) {
         return 1;
     }

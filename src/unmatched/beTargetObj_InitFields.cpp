@@ -14,11 +14,11 @@ extern int DAT_00587ce8[4];
 void beTargetObj_InitFields(void);
 }
 void beTargetObj_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
-    void *temp_s1_3;
     int temp_s2;
+    void *temp_s1_3;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00587ce8[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

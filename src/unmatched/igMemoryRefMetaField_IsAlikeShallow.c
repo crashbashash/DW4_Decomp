@@ -2,9 +2,9 @@ int Memory_GetBufferSize();
 struct M { char pad[8]; int f8; };
 int igMemoryRefMetaField_IsAlikeShallow(struct M *arg0, int arg1, int arg2) {
     int off;
-    char *b;
-    char *a;
     int n;
+    char *a;
+    char *b;
     int i;
 
     off = arg0->f8;

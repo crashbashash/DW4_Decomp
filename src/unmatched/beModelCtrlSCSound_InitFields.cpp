@@ -10,8 +10,8 @@ extern int DAT_005887b0[4];
 void beModelCtrlSCSound_InitFields(void);
 }
 void beModelCtrlSCSound_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005887b0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

@@ -4,8 +4,8 @@ int FUN_0020b9d0();
 extern struct S *DAT_0056c0e0[17];
 extern unsigned int DAT_0056c128[4];
 void FUN_0020c8b0(struct S *arg0) {
-    unsigned int s0;
     int s1;
+    unsigned int s0;
     struct S *o;
     if (arg0->f70 == 4 || arg0->f70 == 5 || arg0->f70 == 1) return;
     if (arg0->f72 != 0) {

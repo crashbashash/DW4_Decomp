@@ -18,7 +18,6 @@ extern int DAT_005898d0[4];
 void beDataBase_InitFields(void);
 }
 void beDataBase_InitFields(void) {
-    void *temp_s0;
     int temp_s1;
     void *temp_s2;
     void *temp_s2_10;
@@ -32,6 +31,7 @@ void beDataBase_InitFields(void) {
     void *temp_s2_7;
     void *temp_s2_8;
     void *temp_s2_9;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_005898d0[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);

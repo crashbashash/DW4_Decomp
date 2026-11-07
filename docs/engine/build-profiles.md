@@ -249,18 +249,32 @@ with the game's flags, and AdxMovie was written alongside the game.
 `igNamedObject_GetVTable` differs under 3.0.3 by two swapped registers as a `union`, and matches under
 3.0.3 and b38 as a `struct`.
 
-**3.0b52 with `-sdatathreshold 1` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
-runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. The dw4-ps2-ai project builds the same way.
-`-O4,p` and `-O3,p` differ on four functions, too few to separate them; every stock library verifies at
-`-O4`. 3,999 of the 4,786 MWCC units carry this profile. A unit moved only when every member matched
-under it, so the rest keep their earlier profile.
+**3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
+runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. 4,470 of the 4,838 MWCC units carry this
+profile. A unit moved only when every member matched under it, so the rest keep their earlier profile.
+zlib and libpng are the exception that is settled: they build with `combat` and fail under `b52`.
 
-Three respellings carry a unit across:
+**The data threshold comes from the stock libraries and the small-data block.** zlib, libpng and Lua are
+the only code with its original declarations, and they verify at thresholds 1 and 2 and fail at 4 and
+above. Retail's small data, `0x554880`-`0x554e80`, holds one-byte objects and one `short` (`0x554b04`),
+which a threshold of 1 cannot place. The game's own sources cannot separate thresholds: all 11,871
+matched functions pass at 1, 2, 4, 8 and with no flag, because their `[4]` declarations hide the size.
 
-* `_GetMetaObject` compares the validity test with `false`, as above.
+**Every 4- and 8-byte gp-relative object is a compiler literal.** `0x554880`-`0x554970` holds floats and
+doubles such as π, 2π, `FLT_MAX`, `0.01` and `1e20`. Written as a literal, b52 emits the same
+`lwc1 $f0, 0(gp)` through `R_MIPS_LITERAL` into `.lit4`, which is how retail reaches them. An
+`extern float` naming one of these addresses compiles to `lui`/`lwc1` instead and does not match.
+
+These respellings carry a unit across:
+
+* `_GetMetaObject`, and every accessor of the same shape, compares the validity test with `false`, as
+  above. The `asm { nop }` the older spelling needed goes away.
 * `_InitFields` declares the meta pointer last, which puts it in `s0`.
-* A library's registered flag is a scalar byte: `-sdatathreshold 1` keeps one-byte data gp-relative,
-  so a `[4]` declaration no longer reaches it.
+* A library's registered flag is a scalar byte: the threshold keeps one-byte data gp-relative, so a
+  `[4]` declaration no longer reaches it.
+* A `.c` body in an exceptions-on unit becomes `.cpp`, since only the C++ front end emits the index
+  record ([GetVTable](getvtable-fold.md)).
+* Local declarations are reordered where only register allocation differs.
 
 A unit holding the retail copy of a `duplicates` entry in `unit-objects.json` stays on its profile:
 `tools/check.py` compares every emitted copy under that unit's profile, so moving it changes what
@@ -273,6 +287,9 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
 
 ## Open questions
 
-* **The remaining units.** 787 MWCC units stay on 3.0, 3.0.3, b38 or 2.4, most for one or two members
-  that differ under b52. Whether they respell, as the status objects did, is untested.
-* **b50 or b52, `-O3` or `-O4`** are not separated by anything measured so far.
+* **The remaining units.** 347 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, b38 or 2.4,
+  most for one or two members that differ under b52. Functions reading a literal pool address need
+  `tools/verify.py` and the link to accept `.lit4`/`.lit8`; 41 failing functions are of that kind.
+* **`-O3` or `-O4`.** Four matched functions need `-O4` (`FUN_001ef9b0`, `FUN_002094c0`, `FUN_00315050`,
+  `FUN_003a7300`), and about twenty failing ones pass only at `-O3`, so neither level fits every function
+  as currently spelled. b50 and b52 are not separated.

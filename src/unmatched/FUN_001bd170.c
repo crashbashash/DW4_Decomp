@@ -5,11 +5,11 @@ struct Arr { char p[8]; int n; int cap; int *data; };
 struct B { char p[12]; struct Arr *list; };
 struct A { char p[32]; struct Arr *out; };
 void FUN_001bd170(struct A *arg0, struct B *arg1) {
-    struct Arr *o;
-    struct B *c;
-    int idx;
-    int n;
     int i;
+    int n;
+    int idx;
+    struct B *c;
+    struct Arr *o;
     n = arg1->list->n;
     for (i = 0; i < n; i++) {
         c = (struct B *)arg1->list->data[i];

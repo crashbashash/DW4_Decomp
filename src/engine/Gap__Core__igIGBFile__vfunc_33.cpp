@@ -4,8 +4,8 @@ VC *FUN_002d7e90(void *, int);
 extern int DAT_004fb410[4];
 struct S { char pad8[8]; int cnt; char pad[244]; int f100; char pad2[8]; int f10c; int f110; };
 void Gap__Core__igIGBFile__vfunc_33(int *arg0, S *arg1) {
-    int i;
     int n;
+    int i;
     arg1->f100 = 0;
     arg1->f10c = 0;
     arg1->f110 = 0;

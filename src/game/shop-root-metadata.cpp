@@ -23,11 +23,8 @@ extern "C" void *beNDMWShopCtrl00_Create(void *allocator){
 /* Lazy accessor. A null handle, or one whose _validity word lacks bit 4, runs the registrar; the
  * handle is re-read afterwards because the callback may publish a different object. */
 igMetaObject *beNDMWShopCtrl00_ResolveMetaObject(){
-    igMetaObject *meta=g_beNDMWShopCtrl00_metaObject[0];bool validityBit4Set;
-    if(!meta)goto ensure;
-    if(!(validityBit4Set=meta->_validity&4)){
-        asm { nop }
-ensure:
+    igMetaObject *meta=g_beNDMWShopCtrl00_metaObject[0];
+    if(!meta||((meta->_validity&4)!=0)==false){
         beNDMWShopCtrl00_EnsureRegistered();
     }
     return g_beNDMWShopCtrl00_metaObject[0];

@@ -12,10 +12,10 @@ void FUN_00165d30(O *arg0, unsigned int arg1, int arg2) {
     int sp5C;
     int v[3];
     void *s0;
-    unsigned int i;
     int off;
     int src;
     char *s1;
+    unsigned int i;
 
     arg0->f72 = arg1;
     arg0->f84 = arg2;

@@ -10,10 +10,10 @@ class AL { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 class PV { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual char *vX(unsigned); };
 struct PA { int vt; int pad1[2]; unsigned n; char pad2[16]; int stride; char *data; char pad3[52]; unsigned char flag; };
 extern "C" void Gap__Gfx__igPsx2ParticleArray__vfunc_19(PA *arg0) {
-    char *d;
     char *e;
-    unsigned i;
     char *buf;
+    unsigned i;
+    char *d;
     if (arg0->flag != 0) {
         buf = ((AL *)igObject_GetAllocator(arg0))->vX(arg0->stride * arg0->n);
         for (i = 0; i < arg0->n; i++) {

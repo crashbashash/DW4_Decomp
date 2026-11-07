@@ -6,9 +6,9 @@ L *FUN_002fc250(...);
 void FUN_002eed00(A *arg0, V88 *arg1);
 }
 void FUN_002eed00(A *arg0, V88 *arg1) {
-    int n;
-    int i;
     L *l;
+    int i;
+    int n;
     V88 *o;
     int r;
 

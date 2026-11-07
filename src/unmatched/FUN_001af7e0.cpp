@@ -3,8 +3,8 @@ extern "C" {
 struct L { char pad8[8]; unsigned int cnt; char pad12[4]; V112 **arr; };
 struct S { char pad32[32]; L *l; };
 void FUN_001af7e0(S *arg0) {
-    unsigned int i;
     unsigned int n;
+    unsigned int i;
 
     n = arg0->l->cnt;
     for (i = 0; i < n; i++) {

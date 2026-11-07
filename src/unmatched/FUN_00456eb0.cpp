@@ -42,8 +42,8 @@ extern "C" int FUN_004555e0(Item2 *);
 extern "C" int FUN_00456c20(Ctl2 *, Item2 *);
 extern "C" void FUN_00456eb0(Ctl *arg0, int arg1);
 void FUN_00456eb0(Ctl *arg0, int arg1) {
-    int ok;
     Item2 *s0;
+    int ok;
     ok = 0;
     s0 = arg0->f12->f168;
     if (s0 != 0) {

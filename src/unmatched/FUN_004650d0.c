@@ -11,10 +11,10 @@ typedef struct Tg { char pad[92]; float f92; float f96; float f100; float f104; 
 typedef struct Mx { float m[16]; } Mx;
 typedef struct Ob { char pad[8]; Tg *f8; Mx mat; } Ob;
 void FUN_004650d0(Ob *arg0) {
-    Ev e3;
-    Ev e2;
-    Ev e1;
     float v[3];
+    Ev e1;
+    Ev e2;
+    Ev e3;
     Tg *temp_s0;
 
     temp_s0 = arg0->f8;

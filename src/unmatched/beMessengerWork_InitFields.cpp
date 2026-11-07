@@ -14,10 +14,10 @@ extern int DAT_00588f88[4];
 void beMessengerWork_InitFields(void);
 }
 void beMessengerWork_InitFields(void) {
-    void *temp_s0;
-    void *temp_s1;
-    void *temp_s1_2;
     int temp_s2;
+    void *temp_s1_2;
+    void *temp_s1;
+    void *temp_s0;
 
     temp_s0 = (void *)DAT_00588f88[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);

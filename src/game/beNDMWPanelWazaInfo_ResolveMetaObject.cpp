@@ -6,12 +6,8 @@ void *beNDMWPanelWazaInfo_ResolveMetaObject(void);
 struct G { int pad[9]; int f; };
 void *beNDMWPanelWazaInfo_ResolveMetaObject(void) {
     struct G *g = DAT_0058b1e8[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    if (!g || ((g->f & 4) != 0) == false) {
+        FUN_003bd750();
     }
-    FUN_003bd750();
-end:
     return DAT_0058b1e8[0];
 }

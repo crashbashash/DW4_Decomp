@@ -7,9 +7,9 @@ struct SS { char pad8[8]; int f8; char pad[41]; unsigned char f53; char pad54[6]
 void Gap__Core__igStringArrayMetaField__vfunc_32(struct SS *arg0, int arg1) {
     int *temp_a1;
     int temp_v1;
-    int var_s0;
     int var_v0;
     int *var_s1;
+    int var_s0;
     int temp_a0;
     int temp_s3;
 

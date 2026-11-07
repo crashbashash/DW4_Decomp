@@ -8,9 +8,9 @@ int lua_pushusertag();
 extern int DAT_004ea540[4];
 int FUN_002406e0(int arg0) {
     int v;
-    int *s0;
-    int s1;
     int *p;
+    int s1;
+    int *s0;
     p = lua_touserdata(arg0, -1);
     s1 = p[3];
     s0 = (int *)p[7];

@@ -35,9 +35,9 @@ void FUN_001f3900(unsigned int arg0) {
     int a1;
     int t;
     int v;
-    unsigned int s0;
-    unsigned int s2;
     int s3;
+    unsigned int s2;
+    unsigned int s0;
     unsigned long long a1l;
     int f;
     a2 = DAT_00562c70[DAT_00569330[0]];

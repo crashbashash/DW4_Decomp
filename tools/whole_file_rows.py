@@ -26,7 +26,7 @@ tools/apply_names.py, which is what moves `FUN_` names to the library's own.
 
 Usage:
   whole_file_rows.py --src src/third_party/zlib --files adler32 crc32 --range 0x221870 0x2252d8 \\
-      --compiler combat --flags "-O4,p -sdatathreshold 1 -lang c -I- -Isrc/third_party/libc" \\
+      --compiler combat --flags "-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc" \\
       --unit zlib [--write] [--names config/SLUS-20836/names/zlib.tsv]
 """
 import argparse
