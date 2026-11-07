@@ -359,6 +359,8 @@ def main(argv=None):
             placement["table"] = [table_at, table_size, ".exception"]
         return placement, ""
 
+    retail_image, retail_gp = verify.read_elf(a.elf), reginfo_gp(a.elf)
+
     def build_one(u):
         va, sz, kind, name, extra = u
         key = None
@@ -456,6 +458,11 @@ def main(argv=None):
                 os.remove(stage)
                 return va, {"fatal": f"{name}: {error}"}
             from_group = group_placement(records_, va)
+        if not group:
+            _folded, literal_errors = verify.fold_literals(stage, va, name, retail_image, retail_gp)
+            if literal_errors:
+                os.remove(stage)
+                return va, {"fatal": f"{name}: {literal_errors[0]}"}
         shutil.copyfile(stage, obj)
         # MWCC's .text is exact-size; only its alignment (16) needs overriding,
         # which the linker script's SUBALIGN(1) does.
@@ -663,7 +670,7 @@ def main(argv=None):
 
     script += ["    _section_end = .;",
                "  }",
-               "  /DISCARD/ : { *(.comment) *(.reginfo) *(.mwcats) *(.debug) }"]
+               "  /DISCARD/ : { *(.comment) *(.reginfo) *(.mwcats) *(.debug) *(.lit4) *(.lit8) }"]
     # gp must be defined: __start does `move gp, a0`, i.e. the loader passes it in,
     # and the value is in the ELF's .reginfo. Without it every R_MIPS_GPREL16
     # reloc in the C objects fails with "small-data section too large".

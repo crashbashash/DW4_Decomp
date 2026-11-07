@@ -111,6 +111,16 @@ candidate cannot carry initialised data, string literals, `.sdata` scalars or
 `.bss` next to a matched body (counterexample 1b); reading only `.text` and
 `.rodata` would let it.
 
+### Compiler literals
+
+MWCC puts a float or double constant in the object's own `.lit4` or `.lit8` and reaches it through
+`R_MIPS_LITERAL`. Retail merged those into one pool, `0x554880`-`0x554974`, and one object's section
+cannot be scattered over its entries. `verify.fold_literals` takes each entry's address from the retail
+instruction, requires it to lie in the pool, be aligned and hold exactly the literal's bytes, writes the
+immediate into the object and clears the relocation. Every entry of the section must be used by a proven
+reference, so a literal cannot carry data in. The verifier and `tools/linkgen.py` share this step; the
+link discards the sections and the pool stays retail data. Emitted groups do not fold yet.
+
 ### Symbol identity
 
 A relocation symbol's name is a claim about retail, and `verify.sym_address`

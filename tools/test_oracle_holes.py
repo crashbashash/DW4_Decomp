@@ -52,6 +52,25 @@ int igObjectSystem_FindMetaByNameDefault(const char *name){return igObjectSystem
 """
 
 
+# a body that reads one compiler float literal, the retail pool's entry at 0x5548b8
+LITERAL_VA, LITERAL_NAME = 0x20d290, "FUN_0020d290"
+LITERAL_BODY = """extern long long DAT_0056c190[];
+void FUN_0020d290(long long *arg0) {
+    unsigned int t;
+    float f;
+    unsigned int u;
+    t = *(volatile unsigned int *)0x10000800;
+    f = %s * (float)t;
+    u = (unsigned int)f;
+    *arg0 = (DAT_0056c190[0] + u) * 100;
+}
+"""
+LITERAL_HONEST = LITERAL_BODY % "1.08506942f"
+LITERAL_WRONG_VALUE = LITERAL_BODY % "1.08506954f"
+# a second body carries a literal retail never reaches from this function
+LITERAL_EXTRA_BODY = LITERAL_HONEST + "float carried(float x) { return x * 3.25f; }\n"
+
+
 def retail_available():
     return (all(Path(p).exists() for p in (verify.WIBO_DEFAULT, verify.MWCC_DEFAULT, verify.ELF_DEFAULT))
             and shutil.which("mipsel-linux-gnu-readelf"))
@@ -225,6 +244,30 @@ class RelocationTypes(unittest.TestCase):
             self.assertEqual(verify.object_relocs("owner.o"), [(".text", 0, verify.R_26, "callee", 0)])
 
 
+class LiteralPool(unittest.TestCase):
+    """A compiler literal must be the retail pool entry its instruction names."""
+
+    def setUp(self):
+        self.image = bytearray(verify.LITERAL_POOL[1] - verify.VADDR_BASE + verify.FILE_BASE + 64)
+        self.at = verify.LITERAL_POOL[0] + 0x40
+        offset = self.at - verify.VADDR_BASE + verify.FILE_BASE
+        self.image[offset:offset + 8] = bytes(range(1, 9))
+
+    def test_the_entry_at_its_address_is_accepted(self):
+        self.assertIsNone(verify.literal_error(self.at, bytes(range(1, 5)), self.image))
+        self.assertIsNone(verify.literal_error(self.at, bytes(range(1, 9)), self.image))
+
+    def test_another_value_is_refused(self):
+        self.assertIn("is not the retail pool entry", verify.literal_error(self.at, b"\0\0\0\1", self.image))
+
+    def test_an_address_outside_the_pool_is_refused(self):
+        for address in (verify.LITERAL_POOL[0] - 4, verify.LITERAL_POOL[1]):
+            self.assertIn("outside the retail pool", verify.literal_error(address, bytes(4), self.image))
+
+    def test_a_misaligned_entry_is_refused(self):
+        self.assertIn("not aligned", verify.literal_error(self.at + 4, bytes(8), self.image))
+
+
 class DefinedSymbols(unittest.TestCase):
     """Item 3(a): defining a symbol that names a retail address outside the body."""
 
@@ -253,6 +296,29 @@ class Counterexamples(unittest.TestCase):
             path = Path(td) / "cand.c"
             path.write_text(source)
             return verify.verify_one(VA, str(path), symbols=str(ROOT / "config/SLUS-20836/symbols.txt"))
+
+    def verify_literal(self, source):
+        with tempfile.TemporaryDirectory(prefix="dw4-oracle-") as td:
+            path = Path(td) / "cand.c"
+            path.write_text(source)
+            return verify.verify_one(LITERAL_VA, str(path), symbols=str(ROOT / "config/SLUS-20836/symbols.txt"),
+                                     flags="-O4,s -sdatathreshold 2 -Iinclude -Cpp_exceptions off",
+                                     mwcc=str(ROOT / "local/mwcps2/3.0b52-030722/mwccps2.exe"),
+                                     units="/dev/null", unit_flags="/dev/null", unit_compilers="/dev/null",
+                                     unit_objects=None)
+
+    def test_honest_literal_matches(self):
+        ok, report = self.verify_literal(LITERAL_HONEST)
+        self.assertTrue(ok, report)
+
+    def test_literal_with_another_value_fails(self):
+        ok, report = self.verify_literal(LITERAL_WRONG_VALUE)
+        self.assertFalse(ok, report)
+        self.assertIn("is not the retail pool entry at 0x5548b8", report)
+
+    def test_literal_of_another_body_fails(self):
+        ok, report = self.verify_literal(LITERAL_EXTRA_BODY)
+        self.assertFalse(ok, report)
 
     def test_honest_source_still_matches(self):
         ok, report = self.verify(CALLEE + "extern void *g_objectSystem_00586dc8[4];\n" + BODY)

@@ -55,7 +55,7 @@ MWCC_DEFAULT = os.environ.get(
 WIBO_DEFAULT = os.environ.get("DW4_WIBO", os.path.join(ROOT, "local", "wibo"))
 FLAGS_DEFAULT = "-O3 -Iinclude"
 
-R_HI16, R_LO16, R_26, R_32, R_GPREL16 = 0x05, 0x06, 0x04, 0x02, 0x07
+R_HI16, R_LO16, R_26, R_32, R_GPREL16, R_LITERAL = 0x05, 0x06, 0x04, 0x02, 0x07, 0x08
 
 # Every scratch path carries the PID **and** the thread id. `verify_one` used fixed
 # names, which is why the docs said "never call it from threads" — but two
@@ -109,6 +109,8 @@ COMPARED_SECTIONS = {
                                                    "isolate_emitted_body, renamed by retail address: compared, placed",
     re.compile(r"^\.exception\.dw4_[0-9a-f]{8}$"): "a group member's exception table kept by "
                                                     "isolate_emitted_body, renamed by retail address: compared, placed",
+    ".lit4": "MWCC's float literals: every entry compared with the retail pool by fold_literals, discarded by the link",
+    ".lit8": "MWCC's double literals: every entry compared with the retail pool by fold_literals, discarded by the link",
     ".data": "ee-gcc emits it empty; verify fails any content as an unowned allocated section",
     ".bss": "ee-gcc emits it empty; verify fails any content as an unowned allocated section",
     "": "the null section header every ELF carries",
@@ -133,6 +135,9 @@ COMPARED_SECTIONS = {
     ".mdebug": "ee-gcc debug tag: not loaded, no content",
     ".mdebug.eabi64": "ee-gcc ABI tag: not loaded, no content",
 }
+# The compiler's float and double constants in the retail image, reached through gp.
+LITERAL_POOL = (0x554880, 0x554974)
+LITERAL_SECTIONS = {".lit4": 4, ".lit8": 8}
 # Sections the oracle knows it does not yet compare. None today: every allocated section
 # of every object is compared or fails verification.
 DEBT_SECTIONS = {}
@@ -733,6 +738,95 @@ def apply_relocs(text, relocs, resolve, gp):
     for off, name in pend_hi:
         unresolved.append((off, name))
     return bytes(buf), None, unresolved
+
+
+def literal_error(address, data, img):
+    """Why a literal cannot be the retail pool entry at `address`, or None when it is."""
+    width = len(data)
+    if not LITERAL_POOL[0] <= address <= LITERAL_POOL[1] - width:
+        return f"literal at 0x{address:x} is outside the retail pool"
+    if address % width:
+        return f"literal at 0x{address:x} is not aligned to {width} bytes"
+    if va_bytes(img, address, width) != data:
+        return f"literal {data.hex()} is not the retail pool entry at 0x{address:x}"
+    return None
+
+
+def fold_literals(obj, va, name, img, gp):
+    """Point the `R_MIPS_LITERAL` references of `name`'s body at the retail pool.
+
+    MWCC gives each object its own `.lit4`/`.lit8`, and the linker cannot scatter one section
+    over the entries of a shared pool. The retail instruction names the entry, so each
+    reference takes its address from there, and the value must be the one retail holds at
+    that address. The immediate is written into the object and the relocation cleared; the
+    pool itself stays retail data. An object is rewritten only when every reference is proven
+    and every entry of its literal sections is referenced, so nothing else can ride along.
+
+    -> (indices of the folded sections, error strings). With errors the object is unchanged.
+    """
+    with open(obj, "rb") as fh:
+        data = bytearray(fh.read())
+    shoff, = struct.unpack_from("<I", data, 32)
+    shentsize, shnum, shstrndx = struct.unpack_from("<HHH", data, 46)
+    sections = [struct.unpack_from("<10I", data, shoff + i * shentsize) for i in range(shnum)]
+
+    def section_name(section):
+        start = sections[shstrndx][4] + section[0]
+        return bytes(data[start:data.index(0, start)]).decode()
+
+    names = [section_name(section) for section in sections]
+    literal_sections = {i: LITERAL_SECTIONS[n] for i, n in enumerate(names)
+                        if n in LITERAL_SECTIONS and sections[i][5]}
+    if not literal_sections:
+        return [], []
+    body = object_sym(obj, name)
+    if body[1] is None or not isinstance(body[2], int):
+        return [], [f"object defines no symbol {name!r}"]
+    start, _size, text_index = body
+    used, patches, cleared, errors = set(), [], [], []
+    for section in sections:
+        if section[1] != 9:                                  # SHT_REL
+            continue
+        symbols = sections[section[6]]
+        for at in range(section[4], section[4] + section[5], 8):
+            offset, info = struct.unpack_from("<II", data, at)
+            if info & 0xff != R_LITERAL:
+                continue
+            if section[7] != text_index:
+                errors.append(f"literal reference outside {name} (section {section[7]})")
+                continue
+            value, _sz, _info, _other, index = struct.unpack_from("<IIBBH", data, symbols[4] + (info >> 8) * 16 + 4)
+            width = literal_sections.get(index)
+            if width is None:
+                errors.append(f"literal reference at +0x{offset:x} is not into .lit4 or .lit8")
+                continue
+            word_at = sections[text_index][4] + offset
+            word, = struct.unpack_from("<I", data, word_at)
+            entry = value + (word & 0xffff)
+            retail, = struct.unpack("<I", va_bytes(img, va + offset - start, 4))
+            imm = retail & 0xffff
+            address = gp + (imm - 0x10000 if imm & 0x8000 else imm)
+            source = sections[index][4] + entry
+            error = literal_error(address, bytes(data[source:source + width]), img)
+            if error:
+                errors.append(f"{error} (+0x{offset:x})")
+                continue
+            used.add((index, entry))
+            patches.append((word_at, (word & ~0xffff) | imm))
+            cleared.append(at)
+    for index, width in literal_sections.items():
+        for entry in range(0, sections[index][5], width):
+            if (index, entry) not in used:
+                errors.append(f"{names[index]} entry +0x{entry:x} is not referenced by {name}")
+    if errors:
+        return [], errors
+    for at, word in patches:
+        struct.pack_into("<I", data, at, word)
+    for at in cleared:
+        struct.pack_into("<I", data, at + 4, 0)
+    with open(obj, "wb") as fh:
+        fh.write(data)
+    return sorted(literal_sections), []
 
 
 def solve_gp(text, relocs, resolve, retail, base_va):
@@ -1567,6 +1661,9 @@ def _verify_standalone(obj, va, name, size, retail, img, by_name, symbols, tabs,
     all_text = object_section(obj, ".text", ndx)
     if symsize <= 0 or off + symsize > len(all_text):
         return False, f"object symbol {name!r} has an invalid .text extent"
+    literal_sections, literal_errors = fold_literals(
+        obj, va, name, img, gp_override if gp_override is not None else reginfo_gp(elf))
+    all_text = object_section(obj, ".text", ndx)
     object_relocs(obj)      # rejects unsupported relocation types in any section
     text = all_text[off:off + symsize]
     text_sections = [header for section, header in headers if section == ".text" and header[5]]
@@ -1632,11 +1729,11 @@ def _verify_standalone(obj, va, name, size, retail, img, by_name, symbols, tabs,
           and len(text) == size and not table_errors)
 
     # ---- every allocated section must have a retail identity -----------------
-    owned = {ndx} | set(table_bases) | set(index_sections) | set(table_sections_exc)
+    owned = {ndx} | set(table_bases) | set(index_sections) | set(table_sections_exc) | set(literal_sections)
     unowned = [(n, h[5]) for i, (n, h) in enumerate(headers)
                if h[2] & 2 and h[5] and i not in owned]
     smuggled = defined_outside(obj_syms, headers, [(va, va + size)], exempt={name})
-    ok = ok and not unowned and not smuggled
+    ok = ok and not unowned and not smuggled and not literal_errors
 
     # ---- the jump table -----------------------------------------------------
     tbl_report = list(table_errors)
@@ -1696,6 +1793,7 @@ def _verify_standalone(obj, va, name, size, retail, img, by_name, symbols, tabs,
     for symbol, claimed in smuggled:
         lines.append(f"   object defines {symbol}, which names retail address 0x{claimed:x} outside "
                      "the function (a candidate may only reference that datum)")
+    lines += ["   " + error for error in literal_errors]
     for off_, nm in unresolved:
         lines.append(f"   unresolved relocation against {nm!r} at +0x{off_:x}")
     for nm, error in sorted(dishonest.items()):
