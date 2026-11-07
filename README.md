@@ -16,13 +16,13 @@ Run commands from the repository root. Game data and toolchains are never commit
 <!-- progress:start -->
 | Region | Size | Matched | Readable |
 | --- | ---: | ---: | ---: |
-| Game | 1106 KB | 86.5 % | 6.0 % |
-| Alchemy engine | 1573 KB | 60.6 % | 3.3 % |
+| Game | 1106 KB | 86.6 % | 6.0 % |
+| Alchemy engine | 1573 KB | 61.0 % | 3.3 % |
 | Lua 4.0.1 interpreter | 70 KB | 100.0 % | 100.0 % |
-| CRI middleware (ADX, Sofdec, audio) | 343 KB | 43.6 % | 0.0 % |
+| CRI middleware (ADX, Sofdec, audio) | 343 KB | 44.8 % | 0.0 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
-| Sony SDK and C runtime | 201 KB | 13.4 % | 0.0 % |
-| **Total** | **3383 KB** | **66.4 %** | **8.2 %** |
+| Sony SDK and C runtime | 201 KB | 13.5 % | 0.0 % |
+| **Total** | **3383 KB** | **66.7 %** | **8.2 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->

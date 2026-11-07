@@ -1,0 +1,4 @@
+extern int DAT_005863b0[4];
+int FUN_002c0930(void) {
+    return DAT_005863b0[0];
+}
