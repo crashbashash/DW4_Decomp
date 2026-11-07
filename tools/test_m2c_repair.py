@@ -45,6 +45,20 @@ class ArgumentVariants(unittest.TestCase):
         out = m2c_batch.argument_variants("int f(int arg1, int arg2) {\n    return g(arg1, arg2);\n}\n", "")
         self.assertTrue(any("int f(int arg0, int arg1, int arg2) {" in x for x in out))
 
+    def test_a_declared_prototype_follows_the_definition(self):
+        src = 'extern "C" {\nvoid f(int arg1);\n}\nvoid f(int arg1) {\n    g(arg1);\n}\n'
+        out = m2c_batch.argument_variants(src, "")
+        self.assertTrue(any("void f(int arg0, int arg1);" in x for x in out))
+
+    def test_an_unused_middle_parameter_comes_back(self):
+        out = m2c_batch.argument_variants("void f(void *arg0, int arg2) {\n    g(arg0, arg2);\n}\n", "")
+        self.assertTrue(any("void f(void *arg0, int arg1, int arg2) {" in x for x in out))
+
+    def test_a_byte_offset_on_an_int_pointer_is_not_scaled_twice(self):
+        src = "void f(int a) {\n    x = *(int *)(&D[0] + (a * 4));\n    p = (int *)(a);\n    p += 4;\n}\n"
+        out = m2c_batch.argument_variants(src, "")
+        self.assertTrue(any("((char *)&D[0] + (a * 4))" in x and "p += 1;" in x for x in out))
+
     def test_a_value_left_in_a_register_reaches_the_callee(self):
         out = m2c_batch.argument_variants("void f(void) {\n    g(0xFF);\n}\n", "")
         self.assertTrue(any("void f(int p0) {" in x and "g(p0, 0xFF);" in x for x in out))
@@ -57,6 +71,36 @@ class ArgumentVariants(unittest.TestCase):
     def test_a_word_stored_narrower_is_loaded_whole(self):
         src = "void f(void *a) {\n    *(short *)a = (short) *(short *)((char *)a + 4);\n}\n"
         self.assertTrue(any("(short) *(int *)" in x for x in m2c_batch.argument_variants(src, "")))
+
+
+class TailCallDrafts(unittest.TestCase):
+    @staticmethod
+    def drafts(*lines):
+        return m2c_batch.tail_call_drafts("f", "".join("/* 0 */ %s\n" % x for x in lines))
+
+    def test_arguments_swapped_through_a_scratch_register(self):
+        out = self.drafts("move $v0,$a0", "move $a0,$a1", "j g", "move $a1,$v0")
+        self.assertTrue(any("g(arg1, arg0);" in x for x in out))
+
+    def test_a_delay_slot_load_keeps_its_field_type(self):
+        out = self.drafts("move $v0,$a0", "move $a0,$a1", "j g", "lbu $a1,12($v0)")
+        self.assertTrue(any("void g(int, unsigned char);" in x for x in out))
+
+    def test_a_short_parameter_is_narrowed_at_its_use(self):
+        out = self.drafts("dsll32 $v0,$a1,0x10", "dsra32 $v0,$v0,0x10", "j g", "sw $v0,16($a0)")
+        self.assertTrue(any("short arg1" in x and "= arg1;" in x for x in out))
+
+    def test_the_fifth_integer_argument_is_a4(self):
+        out = self.drafts("j g", "li $a4,1")
+        self.assertTrue(any("g(arg0, arg1, arg2, arg3, 1);" in x for x in out))
+
+    def test_a_float_constant_comes_from_its_bits(self):
+        out = self.drafts("lui $v0,0x3f00", "mtc1 $v0,$f0", "j g", "mul.s $f12,$f0,$f12")
+        self.assertTrue(any("g((0.5f * farg0));" in x for x in out))
+
+    def test_a_branch_or_an_unread_register_gives_no_draft(self):
+        self.assertEqual(self.drafts("beq $a0,$zero,.L1", "nop", "j g", "nop"), [])
+        self.assertEqual(self.drafts("j g", "move $a0,$s0"), [])
 
 
 if __name__ == "__main__":

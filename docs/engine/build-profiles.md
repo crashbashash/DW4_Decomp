@@ -306,8 +306,15 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
 
 ## Open questions
 
-* **The remaining units.** 122 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, combat or 2.4:
-  99 in Alchemy, 22 in the game, and `FUN_002252d8` in libmtap, which has MWCC's shape in a GCC library.
+* **Which GCC built the Sony libraries.** Not the one that built CRI and newlib. A function whose only
+  call is a tail call keeps a frame in all 473 cases in CRI ADX, CRI Sofdec and newlib, because
+  2.96-ee-001003-1 saves `ra` for it; no flag changes that. In the Sony libraries none of the 17 such
+  functions has a frame. Those 17 cannot match under the pinned compiler: six are pinned to MWCC 3.0 as a
+  stand-in (`FUN_00109ac8`, `FUN_0010a3d8` to `FUN_0010a408`, `thunk_FUN_00113950`), which says nothing
+  about how they were built, and the rest have no source. How much else in the Sony block this explains
+  is unknown, and no other EE GCC is to hand.
+* **The remaining units.** 121 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, combat or 2.4:
+  98 in Alchemy, 22 in the game, and `FUN_002252d8` in libmtap, which has MWCC's shape in a GCC library.
   Most hold one or two members that differ under b52, and a randomised search over spelling leaves 160
   such functions unmatched. `tools/roll_profile.py` lists the members.
 * **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it. The `goto` guards and one clamp keep their `nop` for now.

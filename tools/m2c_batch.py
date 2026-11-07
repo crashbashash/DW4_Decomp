@@ -32,8 +32,10 @@ import argparse
 import contextlib
 import io
 import collections
+import itertools
 import os
 import re
+import struct
 import sys
 import threading
 import time
@@ -1246,7 +1248,9 @@ def _last_definition(c):
 
 
 def _with_params(c, m, params):
-    return c[:m.start(3)] + params + c[m.end(3):]
+    head = re.sub(r"^(\w[^\n(]*\b%s\()[^()\n]*(\);)$" % re.escape(m.group(2)),
+                  lambda p: p.group(1) + params + p.group(2), c[:m.start(3)], flags=re.M)
+    return head + params + c[m.end(3):]
 
 
 def _tail_argument(asm):
@@ -1269,8 +1273,9 @@ def _tail_argument(asm):
 def argument_variants(c, asm):
     """Drafts restoring what m2c loses when an argument only passes through registers.
 
-    Retail states these outright: an unused first parameter, a value left in `a0` for the callee,
-    a tail call's delay-slot argument, and a word loaded but stored narrower.
+    Retail states these outright: an unused parameter, a value left in `a0` for the callee, a tail
+    call's delay-slot argument, a word loaded but stored narrower, and a byte offset that m2c left
+    on an `int *`, which C would scale a second time.
     """
     found = _last_definition(c)
     if not found:
@@ -1279,9 +1284,10 @@ def argument_variants(c, asm):
     params = m.group(3).strip()
     out = []
     named = [int(x) for x in re.findall(r"\barg(\d)\b", params)]
-    if named and named[0] > 0:
-        lead = ", ".join("int arg%d" % i for i in range(named[0]))
-        out.append(_with_params(c, m, lead + ", " + params))
+    if named and len(named) <= max(named):
+        have = {int(x.group(1)): x.group(0) for x in re.finditer(r"[^,]*\barg(\d)\b", params)}
+        out.append(_with_params(c, m, ", ".join(have.get(i, "int arg%d" % i).strip()
+                                                for i in range(max(named) + 1))))
     body = c[m.end():]
     calls = [x for x in re.finditer(r"\b(\w+)\(([^;{}]*)\);", body)
              if x.group(1) not in ("if", "while", "switch", "return", "sizeof")]
@@ -1304,11 +1310,186 @@ def argument_variants(c, asm):
                 need = ", ".join("void *arg%d" % i for i in range(base + 1))
                 text = _with_params(text, m, need)
             out.append(text)
+    scaled = re.sub(r"\(&(\w+)\[0\] \+ \((\w+) \* 4\)\)", r"((char *)&\1[0] + (\2 * 4))", c)
+    for walker in re.findall(r"\b(\w+) = \(int \*\)\(", c):
+        scaled = re.sub(r"\b%s \+= 4;" % walker, "%s += 1;" % walker, scaled)
+    if scaled != c:
+        out.append(scaled)
     for narrow in ("short", "unsigned short", "char", "unsigned char"):
         widened = c.replace("(%s) *(%s *)" % (narrow, narrow), "(%s) *(int *)" % narrow)
         if widened != c:
             out.append(widened)
     return out
+
+
+_ARG_REGS = ["$a%d" % i for i in range(8)]
+_FLOAT_REGS = ["$f%d" % i for i in range(12, 20)]
+_MEM_TYPES = {"lw": "int", "lh": "short", "lhu": "unsigned short", "lb": "char", "lbu": "unsigned char",
+              "ld": "long long", "lwc1": "float", "sw": "int", "sh": "short", "sb": "unsigned char",
+              "sd": "long long", "swc1": "float"}
+_BINARY = {"addu": "+", "daddu": "+", "subu": "-", "and": "&", "or": "|", "xor": "^", "mult": "*",
+           "mult1": "*", "add.s": "+", "sub.s": "-", "mul.s": "*", "div.s": "/"}
+_SHIFTS = {"sll": "<<", "sra": ">>", "dsll": "<<", "dsra": ">>"}
+_FRAME = re.compile(r"(addiu\s+\$sp,\s*\$sp|[ls]d\s+\$ra,)")
+
+
+class _NotStraightLine(Exception):
+    pass
+
+
+class _TailCall:
+    """What straight-line code holds in each argument register when it reaches a tail call."""
+
+    def __init__(self):
+        self.regs = {"$zero": "0"}
+        self.regs.update({r: "arg%d" % i for i, r in enumerate(_ARG_REGS)})
+        self.regs.update({r: "farg%d" % i for i, r in enumerate(_FLOAT_REGS)})
+        self.high = {}
+        self.consts = {}
+        self.globals = {}
+        self.stmts = []
+
+    def read(self, reg):
+        if reg not in self.regs:
+            raise _NotStraightLine(reg)
+        return self.regs[reg]
+
+    def write(self, reg, value, const=None):
+        self.regs[reg] = value
+        self.high.pop(reg, None)
+        self.consts.pop(reg, None)
+        if const is not None:
+            self.consts[reg] = const
+
+    def place(self, operand, kind):
+        """The C lvalue for a memory operand."""
+        m = re.match(r"%(?:lo|gp_rel)\((\w+)\)\((\$\w+)\)$", operand)
+        if m:
+            self.globals[m.group(1)] = kind
+            return m.group(1)
+        m = re.match(r"(-?(?:0x)?[0-9a-fA-F]+)\((\$\w+)\)$", operand)
+        if not m:
+            raise _NotStraightLine(operand)
+        return "*(%s *)((char *)(%s) + %d)" % (kind, self.read(m.group(2)), int(m.group(1), 0))
+
+    def step(self, line):
+        op, _, rest = line.partition(" ")
+        args = [x.strip() for x in rest.split(",")]
+        if op == "nop" or _FRAME.match(line):
+            return
+        if op == "move":
+            self.write(args[0], self.read(args[1]), self.consts.get(args[1]))
+        elif op == "li":
+            value = int(args[1], 0)
+            self.write(args[0], str(value), value)
+        elif op == "lui":
+            m = re.match(r"%hi\((\w+)\)$", args[1])
+            if m:
+                self.write(args[0], "0")
+                self.high[args[0]] = m.group(1)
+            else:
+                value = int(args[1], 0) << 16
+                self.write(args[0], str(value), value)
+        elif op == "ori" and args[0] == args[1] and args[1] in self.consts:
+            value = self.consts[args[1]] | int(args[2], 0)
+            self.write(args[0], "0x%X" % value, value)
+        elif op == "addiu":
+            m = re.match(r"%lo\((\w+)\)$", args[2])
+            if m:
+                self.globals.setdefault(m.group(1), "int")
+                self.write(args[0], "(int)&%s" % m.group(1))
+            else:
+                self.write(args[0], "(%s + %d)" % (self.read(args[1]), int(args[2], 0)))
+        elif op in ("dsll32", "dsra32") and args[2] == "0x10":
+            if op == "dsll32":
+                self.write(args[0], "(short)%s" % self.read(args[1]))
+            else:
+                self.write(args[0], self.read(args[1]))
+        elif op in _SHIFTS:
+            self.write(args[0], "(%s %s %d)" % (self.read(args[1]), _SHIFTS[op], int(args[2], 0)))
+        elif op in _BINARY and len(args) == 3:
+            self.write(args[0], "(%s %s %s)" % (self.read(args[1]), _BINARY[op], self.read(args[2])))
+        elif op == "mtc1":
+            if args[0] not in self.consts:
+                raise _NotStraightLine(line)
+            value = struct.unpack("<f", struct.pack("<I", self.consts[args[0]] & 0xFFFFFFFF))[0]
+            self.write(args[1], "%sf" % repr(value))
+        elif op in _MEM_TYPES and op[0] == "l":
+            self.write(args[0], self.place(args[1], _MEM_TYPES[op]))
+        elif op in _MEM_TYPES:
+            self.stmts.append("%s = %s;" % (self.place(args[1], _MEM_TYPES[op]), self.read(args[0])))
+        else:
+            raise _NotStraightLine(line)
+
+
+def _tail_arguments(regs, initial):
+    changed = [i for i, r in enumerate(regs) if regs[r] != initial[r]]
+    return max(changed) + 1 if changed else 0
+
+
+def _argument_kind(value, style):
+    """The parameter type a callee declares for `value`.
+
+    MWCC schedules a load into the delay slot only when no conversion stands between it and the
+    argument, so a field's type shows in the code: `loaded` needs none, `converted` needs one.
+    """
+    if style == "loaded" and re.match(r"\(arg\d [+-] \d+\)$", value):
+        return "char *"
+    m = re.match(r"\*\(([\w ]+) \*\)", value)
+    if not m:
+        return "int"
+    if m.group(1) == "long long" or style == "loaded":
+        return m.group(1)
+    return "unsigned int" if style == "converted" and m.group(1) == "int" else "int"
+
+
+def tail_call_drafts(name, asm):
+    """C for a function that is straight-line code ending in a tail call.
+
+    m2c reports a callee's arguments only where it can see them used, so one set in a delay slot,
+    swapped through `v0`, or held in `a4`-`a7` goes missing. This reads the argument registers at
+    the jump instead. verify compares every draft with retail, so a wrong guess costs nothing.
+    """
+    lines = [re.sub(r"\s+", " ", l.split("*/")[-1].strip()) for l in asm.split("\n") if "*/" in l]
+    if len(lines) < 2 or not lines[-2].startswith("j ") or any(_BRANCH_LINE.match(l) for l in lines[:-2]):
+        return []
+    state = _TailCall()
+    initial = dict(state.regs)
+    try:
+        for line in lines[:-2] + lines[-1:]:
+            state.step(line)
+    except (_NotStraightLine, ValueError, IndexError):
+        return []
+    callee = lines[-2].split()[1]
+    ints = {r: state.regs[r] for r in _ARG_REGS}
+    floats = {r: state.regs[r] for r in _FLOAT_REGS}
+    need, need_f = _tail_arguments(ints, initial), _tail_arguments(floats, initial)
+    decls = "".join("extern %s %s;\n" % (k, g) for g, k in state.globals.items() if g != callee)
+    out = []
+    for extra, style, kind in itertools.product((0, 1, 2), ("loaded", "plain", "converted"), ("void", "int")):
+        count = min(8, need + extra)
+        values = [ints[r] for r in _ARG_REGS[:count]] + [floats[r] for r in _FLOAT_REGS[:need_f]]
+        kinds = [_argument_kind(v, style) for v in values[:count]] + ["float"] * need_f
+        if style == "converted":
+            values = ["(unsigned int)" + v if k == "unsigned int" else v for v, k in zip(values, kinds)]
+        seen = " ".join(state.stmts + values)
+        used = [int(x) for x in re.findall(r"\barg(\d)\b", seen)]
+        used_f = [int(x) for x in re.findall(r"\bfarg(\d)\b", seen)]
+        bases = re.findall(r"\(arg(\d) [+-] \d+\)", seen) if "char *" in kinds else []
+        params = ["%s arg%d" % ("char *" if str(i) in bases else "int", i)
+                  for i in range(max(used) + 1 if used else 0)]
+        params += ["float farg%d" % i for i in range(max(used_f) + 1 if used_f else 0)]
+        call = "%s%s(%s);" % ("return " if kind == "int" else "", callee, ", ".join(values))
+        body = "".join("    %s\n" % x for x in state.stmts + [call])
+        text = "%s%s %s(%s);\n%s %s(%s) {\n%s}\n" % (
+            decls, kind, callee, ", ".join(kinds) or "void", kind, name, ", ".join(params) or "void", body)
+        out.append(text)
+        if "(short)arg" in text:
+            narrow = re.sub(r"\(short\)(arg\d)", r"\1", text)
+            for i in set(re.findall(r"\(short\)arg(\d)", text)):
+                narrow = narrow.replace("int arg%s" % i, "short arg%s" % i)
+            out.append(narrow)
+    return list(dict.fromkeys(out))
 
 
 def _error_line(src, rep):
@@ -1433,6 +1614,8 @@ def score_candidate(cand):
             fixed = repair(base)
             if fixed != base:
                 variants.append((fixed, tag + "+r"))
+        if mode == "hybrid":
+            variants = [(x, "tail%d" % i) for i, x in enumerate(tail_call_drafts(name, asm))] + variants
         for vsrc, vmode in variants:
             tmp = os.path.join(cc.scratch_dir(), "m2c_batch_%s%s" % (_tag(), ".cpp" if "vcpp" in vmode else ".c"))
             open(tmp, "w").write("/* %s */\n" % name + vsrc)
@@ -1446,8 +1629,8 @@ def score_candidate(cand):
                 vsrc = mended
                 open(tmp, "w").write("/* %s */\n" % name + vsrc)
                 good, rep = vfy.verify_one(va, tmp, symbols=ctx["symbols"], elf=ctx["elf"])
-            if "compile failed" in rep.splitlines()[0]:
-                nb = 10 ** 9        # a compile failure is NOT a 0-diff candidate
+            if "compile failed" in rep.splitlines()[0] or rep.startswith("object defines no symbol"):
+                nb = 10 ** 9        # neither is a 0-diff candidate
             else:
                 nb = _diffcount(rep)
                 if "size:" in rep:  # a size difference is at least one instruction

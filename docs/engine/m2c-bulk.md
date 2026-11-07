@@ -94,7 +94,9 @@ instruction or register C cannot express, such as the MMI `qfsrv` and `pextlb`, 
 
 `expand_asm` rewrites instructions m2c does not know before it drafts: `adda.s` and `madd.s` become a sum of products, which C writes as `a + b + c * d`; `c1` with function 4 is `sqrt.s`; and `ldl`/`ldr` and `sdl`/`sdr` pairs become 64-bit moves, though they are really a whole-struct copy of a type under 8-byte alignment, so such a draft needs its struct written by hand.
 
-`argument_variants` restores what m2c loses when a value only passes through registers, which retail states outright: an unused first parameter, a value left in `a0` for the callee, a tail call's delay-slot argument, and a word loaded but stored narrower. Nearly all near misses of one or two instructions had one of these causes, and random mutation found almost none of them.
+`argument_variants` restores what m2c loses when a value only passes through registers, which retail states outright: an unused parameter, a value left in `a0` for the callee, a tail call's delay-slot argument, a word loaded but stored narrower, and a byte offset left on an `int *`, which C would scale twice. Nearly all near misses of one or two instructions had one of these causes, and random mutation found almost none of them.
+
+`tail_call_drafts` writes a function that is straight-line code ending in a tail call without m2c: it evaluates the instructions and reads the argument registers, `a4`-`a7` and `f12` onwards included, at the jump. A parameter's type shows in the schedule. MWCC moves a load into the delay slot only when no conversion stands between the load and the argument, so `lbu` there means the callee takes `unsigned char`, and a `lw` done first means a conversion, which an enum parameter would explain.
 
 ## The EE ABI: `mipsee`, `a4-a7`, and the 168 registrar trampolines
 
