@@ -305,7 +305,7 @@
    "foreign_profile.functions": 38,
    "fun_dat_refs": 80725,
    "inline_asm.hardware": 11,
-   "inline_asm.other": 68,
+   "inline_asm.other": 63,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
