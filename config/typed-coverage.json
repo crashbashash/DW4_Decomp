@@ -456,12 +456,12 @@
   "igMemoryPoolContextInfo": 12,
   "igMemoryPoolInfo": 23,
   "igMemoryRefArrayMetaField": 2,
-  "igMemoryRefMetaField": 196,
+  "igMemoryRefMetaField": 204,
   "igMessageInterface": 1,
-  "igMetaEnum": 5,
-  "igMetaField": 393,
+  "igMetaEnum": 8,
+  "igMetaField": 406,
   "igMetaFieldList": 3,
-  "igMetaObject": 699,
+  "igMetaObject": 703,
   "igModel": 1,
   "igModelViewMatrixAttr": 4,
   "igMousePosObserver": 18,
@@ -474,13 +474,13 @@
   "igNamedObjectInfo": 3,
   "igNode": 3,
   "igNodeList": 5,
-  "igObject": 1066,
+  "igObject": 1062,
   "igObjectDirEntry": 17,
   "igObjectList": 657,
   "igObjectListList": 4,
   "igObjectPool": 32,
-  "igObjectRefArrayMetaField": 7,
-  "igObjectRefMetaField": 1384,
+  "igObjectRefArrayMetaField": 8,
+  "igObjectRefMetaField": 1385,
   "igOnOffModel": 1,
   "igPageMemoryPool": 15,
   "igParticleArray": 12,
@@ -521,7 +521,7 @@
   "igRadioGroup": 6,
   "igRadioGroupModel": 4,
   "igRadioGroupSelectedObserver": 1,
-  "igRawRefArrayMetaField": 6,
+  "igRawRefArrayMetaField": 8,
   "igRawRefMetaField": 9,
   "igRay": 2,
   "igRayList": 2,
@@ -539,7 +539,7 @@
   "igShortMetaField": 1,
   "igSorter": 5,
   "igSphere": 10,
-  "igStackMemoryPool": 18,
+  "igStackMemoryPool": 14,
   "igStandardQueue": 7,
   "igStencilFunctionAttr": 18,
   "igStringArrayMetaField": 3,
@@ -606,13 +606,13 @@
    "total": 3
   },
   "engine": {
-   "files": 2020,
-   "offset_casts": 112,
-   "other_members": 332,
-   "recovered": 1377,
-   "recovered_pct": 75.25,
-   "synthetic": 9,
-   "total": 1830
+   "files": 3337,
+   "offset_casts": 679,
+   "other_members": 2273,
+   "recovered": 1889,
+   "recovered_pct": 30.53,
+   "synthetic": 1346,
+   "total": 6187
   },
   "game": {
    "files": 1590,
@@ -624,13 +624,13 @@
    "total": 2907
   },
   "lua": {
-   "files": 10,
-   "offset_casts": 1,
-   "other_members": 37,
+   "files": 8,
+   "offset_casts": 0,
+   "other_members": 56,
    "recovered": 1,
-   "recovered_pct": 2.56,
+   "recovered_pct": 1.75,
    "synthetic": 0,
-   "total": 39
+   "total": 57
   },
   "menu": {
    "files": 3,
@@ -660,19 +660,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 12400,
-   "offset_casts": 5648,
-   "other_members": 12766,
-   "recovered": 20790,
-   "recovered_pct": 43.76,
-   "synthetic": 8310,
-   "total": 47514
+   "files": 11941,
+   "offset_casts": 5833,
+   "other_members": 11827,
+   "recovered": 20302,
+   "recovered_pct": 44.37,
+   "synthetic": 7789,
+   "total": 45751
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 5816,
- "recovered": 24677,
- "synthetic": 8418,
- "total": 56075,
- "typeable": 43
+ "offset_casts": 6567,
+ "recovered": 24701,
+ "synthetic": 9234,
+ "total": 58687,
+ "typeable": 366
 }

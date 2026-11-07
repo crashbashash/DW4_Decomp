@@ -4,7 +4,12 @@ struct L { char pad8[8]; int cnt; char pad12[4]; E **arr; };
 struct S { char pad8[8]; int f8; char pad12[40]; L *f34; };
 extern "C" int FUN_002d5ad0(S *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" int FUN_002d5ad0(S *arg0, int arg1, int arg2, int arg3, int arg4) {
-    int var_s4; int temp_v0; int temp_s5; VC *temp_a0; int temp_s6; int var_s7;
+    VC *temp_a0;
+    int var_s7;
+    int temp_v0;
+    int temp_s6;
+    int temp_s5;
+    int var_s4;
 
     var_s7 = 0;
     var_s4 = 0;

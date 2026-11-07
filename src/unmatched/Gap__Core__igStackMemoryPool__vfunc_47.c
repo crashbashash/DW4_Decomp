@@ -1,17 +1,18 @@
-#include "dw4/reflected.h"
 struct E { unsigned sz : 31; unsigned f : 1; };
-long long Gap__Core__igStackMemoryPool__vfunc_47(igStackMemoryPool *arg0) {
+struct P { char p[116]; int raw; char q[12]; int top; struct E *e; unsigned char active; };
+long long Gap__Core__igStackMemoryPool__vfunc_47(struct P *arg0) {
+    int cur;
     long long total = 0;
     struct E *e;
-    int cur;
-    if (arg0->_isActive == 0) {
+    int raw;
+    if (arg0->active == 0) {
         return 0;
     }
-    cur = arg0->_stackPtr;
-    e = (struct E *)arg0->_nextInt + 1;
-    arg0 = (igStackMemoryPool *)arg0->_rawMemory;
-    while (cur != (int)arg0) {
-        unsigned long long t = e->sz;
+    cur = arg0->top;
+    e = arg0->e + 1;
+    raw = arg0->raw;
+    while (cur != raw) {
+        unsigned t = e->sz;
         e++;
         total += t;
         cur -= t;

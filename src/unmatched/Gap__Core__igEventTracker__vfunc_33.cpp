@@ -1,6 +1,3 @@
-/* The status temporary is read through an inline Code() into a local, the summed value is read
- * through a volatile view so its load precedes the accumulator load, and the loop counter is
- * initialised before the position. */
 extern "C" {
 int FUN_002e2130(void *);
 int FUN_002e2300(void *, int);
@@ -24,10 +21,10 @@ struct T {
 };
 extern "C" void Gap__Core__igEventTracker__vfunc_33(T *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7)
 {
+    int var_s1;
+    int var_s0;
     Ev ev;
     int key = arg3;
-    int var_s0;
-    int var_s1;
     var_s1 = 0;
     var_s0 = 0;
     FUN_002e2130(&ev);

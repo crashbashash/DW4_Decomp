@@ -1,7 +1,3 @@
-/* Copy constructor of a field descriptor. The reference-counted name string is shared with the
- * source, and a fresh default-value buffer is allocated for the copy.
- * DefaultPointerView (matching construct) projects the default-value pointer at +32 as a real pointer:
- * with an int, the load schedule changes. */
 #include "dw4/reflected.h"
 void *igObject_CopyConstructHeader(void *, void *);
 void *igObject_AllocateStorage(void *, int);
@@ -17,8 +13,6 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
     int name;
     int refCount;
     int *nameHeader;
-    unsigned short defaultSize;
-    void *defaultBuffer;
 
     igObject_CopyConstructHeader(dest, source);
     dest->_vtable = (int)g_igMetaField_vtable;
@@ -30,9 +24,6 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
     dest->_internalIndex = source->_internalIndex;
     dest->_externalEnumStorage = source->_externalEnumStorage;
 
-    /* Share the name string: take a reference on the source's, then drop the
-     * reference held by the destination's old name (a string chunk keeps its
-     * count at -4 and its chunk header at -8; the last release frees it). */
     name = source->_fieldName;
     if (name) {
         ++*(int *)(name - 4);
@@ -59,11 +50,7 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
     dest->_isAlikeShallowMethod = source->_isAlikeShallowMethod;
     dest->_persistent = source->_persistent;
 
-    /* Allocate the copy's own default-value storage, then copy the bytes. Size and pointers are
-     * re-read after the allocation on purpose. */
-    ((DefaultPointerView *)dest)->value = igObject_AllocateStorage(dest, dest->_size);
-    defaultSize = dest->_size;
-    defaultBuffer = ((DefaultPointerView *)dest)->value;
-    memcpy(defaultBuffer, ((DefaultPointerView *)source)->value, defaultSize);
+    dest->_default = (int)igObject_AllocateStorage(dest, dest->_size);
+    memcpy((void *)dest->_default, (void *)source->_default, dest->_size);
     return dest;
 }

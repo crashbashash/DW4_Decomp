@@ -8,13 +8,13 @@ extern int DAT_00586f20[4];
 struct L { char pad[8]; int n; int cap; int **arr; };
 void StringList_Resize(struct L *arg0, int arg1) {
     int *a1;
-    int v1;
-    int pool;
-    int *nw;
-    int **slot;
-    int *old;
-    int i;
     int n;
+    int pool;
+    int i;
+    int **slot;
+    int *nw;
+    int v1;
+    int *old;
 
     n = arg0->n;
     if (arg1 > n) {

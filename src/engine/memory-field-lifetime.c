@@ -18,32 +18,6 @@ void igMemoryRefMetaField_DestructValue(igMemoryRefMetaField *field,void *object
         *(void **)((char *)object+field->_offset)=0;
     }
 }
-
-void igMemoryRefMetaField_AddElementRefs(igMemoryRefMetaField *field,void *object){
-    RefHeader *value;RefHeader **data;int i,n;
-    if(!field->_refCounted)return;
-    if(!field->_memType)return;
-    if(!igObject_IsKindOf((void *)field->_memType,g_igObjectRefMetaField_metaObject[0]))return;
-    data=*(RefHeader ***)((char *)object+field->_offset);
-    if(!data)return;
-    n=Memory_GetBufferSize(data)>>2;
-    for(i=0;i<n;i++){value=data[i];if(value)++value->refs;}
-}
-
-void igMemoryRefMetaField_ReleaseElementRefs(igMemoryRefMetaField *field,void *object){
-    int i,n;RefHeader **data;
-    if(!field->_refCounted)return;
-    if(!field->_memType)return;
-    if(!igObject_IsKindOf((void *)field->_memType,g_igObjectRefMetaField_metaObject[0]))return;
-    data=*(RefHeader ***)((char *)object+field->_offset);
-    if(!data)return;
-    n=Memory_GetBufferSize(data)>>2;
-    for(i=0;i<n;i++){
-        RefHeader *value=data[i];
-        if(value){--value->refs;if(!(value->refs&0x7fffff))igObject_Destroy(value);}
-    }
-}
-
 void igMemoryRefMetaField_SetToDefault(igMemoryRefMetaField *field,void *object){
     void *value,*result;
     igMemoryRefMetaField_ReleaseElementRefs(field,object);

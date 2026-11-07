@@ -1,0 +1,239 @@
+void *FUN_00187b50();
+void *FUN_002b5fe0();
+void *FUN_002c45f0();
+int FUN_002eb010();
+int Memory_GetAllocatorBySelector();
+int ObjectList_AppendRetained();
+int StringChunk_ReleaseHeader();
+int StringPool_Construct();
+void *StringPool_Intern();
+int igMetaField_FinalizeDescriptor();
+int igMetaField_SetFieldName();
+int igObject_Destroy();
+extern int DAT_0051e7b8[4];
+extern int DAT_0051e7c8[4];
+extern int DAT_0051e7d0[4];
+extern int DAT_0051e7d8[4];
+extern int DAT_0051e7e0[4];
+extern int DAT_0051e7f0[4];
+extern int DAT_00586f20[4];
+extern int DAT_00587040[4];
+void FUN_00452ca0(int arg0) {
+    void *sp4C;
+    void *sp48;
+    void *sp44;
+    void *sp40;
+    void *sp3C;
+    void *sp38;
+    int *temp_a1;
+    int *temp_a1_2;
+    int *temp_a1_3;
+    int *temp_a1_4;
+    int *temp_a1_5;
+    int *temp_a1_6;
+    int temp_v0;
+    int temp_v0_2;
+    int temp_v0_3;
+    int temp_v0_4;
+    int temp_v0_5;
+    int temp_v0_6;
+    int var_v0_10;
+    int var_v0_12;
+    int var_v0_2;
+    int var_v0_4;
+    int var_v0_6;
+    int var_v0_8;
+    void *temp_s1;
+    void *temp_s1_2;
+    void *temp_s1_3;
+    void *temp_s1_4;
+    void *temp_s1_5;
+    void *temp_s1_6;
+    void *var_v0;
+    void *var_v0_11;
+    void *var_v0_3;
+    void *var_v0_5;
+    void *var_v0_7;
+    void *var_v0_9;
+
+    temp_s1 = (void *)(FUN_002b5fe0(Memory_GetAllocatorBySelector(DAT_00587040[0])));
+    if (&DAT_0051e7b8[0] == 0) {
+        var_v0 = (void *)(0);
+    } else {
+        if (DAT_00586f20[0] == 0) {
+            var_v0_2 = FUN_002eb010(0x10);
+            if (var_v0_2 != 0) {
+                var_v0_2 = StringPool_Construct(var_v0_2);
+            }
+            DAT_00586f20[0] = var_v0_2;
+        }
+        var_v0 = (void *)(StringPool_Intern(DAT_00586f20[0], &DAT_0051e7b8[0]));
+    }
+    sp4C = (void *)(var_v0);
+    igMetaField_SetFieldName(temp_s1, &sp4C);
+    if (sp4C != 0) {
+        temp_a1 = (int *)((char *)sp4C - 8);
+        temp_v0 = *(int *)((char *)(sp4C) - 4) - 1;
+        *(int *)((char *)(sp4C) - 4) = temp_v0;
+        if (temp_v0 == 0) {
+            StringChunk_ReleaseHeader(*temp_a1, temp_a1);
+        }
+    }
+    *(int *)((char *)(temp_s1) + 8) = 0;
+    igMetaField_FinalizeDescriptor(temp_s1);
+    ObjectList_AppendRetained(arg0, temp_s1);
+    *(int *)((char *)(temp_s1) + 4) = (int)((int) (*(int *)((char *)(temp_s1) + 4) - 1));
+    if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1) + 4) << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(temp_s1);
+    }
+    temp_s1_2 = (void *)(FUN_002c45f0(Memory_GetAllocatorBySelector(DAT_00587040[0])));
+    if (&DAT_0051e7c8[0] == 0) {
+        var_v0_3 = (void *)(0);
+    } else {
+        if (DAT_00586f20[0] == 0) {
+            var_v0_4 = FUN_002eb010(0x10);
+            if (var_v0_4 != 0) {
+                var_v0_4 = StringPool_Construct(var_v0_4);
+            }
+            DAT_00586f20[0] = var_v0_4;
+        }
+        var_v0_3 = (void *)(StringPool_Intern(DAT_00586f20[0], &DAT_0051e7c8[0]));
+    }
+    sp48 = (void *)(var_v0_3);
+    igMetaField_SetFieldName(temp_s1_2, &sp48);
+    if (sp48 != 0) {
+        temp_a1_2 = (int *)((char *)sp48 - 8);
+        temp_v0_2 = *(int *)((char *)(sp48) - 4) - 1;
+        *(int *)((char *)(sp48) - 4) = temp_v0_2;
+        if (temp_v0_2 == 0) {
+            StringChunk_ReleaseHeader(*temp_a1_2, temp_a1_2);
+        }
+    }
+    *(int *)((char *)(temp_s1_2) + 8) = 4;
+    igMetaField_FinalizeDescriptor(temp_s1_2);
+    ObjectList_AppendRetained(arg0, temp_s1_2);
+    *(int *)((char *)(temp_s1_2) + 4) = (int)((int) (*(int *)((char *)(temp_s1_2) + 4) - 1));
+    if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_2) + 4) << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(temp_s1_2);
+    }
+    temp_s1_3 = (void *)(FUN_00187b50(Memory_GetAllocatorBySelector(DAT_00587040[0])));
+    if (&DAT_0051e7d0[0] == 0) {
+        var_v0_5 = (void *)(0);
+    } else {
+        if (DAT_00586f20[0] == 0) {
+            var_v0_6 = FUN_002eb010(0x10);
+            if (var_v0_6 != 0) {
+                var_v0_6 = StringPool_Construct(var_v0_6);
+            }
+            DAT_00586f20[0] = var_v0_6;
+        }
+        var_v0_5 = (void *)(StringPool_Intern(DAT_00586f20[0], &DAT_0051e7d0[0]));
+    }
+    sp44 = (void *)(var_v0_5);
+    igMetaField_SetFieldName(temp_s1_3, &sp44);
+    if (sp44 != 0) {
+        temp_a1_3 = (int *)((char *)sp44 - 8);
+        temp_v0_3 = *(int *)((char *)(sp44) - 4) - 1;
+        *(int *)((char *)(sp44) - 4) = temp_v0_3;
+        if (temp_v0_3 == 0) {
+            StringChunk_ReleaseHeader(*temp_a1_3, temp_a1_3);
+        }
+    }
+    *(int *)((char *)(temp_s1_3) + 8) = 8;
+    igMetaField_FinalizeDescriptor(temp_s1_3);
+    ObjectList_AppendRetained(arg0, temp_s1_3);
+    *(int *)((char *)(temp_s1_3) + 4) = (int)((int) (*(int *)((char *)(temp_s1_3) + 4) - 1));
+    if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_3) + 4) << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(temp_s1_3);
+    }
+    temp_s1_4 = (void *)(FUN_00187b50(Memory_GetAllocatorBySelector(DAT_00587040[0])));
+    if (&DAT_0051e7d8[0] == 0) {
+        var_v0_7 = (void *)(0);
+    } else {
+        if (DAT_00586f20[0] == 0) {
+            var_v0_8 = FUN_002eb010(0x10);
+            if (var_v0_8 != 0) {
+                var_v0_8 = StringPool_Construct(var_v0_8);
+            }
+            DAT_00586f20[0] = var_v0_8;
+        }
+        var_v0_7 = (void *)(StringPool_Intern(DAT_00586f20[0], &DAT_0051e7d8[0]));
+    }
+    sp40 = (void *)(var_v0_7);
+    igMetaField_SetFieldName(temp_s1_4, &sp40);
+    if (sp40 != 0) {
+        temp_a1_4 = (int *)((char *)sp40 - 8);
+        temp_v0_4 = *(int *)((char *)(sp40) - 4) - 1;
+        *(int *)((char *)(sp40) - 4) = temp_v0_4;
+        if (temp_v0_4 == 0) {
+            StringChunk_ReleaseHeader(*temp_a1_4, temp_a1_4);
+        }
+    }
+    *(int *)((char *)(temp_s1_4) + 8) = 0x10;
+    igMetaField_FinalizeDescriptor(temp_s1_4);
+    ObjectList_AppendRetained(arg0, temp_s1_4);
+    *(int *)((char *)(temp_s1_4) + 4) = (int)((int) (*(int *)((char *)(temp_s1_4) + 4) - 1));
+    if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_4) + 4) << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(temp_s1_4);
+    }
+    temp_s1_5 = (void *)(FUN_00187b50(Memory_GetAllocatorBySelector(DAT_00587040[0])));
+    if (&DAT_0051e7e0[0] == 0) {
+        var_v0_9 = (void *)(0);
+    } else {
+        if (DAT_00586f20[0] == 0) {
+            var_v0_10 = FUN_002eb010(0x10);
+            if (var_v0_10 != 0) {
+                var_v0_10 = StringPool_Construct(var_v0_10);
+            }
+            DAT_00586f20[0] = var_v0_10;
+        }
+        var_v0_9 = (void *)(StringPool_Intern(DAT_00586f20[0], &DAT_0051e7e0[0]));
+    }
+    sp3C = (void *)(var_v0_9);
+    igMetaField_SetFieldName(temp_s1_5, &sp3C);
+    if (sp3C != 0) {
+        temp_a1_5 = (int *)((char *)sp3C - 8);
+        temp_v0_5 = *(int *)((char *)(sp3C) - 4) - 1;
+        *(int *)((char *)(sp3C) - 4) = temp_v0_5;
+        if (temp_v0_5 == 0) {
+            StringChunk_ReleaseHeader(*temp_a1_5, temp_a1_5);
+        }
+    }
+    *(int *)((char *)(temp_s1_5) + 8) = 0x18;
+    igMetaField_FinalizeDescriptor(temp_s1_5);
+    ObjectList_AppendRetained(arg0, temp_s1_5);
+    *(int *)((char *)(temp_s1_5) + 4) = (int)((int) (*(int *)((char *)(temp_s1_5) + 4) - 1));
+    if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_5) + 4) << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(temp_s1_5);
+    }
+    temp_s1_6 = (void *)(FUN_00187b50(Memory_GetAllocatorBySelector(DAT_00587040[0])));
+    if (&DAT_0051e7f0[0] == 0) {
+        var_v0_11 = (void *)(0);
+    } else {
+        if (DAT_00586f20[0] == 0) {
+            var_v0_12 = FUN_002eb010(0x10);
+            if (var_v0_12 != 0) {
+                var_v0_12 = StringPool_Construct(var_v0_12);
+            }
+            DAT_00586f20[0] = var_v0_12;
+        }
+        var_v0_11 = (void *)(StringPool_Intern(DAT_00586f20[0], &DAT_0051e7f0[0]));
+    }
+    sp38 = (void *)(var_v0_11);
+    igMetaField_SetFieldName(temp_s1_6, &sp38);
+    if (sp38 != 0) {
+        temp_a1_6 = (int *)((char *)sp38 - 8);
+        temp_v0_6 = *(int *)((char *)(sp38) - 4) - 1;
+        *(int *)((char *)(sp38) - 4) = temp_v0_6;
+        if (temp_v0_6 == 0) {
+            StringChunk_ReleaseHeader(*temp_a1_6, temp_a1_6);
+        }
+    }
+    *(int *)((char *)(temp_s1_6) + 8) = 0x20;
+    igMetaField_FinalizeDescriptor(temp_s1_6);
+    ObjectList_AppendRetained(arg0, temp_s1_6);
+    *(int *)((char *)(temp_s1_6) + 4) = (int)((int) (*(int *)((char *)(temp_s1_6) + 4) - 1));
+    if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_6) + 4) << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(temp_s1_6);
+    }
+}

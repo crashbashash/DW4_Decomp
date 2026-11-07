@@ -5260,5 +5260,141 @@
       "lua_tostring__FP9lua_Statei": "0x00247160"
     },
     "symbol": "errormessage__FP9lua_State"
+  },
+  "0x002fe600": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__1KFv": "0x002e2300"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x002eedd0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e8670": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e9ce0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e4a40": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e42d0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e82a0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__3RefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "stripped": [
+      "__dt__14TypeListHolderFv"
+    ]
+  },
+  "0x002e3a60": {
+    "emitted": {},
+    "duplicates": {},
+    "externals": {},
+    "stripped": [
+      "__dt__12StreamHolderFv"
+    ]
+  },
+  "0x002e18f0": {
+    "emitted": {},
+    "duplicates": {},
+    "externals": {},
+    "stripped": [
+      "__dt__15TrackerLockHoldFv"
+    ]
+  },
+  "0x002dfcd0": {
+    "emitted": {},
+    "stripped": [
+      "__dt__22EventTrackerScopedLockFv"
+    ]
+  },
+  "0x0032c4d0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__15FolderObjectRefFv": "0x00130140",
+      "__dt__15FolderStringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0032c700": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__15FolderObjectRefFv": "0x00130140",
+      "__dt__15FolderStringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0032c930": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__15FolderObjectRefFv": "0x00130140",
+      "__dt__15FolderStringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0032cb50": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__15FolderObjectRefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0032a280": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__13DumpObjectRefFv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
   }
 }

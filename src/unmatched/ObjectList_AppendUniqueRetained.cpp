@@ -1,17 +1,25 @@
 extern "C" {
 int ObjectList_AppendRetained(void *, int);
 }
+struct K { volatile int p; K(int x) { p = x; } };
 struct L {
     int a, b; int n; int c; int *items;
-    int IndexOf(int k) { int i; for (i = 0; i < n; i++) { if (k == items[i]) { return i; } } return -1; }
 };
+inline int indexOf(L *l, const K &v) {
+    int i;
+    int n = l->n;
+    int key = v.p;
+    for (i = 0; i < n; i++) {
+        if (key == l->items[i]) {
+            return i;
+        }
+    }
+    return -1;
+}
 extern "C" int ObjectList_AppendUniqueRetained(L *arg0, int arg1) {
-    volatile int key = arg1;
-    int n = arg0->n;
-    int kk = key;
-    int r = arg0->IndexOf(kk);
+    int r = indexOf(arg0, K(arg1));
     if (r == -1) {
-        r = n;
+        r = arg0->n;
         ObjectList_AppendRetained(arg0, arg1);
     }
     return r;

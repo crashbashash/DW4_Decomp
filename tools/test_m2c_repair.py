@@ -50,6 +50,36 @@ class ArgumentVariants(unittest.TestCase):
         out = m2c_batch.argument_variants(src, "")
         self.assertTrue(any("void f(int arg0, int arg1);" in x for x in out))
 
+    def test_a_word_widened_for_a_shift_is_loaded_as_a_word(self):
+        src = "void f(void *p) {\n    if (((long long) *(long long *)((char *)(p) + 4) << 0x29) == 0) {\n    }\n}\n"
+        self.assertTrue(any("*(int *)((char *)(p) + 4) << 0x29" in x for x in m2c_batch.argument_variants(src, "")))
+
+    def test_a_released_global_is_read_once(self):
+        src = ("void f(void) {\n    *(int *)((char *)(D[0]) + 4) = (int)((int) (*(int *)((char *)(D[0]) + 4) - 1));\n"
+               "    if (((long long) *(long long *)((char *)(D[0]) + 4) << 0x29) == 0) {\n"
+               "        igObject_Destroy(D[0]);\n    }\n}\n")
+        out = m2c_batch.argument_variants(src, "")
+        self.assertTrue(any("void *held = (void *)D[0];" in x and "igObject_Destroy(held);" in x for x in out))
+
+    def test_a_rotated_loop_becomes_a_while(self):
+        src = "void f(int a) {\nloop_2:\n    if (a < 3) {\n        a += 1;\n        goto loop_2;\n    }\n}\n"
+        self.assertEqual(m2c_batch.unrotate_loops(src), "void f(int a) {\n    while (a < 3) {\n        a += 1;\n    }\n}\n")
+
+    def test_arguments_go_in_the_registers_retail_sets(self):
+        asm = "/* 0 */ move $a3, $zero\n/* 4 */ jal g\n/* 8 */ nop\n"
+        out = m2c_batch.place_arguments("void f(void) {\n    g(0);\n}\n", asm)
+        self.assertIn("g(arg0, arg1, arg2, 0);", out)
+        self.assertIn("void f(int arg0, int arg1, int arg2) {", out)
+
+    def test_a_passed_through_first_argument_is_kept(self):
+        asm = "/* 0 */ addiu $a1, $s1, 1\n/* 4 */ jal g\n/* 8 */ li $a2, 4\n"
+        out = m2c_batch.place_arguments("void f(void *arg0) {\n    g(x + 1, 4);\n}\n", asm)
+        self.assertIn("g(arg0, x + 1, 4);", out)
+
+    def test_locals_are_reversed_for_b52(self):
+        src = "void f(void) {\n    int a;\n    char *b;\n    void *c;\n\n    a = 1;\n}\n"
+        self.assertEqual(m2c_batch.reverse_locals(src), "void f(void) {\n    void *c;\n    char *b;\n    int a;\n\n    a = 1;\n}\n")
+
     def test_an_unused_middle_parameter_comes_back(self):
         out = m2c_batch.argument_variants("void f(void *arg0, int arg2) {\n    g(arg0, arg2);\n}\n", "")
         self.assertTrue(any("void f(void *arg0, int arg1, int arg2) {" in x for x in out))

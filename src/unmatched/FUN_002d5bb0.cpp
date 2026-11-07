@@ -6,11 +6,11 @@ extern "C" {
 void FUN_002d5bb0(A *arg0, int arg1, int arg2);
 }
 void FUN_002d5bb0(A *arg0, int arg1, int arg2) {
-    int var_s0;
-    int var_s1;
-    E *temp_a0;
-    L *temp_s2;
     int var_s3;
+    L *temp_s2;
+    E *temp_a0;
+    int var_s1;
+    int var_s0;
 
     var_s3 = arg1;
     temp_s2 = arg0->vX()->f52;

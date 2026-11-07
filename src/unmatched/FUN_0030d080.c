@@ -1,11 +1,11 @@
 typedef struct B { char pad8[8]; int cnt; char pad12[4]; char *data; } B;
 typedef struct A { char pad16[16]; B *b; } A;
 int FUN_0030d080(A *arg0) {
-    int i;
+    B *b;
+    char *p;
     int n;
     int count;
-    char *p;
-    B *b;
+    int i;
 
     b = arg0->b;
     p = b->data;

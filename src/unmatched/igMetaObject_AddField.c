@@ -6,12 +6,11 @@ int igMetaField_FinalizeDescriptor();
 int igMetaObject_CountTree();
 
 void igMetaObject_AddField(igMetaObject *arg0, void *arg1) {
-    /* matching construct: variant search — decl order [4, 3, 2, 1, 0]; the unit compiler (3.0 (2001-11-26) -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
-    int i;
-    int n;
-    char *m;
-    int idx;
     int flags;
+    int idx;
+    char *m;
+    int n;
+    int i;
 
     flags = arg0->_validity;
     arg0->_validity = flags & ~4;

@@ -9,9 +9,9 @@ void FUN_002f08d0(igMemoryPool *arg0, char *arg1);
 }
 struct F { VT v; };
 void FUN_002f08d0(igMemoryPool *arg0, char *arg1) {
+    long long s4, s3, s2, s1, s0, s6, s7, s8;
+    long long sp120, sp110, sp100, spF0;
     __int128 spE0;
-    long long spF0, sp100, sp110, sp120;
-    long long s8, s7, s6, s0, s1, s2, s3, s4;
     VT *o = (VT *)arg0;
 
     if (arg1 != 0 && *arg1 != 0) {

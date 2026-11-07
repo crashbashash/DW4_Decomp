@@ -4,7 +4,12 @@ extern int DAT_004fb418[4];
 struct L { char pad8[8]; int n; int cap; int *data; };
 struct S { char pad16[16]; struct L *f16; };
 void Gap__Core__igCallStackTable__vfunc_24(int *arg0, struct S *arg1, int arg2) {
-    struct L *l; int t, n, *data, cnt, i;
+    struct L *l;
+    int i;
+    int cnt;
+    int *data;
+    int n;
+    int t;
     l = arg1->f16;
     data = l->data;
     n = l->n;

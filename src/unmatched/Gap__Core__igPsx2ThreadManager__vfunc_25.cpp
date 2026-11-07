@@ -16,11 +16,13 @@ struct L {
 };
 void Gap__Core__igPsx2ThreadManager__vfunc_25(void *arg0, int arg1) {
     volatile int sp4C;
-    int tid = GetThreadId();
-    int old = ChangeThreadPriority(tid, 1);
-    L *list;
-    int i;
     int key;
+    int i;
+    int old;
+    L *list;
+    int tid;
+    tid = GetThreadId();
+    old = ChangeThreadPriority(tid, 1);
     sp4C = arg1;
     list = *(L **)((char *)arg0 + 8);
     key = sp4C;

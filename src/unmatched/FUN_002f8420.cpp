@@ -9,7 +9,7 @@ class VB { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 struct Z { int w[7]; int f28; };
 extern "C" void FUN_002f8420(VA *arg0, char *arg1, VB *arg2);
 void FUN_002f8420(VA *arg0, char *arg1, VB *arg2) {
-    int s0, s1, s2;
+    int s2, s1, s0;
     Z *s6;
     s1 = 0;
     s0 = -1;

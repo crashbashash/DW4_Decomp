@@ -1,14 +1,15 @@
+struct R { int w0; R() {} R(const R &o) { w0 = o.w0; } bool operator==(const R &o) const { return w0 == o.w0; } };
 struct T { int w0; int refs; };
 struct C { char p0[80]; int f80; int f84; char p88[12]; int f100; char p104[64]; unsigned char f168; char p169[23]; int f192; char p196[20]; int f216; char p220[40]; int f260; int f264; char p268[12]; int f280; };
 extern "C" {
 int FUN_002e3a10(...);
-int FUN_002e7030(...);
+int FUN_002e7030(R *, C *);
 int FUN_002fff90(T*, int*, C*, int, unsigned char);
 int FUN_00300250(T*, int*, C*, int, unsigned char);
 int igObject_IsKindOf(...);
 int igObject_Destroy(...);
 int igObject_RegisterInstance(...);
-extern int DAT_004fb418[4];
+extern R DAT_004fb418[2];
 extern int DAT_00586710[4];
 }
 class MF {
@@ -29,21 +30,18 @@ int igIGBFile_ReadObject(T **arg0, C *arg1)
 {
   int sp5C;
   T * volatile sp58;
-  int sp54;
-  int *ps;
-  int **pps;
   int *s0;
   T *s3, *r2;
   T *t;
-  int r;
   int v;
+  int r;
+  R sp54;
   int o = arg1->f80;
   int ea = arg1->f264 + o;
   int t0;
   if (o > arg1->f260 - 9 || (t0 = arg1->f216 * 4 + (arg1->f80 + FUN_002e3a10(arg1, ea)), arg1->f260 < t0)) {
     r = FUN_002e7030(&sp54, arg1);
-    pps = &ps; ps = &sp54;
-    if (**pps == DAT_004fb418[0]) {
+    if (*(R *)(int)&sp54 == DAT_004fb418[0]) {
       *arg0 = 0;
       t = *arg0;
       if (t != 0) t->refs = t->refs + 1;

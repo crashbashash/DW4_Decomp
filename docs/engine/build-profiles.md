@@ -313,8 +313,8 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
   stand-in (`FUN_00109ac8`, `FUN_0010a3d8` to `FUN_0010a408`, `thunk_FUN_00113950`), which says nothing
   about how they were built, and the rest have no source. How much else in the Sony block this explains
   is unknown, and no other EE GCC is to hand.
-* **The remaining units.** 121 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, combat or 2.4:
-  98 in Alchemy, 22 in the game, and `FUN_002252d8` in libmtap, which has MWCC's shape in a GCC library.
+* **The remaining units.** 87 MWCC units besides zlib and libpng stay on 3.0, 3.0.3, combat or 2.4:
+  64 in Alchemy, 22 in the game, and `FUN_002252d8` in libmtap, which has MWCC's shape in a GCC library.
   Most hold one or two members that differ under b52, and a randomised search over spelling leaves 160
   such functions unmatched. `tools/roll_profile.py` lists the members.
 * **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it. The `goto` guards and one clamp keep their `nop` for now.

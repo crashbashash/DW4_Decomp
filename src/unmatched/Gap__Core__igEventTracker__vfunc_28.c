@@ -1,10 +1,10 @@
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];
 void Gap__Core__igEventTracker__vfunc_28(int *arg0, char *arg1, char *arg2, int *arg3) {
-    int t;
-    int sh;
     int acc;
     int c;
+    int sh;
+    int t;
     sh = 0;
     acc = 0;
     arg2 = (char *)(*(int *)(*(char **)(arg1 + 80) + 16) + (int)arg2);

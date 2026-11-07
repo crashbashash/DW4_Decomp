@@ -65,10 +65,10 @@ struct FieldVector {int vt,refs;VisitorFieldView **data;int count;};
 extern "C" int igMetaObject_GetFieldCount(igMetaObject *);
 extern "C" int g_igObject_metaObject[4];
 extern "C" void igObject_VisitFields(VisitorObjectView *object,Visitor callback,void *context){
-    VisitorFieldView *field;
-    int i;
-    int count;
     FieldVector *fields;
+    int count;
+    int i;
+    VisitorFieldView *field;
     if(callback(object,0,context)==1)return;
     object->Prepare();
     fields=(FieldVector *)object->Meta()->_metaFields;

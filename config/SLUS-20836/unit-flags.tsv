@@ -46,34 +46,7 @@
 0x002ae010	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2ace48 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x002ae290	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2ace48 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x002b5148	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2b50e8 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
-0x002bc9c0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPluginRepository profile default -O3 -Iinclude exceptions off does not reproduce it
-0x002c38c0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igIGBFile profile default -O3 -Iinclude exceptions off does not reproduce it
-0x002dd0f0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igEventTracker_2dce80 profile 3.0.3 -O3 -Iinclude exceptions off does not reproduce it
-0x002df8a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igEventTracker_2dce80 profile 3.0.3 -O3 -Iinclude exceptions off does not reproduce it
-0x002dff30	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igEventTracker_2dce80 profile 3.0.3 -O3 -Iinclude exceptions off does not reproduce it
-0x002e78b0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igIGBFile_2e6090 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002e9560	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igIGBFile_2e6090 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002eb980	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igLocationTable_2eb220 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002ec600	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMediaFile_2ec560 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002f41e0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMemoryPoolContextInfo_2f25d0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002f78b0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMemoryPoolContextInfo_2f25d0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002f8420	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMemoryPoolContextInfo_2f25d0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002fab40	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMemoryRefMetaField_2fa9d0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002fabf0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMemoryRefMetaField_2fa9d0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002fdf40	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMetaObject_2fd7c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002fe000	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMetaObject_2fd7c0 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x002fe810	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igMetaObject_2fe470 profile default -O3 -Iinclude exceptions off does not reproduce it
 0x002fede0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igNamedObjectInfo_2fed50 profile default -O3 -Iinclude exceptions off does not reproduce it
-0x002ff930	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igObject_2fef20 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x00300490	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igObject_2fef20 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x003006a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igObject_2fef20 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x00300b00	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igObject_2fef20 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x003273e0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igProgramFile_327140 profile default -O3 -Iinclude exceptions off does not reproduce it
-0x00327610	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igStackMemoryPool_3275e0 profile 3.0.3 -O3 -Iinclude exceptions off does not reproduce it
-0x00327670	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igStackMemoryPool_3275e0 profile 3.0.3 -O3 -Iinclude exceptions off does not reproduce it
-0x00329980	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2CallStackTracer_328e00 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x00329e70	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2CallStackTracer_328e00 profile combat -O3 -Iinclude exceptions off does not reproduce it
-0x00330570	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igPsx2ThreadManager_330460 profile default -O3 -Iinclude exceptions off does not reproduce it
 0x00336580	-O3 -Iinclude	provisional	unit igMovieInfo profile combat -O3,p -Iinclude exceptions on does not reproduce it
 0x00377990	-O3,p -Iinclude -Cpp_exceptions off	provisional	unit beAction2_377700 profile default -O3,p -Iinclude exceptions on does not reproduce it
 0x003bd850	-O3,p -Iinclude	provisional	unit beNDMWPanelWazaInfoRam profile default -O3 -Iinclude exceptions on does not reproduce it

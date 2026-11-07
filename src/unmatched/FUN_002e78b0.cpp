@@ -10,8 +10,8 @@ void igObject_Destroy(T *);
 extern int DAT_004fb410[4];
 }
 extern "C" void FUN_002e78b0(int *arg0, O *arg1) {
-    int temp_s0;
     int temp_s1;
+    int temp_s0;
     int i;
     T *temp_a0;
     T *temp_a0_2;

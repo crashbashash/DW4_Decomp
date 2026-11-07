@@ -4,10 +4,10 @@ class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 struct L { VC **arr; int n; };
 extern "C" { extern L *DAT_00586f60[4]; extern L *DAT_00586f58[4]; }
 void FUN_002f0760(int arg0) {
-    int var_s1;
-    VC *temp_s1;
     int var_s2;
+    VC *temp_s1;
     VC *temp_s2;
+    int var_s1;
 
     var_s2 = DAT_00586f60[0]->n - 1;
     while (var_s2 >= 0) {

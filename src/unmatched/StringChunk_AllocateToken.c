@@ -4,7 +4,11 @@ void *StringChunk_AllocateObject();
 void *StringChunk_Construct();
 int StringChunk_TakeBlock();
 int StringChunk_AllocateToken(struct C *arg0, int arg1, struct C **arg2, int *arg3) {
-    unsigned int var_s0; struct C *var_s1; int var_s2; unsigned int temp_s3; void *var_v0;
+    unsigned int temp_s3;
+    int var_s2;
+    void *var_v0;
+    struct C *var_s1;
+    unsigned int var_s0;
 
     temp_s3 = ((arg1 + 3) & ~3) + 8;
     var_s2 = 0;

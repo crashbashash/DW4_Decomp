@@ -4,10 +4,11 @@ typedef struct Ob { char pad12[12]; R *f12; Lst *f16; } Ob;
 int igObject_Destroy();
 
 void FUN_00309870(Ob *arg0) {
-    int i;
+    int m;
     int j;
-    int n;
     Lst *l;
+    int n;
+    int i;
     R *p;
     R *q;
 
@@ -22,8 +23,8 @@ void FUN_00309870(Ob *arg0) {
             }
         }
     }
-    n = l->n;
-    for (j = 0; j < n; j++) {
+    m = l->n;
+    for (j = 0; j < m; j++) {
         l->data[j] = 0;
     }
     l->n = 0;

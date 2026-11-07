@@ -1270,12 +1270,106 @@ def _tail_argument(asm):
     return None
 
 
+_RELEASE = re.compile(
+    r"^( *)\*\(int \*\)\(\(char \*\)\((?P<g>\w+\[0\])\) \+ 4\) = .*\n"
+    r" *if \((?P<test>.*\(\(char \*\)\((?P=g)\) \+ 4\).*)\) \{\n"
+    r" *igObject_Destroy\((?P=g)\);\n *\}\n", re.M)
+
+
+def _held_release(m):
+    """A global released through a local: retail reads it once, m2c at every use."""
+    pad = m.group(1)
+    test = m.group("test").replace("(%s)" % m.group("g"), "(held)")
+    return ("%s{\n%s    void *held = (void *)%s;\n"
+            "%s    *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;\n"
+            "%s    if (%s) {\n%s        igObject_Destroy(held);\n%s    }\n%s}\n"
+            % (pad, pad, m.group("g"), pad, pad, test, pad, pad, pad))
+
+
+_ROTATED_LOOP = re.compile(r"^loop_(\d+):\n( *)if \((.*)\) \{\n(.*?)^\2    goto loop_\1;\n\2\}\n", re.M | re.S)
+
+
+def unrotate_loops(c):
+    """`loop: if (c) { ...; goto loop; }` as the `while` it was: MWCC lays the two out differently."""
+    def sub(m):
+        if len(re.findall(r"\bloop_%s\b" % m.group(1), c)) != 2:
+            return m.group(0)
+        return "%swhile (%s) {\n%s%s}\n" % (m.group(2), m.group(3), m.group(4), m.group(2))
+    return _ROTATED_LOOP.sub(sub, c)
+
+
+def _written_arguments(asm):
+    """{callee: argument registers written before its call}, for callees called with one such set."""
+    lines = [re.sub(r"\s+", " ", l.split("*/")[-1].strip()) for l in asm.split("\n") if "*/" in l]
+    seen = {}
+    start = 0
+    for i, line in enumerate(lines):
+        if not _BRANCH_LINE.match(line) and not re.match(r"\.?L\w+:", line):
+            continue
+        if line.startswith("jal ") and i + 1 < len(lines):
+            window = lines[start:i] + lines[i + 1:i + 2]
+            regs = {int(x) for l in window for x in re.findall(r"^\w[\w.]* \$a(\d)\b", l)}
+            seen.setdefault(line.split()[1], set()).add(frozenset(regs))
+        start = i + 2
+    return {k: v.pop() for k, v in seen.items() if len(v) == 1}
+
+
+def place_arguments(c, asm):
+    """Put each call's arguments in the registers retail sets, passing the skipped ones through.
+
+    m2c numbers a call's arguments from `a0`, so `X(0)` may really be a zero in `a3`, or `a0` may
+    be a value the caller received and left alone.
+    """
+    found = _last_definition(c)
+    if not found:
+        return c
+    written = _written_arguments(asm)
+    head, body = c[:found[0].end()], c[found[0].end():]
+    params = found[0].group(3)
+    need = 0
+    for callee, regs in written.items():
+        if not regs:
+            continue
+        for m in reversed(list(re.finditer(r"\b%s\(" % re.escape(callee), body))):
+            close = _match_paren(body, m.end() - 1)
+            args = _vc_split_args(body[m.end():close - 1])
+            args = [a.strip() for a in args if a.strip()]
+            if len(args) != len(regs) or sorted(regs) == list(range(len(regs))):
+                continue
+            give = iter(args)
+            placed = [next(give) if i in regs else "arg%d" % i for i in range(max(regs) + 1)]
+            need = max([need] + [i + 1 for i in range(max(regs) + 1) if i not in regs])
+            body = body[:m.end()] + ", ".join(placed) + body[close - 1:]
+    text = head + body
+    if need:
+        have = {int(x.group(1)): x.group(0).strip() for x in re.finditer(r"[^,]*\barg(\d)\b", params)}
+        top = max([need - 1] + list(have))
+        text = _with_params(text, found[0], ", ".join(have.get(i, "int arg%d" % i) for i in range(top + 1)))
+    return text
+
+
+_LOCALS = re.compile(r"((?:^    [\w ]+[ *]\w+(?:\[\w+\])?;\n){2,})", re.M)
+
+
+def reverse_locals(c):
+    """A function's locals in reverse: b52 gives the first declared the higher register and stack slot."""
+    found = _last_definition(c)
+    if not found:
+        return c
+    head, body = c[:found[0].end()], c[found[0].end():]
+    m = _LOCALS.search(body)
+    if not m or body[:m.start()].strip():
+        return c
+    return head + body[:m.start()] + "".join(reversed(m.group(1).splitlines(True))) + body[m.end():]
+
+
 def argument_variants(c, asm):
     """Drafts restoring what m2c loses when an argument only passes through registers.
 
     Retail states these outright: an unused parameter, a value left in `a0` for the callee, a tail
-    call's delay-slot argument, a word loaded but stored narrower, and a byte offset that m2c left
-    on an `int *`, which C would scale a second time.
+    call's delay-slot argument, a word loaded but stored narrower, a byte offset that m2c left
+    on an `int *`, which C would scale a second time, and a word widened for a 64-bit shift, which
+    is how `igObject`'s 23-bit reference count is tested.
     """
     found = _last_definition(c)
     if not found:
@@ -1310,11 +1404,29 @@ def argument_variants(c, asm):
                 need = ", ".join("void *arg%d" % i for i in range(base + 1))
                 text = _with_params(text, m, need)
             out.append(text)
+    word = re.sub(r"\(long long\) \*\(long long \*\)(\(\(char \*\)\([\w\[\]]+\) \+ \d+\)) << 0x",
+                  r"(long long) *(int *)\1 << 0x", c)
+    if word != c:
+        out.append(word)
+        held = _RELEASE.sub(_held_release, word)
+        if held != word:
+            out.append(held)
     scaled = re.sub(r"\(&(\w+)\[0\] \+ \((\w+) \* 4\)\)", r"((char *)&\1[0] + (\2 * 4))", c)
     for walker in re.findall(r"\b(\w+) = \(int \*\)\(", c):
         scaled = re.sub(r"\b%s \+= 4;" % walker, "%s += 1;" % walker, scaled)
     if scaled != c:
         out.append(scaled)
+    loops = unrotate_loops(c)
+    placed = place_arguments(c, asm)
+    held = _RELEASE.sub(_held_release, word)
+    for extra in (loops, placed, place_arguments(loops, asm), unrotate_loops(word),
+                  place_arguments(unrotate_loops(word), asm), place_arguments(unrotate_loops(held), asm)):
+        if extra != c:
+            out.append(extra)
+    for extra in list(out) + [c]:
+        turned = reverse_locals(extra)
+        if turned != extra:
+            out.append(turned)
     for narrow in ("short", "unsigned short", "char", "unsigned char"):
         widened = c.replace("(%s) *(%s *)" % (narrow, narrow), "(%s) *(int *)" % narrow)
         if widened != c:

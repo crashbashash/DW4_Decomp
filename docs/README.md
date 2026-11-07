@@ -22,6 +22,7 @@ Content-pinned [per-unit compiler requirements](engine/unit-compilers.md) cover
 its alternate-compiler bodies without changing unlisted units' compiler.
 [Explicit emitted-function ownership](engine/emitted-functions.md) verifies and
 places both bodies of the nearby-query compiler unit.
+[The arena allocator](engine/arena-allocator.md) is dlmalloc 2.7 with a repacked chunk header.
 [Retail unwind recovery](engine/exception-unwind.md) decodes the complete combat
 cleanup table and constrains automatic-object lifetimes.
 [Dispatcher draft recovery](systems/combat-draft-recovery.md) records the

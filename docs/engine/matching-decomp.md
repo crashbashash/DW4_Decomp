@@ -323,6 +323,18 @@ Retail shapes that only one spelling reproduces:
   give a function one word short, as do all `-O` levels and the `-O3,s`/`-O3,p` variants. The
   alternate compiler at `-O3,p` emits it from ordinary source, for example `FUN_00259d10` and
   `FUN_00259a20`. Try that profile before anything else.
+* **Local declaration order under b52.** The first-declared local takes the higher saved register and the
+  higher stack slot, the opposite of the older compilers, so a source that matched under 3.0 or combat usually
+  needs its locals reversed. That alone moved most of Alchemy Core's blocking functions. Past six locals, a greedy
+  climb over line order beats a random sweep. A variable that no order moves belongs to an inlined helper:
+  inline-scope locals are coloured after the function's own.
+* **Compare spelling picks the register.** `a > b` gives `slt at,b,a`; `b < a` gives `slt reg,b,a`. `n > 1`
+  differs from `n >= 2`, and `0 <= x` gives `slt at,v,zero`.
+* **`igResult` compares.** `addiu v1,sp,N; lw v1,0(v1)` comes from a one-word class with a user copy constructor
+  and `operator==(const R &)`, compared directly on the call's temporary. A named local folds the address away.
+* **`daddiu reg,zero,N`** is a constant assigned to a `bool`, `short` or `char` variable.
+* **An inline destructor always emits its out-of-line copy.** Its body must be spelled as retail's copy is, and the
+  function needs a `duplicates` row in `unit-objects.json`, which the verifier checks against retail's bytes.
 * **A value spilled and reloaded before every use.** Declare the local `volatile`:
   `RT * volatile sp6C` reproduces the register allocation of `FUN_00234d70`, where a plain
   local adds a saved register. Read it once into a plain local for the final release so the

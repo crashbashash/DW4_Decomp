@@ -6,7 +6,3 @@ extern "C" void *igMetaObject_CreateInstanceDefault(void *meta){return igMetaObj
 
 struct StaticInitCallbacks { void (**functions)(); int count; };
 extern "C" void igArray_Destruct(StaticInitCallbacks *,short);
-extern "C" void igMetaObject_RunStaticInit(StaticInitCallbacks *(*initialize)()){
-    int i; int count; StaticInitCallbacks *list=initialize();
-    if(list){count=list->count;for(i=0;i<count;i++)list->functions[i]();igArray_Destruct(list,1);}
-}

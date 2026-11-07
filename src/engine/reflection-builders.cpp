@@ -55,24 +55,3 @@ extern "C" void igMetaObject_InheritFromBase(igMetaObject *meta,igMetaObject *pa
         for(int i=0;i<count;i++)igMetaObject_AppendField(meta,igMetaObject_GetFieldAt(parent,i));
     }
 }
-
-extern "C" void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int count){
-    igMetaField *field;
-    for(int i=0;i<count;i++){
-        field=factories[i](Memory_GetAllocatorBySelector(*(int *)0x587040));
-        igMetaObject_AppendField(meta,field);
-        --((RefHeader *)field)->refs;
-        if(!(((RefHeader *)field)->refs&0x7fffff))igObject_Destroy(field);
-    }
-}
-
-extern "C" void igMetaObject_NameFields(igMetaObject *meta,const char **names,igMetaField ***handles,int *offsets,int start){
-    int row;
-    int count=igMetaObject_GetFieldCount(meta);
-    row=0;
-    for(;start<count;start++,row++){
-        igMetaField *field=((FieldPointerStorage *)meta->_metaFields)->data[start];
-        igMetaField_Configure(field,names[row],handles[row],offsets[row],meta);
-        igMetaField_FinalizeDescriptor(field);
-    }
-}

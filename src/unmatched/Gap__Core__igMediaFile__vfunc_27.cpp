@@ -19,7 +19,7 @@ int Gap__Core__igMediaFile__vfunc_27(A *arg0, int arg1, int arg2, int arg3) {
     }
     bytes = arg2 * arg3;
     if (arg0->f2c == 1) {
-        got = ((VC_112a *)arg0->f40)->vX(arg0->f18, arg1, arg3 * arg2);
+        got = ((VC_112a *)arg0->f40)->vX(arg0->f18, arg1, (unsigned)arg3 * arg2);
         n = got / arg2;
         back = n * arg2;
         if (got != back) {

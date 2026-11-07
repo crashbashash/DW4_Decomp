@@ -12,11 +12,11 @@ extern "C" void FUN_002f78b0(VA *arg0);
 void FUN_002f78b0(VA *arg0) {
     char sp70[256];
 
-    bool s0;
-    VB *s1;
-    int s2;
-    int s3;
     int s4;
+    int s3;
+    int s2;
+    VB *s1;
+    bool s0;
 
     VB *t;
     R r;

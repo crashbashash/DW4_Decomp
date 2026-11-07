@@ -31,10 +31,10 @@ typedef struct Obj {
 } Obj;
 
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_111(Obj *o, unsigned int lo, int len) {
-    unsigned int hi;
-    int i;
     Ranges *r;
+    int i;
     bool found;
+    unsigned int hi;
     found = 0;
     r = o->r;
     r->total += len;
@@ -53,9 +53,10 @@ extern "C" void Gap__Core__igArenaMemoryPool__vfunc_111(Obj *o, unsigned int lo,
                 return;
             } else {
                 if (len < 0 && a == hi) {
+                    int n = r->count;
                     int j = i + 2;
-                    if (j < r->count) {
-                        memcpy(e, (char *)r->data + j * 4, (r->count - j) * 4);
+                    if (j < n) {
+                        memcpy(e, (char *)r->data + j * 4, (n - j) * 4);
                     }
                     r->count -= 2;
                 } else if (len < 0 || e[1] < hi) {

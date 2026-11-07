@@ -2,14 +2,14 @@ extern int DAT_004c1ea8[4];
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];
 void Gap__Core__igEventTracker__vfunc_29(int *arg0, char *arg1, char *arg2, int *arg3) {
-    int t;
-    int sh;
+    int acc2;
     int acc;
     int c;
-    int t2;
-    int c2;
+    int sh;
     int sh2;
-    int acc2;
+    int c2;
+    int t;
+    int t2;
     sh = 0;
     acc = 0;
     arg2 = (char *)(*(int *)(*(char **)(arg1 + 80) + 16) + (int)arg2);
@@ -30,7 +30,7 @@ void Gap__Core__igEventTracker__vfunc_29(int *arg0, char *arg1, char *arg2, int 
     {
     char *q = arg2 + 1;
     c = *arg2;
-    if (DAT_004c1ea8[0] < c) {
+    if (c > DAT_004c1ea8[0]) {
         *arg0 = DAT_004fb418[0];
         return;
     }
