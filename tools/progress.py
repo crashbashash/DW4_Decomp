@@ -630,7 +630,7 @@ def _walk(top, ext):
 REGION_LABELS = collections.OrderedDict([
     ("Game", "Game"), ("Alchemy", "Alchemy engine"), ("Lua", "Lua 4.0.1 interpreter"),
     ("CRI ADX", "CRI ADX"), ("CRI Sofdec", "CRI Sofdec"), ("PNG", "libpng and zlib"),
-    ("Sony", "Sony SDK"), ("libgcc", "libgcc"), ("Metrowerks", "Metrowerks runtime"),
+    ("Sony", "Sony SDK"), ("newlib", "newlib"), ("libgcc", "libgcc"), ("Metrowerks", "Metrowerks runtime"),
     ("Static", "Static initialisers")])
 REGION_ORDER = list(REGION_LABELS.values())
 

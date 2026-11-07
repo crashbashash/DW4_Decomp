@@ -45,13 +45,13 @@
 00109350	FUN_00109350	match	-
 00109368	FUN_00109368	match	-
 00109378	FUN_00109378	match	-
-00109ac8	FUN_00109ac8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
-0010a3d8	FUN_0010a3d8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
-0010a3e8	FUN_0010a3e8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
-0010a3f8	FUN_0010a3f8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
-0010a408	FUN_0010a408	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
-0010a418	FUN_0010a418	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
-0010a440	FUN_0010a440	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+00109ac8	FUN_00109ac8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-libmpeg_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+0010a3d8	FUN_0010a3d8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-libmpeg_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+0010a3e8	FUN_0010a3e8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-libmpeg_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+0010a3f8	FUN_0010a3f8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-libmpeg_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+0010a408	FUN_0010a408	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-libmpeg_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+0010a418	FUN_0010a418	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-libmpeg_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+0010a440	FUN_0010a440	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-libmpeg_109410 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
 0010b360	FUN_0010b360	match	-
 0010b5a0	FUN_0010b5a0	match	-
 0010b5c8	FUN_0010b5c8	match	-
@@ -124,7 +124,7 @@
 001236a0	FUN_001236a0	match	-
 001236b8	FUN_001236b8	match	-
 001236d0	FUN_001236d0	match	-
-001236e8	FUN_001236e8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_1221b8 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+001236e8	FUN_001236e8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of newlib-libc_1236b8 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
 00123710	FUN_00123710	match	-
 00123730	FUN_00123730	match	-
 00123850	FUN_00123850	match	-

@@ -7,7 +7,17 @@
 # Gap:: (- when they prove none). anchor is a symbol that must sit at the row's start (- for none).
 # start	end	id	label	group	build	namespace	anchor	confidence	evidence
 0x00100000	0x001029f8	metrowerks-runtime	Metrowerks C++ runtime and startup	Metrowerks	mwcc	-	-	high	`std::exception`, `std::bad_alloc`, `__ptmf_scall`; `entry` calls `main`; ends where the GCC prologues begin
-0x001029f8	0x00130000	sony-sdk	Sony SDK and C library	Sony	gcc	-	-	high	GCC prologues; libdma, libipu, libmpeg, libcdvd, libmc, newlib; `max system bytes`, `bug in vfprintf: bad base`
+0x001029f8	0x00102c98	sony-libgraph	Sony libgraph	Sony	gcc	-	-	medium	GS registers at 0x12000000; first in the descriptors
+0x00102c98	0x001034e0	sony-libdma	Sony libdma	Sony	gcc	-	-	high	`libdma: sync timeout`; the rest call into it
+0x001034e0	0x0010a468	sony-libmpeg	Sony libmpeg	Sony	gcc	-	-	high	`Invalid macroblock_type code`, `[MPEG ERROR]%s`; strings in order
+0x0010a468	0x0010aae0	sony-libipu	Sony libipu	Sony	gcc	-	-	high	IPU_CMD and IPU_CTRL at 0x10002000, DMA channel 4 at 0x1000b000; libmpeg calls it
+0x0010aae0	0x00116138	sony-libkernl	Sony libkernl	Sony	gcc	-	-	medium	`SetGsCrt` and the syscall stubs, `## internel error in libkernl.a!`, `TTY:`; the end is the first function calling libcdvd
+0x00116138	0x00117b60	sony-libcdvd	Sony libcdvd	Sony	gcc	-	-	high	`Libcdvd bind err`, `sceCdCbfunc`; the rest call into it
+0x00117b60	0x00118fe0	sony-libpad	Sony libpad	Sony	gcc	-	-	high	`libpad: Module version mismatch`; the end is libsdr's first string
+0x00118fe0	0x001194c0	sony-libsdr	Sony libsdr	Sony	gcc	-	-	medium	`sceSdRemoteInit() RPC bind error!`; the end is libmc's first string
+0x001194c0	0x0011acc0	sony-libmc	Sony libmc	Sony	gcc	-	-	medium	`bind error libmc`, `sceMcUdCheckNewCard`; the end is the first libm constant
+0x0011acc0	0x001236b8	newlib-libm	newlib maths library	newlib	gcc	-	-	high	pi, pi/2 and fdlibm's asin polynomial; wrappers calling it end at 0x1236b8
+0x001236b8	0x00130000	newlib-libc	newlib C library	newlib	gcc	-	-	high	`bug in vfprintf: bad base`, `max system bytes`
 0x00130000	0x00142f10	alchemy-attrs	Alchemy Attrs	Alchemy	mwcc	Attrs	AttrsLibrary_MarkRegistered	high	latch, 70 registrars; RTTI `Gap::Attrs`
 0x00142f10	0x00145ce0	alchemy-audio	Alchemy Audio	Alchemy	mwcc	-	AudioLibrary_MarkRegistered	high	latch, 3 registrars (`igAudioContext`, `igPsx2AudioContext`, `igPsx2AudioSourceList`); the name describes the classes
 0x00145ce0	0x00149bc0	alchemy-window-input	Alchemy WindowInput	Alchemy	mwcc	-	WindowInputLibrary_MarkRegistered	high	latch, 11 registrars (`igWindow`, `igController`, `igEventProducer`); the name describes the classes; the end is the next block's first class
@@ -29,7 +39,7 @@
 0x002590c0	0x0025b248	game-main	The game's `main`	Game	mwcc	-	-	high	`entry` calls `main` at 0x2595e0; `ndmw.igb`, `IOPRP280.IMG`; runs the Collision, AdxMovie, Bec and Ndmw register lists
 0x0025b248	0x0027ede0	cri-adx	CRI ADX	CRI ADX	gcc	-	-	high	GCC prologues; `ADXT/PS2EE`, `ADXRT`, `CRI CFG/PS2EE`, `PL2ENC` version strings; built Oct 6 2004 11:47:17-11:47:45, `Append: GCC2096 SCE2810`
 0x0027ede0	0x00280b98	enbaya	Enbaya animation codec	Alchemy	mwcc	-	-	high	every caller from outside is `igEnbaya*` code; self-contained C++ between the two CRI libraries; that it is the codec rather than other Enbaya code is an inference
-0x00280b98	0x002b5d50	cri-sofdec	CRI Sofdec and MPEG	CRI Sofdec	gcc	-	-	high	GCC prologues; `CRI CFT`, `CRI M2V`, `CRI MPS`, `CRI MPV`, `MWSFD`, `CRI SFD`, `CRI SFH`, `CRI SFX`, `CRI SUD` version strings; built Oct 6 2004 11:36:10-11:36:36, `Append: GCC2096 SCE2810`
+0x00280b98	0x002b5d50	cri-sofdec	CRI Sofdec and MPEG	CRI Sofdec	gcc	-	-	high	GCC prologues; `CRI CFT`, `CRI M2V`, `CRI MPS`, `CRI MPV`, `MWSFD`, `CRI SFD`, `CRI SFH`, `CRI SFX`, `CRI SUD` version strings; built Oct 6 2004 11:36:10-11:36:36, `Append: GCC2096 SCE2810`; `SNDF Ver.2.09c` of Oct 4 2004 is its first module: 0x280b98 reads the pointer at 0x4bb10c
 0x002b5d50	0x00331fb0	alchemy-core	Alchemy Core	Alchemy	mwcc	Core	FUN_002b5d50	medium	RTTI `Gap::Core`; latch 0x2b5d50 called by 130 of its 152 registrars; `Intrinsic Alchemy  v3.2 -0810`; the end is where the `-O3,p` build begins; `Built by` stamp Tue Aug 10 11:05:06 JST 2004
 0x00331fb0	0x0033bf50	adx-movie	AdxMovie	Game	mwcc	-	-	medium	latch, 17 registrars (`igAdx*`, `igMovie*`) directly in `Gap::`; wraps CRI; the game's `_GetMetaObject` macro; built `-O3,p` like Bec and Ndmw; `main` runs its register list; counted with the game; the name describes the classes; the start is good to about 0x80 bytes
 0x0033bf50	0x003b04e0	bec	Bec, the game framework	Game	mwcc	Bec	FUN_0033bf50	high	register list of 303 classes then latch; `libBecRuntimePlugin`; RTTI `Gap::Bec`

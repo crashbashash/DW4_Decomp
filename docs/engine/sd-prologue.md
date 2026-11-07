@@ -9,7 +9,7 @@ rebuild with it through `tools/cc.py` / `tools/eegcc_compile.py`, pinned per uni
 without source: it links from the retail image and reads from the generated `asm/`.
 
 * **Population:** 1,698-1,701 non-leaf functions (about 417 KB) in six contiguous blocks that hold 3,304 functions / 530 KB in total:
-  `0x1029f8..0x130000` (Sony libdma, libipu/libmpeg, libpad, libmc, kernel syscall stubs), `0x2252d8..0x225770` (libmtap), `0x22e4b8..0x230f50`
+  `0x1029f8..0x130000` (Sony libgraph to libmc, newlib), `0x2252d8..0x225770` (libmtap), `0x22e4b8..0x230f50`
   (libgcc), `0x25b248..0x27ede0` (CRI ADX/AFS/ADXF), `0x280b98..0x2b5d50` (CRI CFT/M2V/MPS/MPV/Sofdec), `0x4820d0..0x4833c8` (Sony kernel-mode code,
   linked at `0x80074000` and up). `config/SLUS-20836/regions.tsv` holds these bounds.
 * **Evidence:** the ELF carries `GCC2096 SCE2810` stamps beside each CRI library's build string; no `sq` saves and no `slt/sltu` into `at` inside the

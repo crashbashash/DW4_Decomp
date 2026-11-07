@@ -257,8 +257,10 @@ zlib and libpng are the exception that is settled: they build with `combat` and 
 **A library is one build, so a unit never crosses a library boundary.** Retail records two of the builds.
 Alchemy carries one stamp, `Intrinsic Alchemy v3.2 -0810 (Static/Release)`, dated 10 August 2004. CRI's
 module strings fall into two batches on 6 October 2004, Sofdec from 11:36:10 to 11:36:36 and ADX from
-11:47:17 to 11:47:45, each with `Append: GCC2096 SCE2810`. A static initialiser follows the library that
-owns it: `FUN_00521600` calls AdxMovie and matches only with `,p`, unlike Alchemy's own.
+11:47:17 to 11:47:45, each with `Append: GCC2096 SCE2810`. `SNDF Ver.2.09c`, built on 4 October, is Sofdec's first
+module. The second data section keeps the Sony and newlib strings in code order, which is how
+`config/SLUS-20836/regions.tsv` divides that block, and the descriptors say `2800` except libmc's `2810`.
+A static initialiser follows the library that owns it: `FUN_00521600` calls AdxMovie and matches only with `,p`, unlike Alchemy's own.
 
 **The data threshold comes from the stock libraries and the small-data block.** zlib, libpng and Lua are
 the only code with its original declarations, and they verify at thresholds 1 and 2 and fail at 4 and
@@ -302,8 +304,5 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
   (`FUN_001ef9b0`, `FUN_002094c0`, `FUN_00315050`, `FUN_003a7300`), and 34 pass only at `-O3`, in spite of
   the same search at the other level. Descending load orders in some of them suggest struct copies or
   inlined vector methods, which that search cannot write. b50 and b52 are not separated.
-* **Library boundaries.** `sony-sdk` holds several libraries from at least two SDK releases: the descriptors
-  say `2800`, libmc `2810`. Their boundaries are not recovered. `SNDF Ver.2.09c` was built on 4 October 2004
-  and its string sits between the ADX and Sofdec data, so which library holds it is unknown. Viewer takes
-  `,p` although the Alchemy stamp suggests one build, and whether `enbaya` and `p2` belong to that build is
-  not established.
+* **Library boundaries.** Viewer takes `,p` although the Alchemy stamp suggests one build, and whether
+  `enbaya` and `p2` belong to that build is not established.
