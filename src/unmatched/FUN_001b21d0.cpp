@@ -7,8 +7,6 @@ void FUN_001b23b0(igVertexArray2 **, A *);
 int igObject_IsKindOf(igVec3fList *, int);
 void igObject_Destroy(igVertexArray2 *);
 extern int DAT_005610b8[4];
-extern float GPR_00554914;
-extern float GPR_00554918;
 void FUN_001b21d0(A *arg0, V3 *arg1, V3 *arg2);
 }
 /* matching construct: the receiver class is not established (the +12 vertex array and +32 index base are accessed through FUN_001b23b0 / f32 below), so it keeps a local layout; _objList data, _data and the vertex array reference are 4-byte handles, so the handle and the array stay ONE variable */
@@ -17,8 +15,8 @@ void FUN_001b21d0(A *arg0, V3 *arg1, V3 *arg2) {
     igVec3fList *s3;
     unsigned s4, s5;
     V3 *v;
-    arg1->x = arg1->y = arg1->z = GPR_00554914;
-    arg2->x = arg2->y = arg2->z = GPR_00554918;
+    arg1->x = arg1->y = arg1->z = 1.00000002e+20f;
+    arg2->x = arg2->y = arg2->z = -1.00000002e+20f;
     FUN_001b23b0(&sp7C, arg0);
     s3 = (igVec3fList *)igVertexArray2__FindVertexData(sp7C, 1, 0);
     if (sp7C != 0) {

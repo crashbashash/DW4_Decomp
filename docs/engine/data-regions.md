@@ -17,6 +17,25 @@ The method is three cheap measurements over each region, all reproducible:
 * **printable runs** — ASCII sequences of six characters or more, which name most of these regions
   outright.
 
+## Which library owns what
+
+The linker lays data out by section and, inside a section, in the same object order as the code, so
+the library whose code forms an address most is that data's owner, and owners run in link order.
+`scripts/data_owners.py` measures this into `config/SLUS-20836/data-owners.tsv`, with `make rules`
+checking it is current. Each section opens with the first object of the link, the Metrowerks runtime:
+
+| Section | Starts | Note |
+| --- | --- | --- |
+| 0 | `0x481c00` | |
+| 1 | `0x4d1c18` | |
+| 2 | `0x522440` | holds the vtables |
+| 3 | `0x554f00` | `.bss`, past the end of the file image at `0x554b00` |
+
+The table is in link order by construction: the heaviest in-order chain stands, and each section's
+comment counts the references left out. They are about 13 % of the total, mostly widely shared
+globals, such as the object system at `0x586dc8`, that one library defines and others reach more.
+An owner is who reaches the data, so for those it can be the wrong library.
+
 ## The five that are identified
 
 | region | bytes | composition | what it is |

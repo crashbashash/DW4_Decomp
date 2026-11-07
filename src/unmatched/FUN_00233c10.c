@@ -118,9 +118,6 @@ extern const float g_vec3Zero[4];
 extern const float g_vec4Zero[4];
 
 /* Small-data float literals the retail code reads through gp (value in the comment). */
-extern float GPR_005548c8;
-extern float GPR_00554948;
-extern float GPR_00554968;
 
 #define OPTION_BOOL(name, help, value)  if (name) FUN_002342b0(name, help, value)
 #define OPTION_INT(name, help, value)   if (name) FUN_002342e0(name, help, value)
@@ -165,11 +162,11 @@ void FUN_00233c10(const char *programName)
         defaultScaledNormalsColor[3] = 1.0f;
         FUN_002343d0(scaledNormalsColor, sets_the_scaled_normals_color, defaultScaledNormalsColor);
     }
-    OPTION_FLOAT(invalidNormalsPrecision, sets_the_precision_on_the_normals_, GPR_005548c8);
+    OPTION_FLOAT(invalidNormalsPrecision, sets_the_precision_on_the_normals_, 0.00100000005f);
     OPTION_BOOL(autoSelectCamera, select_the_first_camera_if_any_in_, 1);
     OPTION_FLOAT(hfov, sets_the_horizontal_field_of_view, 45.0f);
     OPTION_BOOL(autoPlanes, find_automatically_near_and_far_cl, 1);
-    OPTION_FLOAT(nearPlane, sets_the_default_near_clipping_pla, GPR_00554948);
+    OPTION_FLOAT(nearPlane, sets_the_default_near_clipping_pla, 0.100000001f);
     OPTION_FLOAT(farPlane, sets_the_default_far_clipping_plan, 1000.0f);
     if (upVector) {
         defaultUpVector[0] = g_vec3Zero[0];
@@ -204,9 +201,9 @@ void FUN_00233c10(const char *programName)
         FUN_002343d0(headLightAmbient, sets_the_ambient_color_for_the_hea, defaultHeadLightAmbient);
     }
     if (clearColor) {
-        defaultClearColor[0] = GPR_00554968;
-        defaultClearColor[1] = GPR_00554968;
-        defaultClearColor[2] = GPR_00554968;
+        defaultClearColor[0] = 0.200000003f;
+        defaultClearColor[1] = 0.200000003f;
+        defaultClearColor[2] = 0.200000003f;
         defaultClearColor[3] = 1.0f;
         FUN_002343d0(clearColor, sets_the_clear_color, defaultClearColor);
     }
@@ -216,7 +213,7 @@ void FUN_00233c10(const char *programName)
     OPTION_BOOL(forceBackfaceCulling, force_back_face_culling_on_all_geo, 0.0f);
     OPTION_BOOL(alphaTest, sets_alpha_test_state, 0.0f);
     OPTION_BOOL(forceAlphaTest, force_alpha_test_on_all_geometries, 0.0f);
-    OPTION_FLOAT(alphaTestReference, sets_alpha_test_reference_value, GPR_00554948);
+    OPTION_FLOAT(alphaTestReference, sets_alpha_test_reference_value, 0.100000001f);
     OPTION_FLOAT(maximumFrameRate, sets_the_maximum_frame_rate_0_mean, 0.0f);
     OPTION_BOOL(optimizeTextures, share_textures_at_load_time, 1);
     OPTION_BOOL(halfBuffer, sets_psx2_half_buffer_mode, 0.0f);

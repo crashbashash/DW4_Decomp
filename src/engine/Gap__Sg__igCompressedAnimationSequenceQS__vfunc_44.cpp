@@ -10,7 +10,6 @@ int List_Reserve(Lst *, int, int);
 int List_Resize(Lst *, int, int);
 int igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
-extern float GPR_0055494c;
 void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(T *arg0, Src *arg1);
 }
 void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(T *arg0, Src *arg1) {
@@ -54,7 +53,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(T *arg0, Src *arg1) {
         if (c < l->cap) List_Reserve(l, c, 2);
         FUN_001e5f00(arg1->v172(), arg0->f8->data, &sp7C, &sp78);
         arg0->f20 = sp7C;
-        arg0->f24 = GPR_0055494c * sp78;
+        arg0->f24 = 1.52590219e-05f * sp78;
     }
     if (s0 != 0) {
         if (arg0->f12 == 0) {
@@ -77,7 +76,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(T *arg0, Src *arg1) {
         if (c < l->cap) List_Reserve(l, c, 2);
         FUN_001e6130(arg1->v184(), arg0->f12->data, &sp7C, &sp78);
         arg0->f28 = sp7C;
-        arg0->f32 = GPR_0055494c * sp78;
+        arg0->f32 = 1.52590219e-05f * sp78;
     }
     if (arg0->f16 == 0) {
         al = igObject_GetAllocator(arg0);

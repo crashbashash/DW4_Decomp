@@ -28,8 +28,6 @@ extern int DAT_0048b910[4];
 extern int DAT_0048b9d0[4];
 extern int DAT_0048ba90[4];
 extern int DAT_00561620[4];
-extern float GPR_00554944;
-extern float GPR_00554948;
 
 struct Fld { char p0[38]; char f38; char p39[13]; char f52; char p53[3]; int f56; };
 void igProjectiveShadowShader_InitFields(void) {
@@ -57,7 +55,7 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_s2->f52 = 1;
     temp_s2 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4);
     temp_s2->f56 = FUN_0019cbe0();
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5), GPR_00554944);
+    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5), 0.300000012f);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6), 0x80);
     FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7), 0x80);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8), 0.5f);
@@ -96,7 +94,7 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12), 1);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x13), GPR_00554948);
+    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x13), 0.100000001f);
     FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14), 1000.0f);
     temp_a0 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x15);
     v3[0] = 1.0f; v3[1] = 0; v3[2] = 0;

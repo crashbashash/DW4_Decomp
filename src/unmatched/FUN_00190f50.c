@@ -1,7 +1,6 @@
 /* Axis-angle rotation matrix (Rodrigues); the sign bit is cleared through a byte bit-field union,
  * and partial products are split so the adds keep their operand order. */
 typedef union U { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U;
-extern float GPR_0055495c;
 float FUN_00123138(float);
 float FUN_001233d8(float);
 void FUN_00190f50(float *arg0, float *arg1, float fparg0) {
@@ -22,7 +21,7 @@ void FUN_00190f50(float *arg0, float *arg1, float fparg0) {
     float one;
     u.f = fparg0;
     u.b.sign = 0;
-    if (u.f < GPR_0055495c) {
+    if (u.f < 4.99999999e-07f) {
         arg0[10] = 1.0f;
         arg0[5] = 1.0f;
         arg0[0] = 1.0f;

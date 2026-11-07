@@ -18,7 +18,6 @@ int FUN_0017c880(...);
 int igMatrix44f_SetIdentity(...);
 int FUN_001e7500(...);
 extern int DAT_004dcd68[4];
-extern float GPR_005548c0;
 void FUN_00174140(void *arg0, int arg1);
 }
 class VC104 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(void *); };
@@ -51,9 +50,9 @@ void FUN_00174140(void *a0, int arg1) {
     FUN_00173ed0(a0, 14, m);
     FUN_0016cc50(a0, 0);
     v.w = 0x3F800000;
-    v.x = GPR_005548c0;
-    v.y = GPR_005548c0;
-    v.z = GPR_005548c0;
+    v.x = 0.501960754f;
+    v.y = 0.501960754f;
+    v.z = 0.501960754f;
     FUN_00175510(a0, &v);
     FUN_001754b0(a0, 1);
     FUN_001755e0(a0, 1);

@@ -6,9 +6,6 @@ extern float DAT_004e1170[4];
 extern float DAT_004e1174[4];
 extern float DAT_004e1178[4];
 extern float DAT_004e117c[4];
-extern float GPR_005548c8;
-extern float GPR_00554948;
-extern float GPR_00554968;
 
 void *FUN_00238110(void *arg0) {
     *(int *)((char *)(arg0) + 0) = 0;
@@ -26,11 +23,11 @@ void *FUN_00238110(void *arg0) {
     *(int *)((char *)(arg0) + 44) = 0;
     *(int *)((char *)(arg0) + 48) = 0;
     *(int *)((char *)(arg0) + 52) = 0x3F800000;
-    *(float *)((char *)(arg0) + 56) = (float) GPR_005548c8;
+    *(float *)((char *)(arg0) + 56) = (float) 0.00100000005f;
     *(char *)((char *)(arg0) + 60) = 1;
     *(int *)((char *)(arg0) + 64) = 0x42340000;
     *(char *)((char *)(arg0) + 68) = 1;
-    *(float *)((char *)(arg0) + 72) = (float) GPR_00554948;
+    *(float *)((char *)(arg0) + 72) = (float) 0.100000001f;
     *(int *)((char *)(arg0) + 76) = 0x447A0000;
     *(float *)((char *)(arg0) + 80) = (float) DAT_004e1058[0];
     *(float *)((char *)(arg0) + 84) = (float) DAT_004e105c[0];
@@ -52,9 +49,9 @@ void *FUN_00238110(void *arg0) {
     *(float *)((char *)(arg0) + 136) = (float) DAT_004e1174[0];
     *(float *)((char *)(arg0) + 140) = (float) DAT_004e1178[0];
     *(float *)((char *)(arg0) + 144) = (float) DAT_004e117c[0];
-    *(float *)((char *)(arg0) + 148) = (float) GPR_00554968;
-    *(float *)((char *)(arg0) + 152) = (float) GPR_00554968;
-    *(float *)((char *)(arg0) + 156) = (float) GPR_00554968;
+    *(float *)((char *)(arg0) + 148) = (float) 0.200000003f;
+    *(float *)((char *)(arg0) + 152) = (float) 0.200000003f;
+    *(float *)((char *)(arg0) + 156) = (float) 0.200000003f;
     *(int *)((char *)(arg0) + 160) = 0x3F800000;
     *(char *)((char *)(arg0) + 164) = 0;
     *(char *)((char *)(arg0) + 165) = 0;
@@ -62,7 +59,7 @@ void *FUN_00238110(void *arg0) {
     *(char *)((char *)(arg0) + 167) = 0;
     *(char *)((char *)(arg0) + 168) = 0;
     *(char *)((char *)(arg0) + 169) = 0;
-    *(float *)((char *)(arg0) + 172) = (float) GPR_00554948;
+    *(float *)((char *)(arg0) + 172) = (float) 0.100000001f;
     *(int *)((char *)(arg0) + 176) = 0;
     *(char *)((char *)(arg0) + 180) = 1;
     *(char *)((char *)(arg0) + 181) = 0;

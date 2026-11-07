@@ -35,7 +35,6 @@ extern int DAT_004e97d0[4];
 extern int DAT_004e9800[4];
 extern G *DAT_0056dc50[4];
 extern int DAT_00587028[4];
-extern float GPR_00554908;
 extern unsigned char GPR_00554bd0;
 extern unsigned char GPR_00554c14;
 extern int DAT_00587050[4];
@@ -110,7 +109,7 @@ extern "C" int FUN_002364e0(igObject **arg0, int arg1) {
     cfg.b0 = 1;
     cfg.c0 = s4->f192;
     cfg.b1 = 0;
-    cfg.bc = GPR_00554908;
+    cfg.bc = 59.9399986f;
     cfg.b4 = 2;
     cfg.b8 = 1;
     cfg.c4 = 0;

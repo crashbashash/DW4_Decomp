@@ -29,7 +29,8 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`regions.py`](regions.py) | read config/SLUS-20836/regions.tsv, the record of what each part of the image is |
 | [`check_regions.py`](check_regions.py) | test that table against the retail image |
 | [`unitprofiles.py`](unitprofiles.py) | resolve a function's translation-unit build profile (config/SLUS-20836/units.tsv) and tell a provisional per-function override from it |
-| [`gen_unit_profiles.py`](gen_unit_profiles.py) | derive config/SLUS-20836/units.tsv from the pins, the sweeps and the retail exception evidence; rewrites the per-function tables so only dissenting members keep a row |
+| [`roll_profile.py`](roll_profile.py) | move whole units onto a profile when every member still verifies there |
+| [`gen_unit_profiles.py`](gen_unit_profiles.py) | draft units.tsv from the pins, the sweeps and the retail exception evidence; rewrites the per-function tables so only dissenting members keep a row |
 | [`progress.py`](progress.py) | the repo's progress numbers, computed from committed files only |
 | [`datamap.py`](datamap.py) | how much of the binary's *data* the repo has identified |
 | [`typed_coverage.py`](typed_coverage.py) | Measure typed coverage: how much of the decompiled C speaks in structs |

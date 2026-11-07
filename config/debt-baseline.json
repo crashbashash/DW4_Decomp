@@ -14,9 +14,9 @@
   "code_only.other.functions": 4,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "foreign_profile.bytes": 49208,
-  "foreign_profile.functions": 211,
-  "fun_dat_refs": 76087,
+  "foreign_profile.bytes": 27332,
+  "foreign_profile.functions": 96,
+  "fun_dat_refs": 76085,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
@@ -25,12 +25,15 @@
   "mismatch.functions": 0,
   "name_defect.bytes": 1236,
   "name_defect.functions": 3,
-  "orphan.bytes": 15928,
-  "raw_casts.reflected": 173,
+  "orphan.bytes": 15100,
+  "raw_casts.reflected": {
+   "reason": "struct.b 291 to 293: 53 newly named vtable slots make the checker attribute existing local views of other objects (the object system, a returned object, list nodes) to the slot's class; no source got worse",
+   "value": 177
+  },
   "struct.a": 141,
   "struct.b": {
-   "reason": "naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class",
-   "value": 291
+   "reason": "struct.b 291 to 293: 53 newly named vtable slots make the checker attribute existing local views of other objects (the object system, a returned object, list nodes) to the slot's class; no source got worse",
+   "value": 293
   },
   "struct.c": 287,
   "unmatched.bytes": {

@@ -7,7 +7,6 @@ void igMatrix44f_SetIdentity(int);
 void FUN_001bf560(O*, int, int*);
 void FUN_00192810(int*, int);
 void Matrix44_SetTranslation(int, int*);
-extern float GPR_00554930;
 int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23(O *a0, int a1, int a2) {
     unsigned char s6f; unsigned char s6e; int s68; int s64; float s60; float s5c; int s50[3]; int s40[4];
     float f;
@@ -20,7 +19,7 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23(O *a0, int a1, int a2) {
         if (a0->flags & 2) { FUN_001bf560(a0, a0->m->count - 1, s40); FUN_00192810(s40, a1); }
         if (a0->flags & 1) { a0->v44(a0->v33() - 1, s50); Matrix44_SetTranslation(a1, s50); }
     } else {
-        if (s5c < GPR_00554930) f = 0.0f; else f = s60 / s5c;
+        if (s5c < 9.99999997e-07f) f = 0.0f; else f = s60 / s5c;
         if (a0->flags & 2) { a0->v46(s40, s68, s64, f); FUN_00192810(s40, a1); }
         if (a0->flags & 1) { a0->v45(s50, s68, s64, f); Matrix44_SetTranslation(a1, s50); }
     }

@@ -1547,15 +1547,15 @@
 00140540 000010 Gap__Attrs__igTexGenMatrixAttr__vfunc_24 Gap::Attrs::igTexGenMatrixAttr::vfunc_24
 00140550 000050 Gap__Attrs__igTexGenMatrixAttr__vfunc_26 Gap::Attrs::igTexGenMatrixAttr::vfunc_26
 001405a0 00006c FUN_001405a0
-00140610 000130 FUN_00140610
-00140740 000160 FUN_00140740
-001408a0 000008 FUN_001408a0
+00140610 000130 Gap__Attrs__igTextureAttr__vfunc_37 Gap::Attrs::igTextureAttr::vfunc_37
+00140740 000160 Gap__Attrs__igTextureAttr__vfunc_38 Gap::Attrs::igTextureAttr::vfunc_38
+001408a0 000008 Gap__Attrs__igTextureAttr__vfunc_26 Gap::Attrs::igTextureAttr::vfunc_26
 001408b0 000018 FUN_001408b0
 001408d0 0001f8 Gap__Attrs__igTextureAttr__vfunc_24 Gap::Attrs::igTextureAttr::vfunc_24
 00140ad0 00012c FUN_00140ad0
 00140c00 00002c FUN_00140c00
 00140c30 000034 Gap__Attrs__igTextureAttr__vfunc_12 Gap::Attrs::igTextureAttr::vfunc_12
-00140c70 000088 FUN_00140c70
+00140c70 000088 Gap__Attrs__igTextureAttr__vfunc_28 Gap::Attrs::igTextureAttr::vfunc_28
 00140d00 000018 Gap__Attrs__igTextureBindAttr__vfunc_31 Gap::Attrs::igTextureBindAttr::vfunc_31
 00140d20 000008 Gap__Attrs__igTextureBindAttr__vfunc_26 Gap::Attrs::igTextureBindAttr::vfunc_26
 00140d30 000030 Gap__Attrs__igTextureBindAttr__vfunc_28 Gap::Attrs::igTextureBindAttr::vfunc_28
@@ -1655,11 +1655,11 @@
 00142390 000008 Gap__Attrs__igTextureFunctionAttr__vfunc_34 Gap::Attrs::igTextureFunctionAttr::vfunc_34
 001423a0 000008 Gap__Attrs__igTextureFunctionAttr__vfunc_35 Gap::Attrs::igTextureFunctionAttr::vfunc_35
 001423b0 00000c Gap__Attrs__igTextureCubeAttr__vfunc_22 Gap::Attrs::igTextureCubeAttr::vfunc_22
-001423c0 000008 FUN_001423c0
-001423d0 000008 FUN_001423d0
-001423e0 000008 FUN_001423e0
-001423f0 000008 FUN_001423f0
-00142400 000074 FUN_00142400
+001423c0 000008 Gap__Attrs__igTextureAttr__vfunc_32 Gap::Attrs::igTextureAttr::vfunc_32
+001423d0 000008 Gap__Attrs__igTextureAttr__vfunc_33 Gap::Attrs::igTextureAttr::vfunc_33
+001423e0 000008 Gap__Attrs__igTextureAttr__vfunc_34 Gap::Attrs::igTextureAttr::vfunc_34
+001423f0 000008 Gap__Attrs__igTextureAttr__vfunc_35 Gap::Attrs::igTextureAttr::vfunc_35
+00142400 000074 Gap__Attrs__igTextureAttr__vfunc_36 Gap::Attrs::igTextureAttr::vfunc_36
 00142480 00000c Gap__Attrs__igTextureCoordSourceAttr__vfunc_22 Gap::Attrs::igTextureCoordSourceAttr::vfunc_22
 00142490 000008 Gap__Attrs__igTextureCoordSourceAttr__vfunc_32 Gap::Attrs::igTextureCoordSourceAttr::vfunc_32
 001424a0 000008 Gap__Attrs__igTextureCoordSourceAttr__vfunc_33 Gap::Attrs::igTextureCoordSourceAttr::vfunc_33
@@ -2463,8 +2463,8 @@
 001547a0 00000c FUN_001547a0
 001547b0 0000ac igPsx2BlendEquationExt_InitFields
 00154860 000118 FUN_00154860
-00154980 0000fc FUN_00154980
-00154a80 000044 FUN_00154a80
+00154980 0000fc Gap__Gfx__igClut__vfunc_25 Gap::Gfx::igClut::vfunc_25
+00154a80 000044 Gap__Gfx__igClut__vfunc_24 Gap::Gfx::igClut::vfunc_24
 00154ad0 000070 FUN_00154ad0
 00154b40 000040 FUN_00154b40
 00154b80 000110 FUN_00154b80
@@ -2473,7 +2473,7 @@
 00154d90 000064 FUN_00154d90
 00154e00 000034 FUN_00154e00
 00154e40 00005c FUN_00154e40
-00154ea0 00008c FUN_00154ea0
+00154ea0 00008c Gap__Gfx__igClut__vfunc_23 Gap::Gfx::igClut::vfunc_23
 00154f30 000200 FUN_00154f30
 00155130 0000c0 Gap__Gfx__igExternalImageEntry__vfunc_44 Gap::Gfx::igExternalImageEntry::vfunc_44
 001551f0 0000f8 FUN_001551f0
@@ -2580,7 +2580,7 @@
 0015c830 000008 Gap__Bec__ParticleArray__vfunc_30 Gap::Bec::ParticleArray::vfunc_30
 0015c840 000008 Gap__Bec__ParticleArray__vfunc_29 Gap::Bec::ParticleArray::vfunc_29
 0015c850 000094 Gap__Bec__ParticleArray__vfunc_10 Gap::Bec::ParticleArray::vfunc_10
-0015c8f0 000008 FUN_0015c8f0
+0015c8f0 000008 Gap__Gfx__igParticleArray__vfunc_13 Gap::Gfx::igParticleArray::vfunc_13
 0015c900 000050 Gap__Bec__ParticleArray__vfunc_15 Gap::Bec::ParticleArray::vfunc_15
 0015c950 0000e8 FUN_0015c950
 0015ca40 000108 Gap__Bec__ParticleArray__vfunc_36 Gap::Bec::ParticleArray::vfunc_36
@@ -3639,11 +3639,11 @@
 0018e490 000058 igVec4fArrayMetaField_SwapBytes
 0018e4f0 000010 igVec4fArrayMetaField_GetSize
 0018e500 00005c igVec4fMetaField_SwapBytes
-0018e560 000014 FUN_0018e560
-0018e580 0000e0 FUN_0018e580
+0018e560 000014 Gap__igVec4fMetaField__vfunc_56 Gap::igVec4fMetaField::vfunc_56
+0018e580 0000e0 Gap__igVec4fMetaField__vfunc_57 Gap::igVec4fMetaField::vfunc_57
 0018e660 000008 igVec4fMetaField_GetSize
 0018e670 000010 FUN_0018e670
-0018e680 000008 FUN_0018e680
+0018e680 000008 Gap__igVec4fMetaField__vfunc_27 Gap::igVec4fMetaField::vfunc_27
 0018e690 000058 igVec4ucMetaField_SwapBytes
 0018e6f0 000014 Gap__igVec4ucMetaField__vfunc_56 Gap::igVec4ucMetaField::vfunc_56
 0018e710 00009c Gap__igVec4ucMetaField__vfunc_57 Gap::igVec4ucMetaField::vfunc_57
@@ -4874,7 +4874,7 @@
 001b2970 000554 FUN_001b2970
 001b2ed0 00005c FUN_001b2ed0
 001b2f30 00006c FUN_001b2f30
-001b2fa0 00008c FUN_001b2fa0
+001b2fa0 00008c Gap__Sg__igCommonTraversal__vfunc_26 Gap::Sg::igCommonTraversal::vfunc_26
 001b3030 000aa0 FUN_001b3030
 001b3ad0 0001c0 FUN_001b3ad0
 001b3c90 000360 FUN_001b3c90
@@ -4895,19 +4895,19 @@
 001b6be0 000064 FUN_001b6be0
 001b6c50 00004c FUN_001b6c50
 001b6ca0 000008 Gap__Core__igObject__vfunc_08 Gap::Core::igObject::vfunc_08
-001b6cb0 000018 FUN_001b6cb0
+001b6cb0 000018 Gap__Sg__igCommonTraversal__vfunc_30 Gap::Sg::igCommonTraversal::vfunc_30
 001b6cd0 000008 FUN_001b6cd0
 001b6ce0 00013c FUN_001b6ce0
 001b6e20 0000b4 Gap__Sg__igCommonTraversal__vfunc_31 Gap::Sg::igCommonTraversal::vfunc_31
 001b6ee0 000044 FUN_001b6ee0
 001b6f30 0000e0 FUN_001b6f30
-001b7010 000314 FUN_001b7010
+001b7010 000314 Gap__Sg__igCommonTraversal__vfunc_28 Gap::Sg::igCommonTraversal::vfunc_28
 001b7330 000098 FUN_001b7330
 001b73d0 000010 FUN_001b73d0
-001b73e0 0001c4 FUN_001b73e0
-001b75b0 000074 FUN_001b75b0
+001b73e0 0001c4 Gap__Sg__igCommonTraversal__vfunc_23 Gap::Sg::igCommonTraversal::vfunc_23
+001b75b0 000074 Gap__Sg__igCommonTraversal__vfunc_32 Gap::Sg::igCommonTraversal::vfunc_32
 001b7630 0000ec Gap__Sg__igCommonTraversal__vfunc_24 Gap::Sg::igCommonTraversal::vfunc_24
-001b7720 000014 FUN_001b7720
+001b7720 000014 Gap__Sg__igCommonTraversal__vfunc_33 Gap::Sg::igCommonTraversal::vfunc_33
 001b7740 000030 FUN_001b7740
 001b7770 0001b0 FUN_001b7770
 001b7920 0001c8 FUN_001b7920
@@ -5109,7 +5109,7 @@
 001c6110 000120 FUN_001c6110
 001c6230 000030 FUN_001c6230
 001c6260 0000ac FUN_001c6260
-001c6310 000028 FUN_001c6310
+001c6310 000028 Gap__Sg__igNode__vfunc_26 Gap::Sg::igNode::vfunc_26
 001c6340 00008c FUN_001c6340
 001c63d0 000008 FUN_001c63d0
 001c63e0 00007c FUN_001c63e0
@@ -5432,8 +5432,8 @@
 001e31c0 00000c Gap__Sg__igIniShaderFactory__vfunc_22 Gap::Sg::igIniShaderFactory::vfunc_22
 001e31d0 00000c Gap__Sg__igGroup__vfunc_22 Gap::Sg::igGroup::vfunc_22
 001e31e0 00000c Gap__Sg__igFrustCullTraversal__vfunc_22 Gap::Sg::igFrustCullTraversal::vfunc_22
-001e31f0 000074 FUN_001e31f0
-001e3270 000038 FUN_001e3270
+001e31f0 000074 Gap__Sg__igCommonTraversal__vfunc_29 Gap::Sg::igCommonTraversal::vfunc_29
+001e3270 000038 Gap__Sg__igCommonTraversal__vfunc_27 Gap::Sg::igCommonTraversal::vfunc_27
 001e32b0 00000c Gap__Sg__igEnbayaTransformSource__vfunc_22 Gap::Sg::igEnbayaTransformSource::vfunc_22
 001e32c0 00000c Gap__Sg__igEnbayaContextPool__vfunc_22 Gap::Sg::igEnbayaContextPool::vfunc_22
 001e32d0 00000c Gap__Sg__igEnbayaAnimationState__vfunc_22 Gap::Sg::igEnbayaAnimationState::vfunc_22
@@ -11690,11 +11690,11 @@
 002d40f0 0001e4 Gap__Core__igCallStackTable__vfunc_31 Gap::Core::igCallStackTable::vfunc_31
 002d42e0 000068 Gap__Core__igCallStackTracer__vfunc_24 Gap::Core::igCallStackTracer::vfunc_24
 002d4350 00004c Gap__Core__igCallStackTracer__vfunc_25 Gap::Core::igCallStackTracer::vfunc_25
-002d43a0 0000c4 FUN_002d43a0
-002d4470 000154 FUN_002d4470
-002d45d0 0005b4 FUN_002d45d0
-002d4b90 000008 FUN_002d4b90
-002d4ba0 000008 FUN_002d4ba0
+002d43a0 0000c4 Gap__Core__igCallStackTracer__vfunc_26 Gap::Core::igCallStackTracer::vfunc_26
+002d4470 000154 Gap__Core__igCallStackTracer__vfunc_27 Gap::Core::igCallStackTracer::vfunc_27
+002d45d0 0005b4 Gap__Core__igCallStackTracer__vfunc_28 Gap::Core::igCallStackTracer::vfunc_28
+002d4b90 000008 Gap__Core__igCallStackTracer__vfunc_29 Gap::Core::igCallStackTracer::vfunc_29
+002d4ba0 000008 Gap__Core__igCallStackTracer__vfunc_30 Gap::Core::igCallStackTracer::vfunc_30
 002d4bb0 000058 Gap__Core__igCharArrayMetaField__vfunc_52 Gap::Core::igCharArrayMetaField::vfunc_52
 002d4c10 000008 Gap__Core__igCharArrayMetaField__vfunc_25 Gap::Core::igCharArrayMetaField::vfunc_25
 002d4c20 000054 FUN_002d4c20
@@ -11743,7 +11743,7 @@
 002d63e0 0000d8 FUN_002d63e0
 002d64c0 000114 FUN_002d64c0
 002d65e0 000090 FUN_002d65e0
-002d6670 000008 FUN_002d6670
+002d6670 000008 Gap__Core__igDataList__vfunc_23 Gap::Core::igDataList::vfunc_23
 002d6680 000108 List_Reserve
 002d6790 000078 List_Resize
 002d6810 0000e8 List_InsertBytes
@@ -11768,18 +11768,18 @@
 002d7990 000008 FUN_002d7990
 002d79a0 000008 FUN_002d79a0
 002d79b0 000008 FUN_002d79b0
-002d79c0 000008 FUN_002d79c0
+002d79c0 000008 Gap__Core__igDirEntry__vfunc_42 Gap::Core::igDirEntry::vfunc_42
 002d79d0 000008 FUN_002d79d0
 002d79e0 000008 FUN_002d79e0
-002d79f0 000008 FUN_002d79f0
-002d7a00 000008 FUN_002d7a00
-002d7a10 000008 FUN_002d7a10
-002d7a20 000008 FUN_002d7a20
-002d7a30 000008 FUN_002d7a30
-002d7a40 000008 FUN_002d7a40
-002d7a50 000008 FUN_002d7a50
+002d79f0 000008 Gap__Core__igDirEntry__vfunc_41 Gap::Core::igDirEntry::vfunc_41
+002d7a00 000008 Gap__Core__igDirEntry__vfunc_40 Gap::Core::igDirEntry::vfunc_40
+002d7a10 000008 Gap__Core__igDirEntry__vfunc_38 Gap::Core::igDirEntry::vfunc_38
+002d7a20 000008 Gap__Core__igDirEntry__vfunc_39 Gap::Core::igDirEntry::vfunc_39
+002d7a30 000008 Gap__Core__igDirEntry__vfunc_35 Gap::Core::igDirEntry::vfunc_35
+002d7a40 000008 Gap__Core__igDirEntry__vfunc_36 Gap::Core::igDirEntry::vfunc_36
+002d7a50 000008 Gap__Core__igDirEntry__vfunc_37 Gap::Core::igDirEntry::vfunc_37
 002d7a60 000008 FUN_002d7a60
-002d7a70 000008 FUN_002d7a70
+002d7a70 000008 Gap__Core__igDirEntry__vfunc_34 Gap::Core::igDirEntry::vfunc_34
 002d7a80 000008 FUN_002d7a80
 002d7a90 000008 FUN_002d7a90
 002d7aa0 000030 FUN_002d7aa0
@@ -11820,8 +11820,8 @@
 002d9330 000080 FUN_002d9330
 002d93b0 000058 igDoubleArrayMetaField_SwapBytes
 002d9410 000010 igDoubleArrayMetaField_GetSize
-002d9420 000034 FUN_002d9420
-002d9460 00008c FUN_002d9460
+002d9420 000034 Gap__Core__igDoubleMetaField__vfunc_56 Gap::Core::igDoubleMetaField::vfunc_56
+002d9460 00008c Gap__Core__igDoubleMetaField__vfunc_57 Gap::Core::igDoubleMetaField::vfunc_57
 002d94f0 000008 Gap__Core__igDoubleMetaField__vfunc_25 Gap::Core::igDoubleMetaField::vfunc_25
 002d9500 000028 FUN_002d9500
 002d9530 000008 FUN_002d9530
@@ -11945,7 +11945,7 @@
 002e26b0 000094 FUN_002e26b0
 002e2750 000074 FUN_002e2750
 002e27d0 000178 Gap__Core__igExternalDirEntry__vfunc_44 Gap::Core::igExternalDirEntry::vfunc_44
-002e2950 00026c FUN_002e2950
+002e2950 00026c Gap__Core__igExternalDirEntry__vfunc_43 Gap::Core::igExternalDirEntry::vfunc_43
 002e2bc0 000030 Gap__Core__igExternalDirEntry__vfunc_11 Gap::Core::igExternalDirEntry::vfunc_11
 002e2bf0 000038 FUN_002e2bf0
 002e2c30 000070 Gap__Core__igExternalIndexedEntry__vfunc_32 Gap::Core::igExternalIndexedEntry::vfunc_32
@@ -12090,11 +12090,11 @@
 002eb980 000128 Gap__Core__igLocationTable__vfunc_32 Gap::Core::igLocationTable::vfunc_32
 002ebab0 000058 igLongArrayMetaField_SwapBytes
 002ebb10 000010 igLongArrayMetaField_GetSize
-002ebb20 000034 FUN_002ebb20
-002ebb60 00008c FUN_002ebb60
+002ebb20 000034 Gap__Core__igLongMetaField__vfunc_56 Gap::Core::igLongMetaField::vfunc_56
+002ebb60 00008c Gap__Core__igLongMetaField__vfunc_57 Gap::Core::igLongMetaField::vfunc_57
 002ebbf0 000008 igLongMetaField_GetSize
 002ebc00 000028 FUN_002ebc00
-002ebc30 000008 FUN_002ebc30
+002ebc30 000008 Gap__Core__igLongMetaField__vfunc_27 Gap::Core::igLongMetaField::vfunc_27
 002ebc40 0000b0 FUN_002ebc40
 002ebcf0 000070 FUN_002ebcf0
 002ebd60 000010 FUN_002ebd60
@@ -12357,7 +12357,7 @@
 002fb190 0000e4 igMetaField_AllocateArray
 002fb280 000150 igMemoryRefMetaField_SetAlignmentType
 002fb3d0 000174 igMemoryRefMetaField_Write
-002fb550 000020 FUN_002fb550
+002fb550 000020 Gap__Core__igMemoryRefMetaField__vfunc_45 Gap::Core::igMemoryRefMetaField::vfunc_45
 002fb570 00011c igMemoryRefMetaField_IsAlikeDeep
 002fb690 0000c4 igMemoryRefMetaField_ReadRawFieldMem
 002fb760 0000c4 igMemoryRefMetaField_IsAlikeShallow
@@ -12617,9 +12617,9 @@
 00303750 000128 Gap__Core__igObjectRefMetaField__vfunc_36 Gap::Core::igObjectRefMetaField::vfunc_36
 00303880 0000f4 Gap__Core__igObjectRefMetaField__vfunc_38 Gap::Core::igObjectRefMetaField::vfunc_38
 00303980 000030 Gap__Core__igObjectRefMetaField__vfunc_39 Gap::Core::igObjectRefMetaField::vfunc_39
-003039b0 000090 FUN_003039b0
+003039b0 000090 Gap__Core__igObjectRefMetaField__vfunc_41 Gap::Core::igObjectRefMetaField::vfunc_41
 00303a40 000034 Gap__Core__igObjectRefMetaField__vfunc_42 Gap::Core::igObjectRefMetaField::vfunc_42
-00303a80 00001c FUN_00303a80
+00303a80 00001c Gap__Core__igObjectRefMetaField__vfunc_44 Gap::Core::igObjectRefMetaField::vfunc_44
 00303aa0 000058 Gap__Core__igObjectRefMetaField__vfunc_45 Gap::Core::igObjectRefMetaField::vfunc_45
 00303b00 000058 Gap__Core__igObjectRefMetaField__vfunc_46 Gap::Core::igObjectRefMetaField::vfunc_46
 00303b60 000058 Gap__Core__igObjectRefMetaField__vfunc_47 Gap::Core::igObjectRefMetaField::vfunc_47
@@ -12872,11 +12872,11 @@
 0030e540 0000b0 FUN_0030e540
 0030e5f0 000058 igUnsignedCharArrayMetaField_SwapBytes
 0030e650 000008 igUnsignedCharArrayMetaField_GetSize
-0030e660 00004c FUN_0030e660
-0030e6b0 00008c FUN_0030e6b0
+0030e660 00004c Gap__Core__igUnsignedCharMetaField__vfunc_56 Gap::Core::igUnsignedCharMetaField::vfunc_56
+0030e6b0 00008c Gap__Core__igUnsignedCharMetaField__vfunc_57 Gap::Core::igUnsignedCharMetaField::vfunc_57
 0030e740 000008 igUnsignedCharMetaField_GetSize
 0030e750 000028 FUN_0030e750
-0030e780 000008 FUN_0030e780
+0030e780 000008 Gap__Core__igUnsignedCharMetaField__vfunc_27 Gap::Core::igUnsignedCharMetaField::vfunc_27
 0030e790 000058 Gap__Core__igUnsignedIntArrayMetaField__vfunc_52 Gap::Core::igUnsignedIntArrayMetaField::vfunc_52
 0030e7f0 000010 Gap__Core__igUnsignedIntArrayMetaField__vfunc_25 Gap::Core::igUnsignedIntArrayMetaField::vfunc_25
 0030e800 000034 Gap__Core__igUnsignedIntMetaField__vfunc_56 Gap::Core::igUnsignedIntMetaField::vfunc_56
@@ -13160,7 +13160,7 @@
 00327140 0000c8 Gap__Core__igProgramFile__vfunc_23 Gap::Core::igProgramFile::vfunc_23
 00327210 000168 Gap__Core__igProgramFile__vfunc_24 Gap::Core::igProgramFile::vfunc_24
 00327380 000058 Gap__Core__igProgramFile__vfunc_25 Gap::Core::igProgramFile::vfunc_25
-003273e0 000194 FUN_003273e0
+003273e0 000194 Gap__Core__igProgramFile__vfunc_26 Gap::Core::igProgramFile::vfunc_26
 00327580 000010 Gap__Core__igProgramFile__vfunc_27 Gap::Core::igProgramFile::vfunc_27
 00327590 000010 Gap__Core__igProgramFile__vfunc_28 Gap::Core::igProgramFile::vfunc_28
 003275a0 000010 Gap__Core__igProgramFile__vfunc_29 Gap::Core::igProgramFile::vfunc_29

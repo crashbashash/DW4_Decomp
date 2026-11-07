@@ -1,4 +1,3 @@
-extern float GPR_00554900;
 
 void FUN_00170210(void *arg0) {
     *(int *)((char *)(arg0) + 144) = 0;
@@ -13,9 +12,9 @@ void FUN_00170210(void *arg0) {
     *(int *)((char *)(arg0) + 36) = 0x3F800000;
     *(int *)((char *)(arg0) + 40) = 0x3F800000;
     *(int *)((char *)(arg0) + 44) = 0x3F800000;
-    *(float *)((char *)(arg0) + 16) = (float) GPR_00554900;
-    *(float *)((char *)(arg0) + 20) = (float) GPR_00554900;
-    *(float *)((char *)(arg0) + 24) = (float) GPR_00554900;
+    *(float *)((char *)(arg0) + 16) = (float) 0.600000024f;
+    *(float *)((char *)(arg0) + 20) = (float) 0.600000024f;
+    *(float *)((char *)(arg0) + 24) = (float) 0.600000024f;
     *(int *)((char *)(arg0) + 28) = 0x3F800000;
     *(int *)((char *)(arg0) + 48) = 0;
     *(int *)((char *)(arg0) + 52) = 0;

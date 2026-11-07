@@ -8,7 +8,6 @@ void FUN_00191860(float *, float, float, float, float, float, float);
 void FUN_001919d0(float *, float, float, float, float, float);
 void FUN_00191b10(float *, float *, float *, float *);
 extern float DAT_004e0f30[16];
-extern float GPR_00554940;
 void FUN_001d7630(void *arg0, float *arg1);
 }
 struct G { int pad[2]; int f8; };
@@ -49,7 +48,7 @@ void FUN_001d7630(void *arg0, float *arg1) {
     if (t->f208 != 0) {
         FUN_00191860(m2, t->f224, t->f220, t->f216, t->f212, t->f64, t->f68);
     } else {
-        float f12 = GPR_00554940 * (2.0f * t->f60);
+        float f12 = 0.0174532924f * (2.0f * t->f60);
         FUN_001919d0(m2, f12, f12, 1.0f, t->f64, t->f68);
     }
     t->f92->vX(m1);

@@ -45,13 +45,13 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 11,965 | 1,530,244 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,694 | 1,923,688 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 12,663 | 1,922,628 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,508 | 906,096 |
-| it sits in its class or module file, not `src/unmatched/` | 11,389 | 1,730,948 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 9,837 | 1,777,188 |
+| it sits in its class or module file, not `src/unmatched/` | 11,347 | 1,726,780 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 9,836 | 1,777,132 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,649 | 1,230,948 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,136 | 719,956 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,114 | 368,228 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,115 | 368,284 |
 
 ## Debt
 
@@ -82,14 +82,14 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `unmatched.functions` | 2,966 | 2,966 | 0 | functions in the layout with no definition in src/ — increase recorded: asm bodies are no longer kept in the repository (owner decision): the 1,206 functions that were asm bodies have no file in src/ and count as unmatched, so unmatched.* rises by what asm_body.* falls; no C source was removed |
 | `unmatched.bytes` | 1,108,904 | 1,108,904 | 0 | bytes of those — increase recorded: asm bodies are no longer kept in the repository (owner decision): the 1,206 functions that were asm bodies have no file in src/ and count as unmatched, so unmatched.* rises by what asm_body.* falls; no C source was removed |
 | `struct.a` | 141 | 141 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 291 | 291 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: naming 1,103 vtable slots gives the report a class to compare: the views it now flags are other objects, none a wrong class |
+| `struct.b` | 293 | 293 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: struct.b 291 to 293: 53 newly named vtable slots make the checker attribute existing local views of other objects (the object system, a returned object, list nodes) to the slot's class; no source got worse |
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 5,670 | 5,670 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 173 | 173 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 76,087 | 76,087 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
-| `foreign_profile.functions` | 211 | 96 | -115 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
-| `foreign_profile.bytes` | 49,208 | 27,332 | -21876 | bytes of those |
-| `orphan.bytes` | 15,928 | 15,100 | -828 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
+| `raw_casts.reflected` | 177 | 177 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) — increase recorded: struct.b 291 to 293: 53 newly named vtable slots make the checker attribute existing local views of other objects (the object system, a returned object, list nodes) to the slot's class; no source got worse |
+| `fun_dat_refs` | 76,085 | 76,085 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `foreign_profile.functions` | 96 | 96 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
+| `foreign_profile.bytes` | 27,332 | 27,332 | 0 | bytes of those |
+| `orphan.bytes` | 15,100 | 15,100 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 10,528 | 10,528 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 
 ## The data half
@@ -164,7 +164,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 8,829 of 20,214 |
+| functions with a recovered name (any: role names included) | 8,882 of 20,214 |
 | functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 1,560 of 20,214 (1,425 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
