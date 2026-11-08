@@ -47,6 +47,8 @@ Every verified unit lands in exactly one category (tools/verify.py `category`):
                  not its address
   inventory-gap  code bytes identical, a reference lands in a symbol-map gap or
                  inside another function's recorded extent
+  unapproved      code bytes identical, but the source uses inline `asm` or `volatile` with no row
+                  in config/source-approvals.tsv; counted in no matched figure.
   foreign-profile code bytes identical only under a provisional per-function
                  override whose compiler, flags or exception mode differ from
                  the function's unit profile (config/SLUS-20836/units.tsv)
@@ -89,6 +91,7 @@ import sys
 import threading
 
 import asmsources
+import sourceapprovals
 import buildcache
 import cc
 import srctree
@@ -328,8 +331,8 @@ def main(argv=None):
     cat_token = re.compile(r"\bcat=([\w-]+)")
     orphan_token = re.compile(r"\borphan=(\d+)")
     override_token = re.compile(r"\boverride=(\w+)")
-    CATEGORIES = ("match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "asm-body", "assembly",
-                  "mismatch", "compile")
+    CATEGORIES = ("match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "unapproved", "asm-body",
+                  "assembly", "mismatch", "compile")
 
     def classify(ok, report):
         """(category, exc, diagnostic, override) from a verify report; see the docstring.
@@ -402,12 +405,19 @@ def main(argv=None):
             cover_store.put(key, {"category": kind, "exc": exc, "diagnostic": diagnostic, "override": override})
         return (nm, kind, exc, diagnostic, override)
 
+    approvals = sourceapprovals.load()
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
         for nm, kind, exc, diagnostic, override in ex.map(cover_one, cands):
             if nm in asm_bodies and kind not in ("mismatch", "compile"):
                 kind = "asm-body"
             elif nm in assembly and kind == "match":
                 kind = "assembly"
+            elif kind == "match":
+                # read after the cache: approving a row changes the category, not the compile
+                owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
+                why = sourceapprovals.problem(src_index[nm], owner, approvals)
+                if why:
+                    kind, diagnostic = "unapproved", "unapproved: " + why
             categories[nm] = (kind, diagnostic)
             if override in ("unused", "redundant"):
                 stale_overrides[nm] = override
@@ -436,6 +446,7 @@ def main(argv=None):
                "name-defect": "code bytes identical, a symbol name is wrong for its address",
                "inventory-gap": "code bytes identical, a reference lands outside the symbol map or inside another extent",
                "foreign-profile": "code bytes identical only under a provisional override of the unit profile (config/SLUS-20836/units.tsv)",
+               "unapproved": "code bytes identical, but `asm` or `volatile` without an owner approval (config/source-approvals.tsv)",
                "asm-body": "retail instructions in an `asm` function: links identically, recovers nothing, not counted",
                "assembly": "owner-approved hand-written assembly source, byte-identical; not C, counted apart",
                "mismatch": "code bytes, size, tables or object shape differ",

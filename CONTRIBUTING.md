@@ -23,6 +23,9 @@ planning something big, open an issue first so two people don't end up on the sa
 The code has to match the original byte for byte. If you can't get a function into C yet, leave it
 out. Please don't wrap its instructions in `asm`.
 
+Inline `asm` and `volatile` make a function count as unmatched until the project owner approves that use
+([why](docs/engine/source-approvals.md)), so look for plain C first.
+
 ## Checking your work
 
 To try one function:

@@ -124,7 +124,7 @@ def semantic_named(name):
 # tools/check.py classifies every unit and commits the table as data/check-categories.tsv
 # (`va name category diagnostic`). Only `match` is fully verified; the others are code
 # bytes identical with a debt still to settle, or not matched at all.
-CATEGORY_ORDER = ["match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "asm-body", "assembly",
+CATEGORY_ORDER = ["match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "unapproved", "asm-body", "assembly",
                   "mismatch", "compile"]
 CATEGORY_EXPLAIN = {
     "match": "code bytes, exception metadata and symbol rules all pass — fully verified",
@@ -133,6 +133,8 @@ CATEGORY_EXPLAIN = {
     "inventory-gap": "code bytes identical; a reference lands in a symbol-map gap or inside another extent",
     "foreign-profile": "code bytes identical only under a provisional per-function override whose compiler, flags or "
                        "exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md)",
+    "unapproved": "code bytes identical, but the source uses inline `asm` or `volatile` the owner has not approved "
+                  "(config/source-approvals.tsv; docs/engine/source-approvals.md)",
     "asm-body": "the retail instructions in an `asm` function: links identically, recovers nothing, counted in no "
                 "figure above (docs/engine/asm-body-matches.md)",
     "assembly": "an owner-approved hand-written assembly source (config/assembly-sources.tsv), byte-identical: "
@@ -461,6 +463,8 @@ DEBT_COUNTERS = [
     ("fun_dat_refs", "FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted)"),
     ("foreign_profile.functions", "code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv)"),
     ("foreign_profile.bytes", "bytes of those"),
+    ("unapproved.functions", "code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv)"),
+    ("unapproved.bytes", "bytes of those"),
     ("orphan.bytes", "exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks"),
     ("inventory.unsymbolised_bytes", "instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py)"),
     ("profile_split.units", "units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build)"),
@@ -565,7 +569,7 @@ def debt_summary(d, syms, matched, asm_body, paths, typed):
         return by.get(kind, {}).get(what, 0) if rec else None
     for kind, key in (("code-only", "code_only"), ("name-defect", "name_defect"),
                       ("inventory-gap", "inventory_gap"), ("foreign-profile", "foreign_profile"),
-                      ("mismatch", "mismatch"), ("compile", "compile")):
+                      ("unapproved", "unapproved"), ("mismatch", "mismatch"), ("compile", "compile")):
         c[key + ".functions"] = cat(kind, "functions")
         c[key + ".bytes"] = cat(kind, "bytes")
     for r in EXC_REASONS:

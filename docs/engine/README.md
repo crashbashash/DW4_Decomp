@@ -129,5 +129,6 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [sd-prologue](sd-prologue.md): the `sd` callee-saved prologue is Sony EE GCC output (the SDK and CRI blocks); census, evidence, and how the Sony compiler builds these units.
 - [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold — the measured MWCC wall behind the 983 accessors, what was tried, and the family's generators.
 - [assembly-sources](assembly-sources.md): hand-written `.S` routines the owner approved (`config/assembly-sources.tsv`), the evidence each needs, and the candidates still open.
+- [source-approvals](source-approvals.md): inline `asm` and `volatile` the owner approved (`config/source-approvals.tsv`), and the `unapproved` category for the rest.
 - [asm-body-matches](asm-body-matches.md): asm bodies are not kept in the repository (owner decision); what a function without C looks like, the generator for local study, assembler quirks.
 - [Oracle runner](oracle-runner.md): the byte oracle (`make check`, `make link`, typed/hygiene/progress gates) on every push via a private self-hosted runner; what it proves, what it cannot block, install and rotation.

@@ -1,0 +1,9 @@
+# Owner-approved inline `asm` and `volatile` in C and C++ sources (tools/sourceapprovals.py). Only the
+# project owner approves a row, after reviewing the evidence. An agent writes one only on the owner's
+# explicit instruction for that function. A function using either without a row is `unapproved`: its
+# source stays and links, but it counts in no matched figure.
+# kind	symbol	count	evidence (docs/engine/source-approvals.md)
+asm	__divdi3	1	#umul_ppmm
+asm	__moddi3	1	#umul_ppmm
+asm	__udivdi3	1	#umul_ppmm
+asm	__umoddi3	1	#umul_ppmm

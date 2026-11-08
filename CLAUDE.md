@@ -28,6 +28,11 @@ evidence-named source that rebuilds to a byte-identical retail ELF. Run every co
   write one only when the owner has explicitly told it to add that specific routine, after reviewing
   its evidence; it never adds one on its own initiative or as part of a broader request ("match
   everything", "clear the queue").
+- **Approved `asm` and `volatile`.** Inline `asm` and `volatile` in C and C++ take the same approval as a
+  `.S` file: a row in `config/source-approvals.tsv`, added after the owner reviewed the evidence that the
+  original source used it ([source approvals](docs/engine/source-approvals.md)). Only the owner approves a
+  row. An agent may write one only when the owner has explicitly told it to add that specific function; it
+  never adds one on its own initiative or as part of a broader request.
   Recovered metadata is fine. The retail executable is reached through the gitignored
   `orig/<GAMEID>/`. Never force-add, and never modify a disc image: work on a copy.
 - **Scope.** The repository holds the decompilation and what it needs: source,
@@ -95,10 +100,13 @@ make it read well. Either can be done alone.
   definition in `src/`: `python3 tools/m2c_batch.py` drafts them (gcc target for Sony EE GCC units;
   `--write` adds a draft only when the C verifies). When a compiler is added, re-attempt the functions in
   its blocks first. Blocks built by a compiler build the project does not have stay without source.
-- **No new inline `asm`.** An `asm` statement inside C passes the byte check whether or not C could produce
-  the same bytes, so it can hide a spelling nobody found. Find the C. `tools/progress.py --debt-check`
-  fails on any rise in `inline_asm.*`; only the owner agrees one, and only `sync` and `ei` have no C
-  spelling. `tools/inline_asm.py --test <source>` shows which existing statements can go.
+- **No unapproved inline `asm` or `volatile`.** Either passes the byte check whether or not C could produce
+  the same bytes, so it can hide a spelling nobody found. Find the C. A function using one without a row in
+  `config/source-approvals.tsv` is filed as `unapproved`: it links, but it is not matched
+  ([source approvals](docs/engine/source-approvals.md)). Only `sync` and `ei` need no row, as C cannot spell
+  them. A `volatile` that only pins when a load is scheduled, where retail reads once, is never approved.
+  `python3 tools/sourceapprovals.py --list` is the queue, and `tools/inline_asm.py --test <source>` shows
+  which `asm` statements can go. `tools/progress.py --debt-check` also fails on any rise in `inline_asm.*`.
 - **Names** come from evidence; a guess goes in the topic document's open questions, not into a name. Apply overlays with
   `tools/apply_names.py` (dry run, then `--apply --check`).
 
@@ -108,7 +116,8 @@ make it read well. Either can be done alone.
 profile** in `config/SLUS-20836/units.tsv` (compiler, flags, exception mode;
 [build profiles](docs/engine/build-profiles.md)), including the C++ exception metadata. A function that
 matches only under a per-function override in `config/SLUS-20836/unit-flags.tsv` / `unit-compilers.tsv`
-is `foreign-profile` debt, not a match. That is all a match needs: decompiler output, `FUN_` names and
+is `foreign-profile` debt, not a match, and one using inline `asm` or `volatile` without an owner approval
+is `unapproved` debt. That is all a match needs: decompiler output, `FUN_` names and
 raw casts can land as they are.
 
 **Readable** is a separate pass over matched code, measured by the README's Readable column. A function
@@ -156,7 +165,8 @@ runner runs them again on every pushed commit ([oracle runner](docs/engine/oracl
 
 Run `make check-fresh` and `make link-fresh` (cache ignored) before any commit that changes
 `config/<GAMEID>/units.tsv`, `unit-*`, `extent-overrides.tsv`, `jumptables.txt`, `compiler-runtime-symbols.tsv`
-or `tools/`, and before a milestone. A drop in the `match` count is a regression: find the cause, never
+or `tools/`, and before a milestone. A drop in the `match` count is a regression, and that includes a function moving to `unapproved`, such as
+through a new `volatile`: find the cause, never
 explain it away. A debt counter that rises (`tools/progress.py --debt-check`) is re-recorded only with a
 reason (`--debt-baseline --allow-increase "<reason>"`; [debt ratchet](docs/engine/debt-ratchet.md)).
 

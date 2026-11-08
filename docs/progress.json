@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2648912,
-    "functions": 18706
+    "bytes": 2213976,
+    "functions": 18157
    },
    "mismatch": {
     "bytes": 0,
@@ -102,6 +102,10 @@
    "name-defect": {
     "bytes": 0,
     "functions": 0
+   },
+   "unapproved": {
+    "bytes": 434936,
+    "functions": 549
    }
   },
   "code_only_by_exc": {
@@ -124,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2653024,
-   "functions": 18721
+   "bytes": 2218088,
+   "functions": 18172
   },
   "fully_verified": {
-   "bytes": 2648912,
-   "functions": 18706
+   "bytes": 2213976,
+   "functions": 18157
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -138,8 +142,8 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 4112,
-  "fully_matched": 2653024,
-  "fully_verified": 2648912,
+  "fully_matched": 2218088,
+  "fully_verified": 2213976,
   "functions_asm_body": 0,
   "functions_assembly": 15,
   "matched": 2659640,
@@ -300,6 +304,14 @@
     "reason": null,
     "value": 287
    },
+   "unapproved.bytes": {
+    "reason": null,
+    "value": 434936
+   },
+   "unapproved.functions": {
+    "reason": null,
+    "value": 549
+   },
    "unmatched.bytes": {
     "reason": null,
     "value": 800380
@@ -345,13 +357,15 @@
    "struct.a": 139,
    "struct.b": 300,
    "struct.c": 287,
+   "unapproved.bytes": 434936,
+   "unapproved.functions": 549,
    "unmatched.bytes": 800380,
    "unmatched.functions": 1465
   }
  },
  "functions": {
-  "fully_matched": 18721,
-  "fully_verified": 18706,
+  "fully_matched": 18172,
+  "fully_verified": 18157,
   "matched": 18734,
   "named": 9646,
   "named_semantic": 1969,
@@ -443,43 +457,43 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 383392,
+  "bytes": 382960,
   "failing": {
    "addresses": {
-    "bytes": 2158204,
-    "functions": 13645
+    "bytes": 1730568,
+    "functions": 13128
    },
    "fields": {
-    "bytes": 790668,
-    "functions": 3506
+    "bytes": 575864,
+    "functions": 3275
    },
    "idioms": {
-    "bytes": 1289820,
-    "functions": 6044
+    "bytes": 1030064,
+    "functions": 5741
    },
    "name": {
-    "bytes": 1758636,
-    "functions": 13135
+    "bytes": 1353284,
+    "functions": 12646
    },
    "placed": {
-    "bytes": 1927240,
-    "functions": 12237
+    "bytes": 1560228,
+    "functions": 11782
    },
    "references": {
-    "bytes": 2009128,
-    "functions": 10769
+    "bytes": 1593176,
+    "functions": 10294
    },
    "types": {
-    "bytes": 956092,
-    "functions": 3655
+    "bytes": 692296,
+    "functions": 3394
    },
    "virtuals": {
-    "bytes": 407880,
-    "functions": 1259
+    "bytes": 286064,
+    "functions": 1139
    }
   },
-  "functions": 2197,
-  "matched_functions": 18721
+  "functions": 2194,
+  "matched_functions": 18172
  },
  "regions": [
   {

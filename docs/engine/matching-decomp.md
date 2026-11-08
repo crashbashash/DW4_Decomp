@@ -352,10 +352,11 @@ Retail shapes that only one spelling reproduces:
 * **`daddiu reg,zero,N`** is a constant assigned to a `bool`, `short` or `char` variable.
 * **An inline destructor always emits its out-of-line copy.** Its body must be spelled as retail's copy is, and the
   function needs a `duplicates` row in `unit-objects.json`, which the verifier checks against retail's bytes.
-* **A value spilled and reloaded before every use.** Declare the local `volatile`:
-  `RT * volatile sp6C` reproduces the register allocation of `FUN_00234d70`, where a plain
-  local adds a saved register. Read it once into a plain local for the final release so the
-  object stays in `a0`.
+* **A value spilled and reloaded before every use.** A local declared `volatile` reproduces this, as
+  `RT * volatile sp6C` does for `FUN_00234d70`, where a plain local adds a saved register. Read it once into
+  a plain local for the final release so the object stays in `a0`. It is not a finished spelling: the
+  function stays `unapproved` until the owner approves that use
+  ([source approvals](source-approvals.md)), so look for what really keeps the value on the stack first.
 * **The object graph's reference release** compiles only from
   `if (&obj->field) { release(obj->field); }` on a real struct with the field at its recovered
   offset. Retail emits a redundant `addiu vX,base,OFF; beqz vX` on the field's address before

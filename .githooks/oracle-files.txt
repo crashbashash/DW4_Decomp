@@ -18,4 +18,7 @@ config/SLUS-20836/compiler-runtime-symbols.tsv
 config/SLUS-20836/data-names.tsv
 config/assembly-sources.tsv
 tools/asmsources.py
+config/source-approvals.tsv
+tools/sourceapprovals.py
+tools/inline_asm.py
 tools/units.py
