@@ -326,7 +326,7 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 3420,
    "foreign_profile.functions": 19,
-   "fun_dat_refs": 84475,
+   "fun_dat_refs": 84221,
    "inline_asm.hardware": 11,
    "inline_asm.other": 37,
    "inventory.unsymbolised_bytes": 10528,
@@ -353,9 +353,9 @@
   "fully_matched": 18720,
   "fully_verified": 18705,
   "matched": 18734,
-  "named": 9419,
-  "named_semantic": 1742,
-  "named_semantic_matched": 1575,
+  "named": 9437,
+  "named_semantic": 1760,
+  "named_semantic_matched": 1592,
   "total": 20214
  },
  "largest": [
@@ -443,11 +443,11 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 286184,
+  "bytes": 297020,
   "failing": {
    "addresses": {
-    "bytes": 2242748,
-    "functions": 13882
+    "bytes": 2238064,
+    "functions": 13861
    },
    "fields": {
     "bytes": 790804,
@@ -458,16 +458,16 @@
     "functions": 6059
    },
    "name": {
-    "bytes": 1841996,
-    "functions": 13360
+    "bytes": 1837948,
+    "functions": 13343
    },
    "placed": {
-    "bytes": 2012964,
-    "functions": 12455
+    "bytes": 2002128,
+    "functions": 12427
    },
    "references": {
-    "bytes": 2063844,
-    "functions": 10953
+    "bytes": 2061652,
+    "functions": 10930
    },
    "types": {
     "bytes": 953844,
@@ -478,7 +478,7 @@
     "functions": 1258
    }
   },
-  "functions": 1945,
+  "functions": 1973,
   "matched_functions": 18705
  },
  "regions": [
