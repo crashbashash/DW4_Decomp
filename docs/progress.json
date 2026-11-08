@@ -215,7 +215,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 84551
+    "value": 84592
    },
    "inline_asm.hardware": {
     "reason": null,
@@ -291,11 +291,11 @@
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 870780
+    "value": 869800
    },
    "unmatched.functions": {
     "reason": null,
-    "value": 1581
+    "value": 1577
    }
   },
   "counters": {
