@@ -16,7 +16,7 @@ typedef struct {
     char name[1024];
 } OpenRequest;
 
-void FUN_0010d890(void *addr, int size);
+void sceSifWriteBackDCache(void *addr, int size);
 
 typedef struct {
     int sema;

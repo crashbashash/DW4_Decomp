@@ -27,8 +27,8 @@ extern char DAT_0055dac0[192];
 extern int *DAT_0055d5e8;
 extern int *DAT_0055d5ec;
 extern int *DAT_0055d5f0;
-void FUN_0010d890(void *p, int size);
-void FUN_00119f98(void *arg);
+void sceSifWriteBackDCache(void *p, int size);
+void mceGetInfoApdx(void *arg);
 int FUN_00119ff0(int port, int slot, int *type, int *free, int *format) {
     int r;
     if (DAT_0055d5c0.server == 0) return -100;
@@ -42,8 +42,8 @@ int FUN_00119ff0(int port, int slot, int *type, int *free, int *format) {
     DAT_0055d5e8 = type;
     DAT_0055d5ec = free;
     DAT_0055d5f0 = format;
-    FUN_0010d890(DAT_0055dac0, 192);
-    r = FUN_0010e2a8(&DAT_0055d5c0, 1, 1, &DAT_0055d640, 48, &DAT_0055eb80, 4, FUN_00119f98, DAT_0055dac0);
+    sceSifWriteBackDCache(DAT_0055dac0, 192);
+    r = FUN_0010e2a8(&DAT_0055d5c0, 1, 1, &DAT_0055d640, 48, &DAT_0055eb80, 4, mceGetInfoApdx, DAT_0055dac0);
     if (r == 0) {
         DAT_00485190 = 1;
     } else {

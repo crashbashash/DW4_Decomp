@@ -1,5 +1,5 @@
 extern char DAT_004d2090[];
-void FUN_001061d8(char *d, int PMV[2][2][2], int *dmvector, int mv_field_sel[2][2], int s,
+void _motionVectors(char *d, int PMV[2][2][2], int *dmvector, int mv_field_sel[2][2], int s,
                   int motion_vector_count, int mv_format, int h_r_size, int v_r_size, int dmv, int mvscale);
 void FUN_00106378(char *d, int *pmv, int *dmvector, int h_r_size, int v_r_size, int dmv, int mvscale, int full_pel);
 void FUN_001064c8(char *d, unsigned int cmd);
@@ -56,7 +56,7 @@ int FUN_00105ca8(char *ld, int *pmacroblock_type, int *pmotion_type, int *pdct_t
 
     if ((*pmacroblock_type & 8) || ((*pmacroblock_type & 1) && concealment_motion_vectors)) {
         if (LD(2144))
-            FUN_001061d8(ld, PMV, dmvector, motion_vertical_field_select, 0, motion_vector_count, mv_format,
+            _motionVectors(ld, PMV, dmvector, motion_vertical_field_select, 0, motion_vector_count, mv_format,
                          LD(380) - 1, LD(384) - 1, dmv, mvscale);
         else
             FUN_00106378(ld, PMV[0][0], dmvector, LD(368) - 1, LD(368) - 1, 0, 0, LD(364));
@@ -66,7 +66,7 @@ int FUN_00105ca8(char *ld, int *pmacroblock_type, int *pmotion_type, int *pdct_t
 
     if (*pmacroblock_type & 4) {
         if (LD(2144))
-            FUN_001061d8(ld, PMV, dmvector, motion_vertical_field_select, 1, motion_vector_count, mv_format,
+            _motionVectors(ld, PMV, dmvector, motion_vertical_field_select, 1, motion_vector_count, mv_format,
                          LD(388) - 1, LD(392) - 1, 0, mvscale);
         else
             FUN_00106378(ld, PMV[0][1], dmvector, LD(376) - 1, LD(376) - 1, 0, 0, LD(372));

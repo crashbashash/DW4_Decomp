@@ -1,0 +1,52 @@
+typedef struct { int pid; void *pkt_table; int pkt_table_len; int unused1; int unused2; void *rdata_table; int rdata_table_len; void *client_table; int client_table_len; int rdata_table_idx; } RpcData;
+typedef struct { int hdr[3]; int value; } Cmd;
+extern int DAT_00481e70;
+extern char DAT_00556200[];
+extern char DAT_00556a00[];
+extern char DAT_00557200[];
+extern RpcData DAT_00557a00;
+int FUN_00113f20(void);
+int FUN_00113f78(void);
+void sceSifInitCmd(void);
+void sceSifAddCmdHandler(int, void *, void *);
+void _request_end(void *, void *);
+void _request_bind(void *, void *);
+void _request_call(void *, void *);
+void _request_rdata(void *, void *);
+int FUN_0010b2f0(int);
+int FUN_0010b2e0(int, int);
+int FUN_0010d198(int);
+int FUN_0010d6c8(int, void *, int, int, int, int);
+void sceSifInitRpc(void) {
+    Cmd *cmd;
+    FUN_00113f20();
+    if (DAT_00481e70) {
+        FUN_00113f78();
+        return;
+    }
+    DAT_00481e70 = 1;
+    FUN_00113f78();
+    sceSifInitCmd();
+    FUN_00113f20();
+    DAT_00557a00.pkt_table = (void *)((unsigned int)DAT_00556200 | 0x20000000);
+    DAT_00557a00.pkt_table_len = 32;
+    DAT_00557a00.unused1 = 0;
+    DAT_00557a00.unused2 = 0;
+    DAT_00557a00.rdata_table = (void *)((unsigned int)DAT_00556a00 | 0x20000000);
+    DAT_00557a00.rdata_table_len = 32;
+    DAT_00557a00.client_table = (void *)((unsigned int)DAT_00557200 | 0x20000000);
+    DAT_00557a00.client_table_len = 32;
+    DAT_00557a00.rdata_table_idx = 0;
+    DAT_00557a00.pid = 1;
+    sceSifAddCmdHandler(0x80000008, _request_end, &DAT_00557a00);
+    sceSifAddCmdHandler(0x80000009, _request_bind, &DAT_00557a00);
+    sceSifAddCmdHandler(0x8000000a, _request_call, &DAT_00557a00);
+    sceSifAddCmdHandler(0x8000000c, _request_rdata, &DAT_00557a00);
+    FUN_00113f78();
+    if (FUN_0010b2f0(0x80000002)) return;
+    cmd = (Cmd *)(DAT_00556200 + 64);
+    cmd->value = 1;
+    FUN_0010d6c8(0x80000002, cmd, 16, 0, 0, 0);
+    while (!FUN_0010d198(0));
+    FUN_0010b2e0(0x80000002, 1);
+}

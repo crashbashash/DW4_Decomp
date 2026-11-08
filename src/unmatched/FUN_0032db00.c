@@ -12,7 +12,7 @@ extern MediaRpcShared *DAT_00587360;
 void *memcpy(void *, const void *, int);
 void *memmove(void *, const void *, int);
 void FUN_0010b858(char *, char *);
-void FUN_0010bd90(int);
+void iWakeupThread(int);
 void FUN_0032db00(MediaRpcCompletion *c) {
     int headSize;
     int tailSize;
@@ -43,7 +43,7 @@ void FUN_0032db00(MediaRpcCompletion *c) {
         thread = w->u.wait.thread;
         if (callback == 0) {
             *w->u.wait.slot = w->u.wait.value;
-            FUN_0010bd90(thread);
+            iWakeupThread(thread);
         } else {
             callback(thread, w->u.wait.value);
         }

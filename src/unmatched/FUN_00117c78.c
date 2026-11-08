@@ -1,5 +1,5 @@
 extern int DAT_00485108;
-int FUN_00118f10(void);
+int scePadGetModVersion(void);
 typedef struct {
     int f0[9];
     int server;
@@ -27,7 +27,7 @@ int FUN_00117c78(int mode) {
         i = 0x10000;
         while (i--);
     }
-    r = FUN_00118f10();
+    r = scePadGetModVersion();
     if (r >> 8 != 4) {
         if (DAT_0048510c) {
             FUN_0010d108(DAT_004d2998);

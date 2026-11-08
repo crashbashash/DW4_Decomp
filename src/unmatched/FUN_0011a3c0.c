@@ -34,8 +34,8 @@ typedef struct {
 extern McNamePkt DAT_0055d670;
 char *FUN_0012ad58(char *dst, const char *src, unsigned int n);
 extern char DAT_0055db80[1024];
-void FUN_0010d890(void *p, int size);
-void FUN_0011a330(void *arg);
+void sceSifWriteBackDCache(void *p, int size);
+void mceStorePwd(void *arg);
 int FUN_0011a3c0(int port, int slot, char *name, void *info) {
     int r;
     if (DAT_0055d5c0.server == 0) return -100;
@@ -49,8 +49,8 @@ int FUN_0011a3c0(int port, int slot, char *name, void *info) {
     DAT_0055d670.f16 = DAT_0055db80;
     FUN_0012ad58(DAT_0055d670.name, name, 1023);
     DAT_0055d670.name[1023] = 0;
-    FUN_0010d890(DAT_0055db80, 1024);
-    r = FUN_0010e2a8(&DAT_0055d5c0, 12, 1, &DAT_0055d670, 1044, &DAT_0055eb80, 4, FUN_0011a330, info);
+    sceSifWriteBackDCache(DAT_0055db80, 1024);
+    r = FUN_0010e2a8(&DAT_0055d5c0, 12, 1, &DAT_0055d670, 1044, &DAT_0055eb80, 4, mceStorePwd, info);
     if (r == 0) {
         DAT_00485190 = 12;
     } else {

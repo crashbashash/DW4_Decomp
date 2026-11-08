@@ -25,7 +25,7 @@ typedef struct {
 int FUN_0010ef30(int op);
 int FUN_0010f060(void);
 void FUN_0010ef60(void);
-FileEntry *FUN_0010eab8(int fd);
+FileEntry *get_iob(int fd);
 int CreateSema(SemaParam *param);
 int DeleteSema(int sema);
 int WaitSema(int sema);
@@ -43,7 +43,7 @@ int FUN_00110d60(int fd, int mode)
     int result;
     int sema;
     int status;
-    entry = FUN_0010eab8(fd);
+    entry = get_iob(fd);
     FUN_0010ef30(11);
     if (D_00481efc == 0) {
         FUN_0010ef60();

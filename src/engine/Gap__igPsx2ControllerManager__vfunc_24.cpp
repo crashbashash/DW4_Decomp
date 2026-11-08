@@ -5,7 +5,7 @@ class Pe { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 struct Rt { char pad[56]; int f56; };
 extern "C" {
 int FUN_00117c78(...);
-int FUN_00117ed8(...);
+int scePadPortOpen(...);
 int strncmp(...);
 void *FUN_00147090(...);
 int FUN_00225300(...);
@@ -111,7 +111,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                     al2 = (Al *)Memory_GetAllocatorBySelector(DAT_00587060[0]);
                 }
                 mem = al2->vX(0x100, 0x40);
-                if (FUN_00117ed8(s3, s1, mem) != 1) {
+                if (scePadPortOpen(s3, s1, mem) != 1) {
                     Memory_FreeBuffer(mem);
                 } else {
                     sp88 = (igPsx2Controller *)FUN_00147090(igObject_GetAllocator(arg0));

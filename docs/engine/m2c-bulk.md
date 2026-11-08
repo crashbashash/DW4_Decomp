@@ -636,9 +636,9 @@ accepted. In its pattern the name must be separated from the type tokens by whit
 
     ^(\s*(?:[A-Za-z_]\w*\s+)*[A-Za-z_]\w*\s*\**\s*)([A-Za-z_]\w*)\s*\([^;]*\)\s*;\s*$
 
-lets `([A-Za-z_]\w*)` be split. For the call statement `FUN_00102d08(arg3);` the match is
+lets `([A-Za-z_]\w*)` be split. For the call statement `WatchDma(arg3);` the match is
 group(1) `    FUN_00102`, group(2) `d08`, so the rewrite replaces the whole line with
-`    FUN_00102d08();` — **the argument is deleted**. Every bare call statement in every candidate
+`    WatchDma();` — **the argument is deleted**. Every bare call statement in every candidate
 loses its arguments, and because this is a text pass there is no error to notice: the candidate just
 compiles to one or two instructions that do not match retail.
 
@@ -650,7 +650,7 @@ int FUN_001033f8(void *arg0, unsigned int arg1, int arg2, int arg3) {
     if (arg2 == 1) {
         return (unsigned int) *(int *)((char *)arg0 + 16) < arg1;
     }
-    FUN_00102d08(arg0, arg1, arg3);
+    WatchDma(arg0, arg1, arg3);
     return 0;
 }
 ```

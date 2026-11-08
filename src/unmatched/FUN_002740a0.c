@@ -23,7 +23,7 @@ extern void FUN_002716f8(int);
 extern void FUN_00271a68(int);
 extern void FUN_00272228(void);
 extern void FUN_00272118(void);
-extern void FUN_00116c80(int);
+extern void sceCdSync(int);
 extern void FUN_0010b918(void *, void *);
 
 int FUN_002740a0(DvCiHandle *h, int nsct, char *buf)
@@ -66,7 +66,7 @@ int FUN_002740a0(DvCiHandle *h, int nsct, char *buf)
     }
     ready = D_004ab444;
     if (ready == 1) {
-        FUN_00116c80(0);
+        sceCdSync(0);
         FUN_00272228();
         FUN_00272118();
         FUN_00271a68(h->req);

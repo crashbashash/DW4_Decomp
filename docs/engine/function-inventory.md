@@ -92,7 +92,7 @@ The rows this pass added, by evidence class:
 
 | class | rows | what the bytes show |
 | --- | --- | --- |
-| epilogue growth | 159 (all functions of the EE GCC blocks; of the 156 such rows in the table, 25 match and 131 have no C source yet) + `FUN_00114780` (`eret` then `jr ra; nop`) | the dump stopped 3–5 words before `ld ra; jr ra; addiu sp,+N`; the walk from the symbol start ends there |
+| epilogue growth | 159 (all functions of the EE GCC blocks; of the 156 such rows in the table, 25 match and 131 have no C source yet) + `SetT2` (`eret` then `jr ra; nop`) | the dump stopped 3–5 words before `ld ra; jr ra; addiu sp,+N`; the walk from the symbol start ends there |
 | `cut`: tail-call wrapper + framed body | 20 (`FUN_00129c88`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `FUN_0012c858`, `FUN_00169e30`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
 | `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `FUN_00293788`, `FUN_00294838/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
 | `cut`: span reached a referenced leaf | 5 (`Gap__Core__igCallStackTable__vfunc_28`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |

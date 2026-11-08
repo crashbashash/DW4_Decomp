@@ -11,7 +11,7 @@ R FUN_0032d640(int, int);
 R FUN_0032d850(int, int, int, int, int);
 void FUN_00113f20(void);
 void FUN_00113f78(void);
-void FUN_0010d4c8(int, void *, int);
+void sceSifAddCmdHandler(int, void *, int);
 void FUN_0032db00(void);
 extern R DAT_004fb410;
 extern int DAT_004f9498[4];
@@ -35,7 +35,7 @@ extern "C" void Gap__Core__igPsx2Media__vfunc_13(Media *self) {
     FUN_0032d640(self->f12, 0x12114);
     FUN_0032d850(self->f12, 19, (int)(unsigned)self->f8, (char)0, (char)0);
     FUN_00113f20();
-    FUN_0010d4c8(4, (void *)FUN_0032db00, 0);
+    sceSifAddCmdHandler(4, (void *)FUN_0032db00, 0);
     FUN_00113f78();
     DAT_00587360 = self;
     self->f16->v92();

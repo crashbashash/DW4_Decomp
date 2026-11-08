@@ -16,7 +16,7 @@ typedef struct {
     char name[1024];
 } OpenRequest;
 
-void FUN_0010d890(void *addr, int size);
+void sceSifWriteBackDCache(void *addr, int size);
 
 typedef struct {
     char bytes[64];
@@ -73,7 +73,7 @@ int FUN_00111058(const unsigned char *name, const StatBlock *stat, unsigned int 
     req->result = &result;
     req->sema = sema;
     req->result_size = 4;
-    FUN_0010d890(&D_00557a80, 1104);
+    sceSifWriteBackDCache(&D_00557a80, 1104);
     if (FUN_0010e2a8(D_00559180, 13, 0, &D_00557a80, i + 81, D_005586c0, 4, 0, 0) < 0) {
         DeleteSema(sema);
         FUN_0010ef60();

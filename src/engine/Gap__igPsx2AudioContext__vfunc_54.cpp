@@ -7,7 +7,7 @@ void *FUN_002ba650(...);
 T *FUN_002b7f40(...);
 void igObject_Destroy(T *);
 int FUN_00113f20(...);
-int FUN_0010d4c8(...);
+int sceSifAddCmdHandler(...);
 int FUN_00113f78(...);
 int FUN_00143840(...);
 int FUN_00143880(...);
@@ -40,7 +40,7 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
         ((C *)arg0->_streamingThread)->a140(arg1);
         ((C *)arg0->_streamingThread)->a120();
         FUN_00113f20();
-        FUN_0010d4c8(0, &FUN_00143840, &DAT_0055f5b0[0]);
+        sceSifAddCmdHandler(0, &FUN_00143840, &DAT_0055f5b0[0]);
         FUN_00113f78();
     }
 }

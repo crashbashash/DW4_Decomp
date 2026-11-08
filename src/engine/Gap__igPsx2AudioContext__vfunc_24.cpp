@@ -8,7 +8,7 @@ extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];
 extern struct L *DAT_0055f5d0[4];
 extern "C" void FUN_00143800(void);
-extern "C" int FUN_00112ca0(int *);
+extern "C" int sceSifSearchModuleByName(int *);
 extern "C" struct Status FUN_0032cf50(int *, int, int, int);
 extern "C" int FUN_00300db0(struct A *, int, int);
 extern "C" int FUN_00301000(struct A *);
@@ -22,12 +22,12 @@ extern "C" struct Status FUN_0032d6d0(struct Obj *, int, int, int, int, int, int
 extern "C" int FUN_00300f50(struct A *, int);
 extern "C" struct Status FUN_0032d850(struct Obj *, int, unsigned int, int, int);
 extern "C" int FUN_00113f20(void);
-extern "C" int FUN_0010d4c8(int, void (*)(void), int);
+extern "C" int sceSifAddCmdHandler(int, void (*)(void), int);
 extern "C" int FUN_00113f78(void);
 extern "C" void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct A *arg1) {
     struct Obj *o;
     int s0; int *buf; int n; struct L *l;
-    if (FUN_00112ca0(DAT_004d5f80) < 0) {
+    if (sceSifSearchModuleByName(DAT_004d5f80) < 0) {
         if (FUN_0032cf50(DAT_004d5f98, 2, 0, 0) != *(Status *)DAT_004fb410) {
             *arg0 = DAT_004fb418[0];
             return;
@@ -63,7 +63,7 @@ extern "C" void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct A *arg1) {
     FUN_0032d850(arg1->conn, 0x40001, 0x3FFF3FFF, 0, 0);
     arg1->f40 = FUN_00300db0(arg1, 0x2000, 0x10);
     FUN_00113f20();
-    FUN_0010d4c8(3, FUN_00143800, 0);
+    sceSifAddCmdHandler(3, FUN_00143800, 0);
     FUN_00113f78();
     *arg0 = DAT_004fb410[0];
 }

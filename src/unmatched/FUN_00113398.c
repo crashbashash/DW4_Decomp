@@ -16,12 +16,12 @@ typedef struct {
     int attr;
 } DmaTransfer;
 
-void FUN_00116090(int a, int b);
+void sceSifExecNotifyHandler(int a, int b);
 void FUN_0010b1b0(void);
 unsigned int sceSifGetReg(unsigned int reg);
 void FUN_0010b2e0(unsigned int reg, unsigned int value);
 unsigned int FUN_0010b2a0(DmaTransfer *dma, int count);
-void FUN_0010d890(void *addr, int size);
+void sceSifWriteBackDCache(void *addr, int size);
 extern BootPacket D_00559680;
 
 int FUN_00113398(const char *name, int arg)
@@ -29,8 +29,8 @@ int FUN_00113398(const char *name, int arg)
     DmaTransfer dma;
     void *dest;
     int i;
-    FUN_00116090(0, 0);
-    FUN_00116090(1, 0);
+    sceSifExecNotifyHandler(0, 0);
+    sceSifExecNotifyHandler(1, 0);
     FUN_0010b1b0();
     dest = (void *)sceSifGetReg(0x80000000);
     D_00559680.arg = arg;
@@ -46,7 +46,7 @@ int FUN_00113398(const char *name, int arg)
     dma.dest = dest;
     dma.size = 104;
     dma.attr = 68;
-    FUN_0010d890(&D_00559680, 104);
+    sceSifWriteBackDCache(&D_00559680, 104);
     FUN_0010b2e0(4, 0x40000);
     if (FUN_0010b2a0(&dma, 1) != 0) {
         FUN_0010b2e0(4, 0x10000);

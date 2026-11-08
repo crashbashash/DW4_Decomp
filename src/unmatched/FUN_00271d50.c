@@ -28,9 +28,9 @@ extern int D_004a9300;
 extern unsigned char D_004a9304;
 
 extern void FUN_002725a0(int marker);
-extern int FUN_001179d8(void);
-extern int FUN_00116c80(int mode);
-extern int FUN_00117690(int lsn, int sectors, void *buf, void *mode);
+extern int sceCdBreak(void);
+extern int sceCdSync(int mode);
+extern int sceCdRead(int lsn, int sectors, void *buf, void *mode);
 extern int FUN_00271c00(Srd *srd);
 extern int FUN_0010d108(char *fmt, ...);
 
@@ -43,12 +43,12 @@ void FUN_00271d50(Srd *srd)
         switch (srd->state) {
         case 2:
             FUN_002725a0(0x1600);
-            busy = FUN_001179d8();
+            busy = sceCdBreak();
             FUN_002725a0(0x1601);
             if (busy == 0)
                 FUN_0010d108(D_004efca8, D_004a92dc);
             FUN_002725a0(0x1700);
-            FUN_00116c80(0);
+            sceCdSync(0);
             FUN_002725a0(0x1701);
             srd->state = 0;
             D_004a92e4++;
@@ -72,7 +72,7 @@ void FUN_00271d50(Srd *srd)
         FUN_002725a0(0x1800);
         if (D_004a9300 == 1)
             srd->spindlctrl = D_004a9304;
-        busy = FUN_00117690(srd->lsn, srd->sectors, srd->buf, &srd->trycount);
+        busy = sceCdRead(srd->lsn, srd->sectors, srd->buf, &srd->trycount);
         FUN_002725a0(0x1801);
         if (busy == 1) {
             D_004a92e0++;
@@ -84,7 +84,7 @@ void FUN_00271d50(Srd *srd)
     }
     if (srd->state == 2) {
         FUN_002725a0(0x1900);
-        busy = FUN_00116c80(1);
+        busy = sceCdSync(1);
         FUN_002725a0(0x1901);
         result = FUN_00271c00(srd);
         if (busy == 0) {

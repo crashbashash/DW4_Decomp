@@ -41,12 +41,12 @@ Exact script call-site references, message arguments, API roots and native edges
 | `0x0010af20` | `WaitSema` | 16 | 0 |
 | `0x0010b340` | `GetMemorySize` | 16 | 0 |
 | `0x0010b350` | `_InitTLB` | 16 | 0 |
-| `0x0010b5e0` | `FUN_0010b5e0` | 172 | 0 |
+| `0x0010b5e0` | `sbrk` | 172 | 0 |
 | `0x0010c8d8` | `FUN_0010c8d8` | 148 | 0 |
 | `0x0010c970` | `FUN_0010c970` | 360 | 1 |
 | `0x0010cad8` | `FUN_0010cad8` | 1524 | 16 |
 | `0x001138b0` | `RFU086_WaitEvnetFlag` | 16 | 0 |
-| `0x00113990` | `FUN_00113990` | 500 | 0 |
+| `0x00113990` | `InitTLB32MB` | 500 | 0 |
 | `0x00113f20` | `FUN_00113f20` | 84 | 0 |
 | `0x00113f78` | `FUN_00113f78` | 24 | 0 |
 | `0x0018be80` | `FUN_0018be80` | 1340 | 0 |

@@ -4,7 +4,7 @@ struct FolderEntryWide { char bytes[328]; };
 struct FolderStringRef;
 extern "C" {
 extern int DAT_00586f20;
-int FUN_00110b30(int);
+int sceDopen(int);
 int FUN_00110bf8(int);
 int FUN_00110d60(int, FolderEntryWide *);
 int FUN_002eb010(int);
@@ -48,7 +48,7 @@ struct FolderObjectRef {
 extern "C" FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self);
 FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
     FolderEntryWide entry;
-    int handle = FUN_00110b30(self->path);
+    int handle = sceDopen(self->path);
     if (handle < 0) {
         return FolderObjectRef(0);
     }

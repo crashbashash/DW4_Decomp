@@ -3,12 +3,12 @@ int AddIntcHandler(int, int (*)(), int);
 int FUN_002651d0();
 int FUN_0010b9c0(int);
 int FUN_0010ba28(int);
-int FUN_0010d940(int);
-int FUN_001120e8();
+int sceSifInitRpc(int);
+int sceSifInitIopHeap();
 int FUN_00116fb0(int);
-int FUN_00117a90(int);
-int FUN_00118fe0();
-int FUN_00119138(...);
+int sceCdMmode(int);
+int sceSdRemoteInit();
+int sceSdRemote(...);
 int memset(void *, int, int);
 int sprintf(...);
 int FUN_0026ac50(int);
@@ -61,25 +61,25 @@ int FUN_00332860(void) {
     if (GPR_00554de8 != 0) {
         return 1;
     }
-    FUN_0010d940(0);
-    FUN_001120e8();
+    sceSifInitRpc(0);
+    sceSifInitIopHeap();
     FUN_00116fb0(0);
     switch (DAT_005873c8[0]) {
     case 1:
-        FUN_00117a90(1);
+        sceCdMmode(1);
         break;
     case 2:
-        FUN_00117a90(2);
+        sceCdMmode(2);
         break;
     }
     GPR_005549b8 = 0;
     FUN_0032cf50(&sp23C, &DAT_004ffe70[0], 1, 0, 0);
-    FUN_00118fe0();
-    FUN_00119138(1, 0x8000, 0);
-    FUN_00119138(1, 0x8010, 0x980, 0x3FFF);
-    FUN_00119138(1, 0x8010, 0xA80, 0x3FFF);
-    FUN_00119138(1, 0x8010, 0x981, 0x3FFF);
-    FUN_00119138(1, 0x8010, 0xA81, 0x3FFF);
+    sceSdRemoteInit();
+    sceSdRemote(1, 0x8000, 0);
+    sceSdRemote(1, 0x8010, 0x980, 0x3FFF);
+    sceSdRemote(1, 0x8010, 0xA80, 0x3FFF);
+    sceSdRemote(1, 0x8010, 0x981, 0x3FFF);
+    sceSdRemote(1, 0x8010, 0xA81, 0x3FFF);
     if (DAT_005873d0[0] != 0) {
         sprintf(sp30, &DAT_004ffe80[0], &DAT_005873d0[0]);
     } else if (strcmp(&DAT_004ffe90[0], &DAT_004ffea0[0]) == 0) {

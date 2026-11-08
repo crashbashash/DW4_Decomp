@@ -37,10 +37,10 @@ extern char DAT_004d2b10[];
 extern int DAT_00485198;
 int FUN_0010aee0(Sema *s);
 int FUN_0010af20(int sema);
-void FUN_0010d940(int mode);
+void sceSifInitRpc(int mode);
 int FUN_0010e0d8(void *cd, unsigned int id, int mode);
 int FUN_0010d108(const char *fmt, ...);
-int FUN_00119ed0(int mode, int *cmd, int *result);
+int sceMcSync(int mode, int *cmd, int *result);
 int FUN_001194c0(void) {
     Sema s;
     int r;
@@ -55,9 +55,9 @@ int FUN_001194c0(void) {
         s.option = 0;
         DAT_00485198 = FUN_0010aee0(&s);
     }
-    FUN_00119ed0(0, 0, 0);
+    sceMcSync(0, 0, 0);
     FUN_0010af20(DAT_00485194);
-    FUN_0010d940(0);
+    sceSifInitRpc(0);
     while (1) {
         if (FUN_0010e0d8(&DAT_0055d5c0, 0x80000400, 0) < 0) {
             FUN_0010d108(DAT_004d2ad0);

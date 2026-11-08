@@ -16,7 +16,7 @@ typedef struct {
     char name[1024];
 } OpenRequest;
 
-void FUN_0010d890(void *addr, int size);
+void sceSifWriteBackDCache(void *addr, int size);
 
 typedef struct {
     int sema;
@@ -64,7 +64,7 @@ int FUN_00111f20(const char *name, void *buffer, unsigned int length)
     }
     req->buffer = buffer;
     req->length = length;
-    FUN_0010d890(buffer, length);
+    sceSifWriteBackDCache(buffer, length);
     param.max_count = 1;
     param.init_count = 0;
     param.option = 0;

@@ -2,7 +2,7 @@ typedef struct { int count; int max_count; int init_count; int wait_threads; uns
 typedef struct { char p0[20]; void *paddr; int rid; void *client; int src; int dest; int size; char p1[20]; } Pkt;
 typedef struct { Pkt *pkt; int rid; int sema; int p0; int command; char p1[16]; void *server; } Client;
 extern char DAT_00557a00[];
-Pkt *FUN_0010db08(void *);
+Pkt *_sceRpcGetPacket(void *);
 void FUN_0010dbb0(Pkt *);
 int FUN_0010aee0(SemaParam *);
 int FUN_0010aef0(int);
@@ -11,7 +11,7 @@ int FUN_0010d6c8(int, Pkt *, int, int, int, int);
 int FUN_0010de20(Client *cd, int src, int dest, int size, int mode) {
     SemaParam sp;
     Pkt *pkt;
-    pkt = FUN_0010db08(DAT_00557a00);
+    pkt = _sceRpcGetPacket(DAT_00557a00);
     if (pkt == 0) return -1;
     cd->pkt = pkt;
     cd->rid = pkt->rid;

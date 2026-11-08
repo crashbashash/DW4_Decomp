@@ -13,7 +13,7 @@ extern char D_004ab558[];
 extern const char D_004f03e8[], D_004f0400[], D_004f0418[], D_004f0430[];
 extern void FUN_002745c0(const char *, char *);
 extern void FUN_002725a0(int);
-extern int FUN_00116c80(int);
+extern int sceCdSync(int);
 extern int FUN_002739e8(DvciInfo *, char *);
 extern void FUN_00265928(const char *, ...);
 extern void FUN_002659a0(const char *, ...);
@@ -34,7 +34,7 @@ int FUN_00274ab0(char *tab, int n)
             continue;
         FUN_002745c0(name, D_004ab558);
         FUN_002725a0(0x9400);
-        while (FUN_00116c80(1) == 1)
+        while (sceCdSync(1) == 1)
             ;
         FUN_002725a0(0x9401);
         FUN_002725a0(0x9500);

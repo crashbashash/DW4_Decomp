@@ -22,7 +22,7 @@ int FUN_00113f78(void);
 void FUN_0010b7d8(void *start, void *end);
 void *memcpy(void *dst, const void *src, unsigned int n);
 PadFrame *FUN_00118178(int port, int slot);
-int FUN_00118bb0(int port, int slot, int mode);
+int scePadSetButtonInfo(int port, int slot, int mode);
 int FUN_00118af8(int port, int slot);
 int FUN_00118c60(int port, int slot) {
     if (DAT_0055d290[port][slot].open == 0) return 0;

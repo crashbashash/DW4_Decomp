@@ -145,7 +145,7 @@ Rodata also carries build strings and markers:
 | `MARK:lsc_obj` | `0x4abc58` |
 
 `libdma: sync timeout` at `0x4d1e70` is referenced from exactly two sites, `0x102cc0` and `0x102d3c`,
-inside `FUN_00102c98` and `FUN_00102d08`, which confirms their `libdma` attribution. The IPU/MPEG-2
+inside `WaitDma` and `WatchDma`, which confirms their `libdma` attribution. The IPU/MPEG-2
 decoder error strings sit together at `0x4d1ee0+`, matching `libipu`.
 
 ## Platform code outside the block

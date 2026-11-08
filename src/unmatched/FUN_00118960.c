@@ -21,14 +21,14 @@ int FUN_00113f78(void);
 void FUN_0010b7d8(void *start, void *end);
 void *memcpy(void *dst, const void *src, unsigned int n);
 PadFrame *FUN_00118178(int port, int slot);
-int FUN_00118bb0(int port, int slot, int mode);
+int scePadSetButtonInfo(int port, int slot, int mode);
 int FUN_00118af8(int port, int slot);
 extern int DAT_0055d480[32];
 extern int DAT_0055d240;
 int FUN_0010e2a8(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
 extern int DAT_00485108;
 int FUN_00118440(int port, int slot, int v);
-int FUN_00117b60(int port, int slot);
+int _send_to_iop(int port, int slot);
 int FUN_00118960(int port, int slot, unsigned char *data) {
     int i;
     int *b;
@@ -39,6 +39,6 @@ int FUN_00118960(int port, int slot, unsigned char *data) {
     for (i = 0; i < 6; i++) d[i] = data[i];
     b[1] = 1;
     b[2] = 6;
-    if (FUN_00117b60(port, slot) != 1) return 0;
+    if (_send_to_iop(port, slot) != 1) return 0;
     return 1;
 }

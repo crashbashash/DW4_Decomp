@@ -16,9 +16,9 @@ int FUN_0010af00(int sema);
 int FUN_0010af30(int sema);
 int FUN_0010ade0(int id, void *info);
 int FUN_0010d108(const char *fmt, ...);
-void FUN_0010d940(int mode);
+void sceSifInitRpc(int mode);
 int FUN_0010e0d8(void *cd, unsigned int id, int mode);
-int FUN_00116d20(int mode);
+int sceCdSyncS(int mode);
 int FUN_00116d90(int cmd) {
     int i;
     FUN_00116498();
@@ -28,11 +28,11 @@ int FUN_00116d90(int cmd) {
     }
     DAT_00483558 = cmd;
     FUN_0010ade0(DAT_0055cf98, &DAT_0055cfa0);
-    if (FUN_00116d20(1)) {
+    if (sceCdSyncS(1)) {
         FUN_0010af00(DAT_0048356c);
         return 0;
     }
-    FUN_0010d940(0);
+    sceSifInitRpc(0);
     if (DAT_0048358c >= 0) return 1;
     while (1) {
         if (FUN_0010e0d8(&DAT_004850c0, 0x80000593, 0) < 0) {

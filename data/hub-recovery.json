@@ -9501,7 +9501,7 @@
     },
     {
       "address": 1095136,
-      "name": "FUN_0010b5e0",
+      "name": "sbrk",
       "size": 172,
       "source": null,
       "direct": [
@@ -9812,9 +9812,9 @@
     },
     {
       "address": 1128784,
-      "name": "FUN_00113950",
+      "name": "InitTLB",
       "size": 64,
-      "source": "src/unmatched/FUN_00113950.c",
+      "source": "src/sony/libkernl/InitTLB.c",
       "direct": [
         {
           "site": 1128792,
@@ -9839,7 +9839,7 @@
     },
     {
       "address": 1128848,
-      "name": "FUN_00113990",
+      "name": "InitTLB32MB",
       "size": 500,
       "source": null,
       "direct": [
@@ -9930,9 +9930,9 @@
     },
     {
       "address": 1131784,
-      "name": "thunk_FUN_00113950",
+      "name": "thunk_InitTLB",
       "size": 8,
-      "source": "src/unmatched/thunk_FUN_00113950.c",
+      "source": "src/sony/libkernl/thunk_InitTLB.c",
       "direct": [
         {
           "site": 1131784,

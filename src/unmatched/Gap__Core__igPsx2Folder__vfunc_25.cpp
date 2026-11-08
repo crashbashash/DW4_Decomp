@@ -6,7 +6,7 @@ struct FolderPathText : FolderObject { char *text; };
 struct FolderStringRef;
 extern "C" {
 extern int DAT_00586f20;
-int FUN_00110b30(int);
+int sceDopen(int);
 int FUN_00110bf8(int);
 int FUN_00110d60(int, FolderEntry *);
 int FUN_002eb010(int);
@@ -56,7 +56,7 @@ extern "C" FolderObjectRef Gap__Core__igPsx2Folder__vfunc_25(FolderSelf *self);
 FolderObjectRef Gap__Core__igPsx2Folder__vfunc_25(FolderSelf *self) {
     FolderEntry entry;
     FolderFileStat st;
-    int handle = FUN_00110b30(self->path);
+    int handle = sceDopen(self->path);
     if (handle < 0) {
         return FolderObjectRef(0);
     }

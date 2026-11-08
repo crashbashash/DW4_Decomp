@@ -10,7 +10,7 @@ extern Client DAT_0056d760;
 extern char DAT_004e7858[];
 extern char DAT_004e7870[];
 extern char DAT_004e7898[];
-void FUN_0010d940(int mode);
+void sceSifInitRpc(int mode);
 int FUN_0010e0d8(void *cd, unsigned int id, int mode);
 int FUN_0010d108(const char *fmt, ...);
 void FUN_002252d8(const char *format, ...);
@@ -18,7 +18,7 @@ int sceMtapGetModVersion(void);
 int FUN_00225300(void) {
     int i;
     int v;
-    FUN_0010d940(0);
+    sceSifInitRpc(0);
     while (1) {
         if (FUN_0010e0d8(&DAT_0056d6c0, 0x80000901, 0) < 0) goto err;
         if (DAT_0056d6c0.server != 0) break;

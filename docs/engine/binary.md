@@ -236,7 +236,7 @@ can be written: MWCC's integrated assembler rejects the `syscall` mnemonic in an
 either. They stay in `asm/`, and `make link` rebuilds them from the retail bytes.
 
 Three functions *use* a syscall inline but are real game code, recorded with number `-`
-and **not** skipped: `entry` (`0x00100008`), `FUN_0010bd90`, `FUN_0010bea8`.
+and **not** skipped: `entry` (`0x00100008`), `iWakeupThread`, `iSuspendThread`.
 
 Sample of the non-`i` stubs:
 ```
