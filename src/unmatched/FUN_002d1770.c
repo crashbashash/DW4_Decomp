@@ -2,7 +2,7 @@ int FUN_002d27a0();
 int FUN_002d2800();
 int FUN_002d2e60();
 int StringChunk_ReleaseHeader();
-int thunk_FUN_00126360();
+int thunk_free();
 extern void *DAT_00586dc8[4];
 extern long long DAT_00586dd8[4];
 
@@ -50,7 +50,7 @@ void FUN_002d1770(void) {
                     }
                 }
             }
-            thunk_FUN_00126360(core);
+            thunk_free(core);
         }
         DAT_00586dc8[0] = 0;
     }

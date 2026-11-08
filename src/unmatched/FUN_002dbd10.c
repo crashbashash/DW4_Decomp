@@ -1,5 +1,5 @@
 typedef struct R { int pad0; int rc; } R;
-extern int FUN_00129ef8();
+extern int sscanf();
 extern void *FUN_002b9500();
 extern int FUN_002dbfb0();
 extern int FUN_002dc050();
@@ -20,13 +20,13 @@ unsigned char FUN_002dbd10(int arg0, int arg1, int arg2, int arg3, int arg4) {
     switch (arg1) {
     case 1:
         sp68 = 0; sp64 = 0;
-        if (FUN_00129ef8(arg2, &DAT_004f9730[0], &sp68) != 1) return 0;
-        if (FUN_00129ef8(arg4, &DAT_004f9730[0], &sp64) != 1) return 0;
+        if (sscanf(arg2, &DAT_004f9730[0], &sp68) != 1) return 0;
+        if (sscanf(arg4, &DAT_004f9730[0], &sp64) != 1) return 0;
         r = FUN_002dc050(arg0, sp68, arg3, sp64); break;
     case 2:
         sp60 = 0; sp5C = 0;
-        if (FUN_00129ef8(arg2, &DAT_004f9738[0], &sp60) != 1) return 0;
-        if (FUN_00129ef8(arg4, &DAT_004f9738[0], &sp5C) != 1) return 0;
+        if (sscanf(arg2, &DAT_004f9738[0], &sp60) != 1) return 0;
+        if (sscanf(arg4, &DAT_004f9738[0], &sp5C) != 1) return 0;
         r = FUN_002dc0a0(arg0, arg3, sp60, sp5C); break;
     case 3:
         sp6F = 0; sp6E = 0;

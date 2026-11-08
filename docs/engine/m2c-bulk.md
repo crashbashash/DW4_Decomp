@@ -831,7 +831,7 @@ is not argument errors: `FUN_0016cde0` (`void f(void){ FUN_00207420(); }`) dropp
 argument — retail is `li a0,1`, closed by `args_search.py`; `FUN_00109378` differs only in the
 register chosen for a load (retail `v0`, ours `v1`); `FUN_002648e8` differs only in the address temp
 (retail `lui v1`, ours `lui at`, and none of array / plain / pointer / literal / `volatile` spellings
-reproduces it); `FUN_00123640` has a 20-byte tail-call-with-frame shape (`addiu sp,-16; sd ra; ld ra;
+reproduces it); `atan2f` has a 20-byte tail-call-with-frame shape (`addiu sp,-16; sd ra; ld ra;
 j X; addiu sp,16`) that neither the C nor the C++ front end produced from a one-call body (the
 sibling **frame-keeping** wrappers that set up arguments are covered by automatch's `wargs`
 template); and the 16-byte BIOS wrappers need a `syscall`
@@ -1395,7 +1395,7 @@ A 16-byte struct is the only width-correct spelling, and C99 compound literals s
 compile. Leaving it undefined does more damage than a wrong type: after `s128 spF0;` MWCC's C parser
 reports every later declaration in the same scope as an `undefined identifier`, so part of those
 buckets is this cascade and not missing declarations (`FUN_001ebc10` is an example). Spelling does not
-fix the frame either: `FUN_00128598` stores a word (`sw a1,0(sp)`) into the slot m2c types as a
+fix the frame either: `qsort` stores a word (`sw a1,0(sp)`) into the slot m2c types as a
 quadword, so the frame layout that follows from m2c's outgoing-argument model is wrong however `s128`
 is declared.
 

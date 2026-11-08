@@ -1,6 +1,6 @@
 typedef struct T { char p[88]; int f88; } T;
 typedef struct Arg { char p[16]; int f16; int f20; int f24; int f28; int f32; char p2[4]; int f40; int f44; char p3[4]; unsigned char f52; } Arg;
-int FUN_00129ef8();
+int sscanf();
 int *FUN_001405a0();
 T *FUN_00140c00();
 int strcmp();
@@ -19,7 +19,7 @@ int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
     int *var_a1;
     int *var_s1;
 
-    if (FUN_00129ef8(arg1, &DAT_004d5e10[0], sp50, &sp206C, &sp2068, &sp2064, &sp2060, &sp205C, &sp2058, &sp2054, &sp2050) != 9) {
+    if (sscanf(arg1, &DAT_004d5e10[0], sp50, &sp206C, &sp2068, &sp2064, &sp2060, &sp205C, &sp2058, &sp2054, &sp2050) != 9) {
         return 0;
     }
     var_s1 = (int *)(&DAT_004d5df8[0]);

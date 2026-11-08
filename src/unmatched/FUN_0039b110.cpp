@@ -1,5 +1,5 @@
 extern "C" {
-float FUN_00123640(float, float);
+float atan2f(float, float);
 float sqrtf(float);
 }
 #include "dw4/reflected.h"
@@ -15,7 +15,7 @@ void FUN_0039b110(bePadData *arg0, int *arg1, float *arg2) {
     x = vp[0];
     y = vp[1];
     d = sqrtf(x * x + y * y);
-    ang = FUN_00123640(vp[1], vp[0]);
+    ang = atan2f(vp[1], vp[0]);
     half = 0.5f * arg0->_adAngle;
     *arg1 = 0;
     if (!(d < arg0->_enaLen)) {

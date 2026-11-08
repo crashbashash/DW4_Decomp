@@ -1,5 +1,5 @@
 extern "C" {
-int FUN_00126308(...);
+int malloc(...);
 int FUN_0032f300(...);
 extern void ** DAT_00587218[4];
 void FUN_002ee430(int arg0);
@@ -13,5 +13,5 @@ void FUN_002ee430(int arg0) {
         ((DW4VC_16_1 *)(DAT_00587218[0]))->vX((int)(arg0));
         return;
     }
-    FUN_00126308(arg0);
+    malloc(arg0);
 }

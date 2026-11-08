@@ -1,5 +1,5 @@
 /* Gap__Sg__igEnbayaContextPool__vfunc_13 */
-int FUN_00129ef8();
+int sscanf();
 int FUN_001c1a80();
 void *FUN_002b9500();
 int FUN_003064b0();
@@ -42,7 +42,7 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
                 sp54 = 0;
                 var_a0 = *(int *)((char *)(sp5C) + 8);
                 var_a0 = (var_a0 == 0) ? DAT_004c22f0[0] : var_a0;
-                if ((FUN_00129ef8(var_a0, &DAT_004e45e0[0], &sp54) == 1) && (sp54 >= 0) && (sp58 >= 0)) {
+                if ((sscanf(var_a0, &DAT_004e45e0[0], &sp54) == 1) && (sp54 >= 0) && (sp58 >= 0)) {
                     FUN_001c1a80(arg0, sp54, sp58);
                 }
             }

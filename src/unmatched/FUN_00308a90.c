@@ -4,9 +4,9 @@ typedef struct Pn { Hd h; } Pn;
 typedef struct O { int w[3]; Hd *f12; } O;
 typedef struct Gl { int w[2]; int f8; } Gl;
 extern int DAT_00586f20[4];
-extern Gl *DAT_004854a0[4];
+extern Gl *_impure_ptr[4];
 extern char DAT_004fb390[];
-int FUN_00124e10(int);
+int fflush(int);
 Ob *FUN_002c72c0(int);
 int FUN_00301000(void);
 int FUN_002eb010(int);
@@ -68,6 +68,6 @@ Hd *FUN_00308a90(O *arg0) {
         arg0->f12->f32 = (Ob *)arg0;
         FUN_00308850(arg0, arg0->f12);
     }
-    FUN_00124e10(DAT_004854a0[0]->f8);
+    fflush(_impure_ptr[0]->f8);
     return arg0->f12;
 }

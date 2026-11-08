@@ -39,19 +39,19 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 ## Readable
 
-Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow.
+Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it.
 
-**1,945** of the 18,705 matched functions are readable: **286,184** code bytes, **8.3 %** of the code.
+**2,197** of the 18,720 matched functions are readable: **383,392** code bytes, **11.1 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,360 | 1,841,996 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 13,882 | 2,242,748 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,658 | 953,844 |
-| it sits in its class or module file, not `src/unmatched/` | 12,455 | 2,012,964 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 10,953 | 2,063,844 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 6,059 | 1,287,996 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,509 | 790,804 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,134 | 1,755,992 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 13,644 | 2,155,560 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,654 | 953,448 |
+| it sits in its class or module file, not `src/unmatched/` | 12,236 | 1,924,596 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 10,769 | 2,006,672 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 6,043 | 1,287,176 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,506 | 790,668 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,258 | 405,236 |
 
 ## Debt
@@ -84,12 +84,12 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 37 | 37 | 0 | every other `asm` statement: each has to show its function fails without it |
 | `unmatched.functions` | 1,465 | 1,465 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 800,380 | 800,380 | 0 | bytes of those |
-| `struct.a` | 141 | 141 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) — increase recorded: struct.a +1: newlib libc drafts declare struct _reent as prefixes of different lengths (60 and 80 bytes, same fields); one shared dw4/newlib_reent.h is the readability pass |
+| `struct.a` | 139 | 139 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 300 | 300 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members. |
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 6,030 | 6,030 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `m2c_idiom.units` | 6,011 | 6,011 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 366 | 366 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 84,475 | 84,475 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 83,134 | 83,134 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 19 | 19 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 3,420 | 3,420 | 0 | bytes of those |
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
@@ -170,14 +170,14 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 9,419 of 20,214 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 1,742 of 20,214 (1,575 of them matched) |
+| functions with a recovered name (any: role names included) | 9,646 of 20,214 |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 1,969 of 20,214 (1,801 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 204 tables, 4,123 entries, in 167 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 24,880 of 61,941 (40.17 %) |
+| field accesses using a **recovered** type (not an offset cast) | 24,880 of 62,144 (40.04 %) |
 | functions in the retail split (`asm/`, generated) | 20,214 |
 
 ## How these numbers are produced

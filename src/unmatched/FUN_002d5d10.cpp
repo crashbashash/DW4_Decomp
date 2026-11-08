@@ -1,5 +1,5 @@
 extern "C" {
-int FUN_00129ef8(int, void *, int *);
+int sscanf(int, void *, int *);
 extern int DAT_004f95e8[4];
 extern int DAT_004f95f0[4];
 int FUN_002d5d10(int *arg0, int arg1, int arg2, int arg3);
@@ -14,12 +14,12 @@ int FUN_002d5d10(int *arg0, int arg1, int arg2, int arg3) {
     int i;
 
     a = 0;
-    FUN_00129ef8(arg2, &DAT_004f95e8[0], &a);
+    sscanf(arg2, &DAT_004f95e8[0], &a);
     q = (Q *)((A *)arg0)->vX()[13];
     for (i = 0; i < q->count; i++) {
         B *o = q->data[i];
         o->vX(arg1 + ((int *)o)[2], arg2 + a, arg3);
     }
-    FUN_00129ef8(arg2, &DAT_004f95f0[0], &b);
+    sscanf(arg2, &DAT_004f95f0[0], &b);
     return a + b;
 }

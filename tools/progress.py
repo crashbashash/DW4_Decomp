@@ -820,9 +820,21 @@ def readable_failures(name, path, cache):
     return failed
 
 
+def assembly_failures(name):
+    """The READABLE_CHECKS keys an approved assembly source fails. Its row says no C reproduces it, so
+    the tests of C source do not apply, and only its name can fail."""
+    failed = []
+    if not named(name) or SLOT_NAME_RE.search(name):
+        failed.append("name")
+    if carries_address(name):
+        failed.append("addresses")
+    return failed
+
+
 def readable(syms=None, paths=None, cats=None):
     """{"names": set of readable matched functions, "functions", "bytes", "matched_functions",
-    "failing": {check: {"functions", "bytes"}}} over the functions make check classifies as `match`."""
+    "failing": {check: {"functions", "bytes"}}} over the functions make check classifies as `match`
+    and the owner-approved `assembly` sources."""
     if _READABLE:
         return _READABLE
     syms = syms or load_symbols()
@@ -832,10 +844,11 @@ def readable(syms=None, paths=None, cats=None):
     failing = {key: {"functions": 0, "bytes": 0} for key, _ in READABLE_CHECKS}
     functions = size_total = matched = 0
     for va, size, name in syms:
-        if name not in paths or cats.get(va, ("",))[0] != "match":
+        category = cats.get(va, ("",))[0]
+        if name not in paths or category not in ("match", "assembly"):
             continue
         matched += 1
-        failed = readable_failures(name, paths[name], cache)
+        failed = assembly_failures(name) if category == "assembly" else readable_failures(name, paths[name], cache)
         for key in failed:
             failing[key]["functions"] += 1
             failing[key]["bytes"] += size
@@ -850,7 +863,7 @@ def readable(syms=None, paths=None, cats=None):
 def region_table():
     """Markdown rows: per region the code size, the share matched (C/C++ that make check classifies as
     `match`: bytes, exception metadata and symbol rules all pass, plus owner-approved `assembly`
-    sources) and the share readable (matched and passing every READABLE_CHECKS condition)."""
+    sources) and the share readable (matched and passing READABLE_CHECKS, see `readable`)."""
     syms = load_symbols()
     paths = have_src_paths()
     cats = load_categories() or {}
@@ -882,7 +895,7 @@ def readme_block(d):
     Generated on every `make progress`, so the README holds no hand-written figure that can go
     stale; `progress --check` fails when it drifts. "Matched" is make check's `match` on C/C++
     source plus owner-approved `assembly` sources; "Readable" is the matched code that also passes
-    READABLE_CHECKS. `d` is unused: the
+    READABLE_CHECKS (a named assembly source passes). `d` is unused: the
     table reads the symbol map, src/ and data/check-categories.tsv directly.
     """
     return ("<!-- progress:start -->\n%s\n\nThe full figures and the verification debt are in "
@@ -1013,7 +1026,9 @@ def render_md(d):
     rd = d["readable"]
     A("Matching proves the bytes; it does not make the source readable. A matched function counts as "
       "**readable** when it also passes every test below. The tests are mechanical, so this is a floor: "
-      "a function can pass them all and still be hard to follow.")
+      "a function can pass them all and still be hard to follow. An owner-approved assembly source "
+      "counts as readable when it has a recovered name, because its approval records that no C "
+      "reproduces it.")
     A("")
     A("**%s** of the %s matched functions are readable: **%s** code bytes, **%.1f %%** of the code."
       % (format(rd["functions"], ","), format(rd["matched_functions"], ","), format(rd["bytes"], ","),

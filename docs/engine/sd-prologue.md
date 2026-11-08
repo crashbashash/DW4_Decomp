@@ -82,7 +82,19 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   index is a case label; volatile statistics words change delay-slot filling.
 * **newlib and libgcc** build at `-O2 -G0 -g` throughout (`0x11acc0..0x130000`, `0x22e4b8..0x230f50`):
   `ee-as` must receive `-g` so libcall delay slots keep their nops, and `-G0` so non-simple float
-  literals use `lui`/`ori`/`mtc1`. Members without a libcall match either way.
+  literals use `lui`/`ori`/`mtc1`. Members without a libcall match either way. newlib adds
+  `-fno-builtin`, as its own build does: fdlibm calls `fabs` as a function, and the builtin would
+  inline it.
+* **newlib's names and files come from Sony's `ee001003_1` `libc.a` and `libm.a`.** Each `src/newlib/`
+  file is one archive object in retail order, and an object is placed only where its whole `.text`
+  matches with relocated words masked and every call lands on the function of that name. A symbol the
+  object keeps local has its name from the object's symbol table, and so does a datum, through the
+  object's `lui`/`lo` relocations. Where one name has several retail copies, a copy takes its object as
+  a suffix: `__sprint_vfiprintf`, `__sbprintf_vfiprintf`, `Zero_fmod` (`ef_fmod.o` keeps `Zero` as its
+  own static) and `huge_ceil`, `huge_floor`. Wrappers that differ only in their callee, such as `realloc` and
+  `memalign`, are told apart by that call.
+  `src/sony/libkernl/` holds what the objects call by name: `_exit`, `close`, `lseek`, `isatty`, `fstat`,
+  `getpid`, `kill`.
 * **newlib is a snapshot between 1.9.0 and 1.10.0.** fdlibm follows 1.10.0 with
   `_FLT_LARGEST_EXPONENT_IS_NORMAL` and `_FLT_NO_DENORMALS` (the `FLT_UWORD_*` macros), except
   `ef_asin.c`, which keeps 1.9.0's constants. `dtoa.c`, `strtod.c`, `mprec.c` and `signal.c` are 1.10.0;
@@ -169,6 +181,11 @@ disabling ASLR change nothing.
 
 ## Open questions
 
+* **newlib strings and the `huge` copies.** `C_locale`, `empty_locale` and the `*_format` strings are
+  named by their text, since the objects hold them in unnamed `.rodata`. `huge_ceil` and `huge_floor`
+  follow upstream's `static const double huge`, whose local symbol the objects do not keep.
+* **`thunk_free_2`** (`0x2f0050`) is a second jump to `free` beside `thunk_free`; what separates the two
+  in Alchemy is not known.
 * **newlib's R5900 assembly.** setjmp, longjmp and the string and memory routines come from
   `libc/machine/r5900/*.S` in Sony's `ee001003_1` `libc.a`, and are `.S` sources here
   ([assembly sources](assembly-sources.md)). Which compiler first generated those files is open.

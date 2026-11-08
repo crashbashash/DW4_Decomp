@@ -1,5 +1,5 @@
 extern "C" {
-int *FUN_00125d50(...);
+int *getenv(...);
 int FUN_002eb010(...);
 void *StringPool_Construct(...);
 char *StringPool_Intern(...);
@@ -36,7 +36,7 @@ void FUN_002d1c40(Obj *arg0) {
     char *s1;
     char *t;
     sp3C = 0;
-    s1 = (char *)FUN_00125d50(DAT_004f9460);
+    s1 = (char *)getenv(DAT_004f9460);
     s1 = StringPool_Intern(Pool::get(), s1);
     SRel::go(t = sp3C);
     sp3C = s1;

@@ -12,11 +12,11 @@ extern char *DAT_004c22f0;
 extern int DAT_00586f20;
 char *strchr(char *, int);
 int strlen(const char *);
-int FUN_0012a918(const char *, const char *, int);
+int strncasecmp(const char *, const char *, int);
 void FUN_0030b3c0(MediaPathBuffer *, char *);
 void FUN_0030b460(MediaPathBuffer *, const char *, int, int);
 void FUN_0030b420(MediaPathBuffer *);
-int FUN_0012c4c8(int);
+int _toupper(int);
 int FUN_002eb010(int);
 int StringPool_Construct(int);
 char *StringPool_Intern(int, char *);
@@ -45,7 +45,7 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
         prefix = colon - *path;
         for (i = 0; i < 5; i++) {
             char **device = &DAT_004c2650[i];
-            if (prefix == strlen(*device) && FUN_0012a918(*path, *device, prefix) == 0) {
+            if (prefix == strlen(*device) && strncasecmp(*path, *device, prefix) == 0) {
                 if (i < 2) {
                     isDisc = true;
                 } else {
@@ -69,7 +69,7 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
                 if (*p == '/') {
                     *p = '\\';
                 } else {
-                    *p = FUN_0012c4c8(*p);
+                    *p = _toupper(*p);
                 }
             }
             appendPath(DAT_004ffbf0, self->conversion);
@@ -87,7 +87,7 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
             if (*p == '/') {
                 *p = '\\';
             } else {
-                *p = FUN_0012c4c8(*p);
+                *p = _toupper(*p);
             }
         }
         appendPath(DAT_004ffbf0, self->conversion);

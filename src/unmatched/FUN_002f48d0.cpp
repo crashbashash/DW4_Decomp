@@ -3,7 +3,7 @@ extern "C" {
 int FUN_002f0460(void *);
 int FUN_002f8760();
 int Memory_ShutdownAllocatorRegistries(void *);
-int thunk_FUN_00126360__002f0050(void *);
+int thunk_free_2(void *);
 extern int D_00587010[4];
 extern int *DAT_00586dc8[4];
 extern unsigned char GPR_00554c14;
@@ -27,7 +27,7 @@ void FUN_002f48d0(char *arg0) {
             if (obj != 0) {
                 FUN_002f0460(obj);
                 obj->v96();
-                thunk_FUN_00126360__002f0050(obj);
+                thunk_free_2(obj);
                 *pp = 0;
             }
             i--;
@@ -39,5 +39,5 @@ void FUN_002f48d0(char *arg0) {
         FUN_002f8760();
     }
     *(int *)((char *)DAT_00586dc8[0] + 48) = 0;
-    thunk_FUN_00126360__002f0050(ent);
+    thunk_free_2(ent);
 }

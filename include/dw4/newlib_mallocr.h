@@ -1,10 +1,7 @@
-/* newlib_mallocr.h -- boundary-tag allocator (Doug Lea's malloc 2.6.x as shipped in newlib's mallocr.c).
- * Evidence: FUN_001253e8 walks chunk headers {prev_size, size, fd, bk}, the bin array at 0x4854b0,
- * the size-class ladder (>>3, >>6, >>9, >>12, >>15, >>18 / 126), the binblocks bitmap and the
- * trim threshold, which is the structure of that allocator. */
+/* Doug Lea's malloc 2.6.x as shipped in newlib's mallocr.c. */
 #ifndef NEWLIB_MALLOCR_H
 #define NEWLIB_MALLOCR_H
-typedef struct Reent Reent;
+#include "dw4/newlib_reent.h"
 typedef unsigned int INTERNAL_SIZE_T;
 typedef struct malloc_chunk {
     INTERNAL_SIZE_T prev_size;
@@ -14,42 +11,42 @@ typedef struct malloc_chunk {
 } *mchunkptr;
 typedef struct malloc_chunk *mbinptr;
 
-extern mbinptr D_004854b0[];            /* malloc_av_ */
-extern unsigned long D_004858b8;         /* trim_threshold */
-extern unsigned long D_004858c0;         /* top_pad */
-extern char *D_004858c8;                 /* sbrk_base */
-extern unsigned long D_004858d0;         /* max_sbrked_mem */
-extern unsigned long D_004858d8;         /* max_total_mem */
+extern mbinptr __malloc_av_[];
+extern unsigned long __malloc_trim_threshold;
+extern unsigned long __malloc_top_pad;
+extern char *__malloc_sbrk_base;
+extern unsigned long __malloc_max_sbrked_mem;
+extern unsigned long __malloc_max_total_mem;
 struct mallinfo { int arena; int ordblks; int smblks; int hblks; int hblkhd; int usmblks; int fsmblks; int uordblks; int fordblks; int keepcost; };
-extern struct mallinfo D_004858e0;          /* current_mallinfo */
-extern char *FUN_00129828(Reent *, int); /* _sbrk_r */
-extern void FUN_00127310(Reent *);       /* __malloc_lock */
-extern void FUN_00127390(Reent *);       /* __malloc_unlock */
-extern int FUN_001256e0(Reent *, unsigned int);   /* malloc_trim */
+extern struct mallinfo __malloc_current_mallinfo;
+extern char *_sbrk_r(struct _reent *, int);
+extern void __malloc_lock(struct _reent *);
+extern void __malloc_unlock(struct _reent *);
+extern int _malloc_trim_r(struct _reent *, unsigned int);
 
 #define SIZE_SZ 4
 #define PREV_INUSE 0x1
 #define SIZE_BITS 0x3
 #define MAX_SMALLBIN_SIZE 512
 #define BINBLOCKWIDTH 4
-#define av_ D_004854b0
+#define av_ __malloc_av_
 #define bin_at(i) ((mbinptr)((char *)&(av_[2 * (i) + 2]) - 2 * SIZE_SZ))
 #define top (av_[2])
 #define last_remainder (bin_at(1))
 #define binblocks (bin_at(0)->size)
-#define trim_threshold D_004858b8
-#define top_pad D_004858c0
-#define sbrk_base D_004858c8
-#define max_sbrked_mem D_004858d0
-#define max_total_mem D_004858d8
-#define current_mallinfo D_004858e0
+#define trim_threshold __malloc_trim_threshold
+#define top_pad __malloc_top_pad
+#define sbrk_base __malloc_sbrk_base
+#define max_sbrked_mem __malloc_max_sbrked_mem
+#define max_total_mem __malloc_max_total_mem
+#define current_mallinfo __malloc_current_mallinfo
 #define sbrked_mem (current_mallinfo.arena)
 #define mmapped_mem 0
 #define MINSIZE 16
 #define MALLOC_ALIGN_MASK 15
 #define MALLOC_ALIGNMENT 16
 #define initial_top ((mchunkptr)(bin_at(0)))
-#define MORECORE(x) FUN_00129828(reent_ptr, x)
+#define MORECORE(x) _sbrk_r(reent_ptr, x)
 #define MORECORE_FAILURE (-1)
 #define set_head_size(p, s) ((p)->size = (((p)->size & PREV_INUSE) | (s)))
 #define chunk2mem(p) ((void *)((char *)(p) + 2 * SIZE_SZ))
@@ -118,7 +115,7 @@ extern int FUN_001256e0(Reent *, unsigned int);   /* malloc_trim */
 #define prev_chunk(p) ((mchunkptr)(((char *)(p)) - ((p)->prev_size)))
 #define set_inuse_bit_at_offset(p, s) (((mchunkptr)(((char *)(p)) + (s)))->size |= PREV_INUSE)
 extern void *memcpy(void *, const void *, unsigned int);
-extern void *FUN_00126600(Reent *, unsigned int);                /* _malloc_r */
+extern void *_malloc_r(struct _reent *, unsigned int);
 #define MALLOC_COPY(dest,src,nbytes)                                          \
 do {                                                                          \
   INTERNAL_SIZE_T mcsz = (nbytes);                                            \

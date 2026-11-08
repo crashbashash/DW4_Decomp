@@ -1,5 +1,5 @@
-int FUN_00124e10();
+int fflush();
 
 int Gap__igLogInterface__vfunc_24(void *d0, int arg1) {
-    return FUN_00124e10(arg1) == 0;
+    return fflush(arg1) == 0;
 }

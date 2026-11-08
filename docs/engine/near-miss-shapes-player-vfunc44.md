@@ -51,7 +51,7 @@ char *igProperty_FindByName(Ref *, int, const char *);
 int strcmp(int, const char *);
 void beMessenger_SelectReceivers(int, const char *, const char *, int);
 void beMessenger_AppendString(int, const char *);
-void FUN_00129e60(char *, const char *, int);
+void sprintf(char *, const char *, int);
 void beMessenger_AppendFloat(int, float);
 void beMessenger_AppendVec3(int, int *);
 void beMessenger_AppendBool(int, int);
@@ -102,7 +102,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *
         const char *w2 = who ? who : DAT_004e0858;
         beMessenger_SelectReceivers(self->_messenger, DAT_00516228, w2, num);
         beMessenger_AppendString(self->_messenger, DAT_005164b8);
-        FUN_00129e60(name, DAT_005164c8, msg->number);
+        sprintf(name, DAT_005164c8, msg->number);
         beMessenger_AppendString(self->_messenger, name);
         beMessenger_AppendFloat(self->_messenger, 480.0f);
         vec[0] = 0; vec[1] = 0x41200000; vec[2] = 0;

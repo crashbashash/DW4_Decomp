@@ -1,4 +1,4 @@
-int **FUN_00126308();
+int **malloc();
 extern int DAT_0052d710[4];
 extern int DAT_0052d730[4];
 void FUN_00280a70(int ***arg0, int **arg1) {
@@ -8,7 +8,7 @@ void FUN_00280a70(int ***arg0, int **arg1) {
         *arg0 = arg1;
         return;
     }
-    temp_v0 = FUN_00126308(4);
+    temp_v0 = malloc(4);
     if (temp_v0 != 0) {
         *temp_v0 = &DAT_0052d730[0];
         *temp_v0 = &DAT_0052d710[0];

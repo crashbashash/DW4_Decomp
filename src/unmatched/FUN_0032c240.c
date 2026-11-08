@@ -1,6 +1,6 @@
 struct T { int word0; int references; int w8; int w12; };
 extern int strlen();
-extern char FUN_0012c4c8();
+extern char _toupper();
 extern struct T *FUN_002b9500();
 extern int FUN_002eb010();
 extern int FUN_0030b3c0();
@@ -46,7 +46,7 @@ int FUN_0032c240(char **arg0, char *arg1, char *arg2) {
             if (*p == 0x2F) {
                 *p = 0x5C;
             } else {
-                *p = FUN_0012c4c8(*p);
+                *p = _toupper(*p);
             }
         }
     } else {

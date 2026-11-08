@@ -105,7 +105,7 @@ int StringChunk_ReleaseHeader(int owner, StringHeader *header);
 int List_Resize(IntList *list, int newCount, int elementSize);
 int igObject_Destroy(igObject *object);
 int printf(const char *format, ...);
-int FUN_00124d60(int status);
+int exit(int status);
 
 extern const char help[16];
 extern const char n[8];
@@ -197,7 +197,7 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
             opts->intList = 0;
             ReleaseObject(opts->stringList);
             opts->stringList = 0;
-            FUN_00124d60(0);
+            exit(0);
         } else if (FUN_002346c0(args, &index, 0, opts)) {
             char *name;
             name = opts->modelName;
@@ -357,7 +357,7 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
             opts->intList = 0;
             ReleaseObject(opts->stringList);
             opts->stringList = 0;
-            FUN_00124d60(0);
+            exit(0);
         }
     }
 

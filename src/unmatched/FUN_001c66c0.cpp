@@ -39,7 +39,7 @@ extern int FUN_00306360(Obj *, char *, int);
 extern unsigned char FUN_00306910(Obj *, int, void *, char **, void *, int);
 extern int StringPool_Construct(int);
 extern char *StringPool_Intern(int, int);
-extern int thunk_FUN_0012a110(int, int);
+extern int thunk_strcasecmp(int, int);
 extern void igObject_Destroy(Obj *);
 extern void StringChunk_ReleaseHeader(int, int *);
 extern int DAT_00586f20[4];
@@ -140,7 +140,7 @@ int FUN_001c66c0(Node *self, int force)
         b = o40->f8;
         if (b == 0) b = DAT_004c22f0[0];
     }
-    if (thunk_FUN_0012a110(a, b) == 0) {
+    if (thunk_strcasecmp(a, b) == 0) {
         Obj *par = self->f28;
         if (par != 0) par->u.w = par->u.w + 1;
         REL_OBJ(self->f32)

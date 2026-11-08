@@ -93,7 +93,7 @@ The rows this pass added, by evidence class:
 | class | rows | what the bytes show |
 | --- | --- | --- |
 | epilogue growth | 159 (all functions of the EE GCC blocks; of the 156 such rows in the table, 25 match and 131 have no C source yet) + `SetT2` (`eret` then `jr ra; nop`) | the dump stopped 3–5 words before `ld ra; jr ra; addiu sp,+N`; the walk from the symbol start ends there |
-| `cut`: tail-call wrapper + framed body | 20 (`FUN_00129c88`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `FUN_0012c858`, `FUN_00169e30`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
+| `cut`: tail-call wrapper + framed body | 20 (`_getpid_r`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `vfiprintf`, `FUN_00169e30`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
 | `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `FUN_00293788`, `FUN_00294838/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
 | `cut`: span reached a referenced leaf | 5 (`Gap__Core__igCallStackTable__vfunc_28`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |
 | `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop — `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`) | the inner address is a fresh start after the container's return |
@@ -102,7 +102,7 @@ The rows this pass added, by evidence class:
 
 `FUN_0029a210` (56 → 20) is not a row: it is a rule-1 promotion whose walk now stops at its tail
 call; the framed body after it (`0x29a228`) is a rule-5 promotion. `FUN_001044f0` (64 → 148) is the
-SDK-descriptor split piece that now takes the walk's extent. `FUN_001236b8` keeps its 24 bytes: it
+SDK-descriptor split piece that now takes the walk's extent. `abort` keeps its 24 bytes: it
 ends in a call to a non-returning function and has no epilogue. `FUN_001eba30` and `FUN_00102550`
 keep their extents.
 
@@ -144,7 +144,7 @@ class C, which a lone data word (no table context) points at:
 | code bytes in `config/SLUS-20836/symbols.txt` | 3,377,884 | 3,464,192 |
 | code bytes laid out (`config/SLUS-20836/layout.txt`) | 3,377,372 in 19,293 units | 3,464,192 in 20,214 units |
 | truncated layout units (symbol overlapping the next) | 4 | 0 |
-| symbols ending without a return (audit) | 167 | 1 (`FUN_001236b8`, non-returning callee) |
+| symbols ending without a return (audit) | 167 | 1 (`abort`, non-returning callee) |
 | symbols holding two functions (audit + the `j`-to-fresh-start scan) | 11 + 26 | 0 |
 | unsymbolised instruction-shaped bytes (scan, same tool on both trees) | 88,352 in 1,348 bodies | 10,528 in 363 bodies |
 | `inventory-gap` units | 33 | see the `make check` summary in the commit |

@@ -11,7 +11,7 @@ typedef struct PlayerArg { int vt; unsigned refs; int id; char pad12[28]; RefHdr
 typedef struct PropRec { char pad[20]; beNDMWMdlPlayerInfoWork *work; } PropRec;
 
 extern "C" {
-float FUN_00123640(float, float);
+float atan2f(float, float);
 int memset(void *, int, int);
 int igMatrix44f_SetIdentity(void *);
 int FUN_00191f30(void *, void *, int);
@@ -194,8 +194,8 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, Playe
         Locals::Project(spA0, (int)&((igViewerParameters *)((igViewerSceneInfoManager *)arg0->_viewerSIManager)->_parameters)->_viewMatrix, Scratch());
         FUN_00192f50(spE8, DAT_004e1098, spA0);
         {
-            float r1 = FUN_00123640(spE8[0], spE8[2]);
-            *(float *)&w->_targetDirection[1] = r1 + FUN_00123640(stickX, -stickY);
+            float r1 = atan2f(spE8[0], spE8[2]);
+            *(float *)&w->_targetDirection[1] = r1 + atan2f(stickX, -stickY);
         }
         w->_keyInput = 1;
     } else {

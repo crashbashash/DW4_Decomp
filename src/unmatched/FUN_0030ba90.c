@@ -1,5 +1,5 @@
 extern int DAT_004C22F0[4];
-int FUN_0012a110();
+int strcasecmp();
 int strlen();
 
 int FUN_0030ba90(void *arg0, char *arg1) {
@@ -26,6 +26,6 @@ int FUN_0030ba90(void *arg0, char *arg1) {
     if (*(var_s0 + (temp_a0 - var_a1)) != 0x2E) {
         return 0;
     }
-    temp_v0 = FUN_0012a110(var_s0 + temp_a0, arg1);
+    temp_v0 = strcasecmp(var_s0 + temp_a0, arg1);
     return temp_v0 == 0;
 }

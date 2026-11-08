@@ -112,7 +112,7 @@ extern "C" {
 void FUN_002e2130(EventRecordInfo *);
 void FUN_002e2300(EventRecordInfo *, int);
 int strcmp(char *, char *);
-int FUN_0012aff0(char *, char *);
+int strstr(char *, char *);
 extern EventQueryResult DAT_004fb418[2];
 extern char DAT_004f98d0[];
 void Gap__Core__igEventTracker__vfunc_37(EventTrackerQueryView *self, char *wanted);
@@ -141,7 +141,7 @@ void Gap__Core__igEventTracker__vfunc_37(EventTrackerQueryView *self, char *want
                 if (strcmp(buffer, DAT_004f98d0) == 0) {
                     break;
                 }
-                if (FUN_0012aff0(buffer, wanted) != 0) {
+                if (strstr(buffer, wanted) != 0) {
                     info.kind = 3;
                     info.f68 = 0;
                     info.f72 = 0;

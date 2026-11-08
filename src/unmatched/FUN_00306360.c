@@ -4,7 +4,7 @@ int FUN_0030b3c0();
 int ObjectList_AppendRetained();
 int igObject_Destroy();
 int igObject_GetAllocator();
-int thunk_FUN_0012a110();
+int thunk_strcasecmp();
 extern char *DAT_004c22f0[4];
 typedef struct IniNameText { char pad[4]; int _refCount; char *text; } IniNameText;
 typedef struct IniSectionList { char pad[8]; int count; int cap; IniNameText **data; } IniSectionList;
@@ -18,13 +18,13 @@ int FUN_00306360(IniSectionsView *self, char *name, int create) {
     IniNameText *held;
 
     for (i = 0; i < 11; i++) {
-        if (thunk_FUN_0012a110(name, DAT_004fb160[i]) == 0) {
+        if (thunk_strcasecmp(name, DAT_004fb160[i]) == 0) {
             return i;
         }
     }
     n = self->sections->count;
     for (i = 0; i < n; i++) {
-        if (thunk_FUN_0012a110(name, text(self->sections->data[i])) == 0) {
+        if (thunk_strcasecmp(name, text(self->sections->data[i])) == 0) {
             return i + 11;
         }
     }

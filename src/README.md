@@ -5,10 +5,11 @@ proves it, and `make link` proves the relinked image is byte-identical.
 
 | Folder | Holds |
 | --- | --- |
-| `engine/` | The Alchemy/`Gap::Core` engine layer: object model, metadata and reflection, memory pools, lists, strings, render attributes, libc/libgcc helpers |
+| `engine/` | The Alchemy/`Gap::Core` engine layer: object model, metadata and reflection, memory pools, lists, strings, render attributes |
 | `game/` | The game layer (`Gap::Bec`, the `be*` classes): menus and windows, messengers, status panels, camera, plus their class registrars |
 | `audio/`, `movie/`, `menu/` | The ADX audio, CRI movie and GUI middleware classes |
 | `lua/` | The Lua native API (`api.c`), the combat and material helpers it calls, and the Lua functions the game rewrote |
+| `newlib/`, `libgcc/`, `sony/` | The C and maths library, GCC's runtime and Sony's runtime libraries, one file per archive object where the archive is known |
 | `third_party/` | Stock zlib, libpng and Lua, byte-identical to upstream and compiled whole; see its [README](third_party/README.md) |
 | `unmatched/` | Matched units that are not **named** yet — every file here compiles to the retail bytes like everything else (`make check` proves it), but the function is still called `FUN_<va>` or `Class::vfunc_NN`. A unit leaves this folder when it gets a semantic name and a module (`tools/place_named.py`) |
 

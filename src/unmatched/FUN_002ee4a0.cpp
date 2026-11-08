@@ -1,5 +1,5 @@
 extern "C" {
-int FUN_00126360(...);
+int free(...);
 int FUN_0032f300(...);
 extern void ** DAT_00587218[4];
 void FUN_002ee4a0(int arg0);
@@ -13,5 +13,5 @@ void FUN_002ee4a0(int arg0) {
         ((DW4VC_36_1 *)(DAT_00587218[0]))->vX((int)(arg0));
         return;
     }
-    FUN_00126360(arg0);
+    free(arg0);
 }

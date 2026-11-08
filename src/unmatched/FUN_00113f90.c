@@ -8,7 +8,7 @@ typedef struct {
 } SemaParam;
 
 int CreateSema(SemaParam *param);
-extern int D_00482590;
+extern int __sce_sema_id;
 extern int D_00482594;
 
 void FUN_00113f90(void)
@@ -19,6 +19,6 @@ void FUN_00113f90(void)
     first.init_count = 1;
     second.max_count = 1;
     second.init_count = 1;
-    D_00482590 = CreateSema(&first);
+    __sce_sema_id = CreateSema(&first);
     D_00482594 = CreateSema(&second);
 }

@@ -18,8 +18,8 @@ class V1012 { public: virtual void d0(); virtual void d1(); virtual void d2(); v
 extern "C" {
 int FUN_00100610(void *);
 G *FUN_001007e0(int);
-int FUN_00124d60(int);
-int FUN_00124e10(int);
+int exit(int);
+int fflush(int);
 int printf(int *, int, int, int, int);
 void *FUN_00145d00(int);
 void *FUN_0014a000(int);
@@ -29,7 +29,7 @@ int FUN_00308320(int *);
 int Memory_GetAllocatorBySelector(int);
 void StringChunk_ReleaseHeader(int, int *);
 void igObject_Destroy(igObject *);
-extern int *DAT_004854a0[4];
+extern int *_impure_ptr[4];
 extern int DAT_004e96f8[4];
 extern int DAT_004e97d0[4];
 extern int DAT_004e9800[4];
@@ -90,7 +90,7 @@ extern "C" int FUN_002364e0(igObject **arg0, int arg1) {
             int t = FUN_00308320(DAT_004e97d0);
             if (t != 1 && t == 2) GPR_00554bd0 = 1;
         }
-        FUN_00124d60(1);
+        exit(1);
     }
     if (s4->f229 != 0) {
         int v;
@@ -137,7 +137,7 @@ extern "C" int FUN_002364e0(igObject **arg0, int arg1) {
         s5b = ((V224 *)s3)->vX(s5);
         printf(DAT_004e9800, s2, s1b, s5b, ((V228 *)s3)->vX(s5));
     }
-    FUN_00124e10(*(int *)((char *)DAT_004854a0[0] + 8));
+    fflush(*(int *)((char *)_impure_ptr[0] + 8));
     ((V708 *)spD8)->vX((char *)s4 + 148);
     ((V932 *)spD8)->vX(1);
     if (DAT_0056dc50[0] != 0) {

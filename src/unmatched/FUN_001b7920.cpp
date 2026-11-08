@@ -4,7 +4,7 @@ extern "C" {
 int FUN_0030bfa0(SegmentStackList *, int, void *);
 int List_RemoveWordAt(SegmentStackList *, int);
 int igObject_Destroy(igObject *);
-int FUN_0012a110(void *, void *);
+int strcasecmp(void *, void *);
 igObject *FUN_001b7920(igCommonTraversal *self, int name);
 }
 static inline void removeRetained(SegmentStackList *list, int i) {
@@ -23,7 +23,7 @@ igObject *FUN_001b7920(igCommonTraversal *self, int name) {
     int last;
     SegmentStackList *stack;
     igObject *top;
-    index = FUN_0030bfa0((SegmentStackList *)self->_segmentOverrideNames, name, FUN_0012a110);
+    index = FUN_0030bfa0((SegmentStackList *)self->_segmentOverrideNames, name, strcasecmp);
     if (index < 0) {
         return 0;
     }

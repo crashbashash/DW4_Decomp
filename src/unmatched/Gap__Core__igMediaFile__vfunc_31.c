@@ -1,5 +1,5 @@
 int memcpy();
-int FUN_0012fde0();
+int vsprintf();
 int FUN_002ec570();
 struct F { char pad[44]; unsigned char f44; char pad2[7]; int f52; int f56; int f60; };
 int Gap__Core__igMediaFile__vfunc_31(struct F *self, int fmt, ...) {
@@ -17,7 +17,7 @@ int Gap__Core__igMediaFile__vfunc_31(struct F *self, int fmt, ...) {
     } else {
         off = (8 - n) * 8;
     }
-    len = FUN_0012fde0(buf, fmt, (char *)__builtin_next_arg(fmt) - off);
+    len = vsprintf(buf, fmt, (char *)__builtin_next_arg(fmt) - off);
     pos = self->f56 + len;
     if (pos >= self->f52) {
         FUN_002ec570(self, pos);

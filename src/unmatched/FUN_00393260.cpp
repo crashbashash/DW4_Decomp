@@ -10,7 +10,7 @@ int FUN_003a7d80(...);
 int FUN_003a7a20(...);
 void *beBaseInfoDataList_Create(...);
 void *FUN_00352940(...);
-float FUN_00123640(float, float);
+float atan2f(float, float);
 int FUN_00192f50(...);
 int FUN_00392d20(beModelCtrlMoveObject *, int, float, float, float);
 int Memory_GetAllocatorBySelector(...);
@@ -102,7 +102,7 @@ extern "C" unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, be
         }
         FUN_00192f50(&sp88[0], &DAT_004e1098[0], igProperty_FindByName((igObject *)arg1->_dataList, DAT_00585be0[0], &DAT_0050ef60[0])->f16 + 32);
         {
-            float r = FUN_00123640(sp88[0], sp88[2]);
+            float r = atan2f(sp88[0], sp88[2]);
             *(float *)&arg2->_direction[1] = r;
             *(float *)&arg2->_targetDirection[1] = r;
         }

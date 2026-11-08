@@ -1,6 +1,6 @@
 extern "C" {
-int FUN_00124e10(...);
-extern void * DAT_004854a0[4];
+int fflush(...);
+extern void * _impure_ptr[4];
 extern void ** DAT_005871b0[4];
 void FUN_00304680(void);
 }
@@ -9,5 +9,5 @@ void FUN_00304680(void) {
     if (DAT_005871b0[0] != 0) {
         ((DW4VC_128_0 *)(DAT_005871b0[0]))->vX();
     }
-    FUN_00124e10(*(int *)((char *)(DAT_004854a0[0]) + 8));
+    fflush(*(int *)((char *)(_impure_ptr[0]) + 8));
 }

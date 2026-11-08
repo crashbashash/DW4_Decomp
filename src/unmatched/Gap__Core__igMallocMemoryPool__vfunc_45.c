@@ -1,4 +1,4 @@
-int FUN_0012aff0();
+int strstr();
 int FUN_002f0880();
 extern int DAT_004fd3c8[4];
 extern int DAT_004fd3d8[4];
@@ -17,13 +17,13 @@ void Gap__Core__igMallocMemoryPool__vfunc_45(int *arg0, struct A1 *arg1, struct 
     temp_s1 = arg2->f76;
     if (temp_s1 != 0) {
         var_s2 = arg1->f152;
-        if (FUN_0012aff0(temp_s1, &DAT_004fd3c8[0]) != 0) {
+        if (strstr(temp_s1, &DAT_004fd3c8[0]) != 0) {
             var_s2 = 0;
-        } else if (FUN_0012aff0(temp_s1, &DAT_004fd3d8[0]) != 0) {
+        } else if (strstr(temp_s1, &DAT_004fd3d8[0]) != 0) {
             var_s2 = 1;
-        } else if (FUN_0012aff0(temp_s1, &DAT_004fd3f0[0]) != 0) {
+        } else if (strstr(temp_s1, &DAT_004fd3f0[0]) != 0) {
             var_s2 = 2;
-        } else if (FUN_0012aff0(temp_s1, &DAT_004fd400[0]) != 0) {
+        } else if (strstr(temp_s1, &DAT_004fd400[0]) != 0) {
             var_s2 = 3;
         }
         arg1->f152 = var_s2;

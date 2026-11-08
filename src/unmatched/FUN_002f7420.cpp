@@ -6,7 +6,7 @@ int *FUN_002ee430(int);
 void *memset(void *, int, int);
 int FUN_00304430(const int *, ...);
 void FUN_00304680();
-void FUN_00128598(void *, int, int, int (*)(const void *, const void *));
+void qsort(void *, int, int, int (*)(const void *, const void *));
 int FUN_002f7410(const void *, const void *);
 int sprintf(char *, const int *, ...);
 int FUN_002e1500(void *, int);
@@ -67,7 +67,7 @@ extern "C" void FUN_002f7420(LeakReportSlot *self) {
                     list[k] = FUN_0030d1d0(names, it);
                     it = FUN_0030d4a0(names, it);
                 }
-                FUN_00128598(list, n, 4, FUN_002f7410);
+                qsort(list, n, 4, FUN_002f7410);
                 for (it = 0; it < n; it++) {
                     int name = list[it];
                     tracker->describe(0, -1, name, &sizeA, &sizeB, &sizeC, &sizeD);

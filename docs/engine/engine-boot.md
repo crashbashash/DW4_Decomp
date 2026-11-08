@@ -23,7 +23,7 @@ addresses and the call graph are the deliverable.  Everything here is in the EE 
 `0x114a60`, `0x10bcb8`, `0x1142f0`, `0x1137c8` and tail-jumps `0x115ed8`.  `FUN_001029d0` sets up
 four table pointers (`0x522440`, `0x522480`, `0x546fb0`, `0x554858`) and jumps into `0x100c50`
 (the static-initialiser driver).  `FUN_00100bc0` is the atexit list walker
-(`while (e) { next = e->next; e->fn(e->arg, -1); }`).  `FUN_00124d60` walks the C++ static
+(`while (e) { next = e->next; e->fn(e->arg, -1); }`).  `exit` walks the C++ static
 destructor list at `0x004854a0` and then re-enters `0x100228`.
 
 ## The game's `main` (`FUN_002595e0`, `0x002595e0`, 976 bytes)

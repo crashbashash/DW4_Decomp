@@ -1,6 +1,6 @@
 /* Drops the first argument and tail-calls with the other two; C mode rather than C++ gives the
  * direct jump. */
-int FUN_00129068();
+int realloc();
 void FUN_00280b70(int unused, int a, int b) {
-    FUN_00129068(a, b);
+    realloc(a, b);
 }

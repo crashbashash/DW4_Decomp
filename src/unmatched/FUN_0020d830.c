@@ -1,4 +1,4 @@
-int FUN_001236e8(char *);
+int atoi(char *);
 int strlen(char *);
 int strcmp(char *, int);
 extern char DAT_00491910[];
@@ -14,7 +14,7 @@ int FUN_0020d830(int arg0) {
         p = DAT_00491910 + off;
         if (strcmp(p, arg0) == 0) {
             off = off + (strlen(p) + 1);
-            r = DAT_0056c2b0[0] + FUN_001236e8(DAT_00491910 + off);
+            r = DAT_0056c2b0[0] + atoi(DAT_00491910 + off);
             break;
         }
         off = off + (strlen(p) + 1);

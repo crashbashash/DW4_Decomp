@@ -1,5 +1,5 @@
 extern "C" {
-float FUN_00123640(float, float);
+float atan2f(float, float);
 float FUN_003a6850(void *);
 }
 typedef struct V3 { float x, y, z; } V3;
@@ -16,7 +16,7 @@ void FUN_003a5d70(void *arg0, A *a, B *b, V3 *q, V3 *outv, float *outd, int *out
     for (i = 0; i < n; i++) {
         V3 *p = &a->pts[i];
         px = p->x; py = p->y; pz = p->z;
-        ang = FUN_00123640(px - q->x, pz - q->z) - ref;
+        ang = atan2f(px - q->x, pz - q->z) - ref;
         if (ang < 0.0f) ang = -ang;
         while (ang > 6.2831855f) ang -= 6.2831855f;
         if (i == 0 || !(best <= ang)) {

@@ -5,7 +5,7 @@
  * allocate-bytes slot. */
 extern "C" {
 /* Libc-style allocation fallback taking the total size. */
-char *FUN_00126308(int);
+char *malloc(int);
 /* Default allocator provider: selector in, allocator object (or null) out. */
 void **Memory_GetAllocatorBySelector(...);
 /* Selector word the provider is queried with when no allocator is passed. */
@@ -25,7 +25,7 @@ char *igObject_AllocateRawStorage(int size, int prefix_size, void **requested_al
     }
     if (allocator == 0) {
         /* no allocator at all: the prefix is not added on this path (retail behaviour) */
-        return FUN_00126308(total_size);
+        return malloc(total_size);
     }
     return ((DW4VC_216_2 *)allocator)->vX(total_size) + prefix_size;
 }

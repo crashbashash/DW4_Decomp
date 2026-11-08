@@ -1,4 +1,4 @@
-float FUN_00123670(float);
+float logf(float);
 void FUN_0026cfd0(int, int, int);
 
 void FUN_0029b4c8(char *obj, int volume) {
@@ -14,7 +14,7 @@ void FUN_0029b4c8(char *obj, int volume) {
         hi = 0;
         lo = 0;
     } else {
-        t = (FUN_00123670(volume) - 6.907755f) * 1731.23401f;
+        t = (logf(volume) - 6.907755f) * 1731.23401f;
         hi = t * 0.01f;
         lo = (int)t - hi * 100;
     }

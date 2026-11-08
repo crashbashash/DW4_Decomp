@@ -1,20 +1,20 @@
 struct igResult { int w0; igResult() {} igResult(const igResult &o) { w0 = o.w0; } bool operator==(const igResult &o) const { return w0 == o.w0; } };
 extern "C" {
-extern char DAT_004d3d10[];
+extern char _ctype_[];
 extern char DAT_004d3d11[];
 extern char DAT_004f95c0[];
 extern char DAT_004fb198[];
 extern char DAT_004fb1a0[];
 extern igResult DAT_004fb410;
-int FUN_00129ef8(char *, char *, int);
+int sscanf(char *, char *, int);
 int strncmp(char *, char *, int);
-char *FUN_0012aff0(char *, char *);
+char *strstr(char *, char *);
 igResult igMetaEnum_GetValueByName(void *, char *, int);
 int strlen(char *);
 void strncpy(char *, char *, int);
 }
 static inline bool sameChar(int a, int b) { return (char)a == (char)b; }
-static inline int isSpaceChar(char c) { return DAT_004d3d10[c + 1] & 8; }
+static inline int isSpaceChar(char c) { return _ctype_[c + 1] & 8; }
 extern "C" int FUN_00307200(char *text, int value, void *meta, char *format) {
     char buffer[260];
     char *end;
@@ -39,7 +39,7 @@ extern "C" int FUN_00307200(char *text, int value, void *meta, char *format) {
         }
     }
     if (*f != 0) {
-        char *found = FUN_0012aff0(s, f);
+        char *found = strstr(s, f);
         if (found != 0) {
             end = found;
         } else {
@@ -48,10 +48,10 @@ extern "C" int FUN_00307200(char *text, int value, void *meta, char *format) {
     }
     if (DAT_004d3d11[*s] & 4) {
         if (strncmp(text, DAT_004fb198, 2) == 0) {
-            if (FUN_00129ef8(text, DAT_004fb1a0, value) == 1) {
+            if (sscanf(text, DAT_004fb1a0, value) == 1) {
                 return 1;
             }
-        } else if (FUN_00129ef8(text, DAT_004f95c0, value) == 1) {
+        } else if (sscanf(text, DAT_004f95c0, value) == 1) {
             return 1;
         }
     } else {

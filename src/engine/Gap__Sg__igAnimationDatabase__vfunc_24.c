@@ -9,7 +9,7 @@ extern int DAT_00562428[4];
 extern int *DAT_00562560[4];
 extern int DAT_00585b20[4];
 extern int DAT_00585be0[4];
-int FUN_00129ef8(char *, char *, char *, int *);
+int sscanf(char *, char *, char *, int *);
 int strlen(char *);
 int strncmp(char *, char *, int);
 int igObject_IsKindOf(void *, int);
@@ -61,7 +61,7 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O *arg0, char *arg1) {
             }
             DAT_00562560[0] = (int *)var_s1;
         }
-        FUN_00129ef8(arg1 + strlen(DAT_004e44f8), DAT_004e4500, sp50, &sp106C);
+        sscanf(arg1 + strlen(DAT_004e44f8), DAT_004e4500, sp50, &sp106C);
         sp1068 = igProperty_FindByName(arg0->f24, DAT_00585be0[0], sp50);
         t = sp1068;
         if (t != 0) {

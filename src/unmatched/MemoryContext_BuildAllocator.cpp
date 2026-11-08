@@ -181,7 +181,7 @@ class Gl { public:
 };
 extern "C" {
 igMemoryPool *Memory_GetAllocatorBySelector(int);
-int FUN_0012aff0(char *, char *);
+int strstr(char *, char *);
 int strcmp(char *, char *);
 igMemoryPool *igAliasMemoryPool_Create(igMemoryPool *);
 igMemoryPool *igMetaObject_CreateInstance(int, igMemoryPool *);
@@ -240,13 +240,13 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
     }
     if (cfg->_scope != 0) {
         slot->f140 = 0;
-        if (FUN_0012aff0((char *)cfg->_scope, DAT_004fa620) == 0) {
-            if (FUN_0012aff0((char *)cfg->_scope, DAT_004fa2a8) != 0) slot->f140 = slot->f140 | 1;
-            else if (FUN_0012aff0((char *)cfg->_scope, DAT_004fa2b0) != 0) slot->f140 = slot->f140 | 2;
+        if (strstr((char *)cfg->_scope, DAT_004fa620) == 0) {
+            if (strstr((char *)cfg->_scope, DAT_004fa2a8) != 0) slot->f140 = slot->f140 | 1;
+            else if (strstr((char *)cfg->_scope, DAT_004fa2b0) != 0) slot->f140 = slot->f140 | 2;
         }
-        if (FUN_0012aff0((char *)cfg->_scope, DAT_004fa630) != 0) slot->f140 = slot->f140 | 0x01000000;
-        if (FUN_0012aff0((char *)cfg->_scope, DAT_004fa638) != 0) slot->f140 = slot->f140 | 0x02000000;
-        if (FUN_0012aff0((char *)cfg->_scope, DAT_004fa600) != 0) slot->f140 = slot->f140 | 0x04000000;
+        if (strstr((char *)cfg->_scope, DAT_004fa630) != 0) slot->f140 = slot->f140 | 0x01000000;
+        if (strstr((char *)cfg->_scope, DAT_004fa638) != 0) slot->f140 = slot->f140 | 0x02000000;
+        if (strstr((char *)cfg->_scope, DAT_004fa600) != 0) slot->f140 = slot->f140 | 0x04000000;
         if (flag == 0) {
             int f = slot->f140;
             if ((((unsigned long long)((long long)f << 0x28)) >> 0x28) != 0 && (f & 0x05000000) != 0) {
@@ -279,7 +279,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                 int refMode = !!(ctx->flags & 4);
                 if (refMode) {
                     if (cfg->_scope != 0) {
-                        if ((FUN_0012aff0((char *)cfg->_scope, DAT_004fa600) != 0 || FUN_0012aff0((char *)cfg->_scope, DAT_004fa648) != 0 || FUN_0012aff0((char *)cfg->_scope, DAT_004fa658) != 0) && flag == 0) {
+                        if ((strstr((char *)cfg->_scope, DAT_004fa600) != 0 || strstr((char *)cfg->_scope, DAT_004fa648) != 0 || strstr((char *)cfg->_scope, DAT_004fa658) != 0) && flag == 0) {
                             *out = DAT_004fb410[0];
                             return;
                         }

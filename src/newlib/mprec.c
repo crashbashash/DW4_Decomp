@@ -1,82 +1,7 @@
-/* newlib 1.9.0 libc/stdlib/mprec.c, built whole. */
-#define NULL 0
-#define _Kmax 15
-#define Pack_32
-#define IEEE_8087
-typedef unsigned int __ULong;
-typedef int __Long;
-typedef unsigned int size_t;
-typedef struct _Bigint {
-    struct _Bigint *_next;
-    int _k, _maxwds, _sign, _wds;
-    __ULong _x[1];
-} _Bigint;
-struct _reent {
-    int _errno;
-    void *_stdin, *_stdout, *_stderr;
-    int _inc;
-    char _emergency[25];
-    int _current_category;
-    const char *_current_locale;
-    int __sdidinit;
-    void (*__cleanup)(struct _reent *);
-    struct _Bigint *_result;
-    int _result_k;
-    struct _Bigint *_p5s;
-    struct _Bigint **_freelist;
-};
-union double_union {
-    double d;
-    __ULong i[2];
-};
-#define word0(x) (x.i[1])
-#define word1(x) (x.i[0])
-#define Storeinc(a, b, c) (((unsigned short *)a)[1] = (unsigned short)b, ((unsigned short *)a)[0] = (unsigned short)c, a++)
-#define Exp_shift 20
-#define Exp_shift1 20
-#define Exp_msk1 ((__ULong)0x100000L)
-#define Exp_mask ((__ULong)0x7ff00000L)
-#define P 53
-#define Bias 1023
-#define Exp_1 ((__ULong)0x3ff00000L)
-#define Ebits 11
-#define Frac_mask ((__ULong)0xfffffL)
-#define Bcopy(x, y) memcpy((char *)&x->_sign, (char *)&y->_sign, y->_wds * sizeof(__Long) + 2 * sizeof(int))
-void *memcpy(void *, const void *, size_t);
-
-
-
-
-
-#define _DEFUN(name, arglist, args) name(args)
-#define _AND ,
-#define _CONST const
-#define Sign_Extend(a, b)
-#define Sign_Extend(a,b)
-#define Balloc FUN_001273e0
-#define Bfree FUN_00127488
-#define multadd FUN_001274b8
-#define s2b FUN_001275c0
-#define hi0bits FUN_001276f0
-#define lo0bits FUN_00127770
-#define i2b FUN_00127830
-#define mult FUN_00127868
-#define pow5mult FUN_00127a78
-#define lshift FUN_00127b78
-#define cmp FUN_00127cd0
-#define diff FUN_00127d38
-#define ulp FUN_00127ec8
-#define b2d FUN_00127f98
-#define d2b FUN_00128130
-#define ratio FUN_001282b8
-#define _mprec_log10 FUN_00128388
-
-
-/* reent.c knows this value */
-#define _Kmax 15
+#include "dw4/newlib_mprec.h"
 
 _Bigint *
-FUN_001273e0(struct _reent *ptr, int k)
+_Balloc(struct _reent *ptr, int k)
 {
   int x;
   _Bigint *rv ;
@@ -114,7 +39,7 @@ FUN_001273e0(struct _reent *ptr, int k)
 }
 
 void
-FUN_00127488(struct _reent *ptr, _Bigint * v)
+_Bfree(struct _reent *ptr, _Bigint * v)
 {
   if (v)
     {
@@ -124,7 +49,7 @@ FUN_00127488(struct _reent *ptr, _Bigint * v)
 }
 
 _Bigint *
-FUN_001274b8(struct _reent *ptr, _Bigint * b, int m, int a)
+_multadd(struct _reent *ptr, _Bigint * b, int m, int a)
 {
   int i, wds;
   __ULong *x, y;
@@ -167,7 +92,7 @@ FUN_001274b8(struct _reent *ptr, _Bigint * b, int m, int a)
 }
 
 _Bigint *
-FUN_001275c0(struct _reent * ptr, _CONST char *s, int nd0, int nd, __ULong y9)
+_s2b(struct _reent * ptr, const char *s, int nd0, int nd, __ULong y9)
 {
   _Bigint *b;
   int i, k;
@@ -202,7 +127,7 @@ FUN_001275c0(struct _reent * ptr, _CONST char *s, int nd0, int nd, __ULong y9)
 }
 
 int
-FUN_001276f0(register __ULong x)
+_hi0bits(register __ULong x)
 {
   register int k = 0;
 
@@ -236,7 +161,7 @@ FUN_001276f0(register __ULong x)
 }
 
 int
-FUN_00127770(__ULong *y)
+_lo0bits(__ULong *y)
 {
   register int k;
   register __ULong x = *y;
@@ -286,7 +211,7 @@ FUN_00127770(__ULong *y)
 }
 
 _Bigint *
-FUN_00127830(struct _reent * ptr, int i)
+_i2b(struct _reent * ptr, int i)
 {
   _Bigint *b;
 
@@ -297,7 +222,7 @@ FUN_00127830(struct _reent * ptr, int i)
 }
 
 _Bigint *
-FUN_00127868(struct _reent * ptr, _Bigint * a, _Bigint * b)
+_multiply(struct _reent * ptr, _Bigint * a, _Bigint * b)
 {
   _Bigint *c;
   int k, wa, wb, wc;
@@ -389,11 +314,11 @@ FUN_00127868(struct _reent * ptr, _Bigint * a, _Bigint * b)
 }
 
 _Bigint *
-FUN_00127a78(struct _reent * ptr, _Bigint * b, int k)
+_pow5mult(struct _reent * ptr, _Bigint * b, int k)
 {
   _Bigint *b1, *p5, *p51;
   int i;
-  static _CONST int p05[3] = {5, 25, 125};
+  static const int p05[3] = {5, 25, 125};
 
   if ((i = k & 3) != 0)
     b = multadd (ptr, b, p05[i - 1], 0);
@@ -427,7 +352,7 @@ FUN_00127a78(struct _reent * ptr, _Bigint * b, int k)
 }
 
 _Bigint *
-FUN_00127b78(struct _reent * ptr, _Bigint * b, int k)
+_lshift(struct _reent * ptr, _Bigint * b, int k)
 {
   int i, k1, n, n1;
   _Bigint *b1;
@@ -487,7 +412,7 @@ FUN_00127b78(struct _reent * ptr, _Bigint * b, int k)
 }
 
 int
-FUN_00127cd0(_Bigint * a, _Bigint * b)
+__mcmp(_Bigint * a, _Bigint * b)
 {
   __ULong *xa, *xa0, *xb, *xb0;
   int i, j;
@@ -517,7 +442,7 @@ FUN_00127cd0(_Bigint * a, _Bigint * b)
 }
 
 _Bigint *
-FUN_00127d38(struct _reent * ptr, _Bigint * a, _Bigint * b)
+__mdiff(struct _reent * ptr, _Bigint * a, _Bigint * b)
 {
   _Bigint *c;
   int i, wa, wb;
@@ -600,7 +525,7 @@ FUN_00127d38(struct _reent * ptr, _Bigint * a, _Bigint * b)
 }
 
 double
-FUN_00127ec8(double _x)
+_ulp(double _x)
 {
   union double_union x, a;
   register __Long L;
@@ -616,9 +541,7 @@ FUN_00127ec8(double _x)
       L |= Exp_msk1 >> 4;
 #endif
       word0 (a) = L;
-#ifndef _DOUBLE_IS_32BITS
       word1 (a) = 0;
-#endif
 
 #ifndef Sudden_Underflow
     }
@@ -628,17 +551,13 @@ FUN_00127ec8(double _x)
       if (L < Exp_shift)
 	{
 	  word0 (a) = 0x80000 >> L;
-#ifndef _DOUBLE_IS_32BITS
 	  word1 (a) = 0;
-#endif
 	}
       else
 	{
 	  word0 (a) = 0;
 	  L -= Exp_shift;
-#ifndef _DOUBLE_IS_32BITS
          word1 (a) = L >= 31 ? 1 : 1 << (31 - L);
-#endif
 	}
     }
 #endif
@@ -646,7 +565,7 @@ FUN_00127ec8(double _x)
 }
 
 double
-FUN_00127f98(_Bigint * a, int *e)
+_b2d(_Bigint * a, int *e)
 {
   __ULong *xa, *xa0, w, y, z;
   int k;
@@ -672,9 +591,7 @@ FUN_00127f98(_Bigint * a, int *e)
     {
       d0 = Exp_1 | y >> (Ebits - k);
       w = xa > xa0 ? *--xa : 0;
-#ifndef _DOUBLE_IS_32BITS
       d1 = y << ((32 - Ebits) + k) | w >> (Ebits - k);
-#endif
       goto ret_d;
     }
   z = xa > xa0 ? *--xa : 0;
@@ -682,16 +599,12 @@ FUN_00127f98(_Bigint * a, int *e)
     {
       d0 = Exp_1 | y << k | z >> (32 - k);
       y = xa > xa0 ? *--xa : 0;
-#ifndef _DOUBLE_IS_32BITS
       d1 = z << k | y >> (32 - k);
-#endif
     }
   else
     {
       d0 = Exp_1 | y;
-#ifndef _DOUBLE_IS_32BITS
       d1 = z;
-#endif
     }
 #else
   if (k < Ebits + 16)
@@ -722,7 +635,7 @@ ret_d:
 }
 
 _Bigint *
-FUN_00128130(struct _reent * ptr, double _d, int *e, int *bits)
+_d2b(struct _reent * ptr, double _d, int *e, int *bits)
 {
   union double_union d;
   _Bigint *b;
@@ -760,7 +673,6 @@ FUN_00128130(struct _reent * ptr, double _d, int *e, int *bits)
     z |= Exp_msk1;
 #endif
 #ifdef Pack_32
-#ifndef _DOUBLE_IS_32BITS
   if (d1)
     {
       y = d1;
@@ -775,7 +687,6 @@ FUN_00128130(struct _reent * ptr, double _d, int *e, int *bits)
       i = b->_wds = (x[1] = z) ? 2 : 1;
     }
   else
-#endif
     {
 #ifdef DEBUG
       if (!z)
@@ -784,9 +695,7 @@ FUN_00128130(struct _reent * ptr, double _d, int *e, int *bits)
       k = lo0bits (&z);
       x[0] = z;
       i = b->_wds = 1;
-#ifndef _DOUBLE_IS_32BITS
       k += 32;
-#endif
     }
 #else
   if (d1)
@@ -867,11 +776,9 @@ FUN_00128130(struct _reent * ptr, double _d, int *e, int *bits)
 #endif
   return b;
 }
-#undef d0
-#undef d1
 
 double
-FUN_001282b8(_Bigint * a, _Bigint * b)
+_ratio(_Bigint * a, _Bigint * b)
 {
   union double_union da, db;
   int k, ka, kb;
@@ -909,33 +816,8 @@ FUN_001282b8(_Bigint * a, _Bigint * b)
   return da.d / db.d;
 }
 
-
-_CONST double
-  tens[] =
-{
-  1e0, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9,
-  1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
-  1e20, 1e21, 1e22, 1e23, 1e24
-
-};
-
-#if !defined(_DOUBLE_IS_32BITS) && !defined(__v800)
-_CONST double bigtens[] =
-{1e16, 1e32, 1e64, 1e128, 1e256};
-
-_CONST double tinytens[] =
-{1e-16, 1e-32, 1e-64, 1e-128, 1e-256};
-#else
-_CONST double bigtens[] =
-{1e16, 1e32};
-
-_CONST double tinytens[] =
-{1e-16, 1e-32};
-#endif
-
-
 double
-FUN_00128388(int dig)
+_mprec_log10(int dig)
 {
   double v = 1.0;
   if (dig < 24)

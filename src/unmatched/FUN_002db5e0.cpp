@@ -1,5 +1,5 @@
 extern "C" {
-int FUN_00129ef8(...);
+int sscanf(...);
 int strlen(...);
 int FUN_002b9500(...);
 int FUN_002db480(...);
@@ -15,7 +15,7 @@ bool FUN_002db5e0(char *arg0, int *arg1) {
 
     var_s0 = false;
     FUN_002db480();
-    if (FUN_00129ef8(*(int *)(arg0 + 52), &DAT_004f9718[0], buf) == 1) {
+    if (sscanf(*(int *)(arg0 + 52), &DAT_004f9718[0], buf) == 1) {
         *(int *)(arg0 + 52) = *(int *)(arg0 + 52) + strlen(buf);
         FUN_002db4e0(arg0, buf);
         *arg1 = FUN_002b9500(igObject_GetAllocator(arg0));

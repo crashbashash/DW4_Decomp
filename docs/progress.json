@@ -226,7 +226,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 84475
+    "value": 83134
    },
    "inline_asm.hardware": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 6030
+    "value": 6011
    },
    "mismatch.bytes": {
     "reason": null,
@@ -289,8 +289,8 @@
     "value": 366
    },
    "struct.a": {
-    "reason": "struct.a +1: newlib libc drafts declare struct _reent as prefixes of different lengths (60 and 80 bytes, same fields); one shared dw4/newlib_reent.h is the readability pass",
-    "value": 141
+    "reason": null,
+    "value": 139
    },
    "struct.b": {
     "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members.",
@@ -326,13 +326,13 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 3420,
    "foreign_profile.functions": 19,
-   "fun_dat_refs": 84475,
+   "fun_dat_refs": 83134,
    "inline_asm.hardware": 11,
    "inline_asm.other": 37,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 6030,
+   "m2c_idiom.units": 6011,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -342,7 +342,7 @@
    "profile_split.bytes": 43892,
    "profile_split.units": 13,
    "raw_casts.reflected": 366,
-   "struct.a": 141,
+   "struct.a": 139,
    "struct.b": 300,
    "struct.c": 287,
    "unmatched.bytes": 800380,
@@ -353,9 +353,9 @@
   "fully_matched": 18720,
   "fully_verified": 18705,
   "matched": 18734,
-  "named": 9419,
-  "named_semantic": 1742,
-  "named_semantic_matched": 1575,
+  "named": 9646,
+  "named_semantic": 1969,
+  "named_semantic_matched": 1801,
   "total": 20214
  },
  "largest": [
@@ -443,43 +443,43 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 286184,
+  "bytes": 383392,
   "failing": {
    "addresses": {
-    "bytes": 2242748,
-    "functions": 13882
+    "bytes": 2155560,
+    "functions": 13644
    },
    "fields": {
-    "bytes": 790804,
-    "functions": 3509
+    "bytes": 790668,
+    "functions": 3506
    },
    "idioms": {
-    "bytes": 1287996,
-    "functions": 6059
+    "bytes": 1287176,
+    "functions": 6043
    },
    "name": {
-    "bytes": 1841996,
-    "functions": 13360
+    "bytes": 1755992,
+    "functions": 13134
    },
    "placed": {
-    "bytes": 2012964,
-    "functions": 12455
+    "bytes": 1924596,
+    "functions": 12236
    },
    "references": {
-    "bytes": 2063844,
-    "functions": 10953
+    "bytes": 2006672,
+    "functions": 10769
    },
    "types": {
-    "bytes": 953844,
-    "functions": 3658
+    "bytes": 953448,
+    "functions": 3654
    },
    "virtuals": {
     "bytes": 405236,
     "functions": 1258
    }
   },
-  "functions": 1945,
-  "matched_functions": 18705
+  "functions": 2197,
+  "matched_functions": 18720
  },
  "regions": [
   {
@@ -613,11 +613,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 6832,
-  "pct": 40.17,
+  "offset_casts": 6826,
+  "pct": 40.04,
   "recovered": 24880,
-  "synthetic": 10327,
-  "total": 61941,
+  "synthetic": 10221,
+  "total": 62144,
   "typeable": 366,
   "typeable_pct": 0.59
  }

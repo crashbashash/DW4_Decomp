@@ -6,7 +6,7 @@ int ObjectList_ResizeRetained(...);
 void igObject_Destroy(void *);
 int igObject_GetAllocator(...);
 int strcmp(int, int);
-int thunk_FUN_0012a110(int, int);
+int thunk_strcasecmp(int, int);
 extern int DAT_004c22f0[4];
 }
 /* Arena handles (4-byte refs) of the reflected int fields are followed through casts. */
@@ -46,7 +46,7 @@ igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, int arg2, int arg3) {
                 }
             } else {
                 nm = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? DAT_004c22f0[0] : ((igStringObj *)r.p->_valueName)->_buffer;
-                if (thunk_FUN_0012a110(nm, arg2) == 0) {
+                if (thunk_strcasecmp(nm, arg2) == 0) {
                     igRegistryValue *ret = r.p;
                     return ret;
                 }

@@ -1,6 +1,6 @@
-float FUN_00123138(float);
-float FUN_00123628(float);
-float FUN_00123640(float, float);
+float cosf(float);
+float asinf(float);
+float atan2f(float, float);
 int igMatrix44f_SetIdentity(float *);
 int FUN_001916f0(float *, int);
 
@@ -19,13 +19,13 @@ void FUN_00192990(int arg0, float *arg1, float *arg2, float *arg3) {
     } else {
         x = 1.0f;
     }
-    r = FUN_00123628(x);
+    r = asinf(x);
     *arg2 = r;
-    if (FUN_00123138(r) != 0.0f) {
-        *arg1 = FUN_00123640(m[6], m[10]);
-        *arg3 = FUN_00123640(m[1], m[0]);
+    if (cosf(r) != 0.0f) {
+        *arg1 = atan2f(m[6], m[10]);
+        *arg3 = atan2f(m[1], m[0]);
         return;
     }
-    *arg2 = FUN_00123640(m[4], m[5]);
+    *arg2 = atan2f(m[4], m[5]);
     *arg3 = 0.0f;
 }

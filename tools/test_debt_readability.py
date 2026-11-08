@@ -24,6 +24,26 @@ def quiet(fn, *args):
         return fn(*args)
 
 
+class ReadableAssembly(unittest.TestCase):
+    def measure(self, name, category):
+        progress._READABLE.clear()
+        self.addCleanup(progress._READABLE.clear)
+        return progress.readable([(0x100000, 16, name)], {name: "src/newlib/memchr.S"},
+                                 {0x100000: (category,)})
+
+    def test_a_named_approved_source_is_readable(self):
+        result = self.measure("memchr", "assembly")
+        self.assertEqual((result["names"], result["bytes"], result["matched_functions"]), ({"memchr"}, 16, 1))
+
+    def test_an_unnamed_approved_source_is_not(self):
+        result = self.measure("FUN_00100000", "assembly")
+        self.assertEqual((result["names"], result["failing"]["name"]["functions"]), (set(), 1))
+
+    def test_an_asm_body_is_not_counted(self):
+        result = self.measure("memchr", "asm-body")
+        self.assertEqual((result["names"], result["matched_functions"]), (set(), 0))
+
+
 class Ratchet(unittest.TestCase):
     def setUp(self):
         folder = tempfile.TemporaryDirectory()

@@ -125,6 +125,9 @@ is readable when all of these hold:
 4. A shape found by a permuter, flag sweep or random walk carries
    `/* matching construct: <tool> — <what moved> */` at the affected line.
 
+An owner-approved assembly source counts as readable once it has a recovered name: its row in
+`config/assembly-sources.tsv` records the evidence that no C reproduces it.
+
 When two spellings match the same bytes, keep the more readable one. A function that cannot be
 written as C yet stays without a file: its retail instructions wrapped in an `asm` function recover
 nothing and are not committed ([asm-body matches](docs/engine/asm-body-matches.md)).

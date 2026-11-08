@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 struct V4 { float x, y, z; };
-float FUN_00123640(float, float);
+float atan2f(float, float);
 bool FUN_0018b050(void *, int);
 void igMatrix44f_SetIdentity(void *);
 void FUN_00191670(void *, void *, float);
@@ -244,7 +244,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
         REL(o3->_bound)
         o3->_bound = 0;
         FUN_00192f50(&c0_v, DAT_004e1098, O3->_m);
-        float ang = FUN_00123640(c0_v.x, c0_v.z);
+        float ang = atan2f(c0_v.x, c0_v.z);
         FLT(d2->_direction[1]) = ang;
         FLT(d2->_targetDirection[1]) = ang;
         if (igProperty_FindByName(nm->_dataList, DAT_00585be0[0], DAT_0050efd8) != 0 ||
@@ -362,7 +362,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
             OV3->v35(c5_m);
             if (d != 0) {
                 FUN_00192f50(&c5_v, DAT_004e1098, c5_m);
-                float ang = FUN_00123640(c5_v.x, c5_v.z);
+                float ang = atan2f(c5_v.x, c5_v.z);
                 FLT(d->_direction[1]) = ang;
                 FLT(d->_targetDirection[1]) = ang;
             }
@@ -543,7 +543,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
                     NAMEOF(n)
                     FUN_00394400(self, ent, DAT_0050f220, DAT_0050f228, n, s8, c6_hit, s5, s7, r6);
                     if (DAT_0058a210[0] != 0) {
-                        FLT(d->_targetDirection[1]) = FUN_00123640(c6_t1.x - c6_t2.x, c6_t1.z - c6_t2.z);
+                        FLT(d->_targetDirection[1]) = atan2f(c6_t1.x - c6_t2.x, c6_t1.z - c6_t2.z);
                         FUN_003956e0(self, nm, ent, d, 1);
                     }
                 }

@@ -2,7 +2,7 @@
 struct R { int v; R() {} };
 class Ctx;
 extern "C" {
-int FUN_0012aff0(...);
+int strstr(...);
 void *FUN_002c5780(...);
 int FUN_002dcc40(...);
 int igObject_Destroy(...);
@@ -36,9 +36,9 @@ void MemoryContext_BuildAndAttachEventTracker(R *out, Ctx *self, int idx) {
         ty = 0;
         ps = &slot->sub; igMemoryPoolInfo *sub = *ps;
         if (sub != 0) ty = (void *)sub->_releaseOptions;
-        if (ty == 0 || FUN_0012aff0(ty, &DAT_004fa530[0]) == 0) {
+        if (ty == 0 || strstr(ty, &DAT_004fa530[0]) == 0) {
             int h2 = (self->flags & 2) != 0;
-            if ((h2 && idx != 1) || (ty != 0 && FUN_0012aff0(ty, &DAT_004fa550[0]) != 0)) {
+            if ((h2 && idx != 1) || (ty != 0 && strstr(ty, &DAT_004fa550[0]) != 0)) {
                 o = (Obj *)FUN_002c5780(self->v92(3));
                 void *b = DAT_00586dc8[0]->f124;
                 void *f = (void *)(*ps)->_eventTrackerCapacity;
@@ -57,7 +57,7 @@ void MemoryContext_BuildAndAttachEventTracker(R *out, Ctx *self, int idx) {
         void *ty2 = 0;
         ps2 = &slot->sub; igMemoryPoolInfo *sub2 = *ps2;
         if (sub2 != 0) ty2 = (void *)sub2->_releaseOptions;
-        if (ty2 != 0 && FUN_0012aff0(ty2, &DAT_004fa550[0]) != 0) {
+        if (ty2 != 0 && strstr(ty2, &DAT_004fa550[0]) != 0) {
             o2 = (Obj *)FUN_002c5780(self->v92(3));
             void *b2 = DAT_00586dc8[0]->f124;
             void *f2 = (void *)(*ps2)->_eventTrackerCapacity;

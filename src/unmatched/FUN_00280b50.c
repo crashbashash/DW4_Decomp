@@ -1,5 +1,5 @@
-int FUN_00126308();
+int malloc();
 
 void FUN_00280b50(int a0, int a1) {
-    FUN_00126308(a1, a1);
+    malloc(a1, a1);
 }

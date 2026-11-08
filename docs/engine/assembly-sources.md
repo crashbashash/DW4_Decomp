@@ -4,7 +4,8 @@ A few retail routines were written in assembly, not compiled. Their source is a 
 `src/`, assembled by the same Sony EE GCC driver and `ee-as` as the C of their unit
 (`tools/eegcc_compile.py`), and verified byte for byte like any other function. `make check` puts them in
 the `assembly` category. The original source was assembly, so they count as matched in `README.md`,
-`PROGRESS.md` and `functions.fully_matched`. They are not C, so figures labelled C/C++ leave them out,
+`PROGRESS.md` and `functions.fully_matched`, and as readable once they have a recovered name, since
+the approval records that no C reproduces them. They are not C, so figures labelled C/C++ leave them out,
 as do `make check`'s `match` count and `functions.fully_verified`, which the oracle compares.
 
 ## The approval rule

@@ -2,6 +2,8 @@
 #ifndef DW4_NEWLIB_REENT_H
 #define DW4_NEWLIB_REENT_H
 
+#define NULL 0
+typedef unsigned int size_t;
 typedef unsigned int __ULong;
 struct _glue
 {
@@ -106,5 +108,10 @@ struct _reent
   struct _glue __sglue;
   struct __sFILE __sf[3];
 };
+
+typedef struct __sFILE FILE;
+
+extern struct _reent *_impure_ptr;
+#define _REENT _impure_ptr
 
 #endif

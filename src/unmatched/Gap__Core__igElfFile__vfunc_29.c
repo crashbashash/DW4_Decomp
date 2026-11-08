@@ -4,7 +4,7 @@ extern int DAT_004fb410;
 extern char DAT_004fdf80[];
 extern char DAT_004fde68[];
 extern char DAT_004fde70[];
-char *FUN_0012aff0(const char *, const char *);
+char *strstr(const char *, const char *);
 char *strncpy(char *, const char *, int);
 char *strchr(char *, int);
 void *memcpy(void *, const void *, int);
@@ -26,7 +26,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
     char *scan;
     int i;
     char *tail;
-    sep = FUN_0012aff0(*mangled != 0 ? mangled + 1 : mangled, DAT_004fdf80);
+    sep = strstr(*mangled != 0 ? mangled + 1 : mangled, DAT_004fdf80);
     start = out;
     if (sep != 0) {
         nameLength = sep - mangled;

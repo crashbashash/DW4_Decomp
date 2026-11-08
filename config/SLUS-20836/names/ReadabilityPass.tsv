@@ -17,20 +17,13 @@
 0x002bd0c0	igObjectRefMetaField_EnsureRegistered	engine
 0x002c2f30	igIntMetaField_EnsureRegistered	engine
 0x00237030	igInsightCore_AddInfo	engine
-0x00127098	memcpy	engine
 0x002b7500	igUnsignedCharMetaField_EnsureRegistered	engine
 0x002b6f10	igUnsignedIntMetaField_EnsureRegistered	engine
 0x002be760	igMetaObject_EnsureRegistered	engine
 0x002c2860	__internalObjectList_EnsureRegistered	engine
-0x0012724c	memset	engine
-0x00129e60	sprintf	engine
 0x00190380	igMatrix44f_SetIdentity	engine
 0x00300cd0	igObject_IsKindOf	engine
 0x003c7450	beLoadIntf2ComMdlData::Create	game
-0x00127148	memmove	engine
-0x00128528	printf	engine
-0x0012a78c	strlen	engine
-0x0012ad58	strncpy	engine
 0x0015f580	igVertexArray2::FindVertexData	engine
 0x001c6460	ObjectRef_Destruct_001c6460	engine
 0x00253170	lua_close	engine
@@ -69,8 +62,6 @@
 0x003ee320	beNDMWLoadCtrl2CommonIntf::RemoveAccessPlayer	game
 0x003ee6d0	beNDMWDegiData::LoadFromProperties	game
 0x00411950	beNDMWStatus_AssignEquipment	game
-0x0012a5fc	strcpy	engine
-0x0012d5c8	vfprintf	engine
 0x00250200	luaM_realloc	engine
 0x002ba180	igShortMetaField_EnsureRegistered	engine
 0x002c61a0	igEnumMetaField_EnsureRegistered	engine
@@ -226,3 +217,7 @@
 0x00452870	igCharMetricsList_RunStaticInit	engine
 0x00452ae0	igCharMetricsMetaField_RunStaticInit	engine
 0x004532f0	igAction_RunStaticInit	engine
+0x002d3540	thunk_malloc	engine
+0x002d3550	thunk_free	engine
+0x002f0050	thunk_free_2	engine
+0x0030bed0	thunk_strcasecmp	engine

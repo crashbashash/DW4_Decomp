@@ -1,6 +1,6 @@
 int strlen(char *);
 int strncmp(char *, char *, int);
-char *FUN_0012aff0(char *, char *);
+char *strstr(char *, char *);
 struct F { char pad12[12]; char *f12; };
 struct O { char pad28[28]; char *f28; };
 struct Ls { char pad8[8]; struct O **data; int n; };
@@ -16,7 +16,7 @@ struct F *igMetaField_FindByName(int arg0, char *arg1) {
     found = 0;
     if (strncmp(arg1, DAT_004c22b8[0], strlen(DAT_004c22b8[0])) == 0) {
         arg1 = arg1 + strlen(DAT_004c22b8[0]);
-        q = FUN_0012aff0(arg1, DAT_004c22c0[0]);
+        q = strstr(arg1, DAT_004c22c0[0]);
         if (q != 0) {
             s8 = q + strlen(DAT_004c22c0[0]);
             i = 0;

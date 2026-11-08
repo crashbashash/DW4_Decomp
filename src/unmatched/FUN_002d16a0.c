@@ -9,7 +9,7 @@ int FUN_002d1930();
 int FUN_002d1a00();
 int FUN_002d1e40();
 int FUN_0032d1f0();
-int thunk_FUN_00126308();
+int thunk_malloc();
 extern int DAT_004fb410[4];
 extern int DAT_004fb418[4];
 extern int DAT_00530d80[4];
@@ -23,7 +23,7 @@ void FUN_002d16a0(int arg0) {
         DAT_004fb410[0] = 0;
         DAT_004fb418[0] = 1;
         FUN_0032d1f0();
-        var_v0 = thunk_FUN_00126308(0x3A0);
+        var_v0 = thunk_malloc(0x3A0);
         if (var_v0 != 0) {
             var_v0 = FUN_002d1930(var_v0);
         }

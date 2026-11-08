@@ -129,7 +129,7 @@ def table_base(ins, jl, rb):
             continue
         # The other half can also sit in the *load's displacement*:
         #   lui v1,0x4d ; ... ; lw v1,0x41d0(v1)   -> the table is at 0x4d41d0
-        # (FUN_0012c858, 89 cases).
+        # (vfiprintf, 89 cases).
         for k in range(j + 1, jl + 1):
             mn, p = ins[k][1], splits(ins[k][2])
             if mn not in ("lw", "lhu", "lbu", "lh", "lb", "sw", "sb", "sh"):

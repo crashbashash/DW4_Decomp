@@ -1,13 +1,22 @@
-/* ieee_words.h -- access to the two 32-bit halves of a double, as fdlibm's EXTRACT_WORDS /
- * INSERT_WORDS do. The EE passes a double in one 64-bit register, so the halves are read and
- * written with register shifts rather than through memory. */
+/* fdlibm's EXTRACT_WORDS family: the two 32-bit halves of a double, and a float's word. */
 #ifndef IEEE_WORDS_H
 #define IEEE_WORDS_H
+typedef int __int32_t;
+typedef unsigned int __uint32_t;
+
+#define FLT_UWORD_IS_FINITE(x) 1
+#define FLT_UWORD_IS_NAN(x) 0
+#define FLT_UWORD_IS_INFINITE(x) 0
+#define FLT_UWORD_MAX 0x7fffffff
+#define FLT_UWORD_IS_ZERO(x) ((x)<0x00800000L)
+#define FLT_UWORD_IS_SUBNORMAL(x) 0
+#define FLT_LARGEST_EXP (FLT_UWORD_MAX>>23)
+#define FLT_SMALLEST_EXP 1
 typedef union {
     double value;
     struct {
-        unsigned lo;
-        int hi;
+        __uint32_t lo;
+        __uint32_t hi;
     } parts;
 } IeeeDoubleWords;
 
@@ -57,7 +66,6 @@ typedef union {
         (d) = sl_u.value; \
     } while (0)
 
-/* single-precision counterpart: the float lives in an FPR and is moved to a GPR with mfc1 */
 typedef union {
     float value;
     unsigned int word;

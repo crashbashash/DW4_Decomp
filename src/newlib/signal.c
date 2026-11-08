@@ -1,27 +1,22 @@
-/* newlib 1.10.0 libc/signal/signal.c, built whole. */
-typedef void (*_sig_func_ptr)(int);
 #include "dw4/newlib_reent.h"
-#define NULL ((void *)0)
+
+typedef void (*_sig_func_ptr)(int);
 #define NSIG 32
 #define SIG_DFL ((_sig_func_ptr)0)
 #define SIG_IGN ((_sig_func_ptr)1)
 #define SIG_ERR ((_sig_func_ptr)-1)
 #define EINVAL 22
-#define _REENT DAT_004854a0
-extern struct _reent *DAT_004854a0;
-void *FUN_00126600(struct _reent *ptr, unsigned int size);
-int FUN_00129c28(struct _reent *ptr, int pid, int sig);
-int FUN_00129c88(struct _reent *ptr);
+void *_malloc_r(struct _reent *ptr, unsigned int size);
+int _kill_r(struct _reent *ptr, int pid, int sig);
+int _getpid_r(struct _reent *ptr);
 
-int
-FUN_00129940 (ptr)
-     struct _reent *ptr;
+int _init_signal_r(struct _reent *ptr)
 {
   int i;
 
   if (ptr->_sig_func == NULL)
     {
-      ptr->_sig_func = (_sig_func_ptr *)FUN_00126600 (ptr, sizeof (_sig_func_ptr) * NSIG);
+      ptr->_sig_func = (_sig_func_ptr *)_malloc_r (ptr, sizeof (_sig_func_ptr) * NSIG);
       if (ptr->_sig_func == NULL)
 	return -1;
 
@@ -32,11 +27,7 @@ FUN_00129940 (ptr)
   return 0;
 }
 
-_sig_func_ptr
-FUN_001299b0 (ptr, sig, func)
-     struct _reent *ptr;
-     int sig;
-     _sig_func_ptr func;
+_sig_func_ptr _signal_r(struct _reent *ptr, int sig, _sig_func_ptr func)
 {
   _sig_func_ptr old_func;
 
@@ -46,7 +37,7 @@ FUN_001299b0 (ptr, sig, func)
       return SIG_ERR;
     }
 
-  if (ptr->_sig_func == NULL && FUN_00129940 (ptr) != 0)
+  if (ptr->_sig_func == NULL && _init_signal_r (ptr) != 0)
     return SIG_ERR;
 
   old_func = ptr->_sig_func[sig];
@@ -55,10 +46,7 @@ FUN_001299b0 (ptr, sig, func)
   return old_func;
 }
 
-int
-FUN_00129a30 (ptr, sig)
-     struct _reent *ptr;
-     int sig;
+int _raise_r(struct _reent *ptr, int sig)
 {
   _sig_func_ptr func;
 
@@ -68,12 +56,12 @@ FUN_00129a30 (ptr, sig)
       return -1;
     }
 
-  if (ptr->_sig_func == NULL && FUN_00129940 (ptr) != 0)
+  if (ptr->_sig_func == NULL && _init_signal_r (ptr) != 0)
     return -1;
 
   func = ptr->_sig_func[sig];
   if (func == SIG_DFL)
-    return FUN_00129c28 (ptr, FUN_00129c88 (ptr), sig);
+    return _kill_r (ptr, _getpid_r (ptr), sig);
   else if (func == SIG_IGN)
     return 0;
   else if (func == SIG_ERR)
@@ -89,10 +77,7 @@ FUN_00129a30 (ptr, sig)
     }
 }
 
-int
-FUN_00129b08 (ptr, sig)
-     struct _reent *ptr;
-     int sig;
+int __sigtramp_r(struct _reent *ptr, int sig)
 {
   _sig_func_ptr func;
 
@@ -101,7 +86,7 @@ FUN_00129b08 (ptr, sig)
       return -1;
     }
 
-  if (ptr->_sig_func == NULL && FUN_00129940 (ptr) != 0)
+  if (ptr->_sig_func == NULL && _init_signal_r (ptr) != 0)
     return -1;
 
   func = ptr->_sig_func[sig];
@@ -119,27 +104,25 @@ FUN_00129b08 (ptr, sig)
     }
 }
 
-int
-FUN_00129ba0 (sig)
-     int sig;
+int raise(int sig)
 {
-  return FUN_00129a30 (_REENT, sig);
+  return _raise_r (_REENT, sig);
 }
 
 _sig_func_ptr
-FUN_00129bc0 (int sig, _sig_func_ptr func)
+signal (int sig, _sig_func_ptr func)
 {
-  return FUN_001299b0 (_REENT, sig, func);
+  return _signal_r (_REENT, sig, func);
 }
 
 int
-FUN_00129be8 ()
+_init_signal ()
 {
-  return FUN_00129940 (_REENT);
+  return _init_signal_r (_REENT);
 }
 
 int
-FUN_00129c08 (int sig)
+__sigtramp (int sig)
 {
-  return FUN_00129b08 (_REENT, sig);
+  return __sigtramp_r (_REENT, sig);
 }

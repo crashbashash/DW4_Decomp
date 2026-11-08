@@ -237,6 +237,11 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
             else:
                 found = definitions(open(path).read())
             for name, _s, _e in found:
+                # A stock file can hold a definition its build compiles out (pngrutil.c's WinCE
+                # strtod). Its unit row names what it really defines, so such a name stays with
+                # the source that owns it.
+                if os.sep + "third_party" + os.sep in path and name in out:
+                    continue
                 # within one file these are `#ifdef` alternatives; a real clash fails to compile
                 if out.get(name, path) != path:
                     # two stock files may each keep a `static` of one name: the unit row says

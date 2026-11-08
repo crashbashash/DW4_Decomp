@@ -1,4 +1,4 @@
-int FUN_00129ef8();
+int sscanf();
 void *FUN_002b9500();
 void *FUN_002baff0();
 int FUN_00305d30();
@@ -31,7 +31,7 @@ void FUN_00307fd0(void *self, IniIncludeFile *file, char *line, int lineNo, int 
     IniIncludeObject *held;
     IniIncludeText *heldDir;
 
-    if (FUN_00129ef8(line, DAT_004fb280, &open, path, &close) != 3) {
+    if (sscanf(line, DAT_004fb280, &open, path, &close) != 3) {
         return;
     }
 if (open != '"' && open != '<') return; if ((open == '"' && close != '"') || (open == '<' && close != '>')) return;     if (DAT_005871c0 < 12) {

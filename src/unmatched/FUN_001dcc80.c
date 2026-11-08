@@ -1,6 +1,6 @@
 int FUN_001002f0(double, double);
 double dpsub(double, double);
-double FUN_00122590(double);
+double floor(double);
 int dptoli(double);
 typedef struct KeyTimeListView { int _vtable; unsigned int _refCount; int _count; int _capacity; double *_data; } KeyTimeListView;
 typedef struct KeyValueListView { int _vtable; unsigned int _refCount; int _count; int _capacity; int *_data; } KeyValueListView;
@@ -24,7 +24,7 @@ int FUN_001dcc80(KeyTrackView *o, double t) {
         dur = tl->_data[last];
     }
     q = rel / dur;
-    k = dptoli(FUN_00122590(q));
+    k = dptoli(floor(q));
     switch (o->_mode) {
     case 0:
         v = dur * dpsub(q, k);

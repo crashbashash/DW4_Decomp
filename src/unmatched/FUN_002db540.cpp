@@ -1,6 +1,6 @@
 extern "C" {
 typedef struct S { char pad[52]; int f52; } S;
-int FUN_00129ef8(...);
+int sscanf(...);
 int strlen(...);
 int FUN_002b9500(...);
 int FUN_002db480();
@@ -13,7 +13,7 @@ bool FUN_002db540(S *arg0, int *arg1) {
 
     var_s0 = 0;
     FUN_002db480();
-    if (FUN_00129ef8(arg0->f52, &DAT_004f96d0[0], sp40) == 1) {
+    if (sscanf(arg0->f52, &DAT_004f96d0[0], sp40) == 1) {
         arg0->f52 = arg0->f52 + strlen(sp40);
         *arg1 = FUN_002b9500(igObject_GetAllocator(arg0));
         FUN_0030b3c0(*arg1, sp40);
