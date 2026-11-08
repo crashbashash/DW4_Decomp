@@ -21,6 +21,9 @@ unsigned char FUN_00392be0(int unused0, int unused1, beModelCtrlInfoWork *owner,
             return 1;
         }
         r = l[2];
+        if (r->_isRun) {
+            return r->_isRun;
+        }
         return r->_isRun;
     case 1:
         return ((beModelCtrlMoveObject **)p->_data)[3]->_isRun;

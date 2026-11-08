@@ -1966,7 +1966,7 @@
 0015f660	FUN_0015f660	match	-
 0015f730	Gap__Gfx__igVertexArray2__vfunc_25	match	-
 0015feb0	Gap__Gfx__igVertexStream__vfunc_27	match	-
-0015ff10	Gap__Gfx__igVertexArray2Helper__vfunc_23	match	DEFERRED duplicate 0x2e2300 __dt__2RPFv 68B (compared under the profile of its retail unit)
+0015ff10	Gap__Gfx__igVertexArray2Helper__vfunc_23	match	-
 00160dc0	Gap__Gfx__igVertexArray2Helper__vfunc_27	match	-
 00160e00	Gap__Gfx__igVertexArray2Helper__vfunc_28	match	-
 00160ec0	Gap__Gfx__igVertexArray2Helper__vfunc_29	match	-
@@ -2018,7 +2018,7 @@
 00164d50	FUN_00164d50	match	-
 00164d60	FUN_00164d60	match	jump table 0x4df070: 11 entries, 44 bytes, matches retail
 00164f50	FUN_00164f50	match	-
-00165bb0	FUN_00165bb0	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+00165bb0	FUN_00165bb0	match	-
 00165cb0	FUN_00165cb0	match	-
 00165cc0	FUN_00165cc0	match	-
 00165cd0	FUN_00165cd0	match	-
@@ -2344,7 +2344,7 @@
 00177de0	Gap__Gfx__igPsx2VisualContext__vfunc_259	match	-
 001788a0	FUN_001788a0	match	-
 001788e0	FUN_001788e0	match	-
-00179e00	FUN_00179e00	match	DEFERRED duplicate 0x164970 __dt__3RefFv 128B (compared under the profile of its retail unit)
+00179e00	FUN_00179e00	match	-
 0017a070	FUN_0017a070	match	-
 0017a180	FUN_0017a180	match	-
 0017a2b0	FUN_0017a2b0	match	-
@@ -3999,7 +3999,7 @@
 001af860	FUN_001af860	match	-
 001af890	Gap__Sg__igAttrStackManager__vfunc_23	match	-
 001af920	Gap__Sg__igAttrStackManager__vfunc_09	match	-
-001afa30	Gap__Sg__igAttrStackManager__vfunc_10	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+001afa30	Gap__Sg__igAttrStackManager__vfunc_10	match	-
 001afb00	FUN_001afb00	match	-
 001afb60	FUN_001afb60	match	-
 001afc90	FUN_001afc90	match	-
@@ -4178,7 +4178,7 @@
 001c12d0	Gap__Sg__igEnbayaContextPool__vfunc_13	match	-
 001c1450	Gap__Sg__igEnbayaContextPool__vfunc_04	match	-
 001c1560	FUN_001c1560	match	-
-001c17e0	FUN_001c17e0	match	-
+001c17e0	FUN_001c17e0	match	DEFERRED duplicate 0x2e2300 __dt__14PoolListHolderFv 68B (compared under the profile of its retail unit)
 001c1a80	FUN_001c1a80	match	-
 001c1b50	Gap__Sg__igEnbayaTransformSource__vfunc_23	match	-
 001c1b80	Gap__Sg__igEnbayaTransformSource__vfunc_24	match	-
@@ -4219,7 +4219,7 @@
 001c5030	FUN_001c5030	match	-
 001c5160	FUN_001c5160	match	-
 001c51b0	FUN_001c51b0	match	-
-001c51d0	FUN_001c51d0	match	DEFERRED duplicate 0x2e2300 __dt__11FieldHolderFv 68B (compared under the profile of its retail unit)
+001c51d0	FUN_001c51d0	match	-
 001c5310	Gap__Bec__ParticleTimer__vfunc_15	match	-
 001c5380	Gap__Bec__ParticleTimer__vfunc_27	match	-
 001c53d0	Gap__Bec__ParticleTimer__vfunc_26	match	-
@@ -4253,7 +4253,7 @@
 001c6460	ObjectRef_Destruct_001c6460	match	-
 001c64e0	StringList_CopyRetained	match	-
 001c6520	FUN_001c6520	match	-
-001c66c0	FUN_001c66c0	match	DEFERRED duplicate 0x2e2300 __dt__2RPFv 68B (compared under the profile of its retail unit)
+001c66c0	FUN_001c66c0	match	-
 001c6fa0	FUN_001c6fa0	match	-
 001c70d0	Gap__Sg__igIniShaderFactory__vfunc_24	match	-
 001c7600	FUN_001c7600	match	-
@@ -10210,7 +10210,7 @@
 002d9710	FUN_002d9710	match	-
 002d9cf0	FUN_002d9cf0	match	DEFERRED duplicate 0x3d9bd0 __dt__3RefFv 128B (compared under the profile of its retail unit)
 002da010	FUN_002da010	match	-
-002da1c0	FUN_002da1c0	match	DEFERRED duplicate 0x2e2300 __dt__3MemFv 68B (compared under the profile of its retail unit)
+002da1c0	FUN_002da1c0	match	-
 002da710	FUN_002da710	match	-
 002da770	FUN_002da770	match	-
 002da780	FUN_002da780	match	-
@@ -10811,7 +10811,7 @@
 002fe4a0	igMetaObject_AddField	match	-
 002fe570	FUN_002fe570	match	-
 002fe5a0	FUN_002fe5a0	match	-
-002fe600	FUN_002fe600	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+002fe600	FUN_002fe600	match	-
 002fe730	FUN_002fe730	match	-
 002fe7a0	igMetaObject_AssignTypeId	match	-
 002fe810	FUN_002fe810	match	-
@@ -11040,7 +11040,7 @@
 003077a0	FUN_003077a0	match	-
 00307870	FUN_00307870	match	-
 00307a50	FUN_00307a50	match	-
-00307c10	FUN_00307c10	match	DEFERRED duplicate 0x164970 __dt__3RefFv 128B (compared under the profile of its retail unit)
+00307c10	FUN_00307c10	match	-
 00307f80	FUN_00307f80	match	-
 00307fd0	FUN_00307fd0	match	-
 003081d0	FUN_003081d0	match	-
@@ -11061,7 +11061,7 @@
 00308e00	FUN_00308e00	match	-
 00308f00	Gap__Core__igResource__vfunc_12	match	-
 00308fb0	FUN_00308fb0	match	-
-003092f0	FUN_003092f0	match	DEFERRED duplicate 0x2e2300 __dt__3MemFv 68B (compared under the profile of its retail unit)
+003092f0	FUN_003092f0	match	-
 00309640	FUN_00309640	match	-
 00309740	FUN_00309740	match	-
 00309750	FUN_00309750	match	-
@@ -12090,7 +12090,7 @@
 003364c0	FUN_003364c0	match	exception index 0x5478c8: matches retail (packed)
 003364e0	igMovieInfo_Register	match	exception index 0x5478d4: matches retail (packed)
 00336560	igMovieInfo_GetMetaObject	match	exception index 0x5478e0: matches retail (packed)
-00336580	igMovieInfo_InitFields	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of igMovieInfo (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude') they are not
+00336580	igMovieInfo_InitFields	match	exception index 0x5478ec: matches retail (packed)
 00336860	FUN_00336860	match	exception index 0x5478f8: matches retail (packed)
 003368b0	FUN_003368b0	match	exception index 0x547904: matches retail (packed)
 00336900	igMovieRenderer_GetVTable	match	exception index 0x547910: matches retail (packed)
@@ -12171,7 +12171,7 @@
 00339200	FUN_00339200	match	exception index 0x547b5c: matches retail (packed)
 00339280	Gap__igMovieManager__vfunc_23	match	-
 00339290	Gap__igMovieManager__vfunc_24	match	-
-003392a0	Gap__igMovieManager__vfunc_25	match	DEFERRED duplicate 0x336440 __dt__2RPFv 128B (compared under the profile of its retail unit)
+003392a0	Gap__igMovieManager__vfunc_25	match	-
 00339eb0	Gap__igMovieManager__vfunc_26	match	exception index 0x547b80: matches retail (packed)
 0033bbc0	Gap__igMovieManager__vfunc_27	match	-
 0033bbd0	FUN_0033bbd0	match	exception index 0x547b98: matches retail (packed)
@@ -14872,7 +14872,7 @@
 0037d270	FUN_0037d270	match	exception index 0x54e6fc: matches retail (packed)
 0037d2a0	FUN_0037d2a0	match	exception index 0x54e708: matches retail (packed)
 0037d2f0	FUN_0037d2f0	match	exception index 0x54e714: matches retail (packed)
-0037d310	FUN_0037d310	match	DEFERRED duplicate 0x367a20 __dt__3RefFv 128B (compared under the profile of its retail unit)
+0037d310	FUN_0037d310	match	-
 0037d4a0	FUN_0037d4a0	match	exception index 0x54e72c: matches retail (packed)
 0037d570	FUN_0037d570	match	exception index 0x54e738: matches retail (packed)
 0037d680	FUN_0037d680	match	exception index 0x54e744: matches retail (packed)
@@ -15084,14 +15084,14 @@
 003921a0	FUN_003921a0	match	exception index 0x54ee88: matches retail (packed)
 00392200	Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21	match	exception index 0x54ee94: matches retail (packed)
 00392240	Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21	match	exception index 0x54eea0: matches retail (packed)
-003926d0	FUN_003926d0	match	DEFERRED duplicate 0x350d90 __dt__9RideOnRefFv 128B (compared under the profile of its retail unit)
+003926d0	FUN_003926d0	match	-
 00392be0	FUN_00392be0	match	jump table 0x50f080: 6 entries, 24 bytes, matches retail
 00392d20	FUN_00392d20	match	-
 00392d90	FUN_00392d90	match	exception index 0x54eec4: matches retail (packed)
 00392e10	FUN_00392e10	match	jump table 0x50f0a0: 6 entries, 24 bytes, matches retail
-00392fa0	FUN_00392fa0	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-00393260	FUN_00393260	match	DEFERRED duplicate 0x33e9c0 __dt__11DataListRefFv 128B (compared under the profile of its retail unit)
-00393aa0	FUN_00393aa0	match	DEFERRED duplicate 0x33e9c0 __dt__11DataListRefFv 128B (compared under the profile of its retail unit)
+00392fa0	FUN_00392fa0	match	-
+00393260	FUN_00393260	match	-
+00393aa0	FUN_00393aa0	match	-
 00393b20	FUN_00393b20	match	exception index 0x54ef00: matches retail (packed)
 00393c80	FUN_00393c80	match	DEFERRED duplicate 0x150eb0 __dt__3RPAFv 128B (compared under the profile of its retail unit)
 003943c0	FUN_003943c0	match	exception index 0x54ef18: matches retail (packed)
@@ -16040,8 +16040,8 @@
 003bd770	beNDMWPanelWazaInfo_Register	match	exception index 0x5514ec: matches retail (packed)
 003bd7e0	beNDMWPanelWazaInfo_GetMetaObject	match	exception index 0x5514f8: matches retail (packed)
 003bd800	beNDMWPanelWazaInfoRam_ResolveMetaObject	match	exception index 0x551504: matches retail (packed)
-003bd850	beNDMWPanelWazaInfoRam_GetVTable	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWPanelWazaInfoRam (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
-003bd940	FUN_003bd940	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWPanelWazaInfoRam (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude') they are not
+003bd850	beNDMWPanelWazaInfoRam_GetVTable	match	exception index 0x551510: matches retail (packed)
+003bd940	FUN_003bd940	match	exception index 0x55151c: matches retail (packed)
 003bd9c0	FUN_003bd9c0	match	exception index 0x551528: matches retail (packed)
 003bd9e0	beNDMWPanelWazaInfoRam_Register	match	exception index 0x551534: matches retail (packed)
 003bda60	beNDMWPanelWazaInfoRam_GetMetaObject	match	exception index 0x551540: matches retail (packed)
@@ -16765,7 +16765,7 @@
 003d0760	FUN_003d0760	match	exception index 0x553208: matches retail (packed)
 003d08f0	FUN_003d08f0	match	exception index 0x553214: matches retail (table 0x5444e8 8 bytes)
 003d0a90	FUN_003d0a90	match	exception index 0x553220: matches retail (packed)
-003d0bc0	Gap__Bec__beNDMWPanelWaza__vfunc_34	match	DEFERRED duplicate 0x3bd940 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d0bc0	Gap__Bec__beNDMWPanelWaza__vfunc_34	match	-
 003d1430	Gap__Bec__beNDMWPanelWaza__vfunc_20	match	-
 003d1440	Gap__Bec__beNDMWPanelObjectStat__vfunc_20	match	-
 003d1450	Gap__Bec__beNDMWPanelObjectStat__vfunc_22	match	-
@@ -17104,7 +17104,7 @@
 004148d0	Gap__Bec__beNDMWStatusPowerSocket__vfunc_34	match	exception index 0x553e08: matches retail (packed)
 00414d10	Gap__Bec__beNDMWStatusPowerSocket__vfunc_36	match	-
 00414e40	Gap__Bec__beNDMWStatusPowerSocket__vfunc_37	match	exception index 0x553e2c: matches retail (packed)
-00414e70	Gap__Bec__beNDMWStatusPowerSocket__vfunc_38	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of beNDMWStatusPowerSocket_412cc0 (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude') they are not
+00414e70	Gap__Bec__beNDMWStatusPowerSocket__vfunc_38	match	exception index 0x553e38: matches retail (packed)
 00415440	Gap__Bec__beNDMWStatusMainSlot__vfunc_24	match	exception index 0x553e50: matches retail (table 0x545784 8 bytes)
 00415680	Gap__Bec__beNDMWStatusMainSlot__vfunc_26	match	DEFERRED duplicate 0x1489a0 __dt__12GlobalStrRefFv 128B (compared under the profile of its retail unit)
 00415870	Gap__Bec__beNDMWStatusMainSlot__vfunc_25	match	-
@@ -17115,7 +17115,7 @@
 004165a0	Gap__Bec__beNDMWStatusMainSlot__vfunc_39	match	exception index 0x553eb0: matches retail (packed)
 00416b50	Gap__Bec__beNDMWStatusMainSlot__vfunc_34	match	exception index 0x553ed4: matches retail (packed)
 00416c80	Gap__Bec__beNDMWStatusMainSlot__vfunc_35	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
-00416f90	Gap__Bec__beNDMWStatusMainSlot__vfunc_36	match	DEFERRED duplicate 0x414420 __dt__9WindowRefFv 128B (compared under the profile of its retail unit)
+00416f90	Gap__Bec__beNDMWStatusMainSlot__vfunc_36	match	-
 004170c0	Gap__Bec__beNDMWStatusMainSlot__vfunc_37	match	exception index 0x553ef8: matches retail (packed)
 004170f0	Gap__Bec__beNDMWStatusMainSlot__vfunc_38	match	exception index 0x553f04: matches retail (packed)
 00417160	Gap__Bec__beNDMWStatusSubSlot__vfunc_23	match	exception index 0x553f10: matches retail (table 0x545864 8 bytes)
@@ -17139,7 +17139,7 @@
 00418ac0	FUN_00418ac0	match	DEFERRED duplicate 0x1489a0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 004191f0	FUN_004191f0	match	exception index 0x553fa0: matches retail (table 0x545904 8 bytes)
 00419680	FUN_00419680	match	-
-004196c0	Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21	match	DEFERRED duplicate 0x414420 __dt__5RP<2>Fv 128B (compared under the profile of its retail unit)
+004196c0	Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21	match	-
 0041a380	FUN_0041a380	match	exception index 0x553fb8: matches retail (packed)
 0041a400	Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0041aaa0	FUN_0041aaa0	match	exception index 0x553fd0: matches retail (table 0x545994 8 bytes)
@@ -17207,9 +17207,9 @@
 00428610	FUN_00428610	match	exception index 0x554180: matches retail (packed)
 00428690	FUN_00428690	match	exception index 0x55418c: matches retail (packed)
 00428710	FUN_00428710	match	exception index 0x554198: matches retail (packed)
-00428790	Gap__Bec__beNDMWShopCtrl30__vfunc_21	match	DEFERRED duplicate 0x414420 __dt__12WindowRef<3>Fv 128B (compared under the profile of its retail unit)
-004295b0	FUN_004295b0	match	DEFERRED duplicate 0x414420 __dt__12WindowRef<3>Fv 128B (compared under the profile of its retail unit)
-00429630	Gap__Bec__beNDMWShopCtrl40__vfunc_21	match	DEFERRED duplicate 0x414420 __dt__12WindowRef<1>Fv 128B (compared under the profile of its retail unit)
+00428790	Gap__Bec__beNDMWShopCtrl30__vfunc_21	match	-
+004295b0	FUN_004295b0	match	-
+00429630	Gap__Bec__beNDMWShopCtrl40__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0042a2e0	Gap__Bec__beNDMWShopCtrl50__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0042b800	FUN_0042b800	match	exception index 0x5541d4: matches retail (packed)
 0042b880	FUN_0042b880	match	exception index 0x5541e0: matches retail (packed)
@@ -17781,13 +17781,13 @@
 00454610	Gap__Gui__igEventDispatcher__vfunc_29	match	-
 004546c0	Gap__Gui__igEventDispatcher__vfunc_30	match	-
 00454770	Gap__Gui__igEventDispatcher__vfunc_31	match	-
-00454820	Gap__Gui__igEventDispatcher__vfunc_32	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
-00454930	Gap__Gui__igEventDispatcher__vfunc_33	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+00454820	Gap__Gui__igEventDispatcher__vfunc_32	match	-
+00454930	Gap__Gui__igEventDispatcher__vfunc_33	match	-
 00454a30	Gap__Gui__igEventDispatcher__vfunc_34	match	-
-00454b30	Gap__Gui__igEventDispatcher__vfunc_35	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
-00454c30	Gap__Gui__igEventDispatcher__vfunc_39	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+00454b30	Gap__Gui__igEventDispatcher__vfunc_35	match	-
+00454c30	Gap__Gui__igEventDispatcher__vfunc_39	match	-
 00454d30	Gap__Gui__igEventDispatcher__vfunc_38	match	-
-00454e30	Gap__Gui__igEventDispatcher__vfunc_36	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+00454e30	Gap__Gui__igEventDispatcher__vfunc_36	match	-
 00454f20	Gap__Gui__igEventDispatcher__vfunc_37	match	-
 00455010	Gap__Gui__igEventDispatcher__vfunc_40	match	-
 004550b0	Gap__Gui__igEventDispatcher__vfunc_41	match	-
@@ -17863,7 +17863,7 @@
 00457950	Gap__Gui__igModel__vfunc_10	match	-
 004579d0	Gap__Gui__igRadioGroup__vfunc_13	match	-
 00457a10	FUN_00457a10	match	-
-00457ab0	FUN_00457ab0	match	DEFERRED duplicate 0x2e2300 __dt__1KFv 68B (compared under the profile of its retail unit)
+00457ab0	FUN_00457ab0	match	-
 00457bc0	Gap__Gui__igRadioGroupSelectedObserver__vfunc_24	match	-
 00457bf0	Gap__Gui__igOnOffValueObserver__vfunc_24	match	-
 00457c40	FUN_00457c40	match	-

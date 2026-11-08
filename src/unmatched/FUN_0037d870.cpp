@@ -5,8 +5,8 @@ int List_Reserve(...);
 int igObject_Destroy(...);
 extern int DAT_00589998[4];
 extern int DAT_00589ad0[4];
-extern int DAT_0058a360[4];
-extern int DAT_0058a460[4];
+extern int DAT_0058a360[64];
+extern int DAT_0058a460[32];
 }
 /* matching construct: dummy-virtual view (20 slots) so Kind() compiles to the retail jalr; fields are read through beCriSfpData. */
 struct SndKindV {
@@ -40,12 +40,11 @@ extern "C" int FUN_0037d870(beCri *arg0, int arg1) {
                 b = DAT_00589998[0];
                 if (b == ((SndKindV *)e)->Kind() && e->_isTransfer != 0) {
                     int ch = e->_portNo;
-                    int k = ch * 4;
-                    if (*(int *)((char *)DAT_0058a360 + k) != 0 || *(int *)((char *)DAT_0058a360 + k + 128) != 0) {
+                    if (DAT_0058a360[ch] != 0 || DAT_0058a360[ch + 32] != 0) {
                         FUN_002813c8(ch);
-                        *(int *)((char *)DAT_0058a360 + k) = 0;
-                        *(int *)((char *)DAT_0058a360 + k + 128) = 0;
-                        *(int *)((char *)DAT_0058a460 + k) = 0;
+                        DAT_0058a360[ch] = 0;
+                        DAT_0058a360[ch + 32] = 0;
+                        DAT_0058a460[ch] = 0;
                     }
                 }
             }

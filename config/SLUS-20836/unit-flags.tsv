@@ -34,9 +34,5 @@
 0x002ae290	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2ace48 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x002b5148	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2b50e8 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x002fede0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igNamedObjectInfo_2fed50 profile default -O3 -Iinclude exceptions off does not reproduce it
-0x00336580	-O3 -Iinclude	provisional	unit igMovieInfo profile combat -O3,p -Iinclude exceptions on does not reproduce it
 0x00377990	-O3,p -Iinclude -Cpp_exceptions off	provisional	unit beAction2_377700 profile default -O3,p -Iinclude exceptions on does not reproduce it
-0x003bd850	-O3,p -Iinclude	provisional	unit beNDMWPanelWazaInfoRam profile default -O3 -Iinclude exceptions on does not reproduce it
-0x003bd940	-O3,p -Iinclude	provisional	unit beNDMWPanelWazaInfoRam profile default -O3 -Iinclude exceptions on does not reproduce it
-0x00414e70	-O3 -Iinclude	provisional	unit beNDMWStatusPowerSocket_412cc0 profile combat -O3,p -Iinclude exceptions on does not reproduce it
 0x004831a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit sony-kernel_4820d0 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it

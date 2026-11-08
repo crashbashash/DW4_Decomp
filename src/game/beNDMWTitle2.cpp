@@ -227,7 +227,6 @@ template <int Tag> struct TitleRef {
 
 /* per-frame title-menu update. Lazily builds the CTRL / COMMDLCTRL / OPTION / TEXTORDER objects in
  * the info record's property list, then runs the CTRL._st0.._st3 state machine. */
-#pragma opt_propagation on
 void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
     int allocator;
     bool left;

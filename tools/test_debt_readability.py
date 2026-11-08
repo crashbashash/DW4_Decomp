@@ -48,6 +48,15 @@ class Ratchet(unittest.TestCase):
         d = state(**{"mismatch.functions": 11})
         self.assertEqual(quiet(progress.debt_record, d, None), 1)
 
+    def test_a_new_reason_keeps_the_earlier_one_and_skips_readability(self):
+        import json
+        d = state(**{"mismatch.functions": 11, "fun_dat_refs": 12})
+        d["debt"]["baseline"]["mismatch.functions"]["reason"] = "first"
+        quiet(progress.debt_record, d, "second")
+        saved = json.load(open(progress.DEBT_BASELINE))["counters"]
+        self.assertEqual(saved["mismatch.functions"], {"value": 11, "reason": "first second"})
+        self.assertEqual(saved["fun_dat_refs"], 12)
+
 
 if __name__ == "__main__":
     unittest.main()

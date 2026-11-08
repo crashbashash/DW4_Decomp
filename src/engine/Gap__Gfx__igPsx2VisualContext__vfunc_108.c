@@ -1,22 +1,18 @@
 int FUN_00172330(void *, void *);
 extern int DAT_00560904[4];
-struct V { float x, y, z, w; };
-struct O { char pad[32]; struct V v; char pad2[20]; unsigned flags; };
-struct A { char pad[1344]; struct O *o; };
-void Gap__Gfx__igPsx2VisualContext__vfunc_108(struct A *arg0, struct V *arg1) {
-    struct V *p;
-    struct O *o;
+struct VisualContextVec4 { float x, y, z, w; };
+struct VisualContextState { char pad[32]; struct VisualContextVec4 v; char pad2[20]; unsigned flags; };
+struct Psx2VisualContextView { char pad[1344]; struct VisualContextState *o; };
+void Gap__Gfx__igPsx2VisualContext__vfunc_108(struct Psx2VisualContextView *arg0, struct VisualContextVec4 *arg1) {
+    struct VisualContextVec4 *p;
+    struct VisualContextState *o;
     unsigned old;
     unsigned *fp;
     int same;
 
     o = arg0->o;
     p = &o->v;
-    same = 1;
-    if (p->x != arg1->x) same = 0;
-    if (same) { same = 1; if (p->y != arg1->y) same = 0; }
-    if (same) { same = 1; if (p->z != arg1->z) same = 0; }
-    if (same) { same = 1; if (p->w != arg1->w) same = 0; }
+    same = p->x == arg1->x && p->y == arg1->y && p->z == arg1->z && p->w == arg1->w;
     if (same) {
         DAT_00560904[0] += 1;
     }

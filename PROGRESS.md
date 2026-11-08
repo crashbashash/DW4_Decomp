@@ -4,8 +4,8 @@ A snapshot of how much of `game.elf` has been rebuilt as matching C. Regenerated
 
 ```
 fully verified C/C++
-  functions  ██████████████████████░░  90.5 %   18,291 / 20,214
-  code bytes █████████████████░░░░░░░  72.1 %   2,497,716 / 3,464,180   (make check `match`: code bytes, exception metadata and symbol rules)
+  functions  ██████████████████████░░  90.5 %   18,295 / 20,214
+  code bytes █████████████████░░░░░░░  72.1 %   2,498,912 / 3,464,180   (make check `match`: code bytes, exception metadata and symbol rules)
 decompiled as C/C++ (code bytes identical, verification debt included — see below)
   functions  ██████████████████████░░  90.7 %   18,341 / 20,214
   code bytes ██████████████████░░░░░░  73.3 %   2,538,748 / 3,464,180
@@ -22,9 +22,9 @@ The function count is flattered by small functions: the ones done have a median 
 
 | category | functions | code bytes | % of code bytes | meaning |
 | --- | ---: | ---: | ---: | --- |
-| **`match`** | 18,291 | 2,497,716 | 72.1 | code bytes, exception metadata and symbol rules all pass — fully verified |
+| **`match`** | 18,295 | 2,498,912 | 72.1 | code bytes, exception metadata and symbol rules all pass — fully verified |
 | `code-only` | 12 | 28,796 | 0.8 | code bytes identical; exception metadata not reproduced (compile mode or cleanup scope) |
-| `foreign-profile` | 38 | 12,236 | 0.4 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
+| `foreign-profile` | 34 | 11,040 | 0.3 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
 
 The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
@@ -39,17 +39,17 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow.
 
-**1,936** of the 18,291 matched functions are readable: **285,388** code bytes, **8.2 %** of the code.
+**1,936** of the 18,295 matched functions are readable: **285,388** code bytes, **8.2 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,085 | 1,720,856 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 13,493 | 2,100,860 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,625 | 927,168 |
-| it sits in its class or module file, not `src/unmatched/` | 12,189 | 1,889,740 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 10,670 | 1,949,360 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 6,026 | 1,276,944 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,449 | 768,536 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,087 | 1,721,096 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 13,496 | 2,101,944 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,619 | 925,632 |
+| it sits in its class or module file, not `src/unmatched/` | 12,193 | 1,890,936 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 10,673 | 1,950,444 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 6,029 | 1,278,028 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,450 | 769,336 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,257 | 398,008 |
 
 ## Debt
@@ -79,19 +79,22 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.hardware` | 11 | 11 | 0 | `asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py) |
-| `inline_asm.other` | 68 | 63 | -5 | every other `asm` statement: each has to show its function fails without it |
+| `inline_asm.other` | 66 | 66 | 0 | every other `asm` statement: each has to show its function fails without it |
 | `unmatched.functions` | 1,873 | 1,873 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 925,432 | 925,432 | 0 | bytes of those |
 | `struct.a` | 140 | 140 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 299 | 299 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. |
+| `struct.b` | 300 | 300 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members. |
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 6,006 | 6,006 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `m2c_idiom.units` | 6,005 | 6,005 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 366 | 366 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 81,818 | 81,818 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
-| `foreign_profile.functions` | 38 | 38 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
-| `foreign_profile.bytes` | 12,236 | 12,236 | 0 | bytes of those |
+| `fun_dat_refs` | 81,817 | 81,817 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `foreign_profile.functions` | 34 | 34 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
+| `foreign_profile.bytes` | 11,040 | 11,040 | 0 | bytes of those |
 | `orphan.bytes` | 7,260 | 7,260 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 10,528 | 10,528 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
+| `profile_split.units` | 23 | 23 | 0 | units whose compiler, optimisation level or -sdatathreshold differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
+| `profile_split.bytes` | 172,108 | 172,108 | 0 | bytes of those |
+| `opt_pragma.statements` | 26 | 26 | 0 | optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source |
 
 ## The data half
 
@@ -172,7 +175,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 196 tables, 3,407 entries, in 156 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 24,813 of 60,648 (40.91 %) |
+| field accesses using a **recovered** type (not an offset cast) | 24,815 of 60,646 (40.92 %) |
 | functions in the retail split (`asm/`, generated) | 20,214 |
 
 ## How these numbers are produced

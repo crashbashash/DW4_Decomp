@@ -84,4 +84,3 @@ void FUN_004432a0(beNDMWShinkaCtrl *self) {
         }
     }
 }
-#pragma opt_loop_invariants reset

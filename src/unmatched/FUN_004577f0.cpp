@@ -7,9 +7,10 @@ struct Flags { int a; int b; int c; int d[4]; };
 struct Finder {
     static int Find(igObjectList *l, K &key) {
         int n = l->_count;
+        void *p = *(void * volatile *)&key.p;
         int i = 0;
         for (; i < n; i++) {
-            if (key.p == ((void **)l->_data)[i]) {
+            if (p == ((void **)l->_data)[i]) {
                 return i;
             }
         }

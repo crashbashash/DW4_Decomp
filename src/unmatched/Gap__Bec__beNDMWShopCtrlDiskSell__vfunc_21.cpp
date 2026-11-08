@@ -397,7 +397,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
                         beMessenger_SelectGroup(self->_messenger, &DAT_0051b498[0]);
                         beMessenger_AppendInt(self->_messenger, self->_playerNo);
                         beMessenger_DispatchSelected(self->_messenger, &DAT_0051b4a0[0]);
-                        rc = ((Item **)fb->_data)[self->_cursor]; { int q = rc->f20; tot = q - self->_kazu; rc->f20 = tot; }
+                        rc = ((Item **)fb->_data)[self->_cursor]; { unsigned int q = rc->f20; tot = q - self->_kazu; rc->f20 = tot; }
                         break;
                     case 1:
                         break;

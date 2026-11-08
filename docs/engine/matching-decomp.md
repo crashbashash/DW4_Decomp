@@ -368,6 +368,14 @@ Retail shapes that only one spelling reproduces:
   operator: `v = p[0]; v |= p[1] << 8;`.
 * **`movz` from a ternary** comes from enum constants, `b ? kOff : kOn`. Plain integers fold to
   `sltu` and `xori`.
+* **A field added into or subtracted from memory** takes retail's register order through an
+  unsigned temporary or a cast on the compound assignment: `{ unsigned q = r->f; r->f = q - n; }`,
+  `*p += (int)x;`. The plain form swaps `v1` and `a0`.
+* **A one-byte guard flag** is a scalar `extern char X;`. As `char X[4]` it loses gp addressing
+  under `-sdatathreshold 2`.
+* **The old compiler's workarounds go under b52:** `volatile`, inline `nop`s and function-address
+  aliases usually give way to `&&` chains assigned to an int, `?:` for a minimum, `bool` with `^`,
+  and an assignment inside the condition.
 * **A 24-bit mask under b52** is `unsigned int` with `& 0xFFFFFF`; `dsll32` and `dsrl32` are how
   it masks a 32-bit value. A `ULL` constant adds extensions.
 

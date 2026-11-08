@@ -3,13 +3,14 @@ extern "C" char DAT_004d3d11[16];
 extern "C" char DAT_004f95c0[16];
 extern "C" char DAT_004fb198[16];
 extern "C" char DAT_004fb1a0[16];
-extern "C" int DAT_004fb410[4];
+struct igResult { int w0; igResult() {} igResult(const igResult &o) { w0 = o.w0; } bool operator==(const igResult &o) const { return w0 == o.w0; } };
+extern "C" igResult DAT_004fb410;
 extern "C" int FUN_00129ef8(char *, char *, int *);
 extern "C" int strlen(void);
 extern "C" int FUN_0012aba0(char *, char *, int);
 extern "C" void strncpy(char *, char *, int);
 extern "C" unsigned FUN_0012aff0(char *, char *);
-extern "C" int igMetaEnum_GetValueByName(int *, int, char *, int *);
+extern "C" igResult igMetaEnum_GetValueByName(int, char *, int *);
 
 extern "C" bool FUN_00306f10(char *arg0, int *arg1, int arg2, char *arg3) {
     char *s2;
@@ -20,7 +21,6 @@ extern "C" bool FUN_00306f10(char *arg0, int *arg1, int arg2, char *arg3) {
     int len;
     char buf[256];
     int sp18C;
-    int sp188;
     s2 = arg0;
     s1 = (unsigned)(arg0 + strlen());
     *arg1 = 0;
@@ -52,8 +52,7 @@ extern "C" bool FUN_00306f10(char *arg0, int *arg1, int arg2, char *arg3) {
             strncpy(buf, tok, len);
             buf[len] = 0;
             sp18C = 0;
-            igMetaEnum_GetValueByName(&sp188, arg2, buf, &sp18C);
-            { int **ppp; int *pp = &sp188; ppp = &pp; if (**ppp == DAT_004fb410[0]) { unsigned t = sp18C; *arg1 |= t; } else s0 = false; }
+            if (igMetaEnum_GetValueByName(arg2, buf, &sp18C) == DAT_004fb410) { *arg1 |= (unsigned)sp18C; } else s0 = false;
         }
     }
     }

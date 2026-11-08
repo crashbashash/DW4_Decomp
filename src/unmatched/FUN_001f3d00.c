@@ -147,8 +147,7 @@ void FUN_001f3d00(unsigned arg0, int arg1) {
     if (m & 0x10) DAT_00569290[0] += temp_a2_2;
     temp_s3 = DAT_004914a6[0];
     while (var_s2 != 0) {
-        var_s0 = var_s2;
-        if ((unsigned)temp_s3 < var_s2) var_s0 = temp_s3;
+        var_s0 = ((unsigned)temp_s3 < var_s2) ? temp_s3 : var_s2;
         FUN_001f64a0(var_s0, 0, arg1);
         var_s2 -= var_s0;
     }

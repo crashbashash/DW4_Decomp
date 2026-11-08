@@ -123,7 +123,7 @@
   "beModelCtrlMOVERL": 9,
   "beModelCtrlMSGBOX": 1,
   "beModelCtrlMUTEKI": 1,
-  "beModelCtrlMoveObject": 47,
+  "beModelCtrlMoveObject": 49,
   "beModelCtrlMoveObjectList": 12,
   "beModelCtrlNode2": 33,
   "beModelCtrlSCEffect": 26,
@@ -611,20 +611,20 @@
   },
   "engine": {
    "files": 3337,
-   "offset_casts": 679,
-   "other_members": 2268,
+   "offset_casts": 678,
+   "other_members": 2267,
    "recovered": 1889,
-   "recovered_pct": 30.53,
-   "synthetic": 1351,
-   "total": 6187
+   "recovered_pct": 30.52,
+   "synthetic": 1355,
+   "total": 6189
   },
   "game": {
    "files": 1590,
    "offset_casts": 53,
-   "other_members": 258,
+   "other_members": 259,
    "recovered": 2504,
    "recovered_pct": 86.08,
-   "synthetic": 94,
+   "synthetic": 93,
    "total": 2909
   },
   "lua": {
@@ -665,18 +665,18 @@
   },
   "unmatched": {
    "files": 12180,
-   "offset_casts": 5898,
-   "other_members": 12630,
-   "recovered": 20412,
-   "recovered_pct": 42.78,
-   "synthetic": 8770,
-   "total": 47710
+   "offset_casts": 5891,
+   "other_members": 12633,
+   "recovered": 20414,
+   "recovered_pct": 42.79,
+   "synthetic": 8768,
+   "total": 47706
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6632,
- "recovered": 24813,
- "synthetic": 10220,
- "total": 60648,
+ "offset_casts": 6624,
+ "recovered": 24815,
+ "synthetic": 10221,
+ "total": 60646,
  "typeable": 366
 }

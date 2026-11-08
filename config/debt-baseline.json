@@ -14,31 +14,28 @@
   "code_only.other.functions": 4,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "foreign_profile.bytes": 12236,
-  "foreign_profile.functions": 38,
-  "fun_dat_refs": {
-   "reason": null,
-   "value": 81818
-  },
+  "foreign_profile.bytes": 11040,
+  "foreign_profile.functions": 34,
+  "fun_dat_refs": 81817,
   "inline_asm.hardware": 11,
-  "inline_asm.other": 68,
+  "inline_asm.other": 66,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
-  "m2c_idiom.units": {
-   "reason": null,
-   "value": 6006
-  },
+  "m2c_idiom.units": 6005,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 0,
   "name_defect.functions": 0,
+  "opt_pragma.statements": 26,
   "orphan.bytes": 7260,
+  "profile_split.bytes": 172108,
+  "profile_split.units": 23,
   "raw_casts.reflected": 366,
   "struct.a": 140,
   "struct.b": {
-   "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass.",
-   "value": 299
+   "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members.",
+   "value": 300
   },
   "struct.c": 287,
   "unmatched.bytes": 925432,

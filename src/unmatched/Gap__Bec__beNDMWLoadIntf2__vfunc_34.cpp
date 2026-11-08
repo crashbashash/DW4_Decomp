@@ -357,4 +357,3 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
     }
 }
 
-#pragma opt_propagation reset

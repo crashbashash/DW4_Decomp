@@ -43,6 +43,8 @@ as zero.
 | `fun_dat_refs` | the matched units' source, comments and strings blanked, asm bodies excluded | occurrences of `FUN_<va>` / `DAT_<va>` identifiers (prototypes and calls), minus every occurrence of the name of each `FUN_` function the file defines (its definition and, in a C++ unit, its `extern "C"` prototype) |
 | `foreign_profile.functions`, `foreign_profile.bytes` | `data/check-categories.tsv` | functions whose code bytes match only under a provisional per-function override (compiler, flags or exception mode) that differs from their translation unit's profile in `config/SLUS-20836/units.tsv`; never counted as `match` (see [build profiles](build-profiles.md)) |
 | `orphan.bytes` | `data/check-categories.tsv` | exception-metadata orphan bytes: the `extra` + `differ` code-only bytes |
+| `profile_split.units` / `.bytes` | `config/SLUS-20836/units.tsv` by `config/SLUS-20836/regions.tsv` | units whose compiler, optimisation level or `-sdatathreshold` differs from the most common profile of their library. A library was one build, so each such unit is one whose members still match only elsewhere. The static initialisers are exempt: they are collected from every library |
+| `opt_pragma.statements` | `src/` | optimiser pragmas (`opt_*`, `optimize_for_size`, `inline_depth` and the like). They change the optimiser for one function, which is a flag change written in the source; owner rule 2026-11-08: a rise needs the owner, as for `inline_asm` |
 
 `m2c_idiom.units`, `raw_casts.reflected` and `fun_dat_refs` measure readability, which is a separate
 job from matching ([matched and readable](../../CLAUDE.md#matched-and-readable)). They stay in the report

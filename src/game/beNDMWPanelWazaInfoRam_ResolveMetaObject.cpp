@@ -1,15 +1,18 @@
 extern "C" {
 void FUN_003bd9c0(void);
-extern struct G *DAT_0058b1f0[4];
+extern struct WazaInfoRamMeta *DAT_0058b1f0[4];
 void *beNDMWPanelWazaInfoRam_ResolveMetaObject(void);
 }
-struct G { int pad[9]; int f; };
+struct WazaInfoRamMeta {
+    int pad[9];
+    int flags;
+    bool ready() const { return (flags & 4) != 0; }
+};
 void *beNDMWPanelWazaInfoRam_ResolveMetaObject(void) {
-    struct G *g = DAT_0058b1f0[0];
-    bool t;
-    if (g) {
-        if (t = g->f & 4) goto end;
-        asm { nop }
+    WazaInfoRamMeta *meta = DAT_0058b1f0[0];
+    if (meta) {
+        bool t;
+        if ((t = meta->ready()) != false) goto end;
     }
     FUN_003bd9c0();
 end:

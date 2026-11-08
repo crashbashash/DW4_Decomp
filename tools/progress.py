@@ -444,6 +444,9 @@ DEBT_COUNTERS = [
     ("foreign_profile.bytes", "bytes of those"),
     ("orphan.bytes", "exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks"),
     ("inventory.unsymbolised_bytes", "instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py)"),
+    ("profile_split.units", "units whose compiler, optimisation level or -sdatathreshold differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build)"),
+    ("profile_split.bytes", "bytes of those"),
+    ("opt_pragma.statements", "optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source"),
 ]
 
 
@@ -478,6 +481,55 @@ def debt_struct_counts():
     except Exception as exc:               # the report is optional input; say so, do not fake zeros
         sys.stderr.write("progress: warning: struct report unavailable (%s)\n" % exc)
         return None
+
+
+OPT_PRAGMA_RE = re.compile(r"^\s*#\s*pragma\s+(?:opt_\w+|optimi[sz]e\w*|optimization_level|inline_depth|"
+                           r"auto_inline|peephole|scheduling|global_optimizer|dont_inline|always_inline)\b", re.M)
+# The static initialisers are collected from every library's units, so no one profile is theirs.
+PROFILE_SPLIT_EXEMPT = {"static-initialisers"}
+
+
+def _profile_key(compiler, flags):
+    """What makes two units one build: the compiler, the optimisation level and -sdatathreshold."""
+    level = re.search(r"(?:^|\s)(-O\S*)", flags)
+    threshold = re.search(r"-sdatathreshold\s+(\d+)", flags)
+    return compiler, level[1] if level else "", threshold[1] if threshold else ""
+
+
+def profile_split():
+    """(units, bytes) of units off their library's main profile, by config/SLUS-20836/regions.tsv."""
+    import regions
+    by_region = collections.defaultdict(list)
+    with open(os.path.join(ROOT, "config", "SLUS-20836", "units.tsv")) as fh:
+        for line in fh:
+            f = line.rstrip("\n").split("\t")
+            if line[0] in "#@" or len(f) < 6 or not f[0].startswith("0x"):
+                continue
+            lo, hi = int(f[0], 16), int(f[1], 16)
+            region = regions.of(lo)
+            if region is None or region.build == "data" or region.id in PROFILE_SPLIT_EXEMPT:
+                continue
+            by_region[region.id].append((_profile_key(f[3], f[4]), hi - lo))
+    units = size = 0
+    for rows in by_region.values():
+        main = collections.Counter(key for key, _ in rows).most_common(1)[0][0]
+        off = [n for key, n in rows if key != main]
+        units, size = units + len(off), size + sum(off)
+    return units, size
+
+
+def opt_pragmas():
+    """Optimiser pragma lines under src/."""
+    n = 0
+    for root, _dirs, files in os.walk(os.path.join(ROOT, "src")):
+        for f in files:
+            # a build's temporary copies (`dw4u_*`) come and go while it runs
+            if f.endswith((".c", ".cpp", ".h")) and not f.startswith("dw4u_"):
+                try:
+                    n += len(OPT_PRAGMA_RE.findall(open(os.path.join(root, f), errors="replace").read()))
+                except FileNotFoundError:
+                    continue
+    return n
 
 
 def debt_summary(d, syms, matched, asm_body, paths, typed):
@@ -540,6 +592,8 @@ def debt_summary(d, syms, matched, asm_body, paths, typed):
     except Exception as exc_:                # the scan table is optional input; say so, never fake a zero
         sys.stderr.write("progress: warning: inventory scan unavailable (%s)\n" % exc_)
         c["inventory.unsymbolised_bytes"] = None
+    c["profile_split.units"], c["profile_split.bytes"] = profile_split()
+    c["opt_pragma.statements"] = opt_pragmas()
     return dict(counters={k: c.get(k) for k, _ in DEBT_COUNTERS},
                 baseline=load_debt_baseline())
 
@@ -609,8 +663,11 @@ def debt_record(d, reason):
                 out[k] = base[k]["value"] if base[k]["reason"] is None else dict(base[k])
             continue
         old = base.get(k)
-        if old is not None and v > old["value"]:
-            out[k] = dict(value=v, reason=reason)
+        if old is not None and v > old["value"] and k in READABILITY_COUNTERS:
+            out[k] = v                      # may rise freely; the reason is for the counters that refuse
+        elif old is not None and v > old["value"]:
+            # keep an earlier reason: the value still includes the increase it explained
+            out[k] = dict(value=v, reason=old["reason"] + " " + reason if old["reason"] else reason)
         elif old is not None and old["reason"] and v == old["value"]:
             out[k] = dict(value=v, reason=old["reason"])
         else:

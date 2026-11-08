@@ -1,37 +1,14 @@
-typedef struct P { char pad16[16]; float v[4]; } P;
-typedef struct T { char pad1344[1344]; P *f1344; } T;
+typedef struct VisualColorBlock { char pad16[16]; float v[4]; } VisualColorBlock;
+typedef struct VisualContextColorView { char pad1344[1344]; VisualColorBlock *f1344; } VisualContextColorView;
 int FUN_00172330();
 extern int DAT_005608f8[4];
-void Gap__Gfx__igPsx2VisualContext__vfunc_102(T *arg0, float *arg1) {
-    P *p;
-    int eq;
-    float *cur;
-
-    p = arg0->f1344;
-    eq = 1;
-    cur = p->v;
-    if (cur[0] != arg1[0]) {
-        eq = 0;
-    }
-    if (eq != 0) {
-        eq = 1;
-        if (cur[1] != arg1[1]) {
-            eq = 0;
-        }
-    }
-    if (eq != 0) {
-        eq = 1;
-        if (cur[2] != arg1[2]) {
-            eq = 0;
-        }
-    }
-    if (eq != 0) {
-        eq = 1;
-        if (cur[3] != arg1[3]) {
-            eq = 0;
-        }
-    }
-    if (eq != 0) {
+static inline int colorEqual(const float *a, const float *b) {
+    return a[0] == b[0] && a[1] == b[1] && a[2] == b[2] && a[3] == b[3];
+}
+void Gap__Gfx__igPsx2VisualContext__vfunc_102(VisualContextColorView *arg0, float *arg1) {
+    float *cur = arg0->f1344->v;
+    VisualColorBlock *p;
+    if (colorEqual(cur, arg1)) {
         DAT_005608f8[0] += 1;
     }
     p = arg0->f1344;

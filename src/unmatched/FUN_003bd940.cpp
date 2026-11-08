@@ -1,9 +1,9 @@
-int FUN_00100610();
-int igObject_Destroy();
-struct R { int vt; unsigned int rc; };
+extern "C" int FUN_00100610(void *);
+extern "C" int igObject_Destroy(void *);
+struct RefHolderTarget { int vt; unsigned int rc; };
 
-struct R **FUN_003bd940(struct R **arg0, short arg1) {
-    struct R *temp_a0;
+extern "C" struct RefHolderTarget **FUN_003bd940(struct RefHolderTarget **arg0, short arg1) {
+    struct RefHolderTarget *temp_a0;
 
     if (arg0 != 0) {
         temp_a0 = *arg0;

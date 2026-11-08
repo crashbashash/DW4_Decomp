@@ -31,7 +31,7 @@ extern int DAT_0056bad8[4];
 void FUN_001f1fe0(unsigned int arg0) {
     unsigned int s3;
     int s2;
-    int s1;
+    unsigned int s1;
     unsigned int s0;
     unsigned int a2;
     int a0;
@@ -112,7 +112,7 @@ void FUN_001f1fe0(unsigned int arg0) {
     s2 = 0;
     while (s3 >= 3U) {
         s0 = s3;
-        if ((unsigned int)s1 < s3) {
+        if (s1 < s3) {
             s0 = s1;
         }
         DAT_00569238[0](s0, s2);

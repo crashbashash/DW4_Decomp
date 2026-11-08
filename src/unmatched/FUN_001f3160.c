@@ -40,7 +40,7 @@ void FUN_001f3160(unsigned int arg0, unsigned short *arg1) {
     unsigned int limit;
     unsigned int cnt;
     unsigned long long w;
-    unsigned int mask;
+    int mask;
     int b27;
 
     n = arg0;
@@ -87,16 +87,15 @@ void FUN_001f3160(unsigned int arg0, unsigned short *arg1) {
         FUN_001eb810();
     }
     {
-        w = (unsigned long long)n;
-        DAT_00569250[0] += w;
-        DAT_00569248[0] += w;
-        DAT_00569258[0] += (unsigned long long)(n / 3U);
+        DAT_00569250[0] += n;
+        DAT_00569248[0] += n;
+        DAT_00569258[0] += n / 3U;
         mask = DAT_0056bad8[0];
-        if (mask & 1) DAT_00569270[0] += w;
-        if (mask & 2) DAT_00569280[0] += w;
-        if (mask & 4) DAT_00569278[0] += w;
-        if (mask & 8) DAT_00569288[0] += w;
-        if (mask & 0x10) DAT_00569290[0] += w;
+        if (mask & 1) DAT_00569270[0] += n;
+        if (mask & 2) DAT_00569280[0] += n;
+        if (mask & 4) DAT_00569278[0] += n;
+        if (mask & 8) DAT_00569288[0] += n;
+        if (mask & 0x10) DAT_00569290[0] += n;
     }
     limit = ((unsigned int)DAT_004914a6[0] / 3U) * 3;
     while (n >= 3U) {

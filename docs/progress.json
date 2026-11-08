@@ -80,16 +80,16 @@
     "functions": 0
    },
    "foreign-profile": {
-    "bytes": 12236,
-    "functions": 38
+    "bytes": 11040,
+    "functions": 34
    },
    "inventory-gap": {
     "bytes": 0,
     "functions": 0
    },
    "match": {
-    "bytes": 2497716,
-    "functions": 18291
+    "bytes": 2498912,
+    "functions": 18295
    },
    "mismatch": {
     "bytes": 0,
@@ -120,8 +120,8 @@
   },
   "foreign_orphan_bytes": 7260,
   "fully_verified": {
-   "bytes": 2497716,
-   "functions": 18291
+   "bytes": 2498912,
+   "functions": 18295
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -129,7 +129,7 @@
  },
  "code_bytes": {
   "asm_body": 0,
-  "fully_verified": 2497716,
+  "fully_verified": 2498912,
   "functions_asm_body": 0,
   "matched": 2538748,
   "total": 3464180
@@ -207,15 +207,15 @@
    },
    "foreign_profile.bytes": {
     "reason": null,
-    "value": 12236
+    "value": 11040
    },
    "foreign_profile.functions": {
     "reason": null,
-    "value": 38
+    "value": 34
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 81818
+    "value": 81817
    },
    "inline_asm.hardware": {
     "reason": null,
@@ -223,7 +223,7 @@
    },
    "inline_asm.other": {
     "reason": null,
-    "value": 68
+    "value": 66
    },
    "inventory.unsymbolised_bytes": {
     "reason": null,
@@ -239,7 +239,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 6006
+    "value": 6005
    },
    "mismatch.bytes": {
     "reason": null,
@@ -257,9 +257,21 @@
     "reason": null,
     "value": 0
    },
+   "opt_pragma.statements": {
+    "reason": null,
+    "value": 26
+   },
    "orphan.bytes": {
     "reason": null,
     "value": 7260
+   },
+   "profile_split.bytes": {
+    "reason": null,
+    "value": 172108
+   },
+   "profile_split.units": {
+    "reason": null,
+    "value": 23
    },
    "raw_casts.reflected": {
     "reason": null,
@@ -270,8 +282,8 @@
     "value": 140
    },
    "struct.b": {
-    "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass.",
-    "value": 299
+    "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members.",
+    "value": 300
    },
    "struct.c": {
     "reason": null,
@@ -301,30 +313,33 @@
    "code_only.other.functions": 4,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "foreign_profile.bytes": 12236,
-   "foreign_profile.functions": 38,
-   "fun_dat_refs": 81818,
+   "foreign_profile.bytes": 11040,
+   "foreign_profile.functions": 34,
+   "fun_dat_refs": 81817,
    "inline_asm.hardware": 11,
-   "inline_asm.other": 63,
+   "inline_asm.other": 66,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 6006,
+   "m2c_idiom.units": 6005,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
    "name_defect.functions": 0,
+   "opt_pragma.statements": 26,
    "orphan.bytes": 7260,
+   "profile_split.bytes": 172108,
+   "profile_split.units": 23,
    "raw_casts.reflected": 366,
    "struct.a": 140,
-   "struct.b": 299,
+   "struct.b": 300,
    "struct.c": 287,
    "unmatched.bytes": 925432,
    "unmatched.functions": 1873
   }
  },
  "functions": {
-  "fully_verified": 18291,
+  "fully_verified": 18295,
   "matched": 18341,
   "named": 9237,
   "named_semantic": 1560,
@@ -417,32 +432,32 @@
   "bytes": 285388,
   "failing": {
    "addresses": {
-    "bytes": 2100860,
-    "functions": 13493
+    "bytes": 2101944,
+    "functions": 13496
    },
    "fields": {
-    "bytes": 768536,
-    "functions": 3449
+    "bytes": 769336,
+    "functions": 3450
    },
    "idioms": {
-    "bytes": 1276944,
-    "functions": 6026
+    "bytes": 1278028,
+    "functions": 6029
    },
    "name": {
-    "bytes": 1720856,
-    "functions": 13085
+    "bytes": 1721096,
+    "functions": 13087
    },
    "placed": {
-    "bytes": 1889740,
-    "functions": 12189
+    "bytes": 1890936,
+    "functions": 12193
    },
    "references": {
-    "bytes": 1949360,
-    "functions": 10670
+    "bytes": 1950444,
+    "functions": 10673
    },
    "types": {
-    "bytes": 927168,
-    "functions": 3625
+    "bytes": 925632,
+    "functions": 3619
    },
    "virtuals": {
     "bytes": 398008,
@@ -450,7 +465,7 @@
    }
   },
   "functions": 1936,
-  "matched_functions": 18291
+  "matched_functions": 18295
  },
  "regions": [
   {
@@ -584,11 +599,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 6632,
-  "pct": 40.91,
-  "recovered": 24813,
-  "synthetic": 10220,
-  "total": 60648,
+  "offset_casts": 6624,
+  "pct": 40.92,
+  "recovered": 24815,
+  "synthetic": 10221,
+  "total": 60646,
   "typeable": 366,
   "typeable_pct": 0.6
  }

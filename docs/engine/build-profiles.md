@@ -250,10 +250,11 @@ with the game's flags, and AdxMovie was written alongside the game.
 3.0.3 and b38 as a `struct`.
 
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
-runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. 4,805 of the 4,840 MWCC units are on
-b52, 29 of them at `-O3` or `-O3,p` because their members pass only there. The unit at `0x4583f0` in Gui, four
+runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. 4,810 of the 4,840 MWCC units are on
+b52, 13 of them at `-O3` or `-O3,p` because their members pass only there. The unit at `0x4583f0` in Gui, four
 out-of-line holder destructors, matches only at `-O4,p`, though the Gui unit after it is `-O4,s`. Why is
-open. A unit moved only when every member matched under it, so the rest keep their earlier profile.
+open. A unit moved only when every member matched under it, so the rest keep their earlier profile;
+`profile_split.units` in the debt ratchet counts them.
 zlib and libpng are the exception that is settled: they build with `combat` and fail under `b52`.
 
 **A library is one build, so a unit never crosses a library boundary.** Retail records two of the builds.
@@ -315,9 +316,14 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
   stand-in (`FUN_00109ac8`, `FUN_0010a3d8` to `FUN_0010a408`, `thunk_FUN_00113950`), which says nothing
   about how they were built, and the rest have no source. How much else in the Sony block this explains
   is unknown, and no other EE GCC is to hand.
-* **The remaining units.** 14 MWCC units besides zlib and libpng stay on 3.0, 3.0.3 or combat: 6 in
-  Alchemy, 7 in the game, and `FUN_002252d8` in libmtap, which has MWCC's shape in a GCC library. Each
-  holds a member that still differs under b52, or the retail copy of a shared inline.
+* **The remaining units.** 23 units sit off their library's profile: 9 MWCC units besides zlib and
+  libpng on 3.0, 3.0.3 or combat, 13 b52 units at the wrong optimisation level, and the Gui unit above.
+  `FUN_002252d8` in libmtap has MWCC's shape in a GCC library. Each holds a member that still differs
+  under its library's profile. The largest is Ndmw's `0x3f77b0` (64 KB), held by the 42 KB script
+  dispatcher `Gap__Bec__beNDMWGameRam__vfunc_34`. A unit holding the retail copy of a shared inline
+  destructor also needs every other unit's copy of it to match under the new profile: the Attrs unit at
+  `0x130060` stays on 3.0 because `igMovieRenderer_InitializeDrawing`'s inlined release and its
+  out-of-line copy need different spellings at b52.
   `tools/roll_profile.py` lists the members. Respelling for b52 moved the rest: most members differed
   only in register order, because b52 gives the first-declared local the higher register.
 * **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it. The `goto` guards and one clamp keep their `nop` for now.

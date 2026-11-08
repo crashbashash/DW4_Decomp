@@ -114,10 +114,7 @@ void FUN_001f2d90(unsigned int arg0, int arg1) {
     }
     s1 = DAT_004914a6[0];
     while (s3 >= 3U) {
-        s0 = s3;
-        if ((unsigned int)s1 < s3) {
-            s0 = s1;
-        }
+        s0 = ((unsigned int)s1 < s3) ? s1 : s3;
         FUN_001f64a0(s0, 0, s2);
         DAT_00569250[0] += s0;
         DAT_00569248[0] += s0;

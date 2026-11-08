@@ -91,7 +91,8 @@ def main():
     targets = {}
     for index, (start, end, _label, unit_compiler, flags, _exceptions) in enumerate(units):
         region = regions.of(start)
-        if (region.id in wanted and regions.of(end - 1) is region and unit_compiler not in (args.compiler, "ee-gcc")
+        if (region.id in wanted and regions.of(end - 1) is region and unit_compiler != "ee-gcc"
+                and (unit_compiler, flags) != (args.compiler, args.flags)
                 and "-lang" not in flags and not any(start <= held < end for held in holders)):
             targets[index] = units[index]
     paths = unitfiles.scan("src")

@@ -1,7 +1,6 @@
 /* Steps the model's direction toward its target (per-axis rate limit, wrapping at 2*pi), then
  * writes the new rotation into the ram object's transform. The ram object's data list is created
  * on first use. */
-#pragma opt_strength_reduction off
 #include "dw4/reflected.h"
 extern "C" {
 struct Ref { int w0; int references; };
@@ -122,4 +121,3 @@ pre:
     pv = &v.x;
     goto test;
 }
-#pragma opt_strength_reduction reset
