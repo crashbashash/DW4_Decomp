@@ -48,7 +48,7 @@ extern int FUN_001256e0(Reent *, unsigned int);   /* malloc_trim */
 #define MINSIZE 16
 #define MALLOC_ALIGN_MASK 15
 #define MALLOC_ALIGNMENT 16
-#define initial_top ((mchunkptr)av_)
+#define initial_top ((mchunkptr)(bin_at(0)))
 #define MORECORE(x) FUN_00129828(reent_ptr, x)
 #define MORECORE_FAILURE (-1)
 #define set_head_size(p, s) ((p)->size = (((p)->size & PREV_INUSE) | (s)))

@@ -81,6 +81,18 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   `pack_d`, `dpmul` or `dpdiv`, flushes denormals to zero, and its `isnan`/`isinf`/`iszero` are inline
   functions (macros change the compare). Each division object carries its own `__clz_tab` copy.
   A `static __inline__` helper inlines under `tools/check.py` only from a header (`include/dw4/fp_bit*.h`).
+* **`mprec.c` and `signal.c` are whole-file units** (`src/newlib/`; `0x1273e0..0x1283f8`, 17
+  functions, and `0x129940..0x129c28`, 8 functions). A call compiles differently when its callee is
+  defined earlier in the same file: `multadd` and `pow5mult` reproduce only after `Balloc` and `i2b`,
+  and `__sigtramp_r`'s delay slot is `bnez` rather than `bnezl` only after `_init_signal_r`. Their
+  profile adds `-ffunction-sections`, which leaves the code unchanged and gives each function its own
+  section, as a whole-file object needs.
+* **mallocr's `initial_top` is upstream's `(mchunkptr)(bin_at(0))`**: the same address spelled as
+  `(mchunkptr)av_` moves a temporary in `malloc_extend_top` and changes its registers.
+* **An ee-gcc object's own `.rodata`** (strings, `li.d` literals and switch tables together, as in
+  `_dtoa_r`, `_vfprintf_r` and the fdlibm kernels) is owned through a reviewed row in
+  `config/SLUS-20836/rodata-pools.tsv`, which `tools/verify.py` compares byte for byte with retail. A
+  literal loaded through `$at` stays a literal in the C; an `extern double` compiles to a plain `lui`/`ld`.
 * **The float-spilling varargs wrappers** `FUN_00265928`, `FUN_002658a8`, `FUN_002659a0`,
   `FUN_0027e2f0`, `printf` (`0x128528`), `FUN_002777f8`, `FUN_0029a320` and `FUN_0010d108` are Sony EE
   libc code built with gcc. No MWCC variant emits `$f12..$f19` spills in a varargs prologue, MWCC
@@ -136,14 +148,16 @@ disabling ASLR change nothing.
 
 * **newlib functions without C.** `memcpy`, `memmove`, `memset`, `memchr`, `memcmp`, `setjmp`
   (`0x129880`), `longjmp` (`0x1298d8`) and the 128-bit string routines (`strcat`, `strchr`, `strcmp`
-  `0x12a4a4`, `strcpy`, `strlen`, `strncat`, `strncmp`, `strncpy`) use `lq`/`sq` and MMI instructions
-  (`pcpyld`, `psubb`, `pnor`) and look hand-written: the `__builtin_mips5900_*` spellings tried insert
-  `por` moves or go through memory. `_dtoa_r` (`0x123ad8`) matches every word under `-g` but owns an
-  88-byte `.rodata` of strings, `li.d` literals and its switch table that `tools/verify.py` cannot yet
-  own for an ee-gcc object. `multadd` (`0x1274b8`) and `pow5mult` (`0x127a78`) match only when
-  `mprec.c` is compiled whole (Balloc and i2b defined earlier in the file), which suggests a
-  whole-file unit. `malloc_extend_top` (`0x1263a8`) and `__sigtramp_r` (`0x129b08`) differ in register
-  choice and in one `bnez`/`bnezl`.
+  `0x12a4a4`, `strcpy`, `strlen`, `strncat`, `strncmp`, `strncpy`) are assembly files, not ee-gcc 2.96
+  output with a few MMI statements. 2.96 aligns every loop top with a padding `nop`, starts each object
+  on 8 bytes, fills a short loop's delay slot and loads -1 as `li`; these keep unaligned loops,
+  4-byte object starts, `bne; nop` loop ends (the form `ee-as` gives a reorder-mode `.s`) and the
+  `lui`/`ori` pair of a hand-written `li 0xffffffff`. setjmp/longjmp save `s0`-`s8`, `sp` and `ra` with
+  `sq` and keep `noreorder` slots; memcpy and memmove hold the destination in `t0`; strcat saves with
+  `sq`. Some `pcpyud` operands are live, unrelated registers, which suggests compiler output kept and
+  edited as `.S`. `__builtin_mips5900_*` casts between `V2DI` and TImode insert `por` moves. Open:
+  `strncat`, `strncmp` and `strncpy` have gcc-style loop padding, and `strncat`'s byte tail follows
+  2.9-ee-991111-01 output; a C-and-asm candidate matching under that compiler would place them.
 * **The other Sony libraries' assembler.** Every matched function of libgraph, libdma, libipu, libcdvd,
   libpad, libsdr, libmc and libmtap matches with either assembler, so which one built them is open.
   `FUN_00114d88` also matches under `2.9-ee-990721`.

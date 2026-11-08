@@ -107,8 +107,10 @@ section remains besides `.text` and the owner's tables.
 
 ## Whole-file units
 
-A stock library file (zlib, libpng, Lua) is kept as upstream wrote it and compiles whole, so its
-row covers the file rather than one function. Lua's `lmem.c` and `lstate.c`, which the game rewrote,
+A stock library file (zlib, libpng, Lua, newlib's `mprec.c` and `signal.c`) is kept as upstream wrote it and compiles whole, so its
+row covers the file rather than one function. An ee-gcc file builds with `-ffunction-sections`:
+`tools/eegcc_compile.py` then renames each `.text.<function>` to `.text` and points the calls the
+assembler resolved through a section symbol back at their function, the object shape MWCC writes. Lua's `lmem.c` and `lstate.c`, which the game rewrote,
 are whole-file units too, from `src/lua/`:
 
 ```json

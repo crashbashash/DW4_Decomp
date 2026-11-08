@@ -244,7 +244,8 @@ def main(argv=None):
         compiled = []
         for stem in a.files:
             obj = os.path.join(tmp, stem + ".o")
-            compile_file(a.wibo, compiler, a.flags + (" -Cpp_exceptions off" if a.exceptions == "off" else ""),
+            mwcc_off = a.exceptions == "off" and not cc.is_eegcc(compiler)
+            compile_file(a.wibo, compiler, a.flags + (" -Cpp_exceptions off" if mwcc_off else ""),
                          os.path.join(a.src, stem + a.ext), obj)
             syms, headers, functions = text_functions(obj)
             at = locate(functions, retail, [v for v in starts if v not in owned], placed, a.drop)
