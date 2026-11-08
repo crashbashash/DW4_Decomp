@@ -72,8 +72,8 @@
     "functions": 0
    },
    "assembly": {
-    "bytes": 188,
-    "functions": 2
+    "bytes": 4112,
+    "functions": 15
    },
    "code-only": {
     "bytes": 9952,
@@ -133,10 +133,10 @@
  },
  "code_bytes": {
   "asm_body": 0,
-  "assembly": 188,
+  "assembly": 4112,
   "fully_verified": 2646268,
   "functions_asm_body": 0,
-  "functions_assembly": 2,
+  "functions_assembly": 15,
   "matched": 2659640,
   "total": 3464132
  },
@@ -340,8 +340,8 @@
    "struct.a": 141,
    "struct.b": 300,
    "struct.c": 287,
-   "unmatched.bytes": 804304,
-   "unmatched.functions": 1478
+   "unmatched.bytes": 800380,
+   "unmatched.functions": 1465
   }
  },
  "functions": {
@@ -405,12 +405,12 @@
   }
  ],
  "link": {
-  "asm_bytes": 804304,
+  "asm_bytes": 800380,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
-  "from_assembly_bytes": 188,
-  "from_assembly_units": 2,
+  "from_assembly_bytes": 4112,
+  "from_assembly_units": 15,
   "from_c_bytes": 2672280,
   "from_c_pct": 58.85,
   "from_c_units": 18734,

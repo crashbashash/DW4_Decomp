@@ -5,3 +5,16 @@
 # symbol	path	evidence (docs/engine/assembly-sources.md)
 FUN_00129880	src/newlib/setjmp.S	#setjmp-and-longjmp
 FUN_001298d8	src/newlib/setjmp.S	#setjmp-and-longjmp
+FUN_00126f24	src/newlib/memchr.S	#the-r5900-string-and-memory-routines
+FUN_00127004	src/newlib/memcmp.S	#the-r5900-string-and-memory-routines
+memcpy	src/newlib/memcpy.S	#the-r5900-string-and-memory-routines
+memmove	src/newlib/memmove.S	#the-r5900-string-and-memory-routines
+memset	src/newlib/memset.S	#the-r5900-string-and-memory-routines
+FUN_0012a1e8	src/newlib/strcat.S	#the-r5900-string-and-memory-routines
+FUN_0012a314	src/newlib/strchr.S	#the-r5900-string-and-memory-routines
+igStrCmp	src/newlib/strcmp.S	#the-r5900-string-and-memory-routines
+strcpy	src/newlib/strcpy.S	#the-r5900-string-and-memory-routines
+strlen	src/newlib/strlen.S	#the-r5900-string-and-memory-routines
+FUN_0012a9f0	src/newlib/strncat.S	#the-r5900-string-and-memory-routines
+FUN_0012aba0	src/newlib/strncmp.S	#the-r5900-string-and-memory-routines
+strncpy	src/newlib/strncpy.S	#the-r5900-string-and-memory-routines

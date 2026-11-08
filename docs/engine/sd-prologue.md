@@ -146,11 +146,9 @@ disabling ASLR change nothing.
 
 ## Open questions
 
-* **newlib functions without C.** setjmp and longjmp are hand-written assembly, approved as
-  `src/newlib/setjmp.S` ([assembly sources](assembly-sources.md)). The R5900 string and memory
-  routines (`memcpy`, `memmove`, `memset`, `memchr`, `memcmp`, and the 128-bit `strcat`, `strchr`,
-  `strcmp` `0x12a4a4`, `strcpy`, `strlen`, `strncat`, `strncmp`, `strncpy`) have no C yet. They look
-  like compiled C with MMI `asm` statements (that document's open questions has the evidence).
+* **newlib's R5900 assembly.** setjmp, longjmp and the string and memory routines come from
+  `libc/machine/r5900/*.S` in Sony's `ee001003_1` `libc.a`, and are `.S` sources here
+  ([assembly sources](assembly-sources.md)). Which compiler first generated those files is open.
 * **The other Sony libraries' assembler.** Every matched function of libgraph, libdma, libipu, libcdvd,
   libpad, libsdr, libmc and libmtap matches with either assembler, so which one built them is open.
   `FUN_00114d88` also matches under `2.9-ee-990721`.

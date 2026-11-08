@@ -38,6 +38,8 @@ upstream file) per file, and spells instructions as mnemonics, never `.word`.
   that one with each callee-saved register stored as a quadword (`sq`/`lq`: the R5900's general
   registers are 128 bits wide) and `$f24`-`$f31` added after `s8`. The jmp_buf layout follows:
   `s0`-`s8` at 0-128, the floating-point registers at 144-172, then `sp` at 176 and `ra` at 192.
+* Sony's own build agrees: the `setjmp.o` of the `ee001003_1` toolchain's `libc.a` is DW4's bytes
+  and records its source as `src/newlib/libc/machine/r5900/setjmp.S`.
 * No C can write them. setjmp stores the caller's callee-saved registers, `sp` and `ra`, and
   longjmp restores them and returns into another frame. A compiler saves only the registers its own
   body uses, in its own frame.
@@ -47,12 +49,29 @@ upstream file) per file, and spells instructions as mnemonics, never `.word`.
   names, register spellings, `.ent`/`.frame`) cannot be read back from the binary, so those follow
   upstream, as matched C follows whatever spelling reproduces the code.
 
+### The R5900 string and memory routines
+
+`memchr` (`FUN_00126f24`), `memcmp` (`FUN_00127004`), `memcpy`, `memmove`, `memset`, `strcat`
+(`FUN_0012a1e8`), `strchr` (`FUN_0012a314`), `strcmp` (`igStrCmp`), `strcpy`, `strlen`, `strncat`
+(`FUN_0012a9f0`), `strncmp` (`FUN_0012aba0`) and `strncpy`: one `src/newlib/<name>.S` each.
+
+* DW4 links them from the `libc.a` of Sony's EE toolchain release `ee001003_1` (2.96-ee-001003-1,
+  the compiler of the rest of newlib). Each member's `.text` is DW4's bytes exactly; `strcat.o`
+  differs only in its unrelocated `jal strcpy`.
+* Each member records its source as `src/newlib/libc/machine/r5900/<name>.S`. The C members of
+  the same archive record `.c` files (`libc/stdlib/strtol.c`) and carry the compiler's
+  `gcc2_compiled.`/`__gnu_compiled_c` symbols and an `.mdebug.eabi64` section; these carry none.
+* Their local labels are compiler-style (`$L3`, `$L9`, `$L14` in `strcat.o`), so the `.S` files
+  were most likely compiler output that was edited and kept as assembly. That is why plain C with
+  MMI `asm` statements comes close under the 2.9-ee releases and 2.96 but never matches: a C
+  search found near misses for all thirteen and a match for none.
+* `strcat` saves `ra` with `sq`, which no tried compiler emits; it is a non-leaf routine (it
+  calls `strcpy`).
+* The files keep the archive objects' own local labels (`$Ln`) and their `noreorder` delay slots,
+  and assemble to the archive's bytes.
+
 ## Open questions
 
-* **memcpy, memmove, memset, memchr, memcmp, strcpy, strcat, strlen, strchr, strcmp, strncat,
-  strncmp, strncpy** were listed as possibly hand-written. They are not approved, because the C
-  search is not finished. newlib's `memcpy.c`, given a 32-byte `lq`/`sq` block loop, compiles under
-  2.96 `-O2 -G0 -g` to retail's instruction sequence; only the register choice and a few scheduled
-  slots differ. strncat's byte tail comes out exactly under 2.9-ee-991111-01 (its `lui`/`ori` -1 and
-  the assembler's short-loop `nop`s), and strchr and strncpy contain `movz`, which only 2.96's
-  if-conversion emits. All of these look like compiled C with MMI `asm` statements.
+* **Which compiler generated the R5900 `.S` files** before they were edited. Their `lui`/`ori` -1
+  and loop scheduling point at a 2.9-ee release; a few details (`daddu` in strchr, filled `ld` loops
+  in strlen) point at 2.96.
