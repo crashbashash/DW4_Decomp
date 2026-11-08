@@ -81,7 +81,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.hardware` | 11 | 11 | 0 | `asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py) |
-| `inline_asm.other` | 37 | 37 | 0 | every other `asm` statement: each has to show its function fails without it |
+| `inline_asm.other` | 34 | 34 | 0 | every other `asm` statement: each has to show its function fails without it |
 | `unmatched.functions` | 1,465 | 1,465 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 800,380 | 800,380 | 0 | bytes of those |
 | `struct.a` | 139 | 139 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |

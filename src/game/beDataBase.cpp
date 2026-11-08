@@ -5,9 +5,7 @@
  * type. A cell of record R and column C is stored row-major at index (columnCount * R + C) of the
  * matching data list (the Junk Shop table is 9 rows x 36 columns; the enemy
  * table keys MODEL, HPMAX, ... by column name). The lists are reached through the reflected
- * object-reference fields and viewed here as the igDataList count/data prefix. "matching
- * construct" marks the volatile local and the hand-placed asm (joins, delay-slot NOPs, register
- * moves) that reproduce the retail scheduling. */
+ * object-reference fields and viewed here as the igDataList count/data prefix. */
 #include "dw4/reflected.h"
 
 /* Index returned by beDataBase_FindRecordValueIndex when the key has no column. */
@@ -95,12 +93,6 @@ long long beDataBase_GetRecordInt(beDataBase *self, int record, const char *key)
         result = *(int *)(((igDataList *)self->_intData)->_data + index * 4);
     else
         result = 0;
-
-    /* matching construct: hand-placed instruction/delay-slot padding */
-
-    asm {
-        nop
-    }
 
     return result;
 }
