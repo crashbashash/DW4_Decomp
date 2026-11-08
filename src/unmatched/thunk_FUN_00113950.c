@@ -1,4 +1,6 @@
-int thunk_FUN_00113950()
+int FUN_00113950(void);
+
+void thunk_FUN_00113950(void)
 {
-    return FUN_00113950();
+    FUN_00113950();
 }

@@ -91,7 +91,9 @@ def main():
     targets = {}
     for index, (start, end, _label, unit_compiler, flags, _exceptions) in enumerate(units):
         region = regions.of(start)
-        if (region.id in wanted and regions.of(end - 1) is region and unit_compiler != "ee-gcc"
+        # GCC units roll only onto a GCC compiler and MWCC units only onto MWCC
+        if (region.id in wanted and regions.of(end - 1) is region
+                and unit_compiler.startswith("ee-gcc") == args.compiler.startswith("ee-gcc")
                 and (unit_compiler, flags) != (args.compiler, args.flags)
                 and "-lang" not in flags and not any(start <= held < end for held in holders)):
             targets[index] = units[index]

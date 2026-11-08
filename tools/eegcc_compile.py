@@ -75,7 +75,11 @@ def main(argv):
         if r.returncode:
             sys.stderr.write(r.stdout + r.stderr)
             return 1
-        r = subprocess.run([os.path.join(bindir, "ee-as"), *asflags, "-o", out, asm],
+        # 2.96 keeps its assembler beside ee-gcc; the 2.9-ee releases keep it at ee/bin/as
+        assembler = os.path.join(bindir, "ee-as")
+        if not os.path.exists(assembler):
+            assembler = os.path.join(os.path.dirname(bindir), "ee", "bin", "as")
+        r = subprocess.run([assembler, *asflags, "-o", out, asm],
                            capture_output=True, text=True, env=assembler_env())
         if r.returncode:
             sys.stderr.write(r.stdout + r.stderr)

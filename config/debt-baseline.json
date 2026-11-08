@@ -14,23 +14,23 @@
   "code_only.other.functions": 2,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "foreign_profile.bytes": 3812,
-  "foreign_profile.functions": 33,
-  "fun_dat_refs": 81819,
+  "foreign_profile.bytes": 3504,
+  "foreign_profile.functions": 21,
+  "fun_dat_refs": 84551,
   "inline_asm.hardware": 11,
   "inline_asm.other": 42,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
-  "m2c_idiom.units": 6005,
+  "m2c_idiom.units": 6032,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 0,
   "name_defect.functions": 0,
   "opt_pragma.statements": 12,
   "orphan.bytes": 32,
-  "profile_split.bytes": 43932,
-  "profile_split.units": 14,
+  "profile_split.bytes": 43892,
+  "profile_split.units": 13,
   "raw_casts.reflected": 366,
   "struct.a": 140,
   "struct.b": {
@@ -38,8 +38,8 @@
    "value": 300
   },
   "struct.c": 287,
-  "unmatched.bytes": 925432,
-  "unmatched.functions": 1873
+  "unmatched.bytes": 870780,
+  "unmatched.functions": 1581
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

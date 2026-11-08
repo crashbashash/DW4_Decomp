@@ -41,11 +41,27 @@ class AssemblerEnv(unittest.TestCase):
             calls.append((cmd, kwargs))
             return Done()
 
-        with patch.object(eegcc_compile.subprocess, "run", run), patch.object(eegcc_compile, "fix_symtab_info"):
+        with patch.object(eegcc_compile.subprocess, "run", run), patch.object(eegcc_compile, "fix_symtab_info"), \
+                patch.object(eegcc_compile.os.path, "exists", lambda path: path == "/x/ee-as"):
             self.assertEqual(eegcc_compile.main(["/x/ee-gcc", "-O2", "-G0", "a.c", "a.o"]), 0)
         assembler = [kwargs for cmd, kwargs in calls if cmd[0].endswith("ee-as")]
         self.assertEqual(len(assembler), 1)
         self.assertEqual(assembler[0]["env"]["GLIBC_TUNABLES"], "glibc.cpu.hwcaps=-SSSE3,-SSE2:glibc.malloc.mmap_threshold=0")
+
+    def test_a_release_without_ee_as_uses_its_ee_bin_as(self):
+        calls = []
+
+        class Done:
+            returncode, stdout, stderr = 0, "", ""
+
+        def run(cmd, **kwargs):
+            calls.append(cmd)
+            return Done()
+
+        with patch.object(eegcc_compile.subprocess, "run", run), patch.object(eegcc_compile, "fix_symtab_info"), \
+                patch.object(eegcc_compile.os.path, "exists", lambda path: False):
+            self.assertEqual(eegcc_compile.main(["/x/bin/ee-gcc", "-O2", "-G0", "a.c", "a.o"]), 0)
+        self.assertEqual(calls[1][0], "/x/ee/bin/as")
 
 
 if __name__ == "__main__":

@@ -20,7 +20,21 @@ without source: it links from the retail image and reads from the generated `asm
 * **Share of the code:** the blocks are about 530 KB, roughly 11 points of the 4.5 MB code. 313 small leaf functions inside these blocks
   match from C. The census script is `scripts/analysis/sd_population.py`.
 
-## The Sony compiler
+## The Sony libraries' compiler
+
+The Sony runtime libraries (libgraph, libdma, libmpeg, libipu, libkernl, libcdvd, libpad, libsdr, libmc,
+libmtap) are not built by the 2.96 below but by **EE GCC 2.9-ee-991111**, the Cygnus-based release of
+the first SDK (`ee-gcc2.9-991111.tar.xz` in the decomp.me compiler releases, pinned as `ee-gcc-2.9`).
+It reproduces their signs: register saves at 16-byte spacing with `sd`, a frameless sibling `j` for a
+function whose only call is a tail call (which 2.96 cannot produce), a final `jal` with an epilogue
+after other work, unfilled delay slots, real `mult` for small constants, `lwu` zero-extension and
+`__muldf3`-style libcalls. Every function of those libraries that matched under 2.96 still matches
+under it apart from a few in libmpeg and libkernl, and raw m2c drafts match under it where none match
+under 2.96. Its release keeps the assembler at `ee/bin/as`, which `tools/eegcc_compile.py` falls back
+to. libmtap's `FUN_002252d8` is an empty varargs function under it. CRI, newlib and libgcc fail under
+2.9-ee and stay on 2.96, as does the kernel-mode code until it is tested further.
+
+## The CRI and newlib compiler
 
 A Sony EE GCC 2.96 build (`2.96-ee-001003-1`, the `GCC2096` stamp in the ELF) is kept under `local/ee-gcc2.96/`
 (public `ee-gcc2.96.tar.xz` from the decomp.me compiler releases, SHA-256
@@ -98,18 +112,16 @@ disabling ASLR change nothing.
 
 ## Open questions
 
-* **A second compiler build.** `0x102c00..0x117db8`, sceMc `0x117e58..0x11a330`, sceMtap and soft-float
-  `__floatdidf`/`__floatdisf` appear to come from a different build than the available
-  `2.96-ee-001003-1`, probably the `GCC2096 SCE2810` build stamped in the ELF. Signs: 16-byte register
-  save slots (`s0`@0, `s1`@16, `ra`@32) in 91 of 125 functions of the first range, final calls kept as
-  `jal` with an epilogue where ee-gcc emits a sibling `j`, unfilled delay slots, real `mult`/`mult1`
-  for small constants, `lwu` zero-extension, branch targets on 4-byte boundaries, and libcalls named
-  `__muldf3` where ee-gcc calls `dp*`. About twenty `-m`/`-f` flags change none of these, so functions
-  with these signs have no source until that build is available. `0x11acc0..0x12fe90` uses the normal
-  8-byte spacing.
-* **`FUN_002252d8`** is libmtap's no-op printf: every libmtap error string is passed to it. It verifies under MWCC (`combat -O4,p`) and
-  under ee-gcc at `-O1 -G0 -msoft-float` with a 32-byte local, and neither is proven: its start is 8 mod 16, which MWCC never emits, and the
-  rest of libmtap has no source to set a profile. It keeps the MWCC row until that library builds.
+* **Which assembler.** The 2.9-ee release's own `ee/bin/as` never fills a `jal` delay slot left to it;
+  the 2.96 kit's `ee-as` (2.10-ee) does. Retail fills such slots with a store in a few Sony functions:
+  `FUN_00108cc8`, `FUN_0010a138` and `FUN_001071f0` match only with the 2.10 assembler, and two others
+  drop a `volatile` workaround with it. `FUN_0010c7b0` and `FUN_00113398` match only with the release's
+  own assembler, possibly because they were spelled for it. Everything else (343 functions) matches with
+  either. The release's own assembler stays until the evidence settles it.
+* **Which 2.9-ee build.** The three `2.9-ee-991111` releases (`991111`, `991111a`, `991111-01`) give the
+  same code on everything tried, so `991111` is pinned; `2.9-ee-990721` differs on a few functions and
+  makes `FUN_002252d8` 56 bytes against retail's 40. `FUN_00114d88` matches only under 990721, which
+  leaves open whether a library or two was built with the older release.
 * **`FUN_0010d0d0`**, a printf-family wrapper into `FUN_0010cad8` inside the Sony block, has no source.
   Under MWCC, `void f(int a0,...) { char d[48]; FUN_0010cad8(a0, (char*)__builtin_next_arg(d) - 56); }`
   reproduces the frame (144, `ra` at `sp+0`, spills `sp+88..136`, `a0` unhomed) and differs only in the

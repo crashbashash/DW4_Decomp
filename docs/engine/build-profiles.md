@@ -249,6 +249,10 @@ with the game's flags, and AdxMovie was written alongside the game.
 `igNamedObject_GetVTable` differs under 3.0.3 by two swapped registers as a `union`, and matches under
 3.0.3 and b38 as a `struct`.
 
+**Two EE GCC builds.** CRI, newlib and libgcc are 2.96-ee-001003-1 (`ee-gcc`); the Sony runtime
+libraries are 2.9-ee-991111 (`ee-gcc-2.9`), whose frameless sibling calls 2.96 cannot produce
+([the `sd` prologue](sd-prologue.md)).
+
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
 runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. Bec and Ndmw also take `-inline level=8`:
 holder destructors inside inlined helpers are expanded in retail, which needs an inline depth of at
@@ -315,16 +319,9 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
 
 ## Open questions
 
-* **Which GCC built the Sony libraries.** Not the one that built CRI and newlib. A function whose only
-  call is a tail call keeps a frame in all 473 cases in CRI ADX, CRI Sofdec and newlib, because
-  2.96-ee-001003-1 saves `ra` for it; no flag changes that. In the Sony libraries none of the 17 such
-  functions has a frame. Those 17 cannot match under the pinned compiler: six are pinned to MWCC 3.0 as a
-  stand-in (`FUN_00109ac8`, `FUN_0010a3d8` to `FUN_0010a408`, `thunk_FUN_00113950`), which says nothing
-  about how they were built, and the rest have no source. How much else in the Sony block this explains
-  is unknown, and no other EE GCC is to hand.
 * **The remaining units.** 18 units sit off their library's profile (`profile_split.units`): MWCC
-  units on 3.0, 3.0.3 or combat, b52 units at the wrong optimisation level.
-  `FUN_002252d8` in libmtap has MWCC's shape in a GCC library. Each holds a member that still differs
+  units on 3.0, 3.0.3 or combat, b52 units at the wrong optimisation level, and Sony units still on
+  2.96 because a member is spelled for it or for an MWCC stand-in. Each holds a member that still differs
   under its library's profile. The 42 KB script dispatcher `Gap__Bec__beNDMWGameRam__vfunc_34` is on
   the Ndmw profile with `#pragma inline_depth(1)`: retail calls `RecoveryTarget::release` and
   `RecoveryString::release` out of line from it while its own copies of the `RecoveryRef` destructors

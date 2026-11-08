@@ -32,6 +32,7 @@ ARCHIVES = {
     "b52": "mwcps2-3.0b52-030722.tar.gz",
     "2.4": "mwcps2-2.4-001213.tar.gz",
     "ee-gcc": "ee-gcc2.96.tar.xz",
+    "ee-gcc-2.9": "ee-gcc2.9-991111.tar.xz",
 }
 
 
@@ -64,7 +65,7 @@ def install(ident, path, digest, force):
     archive = ARCHIVES[ident]
     data = fetch(COMPILERS + archive)
     # an ee-gcc install is the whole toolchain tree (bin/, lib/, ee/); an MWCC build is one folder
-    root = os.path.join(ROOT, os.path.dirname(os.path.dirname(path))) if ident == "ee-gcc" \
+    root = os.path.join(ROOT, os.path.dirname(os.path.dirname(path))) if ident.startswith("ee-gcc") \
         else os.path.join(ROOT, os.path.dirname(path))
     os.makedirs(root, exist_ok=True)
     with tarfile.open(fileobj=io.BytesIO(data)) as tar:
