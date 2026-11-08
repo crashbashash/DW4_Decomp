@@ -1,6 +1,4 @@
 void FUN_00259f80(int *arg0) {
-    int x;
-    x = *(volatile int *)(arg0 + 10);
-    asm("nop");
-    asm("nop");
+    /* matching construct: hand search — the branch folds away, leaving the load and its delay slot */
+    if (arg0[10]) return;
 }

@@ -323,6 +323,12 @@ Retail shapes that only one spelling reproduces:
   give a function one word short, as do all `-O` levels and the `-O3,s`/`-O3,p` variants. The
   alternate compiler at `-O3,p` emits it from ordinary source, for example `FUN_00259d10` and
   `FUN_00259a20`. Try that profile before anything else.
+* **A `nop` before a label or `jr ra` is often a deleted branch's delay slot.** A branch to the next
+  instruction is removed late, so its delay slot stays, and so does the load that fed it.
+  `if (p->f) return;` as a whole function compiles to `lw v1,f(a0); nop; jr ra; nop`, where a plain
+  read of `p->f` is dropped. `r = a == b; if (r) return r; return r;` leaves `xor; sltiu; nop` at the
+  epilogue. Other reachable shapes give the same `nop`: an inlined compare, a struct view that keeps
+  two loads apart, or the right profile for the unit. Look for those before writing `asm { nop }`.
 * **Local declaration order under b52.** The first-declared local takes the higher saved register and the
   higher stack slot, the opposite of the older compilers, so a source that matched under 3.0 or combat usually
   needs its locals reversed. That alone moved most of Alchemy Core's blocking functions. Past six locals, a greedy

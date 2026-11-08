@@ -234,7 +234,7 @@
    },
    "inline_asm.other": {
     "reason": null,
-    "value": 28
+    "value": 25
    },
    "inventory.unsymbolised_bytes": {
     "reason": null,
@@ -328,7 +328,7 @@
    "foreign_profile.functions": 18,
    "fun_dat_refs": 83134,
    "inline_asm.hardware": 11,
-   "inline_asm.other": 28,
+   "inline_asm.other": 25,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
@@ -613,11 +613,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 6826,
-  "pct": 40.03,
+  "offset_casts": 6825,
+  "pct": 40.04,
   "recovered": 24879,
   "synthetic": 10221,
-  "total": 62144,
+  "total": 62143,
   "typeable": 366,
   "typeable_pct": 0.59
  }

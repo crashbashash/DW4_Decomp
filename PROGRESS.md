@@ -81,7 +81,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.hardware` | 11 | 11 | 0 | `asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py) |
-| `inline_asm.other` | 28 | 28 | 0 | every other `asm` statement: each has to show its function fails without it |
+| `inline_asm.other` | 25 | 25 | 0 | every other `asm` statement: each has to show its function fails without it |
 | `unmatched.functions` | 1,465 | 1,465 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 800,380 | 800,380 | 0 | bytes of those |
 | `struct.a` | 139 | 139 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
@@ -177,7 +177,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 204 tables, 4,123 entries, in 167 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 24,879 of 62,144 (40.03 %) |
+| field accesses using a **recovered** type (not an offset cast) | 24,879 of 62,143 (40.04 %) |
 | functions in the retail split (`asm/`, generated) | 20,214 |
 
 ## How these numbers are produced
