@@ -250,7 +250,8 @@ with the game's flags, and AdxMovie was written alongside the game.
 3.0.3 and b38 as a `struct`.
 
 **Two EE GCC builds.** CRI, newlib and libgcc are 2.96-ee-001003-1 (`ee-gcc`); the Sony runtime
-libraries are 2.9-ee-991111 (`ee-gcc-2.9`), whose frameless sibling calls 2.96 cannot produce
+libraries are 2.9-ee-991111-01 (`ee-gcc-2.9`; libmpeg with the 2.96 kit's assembler, `ee-gcc-2.9-as210`),
+whose frameless sibling calls 2.96 cannot produce
 ([the `sd` prologue](sd-prologue.md)).
 
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks

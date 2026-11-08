@@ -23,8 +23,16 @@ without source: it links from the retail image and reads from the generated `asm
 ## The Sony libraries' compiler
 
 The Sony runtime libraries (libgraph, libdma, libmpeg, libipu, libkernl, libcdvd, libpad, libsdr, libmc,
-libmtap) are not built by the 2.96 below but by **EE GCC 2.9-ee-991111**, the Cygnus-based release of
-the first SDK (`ee-gcc2.9-991111.tar.xz` in the decomp.me compiler releases, pinned as `ee-gcc-2.9`).
+libmtap) are not built by the 2.96 below but by **EE GCC 2.9-ee-991111-01**, the Cygnus-based release of
+the first SDK (`ee-gcc2.9-991111-01.tar.xz` in the decomp.me compiler releases, pinned as `ee-gcc-2.9`).
+Of the 991111 releases only -01 writes two hazard `nop`s before a `div.s` (`FUN_00115a58`).
+
+Two libraries were assembled differently. libkernl needs this release's own assembler (`ee/bin/as`),
+which leaves a delay slot unfilled where a store could have moved into it (`FUN_0010c7b0`,
+`FUN_00113398`). libmpeg needs one that fills it: the 2.96 kit's `ee-as` (2.10-ee), which
+`FUN_00108cc8`, `FUN_0010a138` and `FUN_001071f0` show. libmpeg's units are pinned as `ee-gcc-2.9-as210`,
+the same compiler with that assembler; `tools/download_tools.py` builds it from the two releases. The
+other eight libraries match the same either way and stay on the release's own assembler.
 It reproduces their signs: register saves at 16-byte spacing with `sd`, a frameless sibling `j` for a
 function whose only call is a tail call (which 2.96 cannot produce), a final `jal` with an epilogue
 after other work, unfilled delay slots, real `mult` for small constants, `lwu` zero-extension and
@@ -112,22 +120,11 @@ disabling ASLR change nothing.
 
 ## Open questions
 
-* **Which assembler.** The 2.9-ee release's own `ee/bin/as` never fills a `jal` delay slot left to it;
-  the 2.96 kit's `ee-as` (2.10-ee) does. Retail fills such slots with a store in a few Sony functions:
-  `FUN_00108cc8`, `FUN_0010a138` and `FUN_001071f0` match only with the 2.10 assembler, and two others
-  drop a `volatile` workaround with it. `FUN_0010c7b0` and `FUN_00113398` match only with the release's
-  own assembler, possibly because they were spelled for it. Everything else (343 functions) matches with
-  either. The release's own assembler stays until the evidence settles it.
-* **Which 2.9-ee build.** The three `2.9-ee-991111` releases (`991111`, `991111a`, `991111-01`) give the
-  same code on everything tried, so `991111` is pinned; `2.9-ee-990721` differs on a few functions and
-  makes `FUN_002252d8` 56 bytes against retail's 40. `FUN_00114d88` matches only under 990721, which
-  leaves open whether a library or two was built with the older release.
-* **`FUN_0010d0d0`**, a printf-family wrapper into `FUN_0010cad8` inside the Sony block, has no source.
-  Under MWCC, `void f(int a0,...) { char d[48]; FUN_0010cad8(a0, (char*)__builtin_next_arg(d) - 56); }`
-  reproduces the frame (144, `ra` at `sp+0`, spills `sp+88..136`, `a0` unhomed) and differs only in the
-  order of words 1-4, which about 130 spellings do not move; the order looks gcc-scheduled. Worth
-  trying under the Sony compiler.
+* **The other Sony libraries' assembler.** Every matched function of libgraph, libdma, libipu, libcdvd,
+  libpad, libsdr, libmc and libmtap matches with either assembler, so which one built them is open.
+  `FUN_00114d88` also matches under `2.9-ee-990721`.
 * **`FUN_00119138`** (904 bytes) has no source. It looks like a Sony libcdvd-style RPC wrapper
   `int f(int a0,...)`: it copies six variadic words into a global array, then dispatches on the first
   (`0x8130`, `0x8140`, `0x8160`, `0x8170`, `0x81a0`, `0x81b0`, `0x81d0`, `0x9000..0x90f0`) to
-  `FUN_0010e2a8` with a different argument shape per command. Control flow is known in outline only.
+  `FUN_0010e2a8` with a different argument shape per command. It also saves and sets `gp`, which C
+  cannot spell, so it waits with the other inline-`asm` functions.

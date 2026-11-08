@@ -32,7 +32,12 @@ ARCHIVES = {
     "b52": "mwcps2-3.0b52-030722.tar.gz",
     "2.4": "mwcps2-2.4-001213.tar.gz",
     "ee-gcc": "ee-gcc2.96.tar.xz",
-    "ee-gcc-2.9": "ee-gcc2.9-991111.tar.xz",
+    "ee-gcc-2.9": "ee-gcc2.9-991111-01.tar.xz",
+    "ee-gcc-2.9-as210": "ee-gcc2.9-991111-01.tar.xz",
+}
+# an install that pairs one archive's compiler with another install's assembler: id -> the ee-as it uses
+ASSEMBLERS = {
+    "ee-gcc-2.9-as210": "local/ee-gcc2.96/bin/ee-as",
 }
 
 
@@ -59,7 +64,8 @@ def fetch(url):
 
 def install(ident, path, digest, force):
     dest = os.path.join(ROOT, path)
-    if not force and os.path.exists(dest) and sha256(dest) == digest:
+    if not force and os.path.exists(dest) and sha256(dest) == digest and (
+            ident not in ASSEMBLERS or os.path.exists(os.path.join(os.path.dirname(dest), "ee-as"))):
         print(f"{ident}: {path} present")
         return True
     archive = ARCHIVES[ident]
@@ -74,6 +80,11 @@ def install(ident, path, digest, force):
         print(f"{ident}: {archive} did not produce {path} with SHA-256 {digest}", file=sys.stderr)
         return False
     os.chmod(dest, os.stat(dest).st_mode | stat.S_IXUSR)
+    if ident in ASSEMBLERS:
+        link = os.path.join(os.path.dirname(dest), "ee-as")
+        if os.path.lexists(link):
+            os.remove(link)
+        os.symlink(os.path.relpath(os.path.join(ROOT, ASSEMBLERS[ident]), os.path.dirname(dest)), link)
     print(f"{ident}: {path} installed and verified")
     return True
 
