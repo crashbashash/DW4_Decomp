@@ -2,7 +2,9 @@
 """What tools/inline_asm.py counts as a statement, and which ones C cannot spell."""
 import os
 import sys
+import tempfile
 import unittest
+from unittest import mock
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import inline_asm  # noqa: E402
@@ -25,6 +27,15 @@ class Statements(unittest.TestCase):
     def test_a_trailing_semicolon_goes_with_the_statement(self):
         start, end, _body = inline_asm.statements('asm("nop"); int x;')[0]
         self.assertEqual('asm("nop"); int x;'[start:end], 'asm("nop");')
+
+    def test_a_temporary_split_is_not_a_source(self):
+        with tempfile.TemporaryDirectory() as root:
+            os.mkdir(os.path.join(root, "src"))
+            for name in ("unit.c", "dw4u_123_0.c"):
+                open(os.path.join(root, "src", name), "w").close()
+            with mock.patch.object(inline_asm, "ROOT", root):
+                found = [os.path.basename(path) for path in inline_asm.sources()]
+        self.assertEqual(found, ["unit.c"])
 
     def test_only_sync_and_ei_have_no_c_spelling(self):
         self.assertTrue(inline_asm.is_hardware("sync"))

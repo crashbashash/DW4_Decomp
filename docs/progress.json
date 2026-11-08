@@ -226,7 +226,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 85132
+    "value": 84475
    },
    "inline_asm.hardware": {
     "reason": null,
@@ -234,7 +234,7 @@
    },
    "inline_asm.other": {
     "reason": null,
-    "value": 42
+    "value": 37
    },
    "inventory.unsymbolised_bytes": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 6033
+    "value": 6030
    },
    "mismatch.bytes": {
     "reason": null,
@@ -302,11 +302,11 @@
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 810472
+    "value": 800380
    },
    "unmatched.functions": {
     "reason": null,
-    "value": 1485
+    "value": 1465
    }
   },
   "counters": {

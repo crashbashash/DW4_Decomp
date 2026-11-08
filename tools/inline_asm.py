@@ -66,7 +66,8 @@ def sources():
         for dirpath, dirs, files in os.walk(os.path.join(ROOT, base)):
             dirs[:] = [d for d in dirs if d != "third_party"]
             for name in files:
-                if name.endswith((".c", ".cpp", ".h", ".hpp")):
+                # `dw4u_*` are tools/units.py's one-function splits, copies of a unit's own code
+                if name.endswith((".c", ".cpp", ".h", ".hpp")) and not name.startswith("dw4u_"):
                     yield os.path.join(dirpath, name)
 
 

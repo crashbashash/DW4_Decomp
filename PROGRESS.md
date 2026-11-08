@@ -81,15 +81,15 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.hardware` | 11 | 11 | 0 | `asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py) |
-| `inline_asm.other` | 42 | 37 | -5 | every other `asm` statement: each has to show its function fails without it |
-| `unmatched.functions` | 1,485 | 1,465 | -20 | functions in the layout with no definition in src/ |
-| `unmatched.bytes` | 810,472 | 800,380 | -10092 | bytes of those |
+| `inline_asm.other` | 37 | 37 | 0 | every other `asm` statement: each has to show its function fails without it |
+| `unmatched.functions` | 1,465 | 1,465 | 0 | functions in the layout with no definition in src/ |
+| `unmatched.bytes` | 800,380 | 800,380 | 0 | bytes of those |
 | `struct.a` | 141 | 141 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) — increase recorded: struct.a +1: newlib libc drafts declare struct _reent as prefixes of different lengths (60 and 80 bytes, same fields); one shared dw4/newlib_reent.h is the readability pass |
 | `struct.b` | 300 | 300 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members. |
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 6,033 | 6,030 | -3 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `m2c_idiom.units` | 6,030 | 6,030 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 366 | 366 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 85,132 | 84,475 | -657 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 84,475 | 84,475 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 19 | 19 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 3,420 | 3,420 | 0 | bytes of those |
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
