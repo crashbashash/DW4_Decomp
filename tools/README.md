@@ -16,6 +16,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`split.py`](split.py) | lay out the retail code and emit one assembly unit per function |
 | [`buildcache.py`](buildcache.py) | a content-addressed result cache for tools/check.py and tools/linkgen.py |
 | [`units.py`](units.py) | resolve a symbol to its definition in a multi-function source file |
+| [`asmsources.py`](asmsources.py) | the owner-approved hand-written `.S` sources in `src/` (`config/assembly-sources.tsv`); refuses any other |
 | [`srctree.py`](srctree.py) | resolve a filename to its path when `src/` is not flat |
 | [`jumptables.py`](jumptables.py) | find the switches' jump tables and record them in a config file |
 | [`syscalls.py`](syscalls.py) | recover the EE kernel syscall stubs → `config/SLUS-20836/syscalls.txt` |
@@ -88,7 +89,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Tests
 
-`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
+`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
 
 ## Subfolders
 

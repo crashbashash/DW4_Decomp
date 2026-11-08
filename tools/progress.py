@@ -42,6 +42,7 @@ import regions
 import units
 import inline_asm
 from unitprofiles import asm_body_names
+import asmsources
 import datamap
 import re
 import statistics
@@ -121,8 +122,8 @@ def semantic_named(name):
 # tools/check.py classifies every unit and commits the table as data/check-categories.tsv
 # (`va name category diagnostic`). Only `match` is fully verified; the others are code
 # bytes identical with a debt still to settle, or not matched at all.
-CATEGORY_ORDER = ["match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "asm-body", "mismatch",
-                  "compile"]
+CATEGORY_ORDER = ["match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "asm-body", "assembly",
+                  "mismatch", "compile"]
 CATEGORY_EXPLAIN = {
     "match": "code bytes, exception metadata and symbol rules all pass — fully verified",
     "code-only": "code bytes identical; exception metadata not reproduced (compile mode or cleanup scope)",
@@ -132,6 +133,8 @@ CATEGORY_EXPLAIN = {
                        "exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md)",
     "asm-body": "the retail instructions in an `asm` function: links identically, recovers nothing, counted in no "
                 "figure above (docs/engine/asm-body-matches.md)",
+    "assembly": "an owner-approved hand-written assembly source (config/assembly-sources.tsv), byte-identical: "
+                "recovered, but not C, so counted apart from the C figures (docs/engine/assembly-sources.md)",
     "mismatch": "code bytes, size, tables or object shape differ",
     "compile": "does not compile",
 }
@@ -230,9 +233,12 @@ def collect():
     paths = have_src_paths()
     asm_body = [s for s in syms if s[2] in paths and is_asm_body(s[2], paths[s[2]])]
     asm_body_names_set = {s[2] for s in asm_body}
-    have = set(paths) - asm_body_names_set
+    # an owner-approved hand-written assembly source (tools/asmsources.py) is recovered source, but
+    # not C: it is counted apart and never in the C figures
+    assembly = [s for s in syms if s[2] in paths and asmsources.is_assembly(paths[s[2]])]
+    have = set(paths) - asm_body_names_set - {s[2] for s in assembly}
     matched = [s for s in syms if s[2] in have]
-    cats = categorise(matched + asm_body)
+    cats = categorise(matched + asm_body + assembly)
     if cats["warning"]:
         sys.stderr.write("progress: warning: %s — figures marked (categories not recorded)\n"
                          % cats["warning"])
@@ -335,6 +341,7 @@ def collect():
     except FileNotFoundError:
         pass
     asm_body_b = sum(s[1] for s in asm_body)
+    assembly_b = sum(s[1] for s in assembly)
     from_c = done_b + jtbl_b                    # the compiler regenerates the jump tables
     from_asm_body = asm_body_b + jtbl_asm_b
     # Typed coverage: how much of the matched C speaks in recovered structs rather than
@@ -348,8 +355,9 @@ def collect():
     link = dict(section_bytes=SECTION_BYTES,
                 from_c_bytes=from_c, from_c_units=len(matched),
                 from_asm_body_bytes=from_asm_body, from_asm_body_units=len(asm_body),
+                from_assembly_bytes=assembly_b, from_assembly_units=len(assembly),
                 jtbl_bytes=jtbl_b, jtbl_asm_body_bytes=jtbl_asm_b,
-                asm_bytes=total_b - done_b - asm_body_b,
+                asm_bytes=total_b - done_b - asm_body_b - assembly_b,
                 image_bytes=dm["image_bytes"],
                 from_c_pct=round(100.0 * from_c / SECTION_BYTES, 2),
                 from_asm_body_pct=round(100.0 * from_asm_body / SECTION_BYTES, 2))
@@ -371,7 +379,9 @@ def collect():
         code_bytes=dict(matched=done_b, total=total_b,
                         fully_verified=fv["bytes"] if fv else None,
                         asm_body=asm_body_b,
-                        functions_asm_body=len(asm_body)),
+                        functions_asm_body=len(asm_body),
+                        assembly=assembly_b,
+                        functions_assembly=len(assembly)),
         categories=cats,
         data_bytes=dict(identified=dm["identified_data_bytes"],
                         total=dm["data_bytes"],
@@ -565,7 +575,7 @@ def debt_summary(d, syms, matched, asm_body, paths, typed):
         c["struct." + k] = st[k] if st else None
     # m2c idioms and FUN_/DAT_ references: over the matched units' source, asm bodies excluded,
     # comments and string literals blanked so prose never counts.
-    asm_names = {s[2] for s in asm_body}
+    asm_names = {s[2] for s in asm_body} | {n for n, p in paths.items() if asmsources.is_assembly(p)}
     idiom_units, refs = 0, 0
     for path, names in _unit_files(paths, asm_names).items():
         try:
@@ -917,6 +927,10 @@ def render_md(d):
     A("not counted: %s asm bodies, %s code bytes (%.1f %%): retail instructions kept as source, "
       "in no figure above" % (format(b["functions_asm_body"], ","), format(b["asm_body"], ","),
                               pct(b["asm_body"], b["total"])))
+    if b.get("functions_assembly"):
+        A("assembly   : %s hand-written assembly sources, %s code bytes (%.1f %%): owner-approved `.S` "
+          "routines (config/assembly-sources.tsv), byte-identical, counted apart from C"
+          % (format(b["functions_assembly"], ","), format(b["assembly"], ","), pct(b["assembly"], b["total"])))
     A("```")
     A("")
     A("The function count is flattered by small functions: the ones done have a median size of "

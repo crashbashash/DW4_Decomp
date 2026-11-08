@@ -20,9 +20,10 @@ the result is valid.
 import itertools
 import os
 import re
+import asmsources
 import unitobjects
 
-_EXTS = (".c", ".cpp")
+_EXTS = (".c", ".cpp", asmsources.EXT)
 # Temp prefixes for the one-function splits; skipped by `scan`, ignored by git.
 TMP_PREFIX = "dw4u_"
 _SEQ = itertools.count()
@@ -230,7 +231,12 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
             if not f.endswith(_EXTS) or f.startswith(TMP_PREFIX):
                 continue
             path = os.path.join(root, f)
-            for name, _s, _e in definitions(open(path).read()):
+            if asmsources.is_assembly(path):
+                # only an owner-approved hand-written routine may be assembly (tools/asmsources.py)
+                found = [(name, 0, 0) for name in asmsources.approved_definitions(path)]
+            else:
+                found = definitions(open(path).read())
+            for name, _s, _e in found:
                 # within one file these are `#ifdef` alternatives; a real clash fails to compile
                 if out.get(name, path) != path:
                     # two stock files may each keep a `static` of one name: the unit row says
@@ -276,6 +282,14 @@ def standalone(path, name, symbols="config/SLUS-20836/symbols.txt", unit_objects
     into a dot-named sibling, so `#include`s relative to the unit still resolve and
     `scan` skips it.
     """
+    if asmsources.is_assembly(path):
+        text = open(path).read()
+        if len(asmsources.definitions(text)) <= 1:
+            return path, None
+        tmp = os.path.join(os.path.dirname(path),
+                           "%s%d_%d%s" % (TMP_PREFIX, os.getpid(), next(_SEQ), asmsources.EXT))
+        open(tmp, "w").write(asmsources.extract(text, name))
+        return tmp, tmp
     text = open(path).read()
     name = unitobjects.source_owner(name, symbols, unit_objects)
     if len(definitions(text)) <= 1 or unitobjects.is_whole_file(name, symbols, unit_objects):

@@ -21,7 +21,14 @@ evidence-named source that rebuilds to a byte-identical retail ELF. Run every co
 - **Assets.** No game binaries or extracted assets in the repository (disc images, executables, IRX,
   BIOS, memory cards, savestates, screenshots, small extracts), and no retail code as assembly: the
   generated `asm/` tree is gitignored and a function's retail instructions are never committed in any
-  wrapper. Recovered metadata is fine. The retail executable is reached through the gitignored
+  wrapper. The one exception is a routine the owner has approved as hand-written assembly: its `.S`
+  source is in `src/` with a row in `config/assembly-sources.tsv`, approved after the owner reviewed
+  the evidence that it was written in assembly and that no C reproduces it
+  ([assembly sources](docs/engine/assembly-sources.md)). Only the owner approves a row. An agent may
+  write one only when the owner has explicitly told it to add that specific routine, after reviewing
+  its evidence; it never adds one on its own initiative or as part of a broader request ("match
+  everything", "clear the queue").
+  Recovered metadata is fine. The retail executable is reached through the gitignored
   `orig/<GAMEID>/`. Never force-add, and never modify a disc image: work on a copy.
 - **Scope.** The repository holds the decompilation and what it needs: source,
   build tables, tools, evidence and reference documentation. These do not belong in it and go to the

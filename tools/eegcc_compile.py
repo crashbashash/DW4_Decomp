@@ -6,6 +6,9 @@ docs/engine/sd-prologue.md) cannot come out of MWCC. The pinned compiler is the 
 `ee-gcc` 2.96-ee-001003-1 build kept under `local/`. Its `-c` mode crashes inside `cc1` when it writes
 its own temporary assembly, so the object is built in two steps, `-S` and then the sibling `ee-as`.
 
+A `.S` source is a hand-written assembly file (config/assembly-sources.tsv): it is preprocessed by
+the same driver and assembled by the same `ee-as`, with no compiler pass and no debug records.
+
 Usage: eegcc_compile.py <ee-gcc> <flags...> <source> <object>
 """
 import os
@@ -67,11 +70,16 @@ def main(argv):
         asflags = [f[4:].replace(",", " ").split() for f in flags if f.startswith("-Wa,")]
         asflags = [x for g in asflags for x in g]
         flags = [f for f in flags if not f.startswith("-Wa,")]
-        if any(f in ("-g", "-g2", "-g3") for f in flags):
+        assembly = source.endswith(".S")
+        if any(f in ("-g", "-g2", "-g3") for f in flags) and not assembly:
             asflags = ["-g"] + asflags
         asflags = [f for f in flags if f.startswith("-G") and f[2:].isdigit()] + asflags
-        r = subprocess.run([compiler, "-S", *flags, source, "-o", asm],
-                           capture_output=True, text=True)
+        if assembly:
+            cpp = [f for f in flags if f.startswith(("-I", "-D", "-U"))]
+            r = subprocess.run([compiler, "-E", *cpp, source, "-o", asm], capture_output=True, text=True)
+        else:
+            r = subprocess.run([compiler, "-S", *flags, source, "-o", asm],
+                               capture_output=True, text=True)
         if r.returncode:
             sys.stderr.write(r.stdout + r.stderr)
             return 1

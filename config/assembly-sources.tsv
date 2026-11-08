@@ -1,0 +1,7 @@
+# Owner-approved hand-written assembly sources (tools/asmsources.py). Only the project owner approves
+# a row, after reviewing the evidence that the routine was written in assembly and that no C
+# reproduces it. An agent writes one only on the owner's explicit instruction for that routine.
+# Any other `.S` file in src/ is refused by every tool that scans src/.
+# symbol	path	evidence (docs/engine/assembly-sources.md)
+FUN_00129880	src/newlib/setjmp.S	#setjmp-and-longjmp
+FUN_001298d8	src/newlib/setjmp.S	#setjmp-and-longjmp

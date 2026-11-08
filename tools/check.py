@@ -53,6 +53,9 @@ Every verified unit lands in exactly one category (tools/verify.py `category`):
   asm-body       code bytes identical because the source is the retail
                  instructions in an `asm` function: nothing recovered, so it
                  counts as neither decompiled nor matched
+  assembly       code bytes identical from an owner-approved hand-written
+                 assembly source (config/assembly-sources.tsv): recovered,
+                 but not C, so counted apart from the C figures
   mismatch       code bytes, size, jump table or object shape differ (this
                  includes smuggled data and unowned sections)
   compile        the unit does not compile
@@ -85,6 +88,7 @@ import subprocess
 import sys
 import threading
 
+import asmsources
 import buildcache
 import cc
 import srctree
@@ -324,7 +328,8 @@ def main(argv=None):
     cat_token = re.compile(r"\bcat=([\w-]+)")
     orphan_token = re.compile(r"\borphan=(\d+)")
     override_token = re.compile(r"\boverride=(\w+)")
-    CATEGORIES = ("match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "asm-body", "mismatch", "compile")
+    CATEGORIES = ("match", "code-only", "name-defect", "inventory-gap", "foreign-profile", "asm-body", "assembly",
+                  "mismatch", "compile")
 
     def classify(ok, report):
         """(category, exc, diagnostic, override) from a verify report; see the docstring.
@@ -352,7 +357,8 @@ def main(argv=None):
     cands = [(va, sz, nm, src_index[nm]) for va, sz, nm in syms if nm in src_index]
     by_name = {nm: va for va, _, nm in syms}
     asm_bodies = {nm for _, _, nm, path in cands if nm in unitprofiles.asm_body_names(path)}
-    decompiled = [nm for _, _, nm, _ in cands if nm not in asm_bodies]
+    assembly = asmsources.approved_names({nm: path for _, _, nm, path in cands})
+    decompiled = [nm for _, _, nm, _ in cands if nm not in asm_bodies and nm not in assembly]
     if a.cover_limit:
         cands = cands[:a.cover_limit]
     cover_store = buildcache.Store("check-cover", use_cache)
@@ -400,12 +406,14 @@ def main(argv=None):
         for nm, kind, exc, diagnostic, override in ex.map(cover_one, cands):
             if nm in asm_bodies and kind not in ("mismatch", "compile"):
                 kind = "asm-body"
+            elif nm in assembly and kind == "match":
+                kind = "assembly"
             categories[nm] = (kind, diagnostic)
             if override in ("unused", "redundant"):
                 stale_overrides[nm] = override
             if kind == "match":
                 matched.append(nm)
-            elif kind == "asm-body":
+            elif kind in ("asm-body", "assembly"):
                 pass
             elif kind == "compile":
                 failed.append((nm, diagnostic))
@@ -418,9 +426,10 @@ def main(argv=None):
     cover_store.save(prune=whole_tree_run and not a.cover_limit)
     print(cover_store.summary("functions compiled and compared"))
     print("code  : %d functions, %d bytes laid out in %s" % (total, code_bytes, a.symbols))
-    print("cover : %d/%d decompiled in %s/ (%.1f%%), %d match byte-for-byte, %d asm bodies not counted"
+    print("cover : %d/%d decompiled in %s/ (%.1f%%), %d match byte-for-byte, %d asm bodies not counted%s"
           % (len(decompiled), total, a.src_dir,
-             100.0 * len(decompiled) / total if total else 0.0, len(matched), len(asm_bodies)))
+             100.0 * len(decompiled) / total if total else 0.0, len(matched), len(asm_bodies),
+             ", %d hand-written assembly sources counted apart" % len(assembly) if assembly else ""))
     counts = {kind: sum(1 for k, _ in categories.values() if k == kind) for kind in CATEGORIES}
     explain = {"match": "code bytes, exception metadata and symbol rules all pass",
                "code-only": "code bytes identical, exception metadata unproven (exc=missing/extra/differ)",
@@ -428,11 +437,13 @@ def main(argv=None):
                "inventory-gap": "code bytes identical, a reference lands outside the symbol map or inside another extent",
                "foreign-profile": "code bytes identical only under a provisional override of the unit profile (config/SLUS-20836/units.tsv)",
                "asm-body": "retail instructions in an `asm` function: links identically, recovers nothing, not counted",
+               "assembly": "owner-approved hand-written assembly source, byte-identical; not C, counted apart",
                "mismatch": "code bytes, size, tables or object shape differ",
                "compile": "does not compile"}
     for kind in CATEGORIES:
         if kind == "match" or counts[kind]:
-            print("%s%-15s %6d  %s" % ("   " if kind == "match" else "!! debt: ", kind, counts[kind], explain[kind]))
+            print("%s%-15s %6d  %s" % ("   " if kind in ("match", "assembly") else "!! debt: ", kind, counts[kind],
+                                       explain[kind]))
     if stale_overrides:
         print("!! stale overrides: %d per-function row(s) the unit profile makes unnecessary (delete them): %s%s"
               % (len(stale_overrides), ", ".join(sorted(stale_overrides)[:8]),

@@ -16,3 +16,6 @@ scripts/host_details_allow.txt
 config/SLUS-20836/exceptions.txt
 config/SLUS-20836/compiler-runtime-symbols.tsv
 config/SLUS-20836/data-names.tsv
+config/assembly-sources.tsv
+tools/asmsources.py
+tools/units.py

@@ -37,6 +37,7 @@ import subprocess
 import sys
 import threading
 
+import asmsources
 import buildcache
 import exceptions as exception_records
 import srctree
@@ -578,6 +579,7 @@ def main(argv=None):
 
     made = 0
     c_units = c_bytes = body_units = body_bytes = asm_units = asm_bytes = jtbl_bytes = 0
+    hand_units = hand_bytes = 0
     for va, sz, kind, name, extra in units:
         off = va - VADDR_BASE + FILE_BASE
         raw = img[off:off + sz]
@@ -601,6 +603,9 @@ def main(argv=None):
             if use_c and name in unitprofiles.asm_body_names(csrc):
                 body_units += 1
                 body_bytes += sz
+            elif use_c and asmsources.is_assembly(csrc):
+                hand_units += 1
+                hand_bytes += sz
             elif use_c:
                 c_units += 1
                 c_bytes += sz
@@ -701,11 +706,14 @@ def main(argv=None):
     open(a.ld_out, "w").write("\n".join(script) + "\n")
     print(f"linkgen: {len(units)} units, {made} asm units written, "
           f"{len(undefined)} undefined C symbols -> {a.ld_out}")
-    total = c_bytes + body_bytes + asm_bytes + jtbl_bytes
+    total = c_bytes + body_bytes + hand_bytes + asm_bytes + jtbl_bytes
     print("linkgen: linked from C      %6d units  %9d bytes  %5.1f %% of the section"
           % (c_units, c_bytes, 100.0 * c_bytes / total))
     print("linkgen: asm bodies         %6d units  %9d bytes  %5.1f %%  (not counted)"
           % (body_units, body_bytes, 100.0 * body_bytes / total))
+    if hand_units:
+        print("linkgen: hand-written .S    %6d units  %9d bytes  %5.1f %%  (approved assembly sources)"
+              % (hand_units, hand_bytes, 100.0 * hand_bytes / total))
     print("linkgen: linked from asm    %6d units  %9d bytes  %5.1f %%"
           % (asm_units, asm_bytes, 100.0 * asm_bytes / total))
     print("linkgen: compiler tables    %6s        %9d bytes  %5.1f %%"

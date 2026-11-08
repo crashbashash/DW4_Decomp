@@ -146,18 +146,11 @@ disabling ASLR change nothing.
 
 ## Open questions
 
-* **newlib functions without C.** `memcpy`, `memmove`, `memset`, `memchr`, `memcmp`, `setjmp`
-  (`0x129880`), `longjmp` (`0x1298d8`) and the 128-bit string routines (`strcat`, `strchr`, `strcmp`
-  `0x12a4a4`, `strcpy`, `strlen`, `strncat`, `strncmp`, `strncpy`) are assembly files, not ee-gcc 2.96
-  output with a few MMI statements. 2.96 aligns every loop top with a padding `nop`, starts each object
-  on 8 bytes, fills a short loop's delay slot and loads -1 as `li`; these keep unaligned loops,
-  4-byte object starts, `bne; nop` loop ends (the form `ee-as` gives a reorder-mode `.s`) and the
-  `lui`/`ori` pair of a hand-written `li 0xffffffff`. setjmp/longjmp save `s0`-`s8`, `sp` and `ra` with
-  `sq` and keep `noreorder` slots; memcpy and memmove hold the destination in `t0`; strcat saves with
-  `sq`. Some `pcpyud` operands are live, unrelated registers, which suggests compiler output kept and
-  edited as `.S`. `__builtin_mips5900_*` casts between `V2DI` and TImode insert `por` moves. Open:
-  `strncat`, `strncmp` and `strncpy` have gcc-style loop padding, and `strncat`'s byte tail follows
-  2.9-ee-991111-01 output; a C-and-asm candidate matching under that compiler would place them.
+* **newlib functions without C.** setjmp and longjmp are hand-written assembly, approved as
+  `src/newlib/setjmp.S` ([assembly sources](assembly-sources.md)). The R5900 string and memory
+  routines (`memcpy`, `memmove`, `memset`, `memchr`, `memcmp`, and the 128-bit `strcat`, `strchr`,
+  `strcmp` `0x12a4a4`, `strcpy`, `strlen`, `strncat`, `strncmp`, `strncpy`) have no C yet. They look
+  like compiled C with MMI `asm` statements (that document's open questions has the evidence).
 * **The other Sony libraries' assembler.** Every matched function of libgraph, libdma, libipu, libcdvd,
   libpad, libsdr, libmc and libmtap matches with either assembler, so which one built them is open.
   `FUN_00114d88` also matches under `2.9-ee-990721`.
