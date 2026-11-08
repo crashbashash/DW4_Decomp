@@ -80,20 +80,20 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.hardware` | 11 | 11 | 0 | `asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py) |
 | `inline_asm.other` | 42 | 42 | 0 | every other `asm` statement: each has to show its function fails without it |
-| `unmatched.functions` | 1,873 | 1,581 | -292 | functions in the layout with no definition in src/ |
-| `unmatched.bytes` | 925,432 | 870,780 | -54652 | bytes of those |
+| `unmatched.functions` | 1,581 | 1,581 | 0 | functions in the layout with no definition in src/ |
+| `unmatched.bytes` | 870,780 | 870,780 | 0 | bytes of those |
 | `struct.a` | 140 | 140 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 300 | 300 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members. |
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 6,005 | 6,032 | **+27** | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `m2c_idiom.units` | 6,032 | 6,032 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 366 | 366 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 81,819 | 84,551 | **+2732** | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
-| `foreign_profile.functions` | 33 | 21 | -12 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
-| `foreign_profile.bytes` | 3,812 | 3,504 | -308 | bytes of those |
+| `fun_dat_refs` | 84,551 | 84,551 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `foreign_profile.functions` | 21 | 21 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
+| `foreign_profile.bytes` | 3,504 | 3,504 | 0 | bytes of those |
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 10,528 | 10,528 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
-| `profile_split.units` | 14 | 13 | -1 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
-| `profile_split.bytes` | 43,932 | 43,892 | -40 | bytes of those |
+| `profile_split.units` | 13 | 13 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
+| `profile_split.bytes` | 43,892 | 43,892 | 0 | bytes of those |
 | `opt_pragma.statements` | 12 | 12 | 0 | optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source |
 
 ## The data half
