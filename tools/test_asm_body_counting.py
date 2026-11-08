@@ -52,6 +52,21 @@ class Categories(unittest.TestCase):
         self.assertEqual(result["fully_verified"], {"functions": 1, "bytes": 16})
         self.assertEqual(result["by"]["asm-body"], {"functions": 1, "bytes": 8})
 
+    def test_assembly_counts_as_matched_but_not_as_the_oracle_match_count(self):
+        rows = {0x100000: ("assembly", "-"), 0x100010: ("match", "-"), 0x100020: ("asm-body", "-")}
+        units = [(0x100000, 32, "memcpy"), (0x100010, 16, "FUN_00100010"), (0x100020, 16, "FUN_00100020")]
+        paths = {name: "src/%s" % name for _va, _size, name in units}
+        with mock.patch.object(progress, "load_categories", return_value=rows), \
+                mock.patch.object(progress, "load_symbols", return_value=units), \
+                mock.patch.object(progress, "have_src_paths", return_value=paths), \
+                mock.patch.object(progress, "readable", return_value={"names": set()}), \
+                mock.patch.object(progress, "region_of", return_value="newlib"):
+            table = progress.region_table()
+            result = progress.categorise(units)
+        self.assertIn("| newlib | 0 KB | 75.0 % | 0.0 % |", table)
+        self.assertEqual(result["fully_verified"], {"functions": 1, "bytes": 16})
+        self.assertEqual(result["fully_matched"], {"functions": 2, "bytes": 48})
+
 
 if __name__ == "__main__":
     unittest.main()

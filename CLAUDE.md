@@ -23,7 +23,7 @@ evidence-named source that rebuilds to a byte-identical retail ELF. Run every co
   generated `asm/` tree is gitignored and a function's retail instructions are never committed in any
   wrapper. The one exception is a routine the owner has approved as hand-written assembly: its `.S`
   source is in `src/` with a row in `config/assembly-sources.tsv`, approved after the owner reviewed
-  the evidence that it was written in assembly and that no C reproduces it
+  the evidence that its original source was assembly
   ([assembly sources](docs/engine/assembly-sources.md)). Only the owner approves a row. An agent may
   write one only when the owner has explicitly told it to add that specific routine, after reviewing
   its evidence; it never adds one on its own initiative or as part of a broader request ("match
@@ -78,11 +78,13 @@ make it read well. Either can be done alone.
   `stripped` for an out-of-line destructor copy the retail linker dead-stripped);
   [emitted functions](docs/engine/emitted-functions.md). A stock library's rows
   (`whole_file`, `data`, `symbol`) are measured by `tools/whole_file_rows.py`, never typed.
-- **Progress is verified C/C++.** The headline is `functions.fully_verified` and
-  `code_bytes.fully_verified` in `docs/progress.json`: units `make check` classifies as `match`. Decompiled
-  (`matched`) adds the verification debt, and is reported as the second figure, never as the headline.
-  Nothing else earns credit: no partial score for a near miss (objdiff's fuzzy percentage included), and
-  no figure summed with asm bodies.
+- **Progress is fully matched source.** The headline is `functions.fully_matched` and
+  `code_bytes.fully_matched` in `docs/progress.json`: units `make check` classifies as `match`, plus
+  owner-approved assembly sources, whose original was written in assembly. `fully_verified` is the
+  `match` count alone, which the regression rule compares. The code-bytes-identical figure adds the
+  verification debt, and is reported second, never as the headline. Nothing else earns credit: no
+  partial score for a near miss (objdiff's fuzzy percentage included), and no figure summed with asm
+  bodies.
 - **No asm bodies.** A function without C has no file in `src/`: it links from the retail image and reads
   from the generated `asm/`. Its retail instructions wrapped in an `asm` function recover nothing and are
   not committed; `make check` files any that appear as `asm-body`, counted in no figure

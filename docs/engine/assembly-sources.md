@@ -3,8 +3,9 @@
 A few retail routines were written in assembly, not compiled. Their source is a `.S` file under
 `src/`, assembled by the same Sony EE GCC driver and `ee-as` as the C of their unit
 (`tools/eegcc_compile.py`), and verified byte for byte like any other function. `make check` puts them in
-the `assembly` category and `tools/progress.py` counts them apart: they are recovered source, but
-they are not C, so they are never in the C figures.
+the `assembly` category. The original source was assembly, so they count as matched in `README.md`,
+`PROGRESS.md` and `functions.fully_matched`. They are not C, so figures labelled C/C++ leave them out,
+as do `make check`'s `match` count and `functions.fully_verified`, which the oracle compares.
 
 ## The approval rule
 
@@ -16,14 +17,19 @@ as part of a broader request ("match everything", "clear the queue"). `tools/uni
 stops on it. The table is one of the oracle's own files (`.githooks/oracle-files.txt`).
 
 To propose a routine, write its evidence in this document's open questions and show it to the
-owner. The evidence has to show both of these:
+owner. The evidence has to show that **the original source was assembly**. Strongest first:
 
-* **It is not compiler output.** Name the instruction pattern that no compiler build the project
-  has produces, under the sources and flags tried: register saves C cannot spell, a `noreorder`
-  delay slot, an upstream assembly source.
-* **The C search is done.** List the compilers, flags and source shapes tried, with their best
-  diffs. "Looks hand-written" is not evidence. Several newlib routines once judged hand-written
-  have the structure plain C gives under 2.96 (see the open questions).
+* **The original build records it:** an object naming a `.S` source and lacking the compiler markers
+  its C siblings carry.
+* **An upstream assembly source** that the routine follows.
+* **Code no compiler produces:** instructions it never emits, or saves and restores of another
+  frame's registers.
+
+A failed C search, with the compilers, flags, source shapes and best diffs tried, can support the
+case but never makes it: it shows that C has not been found, not that the original was assembly.
+"Looks hand-written" is not evidence. Several newlib routines once judged hand-written have the
+structure plain C gives under 2.96. A function that is compiler output stays unmatched until its C
+is found, however long the search has run.
 
 An approved `.S` file follows the upstream source where there is one, keeps one routine (or one
 upstream file) per file, and spells instructions as mnemonics, never `.word`.

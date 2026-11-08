@@ -69,8 +69,9 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add PROGRESS.md docs/progress.json README.md
-          # The one-line report states C/C++ figures, with the asm bodies left out, and the
-          # fully-linked share of the section from C/C++, so the log never counts asm bodies.
+          # The one-line report states the matched figures (C/C++ and approved assembly), with the
+          # asm bodies left out, and the fully-linked share of the section from C/C++, so the log
+          # never counts asm bodies.
           git commit -m "progress: $(python3 tools/progress.py --report) [skip ci]"
           # someone may have pushed while this job ran
           git pull --rebase --autostash origin "${GITHUB_REF_NAME}"

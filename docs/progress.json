@@ -19,24 +19,24 @@
   {
    "hi": 128,
    "lo": 65,
-   "matched": 5556,
-   "matched_bytes": 528932,
+   "matched": 5558,
+   "matched_bytes": 529120,
    "total": 5717,
    "total_bytes": 544696
   },
   {
    "hi": 256,
    "lo": 129,
-   "matched": 2584,
-   "matched_bytes": 462700,
+   "matched": 2588,
+   "matched_bytes": 463440,
    "total": 2915,
    "total_bytes": 527944
   },
   {
    "hi": 512,
    "lo": 257,
-   "matched": 1132,
-   "matched_bytes": 396772,
+   "matched": 1141,
+   "matched_bytes": 399956,
    "total": 1486,
    "total_bytes": 526560
   },
@@ -123,6 +123,10 @@
    }
   },
   "foreign_orphan_bytes": 32,
+  "fully_matched": {
+   "bytes": 2650380,
+   "functions": 18720
+  },
   "fully_verified": {
    "bytes": 2646268,
    "functions": 18705
@@ -134,6 +138,7 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 4112,
+  "fully_matched": 2650380,
   "fully_verified": 2646268,
   "functions_asm_body": 0,
   "functions_assembly": 15,
@@ -345,6 +350,7 @@
   }
  },
  "functions": {
+  "fully_matched": 18720,
   "fully_verified": 18705,
   "matched": 18734,
   "named": 9419,

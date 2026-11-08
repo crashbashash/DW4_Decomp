@@ -17,8 +17,10 @@ verification, not a re-verification. Re-run `make check` to prove it again.
 
 An `asm` body (the retail instructions wrapped in an MWCC `asm` function under `#pragma
 optimization_level 0`, see docs/engine/asm-body-matches.md) counts as neither decompiled nor
-matched: every figure here is C/C++, and asm bodies are reported on their own line. The test is
-the file's content, not its folder, so an asm body anywhere under `src/` is one.
+matched, and asm bodies are reported on their own line. The test is the file's content, not its
+folder, so an asm body anywhere under `src/` is one. An owner-approved assembly source, whose
+original was written in assembly (docs/engine/assembly-sources.md), is matched: the matched
+figures are C/C++ plus those sources, and each figure labelled C/C++ leaves them out.
 
 The output is a pure function of the tree: it carries no date, revision or commit count, so a
 re-run with no source changes produces no changes (and `--check` is idempotent).
@@ -134,7 +136,7 @@ CATEGORY_EXPLAIN = {
     "asm-body": "the retail instructions in an `asm` function: links identically, recovers nothing, counted in no "
                 "figure above (docs/engine/asm-body-matches.md)",
     "assembly": "an owner-approved hand-written assembly source (config/assembly-sources.tsv), byte-identical: "
-                "recovered, but not C, so counted apart from the C figures (docs/engine/assembly-sources.md)",
+                "the original was written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md)",
     "mismatch": "code bytes, size, tables or object shape differ",
     "compile": "does not compile",
 }
@@ -188,7 +190,8 @@ def categorise(matched):
     by = {k: dict(functions=0, bytes=0) for k in CATEGORY_ORDER}
     exc = {k: dict(functions=0, bytes=0) for k in EXC_REASONS}
     result = dict(recorded=False, warning=None, by=by, code_only_by_exc=exc, foreign_orphan_bytes=0,
-                  fully_verified=dict(functions=0, bytes=0), source="data/check-categories.tsv")
+                  fully_verified=dict(functions=0, bytes=0), fully_matched=dict(functions=0, bytes=0),
+                  source="data/check-categories.tsv")
     if rows is None:
         result["warning"] = ("data/check-categories.tsv is missing: run `make check` to record the "
                              "verification categories")
@@ -221,6 +224,7 @@ def categorise(matched):
         return result
     result["recorded"] = True
     result["fully_verified"] = dict(by["match"])
+    result["fully_matched"] = {k: by["match"][k] + by["assembly"][k] for k in ("functions", "bytes")}
     return result
 
 
@@ -233,8 +237,8 @@ def collect():
     paths = have_src_paths()
     asm_body = [s for s in syms if s[2] in paths and is_asm_body(s[2], paths[s[2]])]
     asm_body_names_set = {s[2] for s in asm_body}
-    # an owner-approved hand-written assembly source (tools/asmsources.py) is recovered source, but
-    # not C: it is counted apart and never in the C figures
+    # an owner-approved assembly source (tools/asmsources.py) is matched, but it is not C: it stays
+    # out of `matched` and the other C/C++ figures
     assembly = [s for s in syms if s[2] in paths and asmsources.is_assembly(paths[s[2]])]
     have = set(paths) - asm_body_names_set - {s[2] for s in assembly}
     matched = [s for s in syms if s[2] in have]
@@ -245,13 +249,14 @@ def collect():
 
     total_b = sum(s[1] for s in syms)
     done_b = sum(s[1] for s in matched)
-    sizes_done = [s[1] for s in matched]
-    sizes_left = [s[1] for s in syms if s[2] not in have]
+    have_or_assembly = have | {s[2] for s in assembly}
+    sizes_done = [s[1] for s in matched + assembly]
+    sizes_left = [s[1] for s in syms if s[2] not in have_or_assembly]
 
     bands = []
     for lo, hi in BANDS:
         b = [s for s in syms if lo <= s[1] <= hi]
-        m = [s for s in b if s[2] in have]
+        m = [s for s in b if s[2] in have_or_assembly]
         bands.append(dict(lo=lo, hi=hi, total=len(b), matched=len(m),
                           total_bytes=sum(s[1] for s in b),
                           matched_bytes=sum(s[1] for s in m)))
@@ -367,17 +372,21 @@ def collect():
     # (A sha in the file would make every push churn one, and leave the operator's next push
     # non-fast-forward.) The workflow puts the revision in its run summary instead.
     # `matched` is a C/C++ definition in src/ whose code bytes are retail's, never an asm body;
-    # `fully_verified` is the subset `make check` classifies as `match` — the headline — and is
-    # None when the categories are not recorded.
+    # `fully_verified` is the subset `make check` classifies as `match`, the oracle's count;
+    # `fully_matched` adds the approved assembly sources and is the headline. Both are None when
+    # the categories are not recorded.
     fv = cats["fully_verified"] if cats["recorded"] else None
+    fm = cats["fully_matched"] if cats["recorded"] else None
     d = dict(
         functions=dict(matched=len(matched), total=len(syms),
                        fully_verified=fv["functions"] if fv else None,
+                       fully_matched=fm["functions"] if fm else None,
                        named=sum(1 for s in syms if named(s[2])),
                        named_semantic=sum(1 for s in syms if semantic_named(s[2])),
                        named_semantic_matched=sum(1 for s in matched if semantic_named(s[2]))),
         code_bytes=dict(matched=done_b, total=total_b,
                         fully_verified=fv["bytes"] if fv else None,
+                        fully_matched=fm["bytes"] if fm else None,
                         asm_body=asm_body_b,
                         functions_asm_body=len(asm_body),
                         assembly=assembly_b,
@@ -840,8 +849,8 @@ def readable(syms=None, paths=None, cats=None):
 
 def region_table():
     """Markdown rows: per region the code size, the share matched (C/C++ that make check classifies as
-    `match`: bytes, exception metadata and symbol rules all pass) and the share readable (matched and
-    passing every READABLE_CHECKS condition)."""
+    `match`: bytes, exception metadata and symbol rules all pass, plus owner-approved `assembly`
+    sources) and the share readable (matched and passing every READABLE_CHECKS condition)."""
     syms = load_symbols()
     paths = have_src_paths()
     cats = load_categories() or {}
@@ -850,7 +859,7 @@ def region_table():
     for va, size, name in syms:
         row = rows[region_of(va)]
         row[0] += size
-        if name in paths and cats.get(va, ("",))[0] == "match":
+        if name in paths and cats.get(va, ("",))[0] in ("match", "assembly"):
             row[1] += size
             if name in clear:
                 row[2] += size
@@ -872,7 +881,8 @@ def readme_block(d):
 
     Generated on every `make progress`, so the README holds no hand-written figure that can go
     stale; `progress --check` fails when it drifts. "Matched" is make check's `match` on C/C++
-    source; "Readable" is the matched code that also passes READABLE_CHECKS. `d` is unused: the
+    source plus owner-approved `assembly` sources; "Readable" is the matched code that also passes
+    READABLE_CHECKS. `d` is unused: the
     table reads the symbol map, src/ and data/check-categories.tsv directly.
     """
     return ("<!-- progress:start -->\n%s\n\nThe full figures and the verification debt are in "
@@ -894,28 +904,30 @@ def render_md(d):
     A = L.append
     A("# Progress")
     A("")
-    A("A snapshot of how much of `game.elf` has been rebuilt as matching C. "
+    A("A snapshot of how much of `game.elf` has been rebuilt as matching source. "
       "Regenerated by `tools/progress.py`; do not edit by hand.")
     A("")
     A("```")
     if cats.get("recorded"):
-        A("fully verified C/C++")
-        A("  functions  %s %5.1f %%   %s / %s" % (bar(pct(f["fully_verified"], f["total"])),
-                                                  pct(f["fully_verified"], f["total"]),
-                                                  format(f["fully_verified"], ","), format(f["total"], ",")))
-        A("  code bytes %s %5.1f %%   %s / %s   (make check `match`: code bytes, exception metadata and symbol rules)"
-          % (bar(pct(b["fully_verified"], b["total"])), pct(b["fully_verified"], b["total"]),
-             format(b["fully_verified"], ","), format(b["total"], ",")))
-        A("decompiled as C/C++ (code bytes identical, verification debt included — see below)")
+        A("fully matched (C/C++ and approved assembly)")
+        A("  functions  %s %5.1f %%   %s / %s" % (bar(pct(f["fully_matched"], f["total"])),
+                                                  pct(f["fully_matched"], f["total"]),
+                                                  format(f["fully_matched"], ","), format(f["total"], ",")))
+        A("  code bytes %s %5.1f %%   %s / %s   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)"
+          % (bar(pct(b["fully_matched"], b["total"])), pct(b["fully_matched"], b["total"]),
+             format(b["fully_matched"], ","), format(b["total"], ",")))
+        A("code bytes identical (verification debt included — see below)")
     else:
-        A("fully verified: (categories not recorded — data/check-categories.tsv missing or stale; run make check)")
-        A("decompiled as C/C++ (code bytes identical)")
-    A("  functions  %s %5.1f %%   %s / %s" % (bar(pct(f["matched"], f["total"])),
-                                              pct(f["matched"], f["total"]),
-                                              format(f["matched"], ","), format(f["total"], ",")))
-    A("  code bytes %s %5.1f %%   %s / %s" % (bar(pct(b["matched"], b["total"])),
-                                              pct(b["matched"], b["total"]),
-                                              format(b["matched"], ","), format(b["total"], ",")))
+        A("fully matched: (categories not recorded — data/check-categories.tsv missing or stale; run make check)")
+        A("code bytes identical")
+    identical_f = f["matched"] + b["functions_assembly"]
+    identical_b = b["matched"] + b["assembly"]
+    A("  functions  %s %5.1f %%   %s / %s" % (bar(pct(identical_f, f["total"])),
+                                              pct(identical_f, f["total"]),
+                                              format(identical_f, ","), format(f["total"], ",")))
+    A("  code bytes %s %5.1f %%   %s / %s" % (bar(pct(identical_b, b["total"])),
+                                              pct(identical_b, b["total"]),
+                                              format(identical_b, ","), format(b["total"], ",")))
     lk = d["link"]
     A("fully linked %s %5.1f %%   %s / %s bytes of the section linked from C/C++"
       % (bar(lk["from_c_pct"]), lk["from_c_pct"],
@@ -928,8 +940,8 @@ def render_md(d):
       "in no figure above" % (format(b["functions_asm_body"], ","), format(b["asm_body"], ","),
                               pct(b["asm_body"], b["total"])))
     if b.get("functions_assembly"):
-        A("assembly   : %s hand-written assembly sources, %s code bytes (%.1f %%): owner-approved `.S` "
-          "routines (config/assembly-sources.tsv), byte-identical, counted apart from C"
+        A("assembly   : %s assembly sources, %s code bytes (%.1f %%), in the matched figures above: "
+          "owner-approved `.S` routines (config/assembly-sources.tsv) whose original was assembly"
           % (format(b["functions_assembly"], ","), format(b["assembly"], ","), pct(b["assembly"], b["total"])))
     A("```")
     A("")
@@ -942,10 +954,10 @@ def render_md(d):
     A("")
     if cats.get("recorded"):
         A("`make check` classifies every decompiled unit (`tools/check.py`, committed as "
-          "`data/check-categories.tsv`). Only **match** is fully verified; the other rows are code "
-          "bytes identical to retail with something still unproven, and they are the headline's debt, "
-          "not part of it. An **asm-body** row recovers nothing, so it is outside the decompiled "
-          "figure as well.")
+          "`data/check-categories.tsv`). **match** and **assembly** are fully matched; the other rows "
+          "are code bytes identical to retail with something still unproven, and they are the "
+          "headline's debt, not part of it. An **asm-body** row recovers nothing, so it is in no "
+          "matched figure.")
         A("")
         A("| category | functions | code bytes | % of code bytes | meaning |")
         A("| --- | ---: | ---: | ---: | --- |")
@@ -1193,15 +1205,16 @@ def main(argv=None):
         lk = d["link"]
         cats = d["categories"]
         if cats["recorded"]:
-            head = ("%.1f %% of the code bytes fully verified as C/C++ (%d/%d functions), %.1f %% decompiled"
-                    % (pct(b["fully_verified"], b["total"]), f["fully_verified"], f["total"],
-                       pct(b["matched"], b["total"])))
+            head = ("%.1f %% of the code bytes fully matched (%d/%d functions), %.1f %% identical"
+                    % (pct(b["fully_matched"], b["total"]), f["fully_matched"], f["total"],
+                       pct(b["matched"] + b["assembly"], b["total"])))
         else:
             head = ("%.1f %% of the code bytes decompiled (categories not recorded)"
                     % pct(b["matched"], b["total"]))
         print("%s — %d/%d functions (%.1f %%); fully linked %.1f %% of the section from C/C++; "
               "%d asm bodies (%.1f %% of the code bytes) not counted"
-              % (head, f["matched"], f["total"], pct(f["matched"], f["total"]), lk["from_c_pct"],
+              % (head, f["matched"] + b["functions_assembly"], f["total"],
+                 pct(f["matched"] + b["functions_assembly"], f["total"]), lk["from_c_pct"],
                  b["functions_asm_body"], pct(b["asm_body"], b["total"])))
         return 0
 
@@ -1235,8 +1248,8 @@ def main(argv=None):
             open(README, "w").write(new)
             changed.append(README)
     print("progress: %.1f %% of %s code bytes, %.1f %% of %s functions%s"
-          % (pct(b["matched"], b["total"]), format(b["total"], ","),
-             pct(f["matched"], f["total"]), format(f["total"], ","),
+          % (pct(b["matched"] + b["assembly"], b["total"]), format(b["total"], ","),
+             pct(f["matched"] + b["functions_assembly"], f["total"]), format(f["total"], ","),
              "  (updated %s)" % ", ".join(os.path.basename(c) for c in changed)
              if changed else "  (no change)"))
     return 0

@@ -23,11 +23,11 @@ Run commands from the repository root. Game data and toolchains are never commit
 | CRI Sofdec | 204 KB | 57.9 % | 0.0 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
 | Sony SDK | 96 KB | 58.5 % | 0.8 % |
-| newlib | 84 KB | 95.2 % | 0.0 % |
+| newlib | 84 KB | 100.0 % | 0.0 % |
 | libgcc | 11 KB | 100.0 % | 0.0 % |
 | Metrowerks runtime | 10 KB | 29.0 % | 0.0 % |
 | Static initialisers | 10 KB | 41.5 % | 0.0 % |
-| **Total** | **3383 KB** | **76.4 %** | **8.3 %** |
+| **Total** | **3383 KB** | **76.5 %** | **8.3 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->
