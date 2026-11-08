@@ -21,13 +21,8 @@ The existing12-byte beDataBase metadata getter is preserved separately.
 
 Matching source is in [beDataBase.c](../../src/game/beDataBase.cpp) and the
 [item C](../../src/game/beNDMWItemBaseDatabase.cpp)/
-[C++ dispatch](../../src/game/beNDMWItemBaseDatabase.cpp) units. The
-[guest-address adapter](../../recovered/engine/item-database.c) passes
-**474 full-return/RAM/ordered-call comparisons** with original EE instructions.
-All290 non-padding module words execute; two padding words are checked as zero.
-Composed cases also execute all47 words of the existing property-name search,
-for337 executed instruction addresses in total. No retail output is copied into
-expectations. These are synthetic-memory tests, not live-game tests.
+[C++ dispatch](../../src/game/beNDMWItemBaseDatabase.cpp) units. The module has290
+non-padding words and two zero padding words.
 
 ## Item and virtual-selector contract
 
@@ -45,8 +40,8 @@ The concrete ability-chip selector supplies the literal `abChip`. The base
 request captures `status->_messenger` at20 once, sends
 `DATABASE / abChip / id0 / GETDATABASE`, then reads object result0 using that
 same messenger, even if the first callback changes the status field. Message
-selection/delivery and the DATABASE receiver remain controlled services; this
-checkpoint does not recover database loading or asset ownership.
+selection/delivery and the DATABASE receiver are outside this block; this
+page does not recover database loading or asset ownership.
 
 ## Flat record indices and typed storage
 
@@ -60,22 +55,20 @@ in its original private cell, re-reads column count/data and finds pointer equal
 The result is wrapped `capturedStride * record + column`. If a callback leaves
 the named object absent from the subsequently scanned array, column becomes-1
 and the multiplication is still added; this is not replaced by an unconditional
-missing-index result. Capture and live-read boundaries are checked by mutation
-fixtures. RecordColumns in matching C is a synthetic count/data prefix view;
+missing-index result. RecordColumns in matching C is a synthetic count/data prefix view;
 it does not assert a concrete serialized class or inflate recovered typing credit.
 
 Integer lookup tries signed char, then signed short, then signed int columns.
 It sign-extends the stored value and returns0 if every lookup returns-1. A stored
 negative value is still a successful lookup. Boolean lookup returns an unsigned
 byte without normalization:128 remains128. Boolean and string accessors do not
-guard a missing index, so tests preserve their before-array reads rather than
-adding a safety policy. String entries are objects with value pointer at8; a
+guard a missing index, so a missing index reads before the array. String entries are
+objects with value pointer at8; a
 null value selects the empty string at4e0858. No extra null-object guard is added.
 
 Record count chooses string columns first, then char, short, int, float and bool.
 It divides the corresponding value count by the first nonzero column count.
 All-zero columns return0; negative counts retain signed division behavior.
-Fixtures include signed overflow division and wrapped index arithmetic.
 
 ## Matching and verification boundaries
 
@@ -95,18 +88,12 @@ post-compile patching, compiler override, opaque replacement body or original
 source-spelling claim is used.
 
 ```sh
-python3 testing/test_item_database_retail.py
-python3 testing/test_object_lists_retail.py
 python3 -m unittest discover -s tools -p test_function_extents.py
 make check
 make link
 make typed-check
 ```
 
-The composed chain executes item wrappers, actual chip selection, database
-getters and property-name lookup. Messaging/DATABASE delivery and strcmp remain
-leaves. Additional leaf fixtures check full-register return forwarding, fresh
-record/value-list reads, captured messenger/stride, missing fields, scalar
-boundaries and relocated column arrays. Full chip transaction matching,
-recalculation, other lobby services and script outcomes remain in the
+Messaging/DATABASE delivery and strcmp are leaves of this chain. Full chip transaction
+composition, recalculation, other lobby services and script outcomes remain in the
 [hub recovery queue](../systems/hub-recovery.md).

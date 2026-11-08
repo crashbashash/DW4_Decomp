@@ -2,8 +2,7 @@
 
 The [factory/binding checkpoint](alias-pool-binding.md) extends
 through the complete contiguous method run **2d0560..2d163c**. Together with
-factory2cd170, this is **54 bodies /4,160 bytes**. All have readable behavioral
-recovery and original-instruction comparisons. All54 bodies /4,160 bytes have
+factory2cd170, this is **54 bodies /4,160 bytes**. All54 bodies /4,160 bytes have
 matching source in `src/engine/` and `src/unmatched/` (category `match` in
 `data/check-categories.tsv`). Seven exact virtual tails
 /160 bytes use per-unit exceptions-off settings; see
@@ -57,19 +56,18 @@ Statuses returned by the lock methods are not interpreted.
 
 Lock2d0a10 invokes retained lock132(1); unlock2d0a50 invokes124. Both use
 output-first temporary status cells. UnlockAndReturn2d0a80 preserves the supplied
-result across unlock. These helpers compose with actual wrapper/backend bodies;
-the lock implementation and OS concurrency remain controlled boundaries.
+result across unlock. The lock implementation and OS concurrency are outside this
+run.
 
 Initialize1500, Construct1540 and CopyConstruct1590 invoke their respective base
 helper, publish5313a0 and clear lock116, tracker152 and alias180. Construct also
-invokes Initialize on a non-null receiver. Base construction remains controlled;
-this does not prove complete cloning or metadata/default initialization.
+invokes Initialize on a non-null receiver. Base construction, complete cloning and
+metadata/default initialization are outside this run.
 
 Teardown15d0 releases the alias reference without clearing180, invokes current
 receiver392, then base teardown2f0030. The [exact teardown](../../src/engine/alias-pool-destruction.cpp)
-uses the low23-bit reference lifetime and genuine C++ virtual dispatch. Parent392
-must still be recovered to establish its own lock/tracker cleanup; this test does
-not supply an invented complete close implementation.
+uses the low23-bit reference lifetime and genuine C++ virtual dispatch. The
+lock/tracker cleanup of parent392 is not established here.
 
 ## Allocation backend412
 
@@ -129,25 +127,11 @@ Failure to open unlocks before releasing the file. It does not dump tracker data
 ## Verification and remaining matching work
 
 ```sh
-python3 testing/test_alias_pool_runtime_retail.py
-python3 testing/test_alias_pool_binding_retail.py
-python3 testing/test_allocator_builder_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link
 make typed-check
 ```
-
-The runtime suite executes **286 RAM/return/ordered-call cases**, covering every
-one of the **1,040 instructions** in the54 bodies. It exercises fresh construction
-through actual factory/constructor/initializer calls, persistent lock/allocate/
-reallocate/free/teardown, wrapped64-bit admission and32-bit counters, growth retries,
-null/failure paths, ownership mutation, lock replacement/destruction, signed
-statistics deltas, all12 logger arguments, output-first statuses and file failures.
-The shared interpreter's virtual tail transfers execute the original delay slot.
-Its backing allocator, base constructors, actual locks, file/print and ownership
-services remain controlled leaves. Complete-body instruction coverage does not
-establish complete game-state or hardware-threading coverage.
 
 All54 bodies /4,160 bytes match. The typed backend740 is
 `src/unmatched/igAliasMemoryPool_ManageAllocation.cpp`, lock484 is

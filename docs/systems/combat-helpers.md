@@ -6,9 +6,6 @@ The 132-byte [technique-row lookup](../../src/game/beNDMWGameRam_FindTechniqueRo
 is C; the 652-byte query and 128-byte deleting destructor share one
 [C++ compiler unit](../../src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc), now compiled together with the
 [player stat recompute](../../src/unmatched/FUN_003fab90.cpp).
-The row/query pair also has readable
-[behavioral C](../../recovered/game/combat-helpers.c) and an independent
-original-instruction comparison.
 
 The separate FightCom metadata builder and BLT attribute accessor now have
 140 bytes of matching C; see the
@@ -34,8 +31,8 @@ the output word and returns. Empty/negative counts or no match leave the output
 unchanged. Duplicate keys therefore select the first item.
 
 The actual incoming `a0` receiver is unused; player, base number and output
-occupy `a1`, `a2` and `a3`. The reference exposes only the meaningful arguments;
-incidental integer return-register contents are not part of this void projection.
+occupy `a1`, `a2` and `a3`. Incidental integer return-register contents are not
+part of its void signature.
 
 The matching body uses generated `igObjectList::_count`/`_data` and
 `beNDMWItemWaza::_baseNo`/`_recNo`. A natural indexed loop produces the original
@@ -89,29 +86,15 @@ no extra code is ignored. The symbol reader correctly handles compiler binding
 13. Exceptions are disabled for this compiler unit to suppress new unplaced
 metadata; the original retail data remains in the layout.
 
-## Verification and limits
+## Limits
 
-Run `python3 testing/test_combat_helpers_retail.py`. It executes both original
-bodies through the shared EE instruction core and compiles the recovered C
-independently. **180 row-search and 444 nearby-query cases** compare all runtime
-RAM and meaningful ordered service arguments. Callee-save register payloads and
-stack restoration are checked on the retail side. Compiler stack bytes are
-excluded. Coverage of the row/query pair includes all **195 executable words**; `0x3fc74c` is a
-reviewed zero alignment word after an unconditional jump.
-
-Fixtures cover first duplicate/missing/signed keys, negative/empty list counts,
-output aliases, allocator selection, exclusion, strict radius boundaries,
-zero/negative HP, duplicate ids, relocated growth, messenger replacement,
-reference-count wrap/destruction and null empty results. Raw float fixtures
-include adjacent radius values, signed zeros, denormals and exponent-255 values.
-Float comparisons use the existing documented EE model, adding no new hardware
-validation.
+`0x3fc74c` is a reviewed zero alignment word after an unconditional jump; the
+row/query pair has 195 executable words.
 
 Property lookup, allocator/factory, list growth/destruction and messenger
-services remain controlled boundaries. Matrix translation executes original
-versus already recovered primitive code. Appending after an allocation failure,
+services are separate dependencies. Appending after an allocation failure,
 MMU fault behavior and arbitrary aliases into compiler scratch storage are
-outside this validation. The engine's other dependencies remain separate work.
+not established. The engine's other dependencies remain separate work.
 
 The full [combat calculation callback](combat-damage.md) matches as
 `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`; the three

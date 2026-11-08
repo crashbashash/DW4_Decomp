@@ -89,41 +89,40 @@ retail route observations in the game reference remain separate evidence.
 | --- | --- | --- |
 | Scene and script ownership | Authored pack/manager roster, named-chunk resolution, startup/update/unload and both Central variants | Four core packs inventoried; full scene/receiver closure open |
 | Scripts and progression | Reviewed original-bytecode control flow for conversations, flags, quests, difficulty and return visits | Readable corpus available; exhaustive hub branch validation open |
-| Shared Lua/SD/DM engine | Complete producers/receivers, object lifetime and callback paths, matching C for game bodies | Substantial behavioral recovery; direct and indirect frontier still open |
+| Shared Lua/SD/DM engine | Complete producers/receivers, object lifetime and callback paths, matching C for game bodies | Substantial recovery; direct and indirect frontier still open |
 | Actors, collision, camera and materials | Complete relevant controller bodies and retail state comparisons | Complete recovery open |
 | Portals and stage lifecycle | Every hub transition, travel selection, return point, cancellation, preparation failure and unload | General portal services/transitions open |
 | Shop services | WPU/APU/CHIP/DISK/JUNK controller trees, stock, price, eligibility, buy/sell, results, preview, close and errors | Scripts and stock-selection preparation recovered; transactions/controllers remain open |
 | Central services | BANK/CNOS/LABO/XDATA, card/album, NPC interaction and associated record transactions | Partial shared records/menu foundations; dedicated service recovery open |
 | Saving | Save Keeper control flow, persistent payload/results, cancellation/error and reload evidence | Save format recovered; `stagIS12` save scene, `stagIS11` (CARD) / `stagIS13` (LOADCTRL2) interface scenes and a retail post-save trace open |
 | Matching verification | Zero mismatches, recovered-access baseline retained, byte-identical retail section | Required at each recovery checkpoint |
-| Behavioral coverage | Controlled fresh/return/progression/difficulty and one-to-four-player hub cases | Exhaustive hub matrix open; multiplayer stock and ownership must be included |
+| Hub case coverage | Controlled fresh/return/progression/difficulty and one-to-four-player hub cases | Exhaustive hub matrix open; multiplayer stock and ownership must be included |
 
 Recovery closure requires all reachable relevant game-code bodies to be readable
-and matched and all unresolved dispatch sites classified or resolved. A passing
-narrow oracle, source definition or decompiler output alone does not establish
+and matched and all unresolved dispatch sites classified or resolved. A source
+definition or decompiler output alone does not establish
 completion. Preserve original behavior; do not introduce a
 replacement hub or modernize the original scripts to satisfy this goal.
 
 ## Current work queue
 
 1. The alias-pool dependency beneath the Lua object/message path is matched.
-   The complete54-body method run plus factory has readable recovery and286
-   original-instruction cases, including factory/initialization, locks, event
-   tracker, accounting, ownership, diagnostics and allocation backend.
-   All1,040 instructions are exercised; backing/base/lock/file services remain
-   explicit leaves. All 54 bodies /4,160 bytes have exact source (39 in `src/engine/`,
+   The complete54-body method run plus factory covers factory/initialization, locks,
+   event tracker, accounting, ownership, diagnostics and allocation backend, in
+   1,040 instructions; backing/base/lock/file services are separate.
+   All 54 bodies /4,160 bytes have exact source (39 in `src/engine/`,
    15 in `src/unmatched/`). Exact matches include a 152-byte setter, a 108-byte
    teardown and 160 tail bytes.
    See [runtime evidence](../engine/alias-pool-runtime.md).
 2. Resolve the inventory's SD receivers and named-chunk ownership, starting with
    SUBWND's controller factory at 3d59b0 and commands at 3d60e0. The
-   [lifecycle prefix](../engine/subwindow-lifecycle.md) has full11-mode
-   behavioral recovery and1,072 retail cases, including CARD's central-area
+   [lifecycle prefix](../engine/subwindow-lifecycle.md) covers all11 modes,
+   including CARD's central-area
    return and non-STATUS shopexit.lua. The complete5,264-byte [preparation body](../engine/subwindow-preparation.md)
-   has843 retail cases, including lifecycle composition, stock tiers,
+   covers stock tiers,
    multiplayer/species selection and reference callbacks. The9,820-byte
-   [command receiver](../engine/subwindow-command.md) has272 retail cases, including status/preview snapshots and full all-mode
-   lifecycle composition. All11 manager bodies /17,616 bytes are behaviorally
+   [command receiver](../engine/subwindow-command.md) covers status/preview snapshots.
+   All11 manager bodies /17,616 bytes are
    recovered and all 11 match. Concrete
    service outcomes remain open.
    CARD has a literal front-end caller in entry808; its name does not by itself
@@ -131,33 +130,31 @@ replacement hub or modernize the original scripts to satisfy this goal.
    non-STATUS modes, including CARD and saved/card-return paths, rather than
    treating the STATUS parent as their implementation.
 3. The [generic shop-root metadata block](../engine/shop-root-metadata.md)
-   has complete seven-body behavioral recovery /416 bytes and117 retail cases;
+   is seven bodies /416 bytes;
    all seven bodies /416 bytes match: 212 bytes that include 84 under anonymous
    factory/ensure names, 12 bytes of classification/matching, the 76-byte
    accessor and the 116-byte vtable getter
    (`src/unmatched/beNDMWShopCtrl00_GetVTable.cpp`).
    The concrete class vtable53feb0 raw92 identifies update4267b0, also selected
    by the tree updater. The [root runtime/window tree](../engine/window-tree-and-shop-root.md)
-   has six complete behavioral bodies /2,980 bytes and1,057 retail cases,
+   is six complete bodies /2,980 bytes,
    including all mode factories, child binding/update/removal and the
    actual child-close helper. All six bodies match in `src/unmatched/`
    (`beNDMWWindow_RequestChildrenClose.c`, `beNDMWWindow_BindContext.cpp`,
    `beNDMWWindow_UpdateTree.cpp`, `Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`,
    `FUN_00426fa0.cpp` and `FUN_00427020.cpp`); concrete selected
    service controllers and transaction/result producers remain open. The
-   [presentation/title module](../engine/window-presentation.md) has223 retail
-   cases with actual root/tree/title close composition and all eight bodies /2,628 bytes
+   [presentation/title module](../engine/window-presentation.md) has
+   all eight bodies /2,628 bytes
    matched; concrete text/model receivers remain dependencies. Recover the
    five remaining primary service updates /16,260 reviewed bytes in hub execution
    order. The [XDATA controller](../engine/xdata-controller.md) has complete
-   behavioral update/cleanup recovery,2,501 retail cases and a verified txt_shop.lua
+   update/cleanup recovery and a verified txt_shop.lua
    binding in both core packs. Its five bodies match; its widget/chip/recalculation dependencies
    remain open. The [selector widgets](../engine/shop-selectors.md)
-   have six complete behavioral bodies /7,916 bytes and576 composed/isolated
-   retail cases, with five bodies /7,144 bytes matched and the 772-byte shared
-   update at 4233f0 `foreign-profile` (code bytes identical only under a provisional compiler override;
+   have six complete bodies /7,916 bytes, all matched (the 772-byte shared update at 4233f0 is in
    `src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp`), plus the 76 exact metadata bytes. Their SELECTCTRL
-   input/receiver and chip dependencies have behavioral recovery (sections below); the
+   input/receiver and chip dependencies are in the sections below; the
    recalculation contract remains open. Review the corresponding script branches.
 4. Close every hub transition, progression state and multiplayer-dependent branch.
 
@@ -169,22 +166,20 @@ metadata getter and inherited dispatch check also match. The occupied handler's
 complete body is 1,960 bytes in the generated extents; a 1,932-byte extent
 truncates its return.
 
-The [complete manager update/general handler](../engine/selectctrl.md) have
-readable behavioral source / 4,824 bytes (the 2,864-byte update and the
-1,960-byte handler) and 4,089 original-instruction cases.
-All 1,187 non-padding words execute, including input/confirmation/cancel/FO2TOP,
+The [complete manager update/general handler](../engine/selectctrl.md) are
+4,824 bytes (the 2,864-byte update and the
+1,960-byte handler) with 1,187 non-padding words, covering input/confirmation/cancel/FO2TOP,
 registry/work/list/string ownership and full generate/close lifecycles. Both
 bodies match (`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp` and
 `src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp`).
 
 The [original pad-record lookup](../engine/selectctrl.md#original-pad-record-selection)
-executes beneath SELECTCTRL in 216 composed cases, with 201 direct cases;
-manager coverage is 4,089, for 4,506 total. Its 88-byte body is fully recovered
-behaviorally and named from original callers/reflection; it matches as
+executes beneath SELECTCTRL. Its 88-byte body is fully recovered
+and named from original callers/reflection; it matches as
 `src/unmatched/bePadManager_GetPadForPlayer.c`.
 
-Actual pad acquisition and sampling, model execution, message services and the
-combined manager/widget/XDATA suite remain open boundaries. A read-only matching
+Actual pad acquisition and sampling, model execution and message services
+remain open boundaries. A read-only matching
 audit over 347 direct hub functions without source returned zero
 automatic matches, with eleven candidates within three instruction words.
 
@@ -194,23 +189,21 @@ Two complete dependency bodies match, **460 exact bytes**: generic object teardo
 268 and base window-controller cleanup 192. Each retains a single explicit
 four-byte register copy within readable C/C++ logic; window cleanup also retains
 its original NOP. Exact source and the byte-identical relink separately verify
-the original bodies. Existing portable adapter boundaries are unaffected.
+the original bodies.
 
 ### Owner/manager protocol composition
 
-The [joint oracle](../engine/selector-manager-composition.md) routes common
-shop-selector requests through the real SELECTCTRL handler/update and pad lookup,
-then the real empty-queue close helpers: 144 lifecycles / 3,146 checkpoints across
-four players and all returned indices 0..6. It verifies actual result/completion
-publication, pending waits, cancellation, rejection recovery and FO2TOP busy/
-ready behavior. Immediate delivery and primitive/model/device services remain
-controlled; actual ShopSelect initialization, XDATA transactions, nonempty close
-queues and complete script/dispatch closure remain open. It adds no matching bytes.
+The [owner/manager protocol](../engine/selector-manager-composition.md) routes common
+shop-selector requests through the SELECTCTRL handler/update and pad lookup, then
+the close helpers, across four players and all returned indices 0..6. It describes
+result/completion publication, pending waits, cancellation, rejection recovery and
+FO2TOP busy/ready behavior. Actual ShopSelect initialization, XDATA transactions
+and complete script/dispatch closure remain open.
 
 ### Shared ListCtrl paging and chip-view helpers
 
 All five [paging/view helper bodies](../engine/list-controller-chip-view.md)
-match / 2,196 bytes, with 3,149 original-instruction cases: previous/next page and
+match / 2,196 bytes: previous/next page and
 chip page counting 864 bytes, the arrow initializer 260 and chip RefreshText
 1,072. The contiguous three-method ListCtrl block is 916 bytes and the full chip
 count/text block is 1,280 bytes. Register bindings and a small explicit scheduling
@@ -225,22 +218,18 @@ execution and other lobby services remain open.
 
 ### Chip transaction controller
 
-The [complete chip update](../engine/chip-controller.md) has behavioral
-source for 7,232 bytes and 1,076 original-instruction comparisons. All 1,761 reachable
-non-padding words execute; 47 padding/static-dead words are checked. Actual page
-count and context binding compose in 18 cases. Inventory rebuilding, equipped
+The [complete chip update](../engine/chip-controller.md) is 7,232 bytes: 1,761 reachable
+non-padding words and 47 padding/static-dead words. Inventory rebuilding, equipped
 preview restoration, notice/confirmation, current-record increment and fresh
 XDATA debit are recovered. Item/status/recalculation/message/script and selector
-execution remain controlled dependencies; full hub acceptance remains open.
-The update is `foreign-profile` in `data/check-categories.tsv`
-(`src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`): its code bytes
-are identical to retail only under a provisional compiler override, not under its unit profile.
+execution remain dependencies; full hub acceptance remains open.
+The update matches in `src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`.
 
 ### Item/database lookup and return ABI
 
 The [ten-body lookup chain](../engine/item-database.md) is exact / 1,168 bytes:
 952 bytes beside three 72-byte wrappers whose explicit return/status contracts
-are part of the match. The 474-case oracle composes concrete chip
+are part of the match. The chain composes concrete chip
 selection, database readers and existing property-name lookup. Delivery through
-the DATABASE receiver remains controlled. The index finder's extent includes its
+the DATABASE receiver remains open. The index finder's extent includes its
 full 192-byte return span.

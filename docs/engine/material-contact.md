@@ -8,12 +8,7 @@ receiver registration, recursive contact search, message dispatch and two metada
 box-membership leaf at `0x0018b630` also match. The per-instance update at `0x0038b1f0` is the one
 function of the module without matching source; see [Open items](#open-items).
 
-Two behavioral references sit beside the matched source:
-[`recovered/engine/material-contact.c`](../../recovered/engine/material-contact.c) for the seven
-helpers and [`recovered/engine/material-runtime.c`](../../recovered/engine/material-runtime.c) for
-the controller lifecycle. They are readable behavioral C checked against the original instructions.
-Behavioral recovery is not matched-code coverage, and it does not establish whole-frame or general
-portal acceptance.
+None of this establishes whole-frame or general portal acceptance.
 
 ## Receiver and module boundary
 
@@ -69,7 +64,7 @@ Both lists expose their element buffer at +16. The +32 existence bytes are read 
 stride of one; treating them as four integer elements would read unrelated fields. The generated
 reflection header declares them as `unsigned char _wkPlExist[4]` (an `igBoolArrayMetaField`). The
 matched `beMatCtrl_IsAllPlayer` and `beMatCtrl_GetPlayerNo` read the bytes through a local byte
-view of the receiver, and the behavioral reference preserves the same byte accesses.
+view of the receiver.
 
 The manager's `_isLuaCallDisp` byte enables debug formatting of Lua calls. Each RAM instance has an
 `_isRun` byte at +20 and a state word `_st0` at +24, followed by `_st1`, `_st2` and `_st3`.
@@ -93,7 +88,7 @@ callback's mask.
 
 ## Material producer and receiver lifecycle
 
-The [material runtime reference](../../recovered/engine/material-runtime.c) recovers the five
+The sections below cover the five
 nontrivial bodies of the method group `0x0038af70..0x0038bed0`: initialization, receiver
 registration, recursive contact accumulation, per-instance update and message dispatch, plus the
 box-membership leaf. The [Lua dependency inventory](lua-dependencies.md) includes the five as
@@ -113,25 +108,33 @@ in the original EE registers.
 ### Per-instance update
 
 Each RAM instance's `_isRun` byte (+20) gates its update (`0x38b1f0`). Any `_st0` (+24) other than
-1 recreates Work, allocates two zeroed integer mask lists and an enabled run-flag byte list sized
-to the material data count, clears the player-existence bytes and publishes `_st0=1` plus zero
+1 recreates Work at instance +44 (`0x359480`), allocates two integer mask lists sized to the material
+data count at info +32 and appends them to Work's list at +12, filled from the zero words at
+`0x4c8f70` and `0x4c8f78`. It sizes Work's run-flag byte list at +8 to the same count and fills it from
+the enabled byte at `0x5549d0`, clears the player-existence bytes and publishes `_st0=1` plus zero
 `_st1/_st2/_st3`. This initialization does not also run contact callbacks in that tick. The
 allocator fallback is controlled by the byte at `0x554c14`.
 
-Active update clears the write mask buffer, selects PLAYER/GETMATRIX results, reconstructs the four
-existence bytes and converts each selected matrix to a point, then runs the recursive search for
-each.
+Active update retains slot 0 of Work's mask list as the current buffer and slot 1 as the previous one,
+and clears the current buffer from the word at `0x4c8f80`. It selects PLAYER/GETMATRIX results
+(`0x38e670`), reconstructs the four existence bytes (a byte is set when any result's player id equals
+that player) and, for each result whose player exists, converts the selected matrix to a point
+(`0x38f630`, `0x190a30`) and runs the recursive search with the root node at info +36.
 
 The current and previous buffers are retained and published on the manager before Lua executes.
-For each enabled material with any changed player bit, update sets the callback material index,
+For each enabled material, in order, update tests players 0 to 3 with `(word & bit) == bit` on both
+buffers. On the first player whose result differs it sets the callback material index,
 resets the requested activation index to -1 and the activation byte to 1, formats its authored
-name as `%s.lua`, clears global MDL object `0x58a1e0`, and invokes Lua once. The first differing
+name as `%s.lua` (a null name uses the empty string at `0x4e0858`), clears global MDL object `0x58a1e0`, and invokes Lua once
+(`0x389ff0`, with the manager's owner at +36). The first differing
 player ends the search, so simultaneous changes do not multiply callbacks. Debug formatting runs
 only when `_isLuaCallDisp` is exactly 1.
 
-After each callback, an in-range requested index changes its run-flag byte; noncanonical values are
+After each callback, a requested index other than -1 that is within the run-flag list changes its
+run-flag byte; noncanonical values are
 retained. Disabling a later material affects that same tick's remaining traversal. The work's two
-list references then swap, with retains before releases and the low-23-bit destruction rule
+list references then swap (slot 0 receives the previous buffer, slot 1 the current one, each store
+guarded by the list's count), with retains before releases and the low-23-bit destruction rule
 preserved.
 
 ### Recursive contact search
@@ -139,16 +142,15 @@ preserved.
 Recursive search (`0x38b080`) admits inclusive X ranges, requires the box query to return exactly 2
 before setting a material/player bit, and visits children even when a parent's box fails. A range
 miss skips its whole subtree. Index -1 is a search-only node. The original reads material/mask
-cells before the mask-store range guard; the reference preserves that order rather than adding a
-bounds policy absent from retail.
+cells before the mask-store range guard, with no other bounds policy.
 
 ### Box membership
 
-The leaf at `0x18b630` (`dw4_material_box_contains` in the runtime reference) checks point X/Y/Z
+The leaf at `0x18b630` checks point X/Y/Z
 against the box's min vector at +8/+12/+16 and max vector at +20/+24/+28, inclusively and in axis
-order. It returns only 0 (outside) or 2 (inside). The reference uses the established EE
-float-comparison model; signed zeros and denormals compare as zero, and exponent-255 inputs retain
-the documented model's finite interpretation. This is an original-instruction comparison, not a
+order. It returns only 0 (outside) or 2 (inside). The comparison follows the
+[EE float rules](action2-timing.md#floating-point-is-not-host-floating-point): signed zeros and
+denormals compare as zero, and exponent-255 inputs are finite values. That model is not a
 hardware measurement.
 
 ### Message dispatch
@@ -210,34 +212,6 @@ A comparison with the GameCube and Xbox updates shows different load placement
 there; it does not close the USA boundary either. The regional and platform targets are retired
 and their comparison tooling is not in the repository.
 
-## Verification
-
-`python3 testing/test_material_contact_retail.py` compiles the behavioral C with host warnings as
-errors, executes the original seven helper functions through the EE instruction interpreter and
-compares returns and all RAM writes. There are **61,549 cases**: every four-player
-current/previous contact mask and existence roster, three selected material indices with
-distracting neighboring masks, noncanonical true bytes, high masks, wrapped variable shifts and
-activation byte truncation. No callee is stubbed: these seven functions only access RAM. The
-interpreter is an offline instruction oracle, not a running-game capture.
-
-`python3 testing/test_material_runtime_retail.py` passes **3,055 cases**:
-
-- **1,047 whole-function cases** comparing the five original lifecycle bodies with the reference,
-  including integrated update-to-recursive-search execution. Each checks returned values, every
-  runtime RAM byte and ordered meaningful callee arguments; compiler stack/scratch storage is
-  excluded. The matrix covers initialization states, growth and unrolled-fill boundaries,
-  noncanonical run/debug bytes, all four-player contact transitions, persistent buffer swaps with
-  reordered/duplicate selector results, activation bounds and byte values, allocator branches,
-  low-23-bit reference destruction, recursive X boundaries, wrapped shift 31 and all message arms.
-  In these cases platform allocation/list services, matrix queries, box membership, formatting and
-  Lua execution are explicit controlled leaves.
-- **2,000 direct box comparisons** with no callees.
-- **Eight full update/search runs** through the original box instructions versus the recovered C
-  box function, which remove the controlled box-result boundary for that route.
-
-The float comparison uses the documented EE arithmetic model, whose hardware-validation limit
-still applies.
-
 ## Open items
 
 - **The update main body (`0x0038b1f0`, 3,064 bytes) has no matching source.** The C++ candidate
@@ -255,7 +229,6 @@ still applies.
   the previous-word compare first), compiled with the five-scope owner frame and the pinned
   alternate compiler, leave 13, 13, 13, 15 and 13 main-body words different, against the
   goto-shaped candidate's ten, with the same register gap.
-- **Controlled leaves in the runtime oracle.** Matrix queries, allocator and list services,
-  formatting, Lua execution and receiver registration are controlled leaves rather than recovered
-  contracts, and the remaining constructor/framework services are not recovered. The full engine
-  dependency chain is not complete until they are.
+- **Engine services.** Matrix queries, allocator and list services, formatting, Lua execution and
+  receiver registration are not described here, and the remaining constructor/framework services
+  are not recovered. The full engine dependency chain is not complete until they are.

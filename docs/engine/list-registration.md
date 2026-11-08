@@ -3,9 +3,7 @@
 **32 complete bodies / 2,092 code bytes** cover metadata
 allocation/readiness, publication callbacks, vtable access, initializer forwarding,
 registrar tuples, the three inherited schema callbacks and default element selectors.
-[Portable behavior](../../recovered/engine/list-registration.c) composes with the
-original metadata, descriptor-copy and callback-array implementations. The two
-specialization bodies delegate to their existing recovery rather than duplicate it.
+The two specialization bodies are those of the [descriptor copy page](list-descriptor-copy.md).
 
 All 32 bodies / 2,092 bytes have matching source. Two reviewed parent getters
 add **24 newly classified and matched bytes**. The four vtable getters of 60 bytes,
@@ -31,7 +29,7 @@ code and function count increase 24 bytes/two functions; retail bytes are unchan
 All four registrars preserve their original eleven-argument tuples, size 20, callback
 addresses and feature-initialization calls. The RAM-list registrar has no own field
 adder and appends its original dependency table at `4c7b98`; the beBaseInfoRam
-registration callback reached from it remains a controlled gameplay/type boundary.
+registration callback reached from it remains a gameplay/type boundary.
 
 `igDataList_InitFields` (`2c8600`, 160) captures the inherited count, creates three
 fields from constructor table `4c1380` and selects the third. It supplies the
@@ -62,9 +60,7 @@ same distinct behavior. The two parent-publication leaves at `143720` and
 allocation or registration.
 
 Vtable getters initialize the original temporary object header, stamp their own
-table and read through object-system offset 916. The adapter reserves 320 scratch
-bytes for the temporary and shared registration operations. Tests compare the
-defined result, not incidental temporary stack contents.
+table and read through object-system offset 916.
 
 ## Default element descriptor instances
 
@@ -77,29 +73,18 @@ These are the default `igUnsignedCharMetaField`, `igObjectRefMetaField` and
 `igIntMetaField` descriptor instances. In particular, the raw data-list element
 selector is unsigned char, not the separate `igCharMetaField` class. The independent
 class record for handle `585760` and the provider's original load establish this.
-The scalar publication/class-initialization bodies remain controlled in this
-checkpoint; fixtures supply descriptor ABI views with their observed tables,
-value sizes and ownership.
+The scalar publication/class-initialization bodies are outside this page.
 
 ## Verification and integration
 
 ```sh
-python3 testing/test_list_registration_retail.py
-python3 testing/test_list_descriptor_copy_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link
 make typed-check
 ```
 
-**48 original-instruction RAM/defined-return/ordered-call checkpoints** cover all
-32 bodies, allocation-only reuse, ready/cached registration, vtable-offset access,
-published aliases, default-selector cache hits/misses and the complete original
-Work deferred-registration path. The fixture allocator supplies unique metadata,
-descriptor, list, default and callback allocations, avoiding synthetic metadata
-rows or shared allocation addresses.
-
-The end-to-end path proves six valid metadata objects: base object, Work, data
+Work's deferred registration produces six valid metadata objects: base object, Work, data
 list, object list, integer list and RAM list. Work has eight fields, each list has
 five and size 20, with the real inherited names and offsets. The raw/object/integer
 `_data` descriptors are distinct, have distinct default buffers, select the correct
@@ -109,7 +94,7 @@ storage; their shared name has three references. Work's two child-type pointers
 match the registered integer/RAM metadata. Repeated Work initialization performs
 no further allocation.
 
-Fifteen independent dependency regressions verify reviewed getter words/extents,
+`testing/test_lua_engine_dependencies.py` checks reviewed getter words/extents,
 registrar callback arguments and unsigned-byte selector identity. These extend
 explicit roots without inventing edges through generic dispatch.
 
@@ -122,4 +107,4 @@ and other Lua-dependent gameplay receivers remain active work.
 The [memory-value follow-up](memory-field-values.md) now connects this metadata
 to actual Work and child-list instances, populates strings/integers/retained
 references and executes original final release. Array allocation and wider
-allocator/type/publication services remain controlled.
+allocator/type/publication services are outside it.

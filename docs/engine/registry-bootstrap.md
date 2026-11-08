@@ -1,7 +1,6 @@
 # Registry bootstrap and allocator-context lookup
 
-**17 complete bodies / 1,512 bytes** are recovered in
-[registry-bootstrap.c](../../recovered/engine/registry-bootstrap.c): six contiguous
+**17 complete bodies / 1,512 bytes** are covered here: six contiguous
 registry-list methods, global registry initialization/shutdown, current context and
 five adjacent context dispatch wrappers, and two concrete record-lookup methods.
 Fifteen bodies /1,448 bytes have exact source. New list init104/release116/append168
@@ -35,21 +34,20 @@ Release (`2fa540`) skips null list/data. A non-null data buffer is freed through
 current system allocator slot264. A positive signed low16-bit delete flag then
 frees the header through `2fa6e0`, which reloads the current system allocator. The
 routine returns the original list pointer and does not clear its fields. The
-allocate/delete wrappers (`2fa6c0`/`2fa6e0`) directly tail-dispatch slots216/264.
+allocate/delete wrappers (`2fa6c0`/`2fa6e0`) each read the current system allocator
+and tail-dispatch its slots216/264 with their single argument.
 The existing forward `IndexOf` method remains the same original72-byte routine.
 
 Global initialization (`2f2180`) allocates/initializes the primary list, publishes
 `586f58`, appends the supplied root allocator and clears its byte7. It then
-allocates/initializes the empty secondary list and publishes `586f60`. Original
-allocation failures do not acquire new guards in the adapter: the comparison
-fixture preserves the original calls/writes without asserting safe live-game OOM
-behavior.
+allocates/initializes the empty secondary list and publishes `586f60`. Allocation
+failures have no further guards, which does not make live-game OOM behaviour safe.
 
 Shutdown (`2f2200`) releases the current primary then current secondary list with
 delete flag1, clears both globals and invokes root allocator slot392. Publication
 is reloaded before releasing the second list, so a callback can change it. The
-slot392 implementation remains external; the oracle checks that both globals are
-already zero when it is called.
+slot392 implementation remains external; both globals are already zero when it
+is called.
 
 ## Current context and wrappers
 
@@ -90,32 +88,17 @@ on the first match, invokes the context's **current** slot92. It reloads that
 vtable after string comparison callbacks. Thus it does not implement an independent
 name-based allocation path or search every parent context's names.
 
-## Verification and remaining work
+## Remaining work
 
-`python3 testing/test_registry_bootstrap_retail.py` compares **191** original-instruction
-RAM, defined-return and ordered-call cases across all17 bodies. Tests cover64-slot
-initialization, four-slot growth, signed16 deletion flags, failure call behavior,
-callback-time capacity/count/allocator/publication changes, real global lifetime,
-context modes/slots, selector bounds/presence/special requests, recursive parent
-lookup and repeated-parent prevention, and null/empty/first/last/mutating names.
-
-`python3 testing/test_memory_field_values_retail.py --registry-bootstrap` passes
-**116** checkpoints through actual registry creation, real metadata registration,
-populated Work/list lifetime, runtime header copying and registry shutdown. Default
-and named lookup use the original46-record algorithms. Context record contents and
-allocator virtual behavior are still fixture inputs. This mode replaces the old
-pointer-shaped value at `587040` with valid fixture selector2; it does **not** claim
-that2 is the game's published metadata selector. Prior modes keep their113/114
-checkpoint counts.
+Default and named lookup use the 46-record algorithms above. The selector value the
+game publishes at `587040` is not established; selector2 here is only the default.
 
 Twenty dependency tests independently check startup/teardown call sites, global
 publication, list dispatch slots, context constructor/vtable receiver bindings and
 prior engine contracts. Four reviewed producer/receiver roots add these required
 paths without inventing virtual edges. Retail objdump also confirms their shapes.
-Matching, relink and typed checks remain independent of these behavioral
-oracles.
 
-The subsequent context lifecycle recovery covers original record-name initialization,
+[Context lifecycle](context-lifecycle.md) covers record-name initialization,
 retained slot updates, and special208/212 delegation/removal. The slot204 builder,
 context-stack manipulation, allocator virtual internals/close hook, type/scalar
 publication, actual cloning and broader gameplay remain open.

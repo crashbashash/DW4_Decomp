@@ -1,10 +1,10 @@
 # Messenger memory initialization and reset
 
-The complete contiguous four-body group at `38bee0..38ca40` has readable
-[behavioral C](../../recovered/engine/messenger-memory.c): initialization, two
+The complete contiguous four-body group at `38bee0..38ca40` holds
+initialization, two
 temporary reference-owner destructors and reset, totaling 2,904 code bytes.
-The same adapter includes the 28-byte `beMessenger::vfunc_26` reset forwarder,
-for five bodies / 2,932 bytes. All five
+With the 28-byte `beMessenger::vfunc_26` reset forwarder,
+that makes five bodies / 2,932 bytes. All five
 bodies match: the forwarder in [beMessenger.cpp](../../src/game/beMessenger.cpp), initialization in
 [beMessenger_InitializeMemory.cpp](../../src/unmatched/beMessenger_InitializeMemory.cpp), reset in
 [beMessenger_ResetMemory.cpp](../../src/unmatched/beMessenger_ResetMemory.cpp), and the two destructors as
@@ -37,7 +37,9 @@ slot gets a newly constructed object. Replacement retains the new object,
 releases the previous slot, rechecks the list count before storing, then releases
 temporary ownership. The original loop still constructs every requested object
 if a destructor changes count during replacement; a failed range check suppresses
-that slot's store. Recovery preserves these service boundaries and reloads.
+that slot's store. One initialization therefore makes 101 direct factory calls: five
+argument contexts (the current one and the four pool elements), 64 work records and
+32 delay records.
 
 Allocator choice is repeated for the initial context and for each pool element.
 The function asks `301000` for the receiver's allocator, then uses the global
@@ -48,9 +50,8 @@ implementations remain separate dependencies.
 Initialization clears nesting count (+36), then sets `_isMemoryAssign` (+48) to
 one. It retains the registry/group list (+20) and freeze clock (+40). The function
 itself is unconditional; its callers use the initialized flag when deciding
-whether to invoke it. The oracle checks both normal initialization and repeated
-direct initialization. Controlled factory null results are propagated by this
-layer; this does not establish the factories' failure/retry policy.
+whether to invoke it. A null factory result is propagated by this
+layer; the factories' failure/retry policy is not established.
 
 ## Reset and temporary ownership
 
@@ -74,47 +75,19 @@ omitted the argument despite the original call using incoming a0. The corrected
 signature preserves all 28 original bytes. The two destructors match as
 compiler-emitted members of the units named above.
 
-## Verification and integration
+## Verification and remaining work
 
 Run from the repository root:
 
 ```sh
-python3 testing/test_messenger_memory_retail.py
-python3 testing/test_messenger_lifecycle_retail.py
-python3 testing/test_messenger_dispatch_retail.py
-python3 testing/test_messenger_results_retail.py
 make check
 make typed-check
 make link
 ```
 
-The memory oracle compares original instructions against the recovered adapter
-for every body, including defined returns, all RAM outside temporary stack frames,
-factory counts and ordered service calls. **254 cases** cover pool counts at
-reserve boundaries (64/65, 32/33, 4/5), global/receiver allocator selection and
-callback-driven switching, null factory results, temporary reference counts,
-old-slot destructor mutation, repeated initialization, reset lists with
-0/1/4/8/9/17 elements, capacity 4/32, count mutation during release, signed deletion
-flags and null owners/references.
-
-Persistent integration executes original memory initialization together with real
-recovered [selection/dispatch](messenger-dispatch.md) and
-[lifecycle](messenger-lifecycle.md): initialized-flag checking, cold selection,
-immediate queries, enqueue/expiry, context push/pop, reset and reinitialization.
-The fixture's factories create distinct work records, delay records and complete
-argument contexts in disjoint storage, allowing the actual upper engine bodies
-to run. Assertions confirm the original 64/32/4 pool counts and 101 direct factory
-calls (five argument contexts, 64 work records, 32 delay records).
-
-Object factories, registry behavior, list resize/reserve/mutation, pool/interner,
-allocator/delete and concrete receiver handlers remain controlled. Factory
-fixtures supply layouts required by the callers; they are not recovered factory
-implementations. In particular, transitive constructor/destructor ownership and
+Transitive constructor/destructor ownership and
 allocation failure policy remain open. Complete engine recovery is not
 established by this subgroup. Next work includes actual
-factories/registry, lower-service composition and concrete receivers.
-
-The subsequent [creation recovery](object-creation.md) executes the original
-factory and shared reflection/construction/lifetime bodies through this memory
-lifecycle. Its integration metadata and concrete field operations are controlled.
-The standalone memory suite above retains its declared whole-factory boundary.
+registry behaviour, lower services and concrete receivers.
+[Object creation](object-creation.md) covers the
+factory and shared reflection/construction/lifetime bodies.

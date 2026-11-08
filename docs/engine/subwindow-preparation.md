@@ -1,16 +1,13 @@
 # SUBWND work and shop-stock preparation
 
 The complete **3d8740..3d9bd0 / 5,264-byte** preparation body called by the
-[service-menu lifecycle](subwindow-lifecycle.md) is recovered. The readable
-[guest-reference implementation](../../recovered/engine/subwindow-preparation.c)
-passes **843 original-instruction RAM/ordered-call cases**, including composition
-with the lifecycle for all eleven modes. All **1,222 executable instructions**
-run. The94 remaining words are zero padding excluded by Ghidra's address ranges
+[service-menu lifecycle](subwindow-lifecycle.md) is recovered, with **1,222 executable
+instructions**. The94 remaining words are zero padding excluded by Ghidra's address ranges
 in the generated [reviewed extents](../../data/function-extents.json).
 
-This is behavioral recovery, with **zero new matching bytes**. Database access,
+It matches as `src/unmatched/FUN_003d8740.cpp`. Database access,
 record lookup, item construction/initialization, list operations, allocation and
-destruction are controlled services. It does not implement prices, buy/sell,
+destruction are separate services. It does not implement prices, buy/sell,
 service transactions or NPC menus.
 
 ## Work, currency and player selection
@@ -20,7 +17,7 @@ Missing RAM `_work`44 is constructed through3b5ec0. Allocation first queries
 224-byte private frame's temporary at220 holds a retained reference; the old
 RAM work is released before publication and the current temporary is released
 afterward. The published work is cached before that last release. Destruction
-callbacks may change RAM or temporary storage; the adapter preserves that order.
+callbacks may change RAM or temporary storage between these steps.
 
 Every mode queries GAMERAM GETPLAYER separately for all four slots. A nonzero
 **ISUSE byte** includes the player in the participant count and caps signed BIT
@@ -86,28 +83,14 @@ choice. Weapon/armor initialization receives item,id,owner,player-zero level;
 chip initialization receives item,id only. The current temporary is appended
 through301e30, then the current temporary is released with the low23-bit rule.
 Callbacks can replace the temporary between initialization, append and release.
-The adapter preserves the original full-width database result and distinguishes
-`0xffffffff` from the64-bit missing sentinel.
+The database result is used at full width, so
+`0xffffffff` is distinct from the64-bit missing sentinel.
 
 ## Verification and remaining work
 
 ```sh
-python3 testing/test_subwindow_preparation_retail.py
-python3 testing/test_subwindow_lifecycle_retail.py
 python3 tools/test_function_extents.py
 ```
 
-Cases cover every level/investment boundary, species0..16, participant masks,
-all11 modes, both allocators, work construction/publication, reference-count
-boundaries, nonempty-list caching, callback-changed list/property/temporary
-storage and full-width item IDs. Persistent open/tick/close cases execute both
-the original preparation and lifecycle, compared with both recovered bodies.
-The expected execution does not copy retail output into the recovered result.
-
-The original compiler's exact output remains unbanked. Adjacent128-byte scoped
-reference cleanup candidates reproduce body size and all but five instruction
-words; explicit C and an emitted C++ destructor retain different scheduling.
-Those private probes receive no matching credit. The
-[command receiver](subwindow-command.md) now has complete behavioral recovery.
-Continue exact matching and concrete service-controller/result paths and stock
+Continue the concrete service-controller/result paths and stock
 services, against the [full hub completion contract](../systems/hub-recovery.md).

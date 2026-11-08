@@ -1,14 +1,12 @@
 # SUBWND command receiver
 
-The entire **3d60e0..3d873c / 9,820-byte** receiver is recovered.
-The readable [guest-reference implementation](../../recovered/engine/subwindow-command.c)
-passes **272 original-instruction RAM/return/ordered-call cases**. All **2,434
-executable instruction addresses** run. Its21 internal alignment NOPs are excluded
+The entire **3d60e0..3d873c / 9,820-byte** receiver is recovered, with **2,434
+executable instruction addresses**. Its21 internal alignment NOPs are excluded
 from Ghidra's actual body ranges; a further zero word at3d873c separates the
 function from [preparation](subwindow-preparation.md) at3d8740.
 
-Together with the [lifecycle](subwindow-lifecycle.md) and preparation, this finishes
-readable behavioral recovery of the11-body SUBWND manager region /17,616 code
+Together with the [lifecycle](subwindow-lifecycle.md) and preparation, this makes up
+the11-body SUBWND manager region /17,616 code
 bytes. All 11 bodies /17,616 bytes match (`src/game/beNDMWStatus.c`,
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_29.cpp`,
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_31.cpp`,
@@ -64,7 +62,7 @@ PLAYERNAME is a reference object reached through the property/list/data graph.
 It is placed in private frame word396, retained and appended to TEXTCTL's
 STWINFONT02/font000. The temporary is reloaded **after** the text-prefix callbacks
 and again for final release. Capturing its value before those callbacks changes
-the original behavior. The adapter uses a400-byte private guest frame, preserving
+the original behavior. The routine uses a400-byte private frame holding
 all text buffers, reference cells and preview-vector addresses.
 
 LEVEL is signed and capped above999 for display. The shinka database maps
@@ -106,7 +104,7 @@ then sends TEXTCTL COLOR using these exact RGB bit patterns:
 | Lower | 3f70a3d7 | 3ecccccd | 3e800000 |
 | Higher | 00000000 | 3f75c28f | 3f800000 |
 
-No host floating-point arithmetic is needed to reproduce these constants. Their
+Their
 private vector cells are384,368,...,224 in the400-byte frame. Values/colors are
 captured before formatting callbacks; the baseline pointer is reloaded for each
 stat. This receiver does not apply equipment or purchase anything.
@@ -117,12 +115,9 @@ those two properties. It does not restore the other eleven stat records here.
 Both paths cache work before their first argument callback and keep reloading
 the parameter list through that cached work.
 
-## Evidence, matching and remaining work
+## Matching and remaining work
 
 ```sh
-python3 testing/test_subwindow_command_retail.py
-python3 testing/test_subwindow_preparation_retail.py
-python3 testing/test_subwindow_lifecycle_retail.py
 python3 testing/test_lua_engine_dependencies.py
 python3 tools/test_function_extents.py
 make check
@@ -130,16 +125,7 @@ make link
 make typed-check
 ```
 
-The receiver cases cover all seven commands/defaults, all11 modes, all four
-selected players, distinct run bytes, null/non-null roots, parameter capacities0
-through13, signed level/experience/preview limits, reference boundaries and
-callback-changed work/list/messenger/name/gift storage. Stateful sequences run
-Generate → actual lifecycle/preparation → UPDATE → preview → restoration → data
-results → removal → actual lifecycle finalization for every service mode.
-Formatting, enum lookup, messages, records, list resizing and other concrete
-controllers remain controlled services. Expected execution does not copy retail
-output into the recovered result. Live UI, transactions and persistence
-are not accepted by these tests.
+Live UI, transactions and persistence are not established by this body.
 
 The generated extent changes the previous dispatcher-grown9,824-byte split to
 its actual9,820-byte return span. The final padding word becomes ordinary data:

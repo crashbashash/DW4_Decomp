@@ -1,15 +1,15 @@
 # Model-sequence JUMP and WCHECK
 
-The contiguous four-body group `0x00394ae0..0x00394f98` is behaviorally
-recovered in `recovered/frontend/modelwait.{c,h}`.
-These are executable references, not newly byte-matched compilation units.
+The contiguous four-body group `0x00394ae0..0x00394f98` implements these commands.
+All four match: `FUN_00394ae0`, `FUN_00394b30` and `FUN_00394bf0` in one-function files
+under `src/unmatched/`, and the adjacent `igObject::vfunc_39`.
 
-| Entry | Bytes | Reference contract after API |
+| Entry | Bytes | Contract |
 |---|---:|---|
-| `0x00394ae0` | 68 | `mw_jump(owner, work, command)` calls owner vtable `+0x8c` with the command name (`command+8`), using the empty string if null; returns 1 regardless of the virtual result |
-| `0x00394b30` | 180 | `mw_start(owner, work, command)` interns the command name, releases the previous `work+0x4c` string and assigns the new one; returns 0 |
-| `0x00394bf0` | 920 | `mw_update(owner, info, node, work)` polls the wait condition, clears the wait string before resuming dispatcher `0x00395250` |
-| `0x00394f90` | 8 | `mw_noop` is the adjacent empty body, already named `igObject::vfunc_39` |
+| `0x00394ae0` | 68 | JUMP, `(owner, work, command)`: calls owner vtable `+0x8c` with the command name (`command+8`), using the empty string if null; returns 1 regardless of the virtual result |
+| `0x00394b30` | 180 | WCHECK start, `(owner, work, command)`: interns the command name, releases the previous `work+0x4c` string and assigns the new one; returns 0 |
+| `0x00394bf0` | 920 | WCHECK update, `(owner, info, node, work)`: polls the wait condition, clears the wait string before resuming dispatcher `0x00395250` |
+| `0x00394f90` | 8 | The adjacent empty body, already named `igObject::vfunc_39` |
 
 The start/update signatures differ: start receives the work as its second
 argument, while update receives it as its fourth. Strings use full-word
@@ -32,27 +32,12 @@ The movement query completes only when its **low byte is zero**. A result of
 Action and keeps movement waiting. On completion, string assignment to null
 finishes before the dispatcher call; a new wait installed by that call survives.
 
-## Verification
+## Limits
 
-```
-python3 scripts/verify_modelwait.py --elf orig/SLUS-20836/SLUS_208.36
-```
-
-The verifier compares **988 calls** against original retail instructions,
-covering all **294 instruction addresses** across the four bodies. It compares
-ordered meaningful engine calls, ordered non-stack writes, final memory, and
-defined returns. Cases include null names, pool initialization/failure, old
-string counts (including high bits and wraparound), every name branch, non-Boolean
-query results, waiting ticks, completion, replacement, and dispatcher re-entry.
-Function boundaries and instructions were cross-checked with MIPS objdump.
-The test uses distinct interned-string and literal addresses to exercise content
-comparison. It does not pass null to strcmp: the caller must invoke update only
-with a pending wait.
-
-Allocation, string operations, strcmp, messenger, movement query, virtual slots
-and `0x00395250` remain explicit leaves. The test verifies caller behavior, not
-the original implementation of those leaves. No animation clock, rendering,
-audio, or whole-menu equivalence follows from these checks.
+Update has no null guard before `strcmp`: the caller must invoke it only with a
+pending wait. Allocation, string operations, strcmp, messenger, movement query,
+virtual slots and `0x00395250` are callees of these bodies, not part of them. No
+animation clock, rendering, audio, or whole-menu equivalence follows from this page.
 
 ## Logo sequence program
 
@@ -73,6 +58,4 @@ and validation. This slice does not establish retail action timing or pixels.
 
 `make check` reports zero mismatches and every split unit round-trips;
 `make link` is BYTE-IDENTICAL and `make typed-check` matches its baseline.
-The load-interface verifier retains 11 direct + 432 message + 1,045
-update cases, including, two-argument `0x003de260`, and Cross/Circle behavior.
 No console comparison covers this slice.

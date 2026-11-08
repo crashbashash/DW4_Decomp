@@ -1,8 +1,6 @@
 # Messenger delayed delivery and argument contexts
 
-Ten complete lifecycle bodies (4,476 code bytes) have readable
-[behavioral C](../../recovered/engine/messenger-lifecycle.c), backed by original
-instructions and reflection. They cover argument clearing, delay-record reuse,
+Ten complete lifecycle bodies (4,476 code bytes) cover argument clearing, delay-record reuse,
 initialization checking, expiry updates, enqueue and context push/pop. The six
 bodies at `38e8f0..38f0e0` form a contiguous enqueue/nesting block; the adjacent
 clear functions are `38ca40..38cff0`. Initialization/update retain their existing
@@ -46,12 +44,12 @@ matrix, with widths 1/4/4/8/12/64. Capacity above four may shrink to four.
 
 String-list clearing replaces each token through the original null-intern service,
 releasing the previous token before publishing its replacement. It captures count
-before the loop and computes each slot before the service calls. A controlled
-non-null result from null interning is preserved by this layer. Object-list
+before the loop and computes each slot before the service calls. A non-null
+result from null interning is published unchanged by this layer. Object-list
 clearing releases all retained references, then re-reads count and backing storage
 for the zeroing pass. Only afterward is count cleared and capacity reconsidered.
-The string channel precedes the object channel. Recovered C preserves this order
-and the callbacks' opportunity to change counts/pointers.
+The string channel precedes the object channel, and callbacks can change
+counts/pointers between these steps.
 
 Delay reset clears use/deadline, replaces group, information and message strings,
 clears the numeric selector and clears the owned argument context. It retains
@@ -77,22 +75,21 @@ remain separate operations.
 When memory is assigned and the delay stack count is nonzero, update captures its
 initial count and current clock. With freeze clock zero, it repeatedly examines
 the first record. An inactive record or future deadline stops delivery. For each
-expired record, it selects the recorded receivers using the real recovered
-[selection implementation](messenger-dispatch.md), swaps argument contexts,
-dispatches the recorded message, resets the expired record, removes it from the
-front and appends it as an unused spare. It then releases temporary ownership.
+expired record, held under a temporary reference, it selects the recorded receivers through
+[`38d860`](messenger-dispatch.md), swaps argument contexts, dispatches the recorded
+message through `38e060`, resets the expired record through `38ce70`, removes it from the
+front and appends it as an unused spare through `301e30`. It then releases temporary ownership.
 The current argument context is cleared at the end of the update.
 
 A receiver may enqueue while dispatch is suspended. Newly queued messages can
 run during this update if already due, but the original captured count bounds
 the total iterations. The update uses its captured clock even if the receiver
-changes the system clock. Tests exercise both behaviors through actual original
-nested enqueue and dispatch bodies, with a controlled concrete receiver callback.
+changes the system clock.
 
 With a nonzero freeze clock, update shifts deadlines in the active prefix by
-`currentClock - freezeClock`, stops at the first inactive record, and updates the
-freeze clock. It dispatches no receivers on that path. Uninitialized or empty
-stacks skip the update entirely; the recovery preserves those original conditions.
+`currentClock - freezeClock`, stops at the first inactive record or the captured count,
+updates the freeze clock and clears the current argument context. It dispatches no
+receivers on that path. Uninitialized or empty stacks skip the update entirely.
 
 ## Context nesting
 
@@ -101,44 +98,22 @@ entry and inserts the prior context at the front; the nesting count increments.
 Pop first clears the current context, restores the first saved context, removes
 that front entry and appends the prior context as a spare; the nesting count
 decrements. Both paths balance object references around assignment and list
-ownership. These bodies assume usable spare contexts and do not introduce a host
-bounds policy or overflow fallback.
+ownership. These bodies assume usable spare contexts and have no bounds check or
+overflow fallback.
 
 ## Validation and remaining dependencies
 
 Run from the repository root:
 
 ```sh
-python3 testing/test_messenger_lifecycle_retail.py
-python3 testing/test_messenger_dispatch_retail.py
-python3 testing/test_messenger_results_retail.py
 make check
 make typed-check
 make link
 ```
 
-The lifecycle suite passes **464 original-instruction RAM/defined-return/ordered-call
-comparisons** across all ten bodies. It executes the real recovered
-selection/dispatch alongside clearing, enqueue, expiry and nesting. Cases cover
-all eight channels, 0/1/4/8/9/17 elements, string/object lifetime edges,
-destructor count mutation, relocated shrink buffers, null-intern return propagation,
-64-bit delay high words and wraparound, negative/equal/future deadlines,
-freeze/resume clock shifts, initialized/empty stacks, persistent enqueue/delivery,
-1/2/3-context push/pop and receiver-driven nested enqueue. Explicit assertions
-prove the receiver callback ran, iteration bounds held and captured-clock behavior
-was exercised. Temporary stack addresses are normalized across nested frames;
-all other RAM and ordered leaf calls are compared.
-
-List mutation/reserve, pool/interner, allocator/delete, memory initialization,
-registry/factories and concrete receiver callbacks remain controlled leaves.
-This validates the engine lifecycle itself; it does not prove those lower
-contracts, concurrency or a real wall-clock unit.
-Real list/pool/chunk composition remains a next integration step. Concrete
+Concrete
 virtual receiver implementations and group registry behavior remain recovery
 work, together with the expiry update `38d0a0`, which has no C source yet, and broader
-Lua dependencies.
-
-The subsequent [memory recovery](messenger-memory.md) covers original initialization
-and reset, with a cold integration oracle through this lifecycle. Factory internals
-and lower services remain controlled; the standalone lifecycle suite above retains
-its declared initialization leaf.
+Lua dependencies. A real wall-clock unit for the delay constant and any concurrency
+contract are not established. [Messenger memory](messenger-memory.md) covers
+initialization and reset.

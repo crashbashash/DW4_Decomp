@@ -4,8 +4,8 @@ All persistent player/world state (LEVEL, EXP, HP, BIT, items, flags, …) is
 stored as **named property records** inside the GAMERAM object graph, accessed
 by string key. This is the layer the `SYS*` script functions use.
 
-The complete list/lookup group now has [behavioral source and original-instruction
-verification](object-lists.md), including two corrected historical search labels.
+The complete list/lookup group is described in [object lists](object-lists.md),
+including two corrected historical search labels.
 
 ## Core lookup — `0x3022c0`
 ```asm

@@ -1,7 +1,6 @@
 # Metadata construction, ownership and registry indexing
 
-Ten complete behavioral bodies / 1,216 code bytes are in
-[metadata-bootstrap.c](../../recovered/engine/metadata-bootstrap.c): the contiguous
+This page covers ten complete bodies / 1,216 code bytes: the contiguous
 metadata constructor/initializer/copy/release run, metadata factory, name setter,
 index assignment, registry append, pointer search and base header copy dependency.
 Eight bodies / 988 bytes have exact source. Initialization (284) and naming (148)
@@ -29,8 +28,7 @@ constructor `2eab70` stamps vtable `5327d0`; its allocation size is 16 bytes.
 Independent retail opcode/table checks connect that factory to the metadata
 constructor. Buffer +8 / count +12 are the already observed internal ABI, distinct
 from the reflected `igMetaFieldList` layout. This identifies the runtime class;
-it does not claim an original C++ declaration. The actual list factory and buffer
-allocation remain controlled in this checkpoint's metadata composition.
+it does not claim an original C++ declaration.
 
 `igMetaObject_Init` (`2fd820`, 284) runs the original object header initializer,
 sets vtable and all observed metadata defaults: version 1.0, persistence 1,
@@ -41,8 +39,8 @@ source. Initialization assumes a fresh object; it does not release previous list
 
 The initializer ensures the string pool, interns null, then reads/releases the
 current pool-name token and publishes the interner result. The read occurs after
-the callback, which matters under mutation. No copy/pool/default allocation policy
-is synthesized from these defaults.
+the callback, which matters under mutation. These defaults imply no copy/pool/default
+allocation policy.
 
 ## Names and ownership
 
@@ -51,13 +49,13 @@ the supplied name, reads the current token after that callback, releases it and
 publishes the captured result. Token release subtracts one at token -4 and, on
 zero, calls chunk release with owner word at token -8 and header pointer token -8.
 An existing canonical token is retained by the interner before the prior field
-reference is released; an explicit alias case checks stable ownership.
+reference is released, so ownership stays stable when both names share a token.
 
 `igMetaObject_ReleaseLists` (`2fd980`, 136) decrements the field-list reference and
 calls object destruction if its low 23 bits become zero. It then re-reads the child
 list pointer and applies the same release. It neither clears these member cells
 nor releases other metadata members. A first destructor can change which child
-list the second operation sees; the oracle includes that case.
+list the second operation sees.
 
 `igMetaObject_CopyConstruct` (`2fd940`, 60) delegates to base header copy, stamps
 vtable and clears name and pool name. Other metadata fields are not copied by this
@@ -79,43 +77,22 @@ The append wrapper executes its original delay-slot registry load and tail-calls
 already recovered retaining append increments the object's reference before the
 vector append. Pointer search `2ea820` (68) captures buffer +8 and signed count +12,
 returns the first equal pointer's index, or -1 for empty/negative/missing ranges.
-The final vector append/growth primitive remains controlled.
+The final vector append/growth primitive is described in
+[internal pointer lists](internal-object-lists.md).
 
-## Verification and composition
+## Verification and remaining work
 
 ```sh
-python3 testing/test_metadata_bootstrap_retail.py
-python3 testing/test_reflection_registration_retail.py --metadata
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link
 make typed-check
 ```
 
-**214 original-instruction RAM/defined-return/ordered-call cases** cover all ten
-bodies, composed object header/raw allocation, factory modes and handle reloading,
-header/copy flags including self-copy, pool creation, callback-time name mutation,
-canonical alias retention, reference count flags, list aliasing/destructor mutation,
-negative list counts and registry replacement during insertion.
+Registering Work produces a pooled class name, version 1, persistence 1, an assigned
+registry index, one registry entry and exactly one final metadata reference.
 
-**487 registration cases** additionally compose original metadata factory,
-initialization, pooled naming, registry pointer search and retaining insertion,
-plus original concrete Work descriptor factories, default hooks and storage
-wrappers. Executed-entry assertions cover all seven metadata entries reached by
-registration. The original Work path produces a pooled class name, version 1,
-persistence 1, index zero, one registry entry and exactly one final metadata
-reference, alongside all previously checked descriptor schema/default assertions.
-
-The internal field-list factory, type queries, base-class registration, allocator
-virtual methods/table population, interning, vector append/growth, profile and
-other system services remain controlled. Runtime CreateInstance is still a lower
-boundary in this module's standalone oracle. Other generic descriptors in the
-registration suite remain synthetic. Full object-system bootstrap, original
-instance composition, further schemas, memory/array fields and gameplay receivers
-remain required work.
-
-The `--internal-lists` registration mode now also executes the original internal
-field-list factory, constructor, buffer allocation and growth. See
-[internal pointer lists](internal-object-lists.md) for current coverage and lower
-allocator/byte/type boundaries. The standalone metadata oracle retains its
-controlled list factory to isolate that module.
+The internal field-list factory, constructor, buffer allocation and growth are
+described in [internal pointer lists](internal-object-lists.md). Full object-system
+bootstrap, further schemas, memory/array fields and gameplay receivers remain
+required work.

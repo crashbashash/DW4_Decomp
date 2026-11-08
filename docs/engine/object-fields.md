@@ -4,22 +4,21 @@ Three separate [reference helpers used by the combat callback](../systems/combat
 also have 316 bytes of matching C. They share the packed low-23-bit destruction
 rule; their original template/type identities remain unknown.
 
-Fourteen complete bodies (1,676 code bytes) have readable
-[behavioral C](../../recovered/engine/object-fields.c): the contiguous four-body
+Fourteen complete bodies (1,676 code bytes) are covered here: the contiguous four-body
 cleanup/persistence run at `2ffc10..2fff90`, concrete reference assignment and
 construction/destruction/reset, shared zero/clear helpers, construct-flag and
 metadata count/index getters.
 
-Thirteen bodies (1,292 bytes) have exact source. Eight reference-field bodies (748 bytes)
+All fourteen bodies have exact source. Eight reference-field bodies (748 bytes)
 are consolidated in [ref-field-lifecycle.cpp](../../src/engine/ref-field-lifecycle.cpp),
 using reflected receiver fields and explicitly documented header/virtual-slot ABI
 views. Assignment adds **168 matched bytes** and construction adds **220**; six
 prior matches are preserved with corrected types/signatures. The existing
 [metadata count](../../src/engine/igMetaObject_GetFieldCount.c) and
 [index](../../src/engine/igMetaObject_GetFieldAt.c) getters contribute 36 bytes.
-Of the four generic cleanup/persistence bodies, `2ffc10`, `2ffcb0` and `2ffd40` (508 bytes)
-match in one-function files under `src/unmatched/`; `igObject_WritePersistentFields`
-(`2ffe10`, 384 bytes) has no C source yet.
+The four generic cleanup/persistence bodies, `2ffc10`, `2ffcb0`, `2ffd40` and
+`igObject_WritePersistentFields` (`2ffe10`, 384 bytes), match in one-function files
+under `src/unmatched/`.
 
 ## Generic cleanup and field-table traversal
 
@@ -63,10 +62,10 @@ Reference destruction uses the low 23 bits of the full header word at object +4.
 Construction skips when `_construct` is zero. Otherwise a nonempty `_poolName`
 uses named allocator lookup, falling back to the enclosing instance's allocator
 on a missing result; an absent/empty name directly uses that enclosing allocator.
-It creates `_metaObject` through the recovered shared creation path, assigns it
+It creates `_metaObject` through the shared creation path, assigns it
 through the actual reference setter and balances the temporary factory reference
-when either ownership flag is set. Flags are re-read after assignment. No new
-allocation-failure or alias policy is added.
+when either ownership flag is set. Flags are re-read after assignment. There is no
+allocation-failure or alias check.
 
 Destruction alone does not clear the member. Clear/reset releases according to
 `_refCounted` and then computes its zeroing destination. The shared zero/clear
@@ -77,8 +76,8 @@ view declares ABI positions and must not be instantiated; it is not a recovered
 original C++ inheritance declaration.
 
 The `_construct`, `_destruct` and `_refCounted` flags are independently observed
-conditions. Recovery does not collapse them into a single host ownership rule or
-assert that every tested combination occurs in retail class descriptors.
+conditions. They do not collapse into a single ownership rule, and not every
+combination is known to occur in retail class descriptors.
 
 ## Persistence size and write behavior
 
@@ -98,48 +97,26 @@ provider's slot 208 processes those two words.
 The writer visits non-base fields whose `_persistent` byte is **exactly one**
 and `_isRunTime` byte is zero. It calls the existing field-write dispatcher and
 advances by its returned byte count. It recomputes and returns serialized size
-at the end rather than returning the output cursor distance. Tests deliberately
-change size contributions during writing and persistence during the pre-write
-hook: header size, final size and bytes written can differ under such callbacks.
-The recovery preserves that behavior. Context type-ID lookup, actual field writes
-and byte-swap primitives remain controlled in this oracle.
+at the end rather than returning the output cursor distance. Header size, final size
+and bytes written can therefore differ when callbacks change size contributions during
+writing or persistence during the pre-write hook.
 
-## Validation and ownership graph
+## Validation and remaining work
 
 Run from the repository root:
 
 ```sh
-python3 testing/test_object_fields_retail.py
-python3 testing/test_owned_field_graph_retail.py
-python3 testing/test_object_creation_retail.py
-python3 testing/test_messenger_interned_registry_retail.py
 make check
 make typed-check
 make link
 ```
 
-The standalone suite passes **230 original-instruction RAM/defined-return/
-ordered-call cases across all fourteen bodies**. It covers base-prefix skipping,
-captured-count/new-buffer iteration, vtable mutation, write proxies/persistence,
-header byte order, repeated size computation, ownership flags, aliasing/nulls,
-allocator selection/fallback, constructor balance, low-23-bit release, destination
-mutation and low-16-bit fill sizes. Defined size/getter returns and RAM/call order
-are compared; incidental void-return register contents are excluded.
+With `_construct=1`, `_destruct=1` and `_refCounted=0`, a parent's final release through
+[object destruction](object-creation.md) frees each owned child once and zeroes the
+parent's slots.
 
-A separate graph suite passes **six persistent creation/final-release checkpoints**
-for parents with zero, one or three owned children. Shared
-[object construction/destruction](object-creation.md), concrete reference fields,
-generic cleanup and retained-list final release all execute real recovered bodies.
-The metadata is synthetic: constructed/destructed ownership uses `_construct=1`,
-`_destruct=1`, `_refCounted=0`. Assertions prove child pointers/reference counts,
-instance counts, one free per object, zeroed parent slots and list publication.
-There is no whole-reference-field construction or destruction stub in that path.
-Allocator, unrelated virtual hooks and byte fill remain controlled.
-
-The graph does not establish the original messenger class field tables. Existing
-cold-messenger integrations retain their prior controlled payload constructors
-and concrete cleanup boundaries. Original registrar/descriptor recovery and
-composition into those actual class layouts remain necessary. Serialization
+The original messenger class field tables are not established. Original
+registrar/descriptor recovery remains necessary. Serialization
 helpers, concrete string/memory fields and broader Lua gameplay receivers also
 remain open. These verified families do not establish complete Lua-dependent engine recovery.
 
@@ -151,8 +128,6 @@ vtable snapshot establishes their entry addresses. The inventory treats them as
 explicit evidenced roots, not invented direct edges from generic virtual calls.
 Original runtime class-descriptor construction still requires further recovery.
 
-The subsequent [string-field recovery](string-fields.md) adds actual scalar string
-ownership and raw codecs plus common reset/write dispatch. Its owned-string
-oracle executes concrete field construction/defaulting and final release through
-this generic lifecycle with real pool storage; original runtime class descriptors
+[String fields](string-fields.md) cover scalar string ownership and raw codecs plus
+common reset/write dispatch; original runtime class descriptors
 remain a separate recovery requirement.

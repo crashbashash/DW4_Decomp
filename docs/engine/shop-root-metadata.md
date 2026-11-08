@@ -1,9 +1,7 @@
 # Generic shop-root factory and metadata
 
 The complete contiguous six-body **3b8d90..3b8f4c** `beNDMWShopCtrl00` metadata block
-(404 code bytes) and its 12-byte published parent accessor at 3b65b0 are recovered. The
-[guest-reference implementation](../../recovered/engine/shop-root-metadata.c)
-passes **117 original-instruction RAM/return/ordered-call cases**, executing all
+(404 code bytes) and its 12-byte published parent accessor at 3b65b0 are recovered:
 **104 instruction addresses** across the seven bodies /416 bytes.
 
 All seven bodies /416 bytes have exact source. The 76-byte lazy
@@ -62,7 +60,7 @@ this full eleven-argument tuple to `igMetaObject_RegisterClass`:
 | 8–10 | Zero: no own field-adder or extra callback vector |
 
 The first eight arguments use EE registers; the remaining three are64-bit stack
-slots0/8/16. The oracle checks all eleven, not just register arguments. The
+slots0/8/16. The
 registrar returns the shared callback-state address rather than discarding it;
 the corrected C signature retains exact original bytes.
 
@@ -86,9 +84,8 @@ The reference fields are `_subWindow`, `_mother`, `_textCloseTypeList`,
 It reads the result through the captured system's byte offset916 into the
 temporary, republishes53feb0 and invokes [cleanup3b6430(temporary,0)](window-object-lifetime.md). The captured
 result is returned even if cleanup changes the same temporary cell. Uninitialized
-non-reference fields are not silently zeroed by the adapter. Tests translate the
-incoming private frame before either execution; no retail output is copied into
-the recovered result. Header construction and cleanup remain controlled services.
+non-reference fields are not zeroed. Header construction and cleanup are separate
+services.
 
 The ordinary vtable at53feb0 has the two-word RTTI header. Its raw byte92
 contains update4267b0 (RTTI-array vfunc index21); tree update3f6490 loads byte92
@@ -98,29 +95,21 @@ Do not mix these raw offsets with header-free GetVTable-slot numbering.
 ## Evidence and remaining matching work
 
 ```sh
-python3 testing/test_shop_root_metadata_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link
 make typed-check
 ```
 
-Cases include null/replaced handles, all validity-bit combinations, allocator and
-instance-result boundaries, full registrar results/stack arguments, alternative
-system offsets, header-time offset changes and cleanup-time temporary mutation.
-Shared registration/instance creation/header/cleanup are explicit leaves; this
-suite proves the seven adapter bodies under those service contracts.
-
 The lazy76-byte body now matches with one explicit retail padding NOP and a
 label preserving the null branch's direct entry at the registration call. The
-non-null/not-ready path executes the NOP; all104 module instructions remain
-covered by the oracle. This follows the existing matching convention,
+non-null/not-ready path executes the NOP. This follows the existing matching convention,
 without claiming the original C++ source spelling. The116-byte vtable getter matches in
 [beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp). No opaque assembly replacement body is used. The matched accessor retains its
 original no-op within readable C++ under the established project convention.
 
-The [root runtime and common window tree](window-tree-and-shop-root.md) now have
-complete behavioral recovery. The116 metadata bytes and the six runtime bodies
+The116 metadata bytes and the six bodies of the
+[root runtime and common window tree](window-tree-and-shop-root.md)
 match. Continue with actual shop
 subcontrollers, price/item services and transaction results. The
 [full hub goal](../systems/hub-recovery.md), dedicated LABO/CARD roots and separate

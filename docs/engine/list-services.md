@@ -1,9 +1,7 @@
 # Shared list growth, mutation, search and reference bridges
 
 The twelve-body shared primitive run at `0x2d6670..0x2d6e60` (1,956 code bytes)
-and four retained-reference bridges (584 bytes) now have complete readable
-[behavioral C](../../recovered/engine/list-services.c). All sixteen bodies are
-compared with original instructions, including their nested calls to each other.
+and four retained-reference bridges (584 bytes) are covered here.
 Three matched bodies are folded in [matching source](../../src/engine/list-services.c);
 the pre-existing eight-byte -1 default remains under its generic name. Ten
 further bodies match in per-function files under `src/unmatched/`. The two range
@@ -48,9 +46,14 @@ reserve even when capacity already suffices, then publishes count. It supplies
 no negative-count guard of its own; callers establish their respective admission
 rules. Overflow/nontermination behavior is not replaced with a host clamp.
 
-Range insertion permits indices through count, requires a positive range length,
-grows if needed, reloads the new buffer, moves the existing tail and copies the
-input. Append range follows the same growth rule. Removal validates the index,
+Range insertion (`0x2d6810`) takes the list, index, range length, input pointer and
+element stride; `0x2d6b80` takes the same first four with the stride fixed at four. Both do
+nothing unless the index is between zero and the current count inclusive and the length is
+positive. The new count is the old count plus the length: above capacity, resize
+(`0x2d6790`) grows the list and publishes it; otherwise the routine stores it directly.
+They then reload the buffer, move the tail up by `length * stride` bytes when the index is
+not the old count, and copy `length * stride` input bytes to the index position.
+Append range follows the same growth rule. Removal validates the index,
 moves the tail if needed and decrements the re-read count. Search is retail's
 comparator-driven midpoint loop plus final candidate check: it returns an actual
 matched index or -1, not an insertion position or a first-duplicate guarantee.
@@ -69,36 +72,12 @@ calls carry both allocator and token-header address.
 Object append retains at object +4 before either storing in spare capacity or
 calling word append. Its retaining semantics are separate from the word append
 primitive, which always calls resize. Allocation and interning failure routing
-remain their owning services' contracts; the reconstruction preserves the
-observed list operations rather than adding new recovery policy.
+remain their owning services' contracts.
 
-The reference adapter's allocation scratch is a dedicated four-byte guest
-temporary. When composing it with messenger string append, it must not alias
-the caller's live string-token temporary. The integration harness now models
-those separate retail frames explicitly.
-
-## Verification and remaining work
-
-`python3 testing/test_list_services_retail.py` passes **1,350 whole-function
-return/RAM/ordered-call cases** across every body. It covers zero/shrink/grow
-reserve, 4/1,024 capacity boundaries, strides 1/4/12/64, descriptor unit masking,
-range admission, relocation, tail movement, empty/missing/duplicate searches
-and string/object retains/releases. Metadata getters, allocation/free, byte
-copy/move/fill, comparator and string-pool operations remain controlled leaves
-in this standalone test. The deeper messenger comparison now executes the
-[recovered pool/table bodies](string-pool.md), retaining chunk/allocator/byte/
-synchronization service boundaries.
-
-The messenger oracle now executes original versus recovered list reserve,
-resize, word append and all three retaining/string-resize bridges, alongside
-real matrix copying. All **1,178 messenger cases** pass with that deeper
-composition. Controlled list results have been replaced by metadata/allocator/
-byte/pool boundaries. This does not establish full receiver selection, scene
-publication or gameplay behavior.
+## Remaining work
 
 String copy (52 bytes) and word append (84 bytes) now match the retail compiler,
-adding **136 verified code bytes**. Their initial decompiler drafts had invalid
-output typing or omitted incoming call arguments. Object append's existing
+adding **136 verified code bytes**. Object append's existing
 88-byte match is retained. Ten further bodies match in `src/unmatched/`;
 `List_InsertBytes` and `List_InsertWords` have no C source yet.
 

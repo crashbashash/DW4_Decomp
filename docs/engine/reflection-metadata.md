@@ -12,9 +12,8 @@ offset + type**.
 
 ---
 
-The [registration/descriptor recovery](reflection-registration.md) supplies
-full behavioral source, 487 original-instruction comparisons and the original
-Work schema path. Its lower factory/type/vector/system boundaries remain explicit.
+[Registration and descriptor construction](reflection-registration.md) covers the
+registrar, the descriptor builders and the original Work schema path.
 
 ## 1. The registrar: `igMetaObject_RegisterClass`
 

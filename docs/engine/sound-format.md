@@ -158,8 +158,8 @@ and the embedded `STAGIS10.sfp` start cue.
 
 ## Pre-lobby selection mapping
 
-The complete `beSeCtl` runtime group (`0x0039c900..0x0039cb6c`) is represented in
-[`sectl.c`](../../recovered/frontend/sectl.c). Its action dispatcher at
+The complete `beSeCtl` runtime group (`0x0039c900..0x0039cb6c`) has matching source.
+Its action dispatcher at
 `0x0039c990` selects the **last** matching `beSeInfoData` model name, walks every
 matching `beSeData` action, then sends `MODELCTRL(model, slot)` / `SETSOUND` with
 sound-name and signed-16 delay converted to float. This binds sound to model
@@ -184,12 +184,7 @@ These delays are zero. AREA620 / NDMW806 option value sequences `SQ_LINERTxx` /
 are separate. Available `CURSOR_CHANGE` and `CURSOR_DECIDE3` clips have no
 `beSeData` selection mapping in this pack and are not substitutes.
 
-Run `python3 scripts/verify_sectl.py --elf orig/SLUS-20836/SLUS_208.36` from the
-repository root: **392 retail/C comparisons**, 150 instruction addresses,
-ordered stores/calls, duplicate model/action rows, absent/null names, initialization,
-and signed delay extremes. The oracle stubs messaging and integer-to-float leaves;
-it verifies dispatch, not downstream audible timing or mixing. This is behavioral
-recovery and adds no byte-matched `src/` coverage.
+This covers dispatch, not downstream audible timing or mixing.
 
 ## Resident sequence-to-waveform resolution
 

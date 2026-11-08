@@ -1,8 +1,7 @@
 # Inherited list storage-descriptor construction and copying
 
-This recovery covers **eleven complete bodies / 1,468 code bytes**, all with exact
-matching source, plus portable guest-reference behavior in
-[list-descriptor-copy.c](../../recovered/engine/list-descriptor-copy.c).
+This page covers **eleven complete bodies / 1,468 code bytes**, all with exact
+matching source.
 Four new exact functions add **800 bytes**: base descriptor copy 300, memory clone 116
 and two native list field-specializers 192 each. The latter 384 bytes were previously
 unclassified data gaps; the analysed Ghidra snapshots now identify both callbacks.
@@ -53,8 +52,8 @@ ref-counting, memory type/size, reset, release and alignment values. It does not
 retain those borrowed type/parent pointers or copy the cleared derived members.
 
 These are constructor paths, not safe assignment helpers. Self-copy can clear
-its source name and overwrite its source-default pointer before byte copying.
-The oracle preserves that instruction behavior instead of adding alias protection.
+its source name and overwrite its source-default pointer before byte copying;
+there is no alias protection.
 Padding and unwritten members retain their prior contents.
 
 ## Construction and clone modes
@@ -64,10 +63,8 @@ the normal runtime vs bootstrap switch. Cold construction runs the existing base
 reference-field constructor, stamps `532a50`, clears the two derived pointer cells
 and performs the initializer chain. Memory initialization sets ref-counting and
 release flags, zero memory size/type, reset method 3, alignment -1 and shallow-copy
-method 2. The adapter extends the concrete factory module rather than duplicating
-its ancestor implementation. The current factory oracle covers 24 bodies / 2,368
-bytes in 336 cases; 23 bodies / 2,292 bytes match, with header initializer 76 retained
-as its existing compiler residual.
+method 2. The [concrete factory module](field-factories.md) spans 24 bodies /
+2,368 bytes, all matching.
 
 Cold `igMemoryRefMetaField_Clone` uses default raw allocation (`2ff800`) for 80 bytes
 and invokes the complete copy chain when allocation is non-null. A null allocation
@@ -100,7 +97,8 @@ cell, then runs the original finalize/retaining-replace helper. Finally it relea
 the clone-owned temporary reference. It does not add null/name/copy fallback checks
 or replace the captured metadata handle after provider callbacks.
 
-The parent retains the original descriptor; the child owns the clone. This avoids
+The parent retains the original descriptor; the child owns the clone, which has its own
+default buffer with matching bytes and shares the name token. This avoids
 mutating the shared parent's element information. Later generic layout finalization
 is responsible for updating field parent/index information where appropriate.
 The element-provider implementations and full inherited `igDataList` schema remain
@@ -109,32 +107,15 @@ required recovery work.
 ## Verification and remaining work
 
 ```sh
-python3 testing/test_list_descriptor_copy_retail.py
-python3 testing/test_field_factories_retail.py
-python3 testing/test_metadata_callback_services_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link
 make typed-check
 ```
 
-**95 original-instruction RAM/defined-return/ordered-call cases** cover all eleven
-bodies, default sizes 0/4/8, null/non-null names, fresh/self copies, active/inactive
-system paths, clone flags, allocation failure, post-allocation size/source mutation,
-registration-time vtable changes and provider-time published-handle mutation.
-
-Both native specialization callbacks execute the actual lookup, cold clone and
-three-layer copy chain, finalization, retaining replacement and publication. The
-fixture supplies an inherited descriptor ABI view and retained field list;
-assertions prove parent ownership remains one, clone ownership becomes one, shared
-name references become two, default buffers are distinct with matching bytes,
-size/type/publication changes are correct and the parent's published descriptor
-stays intact. This is component composition, not complete live class registration.
-
 Element descriptor providers, type queries, interning, allocator/owner services,
-runtime CreateInstance and generic copy contents remain controlled. The existing
-78-checkpoint deferred-callback oracle still treats complete child registration
-as a boundary. Fourteen independent dependency tests check reviewed callback
+runtime CreateInstance and generic copy contents are outside this page.
+`testing/test_lua_engine_dependencies.py` checks reviewed callback
 extents and the original memory-clone/copy-chain instruction targets. Full
 child-list bootstrap and Work instance creation remain active work.
 

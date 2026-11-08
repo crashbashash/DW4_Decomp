@@ -3,7 +3,7 @@
 The complete contiguous method block **2d0560..2d06b8** contains
 nine bodies / **304 bytes**, all represented by exact matching source: the setter
 at 2d0560 (**152 matched bytes**) and the eight following methods. Factory2cd170
-has an exact mechanical draft, a name and behavioral verification. Together these
+is exact as well. Together these
 are ten bodies /464 bytes. They close the binding/accounting block, not the alias allocator.
 
 The [matching setter](../../src/engine/alias-pool-controls.cpp) uses a narrow ABI
@@ -22,10 +22,9 @@ with argument1, then invokes virtual slots44 and36 (argument0) in that order.
 The constructor's returned pointer is retained. Retail does not guard the later
 virtual dereference after a null allocation; the matching source adds no guard.
 
-Both active-byte values1/255 and bootstrap0 have original-instruction tests;
-registration-time metadata mutation verifies the subsequent reload. Allocation,
-constructor and metadata instance creation remain controlled leaves in this
-oracle. The exact factory is in [igAliasMemoryPool_Create.cpp](../../src/engine/igAliasMemoryPool_Create.cpp).
+Active-byte values1 and255 both take the active path; only0 takes bootstrap.
+Metadata is re-read after registration, so a registration-time change is observed.
+The exact factory is in [igAliasMemoryPool_Create.cpp](../../src/engine/igAliasMemoryPool_Create.cpp).
 
 ## Binding lifetime
 
@@ -61,25 +60,17 @@ The status word is read from retail data, not assigned an invented enum value.
 ## Evidence and verification
 
 ```sh
-python3 testing/test_alias_pool_binding_retail.py
 python3 tools/verify.py 0x2d0560 src/engine/alias-pool-controls.cpp
 make check
 make typed-check
 make link
 ```
 
-The [behavioral adapter](../../recovered/engine/alias-pool-binding.c) is a
-guest-reference oracle, separate from matching C.
-The 178 original-instruction RAM/ordered-call cases exercise all116 instructions
-in the ten bodies. They cover null/replacement/same aliases, low23-bit reference
-boundaries, reference-word overflow, zero/nonzero/truncated query results, callback-time publication
-and refcounts, callback mutation, every reset/enable/disable method and a retained
-bind/rebind/replace/detach sequence. Destroy and virtual query/reset callbacks are
-controlled leaves; the allocator backend and hardware locking are not validated
-by these tests. Ghidra output was checked against retail objdump.
+Ghidra output was checked against retail objdump. The allocator backend and
+hardware locking are outside these ten bodies.
 
 The [alias-pool runtime](alias-pool-runtime.md) composes init1500/constructor1540,
 factory, lock/event services and backend2d1210, and classifies the vtable
 targets listed in the [alias pool backend trace](allocator-builder.md#alias-pool-backend-trace).
-It has286 comparisons for54 bodies and carries their matching status.
+It covers54 bodies and carries their matching status.
 The [hub recovery objective](../systems/hub-recovery.md) remains open.

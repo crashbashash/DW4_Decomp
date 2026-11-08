@@ -3,20 +3,17 @@
 This page covers the complete **5,484-byte ShopCtrl10 update**
 4270a0..42860c and its three adjacent128-byte scoped-reference cleanups
 428610/428690/428710: **four bodies /5,868 bytes**. The common144-byte
-message-script dispatcher3f5920 is also recovered in
-[window-presentation.c](../../recovered/engine/window-presentation.c), giving
-**five bodies /6,012 bytes** for this checkpoint.
+message-script dispatcher3f5920 brings that to
+**five bodies /6,012 bytes**.
 
-The [guest-reference controller](../../recovered/engine/xdata-controller.c)
-passes **2,501 original-instruction RAM/ordered-call cases**. It executes
-**1,458/1,503 instruction addresses** across the five bodies. Thirty-three zero
+The five bodies hold **1,503 instruction addresses**. Thirty-three zero
 words are padding; twelve nonzero words are statically unreachable literal-null
-construction branches. These exclusions are checked independently. All five
+construction branches. All five
 bodies match (`src/unmatched/Gap__Bec__beNDMWShopCtrl10__vfunc_21.cpp`,
 `src/unmatched/FUN_00428610.cpp`, `src/unmatched/FUN_00428690.cpp`,
 `src/unmatched/FUN_00428710.cpp` and
 `src/unmatched/beNDMWWindow_RunMessageScript.cpp`). Widget/input, player recalculation, lookup, pool/list, formatting,
-text/model receivers and Lua execution remain explicit services.
+text/model receivers and Lua execution are separate services.
 
 ## Owner and primary state
 
@@ -32,9 +29,8 @@ separate property lookups, executes model/text/child-close helpers, then advance
 Primary3 clears active byte24 after the common close poll returns nonzero. Other
 primary states return without work. No extra active-byte guard is inserted.
 
-The selected player number20 is reloaded around messages; four-player cases verify
-that only the selected record is charged and updated. Common context binding and
-window-tree ownership run as original/recovered bodies in composed tests.
+The selected player number20 is reloaded around messages; only the selected record
+is charged and updated.
 
 ## Main, stat and chip menus
 
@@ -63,7 +59,7 @@ Each factory first queries the object allocator, then uses selector587110 when
 byte554c14 is zero. Scoped references are at364/360/356/352/348/344/340. Binding,
 append and release reload the current private cell; child-list snapshots occur
 at the original points. Retained widgets and their real selection/animation code
-remain services in these tests.
+are separate services.
 
 ## Quote, cost and limits
 
@@ -84,8 +80,8 @@ It then resolves the selected player and maps results0..6:
 The exact cost calculation first wraps `stat - 45` as32 bits. For signed `n`,
 it computes `n / 5 + (n % 5 != 0)` using division toward zero, then replaces a
 negative result with1 and caps above400. **Zero remains zero**. For example,
-stat45 costs0,46 costs1,2045 costs400, and2046 also costs400. The unusual signed
-boundary behavior is preserved rather than replaced with a host ceiling helper.
+stat45 costs0,46 costs1,2045 costs400, and2046 also costs400. This signed
+boundary behavior is not a plain ceiling.
 
 The current result is cached into parameter88 before allocation. The controller
 creates **beNDMWShopSelect00** through3b4f50, increments substate and fetches XDATA.
@@ -94,7 +90,7 @@ selects error1161. Otherwise it requests `+1` and formatted remaining XDATA thro
 STWINFONT41, records the original seven type/font close pairs on that dialog,
 and assigns the current result's prompt from the copied11730..11760 table at
 4cf970. Quote construction spends no XDATA. Current result and temporary dialog
-storage remain live around callbacks; no new array/result guards are inserted.
+storage remain live around callbacks; there are no array/result guards.
 
 ## Confirmation and actual record writes
 
@@ -108,12 +104,11 @@ and its signed value exceeds the index above. Counter increments wrap32 bits.
 The affordability/cap branch belongs to quotation. Confirmation debits the newly
 computed price and applies the bounded counter increment, including when those
 records changed while the dialog was open. Missing/short counter arrays do not
-add a rollback of the debit. The reference does not introduce transaction guards.
+add a rollback of the debit. There are no transaction guards.
 
 It then sends RECALCPLAYER, resolves the player again, copies current MHP/MMP to
 HP/MP, sends SUBWND UPDATE with the current player number and creates the success
-notice /1165. Actual recalculation formulas are not implemented by this body.
-Tests use a controlled recalculation response to verify the final HP/MP copies;
+notice /1165. Actual recalculation formulas are not implemented by this body;
 the recalculation receiver remains part of the full hub dependency frontier.
 
 ## Script call number and pack ownership
@@ -147,22 +142,18 @@ This proves pack-local ownership and specific raw control-flow prefixes. Runtime
 collection ordering, lookup winners across infos, filesystem fallback, all text
 branches and real localized display remain dependencies to close.
 
-## Coverage, undefined selector and remaining work
+## Undefined selector, padding and remaining work
 
 The controller's valid cached parameters0..6 select a stat key. The original
-out-of-range confirmation path instead consumes the incoming saved s0 register.
-The reference exposes that register explicitly as `incoming_s0` for those raw
-state cases; it does not invent a fallback stat or guard. It is an oracle input,
-not an extra argument to the original game method.
+out-of-range confirmation path instead consumes the incoming saved s0 register;
+there is no fallback stat or guard.
 
 Six literal string constructors contain null branches even though their preceding
-lui/addiu loads a fixed nonzero address immediately before bnez. The twelve
-unexecuted words are checked against those exact instruction sequences. Thirty-two
-Ghidra-excluded zero words in the controller and the script helper's independently
-proven padding at3f5974 account for the remaining unexecuted addresses.
+lui/addiu loads a fixed nonzero address immediately before bnez, which makes twelve
+words unreachable. Thirty-two Ghidra-excluded zero words in the controller and the
+script helper's padding at3f5974 account for the remaining non-code addresses.
 
 ```sh
-python3 testing/test_xdata_controller_retail.py
 python3 testing/test_xdata_script_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
@@ -170,18 +161,12 @@ make link
 make typed-check
 ```
 
-The2,501 cases cover state/substate/allocator combinations; signed cost/cap/balance
-boundaries; all seven counters, short/negative counts and overflow; four selected
-players; callback changes, string ownership and null fonts; invalid cached selector
-register behavior; and actual tree-driven quote/cancel/accept/continue/close flows.
-The three adjacent scoped-reference cleanup helpers are byte-identical and tested
-for returned wrapper, low23-bit release and signed low16-bit delete flags. Their
-original template types are not guessed. Private input frames are translated
-before execution, with no copied retail output.
+The three adjacent scoped-reference cleanup helpers are byte-identical: each returns
+its wrapper, releases with the low23-bit rule and tests signed low16-bit delete flags.
+Their original template types are not guessed.
 
 The [shared selector and three initializers](shop-selectors.md), including stat
-cost refresh, now have complete behavioral recovery and composed owner/widget
-coverage. The actual SELECTCTRL receiver/input, XdataChip43aae0 and inherited
+cost refresh, are described separately. The actual SELECTCTRL receiver/input, XdataChip43aae0 and inherited
 ListCtrl40dae0/40dbf0/40dd30 remain explicitly reviewed callback dependencies.
 Recover them alongside RECALCPLAYER. The other five primary service updates total16,260 reviewed
 bytes before their dependencies; BANK/CNOS/DISK/ShopDevice/JUNK, LABO/CARD, saving
@@ -189,8 +174,8 @@ and the [full hub script/dispatch closure](../systems/hub-recovery.md) remain op
 
 The complete inherited ListCtrl paging block and chip-specific page-count/text helpers are
 recovered: [five bodies /2,196 bytes](list-controller-chip-view.md),
-with all 2,196 bytes exact and3,149 original-instruction comparisons. The chip text
+with all 2,196 bytes exact. The chip text
 helper's full1,072-byte return span is restored. The primary chip transaction
-update43aae0 /7,232 bytes still requires complete recovery; cost/stat/property
+update43aae0 /7,232 bytes matches; cost/stat/property
 services and actual upgrade outcomes remain open. This adds helper recovery,
 not acceptance of the chip service as a whole.

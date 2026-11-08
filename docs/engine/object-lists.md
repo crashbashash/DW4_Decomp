@@ -6,14 +6,13 @@ at `0x3e9260` uses the declaring base `igDataList::_data` and retains its exact
 see [GAMERAM ABI recovery](../systems/combat-draft-recovery.md).
 
 The complete contiguous twelve-body group at `301c90..302540` contains 2,160
-code bytes. Together with the 148-byte name setter at `2fecb0`, all thirteen
-bodies have readable [behavioral C](../../recovered/engine/object-lists.c).
-One body, retained append (88 bytes), already has exact source in
+code bytes. Together with the 148-byte name setter at `2fecb0`, that makes thirteen
+bodies. One, retained append (88 bytes), already has exact source in
 [list-services.c](../../src/engine/list-services.c); ten more match in one-function
 files under `src/unmatched/`. `igProperty_FindByName` (`3022c0`, 188 bytes) is
 `foreign-profile` in [igProperty_FindByName.c](../../src/unmatched/igProperty_FindByName.c) (code bytes
-identical; the build-profile check is open), and remove-first (`302000`, 248 bytes) has
-no C source yet. The behavioral C claims no new matching bytes.
+identical; the build-profile check is open), and remove-first (`302000`, 248 bytes)
+matches in [ObjectList_RemoveFirstRetained.cpp](../../src/unmatched/ObjectList_RemoveFirstRetained.cpp).
 
 The [name generator](../../scripts/seed_names_object_lists.py) derives retained-list
 and name-publication roles from verified accesses. Existing property roles live
@@ -41,8 +40,7 @@ word at +4; destruction is triggered when its low 23 bits become zero.
 Fill captures count for retain/release but reloads it for publication. Clear also
 reloads count for its byte-zero service. Resize instead retains its original count
 for release and zeroing, then publishes the requested count. Destructor callbacks
-can therefore affect these operations differently. The reference C preserves the
-original reloads, rather than imposing one host container policy.
+can therefore affect these operations differently.
 
 Append-list captures source buffer/count for the retaining pass, then reloads
 both before calling generic word append. Single append retains before growth.
@@ -51,9 +49,8 @@ the buffer/count and clear the newly unused tail slot. Remove-all resumes at the
 same index after removal, so adjacent duplicates are not skipped.
 
 These entries retain original unchecked start/count behavior. In particular,
-retained resize does not reject a negative shrink count. The oracle's bounded
-negative-index fixtures demonstrate original accesses and stored counts; they do
-not establish a valid gameplay caller contract. Guest pointer and word arguments
+retained resize does not reject a negative shrink count. Whether any gameplay caller
+relies on negative indices or counts is not established. Guest pointer and word arguments
 use the EE ABI's canonical sign-extended word representation.
 
 ## Property searches and corrected contracts
@@ -79,8 +76,8 @@ Text lookup captures count once but reloads the buffer and descriptor member
 offset before subsequent comparisons. A comparator callback changing count to
 zero and moving the buffer does not shorten the original scan. Pointer lookup
 also captures count but explicitly skips null records; text and sorted lookup
-retain their original valid-record assumptions. Numeric comparisons are unsigned
-and tested across `7fffffff/80000000/ffffffff`; exact equality depends on canonical
+retain their original valid-record assumptions. Numeric comparisons are unsigned, so
+`7fffffff` sorts below `80000000` and `ffffffff`; exact equality depends on canonical
 EE word arguments, including their upper register bits.
 
 ## Name publication and messenger integration
@@ -89,56 +86,24 @@ EE word arguments, including their upper register bits.
 the new text, releases the old token at object +8, then publishes the new token.
 It interns before releasing, preserving aliasing when old and new text share a
 token. Token release uses the full preceding count word and owner at token -8.
-Pool failure policy and actual interning remain lower dependencies in this oracle.
+Pool failure policy and actual interning remain lower dependencies.
 
-A separate cold integration suite executes actual descriptor-based group lookup,
-name publication, retained append/resize and generic list operations through
+Messenger group lookup uses this descriptor-based search, reached through
 [factory creation](object-creation.md), [memory setup](messenger-memory.md),
-[dispatch](messenger-dispatch.md) and [lifecycle](messenger-lifecycle.md). It uses
-an actual registry list containing a named group, creates/registers another group
-on a real lookup miss, finds and queries that group, queues/delivers its message,
-performs context push/pop, resets and initializes again. Assertions prove registry
-growth to two and reset to zero. Registry lookup and whole-list mutation are real
-bodies, not controlled return values, in this composition.
+[dispatch](messenger-dispatch.md) and [lifecycle](messenger-lifecycle.md). A lookup miss
+creates and registers another group in the registry list, and reset empties that list.
 
-## Validation and remaining boundaries
+## Remaining boundaries
 
 Run from the repository root:
 
 ```sh
-python3 testing/test_object_lists_retail.py
-python3 testing/test_messenger_registry_retail.py
-python3 testing/test_object_creation_retail.py
-python3 testing/test_messenger_factories_retail.py
-python3 testing/test_messenger_memory_retail.py
-python3 testing/test_messenger_lifecycle_retail.py
-python3 testing/test_messenger_dispatch_retail.py
-python3 testing/test_messenger_results_retail.py
 make check
 make typed-check
 make link
 ```
 
-The object-list suite passes **718 original-instruction RAM/defined-return/
-ordered-call cases across all thirteen bodies**, with real recovered
-[generic list operations](list-services.md). Cases cover growth/shrink, duplicate
-and null references, aliased append, ownership before mutation, callback count
-changes, returned removal counts/output words, descriptor nulls/member offsets,
-text/pointer/sorted keys, duplicate unsigned keys, relocated lookup storage,
-name-token alias/release and lazy pool creation.
-
-The messenger registry suite passes **twelve persistent RAM/ordered-call
-checkpoints** through real registry/name/object/generic list bodies and the cold
-engine chain. It uses synthetic field metadata and controlled
-concrete field/registrar/allocator/byte/interner/receiver services. Standalone
-object-list destruction is controlled; the cold composition executes the recovered
-shared object lifetime path with its remaining cleanup leaves. Actual pool/chunk
-composition, concrete class descriptors/fields/receivers and lower service contracts
-remain work. Remove-first (`302000`) has no C source yet; naming, recovery and these comparisons do not establish complete
-Lua-dependent engine recovery.
-
-The [interned-registry composition](string-pool.md#cold-registry-interning-and-erase-byte-match)
-replaces whole pool/table/chunk interning and release leaves through this cold
-registry path. Its 158 checkpoints retain concrete field/registrar and allocator/
-byte/sync primitives as controlled boundaries; the standalone suites above are
-separate from it.
+[Generic list operations](list-services.md) and
+[pool/table/chunk interning](string-pool.md) are described separately. Concrete class
+descriptors/fields/receivers and lower service contracts remain work; naming and recovery
+do not establish complete Lua-dependent engine recovery.

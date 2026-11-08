@@ -1,7 +1,6 @@
 # Concrete descriptor factories and initializer chains
 
-Eighteen complete bodies / 1,752 code bytes are recovered in
-[behavioral C](../../recovered/engine/field-factories.c). They cover the three
+Eighteen complete bodies / 1,752 code bytes. They cover the three
 factory kinds referenced by Work's original field table, their constructor and
 initializer chains, object header construction, raw allocation and the two concrete
 post-construction default hooks. All eighteen bodies / 1,752 bytes match retail;
@@ -29,8 +28,7 @@ Work's six constructor-table entries at `4c5ce0` are, in order:
 
 When the object-system byte at `*586dc8` is nonzero, each factory runs its class
 registration guard, re-reads the published class handle, and delegates to
-`igMetaObject_CreateInstance(handle, allocator)`. This branch retains registration
-and generic instance creation as lower dependencies in this module's oracle.
+`igMetaObject_CreateInstance(handle, allocator)`. Registration and generic instance creation are lower dependencies.
 
 When that byte is zero, factories allocate 60 / 52 / 68 bytes respectively, with
 zero prefix and the supplied allocator. They conditionally invoke their concrete
@@ -83,10 +81,8 @@ and sets shallow-copy method 2. Object-reference initialization clears pool name
 and child metadata and enables ref-counting. Work's field adder subsequently sets
 the two list child types and their construct flags through the original tables.
 
-`30b270` was previously described as a constructor in string-field provenance.
-It is the initializer called both by the actual constructor `30b230` and the
-GetVTable temporary path. The vtable identity and existing lifecycle roots remain
-valid; their wording and independent regression now identify the initializer.
+`30b270` is the initializer called both by the actual constructor `30b230` and the
+GetVTable temporary path.
 
 ## Raw allocation
 
@@ -95,48 +91,28 @@ wraparound. With no supplied allocator it queries the default allocator provider
 using global `587018`. A non-null allocator dispatches slot 216 with the total
 size and returns allocation plus prefix, even if the allocation result is zero.
 If the provider also returns null, the libc allocation fallback receives the total
-size and its result is returned **without adding the prefix**. Tests preserve this
-branch distinction rather than imposing a uniform allocation policy.
+size and its result is returned **without adding the prefix**. There is no uniform
+allocation policy across the branches.
 
 ## Verification and remaining boundaries
 
 ```sh
-python3 testing/test_field_factories_retail.py
-python3 testing/test_reflection_registration_retail.py --field-factories
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link
 make typed-check
 ```
 
-**276 original-instruction RAM/defined-return/ordered-call cases** cover all eighteen
-bodies, bootstrap/runtime factory modes, registration-time handle changes, ancestor
-initialization, reference flag preservation, allocator-owner code truncation,
-default allocator/fallback selection, prefix arithmetic and allocation failures,
-plus pool creation and callback-time field-name mutation/release.
-
-The registration suite passes **487 composed cases** with the actual Work factories,
-full constructor/initializer chain and post-construction defaults, together with
-original storage wrappers. It asserts executed coverage of every new body and
-checks actual final vtables, six allocated defaults, value sizes, persistence,
-string flags, reference flags, names, offsets, reference counts, published handles
-and Work child-type configuration. Three string descriptors, one integer descriptor
-and two reference descriptors come from the original constructor table.
-
 Allocator virtual methods, allocator table population, interning, type/size/alignment
 queries, metadata factory/base registration, callback vectors and object-system
-services remain controlled in that composition. Generic test-only descriptors in
-other registration cases remain synthetic. This establishes the Work descriptor
-construction path, not full original object-system bootstrap or live Work instance
-creation. Memory/array fields, further class schemas and gameplay receivers remain
-required.
+services are outside this module. Full original object-system bootstrap, live Work
+instance creation, memory/array fields, further class schemas and gameplay receivers
+remain required.
 
-The [base bootstrap recovery](object-base.md) extends the adapter/oracle with
-`igUnsignedIntMetaField` factory/constructor/initializer (276 existing exact bytes).
-The current factory oracle therefore covers 21 bodies / 2,028 bytes in 306 cases;
-all 21 bodies / 2,028 bytes match. The original eighteen-body milestone above is unchanged.
+The [base bootstrap page](object-base.md) adds the
+`igUnsignedIntMetaField` factory/constructor/initializer (276 exact bytes), making
+21 bodies / 2,028 bytes, all matching.
 
-The [memory descriptor extension](list-descriptor-copy.md) adds its factory,
-constructor and initializer (340 existing exact bytes). The current factory
-adapter/oracle covers 24 bodies / 2,368 bytes in 336 cases; all 24 bodies / 2,368 bytes
-match.
+The [memory descriptor page](list-descriptor-copy.md) adds its factory,
+constructor and initializer (340 exact bytes), making 24 bodies / 2,368 bytes, all
+matching.

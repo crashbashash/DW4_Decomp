@@ -4,18 +4,14 @@
 WindowSelect update4233f0 /772 bytes, FO2TOP predicate423700 /84 bytes,
 ShopSelect00 initializer43d1d0 /636, ShopSelect01 initializer43d450 /1,976,
 ShopSelect11 initializer43ecc0 /3,752 and its stat/cost display43fb70 /696.
-The [shared selector](../../recovered/engine/window-selector.c) and
-[shop initializers](../../recovered/engine/shop-selectors.c) pass **576
-original-instruction RAM/ordered-call cases**.
 
-All **1,909 reachable instruction addresses** run. The full1,979-word spans
-also contain six excluded zero padding words and64 statically impossible
+The full1,979-word spans hold **1,909 reachable instruction addresses**, six
+zero padding words and64 statically impossible
 literal-null construction words. The84-byte
 [FO2TOP predicate](../../src/game/beNDMWWindowSelect_CanRequestFO2TOP.cpp) is exact source;
 the three shop initializers and the stat/cost display /7,060 bytes match in one-function
-files under `src/unmatched/`, and the shared update4233f0 /772 bytes is `foreign-profile` in
-[Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp](../../src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp) (code bytes
-identical; the build-profile check is open). Receiver/input, pool/list,
+files under `src/unmatched/`, and the shared update4233f0 /772 bytes matches in
+[Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp](../../src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp). Receiver/input, pool/list,
 lookup/recalculation, formatting, text/model and Lua services remain boundaries.
 
 The76-byte lazy shop metadata
@@ -133,22 +129,13 @@ at/above cap the format is literal `----`. It publishes costs to STWINFONT19 and
 resets corresponding STWINFONT14 value colors below cap. Capped values receive
 exact RGB bits3f666666/3ecccccd/3e4ccccd. It re-reads the copied cap before color
 selection after the text callbacks, preserving the original captured stat and
-live table distinction. No host float arithmetic changes the bit patterns.
+live table distinction.
 
-## Composition, spans and verification
+## XDATA flow outcome, spans and verification
 
-The576 cases cover every recognized two-/three-choice code and unknown cases,
-null/custom fonts, old/new info-name ownership, pool creation/failure, callback
-changes to temporaries/message/parent/decision-list count and storage, vectors
-with signed-zero/NaN bits, full-width FO2TOP and low-byte end distinctions, four
-players and signed/cap/cost boundaries.
-
-Stateful cases execute the real XDATA owner, tree, shared selector, all three
-initializers, stat refresh and common script/presentation/close bodies on both
-sides. SELECTCTRL input/receiver responses remain controlled. Quotes remain
-uncharged; cancellation preserves XDATA and all UPCNT entries; acceptance charges
-the selected stat and increments its specific slot. Rendering, actual input and
-recalculation formulas remain unaccepted dependencies.
+In the XDATA stat flow, quotes remain uncharged; cancellation preserves XDATA and
+all UPCNT entries; acceptance charges the selected stat and increments its specific
+slot. Rendering, actual input and recalculation formulas remain open dependencies.
 
 Select00's636-byte span includes the return/delay that a628-byte split omits;
 Select11's3752-byte span includes12 bytes its3740 occupied-byte sum omits. Generated
@@ -156,22 +143,18 @@ Ghidra ranges cover them, 20 classified code bytes of unchanged retail
 contents. The common loop/predicate and refresh spans equal their occupied-byte counts.
 
 Thirty-two string-construction blocks test an immediately loaded nonzero literal,
-then contain an impossible null branch and delay word. Independent instruction
-checks establish those64 excluded words. Six zero words are outside Ghidra's
-occupied ranges. Tests do not force a fault or corrupt registers to claim coverage.
+then contain an impossible null branch and delay word: those are the64 impossible
+words. Six zero words are outside Ghidra's occupied ranges.
 
 ```sh
-python3 testing/test_shop_selectors_retail.py
 python3 testing/test_lua_engine_dependencies.py
 python3 tools/test_function_extents.py
-python3 testing/test_xdata_controller_retail.py
 make check
 make link
 make typed-check
 ```
 
-Private input frames are mapped before execution and no retail output is copied
-into the recovered expected state. The concrete SELECTCTRL manager is identified independently: beSelectCtrl
+The concrete SELECTCTRL manager is identified independently: beSelectCtrl
 at table53b290 registers literal50f7f0 through39cbc0. Raw132 selects update39cbf0;
 raw140 selects general handler39d720. Its inherited raw144 check378410 is the
 exact return-zero body, so the shared messenger uses the general raw140 path.
@@ -179,12 +162,9 @@ Pad-manager acquisition39cb70 (not cleanup) and
 registration39cbc0 have exact source, 100 bytes. The
 metadata getter and inherited check are matched as well. The complete
 [SELECTCTRL manager review](selectctrl.md) records the2,864-byte update
-and1,960-byte general handler. Both have full behavioral source and4,089
-original-instruction cases, and both match. This selector suite's receiver
-responses remain controlled. A separate [joint owner/manager oracle](selector-manager-composition.md)
-covers144 lifecycles /3,146 checkpoints with actual handler responses,
-pad lookup and empty close queues. It controls initialization, message delivery
-and model services; the full initializer/XDATA transaction composition remains open.
+and1,960-byte general handler; both match. The
+[owner/manager protocol](selector-manager-composition.md) describes the selector
+running against the actual handler responses, pad lookup and close queues.
 
 The open build-profile checks on the shared update4233f0 and the chip controller update, and exact
 matching of the remaining stat/transaction services, continue under the [full hub goal](../systems/hub-recovery.md).

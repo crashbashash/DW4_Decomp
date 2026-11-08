@@ -15,33 +15,30 @@ has not been established.
 
 ## Raw buffers are duplicated
 
-[memory-buffer-services.c](../../recovered/engine/memory-buffer-services.c) recovers
-the complete `2ed460..2ed608` helper family:
+The complete `2ed460..2ed608` helper family:
 
 | Entry | Recovered operation |
 | --- | --- |
 | `2ed460` | `Memory_FreeBuffer`: skip null buffer, find owner, skip null owner, invoke owner slot264 |
 | `2ed4b0`, `2ed5c0` | Original tail aliases of the guarded free |
-| `2ed4c0` | Free through the supplied allocator's slot264, without owner lookup |
+| `2ed4c0` | Takes the buffer and allocator; tail-dispatches the allocator's slot264 with the buffer, without owner lookup |
 | `2ed4e0` | Find owner and query its slot336 for buffer size |
 | `2ed520` | Tail alias of owner search `2f04f0` |
 | `2ed530` | Duplicate a buffer using its owner and size, then copy bytes |
-| `2ed5a0` | Tail-call supplied allocator slot240; return semantics remain unresolved |
+| `2ed5a0` | Takes the buffer and allocator; tail-calls the allocator's slot240 with the buffer; return semantics remain unresolved |
 | `2ed5d0` | Find owner and invoke slot264, without the guarded free's null checks |
 
 `Memory_DuplicateBuffer` queries size, separately finds the owner, allocates through
 `2ed1c0(size, owner)`, queries the original size **again after allocation**, then
 calls the byte-copy service. It returns the new allocation. It does not retain or
-share the original buffer and does not add an allocation-failure guard. The oracle
-checks the second size query independently and confirms the original zero-destination
-copy call on a controlled allocation failure; that is not a claim that such a
-failure is safe in the running game. The first size-query argument and unchecked
-free's owner-query argument are now explicit in the existing matching sources.
+share the original buffer and does not add an allocation-failure guard: a failed
+allocation still reaches the copy call with a zero destination, which is not a claim
+that such a failure is safe in the running game. The first size-query argument and
+unchecked free's owner-query argument are explicit in the existing matching sources.
 
 ## Shallow and deep memory-field copy
 
-[memory-field-copy.c](../../recovered/engine/memory-field-copy.c) preserves both
-copy prefixes: release the destination's current element references, conditionally
+Both copy forms share a prefix: release the destination's current element references, conditionally
 free its old allocation when `_releaseOnCopy` is set, duplicate the current source
 buffer if non-null, then publish through the field's current offset. Callbacks can
 change the offset before later reads and publication.
@@ -67,7 +64,7 @@ calls `304680`. A nonzero mode and non-null captured buffer enable further work:
 query element slot104 for its full32-bit stride, divide capacity by that stride,
 type-check the current descriptor and print non-null object-reference cells through
 `300490`. This uses allocator capacity, not a logical list count. The loop compares
-the quotient as signed32; the adapter preserves the EE zero-divisor quotient.
+the quotient as signed32; a zero stride takes the EE zero-divisor quotient.
 Debug output and per-object print implementations remain callbacks.
 
 The routine named `igMemoryRefMetaField_ReleaseElements` (`2fb0b0`, slot168)
@@ -86,21 +83,9 @@ before the callback. Its 256 bytes are exact source in
 [object-visitor.cpp](../../src/engine/object-visitor.cpp); its category is `foreign-profile`
 (the code bytes are reproduced only under a provisional per-function override).
 
-## Verification and remaining boundaries
+## Remaining boundaries
 
-`python3 testing/test_memory_field_copy_retail.py` compares **167** original-instruction
-RAM, defined-return and ordered-call checkpoints across all14 bodies. Cases cover
-copy/release/ref-count flags, null and self-copy sources, distinct buffers/elements,
-object clones and nested duplication, changing offsets/type/size/element cells,
-print modes/strides/captured buffers, visitor callbacks and captured count/changing
-field storage, both free policies, aliases and allocator dispatch.
-
-`python3 testing/test_memory_field_values_retail.py --buffer-services` passes all
-**113** existing checkpoints with original array allocation and buffer services
-composed into construction, defaults, populated Work/list lifetime and teardown.
-Owner search and allocator virtual methods (including the instance allocator index)
-remain controlled leaves. The older isolated and `--array-storage` modes remain
-separate checks. Eighteen dependency tests verify original slots144/152/164/168,
+Eighteen dependency tests verify original slots144/152/164/168,
 duplicate-buffer calls, type handles and prior roots.
 
 The intrinsic-discard interpretation does not hold; the historical symbol alone does not establish
@@ -111,7 +96,7 @@ reference rewriting visits both halves of same-basename C/C++ pairs.
 `python3 testing/test_apply_names.py` covers both cases in an isolated naming batch.
 Existing string delete wrappers keep their exact alias targets.
 
-The subsequent [allocator-registry checkpoint](allocator-registry.md) recovers
+The [allocator registry](allocator-registry.md) covers
 owner traversal and encoding plus complete allocation wrappers. Compiler residuals,
 registry bootstrap, allocator virtual implementations/slot240, object cloning,
 per-object print, scalar/type publication and broader gameplay remain open.

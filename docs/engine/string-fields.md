@@ -1,21 +1,19 @@
 # Scalar string fields, ownership and raw value encoding
 
-Twenty-one complete bodies (2,548 code bytes) have readable
-[behavioral C](../../recovered/engine/string-fields.c): the contiguous eighteen-body
+Twenty-one complete bodies (2,548 code bytes) make up this family: the contiguous eighteen-body
 scalar string-value run at `30a910..30b230`, its retained-slot helper (`1c8c00`),
 and common reset/write dispatchers (`2fc500`, `2fc6f0`). Some shared methods retain
 canonical derived `igStringArrayMetaField::vfunc_*` names; this recovery establishes
 their scalar-value behavior, not complete string-array behavior.
-records the evidence and limits.
 
 Thirteen bodies (908 bytes) have exact source in
 [string-field-values.c](../../src/engine/string-field-values.c) and
 [string-field-dispatch.cpp](../../src/engine/string-field-dispatch.cpp). Generic
 reset adds 124 bytes and three equality methods add 288, totaling **412 new matched
 code bytes**. The existing write dispatcher now explicitly receives/forwards all
-five physical arguments and retains its 72-byte match. Six more bodies (780 bytes)
-match in one-function files under `src/unmatched/`. Raw decode (`30ab20`, 676 bytes) and
-raw encode (`30add0`, 184 bytes) have no C source yet.
+five physical arguments and retains its 72-byte match. Seven more bodies (964 bytes)
+match in one-function files under `src/unmatched/`, including raw encode (`30add0`,
+184 bytes). Raw decode (`30ab20`, 676 bytes) has no C source yet.
 
 ## Runtime field identity and value methods
 
@@ -91,12 +89,12 @@ The reader copies and optionally swaps length into a local cell. Signed lengths
 below one clear the output through actual null interning and return four.
 Positive lengths scan only their declared span for a terminator. An embedded
 terminator permits direct interning of the input text. Otherwise the reader
-allocates length+1, copies exactly the declared bytes, adds a terminator, interns,
-and frees the temporary. Allocator selection is repeated before free, so an
+allocates length+1 (allocator slot +216), copies exactly the declared bytes, adds a
+terminator, interns, and frees the temporary (slot +264). Allocator selection is repeated before free, so an
 interner callback can change the global mode/provider used for that free. It
 returns the original positive declared length plus four, without adding another
-alignment policy. Allocation failure and invalid lengths retain original lower
-contracts; this recovery adds no host bounds or retry behavior.
+alignment policy. Allocation failure and invalid lengths follow the lower services'
+contracts; there is no bounds check or retry here.
 
 The common reset dispatcher selects virtual slots 112/116/120 for reset-method
 values 0/3/2 respectively; other values do nothing. The common persistent-value
@@ -110,39 +108,18 @@ the prior draft's omitted output/context/swap parameters.
 Run from the repository root:
 
 ```sh
-python3 testing/test_string_fields_retail.py
-python3 testing/test_owned_string_field_retail.py
 python3 testing/test_lua_engine_dependencies.py
-python3 testing/test_object_fields_retail.py
-python3 testing/test_messenger_interned_registry_retail.py
 make check
 make typed-check
 make link
 ```
 
-The standalone suite passes **255 original-instruction RAM/defined-return/ordered-call
-cases across all twenty-one bodies**, including nulls/aliases, token-count edges,
-source-cell/offset mutation, default/reset/copy, exact and lexical comparisons,
-persistence flags, signed lengths, termination/padding, both endian settings,
-allocator modes and allocator re-selection after interning. Pool/allocator/byte/
-endian primitives remain controlled in that suite.
-
-A separate owned-string suite passes **42 persistent checkpoints** using real
-string fields, reset/write dispatch, generic object construction/persistence/
-cleanup, list final release and pool/table/chunk storage. Defaults of length
-0/7/16,385 are constructed, shared with instances, serialized and read back under
-both endian settings. A nonterminated three-byte input proves temporary allocation
-and free. Final release clears the instance while retaining the descriptor's
-one default reference; clearing that default returns the pool table to zero.
-Assertions prove canonical identity, counts, encoded size and one owner free.
-Metadata is synthetic; allocator, unrelated hooks, bytes and endian primitives
-remain controlled. There is no whole string-field ownership or interning stub in
-that path. Original messenger registrar/descriptor construction remains open.
+Final release clears the instance while retaining the descriptor's one default
+reference; clearing that default returns the pool table to zero. Original messenger
+registrar/descriptor construction remains open.
 
 Five reviewed lifecycle roots are backed by constructor/raw-vtable evidence and
-messenger Work/ArgData string descriptor types. Seven dependency regressions pass.
-Existing cold-messenger payload constructors remain explicit controlled boundaries;
-this owned-string class does not substitute synthetic metadata for the retail
-class-descriptor recovery still required. Original string/memory descriptor setup,
-other memory fields, the two raw-value bodies without C source and concrete gameplay receivers remain
+messenger Work/ArgData string descriptor types. Retail class-descriptor recovery
+is still required. Original string/memory descriptor setup,
+other memory fields, the raw-decode body without C source and concrete gameplay receivers remain
 part of the full Lua-dependent engine goal.

@@ -1,13 +1,12 @@
 # Messenger receiver selection and dispatch
 
 The contiguous fourteen-body block at `0x0038d470..0x0038e8f0` contains
-5,192 code bytes. All bodies have readable [behavioral C](../../recovered/engine/messenger-dispatch.c)
-with guest references behind the shared memory/call API. Five forwarding bodies
+5,192 code bytes. Five forwarding bodies
 (244 bytes) retain exact matching source in
 [beMessengerDispatch.cpp](../../src/game/beMessengerDispatch.cpp).
 These were existing matches; the consolidation corrects their signatures and
 removes surplus forwarded arguments without adding matching bytes.
-records the evidence and limits. The semantic names describe verified operations,
+The semantic names describe verified operations,
 not original C++ method spellings.
 
 ## Data and entry points
@@ -44,7 +43,7 @@ they retain `FUN_` names. They release the referenced object using the low
 23-bit reference-count rule and delete owner storage only for a positive signed
 16-bit deletion flag. The enum resolver returns -1 for a non-enum field; it does
 not cache that failure. Its successful name copy uses the original unbounded
-copy service and original fixed cache buffer; this recovery adds no new bound.
+copy service and original fixed cache buffer.
 
 ## Selection, cache and ownership
 
@@ -63,8 +62,8 @@ Consequently changing the requested number reuses the same name-based cache.
 Receiver/name lists, cached numeric lists and backing pointers are re-read at the
 original service boundaries. Reference releases precede the zeroing pass, which
 re-reads count after destructor callbacks. Cache removal and insertion balance
-separate temporary/list ownership. The reference C preserves the order of these
-operations, including intern-before-old-token-release.
+separate temporary/list ownership. These operations run in that order, with
+interning before the old token's release.
 
 Registration locates or constructs a group, appends its receiver, copies a
 retained information token and appends the corresponding number. Deferred
@@ -102,31 +101,17 @@ This is synchronous mutable state, not evidence of thread safety.
 Run from the repository root:
 
 ```sh
-python3 testing/test_messenger_dispatch_retail.py
 python3 tools/test_function_extents.py
 make check
 make typed-check
 make link
 ```
 
-The differential oracle executes private retail instructions for every body and
-compares defined returns, RAM outside temporary stack frames, and ordered leaf
-calls. **1,561 cases** cover cache misses/hits/promotion, null/non-null name
-filters, IDs -2/-1/exact/missing, empty and 1/2/4/9/17-receiver groups, all three
-message paths, activity/run-check combinations, callback return low bytes,
-callback filter/state mutation, string/object lifetime edges, destructor count
-mutation, relocated growth buffers, enum success/failure/cache, registration,
-lazy pool creation and controlled allocation failure. Fixtures supply valid
-nonempty work/delay stacks and parallel registry lists, as the original code
-requires; no host bounds or fallback behavior is substituted.
-
-Registry, list, intern, allocator/delete, argument clearing, object factories and
-virtual receiver handlers remain controlled leaves in this oracle. Their tests
-establish this block's own behavior against those contracts, not complete
-receiver implementation. Lower list/string services have
-[separate recovered bodies](list-services.md) and deeper
-[result-channel composition](messenger-results.md); integrating those real
-services into this selection oracle remains open. The other nine bodies match in
+The original code requires nonempty work/delay stacks and parallel registry lists;
+it has no bounds checks or fallback behaviour for them. Registry, list, intern,
+allocator/delete, argument clearing, object factories and virtual receiver handlers
+lie outside this block. Lower list/string services are described in
+[list services](list-services.md) and [result channels](messenger-results.md). The other nine bodies match in
 `src/unmatched/` (`FUN_0038e530` as the destructor emitted by `beMessenger_DispatchSelected.cpp`).
 
 The reviewed Ghidra address sets contain holes: occupied byte counts truncated
@@ -136,12 +121,9 @@ ending at `38e054` and `38e52c`, respectively, including return delay slots.
 Original objdump confirms both epilogues. The split gains 44 code bytes previously
 left in gaps; no binary content changes. Extent regressions cover both spans.
 
-The subsequent [lifecycle recovery](messenger-lifecycle.md) covers argument
-clearing, delayed enqueue/expiry and context nesting, with real integration
-through this dispatcher. Registry/group construction, concrete receiver virtual
+[Messenger lifecycle](messenger-lifecycle.md) covers argument
+clearing, delayed enqueue/expiry and context nesting, and
+[messenger memory](messenger-memory.md) covers cold initialization and reset.
+Registry/group construction, concrete receiver virtual
 implementations and remaining compiler/allocator contracts remain open. This
 block is one part of the full Lua-dependent engine recovery.
-
-The [memory recovery oracle](messenger-memory.md) additionally executes cold
-initialization and reset through this dispatcher. The standalone dispatcher suite
-retains its explicitly controlled initialization boundary.

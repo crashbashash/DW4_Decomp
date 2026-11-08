@@ -73,7 +73,7 @@ Each folder also has its own `README.md` listing what is in it.
 | Host dynamic-testing instructions and tools | [Testing](../testing/README.md) |
 | The overall engine, and its two state systems | [`engine/architecture.md`](engine/architecture.md) |
 | How the game boots to the title menu | [`engine/front-end-boot.md`](engine/front-end-boot.md), [`engine/engine-boot.md`](engine/engine-boot.md) |
-| Complete matching title/menu/options controller, behavioral oracle and remaining engine boundaries | [`engine/title-menu-controller.md`](engine/title-menu-controller.md), [`engine/common-model-controller.md`](engine/common-model-controller.md), [`../recovered/frontend/README.md`](../recovered/frontend/README.md) |
+| Complete matching title/menu/options controller and remaining engine boundaries | [`engine/title-menu-controller.md`](engine/title-menu-controller.md), [`engine/common-model-controller.md`](engine/common-model-controller.md) |
 | The Game Start slot/character/name/difficulty/card controller family | [`engine/load-intf2.md`](engine/load-intf2.md) |
 | When a model-controller ACTION completes — WAIT/WAITCHECK, the named timer, JOINTSET completion, the node clock and the EE float arithmetic under them | [`engine/system-clock.md`](engine/system-clock.md), [`engine/action2-timing.md`](engine/action2-timing.md), [`engine/action2-jointset.md`](engine/action2-jointset.md), [`engine/model-sequence-waits.md`](engine/model-sequence-waits.md) |
 | How the binary was built, or how to import it into Ghidra | [`engine/binary.md`](engine/binary.md), [`engine/toolchain.md`](engine/toolchain.md) |
@@ -128,12 +128,7 @@ retail. Both take `--help`.
 | Script | Purpose |
 |---|---|
 | `dump_function_extents.py` | Export reviewed contiguous function spans when a Ghidra body count would truncate the build; consumed by `tools/split.py` |
-| `verify_systemclock.py`, `clock_dispatch_probe.py` | Compare timer lifecycle, system sample/render and scheduler order with retail instructions; independently check the logo scheduler chain in a savestate; [contracts](engine/system-clock.md) |
-| `verify_modelwait.py` | Compare all four JUMP/WCHECK bodies with retail instructions, ordered writes and engine calls; [contracts](engine/model-sequence-waits.md) |
-| `verify_action2time.py` (`ee_core.py`) | Compare the Action2 timer, WAITCHECK, JOINTSET, node-clock, float→int64, walker, driver and ISCOMEND bodies with retail instructions on an exact 64-bit/EE-float interpreter; [contracts](engine/action2-timing.md) |
-| `verify_sectl.py` | Compare the complete selection-sound dispatcher with retail instructions, signed delays and ordered model messages; [mappings](engine/sound-format.md#pre-lobby-selection-mapping) |
-| `verify_commdl.py` | Compare all ten common-model helper bodies with retail instructions, ordered memory writes and engine arguments |
-| `verify_title_menu.py` | Compare the recovered title-menu C state machine with direct interpretation of retail MIPS instructions at a stubbed engine boundary |
+| `clock_dispatch_probe.py` | Check the logo scheduler chain in a savestate; [contracts](engine/system-clock.md) |
 | `dump_functions.py`, `dump_strings.py`, `dump_xrefs.py`, `dump_symbols.py` | Ghidra dumps → `../data/` |
 | `dump_vtables.py`, `apply_vtable_names.py` | Recover `__RTTI__`/`__vt__` records, and write `Class::vfunc_NN` names back into the analysed program |
 | `decompile_funcs.py` | Ghidra's decompiler, by address |

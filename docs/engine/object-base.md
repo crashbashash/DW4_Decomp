@@ -1,10 +1,8 @@
 # Original igObject bootstrap and inherited header fields
 
-This recovery covers **13 complete bodies / 1,144 code bytes**: ten bootstrap,
-publication and descriptor-attachment bodies in
-[object-base.c](../../recovered/engine/object-base.c), plus the unsigned descriptor
-factory/constructor/initializer now included in
-[field-factories.c](../../recovered/engine/field-factories.c).
+This page covers **13 complete bodies / 1,144 code bytes**: ten bootstrap,
+publication and descriptor-attachment bodies, plus the unsigned descriptor
+factory/constructor/initializer.
 All thirteen bodies / 1,144 bytes have exact matching source. Vtable lookup (48) is in
 [igObject_GetVTable.c](../../src/unmatched/igObject_GetVTable.c) and manual field initialization (540) in
 [igObject_InitFields.c](../../src/unmatched/igObject_InitFields.c).
@@ -55,10 +53,7 @@ callback, are the newly classified leaves. No original C++ declaration spelling
 is claimed by these ABI projections.
 
 `igObject_GetVTable` (`2ff4b0`, 48) initializes a temporary eight-byte object header,
-then reads its table word through the object-system offset at +916. The adapter
-reserves 320 scratch bytes for that header, naming temporaries and shared class
-registration. Tests compare the defined result and normalized temporary arguments;
-unobservable stack bytes are excluded.
+then reads its table word through the object-system offset at +916.
 
 ## Two manually registered header descriptors
 
@@ -98,40 +93,27 @@ base metadata field routines and stamp that vtable. They introduce no extra
 value flags. All three existing exact bodies are named/folded with explicit
 interfaces; this extension does not itself add matched bytes.
 
-## Verification and integration
+## Verification and remaining work
 
 ```sh
-python3 testing/test_object_base_retail.py
-python3 testing/test_field_factories_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link
 make typed-check
 ```
 
-**33 original-instruction RAM/defined-return/ordered-call checkpoints** cover all
-ten base bodies and execute the unsigned constructor chain. They include all
-published-accessor aliases, null parent, empty callback allocation/failure,
-header-offset getter behavior, cold/repeated registration and initializer-runner
-entry, direct field addition/publication, and original Work registration after
-the real base class is registered.
-
-Assertions prove two base descriptors, their real names/handles/offsets,
-non-persistence/reset flags, unsigned vtables, size 8 and valid base metadata.
-Work registration then has **eight total fields**: two shared inherited header
+Base metadata has two descriptors with the names, handles and offsets above, cleared
+persistence, reset method3, unsigned vtables and size 8. Work registration then has
+**eight total fields**: two shared inherited header
 descriptors and six own descriptors at offsets 8/12/16/20/24/28, with internal
 indexes 2..7. Header descriptor counts become two; own descriptors retain one
 reference. Base/Work metadata each retain one registry-owned reference, with
 registry indexes 0/1 and Work size 32. Repeat registration creates no extra fields.
 
-The extended concrete-factory oracle passes **306 cases across 21 bodies**. Twelve
-dependency regressions independently check the classified leaf words, registrar
+Twelve dependency regressions independently check the classified leaf words, registrar
 literals and base vtable, supporting eight explicit callback roots without
 inventing direct edges through generic dispatch.
 
-Allocator, interner, type queries, callback-vector storage/cleanup, the parent's
-child-list factory and Work's child-type metadata remain controlled boundaries.
-This proves original base/Work metadata and field construction, not complete live
-Work instance creation. Next dependencies include real `igIntList` metadata at
+Next dependencies include real `igIntList` metadata at
 `586880`, `beBaseInfoRamList` metadata at `589d20`, their inherited storage fields,
 and remaining type/allocator services.

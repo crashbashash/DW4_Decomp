@@ -1,8 +1,6 @@
 # Reflection creation and messenger factories
 
-Twenty complete bodies (2,616 code bytes) now have readable
-[behavioral C](../../recovered/engine/object-creation.c), with guest references
-behind the shared memory/call API. They cover messenger factory/registration
+Twenty complete bodies (2,616 code bytes) cover messenger factory/registration
 forwarding, the contiguous three-body instance-creation group, static initializer
 callbacks, the contiguous three-body construction/registration group, and the
 contiguous five-body destruction/field-pass group.
@@ -40,8 +38,7 @@ It re-reads the buffer each iteration while retaining the captured count, and
 finally calls table cleanup (`2d3420`, deletion flag 1). The matching source uses
 a structural callback-table view, not an original recovered type name. Its
 callbacks are declared without parameters; the byte-identical loop physically
-leaves the table pointer in a0. The behavioral adapter carries that original
-register value explicitly. Original callback declaration spelling remains open.
+leaves the table pointer in a0. Original callback declaration spelling remains open.
 
 The contiguous allocation group is default creation (`2fda10`), ordinary creation
 (`2fda40`) and creation for a pool (`2fdb40`). Default creation asks the global
@@ -54,8 +51,8 @@ to the default allocator.
 Allocation invokes allocator vtable byte slot 216 with metadata prefix size +32
 plus instance size +72. The object reference is the returned allocation plus the
 prefix size, using original word arithmetic. It constructs that resulting reference
-when nonzero. This is the original test on the adjusted reference; recovery adds
-no independent allocation-failure policy. Creation for a pool first requires
+when nonzero. This is the original test on the adjusted reference; there is
+no separate allocation-failure check. Creation for a pool first requires
 metadata flag bit 4 at +36, then follows the same allocation selection and calls
 the shorter pooled construction body. Replacement metadata follows the same
 entry-specific checks recursively.
@@ -120,55 +117,23 @@ plain assignment hoists the copy into the null-system branch's delay slot and
 changes two words. CW's `dmove` emits the original64-bit DADDU and carries copy
 dataflow; `move` emits32-bit ADDU, while generic `daddu` also changes call setup.
 No original-source spelling or all-C++ claim is made: this matching body contains
-one explicit register-copy instruction and C++ lifecycle logic. The existing
-portable adapter remains unchanged.
+one explicit register-copy instruction and C++ lifecycle logic.
 
 ## Validation and remaining work
 
 Run from the repository root:
 
 ```sh
-python3 testing/test_object_creation_retail.py
-python3 testing/test_messenger_factories_retail.py
-python3 testing/test_messenger_memory_retail.py
-python3 testing/test_messenger_lifecycle_retail.py
-python3 testing/test_messenger_dispatch_retail.py
-python3 testing/test_messenger_results_retail.py
 make check
 make typed-check
 make link
 ```
 
-The standalone creation oracle passes **249 original-instruction RAM/defined-return/
-ordered-call cases across all twenty bodies**. These cover allocator choices,
-abstract and pool flags, recursive replacement metadata, prefix allocation,
-null returns, full/pooled headers and ownership bytes, field counts/base prefixes,
-field-buffer/count mutation, vtable mutation, instance registration/tracking,
-null-system and both teardown paths, and static callback count mutation.
+The original class registrars, exact field-descriptor tables and transitive concrete
+field ownership are not established here. Recovering those bodies is still required.
+Full Lua-dependent engine recovery remains open.
 
-A separate integration suite passes **13 persistent RAM/ordered-call checkpoints**
-through real factories, creation, construction, field passes and destruction,
-together with [cold memory setup/reset](messenger-memory.md),
-[selection/dispatch](messenger-dispatch.md) and [delayed delivery/nesting](messenger-lifecycle.md).
-It includes all four factories, initialization, queries, enqueue/expiry, push/pop,
-reset/reinitialization and group creation during controlled registry-miss registration.
-
-Integration metadata is synthetic: each class has a controlled payload-construction
-field that supplies the layout required by the messenger callers. Allocator,
-registrar, concrete MetaField construction/reset/zero operations, remaining cleanup
-helpers, registry and concrete receiver handlers stay controlled. These fixtures
-validate the recovered shared path; they do not establish the original class
-registrars, exact field-descriptor tables or transitive concrete field ownership.
-Recovering and composing those bodies is still required. Full Lua-dependent
-engine recovery remains open.
-
-The subsequent [registry integration](object-lists.md) replaces whole registry and
-object/generic list leaves through this creation path. Its concrete fields,
-registrars, interner and allocator services retain explicit controlled boundaries.
-
-The subsequent [field lifecycle recovery](object-fields.md) covers the original
-remaining cleanup passes and concrete object-reference field operations. Its
-owned-graph oracle executes actual nested construction and final release through
-this shared lifecycle; metadata is synthetic and original class descriptors remain
-open. The earlier cold-messenger oracles retain their declared concrete field
-boundaries.
+[Object lists](object-lists.md) cover the registry and object/generic list operations
+reached through this creation path. [Object fields](object-fields.md) cover the
+remaining cleanup passes and concrete object-reference field operations; original
+class descriptors remain open.

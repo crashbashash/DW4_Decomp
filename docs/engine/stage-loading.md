@@ -52,26 +52,23 @@ control flow and arithmetic shape. The pinned alternate compiler with `-O3,p`
 produces the entire retail body without inline assembly or compiler changes.
 
 The full matching check has zero mismatches and the relink is
-byte-identical. The reference/retail loading-node oracle also passes
-all **2,631 comparisons** below.
+byte-identical.
 
 ## Complete contiguous runtime group
 
-[`loadingnode.c`](../../recovered/frontend/loadingnode.c) and
-[`loadingnode.h`](../../recovered/frontend/loadingnode.h) recover all nine
-consecutive bodies from `0x0039a930` through `0x0039ae44` (1,232 instruction
-bytes, excluding alignment). They are behavioral references, not
-byte-matched CodeWarrior translation units; the clock routine `0x0039a9e0` is
-byte-matched separately (above).
+The group is nine consecutive bodies from `0x0039a930` through `0x0039ae44`
+(1,232 instruction bytes, excluding alignment). Seven have matching source,
+including the clock routine `0x0039a9e0` (above); the two traversal thunks
+`0x0039a930` and `0x0039adc0` have no C source yet.
 
 | Address | Contract |
 |---|---|
-| `0x0039a930` | Base-node traversal thunk, reverses context/node arguments |
+| `0x0039a930` | Base-node traversal thunk: receives context then node, calls `0x0039ab20` with node then context, returns its result |
 | `0x0039a960` | Rebase `_timeBias` against the scaled clock |
 | `0x0039a9e0` | Return locked time or advance/loop the node clock |
 | `0x0039ab20` | First-time setup, context time push, child traversal, callback/pop |
 | `0x0039ad80` | Register base-node traversal callback |
-| `0x0039adc0` | Loading-node traversal thunk |
+| `0x0039adc0` | Loading-node traversal thunk, same operation as `0x0039a930` |
 | `0x0039adf0` | Copy `_lockTime` to `_stopTime` |
 | `0x0039ae00` | Strict predicate `_playLimitTime < _playTime` |
 | `0x0039ae10` | Register loading-node traversal callback |
@@ -127,27 +124,13 @@ not been compared with a running PS2 capture. Exact compressed-sampler EE roundi
 remains unverified. This recovery establishes asset selection, visible content and
 node-runtime behavior.
 
-## Reproduction and boundaries
+## Boundaries
 
-From the repository root:
-
-```sh
-python3 scripts/verify_loadingnode.py --elf orig/SLUS-20836/SLUS_208.36
-```
-
-The verifier executes retail instructions and recovered C in the same memory
-world: **2,631 comparisons**, all nine bodies and all reachable body instruction
-addresses, ordered non-stack stores, ordered leaf calls, final memory and
-specified returns. Cases cover first traversal, allocation/growth, callbacks,
-child return codes, clock truncation and unsigned conversion, stalls, strict
-loop/ready boundaries, locking and a 650-tick evolving lifecycle. Float-to-int64
-software helpers execute on the retail side; recovered C uses the shared EE
-float model. External traversal/allocator callbacks are deterministic leaves;
-their implementations and physical EE rounding are outside this proof.
+Physical EE rounding of the clock conversion is not established.
 
 FileListInfoManager and LayerCtl were decompiled for the relevant load and layer
 contracts and checked against their original assembly. Their full runtime
-modules have not been reconstructed as differential C references here. Stage
+modules are not covered here. Stage
 streaming, shutdown cancellation inside decoders, other stage transitions and
 retail visual comparison remain separate work.
 

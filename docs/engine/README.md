@@ -106,9 +106,9 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 | [`platform-seam.md`](platform-seam.md) | The platform seam as an inventory — **32 `igPsx2*` classes, 31 of them under 30 generic interfaces with 153 fields** (`igPsx2IopRpcConnection` derives from `igObject` — it is the RPC seam and is deleted), recovered from the class hierarchy + reflection |
 | [`engine-boot.md`](engine-boot.md) | **The boot chain** — the CRT entry (`0x100008`) → the game's `main` (`FUN_002595e0`) → the managers and the frame loop (`FUN_0025a580`/`FUN_0025a8c0`) |
 | [`front-end-boot.md`](front-end-boot.md) | **The front-end boot — power-on to the title menu** — the logos → opening FMV → title → menu sequence is a chain of `NDMW.AFS` stage entries (800…814) that drive the scene stages `stagIS08/09/10/12`, switched by the Lua `STAGECTL NEXTSTAGE` API; and the controllers (`beNDMWStageCtl`, `beNDMWLoadCtrl2`, `beNDMWTitle2`, `beNDMWLogo`) |
-| [`common-model-controller.md`](common-model-controller.md) | Common-model submission, reference lifetime and newest-first completion queues; retail/C recovery |
-| [`title-menu-controller.md`](title-menu-controller.md) | Complete byte-matched title runtime: nine functions, scoped references, three switch tables and exception metadata; behavioral oracle and remaining frontend modules |
-| [`load-intf2.md`](load-intf2.md) | **The Game Start slot/character/name/difficulty/card family (`beNDMWLoadIntf2`)** — runtime block, object model, named working set, and message protocol; the master update/message handler and the **slot-selection**, **text-order** and **completion/selection** helpers are recoverable behavioral C (in `recovered/frontend/`), the other controllers are still open |
+| [`common-model-controller.md`](common-model-controller.md) | Common-model submission, reference lifetime and newest-first completion queues |
+| [`title-menu-controller.md`](title-menu-controller.md) | Complete byte-matched title runtime: nine functions, scoped references, three switch tables and exception metadata; remaining frontend modules |
+| [`load-intf2.md`](load-intf2.md) | **The Game Start slot/character/name/difficulty/card family (`beNDMWLoadIntf2`)** — runtime block, object model, named working set, and message protocol; the master update/message handler and the **slot-selection**, **text-order** and **completion/selection** helpers, with the other controllers still open |
 | [`action2-jointset.md`](action2-jointset.md) | **The `beAction2` JOINTSET contract** — reflected field layout, 60-fps frame-to-nanosecond conversion, loop/clamp behavior, and the recovered node-clock rebasing used by the title animations |
 | [`action2-timing.md`](action2-timing.md) | **When an ACTION completes** — the node clock (2^18 ns quantum, EE round-toward-zero float math), the named `WAIT` timer, WAITCHECK start/update, JOINTSET strictness, the component walker/driver and the `ISCOMEND` predicate, with the logo OPEN/CLOSE thresholds and the unverified clock boundary |
 | [`p2-renderer.md`](p2-renderer.md) | The `p2` EE-side renderer: its 6 register-touching functions, the **VU1 upload path** (program index → 48-byte record → transfer descriptor → SPR DMA), and the six functions that **name themselves** in their own strings |
@@ -117,8 +117,8 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 | [`vu1-microcode.md`](vu1-microcode.md) | The renderer's VU1 microcode map — **237 entry points** over a 109,184-byte image, by family; **lighting is 91 programs / ~90 KB** |
 | [`module-map.md`](module-map.md) | Which region of `game.elf` is which library, from `config/SLUS-20836/regions.tsv`; **85 % of the unnamed mass and of the naming backlog is third-party middleware** (SDK, Intrinsic Alchemy, libpng, Lua, CRIWARE) |
 
-- [Action2 timing and completion](action2-timing.md): timer, WAITCHECK, JOINTSET and `ISCOMEND` behavioral references with the exact time/float model.
-- [Model-sequence JUMP/WCHECK](model-sequence-waits.md): the four contiguous behavioral references and retail verification.
+- [Action2 timing and completion](action2-timing.md): timer, WAITCHECK, JOINTSET and `ISCOMEND` with the exact time/float model.
+- [Model-sequence JUMP/WCHECK](model-sequence-waits.md): the four contiguous bodies.
 
 - [System clock investigation](system-clock.md): verified logo WAIT duration, timer lifecycle and normal Action2 scheduling; raw cadence and game-pause/stage routing remain open.
 

@@ -17,10 +17,6 @@ message protocol, the per-screen helpers and where each function's source is.
 - Named functions are in `src/game/` and `src/engine/`. Functions that still
   carry a `FUN_` or `Gap__Bec__…__vfunc_NN` symbol are in `src/unmatched/`: their
   bytes match, their names and module placement are not settled.
-- A separate behavioural reference of the two master bodies and sixteen helpers
-  lives in `recovered/frontend/` with its own retail oracle
-  ([below](#behavioural-reference-and-its-verifier)). It is an independent
-  verification surface; exact source recovery does not depend on it.
 - What is not recovered is listed under [Open items](#open-items).
 
 Byte sizes on this page are the function extents in
@@ -250,15 +246,15 @@ Details of the body that are easy to get wrong:
   `0x3e3e00(JCHRSELBASE)` where retail emits `0x3e3e00(JLINEWIN01)`.
 - In the CTRL `st0==0`, `st1==4` path retail writes `CTRL+0x1d = 0` (`0x3e51c8`)
   before setting state 8.
-- `0x003de260(int, char)` reads its second argument (the verifier's
-  `ARGC[0x3de260]` is 2). The two call sites pass
+- `0x003de260(int, char)` reads its second argument. The two call sites pass
   different values: `0x3e6534` inherits `a1=1` from `li a1,1` at `0x3e64ec`,
   `0x3e7b54` does `move a1,zero`.
 - The Yes branch calls `0x003def70` with a1 = 1 left by the `li a1,1` at
-  `0x3e66ec` (the behavioural reference passes no a1 at that call); the No branch
+  `0x3e66ec`; the No branch
   passes 0 in the delay slot at `0x3e6734`.
 - The `0x3e3e00` send's 6th register is set per call site (the slot-open cursor
-  publish carries `t1=1`, the mark publishes 0).
+  publish carries `t1=1`, the mark publishes 0). Its vec3 temporary is filled by
+  `0x003e9220`, a three-float copy (`+0/+4/+8`) of the source record's `+0x1c` vec3.
 - The play/close helpers take five arguments and the sequence query four; the
   fifth (wait) argument comes from retail `t0=1` definitions.
 - The starter preview's two `0x1ae1a0` vectors (MOVETRANS) are zero (`mtc1 zero`).
@@ -306,46 +302,45 @@ python3 tools/verify.py 0x3e4750 src/game/beNDMWLoadIntf2Update.cpp
 
 ## Per-screen helpers
 
-The behavioural labels (`ss_*`, `to_*`, `cm_*`, `ds_*`) are the names used in
-`recovered/frontend/`; they describe observed behaviour and are not recovered
-method names.
-
 ### Slot selection
 
 The `beNDMWLoadIntf2SelSlot` helpers. The slot-selection screen runs
 in CTRL state 6 of the master update. The record
-is the `SELSLOT` record the master passes as `a0` (`v21 = ENSURE(LI2_SELSLOT)` in
-the reference); its pointers are `+0x14` pad
+is the `SELSLOT` record the master passes as `a0`; its pointers are `+0x14` pad
 manager, `+0x18` CommMdlCtrl, `+0x1c` TextOrder, `+0x20` the common interface.
 
-| Entry | Bytes | Symbol / source | Reference | Contract |
-|---|---:|---|---|---|
-| `0x003e0b80` | 40 | `FUN_003e0b80`, `src/unmatched/FUN_003e0b80.c` | `ss_clear` | clears `+0x34`/`+0x35`/`+0x36`/`+0x38` and `+0x4c..+0x58` |
-| `0x003e0bb0` | 140 | `beNDMWLoadIntf2SelSlot__Init`, `src/game/beNDMWLoadIntf2SelSlot__Init.cpp` | `ss_init` | reads the manager's `+0x38` mode → SELSLOT `+0x24`/`+0x2c` (0→5, 1→2, 2→9) |
-| `0x003e0c40` | 2,848 | `beNDMWLoadIntf2SelSlot__Open`, `src/game/beNDMWLoadIntf2SelSlot__Open.cpp` | `ss_open` | open/refresh: publishes `j_slotbase`/`j_memoryiconwin`, the `j_slotcursor` line and the marks, reconciles `+0x48`; returns `+0x34` |
-| `0x003e1760` | 4,888 | `beNDMWLoadIntf2SelSlot__UpdateSelection`, `src/game/beNDMWLoadIntf2SelSlot__UpdateSelection.cpp` | `ss_update` | samples the pad through `+0x14`, moves the `+0x3c` cursor on the direction bits (`0x10` up / `0x40` down / `0x20`,`0x80` cross), cancels on `0x2000` (`+0x36`), commits/selects on `0x4000` via `0x3ee190` (`+0x40`), publishes the marks; returns `+0x35` |
-| `0x003e2a80` | 140 | `beNDMWLoadIntf2SelSlot__PublishCursor`, `src/game/beNDMWLoadIntf2SelSlot__PublishCursor.cpp` | `ss_pub_cursor` | resets `+0x35`/`+0x4c..+0x58`, publishes one `j_slotcursor` line from the mark table |
-| `0x003e2b10` | 1,364 | `beNDMWLoadIntf2SelSlot__Close`, `src/game/beNDMWLoadIntf2SelSlot__Close.cpp` | `ss_marks` | finishes the mark publish (closes `j_slotbase`/`j_slotcursor`/`j_memoryiconwin` and the marks), returns SELSLOT `+0x38` |
-| `0x003e3070` | 2,832 | `beNDMWLoadIntf2SelSlot__RefreshSlotMarks`, `src/game/beNDMWLoadIntf2SelSlot__RefreshSlotMarks.cpp` | `ss_select` | re-publishes the marks, suppressing the selected row (`param_2 == loop index`), reconciles `+0x48` |
+| Entry | Bytes | Symbol / source | Contract |
+|---|---:|---|---|
+| `0x003e0b80` | 40 | `FUN_003e0b80`, `src/unmatched/FUN_003e0b80.c` | clears `+0x34`/`+0x35`/`+0x36`/`+0x38` and `+0x4c..+0x58` |
+| `0x003e0bb0` | 140 | `beNDMWLoadIntf2SelSlot__Init`, `src/game/beNDMWLoadIntf2SelSlot__Init.cpp` | reads the manager's `+0x38` mode → SELSLOT `+0x24`/`+0x2c` (0→5, 1→2, 2→9) |
+| `0x003e0c40` | 2,848 | `beNDMWLoadIntf2SelSlot__Open`, `src/game/beNDMWLoadIntf2SelSlot__Open.cpp` | open/refresh: publishes `j_slotbase`/`j_memoryiconwin`, the `j_slotcursor` line and the marks, reconciles `+0x48`; returns `+0x34` |
+| `0x003e1760` | 4,888 | `beNDMWLoadIntf2SelSlot__UpdateSelection`, `src/game/beNDMWLoadIntf2SelSlot__UpdateSelection.cpp` | samples the pad through `+0x14`, moves the `+0x3c` cursor on the direction bits (`0x10` up / `0x40` down / `0x20`,`0x80` cross), cancels on `0x2000` (`+0x36`), commits/selects on `0x4000` via `0x3ee190` (`+0x40`), publishes the marks; returns `+0x35` |
+| `0x003e2a80` | 140 | `beNDMWLoadIntf2SelSlot__PublishCursor`, `src/game/beNDMWLoadIntf2SelSlot__PublishCursor.cpp` | resets `+0x35`/`+0x4c..+0x58`, publishes one `j_slotcursor` line from the mark table |
+| `0x003e2b10` | 1,364 | `beNDMWLoadIntf2SelSlot__Close`, `src/game/beNDMWLoadIntf2SelSlot__Close.cpp` | finishes the mark publish (tracked closes of `j_slotbase`/`j_slotcursor`/`j_memoryiconwin`, and the marks), returns SELSLOT `+0x38` |
+| `0x003e3070` | 2,832 | `beNDMWLoadIntf2SelSlot__RefreshSlotMarks`, `src/game/beNDMWLoadIntf2SelSlot__RefreshSlotMarks.cpp` | re-publishes the marks, suppressing the selected row (`param_2 == loop index`), reconciles `+0x48` |
 
 The two mark tables are `0x004cd090` (`SQ_SELECT01`/`SQ_SELECT02`, 2 rows) and
 `0x004cd060` (`SQ_SELECT1A..1D` + `SQ_SELECT02`, 5 rows), `{u32 name; u32
 modelIndex}` each; the per-row model "made" flag is
 `SELSLOT+0x20 → +0x34 → +0x2c → +0x10 → [modelIndex] +8`.
 
+The screen opens only after the open queue drains, so it never opens while the queue
+stays full. `SELSLOT+0x35` settles exactly when the queue empties; cancel sets `+0x36`;
+confirm arms the per-player records.
+
 ### Text order
 
 The six consecutive bodies `0x003eba10..0x003ec114` publish and configure the
 screens' text lines (`beNDMWLoadIntf2TextOrder`).
 
-| Entry | Bytes | Symbol / source | Reference | Contract |
-|---|---:|---|---|---|
-| `0x003eba10` | 708 | `TextOrder_Configure`, `src/game/TextOrder_Configure.cpp` | `to_configure` | optional ALIGN, optional colour, TEXTSET, SWITCH SET, in order |
-| `0x003ebce0` | 136 | `TextOrder_PublishLine`, `src/game/TextOrder_PublishLine.cpp` | `to_line` | publish one line: `0x38d860(ctx,0x5179b0,0,-1)`, then `0x38f830(ctx,name)`, `0x38f830(ctx,font)`, `0x38f830(ctx,0x517a10)`, `0x38e060(ctx,0x517a08)`; `ctx = owner+0x10` |
-| `0x003ebd70` | 72 | `TextOrder_ConfigureFont`, `src/game/TextOrder_ConfigureFont.cpp` | `to_configure_font` | resolve the font from set/index, then configure (seven original arguments) |
-| `0x003ebdc0` | 60 | `TextOrder_ClearFont`, `src/game/TextOrder_ClearFont.cpp` | `to_clear_font` | resolve the font from set/index, then SWITCH CLR |
-| `0x003ebe00` | 588 | `beNDMWLoadIntf2TextOrder_PublishIdLines`, `src/game/beNDMWLoadIntf2TextOrder_PublishIdLines.cpp` | `to_set` | scan the id table, publish the id's line list, latch `0x0058a220`/`0x0058a1e0` from the entry's 2nd word, fire `0x389ff0` with `0x517a28` (id&0xf000 ∈ {0x1000,0x2000,0x3000}) or `0x517a18` (0), and when `flag==1` and the entry carries bit 20 latch the **next** entry's 2nd word into `0x58a220` and repeat the animation dispatch |
-| `0x003ec050` | 196 | `TextOrder_PublishLineListOnly`, `src/game/TextOrder_PublishLineListOnly.cpp` | `to_pub` | close variant: publish the id's line list only (no globals, no animation) |
+| Entry | Bytes | Symbol / source | Contract |
+|---|---:|---|---|
+| `0x003eba10` | 708 | `TextOrder_Configure`, `src/game/TextOrder_Configure.cpp` | optional ALIGN, optional colour, TEXTSET, SWITCH SET, in order |
+| `0x003ebce0` | 136 | `TextOrder_PublishLine`, `src/game/TextOrder_PublishLine.cpp` | publish one line: `0x38d860(ctx,0x5179b0,0,-1)`, then `0x38f830(ctx,name)`, `0x38f830(ctx,font)`, `0x38f830(ctx,0x517a10)`, `0x38e060(ctx,0x517a08)`; `ctx = owner+0x10` |
+| `0x003ebd70` | 72 | `TextOrder_ConfigureFont`, `src/game/TextOrder_ConfigureFont.cpp` | resolve the font from set/index, then configure (seven original arguments) |
+| `0x003ebdc0` | 60 | `TextOrder_ClearFont`, `src/game/TextOrder_ClearFont.cpp` | resolve the font from set/index, then SWITCH CLR |
+| `0x003ebe00` | 588 | `beNDMWLoadIntf2TextOrder_PublishIdLines`, `src/game/beNDMWLoadIntf2TextOrder_PublishIdLines.cpp` | scan the id table, publish the id's line list, latch `0x0058a220`/`0x0058a1e0` from the entry's 2nd word, fire `0x389ff0` with `0x517a28` (id&0xf000 ∈ {0x1000,0x2000,0x3000}) or `0x517a18` (0), and when `flag==1` and the entry carries bit 20 latch the **next** entry's 2nd word into `0x58a220` and repeat the animation dispatch |
+| `0x003ec050` | 196 | `TextOrder_PublishLineListOnly`, `src/game/TextOrder_PublishLineListOnly.cpp` | close variant: publish the id's line list only (no globals, no animation) |
 
 - A control id is `(mode << 16) | token`; it is matched against the low 20 bits
   of the words in the id table at `0x004cda40` (stride `0xc`: `{u32 id; u32
@@ -367,19 +362,20 @@ screens' text lines (`beNDMWLoadIntf2TextOrder`).
   animation dispatch; it does **not** publish the next entry's line list.
 - `0x3ec050` has no sentinel check, so a missing id would run off the id table;
   callers always pass present ids.
+- In `0x003ebe00`, id `0x503` (`id & 0xf000 == 0`, bit 20 set) fires the off-token, and a
+  missing id such as `0x7ffff` hits the `0xffffffff` sentinel and makes no calls or writes.
 - In `0x003eba10`, the two nops at `0x003eba64` and `0x003ebb8c` are unreachable
-  padding. The verifier executes all 208 reachable instructions of
-  `0x003eba10`, `0x003ebd70` and `0x003ebdc0` and excludes those two.
+  padding; `0x003eba10`, `0x003ebd70` and `0x003ebdc0` hold 208 reachable instructions.
 
 ### Completion and selection
 
 The two CommMdlCtrl queue queries and the confirm selection.
 
-| Entry | Bytes | Symbol / source | Reference | Contract |
-|---|---:|---|---|---|
-| `0x003e4280` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty`, `src/game/beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty.c` | `cm_open_empty` | `CommMdlCtrl(a0)._openDataList(+0x14).count(+8) <= 0` (an `igObjectList`: `+8` count, `+0x10` data) |
-| `0x003e44d0` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty`, `src/game/beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty.c` | `cm_close_empty` | the same predicate on `_closeDataList(+0x18)` |
-| `0x003ee190` | 184 | `FUN_003ee190`, `src/unmatched/FUN_003ee190.c` | `ds_select` | over the four per-player `beNDMWLoadSavePlWork` records of `COMMONINTF._flagWork` (`+0x28 → +0x10 → [i*4]`): arm rows 0–3 (`_sysStat0` `+0x24` = 1, `+0x28`/`+0x2c`/`+0x30` = 0, `_isCtrl` `+0xf` = 0, `_sysCount0` `+8` = `0x3c`), then clear the selected row (`+0x24` = 0, `+0xf` = 1, `+8` = 0) |
+| Entry | Bytes | Symbol / source | Contract |
+|---|---:|---|---|
+| `0x003e4280` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty`, `src/game/beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty.c` | `CommMdlCtrl(a0)._openDataList(+0x14).count(+8) <= 0` (an `igObjectList`: `+8` count, `+0x10` data) |
+| `0x003e44d0` | 20 | `beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty`, `src/game/beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty.c` | the same predicate on `_closeDataList(+0x18)` |
+| `0x003ee190` | 184 | `FUN_003ee190`, `src/unmatched/FUN_003ee190.c` | over the four per-player `beNDMWLoadSavePlWork` records of `COMMONINTF._flagWork` (`+0x28 → +0x10 → [i*4]`): arm rows 0–3 (`_sysStat0` `+0x24` = 1, `+0x28`/`+0x2c`/`+0x30` = 0, `_isCtrl` `+0xf` = 0, `_sysCount0` `+8` = `0x3c`), then clear the selected row (`+0x24` = 0, `+0xf` = 1, `+8` = 0) |
 
 `0x3e4280`/`0x3e44d0` are called with the `COMMDLCTRL` record; `0x3ee190` is
 called with the `COMMONINTF` record. The queues these predicates read are filled
@@ -450,104 +446,6 @@ The other helpers of the master update in this range are matched too:
 `src/game/`), `0x003ef1e0` (`FUN_003ef1e0`, `src/unmatched/`) and `0x003ef5d0`
 (`beNDMWDegiData__StoreToProperties`, `src/game/`).
 
-## Behavioural reference and its verifier
-
-[`recovered/frontend/loadintf2.c`](../../recovered/frontend/loadintf2.c) /
-`loadintf2.h` reconstruct both master bodies as an executable behavioural
-reference over one flat `peek/poke/call` world:
-
-- `0x003e9430` **vfunc_34**, the family message handler: command `0` builds the
-  whole named household and forwards `LOADCTRL2`+`GETCOMMON`; the other commands
-  are those in [Other commands](#other-commands).
-- `0x003e4750` **vfunc_31**, the per-frame master update. The `0x3e9220`/
-  `0x3e3e00` vec3 temporaries are copied through reference scratch slots.
-
-Sixteen helpers are reconstructed beside them and called directly by the
-reference: the seven slot helpers in `recovered/frontend/selslot.{c,h}`,
-the six text-order bodies in `recovered/frontend/textorder.{c,h}`
-and the three completion/selection helpers in
-`recovered/frontend/completion.{c,h}`.
-
-```sh
-python3 scripts/verify_loadintf2.py --elf orig/SLUS-20836/SLUS_208.36
-python3 scripts/verify_loadintf2.py --regression-only
-```
-
-The verifier loads the user's retail ELF and runs the original MIPS of both
-master functions through a restricted integer R5900 interpreter, comparing the
-ordered engine calls (with their meaningful arguments, including the fifth
-argument of the common-model play/close calls), the 12-byte temporary payload of
-the one call that carries one (`0x003e3e00`), and every non-stack byte written.
-On the retail side the interpreter descends into the sixteen helpers and executes
-their **original instructions** (the `REAL` set; a `real_hits` set records every
-`REAL` jal target and the run asserts it covers `REAL`), while the C side runs
-the recovered bodies. Engine and messenger callees are opaque
-`api->call`s. The interpreter's `lb` sign-extends the byte (`0xff` reads
-as −1); focused `interpreter_selftest` checks run before every verification
-.
-
-The matrix is **626 focused direct cases, 432 message cases and 1,045 update
-cases**:
-
-- Message cases: every command × registry presence × kind × entry/ready flag.
-- Update cases: 600 randomized single-tick rows, 4 targeted edge rows (system
-  gate / pad absent / player 1), 40 randomized 8-tick multi-step flows, 15
-  deliberate 8-tick flows and 1 deterministic regression (the case-1
-  preamble, which fails at event index 41 when `CTRL` is reset instead of the
-  per-player record). Controller input (the pad block) is rewritten every tick
-  while the controller/record state evolves across a flow, and all four player
-  indices (0–3) are exercised. Pad masks are drawn from
-  `(0, 0x10, 0x20, 0x40, 0x80, 0x2000, 0x4000)`.
-- The deliberate flows pin directions, confirm, confirm-at-player-0, cancel,
-  delayed completion, backtracking, slot entry, movement, confirm/select and the
-  `ss_pub_cursor` path, and assert that the text-order line/animation leaf
-  callees run. The slot flows assert these transitions from the per-tick retail
-  trace: `slot-entry` opens on tick 3; `slot-delayed` waits until the open queue
-  drains (tick 5); `slot-stall` never opens (the queue never drains);
-  `slot-complete` settles `SELSLOT+0x35` exactly when the queue empties;
-  `slot-cancel` sets `+0x36`; `slot-confirm` arms the per-player records.
-- Direct cases drive the text-order and completion functions without their
-  callers: a present id walks its **whole** line list and fires the on-token
-  (`id & 0xf000 == 0x1000`); id `0x503` (`0xf000 == 0`, bit 20 set) fires the
-  off-token; a **missing** id (`0x7ffff`) hits the `0xffffffff` sentinel and
-  makes no calls or writes; the close variant publishes the list without
-  latching the global pointer or firing the token; the flag-controlled bit-20
-  path; every alignment/colour branch (including unsupported values), four font
-  sets, indices 0/1/19, wrapper equivalence and messenger rebinding; and a
-  focused slot-close case that checks all three tracked closes. The verifier
-  also asserts tracked movement/cancel requests.
-
-Completion is not forced: the harness wires the state the accessors read — the
-CommMdlCtrl queues at `CM+0x14`/`+0x18` with their counts written each tick from
-the `cmon`/`cmcn` keys — and wires all four per-player records (`RECARR[0..3]`)
-so `ds_select` has real targets. It also wires the SELSLOT record's pointers and
-the manager's model chain so the "made" flags are exercised.
-
-**Boundaries of that comparison**, stated so it is not read as a stronger claim
-than it is:
-
-- `snapshot()` compares two *final* memory images, not an ordered write trace:
-  the same final bytes reached by a different sequence of stores agree, and a
-  store that is later overwritten is invisible.
-- Temporary and stack pointers are normalised out of the compared call
-  arguments (the two sides use different scratch addresses), so a temporary's
-  *identity* and *alias* relationship is not compared directly. Only the
-  `0x003e3e00` vec3 temporary is compared, and by payload value.
-- The one temporary that is checked is filled by `0x003e9220`, a three-float
-  (`+0/+4/+8`) copy of the source record's `+0x1c` vec3, so the compared payload
-  is that record field, not an independent object.
-- **Stubbed dependencies** (identical on both sides, not verified by this test):
-  every engine/manager callee and the remaining subordinate per-screen helpers
-  (`0x3ec120`, `0x3ec450`, `0x3ecdc0`…`0x3ef5d0`, `0x3d9e10`…`0x3de260`, plus
-  `0x3e3e00`/`0x3e4030`/`0x3e42a0`/`0x3e4480`/`0x39b810`/`0x389ff0` and the
-  text-order engine leaves `0x38d860`/`0x38f830`/`0x38e060`, `0x2294f0`,
-  `0x12a4a4`). The test does **not** verify the engine's own implementations,
-  rendering, timing or reference lifetimes, nor the behaviour of the stubbed
-  helpers.
-- The common-model submissions and poller are stubbed in this harness, so queues
-  are seeded and not filled by the screen. That group has its own verified
-  [behavioural reference](common-model-controller.md).
-
 ## Call and Create flows
 
 The title's two character flows run these states:
@@ -571,12 +469,6 @@ The title's two character flows run these states:
   constructors `0x003c27c0`–`0x003c6b00`.
 - **Unidentified objects.** The object behind `_statDisp`, the property
   block `0x003ee6d0` fills and `_svData`'s object have no reflected class.
-- **Behavioural reference coverage.** The remaining per-screen helpers
-  (`0x003ec120`, `0x003ec450`, `0x003ecdc0`–`0x003ef5d0`) — the character
-  portrait/naming entry, the difficulty rows and the memory-card utilities — are
-  stubs in `scripts/verify_loadintf2.py`, and the common-model submissions and
-  poller are not integrated there, so the *screen-driven* queue fill is not
-  compared.
 - **Not described.** The `making`/`GAMEREMOVE` transitions and the interaction
   with `beNDMWLoadSavePlWork`.
 - **Outside this block.** `0x003e3b80` (`beNDMWLoadIntf2ComMdlCtrl__Start`, 504

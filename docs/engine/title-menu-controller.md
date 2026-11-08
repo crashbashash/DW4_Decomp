@@ -3,9 +3,7 @@
 The title controller is `beNDMWTitle2`. Its complete contiguous runtime block is
 byte-matched: **nine functions / 9,876 code bytes**.
 The 8,992-byte update is in [`src/game/beNDMWTitle2.cpp`](../../src/game/beNDMWTitle2.cpp),
-including initialization and reference lifetimes. Its initialized-state
-[executable C reference](../../recovered/frontend/README.md) remains available
-for the 55,264-case retail-instruction comparison.
+including initialization and reference lifetimes.
 
 The title scene and its asset graphs are described in
 [front-end boot](front-end-boot.md). The state machine supplies the missing
@@ -66,8 +64,7 @@ reproduce the full payload, including the shared cleanup suffixes:
 
 The outer work-list and CTRL references enclose the three short-lived child
 references during initialization. Later ensure-list temporaries have their own
-short scopes. This is the allocation/lifetime boundary that the
-initialized-record behavioral reference omits.
+short scopes.
 
 Relative to a raw m2c draft, the source restores seven inert cases to their nested
 switches and uses word-sized reference-count reads, byte-sized `OPTION._isOK` accesses
@@ -82,7 +79,6 @@ Verification:
 
 ```sh
 make verify VA=0x3f2ef0 SRC=src/game/beNDMWTitle2.cpp
-python3 scripts/verify_title_menu.py --elf orig/SLUS-20836/SLUS_208.36
 make check
 make link
 make typed-check
@@ -126,8 +122,8 @@ handoff, not a recovered hardcoded inactivity timeout.
 ## Input and two-row menu
 
 The pad record returned by `0x0039b810` supplies directional words at `+0x1c` and
-`+0x20`, pressed buttons at `+0x48`, and the second button word at `+0x4c` (`button_secondary` in the behavioral
-interface; the pad-manager producer and repeat timing are outside this verification). Direction tests OR the two direction words and the two button
+`+0x20`, pressed buttons at `+0x48`, and a second button word at `+0x4c` (the pad-manager
+producer and repeat timing are not established here). Direction tests OR the two direction words and the two button
 words: Up uses `1 / 0x10`, Right `2 / 0x20`, Down `4 / 0x40`, Left `8 / 0x80`.
 START (`0x0008`), Cross (`0x4000`) and Circle (`0x2000`) use `+0x48` alone.
 This describes the controller's consumption; it does not by itself establish
@@ -170,32 +166,28 @@ direction. Cross exits only on row 3, while Circle exits from any row. Both set
 The visible choices respond immediately, but that differs from immediately
 writing game RAM.
 
-The window/cursor sequences and text operations are all in the C reference,
-including `SQ_MOVE`, `SQ_LINESL00..03`, `SQ_LINERT00..02`, `SQ_LINELF00..02`,
+The window/cursor sequences and text operations include `SQ_MOVE`, `SQ_LINESL00..03`, `SQ_LINERT00..02`, `SQ_LINELF00..02`,
 and `SQ_LINEON00..03`. Text IDs `0x000f0001..0x000f000d` are preserved.
 No durations have been invented: the completion callbacks gate state advances.
 
 The alternate `_oldCountry != 1` exit uses the black fade, writes both settings
 back to game RAM, marks the option-valid byte, stops BGM/environment/SE, and
 requests `stagIS08`. Normal opening assigns `_oldCountry=1`; the alternate
-branch is retained and tested without asserting it is reachable during normal
+branch exists in retail and is not asserted to be reachable during normal
 US title-menu interaction.
 
 ## Engine boundary
 
 `0x003e4280` returns whether the list at the common-model controller's `+0x14`
 has no entries; `0x003e44d0` does the same for `+0x18`. These are two separate
-queues. The reconstruction calls them `opening_done` and `closing_done`, with
-opening also covering played sequences. `0x003e44f0` updates the model controller
+queues: opening, which also covers played sequences, and closing. `0x003e44f0` updates the model controller
 before the input/state dispatch. The original transitions depend on these
 queries, not on one fixed delay.
 
-The reference deliberately delegates the model/text/messenger implementations.
-A call-order match with stubbed replies does not establish their real timing,
-rendering, audio, persistence, or reference lifetimes. The object-creation
-prologue lazily constructs a property list and the CTRL, common-model, OPTION,
-and text-order objects; it is not replaced by C host records in the matching
-build.
+The model/text/messenger implementations, with their real timing, rendering,
+audio, persistence and reference lifetimes, lie outside this controller. The
+object-creation prologue lazily constructs a property list and the CTRL,
+common-model, OPTION, and text-order objects.
 
 ## Boundary repair and verification
 
@@ -225,16 +217,15 @@ The complete 168-byte body has matching source.
 
 `GENERATE_TITLE` hands the loaded title to `beNDMWLoadCtrl2`, whose contiguous
 runtime block is `0x003f19e0..0x003f2d4c`. All nine runtime bodies have matching
-C/C++; the behavioral references remain useful
-for their bounded engine-call contracts:
+C/C++:
 
 | Start | Bytes | Role | Recovery |
 |---|---:|---|---|
 | `0x003f19e0` | 156 | Resolve pad manager and addref/release it | **Byte-matched** `vfunc_32` |
-| `0x003f1a80` | 2,504 | Per-frame load-controller update | **Byte-matched** `vfunc_31`; has a behavioral reference |
+| `0x003f1a80` | 2,504 | Per-frame load-controller update | **Byte-matched** `vfunc_31` |
 | `0x003f2450` | 12 | MetaObject return `*(int*)0x0058baf0` | **Byte-matched** `vfunc_30` |
 | `0x003f2460` | 36 | Slot-29 descriptor wrapper (C++ mode) | **Byte-matched** `vfunc_29` |
-| `0x003f2490` | 1,832 | RUN/GAMESTART message handler | **Byte-matched** `vfunc_34`; has a behavioral reference |
+| `0x003f2490` | 1,832 | RUN/GAMESTART message handler | **Byte-matched** `vfunc_34` |
 | `0x003f2bc0`/`c40`/`cc0` | 128 each | Reference-release wrappers | Matching source; no register-allocation wall |
 | `0x003f2d40` | 12 | MetaObject return `*(int*)0x0058bef0` | **Byte-matched** `vfunc_20` |
 
@@ -249,13 +240,6 @@ The generated symbol map supplies the contiguous extents above; they are
 not Ghidra occupied-body counts.
 
 ### Recovered load-controller flow
-
-Both functions are reconstructed in
-[`recovered/frontend/loadctrl.c`](../../recovered/frontend/loadctrl.c) and checked
-against the original instructions by `scripts/verify_loadctrl.py` (1,624 cases:
-ordered engine calls with their arguments and every non-stack byte write). The
-engine callees are stubbed, so this is control-flow and call-stream equivalence,
-not engine timing or rendering.
 
 The controller is `this = beNDMWLoadCtrl2` (`_insight` `+0x0c`, `_messenger`
 `+0x14`, `_cameraMode` `+0x24`, `_lightMode` `+0x28`) plus a second argument, the
@@ -297,11 +281,11 @@ and [the load-interface contracts](load-intf2.md).
 
 ### Common-model boundary
 
-The shared `0x003e3b80..0x003e46a4` helper group has a verified
-[common-model reference](common-model-controller.md).
+The shared `0x003e3b80..0x003e46a4` helper group is described in
+[common-model request queues](common-model-controller.md).
 The action interpreter, exact sequence/running predicates, timing, rendering and
-audio remain outside its equivalence claim. See `load-intf2.md` for the
-master/slot behavioral references and their seeded-queue limitation.
+audio are outside that description. See `load-intf2.md` for the
+master and slot controllers.
 
 ### Logo sequence
 

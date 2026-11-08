@@ -2,15 +2,12 @@
 
 This page covers the complete seven-body presentation run
 **3f59b0..3f6348 /2,420 code bytes**, plus the complete shared title update
-**424160..424230 /208 bytes**. The readable
-[guest-reference implementation](../../recovered/engine/window-presentation.c)
-passes **223 original-instruction RAM/return/ordered-call cases**, including real
-root/tree/title/presentation closure. It executes **651/657 instruction addresses**:
-four words are excluded zero padding; two belong to a contradictory branch under
-the checked callee-save ABI. Neither is counted as exercised.
+**424160..424230 /208 bytes**: **657 instruction addresses**, of which
+four words are zero padding and two belong to a branch that can never be taken
+under the callee-save ABI.
 
 All eight bodies /2,628 bytes have exact source. ClearTextElement136 was already matched;
-its five receiver accesses now use the recovered Window layout. New
+its five receiver accesses use the recovered Window layout. The
 [model forwards](../../src/game/window-model-forwarding.cpp) add **116 matched
 bytes**: default-origin64 and model-sequence52. The other five bodies /2,376 bytes
 match as `src/unmatched/beNDMWWindow_ClearQueuedText.cpp`,
@@ -48,7 +45,7 @@ String references use a full32-bit counter at token-4 and owner at token-8, dist
 from object low23-bit references. When a temporary or old element reaches zero,
 30c940 receives the owner and token-8. Pool creation16/2eb010 and2eadf0 occurs only
 when global586f20 is null; its returned value is published before2eaf60. Allocation
-failure does not gain a new early return or alternative intern policy.
+failure has no early return or alternative intern policy.
 
 ## Model presentation and queued close data
 
@@ -98,23 +95,20 @@ it clears the current name string list, zeroes the current ram-number list count
 clears the current sequence string list and returns1. Clear/reset order, captured
 list pointers and callback-time string ownership are preserved.
 
-## Shared title update and composition
+## Shared title update
 
 The title update is shared by the five root title widgets and other title classes.
 In primary state0 it calls raw virtual byte96 for type-specific initialization,
 then increments the current state and clears40/36/32. State1 does nothing. State2
-executes PlayQueuedModelClose, ClearQueuedText and the recovered child-close helper,
+executes PlayQueuedModelClose, ClearQueuedText and the child-close helper,
 then advances/reset counters. State3 clears active byte24 after PollCloseComplete
 returns nonzero. Other states do nothing. The tree caller owns the active-byte
 check; no second guard is inserted into this title body.
 
-Tests compose the real generic shop root, common window tree, shared title update
-and all presentation helpers on both sides. Factories create controlled widgets;
-title-specific byte96 initialization and concrete text/model receiver services
-remain leaves. This proves the lifecycle interaction, not real rendering, animation,
-input or transactions.
+Title-specific byte96 initialization and concrete text/model receiver services are
+separate dependencies, as are real rendering, animation, input and transactions.
 
-## Span and coverage evidence
+## Span evidence
 
 The title's old200-byte occupied-size split lost the final return/delay words.
 Its actual208-byte span now includes both. Reviewing the selected service
@@ -136,26 +130,19 @@ retail contents unchanged. Generated Ghidra ranges own the symbols/layout/assemb
 independent tests check every final return against the ELF. The remaining six
 service updates total21,744 bytes before their dependencies.
 
-The two unexecuted nonzero words at3f5e54/5e58 are an inner null-close-sequence
+The two never-run nonzero words at3f5e54/5e58 are an inner null-close-sequence
 branch. Entry moves the argument to callee-saved s2; the outer zero test skips the
 whole tracking block, and the inner nonzero test therefore always skips those
 words. A register-write scan verifies that s2 is written only at entry and final
-restore. The tests do not corrupt callee-saved registers to manufacture coverage.
+restore.
 
 ```sh
-python3 testing/test_window_presentation_retail.py
 python3 testing/test_lua_engine_dependencies.py
 python3 tools/test_function_extents.py
 make check
 make link
 make typed-check
 ```
-
-Cases cover null strings, pool creation/failure, reference-count boundaries,
-non-null interned-empty results, callback-changed temporary/messenger/backing
-storage, resize relocation, negative counts, return-width distinctions and
-persistent all-mode root/title close sequences. Private input frames are mapped
-before execution; no retail output is copied into expected memory.
 
 The 208-byte title matches as
 `src/unmatched/Gap__Bec__beNDMWWindowTitle__vfunc_21.cpp`. Recover

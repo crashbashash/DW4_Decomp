@@ -1,20 +1,17 @@
 # `beAction2` timing and completion
 
-Behavioral recovery of the retail code that decides **when a model-controller ACTION
+The retail code that decides **when a model-controller ACTION
 finishes**: the WAIT/WAITCHECK component, the named timer it arms, the JOINTSET
 completion path, the node clock they share, the float-to-integer conversion under all
 of them, the component walker and per-frame driver, and the `ISCOMEND` predicate the
 sequence layer polls.
-The C is an executable reference, not newly byte-matched compilation units; nothing
-here is banked into `src/`.
-
-Files: `recovered/frontend/action2time.{c,h}` (the contracts below),
-`recovered/frontend/eefloat.{c,h}` (single-precision arithmetic as the EE performs it),
-and `scripts/verify_action2time.py` with its interpreter `scripts/ee_core.py`.
+Every body in the table below has C source in `src/`. All classify as `match` in
+`data/check-categories.tsv` except `0x00377990` (`vfunc_33`), which is `foreign-profile`:
+its code bytes reproduce only under a provisional compiler override.
 
 ## Recovered bodies
 
-| Retail | Bytes | C | Contract |
+| Retail | Bytes | Label | Contract |
 |---|---:|---|---|
 | `0x00230110` | 60 | `a2_f32_to_s64` | float → int64; sign-magnitude wrapper around the soft-double conversion `0x0022ffe8` |
 | `0x00398e80` | 112 | `a2_node_time(node, clock)` | node clock: `(int64)(scale · ticks) << 18` plus bias |
@@ -37,8 +34,8 @@ is the `Gap::Bec::beAction2` manager (`mgr`) and its second the playing-action o
 `+0x14` active byte, `+0x28` property list, `+0x2c` time node, `+0x38`
 `beAction2InfoWork`). `*_Start` handlers take the component as a third argument. The
 driver calls `*_Update` with exactly `(mgr, act)`. `mgr+0xc` is the engine system whose
-int64 clock is at `+0x50`; `mgr+0x14` is the messenger. The `a2_*` names are the C
-reference's, not committed symbols: no retail name for the timer group or the
+int64 clock is at `+0x50`; `mgr+0x14` is the messenger. The `a2_*` names are descriptive
+labels, not committed symbols: no retail name for the timer group or the
 conversion has evidence beyond the property names `WAIT` (`0x50dfd8`) and `FADE`
 (`0x50dfe0`), so they remain hypotheses.
 
@@ -46,7 +43,7 @@ conversion has evidence beyond the property names `WAIT` (`0x50dfd8`) and `FADE`
 
 The engine clock `sys+0x50` is an int64 count of **nanoseconds**. Every consumer reads
 it through the same sequence, which fixes the resolution at 2^18 ns (262,144 ns,
-≈ 0.26 ms) — *not* "frames", as an earlier version of the JOINTSET page said:
+≈ 0.26 ms), not frames:
 
 ```
 ticks = low 32 bits of (clock >> 18)            # arithmetic shift, then truncation
@@ -57,8 +54,7 @@ time  = ((int64)(f * scale) << 18) + bias       # scale: node +0x78 / timer +0x1
 
 `(int64)` is `0x00230110`. It converts the magnitude and negates for negative inputs; a
 magnitude of 2^64 or more saturates to 2^64 − 1 (so `-x` becomes 1); magnitudes between
-2^63 and 2^64 wrap as unsigned; denormals and negative zero convert to 0. This is
-verified against retail for every exponent, both signs and several mantissa classes.
+2^63 and 2^64 wrap as unsigned; denormals and negative zero convert to 0.
 
 `FUN_00398ef0` writes a `beModelCtrlNode2`'s cached time at node `+112` (`_time`) separately,
 from the effective time `0x00398e80` calculates. A paused snapshot can stop mid-update
@@ -78,20 +74,17 @@ EE:          1e9f · 30 = 0x50df8475 ->                 / 60 -> 499,999,968 ns
 ```
 
 The duration compared against elapsed time is **499,999,968 ns**, 32 ns short of half a
-second. `eefloat.c` carries IEEE bit patterns and uses integers only; `ee_core.py`
-implements the same model independently. Both are checked against each other and
-against the host FPU forced to round toward zero (an independent oracle for the
-rounding rule on normal operands).
+second.
 
 Beyond 2^24 ticks (2^42 ns ≈ 73 minutes of continuous clock) the float cannot hold the
-tick count exactly, so elapsed times coarsen; the model reproduces that.
+tick count exactly, so elapsed times coarsen.
 
 ## Named timer
 
 The action's property list (`act+0x28`) is created lazily, with a reference-counted
 assign whose count lives in the low 23 bits (release triggers when
-`(count & 0x7fffff) == 0`; a count with high bits set therefore releases early —
-modeled). `a2_timer_start` looks the name up, creates and registers the property when
+`(count & 0x7fffff) == 0`; a count with high bits set therefore releases early).
+`a2_timer_start` looks the name up, creates and registers the property when
 absent, and writes, in order: base `-(f(start) << 18)` at `+0x18`, the start clock at
 `+0x28`, `1.0f` at `+0x38`, the duration at `+0x20`. `a2_timer_complete` looks the timer
 up, reads its duration, then calls the elapsed query (a second lookup) and compares
@@ -126,7 +119,7 @@ resumes `a2_start_components`** (the store happens before the call):
   end time completes at once; the guard `work+8 != 1` of the controlling element
   suppresses the check entirely.
 
-The `R` path's meaning is not established (see Boundaries); its arithmetic is verified.
+The `R` path's meaning is not established (see [Unverified](#unverified)).
 
 ## JOINTSET
 
@@ -138,15 +131,14 @@ one-shot (2) clamps to `end`, loop (1) subtracts the span. If anything changed i
 rebases the bias to the new time and sets `work+0x30`. At exactly `now == end` nothing
 happens, which is why a one-shot range completes one clock quantum later than a
 non-strict test would. A loop whose start is not below its end never leaves the loop in
-retail (an infinite spin); the reference does the same and the verifier never presents
-that input.
+retail (an infinite spin).
 
 ## Walker, driver, ISCOMEND
 
 `a2_start_components` resumes at `work._comIndex`, starting each component by its class
 (MOTIONSET, JOINTSET, FADESET, WAITCHECK, FLASHSET are tried in that order, one virtual
 `GetMetaObject` call per test) and continuing while the handler's low return byte is
-nonzero. A component of an unknown class never advances in retail; the reference stops.
+nonzero. A component of an unknown class never advances in retail.
 
 `a2_update` runs only while `act+0x14` is set and `work+0x4c` (`_isFreeze`) is clear,
 and calls the `*_Update` handlers in the order MOTIONSET, **JOINTSET, FADESET,
@@ -173,39 +165,14 @@ the start clock's offset inside its tick is at least 170,742 ns, and the 31st fr
 otherwise — about 35 % / 65 % over uniformly distributed phase. OPEN and CLOSE complete
 on the same frame as their final `JOINTSET`/`WAITCHECK` update, and `ISCOMEND` is true
 on that frame. The exact frame in the real game depends on the clock's phase and
-cadence, which this slice does not recover (below).
+cadence, which this page does not establish (below).
 
 Outside that range, convert **each absolute clock separately**, then subtract;
 rounding the elapsed tick difference loses retail behavior. At a 16,666,667 ns
 step, start clocks `((2^25)+1)<<18`, `(2^31)<<18`, and `((2^31)+255)<<18`
-complete OPEN and CLOSE on frames 30, 33, and 29 respectively in the modeled
-retail/C comparison. The first case completes after only 1,907 raw ticks.
+complete OPEN and CLOSE on frames 30, 33, and 29 respectively.
+The first case completes after only 1,907 raw ticks.
 These are conditional clock-model results, not measured console timings.
-
-## Verification
-
-```
-python3 scripts/verify_action2time.py --elf orig/SLUS-20836/SLUS_208.36       # ~100 s
-python3 scripts/verify_action2time.py --elf orig/SLUS-20836/SLUS_208.36 --quick
-```
-
-The verifier runs the **original retail instructions** of every body above on an
-R5900 interpreter and the recovered C in the same world. The module's own functions
-execute as instructions; everything outside it is a leaf stub that both sides share.
-For each call it compares the ordered leaf calls with their meaningful arguments (32-
-and 64-bit exactly), the ordered stores (8-byte stores as low then high word), the final
-memory image and defined return values. It also asserts, with independent Python
-integer arithmetic, the strict `duration < elapsed` threshold at `E−1, E, E+1`, the
-JOINTSET clamp and loop-wrap results, ISCOMEND's predicate, and the logo OPEN/CLOSE
-completion tick for many clock phases and cadences. 46,132 retail/C calls agree, with
-**1,013 body instruction addresses** covered; five additional statically reachable
-but unreachable-by-construction addresses are exempt (`DEAD` in the script). Eight deliberately mutated
-copies of the C (non-strict compares, round-to-nearest, swapped store/call order,
-unsigned/signed compare, saturation, off-by-one) are each rejected.
-
-The interpreter checks itself first on hand-assembled programs (64-bit variable shifts,
-`divu` by zero, branch-likely nullification, `mula.s`/`msub.s`, `bc1t`/`bc1f`,
-`mtc1`/`cvt`).
 
 ## Unverified
 
@@ -220,8 +187,8 @@ The interpreter checks itself first on hand-assembled programs (64-bit variable 
   confirming that result, not every arithmetic operation or exceptional case.
 - **Leaf behavior.** Property-list lookup/insert, allocation, string interning, the
   FADESET/MOTIONSET/FLASHSET handlers, the motion clock `0x001dd4b0`/`0x001af510`, the
-  messenger, and `vfunc_33`'s other message cases are stubs, compared only by calls and
-  arguments. `FADESET` completion does not gate an action.
+  messenger, and `vfunc_33`'s other message cases are not established here. `FADESET`
+  completion does not gate an action.
 - **The node's `_timeScale`** is read, not set, here; actions are assumed to run at 1.0
   unless another writer says otherwise.
 - **The `R` WAITCHECK mode's** purpose (a beat-aligned wait is the arithmetic's shape)

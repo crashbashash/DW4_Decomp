@@ -1,8 +1,7 @@
 # Compiler object ownership and exception settings
 
 These are measured properties of MWCCPS2
-3.0 build011126 and the matching pipeline. They do not mark a behavioral adapter
-as byte-matched source.
+3.0 build011126 and the matching pipeline.
 
 ## Exact alias-pool tail calls
 
@@ -29,8 +28,7 @@ The compiler's own `-help all` output documents the exceptions-on default.
 The C++ types are narrow ABI views, not recovered original class declarations.
 No object is instantiated and no assembly encodings are inserted into C. The
 default and explicit argument movements, halfword alignment, full -1 sentinel
-and virtual tail transfer are verified instruction-for-instruction. Existing
-286-case retail runtime comparisons still cover all54 bodies/4,160 bytes.
+and virtual tail transfer are verified instruction-for-instruction.
 
 All54 bodies /4,160 bytes of the alias runtime match; the740-byte backend is
 `src/unmatched/igAliasMemoryPool_ManageAllocation.cpp`. The exception setting alone
@@ -70,7 +68,6 @@ looks close.
 
 ```sh
 python3 tools/test_verify_relocations.py
-python3 testing/test_alias_pool_runtime_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link

@@ -1,7 +1,6 @@
 # Context construction, record ownership and tracker delegation
 
-Recovery covers seven bodies /1,928 bytes in
-[context-lifecycle.c](../../recovered/engine/context-lifecycle.c): constructor152,
+Seven bodies /1,928 bytes: constructor152,
 destructor188, name initialization116, retained slot setter184, allocation delete64,
 and the contiguous special delegate668/removal556 pair. All seven bodies /1,928 bytes
 have matching source: destructor188/setter184 (**372 matched bytes**) in
@@ -43,13 +42,6 @@ before publication. It publishes the new pointer, increments its full reference
 word and, for non-null values with index>=current header8, stores index+1 at header8.
 Null assignments do not update that header. Its wider meaning is not inferred.
 
-The210-checkpoint composition constructs the context, initializes all original
-names, installs46 allocator bindings through this setter, runs original registry
-creation and populated Work/list/header lifetime, removes every binding, then
-destroys the context. The externally owned allocator changes reference1->47->1.
-The context fixture sits in guest storage distinct from the metadata field-name
-selector, so both recovered layouts coexist; an address overlapping the selector does not work.
-
 ## Special delegation and removal
 
 Slot208 (2f64e0) calls the current slot204 allocator builder with output-first
@@ -79,26 +71,13 @@ All paths finally release the captured allocator reference. The original header8
 condition is preserved literally: index==header8+1 stores index at header8. It is
 not silently replaced with a conventional shrinking-count condition.
 
-The [allocator builder recovery](allocator-builder.md) implements the
-complete2,064-byte slot204 dispatcher and composes it into selector/name/delegate
-oracles. Concrete allocator/tracker factories and virtual methods remain callbacks.
+The [allocator builder](allocator-builder.md) documents the
+complete2,064-byte slot204 dispatcher. Concrete allocator/tracker factories and
+virtual methods are outside it.
 
-## Verification and remaining work
+## Remaining work
 
-python3 testing/test_context_lifecycle_retail.py checks **244** original-instruction
-RAM, defined-return and ordered-call cases across all seven bodies. It covers
-null/signed16 destruction, parent flags/references, slot bounds/identity/replacement,
-all tracking-option branches, inherited/owned tracker lifetimes, backing-policy
-precedence, callbacks, special selector/name dispatch and the unusual header8 rule.
-
-python3 testing/test_memory_field_values_retail.py --context-lifecycle checks
-**210** states with original context construction/names/retained slots, metadata,
-populated Work/list lifetime, runtime header copy, registry shutdown and context
-slot release/destruction. Allocator values remain supplied fixture objects; their
-backend implementations and global selector publication remain bounded. The other
-modes retain their113/114/116 counts.
-
-Twenty-one dependency tests verify constructor/destructor sites, concrete slots100/
+`testing/test_lua_engine_dependencies.py` verifies constructor/destructor sites, concrete slots100/
 180/208/212 and reviewed roots. Retail objdump confirms the complete shapes.
 Next: context configuration/stack
 control, actual allocator/tracker backends and remaining Lua gameplay receivers.

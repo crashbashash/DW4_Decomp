@@ -48,14 +48,10 @@ This does not claim the original source used inline assembly.
 
 ```sh
 python3 tools/verify.py 0x3b6430 src/game/beNDMWWindowCtrl_Destroy.cpp --verbose
-python3 testing/test_shop_root_metadata_retail.py
 make check
 make link
 make typed-check
 ```
 
-The metadata oracle's117 cases still treat this cleanup call as a controlled
-leaf. Exact verification separately covers this entire original cleanup body;
-it is not a claim that the two portable adapters now compose end to end.
 The original helper/source and whole-section byte checks are the acceptance
 for this PS2 matching body.

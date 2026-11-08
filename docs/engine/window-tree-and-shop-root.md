@@ -3,20 +3,18 @@
 **Six bodies /2,980 code bytes** are recovered: the contiguous child-close,
 context-binding and recursive-update helpers at3f6350..3f6618, plus the complete
 ShopCtrl00 update4267b0..426f94 and its two adjacent128-byte scoped-reference
-cleanups426fa0/427020. The readable
-[window-tree reference](../../recovered/engine/window-tree.c) and
-[shop-root reference](../../recovered/engine/shop-root-update.c) pass
-**1,057 original-instruction RAM/ordered-call cases**, including composed
-open/select/close sequences for all eleven raw mode values. All **741 executable
-instruction addresses** run. Four excluded zero words are padding.
+cleanups426fa0/427020. They hold **741 executable
+instruction addresses**; four further zero words are padding.
 
 The final16 bytes of the shop-root update were absent from the previous split.
 Ghidra counts2,004 occupied bytes but spans **2,020 bytes**, with four internal
 NOP holes. The old occupied-byte size ended after restoring ra at426f80, losing
 saved-s1/s0 restores, return and stack-release delay slot. Generated ranges and
 split/layout now include the full sequence. This adds16 classified code bytes
-and removes16 data bytes; **zero new matching bytes**. All six bodies retain
-assembly.
+and removes16 data bytes. All six bodies match in `src/unmatched/`
+(`beNDMWWindow_RequestChildrenClose.c`, `beNDMWWindow_BindContext.cpp`,
+`beNDMWWindow_UpdateTree.cpp`, `Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`,
+`FUN_00426fa0.cpp` and `FUN_00427020.cpp`).
 
 ## Window ownership and context
 
@@ -40,12 +38,12 @@ the low23-bit reference rule, then publishes the parent and insight. It queries
 the insight collection through236f80 using the current published beMessenger
 handle588f38 and bePadManager handle588518, storing the two results. Player and
 entry code are published last. Original arguments remain captured across callbacks;
-no fallback manager, extra initialization or null-success policy is inserted.
+there is no fallback manager, extra initialization or null-success policy.
 
 RequestChildrenClose3f6350 captures the signed list count, reloads list/data for
 each child, and changes only children whose signed state28 is below2. It writes
 state2 and clears40,36,32 in that order. Existing close states are preserved.
-This complete104-byte body is also executed in the composed shop close tests.
+The body is 104 bytes.
 
 ## Recursive update and removal
 
@@ -62,7 +60,7 @@ through2d6cf0; the list pointer captured after recursion survives the destructio
 callback. After removal it reloads that list's current count/data and explicitly
 zeroes the vacated tail. Both the local index and local loop bound decrement so
 shifted children are processed. New children appended during callbacks do not
-increase the captured bound. No new null-child or consistency guards are added.
+increase the captured bound. There are no null-child or consistency guards.
 
 ## Root state0: common widgets
 
@@ -121,9 +119,9 @@ The service reference occupies private frame56. The routine sets that cell to
 zero, captures the selected factory, obtains the allocator, releases the **current**
 cell, constructs/binds/appends the service and releases the current cell again.
 The retail instructions retain pre-construction release branches that Ghidra's
-decompiler removed as unreachable after assuming the local stays zero. Controlled
-callback/frame-mutation cases exercise those original instructions; this is not
-a live-game claim that ordinary allocation changes the caller's private frame.
+decompiler removed as unreachable after assuming the local stays zero. Whether
+ordinary allocation can change the caller's private frame in a live game is not
+established.
 
 The root captures the actual current child count in80, increments the current
 substate and clears40/36. It then compares current count with the captured count.
@@ -136,8 +134,7 @@ root update.
 
 State2 sends MODELCTRL / `i_bgclear` / OFFREEZE, then invokes3f5f80,3f5a40 and
 RequestChildrenClose in that order. It increments the current state and clears
-counters. The [presentation/close helpers](window-presentation.md) now have complete
-behavioral recovery. State3 calls3f6090 and clears `_isRun` when its full return
+counters. See the [presentation/close helpers](window-presentation.md). State3 calls3f6090 and clears `_isRun` when its full return
 register is nonzero. Other primary states do nothing.
 
 The two adjacent scoped-reference cleanup bodies are byte-identical. They
@@ -146,10 +143,9 @@ free their wrapper through100610 when the signed low16-bit flags are positive,
 and return the original wrapper. Their original template payload types and unwind
 ownership are not inferred solely from adjacency or identical code.
 
-## Verification and matching boundary
+## Checks and remaining work
 
 ```sh
-python3 testing/test_window_tree_retail.py
 python3 testing/test_lua_engine_dependencies.py
 python3 tools/test_function_extents.py
 make check
@@ -157,20 +153,5 @@ make link
 make typed-check
 ```
 
-Cases cover states/substates, all modes and both allocators, gate/close return
-widths, parent/refcount boundaries, signed child states, list replacement/growth,
-removal relocation, callback-mutated fields/temporary storage, and persistent
-root/tree open/selection/closure. Service widgets use controlled virtual methods;
-parent/root/common tree bodies execute original instructions on one side and the
-recovered implementations on the other. No retail output is copied into the
-recovered expected result. Private-frame input is translated before execution.
-
-The presentation suite now composes this root/tree with actual title updates and
-close helpers; concrete receivers and service widgets remain controlled leaves.
-
-An explicitly typed BindContext compiler candidate reproduces logic in204 bytes,
-missing the executed retail NOP after destruction; it is not banked. Child-close
-source-shape probes also remain mismatched. No assembler placeholders or matching
-credit are added. Continue exact matching and recover the concrete selected
-service controllers, presentation/close helpers, actual prices/transactions and
+Recover the concrete selected service controllers, actual prices/transactions and
 [remaining hub scope](../systems/hub-recovery.md).

@@ -6,9 +6,7 @@ This page covers the concrete `beSelectCtrl` receiver used by the
 `beSelectCtrl_RegisterReceiver` at `0x0039cbc0` (36 bytes).
 The metadata getter at `0x0039cbb0` (12 bytes) and inherited dispatch check at
 `0x00378410` (8 bytes) are matched as well.
-The complete update (2,864 bytes) and general handler (1,960 bytes)
-have [readable behavioral source](../../recovered/engine/selectctrl.c), checked
-against the original instructions. These two bodies match in
+The complete update (2,864 bytes) and general handler (1,960 bytes) match in
 [Gap__Bec__beSelectCtrl__vfunc_31.cpp](../../src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp) and
 [Gap__Bec__beSelectCtrl__vfunc_33.cpp](../../src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp).
 
@@ -40,7 +38,7 @@ layout.
 
 ## Distinct state objects
 
-The original-instruction oracle verifies these distinct records. Their offsets
+These records are distinct. Their offsets
 must not be merged into a single state layout: all three have meaningful words
 24 and 28.
 
@@ -103,60 +101,41 @@ count. The other **28 bytes** are five saved-register restores,
 `jr ra` and its delay slot, as covered by the extent regression. The contiguous span includes those seven
 words. Generated extents retain every occupied range.
 
-## Behavioral verification and matching residue
+## Verification and behaviour details
 
 Run from the repository root:
 
 ```sh
-python3 testing/test_selectctrl_retail.py
 make check
 make link
 make typed-check
 ```
 
-The oracle runs **4,089 manager cases**, comparing every non-stack RAM byte and ordered
-engine-call arguments/state snapshots. It executes all **1,187 non-padding
-instruction addresses** in the two bodies' 1,206-word spans; the 19 omitted
-words are independently checked as zero padding. No original output is copied
-into the recovered expectation. Input state and private temporary storage are
-mapped before the two implementations execute independently.
+The two bodies' spans hold 1,206 words: **1,187 non-padding instructions** and 19
+zero padding words.
 
-Cases cover all commands, invalid full-width command values, inactive contexts,
-both registry allocators, live integer counts/start-point handling, vector bit
-patterns (including signed zero and NaN payloads), cancellation defaults, typed
-bool-list creation/growth, signed size/capacity extremes, old and temporary
-reference deletion, string replacement, pool creation/failure and callback
-mutation. The decision loop reloads its temporary list pointer after each bool
+The decision loop reloads its temporary list pointer after each bool
 getter and its backing data after resize. Cancellation writes zero only for an
 exact NOCANCEL string; otherwise the new work's supplied cancellation byte is
 preserved. The FO2TOP eligibility test does not additionally require active=1.
 Work-owned animation waits reload their saved sequence **after** selecting the
-model receiver. A deliberate callback replacement in the regression checks it:
-the source uses the later string, and a capture taken before the selection is stale.
+model receiver: the source uses the later string, and a capture taken before the
+selection is stale.
 
-Persistent sequences run GENERATE/open, directional selection, confirmation,
-close and final work release. Separate sequences cover cancellation (including
-simultaneous `0x2000|0x4000` precedence), REMOVE, FO2TOP and rejected-choice
-recovery through the 16-count wait. The named model sequences are
+The named model sequences are
 `SQ_OPEN`, `SQ_LINESL%02d`, `SQ_LINEUP%02d`, `SQ_LINEDW%02d`,
 `SQ_LINEON%02d`, `SQ_CLOSE`, `SQ_CANCEL` and `SQ_FO2TOP`. Rejection sends
-`SOUND CURSOR_NG PLAY`. Model/animation execution itself remains controlled.
+`SOUND CURSOR_NG PLAY`.
 
-Factories/allocators, registry lookup, pad-state acquisition, messenger services,
-formatting, interning and destruction are bounded leaves. This proves the two
-manager bodies at those boundaries. It does not establish real pad sampling,
-rendering, physical animation timing or the original
-scripts' complete outcomes. The 576-case shop-selector oracle
-controls its SELECTCTRL receiver responses. The separate
-[joint common-owner oracle](selector-manager-composition.md) executes the
-actual handler/update/pad lookup beneath the owner, with immediate SD delivery
-and empty close queues. Shop-specific initialization and XDATA transactions
-are not part of that call tree.
+Real pad sampling, rendering, physical animation timing and the original
+scripts' complete outcomes are not established here. The
+[joint common-owner page](selector-manager-composition.md) covers the
+handler/update/pad lookup beneath the owner. Shop-specific initialization and XDATA
+transactions are not part of that call tree.
 
 The update (2,864 bytes) and the general handler (1,960 bytes) match.
 
-Open: extending the joint common-owner
-oracle to actual ShopSelect initialization and XDATA transactions, and closing the
+Open: actual ShopSelect initialization and XDATA transactions under the common owner, and closing the
 pad/model service dependencies. The broader chip/list/recalculation, other services,
 saving and hub script closure belong to the full lobby goal, which is unfinished.
 
@@ -164,8 +143,7 @@ saving and hub script closure belong to the full lobby goal, which is unfinished
 
 The SELECTCTRL update's lookup at `0x0039b810` is named
 `bePadManager_GetPadForPlayer` from its body and its manager/player arguments.
-[Readable source](../../recovered/engine/pad-manager-selection.c) recovers all
-88 bytes under the same guest-memory API, with no external callees. The adjacent
+The lookup is 88 bytes with no external callees. The adjacent
 12-byte metadata getter is matched. The
 lookup itself matches in [bePadManager_GetPadForPlayer.c](../../src/unmatched/bePadManager_GetPadForPlayer.c).
 
@@ -176,19 +154,10 @@ the signed incoming register is less than4, and entry4 for all other values.
 It reads the selected word through `_padList`'s backing pointer at16 and returns
 its sign-extended pointer. It does not read the list count or byte28, clamp
 negative players or guard a null selected record. The array index shift wraps
-as an EE 32-bit operation; the behavioral adapter preserves that detail.
+as an EE 32-bit operation.
 
-`python3 testing/test_selectctrl_retail.py` runs **4,506 cases** in total: the
-4,089 manager cases, **201 direct pad-selection cases** and **216 real
-manager/pad-lookup compositions**. The full three-body spans contain1,228 words;
-all1,208 non-padding instructions run, with20 zero padding words checked.
-Direct cases cover disabled-byte values0/1/255, the unused all-device byte,
-ignored list counts, player boundaries and negative/noncanonical register
-values, plus null and high-bit result pointers. Composed cases exercise all
-four players and the fallback record through orientation/direction/confirm/
-cancel paths. They compare complete RAM and ordered calls, without replacing
-the getter's result with a fixture return. Pad record contents are
-controlled input; this does not recover device sampling.
+The full three-body spans contain 1,228 words: 1,208 non-padding instructions and
+20 zero padding words. Device sampling is not covered by these bodies.
 
 A read-only matching pass scored all347 missing direct hub functions:
 zero automatic matches,265 mismatches,70 compile failures,8 SDK
@@ -206,5 +175,4 @@ The shared268-byte `igObject_Destroy` body used by the
 retained work/list release path matches, as do192 bytes of base-window cleanup used by
 metadata temporaries. [Object destruction](object-creation.md#destruction) records
 the explicit single register-copy instruction and exact-byte validation. Those
-bodies are not matching residues; the SELECTCTRL suite controls its
-object-destruction calls, so this adds no combined lifetime acceptance by itself.
+bodies are not matching residues.

@@ -1,11 +1,10 @@
 # Allocator builder and metadata-name selection
 
-[allocator-builder.c](../../recovered/engine/allocator-builder.c) recovers the complete 2,064-byte context slot 204 builder, plus its active
-object-system metadata-name lookup60 and default-system wrapper16. Three bodies /
-2,140 bytes are behaviorally recovered. The two lookup helpers /76 bytes have
-matching source, the default wrapper's16 exact bytes among them. The builder retains
-assembly. Its private mechanically repaired m2c candidate compiles to2,048 bytes
-and still differs in frame, register allocation and call/branch shape.
+The complete 2,064-byte context slot 204 builder (`2f5cd0`), plus its active
+object-system metadata-name lookup60 and default-system wrapper16: three bodies /
+2,140 bytes, all with matching source. The builder is
+`src/unmatched/MemoryContext_BuildAllocator.cpp`; the two lookup helpers /76 bytes
+include the default wrapper's16 exact bytes.
 
 This is the allocator construction *dispatcher*. Concrete allocator classes,
 their factories and virtual backend operations remain separate dependencies.
@@ -81,22 +80,10 @@ and stores current success. Temporary virtual-method status words are ignored
 except the recursive alias guard. Original failure/null behavior is not replaced
 with new safety guards.
 
-## Verification and remaining work
+## Remaining work
 
-python3 testing/test_allocator_builder_retail.py checks **280** original-instruction
-RAM and ordered-call cases. Coverage includes defaults/selector2/no descriptor,
-all option bits and deferral, existing allocators, borrowed/proxy aliases, recursive
-success/failure, class lookup/fallback, Dynamic/Fixed backing choices, changed
-alignment results, status mutation and full selector/name/special-delegate chains.
-Distinct status words are seeded into ELF-backed data so branch tests do not depend
-on the pristine globals both being zero.
-
-Metadata helper tests run the original active/inactive lookup and its underlying
-field-selector search; the search is already recovered separately. Backend factories,
-metadata instance creation and allocator virtuals are controlled leaves here.
-Existing context/lifetime suites retain their244/210 checkpoints. Twenty-two
-dependency tests verify slot204 binding, creation/metadata/proxy sites, output
-status publication and the authoritative metadata name-field descriptor.
+`testing/test_lua_engine_dependencies.py` checks slot204 binding, creation/metadata/proxy
+sites, output status publication and the authoritative metadata name-field descriptor.
 
 The dispatcher and its dependencies are not the complete allocator backend.
 Next: actual proxy/allocator factories and virtual resize/backing/apply/enable
@@ -123,7 +110,6 @@ of -1 selects free. Lock, ownership and backing implementations remain dependenc
 
 The vtable also exposes starts `0x2d0ae0`, `0x2d0b00`, `0x2d0c00`, `0x2d0d80`,
 `0x2d0da0` and `0x2d0e30`; the [alias-pool runtime](alias-pool-runtime.md) reviews
-their function boundaries. This trace is static analysis, not a behavioral or
-exact-matching result: the recovery of the contiguous alias pool
+their function boundaries. The contiguous alias pool
 factory/binding/backend module is in [alias-pool binding](alias-pool-binding.md)
 and [alias-pool runtime](alias-pool-runtime.md).

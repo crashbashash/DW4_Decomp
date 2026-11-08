@@ -1,10 +1,8 @@
 # Class registration and field-descriptor construction
 
-Fourteen complete bodies (2,812 code bytes) have readable
-[behavioral C](../../recovered/engine/reflection-registration.c), covering the main
+Fourteen complete bodies (2,812 code bytes) cover the main
 class registrar, inheritance, field creation/naming/layout, descriptor binding,
-default storage and the original Work registrar/field adder. The adapter accepts eleven registrar arguments and a
-320-byte scratch area for original debug-name/token/output temporaries.
+default storage and the original Work registrar/field adder.
 
 Thirteen bodies (2,068 bytes) have source with identical code bytes. Five new matches add **872 code
 bytes** in [reflection-builders.cpp](../../src/engine/reflection-builders.cpp):
@@ -37,31 +35,39 @@ registers and the last three in caller stack slots +0/+8/+16:
 | 10 | Optional zero-terminated callback-vector item list |
 
 The registrar always queries the metadata allocator first. A missing handle
-triggers the original stack debug-name prefix/copy/concatenate operations and
-metadata factory, then publishes its result. Metadata factory success is a
-caller/lower-service contract, not a new recovery fallback.
+triggers the stack debug name (the 15-byte prefix at `4faf20`, with the class name
+concatenated through `12a1e8` when non-null) and metadata factory `2be4f0`, then
+publishes its result. Metadata factory success is a
+caller/lower-service contract; there is no fallback.
 
 Validity +36 uses independently observed bits: 1 inheritance attached, 2 class
 configuration performed, 4 layout finalized, 8 registration in progress. An
 already-busy entry returns zero without clearing another invocation's busy bit.
-Otherwise the registrar sets busy, skips already-finalized work, or performs the
-missing inheritance/configuration/layout phases. It clears its own busy bit at
-the end. Tests execute callback-driven re-entry while that bit is set.
+Otherwise the registrar sets busy, skips already-finalized work (returning zero), or
+performs the missing inheritance/configuration/layout phases. It clears its own busy
+bit at the end.
+
+The phases nest. While bit 4 is clear and bit 2 is clear, inheritance runs first if
+bit 1 is clear: the base registrar is called with the metadata and its result kept as
+callback state, the base accessor supplies the parent, `2fdc50` attaches it and bit 1 is
+set. Fresh configuration follows. Finalization then runs whenever bit 4 was clear, even
+if configuration had already happened, and sets bit 4 as its last step.
 
 Fresh configuration names the metadata, stores size/accessor/abstract state,
 optionally calls the vtable getter and field adder, sets configured, assigns a
 type ID and balances a temporary metadata reference. The field adder is called
 without a defined argument; the original Work adder reads its own global handle.
-A guarded optional system lookup may invoke the original profile/stream helper.
+When system words +100, +96 and +104 are all nonzero, it looks the class name up in the
++104 object through `30d350` and, unless that returns -1, calls the profile/stream helper
+`2fe810` with the scratch output, metadata and system +96.
 Layout finalization then runs, followed by metadata setup callback +76 if present.
 
 The return is pending static-initializer callback state, rather than the class
 metadata pointer. Base registration may supply that state; otherwise the registrar
-allocates/constructs a twelve-byte callback container even when there are no
-items. Dependency-list items append during finalization, while argument 9 appends
-only when fresh configuration ran. Both item values are explicitly passed to the
-append service, restoring operands omitted by the initial decompiler output.
-Primitive allocation/list/system/profile operations remain controlled.
+allocates a twelve-byte callback container through `2ed240` and constructs it through
+`2d3400`, even when there are no items. Dependency-list items append during
+finalization, while argument 9 appends only when fresh configuration ran. Both
+item values are explicitly passed to the append service `2d3480`.
 
 ## Inheritance and field creation
 
@@ -73,8 +79,7 @@ field count. Parent metadata is not cloned and shared field records stay shared.
 `igMetaObject_CreateFields` (`2fdf40`) iterates a constructor-address table with
 the supplied signed count. Every iteration re-queries the metadata allocator,
 invokes that field factory, appends a retained descriptor, and releases the
-factory-owned reference. The original assumes a non-null factory result; recovery
-does not add a null-success policy. `igMetaObject_AppendField` (`2fde50`) and the
+factory-owned reference. The original assumes a non-null factory result. `igMetaObject_AppendField` (`2fde50`) and the
 retaining append at `2ead30` preserve the original tail-call behavior.
 
 Internal field-pointer storage is accessed at buffer +8 / count +12. The matching
@@ -98,8 +103,8 @@ address +28, member offset +8 and parent metadata +24. Default-storage ensure
 (`2fc3b0`) calls virtual type-size slot 100, stores its low 16 bits, and allocates
 missing storage. If the existing allocation's signed capacity is too small, it
 releases and allocates again. It re-reads requested size and default pointer at
-the original callback boundaries. The allocation's third argument is preserved
-as one; this recovery does not infer a general allocator policy from it.
+the original callback boundaries. The allocation's third argument is
+one; no general allocator policy follows from it.
 
 Descriptor finalization (`2fc630`) invokes slot 92, copies halfword +18 from a
 non-null returned type record or stores -1 as type index, obtains low-16-bit size
@@ -125,50 +130,40 @@ prefix size becomes the negated backward offset rounded with ordinary-field
 alignment. The declared-size sentinel preserves the prior prefix size.
 Finalization sets validity bit 4 before notifying the object system.
 The original also computes a local maximum field end without publishing it.
-Recovery adds no alignment validation or host clamping policy.
+There is no alignment validation or clamping.
 
 ## Original Work class schema
 
-The adapter includes the complete original `beMessengerWork_Register` (`3581f0`)
-and `beMessengerWork_InitFields` (`358290`) algorithms. Registration supplies its
+The complete original `beMessengerWork_Register` (`3581f0`)
+and `beMessengerWork_InitFields` (`358290`) follow this path. Registration supplies its
 actual constant eleven-argument tuple, including field adder in stack slot zero.
 The adder reads handle `588f88`, preserves inherited count, creates six fields
 from table `4c5ce0`, sets the last two child-type references through original
 getters `2caab0` / `36a0a0` and enables their construction. It then binds the
 original name/handle/offset arrays at `4c5d00/4c5d20/4c5d40`.
 
-The oracle compares resulting names/offsets/handle publications against decoded
+The resulting names/offsets/handle publications agree with decoded
 `data/reflection.json`: group name +8, information name +12, RAM number +16,
-message +20, RAM-number list +24 and RAM-reference list +28. It verifies captured
-child references/construction flags, one retained field reference and one name
-reference per descriptor, validity 7, size 32 and repeat-registration behavior.
-This removes hand-authored rows for that schema in this test. Metadata/field
-factories, type/vtable getters, interner and lower services are still controlled;
-it does not establish complete live class bootstrap or instance creation.
+message +20, RAM-number list +24 and RAM-reference list +28. Registration leaves one
+retained field reference and one name reference per descriptor, the two child
+references and construction flags, validity 7 and size 32, and it is repeatable. It
+does not establish complete live class bootstrap or instance creation.
 
 ## Validation and remaining work
 
 Run from the repository root:
 
 ```sh
-python3 testing/test_reflection_registration_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
 make typed-check
 make link
 ```
 
-**487 original-instruction RAM/defined-return/ordered-call cases** cover all
-fourteen bodies, validity combinations, missing handles, abstract states, callback
-state reuse/allocation, dependency arguments, re-entry, inherited/runtime fields,
-alignment/prefix size, null type records, size truncation and default-buffer growth.
-The EE harness supplies registrar arguments beyond register eight in their original
-caller stack slots. Tail mediation executes original delay slots before controlled
-vector primitives. Only the registrar/Work-registrar defined returns are compared;
-incidental void-return register state and temporary stack bytes are excluded.
 
 Three new reviewed callback roots link Work registration, field addition and
 vtable lookup to their actual literal argument sites. Independent retail argument
+and table checks validate those roots; the inventory does not invent direct
 and table checks validate those roots; the inventory does not invent direct
 edges for generic indirect calls. Original base/type/vtable/field factories,
 callback vectors, allocation, system/profile and interner primitives remain open.
@@ -176,23 +171,15 @@ Other messenger class schemas, concrete memory/array fields, full instance
 composition and gameplay receivers remain required work. Full Lua-dependent engine
 completion is not claimed.
 
-The optional `--object-storage` oracle mode now composes original encoded lookup
-and allocation/free wrappers beneath these same 487 cases. See
-[object storage](object-storage.md) for exact scope and remaining allocator leaves.
+[Object storage](object-storage.md) covers encoded lookup and the
+allocation/free wrappers, [concrete factories](field-factories.md) the Work descriptor
+factories, initializer chains and default hooks, and
+[metadata bootstrap](metadata-bootstrap.md) the metadata factory/init, name and index
+bodies and retaining registry insertion.
 
-The `--field-factories` mode now additionally executes actual Work descriptor
-factories, initializer chains and default hooks. See [concrete factories](field-factories.md)
-for coverage and the remaining type-query, metadata and allocator boundaries.
-
-The `--metadata` mode also replaces metadata factory/init, name and index stubs
-with original bodies and retaining registry insertion. See
-[metadata bootstrap](metadata-bootstrap.md) for coverage and remaining list/allocator
-and object-system boundaries.
-
-A separate [base bootstrap oracle](object-base.md) now executes original `igObject`
-registration and its two manually generated header descriptors before Work. That
-path has eight total Work fields; this page's original controlled-base fixtures
-retain six own fields to isolate the registrar and descriptor builders.
+[Object base](object-base.md) registers `igObject` and its two manually generated
+header descriptors before Work, so Work has eight total fields: those two and its six
+own fields.
 
 ## Open questions
 

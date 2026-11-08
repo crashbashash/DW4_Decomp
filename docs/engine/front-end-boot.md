@@ -159,14 +159,13 @@ The opening effect runs first, on its own — see *The opening: traces, a white 
 
 ## Title input, skipping and the Option screen
 
-The controller is recovered as [executable behavioral C](title-menu-controller.md). Its press-start gate accepts START alone. Option edits change displayed working values immediately and commit camera/light
-after closing; Circle accepts those changes. The comparison covers state and engine-call order,
-not framebuffer equivalence.
+The controller is documented in [title-menu-controller](title-menu-controller.md). Its press-start gate accepts START alone. Option edits change displayed working values immediately and commit camera/light
+after closing; Circle accepts those changes.
 
-- **The opening cannot be skipped** (retail behaviour, reported by the project owner). The recovered
+- **The opening cannot be skipped** (retail behaviour, reported by the project owner). The
   title controller agrees: `beNDMWTitle2Ctrl` reads the START bit only in `_st0=1/_st1=2/_st2=1`, after
-  `opening_done` has returned for the logo's and `j_startmenu01`'s `SQ_OPEN`, so no button is read earlier
-  (`recovered/frontend/title-menu.c`). The stage script agrees
+  the logo's and `j_startmenu01`'s `SQ_OPEN` sequences have finished, so no button is read earlier.
+  The stage script agrees
   (`lua/00-title-menus/04-title-screen_e806/004-layer-setup-2.lua`): it generates `j_startback`
   `SQ_OPEN`, waits for that sequence to finish, plays the white fade, and only then sends `TITLE2 RUN` (the
   controller's `_st0=0` gate) and `STAGECTL PADINPUT ENABLE 30`. Not yet confirmed by a live retail run. Presses during the blue-trace opening are ignored until `SQ_OPEN` ends and the

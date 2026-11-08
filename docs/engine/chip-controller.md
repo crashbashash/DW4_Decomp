@@ -1,25 +1,12 @@
 # XDATA chip transaction controller
 
-The complete 7,232-byte update at `43aae0..43c720` is recovered as
-[guest-address C](../../recovered/engine/chip-controller.c). Its adjacent
-[count/text and inherited paging helpers](list-controller-chip-view.md) were
-recovered separately and now have exact matching source for all2,196 bytes.
-The update itself still uses retail assembly: its behavioral recovery adds
-**zero exact code bytes**. A corrected private full-body probe compiles but still
-has a different frame/register layout and does not match; it was not banked.
+The complete 7,232-byte update at `43aae0..43c720` has matching source in
+`src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`. Its adjacent
+[count/text and inherited paging helpers](list-controller-chip-view.md) have exact
+matching source for all2,196 bytes.
 
-The suite passes **1,076 RAM/ordered-call comparisons**, executing all1,761
-reachable non-padding controller words out of1,808. Fifteen padding words and
-32 words in sixteen statically dead literal-null branches are checked separately.
-Run `python3 testing/test_chip_controller_retail.py`. The oracle executes original
-EE instructions against synthetic memory, comparing persistent RAM and ordered
-service calls with argument/state snapshots. It covers controller states,
-allocator variants, reference cleanup, selection/paging, both errors, previews,
-confirmation/decline, four players, fresh commit prices/balances, wrapped record
-writes, and callback timing. Selected cases run actual page-count and parent
-binding bodies beneath the controller. Item factories/getters, recalculation,
-messages, strings/lists, selectors, rendering and script execution remain
-controlled services. This is not a live-game test.
+Of the update's1,808 words,1,761 are reachable non-padding controller words, fifteen are
+padding and 32 sit in sixteen statically dead literal-null branches.
 
 ## Retained data and selection
 
@@ -83,13 +70,10 @@ after the full-width close-poll result is nonzero. Empty-list phase10 installs
 its special dialog text and advances to closure on completion. Error entry40 is
 read after allocation, and private reference cells are reloaded around callbacks.
 
-Exact matching of this update, its real item/pricing/status/recalculation
-services and selector/message/script composition remain
-open. Other lobby services and their script outcomes retain the scope in the
+Its real item/pricing/status/recalculation services and selector/message/script
+composition remain open. Other lobby services and their script outcomes retain the scope in the
 [hub inventory](../systems/hub-recovery.md).
 
-The [item/database block](item-database.md) now has complete exact source and
-explicit status/value-return contracts. Its standalone composed oracle
-validates the lookup chain; this controller's existing oracle still treats
-lookups as services. Live database delivery, recalculation and full transaction
-composition remain open.
+The [item/database block](item-database.md) has complete exact source and
+explicit status/value-return contracts. Live database delivery, recalculation and
+full transaction composition remain open.

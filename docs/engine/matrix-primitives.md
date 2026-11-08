@@ -1,7 +1,7 @@
 # Matrix copy and translation primitives
 
 The complete five-body copy/translation run at `0x001908f0..0x00190b24`
-(540 code bytes) has readable [behavioral C](../../recovered/engine/matrix-primitives.c).
+(540 code bytes).
 The three previously matched construction/get/set bodies are folded into
 [matching source](../../src/engine/matrix-primitives.c); copy and local translation
 have no C source yet, pending compiler recovery.
@@ -24,43 +24,22 @@ four LQ instructions load all 64 bytes before any SQ store. That path preserves
 an overlapping source as a complete snapshot. Otherwise the routine copies
 sixteen float words forward, interleaving each load and store. Overlap can
 propagate already overwritten words; substituting memmove would change retail
-behavior on that path. The reference tests guest alignment, independently of
-host object alignment. Verification addresses are word-aligned; invalid
+behavior on that path. The test is on the addresses themselves; invalid
 word-alignment exception behavior is outside this contract.
 
 Construction writes the identity basis before reading the vector, preserving
 aliases where the source vector overlaps those words. Get/set copy sequentially
-as well. Local translation reloads vector components for each destination row;
-aliases with translation storage therefore observe earlier writes. It updates
+as well. Local translation handles rows 0 to 3 in order, reloading the three vector
+components each time: word `12 + row` becomes its old value plus
+`((m[row] * x + m[4 + row] * y) + m[8 + row] * z)`. Aliases with translation storage
+therefore observe earlier writes. It updates
 the fourth stored translation word too, so it is not limited to affine matrices.
-Its multiply/add sequence uses the existing EE float/accumulator model. That
-model's hardware-validation limits remain; these are instruction-oracle
-comparisons rather than a new hardware measurement.
-
-## Verification and oracle correction
-
-`python3 testing/test_matrix_primitives_retail.py` passes **896 whole-RAM cases**
-covering every original body with no controlled callees. Cases include all four
-valid word alignments within a quadword, copy overlap offsets -96..96, aliased
-construction/get/set/local translation, raw payloads, signed zeros, denormals,
-exponent-255 encodings and arithmetic boundaries.
-
-The aligned copy exposed an error in `scripts/ee_core.py`: LQ read 16 bytes but
-masked its destination register to 64 bits, causing SQ to zero the upper lane.
-LQ now preserves all 128 bits. `testing/test_ee_quadword.py` checks independent
-instruction encodings and a payload with nonzero upper/lower lanes, while scalar
-loads retain the existing interpreter model. This does not claim a complete
-R5900/MMI implementation or change the documented float model.
-
-The messenger oracle now descends into the original copy routine and delegates
-the reference side to recovered C, rather than supplying a controlled matrix-copy
-result. All **1,178 messenger cases** still pass. Matching/typed/link gates preserve
-the byte-identity oracle.
+The arithmetic follows the [EE float rules](action2-timing.md#floating-point-is-not-host-floating-point).
 
 ## Remaining work
 
-No new matching code bytes are claimed by this recovery. FromTranslation's
-existing 84-byte match is now ordinary readable float-array C; get/set retain
+FromTranslation's
+existing 84-byte match is ordinary readable float-array C; get/set retain
 their two 28-byte matches. Copy needs a matching representation of its quadword
 path. Local translation's natural expression matches its size and shape but
 still differs in multiply operand scheduling; those candidates remain outside

@@ -3,9 +3,7 @@
 Six complete bodies / **568 code bytes** all have matching
 source. Four new exact functions add **468 bytes**: string-field lookup 160,
 metadata name lookup 20, callback-array destruction 96 and append 192. Constructor 20
-and finalize/replace 80 retain existing matches with explicit interfaces. The
-[behavioral adapter](../../recovered/engine/metadata-callback-services.c) composes
-with the previously recovered list, descriptor and dispatcher implementations.
+and finalize/replace 80 retain existing matches with explicit interfaces.
 
 ## Corrected string-field lookup
 
@@ -23,10 +21,7 @@ the current matching object pointer, or zero. Count is re-read each iteration an
 the selected object pointer is re-read after comparison callbacks. It does not
 retain its result.
 
-Earlier numeric fixtures verified the same address arithmetic while assigning
-the wrong meaning to its operands: addition is commutative. They now use actual
-object references and a selector offset 12. Corrected receiver types also produce
-an exact 160-byte match in
+The routine has an exact 160-byte match in
 [list-string-field-find.c](../../src/engine/list-string-field-find.c).
 
 `igMetaObject_FinalizeAndReplaceField` (`2fdea0`, 80) finalizes the incoming
@@ -63,51 +58,37 @@ capacity = wrap32(capacity * trunc_toward_zero(triple / 2))
 ```
 
 Thus ordinary capacities advance **4 -> 24 -> 864**. This is not a conventional
-1.5-times growth rule. Original words, including the multiply at `2d34d0`, and
-retail instruction execution prove the formula. The guest adapter preserves
-32-bit wrapping and signed division without host-language overflow assumptions.
+1.5-times growth rule. The multiply at `2d34d0` in the original words confirms
+the formula: the arithmetic wraps at 32 bits and the division is signed.
 
 A missing buffer allocates capacity times four bytes through `2ed240`, using the
 allocator read from object system +52. An existing buffer reallocates through
 `2ed330`. The returned buffer is published; count is then re-read and incremented
 before the item is written at its prior index. Allocation callbacks can change
 that index through count mutation. A count greater than capacity does not trigger
-a new safety/growth policy. No allocation-failure fallback is added.
+growth. There is no allocation-failure fallback.
 
-## Verification and integration
+## Verification and remaining work
 
 ```sh
-python3 testing/test_metadata_callback_services_retail.py
-python3 testing/test_internal_object_lists_retail.py
 python3 testing/test_lua_engine_dependencies.py
 make check
 make link
 make typed-check
 ```
 
-**78 original-instruction RAM/defined-return/ordered-call checkpoints** cover all
-six bodies, arbitrary constructor contents, null/data/destructor combinations,
-signed deletion flags, exact/elevated count boundaries, quadratic growth, two
-32-bit overflow cases, callback-time count mutation, and dispatcher buffer/count
-mutation with captured iteration count.
+Replacing an inherited Work descriptor leaves the parent's retained original in place,
+with old and new ownership balanced by the retaining replacement.
 
-The oracle also constructs real base metadata and uses its real descriptors for
-name lookup. It replaces an inherited Work descriptor while its parent retains
-the original, checking pointer replacement and old/new ownership counts.
-
-Finally, the original initializer runner executes Work's original registration
-and actual callback array operations, dispatching the original dependency entries
-`2cab90` and `36a180` in order before array cleanup. Those child class bodies are
-explicit controlled leaves here. This establishes their dispatch, not completed
-`igIntList` or `beBaseInfoRamList` registration. Allocator, byte/type/interner,
-selector publication and the wider descriptor-copy protocol remain lower bounds.
+The initializer runner, on Work's original registration, dispatches the dependency entries
+`2cab90` and `36a180` in order before array cleanup. That establishes their dispatch,
+not completed `igIntList` or `beBaseInfoRamList` registration.
 
 Thirteen dependency regressions independently connect selector metadata, wrapper
 instructions, specialization call sites and original registrar callback literals,
 plus the original Work dependency table. Two reviewed helper roots expose this
 path without inventing generic indirect-call edges.
 
-The [descriptor-copy follow-up](list-descriptor-copy.md) now recovers both native
+[Descriptor copy](list-descriptor-copy.md) covers both native
 specialization bodies and the complete cold memory-descriptor copy chain. The
-full child registrar/inherited schema and element-provider paths remain open; this
-page's deferred-dispatch oracle keeps those child bodies controlled.
+full child registrar/inherited schema and element-provider paths remain open.

@@ -189,14 +189,13 @@ This validates these captures; it does not establish a general address invariant
 
 ## Executable lifecycle and scheduling contracts
 
-`recovered/frontend/systemclock.{c,h}` is a behavioral reference over a flat
-read/write/call interface. It covers the complete thirteen-body timer group
+These contracts cover the complete thirteen-body timer group
 `0x00330a50..0x00330e58`, the adjacent system start/stop pair
 `0x002371f0`/`0x00237280`, the adjacent sample/render pair
 `0x00237730`/`0x002377c0`, and the scheduler/manager/gate bodies
 `0x00237ec0`/`0x00378bc0`/`0x003a0540` needed to establish update order.
-It adds no byte-matched source. The public entry is `dw4_clock_call(api, entry,
-object, argument)`; external virtual methods remain host callbacks.
+All of them have matching source except the scheduler `0x00237ec0`, which has no
+C source yet.
 
 ### Timer lifecycle
 
@@ -216,12 +215,12 @@ All addition/subtraction wraps; no monotonic clamp is present.
 | `0x00330da0` / `0x00330e50` | Get preset / stopped | Read +0x18 / +0x20. |
 
 The seconds wrappers at `0x00330a50`, `0x00330b40`, `0x00330db0` and seconds
-preset setter `0x00330d30` retain the original software-double calls and argument
-bit patterns. Those arithmetic leaves remain opaque in this verification.
+preset setter `0x00330d30` use software-double calls; that arithmetic is not
+analysed here.
 
 Pausing at time 109, waiting arbitrarily, resuming and advancing raw time by 20
 returns 129. Repeated pause/resume calls do not resample or discard elapsed time.
-These are verified method contracts, not evidence that the game's pause UI uses them.
+These are method contracts, not evidence that the game's pause UI uses them.
 
 ### System start, stop and sampling
 
@@ -234,14 +233,13 @@ calls manager slot +0x68. Both reread list length while walking it.
 adds it to world time, then invokes the dispatcher and serial scheduler, in that
 order. The scale is the signed 32-bit `_currentToWorldTimeFactor` (+0x48).
 The multiplication wraps to 64 bits **before** the arithmetic right shift by 18.
-The verifier executes the original multiplication helper `0x0022e440`, including
-negative and overflowing products. Unity is `0x40000`, initialized at
+The multiplication goes through the helper `0x0022e440`. Unity is `0x40000`, initialized at
 `0x00237490` **[static]**. Negative deltas are not clamped.
 
 Repeated system start has a non-obvious consequence: the timer can retain its
 additional time while the system forgets its previous sample. The next system
-update then adds that retained time again. A deterministic start/update/stop/
-start/update test produces world times 100 then 200 without advancing the resumed
+update then adds that retained time again. A start/update/stop/
+start/update sequence produces world times 100 then 200 without advancing the resumed
 timer. Do not treat this start method as an ordinary per-frame or per-screen reset.
 Its use across normal stage loads is still open.
 
@@ -260,6 +258,15 @@ The recovered call chain is:
       virtual +0x84 -> 0x003778d0 (Action2 per-action update)
 ```
 
+The serial scheduler `0x00237ec0` (336 contiguous bytes) works from a snapshot. It
+reads the manager list through the object at +8, captures that list's count and
+resizes its own snapshot list at +0x0c to the count through `0x301ee0`. For each
+index it rereads the manager list, retains that manager, releases the snapshot's
+old entry with the low-23-bit rule (destroying through `0x2ff820` at zero) and
+stores the manager when the index is within the snapshot's count. A second pass
+calls virtual +0x74 on each snapshot entry in index order, rereading the snapshot
+list each time. Finally it resizes the snapshot to zero.
+
 The manager gates are the low bit of `beSystem._isActive` (+0x2c), zero
 `_isFirstTime` (+0x2d), nonzero manager +0x1c, and zero `_isFrameSkip` (+0x2e).
 The system clock advances even when a manager is gated off.
@@ -274,13 +281,11 @@ to `0x003778d0`. Reproduce this bounded pointer-chain check with:
 python3 scripts/clock_dispatch_probe.py STATE.p2s
 ```
 
-The differential suite executes the original clock, serial scheduler, manager
-walker and gate instructions; the final Action2 update is a leaf that records
-its observed world time. Multiple managers/groups/actions all see the newly
-written clock in the original list order at this callback boundary. External
-dispatcher receivers and other managers are not executed in that comparison;
-this does not prove they cannot re-enter the pump or change shared state. Existing Action2 verification covers
-that leaf's timing consumers separately. This does not establish all messenger
+Multiple managers/groups/actions all see the newly written clock in the original
+list order. External dispatcher receivers and other managers have not been examined,
+so they are not shown to leave the pump and shared state alone.
+[Action2 timing](action2-timing.md) covers the update's timing consumers separately.
+This does not establish all messenger
 reentrancy, start/replacement timing or hardware frame phase.
 
 ### Render passes are separate from clock updates
@@ -296,20 +301,6 @@ update at `0x0025a828` before its render call at `0x0025a838`. Therefore source
 reads, renderer frames and Action2 scheduler invocations are distinct counts.
 These outer bodies are not single-frame functions:
 they contain repetition and lifecycle setup/teardown.
-
-### Verification
-
-```sh
-python3 scripts/verify_systemclock.py --elf orig/SLUS-20836/SLUS_208.36 --mutations
-```
-
-**9,431 retail/C calls**, all **585 reachable body instruction addresses**, ordered
-leaf calls and non-stack stores, final memory, and defined returns agree. Independent
-assertions pin lifecycle values, signed scaling/overflow, retained time across
-system restart, unchanged world time across repeated render passes, and the clock
-seen by ordered Action2 dispatch. Four deliberately wrong variants are rejected:
-logical shift, lost frozen elapsed time, cleared world time on start, and callbacks
-before the clock write. No retail bytes are embedded.
 
 Raw source time, timer lifecycle state, the last sample/delta and accumulated world time are
 separate state. Action2 reads the accumulated value after the sample/update, and it is retained

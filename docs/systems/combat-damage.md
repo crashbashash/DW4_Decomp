@@ -18,8 +18,7 @@ The [generated inventory](combat-inventory.md) records the switch targets,
 direct calls, unresolved indirect call sites and actual source coverage.
 The [three immediate helpers](combat-helpers.md) now have matching C/C++:
 the 128-byte deleting destructor, 132-byte technique-row lookup and 652-byte
-nearby query, totaling 912 bytes. The row/query pair also has behavioral C
-and original-instruction comparisons.
+nearby query, totaling 912 bytes.
 All [26 contiguous BLT/BLP Lua helpers](combat-lua-api.md) now have matching C
 (5,372 bytes), as do the FightCom enum builder and cached string-pool accessor.
 The calculation dispatcher itself matches as

@@ -32,34 +32,13 @@ python3 testing/test_name_live_models.py
 python3 testing/test_story_state.py
 python3 testing/test_gs_framebuffer.py
 python3 testing/test_lua_engine_dependencies.py
-python3 testing/test_material_contact_retail.py
-python3 testing/test_material_runtime_retail.py
-python3 testing/test_reflection_registration_retail.py
-python3 testing/test_string_fields_retail.py
-python3 testing/test_owned_string_field_retail.py
-python3 testing/test_object_fields_retail.py
-python3 testing/test_owned_field_graph_retail.py
-python3 testing/test_object_lists_retail.py
-python3 testing/test_messenger_interned_registry_retail.py
-python3 testing/test_messenger_registry_retail.py
-python3 testing/test_object_creation_retail.py
-python3 testing/test_messenger_factories_retail.py
-python3 testing/test_messenger_memory_retail.py
-python3 testing/test_messenger_lifecycle_retail.py
-python3 testing/test_messenger_dispatch_retail.py
-python3 testing/test_messenger_results_retail.py
-python3 testing/test_list_services_retail.py
-python3 testing/test_string_pool_retail.py
-python3 testing/test_string_chunks_retail.py
 python3 tools/test_permuter_paths.py
 python3 tools/test_verify_relocations.py
 python3 tools/test_multiple_jump_tables.py
 python3 testing/test_m2c_compat.py
 python3 testing/test_combat_initialization.py
-python3 testing/test_combat_helpers_retail.py
 python3 testing/test_combat_draft_repairs.py
 python3 testing/test_combat_unwind.py
-python3 testing/test_matrix_primitives_retail.py
 python3 testing/test_ee_quadword.py
 ```
 
@@ -134,95 +113,70 @@ including callback re-entry and the original Work name/offset/handle tables.
 Primitive factories, allocation, type/system/vector/interner services remain
 controlled; original schema inputs do not imply complete runtime bootstrap.
 
-Object storage: `python3 testing/test_object_storage_retail.py` checks 726 retail
-cases across eleven complete bodies. `python3 testing/test_reflection_registration_retail.py --object-storage`
 composes original lookup/allocation/free wrappers beneath all 487 registration
 cases. Allocator virtual services remain controlled; see
 [contracts and limits](../docs/engine/object-storage.md).
 
-Descriptor factories: `python3 testing/test_field_factories_retail.py` checks 336
 retail cases across 24 complete bodies. Add `--field-factories` to
-`testing/test_reflection_registration_retail.py` to compose all 487 cases through
 actual Work factories, initializer chains, defaults and storage wrappers. See
 [factory contracts and boundaries](../docs/engine/field-factories.md).
 
-Metadata bootstrap: `python3 testing/test_metadata_bootstrap_retail.py` checks 214
-retail cases across ten bodies. `python3 testing/test_reflection_registration_retail.py --metadata`
 composes all 487 registration cases through original metadata construction, names
 and registry indexing, plus concrete descriptors and storage wrappers. See
 [metadata contracts and boundaries](../docs/engine/metadata-bootstrap.md).
 
-Internal lists: `python3 testing/test_internal_object_lists_retail.py` checks 379
-retail cases across 22 complete bodies. `python3 testing/test_reflection_registration_retail.py --internal-lists`
 composes the original internal field-list factory, construction and buffer growth
 under all 487 registration cases. See [internal list contracts](../docs/engine/internal-object-lists.md),
 including the explicitly unconfirmed append return signature.
 
-Object base: `python3 testing/test_object_base_retail.py` checks 33 original-instruction
 checkpoints across the complete base bootstrap and unsigned field constructor chain,
 including Work registration with two inherited header descriptors. See
 [base contracts and boundaries](../docs/engine/object-base.md).
 
-Metadata callback services: `python3 testing/test_metadata_callback_services_retail.py`
 checks 78 retail checkpoints across six complete bodies, including actual base
 metadata lookup/replacement and original Work callback-array dispatch/cleanup.
 See [contracts and limits](../docs/engine/metadata-callback-services.md).
 
-List descriptor copying: `python3 testing/test_list_descriptor_copy_retail.py`
 checks 95 retail cases across eleven bodies, including both original inherited
 `_data` specialization callbacks. See [copy contracts and limits](../docs/engine/list-descriptor-copy.md).
 
-List registration: `python3 testing/test_list_registration_retail.py` checks 48
 retail checkpoints across 32 bodies, including the actual Work callback path and
 all inherited list schemas. See [list registration contracts](../docs/engine/list-registration.md).
 
-Memory field values: `python3 testing/test_memory_field_values_retail.py` checks 113
 retail checkpoints across 32 bodies and actual populated Work/list instance lifetime.
 It includes ownership, counters, string release, trimming and data-buffer cleanup.
 See [lifetime contracts and limits](../docs/engine/memory-field-values.md).
 
-Array storage: `python3 testing/test_array_storage_retail.py` checks 151 retail
 RAM/ordered-call cases across aligned allocation and named alignment selection.
-`python3 testing/test_memory_field_values_retail.py --array-storage` runs the
 113-checkpoint Work lifetime suite with actual array allocation. See
 [contracts and remaining services](../docs/engine/array-storage.md).
 
-Memory copy/buffers: `python3 testing/test_memory_field_copy_retail.py` checks 167
 retail RAM/defined-return/ordered-call cases across 14 bodies, including actual raw
 buffer duplication and callback-driven object visitation.
-`python3 testing/test_memory_field_values_retail.py --buffer-services` runs all113
 lifetime checkpoints with recovered array/buffer services.
 `python3 testing/test_apply_names.py` checks explicit thunk naming precedence and
 same-basename C/C++ reference rewriting. See
 [copy contracts and limits](../docs/engine/memory-field-copy.md).
 
-Allocator registries: `python3 testing/test_allocator_registry_retail.py` checks
 186 original-instruction cases across13 bodies and actual buffer composition.
-`python3 testing/test_memory_field_values_retail.py --allocator-registry` checks
 114 lifetime/runtime-header states with original array, buffer, owner and selector
 services. `python3 tools/test_function_extents.py` guards the wrapper
 span; `python3 tools/test_verify_relocations.py` guards MWCC backward HI/LO pairs.
 See [contracts and remaining boundaries](../docs/engine/allocator-registry.md).
 
-Registry bootstrap/context: `python3 testing/test_registry_bootstrap_retail.py`
 checks191 original-instruction cases across17 bodies, including the concrete
 46-record selector/name receiver.
-`python3 testing/test_memory_field_values_retail.py --registry-bootstrap` checks
 116 states with actual registry creation, context lookup, populated lifetime and
 registry teardown. See [contracts and limits](../docs/engine/registry-bootstrap.md).
 
-Context lifecycle: python3 testing/test_context_lifecycle_retail.py checks244
-retail cases across seven bodies. python3 testing/test_memory_field_values_retail.py
 --context-lifecycle checks210 states through original names,46 retained bindings,
 populated lifetime and complete slot/context release. See
 [contracts and limitations](../docs/engine/context-lifecycle.md).
 
-Allocator builder: python3 testing/test_allocator_builder_retail.py checks280
 retail RAM/ordered-call cases across the complete slot204 builder and metadata
 lookup helpers, including recursive aliases and selector/name/delegate composition.
 See [contracts and remaining backend work](../docs/engine/allocator-builder.md).
 
-Alias factory/binding: `python3 testing/test_alias_pool_binding_retail.py` compares
 178 original-instruction RAM/ordered-call cases across the factory and complete
 contiguous binding/accounting block, covering all116 instructions. Callbacks and
 allocation backends remain leaves; see [the contract](../docs/engine/alias-pool-binding.md).
@@ -230,7 +184,6 @@ allocation backends remain leaves; see [the contract](../docs/engine/alias-pool-
 actual shop/central mode prefixes and closed direct-edge accounting. Generate
 and check the [hub inventory](../docs/systems/hub-recovery.md) separately.
 
-Alias runtime: `python3 testing/test_alias_pool_runtime_retail.py` compares286
 RAM/return/ordered-call cases for all54 bodies /4,160 bytes, executing all1,040
 instructions. Actual alias wrappers, backend, factory/initializer, locking and
 lifetime controllers compose with controlled base/backing/file/ownership services.
@@ -244,7 +197,6 @@ HI/LO ordering and independent GNU linking of a real multi-body MWCC object.
 Extra emitted code is rejected even when the selected method matches; see
 [compiler object evidence](../docs/engine/compiler-object-verification.md).
 
-SUBWND lifecycle: `python3 testing/test_subwindow_lifecycle_retail.py` compares
 1,072 RAM/return/ordered-call cases across all11 modes, four players, factory and
 reference lifetime, callbacks and CARD/ordinary exits.630 instructions execute;
 the only three unexecuted words are Ghidra-reviewed NOP padding. Constructors,
@@ -259,7 +211,6 @@ sequence. No save UI or persistence is established.
 See [the owned dependency edge](../docs/systems/hub-recovery.md#save-keeper-named-script-edge).
 
 The [concrete SELECTCTRL oracle](../docs/engine/selectctrl.md) runs with
-`python3 testing/test_selectctrl_retail.py`: 4,089 original-instruction
 RAM/ordered-call cases for both complete update/general receiver bodies.
 All 1,187 non-padding words execute; 19 padding words are checked separately.
 Registry/factory/pad/messenger/model/format/string services remain controlled;
@@ -271,7 +222,6 @@ cases and216 real manager/lookup compositions:4,506 total comparisons and all
 physical device sampling and model execution remain outside this acceptance.
 
 Common owner/controller composition: run
-`python3 testing/test_selector_manager_composition_retail.py` for144 lifecycles
 /3,146 persistent RAM-and-call checkpoints through the real owner, SELECTCTRL
 handler/update, pad lookup and empty close routines. Handler results replace
 canned selection/completion responses. Immediate SD delivery, initialization,
@@ -279,14 +229,12 @@ model/device and primitive services remain controlled. See
 [scope and measured coverage](../docs/engine/selector-manager-composition.md).
 
 Shared page controls and chip view: run
-`python3 testing/test_list_controller_chip_view_retail.py` for3,149 full-body
 RAM/defined-return/ordered-call comparisons across ListCtrl's three methods and
 two chip helpers. All544 non-padding words execute; five padding words are
 checked separately. Pad lookup can execute its real body; model/property/text/
 format services remain controlled. All five bodies have exact matching source
 /2,196 bytes. [Contracts and limits](../docs/engine/list-controller-chip-view.md).
 
-Chip upgrade controller: run `python3 testing/test_chip_controller_retail.py` for
 1,076 RAM/ordered-call comparisons through the complete7,232-byte update. All
 1,761 reachable non-padding words execute;15 padding and32 statically dead
 literal-null words are checked. Four-player commit, preview restoration, fresh
@@ -294,7 +242,6 @@ price/wallet lookup and callback ordering are covered;18 cases compose the real
 page-count and parent-binding bodies. Record/status/message/selector/rendering
 services remain controlled. [Contracts and limits](../docs/engine/chip-controller.md).
 
-Item/database record lookup: run `python3 testing/test_item_database_retail.py`
 for474 full-return/RAM/ordered-call comparisons through ten bodies /1,168 bytes.
 All290 non-padding module words and all47 property-search words execute; two
 module padding words are checked. The chain includes real chip selection and

@@ -1,9 +1,8 @@
 # Object storage and encoded allocator selection
 
-This recovery covers eleven complete behavioral bodies / 716 code bytes:
+This page covers eleven complete bodies / 716 code bytes:
 the contiguous helper run `300d30..301008` and its encoded-selector dependency
-`2f0700`. [Guest-reference C](../../recovered/engine/object-storage.c) preserves
-RAM, defined returns and callback ordering. Ten bodies / 640 bytes have exact
+`2f0700`. Ten bodies / 640 bytes have exact
 matching source; allocation-base recovery adds 52 bytes. Encoded lookup (76 bytes)
 remains a compiler residual. Previously matched dispatch wrappers now explicitly
 forward their object receiver and preserve allocation results.
@@ -56,31 +55,16 @@ allocation. The original does not add null-input or allocation-failure handling.
 Allocator selection occurs after length evaluation, so a changed object header
 at that callback boundary takes effect.
 
-## Verification and composition
+## Verification and remaining work
 
 Run from the repository root:
 
 ```sh
-python3 testing/test_object_storage_retail.py
-python3 testing/test_reflection_registration_retail.py --object-storage
 make check
 make link
 make typed-check
 ```
 
-The storage oracle passes **726 original-instruction RAM/defined-return/ordered-call
-cases** across all eleven bodies. It checks all 256 header codes, negative direct
-selector inputs, runtime-prefix wraparound, zero/large sizes, exact virtual slots
-and arguments, null frees, empty/long string duplication and header mutation during
-length measurement. Allocator virtual services and libc byte operations remain
-controlled. Tail mediation executes the actual byte-load delay slot and original
-selector instructions.
-
-The registration oracle additionally passes **487 cases** with actual encoded
-lookup, object allocator selection and default allocation/free wrappers composed
-underneath descriptor registration. It asserts that all four storage entries
-execute and compares original-instruction memory and callback traces. Concrete
-allocator virtual methods, capacity queries, factories, interning, type records,
-callback vectors and system services remain controlled. This removes the wrapper
-boundary, not the full allocator or metadata-bootstrap boundary. Other Lua-dependent
-engine modules remain required work.
+Concrete allocator virtual methods, capacity queries, factories, interning, type
+records, callback vectors and system services lie below these wrappers and remain
+separate work, as do other Lua-dependent engine modules.

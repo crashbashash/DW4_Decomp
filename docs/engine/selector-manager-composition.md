@@ -1,29 +1,12 @@
 # Common selector and SELECTCTRL protocol composition
 
-A joint original-instruction oracle covers the common shop
-selector owner, its concrete SELECTCTRL handler/update, pad-record lookup and
-empty close queues. The owner obtains its selected value and completion flag
-from the real handler's append operations. It has no fixture-selected result
-or fixture completion flag.
+The common shop selector owner runs on top of its concrete SELECTCTRL
+handler/update, pad-record lookup and close queues. The owner obtains its
+selected value and completion flag from the handler's append operations; it
+holds no result or completion flag of its own. The old selected field has no
+part in publication: the GENERATE handler establishes the requested start point.
 
-Run from the repository root:
-
-```sh
-python3 testing/test_selector_manager_composition_retail.py
-```
-
-The suite compares **144 complete component lifecycles /3,146 persistent
-RAM-and-ordered-call checkpoints**. A checkpoint invokes one source entry;
-the harness controls the order of owner and manager updates. It compares every
-non-stack RAM byte, ordered external calls with arguments/state snapshots, and
-the delivered command history against the original retail instructions.
-Before generation, the old selected field is poisoned so successful publication
-requires the real GENERATE handler to establish the requested start point.
-
-## Executed bodies
-
-These eight bodies were already recovered. This checkpoint adds joint validation,
-with **zero new matching bytes**.
+## Bodies
 
 | Original entry | Body | Span bytes |
 | --- | --- | ---: |
@@ -36,55 +19,36 @@ with **zero new matching bytes**.
 | `0x003f5f80` | Queued model close | 272 |
 | `0x003f6090` | Close completion polling | 696 |
 
-The joint scenarios execute **1,293/1,829 instruction addresses** across these
-7,316 bytes. That is the measured coverage for these scenarios, rather than
-an exhaustive path claim. The separate manager/pad and selector/initializer
-oracles retain their broader input/callback coverage.
+## Request and response protocol
 
-## Request and response boundary
-
-An explicit test bridge models immediate SD delivery, enum decoding and primitive
-message buffers. It verifies the SELECTCTRL target name and player, captures the
-owner's integer/vector/string/decision-byte arguments, then invokes the actual
-handler on both the MIPS and recovered-C sides. GETSELECT and ISEND responses
-come from that handler's append operations. FO2TOP readiness likewise comes from
-its real ISFO2TOP branch. A nested retail call receives a separate guest stack
-frame; its caller's CPU state is restored while RAM, coverage and events remain
-shared. Native C callbacks use separate scratch frames.
+The owner addresses the SELECTCTRL target by name and player and passes its
+integer, vector, string and decision-byte arguments to the handler. GETSELECT
+and ISEND responses come from that handler's append operations. FO2TOP readiness
+likewise comes from its ISFO2TOP branch.
 
 The owner publishes the current selection to its mother's return word while the
 manager is active. It starts closing only after the manager has completed its
 own close phases, cleared active and released its work reference. The three
-owner close helpers execute their real bodies with valid empty queues and an
-empty child list.
+owner close helpers then run over the window's close queues and child list.
 
-## Scenarios and limits
+## Protocol behaviour
 
-Scenarios cover all four players, both orientations, supplied decision flags,
-normal and fallback pad records, 1/2/3/7 choices, cold registry allocation and
-both allocator paths. They include:
+The protocol applies to all four players and both orientations, with supplied
+decision flags, normal and fallback pad records, and 1/2/3/7 choices:
 
-- Generation and start-point publication, pending opening waits, directional
-  movement and result publication while the owner remains active.
-- Accepted selection and pending confirmation/close waits.
-- Cancellation winning over simultaneous confirmation.
-- NOCANCEL and disabled-choice rejection through the original 16-count wait,
-  followed by a valid choice.
-- FO2TOP acceptance resetting the selection to zero, busy rejection preserving
-  the parent's existing result, and return to ordinary selection.
-- Every returned index0..6 in a seven-choice cursor, with the corresponding
-  `i_stcursor01` receiver name. One-choice and ordinary dialogs use
-  `i_stmessky` and `i_stmesscr` fixture names respectively.
+- Generation publishes the start point, then pending opening waits, directional
+  movement and result publication run while the owner remains active.
+- Accepted selection is followed by pending confirmation/close waits.
+- Cancellation wins over simultaneous confirmation.
+- NOCANCEL and disabled-choice rejection go through the original 16-count wait,
+  after which a valid choice is accepted.
+- FO2TOP acceptance resets the selection to zero, busy rejection preserves the
+  parent's existing result, and selection then returns to ordinary operation.
+- Every returned index0..6 in a seven-choice cursor corresponds to the
+  `i_stcursor01` receiver name. One-choice and ordinary dialogs use `i_stmessky`
+  and `i_stmesscr`.
 
-Pad records are controlled input. Fallback-record cases populate that record to
-exercise the lookup path; neutral-record initialization and physical sampling
-remain outside this suite. Model execution, real frame scheduling, SD receiver
-selection/delivery/primitive storage, enum construction, factories/registry,
-formatting, string/list services and generic object destruction are also
-controlled boundaries. A default initializer supplies owner fields directly.
-The actual ShopSelect initializers, fonts, Lua execution and XDATA transactions
-still need to join this call tree. Full script/dispatch closure and nonempty close
-queues remain separate work.
+Full script/dispatch closure remains separate work.
 
 See the [selector contracts](shop-selectors.md), [manager/input contracts](selectctrl.md),
 [window presentation](window-presentation.md) and [full hub completion contract](../systems/hub-recovery.md).

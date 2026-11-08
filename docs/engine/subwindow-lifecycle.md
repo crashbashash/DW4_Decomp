@@ -2,17 +2,12 @@
 
 The complete lifecycle prefix **3d58f0..3d60d8**, the four emitted pointer-wrapper
 cleanup helpers at 3d9bd0..3d9dd0 and the final metadata getter 3d9dd0 are recovered.
-The nine bodies span **2,532 bytes**. The readable
-[guest-reference implementation](../../recovered/engine/subwindow-lifecycle.c)
-passes **1,072 original-instruction RAM/return/ordered-call cases** for all eleven
-service modes and four owning-player arguments. This is behavioral recovery;
-only the two pre-existing metadata getters /24 bytes are matching source.
-No new matched C bytes are claimed here.
+The nine bodies span **2,532 bytes**, serve all eleven service modes and four
+owning-player arguments, and all match.
 
-The whole manager region has eleven bodies /17,616 code bytes. Its9,820-byte
+The whole manager region has eleven bodies /17,616 code bytes, including its9,820-byte
 [command receiver](subwindow-command.md) and the5,264-byte
-[preparation body](subwindow-preparation.md) now have complete behavioral recovery
-with272 and843 retail cases respectively, including composition with this lifecycle.
+[preparation body](subwindow-preparation.md).
 Menu-specific controllers, transactions and Lua callbacks also remain open.
 
 ## Correct function span
@@ -29,10 +24,8 @@ as size/end metadata. The regenerated
 The correction adds12 classified code bytes and removes12 unclassified data
 bytes; it does not add matching credit or change any retail image bytes.
 
-The runtime test executes **630/633 instruction addresses** across the nine
-spans. The only unexecuted words are those three reviewed padding NOPs. It checks
-their zero words and Ghidra membership rather than forcing execution of padding.
-Seven span regressions retain the earlier title/material/messenger/allocator
+The nine spans hold **633 instruction addresses**, three of them those reviewed
+padding NOPs. Seven span regressions retain the earlier title/material/messenger/allocator
 evidence and independently protect this full return sequence.
 
 ## Owner and initialization
@@ -76,8 +69,7 @@ construction. Allocation queries the object's allocator first, then uses the
 selector at587110 when byte554c14 is zero. The complete eleven-entry jump table
 at5168e0 and each constructor's actual JAL independently verify these groups.
 
-The temporary root reference is an actual guest frame word at sp+76. The adapter
-models it in a supplied80-byte scratch frame. An incoming temporary reference is
+The temporary root reference is a private frame word at sp+76. An incoming temporary reference is
 released before constructor replacement; callbacks can change that storage.
 Initialization3f63c0 receives root,0,`_insight`,`_whoGenerate`,0. The mode stored
 on root+44 is re-read afterward. The manager retains the captured new root,
@@ -91,8 +83,8 @@ increments the current word24 and resets36,32,28 in that order. The new root is
 updated **in the same manager call**, not on an extra delayed tick. State1 uses
 the same update/completion path. Other states go directly to finalization.
 The manager re-reads its root after tree update and tests byte root+24.
-No new root-null or enum guards are inserted; the original requires valid
-factory results. Controlled callbacks do not establish invalid-enum safety.
+There are no root-null or enum guards; the original requires valid
+factory results.
 
 ## Completion and service-specific exits
 
@@ -123,10 +115,9 @@ return the incoming wrapper. Their exact template payload types are not inferred
 from their identical instructions. Null wrappers and high reference/flag bits
 retain their original distinctions.
 
-## Evidence and resume
+## Checks and remaining work
 
 ```sh
-python3 testing/test_subwindow_lifecycle_retail.py
 python3 tools/test_function_extents.py
 python3 testing/test_lua_engine_dependencies.py
 make check
@@ -134,19 +125,8 @@ make link
 make typed-check
 ```
 
-The cases cover all eleven mode factories, four players, allocator selection,
-all16 participant masks, initial/ticking/finishing states, byte truncation,
-reference boundaries, private temporary replacement, callback-mutated owner/mode/
-messenger/state/participants, CARD reset and per-mode persistent open/tick/close.
-Snapshots compare counts/publication at callback time, not just final RAM.
-Incoming private-frame storage is translated from input state for persistent
-ticks; no retail output is copied into the expected result.
-
-Preparation, real constructors/root initialization/tree update, messenger,
-record lookup/mutation, destruction and Lua execution are controlled leaves.
-This proves the lifecycle body under those contracts, not actual shop stock,
-prices, purchases, appraisal, bank/lab/X Data/card/save outcomes or UI behaviour.
-Live gameplay and multiplayer menu ownership are not accepted by these tests. No emulator or pristine disc is modified.
+Actual shop stock, prices, purchases, appraisal, bank/lab/X Data/card/save
+outcomes, UI behaviour and multiplayer menu ownership lie outside this lifecycle.
 
 Continue exact matching and the concrete
 service-controller/result dependencies for the [full hub goal](../systems/hub-recovery.md).

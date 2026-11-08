@@ -2,15 +2,13 @@
 
 The [generated dependency inventory](lua-dependencies.md) maps all 116 binding
 implementations and their direct retail call closure, retaining unresolved virtual
-and register transfers. [Material-contact helpers](material-contact.md) recover
-the complete first engine module through behavioral C, matching Lua wrappers
-and an exhaustive original-instruction oracle.
+and their direct retail call closure, retaining unresolved virtual
+and register transfers. [Material-contact helpers](material-contact.md) cover
+the complete first engine module, with matching Lua wrappers.
 
-Timed-message callback reentrancy was sampled against the original enqueue/update
-instructions: eleven zero/positive-delay samples, including two 32-callback passes.
-Negative-delay insertion ahead of the executing record exposes retail head recycling.
-Controlled receiver/list leaves do not establish gameplay or general stage-unload
-behaviour.
+A timed-message callback can re-enter enqueue during the update. A negative delay
+inserts ahead of the executing record, which exposes retail head recycling. What that
+means for gameplay or general stage-unload behaviour is not established.
 
 ## Version
 The embedded VM is **stock Lua 4.0.1** (not Lua 5.x):
