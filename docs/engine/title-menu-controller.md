@@ -226,13 +226,9 @@ runtime block is `0x003f19e0..0x003f2d4c` and holds nine bodies:
 | `0x003f2bc0`/`c40`/`cc0` | 128 each | Reference-release wrappers | |
 | `0x003f2d40` | 12 | MetaObject return `*(int*)0x0058bef0` | `vfunc_20` |
 
-The reference-counting idiom these wrappers share is a known matchable
-shape: the addref `if` body ends in an explicit `asm{nop}`, the release
-call is followed by `asm{nop}`, and the closing store by `asm{nop}` — that is
-MWCC's trailing-padding placement, and moving the last `nop` inside the addref
-block is what aligns the branch displacement. The three release-only wrappers
-(`0x003f2bc0` family and the title's `0x003f5210`/`0x003f5290`) match
-with it; a register-allocation wall for them is refuted.
+The reference-counting idiom these wrappers share is plain C with no `asm`: a null test on the
+receiver, the release of the held object (its count in the low 23 bits, `igObject_Destroy` at zero), then
+the signed-`short` deletion flag. The `nop`s around it are the compiler's own output.
 The generated symbol map supplies the contiguous extents above; they are
 not Ghidra occupied-body counts.
 

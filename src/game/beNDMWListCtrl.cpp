@@ -1,8 +1,6 @@
 /* A page turn happens when the player's pad shows left (previous) or right (next) and no up/down is
  * held; the page index moves by one and the i_stcursorleft / i_stcursorright arrow models on the
- * MODELCTRL receiver are told which sequence to play. Explicit NOPs, one local unconditional join per
- * method and one address-high word in the arrow initializer preserve branch and alignment layout
- * (matching constructs). */
+ * MODELCTRL receiver are told which sequence to play. */
 #include "dw4/reflected.h"
 /* Direction bits as the pad object reports them: the stick words (_lTrg, _lRpt, _lStk) use 1 up, 2
  * right, 4 down, 8 left; the button words (_trigger, _repeat) use the PS2 digital layout 0x10 up,

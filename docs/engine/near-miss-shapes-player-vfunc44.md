@@ -28,6 +28,8 @@ Strings: `DAT_00516110` "ONE", `DAT_00516290` "SQ_WAIT", `DAT_00516228` "MODELCT
 Compile with the alternate compiler at `-O3,p` (`local/mwcps2/combat/mwccps2.exe`, see
 [unit-compilers](unit-compilers.md)). It supplies the padding `nop`s of the release block and the
 `SETEFFECT` block by itself; only the trailing `nop` after `SendNamed` needs `asm { nop }`.
+This sketch applies to that compiler only. The function's own source is on its unit's b52 profile, where
+the compiler produces every `nop` and no `asm` is written.
 
 ```cpp
 struct EV { int v; static int rd(EV *p) { return p->v; } };

@@ -38,13 +38,8 @@ The cell helpers remain separate dependencies.
 
 ## Code generation and verification
 
-All48 original instruction words and12 relocations match with the normal
-`-O3 -Iinclude` settings. The source retains one original padding NOP after
-the final member helper and one explicit four-byte `dmove v0,self` return copy.
-Ordinary C return spelling causes a redundant-copy optimization that changes
-three branch/call-delay words. The explicit copy preserves the original
-return point and still leaves the full control flow and cleanup calls in C.
-This does not claim the original source used inline assembly.
+The body is plain C with no `asm`: the inlined base destructor keeps its own `self` test, and the
+receiver is returned through an ordinary `return self`.
 
 ```sh
 python3 tools/verify.py 0x3b6430 src/game/beNDMWWindowCtrl_Destroy.cpp --verbose
