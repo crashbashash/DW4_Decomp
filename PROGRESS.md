@@ -49,7 +49,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 13,645 | 2,158,204 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,655 | 956,092 |
 | it sits in its class or module file, not `src/unmatched/` | 12,237 | 1,927,240 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 10,770 | 2,009,316 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 10,769 | 2,009,128 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 6,044 | 1,289,820 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,506 | 790,668 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,259 | 407,880 |
@@ -81,7 +81,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.hardware` | 11 | 11 | 0 | `asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py) |
-| `inline_asm.other` | 25 | 25 | 0 | every other `asm` statement: each has to show its function fails without it |
+| `inline_asm.other` | 1 | 1 | 0 | every other `asm` statement: each has to show its function fails without it |
 | `unmatched.functions` | 1,465 | 1,465 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 800,380 | 800,380 | 0 | bytes of those |
 | `struct.a` | 139 | 139 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
@@ -89,7 +89,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.c` | 287 | 287 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 6,011 | 6,011 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 366 | 366 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 83,134 | 83,134 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 83,133 | 83,133 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 18 | 18 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 776 | 776 | 0 | bytes of those |
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |

@@ -9,15 +9,13 @@ extern int DAT_0055f468[4];
 extern int DAT_00585b20[4];
 void FUN_00460be0(V *arg0, P *arg1);
 }
-void FUN_00460be0(V *arg0, P *arg1) {
-    int var_s0;
-
-    var_s0 = igMetaObject_FindFieldByName(DAT_0055f468[0], &DAT_0051fab8[0]);
-    if ((var_s0 != 0) && (igObject_IsKindOf(var_s0, DAT_00585b20[0]) != 0)) {
-        asm { nop }
-    } else {
-        var_s0 = 0;
-        asm { nop }
+static inline int castToProperty(int object) {
+    if (object != 0 && igObject_IsKindOf(object, DAT_00585b20[0]) != 0) {
+        return object;
     }
-    igProperty_FindByPointer(arg1->f32, var_s0, arg0->vX());
+    return 0;
+}
+void FUN_00460be0(V *arg0, P *arg1) {
+    int field = castToProperty(igMetaObject_FindFieldByName(DAT_0055f468[0], &DAT_0051fab8[0]));
+    igProperty_FindByPointer(arg1->f32, field, arg0->vX());
 }

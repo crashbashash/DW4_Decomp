@@ -226,7 +226,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 83134
+    "value": 83133
    },
    "inline_asm.hardware": {
     "reason": null,
@@ -234,7 +234,7 @@
    },
    "inline_asm.other": {
     "reason": null,
-    "value": 25
+    "value": 1
    },
    "inventory.unsymbolised_bytes": {
     "reason": null,
@@ -326,9 +326,9 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 776,
    "foreign_profile.functions": 18,
-   "fun_dat_refs": 83134,
+   "fun_dat_refs": 83133,
    "inline_asm.hardware": 11,
-   "inline_asm.other": 25,
+   "inline_asm.other": 1,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
@@ -466,8 +466,8 @@
     "functions": 12237
    },
    "references": {
-    "bytes": 2009316,
-    "functions": 10770
+    "bytes": 2009128,
+    "functions": 10769
    },
    "types": {
     "bytes": 956092,

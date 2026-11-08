@@ -108,13 +108,9 @@ The [matching destruction source](../../src/engine/igObject_Destroy.cpp) now
 reproduces all67 instruction words and9 relocations. It uses a single C++
 dispatch view with numbered virtual slots (an ABI projection, not an original
 class declaration) and reflected `_instanceCount`44 / `_instances`48 fields.
-The count decrement preserves the original wrapped word. One explicit four-byte
-`dmove object,input` captures the receiver after reading the system mode;
-plain assignment hoists the copy into the null-system branch's delay slot and
-changes two words. CW's `dmove` emits the original64-bit DADDU and carries copy
-dataflow; `move` emits32-bit ADDU, while generic `daddu` also changes call setup.
-No original-source spelling or all-C++ claim is made: this matching body contains
-one explicit register-copy instruction and C++ lifecycle logic.
+The count decrement preserves the original wrapped word. The receiver is copied after the
+system mode is read, through a cast by way of `void *`: a plain assignment hoists the copy into the
+null-system branch's delay slot and changes two words. No original-source spelling is claimed.
 
 ## Validation and remaining work
 

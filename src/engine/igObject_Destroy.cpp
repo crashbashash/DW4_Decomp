@@ -1,6 +1,5 @@
 /* RTTI-headed dispatch projection; slot names are indices, not a claim of original C++ method
- * declarations. One explicit four-byte DMOVE preserves the receiver capture after the system-mode
- * read; plain assignment would hoist that copy into the null-system branch's delay slot. */
+ * declarations. */
 #include "dw4/reflected.h"
 class igObjectDispatchView {
 public:
@@ -24,15 +23,13 @@ void *igObject_GetAllocationBase(void *);
 void igObject_Destroy(igObjectDispatchView *);
 }
 void igObject_Destroy(igObjectDispatchView *input){
-    /* matching construct: variant search — decl order [2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
     igObjectDispatchView *object;
     igMetaObject *type;
     void *instances;
     if(D_00586dc8[0]){
         unsigned char mode=*D_00586dc8[0];
-        /* CW's dmove pseudo-op carries copy dataflow and emits DADDU.
-         * move emits a 32-bit ADDU; generic daddu loses the same scheduling. */
-        asm { dmove object,input }
+        /* matching construct: hand search — the plain copy hoists into the null-system branch's delay slot */
+        object=(igObjectDispatchView *)(void *)input;
         if(!mode){
             object->slot_08();object->slot_10();object->slot_00();
             Memory_FreeBuffer(object);return;

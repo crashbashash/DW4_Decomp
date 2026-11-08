@@ -140,8 +140,7 @@ limit of the source: the same handlers match under the `combat` profile.
 - decomp-permuter, pointed at `beAction2FLASHSET_Update` from the typed source, ran ~68k candidates and
   never scored below 585 (a match is 0), and from the plain m2c draft it found no verified match
   either. The harness itself is sound: the same project built from an already-matched unit
-  (`Gap::Bec::beBaseInfoManager::vfunc_21`) reports `base score = 0` and exits. The permuter's parser
-  cannot read the `asm { nop }` padding the dispatch pair needs, so those units are matched by hand.
+  (`Gap::Bec::beBaseInfoManager::vfunc_21`) reports `base score = 0` and exits.
 - A two-flag sweep of all 2,954 near-miss draft candidates in `build/m2c` under `-O3` and `-O3,p` found no
   `,p`-only match: the 130 that match do so under both.
 

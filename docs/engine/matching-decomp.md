@@ -329,6 +329,14 @@ Retail shapes that only one spelling reproduces:
   read of `p->f` is dropped. `r = a == b; if (r) return r; return r;` leaves `xor; sltiu; nop` at the
   epilogue. Other reachable shapes give the same `nop`: an inlined compare, a struct view that keeps
   two loads apart, or the right profile for the unit. Look for those before writing `asm { nop }`.
+* **A GCC wrapper that keeps its frame around one call** is not a tail call: `ee-gcc -O2` emits `j` for
+  `void f(void) { g(); }`, while `do { g(); } while (0);` keeps `jal` and the frame. So does a result
+  that needs no conversion but changes type, such as `short g(); int f(void) { return g(); }`. On the
+  2.9-ee releases `int r = g(); return r;` does too, though not on 2.96.
+* **An empty GCC delay loop survives on its test.** `for (i = 0x1FFF; i > -1; i -= 32) { }` is kept with
+  r5900 short-loop pad nops; the same loop tested with `i >= 0` is deleted.
+* **A copy that hoists into an earlier delay slot** stays behind the read before it when it goes through a
+  cast by way of `void *`: `object = (T *)(void *)input;`. MWCC's `dmove` pseudo-op is not needed.
 * **Local declaration order under b52.** The first-declared local takes the higher saved register and the
   higher stack slot, the opposite of the older compilers, so a source that matched under 3.0 or combat usually
   needs its locals reversed. That alone moved most of Alchemy Core's blocking functions. Past six locals, a greedy

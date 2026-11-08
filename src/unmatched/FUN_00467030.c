@@ -1,37 +1,27 @@
 int ObjectList_AppendRetained();
 struct L { char pad[8]; int n; int p12; int *arr; };
 struct A { char pad[24]; struct L *f24; };
-void FUN_00467030(struct A *arg0, int arg1) {
-    volatile int sp1C;
-    struct L *l;
-    int i;
-    int n;
-    int *p;
-    int k;
-
-    l = arg0->f24;
-    sp1C = arg1;
-    n = l->n;
-    i = 0;
+static inline int indexOf(struct L *list, const int *value) {
+    int i = 0;
+    int n = list->n;
     if (0 < n) {
-        p = l->arr;
-        k = sp1C;
-loop:
-        if (k == *p) {
-            asm { nop }
-        } else {
-            i += 1;
-            p += 1;
-            if (i >= n) {
-                goto nf;
+        int *p = list->arr;
+        int wanted = *value;
+        do {
+            if (wanted == *p) {
+                return i;
             }
-            goto loop;
-        }
-    } else {
-nf:
-        i = -1;
+            i++;
+            p++;
+        } while (i < n);
     }
-    if (i < 0) {
-        ObjectList_AppendRetained(*(struct L * volatile *)&arg0->f24, arg1);
+    return -1;
+}
+void FUN_00467030(struct A *arg0, int arg1) {
+    struct L *list = arg0->f24;
+    /* matching construct: retail keeps the value in a stack slot */
+    volatile int value = arg1;
+    if (indexOf(list, (const int *)&value) < 0) {
+        ObjectList_AppendRetained(arg0->f24, arg1);
     }
 }
