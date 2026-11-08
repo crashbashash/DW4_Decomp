@@ -1,6 +1,6 @@
 extern "C" {
 int sprintf(int *, int *, int, int, int);
-int FUN_00230298(float);
+int fptodp(float);
 int Matrix44_GetTranslation(float *, float *);
 int Matrix44_TranslateLocal(float *, float *);
 int beMessenger_GetMatrix(float *, int, int);
@@ -29,9 +29,9 @@ int *PLAYERgetPosStr(int arg0, float fparg0, float fparg1, float fparg2) {
         sp90[2] = fparg2;
         Matrix44_TranslateLocal(sp40, sp90);
         Matrix44_GetTranslation(sp40, sp80);
-        temp_s1 = FUN_00230298(sp80[0]);
-        temp_s0 = FUN_00230298(sp80[1]);
-        sprintf(&DAT_0058a2f0[0], &DAT_0050db00[0], temp_s1, temp_s0, FUN_00230298(sp80[2]));
+        temp_s1 = fptodp(sp80[0]);
+        temp_s0 = fptodp(sp80[1]);
+        sprintf(&DAT_0058a2f0[0], &DAT_0050db00[0], temp_s1, temp_s0, fptodp(sp80[2]));
         return &DAT_0058a2f0[0];
     }
     return 0;

@@ -1,5 +1,5 @@
-int FUN_00230c78();
+int dpcmp();
 
 int FUN_001002f0(void) {
-    return FUN_00230c78() < 0;
+    return dpcmp() < 0;
 }

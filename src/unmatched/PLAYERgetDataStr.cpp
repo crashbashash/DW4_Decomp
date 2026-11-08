@@ -2,7 +2,7 @@ extern "C" {
 float FUN_00123640(float, float);
 int sprintf(int *, int *, int, int, int, int);
 int FUN_00192f50(float *, int *, float *);
-int FUN_00230298(float);
+int fptodp(float);
 int Matrix44_GetTranslation(float *, float *);
 int beMessenger_AppendInt(int, int);
 int beMessenger_DispatchSelected(int, int *);
@@ -32,6 +32,6 @@ int *PLAYERgetDataStr(int arg0, int arg1, float fparg0) {
     Matrix44_GetTranslation(mat, t);
     FUN_00192f50(v, &DAT_004e1098[0], mat);
     ang = FUN_00123640(v[0], v[2]);
-    sprintf(&DAT_0058a2b0[0], &DAT_0050dd90[0], (FUN_00230298(t[0])), (FUN_00230298(t[1])), (FUN_00230298(t[2])), FUN_00230298((57.29578f * ang) + fparg0));
+    sprintf(&DAT_0058a2b0[0], &DAT_0050dd90[0], (fptodp(t[0])), (fptodp(t[1])), (fptodp(t[2])), fptodp((57.29578f * ang) + fparg0));
     return &DAT_0058a2b0[0];
 }

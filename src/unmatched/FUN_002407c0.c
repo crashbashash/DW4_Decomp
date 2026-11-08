@@ -1,4 +1,4 @@
-int __floatsidf();
+int litodp();
 void *FUN_0023f830();
 void *FUN_0023fb30();
 int FUN_002467a0();
@@ -35,7 +35,7 @@ int FUN_002407c0(int arg0, struct Nd *arg1, int arg2) {
     }
     temp_v0_2 = (char *)FUN_0023fb30(arg2, arg1);
     if (temp_v0_2 != 0) {
-        lua_pushnumber(arg0, __floatsidf(*(int *)(temp_v0_2 + 20)));
+        lua_pushnumber(arg0, litodp(*(int *)(temp_v0_2 + 20)));
         return 1;
     }
     FUN_002467a0(&DAT_004ea5c0[0], arg2, *(int *)((char *)arg1 + 12));

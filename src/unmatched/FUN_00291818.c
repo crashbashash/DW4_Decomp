@@ -1,6 +1,6 @@
 /* 64-bit a * b / c rounded to nearest, computed on magnitudes with the sign restored; division by
  * zero saturates to the signed 64-bit limit of the result's sign. */
-extern long long FUN_0022e440(long long a, long long b); /* 64-bit multiply */
+extern long long __muldi3(long long a, long long b); /* 64-bit multiply */
 
 long long FUN_00291818(long long a, long long b, long long c) {
     int sign;
@@ -21,6 +21,6 @@ long long FUN_00291818(long long a, long long b, long long c) {
         c = -c;
         sign = -sign;
     }
-    a = (FUN_0022e440(a, b) + c / 2) / c;
+    a = (__muldi3(a, b) + c / 2) / c;
     return (sign < 0) ? -a : a;
 }

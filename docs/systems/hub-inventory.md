@@ -52,7 +52,7 @@ Exact script call-site references, message arguments, API roots and native edges
 | `0x0018be80` | `FUN_0018be80` | 1340 | 0 |
 | `0x001908f0` | `Matrix44_Copy` | 188 | 0 |
 | `0x00190a50` | `Matrix44_TranslateLocal` | 212 | 0 |
-| `0x0022e440` | `FUN_0022e440` | 116 | 0 |
+| `0x0022e440` | `__muldi3` | 116 | 0 |
 | `0x0023c9a0` | `FUN_0023c9a0` | 416 | 0 |
 | `0x0023f4f0` | `FUN_0023f4f0` | 428 | 0 |
 | `0x002413f0` | `FUN_002413f0` | 352 | 0 |

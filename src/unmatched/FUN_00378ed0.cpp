@@ -25,7 +25,7 @@ unsigned char FUN_003a7d80(...);
 int FUN_003a7a20(...);
 float FUN_003a8140(void *, void *);
 int FUN_003a7e90(...);
-int FUN_00230110(float);
+int __fixsfdi(float);
 int ObjectList_RemoveFirstRetained(...);
 extern int DAT_0050e1f8[4];
 extern int DAT_0050e200[4];
@@ -298,7 +298,7 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
                         int np = pr->_movePoint + 1;
                         if (((char *)(np + pr->_moveCode))[0] == 0) np = 0;
                         pr->_movePoint = np;
-                        float w = pr->_oneTime; w = w; FUN_003a7a20(act, &DAT_0050e228[0], FUN_00230110((1e9f * w) / 60.0f));
+                        float w = pr->_oneTime; w = w; FUN_003a7a20(act, &DAT_0050e228[0], __fixsfdi((1e9f * w) / 60.0f));
                     }
                     if (FUN_003a7e90(act, &DAT_0050e238[0]) != 0) {
                         int h408;

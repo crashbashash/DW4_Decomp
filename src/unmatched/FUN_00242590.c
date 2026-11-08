@@ -3,8 +3,8 @@ struct P *lua_touserdata(int, int);
 int lua_type(int, int);
 int FUN_002467a0(void *, int);
 int lua_tonumber(int, int);
-int FUN_00230d80(int);
-int __floatsidf(int);
+int dptoli(int);
+int litodp(int);
 int lua_pushnumber(int, int);
 extern char DAT_004ea6b0[];
 int FUN_00242590(int arg0) {
@@ -16,6 +16,6 @@ int FUN_00242590(int arg0) {
         return 0;
     }
     temp_s0_2 = (char *)lua_touserdata(arg0, 1);
-    lua_pushnumber(arg0, __floatsidf(*(temp_s0_2 + FUN_00230d80(lua_tonumber(arg0, 2)))));
+    lua_pushnumber(arg0, litodp(*(temp_s0_2 + dptoli(lua_tonumber(arg0, 2)))));
     return 1;
 }

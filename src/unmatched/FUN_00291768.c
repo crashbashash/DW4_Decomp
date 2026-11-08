@@ -1,4 +1,4 @@
-long long FUN_0022e440(long long a, long long b);
+long long __muldi3(long long a, long long b);
 
 int FUN_00291768(long long a, long long b, long long c) {
     int sign;
@@ -21,7 +21,7 @@ int FUN_00291768(long long a, long long b, long long c) {
         d = -d;
         sign = -sign;
     }
-    a = (FUN_0022e440(a, b) + d / 2) / d;
+    a = (__muldi3(a, b) + d / 2) / d;
     if (sign < 0) {
         a = -a;
     }

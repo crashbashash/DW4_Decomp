@@ -1,4 +1,4 @@
-extern "C" long long FUN_00230110(float);
+extern "C" long long __fixsfdi(float);
 extern "C" long long FUN_00398e80(int, long long);
 typedef struct Clock { char p[80]; long long time; } Clock;
 typedef struct Node { char p[120]; float scale; char q[4]; long long bias; } Node;
@@ -46,7 +46,7 @@ extern "C" void beAction2JOINTSET_Update(Owner *arg0, Act *arg1) {
             node = arg1->node;
             f = (float)(unsigned int)(int)(arg0->clock->time >> 18);
             f = f * node->scale;
-            node->bias = now - (FUN_00230110(f) << 18);
+            node->bias = now - (__fixsfdi(f) << 18);
             work->isEnd = 1;
         }
     }

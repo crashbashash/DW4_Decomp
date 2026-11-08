@@ -8,7 +8,7 @@ int beMessenger_AppendMatrix(int, int);
 int beMessenger_AppendString(int, void *);
 int beMessenger_GetString(int, int);
 int FUN_003a84a0(void *, float);
-long long FUN_00230110(float);
+long long __fixsfdi(float);
 int strcmp(void *, void *);
 void igObject_Destroy(void *);
 int List_Reserve(void *, int, int);
@@ -129,8 +129,8 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
             tt = (int)(((igInsightCore *)arg0->_insight)->_worldTime >> 0x12);
             nd = (beModelCtrlNode2 *)arg1->_node;
             f20 = (float)(unsigned int)tt;
-            { long long r = FUN_00230110(f20 * nd->_timeScale); long long o = *(volatile long long *)&nd->_timeBias; nd->_timeBias = (r << 0x12) + o; }
-            nd->_timeBias = nd->_timeBias - (FUN_00230110(f20 * k) << 0x12);
+            { long long r = __fixsfdi(f20 * nd->_timeScale); long long o = *(volatile long long *)&nd->_timeBias; nd->_timeBias = (r << 0x12) + o; }
+            nd->_timeBias = nd->_timeBias - (__fixsfdi(f20 * k) << 0x12);
             nd->_timeScale = k;
             ((beAction2InfoWork *)spBC.p)->_isFreeze = 1;
         }
@@ -145,7 +145,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
             tt = (int)(((igInsightCore *)arg0->_insight)->_worldTime >> 0x12);
             nd = (beModelCtrlNode2 *)arg1->_node;
             f20 = (float)(unsigned int)tt;
-            { long long r = FUN_00230110(f20 * nd->_timeScale); float a2 = f20 * k; float a3 = a2; long long o = *(volatile long long *)&nd->_timeBias; nd->_timeBias = (r << 0x12) + o; nd->_timeBias = nd->_timeBias - (FUN_00230110(a3) << 0x12); }
+            { long long r = __fixsfdi(f20 * nd->_timeScale); float a2 = f20 * k; float a3 = a2; long long o = *(volatile long long *)&nd->_timeBias; nd->_timeBias = (r << 0x12) + o; nd->_timeBias = nd->_timeBias - (__fixsfdi(a3) << 0x12); }
             nd->_timeScale = k;
             ((beAction2InfoWork *)spBC.p)->_isFreeze = 0;
         }

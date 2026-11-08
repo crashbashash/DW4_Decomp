@@ -1,5 +1,5 @@
 int sprintf();
-int FUN_00230298(float);
+int fptodp(float);
 int FUN_002eb010();
 int StringPool_Construct();
 int StringPool_Intern();
@@ -10,7 +10,7 @@ void Gap__Core__igFloatArrayMetaField__vfunc_57(int *arg0, int arg1, float *arg2
     int var_v0;
     int var_v1;
 
-    sprintf(sp20, &DAT_004f9a70[0], FUN_00230298(*arg2));
+    sprintf(sp20, &DAT_004f9a70[0], fptodp(*arg2));
     if (sp20 == 0) {
         var_v1 = 0;
     } else {

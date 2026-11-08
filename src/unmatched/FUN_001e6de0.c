@@ -1,7 +1,7 @@
 typedef struct Rc { int w0; int refs; int f8; } Rc;
 typedef struct V3 { float x, y, z; } V3;
 Rc *FUN_002b9500();
-int FUN_00230298(float);
+int fptodp(float);
 int FUN_002eb010();
 int FUN_0030b7e0();
 int StringPool_Construct();
@@ -20,9 +20,9 @@ int FUN_001e6de0(int *arg0, V3 *arg1, int arg2) {
     Rc *t;
     sp58[0] = 0;
     sp5C = FUN_002b9500(0);
-    s2 = FUN_00230298(arg1->x);
-    s1 = FUN_00230298(arg1->y);
-    FUN_0030b7e0(sp5C, arg2, s2, s1, FUN_00230298(arg1->z));
+    s2 = fptodp(arg1->x);
+    s1 = fptodp(arg1->y);
+    FUN_0030b7e0(sp5C, arg2, s2, s1, fptodp(arg1->z));
     name = sp5C->f8;
     if (name == 0) {
         name = DAT_004c22f0[0];

@@ -1,5 +1,5 @@
-int __floatsidf();
-int FUN_00230d80();
+int litodp();
+int dptoli();
 int FUN_002467a0();
 int lua_type();
 int lua_tonumber();
@@ -16,6 +16,6 @@ int FUN_002429f0(int arg0) {
         return 0;
     }
     temp_s0_2 = (void *)(lua_touserdata(arg0, 1));
-    lua_pushnumber(arg0, __floatsidf(*(short *)((char *)temp_s0_2 + (FUN_00230d80(lua_tonumber(arg0, 2)) * 2))));
+    lua_pushnumber(arg0, litodp(*(short *)((char *)temp_s0_2 + (dptoli(lua_tonumber(arg0, 2)) * 2))));
     return 1;
 }

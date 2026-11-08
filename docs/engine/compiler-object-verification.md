@@ -144,7 +144,7 @@ is the one resolver that checks it; `tools/linkgen.py` resolves its
   names its target by convention and is exempt, and the 60 such rows are the
   only disagreements in the map). The six-digit form is still accepted for
   unmapped names (`FUN_2e5ac0` is in use), but a mapped name is not held to
-  it: `__adddf3` is the runtime helper's real name, not a claim.
+  it: `__adddf3` is GCC's libcall name for the helper, not a claim.
 
 Each refusal is a `symbol 'name': reason` line under the DIFFER header. Two
 consequences the first sweep measured: about 1,070 units reach a function's

@@ -1,4 +1,4 @@
-int __floatsidf();
+int litodp();
 int FUN_002467a0();
 void *lua_touserdata();
 int lua_pushnumber();
@@ -10,8 +10,8 @@ int FUN_002424d0(int arg0) {
         FUN_002467a0(&DAT_004ea670[0]);
         return 0;
     }
-    lua_pushnumber(arg0, __floatsidf(*(int *)((char *)(temp_v0) + 48)));
-    lua_pushnumber(arg0, __floatsidf(*(int *)((char *)(temp_v0) + 40)));
-    lua_pushnumber(arg0, __floatsidf(*(int *)((char *)(temp_v0) + 44)));
+    lua_pushnumber(arg0, litodp(*(int *)((char *)(temp_v0) + 48)));
+    lua_pushnumber(arg0, litodp(*(int *)((char *)(temp_v0) + 40)));
+    lua_pushnumber(arg0, litodp(*(int *)((char *)(temp_v0) + 44)));
     return 3;
 }

@@ -28,7 +28,7 @@ extern char DAT_00586e20[64];           /* scratch buffer the log line is format
 extern unsigned char GPR_00554c08;
 extern unsigned char GPR_00554c0c;      /* "already reported the load time" latch */
 int sprintf(...);
-int FUN_00230728(...);                  /* elapsed time between two clock reads */
+int dpsub(...);                  /* elapsed time between two clock reads */
 int FUN_00308240(...);                  /* assert/log hook: 1 = ok, 2 = do not report again */
 int FUN_00308320(...);
 igResult FUN_002e5f70(void *, int);
@@ -150,7 +150,7 @@ extern "C" int igIGBFile_ReadFile(File *self, int path) {
   self->loaded = 1;
   self->loading = 0;
   if (!GPR_00554c0c) {
-    int answer = FUN_00308240(DAT_004f9b90, path, FUN_00230728(DAT_005871d8[0]->now(), startTime));
+    int answer = FUN_00308240(DAT_004f9b90, path, dpsub(DAT_005871d8[0]->now(), startTime));
     if (answer != 1 && answer == 2) GPR_00554c0c = 1;
   }
   return self->result;

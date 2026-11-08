@@ -231,7 +231,7 @@ The yield is strongly size-dependent, and the clean shapes are a minority of the
 
 | band | matched |
 | --- | --- |
-| simplest call-and-compare leaves (`FUN_001002a0`: `return FUN_00230c78() == 0;`) | first try |
+| simplest call-and-compare leaves (`FUN_001002a0`: `return dpcmp() == 0;`) | first try |
 | ≤64 bytes | ≈13 % |
 | all sizes | ~1–6 % |
 

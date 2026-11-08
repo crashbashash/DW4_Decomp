@@ -1,0 +1,32 @@
+# libgcc routines named by the objects of Sony's EE GCC libgcc.a: libgcc2's _divdi3.o .. _fixsfdi.o, and fp-bit.c
+# built as fp-bit.o and dp-bit.o with US_SOFTWARE_GOFAST, whose names (dpadd, litodp) are also what compilers call.
+# <va>	<name>	<module>
+0x0022e440	__muldi3	libgcc
+0x0022e4b8	__divdi3	libgcc
+0x0022eb50	__moddi3	libgcc
+0x0022f1e0	__udivdi3	libgcc
+0x0022f760	__umoddi3	libgcc
+0x0022fcc8	__floatdidf	libgcc
+0x0022fd70	__floatdisf	libgcc
+0x0022fe58	__fixunsdfdi	libgcc
+0x0022ff70	__fixdfdi	libgcc
+0x0022ffe8	__fixunssfdi	libgcc
+0x00230110	__fixsfdi	libgcc
+0x00230150	__pack_f	libgcc
+0x00230208	__unpack_f	libgcc
+0x00230268	__make_fp	libgcc
+0x00230298	fptodp	libgcc
+0x002302d8	__pack_d	libgcc
+0x002303b0	__unpack_d	libgcc
+0x00230470	_fpadd_parts	libgcc
+0x002306d0	dpadd	libgcc
+0x00230728	dpsub	libgcc
+0x00230790	dpmul	libgcc
+0x00230a18	dpdiv	libgcc
+0x00230b58	__fpcmp_parts_d	libgcc
+0x00230c78	dpcmp	libgcc
+0x00230cc8	litodp	libgcc
+0x00230d80	dptoli	libgcc
+0x00230e20	__make_dp	libgcc
+0x00230e50	dptofp	libgcc
+0x00230ea8	dptoul	libgcc

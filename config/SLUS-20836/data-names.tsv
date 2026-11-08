@@ -3410,6 +3410,11 @@
 0x004e7e28	igFileInfoList_className	class-name
 0x004e7e38	igFileInfo_className	class-name
 0x004e7e98	igBase_className	class-name
+0x004e7fa8	__clz_tab_divdi3	recovered-global
+0x004e80a8	__clz_tab_moddi3	recovered-global
+0x004e81a8	__clz_tab_udivdi3	recovered-global
+0x004e82a8	__clz_tab_umoddi3	recovered-global
+0x004e83a8	__thenan_df	recovered-global
 0x004e83c0	igSerialScheduler_className	class-name
 0x004e8408	igMessenger_className	class-name
 0x004e8428	igMessage_className	class-name

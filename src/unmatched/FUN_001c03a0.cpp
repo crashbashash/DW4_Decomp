@@ -14,7 +14,7 @@ int FUN_001db720(int, int, int);
 int FUN_001dc500(int, int, int);
 int FUN_001dc610(int);
 int FUN_001e07a0(A1 *, A0 *);
-long long FUN_00230298(float);
+long long fptodp(float);
 extern Obj *DAT_00562660[4];
 extern void *DAT_00562668[4];
 extern void *DAT_00562670[4];
@@ -65,7 +65,7 @@ void FUN_001c03a0(A0 *arg0, A1 *arg1) {
                 s4->a[3] = sp70[3];
                 s4->f60 = FUN_001931b0(sp70, 1);
                 s4 = DAT_00562660[0];
-                s4->f48 = FUN_00230298(f20);
+                s4->f48 = fptodp(f20);
                 s4->f64 = f20;
                 FUN_001dc500(arg1->f68, 0, 0);
                 FUN_001b12f0(s0, DAT_00562668[0]);

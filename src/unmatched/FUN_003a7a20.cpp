@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 extern "C" {
-long long FUN_00230110(float);
+long long __fixsfdi(float);
 void *FUN_0036a510(...);
 void *beBaseInfoDataList_Create(...);
 int Memory_GetAllocatorBySelector(...);
@@ -76,7 +76,7 @@ extern "C" void FUN_003a7a20(Act *arg0, int arg1, long long arg2) {
     v = (unsigned)(t >> 0x12);
     f = (float)v;
     f = f * var_s2->_timeScale;
-    var_s2->_timeBias = -(FUN_00230110(f) << 0x12);
+    var_s2->_timeBias = -(__fixsfdi(f) << 0x12);
     var_s2->_svWorldTime = t;
     var_s2->_keikaFrame = 1.0f;
     var_s2->_endTime = arg2;

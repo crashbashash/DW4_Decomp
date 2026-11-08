@@ -1,18 +1,5 @@
-#define __clz_tab D_004e80a8
+#define __clz_tab __clz_tab_moddi3
 #include "dw4/libgcc_longlong.h"
-typedef int word_type __attribute__ ((mode (SI)));
-static inline long long __negdi2(long long u)
-{
-    DWunion w;
-    DWunion uu;
-
-    uu.ll = u;
-
-    w.s.low = -uu.s.low;
-    w.s.high = -uu.s.high - ((UWtype) w.s.low > 0);
-
-    return w.ll;
-}
 
 long long __moddi3(long long u, long long v)
 {

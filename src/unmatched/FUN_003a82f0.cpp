@@ -3,7 +3,7 @@
  * change. */
 #include "dw4/reflected.h"
 extern "C" {
-long long FUN_00230110(float);
+long long __fixsfdi(float);
 igObject *beBaseInfoDataList_Create(int);
 int Memory_GetAllocatorBySelector(int);
 void igObject_Destroy(igObject *);
@@ -48,11 +48,11 @@ extern "C" void FUN_003a82f0(beBaseInfoRam *arg0, int arg1, float fparg0) {
     cur = prop->_timeScale;
     if (fparg0 != cur) {
         scale = (float)(unsigned int)(int)(((igInsightCore *)((beBaseInfoManager *)arg0->_parentManager)->_insight)->_worldTime >> 0x12);
-        r = FUN_00230110(scale * cur);
+        r = __fixsfdi(scale * cur);
         r <<= 0x12;
         r += prop->_timeBias;
         b = r;
-        b -= FUN_00230110(scale * fparg0) << 0x12;
+        b -= __fixsfdi(scale * fparg0) << 0x12;
         prop->_timeBias = b;
         prop->_timeScale = fparg0;
         prop->_keikaFrame = 0.0f;

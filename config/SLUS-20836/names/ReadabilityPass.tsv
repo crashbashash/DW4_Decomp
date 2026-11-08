@@ -33,13 +33,6 @@
 0x0012ad58	strncpy	engine
 0x0015f580	igVertexArray2::FindVertexData	engine
 0x001c6460	ObjectRef_Destruct_001c6460	engine
-0x0022e4b8	__divdi3	engine
-0x0022eb50	__moddi3	engine
-0x0022fcc8	__floatdidf	engine
-0x0022fd70	__floatdisf	engine
-0x002306d0	__adddf3	engine
-0x00230a18	__divdf3	engine
-0x00230cc8	__floatsidf	engine
 0x00253170	lua_close	engine
 0x002b7070	igUnsignedIntMetaField_GetDefaultDescriptor	engine
 0x002ba2e0	igShortMetaField_GetDefaultDescriptor	engine
@@ -78,9 +71,6 @@
 0x00411950	beNDMWStatus_AssignEquipment	game
 0x0012a5fc	strcpy	engine
 0x0012d5c8	vfprintf	engine
-0x002302d8	pack_d	engine
-0x002303b0	unpack_d	engine
-0x00230790	__muldf3	engine
 0x00250200	luaM_realloc	engine
 0x002ba180	igShortMetaField_EnsureRegistered	engine
 0x002c61a0	igEnumMetaField_EnsureRegistered	engine

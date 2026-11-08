@@ -102,7 +102,7 @@ Both JOINTSET handlers match under the `combat` profile (`-O3,p`).
 
 `beAction2JOINTSET_Start` gets retail's integer register allocation (`work->_jointSt0` in `s1`, params in
 `s0`, node reusing `s0`) only when the bias goes through a `long long` temporary for the start time:
-`long long st = work->_jointStartTimeL; node->_timeBias = st - (FUN_00230110(conv * node->_timeScale) << 18);`.
+`long long st = work->_jointStartTimeL; node->_timeBias = st - (__fixsfdi(conv * node->_timeScale) << 18);`.
 The literal's spelling does not matter: `1e9f` and `1000000000.0f` fold identically.
 
 The optimisation **sub-flag** `p` (peephole) matters here: the retail ELF was built with **per-file**
@@ -118,7 +118,7 @@ by function VA and consulted through `tools/unitflags.py` by both `tools/verify.
 sweep disable the table; the table is a committed hand-authored overlay like
 `config/SLUS-20836/names/*.tsv`.
 
-`beAction2JOINTSET_Update` calls `FUN_00398e80` (node-time helper) plus `FUN_00230110`
+`beAction2JOINTSET_Update` calls `FUN_00398e80` (node-time helper) plus `__fixsfdi`
 (float→nanosecond conversion).
 
 ## What didn't work

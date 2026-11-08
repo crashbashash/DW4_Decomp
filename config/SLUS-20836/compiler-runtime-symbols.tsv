@@ -1,25 +1,16 @@
-# MWCC runtime helpers a compiled object calls by the compiler's own name (soft-double arithmetic,
-# the unsigned conversion and the libm entry points). The retail functions carry the project's
-# libgcc/libm names in config/SLUS-20836/symbols.txt, so tools/verify.py and tools/linkgen.py resolve the
-# compiler's spelling through this table.
+# Runtime helpers a compiled object calls by a compiler's own name when the retail function carries
+# a different name in config/SLUS-20836/symbols.txt: MWCC's unsigned conversion, compares and libm
+# entry points, and GCC's soft-double libcalls, which reach libgcc's dpadd, dpmul, dpdiv and litodp.
+# tools/verify.py and tools/linkgen.py resolve the compiler's spelling through this table.
 # name	address
-dpadd	0x002306d0
-dpsub	0x00230728
-dpmul	0x00230790
-dpdiv	0x00230a18
-dptoul	0x00230ea8
-fptodp	0x00230298
-litodp	0x00230cc8
 _d_utod	0x00100290
 _dpflt	0x001002f0
 _dpfgt	0x00100340
 fabs	0x00122538
 pow	0x001235e0
 _dpfne	0x001002d0
-dpcmp	0x00230c78
-dptoli	0x00230d80
-__udivdi3	0x0022f1e0
-__muldi3	0x0022e440
 sqrtf	0x001236a0
-dptofp	0x00230e50
-__fixdfdi	0x0022ff70
+__adddf3	0x002306d0
+__muldf3	0x00230790
+__divdf3	0x00230a18
+__floatsidf	0x00230cc8

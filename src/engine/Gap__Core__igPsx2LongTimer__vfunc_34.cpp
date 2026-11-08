@@ -6,9 +6,9 @@ extern "C" {
 int __divdi3(...);
 int __moddi3(...);
 int __floatdidf(...);
-int __adddf3(...);
-int __divdf3(...);
-int __floatsidf(...);
+int dpadd(...);
+int dpdiv(...);
+int litodp(...);
 void Gap__Core__igPsx2LongTimer__vfunc_34(void **self);
 }
 /* matching construct: dummy-virtual class so the call below compiles to retail's slot-35 vtable call */
@@ -20,6 +20,6 @@ void Gap__Core__igPsx2LongTimer__vfunc_34(void **self) {
     int fractionSeconds;
 
     presetNs = ((DW4VC_140_0 *)(self))->vX();
-    fractionSeconds = __divdf3((__floatdidf(__moddi3(presetNs, NANOSECONDS_PER_SECOND))), __floatsidf(NANOSECONDS_PER_SECOND));
-    __adddf3(__floatdidf(__divdi3(presetNs, NANOSECONDS_PER_SECOND)), fractionSeconds);
+    fractionSeconds = dpdiv((__floatdidf(__moddi3(presetNs, NANOSECONDS_PER_SECOND))), litodp(NANOSECONDS_PER_SECOND));
+    dpadd(__floatdidf(__divdi3(presetNs, NANOSECONDS_PER_SECOND)), fractionSeconds);
 }

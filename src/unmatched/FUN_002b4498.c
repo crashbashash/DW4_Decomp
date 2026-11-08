@@ -5,7 +5,7 @@ extern char D_004f5898[];
 extern char D_004f58a0[];
 extern void FUN_002b45b0(void *h, char *a, char *b, int *o1, int *o2);
 extern int FUN_00129ef8(const char *s, const char *fmt, ...);
-extern long long FUN_0022e440(long long n, int k);
+extern long long __muldi3(long long n, int k);
 void FUN_002b4498(void *h, int k, int *o1, int *o2) {
     int p, len;
     long long n;
@@ -24,7 +24,7 @@ void FUN_002b4498(void *h, int k, int *o1, int *o2) {
         *o1 = 0x7FFFFFFF;
         return;
     }
-    FUN_00129ef8(str + (int)FUN_0022e440(n, k), D_004f58a0, &x, &y, &z);
+    FUN_00129ef8(str + (int)__muldi3(n, k), D_004f58a0, &x, &y, &z);
     *o1 = y;
     *o2 = z;
 }

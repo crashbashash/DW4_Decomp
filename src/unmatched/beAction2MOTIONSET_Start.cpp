@@ -3,7 +3,7 @@ extern "C" {
 extern int DAT_004e0858[4];
 extern int DAT_00561b48[4];
 extern int DAT_00585be0[4];
-long long FUN_00230110(float);
+long long __fixsfdi(float);
 void *igProperty_FindByName(...);
 int FUN_001ac140(void *, long long);
 int FUN_001ae660(void *, void *, int, int, int, int *, int, long long, float, float, int);
@@ -28,7 +28,7 @@ int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2M
         work->_isNoHokan = 0;
         hokanTicks = 1;
     } else {
-        hokanTicks = FUN_00230110(1e9f * arg2->_hokanTime / 60.0f);
+        hokanTicks = __fixsfdi(1e9f * arg2->_hokanTime / 60.0f);
         blend = 0.0f;
     }
     if (((igAnimationStateList *)anim->_animationStateList)->_count >= 2) FUN_001ae780(anim, 0);
@@ -39,10 +39,10 @@ int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2M
     if (((char *)arg2->_hokanMode)[0] == 'S') {
         igAnimationState *tr = ((igAnimationState **)((igAnimationStateList *)anim->_animationStateList)->_data)[0];
         float f = (float)(unsigned int)(int)(((igInsightCore *)arg0->_insight)->_worldTime >> 18);
-        long long ticks = FUN_00230110(f * tr->_timeScale);
+        long long ticks = __fixsfdi(f * tr->_timeScale);
         biasOld = tr->_timeBias;
         tr->_timeBias = (ticks << 18) + biasOld;
-        tr->_timeBias -= FUN_00230110(f * zero) << 18;
+        tr->_timeBias -= __fixsfdi(f * zero) << 18;
         tr->_timeScale = zero;
     }
     if (((char *)arg2->_hokanMode)[1] == 'S') {
@@ -50,10 +50,10 @@ int beAction2MOTIONSET_Start(beAction2 *arg0, beAction2InfoRam *arg1, beAction2M
         int idx = sl->_count - 1;
         igAnimationState *tr = ((igAnimationState **)sl->_data)[idx];
         float f = (float)(unsigned int)(int)(((igInsightCore *)arg0->_insight)->_worldTime >> 18);
-        long long ticks = FUN_00230110(f * tr->_timeScale);
+        long long ticks = __fixsfdi(f * tr->_timeScale);
         biasOld = tr->_timeBias;
         tr->_timeBias = (ticks << 18) + biasOld;
-        tr->_timeBias -= FUN_00230110(f * zero) << 18;
+        tr->_timeBias -= __fixsfdi(f * zero) << 18;
         tr->_timeScale = zero;
     }
     igAnimationTrackList *bl = (igAnimationTrackList *)res->_trackList;

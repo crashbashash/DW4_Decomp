@@ -7,7 +7,7 @@
 extern "C" {
 int FUN_001b1cf0(...);
 int FUN_001b1dc0(...);
-int FUN_00230110(float);
+int __fixsfdi(float);
 int FUN_00236f80(...);
 int FUN_002eb010(...);
 void *FUN_003694a0(...);
@@ -228,7 +228,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
             shake->_endTime = beMessenger_GetFloat(self->_messenger, 2);
             shake->_movePoint = 0;
             /* matching construct: endTime goes through a local (as in FUN_00378ed0) to order the float loads; seconds -> ticks at 60 fps */
-            { float w = shake->_endTime; w = w; FUN_003a7a20(ram, &DAT_0050e238[0], FUN_00230110((1e9f * w) / 60.0f)); w = 0.0f; }
+            { float w = shake->_endTime; w = w; FUN_003a7a20(ram, &DAT_0050e238[0], __fixsfdi((1e9f * w) / 60.0f)); w = 0.0f; }
             FUN_003a8580(ram, &DAT_0050e228[0]);
             shake->_isFirst = 1;
         }

@@ -1,5 +1,5 @@
 int FUN_001006d0();
-int FUN_00230d80();
+int dptoli();
 int lua_gettop();
 int lua_tonumber();
 void *lua_touserdata();
@@ -10,7 +10,7 @@ int FUN_00243c80(int arg0) {
     int var_v0;
 
     if (lua_gettop() != 0) {
-        var_v0 = FUN_00230d80(lua_tonumber(arg0, -2));
+        var_v0 = dptoli(lua_tonumber(arg0, -2));
     } else {
         var_v0 = 1;
     }

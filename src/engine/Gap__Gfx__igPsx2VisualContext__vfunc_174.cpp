@@ -3,7 +3,7 @@ int FUN_00178970(...);
 int FUN_001f6f50(...);
 int FUN_002073c0(...);
 int FUN_00207560(...);
-float FUN_00230e50(...);
+float dptofp(...);
 
 }
 struct N;
@@ -14,7 +14,7 @@ extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_174(A *arg0) {
     float f20 = 0.0f;
     N *n;
     if (arg0->b60 != 0) {
-        f20 = FUN_00230e50(arg0->f56->v100());
+        f20 = dptofp(arg0->f56->v100());
         arg0->f56->v116();
     }
     FUN_002073c0();

@@ -91,12 +91,19 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   `MALLOC_ALIGNMENT` 16, `SIZE_T_SMALLER_THAN_LONG`, no `__SCLE`, `FLT_ROUNDS` not 1 (strtod's fast
   path is compiled out), and each mallocr piece a separate object. A `static const` scalar whose every
   use folds into `lui`/`ori` has no retail `.rodata`, so it is written as a macro.
-* **libgcc** is gcc's `libgcc2.c` (the 64-bit division, `__floatdi*` and `__fix*di` routines) and a
-  Sony-modified `fp-bit.c` built with `US_SOFTWARE_GOFAST`, which is where the `dpadd`/`dpmul`/`dptoli`
-  names in `config/SLUS-20836/compiler-runtime-symbols.tsv` come from. Sony's `fp-bit.c` does not round in
-  `pack_d`, `dpmul` or `dpdiv`, flushes denormals to zero, and its `isnan`/`isinf`/`iszero` are inline
+* **libgcc** is gcc's `libgcc2.c` (`src/libgcc/libgcc2.c` and one file per division object) and a
+  Sony-modified `fp-bit.c` built with `US_SOFTWARE_GOFAST` as `dp-bit.o` and `fp-bit.o` (`src/libgcc/dp_bit.c`,
+  `fp_bit.c`), which is where the `dpadd`/`dpmul`/`dptoli` names come from. The routine names are those of
+  the 2.9-ee `libgcc.a`, whose objects hold the same routines in nearly the retail order. GCC-built objects
+  call the same code as `__adddf3`, `__muldf3`, `__divdf3` and `__floatsidf`, which
+  `config/SLUS-20836/compiler-runtime-symbols.tsv` resolves. Sony's `fp-bit.c` does not round in
+  `__pack_d`, `dpmul` or `dpdiv`, flushes denormals to zero, and its `isnan`/`isinf`/`iszero` are inline
   functions (macros change the compare). Each division object carries its own `__clz_tab` copy.
-  A `static __inline__` helper inlines under `tools/check.py` only from a header (`include/dw4/fp_bit*.h`).
+  A `static __inline__` helper inlines under `tools/check.py` only from a header (`include/dw4/dp_bit.h`,
+  `fp_bit.h`, `libgcc_longlong.h`).
+  Open question: the name `__thenan_df` at `0x4e83a8` follows upstream gcc 2.96's shared constant; the 2.9-ee
+  archive has a per-object `thenan` instead, and no 2.96 `libgcc.a` is available to confirm it.
+  `__muldi3` at `0x22e440` has no source yet and sits just below the region's start in `regions.tsv`.
 * **`mprec.c` and `signal.c` are whole-file units** (`src/newlib/`; `0x1273e0..0x1283f8`, 17
   functions, and `0x129940..0x129c28`, 8 functions). A call compiles differently when its callee is
   defined earlier in the same file: `multadd` and `pow5mult` reproduce only after `Balloc` and `i2b`,

@@ -1,5 +1,5 @@
-int FUN_00230d80();
-short FUN_00230ea8();
+int dptoli();
+short dptoul();
 int FUN_002467a0();
 int lua_type();
 int lua_tonumber();
@@ -17,12 +17,12 @@ int FUN_00242ce0(int arg0) {
         return 0;
     } else {
         temp_s1 = (void *)(lua_touserdata(arg0, 1));
-        temp_s0_2 = FUN_00230d80(lua_tonumber(arg0, 2));
+        temp_s0_2 = dptoli(lua_tonumber(arg0, 2));
         if (lua_type(arg0, 3) != 2) {
             FUN_002467a0(&DAT_004ea6d0[0]);
             return 0;
         } else {
-            *(short *)((char *)temp_s1 + (temp_s0_2 * 2)) = FUN_00230ea8(lua_tonumber(arg0, 3));
+            *(short *)((char *)temp_s1 + (temp_s0_2 * 2)) = dptoul(lua_tonumber(arg0, 3));
         }
     }
     return 0;

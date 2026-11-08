@@ -8,7 +8,7 @@ struct LuaFnP { int pad[3]; int f12; };
 struct LuaFn { char pad0[12]; int f12; char name[12]; struct LuaFnP *p; char pad1[8]; short id; unsigned short flags; };
 extern struct LuaFn *lua_touserdata(void *, int);
 extern void lua_pushnumber(void *, long long);
-extern long long __floatsidf(int);
+extern long long litodp(int);
 extern long long FUN_00100290(int);
 extern void FUN_0023d070(char *, void *, char *);
 extern void FUN_002467a0(char *, ...);
@@ -93,7 +93,7 @@ extern void MDLsetDMGTurn(int);
 extern unsigned char MDLisCallName(int);
 extern void MDLsetWorldPosTarget_78(float, float, float);
 extern void MDLsetWorldPosTarget_79(int);
-extern long long FUN_00230298(float);
+extern long long fptodp(float);
 extern float MDLgetKyoriSquare(float, float, float);
 extern unsigned char MDLisSeqName(int);
 extern unsigned char MDLisStatus(int, int, int);
@@ -143,33 +143,33 @@ int LuaAPI_Dispatch(void *L) {
     case 0x1:
         FUN_0023d070(fn->name, L, SYSgetPlayerName(a->v[0].u.i)); return 1;
     case 0x2:
-        lua_pushnumber(L, __floatsidf(SYSgetPlayerNinzu())); return 1;
+        lua_pushnumber(L, litodp(SYSgetPlayerNinzu())); return 1;
     case 0x3:
         FUN_0023d070(fn->name, L, SYSgetWeaponName(a->v[0].u.i, a->v[1].u.i)); return 1;
     case 0x4:
-        lua_pushnumber(L, __floatsidf(SYSgetRandom(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(SYSgetRandom(a->v[0].u.i))); return 1;
     case 0x5:
-        lua_pushnumber(L, __floatsidf(SYSgetDifficulty())); return 1;
+        lua_pushnumber(L, litodp(SYSgetDifficulty())); return 1;
     case 0x6:
         SYSsetDifficulty(a->v[0].u.i); return 0;
     case 0x7:
-        lua_pushnumber(L, __floatsidf(SYSgetCameraMode())); return 1;
+        lua_pushnumber(L, litodp(SYSgetCameraMode())); return 1;
     case 0x8:
-        lua_pushnumber(L, __floatsidf(SYSgetLightMode())); return 1;
+        lua_pushnumber(L, litodp(SYSgetLightMode())); return 1;
     case 0x9:
-        lua_pushnumber(L, __floatsidf(SYSgetArea())); return 1;
+        lua_pushnumber(L, litodp(SYSgetArea())); return 1;
     case 0xa:
-        lua_pushnumber(L, __floatsidf(SYSgetCountry())); return 1;
+        lua_pushnumber(L, litodp(SYSgetCountry())); return 1;
     case 0xb:
-        lua_pushnumber(L, __floatsidf(SYSgetTarget())); return 1;
+        lua_pushnumber(L, litodp(SYSgetTarget())); return 1;
     case 0xc:
-        lua_pushnumber(L, __floatsidf(SYSgetIsPackOnly())); return 1;
+        lua_pushnumber(L, litodp(SYSgetIsPackOnly())); return 1;
     case 0xd:
         SYSsetGateStage(a->v[0].u.i, a->v[1].u.i); return 0;
     case 0xe:
         FUN_0023d070(fn->name, L, SYSgetGateStageName()); return 1;
     case 0xf:
-        lua_pushnumber(L, __floatsidf(SYSgetGateStageNo())); return 1;
+        lua_pushnumber(L, litodp(SYSgetGateStageNo())); return 1;
     case 0x10:
         lua_pushnumber(L, FUN_00100290(SYSctlDeviceFolder(a->v[0].u.i, a->v[1].u.i, a->v[2].u.i, a->v[3].u.i, a->v[4].u.i, a->v[5].u.i))); return 1;
     case 0x11:
@@ -177,19 +177,19 @@ int LuaAPI_Dispatch(void *L) {
     case 0x12:
         lua_pushnumber(L, FUN_00100290(SYSctlFlagFolder(a->v[0].u.i, a->v[1].u.i))); return 1;
     case 0x13:
-        lua_pushnumber(L, __floatsidf(SYSgetPlayerLevel(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(SYSgetPlayerLevel(a->v[0].u.i))); return 1;
     case 0x14:
-        lua_pushnumber(L, __floatsidf(SYSgetPlayerDigimon(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(SYSgetPlayerDigimon(a->v[0].u.i))); return 1;
     case 0x15:
         lua_pushnumber(L, FUN_00100290(SYSisGetShinkaDigimon(a->v[0].u.i, a->v[1].u.i))); return 1;
     case 0x16:
-        lua_pushnumber(L, __floatsidf(SYSctlCardFolder(a->v[0].u.i, a->v[1].u.i))); return 1;
+        lua_pushnumber(L, litodp(SYSctlCardFolder(a->v[0].u.i, a->v[1].u.i))); return 1;
     case 0x17:
-        lua_pushnumber(L, __floatsidf(SYSctlBit(a->v[0].u.i, a->v[1].u.i, a->v[2].u.i))); return 1;
+        lua_pushnumber(L, litodp(SYSctlBit(a->v[0].u.i, a->v[1].u.i, a->v[2].u.i))); return 1;
     case 0x18:
-        lua_pushnumber(L, __floatsidf(SYSctlShinka(a->v[0].u.i, a->v[1].u.i, a->v[2].u.i))); return 1;
+        lua_pushnumber(L, litodp(SYSctlShinka(a->v[0].u.i, a->v[1].u.i, a->v[2].u.i))); return 1;
     case 0x19:
-        lua_pushnumber(L, __floatsidf(SYSctlPlayer(a->v[0].u.i, a->v[1].u.i, a->v[2].u.i, a->v[3].u.i))); return 1;
+        lua_pushnumber(L, litodp(SYSctlPlayer(a->v[0].u.i, a->v[1].u.i, a->v[2].u.i, a->v[3].u.i))); return 1;
     case 0x1a:
         CFLclear(); return 0;
     case 0x1b:
@@ -209,13 +209,13 @@ int LuaAPI_Dispatch(void *L) {
     case 0x22:
         lua_pushnumber(L, FUN_00100290(MATisAllPlayer())); return 1;
     case 0x23:
-        lua_pushnumber(L, __floatsidf(MATgetPlayerNo())); return 1;
+        lua_pushnumber(L, litodp(MATgetPlayerNo())); return 1;
     case 0x24:
-        lua_pushnumber(L, __floatsidf(MATisRidePlayer(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(MATisRidePlayer(a->v[0].u.i))); return 1;
     case 0x25:
-        lua_pushnumber(L, __floatsidf(MATisRideOffPlayer(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(MATisRideOffPlayer(a->v[0].u.i))); return 1;
     case 0x26:
-        lua_pushnumber(L, __floatsidf(MATgetPlayerMatStat(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(MATgetPlayerMatStat(a->v[0].u.i))); return 1;
     case 0x27:
         MATsetRun(a->v[0].u.b); return 0;
     case 0x28:
@@ -245,7 +245,7 @@ int LuaAPI_Dispatch(void *L) {
     case 0x34:
         DMrun(); return 0;
     case 0x35:
-        lua_pushnumber(L, __floatsidf(DMgetCount())); return 1;
+        lua_pushnumber(L, litodp(DMgetCount())); return 1;
     case 0x36:
         lua_pushnumber(L, FUN_00100290(FLGisOn(a->v[0].u.i))); return 1;
     case 0x37:
@@ -255,17 +255,17 @@ int LuaAPI_Dispatch(void *L) {
     case 0x39:
         COUNTERset(a->v[0].u.i, a->v[1].u.i); return 0;
     case 0x3a:
-        lua_pushnumber(L, __floatsidf(COUNTERget(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(COUNTERget(a->v[0].u.i))); return 1;
     case 0x3b:
         FUN_0023d070(fn->name, L, MDLgetInfoName()); return 1;
     case 0x3c:
-        lua_pushnumber(L, __floatsidf(MDLgetRamNo())); return 1;
+        lua_pushnumber(L, litodp(MDLgetRamNo())); return 1;
     case 0x3d:
-        lua_pushnumber(L, __floatsidf(MDLgetRecNo())); return 1;
+        lua_pushnumber(L, litodp(MDLgetRecNo())); return 1;
     case 0x3e:
-        lua_pushnumber(L, __floatsidf(MDLgetMHp())); return 1;
+        lua_pushnumber(L, litodp(MDLgetMHp())); return 1;
     case 0x3f:
-        lua_pushnumber(L, __floatsidf(MDLgetHp())); return 1;
+        lua_pushnumber(L, litodp(MDLgetHp())); return 1;
     case 0x40:
         FUN_0023d070(fn->name, L, MDLgetPosStr(a->v[0].u.f, a->v[1].u.f, a->v[2].u.f)); return 1;
     case 0x41:
@@ -279,11 +279,11 @@ int LuaAPI_Dispatch(void *L) {
     case 0x45:
         lua_pushnumber(L, FUN_00100290(MDLisLive(a->v[0].u.i, a->v[1].u.i))); return 1;
     case 0x46:
-        lua_pushnumber(L, __floatsidf(MDLgetBulletKind())); return 1;
+        lua_pushnumber(L, litodp(MDLgetBulletKind())); return 1;
     case 0x47:
         FUN_0023d070(fn->name, L, MDLgetBulletName()); return 1;
     case 0x48:
-        lua_pushnumber(L, __floatsidf(MDLgetBulletBoxNo())); return 1;
+        lua_pushnumber(L, litodp(MDLgetBulletBoxNo())); return 1;
     case 0x49:
         MDLdspDamage(a->v[0].u.i); return 0;
     case 0x4a:
@@ -299,7 +299,7 @@ int LuaAPI_Dispatch(void *L) {
     case 0x4f:
         MDLsetWorldPosTarget_79(a->v[0].u.i); return 0;
     case 0x50:
-        lua_pushnumber(L, FUN_00230298(MDLgetKyoriSquare(a->v[0].u.f, a->v[1].u.f, a->v[2].u.f))); return 1;
+        lua_pushnumber(L, fptodp(MDLgetKyoriSquare(a->v[0].u.f, a->v[1].u.f, a->v[2].u.f))); return 1;
     case 0x51:
         lua_pushnumber(L, FUN_00100290(MDLisSeqName(a->v[0].u.i))); return 1;
     case 0x52:
@@ -307,59 +307,59 @@ int LuaAPI_Dispatch(void *L) {
     case 0x53:
         lua_pushnumber(L, FUN_00100290(BLTisPlayerBullet())); return 1;
     case 0x54:
-        lua_pushnumber(L, __floatsidf(BLTgetShootRamNo())); return 1;
+        lua_pushnumber(L, litodp(BLTgetShootRamNo())); return 1;
     case 0x55:
         lua_pushnumber(L, FUN_00100290(BLTisHitCheck())); return 1;
     case 0x56:
-        lua_pushnumber(L, __floatsidf(BLTgetDamageValue(a->v[0].u.b))); return 1;
+        lua_pushnumber(L, litodp(BLTgetDamageValue(a->v[0].u.b))); return 1;
     case 0x57:
-        lua_pushnumber(L, __floatsidf(BLTgetDamageRank(a->v[0].u.i, a->v[1].u.b))); return 1;
+        lua_pushnumber(L, litodp(BLTgetDamageRank(a->v[0].u.i, a->v[1].u.b))); return 1;
     case 0x58:
         lua_pushnumber(L, FUN_00100290(BLTisCritical())); return 1;
     case 0x59:
-        lua_pushnumber(L, __floatsidf(BLTgetStunTime(a->v[0].u.i, a->v[1].u.b))); return 1;
+        lua_pushnumber(L, litodp(BLTgetStunTime(a->v[0].u.i, a->v[1].u.b))); return 1;
     case 0x5a:
-        lua_pushnumber(L, __floatsidf(BLTgetPoisonTime(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(BLTgetPoisonTime(a->v[0].u.i))); return 1;
     case 0x5b:
-        lua_pushnumber(L, __floatsidf(BLTgetSleepTime())); return 1;
+        lua_pushnumber(L, litodp(BLTgetSleepTime())); return 1;
     case 0x5c:
-        lua_pushnumber(L, __floatsidf(BLTgetBindTime())); return 1;
+        lua_pushnumber(L, litodp(BLTgetBindTime())); return 1;
     case 0x5d:
-        lua_pushnumber(L, __floatsidf(BLTgetAttackDownTime(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(BLTgetAttackDownTime(a->v[0].u.i))); return 1;
     case 0x5e:
-        lua_pushnumber(L, __floatsidf(BLTgetPowerDownTime(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(BLTgetPowerDownTime(a->v[0].u.i))); return 1;
     case 0x5f:
         BLTcalcSkillUp(a->v[0].u.b, a->v[1].u.b); return 0;
     case 0x60:
-        lua_pushnumber(L, __floatsidf(BLTcalcEXPUp())); return 1;
+        lua_pushnumber(L, litodp(BLTcalcEXPUp())); return 1;
     case 0x61:
         FUN_0023d070(fn->name, L, BLTgetAttributeStr()); return 1;
     case 0x62:
         lua_pushnumber(L, FUN_00100290(BLPisHitCheck())); return 1;
     case 0x63:
-        lua_pushnumber(L, __floatsidf(BLPgetDamageValue())); return 1;
+        lua_pushnumber(L, litodp(BLPgetDamageValue())); return 1;
     case 0x64:
         FUN_0023d070(fn->name, L, BLPgetAttackZokusei()); return 1;
     case 0x65:
-        lua_pushnumber(L, __floatsidf(BLPgetDamageRank(a->v[0].u.i, a->v[1].u.i))); return 1;
+        lua_pushnumber(L, litodp(BLPgetDamageRank(a->v[0].u.i, a->v[1].u.i))); return 1;
     case 0x66:
-        lua_pushnumber(L, __floatsidf(BLPgetStunTime(a->v[0].u.i, a->v[1].u.i))); return 1;
+        lua_pushnumber(L, litodp(BLPgetStunTime(a->v[0].u.i, a->v[1].u.i))); return 1;
     case 0x67:
-        lua_pushnumber(L, __floatsidf(BLPgetPoisonTime(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(BLPgetPoisonTime(a->v[0].u.i))); return 1;
     case 0x68:
-        lua_pushnumber(L, __floatsidf(BLPgetSleepTime())); return 1;
+        lua_pushnumber(L, litodp(BLPgetSleepTime())); return 1;
     case 0x69:
-        lua_pushnumber(L, __floatsidf(BLPgetBindTime())); return 1;
+        lua_pushnumber(L, litodp(BLPgetBindTime())); return 1;
     case 0x6a:
-        lua_pushnumber(L, __floatsidf(BLPgetAttackDownTime(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(BLPgetAttackDownTime(a->v[0].u.i))); return 1;
     case 0x6b:
-        lua_pushnumber(L, __floatsidf(BLPgetPowerDownTime(a->v[0].u.i))); return 1;
+        lua_pushnumber(L, litodp(BLPgetPowerDownTime(a->v[0].u.i))); return 1;
     case 0x6c:
-        lua_pushnumber(L, __floatsidf(BLPcalcKoukaMagic())); return 1;
+        lua_pushnumber(L, litodp(BLPcalcKoukaMagic())); return 1;
     case 0x6d:
-        lua_pushnumber(L, __floatsidf(TXTgetCallNo())); return 1;
+        lua_pushnumber(L, litodp(TXTgetCallNo())); return 1;
     case 0x6e:
-        lua_pushnumber(L, __floatsidf(PLAYERgetPos())); return 1;
+        lua_pushnumber(L, litodp(PLAYERgetPos())); return 1;
     case 0x6f:
         FUN_0023d070(fn->name, L, PLAYERgetDataStr(a->v[0].u.i, a->v[1].u.i, a->v[2].u.f)); return 1;
     case 0x70:

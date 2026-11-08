@@ -1,4 +1,4 @@
-extern "C" long long FUN_00230110(float);
+extern "C" long long __fixsfdi(float);
 extern "C" long long FUN_00398e80(int, long long);
 extern "C" int FUN_001ac140(int, long long);
 typedef struct Clock { char p[80]; long long time; } Clock;
@@ -52,10 +52,10 @@ extern "C" void beAction2MOTIONSET_Update(Owner *arg0, Act *arg1) {
                 rate = node->scale;
                 first = pieces->items[0];
                 f = (float)(unsigned int)(int)(v >> 18);
-                d = FUN_00230110(f * first->rate);
+                d = __fixsfdi(f * first->rate);
                 p = first->pos;
                 first->pos = (d << 18) + p;
-                first->pos = first->pos - (FUN_00230110(f * rate) << 18);
+                first->pos = first->pos - (__fixsfdi(f * rate) << 18);
                 first->rate = rate;
             }
             work->state = 0;

@@ -14,7 +14,7 @@ extern "C" {
 extern char DAT_004e0858[16];
 extern int DAT_0050dfd8[4];
 extern float DAT_0058a348[4];
-long long FUN_00230110(float);
+long long __fixsfdi(float);
 int FUN_003a7a20(beAction2InfoRam *, void *, long long);
 int beAction2WAITCHECK_Start(beAction2 *mgr, beAction2InfoRam *act, beAction2WAITCHECK *comp) {
     beAction2InfoWork *w = (beAction2InfoWork *)act->_work;
@@ -34,7 +34,7 @@ int beAction2WAITCHECK_Start(beAction2 *mgr, beAction2InfoRam *act, beAction2WAI
         secs = DAT_0058a348[0] + (float)r / 100.0f;
     }
     case 'F':
-        FUN_003a7a20(act, DAT_0050dfd8, FUN_00230110(1e9f * secs / 60.0f));
+        FUN_003a7a20(act, DAT_0050dfd8, __fixsfdi(1e9f * secs / 60.0f));
         w->_waitSt0 = 1;
         break;
     case 'M':

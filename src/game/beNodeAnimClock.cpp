@@ -16,7 +16,7 @@
 
 /* float -> int64 conversion. */
 extern "C" {
-long long FUN_00230110(float);
+long long __fixsfdi(float);
 }
 /* Rebases _timeBias against the scaled clock. */
 extern "C" {
@@ -44,7 +44,7 @@ long long FUN_0039a9e0(beNodeAnim *self, long long elapsed) {
         self->_beforeTime = savedNow;
         scaledTicks = (float)(unsigned int)(int)(savedNow >> CLOCK_TICK_SHIFT);
         scaledTicks = scaledTicks * self->_timeScale;
-        result = FUN_00230110(scaledTicks);
+        result = __fixsfdi(scaledTicks);
         loopEnd = self->_loop2Time;
         result <<= CLOCK_TICK_SHIFT;
         result += self->_timeBias;

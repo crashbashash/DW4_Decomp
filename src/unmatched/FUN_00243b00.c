@@ -1,4 +1,4 @@
-int FUN_00230d80();
+int dptoli();
 int FUN_002467a0();
 int lua_type();
 int lua_tonumber();
@@ -15,6 +15,6 @@ int FUN_00243b00(int arg0) {
         return 0;
     }
     temp_s0_2 = (void *)(lua_touserdata(arg0, 1));
-    lua_pushnumber(arg0, *(long long *)((char *)temp_s0_2 + (FUN_00230d80(lua_tonumber(arg0, 2)) * 8)));
+    lua_pushnumber(arg0, *(long long *)((char *)temp_s0_2 + (dptoli(lua_tonumber(arg0, 2)) * 8)));
     return 1;
 }

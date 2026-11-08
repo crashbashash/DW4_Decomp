@@ -1,6 +1,6 @@
 extern "C" {
 int sprintf(...);
-int FUN_00230298(float);
+int fptodp(float);
 int FUN_00304430(...);
 int FUN_00304680(...);
 extern float DAT_0048a470[4];
@@ -35,9 +35,9 @@ void FUN_00166a70(void *arg0_, float fparg0, float fparg1) {
         temp_f4 = (float) DAT_005607b0[0];
         DAT_005607b8[0] = temp_f4 / DAT_005607a0[0];
         DAT_005607c0[0] = (1000.0f * DAT_005607a8[0]) / temp_f4;
-        temp_s2 = FUN_00230298(1.0f / DAT_00560838[0]);
-        temp_s1 = FUN_00230298(1.0f / DAT_0048a470[0]);
-        sprintf(&DAT_005607d0[0], &DAT_004df110[0], temp_s2, temp_s1, FUN_00230298(DAT_005607b8[0]));
+        temp_s2 = fptodp(1.0f / DAT_00560838[0]);
+        temp_s1 = fptodp(1.0f / DAT_0048a470[0]);
+        sprintf(&DAT_005607d0[0], &DAT_004df110[0], temp_s2, temp_s1, fptodp(DAT_005607b8[0]));
         DAT_005607a0[0] = 0.0f;
         DAT_005607a8[0] = 0.0f;
         DAT_005607b0[0] = 0;

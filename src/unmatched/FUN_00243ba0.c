@@ -1,4 +1,4 @@
-int FUN_00230d80();
+int dptoli();
 int FUN_002467a0();
 int lua_type();
 long long lua_tonumber();
@@ -16,7 +16,7 @@ int FUN_00243ba0(int arg0) {
         return 0;
     }
     s1 = (long long *)lua_touserdata(arg0, 1);
-    idx = FUN_00230d80(lua_tonumber(arg0, 2));
+    idx = dptoli(lua_tonumber(arg0, 2));
     if (lua_type(arg0, 3) != 2) {
         FUN_002467a0(&DAT_004ea6d0[0]);
         return 0;

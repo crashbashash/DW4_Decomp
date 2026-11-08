@@ -11,7 +11,7 @@ int FUN_003a65f0(void *, void *, void *);
 float FUN_003a68d0();
 float FUN_003a68e0(int, int, int, float);
 int FUN_003a7a20(void *, void *, int);
-int FUN_00230110(float);
+int __fixsfdi(float);
 int Memory_GetAllocatorBySelector(int);
 int igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
@@ -170,7 +170,7 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
             }
         }
         str.p = newv;
-        fv = seg->_time; fv = fv; FUN_003a7a20(arg2, &DAT_0050ef68[0], FUN_00230110((1e9f * fv) / 60.0f));
+        fv = seg->_time; fv = fv; FUN_003a7a20(arg2, &DAT_0050ef68[0], __fixsfdi((1e9f * fv) / 60.0f));
     } else {
         nm = (char *)cur->_seqName;
         if (DAT_00586f20[0] == 0) {

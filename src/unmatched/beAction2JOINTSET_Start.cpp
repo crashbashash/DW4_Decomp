@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 /* float -> nanosecond-tick conversion helper */
-extern "C" long long FUN_00230110(float);
+extern "C" long long __fixsfdi(float);
 typedef struct Clock { char p[80]; long long time; } Clock;
 typedef struct Node { char p[120]; float scale; char q[4]; long long bias; } Node;
 typedef struct Work { char p[28]; int state; long long start; long long end; char isEnd; } Work;
@@ -22,17 +22,17 @@ extern "C" int beAction2JOINTSET_Start(Owner *arg0, beAction2InfoRam *arg1, beAc
     }
     float m = arg2->_startTime;
     float n = 1e9f * m;
-    work->start = FUN_00230110(n / 60.0f);
+    work->start = __fixsfdi(n / 60.0f);
     m = arg2->_endTime;
     n = 1e9f * m;
     m = n / 60.0f;
-    work->end = FUN_00230110(m);
+    work->end = __fixsfdi(m);
     t = (int)(arg0->clock->time >> 18);
     node = (Node *)arg1->_node;
     f = (float)(unsigned int)(int)t;
     f = f * node->scale;
     start = work->start;
-    node->bias = start - (FUN_00230110(f) << 18);
+    node->bias = start - (__fixsfdi(f) << 18);
     work->isEnd = 0;
     return 1;
 }

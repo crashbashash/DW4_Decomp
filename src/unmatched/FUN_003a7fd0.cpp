@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 extern "C" {
-long long FUN_00230110(float);
+long long __fixsfdi(float);
 void *beBaseInfoDataList_Create(...);
 int Memory_GetAllocatorBySelector(...);
 int igObject_Destroy(...);
@@ -53,6 +53,6 @@ long long FUN_003a7fd0(beBaseInfoRam *arg0, int arg1) {
     int temp_v0 = (int)(((igInsightCore *)((beBaseInfoManager *)arg0->_parentManager)->_insight)->_worldTime >> 0x12);
     float var_f12 = (float)(unsigned int)temp_v0;
     var_f12 = var_f12 * temp_s0->_timeScale;
-    long long sh = FUN_00230110(var_f12);
+    long long sh = __fixsfdi(var_f12);
     return (sh << 0x12) + temp_s0->_timeBias;
 }

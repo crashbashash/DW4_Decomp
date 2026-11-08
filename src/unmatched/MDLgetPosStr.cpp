@@ -3,7 +3,7 @@ struct M { float m[16]; };
 struct V3 { float x, y, z; };
 int sprintf(char *, char *, int, int, int);
 int igMatrix44f_SetIdentity(struct M *);
-int FUN_00230298(float);
+int fptodp(float);
 int Matrix44_Copy(struct M *, void *);
 int Matrix44_GetTranslation(struct M *, struct V3 *);
 int Matrix44_TranslateLocal(struct M *, struct V3 *);
@@ -27,8 +27,8 @@ char *MDLgetPosStr(float fparg0, float fparg1, float fparg2) {
     b.z = fparg2;
     Matrix44_TranslateLocal(&m, &b);
     Matrix44_GetTranslation(&m, &a);
-    s1 = FUN_00230298(a.x);
-    s0 = FUN_00230298(a.y);
-    sprintf(DAT_0058a230, DAT_0050db00, s1, s0, FUN_00230298(a.z));
+    s1 = fptodp(a.x);
+    s0 = fptodp(a.y);
+    sprintf(DAT_0058a230, DAT_0050db00, s1, s0, fptodp(a.z));
     return DAT_0058a230;
 }

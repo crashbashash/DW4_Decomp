@@ -1,6 +1,6 @@
 struct P { int pad[3]; int f12; };
-long long FUN_0022ff70(int);
-int FUN_00230d80(int);
+long long __fixdfdi(int);
+int dptoli(int);
 int FUN_002467a0();
 int lua_type(int, int);
 int lua_tonumber(int, int);
@@ -17,11 +17,11 @@ int FUN_002433a0(int arg0) {
         return 0;
     }
     temp_s1 = (char *)lua_touserdata(arg0, 1);
-    temp_s0_2 = FUN_00230d80(lua_tonumber(arg0, 2));
+    temp_s0_2 = dptoli(lua_tonumber(arg0, 2));
     if (lua_type(arg0, 3) != 2) {
         FUN_002467a0(DAT_004ea6d0);
         return 0;
     }
-    *(long long *)(temp_s1 + (temp_s0_2 * 8)) = FUN_0022ff70(lua_tonumber(arg0, 3));
+    *(long long *)(temp_s1 + (temp_s0_2 * 8)) = __fixdfdi(lua_tonumber(arg0, 3));
     return 0;
 }

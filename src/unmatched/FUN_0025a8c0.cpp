@@ -16,7 +16,7 @@ extern "C" {
 int FUN_00100610(...);
 Frame *FUN_001007e0(...);
 float __floatdisf(int);
-int FUN_00230298(float);
+int fptodp(float);
 Frame *FUN_00238110(...);
 int FUN_00239390(...);
 int FUN_00259f80(...);
@@ -147,7 +147,7 @@ void FUN_0025a8c0(App *arg0) {
         sp.p->vB();
         temp_f12 = (1e9f * (float)s1) / __floatdisf(sp.p->vA());
         if (GPR_00554bf0 == 0) {
-            r = FUN_003082b0(&DAT_004ecf70[0], s1, FUN_00230298(temp_f12));
+            r = FUN_003082b0(&DAT_004ecf70[0], s1, fptodp(temp_f12));
             if (r != 1 && r == 2) GPR_00554bf0 = 1;
         }
         FUN_00463b70(arg0);
