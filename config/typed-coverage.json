@@ -6,7 +6,7 @@
   "__internalNonRefCountedObjectList": 12,
   "be": 4,
   "beAction2": 20,
-  "beAction2Data": 4,
+  "beAction2Data": 3,
   "beAction2FADESET": 10,
   "beAction2Info": 13,
   "beAction2InfoRam": 55,
@@ -610,7 +610,7 @@
    "total": 3
   },
   "engine": {
-   "files": 3337,
+   "files": 3341,
    "offset_casts": 678,
    "other_members": 2267,
    "recovered": 1889,
@@ -621,11 +621,20 @@
   "game": {
    "files": 1590,
    "offset_casts": 53,
-   "other_members": 259,
-   "recovered": 2504,
-   "recovered_pct": 86.08,
+   "other_members": 260,
+   "recovered": 2503,
+   "recovered_pct": 86.04,
    "synthetic": 93,
    "total": 2909
+  },
+  "libgcc": {
+   "files": 7,
+   "offset_casts": 0,
+   "other_members": 84,
+   "recovered": 0,
+   "recovered_pct": 0.0,
+   "synthetic": 0,
+   "total": 84
   },
   "lua": {
    "files": 8,
@@ -654,6 +663,24 @@
    "synthetic": 0,
    "total": 5
   },
+  "newlib": {
+   "files": 136,
+   "offset_casts": 4,
+   "other_members": 566,
+   "recovered": 0,
+   "recovered_pct": 0.0,
+   "synthetic": 0,
+   "total": 570
+  },
+  "sony": {
+   "files": 129,
+   "offset_casts": 10,
+   "other_members": 285,
+   "recovered": 0,
+   "recovered_pct": 0.0,
+   "synthetic": 0,
+   "total": 295
+  },
   "third_party": {
    "files": 40,
    "offset_casts": 0,
@@ -664,19 +691,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 12472,
-   "offset_casts": 6083,
-   "other_members": 13333,
+   "files": 12206,
+   "offset_casts": 6079,
+   "other_members": 12929,
    "recovered": 20479,
-   "recovered_pct": 42.08,
+   "recovered_pct": 42.44,
    "synthetic": 8768,
-   "total": 48663
+   "total": 48255
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6816,
- "recovered": 24880,
+ "offset_casts": 6826,
+ "recovered": 24879,
  "synthetic": 10221,
- "total": 61603,
+ "total": 62144,
  "typeable": 366
 }

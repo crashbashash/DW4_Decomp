@@ -15211,7 +15211,7 @@
 00377340	beAction2MOTIONSET_Start	match	exception index 0x54e4c8: matches retail (table 0x5434b4 8 bytes)
 00377700	beAction2_StartComponents	match	exception index 0x54e4d4: matches retail (table 0x5434bc 8 bytes)
 003778d0	Gap__Bec__beAction2__vfunc_31	match	exception index 0x54e4e0: matches retail (packed)
-00377990	Gap__Bec__beAction2__vfunc_33	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude -Cpp_exceptions off'); under the unit profile of beAction2_377700 (local/mwcps2/3.0-011126/mwccps2.exe '-O3,p -Iinclude') they are not
+00377990	Gap__Bec__beAction2__vfunc_33	match	DEFERRED duplicate 0x36c790 __dt__2RPFv 128B (compared under the profile of its retail unit)
 003783f0	Gap__Bec__beAction2__vfunc_20	match	-
 00378400	Gap__Core__igObject__vfunc_28	match	-
 00378410	Gap__Core__igObject__vfunc_34	match	-

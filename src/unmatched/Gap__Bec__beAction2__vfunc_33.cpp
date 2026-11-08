@@ -35,10 +35,11 @@ extern unsigned char GPR_00554c14;
 int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void *arg2);
 }
 
-/* matching construct: stack-resident ref holder with an empty destructor. */
+/* Owning reference held in the frame; its release is inlined at each return. */
 struct Rc { int w0; int references; };
-struct RP { Rc *p; ~RP() {} };
+struct RP { Rc *p; inline ~RP(); };
 #define REL(o) { Rc *rr = (o); if (rr != 0) { rr->references = rr->references - 1; if (((unsigned long long)((long long)rr->references << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
+inline RP::~RP() { Rc *rr = p; if (rr != 0) { rr->references = rr->references - 1; if ((rr->references & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 
 /* matching construct: dummy virtual slots so the calls dispatch through the retail vtable offsets */
 struct V {
@@ -206,7 +207,6 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
                     }
                 }
             }
-            { Rc *o = spBC.p; REL(o) }
             return 1;
         }
         if (spBC.p == 0) {
@@ -266,6 +266,5 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
         }
         break;
     }
-    { Rc *o = spBC.p; REL(o) }
     return 1;
 }

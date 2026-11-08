@@ -26,21 +26,16 @@ void Gap__Bec__beAction2__vfunc_31(void *self, beAction2InfoRam *info) {
     if (work->_motionSt0 != 0) {
         beAction2MOTIONSET_Update(self, info);
     }
-    /* The asm nops below are matching constructs: retail's post-call scheduler padding. */
     if (work->_jointSt0 != 0) {
         beAction2JOINTSET_Update(self, info);
-        asm { nop }
     }
     if (work->_fadeSt0 != 0) {
         beAction2FADESET_Update(self, info);
-        asm { nop }
     }
     if (work->_waitSt0 != 0) {
         beAction2WAITCHECK_Update(self, info);
-        asm { nop }
     }
     if (work->_flashSt0 != 0) {
         beAction2FLASHSET_Update(self, info);
-        asm { nop }
     }
 }

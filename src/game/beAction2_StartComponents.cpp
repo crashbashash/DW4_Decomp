@@ -52,51 +52,46 @@ public:
     virtual int GetMetaObject();
 };
 
+/* matching construct: the guard reads the list through its own view, so its load stays apart from
+ * the loads in the loop. */
+struct Action2DataGuardView : beAction2Data {};
+
 /* Resumes at work._comIndex and starts components until one handler returns false or the list is
  * exhausted, then saves the position back into work._comIndex. The component kind is identified by
  * comparing its virtual GetMetaObject() result with the published metadata handle of each *_Start
  * handler's class. */
 void beAction2_StartComponents(int manager, void *info)
 {
-    Action2Component *component;
-    unsigned char keepGoing;
-    int index;
     beAction2Data *data;
     beAction2InfoWork *work;
+    int index;
+    unsigned char keepGoing;
+    Action2Component *component;
 
     work = (beAction2InfoWork *)((beAction2InfoRam *)info)->_work;
     data = (beAction2Data *)work->_comData;
     index = work->_comIndex;
-    if (index != ((Action2ComponentList *)data->_comList)->_count) {
-next_component:
-        keepGoing = true;
-        component = (((Action2ComponentList *)data->_comList)->_data)[index];
-        if (g_beAction2MOTIONSET_metaObject[0] == component->GetMetaObject()) {
-            keepGoing = beAction2MOTIONSET_Start(manager, info, component) & 0xFF;
-            index += 1;
-        } else if (g_beAction2JOINTSET_metaObject[0] == component->GetMetaObject()) {
-            keepGoing = beAction2JOINTSET_Start(manager, info, component) & 0xFF;
-            index += 1;
-        } else if (g_beAction2FADESET_metaObject[0] == component->GetMetaObject()) {
-            keepGoing = beAction2FADESET_Start(manager, info, component) & 0xFF;
-            index += 1;
-        } else if (g_beAction2WAITCHECK_metaObject[0] == component->GetMetaObject()) {
-            keepGoing = beAction2WAITCHECK_Start(manager, info, component) & 0xFF;
-            index += 1;
-        } else if (g_beAction2FLASHSET_metaObject[0] == component->GetMetaObject()) {
-            keepGoing = beAction2FLASHSET_Start(manager, info, component) & 0xFF;
-            index += 1;
-            /* matching construct: preserve the retail scheduler's inner-branch padding. */
-            asm { nop }
-        }
-        if (keepGoing & 0xFF) {
-            if (index == ((Action2ComponentList *)data->_comList)->_count) {
-                /* matching construct: preserve the retail scheduler's loop-exit padding. */
-                asm { nop }
-            } else {
-                goto next_component;
+    if (index != ((Action2ComponentList *)((Action2DataGuardView *)data)->_comList)->_count) {
+        do {
+            keepGoing = true;
+            component = (((Action2ComponentList *)data->_comList)->_data)[index];
+            if (g_beAction2MOTIONSET_metaObject[0] == component->GetMetaObject()) {
+                keepGoing = beAction2MOTIONSET_Start(manager, info, component) & 0xFF;
+                index += 1;
+            } else if (g_beAction2JOINTSET_metaObject[0] == component->GetMetaObject()) {
+                keepGoing = beAction2JOINTSET_Start(manager, info, component) & 0xFF;
+                index += 1;
+            } else if (g_beAction2FADESET_metaObject[0] == component->GetMetaObject()) {
+                keepGoing = beAction2FADESET_Start(manager, info, component) & 0xFF;
+                index += 1;
+            } else if (g_beAction2WAITCHECK_metaObject[0] == component->GetMetaObject()) {
+                keepGoing = beAction2WAITCHECK_Start(manager, info, component) & 0xFF;
+                index += 1;
+            } else if (g_beAction2FLASHSET_metaObject[0] == component->GetMetaObject()) {
+                keepGoing = beAction2FLASHSET_Start(manager, info, component) & 0xFF;
+                index += 1;
             }
-        }
+        } while ((keepGoing & 0xFF) && index != ((Action2ComponentList *)data->_comList)->_count);
     }
     work->_comIndex = index;
 }

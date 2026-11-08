@@ -56,10 +56,10 @@ The block has two drivers:
 
 What made the Start driver match was recovering the original **pointer-typed list layout** and
 expressing the dispatch as a real C++ virtual call (`component->GetMetaObject()`), not an offset cast:
-the untyped draft would not allocate retail's registers. Both drivers also need retail's **scheduler
-padding** written out as explicit `asm{nop}` — two in the Start driver (after the FLASHSET branch and
-at the loop exit), four in the Update driver (after the delay slot of each `*_Update` `jal`). The
-Start driver needs the `-O3,p` per-unit override; the Update driver does not.
+the untyped draft would not allocate retail's registers. The Start driver's guard reads the list through its own struct view, because
+the compiler would otherwise merge that load with the ones in the loop, where retail reloads the list for the
+guard, the body and the latch. The `nop`s after each `*_Update` `jal`, after the FLASHSET branch and at the loop
+exit are ordinary output of the unit's `b52 -O3,p` profile, not padding the source spells.
 
 All five handler pairs match retail: they verify byte-identical from `src/unmatched/` with `-O3,p`
 under the alternate compiler (the `combat` profile in `config/SLUS-20836/units.tsv`). A C++ **typed work
