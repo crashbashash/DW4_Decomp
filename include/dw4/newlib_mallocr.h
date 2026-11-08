@@ -20,7 +20,8 @@ extern unsigned long D_004858c0;         /* top_pad */
 extern char *D_004858c8;                 /* sbrk_base */
 extern unsigned long D_004858d0;         /* max_sbrked_mem */
 extern unsigned long D_004858d8;         /* max_total_mem */
-extern int D_004858e0;                   /* sbrked_mem */
+struct mallinfo { int arena; int ordblks; int smblks; int hblks; int hblkhd; int usmblks; int fsmblks; int uordblks; int fordblks; int keepcost; };
+extern struct mallinfo D_004858e0;          /* current_mallinfo */
 extern char *FUN_00129828(Reent *, int); /* _sbrk_r */
 extern void FUN_00127310(Reent *);       /* __malloc_lock */
 extern void FUN_00127390(Reent *);       /* __malloc_unlock */
@@ -41,7 +42,8 @@ extern int FUN_001256e0(Reent *, unsigned int);   /* malloc_trim */
 #define sbrk_base D_004858c8
 #define max_sbrked_mem D_004858d0
 #define max_total_mem D_004858d8
-#define sbrked_mem D_004858e0
+#define current_mallinfo D_004858e0
+#define sbrked_mem (current_mallinfo.arena)
 #define mmapped_mem 0
 #define MINSIZE 16
 #define MALLOC_ALIGN_MASK 15
@@ -117,29 +119,21 @@ extern int FUN_001256e0(Reent *, unsigned int);   /* malloc_trim */
 #define set_inuse_bit_at_offset(p, s) (((mchunkptr)(((char *)(p)) + (s)))->size |= PREV_INUSE)
 extern void *memcpy(void *, const void *, unsigned int);
 extern void *FUN_00126600(Reent *, unsigned int);                /* _malloc_r */
-#define MALLOC_COPY(dest, src, nbytes) \
-    { \
-        INTERNAL_SIZE_T *mcsrc = (INTERNAL_SIZE_T *)(src); \
-        INTERNAL_SIZE_T *mcdst = (INTERNAL_SIZE_T *)(dest); \
-        INTERNAL_SIZE_T mcsz = (nbytes); \
-        if (mcsz > 9 * SIZE_SZ) \
-            memcpy(mcdst, mcsrc, mcsz); \
-        else { \
-            if (mcsz >= 5 * SIZE_SZ) { \
-                *mcdst++ = *mcsrc++; \
-                *mcdst++ = *mcsrc++; \
-                if (mcsz >= 7 * SIZE_SZ) { \
-                    *mcdst++ = *mcsrc++; \
-                    *mcdst++ = *mcsrc++; \
-                    if (mcsz >= 9 * SIZE_SZ) { \
-                        *mcdst++ = *mcsrc++; \
-                        *mcdst++ = *mcsrc++; \
-                    } \
-                } \
-            } \
-            *mcdst++ = *mcsrc++; \
-            *mcdst++ = *mcsrc++; \
-            *mcdst = *mcsrc; \
-        } \
-    }
+#define MALLOC_COPY(dest,src,nbytes)                                          \
+do {                                                                          \
+  INTERNAL_SIZE_T mcsz = (nbytes);                                            \
+  if(mcsz <= 9*sizeof(mcsz)) {                                                \
+    INTERNAL_SIZE_T* mcsrc = (INTERNAL_SIZE_T*) (src);                        \
+    INTERNAL_SIZE_T* mcdst = (INTERNAL_SIZE_T*) (dest);                       \
+    if(mcsz >= 5*sizeof(mcsz)) {     *mcdst++ = *mcsrc++;                     \
+                                     *mcdst++ = *mcsrc++;                     \
+      if(mcsz >= 7*sizeof(mcsz)) {   *mcdst++ = *mcsrc++;                     \
+                                     *mcdst++ = *mcsrc++;                     \
+        if(mcsz >= 9*sizeof(mcsz)) { *mcdst++ = *mcsrc++;                     \
+                                     *mcdst++ = *mcsrc++; }}}                 \
+                                     *mcdst++ = *mcsrc++;                     \
+                                     *mcdst++ = *mcsrc++;                     \
+                                     *mcdst   = *mcsrc  ;                     \
+  } else memcpy(dest, src, mcsz);                                             \
+} while(0)
 #endif

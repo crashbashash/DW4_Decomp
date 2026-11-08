@@ -387,19 +387,49 @@
 0011bd80	FUN_0011bd80	match	jump table 0x4d2ee8: 56 entries, 224 bytes, matches retail
 0011c220	FUN_0011c220	match	-
 0011c640	FUN_0011c640	match	jump table 0x4d2fe0: 56 entries, 224 bytes, matches retail
+0011cc48	FUN_0011cc48	match	jump table 0x4d30c0: 18 entries, 72 bytes, matches retail
+0011cdf8	FUN_0011cdf8	match	jump table 0x4d3108: 116 entries, 464 bytes, matches retail
+0011dd48	FUN_0011dd48	match	jump table 0x4d32d8: 148 entries, 592 bytes, matches retail
 0011e300	FUN_0011e300	match	-
+0011e620	FUN_0011e620	match	-
+0011ea48	FUN_0011ea48	match	-
+0011ede8	FUN_0011ede8	match	-
+0011efc8	FUN_0011efc8	match	jump table 0x4d3528: 4 entries, 16 bytes, matches retail
 0011f198	FUN_0011f198	match	jump table 0x4d3538: 12 entries, 48 bytes, matches retail
+0011f478	FUN_0011f478	match	jump table 0x4d3568: 6 entries, 24 bytes, matches retail
+0011f560	FUN_0011f560	match	jump table 0x4d3580: 240 entries, 960 bytes, matches retail
+0011f910	FUN_0011f910	match	-
 0011f9e0	FUN_0011f9e0	match	jump table 0x4d3978: 12 entries, 48 bytes, matches retail
+0011fcb8	FUN_0011fcb8	match	jump table 0x4d39a8: 28 entries, 112 bytes, matches retail
 00120808	FUN_00120808	match	jump table 0x4d3a50: 14 entries, 56 bytes, matches retail
 00120a40	FUN_00120a40	match	jump table 0x4d3aa0: 30 entries, 120 bytes, matches retail
+00120fa8	FUN_00120fa8	match	-
+001210f8	FUN_001210f8	match	jump table 0x4d3b18: 19 entries, 76 bytes, matches retail
+00121960	FUN_00121960	match	-
+00121a68	FUN_00121a68	match	jump table 0x4d3b68: 17 entries, 68 bytes, matches retail
 00121cf0	FUN_00121cf0	match	jump table 0x4d3bb0: 44 entries, 176 bytes, matches retail
 001221b8	FUN_001221b8	match	-
 001223c8	FUN_001223c8	match	-
+00122410	FUN_00122410	match	-
+00122538	FUN_00122538	match	-
 00122570	FUN_00122570	match	-
 00122590	FUN_00122590	match	-
+001227a8	FUN_001227a8	match	-
 00122890	FUN_00122890	match	-
 001228d8	FUN_001228d8	match	-
+00122918	FUN_00122918	match	-
+001229c8	FUN_001229c8	match	jump table 0x4d3c88: 12 entries, 48 bytes, matches retail
+00122bb0	FUN_00122bb0	match	-
+00122ce8	FUN_00122ce8	match	-
 00122d90	FUN_00122d90	match	jump table 0x4d3cb8: 21 entries, 84 bytes, matches retail
+00123020	FUN_00123020	match	-
+001230f8	FUN_001230f8	match	-
+00123138	FUN_00123138	match	-
+00123210	FUN_00123210	match	-
+00123238	FUN_00123238	match	-
+00123310	FUN_00123310	match	-
+001233d8	FUN_001233d8	match	-
+001234c0	FUN_001234c0	match	-
 00123538	FUN_00123538	match	-
 00123550	FUN_00123550	match	-
 00123568	FUN_00123568	match	-
@@ -418,47 +448,66 @@
 001236a0	FUN_001236a0	match	-
 001236b8	FUN_001236b8	match	-
 001236d0	FUN_001236d0	match	-
-001236e8	FUN_001236e8	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of newlib-libc_1236b8 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+001236e8	FUN_001236e8	match	-
 00123710	FUN_00123710	match	-
 00123730	FUN_00123730	match	-
+00123798	FUN_00123798	match	-
 00123850	FUN_00123850	match	-
+001238a8	FUN_001238a8	match	-
 00124d40	FUN_00124d40	match	-
 00124d48	FUN_00124d48	match	-
 00124d50	FUN_00124d50	match	-
 00124d60	FUN_00124d60	match	-
+00124e10	FUN_00124e10	match	-
 00124f28	FUN_00124f28	match	-
 00124f88	FUN_00124f88	match	-
+00125000	FUN_00125000	match	-
 001250f8	FUN_001250f8	match	-
 00125118	FUN_00125118	match	-
 00125138	FUN_00125138	match	-
 001251c8	FUN_001251c8	match	-
 00125220	FUN_00125220	match	-
+00125278	FUN_00125278	match	-
+001252c8	FUN_001252c8	match	-
 001253e8	FUN_001253e8	match	-
+001256e0	FUN_001256e0	match	-
 00125850	FUN_00125850	match	-
 001258b0	FUN_001258b0	match	-
 00125c90	FUN_00125c90	match	-
 00125d28	FUN_00125d28	match	-
 00125d50	FUN_00125d50	match	-
+00125d78	FUN_00125d78	match	-
 00125ec0	FUN_00125ec0	match	-
 00125ee0	FUN_00125ee0	match	-
 00125f70	FUN_00125f70	match	-
 00125f80	FUN_00125f80	match	-
 00125fa8	FUN_00125fa8	match	-
 00125fc8	FUN_00125fc8	match	-
+00126028	FUN_00126028	match	-
 00126180	FUN_00126180	match	-
+00126218	FUN_00126218	match	-
 00126308	FUN_00126308	match	-
 00126360	FUN_00126360	match	-
+00126600	FUN_00126600	match	-
 00126d28	FUN_00126d28	match	-
+00126df8	FUN_00126df8	match	-
 00126ef0	FUN_00126ef0	match	-
 00127310	FUN_00127310	match	-
 00127390	FUN_00127390	match	-
 001273e0	FUN_001273e0	match	-
-00127488	FUN_00127488	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/3.0-011126/mwccps2.exe '-O3 -Iinclude'); under the unit profile of sony-sdk_125c90 (local/ee-gcc2.96/bin/ee-gcc '-O2 -G0 -Iinclude') they are not
+00127488	FUN_00127488	match	-
+001275c0	FUN_001275c0	match	-
 001276f0	FUN_001276f0	match	-
 00127770	FUN_00127770	match	-
 00127830	FUN_00127830	match	-
+00127868	FUN_00127868	match	-
+00127b78	FUN_00127b78	match	-
 00127cd0	FUN_00127cd0	match	-
+00127d38	FUN_00127d38	match	-
+00127ec8	FUN_00127ec8	match	-
 00127f98	FUN_00127f98	match	-
+00128130	FUN_00128130	match	-
+001282b8	FUN_001282b8	match	-
 00128388	FUN_00128388	match	-
 001283f8	FUN_001283f8	match	-
 00128428	FUN_00128428	match	-
@@ -467,50 +516,72 @@
 001284a8	FUN_001284a8	match	-
 001284c8	FUN_001284c8	match	-
 00128528	printf	match	-
+00128598	FUN_00128598	match	-
 00128f88	FUN_00128f88	match	-
 00128fa0	FUN_00128fa0	match	-
 00129008	FUN_00129008	match	-
 00129068	FUN_00129068	match	-
+001290d0	FUN_001290d0	match	-
 00129670	FUN_00129670	match	-
+001296a8	FUN_001296a8	match	-
 00129828	FUN_00129828	match	-
 00129940	FUN_00129940	match	-
 001299b0	FUN_001299b0	match	-
+00129a30	FUN_00129a30	match	-
 00129ba0	FUN_00129ba0	match	-
 00129bc0	FUN_00129bc0	match	-
 00129be8	FUN_00129be8	match	-
 00129c08	FUN_00129c08	match	-
 00129c28	FUN_00129c28	match	-
 00129c88	FUN_00129c88	match	-
+00129ca0	FUN_00129ca0	match	-
 00129d38	FUN_00129d38	match	-
 00129dd8	FUN_00129dd8	match	-
 00129e60	sprintf	match	-
 00129ef0	FUN_00129ef0	match	-
+00129ef8	FUN_00129ef8	match	-
 00129fa0	FUN_00129fa0	match	-
 0012a008	FUN_0012a008	match	-
 0012a088	FUN_0012a088	match	-
 0012a0f0	FUN_0012a0f0	match	-
+0012a110	FUN_0012a110	match	-
 0012a5e8	FUN_0012a5e8	match	-
 0012a710	FUN_0012a710	match	-
 0012a8c8	FUN_0012a8c8	match	-
+0012a918	FUN_0012a918	match	-
 0012af18	FUN_0012af18	match	-
 0012afa0	FUN_0012afa0	match	-
 0012aff0	FUN_0012aff0	match	-
+0012b078	FUN_0012b078	match	jump table 0x4d4080: 52 entries, 208 bytes, matches retail
 0012bf90	FUN_0012bf90	match	-
+0012bfb8	FUN_0012bfb8	match	-
 0012bfe0	FUN_0012bfe0	match	-
 0012c218	FUN_0012c218	match	-
 0012c248	FUN_0012c248	match	-
 0012c478	FUN_0012c478	match	-
 0012c4a8	FUN_0012c4a8	match	-
 0012c4c8	FUN_0012c4c8	match	-
+0012c4e8	FUN_0012c4e8	match	-
+0012c5d0	FUN_0012c5d0	match	-
 0012c758	FUN_0012c758	match	-
+0012c7a0	FUN_0012c7a0	match	-
+0012c858	FUN_0012c858	match	-
+0012c8d0	FUN_0012c8d0	match	jump table 0x4d4150: 121 entries, 484 bytes, matches retail
 0012d4c8	FUN_0012d4c8	match	-
+0012d510	FUN_0012d510	match	-
 0012d5c8	vfprintf	match	-
+0012d640	FUN_0012d640	match	jump table 0x4d4340: 129 entries, 516 bytes, matches retail
+0012ecb0	FUN_0012ecb0	match	-
+0012ee70	FUN_0012ee70	match	-
+0012ef50	FUN_0012ef50	match	jump table 0x4d4580: 271 entries, 1084 bytes, matches retail
+0012fbe0	FUN_0012fbe0	match	-
 0012fce0	FUN_0012fce0	match	-
 0012fd08	FUN_0012fd08	match	-
 0012fd78	FUN_0012fd78	match	-
 0012fde0	FUN_0012fde0	match	-
 0012fe38	FUN_0012fe38	match	-
 0012fe90	FUN_0012fe90	match	-
+0012fef0	FUN_0012fef0	match	-
 00130000	AttrsLibrary_MarkRegistered	match	-
 00130020	FUN_00130020	match	-
 00130060	igVisualContextAttrDefaultManager_GetMetaObject	match	-
@@ -5821,13 +5892,34 @@
 0022e220	Gap__igItemDataBaseList__vfunc_18	match	-
 0022e2a0	Gap__igItemDataBaseList__vfunc_04	match	-
 0022e3c0	FUN_0022e3c0	match	-
+0022e4b8	__divdi3	match	-
+0022eb50	__moddi3	match	-
+0022f1e0	FUN_0022f1e0	match	-
 0022f760	__umoddi3	match	-
+0022fcc8	__floatdidf	match	-
+0022fd70	__floatdisf	match	-
+0022fe58	FUN_0022fe58	match	-
+0022ff70	FUN_0022ff70	match	-
+0022ffe8	FUN_0022ffe8	match	-
 00230110	FUN_00230110	match	-
+00230150	FUN_00230150	match	-
 00230208	FUN_00230208	match	-
 00230268	FUN_00230268	match	-
 00230298	FUN_00230298	match	-
+002302d8	pack_d	match	-
+002303b0	unpack_d	match	-
+00230470	FUN_00230470	match	-
 002306d0	__adddf3	match	-
 00230728	FUN_00230728	match	-
+00230790	__muldf3	match	-
+00230a18	__divdf3	match	-
+00230b58	FUN_00230b58	match	-
+00230c78	FUN_00230c78	match	-
+00230cc8	__floatsidf	match	-
+00230d80	FUN_00230d80	match	-
+00230e20	FUN_00230e20	match	-
+00230e50	FUN_00230e50	match	-
+00230ea8	FUN_00230ea8	match	-
 00230f50	InsightLibrary_MarkRegistered	match	-
 00230f70	FUN_00230f70	match	-
 00231010	FUN_00231010	match	-

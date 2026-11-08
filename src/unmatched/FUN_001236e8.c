@@ -1,4 +1,7 @@
-long long FUN_0012c218();
-long long FUN_001236e8(int arg0) {
-    return (long long) (FUN_0012c218(arg0, 0, 0xA) << 0x20) >> 0x20;
+/* newlib atoi(s). */
+long FUN_0012c218(const char *s, char **end, int base);
+
+int FUN_001236e8(const char *s)
+{
+    return (int)FUN_0012c218(s, 0, 10);
 }

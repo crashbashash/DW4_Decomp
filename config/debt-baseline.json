@@ -14,15 +14,15 @@
   "code_only.other.functions": 2,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "foreign_profile.bytes": 3504,
-  "foreign_profile.functions": 21,
-  "fun_dat_refs": 84592,
+  "foreign_profile.bytes": 3420,
+  "foreign_profile.functions": 19,
+  "fun_dat_refs": 85132,
   "inline_asm.hardware": 11,
   "inline_asm.other": 42,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
-  "m2c_idiom.units": 6032,
+  "m2c_idiom.units": 6033,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 0,
@@ -32,14 +32,17 @@
   "profile_split.bytes": 43892,
   "profile_split.units": 13,
   "raw_casts.reflected": 366,
-  "struct.a": 140,
+  "struct.a": {
+   "reason": "struct.a +1: newlib libc drafts declare struct _reent as prefixes of different lengths (60 and 80 bytes, same fields); one shared dw4/newlib_reent.h is the readability pass",
+   "value": 141
+  },
   "struct.b": {
    "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members.",
    "value": 300
   },
   "struct.c": 287,
-  "unmatched.bytes": 869800,
-  "unmatched.functions": 1577
+  "unmatched.bytes": 810472,
+  "unmatched.functions": 1485
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

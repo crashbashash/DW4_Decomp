@@ -61,12 +61,26 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
 
 ### What rebuilds with it
 
-* **CRI ADX/AFS, Sofdec/MPEG and libgcc** units rebuild at `-O2 -G0`. A macro must be a plain block,
+* **CRI ADX/AFS and Sofdec/MPEG** units rebuild at `-O2 -G0`. A macro must be a plain block,
   since a `do/while(0)` macro changes scheduling; a switch becomes a jump table only when every table
   index is a case label; volatile statistics words change delay-slot filling.
-* **fdlibm (double and float) and newlib** (strtol/strtoul, mallocr) rebuild from C at `-O2 -G0 -g`.
-  For libm, `ee-as` must receive `-g` so libcall delay slots keep their nops, and `-G0` so non-simple
-  float literals use `lui`/`ori`/`mtc1`.
+* **newlib and libgcc** build at `-O2 -G0 -g` throughout (`0x11acc0..0x130000`, `0x22e4b8..0x230f50`):
+  `ee-as` must receive `-g` so libcall delay slots keep their nops, and `-G0` so non-simple float
+  literals use `lui`/`ori`/`mtc1`. Members without a libcall match either way.
+* **newlib is a snapshot between 1.9.0 and 1.10.0.** fdlibm follows 1.10.0 with
+  `_FLT_LARGEST_EXPONENT_IS_NORMAL` and `_FLT_NO_DENORMALS` (the `FLT_UWORD_*` macros), except
+  `ef_asin.c`, which keeps 1.9.0's constants. `dtoa.c`, `strtod.c`, `mprec.c` and `signal.c` are 1.10.0;
+  `sscanf`/`vfscanf` are 1.9.0 with 1.8.2's unsigned `n < width`, and `vfprintf.c` is 1.9.0 with a plain
+  `double _fpvalue` and `expbuf[MAXEXP]`. The configuration: 64-bit `long`, 32-bit `__ULong`,
+  `MALLOC_ALIGNMENT` 16, `SIZE_T_SMALLER_THAN_LONG`, no `__SCLE`, `FLT_ROUNDS` not 1 (strtod's fast
+  path is compiled out), and each mallocr piece a separate object. A `static const` scalar whose every
+  use folds into `lui`/`ori` has no retail `.rodata`, so it is written as a macro.
+* **libgcc** is gcc's `libgcc2.c` (the 64-bit division, `__floatdi*` and `__fix*di` routines) and a
+  Sony-modified `fp-bit.c` built with `US_SOFTWARE_GOFAST`, which is where the `dpadd`/`dpmul`/`dptoli`
+  names in `config/SLUS-20836/compiler-runtime-symbols.tsv` come from. Sony's `fp-bit.c` does not round in
+  `pack_d`, `dpmul` or `dpdiv`, flushes denormals to zero, and its `isnan`/`isinf`/`iszero` are inline
+  functions (macros change the compare). Each division object carries its own `__clz_tab` copy.
+  A `static __inline__` helper inlines under `tools/check.py` only from a header (`include/dw4/fp_bit*.h`).
 * **The float-spilling varargs wrappers** `FUN_00265928`, `FUN_002658a8`, `FUN_002659a0`,
   `FUN_0027e2f0`, `printf` (`0x128528`), `FUN_002777f8`, `FUN_0029a320` and `FUN_0010d108` are Sony EE
   libc code built with gcc. No MWCC variant emits `$f12..$f19` spills in a varargs prologue, MWCC
@@ -120,6 +134,16 @@ disabling ASLR change nothing.
 
 ## Open questions
 
+* **newlib functions without C.** `memcpy`, `memmove`, `memset`, `memchr`, `memcmp`, `setjmp`
+  (`0x129880`), `longjmp` (`0x1298d8`) and the 128-bit string routines (`strcat`, `strchr`, `strcmp`
+  `0x12a4a4`, `strcpy`, `strlen`, `strncat`, `strncmp`, `strncpy`) use `lq`/`sq` and MMI instructions
+  (`pcpyld`, `psubb`, `pnor`) and look hand-written: the `__builtin_mips5900_*` spellings tried insert
+  `por` moves or go through memory. `_dtoa_r` (`0x123ad8`) matches every word under `-g` but owns an
+  88-byte `.rodata` of strings, `li.d` literals and its switch table that `tools/verify.py` cannot yet
+  own for an ee-gcc object. `multadd` (`0x1274b8`) and `pow5mult` (`0x127a78`) match only when
+  `mprec.c` is compiled whole (Balloc and i2b defined earlier in the file), which suggests a
+  whole-file unit. `malloc_extend_top` (`0x1263a8`) and `__sigtramp_r` (`0x129b08`) differ in register
+  choice and in one `bnez`/`bnezl`.
 * **The other Sony libraries' assembler.** Every matched function of libgraph, libdma, libipu, libcdvd,
   libpad, libsdr, libmc and libmtap matches with either assembler, so which one built them is open.
   `FUN_00114d88` also matches under `2.9-ee-990721`.

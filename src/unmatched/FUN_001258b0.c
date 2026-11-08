@@ -11,6 +11,17 @@ typedef struct __sFILE {
   void *_cookie;
   int (*_read)();
   int (*_write)();
+  long (*_seek)();
+  int (*_close)();
+  struct __sbuf _ub;
+  unsigned char *_up;
+  int _ur;
+  unsigned char _ubuf[3];
+  unsigned char _nbuf[1];
+  struct __sbuf _lb;
+  int _blksize;
+  int _offset;
+  struct _reent *_data;
 } FILE;
 struct __siov { void *iov_base; size_t iov_len; };
 struct __suio { struct __siov *uio_iov; int uio_iovcnt; int uio_resid; };

@@ -17,10 +17,13 @@ typedef union {
     long long ll;
 } DWunion;
 
-/* libgcc2 __clz_tab: highest-set-bit count of each byte value, one copy in the
- * retail image at 0x4e82a8 (shared rodata, referenced by address). */
-extern const unsigned char D_004e82a8[256];
+/* libgcc2 __clz_tab: highest-set-bit count of each byte value. Each division
+ * object carries its own copy; a file defines __clz_tab to its copy before
+ * including this header. */
+#ifndef __clz_tab
 #define __clz_tab D_004e82a8
+#endif
+extern const unsigned char __clz_tab[256];
 
 #define SI_TYPE_SIZE 32
 #define W_TYPE_SIZE 32
@@ -142,6 +145,8 @@ static inline UDWtype __udivmoddi4(UDWtype u, UDWtype v, UDWtype *rp)
     } else {
         if (d1 > n1) {
             /* 00 = nn / DD: remainder is nn */
+            q0 = 0;
+            q1 = 0;
             if (rp != 0) {
                 rr.s.low = n0;
                 rr.s.high = n1;

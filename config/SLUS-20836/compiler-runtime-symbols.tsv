@@ -21,3 +21,5 @@ dptoli	0x00230d80
 __udivdi3	0x0022f1e0
 __muldi3	0x0022e440
 sqrtf	0x001236a0
+dptofp	0x00230e50
+__fixdfdi	0x0022ff70

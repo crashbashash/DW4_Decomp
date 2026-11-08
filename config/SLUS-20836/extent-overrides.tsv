@@ -64,6 +64,20 @@
 0x001253e8	756	FUN_001253e8
 0x0012bfe0	568	FUN_0012bfe0
 0x0012c248	556	FUN_0012c248
+0x0011cdf8	3916	FUN_0011cdf8
+0x00121a68	644	FUN_00121a68
+0x00122410	292	FUN_00122410
+0x001229c8	484	FUN_001229c8
+0x00122bb0	308	FUN_00122bb0
+0x0022e4b8	1684	__divdi3
+0x00230470	604	FUN_00230470
+0x00298d78	100	FUN_00298d78
+0x002a4bc8	148	FUN_002a4bc8
+0x002ae2b8	156	FUN_002ae2b8
+0x00128598	2540	FUN_00128598
+0x0012b078	3860	FUN_0012b078
+0x0012ee70	220	FUN_0012ee70
+0x0012ef50	3212	FUN_0012ef50
 
 # --- epilogues the dump stopped short of: the `ld`/`lwc1` restores, `jr ra` and its delay slot
 # --- lie after the recorded end (inventory audit, 160 asm bodies in the EE GCC blocks; the
