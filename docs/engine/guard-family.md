@@ -5,7 +5,7 @@ has a source form under each compiler (§5).**
 
 The family is ~1,057 small
 functions whose retail code has an `andi ; sltu v0,zero,v0 ; bnez` flag test, where
-MWCC 3.0 emits the `sltu` only for the source form below; the other spellings tried do not produce it.
+the `sltu` is a value conversion of the flag test, so it needs a source form that converts it (§2).
 
 ## 1. What the functions are
 
@@ -47,7 +47,9 @@ Three details are all load-bearing:
    short-circuit condition.** `!(t = g->f & 4)` forces MWCC to convert the `int`
    expression to `bool` — a *value* conversion, which is exactly the
    `sltu v0,zero,v0` — while the pointer test stays a plain `beqz` and the global
-   is still loaded only twice. Nothing else reaches that state:
+   is still loaded only twice. The test has to be spelled as a value:
+   * under 3.0b52, `bool t; ... !(t = g->f & 4)` differs, and `((g->f & 4) != 0) == false` or
+     `int t; ... !(t = (g->f & 4) != 0)` gives the bytes; all three give them under the default compiler;
    * a bare condition (`!(g->f & 4)`) compiles to `andi` + a branch, no `sltu`;
    * a `bool` *cast* (`(bool)(g->f & 4)`) is folded away;
    * a `bool` initialised in its declaration (`bool t = g->f & 4;`) loads the
@@ -55,7 +57,7 @@ Three details are all load-bearing:
    * `bool t = g && (g->f & 4);` materialises *both* operands — a second `sltu`
      on the pointer, 76 bytes with `v1`.
 2. **C++ mode.** Only C++ has `bool`, and MWCC picks the language from the file
-   *extension* — so these are the repo's only `src/*.cpp` units.
+   *extension*.
 3. **The global must be declared as a 16-byte array** (`extern struct G *DAT_x[4]`,
    declaration only). As a plain pointer it is small data and MWCC emits
    gp-relative `lw v0,-N(gp)`; retail uses absolute `lui at` + `lw`.

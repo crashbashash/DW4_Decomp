@@ -134,7 +134,8 @@ needs the class with its destructor declared, which is model recovery, not retar
 The default compiler (3.0-011126) never folds the frame temporary's offset into the final load, so
 no spelling reaches these functions under it. 3.0b52 does fold it, and an accessor in a `b52` unit
 matches once it is `.cpp` (`tools/getvtable_stack_gen.py --retarget`). An accessor in a unit on another
-compiler reports `foreign-profile` ([build profiles](build-profiles.md#open-questions)).
+compiler reproduces only under a provisional override, which `make check` files as `foreign-profile`
+([build profiles](build-profiles.md#open-questions)).
 
 ### Reproducing
 

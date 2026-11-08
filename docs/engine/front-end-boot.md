@@ -164,7 +164,8 @@ after closing; Circle accepts those changes.
 
 - **The opening cannot be skipped** (retail behaviour, reported by the project owner). The
   title controller agrees: `beNDMWTitle2Ctrl` reads the START bit only in `_st0=1/_st1=2/_st2=1`, after
-  the logo's and `j_startmenu01`'s `SQ_OPEN` sequences have finished, so no button is read earlier.
+  `beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty` reports the open queue empty for the logo's and
+  `j_startmenu01`'s `SQ_OPEN` starts, so no button is read earlier.
   The stage script agrees
   (`lua/00-title-menus/04-title-screen_e806/004-layer-setup-2.lua`): it generates `j_startback`
   `SQ_OPEN`, waits for that sequence to finish, plays the white fade, and only then sends `TITLE2 RUN` (the

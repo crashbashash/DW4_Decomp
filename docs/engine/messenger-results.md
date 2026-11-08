@@ -77,7 +77,7 @@ unverified, and complete SD dispatch is not established by this block.
 
 Both C++ wrappers require the original frame-preserving language mode.
 
-Material update consumes these channels once actual messenger selection and player result
-production are integrated. The [Lua dependency inventory](lua-dependencies.md)
+The material update at `0x38b1f0` reads player results through this block (`0x38f320`, `0x38f5a0`,
+`0x38f630`). The [Lua dependency inventory](lua-dependencies.md)
 retains the wider receiver/virtual/update frontiers; this module does not close
 the full Lua-dependent engine recovery goal.
