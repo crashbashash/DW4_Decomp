@@ -28,8 +28,8 @@ void igObject_Destroy(igObjectDispatchView *input){
     void *instances;
     if(D_00586dc8[0]){
         unsigned char mode=*D_00586dc8[0];
-        /* matching construct: hand search — the plain copy hoists into the null-system branch's delay slot */
-        object=(igObjectDispatchView *)(void *)input;
+        /* matching construct: hand search — without the cast the copy hoists into the null-system branch's delay slot */
+        object=(igObjectDispatchView *)input;
         if(!mode){
             object->slot_08();object->slot_10();object->slot_00();
             Memory_FreeBuffer(object);return;

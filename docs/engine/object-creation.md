@@ -109,7 +109,7 @@ reproduces all67 instruction words and9 relocations. It uses a single C++
 dispatch view with numbered virtual slots (an ABI projection, not an original
 class declaration) and reflected `_instanceCount`44 / `_instances`48 fields.
 The count decrement preserves the original wrapped word. The receiver is copied after the
-system mode is read, through a cast by way of `void *`: a plain assignment hoists the copy into the
+system mode is read, through an explicit cast: a plain assignment hoists the copy into the
 null-system branch's delay slot and changes two words. No original-source spelling is claimed.
 
 ## Validation and remaining work
