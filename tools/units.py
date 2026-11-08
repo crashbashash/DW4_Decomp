@@ -144,6 +144,23 @@ def definitions(text):
     starts = []
     while i < n:
         c = clean[i]
+        if c == "#" and depth == 0 and not clean[clean.rfind("\n", 0, i) + 1:i].strip():
+            # a preprocessor line, continuations included, is skipped whole: braces in a
+            # one-line `#define F(x) do { ... } while (0)` would otherwise end the statement
+            # early and make the next directive read as a definition of `F`
+            end = i
+            while True:
+                end = clean.find("\n", end)
+                if end < 0:
+                    end = n
+                    break
+                if clean[end - 1] != "\\":
+                    break
+                end += 1
+            if not clean[stmt_start:i].strip():
+                stmt_start = end + 1
+            i = end + 1
+            continue
         if c == "{":
             if depth == 0:
                 sig = clean[stmt_start:i]

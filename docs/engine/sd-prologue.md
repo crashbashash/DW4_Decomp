@@ -58,6 +58,24 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
 * A final `jal` that is not a sibling call means an implicit-int function with no return statement.
 * `lui`+`addiu`+access at `0(reg)` on a once-used global means it is volatile.
 * The scheduler moves the last independent store of a run early, so source stores are in field order.
+* Field types decide which loads may move above which stores, through type-based aliasing: a
+  ring or chunk struct is `{char *start; int size; char *cur; int count}`, not four ints.
+* Retail often leaves stale values in `a1`-`a3` at a call. The callee's own matched source gives
+  its real arity, and an `int` callee whose result is ignored still differs from a `void` one.
+* A function that keeps `v0` out of its body returns its first call's status:
+  `r = f(h); if (r) return g(0, code); ...; return r;`.
+* An explicit `return;` after a final call inside an `if` gives the `j` sibling call.
+* `if (x & 0x10) return 0; return 1;` gives `andi`/`sltiu`; `(x & 0x10) == 0` gives a shift.
+* Case bodies follow source order, and a sparse switch is a compare tree. Some trees need a case
+  merged into `default`, whose value retail does not pin down.
+* ee-gcc truncates decimal float literals, so a literal is written as the float's exact decimal
+  value, such as `-25.0879993438720703125f`.
+* Empty delay loops are plain C: `for (i = 0; i < 64; i++);` unrolls by 32,
+  `i = 10000; while (i--);` gives the step-4 form, and `ee-as` pads short loops itself.
+* Locals spaced 8 bytes apart on the stack are `long long`. A struct of ints assigned whole gives
+  the `ldl`/`ldr` copy.
+* Three symbols (`FUN_00298d78`, `FUN_002a4bc8`, `FUN_002ae2b8`) used to count the alignment `nop`
+  after their return. The object's 8-byte alignment supplies that word.
 * Fixed-table loops are count-up `for` loops; varargs use `__builtin_va_list`.
 * The SDK libc follows newlib's source order.
 

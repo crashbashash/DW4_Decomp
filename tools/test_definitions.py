@@ -40,6 +40,13 @@ class KAndR(unittest.TestCase):
         self.assertIn("return 1", kept)
         self.assertNotIn("three", kept)
 
+    def test_one_line_macros_with_braces_are_not_definitions(self):
+        text = ("#define ADD(x) do { (x)++; } while (0)\n#define DROP(x) do { (x)--; } while (0)\n"
+                "#define LONG(x) do { \\\n (x) = 0; } while (0)\nint f(int a) { ADD(a); DROP(a); return a; }\n")
+        self.assertEqual(names(text), ["f"])
+        kept = units.extract(text, "f")
+        self.assertIn("#define DROP(x) do { (x)--; }", kept)
+
 
 if __name__ == "__main__":
     unittest.main()
