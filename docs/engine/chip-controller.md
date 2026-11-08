@@ -1,9 +1,9 @@
 # XDATA chip transaction controller
 
-The complete 7,232-byte update at `43aae0..43c720` has matching source in
+The complete 7,232-byte update at `43aae0..43c720` is in
 `src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`. Its adjacent
-[count/text and inherited paging helpers](list-controller-chip-view.md) have exact
-matching source for all2,196 bytes.
+[count/text and inherited paging helpers](list-controller-chip-view.md) are
+2,196 bytes.
 
 Of the update's1,808 words,1,761 are reachable non-padding controller words, fifteen are
 padding and 32 sit in sixteen statically dead literal-null branches.
@@ -74,6 +74,6 @@ Its real item/pricing/status/recalculation services and selector/message/script
 composition remain open. Other lobby services and their script outcomes retain the scope in the
 [hub inventory](../systems/hub-recovery.md).
 
-The [item/database block](item-database.md) has complete exact source and
+The [item/database block](item-database.md) has
 explicit status/value-return contracts. Live database delivery, recalculation and
 full transaction composition remain open.

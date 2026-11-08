@@ -5,17 +5,15 @@ allocation/readiness, publication callbacks, vtable access, initializer forwardi
 registrar tuples, the three inherited schema callbacks and default element selectors.
 The two specialization bodies are those of the [descriptor copy page](list-descriptor-copy.md).
 
-All 32 bodies / 2,092 bytes have matching source. Two reviewed parent getters
-add **24 newly classified and matched bytes**. The four vtable getters of 60 bytes,
-the RAM-list allocation getter 68 and ready getter 76 match in per-function files
-under `src/unmatched/`. Existing matched registrar/public-accessor wrappers now explicitly return
+The four vtable getters of 60 bytes,
+the RAM-list allocation getter 68 and ready getter 76 are in per-function files
+under `src/unmatched/`. Registrar/public-accessor wrappers return
 the callback state or metadata pointer consumed by their callers.
 
-The two twelve-byte parent accessors were previously data gaps. The recovery script
+The two twelve-byte parent accessors come from a recovery script. It
 checks exact words, registrar literals, contiguous extents and lack of overlap,
 then regenerates analysed Ghidra function/symbol snapshots without analysis. See
-[the reproducible script](../../scripts/recover_list_parent_callbacks.py). Classified
-code and function count increase 24 bytes/two functions; retail bytes are unchanged.
+[the reproducible script](../../scripts/recover_list_parent_callbacks.py).
 
 ## Four list classes and inherited schemas
 

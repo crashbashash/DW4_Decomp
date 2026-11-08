@@ -73,38 +73,22 @@ assembler treats a sequence; the notes below were measured that way and stay as 
   marks them `truncated`, e.g. `FUN_00108078` 0x138 vs 0x110) stay retained assembly units until a reviewed
   row in `data/function-extents.json` corrects the extent.
 
-## Functions with no starting definition
+## Large functions
 
-131 functions (345,096 bytes) had no definition in `src/` to start from, 32 of
-them with jump tables (the largest: `beNDMWLoadIntf2::vfunc_31`, 18,616 bytes, two tables; `beNDMWSaveIntf::vfunc_31`, 16,352 bytes,
-two tables), and `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes) joins them. All of these are typed C/C++
-except one, which has no C: `beMatCtrl::vfunc_31` (**3,064 bytes**).
+The largest functions have jump tables: `beNDMWLoadIntf2::vfunc_31`, 18,616 bytes, two tables; `beNDMWSaveIntf::vfunc_31`, 16,352 bytes,
+two tables.
 
-### Recovered functions and the rows they need
+### The rows they need
 
-Every recovery is verified independently under its own build profile. Of the 37 with a reflected receiver class and no jump
-table, **34** are typed C/C++ in `src/unmatched/`:
+Each function is verified independently under its own build profile.
 
-* `beDBManager::vfunc_33`, `beMessenger_ResolveEnumValue`, `igAliasMemoryPool_Dump`, `igObject::vfunc_31`,
-  `beNDMWMdlPlayer::vfunc_36/38/44`, `beNDMWStatusCtrlBit::vfunc_21`, `beNDMWStatusCtrlFolder::vfunc_21`, `beNDMWLoadCtrl2::vfunc_34`,
-  `beNDMWShopSelect01/02/11::vfunc_22`, `beNDMWShopCtrlA1::vfunc_21`, `beNDMWShopCtrl40::vfunc_21`, `beNDMWPanelWaza::vfunc_31` (16);
-* `beNDMWShopSelect11_RefreshStatCosts`, `beNDMWStageCtl::vfunc_34`, `beModelCtrlSCHitBox::vfunc_21`, `beNDMWStatusCtrlEquip::vfunc_21`,
-  `beNDMWMdlPlayer2::vfunc_47`, `beNDMWShopCtrlA0::vfunc_21`, `beNDMWShopJunk::vfunc_21`, `beSelectCtrl::vfunc_31`,
-  `beNDMWStatusCtrl00::vfunc_21`, `beNDMWStatusCtrlSkill::vfunc_21`, `beNDMWMdlPEBase::vfunc_46`, `beNDMWShopCtrlXdataChip::vfunc_21`
-  and `beNDMWStatusSubMenu::vfunc_21` (9,304 bytes) (13, which match once scored under the right profile and given the source shapes below);
-* `beNDMWStatusCtrlSendBit::vfunc_21` (4,816 bytes), `beNDMWLoadCtrl2::vfunc_31` and `beNDMWShopCtrlDeviceSell::vfunc_21` (3);
-* `beFileListInfoManager::vfunc_27` (5,776 bytes) and `beNDMWShopCtrlDiskSell::vfunc_21` (4,116 bytes) (2).
-
-Nearly all need the alternate combat compiler and `-O3,p` (some with
+Functions with a reflected receiver class and no jump table nearly all need the alternate combat compiler and `-O3,p` (some with
 `-Cpp_exceptions off`), and the C++ ones an entry in `config/SLUS-20836/unit-objects.json` for an empty-destructor duplicate; the rows are in
 `config/SLUS-20836/unit-compilers.tsv`, `config/SLUS-20836/unit-flags.tsv` and `config/SLUS-20836/unit-objects.json`.
 
-The others went through the same recovery, with the verifier run under each one's own profile. A unit that emits an
+A unit that emits an
 empty-destructor duplicate (`__dt__2RPFv` at 0x002e2300, `__dt__3RefFv` at 0x003d9bd0 or 0x00130140, `__dt__9LuaStrRefFv`) matches only
-with that duplicate named in its unit-objects entry; seven fail the independent check without it.
-
-A further 34 functions that had no definition at all and 4 untyped asm helpers are typed C, and 130 more
-files are typed onto the reflected structs.
+with that duplicate named in its unit-objects entry.
 
 ### Source shapes that fix near-misses
 
@@ -143,9 +127,9 @@ Shapes found on one function:
 
 ### The system update, the node-clock timer and the LoadIntf2 update
 
-* `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes): the complete body is typed C; see
+* `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes): see
   [system update recovery](system-clock.md#complete-besystem-update-recovery).
-* `FUN_0039a9e0` (308 bytes) matches as typed C in `src/game/beNodeAnimClock.cpp`.
+* `FUN_0039a9e0` (308 bytes) is in `src/game/beNodeAnimClock.cpp`.
   A `const` timestamp snapshot, a `const` play-count load before subtraction,
   and reuse of the incoming parameter for the elapsed delta preserve the original
   parameter web and operand order. No inline assembly, fake arguments or compiler modification is used.
@@ -154,17 +138,17 @@ Shapes found on one function:
   at four words, and around 400 spellings of that draft do not resolve it. The traced need for an invisible
   interference node describes that draft, not every possible source form, so it does not make the
   function impossible in source.
-  See [the clock recovery](stage-loading.md#byte-matched-clock-update).
+  See [the clock recovery](stage-loading.md#clock-update).
 * `beNDMWLoadIntf2::vfunc_31`: the complete 18,616-byte update
-  matches as typed C++ in `src/game/beNDMWLoadIntf2Update.cpp`, including all three
+  is in `src/game/beNDMWLoadIntf2Update.cpp`, including all three
   emitted helper duplicates, nine jump tables, exception index and sixteen cleanup
   ranges/actions. See [the full recovery](load-intf2.md#matched-source).
 
-### Open: `beMatCtrl::vfunc_31`
+### `beMatCtrl::vfunc_31`
 
-`beMatCtrl::vfunc_31` (3,064 bytes) has no matching C. A genuine C++ candidate
+A C++ spelling of `beMatCtrl::vfunc_31` (3,064 bytes)
 reproduces five owner lifetimes, both destructor profiles and the complete
-exception index/table; its main body is unbanked with ten differences. The manual-reference draft's five stale call
+exception index/table, with ten differences in its main body. The manual-reference draft's five stale call
 arguments are corrected. See [ownership and ABI evidence](material-contact.md#update-ownership-and-call-contracts).
 
 The manual-reference draft differs at 11
@@ -180,9 +164,8 @@ all source forms impossible.
 ## Counting and verifying
 
 `extern "C" { }` wrappers: `definitions()` in `tools/units.py` treats `extern "C" { ... }` as transparent (its definitions are top-level
-ones; the wrapper stays in place when `extract` blanks the others), so functions inside a linkage block are counted like any other:
-the 62 banked files whose functions sit inside one, and the typed C for `beNDMWShopCtrl00_GetVTable` and `igActorManager::vfunc_25`,
-123 functions (29,568 bytes) in all. Skipping a linkage block as a "bare block" leaves such functions matched under `verify.py`
+ones; the wrapper stays in place when `extract` blanks the others), so functions inside a linkage block are counted like any other.
+Skipping a linkage block as a "bare block" leaves such functions matched under `verify.py`
 yet counted as unmatched in every tool.
 
 A verifier must use the unit's own build profile: forcing `-O3 -Iinclude` on a function that needs the alternate compiler reports

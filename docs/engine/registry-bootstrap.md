@@ -3,15 +3,15 @@
 **17 complete bodies / 1,512 bytes** are covered here: six contiguous
 registry-list methods, global registry initialization/shutdown, current context and
 five adjacent context dispatch wrappers, and two concrete record-lookup methods.
-Fifteen bodies /1,448 bytes have exact source. New list init104/release116/append168
-and concrete named lookup156 add **544 matched bytes**. Current-context getter84 matches in
+List init104/release116/append168
+and concrete named lookup156 total 544 bytes. Current-context getter84 is in
 [Memory_GetCurrentContext.c](../../src/unmatched/Memory_GetCurrentContext.c) and concrete selector244 in
 [FUN_002f2730.cpp](../../src/unmatched/FUN_002f2730.cpp).
-List allocate/delete32 each have no C source yet.
+List allocate/delete are 32 bytes each.
 
 Six body-derived names are applied through `config/SLUS-20836/names/RegistryBootstrap.tsv`.
 Concrete methods retain their generated, evidenced class/virtual-slot names;
-unknown dispatch roles are not assigned speculative semantic names. Matching
+unknown dispatch roles are not assigned speculative semantic names.
 [registry-list.cpp](../../src/engine/registry-list.cpp) and
 [context-record-name.cpp](../../src/engine/context-record-name.cpp) use observed
 ABI projections rather than claiming original C++ declarations. The subsequent [context lifecycle recovery](context-lifecycle.md) establishes

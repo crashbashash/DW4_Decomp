@@ -6,12 +6,10 @@ bodies at `38e8f0..38f0e0` form a contiguous enqueue/nesting block; the adjacent
 clear functions are `38ca40..38cff0`. Initialization/update retain their existing
 vtable-slot names.
 
-Three forwarding bodies (192 bytes) have exact source in
-[beMessengerLifecycle.cpp](../../src/game/beMessengerLifecycle.cpp). Group-delayed
-send at `38ecf0` adds **84 matched bytes**; named-delayed send and group preparation
-were existing matches and now have explicit, corrected signatures. Six more bodies
-(3,312 bytes) match in one-function files under `src/unmatched/`; the expiry update
-`38d0a0` (`beMessenger::vfunc_27`, 972 bytes) has no C source yet.
+Three forwarding bodies (192 bytes) are in
+[beMessengerLifecycle.cpp](../../src/game/beMessengerLifecycle.cpp). Six more bodies
+(3,312 bytes) are in one-function files under `src/unmatched/`. The expiry update is
+`38d0a0` (`beMessenger::vfunc_27`, 972 bytes).
 
 ## Entry points and storage
 
@@ -113,7 +111,7 @@ make link
 
 Concrete
 virtual receiver implementations and group registry behavior remain recovery
-work, together with the expiry update `38d0a0`, which has no C source yet, and broader
+work, together with broader
 Lua dependencies. A real wall-clock unit for the delay constant and any concurrency
 contract are not established. [Messenger memory](messenger-memory.md) covers
 initialization and reset.

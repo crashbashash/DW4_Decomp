@@ -43,7 +43,7 @@ round-toward-zero arithmetic, which makes 30 frames 499,999,968 ns rather than 5
 
 ## The component dispatch pair
 
-The block's two drivers are recovered and banked:
+The block has two drivers:
 
 - `beAction2_StartComponents` (`0x00377700`, 456 B) is the per-object Start driver. It walks the
   `beAction2Data`'s component list — an `igObjectList`-shaped `{_count, _capacity, _data}` struct at
@@ -96,9 +96,9 @@ message's argument bag is `S = beModelCtrl+0x14`, `W = S+0x10`, with typed paral
 accessors are `beMessenger_AppendBool`, `AppendInt`, `GetInt`, `GetFloat`, `GetVec3`, `AppendMatrix`,
 `GetMatrix`, `AppendObject`, `GetObject`, `AppendString` and `GetString` (`0x38f150..0x38f8f0`).
 
-## Matching status
+## Compiler profile
 
-Both JOINTSET handlers match under the `combat` profile (`-O3,p`).
+Both JOINTSET handlers build under the `combat` profile (`-O3,p`).
 
 `beAction2JOINTSET_Start` gets retail's integer register allocation (`work->_jointSt0` in `s1`, params in
 `s0`, node reusing `s0`) only when the bias goes through a `long long` temporary for the start time:

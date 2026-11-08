@@ -35,11 +35,11 @@ AREA.AFS **1321**; `loadingeng` selects **831**. A basename-first lookup
 therefore selects a different regional card. USA ML02 is entry
 1320.
 
-## Byte-matched clock update
+## Clock update
 
-`FUN_0039a9e0` has complete, byte-identical typed C in
-[`beNodeAnimClock.cpp`](../../src/game/beNodeAnimClock.cpp): **308 code bytes and
-two relocations**. It uses the reflected `beNodeAnim` base
+`FUN_0039a9e0` is typed C in
+[`beNodeAnimClock.cpp`](../../src/game/beNodeAnimClock.cpp): 308 code bytes and
+two relocations. It uses the reflected `beNodeAnim` base
 fields; the same clock routine serves derived loading nodes.
 
 Keeping the
@@ -57,9 +57,8 @@ byte-identical.
 ## Complete contiguous runtime group
 
 The group is nine consecutive bodies from `0x0039a930` through `0x0039ae44`
-(1,232 instruction bytes, excluding alignment). Seven have matching source,
-including the clock routine `0x0039a9e0` (above); the two traversal thunks
-`0x0039a930` and `0x0039adc0` have no C source yet.
+(1,232 instruction bytes, excluding alignment), including the clock routine
+`0x0039a9e0` (above) and the two traversal thunks `0x0039a930` and `0x0039adc0`.
 
 | Address | Contract |
 |---|---|

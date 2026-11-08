@@ -1,10 +1,9 @@
 # Combat callback reference ownership helpers
 
-The reference/list utility recovery now includes **fifteen complete ownership, string
+The reference/list utilities comprise **fifteen complete ownership, string
 and allocator bodies, 1,732 code bytes**. Retail unwind data
-identifies eight additional cleanup bodies, contributing 1,012 matched bytes.
-Every one of the nineteen functions in the contiguous
-`0x3e9010..0x3e93b8` utility run is now recovered: 816 code bytes in total,
+identifies eight additional cleanup bodies, 1,012 bytes.
+The contiguous `0x3e9010..0x3e93b8` utility run holds nineteen functions: 816 code bytes in total,
 excluding alignment gaps. Retain and allocator selection are direct GAMERAM
 calls; the whole run provides the surrounding reference/list contract.
 
@@ -57,7 +56,7 @@ from the factory copies while preserving the same ownership rule.
 These are physical cleanup identities and verified object-prefix operations.
 Distinct entry points do not establish distinct original template spellings.
 The [complete protected ranges](../engine/exception-unwind.md) are now decoded. The callback
-itself matches as `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`; see
+itself is `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`; see
 [draft recovery](combat-draft-recovery.md#retail-unwind-data).
 
 The string cleanup at `0x130720` releases its nonnull token by decrementing the
@@ -66,7 +65,7 @@ stored at token−8 and the header address token−8. It then optionally deletes
 wrapper for a positive signed-short flag, returns the wrapper and leaves its word
 unchanged. The `0x33e9c0` cleanup is the packed object-reference operation below;
 its unwind entry disproves a plain-vector interpretation of the temporary at
-`+0x3e8`. These two complete bodies add 244 matched bytes.
+`+0x3e8`. These two complete bodies total 244 bytes.
 
 ## Ordering and destruction
 
@@ -130,6 +129,6 @@ release as void and both assignment ABIs explicitly. It also uses the recovered
 data and allocator-selector names. Reference storage uses
 guest-word pointers in that analysis-only context to agree with reflected
 four-byte fields. These are machine-ABI projections, not original template names.
-The [three immediate helpers](combat-helpers.md), including the nearby query,
-now match too. The full [calculation callback](combat-damage.md) matches as
+The [three immediate helpers](combat-helpers.md) include the nearby query.
+The full [calculation callback](combat-damage.md) is
 `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.

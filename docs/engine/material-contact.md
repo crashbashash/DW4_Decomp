@@ -1,12 +1,11 @@
 # Lua material-contact engine helpers
 
 The contiguous helper group at `0x0038aca0..0x0038af70` implements the seven Lua MAT bindings on
-the material controller `beMatCtrl`. The binding wrappers at `0x00373160..0x00373274` are matching
-C++ in [`src/lua/material.cpp`](../../src/lua/material.cpp), and all seven engine helpers have
-matching source. The adjacent controller methods at `0x0038af70..0x0038bed0` (initialization,
-receiver registration, recursive contact search, message dispatch and two metadata getters) and the
-box-membership leaf at `0x0018b630` also match. The per-instance update at `0x0038b1f0` is the one
-function of the module without matching source; see [Open items](#open-items).
+the material controller `beMatCtrl`. The binding wrappers at `0x00373160..0x00373274` are
+C++ in [`src/lua/material.cpp`](../../src/lua/material.cpp). The adjacent controller methods at
+`0x0038af70..0x0038bed0` (initialization, receiver registration, recursive contact search, the
+per-instance update, message dispatch and two metadata getters) and the box-membership leaf at
+`0x0018b630` belong to the same module; for the update see [Open items](#open-items).
 
 None of this establishes whole-frame or general portal acceptance.
 
@@ -23,7 +22,7 @@ original C++ spelling. Generate them with
 `python3 scripts/seed_names_material_contact.py > config/SLUS-20836/names/MaterialContact.tsv`,
 then use the dry run and `--apply --check` naming workflow.
 
-## Matching status and source
+## Functions and source
 
 | Address | Symbol | Role | Source |
 | --- | --- | --- | --- |
@@ -39,14 +38,12 @@ then use the dry run and `--apply --check` naming workflow.
 | `0x0038b040` | `Gap__Bec__beMatCtrl__vfunc_30` | metadata getter | matched, `src/game/beMatCtrl.c` |
 | `0x0038b050` | `Gap__Bec__beMatCtrl__vfunc_29` | receiver registration (44 bytes) | matched, `src/game/beMatCtrl.cpp` |
 | `0x0038b080` | `FUN_0038b080` | recursive contact search | matched, `src/unmatched/FUN_0038b080.cpp` |
-| `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | per-instance update (3,064 bytes) | **no source**; links from the retail image |
+| `0x0038b1f0` | `Gap__Bec__beMatCtrl__vfunc_31` | per-instance update (3,064 bytes) | — |
 | `0x0038bdf0` | `Gap__Bec__beMatCtrl__vfunc_34` | message dispatch (220 bytes) | matched, `src/unmatched/Gap__Bec__beMatCtrl__vfunc_34.cpp` |
 | `0x0038bed0` | `Gap__Bec__beMatCtrl__vfunc_20` | metadata getter | matched, `src/game/beMatCtrl.c` |
 | `0x0018b630` | `FUN_0018b630` | box membership | matched, `src/unmatched/FUN_0018b630.c` |
 
-The match category of each function is recorded in the generated `data/check-categories.tsv`.
-
-The seven Lua wrappers total **240 matched code bytes** and each passes `tools/verify.py` in C++
+The seven Lua wrappers total 240 code bytes and need C++
 mode. C mode produces tail jumps rather than the original stack frames.
 
 ## Fields
@@ -63,7 +60,7 @@ mode. C mode produces tail jumps rather than the original stack frames.
 Both lists expose their element buffer at +16. The +32 existence bytes are read with `lbu` and a
 stride of one; treating them as four integer elements would read unrelated fields. The generated
 reflection header declares them as `unsigned char _wkPlExist[4]` (an `igBoolArrayMetaField`). The
-matched `beMatCtrl_IsAllPlayer` and `beMatCtrl_GetPlayerNo` read the bytes through a local byte
+`beMatCtrl_IsAllPlayer` and `beMatCtrl_GetPlayerNo` sources read the bytes through a local byte
 view of the receiver.
 
 The manager's `_isLuaCallDisp` byte enables debug formatting of Lua calls. Each RAM instance has an
@@ -214,12 +211,11 @@ and their comparison tooling is not in the repository.
 
 ## Open items
 
-- **The update main body (`0x0038b1f0`, 3,064 bytes) has no matching source.** The C++ candidate
+- **The update main body (`0x0038b1f0`, 3,064 bytes).** A C++ spelling
   reproduces the five owner lifetimes, both destructor variants, the exception index and the
   complete table extent, but its main body has ten differing instructions in the bit-test loop of
   the changed-bit scan. The register gap is that retail holds the previous word in `a0` and the
-  current compare temporary in `a1`. The candidate stays outside `src/`; no instruction difference
-  is patched away.
+  current compare temporary in `a1`.
 - **Natural loop forms do not close the gap.** Retail leaves the four-bit
   scan after the first changed bit: the changed path ends with an unconditional branch to the
   outer-loop increment (`0x38bc58`), and the unchanged path increments the bit and branches back to
@@ -229,6 +225,5 @@ and their comparison tooling is not in the repository.
   the previous-word compare first), compiled with the five-scope owner frame and the pinned
   alternate compiler, leave 13, 13, 13, 15 and 13 main-body words different, against the
   goto-shaped candidate's ten, with the same register gap.
-- **Engine services.** Matrix queries, allocator and list services, formatting, Lua execution and
-  receiver registration are not described here, and the remaining constructor/framework services
-  are not recovered. The full engine dependency chain is not complete until they are.
+- **Engine services.** Matrix queries, allocator and list services, formatting, Lua execution,
+  receiver registration and the constructor/framework services are not described here.

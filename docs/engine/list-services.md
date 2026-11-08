@@ -2,11 +2,11 @@
 
 The twelve-body shared primitive run at `0x2d6670..0x2d6e60` (1,956 code bytes)
 and four retained-reference bridges (584 bytes) are covered here.
-Three matched bodies are folded in [matching source](../../src/engine/list-services.c);
-the pre-existing eight-byte -1 default remains under its generic name. Ten
-further bodies match in per-function files under `src/unmatched/`. The two range
-insertions, `List_InsertBytes` (`0x2d6810`, 232 bytes) and `List_InsertWords`
-(`0x2d6b80`, 220 bytes), have no C source yet.
+Three bodies are folded in [list-services.c](../../src/engine/list-services.c);
+the eight-byte -1 default keeps its generic name. Ten further bodies are
+per-function files under `src/unmatched/`. The two range insertions are
+`List_InsertBytes` (`0x2d6810`, 232 bytes) and `List_InsertWords`
+(`0x2d6b80`, 220 bytes).
 
 ## Primitive contracts
 
@@ -74,15 +74,9 @@ calling word append. Its retaining semantics are separate from the word append
 primitive, which always calls resize. Allocation and interning failure routing
 remain their owning services' contracts.
 
-## Remaining work
+## Scope
 
-String copy (52 bytes) and word append (84 bytes) now match the retail compiler,
-adding **136 verified code bytes**. Object append's existing
-88-byte match is retained. Ten further bodies match in `src/unmatched/`;
-`List_InsertBytes` and `List_InsertWords` have no C source yet.
+String copy is 52 bytes, word append 84 and object append 88.
 
-Continue with the allocation/metadata and string-pool service dependencies,
-remaining compiler bodies and actual messenger receiver/result production.
 Sorted insertion and other list-library routines beyond this primitive span
-also remain part of the broader dependency recovery; this page does not claim
-the whole list library or Lua-dependent engine is complete.
+are not covered here.

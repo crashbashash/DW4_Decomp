@@ -2,13 +2,13 @@
 
 **13 complete bodies / 772 code bytes**: the contiguous
 owner/selector run, its list-search and default-getter dependencies, and three
-allocation wrappers. Eleven bodies / 692 bytes have exact source, among them the 140-byte
-encoder and 72-byte index search (**212 matched bytes**), the default
-allocation wrapper, exact at56 bytes with an explicit allocator ABI view, and
-owner lookup292 in `src/unmatched/Memory_FindOwningAllocator.cpp`.
-The shared-tail wrapper `Memory_AllocateBufferViaSharedTail` also matches, in
-`src/unmatched/Memory_AllocateBufferViaSharedTail.c`. Its shared tail `FUN_002ed1e0` and
-the direct tail28 `Memory_AllocateBufferDirect` (`2ed240`) have no C source yet.
+allocation wrappers. They include the 140-byte
+encoder, the 72-byte index search, the 56-byte default
+allocation wrapper, which uses an explicit allocator ABI view, and
+the 292-byte owner lookup in `src/unmatched/Memory_FindOwningAllocator.cpp`.
+The shared-tail wrapper `Memory_AllocateBufferViaSharedTail` is in
+`src/unmatched/Memory_AllocateBufferViaSharedTail.c`. Its shared tail is `FUN_002ed1e0`;
+the 28-byte direct tail is `Memory_AllocateBufferDirect` (`2ed240`).
 
 Seven names in `config/SLUS-20836/names/AllocatorRegistry.tsv` describe observed operations.
 The adjacent status/constant/no-op leaves retain address names because their wider

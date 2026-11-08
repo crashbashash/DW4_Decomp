@@ -15,9 +15,9 @@ New to the project? [`engine/architecture.md`](engine/architecture.md) is the ov
 and how it was built. [`../PROGRESS.md`](../PROGRESS.md) is the state of the work, and
 [`systems/open-questions.md`](systems/open-questions.md) is what nobody has worked out yet.
 
-The complete [combat Lua API run](systems/combat-lua-api.md) has matching source.
+The [combat Lua API run](systems/combat-lua-api.md) covers the BLT/BLP helpers.
 The [reference ownership dependencies](systems/combat-reference-helpers.md)
-include fifteen complete matching bodies and retail unwind identities.
+include fifteen complete bodies and retail unwind identities.
 Content-pinned [per-unit compiler requirements](engine/unit-compilers.md) cover
 its alternate-compiler bodies without changing unlisted units' compiler.
 [Explicit emitted-function ownership](engine/emitted-functions.md) verifies and
@@ -58,7 +58,7 @@ Each folder also has its own `README.md` listing what is in it.
 |---|---|
 | What is done and what is left | [`../PROGRESS.md`](../PROGRESS.md) |
 | Full lobby, Central Area and shops recovery | [Hub completion contract](systems/hub-recovery.md), [generated dependency inventory](systems/hub-inventory.md) |
-| Original hub menu selection and pad handling | [SELECTCTRL manager](engine/selectctrl.md), [shared shop selector widgets](engine/shop-selectors.md), [joint protocol oracle](engine/selector-manager-composition.md) |
+| Original hub menu selection and pad handling | [SELECTCTRL manager](engine/selectctrl.md), [shared shop selector widgets](engine/shop-selectors.md) |
 | Shared shop page controls and chip-list text | [ListCtrl/chip-list helper recovery](engine/list-controller-chip-view.md) |
 | Original allocation and cleanup behind hub controllers | [Object creation/destruction](engine/object-creation.md), [window object cleanup](engine/window-object-lifetime.md) |
 | How much is done — the code and data numbers | [`engine/progress-metrics.md`](engine/progress-metrics.md), [`../PROGRESS.md`](../PROGRESS.md) |

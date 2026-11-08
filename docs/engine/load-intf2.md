@@ -7,16 +7,13 @@ difficulty/memory-card screens before the Main Lobby loads. This page inventorie
 the module: its runtime block, its object model, its named working set, its
 message protocol, the per-screen helpers and where each function's source is.
 
-## Recovery state
+## Source layout
 
-- Every function of the runtime block `0x003e46b0..0x003eba0c` (36 functions,
-  one translation unit, `beNDMWLoadIntf2_3e46b0` in `config/SLUS-20836/units.tsv`)
-  has C or C++ source that `make check` classifies as `match`
-  (`data/check-categories.tsv`). The same holds for every per-screen helper in
-  the tables under [Per-screen helpers](#per-screen-helpers).
+- The runtime block `0x003e46b0..0x003eba0c` is 36 functions in
+  one translation unit, `beNDMWLoadIntf2_3e46b0` in `config/SLUS-20836/units.tsv`.
 - Named functions are in `src/game/` and `src/engine/`. Functions that still
   carry a `FUN_` or `Gap__Bec__…__vfunc_NN` symbol are in `src/unmatched/`: their
-  bytes match, their names and module placement are not settled.
+  names and module placement are not settled.
 - What is not recovered is listed under [Open items](#open-items).
 
 Byte sizes on this page are the function extents in
@@ -200,7 +197,7 @@ effect when the record has no data list:
 `FUN_003f1270`/`FUN_003f12f0`/`FUN_003f1380`/`FUN_003f13d0` — start / wait /
 close / done — and `FUN_003ecc60` is the release path the load controller calls
 when the selector reports `_intfStat == 0`. Those four model-controller wrappers
-are the seam between the load controller and this interface. All five are matched
+are the seam between the load controller and this interface. All five are
 in `src/unmatched/`.
 
 ## Where the controller logic lives
@@ -424,8 +421,8 @@ player models `0x004cd0e0`.
 
 ### Card selection and card utilities
 
-The step functions the load and save masters share. Every one is matched
-and reads the reflected receivers listed under
+The step functions the load and save masters share. Every one
+reads the reflected receivers listed under
 [Typed receivers and links](#typed-receivers-and-links).
 
 | Entry | Bytes | Symbol / source | Note |
@@ -439,7 +436,7 @@ and reads the reflected receivers listed under
 | `0x003edf60` | 556 | `beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard`, `src/game/beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard.cpp` | sets `_isFormatRun`: the card-format step |
 | `0x003ee6d0` | 2,824 | `beNDMWDegiData__LoadFromProperties`, `src/game/beNDMWDegiData__LoadFromProperties.cpp` | the property loader: takes a `beNDMWDegiData` record and fills the block at its `_data` field (`+28`) |
 
-The other helpers of the master update in this range are matched too:
+The other helpers of the master update in this range:
 `0x003ec120` (`FUN_003ec120`, `src/unmatched/`), `0x003ec450`
 (`beNDMWLoadIntf2MesWin__Update`, `src/game/`), `0x003ecdc0` (`FUN_003ecdc0`,
 `src/unmatched/`), `0x003ee4d0` (`beNDMWDegiData__UpdateFieldsFromData`,
@@ -472,5 +469,5 @@ The title's two character flows run these states:
 - **Not described.** The `making`/`GAMEREMOVE` transitions and the interaction
   with `beNDMWLoadSavePlWork`.
 - **Outside this block.** `0x003e3b80` (`beNDMWLoadIntf2ComMdlCtrl__Start`, 504
-  bytes), the common-model start helper, has no source in `src/`; see
+  bytes), the common-model start helper; see
   [common-model request queues](common-model-controller.md).

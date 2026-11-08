@@ -1,12 +1,9 @@
 # Inherited list storage-descriptor construction and copying
 
-This page covers **eleven complete bodies / 1,468 code bytes**, all with exact
-matching source.
-Four new exact functions add **800 bytes**: base descriptor copy 300, memory clone 116
-and two native list field-specializers 192 each. The latter 384 bytes were previously
-unclassified data gaps; the analysed Ghidra snapshots now identify both callbacks.
-Classified code increases by 384 bytes and the function denominator by 2; retail
-bytes and linked-section size remain unchanged.
+This page covers **eleven complete bodies / 1,468 code bytes**, among them
+base descriptor copy 300, memory clone 116
+and two native list field-specializers 192 each. The analysed Ghidra snapshots
+identify both specializer callbacks.
 
 The reviewed callback recovery script checks original registrar literals, prologue,
 handle load, query/replacement calls, complete 192-byte extent, epilogue and absence

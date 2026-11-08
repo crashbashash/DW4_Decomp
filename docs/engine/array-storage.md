@@ -1,6 +1,6 @@
 # Array allocation and named alignment selection
 
-Two complete bodies / 564 bytes, both with matching source. The 228-byte allocator
+Two complete bodies / 564 bytes. The 228-byte allocator
 is in [array-allocation.cpp](../../src/engine/array-allocation.cpp); the adjacent
 336-byte alignment selector is `src/unmatched/igMemoryRefMetaField_SetAlignmentType.c`.
 These routines are storage services, with no element constructor loop.
@@ -24,9 +24,9 @@ values are inferred.
 
 Descriptor, offset and status loads occur after callbacks where the original
 instructions reload them. Size and multiplied byte count remain captured.
-The matching source uses an unsigned byte-count local and unsigned multiplication;
+The source uses an unsigned byte-count local and unsigned multiplication;
 virtual ABI projections describe observed slots and are not instantiable classes.
-The constructor's declaration now records the helper's void return.
+The constructor's declaration records the helper's void return.
 
 ## Named alignment selection (`2fb280`)
 

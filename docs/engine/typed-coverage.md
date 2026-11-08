@@ -371,8 +371,8 @@ Most of the pass's gain is outside the narrower [game-layer scope](typed-game-la
 measured separately (`make typed-scope`) and is above its 80 % stop condition. The pass is closed;
 it is not the start of another blanket typing sweep.
 
-Validation of a pass of this size: uncached verification of all edited source files (for these 316
-files, 323 functions match, including owned emitted bodies), then complete `make check` and
+Validation of a pass of this size: uncached verification of all edited source files, including owned
+emitted bodies, then complete `make check` and
 `make link`; also `make typed-check`, `make reflected-check`, `make hygiene` and
 `python3 tools/progress.py --check`. The fresh source check uses an isolated tree of the edited
 files with

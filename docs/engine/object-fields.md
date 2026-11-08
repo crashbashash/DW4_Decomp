@@ -1,7 +1,7 @@
 # Object field cleanup, persistence and reference ownership
 
 Three separate [reference helpers used by the combat callback](../systems/combat-reference-helpers.md)
-also have 316 bytes of matching C. They share the packed low-23-bit destruction
+total 316 bytes. They share the packed low-23-bit destruction
 rule; their original template/type identities remain unknown.
 
 Fourteen complete bodies (1,676 code bytes) are covered here: the contiguous four-body
@@ -9,15 +9,13 @@ cleanup/persistence run at `2ffc10..2fff90`, concrete reference assignment and
 construction/destruction/reset, shared zero/clear helpers, construct-flag and
 metadata count/index getters.
 
-All fourteen bodies have exact source. Eight reference-field bodies (748 bytes)
+Eight reference-field bodies (748 bytes)
 are consolidated in [ref-field-lifecycle.cpp](../../src/engine/ref-field-lifecycle.cpp),
 using reflected receiver fields and explicitly documented header/virtual-slot ABI
-views. Assignment adds **168 matched bytes** and construction adds **220**; six
-prior matches are preserved with corrected types/signatures. The existing
-[metadata count](../../src/engine/igMetaObject_GetFieldCount.c) and
-[index](../../src/engine/igMetaObject_GetFieldAt.c) getters contribute 36 bytes.
+views. The [metadata count](../../src/engine/igMetaObject_GetFieldCount.c) and
+[index](../../src/engine/igMetaObject_GetFieldAt.c) getters are 36 bytes.
 The four generic cleanup/persistence bodies, `2ffc10`, `2ffcb0`, `2ffd40` and
-`igObject_WritePersistentFields` (`2ffe10`, 384 bytes), match in one-function files
+`igObject_WritePersistentFields` (`2ffe10`, 384 bytes), are in one-function files
 under `src/unmatched/`.
 
 ## Generic cleanup and field-table traversal

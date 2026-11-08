@@ -2,9 +2,9 @@
 
 The complete contiguous 32-body block at `0x0038f0e0..0x0038f94c`
 (2,032 code bytes) exposes `beMessenger`'s typed result/argument channels.
-Twenty bodies have matching C/C++ in [beMessengerResults.c](../../src/game/beMessengerResults.c)
+Twenty bodies are in [beMessengerResults.c](../../src/game/beMessengerResults.c)
 and [beMessengerResults.cpp](../../src/game/beMessengerResults.cpp); the other twelve
-match in [beMessengerArgs.cpp](../../src/game/beMessengerArgs.cpp) (seven) and in one-function files
+are in [beMessengerArgs.cpp](../../src/game/beMessengerArgs.cpp) (seven) and in one-function files
 under `src/unmatched/` (five).
 
 Receiver selection and actual message routing are covered in
@@ -68,21 +68,16 @@ String get copies an indexed temporary, releases it and returns the borrowed
 token. String destruction tests the full string-header count, unlike the
 low-23-bit object rule; its free call carries both allocator and header address.
 
-## Matching and remaining dependencies
+## Remaining dependencies
 
 List growth/append/reference-copy are described in [list services](list-services.md), pool
 and table bodies in [string services](string-pool.md) and matrix copying in
 [matrix primitives](matrix-primitives.md). Allocator failure/exception behavior remains
 unverified, and complete SD dispatch is not established by this block.
 
-Float get, matrix get and object append add **104 matched code bytes**.
-Both C++ wrappers require the original frame-preserving language mode. The other
-seventeen source bodies were already matched; naming/folding preserves their
-bytes. Full matching checks, typed baseline and byte-identical relink are
-required after the module fold.
+Both C++ wrappers require the original frame-preserving language mode.
 
-Next recover the list metadata/allocator,
-string pool and remaining matrix compiler bodies. Then integrate actual messenger selection and player result
-production, so material update can consume these channels. The [Lua dependency inventory](lua-dependencies.md)
+Material update consumes these channels once actual messenger selection and player result
+production are integrated. The [Lua dependency inventory](lua-dependencies.md)
 retains the wider receiver/virtual/update frontiers; this module does not close
 the full Lua-dependent engine recovery goal.

@@ -5,16 +5,14 @@ forwarding, the contiguous three-body instance-creation group, static initialize
 callbacks, the contiguous three-body construction/registration group, and the
 contiguous five-body destruction/field-pass group.
 
-Twelve bodies have matching source (952 bytes): the eight factory/registration
-wrappers (336), default creation (48), instance registration (180), and the newly
-matched static initializer runner (120), plus full object destruction (268).
-The other eight have source in one-function files under `src/unmatched/`: seven match
-(1,464 bytes) and field zeroing `2ff930` (200 bytes) is `foreign-profile` (code bytes
-identical; the build-profile check is open). The exact
-sources of the twelve are [beMessengerFactories.cpp](../../src/game/beMessengerFactories.cpp),
+Sizes include the eight factory/registration
+wrappers (336), default creation (48), instance registration (180), the
+static initializer runner (120), full object destruction (268) and
+field zeroing `2ff930` (200). Sources are one-function files under `src/unmatched/`,
+[beMessengerFactories.cpp](../../src/game/beMessengerFactories.cpp),
 [igMetaObjectCreation.cpp](../../src/engine/igMetaObjectCreation.cpp), and the
-existing [instance registration source](../../src/unmatched/igObject_RegisterInstance.cpp).
-Explicit allocator/return signatures preserve the existing bytes.
+the [instance registration source](../../src/unmatched/igObject_RegisterInstance.cpp).
+Explicit allocator/return signatures preserve the retail bytes.
 
 ## Factory and creation behavior
 
@@ -27,15 +25,14 @@ Explicit allocator/return signatures preserve the existing bytes.
 
 Each factory saves its allocator, runs its registration wrapper, reloads the
 metadata handle and returns `igMetaObject_CreateInstance(handle, allocator)`.
-The prior matching factory drafts declared void returns even though the original
-return register carries the new object. Corrected projections explicitly return
+The original return register carries the new object, so the factories explicitly return
 that reference. Registration wrappers dispatch the corresponding original class
 registrar through `igMetaObject_RunStaticInit` (`2fe940`).
 
 The static initializer runner calls its registrar, then, for a non-null returned
 table, captures count +4 and calls entries from the table's buffer +0 in order.
 It re-reads the buffer each iteration while retaining the captured count, and
-finally calls table cleanup (`2d3420`, deletion flag 1). The matching source uses
+finally calls table cleanup (`2d3420`, deletion flag 1). The source uses
 a structural callback-table view, not an original recovered type name. Its
 callbacks are declared without parameters; the byte-identical loop physically
 leaves the table pointer in a0. Original callback declaration spelling remains open.

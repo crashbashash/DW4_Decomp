@@ -26,13 +26,10 @@ python3 testing/test_hub_recovery_inventory.py
 ```
 
 The inventory observes 49 bound APIs and reaches 508 native functions /
-117,120 bytes; 94 functions / 48,540 bytes have no C source yet (of the other 414,
-409 are `match` and 5 `foreign-profile` in `data/check-categories.tsv`; sizes from
-`config/SLUS-20836/symbols.txt`), with 110 unresolved
+117,120 bytes (sizes from `config/SLUS-20836/symbols.txt`), with 110 unresolved
 register transfers. This is a **lower bound**, not a completion percentage or a
-remaining function estimate. The shared closure is 985 functions / 240,640 bytes;
-868 of them have C source (851 `match`, 16 `foreign-profile`, 1 `code-only`)
-and 117 / 61,900 bytes have no C source yet. Direct APIs do not reveal SD receiver implementations,
+remaining function estimate. The shared closure is 985 functions / 240,640 bytes.
+Direct APIs do not reveal SD receiver implementations,
 data-held callbacks, model programs or arbitrary named-chunk ownership. Shared
 SDK and middleware bodies also need classification at the platform boundary.
 The current generated inventory is authoritative when these counts change.
@@ -106,13 +103,10 @@ replacement hub or modernize the original scripts to satisfy this goal.
 
 ## Current work queue
 
-1. The alias-pool dependency beneath the Lua object/message path is matched.
-   The complete54-body method run plus factory covers factory/initialization, locks,
+1. The alias-pool dependency beneath the Lua object/message path:
+   the complete54-body method run plus factory covers factory/initialization, locks,
    event tracker, accounting, ownership, diagnostics and allocation backend, in
    1,040 instructions; backing/base/lock/file services are separate.
-   All 54 bodies /4,160 bytes have exact source (39 in `src/engine/`,
-   15 in `src/unmatched/`). Exact matches include a 152-byte setter, a 108-byte
-   teardown and 160 tail bytes.
    See [runtime evidence](../engine/alias-pool-runtime.md).
 2. Resolve the inventory's SD receivers and named-chunk ownership, starting with
    SUBWND's controller factory at 3d59b0 and commands at 3d60e0. The
@@ -122,16 +116,15 @@ replacement hub or modernize the original scripts to satisfy this goal.
    covers stock tiers,
    multiplayer/species selection and reference callbacks. The9,820-byte
    [command receiver](../engine/subwindow-command.md) covers status/preview snapshots.
-   All11 manager bodies /17,616 bytes are
-   recovered and all 11 match. Concrete
+   All11 manager bodies total 17,616 bytes. Concrete
    service outcomes remain open.
    CARD has a literal front-end caller in entry808; its name does not by itself
    identify Booster Pack/album or Save Keeper behavior. Track all ten
    non-STATUS modes, including CARD and saved/card-return paths, rather than
    treating the STATUS parent as their implementation.
 3. The [generic shop-root metadata block](../engine/shop-root-metadata.md)
-   is seven bodies /416 bytes;
-   all seven bodies /416 bytes match: 212 bytes that include 84 under anonymous
+   is seven bodies /416 bytes:
+   212 bytes that include 84 under anonymous
    factory/ensure names, 12 bytes of classification/matching, the 76-byte
    accessor and the 116-byte vtable getter
    (`src/unmatched/beNDMWShopCtrl00_GetVTable.cpp`).
@@ -139,61 +132,57 @@ replacement hub or modernize the original scripts to satisfy this goal.
    by the tree updater. The [root runtime/window tree](../engine/window-tree-and-shop-root.md)
    is six complete bodies /2,980 bytes,
    including all mode factories, child binding/update/removal and the
-   actual child-close helper. All six bodies match in `src/unmatched/`
+   actual child-close helper, in `src/unmatched/`
    (`beNDMWWindow_RequestChildrenClose.c`, `beNDMWWindow_BindContext.cpp`,
    `beNDMWWindow_UpdateTree.cpp`, `Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`,
    `FUN_00426fa0.cpp` and `FUN_00427020.cpp`); concrete selected
    service controllers and transaction/result producers remain open. The
-   [presentation/title module](../engine/window-presentation.md) has
-   all eight bodies /2,628 bytes
-   matched; concrete text/model receivers remain dependencies. Recover the
+   [presentation/title module](../engine/window-presentation.md) is
+   eight bodies /2,628 bytes;
+   concrete text/model receivers remain dependencies. Recover the
    five remaining primary service updates /16,260 reviewed bytes in hub execution
    order. The [XDATA controller](../engine/xdata-controller.md) has complete
    update/cleanup recovery and a verified txt_shop.lua
-   binding in both core packs. Its five bodies match; its widget/chip/recalculation dependencies
+   binding in both core packs. Its widget/chip/recalculation dependencies
    remain open. The [selector widgets](../engine/shop-selectors.md)
-   have six complete bodies /7,916 bytes, all matched (the 772-byte shared update at 4233f0 is in
-   `src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp`), plus the 76 exact metadata bytes. Their SELECTCTRL
+   have six complete bodies /7,916 bytes (the 772-byte shared update at 4233f0 is in
+   `src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp`), plus 76 metadata bytes. Their SELECTCTRL
    input/receiver and chip dependencies are in the sections below; the
    recalculation contract remains open. Review the corresponding script branches.
 4. Close every hub transition, progression state and multiplayer-dependent branch.
 
 ### SELECTCTRL manager, handler and pad selection
 
-[Receiver/pad-manager entry methods](../engine/selectctrl.md) are two exact
-bodies / 100 bytes. Raw 136 is lazy pad-manager acquisition, not cleanup. The
-metadata getter and inherited dispatch check also match. The occupied handler's
+[Receiver/pad-manager entry methods](../engine/selectctrl.md) are two
+bodies / 100 bytes. Raw 136 is lazy pad-manager acquisition, not cleanup. The occupied handler's
 complete body is 1,960 bytes in the generated extents; a 1,932-byte extent
 truncates its return.
 
 The [complete manager update/general handler](../engine/selectctrl.md) are
 4,824 bytes (the 2,864-byte update and the
 1,960-byte handler) with 1,187 non-padding words, covering input/confirmation/cancel/FO2TOP,
-registry/work/list/string ownership and full generate/close lifecycles. Both
-bodies match (`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp` and
+registry/work/list/string ownership and full generate/close lifecycles
+(`src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp` and
 `src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp`).
 
 The [original pad-record lookup](../engine/selectctrl.md#original-pad-record-selection)
-executes beneath SELECTCTRL. Its 88-byte body is fully recovered
-and named from original callers/reflection; it matches as
+executes beneath SELECTCTRL. Its 88-byte body is
+named from original callers/reflection; see
 `src/unmatched/bePadManager_GetPadForPlayer.c`.
 
 Actual pad acquisition and sampling, model execution and message services
-remain open boundaries. A read-only matching
-audit over 347 direct hub functions without source returned zero
-automatic matches, with eleven candidates within three instruction words.
+remain open boundaries.
 
-### Shared destruction matching
+### Shared destruction
 
-Two complete dependency bodies match, **460 exact bytes**: generic object teardown
+Two complete dependency bodies total **460 bytes**: generic object teardown
 268 and base window-controller cleanup 192. Each retains a single explicit
 four-byte register copy within readable C/C++ logic; window cleanup also retains
-its original NOP. Exact source and the byte-identical relink separately verify
-the original bodies.
+its original NOP.
 
 ### Owner/manager protocol composition
 
-The [owner/manager protocol](../engine/selector-manager-composition.md) routes common
+The [owner/manager protocol](../engine/shop-selectors.md#owner-and-selectctrl-protocol) routes common
 shop-selector requests through the SELECTCTRL handler/update and pad lookup, then
 the close helpers, across four players and all returned indices 0..6. It describes
 result/completion publication, pending waits, cancellation, rejection recovery and
@@ -202,8 +191,8 @@ and complete script/dispatch closure remain open.
 
 ### Shared ListCtrl paging and chip-view helpers
 
-All five [paging/view helper bodies](../engine/list-controller-chip-view.md)
-match / 2,196 bytes: previous/next page and
+The five [paging/view helper bodies](../engine/list-controller-chip-view.md)
+are 2,196 bytes: previous/next page and
 chip page counting 864 bytes, the arrow initializer 260 and chip RefreshText
 1,072. The contiguous three-method ListCtrl block is 916 bytes and the full chip
 count/text block is 1,280 bytes. Register bindings and a small explicit scheduling
@@ -211,9 +200,8 @@ projection preserve the original RefreshText body; source does not imply an
 assembly-free or original-declaration claim. The reviewed extents include the
 helpers' full return spans (8 bytes), without changing the retail image.
 
-This closes utility dependencies, not chip pricing/recalculation/debit outcomes,
-and it does not close the full lobby goal. Chip transaction matching under its unit profile (the update is
-`foreign-profile`), actual item/status/recalculation/receiver/script
+These are utility dependencies, not chip pricing/recalculation/debit outcomes.
+Actual item/status/recalculation/receiver/script
 execution and other lobby services remain open.
 
 ### Chip transaction controller
@@ -223,13 +211,13 @@ non-padding words and 47 padding/static-dead words. Inventory rebuilding, equipp
 preview restoration, notice/confirmation, current-record increment and fresh
 XDATA debit are recovered. Item/status/recalculation/message/script and selector
 execution remain dependencies; full hub acceptance remains open.
-The update matches in `src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`.
+The update is in `src/unmatched/Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21.cpp`.
 
 ### Item/database lookup and return ABI
 
-The [ten-body lookup chain](../engine/item-database.md) is exact / 1,168 bytes:
-952 bytes beside three 72-byte wrappers whose explicit return/status contracts
-are part of the match. The chain composes concrete chip
+The [ten-body lookup chain](../engine/item-database.md) is 1,168 bytes:
+952 bytes beside three 72-byte wrappers with explicit return/status contracts.
+The chain composes concrete chip
 selection, database readers and existing property-name lookup. Delivery through
 the DATABASE receiver remains open. The index finder's extent includes its
 full 192-byte return span.

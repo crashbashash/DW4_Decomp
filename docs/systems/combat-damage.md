@@ -16,30 +16,27 @@ commands covering both directions of hit/damage/status calculations, EXP,
 skill growth, player-to-player magic and player attack element lookup.
 The [generated inventory](combat-inventory.md) records the switch targets,
 direct calls, unresolved indirect call sites and actual source coverage.
-The [three immediate helpers](combat-helpers.md) now have matching C/C++:
+The [three immediate helpers](combat-helpers.md) are
 the 128-byte deleting destructor, 132-byte technique-row lookup and 652-byte
 nearby query, totaling 912 bytes.
-All [26 contiguous BLT/BLP Lua helpers](combat-lua-api.md) now have matching C
-(5,372 bytes), as do the FightCom enum builder and cached string-pool accessor.
-The calculation dispatcher itself matches as
+The [26 contiguous BLT/BLP Lua helpers](combat-lua-api.md) total 5,372 bytes.
+The calculation dispatcher itself is
 `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.
 The [draft recovery notes](combat-draft-recovery.md) describe its reviewed
 argument slots, byte/word access widths, address units and protected repairs.
-Its three [reference-ownership helpers](combat-reference-helpers.md) now have
-316 bytes of matching C and explicit release/assignment call slots in the
+Its three [reference-ownership helpers](combat-reference-helpers.md) total
+316 bytes, with explicit release/assignment call slots in the
 generated analysis context.
 
-All 26 contiguous BLT/BLP Lua helpers have matching source;
-these wrappers are separate from the calculation rules. Five status-duration
+The 26 contiguous BLT/BLP Lua helpers are
+wrappers separate from the calculation rules. Five status-duration
 helpers had disjoint Ghidra bodies whose byte counts truncated their epilogues.
-Reviewed spans restore eight bytes apiece without changing retail bytes or
-increasing the matched-source count. The full dispatcher's reviewed
-span ends at `0x00406d98`; the former next-symbol heuristic included eight
-padding bytes after its return.
+Reviewed spans restore eight bytes apiece without changing retail bytes. The full dispatcher's reviewed
+span ends at `0x00406d98`, before eight padding bytes.
 
 The initial whole-dispatcher m2c draft references undefined incoming
 `saved_reg_s0`/`saved_reg_s3`. Known accessor signatures remove spurious call
-arguments containing `MULT_HI` in a later draft, but code still differs.
+arguments containing `MULT_HI` in a later draft.
 The initial report that only one switch table was emitted is refuted: the
 compiler emits two different sections both named `.rodata`. Verification and
 linking now preserve their section indices, individual relocations and separate
@@ -126,7 +123,7 @@ game logic. The handlers sit in one dispatcher switch:
 | Piece | Address |
 |---|---|
 | Key-name table (22 pointers, `E2PISHITCHECK` first) | `0x004cc350` |
-| Name → id dictionary builder | [`FightCom_GetMetaEnum`](../../src/game/FightCom_GetMetaEnum.cpp), `0x003c9be0` (second table at `0x004cc3b0` is just ids 0–21); 84 bytes matched |
+| Name → id dictionary builder | [`FightCom_GetMetaEnum`](../../src/game/FightCom_GetMetaEnum.cpp), `0x003c9be0` (second table at `0x004cc3b0` is just ids 0–21); 84 bytes |
 | Dispatcher jump table (22 entries) | `0x00519310` |
 | Case 2, `P2EISCRITICAL` | `0x003fe130` |
 | Case 5, `P2EDAMAGE` | `0x003fe550`–`0x003ff030` |

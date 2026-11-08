@@ -4,16 +4,15 @@ Fourteen complete bodies (2,812 code bytes) cover the main
 class registrar, inheritance, field creation/naming/layout, descriptor binding,
 default storage and the original Work registrar/field adder.
 
-Thirteen bodies (2,068 bytes) have source with identical code bytes. Five new matches add **872 code
-bytes** in [reflection-builders.cpp](../../src/engine/reflection-builders.cpp):
-inheritance 208, creation 184, naming 208, default storage 144 and descriptor
-finalization 128; creation (`2fdf40`) and naming (`2fe000`) are `foreign-profile` (the
-build-profile check is open). Five prior ownership/binding matches (452 bytes) are folded in
+[reflection-builders.cpp](../../src/engine/reflection-builders.cpp) holds five bodies, 872 code
+bytes:
+inheritance 208, creation (`2fdf40`) 184, naming (`2fe000`) 208, default storage 144 and descriptor
+finalization 128. Five ownership/binding bodies (452 bytes) are folded in
 [metadata-field-values.c](../../src/engine/metadata-field-values.c), with explicit
-forwarded receivers/arguments and corrected void declarations. The prior Work
-registrar/adder matches add 300 bytes. Layout finalization
-(444) matches in [igMetaObject_FinalizeFieldLayout.cpp](../../src/unmatched/igMetaObject_FinalizeFieldLayout.cpp); main
-registration (`2fe9c0`, 744) has no C source yet. ABI/virtual-slot views are observed projections,
+forwarded receivers/arguments and void declarations. The Work
+registrar/adder is 300 bytes. Layout finalization
+(444) is in [igMetaObject_FinalizeFieldLayout.cpp](../../src/unmatched/igMetaObject_FinalizeFieldLayout.cpp); main
+registration (`2fe9c0`) is 744. ABI/virtual-slot views are observed projections,
 not original C++ type declarations, and must not be instantiated.
 
 ## Registrar arguments and validity states

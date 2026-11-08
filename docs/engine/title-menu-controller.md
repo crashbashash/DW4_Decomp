@@ -13,17 +13,17 @@ block `0x003f2d50..0x003f540c`; its metadata/constructors live separately around
 
 ## Runtime block
 
-| Start | Bytes in split | Role | Recovery |
-|---|---:|---|---|
-| `0x003f2d50` | 172 | Initialize option messenger/settings | Byte-matched `beNDMWTitle2Option_InitSettings` |
-| `0x003f2e00` | 228 | Resolve pad manager and release cached memory-card utility | **Byte-matched** `Gap::Bec::beNDMWTitle2::vfunc_32` |
-| `0x003f2ef0` | 8,992 | Per-frame title/menu/options controller, including its internal padding | **Byte-matched C++**, complete compiler unit |
-| `0x003f5210` | 128 | Reference-wrapper cleanup | Matching C; compiler copy also verified with the update (no register-allocation wall) |
-| `0x003f5290` | 128 | Second reference-wrapper cleanup | Matching C; compiler copy also verified with the update (no register-allocation wall) |
-| `0x003f5310` | 12 | Info MetaObject return | Matching source |
-| `0x003f5320` | 36 | Slot-29 descriptor wrapper | Matching C++ |
-| `0x003f5350` | 168 | RUN/GAMESTART message handler | Matching C over the repaired complete extent |
-| `0x003f5400` | 12 | Controller MetaObject return | Matching source |
+| Start | Bytes in split | Role |
+|---|---:|---|
+| `0x003f2d50` | 172 | Initialize option messenger/settings (`beNDMWTitle2Option_InitSettings`) |
+| `0x003f2e00` | 228 | Resolve pad manager and release cached memory-card utility (`Gap::Bec::beNDMWTitle2::vfunc_32`) |
+| `0x003f2ef0` | 8,992 | Per-frame title/menu/options controller, including its internal padding; C++, complete compiler unit |
+| `0x003f5210` | 128 | Reference-wrapper cleanup |
+| `0x003f5290` | 128 | Second reference-wrapper cleanup |
+| `0x003f5310` | 12 | Info MetaObject return |
+| `0x003f5320` | 36 | Slot-29 descriptor wrapper (C++) |
+| `0x003f5350` | 168 | RUN/GAMESTART message handler |
+| `0x003f5400` | 12 | Controller MetaObject return |
 
 The update's 8,700-byte Ghidra body count is the sum of
 its disjoint address ranges. The build's 8,992-byte contiguous span also includes
@@ -32,8 +32,7 @@ entire 8,992-byte span.
 
 ## Complete matching unit
 
-The update is **8,992 matched C++ bytes and one function**. The other eight
-runtime bodies have their own matching source. Its content-pinned compiler and `-O3,p`
+The update is one 8,992-byte C++ function. Its content-pinned compiler and `-O3,p`
 profile are recorded in `config/SLUS-20836/unit-compilers.tsv` and `config/SLUS-20836/unit-flags.tsv`;
 `config/SLUS-20836/unit-objects.json` checks the complete compiler object:
 
@@ -211,23 +210,21 @@ reviewed addresses when adding another entry; do not edit the generated JSON.
 The message enumeration at `0x004c9710` contains `RUN=0`, `GAMESTART=1`. The
 handler returns 1; with a non-null info list, RUN sets the info gate and clears
 its three inner state fields, while GAMESTART marks global `0x00554e70` valid.
-The complete 168-byte body has matching source.
 
 ## Game Start path: `beNDMWLoadCtrl2`
 
 `GENERATE_TITLE` hands the loaded title to `beNDMWLoadCtrl2`, whose contiguous
-runtime block is `0x003f19e0..0x003f2d4c`. All nine runtime bodies have matching
-C/C++:
+runtime block is `0x003f19e0..0x003f2d4c` and holds nine bodies:
 
-| Start | Bytes | Role | Recovery |
+| Start | Bytes | Role | Name |
 |---|---:|---|---|
-| `0x003f19e0` | 156 | Resolve pad manager and addref/release it | **Byte-matched** `vfunc_32` |
-| `0x003f1a80` | 2,504 | Per-frame load-controller update | **Byte-matched** `vfunc_31` |
-| `0x003f2450` | 12 | MetaObject return `*(int*)0x0058baf0` | **Byte-matched** `vfunc_30` |
-| `0x003f2460` | 36 | Slot-29 descriptor wrapper (C++ mode) | **Byte-matched** `vfunc_29` |
-| `0x003f2490` | 1,832 | RUN/GAMESTART message handler | **Byte-matched** `vfunc_34` |
-| `0x003f2bc0`/`c40`/`cc0` | 128 each | Reference-release wrappers | Matching source; no register-allocation wall |
-| `0x003f2d40` | 12 | MetaObject return `*(int*)0x0058bef0` | **Byte-matched** `vfunc_20` |
+| `0x003f19e0` | 156 | Resolve pad manager and addref/release it | `vfunc_32` |
+| `0x003f1a80` | 2,504 | Per-frame load-controller update | `vfunc_31` |
+| `0x003f2450` | 12 | MetaObject return `*(int*)0x0058baf0` | `vfunc_30` |
+| `0x003f2460` | 36 | Slot-29 descriptor wrapper (C++ mode) | `vfunc_29` |
+| `0x003f2490` | 1,832 | RUN/GAMESTART message handler | `vfunc_34` |
+| `0x003f2bc0`/`c40`/`cc0` | 128 each | Reference-release wrappers | |
+| `0x003f2d40` | 12 | MetaObject return `*(int*)0x0058bef0` | `vfunc_20` |
 
 The reference-counting idiom these wrappers share is a known matchable
 shape: the addref `if` body ends in an explicit `asm{nop}`, the release

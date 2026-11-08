@@ -1,14 +1,14 @@
 # Immediate GAMERAM combat helpers
 
-All three complete immediate helper bodies now have matching source:
+The three complete immediate helper bodies are
 **912 code bytes** at `0x003fc670`, `0x003fc6f0` and `0x003fc780`.
 The 132-byte [technique-row lookup](../../src/game/beNDMWGameRam_FindTechniqueRow.cpp)
 is C; the 652-byte query and 128-byte deleting destructor share one
-[C++ compiler unit](../../src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc), now compiled together with the
+[C++ compiler unit](../../src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc), compiled together with the
 [player stat recompute](../../src/unmatched/FUN_003fab90.cpp).
 
-The separate FightCom metadata builder and BLT attribute accessor now have
-140 bytes of matching C; see the
+The separate FightCom metadata builder and BLT attribute accessor are
+140 bytes; see the
 [compiler requirements](../engine/unit-compilers.md).
 
 | Address | Bytes | Semantic name | Role |
@@ -77,11 +77,10 @@ spellings are not asserted.
 The same compiler unit emits the complete 128-byte deleting destructor at
 `0x3fc670`. It releases the held object using the low-23-bit rule, invokes the
 delete entry when its signed low-16-bit deletion flag is positive, and returns
-the wrapper pointer. The delete symbol has an explicit binding to `0x100610`;
-that callee's own body has no C source yet.
+the wrapper pointer. The delete symbol has an explicit binding to `0x100610`.
 
 [Explicit emitted-function ownership](../engine/emitted-functions.md) verifies
-both complete bodies before placing either one. Both now have matching source;
+both complete bodies before placing either one;
 no extra code is ignored. The symbol reader correctly handles compiler binding
 13. Exceptions are disabled for this compiler unit to suppress new unplaced
 metadata; the original retail data remains in the layout.

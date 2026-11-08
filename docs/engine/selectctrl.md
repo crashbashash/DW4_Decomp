@@ -1,12 +1,12 @@
 # SELECTCTRL manager and pad input
 
 This page covers the concrete `beSelectCtrl` receiver used by the
-[shop selectors](shop-selectors.md). Two entry bodies match exactly:
+[shop selectors](shop-selectors.md). Its two entry bodies are
 `beSelectCtrl_EnsurePadManager` at `0x0039cb70` (64 bytes) and
 `beSelectCtrl_RegisterReceiver` at `0x0039cbc0` (36 bytes).
-The metadata getter at `0x0039cbb0` (12 bytes) and inherited dispatch check at
-`0x00378410` (8 bytes) are matched as well.
-The complete update (2,864 bytes) and general handler (1,960 bytes) match in
+The metadata getter is at `0x0039cbb0` (12 bytes) and the inherited dispatch check at
+`0x00378410` (8 bytes).
+The complete update (2,864 bytes) and general handler (1,960 bytes) are in
 [Gap__Bec__beSelectCtrl__vfunc_31.cpp](../../src/unmatched/Gap__Bec__beSelectCtrl__vfunc_31.cpp) and
 [Gap__Bec__beSelectCtrl__vfunc_33.cpp](../../src/unmatched/Gap__Bec__beSelectCtrl__vfunc_33.cpp).
 
@@ -28,7 +28,7 @@ with `_messenger` word20, the supplied info record and literal `SELECTCTRL`
 (`0x0050f7f0`). The C++ compilation matches its36-byte frame/call/return;
 C mode instead emits a16-byte tail call. The pad-manager method uses the
 existing explicit retail NOP convention after pointer publication.
-These matching sources preserve observed machine behavior; their original
+These sources preserve observed machine behavior; their original
 source spelling is unknown.
 
 Sources: [manager methods](../../src/game/beSelectCtrl.cpp) and
@@ -129,7 +129,7 @@ The named model sequences are
 
 Real pad sampling, rendering, physical animation timing and the original
 scripts' complete outcomes are not established here. The
-[joint common-owner page](selector-manager-composition.md) covers the
+[owner and SELECTCTRL protocol](shop-selectors.md#owner-and-selectctrl-protocol) covers the
 handler/update/pad lookup beneath the owner. Shop-specific initialization and XDATA
 transactions are not part of that call tree.
 
@@ -143,9 +143,9 @@ saving and hub script closure belong to the full lobby goal, which is unfinished
 
 The SELECTCTRL update's lookup at `0x0039b810` is named
 `bePadManager_GetPadForPlayer` from its body and its manager/player arguments.
-The lookup is 88 bytes with no external callees. The adjacent
-12-byte metadata getter is matched. The
-lookup itself matches in [bePadManager_GetPadForPlayer.c](../../src/unmatched/bePadManager_GetPadForPlayer.c).
+The lookup is 88 bytes with no external callees, beside a
+12-byte metadata getter. The
+lookup is in [bePadManager_GetPadForPlayer.c](../../src/unmatched/bePadManager_GetPadForPlayer.c).
 
 Reflection handle `0x00588518` identifies `bePadManager`: `_padList` is word20,
 `_is1pAllDevice` byte28 and `_isPadDisable` byte29. The lookup uses byte29 and

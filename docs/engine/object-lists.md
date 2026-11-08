@@ -7,12 +7,11 @@ see [GAMERAM ABI recovery](../systems/combat-draft-recovery.md).
 
 The complete contiguous twelve-body group at `301c90..302540` contains 2,160
 code bytes. Together with the 148-byte name setter at `2fecb0`, that makes thirteen
-bodies. One, retained append (88 bytes), already has exact source in
-[list-services.c](../../src/engine/list-services.c); ten more match in one-function
-files under `src/unmatched/`. `igProperty_FindByName` (`3022c0`, 188 bytes) is
-`foreign-profile` in [igProperty_FindByName.c](../../src/unmatched/igProperty_FindByName.c) (code bytes
-identical; the build-profile check is open), and remove-first (`302000`, 248 bytes)
-matches in [ObjectList_RemoveFirstRetained.cpp](../../src/unmatched/ObjectList_RemoveFirstRetained.cpp).
+bodies. Retained append (88 bytes) is in
+[list-services.c](../../src/engine/list-services.c); ten more are in one-function
+files under `src/unmatched/`. `igProperty_FindByName` (`3022c0`, 188 bytes) is in
+[igProperty_FindByName.c](../../src/unmatched/igProperty_FindByName.c), and remove-first (`302000`, 248 bytes)
+is in [ObjectList_RemoveFirstRetained.cpp](../../src/unmatched/ObjectList_RemoveFirstRetained.cpp).
 
 The [name generator](../../scripts/seed_names_object_lists.py) derives retained-list
 and name-publication roles from verified accesses. Existing property roles live

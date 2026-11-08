@@ -2,12 +2,9 @@
 
 This page covers **32 complete bodies / 1,168 code bytes**: the contiguous
 seven-body memory value/lifetime run, generic scalar defaults/no-ops and the exact
-metadata/trim/base hooks used by Work and its lists. All 32 bodies / 1,168 bytes
-have matching source; add-reference 164 and release-reference 200 are `foreign-profile` in
-`data/check-categories.tsv` (the code bytes are reproduced only under a provisional
-per-function override) and the other 30 are `match`. Five new memory bodies add **788 exact bytes**: construction 200,
+metadata/trim/base hooks used by Work and its lists. Five memory bodies total 788 bytes: construction 200,
 destruction 88, add-reference 164, release-reference 200 and default reset 136.
-The two scalar default-copy bodies (24 each) match in `src/unmatched/igMetaField_SetToDefault.c`
+The two scalar default-copy bodies (24 each) are in `src/unmatched/igMetaField_SetToDefault.c`
 and `src/unmatched/igMetaField_CopyDefaultToValue.c`.
 
 ## Memory-reference construction and default dispatch
@@ -90,7 +87,6 @@ make typed-check
 ```
 
 Twenty dependency regressions independently validate original memory-field virtual
-roots and concrete list teardown/metadata hooks. Matching source uses observed
+roots and concrete list teardown/metadata hooks. The source uses observed
 reference/default-pointer/virtual-slot ABI projections and reflected members; these
-are not new original C++ type-name claims. Earlier compiler residuals and the
-unconfirmed append return signature remain tracked separately.
+are not new original C++ type-name claims. The append return signature is unconfirmed.

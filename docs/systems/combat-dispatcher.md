@@ -1,12 +1,10 @@
-# GAMERAM combat dispatcher: matched
+# GAMERAM combat dispatcher
 
-`beNDMWGameRam::vfunc_34` at `0x3fca10` (41,864 bytes, 3,259 relocations) rebuilds byte-for-byte from
+`beNDMWGameRam::vfunc_34` at `0x3fca10` (41,864 bytes, 3,259 relocations) is
 [`src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`](../../src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp). It is the
 parent command callback (GETCOMMON, GETPLAYER, CTRLITEM, FIGHTCALC, CTRLPLAYER and the rest of the 22-name `Message` enum) and
 contains the 36,000-byte FIGHTCALC region with its 22 sub-commands: hit checks, damage and damage rank, critical, the status times,
-EXP and skill gain, the Kouka magic and the attack-attribute lookup. `make check` reports zero mismatches
-and `make link` is byte-identical to retail; the live function figures are in
-[`PROGRESS.md`](../../PROGRESS.md).
+EXP and skill gain, the Kouka magic and the attack-attribute lookup.
 
 The parent command switch uses the 22-name table at `0x4cc410` and the jump table at `0x519370`:
 
@@ -62,10 +60,10 @@ instrumented, including the second pass that produces the emitted registers) and
 milliseconds so id permutations can be searched without recompiling). The same method also matches `FUN_003fab90` and the messenger
 callees ([callees](combat-callees.md)).
 
-## Remaining combat work
+## Scope
 
-`Matrix44_Copy` has no C source yet; `strcmp` is newlib's R5900 assembly (`src/newlib/strcmp.S`). The dispatcher's dynamic behaviour (indirect call targets,
-hit geometry, actor programs, spawning, progression) is separate recovery work; this page claims byte identity of the callback only.
+`strcmp` is newlib's R5900 assembly (`src/newlib/strcmp.S`). The dispatcher's dynamic behaviour (indirect call targets,
+hit geometry, actor programs, spawning, progression) is outside this page.
 
 ## Typed members
 

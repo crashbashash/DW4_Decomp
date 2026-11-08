@@ -288,21 +288,21 @@ language mode, not by flags.** The full account is
   compiled as **C++** (only C++ has `bool`, and MWCC takes the language from the file extension, so
   these are `src/*.cpp` units). The pointer test stays a plain `beqz`, the global
   is still loaded exactly twice, and the global must be declared as a 16-byte array or MWCC
-  addresses it gp-relative. Verified **550/550** (72 bytes each). The other **507** members are
+  addresses it gp-relative. These **550** are 72 bytes each. The other **507** members are
   the *same idiom plus one dead `nop`* before the merged `jal`. They match with `asm { nop }`
   under the default compiler, or without it under the alternate compiler at `-O3,p`
   (`tools/guard_b_gen.py`).
-* **The one-call wrappers — 1,067 banked.** The 28/32-byte "single call, frame kept" wrappers are
+* **The one-call wrappers.** The 28/32-byte "single call, frame kept" wrappers are
   not a tail-call puzzle: **MWCC's C front end turns `void f(void){ X(); }` into a 2-instruction
   `j` tail call; its C++ front end keeps the frame.** Retail is C++, so these reproduce only as
-  `.cpp` too (`wcall` 527/527, `wload` 485/493). The two exact shapes do not cover the rest of the family -
+  `.cpp` too (`wcall`, `wload`). The two exact shapes do not cover the rest of the family -
   wrappers that also set up arguments - so **`wargs` generalises them**: it decodes the
-  argument setup from the retail instructions and lets `verify.py` decide (**55** more, 658
-  candidates). The decode hinges on the R5900 calling convention, which passes argument 5..8 in
+  argument setup from the retail instructions and lets `verify.py` decide.
+  The decode hinges on the R5900 calling convention, which passes argument 5..8 in
   `t0-t3` rather than on the stack, so a wrapper's `t`-register setup is an argument too.
   The m2c pass needs the same thing: m2c's `MipsArch` models only
   `a0-a3`, so the pipeline runs its **`mipsee-mwcc-c`** arch with `t0-t3` renamed to `a4-a7`,
-  which is what matches 168 of the 1,075 class-registrar trampolines.
+  which is what the class-registrar trampolines need.
 
 **The rest, via m2c.** Functions beyond shape templates go through
 [`m2c`](https://github.com/matt-kempster/m2c) with its
@@ -505,7 +505,7 @@ code bytes.
 
 ## Open questions
 
-- `FUN_00259cd0` (60 bytes, `0x32d4b0(&local, argv0); GPR_00554bec = local == DAT_004fb410[0]`)
-  has no source body. Besides the missing `nop`, its best spelling under the default compiler
-  left a register-only residual: retail keeps the local's address in `v1` and the result in
+- `FUN_00259cd0` (60 bytes, `0x32d4b0(&local, argv0); GPR_00554bec = local == DAT_004fb410[0]`):
+  besides the missing `nop`, its best spelling under the default compiler
+  leaves a register-only residual: retail keeps the local's address in `v1` and the result in
   `v0`, where the draft uses `a0`.

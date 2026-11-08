@@ -9,7 +9,7 @@ Index: [`../README.md`](../README.md).
   overrides, the `foreign-profile` debt category, how to review a provisional unit
   and how `tools/gen_unit_profiles.py` derives the table.
 - [Per-unit compiler requirements](unit-compilers.md): content-pinned selection
-  for the matched combat dependencies (the compiler is a unit profile in
+  for the combat dependencies (the compiler is a unit profile in
   `config/SLUS-20836/units.tsv`, and this table holds provisional per-function
   overrides only).
 - [Compiler-emitted function ownership](emitted-functions.md): explicit checking
@@ -37,14 +37,13 @@ Index: [`../README.md`](../README.md).
 | [Shop-root metadata](shop-root-metadata.md) | Complete generic service-root factory/metadata block, exact published parent callback and concrete runtime update target |
 | [Window object cleanup](window-object-lifetime.md) | Complete exact192-byte base-controller cleanup, inherited member order and signed deletion flag |
 | [Window tree and shop-root runtime](window-tree-and-shop-root.md) | Full recursive child ownership/update and generic root widget/service selection, opening gate and close sequencing |
-| [Window presentation and close queues](window-presentation.md) | Full model/text lifetime, close polling and shared title update; exact default-origin and sequence forwards |
+| [Window presentation and close queues](window-presentation.md) | Full model/text lifetime, close polling and shared title update; default-origin and sequence forwards |
 | [XDATA controller](xdata-controller.md) | Full quote/confirmation/UPCNT debit flow, four-player record selection, script call-number publication and actual txt_shop pack ownership |
-| [Item/database lookup](item-database.md) | Ten exact bodies /1,168 bytes, explicit value/status ABI and474 original-instruction comparisons |
-| [Chip transaction controller](chip-controller.md) | Full inventory/preview/confirmation/record and XDATA flow at43aae0; original-instruction oracle, matching still open |
-| [ListCtrl and chip-list view](list-controller-chip-view.md) | Five complete paging/text helpers, all 2,196 bytes exact; 3,149 original-instruction cases and caller ABI boundaries |
+| [Item/database lookup](item-database.md) | Ten bodies /1,168 bytes, explicit value/status ABI and474 original-instruction comparisons |
+| [Chip transaction controller](chip-controller.md) | Full inventory/preview/confirmation/record and XDATA flow at43aae0; original-instruction oracle |
+| [ListCtrl and chip-list view](list-controller-chip-view.md) | Five complete paging/text helpers, 2,196 bytes; 3,149 original-instruction cases and caller ABI boundaries |
 | [Shop selector widgets](shop-selectors.md) | Full selector publication/focus/close loop, XDATA one/two/three/seven-choice initialization, stat costs and exact focus predicate |
-| [Selector/manager composition](selector-manager-composition.md) | 144 joint owner/handler/pad/close lifecycles and 3,146 original-instruction checkpoints; delivery/render/device boundaries |
-| [SELECTCTRL manager](selectctrl.md) | Exact pad-manager acquisition/registration plus full update/general receiver behavioral recovery and 4,089 manager cases plus real pad-record selection, 4,506 total comparisons. |
+| [SELECTCTRL manager](selectctrl.md) | Pad-manager acquisition/registration plus full update/general receiver behavioral recovery and 4,089 manager cases plus real pad-record selection, 4,506 total comparisons. |
 | [Context lifecycle and tracker delegation](context-lifecycle.md) | Original context construction/names, retained slots and special delegation/removal |
 | [Registry bootstrap and context lookup](registry-bootstrap.md) | Original list lifetime/publication, context dispatch and concrete selector/name lookup |
 | [Allocator registries](allocator-registry.md) | Original owner search, encoded indices, list lookup and complete allocation wrappers |
@@ -61,13 +60,13 @@ Index: [`../README.md`](../README.md).
 | [Object storage](object-storage.md) | Encoded allocator lookup, storage dispatch and registration composition |
 | [Reflection registration](reflection-registration.md) | Original registrar state machine, field builders/layout and Work schema through retail descriptor tables |
 | [String fields](string-fields.md) | Complete scalar string-value run, reset/write dispatch, token ownership, codec and owned-string lifetime validation |
-| [Object fields](object-fields.md) | Generic cleanup/persistence, concrete reference-field construction/ownership, exact typed source and real owned-graph validation |
+| [Object fields](object-fields.md) | Generic cleanup/persistence, concrete reference-field construction/ownership and real owned-graph validation |
 | [Object lists](object-lists.md) | Retained object-list operations, descriptor-based registry searches, corrected insertion-index contract and cold registry integration |
 | [Object creation](object-creation.md) | Reflection allocation, construction/lifetime field passes, static initialization and real messenger factory composition |
 | [Messenger memory](messenger-memory.md) | Complete initialization/reset group, temporary owners and reset forwarding; cold lifecycle/dispatch integration |
 | [Messenger lifecycle](messenger-lifecycle.md) | Complete argument clearing, delayed enqueue/expiry and context nesting; real dispatch integration and original callback timing |
 | [Messenger dispatch](messenger-dispatch.md) | Complete fourteen-body receiver selection/registration/dispatch and delayed-selection recovery, original special queries and verified ABI |
-| [Messenger results](messenger-results.md) | Complete 32-body typed result-channel recovery, float/aggregate ABI, reference ownership and matching source |
+| [Messenger results](messenger-results.md) | Complete 32-body typed result-channel recovery, float/aggregate ABI and reference ownership |
 | [Matrix primitives](matrix-primitives.md) | Copy/translation subgroup, alignment-dependent alias behavior, real matrix-copy integration and LQ oracle correction |
 | [List services](list-services.md) | Shared reserve/growth/mutation/search and retained string/object bridges, composed messenger verification and remaining service boundaries |
 | [String pool](string-pool.md) | Public pool/ordered-table lifecycle, token references, cold registry interning and remaining cleanup/synchronization boundaries |
@@ -76,7 +75,7 @@ Index: [`../README.md`](../README.md).
 | `property-system.md` | `GAMERAM` property/method system (player stats, keys) |
 | `afs-archives.md` | `NDMW.AFS` / `AREA.AFS` layout and Lua chunk storage |
 | `model-format.md` | **Model geometry** — why a model is not a GS mesh: the `igGeometryAttr1_5` chain (`_vertexArray`/`_indexArray`/`_primType`/`_primLengths`), the two shipped representations (triangle strip from a strip-length array, triangle list with none), the `{positions, normals}` pair `_vdata` points at, the UV stream that follows it, the DCC part names on the `M_*Shape` object, and the self-checks (`sum(lengths)==numVerts`). 669 models extracted from one loaded stage (130 with normals, all with UVs, 599 named); **the offline pack form is solved** — all 549 of entry 621's attributes resolve from the file alone, 450 are byte-identical to the live game's, and 444 carry the DCC shape name recovered from the pack (`model-pack-621-attributes.tsv`) |
-| `igvertexarray2helper.md` | **The `igVertexArray2Helper` binder** — the class that looks a vertex stream up by `(componentType, componentIndex)` and gets/sets its elements: the vtable (`0x5262a0`), the data classes (`igVertexArray2`/`igVertexData`/`igVertexStream` field offsets), the shared `FUN_0015f580` stream lookup called by 38 functions, the 28–39 / 40–54 accessor families, the 6 banked slots, and the two measured walls (the duplicated-null-load dynamic-cast idiom, and MWCC's load scheduler / saved-register allocation) |
+| `igvertexarray2helper.md` | **The `igVertexArray2Helper` binder** — the class that looks a vertex stream up by `(componentType, componentIndex)` and gets/sets its elements: the vtable (`0x5262a0`), the data classes (`igVertexArray2`/`igVertexData`/`igVertexStream` field offsets), the shared `FUN_0015f580` stream lookup called by 38 functions, the 28–39 / 40–54 accessor families, and the two measured walls (the duplicated-null-load dynamic-cast idiom, and MWCC's load scheduler / saved-register allocation) |
 | `sound-format.md` | **The `ps2_` sound banks** — a stage's SE/BGM is a CRI `DTPK`/`TBLD`/`VAGD` container inside its sound pack; the chunk layout, the per-sound entry table, and the VAG ADPCM variant (sample-exact vs ffmpeg) |
 | `reflection-metadata.md` | `ig*` reflection system and `be*` game-data types |
 | `rtti-and-vtables.md` | MWCC RTTI/vtable layout and class-name recovery — 1,333 functions reachable from 478 vtables, 1,286 of them uniquely named — and the reflection-record region |
@@ -86,7 +85,7 @@ Index: [`../README.md`](../README.md).
 | `lua-decompilation.md` | The fully decompiled game Lua (5,291 chunks) |
 | `lua-numeric-audit.md` | Corrected signed literals, regenerated corpus and progression-ID audit |
 | `toolchain.md` | The original CodeWarrior PS2 build toolchain — which build it is, and why `.comment` can't tell you |
-| `guard-family.md` | **The `sltu` guard family — cracked** (550 banked), the 76-byte variant still open, and the C-vs-C++ tail-call discovery that banked 1,012 one-call wrappers |
+| `guard-family.md` | **The `sltu` guard family**: the source forms of its 72- and 76-byte variants, and the C-vs-C++ tail-call difference behind the one-call wrappers |
 | `m2c-bulk.md` | **The bulk decompilation pipeline** — the vendored `m2c` over the functions templates cannot reach: the driver, the mechanical cleaner, the address-form problem, what it measured, the symbolizer's `%lo` bug, the measured negatives, and the pitfalls. |
 | `naming.md` | **Naming and the module loop** — the committed `config/SLUS-20836/names/` overlay, `tools/apply_names.py`, why names live in the repo rather than only in Ghidra, and what counts as a recovered name |
 | `progress-metrics.md` | **The two progress numbers** — what "code bytes matched" and "data bytes identified" each mean, the classification behind the data figure (strings, RTTI vtables, jump tables, class handles, the unclassified remainder), and how `PROGRESS.md` / `docs/progress.json` / the README block are generated |
@@ -107,7 +106,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 | [`engine-boot.md`](engine-boot.md) | **The boot chain** — the CRT entry (`0x100008`) → the game's `main` (`FUN_002595e0`) → the managers and the frame loop (`FUN_0025a580`/`FUN_0025a8c0`) |
 | [`front-end-boot.md`](front-end-boot.md) | **The front-end boot — power-on to the title menu** — the logos → opening FMV → title → menu sequence is a chain of `NDMW.AFS` stage entries (800…814) that drive the scene stages `stagIS08/09/10/12`, switched by the Lua `STAGECTL NEXTSTAGE` API; and the controllers (`beNDMWStageCtl`, `beNDMWLoadCtrl2`, `beNDMWTitle2`, `beNDMWLogo`) |
 | [`common-model-controller.md`](common-model-controller.md) | Common-model submission, reference lifetime and newest-first completion queues |
-| [`title-menu-controller.md`](title-menu-controller.md) | Complete byte-matched title runtime: nine functions, scoped references, three switch tables and exception metadata; remaining frontend modules |
+| [`title-menu-controller.md`](title-menu-controller.md) | Title runtime: nine functions, scoped references, three switch tables and exception metadata; remaining frontend modules |
 | [`load-intf2.md`](load-intf2.md) | **The Game Start slot/character/name/difficulty/card family (`beNDMWLoadIntf2`)** — runtime block, object model, named working set, and message protocol; the master update/message handler and the **slot-selection**, **text-order** and **completion/selection** helpers, with the other controllers still open |
 | [`action2-jointset.md`](action2-jointset.md) | **The `beAction2` JOINTSET contract** — reflected field layout, 60-fps frame-to-nanosecond conversion, loop/clamp behavior, and the recovered node-clock rebasing used by the title animations |
 | [`action2-timing.md`](action2-timing.md) | **When an ACTION completes** — the node clock (2^18 ns quantum, EE round-toward-zero float math), the named `WAIT` timer, WAITCHECK start/update, JOINTSET strictness, the component walker/driver and the `ISCOMEND` predicate, with the logo OPEN/CLOSE thresholds and the unverified clock boundary |
@@ -126,9 +125,9 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 
 - [Hard/Soft lighting](light-modes.md): LIGHTMODE handoff, authored versus overridden rigs, paired texture packs and unchanged Main Lobby shadows, verified against both retail modes.
 - [Register allocation](register-allocation.md): how the pinned MWCC colours registers (simplify/select, vreg ids from declaration order), the trace/replay tools, and the source forms that move a colour.
-- [beNDMWMdlPlayer::vfunc_44 recovery](near-miss-shapes-player-vfunc44.md): the idle player-number-badge handler, typed, one 5-word cluster from matching.
+- [beNDMWMdlPlayer::vfunc_44 recovery](near-miss-shapes-player-vfunc44.md): the idle player-number-badge handler, typed, and the 5-word cluster its C leaves different.
 - [sd-prologue](sd-prologue.md): the `sd` callee-saved prologue is Sony EE GCC output (the SDK and CRI blocks); census, evidence, and how the Sony compiler builds these units.
-- [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold — the measured MWCC wall behind the 983 accessors, what was tried, and the generators that bank the members that do match.
+- [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold — the measured MWCC wall behind the 983 accessors, what was tried, and the family's generators.
 - [assembly-sources](assembly-sources.md): hand-written `.S` routines the owner approved (`config/assembly-sources.tsv`), the evidence each needs, and the candidates still open.
 - [asm-body-matches](asm-body-matches.md): asm bodies are not kept in the repository (owner decision); what a function without C looks like, the generator for local study, assembler quirks.
 - [Oracle runner](oracle-runner.md): the byte oracle (`make check`, `make link`, typed/hygiene/progress gates) on every push via a private self-hosted runner; what it proves, what it cannot block, install and rotation.

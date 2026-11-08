@@ -2,10 +2,7 @@
 
 This page covers eleven complete bodies / 716 code bytes:
 the contiguous helper run `300d30..301008` and its encoded-selector dependency
-`2f0700`. Ten bodies / 640 bytes have exact
-matching source; allocation-base recovery adds 52 bytes. Encoded lookup (76 bytes)
-remains a compiler residual. Previously matched dispatch wrappers now explicitly
-forward their object receiver and preserve allocation results.
+`2f0700`. Dispatch wrappers forward their object receiver and preserve allocation results.
 
 ## Header and lookup
 

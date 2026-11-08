@@ -1,14 +1,14 @@
 # Packed pooled-string chunk allocator
 
 The twelve allocation/chunk bodies surrounding the separately recovered header
-release bridge account for 1,272 code bytes. Seven matching bodies (376 bytes) are in
-[matching C](../../src/engine/string-chunks.c) and
-[matching C++](../../src/engine/string-chunks.cpp), including adjacent-block merge
-and storage initialization. `StringChunk_AllocateToken` (`0x30c830`, 264 bytes) matches in
+release bridge account for 1,272 code bytes. Seven bodies (376 bytes) are in
+[string-chunks.c](../../src/engine/string-chunks.c) and
+[string-chunks.cpp](../../src/engine/string-chunks.cpp), including adjacent-block merge
+and storage initialization. `StringChunk_AllocateToken` (`0x30c830`, 264 bytes) is in
 [StringChunk_AllocateToken.c](../../src/unmatched/StringChunk_AllocateToken.c) and TakeBlock
 (`0x30ca40`, 236 bytes) in
-[StringChunk_TakeBlock.c](../../src/unmatched/StringChunk_TakeBlock.c). Three bodies (396 bytes) have no C
-source yet: the table and chunk allocation wrappers (`0x30c740`, `0x30cce0`)
+[StringChunk_TakeBlock.c](../../src/unmatched/StringChunk_TakeBlock.c). The other three bodies (396 bytes)
+are the table and chunk allocation wrappers (`0x30c740`, `0x30cce0`)
 and ReturnBlock (`0x30cb80`). Names come
 from [the semantic generator](../../scripts/seed_names_string_chunks.py), not
 assertions about original C++ method spelling.
@@ -61,17 +61,16 @@ underlying delete service; storage release forwards directly to `0x2ed460`.
 
 ## Current limits
 
-Merge is **68 matching code bytes**. Construction/destruction/deletion sources
-match with their incoming arguments
-explicit and a short deletion-flag cast. Matching, typed and byte-identical
-link gates remain required. Open: the three bodies without C source and allocator/delete/
+Merge is **68 code bytes**. Construction/destruction/deletion sources
+keep their incoming arguments
+explicit and use a short deletion-flag cast. Open: allocator/delete/
 synchronization contracts, then composing original producers and stage receivers
 through this storage. This subgroup does not complete the allocator platform layer
 or the full Lua-dependent engine recovery.
 
-## Storage initializer byte match
+## Storage initializer
 
-`StringChunk_InitializeStorage` matches all **116 retail bytes**. The matching
+`StringChunk_InitializeStorage` is **116 bytes**. Its
 C++ declaration supplies only the observed allocator vtable slot at +216 and
 the recovered 36-byte chunk fields. Its 52 reserved method declarations are
 slot padding, not original names or implementations; never instantiate this
@@ -79,16 +78,15 @@ view. Four-byte references remain integers.
 
 Keeping the footer-end pointer local preserves the observed single head load
 and sequential packed writes. Typed fields also prevent an extra saved-register
-address temporary. A class-size assertion protects the layout. Full matching/
-typed/link gates retain byte identity.
+address temporary. A class-size assertion protects the layout.
 
 The two virtual forwarding routines emit frames in C++
-source and have no C source yet.
+source.
 The permuter driver honors `--outdir` in normal/pilot modes and defaults projects
 to `build/permuter/`, keeping target objects/search
 artifacts private. Four path regressions and a real build-only override smoke
 check pass.
 
-The [cold registry/interner path](string-pool.md#cold-registry-interning-and-erase-byte-match)
+The [cold registry/interner path](string-pool.md#cold-registry-interning-and-erase)
 reaches this storage through name lookup, typed string channels and final-release
 coalescing/deletion in the messenger engine chain.

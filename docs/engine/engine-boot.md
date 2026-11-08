@@ -1,7 +1,6 @@
 # The engine boot chain — from the CRT entry to the frame loop
 
-`main`, the SDK init and both frame functions are matched C in `src/unmatched/`; for the rest, the
-addresses and the call graph are the deliverable.  Everything here is in the EE runtime / Alchemy-core region.
+`main`, the SDK init and both frame functions are C in `src/unmatched/`.  Everything here is in the EE runtime / Alchemy-core region.
 
 ## The CRT entry (`entry`, `0x00100008`)
 
@@ -71,7 +70,7 @@ and the MetaObject global the class's own `_GetMetaObject` accessor lazily fills
 | `0x1a7cc0` | `igAnimationCombinerBoneInfoPool_Create` | `0x1a7d90` | `0x562250` | `0x562528` |
 | `0x1a67c0` | `igAnimationStatePool_Create` | `0x1a6890` | `0x5620d8` | `0x562540` |
 
-All six are matched C (`config/SLUS-20836/names/Managers.tsv`, `src/engine/`).  At the semantic level each is
+All six are C (`config/SLUS-20836/names/Managers.tsv`, `src/engine/`).  At the semantic level each is
 `igMetaObject_CreateInstance`: allocate the class's reflected size (0x20),
 run `igObject_InitHeader`, stamp the vtable.
 
@@ -116,7 +115,7 @@ pipeline split rather than as a variant selector.
 `FUN_002595e0` calls one of them around `0x2598c0`/`0x2598d0`, chosen by byte `+0xd8` of the frame
 object; the update loop itself is inside the body.
 
-`src/unmatched/FUN_0025a580.cpp` matches.  Retail saves `s0`–`s2` in an 80-byte frame, keeps `arg0` in
+`FUN_0025a580` is `src/unmatched/FUN_0025a580.cpp`.  Retail saves `s0`–`s2` in an 80-byte frame, keeps `arg0` in
 `s1` and reloads `24(s1)` for the later virtual call.  This allocation is source-driven, not a compiler
 flag effect: in a minimal MWCC test a two-parameter function with a `short` second parameter gets
 `s1` = arg0, `s0` = arg1 only when the first call in the body takes no argument, and passing a pointer

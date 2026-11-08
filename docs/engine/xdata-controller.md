@@ -8,11 +8,11 @@ message-script dispatcher3f5920 brings that to
 
 The five bodies hold **1,503 instruction addresses**. Thirty-three zero
 words are padding; twelve nonzero words are statically unreachable literal-null
-construction branches. All five
-bodies match (`src/unmatched/Gap__Bec__beNDMWShopCtrl10__vfunc_21.cpp`,
+construction branches. The five
+bodies are in `src/unmatched/Gap__Bec__beNDMWShopCtrl10__vfunc_21.cpp`,
 `src/unmatched/FUN_00428610.cpp`, `src/unmatched/FUN_00428690.cpp`,
 `src/unmatched/FUN_00428710.cpp` and
-`src/unmatched/beNDMWWindow_RunMessageScript.cpp`). Widget/input, player recalculation, lookup, pool/list, formatting,
+`src/unmatched/beNDMWWindow_RunMessageScript.cpp`. Widget/input, player recalculation, lookup, pool/list, formatting,
 text/model receivers and Lua execution are separate services.
 
 ## Owner and primary state
@@ -173,9 +173,7 @@ bytes before their dependencies; BANK/CNOS/DISK/ShopDevice/JUNK, LABO/CARD, savi
 and the [full hub script/dispatch closure](../systems/hub-recovery.md) remain open.
 
 The complete inherited ListCtrl paging block and chip-specific page-count/text helpers are
-recovered: [five bodies /2,196 bytes](list-controller-chip-view.md),
-with all 2,196 bytes exact. The chip text
-helper's full1,072-byte return span is restored. The primary chip transaction
-update43aae0 /7,232 bytes matches; cost/stat/property
-services and actual upgrade outcomes remain open. This adds helper recovery,
-not acceptance of the chip service as a whole.
+recovered: [five bodies /2,196 bytes](list-controller-chip-view.md).
+The chip text helper's return span is 1,072 bytes, and the primary chip transaction
+update43aae0 is 7,232 bytes; cost/stat/property
+services and actual upgrade outcomes remain open.

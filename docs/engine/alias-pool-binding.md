@@ -1,12 +1,11 @@
 # Alias-pool retained binding and accounting controls
 
 The complete contiguous method block **2d0560..2d06b8** contains
-nine bodies / **304 bytes**, all represented by exact matching source: the setter
-at 2d0560 (**152 matched bytes**) and the eight following methods. Factory2cd170
-is exact as well. Together these
-are ten bodies /464 bytes. They close the binding/accounting block, not the alias allocator.
+nine bodies / **304 bytes**: the setter
+at 2d0560 (**152 bytes**) and the eight following methods. With factory2cd170
+these are ten bodies /464 bytes. They make up the binding/accounting block, not the alias allocator.
 
-The [matching setter](../../src/engine/alias-pool-controls.cpp) uses a narrow ABI
+The [setter](../../src/engine/alias-pool-controls.cpp) uses a narrow ABI
 view to preserve the original byte load/store and virtual slot376 dispatch. The
 view must not be instantiated. C mode selected v0 for the indirect call, whereas
 the original C++ virtual dispatch uses t9; explicit width and the virtual-call
@@ -20,11 +19,11 @@ igMetaObject_CreateInstance with the requested allocator. The bootstrap path
 requests184 bytes with allocation argument0, conditionally runs constructor1540
 with argument1, then invokes virtual slots44 and36 (argument0) in that order.
 The constructor's returned pointer is retained. Retail does not guard the later
-virtual dereference after a null allocation; the matching source adds no guard.
+virtual dereference after a null allocation; the source adds no guard.
 
 Active-byte values1 and255 both take the active path; only0 takes bootstrap.
 Metadata is re-read after registration, so a registration-time change is observed.
-The exact factory is in [igAliasMemoryPool_Create.cpp](../../src/engine/igAliasMemoryPool_Create.cpp).
+The factory is in [igAliasMemoryPool_Create.cpp](../../src/engine/igAliasMemoryPool_Create.cpp).
 
 ## Binding lifetime
 

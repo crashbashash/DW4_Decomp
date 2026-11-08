@@ -6,11 +6,11 @@ This page covers the complete seven-body presentation run
 four words are zero padding and two belong to a branch that can never be taken
 under the callee-save ABI.
 
-All eight bodies /2,628 bytes have exact source. ClearTextElement136 was already matched;
-its five receiver accesses use the recovered Window layout. The
-[model forwards](../../src/game/window-model-forwarding.cpp) add **116 matched
+The eight bodies are 2,628 bytes. ClearTextElement136's five receiver accesses
+use the recovered Window layout. The
+[model forwards](../../src/game/window-model-forwarding.cpp) are **116
 bytes**: default-origin64 and model-sequence52. The other five bodies /2,376 bytes
-match as `src/unmatched/beNDMWWindow_ClearQueuedText.cpp`,
+are `src/unmatched/beNDMWWindow_ClearQueuedText.cpp`,
 `src/unmatched/beNDMWWindow_PresentModel.cpp`,
 `src/unmatched/beNDMWWindow_PlayQueuedModelClose.cpp`,
 `src/unmatched/beNDMWWindow_PollCloseComplete.cpp` and
@@ -20,7 +20,7 @@ This does not establish shop transactions or UI operation.
 The run extends backward with the 144-byte
 [message-script dispatcher](xdata-controller.md#script-call-number-and-pack-ownership)
 at3f5920. The current presentation/title boundary is nine bodies /2,772 bytes;
-the added body matches as `src/unmatched/beNDMWWindow_RunMessageScript.cpp`.
+the added body is `src/unmatched/beNDMWWindow_RunMessageScript.cpp`.
 
 ## Text close requests
 

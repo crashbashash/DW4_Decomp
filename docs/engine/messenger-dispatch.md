@@ -2,10 +2,8 @@
 
 The contiguous fourteen-body block at `0x0038d470..0x0038e8f0` contains
 5,192 code bytes. Five forwarding bodies
-(244 bytes) retain exact matching source in
+(244 bytes) are in
 [beMessengerDispatch.cpp](../../src/game/beMessengerDispatch.cpp).
-These were existing matches; the consolidation corrects their signatures and
-removes surplus forwarded arguments without adding matching bytes.
 The semantic names describe verified operations,
 not original C++ method spellings.
 
@@ -111,7 +109,7 @@ The original code requires nonempty work/delay stacks and parallel registry list
 it has no bounds checks or fallback behaviour for them. Registry, list, intern,
 allocator/delete, argument clearing, object factories and virtual receiver handlers
 lie outside this block. Lower list/string services are described in
-[list services](list-services.md) and [result channels](messenger-results.md). The other nine bodies match in
+[list services](list-services.md) and [result channels](messenger-results.md). The other nine bodies are in
 `src/unmatched/` (`FUN_0038e530` as the destructor emitted by `beMessenger_DispatchSelected.cpp`).
 
 The reviewed Ghidra address sets contain holes: occupied byte counts truncated

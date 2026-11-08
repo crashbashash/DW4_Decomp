@@ -7,7 +7,7 @@ function from [preparation](subwindow-preparation.md) at3d8740.
 
 Together with the [lifecycle](subwindow-lifecycle.md) and preparation, this makes up
 the11-body SUBWND manager region /17,616 code
-bytes. All 11 bodies /17,616 bytes match (`src/game/beNDMWStatus.c`,
+bytes (`src/game/beNDMWStatus.c`,
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_29.cpp`,
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_31.cpp`,
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_32.cpp`,
@@ -127,12 +127,10 @@ make typed-check
 
 Live UI, transactions and persistence are not established by this body.
 
-The generated extent changes the previous dispatcher-grown9,824-byte split to
-its actual9,820-byte return span. The final padding word becomes ordinary data:
-**four fewer classified code bytes, zero matched-byte gain**, with retail image
-contents unchanged. Existing RTTI/slot names are retained.
+The generated extent gives the actual9,820-byte return span; the final padding word is ordinary data.
+Existing RTTI/slot names are retained.
 
-The 72-byte init at 3d5960 and the adjacent 92-byte scoped cleanup at 3d58f0 match
+The 72-byte init at 3d5960 and the adjacent 92-byte scoped cleanup at 3d58f0 are in
 (`src/unmatched/Gap__Bec__beNDMWStatus__vfunc_29.cpp` and
 `src/unmatched/Gap__Bec__beNDMWStatus__vfunc_32.cpp`). Continue
 the concrete [hub service-controller and result dependencies](../systems/hub-recovery.md),

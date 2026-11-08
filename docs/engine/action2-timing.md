@@ -5,9 +5,6 @@ finishes**: the WAIT/WAITCHECK component, the named timer it arms, the JOINTSET
 completion path, the node clock they share, the float-to-integer conversion under all
 of them, the component walker and per-frame driver, and the `ISCOMEND` predicate the
 sequence layer polls.
-Every body in the table below has C source in `src/`. All classify as `match` in
-`data/check-categories.tsv` except `0x00377990` (`vfunc_33`), which is `foreign-profile`:
-its code bytes reproduce only under a provisional compiler override.
 
 ## Recovered bodies
 

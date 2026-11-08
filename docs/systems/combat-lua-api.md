@@ -66,11 +66,10 @@ interior zeros, and every relocation must match; close sizes are insufficient.
 `make check` verifies each complete body, and `make link` verifies the rebuilt
 retail section.
 
-The callback's post-module string-pool accessor also now has 76 bytes of matching
+The callback's post-module string-pool accessor is 76 bytes of
 C at [`StringPool_GetInstance`](../../src/engine/StringPool_GetInstance.cpp).
 It lazily allocates 16 bytes and calls `StringPool_Construct`; failed
 allocation leaves the cache null so a later call retries. The semantic name is
 generated with the other combat dependency names. Neither that helper nor the
-completed Lua API closes the calculation dispatcher. Its three immediate helpers
-now also have matching source; the callback itself matches as
+Lua API closes the calculation dispatcher. The callback itself is
 `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.

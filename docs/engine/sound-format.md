@@ -158,7 +158,7 @@ and the embedded `STAGIS10.sfp` start cue.
 
 ## Pre-lobby selection mapping
 
-The complete `beSeCtl` runtime group (`0x0039c900..0x0039cb6c`) has matching source.
+The `beSeCtl` runtime group is `0x0039c900..0x0039cb6c`.
 Its action dispatcher at
 `0x0039c990` selects the **last** matching `beSeInfoData` model name, walks every
 matching `beSeData` action, then sends `MODELCTRL(model, slot)` / `SETSOUND` with

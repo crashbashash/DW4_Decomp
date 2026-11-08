@@ -405,14 +405,12 @@ default compiler needs the value-tested `bool ready = meta->_validity & 4` (plus
 `unsigned char` flag compared with zero and pad the branch target themselves, so the generator picks
 the shape from the unit compiler.
 
-Result (`tools/verify.py` per unit, unit profile first): `_Register` 483/483
-`match`; `_InitFields` 284/286 `match`;
-`_GetMetaObject` 21/21 and `_ResolveMetaObject` 9/9 `match`. The `_GetVTable` family is in
+`tools/verify.py` checks each unit, unit profile first. The `_GetVTable` family is in
 [getvtable-fold.md](getvtable-fold.md#one-translation-unit-one-profile).
 Where a row carries an override its unit profile makes unnecessary the verifier prints
 `override=unused`; those rows are stale and are pruned with `tools/gen_unit_profiles.py --from-check`.
 
-Not matched under the unit profile, with the reason:
+Two bodies need more than the unit profile:
 
 * `igTransformSequence_InitFields` (0x195620, unit default `-O3`, exceptions off): the
   `FUN_002d9500(field, -1.0)` call passes the double as a 128-bit value (`dsll32 v0; … pcpyld
@@ -423,8 +421,8 @@ Not matched under the unit profile, with the reason:
 * `igMovieInfo_InitFields` (0x336580, combat `-O3,p`): the code reproduces under the unit profile but
   needs **two symbols at 0x149980** — `FUN_00149980` and the data-named `DAT_00149980` — because
   retail loads the address twice; with one name the compiler keeps it in a saved register and the
-  frame grows. `config/SLUS-20836/symbols.txt` has one name, so the file verifies `name-defect` and keeps its
-  override until an alias is recorded.
+  frame grows. With one name in `config/SLUS-20836/symbols.txt` the file verifies `name-defect` and needs its
+  override.
 
 Reproducing:
 

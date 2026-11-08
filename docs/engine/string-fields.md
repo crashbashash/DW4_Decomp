@@ -6,14 +6,13 @@ and common reset/write dispatchers (`2fc500`, `2fc6f0`). Some shared methods ret
 canonical derived `igStringArrayMetaField::vfunc_*` names; this recovery establishes
 their scalar-value behavior, not complete string-array behavior.
 
-Thirteen bodies (908 bytes) have exact source in
-[string-field-values.c](../../src/engine/string-field-values.c) and
-[string-field-dispatch.cpp](../../src/engine/string-field-dispatch.cpp). Generic
-reset adds 124 bytes and three equality methods add 288, totaling **412 new matched
-code bytes**. The existing write dispatcher now explicitly receives/forwards all
-five physical arguments and retains its 72-byte match. Seven more bodies (964 bytes)
-match in one-function files under `src/unmatched/`, including raw encode (`30add0`,
-184 bytes). Raw decode (`30ab20`, 676 bytes) has no C source yet.
+Source is in
+[string-field-values.c](../../src/engine/string-field-values.c),
+[string-field-dispatch.cpp](../../src/engine/string-field-dispatch.cpp) and
+one-function files under `src/unmatched/`, including raw encode (`30add0`,
+184 bytes). Generic reset is 124 bytes, the three equality methods 288 and raw
+decode (`30ab20`) 676. The 72-byte write dispatcher explicitly receives/forwards all
+five physical arguments.
 
 ## Runtime field identity and value methods
 
@@ -71,9 +70,9 @@ helper and leaves a zero member; later generic clear need not release it again.
 Comparisons return zero for two nulls, negative/positive for null/non-null order,
 and the original string comparator result otherwise. Equality first accepts
 identical pointers (including null), rejects unequal null/non-null pairs, then
-compares bytes. Shared equality bodies now match with explicit Boolean
+compares bytes. Shared equality bodies need explicit Boolean
 normalization; the equivalent direct-zero-comparison draft emits different
-instructions and remains private. No instruction padding or byte patches are used.
+instructions. No instruction padding or byte patches are used.
 
 ## Raw encoding and common dispatch
 
@@ -121,5 +120,5 @@ registrar/descriptor construction remains open.
 Five reviewed lifecycle roots are backed by constructor/raw-vtable evidence and
 messenger Work/ArgData string descriptor types. Retail class-descriptor recovery
 is still required. Original string/memory descriptor setup,
-other memory fields, the raw-decode body without C source and concrete gameplay receivers remain
+other memory fields and concrete gameplay receivers remain
 part of the full Lua-dependent engine goal.

@@ -2,13 +2,10 @@
 
 The [factory/binding checkpoint](alias-pool-binding.md) extends
 through the complete contiguous method run **2d0560..2d163c**. Together with
-factory2cd170, this is **54 bodies /4,160 bytes**. All54 bodies /4,160 bytes have
-matching source in `src/engine/` and `src/unmatched/` (category `match` in
-`data/check-categories.tsv`). Seven exact virtual tails
+factory2cd170, this is **54 bodies /4,160 bytes**, in `src/engine/` and `src/unmatched/`.
+Seven exact virtual tails
 /160 bytes use per-unit exceptions-off settings; see
-[compiler evidence](compiler-object-verification.md). Teardown108 adds **108 matched bytes** here.
-The eight newly classified bodies add980 bytes to the code denominator, not
-matched progress. Parent allocators, metadata, synchronization and file services
+[compiler evidence](compiler-object-verification.md). Parent allocators, metadata, synchronization and file services
 remain explicit dependencies.
 
 This run excludes the earlier reflection/registration block at2cd210..2cd5b8
@@ -133,15 +130,8 @@ make link
 make typed-check
 ```
 
-All54 bodies /4,160 bytes match. The typed backend740 is
+The typed backend740 is
 `src/unmatched/igAliasMemoryPool_ManageAllocation.cpp`, lock484 is
 `src/unmatched/Gap__Core__igAliasMemoryPool__vfunc_34.cpp`, and the diagnostic bodies are
 `src/unmatched/igAliasMemoryPool_PrintStatistics.cpp` and
-`src/unmatched/igAliasMemoryPool_Dump.cpp`; the seven simple virtual tails are
-exact. No assembly
-patches or fixed instruction encodings are inserted into C to count a match.
-
-Active resume: close the parent allocator/ownership services
-needed by the [full hub recovery contract](../systems/hub-recovery.md). Keep hub
-SD receiver, service-menu, portal/progression and save closure visible alongside
-this shared engine work.
+`src/unmatched/igAliasMemoryPool_Dump.cpp`.

@@ -144,18 +144,12 @@ nine declared `unit-objects.json` rows agree with the recovered table
 ### Coverage
 
 The `excepts:` line of `make check` and the `exception metadata` line of
-`make link` carry the current numbers. First measurement: 4,516
-of the 4,614 mapped functions with a retail record are decompiled; 1,875
-reproduce their record (and table) byte for byte, 2,566 do not produce it
-(2,455 `.c` units plus 101 group units and ten `.cpp` units built with
-`-Cpp_exceptions off`), 75 produce a different shape or bytes (39 emit no
-table where retail has one; the rest emit a shorter table, i.e. the source
-lacks a cleanup scope retail had), and 1,684 `.cpp` units emit metadata for
-functions retail compiled without it. The relink places 1,866 compiled records
-(47 with tables, 22,768 bytes) at their retail slots; the nine group units'
-records are verified by `verify_emitted_unit` but linked from retail bytes,
-and the remaining 21,108 bytes of `.exceptix` plus 1,589 of `.exception` from
-`extra`/`differ` units are still orphans that `linkcheck` names. Every one of
+`make link` carry the current numbers. A `.c` unit, or a `.cpp` unit built with
+`-Cpp_exceptions off`, does not produce a retail record. A missing or shorter
+table means the source lacks a cleanup scope retail had. A `.cpp` unit can emit
+metadata for a function retail compiled without it. Group units' records are
+verified by `verify_emitted_unit` but linked from retail bytes, and what
+`extra`/`differ` units leave unplaced are orphans that `linkcheck` names. Every one of
 these failures is a property of the source (language, exception setting or a
 missing lifetime), not of the oracle. A probe of 40 code-only units bears this
 out: `exc=extra` units match fully with `-Cpp_exceptions off`, and 12 of 40
@@ -164,7 +158,7 @@ out: `exc=extra` units match fully with `-Cpp_exceptions off`, and 12 of 40
 ## Open questions
 
 - `FUN_00383ed0` and `FUN_00447d00` keep a retail exception record, but the compiler
-  emits none for them as C or C++, so both stay code-only. About seven spellings of
+  emits none for them as C or C++. About seven spellings of
   each failed, and neither table has a cleanup scope. Unproven: the original had a
   frame or call the optimiser removed after the record was scheduled, or an inlined
   helper left a cleanup scope.
@@ -173,4 +167,4 @@ out: `exc=extra` units match fully with `-Cpp_exceptions off`, and 12 of 40
   and seven member destructors. That makes the function a mangled constructor of a
   class with a base and seven destructible members. Reproducing the table needs the
   unit written as that constructor, and `tools/verify.py` cannot find the body by its
-  retail symbol name once the definition is mangled. The body itself matches as C++.
+  retail symbol name once the definition is mangled. The body alone reproduces as C++.

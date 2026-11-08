@@ -4,12 +4,10 @@ The complete contiguous six-body **3b8d90..3b8f4c** `beNDMWShopCtrl00` metadata 
 (404 code bytes) and its 12-byte published parent accessor at 3b65b0 are recovered:
 **104 instruction addresses** across the seven bodies /416 bytes.
 
-All seven bodies /416 bytes have exact source. The 76-byte lazy
-accessor uses the existing project padding convention. Four /212 bytes were already matched:
-the factory52 and registration wrapper32 were under anonymous `FUN_` names,
-alongside Register100 and GetMetaObject28. They are named and their return/callback
-ABIs corrected with no additional matching credit. The newly classified parent
-getter contributes **one function /12 matched bytes**. The vtable getter116 matches in [beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp).
+The 76-byte lazy
+accessor uses the existing project padding convention. The factory52, registration wrapper32,
+Register100 and GetMetaObject28 make up 212 bytes; the parent
+getter is 12. The vtable getter116 is in [beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp).
 This is metadata recovery, not working shop transactions.
 
 ## Factory and published metadata
@@ -101,22 +99,19 @@ make link
 make typed-check
 ```
 
-The lazy76-byte body now matches with one explicit retail padding NOP and a
+The lazy76-byte body needs one explicit retail padding NOP and a
 label preserving the null branch's direct entry at the registration call. The
-non-null/not-ready path executes the NOP. This follows the existing matching convention,
-without claiming the original C++ source spelling. The116-byte vtable getter matches in
-[beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp). No opaque assembly replacement body is used. The matched accessor retains its
+non-null/not-ready path executes the NOP. This follows the existing convention,
+without claiming the original C++ source spelling. The116-byte vtable getter is in
+[beNDMWShopCtrl00_GetVTable.cpp](../../src/unmatched/beNDMWShopCtrl00_GetVTable.cpp). It retains its
 original no-op within readable C++ under the established project convention.
 
-The116 metadata bytes and the six bodies of the
-[root runtime and common window tree](window-tree-and-shop-root.md)
-match. Continue with actual shop
-subcontrollers, price/item services and transaction results. The
+Actual shop subcontrollers, price/item services and transaction results lie beyond these metadata bytes and the
+[root runtime and common window tree](window-tree-and-shop-root.md). The
 [full hub goal](../systems/hub-recovery.md), dedicated LABO/CARD roots and separate
 Save Keeper stagIS12 route remain open.
 
-A separate 192 exact bytes cover that complete base-controller
+A separate 192-byte body is that base-controller
 cleanup dependency. Its seven member helper calls and signed deletion flag are
 readable source; it contains one explicit return-register copy and original NOP.
-The seven-body metadata accounting above is416/416 exact bytes: the new
-cleanup body is outside that block. Header and member-cell services remain open boundaries.
+It sits outside the seven-body metadata block. Header and member-cell services remain open boundaries.

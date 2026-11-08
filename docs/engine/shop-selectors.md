@@ -8,16 +8,16 @@ ShopSelect11 initializer43ecc0 /3,752 and its stat/cost display43fb70 /696.
 The full1,979-word spans hold **1,909 reachable instruction addresses**, six
 zero padding words and64 statically impossible
 literal-null construction words. The84-byte
-[FO2TOP predicate](../../src/game/beNDMWWindowSelect_CanRequestFO2TOP.cpp) is exact source;
-the three shop initializers and the stat/cost display /7,060 bytes match in one-function
-files under `src/unmatched/`, and the shared update4233f0 /772 bytes matches in
+[FO2TOP predicate](../../src/game/beNDMWWindowSelect_CanRequestFO2TOP.cpp) is in `src/game/`;
+the three shop initializers and the stat/cost display /7,060 bytes are one-function
+files under `src/unmatched/`, and the shared update4233f0 /772 bytes is
 [Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp](../../src/unmatched/Gap__Bec__beNDMWWindowSelect__vfunc_21.cpp). Receiver/input, pool/list,
 lookup/recalculation, formatting, text/model and Lua services remain boundaries.
 
 The76-byte lazy shop metadata
-accessor is exact source as well, using the repository's explicit-padding convention.
+accessor uses the repository's explicit-padding convention.
 Its null branch enters at the registration call while the non-null/not-ready path
-executes the original no-op. Together the two exact bodies are160 bytes.
+executes the original no-op.
 
 ## Selector fields and generation
 
@@ -159,12 +159,57 @@ at table53b290 registers literal50f7f0 through39cbc0. Raw132 selects update39cbf
 raw140 selects general handler39d720. Its inherited raw144 check378410 is the
 exact return-zero body, so the shared messenger uses the general raw140 path.
 Pad-manager acquisition39cb70 (not cleanup) and
-registration39cbc0 have exact source, 100 bytes. The
-metadata getter and inherited check are matched as well. The complete
+registration39cbc0 total 100 bytes. The complete
 [SELECTCTRL manager review](selectctrl.md) records the2,864-byte update
-and1,960-byte general handler; both match. The
-[owner/manager protocol](selector-manager-composition.md) describes the selector
+and1,960-byte general handler. [Owner and SELECTCTRL protocol](#owner-and-selectctrl-protocol) describes the selector
 running against the actual handler responses, pad lookup and close queues.
 
-The open build-profile checks on the shared update4233f0 and the chip controller update, and exact
-matching of the remaining stat/transaction services, continue under the [full hub goal](../systems/hub-recovery.md).
+## Owner and SELECTCTRL protocol
+
+The common shop selector owner runs on top of its concrete SELECTCTRL
+handler/update, pad-record lookup and close queues. The owner obtains its
+selected value and completion flag from the handler's append operations; it
+holds no result or completion flag of its own. The old selected field has no
+part in publication: the GENERATE handler establishes the requested start point.
+
+### Bodies
+
+| Original entry | Body | Span bytes |
+| --- | --- | ---: |
+| `0x004233f0` | Common WindowSelect owner update | 772 |
+| `0x00423700` | CanRequestFO2TOP | 84 |
+| `0x0039cbf0` | SELECTCTRL manager update | 2,864 |
+| `0x0039d720` | General SELECTCTRL handler | 1,960 |
+| `0x0039b810` | Pad manager record selection | 88 |
+| `0x003f5a40` | Queued text close | 580 |
+| `0x003f5f80` | Queued model close | 272 |
+| `0x003f6090` | Close completion polling | 696 |
+
+### Request and response protocol
+
+The owner addresses the SELECTCTRL target by name and player and passes its
+integer, vector, string and decision-byte arguments to the handler. GETSELECT
+and ISEND responses come from that handler's append operations. FO2TOP readiness
+likewise comes from its ISFO2TOP branch.
+
+The owner publishes the current selection to its mother's return word while the
+manager is active. It starts closing only after the manager has completed its
+own close phases, cleared active and released its work reference. The three
+owner close helpers then run over the window's close queues and child list.
+
+### Protocol behaviour
+
+The protocol applies to all four players and both orientations, with supplied
+decision flags, normal and fallback pad records, and 1/2/3/7 choices:
+
+- Generation publishes the start point, then pending opening waits, directional
+  movement and result publication run while the owner remains active.
+- Accepted selection is followed by pending confirmation/close waits.
+- Cancellation wins over simultaneous confirmation.
+- NOCANCEL and disabled-choice rejection go through the original 16-count wait,
+  after which a valid choice is accepted.
+- FO2TOP acceptance resets the selection to zero, busy rejection preserves the
+  parent's existing result, and selection then returns to ordinary operation.
+- Every returned index0..6 in a seven-choice cursor corresponds to the
+  `i_stcursor01` receiver name. One-choice and ordinary dialogs use `i_stmessky`
+  and `i_stmesscr`.

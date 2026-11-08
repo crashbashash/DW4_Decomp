@@ -203,17 +203,11 @@ and a dozen others (`-O3,p` default, combat `-O4`/`-O4,p`, 2.4, b52 for Lua's
 `luaV_execute`, `-bool off`). The per-function tables hold 673 flag rows and 605
 compiler rows (all provisional); 699 functions keep an override.
 
-`make check` on that tree: **15,342 match**, 2,356
-code-only (2,307 `exc=missing` C units in exceptions-on units; no `exc=extra`
-unit), 4 name-defect, 0 inventory-gap, **705
-foreign-profile** (345,216 bytes), 0 mismatch. The foreign-profile set is: the pins
+The `foreign-profile` set has three sources: the pins
 that disagree with their class run (combat `-O3`/`-O3,p` members in default or 3.0.3
-units and vice versa), 89 compiler-unit owners that match only with exceptions off while
+units and vice versa), compiler-unit owners that match only with exceptions off while
 their unit carries retail exception records, and C leaves inside Sony `sd`-prologue
-pieces that MWCC reproduces and the Sony compiler does not. The debt baseline's first
-values are `foreign_profile.functions = 705` and `foreign_profile.bytes = 345,216`;
-`orphan.bytes` is 23,524 (the 97 foreign-profile overrides
-that still emit metadata retail lacks).
+pieces that MWCC reproduces and the Sony compiler does not.
 
 ## What each library was built with
 
@@ -320,7 +314,7 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
 
 ## Open questions
 
-* **The remaining units.** 18 units sit off their library's profile (`profile_split.units`): MWCC
+* **The remaining units.** Some units sit off their library's profile (`profile_split.units`): MWCC
   units on 3.0, 3.0.3 or combat, b52 units at the wrong optimisation level, and Sony units still on
   2.96 because a member is spelled for it or for an MWCC stand-in. Each holds a member that still differs
   under its library's profile. The 42 KB script dispatcher `Gap__Bec__beNDMWGameRam__vfunc_34` is on

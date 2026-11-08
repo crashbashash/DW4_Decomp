@@ -2,8 +2,7 @@
 
 The contiguous helper group `0x003e3b80..0x003e46a4` belongs to the reflected
 `beNDMWLoadIntf2ComMdlCtrl` working object, also used by the title controller.
-Every body has matching source (category `match` in `data/check-categories.tsv`) except
-`0x003e3b80`, which has none. Its logic is under [Submission and completion](#submission-and-completion).
+The logic of `0x003e3b80` is under [Submission and completion](#submission-and-completion).
 
 | Entry | Bytes | Symbol and arguments |
 |---|---:|---|

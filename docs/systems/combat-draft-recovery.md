@@ -1,11 +1,11 @@
 # GAMERAM draft: reviewed ABI and memory repairs
 
 The full `beNDMWGameRam::vfunc_34` callback (41,864 code bytes, including the nested
-36,000-byte FIGHTCALC region) matches byte-for-byte; see
-[the matched dispatcher](combat-dispatcher.md). This page describes the reviewed repairs
+36,000-byte FIGHTCALC region) is described in
+[the dispatcher page](combat-dispatcher.md). This page describes the reviewed repairs
 applied to its m2c draft. The repairs make a provisional draft more faithful; they do not
 by themselves establish complete equivalence, and the draft variants measured below are
-diagnostics, not the matched source.
+diagnostics, not the dispatcher's source.
 
 ## Call interfaces and type propagation
 
@@ -160,7 +160,7 @@ The combined diagnostic is 41,752 bytes with a 1,216-byte frame, versus retail's
 41,864 and 1,200. It does not match. A generic inline clamp
 changes some joins but does not resolve the differences. Pointer-return,
 explicit index-sequencing and additional unused formal-argument projections do
-not restore the retail frame. None of these private variants are banked C.
+not restore the retail frame.
 
 ## Technique-action branch order
 
@@ -191,8 +191,7 @@ A nested inline-release projection emits a 128-byte destructor and a 68-byte
 release body at inline level 1, while a destructor that calls an external release
 emits 88 bytes. These are private source-model hypotheses: sizes do not
 prove helper identity or original inline settings. The oracle rejects the
-unowned emitted code. Neither this model nor a volatile-word diagnostic is
-banked as dispatcher source.
+unowned emitted code.
 
 A case-local scope experiment must exclude the parent command case.
 With that switch boundary, case-local declarations are permitted, but they do
@@ -289,8 +288,7 @@ other instructions/table targets differ, so this is not a match.
 
 The complete diagnostic has the same static direct-call target histogram as
 retail: 1,681 `jal` instructions with no per-target count differences. Static
-counts do not prove pathwise ordering or behavior. None of these candidates is
-banked source.
+counts do not prove pathwise ordering or behavior.
 
 ## Direct-call boundaries and RNG expressions
 
@@ -320,8 +318,8 @@ or ownership lifetimes.
 
 Applying the six indexed-list loops to this draft raises its frame to
 1,216 bytes and yields 41,896 bytes. The technique ladder alone retains the
-1,200-byte frame at 41,840 bytes, but fails full comparison. Neither
-experiment is banked; code size is not the acceptance criterion.
+1,200-byte frame at 41,840 bytes, but fails full comparison. Code size is not
+the acceptance criterion.
 A five-reference class projection whose destructor calls the recovered release
 helper also leaves the receiver in `s0`, raises the frame to 1,216 bytes, and
 emits 88 unowned destructor bytes. The strict verifier rejects that object;
@@ -362,8 +360,7 @@ index at `0x553b80`, pointing to table `0x544fd4` for `0x3fca10..0x406d98`.
 The cleanup records identify the five missing reference homes and five physical
 destructor targets, plus the copied argument at `+0x408` and nearby-list cleanup.
 The [reference-helper inventory](combat-reference-helpers.md#retail-unwind-identities)
-records their exact sites and associations. Six of those destructors have
-complete matching source (768 code bytes).
+records their exact sites and associations.
 
 The single-wrapper C++ probes are hypotheses. Their private
 symbol aliases do not establish original cleanup identities. Retail's table

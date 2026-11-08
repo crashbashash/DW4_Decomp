@@ -127,8 +127,3 @@ make typed-check
 
 Actual shop stock, prices, purchases, appraisal, bank/lab/X Data/card/save
 outcomes, UI behaviour and multiplayer menu ownership lie outside this lifecycle.
-
-Continue exact matching and the concrete
-service-controller/result dependencies for the [full hub goal](../systems/hub-recovery.md).
-The ten alias matching residuals remain open; private compiler/permuter searches
-did not produce a newly verified exact body.

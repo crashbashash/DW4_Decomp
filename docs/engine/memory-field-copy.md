@@ -3,12 +3,10 @@
 This page covers **14 complete bodies / 1,668 code bytes**: the contiguous
 four-body memory-field copy/print/visitor run (1,044 bytes), nine contiguous
 buffer services (368 bytes), and the generic object visitor (256 bytes).
-Twelve bodies / 1,612 bytes have exact source; eleven are `match` and the object visitor
-is `foreign-profile` in `data/check-categories.tsv`. The new shallow copy and object visitor
-add **408 matched bytes**. Deep copy436, print244 and field visitor212 match in
+Deep copy436, print244 and field visitor212 are in
 `src/unmatched/igMemoryRefMetaField_DeepCopy.cpp`, `src/unmatched/igMemoryRefMetaField_Print.cpp`
 and `src/unmatched/igMemoryRefMetaField_ReleaseElements.cpp`. The two
-allocator tail dispatches28 each (`2ed4c0`, `2ed5a0`) have no C source yet.
+allocator tail dispatches are 28 bytes each (`2ed4c0`, `2ed5a0`).
 Names in `config/SLUS-20836/names/MemoryBuffers.tsv` describe observed behavior; they do not
 assert original C++ spelling. Slot240 remains address-named because its meaning
 has not been established.
@@ -34,7 +32,7 @@ calls the byte-copy service. It returns the new allocation. It does not retain o
 share the original buffer and does not add an allocation-failure guard: a failed
 allocation still reaches the copy call with a zero destination, which is not a claim
 that such a failure is safe in the running game. The first size-query argument and
-unchecked free's owner-query argument are explicit in the existing matching sources.
+unchecked free's owner-query argument are explicit in the sources.
 
 ## Shallow and deep memory-field copy
 
@@ -45,7 +43,7 @@ change the offset before later reads and publication.
 
 Shallow copy (`2faf10`) then retains the copied element references through the
 original add-reference helper. It shares elements, but its raw buffer is distinct.
-Its complete 152-byte body is exact source in
+Its 152-byte body is in
 [memory-field-copy.cpp](../../src/engine/memory-field-copy.cpp).
 
 Deep copy (`2fad50`) queries the current element descriptor. Object-reference
@@ -79,9 +77,8 @@ slot88, captures its field-list/count and starts after the actual igObject base
 header-field count. Each row reloads the field-list data pointer. The callback
 receives object/field/context; exactly1 skips that field, while other results invoke
 field slot168 with field/object/callback/context. The field receiver is captured
-before the callback. Its 256 bytes are exact source in
-[object-visitor.cpp](../../src/engine/object-visitor.cpp); its category is `foreign-profile`
-(the code bytes are reproduced only under a provisional per-function override).
+before the callback. Its 256-byte body is in
+[object-visitor.cpp](../../src/engine/object-visitor.cpp).
 
 ## Remaining boundaries
 
@@ -97,6 +94,6 @@ reference rewriting visits both halves of same-basename C/C++ pairs.
 Existing string delete wrappers keep their exact alias targets.
 
 The [allocator registry](allocator-registry.md) covers
-owner traversal and encoding plus complete allocation wrappers. Compiler residuals,
-registry bootstrap, allocator virtual implementations/slot240, object cloning,
+owner traversal and encoding plus complete allocation wrappers. Registry bootstrap,
+allocator virtual implementations/slot240, object cloning,
 per-object print, scalar/type publication and broader gameplay remain open.

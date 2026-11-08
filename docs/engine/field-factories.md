@@ -3,12 +3,12 @@
 Eighteen complete bodies / 1,752 code bytes. They cover the three
 factory kinds referenced by Work's original field table, their constructor and
 initializer chains, object header construction, raw allocation and the two concrete
-post-construction default hooks. All eighteen bodies / 1,752 bytes match retail;
-header initialization at `2fef20` (76 bytes) is `src/unmatched/igObject_InitHeader.c`.
+post-construction default hooks. Header initialization at `2fef20` (76 bytes) is
+`src/unmatched/igObject_InitHeader.c`.
 
-Three new matches add **504 bytes**: `igMetaField_Init` (252),
+Among them are `igMetaField_Init` (252),
 `igObject_ConstructHeader` (140) and `igObject_AllocateRawStorage` (112).
-Nine prior constructor/initializer matches are folded into
+Nine constructor/initializer bodies are folded into
 [field-descriptor-constructors.c](../../src/engine/field-descriptor-constructors.c)
 with recovered receiver fields and explicit forwarded receivers. Three factories
 and two default hooks are folded into

@@ -2,10 +2,10 @@
 
 Four public pool bodies, the complete ten-body ordered-table run at
 `0x30c0c0..0x30c73c`, and the string-header release bridge at `0x30c940`
-form this family. These fifteen bodies account for 2,228 code bytes. Four matches
+form this family. These fifteen bodies account for 2,228 code bytes. Four bodies
 (pool/table destruction, table erase and header release, 384 bytes) are folded in
-[matching source](../../src/engine/string-pool.c). The other eleven (1,844 bytes)
-match in one-function files under `src/unmatched/`.
+[string-pool.c](../../src/engine/string-pool.c). The other eleven (1,844 bytes)
+are one-function files under `src/unmatched/`.
 
 The combat unwind table also identifies the complete 116-byte
 [deleting string-wrapper cleanup](../../src/engine/StringRef_Destruct_00130720.c):
@@ -58,19 +58,14 @@ length plus nine bytes, releases storage, then consults chunk byte +32 to decide
 whether to notify the table. RemoveHeader's retaining search occurs before
 erasure, so that count write is preserved even during final release.
 
-## Matching and remaining work
+## Source conventions
 
-The matching destruction/release sources declare their incoming
+The destruction/release sources declare their incoming
 arguments explicitly. Short casts preserve the deletion tests without signed
-shift expressions; original bytes match. Names come from [the generator](../../scripts/seed_names_string_pool.py)
+shift expressions. Names come from [the generator](../../scripts/seed_names_string_pool.py)
 and decoded roles, without asserting original C++ spelling.
 
-Open: chunk composition through all messenger routes, allocator/
-metadata and synchronization dependencies, then actual messenger receiver/result
-production. These subgroups do not complete the string allocator, list library
-or full Lua-dependent engine recovery.
-
-## Cold registry interning and erase byte match
+## Cold registry interning and erase
 
 The cold messenger chain runs through the pool, table, chunk and string-result
 bodies, using the factory/memory/registry/object/generic-list,

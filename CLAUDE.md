@@ -61,6 +61,9 @@ evidence-named source that rebuilds to a byte-identical retail ELF. Run every co
 - Keep documentation with its topic and index it from the owning folder's README. A document states the
   current state: no dated sections, update notes or accounts of how a result was reached (Git keeps the
   history); when something changes, rewrite the passage that describes it. Preserve unrelated changes.
+- A document never records which functions match or lack source, nor tallies of matched functions or
+  bytes: `data/check-categories.tsv` and `PROGRESS.md` own that, and a copy in prose goes stale. Describe
+  behaviour, layout and why a shape compiles as it does. Output generated from those tables is fine.
 
 ## Decompilation
 

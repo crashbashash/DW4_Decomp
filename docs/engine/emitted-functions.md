@@ -270,15 +270,14 @@ remains the integration oracle.
   under the default profile, against retail's 128; the `o = p` spelling does the reverse. About seven
   spellings per unit were tried.
 - **Limits of the unit-objects model.** Two class symbols cannot alias one retail destructor address:
-  `0x41acf0` needs direct-p and single-load shapes at different sites of one class. `0x41acf0`, `0x4207a0`,
-  `0x43dc10` and `0x3d50c0` stay `code-only` in `data/check-categories.tsv`. `0x390320` (53 code words off)
-  and `0x38b1f0` (13 words, the order and registers of loop-invariant values in the preheader) have no source.
+`0x41acf0` needs direct-p and single-load shapes at different sites of one class. The closest spelling of
+`0x38b1f0` differs in the order and registers of loop-invariant values in the preheader.
 - **Member-subobject tables at the frame size.** `0x350100`, `0x3b0a80`, `0x33c950`, `0x3c0120`, `0x3c0640`,
   `0x3bfd60` and `0x3c1480` are the only retail functions with tag `0x07`/`0x87` (`0x86` for the base) tables
   whose location field equals the frame size, and they never materialise an inlined `this`: every member
   address is a constant `addiu a0,sp,N`. The construct is a class with N non-trivial members whose constructor
-  is inlined. `0x3bfd60` and `0x3c1480` now match with their tables; the tables of the other five are not
-  reproduced. For those, no available compiler emits the construct: the combat family uses tag `0x27`/`0xa7`
+is inlined. A spelling reproduces the tables of `0x3bfd60` and `0x3c1480`. For the other five,
+no available compiler emits the construct: the combat family uses tag `0x27`/`0xa7`
   with a register in the location field and keeps `this` in a saved register (712 bytes against 784 for
   `0x350100`); the stack family uses tag `0x07`/`0x87` with frame-4 and stores and reloads `this`. About 25
   spellings and every pragma and flag variant failed. Unproven: retail's compiler build treats the tracked

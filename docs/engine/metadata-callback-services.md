@@ -21,7 +21,7 @@ the current matching object pointer, or zero. Count is re-read each iteration an
 the selected object pointer is re-read after comparison callbacks. It does not
 retain its result.
 
-The routine has an exact 160-byte match in
+The 160-byte routine is in
 [list-string-field-find.c](../../src/engine/list-string-field-find.c).
 
 `igMetaObject_FinalizeAndReplaceField` (`2fdea0`, 80) finalizes the incoming

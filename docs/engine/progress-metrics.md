@@ -52,7 +52,7 @@ data progress advances.
 
 ### The third number: typed coverage
 
-**24.25 % of field accesses use a recovered type** (550 of 2,268), measured by
+**Typed coverage is the share of field accesses that use a recovered type**, measured by
 `tools/typed_coverage.py` and carried into `PROGRESS.md` and `docs/progress.json` beside the other
 two. It counts accesses written as a member of a recovered class (`igMetaObject *g; g->_validity`)
 against accesses written as an offset cast (`*(int *)((char *)p + 36)`), and it is the *inward*
@@ -61,7 +61,7 @@ metric: matched bytes say how much of the binary is verified, this says how much
 is exactly what another compiler cannot use (see [`typed-coverage.md`](typed-coverage.md)).
 
 It was measured **neutral for matching**: it buys nothing in the matched-byte percentage. The number also has a *ceiling*
-worth watching — only 1.4 % of accesses are typeable from the receiver class alone, because most
+worth watching — only a small share of accesses is typeable from the receiver class alone, because most
 matched C is address-named, so **typed coverage advances with naming**: the two loops are the same
 work seen from two sides.
 
@@ -81,16 +81,16 @@ in `asm/`. `make link` proves the result — the whole section compares byte-ide
 prints the accounting from the link itself:
 
 ```
-linkgen: linked from C        7462 units     332564 bytes    9.8 % of the section
-linkgen: asm bodies              0 units          0 bytes    0.0 %  (not counted)
-linkgen: linked from asm     11199 units    3034924 bytes   89.8 %
-linkgen: compiler tables                      11044 bytes    0.3 %
+linkgen: linked from C        N units     B bytes    P % of the section
+linkgen: asm bodies           N units     B bytes    P %  (not counted)
+linkgen: linked from asm      N units     B bytes    P %
+linkgen: compiler tables                  B bytes    P %
 ```
 
 The headline is the same accounting against the **whole image**
-(code + data), because the data half is still linked from `asm/`: **7.2 %** — the matched code
+(code + data), because the data half is still linked from `asm/`: the matched code
 plus the jump tables the compiler regenerates. That is the number `PROGRESS.md` shows as the
-`fully linked` bar, with the code-only reading (9.9 %, equal to matched) explained next to it.
+`fully linked` bar, with the code-only reading (equal to matched) explained next to it.
 
 One consequence worth stating plainly: because nothing decompiled is ever *waiting* to be
 linked, "matched" and "fully linked" cannot drift apart later — the risk a TU-based project

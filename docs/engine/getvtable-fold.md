@@ -100,15 +100,15 @@ code depends on them being C, and the only other way to match one is
 whole-function inline assembly, which recovers no source and would only inflate the percentage. If a C or C++ spelling of the fold under
 the default compiler is ever found (the stack-offset fold is the open question) they can be matched mechanically; until then do not spend matching time on that spelling.
 
-The decision does not cover the accessors the pinned alternate compiler reproduces: the stack-object `*_GetVTable` accessors with a 48-byte frame (171 functions of the 60-byte family) match as C at `-O3,p` with a `struct Obj { int *vt; char pad[28]; }` template. Other `_GetVTable` sizes are worth re-testing with the same template.
+The decision does not cover the accessors the pinned alternate compiler reproduces: the stack-object `*_GetVTable` accessors with a 48-byte frame (the 60-byte family) compile to retail as C at `-O3,p` with a `struct Obj { int *vt; char pad[28]; }` template. Other `_GetVTable` sizes are worth re-testing with the same template.
 
 ## One translation unit, one profile
 
 Build settings resolve per translation unit ([build profiles](build-profiles.md)), and a
 `*_GetVTable` is done only when it prints `cat=match` under its **unit's** profile. Reproducing the
-code bytes is not enough for two kinds of accessor, 590 in all, and they have different causes.
+code bytes is not enough for two kinds of accessor, and they have different causes.
 
-### `exc=missing` (317 units): the right bytes in the wrong language
+### `exc=missing`: the right bytes in the wrong language
 
 MWCC keeps a 12-byte exception index record for every function with a frame or a call when
 exceptions are on, and only the C++ front end emits one. A matched C body therefore verifies
@@ -117,26 +117,24 @@ exceptions are on, and only the C++ front end emits one. A matched C body theref
 `tools/getvtable_stack_gen.py --retarget FILE...`) rewrites the unit as `.cpp` — typed `extern "C"`
 prototypes inferred from the call sites because C++ has no unprototyped calls, `(void *)` casts on
 stores into typed pointers replaced by the target's own type, the body unchanged — and verifies it
-under the unit profile. **307 of the 317 verify `cat=match`** as `.cpp`. `getvtable_stack_gen.py` runs the same step on every draft it writes, so a newly generated
+under the unit profile. `getvtable_stack_gen.py` runs the same step on every draft it writes, so a newly generated
 accessor lands in the language its unit needs.
 
-The ten that stay `code-only` (`libBecRuntimePlugin`, `libNdmwRuntimePlugin`, `beTransformSync`,
+Ten accessors are different (`libBecRuntimePlugin`, `libNdmwRuntimePlugin`, `beTransformSync`,
 `beModelCtrlNode2`, `beModelCtrlInfoWork`, `beCopyTransform`, `beCopyModelCtrl2`, `beCameraCtrl`,
-`beNDMWMdlPlayerInfoWork`, `beNDMWMdlItemInfoWork` `_GetVTable`) reproduce the code and the index
+`beNDMWMdlPlayerInfoWork`, `beNDMWMdlItemInfoWork` `_GetVTable`). A C body reproduces the code and the index
 record, but retail also keeps a **16–20-byte exception table** for them (`config/SLUS-20836/exceptions.txt`,
 `exc=differ orphan=20`): the stack object had a destructor the unwinder must run, i.e. the original
 was a real C++ class temporary (`Class tmp; return tmp.vtable slot`) whose destructor is the
 `(&o, 0)` call the C shape spells by hand. A C-shaped body cannot emit that table; reproducing it
-needs the class with its destructor declared, which is model recovery, not retargeting. They are
-left as they are.
+needs the class with its destructor declared, which is model recovery, not retargeting.
 
 ### `foreign-profile`: the stack-offset fold is the profile
 
 The default compiler (3.0-011126) never folds the frame temporary's offset into the final load, so
 no spelling reaches these functions under it. 3.0b52 does fold it, and an accessor in a `b52` unit
-matches once it is `.cpp` (`tools/getvtable_stack_gen.py --retarget`). The accessors still listed
-as `foreign-profile` sit in units that have not moved to `b52`, because another member of the unit
-does not match there yet ([build profiles](build-profiles.md#open-questions)).
+matches once it is `.cpp` (`tools/getvtable_stack_gen.py --retarget`). An accessor in a unit on another
+compiler reports `foreign-profile` ([build profiles](build-profiles.md#open-questions)).
 
 ### Reproducing
 

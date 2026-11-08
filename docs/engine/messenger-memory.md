@@ -4,8 +4,7 @@ The complete contiguous four-body group at `38bee0..38ca40` holds
 initialization, two
 temporary reference-owner destructors and reset, totaling 2,904 code bytes.
 With the 28-byte `beMessenger::vfunc_26` reset forwarder,
-that makes five bodies / 2,932 bytes. All five
-bodies match: the forwarder in [beMessenger.cpp](../../src/game/beMessenger.cpp), initialization in
+that makes five bodies / 2,932 bytes: the forwarder in [beMessenger.cpp](../../src/game/beMessenger.cpp), initialization in
 [beMessenger_InitializeMemory.cpp](../../src/unmatched/beMessenger_InitializeMemory.cpp), reset in
 [beMessenger_ResetMemory.cpp](../../src/unmatched/beMessenger_ResetMemory.cpp), and the two destructors as
 compiler-emitted members of the units in

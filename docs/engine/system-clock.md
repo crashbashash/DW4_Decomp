@@ -194,8 +194,6 @@ These contracts cover the complete thirteen-body timer group
 `0x002371f0`/`0x00237280`, the adjacent sample/render pair
 `0x00237730`/`0x002377c0`, and the scheduler/manager/gate bodies
 `0x00237ec0`/`0x00378bc0`/`0x003a0540` needed to establish update order.
-All of them have matching source except the scheduler `0x00237ec0`, which has no
-C source yet.
 
 ### Timer lifecycle
 

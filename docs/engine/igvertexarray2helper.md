@@ -5,10 +5,6 @@
 array and reads or writes its elements. It sits in the Alchemy graphics core
 (`0x0015ff10`–`0x00164870`, the `0x141000`–`0x1f0000` region of `module-map.md`).
 
-Status: the class's functions verify byte-identical under the unit's `combat` profile
-(see [Matching](#matching)), except slots 26, 46, 59, 60 and 61, which have no source yet.
-`igVertexArray2Helper_GetVTable` is `foreign-profile`.
-
 ## Identity and layout
 
 | | |
@@ -97,8 +93,8 @@ The four look-up tables of slots 28–39 are the same three bodies over four
 ## Matching
 
 The `0x0015ff10`-`0x00164870` unit uses the `combat` profile (`-O3`, alternate compiler,
-exceptions off), and the accessors verify byte-identical from `src/unmatched/` under it,
-`vfunc_30`, `vfunc_40` and `vfunc_42` included. The duplicated-null-load cast and the
+exceptions off), which the accessors need, `vfunc_30`, `vfunc_40` and `vfunc_42` included.
+The duplicated-null-load cast and the
 scheduler residuals below are default-compiler results, so neither stands as a wall.
 Spellings and flags that failed under the default compiler say nothing about the
 alternate compiler.

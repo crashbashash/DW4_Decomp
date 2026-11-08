@@ -3,19 +3,18 @@
 This page covers **13 complete bodies / 1,144 code bytes**: ten bootstrap,
 publication and descriptor-attachment bodies, plus the unsigned descriptor
 factory/constructor/initializer.
-All thirteen bodies / 1,144 bytes have exact matching source. Vtable lookup (48) is in
+Vtable lookup (48) is in
 [igObject_GetVTable.c](../../src/unmatched/igObject_GetVTable.c) and manual field initialization (540) in
 [igObject_InitFields.c](../../src/unmatched/igObject_InitFields.c).
 
-Five new matching functions add **104 bytes**: empty initializer callbacks 60,
-registration forwarding 12, and three newly classified leaf callbacks totaling 32.
-The reviewed callback leaves were previously unclaimed data words. Their exact
+Five small functions total **104 bytes**: empty initializer callbacks 60,
+registration forwarding 12, and three leaf callbacks totaling 32.
+Analysis alone leaves the callback leaves as unclaimed data words. Their exact
 instructions and registrar argument sites are checked before creating functions
 in the analysed Ghidra project through
 [the reproducible recovery script](../../scripts/recover_object_base_callbacks.py).
 Function/symbol snapshots are regenerated with the existing dump scripts, without
-analysis. Classified code increases by 32 bytes and the function denominator by 3;
-the retail image and linked-section size are unchanged.
+analysis.
 
 ## Registrar and callback interfaces
 
@@ -90,8 +89,8 @@ cold bootstrap switch as the other concrete descriptor factories. Its class
 handle is `585738`, size 52, constructor `30e8e0` (64), initializer `30e920` (52),
 and concrete vtable `533430`. Constructor and initializer delegate to the actual
 base metadata field routines and stamp that vtable. They introduce no extra
-value flags. All three existing exact bodies are named/folded with explicit
-interfaces; this extension does not itself add matched bytes.
+value flags. All three bodies are named/folded with explicit
+interfaces.
 
 ## Verification and remaining work
 

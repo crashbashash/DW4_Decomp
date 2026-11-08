@@ -1,10 +1,8 @@
-# FIGHTCALC direct callees: second matching pass
+# FIGHTCALC direct callees
 
-The [generated inventory](combat-inventory.md) lists 68 distinct bodies called directly from the FIGHTCALC region. 44 of them
-had matching source; two passes matched **22 more** (all of the size-1,228-and-up messenger bodies and the 6,872-byte stat
-recomputation included), plus six compiler-emitted destructors, so **66 of 68 bodies (17,932 of 18,444 bytes)** now rebuild
-byte-for-byte. `make check` reports zero mismatches and `make link` stays byte-identical; the live function figures are in [`PROGRESS.md`](../../PROGRESS.md).
-The 26-body BLT/BLP helper run was already complete ([Combat Lua API](combat-lua-api.md)).
+The [generated inventory](combat-inventory.md) lists 68 distinct bodies called directly from the FIGHTCALC region. The table covers
+the size-1,228-and-up messenger bodies and the 6,872-byte stat recomputation, with the compiler-emitted destructors they own.
+The 26-body BLT/BLP helper run is in [Combat Lua API](combat-lua-api.md).
 
 Almost all of these need the content-pinned alternate compiler (`-O3,p`, see [unit compilers](../engine/unit-compilers.md)); the
 stock compiler differs only in delay-slot fill and one alignment `nop`. Where a form looks odd (`volatile` reads, comma-ordered
@@ -30,7 +28,7 @@ original source.
 | `0x00447b00` | 56 | list slot nonzero test | `src/unmatched/FUN_00447b00.cpp` |
 | `0x00447b40` | 88 | list slot store from `DAT_004cfe80` | `src/unmatched/FUN_00447b40.cpp` |
 
-## Round two: what closed the three near-misses
+## What the three hardest shapes needed
 
 - **`DispatchSelected`**: each of the four list appends needs fresh locals, as separately inlined AppendBool/AppendInt bodies
   would create; the first loop reads the element once into `have` and once inline; the lists are typed (`int *data`,
@@ -40,15 +38,15 @@ original source.
   classes (`RowRef`, `SavedRef`), emitted as two copies of the same destructor body.
 - **`FUN_003fab90`**: the register rotation was graph-colouring order, not declaration order. An offline replica of the compiler's
   optimistic colouring showed that `player` needs the late virtual-register index that small inline accessors
-  (`GetPlayer`, `GetProp`) give it. The body is 6,872 bytes, not 6,860: the return sequence lies past the old symbol extent, now fixed by a reviewed
+  (`GetPlayer`, `GetProp`) give it. The body is 6,872 bytes: the return sequence lies past the raw symbol extent and needs a reviewed
   row in `data/function-extents.json`. A retail destructor address can belong to one ownership group only, so the nearby-query
   source (`beNDMWGameRam_CollectNearbyNonzeroHp.inc`) is included by this unit and both bodies are verified together.
   Helpers are struct static members because `tools/units.py` blanks free top-level helpers.
 
-## Remaining (2 of 68): not reproducible from plain source
+## Not reproducible from plain source
 
-`strcmp` was written in assembly and is built from its `.S` source. `Matrix44_Copy` was attempted a third time with the
-register-colouring lessons above and cannot be matched without inline assembly, which is not recovered source.
+`strcmp` was written in assembly and is built from its `.S` source. `Matrix44_Copy` does not yield to the
+register-colouring lessons above and needs inline assembly to reproduce, which is not recovered source.
 
 - **`strcmp` (324 bytes).** newlib's R5900 `strcmp.S`, built from `src/newlib/strcmp.S` as owner-approved
   hand-written assembly ([assembly sources](../engine/assembly-sources.md)).
@@ -58,7 +56,7 @@ register-colouring lessons above and cannot be matched without inline assembly, 
   into `v1`. The compiler colours in virtual-register order and tries `v1` and `a1` first; retail's `a2, a3, t0, t1` only appears if the
   quads stay live across the alignment test, and then the loads hoist above the branch. The neighbouring `FUN_001904f0` and
   `FUN_001906d0` are plainly hand-written (VU0 macro mode, `mtsab`/`qfsrv`), and the register choice looks human-picked too.
-  A candidate with an `asm` block matches but is not banked.
+  Only a candidate with an `asm` block reproduces it.
 
-The dispatcher itself (`0x3fca10`, 41,864 bytes), which contains the 22 FIGHTCALC commands, matches as
+The dispatcher itself (`0x3fca10`, 41,864 bytes), which contains the 22 FIGHTCALC commands, is
 `src/unmatched/Gap__Bec__beNDMWGameRam__vfunc_34.cpp`.

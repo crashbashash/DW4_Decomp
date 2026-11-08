@@ -5,7 +5,7 @@ These are measured properties of MWCCPS2
 
 ## Exact alias-pool tail calls
 
-Seven virtual wrappers have exact source in
+Seven virtual wrappers are in
 [`alias-pool-tail.cpp`](../../src/engine/alias-pool-tail.cpp):
 
 | Entry | Bytes | Operation |
@@ -18,7 +18,7 @@ Seven virtual wrappers have exact source in
 | 2d0d80 |24| Free sentinel/default-alignment forwarding through412 |
 | 2d0e30 |20| Backing-pool allocation-size forwarding through336 |
 
-All seven /160 bytes match at `-O3 -Cpp_exceptions off -Iinclude`. With the
+All seven /160 bytes need `-O3 -Cpp_exceptions off -Iinclude`. With the
 same source and the compiler's default exceptions-on setting, the functions
 retain a stack frame and `jalr`, while retail uses `jr t9`. The exception mode
 is part of the unit's profile, which both check and link consume

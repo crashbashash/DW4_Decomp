@@ -6,12 +6,10 @@ ShopCtrl00 update4267b0..426f94 and its two adjacent128-byte scoped-reference
 cleanups426fa0/427020. They hold **741 executable
 instruction addresses**; four further zero words are padding.
 
-The final16 bytes of the shop-root update were absent from the previous split.
-Ghidra counts2,004 occupied bytes but spans **2,020 bytes**, with four internal
-NOP holes. The old occupied-byte size ended after restoring ra at426f80, losing
+Ghidra counts2,004 occupied bytes for the shop-root update, which spans **2,020 bytes**, with four internal
+NOP holes. The occupied-byte size would end after restoring ra at426f80, losing
 saved-s1/s0 restores, return and stack-release delay slot. Generated ranges and
-split/layout now include the full sequence. This adds16 classified code bytes
-and removes16 data bytes. All six bodies match in `src/unmatched/`
+split/layout include the full sequence. The six bodies are in `src/unmatched/`
 (`beNDMWWindow_RequestChildrenClose.c`, `beNDMWWindow_BindContext.cpp`,
 `beNDMWWindow_UpdateTree.cpp`, `Gap__Bec__beNDMWShopCtrl00__vfunc_21.cpp`,
 `FUN_00426fa0.cpp` and `FUN_00427020.cpp`).

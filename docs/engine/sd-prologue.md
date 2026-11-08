@@ -3,10 +3,9 @@
 Two independent investigations reached the same conclusion: the functions that
 save callee-saved registers with `sd` at 8-byte spacing are **Sony EE GCC output**, the SDK libraries and the CRI middleware linked into the
 game, not Metrowerks code. A Sony EE GCC 2.96 build is kept
-under `local/ee-gcc2.96/` and reproduces this prologue, so these functions *are* matchable as C — about a hundred of the Sony-built units
+under `local/ee-gcc2.96/` and reproduces this prologue, so these functions *are* matchable as C — the Sony-built units
 rebuild with it through `tools/cc.py` / `tools/eegcc_compile.py`, pinned per unit in `config/SLUS-20836/unit-compilers.tsv` (see
-[the Sony compiler](#the-sony-compiler)). Until a unit is converted, its function is
-without source: it links from the retail image and reads from the generated `asm/`.
+[the Sony compiler](#the-sony-libraries-compiler)).
 
 * **Population:** 1,698-1,701 non-leaf functions (about 417 KB) in six contiguous blocks that hold 3,304 functions / 530 KB in total:
   `0x1029f8..0x130000` (Sony libgraph to libmc, newlib), `0x2252d8..0x225770` (libmtap), `0x22e4b8..0x230f50`
@@ -17,8 +16,7 @@ without source: it links from the retail image and reads from the generated `asm
   (MWCC aligns to 16); `movn/movz` use 228 against 8 in the MWCC reference set.
 * **MWCC cannot emit it:** four compiler builds at `-O0..-O4,p`, the hidden `--gcc-compat` options (`-mgp64`, `-mabi=64`, `-mcpu=r5900`, `-mips3`) all
   save with `sq`; there is no register-save, ABI or processor switch in `-help all`.
-* **Share of the code:** the blocks are about 530 KB, roughly 11 points of the 4.5 MB code. 313 small leaf functions inside these blocks
-  match from C. The census script is `scripts/analysis/sd_population.py`.
+* **Share of the code:** the blocks are about 530 KB, roughly 11 points of the 4.5 MB code. The census script is `scripts/analysis/sd_population.py`.
 
 ## The Sony libraries' compiler
 
@@ -115,7 +113,7 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   `fp_bit.h`, `libgcc_longlong.h`).
   Open question: the name `__thenan_df` at `0x4e83a8` follows upstream gcc 2.96's shared constant; the 2.9-ee
   archive has a per-object `thenan` instead, and no 2.96 `libgcc.a` is available to confirm it.
-  `__muldi3` at `0x22e440` has no source yet and sits just below the region's start in `regions.tsv`.
+  `__muldi3` at `0x22e440` sits just below the region's start in `regions.tsv`.
 * **`mprec.c` and `signal.c` are whole-file units** (`src/newlib/`; `0x1273e0..0x1283f8`, 17
   functions, and `0x129940..0x129c28`, 8 functions). A call compiles differently when its callee is
   defined earlier in the same file: `multadd` and `pow5mult` reproduce only after `Balloc` and `i2b`,
@@ -192,8 +190,8 @@ disabling ASLR change nothing.
 * **The other Sony libraries' assembler.** Every matched function of libgraph, libdma, libipu, libcdvd,
   libpad, libsdr, libmc and libmtap matches with either assembler, so which one built them is open.
   `FUN_00114d88` also matches under `2.9-ee-990721`.
-* **`sceSdRemote`** (904 bytes, libsdr; named by the SDK 3.0.3 library) has no source. It is an RPC
+* **`sceSdRemote`** (904 bytes, libsdr; named by the SDK 3.0.3 library) is an RPC
   wrapper `int sceSdRemote(int a0,...)`: it copies six variadic words into a global array, then dispatches on the first
   (`0x8130`, `0x8140`, `0x8160`, `0x8170`, `0x81a0`, `0x81b0`, `0x81d0`, `0x9000..0x90f0`) to
   `FUN_0010e2a8` with a different argument shape per command. It also saves and sets `gp`, which C
-  cannot spell, so it waits with the other inline-`asm` functions.
+  cannot spell.

@@ -3,9 +3,8 @@
 This page covers ten complete bodies / 1,216 code bytes: the contiguous
 metadata constructor/initializer/copy/release run, metadata factory, name setter,
 index assignment, registry append, pointer search and base header copy dependency.
-Eight bodies / 988 bytes have exact source. Initialization (284) and naming (148)
-add **432 matched bytes**; base header copy (160) and pointer search (68) retain
-assembly. Existing matching interfaces now explicitly forward their receivers,
+Sizes include initialization (284), naming (148), base header copy (160) and
+pointer search (68). The interfaces explicitly forward their receivers,
 copy source and appended metadata pointer.
 
 ## Construction and field storage
