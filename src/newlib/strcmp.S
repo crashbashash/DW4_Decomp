@@ -1,8 +1,8 @@
 	.set	noreorder
 
-	.globl	igStrCmp
-	.ent	igStrCmp
-igStrCmp:
+	.globl	strcmp
+	.ent	strcmp
+strcmp:
 	or	$8,$4,$5
 	andi	$2,$8,0x7
 	bnezl	$2,$L19
@@ -93,6 +93,6 @@ $L22:
 	lbu	$2,0($5)
 	jr	$31
 	subu	$2,$3,$2
-	.end	igStrCmp
+	.end	strcmp
 
 	.set	reorder

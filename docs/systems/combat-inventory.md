@@ -74,11 +74,11 @@ their own recovery. Source presence does not substitute for `make check`.
 
 ## Direct callees from the FIGHTCALC region
 
-66/68 bodies have matching source definitions (17,932/18,444 bytes).
+67/68 bodies have matching source definitions (18,256/18,444 bytes).
 
 | Address | Function | Bytes | Matching source |
 | --- | --- | ---: | --- |
-| `0x0012a4a4` | `igStrCmp` | 324 | assembly only |
+| `0x0012a4a4` | `strcmp` | 324 | [src/newlib/strcmp.S](../../src/newlib/strcmp.S) |
 | `0x00190380` | `igMatrix44f_SetIdentity` | 72 | [src/engine/igMatrix44f_SetIdentity.c](../../src/engine/igMatrix44f_SetIdentity.c) |
 | `0x001908f0` | `Matrix44_Copy` | 188 | assembly only |
 | `0x00190a30` | `Matrix44_GetTranslation` | 28 | [src/engine/matrix-primitives.c](../../src/engine/matrix-primitives.c) |

@@ -16,7 +16,7 @@ int beMessenger_SendNamed(...);
 int beNDMWWindow_PresentModelAtOrigin(...);
 int beNDMWWindow_SendModelSequence(...);
 int igProperty_GetRecordArray(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int DAT_004cf9f0[4];
 extern int DAT_004cf9f8[4];
 extern int DAT_0051b1c8[4];
@@ -179,7 +179,7 @@ void FUN_0042e330(beNDMWShopCtrlA1 *arg0) {
                 }
             } else {
                 if (s5 != -1) {
-                    if (igStrCmp(sp98.p, &DAT_0051b938[0]) == 0) {
+                    if (strcmp(sp98.p, &DAT_0051b938[0]) == 0) {
                         goto next;
                     }
                     beNDMWWindow_SendModelSequence(arg0, sp98.p, s5, &DAT_0051b620[0]);

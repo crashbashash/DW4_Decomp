@@ -3,7 +3,7 @@ struct Ref;
 extern "C" {
 
 void igObject_Destroy(void *);
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 int FUN_0015db90(void *);
 Ref FUN_00382eb0(void *, const char *);
 int FUN_00383350(void *, int, void *);
@@ -49,7 +49,7 @@ extern "C" void FUN_00383420(beFont *self, Layout *layout, Source *src, int idx)
     igMetaObject *info;
     if (cur.p != 0) ++cur.p->_refCount;
     info = src->getInfo();
-    if (igStrCmp((const char *)info->_name, DAT_0050e798) == 0) {
+    if (strcmp((const char *)info->_name, DAT_0050e798) == 0) {
         const char *s0 = (const char *)((igStringObj *)src)->_buffer;
         const char *s;
         if (s0 == 0) s = DAT_004c22f0[0]; else s = s0;
@@ -59,7 +59,7 @@ extern "C" void FUN_00383420(beFont *self, Layout *layout, Source *src, int idx)
         beUnicodeObj *o = cur.p;
         if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); }
         cur.p = n;
-    } else if (igStrCmp((const char *)info->_name, DAT_0050e7a8) == 0) {
+    } else if (strcmp((const char *)info->_name, DAT_0050e7a8) == 0) {
         if (src != 0) ++((beUnicodeObj *)src)->_refCount;
         beUnicodeObj *o = cur.p;
         if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); }

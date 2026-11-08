@@ -3,7 +3,7 @@
 extern "C" {
 void igObject_Destroy(void *);
 struct Tab { int name; int f4; int *f8; };
-int igStrCmp(int, int);
+int strcmp(int, int);
 beUnicodeObj *FUN_003614f0(int);
 int beUnicodeObj_AllocateBuffer(beUnicodeObj *, int);
 int beNDMWLoadIntf2ComMdlCtrl__Play(int, int, int, int *, int);
@@ -57,7 +57,7 @@ extern "C" int FUN_003dd6d0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                     int k = 0;
                     int m;
                     for (m = 0; m < 16; m++) {
-                        if (igStrCmp(DAT_004cec70[m].name, e->_dmkind) == 0) { k = m; break; }
+                        if (strcmp(DAT_004cec70[m].name, e->_dmkind) == 0) { k = m; break; }
                     }
                     beNDMWLoadIntf2ComMdlCtrl__Play(s4, s3, DAT_004cc830[j], DAT_004cec70[k].f8, 0);
                     int a = igObject_GetAllocator(arg0);

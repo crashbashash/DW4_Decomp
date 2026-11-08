@@ -1,6 +1,6 @@
 int StringChunk_ReleaseHeader();
 int StringList_CopyRetained();
-int igStrCmp();
+int strcmp();
 
 int FUN_00234470(int arg0, int *arg1, int arg2) {
     void *sp3C;
@@ -10,7 +10,7 @@ int FUN_00234470(int arg0, int *arg1, int arg2) {
 
     if (arg2 != 0) {
         StringList_CopyRetained(&sp3C, arg0, *arg1);
-        temp_s1 = igStrCmp(sp3C, arg2) == 0;
+        temp_s1 = strcmp(sp3C, arg2) == 0;
         if (sp3C != 0) {
             temp_a1 = (int *)((char *)sp3C - 8);
             temp_v0 = *(int *)((char *)(sp3C) - 4) - 1;

@@ -63,7 +63,7 @@ unsigned int beMessenger_ResolveEnumValue(...);
 int beMessenger_SendGroup(...);
 int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
-int igStrCmp(...);
+int strcmp(...);
 extern char DAT_004e0858[];
 extern char *DAT_004c22f0[];
 extern int DAT_0050f9a0[4];
@@ -181,7 +181,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         case 1:
             if (self->_currentBGM != 0) {
                 nm = e->_name ? (char *)e->_name : DAT_004e0858;
-                if (igStrCmp(nm, self->_currentBGM) == 0) return 1;
+                if (strcmp(nm, self->_currentBGM) == 0) return 1;
             }
             if (FUN_0037c2c0(self->_cri, info->_fnameList, e) == 0) {
                 beMessenger_PrepareDelayedGroup(self->_messenger, &DAT_0050f9a0[0]);
@@ -243,10 +243,10 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
     case 5:
         s1 = beMessenger_GetString(self->_messenger, 0);
         if (beMessenger_GetLongCount(self->_messenger) > 0) {
-            if (igStrCmp(s1, &DAT_0050f9e8[0]) == 0) {
+            if (strcmp(s1, &DAT_0050f9e8[0]) == 0) {
                 cri = self->_cri;
                 FUN_0037d160(cri, beMessenger_GetLong(self->_messenger, 0), 0.0f, 1.0f, 10.0f);
-            } else if (igStrCmp(s1, &DAT_0050f9f0[0]) == 0) {
+            } else if (strcmp(s1, &DAT_0050f9f0[0]) == 0) {
                 cri = self->_cri;
                 FUN_0037d160(cri, beMessenger_GetLong(self->_messenger, 0), 1.0f, 0.0f, 10.0f);
             }
@@ -254,12 +254,12 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         }
         if (beMessenger_GetStringCount(self->_messenger) <= 1) break;
         s2 = beMessenger_GetString(self->_messenger, 1);
-        if (igStrCmp(s1, &DAT_0050f9e8[0]) == 0) {
+        if (strcmp(s1, &DAT_0050f9e8[0]) == 0) {
             FUN_0037cf30(self->_cri, s2, 0.0f, 1.0f, 10.0f);
-        } else if (igStrCmp(s1, &DAT_0050f9f0[0]) == 0) {
+        } else if (strcmp(s1, &DAT_0050f9f0[0]) == 0) {
             FUN_0037cf30(self->_cri, s2, 1.0f, 0.0f, 10.0f);
         }
-        if (self->_currentBGM != 0 && igStrCmp(s2, self->_currentBGM) == 0) {
+        if (self->_currentBGM != 0 && strcmp(s2, self->_currentBGM) == 0) {
             s1 = U::Intern(0);
             old = (char *)self->_currentBGM;
             SREL(old)
@@ -350,7 +350,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
                 dt = (char *)info->_dataType;
                 bn = (char *)((igStringObj *)scratch.p)->_buffer;
                 if (bn == 0) bn2 = DAT_004c22f0[0]; else bn2 = bn;
-                if (igStrCmp(dt, bn2) == 0) {
+                if (strcmp(dt, bn2) == 0) {
                     nm = ((igNamedObject **)fl20->_data)[ia]->_name ? (char *)((igNamedObject **)fl20->_data)[ia]->_name : DAT_004e0858;
                     FUN_0030b3c0(scratch.p, nm);
                     FUN_0030ba20(scratch.p);
@@ -365,7 +365,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
                     if (0 < ((igStringRefList *)names.p)->_count) {
                         do {
                             int eq;
-                            eq = igStrCmp(held.p, StringList_CopyRetained(names.p, ja).p) == 0;
+                            eq = strcmp(held.p, StringList_CopyRetained(names.p, ja).p) == 0;
                             if (eq) { fa1 = 1; break; }
                             ja += 1;
                         } while (ja < ((igStringRefList *)names.p)->_count);
@@ -391,7 +391,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
                             do {
                                 ne = ((igNamedObject **)sub->_data)[nb];
                                 nm = ne->_name ? (char *)ne->_name : DAT_004e0858;
-                                if (igStrCmp(nm, nmb) == 0) {
+                                if (strcmp(nm, nmb) == 0) {
                                     ObjectList_AppendRetained(((beCri *)self->_cri)->_lsBinObjs, ne);
                                     fb1 = 1;
                                     break;

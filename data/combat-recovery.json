@@ -126,9 +126,9 @@
   "direct_callees": [
     {
       "address": "0x0012a4a4",
-      "name": "igStrCmp",
+      "name": "strcmp",
       "size": 324,
-      "source": null,
+      "source": "src/newlib/strcmp.S",
       "sites": [
         "0x003fe298",
         "0x003fe2b8",
@@ -184,9 +184,9 @@
     },
     {
       "address": "0x00190380",
-      "name": "FUN_00190380",
+      "name": "igMatrix44f_SetIdentity",
       "size": 72,
-      "source": "src/unmatched/FUN_00190380.c",
+      "source": "src/engine/igMatrix44f_SetIdentity.c",
       "sites": [
         "0x00405a48"
       ]
@@ -262,7 +262,7 @@
       "address": "0x0033e9c0",
       "name": "ObjectRef_Destruct_0033e9c0",
       "size": 128,
-      "source": "src/engine/ObjectRef_Destruct_0033e9c0.c",
+      "source": "src/engine/ObjectRef_Destruct_0033e9c0.cpp",
       "sites": [
         "0x00403164"
       ]
@@ -488,7 +488,7 @@
       "address": "0x0038f150",
       "name": "beMessenger_AppendBool",
       "size": 116,
-      "source": "src/game/beMessengerArgs.c",
+      "source": "src/game/beMessengerArgs.cpp",
       "sites": [
         "0x003fdf34",
         "0x003fe104",
@@ -524,7 +524,7 @@
       "address": "0x0038f250",
       "name": "beMessenger_AppendInt",
       "size": 120,
-      "source": "src/game/beMessengerArgs.c",
+      "source": "src/game/beMessengerArgs.cpp",
       "sites": [
         "0x003ff004",
         "0x003ff010",
@@ -703,7 +703,7 @@
       "address": "0x0038f350",
       "name": "beMessenger_AppendFloat",
       "size": 120,
-      "source": "src/game/beMessengerArgs.c",
+      "source": "src/game/beMessengerArgs.cpp",
       "sites": [
         "0x003ff6ec",
         "0x003ffb40",
@@ -720,7 +720,7 @@
       "address": "0x0038f4b0",
       "name": "beMessenger_AppendVec3",
       "size": 148,
-      "source": "src/game/beMessengerArgs.c",
+      "source": "src/game/beMessengerArgs.cpp",
       "sites": [
         "0x003ff708",
         "0x003ffb5c",
@@ -735,7 +735,7 @@
       "address": "0x0038f5b0",
       "name": "beMessenger_AppendMatrix",
       "size": 124,
-      "source": "src/game/beMessengerArgs.c",
+      "source": "src/game/beMessengerArgs.cpp",
       "sites": [
         "0x00405b10"
       ]
@@ -890,7 +890,7 @@
       "address": "0x0038f830",
       "name": "beMessenger_AppendString",
       "size": 188,
-      "source": "src/game/beMessengerArgs.c",
+      "source": "src/game/beMessengerArgs.cpp",
       "sites": [
         "0x003ff6cc",
         "0x003ff6dc",
@@ -912,7 +912,7 @@
       "address": "0x0038f8f0",
       "name": "beMessenger_GetString",
       "size": 92,
-      "source": "src/game/beMessengerArgs.c",
+      "source": "src/game/beMessengerArgs.cpp",
       "sites": [
         "0x003fde34",
         "0x003ffef4",
@@ -1076,7 +1076,7 @@
       "address": "0x003a9460",
       "name": "beDataBase_GetRecordInt",
       "size": 216,
-      "source": "src/game/beDataBase.c",
+      "source": "src/game/beDataBase.cpp",
       "sites": [
         "0x003fe02c",
         "0x003fe39c",
@@ -1188,7 +1188,7 @@
       "address": "0x003a9580",
       "name": "beDataBase_GetRecordString",
       "size": 88,
-      "source": "src/game/beDataBase.c",
+      "source": "src/game/beDataBase.cpp",
       "sites": [
         "0x003fe284",
         "0x003feae4",
@@ -1207,7 +1207,7 @@
       "address": "0x003c9be0",
       "name": "FightCom_GetMetaEnum",
       "size": 84,
-      "source": "src/game/FightCom_GetMetaEnum.c",
+      "source": "src/game/FightCom_GetMetaEnum.cpp",
       "sites": [
         "0x003fde64"
       ]
@@ -1264,7 +1264,7 @@
       "address": "0x003e9110",
       "name": "ObjectRef_Release_003e9110",
       "size": 68,
-      "source": "src/engine/ObjectRef_Release_003e9110.c",
+      "source": "src/engine/ObjectRef_Release_003e9110.cpp",
       "sites": [
         "0x00405580",
         "0x004059c8",
@@ -1346,7 +1346,7 @@
       "address": "0x003e92b0",
       "name": "ObjectRef_Assign_003e92b0",
       "size": 124,
-      "source": "src/engine/ObjectRef_Assign_003e92b0.c",
+      "source": "src/engine/ObjectRef_Assign_003e92b0.cpp",
       "sites": [
         "0x00403158"
       ]
@@ -1364,7 +1364,7 @@
       "address": "0x003e9370",
       "name": "Memory_SelectAllocator_003e9370",
       "size": 56,
-      "source": "src/engine/Memory_SelectAllocator_003e9370.c",
+      "source": "src/engine/Memory_SelectAllocator_003e9370.cpp",
       "sites": [
         "0x00403134"
       ]
@@ -1382,7 +1382,7 @@
       "address": "0x003f8760",
       "name": "FUN_003f8760",
       "size": 548,
-      "source": "src/game/beNDMWGameRam_SaveBase.c",
+      "source": "src/game/beNDMWGameRam_SaveBase.cpp",
       "sites": [
         "0x003ff68c",
         "0x003ffa84"
@@ -1392,7 +1392,7 @@
       "address": "0x003f9c80",
       "name": "FUN_003f9c80",
       "size": 408,
-      "source": "src/game/beNDMWGameRam_VitalsDelta.c",
+      "source": "src/game/beNDMWGameRam_VitalsDelta.cpp",
       "sites": [
         "0x003fef9c",
         "0x004053f0",
@@ -1403,7 +1403,7 @@
       "address": "0x003f9e20",
       "name": "FUN_003f9e20",
       "size": 344,
-      "source": "src/game/beNDMWGameRam_VitalsDelta.c",
+      "source": "src/game/beNDMWGameRam_VitalsDelta.cpp",
       "sites": [
         "0x003feff0"
       ]
@@ -1426,7 +1426,7 @@
       "address": "0x003fc6f0",
       "name": "beNDMWGameRam_FindTechniqueRow",
       "size": 132,
-      "source": "src/game/beNDMWGameRam_FindTechniqueRow.c",
+      "source": "src/game/beNDMWGameRam_FindTechniqueRow.cpp",
       "sites": [
         "0x003fe21c",
         "0x003fe864",
@@ -1508,7 +1508,7 @@
       "address": "0x00406e10",
       "name": "FUN_00406e10",
       "size": 48,
-      "source": "src/unmatched/FUN_00406e10.c",
+      "source": "src/unmatched/FUN_00406e10.cpp",
       "sites": [
         "0x0040314c"
       ]
@@ -1567,7 +1567,7 @@
       "address": "0x00406e60",
       "name": "ObjectRef_AssignObject_00406e60",
       "size": 124,
-      "source": "src/engine/ObjectRef_AssignObject_00406e60.c",
+      "source": "src/engine/ObjectRef_AssignObject_00406e60.cpp",
       "sites": [
         "0x003fe00c",
         "0x003fe268",
@@ -1967,7 +1967,7 @@
       "address": "0x00406fa0",
       "name": "FUN_00406fa0",
       "size": 60,
-      "source": "src/unmatched/FUN_00406fa0.c",
+      "source": "src/unmatched/FUN_00406fa0.cpp",
       "sites": [
         "0x004003a0",
         "0x00401320",
@@ -1982,7 +1982,7 @@
       "address": "0x00406fe0",
       "name": "StringPool_GetInstance",
       "size": 76,
-      "source": "src/engine/StringPool_GetInstance.c",
+      "source": "src/engine/StringPool_GetInstance.cpp",
       "sites": [
         "0x003fde50",
         "0x003fff10",
@@ -2121,157 +2121,157 @@
       "address": "0x00374800",
       "name": "BLTisPlayerBullet",
       "size": 128,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00374880",
       "name": "BLTgetShootRamNo",
       "size": 12,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00374890",
       "name": "BLTisHitCheck",
       "size": 272,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x003749a0",
       "name": "BLTisCritical",
       "size": 156,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00374a40",
       "name": "BLTgetDamageValue",
       "size": 364,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00374bb0",
       "name": "BLTgetDamageRank",
       "size": 264,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00374cc0",
       "name": "BLTgetAttributeStr",
       "size": 56,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00374d00",
       "name": "BLTgetStunTime",
       "size": 212,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00374de0",
       "name": "BLTgetPoisonTime",
       "size": 288,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00374f00",
       "name": "BLTgetSleepTime",
       "size": 260,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00375010",
       "name": "BLTgetBindTime",
       "size": 260,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00375120",
       "name": "BLTgetAttackDownTime",
       "size": 288,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00375240",
       "name": "BLTgetPowerDownTime",
       "size": 288,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00375360",
       "name": "BLTcalcSkillUp",
       "size": 176,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00375410",
       "name": "BLTcalcEXPUp",
       "size": 136,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x003754a0",
       "name": "BLPisHitCheck",
       "size": 156,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00375540",
       "name": "BLPgetDamageValue",
       "size": 336,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00375690",
       "name": "BLPgetAttackZokusei",
       "size": 148,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00375730",
       "name": "BLPgetDamageRank",
       "size": 244,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00375830",
       "name": "BLPgetStunTime",
       "size": 328,
-      "source": "src/lua/combat.c"
+      "source": "src/lua/combat.cpp"
     },
     {
       "address": "0x00375980",
       "name": "BLPgetPoisonTime",
       "size": 164,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00375a30",
       "name": "BLPgetSleepTime",
       "size": 156,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00375ad0",
       "name": "BLPgetBindTime",
       "size": 156,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00375b70",
       "name": "BLPgetAttackDownTime",
       "size": 184,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00375c30",
       "name": "BLPgetPowerDownTime",
       "size": 184,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     },
     {
       "address": "0x00375cf0",
       "name": "BLPcalcKoukaMagic",
       "size": 156,
-      "source": "src/lua/api.c"
+      "source": "src/lua/api.cpp"
     }
   ]
 }

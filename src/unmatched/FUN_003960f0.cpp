@@ -5,7 +5,7 @@ int FUN_002eb010(int);
 int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
-int igStrCmp(int *, int);
+int strcmp(int *, int);
 extern int DAT_004e0858[4];
 extern int DAT_00586f20[4];
 extern int DAT_00588e20[4];
@@ -58,7 +58,7 @@ int FUN_003960f0(int arg0, beModelCtrlInfoWork *self) {
                 for (j = 0; j < n; j++) {
                     Obj *o = (Obj *)((int *)((igObjectList *)lst->_comList)->_data)[j];
                     if (DAT_00588e20[0] == o->vX()) {
-                        if (igStrCmp(o->nm != 0 ? (int *)o->nm : &DAT_004e0858[0], s2) == 0) {
+                        if (strcmp(o->nm != 0 ? (int *)o->nm : &DAT_004e0858[0], s2) == 0) {
                             igIntList *ia = (igIntList *)self->_labelOffsetList;
                             result = j;
                             if (ia->_count != 0 && idx >= 0 && idx < ia->_count) {

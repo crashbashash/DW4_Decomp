@@ -11,7 +11,7 @@ void ObjectPointerList_SetCount(PointerList *,int);
 void ObjectPointerList_Destruct(PointerList *);
 void InternalObjectList_SetCount(PointerList *,int);
 void igObject_Destroy(void *);
-int igStrCmp(const char *,const char *);
+int strcmp(const char *,const char *);
 
 void ObjectPointerList_ClearUnused(PointerList *list){
     int i=list->count;

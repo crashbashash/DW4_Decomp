@@ -23,7 +23,7 @@ extern int FUN_003c03e0(...);
 extern igResult igMetaEnum_GetValueByName(...);
 extern int FUN_00445c60(...);
 extern int FUN_00443900(void *, void *, int, int, int, bool);
-extern int igStrCmp(...);
+extern int strcmp(...);
 extern int beMessenger_SelectReceivers(...);
 extern int beMessenger_SelectGroup(...);
 extern int beMessenger_AppendFloat(int, float);
@@ -196,7 +196,7 @@ extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model
         if (w->_isOnCtrl != 0 && W(_timerList)->data[8] != 0) {
             if (((BList *)w->_isFirstList)->data[8] != 0) {
                 FUN_003a7a20(obj, &DAT_0051d450[0], MS(W(_timerList)->data[8]));
-                if (igStrCmp(w->_seqCodeName, &DAT_0051d458[0]) != 0) CALLV(&DAT_0051d458[0]);
+                if (strcmp(w->_seqCodeName, &DAT_0051d458[0]) != 0) CALLV(&DAT_0051d458[0]);
                 SETB(w->_isFirstList, 8, GPR_00554a7c)
             }
             if (FUN_003a7e90(obj, &DAT_0051d450[0]) != 0) {
@@ -205,7 +205,7 @@ extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model
                 SETI(w->_timerList, 8, DAT_004cfce0[0])
             }
         }
-        if (w->_isOnCtrl != 0 && W(_timerList)->data[9] != 0 && igStrCmp(w->_seqCodeName, &DAT_0051d468[0]) == 0) {
+        if (w->_isOnCtrl != 0 && W(_timerList)->data[9] != 0 && strcmp(w->_seqCodeName, &DAT_0051d468[0]) == 0) {
             if (((BList *)w->_isFirstList)->data[9] != 0) {
                 FUN_003a7a20(obj, &DAT_0051d470[0], MS(W(_timerList)->data[9]));
                 SETB(w->_isFirstList, 9, GPR_00554a80)

@@ -1,6 +1,6 @@
 /* Recognises a 288-byte stream header (0x80, 0x00 lead bytes and the 6-byte DAT_004f4b68 tag at
  * +282); always reports the header size. */
-int FUN_0012aba0();
+int strncmp();
 extern char DAT_004f4b68[];
 
 int FUN_0029b3a8(unsigned char *header, int length, int *headerSize) {
@@ -14,5 +14,5 @@ int FUN_0029b3a8(unsigned char *header, int length, int *headerSize) {
     if (header[1] != 0) {
         return 0;
     }
-    return FUN_0012aba0(header + 282, DAT_004f4b68, 6) == 0;
+    return strncmp(header + 282, DAT_004f4b68, 6) == 0;
 }

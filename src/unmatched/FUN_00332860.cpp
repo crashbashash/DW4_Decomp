@@ -20,7 +20,7 @@ int FUN_00280b98(struct Q *);
 int FUN_002ed2b0(int, int, int);
 int FUN_0032cf50(...);
 int Memory_GetAllocatorByName(int *);
-int igStrCmp(int *, int *);
+int strcmp(int *, int *);
 extern int DAT_004ffe68[4];
 extern int DAT_004ffe70[4];
 extern int DAT_004ffe80[4];
@@ -82,7 +82,7 @@ int FUN_00332860(void) {
     FUN_00119138(1, 0x8010, 0xA81, 0x3FFF);
     if (DAT_005873d0[0] != 0) {
         sprintf(sp30, &DAT_004ffe80[0], &DAT_005873d0[0]);
-    } else if (igStrCmp(&DAT_004ffe90[0], &DAT_004ffea0[0]) == 0) {
+    } else if (strcmp(&DAT_004ffe90[0], &DAT_004ffea0[0]) == 0) {
         sprintf(sp30, &DAT_004ffeb0[0]);
     } else {
         sprintf(sp30, &DAT_004ffee0[0]);

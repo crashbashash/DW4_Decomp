@@ -20,7 +20,7 @@ IgbTypeRefList *FUN_002c8af0(int);
 void List_Reserve(void *, int, int);
 void ObjectList_AppendRetained(IgbTypeRefList *, IgbRegistryType *);
 void igObject_Destroy(void *);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 }
 extern "C" void FUN_002e7f20(int *out, IgbMetaSection *self) {
     int fail;
@@ -59,7 +59,7 @@ extern "C" void FUN_002e7f20(int *out, IgbMetaSection *self) {
         int j;
         for (j = 0; j < count; j++) {
             t = table->data[j];
-            if (igStrCmp(t->meta()->name, name) == 0) { found = true; break; }
+            if (strcmp(t->meta()->name, name) == 0) { found = true; break; }
         }
         if (!found) { t = 0; } else { t->meta(); }
         ObjectList_AppendRetained(self->types, t);

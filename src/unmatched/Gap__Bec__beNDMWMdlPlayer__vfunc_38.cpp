@@ -45,7 +45,7 @@ void igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
 PropRec *igProperty_FindByName(RefHdr *, int, void *);
 int *igProperty_GetRecord(int, void *);
-int igStrCmp(int, void *);
+int strcmp(int, void *);
 extern int DAT_004cc730[4];
 extern int DAT_004cc770[4];
 extern int DAT_004cc780[4];
@@ -204,7 +204,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, Playe
     hold = pad->_trigger;
     trig = pad->_button;
     if (w->_isMainLobby == 0) {
-        if (igStrCmp(w->_seqCodeName, DAT_00516118) != 0 && (hold & 0x8000)) {
+        if (strcmp(w->_seqCodeName, DAT_00516118) != 0 && (hold & 0x8000)) {
             SET_KEYNAME(w, DAT_00516120)
         }
         if (trig & 0x8000) {
@@ -233,7 +233,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, Playe
                 if (w->_bodyAtkTimer == 0.0f) {
                     w->_bodyAtkSt0 = 0;
                 } else if (w->_keyInput != 0) {
-                    if (lStk == w->_bodyAtkPad && igStrCmp(w->_seqCodeName, DAT_00516118) != 0 && igStrCmp(w->_seqCodeName, DAT_00516130) != 0) {
+                    if (lStk == w->_bodyAtkPad && strcmp(w->_seqCodeName, DAT_00516118) != 0 && strcmp(w->_seqCodeName, DAT_00516130) != 0) {
                         SET_KEYNAME(w, DAT_00516138)
                         w->_ctrlSt0 = 0;
                         w->_ctrlSt1 = 0;
@@ -246,7 +246,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_38(beNDMWMdlPlayer *arg0, Playe
             w->_bodyAtkSt0 = 0;
         }
     }
-    if (igStrCmp(w->_seqCodeName, DAT_00516118) != 0 && igStrCmp(w->_seqCodeName, DAT_00516130) != 0) {
+    if (strcmp(w->_seqCodeName, DAT_00516118) != 0 && strcmp(w->_seqCodeName, DAT_00516130) != 0) {
         unsigned char pan = w->_isPanel;
         if (pan != 0) {
             handled = 0;

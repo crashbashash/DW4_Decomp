@@ -2,7 +2,7 @@ typedef struct FL { char pad[8]; volatile int n; int cap; float *data; } FL;
 typedef struct A2 { char pad[72]; FL *list; } A2;
 typedef struct A3 { char pad[8]; char *name; float f12; float f16; } A3;
 extern "C" {
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 int List_Resize(FL *, int, int);
 extern char D_004e0858[];
 extern char D_0050f0d0[];
@@ -20,7 +20,7 @@ int FUN_00393b20(int a0, int a1, A2 *arg2, A3 *arg3) {
     int k3;
     float x, y;
     s = arg3->name ? arg3->name : D_004e0858;
-    t = igStrCmp(s, D_0050f0d0);
+    t = strcmp(s, D_0050f0d0);
     l = arg2->list;
     idx = t == 0 ? 2 : 0;
     if (l->n == 0) {

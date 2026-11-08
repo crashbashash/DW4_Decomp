@@ -9791,7 +9791,7 @@
       "address": 1102032,
       "name": "FUN_0010d0d0",
       "size": 56,
-      "source": null,
+      "source": "src/unmatched/FUN_0010d0d0.c",
       "direct": [
         {
           "site": 1102068,
@@ -9947,7 +9947,7 @@
       "address": 1131976,
       "name": "FUN_001145c8",
       "size": 40,
-      "source": null,
+      "source": "src/unmatched/FUN_001145c8.c",
       "direct": [
         {
           "site": 1131988,
@@ -9968,7 +9968,7 @@
       "address": 1175016,
       "name": "FUN_0011ede8",
       "size": 480,
-      "source": null,
+      "source": "src/unmatched/FUN_0011ede8.c",
       "direct": [
         {
           "site": 1175072,
@@ -10026,7 +10026,7 @@
       "address": 1192464,
       "name": "FUN_00123210",
       "size": 40,
-      "source": null,
+      "source": "src/unmatched/FUN_00123210.c",
       "direct": [],
       "indirect": []
     },
@@ -10079,7 +10079,7 @@
       "address": 1193880,
       "name": "FUN_00123798",
       "size": 180,
-      "source": null,
+      "source": "src/unmatched/FUN_00123798.c",
       "direct": [
         {
           "site": 1193892,
@@ -10100,7 +10100,7 @@
       "address": 1194152,
       "name": "FUN_001238a8",
       "size": 556,
-      "source": null,
+      "source": "src/unmatched/FUN_001238a8.c",
       "direct": [
         {
           "site": 1194460,
@@ -10114,8 +10114,8 @@
     {
       "address": 1194712,
       "name": "FUN_00123ad8",
-      "size": 4712,
-      "source": null,
+      "size": 4708,
+      "source": "src/unmatched/FUN_00123ad8.c",
       "direct": [
         {
           "site": 1194816,
@@ -10770,7 +10770,7 @@
       "address": 1199632,
       "name": "FUN_00124e10",
       "size": 276,
-      "source": null,
+      "source": "src/unmatched/FUN_00124e10.c",
       "direct": [
         {
           "site": 1199692,
@@ -10832,7 +10832,7 @@
       "address": 1200840,
       "name": "FUN_001252c8",
       "size": 284,
-      "source": null,
+      "source": "src/unmatched/FUN_001252c8.c",
       "direct": [
         {
           "site": 1200984,
@@ -10892,7 +10892,7 @@
       "address": 1201888,
       "name": "FUN_001256e0",
       "size": 364,
-      "source": null,
+      "source": "src/unmatched/FUN_001256e0.c",
       "direct": [
         {
           "site": 1201928,
@@ -10952,7 +10952,7 @@
       "address": 1202352,
       "name": "FUN_001258b0",
       "size": 992,
-      "source": null,
+      "source": "src/unmatched/FUN_001258b0.c",
       "direct": [
         {
           "site": 1202440,
@@ -11074,7 +11074,7 @@
       "address": 1204264,
       "name": "FUN_00126028",
       "size": 340,
-      "source": null,
+      "source": "src/unmatched/FUN_00126028.c",
       "direct": [
         {
           "site": 1204344,
@@ -11101,7 +11101,7 @@
       "address": 1205160,
       "name": "FUN_001263a8",
       "size": 600,
-      "source": null,
+      "source": "src/unmatched/FUN_001263a8.c",
       "direct": [
         {
           "site": 1205316,
@@ -11128,7 +11128,7 @@
       "address": 1205760,
       "name": "FUN_00126600",
       "size": 1832,
-      "source": null,
+      "source": "src/unmatched/FUN_00126600.c",
       "direct": [
         {
           "site": 1205820,
@@ -11167,17 +11167,17 @@
     },
     {
       "address": 1208100,
-      "name": "FUN_00126f24",
+      "name": "memchr",
       "size": 224,
-      "source": null,
+      "source": "src/newlib/memchr.S",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1208324,
-      "name": "FUN_00127004",
+      "name": "memcmp",
       "size": 148,
-      "source": null,
+      "source": "src/newlib/memcmp.S",
       "direct": [],
       "indirect": []
     },
@@ -11185,7 +11185,7 @@
       "address": 1208472,
       "name": "memcpy",
       "size": 176,
-      "source": null,
+      "source": "src/newlib/memcpy.S",
       "direct": [],
       "indirect": []
     },
@@ -11193,7 +11193,7 @@
       "address": 1208648,
       "name": "memmove",
       "size": 260,
-      "source": null,
+      "source": "src/newlib/memmove.S",
       "direct": [],
       "indirect": []
     },
@@ -11201,7 +11201,7 @@
       "address": 1208908,
       "name": "memset",
       "size": 192,
-      "source": null,
+      "source": "src/newlib/memset.S",
       "direct": [],
       "indirect": []
     },
@@ -11245,7 +11245,7 @@
       "address": 1209312,
       "name": "FUN_001273e0",
       "size": 164,
-      "source": "src/unmatched/FUN_001273e0.c",
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1209348,
@@ -11266,7 +11266,7 @@
       "address": 1209480,
       "name": "FUN_00127488",
       "size": 44,
-      "source": "src/unmatched/FUN_00127488.c",
+      "source": "src/newlib/mprec.c",
       "direct": [],
       "indirect": []
     },
@@ -11274,7 +11274,7 @@
       "address": 1209528,
       "name": "FUN_001274b8",
       "size": 264,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1209684,
@@ -11301,7 +11301,7 @@
       "address": 1209792,
       "name": "FUN_001275c0",
       "size": 304,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1209908,
@@ -11328,7 +11328,7 @@
       "address": 1210096,
       "name": "FUN_001276f0",
       "size": 128,
-      "source": "src/unmatched/FUN_001276f0.c",
+      "source": "src/newlib/mprec.c",
       "direct": [],
       "indirect": []
     },
@@ -11336,7 +11336,7 @@
       "address": 1210224,
       "name": "FUN_00127770",
       "size": 188,
-      "source": "src/unmatched/FUN_00127770.c",
+      "source": "src/newlib/mprec.c",
       "direct": [],
       "indirect": []
     },
@@ -11344,7 +11344,7 @@
       "address": 1210416,
       "name": "FUN_00127830",
       "size": 56,
-      "source": "src/unmatched/FUN_00127830.c",
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1210432,
@@ -11359,7 +11359,7 @@
       "address": 1210472,
       "name": "FUN_00127868",
       "size": 524,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1210564,
@@ -11374,7 +11374,7 @@
       "address": 1211000,
       "name": "FUN_00127a78",
       "size": 252,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1211060,
@@ -11413,7 +11413,7 @@
       "address": 1211256,
       "name": "FUN_00127b78",
       "size": 344,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1211364,
@@ -11434,7 +11434,7 @@
       "address": 1211600,
       "name": "FUN_00127cd0",
       "size": 104,
-      "source": "src/unmatched/FUN_00127cd0.c",
+      "source": "src/newlib/mprec.c",
       "direct": [],
       "indirect": []
     },
@@ -11442,7 +11442,7 @@
       "address": 1211704,
       "name": "FUN_00127d38",
       "size": 400,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1211744,
@@ -11469,7 +11469,7 @@
       "address": 1212104,
       "name": "FUN_00127ec8",
       "size": 208,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [],
       "indirect": []
     },
@@ -11477,7 +11477,7 @@
       "address": 1212312,
       "name": "FUN_00127f98",
       "size": 408,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1212368,
@@ -11492,7 +11492,7 @@
       "address": 1212720,
       "name": "FUN_00128130",
       "size": 388,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1212764,
@@ -11525,7 +11525,7 @@
       "address": 1213112,
       "name": "FUN_001282b8",
       "size": 204,
-      "source": null,
+      "source": "src/newlib/mprec.c",
       "direct": [
         {
           "site": 1213140,
@@ -11552,7 +11552,7 @@
       "address": 1216720,
       "name": "FUN_001290d0",
       "size": 1440,
-      "source": null,
+      "source": "src/unmatched/FUN_001290d0.c",
       "direct": [
         {
           "site": 1216824,
@@ -11627,7 +11627,7 @@
       "address": 1218216,
       "name": "FUN_001296a8",
       "size": 380,
-      "source": null,
+      "source": "src/unmatched/FUN_001296a8.c",
       "direct": [
         {
           "site": 1218272,
@@ -11685,9 +11685,9 @@
     },
     {
       "address": 1218776,
-      "name": "FUN_001298d8",
+      "name": "longjmp",
       "size": 100,
-      "source": null,
+      "source": "src/newlib/setjmp.S",
       "direct": [],
       "indirect": []
     },
@@ -11710,7 +11710,7 @@
       "address": 1220344,
       "name": "FUN_00129ef8",
       "size": 168,
-      "source": null,
+      "source": "src/unmatched/FUN_00129ef8.c",
       "direct": [
         {
           "site": 1220432,
@@ -11729,17 +11729,17 @@
     },
     {
       "address": 1221796,
-      "name": "igStrCmp",
+      "name": "strcmp",
       "size": 324,
-      "source": null,
+      "source": "src/newlib/strcmp.S",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1222120,
-      "name": "FUN_0012a5e8",
+      "name": "strcoll",
       "size": 20,
-      "source": "src/unmatched/FUN_0012a5e8.c",
+      "source": "src/newlib/strcoll.c",
       "direct": [
         {
           "site": 1222132,
@@ -11754,15 +11754,15 @@
       "address": 1222540,
       "name": "strlen",
       "size": 312,
-      "source": null,
+      "source": "src/newlib/strlen.S",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1224824,
       "name": "FUN_0012b078",
-      "size": 3864,
-      "source": null,
+      "size": 3860,
+      "source": "src/unmatched/FUN_0012b078.c",
       "direct": [
         {
           "site": 1225888,
@@ -12272,7 +12272,7 @@
       "address": 1230056,
       "name": "FUN_0012c4e8",
       "size": 232,
-      "source": null,
+      "source": "src/unmatched/stdio_ungetc.c",
       "direct": [
         {
           "site": 1230108,
@@ -12299,7 +12299,7 @@
       "address": 1230288,
       "name": "FUN_0012c5d0",
       "size": 392,
-      "source": null,
+      "source": "src/unmatched/stdio_ungetc.c",
       "direct": [
         {
           "site": 1230360,
@@ -12326,7 +12326,7 @@
       "address": 1234120,
       "name": "FUN_0012d4c8",
       "size": 72,
-      "source": "src/unmatched/FUN_0012d4c8.c",
+      "source": "src/unmatched/stdio_vfprintf.c",
       "direct": [
         {
           "site": 1234160,
@@ -12341,7 +12341,7 @@
       "address": 1234192,
       "name": "FUN_0012d510",
       "size": 180,
-      "source": null,
+      "source": "src/unmatched/stdio_vfprintf.c",
       "direct": [
         {
           "site": 1234284,
@@ -12362,7 +12362,7 @@
       "address": 1234376,
       "name": "vfprintf",
       "size": 116,
-      "source": "src/unmatched/vfprintf.c",
+      "source": "src/unmatched/stdio_vfprintf.c",
       "direct": [
         {
           "site": 1234444,
@@ -12383,7 +12383,7 @@
       "address": 1234496,
       "name": "FUN_0012d640",
       "size": 5744,
-      "source": null,
+      "source": "src/unmatched/stdio_vfprintf.c",
       "direct": [
         {
           "site": 1234552,
@@ -12692,7 +12692,7 @@
       "address": 1240240,
       "name": "FUN_0012ecb0",
       "size": 448,
-      "source": null,
+      "source": "src/unmatched/stdio_vfprintf.c",
       "direct": [
         {
           "site": 1240380,
@@ -12724,16 +12724,16 @@
     {
       "address": 1240688,
       "name": "FUN_0012ee70",
-      "size": 224,
-      "source": null,
+      "size": 220,
+      "source": "src/unmatched/stdio_vfprintf.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1240912,
       "name": "FUN_0012ef50",
-      "size": 3216,
-      "source": null,
+      "size": 3212,
+      "source": "src/unmatched/stdio_vfscanf.c",
       "direct": [
         {
           "site": 1241084,
@@ -12900,7 +12900,7 @@
       "address": 1244128,
       "name": "FUN_0012fbe0",
       "size": 256,
-      "source": null,
+      "source": "src/unmatched/stdio_vfscanf.c",
       "direct": [],
       "indirect": []
     },
@@ -12923,7 +12923,7 @@
       "address": 1244912,
       "name": "FUN_0012fef0",
       "size": 268,
-      "source": null,
+      "source": "src/unmatched/FUN_0012fef0.c",
       "direct": [
         {
           "site": 1244968,
@@ -13080,8 +13080,8 @@
     {
       "address": 2286776,
       "name": "__divdi3",
-      "size": 1688,
-      "source": null,
+      "size": 1684,
+      "source": "src/unmatched/__divdi3.c",
       "direct": [],
       "indirect": []
     },
@@ -13089,7 +13089,7 @@
       "address": 2288464,
       "name": "__moddi3",
       "size": 1680,
-      "source": null,
+      "source": "src/unmatched/__moddi3.c",
       "direct": [],
       "indirect": []
     },
@@ -13097,7 +13097,7 @@
       "address": 2290144,
       "name": "FUN_0022f1e0",
       "size": 1404,
-      "source": null,
+      "source": "src/unmatched/FUN_0022f1e0.c",
       "direct": [],
       "indirect": []
     },
@@ -13113,7 +13113,7 @@
       "address": 2292936,
       "name": "__floatdidf",
       "size": 168,
-      "source": null,
+      "source": "src/unmatched/__floatdidf.c",
       "direct": [
         {
           "site": 2292968,
@@ -13158,7 +13158,7 @@
       "address": 2293336,
       "name": "FUN_0022fe58",
       "size": 280,
-      "source": null,
+      "source": "src/unmatched/FUN_0022fe58.c",
       "direct": [
         {
           "site": 2293364,
@@ -13233,7 +13233,7 @@
       "address": 2293616,
       "name": "FUN_0022ff70",
       "size": 120,
-      "source": null,
+      "source": "src/unmatched/FUN_0022ff70.c",
       "direct": [
         {
           "site": 2293644,
@@ -13266,7 +13266,7 @@
       "address": 2294096,
       "name": "FUN_00230150",
       "size": 180,
-      "source": null,
+      "source": "src/unmatched/FUN_00230150.c",
       "direct": [],
       "indirect": []
     },
@@ -13318,7 +13318,7 @@
       "address": 2294488,
       "name": "pack_d",
       "size": 216,
-      "source": null,
+      "source": "src/unmatched/pack_d.c",
       "direct": [],
       "indirect": []
     },
@@ -13326,15 +13326,15 @@
       "address": 2294704,
       "name": "unpack_d",
       "size": 188,
-      "source": null,
+      "source": "src/unmatched/unpack_d.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2294896,
       "name": "FUN_00230470",
-      "size": 608,
-      "source": null,
+      "size": 604,
+      "source": "src/unmatched/FUN_00230470.c",
       "direct": [],
       "indirect": []
     },
@@ -13408,7 +13408,7 @@
       "address": 2295696,
       "name": "__muldf3",
       "size": 644,
-      "source": null,
+      "source": "src/unmatched/__muldf3.c",
       "direct": [
         {
           "site": 2295744,
@@ -13459,7 +13459,7 @@
       "address": 2296344,
       "name": "__divdf3",
       "size": 320,
-      "source": null,
+      "source": "src/unmatched/__divdf3.c",
       "direct": [
         {
           "site": 2296368,
@@ -13486,7 +13486,7 @@
       "address": 2296664,
       "name": "FUN_00230b58",
       "size": 288,
-      "source": null,
+      "source": "src/unmatched/FUN_00230b58.c",
       "direct": [],
       "indirect": []
     },
@@ -13494,7 +13494,7 @@
       "address": 2296952,
       "name": "FUN_00230c78",
       "size": 76,
-      "source": null,
+      "source": "src/unmatched/FUN_00230c78.c",
       "direct": [
         {
           "site": 2296976,
@@ -13521,7 +13521,7 @@
       "address": 2297032,
       "name": "__floatsidf",
       "size": 184,
-      "source": null,
+      "source": "src/unmatched/__floatsidf.c",
       "direct": [
         {
           "site": 2297196,
@@ -13536,7 +13536,7 @@
       "address": 2297216,
       "name": "FUN_00230d80",
       "size": 156,
-      "source": null,
+      "source": "src/unmatched/FUN_00230d80.c",
       "direct": [
         {
           "site": 2297232,
@@ -13551,7 +13551,7 @@
       "address": 2297376,
       "name": "FUN_00230e20",
       "size": 44,
-      "source": null,
+      "source": "src/unmatched/FUN_00230e20.c",
       "direct": [
         {
           "site": 2297400,
@@ -13566,7 +13566,7 @@
       "address": 2297424,
       "name": "FUN_00230e50",
       "size": 84,
-      "source": null,
+      "source": "src/unmatched/FUN_00230e50.c",
       "direct": [
         {
           "site": 2297440,
@@ -13587,7 +13587,7 @@
       "address": 2297512,
       "name": "FUN_00230ea8",
       "size": 160,
-      "source": null,
+      "source": "src/unmatched/FUN_00230ea8.c",
       "direct": [
         {
           "site": 2297528,
@@ -17338,7 +17338,7 @@
       "address": 3139904,
       "name": "igMetaObject_RunStaticInit",
       "size": 120,
-      "source": "src/engine/igMetaObjectCreation.cpp",
+      "source": "src/unmatched/igMetaObject_RunStaticInit.cpp",
       "direct": [
         {
           "site": 3139992,
@@ -17866,7 +17866,7 @@
       "address": 3191904,
       "name": "FUN_0030b460",
       "size": 352,
-      "source": null,
+      "source": "src/unmatched/FUN_0030b460.c",
       "direct": [
         {
           "site": 3191984,
@@ -17950,7 +17950,7 @@
       "address": 3193840,
       "name": "FUN_0030bbf0",
       "size": 232,
-      "source": null,
+      "source": "src/unmatched/FUN_0030bbf0.c",
       "direct": [
         {
           "site": 3193908,
@@ -18315,7 +18315,7 @@
       "address": 3197504,
       "name": "StringChunk_TakeBlock",
       "size": 236,
-      "source": null,
+      "source": "src/unmatched/StringChunk_TakeBlock.c",
       "direct": [],
       "indirect": []
     },

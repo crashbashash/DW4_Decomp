@@ -23,7 +23,7 @@ int FUN_002eb010(int);
 void *StringPool_Construct(void *);
 char *StringPool_Intern(void *, char *);
 void StringChunk_ReleaseHeader(int, int *);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSelIntf *c, int sel) {
     unsigned char uniq;
     beNDMWLoadCtrl2CommonIntf *host = (beNDMWLoadCtrl2CommonIntf *)c->_commonIntf;
@@ -101,7 +101,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
                         x = (char *)o->_dmName;
                         y = (char *)s4->_dmName;
                         if (x == 0 || y == 0) continue;
-                        if (igStrCmp(x, y) == 0) { uniq = 0; break; }
+                        if (strcmp(x, y) == 0) { uniq = 0; break; }
                     }
                     if (uniq == 1) {
                         beNDMWDegiData *d;
@@ -158,7 +158,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
                     x = (char *)o->_dmName;
                     y = (char *)s42->_dmName;
                     if (x == 0 || y == 0) continue;
-                    if (igStrCmp(x, y) == 0) { uniq2 = 0; break; }
+                    if (strcmp(x, y) == 0) { uniq2 = 0; break; }
                 }
                 if (uniq2 == 1) {
                     if (c->_mesKind != 0) { c->_mesKind = 0; FUN_003ecad0(h40, (c->_plNo << 16) | 0x513); }

@@ -8,7 +8,7 @@ int StringPool_Construct(int);
 int StringPool_Intern(int, char *);
 int beMessenger_GetBool(...);
 int beMessenger_SendNamed(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int DAT_004e0858[4];
 extern int DAT_0050eff8[4];
 extern int DAT_0050f138[4];
@@ -31,11 +31,11 @@ class VO { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 } while (0)
 extern "C" void FUN_00394bf0(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2, beModelCtrlInfoWork *arg3);
 void FUN_00394bf0(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2, beModelCtrlInfoWork *arg3) {
-    if (igStrCmp(arg3->_wCheckName, DAT_0050f138) == 0 || igStrCmp(arg3->_wCheckName, DAT_0050f140) == 0) {
+    if (strcmp(arg3->_wCheckName, DAT_0050f138) == 0 || strcmp(arg3->_wCheckName, DAT_0050f140) == 0) {
         if (!(FUN_00392be0(arg0, arg2, arg3, 2) & 0xFF)) {
             SETSTR();
         }
-    } else if (igStrCmp(arg3->_wCheckName, DAT_0050f148) == 0) {
+    } else if (strcmp(arg3->_wCheckName, DAT_0050f148) == 0) {
         int a2 = arg1->_name;
         int a3 = arg2->_ramNo;
         a2 = a2 ? a2 : (int)DAT_004e0858;
@@ -43,11 +43,11 @@ void FUN_00394bf0(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfoRam *arg2,
         if (beMessenger_GetBool(arg0->_messenger, 0) != 0) {
             SETSTR();
         }
-    } else if (igStrCmp(arg3->_wCheckName, DAT_0050f160) == 0) {
+    } else if (strcmp(arg3->_wCheckName, DAT_0050f160) == 0) {
         if (!(FUN_00392be0(arg0, arg2, arg3, 0) & 0xFF)) {
             SETSTR();
         }
-    } else if (igStrCmp(arg3->_wCheckName, DAT_0050f168) == 0) {
+    } else if (strcmp(arg3->_wCheckName, DAT_0050f168) == 0) {
         if (!(FUN_00392be0(arg0, arg2, arg3, 1) & 0xFF)) {
             SETSTR();
         }

@@ -1,6 +1,6 @@
 void *FUN_00308a90(void *);
 void *igProperty_FindByName(int, int, int);
-int igStrCmp(int, int *);
+int strcmp(int, int *);
 extern int DAT_004fb390[4];
 extern int DAT_00586670[4];
 
@@ -12,7 +12,7 @@ struct R {
 void FUN_003087a0(struct R **arg0, void *arg1, int arg2) {
     struct R *t;
 
-    if (igStrCmp(arg2, &DAT_004fb390[0]) == 0) {
+    if (strcmp(arg2, &DAT_004fb390[0]) == 0) {
         *arg0 = (struct R *)FUN_00308a90(arg1);
         t = *arg0;
         if (t != 0) {

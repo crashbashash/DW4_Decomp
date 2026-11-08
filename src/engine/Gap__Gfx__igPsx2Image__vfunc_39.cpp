@@ -11,7 +11,7 @@ int StringPool_Construct(...);
 void *StringPool_Intern(...);
 int igObject_Destroy(...);
 int igObject_GetAllocator(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int DAT_004df5b8[4];
 extern int DAT_004df5c0[4];
 extern int DAT_004df5c8[4];
@@ -54,8 +54,8 @@ extern "C" int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
   O2 *o2;
   s = FUN_0015ad50(arg1);
   if (s != 0) {
-    if (igStrCmp(s, &DAT_004df5b8[0]) != 0) {
-      if (igStrCmp(s, &DAT_004df5c0[0]) == 0) goto block_4;
+    if (strcmp(s, &DAT_004df5b8[0]) != 0) {
+      if (strcmp(s, &DAT_004df5c0[0]) == 0) goto block_4;
       goto block_22;
     }
 block_4:
@@ -95,8 +95,8 @@ block_4:
   }
 block_22:
   if (s != 0) {
-    if (igStrCmp(s, &DAT_004df5c8[0]) != 0) {
-      if (igStrCmp(s, &DAT_004df5d0[0]) == 0) goto block_26;
+    if (strcmp(s, &DAT_004df5c8[0]) != 0) {
+      if (strcmp(s, &DAT_004df5d0[0]) == 0) goto block_26;
     } else {
 block_26:
       sp54 = (O2 *)FUN_00150390(igObject_GetAllocator(arg0));

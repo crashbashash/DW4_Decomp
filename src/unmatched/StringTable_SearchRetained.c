@@ -1,4 +1,4 @@
-int igStrCmp(int, int);
+int strcmp(int, int);
 struct E { int pad4; int rc; };
 struct T { int pad[1]; unsigned int cnt; unsigned int n; int pad12; int *tab; };
 int StringTable_SearchRetained(struct T *arg0, int arg1, int *arg2, unsigned int *arg3) {
@@ -14,7 +14,7 @@ int StringTable_SearchRetained(struct T *arg0, int arg1, int *arg2, unsigned int
         if (arg0->cnt >= mid) {
             e = (struct E *)arg0->tab[mid - 1];
             s = (int)e + 8;
-            r = igStrCmp(arg1, s);
+            r = strcmp(arg1, s);
             if (r == 0) {
                 e->rc = e->rc + 1;
                 *arg2 = s;

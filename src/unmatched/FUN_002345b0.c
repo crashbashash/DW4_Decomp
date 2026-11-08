@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 int StringChunk_ReleaseHeader();
 int StringList_CopyRetained();
-int igStrCmp();
+int strcmp();
 int FUN_002345b0(igStringRefList *arg0, int *arg1, int arg2, void **arg3) {
     void *sp5C;
     void *sp58;
@@ -9,7 +9,7 @@ int FUN_002345b0(igStringRefList *arg0, int *arg1, int arg2, void **arg3) {
     int v1;
     if (arg2 != 0) {
         StringList_CopyRetained(&sp5C, arg0, *arg1);
-        eq = igStrCmp(sp5C, arg2) == 0;
+        eq = strcmp(sp5C, arg2) == 0;
         if (sp5C != 0) {
             int *a1 = (int *)((char *)sp5C - 8);
             int v0 = *(int *)((char *)sp5C - 4) - 1;

@@ -12,7 +12,7 @@ int beMessenger_GetBool(...);
 int beMessenger_SendNamed(...);
 bePadData *bePadManager_GetPadForPlayer(...);
 int igObject_GetAllocator(...);
-int igStrCmp(...);
+int strcmp(...);
 struct PropertyRecord { char header[20]; beNDMWMdlPlayerInfoWork *value; };
 PropertyRecord *igProperty_FindByName(...);
 extern int DAT_004e0858[4];
@@ -83,7 +83,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
     if (s0->_isOnCtrl != 0) {
         s4 = bePadManager_GetPadForPlayer(arg0->_padManager, arg1->_ramNo)->_button;
     }
-    if (igStrCmp(s0->_wCheckName, DAT_00516270) == 0) {
+    if (strcmp(s0->_wCheckName, DAT_00516270) == 0) {
         switch (s0->_wCheckSt) {
         case 0:
             s0->_wCheckMode = 0;
@@ -121,7 +121,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
             }
             break;
         }
-    } else if (igStrCmp(s0->_wCheckName, DAT_00516298) == 0) {
+    } else if (strcmp(s0->_wCheckName, DAT_00516298) == 0) {
         if (!(s4 & 0x4000)) {
             ((MdlPlayerVirtualSlots *)arg0)->vX(arg1, DAT_00516290);
         }
@@ -146,7 +146,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_39(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
             s0->_wCheckName = (int)ni2;
             FUN_00395250(arg0, s1, arg1, s0);
         }
-    } else if (igStrCmp(s0->_wCheckName, DAT_005162a0) == 0 && !(s4 & 0x4000)) {
+    } else if (strcmp(s0->_wCheckName, DAT_005162a0) == 0 && !(s4 & 0x4000)) {
         if (DAT_00586f20[0] == 0) {
             int n = FUN_002eb010(16);
             if (n != 0) n = StringPool_Construct(n);

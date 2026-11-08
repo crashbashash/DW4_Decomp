@@ -8,7 +8,7 @@ int beMessenger_AppendString(...);
 int beMessenger_AppendVec3(...);
 int beMessenger_DispatchSelected(...);
 int beMessenger_SelectGroup(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int DAT_004cc6d0[4];
 extern int DAT_004cc6e0[4];
 extern int DAT_004cc720[4];
@@ -56,7 +56,7 @@ extern "C" void FUN_003cdef0(beNDMWPanelObject *self, int g, int s, int *name, i
     }
     idx = s + g * 16;
     if (name != 0) {
-        if ((t = (int *)StringList_CopyRetained(((igStringRefList *)self->_textSetList), idx).p, x = true, t != 0) && (igStrCmp((int *)StringList_CopyRetained(((igStringRefList *)self->_textSetList), idx).p, name) == 0 ? (x = false, 1) : 0)) {}
+        if ((t = (int *)StringList_CopyRetained(((igStringRefList *)self->_textSetList), idx).p, x = true, t != 0) && (strcmp((int *)StringList_CopyRetained(((igStringRefList *)self->_textSetList), idx).p, name) == 0 ? (x = false, 1) : 0)) {}
         if (x) {
             if (name == 0) {
                 ref = 0;

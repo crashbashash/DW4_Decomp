@@ -61,7 +61,7 @@ extern int DAT_004fb418[4];
 int FUN_0010f330(...);
 int FUN_0010f738(...);
 int FUN_0010f970(...);
-int FUN_0012a1e8(...);
+int strcat(...);
 unsigned char FUN_002e31c0(int);
 int FUN_002e3220(int);
 int FUN_002e34a0(void);
@@ -135,7 +135,7 @@ extern "C" void Gap__Core__igPsx2File__vfunc_23(int *arg0, FO *arg1, unsigned ar
             s5 = FUN_002e34d0(&sp2BC, buf, 0x200);
             if (s5) {
 L23:
-                FUN_0012a1e8(buf, arg1->f12);
+                strcat(buf, arg1->f12);
                 s7 = arg1->v164(buf);
                 if (*s7 == 0x63) {
                     s3 = 10;

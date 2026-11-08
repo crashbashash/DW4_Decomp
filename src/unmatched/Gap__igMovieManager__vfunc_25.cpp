@@ -4,7 +4,7 @@ int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 int Memory_GetAllocatorBySelector(...);
 int igObject_IsKindOf(...);
-int igStrCmp(...);
+int strcmp(...);
 void *igObjectSystem_FindMetaByNameDefault(...);
 void *igMetaObject_CreateInstance(...);
 int ObjectList_AppendRetained(...);
@@ -107,7 +107,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
             do {
                 RC *c = ((RC **)((ListHead *)self->_codecList)->data)[i];
                 const char *n = (const char *)((int *)((VC *)c)->v20())[7];
-                if (igStrCmp(n, codecName) == 0) {
+                if (strcmp(n, codecName) == 0) {
                     if (c != 0) c->rc = c->rc + 1;
                     REL(codec.p)
                     codec.p = c;

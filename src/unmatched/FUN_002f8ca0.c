@@ -1,5 +1,5 @@
-int FUN_0012aba0();
-int igStrCmp();
+int strncmp();
+int strcmp();
 int strlen();
 extern char DAT_004fa3c8[];
 extern char DAT_004fabb0[];
@@ -16,10 +16,10 @@ struct Item *FUN_002f8ca0(struct Own *arg0, char *arg1) {
     if ((arg1 == 0) || (*arg1 == 0)) {
         return 0;
     }
-    if (FUN_0012aba0(arg1, DAT_004fa3c8, 0xD) == 0) {
+    if (strncmp(arg1, DAT_004fa3c8, 0xD) == 0) {
         arg1 += 0xD;
     }
-    if (FUN_0012aba0(arg1, DAT_004fabb0, 6) == 0) {
+    if (strncmp(arg1, DAT_004fabb0, 6) == 0) {
         if (strlen(arg1) != 6) {
             arg1 += 6;
         }
@@ -29,15 +29,15 @@ struct Item *FUN_002f8ca0(struct Own *arg0, char *arg1) {
         if (it != 0) {
             s = it->name;
             if ((s != 0) && (*s != 0)) {
-                if (FUN_0012aba0(s, DAT_004fa3c8, 0xD) == 0) {
+                if (strncmp(s, DAT_004fa3c8, 0xD) == 0) {
                     s += 0xD;
                 }
-                if (FUN_0012aba0(s, DAT_004fabb0, 6) == 0) {
+                if (strncmp(s, DAT_004fabb0, 6) == 0) {
                     if (strlen(arg1) != 6) {
                         s += 6;
                     }
                 }
-                if (igStrCmp(s, arg1) == 0) {
+                if (strcmp(s, arg1) == 0) {
                     return it;
                 }
             }

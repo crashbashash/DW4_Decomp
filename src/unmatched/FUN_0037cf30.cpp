@@ -4,7 +4,7 @@ extern "C" {
 extern int DAT_004e0858[4];
 int strlen(char *);
 void FUN_003a7590(int, int, float, float, float);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 void FUN_0037cf30(beCri *arg0, char *arg1, float f0, float f1, float f2);
 }
 
@@ -14,11 +14,11 @@ void FUN_0037cf30(beCri *arg0, char *arg1, float f0, float f1, float f2) {
     beCriHandle *n;
     igObjectList *l;
     s = (char *)((beCriHandle *)arg0->_hdBGM)->_name;
-    if ((s ? s : DEFN) && igStrCmp(s ? s : DEFN, arg1) == 0) {
+    if ((s ? s : DEFN) && strcmp(s ? s : DEFN, arg1) == 0) {
         FUN_003a7590(((beCriHandle *)arg0->_hdBGM)->_volume, arg0->_baseVolume, f0, f1, f2);
     } else {
         s = (char *)((beCriHandle *)arg0->_hdENV)->_name;
-        if ((s ? s : DEFN) && igStrCmp(s ? s : DEFN, arg1) == 0) {
+        if ((s ? s : DEFN) && strcmp(s ? s : DEFN, arg1) == 0) {
             FUN_003a7590(((beCriHandle *)arg0->_hdENV)->_volume, arg0->_baseVolume, f0, f1, f2);
         } else {
             l = (igObjectList *)arg0->_hdSEs;
@@ -27,7 +27,7 @@ void FUN_0037cf30(beCri *arg0, char *arg1, float f0, float f1, float f2) {
                 s = (char *)n->_name;
                 if (s ? s : DEFN) {
                     if (strlen(s ? s : DEFN)) {
-                        if (igStrCmp(arg1, (char *)n->_name ? (char *)n->_name : DEFN) == 0)
+                        if (strcmp(arg1, (char *)n->_name ? (char *)n->_name : DEFN) == 0)
                             FUN_003a7590(n->_volume, arg0->_baseVolume, f0, f1, f2);
                     }
                 }

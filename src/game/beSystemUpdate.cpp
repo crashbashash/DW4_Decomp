@@ -25,7 +25,7 @@ int StringPool_Construct(int);
 int *StringPool_Intern(int, int);
 int igObject_Destroy(igObject *);
 void *igObject_GetAllocator(beSystem *);
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 extern int ndmw_igb[4];
 extern struct GlobalContextRecord *g_globalContext[4];
 extern int g_stringPool[4];
@@ -82,7 +82,7 @@ void Gap__Bec__beSystem__vfunc_27(beSystem *self) {
     self->_svWorldTimeL = now;
     if (self->_nextStage != 0 || self->_bootDirectory != 0) {
         if (self->_nextStage != 0) {
-            if (igStrCmp((const char *)self->_nextStage, (const char *)&ndmw_igb[0]) == 0) {
+            if (strcmp((const char *)self->_nextStage, (const char *)&ndmw_igb[0]) == 0) {
                 ndmwAlloc64 = igObject_GetAllocator(self);
                 if (GPR_00554c14 != 0) {
                     ndmwAlloc64 = (void *)(int)ndmwAlloc64;

@@ -12,7 +12,7 @@ int FUN_003ecad0(...);
 int Memory_GetAllocatorBySelector(...);
 int igObject_Destroy(...);
 int igObject_GetAllocator(...);
-int igStrCmp(...);
+int strcmp(...);
 typedef struct Ent { int name; int val; int val2; } Ent;
 extern Ent DAT_004cec70[16];
 extern int *DAT_004cc830[4];
@@ -92,7 +92,7 @@ extern "C" unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1
                     s8 = DAT_004cec70;
                     V3 v1;
                 loop_19:
-                    if (igStrCmp(s8->name, it->_dmkind) == 0) {
+                    if (strcmp(s8->name, it->_dmkind) == 0) {
                         s5 = s4;
                     } else {
                         s4 += 1;
@@ -138,7 +138,7 @@ extern "C" unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1
                 {
                     beNDMWDegiData *o;
                     char *ca, *cb;
-                    if (s3 != arg0->_plNo && (o = (beNDMWDegiData *)((int *)((beNDMWDegiDataList *)sp100->_gameUseData)->_data)[s3], o->_isUse == 1) && o->_id == it2->_id && (ca = (char *)o->_dmName, cb = (char *)it2->_dmName, ca != 0) && cb != 0 && igStrCmp(ca, cb) == 0) {
+                    if (s3 != arg0->_plNo && (o = (beNDMWDegiData *)((int *)((beNDMWDegiDataList *)sp100->_gameUseData)->_data)[s3], o->_isUse == 1) && o->_id == it2->_id && (ca = (char *)o->_dmName, cb = (char *)it2->_dmName, ca != 0) && cb != 0 && strcmp(ca, cb) == 0) {
                         fl = 0;
                     } else {
                         s3 += 1;

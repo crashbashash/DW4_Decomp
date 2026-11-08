@@ -1,6 +1,6 @@
 extern "C" {
 int strlen(...);
-int igStrCmp(...);
+int strcmp(...);
 }
 struct Tb { char pad[8]; int n; char pad2[4]; int *arr; };
 struct Buf { char pad[8]; int sz; char pad2[4]; char *buf; };
@@ -24,7 +24,7 @@ extern "C" int FUN_0030d350(K *arg0, unsigned int arg1) {
             if (off == -1) {
                 return -1;
             }
-            if (igStrCmp(arg0->f16->buf + off, arg1) == 0) {
+            if (strcmp(arg0->f16->buf + off, arg1) == 0) {
                 return off;
             }
             idx += 1;
@@ -40,7 +40,7 @@ extern "C" int FUN_0030d350(K *arg0, unsigned int arg1) {
     s = arg0->f16->buf;
     end = s + arg0->f16->sz;
     while (s < end) {
-        if (igStrCmp(arg1, s) == 0) {
+        if (strcmp(arg1, s) == 0) {
             return s - arg0->f16->buf;
         }
         s += strlen(s) + 1;

@@ -7,7 +7,7 @@ extern char DAT_004f9c68[];
 extern char DAT_004f9c78[];
 extern char DAT_004f9c88[];
 int FUN_002e30b0(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int DAT_004f96a8[4];
 extern int DAT_004f9c60[4];
 extern int DAT_004f9c70[4];
@@ -30,42 +30,42 @@ void **Gap__Core__igPsx2File__vfunc_25(void **arg0, int arg1, int arg2) {
     int var_v1;
 
     FUN_002e30b0();
-    if (igStrCmp(arg2, &DAT_004f96a8[0]) == 0) {
+    if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
         sp4C = ((DW4VCSR_92_1 *)(arg0))->vX((int)(0));
         var_v1 = sp4C.w0;
         goto block_21;
     }
-    if (igStrCmp(arg2, (int *)DAT_004f9c48) == 0) {
+    if (strcmp(arg2, (int *)DAT_004f9c48) == 0) {
         sp48 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(4));
         var_v1 = sp48.w0;
         goto block_21;
     }
-    if (igStrCmp(arg2, (int *)DAT_004f92f0) == 0) {
+    if (strcmp(arg2, (int *)DAT_004f92f0) == 0) {
         sp44 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(1));
         var_v1 = sp44.w0;
         goto block_21;
     }
-    if (igStrCmp(arg2, (int *)DAT_004f9c50) == 0) {
+    if (strcmp(arg2, (int *)DAT_004f9c50) == 0) {
         sp40 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(5));
         var_v1 = sp40.w0;
         goto block_21;
     }
-    if ((igStrCmp(arg2, (int *)DAT_004f9c58) == 0) || (igStrCmp(arg2, &DAT_004f9c60[0]) == 0)) {
+    if ((strcmp(arg2, (int *)DAT_004f9c58) == 0) || (strcmp(arg2, &DAT_004f9c60[0]) == 0)) {
         sp3C = ((DW4VCSR_92_1 *)(arg0))->vX((int)(3));
         var_v1 = sp3C.w0;
         goto block_21;
     }
-    if ((igStrCmp(arg2, (int *)DAT_004f9c68) == 0) || (igStrCmp(arg2, &DAT_004f9c70[0]) == 0)) {
+    if ((strcmp(arg2, (int *)DAT_004f9c68) == 0) || (strcmp(arg2, &DAT_004f9c70[0]) == 0)) {
         sp38 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(7));
         var_v1 = sp38.w0;
         goto block_21;
     }
-    if ((igStrCmp(arg2, (int *)DAT_004f9c78) == 0) || (igStrCmp(arg2, &DAT_004f9c80[0]) == 0)) {
+    if ((strcmp(arg2, (int *)DAT_004f9c78) == 0) || (strcmp(arg2, &DAT_004f9c80[0]) == 0)) {
         sp34 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(2));
         var_v1 = sp34.w0;
         goto block_21;
     }
-    if ((igStrCmp(arg2, (int *)DAT_004f9c88) == 0) || (igStrCmp(arg2, &DAT_004f9c90[0]) == 0)) {
+    if ((strcmp(arg2, (int *)DAT_004f9c88) == 0) || (strcmp(arg2, &DAT_004f9c90[0]) == 0)) {
         sp30 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(6));
         var_v1 = sp30.w0;
         goto block_21;

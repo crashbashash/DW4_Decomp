@@ -7,7 +7,7 @@ int beNDMWLoadIntf2ComMdlCtrl__Play(...);
 int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(...);
 int beNDMWLoadIntf2ComMdlCtrl__Close(...);
 int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(...);
-int igStrCmp(...);
+int strcmp(...);
 typedef struct Ent { int name; int val; int val2; } Ent;
 extern Ent DAT_004cec70[16];
 extern int DAT_00516ca8[4];
@@ -60,7 +60,7 @@ extern "C" unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
                 int s4 = 0;
                 Ent *s3 = DAT_004cec70;
             loop_22:
-                if (igStrCmp(s3->name, s1->f48) == 0) {
+                if (strcmp(s3->name, s1->f48) == 0) {
                     s0 = s4;
                 } else {
                     s4 += 1;
@@ -131,7 +131,7 @@ extern "C" unsigned char FUN_003da7c0(beNDMWLoadIntf2DegiState *arg0) {
             int s4 = 0;
             Ent *s3 = DAT_004cec70;
         loop_46:
-            if (igStrCmp(s3->name, s1->f48) == 0) {
+            if (strcmp(s3->name, s1->f48) == 0) {
                 s0 = s4;
             } else {
                 s4 += 1;

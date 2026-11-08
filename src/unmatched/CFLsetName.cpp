@@ -5,7 +5,7 @@ int FUN_002eb010(int);
 int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 void *StringPool_Intern(int, int);
-int igStrCmp(void *, int);
+int strcmp(void *, int);
 extern int DAT_00586f20[4];
 }
 extern "C" beSystem *DAT_0058a1b8[4];
@@ -37,7 +37,7 @@ extern "C" void CFLsetName(int arg0) {
     do {
         {
             StringRef name = StringList_CopyRetained(list, i);
-            if (igStrCmp(name.p, arg0) == 0) {
+            if (strcmp(name.p, arg0) == 0) {
                 found = true;
                 break;
             }

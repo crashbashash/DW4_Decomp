@@ -62,7 +62,7 @@ void igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
 /* the property container lookup: beBaseInfoRam._dataList / beBaseInfo._dataList / a Seq record's _dataList in, one record out */
 beBaseInfoData *igProperty_FindByName(int, int, const char *);
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 extern float DAT_004c8fb8[4];
 extern char DAT_004e0858[];
 extern float DAT_004e0ef0[4];
@@ -292,7 +292,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
             beMessenger_AppendBool(M, 0);
         } else if (d == 0) {
             beMessenger_AppendBool(M, 0);
-        } else if (igStrCmp((const char *)d->_seqCodeName, beMessenger_GetString(M, 0)) == 0) {
+        } else if (strcmp((const char *)d->_seqCodeName, beMessenger_GetString(M, 0)) == 0) {
             beMessenger_AppendBool(M, 1);
         } else {
             beMessenger_AppendBool(M, 0);
@@ -498,7 +498,7 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
             if (*n == 0x70 && *beMessenger_GetString(M, 0) == 0x70 && d->_hp != 0) ok = 1;
             if (!(ok & 0xFF)) return 1;
         }
-        if (d->_isOnCtrl == 0 || igStrCmp((const char *)d->_seqCodeName, DAT_0050f1b8) == 0) return 1;
+        if (d->_isOnCtrl == 0 || strcmp((const char *)d->_seqCodeName, DAT_0050f1b8) == 0) return 1;
         {
             igObject *hitbody = (igObject *)d->_hitBody;
             if (hitbody == 0) {
@@ -555,14 +555,14 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
     case 1:
     default:
         if (ent->_isRun != 0) {
-            if (igStrCmp(msgname, DAT_0050f1b8) == 0) {
+            if (strcmp(msgname, DAT_0050f1b8) == 0) {
                 CV->v43(ent);
                 POOL()
                 const char *tk = StringPool_Intern(DAT_00586f20[0], DAT_0050f1b8);
                 const char *old = (const char *)d->_seqCodeName;
                 SREL(old)
                 d->_seqCodeName = (int)tk;
-            } else if (igStrCmp(msgname, DAT_0050f230) == 0) {
+            } else if (strcmp(msgname, DAT_0050f230) == 0) {
                 beMessenger_PushArgContext(M);
                 int id = ent->_ramNo;
                 NAMEOF(n)

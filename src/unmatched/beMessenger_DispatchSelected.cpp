@@ -53,7 +53,7 @@ int FUN_002eb010(int);
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
 void StringChunk_ReleaseHeader(int, void *);
-int igStrCmp(int, const void *);
+int strcmp(int, const void *);
 void List_Resize(void *, int, int);
 void ObjectList_AppendRetained(void *, void *);
 void igObject_Destroy(void *);
@@ -122,7 +122,7 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
     work->_message = str;
     igObjectList *fl = (igObjectList *)work->_findRamList;
     count = fl->_count;
-    if (igStrCmp(name, DAT_0050ee10) == 0) {
+    if (strcmp(name, DAT_0050ee10) == 0) {
         matches = 0;
         for (i = 0; i < count; i++) {
             igIntList *list = (igIntList *)work->_findRamNoList; int have = ((int *)list->_data)[i]; if (work->_ramNo == -1 || *(int *)(list->_data + i * 4) /* matching construct: byte-offset element read keeps the data load inside the loop */ == -1 || have == work->_ramNo) matches++;
@@ -148,7 +148,7 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
                 ((int *)il->_data)[nd] = DAT_004c8f88[0];
             }
         }
-    } else if (igStrCmp(name, DAT_0050ee18) == 0) {
+    } else if (strcmp(name, DAT_0050ee18) == 0) {
         ObjRef held(0);
         for (i2 = 0; i2 < count; i2++) {
             igObjectList *list = (igObjectList *)work->_findRamList;

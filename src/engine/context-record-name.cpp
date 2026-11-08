@@ -26,7 +26,7 @@ struct ContextRecords {
     NamedRecord records[46];
 };
 
-extern "C" int igStrCmp(const char *, const char *);  /* 0 when the strings are equal */
+extern "C" int strcmp(const char *, const char *);  /* 0 when the strings are equal */
 
 /* Finds the first of the 46 records whose name equals `name` and returns what its slot-21 lookup
  * yields; null or empty names, and unknown names, give null. */
@@ -34,7 +34,7 @@ extern "C" void *FUN_002f2830(ContextVirtuals *self, const char *name) {
     if (name) {
         if (*name) {
             for (int i = 0; i < 46; ++i)
-                if (!igStrCmp(((ContextRecords *)self)->records[i].name, name)) return self->Lookup(i);
+                if (!strcmp(((ContextRecords *)self)->records[i].name, name)) return self->Lookup(i);
         }
     }
     return 0;

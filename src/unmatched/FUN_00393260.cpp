@@ -24,7 +24,7 @@ int beMessenger_SendNamed(...);
 int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 Prop *igProperty_FindByName(...);
-int igStrCmp(void *, void *);
+int strcmp(void *, void *);
 extern int DAT_004e0858[4];
 extern int DAT_004e1098[4];
 extern int DAT_0050ef18[4];
@@ -140,17 +140,17 @@ extern "C" unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, be
         nm = m->_name ? (char *)m->_name : (char *)&DAT_004e0858[0];
         fa = m->_value;
         fb = m->_frame;
-        if (igStrCmp(nm, &DAT_0050f0c8[0]) == 0) {
+        if (strcmp(nm, &DAT_0050f0c8[0]) == 0) {
             FUN_00392d20(MOVES(arg2)[2], 2, fa, fb, 0.0f);
-        } else if (igStrCmp(nm, &DAT_0050f0d0[0]) == 0) {
+        } else if (strcmp(nm, &DAT_0050f0d0[0]) == 0) {
             FUN_00392d20(MOVES(arg2)[2], 0, fa, fb, 0.0f);
-        } else if (igStrCmp(nm, &DAT_0050f0d8[0]) == 0) {
+        } else if (strcmp(nm, &DAT_0050f0d8[0]) == 0) {
             FUN_00392d20(MOVES(arg2)[2], 4, fa, fb, 0.0f);
-        } else if (igStrCmp(nm, &DAT_0050f0e0[0]) == 0) {
+        } else if (strcmp(nm, &DAT_0050f0e0[0]) == 0) {
             FUN_00392d20(MOVES(arg2)[2], 5, fa, fb, 0.0f);
-        } else if (igStrCmp(nm, &DAT_0050f0e8[0]) == 0) {
+        } else if (strcmp(nm, &DAT_0050f0e8[0]) == 0) {
             FUN_00392d20(MOVES(arg2)[1], 4, fa, fb, 0.0f);
-        } else if (igStrCmp(nm, &DAT_0050f0f0[0]) == 0) {
+        } else if (strcmp(nm, &DAT_0050f0f0[0]) == 0) {
             FUN_00392d20(MOVES(arg2)[1], 1, fa, fb, 0.0f);
         }
     } else {
@@ -186,7 +186,7 @@ extern "C" unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, be
             char *s;
             beModelCtrlMOVERL *m = (beModelCtrlMOVERL *)arg3;
             s = m->_name ? (char *)m->_name : (char *)&DAT_004e0858[0];
-            if (igStrCmp(s, &DAT_0050f0f8[0]) == 0) {
+            if (strcmp(s, &DAT_0050f0f8[0]) == 0) {
                 igObject *ob, *old;
                 beMessenger_SendNamed(arg0->_messenger, &DAT_0050ef18[0], (char *)m->_modelName, arg1->_ramNo, &DAT_0050f100[0]);
                 if (beMessenger_GetObjectCount(arg0->_messenger) == 1) {

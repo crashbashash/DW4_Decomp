@@ -17,7 +17,7 @@ void *FUN_002f0040(int, int, int);
 int Memory_GetDefaultAllocator();
 PoolObject *FUN_0031eb90(void *);
 PoolObject *FUN_003235c0(void *);
-int igStrCmp(char *, int *);
+int strcmp(char *, int *);
 void Memory_InitializeAllocatorRegistries(PoolObject *);
 void FUN_002f0370(PoolObject *);
 }
@@ -35,7 +35,7 @@ static inline PoolObject *newSmallPool() {
 }
 #define NEW_LARGE_POOL(p) { p = newLargePool(); }
 #define NEW_SMALL(p) { p = newSmallPool(); }
-#define NEW_POOL(p) { if (DAT_00586de8 != 0) { if (igStrCmp(DAT_00586de8, DAT_004f8b50) == 0) { NEW_LARGE_POOL(p) } else if (igStrCmp(DAT_00586de8, DAT_004f8c80) == 0) { NEW_SMALL(p) } else { NEW_LARGE_POOL(p) } } else { NEW_LARGE_POOL(p) } }
+#define NEW_POOL(p) { if (DAT_00586de8 != 0) { if (strcmp(DAT_00586de8, DAT_004f8b50) == 0) { NEW_LARGE_POOL(p) } else if (strcmp(DAT_00586de8, DAT_004f8c80) == 0) { NEW_SMALL(p) } else { NEW_LARGE_POOL(p) } } else { NEW_LARGE_POOL(p) } }
 extern "C" void FUN_002f43a0(PoolSlotTable *self) {
     PoolObject *p;
     int i;

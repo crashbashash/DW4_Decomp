@@ -42,7 +42,7 @@ int FUN_00236f80(int, int);
 int *bePadManager_GetPadForPlayer(int, int);
 int igObject_IsKindOf(void *, int);
 int beLua__RunNamedChunk(int, int, int);
-int igStrCmp(int *, int *);
+int strcmp(int *, int *);
 int FUN_002eb010(int);
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
@@ -78,7 +78,7 @@ void Gap__Bec__beMovie__vfunc_31(beMovie *self, MovieInfoArg *arg1) {
                 if (it == 0) goto done;
                 name = (int *)it->_name;
                 if (name != 0) { name = (int *)name; } else name = DAT_004e0858;
-                if (igStrCmp((int *)self->_playingName, name) == 0) {
+                if (strcmp((int *)self->_playingName, name) == 0) {
                     beLua__RunNamedChunk(h, it->_callLuaName, 0);
                     break;
                 }

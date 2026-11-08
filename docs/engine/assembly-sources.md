@@ -32,7 +32,7 @@ upstream file) per file, and spells instructions as mnemonics, never `.word`.
 
 ### setjmp and longjmp
 
-`FUN_00129880` (setjmp, 88 bytes) and `FUN_001298d8` (longjmp, 100 bytes): `src/newlib/setjmp.S`.
+`setjmp` (`0x129880`, 88 bytes) and `longjmp` (`0x1298d8`, 100 bytes): `src/newlib/setjmp.S`.
 
 * Upstream newlib ships them as assembly (`newlib/libc/machine/mips/setjmp.S`). Sony's file is
   that one with each callee-saved register stored as a quadword (`sq`/`lq`: the R5900's general
@@ -51,9 +51,9 @@ upstream file) per file, and spells instructions as mnemonics, never `.word`.
 
 ### The R5900 string and memory routines
 
-`memchr` (`FUN_00126f24`), `memcmp` (`FUN_00127004`), `memcpy`, `memmove`, `memset`, `strcat`
-(`FUN_0012a1e8`), `strchr` (`FUN_0012a314`), `strcmp` (`igStrCmp`), `strcpy`, `strlen`, `strncat`
-(`FUN_0012a9f0`), `strncmp` (`FUN_0012aba0`) and `strncpy`: one `src/newlib/<name>.S` each.
+`memchr`, `memcmp`, `memcpy`, `memmove`, `memset`, `strcat`, `strchr`, `strcmp`, `strcpy`, `strlen`,
+`strncat`, `strncmp` and `strncpy`: one `src/newlib/<name>.S` each, named as the archive members
+name them (`config/SLUS-20836/names/newlib.tsv`).
 
 * DW4 links them from the `libc.a` of Sony's EE toolchain release `ee001003_1` (2.96-ee-001003-1,
   the compiler of the rest of newlib). Each member's `.text` is DW4's bytes exactly; `strcat.o`

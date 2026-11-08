@@ -47,18 +47,11 @@ original source.
 
 ## Remaining (2 of 68): not reproducible from plain source
 
-Both were attempted a third time with the register-colouring lessons above; neither can be matched without inline assembly, which is
-not recovered source.
+`strcmp` was written in assembly and is built from its `.S` source. `Matrix44_Copy` was attempted a third time with the
+register-colouring lessons above and cannot be matched without inline assembly, which is not recovered source.
 
-- **`igStrCmp` (324 bytes).** The retail code is hand-written. It builds `0x0101010101010101` and `0x8080808080808080` in `a3`/`a2`
-  (`lui`/`ori`/`dsll`/`ori`/`dsll`/`ori`) before an alignment dispatch with three paths: 16-byte (`lq`, `psubw`, `pcpyud`, `pcpyld`,
-  `pnor`, `psubb`, `pand`), 8-byte (`ld`, `nor`, `dsubu`, `and`) and byte-wise (`lb`/`lbu`), sharing one byte-loop tail at `0x12a5d4`
-  and relying on branch-likely delay slots. The pinned compiler has no MMI or 128-bit vector builtins (its strings show the MMI
-  mnemonics only in the inline-assembler opcode table; its intrinsics are `__abs`, `__mulhi`, `__strcpy`, `__sqrt`, `__rsqrt`, `__memcpy`, `__sel`).
-  `__int128` only moves data (copies compile to `lq`/`sq`; any arithmetic or bitwise operator fails with "illegal data size" on the
-  pinned build, the default build, 2.4 and all 15 scratch 3.0.x builds; the 2.3.3 build accepts the operators but lowers them to 64-bit
-  operations on the low half). The best plain-C candidate (a `u64` `(x - K1) & ~x & K2` zero-byte test) differs in constant
-  construction, alignment-test layout, loop inversion and sign extension, and lacks the 16-byte path entirely.
+- **`strcmp` (324 bytes).** newlib's R5900 `strcmp.S`, built from `src/newlib/strcmp.S` as owner-approved
+  hand-written assembly ([assembly sources](../engine/assembly-sources.md)).
 - **`Matrix44_Copy` (188 bytes).** The scalar path and the alignment test match. The aligned path differs only in the four-quad block:
   retail loads `lq a2,0 / a3,16 / t0,32 / t1,48` and stores `sq a2 / a3 / t0`, branches, then `sq t1`; the best C (`__int128` temporaries,
   all 576 load/store orders, struct copies, pointer increments, volatile, pragmas, 2.3.3 to 3.0 builds) loads the first-stored quad last

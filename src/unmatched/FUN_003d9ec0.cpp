@@ -12,7 +12,7 @@ int beMessenger_GetObject(...);
 int beMessenger_SendNamed(...);
 void igObject_Destroy(igObject *);
 int igObject_GetAllocator(...);
-int igStrCmp(...);
+int strcmp(...);
 typedef struct SlotEnt { int name; int val; int val2; } SlotEnt;
 extern SlotEnt DAT_004cec70[16];
 extern int DAT_00516c40[4];
@@ -78,7 +78,7 @@ extern "C" void FUN_003d9ec0(SlotPanel *arg0) {
             s3 = 0;
             s2 = DAT_004cec70;
         lsA:
-            if (igStrCmp(s2->name, s0->model) == 0) {
+            if (strcmp(s2->name, s0->model) == 0) {
                 s5 = s3;
             } else {
                 s3 += 1;
@@ -133,7 +133,7 @@ extern "C" void FUN_003d9ec0(SlotPanel *arg0) {
             s3 = 0;
             s2 = DAT_004cec70;
         lsB:
-            if (igStrCmp(s2->name, s0->model) == 0) {
+            if (strcmp(s2->name, s0->model) == 0) {
                 s5 = s3;
             } else {
                 s3 += 1;

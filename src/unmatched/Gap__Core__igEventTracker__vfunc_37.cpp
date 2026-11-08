@@ -111,7 +111,7 @@ struct EventTrackerScopedLock {
 extern "C" {
 void FUN_002e2130(EventRecordInfo *);
 void FUN_002e2300(EventRecordInfo *, int);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 int FUN_0012aff0(char *, char *);
 extern EventQueryResult DAT_004fb418[2];
 extern char DAT_004f98d0[];
@@ -138,7 +138,7 @@ void Gap__Core__igEventTracker__vfunc_37(EventTrackerQueryView *self, char *want
             }
             while (**pending != 0) {
                 self->Describe(**pending, buffer, 255, &line, 0, 0, &column);
-                if (igStrCmp(buffer, DAT_004f98d0) == 0) {
+                if (strcmp(buffer, DAT_004f98d0) == 0) {
                     break;
                 }
                 if (FUN_0012aff0(buffer, wanted) != 0) {

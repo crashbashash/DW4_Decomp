@@ -103,7 +103,7 @@ extern int FUN_002eb010(int);
 extern int StringPool_Construct(int);
 extern char *StringPool_Intern(int, const char *);
 extern void StringChunk_ReleaseHeader(int, int *);
-extern int igStrCmp(const char *, const char *);
+extern int strcmp(const char *, const char *);
 extern int beNDMWItemBase_GetRecordInt(beNDMWItemBase *, beNDMWGameRam *, const char *);
 extern const char *beNDMWItemBase_GetRecordString(beNDMWItemBase *, beNDMWGameRam *, const char *);
 extern int DAT_00586f20[4];   /* interned-string pool */
@@ -397,7 +397,7 @@ extern "C" void FUN_003fab90(beNDMWGameRam *self, int index, unsigned char apply
             if (pocketItem) {
                 const char *zokuseiName = beNDMWItemBase_GetRecordString(pocketItem, self, PROP_ZOKUSEI);
                 for (int element = 0; element < 4; element++) {
-                    if (igStrCmp(zokuseiName, DAT_004cf350[element]) == 0) {
+                    if (strcmp(zokuseiName, DAT_004cf350[element]) == 0) {
                         igProperty_GetRecord(player, PROP_ATTACKZOKUSEI)->value = element;
                         found = 1;
                         break;

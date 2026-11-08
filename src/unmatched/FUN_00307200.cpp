@@ -7,7 +7,7 @@ extern char DAT_004fb198[];
 extern char DAT_004fb1a0[];
 extern igResult DAT_004fb410;
 int FUN_00129ef8(char *, char *, int);
-int FUN_0012aba0(char *, char *, int);
+int strncmp(char *, char *, int);
 char *FUN_0012aff0(char *, char *);
 igResult igMetaEnum_GetValueByName(void *, char *, int);
 int strlen(char *);
@@ -47,7 +47,7 @@ extern "C" int FUN_00307200(char *text, int value, void *meta, char *format) {
         }
     }
     if (DAT_004d3d11[*s] & 4) {
-        if (FUN_0012aba0(text, DAT_004fb198, 2) == 0) {
+        if (strncmp(text, DAT_004fb198, 2) == 0) {
             if (FUN_00129ef8(text, DAT_004fb1a0, value) == 1) {
                 return 1;
             }

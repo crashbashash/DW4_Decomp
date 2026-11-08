@@ -5,7 +5,7 @@ int Memory_GetAllocatorBySelector(...);
 int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 beModelCtrlInfoRamData *igProperty_FindByName(...);
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 extern beBaseInfoRam *DAT_0058a1e0[4];
 extern int DAT_00585be0[4];
 extern int DAT_00587110[4];
@@ -46,5 +46,5 @@ int MDLisSeqName(char *arg0) {
         h->_dataList = (int)s0;
     }
     beModelCtrlInfoRamData *p = igProperty_FindByName(h->_dataList, DAT_00585be0[0], &DAT_0050dd40[0]);
-    return igStrCmp((const char *)((beModelCtrlInfoWork *)p->_work)->_seqCodeName, arg0) == 0;
+    return strcmp((const char *)((beModelCtrlInfoWork *)p->_work)->_seqCodeName, arg0) == 0;
 }

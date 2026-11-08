@@ -28,7 +28,7 @@ struct __suio { struct __siov *uio_iov; int uio_iovcnt; int uio_resid; };
 int FUN_0012fef0();
 int FUN_00124e10();
 void *FUN_00127148();
-void *FUN_00126f24();
+void *memchr();
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define COPY(n)	  (void) FUN_00127148((void *) fp->_p, (void *) p, (size_t) (n))
 
@@ -113,7 +113,7 @@ int FUN_001258b0(fp, uio)
 	  while (len == 0) { nlknown = 0; p = iov->iov_base; len = iov->iov_len; iov++; }
 	  if (!nlknown)
 	    {
-	      nl = FUN_00126f24 ((void *) p, '\n', len);
+	      nl = memchr ((void *) p, '\n', len);
 	      nldist = nl ? nl + 1 - p : len + 1;
 	      nlknown = 1;
 	    }

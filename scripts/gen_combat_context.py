@@ -72,7 +72,7 @@ int FUN_003a92e0(void *,const char *);
 int FUN_003a9310(void *,const char *);
 int beDataBase_GetRecordInt(void *,int,const char *);
 const char *beDataBase_GetRecordString(void *,int,const char *);
-int igStrCmp(const char *,const char *);
+int strcmp(const char *,const char *);
 const char *StringPool_Intern(void *,const char *);
 void *StringPool_GetInstance(void);
 void *FightCom_GetMetaEnum(void);

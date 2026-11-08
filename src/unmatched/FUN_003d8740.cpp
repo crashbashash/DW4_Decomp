@@ -21,7 +21,7 @@ int FUN_004482e0(...);
 int FUN_00448430(...);
 int FUN_00448580(...);
 int FUN_00448660(...);
-int FUN_0012a1e8(...);
+int strcat(...);
 int List_Reserve(...);
 int ObjectList_FillRetained(...);
 int ObjectList_AppendRetained(...);
@@ -318,7 +318,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                     buf9[0] = i9 / 10 + 48; buf9[1] = i9 % 10 + 48; buf9[2] = 0;
                     id = beDataBase_GetRecordInt(data, jrow, buf9);
                     if (id != -1) {
-                        FUN_0012a1e8(buf9, &DAT_00516ba8[0]);
+                        strcat(buf9, &DAT_00516ba8[0]);
                         kind = beDataBase_GetRecordInt(data, jrow, buf9);
                         switch (kind) {
                         case 0:

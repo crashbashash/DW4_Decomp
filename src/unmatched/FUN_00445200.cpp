@@ -8,7 +8,7 @@ int beMessenger_SendNamed(...);
 int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
 void *igProperty_FindByName(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int DAT_004cfc50[4];
 extern int DAT_004cfc74[4];
 extern int DAT_004cfdb8[4];
@@ -90,17 +90,17 @@ extern "C" void FUN_00445200(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1) {
             return;
         }
         if (((igIntList *)st->_timerList)->_count != 0) {
-            if (((int *)((igIntList *)st->_timerList)->_data)[8] != 0 && igStrCmp((char *)st->_seqCodeName, &DAT_0051d458[0]) != 0) {
+            if (((int *)((igIntList *)st->_timerList)->_data)[8] != 0 && strcmp((char *)st->_seqCodeName, &DAT_0051d458[0]) != 0) {
                 FUN_003a8580(arg1, &DAT_0051d450[0]);
                 SETB((igUnsignedCharList *)st->_isFirstList, 8, GPR_00554aa0)
                 SETI((igIntList *)st->_timerList, 8, DAT_004cfdc8[0])
             }
             if (((int *)((igIntList *)st->_timerList)->_data)[9] != 0) {
-                if (igStrCmp((char *)st->_seqCodeName, &DAT_0051d460[0]) == 0) {
+                if (strcmp((char *)st->_seqCodeName, &DAT_0051d460[0]) == 0) {
                     ((MessengerVirt *)arg0)->vX(arg1, &DAT_0051d468[0]);
                     return;
                 }
-                if (igStrCmp((char *)st->_seqCodeName, &DAT_0051d468[0]) != 0) {
+                if (strcmp((char *)st->_seqCodeName, &DAT_0051d468[0]) != 0) {
                     FUN_003a8580(arg1, &DAT_0051d470[0]);
                     SETB((igUnsignedCharList *)st->_isFirstList, 9, GPR_00554aa4)
                     SETI((igIntList *)st->_timerList, 9, DAT_004cfdd0[0])

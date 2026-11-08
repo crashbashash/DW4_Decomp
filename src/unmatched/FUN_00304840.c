@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 int strlen(int);
-int FUN_0012aba0(int, int, unsigned);
+int strncmp(int, int, unsigned);
 igPluginRepository *FUN_002bc930(int);
 int FUN_002eb010(int);
 int ObjectList_AppendRetained(int, igPluginRepository *);
@@ -33,7 +33,7 @@ void FUN_00304840(igPluginHelper *arg0, int arg1, int arg2) {
     }
     sp4C = FUN_002bc930(igObject_GetAllocator(arg0));
     igNamedObject_SetName(sp4C, arg1);
-    if (FUN_0012aba0(arg2, DAT_004c22c8[0], DAT_004fafb8[0]) == 0) {
+    if (strncmp(arg2, DAT_004c22c8[0], DAT_004fafb8[0]) == 0) {
             o = sp4C;
     if (DAT_00586f20[0] == 0) {
         v = FUN_002eb010(16);
@@ -51,7 +51,7 @@ void FUN_00304840(igPluginHelper *arg0, int arg1, int arg2) {
     o->_location = s2;
     sp4C->_locationType = 1;
 
-    } else if (FUN_0012aba0(arg2, DAT_004c22d0[0], DAT_004fafc0[0]) == 0) {
+    } else if (strncmp(arg2, DAT_004c22d0[0], DAT_004fafc0[0]) == 0) {
             o = sp4C;
     if (DAT_00586f20[0] == 0) {
         v = FUN_002eb010(16);

@@ -64,7 +64,7 @@ callees ([callees](combat-callees.md)).
 
 ## Remaining combat work
 
-The two non-reproducible callees (`igStrCmp`, `Matrix44_Copy`) have no C source yet. The dispatcher's dynamic behaviour (indirect call targets,
+`Matrix44_Copy` has no C source yet; `strcmp` is newlib's R5900 assembly (`src/newlib/strcmp.S`). The dispatcher's dynamic behaviour (indirect call targets,
 hit geometry, actor programs, spawning, progression) is separate recovery work; this page claims byte identity of the callback only.
 
 ## Typed members

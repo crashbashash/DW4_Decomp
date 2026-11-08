@@ -6,7 +6,7 @@ struct Rt { char pad[56]; int f56; };
 extern "C" {
 int FUN_00117c78(...);
 int FUN_00117ed8(...);
-int FUN_0012aba0(...);
+int strncmp(...);
 void *FUN_00147090(...);
 int FUN_00225300(...);
 void *FUN_002b9500(...);
@@ -17,7 +17,7 @@ void *Memory_GetAllocatorBySelector(...);
 int ObjectList_AppendRetained(int, int);
 int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
-int igStrCmp(...);
+int strcmp(...);
 int sceMtapPortOpen(...);
 extern char *DAT_004c22f0[4];
 extern int DAT_004d6cc8[4];
@@ -70,12 +70,12 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
         if (FUN_00306770(DAT_00586dc8[0]->f56, 3, &DAT_004d7040[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
             s0 = *(char **)((char *)sp8C + 8);
             s0 = (s0 == 0) ? DAT_004c22f0[0] : s0;
-            if (igStrCmp(s0, &DAT_004d6ce0[0]) == 0) {
+            if (strcmp(s0, &DAT_004d6ce0[0]) == 0) {
                 v1 = 0xFFFF;
                 arg0->_multitap = v1;
-            } else if (igStrCmp(s0, &DAT_004d6cc8[0]) == 0) {
+            } else if (strcmp(s0, &DAT_004d6cc8[0]) == 0) {
                 arg0->_multitap = 0;
-            } else if (FUN_0012aba0(s0, &DAT_004d7058[0], 4) == 0) {
+            } else if (strncmp(s0, &DAT_004d7058[0], 4) == 0) {
                 v1 = 2;
                 if (*(char *)(s0 + 4) == 0x30) { v1 = 1; arg0->_multitap = v1; } else { arg0->_multitap = v1; }
             }

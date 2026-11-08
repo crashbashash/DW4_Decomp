@@ -1,4 +1,4 @@
-int FUN_0012a9f0(char *, int *, int);
+int strncat(char *, int *, int);
 int StringChunk_ReleaseHeader(int, int *);
 int igMetaEnum_GetNameAt(int **, int, int);
 int igMetaEnum_GetNameCount(int);
@@ -20,10 +20,10 @@ char *igMetaEnum_GetNamesByMask(char *arg0, int arg1, int arg2, int arg3) {
     for (; i < cnt; i++) {
         if (arg2 & igMetaEnum_GetValueAt(arg3, i)) {
             if (n != 0) {
-                FUN_0012a9f0(arg0, DAT_004f9950, len);
+                strncat(arg0, DAT_004f9950, len);
             }
             igMetaEnum_GetNameAt(&sp9C, arg3, i);
-            FUN_0012a9f0(arg0, sp9C, len);
+            strncat(arg0, sp9C, len);
             if (sp9C != 0) {
                 hdr = sp9C - 2;
                 v = sp9C[-1] - 1;

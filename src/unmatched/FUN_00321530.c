@@ -1,5 +1,5 @@
 char *strncpy(char *, const char *, int);
-char *FUN_0012a314(char *, int);
+char *strchr(char *, int);
 void *memcpy(void *, const void *, int);
 int strlen(const char *);
 void FUN_00321530(const char *in, char *out, int size) {
@@ -36,7 +36,7 @@ void FUN_00321530(const char *in, char *out, int size) {
                     }
                     strncpy(out, cursor, copy);
                     out[copy] = 0;
-                    open = FUN_0012a314(out, '<');
+                    open = strchr(out, '<');
                     if (open != 0) {
                         length = open - out;
                         memcpy(inner, open + 1, copy + 1 - length);

@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 extern "C" {
-int FUN_0012a1e8(...);
+int strcat(...);
 int strcpy(...);
 int strlen(...);
 extern int DAT_004c22b8[4];
@@ -30,9 +30,9 @@ int igMetaField_GetMangledName(igMetaField *arg0, void **arg1) {
             var_s2 = strlen(temp_s3);
             var_s2 = ((DW4VC_216_1 *)(arg1))->vX((int)(var_s2 + temp_s2_3 + 1));
             strcpy(var_s2, DAT_004c22b8[0]);
-            FUN_0012a1e8(var_s2, temp_s3);
-            FUN_0012a1e8(var_s2, DAT_004c22c0[0]);
-            FUN_0012a1e8(var_s2, temp_s0);
+            strcat(var_s2, temp_s3);
+            strcat(var_s2, DAT_004c22c0[0]);
+            strcat(var_s2, temp_s0);
             goto block_3;
         }
     } else {

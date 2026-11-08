@@ -23,7 +23,7 @@ unsigned int beMessenger_ResolveEnumValue(int, int, int);
 int igObject_Destroy(igObject *);
 int igObject_GetAllocator(void *);
 int igProperty_FindByName(int, int, int *);
-int igStrCmp(int, int *);
+int strcmp(int, int *);
 extern float DAT_004e1058[4];
 extern float DAT_004e105c[4];
 extern float DAT_004e1060[4];
@@ -125,7 +125,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
             ((float *)u->_offsetPos)[2] = DAT_004e1060[0];
         }
         if (beMessenger_GetStringCount(arg0->_messenger) != 0) {
-            if (igStrCmp(beMessenger_GetString(arg0->_messenger, 0), DAT_0050f8d0) == 0) {
+            if (strcmp(beMessenger_GetString(arg0->_messenger, 0), DAT_0050f8d0) == 0) {
                 u->_isCancel = 0;
             }
         }

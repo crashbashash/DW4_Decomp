@@ -62,7 +62,7 @@ int FUN_003a92e0(...);
 int FUN_003a9310(...);
 int beDataBase_GetRecordInt(...);
 const char *beDataBase_GetRecordString(...);
-int igStrCmp(...);
+int strcmp(...);
 const char *StringPool_Intern(...);
 void *StringPool_GetInstance(...);
 void *FightCom_GetMetaEnum(...);
@@ -2284,7 +2284,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
         temp_ret_79 = beMessenger_GetString(arg0->_messenger, 0);
         temp_v0_9 = temp_ret_79;
         var_s0_4 = 0;
-        temp_ret_80 = igStrCmp(temp_v0_9, &DAT_00518880[0]);
+        temp_ret_80 = strcmp(temp_v0_9, &DAT_00518880[0]);
         if (temp_ret_80 == 0) {
             temp_ret_81 = beMessenger_GetString(arg0->_messenger, 1);
             temp_v0_10 = (char *)(temp_ret_81);
@@ -2295,18 +2295,18 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
             temp_ret_85 = ObjectList_GetAt_003e9260(temp_ret_84, temp_ret_82);
             temp_ret_86 = igProperty_GetRecord(temp_ret_85, &DAT_00518880[0]);
             temp_v0_12 = (void *)(temp_ret_86);
-            temp_ret_87 = igStrCmp(temp_v0_10, &DAT_005190e0[0]);
+            temp_ret_87 = strcmp(temp_v0_10, &DAT_005190e0[0]);
             if (temp_ret_87 == 0) {
                 ((beDataObjInt *)temp_v0_12)->_data = temp_v0_11;
             } else {
-                temp_ret_88 = igStrCmp(temp_v0_10, &DAT_005190e8[0]);
+                temp_ret_88 = strcmp(temp_v0_10, &DAT_005190e8[0]);
                 if (temp_ret_88 == 0) {
                     temp_ret_89 = FUN_00406f90((int) temp_v0_12);
                     ((beDataObjInt *)temp_v0_12)->_data = (int)((int) (temp_v0_11 + temp_ret_89));
                 }
             }
         } else {
-            temp_ret_90 = igStrCmp(temp_v0_9, &DAT_00518890[0]);
+            temp_ret_90 = strcmp(temp_v0_9, &DAT_00518890[0]);
             if (temp_ret_90 == 0) {
                 temp_ret_91 = beMessenger_GetString(arg0->_messenger, 1);
                 temp_v0_13 = temp_ret_91;
@@ -2314,19 +2314,19 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                 temp_ret_93 = (void *)(FUN_00407030(&arg0->_playerDataListList));
                 temp_ret_94 = ObjectList_GetAt_003e9260(temp_ret_93, temp_ret_92);
                 temp_v0_14 = (void *)(temp_ret_94);
-                temp_ret_95 = igStrCmp(temp_v0_13, &DAT_00519040[0]);
+                temp_ret_95 = strcmp(temp_v0_13, &DAT_00519040[0]);
                 if (temp_ret_95 == 0) {
                     temp_ret_96 = igProperty_GetRecord(temp_v0_14, &DAT_00518890[0]);
                     var_s0_4 = ((beDataObjInt *)temp_ret_96)->_data;
                 } else {
-                    temp_ret_97 = igStrCmp(temp_v0_13, &DAT_005190f0[0]);
+                    temp_ret_97 = strcmp(temp_v0_13, &DAT_005190f0[0]);
                     if (temp_ret_97 == 0) {
                         temp_ret_98 = igProperty_GetRecord(temp_v0_14, &DAT_00518898[0]);
                         var_s0_4 = ((beDataObjInt *)temp_ret_98)->_data;
                     }
                 }
             } else {
-                temp_ret_99 = igStrCmp(temp_v0_9, &DAT_005188a0[0]);
+                temp_ret_99 = strcmp(temp_v0_9, &DAT_005188a0[0]);
                 if (temp_ret_99 == 0) {
                     temp_ret_100 = beMessenger_GetString(arg0->_messenger, 1);
                     temp_v0_15 = temp_ret_100;
@@ -2334,12 +2334,12 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                     temp_ret_102 = (void *)(FUN_00407030(&arg0->_playerDataListList));
                     temp_ret_103 = ObjectList_GetAt_003e9260(temp_ret_102, temp_ret_101);
                     temp_v0_16 = (void *)(temp_ret_103);
-                    temp_ret_104 = igStrCmp(temp_v0_15, &DAT_005190f8[0]);
+                    temp_ret_104 = strcmp(temp_v0_15, &DAT_005190f8[0]);
                     if (temp_ret_104 == 0) {
                         temp_ret_105 = igProperty_GetRecord(temp_v0_16, &DAT_005188a0[0]);
                         var_s0_4 = ((beDataObjInt *)temp_ret_105)->_data;
                     } else {
-                        temp_ret_106 = igStrCmp(temp_v0_15, &DAT_00519100[0]);
+                        temp_ret_106 = strcmp(temp_v0_15, &DAT_00519100[0]);
                         if (temp_ret_106 == 0) {
                             temp_ret_107 = igProperty_GetRecord(temp_v0_16, &DAT_005188a8[0]);
                             var_s0_4 = ((beDataObjInt *)temp_ret_107)->_data;
@@ -2366,25 +2366,25 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
         temp_v0_22 = temp_ret_113;
         temp_ret_114 = beMessenger_GetInt(arg0->_messenger, 3);
         temp_v0_23 = temp_ret_114;
-        if (igStrCmp(temp_v0_18, &DAT_005190e0[0]) == 0) {
+        if (strcmp(temp_v0_18, &DAT_005190e0[0]) == 0) {
             var_s0_5 = 0;
-        } else if (igStrCmp(temp_v0_18, &DAT_00519108[0]) == 0) {
+        } else if (strcmp(temp_v0_18, &DAT_00519108[0]) == 0) {
             var_s0_5 = 1;
-        } else if (igStrCmp(temp_v0_18, &DAT_00519110[0]) == 0) {
+        } else if (strcmp(temp_v0_18, &DAT_00519110[0]) == 0) {
             var_s0_5 = 2;
-        } else if (igStrCmp(temp_v0_18, &DAT_00519118[0]) == 0) {
+        } else if (strcmp(temp_v0_18, &DAT_00519118[0]) == 0) {
             var_s0_5 = 3;
-        } else if (igStrCmp(temp_v0_18, &DAT_00519120[0]) == 0) {
+        } else if (strcmp(temp_v0_18, &DAT_00519120[0]) == 0) {
             var_s0_5 = 4;
-        } else if (igStrCmp(temp_v0_18, &DAT_00519128[0]) == 0) {
+        } else if (strcmp(temp_v0_18, &DAT_00519128[0]) == 0) {
             var_s0_5 = 5;
-        } else if (igStrCmp(temp_v0_18, &DAT_005190e8[0]) == 0) {
+        } else if (strcmp(temp_v0_18, &DAT_005190e8[0]) == 0) {
             var_s0_5 = 6;
         } else {
             return 1;
         }
         {
-            temp_ret_122 = igStrCmp(temp_v0_17, &DAT_00519130[0]);
+            temp_ret_122 = strcmp(temp_v0_17, &DAT_00519130[0]);
             if (temp_ret_122 == 0) {
                 temp_ret_123 = (void *)(FUN_00407030(&arg0->_playerDataListList));
                 temp_ret_124 = ObjectList_GetAt_003e9260(temp_ret_123, temp_v0_20);
@@ -2393,13 +2393,13 @@ int Gap__Bec__beNDMWGameRam__vfunc_34(beNDMWGameRam *arg0, int arg1, void *arg2)
                 temp_v0_24 = (igObjectList *)(temp_ret_126);
                 var_s5 = 0;
                 if (var_s0_5 != 3) {
-                    if (igStrCmp(temp_v0_19, &DAT_00519138[0]) == 0) {
+                    if (strcmp(temp_v0_19, &DAT_00519138[0]) == 0) {
                         var_s5 = 0;
-                    } else if (igStrCmp(temp_v0_19, &DAT_00519140[0]) == 0) {
+                    } else if (strcmp(temp_v0_19, &DAT_00519140[0]) == 0) {
                         var_s5 = 1;
-                    } else if (igStrCmp(temp_v0_19, &DAT_00519148[0]) == 0) {
+                    } else if (strcmp(temp_v0_19, &DAT_00519148[0]) == 0) {
                         var_s5 = 2;
-                    } else if (igStrCmp(temp_v0_19, &DAT_00519150[0]) == 0) {
+                    } else if (strcmp(temp_v0_19, &DAT_00519150[0]) == 0) {
                         var_s5 = 3;
                     } else {
                         return 1;
@@ -2512,7 +2512,7 @@ block_129:
                     goto block_215;
                 }
             } else {
-                temp_ret_157 = igStrCmp(temp_v0_17, &DAT_00519158[0]);
+                temp_ret_157 = strcmp(temp_v0_17, &DAT_00519158[0]);
                 if (temp_ret_157 == 0) {
                     temp_ret_158 = (void *)(FUN_00407030(&arg0->_playerDataListList));
                     temp_ret_159 = ObjectList_GetAt_003e9260(temp_ret_158, temp_v0_20);
@@ -2575,7 +2575,7 @@ block_129:
                     }
                     goto block_215;
                 }
-                temp_ret_170 = igStrCmp(temp_v0_17, &DAT_00518798[0]);
+                temp_ret_170 = strcmp(temp_v0_17, &DAT_00518798[0]);
                 if (temp_ret_170 == 0) {
                     temp_ret_171 = (void *)(FUN_00407040(&arg0->_commonDataList));
                     temp_ret_172 = igProperty_GetRecordArray(temp_ret_171, &DAT_005187a0[0]);
@@ -2617,7 +2617,7 @@ block_129:
                     }
                     goto block_215;
                 }
-                temp_ret_179 = igStrCmp(temp_v0_17, &DAT_00518840[0]);
+                temp_ret_179 = strcmp(temp_v0_17, &DAT_00518840[0]);
                 if (temp_ret_179 == 0) {
                     temp_ret_180 = (void *)(FUN_00407030(&arg0->_playerDataListList));
                     temp_ret_181 = ObjectList_GetAt_003e9260(temp_ret_180, temp_v0_20);
@@ -2746,23 +2746,23 @@ block_215:
                 temp_ret_224 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
                 temp_ret_225 = (char *)(beDataBase_GetRecordString(temp_ret_224, sp490, &DAT_00519018[0]));
                 temp_v0_39 = (char *)(temp_ret_225);
-                temp_ret_226 = igStrCmp(temp_v0_39, &DAT_00518fa8[0]);
+                temp_ret_226 = strcmp(temp_v0_39, &DAT_00518fa8[0]);
                 if (temp_ret_226 == 0) {
                     var_s0_8 = 0;
                 } else {
-                    temp_ret_227 = igStrCmp(temp_v0_39, &DAT_00518fb0[0]);
+                    temp_ret_227 = strcmp(temp_v0_39, &DAT_00518fb0[0]);
                     if (temp_ret_227 == 0) {
                         var_s0_8 = 1;
                     } else {
-                        temp_ret_228 = igStrCmp(temp_v0_39, &DAT_00518fb8[0]);
+                        temp_ret_228 = strcmp(temp_v0_39, &DAT_00518fb8[0]);
                         if (temp_ret_228 == 0) {
                             var_s0_8 = 2;
                         } else {
-                            temp_ret_229 = igStrCmp(temp_v0_39, &DAT_00518fc0[0]);
+                            temp_ret_229 = strcmp(temp_v0_39, &DAT_00518fc0[0]);
                             if (temp_ret_229 == 0) {
                                 var_s0_8 = 3;
                             } else {
-                                temp_ret_230 = igStrCmp(temp_v0_39, &DAT_00519160[0]);
+                                temp_ret_230 = strcmp(temp_v0_39, &DAT_00519160[0]);
                                 if (temp_ret_230 == 0) {
                                     var_s0_8 = 4;
                                 } else {
@@ -2940,23 +2940,23 @@ block_215:
                     temp_ret_292 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
                     temp_ret_293 = (char *)(beDataBase_GetRecordString(temp_ret_292, sp48C, &DAT_00519018[0]));
                     temp_v0_52 = (char *)(temp_ret_293);
-                    temp_ret_294 = igStrCmp(temp_v0_52, &DAT_00518fa8[0]);
+                    temp_ret_294 = strcmp(temp_v0_52, &DAT_00518fa8[0]);
                     if (temp_ret_294 == 0) {
                         var_s1 = 0;
                     } else {
-                        temp_ret_295 = igStrCmp(temp_v0_52, &DAT_00518fb0[0]);
+                        temp_ret_295 = strcmp(temp_v0_52, &DAT_00518fb0[0]);
                         if (temp_ret_295 == 0) {
                             var_s1 = 1;
                         } else {
-                            temp_ret_296 = igStrCmp(temp_v0_52, &DAT_00518fb8[0]);
+                            temp_ret_296 = strcmp(temp_v0_52, &DAT_00518fb8[0]);
                             if (temp_ret_296 == 0) {
                                 var_s1 = 2;
                             } else {
-                                temp_ret_297 = igStrCmp(temp_v0_52, &DAT_00518fc0[0]);
+                                temp_ret_297 = strcmp(temp_v0_52, &DAT_00518fc0[0]);
                                 if (temp_ret_297 == 0) {
                                     var_s1 = 3;
                                 } else {
-                                    temp_ret_298 = igStrCmp(temp_v0_52, &DAT_00519160[0]);
+                                    temp_ret_298 = strcmp(temp_v0_52, &DAT_00519160[0]);
                                     if (temp_ret_298 == 0) {
                                         var_s1 = 4;
                                     } else {
@@ -3080,23 +3080,23 @@ block_215:
                 temp_ret_318 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
                 temp_ret_319 = (char *)(beDataBase_GetRecordString(temp_ret_318, sp488, &DAT_00519018[0]));
                 temp_v0_62 = (char *)(temp_ret_319);
-                temp_ret_320 = igStrCmp(temp_v0_62, &DAT_00518fa8[0]);
+                temp_ret_320 = strcmp(temp_v0_62, &DAT_00518fa8[0]);
                 if (temp_ret_320 == 0) {
                     var_s0_10 = 0;
                 } else {
-                    temp_ret_321 = igStrCmp(temp_v0_62, &DAT_00518fb0[0]);
+                    temp_ret_321 = strcmp(temp_v0_62, &DAT_00518fb0[0]);
                     if (temp_ret_321 == 0) {
                         var_s0_10 = 1;
                     } else {
-                        temp_ret_322 = igStrCmp(temp_v0_62, &DAT_00518fb8[0]);
+                        temp_ret_322 = strcmp(temp_v0_62, &DAT_00518fb8[0]);
                         if (temp_ret_322 == 0) {
                             var_s0_10 = 2;
                         } else {
-                            temp_ret_323 = igStrCmp(temp_v0_62, &DAT_00518fc0[0]);
+                            temp_ret_323 = strcmp(temp_v0_62, &DAT_00518fc0[0]);
                             if (temp_ret_323 == 0) {
                                 var_s0_10 = 3;
                             } else {
-                                temp_ret_324 = igStrCmp(temp_v0_62, &DAT_00519160[0]);
+                                temp_ret_324 = strcmp(temp_v0_62, &DAT_00519160[0]);
                                 if (temp_ret_324 == 0) {
                                     var_s0_10 = 4;
                                 } else {
@@ -3402,7 +3402,7 @@ loop_449:
             temp_ret_420 = (void *)(FUN_00407030(&arg0->_playerDataListList));
             temp_ret_421 = ObjectList_GetAt_003e9260(temp_ret_420, temp_ret_417);
             temp_v0_78 = (void *)(temp_ret_421);
-            temp_ret_422 = igStrCmp(sp480.value, &DAT_005191b8[0]);
+            temp_ret_422 = strcmp(sp480.value, &DAT_005191b8[0]);
             if (temp_ret_422 == 0) {
                 int sp47C;
                 sp47C = 0;
@@ -3632,7 +3632,7 @@ loop_449:
             temp_ret_505 = (void *)(FUN_00407030(&arg0->_playerDataListList));
             temp_ret_506 = ObjectList_GetAt_003e9260(temp_ret_505, temp_ret_502);
             temp_v0_93 = (void *)(temp_ret_506);
-            temp_ret_507 = igStrCmp(sp46C.value, &DAT_005191b8[0]);
+            temp_ret_507 = strcmp(sp46C.value, &DAT_005191b8[0]);
             if (temp_ret_507 == 0) {
                 int sp468;
                 sp468 = 0;
@@ -3696,7 +3696,7 @@ loop_449:
                 beMessenger_ClearInt(arg0->_messenger);
                 beMessenger_AppendInt(arg0->_messenger, var_s0_16);
             } else {
-                temp_ret_528 = igStrCmp(sp46C.value, &DAT_005188d8[0]);
+                temp_ret_528 = strcmp(sp46C.value, &DAT_005188d8[0]);
                 if (temp_ret_528 == 0) {
                     temp_a2_13 = temp_v0_92 % 10000;
                     int sp464;
@@ -3738,7 +3738,7 @@ loop_449:
                     beMessenger_ClearInt(arg0->_messenger);
                     beMessenger_AppendInt(arg0->_messenger, -var_s1_8);
                 } else {
-                    temp_ret_547 = igStrCmp(sp46C.value, &DAT_00518960[0]);
+                    temp_ret_547 = strcmp(sp46C.value, &DAT_00518960[0]);
                     if (temp_ret_547 == 0) {
                         temp_a2_14 = temp_v0_92 % 10000;
                         int sp460;
@@ -3754,7 +3754,7 @@ loop_449:
                         beMessenger_ClearInt(arg0->_messenger);
                         beMessenger_AppendInt(arg0->_messenger, -temp_ret_552);
                     } else {
-                        temp_ret_553 = igStrCmp(sp46C.value, &DAT_00518970[0]);
+                        temp_ret_553 = strcmp(sp46C.value, &DAT_00518970[0]);
                         if (temp_ret_553 == 0) {
                             temp_a2_15 = temp_v0_92 % 10000;
                             int sp45C;
@@ -3770,7 +3770,7 @@ loop_449:
                             beMessenger_ClearInt(arg0->_messenger);
                             beMessenger_AppendInt(arg0->_messenger, -temp_ret_558);
                         } else {
-                            temp_ret_559 = igStrCmp(sp46C.value, &DAT_00518980[0]);
+                            temp_ret_559 = strcmp(sp46C.value, &DAT_00518980[0]);
                             if (temp_ret_559 == 0) {
                                 temp_a2_16 = temp_v0_92 % 10000;
                                 int sp458;
@@ -3804,7 +3804,7 @@ loop_449:
             temp_ret_572 = (void *)(FUN_00407030(&arg0->_playerDataListList));
             temp_ret_573 = ObjectList_GetAt_003e9260(temp_ret_572, temp_ret_569);
             temp_v0_100 = (void *)(temp_ret_573);
-            temp_ret_574 = igStrCmp(sp454.value, &DAT_005191b8[0]);
+            temp_ret_574 = strcmp(sp454.value, &DAT_005191b8[0]);
             if (temp_ret_574 == 0) {
                 int sp450;
                 sp450 = 0;
@@ -3868,7 +3868,7 @@ loop_449:
                 beMessenger_ClearInt(arg0->_messenger);
                 beMessenger_AppendInt(arg0->_messenger, var_s0_18);
             } else {
-                temp_ret_595 = igStrCmp(sp454.value, &DAT_005188b0[0]);
+                temp_ret_595 = strcmp(sp454.value, &DAT_005188b0[0]);
                 if (temp_ret_595 == 0) {
                     temp_a2_18 = temp_v0_99 % 10000;
                     int sp44C;
@@ -3910,7 +3910,7 @@ loop_449:
                     beMessenger_ClearInt(arg0->_messenger);
                     beMessenger_AppendInt(arg0->_messenger, -var_s1_9);
                 } else {
-                    temp_ret_614 = igStrCmp(sp454.value, &DAT_005188b8[0]);
+                    temp_ret_614 = strcmp(sp454.value, &DAT_005188b8[0]);
                     if (temp_ret_614 == 0) {
                         temp_a2_19 = temp_v0_99 % 10000;
                         int sp448;
@@ -4083,25 +4083,25 @@ loop_449:
                 temp_ret_688 = (char *)(beDataBase_GetRecordString(temp_ret_687, temp_s5_2, &DAT_00519018[0]));
                 temp_v0_112 = (char *)(temp_ret_688);
                 var_s1_12 = 0;
-                temp_ret_689 = igStrCmp(temp_v0_112, &DAT_00518fa8[0]);
+                temp_ret_689 = strcmp(temp_v0_112, &DAT_00518fa8[0]);
                 if (temp_ret_689 == 0) {
                     temp_ret_690 = igProperty_GetRecord(temp_v0_110, &DAT_005188e8[0]);
                     var_s1_12 = ((beDataObjInt *)temp_ret_690)->_data;
                     var_s2_8 = 0;
                 } else {
-                    temp_ret_691 = igStrCmp(temp_v0_112, &DAT_00518fb0[0]);
+                    temp_ret_691 = strcmp(temp_v0_112, &DAT_00518fb0[0]);
                     if (temp_ret_691 == 0) {
                         temp_ret_692 = igProperty_GetRecord(temp_v0_110, &DAT_005188f8[0]);
                         var_s1_12 = ((beDataObjInt *)temp_ret_692)->_data;
                         var_s2_8 = 1;
                     } else {
-                        temp_ret_693 = igStrCmp(temp_v0_112, &DAT_00518fb8[0]);
+                        temp_ret_693 = strcmp(temp_v0_112, &DAT_00518fb8[0]);
                         if (temp_ret_693 == 0) {
                             temp_ret_694 = igProperty_GetRecord(temp_v0_110, &DAT_00518908[0]);
                             var_s1_12 = ((beDataObjInt *)temp_ret_694)->_data;
                             var_s2_8 = 2;
                         } else {
-                            temp_ret_695 = igStrCmp(temp_v0_112, &DAT_00518fc0[0]);
+                            temp_ret_695 = strcmp(temp_v0_112, &DAT_00518fc0[0]);
                             if (temp_ret_695 == 0) {
                                 temp_ret_696 = igProperty_GetRecord(temp_v0_110, &DAT_00518918[0]);
                                 var_s1_12 = ((beDataObjInt *)temp_ret_696)->_data;
@@ -4197,25 +4197,25 @@ loop_449:
                     temp_ret_726 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                     temp_ret_727 = (char *)(beDataBase_GetRecordString(temp_ret_726, temp_s5_2, &DAT_00519018[0]));
                     temp_v0_117 = (char *)(temp_ret_727);
-                    temp_ret_728 = igStrCmp(temp_v0_117, &DAT_00518fa8[0]);
+                    temp_ret_728 = strcmp(temp_v0_117, &DAT_00518fa8[0]);
                     if (temp_ret_728 == 0) {
                         temp_ret_729 = igProperty_GetRecord(temp_v0_110, &DAT_005188e8[0]);
                         var_s1_13 = ((beDataObjInt *)temp_ret_729)->_data;
                         var_s2_8 = 0;
                     } else {
-                        temp_ret_730 = igStrCmp(temp_v0_117, &DAT_00518fb0[0]);
+                        temp_ret_730 = strcmp(temp_v0_117, &DAT_00518fb0[0]);
                         if (temp_ret_730 == 0) {
                             temp_ret_731 = igProperty_GetRecord(temp_v0_110, &DAT_005188f8[0]);
                             var_s1_13 = ((beDataObjInt *)temp_ret_731)->_data;
                             var_s2_8 = 1;
                         } else {
-                            temp_ret_732 = igStrCmp(temp_v0_117, &DAT_00518fb8[0]);
+                            temp_ret_732 = strcmp(temp_v0_117, &DAT_00518fb8[0]);
                             if (temp_ret_732 == 0) {
                                 temp_ret_733 = igProperty_GetRecord(temp_v0_110, &DAT_00518908[0]);
                                 var_s1_13 = ((beDataObjInt *)temp_ret_733)->_data;
                                 var_s2_8 = 2;
                             } else {
-                                temp_ret_734 = igStrCmp(temp_v0_117, &DAT_00518fc0[0]);
+                                temp_ret_734 = strcmp(temp_v0_117, &DAT_00518fc0[0]);
                                 if (temp_ret_734 == 0) {
                                     temp_ret_735 = igProperty_GetRecord(temp_v0_110, &DAT_00518918[0]);
                                     var_s1_13 = ((beDataObjInt *)temp_ret_735)->_data;
@@ -4287,25 +4287,25 @@ loop_449:
                 temp_ret_751 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 temp_ret_752 = (char *)(beDataBase_GetRecordString(temp_ret_751, temp_s5_2, &DAT_00519018[0]));
                 temp_v0_121 = (char *)(temp_ret_752);
-                temp_ret_753 = igStrCmp(temp_v0_121, &DAT_00518fa8[0]);
+                temp_ret_753 = strcmp(temp_v0_121, &DAT_00518fa8[0]);
                 if (temp_ret_753 == 0) {
                     temp_ret_754 = igProperty_GetRecord(temp_v0_110, &DAT_005188e8[0]);
                     var_s1_14 = ((beDataObjInt *)temp_ret_754)->_data;
                     var_s2_8 = 0;
                 } else {
-                    temp_ret_755 = igStrCmp(temp_v0_121, &DAT_00518fb0[0]);
+                    temp_ret_755 = strcmp(temp_v0_121, &DAT_00518fb0[0]);
                     if (temp_ret_755 == 0) {
                         temp_ret_756 = igProperty_GetRecord(temp_v0_110, &DAT_005188f8[0]);
                         var_s1_14 = ((beDataObjInt *)temp_ret_756)->_data;
                         var_s2_8 = 1;
                     } else {
-                        temp_ret_757 = igStrCmp(temp_v0_121, &DAT_00518fb8[0]);
+                        temp_ret_757 = strcmp(temp_v0_121, &DAT_00518fb8[0]);
                         if (temp_ret_757 == 0) {
                             temp_ret_758 = igProperty_GetRecord(temp_v0_110, &DAT_00518908[0]);
                             var_s1_14 = ((beDataObjInt *)temp_ret_758)->_data;
                             var_s2_8 = 2;
                         } else {
-                            temp_ret_759 = igStrCmp(temp_v0_121, &DAT_00518fc0[0]);
+                            temp_ret_759 = strcmp(temp_v0_121, &DAT_00518fc0[0]);
                             if (temp_ret_759 == 0) {
                                 temp_ret_760 = igProperty_GetRecord(temp_v0_110, &DAT_00518918[0]);
                                 var_s1_14 = ((beDataObjInt *)temp_ret_760)->_data;
@@ -4564,7 +4564,7 @@ loop_449:
             temp_ret_828 = ObjectList_GetAt_003e9260(temp_ret_827, temp_ret_825);
             temp_v0_138 = (void *)(temp_ret_828);
             temp_s3_9 = temp_ret_826 % 10000;
-            temp_ret_829 = igStrCmp(sp444.value, &DAT_005191b8[0]);
+            temp_ret_829 = strcmp(sp444.value, &DAT_005191b8[0]);
             if (temp_ret_829 == 0) {
                 var_s2_10 = 0;
                 temp_ret_830 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
@@ -4575,7 +4575,7 @@ loop_449:
                 }
                 temp_ret_833 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 temp_ret_834 = (char *)(beDataBase_GetRecordString(temp_ret_833, temp_s3_9, &DAT_005191f0[0]));
-                temp_ret_835 = igStrCmp(temp_ret_834, &DAT_005191f8[0]);
+                temp_ret_835 = strcmp(temp_ret_834, &DAT_005191f8[0]);
                 if (temp_ret_835 == 0) {
                     temp_ret_836 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                     if (temp_ret_836 == 0) {
@@ -4608,7 +4608,7 @@ loop_449:
                 beMessenger_ClearInt(arg0->_messenger);
                 beMessenger_AppendInt(arg0->_messenger, var_s2_10);
             } else {
-                temp_ret_848 = igStrCmp(sp444.value, &DAT_00519220[0]);
+                temp_ret_848 = strcmp(sp444.value, &DAT_00519220[0]);
                 if (temp_ret_848 == 0) {
                     temp_ret_849 = igProperty_GetRecord(temp_v0_138, &DAT_00518898[0]);
                     temp_s0_25 = ((beDataObjInt *)temp_ret_849)->_data;
@@ -4623,7 +4623,7 @@ loop_449:
                     beMessenger_ClearInt(arg0->_messenger);
                     beMessenger_AppendInt(arg0->_messenger, (int) (temp_s0_25 * temp_ret_854) / 100);
                 } else {
-                    temp_ret_855 = igStrCmp(sp444.value, &DAT_00519228[0]);
+                    temp_ret_855 = strcmp(sp444.value, &DAT_00519228[0]);
                     if (temp_ret_855 == 0) {
                         temp_ret_856 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                         if (temp_ret_856 == 0) {
@@ -4656,7 +4656,7 @@ loop_449:
             temp_ret_870 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
             temp_ret_871 = (char *)(beDataBase_GetRecordString(temp_ret_870, temp_s2_2, &DAT_005191f0[0]));
             int var_s1_17 = 0;
-            temp_ret_872 = igStrCmp(temp_ret_871, &DAT_00519230[0]);
+            temp_ret_872 = strcmp(temp_ret_871, &DAT_00519230[0]);
             if (temp_ret_872 == 0) {
                 temp_ret_873 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 if (temp_ret_873 == 0) {
@@ -4717,7 +4717,7 @@ loop_449:
             temp_ret_898 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
             temp_ret_899 = (char *)(beDataBase_GetRecordString(temp_ret_898, temp_s3_11, &DAT_005191f0[0]));
             var_s2_11 = 0;
-            temp_ret_900 = igStrCmp(temp_ret_899, &DAT_00519238[0]);
+            temp_ret_900 = strcmp(temp_ret_899, &DAT_00519238[0]);
             if (temp_ret_900 == 0) {
                 temp_ret_901 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 if (temp_ret_901 == 0) {
@@ -4813,7 +4813,7 @@ loop_449:
             temp_ret_941 = ObjectList_GetAt_003e9260(temp_ret_940, temp_v0_147);
             temp_v0_149 = (void *)(temp_ret_941);
             temp_s2_3 = temp_ret_939 % 10000;
-            temp_ret_942 = igStrCmp(sp440.value, &DAT_005191b8[0]);
+            temp_ret_942 = strcmp(sp440.value, &DAT_005191b8[0]);
             if (temp_ret_942 == 0) {
                 temp_ret_943 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 if (temp_ret_943 == 0) {
@@ -4824,7 +4824,7 @@ loop_449:
                 temp_ret_946 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 temp_ret_947 = (char *)(beDataBase_GetRecordString(temp_ret_946, temp_s2_3, &DAT_005191f0[0]));
                 var_s1_18 = 0;
-                temp_ret_948 = igStrCmp(temp_ret_947, &DAT_00519248[0]);
+                temp_ret_948 = strcmp(temp_ret_947, &DAT_00519248[0]);
                 if (temp_ret_948 == 0) {
                     temp_ret_949 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                     if (temp_ret_949 == 0) {
@@ -4867,7 +4867,7 @@ loop_449:
                 beMessenger_ClearInt(arg0->_messenger);
                 beMessenger_AppendInt(arg0->_messenger, var_s1_18);
             } else {
-                temp_ret_966 = igStrCmp(sp440.value, &DAT_005188d8[0]);
+                temp_ret_966 = strcmp(sp440.value, &DAT_005188d8[0]);
                 if (temp_ret_966 == 0) {
                     temp_ret_967 = FUN_003a9250(temp_v0_149, &DAT_00518b78[0]);
                     temp_ret_968 = (void *)(FUN_00406e40(temp_ret_967));
@@ -4909,7 +4909,7 @@ loop_449:
                     beMessenger_ClearInt(arg0->_messenger);
                     beMessenger_AppendInt(arg0->_messenger, (int) (temp_s0_29 * var_s1_19) / 100);
                 } else {
-                    temp_ret_983 = igStrCmp(sp440.value, &DAT_00518950[0]);
+                    temp_ret_983 = strcmp(sp440.value, &DAT_00518950[0]);
                     if (temp_ret_983 == 0) {
                         temp_ret_984 = FUN_003a9250(temp_v0_149, &DAT_00518b78[0]);
                         temp_ret_985 = (void *)(FUN_00406e40(temp_ret_984));
@@ -4973,7 +4973,7 @@ loop_449:
             temp_ret_1008 = ObjectList_GetAt_003e9260(temp_ret_1007, temp_v0_156);
             temp_v0_158 = (void *)(temp_ret_1008);
             temp_s2_4 = temp_ret_1006 % 10000;
-            temp_ret_1009 = igStrCmp(sp43C.value, &DAT_005191b8[0]);
+            temp_ret_1009 = strcmp(sp43C.value, &DAT_005191b8[0]);
             if (temp_ret_1009 == 0) {
                 temp_ret_1010 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 if (temp_ret_1010 == 0) {
@@ -4984,7 +4984,7 @@ loop_449:
                 temp_ret_1013 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                 temp_ret_1014 = (char *)(beDataBase_GetRecordString(temp_ret_1013, temp_s2_4, &DAT_005191f0[0]));
                 var_s1_21 = 0;
-                temp_ret_1015 = igStrCmp(temp_ret_1014, &DAT_00519250[0]);
+                temp_ret_1015 = strcmp(temp_ret_1014, &DAT_00519250[0]);
                 if (temp_ret_1015 == 0) {
                     temp_ret_1016 = (void *)(FUN_00406ee0(&arg0->_dBEneatk));
                     if (temp_ret_1016 == 0) {
@@ -5027,7 +5027,7 @@ loop_449:
                 beMessenger_ClearInt(arg0->_messenger);
                 beMessenger_AppendInt(arg0->_messenger, var_s1_21);
             } else {
-                temp_ret_1033 = igStrCmp(sp43C.value, &DAT_005188b0[0]);
+                temp_ret_1033 = strcmp(sp43C.value, &DAT_005188b0[0]);
                 if (temp_ret_1033 == 0) {
                     temp_ret_1034 = FUN_003a9250(temp_v0_158, &DAT_00518b78[0]);
                     temp_ret_1035 = (void *)(FUN_00406e40(temp_ret_1034));
@@ -5069,7 +5069,7 @@ loop_449:
                     beMessenger_ClearInt(arg0->_messenger);
                     beMessenger_AppendInt(arg0->_messenger, (int) (temp_s0_32 * var_s1_22) / 100);
                 } else {
-                    temp_ret_1050 = igStrCmp(sp43C.value, &DAT_005188b8[0]);
+                    temp_ret_1050 = strcmp(sp43C.value, &DAT_005188b8[0]);
                     if (temp_ret_1050 == 0) {
                         temp_ret_1051 = FUN_003a9250(temp_v0_158, &DAT_00518b78[0]);
                         temp_ret_1052 = (void *)(FUN_00406e40(temp_ret_1051));

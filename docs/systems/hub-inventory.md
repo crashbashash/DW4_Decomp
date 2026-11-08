@@ -16,8 +16,8 @@ are not automatically attributed to the hub.
 | 828 | Shop Area | 60 | 1753 | APU, BANK, CHIP, DISK, JUNK, WPU |
 
 **49 bound APIs**, plus registration/dispatch, reach
-**508 functions / 117,404 bytes** through known direct edges.
-**94 functions / 48,540 bytes** lack source definitions.
+**508 functions / 117,380 bytes** through known direct edges.
+**27 functions / 6,636 bytes** lack source definitions.
 The reached bodies contain **110 unresolved register-transfer sites**.
 
 SD receiver methods, callbacks, model/AI programs, named-chunk ownership,
@@ -45,86 +45,19 @@ Exact script call-site references, message arguments, API roots and native edges
 | `0x0010c8d8` | `FUN_0010c8d8` | 148 | 0 |
 | `0x0010c970` | `FUN_0010c970` | 360 | 1 |
 | `0x0010cad8` | `FUN_0010cad8` | 1524 | 16 |
-| `0x0010d0d0` | `FUN_0010d0d0` | 56 | 0 |
 | `0x001138b0` | `RFU086_WaitEvnetFlag` | 16 | 0 |
 | `0x00113990` | `FUN_00113990` | 500 | 0 |
 | `0x00113f20` | `FUN_00113f20` | 84 | 0 |
 | `0x00113f78` | `FUN_00113f78` | 24 | 0 |
-| `0x001145c8` | `FUN_001145c8` | 40 | 0 |
-| `0x0011ede8` | `FUN_0011ede8` | 480 | 0 |
-| `0x00123210` | `FUN_00123210` | 40 | 0 |
-| `0x00123798` | `FUN_00123798` | 180 | 0 |
-| `0x001238a8` | `FUN_001238a8` | 556 | 0 |
-| `0x00123ad8` | `FUN_00123ad8` | 4712 | 1 |
-| `0x00124e10` | `FUN_00124e10` | 276 | 1 |
-| `0x001252c8` | `FUN_001252c8` | 284 | 0 |
-| `0x001256e0` | `FUN_001256e0` | 364 | 0 |
-| `0x001258b0` | `FUN_001258b0` | 992 | 3 |
-| `0x00126028` | `FUN_00126028` | 340 | 0 |
-| `0x001263a8` | `FUN_001263a8` | 600 | 0 |
-| `0x00126600` | `FUN_00126600` | 1832 | 0 |
-| `0x00126f24` | `FUN_00126f24` | 224 | 0 |
-| `0x00127004` | `FUN_00127004` | 148 | 0 |
-| `0x00127098` | `memcpy` | 176 | 0 |
-| `0x00127148` | `memmove` | 260 | 0 |
-| `0x0012724c` | `memset` | 192 | 0 |
-| `0x001274b8` | `FUN_001274b8` | 264 | 0 |
-| `0x001275c0` | `FUN_001275c0` | 304 | 0 |
-| `0x00127868` | `FUN_00127868` | 524 | 0 |
-| `0x00127a78` | `FUN_00127a78` | 252 | 0 |
-| `0x00127b78` | `FUN_00127b78` | 344 | 0 |
-| `0x00127d38` | `FUN_00127d38` | 400 | 0 |
-| `0x00127ec8` | `FUN_00127ec8` | 208 | 0 |
-| `0x00127f98` | `FUN_00127f98` | 408 | 0 |
-| `0x00128130` | `FUN_00128130` | 388 | 0 |
-| `0x001282b8` | `FUN_001282b8` | 204 | 0 |
-| `0x001290d0` | `FUN_001290d0` | 1440 | 0 |
-| `0x001296a8` | `FUN_001296a8` | 380 | 1 |
-| `0x001298d8` | `FUN_001298d8` | 100 | 0 |
-| `0x00129ef8` | `FUN_00129ef8` | 168 | 0 |
-| `0x0012a4a4` | `igStrCmp` | 324 | 0 |
-| `0x0012a78c` | `strlen` | 312 | 0 |
-| `0x0012b078` | `FUN_0012b078` | 3864 | 1 |
-| `0x0012c4e8` | `FUN_0012c4e8` | 232 | 0 |
-| `0x0012c5d0` | `FUN_0012c5d0` | 392 | 0 |
-| `0x0012d510` | `FUN_0012d510` | 180 | 0 |
-| `0x0012d640` | `FUN_0012d640` | 5744 | 1 |
-| `0x0012ecb0` | `FUN_0012ecb0` | 448 | 0 |
-| `0x0012ee70` | `FUN_0012ee70` | 224 | 0 |
-| `0x0012ef50` | `FUN_0012ef50` | 3216 | 5 |
-| `0x0012fbe0` | `FUN_0012fbe0` | 256 | 0 |
-| `0x0012fef0` | `FUN_0012fef0` | 268 | 0 |
 | `0x0018be80` | `FUN_0018be80` | 1340 | 0 |
 | `0x001908f0` | `Matrix44_Copy` | 188 | 0 |
 | `0x00190a50` | `Matrix44_TranslateLocal` | 212 | 0 |
 | `0x0022e440` | `FUN_0022e440` | 116 | 0 |
-| `0x0022e4b8` | `__divdi3` | 1688 | 0 |
-| `0x0022eb50` | `__moddi3` | 1680 | 0 |
-| `0x0022f1e0` | `FUN_0022f1e0` | 1404 | 0 |
-| `0x0022fcc8` | `__floatdidf` | 168 | 0 |
-| `0x0022fe58` | `FUN_0022fe58` | 280 | 0 |
-| `0x0022ff70` | `FUN_0022ff70` | 120 | 0 |
-| `0x00230150` | `FUN_00230150` | 180 | 0 |
-| `0x002302d8` | `pack_d` | 216 | 0 |
-| `0x002303b0` | `unpack_d` | 188 | 0 |
-| `0x00230470` | `FUN_00230470` | 608 | 0 |
-| `0x00230790` | `__muldf3` | 644 | 0 |
-| `0x00230a18` | `__divdf3` | 320 | 0 |
-| `0x00230b58` | `FUN_00230b58` | 288 | 0 |
-| `0x00230c78` | `FUN_00230c78` | 76 | 0 |
-| `0x00230cc8` | `__floatsidf` | 184 | 0 |
-| `0x00230d80` | `FUN_00230d80` | 156 | 0 |
-| `0x00230e20` | `FUN_00230e20` | 44 | 0 |
-| `0x00230e50` | `FUN_00230e50` | 84 | 0 |
-| `0x00230ea8` | `FUN_00230ea8` | 160 | 0 |
 | `0x0023c9a0` | `FUN_0023c9a0` | 416 | 0 |
 | `0x0023f4f0` | `FUN_0023f4f0` | 428 | 0 |
 | `0x002413f0` | `FUN_002413f0` | 352 | 0 |
 | `0x002d6b80` | `List_InsertWords` | 220 | 0 |
 | `0x002ed240` | `Memory_AllocateBufferDirect` | 28 | 1 |
-| `0x0030b460` | `FUN_0030b460` | 352 | 0 |
-| `0x0030bbf0` | `FUN_0030bbf0` | 232 | 0 |
 | `0x0030c740` | `StringTable_AllocateObject` | 28 | 1 |
-| `0x0030ca40` | `StringChunk_TakeBlock` | 236 | 0 |
 | `0x0030cb80` | `StringChunk_ReturnBlock` | 340 | 0 |
 | `0x0030cce0` | `StringChunk_AllocateObject` | 28 | 1 |

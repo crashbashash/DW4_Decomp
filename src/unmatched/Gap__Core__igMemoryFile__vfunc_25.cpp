@@ -1,6 +1,6 @@
 extern "C" {
 int FUN_002e30b0(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int DAT_004f96a8[4];
 extern int DAT_004f9c48[4];
 extern int DAT_004fb410[4];
@@ -10,9 +10,9 @@ class MF { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 extern "C" MF *Gap__Core__igMemoryFile__vfunc_25(MF *arg0, int arg1, int arg2) {
     int ok;
     FUN_002e30b0(arg0);
-    if (igStrCmp(arg2, &DAT_004f96a8[0]) == 0) {
+    if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
         ok = arg0->vX(0).Ok();
-    } else if (igStrCmp(arg2, &DAT_004f9c48[0]) == 0) {
+    } else if (strcmp(arg2, &DAT_004f9c48[0]) == 0) {
         ok = arg0->vX(4).Ok();
     } else {
         return 0;

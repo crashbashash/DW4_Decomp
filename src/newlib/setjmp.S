@@ -4,9 +4,9 @@
 	.set	noreorder
 
 /* int setjmp (jmp_buf);  */
-	.globl	FUN_00129880
-	.ent	FUN_00129880
-FUN_00129880:
+	.globl	setjmp
+	.ent	setjmp
+setjmp:
 	.frame	$sp,0,$31
 
 	sq	$16,0($4)	/* $s0 */
@@ -36,12 +36,12 @@ FUN_00129880:
 	j	$31
 	nop
 
-	.end	FUN_00129880
+	.end	setjmp
 
 /* volatile void longjmp (jmp_buf, int);  */
-	.globl	FUN_001298d8
-	.ent	FUN_001298d8
-FUN_001298d8:
+	.globl	longjmp
+	.ent	longjmp
+longjmp:
 	.frame	$sp,0,$31
 
 	lq	$16,0($4)	/* $s0 */
@@ -75,6 +75,6 @@ FUN_001298d8:
 	j	$31
 	nop
 
-	.end	FUN_001298d8
+	.end	longjmp
 
 	.set	reorder

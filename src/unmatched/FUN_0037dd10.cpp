@@ -6,7 +6,7 @@ int strlen(int *);
 int FUN_00332490(int);
 int ObjectList_AppendRetained(int, int);
 int ObjectList_RemoveFirstRetained(int *, int, int, int);
-int igStrCmp(int *, int *);
+int strcmp(int *, int *);
 extern int DAT_004e0858[4];
 extern int DAT_0050e488[4];
 unsigned char FUN_0037dd10(beCri *arg0, int *arg1);
@@ -23,7 +23,7 @@ unsigned char FUN_0037dd10(beCri *arg0, int *arg1) {
     int h7c;
     int h78;
 
-    if (igStrCmp(arg1, &DAT_0050e488[0]) == 0) {
+    if (strcmp(arg1, &DAT_0050e488[0]) == 0) {
         res1 = 1;
         ObjectList_AppendRetained(arg0->_hdSEs, arg0->_hdBGM);
         ObjectList_AppendRetained(arg0->_hdSEs, arg0->_hdENV);
@@ -44,11 +44,11 @@ unsigned char FUN_0037dd10(beCri *arg0, int *arg1) {
     }
     res2 = 1;
     p = (int *)((beCriHandle *)arg0->_hdBGM)->_name;
-    if ((p != 0 ? p : &DAT_004e0858[0]) != 0 && igStrCmp(p != 0 ? p : &DAT_004e0858[0], arg1) == 0) {
+    if ((p != 0 ? p : &DAT_004e0858[0]) != 0 && strcmp(p != 0 ? p : &DAT_004e0858[0], arg1) == 0) {
         if (FUN_00332490(((beCriAudio *)((beCriHandle *)arg0->_hdBGM)->_audio)->_adxt) != 3) res2 = 0;
     } else {
         p = (int *)((beCriHandle *)arg0->_hdENV)->_name;
-        if ((p != 0 ? p : &DAT_004e0858[0]) != 0 && igStrCmp(p != 0 ? p : &DAT_004e0858[0], arg1) == 0) {
+        if ((p != 0 ? p : &DAT_004e0858[0]) != 0 && strcmp(p != 0 ? p : &DAT_004e0858[0], arg1) == 0) {
             if (FUN_00332490(((beCriAudio *)((beCriHandle *)arg0->_hdENV)->_audio)->_adxt) != 3) res2 = 0;
         } else {
             i2 = 0;
@@ -58,7 +58,7 @@ unsigned char FUN_0037dd10(beCri *arg0, int *arg1) {
                     p = (int *)it->_name;
                     if ((p != 0 ? p : &DAT_004e0858[0]) != 0) {
                         if (strlen(p != 0 ? p : &DAT_004e0858[0]) != 0) {
-                            if (igStrCmp(arg1, (int *)it->_name != 0 ? (int *)it->_name : &DAT_004e0858[0]) == 0 && it->_playID != 0 && FUN_00332490(((beCriAudio *)it->_audio)->_adxt) != 3) {
+                            if (strcmp(arg1, (int *)it->_name != 0 ? (int *)it->_name : &DAT_004e0858[0]) == 0 && it->_playID != 0 && FUN_00332490(((beCriAudio *)it->_audio)->_adxt) != 3) {
                                 res2 = 0;
                                 break;
                             }

@@ -31,7 +31,7 @@ void igObject_Destroy(igObject *);
 void *igObject_GetAllocator(...);
 Prop *igProperty_FindByName(...);
 Rec *igProperty_GetRecord(...);
-int igStrCmp(...);
+int strcmp(...);
 extern char *DAT_004cfc10[10];
 extern char DAT_004e0858[];
 extern int DAT_0051cf58[4];
@@ -100,7 +100,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     do {
         name = parent->_name;
         name = name != 0 ? name : DAT_004e0858;
-        if (igStrCmp(name, DAT_004cfc10[i]) == 0) {
+        if (strcmp(name, DAT_004cfc10[i]) == 0) {
             work.p->_kind = i;
             break;
         }

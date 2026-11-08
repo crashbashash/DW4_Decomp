@@ -111,7 +111,7 @@ void *bePadManager_GetPadForPlayer(...);
 int igObject_GetAllocator(...);
 void *igProperty_GetRecord(...);
 void *igProperty_GetRecordByte(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int text_0rQ[4];
 extern int g_starterPlayerModelName_004cd0e0[4];
 extern int g_playerModelRow[4];
@@ -962,7 +962,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
               rowIndex = 0;
               rowCursor = (int *)(&g_playerModelRow[0]);
             findRow:
-              if (igStrCmp(*rowCursor, g_starterPlayerModelName_004cd0e0
+              if (strcmp(*rowCursor, g_starterPlayerModelName_004cd0e0
                                            [creation->_chaSelDegi]) == 0) {
                 shinkaRow = rowIndex;
               } else {
@@ -1058,7 +1058,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   rowIndex_2 = 0;
                   rowCursor_2 = (int *)(&g_playerModelRow[0]);
                 findRow_2:
-                  if (igStrCmp(*rowCursor_2,
+                  if (strcmp(*rowCursor_2,
                                g_starterPlayerModelName_004cd0e0
                                    [creation->_chaSelDegi]) == 0) {
                     shinkaRow_2 = rowIndex_2;
@@ -1112,7 +1112,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                   rowIndex_3 = 0;
                   rowCursor_3 = (int *)(&g_playerModelRow[0]);
                 findRow_3:
-                  if (igStrCmp(*rowCursor_3,
+                  if (strcmp(*rowCursor_3,
                                g_starterPlayerModelName_004cd0e0
                                    [creation->_chaSelDegi]) == 0) {
                     shinkaRow_3 = rowIndex_3;

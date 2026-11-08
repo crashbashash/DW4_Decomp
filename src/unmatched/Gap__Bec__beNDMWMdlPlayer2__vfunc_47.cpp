@@ -19,7 +19,7 @@ typedef struct RecSl { char _p[12]; StrVec *v; } RecSl;
 typedef struct RecFl { char _p[12]; F3Vec *v; } RecFl;
 typedef struct RecStr { char _p[12]; char *v; } RecStr;
 
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 void *igObject_GetAllocator(Msg *);
 void *Memory_GetAllocatorBySelector(int);
 Ref *beBaseInfoDataList_Create(void *);
@@ -107,10 +107,10 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
     int a, b, s, didb;
     volatile int empty;
     Ref *volatile t;
-    if (igStrCmp(name, DAT_00516648) == 0) {
+    if (strcmp(name, DAT_00516648) == 0) {
         if (msg->flag != 0)
             ((Player2Virt *)self)->vfunc_33(msg, DAT_00516658);
-    } else if (igStrCmp(name, DAT_00516660) == 0) {
+    } else if (strcmp(name, DAT_00516660) == 0) {
         beMessenger_SendGroup(self->_messenger, DAT_005165d0, DAT_005165d8);
         int obj = beMessenger_GetObject(self->_messenger, 0);
         StrVec *names = FUN_003a9310(obj, DAT_005165e8)->v;
@@ -123,7 +123,7 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
         if (a != 0) {
             StringList_CopyRetained(&b, names, idx);
             didb = 1;
-            if (igStrCmp((const char *)((beSystem *)self->_system)->_stageName, (const char *)b) == 0)
+            if (strcmp((const char *)((beSystem *)self->_system)->_stageName, (const char *)b) == 0)
                 match = true;
         }
         if (didb) { STR_RELEASE(b) }
@@ -141,7 +141,7 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
             beMessenger_EnqueueSelected(self->_messenger, DAT_00516648, 1);
         }
         return 1;
-    } else if (igStrCmp(name, DAT_005166a0) == 0) {
+    } else if (strcmp(name, DAT_005166a0) == 0) {
         if (msg->cache == 0) {
             void *al = igObject_GetAllocator((Msg *)msg);
             void *al2;
@@ -205,7 +205,7 @@ extern "C" int Gap__Bec__beNDMWMdlPlayer2__vfunc_47(beNDMWMdlPlayer2 *self, Msg 
             StringList_CopyRetained(&s, FUN_003a9310(obj, DAT_00516708)->v, val);
             char *sp = (char *)s;
             STR_RELEASE(sp)
-            if (igStrCmp(cur, sp) == 0) {
+            if (strcmp(cur, sp) == 0) {
                 int i3 = msg->number * 2 + 1;
                 int *dp3 = FUN_003a9250(obj, DAT_005166f0)->v->data;
                 int e3 = dp3[i3]; int d3 = (e3 * pct) / 100;

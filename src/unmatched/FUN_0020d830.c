@@ -1,6 +1,6 @@
 int FUN_001236e8(char *);
 int strlen(char *);
-int igStrCmp(char *, int);
+int strcmp(char *, int);
 extern char DAT_00491910[];
 extern int DAT_0056c2a8[];
 extern int DAT_0056c2b0[];
@@ -12,7 +12,7 @@ int FUN_0020d830(int arg0) {
     off = 0;
     do {
         p = DAT_00491910 + off;
-        if (igStrCmp(p, arg0) == 0) {
+        if (strcmp(p, arg0) == 0) {
             off = off + (strlen(p) + 1);
             r = DAT_0056c2b0[0] + FUN_001236e8(DAT_00491910 + off);
             break;

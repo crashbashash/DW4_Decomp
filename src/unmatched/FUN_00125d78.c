@@ -117,8 +117,8 @@ void FUN_00124d40(struct _reent *);
 void FUN_00124d48(struct _reent *);
 #define ENV_LOCK FUN_00124d40(reent_ptr)
 #define ENV_UNLOCK FUN_00124d48(reent_ptr)
-int FUN_0012aba0(const char *, const char *, size_t);
-#define strncmp FUN_0012aba0
+int strncmp(const char *, const char *, size_t);
+#define strncmp strncmp
 extern char ***D_004851a8;
 #define p_environ D_004851a8
 

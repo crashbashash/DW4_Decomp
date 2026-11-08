@@ -178,7 +178,7 @@ def restore_attack_effect_order(source, image):
             raise ValueError("reviewed attack result declaration or address escape differs")
         query = ("beDataBase_GetRecordString(FUN_00406ee0(&arg0->_dBEneatk), "
                  + index + ", &DAT_005191f0[0])")
-        pattern = re.compile(r"(?m)^( +)" + result + r" = 0;\n\1if \(igStrCmp\("
+        pattern = re.compile(r"(?m)^( +)" + result + r" = 0;\n\1if \(strcmp\("
                              + re.escape(query) + ", " + re.escape("&" + compared + "[0]")
                              + r"\) == 0\) \{")
         matches = list(pattern.finditer(source))
@@ -187,7 +187,7 @@ def restore_attack_effect_order(source, image):
         match = matches[0]
         replacement = (match[1] + name + " = " + query + ";\n"
                        + match[1] + result + " = 0;\n"
-                       + match[1] + "if (igStrCmp(" + name + ", &" + compared + "[0]) == 0) {")
+                       + match[1] + "if (strcmp(" + name + ", &" + compared + "[0]) == 0) {")
         source = source[:match.start()] + replacement + source[match.end():]
     opening = units._clean(source).index("{", definitions[0][1])
     return source[:opening + 1] + "\n    const char *" + name + ";" + source[opening + 1:]

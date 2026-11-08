@@ -28,7 +28,7 @@ unsigned int beMessenger_ResolveEnumValue(int, int, void *);
 void igNamedObject_SetName(void *, char *);
 void igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 extern int DAT_004e0858[4];
 extern int DAT_0050ebd0[4];
 extern int DAT_0050ebe0[4];
@@ -96,7 +96,7 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
             int j;
             for (j = 0; j < LCOUNT(KIDS(found)); j++) {
                 igGroup *e2 = ELEM(KIDS(found), j);
-                if (NAME(e2) != 0 && igStrCmp((char *)&DAT_0050ebe0[0], NAME(e2)) == 0) { sw = e2; break; }
+                if (NAME(e2) != 0 && strcmp((char *)&DAT_0050ebe0[0], NAME(e2)) == 0) { sw = e2; break; }
             }
             if (sw != 0) FUN_001c5d10(sw, (void *)arg0->_layerSwt);
             else FUN_001c5d10(found, (void *)arg0->_layerSwt);
@@ -127,14 +127,14 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
         while (idx < LCOUNT(GROUPS(srcl))) {
             el = ELEM(GROUPS(srcl), idx);
             if (NAME(el) == 0) igNamedObject_SetName(el, (char *)&DAT_0050ebf0[0]);
-            if (igStrCmp((char *)&DAT_0050ebf8[0], NAME(el)) == 0 || DAT_005618d8[0] == ((NodeVt *)el)->v22()) {
+            if (strcmp((char *)&DAT_0050ebf8[0], NAME(el)) == 0 || DAT_005618d8[0] == ((NodeVt *)el)->v22()) {
                 idx += 1;
             } else {
                 nm = NAME(el);
                 hit = 0;
                 for (q = 0; q < LCOUNT(KIDS(SWT(arg0))); q++) {
                     e3 = ELEM(KIDS(SWT(arg0)), q);
-                    if (igStrCmp(nm, NAME(e3)) == 0) { hit = e3; break; }
+                    if (strcmp(nm, NAME(e3)) == 0) { hit = e3; break; }
                 }
                 if (hit != 0) FUN_001c5d10(hit, el);
                 else FUN_001c5d10(held2.p, el);
@@ -148,7 +148,7 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
         if (beMessenger_GetStringCount(arg0->_messenger) < 2) return 0;
         char *a = beMessenger_GetString(arg0->_messenger, 0);
         char *b = beMessenger_GetString(arg0->_messenger, 1);
-        if (igStrCmp(a, (char *)&DAT_0050ec08[0]) == 0) {
+        if (strcmp(a, (char *)&DAT_0050ec08[0]) == 0) {
             switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0035c9e0(), b)) {
             case 0: FUN_001dc8d0((void *)arg0->_layerSwt); break;
             case 1: FUN_001dc870((void *)arg0->_layerSwt); break;
@@ -157,7 +157,7 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
         } else {
             int i;
             for (i = 0; i < LCOUNT(KIDS(SWT(arg0))); i++) {
-                if (igStrCmp(NAME(ELEM(KIDS(SWT(arg0)), i)), a) == 0) {
+                if (strcmp(NAME(ELEM(KIDS(SWT(arg0)), i)), a) == 0) {
                     switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0035c9e0(), b)) {
                     case 0: FUN_001dc880((void *)arg0->_layerSwt, i); break;
                     case 1: FUN_001dc820((void *)arg0->_layerSwt, i); break;
@@ -178,7 +178,7 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
         char *a = beMessenger_GetString(arg0->_messenger, 0);
         int i;
         for (i = 0; i < LCOUNT(KIDS(SWT(arg0))); i++) {
-            if (igStrCmp(NAME(ELEM(KIDS(SWT(arg0)), i)), a) == 0) {
+            if (strcmp(NAME(ELEM(KIDS(SWT(arg0)), i)), a) == 0) {
                 FUN_001dc9a0((void *)arg0->_layerSwt, i);
                 break;
             }
@@ -197,7 +197,7 @@ int Gap__Bec__beLayerCtl__vfunc_34(beLayerCtl *arg0, beLayerInfoRam *arg1, beMes
         int found = -1;
         int i;
         for (i = 0; i < LCOUNT(KIDS(SWT(arg0))); i++) {
-            if (igStrCmp(NAME(ELEM(KIDS(SWT(arg0)), i)), a) == 0) { found = i; break; }
+            if (strcmp(NAME(ELEM(KIDS(SWT(arg0)), i)), a) == 0) { found = i; break; }
         }
         if (found != -1) {
             beMessenger_ClearObjects(arg0->_messenger);

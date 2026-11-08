@@ -182,7 +182,7 @@ class Gl { public:
 extern "C" {
 igMemoryPool *Memory_GetAllocatorBySelector(int);
 int FUN_0012aff0(char *, char *);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 igMemoryPool *igAliasMemoryPool_Create(igMemoryPool *);
 igMemoryPool *igMetaObject_CreateInstance(int, igMemoryPool *);
 int igObjectSystem_FindMetaByNameDefault(char *);
@@ -257,7 +257,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
     }
     if (obj != 0) {
         int size = cfg->_size;
-        if (size != 0 && (cfg->_arenaType == 0 || igStrCmp((char *)cfg->_arenaType, DAT_004fa640) == 0)) {
+        if (size != 0 && (cfg->_arenaType == 0 || strcmp((char *)cfg->_arenaType, DAT_004fa640) == 0)) {
             r0 = ((OV *)obj)->v172(size);
         }
     } else {
@@ -322,25 +322,25 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         aligned = al & ~(DAT_00587218[0]->v84() - 1);
         if (size != 0) {
             char *kind = (char *)cfg->_arenaType;
-            if (kind == 0 || igStrCmp(kind, DAT_004fa640) == 0) {
+            if (kind == 0 || strcmp(kind, DAT_004fa640) == 0) {
                 r2 = ((OV *)o2)->v172(size);
-            } else if (igStrCmp((char *)cfg->_arenaType, DAT_004fa5e8) == 0) {
+            } else if (strcmp((char *)cfg->_arenaType, DAT_004fa5e8) == 0) {
                 sub = (char *)cfg->_source;
                 if (sub == 0 || *sub == 0) { a = allocB; goto common; }
-                if (igStrCmp(sub, DAT_004fa668) == 0) {
+                if (strcmp(sub, DAT_004fa668) == 0) {
 b78:
                     int v = DAT_00587218[0]->v68(0, aligned);
                     r3 = ((OV *)o2)->v96(v, aligned, 0);
                     slot->f136 = slot->f136 | 2;
-                } else if (igStrCmp(sub, DAT_004fa678) == 0 || igStrCmp(sub, DAT_004fa680) == 0 || igStrCmp(sub, DAT_004fa688) == 0) {
+                } else if (strcmp(sub, DAT_004fa678) == 0 || strcmp(sub, DAT_004fa680) == 0 || strcmp(sub, DAT_004fa688) == 0) {
                     goto b78;
-                } else if (igStrCmp(sub, DAT_004fa5f0) == 0) {
+                } else if (strcmp(sub, DAT_004fa5f0) == 0) {
                     int dfl = cfg->_address;
                     int a2;
                     if (dfl != 0) a2 = dfl;
                     else a2 = 0x70000000;
                     r4 = ((OV *)o2)->v96(a2, (long long)size, 0);
-                } else if (igStrCmp(sub, DAT_004fa690) != 0 && igStrCmp(sub, DAT_004fa698) != 0) {
+                } else if (strcmp(sub, DAT_004fa690) != 0 && strcmp(sub, DAT_004fa698) != 0) {
                     a = ctx->v96(sub);
                     if (a == 0) a = allocB;
 common:

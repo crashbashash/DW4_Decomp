@@ -5,7 +5,7 @@ int beLua__RunNamedChunk(...);
 int FUN_003a0540(...);
 int FUN_003a54a0(...);
 int List_RemoveWordAt(...);
-int igStrCmp(...);
+int strcmp(...);
 extern int DAT_0050ff10[4];
 }
 extern "C" void Gap__Bec__beTimer__vfunc_27(beTimer *arg0);
@@ -29,7 +29,7 @@ void Gap__Bec__beTimer__vfunc_27(beTimer *arg0) {
                     off = i * 4;
                     it = ((beTimerData **)((beTimerDataList *)arg0->_dataList)->_data)[i];
                     if (it->_resetCondition != 0) {
-                        b = igStrCmp(it->_resetCondition, &DAT_0050ff10[0]) == 0 && FUN_003a54a0(arg0) != 0;
+                        b = strcmp(it->_resetCondition, &DAT_0050ff10[0]) == 0 && FUN_003a54a0(arg0) != 0;
                         if (b) {
                             it->_downTimer = it->_startTime;
                         }

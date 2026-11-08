@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 void *igProperty_FindByName(...);
-int igStrCmp(...);
+int strcmp(...);
 int FUN_00394400(...);
 int FUN_003a8580(...);
 extern int DAT_004e0858[4];
@@ -36,7 +36,7 @@ found:
     o = (beModelCtrlInfoAI *)arg3->_aI;
     if (o != 0) {
         o->_mapNo = idx;
-        if (prop->_targetType != 0 && igStrCmp(prop->_targetType, &DAT_0050ef78[0]) == 0) {
+        if (prop->_targetType != 0 && strcmp(prop->_targetType, &DAT_0050ef78[0]) == 0) {
             DAT_0058a218[0] = &vec;
             name2 = (int *)arg1->_name;
             name2 = name2 != 0 ? name2 : &DAT_004e0858[0];

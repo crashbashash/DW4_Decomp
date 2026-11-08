@@ -3,7 +3,7 @@ int FUN_002eb010();
 int StringChunk_ReleaseHeader();
 int StringPool_Construct();
 void *StringPool_Intern();
-int igStrCmp();
+int strcmp();
 extern int DAT_004f7910[4];
 extern int DAT_00586f20[4];
 void FUN_002e3d30(int *arg0) {
@@ -18,7 +18,7 @@ void FUN_002e3d30(int *arg0) {
     void *temp_a0;
 
     temp_a0 = (void *)(arg0[5]);
-    if ((!temp_a0) || (igStrCmp(temp_a0, &DAT_004f7910[0]) == 0)) {
+    if ((!temp_a0) || (strcmp(temp_a0, &DAT_004f7910[0]) == 0)) {
         temp_s1 = ((int *)arg0[26])[3];
         var_s0 = strlen(temp_s1) - 1;
         while (var_s0 > 0 && 0x2F != (temp_a0_2 = *(char *)((temp_s1 + var_s0) - 1)) && temp_a0_2 != 0x5C) {

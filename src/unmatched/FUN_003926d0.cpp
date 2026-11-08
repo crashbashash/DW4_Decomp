@@ -13,7 +13,7 @@ int beMessenger_GetString(...);
 int beMessenger_GetStringCount(...);
 int beMessenger_SendNamed(...);
 int igObject_GetAllocator(...);
-int igStrCmp(...);
+int strcmp(...);
 void igObject_Destroy(...);
 extern int DAT_004e0858[4];
 extern int DAT_0050f010[4];
@@ -70,7 +70,7 @@ void FUN_003926d0(beModelCtrl *arg0, beBaseInfoRam *arg1, beBaseInfoRam *arg2, b
         s6 = beMessenger_GetStringCount(arg0->_messenger);
         if (s6 != 0) {
             s0 = beMessenger_GetString(arg0->_messenger, 0);
-            if (igStrCmp(s0, DAT_0050f050) != 0) {
+            if (strcmp(s0, DAT_0050f050) != 0) {
                 s5 = beMessenger_GetInt(arg0->_messenger, 0);
             } else {
                 s6 = 0;
@@ -97,7 +97,7 @@ void FUN_003926d0(beModelCtrl *arg0, beBaseInfoRam *arg1, beBaseInfoRam *arg2, b
                 FUN_00392be0(arg0, arg2, arg3, 5);
                 return;
             } else {
-                if (igStrCmp(arg3->_seqCodeName, DAT_0050f068) == 0) return;
+                if (strcmp(arg3->_seqCodeName, DAT_0050f068) == 0) return;
                 ((VO *)arg0)->d33(arg2, DAT_0050f070);
                 return;
             }

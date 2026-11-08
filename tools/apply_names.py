@@ -34,6 +34,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import asmsources  # noqa: E402
 import split  # noqa: E402  (tools/split.py — load_names/sanitize are the name rules)
 import srctree  # noqa: E402
 
@@ -135,13 +136,20 @@ def main(argv=None):
     paths = sorted(os.path.join(root, filename)
                    for root, _, files in os.walk(a.src)
                    for filename in files
-                   if filename.endswith(srctree.EXTS) and not filename.startswith("dw4u_"))
+                   if filename.endswith(srctree.EXTS + (asmsources.EXT,)) and not filename.startswith("dw4u_"))
     for path in paths:
         text = open(path).read()
         new_text = word.sub(lambda m: sub.get(m.group(0), m.group(0)), text)
         if new_text != text:
             open(path, "w").write(new_text)
             rewritten += 1
+    # the assembly approval table names its functions by symbol (tools/asmsources.py)
+    if os.path.exists(asmsources.TABLE):
+        text = open(asmsources.TABLE).read()
+        new_text = "".join(sub.get(line.split("\t", 1)[0], line.split("\t", 1)[0]) + line[len(line.split("\t", 1)[0]):]
+                           if not line.startswith("#") else line for line in text.splitlines(True))
+        if new_text != text:
+            open(asmsources.TABLE, "w").write(new_text)
 
     # 2. move each unit to its module folder.
     moved = 0

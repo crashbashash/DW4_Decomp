@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 extern "C" {
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 extern char DAT_004e0858[];   /* the empty string */
 extern char DAT_0050e7b8[];
 /* Second argument: messenger node whose +12 holds the beFontInfo. */
@@ -22,14 +22,14 @@ int FUN_003841d0(beFont *arg0, struct P *arg1) {
 
     res = -1;
     l = (beBaseInfoDataList *)((beFontInfo *)arg1->f12)->_dataList;
-    if (igStrCmp((const char *)arg0->_condition00, DAT_0050e7b8) == 0) {
+    if (strcmp((const char *)arg0->_condition00, DAT_0050e7b8) == 0) {
         i = arg0->_history;
         off = i * 4;
         if (i < l->_count) {
             do {
                 q = (const char *)arg0->_condition01;
                 p = (const char *)((igAttrSet *)((beFontInfoData *)*(int *)(l->_data + off))->_attrSet)->_name;
-                if (igStrCmp(p != 0 ? p : DAT_004e0858, q) == 0) {
+                if (strcmp(p != 0 ? p : DAT_004e0858, q) == 0) {
                     res = i;
                     break;
                 }
@@ -46,10 +46,10 @@ int FUN_003841d0(beFont *arg0, struct P *arg1) {
                 p = (const char *)it->_name;
                 y = (igAttrSet *)it->_attrSet;
                 q = (const char *)arg0->_condition00;
-                if (igStrCmp(p != 0 ? p : DAT_004e0858, q) == 0) {
+                if (strcmp(p != 0 ? p : DAT_004e0858, q) == 0) {
                     p = (const char *)y->_name;
                     q = (const char *)arg0->_condition01;
-                    if (igStrCmp(p != 0 ? p : DAT_004e0858, q) == 0) {
+                    if (strcmp(p != 0 ? p : DAT_004e0858, q) == 0) {
                         res = j;
                         break;
                     }

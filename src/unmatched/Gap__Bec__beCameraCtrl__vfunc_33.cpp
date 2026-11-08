@@ -36,7 +36,7 @@ int beMessenger_SetBool(...);
 int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
 void *igProperty_FindByName(...);
-int igStrCmp(...);
+int strcmp(...);
 extern char DAT_004e0858[];
 extern int DAT_0050e210[4];
 extern int DAT_0050e228[4];
@@ -114,7 +114,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
                 do {
                     other = *(CamInfoPtr **)((char *)owner->_ramList->_data + off);
                     if (FUN_00378e80(self, other) != 0) {
-                        if (igStrCmp(NAME_OR_EMPTY(other->_name), wanted) == 0) {
+                        if (strcmp(NAME_OR_EMPTY(other->_name), wanted) == 0) {
                             found = true;
                             break;
                         }
@@ -129,7 +129,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
                 ram->_isRun = 1;
             }
         } else {
-            if (igStrCmp(wanted, NAME_OR_EMPTY(info->_name)) == 0) {
+            if (strcmp(wanted, NAME_OR_EMPTY(info->_name)) == 0) {
                 ram->_isRun = 1;
                 ram->_st0 = 0;
                 ram->_st3 = 0;

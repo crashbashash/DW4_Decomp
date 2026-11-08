@@ -10,7 +10,7 @@ extern char DAT_004ffbe8[];
 extern char DAT_004ffbf0[];
 extern char *DAT_004c22f0;
 extern int DAT_00586f20;
-char *FUN_0012a314(char *, int);
+char *strchr(char *, int);
 int strlen(const char *);
 int FUN_0012a918(const char *, const char *, int);
 void FUN_0030b3c0(MediaPathBuffer *, char *);
@@ -30,7 +30,7 @@ static inline void appendPath(const char *text, MediaPathBuffer *buffer) {
 void FUN_0032e130(MediaPathFields *self, int index, char **path) {
     bool usePrefix = true;
     bool isDisc = GPR_00554de0;
-    char *colon = FUN_0012a314(*path, ':');
+    char *colon = strchr(*path, ':');
     char *text;
     int prefix;
     int end;
@@ -79,7 +79,7 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
         }
         text = self->conversion->text;
         text = (text == 0) ? DAT_004c22f0 : text;
-    } else if (isDisc && FUN_0012a314(*path, ';') == 0) {
+    } else if (isDisc && strchr(*path, ';') == 0) {
         FUN_0030b3c0(self->conversion, *path);
         stop = strlen(*path);
         for (j = 6; j < stop; j++) {

@@ -16,7 +16,7 @@ int beMessenger_GetStringCount(int);
 int beMessenger_ResolveEnumValue(int, int, int);
 int beMessenger_SendGroup(int, void *, void *);
 int igObject_Destroy(void *);
-int igStrCmp(int, void *);
+int strcmp(int, void *);
 extern int DAT_004c22f0[4];
 extern int DAT_005155d0[4];
 extern int DAT_005155e0[4];
@@ -73,11 +73,11 @@ int Gap__Bec__beNDMWStageCtl__vfunc_34(beNDMWStageCtl *arg0, beNDMWStageCtlInfoR
         if (beMessenger_GetStringCount(arg0->_messenger) > 0) {
             int temp_s2_2 = beMessenger_GetString(arg0->_messenger, 0);
             bePadManager *temp_s0_3 = (bePadManager *)FUN_00236f80(arg0->_insight, DAT_00588518[0]);
-            if (igStrCmp(temp_s2_2, &DAT_005156a0[0]) == 0) {
+            if (strcmp(temp_s2_2, &DAT_005156a0[0]) == 0) {
                 temp_s0_3->_isPadDisable = 0;
-            } else if (igStrCmp(temp_s2_2, &DAT_005156a8[0]) == 0) {
+            } else if (strcmp(temp_s2_2, &DAT_005156a8[0]) == 0) {
                 temp_s0_3->_isPadDisable = 1;
-            } else if (igStrCmp(temp_s2_2, &DAT_005156b0[0]) == 0) {
+            } else if (strcmp(temp_s2_2, &DAT_005156b0[0]) == 0) {
                 beMessenger_ClearBool(arg0->_messenger);
                 beMessenger_AppendBool(arg0->_messenger, temp_s0_3->_isPadDisable);
             }

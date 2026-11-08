@@ -42,7 +42,7 @@ int FUN_002eb010(int);
 int StringPool_Construct(int);
 int StringPool_Intern(int, const char *);
 void StringChunk_ReleaseHeader(int, void *);
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 extern int DAT_00586f20[4];
 extern char DAT_0050ec80[], DAT_0050ec88[], DAT_004e0858[];
 }
@@ -109,7 +109,7 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
         for (j = 0; j < n; j++) {
             beLuaData *d = ((beLuaData **)((beLuaDataList *)info->_dataList_)->_data)[j];
             const char *nm = d->_name ? (const char *)d->_name : DAT_004e0858;
-            if (nm != 0 && igStrCmp(d->_name ? (const char *)d->_name : DAT_004e0858, name) == 0) {
+            if (nm != 0 && strcmp(d->_name ? (const char *)d->_name : DAT_004e0858, name) == 0) {
                 beLuaDataObject *o = (beLuaDataObject *)d->_dataObject;
                 result = ((LuaStateVt *)self->_luaState)->RunBuffer((void *)o->_data, o->_dataSize, name);
                 break;

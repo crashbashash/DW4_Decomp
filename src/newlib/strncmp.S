@@ -1,8 +1,8 @@
 	.set	noreorder
 
-	.globl	FUN_0012aba0
-	.ent	FUN_0012aba0
-FUN_0012aba0:
+	.globl	strncmp
+	.ent	strncmp
+strncmp:
 	bnez	$6,$L3
 	or	$3,$4,$5
 $L20:
@@ -124,6 +124,6 @@ $L13:
 	lbu	$3,0($4)
 	jr	$31
 	subu	$2,$3,$2
-	.end	FUN_0012aba0
+	.end	strncmp
 
 	.set	reorder

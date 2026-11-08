@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);
-int igStrCmp(...);
+int strcmp(...);
 struct Ob { char p[28]; float x; float y; float z; };
 struct Ent { int name; int val; int val2; };
 int FUN_003d9e70(...);
@@ -60,7 +60,7 @@ unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                 int j = 0;
                 int k = 0;
                 for (; k < 16; k++) {
-                    if (igStrCmp(DAT_004cec70[k].name, it->_dmkind) == 0) { j = k; break; }
+                    if (strcmp(DAT_004cec70[k].name, it->_dmkind) == 0) { j = k; break; }
                 }
                 float v1[3];
                 v1[0] = ob->x; v1[1] = ob->y; v1[2] = ob->z;

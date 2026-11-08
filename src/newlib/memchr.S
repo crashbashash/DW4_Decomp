@@ -1,8 +1,8 @@
 	.set	noreorder
 
-	.globl	FUN_00126f24
-	.ent	FUN_00126f24
-FUN_00126f24:
+	.globl	memchr
+	.ent	memchr
+memchr:
 	sltiu	$2,$6,16
 	bnez	$2,$L2
 	andi	$5,$5,0xff
@@ -64,6 +64,6 @@ $L20:
 $L31:
 	jr	$31
 	move	$2,$4
-	.end	FUN_00126f24
+	.end	memchr
 
 	.set	reorder

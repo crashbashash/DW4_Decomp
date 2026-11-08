@@ -1,8 +1,8 @@
 	.set	noreorder
 
-	.globl	FUN_0012a314
-	.ent	FUN_0012a314
-FUN_0012a314:
+	.globl	strchr
+	.ent	strchr
+strchr:
 	andi	$2,$4,0x7
 	bnez	$2,$L24
 	andi	$5,$5,0xff
@@ -110,6 +110,6 @@ $L27:
 	xor	$3,$3,$5
 	jr	$31
 	movz	$2,$4,$3
-	.end	FUN_0012a314
+	.end	strchr
 
 	.set	reorder

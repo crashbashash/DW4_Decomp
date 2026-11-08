@@ -1,5 +1,5 @@
 extern "C" {
-int FUN_0012a1e8(...);
+int strcat(...);
 int strcpy(...);
 int strlen(...);
 void *FUN_002c37e0(...);
@@ -32,8 +32,8 @@ extern "C" int Gap__Core__igExternalDirEntry__vfunc_44(Ent *arg0, int arg1) {
         c = strlen(&DAT_004f9a48[0]);
         buf = (char *)igObject_AllocateStorage(arg0, c + len + 1);
         strcpy(buf, arg0->f40);
-        FUN_0012a1e8(buf, &DAT_004f9a48[0]);
-        FUN_0012a1e8(buf, arg0->f28);
+        strcat(buf, &DAT_004f9a48[0]);
+        strcat(buf, arg0->f28);
         sp3C->vX(buf);
         FUN_00300f50(arg0, buf);
     }

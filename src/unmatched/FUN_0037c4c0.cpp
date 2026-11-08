@@ -14,7 +14,7 @@ int FUN_003a6ce0(beCriAudio *, int, int);
 int FUN_0030b3c0(igNamedObject *, char *);
 int FUN_0030ba20(igNamedObject *);
 int FUN_0030b5c0(igNamedObject *);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 void igObject_Destroy(void *);
 void igNamedObject_SetName(void *, char *);
 extern char DAT_004e0858[16];
@@ -84,7 +84,7 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
                 nm = src != 0 ? src : DAT_004e0858;
                 cur = (char *)h.p->_name;
                 cur = (cur == 0) ? DAT_004c22f0[0] : cur;
-                if (igStrCmp(cur, nm) == 0) { found = i; break; }
+                if (strcmp(cur, nm) == 0) { found = i; break; }
                 i += 1;
                 off += 4;
             } while (i < ENTS->_count);

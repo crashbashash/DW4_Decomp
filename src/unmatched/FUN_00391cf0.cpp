@@ -6,7 +6,7 @@ int FUN_00392d20(int, int, int, float, float, float);
 int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(...);
 void *StringPool_Intern(int, void *);
-int igStrCmp(void *, void *);
+int strcmp(void *, void *);
 extern int DAT_0050ef88[4];
 extern int DAT_0050efe8[4];
 extern int DAT_0050eff0[4];
@@ -25,7 +25,7 @@ struct PoolRel { static inline void rel(char *p) {
 void FUN_00391cf0(VO *self, int arg1, int arg2, beModelCtrlInfoWork *s)
 {
     if (s->_isOnCtrl != 0) self->v40(arg2);
-    if (igStrCmp((void *)s->_keyEventName, &DAT_0050efe8[0]) == 0) {
+    if (strcmp((void *)s->_keyEventName, &DAT_0050efe8[0]) == 0) {
         switch (s->_ctrlSt0) {
         case 1: {
             int mode = s->_ctrlSt1;
@@ -83,7 +83,7 @@ void FUN_00391cf0(VO *self, int arg1, int arg2, beModelCtrlInfoWork *s)
             break;
         }
     }
-    if (igStrCmp((void *)s->_keyEventName, &DAT_0050efe8[0]) != 0 && igStrCmp((void *)s->_keyEventName, (void *)s->_seqCodeName) != 0) {
+    if (strcmp((void *)s->_keyEventName, &DAT_0050efe8[0]) != 0 && strcmp((void *)s->_keyEventName, (void *)s->_seqCodeName) != 0) {
         self->v35(arg2, (char *)s->_keyEventName);
     }
 }

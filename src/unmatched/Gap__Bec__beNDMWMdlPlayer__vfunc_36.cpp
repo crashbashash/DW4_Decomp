@@ -28,7 +28,7 @@ void beMessenger_SendNamed(...);
 void beMessenger_SendDelayedNamed(...);
 void FUN_00396740(...);
 void StringChunk_ReleaseHeader(...);
-int igStrCmp(...);
+int strcmp(...);
 struct PropertyRecord { char p[20]; beNDMWMdlPlayerInfoWork *value; };
 PropertyRecord *igProperty_FindByName(...);
 struct IntRec { char p[12]; int f12; };
@@ -314,13 +314,13 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
     beMessenger_DispatchSelected(arg0->_messenger, DAT_00516450);
     int s4 = ((SystemObjectView *)arg0->_system)->f56;
     for (int j = 0; j < 5; j++) {
-        if (igStrCmp(((int *)DAT_004cc7e0)[j], s4) == 0) {
+        if (strcmp(((int *)DAT_004cc7e0)[j], s4) == 0) {
             beMessenger_SendNamed(arg0->_messenger, DAT_00516038, 0, arg1->_ramNo, DAT_005164a0);
             break;
         }
     }
     for (int k = 0; k < 4; k++) {
-        if (igStrCmp(((int *)DAT_004cc800)[k], s4) == 0) {
+        if (strcmp(((int *)DAT_004cc800)[k], s4) == 0) {
             s5->_isMainLobby = 1;
             break;
         }

@@ -8,7 +8,7 @@ extern char DAT_004f5a18[];
 
 char *strncpy(char *dst, const char *src, unsigned int count);
 int sprintf(char *dst, const char *format, ...);
-char *FUN_0012a1e8(char *dst, char *src);
+char *strcat(char *dst, char *src);
 void FUN_002b51f8(char *dst, int value);
 
 void FUN_002b5168(char *out, int unused, int value) {
@@ -18,8 +18,8 @@ void FUN_002b5168(char *out, int unused, int value) {
     strncpy(out, DAT_004f59f8, 8);
     sprintf(number, DAT_004f5a08, 19);
     field = out + 16;
-    FUN_0012a1e8(out, number);
+    strcat(out, number);
     strncpy(field, DAT_004f5a10, 2);
     FUN_002b51f8(field, value);
-    FUN_0012a1e8(field, DAT_004f5a18);
+    strcat(field, DAT_004f5a18);
 }

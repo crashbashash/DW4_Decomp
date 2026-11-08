@@ -1,6 +1,6 @@
 extern "C" {
 int FUN_002d60b0(...);
-int igStrCmp(...);
+int strcmp(...);
 }
 struct E { char pad[8]; int f8; int name; };
 struct Lst { char pad[16]; struct E **arr; };
@@ -21,7 +21,7 @@ extern "C" int FUN_002d63e0(struct A *arg0, int arg1) {
     found = true;
     while (i < arg0->n && found) {
         e = arg0->f8->arr[i];
-        if (igStrCmp(e->name, arg1) == 0) {
+        if (strcmp(e->name, arg1) == 0) {
             found = false;
         } else {
             i += 1;

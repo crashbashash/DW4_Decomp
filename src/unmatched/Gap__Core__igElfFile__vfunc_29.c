@@ -6,10 +6,10 @@ extern char DAT_004fde68[];
 extern char DAT_004fde70[];
 char *FUN_0012aff0(const char *, const char *);
 char *strncpy(char *, const char *, int);
-char *FUN_0012a314(char *, int);
+char *strchr(char *, int);
 void *memcpy(void *, const void *, int);
 int strlen(const char *);
-int FUN_0012aba0(const char *, const char *, int);
+int strncmp(const char *, const char *, int);
 void FUN_00321530(const char *, char *, int);
 void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char *out, int size) {
     char inner[256];
@@ -59,7 +59,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
                 }
                 strncpy(out, sep, copy);
                 out[copy] = 0;
-                open = FUN_0012a314(out, '<');
+                open = strchr(out, '<');
                 if (open != 0) {
                     length = open - out;
                     memcpy(inner, open + 1, copy + 1 - length);
@@ -103,7 +103,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
     }
     *out = 0;
     tail = out - 1;
-    if (FUN_0012aba0(mangled, DAT_004fdf80, 2) == 0) {
+    if (strncmp(mangled, DAT_004fdf80, 2) == 0) {
         while (((start < tail) ^ 1) == 0 && *tail == ':') {
             tail--;
         }
@@ -117,7 +117,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
         if (*scan == ':') {
             scan++;
         }
-        if (FUN_0012aba0(mangled, DAT_004fde68, nameLength) == 0) {
+        if (strncmp(mangled, DAT_004fde68, nameLength) == 0) {
             nameLength = tail - scan;
             if (nameLength > size - 1) {
                 nameLength = size - 1;
@@ -127,7 +127,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
             *result = DAT_004fb410;
             return;
         }
-        if (FUN_0012aba0(mangled, DAT_004fde70, nameLength) == 0) {
+        if (strncmp(mangled, DAT_004fde70, nameLength) == 0) {
             nameLength = tail - scan;
             if (size > 0) {
                 *out = '~';
@@ -143,7 +143,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
             return;
         }
         for (i = 0; DAT_004c2380[i].mangled != 0; i++) {
-            if (FUN_0012aba0(DAT_004c2380[i].mangled, mangled, nameLength) == 0 && DAT_004c2380[i].name != 0) {
+            if (strncmp(DAT_004c2380[i].mangled, mangled, nameLength) == 0 && DAT_004c2380[i].name != 0) {
                 nameLength = strlen(DAT_004c2380[i].name);
                 if (nameLength > size - 1) {
                     nameLength = size - 1;

@@ -5,7 +5,7 @@ typedef struct K { char pad[52]; int f52; char pad2[8]; int f64; } K;
 typedef struct SoundInfoPointerView { char pad0[12]; struct SoundInfoPointerView *f12; char pad[16]; int *f32; } SoundInfoPointerView;
 extern "C" {
 int FUN_002eb010(int);
-int igStrCmp(int *, int *);
+int strcmp(int *, int *);
 int FUN_0037e020(int, int);
 int beMessenger_RegisterReceiver(int, SoundInfoPointerView *, int *, int, int);
 int StringChunk_ReleaseHeader(int, int *);
@@ -46,7 +46,7 @@ void Gap__Bec__beSound__vfunc_29(beSound *arg0, SoundInfoPointerView *arg1) {
         }
         arg1->f32 = s2;
     }
-    if (igStrCmp(arg1->f32, &DAT_0050f9a8[0]) == 0) {
+    if (strcmp(arg1->f32, &DAT_0050f9a8[0]) == 0) {
         ((K *)arg0->_cri)->f64 = 0;
     } else {
         ((K *)arg0->_cri)->f64 = 1;

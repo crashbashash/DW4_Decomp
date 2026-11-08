@@ -1,4 +1,4 @@
-int igStrCmp();
+int strcmp();
 extern int DAT_004c22f0[4];
 void FUN_001b7740(void **arg0, void **arg1) {
     int var_a0;
@@ -12,5 +12,5 @@ void FUN_001b7740(void **arg0, void **arg1) {
     if (var_a1 == 0) {
         var_a1 = DAT_004c22f0[0];
     }
-    igStrCmp(var_a0, var_a1);
+    strcmp(var_a0, var_a1);
 }

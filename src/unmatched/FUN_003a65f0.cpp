@@ -4,7 +4,7 @@ int FUN_003a63b0(int, V3 *, int);
 int FUN_003a64d0(int, V3 *, int);
 int Matrix44_Copy(void *, int);
 int Matrix44_GetTranslation(int, V3 *);
-int igStrCmp(int, char *);
+int strcmp(int, char *);
 extern char DAT_0050ffd0[];
 extern char DAT_0050ffe8[];
 extern char DAT_00510008[];
@@ -27,12 +27,12 @@ int FUN_003a65f0(int arg0, int arg1, int arg2) {
     DAT_0058a584[0] = p.y;
     DAT_0058a588[0] = p.z;
     DAT_0058a590[0] = 0xC2C80000;
-    e = igStrCmp(arg2, DAT_00510008) == 0;
-    if (igStrCmp(arg1, DAT_0050ffd0) == 0) {
+    e = strcmp(arg2, DAT_00510008) == 0;
+    if (strcmp(arg1, DAT_0050ffd0) == 0) {
         q1.x = p.x; q1.y = p.y; q1.z = p.z;
         return FUN_003a63b0(DAT_0058a570[0], &q1, e);
     }
-    if (igStrCmp(arg1, DAT_0050ffe8) == 0) {
+    if (strcmp(arg1, DAT_0050ffe8) == 0) {
         q2.x = p.x; q2.y = p.y; q2.z = p.z;
         return FUN_003a64d0(DAT_0058a570[0], &q2, e);
     }

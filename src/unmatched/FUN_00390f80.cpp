@@ -15,7 +15,7 @@ int FUN_00230110(float);
 int Memory_GetAllocatorBySelector(int);
 int igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
-int igStrCmp(char *, void *);
+int strcmp(char *, void *);
 extern int DAT_004e0858[4];
 extern int DAT_0050ef60[4];
 extern int DAT_0050ef68[4];
@@ -110,7 +110,7 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
             }
             e->_targetType = (int)newv;
         }
-        if (igStrCmp((char *)e->_targetType, &DAT_0050ef78[0]) == 0) {
+        if (strcmp((char *)e->_targetType, &DAT_0050ef78[0]) == 0) {
             beModelCtrlInfoAI *c2 = (beModelCtrlInfoAI *)arg3->_aI;
             vec[0] = ((float *)c2->_worldPos)[0];
             vec[1] = ((float *)c2->_worldPos)[1];
@@ -192,7 +192,7 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
         }
         str.p = newv;
     }
-    arg3->_keyInput = igStrCmp(str.p, &DAT_0050ef88[0]) == 0;
+    arg3->_keyInput = strcmp(str.p, &DAT_0050ef88[0]) == 0;
     nm = str.p;
     if (DAT_00586f20[0] == 0) {
         v = FUN_002eb010(16);

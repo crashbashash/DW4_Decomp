@@ -2,7 +2,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 extern int g_ParticleInfo_metaObject[4];
-int igStrCmp(int, int);
+int strcmp(int, int);
 int igObject_GetFieldValueByName(void *, int);
 int memset(int, int, int);  /* memset(dst, byte, size); returns dst */
 int Gap__Core__igObject__vfunc_11();
@@ -15,7 +15,7 @@ void Gap__Bec__ParticleInfo__vfunc_11(ParticleInfo *self, int clearControls);
  * igObject_GetFieldValueByName, which finds the reflected field of that name
  * (igMetaObject_FindFieldByName) and returns its value in this object. */
 int Gap__Bec__ParticleInfo__vfunc_22(ParticleInfo *self, int name) {
-    if (igStrCmp(name, self->_name) == 0) {
+    if (strcmp(name, self->_name) == 0) {
         return self->_sceneGraph;
     }
     return igObject_GetFieldValueByName(self, name);

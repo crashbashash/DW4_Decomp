@@ -4,7 +4,7 @@ int FUN_00306770();
 int FUN_00306e50();
 int Memory_GetAllocatorBySelector();
 int igObject_Destroy();
-int igStrCmp();
+int strcmp();
 extern int DAT_004c22d8;
 extern char *DAT_004c22f0;
 extern char DAT_004f7910[];
@@ -49,15 +49,15 @@ void FUN_003085c0(void) {
         name = FUN_002b9500(allocator());
         if (FUN_00306770(cur, 2, DAT_004fb360, &name, DAT_004f7910, 0) != 0) {
             t = text(name);
-            if (igStrCmp(t, DAT_004fb378) == 0) {
+            if (strcmp(t, DAT_004fb378) == 0) {
                 DAT_004c22d8 = 6;
-            } else if (igStrCmp(t, DAT_004fb380) == 0) {
+            } else if (strcmp(t, DAT_004fb380) == 0) {
                 DAT_004c22d8 = 5;
-            } else if (igStrCmp(t, DAT_004fb388) == 0) {
+            } else if (strcmp(t, DAT_004fb388) == 0) {
                 DAT_004c22d8 = 4;
-            } else if (igStrCmp(t, DAT_004f7958) == 0) {
+            } else if (strcmp(t, DAT_004f7958) == 0) {
                 DAT_004c22d8 = 2;
-            } else if (igStrCmp(t, DAT_004f7968) == 0) {
+            } else if (strcmp(t, DAT_004f7968) == 0) {
                 DAT_004c22d8 = 1;
             }
         }

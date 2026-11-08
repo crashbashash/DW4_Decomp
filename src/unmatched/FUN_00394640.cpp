@@ -5,7 +5,7 @@ int FUN_00394400(beModelCtrl *, beBaseInfoRam *, int *, int, int *, int, int, in
 int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 void *StringPool_Intern(int, int *);
-int igStrCmp(int, int *);
+int strcmp(int, int *);
 extern int DAT_004e0858[4];
 extern int DAT_0050f038[4];
 extern int DAT_0050f078[4];
@@ -43,11 +43,11 @@ int FUN_00394640(beModelCtrl *arg0, beBaseInfo *arg1, beBaseInfoRam *arg2, beMod
     t = arg4->_modeName;
     if (t == 0) {
         ok = 1;
-    } else if (igStrCmp(t, &DAT_0050f120[0]) == 0) {
+    } else if (strcmp(t, &DAT_0050f120[0]) == 0) {
         SETSTR(_luaBHit, 0)
-    } else if (igStrCmp(arg4->_modeName, &DAT_0050f038[0]) == 0) {
+    } else if (strcmp(arg4->_modeName, &DAT_0050f038[0]) == 0) {
         SETSTR(_luaWHit, 0)
-    } else if (igStrCmp(arg4->_modeName, &DAT_0050f078[0]) == 0) {
+    } else if (strcmp(arg4->_modeName, &DAT_0050f078[0]) == 0) {
         SETSTR(_luaFHit, 0)
     } else {
         ok = 1;

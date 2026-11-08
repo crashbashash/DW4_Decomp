@@ -1,6 +1,6 @@
 extern "C" {
 void igObject_Destroy(void *);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 void List_Reserve(void *, int, int);
 void List_Resize(void *, int, int);
 }
@@ -78,7 +78,7 @@ extern "C" igResult FUN_002e82a0(IgbTypeReader *self) {
         for (j = 0; j < nameCount; j++) {
             char *n = ((ReflectedNameList *)names.p)->data[j]->name;
             n = (n == 0) ? DAT_004c22f0 : n;
-            if (igStrCmp(n, name) == 0) { found = true; break; }
+            if (strcmp(n, name) == 0) { found = true; break; }
         }
         if (found) { value = ((ReflectedValueList *)values.p)->data[j]; }
         addType(self->types, value);

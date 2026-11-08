@@ -323,7 +323,7 @@ void * FUN_001290d0 (struct _reent *, void *, size_t);
 void _mstats_r (struct _reent *, char *);
 int _system_r (struct _reent *, const char *);
 void __eprintf (const char *, const char *, unsigned int, const char *);
-void * FUN_00126f24 (const void *, int, size_t);
+void * memchr (const void *, int, size_t);
 int memcmp (const void *, const void *, size_t);
 void * memcpy (void *, const void *, size_t);
 void * memmove (void *, const void *, size_t);
@@ -902,7 +902,7 @@ reswitch: switch (ch) {
                         if ((cp = __builtin_va_arg((ap), char *)) == 0)
                                 cp = "(null)";
                         if (prec >= 0) {
-                                char *p = FUN_00126f24(cp, 0, prec);
+                                char *p = memchr(cp, 0, prec);
                                 if (p != 0) {
                                         size = p - cp;
                                         if (size > prec)

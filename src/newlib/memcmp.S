@@ -1,8 +1,8 @@
 	.set	noreorder
 
-	.globl	FUN_00127004
-	.ent	FUN_00127004
-FUN_00127004:
+	.globl	memcmp
+	.ent	memcmp
+memcmp:
 	sltiu	$2,$6,16
 	bnez	$2,$L2
 	or	$2,$4,$5
@@ -45,6 +45,6 @@ $L11:
 $L9:
 	jr	$31
 	move	$2,$0
-	.end	FUN_00127004
+	.end	memcmp
 
 	.set	reorder

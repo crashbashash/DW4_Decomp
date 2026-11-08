@@ -5,7 +5,7 @@ int FUN_0030b3c0(...);
 int ObjectList_ResizeRetained(...);
 void igObject_Destroy(void *);
 int igObject_GetAllocator(...);
-int igStrCmp(int, int);
+int strcmp(int, int);
 int thunk_FUN_0012a110(int, int);
 extern int DAT_004c22f0[4];
 }
@@ -40,7 +40,7 @@ igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, int arg2, int arg3) {
             int nm;
             if (arg0->_valueNameCaseSensitive != 0) {
                 nm = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? DAT_004c22f0[0] : ((igStringObj *)r.p->_valueName)->_buffer;
-                if (igStrCmp(nm, arg2) == 0) {
+                if (strcmp(nm, arg2) == 0) {
                     igRegistryValue *ret = r.p;
                     return ret;
                 }

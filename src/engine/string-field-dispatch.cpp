@@ -2,7 +2,7 @@
  * project target byte slots and must not be instantiated as objects. */
 
 #include "dw4/reflected.h"
-extern "C" int igStrCmp(const char *,const char *);
+extern "C" int strcmp(const char *,const char *);
 
 class FieldResetDispatchView {public: virtual void reserved0(); virtual void reserved1(); virtual void reserved2(); virtual void reserved3(); virtual void reserved4(); virtual void reserved5(); virtual void reserved6(); virtual void reserved7(); virtual void reserved8(); virtual void reserved9(); virtual void reserved10(); virtual void reserved11(); virtual void reserved12(); virtual void reserved13(); virtual void reserved14(); virtual void reserved15(); virtual void reserved16(); virtual void reserved17(); virtual void reserved18(); virtual void reserved19(); virtual void reserved20(); virtual void reserved21(); virtual void reserved22(); virtual void reserved23(); virtual void reserved24(); virtual void reserved25(); virtual void Reset0(void *); virtual void Reset3(void *); virtual void Reset2(void *);};
 extern "C" void igMetaField_Reset(igMetaField *field,void *object){
@@ -25,7 +25,7 @@ extern "C" bool Gap__Core__igStringMetaField__vfunc_45(igStringMetaField *field,
     const char *right=*(const char **)((const char *)two+offset);
     if(left==right)return true;
     if(!left||!right)return false;
-    return !bool(igStrCmp(left,right));
+    return !bool(strcmp(left,right));
 }
 
 extern "C" bool Gap__Core__igStringMetaField__vfunc_46(igStringMetaField *field,const void *one,const void *two){
@@ -34,7 +34,7 @@ extern "C" bool Gap__Core__igStringMetaField__vfunc_46(igStringMetaField *field,
     const char *right=*(const char **)((const char *)two+offset);
     if(left==right)return true;
     if(!left||!right)return false;
-    return !bool(igStrCmp(left,right));
+    return !bool(strcmp(left,right));
 }
 
 extern "C" bool Gap__Core__igStringMetaField__vfunc_47(igStringMetaField *field,const void *one,const void *two){
@@ -43,5 +43,5 @@ extern "C" bool Gap__Core__igStringMetaField__vfunc_47(igStringMetaField *field,
     const char *right=*(const char **)((const char *)two+offset);
     if(left==right)return true;
     if(!left||!right)return false;
-    return !bool(igStrCmp(left,right));
+    return !bool(strcmp(left,right));
 }

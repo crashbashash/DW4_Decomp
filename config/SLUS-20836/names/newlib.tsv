@@ -1,0 +1,13 @@
+# newlib functions named by the members of Sony's prebuilt libc.a that DW4 links
+# (docs/engine/assembly-sources.md): each archive object defines the function under this name.
+# <va>	<name>	<module>
+0x00126f24	memchr	newlib
+0x00127004	memcmp	newlib
+0x00129880	setjmp	newlib
+0x001298d8	longjmp	newlib
+0x0012a1e8	strcat	newlib
+0x0012a314	strchr	newlib
+0x0012a4a4	strcmp	newlib
+0x0012a9f0	strncat	newlib
+0x0012aba0	strncmp	newlib
+0x0012a5e8	strcoll	newlib

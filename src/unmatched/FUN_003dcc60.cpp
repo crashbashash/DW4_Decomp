@@ -11,7 +11,7 @@ int beNDMWLoadIntf2TextOrder_PublishIdLines(...);
 int igObject_GetAllocator(...);
 int Memory_GetAllocatorBySelector(...);
 int igObject_Destroy(...);
-int igStrCmp(...);
+int strcmp(...);
 typedef struct Ent { int name; int val; int val2; } Ent;
 extern Ent DAT_004cec70[16];
 extern int DAT_004cc830[4];
@@ -73,7 +73,7 @@ extern "C" unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1
                 V3 va;
                 s5 = 0;
                 for (s4 = 0; s4 < 16; s4++) {
-                    if (igStrCmp(DAT_004cec70[s4].name, it->_dmkind) == 0) { s5 = s4; break; }
+                    if (strcmp(DAT_004cec70[s4].name, it->_dmkind) == 0) { s5 = s4; break; }
                 }
                 va.x = s0->_pos[0]; va.y = s0->_pos[1]; va.z = s0->_pos[2];
                 beNDMWLoadIntf2ComMdlCtrl__StartAt(s0, arg0->_plNo, *s3, DAT_004cec70[s5].val, &va, 1);

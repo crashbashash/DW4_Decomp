@@ -4,7 +4,7 @@ typedef struct AlignmentFieldView { char pad[68]; int alignmentType; } Alignment
 extern char *DAT_00586dd0;
 extern char *DAT_004c22f0;
 int igObject_Destroy();
-int igStrCmp();
+int strcmp();
 static inline void dropNames(AlignmentNameList *o) {
     if (o != 0) {
         o->_refCount = o->_refCount - 1;
@@ -27,7 +27,7 @@ void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name)
     if (held != 0) { held->_refCount = held->_refCount + 1; }
     n = countOf(names);
     for (i = 0; i < n; i++) {
-        if (igStrCmp(textOf((*(AlignmentName ***)((char *)names + 16))[i]), name) == 0) {
+        if (strcmp(textOf((*(AlignmentName ***)((char *)names + 16))[i]), name) == 0) {
             self->alignmentType = i;
             dropNames(names);
             return;

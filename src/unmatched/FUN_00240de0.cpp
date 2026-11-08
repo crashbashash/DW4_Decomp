@@ -22,7 +22,7 @@ int lua_tag(int, int);
 int lua_tostring(int, int);
 Ob *lua_touserdata(int, int);
 int igMetaObject_FindFieldByName(Meta *, int);
-int igStrCmp(int, int);
+int strcmp(int, int);
 int FUN_00240de0(int arg0) {
     Ob *v0;
     Meta *s1;
@@ -43,7 +43,7 @@ int FUN_00240de0(int arg0) {
             while (FUN_00240360(&sp68) != 0) {
                 e = FUN_00240430(&sp68);
                 if (e->f12 == s1) {
-                    if (igStrCmp(FUN_00240420(e->f16), v02) == 0) {
+                    if (strcmp(FUN_00240420(e->f16), v02) == 0) {
                         s1v = e->f16;
                         FUN_00240390(&sp68, -1);
                         goto out;

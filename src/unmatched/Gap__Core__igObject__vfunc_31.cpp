@@ -178,7 +178,7 @@ int beMessenger_SendNamed(...);
 int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 void *igProperty_FindByName(...);
-int igStrCmp(...);
+int strcmp(...);
 extern float DAT_004e1058[4];
 extern int DAT_0050ef18[4];
 extern int DAT_0050ef60[4];
@@ -240,7 +240,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
         int t;
         int posNode;
         beModelCtrlInfoRideOn4 *p;
-        if (igStrCmp(q->_seqCodeName, &DAT_0050f1b8[0]) == 0) {
+        if (strcmp(q->_seqCodeName, &DAT_0050f1b8[0]) == 0) {
             ((MsgView *)arg0)->v33(arg1, &DAT_0050f1c0[0]);
             return;
         }

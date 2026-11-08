@@ -5,7 +5,7 @@ int beMessenger_AppendFloat(int, float);
 int beMessenger_AppendString(int, int);
 int beMessenger_DispatchSelected(int, int *);
 int beMessenger_SelectReceivers(int, int *, int, int);
-int igStrCmp(int *, int);
+int strcmp(int *, int);
 extern int DAT_004e0858[4];
 extern int DAT_0050f778[4];
 extern int DAT_0050f788[4];
@@ -46,7 +46,7 @@ int Gap__Bec__beSeCtl__vfunc_34(beSeCtl *arg0, struct ContextView *arg1, struct 
         do {
             row = (beSeInfoData *)*(int *)((char *)l1->_data + off);
             p = (int *)row->_name;
-            if (igStrCmp(p != 0 ? p : &DAT_004e0858[0], s5) == 0) {
+            if (strcmp(p != 0 ? p : &DAT_004e0858[0], s5) == 0) {
                 res = i;
             }
             i += 1;
@@ -64,7 +64,7 @@ int Gap__Bec__beSeCtl__vfunc_34(beSeCtl *arg0, struct ContextView *arg1, struct 
         do {
             it = *(beSeData **)((char *)l2->_data + off);
             p = (int *)it->_name;
-            if (igStrCmp(p != 0 ? p : &DAT_004e0858[0], s7) == 0) {
+            if (strcmp(p != 0 ? p : &DAT_004e0858[0], s7) == 0) {
                 sh = it->_delay;
                 beMessenger_SelectReceivers(arg0->_messenger, &DAT_0050f778[0], s5, s8);
                 beMessenger_AppendString(arg0->_messenger, it->_sound);

@@ -9,7 +9,7 @@ int beMessenger_AppendString(int, void *);
 int beMessenger_GetString(int, int);
 int FUN_003a84a0(void *, float);
 long long FUN_00230110(float);
-int igStrCmp(void *, void *);
+int strcmp(void *, void *);
 void igObject_Destroy(void *);
 int List_Reserve(void *, int, int);
 int FUN_003a8760(void *);
@@ -152,7 +152,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
         break;
     default:
         sw = (igBitMask *)((int *)info->_switch)[8];
-        if (igStrCmp(arg2, &DAT_0050dfe8[0]) == 0) {
+        if (strcmp(arg2, &DAT_0050dfe8[0]) == 0) {
             igObjectList *l = (igObjectList *)((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList;
             int n = l->_count;
             int i;

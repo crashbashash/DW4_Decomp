@@ -11,12 +11,12 @@ extern int DAT_00585b20[4];
 extern int DAT_00585be0[4];
 int FUN_00129ef8(char *, char *, char *, int *);
 int strlen(char *);
-int FUN_0012aba0(char *, char *, int);
+int strncmp(char *, char *, int);
 int igObject_IsKindOf(void *, int);
 void *igMetaObject_FindFieldByName(int, char *);
 int igObject_Destroy(void *);
 void *igProperty_FindByName(void *, int, char *);
-int igStrCmp(char *, char *);
+int strcmp(char *, char *);
 void *Gap__Sg__igAnimationDatabase__vfunc_24(O *arg0, char *arg1) {
     int sp106C;
     R *volatile sp1068;
@@ -35,7 +35,7 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O *arg0, char *arg1) {
     } else {
         var_a1 = DAT_004e0858;
     }
-    if (igStrCmp(arg1, var_a1) == 0) {
+    if (strcmp(arg1, var_a1) == 0) {
         return arg0;
     }
     var_s0 = igProperty_FindByName(arg0->f20, DAT_00585be0[0], arg1);
@@ -51,7 +51,7 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O *arg0, char *arg1) {
     if (var_s0 == 0) {
         var_s0 = igProperty_FindByName(arg0->f36, DAT_00585be0[0], arg1);
     }
-    if (FUN_0012aba0(arg1, DAT_004e44f8, strlen(DAT_004e44f8)) == 0) {
+    if (strncmp(arg1, DAT_004e44f8, strlen(DAT_004e44f8)) == 0) {
         if (DAT_00562560[0] == 0) {
             var_s1 = igMetaObject_FindFieldByName(DAT_00562370[0], DAT_004e4130);
             if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, DAT_00585b20[0]) != 0)) {

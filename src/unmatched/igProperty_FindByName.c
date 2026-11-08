@@ -1,4 +1,4 @@
-int igStrCmp();
+int strcmp();
 struct L { char pad[8]; int n; int p12; int *arr; };
 struct P { char pad[8]; int off; };
 int igProperty_FindByName(struct L *arg0, struct P *arg1, int arg2) {
@@ -13,7 +13,7 @@ int igProperty_FindByName(struct L *arg0, struct P *arg1, int arg2) {
     for (var_s2 = 0; var_s2 < temp_s1; var_s2++) {
         temp_s0 = arg0->arr[var_s2];
         temp_a0 = *(int *)(temp_s0 + arg1->off);
-        if ((temp_a0 != 0) && (igStrCmp(temp_a0, arg2) == 0)) {
+        if ((temp_a0 != 0) && (strcmp(temp_a0, arg2) == 0)) {
             return temp_s0;
         }
     }

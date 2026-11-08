@@ -3,7 +3,7 @@ extern "C" {
 int bePlayer_GetStruct(int);
 beDataObjBoolList *igProperty_GetRecordArray(int, int *);
 beDataObjIntList *FUN_003a9250(int, int *);
-int igStrCmp(int, int *);
+int strcmp(int, int *);
 extern int DAT_0050da18[4];
 extern int DAT_0050da50[4];
 extern int DAT_0050da58[4];
@@ -19,13 +19,13 @@ int SYSctlShinka(int arg0, int arg1, int arg2) {
     unsigned char *d;
     d = (unsigned char *)((igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(arg1 + 1), &DAT_0050da18[0])->_data)->_data; /* matching construct: byte base held in a pointer local keeps the retail operand order of the index add */
     has = d[arg2];
-    if (igStrCmp(arg0, &DAT_0050da50[0]) == 0) {
+    if (strcmp(arg0, &DAT_0050da50[0]) == 0) {
         if (has != 0) ret = ((int *)((igIntList *)FUN_003a9250(bePlayer_GetStruct(arg1 + 1), &DAT_0050da58[0])->_data)->_data)[arg2];
         else ret = -1;
-    } else if (igStrCmp(arg0, &DAT_0050da68[0]) == 0) {
+    } else if (strcmp(arg0, &DAT_0050da68[0]) == 0) {
         if (has != 0) ret = ((int *)((igIntList *)FUN_003a9250(bePlayer_GetStruct(arg1 + 1), &DAT_0050da78[0])->_data)->_data)[arg2];
         else ret = -1;
-    } else if (igStrCmp(arg0, &DAT_0050da88[0]) == 0) {
+    } else if (strcmp(arg0, &DAT_0050da88[0]) == 0) {
         if (has != 0) ret = 0;
         else {
             b = (igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(arg1 + 1), &DAT_0050da18[0])->_data;

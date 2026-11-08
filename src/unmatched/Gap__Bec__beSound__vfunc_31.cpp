@@ -8,7 +8,7 @@ extern "C" {
 int beMessenger_SendGroup(...);
 int beMessenger_GetObjectCount(...);
 igObjectList *beMessenger_GetObject(...);
-int igStrCmp(...);
+int strcmp(...);
 int List_Reserve(...);
 int List_RemoveWordAt(...);
 int igObject_Destroy(...);
@@ -46,7 +46,7 @@ void Gap__Bec__beSound__vfunc_31(beSound *self, beBaseInfoRam *arg1) {
             if (0 < objs->_count) do {
                 e = ((SE **)objs->_data)[i];
                 if (NM(e) == 0) { i++; continue; }
-                if (igStrCmp(NM(e), &DAT_0050f9d0[0]) == 0) { i++; continue; }
+                if (strcmp(NM(e), &DAT_0050f9d0[0]) == 0) { i++; continue; }
                 l = e->_list;
                 n = l->_count;
                 for (j = 0; j < n; j++) {

@@ -8,7 +8,7 @@ typedef struct NameList {
 } NameList;
 
 void StringList_CopyRetained(int *out, void *list, int index);
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 int StringChunk_ReleaseHeader(int, void *);
 extern int DAT_004fb410[4]; /* found status */
 extern int DAT_004fb418[4]; /* not-found status */
@@ -25,7 +25,7 @@ void igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, 
         count = ((NameList *)meta->_names)->count;
         for (index = 0; index < count; ++index) {
             StringList_CopyRetained(&retained, (void *)meta->_names, index);
-            match = igStrCmp((const char *)retained, name) == 0;
+            match = strcmp((const char *)retained, name) == 0;
             if (retained) {
                 header = (int *)(retained - 8);
                 if (--*(int *)(retained - 4) == 0) {

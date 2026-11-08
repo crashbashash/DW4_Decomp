@@ -1,8 +1,8 @@
 	.set	noreorder
 
-	.globl	FUN_0012a9f0
-	.ent	FUN_0012a9f0
-FUN_0012a9f0:
+	.globl	strncat
+	.ent	strncat
+strncat:
 	move	$8,$4
 	andi	$2,$8,0x7
 	bnezl	$2,$L18
@@ -120,6 +120,6 @@ $L12:
 $L13:
 	jr	$31
 	move	$2,$8
-	.end	FUN_0012a9f0
+	.end	strncat
 
 	.set	reorder

@@ -17,7 +17,7 @@ Ref *beBaseInfoDataList_Create(void *);
 void igObject_Destroy(Ref *);
 struct PropertyRecord { char header[20]; beNDMWMdlPlayerInfoWork *value; };
 PropertyRecord *igProperty_FindByName(Ref *, int, const char *);
-int igStrCmp(int, const char *);
+int strcmp(int, const char *);
 void beMessenger_SelectReceivers(int, const char *, const char *, int);
 void beMessenger_AppendString(int, const char *);
 void sprintf(char *, const char *, int);
@@ -70,7 +70,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *
     ensureCache(msg);
     Ref *c0 = msg->cache;
     pinfo = igProperty_FindByName(c0, DAT_00585be0[0], DAT_00516110)->value;
-    if (igStrCmp(pinfo->_seqCodeName, DAT_00516290) == 0) {
+    if (strcmp(pinfo->_seqCodeName, DAT_00516290) == 0) {
         const char *who = *(char **)(minfo + 8);
         int num = msg->number;
         const char *w2 = who ? who : DAT_004e0858;

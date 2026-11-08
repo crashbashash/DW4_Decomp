@@ -75,7 +75,7 @@ is **`SetGsCrt`**, and what follows is the **EE kernel library, already named** 
 `FlushCache`, `sceSifSetDma`, `_InitTLB`, `GetMemorySize` (65 functions, `0x10aae0`..`0x10b360`) —
 then **168 more anonymous functions** (`0x10b360`..`0x1137a8`, 33,864 bytes) which are the same
 library's unnamed body, immediately followed by the platform timer cluster at `0x1146a8`. The first
-name that is *not* platform code is `igStrCmp`, at `0x12a4a4`.
+name that is *not* platform code is newlib's `strcmp`, at `0x12a4a4`.
 
 So the region `[0x100008, 0x1137a8)` — 75,268 bytes, 410 functions — is the EE's own runtime, and
 this is the call surface into it:

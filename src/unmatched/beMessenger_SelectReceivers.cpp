@@ -9,7 +9,7 @@
 #include "dw4/reflected.h"
 extern "C" {
 void igObject_Destroy(void *);
-int igStrCmp(const char *, const char *);
+int strcmp(const char *, const char *);
 void List_RemoveWordAt(void *, int);
 void List_InsertWords(void *, int, int, void *);
 void List_Reserve(void *, int, int);
@@ -114,10 +114,10 @@ extern "C" void beMessenger_SelectReceivers(Messenger *self, char *category, cha
     for (i = 0; i < n; i++) {
         Ref item(LDATA((List *)self->_workStack)[i]);
         if (!IW->_groupName) continue;
-        if (igStrCmp((char *)IW->_groupName, category)) continue;
+        if (strcmp((char *)IW->_groupName, category)) continue;
         if (IW->_infoName == 0 || name == 0) {
             if (WorkOps::InfoName2(IW) != name) continue;
-        } else if (igStrCmp((char *)IW->_infoName, name)) continue;
+        } else if (strcmp((char *)IW->_infoName, name)) continue;
         IW->_ramNo = id;
         if (i) {
             List *l = (List *)self->_workStack;
@@ -172,7 +172,7 @@ extern "C" void beMessenger_SelectReceivers(Messenger *self, char *category, cha
                 StringList_CopyRetained(&tmp, (void *)g->_infoNameList, k);
                 s = tmp;
                 STR_RELEASE(s);
-                if (!(work->_infoName && s) || !igStrCmp((char *)work->_infoName, s)) {
+                if (!(work->_infoName && s) || !strcmp((char *)work->_infoName, s)) {
                     src = &LDATA((List *)g->_ramNoList)[k];
                     l = (List *)work->_findRamNoList;
                     c = l->_count;

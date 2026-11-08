@@ -1,7 +1,7 @@
 extern "C" {
 int FUN_002e2130(void *);
 int FUN_002e2300(void *, int);
-int igStrCmp(char *, int);
+int strcmp(char *, int);
 extern int DAT_004fb410[4];
 }
 struct R { int a; inline int Code() { return a; } };
@@ -42,7 +42,7 @@ extern "C" void Gap__Core__igEventTracker__vfunc_33(T *arg0, int arg1, int arg2,
     for (;;) {
         int c = arg0->v25(var_s0, &ev).Code();
         if (c != DAT_004fb410[0]) break;
-        if (ev.str != 0 && *ev.str != 0 && igStrCmp(ev.str, key) == 0) {
+        if (ev.str != 0 && *ev.str != 0 && strcmp(ev.str, key) == 0) {
             switch (ev.type) {
             case 6:
                 *arg4 += 1;

@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 int igObject_GetFieldValueByName();
-int igStrCmp();
+int strcmp();
 extern int DAT_004e0858[4];
 int Gap__Core__igNamedObjectInfo__vfunc_24(igNamedObjectInfo *arg0, int arg1) {
     int i;
@@ -18,7 +18,7 @@ int Gap__Core__igNamedObjectInfo__vfunc_24(igNamedObjectInfo *arg0, int arg1) {
         } else {
             name = (int *)&DAT_004e0858[0];
         }
-        if (igStrCmp(name, arg1) == 0) {
+        if (strcmp(name, arg1) == 0) {
             return ((int *)((igObjectList *)arg0->_objects)->_data)[i];
         }
     }

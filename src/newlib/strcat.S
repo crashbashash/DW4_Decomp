@@ -1,8 +1,8 @@
 	.set	noreorder
 
-	.globl	FUN_0012a1e8
-	.ent	FUN_0012a1e8
-FUN_0012a1e8:
+	.globl	strcat
+	.ent	strcat
+strcat:
 	addiu	$29,$29,-32
 	sq	$16,0($29)
 	move	$16,$4
@@ -83,6 +83,6 @@ $L9:
 	lq	$16,0($29)
 	jr	$31
 	addiu	$29,$29,32
-	.end	FUN_0012a1e8
+	.end	strcat
 
 	.set	reorder

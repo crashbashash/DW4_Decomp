@@ -9,7 +9,7 @@ void *StringPool_Intern();
 int FUN_002eb010();
 int StringChunk_ReleaseHeader();
 extern int g_stringPool[4];
-int igStrCmp(int, int);
+int strcmp(int, int);
 #include "dw4/reflected.h"
 
 typedef struct StringTokenHeader {
@@ -82,7 +82,7 @@ void Gap__Core__igStringMetaField__vfunc_53(void) {
 }
 
 /* Null-aware lexical comparison: two nulls compare equal, null sorts before non-null, otherwise
- * igStrCmp. */
+ * strcmp. */
 int Gap__Core__igStringMetaField__vfunc_44(igStringArrayMetaField *self, int objectA, int objectB) {
     int tokenA;
     int tokenB;
@@ -97,7 +97,7 @@ int Gap__Core__igStringMetaField__vfunc_44(igStringArrayMetaField *self, int obj
     if (tokenB == 0) {
         return 1;
     }
-    return igStrCmp(tokenA, tokenB);
+    return strcmp(tokenA, tokenB);
 }
 
 void igStringMetaField_ConstructValue(void) {

@@ -6,13 +6,13 @@ typedef struct Reent {
     const char *currentLocale;
 } Reent;
 
-int igStrCmp(const char *a, const char *b);
+int strcmp(const char *a, const char *b);
 extern char DAT_004d3ec0[]; /* "C" */
 extern char DAT_004d3eb0[]; /* "" */
 
 char *FUN_00125ee0(Reent *reent, int category, const char *locale) {
     if (locale) {
-        if (igStrCmp(locale, DAT_004d3ec0) && igStrCmp(locale, DAT_004d3eb0)) {
+        if (strcmp(locale, DAT_004d3ec0) && strcmp(locale, DAT_004d3eb0)) {
             return 0;
         }
         reent->currentCategory = category;

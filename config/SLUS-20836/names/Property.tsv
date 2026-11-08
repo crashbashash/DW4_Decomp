@@ -11,7 +11,6 @@
 #
 # 0x3023f0/0x302480 roles corrected from original-instruction cases.
 # <va>	<name>	<module>
-0x0012a4a4	igStrCmp	engine
 0x002fdf40	igMetaObject_CreateFields	engine
 0x002fe000	igMetaObject_NameFields	engine
 0x002fe9c0	igMetaObject_RegisterClass	engine

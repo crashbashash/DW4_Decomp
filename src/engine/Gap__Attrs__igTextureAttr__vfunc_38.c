@@ -3,7 +3,7 @@ typedef struct Arg { char p[16]; int f16; int f20; int f24; int f28; int f32; ch
 int FUN_00129ef8();
 int *FUN_001405a0();
 T *FUN_00140c00();
-int igStrCmp();
+int strcmp();
 extern int DAT_004d5df8[4];
 extern int DAT_004d5e10[4];
 int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
@@ -30,7 +30,7 @@ int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
         }
         var_a1 = (int *)(var_s1);
     }
-    if (igStrCmp(sp50, var_a1) == 0) {
+    if (strcmp(sp50, var_a1) == 0) {
         if (sp206C == arg0->f16) {
             if ((sp2068 == arg0->f20) && (sp2064 == arg0->f24) && (sp2060 == arg0->f28) && (sp205C == arg0->f32) && (sp2058 == arg0->f40) && (sp2054 == arg0->f44) && (sp2050 == arg0->f52)) {
                 return 1;

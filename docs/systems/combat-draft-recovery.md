@@ -242,7 +242,7 @@ weaken the oracle or assume an original source/compiler identity.
 The `KOUKA` field at `0x5191f0` supplies the effect strings compared with
 `sleep`, `ashidome`, `freeze` and `powerdown` in cases 9–12. At query sites
 `0x403a4c`, `0x403d64`, `0x4042a4` and `0x404abc`, retail obtains the string
-before initializing the result in the `igStrCmp` call's delay slot. The nested
+before initializing the result in the `strcmp` call's delay slot. The nested
 draft expression instead leaves zero initialization ahead of the lookup.
 
 The optional `--attack-effects` projection materializes the string first. It
