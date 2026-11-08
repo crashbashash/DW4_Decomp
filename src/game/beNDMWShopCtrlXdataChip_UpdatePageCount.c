@@ -6,13 +6,10 @@ int beNDMWShopCtrlXdataChip_UpdatePageCount(beNDMWShopCtrlXdataChip *self){
     else pages=count/12;
     self->_maxPage=pages;
     remaining=(int)((unsigned)((igObjectList *)self->_itemBaseList)->_count-(unsigned)self->_nowPage*12);
-    asm { .set noreorder }
     if(remaining>=12){
-        asm { nop
-            .set reorder }
         result=12;
     }
     else result=remaining%12;
-    if(result<1){result=1;asm { nop }}
+    if(result<1){result=1;}
     return result;
 }

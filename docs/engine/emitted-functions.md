@@ -222,8 +222,9 @@ Further holder shapes:
 - Expression temporaries take the lowest frame slots. A temporary read in one statement is destroyed at
   its end and gets no unwind range.
 - Nested holder chains take one holder per scope, built at the use site.
-- A holder inside a free inline helper is inlined only with `#pragma inline_depth(8)`. A holder that must
-  sit in a lower frame slot is a local of a struct static-inline helper under `inline_depth(8)`.
+- A holder inside an inline helper has its destructor expanded only at an inline depth of 2 or more.
+  Bec and Ndmw build with `-inline level=8`, so there it needs nothing extra; the locals of an inlined
+  helper take the frame slots below the function's own locals and temporaries.
 - Volatile holder members reproduce a store-then-reload.
 - A `(o = p) != 0` destructor shares the load with the use site.
 

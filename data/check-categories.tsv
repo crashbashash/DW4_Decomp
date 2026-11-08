@@ -14833,9 +14833,9 @@
 00378e40	FUN_00378e40	match	exception index 0x54e564: matches retail (packed)
 00378e80	FUN_00378e80	match	exception index 0x54e570: matches retail (packed)
 00378ec0	FUN_00378ec0	match	-
-00378ed0	FUN_00378ed0	match	DEFERRED duplicate 0x33e9c0 __dt__3RPDFv 128B (compared under the profile of its retail unit)
+00378ed0	FUN_00378ed0	match	-
 00379c40	Gap__Bec__beCameraCtrl__vfunc_31	match	exception index 0x54e594: matches retail (packed)
-00379ce0	Gap__Bec__beCameraCtrl__vfunc_33	match	DEFERRED duplicate 0x33e9c0 __dt__3RPDFv 128B (compared under the profile of its retail unit)
+00379ce0	Gap__Bec__beCameraCtrl__vfunc_33	match	-
 0037a600	FUN_0037a600	match	exception index 0x54e5ac: matches retail (packed)
 0037a680	Gap__Bec__beCameraCtrl__vfunc_20	match	-
 0037a690	FUN_0037a690	match	exception index 0x54e5b8: matches retail (packed)
@@ -15075,7 +15075,7 @@
 00390de0	Gap__Bec__beModelCtrl__vfunc_25	match	exception index 0x54ee1c: matches retail (packed)
 00390e80	Gap__Core__igObject__vfunc_29	match	exception index 0x54ee28: matches retail (packed)
 00390f70	Gap__Bec__beNDMWMdlMapCursor__vfunc_37	match	-
-00390f80	FUN_00390f80	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+00390f80	FUN_00390f80	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00391a10	FUN_00391a10	match	exception index 0x54ee4c: matches retail (packed)
 00391b40	Gap__Core__igObject__vfunc_38	match	-
 00391cf0	FUN_00391cf0	match	exception index 0x54ee64: matches retail (packed)
@@ -16795,15 +16795,15 @@
 003d2230	Gap__Bec__beNDMWMdlPlayer__vfunc_23	match	exception index 0x5532d4: matches retail (packed)
 003d2290	Gap__Bec__beNDMWMdlPlayer__vfunc_35	match	exception index 0x5532e0: matches retail (packed)
 003d22c0	Gap__Bec__beNDMWMdlPlayer__vfunc_37	match	exception index 0x5532ec: matches retail (packed)
-003d22f0	Gap__Bec__beNDMWMdlPlayer__vfunc_38	match	DEFERRED duplicate 0x33e9c0 __dt__8PropsRefFv 128B (compared under the profile of its retail unit)
-003d3170	FUN_003d3170	match	DEFERRED duplicate 0x33e9c0 __dt__8PropsRefFv 128B (compared under the profile of its retail unit)
-003d31f0	Gap__Bec__beNDMWMdlPlayer__vfunc_39	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d22f0	Gap__Bec__beNDMWMdlPlayer__vfunc_38	match	-
+003d3170	FUN_003d3170	match	-
+003d31f0	Gap__Bec__beNDMWMdlPlayer__vfunc_39	match	-
 003d3640	Gap__Bec__beNDMWMdlPlayer__vfunc_36	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
-003d40f0	Gap__Bec__beNDMWMdlPlayer__vfunc_40	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-003d4240	Gap__Bec__beNDMWMdlPlayer__vfunc_41	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-003d4390	Gap__Bec__beNDMWMdlPlayer__vfunc_44	match	DEFERRED duplicate 0x33e9c0 __dt__3TmpFv 128B (compared under the profile of its retail unit)
-003d45f0	Gap__Bec__beNDMWMdlPlayer__vfunc_43	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-003d4820	Gap__Bec__beNDMWMdlPlayer__vfunc_42	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d40f0	Gap__Bec__beNDMWMdlPlayer__vfunc_40	match	-
+003d4240	Gap__Bec__beNDMWMdlPlayer__vfunc_41	match	-
+003d4390	Gap__Bec__beNDMWMdlPlayer__vfunc_44	match	-
+003d45f0	Gap__Bec__beNDMWMdlPlayer__vfunc_43	match	-
+003d4820	Gap__Bec__beNDMWMdlPlayer__vfunc_42	match	-
 003d4970	Gap__Bec__beNDMWMdlPlayer__vfunc_20	match	-
 003d4980	Gap__Bec__beNDMWMdlPlayer2__vfunc_23	match	exception index 0x553364: matches retail (packed)
 003d49c0	Gap__Bec__beNDMWMdlPlayer2__vfunc_35	match	exception index 0x553370: matches retail (packed)
@@ -16994,7 +16994,7 @@
 003f7210	FUN_003f7210	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f7290	FUN_003f7290	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f7310	FUN_003f7310	match	-
-003f77b0	Gap__Bec__beNDMWGameRam__vfunc_23	match	DEFERRED duplicate 0x3ba350 __dt__17CommonDataListRefFv 128B (compared under the profile of its retail unit)
+003f77b0	Gap__Bec__beNDMWGameRam__vfunc_23	match	-
 003f7980	Gap__Bec__beNDMWGameRam__vfunc_24	match	exception index 0x553a30: matches retail (packed)
 003f7c50	Gap__Bec__beNDMWGameRam__vfunc_32	match	exception index 0x553a3c: matches retail (packed)
 003f7e40	Gap__Bec__beNDMWGameRam__vfunc_25	match	-
@@ -17004,11 +17004,11 @@
 003f80e0	FUN_003f80e0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f82a0	FUN_003f82a0	match	exception index 0x553a78: matches retail (table 0x544f2c 8 bytes)
 003f8760	FUN_003f8760	match	exception index 0x553a84: matches retail (packed)
-003f8990	FUN_003f8990	match	DEFERRED duplicate 0x3d9d50 __dt__14RecoveryRef<1>Fv 128B (compared under the profile of its retail unit)
+003f8990	FUN_003f8990	match	-
 003f8c90	FUN_003f8c90	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f93c0	FUN_003f93c0	match	exception index 0x553aa8: matches retail (table 0x544f64 8 bytes)
 003f9570	FUN_003f9570	match	exception index 0x553ab4: matches retail (packed)
-003f96e0	FUN_003f96e0	match	DEFERRED duplicate 0x3832d0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003f96e0	FUN_003f96e0	match	-
 003f99f0	FUN_003f99f0	match	exception index 0x553acc: matches retail (packed)
 003f9bb0	FUN_003f9bb0	match	exception index 0x553ad8: matches retail (packed)
 003f9c80	FUN_003f9c80	match	exception index 0x553ae4: matches retail (table 0x544f7c 8 bytes)
@@ -17143,7 +17143,7 @@
 0041a380	FUN_0041a380	match	exception index 0x553fb8: matches retail (packed)
 0041a400	Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0041aaa0	FUN_0041aaa0	match	exception index 0x553fd0: matches retail (table 0x545994 8 bytes)
-0041acf0	Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21	code-only	DEFERRED duplicate 0x2e2300 __dt__2RPFv 68B (compared under the profile of its retail unit)
+0041acf0	Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21	match	DEFERRED duplicate 0x226990 __dt__13DecideListRefFv 128B (compared under the profile of its retail unit)
 0041d240	FUN_0041d240	match	exception index 0x553fe8: matches retail (packed)
 0041d2c0	FUN_0041d2c0	match	exception index 0x553ff4: matches retail (packed)
 0041d3b0	FUN_0041d3b0	match	-
@@ -17156,9 +17156,9 @@
 0041f110	FUN_0041f110	match	DEFERRED duplicate 0x1363f0 __dt__4RefXFv 128B (compared under the profile of its retail unit)
 0041f190	Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00420230	FUN_00420230	match	exception index 0x554060: matches retail (table 0x545c38 8 bytes)
-004207a0	Gap__Bec__beNDMWStatusSubMenu__vfunc_21	code-only	DEFERRED duplicate 0x2e2300 __dt__2RPFv 68B (compared under the profile of its retail unit)
-00422c00	FUN_00422c00	match	DEFERRED duplicate 0x3b6090 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-00423000	FUN_00423000	match	DEFERRED duplicate 0x3b6090 __dt__2RPFv 128B (compared under the profile of its retail unit)
+004207a0	Gap__Bec__beNDMWStatusSubMenu__vfunc_21	match	DEFERRED duplicate 0x1363f0 __dt__9DeviceRefFv 128B (compared under the profile of its retail unit)
+00422c00	FUN_00422c00	match	-
+00423000	FUN_00423000	match	-
 00423300	Gap__Bec__beNDMWStatusSubMenu__vfunc_20	match	-
 00423310	Gap__Bec__beNDMWStatusCtrlSkill__vfunc_20	match	-
 00423320	Gap__Bec__beNDMWStatusCtrlSendBit__vfunc_20	match	-
@@ -17261,7 +17261,7 @@
 0043a450	FUN_0043a450	match	exception index 0x554414: matches retail (table 0x5468c4 8 bytes)
 0043a660	FUN_0043a660	match	exception index 0x554420: matches retail (table 0x5468cc 8 bytes)
 0043a950	FUN_0043a950	match	exception index 0x55442c: matches retail (packed)
-0043aae0	Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21	foreign-profile	foreign-profile: the code bytes are reproduced only under the provisional override (local/mwcps2/combat/mwccps2.exe '-O3,p -Iinclude'); under the unit profile of beNDMWShopCtrlXdataChip_43aae0 (local/mwcps2/3.0-011126/mwccps2.exe '-O3,p -Iinclude') they are not; orphan 20 bytes
+0043aae0	Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
 0043c720	beNDMWShopCtrlXdataChip_UpdatePageCount	match	-
 0043c7f0	beNDMWShopCtrlXdataChip_RefreshText	match	exception index 0x554444: matches retail (table 0x546a58 8 bytes)
 0043cc20	Gap__Bec__beNDMWShopDevice__vfunc_21	match	-
@@ -17327,8 +17327,8 @@
 00443540	FUN_00443540	match	exception index 0x5545c4: matches retail (packed)
 004435c0	FUN_004435c0	match	exception index 0x5545d0: matches retail (packed)
 00443900	FUN_00443900	match	-
-00443bd0	Gap__Bec__beNDMWMdlPEBase__vfunc_46	match	DEFERRED duplicate 0x33e9c0 __dt__7ListRefFv 128B (compared under the profile of its retail unit)
-00445200	FUN_00445200	match	DEFERRED duplicate 0x33e9c0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+00443bd0	Gap__Bec__beNDMWMdlPEBase__vfunc_46	match	-
+00445200	FUN_00445200	match	-
 004456c0	FUN_004456c0	match	DEFERRED duplicate 0x150eb0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 00445990	FUN_00445990	match	DEFERRED duplicate 0x150eb0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 00445c60	FUN_00445c60	match	exception index 0x554618: matches retail (packed)

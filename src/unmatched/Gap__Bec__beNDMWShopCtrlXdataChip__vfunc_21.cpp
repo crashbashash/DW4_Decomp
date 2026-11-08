@@ -1,3 +1,6 @@
+/* Update state machine of the X-data chip shop (_st0 open / run / close / wait-close, _st1 step).
+ * Each sub-window, list and chip reference is held by an owning reference scoped to the block that
+ * uses it; one holder class per retail destructor copy. */
 #include "dw4/reflected.h"
 extern "C" {
 int sprintf(...);
@@ -15,8 +18,6 @@ int FUN_00448660(...);
 int Memory_GetAllocatorBySelector(...);
 int ObjectList_AppendRetained(...);
 int StringChunk_ReleaseHeader(...);
-int StringList_AppendRetained(int, int **);
-int StringList_CopyRetained(...);
 int StringPool_Construct(int);
 int StringPool_Intern(int, int *);
 int beMessenger_AppendInt(...);
@@ -127,9 +128,40 @@ typedef struct ChipRecord {
     int f12;
 } ChipRecord;
 
+
+static inline void ReleaseObject(igObject *o)
+{
+    if (o) {
+        --o->_refCount;
+        if (!(o->_refCount & 0x7fffff)) igObject_Destroy(o);
+    }
+}
+#define OBJECT_REF(Name, T) \
+class Name { \
+public: \
+    T *p; \
+    Name(void *o) : p((T *)o) {} \
+    ~Name() { ReleaseObject((igObject *)p); } \
+}
+OBJECT_REF(SelectE1Ref, beNDMWStatusSelectE1);
+OBJECT_REF(ConfirmRef, beNDMWShopSelect00);
+OBJECT_REF(ResultRef, beNDMWShopSelect01);
+OBJECT_REF(ChipRef, beNDMWItemAbilityChip);
+OBJECT_REF(NameListRef, igStringRefList);
+OBJECT_REF(CostListRef, igIntList);
+class StringRef {
+public:
+    int *p;
+    StringRef(int *s) : p(s) {}
+    ~StringRef() { int *held = p;
+        if (held != 0) { int *hd = held - 2;
+            int cnt = held[-1] - 1; held[-1] = cnt;
+            if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
+};
+extern "C" int StringList_AppendRetained(int, const StringRef &);
+extern "C" StringRef StringList_CopyRetained(igStringRefList *, int);
 struct ChipUtil { static inline bool IsChip(beNDMWItemBase *e) { if (e != 0) { return e->_kindNo == 3; } return false; } static inline int *CastSel(int *p) { if (p != 0 && igObject_IsKindOf(p, DAT_0058abd8[0]) != 0) return p; return 0; } };
-/* matching construct: macro reproduces the inlined intern/append/release sequence */
-#define INTERN_APPEND(slot, field, text) { \
+#define INTERN_APPEND(field, text) { \
     int *tok; \
     if ((text) == 0) { \
         tok = 0; \
@@ -141,12 +173,7 @@ struct ChipUtil { static inline bool IsChip(beNDMWItemBase *e) { if (e != 0) { r
         } \
         tok = (int *)StringPool_Intern(DAT_00586f20[0], (int *)(text)); \
     } \
-    slot = tok; \
-    StringList_AppendRetained(field, &slot); \
-    { int *held = slot; \
-    if (held != 0) { int *hd = held - 2; \
-        int cnt = held[-1] - 1; held[-1] = cnt; \
-        if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } } }
+    StringList_AppendRetained(field, StringRef(tok)); }
 
 #define RELEASE(t) { \
     if ((t) != 0) { \
@@ -164,31 +191,6 @@ struct ChipUtil { static inline bool IsChip(beNDMWItemBase *e) { if (e != 0) { r
     beMessenger_DispatchSelected(arg0->_messenger, sel); }
 
 extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataChip *arg0) {
-    beNDMWStatusSelectE1 * volatile sp11C;
-    beNDMWShopSelect00 * volatile sp118;
-    beNDMWItemAbilityChip * volatile sp114;
-    volatile int sp110;
-    igIntList * volatile sp10C;
-    beNDMWShopSelect01 * volatile sp108;
-    beNDMWShopSelect00 * volatile sp104;
-    beNDMWShopSelect00 * volatile sp100;
-    int *spFC;
-    int *spF8;
-    int *spF4;
-    int *spF0;
-    int *spEC;
-    int *spE8;
-    int *spE4;
-    int *spE0;
-    int *spDC;
-    int *spD8;
-    int *spD4;
-    int *spD0;
-    int *spCC;
-    int *spC8;
-    int *spC4;
-    int *spC0;
-    int *spBC;
     int vecB[3];
     int vecA[3];
     char sp90[16];
@@ -223,10 +225,10 @@ extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataC
 
     switch (arg0->_st0) {
     case 0:
-        INTERN_APPEND(spFC, arg0->_textCloseTypeList, &DAT_0051b668[0])
-        INTERN_APPEND(spF8, arg0->_textCloseNameList, &DAT_0051b1c8[0])
-        INTERN_APPEND(spF4, arg0->_textCloseTypeList, &DAT_0051be10[0])
-        INTERN_APPEND(spF0, arg0->_textCloseNameList, &DAT_0051b1c8[0])
+        INTERN_APPEND(arg0->_textCloseTypeList, &DAT_0051b668[0])
+        INTERN_APPEND(arg0->_textCloseNameList, &DAT_0051b1c8[0])
+        INTERN_APPEND(arg0->_textCloseTypeList, &DAT_0051be10[0])
+        INTERN_APPEND(arg0->_textCloseNameList, &DAT_0051b1c8[0])
         i = 0;
         p = &DAT_004cf8a0[0];
         do {
@@ -285,20 +287,18 @@ extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataC
                 ((ChipVT *)arg0)->v22(vecB, vecA);
             }
             ALLOC(al)
-            sp11C = (beNDMWStatusSelectE1 *)FUN_003b51b0(al);
-            beNDMWWindow_BindContext(sp11C, arg0, arg0->_insight, arg0->_playerNo, 0);
-            ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp11C);
             {
-                beNDMWStatusSelectE1 *t = sp11C;
+            SelectE1Ref pageWin(FUN_003b51b0(al));
+            beNDMWWindow_BindContext(pageWin.p, arg0, arg0->_insight, arg0->_playerNo, 0);
+            ObjectList_AppendRetained((unsigned)arg0->_subWindow, pageWin.p);
+            {
+                beNDMWStatusSelectE1 *t = pageWin.p;
                 t->_offsetPos[0] = -121.0f;
                 t->_offsetPos[1] = 128.0f;
                 t->_offsetPos[2] = 0.0f;
             }
-            sp11C->_selectMax = pages;
-            sp11C->_startPoint = arg0->_cursor;
-            {
-                beNDMWStatusSelectE1 *t = sp11C;
-                RELEASE(t)
+            pageWin.p->_selectMax = pages;
+            pageWin.p->_startPoint = arg0->_cursor;
             }
             arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
             arg0->_st1 = arg0->_st1 + 1;
@@ -391,10 +391,11 @@ extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataC
                 beNDMWItemBase *chip;
                 long long status;
                 int recNo;
+                {
                 ALLOC(al)
-                sp118 = (beNDMWShopSelect00 *)FUN_003b4f50(al);
-                beNDMWWindow_BindContext(sp118, arg0, arg0->_insight, arg0->_playerNo, 0);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp118);
+                ConfirmRef infoWin(FUN_003b4f50(al));
+                beNDMWWindow_BindContext(infoWin.p, arg0, arg0->_insight, arg0->_playerNo, 0);
+                ObjectList_AppendRetained((unsigned)arg0->_subWindow, infoWin.p);
                 int pages0 = arg0->_nowPage;
                 int idx0 = arg0->_cursor + pages0 * 0xC;
                 status = FUN_00236f80(arg0->_insight, DAT_0058b028[0], pages0);
@@ -412,82 +413,55 @@ extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataC
                     beMessenger_DispatchSelected(arg0->_messenger, &DAT_0051b3a0[0]);
                 }
                 ALLOC(al)
-                sp114 = (beNDMWItemAbilityChip *)FUN_003c87f0(al);
-                FUN_00448660(sp114, recNo + 1);
-                FUN_003f5410(sp118, &DAT_0051b470[0], DAT_004cf8a0[0], beNDMWItemBase_GetRecordString(sp114, status, &DAT_0051b678[0]), &DAT_0051b598[0]);
-                FUN_003f5410(sp118, &DAT_0051b448[0], DAT_004cf8a4[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                FUN_003f5410(sp118, &DAT_0051b448[0], DAT_004cf8a8[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                FUN_003f5410(sp118, &DAT_0051b448[0], DAT_004cf8ac[0], &DAT_0051b590[0], &DAT_0051b598[0]);
-                FUN_003f5410(sp118, &DAT_0051b470[0], DAT_004cf8a8[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                ChipRef abilityChip(FUN_003c87f0(al));
+                FUN_00448660(abilityChip.p, recNo + 1);
+                FUN_003f5410(infoWin.p, &DAT_0051b470[0], DAT_004cf8a0[0], beNDMWItemBase_GetRecordString(abilityChip.p, status, &DAT_0051b678[0]), &DAT_0051b598[0]);
+                FUN_003f5410(infoWin.p, &DAT_0051b448[0], DAT_004cf8a4[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(infoWin.p, &DAT_0051b448[0], DAT_004cf8a8[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(infoWin.p, &DAT_0051b448[0], DAT_004cf8ac[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                FUN_003f5410(infoWin.p, &DAT_0051b470[0], DAT_004cf8a8[0], &DAT_0051b590[0], &DAT_0051b598[0]);
+                {
                 ALLOC(al)
-                sp110 = (int)FUN_002b90e0(al);
-                INTERN_APPEND(spEC, sp110, &DAT_0051b3f8[0])
-                INTERN_APPEND(spE8, sp110, &DAT_0051b408[0])
-                INTERN_APPEND(spE4, sp110, &DAT_0051b418[0])
-                INTERN_APPEND(spE0, sp110, &DAT_0051b420[0])
-                INTERN_APPEND(spDC, sp110, &DAT_0051be40[0])
-                INTERN_APPEND(spD8, sp110, &DAT_0051be50[0])
-                INTERN_APPEND(spD4, sp110, &DAT_0051be58[0])
-                INTERN_APPEND(spD0, sp110, &DAT_0051be68[0])
-                INTERN_APPEND(spCC, sp110, &DAT_0051be78[0])
-                INTERN_APPEND(spC8, sp110, &DAT_0051be88[0])
-                INTERN_APPEND(spC4, sp110, &DAT_0051be90[0])
-                INTERN_APPEND(spC0, sp110, &DAT_0051be98[0])
+                NameListRef statNames(FUN_002b90e0(al));
+                INTERN_APPEND((int)statNames.p, &DAT_0051b3f8[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051b408[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051b418[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051b420[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051be40[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051be50[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051be58[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051be68[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051be78[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051be88[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051be90[0])
+                INTERN_APPEND((int)statNames.p, &DAT_0051be98[0])
                 s1i = FUN_00236f80(arg0->_insight, DAT_0058b028[0]);
                 ALLOC(al)
-                {
-                    igIntList *nw10 = (igIntList *)FUN_002caa70(al);
-                    slist = (igStringRefList *)sp110;
-                    sp10C = nw10;
-                }
+                CostListRef costs = CostListRef(FUN_002caa70(al));
+                slist = statNames.p;
                 li = 0;
                 if (0 < slist->_count) {
                     do {
-                        StringList_CopyRetained(&spBC, slist, li);
-                        cst = beNDMWItemBase_GetRecordInt(sp114, s1i, spBC);
-                        if (spBC != 0) {
-                            int *hd = spBC - 2;
-                            int c = spBC[-1] - 1;
-                            spBC[-1] = c;
-                            if (c == 0) StringChunk_ReleaseHeader(*hd, hd);
-                        }
+                        cst = beNDMWItemBase_GetRecordInt(abilityChip.p, s1i, StringList_CopyRetained(slist, li).p);
                         if (cst > 0) {
                             sprintf(sp90, &DAT_0051b468[0], cst);
-                            FUN_003f5410(sp118, &DAT_0051b448[0], &DAT_0051b220[0], sp90, &DAT_0051b460[0]);
+                            FUN_003f5410(infoWin.p, &DAT_0051b448[0], &DAT_0051b220[0], sp90, &DAT_0051b460[0]);
                             if (li >= 8) li = 7;
                             {
                                 struct Q2 { unsigned __int128 a[2]; }; *(Q2 *)sp70 = *(Q2 *)&DAT_004cfaa0[0];
                             }
-                            sp118->_entCode = sp70[li];
+                            infoWin.p->_entCode = sp70[li];
                             break;
                         }
-                        slist = (igStringRefList *)sp110;
+                        slist = statNames.p;
                         li += 1;
                     } while (li < slist->_count);
                 }
-                {
-                    igIntList *t = sp10C;
-                    if (t != 0) {
-                        t->_refCount = t->_refCount - 1;
-                        igIntList *u = sp10C;
-                        if (((unsigned long long)((long long)(int)u->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(u);
-                    }
-                }
-                {
-                    igStringRefList *t = (igStringRefList *)sp110;
-                    RELEASE(t)
                 }
                 MSG3(&DAT_0051b398[0], &DAT_0051b3e8[0])
                 s0 = ((ChipRecord *)igProperty_GetRecord(beMessenger_GetObject(arg0->_messenger, 0), &DAT_0051b440[0]))->f12;
                 sprintf(sp90, &DAT_0051b468[0], s0 - beNDMWItemBase_GetRecordInt(chip, status, &DAT_0051be38[0]));
-                FUN_003f5410(sp118, &DAT_0051b448[0], &DAT_0051b248[0], sp90, &DAT_0051b460[0]);
-                {
-                    beNDMWItemAbilityChip *t = sp114;
-                    RELEASE(t)
-                }
-                {
-                    beNDMWShopSelect00 *t = sp118;
-                    RELEASE(t)
+                FUN_003f5410(infoWin.p, &DAT_0051b448[0], &DAT_0051b248[0], sp90, &DAT_0051b460[0]);
                 }
                 arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
                 arg0->_st2 = arg0->_st2 + 1;
@@ -496,12 +470,10 @@ extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataC
             case 1:
                 if (((beNDMWWindowList *)(arg0->_subWindow))->_count != arg0->_nowProcKazu) {
                     ALLOC(al)
-                    sp108 = (beNDMWShopSelect01 *)FUN_003b4d90(al);
-                    beNDMWWindow_BindContext(sp108, arg0, arg0->_insight, arg0->_playerNo, 0x493);
-                    ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp108);
                     {
-                        beNDMWShopSelect01 *t = sp108;
-                        RELEASE(t)
+                    ResultRef buyWin(FUN_003b4d90(al));
+                    beNDMWWindow_BindContext(buyWin.p, arg0, arg0->_insight, arg0->_playerNo, 0x493);
+                    ObjectList_AppendRetained((unsigned)arg0->_subWindow, buyWin.p);
                     }
                     arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
                     arg0->_st2 = arg0->_st2 + 1;
@@ -549,10 +521,11 @@ extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataC
             switch (arg0->_st2) {
             case 0:
                 ALLOC(al)
-                sp104 = (beNDMWShopSelect00 *)FUN_003b4f50(al);
-                beNDMWWindow_BindContext(sp104, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp104);
-                beNDMWShopSelect00 *w = sp104;
+                {
+                ConfirmRef refusalWin(FUN_003b4f50(al));
+                beNDMWWindow_BindContext(refusalWin.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
+                ObjectList_AppendRetained((unsigned)arg0->_subWindow, refusalWin.p);
+                beNDMWShopSelect00 *w = refusalWin.p;
                 if (DAT_00586f20[0] == 0) {
                     int pool = FUN_002eb010(0x10);
                     if (pool != 0) pool = StringPool_Construct(pool);
@@ -569,9 +542,6 @@ extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataC
                     }
                     w->_panelName = (int)nw;
                 }
-                {
-                    beNDMWShopSelect00 *t = sp104;
-                    RELEASE(t)
                 }
                 arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
                 arg0->_st2 = arg0->_st2 + 1;
@@ -591,12 +561,10 @@ extern "C" void Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21(beNDMWShopCtrlXdataC
             switch (arg0->_st2) {
             case 0:
                 ALLOC(al)
-                sp100 = (beNDMWShopSelect00 *)FUN_003b4f50(al);
-                beNDMWWindow_BindContext(sp100, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
-                ObjectList_AppendRetained((unsigned)arg0->_subWindow, sp100);
                 {
-                    beNDMWShopSelect00 *t = sp100;
-                    RELEASE(t)
+                ConfirmRef shortageWin(FUN_003b4f50(al));
+                beNDMWWindow_BindContext(shortageWin.p, arg0, arg0->_insight, arg0->_playerNo, arg0->_st3);
+                ObjectList_AppendRetained((unsigned)arg0->_subWindow, shortageWin.p);
                 }
                 arg0->_nowProcKazu = ((beNDMWWindowList *)(arg0->_subWindow))->_count;
                 arg0->_st2 = arg0->_st2 + 1;

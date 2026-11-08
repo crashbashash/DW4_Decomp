@@ -1,4 +1,3 @@
-#pragma inline_depth(8)
 #include "dw4/reflected.h"
 extern "C" {
 long long FUN_00230110(float);

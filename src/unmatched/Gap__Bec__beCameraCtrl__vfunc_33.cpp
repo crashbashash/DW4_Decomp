@@ -4,7 +4,6 @@
  * finished shake, 9 start a shake record (SHAKEONE / SHAKEALL), 10/11 freeze toggles on the camera
  * mode, 12..14 debug zoom. Returns 1 when the message was handled. */
 #include "dw4/reflected.h"
-#pragma inline_depth(8)
 extern "C" {
 int FUN_001b1cf0(...);
 int FUN_001b1dc0(...);

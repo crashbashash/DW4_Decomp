@@ -9,7 +9,6 @@
  *  - Clr::ClearList loops: ref = Intern(pool, 0) before old = *slot
  *  - volatile read of _subWindow for the found-window search body (the list pointer is reloaded) */
 #include "dw4/reflected.h"
-#pragma inline_depth(8)
 
 extern "C" {
 int igObject_GetAllocator(void *);

@@ -65,7 +65,6 @@ template <int kind> struct RP {
 };
 /* matching construct: inlined get-or-create of arg1's list; its own stack smart-pointer slot per expansion */
 /* matching construct: the holder destructor nested in this inline function is only inlined (as retail has it) with the inline depth raised */
-#pragma inline_depth(8)
 struct En { static inline void Run(beBaseInfoRam *o) {
     if (o->_dataList == 0) {
         int base = igObject_GetAllocator(o); int a; if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }

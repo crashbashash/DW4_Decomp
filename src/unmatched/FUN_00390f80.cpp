@@ -170,8 +170,7 @@ void FUN_00390f80(beModelCtrl *arg0, void *arg1, beBaseInfoRam *arg2, beModelCtr
             }
         }
         str.p = newv;
-        fv = seg->_time;
-        FUN_003a7a20(arg2, &DAT_0050ef68[0], FUN_00230110(1e9f * fv / 60.0f));
+        fv = seg->_time; fv = fv; FUN_003a7a20(arg2, &DAT_0050ef68[0], FUN_00230110((1e9f * fv) / 60.0f));
     } else {
         nm = (char *)cur->_seqName;
         if (DAT_00586f20[0] == 0) {

@@ -1,4 +1,4 @@
-struct EV { int v; };
+struct igResult { int w0; igResult() {} igResult(const igResult &o) { w0 = o.w0; } bool operator==(const igResult &o) const { return w0 == o.w0; } };
 extern "C" {
 #include "dw4/reflected.h"
 
@@ -26,7 +26,7 @@ void beMessenger_AppendVec3(int, int *);
 void beMessenger_AppendBool(int, int);
 void beMessenger_DispatchSelected(int, const char *);
 void *FUN_003bf830(void);
-void igMetaEnum_GetValueByName(EV *, void *, int, int *);
+igResult igMetaEnum_GetValueByName(void *, int, int *);
 void beMessenger_SendNamed(int, const char *, int, int, const char *);
 void FUN_00445200(void *, Msg *);
 
@@ -34,16 +34,11 @@ extern unsigned char GPR_00554c14;
 extern char DAT_004e0858[], DAT_00516110[], DAT_00516148[], DAT_00516228[], DAT_00516290[], DAT_005164b0[], DAT_005164b8[], DAT_005164c8[], DAT_005164d8[];
 }
 struct Tmp { Ref *p; Tmp(Ref *q) : p(q) {} ~Tmp() { Ref *q = p; if (q) { q->rc--; if ((q->rc & 0x7fffff) == 0) igObject_Destroy(q); } } };
-extern int DAT_00587110[4], DAT_00585be0[4], DAT_004fb410[4];
+extern int DAT_00587110[4], DAT_00585be0[4];
+extern "C" igResult DAT_004fb410;
 
-extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *msg)
+static inline void ensureCache(Msg *msg)
 {
-    beNDMWMdlPlayerInfoWork *pinfo;
-    Ref *r;
-    char *minfo = msg->info;
-    char name[24];
-    int vec[3];
-    int tmp; EV en;
     if (msg->cache == 0) {
         void *al = igObject_GetAllocator(msg);
         void *al2;
@@ -53,7 +48,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *
             al2 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
         Tmp t(beBaseInfoDataList_Create(al2));
-        r = t.p;
+        Ref *r = t.p;
         if (r) r->rc++;
         Ref *old = msg->cache;
         if (old) {
@@ -62,6 +57,17 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *
         }
         msg->cache = r;
     }
+}
+
+extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *msg)
+{
+    beNDMWMdlPlayerInfoWork *pinfo;
+    Ref *r;
+    char *minfo = msg->info;
+    char name[24];
+    int vec[3];
+    int tmp;
+    ensureCache(msg);
     Ref *c0 = msg->cache;
     pinfo = igProperty_FindByName(c0, DAT_00585be0[0], DAT_00516110)->value;
     if (igStrCmp(pinfo->_seqCodeName, DAT_00516290) == 0) {
@@ -80,10 +86,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *
         beMessenger_DispatchSelected(self->_messenger, DAT_005164d8);
     }
     if (pinfo->_isPanel != 0) {
-        igMetaEnum_GetValueByName(&en, FUN_003bf830(), pinfo->_seqCodeName, &tmp);
-        /* The compare goes through a pointer-to-pointer, which keeps the `addiu v1,sp,120; lw
-         * v1,0(v1)` pair. */
-        int **ppp; int *pp = &en.v; ppp = &pp; if (**ppp == DAT_004fb410[0]) {
+        if (igMetaEnum_GetValueByName(FUN_003bf830(), pinfo->_seqCodeName, &tmp) == DAT_004fb410) {
             pinfo->_isPanel = 0;
             beMessenger_SendNamed(self->_messenger, DAT_00516148, 0, msg->number, DAT_005164b0);
         }

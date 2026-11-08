@@ -1,5 +1,4 @@
 #include "dw4/reflected.h"
-#pragma inline_depth(8)
 extern "C" {
 int beMessenger_SendGroup(...);
 int beMessenger_GetMatrixCount(...);
@@ -58,16 +57,13 @@ struct RPD { igObject *p; RPD(void *x) { p = (igObject *)x; } ~RPD() { igObject 
 struct RPE { igObject *p; RPE(void *x) { p = (igObject *)x; } ~RPE() { igObject *q = p; if (q != 0) { q->_refCount = q->_refCount - 1; if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q); } } };
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 
-struct UP { static inline void Ensure(beBaseInfoRam *act) {
-    if (act->_dataList == 0) {
-        void *alloc;
-        ALLOC(alloc, act)
-        RPD h(beBaseInfoDataList_Create(alloc));
-        igObject *r = h.p;
-        if (r != 0) r->_refCount = r->_refCount + 1;
-        { igObject *o = (igObject *)act->_dataList; REL(o) }
-        act->_dataList = (int)r;
-    } } };
+struct DataListInstall { static inline void go(beBaseInfoRam *act, const RPD &fresh) {
+    igObject *r = fresh.p;
+    if (r != 0) r->_refCount = r->_refCount + 1;
+    { igObject *o = (igObject *)act->_dataList; REL(o) }
+    act->_dataList = (int)r;
+} };
+#define ENSURE_DATA_LIST(act) if ((act)->_dataList == 0) { void *alloc; ALLOC(alloc, act) DataListInstall::go(act, RPD(beBaseInfoDataList_Create(alloc))); }
 
 void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
     float av[4];
@@ -144,7 +140,7 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
             self->_isPosChange = 0;
         }
         if (act->_dataList != 0) {
-            UP::Ensure(act);
+            ENSURE_DATA_LIST(act)
             {
                 beCameraCtrlInfoRamShake *pr = (beCameraCtrlInfoRamShake *)igProperty_FindByName(act->_dataList, DAT_00585be0[0], &DAT_0050e210[0]);
                 if (pr != 0) {
@@ -267,14 +263,14 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
             }
         }
         if (act->_dataList != 0) {
-            UP::Ensure(act);
+            ENSURE_DATA_LIST(act)
             {
                 beCameraCtrlInfoRamShake *pr = (beCameraCtrlInfoRamShake *)igProperty_FindByName(act->_dataList, DAT_00585be0[0], &DAT_0050e210[0]);
                 if (pr != 0) {
                     float *mp;
                     int k = 0;
-                    float *c1 = &DAT_004c8820[(*(char **)&pr->_moveCode)[pr->_movePoint] - 0x30];
-                    float *c2 = &DAT_004c8850[(*(char **)&pr->_moveCode)[pr->_movePoint] - 0x30];
+                    float *c1 = &DAT_004c8820[((char *)pr->_moveCode)[(int)pr->_movePoint] - 0x30];
+                    float *c2 = &DAT_004c8850[((char *)pr->_moveCode)[(int)pr->_movePoint] - 0x30];
                     do {
                         if (k == 0) {
                             mp = XFORM(sys->_eyePosList, 0)->_m;
@@ -290,11 +286,11 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
                             pr->_svIntPos[2] = tmp[2];
                         }
                         float sc = pr->_value;
+                        sc = sc;
                         tmp[0] = *c1 * sc + tmp[0];
-                        sc = pr->_value;
-                        float sd = sc;
+                        float sd = pr->_value;
+                        sd = sd;
                         tmp[1] = *c2 * sd + tmp[1];
-                        sc = sd;
                         Matrix44_SetTranslation(mp, tmp);
                         k += 1;
                     } while (k < 2);
@@ -302,7 +298,7 @@ void FUN_00378ed0(beCameraCtrl *self, beBaseInfoRam *act) {
                         int np = pr->_movePoint + 1;
                         if (((char *)(np + pr->_moveCode))[0] == 0) np = 0;
                         pr->_movePoint = np;
-                        float w = pr->_oneTime; w = w; FUN_003a7a20(act, &DAT_0050e228[0], FUN_00230110((1e9f * w) / 60.0f)); w = 0.0f;
+                        float w = pr->_oneTime; w = w; FUN_003a7a20(act, &DAT_0050e228[0], FUN_00230110((1e9f * w) / 60.0f));
                     }
                     if (FUN_003a7e90(act, &DAT_0050e238[0]) != 0) {
                         int h408;

@@ -13,7 +13,6 @@
  *    _retCode (case 0/1/2) with locals declared a,b,ps,pos,off and 'b' read before 'a'.
  *  - list byte pushes/sets are macros so the global byte is read at the store, after the bounds test. */
 #include "dw4/reflected.h"
-#pragma inline_depth(8)
 extern "C" {
 int FUN_002cb0d0(...);
 int igObject_IsKindOf(...);

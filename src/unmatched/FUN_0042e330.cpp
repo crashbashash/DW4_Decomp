@@ -77,7 +77,6 @@ static inline void release(int ref) {
  * (branch 1) and 0x8c (branch 3); the branch-1 and branch-3 holders are locals of static inline members, which are
  * allocated below the caller's.  The shared loop variables are passed by reference so register order is unchanged.
  * inline_depth(8) keeps the nested intern/destructor inline.  Found by trial (no permuter). */
-#pragma inline_depth(8)
 struct Slots {
     static inline void StoreCardName1(beNDMWShopCtrlA1 *arg0, int &s0, int &o, igDataList *&l, int &n, int *&arr, int &t, int *&p) {
         StringRef sp90(Str::intern(&DAT_0051b948[0]));

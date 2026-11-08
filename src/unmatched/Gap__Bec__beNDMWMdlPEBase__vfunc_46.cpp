@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+struct igResult { int w0; bool operator==(const igResult &o) const { return w0 == o.w0; } };
 typedef struct List { int w0; int references; int size; int cap; int *data; } List;
 typedef struct BList { int w0; int references; int size; int cap; unsigned char *data; } BList;
 typedef struct OList { int w0; int references; int size; int cap; beModelCtrlMoveObject **data; } OList;
@@ -19,7 +20,7 @@ extern int FUN_003a7e90(...);
 extern int FUN_003a8580(...);
 extern long long __divdi3(...);
 extern int FUN_003c03e0(...);
-extern int igMetaEnum_GetValueByName(...);
+extern igResult igMetaEnum_GetValueByName(...);
 extern int FUN_00445c60(...);
 extern int FUN_00443900(void *, void *, int, int, int, bool);
 extern int igStrCmp(...);
@@ -61,7 +62,7 @@ extern int DAT_004cfd98[4];
 extern int DAT_004cfda0[4];
 extern int DAT_004cfda8[4];
 extern int DAT_004cfdb0[4];
-extern int DAT_004fb410[4];
+extern igResult DAT_004fb410;
 extern int DAT_00587110[4];
 extern int DAT_00585be0[4];
 extern int DAT_0051d3a0[4];
@@ -110,15 +111,8 @@ class VC140 { public: virtual void d0(); virtual void d1(); virtual void d2(); v
 #define CALLV(name) ((VC140 *)self)->vX(obj, name)
 #define RELEASE(o) if ((o) != 0) { (o)->references = (o)->references - 1; if (((unsigned long long)((long long)(o)->references << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
 
-extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj);
-extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
-    beNDMWMdlPEBaseInfoWork *w;
-    List *l;
-    int n;
-    int *d;
-    int j;
-    int enumExtra;
-    int enumValue;
+static inline void ensureProps(Model *obj)
+{
     if (obj->props == 0) {
         int allocator = igObject_GetAllocator(obj);
         ListRef holder((List *)beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0])));
@@ -128,6 +122,17 @@ extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model
         RELEASE(old)
         obj->props = created;
     }
+}
+
+extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj);
+extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model *obj) {
+    beNDMWMdlPEBaseInfoWork *w;
+    List *l;
+    int n;
+    int *d;
+    int j;
+    int enumExtra;
+    ensureProps(obj);
     w = igProperty_FindByName(obj->props, DAT_00585be0[0], &DAT_0051d3a0[0])->work;
     if (w->_timerList != 0) {
         if (((Param *)w->_hp)->value == 0) {
@@ -221,8 +226,7 @@ extern "C" void Gap__Bec__beNDMWMdlPEBase__vfunc_46(beNDMWMdlPEBase *self, Model
                 SETI(w->_timerList, 3, DAT_004cfcf0[0])
                 CALLV(&DAT_0051d460[0]);
             } else {
-                igMetaEnum_GetValueByName(&enumValue, FUN_003c03e0(), w->_seqCodeName, &enumExtra);
-                int **ppp; int *pp = &enumValue; ppp = &pp; if (**ppp != DAT_004fb410[0]) {
+                if (!(igMetaEnum_GetValueByName(FUN_003c03e0(), w->_seqCodeName, &enumExtra) == DAT_004fb410)) {
                     OList *moves = (OList *)w->_moveObjectList;
                     int n = moves->size;
                     int i;

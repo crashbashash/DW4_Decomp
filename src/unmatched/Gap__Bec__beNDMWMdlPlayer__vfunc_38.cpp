@@ -102,7 +102,6 @@ struct NamedRef {
  * result (248), which is therefore a by-reference temporary (Scratch).  inline_depth(8) keeps PropsRef's
  * destructor inline inside the inlined helper.  Found by trial (no permuter). */
 struct Scratch { int w; Scratch() { } };
-#pragma inline_depth(8)
 struct Locals {
     static inline void CreateProps(PlayerArg *arg1) {
         void *alloc;

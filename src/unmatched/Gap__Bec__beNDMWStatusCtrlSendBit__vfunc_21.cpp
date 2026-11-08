@@ -3,7 +3,6 @@
  * 'switch (t) { case 1: default: ...; case 2: ...; case 3: ... }'; the double label makes the
  * default arm a join point. */
 #include "dw4/reflected.h"
-#pragma inline_depth(8)
 extern "C" {
 int sprintf(...);
 int FUN_002eb010(...);

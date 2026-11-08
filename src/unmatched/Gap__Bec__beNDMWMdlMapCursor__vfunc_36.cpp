@@ -53,7 +53,6 @@ public:
  * list reference is laid out after the caller's own value reference (+0x58 below +0x5c), as retail does.
  * matching construct: inline_depth(2) lets the list reference's destructor inline inside the inlined
  * helper (the default depth leaves an out-of-line call to __dt__9ObjectRefFv). */
-#pragma inline_depth(2)
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int al = igObject_GetAllocator(ram);

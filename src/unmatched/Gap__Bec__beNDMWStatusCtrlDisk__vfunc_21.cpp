@@ -1,3 +1,6 @@
+/* Update state machine of the status-screen disk control (_st0 open / run / close / wait-close, _st1
+ * step, _st2 sub-step). Each sub-window, list and disk reference is held by an owning reference
+ * scoped to the block that uses it; one holder class per retail destructor copy. */
 #include "dw4/reflected.h"
 
 extern "C" {
@@ -5,7 +8,6 @@ void *FUN_002eb010(int);
 void *StringPool_Construct(void *);
 const char *StringPool_Intern(void *, const char *);
 void StringChunk_ReleaseHeader(int, int *);
-int StringList_AppendRetained(int, const char **);
 int List_Resize(void *, int, int);
 void *igObject_GetAllocator(void *);
 void *Memory_GetAllocatorBySelector(int);
@@ -20,7 +22,6 @@ void *FUN_003b4410(void *);
 void *FUN_003b4f50(void *);
 void *FUN_003b51b0(void *);
 void FUN_003f5410(...);
-void FUN_003f56d0(...);
 void FUN_0041d2c0(...);
 void FUN_0041d3b0(...);
 void FUN_0041d3f0(...);
@@ -97,14 +98,50 @@ typedef unsigned __int128 Q128;
 struct Str3 { const char *v[3]; };
 extern Str3 DAT_004cf730;
 typedef igObject RefHeader;
-struct RP { RefHeader *p; ~RP() {} };
+static inline void ReleaseObject(igObject *o)
+{
+    if (o) {
+        --o->_refCount;
+        if (!(o->_refCount & 0x7fffff)) igObject_Destroy(o);
+    }
+}
+#define WINDOW_REF(Name) \
+class Name { \
+public: \
+    igObject *p; \
+    Name(void *o) : p((igObject *)o) {} \
+    ~Name() { ReleaseObject((igObject *)p); } \
+}
+WINDOW_REF(SelectE1Ref);
+WINDOW_REF(ConfirmRef);
+WINDOW_REF(QuantityRef);
+WINDOW_REF(DecideListRef);
+class SwapRef {
+public:
+    igObject *p;
+    SwapRef(void *o) : p((igObject *)o) { igObject *q = p; if (q) ++q->_refCount; }
+    ~SwapRef() { ReleaseObject((igObject *)p); }
+};
+class DeviceRef {
+public:
+    igObject *p;
+    DeviceRef(void *o) : p((igObject *)o) { igObject *q = p; if (q) ++q->_refCount; }
+    DeviceRef(const DeviceRef &r) : p(r.p) { if (p != 0) p->_refCount = p->_refCount + 1; }
+    ~DeviceRef() { ReleaseObject((igObject *)p); }
+};
+class StringRef {
+public:
+    const char *p;
+    StringRef(const char *s) : p(s) {}
+    ~StringRef() { const char *held = p;
+        if (held != 0) { int *hd = (int *)held - 2;
+            int cnt = ((int *)held)[-1] - 1; ((int *)held)[-1] = cnt;
+            if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
+};
+extern "C" int StringList_AppendRetained(int, const StringRef &);
+extern "C" void FUN_003f56d0(void *, void *, const char *, const DeviceRef &, void *);
 struct HA { static int Add(int a, int b) { return a + b; } };
 
-#define RETAIN_REF(q) { RefHeader *rr = (RefHeader *)(q); if (rr) ++rr->_refCount; }
-#define RELEASE_REF(q) { RefHeader *rr = (RefHeader *)(q); \
-    if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
-#define RETAIN_DIRECT(r) { if ((r).p != 0) (r).p->_refCount = (r).p->_refCount + 1; }
-#define RELEASE_DIRECT(r) { if ((r).p != 0) { (r).p->_refCount = (r).p->_refCount - 1; if (!((r).p->_refCount & 0x7fffff)) igObject_Destroy((r).p); } }
 #define GET_ALLOC(v) { void *ga = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(DAT_00587110[0]); } }
 #define INTERN(slot, text) { \
     const char *tok; \
@@ -117,10 +154,6 @@ struct HA { static int Add(int a, int b) { return a + b; } };
         tok = StringPool_Intern(DAT_00586f20[0], (const char *)(text)); \
     } \
     slot = tok; }
-#define RELEASE_STR(slot) { const char *held = slot; \
-    if (held != 0) { int *hd = (int *)held - 2; \
-        int cnt = ((int *)held)[-1] - 1; ((int *)held)[-1] = cnt; \
-        if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 #define WSETI84(w, v) { beNDMWWindowSelect *wt = (beNDMWWindowSelect *)(w); wt->_selectMax = (v); }
 #define WSETI100(w, v) { beNDMWWindowSelect *wt = (beNDMWWindowSelect *)(w); wt->_startPoint = (v); }
 #define WSETPOS(w, x, y, z) { beNDMWWindowSelect *wt = (beNDMWWindowSelect *)(w); *(float *)&wt->_offsetPos[0] = (x); *(float *)&wt->_offsetPos[1] = (y); *(float *)&wt->_offsetPos[2] = (z); }
@@ -136,8 +169,8 @@ struct HA { static int Add(int a, int b) { return a + b; } };
         tok = StringPool_Intern(DAT_00586f20[0], src); \
     } \
     slot = tok; }
-#define INTERNP_APPEND(slot, field, ptr) { INTERNP(slot, ptr) StringList_AppendRetained(field, &slot); RELEASE_STR(slot) }
-#define INTERN_APPEND(slot, field, text) { INTERN(slot, text) StringList_AppendRetained(field, &slot); RELEASE_STR(slot) }
+#define INTERNP_APPEND(field, ptr) { const char *tok_; INTERNP(tok_, ptr) StringList_AppendRetained(field, StringRef(tok_)); }
+#define INTERN_APPEND(field, text) { const char *tok_; INTERN(tok_, text) StringList_AppendRetained(field, StringRef(tok_)); }
 #define MSG_SELECT_INT(v) { beMessenger_SelectGroup(self->_messenger, DAT_00519ba0); \
     beMessenger_AppendInt(self->_messenger, v); beMessenger_DispatchSelected(self->_messenger, DAT_00519ba8); }
 #define NEXT_ST0() { self->_st0 = self->_st0 + 1; self->_st3 = 0; self->_st2 = 0; self->_st1 = 0; }
@@ -147,7 +180,7 @@ struct HA { static int Add(int a, int b) { return a + b; } };
 #define BLIST_ADD(r, v) { int n; igDataList *dl = (igDataList *)(r).p; n = dl->_count; \
     if (n < dl->_capacity) dl->_count = n + 1; else List_Resize(dl, n + 1, 1); \
     ((unsigned char *)dl->_data)[n] = (v); }
-#define LIST_ADD(lst, val) { int n_ = ((igDataList *)(lst))->_count; igDataList *l_ = (igDataList *)(lst); \
+#define LIST_ADD(decided, val) { int n_ = ((igDataList *)(decided))->_count; igDataList *l_ = (igDataList *)(decided); \
     if (n_ < l_->_capacity) l_->_count = *(volatile int *)&l_->_count + 1; else List_Resize(l_, n_ + 1, 4); \
     ((int *)l_->_data)[n_] = (val); }
 #define SEND_CLOSE() beMessenger_SendNamed(self->_messenger, DAT_00519a90, DAT_00519d88, 0, DAT_00519a58)
@@ -161,27 +194,10 @@ struct HA { static int Add(int a, int b) { return a + b; } };
     igObjectList *l2 = (igObjectList *)self->_modelCloseSeqNameList; \
     FUN_0041d2c0(l2, 0, l2->_count); l2->_count = 0; }
 
+struct Q48 { Q128 q[3]; };
 extern "C" void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self);
 void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
 {
-    RP wA;
-    RP wB;
-    RP wC;
-    RP lst;
-    RP rA;
-    RP rB;
-    RP wD;
-    RP wE;
-    RP rC;
-    char bufA[2];
-    RP wF;
-    RP wG;
-    char bufB[2];
-    RP wH;
-    RP wI;
-    const char *tk0, *tk1, *tk2, *tk3, *tk4, *tk5, *tk6, *tk7, *tk8, *tk9, *tk10, *tk11;
-    RP rD;
-    const char *tk12, *tk13;
     Str3 names;
     char bufC[8];
     float vecA[3];
@@ -196,8 +212,8 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
         MSG_SELECT_INT(self->_playerNo)
         igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a150);
         beNDMWWindow_PresentModelAtOrigin(self, DAT_0051a0a8, 0, DAT_0051a160, DAT_00519a58);
-        INTERN_APPEND(tk0, self->_textCloseTypeList, DAT_0051a040)
-        INTERNP_APPEND(tk1, self->_textCloseNameList, DAT_004cf670[0])
+        INTERN_APPEND(self->_textCloseTypeList, DAT_0051a040)
+        INTERNP_APPEND(self->_textCloseNameList, DAT_004cf670[0])
         beNDMWWindow_RunMessageScript(self, DAT_00519b90, 0x48);
         for (i = 0; i < 12; i++)
             FUN_003f5410(self, DAT_0051a060, DAT_004cf670[i], DAT_00519b60, DAT_00519b68);
@@ -212,18 +228,18 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
             void *al;
             int cnt;
             GET_ALLOC(al)
-            wA.p = (RefHeader *)FUN_003b51b0(al);
-            beNDMWWindow_BindContext(wA.p, self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained(self->_subWindow, wA.p);
+            { SelectE1Ref diskWin(FUN_003b51b0(al));
+            beNDMWWindow_BindContext(diskWin.p, self, self->_insight, self->_playerNo, 0);
+            ObjectList_AppendRetained(self->_subWindow, diskWin.p);
             MSG_SELECT_INT(self->_playerNo)
             igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a150);
-            WSETI84(wA.p, 10)
-            WSETPOS(wA.p, -121.0f, 128.0f, 0.0f)
-            WSETI100(wA.p, self->_cursor)
-            INTERN_APPEND(tk2, ((beNDMWWindowSelect *)wA.p)->_textCloseTypeList, DAT_00519b50)
-            INTERN_APPEND(tk3, ((beNDMWWindowSelect *)wA.p)->_textCloseNameList, DAT_00519d98)
-            beNDMWWindow_RunMessageScript(wA.p, DAT_00519b90, 0x2B);
-            RELEASE_REF(wA.p)
+            WSETI84(diskWin.p, 10)
+            WSETPOS(diskWin.p, -121.0f, 128.0f, 0.0f)
+            WSETI100(diskWin.p, self->_cursor)
+            INTERN_APPEND(((beNDMWWindowSelect *)diskWin.p)->_textCloseTypeList, DAT_00519b50)
+            INTERN_APPEND(((beNDMWWindowSelect *)diskWin.p)->_textCloseNameList, DAT_00519d98)
+            beNDMWWindow_RunMessageScript(diskWin.p, DAT_00519b90, 0x2B);
+            }
             cnt = ((igObjectList *)self->_subWindow)->_count;
             self->_nowProcKazu = cnt;
             self->_st1 = 2; self->_st3 = 0; self->_st2 = 0;
@@ -255,23 +271,20 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
             switch (self->_st2) {
             case 0: {
                 void *al;
-                const Q128 *qs = (const Q128 *)DAT_004cf700;
-                Q128 *qd = (Q128 *)tq;
-                Q128 q0 = *qs++; Q128 q1 = *qs++; Q128 q2 = *qs;
-                qd[0] = q0; qd[1] = q1; qd[2] = q2;
+                *(Q48 *)tq = *(const Q48 *)DAT_004cf700;
                 vecA[0] = -121.0f; vecA[1] = 128.0f; vecA[2] = 0.0f;
                 beNDMWWindow_PresentModel(self, DAT_00519d88, 0, tq[self->_cursor], 0, vecA);
                 GET_ALLOC(al)
-                wB.p = (RefHeader *)FUN_003b51b0(al);
-                beNDMWWindow_BindContext(wB.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, wB.p);
-                WSETI84(wB.p, 2)
-                WSETPOS(wB.p, 115.0f, 145.0f, 0.0f)
-                WSETI100(wB.p, 0)
-                beNDMWWindow_PresentModelAtOrigin(wB.p, DAT_0051a180, 0, DAT_00519eb8, DAT_00519a58);
-                FUN_003f5410(wB.p, DAT_0051a190, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
-                FUN_003f5410(wB.p, DAT_0051a190, DAT_004cf674[0], DAT_00519b60, DAT_00519b68);
-                RELEASE_REF(wB.p)
+                { SelectE1Ref actionWin(FUN_003b51b0(al));
+                beNDMWWindow_BindContext(actionWin.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, actionWin.p);
+                WSETI84(actionWin.p, 2)
+                WSETPOS(actionWin.p, 115.0f, 145.0f, 0.0f)
+                WSETI100(actionWin.p, 0)
+                beNDMWWindow_PresentModelAtOrigin(actionWin.p, DAT_0051a180, 0, DAT_00519eb8, DAT_00519a58);
+                FUN_003f5410(actionWin.p, DAT_0051a190, DAT_004cf670[0], DAT_00519b60, DAT_00519b68);
+                FUN_003f5410(actionWin.p, DAT_0051a190, DAT_004cf674[0], DAT_00519b60, DAT_00519b68);
+                }
                 SYNC_COUNT()
                 NEXT_ST2()
             }
@@ -298,22 +311,21 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                 void *al;
                 int i;
                 GET_ALLOC(al)
-                wC.p = (RefHeader *)FUN_003b51b0(al);
-                beNDMWWindow_BindContext(wC.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, wC.p);
+                { SelectE1Ref orderWin(FUN_003b51b0(al));
+                beNDMWWindow_BindContext(orderWin.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, orderWin.p);
                 MSG_SELECT_INT(self->_playerNo)
                 igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a150);
-                WSETI84(wC.p, 10)
-                WSETPOS(wC.p, -121.0f, 128.0f, 0.0f)
-                WSETI100(wC.p, self->_cursor)
+                WSETI84(orderWin.p, 10)
+                WSETPOS(orderWin.p, -121.0f, 128.0f, 0.0f)
+                WSETI100(orderWin.p, self->_cursor)
                 GET_ALLOC(al)
-                lst.p = (RefHeader *)FUN_002cb0d0(al);
+                DecideListRef decided(FUN_002cb0d0(al));
                 for (i = 0; i < 10; i++) {
-                    if (i == self->_cursor) { BLIST_ADD(lst, GPR_00554a30) } else { BLIST_ADD(lst, GPR_00554a34) }
+                    if (i == self->_cursor) { BLIST_ADD(decided, GPR_00554a30) } else { BLIST_ADD(decided, GPR_00554a34) }
                 }
-                FUN_0041d490(&((beNDMWWindowSelect *)wC.p)->_decideList, lst.p);
-                RELEASE_REF(lst.p)
-                RELEASE_REF(wC.p)
+                FUN_0041d490(&((beNDMWWindowSelect *)orderWin.p)->_decideList, decided.p);
+                }
                 SYNC_COUNT()
                 NEXT_ST2()
             }
@@ -333,14 +345,10 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                         igObjectList *l;
                         MSG_SELECT_INT(self->_playerNo)
                         l = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a150)[3];
-                        rA.p = (RefHeader *)((int *)l->_data)[self->_cursor];
-                        RETAIN_REF(rA.p)
-                        rB.p = (RefHeader *)((int *)l->_data)[self->_retCode];
-                        RETAIN_REF(rB.p)
-                        ObjectList_SetAtRetained_003e9160(l, self->_cursor, rB.p);
-                        ObjectList_SetAtRetained_003e9160(l, self->_retCode, rA.p);
-                        RELEASE_REF(rB.p)
-                        RELEASE_REF(rA.p)
+                        SwapRef cursorDisk(((void **)l->_data)[self->_cursor]);
+                        SwapRef targetDisk(((void **)l->_data)[self->_retCode]);
+                        ObjectList_SetAtRetained_003e9160(l, self->_cursor, targetDisk.p);
+                        ObjectList_SetAtRetained_003e9160(l, self->_retCode, cursorDisk.p);
                     }
                     SEND_CLOSE();
                     RESET_ST1()
@@ -359,14 +367,14 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                 item = (beNDMWItemDisk *)((int *)((igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a150)[3])->_data)[self->_cursor];
                 if (item->_kazu <= 0) {
                     GET_ALLOC(al)
-                    wD.p = (RefHeader *)FUN_003b4f50(al);
-                    beNDMWWindow_BindContext(wD.p, self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained(self->_subWindow, wD.p);
+                    { ConfirmRef emptyWin(FUN_003b4f50(al));
+                    beNDMWWindow_BindContext(emptyWin.p, self, self->_insight, self->_playerNo, 0);
+                    ObjectList_AppendRetained(self->_subWindow, emptyWin.p);
                     NEXT_ST2()
-                    INTERN_APPEND(tk4, ((beNDMWWindowSelect *)wD.p)->_textCloseTypeList, DAT_00519b50)
-                    INTERNP_APPEND(tk5, ((beNDMWWindowSelect *)wD.p)->_textCloseNameList, DAT_004cf670[0])
-                    beNDMWWindow_RunMessageScript(wD.p, DAT_00519b90, 0x8D);
-                    RELEASE_REF(wD.p)
+                    INTERN_APPEND(((beNDMWWindowSelect *)emptyWin.p)->_textCloseTypeList, DAT_00519b50)
+                    INTERNP_APPEND(((beNDMWWindowSelect *)emptyWin.p)->_textCloseNameList, DAT_004cf670[0])
+                    beNDMWWindow_RunMessageScript(emptyWin.p, DAT_00519b90, 0x8D);
+                    }
                 } else {
                     igObjectList *dk;
                     ((igObjectList *)self->_playerNoList)->_count = 0;
@@ -395,14 +403,14 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                     }
                     if (((igObjectList *)self->_playerNoList)->_count <= 0) {
                         GET_ALLOC(al)
-                        wE.p = (RefHeader *)FUN_003b4f50(al);
-                        beNDMWWindow_BindContext(wE.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, wE.p);
+                        { ConfirmRef noPlayerWin(FUN_003b4f50(al));
+                        beNDMWWindow_BindContext(noPlayerWin.p, self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained(self->_subWindow, noPlayerWin.p);
                         NEXT_ST2()
-                        INTERN_APPEND(tk6, ((beNDMWWindowSelect *)wE.p)->_textCloseTypeList, DAT_00519b50)
-                        INTERNP_APPEND(tk7, ((beNDMWWindowSelect *)wE.p)->_textCloseNameList, DAT_004cf670[0])
-                        beNDMWWindow_RunMessageScript(wE.p, DAT_00519b90, 0x8E);
-                        RELEASE_REF(wE.p)
+                        INTERN_APPEND(((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseTypeList, DAT_00519b50)
+                        INTERNP_APPEND(((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseNameList, DAT_004cf670[0])
+                        beNDMWWindow_RunMessageScript(noPlayerWin.p, DAT_00519b90, 0x8E);
+                        }
                     } else {
                         self->_st1 = 6; self->_st3 = 0; self->_st2 = 0;
                         self->_receipt = 0;
@@ -449,10 +457,10 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                     beNDMWWindow_PresentModelAtOrigin(self, DAT_0051a180, 0, DAT_0051a1c8, DAT_00519a58);
                     break;
                 }
-                INTERN_APPEND(tk8, self->_textCloseTypeList, DAT_0051a1d8)
-                INTERN_APPEND(tk9, self->_textCloseNameList, DAT_005199e0)
-                INTERN_APPEND(tk10, self->_textCloseTypeList, DAT_0051a1d8)
-                INTERN_APPEND(tk11, self->_textCloseNameList, DAT_005199e8)
+                INTERN_APPEND(self->_textCloseTypeList, DAT_0051a1d8)
+                INTERN_APPEND(self->_textCloseNameList, DAT_005199e0)
+                INTERN_APPEND(self->_textCloseTypeList, DAT_0051a1d8)
+                INTERN_APPEND(self->_textCloseNameList, DAT_005199e8)
                 beNDMWWindow_RunMessageScript(self, DAT_00519b90, 0x4A);
                 MSG_SELECT_INT(self->_playerNo)
                 lsx = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a150)[3];
@@ -467,34 +475,32 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                     MSG_SELECT_INT(pno)
                     l2 = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), DAT_0051a1e8)[3];
                     if (l2->_count > 0) {
-                        rC.p = (RefHeader *)*(int *)l2->_data;
-                        RETAIN_REF(rC.p)
-                        rD.p = rC.p;
-                        RETAIN_DIRECT(rD)
-                        FUN_003f56d0(self, DAT_0051a060, names.v[i], &rD, DAT_00519b68);
-                        RELEASE_DIRECT(rD)
-                        RELEASE_REF(rC.p)
+                        DeviceRef firstDevice((void *)*(int *)l2->_data);
+                        FUN_003f56d0(self, DAT_0051a060, names.v[i], DeviceRef(firstDevice), DAT_00519b68);
                     }
                     bufC[0] = ((beNDMWItemDisk *)((int *)((igObjectList *)self->_diskList)->_data)[i])->_kazu + 0x30;
                     bufC[1] = 0;
                     FUN_003f5410(self, DAT_0051a170, names.v[i], bufC, DAT_0051a1f8);
                 }
-                bufA[0] = ((beNDMWItemDisk *)self->_sendDisk)->_kazu + 0x30;
-                bufA[1] = 0;
-                FUN_003f5410(self, DAT_0051a200, DAT_005199e0, bufA, DAT_0051a1f8);
+                {
+                    char bufA[2];
+                    bufA[0] = ((beNDMWItemDisk *)self->_sendDisk)->_kazu + 0x30;
+                    bufA[1] = 0;
+                    FUN_003f5410(self, DAT_0051a200, DAT_005199e0, bufA, DAT_0051a1f8);
+                }
                 FUN_003f5410(self, DAT_0051a200, DAT_005199e8, DAT_0051a210, DAT_0051a1f8);
                 NEXT_ST2()
             }
             case 3: {
                 void *al;
                 GET_ALLOC(al)
-                wF.p = (RefHeader *)FUN_003b51b0(al);
-                beNDMWWindow_BindContext(wF.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, wF.p);
-                WSETPOS(wF.p, -121.0f, 109.0f, 0.0f)
-                WSETI84(wF.p, ((igObjectList *)self->_playerNoList)->_count)
-                WSETI100(wF.p, self->_receipt)
-                RELEASE_REF(wF.p)
+                { SelectE1Ref playerWin(FUN_003b51b0(al));
+                beNDMWWindow_BindContext(playerWin.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, playerWin.p);
+                WSETPOS(playerWin.p, -121.0f, 109.0f, 0.0f)
+                WSETI84(playerWin.p, ((igObjectList *)self->_playerNoList)->_count)
+                WSETI100(playerWin.p, self->_receipt)
+                }
                 SYNC_COUNT()
                 NEXT_ST2()
             }
@@ -531,22 +537,24 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                 void *al;
                 int a1, v0;
                 GET_ALLOC(al)
-                wG.p = (RefHeader *)FUN_003b4410(al);
+                { QuantityRef quantityWin(FUN_003b4410(al));
                 a1 = ((beNDMWItemDisk *)self->_sendDisk)->_kazu;
                 v0 = 9 - ((beNDMWItemDisk *)((int *)((igObjectList *)self->_diskList)->_data)[self->_receipt])->_kazu;
                 self->_sendMax = (a1 < v0) ? a1 : v0;
-                beNDMWWindow_BindContext(wG.p, self, self->_insight, self->_playerNo, self->_sendMax);
-                ObjectList_AppendRetained(self->_subWindow, wG.p);
-                WSETPOS(wG.p, 68.0f, -3.0f, 0.0f)
-                RELEASE_REF(wG.p)
+                beNDMWWindow_BindContext(quantityWin.p, self, self->_insight, self->_playerNo, self->_sendMax);
+                ObjectList_AppendRetained(self->_subWindow, quantityWin.p);
+                WSETPOS(quantityWin.p, 68.0f, -3.0f, 0.0f)
+                }
                 SYNC_COUNT()
                 NEXT_ST2()
                 return;
             }
-            case 6:
+            case 6: {
+                char bufB[2];
                 bufB[0] = (self->_sendMax + 0x30) - self->_retCode;
                 bufB[1] = 0;
                 MSG_STR3(DAT_0051a200, DAT_005199e8, bufB, DAT_00519f30)
+            }
                 NEXT_ST2()
                 self->_st3 = self->_retCode;
             case 7:
@@ -565,21 +573,17 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
                     }
                     {
                         void *al;
-                        igObjectList &dl = *(igObjectList *)self->_diskList;
-                        int rcpt;
-                        int mx = *(volatile int *)&self->_sendMax;
-                        rcpt = self->_receipt;
-                        beNDMWItemDisk &sd = *(beNDMWItemDisk *)self->_sendDisk;
-                        const int &d = mx - rc;
-                        beNDMWItemDisk &tg = *((beNDMWItemDisk **)dl._data)[rcpt];
-                        sd._kazu = sd._kazu - d;
-                        tg._kazu = HA::Add(d, tg._kazu);
+                        rc = self->_sendMax - rc;
+                        beNDMWItemDisk *sd = (beNDMWItemDisk *)self->_sendDisk;
+                        beNDMWItemDisk *tg = ((beNDMWItemDisk **)((igObjectList *)self->_diskList)->_data)[self->_receipt];
+                        { unsigned q = sd->_kazu; sd->_kazu = q - rc; }
+                        { unsigned q = tg->_kazu; tg->_kazu = rc + q; }
                         GET_ALLOC(al)
-                        wH.p = (RefHeader *)FUN_003b4f50(al);
-                        beNDMWWindow_BindContext(wH.p, self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained(self->_subWindow, wH.p);
+                        { ConfirmRef sentWin(FUN_003b4f50(al));
+                        beNDMWWindow_BindContext(sentWin.p, self, self->_insight, self->_playerNo, 0);
+                        ObjectList_AppendRetained(self->_subWindow, sentWin.p);
                         beNDMWWindow_RunMessageScript(self, DAT_00519b90, 0x84);
-                        RELEASE_REF(wH.p)
+                        }
                         SYNC_COUNT()
                         NEXT_ST2()
                         return;
@@ -598,13 +602,13 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
             case 10: {
                 void *al;
                 GET_ALLOC(al)
-                wI.p = (RefHeader *)FUN_003b4f50(al);
-                beNDMWWindow_BindContext(wI.p, self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained(self->_subWindow, wI.p);
-                INTERN_APPEND(tk12, ((beNDMWWindowSelect *)wI.p)->_textCloseTypeList, DAT_00519b50)
-                INTERNP_APPEND(tk13, ((beNDMWWindowSelect *)wI.p)->_textCloseNameList, DAT_004cf670[0])
-                beNDMWWindow_RunMessageScript(wI.p, DAT_00519b90, 0x8F);
-                RELEASE_REF(wI.p)
+                { ConfirmRef fullWin(FUN_003b4f50(al));
+                beNDMWWindow_BindContext(fullWin.p, self, self->_insight, self->_playerNo, 0);
+                ObjectList_AppendRetained(self->_subWindow, fullWin.p);
+                INTERN_APPEND(((beNDMWWindowSelect *)fullWin.p)->_textCloseTypeList, DAT_00519b50)
+                INTERNP_APPEND(((beNDMWWindowSelect *)fullWin.p)->_textCloseNameList, DAT_004cf670[0])
+                beNDMWWindow_RunMessageScript(fullWin.p, DAT_00519b90, 0x8F);
+                }
                 SYNC_COUNT()
                 NEXT_ST2()
             }

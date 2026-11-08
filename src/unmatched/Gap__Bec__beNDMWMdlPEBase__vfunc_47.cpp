@@ -3,6 +3,10 @@ typedef struct List { int w0; int references; int size; int cap; int *data; } Li
 typedef struct BList { int w0; int references; int size; int cap; unsigned char *data; } BList;
 typedef struct Entry { int w0, w1, w2, w3, w4; beNDMWMdlPEBaseInfoWork *work; } Entry;
 typedef struct Model { int w0; int references; int id; char pad12[28]; List *props; } Model;
+class igResult;
+extern igResult DAT_004fb410;
+class igResult { public: int v; igResult(const igResult &o) : v(o.v) {}
+    bool operator==(const igResult &o) const { return v == o.v; } };
 extern "C" {
 extern int igObject_GetAllocator(...);
 extern int Memory_GetAllocatorBySelector(...);
@@ -22,13 +26,13 @@ extern int beMessenger_GetInt(...);
 extern int beMessenger_GetIntCount(...);
 extern int beMessenger_GetString(...);
 extern int beMessenger_AppendBool(int, bool);
-extern int igMetaEnum_GetValueByName(...);
+igResult igMetaEnum_GetValueByName(int, int, int *);
 extern int FUN_004456c0(...);
 extern int FUN_00445990(...);
 extern int FUN_00445c60(...);
 extern int FUN_003a8580(...);
 extern int DAT_004cfde8[4], DAT_004cfdf0[4], DAT_004cfdf8[4], DAT_004cfe00[4], DAT_004cfe08[4], DAT_004cfe10[4], DAT_004cfe18[4], DAT_004cfe20[4], DAT_004cfe28[4], DAT_004cfe30[4], DAT_004cfe38[4], DAT_004cfe40[4], DAT_004cfe48[4], DAT_004cfe50[4], DAT_004cfe58[4], DAT_004cfe60[4], DAT_004cfe68[4];
-extern int DAT_004fb410[4], DAT_0051d3a0[4], DAT_0051d3f0[4], DAT_0051d450[4], DAT_0051d460[4], DAT_0051d470[4], DAT_0051d478[4], DAT_0051d480[4], DAT_0051d488[4], DAT_0051d490[4], DAT_0051d498[4], DAT_0051d4a0[4], DAT_00585be0[4], DAT_00587110[4];
+extern int DAT_0051d3a0[4], DAT_0051d3f0[4], DAT_0051d450[4], DAT_0051d460[4], DAT_0051d470[4], DAT_0051d478[4], DAT_0051d480[4], DAT_0051d488[4], DAT_0051d490[4], DAT_0051d498[4], DAT_0051d4a0[4], DAT_00585be0[4], DAT_00587110[4];
 extern unsigned char GPR_00554aa8, GPR_00554aac, GPR_00554ab0, GPR_00554ab4, GPR_00554ab8, GPR_00554abc, GPR_00554ac0, GPR_00554ac4, GPR_00554ac8, GPR_00554acc, GPR_00554ad0, GPR_00554ad4, GPR_00554ad8, GPR_00554adc, GPR_00554ae0, GPR_00554ae4, GPR_00554ae8, GPR_00554aec, GPR_00554af0, GPR_00554af4, GPR_00554af8, GPR_00554afc, GPR_00554c14;
 }
 class VC140 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void vX(Model *, void *); };
@@ -79,14 +83,24 @@ struct DataList { static inline void store(Model *obj, const ListRef &list) {
 #define FILLB(F, DAT) { BList *l = (BList *)w->F; int n = l->size; unsigned char *d = l->data; int j; for (j = 0; j < n; j++) d[j] = DAT; }
 #define VC(name) ((VC140 *)self)->vX(obj, name)
 
+static inline void ensureProps(Model *obj)
+{
+    if (obj->props == 0) {
+        int allocator = igObject_GetAllocator(obj);
+        ListRef holder((List *)beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        List *created = holder.p;
+        if (created != 0) created->references = created->references + 1;
+        List *old = obj->props;
+        RELEASE(old)
+        obj->props = created;
+    }
+}
+
 extern "C" int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int name);
 extern "C" int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model *obj, int name) {
     beNDMWMdlPEBaseInfoWork *w;
     int e;
-    if (obj->props == 0) {
-        int allocator = igObject_GetAllocator(obj);
-        DataList::store(obj, ListRef((List *)beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0]))));
-    }
+    ensureProps(obj);
     w = igProperty_FindByName(obj->props, DAT_00585be0[0], &DAT_0051d3a0[0])->work;
     e = beMessenger_ResolveEnumValue(self->_messenger, FUN_003c04a0(), name);
     switch (e) {
@@ -240,13 +254,10 @@ extern "C" int Gap__Bec__beNDMWMdlPEBase__vfunc_47(beNDMWMdlPEBase *self, Model 
         /* matching construct: the enum result pair is declared after the list holders so the holders
          * take the higher frame slots (+0x9c/+0x98), as in retail */
         int e2;
-        int e1;
         bool r = false;
         if (w != 0 && w->_dispRamNoList != 0 && w->_timerList != 0) {
             int s = beMessenger_GetString(self->_messenger, 0);
-            igMetaEnum_GetValueByName(&e1, FUN_003c0440(), s, &e2);
-            int **ppp; int *pp = &e1; ppp = &pp;
-            if (**ppp == DAT_004fb410[0] && W(_timerList)->data[e2] != 0) r = 1;
+            if (igMetaEnum_GetValueByName(FUN_003c0440(), s, &e2) == DAT_004fb410 && W(_timerList)->data[e2] != 0) r = 1;
         }
         beMessenger_AppendBool(self->_messenger, r);
         return 1;

@@ -376,6 +376,18 @@ Retail shapes that only one spelling reproduces:
 * **The old compiler's workarounds go under b52:** `volatile`, inline `nop`s and function-address
   aliases usually give way to `&&` chains assigned to an int, `?:` for a minimum, `bool` with `^`,
   and an assignment inside the condition.
+* **Frame slots under b52 `-O4,p`:** named locals take the top slots in declaration order, then
+  expression temporaries in the order they are created, then the locals of inlined functions. A
+  class local assigned from a returned temporary (`r = f()`) takes the temporary's place.
+* **Exception tables follow holders.** Retail's several ranges come from holder classes with real
+  releasing destructors, scoped per block and closed where the release happened. An empty
+  destructor with hand releases gives one range. Each retail destructor address is one holder
+  class; holders that share an address are one class with several constructors.
+* **A loaded value kept as the second operand of a multiply** is a local copied to itself before
+  use, `x = p->v; x = x;`, which stops the load being folded back into the expression.
+* **A macro that declares a class** leaves the trailing `;` to its call, `REF(Name);`. A call
+  without one runs into the next declaration, and the source scanner then reads the macro as a
+  function definition and drops the classes.
 * **A 24-bit mask under b52** is `unsigned int` with `& 0xFFFFFF`; `dsll32` and `dsrl32` are how
   it masks a 32-bit value. A `ULL` constant adds extensions.
 

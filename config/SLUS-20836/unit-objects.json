@@ -707,10 +707,16 @@
   "0x004207a0": {
     "emitted": {},
     "duplicates": {
-      "__dt__2RPFv": "0x002e2300"
+      "__dt__11SelectE1RefFv": "0x00411100",
+      "__dt__10ConfirmRefFv": "0x00411080",
+      "__dt__11SelectE0RefFv": "0x00413fd0",
+      "__dt__11ItemListRefFv": "0x003b6090",
+      "__dt__9DeviceRefFv": "0x001363f0",
+      "__dt__12MovedItemRefFv": "0x003c1520",
+      "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
-      "__dl__FPv": "0x002ed5c0"
+      "__dl__FPv": "0x00100610"
     }
   },
   "0x0041de40": {
@@ -1260,10 +1266,16 @@
   "0x0041acf0": {
     "emitted": {},
     "duplicates": {
-      "__dt__2RPFv": "0x002e2300"
+      "__dt__11SelectE1RefFv": "0x00411100",
+      "__dt__10ConfirmRefFv": "0x00411080",
+      "__dt__11QuantityRefFv": "0x0041d240",
+      "__dt__13DecideListRefFv": "0x00226990",
+      "__dt__7SwapRefFv": "0x003b9ba0",
+      "__dt__9DeviceRefFv": "0x001363f0",
+      "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
-      "__dl__FPv": "0x002ed5c0"
+      "__dl__FPv": "0x00100610"
     }
   },
   "0x003a8140": {
@@ -5527,6 +5539,21 @@
     "emitted": {},
     "duplicates": {
       "__dt__9IniStrRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0043aae0": {
+    "emitted": {},
+    "duplicates": {
+      "__dt__11SelectE1RefFv": "0x00411100",
+      "__dt__10ConfirmRefFv": "0x00411080",
+      "__dt__9ResultRefFv": "0x00428710",
+      "__dt__7ChipRefFv": "0x003d9bd0",
+      "__dt__11NameListRefFv": "0x001c6460",
+      "__dt__11CostListRefFv": "0x00150eb0",
+      "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
       "__dl__FPv": "0x00100610"

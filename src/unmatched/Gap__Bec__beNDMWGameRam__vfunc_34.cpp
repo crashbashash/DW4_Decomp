@@ -3476,8 +3476,8 @@ loop_449:
                     temp_ret_445 = (int *)(ObjectRef_AssignObject_00406e60(&arg0->_dBPcTech, temp_ret_444));
                 }
                 temp_ret_446 = (void *)(FUN_00406ee0(&arg0->_dBPcTech));
-                temp_ret_447 = beDataBase_GetRecordInt(temp_ret_446, sp478, &DAT_00518890[0]);
-                var_s0_13 = -(temp_ret_447 / 5);
+                var_s0_13 = -(beDataBase_GetRecordInt(temp_ret_446, sp478, &DAT_00518890[0]) / 5);
+
                 beMessenger_ClearInt(arg0->_messenger);
                 beMessenger_AppendInt(arg0->_messenger, var_s0_13);
             }

@@ -444,7 +444,7 @@ DEBT_COUNTERS = [
     ("foreign_profile.bytes", "bytes of those"),
     ("orphan.bytes", "exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks"),
     ("inventory.unsymbolised_bytes", "instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py)"),
-    ("profile_split.units", "units whose compiler, optimisation level or -sdatathreshold differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build)"),
+    ("profile_split.units", "units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build)"),
     ("profile_split.bytes", "bytes of those"),
     ("opt_pragma.statements", "optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source"),
 ]
@@ -490,10 +490,12 @@ PROFILE_SPLIT_EXEMPT = {"static-initialisers"}
 
 
 def _profile_key(compiler, flags):
-    """What makes two units one build: the compiler, the optimisation level and -sdatathreshold."""
+    """What makes two units one build: the compiler, the optimisation level, -sdatathreshold and -inline."""
     level = re.search(r"(?:^|\s)(-O\S*)", flags)
     threshold = re.search(r"-sdatathreshold\s+(\d+)", flags)
-    return compiler, level[1] if level else "", threshold[1] if threshold else ""
+    inline = re.search(r"-inline\s+(\S+)", flags)
+    return (compiler, level[1] if level else "", threshold[1] if threshold else "",
+            inline[1] if inline else "")
 
 
 def profile_split():

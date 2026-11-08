@@ -250,10 +250,16 @@ with the game's flags, and AdxMovie was written alongside the game.
 3.0.3 and b38 as a `struct`.
 
 **3.0b52 with `-sdatathreshold 2` builds most of the game.** Alchemy is `-O4,s`, and the Metrowerks
-runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. 4,810 of the 4,840 MWCC units are on
-b52, 13 of them at `-O3` or `-O3,p` because their members pass only there. The unit at `0x4583f0` in Gui, four
-out-of-line holder destructors, matches only at `-O4,p`, though the Gui unit after it is `-O4,s`. Why is
-open. A unit moved only when every member matched under it, so the rest keep their earlier profile;
+runtime, `main`, AdxMovie, Viewer, Ndmw and Bec are `-O4,p`. Bec and Ndmw also take `-inline level=8`:
+holder destructors inside inlined helpers are expanded in retail, which needs an inline depth of at
+least 2, and every Bec and Ndmw function that matched without it still matches at depth 8 (depth 2
+breaks four `GetVTable` functions). The `inline_depth` pragmas written before were standing in for
+it, and 13 of them went. The runtime, `main`, AdxMovie and Viewer match the same with or without it,
+so their setting is undetermined. 4,810 of the 4,840 MWCC units are on
+b52, 13 of them at `-O3` or `-O3,p` because their members pass only there. Viewer starts at `0x4583f0`, not at
+its registrar: four out-of-line holder destructors come first, called only from Viewer and matching
+only Viewer's `-O4,p`. At the other library boundaries such copies also sit just before the next
+registrar, but both sides there share a profile, so those boundaries are not moved. A unit moved only when every member matched under it, so the rest keep their earlier profile;
 `profile_split.units` in the debt ratchet counts them.
 zlib and libpng are the exception that is settled: they build with `combat` and fail under `b52`.
 
@@ -316,14 +322,18 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
   stand-in (`FUN_00109ac8`, `FUN_0010a3d8` to `FUN_0010a408`, `thunk_FUN_00113950`), which says nothing
   about how they were built, and the rest have no source. How much else in the Sony block this explains
   is unknown, and no other EE GCC is to hand.
-* **The remaining units.** 23 units sit off their library's profile: 9 MWCC units besides zlib and
-  libpng on 3.0, 3.0.3 or combat, 13 b52 units at the wrong optimisation level, and the Gui unit above.
+* **The remaining units.** 18 units sit off their library's profile (`profile_split.units`): MWCC
+  units on 3.0, 3.0.3 or combat, b52 units at the wrong optimisation level.
   `FUN_002252d8` in libmtap has MWCC's shape in a GCC library. Each holds a member that still differs
-  under its library's profile. The largest is Ndmw's `0x3f77b0` (64 KB), held by the 42 KB script
-  dispatcher `Gap__Bec__beNDMWGameRam__vfunc_34`. A unit holding the retail copy of a shared inline
+  under its library's profile. The 42 KB script dispatcher `Gap__Bec__beNDMWGameRam__vfunc_34` is on
+  the Ndmw profile with `#pragma inline_depth(1)`: retail calls `RecoveryTarget::release` and
+  `RecoveryString::release` out of line from it while its own copies of the `RecoveryRef` destructors
+  have them inlined, which is what a depth of 1 gives; no source form found gives both. A unit holding the retail copy of a shared inline
   destructor also needs every other unit's copy of it to match under the new profile: the Attrs unit at
   `0x130060` stays on 3.0 because `igMovieRenderer_InitializeDrawing`'s inlined release and its
-  out-of-line copy need different spellings at b52.
+  out-of-line copy need different spellings at b52. Retail's movie unit refers to `0x130140` from its
+  exception table, so its own copy was most likely discarded at link time in favour of the Attrs one;
+  the verifier has no way yet to express a copy that was emitted and then discarded.
   `tools/roll_profile.py` lists the members. Respelling for b52 moved the rest: most members differed
   only in register order, because b52 gives the first-declared local the higher register.
 * **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it. The `goto` guards and one clamp keep their `nop` for now.

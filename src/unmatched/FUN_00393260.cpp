@@ -70,7 +70,6 @@ struct MoveRef {
 /* matching construct: the data-list holder (slot 152) must sit below the move-object holder (slot 156), so it is
  * a local of a static inline member (allocated after the caller's); inline_depth(8) keeps its destructor inline.
  * al/p/old stay the caller's locals so the register order matches. Found by trial (no permuter). */
-#pragma inline_depth(8)
 struct Locals {
     static inline void CreateDataList(beBaseInfoRam *arg1, int &al, igObject *&p, igObject *&old) {
         ALLOC(al, arg1);

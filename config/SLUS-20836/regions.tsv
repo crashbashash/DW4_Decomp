@@ -44,8 +44,8 @@
 0x00331fb0	0x0033bf50	adx-movie	AdxMovie	Game	mwcc	-	-	medium	latch, 17 registrars (`igAdx*`, `igMovie*`) directly in `Gap::`; wraps CRI; the game's `_GetMetaObject` macro; built `-O3,p` like Bec and Ndmw; `main` runs its register list; counted with the game; the name describes the classes; the start is good to about 0x80 bytes
 0x0033bf50	0x003b04e0	bec	Bec, the game framework	Game	mwcc	Bec	FUN_0033bf50	high	register list of 303 classes then latch; `libBecRuntimePlugin`; RTTI `Gap::Bec`
 0x003b04e0	0x0044b860	ndmw	Ndmw, the game	Game	mwcc	Bec	FUN_003b04e0	high	register list of 163 classes then latch; `libNdmwRuntimePlugin`; `MODELCTRL`, `GAMERAM`, `STAGECTL`
-0x0044b860	0x00458680	alchemy-gui	Alchemy Gui	Alchemy	mwcc	Gui	GuiLibrary_MarkRegistered	high	latch, 49 registrars; RTTI `Gap::Gui`
-0x00458680	0x00467120	alchemy-viewer	Alchemy Viewer	Alchemy	mwcc	Viewer	ViewerLibrary_MarkRegistered	high	latch, 24 registrars; RTTI `Gap::Viewer`; `Actor manager`, `Scenes done`
+0x0044b860	0x004583f0	alchemy-gui	Alchemy Gui	Alchemy	mwcc	Gui	GuiLibrary_MarkRegistered	high	latch, 49 registrars; RTTI `Gap::Gui`
+0x004583f0	0x00467120	alchemy-viewer	Alchemy Viewer	Alchemy	mwcc	Viewer	-	high	latch, 24 registrars; RTTI `Gap::Viewer`; `Actor manager`, `Scenes done`; ViewerLibrary_MarkRegistered at 0x458680 follows the library's out-of-line holder destructors at 0x4583f0, which only Viewer calls and which match only Viewer's -O4,p
 0x00467120	0x00481c00	vu-microcode	VU1 microcode	-	data	-	-	high	the 109,184 bytes `UCODE_END` gives, from 0x467178 to 0x481bf8; VU nops, no EE prologues
 0x00481c00	0x004820d0	sony-descriptors	Sony library descriptors	-	data	-	-	medium	`PsIIlibgraph2800`, `PsIIlibdma  2800`, `PsIIlibipu  2800`, `PsIIlibkernl2800`
 0x004820d0	0x004833c8	sony-kernel	Sony kernel-mode code	Sony	gcc	-	-	high	addresses and calls in 0x80074000 and up, so it runs at another address; no EE caller
