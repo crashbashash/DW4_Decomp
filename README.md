@@ -17,7 +17,7 @@ Run commands from the repository root. Game data and toolchains are never commit
 | Region | Size | Matched | Readable |
 | --- | ---: | ---: | ---: |
 | Game | 1106 KB | 86.5 % | 6.0 % |
-| Alchemy engine | 1563 KB | 70.1 % | 3.3 % |
+| Alchemy engine | 1563 KB | 70.2 % | 3.3 % |
 | Lua 4.0.1 interpreter | 70 KB | 100.0 % | 100.0 % |
 | CRI ADX | 138 KB | 40.6 % | 0.0 % |
 | CRI Sofdec | 204 KB | 57.1 % | 0.0 % |

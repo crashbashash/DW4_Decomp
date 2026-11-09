@@ -16,7 +16,7 @@
   "compile.functions": 0,
   "foreign_profile.bytes": 776,
   "foreign_profile.functions": 18,
-  "fun_dat_refs": 83195,
+  "fun_dat_refs": 83199,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
@@ -32,12 +32,15 @@
   "profile_split.units": 13,
   "raw_casts.reflected": 359,
   "struct.a": 134,
-  "struct.b": 299,
+  "struct.b": {
+   "reason": "struct.b: igMemoryPoolInfoList_Allocate and _Delete are static wrappers that read a global object's allocator; the report takes that object's view for the class named in the function",
+   "value": 300
+  },
   "struct.c": 285,
   "unapproved.bytes": 50908,
   "unapproved.functions": 80,
-  "unmatched.bytes": 798752,
-  "unmatched.functions": 1461
+  "unmatched.bytes": 796828,
+  "unmatched.functions": 1372
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }
