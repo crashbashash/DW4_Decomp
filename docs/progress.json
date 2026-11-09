@@ -35,8 +35,8 @@
   {
    "hi": 512,
    "lo": 257,
-   "matched": 1227,
-   "matched_bytes": 430492,
+   "matched": 1265,
+   "matched_bytes": 444288,
    "total": 1487,
    "total_bytes": 526892
   },
@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2701100,
-    "functions": 19134
+    "bytes": 2714896,
+    "functions": 19172
    },
    "mismatch": {
     "bytes": 0,
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2706420,
-   "functions": 19217
+   "bytes": 2720216,
+   "functions": 19255
   },
   "fully_verified": {
-   "bytes": 2701100,
-   "functions": 19134
+   "bytes": 2714896,
+   "functions": 19172
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,11 +142,11 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 5320,
-  "fully_matched": 2706420,
-  "fully_verified": 2701100,
+  "fully_matched": 2720216,
+  "fully_verified": 2714896,
   "functions_asm_body": 0,
   "functions_assembly": 83,
-  "matched": 2762736,
+  "matched": 2776532,
   "total": 3464108
  },
  "data_bytes": {
@@ -334,12 +334,12 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 776,
    "foreign_profile.functions": 18,
-   "fun_dat_refs": 86478,
+   "fun_dat_refs": 86964,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 10528,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 5963,
+   "m2c_idiom.units": 5964,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -354,14 +354,14 @@
    "struct.c": 285,
    "unapproved.bytes": 50908,
    "unapproved.functions": 80,
-   "unmatched.bytes": 696052,
-   "unmatched.functions": 891
+   "unmatched.bytes": 682256,
+   "unmatched.functions": 853
   }
  },
  "functions": {
-  "fully_matched": 19217,
-  "fully_verified": 19134,
-  "matched": 19242,
+  "fully_matched": 19255,
+  "fully_verified": 19172,
+  "matched": 19280,
   "named": 9647,
   "named_semantic": 1970,
   "named_semantic_matched": 1850,
@@ -420,15 +420,15 @@
   }
  ],
  "link": {
-  "asm_bytes": 696052,
+  "asm_bytes": 682256,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 5320,
   "from_assembly_units": 83,
-  "from_c_bytes": 2777256,
-  "from_c_pct": 61.16,
-  "from_c_units": 19242,
+  "from_c_bytes": 2791052,
+  "from_c_pct": 61.46,
+  "from_c_units": 19280,
   "image_bytes": 4772480,
   "jtbl_asm_body_bytes": 0,
   "jtbl_bytes": 14520,
@@ -436,7 +436,7 @@
  },
  "median_size": {
   "matched": 72,
-  "unmatched": 408
+  "unmatched": 428
  },
  "metadata": {
   "asm_units": 20216,
@@ -455,32 +455,32 @@
   "bytes": 385104,
   "failing": {
    "addresses": {
-    "bytes": 2205076,
-    "functions": 13998
+    "bytes": 2218872,
+    "functions": 14036
    },
    "fields": {
-    "bytes": 771996,
-    "functions": 3525
+    "bytes": 778960,
+    "functions": 3544
    },
    "idioms": {
-    "bytes": 1255184,
-    "functions": 5967
+    "bytes": 1255548,
+    "functions": 5968
    },
    "name": {
-    "bytes": 1801468,
-    "functions": 13513
+    "bytes": 1815264,
+    "functions": 13551
    },
    "placed": {
-    "bytes": 1996068,
-    "functions": 12639
+    "bytes": 2009864,
+    "functions": 12677
    },
    "references": {
-    "bytes": 2043908,
-    "functions": 11003
+    "bytes": 2055700,
+    "functions": 11035
    },
    "types": {
-    "bytes": 902580,
-    "functions": 3583
+    "bytes": 903720,
+    "functions": 3586
    },
    "virtuals": {
     "bytes": 394616,
@@ -488,7 +488,7 @@
    }
   },
   "functions": 2268,
-  "matched_functions": 19217
+  "matched_functions": 19255
  },
  "regions": [
   {
@@ -534,8 +534,8 @@
   {
    "hi": 2751520,
    "lo": 2467696,
-   "matched": 1788,
-   "matched_bytes": 162884,
+   "matched": 1826,
+   "matched_bytes": 176680,
    "total": 2045,
    "total_bytes": 273452
   },
@@ -623,11 +623,11 @@
  "typed": {
   "error": null,
   "offset_casts": 6817,
-  "pct": 40.31,
+  "pct": 39.95,
   "recovered": 25966,
-  "synthetic": 9857,
-  "total": 64414,
+  "synthetic": 9997,
+  "total": 64995,
   "typeable": 359,
-  "typeable_pct": 0.56
+  "typeable_pct": 0.55
  }
 }
