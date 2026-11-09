@@ -37,6 +37,39 @@ class SourceApprovals(unittest.TestCase):
         path = self.write("b.c", 'void f(void) { asm("sync"); }\n')
         self.assertIsNone(sa.problem(path, "f", {}))
 
+    def test_a_statement_with_a_row_is_approved(self):
+        path = self.write("a.c", 'void f(void) { asm("nop"); }\n')
+        self.assertEqual(len(sa.approved_statements([path], {("asm", "f"): (1, "#x")})), 1)
+        self.assertEqual(sa.approved_statements([path], {}), set())
+
+    def test_a_voided_row_approves_nothing(self):
+        path = self.write("a.c", 'void f(void) { asm("nop"); asm("nop"); }\n')
+        self.assertEqual(sa.approved_statements([path], {("asm", "f"): (1, "#x")}), set())
+
+    def test_hardware_is_not_an_approval(self):
+        path = self.write("a.c", 'void f(void) { asm("sync"); }\n')
+        self.assertEqual(sa.approved_statements([path], {("asm", "f"): (1, "#x")}), set())
+
+    def test_an_inline_helper_needs_every_caller_approved(self):
+        path = self.write("a.c", 'static inline void h(void) { asm("nop"); }\n'
+                                 "void f(void) { h(); }\nvoid g(void) { h(); }\n")
+        self.assertEqual(sa.approved_statements([path], {("asm", "f"): (1, "#x")}), set())
+        rows = {("asm", "f"): (1, "#x"), ("asm", "g"): (1, "#x")}
+        self.assertEqual(len(sa.approved_statements([path], rows)), 1)
+
+    def test_a_helper_nothing_calls_is_not_approved(self):
+        path = self.write("a.c", 'static inline void h(void) { asm("nop"); }\nvoid f(void) { }\n')
+        self.assertEqual(sa.approved_statements([path], {("asm", "f"): (1, "#x")}), set())
+
+    def test_a_header_needs_every_including_function_approved(self):
+        header = self.write("h.h", 'static inline void h(void) { asm("nop"); }\n')
+        one = self.write("a.c", '#include "h.h"\nvoid f(void) { h(); }\n')
+        two = self.write("b.c", '#include "h.h"\nvoid g(void) { h(); }\n')
+        paths = [header, one, two]
+        self.assertEqual(sa.approved_statements(paths, {("asm", "f"): (1, "#x")}), set())
+        rows = {("asm", "f"): (1, "#x"), ("asm", "g"): (1, "#x")}
+        self.assertEqual({path for path, _start in sa.approved_statements(paths, rows)}, {header})
+
     def test_comments_and_strings_do_not_count(self):
         path = self.write("a.c", '/* volatile */ char *f(void) { return "volatile"; } // asm("nop")\n')
         self.assertIsNone(sa.problem(path, "f", {}))

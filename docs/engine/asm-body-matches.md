@@ -37,7 +37,7 @@ statement saying why that instruction has no C spelling and what was tried.
 ## Generating one for local study
 
 ```sh
-python3 tools/asm_body_gen.py sceGsResetPath -o <a scratch folder outside the repository>/sceGsResetPath.c
+python3 tools/asm_body_gen.py FUN_XXXXXXXX -o <a scratch folder outside the repository>/FUN_XXXXXXXX.c
 ```
 
 The generator reads the retail bytes, disassembles them with `objdump -M no-aliases` (canonical

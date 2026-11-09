@@ -167,6 +167,57 @@ def problem(path, name, rows=None):
     return "; ".join(missing) or None
 
 
+def _covered(path, name, rows):
+    """Whether an `asm` row names function `name` and still counts what reaches it."""
+    row = rows.get(("asm", name))
+    return row is not None and row[0] == uses(path, name)["asm"]
+
+
+def _callers(text):
+    """The definitions in a source that a row can name: an inline helper is compiled into its callers."""
+    return [name for name, start, _end in units.definitions(text)
+            if not re.search(r"\binline\b", text[start:text.index("{", start)])]
+
+
+def _includes_header(includes, header, seen):
+    for path in includes:
+        if path == header:
+            return True
+        if path not in seen:
+            seen.add(path)
+            if _includes_header(_header(path)[2], header, seen):
+                return True
+    return False
+
+
+def approved_statements(paths, rows=None):
+    """{(path, offset)} of the `asm` statements C could spell whose every function has a current row.
+    A statement that reaches no function, or one function without a row, stays out."""
+    rows = load() if rows is None else rows
+    sources = [(path, _read(path)) for path in paths]
+    approved = set()
+    for path, text in sources:
+        found = [start for start, _end, body in inline_asm.statements(text) if not inline_asm.is_hardware(body)]
+        if not found:
+            continue
+        if path.endswith((".h", ".hpp")):
+            header = os.path.normpath(path)
+            reach = []
+            for source, source_text in sources:
+                if not source.endswith((".h", ".hpp")) and _INCLUDE.search(source_text) and _includes_header(
+                        _includes(source_text, os.path.dirname(os.path.abspath(source))), header, set()):
+                    reach += [(source, name) for name in _callers(source_text)]
+            if reach and all(_covered(source, name, rows) for source, name in reach):
+                approved.update((path, start) for start in found)
+            continue
+        callers = _callers(text)
+        for start in found:
+            reach = [name for name in callers if _reachable_text(text, name)[start:start + 3] == text[start:start + 3]]
+            if reach and all(_covered(path, name, rows) for name in reach):
+                approved.add((path, start))
+    return approved
+
+
 def _index():
     return units.scan(os.path.relpath(os.path.join(ROOT, "src"), os.getcwd()))
 

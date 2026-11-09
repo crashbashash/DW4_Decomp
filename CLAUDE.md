@@ -112,7 +112,9 @@ make it read well. Either can be done alone.
   ([source approvals](docs/engine/source-approvals.md)). Only `sync` and `ei` need no row, as C cannot spell
   them. A `volatile` that only pins when a load is scheduled, where retail reads once, is never approved.
   `python3 tools/sourceapprovals.py --list` is the queue, and `tools/inline_asm.py --test <source>` shows
-  which `asm` statements can go. `tools/progress.py --debt-check` also fails on any rise in `inline_asm.*`.
+  which `asm` statements can go. `tools/progress.py --debt-check` also fails on any rise in `inline_asm.other`,
+  which counts every statement without a row for each function it reaches; `sync`, `ei` and an approved
+  statement are not debt.
 - **Names** come from evidence; a guess goes in the topic document's open questions, not into a name. Apply overlays with
   `tools/apply_names.py` (dry run, then `--apply --check`).
 

@@ -451,8 +451,7 @@ DEBT_COUNTERS = [
     ("compile.bytes", "bytes of those"),
     ("asm_body.functions", "functions kept as an `asm` body (content classification)"),
     ("asm_body.bytes", "bytes of those"),
-    ("inline_asm.hardware", "`asm` statements holding `sync` or `ei`, which C cannot spell (tools/inline_asm.py)"),
-    ("inline_asm.other", "every other `asm` statement: each has to show its function fails without it"),
+    ("inline_asm.other", "`asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py)"),
     ("unmatched.functions", "functions in the layout with no definition in src/"),
     ("unmatched.bytes", "bytes of those"),
     ("struct.a", "struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py)"),
@@ -578,7 +577,6 @@ def debt_summary(d, syms, matched, asm_body, paths, typed):
     c["asm_body.functions"] = len(asm_body)
     c["asm_body.bytes"] = sum(s[1] for s in asm_body)
     inline = inline_asm.counts()
-    c["inline_asm.hardware"] = inline["hardware"]
     c["inline_asm.other"] = inline["other"]
     left = [s for s in syms if s[2] not in paths]
     c["unmatched.functions"] = len(left)

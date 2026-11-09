@@ -7,6 +7,8 @@ asm	__divdi3	1	#umul_ppmm
 asm	__moddi3	1	#umul_ppmm
 asm	__udivdi3	1	#umul_ppmm
 asm	__umoddi3	1	#umul_ppmm
+asm	sceGsResetPath	2	#sony-vu-and-gp-asm
+asm	sceSdRemote	2	#sony-vu-and-gp-asm
 volatile	sceGsResetGraph	4	#sony-hardware-registers
 volatile	sceGsSyncV	1	#sony-hardware-registers
 volatile	WaitDma	1	#sony-hardware-registers
@@ -55,3 +57,7 @@ volatile	iStartTimerCounter	1	#sony-timer-state
 volatile	iStopTimerCounter	1	#sony-timer-state
 volatile	SetTimerCount	1	#sony-timer-state
 volatile	iGetTimerUsedUnusedCounters	1	#sony-timer-state
+volatile	SetNextComp	2	#sony-hardware-registers
+volatile	sceDmaReset	2	#sony-hardware-registers
+volatile	sceGsResetPath	4	#sony-hardware-registers
+volatile	sceSdRemote	2	#sony-vu-and-gp-asm

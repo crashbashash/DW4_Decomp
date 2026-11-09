@@ -22,7 +22,7 @@ Run commands from the repository root. Game data and toolchains are never commit
 | CRI ADX | 138 KB | 39.2 % | 0.0 % |
 | CRI Sofdec | 204 KB | 57.0 % | 0.0 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
-| Sony SDK | 96 KB | 56.6 % | 0.8 % |
+| Sony SDK | 96 KB | 58.2 % | 0.8 % |
 | newlib | 84 KB | 100.0 % | 100.0 % |
 | libgcc | 11 KB | 100.0 % | 100.0 % |
 | Metrowerks runtime | 10 KB | 29.0 % | 0.0 % |

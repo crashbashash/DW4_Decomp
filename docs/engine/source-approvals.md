@@ -68,6 +68,14 @@ A `volatile` that only pins when a load is scheduled, where retail reads once, i
 C search can support a case but never makes it: it shows that C has not been found, not that the original
 used the construct.
 
+## Approved statements are not debt
+
+`inline_asm.other` in the [debt ratchet](debt-ratchet.md) counts an `asm` statement until every function it reaches
+has a row whose count is current. Adding a row needs the owner, so an approved statement needs no re-recorded
+baseline. A new statement, a statement reaching one more function without a row, or a row its count has voided puts
+the statement back in the counter. `python3 tools/inline_asm.py` prints the approved statements and `sync` and `ei` beside the debt.
+`sync` and `ei` need no row and are not debt: C cannot spell them, and the owner has approved them all.
+
 ## Approved
 
 ### umul_ppmm
@@ -128,3 +136,18 @@ also uses.
   to the stack and reads back. Locals, structs, arrays,
   references and conversion temporaries all fold the slot away or load a wider value, so what keeps the
   slot in the original is not known.
+
+### sony-vu-and-gp-asm
+
+`sceGsResetPath` and `sceSdRemote` hold statements C has no spelling for.
+
+* Sony's `libgraph` and `libsdr` sources in SDK 3.0.3 write these as `__asm__` statements. `sceGsResetPath` orders the
+  VIF1 reset with `sync.l`, then sets a bit of VU control register `$vi28` with `cfc2`, `ori`, `ctc2` and `sync.p`.
+  `sceSdRemote` reads `$gp` through one inline helper to record it beside a registered handler, and swaps it through
+  another around an RPC call that has an end function.
+* Compiled from Sony's text with only retail symbols, constants and helper names mapped, both functions are
+  byte-identical to retail. `sceGsResetPath` needs the assembler of its [compiler note](sd-prologue.md).
+* C reaches neither a VU control register nor a move of `$gp`.
+* `sceSdRemote`'s two `volatile` keywords belong to these statements. Sony writes them, and neither can go: without the
+  one on the read the registers differ, and without both the function comes out 164 bytes short.
+  `sceGsResetPath`'s statements have no outputs, so its `__volatile__` changes nothing and is left out.

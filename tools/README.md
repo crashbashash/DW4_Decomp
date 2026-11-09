@@ -24,7 +24,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`unitcompilers.py`](unitcompilers.py) | Content-pinned compiler selection for proven matching units |
 | [`cc.py`](cc.py) | the one place a compile command is built: MWCC under wibo, or the Sony EE GCC for a unit pinned to it; verify, check and linkgen all go through it |
 | [`project.py`](project.py) | per-version build helpers behind the Makefile: the executable check and disc extraction, the image hash check, and `objdiff.json` with the rules for the objdiff objects |
-| [`inline_asm.py`](inline_asm.py) | counts the `asm` statements inside C for the debt ratchet, and `--test` shows which ones a function verifies without |
+| [`inline_asm.py`](inline_asm.py) | counts the `asm` statements inside C for the debt ratchet, leaving out those the owner approved, and `--test` shows which ones a function verifies without |
 | [`target_asm.py`](target_asm.py) | objdiff target assembly: the retail words of a function with their relocations restored (`.reloc` + masked `.word`) |
 | [`eegcc_compile.py`](eegcc_compile.py) | compile one C file with the Sony EE GCC 2.96 (`-S` then the sibling `ee-as`, with the symbol table repaired for GNU ld) — the Sony-built library units |
 | [`unitobjects.py`](unitobjects.py) | Explicit ownership of additional functions emitted by a compiler unit |

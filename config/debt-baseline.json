@@ -16,9 +16,8 @@
   "compile.functions": 0,
   "foreign_profile.bytes": 776,
   "foreign_profile.functions": 18,
-  "fun_dat_refs": 83133,
-  "inline_asm.hardware": 11,
-  "inline_asm.other": 1,
+  "fun_dat_refs": 83239,
+  "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 10528,
   "inventory_gap.bytes": 0,
   "inventory_gap.functions": 0,
@@ -38,10 +37,10 @@
    "value": 300
   },
   "struct.c": 287,
-  "unapproved.bytes": 434936,
-  "unapproved.functions": 549,
-  "unmatched.bytes": 800380,
-  "unmatched.functions": 1465
+  "unapproved.bytes": 357272,
+  "unapproved.functions": 407,
+  "unmatched.bytes": 798752,
+  "unmatched.functions": 1461
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

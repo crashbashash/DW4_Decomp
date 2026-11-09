@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """inline_asm.py — count the `asm` statements in src/, and test whether each one is needed.
 
-A statement passes the byte check whether or not C could have produced the same bytes, so
-tools/progress.py ratchets these counts and tools/verify.py cannot tell them apart. `sync` and
-`ei` have no C spelling; every other statement has to show the function fails without it.
+A statement passes the byte check whether or not C could have produced the same bytes, and
+tools/verify.py cannot tell them apart. `sync` and `ei` have no C spelling and the owner has
+approved them all; every other statement has to show the function fails without it, and
+tools/progress.py ratchets it as debt until the owner has approved every function it reaches
+(tools/sourceapprovals.py).
 
   python3 tools/inline_asm.py                          # the counts, by what each statement holds
   python3 tools/inline_asm.py --test src/game/x.cpp    # which statements can go; exit 1 if any can
@@ -72,12 +74,19 @@ def sources():
 
 
 def counts():
-    """{"hardware": n, "other": n}: the statements in the tree, by whether C could spell them."""
-    found = collections.Counter({"hardware": 0, "other": 0})
-    for path in sources():
+    """{"hardware": n, "approved": n, "other": n}: the statements in the tree, by whether C could spell
+    them and whether the owner has approved them. Only `other` is debt."""
+    import sourceapprovals
+    paths = [os.path.normpath(path) for path in sources()]
+    approved = sourceapprovals.approved_statements(paths)
+    found = collections.Counter({"hardware": 0, "approved": 0, "other": 0})
+    for path in paths:
         with open(path, errors="surrogateescape") as fh:
-            for _start, _end, body in statements(fh.read()):
-                found["hardware" if is_hardware(body) else "other"] += 1
+            for start, _end, body in statements(fh.read()):
+                if is_hardware(body):
+                    found["hardware"] += 1
+                else:
+                    found["approved" if (path, start) in approved else "other"] += 1
     return found
 
 

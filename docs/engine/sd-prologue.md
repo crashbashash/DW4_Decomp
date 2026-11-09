@@ -25,11 +25,11 @@ libmtap) are not built by the 2.96 below but by **EE GCC 2.9-ee-991111-01**, the
 the first SDK (`ee-gcc2.9-991111-01.tar.xz` in the decomp.me compiler releases, pinned as `ee-gcc-2.9`).
 Of the 991111 releases only -01 writes two hazard `nop`s before a `div.s` (`sceTimerBusClock2Freq`).
 
-Two libraries were assembled differently. libkernl needs this release's own assembler (`ee/bin/as`),
-which leaves a delay slot unfilled where a store could have moved into it. libmpeg needs one that fills it: the 2.96 kit's `ee-as` (2.10-ee), which
-`sceMpegInit` shows. libmpeg's units are pinned as `ee-gcc-2.9-as210`,
-the same compiler with that assembler; `tools/download_tools.py` builds it from the two releases. The
-other eight libraries match the same either way and stay on the release's own assembler.
+The libraries were not all assembled the same way. libkernl needs this release's own assembler (`ee/bin/as`),
+which leaves a delay slot unfilled where a store could have moved into it. libmpeg, libgraph and libdma need one
+that fills it: the 2.96 kit's `ee-as` (2.10-ee), which `sceMpegInit`, `sceGsResetPath` and `sceDmaReset` show. Their
+units are pinned as `ee-gcc-2.9-as210`, the same compiler with that assembler; `tools/download_tools.py` builds it
+from the two releases. The other six libraries match the same either way and stay on the release's own assembler.
 It reproduces their signs: register saves at 16-byte spacing with `sd`, a frameless sibling `j` for a
 function whose only call is a tail call (which 2.96 cannot produce), a final `jal` with an epilogue
 after other work, unfilled delay slots, real `mult` for small constants, `lwu` zero-extension and
@@ -185,10 +185,5 @@ disabling ASLR change nothing.
 * **newlib's R5900 assembly.** setjmp, longjmp and the string and memory routines come from
   `libc/machine/r5900/*.S` in Sony's `ee001003_1` `libc.a`, and are `.S` sources here
   ([assembly sources](assembly-sources.md)). Which compiler first generated those files is open.
-* **The other Sony libraries' assembler.** Every matched function of libgraph, libdma, libipu, libcdvd,
-  libpad, libsdr, libmc and libmtap matches with either assembler, so which one built them is open.
-* **`sceSdRemote`** (904 bytes, libsdr; named by the SDK 3.0.3 library) is an RPC
-  wrapper `int sceSdRemote(int a0,...)`: it copies six variadic words into a global array, then dispatches on the first
-  (`0x8130`, `0x8140`, `0x8160`, `0x8170`, `0x81a0`, `0x81b0`, `0x81d0`, `0x9000..0x90f0`) to
-  one callee with a different argument shape per command. It also saves and sets `gp`, which C
-  cannot spell.
+* **The other Sony libraries' assembler.** Every matched function of libipu, libcdvd, libpad, libsdr, libmc
+  and libmtap matches with either assembler, so which one built them is open.
