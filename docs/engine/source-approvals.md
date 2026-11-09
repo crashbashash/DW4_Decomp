@@ -170,6 +170,26 @@ Sony libkernl functions written in C with instructions C has no spelling for: re
 * The `volatile` on each `__asm__` keeps the statement from being moved or dropped, which it must not be.
 * One TLB function keeps a counter in a fixed register across calls, which only a register variable gives.
 
+### sony-gp-and-syscall-asm
+
+Sony library functions in C that read or swap `$gp`, or make a system call, through an inline `asm` statement: the
+callback and handler registration of libmpeg, libcdvd, libkernl's SIF and timer code, and two thread calls.
+
+* Sony's own build shows they are C: each sits in an SDK 3.0.3 member that carries the compiler's markers and records
+  a `.c` source, and each is byte-identical to that member with relocated words masked. One power-off handler's
+  member is a version four bytes shorter, with the same `$gp` store.
+* C reaches neither `$gp` nor a system call. A handler registered for another context records the caller's `$gp`,
+  and a callback runs on the `$gp` its owner supplied.
+* The `volatile` on each `__asm__` keeps the statement in place, and a `"memory"` clobber is what makes the values
+  around a swap reload, as retail does.
+
+### sony-interrupt-shared-state
+
+Sony library state an interrupt handler writes while thread code waits on it: the vertical-blank flag and time
+`VSync2` passes to its handler, the DMA state `_ch3dmaCSC` shares with its channel's handler, and the DECI2 state
+`sceTtyInit` shares with `sceTtyHandler`. Retail reloads each where the waiter reads it, which a plain spelling merges.
+Only the fields the handler writes are qualified.
+
 ### sony-hardware-registers
 
 Accesses to EE and GS registers in Sony's libraries, and in the CRI code that drives the same registers. Each
