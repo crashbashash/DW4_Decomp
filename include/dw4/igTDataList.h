@@ -20,6 +20,16 @@ public:
         }
         return -1;
     }
+    void append(T v) {
+        int n = count();
+        if (n < _capacity) {
+            _count = _count + 1;
+        } else {
+            List_Resize(this, n + 1, 4);
+        }
+        const T *p = &v;
+        _data[n] = *p;
+    }
 };
 
 #endif

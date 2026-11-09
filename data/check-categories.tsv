@@ -4395,11 +4395,11 @@
 001b0aa0	FUN_001b0aa0	unapproved	unapproved: 3 volatile without an approval row
 001b0dc0	FUN_001b0dc0	match	-
 001b0ea0	FUN_001b0ea0	unapproved	unapproved: 2 volatile without an approval row
-001b1030	FUN_001b1030	unapproved	unapproved: 2 volatile without an approval row
+001b1030	FUN_001b1030	match	-
 001b1100	FUN_001b1100	match	-
 001b11b0	FUN_001b11b0	match	-
 001b1250	FUN_001b1250	match	-
-001b12f0	FUN_001b12f0	unapproved	unapproved: 2 volatile without an approval row
+001b12f0	FUN_001b12f0	match	-
 001b13d0	FUN_001b13d0	match	-
 001b1490	FUN_001b1490	match	-
 001b1cf0	FUN_001b1cf0	match	jump table 0x4e4540: 17 entries, 68 bytes, matches retail
@@ -4442,7 +4442,7 @@
 001b7010	Gap__Sg__igCommonTraversal__vfunc_28	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
 001b7330	FUN_001b7330	match	-
 001b73d0	FUN_001b73d0	match	-
-001b73e0	Gap__Sg__igCommonTraversal__vfunc_23	unapproved	unapproved: 2 volatile without an approval row
+001b73e0	Gap__Sg__igCommonTraversal__vfunc_23	match	-
 001b75b0	Gap__Sg__igCommonTraversal__vfunc_32	match	-
 001b7630	Gap__Sg__igCommonTraversal__vfunc_24	match	-
 001b7720	Gap__Sg__igCommonTraversal__vfunc_33	match	-
@@ -4580,7 +4580,7 @@
 001c1f90	FUN_001c1f90	match	-
 001c20b0	FUN_001c20b0	match	-
 001c2880	FUN_001c2880	match	-
-001c2be0	FUN_001c2be0	unapproved	unapproved: 2 volatile without an approval row
+001c2be0	FUN_001c2be0	match	-
 001c2eb0	FUN_001c2eb0	match	-
 001c2f50	FUN_001c2f50	match	-
 001c2fd0	FUN_001c2fd0	match	-
@@ -5424,7 +5424,7 @@
 0020b110	FUN_0020b110	match	-
 0020b270	FUN_0020b270	match	-
 0020b280	FUN_0020b280	match	-
-0020b650	FUN_0020b650	unapproved	unapproved: 1 volatile without an approval row
+0020b650	FUN_0020b650	match	-
 0020b7f0	FUN_0020b7f0	match	-
 0020b9d0	FUN_0020b9d0	match	-
 0020c7b0	FUN_0020c7b0	match	-
@@ -5432,7 +5432,7 @@
 0020c800	FUN_0020c800	match	-
 0020c840	FUN_0020c840	match	-
 0020c880	FUN_0020c880	match	-
-0020c8b0	FUN_0020c8b0	unapproved	unapproved: 2 volatile without an approval row
+0020c8b0	FUN_0020c8b0	match	-
 0020c9e0	FUN_0020c9e0	match	-
 0020cc10	FUN_0020cc10	match	-
 0020cc50	FUN_0020cc50	match	-
@@ -7039,8 +7039,8 @@
 002639a0	FUN_002639a0	match	-
 00263b08	FUN_00263b08	match	-
 00263b40	FUN_00263b40	match	-
-00263b80	FUN_00263b80	unapproved	unapproved: 1 volatile without an approval row
-00263c08	FUN_00263c08	unapproved	unapproved: 1 volatile without an approval row
+00263b80	FUN_00263b80	match	-
+00263c08	FUN_00263c08	match	-
 00263d60	FUN_00263d60	unapproved	unapproved: 1 volatile without an approval row
 00263d88	FUN_00263d88	unapproved	unapproved: 1 volatile without an approval row
 00263db0	FUN_00263db0	match	-
@@ -7051,11 +7051,11 @@
 00264350	FUN_00264350	match	-
 00264368	FUN_00264368	match	-
 002643d0	FUN_002643d0	match	-
-00264430	FUN_00264430	unapproved	unapproved: 1 volatile without an approval row
-002644d8	FUN_002644d8	unapproved	unapproved: 1 volatile without an approval row
-00264590	FUN_00264590	unapproved	unapproved: 1 volatile without an approval row
-00264618	FUN_00264618	unapproved	unapproved: 1 volatile without an approval row
-002646a0	FUN_002646a0	unapproved	unapproved: 1 volatile without an approval row
+00264430	FUN_00264430	match	-
+002644d8	FUN_002644d8	match	-
+00264590	FUN_00264590	match	-
+00264618	FUN_00264618	match	-
+002646a0	FUN_002646a0	match	-
 00264738	FUN_00264738	unapproved	unapproved: 2 volatile without an approval row
 00264808	FUN_00264808	match	-
 00264818	FUN_00264818	match	-
@@ -7079,7 +7079,7 @@
 00265080	FUN_00265080	match	-
 002651d0	FUN_002651d0	match	-
 002651e8	FUN_002651e8	match	-
-00265200	FUN_00265200	unapproved	unapproved: 2 volatile without an approval row
+00265200	FUN_00265200	match	-
 00265288	FUN_00265288	unapproved	unapproved: 1 volatile without an approval row
 00265308	FUN_00265308	unapproved	unapproved: 1 volatile without an approval row
 00265330	FUN_00265330	match	-
@@ -7380,7 +7380,7 @@
 0026f4b0	FUN_0026f4b0	match	-
 0026f500	FUN_0026f500	match	-
 0026f530	FUN_0026f530	match	-
-0026f728	FUN_0026f728	unapproved	unapproved: 1 volatile without an approval row
+0026f728	FUN_0026f728	match	-
 0026fb28	FUN_0026fb28	match	-
 0026fba8	FUN_0026fba8	match	-
 0026fbb8	FUN_0026fbb8	match	-
@@ -7410,7 +7410,7 @@
 002713d0	FUN_002713d0	match	-
 00271468	FUN_00271468	match	-
 002715e0	FUN_002715e0	match	-
-00271640	FUN_00271640	unapproved	unapproved: 1 volatile without an approval row
+00271640	FUN_00271640	match	-
 00271670	FUN_00271670	unapproved	unapproved: 1 volatile without an approval row
 00271888	FUN_00271888	match	-
 00271938	FUN_00271938	match	-
@@ -7419,7 +7419,7 @@
 00271b98	FUN_00271b98	match	-
 00271d50	FUN_00271d50	unapproved	unapproved: 2 volatile without an approval row
 00271f38	FUN_00271f38	unapproved	unapproved: 1 volatile without an approval row
-00272228	FUN_00272228	unapproved	unapproved: 1 volatile without an approval row
+00272228	FUN_00272228	match	-
 00272290	FUN_00272290	unapproved	unapproved: 1 volatile without an approval row
 002722c8	FUN_002722c8	unapproved	unapproved: 1 volatile without an approval row
 00272300	FUN_00272300	unapproved	unapproved: 1 volatile without an approval row
@@ -7431,7 +7431,7 @@
 002725a0	FUN_002725a0	unapproved	unapproved: 2 volatile without an approval row
 002725d0	FUN_002725d0	match	-
 00272610	FUN_00272610	match	-
-00272620	FUN_00272620	unapproved	unapproved: 1 volatile without an approval row
+00272620	FUN_00272620	match	-
 00272678	FUN_00272678	match	-
 00272688	FUN_00272688	match	-
 002726c0	FUN_002726c0	match	-
@@ -7456,7 +7456,7 @@
 00273548	FUN_00273548	match	-
 002737a8	FUN_002737a8	match	-
 00273928	FUN_00273928	match	-
-00273988	FUN_00273988	unapproved	unapproved: 1 volatile without an approval row
+00273988	FUN_00273988	match	-
 002739b8	FUN_002739b8	match	-
 002739e8	FUN_002739e8	match	-
 00273a90	FUN_00273a90	match	jump table 0x4f01c0: 10 entries, 40 bytes, matches retail
@@ -7488,7 +7488,7 @@
 00275328	FUN_00275328	match	-
 00275340	FUN_00275340	match	-
 00275358	FUN_00275358	match	-
-00275370	FUN_00275370	unapproved	unapproved: 1 volatile without an approval row
+00275370	FUN_00275370	match	-
 002753a8	FUN_002753a8	match	-
 002753d8	FUN_002753d8	match	-
 00275408	FUN_00275408	match	-
@@ -7543,7 +7543,7 @@
 002777f8	FUN_002777f8	match	-
 00277888	FUN_00277888	match	-
 00277890	FUN_00277890	match	-
-00277898	FUN_00277898	unapproved	unapproved: 1 volatile without an approval row
+00277898	FUN_00277898	match	-
 00277918	FUN_00277918	match	-
 002779d8	FUN_002779d8	match	-
 00277b00	FUN_00277b00	match	-
@@ -7717,7 +7717,7 @@
 0027d9c0	FUN_0027d9c0	match	-
 0027da60	FUN_0027da60	match	-
 0027dab0	FUN_0027dab0	match	-
-0027db18	FUN_0027db18	unapproved	unapproved: 1 volatile without an approval row
+0027db18	FUN_0027db18	match	-
 0027db68	FUN_0027db68	match	-
 0027dba8	FUN_0027dba8	match	-
 0027dd58	FUN_0027dd58	match	-
@@ -7726,7 +7726,7 @@
 0027df80	FUN_0027df80	match	-
 0027e078	FUN_0027e078	match	-
 0027e0d0	FUN_0027e0d0	unapproved	unapproved: 2 volatile without an approval row
-0027e130	FUN_0027e130	unapproved	unapproved: 2 volatile without an approval row
+0027e130	FUN_0027e130	match	-
 0027e1c0	FUN_0027e1c0	match	-
 0027e1d8	FUN_0027e1d8	match	-
 0027e1f0	FUN_0027e1f0	match	-
@@ -8732,7 +8732,7 @@
 002a8c70	FUN_002a8c70	match	-
 002a8f40	FUN_002a8f40	match	-
 002a8f90	FUN_002a8f90	match	-
-002a9210	FUN_002a9210	unapproved	unapproved: 1 volatile without an approval row
+002a9210	FUN_002a9210	match	-
 002a9628	FUN_002a9628	match	-
 002a9680	FUN_002a9680	match	-
 002a96d0	FUN_002a96d0	match	-
@@ -15261,9 +15261,9 @@
 0037aac0	Gap__Bec__beChangePosTransform__vfunc_32	match	-
 0037aad0	Gap__Bec__beChangePosTransform__vfunc_30	match	-
 0037b000	Gap__Bec__beChangePosTransform__vfunc_20	match	-
-0037b040	FUN_0037b040	unapproved	unapproved: 4 volatile without an approval row
+0037b040	FUN_0037b040	match	exception index 0x54e600: matches retail (table 0x543564 8 bytes)
 0037b460	FUN_0037b460	match	exception index 0x54e60c: matches retail (packed)
-0037b4d0	FUN_0037b4d0	unapproved	unapproved: 2 volatile without an approval row
+0037b4d0	FUN_0037b4d0	match	exception index 0x54e624: matches retail (table 0x54356c 8 bytes)
 0037b760	FUN_0037b760	match	exception index 0x54e630: matches retail (packed)
 0037b950	FUN_0037b950	match	-
 0037b960	Gap__Bec__beCri__vfunc_22	match	exception index 0x54e648: matches retail (packed)
@@ -15541,7 +15541,7 @@
 00398e30	Gap__Bec__beModelCtrlInfoRideOn2__vfunc_20	match	-
 00398e40	Gap__Bec__beModelCtrl__vfunc_20	match	-
 00398e80	FUN_00398e80	match	exception index 0x54f020: matches retail (packed)
-00398ef0	FUN_00398ef0	unapproved	unapproved: 4 volatile without an approval row
+00398ef0	FUN_00398ef0	match	exception index 0x54f02c: matches retail (table 0x543c24 8 bytes)
 003993a0	FUN_003993a0	match	exception index 0x54f038: matches retail (packed)
 003993e0	Gap__Bec__beModelCtrlSCHitBox__vfunc_21	match	DEFERRED duplicate 0x198190 __dt__3RefFv 128B (compared under the profile of its retail unit)
 003998f0	Gap__Bec__beModelCtrlSCHitBox__vfunc_22	match	exception index 0x54f050: matches retail (packed)
@@ -15659,7 +15659,7 @@
 003a3850	FUN_003a3850	match	exception index 0x54f41c: matches retail (packed)
 003a3900	FUN_003a3900	match	exception index 0x54f428: matches retail (packed)
 003a3940	Gap__Bec__ParticleTimer__vfunc_11	match	exception index 0x54f434: matches retail (packed)
-003a3960	FUN_003a3960	unapproved	unapproved: 2 volatile without an approval row
+003a3960	FUN_003a3960	match	exception index 0x54f440: matches retail (table 0x543df0 8 bytes)
 003a3bb0	Gap__Bec__ParticleArray__vfunc_11	match	exception index 0x54f44c: matches retail (packed)
 003a3bf0	Gap__Bec__ParticleArray__vfunc_38	match	-
 003a4910	Gap__Bec__ParticleArray__vfunc_20	match	-

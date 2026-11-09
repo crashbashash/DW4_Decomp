@@ -2,11 +2,13 @@
  * next pooled matrix item and the next pooled time item, registers both with their attr stacks,
  * runs the traversal callback and undoes both again. */
 #include "dw4/reflected.h"
+
+#include "dw4/igTDataList.h"
+
 extern "C" {
 int FUN_001b1490(...);
 int FUN_001e07a0(void *, void *);
 int FUN_001dca40(void *, void *);
-int List_Resize(void *, int, int);
 int FUN_001356b0();
 int FUN_00130f20();
 int igMatrix44f_SetIdentity(void *);
@@ -25,6 +27,8 @@ class Trav { public:
     virtual void v30(long long);
     virtual void v31();
 };
+template <class T> struct AttrSlots : igTDataList<T> {
+};
 struct Mat { int w[16]; };
 struct Src { int pad[8]; Mat m32; int pad2[4]; long long t112; };
 struct Rec { int pad[8]; Mat m32; int pad2[3]; Src *src108; };
@@ -35,10 +39,6 @@ extern "C" int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
 {
     igAttrStackManager *b;
     int idxB;
-    int cntB;
-    igAttrStack *lB;
-    Item * volatile spBC;
-    igTimeAttr * volatile spB8;
     Mat mA;
     Mat mB;
     long long t;
@@ -46,7 +46,6 @@ extern "C" int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
     igObjectPool *p2;
     Item *item;
     igTimeAttr *item2;
-    int cnt2;
     int cnt;
     igAttrStack *l;
     int idx;
@@ -61,18 +60,17 @@ extern "C" int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
     short *pi;
     short *pg2;
     short *pi2;
-    igAttrStack *l0;
     int n1;
 
     b = (igAttrStackManager *)arg1->_attrStack;
     ix = DAT_0055efe8[0]->f8;
-    l0 = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[ix]];
+    l = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[ix]];
     Matrix44_Copy(&arg0->m32, &arg0->src108->m32);
     t = arg0->src108->t112;
     igMatrix44f_SetIdentity(&mA);
-    if (l0->_count != 0) {
-        n1 = l0->_count - 1;
-        FUN_001904f0(&mA, &arg0->m32, (char *)((void **)l0->_data)[n1] + 12);
+    if (l->_count != 0) {
+        n1 = l->_count - 1;
+        FUN_001904f0(&mA, &arg0->m32, (char *)((void **)l->_data)[n1] + 12);
     } else {
         igMatrix44f_SetIdentity(&mB);
         FUN_001904f0(&mA, &arg0->m32, &mB);
@@ -98,34 +96,14 @@ extern "C" int FUN_0037b040(Rec *arg0, igCommonTraversal *arg1)
     pi = &((igAttr *)item)->_cachedUnitID;
     idx = *pi + ((int *)b->_attrStackIndexTable)[*pg];
     l = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idx];
-    spBC = item;
-    cnt2 = *(volatile int *)&l->_count;
-    if (cnt2 < l->_capacity) {
-        l->_count = l->_count + 1;
-    } else {
-        List_Resize(l, cnt2 + 1, 4);
-    }
-    {
-        Item *a3 = spBC;
-        ((void **)l->_data)[cnt2] = a3;
-        FUN_001b1490(b, l, idx, a3);
-    }
+    ((AttrSlots<Item *> *)l)->append(item);
+    FUN_001b1490(b, l, idx);
     pg2 = &item2->_cachedAttrIndex;
     pi2 = &item2->_cachedUnitID;
     idxB = *pi2 + ((int *)b->_attrStackIndexTable)[*pg2];
-    lB = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idxB];
-    spB8 = item2;
-    cntB = *(volatile int *)&lB->_count;
-    if (cntB < lB->_capacity) {
-        lB->_count = lB->_count + 1;
-    } else {
-        List_Resize(lB, cntB + 1, 4);
-    }
-    {
-        igTimeAttr *a3 = spB8;
-        ((void **)lB->_data)[cntB] = a3;
-        FUN_001b1490(b, lB, idxB, a3);
-    }
+    l = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idxB];
+    ((AttrSlots<igTimeAttr *> *)l)->append(item2);
+    FUN_001b1490(b, l, idxB);
     r = FUN_001e07a0(arg1, arg0);
     idx2 = *pi2 + ((int *)b->_attrStackIndexTable)[*pg2];
     l2 = ((igAttrStack **)((igObjectList *)b->_attrStacks)->_data)[idx2];

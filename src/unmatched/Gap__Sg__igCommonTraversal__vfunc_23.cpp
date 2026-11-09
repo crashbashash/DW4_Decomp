@@ -1,6 +1,8 @@
 #include "dw4/reflected.h"
-struct AttrSlotList { char pad8[8]; volatile int _count; int _capacity; igObject **_data; };
-struct igAttrDefaultsView;
+
+#include "dw4/igTDataList.h"
+
+typedef igTDataList<igClearAttr *> AttrSlotList;
 class igAttrStackOps {
 public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
@@ -39,29 +41,7 @@ static inline void pushAttr(AttrManagerView *m, igMetaObject *meta, int attr) {
     m->_attrStacks->_data[m->_firstUnit[meta->_id]]->_ops->push(attr);
 }
 extern "C" {
-void FUN_001b1490(AttrManagerView *, AttrSlotList *, int, igClearAttr *);
-int List_Resize(AttrSlotList *, int, int);
-}
-static inline void pushAttrSlot(igCommonTraversalOps *t, igClearAttr *attr) {
-    int n;
-    AttrManagerView *m;
-    AttrSlotList *list;
-    int unit;
-    m = t->_attrStack;
-    unit = attr->_cachedUnitID + m->_firstUnit[attr->_cachedAttrIndex];
-    list = (AttrSlotList *)m->_attrStacks->_data[unit];
-    igClearAttr *volatile held = attr;
-    n = list->_count;
-    if (n < list->_capacity) {
-        list->_count = list->_count + 1;
-    } else {
-        List_Resize(list, n + 1, 4);
-    }
-    {
-        igClearAttr *value = held;
-        list->_data[n] = (igObject *)value;
-        FUN_001b1490(m, list, unit, value);
-    }
+void FUN_001b1490(AttrManagerView *, AttrSlotList *, int);
 }
 extern "C" {
 igMetaObject *igClearAttr_GetMetaObject(void);
@@ -72,18 +52,32 @@ void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root);
 }
 void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
     igClearAttr *attr;
+    AttrManagerView *m;
+    AttrSlotList *list;
+    int unit;
+    igMetaObject *meta;
     int vc = t->_vc;
     if (vc != 0) {
-        pushAttr(t->_attrStack, igClearAttr_GetMetaObject(), vc);
+        meta = igClearAttr_GetMetaObject();
+        m = t->_attrStack;
+        pushAttr(m, meta, vc);
         vc = t->_vc;
-        pushAttr(t->_attrStack, igProjectionMatrixAttr_GetMetaObject(), vc);
+        meta = igProjectionMatrixAttr_GetMetaObject();
+        m = t->_attrStack;
+        pushAttr(m, meta, vc);
     }
     FUN_001b7330(t, t->_viewMat);
     if (t->_userTimeState) {
         t->setTime(t->_timeLong);
     }
     ((long long *)t->_defaultTimeAttr)[2] = t->getTime();
+    m = t->_attrStack;
     attr = t->_defaultTimeAttr;
-    pushAttrSlot(t, attr);
+    list = (AttrSlotList *)m->_attrStacks;
+    unit = attr->_cachedAttrIndex;
+    unit = attr->_cachedUnitID + m->_firstUnit[unit];
+    list = (AttrSlotList *)((AttrStackListView *)list)->_data[unit];
+    list->append(attr);
+    FUN_001b1490(m, list, unit);
     Gap__Sg__igTraversal__vfunc_23(t, root);
 }

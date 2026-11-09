@@ -1,11 +1,13 @@
 #include "dw4/reflected.h"
+
+#include "dw4/igTDataList.h"
+
 extern "C" {
 extern igMetaObject *DAT_0055efe8[4];
 long long FUN_00398e80(...);
 int igMatrix44f_SetIdentity(...);
 int FUN_001904f0(...);
 int FUN_001dca40(...);
-int List_Resize(...);
 int FUN_001b1490(...);
 int FUN_001b12f0(...);
 int FUN_001b13d0(...);
@@ -16,7 +18,9 @@ int FUN_00130f20(...);
 class Ctl;
 extern "C" int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl);
 
-struct Ls { char p0[8]; volatile int cnt; int cap; int *data; int cur; };
+template <class T> struct AttrSlots : igTDataList<T> {
+};
+struct Ls { char p0[8]; int cnt; int cap; int *data; int cur; };
 struct Pool { char p0[8]; int cap; char p1[4]; int *data; int cur; };
 struct Tb { char p0[16]; Ls **data; };
 struct Q { char p0[8]; int n; char p1[4]; int *a; char p2[8]; int (*cb)(int, int); };
@@ -33,8 +37,7 @@ class Ctl { public:
  virtual void v30(long long t); virtual void v31();
  char p0[48]; Mgr *mgr; char p1[16]; Pool *pa; Pool *pb; };
 
-/* matching construct: the volatile read re-loads the 4-byte _overrideAttrList reference on every use (retail re-reads it per iteration); the igAttrList cast stands in for the reference field type */
-#define OV ((igAttrList *)*(volatile int *)&self->_overrideAttrList)
+static inline igAttrList *overrides(const beModelCtrlNode2 *n) { return (igAttrList *)n->_overrideAttrList; }
 extern "C" int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
     long long t;
     short *ai;
@@ -46,7 +49,6 @@ extern "C" int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
     int idx;
     int s6;
     int s7;
-    int n;
     int i;
     int j;
     int l;
@@ -63,8 +65,6 @@ extern "C" int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
     int (*cb)(int, int);
     char mat[64];
     char tmp[64];
-    Ent * volatile sa;
-    Ent * volatile sb;
 
     mgr = ctl->mgr;
     idx = DAT_0055efe8[0]->_id;
@@ -102,34 +102,28 @@ extern "C" int FUN_00398ef0(beModelCtrlNode2 *self, Ctl *ctl) {
     ai = &ea->idx;
     s6 = ea->off + mgr->base[ea->idx];
     tgt = mgr->tb->data[s6];
-    sa = ea;
-    n = tgt->cnt;
-    if (n < tgt->cap) tgt->cnt = tgt->cnt + 1; else List_Resize(tgt, n + 1, 4);
-    tgt->data[n] = (int)sa;
+    ((AttrSlots<Ent *> *)tgt)->append(ea);
     FUN_001b1490(mgr, tgt, s6);
 
     bi = &eb->idx;
     bo = &eb->off;
     s7 = eb->off + mgr->base[eb->idx];
     tgt = mgr->tb->data[s7];
-    sb = eb;
-    n = tgt->cnt;
-    if (n < tgt->cap) tgt->cnt = tgt->cnt + 1; else List_Resize(tgt, n + 1, 4);
-    tgt->data[n] = (int)sb;
+    ((AttrSlots<Ent *> *)tgt)->append(eb);
     FUN_001b1490(mgr, tgt, s7);
 
     j = 0;
-    if (j < OV->_count) {
+    if (j < overrides(self)->_count) {
         jo = 0;
         do {
-            FUN_001b12f0(mgr, *(int *)(OV->_data + jo));
+            FUN_001b12f0(mgr, *(int *)(((igAttrList *)self->_overrideAttrList)->_data + jo));
             j++;
             jo += 4;
-        } while (j < OV->_count);
+        } while (j < ((igAttrList *)self->_overrideAttrList)->_count);
     }
     r = FUN_001e07a0(ctl, self);
-    for (l = OV->_count - 1, lo = l * 4; l >= 0; l--) {
-        FUN_001b13d0(mgr, *(int *)(OV->_data + lo));
+    for (l = ((igAttrList *)self->_overrideAttrList)->_count - 1, lo = l * 4; l >= 0; l--) {
+        FUN_001b13d0(mgr, *(int *)(((igAttrList *)self->_overrideAttrList)->_data + lo));
         lo -= 4;
     }
     {
