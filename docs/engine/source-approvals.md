@@ -81,6 +81,28 @@ used the construct.
   low and high halves keeps the size but leaves 3 to 6 words different, because the compiler adds a
   three-operand multiply beside the `multu`.
 
+### sony-hardware-registers
+
+Accesses to EE and GS registers in Sony's libraries, and in the CRI code that drives the same registers. Each
+keyword is on a fixed register address, or for the DMA channels on a register reached through a channel pointer.
+
+* Sony's `eeregs.h` in SDK 3.0.3 defines the registers as `volatile` pointers to their fixed addresses, and its
+  access macros go through them, so code using the header is `volatile` without writing the word. The header's
+  copyright begins in 1998, and a Release 1.6 sample uses the same macros.
+* Sony's `libdma.c` in that SDK has the source of the DMA functions. Its bodies of the channel pause and the two
+  channel waits compile to retail's bytes under the library's profile, given only declarations for what they call.
+* Other functions in these libraries are byte-identical to objects in the SDK's archives. The remainder sit in the
+  Sony code block under the same compiler.
+* Most keywords change the bytes when removed, so the compiler would merge or drop the access. The others rest on
+  the header.
+* Adding `volatile` to the plain register accesses left in these functions keeps them matching, with one exception:
+  a 64-bit read of a register the header declares as 32 bits. A cast to the wider type, which that read needs, drops
+  the qualifier and matches retail.
+* The serial port registers are the exception to the header: they are absent from it and identified from the
+  open-source ps2sdk.
+
+DW4's libraries are SDK release 2.8.0, which is not available, so the text compared is from a later release.
+
 ## Open questions
 
 * **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores

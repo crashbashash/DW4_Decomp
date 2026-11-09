@@ -36,7 +36,7 @@ questions below.
 ## Ownership and the writer chain
 
 ```
-EE Timer 0 count (0x10000800)  ─ FUN_0020d290 ─▶ 100 ns ticks (u64) ×100
+EE Timer 1 count (0x10000800)  ─ FUN_0020d290 ─▶ 100 ns ticks (u64) ×100
    ─ igPsx2LongTimer::vfunc_37 (0x0032dab0) ─▶ raw time
    ─ igPsx2LongTimer::vfunc_26 (0x00330af0) ─▶ timer time  (paused flag at +0x20; base at +8; frozen value at +0x10)
    ─ FUN_00237730 (clock update) ─▶ sys+0x38 sample, +0x40 delta, +0x50 clock
@@ -45,7 +45,7 @@ EE Timer 0 count (0x10000800)  ─ FUN_0020d290 ─▶ 100 ns ticks (u64) ×100
 
 | Step | Address | Evidence |
 |---|---|---|
-| Hardware read | `0x0020d290` (`FUN_0020d290`) | **[static]** `lw 0x1000_0800` (T0_COUNT); `cvt` to float; `× f32 @ gp−32696`; truncate to u32; `+ u64 @ 0x0056c190`; then `×25×4` = **×100** into the out-parameter |
+| Hardware read | `0x0020d290` (`FUN_0020d290`) | **[static]** `lw 0x1000_0800` (T1_COUNT); `cvt` to float; `× f32 @ gp−32696`; truncate to u32; `+ u64 @ 0x0056c190`; then `×25×4` = **×100** into the out-parameter |
 | Raw source | `0x0032dab0` `igPsx2LongTimer::vfunc_37` | **[static]** calls `0x0020d290` and returns the u64 |
 | Timer time | `0x00330af0` `igPsx2LongTimer::vfunc_26` | **[static]** if byte `+0x20` ≠ 0 return `+0x10`, else `+0x10 + vfunc_37() − +8` |
 | Clock update | `0x00237730` `FUN_00237730` | **[static]** see below; the writer found for `sys+0x50` |
@@ -79,14 +79,14 @@ Live PCSX2 (stock, PINE, 6 s sample):
 | Stored delta | `+0x40` equals the observed step on 360 of 360 updates |
 
 The reported mean step is close to 1/59.94 s (16,683,333 ns). The step is **not** a constant 16,666,667 ns: it is
-the interval between two samples of Timer 0, and varies by roughly ±0.5 ms in the reported sample. Its cause is not isolated.
+the interval between two samples of Timer 1, and varies by roughly ±0.5 ms in the reported sample. Its cause is not isolated.
 No raw sample sequence was retained with the aggregate live statistics,
 so they have not been independently reproduced.
 
-Timer-0 scale: the float at `0x005548b8` reads `0x3f8ae38e` ≈ 1.0850694 ≈ 10,000,000 / 9,216,000.
-That is 100 ns units per timer tick for a 9.216 MHz Timer 0 (BUSCLK/16). The 64-bit accumulator
+Timer-1 scale: the float at `0x005548b8` reads `0x3f8ae38e` ≈ 1.0850694 ≈ 10,000,000 / 9,216,000.
+That is 100 ns units per timer tick for a 9.216 MHz Timer 1 (BUSCLK/16). The 64-bit accumulator
 at `0x0056c190` advanced ≈ 10.1 M per second, matching 10 M × 100 ns. **[observed]** values;
-the "BUSCLK/16 prescaler" reading of the constant is a **[hypothesis]** (the Timer 0 mode
+the "BUSCLK/16 prescaler" reading of the constant is a **[hypothesis]** (the Timer 1 mode
 register is not read by PINE).
 
 ## The logo CLOSE WAIT timer **[observed]**
@@ -305,7 +305,7 @@ separate state. Action2 reads the accumulated value after the sample/update, and
 across render-only passes.
 
 Open: allocation/default initialization of the core and timer; all callers
-of reset/pause/restart, especially game pause and stage loads; exact Timer 0
+of reset/pause/restart, especially game pause and stage loads; exact Timer 1
 samples/frame phase; message-triggered action starts; and the external callbacks
 and software-double arithmetic omitted above. The instruction-derived
 pause/reset and scheduler contracts are established and are not on that list.

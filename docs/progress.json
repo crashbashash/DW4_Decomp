@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2278956,
-    "functions": 18249
+    "bytes": 2289160,
+    "functions": 18286
    },
    "mismatch": {
     "bytes": 0,
@@ -104,8 +104,8 @@
     "functions": 0
    },
    "unapproved": {
-    "bytes": 369956,
-    "functions": 457
+    "bytes": 359752,
+    "functions": 420
    }
   },
   "code_only_by_exc": {
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2283068,
-   "functions": 18264
+   "bytes": 2293272,
+   "functions": 18301
   },
   "fully_verified": {
-   "bytes": 2278956,
-   "functions": 18249
+   "bytes": 2289160,
+   "functions": 18286
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,8 +142,8 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 4112,
-  "fully_matched": 2283068,
-  "fully_verified": 2278956,
+  "fully_matched": 2293272,
+  "fully_verified": 2289160,
   "functions_asm_body": 0,
   "functions_assembly": 15,
   "matched": 2659640,
@@ -357,15 +357,15 @@
    "struct.a": 139,
    "struct.b": 300,
    "struct.c": 287,
-   "unapproved.bytes": 369956,
-   "unapproved.functions": 457,
+   "unapproved.bytes": 359752,
+   "unapproved.functions": 420,
    "unmatched.bytes": 800380,
    "unmatched.functions": 1465
   }
  },
  "functions": {
-  "fully_matched": 18264,
-  "fully_verified": 18249,
+  "fully_matched": 18301,
+  "fully_verified": 18286,
   "matched": 18734,
   "named": 9646,
   "named_semantic": 1969,
@@ -460,32 +460,32 @@
   "bytes": 382960,
   "failing": {
    "addresses": {
-    "bytes": 1794160,
-    "functions": 13214
+    "bytes": 1804364,
+    "functions": 13251
    },
    "fields": {
-    "bytes": 595252,
-    "functions": 3306
+    "bytes": 599660,
+    "functions": 3319
    },
    "idioms": {
-    "bytes": 1058340,
-    "functions": 5789
+    "bytes": 1058912,
+    "functions": 5791
    },
    "name": {
-    "bytes": 1413548,
-    "functions": 12727
+    "bytes": 1421224,
+    "functions": 12752
    },
    "placed": {
-    "bytes": 1622460,
-    "functions": 11866
+    "bytes": 1630136,
+    "functions": 11891
    },
    "references": {
-    "bytes": 1655700,
-    "functions": 10375
+    "bytes": 1665444,
+    "functions": 10410
    },
    "types": {
-    "bytes": 729084,
-    "functions": 3437
+    "bytes": 729528,
+    "functions": 3440
    },
    "virtuals": {
     "bytes": 312688,
@@ -493,7 +493,7 @@
    }
   },
   "functions": 2194,
-  "matched_functions": 18264
+  "matched_functions": 18301
  },
  "regions": [
   {

@@ -35,15 +35,15 @@
 00102700	FUN_00102700	match	-
 001029c0	thunk_FUN_00100bc0	match	-
 001029d0	FUN_001029d0	match	-
-001029f8	sceGsResetGraph	unapproved	unapproved: 4 volatile without an approval row
+001029f8	sceGsResetGraph	match	-
 00102b88	FUN_00102b88	match	-
-00102c00	sceGsSyncV	unapproved	unapproved: 1 volatile without an approval row
-00102c98	WaitDma	unapproved	unapproved: 1 volatile without an approval row
-00102d08	WatchDma	unapproved	unapproved: 1 volatile without an approval row
+00102c00	sceGsSyncV	match	-
+00102c98	WaitDma	match	-
+00102d08	WatchDma	match	-
 00102d90	FUN_00102d90	match	-
 00102db8	FUN_00102db8	match	-
 00102df0	FUN_00102df0	match	-
-00102ef8	sceDmaPutEnv	unapproved	unapproved: 10 volatile without an approval row
+00102ef8	sceDmaPutEnv	match	-
 00103120	sceDmaSend	match	-
 00103188	sceDmaSendN	match	-
 00103200	sceDmaSendI	match	-
@@ -52,32 +52,32 @@
 00103340	sceDmaRecvI	match	-
 001033c0	FUN_001033c0	match	-
 001033f8	FUN_001033f8	match	-
-00103430	sceDmaPause	unapproved	unapproved: 5 volatile without an approval row
-001034e0	FUN_001034e0	unapproved	unapproved: 2 volatile without an approval row
+00103430	sceDmaPause	match	-
+001034e0	FUN_001034e0	match	-
 00105228	FUN_00105228	match	-
 001054e8	FUN_001054e8	match	-
 00105508	FUN_00105508	match	-
-001057a0	FUN_001057a0	unapproved	unapproved: 1 volatile without an approval row
+001057a0	FUN_001057a0	match	-
 001058b8	FUN_001058b8	match	-
 001059e8	FUN_001059e8	match	-
 00105be8	FUN_00105be8	match	-
-00105ca8	FUN_00105ca8	unapproved	unapproved: 2 volatile without an approval row
+00105ca8	FUN_00105ca8	match	-
 00106150	FUN_00106150	match	-
 001061d8	_motionVectors	match	-
 00106378	FUN_00106378	match	-
-001064c8	FUN_001064c8	unapproved	unapproved: 1 volatile without an approval row
-001064f8	FUN_001064f8	unapproved	unapproved: 9 volatile without an approval row
-00106660	FUN_00106660	unapproved	unapproved: 10 volatile without an approval row
-001067e8	FUN_001067e8	unapproved	unapproved: 12 volatile without an approval row
-00106a58	FUN_00106a58	unapproved	unapproved: 2 volatile without an approval row
-00106b78	FUN_00106b78	unapproved	unapproved: 2 volatile without an approval row
-00106c88	FUN_00106c88	unapproved	unapproved: 3 volatile without an approval row
-00106df8	FUN_00106df8	unapproved	unapproved: 1 volatile without an approval row
+001064c8	FUN_001064c8	match	-
+001064f8	FUN_001064f8	match	-
+00106660	FUN_00106660	match	-
+001067e8	FUN_001067e8	match	-
+00106a58	FUN_00106a58	match	-
+00106b78	FUN_00106b78	match	-
+00106c88	FUN_00106c88	match	-
+00106df8	FUN_00106df8	match	-
 00106e78	FUN_00106e78	match	-
 00106ee0	FUN_00106ee0	match	-
 00107000	FUN_00107000	match	-
 001070c8	FUN_001070c8	match	-
-001071f0	FUN_001071f0	unapproved	unapproved: 5 volatile without an approval row
+001071f0	FUN_001071f0	match	-
 001073e0	FUN_001073e0	match	-
 00107428	FUN_00107428	match	-
 001074a0	FUN_001074a0	match	-
@@ -87,14 +87,14 @@
 00107790	FUN_00107790	match	-
 00107860	FUN_00107860	match	-
 00107ba8	FUN_00107ba8	match	-
-00107c48	FUN_00107c48	unapproved	unapproved: 11 volatile without an approval row
+00107c48	FUN_00107c48	match	-
 00107ed8	FUN_00107ed8	match	-
 00107f00	FUN_00107f00	match	-
 00108078	FUN_00108078	match	-
 00108188	FUN_00108188	match	-
-001084b0	FUN_001084b0	unapproved	unapproved: 3 volatile without an approval row
-00108538	FUN_00108538	unapproved	unapproved: 6 volatile without an approval row
-00108cc8	sceMpegInit	unapproved	unapproved: 8 volatile without an approval row
+001084b0	FUN_001084b0	match	-
+00108538	FUN_00108538	match	-
+00108cc8	sceMpegInit	match	-
 00108f88	FUN_00108f88	match	-
 00108fd0	FUN_00108fd0	match	-
 00109018	FUN_00109018	match	-
@@ -113,13 +113,13 @@
 001098a8	FUN_001098a8	match	-
 00109910	FUN_00109910	match	-
 001099a0	FUN_001099a0	match	-
-00109a00	FUN_00109a00	unapproved	unapproved: 11 volatile without an approval row
+00109a00	FUN_00109a00	match	-
 00109ac8	FUN_00109ac8	match	-
 00109ad8	FUN_00109ad8	match	-
 00109b10	FUN_00109b10	match	-
 00109c68	FUN_00109c68	match	-
 00109c88	FUN_00109c88	match	-
-0010a138	FUN_0010a138	unapproved	unapproved: 4 volatile without an approval row
+0010a138	FUN_0010a138	match	-
 0010a218	FUN_0010a218	match	-
 0010a348	FUN_0010a348	match	-
 0010a3d8	FUN_0010a3d8	match	-
@@ -128,11 +128,11 @@
 0010a408	FUN_0010a408	match	-
 0010a418	FUN_0010a418	match	-
 0010a440	FUN_0010a440	match	-
-0010a468	setD3_CHCR	unapproved	unapproved: 5 volatile without an approval row
-0010a4e0	FUN_0010a4e0	unapproved	unapproved: 5 volatile without an approval row
+0010a468	setD3_CHCR	match	-
+0010a4e0	FUN_0010a4e0	match	-
 0010a558	sceIpuStopDMA	unapproved	unapproved: 1 volatile without an approval row
 0010a640	sceIpuRestartDMA	unapproved	unapproved: 1 volatile without an approval row
-0010a7f8	FUN_0010a7f8	unapproved	unapproved: 5 volatile without an approval row
+0010a7f8	FUN_0010a7f8	match	-
 0010b360	FUN_0010b360	match	-
 0010b4a8	write	match	-
 0010b528	read	match	-
@@ -170,7 +170,7 @@
 0010c310	sceTtyHandler	unapproved	unapproved: 4 volatile without an approval row
 0010c4a8	sceTtyWrite	unapproved	unapproved: 3 volatile without an approval row
 0010c620	sceTtyRead	unapproved	unapproved: 1 volatile without an approval row
-0010c7b0	FUN_0010c7b0	unapproved	unapproved: 2 volatile without an approval row
+0010c7b0	FUN_0010c7b0	match	-
 0010c7f0	deci2Putchar	match	-
 0010c8a0	FUN_0010c8a0	match	-
 0010d0d0	FUN_0010d0d0	match	-
@@ -280,14 +280,14 @@
 001145c8	FUN_001145c8	match	-
 001145f0	ExecOSD	match	-
 00114660	FUN_00114660	match	-
-001146a8	InitAlarm	unapproved	unapproved: 1 volatile without an approval row
+001146a8	InitAlarm	match	-
 001147f0	FUN_001147f0	match	-
 00114800	FUN_00114800	match	-
 00114810	FUN_00114810	match	-
-00114820	InitTimer	unapproved	unapproved: 1 volatile without an approval row
+00114820	InitTimer	match	-
 00114978	EndTimer	unapproved	unapproved: 1 volatile without an approval row
-00114a60	StartTimerSystemTime	unapproved	unapproved: 1 volatile without an approval row
-00114af0	StopTimerSystemTime	unapproved	unapproved: 1 volatile without an approval row
+00114a60	StartTimerSystemTime	match	-
+00114af0	StopTimerSystemTime	match	-
 00114d00	InsertAlarm	match	-
 00114d88	FUN_00114d88	match	-
 001151a0	AllocTimerCounter	match	-
@@ -5346,7 +5346,7 @@
 001f76c0	FUN_001f76c0	match	-
 001f7ad0	FUN_001f7ad0	match	-
 001f8050	p2readGSPrivRegister	match	-
-001f8190	FUN_001f8190	unapproved	unapproved: 14 volatile without an approval row
+001f8190	FUN_001f8190	match	-
 001f8320	FUN_001f8320	match	-
 001f8490	FUN_001f8490	match	-
 001f8730	FUN_001f8730	match	-
@@ -5434,7 +5434,7 @@
 0020cc50	FUN_0020cc50	match	-
 0020ccd0	FUN_0020ccd0	match	-
 0020d270	FUN_0020d270	match	-
-0020d290	FUN_0020d290	unapproved	unapproved: 1 volatile without an approval row
+0020d290	FUN_0020d290	match	-
 0020d340	FUN_0020d340	match	-
 0020d360	FUN_0020d360	match	-
 0020d400	FUN_0020d400	match	-
@@ -8723,13 +8723,13 @@
 002a8a30	FUN_002a8a30	match	-
 002a8b30	FUN_002a8b30	match	-
 002a8b50	FUN_002a8b50	match	-
-002a8ba0	FUN_002a8ba0	unapproved	unapproved: 3 volatile without an approval row
-002a8c08	FUN_002a8c08	unapproved	unapproved: 3 volatile without an approval row
+002a8ba0	FUN_002a8ba0	match	-
+002a8c08	FUN_002a8c08	match	-
 002a8c70	FUN_002a8c70	match	-
 002a8f40	FUN_002a8f40	match	-
 002a8f90	FUN_002a8f90	match	-
 002a9210	FUN_002a9210	unapproved	unapproved: 1 volatile without an approval row
-002a9628	FUN_002a9628	unapproved	unapproved: 3 volatile without an approval row
+002a9628	FUN_002a9628	match	-
 002a9680	FUN_002a9680	match	-
 002a96d0	FUN_002a96d0	match	-
 002a96e0	FUN_002a96e0	match	-
