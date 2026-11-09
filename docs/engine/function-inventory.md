@@ -74,7 +74,7 @@ nothing promoted an unreferenced `jal`/`j` target (47 tail-call and 11 call targ
 the 33 `inventory-gap` units); nothing promoted a vtable-referenced body with a frame (`0x3236a0`,
 3.6 KB, 272-byte `sq` frame, 34 calls, sat in a gap). Rule 2 now also refuses a label right after
 a switch dispatch (`jr v1; nop`): it had turned the first case body of four switch functions into
-"functions" of their own, which cut the real function short (`FUN_00172130`,
+"functions" of their own, which cut the real function short (`Gap__Gfx__igPsx2VisualContext__vfunc_100`,
 `igPsx2VisualContext::vfunc_37`, `igPsx2DisableExt::vfunc_30/31`).
 
 ## 3. Reviewed extents (`config/SLUS-20836/extent-overrides.tsv`)
@@ -93,7 +93,7 @@ The rows this pass added, by evidence class:
 | class | rows | what the bytes show |
 | --- | --- | --- |
 | epilogue growth | 159 (all functions of the EE GCC blocks) + `SetT2` (`eret` then `jr ra; nop`) | the dump stopped 3–5 words before `ld ra; jr ra; addiu sp,+N`; the walk from the symbol start ends there |
-| `cut`: tail-call wrapper + framed body | 20 (`_getpid_r`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `vfiprintf`, `FUN_00169e30`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
+| `cut`: tail-call wrapper + framed body | 20 (`_getpid_r`, `FUN_00269878`, `FUN_00297f30`, `FUN_002980c0`, `FUN_0017c880`, `FUN_00260d48`, `FUN_002a1110`, `FUN_00109c88`, `vfiprintf`, `Gap__Gfx__igPsx2VisualContext__vfunc_172`, `FUN_00299110`, `FUN_002997c0`, `FUN_0029b6d0`, `FUN_002a3730`, `FUN_002b2ee8`, `FUN_002b3300`, `FUN_002b4210`, …) | the head ends in `j <body>` to a fresh frame prologue under the same symbol (a function never jumps to its own frame-opening word) |
 | `cut`: wrapper + leaf body | 12 (`FUN_002612c0`, `FUN_002854b0`, `FUN_0028abc0`, `FUN_00293788`, `FUN_00294838/8b8/938`, `FUN_002ad2e0`, `FUN_002ad3e0`, `FUN_002b3530`, `FUN_002b4630`, `Memory_AllocateBufferViaSharedTail`) | the head's walk ends at its `j` to a fresh start that follows after padding; the body is claimed by rule 3 |
 | `cut`: span reached a referenced leaf | 5 (`Gap__Core__igCallStackTable__vfunc_28`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |
 | `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop — `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`) | the inner address is a fresh start after the container's return |
@@ -108,7 +108,7 @@ keep their extents.
 
 A function whose extent changed and that has no C source links from the retail image at its
 reviewed extent; the repository keeps no asm bodies ([asm-body matches](asm-body-matches.md)). Three units were renamed because the stub rule now reaches
-them before the leaf rule (`FUN_001673b0`, `FUN_0016e390`, `FUN_0022bbc0` → `thunk_…` after their
+them before the leaf rule (`thunk_FUN_001592c0`, `thunk_FUN_001592c0__0016e390`, `thunk_Gap__Core__igObject__vfunc_09__0022bbc0` → `thunk_…` after their
 targets); ten units that called `thunk_FUN_002fe2ac` call `FUN_002fe290`.
 
 ## 4. The scan and the debt counter

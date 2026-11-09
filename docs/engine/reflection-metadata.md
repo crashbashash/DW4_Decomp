@@ -25,7 +25,7 @@ long igMetaObject_RegisterClass(
     int   abstract_state, // a0  stored as a byte at metaobj+0x1a; getter called for 0
     int  *handle_slot,    // a1  BSS slot; *handle_slot is the MetaObject* (created if 0)
     code *fn1,            // a2  the BASE class's registrar; returns pending initializer callback state
-                           //     (RegisterClass returns that callback state; FUN_002d3480 appends items)
+                           //     (RegisterClass returns that callback state; igArray_Append appends items)
     code *fn2,            // a3  the BASE class's MetaObject accessor; its result is inherited by
                            //     igMetaObject_InheritFromBase (fields, +0x20, +0x48, +0x5c)
     int   v54,            // t0  the class's own get-or-register MetaObject accessor, stored at
@@ -36,8 +36,8 @@ long igMetaObject_RegisterClass(
                            //     result is stored at +0x5c, which the igMetaObject reflection struct
                            //     names `_vTablePointer`, and is then inherited
     code *post_init,      // sp+0  <-- no-argument field adder; Work reads its global handle
-    int   arg10,          // sp+8  passed to FUN_002d3480 when non-zero
-    int  *list_ptrs);     // sp+16 0-terminated word list, one FUN_002d3480 call per entry
+    int   arg10,          // sp+8  passed to igArray_Append when non-zero
+    int  *list_ptrs);     // sp+16 0-terminated word list, one igArray_Append call per entry
 ```
 
 The only fields needed for the extraction are `handle_slot` (a1) and `class_name` (t1).
@@ -109,7 +109,7 @@ Every field's byte offset is exact. `igViewportAttr` gives `_x` at `+0x0c`, `_y`
 ## 3. Field types
 
 The ctor function is a per-type factory. It loads that MetaField class's `MetaObject` handle from a
-`0x58xxxx` global and calls `FUN_002fda40(type, ctx)`; the same handle names the class at its own
+`0x58xxxx` global and calls `igMetaObject_CreateInstance(type, ctx)`; the same handle names the class at its own
 registration site, so the type is recoverable exactly. All 32 types observed in `game.elf`:
 
 | ctor | type | fields |

@@ -280,7 +280,7 @@ word (`0x26f0` = 2*4980 + 8) just before the UVs, and the inline image's index b
 `0x0130ac20`.  A second, reordered copy of similar values at `0x00e379dc` is not the crate's stream.
 
 **Node and bone matrices.**  `igTransform._m` (+0x20) is a node's local matrix.  Slot 37 of the
-`beModelCtrlNode2` vtable (`0x537f40`), `FUN_001b2750`, sets it: when `_transformInput` (+0x68) is
+`beModelCtrlNode2` vtable (`0x537f40`), `Gap__Core__igObject__vfunc_37`, sets it: when `_transformInput` (+0x68) is
 non-NULL it passes `node+0x20` and the source matrix to that object's `vfunc_0x5c`.  `SETMATRIX` and
 `MOVETRANS` call this slot.  A skinned actor's bone matrices are `igActor._boneMatrixCacheArray` and
 `_blendMatrixCacheArray`, reset on action start by `beAction2::vfunc_33`.  The runtime bone array is

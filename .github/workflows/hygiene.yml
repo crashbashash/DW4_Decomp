@@ -21,6 +21,8 @@ jobs:
         run: python3 testing/test_check_host_details.py
       - name: Whole tree
         run: python3 scripts/check_host_details.py --tree
+      - name: Check function names in documents
+        run: python3 scripts/check_doc_function_names.py
       - name: Added lines and commit messages in this push or pull request
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then

@@ -18,7 +18,7 @@ Engine's CodeWarrior ABI and emits C in that idiom. It is vendored under the loc
 ## The pipeline
 
 ```sh
-python3 tools/m2c_one.py 0x130060            # one function -> m2c's C
+python3 tools/m2c_one.py 0xVA                # one function -> m2c's C
 python3 tools/m2c_batch.py --report 200      # sample the yield, write nothing
 python3 tools/m2c_batch.py --max-size 64 --write --worklist build/m2c_worklist.tsv
 python3 tools/m2c_errors.py --all            # bucket a tier's compile failures by MWCC's message
@@ -57,7 +57,7 @@ m2c's output is not compilable C, and its addresses are in the wrong *form*:
 | `extern int FUN_x;` (a `FUN_<addr>` used only as an *address*, never called) | `int FUN_x();` — otherwise MWCC treats it as small data and reaches `&FUN_x` gp-relative, where retail uses absolute `lui`/`addiu` |
 | `(long long) &X` (an address cast to 64-bit) | `&X` — the cast makes MWCC zero-extend the 32-bit address with `dsll32`/`dsrl32` before the `sd`; retail stores the sign-extended pointer |
 | `*(int *)X = &FUN_x;` | `= (int)&FUN_x;` — a function address stored into a word slot (a vtable entry) is an int; without the cast MWCC rejects `int (*)()`→`int` |
-| `func_0012CAF0`, `D_0055EBC0` | `FUN_0012caf0`, `DAT_0055ebc0` (the repo's naming) |
+| `func_XXXXXXXX`, `D_XXXXXXXX` | `FUN_XXXXXXXX`, `DAT_XXXXXXXX` with the address in lowercase hex (the repo's naming) |
 | a numeric address used as a **bitwise** operand (`0x5586C0 \| 0x20000000`, the PS2 uncached alias) | `(int)DAT_005586c0 \| 0x20000000` — the address is an int *value* here, not a pointer base, and a bare `DAT_x` is `char[] | int`, which MWCC rejects |
 | `p += N`, `N + p`, `(void *)X + N` (a declared `void *`) | the `(char *)` form — MWCC rejects `void *` arithmetic in **every** spelling, with three different messages |
 | `arg->unk4` on a `void *` | `*(int *)((char *)(arg) + 4)` (a general base-expression scan, since the base is often parenthesised, e.g. `(*(int *)DAT_x)->unk4`) |
@@ -111,11 +111,11 @@ renames `t0-t3` to `a4-a7` in the assembly (`m2c_one.asm_for(ee_abi=True)`), whi
 bridge: m2c then sees arguments 5–8 instead of an unmodelled temporary.
 
 The EE pipeline reaches functions `mips-mwcc-c` cannot:
-they are mostly **100–149 bytes and calls `FUN_002fe9c0`** — the per-class MetaObject registrar
+they are mostly **100–149 bytes and call one registration function** — the per-class MetaObject registrar
 trampolines (T1) whose registration call takes **11 arguments**, of which a four-register
 model sees four.
 
-Retail has 1,075 `jal FUN_002fe9c0` sites in 484 distinct caller functions (some register several classes).
+Retail has 1,075 `jal` sites of that function in 484 distinct caller functions (some register several classes).
 The 100-byte ones need the EE ABI; the 108–116-byte ones pass a **function pointer** as the 9th
 argument and need two more cleaner rules: m2c declares an address-only `FUN_<addr>`
 symbol `extern int FUN_x;` (a small-data object, so MWCC reaches `&FUN_x` gp-relative) and casts the
@@ -125,7 +125,7 @@ other sites sit in unclaimed Ghidra gaps as `LAB_` labels — the gap-label
 promotion adds them (§*883 functions Ghidra only labelled*).
 
 The EE arch also models float arguments as `f12-f19` rather than `f12-f15`, which is what the
-few non-registrar matches (e.g. `FUN_00182420`, three pointers plus a float parameter) need.
+few non-registrar matches (e.g. three pointers plus a float parameter) need.
 
 ## 883 functions Ghidra only labelled
 
@@ -134,7 +134,7 @@ labels — `LAB_<addr>`, branch targets and referenced stubs it never promoted t
 When nothing branches into one and nothing takes its address as code, it stays a label and falls in
 the **unclaimed gap** between two functions: absent from `config/SLUS-20836/symbols.txt`, invisible to the
 split, impossible to decompile. The 592 gap-held class-registrar trampolines are exactly this:
-each alone in its own 116–404-byte gap, with `LAB_001301d0` sitting on its
+each alone in its own 116–404-byte gap, with a `LAB_<addr>` label sitting on its
 `addiu sp,sp,-48`.
 
 `tools/split.py` has a **third derivation rule** (beside the delay-slot and jump-table-body rules)
@@ -146,8 +146,8 @@ stub). Result: **883 promoted, 15,974 → 16,857 functions, +131,532 bytes**. No
 claimed bytes were already linked as raw data — so `make link` stays **byte-identical** and the split
 round-trips. Decompiling them reproduces the registrars among them, plus a few others.
 
-The 291 non-registrar promotions are real functions, not data — `FUN_0010a418` calls `0x10a558`,
-`FUN_001308c0` calls the reflection driver `0x2fdf40`. The registrars need one further cleaner
+The 291 non-registrar promotions are real functions, not data — they make calls of their own,
+including to the reflection driver. The registrars need one further cleaner
 rule: the `(long long)` cast also has to come off
 a **data** address (`(long long) &DAT_x[0]`), not just a function one. With the rule limited to
 function addresses 528 of the 592 registrars match; generalised to any address-of, **592/592**.
@@ -170,8 +170,8 @@ and `jal`, not data references. So `tools/split.py` has a **second promotion pas
 * it is not reachable by fallthrough (the preceding word is padding, or a `jr ra` / its delay slot);
 * its size runs to that terminator's delay slot, bounded by the next ***plausible start***, not the
   next label of any kind — a function with an internal loop carries branch-target labels of its own,
-  and those must not cut its body short (bounding by any label hides `igMetaField`'s `+0xd0`
-  byte-swap at `0x2fd170`). Sibling stubs are referenced like the first, so they do bound it.
+  and those must not cut its body short (bounding by any label hides a vtable slot's
+  byte-swap). Sibling stubs are referenced like the first, so they do bound it.
 
 A body with two terminators is left alone: it is either a merge of two stubs or a real multi-return
 function, and either way ambiguous. Result: **1,804 promoted, 16,857 → 18,661 functions, +42,872
@@ -221,7 +221,7 @@ The yield of a full sweep drops as the reachable functions are taken. The totals
 - **the low-diff tier** with the virtual-call transform and the dropped-argument shapes (`leadcall`, `width`)
 
 The yield is strongly size-dependent, and the clean shapes are a minority of the work: the simplest
-call-and-compare leaves (`FUN_001002a0`: `return dpcmp() == 0;`) match first try, and small functions
+call-and-compare leaves (`return dpcmp() == 0;`) match first try, and small functions
 close far more often than large ones.
 
 Restoring the delay slots (§*727 functions ended one instruction short*) removes most m2c failures, so
@@ -258,15 +258,14 @@ from `build/m2c/`, rebuild each parameter list as slots `0..maxIndex`, keep the 
 parameter in its own slot, fill every hole with an unused `int dummyN`, and re-verify. A
 `.cpp` is chosen when the draft carries C++ syntax (the virtual-call transforms emit
 `class `/`extern "C"`), because the extension selects MWCC's front end. The same pass closes a 64-bit-load cast
-(`FUN_0038f480`: retail `ld`, m2c `lw`, needs a `(long long *)`) and two argument-preserving
-wrappers that forward all of their own arguments (`FUN_0029cb48`, `FUN_0032cf50`).
+(retail `ld`, m2c `lw`, needs a `(long long *)`) and two argument-preserving
+wrappers that forward all of their own arguments.
 
 A wrapper that shifts its argument registers and tail-jumps (the 12-byte form
 `move a0,a1; j T; move a1,a2`) is the same defect: it drops its own first argument and forwards the
 rest. The fix is an unused leading parameter: `void f(int unused, int a, int b) { T(a, b); }`. A vfunc
 of this shape keeps the repository's flat extern-C symbol name and must be a `.c` file, because C++
-mode frames the call at 32 bytes instead of the 12-byte tail jump. Examples: `FUN_0016cdd0`,
-`FUN_0015ad30` (forwards 7 of 8), `FUN_00328f70`.
+mode frames the call at 32 bytes instead of the 12-byte tail jump.
 
 m2c also loses an argument set up in a delay slot: it decompiles `j X` with a setup instruction there
 as a call to `X` without that argument (the same for `addiu`, `li`, `lw` and `move`). For a `void *`
@@ -288,7 +287,7 @@ single result on this page.
 The A/B is unambiguous: over two equal samples from one address region, with one cap on size, functions
 with a bit-15 `%lo` reference matched after this fix and the control sample without one did not,
 and per function: running the *same* assembly with only the double-corrected names substituted in
-fails `FUN_00130310`, `FUN_00130440`, `FUN_00130f60` and `FUN_00131160`, all of which match with the
+fails four functions, all of which match with the
 correct names.
 
 The convention lives in exactly one place, `automatch.eff_addr(hi, off, is_addiu)`. The lesson
@@ -302,11 +301,11 @@ A register loaded by `lui $r,HIGH` **keeps** that high half until it is written 
 *every* load/store that uses it adds the `%lo` of the object being addressed. Pairing a `lui`
 with only the first use inside a 4-instruction window leaves a second
 use after a branch numeric, and m2c then adds that displacement **on top of** the
-named `%hi` base. `FUN_00270db0` is the minimal case:
+named `%hi` base. The minimal case:
 
 ```
-270DB4  lui $v0, %hi(DAT_004a927c)     270DBC  sw $zero,%lo(DAT_004a927c)($v0)
-270DC8  lui $v1, %hi(DAT_004a9280)     270DCC  sw $a0,-28036($v0)   <- the same object,
++0x04   lui $v0, %hi(DAT_004a927c)     +0x0C   sw $zero,%lo(DAT_004a927c)($v0)
++0x18   lui $v1, %hi(DAT_004a9280)     +0x1C   sw $a0,-28036($v0)   <- the same object,
                                          reached across the `bnez`
 ```
 
@@ -391,7 +390,7 @@ explicit temporary at its translation site. This exposes lifetimes that nested
 call expressions can hide. The ordinary source rendering stays unchanged.
 
 ```sh
-python3 tools/m2c_one.py 0x3fca10 --context build/combat-context.c --materialize-calls
+python3 tools/m2c_one.py 0xVA --context build/combat-context.c --materialize-calls
 python3 testing/test_m2c_materialization.py
 ```
 
@@ -402,7 +401,7 @@ previous translator. Its diagnostic counter includes inference passes and is
 not a count of distinct retail calls. Four tests check call count/order,
 void-call handling, restoration and subprocess parity.
 
-For the combat callback at `0x3fca10`, default output is the ordinary rendering;
+For a combat callback, default output is the ordinary rendering;
 opt-in output equals the separately reviewed materialization experiment. The
 mode is a source-recovery aid. Access widths, arithmetic and ABI projections
 still need original-instruction review, and banking requires the full code and
@@ -417,7 +416,7 @@ and its bound can remain one expression. An unused HI value from a quotient-only
 `div` does not create a remainder temporary. The two flags are mutually exclusive.
 
 ```sh
-python3 tools/m2c_one.py 0x3fca10 --context build/combat-context.c --materialize-boundaries
+python3 tools/m2c_one.py 0xVA --context build/combat-context.c --materialize-boundaries
 ```
 
 The equivalent serial API is
@@ -489,7 +488,7 @@ Two readings:
 
 * **Symbolization is the real improvement.** It converts 52 compile failures into
   *comparable* candidates (131 → 79 mismatches), and it makes the output readable —
-  `FUN_00100bc0` came out as `extern void *DAT_00555048[4]; … temp_v1 = DAT_00555048[0];`
+  one function came out as `extern void *DAT_00555048[4]; … temp_v1 = DAT_00555048[0];`
   instead of `*(void **)0x555048` with pointer casts the compiler rejects.
 * **The context is neutral** (2 vs 3 is noise at n=300), and it is structurally narrow:
   only 1.7 % of the candidates read a class handle global at all.
@@ -517,8 +516,8 @@ measured value for matching is in symbolizing the data references, not in typing
 
 m2c refuses **728 functions (4.6 %)** of Ghidra's function list with
 `Last instruction is missing a delay slot`. They are
-not m2c's fault: Ghidra's function boundaries cut them one instruction short. `FUN_00100240` ends at
-`jr $ra` (0x100284) and the `addiu sp,sp,16` that the hardware requires after it sits at 0x100288 —
+not m2c's fault: Ghidra's function boundaries cut them one instruction short. One such function ends at
+`jr $ra` and the `addiu sp,sp,16` that the hardware requires after it sits in the next word —
 inside the *next layout unit*. The link does not notice, because those bytes are emitted as a data
 unit and the section still links byte-identically; but such a symbol is not a function, no C can
 match it, and m2c cannot read it.
@@ -540,16 +539,16 @@ since its compiled form contains the delay slot). This is a derivation rule in `
 Ghidra stops at a `switch`'s indirect `jr $v0` and never follows the jump table, so the case
 bodies — and the shared `jr $ra` epilogue they all branch to — are left in the *unclaimed* gap
 before the next symbol. On its function list **155 functions (401,160 bytes) branch outside their
-own symbol, and a function whose source matches never does.** `FUN_00204840` is recorded as 52 bytes, just
+own symbol, and a function whose source matches never does.** One such function is recorded as 52 bytes, just
 
 ```
-sltiu at,a0,14 ; beqz at,0x204904 ; move v0,zero ; lui v0,0x4e ; sll v1,a0,2
+sltiu at,a0,14 ; beqz at,<target> ; move v0,zero ; lui v0,0x4e ; sll v1,a0,2
 addiu v0,v0,21168 ; addu v0,v1,v0 ; lw v0,0(v0) ; jr v0
 ```
 
-and its 14 case bodies plus the epilogue sit at `0x204874..0x204910` attributed to nobody (2,556
+and its 14 case bodies plus the epilogue sit after it, attributed to nobody (2,556
 out-of-range targets land in such gaps). m2c rejects a fragment like that outright:
-`Cannot find branch target .L00204904`.
+`Cannot find branch target .L<target>`.
 
 `tools/split.py` grows the symbol to the next one when every out-of-range **pc-relative**
 branch lands in the unclaimed gap (none inside another function; growth capped at 8 KB). 151
@@ -588,13 +587,13 @@ switch functions compiled from C — the tables really do land at 0x4ea200, 0x4e
 | tables | **180** (18 functions have 2–9 tables, MWCC 16-byte-aligns each) |
 | entries | 2,694 words = 10,776 bytes; 11,044 bytes of span |
 | of the 151 functions `split.py` grows | 47 have a table; the rest are grown for loops / other out-of-range branches |
-| match once the table is visible | **3** (408 bytes) — `FUN_0023cd00`, `FUN_00204150`, `FUN_0024a700` |
+| match once the table is visible | **3** (408 bytes) |
 | the other 135 | **122 compile-fail / 14 mismatch / 2 m2c-fail** |
 
 Two readings:
 
 * **The table fixes m2c's *parse*, not the match.** It emits a complete, readable `switch`
-  (m2c's output for `FUN_0024a700` is the retail case set), and the tier's composition barely
+  (m2c's output for one of the three is the retail case set), and the tier's composition barely
   changes: 107 of the 138 candidates contain `lq`/`sq`/`ld`/`sd`, 89 declare a `void *temp_*`, and
   the top compile errors are int→`void *` conversions, the undeclared `s128` and the
   `arrayize_globals` redeclaration. Declaring those `void *temp_*` locals `int`
@@ -604,8 +603,8 @@ Two readings:
 * **One source idiom is real.** m2c's `switch (arg0)` over cases 32..41 compiles its index
   adjustment as `addi`, where retail has `addiu` (0x2482ffe0): MWCC lowers a bare switch over int
   constants to the *signed* subtract even when the parameter is unsigned. Writing the adjustment
-  explicitly — `switch ((unsigned)(arg0 - 32))` with cases 0..9 — reproduces retail
-  (`FUN_0024a700`). Only 1 of the 14 mismatches is this, so it is a hand fix, not a template.
+  explicitly — `switch ((unsigned)(arg0 - 32))` with cases 0..9 — reproduces retail.
+  Only 1 of the 14 mismatches is this, so it is a hand fix, not a template.
 
 ## `loosen_prototypes` must not match a call statement
 
@@ -615,21 +614,21 @@ accepted. In its pattern the name must be separated from the type tokens by whit
 
     ^(\s*(?:[A-Za-z_]\w*\s+)*[A-Za-z_]\w*\s*\**\s*)([A-Za-z_]\w*)\s*\([^;]*\)\s*;\s*$
 
-lets `([A-Za-z_]\w*)` be split. For the call statement `WatchDma(arg3);` the match is
-group(1) `    FUN_00102`, group(2) `d08`, so the rewrite replaces the whole line with
-`    WatchDma();` — **the argument is deleted**. Every bare call statement in every candidate
+lets `([A-Za-z_]\w*)` be split. For the call statement `callee(arg3);` the match is
+group(1) `    calle`, group(2) `e`, so the rewrite replaces the whole line with
+`    callee();` — **the argument is deleted**. Every bare call statement in every candidate
 loses its arguments, and because this is a text pass there is no error to notice: the candidate just
 compiles to one or two instructions that do not match retail.
 
-That is exactly the shape of the "cheapest" tier. `FUN_001033f8` (0x001033f8, 52 bytes) then differs
+That is exactly the shape of the "cheapest" tier. A 52-byte function then differs
 in one word — retail's `move a2,a3` against our `nop`. The function is
 
 ```c
-int FUN_001033f8(void *arg0, unsigned int arg1, int arg2, int arg3) {
+int FUN_XXXXXXXX(void *arg0, unsigned int arg1, int arg2, int arg3) {
     if (arg2 == 1) {
         return (unsigned int) *(int *)((char *)arg0 + 16) < arg1;
     }
-    WatchDma(arg0, arg1, arg3);
+    callee(arg0, arg1, arg3);
     return 0;
 }
 ```
@@ -675,7 +674,7 @@ lvalue, so without a further pass the draft stops compiling wherever the two dis
 | `void *temp_a0_2 = *(int *)((char *)(arg0) + 88);` | `'int'` → `'void *'` |
 | `*(int *)((char *)(arg0) + 0) = &DAT_00532a50[0];` | `'int *'` → `'int'` |
 | `int *temp_a1 = (char *)temp_v1 - 8;` | `'char *'` → `'int *'` |
-| `DAT_00569238[0] = &FUN_001f4100;` | `'int (*)(...)'` → `'void *'` (the element of an arrayized `void *DAT_x[4]`) |
+| `DAT_XXXXXXXX[0] = &FUN_XXXXXXXX;` | `'int (*)(...)'` → `'void *'` (the element of an arrayized `void *DAT_x[4]`) |
 | `temp_v1 = *(int *)((char *)(temp_v0) + 64);` (`int (*temp_v1)(int)`) | `'int'` → `'int (*)(int)'` |
 
 These *are* the top buckets of the compile tier without that pass — 1,826 first errors of the
@@ -741,8 +740,8 @@ Most of what it closes is a `->unkN->unkM` chain, then a member access on a call
 result (`f(...)->unkN`) and `void *` arithmetic, and rarely a call
 through a slot.
 
-In the negative-offset row, `unk-N` is rarely the sole blocking error
-(`FUN_0022a740` is a case where it is). It is handled because the emitted address would otherwise be wrong, not
+In the negative-offset row, `unk-N` is rarely the sole blocking error.
+It is handled because the emitted address would otherwise be wrong, not
 merely badly spelled — the same test as the member rewrite itself.
 
 The lesson for the loop: **the spelling law does not apply to a correctness bug.** "Converting a compile failure into a mismatch yields no matches" was
@@ -763,8 +762,8 @@ whether m2c chose the wrong loop shape, the wrong register, or the wrong number 
 `tools/args_search.py` closes two measured families automatically. m2c often emits a call with fewer
 arguments than retail passes, and the missing ones are the **leading** arguments — either the
 enclosing function's own parameters, which m2c does not carry as live to the call, or a **small
-integer constant** the retail form materialises into an argument register (`FUN_0016cde0` is
-`j FUN_00207420` with `li a0,1` in the delay slot; m2c wrote `FUN_00207420()`). It tries, per call
+integer constant** the retail form materialises into an argument register (`j callee` with
+`li a0,1` in the delay slot; m2c wrote `callee()`). It tries, per call
 site, prefixes of the parameter list and the constants `0..8, -1, 10, 16, 32, 64, 100, 128, 255, 256,
 1000` as leading arguments and at every later position, hill-climbing on the instruction-diff count
 with `verify.py` as the oracle (fail-closed: nothing is written unless the bytes agree).
@@ -777,13 +776,13 @@ premise that the lowest `diffs` are the cheapest subset:
 
 * **Size, not `diffs`, predicts the yield.** Functions under 48 bytes almost never close, while the
 48–63-byte band often does. That band is where one source idiom lives:
-`if (*(int *)((char *)arg0 + 8) < *(int *)((char *)arg0 + 12)) FUN_002d6680(arg0, temp, K);`, a
-container append with many callers of `FUN_002d6680`. The cheap axis
+`if (*(int *)((char *)arg0 + 8) < *(int *)((char *)arg0 + 12)) FUN_XXXXXXXX(arg0, temp, K);`, a
+container append with many callers. The cheap axis
 is *whether an idiom has been recognised*, not how many instruction words differ.
 * **A one-instruction difference can still be a reverse-engineering problem.** The rest of the sample
-is not argument errors: `FUN_0016cde0` (`void f(void){ FUN_00207420(); }`) dropped a **constant**
-argument — retail is `li a0,1`, closed by `args_search.py`; `FUN_00109378` differs only in the
-register chosen for a load (retail `v0`, ours `v1`); `FUN_002648e8` differs only in the address temp
+is not argument errors: one function (`void f(void){ callee(); }`) dropped a **constant**
+argument — retail is `li a0,1`, closed by `args_search.py`; another differs only in the
+register chosen for a load (retail `v0`, ours `v1`); a third differs only in the address temp
 (retail `lui v1`, ours `lui at`, and none of array / plain / pointer / literal / `volatile` spellings
 reproduces it); `atan2f` has a 20-byte tail-call-with-frame shape (`addiu sp,-16; sd ra; ld ra;
 j X; addiu sp,16`) that neither the C nor the C++ front end produced from a one-call body (the
@@ -794,7 +793,7 @@ investigation, and the instruction diff is where it starts, not a measure of how
 
 ## Small data: the 480 functions that reach globals through `gp`
 
-Retail reaches its small-data objects with a signed displacement off `gp`, e.g. `FUN_002f2260` is
+Retail reaches its small-data objects with a signed displacement off `gp`, e.g. one function is
 just `lbu v1,-32476(gp); jr ra; sb v1,104(a0)`. The symbolizer rewrites `lui`/`lui`+`addiu`
 addresses into `%hi`/`%lo`; a `($gp)` operand left numeric makes m2c model
 `gp` as an ordinary saved register and emit `saved_reg_gp->unk-7EDC` — undeclared, uncompilable,
@@ -813,28 +812,28 @@ There are **480 such functions and 1,547 gp-relative operands** — `lbu` 1,072,
 single instruction-local substitution; a gp address computed with `addiu $r,$gp,disp` is symbolized
 too. `verify.py`
 resolves `R_MIPS_GPREL16` with `gp` from `.reginfo` (the relinker needs it too), and the
-hand-matched `FUN_00130000` is the proof, so this is a matter of what m2c is *fed*, not of the
+hand-matched function on this path is the proof, so this is a matter of what m2c is *fed*, not of the
 verification model. Functions on this path are reachable only through it.
 
 The narrow-access width sits in the same family and is what the `sb` side needs: m2c
 spells a store into an unknown member by truncating the value (`arg0->unk10 = (s8) …`), and that cast
 **is** the access width. Rewriting the member to an `int` store turns retail's `sb` into a `sw`, one
 word off. The rewrite keeps the width on both sides (store `= (u8) …`, load `(u8) base->unkN`),
-which matches the five `Gap__Bec__beNDMWItem*__vfunc_24` functions that sit at `diffs=1` without it.
+which matches five functions that sit at `diffs=1` without it.
 
 The three rules of this family do different jobs:
 
 - `off($gp)` → `%gp_rel(GPR_addr)($gp)` closes gp-relative functions and removes the top `saved_reg_gp` failures.
 - Narrow member access keeping its cast width closes a few.
 - Emitting `extern char DAT_x[]` whenever the symbol is not already *declared* closes none alone, but makes
-  functions such as `FUN_00296028` comparable.
+  functions comparable.
 
 ### A store through a local takes its width from retail
 
 `fit_widths` reads the real width from the retail instruction at the same (base register,
 offset). It decodes the base of a **local** as well as `argN` → `aN`; decoding only `argN`
 leaves a store through a local at the cleaner's default
-`int`. `igDisplayListAttr_InitFields` has `*(int *)((char *)(temp_s1) + 52) = 1;`, which MWCC compiles
+`int`. One `_InitFields` function has `*(int *)((char *)(temp_s1) + 52) = 1;`, which MWCC compiles
 to `sw` where retail has `sb`, while the same function's `+56` store is right, which makes it look
 like a one-word fluke. m2c names a held value after its register (`temp_s1` is `s1`, and a second value
 in the same register is `temp_s1_2`), so the decode is a name parse: `m2c_batch._base_reg()` maps `argN`
@@ -872,8 +871,8 @@ MWCC rejects `p = p + 4`, `p += 4`, `p = p + n`, `p = 4 + p`, `p = n + p` and
 Over the whole tier, the three extra spellings and the bitwise rule make functions compile and match
 none. That is the spelling law in its purest form, and its third confirmation:
 *a compilability fix makes functions comparable, it
-does not make them match.* The one that comes closest is `FUN_002e24e0` — a compile failure
-without them, **1 diff** with them — and its remaining diff is an addend order (`addu v1,v1,a0` vs
+does not make them match.* The one that comes closest is a compile failure
+without them, **1 diff** with them, and its remaining diff is an addend order (`addu v1,v1,a0` vs
 `addu v1,a0,v1`), because MWCC canonicalises `X + (T *)Y` to `(T *)Y + X`, so the *cast*
 decides the operands, not the expression order.
 
@@ -922,25 +921,25 @@ t9` — so compiled as C, **zero** functions with a `jalr t9` match. The gap is 
 symbolizer or the width model: it is the language the
 source is written in. 211 of the 1,449 carry a recovered name.
 
-The mechanism is proven, not inferred. `Gap__Attrs__igBlendFunctionAttr__vfunc_12` (0x13c260, 80 B) is a call through a
-function pointer held in the object at `+88`, its result fed to `igMetaObject_CountInstances`,
-then `Gap::Core::igObject::vfunc_10(arg0)`. As C it is **3 instructions off**, all three in the
+The mechanism is proven, not inferred. An 80-byte function is a call through a
+function pointer held in the object at `+88`, its result fed to a second function (`callee_a`),
+then a third on the same object (`callee_b(arg0)`). As C it is **3 instructions off**, all three in the
 call (`lw v0,0(a0); lw v0,88(v0); jalr v0` against retail's `lw t9,0(a0); lw t9,88(t9); jalr
 t9`). As C++ it is **byte-identical**:
 
 ```cpp
 extern "C" {
-  int Gap__Core__igObject__vfunc_10(void *);
-  int igMetaObject_CountInstances(int, int);
-  void Gap__Attrs__igBlendFunctionAttr__vfunc_12(void *arg0);          /* extern "C": a plain C++ decl mangles the name */
+  int callee_b(void *);
+  int callee_a(int, int);
+  void FUN_XXXXXXXX(void *arg0);          /* extern "C": a plain C++ decl mangles the name */
 }
 class C { public:
   virtual void v0(); ... virtual void v19();   /* 20 preceding slots put the target at +88 */
   virtual int vX();
 };
-void Gap__Attrs__igBlendFunctionAttr__vfunc_12(void *arg0) {              /* arg0 IS the object: retail loads the vptr from a0 */
-  if (igMetaObject_CountInstances(((C *)arg0)->vX(), 1) == 0) { DAT_0055f4c0[0] = 0; }
-  Gap__Core__igObject__vfunc_10(arg0);
+void FUN_XXXXXXXX(void *arg0) {              /* arg0 IS the object: retail loads the vptr from a0 */
+  if (callee_a(((C *)arg0)->vX(), 1) == 0) { DAT_XXXXXXXX[0] = 0; }
+  callee_b(arg0);
 }
 ```
 
@@ -991,7 +990,7 @@ The last two are compilability rules on their own — together they take the com
 **Nested calls.** A vtable call sitting *inside* another call's arguments has to be
 rewritten too: left a plain indirect call, MWCC compiles it `jalr v0` where
 retail has the ABI's `jalr t9`. `_vc_rewrite` therefore rewrites the argument list recursively (and
-splits it at *top-level* commas, because a nested call carries its own), which takes `FUN_0013b6f0`
+splits it at *top-level* commas, because a nested call carries its own), which takes one function
 from 8 diffs to 2.
 The class is small: only ~13 functions in the population contain the nested shape.
 
@@ -1017,12 +1016,12 @@ method returns a class by value, MWCC passes the hidden return buffer in `a0`, s
 `lw t9,0(a1); lw t9,K(t9); jalr t9; addiu a0,sp,N`. The int-returning rewrite *correctly* emits
 `move a0,a1`, which retail does not have, so those functions can never match as spelled. MWCC uses
 an `sret` buffer for a struct return of **any** size (a 4-byte struct included), and
-`FUN_0013e6a0` reproduces **byte-identically** as a struct-returning virtual call:
+one such function reproduces **byte-identically** as a struct-returning virtual call:
 
 ```cpp
 struct DW4SR1 { int w0; };
 /* class DW4VC_280_1 has 68 preceding virtuals */
-void FUN_0013e6a0(void *arg0, void **arg1) {
+void FUN_XXXXXXXX(void *arg0, void **arg1) {
     *(int *)((char *)(arg0) + 12) = ((DW4VC_280_1 *)(arg1))->vX().w0;
 }
 ```
@@ -1036,7 +1035,7 @@ then recognises only a discarded-result call whose first argument is exactly the
 `int` stack local. It re-types that local as `DW4SR4`, assigns the real C++ virtual return, and
 rewrites the other word uses through `.w0`. This is deliberately narrow: an address-first virtual
 call can also be an ordinary output parameter, so byte verification—not the source shape—decides.
-`Gap::Core::igGeometryMaskAttr::vfunc_26` (`0x0013e6a0`) matches byte-identically this way.
+A function of that shape matches byte-identically this way.
 
 In functions containing `lw t9,0(a1)`, most rows within three instructions share one spelling:
 m2c retains the C ABI's explicit object argument after the hidden buffer,
@@ -1045,9 +1044,9 @@ exact `(int)(object)` immediately after the buffer makes them byte-identical. Th
 fail-closed and does not infer the duplicate from its position alone.
 
 The two residuals are different mechanisms, not more struct-return shapes. In
-`Gap::Core::igAlphaFunctionAttr::vfunc_26`, a nested slot returns a `float` in `f0` and retail passes
+one, a nested slot returns a `float` in `f0` and retail passes
 it to the outer call in `f12`, while the synthetic virtual class still declares every slot as
-integer-returning. `Gap__Attrs__igBlendFunctionAttr__vfunc_26` differs only in instruction scheduling around its final virtual
+integer-returning. The other differs only in instruction scheduling around its final virtual
 call: retail materialises the address in the `jalr` delay slot, while the compiler moves `this`
 there for the available source spelling. Neither is reached by the transform; each needs its own
 mechanism.
@@ -1060,7 +1059,7 @@ the vtable base is
 `((char *)(arg1) + 0)` (its cast and sized load) while the restated argument is the bare `arg1`. A
 textual strip never fires for that spelling and the call carries one argument too many. Both sides
 are therefore normalised — peel balanced parentheses, a trailing `+ 0`, and a leading `(char *)` cast
-(`tools/m2c_batch._vc_obj_key`), as in `FUN_001b26f0` and `Gap::Bec::beNDMWMcUtilCtrl::vfunc_07/08`.
+(`tools/m2c_batch._vc_obj_key`).
 
 ## What blocks the rest — the failure taxonomy
 
@@ -1086,7 +1085,7 @@ These are understood and are **not** missing declarations:
   local declarations (`s128 sp20;`) for the `lq`/`sq` values; typing it was measured and matches
   nothing (§*What didn't work*).
 * **`sp0`/`sp4`** are m2c's names for *stack slots* — the EE arch's spelling of the
-  outgoing-stack-slot model (`subroutine_arg0/1` without the EE arch). `FUN_00277fa0`'s retail body is
+  outgoing-stack-slot model (`subroutine_arg0/1` without the EE arch). One retail body is
   `move a1,sp; jal; lw v0,0(sp)`: m2c's `sp` is the frame base used as a value and `sp0` the word at
   frame offset 0, so an `int sp0;` declaration cannot place it; the frame has to be modelled.
 
@@ -1099,7 +1098,7 @@ retail on structure:
 
 * **64-bit argument/return idioms** — retail's `dsll32 a0,a0,0` for passing a `long long`;
 * **m2c's `var_*`/`temp_*` locals** — they change MWCC's register allocation and scheduling, e.g.
-  `FUN_00102d90` came out one instruction larger;
+  one function came out one instruction larger;
 * **loop shape** — m2c prefers `do { … } while (…)`, retail's `-O3` output often does not.
 
 ## Measured negatives — don't burn time here again
@@ -1127,7 +1126,7 @@ byte-identical:
 | --- | --- | --- |
 | **struct** | keeps the base pointer (`move sX,aN; sb K(sX)`) where m2c CSEs `argN+K` (`addiu sX,aN,K; sb 0(sX)`) | give the base — a parameter **or a pointer local** — a struct type with a field at each accessed offset and read `base->fK`; the field widths come from retail, so one variant also carries the width fix |
 | **width** | `sb`/`sh`/`lb`/`lbu`/`lh`/`lhu`/`sd`/`ld` where m2c emitted `sw`/`lw` | cast the deref to the width the retail instruction uses. `fit_widths` decodes only `argN`/`temp_sN` bases, so a base that is a saved copy of a parameter (`sN`) or a nested deref keeps `int`; the offset-only lookup excludes the frame registers (`sp`/`ra`/`gp`/`at`) or a stack slot at the same offset makes the width ambiguous |
-| **leadfn** | the body reads `a1`/`a2` where m2c's `arg0` is `a0` | prepend 1-3 dummy parameters to the definition, so the body's `argN` names shift into the right registers (the 14-row `Gap__Bec__beNDMWMdl*__vfunc_35` family) |
+| **leadfn** | the body reads `a1`/`a2` where m2c's `arg0` is `a0` | prepend 1-3 dummy parameters to the definition, so the body's `argN` names shift into the right registers (a 14-row family) |
 | **leadcall** | retail loads an argument register before the `jal` where m2c emits a shorter argument list | prepend a prefix of the enclosing function's own parameters — or a small constant — to the call's argument list (the `args_search.py` family, applied automatically here) |
 
 The shapes compose: a `struct` variant can carry a `leadfn` shift, and the struct field widths are
@@ -1139,8 +1138,8 @@ What is left there is the **framed tail call**
 combinations could not reproduce), pure `v0`/`v1` or `aN` register renames, and `sp`-frame
 layout differences — none of which a source respelling reaches. The struct cluster lives in the
 **4-80 diff band**, not in the near-miss tier, which is why the sweep must be run over the whole
-queue and not only over `build/near3.tsv`. `FUN_0025a580` (the 832-byte frame loop) is unchanged by
-all four shapes; its source is `src/unmatched/FUN_0025a580.cpp`.
+queue and not only over `build/near3.tsv`. An 832-byte frame loop is unchanged by
+all four shapes.
 
 ## Repairing a draft by hand
 
@@ -1163,10 +1162,9 @@ all; group those by compiler error.
 * Take the width and sign of every load and store from the retail opcode (`lbu`, `lhu`, `sb`, `sh`).
 * Element stride: m2c writes `(int *)DAT_x + (i * N)`, and because `DAT_x` is already `int *` the shift
   comes out four times too large. Use a typed element array (`&DAT_x[i]`, or a `long long` or struct
-  array for 8- or 64-byte elements), as in `FUN_001f8830`.
+  array for 8- or 64-byte elements).
 * Address materialisation: a fallback spelled as an integer constant gives `lui`+`ori`, while an
-  address gives retail's `lui`+`addiu`, so write `(int)&DAT_004f7910[0]`
-  (`Gap::Core::igMemoryPoolContextInfo::vfunc_54`).
+  address gives retail's `lui`+`addiu`, so write `(int)&DAT_XXXXXXXX[0]`.
 
 **Control flow.**
 
@@ -1191,16 +1189,16 @@ diffs the id trace cannot. Sorting the block by a rule does not work (§*What di
 * A C++ vtable slot index is `(offset - 8) / 4` dummy virtuals.
 * A stack-resident key class template covers a family of list searches, with a unit-objects entry
   pointing at the existing destructor copy.
-* The 128-byte deleting reference-wrapper destructors (refcounted member, `igObject_Destroy`, then
-  `FUN_00100610`) match as typed C with the refcount as `int r[1]` masked with `0x7fffff` and a `short`
+* The 128-byte deleting reference-wrapper destructors (refcounted member, the `igObject` destroy call, then
+  one further call) match as typed C with the refcount as `int r[1]` masked with `0x7fffff` and a `short`
   second argument: on the default compiler when the null-test delay slot is empty, on the alternate
   compiler at `-O3,p` when it holds `move a0,s1`. The `(long long)` loads of the m2c draft are the only
   defect.
 
 **Varargs.** Under MWCC `__builtin_next_arg(x)` returns the frame top whatever `x` is. Passing a local
 array keeps it, and its size sets the frame: `void f(int a0,...) { char d[48]; __builtin_next_arg(d); }`
-gives `FUN_002252d8`'s 128-byte frame with `a0` never homed. Passing `a0` homes it and shrinks the
-frame. The `FUN_00308320` `va_start` family (`FUN_00308390`, `FUN_003081d0`) uses
+gives a 128-byte frame with `a0` never homed. Passing `a0` homes it and shrinks the
+frame. One `va_start` family uses
 `__builtin_args_info(2)` with `__builtin_next_arg(arg0)`, matches only under the alternate compiler at
 `-O3`, and differs only in its leading constant. `__builtin_args_info(1)` is an internal compiler
 error; `(3)` is wrong for one named parameter.
@@ -1313,20 +1311,20 @@ tail-calls, so the original union has to be recovered per function.
 
 **Recompiling the frame/tail-call near misses as C++.** Small near misses either fail to compile as C++
 or still differ, and few frame/tail-call cases are the single-call wrapper shape. Many lose a delay-slot instruction instead: `lui a0,0xB000; j X; ori a0,a0,0x1000`
-(`FUN_001147f0`) becomes the constant `0xB0000000`. A general frameless tail-call template matches almost nothing, because MWCC materialises a recovered literal through a scratch
+becomes the constant `0xB0000000`. A general frameless tail-call template matches almost nothing, because MWCC materialises a recovered literal through a scratch
 register (`lui v0; ori a0,v0`) where retail writes the destination directly. The group needs a
 delay-slot fix in m2c or the symbolizer, not a language change or a template.
 
 **Reordering the local declaration block by a rule.** Sorting by the register m2c's name implies,
 reversed, and scalars-first does not close rows whose differences are all register names.
 The pointers-before-ints rule for `_InitFields` does not generalise. The rest are ABI and
-argument-setup differences, such as which argument register a constant lands in (`FUN_00242560`).
+argument-setup differences, such as which argument register a constant lands in.
 
 **Spelling `s128`.** MWCC has no 128-bit scalar: `(s128)x` from an int is `illegal explicit conversion`.
 A 16-byte struct is the only width-correct spelling, and C99 compound literals such as `(s128){x,0}`
 compile. Leaving it undefined does more damage than a wrong type: after `s128 spF0;` MWCC's C parser
 reports every later declaration in the same scope as an `undefined identifier`, so part of those
-buckets is this cascade and not missing declarations (`FUN_001ebc10` is an example). Spelling does not
+buckets is this cascade and not missing declarations. Spelling does not
 fix the frame either: `qsort` stores a word (`sw a1,0(sp)`) into the slot m2c types as a
 quadword, so the frame layout that follows from m2c's outgoing-argument model is wrong however `s128`
 is declared.
@@ -1336,5 +1334,5 @@ is declared.
 - A wrapper that copies or tests a word and keeps the value in `v0` may need to return that value
   rather than be `void`; a `void` spelling allocates `v1`. Unproven. Forms seen:
   `return *(T *)dst = *(T *)src;` for three-instruction copies, an early `return 1; ... return 0;` to
-  keep a compare load in `v0`, and returning the stored pointer (`FUN_002b50c8`). The rule was stated
-  for MWCC, but `FUN_00109368` shows the form under the `ee-gcc` profile, so which compiler it applies to is unsettled.
+  keep a compare load in `v0`, and returning the stored pointer. The rule was stated
+  for MWCC, but one function shows the form under the `ee-gcc` profile, so which compiler it applies to is unsettled.

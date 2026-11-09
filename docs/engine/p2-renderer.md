@@ -14,7 +14,7 @@ memory-mapped register, and one of them is the uploader:
 | `FUN_001f0960` | 924 | `dma_spr`, `dmac`, `dmac_ctrl`, `vif1`, `vu1_regs` |
 | `FUN_001f00e0` | 560 | `dmac` |
 | `FUN_001f8190` | 400 | `gs` |
-| `FUN_001f8050` | 320 | `gs` |
+| `p2readGSPrivRegister` | 320 | `gs` |
 | `FUN_0020cd10` | 656 | `timer` |
 | `FUN_001f8350` | 308 | `dma_spr` |
 
@@ -26,7 +26,7 @@ the layer is ordinary code building data for those.
 This is the answer to "how does the engine get a program onto the VU1", traced with `objdump`:
 
 ```
-FUN_00169e30(a0, a1, ...)                        the dispatcher (Alchemy core, not p2)
+Gap__Gfx__igPsx2VisualContext__vfunc_172(a0, a1, ...)                        the dispatcher (Alchemy core, not p2)
     s0 = *(a0 + 868) -> +16  +  a1 * 48          a1 indexes a table of 48-byte program records
     type = *(s0 + 28)
     if (type == 2)  FUN_00203c50(...)            "Buffer not aligned" -- the code transfer

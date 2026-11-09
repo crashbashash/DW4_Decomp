@@ -79,9 +79,8 @@ required axes:
 
 **Zero fold-hits.** The project's decomp-permuter searched ~1,800 candidates from
 the closest hand-typed seed and floored at score 100 (never 0). There is **no
-matched oracle**: all four non-`GetVTable` sites carrying the fold
-(`FUN_0024bda0` v0/16, `FUN_00447ed0` v1/80 and v1/48,
-`Gap__Bec__beNDMWShopCtrl10__vfunc_21` a1/112) are themselves unmatched.
+matched oracle**: the sites outside `_GetVTable` that carry the fold have no source that reproduces
+it either.
 
 ## Hypotheses eliminated
 
@@ -148,7 +147,7 @@ python3 tools/verify.py 0x<va> src/<module>/<Class>_GetVTable.cpp               
 ## Open questions
 
 - **The larger variants.** Unproven beyond one instance: the larger `*_GetVTable` variants are the plain
-  core plus a tail. `igVisualContextAttrDefaultManager_GetVTable` (`0x1300b0`, 140 B) has the same
+  core plus a tail. One 140-byte accessor has the same
   60-byte core, then a null-checked refcount decrement and a call to `igObject_Destroy` (`0x2ff820`),
   which is dead there because the tested pointer was just zeroed. Size histogram of the 983 functions:
   plain form 60 B x334, 68 B x7, 48 B x3; then 140 B x101, 132 B x45, 216 B x41, 116 B x36, 224 B x32,

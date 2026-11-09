@@ -209,7 +209,7 @@ provenance, read off `0x394520`–`0x3945bc`:
 
 ```
 container = *(model + 0x28)                       // model is the arg (MDL entity)
-record    = FUN_003022c0(container, *(0x585be0), "ONE")   // key "ONE" @0x50ef60
+record    = igProperty_FindByName(container, *(0x585be0), "ONE")   // key "ONE" @0x50ef60
 status    = *(record + 0x14)
 *(0x58a1e4) = *(model + 8)                  // RamNo
 *(0x58a1e8) = *(record + 0x10) + 0x20       // transform

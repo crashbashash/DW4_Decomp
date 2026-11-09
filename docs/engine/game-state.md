@@ -3,7 +3,7 @@
 All addresses are in the ELF's BSS (`0x00554b00`–`0x0058d280`) and are stable.
 
 ## The Game singleton (`0x0058a1b8` …)
-`FUN_00371a30` is the constructor. It allocates sub-objects with
+`Gap__Bec__be__vfunc_23` is the constructor. It allocates sub-objects with
 `0x236f80(allocator, typeinfo)` and stores the pointers in adjacent globals:
 
 | Global | Type | Meaning | Class typeinfo |

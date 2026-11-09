@@ -10,7 +10,7 @@ out to be real techniques (blast/heal/force), confirmed by dynamic probing.
 ## Where the data actually lives (confirmed by disassembly)
 
 The save block's "deliver struct" (base = block+8) is written by
-`FUN_003ee6d0` and read back by `FUN_003ef5d0`. The technique-relevant fields
+`beNDMWDegiData__LoadFromProperties` and read back by `beNDMWDegiData__StoreToProperties`. The technique-relevant fields
 (the `BASE_*` arrays) are, in **file (block-relative) offsets**:
 
 | Field | file offset | struct offset | layout |

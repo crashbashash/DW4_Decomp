@@ -85,7 +85,7 @@ record D on `+0x20` (`_ambient`), record B on `+0x70` (`_shininess` + `_cachedPo
 as a **direction**.
 
 That last point is the honest limit of the mapping: **the runtime descriptor is not the serialised
-`igLightAttr`.** Its array stride is **160 bytes** (`0x00a0`, `FUN_001709d0`), it has no `igObject`
+`igLightAttr`.** Its array stride is **160 bytes** (`0x00a0`, `Gap__Gfx__igPsx2VisualContext__vfunc_79`), it has no `igObject`
 vtable at `+0` and no reflection record, and its fields carry measured roles rather than declared
 names:
 
@@ -93,9 +93,9 @@ names:
 | --- | --- |
 | `+0x10` | 4 words — accumulated by the ambient pass and emitted as record C |
 | `+0x20` | 4 words — emitted as record D; `+0x2c` is the "no-flag" `w` |
-| `+0x40..0x48` | vec3 copied from the scene source (`FUN_00170ed0`) |
+| `+0x40..0x48` | vec3 copied from the scene source (`Gap__Gfx__igPsx2VisualContext__vfunc_90`) |
 | `+0x50` | an index (used by `FUN_001f72330`) and `+0x54` a `w` for record D |
-| `+0x60..0x68` | a **normalised direction** (`FUN_00170ed0` negates the source, transforms and normalises) |
+| `+0x60..0x68` | a **normalised direction** (`Gap__Gfx__igPsx2VisualContext__vfunc_90` negates the source, transforms and normalises) |
 | `+0x6c` | capability/flag word (`& 8` clears a bit and marks the state dirty) |
 | `+0x70` | 4 words — the light position for the matrix path / record B |
 | `+0x84`, `+0x90`, `+0x94`, `+0x98` | `w`, registration index, enabled bool, direction mode (0 or 2) |
@@ -146,7 +146,7 @@ A lit draw's colour depends on **how many hardware matrix uploads came since the
 light and the normal. Recovered from the asm, a retail savestate (stag0001 practice stage) and a retail GS dump (confirmed for the
 stag0001 values; the generalisation and the event model are unconfirmed):
 
-1. **Eye-space light, once per light apply.** `igLightAttr::apply` (`0x0013eb10`) calls `FUN_00170ed0`, which stores descriptor `+0x60 =
+1. **Eye-space light, once per light apply.** `igLightAttr::apply` (`0x0013eb10`) calls `Gap__Gfx__igPsx2VisualContext__vfunc_90`, which stores descriptor `+0x60 =
    normalise(-src_dir x getMatrix(1))`, the source direction times the model-view top. The `igLightAttr` itself keeps its authored
    `_direction`; nothing on the EE accumulates. In the practice stage the descriptor reads `(0, 0.98499, 0.17261)` while the attribute
    still holds `(0.3214, -0.866, 0.383)`.

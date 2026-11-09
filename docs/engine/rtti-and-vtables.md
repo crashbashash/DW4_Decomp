@@ -243,10 +243,10 @@ Two things fell out of the scan that are **not** vtables but matter.
 Scanning for code-pointer runs in rodata finds 1,532 runs / 35,211 slots; 478 carry
 the `{rtti, 0}` header (the vtables). The rest are mostly the **per-class field
 tables** of the engine's reflection system: four parallel arrays of `[ctor][names]
-[descs][offsets]`, one entry per field, driven by `FUN_002fdf40` +
-`FUN_002fe000` from each class's registration init.
+[descs][offsets]`, one entry per field, driven by `igMetaObject_CreateFields` +
+`igMetaObject_NameFields` from each class's registration init.
 
-The full format, the registrar `FUN_002fe9c0`, the field-type catalogue and the
+The full format, the registrar `igMetaObject_RegisterClass`, the field-type catalogue and the
 extraction tool are documented in
 [`reflection-metadata.md`](reflection-metadata.md); `scripts/dump_reflection.py`
 recovers **1,075 MetaObjects, 659 with fields, 3,680 fields with name + offset +

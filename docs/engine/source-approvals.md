@@ -65,7 +65,7 @@ used the construct.
 
 ## Open questions
 
-* **The stack slot `volatile` stands in for.** `FUN_00467030` and `beDataBase_FindRecordValueIndex` each
-  search a list for a value that retail stores to the stack and reads back. Locals, structs, arrays,
+* **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores
+  to the stack and reads back. Locals, structs, arrays,
   references and conversion temporaries all fold the slot away or load a wider value, so what keeps the
   slot in the original is not known.

@@ -139,20 +139,20 @@ for byte):
 * Ids follow the order the IR builder creates values, and that order is **not** the order of the source text for a commutative
   expression: `a + b * 4` and `b * 4 + a` produce the same IR.  Splitting the expression into statements with separate locals
   (`idx = f(x) * 4; p = (int *)(idx + (int)p);`) fixes the creation order and, through the operand order of the final add, the
-  `addu rd,rs,rt` operand order as well (FUN_0024a500, ParticleArray vfunc_24).
+  `addu rd,rs,rt` operand order as well.
 * Reassigning one local (`p = base; p = p + idx;`, `arg1 *= 4; arg1 += arg0;`) joins the values into one web, which is how retail gets
-  `sll a1,a1,2 / addu a1,a1,a0` (FUN_002adc40); a fresh temporary per step cannot produce it.
+  `sll a1,a1,2 / addu a1,a1,a0`; a fresh temporary per step cannot produce it.
 * A constant stored early gets a high id when it is created early: moving the `flag = 1;` store behind the first data store gave the
-  first loaded value the lower id retail needs (FUN_00164b80 family).
+  first loaded value the lower id retail needs.
 * Two loads in the other order (`lw v1,0(a0); lw v0,0(a1)` against ours) are an evaluation-order difference, fixed by swapping the
-  operands of the comparison, not by anything in the allocator (FUN_002a8b30, FUN_00229f70).
+  operands of the comparison, not by anything in the allocator.
 * `lw t9,N(..); jalr t9` is the form of a C++ virtual call; no id order produces `t9` for an ordinary call.
 * `lui rA / addiu rB,rA,lo` with a scratch `rA` is an address materialised as a literal or through a different expression, not a
-  colouring difference (FUN_0027ed10 stays open).
+  colouring difference.
 * Alternate compiler at `-O3,p`: a volatile struct member (or `*(volatile T *)&x->f`) forces its load at the statement position
   and cannot be forward-substituted, so the loaded value becomes a named virtual register with a low id. This reorders integer
-  and float colouring and fixes swapped f-registers and operand order that no ordinary spelling changes (FUN_00396740,
-  beAction2FADESET_Update, beAction2MOTIONSET_Update, FUN_003fa120). Float colouring is the tracer's class-1 pass.
+  and float colouring and fixes swapped f-registers and operand order that no ordinary spelling changes. A function using it stays
+  `unapproved` until the owner approves that use ([source approvals](source-approvals.md)). Float colouring is the tracer's class-1 pass.
 * Alternate compiler at `-O3,p`: accumulating a sum in place on the call-result web (`r = call << 18; r += prop->field; b = r;`)
   instead of `b = field + (call << 18)` keeps the first sum out of the saved register holding `b` across the second call, producing
-  retail's `move s1,v0` in the `jal` delay slot and the trailing `nop` (FUN_003a82f0).
+  retail's `move s1,v0` in the `jal` delay slot and the trailing `nop`.

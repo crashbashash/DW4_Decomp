@@ -236,13 +236,13 @@ not Ghidra occupied-body counts.
 
 The controller is `this = beNDMWLoadCtrl2` (`_insight` `+0x0c`, `_messenger`
 `+0x14`, `_cameraMode` `+0x24`, `_lightMode` `+0x28`) plus a second argument, the
-per-frame context, whose `+0x28` is a **named work registry**. `FUN_003022c0`
+per-frame context, whose `+0x28` is a **named work registry**. `igProperty_FindByName`
 searches that registry by name: `"CTRL"` (`0x518130`) yields the
 `beNDMWLoadCtrl2CtrlData` state record and `"COMMONINTF"` (`0x518138`) the
 `beNDMWLoadCtrl2CommonIntf`, whose `+0x34` is the model-controller sub-object.
 
 The message handler (`vfunc_34`) reads the command through
-`FUN_0038d4a0(messenger, MsgClass, Info->_dataList)`; `RUN=0` and `GAMESTART=1`
+`beMessenger_ResolveEnumValue(messenger, MsgClass, Info->_dataList)`; `RUN=0` and `GAMESTART=1`
 build the work when absent (creating the `"CTRL"` state object, and for
 GAMESTART reading `GAMERAM GETCOMMON` → camera/light, falling back to 0/1 when
 there is no difficulty), then wiring the four slots (`GAMEDATAINIT`, or
@@ -258,7 +258,7 @@ The update (`vfunc_31`) is the `beNDMWLoadCtrl2CtrlData` state machine
 | 0 | (no action; the outer states start from 1) |
 | 1 | Open the selector backdrop (`j_chrselback` / `SQ_OPEN` via `FUN_003f1270`) and wait (`FUN_003f12f0`); on completion enter 2. |
 | 2 | The slot-selector machine. `_st1` 0: model `j_chrselback GENERATE` + `SQ_OPEN`. `_st1` 1–2: fade `i_fadewn01` and wait. `_st1` 3: poll `_intfStat` (+0x30) and drive the sub-controller (`FUN_003ecc60`). `_st1` 4: the four phases of `_st2` — `0` clear each slot, `1` wait for the `+0xe` "made" flags, `2` fade/`SQ_BLOUT30`/close, `3` wait for `ISRUN`, `4` publish `LOADINTF2_ALL SETSELECT_DATA` (slot count via `+0xd`), the `NINZU`/`DIFFICULTY`/`CAMERAMODE`/`LIGHTMODE` fields to `GAMERAM GETCOMMON`, and `TITLE2 GAMESTART`; then enter `_st0` 3. |
-| 3 | GAMESTART hand-off. `_st1` 0 waits (`FUN_003f1380`); `_st1` 1 clears `0x0058a1e0`, runs `gameStart.lua` (`FUN_00389ff0`) and `STAGECTL NEXTSTAGE stagML11`, then returns to 0. |
+| 3 | GAMESTART hand-off. `_st1` 0 waits (`FUN_003f1380`); `_st1` 1 clears `0x0058a1e0`, runs `gameStart.lua` (`beLua__RunNamedChunk`) and `STAGECTL NEXTSTAGE stagML11`, then returns to 0. |
 
 The sub-controller driven at `+0x34` (`FUN_003f1270`/`_12f0`/`_1380`/`_13d0`) is
 the next module down: `beNDMWLoadIntf2`.

@@ -47,7 +47,7 @@ typedef struct Msg {
 
 void *igObject_GetAllocator(Msg *);
 void *Memory_GetAllocatorBySelector(int);
-Ref *FUN_0036ae80(void *);
+Ref *beBaseInfoDataList_Create(void *);
 void igObject_Destroy(Ref *);
 char *igProperty_FindByName(Ref *, int, const char *);
 int strcmp(int, const char *);
@@ -86,7 +86,7 @@ extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_44(beNDMWMdlPlayer *self, Msg *
             al2 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
         Tmp t;
-        t.p = FUN_0036ae80(al2);
+        t.p = beBaseInfoDataList_Create(al2);
         r = t.p;
         if (r) r->rc++;
         Ref *old = msg->cache;

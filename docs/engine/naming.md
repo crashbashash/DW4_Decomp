@@ -95,8 +95,7 @@ python3 tools/place_named.py --apply
 It groups by class and folds each group with `merge_units.py`:
 
 ```
-Gap__Bec__beCameraMode__vfunc_08.c Gap__Bec__beCameraMode__vfunc_20.c  ->  src/game/beCameraMode.c
-Gap__Bec__beCameraMode__vfunc_23.c /
+Gap__Bec__Class__vfunc_NN.c Gap__Bec__Class__vfunc_MM.c  ->  src/game/Class.c
 ```
 
 Folders come from the namespace: `Gap::Bec::*` → `src/game/`, `Gap::Core::*` →

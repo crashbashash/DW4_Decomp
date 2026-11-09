@@ -97,7 +97,7 @@ So each script-API call routes: object → id (`obj+40`) → jump table → stub
 real C++ function.
 
 ### Registration
-`FUN_003719d0` calls the generic registrar:
+`LuaAPI_Register` calls the generic registrar:
 ```
 0x23f4f0(L, 0, 0x00370780, 0x004c8560, 116, 0x0050cfc0, 0)
           ^dispatcher  ^names   ^count ^descriptors
@@ -234,7 +234,7 @@ Columns: **stub** = dispatcher target; **real** = C++ implementation the stub ca
 
 ## Calling convention (important)
 The EE ABI used here passes arguments 5–8 in **`t0`–`t3`**, not on the stack.
-Example (`FUN_00371c10`):
+Example (`bePlayer_GetStruct`):
 ```
 371c10: lui   v0,0x4d
 371c18: sll   v1,a0,2            ; a0 = player index+1

@@ -317,7 +317,7 @@ can set them but they revert to 0 on load; see §6.)*
 
 ## 11. Disk folder, card list, bank (full save-record field map)
 
-Traced from `FUN_003ee6d0` (the per-player record builder) disassembly +
+Traced from `beNDMWDegiData__LoadFromProperties` (the per-player record builder) disassembly +
 the property key table `0x00517e50`. Struct offset + 8 = block offset.
 
 | block offset | field | size / format |
@@ -389,7 +389,7 @@ the property key table `0x00517e50`. Struct offset + 8 = block offset.
   into a **locked** state (no NPC chat, no levels) — there is **no loadable
   pre-DigiElf state**. The new-game opening (title → char select → stagML11 →
   first DigiElf chat) is runtime-state-driven; the save record contains **no
-  stage/intro/location field** (verified from `FUN_003ee6d0`).
+  stage/intro/location field** (verified from `beNDMWDegiData__LoadFromProperties`).
 - **The exact fresh-state flag set.** Unproven: a true fresh (tutorial) state is
   flag 1, the lobby flags 24/501/508/931/935/936/960 and mirror flag 700. Flag 2
   means World 1 access (Ophanimon already spoken to), so a fresh preset built on

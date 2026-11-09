@@ -240,7 +240,7 @@ with the game's flags, and AdxMovie was written alongside the game.
 **The kinds split by spelling.** The `sltu` comes from comparing a `bool` with `false`:
 `((g->_validity & 4) != 0) == false` matches under 3.0, 3.0.3, b38, b50 and b52 alike, where
 `!(t = g->_validity & 4)` matches only under 3.0 and 3.0.3. `_GetVTable` is the same:
-`igNamedObject_GetVTable` differs under 3.0.3 by two swapped registers as a `union`, and matches under
+One `_GetVTable` accessor differs under 3.0.3 by two swapped registers as a `union`, and matches under
 3.0.3 and b38 as a `struct`.
 
 **Two EE GCC builds.** CRI, newlib and libgcc are 2.96-ee-001003-1 (`ee-gcc`); the Sony runtime
@@ -268,7 +268,7 @@ module strings fall into two batches on 6 October 2004, Sofdec from 11:36:10 to 
 11:47:17 to 11:47:45, each with `Append: GCC2096 SCE2810`. `SNDF Ver.2.09c`, built on 4 October, is Sofdec's first
 module. The second data section keeps the Sony and newlib strings in code order, which is how
 `config/SLUS-20836/regions.tsv` divides that block, and the descriptors say `2800` except libmc's `2810`.
-A static initialiser follows the library that owns it: `FUN_00521600` calls AdxMovie and matches only with `,p`, unlike Alchemy's own.
+A static initialiser follows the library that owns it: one calling AdxMovie needs `,p`, unlike Alchemy's own.
 
 **newlib and libgcc build with `-g`.** Its signs are a `nop` after each `jal`, saves kept apart from the body, and code larger than the same source without `-g`.
 
@@ -292,7 +292,7 @@ the source writes the value ([literals](compiler-object-verification.md#compiler
 
 These respellings carry a unit across:
 
-* A parameter may be reassigned: `FUN_001b4500` takes a second argument only to overwrite it, which is why its pointer sits in `a1`.
+* A parameter may be reassigned: a function can take a second argument only to overwrite it, which is why its pointer sits in `a1`.
 * A float constant is a literal, not `extern float`, and a chain such as `a = b = c = 1.0f` keeps its order.
 * `_GetMetaObject`, and every accessor of the same shape, compares the validity test with `false`, as
   above. The `asm { nop }` the older spelling needed goes away.
@@ -309,7 +309,7 @@ other units must match.
 
 **Status objects are returned by value.** The functions that yield `g_statusSucceeded` return a one-word
 class through a hidden pointer, which is why retail passes a stack slot as the first argument and
-reads it back through its address. `Gap__igPsx2AudioContext__vfunc_24` matches only when written that
+reads it back through its address. Such a function matches only when written that
 way, with `operator!=` as a member. 132 source files use that constant and may hide the same shape.
 
 ## Open questions
@@ -317,20 +317,20 @@ way, with `operator!=` as a member. 132 source files use that constant and may h
 * **The remaining units.** Some units sit off their library's profile (`profile_split.units`): MWCC
   units on 3.0, 3.0.3 or combat, b52 units at the wrong optimisation level, and Sony units still on
   2.96 because a member is spelled for it or for an MWCC stand-in. Each holds a member that still differs
-  under its library's profile. The 42 KB script dispatcher `Gap__Bec__beNDMWGameRam__vfunc_34` is on
+  under its library's profile. The 42 KB script dispatcher is on
   the Ndmw profile with `#pragma inline_depth(1)`: retail calls `RecoveryTarget::release` and
   `RecoveryString::release` out of line from it while its own copies of the `RecoveryRef` destructors
   have them inlined, which is what a depth of 1 gives; no source form found gives both. A unit holding the retail copy of a shared inline
   destructor also needs every other unit's copy of it to match under the new profile: the Attrs unit at
-  `0x130060` stays on 3.0 because `igMovieRenderer_InitializeDrawing`'s inlined release and its
+  `0x130060` stays on 3.0 because the movie renderer's inlined release and its
   out-of-line copy need different spellings at b52. Retail's movie unit refers to `0x130140` from its
   exception table, so its own copy was most likely discarded at link time in favour of the Attrs one;
   the verifier has no way yet to express a copy that was emitted and then discarded.
   `tools/roll_profile.py` lists the members. Respelling for b52 moved the rest: most members differed
   only in register order, because b52 gives the first-declared local the higher register.
 * **Why an `asm { nop }` stood in.** An empty true arm before `else { x = 0; }` was an inlined cast: `static inline void *cast(void *o) { if (o != 0 && igObject_IsKindOf(o, meta) != 0) { return o; } return 0; }`, with the meta read inside it.
-* **`-O3` or `-O4`.** Neither level fits every function. Four matched functions pass only at `-O4`
-  (`FUN_001ef9b0`, `FUN_002094c0`, `FUN_00315050`, `FUN_003a7300`), and 34 pass only at `-O3`, in spite of
+* **`-O3` or `-O4`.** Neither level fits every function. Some functions pass only at `-O4` and others
+  only at `-O3`, in spite of
   the same search at the other level. Descending load orders in some of them suggest struct copies or
   inlined vector methods, which that search cannot write. b50 and b52 are not separated.
 * **Why Viewer takes `,p`.** Its build settings are the game's, not Alchemy's, though nothing in the image

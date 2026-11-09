@@ -201,7 +201,7 @@ Strict scan for the RNG-chain idiom (`lw rX,16(obj)` … `lw rY,48(rX)` …
 | function / site | operation |
 |---|---|
 | `FUN_00384800` `0x3849AC` | `genrand()%10000` — item-drop roll |
-| `FUN_00429630` `0x429EA0` | `%10000 <= t` — probability check |
+| `Gap__Bec__beNDMWShopCtrl40__vfunc_21` `0x429EA0` | `%10000 <= t` — probability check |
 | `FUN_0039BCA0` `0x39BDB0` | `%6144 / 1000.0` — random float ≤ 6.144 |
 | `FUN_003764C0` `0x376594` | `%range` — random duration/timing |
 | `FUN_004480A0` `0x4480C8`, `0x4480F0` | `%6000+1`, `%param` — damage/score variance |

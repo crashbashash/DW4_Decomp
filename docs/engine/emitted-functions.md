@@ -1,7 +1,7 @@
 # Explicit compiler-emitted function ownership
 
 The player stat recompute (`0x3fab90`) and the nearby-query C++ source are
-one compiler unit (`src/unmatched/FUN_003fab90.cpp` includes the query from
+one compiler unit (its source includes the query from
 `src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc`). It emits two further real
 retail functions besides the owner: the 652-byte query at `0x3fc780` and a
 128-byte deleting destructor at `0x3fc670`. The

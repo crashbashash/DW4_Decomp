@@ -205,12 +205,12 @@ present), and 14/4 for the wave spawner.
 ```
 Lua sd("GENERATER",…,"START","GENE-xx")
   └─ beGenerater::START            (creates per-player beGeneraterInfoWork)
-       └─ FUN_00384c40             per-frame state machine (state @ +0x1c)
+       └─ Gap__Bec__beGenerater__vfunc_31             per-frame state machine (state @ +0x1c)
             ├─ start modes: 'd' direct / 'r' radar (range vs +0x30) / 't' timer ('BOOT_TIMER')
             ├─ fill modes : 't' timer ('GENE_TIMER') / 'a' add / 'w' wipeout
             ├─ FUN_00384800        drop pass for the dead
             └─ FUN_00384540        spawn: position + facing + the MODELCTRL command
-                 └─ FUN_003d1960   enemy model generate
+                 └─ Gap__Bec__beNDMWMdlEnemy__vfunc_36   enemy model generate
                       DATABASE 'enemy' → MODEL/HPMAX from the row
                       → row RARITY → SETRAREICON(rank,60)   (crown icon only)
                       → FUN_00396740 (base generate)
@@ -274,8 +274,8 @@ At most four enemies show a crown at once. The crown is drawn from `_dispRamNoLi
 and four crowns, exactly four objects hold ids 0, 1, 2 and 3 and the others hold -1, so
 nothing is culled at draw time: the draw loop at `0x443d00` walks a fixed 12 statuses and
 the extra enemies have no crown data. A freed id is reused, so killing a crowned enemy can
-crown another. The value comes from `FUN_0038f800(this->0x14, 0)` field `+8` and
-`FUN_0038d860` stores it in the icon object at `+0x10`. Where the 0..3 range is bounded is
+crown another. The value comes from `beMessenger_GetObject(this->0x14, 0)` field `+8` and
+`beMessenger_SelectReceivers` stores it in the icon object at `+0x10`. Where the 0..3 range is bounded is
 open (§7).
 
 ## 6. What is modifiable, and how
@@ -299,7 +299,7 @@ out of the pack (`scripts/igb_inst.py`) **and** live (`beGeneraterInfoRam` →
 ## 6b. Swapping the spawned **model** — pinned, not re-read per spawn
 
 Unlike position and facing, the spawned **model name is latched at generator init**:
-`FUN_00384c40` copies `MODEL` from the row into `beGeneraterInfoWork+0x1c` once when the
+`Gap__Bec__beGenerater__vfunc_31` copies `MODEL` from the row into `beGeneraterInfoWork+0x1c` once when the
 generator starts, so repointing that field alone has **no effect** on an already-running
 generator. What was tried on the loaded `stag0102` bridge (row 5 = `e_goburi`):
 
@@ -377,14 +377,14 @@ way: 380/383/386/389/392 in 622, 379/382/385/388/391 in 623, 381/384/387/390/393
 
 ## 7. Refuted readings, settled points and open questions
 
-- **Refuted:** `FUN_003d50c0` is *not* the enemy spawner. It is the
+- **Refuted:** `Gap__Bec__beNDMWMdlPlayer2__vfunc_47` is *not* the enemy spawner. It is the
   `g_000bcaps` **checkpoint-capsule** command handler (`GENERATE` / `GENESTAGE` /
   `RAISE`, using `GAMERAM::GETCOMMON`, `BKCHIPSTAGE`, `BKCHIPPOS`, `SQ_ENTR%dP`;
-  sibling `FUN_003d4a20` writes the checkpoint, `FUN_003d4ea0` is its proximity
-  switch). Enemy generate is `FUN_003d1960` (vtable slot `0x53e448`). (The *spawn*
+  sibling `Gap__Bec__beNDMWMdlPlayer2__vfunc_36` writes the checkpoint, `Gap__Bec__beNDMWMdlPlayer2__vfunc_38` is its proximity
+  switch). Enemy generate is `Gap__Bec__beNDMWMdlEnemy__vfunc_36` (vtable slot `0x53e448`). (The *spawn*
   command **is** issued through the `MODELCTRL` interface — `FIND_SPACE` →
   position/facing → `GENERATE` — so "MODELCTRL is not involved" is too strong;
-  what is refuted is only `FUN_003d50c0` being the spawner.)
+  what is refuted is only `Gap__Bec__beNDMWMdlPlayer2__vfunc_47` being the spawner.)
 - **The generator rows AND their positions read offline.** `scripts/igb_inst.py --blob <pack> --lists` reads a stage's generator
   records (`_pos`, `_geneEnemyId`, `_startModeStr`/`_fillModeStr`, the `_startData` frame
   timer, `_callLua`) **and** every list's contents from the disc: a list reads

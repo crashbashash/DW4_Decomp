@@ -27,17 +27,17 @@ igVertexStream  (0x55fa10, igNamedObject)   +0x0c _stream  +0x10 _isConfigured  
 
 ## The stream lookup
 
-Every accessor reaches its data through one helper, `FUN_0015f580(va, componentType,
+Every accessor reaches its data through one helper, `igVertexArray2__FindVertexData(va, componentType,
 componentIndex)` — a *method of `igVertexArray2`* (it reads `va->_objList` at `+0x10`):
 
 1. `count = va->_objList->_count` (the `igObjectList`'s `+8`);
 2. for each element (array at `va->_objList + 0x10`): dynamic-cast the element to
-   `igVertexData` (class check `FUN_00300cd0(elem, igVertexData_meta)`, handle
+   `igVertexData` (class check `igObject_IsKindOf(elem, igVertexData_meta)`, handle
    `0x55fa58`);
 3. return the first element whose `_componentType == componentType && _componentIndex
    == componentIndex`; else `0`.
 
-`FUN_0015f580` is called by **38 functions** inside and outside this module, so it is
+`igVertexArray2__FindVertexData` is called by **38 functions** inside and outside this module, so it is
 the shared `igVertexArray2` stream accessor, not a static of the helper class.
 
 Two sibling helpers dispatch on the *class of the data object* and return its
@@ -63,8 +63,8 @@ stride `arg*4` or `arg*8` into the list's `+0x10` array).
 |---|---|---|---|---|---|
 | 22 | `0x00180e30` | 8 | — | — | `GetMetaObject` (`return metafield[0]`) |
 | 23 | `0x0015ff10` | 3484 | — | — | builds the stream records of a new `igVertexArray2` (see [Open questions](#open-questions)) |
-| 24 | `0x001624b0` | 44 | 5 | — | `FUN_00162b50(FUN_0015f580(va,5,0))` |
-| 25 | `0x001624e0` | 44 | 6 | — | `FUN_00162ca0(FUN_0015f580(va,6,0))` |
+| 24 | `0x001624b0` | 44 | 5 | — | `FUN_00162b50(igVertexArray2__FindVertexData(va,5,0))` |
+| 25 | `0x001624e0` | 44 | 6 | — | `FUN_00162ca0(igVertexArray2__FindVertexData(va,6,0))` |
 | 26 | `0x00160cb0` | 260 | — | — | ctor/`igObject`-swap (refcount) |
 | 27 | `0x00160dc0` | 52 | — | — | `_vertexArray->_vertexStream->_accessMode (+0x18) == 2` predicate |
 | 28/29/30 | `0x160e00`/`0x160ec0`/`0x160f60` | 184/156/120 | 1 | `igVec3fList` | set / get / pointer |
@@ -110,7 +110,7 @@ alternate compiler.
 
 ## Vertex stream addressing
 
-The helper and `FUN_0015f580` define how a model's vertex streams are addressed by
+The helper and `igVertexArray2__FindVertexData` define how a model's vertex streams are addressed by
 `(componentType, componentIndex)` — i.e. how the engine turns the `igVertexArray2`
 object graph into typed position/normal/UV/colour buffers
 (`docs/engine/model-format.md`). `FUN_00162b50`/`FUN_00162ca0` return the element

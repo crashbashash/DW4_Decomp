@@ -132,7 +132,7 @@ Verified by a pure-synthesis builder that reproduces both reference saves **byte
 | `+0xa3c` | 176×u32 | BASE_UPCNT (16 species × 11 power-ups) |
 | `+0xafc` | — | zero padding to end of block |
 
-Struct-offset note: `FUN_003ee6d0` writes the deliver struct at `block+8`, so
+Struct-offset note: `beNDMWDegiData__LoadFromProperties` writes the deliver struct at `block+8`, so
 struct offsets = file offsets − 8 (e.g. `sw v0,72(s0)` = file `+0x50`). The
 function→field keys in write order are `ISUSE UNIQUE LEVEL HP MHP MP MMP
 PLAYERNAME DIGIMONNAME XDATA BIT DEVICEFOLDER DISKFOLDER CARDLIST BANKDEVICE
@@ -241,7 +241,7 @@ but the game clamps/display-caps at 999). The polynomial itself keeps growing.
 
 ## Field source (static)
 
-The block is built by **`FUN_003ee6d0`** (base `*(ctx+28)`), which reads GAMERAM
+The block is built by **`beNDMWDegiData__LoadFromProperties`** (base `*(ctx+28)`), which reads GAMERAM
 properties and writes them to struct offsets. Key→offset (from disassembly):
 
 ```
@@ -288,8 +288,8 @@ Save class field offsets (from reflection tables):
 `_data@+8`, `_dataSize@+12`, `_dataOffSet@+24`, `_imageSize@+32`,
 `_image@+36`, `_saveDataSize@+40`.
 
-Save/load code regions: **`FUN_003e4750`** (save, 18 KB), **`FUN_004081a0`**
-(load, 15.8 KB), **`FUN_003ee6d0`** (per-player record builder, 2.7 KB).
+Save/load code regions: **`Gap__Bec__beNDMWLoadIntf2__vfunc_31`** (save, 18 KB), **`Gap__Bec__beNDMWSaveIntf__vfunc_31`**
+(load, 15.8 KB), **`beNDMWDegiData__LoadFromProperties`** (per-player record builder, 2.7 KB).
 PS2 MC access is via libmc (`mcman.irx`, `mcserv.irx`).
 
 ## Full saved property schema

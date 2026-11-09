@@ -68,7 +68,7 @@ The weapons section holds ~50 **graded** weapon models (α–ε each) plus a set
 {u32 key, u32 message_id, u32 font_subtable_ptr}
 key = (flag << 16) | (category << 8) | sub          (only low 20 bits used)
 ```
-`FUN_003ebe00` does a **linear search** on `key & 0xFFFFF`, then stores the
+`beNDMWLoadIntf2TextOrder_PublishIdLines` does a **linear search** on `key & 0xFFFFF`, then stores the
 matched record's `message_id` to `0x0058a220` ("TXT call number") and walks the
 font sub-table to set up rendering.
 
@@ -375,7 +375,7 @@ rows at every flag page. They are orphan text entries with no real item behind
 them.
 
 ### How the message-id is consumed (text system)
-`FUN_003ebe00` linear-searches the table, stores `message_id` to `0x0058a220`
+`beNDMWLoadIntf2TextOrder_PublishIdLines` linear-searches the table, stores `message_id` to `0x0058a220`
 ("TXT call number"), and walks a **font subtable** at `0x004ceb30` (stride
 `0x50`, indexed `[flag][seq]` → font-name pointer) to set up rendering.
 A getter at `0x3747f0` returns the message-id. The actual string fetch then

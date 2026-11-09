@@ -2,4 +2,6 @@
 # Blocks a commit that adds text identifying a developer's machine or account.
 # Rules: docs/host-details-policy.md.  Enable once per clone: scripts/install_git_hooks.sh
 root=$(git rev-parse --show-toplevel) || exit 1
-exec python3 "$root/scripts/check_host_details.py" --staged
+python3 "$root/scripts/check_host_details.py" --staged || exit 1
+# Blocks a commit that leaves a document naming a function it should not (CLAUDE.md, Layout).
+exec python3 "$root/scripts/check_doc_function_names.py"

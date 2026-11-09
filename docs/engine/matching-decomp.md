@@ -113,9 +113,9 @@ make check             # split integrity + coverage  (all cores; cached reruns a
 make report            # coverage only
 
 # decompile one function
-sed -n '1,40p' asm/FUN_00151090.s      # read the retail code
-$EDITOR src/unmatched/FUN_00151090.c   # write candidate C
-make check                             # or: scripts/match_func.py 0x151090 src/unmatched/FUN_00151090.c FUN_00151090
+sed -n '1,40p' asm/FUN_XXXXXXXX.s      # read the retail code
+$EDITOR src/unmatched/FUN_XXXXXXXX.c   # write candidate C
+make check                             # or: scripts/match_func.py 0xVA src/unmatched/FUN_XXXXXXXX.c FUN_XXXXXXXX
 ```
 
 A function is done when its compiled bytes are **identical** to retail. Mismatches print
@@ -185,8 +185,8 @@ only be compared for self-contained leaf functions (4 of 15,974). Everything els
 relocations applied first:
 
 ```sh
-python3 tools/verify.py 0x246780 src/unmatched/FUN_00246780.c --verbose
-make verify VA=0x246780 SRC=src/unmatched/FUN_00246780.c
+python3 tools/verify.py 0xVA src/unmatched/FUN_XXXXXXXX.c --verbose
+make verify VA=0xVA SRC=src/unmatched/FUN_XXXXXXXX.c
 ```
 
 It compiles the candidate with MWCCPS2 3.0 at `-O3`, reads the object's relocations
@@ -321,8 +321,7 @@ Retail shapes that only one spelling reproduces:
 * **`jal X; nop; nop` at a join**, a `nop` just before the label a preceding branch targets.
   This is not reachable from source under the default compiler: about 40 C and C++ spellings
   give a function one word short, as do all `-O` levels and the `-O3,s`/`-O3,p` variants. The
-  alternate compiler at `-O3,p` emits it from ordinary source, for example `FUN_00259d10` and
-  `FUN_00259a20`. Try that profile before anything else.
+  alternate compiler at `-O3,p` emits it from ordinary source. Try that profile before anything else.
 * **A `nop` before a label or `jr ra` is often a deleted branch's delay slot.** A branch to the next
   instruction is removed late, so its delay slot stays, and so does the load that fed it.
   `if (p->f) return;` as a whole function compiles to `lw v1,f(a0); nop; jr ra; nop`, where a plain
@@ -353,7 +352,7 @@ Retail shapes that only one spelling reproduces:
 * **An inline destructor always emits its out-of-line copy.** Its body must be spelled as retail's copy is, and the
   function needs a `duplicates` row in `unit-objects.json`, which the verifier checks against retail's bytes.
 * **A value spilled and reloaded before every use.** A local declared `volatile` reproduces this, as
-  `RT * volatile sp6C` does for `FUN_00234d70`, where a plain local adds a saved register. Read it once into
+  `RT * volatile sp6C`, where a plain local adds a saved register. Read it once into
   a plain local for the final release so the object stays in `a0`. It is not a finished spelling: the
   function stays `unapproved` until the owner approves that use
   ([source approvals](source-approvals.md)), so look for what really keeps the value on the stack first.
@@ -362,7 +361,7 @@ Retail shapes that only one spelling reproduces:
   offset. Retail emits a redundant `addiu vX,base,OFF; beqz vX` on the field's address before
   the value test. A value test, a `(char *)obj + N` expression and arithmetic on a `void **` do
   not reproduce it. The struct can be a shape: `void *fNNN` at the exact offset is enough, plus
-  any byte field the code really reads. `FUN_00234b90` shows the form, with these companions:
+  any byte field the code really reads. Its companions:
   * The 64-bit refcount mask `dsll32 vX,vX,9; dsrl32 vX,vX,9` is
     `((unsigned long long)((long long)v << 0x29) >> 0x29)`.
   * A refcount release reads +4; a handle release reads -4 with the pointer at -8.
@@ -371,7 +370,7 @@ Retail shapes that only one spelling reproduces:
     signed value.
 * **A call wrapper whose retail body ends in a memory barrier** is the call followed by an
   inline `sync` statement: the barrier sits after the call's delay slot and before the frame
-  restore. `FUN_0010c008` adds a trailing `ei` and a zero return. Inline `sync` and `ei`
+  restore. A variant adds a trailing `ei` and a zero return. Inline `sync` and `ei`
   compile to the exact retail words.
 * **A function address stored repeatedly** goes through a function-pointer member, such as
   `void (*getEnum)(void)`, assigned the plain function. An `int` member with an `(int)fn` cast lets
@@ -523,7 +522,6 @@ code bytes.
 
 ## Open questions
 
-- `FUN_00259cd0` (60 bytes, `0x32d4b0(&local, argv0); GPR_00554bec = local == DAT_004fb410[0]`):
-  besides the missing `nop`, its best spelling under the default compiler
-  leaves a register-only residual: retail keeps the local's address in `v1` and the result in
+- A call that fills a local, followed by a compare stored to a one-byte global: besides the missing
+  `nop`, its best spelling under the default compiler leaves a register-only residual: retail keeps the local's address in `v1` and the result in
   `v0`, where the draft uses `a0`.

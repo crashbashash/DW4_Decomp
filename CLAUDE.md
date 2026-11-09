@@ -69,6 +69,12 @@ evidence-named source that rebuilds to a byte-identical retail ELF. Run every co
 - A document never records which functions match or lack source, nor tallies of matched functions or
   bytes: `data/check-categories.tsv` and `PROGRESS.md` own that, and a copy in prose goes stale. Describe
   behaviour, layout and why a shape compiles as it does. Output generated from those tables is fine.
+- A method document, one on how to match or check code rather than what a part of the game does, names no
+  function: it gives the source shape and its instructions, since an example goes stale when the function is
+  renamed or respelled and nothing updates it. Placeholders are `FUN_XXXXXXXX` and `0xVA`. A document naming
+  functions must be a subject document listed in `config/doc-subjects.txt`, and every name it uses must exist in
+  the symbol table, so a rename updates the documents with it. `scripts/check_doc_function_names.py` enforces both
+  in `make hygiene` and the pre-commit hook.
 
 ## Decompilation
 

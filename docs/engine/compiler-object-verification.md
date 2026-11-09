@@ -140,15 +140,14 @@ is the one resolver that checks it; `tools/linkgen.py` resolves its
   carries one in the eight-digit bootstrap form (`_00586dc8`; `thunk_FUN_x`
   names its target by convention and is exempt, and the 60 such rows are the
   only disagreements in the map). The six-digit form is still accepted for
-  unmapped names (`FUN_2e5ac0` is in use), but a mapped name is not held to
+  unmapped names, but a mapped name is not held to
   it: `__adddf3` is GCC's libcall name for the helper, not a claim.
 
 Each refusal is a `symbol 'name': reason` line under the DIFFER header. Two
 consequences the first sweep measured: about 1,070 units reach a function's
 address through a Ghidra `DAT_` name (a function pointer stored as data; the
 honest spelling is the function's map name) and 31 call unlisted retail code
-in a gap between mapped functions (`FUN_002f00c0`; the map, not the source,
-is incomplete). Both fail with their message; the fix is a rename or a map
+in a gap between mapped functions (the map, not the source, is incomplete). Both fail with their message; the fix is a rename or a map
 entry, outside the oracle. `linkgen` still provides such a symbol at the
 address it spells, so the relink stays byte-identical, and prints how many it
 provided that way.

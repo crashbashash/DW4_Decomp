@@ -73,7 +73,7 @@ over these, which is why the same names appear in it.
 
 The small slot-29 wrappers are matching C++. `beNDMWTitle2::vfunc_29`
 (`0x3f5320`) forwards `(this->_field14, callerArgument, descriptor 0x5186a8)` to
-`FUN_0038d820`; `beNDMWLogo::vfunc_29` (`0x44abc0`) is the same operation with descriptor
+`beMessenger_RegisterReceiverFromInfo`; `beNDMWLogo::vfunc_29` (`0x44abc0`) is the same operation with descriptor
 `0x51db38`. The middle argument matters: m2c drops it when the callee has no recovered
 prototype, which makes a draft look like a two-argument call. The functions also need C++ mode;
 MWCC's C front end tail-calls the helper, while retail keeps a framed call.

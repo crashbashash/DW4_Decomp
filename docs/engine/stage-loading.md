@@ -138,7 +138,7 @@ retail visual comparison remain separate work.
 An unproven static reading of the stage change:
 
 - `STAGECTL` is `Gap::Bec::beNDMWStageCtl` (runtime vtable `0x0053DEA0`, descriptor at `0x00515708`).
-- `FUN_003cd500` is its six-state `NEXTSTAGE` coroutine (jump table `0x00515680`), which issues commands to
+- `Gap__Bec__beNDMWStageCtl__vfunc_31` is its six-state `NEXTSTAGE` coroutine (jump table `0x00515680`), which issues commands to
   STAGECTL, LAYERCTL, MODELCTRL and GENERATER.
 - `beNDMWAfsStageLoad` and `beNDMWAfsSetup` sit beside it in the metadata and look like the pack streamers.
 - The pending request is not held in the StageCtl object.

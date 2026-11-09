@@ -150,7 +150,7 @@ Relative to that rule, typing by kind changes the type of **270 fields** (126 Ve
 Matrix44f, 24 Vec4f, 16 Vec2f, 32 arrays) and the `sizeof` of 57 classes.
 
 What closes the struct is the registered size: **every class registers its `sizeof`** with
-`igMetaObject_RegisterClass` (`li t2,N` in `asm/<Class>_Register.s`, `reflection-metadata.md` §1),
+the class registrar (`li t2,N` in `asm/<Class>_Register.s`, `reflection-metadata.md` §1),
 and the generator reads it for all 1,039 registered classes (the one exception is the
 duplicate-handle `igModelViewMatrixBoneSelectList`). That sizes a trailing array —
 `igMersenneTwisterRandomNumber._mt` is `(2508 - 12) / 4 = 624` words, the MT19937 state, and
@@ -172,16 +172,12 @@ spelling to keep their bytes; each is written readably in the unit rather than b
 type:
 
 - float-literal stores instead of hex patterns (`_offsetPos[0] = -121.0f`, `_directionLimiter[1] =
-  7.0f`, `_avgPos[k] = -1.0f`): `Gap__Bec__beNDMWShopCtrl50/DeviceSell/DiskSell/Evolve/XdataChip/
-  Sell__vfunc_21`, `beNDMWShopSelect11__vfunc_22`, `beNDMWStatusCtrlD0__vfunc_21`,
-  `beNDMWStatusSelect01__vfunc_22`, `beNDMWMdlPlayer__vfunc_36`, `beShadow01__vfunc_32`,
-  `FUN_00378ed0` — MWCC stores a float constant through a GPR, so the bytes are the same;
-- `x->_max[k]` / `x->_pos[k]` instead of the `(&x->_max)[k]` idiom that assumes a scalar:
-  `FUN_003908e0`, `FUN_00396940`, `FUN_003dcc60`; `float *` prototypes and locals where the
-  matrix or centre is passed: `Gap__Sg__igLod__vfunc_27`, `FUN_00378ed0`;
-- `igMousePosObserver_GetVTable` declares a plain `igMousePosObserver s`: the struct is the real
+  7.0f`, `_avgPos[k] = -1.0f`): MWCC stores a float constant through a GPR, so the bytes are the same;
+- `x->_max[k]` / `x->_pos[k]` instead of the `(&x->_max)[k]` idiom that assumes a scalar; `float *`
+  prototypes and locals where the matrix or centre is passed;
+- a unit declares a plain `igMousePosObserver s`: the struct is the real
   100 bytes, so no local wrapper pads it;
-- the `beNDMWLoadIntf2NameSel` receiver (`beNDMWLoadIntf2NameSel__Update`, `FUN_003de990`): the
+- the `beNDMWLoadIntf2NameSel` receiver: the
   class registers 288 bytes and reflection lists fields up to +100, so the per-cell save area
   after the listed fields is the unlisted tail of the same object, spelled as a
   `union { beNDMWLoadIntf2NameSel n; NameSelTail t; }`.
@@ -209,7 +205,7 @@ count for any unit whose first function has no forward declaration).
 struct G { char pad[36]; int f; };
 extern struct G *DAT_0055ebc0[4];
 struct G *g = DAT_0055ebc0[0];
-if (!g || !(t = g->f & 4)) FUN_001301c0();
+if (!g || !(t = g->f & 4)) FUN_XXXXXXXX();
 return DAT_0055ebc0[0];
 ```
 
@@ -227,7 +223,7 @@ reflected field of the same width at that offset):
 #include "dw4/reflected.h"
 extern igMetaObject *DAT_005610e0[4];
 igMetaObject *g = DAT_005610e0[0];
-if (!g || !(t = g->_validity & 4)) FUN_0018a780();
+if (!g || !(t = g->_validity & 4)) FUN_XXXXXXXX();
 return DAT_005610e0[0];
 ```
 
@@ -238,11 +234,11 @@ return DAT_005610e0[0];
 name, so its first argument *is* that class and its offset casts can become member accesses:
 
 ```c
-/* before */  int igMetaField_Write(void *arg0) {
+/* before */  int igMetaField_Method(void *arg0) {
                   return -(*(unsigned char *)((char *)(arg0) + 38) == 0);
               }
 /* after  */  #include "dw4/reflected.h"
-              int igMetaField_Write(igMetaField *arg0) {
+              int igMetaField_Method(igMetaField *arg0) {
                   return -(arg0->_persistent == 0);
               }
 ```
@@ -257,13 +253,13 @@ Three rules keep it from inventing anything, and everything skipped is counted a
   does a byte store, which the map alone would have called `int`;
 * only the receiver (`arg0`/`this`) is usable as a base — **a temporary generally holds a different
   object.** An `_InitFields` body's `temp_s2` is the *field* object returned by
-  `igMetaObject_GetFieldAt`, not the class the function is named for; using the function-name class
+  the field getter, not the class the function is named for; using the function-name class
   there would produce wrong member names that happen to compile.
 
 `--class-regex` scopes a pass to matching class names: `--class-regex be`
 restricts a pass to the **game** classes. The names it produces are real, not placeholders:
-`Gap__Bec__beNDMWItemWeapon__vfunc_24` unpacks to `arg0->_recNo` / `_isEquip` / `_kindNo` /
-`_pocket` / `_revision`, and `Gap__Bec__beCameraMode__vfunc_08` reads `arg0->_model`.
+a `beNDMWItemWeapon` virtual function unpacks to `arg0->_recNo` / `_isEquip` / `_kindNo` /
+`_pocket` / `_revision`, and a `beCameraMode` virtual function reads `arg0->_model`.
 
 Measured yield of the rule: 46 accesses across 31 files for the `<Class>_<Method>` names, and 119
 accesses in 27 files (+41 in the metric) for `--class-regex be` with the RTTI-less vtable names
@@ -276,20 +272,20 @@ type** — so `config/SLUS-20836/signatures.tsv` carries recovered signatures (`
 parameters, and the evidence that settles each), seeded from the object model:
 
 ```
-igMetaObject_GetFieldAt<TAB>igMetaField *<TAB>igMetaObject *, int<TAB>...
+get_field_at<TAB>igMetaField *<TAB>igMetaObject *, int<TAB>...
 ```
 
 `scripts/retype_initfields.py` uses it on the `<Class>_InitFields` family (416 functions), whose
-shape is fixed:
+shape is fixed (the callees carry descriptive names here):
 
 ```c
-temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-igMetaObject_CreateFields(temp_s1, &DAT_004c8060[0], 4);
-temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));   /* field k = 1 */
-*(int *)((char *)(temp_s2) + 56) = FUN_001a5fe0();
+temp_s0 = get_field_count(temp_s1);
+create_fields(temp_s1, &DAT_004c8060[0], 4);
+temp_s2 = (void *)(get_field_at(temp_s1, temp_s0 + 1));   /* field k = 1 */
+*(int *)((char *)(temp_s2) + 56) = FUN_XXXXXXXX();
 ```
 
-`temp_s0` is the class's own field count, so `GetFieldAt(_, count + k)` returns the MetaField object
+`temp_s0` is the class's own field count, so `get_field_at(_, count + k)` returns the MetaField object
 for **`reflection[Class].fields[k]`**, and *its class* is that field's declared type. That fixes what
 +52/+56 mean per field: `beAction2InfoRam`'s four object-ref fields get `_metaObject` at +56, and
 `igGeometryAttr`'s five object-ref fields get +56 while its one enum field gets
@@ -298,16 +294,16 @@ rewrite adds an explicit cast around the temporary rather than retyping its decl
 expression:
 
 ```c
-((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_001a5fe0();
+((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_XXXXXXXX();
 ```
 
 The rules of this pass:
 
-- **The index mapping is validated.** The `CreateFields` count equals the number of reflected
+- **The index mapping is validated.** The `create_fields` count equals the number of reflected
   fields in **416 of 416** files (0 mismatches). That is what makes the mapping safe, since a wrong
   `k` would pick a different field's MetaField class and put a wrong struct name in the C without
   breaking the build.
-- **`k` is read in registration order.** The field index in `GetFieldAt(metaObject, count + k)` is
+- **`k` is read in registration order.** The field index in `get_field_at(metaObject, count + k)` is
   written in registration order, and reflection's field list is registration order, not offset
   order; the two disagree for **55 of 470 classes** (`igCollisionGrid` lists `_cells`,
   `_activeCells`, `_processedCells`, … and only then `_sizeX`/`_sizeY`/`_sizeZ`). The pass takes
@@ -334,8 +330,7 @@ The direct `+52`/`+56` rewrites alone are 717 accesses across 310 files.
 emitted member from the mapping and fails if one disagrees, which matters because a wrong `k` would
 put a wrong struct name in the C and still compile. A descriptor's uses are bounded by reassignment
 of the temporary: a reused local is checked only against the descriptor currently assigned to it
-(checking it against every descriptor ever assigned produces 46 false mismatches across
-`igPsx2Media_InitFields` and `igPsx2VertexArray1_1_InitFields`). The audit checks 2,039 accesses
+(checking it against every descriptor ever assigned produces 46 false mismatches). The audit checks 2,039 accesses
 consistently with registration order. `python3 testing/test_retype_initfields.py` covers valid
 reuse, unrelated reassignment, and real type errors both before and after reuse.
 
@@ -360,10 +355,9 @@ integers. Typed views retain the original access widths, signed extensions, vola
 compiler-specific virtual-call scaffolding where byte matching requires them.
 
 Class identity remains separate evidence: a byte match verifies code generation, so receiver
-interpretations that rest on layout alone are not confirmed class identities. In particular, the
-unchanged symbols
-`Gap__Core__igObject__vfunc_26` and `FUN_0015e2b0` are viewed through
-`beBaseInfoManager` and `igVertexArray1_1` layouts respectively; their symbol/receiver ownership
+interpretations that rest on layout alone are not confirmed class identities. In particular, two
+unchanged symbols are viewed through
+`beBaseInfoManager` and `igVertexArray1_1` layouts; their symbol/receiver ownership
 discrepancies remain unresolved. Followed-reference target classes likewise need separate class,
 reflection or ownership evidence. Matching alone proves none of these identities.
 
@@ -389,24 +383,24 @@ multi-field offset match against a reflected class. Practical findings, all veri
 `tools/verify.py`:
 
 * **Spelling changes codegen.** Replacing a matched private list view (volatile `count`, pointer `data`) with the reflected `igObjectList` changes register
-  allocation in one sort (`FUN_00422c00`); the matched list view stays and the items are typed. Removing a `me = (Class *)owner` copy changes another.
-* **Unreflected neighbours stay local.** The `igProperty` records, the property block of `beNDMWDegiData__LoadFromProperties` (`0x003ee6d0`), the sort key of the item subclasses and the
-  Lua stack of `LuaAPI_Dispatch` have no reflected class and keep small private views; they are recorded as unconfirmed, not invented.
+  allocation in one sort; the matched list view stays and the items are typed. Removing a `me = (Class *)owner` copy changes another.
+* **Unreflected neighbours stay local.** The `igProperty` records, the property block of `beNDMWDegiData`, the sort key of the item subclasses and the
+  Lua stack of the Lua API dispatcher have no reflected class and keep small private views; they are recorded as unconfirmed, not invented.
 
 An exact offset-and-width scan of every private struct view in `src/unmatched` against
 `include/dw4/reflected.h` returns no further game-region match except one that agrees on widths
-only (`FUN_00464540`). These entries stay untyped for a recorded reason:
+only. These entries stay untyped for a recorded reason:
 
-| Function | Why it stays |
+| Functions | Why they stay |
 |---|---|
-| `LuaAPI_Dispatch` | its views are the Lua 4.0 argument stack (24-byte value slots); no reflected class describes it |
-| `MemoryContext_*`, `igMemoryRefMetaField_DeepCopy` | Alchemy memory and meta-field middleware, outside the game layer |
-| `beNDMWDegiData__LoadFromProperties` (`0x003ee6d0`), `beNDMWDegiData__UpdateFieldsFromData` (`0x003ee4d0`) | typed up to the 2.6 KB property block of a `beNDMWDegiData`, which has no reflected class |
-| `beNDMWLoadIntf2ComMdlCtrl__StartAt` (`0x003e3e00`), `FUN_003a8140`, `FUN_00394400` | typed except for `igProperty` records and string-chunk headers, which are not reflected classes |
-| `beNDMWLoadIntf2NameSel__Update` (`0x003def80`) | typed through `beNDMWLoadIntf2NameSel`; the per-cell save area after it is unreflected |
-| `FUN_00423000`, `FUN_0043a450`, `FUN_00422c00` | typed except the item subclass fields (sort key at +20, a field at +16) whose class is not established |
-| `FUN_0039a500`, `FUN_004535d0`, `FUN_0037a690`, `FUN_003a7d80`, `FUN_003a5d70` | the receiver class is not reflected or no typed caller names it; a one-field match is not evidence |
-| `FUN_00393b20`, `FUN_00391a10`, `FUN_003f6620` | callers are unnamed or untyped, so the receiver would be a guess |
+| Lua API dispatcher | its views are the Lua 4.0 argument stack (24-byte value slots); no reflected class describes it |
+| Memory-context and meta-field copy functions | Alchemy memory and meta-field middleware, outside the game layer |
+| `beNDMWDegiData` property functions | typed up to the 2.6 KB property block of a `beNDMWDegiData`, which has no reflected class |
+| Users of `igProperty` records and string chunks | typed except for `igProperty` records and string-chunk headers, which are not reflected classes |
+| `beNDMWLoadIntf2NameSel` update | typed through `beNDMWLoadIntf2NameSel`; the per-cell save area after it is unreflected |
+| Item subclass users | typed except the item subclass fields (sort key at +20, a field at +16) whose class is not established |
+| Receiver without a reflected class or typed caller | the receiver class is not reflected or no typed caller names it; a one-field match is not evidence |
+| Unnamed or untyped callers | callers are unnamed or untyped, so the receiver would be a guess |
 
 ## Shared headers and the struct report
 
@@ -414,23 +408,21 @@ only (`FUN_00464540`). These entries stay untyped for a recorded reason:
   reflected layout. A `class igObject` there would be incompatible with the reflected
   `struct igObject`.
 - The reference release has one spelling. `include/dw4/igobject_release.h` holds
-  `IG_OBJECT_RELEASE(obj)`, whose expansion is the retail sequence, and all five users
-  (`Gap__Viewer__igViewerSceneInfoManager__vfunc_13`, `FUN_00235370`, `FUN_00164f50`,
-  `Gap__Bec__beNDMWShopCtrlSell__vfunc_21`, `beAction2FADESET_Start`) match through it. The
+  `IG_OBJECT_RELEASE(obj)`, whose expansion is the retail sequence. The
   argument is evaluated more than once on purpose (a stack slot whose address escaped must be
   re-read, as retail does); a unit whose source holds the pointer in a smart-pointer temporary
-  releases through a local copy (`igObject *held = p; IG_OBJECT_RELEASE(held);`). The `Ref`
-  destructor in `beAction2FADESET_Start` keeps its own `& 0x7fffff` spelling: it is a matching
-  construct of the retail `__dt__3RefFv`, not a use site.
+  releases through a local copy (`igObject *held = p; IG_OBJECT_RELEASE(held);`). A `Ref`
+  destructor keeps its own `& 0x7fffff` spelling: it is a matching
+  construct of the retail destructor, not a use site.
 - `scripts/check_struct_conflicts.py` (`make struct-report`, a report, not a gate) parses every
   local struct/class view in `src/` and `include/dw4/` and prints (a) same non-generic names with
   clashing layouts across units, (b) receiver views that disagree with the reflected class their
   unit is named for, and (c) `fNN` members whose NN is not the member's decimal offset, grouped by
   name with file:line pairs. Tests: `testing/test_check_struct_conflicts.py` and
   `testing/test_check_vtable_slots.py` (run by `make struct-report` / `make vtable-slots-check`).
-- The `IntList` views in `FUN_00383bf0`, `Gap__Bec__beNDMWMdlPlayer__vfunc_38` and `FUN_00235370`
+- The `IntList` views
   agree and are not a conflict: all put `count` at +8 and `capacity` at +12 — the order
-  `asm/FUN_00383bf0.s` shows (`lw s5,8(s4); lw v1,12(s4)`, the in-capacity test, then
+  the retail code shows (`lw s5,8(s4); lw v1,12(s4)`, the in-capacity test, then
   `sw v1,8(s4)` for the increment and `lw a1,16(s4)` for the data) and the reflected `igIntList`.
 
 ## Limits on recovering a receiver's class
@@ -444,13 +436,13 @@ Two routes for the game-side receiver queue are measured and are dry:
   MWCC emits a translation unit's functions contiguously. `scripts/retype_block_receiver.py` types
   an unnamed `FUN_*` that sits between two `<Class>__vfunc_N` symbols, and leaves it alone unless
   every `arg0`/`this` offset cast lands on a reflected field of that class with matching width;
-  `--game-only` limits it to the module map's `0x334000..0x460000`. For example, `FUN_004482c0` sits
-  between `Gap__Bec__beNDMWItemWeapon__vfunc_21` and `vfunc_23` and resolves to
+  `--game-only` limits it to the module map's `0x334000..0x460000`. For example, a function
+  between two `beNDMWItemWeapon` virtual functions resolves to
   `beNDMWItemWeapon._kindNo/_recNo/_isEquip/_pocket/_revision`. Field names beginning `_pad` are not
   all padding: `_padManager` and `_padList` are real object references. Adjacency does not give the
   **role**, and a name whose only justification is an inferred role is a hypothesis, not
-  an overlay line. So the item cluster's per-class record setters (`FUN_004482c0` and five
-  siblings, each writing a distinct `_kindNo` 0..5) are typeable but stay unnamed until a role
+  an overlay line. So the item cluster's per-class record setters (six
+  functions, each writing a distinct `_kindNo` 0..5) are typeable but stay unnamed until a role
   source appears.
 
 ## Scheduling
@@ -495,13 +487,13 @@ The order that pays:
 
 ## Open items
 
-- The functions in the table under
+- The kinds of function in the table under
   [Helper typing](#helper-typing) stay partly or wholly untyped
   until their receiver or neighbouring record has a reflected class or a typed caller.
-- The symbol/receiver ownership discrepancies of `Gap__Core__igObject__vfunc_26` and
-  `FUN_0015e2b0`, and the receiver interpretations resting on layout alone, are
+- The symbol/receiver ownership discrepancies of the symbols viewed through `beBaseInfoManager` and
+  `igVertexArray1_1` layouts, and the receiver interpretations resting on layout alone, are
   unresolved.
-- The item cluster's per-class record setters (`FUN_004482c0` and five siblings) have a class but
+- The item cluster's per-class record setters have a class but
   no role source, so they are unnamed.
 - `config/SLUS-20836/signatures.tsv` is seeded with the object model only.
 
@@ -518,7 +510,7 @@ remains is naming `FUN_*` bodies by hand, after which the receiver rule types th
   `_metaObject` assignments has 485 pairs but types only 2 accesses, because the functions that walk
   object graphs are the unnamed `FUN_*` units.
 - **Assert and log strings.** The `Class::method` strings are used up, leaving only 2 unnamed
-  functions, one a deliberately declined twin of `igIGBFile_ReadFile`.
+  functions, one a deliberately declined twin of the IGB file reader.
 - **Other data.** The unapplied `register_site`/`post_init` sites in `data/reflection.json` (the 52
   non-function-start `post_init` addresses are leaf fragments in unclaimed gaps), the signature field
   of `data/functions.json` (1 of 15,974 functions) and `ctor_table` are all empty of new types.

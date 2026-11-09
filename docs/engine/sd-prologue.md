@@ -26,9 +26,8 @@ the first SDK (`ee-gcc2.9-991111-01.tar.xz` in the decomp.me compiler releases, 
 Of the 991111 releases only -01 writes two hazard `nop`s before a `div.s` (`sceTimerBusClock2Freq`).
 
 Two libraries were assembled differently. libkernl needs this release's own assembler (`ee/bin/as`),
-which leaves a delay slot unfilled where a store could have moved into it (`FUN_0010c7b0`,
-`FUN_00113398`). libmpeg needs one that fills it: the 2.96 kit's `ee-as` (2.10-ee), which
-`sceMpegInit`, `FUN_0010a138` and `FUN_001071f0` show. libmpeg's units are pinned as `ee-gcc-2.9-as210`,
+which leaves a delay slot unfilled where a store could have moved into it. libmpeg needs one that fills it: the 2.96 kit's `ee-as` (2.10-ee), which
+`sceMpegInit` shows. libmpeg's units are pinned as `ee-gcc-2.9-as210`,
 the same compiler with that assembler; `tools/download_tools.py` builds it from the two releases. The
 other eight libraries match the same either way and stay on the release's own assembler.
 It reproduces their signs: register saves at 16-byte spacing with `sd`, a frameless sibling `j` for a
@@ -37,7 +36,7 @@ after other work, unfilled delay slots, real `mult` for small constants, `lwu` z
 `__muldf3`-style libcalls. Every function of those libraries that matched under 2.96 still matches
 under it apart from a few in libmpeg and libkernl, and raw m2c drafts match under it where none match
 under 2.96. Its release keeps the assembler at `ee/bin/as`, which `tools/eegcc_compile.py` falls back
-to. libmtap's `FUN_002252d8` is an empty varargs function under it. CRI, newlib and libgcc fail under
+to. One libmtap function is an empty varargs function under it. CRI, newlib and libgcc fail under
 2.9-ee and stay on 2.96, as does the kernel-mode code until it is tested further.
 
 ### Sony's prebuilt libraries
@@ -64,7 +63,7 @@ A Sony EE GCC 2.96 build (`2.96-ee-001003-1`, the `GCC2096` stamp in the ELF) is
 It reproduces the `sd` callee-saved prologue, so the functions above are matchable as C:
 
 * Pin a unit to it with a `config/SLUS-20836/unit-compilers.tsv` row naming `local/ee-gcc2.96/bin/ee-gcc` and a flag row in
-  `config/SLUS-20836/unit-flags.tsv` (`FUN_0025b968` builds with `-O2 -G0`). Everything that compiles a unit builds its
+  `config/SLUS-20836/unit-flags.tsv` (a CRI unit builds with `-O2 -G0`). Everything that compiles a unit builds its
   command in `tools/cc.py`; an `ee-gcc` compiler runs through `tools/eegcc_compile.py`, because `ee-gcc -c` crashes inside
   `cc1` and the object is built with `-S` followed by the sibling `ee-as`, whose symbol table the script repairs for GNU ld.
 * Data and unnamed callees use address-bearing names (`D_00498a38`) exactly as for MWCC units.
@@ -126,12 +125,11 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   `_dtoa_r`, `_vfprintf_r` and the fdlibm kernels) is owned through a reviewed row in
   `config/SLUS-20836/rodata-pools.tsv`, which `tools/verify.py` compares byte for byte with retail. A
   literal loaded through `$at` stays a literal in the C; an `extern double` compiles to a plain `lui`/`ld`.
-* **The float-spilling varargs wrappers** `FUN_00265928`, `FUN_002658a8`, `FUN_002659a0`,
-  `FUN_0027e2f0`, `printf` (`0x128528`), `FUN_002777f8`, `FUN_0029a320` and `FUN_0010d108` are Sony EE
+* **The float-spilling varargs wrappers**, such as `printf` (`0x128528`), are Sony EE
   libc code built with gcc. No MWCC variant emits `$f12..$f19` spills in a varargs prologue, MWCC
   saves s registers with `sq` and puts `ra` at `sp+0` below the locals, and it re-materialises `lui`
   bases gcc keeps in a register. Callees: `0x12fde0` vsprintf, `0x10d108` buffered output, `0x12724c`
-  memset. All but `FUN_0010d108` match.
+  memset.
 
 ### Recurring source shapes
 
@@ -155,7 +153,7 @@ It reproduces the `sd` callee-saved prologue, so the functions above are matchab
   `i = 10000; while (i--);` gives the step-4 form, and `ee-as` pads short loops itself.
 * Locals spaced 8 bytes apart on the stack are `long long`. A struct of ints assigned whole gives
   the `ldl`/`ldr` copy.
-* Three symbols (`FUN_00298d78`, `FUN_002a4bc8`, `FUN_002ae2b8`) used to count the alignment `nop`
+* Three symbols used to count the alignment `nop`
   after their return. The object's 8-byte alignment supplies that word.
 * Fixed-table loops are count-up `for` loops; varargs use `__builtin_va_list`.
 * The SDK libc follows newlib's source order.
@@ -182,16 +180,15 @@ disabling ASLR change nothing.
 * **newlib strings and the `huge` copies.** `C_locale`, `empty_locale` and the `*_format` strings are
   named by their text, since the objects hold them in unnamed `.rodata`. `huge_ceil` and `huge_floor`
   follow upstream's `static const double huge`, whose local symbol the objects do not keep.
-* **`thunk_free_2`** (`0x2f0050`) is a second jump to `free` beside `thunk_free`; what separates the two
+* **The second `free` thunk** (`0x2f0050`) is a second jump to `free` beside the first; what separates the two
   in Alchemy is not known.
 * **newlib's R5900 assembly.** setjmp, longjmp and the string and memory routines come from
   `libc/machine/r5900/*.S` in Sony's `ee001003_1` `libc.a`, and are `.S` sources here
   ([assembly sources](assembly-sources.md)). Which compiler first generated those files is open.
 * **The other Sony libraries' assembler.** Every matched function of libgraph, libdma, libipu, libcdvd,
   libpad, libsdr, libmc and libmtap matches with either assembler, so which one built them is open.
-  `FUN_00114d88` also matches under `2.9-ee-990721`.
 * **`sceSdRemote`** (904 bytes, libsdr; named by the SDK 3.0.3 library) is an RPC
   wrapper `int sceSdRemote(int a0,...)`: it copies six variadic words into a global array, then dispatches on the first
   (`0x8130`, `0x8140`, `0x8160`, `0x8170`, `0x81a0`, `0x81b0`, `0x81d0`, `0x9000..0x90f0`) to
-  `FUN_0010e2a8` with a different argument shape per command. It also saves and sets `gp`, which C
+  one callee with a different argument shape per command. It also saves and sets `gp`, which C
   cannot spell.

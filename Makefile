@@ -86,6 +86,7 @@ hygiene:
 	python3 testing/test_check_host_details.py
 	python3 testing/test_buildcache.py
 	python3 scripts/check_host_details.py --tree
+	python3 scripts/check_doc_function_names.py
 
 # The function inventory (docs/engine/function-inventory.md): scripts/inventory_scan.py walks every
 # `data` unit of config/SLUS-20836/layout.txt for instruction-shaped bodies and writes data/inventory-scan.tsv;

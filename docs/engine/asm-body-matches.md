@@ -70,7 +70,7 @@ assembler treats a sequence; the notes below were measured that way and stay as 
   with recorded tables by order; `jumptables.txt` lists some functions' tables descending). A table entry that leaves the function
   is rejected by the generator.
 * **Truncated extents**: 30 functions whose symbol extent overlaps the next function (`config/SLUS-20836/layout.txt`
-  marks them `truncated`, e.g. `FUN_00108078` 0x138 vs 0x110) stay retained assembly units until a reviewed
+  marks them `truncated`) stay retained assembly units until a reviewed
   row in `data/function-extents.json` corrects the extent.
 
 ## Large functions
@@ -129,7 +129,7 @@ Shapes found on one function:
 
 * `beSystem::vfunc_27` (`0x003a0020`, 1,300 bytes): see
   [system update recovery](system-clock.md#complete-besystem-update-recovery).
-* `FUN_0039a9e0` (308 bytes) is in `src/game/beNodeAnimClock.cpp`.
+* The node-clock timer is in `src/game/beNodeAnimClock.cpp`.
   A `const` timestamp snapshot, a `const` play-count load before subtraction,
   and reuse of the incoming parameter for the elapsed delta preserve the original
   parameter web and operand order. No inline assembly, fake arguments or compiler modification is used.

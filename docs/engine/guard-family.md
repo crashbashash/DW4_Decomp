@@ -10,8 +10,7 @@ the `sltu` is a value conversion of the flag test, so it needs a source form tha
 ## 1. What the functions are
 
 They are per-object accessors with an "initialise if not ready" guard, and they
-call message-specific wrappers around a logging/init routine. Example,
-`FUN_00130060` at `0x130060`:
+call message-specific wrappers around a logging/init routine. An example:
 
 ```
 addiu sp,sp,-16          ; lui at,%hi(DAT_0055ebc0)
@@ -20,7 +19,7 @@ beqz  v0,.Lcall          ; nop
 lw    v0,36(v0)          ; andi v0,v0,0x4
 sltu  v0,zero,v0         ; bnez v0,.Lend
 nop                      ; nop
-.Lcall:  jal FUN_001301c0 ; nop
+.Lcall:  jal X ; nop
 .Lend:   lui at,%hi(DAT_0055ebc0) ; ld ra,0(sp)
          lw v0,%lo(DAT_0055ebc0)(at) ; jr ra ; addiu sp,sp,16
 ```
@@ -37,7 +36,7 @@ A census over the whole image finds the motif `andi + sltu rd,zero,rs + bnez rd`
 struct G *g = DAT_0055ebc0[0];
 bool t;
 if (!g || !(t = g->f & 4))
-    FUN_001301c0();
+    X();
 return DAT_0055ebc0[0];
 ```
 
@@ -99,13 +98,12 @@ The variant correlates with the shape of the *callee*: the A guards call 3-instr
 
 Under the default compiler the dead `nop` is written: `asm { nop }` after the flag
 branch inside `if (g) { ... }`, with the call outside it and a `goto` to the return.
-Under b52 the comparison with `false` gives the same bytes with no `asm`
-(`src/unmatched/FUN_00334460.cpp`):
+Under b52 the comparison with `false` gives the same bytes with no `asm`:
 
 ```cpp
 struct G *g = DAT_00587628[0];
 if (!g || ((g->f & 4) != 0) == false) {
-    FUN_003344f0();
+    X();
 }
 return DAT_00587628[0];
 ```
@@ -169,8 +167,7 @@ None of these produces the 76-byte form under the default compiler:
   76 bytes.
 * **One translation unit with the callee.** Compiling a guard with its callee, in either
   order, does not produce the pad.
-* **The permuter.** `tools/permuter/FUN_00334460/run.sh` (the same harness shape as the
-  A harness) ran to ~1.65 M iterations at ~900/s with base score 105 and produced exactly
+* **The permuter.** A harness under `tools/permuter/` (the same shape as the A harness) ran to ~1.65 M iterations at ~900/s with base score 105 and produced exactly
   one output, `output-65-1/` (score 65), which is a reward hack. That candidate inserts
   dead code — `if ((!g) && (!g)) { g++; g--; }` — which MWCC emits as a single `nop`,
   **but at index 4** (between the global load and the null test), not at index 11:

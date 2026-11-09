@@ -68,7 +68,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beActionStarterInfoRam._parentInfo` | `beActionStarterInfo` (hypothesis) | (hypothesis): BaseInfoRam._parentInfo; accessed +8 _name and +28 _modelList match beActionStarterInfo |
 | `beBaseInfoManager._insight` | `igInsightCore` | docs/engine/system-clock.md (+20 _window, +80 _worldTime) |
 | `beBaseInfoManager._system` | `beSystem` | ; _messenger -> beMessenger; _infoList -> beBaseInfoList (FUN_0036aaf0): beBaseInfoManager_InitFields metaObjects |
-| `beBaseInfoRam._dataList` | `beBaseInfoDataList` | beBaseInfoRam_InitFields field 8 getter FUN_0036aec0 reads class handle 0x589e00; FUN_0036ae80 allocates that class |
+| `beBaseInfoRam._dataList` | `beBaseInfoDataList` | beBaseInfoRam_InitFields field 8 getter FUN_0036aec0 reads class handle 0x589e00; beBaseInfoDataList_Create allocates that class |
 | `beBaseInfoRam._parentInfo` | `beBaseInfo` | beBaseInfoRam_InitFields field 1 getter FUN_0036ac80 reads handle 0x589de8 |
 | `beBaseInfoRam._parentManager` | `beBaseInfoManager` | InitFields field 2 getter FUN_0036a8d0 reads handle 0x589db8 |
 | `beCri._hdSEs` | `igObjectList` (hypothesis) | (retained list: ObjectList_AppendRetained/RemoveFirstRetained); elements beCriHandle (hypothesis) |

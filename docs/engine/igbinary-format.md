@@ -284,17 +284,17 @@ objects. Measured across packs: entry 622 = dir 50 (36 mem + 14 obj) / objects 1
 266; 621 = 1,122 (813+309) / 38,135; 140 = 6 (2+4) / 5; 179 = 891 (627+264) / 28,933. The loader reads
 the `hdr[1]` (directory) section first.
 
-The loader parses these in `FUN_002e6090` (read off the disassembly), which maps `hdr[0]→ctx+0x7c`,
+The loader parses these in `igIGBFile_ReadHeader` (read off the disassembly), which maps `hdr[0]→ctx+0x7c`,
 **`hdr[1]→ctx+0x70`**, `hdr[2]→ctx+0x84`, `hdr[3]→ctx+0x80`, `hdr[4]→ctx+0x94`, `hdr[5]→ctx+0x90`,
 `hdr[6]→ctx+0x9c`, `hdr[7]→ctx+0x98`, `hdr[8]→ctx+0x8c`, `hdr[9]→ctx+0x88`, checks `hdr[10]` as the
 validity constant (`0xfada`, against `ctx+0x60`) and takes `hdr[11]`'s low half as the version
 (required < 8; its flag bits land in `ctx+0xd4/0xd5/0xd6/0xd7`, `ctx+0x124`, `ctx+0xd8`). The header is
 read from **file offset 0** — the validity word is `s1+0x28`, which is `hdr[10]` only if the buffer is
-the file start. The object reader `FUN_002e7390` loops **`ctx+0x70`**, i.e. it reads the `hdr[1]`
+the file start. The object reader `igIGBFile_ReadObjectSection` loops **`ctx+0x70`**, i.e. it reads the `hdr[1]`
 section (entry 622's 50-record chain); the `hdr[5]` section is read by another reader in the
 17-section pipeline.
 
-The section buffer itself comes from `FUN_002e9f30`: `ctx+0x108` = the buffer and **`ctx+0x104` = its
+The section buffer itself comes from `igIGBFile_GetSectionBuffer`: `ctx+0x108` = the buffer and **`ctx+0x104` = its
 capacity** = `align4(max(ctx+0xa4, the stream's block size, the requested size))` — so `ctx+0x104` is
 **not** a section length, and the readers' `cursor = ctx+0x104`, their bounds checks and the
 `(ctx+0x104 - cursor) % ctx+0x104` modulo are all buffer arithmetic.
@@ -422,7 +422,7 @@ GENE-00 (record 846, `_pos` `(-117, 72, 609)`) reads `_genePosList` 916, and id 
 **What this corrects.** The ids *did* reach ~1,430 against 1,206 records, but the gap is the
 pack's own memory blocks, not earlier packs: the id space is pack-local and 0-based. So no load replay,
 manifest or section list is needed. The conversion mechanism is unchanged — `igObjectRef`'s `0xcc`
-reader (`FUN_003034e0` -> `FUN_00305580`) resolves the id with `FUN_002d7e90(list, id) =
+reader (`Gap__Core__igObjectRefMetaField__vfunc_51` -> `igRefMetaField_ReadRawFieldMem`) resolves the id with `FUN_002d7e90(list, id) =
 *(*(list+0x10) + id*4)` and takes `+0x18`, and `FUN_002e7640` is where the loader builds that list from
 the table. `scripts/igb_ids.py` reads it (`--id N`, `--check-refs`).
 
@@ -439,19 +439,19 @@ all missed, and why the "extras" grew with position — they are the memory bloc
 The chain is mapped:
 
 ```
-FUN_002e95e0   17-section dispatch pipeline
-  |-- FUN_002e7390 / FUN_002e79a0   read ONE object section into ctx+0x28 (version >= 4 / < 4)
-  |     \-- FUN_002e7100            reads ONE object
+igIGBFile_ReadFile   17-section dispatch pipeline
+  |-- igIGBFile_ReadObjectSection / igIGBFile_ReadObjectSectionOld   read ONE object section into ctx+0x28 (version >= 4 / < 4)
+  |     \-- igIGBFile_ReadObject            reads ONE object
   |          \-- FUN_002fff90 / FUN_00300250   walk the class's field list
   |               \-- FUN_002fc740  = MetaField::vfunc_0xcc(field, object + field[2], cursor + 4)
   \-- FUN_002e7640 / FUN_002e78b0   build the GLOBAL object list ctx+0x8/ctx+0x10 from the remap table
 ```
 
-* `FUN_002e7100` takes the cursor at `*(ctx+0x108) + *(ctx+0x50)` and its **first word is the class
+* `igIGBFile_ReadObject` takes the cursor at `*(ctx+0x108) + *(ctx+0x50)` and its **first word is the class
   index**, resolved through the same class list `igb_dir.py` decodes (`*(ctx+0xc0)`). It does **not**
   read the file's `recordSize` — the length comes back from the field reader, and the cursor then
   advances by that plus `4 * *(ctx+0xd8)`.
-* `FUN_002e7390` reads a section into `ctx+0x28` (`list[i] = obj`, one per loop iteration). That is the
+* `igIGBFile_ReadObjectSection` reads a section into `ctx+0x28` (`list[i] = obj`, one per loop iteration). That is the
   **section list the remap table indexes** — not the id space. `FUN_002e7640` then reads the table and
   fills `ctx+0x10`, which is the list `FUN_002d7e90` indexes by id (§*References are pack-local ids*).
 * `FUN_002fc740` gives two useful facts on the way past: a field's **byte offset in the object is
@@ -460,7 +460,7 @@ FUN_002e95e0   17-section dispatch pipeline
   runtime form of the directory's "declared field with no descriptor".
 
 So the id is a direct index into the loader context's global list (`ctx+0x10`, count `ctx+0x8`), which
-`FUN_002e7640` builds from the file's remap table and `FUN_00305580` reads through `FUN_002d7e90`;
+`FUN_002e7640` builds from the file's remap table and `igRefMetaField_ReadRawFieldMem` reads through `FUN_002d7e90`;
 `FUN_002e8a40` clears the per-file context on the way out.
 
 ### MetaField vtables and the value readers
@@ -510,7 +510,7 @@ The replay is not needed. The ids resolve from the pack's own remap table (§*Re
 ids*), so a pack's generator rows, drop rows, spawn positions/rotations **and now every object-to-object
 binding** read offline. The load-level facts recovered on the way stay true and useful — the two object
 sections (`hdr[1]` directory / `hdr[5]` objects), the loader's header->context map, `beFileListInfo`
-(entry 140) naming a stage's pack pair, `FUN_002e7390`/`FUN_002e7640` — but the "section list and its
+(entry 140) naming a stage's pack pair, `igIGBFile_ReadObjectSection`/`FUN_002e7640` — but the "section list and its
 order" and the manifest were only ever a route to a base that the table already states.
 ### Why it reads as a small-integer stream
 
