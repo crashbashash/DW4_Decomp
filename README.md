@@ -19,7 +19,7 @@ Run commands from the repository root. Game data and toolchains are never commit
 | Game | 1106 KB | 87.9 % | 6.0 % |
 | Alchemy engine | 1563 KB | 70.8 % | 3.3 % |
 | Lua 4.0.1 interpreter | 70 KB | 100.0 % | 100.0 % |
-| CRI ADX | 138 KB | 41.6 % | 0.0 % |
+| CRI ADX | 138 KB | 51.4 % | 0.0 % |
 | CRI Sofdec | 204 KB | 57.4 % | 0.0 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
 | Sony SDK | 96 KB | 65.9 % | 2.2 % |
@@ -27,7 +27,7 @@ Run commands from the repository root. Game data and toolchains are never commit
 | libgcc | 11 KB | 100.0 % | 100.0 % |
 | Metrowerks runtime | 10 KB | 30.5 % | 1.5 % |
 | Static initialisers | 10 KB | 41.5 % | 0.0 % |
-| **Total** | **3383 KB** | **76.3 %** | **11.1 %** |
+| **Total** | **3383 KB** | **76.7 %** | **11.1 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->

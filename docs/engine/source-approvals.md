@@ -61,9 +61,11 @@ match without one have it too, nearly always because the address register has a 
 single-use access in that form, with no call or block boundary before it, has no plain spelling that has been found.
 That points to a `volatile`-qualified access, not to state shared between contexts, so it does not make a case alone.
 
-Shared state does not make a case alone either. A loop containing a call reloads with or without the keyword, so a
-proven writer on another thread says nothing about whether the source needed the qualifier. What the strip test shows
-is what counts: a load retail keeps and a plain spelling drops.
+Confirmed shared state can make the case by itself when the evidence for it is good: a writer shown running in another
+thread or an interrupt, and the variable read where that writer's change has to be seen, such as a wait or exit flag
+polled in a loop. A loop containing a call reloads with or without the keyword, so there the strip test shows no lost
+load, and the case rests on the shared state, with the address form or another sign of the qualifier in support. A
+`volatile` that only steers scheduling, on state nothing else writes, is still never approved.
 
 ## What counts as evidence
 
@@ -189,6 +191,18 @@ Sony library state an interrupt handler writes while thread code waits on it: th
 `VSync2` passes to its handler, the DMA state `_ch3dmaCSC` shares with its channel's handler, and the DECI2 state
 `sceTtyInit` shares with `sceTtyHandler`. Retail reloads each where the waiter reads it, which a plain spelling merges.
 Only the fields the handler writes are qualified.
+
+### adxm-thread-flags
+
+The ADX manager's server threads and its border wait. Each server thread loops until a 64-bit exit request is set,
+then records that it has exited, and the border wait spins on a flag the server thread clears. Other threads set
+the requests and wait on the exit words, so the state really is shared between threads.
+
+* The loops contain calls, so they reload the flags with or without the keyword, and the strip test loses no load.
+  The case rests on the shared state, approved on that basis.
+* Retail reads every one of these words through a full address in a register. Under ee-gcc 2.96 a single plain access
+  is never written that way, which supports a `volatile`-qualified access in the source.
+* One server thread also writes the GS background colour register at its fixed address, a hardware access.
 
 ### sony-hardware-registers
 

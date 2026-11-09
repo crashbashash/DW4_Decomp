@@ -166,3 +166,7 @@ volatile	_ch4dma	8	#sony-hardware-registers
 volatile	VSync2	9	#sony-interrupt-shared-state
 volatile	_ch3dmaCSC	11	#sony-interrupt-shared-state
 volatile	sceTtyInit	5	#sony-interrupt-shared-state
+volatile	FUN_00263c78	1	#adxm-thread-flags
+volatile	FUN_00263eb8	6	#adxm-thread-flags
+volatile	FUN_00263fc0	6	#adxm-thread-flags
+volatile	FUN_002641d8	5	#adxm-thread-flags
