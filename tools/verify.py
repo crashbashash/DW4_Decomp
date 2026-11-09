@@ -1765,7 +1765,7 @@ def _verify_standalone(obj, va, name, size, retail, img, by_name, symbols, tabs,
             tbl_report.append("   jump table 0x%06x: the %d bytes after the section are not padding"
                               % (table_address, len(padding)))
         if good:
-            tbl_report.append("   jump table 0x%06x: %d words, %d bytes, matches retail"
+            tbl_report.append("   jump table 0x%06x: %d entries, %d bytes, matches retail"
                               % (table_address, -(-want // 4), want))
         else:
             ok = False
