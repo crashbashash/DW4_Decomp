@@ -310,10 +310,10 @@ struct DW4StrListOps { static void SetAt(igStringRefList *list, int idx, const R
  struct Header { int word0; int word1; int count; int capacity; };
  static void append(void *list, int value) {
   Header *h = (Header *)list;
+  const Header *view = h;
   int index = h->count;
   if (index < h->capacity) {
-   int *count = &h->count;
-   *count = *((const int *)count) + 1;
+   h->count = view->count + 1;
   } else {
    List_Resize(list, index + 1, 4);
   }

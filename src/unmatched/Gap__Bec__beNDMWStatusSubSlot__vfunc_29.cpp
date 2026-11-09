@@ -19,7 +19,7 @@ extern void *DAT_00586f20[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-struct ElementBufferList { char p[8]; int n; int cap; int *data; };
+struct ElementBufferList { char p[8]; int n; int cap; int *data; int getN() const { return n; } };
 /* window object: close-text lists at +60/+64 are beNDMWWindow fields; the rest (list at +104, flag bytes at +108/+110/+111) belongs to an unreflected subclass */
 struct WindowObject { int word0; int references; char p8[52]; int f60; int f64; char p9[32]; ElementBufferList *list; int f104; char f108; char pad109; char f110; char f111; };
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
@@ -75,7 +75,7 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_29(beNDMWStatusSubSlot *arg0) {
     s0 = win.p->list;
     s1 = s0->n;
     if (s1 < s0->cap) {
-        s0->n = ((const ElementBufferList *)s0)->n + 1;
+        s0->n = s0->getN() + 1;
     } else {
         List_Resize(s0, s1 + 1, 4);
     }

@@ -3,8 +3,7 @@
  * (FUN_003c85b0) appended to its item folder, the 960th skill byte - and replaces the entry at
  * arg1 of the player data list.  The new player data and each new item live on the stack in
  * owning references whose releases the retail exception table records.
- * Matching constructs: the second read of the player list count is const (retail reloads it);
- * the identity (int) branch keeps the allocator select diamond; the per-loop locals and their
+ * Matching constructs: the identity (int) branch keeps the allocator select diamond; the per-loop locals and their
  * declaration order fix the saved-register colouring. */
 #include "dw4/reflected.h"
 extern "C" {
@@ -35,6 +34,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the new player data object, released on scope exit (reference count in
  * the low 23 bits of _refCount). */
+static inline int count(const igObjectList *list) { return list->_count; }
 class PlayerDataRef {
 public:
     igObject *p;
@@ -77,7 +77,7 @@ extern "C" void FUN_003f7310(beNDMWGameRam *arg0, int arg1) {
     }
     players = (igObjectList *)arg0->_playerDataListList;
     if (players->_count != 4) {
-        if (((const igObjectList *)players)->_count < 5) List_Reserve(players, 4, 4);
+        if (count(players) < 5) List_Reserve(players, 4, 4);
         ObjectList_ResizeRetained(arg0->_playerDataListList, 4);
     }
     a0 = igObject_GetAllocator(arg0);

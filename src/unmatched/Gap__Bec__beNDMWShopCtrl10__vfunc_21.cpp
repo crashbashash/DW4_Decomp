@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int st0(const beNDMWShopCtrl10 *self) { return self->_st0; }
 extern "C" {
 extern int FUN_002eb010(int);
 extern int StringPool_Construct(int);
@@ -84,7 +85,7 @@ void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self)
     default:
         return;
     case 0:
-        self->_st0 = ((const beNDMWShopCtrl10 *)self)->_st0 + 1;
+        self->_st0 = st0(self) + 1;
         self->_st3 = 0;
         self->_st2 = 0;
         self->_st1 = 0;

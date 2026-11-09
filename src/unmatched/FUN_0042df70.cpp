@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int countOf(const igIntList *l) { return l->_count; }
 extern "C" {
 int FUN_002eb010(...);
 int List_Resize(...);
@@ -95,7 +96,7 @@ void FUN_0042df70(beNDMWShopCtrlA1 *arg0) {
                 l = (igIntList *)arg0->_cardRamNoList;
                 c = l->_count;
                 if (c < l->_capacity) {
-                    l->_count = *(const int *)&l->_count + 1;
+                    l->_count = countOf(l) + 1;
                 } else {
                     List_Resize(l, c + 1, 4);
                 }
@@ -106,7 +107,7 @@ void FUN_0042df70(beNDMWShopCtrlA1 *arg0) {
                 l2 = (igIntList *)arg0->_cardRamNoList;
                 c2 = l2->_count;
                 if (c2 < l2->_capacity) {
-                    l2->_count = *(const int *)&l2->_count + 1;
+                    l2->_count = countOf(l2) + 1;
                 } else {
                     List_Resize(l2, c2 + 1, 4);
                 }

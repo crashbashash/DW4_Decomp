@@ -6,8 +6,8 @@
  * unusable codes (-2, -4, -5, ...) or 12 for anything else. Phases: 0 opens the save directory, 1
  * resets the image pass, 2 selects the image offset for the pass, 3 writes the save buffer and
  * flushes it, 4 commits and closes (_result = 2, saved). Returns 1 when already finished, 0 while
- * a request is pending, else _isEnd. _phase and _step are const because retail reloads them at
- * every use; the retry test goes through a local because retail does not fold the comparison into
+ * a request is pending, else _isEnd. getPhase and getStep are const because retail reloads the fields at
+ * those uses; the retry test goes through a local because retail does not fold the comparison into
  * the branch. */
 struct SvSaveWork;
 
@@ -40,6 +40,8 @@ typedef struct beSvWriteMediaApiRun {
     char _pad29[3];
     int _phase;             /* +32 (_st0) */
     int _step;              /* +36 (_st1) */
+    int getPhase() const { return _phase; }
+    int getStep() const { return _step; }
     int _st2;
     int _st3;
     int _imageWork;
@@ -53,7 +55,7 @@ typedef struct beSvWriteMediaApiRun {
 
 typedef struct SvCardSlot { int port; int slot; } SvCardSlot;
 
-#define SV_NEXT_STEP(self)  ((self)->_step = (*(int const *)&(self)->_step) + 1, (self)->_st3 = 0, (self)->_st2 = 0)
+#define SV_NEXT_STEP(self)  ((self)->_step = (self)->getStep() + 1, (self)->_st3 = 0, (self)->_st2 = 0)
 #define SV_FIRST_STEP(self) ((self)->_st3 = 0, (self)->_st2 = 0, (self)->_step = 0)
 #define SV_RETRY_STEP(self) ((self)->_step = 1, (self)->_st3 = 0, (self)->_st2 = 0)
 extern "C" {
@@ -96,7 +98,7 @@ int Gap__Bec__beSvWriteMediaApi__vfunc_22(beSvWriteMediaApiRun *self)
         return 0;
     }
     ctx = DAT_0058a600[0];
-    switch ((*(int const *)&self->_phase)) {
+    switch (self->getPhase()) {
     case 0:
         switch (self->_step) {
         case 0:

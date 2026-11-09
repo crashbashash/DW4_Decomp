@@ -4,7 +4,7 @@
  * sell it enters branch _st1 = 3 (ShopSelect00 with script 0x628). The chooser's _retCode then
  * selects branch 1 (device sell sub-window) or 2 (disk sell sub-window), which return to state 0 when
  * they end. State 2 closes the sub-windows, state 3 waits for the close to finish and clears _isRun.
- * Matching constructs: the state switch reads _st0 through a const access so case 0 reloads it;
+ * Matching constructs: the state switch reads _st0 through a const accessor so case 0 reloads it;
  * the disk-scan count is read through a volatile access so every iteration re-reads it;
  * `case 1: case 2:` in that order gives the 2-then-1 compare chain; the decide-list pointers live in
  * stack WindowRef/ListRef holders and are re-read per use; hasDevice/hasDisk are bool. */
@@ -31,6 +31,7 @@ int beNDMWWindow_PollCloseComplete(...);
 int beNDMWWindow_RequestChildrenClose(...);
 int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
+static inline int st0(const beNDMWShopCtrlSell *ctrl) { return ctrl->_st0; }
 struct Item { int p[5]; int f20; };
 struct Rec { int p[3]; igObjectList *f12; };
 Rec *igProperty_GetRecordFolder(...);
@@ -84,7 +85,7 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
     int i;
     int rec;
 
-    switch (*(const int *)&self->_st0) {
+    switch (st0(self)) {
     case 0:
         self->_st0 = self->_st0 + 1;
         self->_st3 = 0;

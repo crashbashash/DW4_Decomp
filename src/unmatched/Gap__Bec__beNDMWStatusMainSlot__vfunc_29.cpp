@@ -3,6 +3,7 @@
  * equip/unknown-disable flags with auto-close off. The new window is owned by a stack reference
  * until the end of the function; the two interned names are temporaries. */
 #include "dw4/reflected.h"
+static inline int countOf(const igDataList *l) { return l->_count; }
 extern "C" {
 int FUN_002eb010(int);
 beNDMWStatusCtrlD0 *FUN_003baf10(int);
@@ -72,7 +73,7 @@ void Gap__Bec__beNDMWStatusMainSlot__vfunc_29(beNDMWStatusMainSlot *arg0) {
     l = (igDataList *)win.p->_kindList;
     c = l->_count;
     if (c < l->_capacity) {
-        l->_count = /* matching construct: const reload of _count */ *(const int *)&l->_count + 1;
+        l->_count = countOf(l) + 1;
     } else {
         List_Resize(l, c + 1, 4);
     }

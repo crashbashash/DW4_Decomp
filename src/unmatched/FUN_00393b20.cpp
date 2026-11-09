@@ -13,6 +13,7 @@ int FUN_00393b20(int a0, int a1, A2 *arg2, A3 *arg3) {
     char *s;
     int idx, i, n, k, t;
     FL *l;
+    const FL *view;
     FL *l2;
     int n2;
     FL *l3;
@@ -26,7 +27,8 @@ int FUN_00393b20(int a0, int a1, A2 *arg2, A3 *arg3) {
     if (l->n == 0) {
         for (i = 0; i < 4; i++) {
             l = arg2->list;
-            k = (*(int const *)&l->n);
+            view = l;
+            k = view->n;
             if (k < l->cap) {
                 l->n = l->n + 1;
             } else {

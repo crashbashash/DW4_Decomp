@@ -5,6 +5,7 @@
  * the original allocation, and explicit snapshots keep the observed ordering of controller reads.
  * LoadVec3 is three floats; reference parameter homes remain 16 bytes apart. */
 #include "dw4/reflected.h"
+static inline int sysStat2(const beNDMWLoadSavePlWork *self) { return self->_sysStat2; }
 #pragma inline_depth(1)
 struct LoadVec3 {
   float x, y, z;
@@ -2344,7 +2345,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             cardStat2_2 = cardWork->_sysStat2;
             switch ((unsigned int)cardStat2_2) {
             case 0:
-              cardWork->_sysStat2 = (*(const int *)&cardWork->_sysStat2 + 1);
+              cardWork->_sysStat2 = (sysStat2(cardWork) + 1);
               cardWork->_sysStat3 = 0;
               break;
             case 1:

@@ -115,7 +115,7 @@ template<int I> class RecoveryRef { public:
  RecoveryRef(void *p):value(p) {}
  ~RecoveryRef() { RecoveryTarget::release((RecoveryTarget *)value); }
 };
-struct DW4ListRec { int w0; int w1; int count; int cap; };
+struct DW4ListRec { int w0; int w1; int count; int cap; int getCount() const { return count; } };
 struct DW4SelAlloc { static int Get(const int *sel, int fb) { if (GPR_00554c14) return fb; else return Memory_GetAllocatorBySelector(*sel); } };
 struct DW4Vec16 { int a, b, c, d; DW4Vec16(const DW4Vec16 &o); };
 int beNDMWLoadIntf2ComMdlCtrl__StartAt(void *, int, void *, void *, DW4Vec16 &, int);
@@ -1983,9 +1983,9 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_31(beNDMWSaveIntf *arg0, SaveHost *arg1) {
                 } else {
                     temp_s0_6 = (DW4ListRec *)(((beNDMWLoadSlotPlayer *)(var_s2_4))->_accessPlList);
                     temp_s1_2 = arg1->player;
-                    temp_s4 = (*(int const *)&temp_s0_6->count);
+                    temp_s4 = temp_s0_6->count;
                     if (temp_s4 < temp_s0_6->cap) {
-                        temp_s0_6->count = (temp_s0_6->count + 1);
+                        temp_s0_6->count = (temp_s0_6->getCount() + 1);
                     } else {
                         List_Resize(temp_s0_6, temp_s4 + 1, 4);
                     }
@@ -2168,9 +2168,9 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_31(beNDMWSaveIntf *arg0, SaveHost *arg1) {
                     ((beNDMWLoadSlotPlayer *)(sp11C.value))->_connectNO = (int)((int) temp_s1->_mcSelPoint);
                     temp_s2_2 = arg1->player;
                     temp_s1_3 = (DW4ListRec *)(((beNDMWLoadSlotPlayer *)(sp11C.value))->_accessPlList);
-                    temp_s4_2 = (*(int const *)&temp_s1_3->count);
+                    temp_s4_2 = temp_s1_3->count;
                     if (temp_s4_2 < temp_s1_3->cap) {
-                        temp_s1_3->count = (temp_s1_3->count + 1);
+                        temp_s1_3->count = (temp_s1_3->getCount() + 1);
                     } else {
                         List_Resize(temp_s1_3, temp_s4_2 + 1, 4);
                     }

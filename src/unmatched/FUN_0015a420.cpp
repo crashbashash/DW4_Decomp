@@ -7,9 +7,9 @@ public:
 class C : public B {
 public:
  int p[11];
- int f48, f52; char pad[4]; char f60;
+ unsigned int f48; int f52; char pad[4]; char f60;
 };
 extern "C" void FUN_0015a420(C *o, int a1, int a2, int a3, int a4, int a5) {
     o->v28(a2); o->v26(a4); o->v27(a5); o->v30(a3);
-    if (a1 != o->f52) { o->v29(); int y = *(unsigned int *)&o->f48; int x = *(int *)&o->f52; memcpy(x, a1, y); } else { o->f60 = 1; FUN_00158480(o); }
+    if (a1 != o->f52) { o->v29(); int y = o->f48; int x = o->f52; memcpy(x, a1, y); } else { o->f60 = 1; FUN_00158480(o); }
 }

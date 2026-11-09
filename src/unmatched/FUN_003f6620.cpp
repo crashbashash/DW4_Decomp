@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int countOf(const igObjectList *l) { return l->_count; }
 
 extern "C" {
 int List_Reserve(void *, int, int);
@@ -173,6 +174,6 @@ void FUN_003f6620(void *arg0, void *arg1, void *arg2)
     } while (done == 0);
     {
         int n = out->_count;
-        if (!(n < ((const igObjectList *)out)->_count)) List_Reserve(out, n, 4);
+        if (!(n < countOf(out))) List_Reserve(out, n, 4);
     }
 }

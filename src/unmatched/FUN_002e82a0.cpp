@@ -12,7 +12,7 @@ struct ReflectedRefObject { int vt; int rc; };
 struct ReflectedNameObject { int vt; int rc; char *name; };
 struct ReflectedNameList { int vt; int rc; int count; int cap; ReflectedNameObject **data; };
 struct ReflectedValueList { int vt; int rc; int count; int cap; int *data; };
-struct ReflectedTypeList { int vt; int rc; int count; int cap; int *data; };
+struct ReflectedTypeList { int vt; int rc; int count; int cap; int *data; int getCount() const { return count; } };
 struct ReflectedRegistry { char p0[44]; ReflectedNameList *names; ReflectedValueList *values; };
 extern ReflectedRegistry *DAT_00586dd0;
 extern char *DAT_004c22f0;
@@ -37,7 +37,7 @@ static inline void assignTypes(IgbTypeReader *self, const TypeListHolder &h) {
 static inline void addType(ReflectedTypeList *l, int v) {
     int idx;
     idx = l->count;
-    if (l->cap > idx) { l->count = *(const int *)&l->count + 1; } else { List_Resize(l, idx + 1, 4); }
+    if (l->cap > idx) { l->count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
     l->data[idx] = v;
 }
 extern "C" igResult FUN_002e82a0(IgbTypeReader *self) {

@@ -1,9 +1,11 @@
 /* Siblings of the result-channel accessors: each Append* grows one typed list of the messenger's
  * beMessengerArgData (bool/int/float/vec3/matrix/string) by one element. C++ with exceptions on;
  * the C-ABI names stay unmangled through the extern "C" block. AppendInt/AppendFloat re-read the
- * list count for the in-capacity increment (retail loads it a second time rather than reusing the
- * index), which is spelled with a const read. */
+ * list count for the in-capacity increment. */
 #include "dw4/reflected.h"
+
+static inline int countOf(const igIntList *l) { return l->_count; }
+static inline int countOf(const igFloatList *l) { return l->_count; }
 
 /* Header in front of every interned string token: the owning chunk, then the token's reference
  * count. A token points just past this header. */
@@ -64,7 +66,7 @@ void beMessenger_AppendInt(beMessenger *self, int value)
     list = (igIntList *)((beMessengerArgData *)self->_argData)->_intList;
     index = list->_count;
     if (index < list->_capacity)
-        list->_count = *(const int *)&list->_count + 1;
+        list->_count = countOf(list) + 1;
     else
         List_Resize(list, index + 1, 4);
     ((int *)list->_data)[index] = value;
@@ -78,7 +80,7 @@ void beMessenger_AppendFloat(beMessenger *self, float value)
     list = (igFloatList *)((beMessengerArgData *)self->_argData)->_floatList;
     index = list->_count;
     if (index < list->_capacity)
-        list->_count = *(const int *)&list->_count + 1;
+        list->_count = countOf(list) + 1;
     else
         List_Resize(list, index + 1, 4);
     ((float *)list->_data)[index] = value;

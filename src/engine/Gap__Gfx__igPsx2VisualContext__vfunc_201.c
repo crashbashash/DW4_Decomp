@@ -2,7 +2,8 @@ typedef struct L { int p0; int p4; int count; int cap; char *data; } L;
 typedef struct S { char p[972]; L *l972; L *l976; L *l980; int p984; L *l988; L *l992; L *l996; L *l1000; } S;
 int List_Resize();
 int Matrix44_Copy();
-#define PUSH(f) do { int n; L *l; int v; l = arg0->f; v = l->count; if (v != 0) { n = ((const L *)l)->count; if (n < l->cap) { l->count = v + 1; } else { List_Resize(l, n + 1, 64); } Matrix44_Copy(l->data + (n << 6), l->data + ((n - 1) << 6)); } } while (0)
+static inline int count_of(const L *list) { return list->count; }
+#define PUSH(f) do { int n; L *l; int v; l = arg0->f; v = count_of(l); if (v != 0) { n = l->count; if (n < l->cap) { l->count = v + 1; } else { List_Resize(l, n + 1, 64); } Matrix44_Copy(l->data + (n << 6), l->data + ((n - 1) << 6)); } } while (0)
 void Gap__Gfx__igPsx2VisualContext__vfunc_201(S *arg0, int arg1) {
     switch (arg1) {
     case 0:

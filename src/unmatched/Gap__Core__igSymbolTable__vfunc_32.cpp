@@ -4,7 +4,7 @@ int FUN_0030da10(...);
 int List_Reserve(...);
 int List_Resize(...);
 }
-struct Entry { int name; int a; int b; int path; };
+struct Entry { int name; int a; unsigned int b; int path; };
 struct List { char pad[8]; int count; int capacity; void *data; };
 class Table { public:
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
@@ -42,7 +42,7 @@ extern "C" void Gap__Core__igSymbolTable__vfunc_32(Table *self, int n) {
     begin = (Entry *)l->data;
     end = begin + l->count / 4;
     for (e = begin; e < end; e++) {
-        int bb = *(unsigned int *)&e->b; if (self->vX(e->a, bb, e - begin) == 0) {
+        int bb = e->b; if (self->vX(e->a, bb, e - begin) == 0) {
             break;
         }
     }

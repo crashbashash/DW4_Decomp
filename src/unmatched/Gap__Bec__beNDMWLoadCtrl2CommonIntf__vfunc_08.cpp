@@ -1,12 +1,13 @@
 #include "dw4/reflected.h"
+static inline int countOf(const beNDMWDegiDataList *l) { return l->_count; }
+static inline int countOf(const beNDMWLoadSavePlWorkList *l) { return l->_count; }
 /* igObject header: vtable and reference count (the count is not a reflected field) */
 extern "C" {
 int igObject_Destroy(igObject *);
 void Gap__Core__igObject__vfunc_08__002ff0f0(beNDMWLoadCtrl2CommonIntf *);
 void Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08(beNDMWLoadCtrl2CommonIntf *arg0) {
     beNDMWDegiDataList *l = (beNDMWDegiDataList *)arg0->_gameUseData;
-    /* matching construct: const read forces the early count load */
-    if (((const beNDMWDegiDataList *)l)->_count > 0) {
+    if (countOf(l) > 0) {
         int n = l->_count;
         int i;
         igObject *o;
@@ -30,8 +31,7 @@ void Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08(beNDMWLoadCtrl2CommonIntf *ar
     }
     {
     beNDMWLoadSavePlWorkList *l2 = (beNDMWLoadSavePlWorkList *)arg0->_flagWork;
-    /* matching construct: const read forces the early count load */
-    if (((const beNDMWLoadSavePlWorkList *)l2)->_count > 0) {
+    if (countOf(l2) > 0) {
         int n = l2->_count;
         int i;
         igObject *o;

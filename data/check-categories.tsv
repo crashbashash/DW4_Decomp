@@ -15215,7 +15215,7 @@
 00377340	beAction2MOTIONSET_Start	match	exception index 0x54e4c8: matches retail (table 0x5434b4 8 bytes)
 00377700	beAction2_StartComponents	match	exception index 0x54e4d4: matches retail (table 0x5434bc 8 bytes)
 003778d0	Gap__Bec__beAction2__vfunc_31	match	exception index 0x54e4e0: matches retail (packed)
-00377990	Gap__Bec__beAction2__vfunc_33	unapproved	unapproved: 1 volatile without an approval row
+00377990	Gap__Bec__beAction2__vfunc_33	match	DEFERRED duplicate 0x36c790 __dt__2RPFv 128B (compared under the profile of its retail unit)
 003783f0	Gap__Bec__beAction2__vfunc_20	match	-
 00378400	Gap__Core__igObject__vfunc_28	match	-
 00378410	Gap__Core__igObject__vfunc_34	match	-

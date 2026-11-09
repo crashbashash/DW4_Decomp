@@ -364,8 +364,18 @@ Retail shapes that only one spelling reproduces:
   e = a->list()->get(i);   // lw v0,8(a0) again on each pass of the loop
   ```
 
-  The same difference moves a load the scheduler would otherwise place later: a field declared `unsigned` and passed
-  as `int`, or an `*(unsigned int *)` read, loads in source order. An increment that reloads is `x = *(const int *)&x + 1`.
+  What to try, in order:
+
+  * A `const` parameter, when the function never writes through the pointer. No read needs changing.
+  * A `const` accessor at the read that has to stay separate: a member on a struct the file declares, or
+    `static inline int countOf(const List *l) { return l->_count; }` for a shared class. If the accessor on the first
+    read gives other bytes, read plainly there and put it on the later read: `n = l->count; ... l->count = countOf(l) + 1`.
+  * A `const T *view = p;` declared at function level, where an accessor changes the bytes.
+  * `(*(const int *)&x)` only when none of those matches, as for a value held in a stack-resident struct.
+
+  The same difference moves a load the scheduler would otherwise place later: a field declared `unsigned` and read
+  plainly, or an accessor returning `unsigned`, loads in source order, where a `const` read does not. Rewriting the
+  increment itself as `l->n++`, `+= 1` or `1 + l->n`, or changing `p[0]` to `*p`, does not separate the loads.
 * **A value spilled and reloaded before every use.** A local declared `volatile` reproduces this, as
   `RT * volatile sp6C`, where a plain local adds a saved register. Read it once into
   a plain local for the final release so the object stays in `a0`. It is not a finished spelling: the

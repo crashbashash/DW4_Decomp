@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int st0(const beNDMWShopCtrlA1 *self) { return self->_st0; }
 extern "C" {
 igObject *FUN_003b4250(void *);
 igObject *FUN_003b4950(void *);
@@ -84,8 +85,7 @@ void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0) {
     Item *it;
     switch (arg0->_st0) {
     case 0:
-        /* matching construct: const read reloads the state word after the dispatch. */
-        arg0->_st0 = ((const beNDMWShopCtrlA1 *)arg0)->_st0 + 1;
+        arg0->_st0 = st0(arg0) + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
         arg0->_st1 = 0;

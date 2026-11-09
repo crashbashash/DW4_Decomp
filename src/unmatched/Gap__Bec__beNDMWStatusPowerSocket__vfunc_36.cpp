@@ -10,6 +10,7 @@ extern int DAT_004cf6d8[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
+static inline int countOf(const igDataList *l) { return l->_count; }
 struct UnidentifiedChildWindow { int word0; int references; char p8[92]; igDataList *list; int f104; char f108; char pad109; char f110; };
 extern "C" UnidentifiedChildWindow *FUN_003baf10(...);
 /* Owning stack reference to the new child window; released on scope exit (reference count in the
@@ -38,8 +39,7 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_36(beNDMWStatusPowerSocket *arg0) 
     s0 = child.p->list;
     s1 = s0->_count;
     if (s1 < s0->_capacity) {
-        /* matching construct: const re-read of the count */
-        s0->_count = ((const igDataList *)s0)->_count + 1;
+                s0->_count = countOf(s0) + 1;
     } else {
         List_Resize(s0, s1 + 1, 4);
     }

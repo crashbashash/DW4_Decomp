@@ -30,15 +30,15 @@
   "orphan.bytes": 32,
   "profile_split.bytes": 43892,
   "profile_split.units": 13,
-  "raw_casts.reflected": 366,
+  "raw_casts.reflected": 362,
   "struct.a": 139,
   "struct.b": {
    "reason": "owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members.",
    "value": 300
   },
   "struct.c": 287,
-  "unapproved.bytes": 159832,
-  "unapproved.functions": 271,
+  "unapproved.bytes": 157188,
+  "unapproved.functions": 270,
   "unmatched.bytes": 798752,
   "unmatched.functions": 1461
  },

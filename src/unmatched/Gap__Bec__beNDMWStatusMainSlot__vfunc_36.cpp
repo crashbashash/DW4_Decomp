@@ -2,6 +2,7 @@
  * sub-window append and the kind-list push) and marks it as the ability-type variant with
  * equipment and unknown entries disabled. */
 #include "dw4/reflected.h"
+static inline int countOf(const igIntList *l) { return l->_count; }
 extern "C" {
 beNDMWStatusCtrlD0 *FUN_003baf10(int);
 int List_Resize(igIntList *, int, int);
@@ -37,8 +38,7 @@ extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_36(beNDMWStatusMainSlot *a
     l = (igIntList *)w->_kindList;
     c = l->_count;
     if (c < l->_capacity) {
-        /* matching construct: const re-read of the count */
-        l->_count = *(const int *)&l->_count + 1;
+        l->_count = countOf(l) + 1;
     } else {
         List_Resize(l, c + 1, 4);
     }

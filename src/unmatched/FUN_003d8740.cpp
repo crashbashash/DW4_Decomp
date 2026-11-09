@@ -1,7 +1,7 @@
 /* SUBWND service-menu work creation, BIT/XDATA caps and shop-stock list preparation. owner is
  * beNDMWStatus (the SUBWND manager) and ram is its beNDMWStatusInfoRam; _subWndNo 6..9 selects
- * weapon / armor / chip / junk stock (WPU / APU / CHIP / JUNK). Lst::count is const so it is
- * re-read for the reserve test; the caps use '>' compares and a separate record local; the level
+ * weapon / armor / chip / junk stock (WPU / APU / CHIP / JUNK). U::Reserve takes a const list
+ * so the count is re-read for the reserve test; the caps use '>' compares and a separate record local; the level
  * tier chains are else-if chains; row8 is declared before the loop counters; each item holder is
  * constructed at its use site from the new object and released by its destructor at scope exit;
  * the dispatch switches list their arms in ascending order. */

@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int countOf(const igIntList *l) { return l->_count; }
 extern "C" {
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 typedef struct S_obj { char pad4[4]; int f4; char pad8[0x68]; igIntList *f112; } S_obj;
@@ -121,7 +122,7 @@ extern "C" void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                         l = (igIntList *)arg0->_playerNoList;
                         c = l->_count;
                         if (c < l->_capacity) {
-                            l->_count = *(const int *)&l->_count + 1;
+                            l->_count = countOf(l) + 1;
                         } else {
                             List_Resize(l, c + 1, 4);
                         }
@@ -208,7 +209,7 @@ extern "C" void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                         l = ((S_obj *)r6.p)->f112;
                         c = l->_count;
                         if (c < l->_capacity) {
-                            l->_count = *(const int *)&l->_count + 1;
+                            l->_count = countOf(l) + 1;
                         } else {
                             List_Resize(l, c + 1, 4);
                         }

@@ -1,5 +1,5 @@
 extern "C" int List_Resize(...);
-struct List { int pad[2]; int count; int cap; int *items; };
+struct List { int pad[2]; int count; int cap; int *items; int getCount() const { return count; } };
 class Sub { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22();  virtual int g100(); };
 class Dev { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();  virtual int g108(); virtual void x112(); virtual int g116(); };
 struct Mid { char pad[12]; Sub *f12; };
@@ -12,19 +12,19 @@ void FUN_001b8a20(Src *arg0, Dst *arg1) {
     if (arg0->f121 != 0) a = arg0->f36; else a = arg0->f32->g108();
     l1 = arg1->l248;
     c1 = l1->count;
-    if (c1 < l1->cap) l1->count = *(const int *)&l1->count + 1;
+    if (c1 < l1->cap) l1->count = l1->getCount() + 1;
     else List_Resize(l1, c1 + 1, 4);
     l1->items[c1] = a;
     c = ((Sub *)((Mid *)arg0->f32)->f12)->g100();
     if (arg0->f121 != 0) b = arg0->f40; else b = arg0->f32->g116();
     l2 = arg1->l252;
     c2 = l2->count;
-    if (c2 < l2->cap) l2->count = *(const int *)&l2->count + 1;
+    if (c2 < l2->cap) l2->count = l2->getCount() + 1;
     else List_Resize(l2, c2 + 1, 4);
     l2->items[c2] = b;
     l3 = arg1->l256;
     c3 = l3->count;
-    if (c3 < l3->cap) l3->count = *(const int *)&l3->count + 1;
+    if (c3 < l3->cap) l3->count = l3->getCount() + 1;
     else List_Resize(l3, c3 + 1, 4);
     l3->items[c3] = c;
 }

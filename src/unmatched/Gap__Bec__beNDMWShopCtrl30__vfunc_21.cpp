@@ -1,7 +1,7 @@
 /* Bank deposit/withdraw update: four-level state machine on _st0 (open / run / close / wait-
  * close), _st1 (sub-state 0..6), _st2 (step) and _st3 (timer); _bankMenu is the deposit/withdraw
  * mode (0/1), _retCode the child window's result. The st0 increment of case 0 reads _st0 through a
- * const lvalue (else the switch scrutinee register is reused); the folder list pointers are loaded after the second folder lookup; function-level
+ * const accessor (else the switch scrutinee register is reused); the folder list pointers are loaded after the second folder lookup; function-level
  * locals pl/x/y are declared in the order amt, pl, x, y to fix the saved-register order. _refCount
  * is read as a signed int (lwu otherwise). Rec/Fld stay local views of the igProperty records. */
 #include "dw4/reflected.h"
@@ -28,6 +28,7 @@ int beMessenger_AppendInt(int, int);
 int beMessenger_AppendString(int, int *);
 int beMessenger_DispatchSelected(int, int *);
 void *beMessenger_GetObject(int, int);
+static inline int st0(const beNDMWShopCtrl30 *ctrl) { return ctrl->_st0; }
 struct Rec;
 Rec *igProperty_GetRecord(void *, int *);
 struct Fld;
@@ -71,7 +72,7 @@ extern "C" void Gap__Bec__beNDMWShopCtrl30__vfunc_21(beNDMWShopCtrl30 *arg0) {
     int y;
     switch (arg0->_st0) {
     case 0:
-        arg0->_st0 = *(const int *)&arg0->_st0 + 1;
+        arg0->_st0 = st0(arg0) + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
         arg0->_st1 = 0;

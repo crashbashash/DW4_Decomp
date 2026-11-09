@@ -1,6 +1,7 @@
 
 /* igObject header: the reference count at +4 is not a reflected field */
 #include "dw4/reflected.h"
+static inline int countOf(const igObjectList *l) { return l->_count; }
 extern "C" {
 int Gap__Core__igObject__vfunc_08__002ff0f0(beSvReadMediaApi *);
 int igObject_Destroy(igObject *);
@@ -8,8 +9,7 @@ void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *arg0);
 }
 void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *arg0) {
     igObjectList *l = (igObjectList *)arg0->_loadWorkList;
-    /* matching construct: const read forces the early count load */
-    if (((const igObjectList *)l)->_count != 0) {
+    if (countOf(l) != 0) {
         int n = l->_count;
         int i;
         igObject *t;

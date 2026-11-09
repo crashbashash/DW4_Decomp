@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int countOf(const beNDMWDegiDataList *l) { return l->_count; }
 extern "C" {
 void igObject_Destroy(igObject *);
 int Gap__Core__igObject__vfunc_08__002ff0f0(...);
@@ -41,8 +42,7 @@ void Gap__Bec__beNDMWLoadSlotPlayer__vfunc_08(Obj *arg0) {
     beNDMWLoadSlotPlayer *self = (beNDMWLoadSlotPlayer *)arg0;
     beNDMWDegiDataList *l = (beNDMWDegiDataList *)self->_saveDataList;
     int n;
-    /* matching construct: const read forces the early count load */
-    if (((const beNDMWDegiDataList *)l)->_count > 0) {
+    if (countOf(l) > 0) {
     n = l->_count;
     int i = 0;
     int off;

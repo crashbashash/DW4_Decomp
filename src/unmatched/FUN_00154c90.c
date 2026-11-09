@@ -1,4 +1,3 @@
-/* The size is read unsigned first so it is loaded before the buffer pointer. */
 #include "dw4/reflected.h"
 int memcpy(int, int, int);
 int FUN_00300db0(igClut *, int, int);
@@ -6,7 +5,7 @@ int FUN_00300f50(igClut *, int);
 
 void FUN_00154c90(igClut *arg0, igClut *arg1, int arg2) {
     int temp_a1;
-    int sz;
+    unsigned int sz;
 
     if (arg0 != arg1) {
         temp_a1 = arg0->_pData;
@@ -21,7 +20,7 @@ void FUN_00154c90(igClut *arg0, igClut *arg1, int arg2) {
         arg0->_isAlphaScaled = arg1->_isAlphaScaled;
         if (arg2 != 0) {
             arg0->_pData = FUN_00300db0(arg0, arg0->_clutSize, 0x80);
-            sz = *(unsigned int *)&arg0->_clutSize;
+            sz = arg0->_clutSize;
             memcpy(arg0->_pData, arg1->_pData, sz);
         }
     }

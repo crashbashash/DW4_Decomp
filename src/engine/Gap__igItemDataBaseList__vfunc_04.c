@@ -5,6 +5,7 @@ int FUN_002297f0();
 unsigned int FUN_00300e50();
 int Gap__Core__igObject__vfunc_02();
 
+static inline int f8_of(const S *list) { return list->f8; }
 void Gap__igItemDataBaseList__vfunc_04(S *arg0) {
     int n;
     int q;
@@ -19,7 +20,7 @@ void Gap__igItemDataBaseList__vfunc_04(S *arg0) {
     if (!(0 > arg0->fC)) {
         arg0->f8 = 0;
     } else {
-        int c = *(const int *)&arg0->f8;
+        int c = f8_of(arg0);
         neg = -c;
         if (c == 0) {
             cap = 0x400;

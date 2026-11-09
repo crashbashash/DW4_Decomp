@@ -16,6 +16,7 @@ extern DW4VC_100 * DAT_005871d0[4];
 extern "C" void Gap__Core__igPsx2Thread__vfunc_45(int *arg0, O *arg1);
 void Gap__Core__igPsx2Thread__vfunc_45(int *arg0, O *arg1) {
     /* matching construct: variant search — decl order [4, 3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
+    const O *view = arg1;
     H4 sp5C;
     int temp_s1;
     int temp_s0_2;
@@ -36,7 +37,7 @@ void Gap__Core__igPsx2Thread__vfunc_45(int *arg0, O *arg1) {
         FUN_00330440(arg1, 0);
     }
     DAT_005871d0[0]->vX(arg1);
-    temp_s1 = *(const int *)&arg1->f60;
+    temp_s1 = view->f60;
     temp_s0_2 = TerminateThread(arg1->f60);
     arg1->f60 = -1;
     sp5C = arg1->f48->vX();

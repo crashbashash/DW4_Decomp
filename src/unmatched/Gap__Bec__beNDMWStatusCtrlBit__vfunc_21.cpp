@@ -41,6 +41,7 @@ typedef struct PropertyRecord { char p[12]; unsigned char f12; } PropertyRecord;
 typedef struct ChildWindow { int w0; int refs; char p8[52]; int f60; int f64; char p68[24]; int f92; } ChildWindow;
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
+static inline int count(const igIntList *list) { return list->_count; }
 class StringRef {
 public:
     int *p;
@@ -101,8 +102,7 @@ void Gap__Bec__beNDMWStatusCtrlBit__vfunc_21(beNDMWStatusCtrlBit *arg0) {
                 l4 = (igIntList *)arg0->_playerNoList;
                 s1 = l4->_count;
                 if (s1 < l4->_capacity) {
-                    /* matching construct: const re-read of the count */
-                    l4->_count = ((const igIntList *)l4)->_count + 1;
+                    l4->_count = count(l4) + 1;
                 } else {
                     List_Resize(l4, s1 + 1, 4);
                 }

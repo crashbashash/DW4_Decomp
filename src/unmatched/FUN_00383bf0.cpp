@@ -2,8 +2,8 @@
 /* arg0 is the beFont: +36 _fonts (glyph list), +40 _fontIdx, +48 _lineFeedList, +52 _alignList. */
 extern "C" {
 typedef union U { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U;
-typedef struct IntList { char p0[8]; int count; int cap; int *data; } IntList;
-typedef struct FloatList { char p0[8]; int count; int cap; float *data; } FloatList;
+typedef struct IntList { char p0[8]; int count; int cap; int *data; int getCount() const { return count; } } IntList;
+typedef struct FloatList { char p0[8]; int count; int cap; float *data; int getCount() const { return count; } } FloatList;
 typedef struct Glyph { char p0[12]; float f12; } Glyph;
 typedef struct GlyphList { char p0[16]; Glyph **data; } GlyphList;
 typedef struct Mesh { char p0[12]; unsigned count; char *verts; int stride; } Mesh;
@@ -48,14 +48,14 @@ void FUN_00383bf0(beFont *arg0, unsigned short *arg1, int arg2, Mesh *arg3) {
                     li = ((IntList *)arg0->_lineFeedList);
                     a = li->count;
                     v = (float *)(base + arg3->stride * n);
-                    if (a < li->cap) li->count = *(const int *)&li->count + 1; else List_Resize(li, a + 1, 4);
+                    if (a < li->cap) li->count = li->getCount() + 1; else List_Resize(li, a + 1, 4);
                     li->data[a] = n;
                     u.f = xo;
                     u.b.sign = 0;
                     lf = ((FloatList *)arg0->_alignList);
                     b = lf->count;
                     xo = *v - u.f;
-                    if (b < lf->cap) lf->count = *(const int *)&lf->count + 1; else List_Resize(lf, b + 1, 4);
+                    if (b < lf->cap) lf->count = lf->getCount() + 1; else List_Resize(lf, b + 1, 4);
                     lf->data[b] = xo;
                     xo = -*v;
                     yo = yo - ((GlyphList *)arg0->_fonts)->data[arg0->_fontIdx]->f12;
@@ -85,10 +85,10 @@ void FUN_00383bf0(beFont *arg0, unsigned short *arg1, int arg2, Mesh *arg3) {
     arg3->count = n;
     li = ((IntList *)arg0->_lineFeedList);
     c = li->count;
-    if (c < li->cap) li->count = *(const int *)&li->count + 1; else List_Resize(li, c + 1, 4);
+    if (c < li->cap) li->count = li->getCount() + 1; else List_Resize(li, c + 1, 4);
     li->data[c] = n;
     lf = ((FloatList *)arg0->_alignList);
     d = lf->count;
-    if (d < lf->cap) lf->count = *(const int *)&lf->count + 1; else List_Resize(lf, d + 1, 4);
+    if (d < lf->cap) lf->count = lf->getCount() + 1; else List_Resize(lf, d + 1, 4);
     lf->data[d] = *v;
 }

@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int countOf(const igIntList *l) { return l->_count; }
 
 extern "C" {
 void igObject_Destroy(igObject *);
@@ -67,7 +68,7 @@ extern "C" void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza 
     int cnt = ((igObjectList *)arg0->_listFolder)->_count;
     igIntList *d = (igIntList *)arg0->_listColor;
     if (d->_count < cnt) {
-        if (!(cnt < *(const int *)&d->_count)) List_Reserve(d, cnt, 4);
+        if (!(cnt < countOf(d))) List_Reserve(d, cnt, 4);
     }
     d = (igIntList *)arg0->_listColor;
     if (cnt >= 0) {

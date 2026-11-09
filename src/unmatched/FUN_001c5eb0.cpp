@@ -10,7 +10,7 @@ struct Obj {
     int refs; int p8; int p12; int p16; int f20;
 };
 struct List { int p0, p4; int n; int p12; Obj **data; };
-struct S { char pad[28]; List * list; };
+struct S { char pad[28]; List * list; List *getList() const { return list; } };
 struct Ref {
     Obj *p;
     Ref() { p = 0; }
@@ -25,7 +25,7 @@ struct Ref {
     }
 };
 extern "C" Ref FUN_001c5eb0(S *host, int idx) {
-    List *l0 = (*(List * const *)&host->list);
+    List *l0 = host->getList();
     int n = l0 ? l0->n : 0;
     if (idx < n) {
         Ref obj(host->list->data[idx]);

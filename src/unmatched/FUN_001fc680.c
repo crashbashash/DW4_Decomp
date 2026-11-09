@@ -19,7 +19,8 @@ int FUN_001fc680(void) {
         unsigned b10 = (w >> 10) & 1;
         if (b1 && b10) {
             int *p = (int *)((char *)DAT_0056c020 + off);
-            switch (*((const int *)p)) {
+            const int *value = p;
+            switch (*value) {
             case 0:
             case 1:
             case 2:

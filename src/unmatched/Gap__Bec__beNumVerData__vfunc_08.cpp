@@ -38,10 +38,11 @@ struct Obj {
     virtual int v88();
 };
 extern "C" void Gap__Bec__beNumVerData__vfunc_08(Obj *arg0);
+static inline int count(const beNumVerDataList *list) { return list->_count; }
 void Gap__Bec__beNumVerData__vfunc_08(Obj *arg0) {
     beNumVerDataList *l = (beNumVerDataList *)((beNumVerData *)arg0)->_verDataList;
     int n;
-    if (/* matching construct: const read forces the second load of _count */ *(const int *)&l->_count > 0) {
+    if (count(l) > 0) {
     n = l->_count;
     int i = 0;
     int off;

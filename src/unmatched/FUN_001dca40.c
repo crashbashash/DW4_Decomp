@@ -1,4 +1,3 @@
-/* The count is read const so it is loaded before f24. */
 typedef struct Obj Obj;
 struct Obj { int w0; int references; };
 typedef struct List List;
@@ -6,6 +5,7 @@ struct List { int pad0[2]; int count; int pad1; Obj **data; int f20; int f24; };
 int ObjectList_ResizeRetained();
 int igObject_Destroy();
 int igObject_GetAllocator();
+static inline int count_of(const List *list) { return list->count; }
 void FUN_001dca40(List *arg0, Obj *(*arg1)(int)) {
     int n;
     int alloc;
@@ -14,7 +14,7 @@ void FUN_001dca40(List *arg0, Obj *(*arg1)(int)) {
     Obj *o;
     Obj *old;
     int off;
-    c = *(const int *)&arg0->count;
+    c = count_of(arg0);
     n = arg0->f24 + c;
     ObjectList_ResizeRetained(arg0, n);
     alloc = igObject_GetAllocator(arg0);

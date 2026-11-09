@@ -20,7 +20,7 @@ static inline int lastOf(AttrIntList *l) {
 }
 static inline int indexOf(AttrIntList *l, const AttrKey &v) {
     int n = l->_count;
-    int key = (*(int const *)&v.value);
+    int key = ((const AttrKey *)&v)->value;
     int i;
     for (i = 0; i < n; i++) {
         if (key == l->_data[i]) return i;

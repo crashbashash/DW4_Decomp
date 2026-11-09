@@ -11,6 +11,7 @@ extern struct L *DAT_00562580[4];
 extern struct Z *DAT_00586dc8[4];
 extern int DAT_005870f8[4];
 extern unsigned char GPR_00554c14;
+static inline int n_of(const struct L *list) { return list->n; }
 void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
     unsigned char sp4F;
     int al; int idx; int z; struct L *l;
@@ -22,7 +23,7 @@ void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
             DAT_00562580[0] = FUN_001a51d0(al);
         }
         l = DAT_00562580[0];
-        idx = (*(int const *)&l->n);
+        idx = n_of(l);
         if (idx < l->cap) { l->n = l->n + 1; } else { List_Resize(l, idx + 1, 4); }
         l->data[idx] = (int)arg0;
         z = DAT_00586dc8[0]->f56;

@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 /* _decideList target: count at +8, byte flags at +16. */
 typedef struct DecideFlagList { char p0[8]; int count; char p12[4]; unsigned char *data; } DecideFlagList;
+static inline DecideFlagList *decideList(const beNDMWShopSelectB0 *self) { return (DecideFlagList *)self->_decideList; }
 extern "C" {
 int FUN_002eb010(int);
 int StringChunk_ReleaseHeader(int, int *);
@@ -39,7 +40,6 @@ extern "C" int StringList_AppendRetained(int, const StringRef &);
         if (DAT_00586f20[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) { pool = StringPool_Construct(pool); } DAT_00586f20[0] = pool; } \
         tok = StringPool_Intern(DAT_00586f20[0], (text)); } \
     StringList_AppendRetained(field, StringRef(tok)); }
-/* matching construct: the (DecideFlagList * signed *)&arg0->_decideList read reloads the field, as retail does */
 void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
     int tv1;
     int s1;
@@ -60,9 +60,9 @@ void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
         IntPair labels = DAT_004cfb30[0];
         s0 = (int *)&labels;
         s1 = 0;
-        if (0 < ((DecideFlagList *)*(int *)&arg0->_decideList)->count) {
+        if (0 < decideList(arg0)->count) {
             do {
-                if ((*(DecideFlagList **)&arg0->_decideList)->data[s1] != 0) {
+                if (((DecideFlagList *)arg0->_decideList)->data[s1] != 0) {
                     s3 = &DAT_0051c700[0];
                 } else {
                     s3 = &DAT_0051c848[0];
@@ -73,7 +73,7 @@ void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
                 beMessenger_DispatchSelected(arg0->_messenger, s3);
                 s1 = s1 + 1;
                 s0 = s0 + 1;
-            } while (s1 < (*(DecideFlagList **)&arg0->_decideList)->count);
+            } while (s1 < ((DecideFlagList *)arg0->_decideList)->count);
         }
     }
     if (DAT_00586f20[0] == 0) {

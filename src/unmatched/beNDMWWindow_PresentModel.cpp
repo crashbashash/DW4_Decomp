@@ -25,6 +25,7 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
+static inline int count(const igDataList *list) { return list->_count; }
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \
@@ -59,7 +60,7 @@ void beNDMWWindow_PresentModel(beNDMWWindow *arg0, const char *arg1, int arg2, c
         {
             int n; igDataList *l = (igDataList *)arg0->_modelCloseRamNoList;
             n = l->_count;
-            if (n < l->_capacity) l->_count = /* matching construct: const reload of _count */ *(const int *)&l->_count + 1; else List_Resize(l, n + 1, 4);
+            if (n < l->_capacity) l->_count = count(l) + 1; else List_Resize(l, n + 1, 4);
             ((int *)l->_data)[n] = arg2;
         }
         INTERN_APPEND(arg0->_modelCloseSeqNameList, arg4)

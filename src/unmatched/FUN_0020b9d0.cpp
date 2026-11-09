@@ -19,6 +19,7 @@ struct N {
     char hi : 1;
     char f71;
     char f72;
+    int getM() const { return m; }
     void Set() {
         m = 4;
         f8 = *DAT_00568f04[0];
@@ -44,7 +45,7 @@ void FUN_0020b9d0(void *arg0) {
             FUN_001effc0(1, &FUN_00208430, n->f36);
         }
         while (var_s0 != 0) {
-            if (((long long)*(const char *)((char *)var_s0 + 70) << 57 >> 57) != 1) {
+            if (var_s0->getM() != 1) {
                 var_s0->Set();
             }
             var_s0 = var_s0->f32;

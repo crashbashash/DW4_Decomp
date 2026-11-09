@@ -1,6 +1,5 @@
-/* The descriptor index is re-read const in the plain cases so the early copy is not reused, and
+/* The descriptor index is re-read through a const accessor in the plain cases so the early copy is not reused, and
  * the base pointer of case 4 is added last. */
-#define RD *(const int *)&arg1->f8
 extern "C" int FUN_001f05a0(...);
 struct P { int f0; int f4; int f8; int pad[12]; int f60; int pad2[1]; int f68; int f72; };
 struct VA {
@@ -39,7 +38,7 @@ struct VA {
     int pad4[6];
     long long f64;
 };
-struct St { int f0; int f4; int f8; int f12; char *f16; int f20; int f24; };
+struct St { int f0; int f4; int f8; int getF8() const { return f8; } int f12; char *f16; int f20; int f24; };
 extern "C" void Gap__Gfx__igPsx2VertexArray1_1__vfunc_27(VA *arg0, St *arg1);
 void Gap__Gfx__igPsx2VertexArray1_1__vfunc_27(VA *arg0, St *arg1) {
     int m;
@@ -56,15 +55,15 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_27(VA *arg0, St *arg1) {
     s1 = arg1->f8;
     switch (t) {
     case 0:
-        arg1->f16 = (char *)(arg0->f8->f0 + RD * 12);
+        arg1->f16 = (char *)(arg0->f8->f0 + arg1->getF8() * 12);
         arg1->f20 = 12;
         break;
     case 1:
-        arg1->f16 = (char *)(arg0->f8->f4 + RD * 12);
+        arg1->f16 = (char *)(arg0->f8->f4 + arg1->getF8() * 12);
         arg1->f20 = 12;
         break;
     case 2:
-        arg1->f16 = (char *)(arg0->f8->f8 + RD * 4);
+        arg1->f16 = (char *)(arg0->f8->f8 + arg1->getF8() * 4);
         arg1->f20 = 4;
         break;
     case 4: {
@@ -80,23 +79,23 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_27(VA *arg0, St *arg1) {
         break;
     }
     case 3:
-        arg1->f16 = (char *)(*(int *)((char *)arg0->f8 + (s0 + 11) * 4) + RD * 8);
+        arg1->f16 = (char *)(*(int *)((char *)arg0->f8 + (s0 + 11) * 4) + arg1->getF8() * 8);
         arg1->f20 = 8;
         break;
     case 6:
-        arg1->f16 = (char *)(arg0->f8->f60 + RD * 4);
+        arg1->f16 = (char *)(arg0->f8->f60 + arg1->getF8() * 4);
         arg1->f20 = (((*arg0->flags() & 0x300000) >> 0x14) & 0xFF) * 4;
         break;
     case 9:
-        arg1->f16 = (char *)(arg0->f8->f60 + RD * 4);
+        arg1->f16 = (char *)(arg0->f8->f60 + arg1->getF8() * 4);
         arg1->f20 = 4;
         break;
     case 7:
-        arg1->f16 = (char *)(arg0->f8->f68 + RD * 12);
+        arg1->f16 = (char *)(arg0->f8->f68 + arg1->getF8() * 12);
         arg1->f20 = 12;
         break;
     case 8:
-        arg1->f16 = (char *)(arg0->f8->f72 + RD * 12);
+        arg1->f16 = (char *)(arg0->f8->f72 + arg1->getF8() * 12);
         arg1->f20 = 12;
         break;
     }

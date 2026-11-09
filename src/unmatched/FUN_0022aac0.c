@@ -1,6 +1,7 @@
 typedef struct { char pad[8]; int cnt; int cap; int *data; } L;
 typedef struct { char pad[12]; L *l12; L *l16; } T;
 int List_Resize();
+static inline int cnt_of(const L *list) { return list->cnt; }
 int FUN_0022aac0(T *arg0, int arg1) {
     L *a;
     int n;
@@ -12,9 +13,9 @@ int FUN_0022aac0(T *arg0, int arg1) {
         List_Resize(a, 0, 4);
     }
     b = arg0->l12;
-    n = (*(int const *)&b->cnt);
+    n = b->cnt;
     if (n < b->cap) {
-        b->cnt = b->cnt + 1;
+        b->cnt = cnt_of(b) + 1;
     } else {
         List_Resize(b, n + 1, 4);
     }

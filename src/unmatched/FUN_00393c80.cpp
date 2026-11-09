@@ -19,6 +19,7 @@ extern int DAT_00586f20[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
+static inline int count(const igIntList *list) { return list->_count; }
 struct RPA { igObject *p; RPA() { p = 0; } ~RPA() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct RPB { igObject *p; RPB() { p = 0; } ~RPB() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 /* Interned-string holder: count at p[-1], header at p[-2]. */
@@ -206,7 +207,7 @@ extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, 
             StringRef sp84(v);
             FUN_001ca620(l40, &sp84.p);
         }
-        k = *(const int *)&l44->_count;
+        k = count(l44);
         if (k < l44->_capacity) {
             l44->_count = l44->_count + 1;
         } else {

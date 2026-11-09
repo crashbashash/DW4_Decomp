@@ -5,6 +5,7 @@ int FUN_002dae40();
 int List_Resize();
 int igObject_GetAllocator();
 extern int DAT_004c22f0[4];
+static inline int n_of(const struct L *list) { return list->n; }
 struct L *FUN_002da780(struct S *s) {
     int cnt;
     int r;
@@ -23,7 +24,7 @@ struct L *FUN_002da780(struct S *s) {
         if (r != 0) {
             cnt = l->n;
             if (cnt < l->cap) {
-                l->n = *(const int *)&l->n + 1;
+                l->n = n_of(l) + 1;
             } else {
                 List_Resize(l, cnt + 1, 4);
             }

@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int threadID(const igPsx2Thread *self) { return self->_threadID; }
 extern "C" {
 void igObject_Destroy(igObject *);
 int DeleteThread(...);
@@ -87,7 +88,7 @@ void Gap__Core__igPsx2Thread__vfunc_44(int *arg0, igPsx2Thread *arg1) {
     }
     DAT_005871d0[0]->call(arg1);
     s1 = arg1->_threadID;
-    s0b = TerminateThread(((const igPsx2Thread *)arg1)->_threadID);
+    s0b = TerminateThread(threadID(arg1));
     arg1->_threadID = -1;
     sp5C = ((Sub *)arg1->_threadDoneSema)->get();
     arg1->_refCount--;

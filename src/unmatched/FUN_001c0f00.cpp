@@ -8,6 +8,7 @@ int igObject_Destroy(...);
 }
 struct List {
     char p0[8]; int count; char p12[4]; Ref **data;
+    int getCount() const { return count; }
     void clear() {
         int n = count;
         for (int i = 0; i < n; i++) {
@@ -35,7 +36,7 @@ extern "C" void FUN_001c0f00(int mode) {
         int saved = 0;
         List *list = DAT_00562540[0];
         if (list != 0) {
-            saved = (*(int const *)&list->count);
+            saved = list->getCount();
             list->clear();
         }
         if (mode != 0) {

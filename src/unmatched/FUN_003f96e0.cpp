@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int countOf(const igObjectList *l) { return l->_count; }
 extern "C" {
 void igObject_Destroy(beUnicodeObj *);
 struct W { char pad[12]; igObjectList *f12; };
@@ -66,7 +67,7 @@ extern "C" void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg
         }
     }
     l = igProperty_GetRecordFolder(s0, DAT_00518828)->f12;
-    if (*(const int *)&l->_count != 0) {
+    if (countOf(l) != 0) {
         n = l->_count;
         for (i = 0; i < n; i++) {
             p = ((igObject **)l->_data)[i];

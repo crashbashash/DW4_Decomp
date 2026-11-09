@@ -2,6 +2,8 @@
  * step, _st2 sub-step). Each sub-window, list and disk reference is held by an owning reference
  * scoped to the block that uses it; one holder class per retail destructor copy. */
 #include "dw4/reflected.h"
+static inline int countOf(const igDataList *l) { return l->_count; }
+static inline int st1Of(const beNDMWStatusCtrlDisk *w) { return w->_st1; }
 
 extern "C" {
 void *FUN_002eb010(int);
@@ -181,7 +183,7 @@ struct HA { static int Add(int a, int b) { return a + b; } };
     if (n < dl->_capacity) dl->_count = n + 1; else List_Resize(dl, n + 1, 1); \
     ((unsigned char *)dl->_data)[n] = (v); }
 #define LIST_ADD(decided, val) { int n_ = ((igDataList *)(decided))->_count; igDataList *l_ = (igDataList *)(decided); \
-    if (n_ < l_->_capacity) l_->_count = *(const int *)&l_->_count + 1; else List_Resize(l_, n_ + 1, 4); \
+    if (n_ < l_->_capacity) l_->_count = countOf(l_) + 1; else List_Resize(l_, n_ + 1, 4); \
     ((int *)l_->_data)[n_] = (val); }
 #define SEND_CLOSE() beMessenger_SendNamed(self->_messenger, DAT_00519a90, DAT_00519d88, 0, DAT_00519a58)
 #define RESET_ST1() { self->_st1 = 0; self->_st3 = 0; self->_st2 = 0; }
@@ -223,7 +225,7 @@ void Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21(beNDMWStatusCtrlDisk *self)
         NEXT_ST0()
     }
     case 1:
-        switch (*(const int *)&self->_st1) {
+        switch (st1Of(self)) {
         case 0: {
             void *al;
             int cnt;

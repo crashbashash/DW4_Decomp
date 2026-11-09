@@ -1,5 +1,5 @@
 struct ConfigToken { int vt; unsigned int _refCount; char *text; int kind; };
-struct ConfigChildList { int vt; int rc; int count; int capacity; int *data; };
+struct ConfigChildList { int vt; int rc; int count; int capacity; int *data; int getCount() const { return count; } };
 struct ConfigTextParser { char pad[52]; char *cursor; };
 struct ConfigSectionRecord { char pad[12]; int table; ConfigChildList *children; int id; char f24[4]; };
 extern "C" {
@@ -17,7 +17,7 @@ int FUN_002dba50(ConfigTextParser *self, ConfigSectionRecord *out);
 static inline void append(ConfigChildList *l, int v) {
     int i = l->count;
     if (i < l->capacity) {
-        l->count = *(const int *)&l->count + 1;
+        l->count = l->getCount() + 1;
     } else {
         List_Resize(l, i + 1, 4);
     }

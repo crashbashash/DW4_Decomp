@@ -22,6 +22,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
+static inline int count(const igIntList *list) { return list->_count; }
 class StringRef {
 public:
     int *p;
@@ -74,8 +75,7 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_29(beNDMWStatusPowerSocket *arg0) 
     s0 = (igIntList *)win.p->_kindList;
     s1 = s0->_count;
     if (s1 < s0->_capacity) {
-        /* matching construct: const reload of the count before the increment */
-        s0->_count = ((const igIntList *)s0)->_count + 1;
+        s0->_count = count(s0) + 1;
     } else {
         List_Resize(s0, s1 + 1, 4);
     }

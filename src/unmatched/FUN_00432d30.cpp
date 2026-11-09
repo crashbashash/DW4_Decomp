@@ -25,6 +25,7 @@ typedef struct { char pad[12]; int f12; } Rec2;
 #define REL(t) if ((t) != 0) { (t)->_refCount = (t)->_refCount - 1; if (((unsigned long long)((long long)(int)(t)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(t); }
 
 /* Working list reference held across the List_Resize call. */
+static inline int count(const igIntList *list) { return list->_count; }
 struct ListRef {
     igIntList *p;
     ListRef(igIntList *x) { p = x; }
@@ -96,7 +97,7 @@ extern "C" int FUN_00432d30(beNDMWShopCtrlDigilabo *arg0) {
                         l = sp.p;
                         c = l->_count;
                         if (c < l->_capacity) {
-                            l->_count = *(const int *)&l->_count + 1;
+                            l->_count = count(l) + 1;
                         } else {
                             List_Resize(l, c + 1, 4);
                         }

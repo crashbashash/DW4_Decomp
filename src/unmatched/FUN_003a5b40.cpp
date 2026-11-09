@@ -1,7 +1,6 @@
 #include "dw4/reflected.h"
 /* arg1 is the position list (12-byte elements, igVec3fList) and arg2 the optional per-element int list (igIntList); both read at _count +8, _capacity +12, _data +16.
- * Arena refs stay 4-byte handles in the reflected structs, so _data is cast to its element pointer on use.
- * matching construct: the second list's count is reloaded after the call, spelled *(const int *)&arg2->_count. */
+ * Arena refs stay 4-byte handles in the reflected structs, so _data is cast to its element pointer on use. */
 extern "C" {
 int List_Resize(void *, int, int);
 int Matrix44_GetTranslation(void *, float *);
@@ -13,6 +12,7 @@ extern int DAT_0058a578[4];
 void FUN_003a5b40(void *arg0, igVec3fList *arg1, igIntList *arg2, int arg3, int arg4);
 }
 void FUN_003a5b40(void *arg0, igVec3fList *arg1, igIntList *arg2, int arg3, int arg4) {
+    const igIntList *view = arg2;
     float v[3];
     int mat[16];
     int cnt, i, s0, s1;
@@ -36,7 +36,7 @@ void FUN_003a5b40(void *arg0, igVec3fList *arg1, igIntList *arg2, int arg3, int 
             e[2] = v[2];
             if (arg2 != 0) {
                 s1 = beMessenger_GetInt(DAT_0058a578[0], i);
-                s0 = *(const int *)&arg2->_count;
+                s0 = view->_count;
                 if (s0 < arg2->_capacity) {
                     arg2->_count = arg2->_count + 1;
                 } else {

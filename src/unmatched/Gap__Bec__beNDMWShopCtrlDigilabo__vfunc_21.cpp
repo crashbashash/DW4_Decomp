@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int countOf(const igIntList *l) { return l->_count; }
 extern "C" {
 void *FUN_00236f80(...);
 int igObject_IsKindOf(...);
@@ -347,7 +348,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
                             l = (igIntList *)((beNDMWShopSelect02 *)sp88.p)->_playerNoList;
                             idx = l->_count;
                             if (idx < l->_capacity) {
-                                l->_count = *(const int *)&l->_count + 1; /* matching construct: retail reloads the count */
+                                l->_count = countOf(l) + 1;
                             } else {
                                 List_Resize(l, idx + 1, 4);
                             }

@@ -7,6 +7,7 @@ int List_Resize(void *, int, int);
 int Matrix44_Copy(void *, void *);
 int igObject_Destroy(void *);
 extern int DAT_004e0ef0[4];
+static inline int n_of(const MatrixStackList *list) { return list->n; }
 void FUN_001ce970(TraversalMatrixState *self) {
     ReleasableList *o;
     int cnt;
@@ -17,9 +18,9 @@ void FUN_001ce970(TraversalMatrixState *self) {
     int i;
     self->mats->n = 0;
     m = self->mats;
-    idx = (*(int const *)&m->n);
+    idx = m->n;
     if (idx < m->cap) {
-        m->n = m->n + 1;
+        m->n = n_of(m) + 1;
     } else {
         List_Resize(m, idx + 1, 64);
     }

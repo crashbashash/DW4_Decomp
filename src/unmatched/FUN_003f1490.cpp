@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline unsigned int sizeOf(const beSaveDataDeliver *d) { return d->_size; }
 extern "C" {
 int memset(int, int, int);
 int beMessenger_AppendInt(int, int);
@@ -83,7 +84,7 @@ void FUN_003f1490(beNDMWMcUtilCtrl *op) {
             case 0:
                 switch (op->_kind) {
                 case 0:
-                    memset(((beSaveDataDeliver *)op->_svData)->_data, 0, *(unsigned int *)&((beSaveDataDeliver *)op->_svData)->_size);
+                    memset(((beSaveDataDeliver *)op->_svData)->_data, 0, sizeOf((beSaveDataDeliver *)op->_svData));
                     beMessenger_SelectReceivers(op->_messenger, &DAT_00517fd0[0], 0, -1);
                     beMessenger_AppendInt(op->_messenger, op->_tgCon);
                     beMessenger_AppendObject(op->_messenger, op->_svData);

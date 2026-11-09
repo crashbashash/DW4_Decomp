@@ -1,4 +1,3 @@
-/* The list count is read const so it is reloaded for the increment. */
 extern "C" {
 int FUN_001db500();
 int List_Resize(...);
@@ -38,7 +37,7 @@ struct SorterDevice {
     virtual void f30(int);
     virtual void f31(int);
 };
-struct SorterList { int pad[2]; int count; int cap; int *items; };
+struct SorterList { int pad[2]; int count; int cap; int *items; int getCount() const { return count; } };
 struct SorterState { char pad[64]; SorterDevice *a; SorterDevice *b; SorterDevice *c; int pad2; SorterList *l80; SorterList *l84; SorterList *l88; };
 static inline void setRef(SorterList *l, int i, const int &v) {
     if (l->count != 0 && i >= 0 && i < l->count) { l->items[i] = v; }
@@ -57,10 +56,10 @@ extern "C" void Gap__Sg__igSorter__vfunc_09(SorterState *o, int arg1) {
         o->c->f31(1);
         o->l80->cap = o->l80->count;
         s2 = o->l84;
-        s3 = *(const int *)&s2->count;
+        s3 = s2->count;
         s0 = o->l80;
         if (s3 < s2->cap) {
-            s2->count = s2->count + 1;
+            s2->count = s2->getCount() + 1;
         } else {
             List_Resize(s2, s3 + 1, 4);
         }

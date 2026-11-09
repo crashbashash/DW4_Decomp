@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+static inline int countOf(const igObjectList *l) { return l->_count; }
 struct Rc { int vt; int rc; };
 extern "C" {
 int List_RemoveWordAt(...);
@@ -48,7 +49,7 @@ void FUN_003a8760(beBaseInfoRam *arg0) {
         }
         temp_a0_3 = ((igObjectList *)arg0->_dataList);
         temp_a1 = temp_a0_3->_count;
-        if (temp_a1 >= *(const int *)&temp_a0_3->_count) {
+        if (temp_a1 >= countOf(temp_a0_3)) {
             List_Reserve(temp_a0_3, temp_a1, 4);
         }
     }

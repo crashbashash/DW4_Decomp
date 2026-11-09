@@ -28,6 +28,7 @@ int beNDMWWindow_PresentModelAtOrigin(void *, void *, int, void *, void *);
 int beNDMWWindow_RequestChildrenClose(void *);
 void igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
+static inline int st0(const beNDMWShopCtrlA2 *ctrl) { return ctrl->_st0; }
 struct Item { int p[3]; int f12; int p16; int f20; };
 struct Rec { int p[3]; igDataList *f12; };
 struct FRec { int p[3]; igDataList *f12; };
@@ -112,8 +113,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
     int i;
     switch (arg0->_st0) {
     case 0:
-        /* matching construct: const read reloads the state word after the dispatch. */
-        arg0->_st0 = ((const beNDMWShopCtrlA2 *)arg0)->_st0 + 1;
+        arg0->_st0 = st0(arg0) + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
         arg0->_st1 = 0;

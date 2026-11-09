@@ -6,17 +6,18 @@ int List_Resize();
 int Matrix44_Copy();
 typedef struct St { char pad0[8]; int n; int cap; char *data; } St;
 typedef struct O { char pad[972]; St *s972; St *s976; St *s980; St *s984; St *s988; St *s992; St *s996; St *s1000; St *s1004; St *s1008; St *s1012; St *s1016; } O;
+static inline int n_of(const St *list) { return list->n; }
 #define SET(l, m) { \
     St *s = (l); \
     int n = s->n; \
     int n1; \
     if (n == 0) { \
         n1 = n + 1; \
-        if (n < s->cap) s->n = ((const St *)s)->n + 1; \
+        if (n < s->cap) s->n = n_of(s) + 1; \
         else List_Resize(s, n1, 0x40); \
         Matrix44_Copy(s->data + (n << 6), m); \
     } else { \
-        Matrix44_Copy(s->data + ((((const St *)s)->n - 1) << 6), m); \
+        Matrix44_Copy(s->data + ((n_of(s) - 1) << 6), m); \
     } }
 #define SETB(l, m) { \
     int n; \
@@ -25,11 +26,11 @@ typedef struct O { char pad[972]; St *s972; St *s976; St *s980; St *s984; St *s9
     n = s->n; \
     if (n == 0) { \
         n1 = n + 1; \
-        if (n < s->cap) s->n = ((const St *)s)->n + 1; \
+        if (n < s->cap) s->n = n_of(s) + 1; \
         else List_Resize(s, n1, 0x40); \
         Matrix44_Copy(s->data + (n << 6), m); \
     } else { \
-        Matrix44_Copy(s->data + ((((const St *)s)->n - 1) << 6), m); \
+        Matrix44_Copy(s->data + ((n_of(s) - 1) << 6), m); \
     } }
 void Gap__Gfx__igPsx2VisualContext__vfunc_203(O *arg0, int arg1, char *arg2) {
     int sp15C, sp158, sp154, sp150;

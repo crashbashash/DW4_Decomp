@@ -19,7 +19,7 @@ void FUN_00259dc0(S *arg0, int arg1, int arg2);
 /* matching construct: retail writes a zero byte to a word-sized frame temporary (sp+88, sp+84) before each
  * "release the old reference, store the new one" pair; a one-byte class temporary with a zeroing constructor
  * takes those slots (below the named StringRef at sp+92). */
-struct ScratchFlag { char c; ScratchFlag() { (*(signed char *)&c) = 0; } };
+struct ScratchFlag { char c; ScratchFlag() { *(signed char *)&c = 0; } };
 class StringRef {
 public:
     int p;
@@ -71,7 +71,7 @@ void FUN_00259dc0(S *arg0, int arg1, int arg2) {
     }
     arg0->f36 = FUN_002caa70(0);
     l = arg0->f36;
-    n = (*(int const *)&l->n);
+    const L *view = l; n = view->n;
     if (n < l->cap) {
         l->n = l->n + 1;
     } else {

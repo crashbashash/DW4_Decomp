@@ -1,5 +1,6 @@
 int List_Resize();
 struct L { int p0; int p1; int size; int cap; long long *data; };
+static inline int size_of(const struct L *list) { return list->size; }
 void Gap__Sg__igCommonTraversal__vfunc_32(void *arg0, long long arg1) {
     int temp_s2;
     struct L *temp_s1;
@@ -7,7 +8,7 @@ void Gap__Sg__igCommonTraversal__vfunc_32(void *arg0, long long arg1) {
     temp_s1 = *(struct L **)((char *)arg0 + 240);
     temp_s2 = temp_s1->size;
     if (temp_s2 < temp_s1->cap) {
-        temp_s1->size = *(const int *)&temp_s1->size + 1;
+        temp_s1->size = size_of(temp_s1) + 1;
     } else {
         List_Resize(temp_s1, temp_s2 + 1, 8);
     }

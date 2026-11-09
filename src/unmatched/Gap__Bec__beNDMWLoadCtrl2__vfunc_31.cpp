@@ -62,6 +62,7 @@ struct S_ref { char pad4[4]; int f4; };
 struct Host { char pad40[40]; S_ref *f40; };
 /* Owning stack reference to a freshly created property data list, released on scope exit
  * (reference count in the low 23 bits of f4). */
+static inline int st1(const beNDMWLoadCtrl2CtrlData *data) { return data->_st1; }
 class ListRef {
 public:
     S_ref *p;
@@ -143,7 +144,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
             }
             break;
         case 2:
-            switch (*(const int *)&st->_st1) {
+            switch (st1(st)) {
             case 0:
                 beMessenger_SendNamed(arg0->_messenger, &DAT_00517a48[0], &DAT_00518148[0], 0, &DAT_00517fe0[0]);
                 beMessenger_SendNamed(arg0->_messenger, &DAT_00517a48[0], &DAT_00518148[0], 0, &DAT_00518158[0]);

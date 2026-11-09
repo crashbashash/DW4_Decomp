@@ -1,5 +1,5 @@
 struct ConfigToken { int vt; unsigned int _refCount; char *text; int kind; };
-struct ConfigRecordList { int vt; int rc; int count; int capacity; int *data; };
+struct ConfigRecordList { int vt; int rc; int count; int capacity; int *data; int getCount() const { return count; } };
 struct ConfigTextParser { char pad[52]; char *cursor; };
 struct ConfigSettingEntry { int key; int value; int extra; };
 struct ConfigSettingsRecord { int vt; int rc; ConfigRecordList *entries; int table; };
@@ -77,7 +77,7 @@ int FUN_002db750(ConfigTextParser *self, ConfigSettingsRecord *out) {
         list = out->entries;
         index = list->count;
         if (index < list->capacity) {
-            list->count = *(const int *)&list->count + 1;
+            list->count = list->getCount() + 1;
         } else {
             List_Resize(list, index + 1, 4);
         }
