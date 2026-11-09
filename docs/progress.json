@@ -459,8 +459,8 @@
     "functions": 13389
    },
    "fields": {
-    "bytes": 699716,
-    "functions": 3382
+    "bytes": 699524,
+    "functions": 3381
    },
    "idioms": {
     "bytes": 1197784,
@@ -622,7 +622,7 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 6827,
+  "offset_casts": 6826,
   "pct": 40.05,
   "recovered": 24990,
   "synthetic": 10141,

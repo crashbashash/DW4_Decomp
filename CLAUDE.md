@@ -115,7 +115,8 @@ make it read well. Either can be done alone.
   which `asm` statements can go. `tools/progress.py --debt-check` also fails on any rise in `inline_asm.other`,
   which counts every statement without a row for each function it reaches; `sync`, `ei` and an approved
   statement are not debt.
-- **Names** come from evidence; a guess goes in the topic document's open questions, not into a name. Apply overlays with
+- **Names** come from the strongest evidence there is. Where no source survives, a best guess from what the function,
+  variable or struct does is a valid name; doubt about it goes in the topic document's open questions. Apply overlays with
   `tools/apply_names.py` (dry run, then `--apply --check`).
 
 ### Matched and readable
@@ -132,9 +133,9 @@ raw casts can land as they are.
 is readable when all of these hold:
 
 1. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.
-2. Every identifier is a recovered name, from evidence (RTTI, strings, callers), never a guess. What
-   it does should make the name obvious, so source never justifies a name: a hypothesis goes in
-   the topic document's open questions. A name
+2. Every identifier is a recovered name: from RTTI, strings or callers where they exist, otherwise a best
+   guess from what the thing does. What it does should make the name obvious, so source never justifies a
+   name: doubt about one goes in the topic document's open questions. A name
    holding an address is not recovered: it says where a thing is, not what it is. That goes for
    functions, variables, structs and classes alike; a type also needs a real name, not a placeholder
    such as `S`, `Obj` or `Info176`.

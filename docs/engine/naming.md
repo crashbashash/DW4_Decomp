@@ -7,7 +7,7 @@ has to meet: one profile per translation unit, shared headers, decimal `fNN` mem
 and evidence-named strings.
 
 **End state.** A module is complete only when every `DAT_`/`FUN_` reference inside it is
-named from evidence. A hypothesis about one goes in the open questions of its topic document, not the source.
+named, from the strongest evidence there is. Doubt about a name goes in the open questions of its topic document, not the source.
 `FUN_`/`DAT_` names are a work-in-progress form, not a permanent one.
 
 ## Where a name lives
@@ -147,7 +147,8 @@ known, the local view is replaced by the shared header in the same commit.
 
 ## What counts as a name
 
-A name must be *recovered*, not guessed. The sources used so far, best first (per-source
+A name is *recovered* from the strongest evidence available. Where nothing stronger survives, a best guess from what
+the function, variable or struct does is a valid name, so long as it describes behaviour the code shows. The sources used so far, best first (per-source
 counts are in [`../../PROGRESS.md`](../../PROGRESS.md) and the overlay files themselves):
 
 | Source | Names | Where |

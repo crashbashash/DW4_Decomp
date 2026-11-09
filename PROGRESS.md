@@ -52,7 +52,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | it sits in its class or module file, not `src/unmatched/` | 12,011 | 1,807,508 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 10,532 | 1,861,764 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,879 | 1,197,784 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,382 | 699,716 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,381 | 699,524 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,182 | 362,736 |
 
 ## Debt

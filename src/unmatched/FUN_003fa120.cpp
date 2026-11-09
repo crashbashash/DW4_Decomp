@@ -1,7 +1,8 @@
-/* The +20 read is const: it is created before the *out reload so the register colouring puts
+/* The flat field is const: its read is created before the *out reload so the register colouring puts
  * the field in a0 and the running total in v1. */
 #include "dw4/reflected.h"
 extern "C" {
+struct BonusItem { char pad[20]; const int flat; };
 struct BonusFolder { char pad[12]; igObjectList *list; };
 int beNDMWItemBase_GetRecordInt(beNDMWItemBase *, beNDMWGameRam *, const char *);
 struct BonusFolder *igProperty_GetRecordFolder(void *, const char *);
@@ -13,7 +14,7 @@ void FUN_003fa120(beNDMWGameRam *gameram, void *player, int *out, const char *na
         if (item != 0) {
             *out += beNDMWItemBase_GetRecordInt(item, gameram, name);
             if (with_flat != 0) {
-                *out += *(const int *)((char *)item + 20);
+                *out += ((BonusItem *)item)->flat;
             }
         }
     }
