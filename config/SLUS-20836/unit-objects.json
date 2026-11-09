@@ -6470,5 +6470,34 @@
     "externals": {
       "__dl__FPv": "0x00100610"
     }
+  },
+  "0x00100610": {
+    "externals": {
+      "__unexpected": "0x00101380"
+    },
+    "exceptions": {
+      "index": "0x00546fe0",
+      "table": "0x00542af0",
+      "table_size": "0x000010"
+    }
+  },
+  "0x00371840": {
+    "externals": {
+      "__ct__10PooledNodeFv": "0x003717e0",
+      "__throw": "0x00102550"
+    },
+    "exceptions": {
+      "index": "0x0054df70",
+      "table": "0x005433c0",
+      "table_size": "0x000014"
+    }
+  },
+  "0x00237c50": {
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
   }
 }
