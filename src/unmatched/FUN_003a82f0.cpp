@@ -1,12 +1,11 @@
 /* Rescales a beBaseInfoRamTimer property of a ram object. The data list is created on first use,
  * then the timer's bias is rebased so the elapsed world time stays continuous across the scale
  * change. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 long long __fixsfdi(float);
 igObject *beBaseInfoDataList_Create(int);
 int Memory_GetAllocatorBySelector(int);
-void igObject_Destroy(igObject *);
 int igObject_GetAllocator(beBaseInfoRam *);
 beBaseInfoRamTimer *igProperty_FindByName(int, int, int);
 extern int DAT_00585be0[4];
@@ -15,12 +14,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" void FUN_003a82f0(beBaseInfoRam *arg0, int arg1, float fparg0) {
     beBaseInfoRamTimer *prop;
     float scale;

@@ -1,6 +1,7 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
-struct NamedObject { int word0; int references; int name; };
-void igObject_Destroy(NamedObject *);
+struct NamedObject : public igObject { int name; };
 NamedObject *FUN_002c43b0(...);
 int FUN_002e3850(...);
 int FUN_002eb010(...);
@@ -17,13 +18,7 @@ extern int DAT_00586f20[4];
 }
 struct G { char p[76]; int f76; };
 extern G *DAT_00586dc8[4];
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->references = o->references - 1; if ((o->references & 0x7FFFFF) == 0) igObject_Destroy(o); } }
-    T *get() const { return p; }
-    T *operator->() const { return p; }
-};
+
 static inline int internedPool(void) {
     if (DAT_00586f20[0] == 0) {
         int v = FUN_002eb010(0x10);

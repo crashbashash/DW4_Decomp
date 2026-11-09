@@ -1,5 +1,7 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
-typedef struct FormattedObject { int w0; int refs; int f8; } FormattedObject;
+typedef struct FormattedObject : public igObject { int f8; } FormattedObject;
 typedef struct Vector3f { float x, y, z; } Vector3f;
 FormattedObject *FUN_002b9500(int);
 int fptodp(float);
@@ -7,22 +9,10 @@ int FUN_002eb010(int);
 int FUN_0030b7e0(FormattedObject *, int, int, int, int);
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
-int igObject_Destroy(FormattedObject *);
 extern int DAT_004c22f0[16];
 extern int DAT_00586f20[16];
 }
-struct AdoptReference { };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object, AdoptReference) : p(object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->refs = object->refs - 1;
-            if ((object->refs & 0x7FFFFF) == 0) igObject_Destroy(object);
-        }
-    }
-};
+
 struct InternedText {
     int text;
     InternedText(int name) {

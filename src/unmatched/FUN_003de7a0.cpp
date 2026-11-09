@@ -1,6 +1,5 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(void *);
 struct Rec { int mod; unsigned short v[32]; };
 beUnicodeObj *FUN_003614f0(int);
 int beUnicodeObj_AllocateBuffer(beUnicodeObj *, int);
@@ -15,12 +14,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the slot's text object; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" void FUN_003de7a0(beNDMWLoadIntf2NameSel *arg0, int arg1) {
     int s1;
     int s3;

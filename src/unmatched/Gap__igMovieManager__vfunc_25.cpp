@@ -1,6 +1,6 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 int Memory_GetAllocatorBySelector(...);
 int igObject_IsKindOf(...);
@@ -46,7 +46,7 @@ public:
     virtual int v35(...); virtual int v36(...);
 };
 /* reference-counted engine object header: refcount word at +4 (low 23 bits) */
-struct RC { int vt; int rc; };
+struct RC : public igObject { };
 /* 4-byte struct returned through a hidden pointer by vtable slot 22 of the audio object */
 struct R4 { int x; };
 /* igMovieManager._movieRenderer: only the owner back-reference at +12 is used here */
@@ -61,7 +61,7 @@ public:
     virtual int v15(...); virtual int v16(...); virtual int v17(...); virtual int v18(...); virtual int v19(...);
     virtual int v20(...); virtual int v21(...); virtual R4 s22();
 };
-template <class T> struct igSmartPointer { T *p; ~igSmartPointer() { T *o = p; if (o != 0) { o->rc = o->rc - 1; if ((o->rc & 0x7fffff) == 0) igObject_Destroy(o); } } };
+
 struct ListHead {
     int a; int b; int count; int cap; int *data;
     /* matching construct: reading the search key through a pointer keeps it in a stack slot, as retail does */
@@ -81,9 +81,9 @@ struct ListHead {
     }
 };
 /* igMovieInfo: name +8, mode +24 (2 = no manager check), codec name +68, codec ref +72. */
-struct MovieInfo { int vt; int rc; const char *name; int pad[3]; int mode; int pad2[10]; const char *codecName; int codec; };
+struct MovieInfo : public igObject { const char *name; int pad[3]; int mode; int pad2[10]; const char *codecName; int codec; };
 
-#define REL(x) { RC *q = (x); if (q != 0) { q->rc = q->rc - 1; if (((unsigned long long)((long long)q->rc << 0x29) >> 0x29) == 0) igObject_Destroy(q); } }
+#define REL(x) { RC *q = (x); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7FFFFF) == 0) igObject_Destroy(q); } }
 #define ALLOC(a, self) { int base_ = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { a = base_; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); } }
 
 int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
@@ -100,7 +100,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
     }
     igSmartPointer<RC> codec;
     codec.p = 0;
-    if (codec.p != 0) codec.p->rc = codec.p->rc + 1;
+    if (codec.p != 0) codec.p->_refCount = codec.p->_refCount + 1;
     if (self->_codecList != 0) {
         i = 0;
         if (0 < ((ListHead *)self->_codecList)->count) {
@@ -108,7 +108,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
                 RC *c = ((RC **)((ListHead *)self->_codecList)->data)[i];
                 const char *n = (const char *)((int *)((VC *)c)->v20())[7];
                 if (strcmp(n, codecName) == 0) {
-                    if (c != 0) c->rc = c->rc + 1;
+                    if (c != 0) c->_refCount = c->_refCount + 1;
                     REL(codec.p)
                     codec.p = c;
                     break;
@@ -130,10 +130,10 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
         RC *created = (RC *)igMetaObject_CreateInstance(meta, a);
         RC *c;
         if (created != 0 && igObject_IsKindOf(created, DAT_00587738[0]) != 0) { c = created; } else { c = 0; }
-        if (c != 0) c->rc = c->rc + 1;
+        if (c != 0) c->_refCount = c->_refCount + 1;
         REL(codec.p)
         codec.p = c;
-        { RC *q = codec.p; q->rc = q->rc - 1; if (((unsigned long long)((long long)q->rc << 0x29) >> 0x29) == 0) igObject_Destroy(q); }
+        { RC *q = codec.p; q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7FFFFF) == 0) igObject_Destroy(q); }
         if (((VC *)codec.p)->v21() != 0) {
             if (self->_codecList == 0) {
                 ALLOC(a, self);
@@ -145,7 +145,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
     }
     {
         RC *c = codec.p;
-        if (c != 0) c->rc = c->rc + 1;
+        if (c != 0) c->_refCount = c->_refCount + 1;
         REL((RC *)movie->codec)
         movie->codec = (int)c;
     }

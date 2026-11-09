@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 struct V4 { float a, b, c, d; };
 struct Frame { void *f0; char pad4[96]; float eye[8]; float center[10]; float range; char pad176[56]; int f232; void *f236; };
 class A { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(V4 *); };
@@ -21,7 +21,6 @@ void *FUN_00238110(...);
 int FUN_00460e00(...);
 int ObjectList_AppendRetained(...);
 int StringChunk_ReleaseHeader(...);
-int igObject_Destroy(...);
 extern float DAT_004e1098[4];
 extern float DAT_004e109c[4];
 extern float DAT_004e10a0[4];
@@ -30,19 +29,7 @@ extern Frame *DAT_0056dc50[4];
 int FUN_0045f200(...);
 void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(void *object) : p((T *)object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-};
+
 struct Tag { };
 static inline void *createFirst() {
     Tag tag = Tag();
@@ -61,7 +48,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     float sp58[3];
     Frame *s0;
     igObject *t;
-    igSmartPointer<igObject> first(createFirst());
+    igSmartPointer<igObject> first((igObject *)createFirst());
     sp40.a = 1.0f; sp40.b = 1.0f; sp40.c = 1.0f; sp40.d = 1.0f;
     ((A *)first.p)->vX(&sp40);
     if (DAT_0056dc50[0] == 0) {
@@ -71,7 +58,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     }
     DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
     s0 = DAT_0056dc50[0];
-    igSmartPointer<igObject> second(createSecond());
+    igSmartPointer<igObject> second((igObject *)createSecond());
     ((B *)second.p)->v128(4);
     ((B *)second.p)->v132(s0->range);
     arg0->f36->v128(s0->eye);
@@ -144,7 +131,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     arg0->f72->b8 = 1;
     arg0->f72->f12 = (int)&FUN_0045f200;
     arg0->f72->b24 = 1;
-    igSmartPointer<igObject> third(createThird());
+    igSmartPointer<igObject> third((igObject *)createThird());
     ((Y *)third.p)->b24 = 1;
     FUN_001c5160(third.p, 1.1f);
     t = third.p;

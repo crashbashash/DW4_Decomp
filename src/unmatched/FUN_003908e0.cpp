@@ -1,12 +1,11 @@
-#include "dw4/reflected.h"
 /* FUN_003908e0 is beModelCtrlInfoHitBody's per-frame box builder; receiver evidence: +8 bool, +16 long, +24 count, +28..+40 the four lists.
  * arg1 is a beBaseInfoRam (+12 parent info, whose +20 is its data list); the "HIT" record is a beModelCtrlInfoDataHit (+20 AABox list).
  * igAABox's _min / _max are the reflected igVec3f fields (float[3] in include/dw4/reflected.h), read and written as floats here.
  * matching construct: the first-loop minuend is spelled `*(float *)&pc[0]`; other spellings change MWCC's operand/load order and swap the arg0 and i registers.
  * Arena refs stay 4-byte handles in the reflected structs, so each list is reached through a cast of the handle to its list class. */
+#include "dw4/igSmartPointer.h"
 struct AABoxExtent { float x, y, z; };
 extern "C" {
-void igObject_Destroy(igAABox *);
 igAABox *FUN_0018a660(int);
 void FUN_0018b990(igAABox *, float *);
 int thunk_FUN_0018ac80(...);
@@ -22,12 +21,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the per-slot working box (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int arg2, long long arg3);
 igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int arg2, long long arg3) {
     if (arg0->_isFirst != 0) {

@@ -1,7 +1,7 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
 /* igObject header: the reference count at +4 is not a reflected field */
-void igObject_Destroy(igObject *);
 int List_Resize(...);
 int Memory_GetAllocatorBySelector(...);
 int ObjectList_AppendRetained(...);
@@ -33,12 +33,7 @@ public:
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 /* Owning stack reference to the new item-page window; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *w) : p(w) {}
-    ~igSmartPointer() { T *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)w); } }
-};
+
 struct Str { static inline int *intern(const char *s) {
     int *token;
     if (s == 0) {

@@ -2,8 +2,8 @@
  * _subWndNo, 1 run it until it stops, default tear down). FUN_003d8740 takes (self, info, st0) so
  * the state stays in a2; the sub-window reference lives in memory and is released when its block
  * ends, before case 0 falls into case 1 into default. */
-#include "dw4/reflected.h"
 
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_003d8740(void *, void *, int);
 beNDMWWindow *FUN_003b7750(void *);
@@ -12,7 +12,6 @@ beNDMWWindow *FUN_003bb1d0(void *);
 beNDMWWindow *beNDMWShopCtrl00_Create(void *);
 void *igObject_GetAllocator(void *);
 void *Memory_GetAllocatorBySelector(int);
-void igObject_Destroy(beNDMWWindow *);
 int FUN_00236f80(int, int);
 int beLua__RunNamedChunk(int, int *, int);
 void beMessenger_SelectGroup(int, int *);
@@ -36,12 +35,6 @@ extern unsigned char GPR_00554c14;
 
 /* Owning stack reference to the sub-window being created: starts empty, takes the window the
  * creator returns and releases it on scope exit (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 
 #define RELEASE_WIN(p_) { beNDMWWindow *rw = (p_); if (rw) { --rw->_refCount; if (!(rw->_refCount & 0x7fffff)) igObject_Destroy(rw); } }
 #define GET_ALLOC(v) { void *ga = igObject_GetAllocator(self); if (GPR_00554c14 != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(DAT_00587110[0]); } }

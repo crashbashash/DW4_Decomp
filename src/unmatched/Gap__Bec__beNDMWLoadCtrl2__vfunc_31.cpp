@@ -1,3 +1,4 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 struct S_ref;
 struct Host;
@@ -19,7 +20,6 @@ int beMessenger_SelectGroup(int, int *);
 int beMessenger_SelectReceivers(int, int *, int *, int);
 int beMessenger_SendGroup(int, int *, int *);
 int beMessenger_SendNamed(int, int *, int *, int, int *);
-int igObject_Destroy(struct S_ref *);
 int igObject_GetAllocator(struct Host *);
 void *beBaseInfoDataList_Create(int);
 void *igProperty_FindByName(struct S_ref *, int, int *);
@@ -58,17 +58,11 @@ extern int DAT_00589208[4];
 extern int DAT_0058a1e0[4];
 extern unsigned char GPR_00554c14;
 
-struct S_ref { char pad4[4]; int f4; };
+struct S_ref : public igObject { };
 struct Host { char pad40[40]; S_ref *f40; };
 /* Owning stack reference to a freshly created property data list, released on scope exit
  * (reference count in the low 23 bits of f4). */
 static inline int st1(const beNDMWLoadCtrl2CtrlData *data) { return data->_st1; }
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->f4; if ((o->f4 & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 
 extern "C" void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1);
 void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
@@ -92,11 +86,11 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
             if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
             igSmartPointer<S_ref> list((S_ref *)beBaseInfoDataList_Create(a));
             o = list.p;
-            if (o != 0) o->f4 = (int)((int) (o->f4 + 1));
+            if (o != 0) o->_refCount = (int)((int) (o->_refCount + 1));
             old = arg1->f40;
             if (old != 0) {
-                old->f4 = (int)((int) (old->f4 - 1));
-                if (((unsigned long long) ((long long) old->f4 << 0x29) >> 0x29) == 0) {
+                old->_refCount = (int)((int) (old->_refCount - 1));
+                if ((old->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(old);
                 }
             }
@@ -111,11 +105,11 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
             if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
             igSmartPointer<S_ref> list((S_ref *)beBaseInfoDataList_Create(a));
             o = list.p;
-            if (o != 0) o->f4 = (int)((int) (o->f4 + 1));
+            if (o != 0) o->_refCount = (int)((int) (o->_refCount + 1));
             old = arg1->f40;
             if (old != 0) {
-                old->f4 = (int)((int) (old->f4 - 1));
-                if (((unsigned long long) ((long long) old->f4 << 0x29) >> 0x29) == 0) {
+                old->_refCount = (int)((int) (old->_refCount - 1));
+                if ((old->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(old);
                 }
             }

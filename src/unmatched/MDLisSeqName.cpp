@@ -1,8 +1,7 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 igObject *beBaseInfoDataList_Create(...);
 int Memory_GetAllocatorBySelector(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 beModelCtrlInfoRamData *igProperty_FindByName(...);
 int strcmp(const char *, const char *);
@@ -15,15 +14,7 @@ int MDLisSeqName(char *arg0);
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    /* matching construct: accessor read — reading the member through `this` (not `ref.p`) keeps the
-     * ram pointer in s0 and the new list in s1 as retail; a direct member read swaps them. */
-    T *get() const { return p; }
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 int MDLisSeqName(char *arg0) {
     beBaseInfoRam *h = DAT_0058a1e0[0];
     if (h->_dataList == 0) {

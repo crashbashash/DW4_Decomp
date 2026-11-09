@@ -1,7 +1,6 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 /* reference-counted engine object header: refcount word at +4 */
-void igObject_Destroy(igObject *);
 igObject *beBaseInfoDataList_Create(int);
 int Memory_GetAllocatorBySelector(...);
 int igObject_GetAllocator(...);
@@ -26,12 +25,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* matching construct: dummy-virtual class gives arg0 a vtable so v35 dispatches through slot 35 */
 class MdlPlayer2VirtualShim { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();  virtual void v35(beBaseInfoRam *, int *); char p[28]; int f32; char p2[8]; int f44; };
 extern "C" void Gap__Bec__beNDMWMdlPlayer2__vfunc_38(MdlPlayer2VirtualShim *arg0, beBaseInfoRam *arg1);

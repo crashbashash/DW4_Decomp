@@ -1,7 +1,7 @@
 /* The byte-offset induction variable shares the function-level `idx` (the first append's index
  * web, then the offset web), which gives it a later register id than the stack reload of the new
  * list pointer. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 static inline int countOf(const igIntList *l) { return l->_count; }
 extern "C" {
 extern int beMessenger_SendGroup(...);
@@ -10,7 +10,6 @@ extern int beMessenger_AppendInt(...);
 extern int beMessenger_DispatchSelected(...);
 extern int List_Resize(...);
 extern int ObjectList_AppendRetained(...);
-extern int igObject_Destroy(...);
 extern int FUN_002caa70(...);
 extern void *Memory_GetAllocatorBySelector(...);
 extern void *igObject_GetAllocator(...);
@@ -35,12 +34,7 @@ void FUN_004329d0(beNDMWShopCtrlDigilabo *self);
 }
 /* Owning stack reference to the new weapon-number list; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
     void *obj;
     RecB *rb;

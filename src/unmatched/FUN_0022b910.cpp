@@ -1,28 +1,8 @@
+#include "dw4/igSmartPointer.h"
 extern "C" {
-struct T { int word0; int references; };
-void igObject_Destroy(T *);
+struct T : public igObject { };
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer() : p(0) {}
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            --o->references;
-            if ((o->references & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-    igSmartPointer &operator=(T *next) {
-        T *o;
-        if (next) ++next->references;
-        if ((o = p) != 0) {
-            --o->references;
-            if ((o->references & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-        p = next;
-        return *this;
-    }
-};
+
 struct Item { char p[12]; T *held; };
 struct Lst { char p[8]; int count; char q[4]; Item **data; };
 struct Own { char p[28]; Lst *f28; };
@@ -42,11 +22,11 @@ static inline void storeHeld(Lst *list, int index, const igSmartPointer<T> &valu
     T *held = value.p;
     Item *it = list->data[index];
     T *old;
-    if (held) ++held->references;
+    if (held) ++held->_refCount;
     old = it->held;
     if (old) {
-        --old->references;
-        if ((old->references & 0x7FFFFF) == 0)
+        --old->_refCount;
+        if ((old->_refCount & 0x7FFFFF) == 0)
             igObject_Destroy(old);
     }
     it->held = held;

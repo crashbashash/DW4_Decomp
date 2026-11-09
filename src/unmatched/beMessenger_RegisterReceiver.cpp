@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 static inline int countOf(const igIntList *l) { return l->_count; }
 extern "C" {
 void *igProperty_FindByName(void *, int);
@@ -8,7 +8,6 @@ void *beMessengerGroup_Create(void *);
 void igNamedObject_SetName(void *, const char *);
 void ObjectList_AppendRetained(void *, void *);
 void List_Resize(void *, int, int);
-void igObject_Destroy(void *);
 void *FUN_002eb010(int);
 void *StringPool_Construct(void *);
 const char *StringPool_Intern(void *, const char *);
@@ -25,12 +24,7 @@ extern unsigned char GPR_00554c14;
 /* Owning stack reference to the receiver group: holds the found (retained) or freshly created
  * group for the duration of the registration and releases it on scope exit (reference count in the
  * low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *g) : p(g) {}
-    ~igSmartPointer() { T *g = p; if (g != 0) { --g->_refCount; if ((g->_refCount & 0x7fffff) == 0) igObject_Destroy(g); } }
-};
+
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -61,11 +55,11 @@ extern "C" void beMessenger_RegisterReceiver(beMessenger *self, void *recv, cons
     int n;
 
     igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)igProperty_FindByName((void *)self->_groupList, DAT_00585be0[0]));
-    RETAIN_REF((igObject *)grp.p)
+    RETAIN_REF(grp.p)
     if (grp.p == 0) {
         allocator = igObject_GetAllocator(self);
         allocator = GPR_00554c14 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        RELEASE_REF((igObject *)grp.p)
+        RELEASE_REF(grp.p)
         grp.p = (beMessengerGroup *)beMessengerGroup_Create(allocator);
         igNamedObject_SetName(grp.p, name);
         ObjectList_AppendRetained((void *)self->_groupList, grp.p);

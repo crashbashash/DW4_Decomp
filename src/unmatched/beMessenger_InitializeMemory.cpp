@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 
 extern "C" {
 int List_Reserve(void *, int, int);
@@ -7,7 +7,6 @@ int ObjectList_ResizeRetained(void *, int);
 igObject *beMessengerArgData_Create(void *);
 igObject *beMessengerDelay_Create(void *);
 igObject *beMessengerWork_Create(void *);
-void igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
@@ -18,12 +17,6 @@ void beMessenger_InitializeMemory(beMessenger *arg0);
 #define RELEASE_REF(q) { igObject *rr = (q); \
     if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
 
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 class WorkRef {
 public:
     igObject *p;

@@ -1,11 +1,12 @@
-typedef struct Iterator { int w0; int refs; } Iterator;
+#include "dw4/igSmartPointer.h"
+
+typedef struct Iterator : public igObject { } Iterator;
 extern "C" {
 Iterator *FUN_002279d0(int);
 int FUN_0022a8d0(Iterator *, int);
 int FUN_0022a950(Iterator *);
 int FUN_0022a9b0(Iterator *);
 int StringChunk_ReleaseHeader(int, int *);
-int igObject_Destroy(Iterator *);
 }
 struct StringRef {
     int *p;
@@ -19,11 +20,7 @@ struct StringRef {
         }
     }
 };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->refs = o->refs - 1; if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o); } }
-};
+
 struct IteratorType {};
 static inline Iterator *makeIterator(IteratorType) { return FUN_002279d0(0); }
 class ItemInterface { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void vX(const StringRef &, int, int); };

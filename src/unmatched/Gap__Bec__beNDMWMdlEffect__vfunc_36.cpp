@@ -1,7 +1,6 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 /* reference-counted engine object header: refcount word at +4 */
-void igObject_Destroy(igObject *);
 igObject *FUN_00350020(...);
 igObject *beBaseInfoDataList_Create(...);
 int FUN_00396340(...);
@@ -25,12 +24,7 @@ struct ReleaseRef { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the freshly created property data list; released at the end of the
  * full expression that stores it (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the effect work object created here; released on scope exit. */
 class EffectRef {
 public:
@@ -51,7 +45,9 @@ struct DataList { static inline void store(beBaseInfoRam *ram, const igSmartPoin
             igObject_Destroy(old);
     }
     ram->_dataList = (int)created;
-} };
+}
+static inline void create(beBaseInfoRam *ram, int a) { igSmartPointer<igObject> list(beBaseInfoDataList_Create(a)); store(ram, list); }
+};
 /* matching construct: opaque receiver; arg0 is only forwarded */
 struct EffectReceiverShim { int dummy; };
 extern "C" void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam *arg1);
@@ -67,7 +63,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        DataList::store(arg1, igSmartPointer<igObject>(beBaseInfoDataList_Create(a)));
+        DataList::create(arg1, a);
     }
     s1 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_00515db8);
     alloc = igObject_GetAllocator(arg0);

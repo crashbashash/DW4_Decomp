@@ -1,7 +1,6 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 static inline int countOf(const igObjectList *l) { return l->_count; }
 extern "C" {
-void igObject_Destroy(beUnicodeObj *);
 struct W { char pad[12]; igObjectList *f12; };
 int FUN_003f9570(beNDMWGameRam *);
 int FUN_00236f80(int, int);
@@ -19,12 +18,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the new name text; released on scope exit, after the name list has
  * retained it (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg3) {
     int s0;
     int al;
@@ -74,7 +68,7 @@ extern "C" void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg
             p = ((igObject **)l->_data)[i];
             if (p != 0) {
                 p->_refCount = p->_refCount - 1;
-                if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy((beUnicodeObj *)p);
+                if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy(p);
             }
         }
         n2 = l->_count;

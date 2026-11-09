@@ -1,28 +1,17 @@
 /* On first use (no movie manager yet, flag byte clear) probes the platform with FUN_00308320 and
  * latches the flag when it answers 2, then hands the renderer's visual context to the movie
  * manager (FUN_00339110) through a counted reference that this call releases afterwards. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_00308320(int *);
-int igObject_Destroy(igObject *);
 extern int DAT_005012f0[4];
 extern unsigned char GPR_00554e4c;
 void igMovieRenderer_InitializeDrawing(igMovieRenderer *arg0);
 }
 /* Counted reference to an igObject: takes a reference on construction and drops it on scope exit
  * (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) { if (p != 0) p->_refCount = p->_refCount + 1; }
-#if __MWERKS__ >= 0x3000
-    /* matching construct: this unit's inline release re-reads p after the decrement */
-    ~igSmartPointer() { if (p != 0) { p->_refCount = p->_refCount - 1; if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy(p); } }
-#else
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); } }
-#endif
-};
-extern "C" int FUN_00339110(int, igSmartPointer<igObject> *);
+
+extern "C" int FUN_00339110(int, igSmartPointer<igObject>);
 void igMovieRenderer_InitializeDrawing(igMovieRenderer *arg0) {
     int temp_v0;
 
@@ -32,6 +21,5 @@ void igMovieRenderer_InitializeDrawing(igMovieRenderer *arg0) {
             GPR_00554e4c = 1;
         }
     }
-    igSmartPointer<igObject> context((igObject *)arg0->_visualContext);
-    FUN_00339110(arg0->_movieManager, &context);
+    FUN_00339110(arg0->_movieManager, igSmartPointer<igObject>((igObject *)arg0->_visualContext, kRetainReference));
 }

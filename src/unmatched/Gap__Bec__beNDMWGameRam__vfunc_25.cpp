@@ -1,6 +1,6 @@
-#include "dw4/reflected.h"
 /* Creates the single game-ram info and its ram object when the info list is empty; the two stack
  * holders release the creating shares once both objects are registered (the lists keep their own). */
+#include "dw4/igSmartPointer.h"
 extern "C" {
 beNDMWGameRamInfo *FUN_003ca380(int);
 beNDMWGameRamInfoRam *FUN_003ca1a0(int);
@@ -8,7 +8,6 @@ int Memory_GetAllocatorBySelector(int);
 int ObjectList_AppendRetained(unsigned, void *);
 int beMessenger_RegisterReceiverFromInfo(int, beNDMWGameRamInfoRam *, int *);
 int igNamedObject_SetName(beNDMWGameRamInfo *, int *);
-void igObject_Destroy(void *);
 int igObject_GetAllocator(beNDMWGameRam *);
 extern int DAT_00518bb8[4];
 extern int DAT_00518bc0[4];
@@ -18,12 +17,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_25(beNDMWGameRam *arg0);
 }
 /* Owning stack reference to the game-ram info created here, released on scope exit (reference
  * count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the info's ram object created here, released on scope exit. */
 class RamRef {
 public:

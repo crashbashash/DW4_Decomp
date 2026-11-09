@@ -1,8 +1,8 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
 /* reference-counted string-chunk header: refcount at +4, length at +12 */
-struct RefCountedHeader { int word0; int references; int w8; int w12; };
-void igObject_Destroy(RefCountedHeader *);
+struct RefCountedHeader : public igObject { int w8; int w12; };
 RefCountedHeader *FUN_00236f80(...);
 int strlen(...);
 int FUN_0030b3c0(...);
@@ -28,18 +28,7 @@ struct Slot { char p0[24]; int f24; };
 /* Element-buffer list header: buffer pointer at +16. */
 struct SlotList { char p[16]; Slot **arr; };
 /* Retained share of the system's global string object. */
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *o) : p(o) { if (p != 0) p->references = p->references + 1; }
-    ~igSmartPointer() {
-        T *o;
-        /* matching construct: (o = p) != 0 shares the load of the held pointer with the string reads, as retail */
-        if ((o = p) != 0) {
-            o->references = o->references - 1;
-            if ((o->references & 0x7fffff) == 0) igObject_Destroy(o);
-        }
-    }
-};
+
 extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_26(beNDMWStatusMainSlot *a);
 void Gap__Bec__beNDMWStatusMainSlot__vfunc_26(beNDMWStatusMainSlot *a) {
     Slot *s2 = 0;
@@ -57,7 +46,7 @@ void Gap__Bec__beNDMWStatusMainSlot__vfunc_26(beNDMWStatusMainSlot *a) {
         buf[1] = 0;
         buf[0] = s2->f24 + 0x30;
         {
-        igSmartPointer<RefCountedHeader> sp48((RefCountedHeader *)*(int *)((char *)FUN_00236f80(a->_insight, DAT_00587d08[0]) + 72));
+        igSmartPointer<RefCountedHeader> sp48((RefCountedHeader *)*(int *)((char *)FUN_00236f80(a->_insight, DAT_00587d08[0]) + 72), kRetainReference);
         FUN_0030b3c0(sp48.p, temp);
         q = sp48.p;
         temp = q->w12;

@@ -1,27 +1,14 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
-struct ResizeEvent { int word0; int references; float origin[2]; float size[2]; };
-void igObject_Destroy(ResizeEvent *);
+struct ResizeEvent : public igObject { float origin[2]; float size[2]; };
 ResizeEvent *FUN_002332b0(...);
 int FUN_00237ea0(...);
 int igObject_GetAllocator(...);
 extern float DAT_004e0fa0[4];
 extern float DAT_004e0fa4[4];
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *event) : p(event) {}
-    ~igSmartPointer() {
-        T *event = p;
-        if (event != 0) {
-            --event->references;
-            if ((event->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(event);
-            }
-        }
-    }
-    T *operator->() const { return p; }
-    T *get() const { return p; }
-};
+
 struct WindowInfo { char p[40]; int f40; };
 struct Receiver { char p[8]; WindowInfo *f8; };
 extern "C" int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int width, int height);

@@ -2,15 +2,14 @@
  * allocator unless the global selector flag is clear), then dispatches on which named property the
  * parent info carries: FUN_00390f80 when the first property's node is armed, FUN_003915a0 for the
  * second property. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 /* Minimal view of the property node: only the word at +8 is tested here. */
-struct NodeView { int _vtable; unsigned int _refCount; int f8; };
+struct NodeView : public igObject { int f8; };
 extern "C" {
 igObject *beBaseInfoDataList_Create(int);
 int FUN_00390f80(int, beBaseInfo *, beBaseInfoRam *, int, beModelCtrlInfoRamData *);
 int FUN_003915a0(int, beBaseInfo *, beBaseInfoRam *, int, beModelCtrlInfoRamData *);
 int Memory_GetAllocatorBySelector(int);
-int igObject_Destroy(igObject *);
 int igObject_GetAllocator(beBaseInfoRam *);
 beModelCtrlInfoRamData *igProperty_FindByName(int, int, int *);
 extern int DAT_0050ef60[4];
@@ -23,12 +22,7 @@ void Gap__Core__igObject__vfunc_38(int arg0, beBaseInfoRam *arg1);
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void Gap__Core__igObject__vfunc_38(int arg0, beBaseInfoRam *arg1) {
     beBaseInfo *info;
     int work;

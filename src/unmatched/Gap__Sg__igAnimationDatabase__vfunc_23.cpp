@@ -1,5 +1,5 @@
-#include "dw4/reflected.h"
-struct AnimDbObject { int _vtable; unsigned int _refCount; int _name; int _source; int _f16; int _f20; };
+#include "dw4/igSmartPointer.h"
+struct AnimDbObject : public igObject { int _name; int _source; int _f16; int _f20; };
 struct AnimDbList { char pad[8]; int _count; int _capacity; AnimDbObject **_data; };
 struct AnimDbDirectory { char pad[8]; int _count; };
 struct AnimDbField { char pad[8]; int _offset; };
@@ -16,7 +16,6 @@ extern int DAT_00586730;
 extern AnimDbField *DAT_00562568;
 extern "C" {
 int igObject_IsKindOf(void *, igMetaObject *);
-int igObject_Destroy(void *);
 int FUN_002e2d30(int, void *, const char *, void *);
 int FUN_002d86b0(AnimDbDirectory *, int, AnimDbObject *);
 int FUN_001aedd0(void *self, AnimDbList *list, int file, AnimDbObject *obj);
@@ -24,24 +23,7 @@ void *igMetaObject_FindFieldByName(igMetaObject *, const char *);
 int sprintf(char *, const char *, ...);
 int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject *obj);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {
-        if (p != 0) {
-            p->_refCount = p->_refCount + 1;
-        }
-    }
-    T *get() const { return p; }
-    ~igSmartPointer() {
-        T *object = get();
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-};
+
 #define CAST_INLINE(NAME, META) static inline AnimDbObject *NAME(AnimDbObject *o) { if (o != 0 && igObject_IsKindOf(o, META) != 0) { return o; } return 0; }
 CAST_INLINE(castSkeleton, DAT_005611d0)
 CAST_INLINE(castField, DAT_00585b20)
@@ -74,8 +56,8 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
     if ((unsigned char)FUN_001aedd0(db, db->_combinerList, file, obj) == 1) {
         return 1;
     }
-    igSmartPointer<AnimDbObject> held(obj);
-    igSmartPointer<AnimDbObject> skel(castSkeleton(held.p));
+    igSmartPointer<AnimDbObject> held(obj, kRetainReference);
+    igSmartPointer<AnimDbObject> skel(castSkeleton(held.p), kRetainReference);
     if (skel.p != 0 && FUN_002d86b0(db->_directory, DAT_00586730, obj) < db->_directory->_count) {
         int i;
         int n;
@@ -88,8 +70,8 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
             int total;
             AnimDbList *list;
             AnimDbObject *target;
-            igSmartPointer<AnimDbObject> skin(db->_animationList->_data[i]);
-            igSmartPointer<AnimDbObject> app(castBoolList(*(AnimDbObject **)((char *)skin.p + DAT_00562568->_offset)));
+            igSmartPointer<AnimDbObject> skin(db->_animationList->_data[i], kRetainReference);
+            igSmartPointer<AnimDbObject> app(castBoolList(*(AnimDbObject **)((char *)skin.p + DAT_00562568->_offset)), kRetainReference);
             list = (AnimDbList *)app.get();
             target = skel.get();
             total = list->_count;

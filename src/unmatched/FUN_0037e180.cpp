@@ -1,12 +1,11 @@
 /* When the manager's "turning OK" flag is raised, queue a kind-5 keep-message on the build work's
  * list and drop the flag. */
-#include "dw4/reflected.h"
 
+#include "dw4/igSmartPointer.h"
 extern "C" {
 beDemoKeepMes *FUN_00363c20(int allocator);
 int Memory_GetAllocatorBySelector(int);
 int ObjectList_AppendRetained(int list, beDemoKeepMes *o);
-void igObject_Destroy(beDemoKeepMes *);
 int igObject_GetAllocator(beDemoManager *);
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
@@ -15,20 +14,6 @@ void FUN_0037e180(beDemoManager *a0);
 
 /* Owning stack reference to a keep-message; its destructor releases the object (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() {
-        T *o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-};
 
 void FUN_0037e180(beDemoManager *a0) {
     beDemoManagerWork *l;

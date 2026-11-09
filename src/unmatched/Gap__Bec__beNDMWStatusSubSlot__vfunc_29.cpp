@@ -1,6 +1,5 @@
+#include "dw4/igSmartPointer.h"
 extern "C" {
-struct RefCountedHeader { int word0; int references; };
-void igObject_Destroy(RefCountedHeader *);
 int List_Resize(...);
 int Memory_GetAllocatorBySelector(...);
 int ObjectList_AppendRetained(...);
@@ -21,7 +20,7 @@ extern unsigned char GPR_00554c14;
 }
 struct ElementBufferList { char p[8]; int n; int cap; int *data; int getN() const { return n; } };
 /* window object: close-text lists at +60/+64 are beNDMWWindow fields; the rest (list at +104, flag bytes at +108/+110/+111) belongs to an unreflected subclass */
-struct WindowObject { int word0; int references; char p8[52]; int f60; int f64; char p9[32]; ElementBufferList *list; int f104; char f108; char pad109; char f110; char f111; };
+struct WindowObject : public igObject { char p8[52]; int f60; int f64; char p9[32]; ElementBufferList *list; int f104; char f108; char pad109; char f110; char f111; };
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {
@@ -31,13 +30,8 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 /* Owning stack reference to the sub-window created here; released on scope exit (reference count
- * in the low 23 bits of references). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *w) : p(w) {}
-    ~igSmartPointer() { T *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy((RefCountedHeader *)w); } }
-};
+ * in the low 23 bits of _refCount). */
+
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 #include "dw4/reflected.h"
 extern "C" WindowObject *FUN_003baf10(...);

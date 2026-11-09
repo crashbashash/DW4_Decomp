@@ -1,14 +1,13 @@
 /* Registers the weapon with the messenger. On the first call the attach-data list is built with
  * four attach-data objects before the receiver is registered from the weapon's info table. The new
  * list and each new element live on the stack in owning references. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 igObject *FUN_0033f8b0(int);
 igObject *FUN_0033fa80(int);
 int Memory_GetAllocatorBySelector(int);
 int ObjectList_AppendRetained(int, igObject *);
 int beMessenger_RegisterReceiverFromInfo(int, int, int *);
-void igObject_Destroy(igObject *);
 int igObject_GetAllocator(...);
 extern int DAT_0050fbf0[4];
 extern int DAT_00587110[4];
@@ -16,12 +15,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the new attach-data list, released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to one new attach-data element, released at the end of each loop pass. */
 class ObjectRef {
 public:

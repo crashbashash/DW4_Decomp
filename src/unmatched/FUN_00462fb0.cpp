@@ -1,36 +1,23 @@
-struct ViewObject { int w0; int references; };
-struct Binding : ViewObject { char p0[68]; ViewObject *source; ViewObject *target; ViewObject *value; };
-struct Camera : ViewObject { char p0[109]; char follow; char p1[18]; ViewObject *object; };
-struct Effect : ViewObject { };
-struct ViewSource { char p[20]; ViewObject *f20; char q[28]; int f52; };
+#include "dw4/igSmartPointer.h"
+struct Binding : igObject { char p0[68]; igObject *source; igObject *target; igObject *value; };
+struct Camera : igObject { char p0[109]; char follow; char p1[18]; igObject *object; };
+struct Effect : igObject { };
+struct ViewSource { char p[20]; igObject *f20; char q[28]; int f52; };
 struct ViewConfig { char p[16]; int *f16; };
-struct ViewState : ViewObject { char p[204]; int f212; int f216; ViewConfig *f220; };
-struct ViewSelector { char p0[12]; ViewSource *f12; int pad16; ViewState *f20; char p1[16]; int f40; ViewObject *f44; int f48; char p2[84]; int f136; };
-struct Fetched { ViewObject *object; };
+struct ViewState : igObject { char p[204]; int f212; int f216; ViewConfig *f220; };
+struct ViewSelector { char p0[12]; ViewSource *f12; int pad16; ViewState *f20; char p1[16]; int f40; igObject *f44; int f48; char p2[84]; int f136; };
+struct Fetched { igObject *object; };
 extern "C" {
 Binding *FUN_0045c170(int);
 Camera *FUN_0045c5a0(int);
 Camera *FUN_0045c8e0(int);
 Effect *FUN_0045cc40(int);
 Fetched FUN_0045eda0(int, int);
-int FUN_00463fd0(int, ViewObject *);
+int FUN_00463fd0(int, igObject *);
 int FUN_00465260(Effect *, int);
-int igObject_Destroy(ViewObject *);
 void FUN_00462fb0(ViewSelector *self);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        ViewObject *object = p;
-        if (object != 0) {
-            object->references = object->references - 1;
-            if ((object->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-};
+
 struct Tag { };
 static inline Binding *create45c170() {
     Tag tag = Tag();
@@ -49,67 +36,67 @@ static inline Effect *create45cc40() {
     return FUN_0045cc40(0);
 }
 static inline void takeValue(const igSmartPointer<Binding> &ref, const Fetched &fetched) {
-    ViewObject *value = fetched.object;
+    igObject *value = fetched.object;
     Binding *owner = ref.p;
-    ViewObject *previous;
+    igObject *previous;
     if (value != 0) {
-        value->references = value->references + 1;
+        value->_refCount = value->_refCount + 1;
     }
     previous = owner->value;
     if (previous != 0) {
-        previous->references = previous->references - 1;
-        if ((previous->references & 0x7FFFFF) == 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
     owner->value = value;
     if (fetched.object != 0) {
-        fetched.object->references = fetched.object->references - 1;
-        if ((fetched.object->references & 0x7FFFFF) == 0) {
+        fetched.object->_refCount = fetched.object->_refCount - 1;
+        if ((fetched.object->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(fetched.object);
         }
     }
 }
-static inline void setSource(const igSmartPointer<Binding> &ref, ViewObject *value) {
+static inline void setSource(const igSmartPointer<Binding> &ref, igObject *value) {
     Binding *owner = ref.p;
-    ViewObject *previous;
+    igObject *previous;
     if (value != 0) {
-        value->references = value->references + 1;
+        value->_refCount = value->_refCount + 1;
     }
     previous = owner->source;
     if (previous != 0) {
-        previous->references = previous->references - 1;
-        if ((previous->references & 0x7FFFFF) == 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
     owner->source = value;
 }
-static inline void setTarget(const igSmartPointer<Binding> &ref, ViewObject *value) {
+static inline void setTarget(const igSmartPointer<Binding> &ref, igObject *value) {
     Binding *owner = ref.p;
-    ViewObject *previous;
+    igObject *previous;
     if (value != 0) {
-        value->references = value->references + 1;
+        value->_refCount = value->_refCount + 1;
     }
     previous = owner->target;
     if (previous != 0) {
-        previous->references = previous->references - 1;
-        if ((previous->references & 0x7FFFFF) == 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
     owner->target = value;
 }
-static inline void setObject(const igSmartPointer<Camera> &ref, ViewObject *value) {
+static inline void setObject(const igSmartPointer<Camera> &ref, igObject *value) {
     Camera *owner = ref.p;
-    ViewObject *previous;
+    igObject *previous;
     if (value != 0) {
-        value->references = value->references + 1;
+        value->_refCount = value->_refCount + 1;
     }
     previous = owner->object;
     if (previous != 0) {
-        previous->references = previous->references - 1;
-        if ((previous->references & 0x7FFFFF) == 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }

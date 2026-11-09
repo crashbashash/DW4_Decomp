@@ -1,11 +1,10 @@
-#include "dw4/reflected.h"
 /* The timer record returned by igProperty_FindByName; +32 is the int64 duration. */
+#include "dw4/igSmartPointer.h"
 struct P { char pad[32]; long long f32; };
 extern "C" {
 igObject *beBaseInfoDataList_Create(...);
 long long FUN_003a7fd0(...);
 int Memory_GetAllocatorBySelector(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 P *igProperty_FindByName(...);
 extern int DAT_00585be0[4];
@@ -15,12 +14,7 @@ int FUN_003a7e90(beAction2InfoRam *arg0, int arg1);
 }
 /* Owning stack reference to the freshly created property list; released on scope exit once the ram
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* matching construct: the (igObject *)/(int) casts on _dataList stand in for a 4-byte reference field */
 int FUN_003a7e90(beAction2InfoRam *arg0, int arg1) {
     if (arg0->_dataList == 0) {

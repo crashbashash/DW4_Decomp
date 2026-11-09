@@ -1,6 +1,6 @@
+#include "dw4/igSmartPointer.h"
 struct FieldBindMeta;
-class FieldBindTarget { public:
-    virtual void s0();
+class FieldBindObject : public igVirtualObject { public:
     virtual void s1();
     virtual void s2();
     virtual void s3();
@@ -22,28 +22,26 @@ class FieldBindTarget { public:
     virtual void s19();
     virtual FieldBindMeta *GetMeta();
     virtual void Assign(void *value);
-    unsigned int _refCount;
+    
 };
-struct FieldBindRefCounted { int vt; unsigned int _refCount; };
-struct FieldBindSlotList { int vt; int rc; int count; int capacity; FieldBindTarget **data; };
-struct FieldBindSet { int vt; int rc; int count; int pad12; FieldBindTarget **targets; char pad20[24]; FieldBindSlotList *overrides; };
-struct FieldBindItem { int pad0; int pad4; int offset; char pad12[12]; FieldBindTarget *source; };
+struct FieldBindSlotList : public igObject { int count; int capacity; FieldBindObject **data; };
+struct FieldBindSet : public igObject { int count; int pad12; FieldBindObject **targets; char pad20[24]; FieldBindSlotList *overrides; };
+struct FieldBindItem { int pad0; int pad4; int offset; char pad12[12]; FieldBindObject *source; };
 extern "C" {
-FieldBindTarget *FUN_002d7d60(FieldBindSet *, int);
+FieldBindObject *FUN_002d7d60(FieldBindSet *, int);
 FieldBindItem *FUN_002d7e90(FieldBindSet *, int);
 int igObject_IsKindOf(void *, int);
 int igMetaObject_GetFieldCount(FieldBindMeta *);
 FieldBindItem *igMetaObject_GetFieldAt(FieldBindMeta *, int);
-void igObjectRefMetaField_Assign(FieldBindItem *, FieldBindTarget *, void *);
-void igObject_Destroy(void *);
+void igObjectRefMetaField_Assign(FieldBindItem *, igVirtualObject *, void *);
 extern int DAT_00585b70;
 extern int DAT_00585b20;
-int FUN_002d7f10(FieldBindSet *self, FieldBindRefCounted **field, FieldBindRefCounted **value);
+int FUN_002d7f10(FieldBindSet *self, FieldBindObject **field, FieldBindObject **value);
 }
-static inline void releaseBound(FieldBindRefCounted *o) {
+static inline void releaseBound(FieldBindObject *o) {
     if (o != 0) {
         o->_refCount = (int)o->_refCount - 1;
-        if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
+        if ((o->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(o);
         }
     }
@@ -60,39 +58,22 @@ static inline FieldBindItem *castRefField(FieldBindItem *o) {
     }
     return 0;
 }
-static inline void setSlot(FieldBindSlotList *l, int i, FieldBindRefCounted *v) {
+static inline void setSlot(FieldBindSlotList *l, int i, FieldBindObject *v) {
     if (l->count != 0 && i >= 0 && i < l->count) {
-        l->data[i] = (FieldBindTarget *)v;
+        l->data[i] = (FieldBindObject *)v;
     }
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *source) : p(source) {
-        if (p != 0) {
-            p->_refCount = p->_refCount + 1;
-        }
-    }
-    ~igSmartPointer() {
-        T *source = p;
-        if (source != 0) {
-            source->_refCount = source->_refCount - 1;
-            if ((source->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(source);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
-int FUN_002d7f10(FieldBindSet *self, FieldBindRefCounted **field, FieldBindRefCounted **value) {
+
+int FUN_002d7f10(FieldBindSet *self, FieldBindObject **field, FieldBindObject **value) {
     int changed = 0;
     int i;
     int j;
     int n;
-    FieldBindRefCounted *current;
+    FieldBindObject *current;
     FieldBindItem *item;
     for (i = 0; i < self->count; i++) {
         current = *field;
-        if (FUN_002d7d60(self, i) == (FieldBindTarget *)current) {
+        if (FUN_002d7d60(self, i) == (FieldBindObject *)current) {
             if (self->overrides != 0) {
                 releaseBound(*field);
                 if (*value != 0) {
@@ -106,16 +87,16 @@ int FUN_002d7f10(FieldBindSet *self, FieldBindRefCounted **field, FieldBindRefCo
         }
         item = castBinding(FUN_002d7e90(self, i));
         if (item != 0) {
-            igSmartPointer<FieldBindTarget> source(item->source);
+            igSmartPointer<igVirtualObject> source(item->source, kRetainReference);
             if (source.get() == 0) {
                 continue;
             }
-            n = igMetaObject_GetFieldCount(source.get()->GetMeta());
+            n = igMetaObject_GetFieldCount(((FieldBindObject *)source.get())->GetMeta());
             for (j = 0; j < n; j++) {
                 FieldBindItem *f;
-                f = castRefField(igMetaObject_GetFieldAt(source.get()->GetMeta(), j));
+                f = castRefField(igMetaObject_GetFieldAt(((FieldBindObject *)source.get())->GetMeta(), j));
                 if (f != 0) {
-                    if (*(FieldBindRefCounted **)((char *)source.get() + f->offset) == *field) {
+                    if (*(FieldBindObject **)((char *)source.get() + f->offset) == *field) {
                         igObjectRefMetaField_Assign(f, source.get(), *value);
                         changed++;
                     }

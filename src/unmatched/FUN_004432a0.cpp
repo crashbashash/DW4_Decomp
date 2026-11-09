@@ -1,6 +1,5 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-int igObject_Destroy(...);
 beDataObjBoolList *igProperty_GetRecordArray(...);
 int FUN_003a9250(...);
 int igObject_GetAllocator(...);
@@ -17,12 +16,6 @@ void FUN_004432a0(beNDMWShinkaCtrl *self);
 }
 /* Owning stack reference to the evolution entry under construction; released on scope exit
  * (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 
 #pragma opt_loop_invariants off
 void FUN_004432a0(beNDMWShinkaCtrl *self) {

@@ -1,8 +1,9 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
-typedef struct List { int w0; int references; int size; int cap; int *data; } List;
-typedef struct BList { int w0; int references; int size; int cap; unsigned char *data; } BList;
+typedef struct List : public igObject { int size; int cap; int *data; } List;
+typedef struct BList : public igObject { int size; int cap; unsigned char *data; } BList;
 typedef struct Entry { int w0, w1, w2, w3, w4; beNDMWMdlPEBaseInfoWork *work; } Entry;
-typedef struct Model { int w0; int references; int id; char pad12[28]; List *props; } Model;
+typedef struct Model : public igObject { int id; char pad12[28]; List *props; } Model;
 class igResult;
 extern igResult DAT_004fb410;
 class igResult { public: int v; igResult(const igResult &o) : v(o.v) {}
@@ -13,7 +14,6 @@ extern int Memory_GetAllocatorBySelector(...);
 extern void *beBaseInfoDataList_Create(...);
 extern void *FUN_002caa70(...);
 extern void *FUN_002cb0d0(...);
-extern void igObject_Destroy(List *);
 extern Entry *igProperty_FindByName(...);
 extern int FUN_003c04a0(...);
 extern int FUN_003c0440(...);
@@ -40,16 +40,11 @@ class VC140 { public: virtual void d0(); virtual void d1(); virtual void d2(); v
 #define W(f) ((List *)w->f)
 #define SETI(L, I, V) if (((List *)(L))->size != 0 && (I) >= 0 && (I) < ((List *)(L))->size) ((List *)(L))->data[I] = (V);
 #define SETB(L, I, V) if (((BList *)(L))->size != 0 && (I) >= 0 && (I) < ((BList *)(L))->size) ((BList *)(L))->data[I] = (V);
-#define RELEASE(o) if ((o) != 0) { (o)->references = (o)->references - 1; if (((unsigned long long)((long long)(o)->references << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
+#define RELEASE(o) if ((o) != 0) { (o)->_refCount = (o)->_refCount - 1; if (((o)->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); }
 #define GI(i) beMessenger_GetInt(self->_messenger, i)
 /* Owning stack reference to the freshly created property data list; released at the end of the
- * full expression that stores it (reference count in the low 23 bits of references). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+ * full expression that stores it (reference count in the low 23 bits of _refCount). */
+
 /* Owning stack reference that carries each new int list of the work while it is sized and filled:
  * starts empty, is handed one created list after another (MKLIST drops the previous one first) and
  * releases the last on scope exit. */
@@ -57,14 +52,14 @@ class IntListRef {
 public:
     List *p;
     IntListRef(List *o) : p(o) {}
-    ~IntListRef() { List *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~IntListRef() { List *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Same role for the work's bool list. */
 class BoolListRef {
 public:
     List *p;
     BoolListRef(List *o) : p(o) {}
-    ~BoolListRef() { List *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~BoolListRef() { List *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Store a freshly created data list in the model, taking the model's share and dropping the previous
  * list; the caller passes the list as a temporary holder that gives up the creating share at the end of
@@ -72,12 +67,12 @@ public:
 struct DataList { static inline void store(Model *obj, const igSmartPointer<List> &list) {
     List *created = list.p;
     List *old;
-    if (created != 0) created->references = created->references + 1;
+    if (created != 0) created->_refCount = created->_refCount + 1;
     old = obj->props;
     RELEASE(old)
     obj->props = created;
 } };
-#define MKLIST(H, F, CT) { int a = igObject_GetAllocator(self); a = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); { List *u = H.p; RELEASE(u) } H.p = (List *)CT(a); { List *c = H.p; if (c != 0) c->references = c->references + 1; { List *old = W(F); RELEASE(old) } w->F = (int)c; } }
+#define MKLIST(H, F, CT) { int a = igObject_GetAllocator(self); a = GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); { List *u = H.p; RELEASE(u) } H.p = (List *)CT(a); { List *c = H.p; if (c != 0) c->_refCount = c->_refCount + 1; { List *old = W(F); RELEASE(old) } w->F = (int)c; } }
 #define SIZEIT(F, N, ES) { List *l = W(F); if (l->size < (N) + 1) List_Reserve(l, N, ES); } { List *l = W(F); if (l->cap >= (N)) l->size = N; else List_Resize(l, N, ES); }
 #define FILLI(F, DAT) { int n = W(F)->size; int *d = W(F)->data; int j; for (j = 0; j < n; j++) d[j] = DAT[0]; }
 #define FILLB(F, DAT) { BList *l = (BList *)w->F; int n = l->size; unsigned char *d = l->data; int j; for (j = 0; j < n; j++) d[j] = DAT; }
@@ -89,7 +84,7 @@ static inline void ensureProps(Model *obj)
         int allocator = igObject_GetAllocator(obj);
         igSmartPointer<List> holder((List *)beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0])));
         List *created = holder.p;
-        if (created != 0) created->references = created->references + 1;
+        if (created != 0) created->_refCount = created->_refCount + 1;
         List *old = obj->props;
         RELEASE(old)
         obj->props = created;

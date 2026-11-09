@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 struct MsgView {
     virtual void d0();
     virtual void d1();
@@ -175,7 +175,6 @@ int beMessenger_GetMatrix(...);
 int beMessenger_GetMatrixCount(...);
 int beMessenger_SelectReceivers(...);
 int beMessenger_SendNamed(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 void *igProperty_FindByName(...);
 int strcmp(...);
@@ -198,12 +197,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1);
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
     int sp27C;
     float sp268[3];

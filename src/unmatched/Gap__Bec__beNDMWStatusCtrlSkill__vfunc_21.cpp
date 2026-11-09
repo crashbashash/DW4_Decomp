@@ -7,17 +7,16 @@
  *  - bool ok (daddiu s1,zero,1); cast-self-assign empty then arm; unsigned reload of the record count
  *  - switch (_nowPage) / switch (_skillMenu) with default first: case alignment nops
  *  - Clr::ClearList loops: ref = Intern(pool, 0) before old = *slot */
-#include "dw4/reflected.h"
 
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int igObject_GetAllocator(void *);
 int Memory_GetAllocatorBySelector(int);
-int FUN_003b5530(int);
+igObject *FUN_003b5530(int);
 int FUN_003b51b0(int);
 void beNDMWWindow_BindContext(int, void *, int, int, int);
 void ObjectList_AppendRetained(int, void *);
 void FUN_003f5410(void *, void *, int, void *, void *);
-void igObject_Destroy(void *);
 void FUN_00443110(int, int, int);
 int FUN_002eb010(int);
 int StringPool_Construct(int);
@@ -64,11 +63,7 @@ void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *);
 struct VC { virtual void d0();virtual void d1();virtual void d2();virtual void d3();virtual void d4();virtual void d5();virtual void d6();virtual void d7();virtual void d8();virtual void d9();virtual void d10();virtual void d11();virtual void d12();virtual void d13();virtual void d14();virtual void d15();virtual void d16();virtual void d17();virtual void d18();virtual void d19();virtual void d20();virtual void d21(); virtual void v22(void *, void *); virtual int v23(); virtual int v24(); };
 /* igSmartPointer<igObject> holds the menu window and RefB the detail window; each is its own class so it gets its own
  * destructor copy. */
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(int x) { p = (T *)x; }
-    ~igSmartPointer() { T *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 struct RefB {
     igObject *p;
     RefB(int x) { p = (igObject *)x; }

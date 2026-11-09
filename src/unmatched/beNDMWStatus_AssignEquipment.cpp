@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_002eb010(...);
 int StringChunk_ReleaseHeader(...);
@@ -6,7 +6,6 @@ int StringPool_Construct(...);
 char *StringPool_Intern(...);
 void *Memory_GetAllocatorBySelector(...);
 void *igObject_GetAllocator(...);
-int igObject_Destroy(...);
 int FUN_00236f80(...);
 int FUN_002b90e0(...);
 int FUN_002caa70(...);
@@ -21,24 +20,21 @@ extern char DAT_00519e48[], DAT_00519e58[], DAT_00519e60[], DAT_00519e68[];
 }
 
 /* An inventory item: kind at +8, equipped flag at +16. */
-struct EquipItem {
-    int _vtable;
-    unsigned int _refCount;
+struct EquipItem : public igObject {
+    
     int _kind;
     int _pad;
     unsigned char _equipped;
 };
 /* igObjectList of EquipItem pointers. */
-struct ItemList {
-    int _vtable;
-    unsigned int _refCount;
+struct ItemList : public igObject {
+    
     int _count;
     int _capacity;
     EquipItem **_data;
 };
-struct StatusPanel {
-    int _vtable;
-    unsigned int _refCount;
+struct StatusPanel : public igObject {
+    
     int _insight;
     char _pad[0x6c];
     ItemList *_equipList;   /* +0x78 */
@@ -61,31 +57,9 @@ extern "C" StringRef StringList_CopyRetained(void *list, int index);
 /* Owning stack references to the equipment-category name list and the scratch int list of the
  * unequip pass; each releases its object on scope exit (reference count in the low 23 bits of
  * _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
-class IntListRef {
-public:
-    igObject *p;
-    IntListRef(igObject *o) : p(o) {}
-    /* matching construct: __option(exceptions) -- the inline instance in this exception-handling unit re-reads p
-     * after the decrement store (retail `lw a0,216(sp)`), but retail's out-of-line copy 0x00150eb0 comes from an
-     * exceptions-off unit and reads p once.  One spelling cannot give both, so the body follows the compile mode
-     * (the verifier compiles the deferred duplicate under that unit's profile). */
-    ~IntListRef() {
-#if __option(exceptions)
-        if (p != 0) { p->_refCount = p->_refCount - 1; if ((p->_refCount & 0x7fffff) == 0) igObject_Destroy(p); }
-#else
-        igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); }
-#endif
-    }
-};
-struct StrList {
-    int _vtable;
-    unsigned int _refCount;
+
+struct StrList : public igObject {
+    
     int _count;
 };
 
@@ -99,7 +73,7 @@ struct U { static inline char *InternStr(char *text) {
     return StringPool_Intern(DAT_00586f20[0], text);
 } };
 #define INTERN_APPEND(lst, text) { char *tok = U::InternStr((char *)(text)); StringList_AppendRetained(lst, StringRef(tok)); }
-#define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
+#define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define LIST_CLEAR_AT(L, i) { REL((L)->_data[i]); \
     if ((L)->_count != 0 && (i) >= 0 && (i) < (L)->_count) (L)->_data[i] = 0; }
 
@@ -164,7 +138,7 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                 rec = FUN_00236f80(self->_insight, DAT_0058b028[0]);
                 alloc = igObject_GetAllocator(self);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-                IntListRef tmp((igObject *)FUN_002caa70(alloc));
+                igSmartPointer<igIntList> tmp = (igIntList *)FUN_002caa70(alloc);
                 cat = -1;
                 i = 0;
                 if (0 < ((StrList *)names.p)->_count) {

@@ -1,53 +1,29 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
-struct InstanceNode { int word0; int references; };
-void igObject_Destroy(InstanceNode *);
+struct InstanceNode : public igObject { };
 unsigned FUN_002fe2c0(int);
 int FUN_002fe2e0(int, unsigned);
 InstanceNode *FUN_00186c00(int);
 int FUN_00301ee0(InstanceNode *, unsigned);
-int FUN_002fd6e0(InstanceNode **, int, int);
 extern int DAT_00560f08[4];
 }
+extern "C" igSmartPointer<InstanceNode> FUN_002fd6e0(int, int);
 struct NodeList : InstanceNode { int count; int capacity; InstanceNode **data; };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(int type, int allocator) {
-        T *created;
-        FUN_002fd6e0(&created, type, allocator);
-        p = created;
-        if (p != 0) {
-            p->references = p->references + 1;
-        }
-        if (created != 0) {
-            created->references = created->references - 1;
-            if ((created->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(created);
-            }
-        }
-    }
-    ~igSmartPointer() {
-        T *node = p;
-        if (node != 0) {
-            node->references = node->references - 1;
-            if ((node->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(node);
-            }
-        }
-    }
-};
+
 struct InstanceListRef {
     NodeList *p;
     InstanceListRef(NodeList *list) : p(list) {}
     InstanceListRef(const InstanceListRef &other) : p(other.p) {
         if (p != 0) {
-            p->references = p->references + 1;
+            p->_refCount = p->_refCount + 1;
         }
     }
     ~InstanceListRef() {
         InstanceNode *node = p;
         if (node != 0) {
-            node->references = node->references - 1;
-            if ((node->references & 0x7FFFFF) == 0) {
+            node->_refCount = node->_refCount - 1;
+            if ((node->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(node);
             }
         }
@@ -58,12 +34,12 @@ static inline void setElement(const InstanceListRef &list, int index, const igSm
     NodeList *l = list.p;
     InstanceNode *previous;
     if (value != 0) {
-        value->references = value->references + 1;
+        value->_refCount = value->_refCount + 1;
     }
     previous = l->data[index];
     if (previous != 0) {
-        previous->references = previous->references - 1;
-        if ((previous->references & 0x7FFFFF) == 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
@@ -78,7 +54,7 @@ extern "C" InstanceListRef FUN_0018f760(int allocator) {
     InstanceListRef list((NodeList *)FUN_00186c00(allocator));
     FUN_00301ee0(list.p, count);
     for (i = 0; i < count; i++) {
-        igSmartPointer<InstanceNode> element(FUN_002fe2e0(meta, i), allocator);
+        igSmartPointer<InstanceNode> element(FUN_002fd6e0(FUN_002fe2e0(meta, i), allocator).get(), kRetainReference);
         setElement(list, i, element);
     }
     return list;

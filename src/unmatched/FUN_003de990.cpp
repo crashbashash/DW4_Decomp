@@ -1,7 +1,7 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
-void igObject_Destroy(void *);
-struct Obj { int word0; unsigned refs; int f8; unsigned short *f12; };
+struct Obj : public igObject { int f8; unsigned short *f12; };
 /* The reflected beNDMWLoadIntf2NameSel registers 288 bytes; reflection lists its fields up to +100
  * and the per-cell save area is the unlisted tail of the same object (+104..), so NameSelTail is
  * laid over it. */
@@ -19,13 +19,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to a slot's value object; released on scope exit (reference count in the
- * low 23 bits of refs). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+ * low 23 bits of _refCount). */
+
 #define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); igSmartPointer<Obj> r(FUN_003614f0(a)); beUnicodeObj_AllocateBuffer(r.p, 1); *r.p->f12 = arg0->t.name[I]; FUN_003ec120(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
 extern "C" void FUN_003de990(NameSelRam *arg0, int arg1) {
     int i;

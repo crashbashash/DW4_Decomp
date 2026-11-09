@@ -1,36 +1,23 @@
+#include "dw4/igSmartPointer.h"
 struct VertexFormat { int flags; };
 struct VertexArray {
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26();
     virtual int setPosition(int index, float *position);
 };
-struct Primitive {
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
+struct Primitive : public igVirtualObject {
+    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
     virtual int configure(VertexFormat *format, int vertices, int a, int b);
     virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36();
     virtual int setPrimitives(int type, int count, int offset);
-    int references;
+    
     int f8;
     VertexArray *vertices;
 };
 extern "C" {
 Primitive *FUN_00137810(int);
 int FUN_002f8a20(void);
-int igObject_Destroy(Primitive *);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->references = object->references - 1;
-            if ((object->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-    T *operator->() const { return p; }
-};
+
 extern "C" int FUN_001d6900(Primitive **out) {
     float v[18];
     igSmartPointer<Primitive> quad(FUN_00137810(FUN_002f8a20()));
@@ -66,7 +53,7 @@ extern "C" int FUN_001d6900(Primitive **out) {
     *out = quad.p;
     Primitive *retained = *out;
     if (retained != 0) {
-        retained->references = retained->references + 1;
+        retained->_refCount = retained->_refCount + 1;
     }
     return 0;
 }

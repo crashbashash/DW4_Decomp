@@ -1,6 +1,5 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(igObject *);
 igObject *beBaseInfoDataList_Create(int);
 int Memory_GetAllocatorBySelector(...);
 int beMessenger_SendNamed(...);
@@ -39,12 +38,7 @@ struct Rel { static inline void go(igObject *object) {
 struct V3 { float x, y, z; };
 /* Owning stack reference to the freshly created property list; released on scope exit once the ram
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 int FUN_00443900(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, int arg2, int arg3, int arg4, int arg5) {
     igObject *s0;
     R *r;

@@ -1,12 +1,12 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
-extern "C" int igObject_Destroy(...);
-struct ConvertedImage { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void convert(void *, int); int references; char pad[44]; void *pixels; };
-struct Stream {
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void close(); virtual void d25(); virtual void d26(); virtual int write(void *, int, int);
-    int references;
+struct ConvertedImage : public igVirtualObject { virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void convert(void *, int); char pad[44]; void *pixels; };
+struct Stream : public igVirtualObject {
+    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void close(); virtual void d25(); virtual void d26(); virtual int write(void *, int, int);
+    
     void release() {
-        references = references - 1;
-        if ((references & 0x7FFFFF) == 0) {
+        _refCount = _refCount - 1;
+        if ((_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(this);
         }
     }
@@ -16,20 +16,7 @@ int igObject_GetAllocator(igPsx2Image *);
 ConvertedImage *FUN_0014df70(int);
 int FUN_0015a380(ConvertedImage *);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->references = object->references - 1;
-            if ((object->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-    T *operator->() const { return p; }
-};
+
 extern "C" int Gap__Gfx__igPsx2Image__vfunc_41(igPsx2Image *image, Stream *stream) {
     igSmartPointer<ConvertedImage> converted(FUN_0014df70(igObject_GetAllocator(image)));
     int word;

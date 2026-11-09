@@ -3,7 +3,7 @@
  * fresh record held), copies the offset and rotation vectors, the two flags and the start frame,
  * then appends the record to the sub-command list, which retains it. The creating reference is
  * released on scope exit. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 struct V { float x, y, z; };
 extern "C" {
 beModelCtrlSCEffect *FUN_0034f8e0(int);
@@ -13,7 +13,6 @@ int ObjectList_AppendRetained(int, beModelCtrlSCEffect *);
 int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 void *StringPool_Intern(int, int);
-int igObject_Destroy(beModelCtrlSCEffect *);
 int igObject_GetAllocator();
 extern int DAT_00586f20[4];
 extern int DAT_00587110[4];
@@ -22,12 +21,7 @@ void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, str
 }
 /* Owning stack reference to the new effect record, released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, struct V *vb, char c1, char c2, float f) {
     int a;
     int v;

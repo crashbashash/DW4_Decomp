@@ -1,5 +1,7 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
-struct Text { int word0; int references; char *chars; int length; };
+struct Text : public igObject { char *chars; int length; };
 extern int strlen(char *);
 extern char _toupper(char);
 extern Text *FUN_002b9500(int);
@@ -10,27 +12,13 @@ extern int Memory_GetAllocatorBySelector(int);
 extern int StringChunk_ReleaseHeader(int, int *);
 extern int StringPool_Construct(int);
 extern char *StringPool_Intern(int, char *);
-extern int igObject_Destroy(Text *);
 extern char *DAT_004c22f0[4];
 extern char DAT_004ffbe8[];
 extern char DAT_004ffbf0[];
 extern int DAT_00586f20[4];
 extern int DAT_00587048[4];
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *text) : p(text) {}
-    ~igSmartPointer() {
-        T *text = p;
-        if (text != 0) {
-            text->references = text->references - 1;
-            if ((text->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(text);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 struct StringRef {
     char *p;
     StringRef(char *chars) {

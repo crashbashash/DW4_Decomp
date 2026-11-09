@@ -1,6 +1,5 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(void *);
 struct Pair { unsigned short out; unsigned short key; };
 struct Table { Pair e[425]; };
 beUnicodeObj *FUN_003614f0(int);
@@ -14,11 +13,7 @@ extern const Table DAT_004c8880;
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *x) { p = x; }
-    ~igSmartPointer() { T *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" int FUN_00382eb0(igSmartPointer<beUnicodeObj> *out, beFont *self, const char *str) {
     Table t = DAT_004c8880;
     char c0;

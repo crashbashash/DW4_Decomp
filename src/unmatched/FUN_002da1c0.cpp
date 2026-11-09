@@ -1,7 +1,7 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
-struct T { int word0; int references; int f8; };
-void igObject_Destroy(T *);
+struct T : public igObject { int f8; };
 void *FUN_002eb010(int);
 void *StringPool_Construct(void *);
 const char *StringPool_Intern(void *, const char *);
@@ -22,25 +22,13 @@ extern void *DAT_00586f20[4];
 }
 static inline void release(T *object) {
     if (object != 0) {
-        object->references = object->references - 1;
-        if ((object->references & 0x7FFFFF) == 0) {
+        object->_refCount = object->_refCount - 1;
+        if ((object->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(object);
         }
     }
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->references = object->references - 1;
-            if ((object->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-};
+
 struct Mem { T *p; Mem() {} ~Mem() { release(p); } };
 static inline void releaseString(const char *h) {
     if (h != 0) {

@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int sprintf(...);
 int strlen(...);
@@ -14,7 +14,6 @@ int beMessenger_DispatchSelected(...);
 int beMessenger_GetObject(...);
 int beMessenger_SelectGroup(...);
 char *beNDMWItemBase_GetRecordString(...);
-void igObject_Destroy(void *);
 char *igProperty_GetRecordFolder(...);
 extern char *DAT_004c22f0[4];
 extern char *DAT_004cf8a0[12];
@@ -49,12 +48,6 @@ struct RecordFolder { int w0; int w4; int w8; igDataList *list; };
 struct V3 { float x, y, z; };
 /* Owning stack reference to the system's shared string object; retained while the shop labels are
  * built and released on scope exit (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 
 void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
 {

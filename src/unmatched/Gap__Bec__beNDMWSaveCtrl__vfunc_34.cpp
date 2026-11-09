@@ -1,6 +1,5 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(igObject *);
 int Memory_GetAllocatorBySelector(...);
 int igObject_GetAllocator(...);
 int FUN_00236f80(...);
@@ -27,12 +26,7 @@ extern unsigned char GPR_00554c14;
 struct A2 { char p[20]; int f20; };
 /* Owning stack references while the controller list is wired up; each releases its object on scope
  * exit. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 class SaveCtrlDataRef {
 public:
     igObject *p;

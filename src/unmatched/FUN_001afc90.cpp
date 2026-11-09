@@ -1,22 +1,8 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
-extern "C" int igObject_Destroy(void *);
-struct AttrRefHeader { void **_vtable; unsigned int _refCount; };
-struct AttrObj : AttrRefHeader { int _id; };
+struct AttrObj : igObject { int _id; };
 struct AttrStackRec;
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    igSmartPointer(const igSmartPointer &o);
-    ~igSmartPointer() {
-        AttrRefHeader *object = p;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-};
+
 class AttrDefaultManager {
 public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
@@ -38,10 +24,10 @@ public:
     virtual void s30();
     virtual void onDefault(int v);
 };
-struct AttrStackRec : AttrRefHeader { int _count; int _capacity; int _data; AttrObj *_default; int _cachedOverride; int _popProc; int pad32; AttrObj *_lastIncrementalFlushedAttr; };
-struct AttrList { char pad[8]; int _count; int _capacity; AttrRefHeader **_data; };
-struct AttrManagerRec {
-    void **_vtable; unsigned int _refCount; int pad8;
+struct AttrStackRec : igObject { int _count; int _capacity; int _data; AttrObj *_default; int _cachedOverride; int _popProc; int pad32; AttrObj *_lastIncrementalFlushedAttr; };
+struct AttrList { char pad[8]; int _count; int _capacity; igObject **_data; };
+struct AttrManagerRec : public igObject {
+     int pad8;
     int _numAttrStacks;
     AttrList *_attrStacks;
     AttrList *_attrDefaults;
@@ -52,7 +38,7 @@ struct AttrManagerRec {
     int *_attrStackIndexTable;
     int _attrStackIndexTableSize;
 };
-static inline void attrRelease(AttrRefHeader *o) {
+static inline void attrRelease(igObject *o) {
     if (o != 0) {
         o->_refCount = o->_refCount - 1;
         if ((o->_refCount & 0x7FFFFF) == 0) {
@@ -60,12 +46,12 @@ static inline void attrRelease(AttrRefHeader *o) {
         }
     }
 }
-static inline void attrRetain(AttrRefHeader *o) {
+static inline void attrRetain(igObject *o) {
     if (o != 0) {
         o->_refCount = o->_refCount + 1;
     }
 }
-static inline void attrListSet(AttrList *l, int i, AttrRefHeader *o) {
+static inline void attrListSet(AttrList *l, int i, igObject *o) {
     attrRetain(o);
     attrRelease(l->_data[i]);
     {
@@ -103,7 +89,7 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         units = FUN_001d8270(meta);
         if (units <= 0) {
             igSmartPointer<AttrObj> def = m->_defaultManager->getDefault(meta, 0);
-            units = ((AttrCaps *)def.p)->unitCount((void *)m->_capabilityManager);
+            units = ((AttrCaps *)def.get())->unitCount((void *)m->_capabilityManager);
             if (units <= 0) {
                 units = 1;
             }
@@ -120,17 +106,17 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
             AttrObj **slot;
             AttrObj *value;
             slot = &stack.p->_default;
-            value = def.p;
+            value = def.get();
             attrFieldSet(slot, value);
             stack.p->_popProc = 0;
             {
-                AttrObj *d = def.p;
+                AttrObj *d = def.get();
                 stack.p->_lastIncrementalFlushedAttr = d;
             }
             {
-                AttrRefHeader *entry = stack.p;
+                igObject *entry = stack.p;
                 attrListSet(m->_attrStacks, first, entry);
-                entry = def.p;
+                entry = def.get();
                 attrListSet(m->_attrDefaults, first, entry);
             }
         }

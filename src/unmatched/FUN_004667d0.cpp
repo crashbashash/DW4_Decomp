@@ -1,28 +1,14 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_00191f30(...);
 int FUN_004569c0(...);
 int FUN_00456a60(...);
 int List_Resize(...);
 int ObjectList_AppendRetained(...);
-int igObject_Destroy(...);
 int FUN_004665e0(...);
 igProbe *FUN_0019e680(int);
 static inline int count_of(const igIntList *list) { return list->_count; }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        igObject *object = (igObject *)p;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 static inline void setProbe(igPickMode *pickMode, const igSmartPointer<igProbe> &probe) {
     igObject *retained = (igObject *)probe.get();
     igIntersectTraversal *traversal = (igIntersectTraversal *)pickMode->_intersectTraversal;

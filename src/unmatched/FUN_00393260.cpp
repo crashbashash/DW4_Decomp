@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 struct Prop { char pad16[16]; char *f16; };
 /* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable offset 88 */
 struct Msg {
@@ -21,7 +21,6 @@ void *StringPool_Intern(int, void *);
 int beMessenger_GetObject(...);
 int beMessenger_GetObjectCount(...);
 int beMessenger_SendNamed(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 Prop *igProperty_FindByName(...);
 int strcmp(void *, void *);
@@ -47,26 +46,20 @@ extern unsigned char GPR_00554c14;
 unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlInfoWork *arg2, Msg *arg3);
 }
 
-
 /* Owning references live across calls (retail exception table 0x543a8c): igSmartPointer<igObject> is the ObjectRef copy at
  * 0x33e9c0 (slot 152), MoveRef the copy emitted behind this function at 0x393aa0 (slot 156). */
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *x) { p = x; }
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 struct MoveRef {
     igObject *p;
     MoveRef() { p = 0; }
     ~MoveRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* matching construct: the code reads the refcount as a signed int, the header declares it unsigned */
-#define RC(x) (*(int *)&(x)->_refCount)
 #define MOVES(c) ((beModelCtrlMoveObject **)((beModelCtrlMoveObjectList *)(c)->_moveObjectList)->_data)
 #define ALLOC(var, arg) { int base_ = igObject_GetAllocator(arg); if (GPR_00554c14 != 0) var = base_; else var = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 
 /* matching construct: the data-list holder (slot 152) must sit below the move-object holder (slot 156), so it is
- * a local of a static inline member (allocated after the caller's); inline_depth(8) keeps its destructor inline.
+ * a local of a static inline member (allocated after the caller's).
  * al/p/old stay the caller's locals so the register order matches. Found by trial (no permuter). */
 struct Locals {
     static inline void CreateDataList(beBaseInfoRam *arg1, int &al, igObject *&p, igObject *&old) {
@@ -74,11 +67,11 @@ struct Locals {
         {
             igSmartPointer<igObject> sp98((igObject *)beBaseInfoDataList_Create(al));
             p = sp98.p;
-            if (p != 0) RC(p) = RC(p) + 1;
+            if (p != 0) p->_refCount = p->_refCount + 1;
             old = (igObject *)arg1->_dataList;
             if (old != 0) {
-                RC(old) = RC(old) - 1;
-                if (((unsigned long long)((long long)RC(old) << 0x29) >> 0x29) == 0) igObject_Destroy(old);
+                old->_refCount = old->_refCount - 1;
+                if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
             }
             arg1->_dataList = (int)p;
         }
@@ -111,22 +104,22 @@ extern "C" unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, be
         MoveRef sp9C;
         ALLOC(al, arg0);
         o = sp9C.p;
-        if (o != 0) { RC(o) = RC(o) - 1; if (((unsigned long long)((long long)RC(o) << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
+        if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); }
         sp9C.p = (igObject *)FUN_00352940(al);
         { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
         ALLOC(al, arg0);
         o = sp9C.p;
-        if (o != 0) { RC(o) = RC(o) - 1; if (((unsigned long long)((long long)RC(o) << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
+        if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); }
         sp9C.p = (igObject *)FUN_00352940(al);
         { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
         ALLOC(al, arg0);
         o = sp9C.p;
-        if (o != 0) { RC(o) = RC(o) - 1; if (((unsigned long long)((long long)RC(o) << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
+        if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); }
         sp9C.p = (igObject *)FUN_00352940(al);
         { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
         ALLOC(al, arg0);
         o = sp9C.p;
-        if (o != 0) { RC(o) = RC(o) - 1; if (((unsigned long long)((long long)RC(o) << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
+        if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); }
         sp9C.p = (igObject *)FUN_00352940(al);
         { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
     }
@@ -190,11 +183,11 @@ extern "C" unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, be
                 if (beMessenger_GetObjectCount(arg0->_messenger) == 1) {
                     arg2->_isPosLock = 1;
                     ob = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);
-                    if (ob != 0) RC(ob) = RC(ob) + 1;
+                    if (ob != 0) ob->_refCount = ob->_refCount + 1;
                     old = (igObject *)arg2->_posLockTrc;
                     if (old != 0) {
-                        RC(old) = RC(old) - 1;
-                        if (((unsigned long long)((long long)RC(old) << 0x29) >> 0x29) == 0) igObject_Destroy(old);
+                        old->_refCount = old->_refCount - 1;
+                        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
                     }
                     arg2->_posLockTrc = (int)ob;
                 }

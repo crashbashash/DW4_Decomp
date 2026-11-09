@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 void *FUN_003bdb10(void *);
 int FUN_003bee30();
@@ -8,7 +8,6 @@ int FUN_003d0a90(void *, void *, int, void *);
 int FUN_003a7a20(void *, int *, int);
 int FUN_003a7e90(void *, int *);
 void *Memory_GetAllocatorBySelector(int);
-void igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
 unsigned int beMessenger_ResolveEnumValue(int, int, int);
 int beMessenger_AppendBool(int, unsigned char);
@@ -35,13 +34,8 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *, beNDMWPanelWazaInfoRa
 }
 /* Owning stack reference to the freshly created panel work; released on scope exit (reference
  * count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
-#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
+
+#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define RET(o) { igObject *rt = (o); if (rt != 0) rt->_refCount = rt->_refCount + 1; }
 #define SETP(T, panel, src, field) { igObject *c = (igObject *)(src); T *pp = (T *)(panel); if (c != 0) c->_refCount = c->_refCount + 1; { igObject *o = (igObject *)pp->field; REL(o) } pp->field = (int)c; }
 #define HOOK(T, panel) SETP(T, panel, work->_textSetList, _textSetList) SETP(T, panel, work->_textColorList, _textColorList) ((T *)(panel))->_playerNo = ram->_ramNo; ((T *)(panel))->_manager = (int)self; ((T *)(panel))->_messenger = self->_messenger;

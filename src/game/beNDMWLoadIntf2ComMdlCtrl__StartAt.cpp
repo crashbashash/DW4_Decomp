@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_002eb010(int);
 int Memory_GetAllocatorBySelector(int);
@@ -10,7 +10,6 @@ int beMessenger_AppendVec3(int, float *);
 int beMessenger_DispatchSelected(int, int *);
 int beMessenger_SelectReceivers(int, int *, int, int);
 int beMessenger_SendNamed(int, int *, int, int, int);
-int igObject_Destroy(beLoadIntf2ComMdlData *);
 int igObject_GetAllocator(beNDMWLoadIntf2ComMdlCtrl *);
 beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int);
 /* Messenger group "MODELCTRL" and message "GENERATE". */
@@ -34,12 +33,6 @@ typedef struct StringTokenHeader {
 /* Owning stack reference to the new open-request record: constructed from the object and released
  * on scope exit, after the open list has retained it (reference count in the low 23 bits of
  * _refCount). Its destructor is emitted out of line. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 
 /* Ask the MODELCTRL receivers named (infoName, ramNo) to GENERATE at `position`, then send them
  * `openSQ` as a named message. When `recordOpen` is 1 the request is also remembered as a

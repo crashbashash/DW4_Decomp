@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_002eb010(...);
 void *FUN_00350020(...);
@@ -11,7 +11,6 @@ void *StringPool_Intern(...);
 int beMessenger_GetInt(...);
 int beMessenger_GetIntCount(...);
 int beMessenger_GetString(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 void *igProperty_FindByName(...);
 extern int DAT_0051dba8[4];
@@ -26,12 +25,7 @@ struct Tgt { char pad[220]; int f220; int f224; };
 struct Rel { static inline void go(igObject *o) { igObject *t = o; if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); } } };
 /* Owning stack reference to the slot's new data list; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the new map info work; released on scope exit. */
 class InfoWorkRef {
 public:
@@ -44,7 +38,9 @@ struct Slot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPo
     if (t != 0) t->_refCount = t->_refCount + 1;
     Rel::go((igObject *)ram->_dataList);
     ram->_dataList = (int)t;
-} };
+}
+static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); setDataList(ram, list); }
+};
 extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam *arg1) {
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
@@ -52,7 +48,7 @@ extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beB
         igObject *created = (igObject *)beBaseInfoDataList_Create(al);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
-        Slot::setDataList(arg1, igSmartPointer<igObject>(created));
+        Slot::adopt(arg1, created);
     }
     Prop *s3 = (Prop *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0051dba8);
     {

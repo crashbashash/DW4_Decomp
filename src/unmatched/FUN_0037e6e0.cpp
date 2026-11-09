@@ -1,7 +1,7 @@
 /* Queue a kind-7 keep-message whose parameter is the interned string `arg1`; a build work is
  * created first when the manager has none. */
-#include "dw4/reflected.h"
 
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_002eb010(int);
 beDemoManagerWork *FUN_003637c0(int allocator);
@@ -11,7 +11,6 @@ int ObjectList_AppendRetained(int list, beDemoKeepMes *o);
 void StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 char *StringPool_Intern(int pool, int key);
-void igObject_Destroy(void *);
 int igObject_GetAllocator(beDemoManager *);
 extern int DAT_00586f20[4];
 extern int DAT_00587110[4];
@@ -21,20 +20,6 @@ void FUN_0037e6e0(beDemoManager *arg0, int arg1);
 
 /* Owning stack reference to a keep-message; its destructor releases the object (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() {
-        T *o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-};
 
 void FUN_0037e6e0(beDemoManager *arg0, int arg1) {
     beDemoManagerWork *l;

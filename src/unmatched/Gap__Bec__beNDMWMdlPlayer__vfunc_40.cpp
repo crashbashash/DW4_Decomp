@@ -1,10 +1,9 @@
 /* BeNDMWMdlPlayer vfunc 40: creates the ram object's data list on first use, then consumes a one-
  * shot flag in the player payload by sending a named message. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int Memory_GetAllocatorBySelector(int);
 int beMessenger_SendNamed(int, int *, int, int, int *);
-void igObject_Destroy(igObject *);
 int igObject_GetAllocator(void *);
 extern int DAT_00516110[4];
 extern int DAT_00516148[4];
@@ -20,12 +19,7 @@ struct PropertyRecord *igProperty_FindByName(igObject *, int, int *);
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_40(beNDMWMdlPlayer *arg0, struct UnidentifiedArg1Object *arg1) {
     struct PropertyPayload *q;
 

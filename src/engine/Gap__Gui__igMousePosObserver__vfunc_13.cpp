@@ -1,42 +1,28 @@
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int Gap__Core__igObject__vfunc_11(...);
 int List_Resize(...);
 int ObjectList_AppendRetained(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 int FUN_00455ad0(...);
-struct ObserverRefView { int w0; int rc; };
 struct ObserverIntListView { int w0; int w4; int cnt; int cap; int *data; };
-struct ObserverEventView : ObserverRefView { int w8; int a; ObserverIntListView *list; };
-struct ObserverModelView { char pad[40]; ObserverRefView *ref; int flags; int fn; };
+struct ObserverEventView : igObject { int w8; int a; ObserverIntListView *list; };
+struct ObserverModelView { char pad[40]; igObject *ref; int flags; int fn; };
 struct MousePosObserverView { char pad[16]; ObserverModelView *m; int f20; };
 ObserverEventView *FUN_0019e680(...);
 static inline int count_of(const ObserverIntListView *list) { return list->cnt; }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *event) : p(event) {}
-    ~igSmartPointer() {
-        ObserverRefView *object = p;
-        if (object != 0) {
-            object->rc = object->rc - 1;
-            if ((object->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 static inline void setEvent(MousePosObserverView *self, const igSmartPointer<ObserverEventView> &event) {
-    ObserverRefView *retained = event.get();
+    igObject *retained = event.get();
     ObserverModelView *model = self->m;
-    ObserverRefView *previous;
+    igObject *previous;
     if (retained != 0) {
-        retained->rc = retained->rc + 1;
+        retained->_refCount = retained->_refCount + 1;
     }
     previous = model->ref;
     if (previous != 0) {
-        previous->rc = previous->rc - 1;
-        if ((previous->rc & 0x7FFFFF) == 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }

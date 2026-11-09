@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 igPluginRepository *FUN_002bc930(...);
 int FUN_002eb010(...);
@@ -7,21 +7,10 @@ int StringChunk_ReleaseHeader(...);
 int StringPool_Construct(...);
 char *StringPool_Intern(...);
 int igNamedObject_SetName(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 extern int DAT_00586f20[4];
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) igObject_Destroy(object);
-        }
-    }
-};
+
 extern "C" void FUN_00304720(igPluginHelper *helper, int name, int location, int locationType) {
     int pool;
     char *text;

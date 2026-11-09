@@ -1,6 +1,7 @@
+#include "dw4/igSmartPointer.h"
 struct FieldLinkInfo;
-class FieldLinkObject { public:
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+class FieldLinkObject : public igVirtualObject { public:
+    virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
     virtual void s10(); virtual void s11(); virtual void s12();
     virtual void Prepare();
@@ -16,8 +17,8 @@ class FieldLinkObject { public:
     virtual int Classify(void *pool);
 };
 struct FieldLinkInfo { char pad[64]; int (*poolFor)(); };
-struct FieldLinkRecord : FieldLinkObject { unsigned int rc; int pad8; int index; int user; int extra; };
-struct FieldLinkSet { int vt; int rc; int count; char pad12[44]; char reset; char pad57[7]; unsigned char mode; unsigned char tracks; unsigned char namedPools; };
+struct FieldLinkRecord : FieldLinkObject { int pad8; int index; int user; int extra; };
+struct FieldLinkSet : public igObject { int count; char pad12[44]; char reset; char pad57[7]; unsigned char mode; unsigned char tracks; unsigned char namedPools; };
 extern "C" {
 int FUN_002d86b0(FieldLinkSet *, int, FieldLinkObject *);
 FieldLinkObject *FUN_002d7d60(FieldLinkSet *, int);
@@ -30,7 +31,6 @@ char *igMetaObject_GetPoolName(FieldLinkInfo *);
 void *Memory_GetAllocatorByName(char *);
 FieldLinkObject *Memory_GetCurrentContextAlias(void);
 void FUN_00301590(FieldLinkRecord *, FieldLinkInfo *);
-void igObject_Destroy(FieldLinkRecord *);
 extern int DAT_00586730;
 extern int DAT_00586140;
 int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user);
@@ -39,24 +39,11 @@ template <class T> struct RetainedWord {
     T *p;
     RetainedWord(T *object) : p(object) {
         if (p != 0) {
-            p->rc = p->rc + 1;
+            p->_refCount = p->_refCount + 1;
         }
     }
 };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            o->rc = o->rc - 1;
-            if ((o->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user) {
     int index = 0;
     FieldLinkInfo *info;

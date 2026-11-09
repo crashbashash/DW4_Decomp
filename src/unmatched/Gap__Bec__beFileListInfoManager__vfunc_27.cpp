@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" int sprintf(...);
 extern "C" int strlen(...);
 extern "C" int FUN_001c5d10(...);
@@ -33,7 +33,6 @@ extern "C" int beMessenger_GetObject(...);
 extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int beMessenger_SendGroup(...);
-extern "C" void igObject_Destroy(void *);
 extern int DAT_004c22f0[4];
 extern int DAT_004e0858[4];
 extern int DAT_0050e560[4];
@@ -103,11 +102,7 @@ struct StringRef {
     ~StringRef() { char *s = p; if (s != 0) { int *hd = (int *)s - 2; int cnt = ((int *)s)[-1] - 1; ((int *)s)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 };
 /* Retained share of the stage-name string object. */
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *o) : p(o) { if (p != 0) p->_refCount = p->_refCount + 1; }
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" int StringList_AppendRetained(void *, const StringRef &);
 
 #define EMPTY ((int *)&DAT_004e0858[0])
@@ -199,7 +194,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
             }
             FUN_00308c80(DAT_00586dd0[0]);
             {
-            igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj);
+            igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
             FUN_0030b3c0(stageObj.p, ((beSystem *)arg0->_system)->_stageName);
             FUN_0030bbf0(stageObj.p, 0, 2);
             t0 = (int *)stageObj.p; FUN_0030b460(t0, &DAT_0050e570[0], 0, strlen(&DAT_0050e570[0]));
@@ -254,7 +249,7 @@ extern "C" void Gap__Bec__beFileListInfoManager__vfunc_27(beFileListInfoManager 
                 arg0->_isReadOnetime = 1;
                 arg0->_onetimeCount = 2;
             }
-            igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj);
+            igSmartPointer<igObject> stageObj((igObject *)((beSystem *)arg0->_system)->_globalStrObj, kRetainReference);
             found = 0;
             i = 0;
             if (0 < s5->_count) {

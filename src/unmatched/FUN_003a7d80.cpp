@@ -1,11 +1,10 @@
 /* Make sure the info ram has a property data list, then report whether a property of the given
  * name exists in it. The lazily created list is owned by a stack reference while it is retained
  * into the ram and the previous list is released. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 igObject *beBaseInfoDataList_Create(int);
 int Memory_GetAllocatorBySelector(int);
-int igObject_Destroy(igObject *);
 int igObject_GetAllocator();
 int igProperty_FindByName(int, int, int);
 extern int DAT_00585be0[4];
@@ -15,12 +14,7 @@ int FUN_003a7d80(beBaseInfoRam *arg0, int arg1);
 }
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 int FUN_003a7d80(beBaseInfoRam *arg0, int arg1) {
     int t;
     int var_v0;

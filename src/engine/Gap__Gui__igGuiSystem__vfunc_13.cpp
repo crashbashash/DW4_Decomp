@@ -1,8 +1,8 @@
+#include "dw4/igSmartPointer.h"
 extern "C" {
-int igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
 }
-struct R { int w0; int refs; int w8; int wc; };
+struct R : public igObject { int w8; int wc; };
 struct X { char p[12]; R *f12; R *f16; };
 struct A { char p[8]; X *f8; int f12; int f16; R *f20; char q[4]; int f28; };
 extern "C" {
@@ -14,29 +14,15 @@ int FUN_00457e90(R *, int);
 int Gap__Core__igObject__vfunc_11(A *);
 int ObjectList_AppendRetained(int, R *);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    void release() {
-        T *o = p;
-        if (o != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    ~igSmartPointer() { release(); }
-    T *get() const { return p; }
-};
+
 static inline void set(R *&field, R *value) {
     if (value != 0) {
-        value->refs = value->refs + 1;
+        value->_refCount = value->_refCount + 1;
     }
     R *old = field;
     if (old != 0) {
-        old->refs = old->refs - 1;
-        if ((old->refs & 0x7FFFFF) == 0) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(old);
         }
     }

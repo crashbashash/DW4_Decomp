@@ -1,4 +1,6 @@
-struct IniValueObject { int pad0; int _refCount; union { int i; float f; unsigned char b; char *s; } value; };
+#include "dw4/igSmartPointer.h"
+
+struct IniValueObject : public igObject { union { int i; float f; unsigned char b; char *s; } value; };
 struct IniValueList;
 struct IniValueTarget;
 extern "C" {
@@ -15,22 +17,11 @@ void FUN_0030b720(IniValueObject *, int, void *);
 void FUN_0030b730(IniValueObject *, void *, float);
 void FUN_0030b770(IniValueObject *, unsigned char, int);
 void FUN_002d9740(IniValueTarget *, int, int, char *);
-void igObject_Destroy(void *);
 extern char *DAT_004c22f0[4];
 extern int DAT_004e4710[2];
 extern int DAT_004e4718[2];
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-};
+
 extern "C" void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list) {
     int i;
     IniValueObject *value;

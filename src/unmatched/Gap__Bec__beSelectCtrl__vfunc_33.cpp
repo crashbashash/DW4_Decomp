@@ -1,7 +1,7 @@
 /* reference-counted engine object header: refcount word at +4 */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 /* matching construct: macro reproduces the retail refcount release sequence inline */
-#define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = (int)rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(rr); } }
+#define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = (int)rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) igObject_Destroy(rr); } }
 extern "C" {
 int FUN_002cb0d0(int);
 int FUN_00345680(int);
@@ -20,7 +20,6 @@ int beMessenger_GetStringCount(int);
 int beMessenger_GetVec3(float *, int, int);
 int beMessenger_GetVec3Count(int);
 unsigned int beMessenger_ResolveEnumValue(int, int, int);
-int igObject_Destroy(igObject *);
 int igObject_GetAllocator(void *);
 int igProperty_FindByName(int, int, int *);
 int strcmp(int, int *);
@@ -36,18 +35,13 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
 }
 /* Owning stack reference to the freshly created property data list, released at the end of the
  * full expression that stores it (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the select work created on start, released on scope exit. */
 class WorkRef {
 public:
     beSelectCtrlInfoWork *p;
     WorkRef(beSelectCtrlInfoWork *o) : p(o) {}
-    ~WorkRef() { beSelectCtrlInfoWork *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
+    ~WorkRef() { beSelectCtrlInfoWork *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to a new decide list while it is filled, released on scope exit. */
 class BoolListRef {
@@ -64,7 +58,9 @@ struct DataList { static inline void store(beBaseInfoRam *ram, const igSmartPoin
     if (created != 0) created->_refCount = (int)created->_refCount + 1;
     REL(ram->_dataList)
     ram->_dataList = (int)created;
-} };
+}
+static inline void create(beBaseInfoRam *ram, int a) { igSmartPointer<igObject> list((igObject *)beBaseInfoDataList_Create(a)); store(ram, list); }
+};
 int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, int arg2) {
     float sp80[3];
     int n;
@@ -84,7 +80,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
     if (arg1->_dataList == 0) {
         a = igObject_GetAllocator(arg1);
         a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        DataList::store(arg1, igSmartPointer<igObject>((igObject *)beBaseInfoDataList_Create(a)));
+        DataList::create(arg1, a);
     }
     s3 = (beSelectCtrlInfoRamData *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0050f800);
     s2 = (beSelectCtrlInfoWork *)s3->_work;

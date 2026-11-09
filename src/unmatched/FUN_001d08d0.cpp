@@ -1,9 +1,8 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 void *FUN_002c9740(void *);
 void *FUN_002c99b0(void *);
 void List_Resize(...);
-int igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
 extern float DAT_0048da38[4];
 extern float DAT_0048da40[4];
@@ -11,16 +10,7 @@ extern unsigned char GPR_00554988;
 }
 struct Src { char pad[20]; int f20; };
 struct Self { char pad[44]; Src *f44; igFloatList *f48; igFloatList *f52; igUnsignedCharList *f56; };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        if (p != 0) {
-            p->_refCount = p->_refCount - 1;
-            if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy(p);
-        }
-    }
-};
+
 struct ByteListRef {
     igUnsignedCharList *p;
     ByteListRef(igUnsignedCharList *object) : p(object) {}
@@ -42,7 +32,7 @@ static inline void setFloats(igFloatList *&field, const igSmartPointer<igFloatLi
     }
     field = held;
 }
-static inline void setBytes(igUnsignedCharList *&field, const ByteListRef &value) {
+static inline void setBytes(igUnsignedCharList *&field, const igSmartPointer<igUnsignedCharList> &value) {
     igUnsignedCharList *held = value.p;
     igUnsignedCharList *old;
     if (held) held->_refCount = held->_refCount + 1;
@@ -60,18 +50,9 @@ extern "C" bool FUN_001d08d0(Self *arg0, int arg1) {
     int j;
     if (arg0->f48 == 0) {
         n = arg0->f44->f20;
-        {
-            igSmartPointer<igFloatList> first((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0)));
-            setFloats(arg0->f48, first);
-        }
-        {
-            igSmartPointer<igFloatList> second((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0)));
-            setFloats(arg0->f52, second);
-        }
-        {
-            ByteListRef flags((igUnsignedCharList *)FUN_002c99b0(igObject_GetAllocator(arg0)));
-            setBytes(arg0->f56, flags);
-        }
+        setFloats(arg0->f48, igSmartPointer<igFloatList>((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0))));
+        setFloats(arg0->f52, igSmartPointer<igFloatList>((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0))));
+        setBytes(arg0->f56, igSmartPointer<igUnsignedCharList>((igUnsignedCharList *)FUN_002c99b0(igObject_GetAllocator(arg0))));
         { igFloatList *l = arg0->f48; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, 4); } }
         { igFloatList *l = arg0->f52; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, 4); } }
         { igUnsignedCharList *l = arg0->f56; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, 1); } }

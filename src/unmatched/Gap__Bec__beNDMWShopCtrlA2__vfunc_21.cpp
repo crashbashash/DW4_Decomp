@@ -1,3 +1,4 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_00236f80(int, int);
@@ -26,7 +27,6 @@ int beNDMWWindow_PlayQueuedModelClose(void *);
 int beNDMWWindow_PollCloseComplete(void *);
 int beNDMWWindow_PresentModelAtOrigin(void *, void *, int, void *, void *);
 int beNDMWWindow_RequestChildrenClose(void *);
-void igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
 static inline int st0(const beNDMWShopCtrlA2 *ctrl) { return ctrl->_st0; }
 struct Item { int p[3]; int f12; int p16; int f20; };
@@ -77,27 +77,19 @@ extern unsigned char GPR_00554a4c;
 extern unsigned char GPR_00554c14;
 void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0);
 }
-struct Rc { int w0; int references; };
+struct Rc : public igObject { };
 /* Owning stack reference to a shop select window while it is set up; released on scope exit
- * (reference count in the low 23 bits of references). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *w) : p(w) {}
-    /* matching construct: an argument read through the conversion is evaluated before the call
-     * arguments that follow it (retail keeps the window in a saved register across them) */
-    operator T *() const { return p; }
-    ~igSmartPointer() { T *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy(w); } }
-};
+ * (reference count in the low 23 bits of _refCount). */
+
 /* Same role for the result sub-window. */
 class SubWindowRef {
 public:
     Rc *p;
     SubWindowRef(Rc *w) : p(w) {}
     operator Rc *() const { return p; }
-    ~SubWindowRef() { Rc *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy(w); } }
+    ~SubWindowRef() { Rc *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-#define REL(o) { Rc *rr = (o); if (rr != 0) { rr->references = rr->references - 1; if (((unsigned long long)((long long)rr->references << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
+#define REL(o) { Rc *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define CLEAR(L) { igStringRefList *l = (igStringRefList *)(L); int n = l->_count; int i; int *slot; int nw; for (i = 0; i < n; i++) { slot = (int *)l->_data + i; if (DAT_00586f20[0] == 0) { int v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); DAT_00586f20[0] = v; } nw = StringPool_Intern(DAT_00586f20[0], 0); { int *old = (int *)*slot; if (old != 0) { int *hdr = old - 2; int c = hdr[1] - 1; hdr[1] = c; if (c == 0) StringChunk_ReleaseHeader(hdr[0], hdr); } } *slot = nw; } l->_count = 0; }
 void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
     void *alloc;

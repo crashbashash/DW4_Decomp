@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_003614f0(...);
 int beUnicodeObj_AllocateBuffer(...);
@@ -10,7 +10,6 @@ int beNDMWLoadIntf2TextOrder_PublishIdLines(...);
 int FUN_003ec120(...);
 int FUN_003ecad0(...);
 int Memory_GetAllocatorBySelector(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 int strcmp(...);
 typedef struct Ent { int name; int val; int val2; } Ent;
@@ -30,12 +29,7 @@ struct Ob { char p[28]; float v28; float v32; float v36; };
 struct V3 { float x; float y; float z; };
 /* Owning stack reference to the slot's name text; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" unsigned char FUN_003db060(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     int sp11C;
     beNDMWLoadCtrl2CommonIntf *sp100;

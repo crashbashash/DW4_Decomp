@@ -1,11 +1,10 @@
-#include "dw4/reflected.h"
 /* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable offset of the
    vertex-array configure method (an igVertexArray subclass instance; the reflected igVertexArray has no vtable type) */
+#include "dw4/igSmartPointer.h"
 class Sink { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void vX(unsigned &, int, int, int); };
 extern "C" {
 void *Memory_GetAllocatorBySelector(...);
 void *igObject_GetAllocator(...);
-int igObject_Destroy(igVertexArray *);
 Sink *FUN_0014b940(...);
 extern unsigned char GPR_00554c14;
 extern int DAT_00587110[4];
@@ -13,12 +12,7 @@ void FUN_00383910(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3);
 }
 /* Owning stack reference to a vertex array: first the attribute's current array, then the newly
  * created one (reference count in the low 23 bits of _refCount); released on scope exit. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_00383910(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3) {
     igSmartPointer<igVertexArray> va((igVertexArray *)arg1->_vertexArray); /* matching construct: declared first so it takes the retail slot above sp68 */
     unsigned sp68;

@@ -3,18 +3,18 @@
  * because retail reloads it at every use while keeping data[] hoisted. `d = l->data;` is repeated
  * inside the sort loop so the compiler keeps a byte-offset induction variable instead of a pointer
  * walk. */
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 /* The list holds beNDMWItemBase entries (kind _kindNo, record _recNo); the sort key at +20 belongs
  * to the item subclasses. The list view stays local because its count is volatile and its data a
  * pointer, which the reflected igObjectList does not express. */
 typedef struct Keyed { char hdr[20]; int key; } Keyed;
-typedef struct List { int w0; int _refCount; volatile int count; int pad1; beNDMWItemBase **data; } List;
+typedef struct List : public igObject { volatile int count; int pad1; beNDMWItemBase **data; } List;
 typedef struct Holder { List *list; } Holder;
 extern "C" {
 void *FUN_003c90f0(void *);
 int ObjectList_AppendRetained(int, int);
 int ObjectList_RemoveFirstRetained(int *, List *, beNDMWItemBase *, int);
-void igObject_Destroy(beNDMWItemBase *);
 void List_RemoveWordAt(List *, int);
 void *igObject_GetAllocator(void *);
 void *Memory_GetAllocatorBySelector(int);
@@ -22,15 +22,9 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void FUN_00422c00(void *arg0, Holder *arg1);
 }
-#define RELEASE(o) { if ((o) != 0) { (o)->_refCount = (o)->_refCount - 1; if (((unsigned long long)((long long)(int)(o)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o); } }
+#define RELEASE(o) { if ((o) != 0) { (o)->_refCount = (o)->_refCount - 1; if (((o)->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); } }
 /* Owning stack reference to the scratch list the sort builds into, released on scope exit
  * (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((beNDMWItemBase *)o); } }
-};
 
 void FUN_00422c00(void *arg0, Holder *arg1) {
     void *al;

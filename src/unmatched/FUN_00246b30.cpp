@@ -1,23 +1,12 @@
-class ScriptFile { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int open(int, int *); virtual int close(); virtual int read(int, int, int); virtual void e0(); virtual void e1(); virtual void e2(); virtual void e3(); virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7(); virtual void e8(); virtual void e9(); virtual int seek(int, int); virtual int size(); int refs; };
+#include "dw4/igSmartPointer.h"
+class ScriptFile : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int open(int, int *); virtual int close(); virtual int read(int, int, int); virtual void e0(); virtual void e1(); virtual void e2(); virtual void e3(); virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7(); virtual void e8(); virtual void e9(); virtual int seek(int, int); virtual int size(); };
 extern "C" {
 int lua_dobuffer(int, int, int, int);
 int luaM_realloc(int, int, int);
 ScriptFile *FUN_002c4ca0(int);
-int igObject_Destroy(ScriptFile *);
 extern int DAT_004eaab0[4];
 }
-struct AdoptReference { };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object, AdoptReference) : p(object) {}
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-};
+
 extern "C" int FUN_00246b30(int state, int path) {
     igSmartPointer<ScriptFile> file(FUN_002c4ca0(0), AdoptReference());
     int size;

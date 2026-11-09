@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 void *beBaseInfoDataList_Create(...);
 int FUN_00396740(...);
@@ -14,7 +14,6 @@ int beMessenger_PopArgContext(...);
 int beMessenger_PrepareDelayedSelection(...);
 int beMessenger_PushArgContext(...);
 int beMessenger_SendNamed(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 void *igProperty_FindByName(...);
 extern int DAT_004e0858[4];
@@ -42,12 +41,7 @@ struct Rel {
 };
 /* Owning stack reference to the slot's new data list; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the new enemy info work; released on scope exit. */
 class InfoWorkRef {
 public:
@@ -60,7 +54,9 @@ struct Slot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPo
     if (t != 0) t->_refCount = t->_refCount + 1;
     Rel::go((igObject *)ram->_dataList);
     ram->_dataList = (int)t;
-} };
+}
+static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); setDataList(ram, list); }
+};
 extern "C" void Gap__Bec__beNDMWMdlEnemy__vfunc_36(beNDMWMdlEnemy *arg0, beBaseInfoRam *arg1) {
     beBaseInfo *s0;
     Holder *s4;
@@ -73,7 +69,7 @@ extern "C" void Gap__Bec__beNDMWMdlEnemy__vfunc_36(beNDMWMdlEnemy *arg0, beBaseI
         igObject *created = (igObject *)beBaseInfoDataList_Create(a);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x68 does) */
-        Slot::setDataList(arg1, igSmartPointer<igObject>(created));
+        Slot::adopt(arg1, created);
     }
     s4 = (Holder *)igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], &DAT_00515e30[0]);
     {

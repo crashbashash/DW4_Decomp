@@ -1,8 +1,8 @@
-#include "dw4/reflected.h"
 /* Appends a sound sub-command to the controller's command list: the command object is created from
  * the controller's allocator, its _sndName is interned (replacing the string the constructor
  * left), _startFrame is set and the object appended; the creating reference is released on scope
  * exit. */
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_002eb010(...);
 beModelCtrlSCSound *FUN_0034f4a0(...);
@@ -11,7 +11,6 @@ int ObjectList_AppendRetained(...);
 int StringChunk_ReleaseHeader(...);
 int StringPool_Construct(...);
 char *StringPool_Intern(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 extern int DAT_00586f20[4];
 extern int DAT_00587110[4];
@@ -20,12 +19,7 @@ void FUN_0039a750(beModelCtrlSubCom *arg0, int arg1, float fparg0);
 }
 /* Owning stack reference to the new sound command, released on scope exit once the list holds its
  * own reference (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_0039a750(beModelCtrlSubCom *arg0, int arg1, float fparg0) {
     int *temp_a1;
     int temp_v0;

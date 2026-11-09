@@ -1,26 +1,5 @@
-#include "dw4/reflected.h"
-extern "C" int igObject_Destroy(igObject *);
-struct AdoptReference { };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object, AdoptReference) : p(object) {}
-    igSmartPointer(const igSmartPointer &other) : p(other.p) {
-        T *o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount + 1;
-        }
-    }
-    ~igSmartPointer() {
-        T *o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+#include "dw4/igSmartPointer.h"
+
 struct ObjectSlotOwner {
     char pad[8];
     igObject *slot;

@@ -1,7 +1,9 @@
+
 /* Build one timed record from the request `arg1` (start time, optional duration, two vectors and a
  * kind code classified by its ten-thousands digit) and append it, retained, to the list at
  * arg0->f8. The record is owned by a stack reference until the list has taken its own reference. */
-typedef struct R { int w0; int refs; int f8; int f12; float f16; int f20; int f24; float f28; float f32; float f36; float f40; float f44; float f48; float f52; } R;
+#include "dw4/igSmartPointer.h"
+typedef struct R : public igObject { int f8; int f12; float f16; int f20; int f24; float f28; float f32; float f36; float f40; float f44; float f48; float f52; } R;
 typedef struct A { char pad[8]; int f8; } A;
 typedef struct S { char pad[12]; int f12; float f16; float f20; float f24; float f28; float f32; float f36; float f40; float f44; } S;
 extern "C" {
@@ -9,19 +11,13 @@ int igObject_GetAllocator(A *);
 int Memory_GetAllocatorBySelector(int);
 void *FUN_0034f6f0(int);
 int ObjectList_AppendRetained(int, R *);
-int igObject_Destroy(R *);
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 void FUN_0039a500(A *arg0, S *arg1);
 }
 /* Owning stack reference to the new record, released on scope exit (reference count in the low 23
  * bits of refs). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_0039a500(A *arg0, S *arg1) {
     int v;
     float f;

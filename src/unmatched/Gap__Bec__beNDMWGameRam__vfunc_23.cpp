@@ -1,14 +1,13 @@
 /* After the base igObject hook, gives the game ram a fresh common data list and a fresh per-player
  * data-list list, each retained into its field in place of the old one, then initialises the four
  * player slots. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 igObject *FUN_00363e80(int);
 igObject *FUN_00364050(int);
 int FUN_003f7310(beNDMWGameRam *, int);
 int Gap__Core__igObject__vfunc_23(beNDMWGameRam *);
 int Memory_GetAllocatorBySelector(int);
-void igObject_Destroy(igObject *);
 int igObject_GetAllocator(beNDMWGameRam *);
 extern int DAT_00587108[4];
 extern unsigned char GPR_00554c14;
@@ -23,12 +22,7 @@ struct ReleaseRef { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the new common data list, released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the new per-player data-list list, released the same way. */
 class PlayerDataListListRef {
 public:

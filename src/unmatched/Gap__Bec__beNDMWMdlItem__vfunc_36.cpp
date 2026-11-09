@@ -1,7 +1,7 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 struct Prop { char pad[20]; igObject *f20; };
-struct ParentInfo { int _vtable; unsigned int _refCount; char *_name; };
+struct ParentInfo : public igObject { char *_name; };
 struct Rec { int p[3]; int f12; };
 igObject *beBaseInfoDataList_Create(...);
 igObject *FUN_003c13f0(...);
@@ -27,7 +27,6 @@ int beMessenger_GetObject(...);
 int beMessenger_PopArgContext(...);
 int beMessenger_PushArgContext(...);
 int beMessenger_SendGroup(...);
-void igObject_Destroy(igObject *);
 void *igObject_GetAllocator(...);
 Prop *igProperty_FindByName(...);
 Rec *igProperty_GetRecord(...);
@@ -46,14 +45,14 @@ extern unsigned char GPR_00554c14;
 
 #define HOLDER_BODY { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() HOLDER_BODY };
-template <class T> struct igSmartPointer { T *p; igSmartPointer(T *o) : p(o) {} ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+
 struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() HOLDER_BODY };
 struct ItemRefB { igObject *p; ItemRefB(igObject *o) : p(o) {} ~ItemRefB() HOLDER_BODY };
 struct ItemRefC { igObject *p; ItemRefC(igObject *o) : p(o) {} ~ItemRefC() HOLDER_BODY };
 template <int K> struct ItemRefK { igObject *p; ItemRefK(igObject *o) : p(o) {} ~ItemRefK() HOLDER_BODY };
 #define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel[0]); }
 #define ALLOC(a, sel) ALLOC_OF(self, a, sel)
-#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
+#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 template <class Ref> static inline void storeItem(const igSmartPointer<beNDMWMdlItemInfoWork> &work, const Ref &item) {
     igObject *held2 = item.p;
     beNDMWMdlItemInfoWork *w2 = work.p;

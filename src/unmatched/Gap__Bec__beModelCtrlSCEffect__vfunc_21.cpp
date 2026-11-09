@@ -1,7 +1,7 @@
 /* BeModelCtrlSCEffect vfunc 21: asks the gene model for its ram number, then dispatches the effect
  * request (owner name, sequence, lock target, offset, rotation, position lock) to the selected
  * receivers. The ram object's data list is created on first use. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 struct PropertyEntry { char pad[20]; struct PropertyValueObj *f20; };
 struct PropertyValueObj { char pad[220]; int *f220; int f224; };
@@ -17,7 +17,6 @@ beBaseInfoRam *beMessenger_GetObject(int, int);
 int beMessenger_GetObjectCount(int);
 int beMessenger_SelectReceivers(int, int *, int, int);
 int beMessenger_SendNamed(int, int *, int, int, int *);
-void igObject_Destroy(igObject *);
 int igObject_GetAllocator(beBaseInfoRam *);
 PropertyEntry *igProperty_FindByName(int, int, int *);
 extern int DAT_004e0858[4];
@@ -31,12 +30,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *arg0, beBaseInfoRam *arg1) {
     beBaseInfo *s2;
     beBaseInfoManager *s1;

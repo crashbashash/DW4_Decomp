@@ -1,7 +1,6 @@
 /* Arena handles are 4-byte ints and are cast to pointers where followed. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(void *);
 struct Tab { int name; int f4; int *f8; };
 int strcmp(int, int);
 beUnicodeObj *FUN_003614f0(int);
@@ -20,12 +19,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the area's text object; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" int FUN_003dd6d0(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     beNDMWLoadCtrl2CommonIntf *ctx = (beNDMWLoadCtrl2CommonIntf *)arg0->_commonIntf;
     int s4 = arg0->_comMdlCtrl;

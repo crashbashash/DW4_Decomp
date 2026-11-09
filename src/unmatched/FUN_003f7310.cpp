@@ -5,7 +5,7 @@
  * owning references whose releases the retail exception table records.
  * Matching constructs: the identity (int) branch keeps the allocator select diamond; the per-loop locals and their
  * declaration order fix the saved-register colouring. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 igObject *FUN_00364050(int);
 igObject *FUN_003c85b0(int);
@@ -18,7 +18,6 @@ int List_Reserve(void *, int, int);
 int Memory_GetAllocatorBySelector(int);
 int ObjectList_AppendRetained(void *, igObject *);
 int ObjectList_ResizeRetained(int, int);
-void igObject_Destroy(igObject *);
 int igObject_GetAllocator(void *);
 extern int DAT_004ced40[4];
 extern int DAT_004cedf0[4];
@@ -35,12 +34,7 @@ extern unsigned char GPR_00554c14;
 /* Owning stack reference to the new player data object, released on scope exit (reference count in
  * the low 23 bits of _refCount). */
 static inline int count(const igObjectList *list) { return list->_count; }
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to one new item record, released at the end of each loop pass. */
 class ItemRef {
 public:

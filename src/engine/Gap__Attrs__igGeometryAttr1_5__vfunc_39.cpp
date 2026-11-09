@@ -1,6 +1,7 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
 void *FUN_0014bff0(void *);
-int igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
 }
 class Buf { public:
@@ -8,20 +9,8 @@ class Buf { public:
  virtual int v92(unsigned, int, int);
  int f4_pad[0];
 };
-struct R { int w0; int refs; int w8; unsigned cap; };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        if (p != 0) {
-            p->refs = p->refs - 1;
-            if ((p->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(p);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+struct R : public igObject { int w8; unsigned cap; };
+
 class T { public:
  char pad0[4]; char pad1[16]; int f20; unsigned f24; int f28; char pad2[16]; Buf *f48; int dummy;
  void setBuffer(const igSmartPointer<R> &buffer);
@@ -29,12 +18,12 @@ class T { public:
 inline void T::setBuffer(const igSmartPointer<R> &buffer) {
     R *held = buffer.get();
     if (held != 0) {
-        held->refs = held->refs + 1;
+        held->_refCount = held->_refCount + 1;
     }
     R *previous = (R *)f48;
     if (previous != 0) {
-        previous->refs = previous->refs - 1;
-        if ((previous->refs & 0x7FFFFF) == 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
@@ -47,8 +36,7 @@ extern "C" int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T *arg0, int arg1, unsign
     int t = arg0->f20;
     if ((unsigned)(t - 4) <= 1U || t == 2) {
         if (arg0->f48 == 0) {
-            igSmartPointer<R> buffer((R *)FUN_0014bff0(igObject_GetAllocator(arg0)));
-            arg0->setBuffer(buffer);
+            arg0->setBuffer(igSmartPointer<R>((R *)FUN_0014bff0(igObject_GetAllocator(arg0))));
         }
         if (((R *)arg0->f48)->cap < arg2) {
             arg0->f48->v92(arg2, 0x20, 0);

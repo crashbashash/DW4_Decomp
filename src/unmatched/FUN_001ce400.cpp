@@ -1,6 +1,6 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
-extern "C" void igObject_Destroy(void *);
-struct IniStringObject { int pad0; int _refCount; char *text; };
+struct IniStringObject : public igObject { char *text; };
 static inline void drop(IniStringObject *object) {
     if (object != 0) {
         object->_refCount = object->_refCount - 1;
@@ -21,12 +21,12 @@ public:
     virtual void d0();    virtual void d1();    virtual void d2();    virtual void d3();    virtual void d4();    virtual void d5();    virtual void d6();    virtual void d7();    virtual void d8();    virtual void d9();    virtual void d10();    virtual void d11();    virtual void d12();    virtual void d13();    virtual void d14();    virtual void d15();    virtual void d16();    virtual void d17();    virtual void d18();    virtual void d19();    virtual void d20();
     virtual IniStringRef resolve(char *);
 };
-class IniFileObject {
+class IniFileObject : public igVirtualObject {
 public:
-    virtual void d0();    virtual void d1();    virtual void d2();    virtual void d3();    virtual void d4();    virtual void d5();    virtual void d6();    virtual void d7();    virtual void d8();    virtual void d9();    virtual void d10();    virtual void d11();    virtual void d12();    virtual void d13();    virtual void d14();    virtual void d15();    virtual void d16();    virtual void d17();    virtual void d18();    virtual void d19();    virtual void d20();    virtual void d21();    virtual void d22();
+    virtual void d1();    virtual void d2();    virtual void d3();    virtual void d4();    virtual void d5();    virtual void d6();    virtual void d7();    virtual void d8();    virtual void d9();    virtual void d10();    virtual void d11();    virtual void d12();    virtual void d13();    virtual void d14();    virtual void d15();    virtual void d16();    virtual void d17();    virtual void d18();    virtual void d19();    virtual void d20();    virtual void d21();    virtual void d22();
     virtual int open(char *, void *);
     virtual void close();
-    int _refCount;
+    
     char pad0[4];
     int handle;
 };
@@ -35,7 +35,6 @@ IniFileObject *FUN_002c4ca0(void *);
 IniStringObject *FUN_002b9500(void *);
 void FUN_0030b3c0(IniStringObject *, int);
 void *Memory_GetAllocatorBySelector(int);
-void igObject_Destroy(void *);
 extern char *DAT_004c22f0[4];
 extern int DAT_004e47b0[4];
 extern IniPathResolver *DAT_00562788[4];
@@ -44,20 +43,7 @@ extern int DAT_00587048[4];
 extern int DAT_00587060[4];
 extern unsigned char GPR_00554c14;
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-    T *operator->() const { return p; }
-};
+
 static inline void retain(IniStringObject *object) {
     if (object != 0) {
         object->_refCount = object->_refCount + 1;

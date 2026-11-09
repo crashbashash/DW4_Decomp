@@ -1,5 +1,7 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
-struct InternedStringList { int w0; int references; };
+struct InternedStringList : public igObject { };
 int FUN_00235370(int, InternedStringList *);
 InternedStringList *FUN_002b90e0(int);
 int FUN_002eb010(int);
@@ -7,7 +9,6 @@ int Memory_GetAllocatorBySelector(int);
 int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 char *StringPool_Intern(int, int);
-int igObject_Destroy(InternedStringList *);
 extern int DAT_00586f20[4];
 extern int DAT_00587028[4];
 extern int DAT_00587060[4];
@@ -42,20 +43,7 @@ struct StringRef {
     }
 };
 int StringList_AppendRetained(InternedStringList *, StringRef *);
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *list) : p(list) {}
-    ~igSmartPointer() {
-        T *list = p;
-        if (list != 0) {
-            --list->references;
-            if ((list->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(list);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 void FUN_00234d70(int self, int count, int *names) {
     int allocator;
     int i;

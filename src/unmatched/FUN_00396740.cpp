@@ -1,5 +1,5 @@
-#include "dw4/reflected.h"
 /* matching construct: PropV carries 35 dummy virtuals so vX() dispatches through vtable offset 148 (lw t9,0(a0); lw t9,148(t9); jalr t9) */
+#include "dw4/igSmartPointer.h"
 struct PropV { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void vX(void *); };
 struct Prop { char pad[16]; PropV *f16; };
 extern "C" {
@@ -12,7 +12,6 @@ int beMessenger_GetMatrix(...);
 int beMessenger_GetMatrixCount(...);
 int beMessenger_GetVec3(...);
 int beMessenger_GetVec3Count(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 struct Prop *igProperty_FindByName(...);
 extern int DAT_0050ef60[4];
@@ -22,12 +21,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" void FUN_00396740(beModelCtrl *arg0, beBaseInfoRam *arg1);
 void FUN_00396740(beModelCtrl *arg0, beBaseInfoRam *arg1) {
     volatile float spD0[3];

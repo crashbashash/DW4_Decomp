@@ -1,4 +1,6 @@
-struct Rc { int w0; int refs; int f8; };
+#include "dw4/igSmartPointer.h"
+
+struct Rc : public igObject { int f8; };
 struct Ent { char pad[12]; char *name; };
 struct Lst { char pad[8]; Ent **arr; unsigned int count; };
 struct Obj { char pad[40]; Lst *lst; };
@@ -7,20 +9,8 @@ class B { public: virtual void p0(); virtual void p1(); virtual void p2(); virtu
 extern "C" Rc *FUN_002b9500(int);
 extern "C" int FUN_0030b3c0(Rc *, char *);
 extern "C" int FUN_0022c150(int, B *, Rc *, int, Ent *, A *);
-extern "C" int igObject_Destroy(Rc *);
 extern char DAT_004e7ea8[16];
-struct AdoptReference { };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object, AdoptReference) : p(object) {}
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-};
+
 extern "C" int FUN_0022c7f0(A *arg0, int arg1, B *arg2, int arg3) {
     bool found;
     Lst *l;

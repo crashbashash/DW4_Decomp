@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int strlen(int);
 int strncmp(int, int, unsigned);
@@ -9,7 +9,6 @@ int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 int StringPool_Intern(int, char *);
 int igNamedObject_SetName(igPluginRepository *, int);
-int igObject_Destroy(igPluginRepository *);
 int igObject_GetAllocator(igPluginHelper *);
 extern int DAT_004c22c8[4];
 extern int DAT_004c22d0[4];
@@ -19,20 +18,7 @@ extern int DAT_00586f20[4];
 extern char GPR_00554c18;
 extern char GPR_00554c1c;
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *repository) : p(repository) {}
-    ~igSmartPointer() {
-        T *repository = p;
-        if (repository != 0) {
-            repository->_refCount = repository->_refCount - 1;
-            if ((repository->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(repository);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, int path, const int &skip) {
     igPluginRepository *repository = ref.p;
     int interned, left;

@@ -2,7 +2,7 @@
  * colouring; `self = p0` and DAT_004cf670[i] put the receiver below the name pointer; the string
  * length of the holder is read into the dead loop counter i / idx; per-arm block locals hold the
  * record folder; `s = s2 == 0 ? default : s2` keeps the unthreaded join of the null fallback. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int strlen(void *);
 void *FUN_00236f80(int, int);
@@ -16,7 +16,6 @@ int beMessenger_DispatchSelected(int, void *);
 int beMessenger_GetObject(int, int);
 int beMessenger_SelectGroup(int, void *);
 char *beNDMWItemBase_GetRecordString(void *, void *, void *);
-void igObject_Destroy(igStringObj *);
 void *igProperty_GetRecordFolder(int, void *);
 extern int DAT_00519ba0[4];
 extern int DAT_00519ba8[4];
@@ -49,14 +48,7 @@ void FUN_00418ac0(beNDMWStatusCtrlD0 *p0, int arg1, int arg2);
 struct RecordFolder { int w0; int w4; int w8; igDataList *list; };
 /* Owning stack reference to the shared name-string object; retained, and released on scope exit
  * (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    /* matching construct: accessor read — the string calls take the held pointer through `this`. */
-    operator T *() { return p; }
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_00418ac0(beNDMWStatusCtrlD0 *p0, int arg1, int arg2) {
     beNDMWStatusCtrlD0 *self;
     igDataList *folder;

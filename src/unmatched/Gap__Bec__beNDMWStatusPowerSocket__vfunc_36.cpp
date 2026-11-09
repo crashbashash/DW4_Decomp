@@ -1,6 +1,6 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
-void igObject_Destroy(igObject *);
 int List_Resize(...);
 int Memory_GetAllocatorBySelector(...);
 int ObjectList_AppendRetained(...);
@@ -11,16 +11,11 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 static inline int countOf(const igDataList *l) { return l->_count; }
-struct UnidentifiedChildWindow { int word0; int references; char p8[92]; igDataList *list; int f104; char f108; char pad109; char f110; };
+struct UnidentifiedChildWindow : public igObject { char p8[92]; igDataList *list; int f104; char f108; char pad109; char f110; };
 extern "C" UnidentifiedChildWindow *FUN_003baf10(...);
 /* Owning stack reference to the new child window; released on scope exit (reference count in the
- * low 23 bits of references). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
-};
+ * low 23 bits of _refCount). */
+
 extern "C" void Gap__Bec__beNDMWStatusPowerSocket__vfunc_36(beNDMWStatusPowerSocket *arg0);
 void Gap__Bec__beNDMWStatusPowerSocket__vfunc_36(beNDMWStatusPowerSocket *arg0) {
     int alloc;

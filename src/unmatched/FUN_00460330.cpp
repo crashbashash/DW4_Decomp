@@ -1,16 +1,16 @@
-typedef struct Obj { int w0; int references; } Obj;
+#include "dw4/igSmartPointer.h"
+typedef struct Obj : public igObject { } Obj;
 typedef struct List { int pad0[2]; int count; int pad1; Obj **data; } List;
 typedef struct Hold { char pad[28]; List *l28; } Hold;
 typedef struct X { char pad[12]; int f12; } X;
 class Ob { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void v128(int); int pad; int f4x; };
-typedef struct Mk { int vt; int refs; int f8; int f12; Obj *f16; } Mk;
+typedef struct Mk : public igObject { int f8; int f12; Obj *f16; } Mk;
 typedef struct A { char pad[12]; X *f12; char pad2[32]; Hold *f48; char pad3[8]; List *f60; List *f64; char pad4[16]; Obj *f84; } A;
 extern "C" {
 Obj *FUN_001361b0(int);
 int FUN_001c5d10(Hold *, int);
 int FUN_00460790(A *, int);
 int ObjectList_AppendRetained(int, int);
-int igObject_Destroy(Obj *);
 }
 #define CLEAR(src) { \
     List *l = (src); \
@@ -22,8 +22,8 @@ int igObject_Destroy(Obj *);
     for (i = 0; i < n; i++) { \
         o = l->data[i]; \
         if (o != 0) { \
-            o->references = o->references - 1; \
-            if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) igObject_Destroy(o); \
+            o->_refCount = o->_refCount - 1; \
+            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); \
         } \
     } \
     m = l->count; \
@@ -33,17 +33,13 @@ int igObject_Destroy(Obj *);
     l->count = 0; }
 static inline void release(Obj *object) {
     if (object != 0) {
-        object->references = object->references - 1;
-        if ((object->references & 0x7FFFFF) == 0) {
+        object->_refCount = object->_refCount - 1;
+        if ((object->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(object);
         }
     }
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() { release(p); }
-};
+
 struct RemovedRef {
     Obj *p;
     RemovedRef(const RemovedRef &);
@@ -86,7 +82,7 @@ extern "C" void FUN_00460330(A *arg0) {
             igSmartPointer<Obj> item(createItem(ItemType()));
             s3 = *(Obj **)((char *)arg0->f60->data + s0);
             s2 = (Mk *)item.p;
-            if (s3 != 0) s3->references = s3->references + 1;
+            if (s3 != 0) s3->_refCount = s3->_refCount + 1;
             release(s2->f16);
             s2->f16 = s3;
             ((Ob *)item.p)->v128(0);

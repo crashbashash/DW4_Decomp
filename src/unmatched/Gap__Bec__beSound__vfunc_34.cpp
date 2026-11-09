@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_002eb010(...);
 void *FUN_002b90e0(...);
@@ -46,7 +46,6 @@ int beMessenger_GetStringCount(...);
 int beMessenger_PrepareDelayedGroup(...);
 unsigned int beMessenger_ResolveEnumValue(...);
 int beMessenger_SendGroup(...);
-int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
 int strcmp(...);
 extern char DAT_004e0858[];
@@ -65,11 +64,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, struct Arg2 
 }
 struct Arg2 { int p[5]; int f20; };
 struct SubE { int p[5]; igObjectList *f20; };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 struct NameListRef {
     igObject *p;
     NameListRef(igObject *o) : p(o) {}

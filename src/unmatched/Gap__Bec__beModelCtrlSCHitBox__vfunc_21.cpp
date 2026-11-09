@@ -1,7 +1,6 @@
-#include "dw4/reflected.h"
-struct BoxF { int vt; unsigned rc; float mn[3]; float mx[3]; };
+#include "dw4/igSmartPointer.h"
+struct BoxF : public igObject { float mn[3]; float mx[3]; };
 extern "C" {
-void igObject_Destroy(igObject *);
 igObject *beBaseInfoDataList_Create(int);
 BoxF *FUN_0018a660(int);
 int FUN_003908d0(...);
@@ -42,7 +41,7 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
     }
 } };
 /* Owning reference to the freshly created data list. */
-template <class T> struct igSmartPointer { T *p; igSmartPointer(T *o) : p(o) {} ~igSmartPointer() { T *object = p; if (object) { --object->_refCount; if ((object->_refCount & 0x7fffff) == 0) igObject_Destroy(object); } } };
+
 /* Owning reference to the working box. */
 struct Ref { BoxF *p; Ref(BoxF *o) : p(o) {} ~Ref() { igObject *object = (igObject *)p; if (object) { --object->_refCount; if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 
@@ -55,7 +54,9 @@ struct DataListInit { static inline void go(beBaseInfoRam *arg1, const igSmartPo
         }
         ReleaseRefInline::go((igObject *)arg1->_dataList);
         arg1->_dataList = (int)s0;
-} };
+}
+static inline void make(beBaseInfoRam *arg1, int a) { igSmartPointer<igObject> list(beBaseInfoDataList_Create(a)); go(arg1, list); }
+};
 extern "C" int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInfoRam *arg1);
 int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInfoRam *arg1) {
     V3 c98;
@@ -74,7 +75,7 @@ int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInf
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        DataListInit::go(arg1, igSmartPointer<igObject>(beBaseInfoDataList_Create(a)));
+        DataListInit::make(arg1, a);
     }
     s2 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0050f410);
     s1 = s2->q;

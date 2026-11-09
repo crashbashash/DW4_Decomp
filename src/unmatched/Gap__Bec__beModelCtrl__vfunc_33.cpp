@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 struct V4 { float x, y, z; };
 float atan2f(float, float);
@@ -58,7 +58,6 @@ void beMessenger_PopArgContext(int);
 void beMessenger_PushArgContext(int);
 unsigned beMessenger_ResolveEnumValue(int, int, const char *);
 void beMessenger_SendNamed(int, const char *, const char *, int, const char *);
-void igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
 /* the property container lookup: beBaseInfoRam._dataList / beBaseInfo._dataList / a Seq record's _dataList in, one record out */
 beBaseInfoData *igProperty_FindByName(int, int, const char *);
@@ -98,11 +97,6 @@ int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const
 }
 
 /* matching construct: RAII holder; its mangled destructor name pins the class name igSmartPointer<igObject> */
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *q) : p(q) {}
-    ~igSmartPointer() { T *x = p; if (x) { --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); } }
-};
 
 /* Owning stack references to the objects this handler creates before binding them: kind 0 the AI
  * info, 1 the hit-body info, 2..4 the ride-on infos of commands 25..27 and 5 their model node. */

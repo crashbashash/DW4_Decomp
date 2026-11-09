@@ -1,6 +1,6 @@
+#include "dw4/igSmartPointer.h"
 extern "C" {
-struct T { int word0; int references; };
-int igObject_Destroy(T *);
+struct T : public igObject { };
 void **igObject_GetAllocator(...);
 void **Memory_GetAllocatorBySelector(...);
 T *FUN_0014db20(...);
@@ -19,17 +19,13 @@ class VA { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 struct S { char p0[8]; int f8, f12, f16, f20, f24, f28, f32, f36, f40, f44, f48; int f52; char p56[4]; char f60; char p61[3]; int f64; T *f68; int f72, f76; char p80[4]; int f84; };
 static inline void release(T *object) {
     if (object != 0) {
-        object->references = object->references - 1;
-        if ((object->references & 0x7FFFFF) == 0) {
+        object->_refCount = object->_refCount - 1;
+        if ((object->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(object);
         }
     }
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() { release(p); }
-};
+
 extern "C" void FUN_001566c0(S *arg0, S *arg1, int arg2, int arg3, int arg4, int arg5) {
     igSmartPointer<T> converted(0);
     igSmartPointer<T> spare(FUN_0014db20(igObject_GetAllocator(arg0)));

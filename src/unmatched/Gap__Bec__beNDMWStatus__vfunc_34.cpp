@@ -6,7 +6,7 @@
  * unsigned char and beMessenger_AppendObject a pointer: the argument type decides which of the two
  * argument loads lands in the delay slot. The 5 and 2 byte copies are the compiler's __memcpy
  * intrinsic (alternate compiler only; the default compiler crashes on it). */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 static inline int countOf(const igIntList *l) { return l->_count; }
 
 extern "C" {
@@ -31,7 +31,6 @@ void beMessenger_SendDelayedGroup(int, const void *, const void *, int);
 void beMessenger_SendGroup(int, const void *, const void *);
 void beMessenger_SendNamed(int, const void *, const void *, int, const void *);
 void beMessenger_SetFreezeTime(int, int);
-void igObject_Destroy(void *);
 int *igProperty_GetRecord(int, const void *);
 
 struct Folder { int pad[3]; igObjectList *list; };
@@ -101,12 +100,7 @@ extern int DAT_00516b18[4];
 
 /* Owning stack reference to the first record of the selected folder: constructed from the object
  * (then retained) and released on scope exit (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 struct MsgArg { int pad[5]; int f20; };
 
 #define RELEASE_REF(q) { igObject *rr = (igObject *)(q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }

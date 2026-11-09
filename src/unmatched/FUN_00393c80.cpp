@@ -1,5 +1,5 @@
-#include "dw4/reflected.h"
 /* The smart-pointer slots RP are destructor holders. */
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_001cafc0(igStringRefList *, int *, int);
 int FUN_001ca620(igStringRefList *, int *);
@@ -11,7 +11,6 @@ int Memory_GetAllocatorBySelector(int);
 int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 int StringPool_Intern(int, int);
-int igObject_Destroy(igObject *);
 int igObject_GetAllocator(int);
 extern int DAT_004c8fa8[4];
 extern int DAT_004c8fb0[4];
@@ -20,7 +19,7 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 static inline int count(const igIntList *list) { return list->_count; }
-template <class T> struct igSmartPointer { T *p; igSmartPointer() { p = 0; } ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+
 struct RPB { igObject *p; RPB() { p = 0; } ~RPB() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 /* Interned-string holder: count at p[-1], header at p[-2]. */
 struct StringRef { int p; StringRef(int x) { p = x; } ~StringRef() { int s = p; if (s != 0) { int *hd = (int *)(s - 8); int c = *(int *)(s - 4) - 1; *(int *)(s - 4) = c; if (c == 0) StringChunk_ReleaseHeader(*hd, hd); } } };

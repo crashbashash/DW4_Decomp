@@ -1,4 +1,6 @@
-struct R { int f0; unsigned int f4; };
+#include "dw4/igSmartPointer.h"
+
+struct R : public igObject { };
 struct G { char pad[56]; int f38; };
 struct Res {
     int v;
@@ -40,21 +42,8 @@ extern Res DAT_004fb410[4];
 extern char *DAT_004c2228[4];
 extern G *DAT_00586dc8[4];
 int FUN_00306360(int, char *, int);
-void igObject_Destroy(void *);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer() : p(0) {}
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            o->f4 = o->f4 - 1;
-            if ((o->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-};
+
 extern "C" Res Gap__Core__igMemoryPoolContextInfo__vfunc_25(Dev *arg1, int arg2, char *arg3) {
     igSmartPointer<R> unused;
     int index;

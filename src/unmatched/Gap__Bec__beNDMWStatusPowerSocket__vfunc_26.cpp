@@ -1,6 +1,7 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 /* igObject-style string object: refcount, data pointer and length are not reflected fields */
-struct Str { int p0; int refs; int data; int len; };
+struct Str : public igObject { int data; int len; };
 extern "C" {
 int strlen(...);
 int FUN_00236f80(...);
@@ -10,7 +11,6 @@ int beMessenger_AppendString(...);
 int beMessenger_DispatchSelected(...);
 int beMessenger_SelectGroup(...);
 int beNDMWItemBase_GetRecordString(...);
-int igObject_Destroy(...);
 extern int *DAT_004c22f0[4];
 extern int DAT_005199e0[4];
 extern int DAT_00519b00[4];
@@ -25,18 +25,7 @@ extern int DAT_0058b028[4];
 void Gap__Bec__beNDMWStatusPowerSocket__vfunc_26(beNDMWStatusPowerSocket *a);
 }
 /* Retained share of the system's global string object. */
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *o) : p(o) { if (p != 0) p->refs = p->refs + 1; }
-    ~igSmartPointer() {
-        T *o;
-        /* matching construct: (o = p) != 0 shares the load of the held pointer with the string reads, as retail */
-        if ((o = p) != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o);
-        }
-    }
-};
+
 void Gap__Bec__beNDMWStatusPowerSocket__vfunc_26(beNDMWStatusPowerSocket *a) {
     int *temp_s1;
     int *var_s1_2;
@@ -59,7 +48,7 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_26(beNDMWStatusPowerSocket *a) {
         sp4C[1] = 0;
         sp4C[0] = *(int *)(var_s1 + 24) + 0x30;
         {
-        igSmartPointer<Str> sp48((Str *)((beSystem *)FUN_00236f80(a->_insight, DAT_00587d08[0]))->_globalStrObj);
+        igSmartPointer<Str> sp48((Str *)((beSystem *)FUN_00236f80(a->_insight, DAT_00587d08[0]))->_globalStrObj, kRetainReference);
         FUN_0030b3c0(sp48.p, temp_v0);
         t2 = sp48.p;
         temp_v0 = t2->len;

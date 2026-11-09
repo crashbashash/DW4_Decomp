@@ -1,3 +1,4 @@
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_00150060(...);
 int FUN_00150390(...);
@@ -8,7 +9,6 @@ int FUN_0030b3c0(...);
 int StringChunk_ReleaseHeader(...);
 int StringPool_Construct(...);
 void *StringPool_Intern(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 int strcmp(...);
 extern int DAT_004df5b8[4];
@@ -22,40 +22,28 @@ public:
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int v21(void*,int);
 
 };
-class O0 {
+class O0 : public igObject {
 public:
- virtual void d0();
-  int refs;
-};
-class O1 {
+ };
+class O1 : public igVirtualObject {
 public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int v21(void*,void*);
-  int refs;
+ virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int v21(void*,void*);
+  
 };
-class O2 {
+class O2 : public igVirtualObject {
 public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int v31(int);
-  int refs;
+ virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int v31(int);
+  
 };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-};
+
 struct LoaderRef {
     O1 *p;
     LoaderRef(O1 *object) : p(object) {}
     ~LoaderRef() {
         O1 *o;
         if ((o = p) != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
 };
@@ -65,8 +53,8 @@ struct ReaderRef {
     ~ReaderRef() {
         O2 *o;
         if ((o = p) != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
 };

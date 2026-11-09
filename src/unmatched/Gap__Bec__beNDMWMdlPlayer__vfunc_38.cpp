@@ -3,11 +3,12 @@
  * slot of the view transform sits between them. Frame-slot order is a compiler constraint, see the
  * "matching construct" notes below. PlayerArg, IntList, RefHdr and PropRec project only the offsets
  * used here. */
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 
-typedef struct RefHdr { int vt; int refs; } RefHdr;
-typedef struct IntList { int vt; unsigned refs; int count; int cap; int *data; } IntList;
-typedef struct PlayerArg { int vt; unsigned refs; int id; char pad12[28]; RefHdr *props; } PlayerArg;
+typedef struct RefHdr : public igObject { } RefHdr;
+typedef struct IntList : public igObject { int count; int cap; int *data; } IntList;
+typedef struct PlayerArg : public igObject { int id; char pad12[28]; RefHdr *props; } PlayerArg;
 typedef struct PropRec { char pad[20]; beNDMWMdlPlayerInfoWork *work; } PropRec;
 
 extern "C" {
@@ -41,7 +42,6 @@ int beMessenger_SendNamed(int, void *, void *, int, void *);
 int beMessenger_SetRunCheck(int, int);
 bePadData *bePadManager_GetPadForPlayer(int, int);
 int igNamedObject_SetName(void *, void *);
-void igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
 PropRec *igProperty_FindByName(RefHdr *, int, void *);
 int *igProperty_GetRecord(int, void *);
@@ -86,11 +86,6 @@ extern unsigned char GPR_00554c14;
 
 }
 
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *x) { p = x; }
-    ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 struct NamedRef {
     RefHdr *p;
     NamedRef(RefHdr *x) { p = x; }
@@ -99,8 +94,7 @@ struct NamedRef {
 
 /* matching construct: slot order.  NamedRef (slot 252) is a block local of the caller; the locals of a
  * static inline member are allocated below the caller's, and `obj` (244) must sit under the view-transform
- * result (248), which is therefore a by-reference temporary (Scratch).  inline_depth(8) keeps igSmartPointer<RefHdr>'s
- * destructor inline inside the inlined helper.  Found by trial (no permuter). */
+ * result (248), which is therefore a by-reference temporary (Scratch).  Found by trial (no permuter). */
 struct Scratch { int w; Scratch() { } };
 struct Locals {
     static inline void CreateProps(PlayerArg *arg1) {
@@ -112,11 +106,11 @@ struct Locals {
         {
             igSmartPointer<RefHdr> obj((RefHdr *)beBaseInfoDataList_Create(alloc));
             rr = obj.p;
-            if (rr != 0) rr->refs = rr->refs + 1;
+            if (rr != 0) rr->_refCount = rr->_refCount + 1;
             old = arg1->props;
             if (old != 0) {
-                old->refs = old->refs - 1;
-                if (((unsigned long long)((long long)old->refs << 0x29) >> 0x29) == 0) igObject_Destroy(old);
+                old->_refCount = old->_refCount - 1;
+                if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
             }
             arg1->props = rr;
         }

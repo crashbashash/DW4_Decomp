@@ -1,7 +1,6 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 
-void igObject_Destroy(igObject *);
 int FUN_001cafc0(igObject *, int *, int);
 int FUN_002eb010(int);
 int StringChunk_ReleaseHeader(int, int *);
@@ -10,10 +9,7 @@ int StringPool_Construct(int);
 int StringPool_Intern(int, int);
 extern int DAT_00586f20[4];
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    ~igSmartPointer() { T *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 struct Util {
     static inline void assign(igSmartPointer<igObject> &r, igObject *n) {
         igObject *o;

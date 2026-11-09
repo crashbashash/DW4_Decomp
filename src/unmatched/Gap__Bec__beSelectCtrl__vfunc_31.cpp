@@ -1,7 +1,7 @@
 /* Bool flags use daddiu, ram->_ramNo and ram->_svSeqName are hoisted into locals before the NAME
  * ternary, switch(st3) has case 0 and default, info is declared first, the on-demand data list is held by an igSmartPointer<igObject>, and the decide-list
  * byte test uses an unsigned index. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 static inline int st2Of(const beBaseInfoRam *r) { return r->_st2; }
 extern "C" {
 extern char DAT_0050f8b0[];
@@ -20,7 +20,6 @@ int beMessenger_SelectGroup(...);
 int beMessenger_SelectReceivers(...);
 int beMessenger_SendNamed(...);
 int *bePadManager_GetPadForPlayer(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 beSelectCtrlInfoRamData *igProperty_FindByName(...);
 extern int DAT_004e0858[4];
@@ -48,12 +47,6 @@ extern unsigned char GPR_00554c14;
 typedef struct DecideList { char pad[16]; unsigned char *data; } DecideList;
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 
 extern "C" void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
     beBaseInfo *info;

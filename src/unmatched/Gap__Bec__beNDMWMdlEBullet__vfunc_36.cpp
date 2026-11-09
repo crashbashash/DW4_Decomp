@@ -1,6 +1,5 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(igObject *);
 igObject *FUN_00350020(...);
 igObject *beBaseInfoDataList_Create(...);
 int FUN_00396340(...);
@@ -23,12 +22,7 @@ struct ReleaseRef { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the new property value object; released on scope exit. */
 class ValueRef {
 public:
@@ -38,9 +32,7 @@ public:
 };
 /* Inlined helper shared by the model-controller "apply ram" methods: a ram without a data list gets a
  * fresh beBaseInfoDataList (allocator chosen by the global selector flag).  Being an inlined callee, its
- * list reference is laid out after the caller's own value reference (+0x58 below +0x5c), as retail does.
- * matching construct: inline_depth(2) lets the list reference's destructor inline inside the inlined
- * helper (the default depth leaves an out-of-line call to __dt__9ObjectRefFv). */
+ * list reference is laid out after the caller's own value reference (+0x58 below +0x5c), as retail does. */
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     igObject *s0;
     if (ram->_dataList == 0) {

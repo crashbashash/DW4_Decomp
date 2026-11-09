@@ -1,7 +1,7 @@
 /* Asks the model controller to play a sequence on a model slot and, when `wait` is 1, remembers
  * the request so the poll can release the caller once ISSEQNAME reports completion. The MODELCTRL
  * message is always sent; only the tracking is conditional. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_002eb010(int);
 int *beLoadIntf2ComMdlData__Create(int);
@@ -11,7 +11,6 @@ int StringChunk_ReleaseHeader(int, int *);
 int StringPool_Construct(int);
 int *StringPool_Intern(int, int *);
 int beMessenger_SendNamed(int, int *, int *, int, int *);
-int igObject_Destroy(beLoadIntf2ComMdlData *);
 int igObject_GetAllocator(beNDMWLoadIntf2ComMdlCtrl *);
 extern int MODELCTRL[4];
 extern int g_stringPool[4];
@@ -27,12 +26,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
 /* Owning stack reference to the tracked entry: constructed from the object and released on scope
  * exit (reference count in the low 23 bits of _refCount); the open list owns the entry afterwards.
  * Its destructor is emitted out of line. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, int *modelName, int *sequenceName, int wait) {
     int *interned;
     beLoadIntf2ComMdlData *entry;

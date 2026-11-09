@@ -1,3 +1,4 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 static inline int countOf(const igObjectList *l) { return l->_count; }
 
@@ -11,7 +12,6 @@ int ObjectList_ResizeRetained(void *, int);
 int StringChunk_ReleaseHeader(int, int *);
 int StringList_Resize(void *, int);
 int igNamedObject_SetName(void *, int);
-void igObject_Destroy(igObject *);
 void *igObject_GetAllocator(void *);
 void *FUN_00364220(void *);
 void *FUN_003644f0(void *);
@@ -33,11 +33,7 @@ struct Entry { unsigned type; int count; int name; };
 
 /* matching construct: one RAII holder per retail destructor copy. The cleanup table at 0x544e60 names eight release
  * copies (0x350b10 for the int node, the seven emitted behind this function for the others) and the string holder 0x130720. */
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o) { --o->_refCount; if (!(o->_refCount & 0x7fffff)) igObject_Destroy((igObject *)o); } }
-};
+
 struct StringRef {
     int *p;
     StringRef(int *s) : p(s) {}

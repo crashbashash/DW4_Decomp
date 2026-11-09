@@ -1,5 +1,8 @@
-struct SrObject { int pad0; int _refCount; char *text; int length; };
-struct SrList { int pad0; int _refCount; int count; char pad1[4]; char **data; };
+#include "dw4/igSmartPointer.h"
+
+struct SrObject : public igObject { char *text; int length; };
+struct SrList : public igObject { int count; char pad1[4]; char **data; };
+
 struct SrInfo { char pad0[28]; void *types; };
 class SrPassList {
 public:
@@ -33,16 +36,6 @@ struct StringRef {
 struct SrDrop {
     static inline void release(SrObject *o);
 };
-struct ReturnedRef {
-    SrObject *p;
-    ReturnedRef(const ReturnedRef &other);
-    ~ReturnedRef();
-};
-struct TextRef {
-    SrObject *p;
-    TextRef(SrObject *object) : p(object) {}
-    ~TextRef();
-};
 extern "C" {
 int FUN_00306360(int, char *, int);
 StringRef FUN_001c6fa0(SrProcessor *);
@@ -52,13 +45,13 @@ unsigned char FUN_00306910(int, int, void *, StringRef *, void *, int);
 void *igObject_GetAllocator(void *);
 SrList *FUN_002b90e0(void *);
 unsigned char FUN_00306aa0(int, int, void *, SrList *, int);
-ReturnedRef FUN_001ca6c0(SrProcessor *, char *, int);
+igSmartPointer<igObject> FUN_001ca6c0(SrProcessor *, char *, int);
 SrObject *FUN_002b9500(void *);
 StringRef FUN_001ccb20(SrList *);
 void FUN_0030b3c0(SrObject *, void *);
 int FUN_0012a78c(void *);
 void FUN_0030b460(SrObject *, void *, int, int);
-unsigned char FUN_00306770(int, int, char *, TextRef *, void *, int);
+unsigned char FUN_00306770(int, int, char *, igSmartPointer<SrObject> *, void *, int);
 void *FUN_002eb010(int);
 void *FUN_002eadf0(void *);
 char *FUN_002eaf60(void *, char *);
@@ -68,13 +61,12 @@ void List_RemoveWordAt(SrList *, int);
 SrObject *FUN_00198b60(void *);
 int FUN_00306e50(int, int, void *, unsigned char *, int, int);
 void FUN_001d9090(SrTarget *, int, int);
-ReturnedRef FUN_001c8c80(SrProcessor *, int, void *, void *, SrList *);
+igSmartPointer<igObject> FUN_001c8c80(SrProcessor *, int, void *, void *, SrList *);
 void FUN_001cade0(SrProcessor *, SrObject *, SrObject *, SrList *, SrList *, SrList *);
 void FUN_001d86f0(SrPassList *, int, SrObject *);
 void FUN_001d87b0(SrPassList *, int, SrObject *);
 void FUN_001d8870(SrPassList *, int, SrObject *);
 void StringChunk_ReleaseHeader(int, int *);
-void igObject_Destroy(void *);
 int igObject_IsKindOf(void *, void *);
 extern char *DAT_004c22f0[4];
 extern int DAT_004e4660[4];
@@ -131,56 +123,6 @@ inline StringRef::~StringRef() {
         }
     }
 }
-inline ReturnedRef::ReturnedRef(const ReturnedRef &other) : p(other.p) {
-    if (p != 0) p->_refCount = p->_refCount + 1;
-}
-inline ReturnedRef::~ReturnedRef() {
-    if (p != 0) {
-        p->_refCount = p->_refCount - 1;
-        if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy(p);
-    }
-}
-inline TextRef::~TextRef() {
-    SrObject *o;
-    if ((o = p) != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-    }
-}
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer() : p(0) {}
-    T *get() const { return p; }
-    igSmartPointer(T *object) : p(object) {
-        if (p != 0) p->_refCount = p->_refCount + 1;
-    }
-    ~igSmartPointer() {
-        T *o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-    void set(T *held) {
-        T *o;
-        if (held != 0) held->_refCount = held->_refCount + 1;
-        if ((o = p) != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-        p = held;
-    }
-    void operator=(const ReturnedRef &other) {
-        T *held = other.p;
-        T *o;
-        if (held != 0) held->_refCount = held->_refCount + 1;
-        if ((o = p) != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-        p = held;
-    }
-};
 static inline void removeFirst(SrList *p) {
     {
         StringCopy removed = StringList_CopyRetained(p, 0);
@@ -190,17 +132,6 @@ static inline void removeFirst(SrList *p) {
     List_RemoveWordAt(p, 0);
     ((int *)p->data)[p->count] = 0;
 }
-struct ListRef {
-    SrList *p;
-    ListRef(SrList *object) : p(object) {}
-    ~ListRef() {
-        SrList *o;
-        if ((o = p) != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-};
 extern "C" int FUN_001cb340(SrProcessor *self, SrTarget *target, int arg) {
     unsigned char flag;
     SrPassList *passes;
@@ -230,22 +161,22 @@ extern "C" int FUN_001cb340(SrProcessor *self, SrTarget *target, int arg) {
     if (section == -1) {
         return 0;
     }
-    ListRef names(FUN_002b90e0(igObject_GetAllocator(self)));
+    igSmartPointer<SrList> names(FUN_002b90e0(igObject_GetAllocator(self)));
     if (FUN_00306aa0(self->ini, section, DAT_004e4748, names.p, 0) == 0) {
         return 0;
     }
     StringRef infoName((char *)0);
     igSmartPointer<SrObject> info;
-    ListRef keys(FUN_002b90e0(igObject_GetAllocator(self)));
-    ListRef values(FUN_002b90e0(igObject_GetAllocator(self)));
+    igSmartPointer<SrList> keys(FUN_002b90e0(igObject_GetAllocator(self)));
+    igSmartPointer<SrList> values(FUN_002b90e0(igObject_GetAllocator(self)));
     count = names.p->count;
     if (FUN_00306910(self->ini, section, DAT_004e4750, &infoName, DAT_004e4660, 0) != 0) {
         infoSection = FUN_00306360(self->ini, infoName.p, 0);
-        info = ReturnedRef(FUN_001ca6c0(self, infoName.p, 1));
-        ListRef pending(FUN_002b90e0(igObject_GetAllocator(self)));
+        info = igSmartPointer<igObject>(FUN_001ca6c0(self, infoName.p, 1));
+        igSmartPointer<SrList> pending(FUN_002b90e0(igObject_GetAllocator(self)));
         FUN_00306aa0(self->ini, infoSection, DAT_004e4700, pending.p, 0);
-        TextRef value(FUN_002b9500(igObject_GetAllocator(self)));
-        TextRef key(FUN_002b9500(igObject_GetAllocator(self)));
+        igSmartPointer<SrObject> value(FUN_002b9500(igObject_GetAllocator(self)));
+        igSmartPointer<SrObject> key(FUN_002b9500(igObject_GetAllocator(self)));
         while (pending.p->count != 0) {
             int ok;
             FUN_0030b3c0(key.p, FUN_001ccb20(pending.p).p);
@@ -314,7 +245,7 @@ extern "C" int FUN_001cb340(SrProcessor *self, SrTarget *target, int arg) {
     }
     target->setInfo(info.p);
     passes->setCount(count);
-    ListRef shared(FUN_002b90e0(igObject_GetAllocator(self)));
+    igSmartPointer<SrList> shared(FUN_002b90e0(igObject_GetAllocator(self)));
     for (i = 0; i < count; i++) {
         FUN_001d9090(target, i, 1);
         {
@@ -325,36 +256,36 @@ extern "C" int FUN_001cb340(SrProcessor *self, SrTarget *target, int arg) {
         if (pass == -1) {
             return 0;
         }
-        igSmartPointer<SrObject> primary((SrObject *)0);
-        igSmartPointer<SrObject> second((SrObject *)0);
-        igSmartPointer<SrObject> third((SrObject *)0);
-        igSmartPointer<SrObject> found((SrObject *)0);
+        igSmartPointer<SrObject> primary((SrObject *)0, kRetainReference);
+        igSmartPointer<SrObject> second((SrObject *)0, kRetainReference);
+        igSmartPointer<SrObject> third((SrObject *)0, kRetainReference);
+        igSmartPointer<igObject> found((igObject *)0, kRetainReference);
         found = FUN_001c8c80(self, pass, DAT_004e4778, DAT_0055f460[0], shared.p);
-        held = found.p;
+        held = (SrObject *)found.p;
         if (held != 0) {
-            primary.set(asMaterial(held));
+            primary = asMaterial(held);
             FUN_001cade0(self, info.p, primary.p, shared.p, keys.p, values.p);
             found = FUN_001c8c80(self, pass, DAT_004e4788, DAT_0055f460[0], shared.p);
-            held = found.get();
+            held = (SrObject *)found.get();
             if (held == 0) {
                 return 0;
             }
-            second.set(asMaterial(held));
+            second = asMaterial(held);
             FUN_001cade0(self, info.p, second.p, shared.p, keys.p, values.p);
         } else {
             found = FUN_001c8c80(self, pass, DAT_004e4658, DAT_0055f460[0], shared.p);
-            held = found.get();
+            held = (SrObject *)found.get();
             if (held == 0) {
                 return 0;
             }
-            primary.set(asMaterial(held));
-            second.set(primary.p);
+            primary = asMaterial(held);
+            second = primary.p;
             FUN_001cade0(self, info.p, primary.p, shared.p, keys.p, values.p);
         }
         found = FUN_001c8c80(self, pass, DAT_004e4798, DAT_00561830[0], shared.p);
-        held = found.p;
+        held = (SrObject *)found.p;
         if (held != 0) {
-            third.set(asTexture(held));
+            third = asTexture(held);
             FUN_001cade0(self, info.p, third.p, shared.p, keys.p, values.p);
         }
         FUN_001d86f0(passes, i, primary.p);

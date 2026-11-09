@@ -1,11 +1,10 @@
+#include "dw4/igSmartPointer.h"
 struct R { int w0; R() {} R(const R &o) { w0 = o.w0; } bool operator==(const R &o) const { return w0 == o.w0; } };
-extern "C" int igObject_Destroy(...);
-struct T {
-    int w0;
-    int refs;
+struct T : public igObject {
+    
     void release() {
-        refs = refs - 1;
-        if ((refs & 0x7FFFFF) == 0) {
+        _refCount = _refCount - 1;
+        if ((_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(this);
         }
     }
@@ -40,24 +39,7 @@ static inline T *castToKind(T *object) {
     }
     return 0;
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {
-        if (p != 0) {
-            p->refs = p->refs + 1;
-        }
-    }
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->refs = object->refs - 1;
-            if ((object->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-    T *operator->() const { return p; }
-};
+
 extern "C" int igIGBFile_ReadObject(T **out, C *file) {
     int metaIndex;
     int *record;
@@ -69,7 +51,7 @@ extern "C" int igIGBFile_ReadObject(T **out, C *file) {
             *out = 0;
             T *null = *out;
             if (null != 0) {
-                null->refs = null->refs + 1;
+                null->_refCount = null->_refCount + 1;
             }
             return;
         }
@@ -79,7 +61,7 @@ extern "C" int igIGBFile_ReadObject(T **out, C *file) {
     if (file->f168 != 0) {
         ((MF *)igIntMetaField_GetDefaultDescriptor())->vX(&metaIndex, 1);
     }
-    igSmartPointer<T> object(castToKind((T *)igMetaObject_CreateInstanceWithPool(*(int *)(*(int *)((char *)file->f192 + 16) + metaIndex * 4), file->f280)));
+    igSmartPointer<T> object(castToKind((T *)igMetaObject_CreateInstanceWithPool(*(int *)(*(int *)((char *)file->f192 + 16) + metaIndex * 4), file->f280)), kRetainReference);
     object->release();
     igObject_RegisterInstance(object.p, 0);
     int read;
@@ -95,7 +77,7 @@ extern "C" int igIGBFile_ReadObject(T **out, C *file) {
     *out = object.p;
     T *retained = *out;
     if (retained != 0) {
-        retained->refs = retained->refs + 1;
+        retained->_refCount = retained->_refCount + 1;
     }
     return 0;
 }

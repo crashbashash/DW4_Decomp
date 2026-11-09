@@ -2,7 +2,7 @@
  * close text type/name, runs its message script, adds the one kind to its kind list and sets the
  * equip/unknown-disable flags with auto-close off. The new window is owned by a stack reference
  * until the end of the function; the two interned names are temporaries. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 static inline int countOf(const igDataList *l) { return l->_count; }
 extern "C" {
 int FUN_002eb010(int);
@@ -15,7 +15,6 @@ int StringPool_Construct(int);
 int *StringPool_Intern(int, int *);
 int beNDMWWindow_BindContext(void *, void *, int, int, int);
 int beNDMWWindow_RunMessageScript(void *, int *, int);
-void igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
 extern int DAT_004cf6e0[4];
 extern int DAT_00519b50[4];
@@ -27,12 +26,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the item page window created here, released on scope exit (reference
  * count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *w) : p(w) {}
-    ~igSmartPointer() { T *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
-};
+
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 class StringRef {

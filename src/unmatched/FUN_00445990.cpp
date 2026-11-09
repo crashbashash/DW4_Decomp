@@ -1,7 +1,7 @@
-#include "dw4/reflected.h"
 /* Refreshes the work record's _upDataList for a player entity. A player's list is fetched from the
  * object the messenger returns for the record's id; everyone else gets a fresh seven-entry
  * igIntList filled with the default value, installed through an owning stack reference. */
+#include "dw4/igSmartPointer.h"
 extern "C" {
 igIntList *FUN_002caa70(...);
 void *FUN_003a9250(...);
@@ -14,7 +14,6 @@ void *beMessenger_GetObject(...);
 int beMessenger_PopArgContext(...);
 int beMessenger_PushArgContext(...);
 int beMessenger_SelectGroup(...);
-int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
 extern int DAT_004cfde0[4];
 extern int DAT_0051d4b0[4];
@@ -26,12 +25,7 @@ void FUN_00445990(beNDMWMdlPEBase *arg0, void *arg1, beNDMWMdlPEBaseInfoWork *ar
 }
 /* Owning stack reference to the freshly created list, released on scope exit once the work record
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_00445990(beNDMWMdlPEBase *arg0, void *arg1, beNDMWMdlPEBaseInfoWork *arg2) {
     void *al;
     int n;

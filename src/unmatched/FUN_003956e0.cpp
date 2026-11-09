@@ -1,9 +1,10 @@
 /* Steps the model's direction toward its target (per-axis rate limit, wrapping at 2*pi), then
  * writes the new rotation into the ram object's transform. The ram object's data list is created
  * on first use. */
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
-struct Ref { int w0; int references; };
+struct Ref : public igObject { };
 struct V3 { float x, y, z; };
 struct Prop { char pad[16]; int f16; };
 float FUN_003a8140(beBaseInfoRam *, int *);
@@ -15,20 +16,14 @@ extern unsigned char GPR_00554c14;
 int igObject_GetAllocator(beBaseInfoRam *);
 int Memory_GetAllocatorBySelector(int);
 Ref *beBaseInfoDataList_Create(int);
-void igObject_Destroy(Ref *);
 Prop *igProperty_FindByName(Ref *, int, int *);
 int Matrix44_GetTranslation(int, float *);
 int Matrix44_SetTranslation(int, float *);
 int FUN_00190ed0(int, float, float, float);
 }
 /* Owning stack reference to the freshly created data list, released on scope exit (reference count
- * in the low 23 bits of references). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+ * in the low 23 bits of _refCount). */
+
 extern "C" void FUN_003956e0(int a0, int a1, beBaseInfoRam *obj, beModelCtrlInfoWork *st, int force) {
     V3 v;
     float tmp[4];
@@ -98,11 +93,11 @@ extern "C" void FUN_003956e0(int a0, int a1, beBaseInfoRam *obj, beModelCtrlInfo
         if (GPR_00554c14 != 0) a2 = alloc; else a2 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         igSmartPointer<Ref> created(beBaseInfoDataList_Create(a2));
         Ref *r = created.p;
-        if (r != 0) r->references = r->references + 1;
+        if (r != 0) r->_refCount = r->_refCount + 1;
         Ref *old = ((Ref *)obj->_dataList);
         if (old != 0) {
-            old->references = old->references - 1;
-            if ((old->references & 0x7fffff) == 0) igObject_Destroy(old);
+            old->_refCount = old->_refCount - 1;
+            if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
         }
         obj->_dataList = (int)r;
     }

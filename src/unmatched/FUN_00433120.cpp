@@ -1,3 +1,4 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
 int igObject_IsKindOf(beNDMWWindow *, int);
@@ -6,7 +7,6 @@ int FUN_00425fb0(beNDMWWindow *);
 int Memory_GetAllocatorBySelector(int);
 int ObjectList_AppendRetained(int, igObject *);
 int beNDMWWindow_BindContext(beNDMWWindow *, beNDMWWindow *, int, int, int);
-int igObject_Destroy(igObject *);
 int igObject_GetAllocator(beNDMWWindow *);
 extern int DAT_00587110[4];
 extern int DAT_0058ab68[4];
@@ -15,12 +15,7 @@ void FUN_00433120(beNDMWWindow *arg0, int arg1);
 }
 /* Owning stack reference to the new sub-window, released on scope exit (reference count in the low
  * 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
-};
+
 void FUN_00433120(beNDMWWindow *arg0, int arg1) {
     beNDMWWindow *var_s2;
     int var_s1;

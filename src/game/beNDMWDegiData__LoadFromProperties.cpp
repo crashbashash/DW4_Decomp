@@ -2,6 +2,7 @@
  * set arg1 into the data block of the beNDMWDegiData arg0 (its _data field, +28), then calls
  * beNDMWDegiData__UpdateFieldsFromData(arg0). PropDest is a private view of that block.
  */
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
 class IdObject {
@@ -13,7 +14,7 @@ public:
     virtual void d20(); virtual void d21(); virtual void d22(); 
     virtual int GetId();
 };
-struct StrObj { int p0; int references; int p8; unsigned short *chars; };
+struct StrObj : public igObject { int p8; unsigned short *chars; };
 struct PropByteRecord { int p[3]; unsigned char v; };
 struct PropIntRecord { int p[3]; int v; };
 struct PropObjListRecord { int p[3]; igObjectList *v; };
@@ -37,7 +38,6 @@ PropStrListRecord *FUN_003a92e0(int, void *);
 PropIntListRecord *FUN_003a9250(int, void *);
 void strcpy(void *, void *);
 void ObjectList_ResizeRetained(void *, int);
-void igObject_Destroy(void *);
 void beNDMWDegiData__UpdateFieldsFromData(void *);
 extern int DAT_00517e58[4];
 extern int DAT_00517e60[4];
@@ -69,11 +69,7 @@ extern int DAT_00517fa0[4];
 extern int DAT_00517fb0[4];
 extern int DAT_00517fc0[4];
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *x) { p = x; }
-    ~igSmartPointer() { T *r = p; if (r != 0) { r->references = r->references - 1; if ((r->references & 0x7fffff) == 0) igObject_Destroy(r); } }
-};
+
 #define IDS(DST, REC, CAP, RESIZE) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; int i; if (RESIZE) { if (l->_count > CAP) ObjectList_ResizeRetained(l, CAP); } i = 0; if (0 < l->_count) { do { DST[i] = ((IdObject **)l->_data)[i]->GetId(); i++; } while (i < l->_count); } if (i < CAP) { do { DST[i] = -1; i++; } while (i < CAP); } }
 #define BYTES(DST, FN, REC) { igTDataList<unsigned char> *l = FN(arg1, REC)->v; int i = 0; if (0 < l->_count) { do { DST[i] = l->_data[i]; i++; } while (i < l->_count); } }
 #define FINDN(DST, REC, N) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(arg1, &DAT_00517ec0[0])->v; int a; for (a = 0; a < N; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
@@ -93,7 +89,7 @@ extern "C" void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *arg0, int arg
         igStringObjList *sl = (igStringObjList *)igProperty_GetRecordFolder(arg1, &DAT_00517e90[0])->v;
         if (sl->_count != 0) {
             igSmartPointer<StrObj> s(((StrObj **)sl->_data)[0]);
-            if (s.p != 0) s.p->references = s.p->references + 1;
+            if (s.p != 0) s.p->_refCount = s.p->_refCount + 1;
             {
                 unsigned short *src;
                 unsigned short *base;

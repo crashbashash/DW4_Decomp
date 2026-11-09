@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int igMatrix44f_SetIdentity(...);
 void FUN_00191670(void *, void *, float);
@@ -18,7 +18,6 @@ void beMessenger_GetVec3(void *, int, int);
 int beMessenger_GetVec3Count(int);
 unsigned int beMessenger_ResolveEnumValue(int, int, void *);
 int beMessenger_SendNamed(...);
-void igObject_Destroy(void *);
 int igObject_GetAllocator(...);
 extern float DAT_004e1058[4];
 extern float DAT_004e105c[4];
@@ -43,12 +42,7 @@ struct Rel { static inline void go(igObject *object) {
 struct V3 { float x; float y; float z; };
 /* Owning stack reference to the new particle work record; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* matching construct: dummy virtual slots so t() dispatches through retail vtable slot 22 (the beSystem _random source) */
 struct Clk {
     virtual void d0();

@@ -7,7 +7,7 @@
  * Matching constructs: the state switch reads _st0 through a const accessor so case 0 reloads it;
  * `case 1: case 2:` in that order gives the 2-then-1 compare chain; the decide-list pointers live in
  * stack WindowRef/igSmartPointer<igObject> holders and are re-read per use; hasDevice/hasDisk are bool. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
 extern "C" {
 void *FUN_002cb0d0(...);
@@ -28,7 +28,6 @@ int beNDMWWindow_ClearQueuedText(...);
 int beNDMWWindow_PlayQueuedModelClose(...);
 int beNDMWWindow_PollCloseComplete(...);
 int beNDMWWindow_RequestChildrenClose(...);
-int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
 static inline int st0(const beNDMWShopCtrlSell *ctrl) { return ctrl->_st0; }
 struct Item { int p[5]; int f20; };
@@ -57,11 +56,6 @@ template <int kind> struct WindowRef {
     igObject *p;
     WindowRef(igObject *w) : p(w) {}
     ~WindowRef() { igObject *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
-};
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *l) : p(l) {}
-    ~igSmartPointer() { T *l = p; if (l != 0) { --l->_refCount; if ((l->_refCount & 0x7fffff) == 0) igObject_Destroy(l); } }
 };
 
 #define ALLOC(a, self) { \

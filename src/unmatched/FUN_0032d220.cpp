@@ -1,9 +1,10 @@
-struct O {
-  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
+#include "dw4/igSmartPointer.h"
+struct O : public igVirtualObject {
+  virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
   virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
   virtual void d20(); virtual void d21(); virtual void d22();
   virtual int v23(int *, int *);
-  int references; char pad8[64]; void *f72; };
+  char pad8[64]; void *f72; };
 extern "C" {
 int FUN_002d01a0(...);
 int FUN_002eb010(...);
@@ -15,7 +16,6 @@ int Memory_GetAllocatorBySelector(...);
 int StringChunk_ReleaseHeader(...);
 int StringPool_Construct(...);
 void *StringPool_Intern(...);
-int igObject_Destroy(...);
 extern int DAT_004f9c50[4];
 extern int DAT_004ffcf0[4];
 extern int DAT_004ffd08[4];
@@ -27,20 +27,7 @@ extern int DAT_00587338[4];
 extern int DAT_00587358[4];
 extern unsigned char GPR_00554c14;
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->references = object->references - 1;
-            if ((object->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-    T *operator->() const { return p; }
-};
+
 static inline int internPool(void) {
     if (DAT_00586f20[0] == 0) {
         int a = FUN_002eb010(0x10);

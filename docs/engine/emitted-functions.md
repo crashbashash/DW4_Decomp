@@ -209,7 +209,8 @@ A RAII cleanup scope reproduces retail's exception table only when the holder:
 - is a class with a real inline destructor (the release is not hand-spelled before each exit);
 - is built at its use site from the factory result (`Holder h(create(a));`, no constructor store);
 - is declared after any earlier return;
-- has one class per distinct destructor copy the table names.
+- has one class instantiation per distinct destructor copy the table names: `igSmartPointer<A>` and
+  `igSmartPointer<B>` are two copies, each with its own row.
 
 The `unit-objects` row names that copy, read from the decoded table's action list, in `duplicates`
 (copy elsewhere) or `emitted` (copy placed behind the owner). `externals.__dl__FPv` is what that copy
@@ -228,15 +229,26 @@ Further holder shapes:
   Bec and Ndmw build with `-inline level=8`, so there it needs nothing extra; the locals of an inlined
   helper take the frame slots below the function's own locals and temporaries.
 - Volatile holder members reproduce a store-then-reload.
-- A `(o = p) != 0` destructor shares the load with the use site.
 
-In several units the destructor inlined in the owner reloads the held pointer after the decrement store
-(direct `p->_refCount = p->_refCount - 1`) while retail's 128-byte out-of-line copy does not
-(`igObject *o = p`), and one source text cannot produce both. The verifier compiles an exceptions-off
-duplicate's copy in a second compile, so the spellings can be selected per mode with
-`#if __option(exceptions)` (`__option(cpp_exceptions)` is silently false in both compiles) or a
-`__MWERKS__ >= 0x3000` gate. The split is a compiler constraint and carries a matching-construct comment.
-It suggests the retail sources had two definitions of the class.
+## One reference holder
+
+Every reference holder is `igSmartPointer<T>` in `include/dw4/igSmartPointer.h`; the executable holds its name, as
+`::~igSmartPointer<`. Its destructor is `igRelease(p)`, an inline taking `igObject *`, and that one text gives both the
+128-byte out-of-line copy retail keeps and every inlined release. Whether an inlined release reloads the held pointer
+after the decrement store depends on the holder, not on the class:
+
+- An unnamed temporary reloads: a by-value argument, a returned value, a temporary bound to `const &`, or `.get()`
+  on a temporary. So does a named holder built by copy-initialisation (`h = f()`) and read only through `.p`.
+- A named holder built by direct initialisation does not, nor one used through `.get()`, `->`, its `T *` conversion,
+  `const &` or `&`. The exception mode and `-O4,s` against `-O4,p` make no difference.
+- The implicit `T *` to `igObject *` conversion in the call decides load reuse. With `T` a derived class, a test read of
+  the holder is reused by the destructor; with `T = igObject`, a `.get()` read is not. This is why `reflected.h` gives
+  each class an `igObject` base under C++.
+- The out-of-line copy is 128 bytes because `this->p` goes through the parameter.
+
+A class with virtual functions has its vtable pointer where `igObject` keeps `_vtable`, so it derives from
+`igVirtualObject` instead, which has a real virtual first slot and `_refCount` at +4. A plain constructor adopts the
+reference; a retaining one takes `kRetainReference`, an enum that costs no bytes.
 
 ## Tests
 
@@ -269,12 +281,14 @@ remains the integration oracle.
 - **What the empty tag objects were.** The `sb zero` beside a factory call shows an empty class passed by value. Its
   purpose is not shown: it may have selected a constructor, or been a default argument or an allocator. Names such as
   `AdoptReference` and `DriverType` are best guesses and need more evidence.
-- **When the inlined release reloads.** Unproven: retail's inlined reference release reloads the holder
-  pointer between the decrement store and the zero test only when the holder's address escaped to a call,
-  not for register-held holders (seen at `0x33bd30`, `0x339110`, `0x43dc10`, `0x25ac60`). In one compile the
-  direct `p->` spelling reproduces each owner body and table but makes the kept linkonce destructor 132 bytes
-  under the default profile, against retail's 128; the `o = p` spelling does the reverse. About seven
-  spellings per unit were tried.
+- **One root.** `igVirtualObject` stands beside `igObject` because a polymorphic class puts its vtable pointer at +0. A
+  polymorphic `igObject` under C++ would give one root, but needs another pass over the generated header.
+- **What the retain tag was.** `RetainReference` selects the retaining constructor at no cost in bytes. The name and the
+  mechanism are best guesses: the original may have used a separate function or another overload.
+- **Helpers holding only an empty tag.** Some inline factories exist to hold an empty tag object for its `sb zero`, and
+  some take one. The bytes show the object, not these helpers or their names, which need a later pass.
+- **A unit's profile and its pragma.** One member of a `-O3,p` unit needs no pragma under `-O4,p -inline level=8`, but
+  another member then gains a code difference. Which profile the unit was built with is open.
 - **Limits of the unit-objects model.** Two class symbols cannot alias one retail destructor address:
 `0x41acf0` needs direct-p and single-load shapes at different sites of one class. The closest spelling of
 `0x38b1f0` differs in the order and registers of loop-invariant values in the preheader.

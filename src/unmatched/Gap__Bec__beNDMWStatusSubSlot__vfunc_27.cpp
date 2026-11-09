@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int igObject_GetAllocator(void *);
 int Memory_GetAllocatorBySelector(int);
@@ -10,7 +10,6 @@ int List_Resize(void *, int, int);
 int beMessenger_SelectGroup(int, int *);
 int beMessenger_AppendString(int, int *);
 int beMessenger_DispatchSelected(int, int *);
-void igObject_Destroy(void *);
 extern int DAT_00519b50[4];
 extern int DAT_00519c28[4];
 extern int DAT_00519c30[4];
@@ -24,12 +23,7 @@ extern unsigned char GPR_00554c14;
 #define APPEND(V) { igBoolList *l = flags.p; int n = l->_count; if (n < l->_capacity) { l->_count = n + 1; } else { List_Resize(l, n + 1, 1); } *(unsigned char *)(n + l->_data) = (V); }
 /* Owning stack reference to the new select window; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *w) : p(w) {}
-    ~igSmartPointer() { T *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
-};
+
 /* Owning stack reference to the new decide list; released on scope exit. */
 class BoolListRef {
 public:

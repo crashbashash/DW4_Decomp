@@ -2,8 +2,8 @@
  * calls; its destructor releases the record on scope exit. The padding nops and register choices
  * come out of the compiler; no inline assembly is used. The 4-byte handles are cast at the use
  * sites. */
-#include "dw4/reflected.h"
 
+#include "dw4/igSmartPointer.h"
 extern "C" {
 void beMessenger_InitializeMemory();
 void beMessengerArgData_Clear(int);
@@ -11,7 +11,6 @@ void *igObject_GetAllocator(void *);
 void *Memory_GetAllocatorBySelector(int);
 void *beMessengerDelay_Create(void *);
 void ObjectList_AppendRetained(void *, void *);
-void igObject_Destroy(void *);
 void *FUN_002eb010(int);
 void *StringPool_Construct(void *);
 const char *StringPool_Intern(void *, const char *);
@@ -27,12 +26,6 @@ extern unsigned char GPR_00554c14;
 
 /* Owning stack reference to the delay record; released on scope exit (reference count in the low
  * 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 
 #define SET_STRING(field, text) { \
     beMessengerDelay *r = (beMessengerDelay *)row.p; \

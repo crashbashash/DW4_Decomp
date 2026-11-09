@@ -1,29 +1,20 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
 typedef struct NodeList { char p0[8]; unsigned count; char p1[4]; int *data; } NodeList;
 typedef struct TraversedNode { char p0[28]; NodeList *children; } TraversedNode;
-typedef struct PathEntry { int w0; int refs; } PathEntry;
+typedef struct PathEntry : public igObject { } PathEntry;
 PathEntry *FUN_0019f630(int);
 int FUN_001c5740(PathEntry *, int);
 int FUN_001c5870(int, unsigned);
 int FUN_001c58c0(int);
 int igObject_IsKindOf(TraversedNode *, int);
 int ObjectList_AppendRetained(NodeList *, PathEntry *);
-int igObject_Destroy(PathEntry *);
 int igObject_GetAllocator(TraversedNode *);
 extern int DAT_005619f8[16];
 extern int DAT_00561ea0[16];
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *object = p;
-        if (object != 0) {
-            object->refs = object->refs - 1;
-            if ((object->refs & 0x7FFFFF) == 0) igObject_Destroy(object);
-        }
-    }
-};
+
 extern "C" void FUN_001d6410(TraversedNode *collector, TraversedNode *node, int path) {
     unsigned count;
     unsigned i;

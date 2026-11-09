@@ -1,15 +1,15 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 /* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
 class TypeIdVirtual { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int v88(); };
 /* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
-class NewObjectVirtual { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void v132(int); };
+class NewObjectVirtual : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void v132(int); };
 struct PropertyRecord { char pad[12]; int f12; };
 extern "C" {
 NewObjectVirtual *FUN_00132810(...);
 int Memory_GetAllocatorBySelector(...);
 int ObjectList_AppendRetained(...);
 int ObjectList_RemoveFirstRetained(...);
-int igObject_Destroy(igObject *);
 int igObject_GetAllocator(...);
 PropertyRecord *igProperty_FindByName(...);
 extern int DAT_004e0858[4];
@@ -22,12 +22,7 @@ void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1)
 /* Owning stack reference to the texture attribute object created per matching property; released
  * on scope exit, after the attribute set has retained it (reference count in the low 23 bits of
  * _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1) {
     struct { int spA0; int pad[5]; } sa;
 

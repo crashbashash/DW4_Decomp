@@ -1,7 +1,8 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
-typedef struct R { int pad0; unsigned int refs; struct R *f8; } R;
+typedef struct R : public igObject { struct R *f8; } R;
 typedef struct O { char pad[32]; R *f32; R *f36; char pad2[20]; R *f60; } O;
-int igObject_Destroy(R *);
 void *igObject_GetAllocator(O *);
 R *FUN_00130020(void *);
 R *FUN_00137ab0(void *);
@@ -9,29 +10,16 @@ R *FUN_00149c30(void *);
 R *FUN_0014f2c0(void *);
 int FUN_001b6f30(O *, R *, R *);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 static inline void retain(R *object) {
     if (object != 0) {
-        object->refs = object->refs + 1;
+        object->_refCount = object->_refCount + 1;
     }
 }
 static inline void release(R *object) {
     if (object != 0) {
-        object->refs = object->refs - 1;
-        if ((object->refs & 0x7FFFFF) == 0) {
+        object->_refCount = object->_refCount - 1;
+        if ((object->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(object);
         }
     }

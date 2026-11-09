@@ -25,10 +25,20 @@
 #ifndef DW4_REFLECTED_H
 #define DW4_REFLECTED_H
 
+/* handle 0x587198, 2 field(s), sizeof 8 (registered instance size) */
+typedef struct igObject {
+    int _vtable;                                   /* +0    igObjectRefMetaField */
+    unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+} igObject;
+
+#ifdef __cplusplus
+typedef struct ParticleArray : public igObject {
+#else
 /* handle 0x58a040, 35 field(s), sizeof 124 (registered instance size) */
 typedef struct ParticleArray {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _particleFormat;                           /* +8    igObjectRefMetaField */
     unsigned int _maxNum;                          /* +12   igUnsignedIntMetaField */
     unsigned int _arrayIndex;                      /* +16   igUnsignedIntMetaField */
@@ -68,10 +78,14 @@ typedef struct ParticleArray {
     char _pad123[1];
 } ParticleArray;
 
+#ifdef __cplusplus
+typedef struct ParticleInfo : public igObject {
+#else
 /* handle 0x58a0e0, 30 field(s), sizeof 1024 (registered instance size) */
 typedef struct ParticleInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -108,10 +122,14 @@ typedef struct ParticleInfo {
     char _pad1020[4];
 } ParticleInfo;
 
+#ifdef __cplusplus
+typedef struct ParticleTimer : public igObject {
+#else
 /* handle 0x58a0a0, 14 field(s), sizeof 64 (registered instance size) */
 typedef struct ParticleTimer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -128,35 +146,51 @@ typedef struct ParticleTimer {
     long long _time;                               /* +56   igLongMetaField */
 } ParticleTimer;
 
+#ifdef __cplusplus
+typedef struct __internalNonRefCountedObjectList : public igObject {
+#else
 /* handle 0x5860e0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct __internalNonRefCountedObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _data;                                     /* +8    igMemoryRefMetaField */
     int _count;                                    /* +12   igIntMetaField */
 } __internalNonRefCountedObjectList;
 
+#ifdef __cplusplus
+typedef struct __internalObjectList : public igObject {
+#else
 /* handle 0x5860d0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct __internalObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _data;                                     /* +8    igMemoryRefMetaField */
     int _count;                                    /* +12   igIntMetaField */
 } __internalObjectList;
 
+#ifdef __cplusplus
+typedef struct be : public igObject {
+#else
 /* handle 0x58a030, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct be {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _stringRefList;                            /* +16   igObjectRefMetaField */
 } be;
 
+#ifdef __cplusplus
+typedef struct beAction2 : public igObject {
+#else
 /* handle 0x58a028, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beAction2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -166,43 +200,63 @@ typedef struct beAction2 {
     char _pad29[3];
 } beAction2;
 
+#ifdef __cplusplus
+typedef struct beAction2Data : public igObject {
+#else
 /* handle 0x58a010, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beAction2Data {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _comList;                                  /* +12   igObjectRefMetaField */
 } beAction2Data;
 
+#ifdef __cplusplus
+typedef struct beAction2DataList : public igObject {
+#else
 /* handle 0x58a008, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beAction2DataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beAction2DataList;
 
+#ifdef __cplusplus
+typedef struct beAction2FADESET : public igObject {
+#else
 /* handle 0x589fb0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beAction2FADESET {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _fadeTime;                               /* +12   igFloatMetaField */
     float _fadeValue;                              /* +16   igFloatMetaField */
 } beAction2FADESET;
 
+#ifdef __cplusplus
+typedef struct beAction2FLASHSET : public igObject {
+#else
 /* handle 0x589f98, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beAction2FLASHSET {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beAction2FLASHSET;
 
+#ifdef __cplusplus
+typedef struct beAction2Info : public igObject {
+#else
 /* handle 0x589f78, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beAction2Info {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -214,19 +268,27 @@ typedef struct beAction2Info {
     int _dataList_;                                /* +36   igObjectRefMetaField */
 } beAction2Info;
 
+#ifdef __cplusplus
+typedef struct beAction2InfoList : public igObject {
+#else
 /* handle 0x589f70, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beAction2InfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beAction2InfoList;
 
+#ifdef __cplusplus
+typedef struct beAction2InfoRam : public igObject {
+#else
 /* handle 0x589f48, 15 field(s), sizeof 60 (registered instance size) */
 typedef struct beAction2InfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -243,10 +305,14 @@ typedef struct beAction2InfoRam {
     int _work;                                     /* +56   igObjectRefMetaField */
 } beAction2InfoRam;
 
+#ifdef __cplusplus
+typedef struct beAction2InfoWork : public igObject {
+#else
 /* handle 0x589e98, 23 field(s), sizeof 96 (registered instance size) */
 typedef struct beAction2InfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _comData;                                  /* +8    igObjectRefMetaField */
     int _comIndex;                                 /* +12   igIntMetaField */
     unsigned char _isNoHokan;                      /* +16   igBoolMetaField */
@@ -274,38 +340,54 @@ typedef struct beAction2InfoWork {
     int _lightingStateAttr;                        /* +92   igObjectRefMetaField */
 } beAction2InfoWork;
 
+#ifdef __cplusplus
+typedef struct beAction2JOINTSET : public igObject {
+#else
 /* handle 0x589fc8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beAction2JOINTSET {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _startTime;                              /* +12   igFloatMetaField */
     float _endTime;                                /* +16   igFloatMetaField */
     int _loopMode;                                 /* +20   igStringMetaField */
 } beAction2JOINTSET;
 
+#ifdef __cplusplus
+typedef struct beAction2MOTIONSET : public igObject {
+#else
 /* handle 0x589fe8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beAction2MOTIONSET {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _hokanMode;                                /* +12   igStringMetaField */
     float _hokanTime;                              /* +16   igFloatMetaField */
     int _loopMode;                                 /* +20   igStringMetaField */
 } beAction2MOTIONSET;
 
+#ifdef __cplusplus
+typedef struct beAction2WAITCHECK : public igObject {
+#else
 /* handle 0x589fa0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beAction2WAITCHECK {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _waitTime;                               /* +12   igFloatMetaField */
 } beAction2WAITCHECK;
 
+#ifdef __cplusplus
+typedef struct beActionStarter : public igObject {
+#else
 /* handle 0x589e90, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beActionStarter {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -315,10 +397,14 @@ typedef struct beActionStarter {
     char _pad29[3];
 } beActionStarter;
 
+#ifdef __cplusplus
+typedef struct beActionStarterData : public igObject {
+#else
 /* handle 0x589e60, 8 field(s), sizeof 36 (registered instance size) */
 typedef struct beActionStarterData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _message;                                  /* +12   igStringMetaField */
     int _delay;                                    /* +16   igIntMetaField */
@@ -328,10 +414,14 @@ typedef struct beActionStarterData {
     char _pad34[2];
 } beActionStarterData;
 
+#ifdef __cplusplus
+typedef struct beActionStarterData2 : public igObject {
+#else
 /* handle 0x589e48, 9 field(s), sizeof 48 (registered instance size) */
 typedef struct beActionStarterData2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _message;                                  /* +12   igStringMetaField */
     int _delay;                                    /* +16   igIntMetaField */
@@ -342,19 +432,27 @@ typedef struct beActionStarterData2 {
     float _rotation[3];                            /* +36   igVec3fMetaField */
 } beActionStarterData2;
 
+#ifdef __cplusplus
+typedef struct beActionStarterDataList : public igObject {
+#else
 /* handle 0x589e58, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beActionStarterDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beActionStarterDataList;
 
+#ifdef __cplusplus
+typedef struct beActionStarterInfo : public igObject {
+#else
 /* handle 0x589e20, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beActionStarterInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -364,10 +462,14 @@ typedef struct beActionStarterInfo {
     int _modelList;                                /* +28   igObjectRefMetaField */
 } beActionStarterInfo;
 
+#ifdef __cplusplus
+typedef struct beActionStarterInfoRam : public igObject {
+#else
 /* handle 0x589e18, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beActionStarterInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -380,27 +482,39 @@ typedef struct beActionStarterInfoRam {
     int _dataList;                                 /* +40   igObjectRefMetaField */
 } beActionStarterInfoRam;
 
+#ifdef __cplusplus
+typedef struct beAsTargetModelData : public igObject {
+#else
 /* handle 0x589e38, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beAsTargetModelData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _dataList;                                 /* +12   igObjectRefMetaField */
 } beAsTargetModelData;
 
+#ifdef __cplusplus
+typedef struct beAsTargetModelDataList : public igObject {
+#else
 /* handle 0x589e30, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beAsTargetModelDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beAsTargetModelDataList;
 
+#ifdef __cplusplus
+typedef struct beBaseInfo : public igObject {
+#else
 /* handle 0x589de8, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beBaseInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -409,36 +523,52 @@ typedef struct beBaseInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beBaseInfo;
 
+#ifdef __cplusplus
+typedef struct beBaseInfoData : public igObject {
+#else
 /* handle 0x589e08, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beBaseInfoData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
 } beBaseInfoData;
 
+#ifdef __cplusplus
+typedef struct beBaseInfoDataList : public igObject {
+#else
 /* handle 0x589e00, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beBaseInfoDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beBaseInfoDataList;
 
+#ifdef __cplusplus
+typedef struct beBaseInfoList : public igObject {
+#else
 /* handle 0x589de0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beBaseInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beBaseInfoList;
 
+#ifdef __cplusplus
+typedef struct beBaseInfoManager : public igObject {
+#else
 /* handle 0x589db8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beBaseInfoManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -448,19 +578,27 @@ typedef struct beBaseInfoManager {
     char _pad29[3];
 } beBaseInfoManager;
 
+#ifdef __cplusplus
+typedef struct beBaseInfoManagerList : public igObject {
+#else
 /* handle 0x589db0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beBaseInfoManagerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beBaseInfoManagerList;
 
+#ifdef __cplusplus
+typedef struct beBaseInfoRam : public igObject {
+#else
 /* handle 0x589d28, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beBaseInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -473,19 +611,27 @@ typedef struct beBaseInfoRam {
     int _dataList;                                 /* +40   igObjectRefMetaField */
 } beBaseInfoRam;
 
+#ifdef __cplusplus
+typedef struct beBaseInfoRamList : public igObject {
+#else
 /* handle 0x589d20, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beBaseInfoRamList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beBaseInfoRamList;
 
+#ifdef __cplusplus
+typedef struct beBaseInfoRamTimer : public igObject {
+#else
 /* handle 0x589d78, 10 field(s), sizeof 64 (registered instance size) */
 typedef struct beBaseInfoRamTimer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     float _timeScale;                              /* +16   igFloatMetaField */
@@ -498,20 +644,28 @@ typedef struct beBaseInfoRamTimer {
     char _pad60[4];
 } beBaseInfoRamTimer;
 
+#ifdef __cplusplus
+typedef struct beBinDataObject : public igObject {
+#else
 /* handle 0x587e28, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beBinDataObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _dataBuffer;                               /* +16   igMemoryRefMetaField */
     int _dataSize;                                 /* +20   igIntMetaField */
 } beBinDataObject;
 
+#ifdef __cplusplus
+typedef struct beBkColor : public igObject {
+#else
 /* handle 0x589d10, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beBkColor {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -523,10 +677,14 @@ typedef struct beBkColor {
     char _pad33[3];
 } beBkColor;
 
+#ifdef __cplusplus
+typedef struct beBkColorInfo : public igObject {
+#else
 /* handle 0x589d00, 8 field(s), sizeof 44 (registered instance size) */
 typedef struct beBkColorInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -536,10 +694,14 @@ typedef struct beBkColorInfo {
     float _rgba[4];                                /* +28   igVec4fMetaField */
 } beBkColorInfo;
 
+#ifdef __cplusplus
+typedef struct beCameraBoxData : public igObject {
+#else
 /* handle 0x589c08, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beCameraBoxData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _switch;                                   /* +8    igObjectRefMetaField */
     int _geometryList;                             /* +12   igObjectRefMetaField */
     int _transformList;                            /* +16   igObjectRefMetaField */
@@ -547,10 +709,14 @@ typedef struct beCameraBoxData {
     int _intPosList;                               /* +24   igObjectRefMetaField */
 } beCameraBoxData;
 
+#ifdef __cplusplus
+typedef struct beCameraCtrl : public igObject {
+#else
 /* handle 0x589c90, 21 field(s), sizeof 220 (registered instance size) */
 typedef struct beCameraCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -575,10 +741,14 @@ typedef struct beCameraCtrl {
     char _pad217[3];
 } beCameraCtrl;
 
+#ifdef __cplusplus
+typedef struct beCameraCtrlInfo : public igObject {
+#else
 /* handle 0x589bd8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beCameraCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -588,10 +758,14 @@ typedef struct beCameraCtrlInfo {
     int _data;                                     /* +28   igObjectRefMetaField */
 } beCameraCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beCameraCtrlInfoRamShake : public igObject {
+#else
 /* handle 0x589c38, 12 field(s), sizeof 64 (registered instance size) */
 typedef struct beCameraCtrlInfoRamShake {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isFirst;                        /* +16   igBoolMetaField */
@@ -605,10 +779,14 @@ typedef struct beCameraCtrlInfoRamShake {
     int _movePoint;                                /* +60   igIntMetaField */
 } beCameraCtrlInfoRamShake;
 
+#ifdef __cplusplus
+typedef struct beCameraDemoData : public igObject {
+#else
 /* handle 0x589be8, 5 field(s), sizeof 32 (registered instance size) */
 typedef struct beCameraDemoData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _cameraPath;                               /* +8    igObjectRefMetaField */
     char _pad12[4];
     long long _endTime;                            /* +16   igLongMetaField */
@@ -616,10 +794,14 @@ typedef struct beCameraDemoData {
     char _pad28[4];
 } beCameraDemoData;
 
+#ifdef __cplusplus
+typedef struct beCameraMode : public igObject {
+#else
 /* handle 0x589b90, 12 field(s), sizeof 120 (registered instance size) */
 typedef struct beCameraMode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     float _inverseMatrix[16];                      /* +12   igMatrix44fMetaField */
     int _cameraPath;                               /* +76   igObjectRefMetaField */
@@ -633,10 +815,14 @@ typedef struct beCameraMode {
     char _pad114[6];
 } beCameraMode;
 
+#ifdef __cplusplus
+typedef struct beChangePosTransform : public igObject {
+#else
 /* handle 0x589b80, 9 field(s), sizeof 44 (registered instance size) */
 typedef struct beChangePosTransform {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -647,10 +833,14 @@ typedef struct beChangePosTransform {
     float _oldPos[3];                              /* +32   igVec3fMetaField */
 } beChangePosTransform;
 
+#ifdef __cplusplus
+typedef struct beChangePosTransformInfo : public igObject {
+#else
 /* handle 0x589b78, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beChangePosTransformInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -659,10 +849,14 @@ typedef struct beChangePosTransformInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beChangePosTransformInfo;
 
+#ifdef __cplusplus
+typedef struct beChangePosTransformInfoRam : public igObject {
+#else
 /* handle 0x589b68, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beChangePosTransformInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -676,10 +870,14 @@ typedef struct beChangePosTransformInfoRam {
     int _transform;                                /* +44   igObjectRefMetaField */
 } beChangePosTransformInfoRam;
 
+#ifdef __cplusplus
+typedef struct beCopyModelCtrl2 : public igObject {
+#else
 /* handle 0x589b58, 13 field(s), sizeof 112 (registered instance size) */
 typedef struct beCopyModelCtrl2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -693,10 +891,14 @@ typedef struct beCopyModelCtrl2 {
     int _srcNode;                                  /* +108  igObjectRefMetaField */
 } beCopyModelCtrl2;
 
+#ifdef __cplusplus
+typedef struct beCopyTransform : public igObject {
+#else
 /* handle 0x589b48, 13 field(s), sizeof 112 (registered instance size) */
 typedef struct beCopyTransform {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -710,16 +912,24 @@ typedef struct beCopyTransform {
     int _srcTransform;                             /* +108  igObjectRefMetaField */
 } beCopyTransform;
 
+#ifdef __cplusplus
+typedef struct beCountry : public igObject {
+#else
 /* handle 0x589b40, 2 field(s), sizeof 8 (registered instance size) */
 typedef struct beCountry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
 } beCountry;
 
+#ifdef __cplusplus
+typedef struct beCri : public igObject {
+#else
 /* handle 0x589ad8, 16 field(s), sizeof 72 (registered instance size) */
 typedef struct beCri {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -738,30 +948,42 @@ typedef struct beCri {
     char _pad68[4];
 } beCri;
 
+#ifdef __cplusplus
+typedef struct beCriAcxData : public igObject {
+#else
 /* handle 0x589ad0, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beCriAcxData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _dataBuffer;                               /* +16   igMemoryRefMetaField */
     int _dataSize;                                 /* +20   igIntMetaField */
 } beCriAcxData;
 
+#ifdef __cplusplus
+typedef struct beCriAudio : public igObject {
+#else
 /* handle 0x589a88, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beCriAudio {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _adxt;                                     /* +8    igObjectRefMetaField */
     int _sndf;                                     /* +12   igObjectRefMetaField */
     int _audioType;                                /* +16   igIntMetaField */
     int _errVolume;                                /* +20   igIntMetaField */
 } beCriAudio;
 
+#ifdef __cplusplus
+typedef struct beCriFxInfo : public igObject {
+#else
 /* handle 0x5899f8, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beCriFxInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -772,10 +994,14 @@ typedef struct beCriFxInfo {
     int _xbFxParam;                                /* +32   igObjectRefMetaField */
 } beCriFxInfo;
 
+#ifdef __cplusplus
+typedef struct beCriFxXbData : public igObject {
+#else
 /* handle 0x589a20, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct beCriFxXbData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _lRoom;                                    /* +8    igIntMetaField */
     int _lRoomHF;                                  /* +12   igIntMetaField */
     float _flRoomRolloffFactor;                    /* +16   igFloatMetaField */
@@ -790,10 +1016,14 @@ typedef struct beCriFxXbData {
     float _flHFReference;                          /* +52   igFloatMetaField */
 } beCriFxXbData;
 
+#ifdef __cplusplus
+typedef struct beCriHandle : public igObject {
+#else
 /* handle 0x5899c8, 8 field(s), sizeof 40 (registered instance size) */
 typedef struct beCriHandle {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _audio;                                    /* +12   igObjectRefMetaField */
     int _volume;                                   /* +16   igObjectRefMetaField */
@@ -804,19 +1034,27 @@ typedef struct beCriHandle {
     char _pad36[4];
 } beCriHandle;
 
+#ifdef __cplusplus
+typedef struct beCriHandleList : public igObject {
+#else
 /* handle 0x5899c0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beCriHandleList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beCriHandleList;
 
+#ifdef __cplusplus
+typedef struct beCriSfpData : public igObject {
+#else
 /* handle 0x589998, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beCriSfpData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _dataBuffer;                               /* +16   igMemoryRefMetaField */
@@ -828,10 +1066,14 @@ typedef struct beCriSfpData {
     char _pad37[3];
 } beCriSfpData;
 
+#ifdef __cplusplus
+typedef struct beCriSndf : public igObject {
+#else
 /* handle 0x589ab0, 5 field(s), sizeof 32 (registered instance size) */
 typedef struct beCriSndf {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _req;                                      /* +8    igIntMetaField */
     char _pad12[4];
     long long _seq;                                /* +16   igLongMetaField */
@@ -839,10 +1081,14 @@ typedef struct beCriSndf {
     char _pad25[7];
 } beCriSndf;
 
+#ifdef __cplusplus
+typedef struct beCriVolume : public igObject {
+#else
 /* handle 0x589960, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beCriVolume {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _isExec;                                   /* +8    igIntMetaField */
     int _max;                                      /* +12   igIntMetaField */
     float _current;                                /* +16   igFloatMetaField */
@@ -851,10 +1097,14 @@ typedef struct beCriVolume {
     float _unit;                                   /* +28   igFloatMetaField */
 } beCriVolume;
 
+#ifdef __cplusplus
+typedef struct beDBManager : public igObject {
+#else
 /* handle 0x589958, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beDBManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -864,10 +1114,14 @@ typedef struct beDBManager {
     char _pad29[3];
 } beDBManager;
 
+#ifdef __cplusplus
+typedef struct beDBManagerInfo : public igObject {
+#else
 /* handle 0x589938, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beDBManagerInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -877,10 +1131,14 @@ typedef struct beDBManagerInfo {
     int _dataBase;                                 /* +28   igObjectRefMetaField */
 } beDBManagerInfo;
 
+#ifdef __cplusplus
+typedef struct beDataBase : public igObject {
+#else
 /* handle 0x5898d0, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct beDataBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _charOffsetList;                           /* +8    igObjectRefMetaField */
     int _charData;                                 /* +12   igObjectRefMetaField */
     int _shortOffsetList;                          /* +16   igObjectRefMetaField */
@@ -895,102 +1153,150 @@ typedef struct beDataBase {
     int _stringData;                               /* +52   igObjectRefMetaField */
 } beDataBase;
 
+#ifdef __cplusplus
+typedef struct beDataBaseList : public igObject {
+#else
 /* handle 0x5898c8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beDataBaseList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beDataBaseList;
 
+#ifdef __cplusplus
+typedef struct beDataObjBool : public igObject {
+#else
 /* handle 0x589898, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDataObjBool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     unsigned char _data;                           /* +12   igBoolMetaField */
     char _pad13[3];
 } beDataObjBool;
 
+#ifdef __cplusplus
+typedef struct beDataObjBoolList : public igObject {
+#else
 /* handle 0x589888, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDataObjBoolList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _data;                                     /* +12   igObjectRefMetaField */
 } beDataObjBoolList;
 
+#ifdef __cplusplus
+typedef struct beDataObjFloatList : public igObject {
+#else
 /* handle 0x589848, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDataObjFloatList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _data;                                     /* +12   igObjectRefMetaField */
 } beDataObjFloatList;
 
+#ifdef __cplusplus
+typedef struct beDataObjInt : public igObject {
+#else
 /* handle 0x5898b8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDataObjInt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _data;                                     /* +12   igIntMetaField */
 } beDataObjInt;
 
+#ifdef __cplusplus
+typedef struct beDataObjIntList : public igObject {
+#else
 /* handle 0x5898a8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDataObjIntList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _data;                                     /* +12   igObjectRefMetaField */
 } beDataObjIntList;
 
+#ifdef __cplusplus
+typedef struct beDataObjList : public igObject {
+#else
 /* handle 0x589840, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beDataObjList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beDataObjList;
 
+#ifdef __cplusplus
+typedef struct beDataObjListList : public igObject {
+#else
 /* handle 0x589838, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beDataObjListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beDataObjListList;
 
+#ifdef __cplusplus
+typedef struct beDataObjObjectList : public igObject {
+#else
 /* handle 0x589858, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDataObjObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _data;                                     /* +12   igObjectRefMetaField */
 } beDataObjObjectList;
 
+#ifdef __cplusplus
+typedef struct beDataObjString : public igObject {
+#else
 /* handle 0x589878, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDataObjString {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _data;                                     /* +12   igStringMetaField */
 } beDataObjString;
 
+#ifdef __cplusplus
+typedef struct beDataObjStringList : public igObject {
+#else
 /* handle 0x589868, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDataObjStringList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _data;                                     /* +12   igObjectRefMetaField */
 } beDataObjStringList;
 
+#ifdef __cplusplus
+typedef struct beDemoKeepMes : public igObject {
+#else
 /* handle 0x5897f8, 9 field(s), sizeof 48 (registered instance size) */
 typedef struct beDemoKeepMes {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kind;                                     /* +8    igIntMetaField */
     char _pad12[4];
     long long _sendTime;                           /* +16   igLongMetaField */
@@ -1002,19 +1308,27 @@ typedef struct beDemoKeepMes {
     char _pad44[4];
 } beDemoKeepMes;
 
+#ifdef __cplusplus
+typedef struct beDemoKeepMesList : public igObject {
+#else
 /* handle 0x5897f0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beDemoKeepMesList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beDemoKeepMesList;
 
+#ifdef __cplusplus
+typedef struct beDemoManager : public igObject {
+#else
 /* handle 0x589790, 11 field(s), sizeof 36 (registered instance size) */
 typedef struct beDemoManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -1027,40 +1341,60 @@ typedef struct beDemoManager {
     char _pad35[1];
 } beDemoManager;
 
+#ifdef __cplusplus
+typedef struct beDemoManagerWork : public igObject {
+#else
 /* handle 0x5897d8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beDemoManagerWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _advancec;                                 /* +8    igIntMetaField */
     int _keepMesList;                              /* +12   igObjectRefMetaField */
 } beDemoManagerWork;
 
+#ifdef __cplusplus
+typedef struct beDemoManagerWorkList : public igObject {
+#else
 /* handle 0x5897d0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beDemoManagerWorkList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beDemoManagerWorkList;
 
+#ifdef __cplusplus
+typedef struct beFile : public igObject {
+#else
 /* handle 0x589778, 2 field(s), sizeof 8 (registered instance size) */
 typedef struct beFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
 } beFile;
 
+#ifdef __cplusplus
+typedef struct beFileChkObj : public igObject {
+#else
 /* handle 0x589780, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beFileChkObj {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _fd;                                       /* +8    igObjectRefMetaField */
 } beFileChkObj;
 
+#ifdef __cplusplus
+typedef struct beFileListInfo : public igObject {
+#else
 /* handle 0x589760, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beFileListInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1069,10 +1403,14 @@ typedef struct beFileListInfo {
     int _fnames;                                   /* +24   igObjectRefMetaField */
 } beFileListInfo;
 
+#ifdef __cplusplus
+typedef struct beFileListInfoManager : public igObject {
+#else
 /* handle 0x5896f8, 16 field(s), sizeof 64 (registered instance size) */
 typedef struct beFileListInfoManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1090,10 +1428,14 @@ typedef struct beFileListInfoManager {
     int _proc;                                     /* +60   igIntMetaField */
 } beFileListInfoManager;
 
+#ifdef __cplusplus
+typedef struct beFont : public igObject {
+#else
 /* handle 0x589678, 18 field(s), sizeof 72 (registered instance size) */
 typedef struct beFont {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1113,28 +1455,40 @@ typedef struct beFont {
     int _history;                                  /* +68   igIntMetaField */
 } beFont;
 
+#ifdef __cplusplus
+typedef struct beFontGeomAttrPair : public igObject {
+#else
 /* handle 0x5896d8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beFontGeomAttrPair {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _category;                                 /* +8    igStringMetaField */
     int _panel;                                    /* +12   igStringMetaField */
     int _geomAttrs;                                /* +16   igObjectRefMetaField */
 } beFontGeomAttrPair;
 
+#ifdef __cplusplus
+typedef struct beFontGeomAttrPairList : public igObject {
+#else
 /* handle 0x5896d0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beFontGeomAttrPairList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beFontGeomAttrPairList;
 
+#ifdef __cplusplus
+typedef struct beFontImage : public igObject {
+#else
 /* handle 0x589658, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beFontImage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _height;                                 /* +12   igFloatMetaField */
     float _baseLine;                               /* +16   igFloatMetaField */
@@ -1144,19 +1498,27 @@ typedef struct beFontImage {
     int _textureBind;                              /* +32   igObjectRefMetaField */
 } beFontImage;
 
+#ifdef __cplusplus
+typedef struct beFontImageList : public igObject {
+#else
 /* handle 0x589650, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beFontImageList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beFontImageList;
 
+#ifdef __cplusplus
+typedef struct beFontInfo : public igObject {
+#else
 /* handle 0x5895e8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beFontInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1166,10 +1528,14 @@ typedef struct beFontInfo {
     int _unicodeList;                              /* +28   igObjectRefMetaField */
 } beFontInfo;
 
+#ifdef __cplusplus
+typedef struct beFontInfoData : public igObject {
+#else
 /* handle 0x5895f8, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beFontInfoData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _attrSet;                                  /* +16   igObjectRefMetaField */
@@ -1181,10 +1547,14 @@ typedef struct beFontInfoData {
     int _kind;                                     /* +40   igStringMetaField */
 } beFontInfoData;
 
+#ifdef __cplusplus
+typedef struct beGenerater : public igObject {
+#else
 /* handle 0x5895d0, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beGenerater {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1197,10 +1567,14 @@ typedef struct beGenerater {
     char _pad37[3];
 } beGenerater;
 
+#ifdef __cplusplus
+typedef struct beGeneraterData : public igObject {
+#else
 /* handle 0x5894f0, 15 field(s), sizeof 68 (registered instance size) */
 typedef struct beGeneraterData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _pos[3];                                 /* +12   igVec3fMetaField */
     unsigned char _genePosIsGlobal;                /* +24   igBoolMetaField */
@@ -1217,19 +1591,27 @@ typedef struct beGeneraterData {
     int _playerDataList;                           /* +64   igObjectRefMetaField */
 } beGeneraterData;
 
+#ifdef __cplusplus
+typedef struct beGeneraterDataList : public igObject {
+#else
 /* handle 0x5894e8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beGeneraterDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beGeneraterDataList;
 
+#ifdef __cplusplus
+typedef struct beGeneraterInfo : public igObject {
+#else
 /* handle 0x5894d8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beGeneraterInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1239,10 +1621,14 @@ typedef struct beGeneraterInfo {
     int _dataList_;                                /* +28   igObjectRefMetaField */
 } beGeneraterInfo;
 
+#ifdef __cplusplus
+typedef struct beGeneraterInfoRam : public igObject {
+#else
 /* handle 0x5894c8, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beGeneraterInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -1256,10 +1642,14 @@ typedef struct beGeneraterInfoRam {
     int _work;                                     /* +44   igObjectRefMetaField */
 } beGeneraterInfoRam;
 
+#ifdef __cplusplus
+typedef struct beGeneraterInfoWork : public igObject {
+#else
 /* handle 0x589478, 11 field(s), sizeof 40 (registered instance size) */
 typedef struct beGeneraterInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isSystemFreeze;                 /* +8    igBoolMetaField */
     unsigned char _isFreeze;                       /* +9    igBoolMetaField */
     char _pad10[2];
@@ -1272,65 +1662,93 @@ typedef struct beGeneraterInfoWork {
     int _geneEnemyMHp;                             /* +36   igIntMetaField */
 } beGeneraterInfoWork;
 
+#ifdef __cplusplus
+typedef struct beGeneraterItemData : public igObject {
+#else
 /* handle 0x589590, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beGeneraterItemData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _dataList;                                 /* +12   igObjectRefMetaField */
 } beGeneraterItemData;
 
+#ifdef __cplusplus
+typedef struct beGeneraterItemDataList : public igObject {
+#else
 /* handle 0x589588, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beGeneraterItemDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beGeneraterItemDataList;
 
+#ifdef __cplusplus
+typedef struct beGeneraterItemDataOne : public igObject {
+#else
 /* handle 0x5895a8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beGeneraterItemDataOne {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _id;                                       /* +12   igIntMetaField */
     int _rank;                                     /* +16   igIntMetaField */
     int _rate;                                     /* +20   igIntMetaField */
 } beGeneraterItemDataOne;
 
+#ifdef __cplusplus
+typedef struct beGeneraterItemDataOneList : public igObject {
+#else
 /* handle 0x5895a0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beGeneraterItemDataOneList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beGeneraterItemDataOneList;
 
+#ifdef __cplusplus
+typedef struct beGeneraterPlayerData : public igObject {
+#else
 /* handle 0x589560, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beGeneraterPlayerData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _geneCount;                                /* +8    igIntMetaField */
     int _geneMaxCount;                             /* +12   igIntMetaField */
     int _itemDataList;                             /* +16   igObjectRefMetaField */
     int _itemLastDataList;                         /* +20   igObjectRefMetaField */
 } beGeneraterPlayerData;
 
+#ifdef __cplusplus
+typedef struct beGeneraterPlayerDataList : public igObject {
+#else
 /* handle 0x589558, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beGeneraterPlayerDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beGeneraterPlayerDataList;
 
+#ifdef __cplusplus
+typedef struct beGroupKeep : public igObject {
+#else
 /* handle 0x589470, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beGroupKeep {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -1339,19 +1757,27 @@ typedef struct beGroupKeep {
     int _childList;                                /* +28   igObjectRefMetaField */
 } beGroupKeep;
 
+#ifdef __cplusplus
+typedef struct beGroupKeepList : public igObject {
+#else
 /* handle 0x589468, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beGroupKeepList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beGroupKeepList;
 
+#ifdef __cplusplus
+typedef struct beHitLandDeliv : public igObject {
+#else
 /* handle 0x589460, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beHitLandDeliv {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1361,10 +1787,14 @@ typedef struct beHitLandDeliv {
     char _pad29[3];
 } beHitLandDeliv;
 
+#ifdef __cplusplus
+typedef struct beHitLandDelivInfo : public igObject {
+#else
 /* handle 0x589450, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beHitLandDelivInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1373,10 +1803,14 @@ typedef struct beHitLandDelivInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beHitLandDelivInfo;
 
+#ifdef __cplusplus
+typedef struct beHitLandDelivInfoRam : public igObject {
+#else
 /* handle 0x589400, 20 field(s), sizeof 104 (registered instance size) */
 typedef struct beHitLandDelivInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -1399,10 +1833,14 @@ typedef struct beHitLandDelivInfoRam {
     char _pad101[3];
 } beHitLandDelivInfoRam;
 
+#ifdef __cplusplus
+typedef struct beHitLandModel : public igObject {
+#else
 /* handle 0x589350, 13 field(s), sizeof 112 (registered instance size) */
 typedef struct beHitLandModel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1418,10 +1856,14 @@ typedef struct beHitLandModel {
     float _mat90[16];                              /* +48   igMatrix44fMetaField */
 } beHitLandModel;
 
+#ifdef __cplusplus
+typedef struct beHitLandModelInfo : public igObject {
+#else
 /* handle 0x589320, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beHitLandModelInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1434,10 +1876,14 @@ typedef struct beHitLandModelInfo {
     int _kind;                                     /* +40   igIntMetaField */
 } beHitLandModelInfo;
 
+#ifdef __cplusplus
+typedef struct beHitLandModelInfoRam : public igObject {
+#else
 /* handle 0x589318, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beHitLandModelInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -1450,10 +1896,14 @@ typedef struct beHitLandModelInfoRam {
     int _dataList;                                 /* +40   igObjectRefMetaField */
 } beHitLandModelInfoRam;
 
+#ifdef __cplusplus
+typedef struct beHitLandModelOrder : public igObject {
+#else
 /* handle 0x589390, 11 field(s), sizeof 60 (registered instance size) */
 typedef struct beHitLandModelOrder {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _raymax[3];                              /* +8    igVec3fMetaField */
     float _raymin[3];                              /* +20   igVec3fMetaField */
     int _infoName;                                 /* +32   igStringMetaField */
@@ -1465,10 +1915,14 @@ typedef struct beHitLandModelOrder {
     int _hitdataList;                              /* +56   igObjectRefMetaField */
 } beHitLandModelOrder;
 
+#ifdef __cplusplus
+typedef struct beHitLandModelTraversal : public igObject {
+#else
 /* handle 0x589380, 15 field(s), sizeof 72 (registered instance size) */
 typedef struct beHitLandModelTraversal {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _nodeSelectProcEnabled;          /* +8    igBoolMetaField */
     char _pad9[3];
     int _nodeSelectProc;                           /* +12   igRawRefMetaField */
@@ -1488,35 +1942,51 @@ typedef struct beHitLandModelTraversal {
     char _pad68[4];
 } beHitLandModelTraversal;
 
+#ifdef __cplusplus
+typedef struct beHitLandResultData : public igObject {
+#else
 /* handle 0x5893e8, 4 field(s), sizeof 88 (registered instance size) */
 typedef struct beHitLandResultData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _infoName;                                 /* +8    igStringMetaField */
     int _ramNo;                                    /* +12   igIntMetaField */
     char _pad16[72];
 } beHitLandResultData;
 
+#ifdef __cplusplus
+typedef struct beHitLandResultDataList : public igObject {
+#else
 /* handle 0x5893e0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beHitLandResultDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beHitLandResultDataList;
 
+#ifdef __cplusplus
+typedef struct beKeyboardReceiver : public igObject {
+#else
 /* handle 0x589308, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beKeyboardReceiver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _keyboard;                                 /* +8    igObjectRefMetaField */
 } beKeyboardReceiver;
 
+#ifdef __cplusplus
+typedef struct beLOA : public igObject {
+#else
 /* handle 0x5892b0, 18 field(s), sizeof 96 (registered instance size) */
 typedef struct beLOA {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -1537,10 +2007,14 @@ typedef struct beLOA {
     char _pad92[4];
 } beLOA;
 
+#ifdef __cplusplus
+typedef struct beLayerCtl : public igObject {
+#else
 /* handle 0x589298, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beLayerCtl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1553,26 +2027,38 @@ typedef struct beLayerCtl {
     int _layerSwt;                                 /* +36   igObjectRefMetaField */
 } beLayerCtl;
 
+#ifdef __cplusplus
+typedef struct beLayerGroup : public igObject {
+#else
 /* handle 0x589280, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beLayerGroup {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beLayerGroup;
 
+#ifdef __cplusplus
+typedef struct beLayerGroupList : public igObject {
+#else
 /* handle 0x589278, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beLayerGroupList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beLayerGroupList;
 
+#ifdef __cplusplus
+typedef struct beLayerInfo : public igObject {
+#else
 /* handle 0x589268, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beLayerInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1582,10 +2068,14 @@ typedef struct beLayerInfo {
     int _groups;                                   /* +28   igObjectRefMetaField */
 } beLayerInfo;
 
+#ifdef __cplusplus
+typedef struct beLayerInfoRam : public igObject {
+#else
 /* handle 0x589260, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beLayerInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -1598,10 +2088,14 @@ typedef struct beLayerInfoRam {
     int _dataList;                                 /* +40   igObjectRefMetaField */
 } beLayerInfoRam;
 
+#ifdef __cplusplus
+typedef struct beLightCtrl : public igObject {
+#else
 /* handle 0x589258, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beLightCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1611,10 +2105,14 @@ typedef struct beLightCtrl {
     char _pad29[3];
 } beLightCtrl;
 
+#ifdef __cplusplus
+typedef struct beLightCtrlInfo : public igObject {
+#else
 /* handle 0x589238, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beLightCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1624,28 +2122,40 @@ typedef struct beLightCtrlInfo {
     int _lightSetList;                             /* +28   igObjectRefMetaField */
 } beLightCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beLoadIntf2ComMdlData : public igObject {
+#else
 /* handle 0x58be70, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beLoadIntf2ComMdlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _openSQ;                                   /* +12   igStringMetaField */
     int _infoName;                                 /* +16   igStringMetaField */
 } beLoadIntf2ComMdlData;
 
+#ifdef __cplusplus
+typedef struct beLoadIntf2ComMdlDataList : public igObject {
+#else
 /* handle 0x58be68, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beLoadIntf2ComMdlDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beLoadIntf2ComMdlDataList;
 
+#ifdef __cplusplus
+typedef struct beLoadingNode : public igObject {
+#else
 /* handle 0x5886e8, 20 field(s), sizeof 128 (registered instance size) */
 typedef struct beLoadingNode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -1668,10 +2178,14 @@ typedef struct beLoadingNode {
     long long _playLimitTime;                      /* +120  igLongMetaField */
 } beLoadingNode;
 
+#ifdef __cplusplus
+typedef struct beLua : public igObject {
+#else
 /* handle 0x589208, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beLua {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1680,44 +2194,64 @@ typedef struct beLua {
     int _luaGlue;                                  /* +28   igObjectRefMetaField */
 } beLua;
 
+#ifdef __cplusplus
+typedef struct beLuaData : public igObject {
+#else
 /* handle 0x5891d8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beLuaData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _dataObject;                               /* +12   igObjectRefMetaField */
 } beLuaData;
 
+#ifdef __cplusplus
+typedef struct beLuaDataList : public igObject {
+#else
 /* handle 0x5891d0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beLuaDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beLuaDataList;
 
+#ifdef __cplusplus
+typedef struct beLuaDataObject : public igObject {
+#else
 /* handle 0x5891f0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beLuaDataObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dataSize;                                 /* +8    igIntMetaField */
     int _data;                                     /* +12   igMemoryRefMetaField */
 } beLuaDataObject;
 
+#ifdef __cplusplus
+typedef struct beLuaDataObjectist : public igObject {
+#else
 /* handle 0x5891e8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beLuaDataObjectist {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beLuaDataObjectist;
 
+#ifdef __cplusplus
+typedef struct beLuaInfo : public igObject {
+#else
 /* handle 0x5891c0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beLuaInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1727,20 +2261,28 @@ typedef struct beLuaInfo {
     int _dataList_;                                /* +28   igObjectRefMetaField */
 } beLuaInfo;
 
+#ifdef __cplusplus
+typedef struct beLuaState : public igObject {
+#else
 /* handle 0x5891b0, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beLuaState {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _luaState;                                 /* +12   igRawRefMetaField */
     int _memPool;                                  /* +16   igObjectRefMetaField */
     int _lp;                                       /* +20   igRawRefMetaField */
 } beLuaState;
 
+#ifdef __cplusplus
+typedef struct beMatCtrl : public igObject {
+#else
 /* handle 0x589160, 17 field(s), sizeof 68 (registered instance size) */
 typedef struct beMatCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1761,27 +2303,39 @@ typedef struct beMatCtrl {
     char _pad65[3];
 } beMatCtrl;
 
+#ifdef __cplusplus
+typedef struct beMatCtrlData : public igObject {
+#else
 /* handle 0x589148, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beMatCtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _chkBox;                                   /* +12   igObjectRefMetaField */
 } beMatCtrlData;
 
+#ifdef __cplusplus
+typedef struct beMatCtrlDataList : public igObject {
+#else
 /* handle 0x589140, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beMatCtrlDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beMatCtrlDataList;
 
+#ifdef __cplusplus
+typedef struct beMatCtrlInfo : public igObject {
+#else
 /* handle 0x5890e8, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beMatCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1793,10 +2347,14 @@ typedef struct beMatCtrlInfo {
     int _search;                                   /* +36   igObjectRefMetaField */
 } beMatCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beMatCtrlInfoRam : public igObject {
+#else
 /* handle 0x5890d8, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beMatCtrlInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -1810,18 +2368,26 @@ typedef struct beMatCtrlInfoRam {
     int _work;                                     /* +44   igObjectRefMetaField */
 } beMatCtrlInfoRam;
 
+#ifdef __cplusplus
+typedef struct beMatCtrlInfoWork : public igObject {
+#else
 /* handle 0x5890c0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beMatCtrlInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _runFlagList;                              /* +8    igObjectRefMetaField */
     int _matOnPlLists;                             /* +12   igObjectRefMetaField */
 } beMatCtrlInfoWork;
 
+#ifdef __cplusplus
+typedef struct beMatCtrlSearch : public igObject {
+#else
 /* handle 0x589110, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beMatCtrlSearch {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _minX;                                   /* +8    igFloatMetaField */
     float _maxX;                                   /* +12   igFloatMetaField */
     int _matNO;                                    /* +16   igIntMetaField */
@@ -1829,19 +2395,27 @@ typedef struct beMatCtrlSearch {
     int _memberList;                               /* +24   igObjectRefMetaField */
 } beMatCtrlSearch;
 
+#ifdef __cplusplus
+typedef struct beMatCtrlSearchList : public igObject {
+#else
 /* handle 0x589108, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beMatCtrlSearchList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beMatCtrlSearchList;
 
+#ifdef __cplusplus
+typedef struct beMemory : public igObject {
+#else
 /* handle 0x589090, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beMemory {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -1852,10 +2426,14 @@ typedef struct beMemory {
     int _updateCount;                              /* +32   igIntMetaField */
 } beMemory;
 
+#ifdef __cplusplus
+typedef struct beMessenger : public igObject {
+#else
 /* handle 0x588f38, 12 field(s), sizeof 56 (registered instance size) */
 typedef struct beMessenger {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _argData;                                  /* +16   igObjectRefMetaField */
@@ -1869,10 +2447,14 @@ typedef struct beMessenger {
     char _pad49[7];
 } beMessenger;
 
+#ifdef __cplusplus
+typedef struct beMessengerArgData : public igObject {
+#else
 /* handle 0x589038, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beMessengerArgData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isRunCheck;                     /* +8    igBoolMetaField */
     char _pad9[3];
     int _debugString;                              /* +12   igStringMetaField */
@@ -1886,19 +2468,27 @@ typedef struct beMessengerArgData {
     int _stringList;                               /* +44   igObjectRefMetaField */
 } beMessengerArgData;
 
+#ifdef __cplusplus
+typedef struct beMessengerArgDataList : public igObject {
+#else
 /* handle 0x589030, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beMessengerArgDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beMessengerArgDataList;
 
+#ifdef __cplusplus
+typedef struct beMessengerDelay : public igObject {
+#else
 /* handle 0x588ff0, 9 field(s), sizeof 48 (registered instance size) */
 typedef struct beMessengerDelay {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isUse;                          /* +8    igBoolMetaField */
     char _pad9[7];
     long long _sendTime;                           /* +16   igLongMetaField */
@@ -1910,38 +2500,54 @@ typedef struct beMessengerDelay {
     char _pad44[4];
 } beMessengerDelay;
 
+#ifdef __cplusplus
+typedef struct beMessengerDelayList : public igObject {
+#else
 /* handle 0x588fe8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beMessengerDelayList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beMessengerDelayList;
 
+#ifdef __cplusplus
+typedef struct beMessengerGroup : public igObject {
+#else
 /* handle 0x588fc8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beMessengerGroup {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _infoNameList;                             /* +12   igObjectRefMetaField */
     int _ramNoList;                                /* +16   igObjectRefMetaField */
     int _ramList;                                  /* +20   igObjectRefMetaField */
 } beMessengerGroup;
 
+#ifdef __cplusplus
+typedef struct beMessengerGroupList : public igObject {
+#else
 /* handle 0x588fc0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beMessengerGroupList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beMessengerGroupList;
 
+#ifdef __cplusplus
+typedef struct beMessengerWork : public igObject {
+#else
 /* handle 0x588f88, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beMessengerWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _groupName;                                /* +8    igStringMetaField */
     int _infoName;                                 /* +12   igStringMetaField */
     int _ramNo;                                    /* +16   igIntMetaField */
@@ -1950,19 +2556,27 @@ typedef struct beMessengerWork {
     int _findRamList;                              /* +28   igObjectRefMetaField */
 } beMessengerWork;
 
+#ifdef __cplusplus
+typedef struct beMessengerWorkList : public igObject {
+#else
 /* handle 0x588f80, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beMessengerWorkList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beMessengerWorkList;
 
+#ifdef __cplusplus
+typedef struct beMeterCtrl : public igObject {
+#else
 /* handle 0x588f30, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beMeterCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -1972,10 +2586,14 @@ typedef struct beMeterCtrl {
     char _pad29[3];
 } beMeterCtrl;
 
+#ifdef __cplusplus
+typedef struct beMeterCtrlInfo : public igObject {
+#else
 /* handle 0x588ea0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beMeterCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -1985,19 +2603,27 @@ typedef struct beMeterCtrlInfo {
     int _oneDataList;                              /* +28   igObjectRefMetaField */
 } beMeterCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beMeterCtrlInfoList : public igObject {
+#else
 /* handle 0x588e98, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beMeterCtrlInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beMeterCtrlInfoList;
 
+#ifdef __cplusplus
+typedef struct beMeterCtrlNode : public igObject {
+#else
 /* handle 0x588e78, 11 field(s), sizeof 52 (registered instance size) */
 typedef struct beMeterCtrlNode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -2010,10 +2636,14 @@ typedef struct beMeterCtrlNode {
     float _numberOffset[3];                        /* +40   igVec3fMetaField */
 } beMeterCtrlNode;
 
+#ifdef __cplusplus
+typedef struct beMeterCtrlOneData : public igObject {
+#else
 /* handle 0x588eb0, 17 field(s), sizeof 72 (registered instance size) */
 typedef struct beMeterCtrlOneData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _node;                                     /* +12   igObjectRefMetaField */
     float _maxValueF;                              /* +16   igFloatMetaField */
@@ -2033,10 +2663,14 @@ typedef struct beMeterCtrlOneData {
     int _mHp;                                      /* +68   igObjectRefMetaField */
 } beMeterCtrlOneData;
 
+#ifdef __cplusplus
+typedef struct beModelCtrl : public igObject {
+#else
 /* handle 0x588e58, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beModelCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -2050,43 +2684,63 @@ typedef struct beModelCtrl {
     char _pad41[3];
 } beModelCtrl;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlACTION : public igObject {
+#else
 /* handle 0x588e08, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beModelCtrlACTION {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beModelCtrlACTION;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlAIData : public igObject {
+#else
 /* handle 0x588d00, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beModelCtrlAIData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _dirRadian;                              /* +12   igFloatMetaField */
     float _time;                                   /* +16   igFloatMetaField */
     int _limit;                                    /* +20   igIntMetaField */
 } beModelCtrlAIData;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlAIDataList : public igObject {
+#else
 /* handle 0x588cf8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlAIDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beModelCtrlAIDataList;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlAIMAP : public igObject {
+#else
 /* handle 0x588d60, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beModelCtrlAIMAP {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beModelCtrlAIMAP;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlAIMap : public igObject {
+#else
 /* handle 0x588ca0, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct beModelCtrlAIMap {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _x1Square;                               /* +12   igFloatMetaField */
     float _x2Square;                               /* +16   igFloatMetaField */
@@ -2100,43 +2754,63 @@ typedef struct beModelCtrlAIMap {
     int _targetMode;                               /* +48   igStringMetaField */
 } beModelCtrlAIMap;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlAIMapList : public igObject {
+#else
 /* handle 0x588c98, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlAIMapList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beModelCtrlAIMapList;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlCTRL : public igObject {
+#else
 /* handle 0x588df8, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beModelCtrlCTRL {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beModelCtrlCTRL;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlData : public igObject {
+#else
 /* handle 0x588e40, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beModelCtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _comList;                                  /* +12   igObjectRefMetaField */
 } beModelCtrlData;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlDataList : public igObject {
+#else
 /* handle 0x588e38, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beModelCtrlDataList;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlHITBOX : public igObject {
+#else
 /* handle 0x588d20, 8 field(s), sizeof 48 (registered instance size) */
 typedef struct beModelCtrlHITBOX {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _kind;                                     /* +12   igIntMetaField */
     float _start;                                  /* +16   igFloatMetaField */
@@ -2145,10 +2819,14 @@ typedef struct beModelCtrlHITBOX {
     float _boxSize[3];                             /* +36   igVec3fMetaField */
 } beModelCtrlHITBOX;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfo : public igObject {
+#else
 /* handle 0x588ba0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beModelCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -2158,10 +2836,14 @@ typedef struct beModelCtrlInfo {
     int _kindString;                               /* +28   igStringMetaField */
 } beModelCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoAI : public igObject {
+#else
 /* handle 0x588ad0, 7 field(s), sizeof 36 (registered instance size) */
 typedef struct beModelCtrlInfoAI {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _seqName;                                  /* +8    igStringMetaField */
     int _mapNo;                                    /* +12   igIntMetaField */
     float _worldPos[3];                            /* +16   igVec3fMetaField */
@@ -2169,10 +2851,14 @@ typedef struct beModelCtrlInfoAI {
     int _hCount;                                   /* +32   igIntMetaField */
 } beModelCtrlInfoAI;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoDataAIH : public igObject {
+#else
 /* handle 0x588c30, 12 field(s), sizeof 44 (registered instance size) */
 typedef struct beModelCtrlInfoDataAIH {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isXHoming;                      /* +16   igBoolMetaField */
@@ -2186,19 +2872,27 @@ typedef struct beModelCtrlInfoDataAIH {
     int _limitCount;                               /* +40   igIntMetaField */
 } beModelCtrlInfoDataAIH;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoDataAIM : public igObject {
+#else
 /* handle 0x588c80, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlInfoDataAIM {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _aIMapList;                                /* +16   igObjectRefMetaField */
 } beModelCtrlInfoDataAIM;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoDataHit : public igObject {
+#else
 /* handle 0x588c00, 8 field(s), sizeof 28 (registered instance size) */
 typedef struct beModelCtrlInfoDataHit {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isHitPlayerBullet;              /* +16   igBoolMetaField */
@@ -2209,28 +2903,40 @@ typedef struct beModelCtrlInfoDataHit {
     char _pad25[3];
 } beModelCtrlInfoDataHit;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoDataSeq : public igObject {
+#else
 /* handle 0x588be8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlInfoDataSeq {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _dataList;                                 /* +16   igObjectRefMetaField */
 } beModelCtrlInfoDataSeq;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoDataTrc : public igObject {
+#else
 /* handle 0x588bd0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlInfoDataTrc {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _recorderNode;                             /* +16   igObjectRefMetaField */
 } beModelCtrlInfoDataTrc;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoHitBody : public igObject {
+#else
 /* handle 0x588b00, 9 field(s), sizeof 48 (registered instance size) */
 typedef struct beModelCtrlInfoHitBody {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isFirst;                        /* +8    igBoolMetaField */
     char _pad9[7];
     long long _calcTime;                           /* +16   igLongMetaField */
@@ -2242,39 +2948,55 @@ typedef struct beModelCtrlInfoHitBody {
     char _pad44[4];
 } beModelCtrlInfoHitBody;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoList : public igObject {
+#else
 /* handle 0x588b98, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beModelCtrlInfoList;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoRamData : public igObject {
+#else
 /* handle 0x588bb0, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beModelCtrlInfoRamData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _node;                                     /* +16   igObjectRefMetaField */
     int _work;                                     /* +20   igObjectRefMetaField */
 } beModelCtrlInfoRamData;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoRideOn : public igObject {
+#else
 /* handle 0x588aa8, 6 field(s), sizeof 84 (registered instance size) */
 typedef struct beModelCtrlInfoRideOn {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _modelName;                                /* +8    igStringMetaField */
     int _modelRamNo;                               /* +12   igIntMetaField */
     int _modelNode;                                /* +16   igObjectRefMetaField */
     float _oldMatrix[16];                          /* +20   igMatrix44fMetaField */
 } beModelCtrlInfoRideOn;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoRideOn2 : public igObject {
+#else
 /* handle 0x588a90, 7 field(s), sizeof 96 (registered instance size) */
 typedef struct beModelCtrlInfoRideOn2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _modelName;                                /* +8    igStringMetaField */
     int _modelRamNo;                               /* +12   igIntMetaField */
     int _modelNode;                                /* +16   igObjectRefMetaField */
@@ -2282,10 +3004,14 @@ typedef struct beModelCtrlInfoRideOn2 {
     float _vector[3];                              /* +84   igVec3fMetaField */
 } beModelCtrlInfoRideOn2;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoRideOn3 : public igObject {
+#else
 /* handle 0x588a58, 11 field(s), sizeof 112 (registered instance size) */
 typedef struct beModelCtrlInfoRideOn3 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _modelName;                                /* +8    igStringMetaField */
     int _modelRamNo;                               /* +12   igIntMetaField */
     int _modelNode;                                /* +16   igObjectRefMetaField */
@@ -2297,10 +3023,14 @@ typedef struct beModelCtrlInfoRideOn3 {
     float _maxKyori;                               /* +108  igFloatMetaField */
 } beModelCtrlInfoRideOn3;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoRideOn4 : public igObject {
+#else
 /* handle 0x588a20, 11 field(s), sizeof 120 (registered instance size) */
 typedef struct beModelCtrlInfoRideOn4 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _modelName;                                /* +8    igStringMetaField */
     int _modelRamNo;                               /* +12   igIntMetaField */
     int _modelNode;                                /* +16   igObjectRefMetaField */
@@ -2312,10 +3042,14 @@ typedef struct beModelCtrlInfoRideOn4 {
     int _isFirst;                                  /* +116  igIntMetaField */
 } beModelCtrlInfoRideOn4;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlInfoWork : public igObject {
+#else
 /* handle 0x588888, 52 field(s), sizeof 236 (registered instance size) */
 typedef struct beModelCtrlInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mHp;                                      /* +8    igObjectRefMetaField */
     int _hp;                                       /* +12   igObjectRefMetaField */
     int _recNo;                                    /* +16   igIntMetaField */
@@ -2373,49 +3107,73 @@ typedef struct beModelCtrlInfoWork {
     int _baseAABox;                                /* +232  igObjectRefMetaField */
 } beModelCtrlInfoWork;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlJUMP : public igObject {
+#else
 /* handle 0x588e00, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beModelCtrlJUMP {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beModelCtrlJUMP;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlLABEL : public igObject {
+#else
 /* handle 0x588e20, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beModelCtrlLABEL {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beModelCtrlLABEL;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlLABELCTRL : public igObject {
+#else
 /* handle 0x588e10, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beModelCtrlLABELCTRL {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _seqName;                                  /* +12   igStringMetaField */
 } beModelCtrlLABELCTRL;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlLUACALL : public igObject {
+#else
 /* handle 0x588e28, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beModelCtrlLUACALL {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _modeName;                                 /* +12   igStringMetaField */
 } beModelCtrlLUACALL;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlMOVE : public igObject {
+#else
 /* handle 0x588dd8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlMOVE {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _value;                                  /* +12   igFloatMetaField */
     float _frame;                                  /* +16   igFloatMetaField */
 } beModelCtrlMOVE;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlMOVEEX : public igObject {
+#else
 /* handle 0x588da0, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beModelCtrlMOVEEX {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _value;                                  /* +12   igFloatMetaField */
     float _frame;                                  /* +16   igFloatMetaField */
@@ -2426,34 +3184,50 @@ typedef struct beModelCtrlMOVEEX {
     float _stopFrame;                              /* +32   igFloatMetaField */
 } beModelCtrlMOVEEX;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlMOVERL : public igObject {
+#else
 /* handle 0x588d88, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlMOVERL {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _modelName;                                /* +12   igStringMetaField */
     int _boneName;                                 /* +16   igStringMetaField */
 } beModelCtrlMOVERL;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlMSGBOX : public igObject {
+#else
 /* handle 0x588df0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beModelCtrlMSGBOX {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beModelCtrlMSGBOX;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlMUTEKI : public igObject {
+#else
 /* handle 0x588d50, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beModelCtrlMUTEKI {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _frame;                                  /* +12   igFloatMetaField */
 } beModelCtrlMUTEKI;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlMoveObject : public igObject {
+#else
 /* handle 0x588b48, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beModelCtrlMoveObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isRun;                          /* +8    igBoolMetaField */
     char _pad9[3];
     float _endTime;                                /* +12   igFloatMetaField */
@@ -2467,19 +3241,27 @@ typedef struct beModelCtrlMoveObject {
     float _stopFrame;                              /* +40   igFloatMetaField */
 } beModelCtrlMoveObject;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlMoveObjectList : public igObject {
+#else
 /* handle 0x588b40, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlMoveObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beModelCtrlMoveObjectList;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlNode2 : public igObject {
+#else
 /* handle 0x588860, 16 field(s), sizeof 144 (registered instance size) */
 typedef struct beModelCtrlNode2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -2499,19 +3281,27 @@ typedef struct beModelCtrlNode2 {
     char _pad140[4];
 } beModelCtrlNode2;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlPDMOVE : public igObject {
+#else
 /* handle 0x588d70, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlPDMOVE {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _value;                                  /* +12   igFloatMetaField */
     float _frame;                                  /* +16   igFloatMetaField */
 } beModelCtrlPDMOVE;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlSCEffect : public igObject {
+#else
 /* handle 0x588800, 12 field(s), sizeof 60 (registered instance size) */
 typedef struct beModelCtrlSCEffect {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isOneSet;                       /* +8    igBoolMetaField */
     char _pad9[3];
     float _runFrame;                               /* +12   igFloatMetaField */
@@ -2526,10 +3316,14 @@ typedef struct beModelCtrlSCEffect {
     char _pad58[2];
 } beModelCtrlSCEffect;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlSCHitBox : public igObject {
+#else
 /* handle 0x5887c8, 11 field(s), sizeof 60 (registered instance size) */
 typedef struct beModelCtrlSCHitBox {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isOneSet;                       /* +8    igBoolMetaField */
     char _pad9[3];
     float _runFrame;                               /* +12   igFloatMetaField */
@@ -2543,10 +3337,14 @@ typedef struct beModelCtrlSCHitBox {
     char _pad57[3];
 } beModelCtrlSCHitBox;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlSCSound : public igObject {
+#else
 /* handle 0x5887b0, 7 field(s), sizeof 32 (registered instance size) */
 typedef struct beModelCtrlSCSound {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isOneSet;                       /* +8    igBoolMetaField */
     char _pad9[3];
     float _runFrame;                               /* +12   igFloatMetaField */
@@ -2555,34 +3353,50 @@ typedef struct beModelCtrlSCSound {
     long long _sndHandle;                          /* +24   igLongMetaField */
 } beModelCtrlSCSound;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlSubCom : public igObject {
+#else
 /* handle 0x5887a0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beModelCtrlSubCom {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _comList;                                  /* +8    igObjectRefMetaField */
 } beModelCtrlSubCom;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlSubComBase : public igObject {
+#else
 /* handle 0x588840, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beModelCtrlSubComBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isOneSet;                       /* +8    igBoolMetaField */
     char _pad9[3];
     float _runFrame;                               /* +12   igFloatMetaField */
     float _startFrame;                             /* +16   igFloatMetaField */
 } beModelCtrlSubComBase;
 
+#ifdef __cplusplus
+typedef struct beModelCtrlWCHECK : public igObject {
+#else
 /* handle 0x588d68, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beModelCtrlWCHECK {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } beModelCtrlWCHECK;
 
+#ifdef __cplusplus
+typedef struct beMovie : public igObject {
+#else
 /* handle 0x588788, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beMovie {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -2594,10 +3408,14 @@ typedef struct beMovie {
     int _playingName;                              /* +36   igStringMetaField */
 } beMovie;
 
+#ifdef __cplusplus
+typedef struct beMovieInfo : public igObject {
+#else
 /* handle 0x588758, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beMovieInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -2606,10 +3424,14 @@ typedef struct beMovieInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beMovieInfo;
 
+#ifdef __cplusplus
+typedef struct beMovieInfoData : public igObject {
+#else
 /* handle 0x588760, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beMovieInfoData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _parentLayer;                              /* +16   igStringMetaField */
@@ -2617,10 +3439,14 @@ typedef struct beMovieInfoData {
     int _sceneInfo;                                /* +24   igObjectRefMetaField */
 } beMovieInfoData;
 
+#ifdef __cplusplus
+typedef struct beNDMWAfsSetup : public igObject {
+#else
 /* handle 0x58c158, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beNDMWAfsSetup {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _infoList;                                 /* +16   igObjectRefMetaField */
@@ -2629,27 +3455,39 @@ typedef struct beNDMWAfsSetup {
     int _subMenuHolder;                            /* +28   igObjectRefMetaField */
 } beNDMWAfsSetup;
 
+#ifdef __cplusplus
+typedef struct beNDMWAfsSetupData : public igObject {
+#else
 /* handle 0x58c130, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beNDMWAfsSetupData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _fileCount;                                /* +12   igIntMetaField */
 } beNDMWAfsSetupData;
 
+#ifdef __cplusplus
+typedef struct beNDMWAfsSetupDataList : public igObject {
+#else
 /* handle 0x58c128, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWAfsSetupDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWAfsSetupDataList;
 
+#ifdef __cplusplus
+typedef struct beNDMWAfsSetupInfo : public igObject {
+#else
 /* handle 0x58c110, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWAfsSetupInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -2658,18 +3496,26 @@ typedef struct beNDMWAfsSetupInfo {
     int _dataList;                                 /* +24   igObjectRefMetaField */
 } beNDMWAfsSetupInfo;
 
+#ifdef __cplusplus
+typedef struct beNDMWAfsStageLoad : public igObject {
+#else
 /* handle 0x58c140, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beNDMWAfsStageLoad {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _stage;                                    /* +12   igObjectRefMetaField */
 } beNDMWAfsStageLoad;
 
+#ifdef __cplusplus
+typedef struct beNDMWDegiData : public igObject {
+#else
 /* handle 0x58bd28, 15 field(s), sizeof 76 (registered instance size) */
 typedef struct beNDMWDegiData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned short _dmNameUni[10];                 /* +8    igUnsignedShortArrayMetaField */
     int _data;                                     /* +28   igMemoryRefMetaField */
     int _insight;                                  /* +32   igObjectRefMetaField */
@@ -2686,19 +3532,27 @@ typedef struct beNDMWDegiData {
     int _maxMp;                                    /* +72   igIntMetaField */
 } beNDMWDegiData;
 
+#ifdef __cplusplus
+typedef struct beNDMWDegiDataList : public igObject {
+#else
 /* handle 0x58bd20, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWDegiDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWDegiDataList;
 
+#ifdef __cplusplus
+typedef struct beNDMWGameRam : public igObject {
+#else
 /* handle 0x58c0a0, 19 field(s), sizeof 76 (registered instance size) */
 typedef struct beNDMWGameRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -2720,10 +3574,14 @@ typedef struct beNDMWGameRam {
     char _pad73[3];
 } beNDMWGameRam;
 
+#ifdef __cplusplus
+typedef struct beNDMWGameRamInfo : public igObject {
+#else
 /* handle 0x58c108, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWGameRamInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -2732,10 +3590,14 @@ typedef struct beNDMWGameRamInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWGameRamInfo;
 
+#ifdef __cplusplus
+typedef struct beNDMWGameRamInfoRam : public igObject {
+#else
 /* handle 0x58c100, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWGameRamInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -2748,39 +3610,55 @@ typedef struct beNDMWGameRamInfoRam {
     int _dataList;                                 /* +40   igObjectRefMetaField */
 } beNDMWGameRamInfoRam;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemAbilityChip : public igObject {
+#else
 /* handle 0x58bf48, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWItemAbilityChip {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
     char _pad17[3];
 } beNDMWItemAbilityChip;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemBase : public igObject {
+#else
 /* handle 0x58bf90, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWItemBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
     char _pad17[3];
 } beNDMWItemBase;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemBaseList : public igObject {
+#else
 /* handle 0x58bf88, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWItemBaseList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWItemBaseList;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemBlueArmor : public igObject {
+#else
 /* handle 0x58bf58, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWItemBlueArmor {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
@@ -2789,10 +3667,14 @@ typedef struct beNDMWItemBlueArmor {
     int _pocket;                                   /* +24   igIntMetaField */
 } beNDMWItemBlueArmor;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemDisk : public igObject {
+#else
 /* handle 0x58bf38, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beNDMWItemDisk {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
@@ -2800,20 +3682,28 @@ typedef struct beNDMWItemDisk {
     int _kazu;                                     /* +20   igIntMetaField */
 } beNDMWItemDisk;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemImportant : public igObject {
+#else
 /* handle 0x58bf20, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWItemImportant {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
     char _pad17[3];
 } beNDMWItemImportant;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemInstant : public igObject {
+#else
 /* handle 0x58bf28, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beNDMWItemInstant {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
@@ -2821,10 +3711,14 @@ typedef struct beNDMWItemInstant {
     int _value;                                    /* +20   igIntMetaField */
 } beNDMWItemInstant;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemRevisionBase : public igObject {
+#else
 /* handle 0x58bf78, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beNDMWItemRevisionBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
@@ -2832,10 +3726,14 @@ typedef struct beNDMWItemRevisionBase {
     int _revision;                                 /* +20   igIntMetaField */
 } beNDMWItemRevisionBase;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemRevisionPocketBase : public igObject {
+#else
 /* handle 0x58bf68, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWItemRevisionPocketBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
@@ -2844,10 +3742,14 @@ typedef struct beNDMWItemRevisionPocketBase {
     int _pocket;                                   /* +24   igIntMetaField */
 } beNDMWItemRevisionPocketBase;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemWaza : public igObject {
+#else
 /* handle 0x58bf10, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beNDMWItemWaza {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
@@ -2855,10 +3757,14 @@ typedef struct beNDMWItemWaza {
     int _baseNo;                                   /* +20   igIntMetaField */
 } beNDMWItemWaza;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemWeapon : public igObject {
+#else
 /* handle 0x58bf60, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWItemWeapon {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
@@ -2867,10 +3773,14 @@ typedef struct beNDMWItemWeapon {
     int _pocket;                                   /* +24   igIntMetaField */
 } beNDMWItemWeapon;
 
+#ifdef __cplusplus
+typedef struct beNDMWItemYellowArmor : public igObject {
+#else
 /* handle 0x58bf50, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beNDMWItemYellowArmor {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _kindNo;                                   /* +8    igIntMetaField */
     int _recNo;                                    /* +12   igIntMetaField */
     unsigned char _isEquip;                        /* +16   igBoolMetaField */
@@ -2878,10 +3788,14 @@ typedef struct beNDMWItemYellowArmor {
     int _revision;                                 /* +20   igIntMetaField */
 } beNDMWItemYellowArmor;
 
+#ifdef __cplusplus
+typedef struct beNDMWListCtrl : public igObject {
+#else
 /* handle 0x58aff0, 24 field(s), sizeof 96 (registered instance size) */
 typedef struct beNDMWListCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -2907,10 +3821,14 @@ typedef struct beNDMWListCtrl {
     int _cursor;                                   /* +92   igIntMetaField */
 } beNDMWListCtrl;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadCtrl2 : public igObject {
+#else
 /* handle 0x58bef0, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWLoadCtrl2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -2923,10 +3841,14 @@ typedef struct beNDMWLoadCtrl2 {
     int _lightMode;                                /* +40   igIntMetaField */
 } beNDMWLoadCtrl2;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadCtrl2CommonIntf : public igObject {
+#else
 /* handle 0x58bb00, 18 field(s), sizeof 72 (registered instance size) */
 typedef struct beNDMWLoadCtrl2CommonIntf {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -2946,10 +3868,14 @@ typedef struct beNDMWLoadCtrl2CommonIntf {
     int _utilUsePlNo;                              /* +68   igIntMetaField */
 } beNDMWLoadCtrl2CommonIntf;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadCtrl2CtrlData : public igObject {
+#else
 /* handle 0x58beb0, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beNDMWLoadCtrl2CtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isTitle;                        /* +16   igBoolMetaField */
@@ -2960,10 +3886,14 @@ typedef struct beNDMWLoadCtrl2CtrlData {
     int _st3;                                      /* +32   igIntMetaField */
 } beNDMWLoadCtrl2CtrlData;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadCtrl2Info : public igObject {
+#else
 /* handle 0x58baf0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beNDMWLoadCtrl2Info {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -2973,10 +3903,14 @@ typedef struct beNDMWLoadCtrl2Info {
     int _nameSelList;                              /* +28   igObjectRefMetaField */
 } beNDMWLoadCtrl2Info;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2 : public igObject {
+#else
 /* handle 0x58bac8, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beNDMWLoadIntf2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -2990,10 +3924,14 @@ typedef struct beNDMWLoadIntf2 {
     int _difficultMax;                             /* +44   igIntMetaField */
 } beNDMWLoadIntf2;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2ChrDataSel : public igObject {
+#else
 /* handle 0x58b6b0, 20 field(s), sizeof 76 (registered instance size) */
 typedef struct beNDMWLoadIntf2ChrDataSel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -3015,10 +3953,14 @@ typedef struct beNDMWLoadIntf2ChrDataSel {
     int _st3;                                      /* +72   igIntMetaField */
 } beNDMWLoadIntf2ChrDataSel;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2ComMdlCtrl : public igObject {
+#else
 /* handle 0x58be38, 8 field(s), sizeof 40 (registered instance size) */
 typedef struct beNDMWLoadIntf2ComMdlCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -3027,10 +3969,14 @@ typedef struct beNDMWLoadIntf2ComMdlCtrl {
     float _pos[3];                                 /* +28   igVec3fMetaField */
 } beNDMWLoadIntf2ComMdlCtrl;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2CtrlData : public igObject {
+#else
 /* handle 0x58ba30, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct beNDMWLoadIntf2CtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isRun;                          /* +16   igBoolMetaField */
@@ -3052,10 +3998,14 @@ typedef struct beNDMWLoadIntf2CtrlData {
     int _st3;                                      /* +48   igIntMetaField */
 } beNDMWLoadIntf2CtrlData;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2DataSelIntf : public igObject {
+#else
 /* handle 0x58b890, 27 field(s), sizeof 92 (registered instance size) */
 typedef struct beNDMWLoadIntf2DataSelIntf {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _mcSelPoint;                               /* +16   igIntMetaField */
@@ -3085,10 +4035,14 @@ typedef struct beNDMWLoadIntf2DataSelIntf {
     int _st3;                                      /* +88   igIntMetaField */
 } beNDMWLoadIntf2DataSelIntf;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2DegiState : public igObject {
+#else
 /* handle 0x58b978, 18 field(s), sizeof 68 (registered instance size) */
 typedef struct beNDMWLoadIntf2DegiState {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _messenger;                                /* +8    igObjectRefMetaField */
     int _comMdlCtrl;                               /* +12   igObjectRefMetaField */
     int _textOrder;                                /* +16   igObjectRefMetaField */
@@ -3109,28 +4063,40 @@ typedef struct beNDMWLoadIntf2DegiState {
     int _st3;                                      /* +64   igIntMetaField */
 } beNDMWLoadIntf2DegiState;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2DegiStateCtrl : public igObject {
+#else
 /* handle 0x58b958, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWLoadIntf2DegiStateCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _statDataList;                             /* +16   igObjectRefMetaField */
 } beNDMWLoadIntf2DegiStateCtrl;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2DegiStateList : public igObject {
+#else
 /* handle 0x58b970, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWLoadIntf2DegiStateList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWLoadIntf2DegiStateList;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2Diffselect : public igObject {
+#else
 /* handle 0x58b800, 20 field(s), sizeof 76 (registered instance size) */
 typedef struct beNDMWLoadIntf2Diffselect {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _selectPoint;                              /* +16   igIntMetaField */
@@ -3152,10 +4118,14 @@ typedef struct beNDMWLoadIntf2Diffselect {
     int _st3;                                      /* +72   igIntMetaField */
 } beNDMWLoadIntf2Diffselect;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2Info : public igObject {
+#else
 /* handle 0x58b5d0, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWLoadIntf2Info {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -3164,10 +4134,14 @@ typedef struct beNDMWLoadIntf2Info {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWLoadIntf2Info;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2MakeChr : public igObject {
+#else
 /* handle 0x58ba00, 8 field(s), sizeof 60 (registered instance size) */
 typedef struct beNDMWLoadIntf2MakeChr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     char _degiName[32];                            /* +16   igCharArrayMetaField */
@@ -3176,10 +4150,14 @@ typedef struct beNDMWLoadIntf2MakeChr {
     int _mojiSelPoint;                             /* +56   igIntMetaField */
 } beNDMWLoadIntf2MakeChr;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2MesWin : public igObject {
+#else
 /* handle 0x58bd98, 22 field(s), sizeof 64 (registered instance size) */
 typedef struct beNDMWLoadIntf2MesWin {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -3202,10 +4180,14 @@ typedef struct beNDMWLoadIntf2MesWin {
     int _sysStat;                                  /* +60   igIntMetaField */
 } beNDMWLoadIntf2MesWin;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2NameSel : public igObject {
+#else
 /* handle 0x58b5d8, 29 field(s), sizeof 288 (registered instance size) */
 typedef struct beNDMWLoadIntf2NameSel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -3237,10 +4219,14 @@ typedef struct beNDMWLoadIntf2NameSel {
     char _pad100[188];
 } beNDMWLoadIntf2NameSel;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2SelSlot : public igObject {
+#else
 /* handle 0x58b740, 26 field(s), sizeof 92 (registered instance size) */
 typedef struct beNDMWLoadIntf2SelSlot {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -3268,20 +4254,28 @@ typedef struct beNDMWLoadIntf2SelSlot {
     int _st3;                                      /* +88   igIntMetaField */
 } beNDMWLoadIntf2SelSlot;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadIntf2TextOrder : public igObject {
+#else
 /* handle 0x58be90, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beNDMWLoadIntf2TextOrder {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
     int _lua;                                      /* +20   igObjectRefMetaField */
 } beNDMWLoadIntf2TextOrder;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadSavePlWork : public igObject {
+#else
 /* handle 0x58bc18, 16 field(s), sizeof 52 (registered instance size) */
 typedef struct beNDMWLoadSavePlWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _sysCount0;                                /* +8    igIntMetaField */
     unsigned char _isEntry;                        /* +12   igBoolMetaField */
     unsigned char _isRdy;                          /* +13   igBoolMetaField */
@@ -3300,37 +4294,53 @@ typedef struct beNDMWLoadSavePlWork {
     int _sysStat3;                                 /* +48   igIntMetaField */
 } beNDMWLoadSavePlWork;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadSavePlWorkList : public igObject {
+#else
 /* handle 0x58bc10, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWLoadSavePlWorkList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWLoadSavePlWorkList;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadSlotPlayer : public igObject {
+#else
 /* handle 0x58bd00, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWLoadSlotPlayer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _connectNO;                                /* +8    igIntMetaField */
     int _saveDataList;                             /* +12   igObjectRefMetaField */
     int _accessPlList;                             /* +16   igObjectRefMetaField */
 } beNDMWLoadSlotPlayer;
 
+#ifdef __cplusplus
+typedef struct beNDMWLoadSlotPlayerList : public igObject {
+#else
 /* handle 0x58bcf8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWLoadSlotPlayerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWLoadSlotPlayerList;
 
+#ifdef __cplusplus
+typedef struct beNDMWLogo : public igObject {
+#else
 /* handle 0x58b570, 19 field(s), sizeof 92 (registered instance size) */
 typedef struct beNDMWLogo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3354,10 +4364,14 @@ typedef struct beNDMWLogo {
     char _pad72[20];
 } beNDMWLogo;
 
+#ifdef __cplusplus
+typedef struct beNDMWLogoCtrlData : public igObject {
+#else
 /* handle 0x58b530, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beNDMWLogoCtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _st0;                                      /* +16   igIntMetaField */
@@ -3366,10 +4380,14 @@ typedef struct beNDMWLogoCtrlData {
     int _st3;                                      /* +28   igIntMetaField */
 } beNDMWLogoCtrlData;
 
+#ifdef __cplusplus
+typedef struct beNDMWLogoInfo : public igObject {
+#else
 /* handle 0x58b528, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWLogoInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -3378,10 +4396,14 @@ typedef struct beNDMWLogoInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWLogoInfo;
 
+#ifdef __cplusplus
+typedef struct beNDMWMcSlot : public igObject {
+#else
 /* handle 0x58bcc8, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct beNDMWMcSlot {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     unsigned char _isFile;                         /* +9    igBoolMetaField */
     char _pad10[2];
@@ -3391,10 +4413,14 @@ typedef struct beNDMWMcSlot {
     char _pad21[3];
 } beNDMWMcSlot;
 
+#ifdef __cplusplus
+typedef struct beNDMWMcSlotGC : public igObject {
+#else
 /* handle 0x58bca8, 9 field(s), sizeof 32 (registered instance size) */
 typedef struct beNDMWMcSlotGC {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     unsigned char _isFile;                         /* +9    igBoolMetaField */
     char _pad10[2];
@@ -3406,19 +4432,27 @@ typedef struct beNDMWMcSlotGC {
     int _detail;                                   /* +28   igIntMetaField */
 } beNDMWMcSlotGC;
 
+#ifdef __cplusplus
+typedef struct beNDMWMcSlotList : public igObject {
+#else
 /* handle 0x58bc90, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWMcSlotList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWMcSlotList;
 
+#ifdef __cplusplus
+typedef struct beNDMWMcSlotPS2 : public igObject {
+#else
 /* handle 0x58bcc0, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct beNDMWMcSlotPS2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     unsigned char _isFile;                         /* +9    igBoolMetaField */
     char _pad10[2];
@@ -3428,10 +4462,14 @@ typedef struct beNDMWMcSlotPS2 {
     char _pad21[3];
 } beNDMWMcSlotPS2;
 
+#ifdef __cplusplus
+typedef struct beNDMWMcSlotXbox : public igObject {
+#else
 /* handle 0x58bc98, 8 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWMcSlotXbox {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     unsigned char _isFile;                         /* +9    igBoolMetaField */
     char _pad10[2];
@@ -3442,10 +4480,14 @@ typedef struct beNDMWMcSlotXbox {
     int _mName;                                    /* +24   igStringMetaField */
 } beNDMWMcSlotXbox;
 
+#ifdef __cplusplus
+typedef struct beNDMWMcUtilCtrl : public igObject {
+#else
 /* handle 0x58bb80, 19 field(s), sizeof 64 (registered instance size) */
 typedef struct beNDMWMcUtilCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _messenger;                                /* +8    igObjectRefMetaField */
     unsigned char _isUseUtil;                      /* +12   igBoolMetaField */
     unsigned char _isRdy;                          /* +13   igBoolMetaField */
@@ -3467,10 +4509,14 @@ typedef struct beNDMWMcUtilCtrl {
     int _st3;                                      /* +60   igIntMetaField */
 } beNDMWMcUtilCtrl;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlEBullet : public igObject {
+#else
 /* handle 0x58b520, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWMdlEBullet {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3484,10 +4530,14 @@ typedef struct beNDMWMdlEBullet {
     char _pad41[3];
 } beNDMWMdlEBullet;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlEffect : public igObject {
+#else
 /* handle 0x58b518, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWMdlEffect {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3501,10 +4551,14 @@ typedef struct beNDMWMdlEffect {
     char _pad41[3];
 } beNDMWMdlEffect;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlEnemy : public igObject {
+#else
 /* handle 0x58b508, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWMdlEnemy {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3518,10 +4572,14 @@ typedef struct beNDMWMdlEnemy {
     char _pad41[3];
 } beNDMWMdlEnemy;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlEnemyInfoWork : public igObject {
+#else
 /* handle 0x58b510, 62 field(s), sizeof 276 (registered instance size) */
 typedef struct beNDMWMdlEnemyInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mHp;                                      /* +8    igObjectRefMetaField */
     int _hp;                                       /* +12   igObjectRefMetaField */
     int _recNo;                                    /* +16   igIntMetaField */
@@ -3590,10 +4648,14 @@ typedef struct beNDMWMdlEnemyInfoWork {
     int _messenger;                                /* +272  igObjectRefMetaField */
 } beNDMWMdlEnemyInfoWork;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlItem : public igObject {
+#else
 /* handle 0x58b4a8, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct beNDMWMdlItem {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3609,10 +4671,14 @@ typedef struct beNDMWMdlItem {
     int _lockRamList;                              /* +48   igObjectRefMetaField */
 } beNDMWMdlItem;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlItemInfoWork : public igObject {
+#else
 /* handle 0x58b4c0, 60 field(s), sizeof 268 (registered instance size) */
 typedef struct beNDMWMdlItemInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mHp;                                      /* +8    igObjectRefMetaField */
     int _hp;                                       /* +12   igObjectRefMetaField */
     int _recNo;                                    /* +16   igIntMetaField */
@@ -3681,10 +4747,14 @@ typedef struct beNDMWMdlItemInfoWork {
     char _pad265[3];
 } beNDMWMdlItemInfoWork;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlMapBase : public igObject {
+#else
 /* handle 0x58b4a0, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWMdlMapBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3698,10 +4768,14 @@ typedef struct beNDMWMdlMapBase {
     char _pad41[3];
 } beNDMWMdlMapBase;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlMapCursor : public igObject {
+#else
 /* handle 0x58b498, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWMdlMapCursor {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3715,10 +4789,14 @@ typedef struct beNDMWMdlMapCursor {
     char _pad41[3];
 } beNDMWMdlMapCursor;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlObject : public igObject {
+#else
 /* handle 0x58b490, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWMdlObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3732,10 +4810,14 @@ typedef struct beNDMWMdlObject {
     char _pad41[3];
 } beNDMWMdlObject;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlPBullet : public igObject {
+#else
 /* handle 0x58b488, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWMdlPBullet {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3749,10 +4831,14 @@ typedef struct beNDMWMdlPBullet {
     char _pad41[3];
 } beNDMWMdlPBullet;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlPEBase : public igObject {
+#else
 /* handle 0x58b428, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWMdlPEBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3766,10 +4852,14 @@ typedef struct beNDMWMdlPEBase {
     char _pad41[3];
 } beNDMWMdlPEBase;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlPEBaseInfoWork : public igObject {
+#else
 /* handle 0x58b430, 62 field(s), sizeof 276 (registered instance size) */
 typedef struct beNDMWMdlPEBaseInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mHp;                                      /* +8    igObjectRefMetaField */
     int _hp;                                       /* +12   igObjectRefMetaField */
     int _recNo;                                    /* +16   igIntMetaField */
@@ -3838,10 +4928,14 @@ typedef struct beNDMWMdlPEBaseInfoWork {
     int _messenger;                                /* +272  igObjectRefMetaField */
 } beNDMWMdlPEBaseInfoWork;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlPlayer : public igObject {
+#else
 /* handle 0x58b3a8, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct beNDMWMdlPlayer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3858,10 +4952,14 @@ typedef struct beNDMWMdlPlayer {
     int _gameRam;                                  /* +52   igObjectRefMetaField */
 } beNDMWMdlPlayer;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlPlayer2 : public igObject {
+#else
 /* handle 0x58b368, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beNDMWMdlPlayer2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -3876,10 +4974,14 @@ typedef struct beNDMWMdlPlayer2 {
     int _padManager;                               /* +44   igObjectRefMetaField */
 } beNDMWMdlPlayer2;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlPlayer2InfoWork : public igObject {
+#else
 /* handle 0x58b378, 56 field(s), sizeof 252 (registered instance size) */
 typedef struct beNDMWMdlPlayer2InfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mHp;                                      /* +8    igObjectRefMetaField */
     int _hp;                                       /* +12   igObjectRefMetaField */
     int _recNo;                                    /* +16   igIntMetaField */
@@ -3942,10 +5044,14 @@ typedef struct beNDMWMdlPlayer2InfoWork {
     int _exp;                                      /* +248  igIntMetaField */
 } beNDMWMdlPlayer2InfoWork;
 
+#ifdef __cplusplus
+typedef struct beNDMWMdlPlayerInfoWork : public igObject {
+#else
 /* handle 0x58b3c8, 70 field(s), sizeof 304 (registered instance size) */
 typedef struct beNDMWMdlPlayerInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mHp;                                      /* +8    igObjectRefMetaField */
     int _hp;                                       /* +12   igObjectRefMetaField */
     int _recNo;                                    /* +16   igIntMetaField */
@@ -4023,10 +5129,14 @@ typedef struct beNDMWMdlPlayerInfoWork {
     int _wCheckMode;                               /* +300  igIntMetaField */
 } beNDMWMdlPlayerInfoWork;
 
+#ifdef __cplusplus
+typedef struct beNDMWPanelObject : public igObject {
+#else
 /* handle 0x58b2c8, 18 field(s), sizeof 60 (registered instance size) */
 typedef struct beNDMWPanelObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _manager;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _page;                                     /* +16   igIntMetaField */
@@ -4046,10 +5156,14 @@ typedef struct beNDMWPanelObject {
     char _pad57[3];
 } beNDMWPanelObject;
 
+#ifdef __cplusplus
+typedef struct beNDMWPanelObjectItem : public igObject {
+#else
 /* handle 0x58b288, 20 field(s), sizeof 68 (registered instance size) */
 typedef struct beNDMWPanelObjectItem {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _manager;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _page;                                     /* +16   igIntMetaField */
@@ -4071,10 +5185,14 @@ typedef struct beNDMWPanelObjectItem {
     int _listColor;                                /* +64   igObjectRefMetaField */
 } beNDMWPanelObjectItem;
 
+#ifdef __cplusplus
+typedef struct beNDMWPanelObjectStat : public igObject {
+#else
 /* handle 0x58b260, 21 field(s), sizeof 72 (registered instance size) */
 typedef struct beNDMWPanelObjectStat {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _manager;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _page;                                     /* +16   igIntMetaField */
@@ -4097,10 +5215,14 @@ typedef struct beNDMWPanelObjectStat {
     int _playerWork;                               /* +68   igObjectRefMetaField */
 } beNDMWPanelObjectStat;
 
+#ifdef __cplusplus
+typedef struct beNDMWPanelObjectWaza : public igObject {
+#else
 /* handle 0x58b2a8, 20 field(s), sizeof 68 (registered instance size) */
 typedef struct beNDMWPanelObjectWaza {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _manager;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _page;                                     /* +16   igIntMetaField */
@@ -4122,10 +5244,14 @@ typedef struct beNDMWPanelObjectWaza {
     int _listColor;                                /* +64   igObjectRefMetaField */
 } beNDMWPanelObjectWaza;
 
+#ifdef __cplusplus
+typedef struct beNDMWPanelWaza : public igObject {
+#else
 /* handle 0x58b358, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beNDMWPanelWaza {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -4136,10 +5262,14 @@ typedef struct beNDMWPanelWaza {
     int _padManager;                               /* +32   igObjectRefMetaField */
 } beNDMWPanelWaza;
 
+#ifdef __cplusplus
+typedef struct beNDMWPanelWazaInfo : public igObject {
+#else
 /* handle 0x58b1e8, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWPanelWazaInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -4148,10 +5278,14 @@ typedef struct beNDMWPanelWazaInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWPanelWazaInfo;
 
+#ifdef __cplusplus
+typedef struct beNDMWPanelWazaInfoRam : public igObject {
+#else
 /* handle 0x58b1f0, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beNDMWPanelWazaInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -4165,10 +5299,14 @@ typedef struct beNDMWPanelWazaInfoRam {
     int _work;                                     /* +44   igObjectRefMetaField */
 } beNDMWPanelWazaInfoRam;
 
+#ifdef __cplusplus
+typedef struct beNDMWPanelWazaInfoWork : public igObject {
+#else
 /* handle 0x58b200, 13 field(s), sizeof 48 (registered instance size) */
 typedef struct beNDMWPanelWazaInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _page;                                     /* +8    igIntMetaField */
     unsigned char _isWindowGenerate;               /* +12   igBoolMetaField */
     unsigned char _isCursorGenerate;               /* +13   igBoolMetaField */
@@ -4184,10 +5322,14 @@ typedef struct beNDMWPanelWazaInfoWork {
     int _textColorList;                            /* +44   igObjectRefMetaField */
 } beNDMWPanelWazaInfoWork;
 
+#ifdef __cplusplus
+typedef struct beNDMWSaveCtrl : public igObject {
+#else
 /* handle 0x58b1d8, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beNDMWSaveCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -4198,10 +5340,14 @@ typedef struct beNDMWSaveCtrl {
     int _padManager;                               /* +32   igObjectRefMetaField */
 } beNDMWSaveCtrl;
 
+#ifdef __cplusplus
+typedef struct beNDMWSaveCtrlCtrlData : public igObject {
+#else
 /* handle 0x58b188, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWSaveCtrlCtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _order;                                    /* +16   igIntMetaField */
@@ -4214,10 +5360,14 @@ typedef struct beNDMWSaveCtrlCtrlData {
     int _st3;                                      /* +40   igIntMetaField */
 } beNDMWSaveCtrlCtrlData;
 
+#ifdef __cplusplus
+typedef struct beNDMWSaveCtrlInfo : public igObject {
+#else
 /* handle 0x58b180, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWSaveCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -4226,10 +5376,14 @@ typedef struct beNDMWSaveCtrlInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWSaveCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beNDMWSaveIntf : public igObject {
+#else
 /* handle 0x58b160, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWSaveIntf {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -4242,10 +5396,14 @@ typedef struct beNDMWSaveIntf {
     int _kindHard;                                 /* +40   igIntMetaField */
 } beNDMWSaveIntf;
 
+#ifdef __cplusplus
+typedef struct beNDMWSaveIntfComMdlCtrl : public igObject {
+#else
 /* handle 0x58b078, 8 field(s), sizeof 40 (registered instance size) */
 typedef struct beNDMWSaveIntfComMdlCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -4254,10 +5412,14 @@ typedef struct beNDMWSaveIntfComMdlCtrl {
     float _pos[3];                                 /* +28   igVec3fMetaField */
 } beNDMWSaveIntfComMdlCtrl;
 
+#ifdef __cplusplus
+typedef struct beNDMWSaveIntfCtrlData : public igObject {
+#else
 /* handle 0x58b0d0, 19 field(s), sizeof 52 (registered instance size) */
 typedef struct beNDMWSaveIntfCtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isRun;                          /* +16   igBoolMetaField */
@@ -4278,10 +5440,14 @@ typedef struct beNDMWSaveIntfCtrlData {
     int _st3;                                      /* +48   igIntMetaField */
 } beNDMWSaveIntfCtrlData;
 
+#ifdef __cplusplus
+typedef struct beNDMWSaveIntfInfo : public igObject {
+#else
 /* handle 0x58b070, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWSaveIntfInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -4290,10 +5456,14 @@ typedef struct beNDMWSaveIntfInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWSaveIntfInfo;
 
+#ifdef __cplusplus
+typedef struct beNDMWShinkaCtrl : public igObject {
+#else
 /* handle 0x58bfb0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beNDMWShinkaCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _messenger;                                /* +8    igObjectRefMetaField */
     int _gameRam;                                  /* +12   igObjectRefMetaField */
     int _playerNo;                                 /* +16   igIntMetaField */
@@ -4302,10 +5472,14 @@ typedef struct beNDMWShinkaCtrl {
     int _list;                                     /* +28   igObjectRefMetaField */
 } beNDMWShinkaCtrl;
 
+#ifdef __cplusplus
+typedef struct beNDMWShinkaObject : public igObject {
+#else
 /* handle 0x58bff0, 21 field(s), sizeof 84 (registered instance size) */
 typedef struct beNDMWShinkaObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _id;                                       /* +8    igIntMetaField */
     int _name;                                     /* +12   igStringMetaField */
     int _level;                                    /* +16   igIntMetaField */
@@ -4327,19 +5501,27 @@ typedef struct beNDMWShinkaObject {
     int _force;                                    /* +80   igIntMetaField */
 } beNDMWShinkaObject;
 
+#ifdef __cplusplus
+typedef struct beNDMWShinkaObjectList : public igObject {
+#else
 /* handle 0x58bfe8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWShinkaObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWShinkaObjectList;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrl00 : public igObject {
+#else
 /* handle 0x58ae30, 21 field(s), sizeof 84 (registered instance size) */
 typedef struct beNDMWShopCtrl00 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4362,10 +5544,14 @@ typedef struct beNDMWShopCtrl00 {
     int _nowProcKazu;                              /* +80   igIntMetaField */
 } beNDMWShopCtrl00;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrl10 : public igObject {
+#else
 /* handle 0x58ae18, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct beNDMWShopCtrl10 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4390,10 +5576,14 @@ typedef struct beNDMWShopCtrl10 {
     int _parameter;                                /* +88   igIntMetaField */
 } beNDMWShopCtrl10;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrl30 : public igObject {
+#else
 /* handle 0x58adf8, 22 field(s), sizeof 88 (registered instance size) */
 typedef struct beNDMWShopCtrl30 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4417,10 +5607,14 @@ typedef struct beNDMWShopCtrl30 {
     int _bankMenu;                                 /* +84   igIntMetaField */
 } beNDMWShopCtrl30;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrl40 : public igObject {
+#else
 /* handle 0x58ade8, 22 field(s), sizeof 88 (registered instance size) */
 typedef struct beNDMWShopCtrl40 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4444,10 +5638,14 @@ typedef struct beNDMWShopCtrl40 {
     int _selectCursor;                             /* +84   igIntMetaField */
 } beNDMWShopCtrl40;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrl50 : public igObject {
+#else
 /* handle 0x58adb8, 26 field(s), sizeof 104 (registered instance size) */
 typedef struct beNDMWShopCtrl50 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4475,10 +5673,14 @@ typedef struct beNDMWShopCtrl50 {
     int _tanka;                                    /* +100  igIntMetaField */
 } beNDMWShopCtrl50;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlA0 : public igObject {
+#else
 /* handle 0x58ada0, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct beNDMWShopCtrlA0 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4503,10 +5705,14 @@ typedef struct beNDMWShopCtrlA0 {
     int _playerNoList;                             /* +88   igObjectRefMetaField */
 } beNDMWShopCtrlA0;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlA1 : public igObject {
+#else
 /* handle 0x58ad88, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct beNDMWShopCtrlA1 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4531,10 +5737,14 @@ typedef struct beNDMWShopCtrlA1 {
     int _cardRamNoList;                            /* +88   igObjectRefMetaField */
 } beNDMWShopCtrlA1;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlA2 : public igObject {
+#else
 /* handle 0x58ad80, 21 field(s), sizeof 84 (registered instance size) */
 typedef struct beNDMWShopCtrlA2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4557,10 +5767,14 @@ typedef struct beNDMWShopCtrlA2 {
     int _nowProcKazu;                              /* +80   igIntMetaField */
 } beNDMWShopCtrlA2;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlDeviceSell : public igObject {
+#else
 /* handle 0x58ad10, 25 field(s), sizeof 100 (registered instance size) */
 typedef struct beNDMWShopCtrlDeviceSell {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4587,10 +5801,14 @@ typedef struct beNDMWShopCtrlDeviceSell {
     int _decideList;                               /* +96   igObjectRefMetaField */
 } beNDMWShopCtrlDeviceSell;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlDigilabo : public igObject {
+#else
 /* handle 0x58ad40, 28 field(s), sizeof 108 (registered instance size) */
 typedef struct beNDMWShopCtrlDigilabo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4622,10 +5840,14 @@ typedef struct beNDMWShopCtrlDigilabo {
     char _pad105[3];
 } beNDMWShopCtrlDigilabo;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlDiskSell : public igObject {
+#else
 /* handle 0x58ace0, 26 field(s), sizeof 104 (registered instance size) */
 typedef struct beNDMWShopCtrlDiskSell {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4653,10 +5875,14 @@ typedef struct beNDMWShopCtrlDiskSell {
     int _tanka;                                    /* +100  igIntMetaField */
 } beNDMWShopCtrlDiskSell;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlEditBit : public igObject {
+#else
 /* handle 0x58ad28, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct beNDMWShopCtrlEditBit {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4681,10 +5907,14 @@ typedef struct beNDMWShopCtrlEditBit {
     int _editMax;                                  /* +88   igIntMetaField */
 } beNDMWShopCtrlEditBit;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlEvolve : public igObject {
+#else
 /* handle 0x58ae08, 25 field(s), sizeof 100 (registered instance size) */
 typedef struct beNDMWShopCtrlEvolve {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4711,10 +5941,14 @@ typedef struct beNDMWShopCtrlEvolve {
     int _shinkaCtrl;                               /* +96   igObjectRefMetaField */
 } beNDMWShopCtrlEvolve;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlSales : public igObject {
+#else
 /* handle 0x58acc8, 26 field(s), sizeof 104 (registered instance size) */
 typedef struct beNDMWShopCtrlSales {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4742,10 +5976,14 @@ typedef struct beNDMWShopCtrlSales {
     int _decideList;                               /* +100  igObjectRefMetaField */
 } beNDMWShopCtrlSales;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlSell : public igObject {
+#else
 /* handle 0x58ad20, 21 field(s), sizeof 84 (registered instance size) */
 typedef struct beNDMWShopCtrlSell {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4768,10 +6006,14 @@ typedef struct beNDMWShopCtrlSell {
     int _nowProcKazu;                              /* +80   igIntMetaField */
 } beNDMWShopCtrlSell;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopCtrlXdataChip : public igObject {
+#else
 /* handle 0x58acb8, 25 field(s), sizeof 100 (registered instance size) */
 typedef struct beNDMWShopCtrlXdataChip {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4798,10 +6040,14 @@ typedef struct beNDMWShopCtrlXdataChip {
     int _itemBaseList;                             /* +96   igObjectRefMetaField */
 } beNDMWShopCtrlXdataChip;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopDevice : public igObject {
+#else
 /* handle 0x58aca8, 25 field(s), sizeof 100 (registered instance size) */
 typedef struct beNDMWShopDevice {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4828,10 +6074,14 @@ typedef struct beNDMWShopDevice {
     int _salesList;                                /* +96   igObjectRefMetaField */
 } beNDMWShopDevice;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopJunk : public igObject {
+#else
 /* handle 0x58ac88, 24 field(s), sizeof 96 (registered instance size) */
 typedef struct beNDMWShopJunk {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4857,10 +6107,14 @@ typedef struct beNDMWShopJunk {
     int _junkItemList;                             /* +92   igObjectRefMetaField */
 } beNDMWShopJunk;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelect00 : public igObject {
+#else
 /* handle 0x58abc8, 27 field(s), sizeof 116 (registered instance size) */
 typedef struct beNDMWShopSelect00 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4890,10 +6144,14 @@ typedef struct beNDMWShopSelect00 {
     int _panelName;                                /* +112  igStringMetaField */
 } beNDMWShopSelect00;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelect01 : public igObject {
+#else
 /* handle 0x58abc0, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWShopSelect01 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4922,10 +6180,14 @@ typedef struct beNDMWShopSelect01 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWShopSelect01;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelect02 : public igObject {
+#else
 /* handle 0x58abb0, 27 field(s), sizeof 116 (registered instance size) */
 typedef struct beNDMWShopSelect02 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4955,10 +6217,14 @@ typedef struct beNDMWShopSelect02 {
     int _playerNoList;                             /* +112  igObjectRefMetaField */
 } beNDMWShopSelect02;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelect03 : public igObject {
+#else
 /* handle 0x58aba8, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWShopSelect03 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -4987,10 +6253,14 @@ typedef struct beNDMWShopSelect03 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWShopSelect03;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelect11 : public igObject {
+#else
 /* handle 0x58aba0, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWShopSelect11 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5019,10 +6289,14 @@ typedef struct beNDMWShopSelect11 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWShopSelect11;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelect34 : public igObject {
+#else
 /* handle 0x58ab98, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWShopSelect34 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5051,10 +6325,14 @@ typedef struct beNDMWShopSelect34 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWShopSelect34;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelect52 : public igObject {
+#else
 /* handle 0x58ab90, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWShopSelect52 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5083,10 +6361,14 @@ typedef struct beNDMWShopSelect52 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWShopSelect52;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelectA0 : public igObject {
+#else
 /* handle 0x58ab88, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWShopSelectA0 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5115,10 +6397,14 @@ typedef struct beNDMWShopSelectA0 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWShopSelectA0;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopSelectB0 : public igObject {
+#else
 /* handle 0x58ab80, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWShopSelectB0 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5147,10 +6433,14 @@ typedef struct beNDMWShopSelectB0 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWShopSelectB0;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopTitle00 : public igObject {
+#else
 /* handle 0x58ab48, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWShopTitle00 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5172,10 +6462,14 @@ typedef struct beNDMWShopTitle00 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWShopTitle00;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopTitle01 : public igObject {
+#else
 /* handle 0x58ab40, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWShopTitle01 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5197,10 +6491,14 @@ typedef struct beNDMWShopTitle01 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWShopTitle01;
 
+#ifdef __cplusplus
+typedef struct beNDMWShopTitle03 : public igObject {
+#else
 /* handle 0x58ab38, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWShopTitle03 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5222,10 +6520,14 @@ typedef struct beNDMWShopTitle03 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWShopTitle03;
 
+#ifdef __cplusplus
+typedef struct beNDMWStageCtl : public igObject {
+#else
 /* handle 0x58b060, 9 field(s), sizeof 40 (registered instance size) */
 typedef struct beNDMWStageCtl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -5236,10 +6538,14 @@ typedef struct beNDMWStageCtl {
     long long _resetTrgTime;                       /* +32   igLongMetaField */
 } beNDMWStageCtl;
 
+#ifdef __cplusplus
+typedef struct beNDMWStageCtlInfo : public igObject {
+#else
 /* handle 0x58b050, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWStageCtlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -5248,10 +6554,14 @@ typedef struct beNDMWStageCtlInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWStageCtlInfo;
 
+#ifdef __cplusplus
+typedef struct beNDMWStageCtlInfoRam : public igObject {
+#else
 /* handle 0x58b048, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWStageCtlInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -5264,10 +6574,14 @@ typedef struct beNDMWStageCtlInfoRam {
     int _dataList;                                 /* +40   igObjectRefMetaField */
 } beNDMWStageCtlInfoRam;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatus : public igObject {
+#else
 /* handle 0x58b028, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beNDMWStatus {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -5280,10 +6594,14 @@ typedef struct beNDMWStatus {
     int _subWndNo;                                 /* +40   igIntMetaField */
 } beNDMWStatus;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrl00 : public igObject {
+#else
 /* handle 0x58afe0, 22 field(s), sizeof 88 (registered instance size) */
 typedef struct beNDMWStatusCtrl00 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5307,10 +6625,14 @@ typedef struct beNDMWStatusCtrl00 {
     int _statusMenu;                               /* +84   igIntMetaField */
 } beNDMWStatusCtrl00;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlBaseEquip : public igObject {
+#else
 /* handle 0x58af30, 31 field(s), sizeof 124 (registered instance size) */
 typedef struct beNDMWStatusCtrlBaseEquip {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5343,10 +6665,14 @@ typedef struct beNDMWStatusCtrlBaseEquip {
     int _deviceFolder;                             /* +120  igObjectRefMetaField */
 } beNDMWStatusCtrlBaseEquip;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlBit : public igObject {
+#else
 /* handle 0x58aeb0, 22 field(s), sizeof 88 (registered instance size) */
 typedef struct beNDMWStatusCtrlBit {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5370,10 +6696,14 @@ typedef struct beNDMWStatusCtrlBit {
     int _playerNoList;                             /* +84   igObjectRefMetaField */
 } beNDMWStatusCtrlBit;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlD0 : public igObject {
+#else
 /* handle 0x58af98, 32 field(s), sizeof 116 (registered instance size) */
 typedef struct beNDMWStatusCtrlD0 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5408,10 +6738,14 @@ typedef struct beNDMWStatusCtrlD0 {
     int _decideList;                               /* +112  igObjectRefMetaField */
 } beNDMWStatusCtrlD0;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlDisk : public igObject {
+#else
 /* handle 0x58aec0, 27 field(s), sizeof 108 (registered instance size) */
 typedef struct beNDMWStatusCtrlDisk {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5440,10 +6774,14 @@ typedef struct beNDMWStatusCtrlDisk {
     int _sendMax;                                  /* +104  igIntMetaField */
 } beNDMWStatusCtrlDisk;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlEquip : public igObject {
+#else
 /* handle 0x58af88, 22 field(s), sizeof 88 (registered instance size) */
 typedef struct beNDMWStatusCtrlEquip {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5467,10 +6805,14 @@ typedef struct beNDMWStatusCtrlEquip {
     int _equipMenu;                                /* +84   igIntMetaField */
 } beNDMWStatusCtrlEquip;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlFlag : public igObject {
+#else
 /* handle 0x58aef8, 22 field(s), sizeof 88 (registered instance size) */
 typedef struct beNDMWStatusCtrlFlag {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5494,10 +6836,14 @@ typedef struct beNDMWStatusCtrlFlag {
     int _impItems;                                 /* +84   igObjectRefMetaField */
 } beNDMWStatusCtrlFlag;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlFolder : public igObject {
+#else
 /* handle 0x58af08, 22 field(s), sizeof 88 (registered instance size) */
 typedef struct beNDMWStatusCtrlFolder {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5521,10 +6867,14 @@ typedef struct beNDMWStatusCtrlFolder {
     int _folderMenu;                               /* +84   igIntMetaField */
 } beNDMWStatusCtrlFolder;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlSendBit : public igObject {
+#else
 /* handle 0x58ae88, 25 field(s), sizeof 100 (registered instance size) */
 typedef struct beNDMWStatusCtrlSendBit {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5551,10 +6901,14 @@ typedef struct beNDMWStatusCtrlSendBit {
     int _receipt;                                  /* +96   igIntMetaField */
 } beNDMWStatusCtrlSendBit;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusCtrlSkill : public igObject {
+#else
 /* handle 0x58ae68, 27 field(s), sizeof 108 (registered instance size) */
 typedef struct beNDMWStatusCtrlSkill {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5583,10 +6937,14 @@ typedef struct beNDMWStatusCtrlSkill {
     int _skillList;                                /* +104  igObjectRefMetaField */
 } beNDMWStatusCtrlSkill;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusInfo : public igObject {
+#else
 /* handle 0x58ac30, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWStatusInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -5595,10 +6953,14 @@ typedef struct beNDMWStatusInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWStatusInfo;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusInfoRam : public igObject {
+#else
 /* handle 0x58ac38, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beNDMWStatusInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -5612,10 +6974,14 @@ typedef struct beNDMWStatusInfoRam {
     int _work;                                     /* +44   igObjectRefMetaField */
 } beNDMWStatusInfoRam;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusInfoWork : public igObject {
+#else
 /* handle 0x58ac48, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beNDMWStatusInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _parameter;                                /* +8    igObjectRefMetaField */
     int _preview;                                  /* +12   igObjectRefMetaField */
     int _weaponSalesList;                          /* +16   igObjectRefMetaField */
@@ -5625,10 +6991,14 @@ typedef struct beNDMWStatusInfoWork {
     int _junkGift;                                 /* +32   igIntMetaField */
 } beNDMWStatusInfoWork;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusMainSlot : public igObject {
+#else
 /* handle 0x58af20, 31 field(s), sizeof 124 (registered instance size) */
 typedef struct beNDMWStatusMainSlot {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5661,10 +7031,14 @@ typedef struct beNDMWStatusMainSlot {
     int _deviceFolder;                             /* +120  igObjectRefMetaField */
 } beNDMWStatusMainSlot;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusPowerSocket : public igObject {
+#else
 /* handle 0x58af28, 31 field(s), sizeof 124 (registered instance size) */
 typedef struct beNDMWStatusPowerSocket {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5697,10 +7071,14 @@ typedef struct beNDMWStatusPowerSocket {
     int _deviceFolder;                             /* +120  igObjectRefMetaField */
 } beNDMWStatusPowerSocket;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusSelect00 : public igObject {
+#else
 /* handle 0x58abf0, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWStatusSelect00 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5729,10 +7107,14 @@ typedef struct beNDMWStatusSelect00 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWStatusSelect00;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusSelect01 : public igObject {
+#else
 /* handle 0x58abe8, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWStatusSelect01 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5761,10 +7143,14 @@ typedef struct beNDMWStatusSelect01 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWStatusSelect01;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusSelectE0 : public igObject {
+#else
 /* handle 0x58abe0, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWStatusSelectE0 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5793,10 +7179,14 @@ typedef struct beNDMWStatusSelectE0 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWStatusSelectE0;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusSelectE1 : public igObject {
+#else
 /* handle 0x58abd8, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWStatusSelectE1 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5825,10 +7215,14 @@ typedef struct beNDMWStatusSelectE1 {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWStatusSelectE1;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusSubMenu : public igObject {
+#else
 /* handle 0x58ae38, 26 field(s), sizeof 104 (registered instance size) */
 typedef struct beNDMWStatusSubMenu {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5856,10 +7250,14 @@ typedef struct beNDMWStatusSubMenu {
     int _playerDeviceCnt;                          /* +100  igObjectRefMetaField */
 } beNDMWStatusSubMenu;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusSubSlot : public igObject {
+#else
 /* handle 0x58af18, 31 field(s), sizeof 124 (registered instance size) */
 typedef struct beNDMWStatusSubSlot {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5892,10 +7290,14 @@ typedef struct beNDMWStatusSubSlot {
     int _deviceFolder;                             /* +120  igObjectRefMetaField */
 } beNDMWStatusSubSlot;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusTitle00 : public igObject {
+#else
 /* handle 0x58ab70, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWStatusTitle00 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5917,10 +7319,14 @@ typedef struct beNDMWStatusTitle00 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWStatusTitle00;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusTitle01 : public igObject {
+#else
 /* handle 0x58ab68, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWStatusTitle01 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5942,10 +7348,14 @@ typedef struct beNDMWStatusTitle01 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWStatusTitle01;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusTitle02 : public igObject {
+#else
 /* handle 0x58ab60, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWStatusTitle02 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5967,10 +7377,14 @@ typedef struct beNDMWStatusTitle02 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWStatusTitle02;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusTitle03 : public igObject {
+#else
 /* handle 0x58ab58, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWStatusTitle03 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -5992,10 +7406,14 @@ typedef struct beNDMWStatusTitle03 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWStatusTitle03;
 
+#ifdef __cplusplus
+typedef struct beNDMWStatusTitle04 : public igObject {
+#else
 /* handle 0x58ab50, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWStatusTitle04 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -6017,10 +7435,14 @@ typedef struct beNDMWStatusTitle04 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWStatusTitle04;
 
+#ifdef __cplusplus
+typedef struct beNDMWTitle2 : public igObject {
+#else
 /* handle 0x58ab10, 12 field(s), sizeof 52 (registered instance size) */
 typedef struct beNDMWTitle2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6036,10 +7458,14 @@ typedef struct beNDMWTitle2 {
     char _pad48[4];
 } beNDMWTitle2;
 
+#ifdef __cplusplus
+typedef struct beNDMWTitle2CtrlData : public igObject {
+#else
 /* handle 0x58aab8, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct beNDMWTitle2CtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isRun;                          /* +16   igBoolMetaField */
@@ -6053,10 +7479,14 @@ typedef struct beNDMWTitle2CtrlData {
     int _st3;                                      /* +44   igIntMetaField */
 } beNDMWTitle2CtrlData;
 
+#ifdef __cplusplus
+typedef struct beNDMWTitle2Info : public igObject {
+#else
 /* handle 0x58aa50, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNDMWTitle2Info {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6065,10 +7495,14 @@ typedef struct beNDMWTitle2Info {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNDMWTitle2Info;
 
+#ifdef __cplusplus
+typedef struct beNDMWTitle2Option : public igObject {
+#else
 /* handle 0x58aa58, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct beNDMWTitle2Option {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _messenger;                                /* +16   igObjectRefMetaField */
@@ -6084,10 +7518,14 @@ typedef struct beNDMWTitle2Option {
     int _dispCountryConf;                          /* +52   igIntMetaField */
 } beNDMWTitle2Option;
 
+#ifdef __cplusplus
+typedef struct beNDMWWindow : public igObject {
+#else
 /* handle 0x58a9b8, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWWindow {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -6109,10 +7547,14 @@ typedef struct beNDMWWindow {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWWindow;
 
+#ifdef __cplusplus
+typedef struct beNDMWWindowCtrl : public igObject {
+#else
 /* handle 0x58b010, 21 field(s), sizeof 84 (registered instance size) */
 typedef struct beNDMWWindowCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -6135,19 +7577,27 @@ typedef struct beNDMWWindowCtrl {
     int _nowProcKazu;                              /* +80   igIntMetaField */
 } beNDMWWindowCtrl;
 
+#ifdef __cplusplus
+typedef struct beNDMWWindowList : public igObject {
+#else
 /* handle 0x58a9a8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNDMWWindowList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNDMWWindowList;
 
+#ifdef __cplusplus
+typedef struct beNDMWWindowSelect : public igObject {
+#else
 /* handle 0x58abf8, 26 field(s), sizeof 112 (registered instance size) */
 typedef struct beNDMWWindowSelect {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -6176,10 +7626,14 @@ typedef struct beNDMWWindowSelect {
     int _decideList;                               /* +108  igObjectRefMetaField */
 } beNDMWWindowSelect;
 
+#ifdef __cplusplus
+typedef struct beNDMWWindowTitle : public igObject {
+#else
 /* handle 0x58ab78, 20 field(s), sizeof 80 (registered instance size) */
 typedef struct beNDMWWindowTitle {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insight;                                  /* +8    igObjectRefMetaField */
     int _messenger;                                /* +12   igObjectRefMetaField */
     int _padManager;                               /* +16   igObjectRefMetaField */
@@ -6201,10 +7655,14 @@ typedef struct beNDMWWindowTitle {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
 } beNDMWWindowTitle;
 
+#ifdef __cplusplus
+typedef struct beNodeAnim : public igObject {
+#else
 /* handle 0x588700, 18 field(s), sizeof 112 (registered instance size) */
 typedef struct beNodeAnim {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -6225,44 +7683,64 @@ typedef struct beNodeAnim {
     long long _playTime;                           /* +104  igLongMetaField */
 } beNodeAnim;
 
+#ifdef __cplusplus
+typedef struct beNumVerData : public igObject {
+#else
 /* handle 0x588690, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beNumVerData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _disp;                                     /* +8    igIntMetaField */
     int _verDataList;                              /* +12   igObjectRefMetaField */
 } beNumVerData;
 
+#ifdef __cplusplus
+typedef struct beNumVerDataList : public igObject {
+#else
 /* handle 0x588688, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNumVerDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNumVerDataList;
 
+#ifdef __cplusplus
+typedef struct beNumVerInsideData : public igObject {
+#else
 /* handle 0x5886b0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beNumVerInsideData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _index;                                    /* +8    igIntMetaField */
     int _kind;                                     /* +12   igIntMetaField */
 } beNumVerInsideData;
 
+#ifdef __cplusplus
+typedef struct beNumVerInsideDataList : public igObject {
+#else
 /* handle 0x5886a8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNumVerInsideDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNumVerInsideDataList;
 
+#ifdef __cplusplus
+typedef struct beNumberCtrl : public igObject {
+#else
 /* handle 0x5886e0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beNumberCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6272,10 +7750,14 @@ typedef struct beNumberCtrl {
     char _pad29[3];
 } beNumberCtrl;
 
+#ifdef __cplusplus
+typedef struct beNumberCtrlInfo : public igObject {
+#else
 /* handle 0x5886d0, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beNumberCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6284,19 +7766,27 @@ typedef struct beNumberCtrlInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beNumberCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beNumberCtrlInfoList : public igObject {
+#else
 /* handle 0x5886c8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNumberCtrlInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beNumberCtrlInfoList;
 
+#ifdef __cplusplus
+typedef struct beNumberCtrlInfoRam : public igObject {
+#else
 /* handle 0x588650, 17 field(s), sizeof 68 (registered instance size) */
 typedef struct beNumberCtrlInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -6315,19 +7805,27 @@ typedef struct beNumberCtrlInfoRam {
     int _work;                                     /* +64   igObjectRefMetaField */
 } beNumberCtrlInfoRam;
 
+#ifdef __cplusplus
+typedef struct beNumberCtrlInfoWork : public igObject {
+#else
 /* handle 0x588630, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beNumberCtrlInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dispNum;                                  /* +8    igIntMetaField */
     int _realNum;                                  /* +12   igIntMetaField */
     int _changeNum;                                /* +16   igIntMetaField */
 } beNumberCtrlInfoWork;
 
+#ifdef __cplusplus
+typedef struct beOptInfo : public igObject {
+#else
 /* handle 0x588608, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beOptInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6339,10 +7837,14 @@ typedef struct beOptInfo {
     int _libAsm;                                   /* +32   igStringMetaField */
 } beOptInfo;
 
+#ifdef __cplusplus
+typedef struct bePadData : public igObject {
+#else
 /* handle 0x588550, 24 field(s), sizeof 104 (registered instance size) */
 typedef struct bePadData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     char _pad9[3];
     float _LStick[2];                              /* +12   igVec2fMetaField */
@@ -6368,19 +7870,27 @@ typedef struct bePadData {
     int _2ndtime;                                  /* +100  igIntMetaField */
 } bePadData;
 
+#ifdef __cplusplus
+typedef struct bePadDataList : public igObject {
+#else
 /* handle 0x588548, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct bePadDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } bePadDataList;
 
+#ifdef __cplusplus
+typedef struct bePadManager : public igObject {
+#else
 /* handle 0x588518, 9 field(s), sizeof 32 (registered instance size) */
 typedef struct bePadManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6391,10 +7901,14 @@ typedef struct bePadManager {
     char _pad30[2];
 } bePadManager;
 
+#ifdef __cplusplus
+typedef struct beParticleCtrl2 : public igObject {
+#else
 /* handle 0x588510, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beParticleCtrl2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6404,10 +7918,14 @@ typedef struct beParticleCtrl2 {
     char _pad29[3];
 } beParticleCtrl2;
 
+#ifdef __cplusplus
+typedef struct beParticleCtrl2Info : public igObject {
+#else
 /* handle 0x5884e0, 11 field(s), sizeof 48 (registered instance size) */
 typedef struct beParticleCtrl2Info {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6420,10 +7938,14 @@ typedef struct beParticleCtrl2Info {
     long long _endTimeLong;                        /* +40   igLongMetaField */
 } beParticleCtrl2Info;
 
+#ifdef __cplusplus
+typedef struct beParticleCtrl2InfoRam : public igObject {
+#else
 /* handle 0x5884a8, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct beParticleCtrl2InfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -6439,36 +7961,52 @@ typedef struct beParticleCtrl2InfoRam {
     int _work;                                     /* +52   igObjectRefMetaField */
 } beParticleCtrl2InfoRam;
 
+#ifdef __cplusplus
+typedef struct beParticleCtrl2InfoWork : public igObject {
+#else
 /* handle 0x5884c8, 4 field(s), sizeof 24 (registered instance size) */
 typedef struct beParticleCtrl2InfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _positionLockNode;                         /* +8    igObjectRefMetaField */
     float _positionLockOffset[3];                  /* +12   igVec3fMetaField */
 } beParticleCtrl2InfoWork;
 
+#ifdef __cplusplus
+typedef struct bePlaySE : public igObject {
+#else
 /* handle 0x587ed0, 4 field(s), sizeof 24 (registered instance size) */
 typedef struct bePlaySE {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _id;                                       /* +8    igIntMetaField */
     char _pad12[4];
     long long _time;                               /* +16   igLongMetaField */
 } bePlaySE;
 
+#ifdef __cplusplus
+typedef struct bePlaySEList : public igObject {
+#else
 /* handle 0x587ec8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct bePlaySEList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } bePlaySEList;
 
+#ifdef __cplusplus
+typedef struct bePoint01 : public igObject {
+#else
 /* handle 0x588498, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct bePoint01 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6479,10 +8017,14 @@ typedef struct bePoint01 {
     int _pointNo;                                  /* +32   igIntMetaField */
 } bePoint01;
 
+#ifdef __cplusplus
+typedef struct bePoint01Info : public igObject {
+#else
 /* handle 0x588478, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct bePoint01Info {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6493,10 +8035,14 @@ typedef struct bePoint01Info {
     int _dataList_;                                /* +32   igObjectRefMetaField */
 } bePoint01Info;
 
+#ifdef __cplusplus
+typedef struct beResetNode : public igObject {
+#else
 /* handle 0x588460, 10 field(s), sizeof 36 (registered instance size) */
 typedef struct beResetNode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -6508,10 +8054,14 @@ typedef struct beResetNode {
     char _pad34[2];
 } beResetNode;
 
+#ifdef __cplusplus
+typedef struct beSaveApi : public igObject {
+#else
 /* handle 0x588298, 15 field(s), sizeof 64 (registered instance size) */
 typedef struct beSaveApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -6530,43 +8080,63 @@ typedef struct beSaveApi {
     char _pad60[4];
 } beSaveApi;
 
+#ifdef __cplusplus
+typedef struct beSaveDataDeliver : public igObject {
+#else
 /* handle 0x5883b0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beSaveDataDeliver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _data;                                     /* +8    igMemoryRefMetaField */
     int _size;                                     /* +12   igIntMetaField */
 } beSaveDataDeliver;
 
+#ifdef __cplusplus
+typedef struct beSaveIntfComMdlData : public igObject {
+#else
 /* handle 0x58b0b0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beSaveIntfComMdlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _openSQ;                                   /* +12   igStringMetaField */
     int _infoName;                                 /* +16   igStringMetaField */
 } beSaveIntfComMdlData;
 
+#ifdef __cplusplus
+typedef struct beSaveIntfComMdlDataList : public igObject {
+#else
 /* handle 0x58b0a8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beSaveIntfComMdlDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beSaveIntfComMdlDataList;
 
+#ifdef __cplusplus
+typedef struct beSaveMemoryObj : public igObject {
+#else
 /* handle 0x5883a0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct beSaveMemoryObj {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mem;                                      /* +8    igMemoryRefMetaField */
 } beSaveMemoryObj;
 
+#ifdef __cplusplus
+typedef struct beSaveUtil : public igObject {
+#else
 /* handle 0x588020, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beSaveUtil {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6578,10 +8148,14 @@ typedef struct beSaveUtil {
     int _connectCheck;                             /* +36   igObjectRefMetaField */
 } beSaveUtil;
 
+#ifdef __cplusplus
+typedef struct beSaveUtilInfo : public igObject {
+#else
 /* handle 0x588010, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beSaveUtilInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6590,10 +8164,14 @@ typedef struct beSaveUtilInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beSaveUtilInfo;
 
+#ifdef __cplusplus
+typedef struct beSaveUtilInfoRam : public igObject {
+#else
 /* handle 0x587ff8, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct beSaveUtilInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -6609,10 +8187,14 @@ typedef struct beSaveUtilInfoRam {
     int _deliver;                                  /* +48   igObjectRefMetaField */
 } beSaveUtilInfoRam;
 
+#ifdef __cplusplus
+typedef struct beSeCtl : public igObject {
+#else
 /* handle 0x587fe8, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beSeCtl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6623,29 +8205,41 @@ typedef struct beSeCtl {
     int _sndMng;                                   /* +32   igObjectRefMetaField */
 } beSeCtl;
 
+#ifdef __cplusplus
+typedef struct beSeData : public igObject {
+#else
 /* handle 0x587fd0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beSeData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _sound;                                    /* +12   igStringMetaField */
     short _delay;                                  /* +16   igShortMetaField */
     char _pad18[2];
 } beSeData;
 
+#ifdef __cplusplus
+typedef struct beSeDataList : public igObject {
+#else
 /* handle 0x587fc8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beSeDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beSeDataList;
 
+#ifdef __cplusplus
+typedef struct beSeInfo : public igObject {
+#else
 /* handle 0x587fb0, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beSeInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6654,19 +8248,27 @@ typedef struct beSeInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beSeInfo;
 
+#ifdef __cplusplus
+typedef struct beSeInfoData : public igObject {
+#else
 /* handle 0x587fb8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beSeInfoData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     int _actionList;                               /* +16   igObjectRefMetaField */
 } beSeInfoData;
 
+#ifdef __cplusplus
+typedef struct beSelectCtrl : public igObject {
+#else
 /* handle 0x587f98, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beSelectCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6679,10 +8281,14 @@ typedef struct beSelectCtrl {
     char _pad37[3];
 } beSelectCtrl;
 
+#ifdef __cplusplus
+typedef struct beSelectCtrlInfo : public igObject {
+#else
 /* handle 0x587f28, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beSelectCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6691,10 +8297,14 @@ typedef struct beSelectCtrlInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beSelectCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beSelectCtrlInfoRamData : public igObject {
+#else
 /* handle 0x587f30, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beSelectCtrlInfoRamData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isTateSelect;                   /* +16   igBoolMetaField */
@@ -6704,10 +8314,14 @@ typedef struct beSelectCtrlInfoRamData {
     int _work;                                     /* +28   igObjectRefMetaField */
 } beSelectCtrlInfoRamData;
 
+#ifdef __cplusplus
+typedef struct beSelectCtrlInfoWork : public igObject {
+#else
 /* handle 0x587f60, 7 field(s), sizeof 36 (registered instance size) */
 typedef struct beSelectCtrlInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _offsetPos[3];                           /* +8    igVec3fMetaField */
     int _selectMax;                                /* +20   igIntMetaField */
     unsigned char _isCancel;                       /* +24   igBoolMetaField */
@@ -6716,10 +8330,14 @@ typedef struct beSelectCtrlInfoWork {
     int _decideList;                               /* +32   igObjectRefMetaField */
 } beSelectCtrlInfoWork;
 
+#ifdef __cplusplus
+typedef struct beShadow01 : public igObject {
+#else
 /* handle 0x587f10, 10 field(s), sizeof 48 (registered instance size) */
 typedef struct beShadow01 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6731,10 +8349,14 @@ typedef struct beShadow01 {
     float _savePos[3];                             /* +36   igVec3fMetaField */
 } beShadow01;
 
+#ifdef __cplusplus
+typedef struct beShadow01Info : public igObject {
+#else
 /* handle 0x587ef0, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beShadow01Info {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6746,19 +8368,27 @@ typedef struct beShadow01Info {
     int _projShadowShader;                         /* +36   igObjectRefMetaField */
 } beShadow01Info;
 
+#ifdef __cplusplus
+typedef struct beShadow01InfoList : public igObject {
+#else
 /* handle 0x587ee8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beShadow01InfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beShadow01InfoList;
 
+#ifdef __cplusplus
+typedef struct beSound : public igObject {
+#else
 /* handle 0x587ea8, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beSound {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6771,10 +8401,14 @@ typedef struct beSound {
     int _playSEs;                                  /* +40   igObjectRefMetaField */
 } beSound;
 
+#ifdef __cplusplus
+typedef struct beSoundData : public igObject {
+#else
 /* handle 0x587e68, 10 field(s), sizeof 32 (registered instance size) */
 typedef struct beSoundData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _version;                                  /* +12   igIntMetaField */
     short _type;                                   /* +16   igShortMetaField */
@@ -6786,10 +8420,14 @@ typedef struct beSoundData {
     char _pad30[2];
 } beSoundData;
 
+#ifdef __cplusplus
+typedef struct beSoundInfo : public igObject {
+#else
 /* handle 0x587e40, 11 field(s), sizeof 40 (registered instance size) */
 typedef struct beSoundInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6802,10 +8440,14 @@ typedef struct beSoundInfo {
     short _sndfVolume;                             /* +38   igShortMetaField */
 } beSoundInfo;
 
+#ifdef __cplusplus
+typedef struct beStaticInfo : public igObject {
+#else
 /* handle 0x587e20, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beStaticInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -6814,10 +8456,14 @@ typedef struct beStaticInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beStaticInfo;
 
+#ifdef __cplusplus
+typedef struct beStaticInfoCtl : public igObject {
+#else
 /* handle 0x587e10, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beStaticInfoCtl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -6828,10 +8474,14 @@ typedef struct beStaticInfoCtl {
     int _staticInfoList;                           /* +32   igObjectRefMetaField */
 } beStaticInfoCtl;
 
+#ifdef __cplusplus
+typedef struct beSvConnectCheck : public igObject {
+#else
 /* handle 0x5881d8, 15 field(s), sizeof 144 (registered instance size) */
 typedef struct beSvConnectCheck {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -6850,10 +8500,14 @@ typedef struct beSvConnectCheck {
     char _pad60[84];
 } beSvConnectCheck;
 
+#ifdef __cplusplus
+typedef struct beSvDeliver : public igObject {
+#else
 /* handle 0x5883c8, 20 field(s), sizeof 68 (registered instance size) */
 typedef struct beSvDeliver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _gameData;                                 /* +8    igObjectRefMetaField */
     int _actConnect;                               /* +12   igObjectRefMetaField */
     int _targetConnect;                            /* +16   igIntMetaField */
@@ -6875,10 +8529,14 @@ typedef struct beSvDeliver {
     int _platformData;                             /* +64   igObjectRefMetaField */
 } beSvDeliver;
 
+#ifdef __cplusplus
+typedef struct beSvEndApi : public igObject {
+#else
 /* handle 0x5881e0, 15 field(s), sizeof 64 (registered instance size) */
 typedef struct beSvEndApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -6897,10 +8555,14 @@ typedef struct beSvEndApi {
     char _pad60[4];
 } beSvEndApi;
 
+#ifdef __cplusplus
+typedef struct beSvFileFindApi : public igObject {
+#else
 /* handle 0x588278, 15 field(s), sizeof 84 (registered instance size) */
 typedef struct beSvFileFindApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -6919,10 +8581,14 @@ typedef struct beSvFileFindApi {
     char _pad60[24];
 } beSvFileFindApi;
 
+#ifdef __cplusplus
+typedef struct beSvFileMakeApi : public igObject {
+#else
 /* handle 0x588280, 17 field(s), sizeof 1048 (registered instance size) */
 typedef struct beSvFileMakeApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -6944,10 +8610,14 @@ typedef struct beSvFileMakeApi {
     char _pad72[976];
 } beSvFileMakeApi;
 
+#ifdef __cplusplus
+typedef struct beSvFormatApi : public igObject {
+#else
 /* handle 0x588270, 15 field(s), sizeof 64 (registered instance size) */
 typedef struct beSvFormatApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -6966,10 +8636,14 @@ typedef struct beSvFormatApi {
     char _pad60[4];
 } beSvFormatApi;
 
+#ifdef __cplusplus
+typedef struct beSvGetFreeSizeApi : public igObject {
+#else
 /* handle 0x588200, 18 field(s), sizeof 88 (registered instance size) */
 typedef struct beSvGetFreeSizeApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -6992,20 +8666,28 @@ typedef struct beSvGetFreeSizeApi {
     char _pad76[12];
 } beSvGetFreeSizeApi;
 
+#ifdef __cplusplus
+typedef struct beSvPlatBaseData : public igObject {
+#else
 /* handle 0x588308, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beSvPlatBaseData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _connectMax;                               /* +8    igIntMetaField */
     int _slotList;                                 /* +12   igObjectRefMetaField */
     unsigned int _dataSize;                        /* +16   igUnsignedIntMetaField */
     unsigned int _memNeed;                         /* +20   igUnsignedIntMetaField */
 } beSvPlatBaseData;
 
+#ifdef __cplusplus
+typedef struct beSvPlatDataGC : public igObject {
+#else
 /* handle 0x588160, 19 field(s), sizeof 140 (registered instance size) */
 typedef struct beSvPlatDataGC {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _connectMax;                               /* +8    igIntMetaField */
     int _slotList;                                 /* +12   igObjectRefMetaField */
     unsigned int _dataSize;                        /* +16   igUnsignedIntMetaField */
@@ -7025,20 +8707,28 @@ typedef struct beSvPlatDataGC {
     int _iconTplSize;                              /* +136  igIntMetaField */
 } beSvPlatDataGC;
 
+#ifdef __cplusplus
+typedef struct beSvPlatDataPC : public igObject {
+#else
 /* handle 0x588038, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct beSvPlatDataPC {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _connectMax;                               /* +8    igIntMetaField */
     int _slotList;                                 /* +12   igObjectRefMetaField */
     unsigned int _dataSize;                        /* +16   igUnsignedIntMetaField */
     unsigned int _memNeed;                         /* +20   igUnsignedIntMetaField */
 } beSvPlatDataPC;
 
+#ifdef __cplusplus
+typedef struct beSvPlatDataPS2 : public igObject {
+#else
 /* handle 0x588088, 28 field(s), sizeof 216 (registered instance size) */
 typedef struct beSvPlatDataPS2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _connectMax;                               /* +8    igIntMetaField */
     int _slotList;                                 /* +12   igObjectRefMetaField */
     unsigned int _dataSize;                        /* +16   igUnsignedIntMetaField */
@@ -7068,10 +8758,14 @@ typedef struct beSvPlatDataPS2 {
     int _image;                                    /* +212  igObjectRefMetaField */
 } beSvPlatDataPS2;
 
+#ifdef __cplusplus
+typedef struct beSvPlatDataXbox : public igObject {
+#else
 /* handle 0x588040, 10 field(s), sizeof 44 (registered instance size) */
 typedef struct beSvPlatDataXbox {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _connectMax;                               /* +8    igIntMetaField */
     int _slotList;                                 /* +12   igObjectRefMetaField */
     unsigned int _dataSize;                        /* +16   igUnsignedIntMetaField */
@@ -7082,18 +8776,26 @@ typedef struct beSvPlatDataXbox {
     unsigned int _saveDataSize;                    /* +40   igUnsignedIntMetaField */
 } beSvPlatDataXbox;
 
+#ifdef __cplusplus
+typedef struct beSvPs2McImage128k : public igObject {
+#else
 /* handle 0x588148, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beSvPs2McImage128k {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _data;                                     /* +8    igMemoryRefMetaField */
     int _dataSize;                                 /* +12   igIntMetaField */
 } beSvPs2McImage128k;
 
+#ifdef __cplusplus
+typedef struct beSvReadMediaApi : public igObject {
+#else
 /* handle 0x588238, 20 field(s), sizeof 88 (registered instance size) */
 typedef struct beSvReadMediaApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -7118,10 +8820,14 @@ typedef struct beSvReadMediaApi {
     char _pad84[4];
 } beSvReadMediaApi;
 
+#ifdef __cplusplus
+typedef struct beSvSlotData : public igObject {
+#else
 /* handle 0x588370, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct beSvSlotData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     unsigned char _isFormat;                       /* +9    igBoolMetaField */
     char _pad10[2];
@@ -7130,19 +8836,27 @@ typedef struct beSvSlotData {
     int _totalSize;                                /* +20   igIntMetaField */
 } beSvSlotData;
 
+#ifdef __cplusplus
+typedef struct beSvSlotDataList : public igObject {
+#else
 /* handle 0x588330, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beSvSlotDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beSvSlotDataList;
 
+#ifdef __cplusplus
+typedef struct beSvSlotGC : public igObject {
+#else
 /* handle 0x588340, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct beSvSlotGC {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     unsigned char _isFormat;                       /* +9    igBoolMetaField */
     char _pad10[2];
@@ -7151,10 +8865,14 @@ typedef struct beSvSlotGC {
     int _totalSize;                                /* +20   igIntMetaField */
 } beSvSlotGC;
 
+#ifdef __cplusplus
+typedef struct beSvSlotPS2 : public igObject {
+#else
 /* handle 0x588338, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct beSvSlotPS2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     unsigned char _isFormat;                       /* +9    igBoolMetaField */
     char _pad10[2];
@@ -7163,10 +8881,14 @@ typedef struct beSvSlotPS2 {
     int _totalSize;                                /* +20   igIntMetaField */
 } beSvSlotPS2;
 
+#ifdef __cplusplus
+typedef struct beSvSlotXbox : public igObject {
+#else
 /* handle 0x588348, 11 field(s), sizeof 56 (registered instance size) */
 typedef struct beSvSlotXbox {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     unsigned char _isFormat;                       /* +9    igBoolMetaField */
     char _pad10[2];
@@ -7180,10 +8902,14 @@ typedef struct beSvSlotXbox {
     unsigned long long _useBytes;                  /* +48   igUnsignedLongMetaField */
 } beSvSlotXbox;
 
+#ifdef __cplusplus
+typedef struct beSvStartApi : public igObject {
+#else
 /* handle 0x5881f0, 15 field(s), sizeof 64 (registered instance size) */
 typedef struct beSvStartApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -7202,10 +8928,14 @@ typedef struct beSvStartApi {
     char _pad60[4];
 } beSvStartApi;
 
+#ifdef __cplusplus
+typedef struct beSvUseCheckApi : public igObject {
+#else
 /* handle 0x588268, 15 field(s), sizeof 76 (registered instance size) */
 typedef struct beSvUseCheckApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -7224,10 +8954,14 @@ typedef struct beSvUseCheckApi {
     char _pad60[16];
 } beSvUseCheckApi;
 
+#ifdef __cplusplus
+typedef struct beSvWriteMediaApi : public igObject {
+#else
 /* handle 0x588220, 17 field(s), sizeof 76 (registered instance size) */
 typedef struct beSvWriteMediaApi {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dummyCount;                               /* +8    igIntMetaField */
     int _orderType;                                /* +12   igIntMetaField */
     unsigned char _isConAllChk;                    /* +16   igBoolMetaField */
@@ -7249,10 +8983,14 @@ typedef struct beSvWriteMediaApi {
     char _pad72[4];
 } beSvWriteMediaApi;
 
+#ifdef __cplusplus
+typedef struct beSwitchCtrl : public igObject {
+#else
 /* handle 0x587df8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beSwitchCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -7262,10 +9000,14 @@ typedef struct beSwitchCtrl {
     char _pad29[3];
 } beSwitchCtrl;
 
+#ifdef __cplusplus
+typedef struct beSwitchCtrlInfo : public igObject {
+#else
 /* handle 0x587de0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beSwitchCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -7275,10 +9017,14 @@ typedef struct beSwitchCtrlInfo {
     int _switchNode;                               /* +28   igObjectRefMetaField */
 } beSwitchCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beSystem : public igObject {
+#else
 /* handle 0x587d08, 30 field(s), sizeof 104 (registered instance size) */
 typedef struct beSystem {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     unsigned char _isShutDown;                     /* +16   igBoolMetaField */
@@ -7313,10 +9059,14 @@ typedef struct beSystem {
     char _pad100[4];
 } beSystem;
 
+#ifdef __cplusplus
+typedef struct beTargetObj : public igObject {
+#else
 /* handle 0x587ce8, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beTargetObj {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _playerPosList;                            /* +16   igObjectRefMetaField */
@@ -7324,10 +9074,14 @@ typedef struct beTargetObj {
     int _enemyPosList;                             /* +24   igObjectRefMetaField */
 } beTargetObj;
 
+#ifdef __cplusplus
+typedef struct beTextureCtrl : public igObject {
+#else
 /* handle 0x587cb8, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beTextureCtrl {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -7340,26 +9094,38 @@ typedef struct beTextureCtrl {
     int _work;                                     /* +36   igObjectRefMetaField */
 } beTextureCtrl;
 
+#ifdef __cplusplus
+typedef struct beTextureCtrlAttr : public igObject {
+#else
 /* handle 0x587c98, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beTextureCtrlAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _attrSet;                                  /* +12   igObjectRefMetaField */
 } beTextureCtrlAttr;
 
+#ifdef __cplusplus
+typedef struct beTextureCtrlData : public igObject {
+#else
 /* handle 0x587ca8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beTextureCtrlData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _tex;                                      /* +12   igObjectRefMetaField */
 } beTextureCtrlData;
 
+#ifdef __cplusplus
+typedef struct beTextureCtrlInfo : public igObject {
+#else
 /* handle 0x587c80, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beTextureCtrlInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -7371,27 +9137,39 @@ typedef struct beTextureCtrlInfo {
     int _dataList_;                                /* +32   igObjectRefMetaField */
 } beTextureCtrlInfo;
 
+#ifdef __cplusplus
+typedef struct beTextureCtrlInfoList : public igObject {
+#else
 /* handle 0x587c78, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beTextureCtrlInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beTextureCtrlInfoList;
 
+#ifdef __cplusplus
+typedef struct beTextureCtrlWork : public igObject {
+#else
 /* handle 0x587cd0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beTextureCtrlWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _textureList;                              /* +8    igObjectRefMetaField */
     int _attributeList;                            /* +12   igObjectRefMetaField */
 } beTextureCtrlWork;
 
+#ifdef __cplusplus
+typedef struct beTimer : public igObject {
+#else
 /* handle 0x587c18, 9 field(s), sizeof 40 (registered instance size) */
 typedef struct beTimer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -7401,29 +9179,41 @@ typedef struct beTimer {
     long long _oldWorldTime;                       /* +32   igLongMetaField */
 } beTimer;
 
+#ifdef __cplusplus
+typedef struct beTimerData : public igObject {
+#else
 /* handle 0x587c50, 6 field(s), sizeof 32 (registered instance size) */
 typedef struct beTimerData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _startTime;                          /* +8    igLongMetaField */
     int _resetCondition;                           /* +16   igStringMetaField */
     int _callLuaFile;                              /* +20   igStringMetaField */
     long long _downTimer;                          /* +24   igLongMetaField */
 } beTimerData;
 
+#ifdef __cplusplus
+typedef struct beTimerDataList : public igObject {
+#else
 /* handle 0x587c48, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beTimerDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beTimerDataList;
 
+#ifdef __cplusplus
+typedef struct beTransformSync : public igObject {
+#else
 /* handle 0x587c08, 13 field(s), sizeof 112 (registered instance size) */
 typedef struct beTransformSync {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -7437,33 +9227,49 @@ typedef struct beTransformSync {
     int _syncTransformList;                        /* +108  igObjectRefMetaField */
 } beTransformSync;
 
+#ifdef __cplusplus
+typedef struct beUnicode : public igObject {
+#else
 /* handle 0x587c00, 2 field(s), sizeof 8 (registered instance size) */
 typedef struct beUnicode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
 } beUnicode;
 
+#ifdef __cplusplus
+typedef struct beUnicodeObj : public igObject {
+#else
 /* handle 0x589640, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beUnicodeObj {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _buffer;                                   /* +12   igMemoryRefMetaField */
 } beUnicodeObj;
 
+#ifdef __cplusplus
+typedef struct beUnicodeObjList : public igObject {
+#else
 /* handle 0x589638, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beUnicodeObjList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beUnicodeObjList;
 
+#ifdef __cplusplus
+typedef struct beWaterMove : public igObject {
+#else
 /* handle 0x587b88, 7 field(s), sizeof 40 (registered instance size) */
 typedef struct beWaterMove {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _baseTime;                           /* +8    igLongMetaField */
     long long _elapseTime;                         /* +16   igLongMetaField */
     long long _maxTime;                            /* +24   igLongMetaField */
@@ -7471,28 +9277,40 @@ typedef struct beWaterMove {
     int _dataList;                                 /* +36   igObjectRefMetaField */
 } beWaterMove;
 
+#ifdef __cplusplus
+typedef struct beWaterMoveData : public igObject {
+#else
 /* handle 0x587bc0, 5 field(s), sizeof 24 (registered instance size) */
 typedef struct beWaterMoveData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _time;                               /* +8    igLongMetaField */
     float _power;                                  /* +16   igFloatMetaField */
     int _posList;                                  /* +20   igObjectRefMetaField */
 } beWaterMoveData;
 
+#ifdef __cplusplus
+typedef struct beWaterMoveDataList : public igObject {
+#else
 /* handle 0x587bb8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beWaterMoveDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beWaterMoveDataList;
 
+#ifdef __cplusplus
+typedef struct beWaterPlain : public igObject {
+#else
 /* handle 0x587bf8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct beWaterPlain {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -7502,10 +9320,14 @@ typedef struct beWaterPlain {
     char _pad29[3];
 } beWaterPlain;
 
+#ifdef __cplusplus
+typedef struct beWaterPlainInfo : public igObject {
+#else
 /* handle 0x587be0, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct beWaterPlainInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -7514,10 +9336,14 @@ typedef struct beWaterPlainInfo {
     int _ramList;                                  /* +24   igObjectRefMetaField */
 } beWaterPlainInfo;
 
+#ifdef __cplusplus
+typedef struct beWaterPlainInfoRam : public igObject {
+#else
 /* handle 0x587aa8, 38 field(s), sizeof 184 (registered instance size) */
 typedef struct beWaterPlainInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -7558,10 +9384,14 @@ typedef struct beWaterPlainInfoRam {
     char _pad180[4];
 } beWaterPlainInfoRam;
 
+#ifdef __cplusplus
+typedef struct beWeapon : public igObject {
+#else
 /* handle 0x587a68, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct beWeapon {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _system;                                   /* +16   igObjectRefMetaField */
@@ -7572,27 +9402,39 @@ typedef struct beWeapon {
     int _attachDataList;                           /* +32   igObjectRefMetaField */
 } beWeapon;
 
+#ifdef __cplusplus
+typedef struct beWeaponAttachData : public igObject {
+#else
 /* handle 0x587a80, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beWeaponAttachData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _boneSelectList;                           /* +8    igObjectRefMetaField */
     int _appearanceListList;                       /* +12   igObjectRefMetaField */
 } beWeaponAttachData;
 
+#ifdef __cplusplus
+typedef struct beWeaponAttachDataList : public igObject {
+#else
 /* handle 0x587a78, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beWeaponAttachDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beWeaponAttachDataList;
 
+#ifdef __cplusplus
+typedef struct beWeaponInfo : public igObject {
+#else
 /* handle 0x587a28, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct beWeaponInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -7604,10 +9446,14 @@ typedef struct beWeaponInfo {
     int _seqDataList;                              /* +36   igObjectRefMetaField */
 } beWeaponInfo;
 
+#ifdef __cplusplus
+typedef struct beWeaponInfoRam : public igObject {
+#else
 /* handle 0x587a20, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct beWeaponInfoRam {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ramNo;                                    /* +8    igIntMetaField */
     int _parentInfo;                               /* +12   igObjectRefMetaField */
     int _parentManager;                            /* +16   igObjectRefMetaField */
@@ -7620,62 +9466,90 @@ typedef struct beWeaponInfoRam {
     int _dataList;                                 /* +40   igObjectRefMetaField */
 } beWeaponInfoRam;
 
+#ifdef __cplusplus
+typedef struct beWeaponSeqData : public igObject {
+#else
 /* handle 0x587a50, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beWeaponSeqData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _label;                                    /* +12   igStringMetaField */
 } beWeaponSeqData;
 
+#ifdef __cplusplus
+typedef struct beWeaponSeqDataList : public igObject {
+#else
 /* handle 0x587a48, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct beWeaponSeqDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } beWeaponSeqDataList;
 
+#ifdef __cplusplus
+typedef struct beXboxImage24k : public igObject {
+#else
 /* handle 0x588070, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct beXboxImage24k {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _data;                                     /* +8    igMemoryRefMetaField */
     int _dataSize;                                 /* +12   igIntMetaField */
 } beXboxImage24k;
 
+#ifdef __cplusplus
+typedef struct igAABox : public igObject {
+#else
 /* handle 0x5610e0, 4 field(s), sizeof 32 (registered instance size) */
 typedef struct igAABox {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _min[3];                                 /* +8    igVec3fMetaField */
     float _max[3];                                 /* +20   igVec3fMetaField */
 } igAABox;
 
+#ifdef __cplusplus
+typedef struct igAABoxList : public igObject {
+#else
 /* handle 0x5610d8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAABoxList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAABoxList;
 
+#ifdef __cplusplus
+typedef struct igActiveComponentsObserver : public igObject {
+#else
 /* handle 0x58c360, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igActiveComponentsObserver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _oldComponentUnderMouse;                   /* +12   igObjectRefMetaField */
     int _oldFocusedComponent;                      /* +16   igObjectRefMetaField */
     int _oldPushedComponent;                       /* +20   igObjectRefMetaField */
 } igActiveComponentsObserver;
 
+#ifdef __cplusplus
+typedef struct igActor : public igObject {
+#else
 /* handle 0x562488, 21 field(s), sizeof 256 (registered instance size) */
 typedef struct igActor {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -7699,10 +9573,14 @@ typedef struct igActor {
     char _pad254[2];
 } igActor;
 
+#ifdef __cplusplus
+typedef struct igActorInfo : public igObject {
+#else
 /* handle 0x562450, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igActorInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -7714,19 +9592,27 @@ typedef struct igActorInfo {
     int _appearanceList;                           /* +36   igObjectRefMetaField */
 } igActorInfo;
 
+#ifdef __cplusplus
+typedef struct igActorList : public igObject {
+#else
 /* handle 0x562480, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igActorList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igActorList;
 
+#ifdef __cplusplus
+typedef struct igActorManager : public igObject {
+#else
 /* handle 0x58ce60, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct igActorManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _skelOnlys;                                /* +16   igObjectRefMetaField */
@@ -7741,39 +9627,55 @@ typedef struct igActorManager {
     int _references;                               /* +52   igObjectRefMetaField */
 } igActorManager;
 
+#ifdef __cplusplus
+typedef struct igActorManagerParams : public igObject {
+#else
 /* handle 0x58ceb8, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igActorManagerParams {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
     unsigned char _skelOnly;                       /* +12   igBoolMetaField */
     unsigned char _skelAndSkin;                    /* +13   igBoolMetaField */
     char _pad14[2];
 } igActorManagerParams;
 
+#ifdef __cplusplus
+typedef struct igAdxAfsFile : public igObject {
+#else
 /* handle 0x587638, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igAdxAfsFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _pathList;                                 /* +12   igObjectRefMetaField */
     short _ptNumber;                               /* +16   igShortMetaField */
     short _fileNumber;                             /* +18   igShortMetaField */
 } igAdxAfsFile;
 
+#ifdef __cplusplus
+typedef struct igAdxAfsFileList : public igObject {
+#else
 /* handle 0x587630, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAdxAfsFileList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAdxAfsFileList;
 
+#ifdef __cplusplus
+typedef struct igAdxAudio : public igObject {
+#else
 /* handle 0x5876e0, 11 field(s), sizeof 48 (registered instance size) */
 typedef struct igAdxAudio {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pWorkArea;                                /* +8    igRawRefMetaField */
     int _iWorkSize;                                /* +12   igIntMetaField */
     int _iMaxHandles;                              /* +16   igIntMetaField */
@@ -7787,10 +9689,14 @@ typedef struct igAdxAudio {
     char _pad44[4];
 } igAdxAudio;
 
+#ifdef __cplusplus
+typedef struct igAdxFile : public igObject {
+#else
 /* handle 0x587668, 25 field(s), sizeof 104 (registered instance size) */
 typedef struct igAdxFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _fileName;                                 /* +12   igStringMetaField */
     int _readMode;                                 /* +16   igEnumMetaField */
@@ -7819,10 +9725,14 @@ typedef struct igAdxFile {
     char _pad96[8];
 } igAdxFile;
 
+#ifdef __cplusplus
+typedef struct igAliasMemoryPool : public igObject {
+#else
 /* handle 0x5869b0, 30 field(s), sizeof 184 (registered instance size) */
 typedef struct igAliasMemoryPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _localAllocated;                     /* +8    igLongMetaField */
     long long _localFreed;                         /* +16   igLongMetaField */
     long long _localNetAllocated;                  /* +24   igLongMetaField */
@@ -7858,30 +9768,42 @@ typedef struct igAliasMemoryPool {
     int _aliasedMemoryPool;                        /* +180  igObjectRefMetaField */
 } igAliasMemoryPool;
 
+#ifdef __cplusplus
+typedef struct igAlphaFunctionAttr : public igObject {
+#else
 /* handle 0x55f490, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igAlphaFunctionAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _func;                                     /* +12   igEnumMetaField */
     float _refValue;                               /* +16   igFloatMetaField */
 } igAlphaFunctionAttr;
 
+#ifdef __cplusplus
+typedef struct igAlphaStateAttr : public igObject {
+#else
 /* handle 0x55f480, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igAlphaStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igAlphaStateAttr;
 
+#ifdef __cplusplus
+typedef struct igAnimation : public igObject {
+#else
 /* handle 0x562370, 11 field(s), sizeof 64 (registered instance size) */
 typedef struct igAnimation {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _priority;                                 /* +12   igIntMetaField */
     int _bindingList;                              /* +16   igObjectRefMetaField */
@@ -7895,10 +9817,14 @@ typedef struct igAnimation {
     char _pad60[4];
 } igAnimation;
 
+#ifdef __cplusplus
+typedef struct igAnimationBinding : public igObject {
+#else
 /* handle 0x562338, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igAnimationBinding {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _hierarchy;                                /* +8    igObjectRefMetaField */
     int _boneTrackIdxArray;                        /* +12   igMemoryRefMetaField */
     int _bindCount;                                /* +16   igIntMetaField */
@@ -7906,19 +9832,27 @@ typedef struct igAnimationBinding {
     int _reflectTrack;                             /* +24   igObjectRefMetaField */
 } igAnimationBinding;
 
+#ifdef __cplusplus
+typedef struct igAnimationBindingList : public igObject {
+#else
 /* handle 0x562330, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationBindingList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationBindingList;
 
+#ifdef __cplusplus
+typedef struct igAnimationCombiner : public igObject {
+#else
 /* handle 0x5622b8, 18 field(s), sizeof 96 (registered instance size) */
 typedef struct igAnimationCombiner {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _animHierarchy;                            /* +12   igObjectRefMetaField */
     long long _animationStateTime;                 /* +16   igLongMetaField */
@@ -7940,10 +9874,14 @@ typedef struct igAnimationCombiner {
     char _pad92[4];
 } igAnimationCombiner;
 
+#ifdef __cplusplus
+typedef struct igAnimationCombinerBoneInfo : public igObject {
+#else
 /* handle 0x562268, 10 field(s), sizeof 60 (registered instance size) */
 typedef struct igAnimationCombinerBoneInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _lastKeyframe;                             /* +8    igIntMetaField */
     int _animationState;                           /* +12   igObjectRefMetaField */
     int _transformSource;                          /* +16   igObjectRefMetaField */
@@ -7955,28 +9893,40 @@ typedef struct igAnimationCombinerBoneInfo {
     int _reflect;                                  /* +56   igIntMetaField */
 } igAnimationCombinerBoneInfo;
 
+#ifdef __cplusplus
+typedef struct igAnimationCombinerBoneInfoList : public igObject {
+#else
 /* handle 0x562260, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationCombinerBoneInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationCombinerBoneInfoList;
 
+#ifdef __cplusplus
+typedef struct igAnimationCombinerBoneInfoListList : public igObject {
+#else
 /* handle 0x562258, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationCombinerBoneInfoListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationCombinerBoneInfoListList;
 
+#ifdef __cplusplus
+typedef struct igAnimationCombinerBoneInfoPool : public igObject {
+#else
 /* handle 0x562250, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igAnimationCombinerBoneInfoPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -7986,19 +9936,27 @@ typedef struct igAnimationCombinerBoneInfoPool {
     char _pad29[3];
 } igAnimationCombinerBoneInfoPool;
 
+#ifdef __cplusplus
+typedef struct igAnimationCombinerList : public igObject {
+#else
 /* handle 0x5622b0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationCombinerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationCombinerList;
 
+#ifdef __cplusplus
+typedef struct igAnimationDatabase : public igObject {
+#else
 /* handle 0x562220, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igAnimationDatabase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -8010,45 +9968,65 @@ typedef struct igAnimationDatabase {
     int _combinerList;                             /* +36   igObjectRefMetaField */
 } igAnimationDatabase;
 
+#ifdef __cplusplus
+typedef struct igAnimationHierarchy : public igObject {
+#else
 /* handle 0x5621e0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igAnimationHierarchy {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _boneTranslationArray;                     /* +12   igMemoryRefMetaField */
 } igAnimationHierarchy;
 
+#ifdef __cplusplus
+typedef struct igAnimationList : public igObject {
+#else
 /* handle 0x562368, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationList;
 
+#ifdef __cplusplus
+typedef struct igAnimationModifier : public igObject {
+#else
 /* handle 0x562200, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationModifier {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _boneIndex;                                /* +8    igIntMetaField */
     int _transform;                                /* +12   igObjectRefMetaField */
     int _type;                                     /* +16   igEnumMetaField */
 } igAnimationModifier;
 
+#ifdef __cplusplus
+typedef struct igAnimationModifierList : public igObject {
+#else
 /* handle 0x5621f0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationModifierList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationModifierList;
 
+#ifdef __cplusplus
+typedef struct igAnimationState : public igObject {
+#else
 /* handle 0x562100, 28 field(s), sizeof 160 (registered instance size) */
 typedef struct igAnimationState {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _animation;                                /* +8    igObjectRefMetaField */
     int _combineMode;                              /* +12   igEnumMetaField */
     int _transitionMode;                           /* +16   igEnumMetaField */
@@ -8081,19 +10059,27 @@ typedef struct igAnimationState {
     long long _timeRequested;                      /* +152  igLongMetaField */
 } igAnimationState;
 
+#ifdef __cplusplus
+typedef struct igAnimationStateList : public igObject {
+#else
 /* handle 0x5620e0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationStateList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationStateList;
 
+#ifdef __cplusplus
+typedef struct igAnimationStatePool : public igObject {
+#else
 /* handle 0x5620d8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igAnimationStatePool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -8103,83 +10089,119 @@ typedef struct igAnimationStatePool {
     char _pad29[3];
 } igAnimationStatePool;
 
+#ifdef __cplusplus
+typedef struct igAnimationSystem : public igObject {
+#else
 /* handle 0x5620c8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igAnimationSystem {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _animHierarchy;                            /* +12   igObjectRefMetaField */
 } igAnimationSystem;
 
+#ifdef __cplusplus
+typedef struct igAnimationTrack : public igObject {
+#else
 /* handle 0x562430, 6 field(s), sizeof 44 (registered instance size) */
 typedef struct igAnimationTrack {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _source;                                   /* +12   igObjectRefMetaField */
     float _constantQuaternion[4];                  /* +16   igVec4fMetaField */
     float _constantTranslation[3];                 /* +32   igVec3fMetaField */
 } igAnimationTrack;
 
+#ifdef __cplusplus
+typedef struct igAnimationTrackList : public igObject {
+#else
 /* handle 0x562428, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationTrackList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationTrackList;
 
+#ifdef __cplusplus
+typedef struct igAnimationTransitionDefinition : public igObject {
+#else
 /* handle 0x5623c0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationTransitionDefinition {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _baseAnimation;                            /* +8    igObjectRefMetaField */
     int _transitionPointList;                      /* +12   igObjectRefMetaField */
     int _params;                                   /* +16   igObjectRefMetaField */
 } igAnimationTransitionDefinition;
 
+#ifdef __cplusplus
+typedef struct igAnimationTransitionDefinitionList : public igObject {
+#else
 /* handle 0x5623b8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationTransitionDefinitionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationTransitionDefinitionList;
 
+#ifdef __cplusplus
+typedef struct igAnimationTransitionParams : public igObject {
+#else
 /* handle 0x562400, 6 field(s), sizeof 32 (registered instance size) */
 typedef struct igAnimationTransitionParams {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _startRatio;                             /* +8    igFloatMetaField */
     float _endRatio;                               /* +12   igFloatMetaField */
     long long _duration;                           /* +16   igLongMetaField */
     long long _targetStartTime;                    /* +24   igLongMetaField */
 } igAnimationTransitionParams;
 
+#ifdef __cplusplus
+typedef struct igAnimationTransitionPoint : public igObject {
+#else
 /* handle 0x5623e8, 4 field(s), sizeof 24 (registered instance size) */
 typedef struct igAnimationTransitionPoint {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _transitionTime;                     /* +8    igLongMetaField */
     int _transitionParams;                         /* +16   igObjectRefMetaField */
     char _pad20[4];
 } igAnimationTransitionPoint;
 
+#ifdef __cplusplus
+typedef struct igAnimationTransitionPointList : public igObject {
+#else
 /* handle 0x5623e0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAnimationTransitionPointList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAnimationTransitionPointList;
 
+#ifdef __cplusplus
+typedef struct igAppearance : public igObject {
+#else
 /* handle 0x562098, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igAppearance {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _skin;                                     /* +12   igObjectRefMetaField */
     int _attachedSkins;                            /* +16   igObjectRefMetaField */
@@ -8188,28 +10210,40 @@ typedef struct igAppearance {
     int _segmentOverrideGraphList;                 /* +28   igObjectRefMetaField */
 } igAppearance;
 
+#ifdef __cplusplus
+typedef struct igAppearanceList : public igObject {
+#else
 /* handle 0x562090, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAppearanceList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAppearanceList;
 
+#ifdef __cplusplus
+typedef struct igAppearanceListList : public igObject {
+#else
 /* handle 0x587a98, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAppearanceListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAppearanceListList;
 
+#ifdef __cplusplus
+typedef struct igArenaMemoryPool : public igObject {
+#else
 /* handle 0x586a88, 34 field(s), sizeof 208 (registered instance size) */
 typedef struct igArenaMemoryPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _localAllocated;                     /* +8    igLongMetaField */
     long long _localFreed;                         /* +16   igLongMetaField */
     long long _localNetAllocated;                  /* +24   igLongMetaField */
@@ -8250,45 +10284,65 @@ typedef struct igArenaMemoryPool {
     char _pad204[4];
 } igArenaMemoryPool;
 
+#ifdef __cplusplus
+typedef struct igAttr : public igObject {
+#else
 /* handle 0x55f468, 4 field(s), sizeof 12 (registered instance size) */
 typedef struct igAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
 } igAttr;
 
+#ifdef __cplusplus
+typedef struct igAttrList : public igObject {
+#else
 /* handle 0x55f460, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAttrList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAttrList;
 
+#ifdef __cplusplus
+typedef struct igAttrListList : public igObject {
+#else
 /* handle 0x55f450, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAttrListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAttrListList;
 
+#ifdef __cplusplus
+typedef struct igAttrPool : public igObject {
+#else
 /* handle 0x55f428, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _metaList;                                 /* +8    igObjectRefMetaField */
     int _nonSharableMetaList;                      /* +12   igObjectRefMetaField */
     int _attributeList;                            /* +16   igObjectRefMetaField */
 } igAttrPool;
 
+#ifdef __cplusplus
+typedef struct igAttrSet : public igObject {
+#else
 /* handle 0x562078, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igAttrSet {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -8300,10 +10354,14 @@ typedef struct igAttrSet {
     char _pad37[3];
 } igAttrSet;
 
+#ifdef __cplusplus
+typedef struct igAttrStack : public igObject {
+#else
 /* handle 0x562030, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct igAttrStack {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -8319,19 +10377,27 @@ typedef struct igAttrStack {
     int _cachedRenderPackage;                      /* +48   igObjectRefMetaField */
 } igAttrStack;
 
+#ifdef __cplusplus
+typedef struct igAttrStackList : public igObject {
+#else
 /* handle 0x562028, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igAttrStackList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igAttrStackList;
 
+#ifdef __cplusplus
+typedef struct igAttrStackManager : public igObject {
+#else
 /* handle 0x561f98, 19 field(s), sizeof 76 (registered instance size) */
 typedef struct igAttrStackManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _stackChanged;                   /* +8    igBoolMetaField */
     char _pad9[3];
     int _numAttrStacks;                            /* +12   igIntMetaField */
@@ -8353,18 +10419,26 @@ typedef struct igAttrStackManager {
     int _attrStackIndexTableSize;                  /* +72   igIntMetaField */
 } igAttrStackManager;
 
+#ifdef __cplusplus
+typedef struct igAudioContext : public igObject {
+#else
 /* handle 0x55f540, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igAudioContext {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _immediateMode;                  /* +8    igBoolMetaField */
     char _pad9[3];
 } igAudioContext;
 
+#ifdef __cplusplus
+typedef struct igBase : public igObject {
+#else
 /* handle 0x56da60, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -8373,18 +10447,26 @@ typedef struct igBase {
     int _logInterface;                             /* +28   igObjectRefMetaField */
 } igBase;
 
+#ifdef __cplusplus
+typedef struct igBasicColorChanger : public igObject {
+#else
 /* handle 0x58c5f0, 4 field(s), sizeof 88 (registered instance size) */
 typedef struct igBasicColorChanger {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _colors[16];                             /* +8    igVec4fArrayMetaField */
     float _disabledColor[4];                       /* +72   igVec4fMetaField */
 } igBasicColorChanger;
 
+#ifdef __cplusplus
+typedef struct igBillboard : public igObject {
+#else
 /* handle 0x561f68, 12 field(s), sizeof 64 (registered instance size) */
 typedef struct igBillboard {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -8397,20 +10479,28 @@ typedef struct igBillboard {
     int _mvm;                                      /* +60   igObjectRefMetaField */
 } igBillboard;
 
+#ifdef __cplusplus
+typedef struct igBitMask : public igObject {
+#else
 /* handle 0x561f58, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igBitMask {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
     unsigned int _bitCount;                        /* +20   igUnsignedIntMetaField */
 } igBitMask;
 
+#ifdef __cplusplus
+typedef struct igBitmapFont : public igObject {
+#else
 /* handle 0x58c620, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igBitmapFont {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _height;                                 /* +12   igFloatMetaField */
     float _baseLine;                               /* +16   igFloatMetaField */
@@ -8420,20 +10510,28 @@ typedef struct igBitmapFont {
     int _textureBind;                              /* +32   igObjectRefMetaField */
 } igBitmapFont;
 
+#ifdef __cplusplus
+typedef struct igBlendEquationExt : public igObject {
+#else
 /* handle 0x55ff00, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igBlendEquationExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
     int _equation;                                 /* +20   igEnumMetaField */
 } igBlendEquationExt;
 
+#ifdef __cplusplus
+typedef struct igBlendFunctionAttr : public igObject {
+#else
 /* handle 0x55f3b8, 15 field(s), sizeof 52 (registered instance size) */
 typedef struct igBlendFunctionAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _src;                                      /* +12   igEnumMetaField */
@@ -8450,18 +10548,26 @@ typedef struct igBlendFunctionAttr {
     int _blendD;                                   /* +48   igEnumMetaField */
 } igBlendFunctionAttr;
 
+#ifdef __cplusplus
+typedef struct igBlendListRecord : public igObject {
+#else
 /* handle 0x561ca8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igBlendListRecord {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _attr;                                     /* +8    igObjectRefMetaField */
     int _fwdPtr;                                   /* +12   igObjectRefMetaField */
 } igBlendListRecord;
 
+#ifdef __cplusplus
+typedef struct igBlendMatricesAttr : public igObject {
+#else
 /* handle 0x55f388, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct igBlendMatricesAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _matrixCache;                              /* +12   igMemoryRefMetaField */
@@ -8469,10 +10575,14 @@ typedef struct igBlendMatricesAttr {
     unsigned int _matrixCacheCapacity;             /* +20   igUnsignedIntMetaField */
 } igBlendMatricesAttr;
 
+#ifdef __cplusplus
+typedef struct igBlendMatricesAttrPool : public igObject {
+#else
 /* handle 0x561580, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igBlendMatricesAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -8482,10 +10592,14 @@ typedef struct igBlendMatricesAttrPool {
     char _pad29[3];
 } igBlendMatricesAttrPool;
 
+#ifdef __cplusplus
+typedef struct igBlendMatrixPaletteAttr : public igObject {
+#else
 /* handle 0x55f360, 8 field(s), sizeof 28 (registered instance size) */
 typedef struct igBlendMatrixPaletteAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _matrixCache;                              /* +12   igMemoryRefMetaField */
@@ -8494,19 +10608,27 @@ typedef struct igBlendMatrixPaletteAttr {
     unsigned int _capacity;                        /* +24   igUnsignedIntMetaField */
 } igBlendMatrixPaletteAttr;
 
+#ifdef __cplusplus
+typedef struct igBlendMatrixPaletteAttrList : public igObject {
+#else
 /* handle 0x55f358, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igBlendMatrixPaletteAttrList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igBlendMatrixPaletteAttrList;
 
+#ifdef __cplusplus
+typedef struct igBlendMatrixSelect : public igObject {
+#else
 /* handle 0x561f38, 13 field(s), sizeof 172 (registered instance size) */
 typedef struct igBlendMatrixSelect {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -8521,20 +10643,28 @@ typedef struct igBlendMatrixSelect {
     float _skeletonInverseTransform[16];           /* +108  igMatrix44fMetaField */
 } igBlendMatrixSelect;
 
+#ifdef __cplusplus
+typedef struct igBlendStateAttr : public igObject {
+#else
 /* handle 0x55f348, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igBlendStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igBlendStateAttr;
 
+#ifdef __cplusplus
+typedef struct igBoolArrayMetaField : public igObject {
+#else
 /* handle 0x586998, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igBoolArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -8558,19 +10688,27 @@ typedef struct igBoolArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igBoolArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igBoolList : public igObject {
+#else
 /* handle 0x5868a8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igBoolList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igBoolList;
 
+#ifdef __cplusplus
+typedef struct igBoolMetaField : public igObject {
+#else
 /* handle 0x586988, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igBoolMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -8593,18 +10731,26 @@ typedef struct igBoolMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igBoolMetaField;
 
+#ifdef __cplusplus
+typedef struct igBoolObject : public igObject {
+#else
 /* handle 0x562c50, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igBoolObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _value;                          /* +8    igBoolMetaField */
     char _pad9[3];
 } igBoolObject;
 
+#ifdef __cplusplus
+typedef struct igBoundingBoxRenderer : public igObject {
+#else
 /* handle 0x58ce18, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igBoundingBoxRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
     int _parameters;                               /* +12   igObjectRefMetaField */
     int _displayList;                              /* +16   igObjectRefMetaField */
@@ -8617,10 +10763,14 @@ typedef struct igBoundingBoxRenderer {
     char _pad41[3];
 } igBoundingBoxRenderer;
 
+#ifdef __cplusplus
+typedef struct igBoundingBoxesMaker : public igObject {
+#else
 /* handle 0x561ef0, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igBoundingBoxesMaker {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _time;                               /* +8    igLongMetaField */
     unsigned char _useWholeAnimation;              /* +16   igBoolMetaField */
     unsigned char _setBoundingBoxes;               /* +17   igBoolMetaField */
@@ -8633,17 +10783,25 @@ typedef struct igBoundingBoxesMaker {
     int _metaObjectList;                           /* +36   igObjectRefMetaField */
 } igBoundingBoxesMaker;
 
+#ifdef __cplusplus
+typedef struct igBoundingSphereMaker : public igObject {
+#else
 /* handle 0x56de00, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igBoundingSphereMaker {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _sphere;                                   /* +8    igObjectRefMetaField */
 } igBoundingSphereMaker;
 
+#ifdef __cplusplus
+typedef struct igBoxComponent : public igObject {
+#else
 /* handle 0x58c610, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igBoxComponent {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _guiSystem;                                /* +8    igObjectRefMetaField */
     int _controller;                               /* +12   igObjectRefMetaField */
     int _model;                                    /* +16   igObjectRefMetaField */
@@ -8654,29 +10812,41 @@ typedef struct igBoxComponent {
     char _pad33[3];
 } igBoxComponent;
 
+#ifdef __cplusplus
+typedef struct igCallStackTable : public igObject {
+#else
 /* handle 0x586960, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igCallStackTable {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _capacity;                                 /* +8    igIntMetaField */
     int _hashCapacity;                             /* +12   igIntMetaField */
     int _callStacks;                               /* +16   igObjectRefMetaField */
     int _hashIndex;                                /* +20   igObjectRefMetaField */
 } igCallStackTable;
 
+#ifdef __cplusplus
+typedef struct igCallStackTracer : public igObject {
+#else
 /* handle 0x586958, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCallStackTracer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCallStackTracer;
 
+#ifdef __cplusplus
+typedef struct igCamera : public igObject {
+#else
 /* handle 0x561ea0, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct igCamera {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -8692,20 +10862,28 @@ typedef struct igCamera {
     float _farPlane;                               /* +52   igFloatMetaField */
 } igCamera;
 
+#ifdef __cplusplus
+typedef struct igCameraMode : public igObject {
+#else
 /* handle 0x58cce0, 6 field(s), sizeof 84 (registered instance size) */
 typedef struct igCameraMode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     float _inverseMatrix[16];                      /* +12   igMatrix44fMetaField */
     int _cameraPath;                               /* +76   igObjectRefMetaField */
     int _camera;                                   /* +80   igObjectRefMetaField */
 } igCameraMode;
 
+#ifdef __cplusplus
+typedef struct igCharArrayMetaField : public igObject {
+#else
 /* handle 0x586940, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igCharArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -8729,28 +10907,40 @@ typedef struct igCharArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igCharArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igCharList : public igObject {
+#else
 /* handle 0x586898, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCharList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCharList;
 
+#ifdef __cplusplus
+typedef struct igCharListNoClean : public igObject {
+#else
 /* handle 0x586890, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCharListNoClean {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCharListNoClean;
 
+#ifdef __cplusplus
+typedef struct igCharMetaField : public igObject {
+#else
 /* handle 0x586930, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igCharMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -8773,19 +10963,27 @@ typedef struct igCharMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igCharMetaField;
 
+#ifdef __cplusplus
+typedef struct igCharMetricsList : public igObject {
+#else
 /* handle 0x58c638, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCharMetricsList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCharMetricsList;
 
+#ifdef __cplusplus
+typedef struct igCharMetricsMetaField : public igObject {
+#else
 /* handle 0x58c648, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igCharMetricsMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -8809,10 +11007,14 @@ typedef struct igCharMetricsMetaField {
     int _fieldList;                                /* +52   igObjectRefMetaField */
 } igCharMetricsMetaField;
 
+#ifdef __cplusplus
+typedef struct igClearAttr : public igObject {
+#else
 /* handle 0x55f308, 11 field(s), sizeof 72 (registered instance size) */
 typedef struct igClearAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned int _clearMode;                       /* +12   igUnsignedIntMetaField */
@@ -8825,28 +11027,40 @@ typedef struct igClearAttr {
     char _pad68[4];
 } igClearAttr;
 
+#ifdef __cplusplus
+typedef struct igClearRenderer : public igObject {
+#else
 /* handle 0x58c1f0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igClearRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
     unsigned int _buffersToClear;                  /* +12   igUnsignedIntMetaField */
 } igClearRenderer;
 
+#ifdef __cplusplus
+typedef struct igClippingStateAttr : public igObject {
+#else
 /* handle 0x55f2f8, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igClippingStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igClippingStateAttr;
 
+#ifdef __cplusplus
+typedef struct igClut : public igObject {
+#else
 /* handle 0x55feb8, 9 field(s), sizeof 32 (registered instance size) */
 typedef struct igClut {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _fmt;                                      /* +8    igEnumMetaField */
     unsigned int _numEntries;                      /* +12   igUnsignedIntMetaField */
     int _stride;                                   /* +16   igIntMetaField */
@@ -8857,10 +11071,14 @@ typedef struct igClut {
     char _pad30[2];
 } igClut;
 
+#ifdef __cplusplus
+typedef struct igCollisionCell : public igObject {
+#else
 /* handle 0x56ddc8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igCollisionCell {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _objects;                                  /* +8    igObjectRefMetaField */
     int _grid;                                     /* +12   igObjectRefMetaField */
     int _box;                                      /* +16   igObjectRefMetaField */
@@ -8870,19 +11088,27 @@ typedef struct igCollisionCell {
     char _pad29[3];
 } igCollisionCell;
 
+#ifdef __cplusplus
+typedef struct igCollisionCellList : public igObject {
+#else
 /* handle 0x56ddc0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCollisionCellList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCollisionCellList;
 
+#ifdef __cplusplus
+typedef struct igCollisionGrid : public igObject {
+#else
 /* handle 0x56dd40, 17 field(s), sizeof 76 (registered instance size) */
 typedef struct igCollisionGrid {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _cells;                                    /* +8    igObjectRefMetaField */
     int _activeCells;                              /* +12   igObjectRefMetaField */
     int _sizeX;                                    /* +16   igIntMetaField */
@@ -8900,18 +11126,26 @@ typedef struct igCollisionGrid {
     int _rate;                                     /* +72   igIntMetaField */
 } igCollisionGrid;
 
+#ifdef __cplusplus
+typedef struct igCollisionGridHelper : public igObject {
+#else
 /* handle 0x56dd28, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igCollisionGridHelper {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _grid;                                     /* +8    igObjectRefMetaField */
     int _staticGroupType;                          /* +12   igObjectRefMetaField */
 } igCollisionGridHelper;
 
+#ifdef __cplusplus
+typedef struct igCollisionGroup : public igObject {
+#else
 /* handle 0x56dce0, 16 field(s), sizeof 96 (registered instance size) */
 typedef struct igCollisionGroup {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -8928,19 +11162,27 @@ typedef struct igCollisionGroup {
     int _collisionCells;                           /* +92   igIntMetaField */
 } igCollisionGroup;
 
+#ifdef __cplusplus
+typedef struct igCollisionGroupList : public igObject {
+#else
 /* handle 0x56dcd8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCollisionGroupList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCollisionGroupList;
 
+#ifdef __cplusplus
+typedef struct igCollisionInfo : public igObject {
+#else
 /* handle 0x56dcc8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igCollisionInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -8948,20 +11190,28 @@ typedef struct igCollisionInfo {
     int _grid;                                     /* +20   igObjectRefMetaField */
 } igCollisionInfo;
 
+#ifdef __cplusplus
+typedef struct igColorAttr : public igObject {
+#else
 /* handle 0x55f2e0, 6 field(s), sizeof 32 (registered instance size) */
 typedef struct igColorAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     float _color[4];                               /* +12   igVec4fMetaField */
     unsigned int _colorPacked;                     /* +28   igUnsignedIntMetaField */
 } igColorAttr;
 
+#ifdef __cplusplus
+typedef struct igColorMaskAttr : public igObject {
+#else
 /* handle 0x55f2b0, 9 field(s), sizeof 20 (registered instance size) */
 typedef struct igColorMaskAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _red;                            /* +12   igBoolMetaField */
@@ -8971,10 +11221,14 @@ typedef struct igColorMaskAttr {
     unsigned int _unused;                          /* +16   igUnsignedIntMetaField */
 } igColorMaskAttr;
 
+#ifdef __cplusplus
+typedef struct igCommonTraversal : public igObject {
+#else
 /* handle 0x561d78, 42 field(s), sizeof 472 (registered instance size) */
 typedef struct igCommonTraversal {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _nodeSelectProcEnabled;          /* +8    igBoolMetaField */
     char _pad9[3];
     int _nodeSelectProc;                           /* +12   igRawRefMetaField */
@@ -9020,10 +11274,14 @@ typedef struct igCommonTraversal {
     float _jointMvmInverseBase[16];                /* +408  igMatrix44fMetaField */
 } igCommonTraversal;
 
+#ifdef __cplusplus
+typedef struct igCompileTraversal : public igObject {
+#else
 /* handle 0x561cc0, 54 field(s), sizeof 520 (registered instance size) */
 typedef struct igCompileTraversal {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _nodeSelectProcEnabled;          /* +8    igBoolMetaField */
     char _pad9[3];
     int _nodeSelectProc;                           /* +12   igRawRefMetaField */
@@ -9083,10 +11341,14 @@ typedef struct igCompileTraversal {
     int _currentBoneIndex;                         /* +516  igIntMetaField */
 } igCompileTraversal;
 
+#ifdef __cplusplus
+typedef struct igCompiledTransform : public igObject {
+#else
 /* handle 0x561d30, 10 field(s), sizeof 36 (registered instance size) */
 typedef struct igCompiledTransform {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _parentIdx;                                /* +8    igIntMetaField */
     int _source;                                   /* +12   igObjectRefMetaField */
     int _moIdx;                                    /* +16   igIntMetaField */
@@ -9098,28 +11360,40 @@ typedef struct igCompiledTransform {
     int _boneIndex;                                /* +32   igIntMetaField */
 } igCompiledTransform;
 
+#ifdef __cplusplus
+typedef struct igCompiledTransformList : public igObject {
+#else
 /* handle 0x561d28, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCompiledTransformList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCompiledTransformList;
 
+#ifdef __cplusplus
+typedef struct igCompoundList : public igObject {
+#else
 /* handle 0x56d840, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCompoundList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCompoundList;
 
+#ifdef __cplusplus
+typedef struct igCompoundMetaField : public igObject {
+#else
 /* handle 0x586918, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igCompoundMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -9143,10 +11417,14 @@ typedef struct igCompoundMetaField {
     int _fieldList;                                /* +52   igObjectRefMetaField */
 } igCompoundMetaField;
 
+#ifdef __cplusplus
+typedef struct igCompressedAnimationSequenceQS : public igObject {
+#else
 /* handle 0x561c38, 14 field(s), sizeof 64 (registered instance size) */
 typedef struct igCompressedAnimationSequenceQS {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _compressedTranslationList;                /* +8    igObjectRefMetaField */
     int _compressedQuaternionList;                 /* +12   igObjectRefMetaField */
     int _compressedTimeList;                       /* +16   igObjectRefMetaField */
@@ -9162,10 +11440,14 @@ typedef struct igCompressedAnimationSequenceQS {
     unsigned char _interpolationMethod[7];         /* +57   igUnsignedCharArrayMetaField */
 } igCompressedAnimationSequenceQS;
 
+#ifdef __cplusplus
+typedef struct igCompressedTransformSequence1_5Data : public igObject {
+#else
 /* handle 0x561be0, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct igCompressedTransformSequence1_5Data {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _compressedTranslationList;                /* +8    igObjectRefMetaField */
     int _compressedQuatList;                       /* +12   igObjectRefMetaField */
     int _compressedScaleList;                      /* +16   igObjectRefMetaField */
@@ -9178,116 +11460,168 @@ typedef struct igCompressedTransformSequence1_5Data {
     float _scaleRange;                             /* +44   igFloatMetaField */
 } igCompressedTransformSequence1_5Data;
 
+#ifdef __cplusplus
+typedef struct igContainsFunctionList : public igObject {
+#else
 /* handle 0x561060, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContainsFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igContainsFunctionList;
 
+#ifdef __cplusplus
+typedef struct igContainsRayFunctionList : public igObject {
+#else
 /* handle 0x561048, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContainsRayFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igContainsRayFunctionList;
 
+#ifdef __cplusplus
+typedef struct igContainsVecFunctionList : public igObject {
+#else
 /* handle 0x561038, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContainsVecFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igContainsVecFunctionList;
 
+#ifdef __cplusplus
+typedef struct igContext : public igObject {
+#else
 /* handle 0x5868f8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContext {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
 } igContext;
 
+#ifdef __cplusplus
+typedef struct igContextExt : public igObject {
+#else
 /* handle 0x5868e8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContextExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
 } igContextExt;
 
+#ifdef __cplusplus
+typedef struct igContextExtInfo : public igObject {
+#else
 /* handle 0x5868c8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContextExtInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pMeta;                                    /* +8    igObjectRefMetaField */
     int _pName;                                    /* +12   igStringMetaField */
     int _pVendorName;                              /* +16   igMemoryRefMetaField */
 } igContextExtInfo;
 
+#ifdef __cplusplus
+typedef struct igContextExtInfoList : public igObject {
+#else
 /* handle 0x5868c0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContextExtInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igContextExtInfoList;
 
+#ifdef __cplusplus
+typedef struct igContextExtList : public igObject {
+#else
 /* handle 0x5868b8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContextExtList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igContextExtList;
 
+#ifdef __cplusplus
+typedef struct igContextList : public igObject {
+#else
 /* handle 0x5868f0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igContextList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igContextList;
 
+#ifdef __cplusplus
+typedef struct igController : public igObject {
+#else
 /* handle 0x55f6b0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igController {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _buttonMap;                                /* +8    igMemoryRefMetaField */
     unsigned char _isMapped;                       /* +12   igBoolMetaField */
     char _pad13[3];
 } igController;
 
+#ifdef __cplusplus
+typedef struct igControllerList : public igObject {
+#else
 /* handle 0x55f608, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igControllerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igControllerList;
 
+#ifdef __cplusplus
+typedef struct igControllerManager : public igObject {
+#else
 /* handle 0x55f698, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igControllerManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _controllers;                              /* +8    igObjectRefMetaField */
 } igControllerManager;
 
+#ifdef __cplusplus
+typedef struct igCopyRenderDestinationAttr : public igObject {
+#else
 /* handle 0x55f258, 14 field(s), sizeof 52 (registered instance size) */
 typedef struct igCopyRenderDestinationAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _copyType;                                 /* +12   igEnumMetaField */
@@ -9302,10 +11636,14 @@ typedef struct igCopyRenderDestinationAttr {
     int _sizeH;                                    /* +48   igIntMetaField */
 } igCopyRenderDestinationAttr;
 
+#ifdef __cplusplus
+typedef struct igCreateCollisionDatabase : public igObject {
+#else
 /* handle 0x56dc88, 17 field(s), sizeof 68 (registered instance size) */
 typedef struct igCreateCollisionDatabase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -9323,10 +11661,14 @@ typedef struct igCreateCollisionDatabase {
     int _staticGroupType;                          /* +64   igObjectRefMetaField */
 } igCreateCollisionDatabase;
 
+#ifdef __cplusplus
+typedef struct igCriMovieCodec : public igObject {
+#else
 /* handle 0x587740, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igCriMovieCodec {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     unsigned char _initialized;                    /* +12   igBoolMetaField */
     char _pad13[3];
@@ -9334,10 +11676,14 @@ typedef struct igCriMovieCodec {
     int _audioContext;                             /* +20   igObjectRefMetaField */
 } igCriMovieCodec;
 
+#ifdef __cplusplus
+typedef struct igCriMovieData : public igObject {
+#else
 /* handle 0x587760, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igCriMovieData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mwply;                                    /* +8    igStructMetaField */
     int _cprmbuf;                                  /* +12   igRawRefMetaField */
     int _adxt;                                     /* +16   igStructMetaField */
@@ -9345,10 +11691,14 @@ typedef struct igCriMovieData {
     int _macroFunction;                            /* +24   igStructMetaField */
 } igCriMovieData;
 
+#ifdef __cplusplus
+typedef struct igCullFaceAttr : public igObject {
+#else
 /* handle 0x55f238, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igCullFaceAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
@@ -9356,17 +11706,25 @@ typedef struct igCullFaceAttr {
     int _mode;                                     /* +16   igEnumMetaField */
 } igCullFaceAttr;
 
+#ifdef __cplusplus
+typedef struct igCustomState : public igObject {
+#else
 /* handle 0x55fe88, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igCustomState {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } igCustomState;
 
+#ifdef __cplusplus
+typedef struct igCustomStateCollection : public igObject {
+#else
 /* handle 0x55fe70, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igCustomStateCollection {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -9374,46 +11732,66 @@ typedef struct igCustomStateCollection {
     unsigned int _flags;                           /* +24   igUnsignedIntMetaField */
 } igCustomStateCollection;
 
+#ifdef __cplusplus
+typedef struct igCustomStateCollectionList : public igObject {
+#else
 /* handle 0x55fe68, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCustomStateCollectionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCustomStateCollectionList;
 
+#ifdef __cplusplus
+typedef struct igCustomStateField : public igObject {
+#else
 /* handle 0x55fe50, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCustomStateField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     unsigned int _stateCollectionHandle;           /* +12   igUnsignedIntMetaField */
     int _stateField;                               /* +16   igObjectRefMetaField */
 } igCustomStateField;
 
+#ifdef __cplusplus
+typedef struct igCustomStateFieldList : public igObject {
+#else
 /* handle 0x55fe48, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igCustomStateFieldList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igCustomStateFieldList;
 
+#ifdef __cplusplus
+typedef struct igDataList : public igObject {
+#else
 /* handle 0x586788, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igDataList;
 
+#ifdef __cplusplus
+typedef struct igDataPump : public igObject {
+#else
 /* handle 0x562c20, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igDataPump {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _destObj;                                  /* +8    igObjectRefMetaField */
     int _destMeta;                                 /* +12   igObjectRefMetaField */
     int _destMetaClassName;                        /* +16   igStringMetaField */
@@ -9421,10 +11799,14 @@ typedef struct igDataPump {
     int _dpi;                                      /* +24   igObjectRefMetaField */
 } igDataPump;
 
+#ifdef __cplusplus
+typedef struct igDataPumpInfo : public igObject {
+#else
 /* handle 0x562c10, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igDataPumpInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -9432,36 +11814,52 @@ typedef struct igDataPumpInfo {
     int _dataPumpList;                             /* +20   igObjectRefMetaField */
 } igDataPumpInfo;
 
+#ifdef __cplusplus
+typedef struct igDataPumpList : public igObject {
+#else
 /* handle 0x562c00, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igDataPumpList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igDataPumpList;
 
+#ifdef __cplusplus
+typedef struct igDataPumpManager : public igObject {
+#else
 /* handle 0x562bf0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igDataPumpManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dataPumpList;                             /* +8    igObjectRefMetaField */
 } igDataPumpManager;
 
+#ifdef __cplusplus
+typedef struct igDecalExt : public igObject {
+#else
 /* handle 0x55fea8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igDecalExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
     unsigned int _decalOffset;                     /* +20   igUnsignedIntMetaField */
 } igDecalExt;
 
+#ifdef __cplusplus
+typedef struct igDefaultAspect : public igObject {
+#else
 /* handle 0x58c590, 7 field(s), sizeof 44 (registered instance size) */
 typedef struct igDefaultAspect {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _node;                                     /* +12   igObjectRefMetaField */
     float _minSize[3];                             /* +16   igVec3fMetaField */
@@ -9469,10 +11867,14 @@ typedef struct igDefaultAspect {
     int _elementList;                              /* +40   igObjectRefMetaField */
 } igDefaultAspect;
 
+#ifdef __cplusplus
+typedef struct igDefaultAspectElement : public igObject {
+#else
 /* handle 0x58c5b0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igDefaultAspectElement {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _geometryElement;                          /* +8    igObjectRefMetaField */
     int _colorChanger;                             /* +12   igObjectRefMetaField */
     int _transform;                                /* +16   igObjectRefMetaField */
@@ -9481,19 +11883,27 @@ typedef struct igDefaultAspectElement {
     float _vMargin;                                /* +28   igFloatMetaField */
 } igDefaultAspectElement;
 
+#ifdef __cplusplus
+typedef struct igDefaultAspectElementList : public igObject {
+#else
 /* handle 0x58c5a0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igDefaultAspectElementList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igDefaultAspectElementList;
 
+#ifdef __cplusplus
+typedef struct igDefaultInterfaceManager : public igObject {
+#else
 /* handle 0x55f610, 19 field(s), sizeof 76 (registered instance size) */
 typedef struct igDefaultInterfaceManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _devices;                                  /* +8    igObjectRefMetaField */
     int _mouseMotionFunction;                      /* +12   igRawRefMetaField */
     int _mouseButtonDownFunction;                  /* +16   igRawRefMetaField */
@@ -9513,19 +11923,27 @@ typedef struct igDefaultInterfaceManager {
     int _keyUpFunction;                            /* +72   igRawRefMetaField */
 } igDefaultInterfaceManager;
 
+#ifdef __cplusplus
+typedef struct igDependencyList : public igObject {
+#else
 /* handle 0x586768, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igDependencyList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igDependencyList;
 
+#ifdef __cplusplus
+typedef struct igDependencyMetaField : public igObject {
+#else
 /* handle 0x586778, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igDependencyMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -9549,10 +11967,14 @@ typedef struct igDependencyMetaField {
     int _fieldList;                                /* +52   igObjectRefMetaField */
 } igDependencyMetaField;
 
+#ifdef __cplusplus
+typedef struct igDependencyOrderedList : public igObject {
+#else
 /* handle 0x586738, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igDependencyOrderedList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _objectList;                               /* +8    igObjectRefMetaField */
     int _dependencies;                             /* +12   igObjectRefMetaField */
     int _order;                                    /* +16   igObjectRefMetaField */
@@ -9561,30 +11983,42 @@ typedef struct igDependencyOrderedList {
     char _pad25[3];
 } igDependencyOrderedList;
 
+#ifdef __cplusplus
+typedef struct igDepthStateAttr : public igObject {
+#else
 /* handle 0x55f228, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igDepthStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igDepthStateAttr;
 
+#ifdef __cplusplus
+typedef struct igDepthWriteStateAttr : public igObject {
+#else
 /* handle 0x55f218, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igDepthWriteStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igDepthWriteStateAttr;
 
+#ifdef __cplusplus
+typedef struct igDirEntry : public igObject {
+#else
 /* handle 0x586710, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igDirEntry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _index;                                    /* +12   igIntMetaField */
     int _resolveMethod;                            /* +16   igEnumMetaField */
@@ -9592,10 +12026,14 @@ typedef struct igDirEntry {
     int _ref;                                      /* +24   igRawRefMetaField */
 } igDirEntry;
 
+#ifdef __cplusplus
+typedef struct igDirectory : public igObject {
+#else
 /* handle 0x586668, 23 field(s), sizeof 72 (registered instance size) */
 typedef struct igDirectory {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -9623,37 +12061,53 @@ typedef struct igDirectory {
     int _loadingSemaphore;                         /* +68   igObjectRefMetaField */
 } igDirectory;
 
+#ifdef __cplusplus
+typedef struct igDirectoryList : public igObject {
+#else
 /* handle 0x586660, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igDirectoryList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igDirectoryList;
 
+#ifdef __cplusplus
+typedef struct igDisableExt : public igObject {
+#else
 /* handle 0x55fea0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igDisableExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
 } igDisableExt;
 
+#ifdef __cplusplus
+typedef struct igDisplayListAttr : public igObject {
+#else
 /* handle 0x55f208, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igDisplayListAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _contents;                                 /* +12   igObjectRefMetaField */
 } igDisplayListAttr;
 
+#ifdef __cplusplus
+typedef struct igDoubleArrayMetaField : public igObject {
+#else
 /* handle 0x586648, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igDoubleArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -9677,19 +12131,27 @@ typedef struct igDoubleArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igDoubleArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igDoubleList : public igObject {
+#else
 /* handle 0x5867f0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igDoubleList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igDoubleList;
 
+#ifdef __cplusplus
+typedef struct igDoubleMetaField : public igObject {
+#else
 /* handle 0x586638, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igDoubleMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -9712,10 +12174,14 @@ typedef struct igDoubleMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igDoubleMetaField;
 
+#ifdef __cplusplus
+typedef struct igDriverDatabase : public igObject {
+#else
 /* handle 0x5865d0, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct igDriverDatabase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _currentProperties;                        /* +8    igObjectRefMetaField */
     int _subPropertyNames;                         /* +12   igObjectRefMetaField */
     int _subPropertyValues;                        /* +16   igObjectRefMetaField */
@@ -9731,10 +12197,14 @@ typedef struct igDriverDatabase {
     int _dbIndex;                                  /* +52   igRawRefMetaField */
 } igDriverDatabase;
 
+#ifdef __cplusplus
+typedef struct igElfFile : public igObject {
+#else
 /* handle 0x586c00, 13 field(s), sizeof 100 (registered instance size) */
 typedef struct igElfFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _fileName;                                 /* +8    igStringMetaField */
     int _file;                                     /* +12   igObjectRefMetaField */
     int _header[13];                               /* +16   igStructMetaField */
@@ -9748,19 +12218,27 @@ typedef struct igElfFile {
     int _symbols;                                  /* +96   igStructMetaField */
 } igElfFile;
 
+#ifdef __cplusplus
+typedef struct igEmptyFunctionList : public igObject {
+#else
 /* handle 0x561028, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igEmptyFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igEmptyFunctionList;
 
+#ifdef __cplusplus
+typedef struct igEnbayaAnimationSource : public igObject {
+#else
 /* handle 0x561ba0, 8 field(s), sizeof 40 (registered instance size) */
 typedef struct igEnbayaAnimationSource {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _interpolationMethod[3];         /* +8    igUnsignedCharArrayMetaField */
     unsigned char _drivenChannels;                 /* +11   igUnsignedCharMetaField */
     int _playMode;                                 /* +12   igEnumMetaField */
@@ -9771,10 +12249,14 @@ typedef struct igEnbayaAnimationSource {
     char _pad36[4];
 } igEnbayaAnimationSource;
 
+#ifdef __cplusplus
+typedef struct igEnbayaAnimationState : public igObject {
+#else
 /* handle 0x561b80, 30 field(s), sizeof 168 (registered instance size) */
 typedef struct igEnbayaAnimationState {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _animation;                                /* +8    igObjectRefMetaField */
     int _combineMode;                              /* +12   igEnumMetaField */
     int _transitionMode;                           /* +16   igEnumMetaField */
@@ -9810,27 +12292,39 @@ typedef struct igEnbayaAnimationState {
     char _pad165[3];
 } igEnbayaAnimationState;
 
+#ifdef __cplusplus
+typedef struct igEnbayaContextPool : public igObject {
+#else
 /* handle 0x561b60, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igEnbayaContextPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _poolList;                                 /* +8    igObjectRefMetaField */
     int _boneCountList;                            /* +12   igObjectRefMetaField */
     int _freeIndexList;                            /* +16   igObjectRefMetaField */
 } igEnbayaContextPool;
 
+#ifdef __cplusplus
+typedef struct igEnbayaTransformSource : public igObject {
+#else
 /* handle 0x561b48, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igEnbayaTransformSource {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _trackId;                                  /* +8    igIntMetaField */
     int _enbayaAnimationSource;                    /* +12   igObjectRefMetaField */
 } igEnbayaTransformSource;
 
+#ifdef __cplusplus
+typedef struct igEnumArrayMetaField : public igObject {
+#else
 /* handle 0x5865b0, 22 field(s), sizeof 60 (registered instance size) */
 typedef struct igEnumArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -9855,10 +12349,14 @@ typedef struct igEnumArrayMetaField {
     int _num;                                      /* +56   igIntMetaField */
 } igEnumArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igEnumMetaField : public igObject {
+#else
 /* handle 0x586598, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igEnumMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -9882,10 +12380,14 @@ typedef struct igEnumMetaField {
     int _getMetaEnumFunction;                      /* +52   igRawRefMetaField */
 } igEnumMetaField;
 
+#ifdef __cplusplus
+typedef struct igEnvironmentMapShader2 : public igObject {
+#else
 /* handle 0x561a98, 29 field(s), sizeof 112 (registered instance size) */
 typedef struct igEnvironmentMapShader2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -9918,37 +12420,53 @@ typedef struct igEnvironmentMapShader2 {
     int _glossMapTextureFunc;                      /* +108  igObjectRefMetaField */
 } igEnvironmentMapShader2;
 
+#ifdef __cplusplus
+typedef struct igEnvironmentMapShader2List : public igObject {
+#else
 /* handle 0x561a90, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igEnvironmentMapShader2List {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igEnvironmentMapShader2List;
 
+#ifdef __cplusplus
+typedef struct igEventDispatcher : public igObject {
+#else
 /* handle 0x58c578, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igEventDispatcher {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _devices;                                  /* +8    igObjectRefMetaField */
     int _receivers;                                /* +12   igObjectRefMetaField */
     int _controllerManager;                        /* +16   igObjectRefMetaField */
 } igEventDispatcher;
 
+#ifdef __cplusplus
+typedef struct igEventProducerList : public igObject {
+#else
 /* handle 0x55f5f8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igEventProducerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igEventProducerList;
 
+#ifdef __cplusplus
+typedef struct igEventReceiverOrderedList : public igObject {
+#else
 /* handle 0x58c568, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igEventReceiverOrderedList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _objectList;                               /* +8    igObjectRefMetaField */
     int _dependencies;                             /* +12   igObjectRefMetaField */
     int _order;                                    /* +16   igObjectRefMetaField */
@@ -9957,10 +12475,14 @@ typedef struct igEventReceiverOrderedList {
     char _pad25[3];
 } igEventReceiverOrderedList;
 
+#ifdef __cplusplus
+typedef struct igEventTracker : public igObject {
+#else
 /* handle 0x586480, 35 field(s), sizeof 9520 (registered instance size) */
 typedef struct igEventTracker {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _lock;                                     /* +8    igObjectRefMetaField */
     int _flags;                                    /* +12   igIntMetaField */
     unsigned int _eventTypeFilterFlags;            /* +16   igUnsignedIntMetaField */
@@ -9996,37 +12518,53 @@ typedef struct igEventTracker {
     int _eventClassNameOffset;                     /* +9516 igIntMetaField */
 } igEventTracker;
 
+#ifdef __cplusplus
+typedef struct igExtendByFunctionList : public igObject {
+#else
 /* handle 0x561068, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igExtendByFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igExtendByFunctionList;
 
+#ifdef __cplusplus
+typedef struct igExtendByRayFunctionList : public igObject {
+#else
 /* handle 0x561050, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igExtendByRayFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igExtendByRayFunctionList;
 
+#ifdef __cplusplus
+typedef struct igExtendByVecFunctionList : public igObject {
+#else
 /* handle 0x561040, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igExtendByVecFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igExtendByVecFunctionList;
 
+#ifdef __cplusplus
+typedef struct igExternalDirEntry : public igObject {
+#else
 /* handle 0x586450, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igExternalDirEntry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _index;                                    /* +12   igIntMetaField */
     int _resolveMethod;                            /* +16   igEnumMetaField */
@@ -10038,10 +12576,14 @@ typedef struct igExternalDirEntry {
     int _externalFilePath;                         /* +40   igStringMetaField */
 } igExternalDirEntry;
 
+#ifdef __cplusplus
+typedef struct igExternalImageEntry : public igObject {
+#else
 /* handle 0x55fe98, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igExternalImageEntry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _index;                                    /* +12   igIntMetaField */
     int _resolveMethod;                            /* +16   igEnumMetaField */
@@ -10053,10 +12595,14 @@ typedef struct igExternalImageEntry {
     int _externalFilePath;                         /* +40   igStringMetaField */
 } igExternalImageEntry;
 
+#ifdef __cplusplus
+typedef struct igExternalIndexedEntry : public igObject {
+#else
 /* handle 0x586418, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct igExternalIndexedEntry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _index;                                    /* +12   igIntMetaField */
     int _resolveMethod;                            /* +16   igEnumMetaField */
@@ -10070,10 +12616,14 @@ typedef struct igExternalIndexedEntry {
     int _objectTypeIndex;                          /* +48   igIntMetaField */
 } igExternalIndexedEntry;
 
+#ifdef __cplusplus
+typedef struct igExternalInfoEntry : public igObject {
+#else
 /* handle 0x5863f8, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igExternalInfoEntry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _index;                                    /* +12   igIntMetaField */
     int _resolveMethod;                            /* +16   igEnumMetaField */
@@ -10084,35 +12634,51 @@ typedef struct igExternalInfoEntry {
     int _infoName;                                 /* +36   igStringMetaField */
 } igExternalInfoEntry;
 
+#ifdef __cplusplus
+typedef struct igFieldChangeView : public igObject {
+#else
 /* handle 0x58c550, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igFieldChangeView {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _synchronizer;                             /* +12   igObjectRefMetaField */
     int _field;                                    /* +16   igObjectRefMetaField */
 } igFieldChangeView;
 
+#ifdef __cplusplus
+typedef struct igFieldChangeViewList : public igObject {
+#else
 /* handle 0x58c548, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igFieldChangeViewList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igFieldChangeViewList;
 
+#ifdef __cplusplus
+typedef struct igFieldSynchronizer : public igObject {
+#else
 /* handle 0x58c538, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igFieldSynchronizer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
 } igFieldSynchronizer;
 
+#ifdef __cplusplus
+typedef struct igFile : public igObject {
+#else
 /* handle 0x5863b0, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _fileName;                                 /* +12   igStringMetaField */
     int _readMode;                                 /* +16   igEnumMetaField */
@@ -10124,10 +12690,14 @@ typedef struct igFile {
     int _completeFilename;                         /* +40   igStringMetaField */
 } igFile;
 
+#ifdef __cplusplus
+typedef struct igFileImage : public igObject {
+#else
 /* handle 0x55fd78, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct igFileImage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned int _px;                              /* +8    igUnsignedIntMetaField */
     unsigned int _py;                              /* +12   igUnsignedIntMetaField */
     unsigned int _pz;                              /* +16   igUnsignedIntMetaField */
@@ -10153,10 +12723,14 @@ typedef struct igFileImage {
     int _pNameString;                              /* +88   igStringMetaField */
 } igFileImage;
 
+#ifdef __cplusplus
+typedef struct igFileImagePng : public igObject {
+#else
 /* handle 0x55ff68, 24 field(s), sizeof 96 (registered instance size) */
 typedef struct igFileImagePng {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned int _px;                              /* +8    igUnsignedIntMetaField */
     unsigned int _py;                              /* +12   igUnsignedIntMetaField */
     unsigned int _pz;                              /* +16   igUnsignedIntMetaField */
@@ -10183,10 +12757,14 @@ typedef struct igFileImagePng {
     int _file;                                     /* +92   igObjectRefMetaField */
 } igFileImagePng;
 
+#ifdef __cplusplus
+typedef struct igFileInfo : public igObject {
+#else
 /* handle 0x56da38, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igFileInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _externalEntryList;                        /* +12   igObjectRefMetaField */
     int _infoList;                                 /* +16   igObjectRefMetaField */
@@ -10194,44 +12772,64 @@ typedef struct igFileInfo {
     int _cachedFile;                               /* +24   igObjectRefMetaField */
 } igFileInfo;
 
+#ifdef __cplusplus
+typedef struct igFileInfoList : public igObject {
+#else
 /* handle 0x56da30, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igFileInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igFileInfoList;
 
+#ifdef __cplusplus
+typedef struct igFileName : public igObject {
+#else
 /* handle 0x587658, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igFileName {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _pathList;                                 /* +12   igObjectRefMetaField */
 } igFileName;
 
+#ifdef __cplusplus
+typedef struct igFileNameList : public igObject {
+#else
 /* handle 0x587650, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igFileNameList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igFileNameList;
 
+#ifdef __cplusplus
+typedef struct igFilterMessageDispatcher : public igObject {
+#else
 /* handle 0x56db10, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igFilterMessageDispatcher {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _defaultFilters;                           /* +8    igObjectRefMetaField */
     int _filters;                                  /* +12   igObjectRefMetaField */
 } igFilterMessageDispatcher;
 
+#ifdef __cplusplus
+typedef struct igFloatArrayMetaField : public igObject {
+#else
 /* handle 0x586388, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igFloatArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -10255,28 +12853,40 @@ typedef struct igFloatArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igFloatArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igFloatList : public igObject {
+#else
 /* handle 0x586808, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igFloatList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igFloatList;
 
+#ifdef __cplusplus
+typedef struct igFloatListList : public igObject {
+#else
 /* handle 0x586800, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igFloatListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igFloatListList;
 
+#ifdef __cplusplus
+typedef struct igFloatMetaField : public igObject {
+#else
 /* handle 0x586378, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igFloatMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -10299,24 +12909,36 @@ typedef struct igFloatMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igFloatMetaField;
 
+#ifdef __cplusplus
+typedef struct igFloatObject : public igObject {
+#else
 /* handle 0x562be0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igFloatObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _value;                                  /* +8    igFloatMetaField */
 } igFloatObject;
 
+#ifdef __cplusplus
+typedef struct igFlushRenderer : public igObject {
+#else
 /* handle 0x56dc48, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igFlushRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
 } igFlushRenderer;
 
+#ifdef __cplusplus
+typedef struct igFlyMode : public igObject {
+#else
 /* handle 0x58cc80, 15 field(s), sizeof 160 (registered instance size) */
 typedef struct igFlyMode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     float _inverseMatrix[16];                      /* +12   igMatrix44fMetaField */
     float _moveDirection[3];                       /* +76   igVec3fMetaField */
@@ -10334,10 +12956,14 @@ typedef struct igFlyMode {
     char _pad157[3];
 } igFlyMode;
 
+#ifdef __cplusplus
+typedef struct igFogAttr : public igObject {
+#else
 /* handle 0x55f1d8, 9 field(s), sizeof 44 (registered instance size) */
 typedef struct igFogAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _mode;                                     /* +12   igEnumMetaField */
@@ -10347,27 +12973,39 @@ typedef struct igFogAttr {
     float _color[4];                               /* +28   igVec4fMetaField */
 } igFogAttr;
 
+#ifdef __cplusplus
+typedef struct igFogStateAttr : public igObject {
+#else
 /* handle 0x55f1c8, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igFogStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igFogStateAttr;
 
+#ifdef __cplusplus
+typedef struct igFolder : public igObject {
+#else
 /* handle 0x586368, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igFolder {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _folderName;                               /* +8    igStringMetaField */
 } igFolder;
 
+#ifdef __cplusplus
+typedef struct igFont : public igObject {
+#else
 /* handle 0x58c510, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igFont {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     float _height;                                 /* +12   igFloatMetaField */
     float _baseLine;                               /* +16   igFloatMetaField */
@@ -10375,10 +13013,14 @@ typedef struct igFont {
     unsigned int _vertexFlags;                     /* +24   igUnsignedIntMetaField */
 } igFont;
 
+#ifdef __cplusplus
+typedef struct igFrustCullTraversal : public igObject {
+#else
 /* handle 0x561a50, 49 field(s), sizeof 560 (registered instance size) */
 typedef struct igFrustCullTraversal {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _nodeSelectProcEnabled;          /* +8    igBoolMetaField */
     char _pad9[3];
     int _nodeSelectProc;                           /* +12   igRawRefMetaField */
@@ -10431,10 +13073,14 @@ typedef struct igFrustCullTraversal {
     float _outerScissorWindowScale;                /* +556  igFloatMetaField */
 } igFrustCullTraversal;
 
+#ifdef __cplusplus
+typedef struct igGeometry : public igObject {
+#else
 /* handle 0x561a38, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igGeometry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -10447,10 +13093,14 @@ typedef struct igGeometry {
     int _renderList;                               /* +40   igObjectRefMetaField */
 } igGeometry;
 
+#ifdef __cplusplus
+typedef struct igGeometryAttr : public igObject {
+#else
 /* handle 0x55f170, 13 field(s), sizeof 48 (registered instance size) */
 typedef struct igGeometryAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _vertexArray;                              /* +12   igObjectRefMetaField */
@@ -10464,10 +13114,14 @@ typedef struct igGeometryAttr {
     int _dPdt;                                     /* +44   igObjectRefMetaField */
 } igGeometryAttr;
 
+#ifdef __cplusplus
+typedef struct igGeometryAttr1_5 : public igObject {
+#else
 /* handle 0x55f160, 14 field(s), sizeof 52 (registered instance size) */
 typedef struct igGeometryAttr1_5 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _vertexArray;                              /* +12   igObjectRefMetaField */
@@ -10482,47 +13136,67 @@ typedef struct igGeometryAttr1_5 {
     int _stripLengths;                             /* +48   igObjectRefMetaField */
 } igGeometryAttr1_5;
 
+#ifdef __cplusplus
+typedef struct igGeometryAttrList : public igObject {
+#else
 /* handle 0x55f420, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igGeometryAttrList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igGeometryAttrList;
 
+#ifdef __cplusplus
+typedef struct igGeometryElement : public igObject {
+#else
 /* handle 0x58c4e8, 6 field(s), sizeof 44 (registered instance size) */
 typedef struct igGeometryElement {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _geometry;                                 /* +8    igObjectRefMetaField */
     float _defaultSize[3];                         /* +12   igVec3fMetaField */
     float _color[4];                               /* +24   igVec4fMetaField */
     int _sharableAttrs;                            /* +40   igObjectRefMetaField */
 } igGeometryElement;
 
+#ifdef __cplusplus
+typedef struct igGeometryList : public igObject {
+#else
 /* handle 0x561a30, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igGeometryList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igGeometryList;
 
+#ifdef __cplusplus
+typedef struct igGeometryMaskAttr : public igObject {
+#else
 /* handle 0x55f148, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igGeometryMaskAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned int _mask;                            /* +12   igUnsignedIntMetaField */
 } igGeometryMaskAttr;
 
+#ifdef __cplusplus
+typedef struct igGeometrySetAttr : public igObject {
+#else
 /* handle 0x55f118, 9 field(s), sizeof 32 (registered instance size) */
 typedef struct igGeometrySetAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _vc;                                       /* +12   igObjectRefMetaField */
@@ -10533,37 +13207,53 @@ typedef struct igGeometrySetAttr {
     char _pad29[3];
 } igGeometrySetAttr;
 
+#ifdef __cplusplus
+typedef struct igGetCenterFunctionList : public igObject {
+#else
 /* handle 0x561018, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igGetCenterFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igGetCenterFunctionList;
 
+#ifdef __cplusplus
+typedef struct igGraphPath : public igObject {
+#else
 /* handle 0x561a10, 5 field(s), sizeof 28 (registered instance size) */
 typedef struct igGraphPath {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _path;                                     /* +8    igObjectRefMetaField */
     float _center[3];                              /* +12   igVec3fMetaField */
     float _length;                                 /* +24   igFloatMetaField */
 } igGraphPath;
 
+#ifdef __cplusplus
+typedef struct igGraphPathList : public igObject {
+#else
 /* handle 0x561a08, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igGraphPathList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igGraphPathList;
 
+#ifdef __cplusplus
+typedef struct igGroup : public igObject {
+#else
 /* handle 0x5619f8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igGroup {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -10572,10 +13262,14 @@ typedef struct igGroup {
     int _childList;                                /* +28   igObjectRefMetaField */
 } igGroup;
 
+#ifdef __cplusplus
+typedef struct igGuiComponent : public igObject {
+#else
 /* handle 0x58c4a8, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igGuiComponent {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _guiSystem;                                /* +8    igObjectRefMetaField */
     int _controller;                               /* +12   igObjectRefMetaField */
     int _model;                                    /* +16   igObjectRefMetaField */
@@ -10586,36 +13280,52 @@ typedef struct igGuiComponent {
     char _pad33[3];
 } igGuiComponent;
 
+#ifdef __cplusplus
+typedef struct igGuiComponentAspect : public igObject {
+#else
 /* handle 0x58c480, 6 field(s), sizeof 40 (registered instance size) */
 typedef struct igGuiComponentAspect {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _node;                                     /* +12   igObjectRefMetaField */
     float _minSize[3];                             /* +16   igVec3fMetaField */
     float _maxSize[3];                             /* +28   igVec3fMetaField */
 } igGuiComponentAspect;
 
+#ifdef __cplusplus
+typedef struct igGuiComponentController : public igObject {
+#else
 /* handle 0x58c478, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igGuiComponentController {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
 } igGuiComponentController;
 
+#ifdef __cplusplus
+typedef struct igGuiComponentList : public igObject {
+#else
 /* handle 0x58c4a0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igGuiComponentList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igGuiComponentList;
 
+#ifdef __cplusplus
+typedef struct igGuiComponentModel : public igObject {
+#else
 /* handle 0x58c438, 10 field(s), sizeof 36 (registered instance size) */
 typedef struct igGuiComponentModel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     unsigned char _hasFocus;                       /* +13   igBoolMetaField */
@@ -10627,10 +13337,14 @@ typedef struct igGuiComponentModel {
     int _component;                                /* +32   igObjectRefMetaField */
 } igGuiComponentModel;
 
+#ifdef __cplusplus
+typedef struct igGuiComponentNode : public igObject {
+#else
 /* handle 0x58c428, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igGuiComponentNode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -10640,10 +13354,14 @@ typedef struct igGuiComponentNode {
     int _component;                                /* +32   igObjectRefMetaField */
 } igGuiComponentNode;
 
+#ifdef __cplusplus
+typedef struct igGuiSystem : public igObject {
+#else
 /* handle 0x58c2e0, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igGuiSystem {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _renderer;                                 /* +8    igObjectRefMetaField */
     int _model;                                    /* +12   igObjectRefMetaField */
     int _viewList;                                 /* +16   igObjectRefMetaField */
@@ -10654,10 +13372,14 @@ typedef struct igGuiSystem {
     char _pad33[3];
 } igGuiSystem;
 
+#ifdef __cplusplus
+typedef struct igGuiSystemModel : public igObject {
+#else
 /* handle 0x58c3c8, 14 field(s), sizeof 184 (registered instance size) */
 typedef struct igGuiSystemModel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
     float _windowSize[2];                          /* +12   igVec2fMetaField */
     float _mousePosition[2];                       /* +20   igVec2fMetaField */
@@ -10675,10 +13397,14 @@ typedef struct igGuiSystemModel {
     char _pad181[3];
 } igGuiSystemModel;
 
+#ifdef __cplusplus
+typedef struct igGuiSystemRenderer : public igObject {
+#else
 /* handle 0x58c338, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igGuiSystemRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
     int _root;                                     /* +12   igObjectRefMetaField */
     int _model;                                    /* +16   igObjectRefMetaField */
@@ -10686,35 +13412,51 @@ typedef struct igGuiSystemRenderer {
     int _displayListAttr;                          /* +24   igObjectRefMetaField */
 } igGuiSystemRenderer;
 
+#ifdef __cplusplus
+typedef struct igHotKeyBinding : public igObject {
+#else
 /* handle 0x58c2c0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igHotKeyBinding {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _key;                                      /* +8    igEnumMetaField */
     int _button;                                   /* +12   igEnumMetaField */
     int _action;                                   /* +16   igObjectRefMetaField */
 } igHotKeyBinding;
 
+#ifdef __cplusplus
+typedef struct igHotKeyBindingList : public igObject {
+#else
 /* handle 0x58c2b8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igHotKeyBindingList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igHotKeyBindingList;
 
+#ifdef __cplusplus
+typedef struct igHotKeyEventReceiver : public igObject {
+#else
 /* handle 0x58c2a8, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igHotKeyEventReceiver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _hotKeyList;                               /* +8    igObjectRefMetaField */
 } igHotKeyEventReceiver;
 
+#ifdef __cplusplus
+typedef struct igIGBFile : public igObject {
+#else
 /* handle 0x586140, 88 field(s), sizeof 308 (registered instance size) */
 typedef struct igIGBFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -10810,10 +13552,14 @@ typedef struct igIGBFile {
     int _memoryPoolHandles;                        /* +304  igObjectRefMetaField */
 } igIGBFile;
 
+#ifdef __cplusplus
+typedef struct igImage : public igObject {
+#else
 /* handle 0x55fd80, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct igImage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned int _px;                              /* +8    igUnsignedIntMetaField */
     unsigned int _py;                              /* +12   igUnsignedIntMetaField */
     unsigned int _pz;                              /* +16   igUnsignedIntMetaField */
@@ -10839,19 +13585,27 @@ typedef struct igImage {
     int _pNameString;                              /* +88   igStringMetaField */
 } igImage;
 
+#ifdef __cplusplus
+typedef struct igImageMipMapList : public igObject {
+#else
 /* handle 0x55ee20, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igImageMipMapList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igImageMipMapList;
 
+#ifdef __cplusplus
+typedef struct igIndexArray : public igObject {
+#else
 /* handle 0x55fd28, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igIndexArray {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _memPool;                                  /* +8    igObjectRefMetaField */
     int _indexData;                                /* +12   igMemoryRefMetaField */
     unsigned int _numIndices;                      /* +16   igUnsignedIntMetaField */
@@ -10859,46 +13613,66 @@ typedef struct igIndexArray {
     unsigned int _usageFlags;                      /* +24   igUnsignedIntMetaField */
 } igIndexArray;
 
+#ifdef __cplusplus
+typedef struct igInfo : public igObject {
+#else
 /* handle 0x586128, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
     char _pad17[3];
 } igInfo;
 
+#ifdef __cplusplus
+typedef struct igInfoList : public igObject {
+#else
 /* handle 0x586120, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igInfoList;
 
+#ifdef __cplusplus
+typedef struct igInfoManager : public igObject {
+#else
 /* handle 0x56dc38, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igInfoManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
 } igInfoManager;
 
+#ifdef __cplusplus
+typedef struct igInfoManagerList : public igObject {
+#else
 /* handle 0x56dc30, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igInfoManagerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igInfoManagerList;
 
+#ifdef __cplusplus
+typedef struct igInfoManagerOrderedList : public igObject {
+#else
 /* handle 0x56dc28, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igInfoManagerOrderedList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _objectList;                               /* +8    igObjectRefMetaField */
     int _dependencies;                             /* +12   igObjectRefMetaField */
     int _order;                                    /* +16   igObjectRefMetaField */
@@ -10907,10 +13681,14 @@ typedef struct igInfoManagerOrderedList {
     char _pad25[3];
 } igInfoManagerOrderedList;
 
+#ifdef __cplusplus
+typedef struct igIniShaderFactory : public igObject {
+#else
 /* handle 0x5619a8, 15 field(s), sizeof 60 (registered instance size) */
 typedef struct igIniShaderFactory {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _attrNames;                                /* +12   igObjectRefMetaField */
     int _attrTypes;                                /* +16   igObjectRefMetaField */
@@ -10926,10 +13704,14 @@ typedef struct igIniShaderFactory {
     int _fileCache;                                /* +56   igObjectRefMetaField */
 } igIniShaderFactory;
 
+#ifdef __cplusplus
+typedef struct igInsightCore : public igObject {
+#else
 /* handle 0x56db60, 21 field(s), sizeof 112 (registered instance size) */
 typedef struct igInsightCore {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _managerList;                              /* +8    igObjectRefMetaField */
     int _scheduler;                                /* +12   igObjectRefMetaField */
     int _infoList;                                 /* +16   igObjectRefMetaField */
@@ -10953,19 +13735,27 @@ typedef struct igInsightCore {
     char _pad108[4];
 } igInsightCore;
 
+#ifdef __cplusplus
+typedef struct igInsightPluginList : public igObject {
+#else
 /* handle 0x56db50, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igInsightPluginList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igInsightPluginList;
 
+#ifdef __cplusplus
+typedef struct igIntArrayMetaField : public igObject {
+#else
 /* handle 0x586108, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igIntArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -10989,37 +13779,53 @@ typedef struct igIntArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igIntArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igIntList : public igObject {
+#else
 /* handle 0x586880, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igIntList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igIntList;
 
+#ifdef __cplusplus
+typedef struct igIntListList : public igObject {
+#else
 /* handle 0x5867b8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igIntListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igIntListList;
 
+#ifdef __cplusplus
+typedef struct igIntListNoClean : public igObject {
+#else
 /* handle 0x586878, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igIntListNoClean {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igIntListNoClean;
 
+#ifdef __cplusplus
+typedef struct igIntMetaField : public igObject {
+#else
 /* handle 0x5860f8, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igIntMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -11042,17 +13848,25 @@ typedef struct igIntMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igIntMetaField;
 
+#ifdef __cplusplus
+typedef struct igIntObject : public igObject {
+#else
 /* handle 0x562bd0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igIntObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _value;                                    /* +8    igIntMetaField */
 } igIntObject;
 
+#ifdef __cplusplus
+typedef struct igInterface : public igObject {
+#else
 /* handle 0x56da28, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igInterface {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11061,17 +13875,25 @@ typedef struct igInterface {
     int _logInterface;                             /* +28   igObjectRefMetaField */
 } igInterface;
 
+#ifdef __cplusplus
+typedef struct igInterfaceManager : public igObject {
+#else
 /* handle 0x55f5e8, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igInterfaceManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _devices;                                  /* +8    igObjectRefMetaField */
 } igInterfaceManager;
 
+#ifdef __cplusplus
+typedef struct igInterfaced : public igObject {
+#else
 /* handle 0x56d9f0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igInterfaced {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11080,10 +13902,14 @@ typedef struct igInterfaced {
     int _logInterface;                             /* +28   igObjectRefMetaField */
 } igInterfaced;
 
+#ifdef __cplusplus
+typedef struct igInterpretedShaderData : public igObject {
+#else
 /* handle 0x561990, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igInterpretedShaderData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _attrPushLists;                            /* +8    igObjectRefMetaField */
     int _attrPopLists;                             /* +12   igObjectRefMetaField */
     int _dataPumps;                                /* +16   igObjectRefMetaField */
@@ -11092,10 +13918,14 @@ typedef struct igInterpretedShaderData {
     int _objectMappings;                           /* +28   igObjectRefMetaField */
 } igInterpretedShaderData;
 
+#ifdef __cplusplus
+typedef struct igIntersectTraversal : public igObject {
+#else
 /* handle 0x561930, 14 field(s), sizeof 64 (registered instance size) */
 typedef struct igIntersectTraversal {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _nodeSelectProcEnabled;          /* +8    igBoolMetaField */
     char _pad9[3];
     int _nodeSelectProc;                           /* +12   igRawRefMetaField */
@@ -11113,28 +13943,40 @@ typedef struct igIntersectTraversal {
     char _pad60[4];
 } igIntersectTraversal;
 
+#ifdef __cplusplus
+typedef struct igIntersectionFunctionList : public igObject {
+#else
 /* handle 0x561070, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igIntersectionFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igIntersectionFunctionList;
 
+#ifdef __cplusplus
+typedef struct igIsEmptyFunctionList : public igObject {
+#else
 /* handle 0x561020, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igIsEmptyFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igIsEmptyFunctionList;
 
+#ifdef __cplusplus
+typedef struct igItemBase : public igObject {
+#else
 /* handle 0x56d9e8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igItemBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11143,10 +13985,14 @@ typedef struct igItemBase {
     int _logInterface;                             /* +28   igObjectRefMetaField */
 } igItemBase;
 
+#ifdef __cplusplus
+typedef struct igItemDataBaseField : public igObject {
+#else
 /* handle 0x56d9d8, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igItemDataBaseField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -11170,19 +14016,27 @@ typedef struct igItemDataBaseField {
     int _fieldList;                                /* +52   igObjectRefMetaField */
 } igItemDataBaseField;
 
+#ifdef __cplusplus
+typedef struct igItemDataBaseList : public igObject {
+#else
 /* handle 0x56d9c8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igItemDataBaseList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igItemDataBaseList;
 
+#ifdef __cplusplus
+typedef struct igItemInterface : public igObject {
+#else
 /* handle 0x56d998, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct igItemInterface {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11196,52 +14050,76 @@ typedef struct igItemInterface {
     unsigned int _currentKnownItem;                /* +48   igUnsignedIntMetaField */
 } igItemInterface;
 
+#ifdef __cplusplus
+typedef struct igIterateDerived : public igObject {
+#else
 /* handle 0x56d980, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igIterateDerived {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _iterated;                                 /* +8    igObjectRefMetaField */
     int _current;                                  /* +12   igIntMetaField */
 } igIterateDerived;
 
+#ifdef __cplusplus
+typedef struct igIterateField : public igObject {
+#else
 /* handle 0x56d968, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igIterateField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _iterated;                                 /* +8    igObjectRefMetaField */
     int _current;                                  /* +12   igIntMetaField */
 } igIterateField;
 
+#ifdef __cplusplus
+typedef struct igIterateGraph : public igObject {
+#else
 /* handle 0x56d948, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igIterateGraph {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _actorSkinIterationState;        /* +8    igBoolMetaField */
     char _pad9[3];
     int _currentPath;                              /* +12   igObjectRefMetaField */
     int _currentIndices;                           /* +16   igObjectRefMetaField */
 } igIterateGraph;
 
+#ifdef __cplusplus
+typedef struct igLibrary : public igObject {
+#else
 /* handle 0x5860c0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igLibrary {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _registerFunction;                         /* +8    igRawRefMetaField */
 } igLibrary;
 
+#ifdef __cplusplus
+typedef struct igLibraryList : public igObject {
+#else
 /* handle 0x5860b8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igLibraryList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igLibraryList;
 
+#ifdef __cplusplus
+typedef struct igLightAttr : public igObject {
+#else
 /* handle 0x55f088, 20 field(s), sizeof 148 (registered instance size) */
 typedef struct igLightAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _lightType;                                /* +12   igEnumMetaField */
@@ -11263,19 +14141,27 @@ typedef struct igLightAttr {
     char _pad146[2];
 } igLightAttr;
 
+#ifdef __cplusplus
+typedef struct igLightList : public igObject {
+#else
 /* handle 0x55f080, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igLightList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igLightList;
 
+#ifdef __cplusplus
+typedef struct igLightSet : public igObject {
+#else
 /* handle 0x5618e8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igLightSet {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -11284,19 +14170,27 @@ typedef struct igLightSet {
     int _lights;                                   /* +28   igObjectRefMetaField */
 } igLightSet;
 
+#ifdef __cplusplus
+typedef struct igLightSetList : public igObject {
+#else
 /* handle 0x589230, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igLightSetList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igLightSetList;
 
+#ifdef __cplusplus
+typedef struct igLightStateAttr : public igObject {
+#else
 /* handle 0x55f060, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct igLightStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _internal;                                 /* +12   igObjectRefMetaField */
@@ -11305,19 +14199,27 @@ typedef struct igLightStateAttr {
     char _pad21[3];
 } igLightStateAttr;
 
+#ifdef __cplusplus
+typedef struct igLightStateAttrList : public igObject {
+#else
 /* handle 0x55f058, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igLightStateAttrList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igLightStateAttrList;
 
+#ifdef __cplusplus
+typedef struct igLightStateAttrPool : public igObject {
+#else
 /* handle 0x5615c0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igLightStateAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -11327,10 +14229,14 @@ typedef struct igLightStateAttrPool {
     char _pad29[3];
 } igLightStateAttrPool;
 
+#ifdef __cplusplus
+typedef struct igLightStateSet : public igObject {
+#else
 /* handle 0x5618d8, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igLightStateSet {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -11340,30 +14246,42 @@ typedef struct igLightStateSet {
     int _lightEnables;                             /* +32   igObjectRefMetaField */
 } igLightStateSet;
 
+#ifdef __cplusplus
+typedef struct igLightingStateAttr : public igObject {
+#else
 /* handle 0x55f048, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igLightingStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igLightingStateAttr;
 
+#ifdef __cplusplus
+typedef struct igLineWidthExt : public igObject {
+#else
 /* handle 0x55fd18, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igLineWidthExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
     float _fWidth;                                 /* +20   igFloatMetaField */
 } igLineWidthExt;
 
+#ifdef __cplusplus
+typedef struct igListenerBase : public igObject {
+#else
 /* handle 0x56d938, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igListenerBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11372,10 +14290,14 @@ typedef struct igListenerBase {
     int _logInterface;                             /* +28   igObjectRefMetaField */
 } igListenerBase;
 
+#ifdef __cplusplus
+typedef struct igListenerInterface : public igObject {
+#else
 /* handle 0x56d900, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct igListenerInterface {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11388,28 +14310,40 @@ typedef struct igListenerInterface {
     int _typesListener;                            /* +44   igObjectRefMetaField */
 } igListenerInterface;
 
+#ifdef __cplusplus
+typedef struct igListenerList : public igObject {
+#else
 /* handle 0x56d930, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igListenerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igListenerList;
 
+#ifdef __cplusplus
+typedef struct igListenerListList : public igObject {
+#else
 /* handle 0x56d928, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igListenerListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igListenerListList;
 
+#ifdef __cplusplus
+typedef struct igLocationTable : public igObject {
+#else
 /* handle 0x586078, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igLocationTable {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _capacity;                                 /* +8    igIntMetaField */
     int _hashCapacity;                             /* +12   igIntMetaField */
     int _locations;                                /* +16   igObjectRefMetaField */
@@ -11418,10 +14352,14 @@ typedef struct igLocationTable {
     int _sourceFileNames;                          /* +28   igObjectRefMetaField */
 } igLocationTable;
 
+#ifdef __cplusplus
+typedef struct igLockBase : public igObject {
+#else
 /* handle 0x56d8f8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igLockBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11430,10 +14368,14 @@ typedef struct igLockBase {
     int _logInterface;                             /* +28   igObjectRefMetaField */
 } igLockBase;
 
+#ifdef __cplusplus
+typedef struct igLockInterface : public igObject {
+#else
 /* handle 0x56d8d8, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igLockInterface {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11445,10 +14387,14 @@ typedef struct igLockInterface {
     int _objectCacheLists;                         /* +40   igObjectRefMetaField */
 } igLockInterface;
 
+#ifdef __cplusplus
+typedef struct igLod : public igObject {
+#else
 /* handle 0x561898, 15 field(s), sizeof 68 (registered instance size) */
 typedef struct igLod {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -11464,10 +14410,14 @@ typedef struct igLod {
     int _hysteresisList;                           /* +64   igObjectRefMetaField */
 } igLod;
 
+#ifdef __cplusplus
+typedef struct igLogInterface : public igObject {
+#else
 /* handle 0x56d8c8, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igLogInterface {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -11478,10 +14428,14 @@ typedef struct igLogInterface {
     char _pad33[3];
 } igLogInterface;
 
+#ifdef __cplusplus
+typedef struct igLogoRenderer : public igObject {
+#else
 /* handle 0x58cdf0, 7 field(s), sizeof 40 (registered instance size) */
 typedef struct igLogoRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
     char _pad12[4];
     long long _time;                               /* +16   igLongMetaField */
@@ -11491,10 +14445,14 @@ typedef struct igLogoRenderer {
     char _pad36[4];
 } igLogoRenderer;
 
+#ifdef __cplusplus
+typedef struct igLongArrayMetaField : public igObject {
+#else
 /* handle 0x586060, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igLongArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -11518,19 +14476,27 @@ typedef struct igLongArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igLongArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igLongList : public igObject {
+#else
 /* handle 0x586868, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igLongList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igLongList;
 
+#ifdef __cplusplus
+typedef struct igLongMetaField : public igObject {
+#else
 /* handle 0x586050, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igLongMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -11553,19 +14519,27 @@ typedef struct igLongMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igLongMetaField;
 
+#ifdef __cplusplus
+typedef struct igLongStack : public igObject {
+#else
 /* handle 0x562b60, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igLongStack {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igLongStack;
 
+#ifdef __cplusplus
+typedef struct igLongTimer : public igObject {
+#else
 /* handle 0x586028, 6 field(s), sizeof 40 (registered instance size) */
 typedef struct igLongTimer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _startTime;                          /* +8    igLongMetaField */
     long long _additionalTime;                     /* +16   igLongMetaField */
     long long _resetTime;                          /* +24   igLongMetaField */
@@ -11573,19 +14547,27 @@ typedef struct igLongTimer {
     char _pad33[7];
 } igLongTimer;
 
+#ifdef __cplusplus
+typedef struct igLuaState : public igObject {
+#else
 /* handle 0x56de10, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igLuaState {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _luaState;                                 /* +12   igRawRefMetaField */
     int _memPool;                                  /* +16   igObjectRefMetaField */
 } igLuaState;
 
+#ifdef __cplusplus
+typedef struct igMallocMemoryPool : public igObject {
+#else
 /* handle 0x586b80, 26 field(s), sizeof 160 (registered instance size) */
 typedef struct igMallocMemoryPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _localAllocated;                     /* +8    igLongMetaField */
     long long _localFreed;                         /* +16   igLongMetaField */
     long long _localNetAllocated;                  /* +24   igLongMetaField */
@@ -11615,10 +14597,14 @@ typedef struct igMallocMemoryPool {
     int _poolOptionFlags;                          /* +156  igIntMetaField */
 } igMallocMemoryPool;
 
+#ifdef __cplusplus
+typedef struct igMaterialAttr : public igObject {
+#else
 /* handle 0x55f010, 10 field(s), sizeof 84 (registered instance size) */
 typedef struct igMaterialAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     float _shininess;                              /* +12   igFloatMetaField */
@@ -11629,19 +14615,27 @@ typedef struct igMaterialAttr {
     unsigned int _flags;                           /* +80   igUnsignedIntMetaField */
 } igMaterialAttr;
 
+#ifdef __cplusplus
+typedef struct igMatrix44fList : public igObject {
+#else
 /* handle 0x561078, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMatrix44fList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMatrix44fList;
 
+#ifdef __cplusplus
+typedef struct igMatrix44fMetaField : public igObject {
+#else
 /* handle 0x561000, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igMatrix44fMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -11664,26 +14658,38 @@ typedef struct igMatrix44fMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igMatrix44fMetaField;
 
+#ifdef __cplusplus
+typedef struct igMatrixObject : public igObject {
+#else
 /* handle 0x562bc0, 3 field(s), sizeof 72 (registered instance size) */
 typedef struct igMatrixObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _m[16];                                  /* +8    igMatrix44fMetaField */
 } igMatrixObject;
 
+#ifdef __cplusplus
+typedef struct igMatrixObjectList : public igObject {
+#else
 /* handle 0x562bb8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMatrixObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMatrixObjectList;
 
+#ifdef __cplusplus
+typedef struct igMatrixObjectPool : public igObject {
+#else
 /* handle 0x561590, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igMatrixObjectPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -11693,29 +14699,41 @@ typedef struct igMatrixObjectPool {
     char _pad29[3];
 } igMatrixObjectPool;
 
+#ifdef __cplusplus
+typedef struct igMatrixOptStateAttr : public igObject {
+#else
 /* handle 0x55f000, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igMatrixOptStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igMatrixOptStateAttr;
 
+#ifdef __cplusplus
+typedef struct igMatrixStack : public igObject {
+#else
 /* handle 0x562ba0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMatrixStack {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMatrixStack;
 
+#ifdef __cplusplus
+typedef struct igMediaFile : public igObject {
+#else
 /* handle 0x585fc8, 20 field(s), sizeof 68 (registered instance size) */
 typedef struct igMediaFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _fileName;                                 /* +12   igStringMetaField */
     int _readMode;                                 /* +16   igEnumMetaField */
@@ -11736,19 +14754,27 @@ typedef struct igMediaFile {
     int _media;                                    /* +64   igObjectRefMetaField */
 } igMediaFile;
 
+#ifdef __cplusplus
+typedef struct igMediaList : public igObject {
+#else
 /* handle 0x586018, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMediaList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMediaList;
 
+#ifdef __cplusplus
+typedef struct igMemoryDescriptorMetaField : public igObject {
+#else
 /* handle 0x586bd8, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igMemoryDescriptorMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -11772,20 +14798,28 @@ typedef struct igMemoryDescriptorMetaField {
     int _fieldList;                                /* +52   igObjectRefMetaField */
 } igMemoryDescriptorMetaField;
 
+#ifdef __cplusplus
+typedef struct igMemoryDictionary : public igObject {
+#else
 /* handle 0x585fa0, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igMemoryDictionary {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _capacity;                                 /* +8    igIntMetaField */
     int _count;                                    /* +12   igIntMetaField */
     int _memoryEntries;                            /* +16   igObjectRefMetaField */
     int _cachedIndex;                              /* +20   igIntMetaField */
 } igMemoryDictionary;
 
+#ifdef __cplusplus
+typedef struct igMemoryDirEntry : public igObject {
+#else
 /* handle 0x585f60, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct igMemoryDirEntry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _index;                                    /* +12   igIntMetaField */
     int _resolveMethod;                            /* +16   igEnumMetaField */
@@ -11801,10 +14835,14 @@ typedef struct igMemoryDirEntry {
     char _pad53[3];
 } igMemoryDirEntry;
 
+#ifdef __cplusplus
+typedef struct igMemoryFile : public igObject {
+#else
 /* handle 0x585f18, 15 field(s), sizeof 60 (registered instance size) */
 typedef struct igMemoryFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _fileName;                                 /* +12   igStringMetaField */
     int _readMode;                                 /* +16   igEnumMetaField */
@@ -11821,28 +14859,40 @@ typedef struct igMemoryFile {
     int _iSeekPosition;                            /* +56   igIntMetaField */
 } igMemoryFile;
 
+#ifdef __cplusplus
+typedef struct igMemoryFileEntry : public igObject {
+#else
 /* handle 0x585f48, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMemoryFileEntry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _buffer;                                   /* +12   igRawRefMetaField */
     unsigned int _size;                            /* +16   igUnsignedIntMetaField */
 } igMemoryFileEntry;
 
+#ifdef __cplusplus
+typedef struct igMemoryFileEntryList : public igObject {
+#else
 /* handle 0x585f40, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMemoryFileEntryList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMemoryFileEntryList;
 
+#ifdef __cplusplus
+typedef struct igMemoryImage : public igObject {
+#else
 /* handle 0x55fd70, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct igMemoryImage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned int _px;                              /* +8    igUnsignedIntMetaField */
     unsigned int _py;                              /* +12   igUnsignedIntMetaField */
     unsigned int _pz;                              /* +16   igUnsignedIntMetaField */
@@ -11868,10 +14918,14 @@ typedef struct igMemoryImage {
     int _pNameString;                              /* +88   igStringMetaField */
 } igMemoryImage;
 
+#ifdef __cplusplus
+typedef struct igMemoryPool : public igObject {
+#else
 /* handle 0x585ea0, 16 field(s), sizeof 112 (registered instance size) */
 typedef struct igMemoryPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _localAllocated;                     /* +8    igLongMetaField */
     long long _localFreed;                         /* +16   igLongMetaField */
     long long _localNetAllocated;                  /* +24   igLongMetaField */
@@ -11889,10 +14943,14 @@ typedef struct igMemoryPool {
     char _pad106[6];
 } igMemoryPool;
 
+#ifdef __cplusplus
+typedef struct igMemoryPoolContextInfo : public igObject {
+#else
 /* handle 0x585e88, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igMemoryPoolContextInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -11900,10 +14958,14 @@ typedef struct igMemoryPoolContextInfo {
     int _memoryPoolInfos;                          /* +20   igObjectRefMetaField */
 } igMemoryPoolContextInfo;
 
+#ifdef __cplusplus
+typedef struct igMemoryPoolInfo : public igObject {
+#else
 /* handle 0x585e00, 21 field(s), sizeof 84 (registered instance size) */
 typedef struct igMemoryPoolInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -11926,19 +14988,27 @@ typedef struct igMemoryPoolInfo {
     int _eventTrackerCapacity;                     /* +80   igIntMetaField */
 } igMemoryPoolInfo;
 
+#ifdef __cplusplus
+typedef struct igMemoryPoolInfoList : public igObject {
+#else
 /* handle 0x585df8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMemoryPoolInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMemoryPoolInfoList;
 
+#ifdef __cplusplus
+typedef struct igMemoryRefArrayMetaField : public igObject {
+#else
 /* handle 0x585de0, 31 field(s), sizeof 84 (registered instance size) */
 typedef struct igMemoryRefArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -11974,10 +15044,14 @@ typedef struct igMemoryRefArrayMetaField {
     int _num;                                      /* +80   igIntMetaField */
 } igMemoryRefArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igMemoryRefMetaField : public igObject {
+#else
 /* handle 0x585d80, 30 field(s), sizeof 80 (registered instance size) */
 typedef struct igMemoryRefMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -12012,18 +15086,26 @@ typedef struct igMemoryRefMetaField {
     int _poolName;                                 /* +76   igStringMetaField */
 } igMemoryRefMetaField;
 
+#ifdef __cplusplus
+typedef struct igMersenneTwisterRandomNumber : public igObject {
+#else
 /* handle 0x562b88, 4 field(s), sizeof 2508 (registered instance size) */
 typedef struct igMersenneTwisterRandomNumber {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _mti;                                      /* +8    igIntMetaField */
     unsigned int _mt[624];                         /* +12   igUnsignedIntArrayMetaField */
 } igMersenneTwisterRandomNumber;
 
+#ifdef __cplusplus
+typedef struct igMessageBase : public igObject {
+#else
 /* handle 0x56d8c0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igMessageBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -12032,36 +15114,52 @@ typedef struct igMessageBase {
     int _logInterface;                             /* +28   igObjectRefMetaField */
 } igMessageBase;
 
+#ifdef __cplusplus
+typedef struct igMessageDefaultReceiver : public igObject {
+#else
 /* handle 0x56db30, 4 field(s), sizeof 24 (registered instance size) */
 typedef struct igMessageDefaultReceiver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _msgHandler;                               /* +8    igObjectRefMetaField */
     int _msgHandlerFunc;                           /* +12   igStructMetaField */
     char _pad16[8];
 } igMessageDefaultReceiver;
 
+#ifdef __cplusplus
+typedef struct igMessageFilter : public igObject {
+#else
 /* handle 0x56daf8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igMessageFilter {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _msgType;                                  /* +8    igObjectRefMetaField */
     int _receivers;                                /* +12   igObjectRefMetaField */
 } igMessageFilter;
 
+#ifdef __cplusplus
+typedef struct igMessageFilterList : public igObject {
+#else
 /* handle 0x56daf0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMessageFilterList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMessageFilterList;
 
+#ifdef __cplusplus
+typedef struct igMessageInterface : public igObject {
+#else
 /* handle 0x56d8a8, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igMessageInterface {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -12071,44 +15169,64 @@ typedef struct igMessageInterface {
     int _messages;                                 /* +32   igObjectRefMetaField */
 } igMessageInterface;
 
+#ifdef __cplusplus
+typedef struct igMessageList : public igObject {
+#else
 /* handle 0x56d8b8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMessageList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMessageList;
 
+#ifdef __cplusplus
+typedef struct igMessageReceiverList : public igObject {
+#else
 /* handle 0x56dae0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMessageReceiverList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMessageReceiverList;
 
+#ifdef __cplusplus
+typedef struct igMessenger : public igObject {
+#else
 /* handle 0x56dac8, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igMessenger {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dispatcher;                               /* +8    igObjectRefMetaField */
 } igMessenger;
 
+#ifdef __cplusplus
+typedef struct igMetaEnum : public igObject {
+#else
 /* handle 0x585d60, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMetaEnum {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _names;                                    /* +12   igObjectRefMetaField */
     int _values;                                   /* +16   igObjectRefMetaField */
 } igMetaEnum;
 
+#ifdef __cplusplus
+typedef struct igMetaField : public igObject {
+#else
 /* handle 0x585cc8, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -12131,29 +15249,41 @@ typedef struct igMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igMetaField;
 
+#ifdef __cplusplus
+typedef struct igMetaFieldInfo : public igObject {
+#else
 /* handle 0x585cb8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMetaFieldInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
     char _pad17[3];
 } igMetaFieldInfo;
 
+#ifdef __cplusplus
+typedef struct igMetaFieldList : public igObject {
+#else
 /* handle 0x5867c0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMetaFieldList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMetaFieldList;
 
+#ifdef __cplusplus
+typedef struct igMetaObject : public igObject {
+#else
 /* handle 0x585be8, 27 field(s), sizeof 100 (registered instance size) */
 typedef struct igMetaObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _id;                                       /* +8    igIntMetaField */
     int _index;                                    /* +12   igIntMetaField */
     int _majorVersion;                             /* +16   igIntMetaField */
@@ -12183,53 +15313,77 @@ typedef struct igMetaObject {
     int _poolName;                                 /* +96   igStringMetaField */
 } igMetaObject;
 
+#ifdef __cplusplus
+typedef struct igMetaObjectList : public igObject {
+#else
 /* handle 0x5867d0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMetaObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMetaObjectList;
 
+#ifdef __cplusplus
+typedef struct igMetaObjectListList : public igObject {
+#else
 /* handle 0x5867c8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMetaObjectListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMetaObjectListList;
 
+#ifdef __cplusplus
+typedef struct igModel : public igObject {
+#else
 /* handle 0x58c298, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igModel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
 } igModel;
 
+#ifdef __cplusplus
+typedef struct igModelViewMatrixAttr : public igObject {
+#else
 /* handle 0x55efe8, 5 field(s), sizeof 76 (registered instance size) */
 typedef struct igModelViewMatrixAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     float _m[16];                                  /* +12   igMatrix44fMetaField */
 } igModelViewMatrixAttr;
 
+#ifdef __cplusplus
+typedef struct igModelViewMatrixAttrList : public igObject {
+#else
 /* handle 0x55efe0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igModelViewMatrixAttrList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igModelViewMatrixAttrList;
 
+#ifdef __cplusplus
+typedef struct igModelViewMatrixAttrPool : public igObject {
+#else
 /* handle 0x5615b8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igModelViewMatrixAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -12239,10 +15393,14 @@ typedef struct igModelViewMatrixAttrPool {
     char _pad29[3];
 } igModelViewMatrixAttrPool;
 
+#ifdef __cplusplus
+typedef struct igModelViewMatrixBoneSelect : public igObject {
+#else
 /* handle 0x561888, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igModelViewMatrixBoneSelect {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -12252,27 +15410,39 @@ typedef struct igModelViewMatrixBoneSelect {
     int _matrixIndex;                              /* +32   igIntMetaField */
 } igModelViewMatrixBoneSelect;
 
+#ifdef __cplusplus
+typedef struct igModelViewMatrixBoneSelectList : public igObject {
+#else
 /* handle 0x561880, 5 field(s), sizeof 20 (from the fields; no registrar found) */
 typedef struct igModelViewMatrixBoneSelectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igModelViewMatrixBoneSelectList;
 
+#ifdef __cplusplus
+typedef struct igMouseCursor : public igObject {
+#else
 /* handle 0x58c320, 4 field(s), sizeof 20 (registered instance size) */
 typedef struct igMouseCursor {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _geometryElement;                          /* +8    igObjectRefMetaField */
     float _offset[2];                              /* +12   igVec2fMetaField */
 } igMouseCursor;
 
+#ifdef __cplusplus
+typedef struct igMousePosObserver : public igObject {
+#else
 /* handle 0x58c380, 10 field(s), sizeof 100 (registered instance size) */
 typedef struct igMousePosObserver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _guiSystem;                                /* +12   igObjectRefMetaField */
     int _intersectTraversal;                       /* +16   igObjectRefMetaField */
@@ -12284,26 +15454,38 @@ typedef struct igMousePosObserver {
     float _inverseProjectionMatrix[16];            /* +36   igMatrix44fMetaField */
 } igMousePosObserver;
 
+#ifdef __cplusplus
+typedef struct igMovieCodec : public igObject {
+#else
 /* handle 0x587738, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igMovieCodec {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } igMovieCodec;
 
+#ifdef __cplusplus
+typedef struct igMovieCodecList : public igObject {
+#else
 /* handle 0x587730, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMovieCodecList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMovieCodecList;
 
+#ifdef __cplusplus
+typedef struct igMovieInfo : public igObject {
+#else
 /* handle 0x5877b0, 26 field(s), sizeof 104 (registered instance size) */
 typedef struct igMovieInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -12332,19 +15514,27 @@ typedef struct igMovieInfo {
     int _bitrate;                                  /* +100  igIntMetaField */
 } igMovieInfo;
 
+#ifdef __cplusplus
+typedef struct igMovieInfoList : public igObject {
+#else
 /* handle 0x587790, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMovieInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igMovieInfoList;
 
+#ifdef __cplusplus
+typedef struct igMovieManager : public igObject {
+#else
 /* handle 0x587870, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igMovieManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _movieList;                                /* +16   igObjectRefMetaField */
@@ -12356,50 +15546,74 @@ typedef struct igMovieManager {
     int _rendererList;                             /* +36   igObjectRefMetaField */
 } igMovieManager;
 
+#ifdef __cplusplus
+typedef struct igMoviePlugin : public igObject {
+#else
 /* handle 0x5878a8, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igMoviePlugin {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _movieManager;                             /* +8    igObjectRefMetaField */
 } igMoviePlugin;
 
+#ifdef __cplusplus
+typedef struct igMovieRenderer : public igObject {
+#else
 /* handle 0x587860, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igMovieRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
     int _movieManager;                             /* +12   igObjectRefMetaField */
 } igMovieRenderer;
 
+#ifdef __cplusplus
+typedef struct igMultiPassStateAttr : public igObject {
+#else
 /* handle 0x55efd0, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igMultiPassStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _numPasses;                                /* +12   igIntMetaField */
 } igMultiPassStateAttr;
 
+#ifdef __cplusplus
+typedef struct igMultiTextureExt : public igObject {
+#else
 /* handle 0x55fd10, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igMultiTextureExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
 } igMultiTextureExt;
 
+#ifdef __cplusplus
+typedef struct igNamedObject : public igObject {
+#else
 /* handle 0x585bd8, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igNamedObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } igNamedObject;
 
+#ifdef __cplusplus
+typedef struct igNamedObjectInfo : public igObject {
+#else
 /* handle 0x585bc0, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igNamedObjectInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -12407,19 +15621,27 @@ typedef struct igNamedObjectInfo {
     int _objects;                                  /* +20   igObjectRefMetaField */
 } igNamedObjectInfo;
 
+#ifdef __cplusplus
+typedef struct igNamedObjectList : public igObject {
+#else
 /* handle 0x585bd0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNamedObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNamedObjectList;
 
+#ifdef __cplusplus
+typedef struct igNode : public igObject {
+#else
 /* handle 0x561838, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igNode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -12427,119 +15649,171 @@ typedef struct igNode {
     int _handle;                                   /* +24   igIntMetaField */
 } igNode;
 
+#ifdef __cplusplus
+typedef struct igNodeList : public igObject {
+#else
 /* handle 0x561830, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNodeList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNodeList;
 
+#ifdef __cplusplus
+typedef struct igNodeListList : public igObject {
+#else
 /* handle 0x561828, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNodeListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNodeListList;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedAttrList : public igObject {
+#else
 /* handle 0x55f458, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedAttrList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedAttrList;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedAttrStackManagerList : public igObject {
+#else
 /* handle 0x561f90, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedAttrStackManagerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedAttrStackManagerList;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedMatrixObjectList : public igObject {
+#else
 /* handle 0x562bb0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedMatrixObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedMatrixObjectList;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedNodeList : public igObject {
+#else
 /* handle 0x561820, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedNodeList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedNodeList;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedObjectList : public igObject {
+#else
 /* handle 0x585bb0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedObjectList;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedObjectStack : public igObject {
+#else
 /* handle 0x562b78, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedObjectStack {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedObjectStack;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedThreadList : public igObject {
+#else
 /* handle 0x585820, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedThreadList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedThreadList;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedTransformList : public igObject {
+#else
 /* handle 0x561298, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedTransformList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedTransformList;
 
+#ifdef __cplusplus
+typedef struct igNonRefCountedViewList : public igObject {
+#else
 /* handle 0x58c1b0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igNonRefCountedViewList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igNonRefCountedViewList;
 
+#ifdef __cplusplus
+typedef struct igNormalizeNormalsStateAttr : public igObject {
+#else
 /* handle 0x55efc0, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igNormalizeNormalsStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igNormalizeNormalsStateAttr;
 
+#ifdef __cplusplus
+typedef struct igNormalsRenderer : public igObject {
+#else
 /* handle 0x58cda0, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct igNormalsRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
     int _parameters;                               /* +12   igObjectRefMetaField */
     int _attrList;                                 /* +16   igObjectRefMetaField */
@@ -12554,16 +15828,14 @@ typedef struct igNormalsRenderer {
     char _pad45[3];
 } igNormalsRenderer;
 
-/* handle 0x587198, 2 field(s), sizeof 8 (registered instance size) */
-typedef struct igObject {
-    int _vtable;                                   /* +0    igObjectRefMetaField */
-    unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
-} igObject;
-
+#ifdef __cplusplus
+typedef struct igObjectDirEntry : public igObject {
+#else
 /* handle 0x585b70, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct igObjectDirEntry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _index;                                    /* +12   igIntMetaField */
     int _resolveMethod;                            /* +16   igEnumMetaField */
@@ -12577,28 +15849,40 @@ typedef struct igObjectDirEntry {
     int _typeMetaIndex;                            /* +48   igIntMetaField */
 } igObjectDirEntry;
 
+#ifdef __cplusplus
+typedef struct igObjectList : public igObject {
+#else
 /* handle 0x585b60, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igObjectList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igObjectList;
 
+#ifdef __cplusplus
+typedef struct igObjectListList : public igObject {
+#else
 /* handle 0x5867b0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igObjectListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igObjectListList;
 
+#ifdef __cplusplus
+typedef struct igObjectPool : public igObject {
+#else
 /* handle 0x5612e8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igObjectPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -12608,10 +15892,14 @@ typedef struct igObjectPool {
     char _pad29[3];
 } igObjectPool;
 
+#ifdef __cplusplus
+typedef struct igObjectRefArrayMetaField : public igObject {
+#else
 /* handle 0x585b48, 26 field(s), sizeof 72 (registered instance size) */
 typedef struct igObjectRefArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -12642,10 +15930,14 @@ typedef struct igObjectRefArrayMetaField {
     int _num;                                      /* +68   igIntMetaField */
 } igObjectRefArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igObjectRefMetaField : public igObject {
+#else
 /* handle 0x585b20, 25 field(s), sizeof 68 (registered instance size) */
 typedef struct igObjectRefMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -12675,26 +15967,38 @@ typedef struct igObjectRefMetaField {
     int _poolName;                                 /* +64   igStringMetaField */
 } igObjectRefMetaField;
 
+#ifdef __cplusplus
+typedef struct igObjectStringMap : public igObject {
+#else
 /* handle 0x585b08, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igObjectStringMap {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _names;                                    /* +8    igObjectRefMetaField */
     int _data;                                     /* +12   igObjectRefMetaField */
 } igObjectStringMap;
 
+#ifdef __cplusplus
+typedef struct igOnOffColorChanger : public igObject {
+#else
 /* handle 0x58c5e8, 4 field(s), sizeof 88 (registered instance size) */
 typedef struct igOnOffColorChanger {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _colors[16];                             /* +8    igVec4fArrayMetaField */
     float _disabledColor[4];                       /* +72   igVec4fMetaField */
 } igOnOffColorChanger;
 
+#ifdef __cplusplus
+typedef struct igOnOffModel : public igObject {
+#else
 /* handle 0x58c288, 11 field(s), sizeof 40 (registered instance size) */
 typedef struct igOnOffModel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     unsigned char _hasFocus;                       /* +13   igBoolMetaField */
@@ -12708,27 +16012,39 @@ typedef struct igOnOffModel {
     char _pad37[3];
 } igOnOffModel;
 
+#ifdef __cplusplus
+typedef struct igOnOffValueObserver : public igObject {
+#else
 /* handle 0x58c220, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igOnOffValueObserver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _group;                                    /* +12   igObjectRefMetaField */
 } igOnOffValueObserver;
 
+#ifdef __cplusplus
+typedef struct igOnOffValueObserverList : public igObject {
+#else
 /* handle 0x58c218, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igOnOffValueObserverList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igOnOffValueObserverList;
 
+#ifdef __cplusplus
+typedef struct igOptBase : public igObject {
+#else
 /* handle 0x56d890, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igOptBase {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -12739,10 +16055,14 @@ typedef struct igOptBase {
     int _configuration;                            /* +36   igObjectRefMetaField */
 } igOptBase;
 
+#ifdef __cplusplus
+typedef struct igOptInterface : public igObject {
+#else
 /* handle 0x56d860, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct igOptInterface {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _optInterface;                             /* +8    igObjectRefMetaField */
     int _itemInterface;                            /* +12   igObjectRefMetaField */
     int _listenerInterface;                        /* +16   igObjectRefMetaField */
@@ -12755,10 +16075,14 @@ typedef struct igOptInterface {
     int _disabledInfos;                            /* +44   igObjectRefMetaField */
 } igOptInterface;
 
+#ifdef __cplusplus
+typedef struct igOverrideAttrSet : public igObject {
+#else
 /* handle 0x561818, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igOverrideAttrSet {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -12770,10 +16094,14 @@ typedef struct igOverrideAttrSet {
     char _pad37[3];
 } igOverrideAttrSet;
 
+#ifdef __cplusplus
+typedef struct igPageMemoryPool : public igObject {
+#else
 /* handle 0x586a30, 23 field(s), sizeof 272 (registered instance size) */
 typedef struct igPageMemoryPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _localAllocated;                     /* +8    igLongMetaField */
     long long _localFreed;                         /* +16   igLongMetaField */
     long long _localNetAllocated;                  /* +24   igLongMetaField */
@@ -12800,10 +16128,14 @@ typedef struct igPageMemoryPool {
     char _pad144[128];
 } igPageMemoryPool;
 
+#ifdef __cplusplus
+typedef struct igParticleArray : public igObject {
+#else
 /* handle 0x55fbe0, 24 field(s), sizeof 92 (registered instance size) */
 typedef struct igParticleArray {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _particleFormat;                           /* +8    igObjectRefMetaField */
     unsigned int _maxNum;                          /* +12   igUnsignedIntMetaField */
     unsigned int _arrayIndex;                      /* +16   igUnsignedIntMetaField */
@@ -12829,10 +16161,14 @@ typedef struct igParticleArray {
     unsigned int _aliveParticleNum;                /* +88   igUnsignedIntMetaField */
 } igParticleArray;
 
+#ifdef __cplusplus
+typedef struct igParticleAttr : public igObject {
+#else
 /* handle 0x55ef80, 11 field(s), sizeof 48 (registered instance size) */
 typedef struct igParticleAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _bUseCurrentTime;                /* +12   igBoolMetaField */
@@ -12846,10 +16182,14 @@ typedef struct igParticleAttr {
     float _offset;                                 /* +44   igFloatMetaField */
 } igParticleAttr;
 
+#ifdef __cplusplus
+typedef struct igParticleFormat : public igObject {
+#else
 /* handle 0x55fca0, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct igParticleFormat {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _position;                                 /* +8    igEnumMetaField */
     int _color;                                    /* +12   igEnumMetaField */
     int _width;                                    /* +16   igEnumMetaField */
@@ -12862,10 +16202,14 @@ typedef struct igParticleFormat {
     int _lifetime;                                 /* +44   igEnumMetaField */
 } igParticleFormat;
 
+#ifdef __cplusplus
+typedef struct igPickMode : public igObject {
+#else
 /* handle 0x58cb88, 16 field(s), sizeof 188 (registered instance size) */
 typedef struct igPickMode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     float _inverseMatrix[16];                      /* +12   igMatrix44fMetaField */
     int _parameters;                               /* +76   igObjectRefMetaField */
@@ -12884,19 +16228,27 @@ typedef struct igPickMode {
     float _joystickT[2];                           /* +180  igVec2fMetaField */
 } igPickMode;
 
+#ifdef __cplusplus
+typedef struct igPixelPipelineModeAttr : public igObject {
+#else
 /* handle 0x55ef70, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igPixelPipelineModeAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _pipelineMode;                             /* +12   igEnumMetaField */
 } igPixelPipelineModeAttr;
 
+#ifdef __cplusplus
+typedef struct igPlanarShadowShader : public igObject {
+#else
 /* handle 0x5617a8, 23 field(s), sizeof 112 (registered instance size) */
 typedef struct igPlanarShadowShader {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -12922,47 +16274,67 @@ typedef struct igPlanarShadowShader {
     char _pad110[2];
 } igPlanarShadowShader;
 
+#ifdef __cplusplus
+typedef struct igPlane : public igObject {
+#else
 /* handle 0x560fe0, 5 field(s), sizeof 28 (registered instance size) */
 typedef struct igPlane {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _norm[3];                                /* +8    igVec3fMetaField */
     float _offset;                                 /* +20   igFloatMetaField */
     int _octant;                                   /* +24   igEnumMetaField */
 } igPlane;
 
+#ifdef __cplusplus
+typedef struct igPluginHelper : public igObject {
+#else
 /* handle 0x585ab8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igPluginHelper {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pluginExtension;                          /* +8    igStringMetaField */
     int _repositoryList;                           /* +12   igObjectRefMetaField */
     int _libraryLoader;                            /* +16   igObjectRefMetaField */
     int _loadedPlugins;                            /* +20   igObjectRefMetaField */
 } igPluginHelper;
 
+#ifdef __cplusplus
+typedef struct igPluginRepository : public igObject {
+#else
 /* handle 0x585af0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPluginRepository {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _location;                                 /* +12   igStringMetaField */
     int _locationType;                             /* +16   igEnumMetaField */
 } igPluginRepository;
 
+#ifdef __cplusplus
+typedef struct igPluginRepositoryList : public igObject {
+#else
 /* handle 0x585ae0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPluginRepositoryList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igPluginRepositoryList;
 
+#ifdef __cplusplus
+typedef struct igPointSpriteExt : public igObject {
+#else
 /* handle 0x55fb40, 23 field(s), sizeof 392 (registered instance size) */
 typedef struct igPointSpriteExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -12987,81 +16359,117 @@ typedef struct igPointSpriteExt {
     float _frustumFar;                             /* +388  igFloatMetaField */
 } igPointSpriteExt;
 
+#ifdef __cplusplus
+typedef struct igPointerList : public igObject {
+#else
 /* handle 0x5867e0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPointerList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igPointerList;
 
+#ifdef __cplusplus
+typedef struct igPointerListList : public igObject {
+#else
 /* handle 0x5867d8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPointerListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igPointerListList;
 
+#ifdef __cplusplus
+typedef struct igPolygonModeAttr : public igObject {
+#else
 /* handle 0x55ef60, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igPolygonModeAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _mode;                                     /* +12   igEnumMetaField */
 } igPolygonModeAttr;
 
+#ifdef __cplusplus
+typedef struct igPrimLengthArray : public igObject {
+#else
 /* handle 0x55fb10, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPrimLengthArray {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _lengthData;                               /* +8    igMemoryRefMetaField */
     unsigned int _numStrips;                       /* +12   igUnsignedIntMetaField */
     unsigned int _dataSize;                        /* +16   igUnsignedIntMetaField */
 } igPrimLengthArray;
 
+#ifdef __cplusplus
+typedef struct igPrimLengthArray1_1 : public igObject {
+#else
 /* handle 0x55fb00, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPrimLengthArray1_1 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _lengthData;                               /* +8    igMemoryRefMetaField */
     unsigned int _numStrips;                       /* +12   igUnsignedIntMetaField */
     unsigned int _dataSize;                        /* +16   igUnsignedIntMetaField */
 } igPrimLengthArray1_1;
 
+#ifdef __cplusplus
+typedef struct igProbe : public igObject {
+#else
 /* handle 0x561970, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igProbe {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _volume;                                   /* +8    igObjectRefMetaField */
     int _rays;                                     /* +12   igObjectRefMetaField */
     int _intersectFaceType;                        /* +16   igObjectRefMetaField */
 } igProbe;
 
+#ifdef __cplusplus
+typedef struct igProgramFile : public igObject {
+#else
 /* handle 0x586be8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igProgramFile {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _fileName;                                 /* +8    igStringMetaField */
     int _file;                                     /* +12   igObjectRefMetaField */
 } igProgramFile;
 
+#ifdef __cplusplus
+typedef struct igProjectionMatrixAttr : public igObject {
+#else
 /* handle 0x55ef50, 5 field(s), sizeof 76 (registered instance size) */
 typedef struct igProjectionMatrixAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     float _m[16];                                  /* +12   igMatrix44fMetaField */
 } igProjectionMatrixAttr;
 
+#ifdef __cplusplus
+typedef struct igProjectionMatrixAttrPool : public igObject {
+#else
 /* handle 0x5615a8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igProjectionMatrixAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -13071,10 +16479,14 @@ typedef struct igProjectionMatrixAttrPool {
     char _pad29[3];
 } igProjectionMatrixAttrPool;
 
+#ifdef __cplusplus
+typedef struct igProjectiveShadowShader : public igObject {
+#else
 /* handle 0x561620, 56 field(s), sizeof 240 (registered instance size) */
 typedef struct igProjectiveShadowShader {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -13135,10 +16547,14 @@ typedef struct igProjectiveShadowShader {
     char _pad238[2];
 } igProjectiveShadowShader;
 
+#ifdef __cplusplus
+typedef struct igPsx2AudioContext : public igObject {
+#else
 /* handle 0x55f550, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct igPsx2AudioContext {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _immediateMode;                  /* +8    igBoolMetaField */
     char _pad9[3];
     int _connection;                               /* +12   igObjectRefMetaField */
@@ -13153,19 +16569,27 @@ typedef struct igPsx2AudioContext {
     int _lastRequestID;                            /* +48   igObjectRefMetaField */
 } igPsx2AudioContext;
 
+#ifdef __cplusplus
+typedef struct igPsx2AudioSourceList : public igObject {
+#else
 /* handle 0x55f5a8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPsx2AudioSourceList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igPsx2AudioSourceList;
 
+#ifdef __cplusplus
+typedef struct igPsx2BlendEquationExt : public igObject {
+#else
 /* handle 0x560628, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct igPsx2BlendEquationExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -13179,19 +16603,27 @@ typedef struct igPsx2BlendEquationExt {
     char _pad45[3];
 } igPsx2BlendEquationExt;
 
+#ifdef __cplusplus
+typedef struct igPsx2CallStackTracer : public igObject {
+#else
 /* handle 0x586db8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPsx2CallStackTracer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igPsx2CallStackTracer;
 
+#ifdef __cplusplus
+typedef struct igPsx2Clut : public igObject {
+#else
 /* handle 0x560610, 11 field(s), sizeof 40 (registered instance size) */
 typedef struct igPsx2Clut {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _fmt;                                      /* +8    igEnumMetaField */
     unsigned int _numEntries;                      /* +12   igUnsignedIntMetaField */
     int _stride;                                   /* +16   igIntMetaField */
@@ -13204,10 +16636,14 @@ typedef struct igPsx2Clut {
     int _refCount_;                                /* +36   igIntMetaField */
 } igPsx2Clut;
 
+#ifdef __cplusplus
+typedef struct igPsx2Controller : public igObject {
+#else
 /* handle 0x55f760, 28 field(s), sizeof 112 (registered instance size) */
 typedef struct igPsx2Controller {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _buttonMap;                                /* +8    igMemoryRefMetaField */
     unsigned char _isMapped;                       /* +12   igBoolMetaField */
     char _pad13[3];
@@ -13242,10 +16678,14 @@ typedef struct igPsx2Controller {
     char _pad91[21];
 } igPsx2Controller;
 
+#ifdef __cplusplus
+typedef struct igPsx2ControllerManager : public igObject {
+#else
 /* handle 0x55f738, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igPsx2ControllerManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _controllers;                              /* +8    igObjectRefMetaField */
     int _multitap;                                 /* +12   igEnumMetaField */
     unsigned char _validControllerManager;         /* +16   igBoolMetaField */
@@ -13253,10 +16693,14 @@ typedef struct igPsx2ControllerManager {
     char _pad18[2];
 } igPsx2ControllerManager;
 
+#ifdef __cplusplus
+typedef struct igPsx2DecalExt : public igObject {
+#else
 /* handle 0x5605f8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igPsx2DecalExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -13265,20 +16709,28 @@ typedef struct igPsx2DecalExt {
     unsigned int _offsetUnits;                     /* +28   igUnsignedIntMetaField */
 } igPsx2DecalExt;
 
+#ifdef __cplusplus
+typedef struct igPsx2DisableExt : public igObject {
+#else
 /* handle 0x5605e8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igPsx2DisableExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
     int _context;                                  /* +20   igObjectRefMetaField */
 } igPsx2DisableExt;
 
+#ifdef __cplusplus
+typedef struct igPsx2EnvironmentMapShader : public igObject {
+#else
 /* handle 0x5624f8, 32 field(s), sizeof 124 (registered instance size) */
 typedef struct igPsx2EnvironmentMapShader {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -13314,10 +16766,14 @@ typedef struct igPsx2EnvironmentMapShader {
     int _multiPassEnable;                          /* +120  igObjectRefMetaField */
 } igPsx2EnvironmentMapShader;
 
+#ifdef __cplusplus
+typedef struct igPsx2File : public igObject {
+#else
 /* handle 0x586d70, 19 field(s), sizeof 76 (registered instance size) */
 typedef struct igPsx2File {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _fileName;                                 /* +12   igStringMetaField */
     int _readMode;                                 /* +16   igEnumMetaField */
@@ -13337,17 +16793,25 @@ typedef struct igPsx2File {
     int _prefix;                                   /* +72   igStringMetaField */
 } igPsx2File;
 
+#ifdef __cplusplus
+typedef struct igPsx2Folder : public igObject {
+#else
 /* handle 0x586d68, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igPsx2Folder {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _folderName;                               /* +8    igStringMetaField */
 } igPsx2Folder;
 
+#ifdef __cplusplus
+typedef struct igPsx2Image : public igObject {
+#else
 /* handle 0x5605e0, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct igPsx2Image {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned int _px;                              /* +8    igUnsignedIntMetaField */
     unsigned int _py;                              /* +12   igUnsignedIntMetaField */
     unsigned int _pz;                              /* +16   igUnsignedIntMetaField */
@@ -13373,10 +16837,14 @@ typedef struct igPsx2Image {
     int _pNameString;                              /* +88   igStringMetaField */
 } igPsx2Image;
 
+#ifdef __cplusplus
+typedef struct igPsx2IndexArray : public igObject {
+#else
 /* handle 0x5605d0, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igPsx2IndexArray {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _memPool;                                  /* +8    igObjectRefMetaField */
     int _indexData;                                /* +12   igMemoryRefMetaField */
     unsigned int _numIndices;                      /* +16   igUnsignedIntMetaField */
@@ -13384,28 +16852,40 @@ typedef struct igPsx2IndexArray {
     unsigned int _usageFlags;                      /* +24   igUnsignedIntMetaField */
 } igPsx2IndexArray;
 
+#ifdef __cplusplus
+typedef struct igPsx2IopRpcConnection : public igObject {
+#else
 /* handle 0x586d48, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPsx2IopRpcConnection {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _sifData;                                  /* +8    igRawRefMetaField */
     int _dataMemory;                               /* +12   igRawRefMetaField */
     int _sema;                                     /* +16   igIntMetaField */
 } igPsx2IopRpcConnection;
 
+#ifdef __cplusplus
+typedef struct igPsx2LongList : public igObject {
+#else
 /* handle 0x5604c0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igPsx2LongList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igPsx2LongList;
 
+#ifdef __cplusplus
+typedef struct igPsx2LongTimer : public igObject {
+#else
 /* handle 0x586d40, 6 field(s), sizeof 40 (registered instance size) */
 typedef struct igPsx2LongTimer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _startTime;                          /* +8    igLongMetaField */
     long long _additionalTime;                     /* +16   igLongMetaField */
     long long _resetTime;                          /* +24   igLongMetaField */
@@ -13413,10 +16893,14 @@ typedef struct igPsx2LongTimer {
     char _pad33[7];
 } igPsx2LongTimer;
 
+#ifdef __cplusplus
+typedef struct igPsx2Media : public igObject {
+#else
 /* handle 0x586cf8, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igPsx2Media {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _headAndTailBuffer;                        /* +8    igMemoryRefMetaField */
     int _connection;                               /* +12   igObjectRefMetaField */
     int _sema;                                     /* +16   igObjectRefMetaField */
@@ -13428,10 +16912,14 @@ typedef struct igPsx2Media {
     char _pad37[3];
 } igPsx2Media;
 
+#ifdef __cplusplus
+typedef struct igPsx2MultiTextureExt : public igObject {
+#else
 /* handle 0x560588, 13 field(s), sizeof 52 (registered instance size) */
 typedef struct igPsx2MultiTextureExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -13447,10 +16935,14 @@ typedef struct igPsx2MultiTextureExt {
     char _pad49[3];
 } igPsx2MultiTextureExt;
 
+#ifdef __cplusplus
+typedef struct igPsx2ParticleArray : public igObject {
+#else
 /* handle 0x560540, 29 field(s), sizeof 120 (registered instance size) */
 typedef struct igPsx2ParticleArray {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _particleFormat;                           /* +8    igObjectRefMetaField */
     unsigned int _maxNum;                          /* +12   igUnsignedIntMetaField */
     unsigned int _arrayIndex;                      /* +16   igUnsignedIntMetaField */
@@ -13483,10 +16975,14 @@ typedef struct igPsx2ParticleArray {
     long long _lSequence;                          /* +112  igLongMetaField */
 } igPsx2ParticleArray;
 
+#ifdef __cplusplus
+typedef struct igPsx2PointSpriteExt : public igObject {
+#else
 /* handle 0x560530, 24 field(s), sizeof 396 (registered instance size) */
 typedef struct igPsx2PointSpriteExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -13512,10 +17008,14 @@ typedef struct igPsx2PointSpriteExt {
     int _context_;                                 /* +392  igObjectRefMetaField */
 } igPsx2PointSpriteExt;
 
+#ifdef __cplusplus
+typedef struct igPsx2ScissorExt : public igObject {
+#else
 /* handle 0x5604f8, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igPsx2ScissorExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -13528,20 +17028,28 @@ typedef struct igPsx2ScissorExt {
     int _scissorHeight;                            /* +40   igIntMetaField */
 } igPsx2ScissorExt;
 
+#ifdef __cplusplus
+typedef struct igPsx2Semaphore : public igObject {
+#else
 /* handle 0x586cd8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igPsx2Semaphore {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _semaID;                                   /* +12   igIntMetaField */
     unsigned int _initCount;                       /* +16   igUnsignedIntMetaField */
     unsigned int _maxCount;                        /* +20   igUnsignedIntMetaField */
 } igPsx2Semaphore;
 
+#ifdef __cplusplus
+typedef struct igPsx2Thread : public igObject {
+#else
 /* handle 0x586ca0, 19 field(s), sizeof 64 (registered instance size) */
 typedef struct igPsx2Thread {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _type;                                     /* +12   igEnumMetaField */
     int _scope;                                    /* +16   igEnumMetaField */
@@ -13563,18 +17071,26 @@ typedef struct igPsx2Thread {
     int _threadID;                                 /* +60   igIntMetaField */
 } igPsx2Thread;
 
+#ifdef __cplusplus
+typedef struct igPsx2ThreadManager : public igObject {
+#else
 /* handle 0x586c98, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igPsx2ThreadManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _threadList;                               /* +8    igObjectRefMetaField */
     int _sema;                                     /* +12   igObjectRefMetaField */
 } igPsx2ThreadManager;
 
+#ifdef __cplusplus
+typedef struct igPsx2UserUCodeExt : public igObject {
+#else
 /* handle 0x5604d0, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igPsx2UserUCodeExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -13585,10 +17101,14 @@ typedef struct igPsx2UserUCodeExt {
     char _pad33[3];
 } igPsx2UserUCodeExt;
 
+#ifdef __cplusplus
+typedef struct igPsx2VertexArray1_1 : public igObject {
+#else
 /* handle 0x560480, 19 field(s), sizeof 144 (registered instance size) */
 typedef struct igPsx2VertexArray1_1 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _vdata;                                    /* +8    igMemoryRefMetaField */
     unsigned int _numVerts;                        /* +12   igUnsignedIntMetaField */
     unsigned int _vtype;                           /* +16   igUnsignedIntMetaField */
@@ -13609,20 +17129,28 @@ typedef struct igPsx2VertexArray1_1 {
     char _pad140[4];
 } igPsx2VertexArray1_1;
 
+#ifdef __cplusplus
+typedef struct igPsx2VertexArray2 : public igObject {
+#else
 /* handle 0x560478, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igPsx2VertexArray2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _internalBuffer;                           /* +12   igObjectRefMetaField */
     int _objList;                                  /* +16   igObjectRefMetaField */
     int _vertexStream;                             /* +20   igObjectRefMetaField */
 } igPsx2VertexArray2;
 
+#ifdef __cplusplus
+typedef struct igPsx2VertexStream : public igObject {
+#else
 /* handle 0x560420, 19 field(s), sizeof 144 (registered instance size) */
 typedef struct igPsx2VertexStream {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _stream;                                   /* +12   igRawRefMetaField */
     unsigned char _isConfigured;                   /* +16   igBoolMetaField */
@@ -13645,10 +17173,14 @@ typedef struct igPsx2VertexStream {
     char _pad140[4];
 } igPsx2VertexStream;
 
+#ifdef __cplusplus
+typedef struct igPsx2VisualContext : public igObject {
+#else
 /* handle 0x55ff88, 179 field(s), sizeof 1560 (registered instance size) */
 typedef struct igPsx2VisualContext {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -13855,10 +17387,14 @@ typedef struct igPsx2VisualContext {
     char _pad1552[8];
 } igPsx2VisualContext;
 
+#ifdef __cplusplus
+typedef struct igPsx2Window : public igObject {
+#else
 /* handle 0x55f6c8, 14 field(s), sizeof 56 (registered instance size) */
 typedef struct igPsx2Window {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _width;                                    /* +8    igIntMetaField */
     int _height;                                   /* +12   igIntMetaField */
     int _originX;                                  /* +16   igIntMetaField */
@@ -13875,26 +17411,38 @@ typedef struct igPsx2Window {
     int _bppDepth;                                 /* +52   igIntMetaField */
 } igPsx2Window;
 
+#ifdef __cplusplus
+typedef struct igQuaternionfList : public igObject {
+#else
 /* handle 0x561088, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igQuaternionfList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igQuaternionfList;
 
+#ifdef __cplusplus
+typedef struct igQueue : public igObject {
+#else
 /* handle 0x585aa8, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igQueue {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _serviceThreads;                           /* +8    igObjectRefMetaField */
 } igQueue;
 
+#ifdef __cplusplus
+typedef struct igRadioGroup : public igObject {
+#else
 /* handle 0x58c240, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igRadioGroup {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _selectedObserver;                         /* +12   igObjectRefMetaField */
     int _observerList;                             /* +16   igObjectRefMetaField */
@@ -13904,26 +17452,38 @@ typedef struct igRadioGroup {
     int _defaultSelected;                          /* +28   igIntMetaField */
 } igRadioGroup;
 
+#ifdef __cplusplus
+typedef struct igRadioGroupModel : public igObject {
+#else
 /* handle 0x58c278, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igRadioGroupModel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
     int _selected;                                 /* +12   igIntMetaField */
 } igRadioGroupModel;
 
+#ifdef __cplusplus
+typedef struct igRadioGroupSelectedObserver : public igObject {
+#else
 /* handle 0x58c230, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igRadioGroupSelectedObserver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _group;                                    /* +12   igObjectRefMetaField */
 } igRadioGroupSelectedObserver;
 
+#ifdef __cplusplus
+typedef struct igRawRefArrayMetaField : public igObject {
+#else
 /* handle 0x585a90, 23 field(s), sizeof 60 (registered instance size) */
 typedef struct igRawRefArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -13950,10 +17510,14 @@ typedef struct igRawRefArrayMetaField {
     int _num;                                      /* +56   igIntMetaField */
 } igRawRefArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igRawRefMetaField : public igObject {
+#else
 /* handle 0x585a80, 22 field(s), sizeof 56 (registered instance size) */
 typedef struct igRawRefMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -13979,37 +17543,53 @@ typedef struct igRawRefMetaField {
     char _pad54[2];
 } igRawRefMetaField;
 
+#ifdef __cplusplus
+typedef struct igRay : public igObject {
+#else
 /* handle 0x560fc0, 5 field(s), sizeof 36 (registered instance size) */
 typedef struct igRay {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _pos[3];                                 /* +8    igVec3fMetaField */
     float _dir[3];                                 /* +20   igVec3fMetaField */
     float _len;                                    /* +32   igFloatMetaField */
 } igRay;
 
+#ifdef __cplusplus
+typedef struct igRayIntersectionFunctionList : public igObject {
+#else
 /* handle 0x561058, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igRayIntersectionFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igRayIntersectionFunctionList;
 
+#ifdef __cplusplus
+typedef struct igRayList : public igObject {
+#else
 /* handle 0x560fb8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igRayList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igRayList;
 
+#ifdef __cplusplus
+typedef struct igRefMetaField : public igObject {
+#else
 /* handle 0x585a60, 22 field(s), sizeof 56 (registered instance size) */
 typedef struct igRefMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -14035,10 +17615,14 @@ typedef struct igRefMetaField {
     char _pad54[2];
 } igRefMetaField;
 
+#ifdef __cplusplus
+typedef struct igRegistry : public igObject {
+#else
 /* handle 0x585a08, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct igRegistry {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _valueTable;                               /* +8    igObjectRefMetaField */
     int _registryFile;                             /* +12   igObjectRefMetaField */
     int _additionalSectionNames;                   /* +16   igObjectRefMetaField */
@@ -14047,28 +17631,40 @@ typedef struct igRegistry {
     char _pad22[2];
 } igRegistry;
 
+#ifdef __cplusplus
+typedef struct igRegistryValue : public igObject {
+#else
 /* handle 0x585a40, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igRegistryValue {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _section;                                  /* +8    igIntMetaField */
     int _value;                                    /* +12   igObjectRefMetaField */
     int _valueName;                                /* +16   igObjectRefMetaField */
 } igRegistryValue;
 
+#ifdef __cplusplus
+typedef struct igRegistryValueList : public igObject {
+#else
 /* handle 0x585a38, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igRegistryValueList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igRegistryValueList;
 
+#ifdef __cplusplus
+typedef struct igRenderDestinationAttr : public igObject {
+#else
 /* handle 0x55eed8, 18 field(s), sizeof 68 (registered instance size) */
 typedef struct igRenderDestinationAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _iCreateMode;                              /* +12   igEnumMetaField */
@@ -14088,20 +17684,28 @@ typedef struct igRenderDestinationAttr {
     int _vc;                                       /* +64   igObjectRefMetaField */
 } igRenderDestinationAttr;
 
+#ifdef __cplusplus
+typedef struct igRenderListAttr : public igObject {
+#else
 /* handle 0x55eeb0, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igRenderListAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _handle;                                   /* +12   igIntMetaField */
     int _vc;                                       /* +16   igObjectRefMetaField */
 } igRenderListAttr;
 
+#ifdef __cplusplus
+typedef struct igRenderPackage : public igObject {
+#else
 /* handle 0x561450, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igRenderPackage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _stateAttrs;                               /* +8    igObjectRefMetaField */
     int _cachedStateAttrs;                         /* +12   igObjectRefMetaField */
     int _geomAttrs;                                /* +16   igObjectRefMetaField */
@@ -14110,19 +17714,27 @@ typedef struct igRenderPackage {
     int _theMass;                                  /* +28   igObjectRefMetaField */
 } igRenderPackage;
 
+#ifdef __cplusplus
+typedef struct igRenderPackageList : public igObject {
+#else
 /* handle 0x561440, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igRenderPackageList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igRenderPackageList;
 
+#ifdef __cplusplus
+typedef struct igRenderPackagePool : public igObject {
+#else
 /* handle 0x561448, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igRenderPackagePool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -14132,17 +17744,25 @@ typedef struct igRenderPackagePool {
     char _pad29[3];
 } igRenderPackagePool;
 
+#ifdef __cplusplus
+typedef struct igRenderer : public igObject {
+#else
 /* handle 0x58c208, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
 } igRenderer;
 
+#ifdef __cplusplus
+typedef struct igRendererOrderedList : public igObject {
+#else
 /* handle 0x58c200, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igRendererOrderedList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _objectList;                               /* +8    igObjectRefMetaField */
     int _dependencies;                             /* +12   igObjectRefMetaField */
     int _order;                                    /* +16   igObjectRefMetaField */
@@ -14151,10 +17771,14 @@ typedef struct igRendererOrderedList {
     char _pad25[3];
 } igRendererOrderedList;
 
+#ifdef __cplusplus
+typedef struct igResource : public igObject {
+#else
 /* handle 0x585978, 19 field(s), sizeof 76 (registered instance size) */
 typedef struct igResource {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _useMemoryPoolAssignmentsState;  /* +8    igBoolMetaField */
     char _pad9[3];
     int _imageDirectory;                           /* +12   igObjectRefMetaField */
@@ -14179,10 +17803,14 @@ typedef struct igResource {
     int _IGBChunkSize;                             /* +72   igIntMetaField */
 } igResource;
 
+#ifdef __cplusplus
+typedef struct igRotateMode : public igObject {
+#else
 /* handle 0x58cbf8, 20 field(s), sizeof 148 (registered instance size) */
 typedef struct igRotateMode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     float _inverseMatrix[16];                      /* +12   igMatrix44fMetaField */
     float _distance;                               /* +76   igFloatMetaField */
@@ -14206,10 +17834,14 @@ typedef struct igRotateMode {
     float _translation[3];                         /* +136  igVec3fMetaField */
 } igRotateMode;
 
+#ifdef __cplusplus
+typedef struct igSceneInfo : public igObject {
+#else
 /* handle 0x5615e0, 12 field(s), sizeof 64 (registered instance size) */
 typedef struct igSceneInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -14223,19 +17855,27 @@ typedef struct igSceneInfo {
     int _sceneGraphList;                           /* +60   igObjectRefMetaField */
 } igSceneInfo;
 
+#ifdef __cplusplus
+typedef struct igScissorExt : public igObject {
+#else
 /* handle 0x55faf8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igScissorExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
 } igScissorExt;
 
+#ifdef __cplusplus
+typedef struct igSearchSceneGraph : public igObject {
+#else
 /* handle 0x56dc60, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igSearchSceneGraph {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _iterateGraph;                             /* +12   igObjectRefMetaField */
     int _searchString;                             /* +16   igStringMetaField */
@@ -14243,10 +17883,14 @@ typedef struct igSearchSceneGraph {
     int _nextOfTypeCode;                           /* +24   igEnumMetaField */
 } igSearchSceneGraph;
 
+#ifdef __cplusplus
+typedef struct igSegment : public igObject {
+#else
 /* handle 0x5615d8, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igSegment {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -14255,72 +17899,104 @@ typedef struct igSegment {
     int _childList;                                /* +28   igObjectRefMetaField */
 } igSegment;
 
+#ifdef __cplusplus
+typedef struct igSemaphore : public igObject {
+#else
 /* handle 0x585970, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igSemaphore {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
 } igSemaphore;
 
+#ifdef __cplusplus
+typedef struct igSerialScheduler : public igObject {
+#else
 /* handle 0x56dab0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igSerialScheduler {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _managerList;                              /* +8    igObjectRefMetaField */
     int _cachedManagerList;                        /* +12   igObjectRefMetaField */
 } igSerialScheduler;
 
+#ifdef __cplusplus
+typedef struct igSetRenderDestinationAttr : public igObject {
+#else
 /* handle 0x55eea0, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igSetRenderDestinationAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _pRDAttr;                                  /* +12   igObjectRefMetaField */
 } igSetRenderDestinationAttr;
 
+#ifdef __cplusplus
+typedef struct igShadeModelAttr : public igObject {
+#else
 /* handle 0x55ee90, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igShadeModelAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _mode;                                     /* +12   igEnumMetaField */
 } igShadeModelAttr;
 
+#ifdef __cplusplus
+typedef struct igShaderData : public igObject {
+#else
 /* handle 0x561548, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igShaderData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _attrPushLists;                            /* +8    igObjectRefMetaField */
     int _attrPopLists;                             /* +12   igObjectRefMetaField */
     int _dataPumps;                                /* +16   igObjectRefMetaField */
     int _childLists;                               /* +20   igObjectRefMetaField */
 } igShaderData;
 
+#ifdef __cplusplus
+typedef struct igShaderFactory : public igObject {
+#else
 /* handle 0x561528, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igShaderFactory {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _attrNames;                                /* +12   igObjectRefMetaField */
     int _attrTypes;                                /* +16   igObjectRefMetaField */
     int _fileCachingMode;                          /* +20   igEnumMetaField */
 } igShaderFactory;
 
+#ifdef __cplusplus
+typedef struct igShaderFactoryList : public igObject {
+#else
 /* handle 0x561518, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igShaderFactoryList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igShaderFactoryList;
 
+#ifdef __cplusplus
+typedef struct igShaderInfo : public igObject {
+#else
 /* handle 0x561500, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igShaderInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _directory;                                /* +12   igObjectRefMetaField */
     unsigned char _resolveState;                   /* +16   igBoolMetaField */
@@ -14328,10 +18004,14 @@ typedef struct igShaderInfo {
     int _factoryList;                              /* +20   igObjectRefMetaField */
 } igShaderInfo;
 
+#ifdef __cplusplus
+typedef struct igShortArrayMetaField : public igObject {
+#else
 /* handle 0x585958, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igShortArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -14355,28 +18035,40 @@ typedef struct igShortArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igShortArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igShortList : public igObject {
+#else
 /* handle 0x586830, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igShortList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igShortList;
 
+#ifdef __cplusplus
+typedef struct igShortListList : public igObject {
+#else
 /* handle 0x586828, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igShortListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igShortListList;
 
+#ifdef __cplusplus
+typedef struct igShortMetaField : public igObject {
+#else
 /* handle 0x585948, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igShortMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -14399,10 +18091,14 @@ typedef struct igShortMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igShortMetaField;
 
+#ifdef __cplusplus
+typedef struct igSkeleton : public igObject {
+#else
 /* handle 0x5614b0, 7 field(s), sizeof 28 (registered instance size) */
 typedef struct igSkeleton {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _boneTranslationArray;                     /* +12   igMemoryRefMetaField */
     int _boneInfoList;                             /* +16   igObjectRefMetaField */
@@ -14410,56 +18106,80 @@ typedef struct igSkeleton {
     int _jointCount;                               /* +24   igIntMetaField */
 } igSkeleton;
 
+#ifdef __cplusplus
+typedef struct igSkeletonBoneInfo : public igObject {
+#else
 /* handle 0x5614d8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igSkeletonBoneInfo {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _parentIdx;                                /* +12   igIntMetaField */
     int _bmIdx;                                    /* +16   igIntMetaField */
     int _flags;                                    /* +20   igIntMetaField */
 } igSkeletonBoneInfo;
 
+#ifdef __cplusplus
+typedef struct igSkeletonBoneInfoList : public igObject {
+#else
 /* handle 0x5614d0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igSkeletonBoneInfoList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igSkeletonBoneInfoList;
 
+#ifdef __cplusplus
+typedef struct igSkeletonList : public igObject {
+#else
 /* handle 0x5614a8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igSkeletonList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igSkeletonList;
 
+#ifdef __cplusplus
+typedef struct igSkin : public igObject {
+#else
 /* handle 0x561490, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igSkin {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _skinnedGraph;                             /* +12   igObjectRefMetaField */
     int _bound;                                    /* +16   igObjectRefMetaField */
 } igSkin;
 
+#ifdef __cplusplus
+typedef struct igSkinList : public igObject {
+#else
 /* handle 0x561488, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igSkinList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igSkinList;
 
+#ifdef __cplusplus
+typedef struct igSorter : public igObject {
+#else
 /* handle 0x561318, 38 field(s), sizeof 132 (registered instance size) */
 typedef struct igSorter {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _dlist;                                    /* +8    igObjectRefMetaField */
     int _mode;                                     /* +12   igIntMetaField */
     int _renderPackagePool;                        /* +16   igObjectRefMetaField */
@@ -14499,18 +18219,26 @@ typedef struct igSorter {
     unsigned char _printOutputState;               /* +131  igBoolMetaField */
 } igSorter;
 
+#ifdef __cplusplus
+typedef struct igSphere : public igObject {
+#else
 /* handle 0x560fa0, 4 field(s), sizeof 24 (registered instance size) */
 typedef struct igSphere {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _center[3];                              /* +8    igVec3fMetaField */
     float _radius;                                 /* +20   igFloatMetaField */
 } igSphere;
 
+#ifdef __cplusplus
+typedef struct igStackMemoryPool : public igObject {
+#else
 /* handle 0x586b20, 26 field(s), sizeof 152 (registered instance size) */
 typedef struct igStackMemoryPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     long long _localAllocated;                     /* +8    igLongMetaField */
     long long _localFreed;                         /* +16   igLongMetaField */
     long long _localNetAllocated;                  /* +24   igLongMetaField */
@@ -14540,10 +18268,14 @@ typedef struct igStackMemoryPool {
     int _eventTracker;                             /* +148  igObjectRefMetaField */
 } igStackMemoryPool;
 
+#ifdef __cplusplus
+typedef struct igStandardQueue : public igObject {
+#else
 /* handle 0x586c50, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igStandardQueue {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _serviceThreads;                           /* +8    igObjectRefMetaField */
     int _insertLock;                               /* +12   igObjectRefMetaField */
     int _removeLock;                               /* +16   igObjectRefMetaField */
@@ -14555,10 +18287,14 @@ typedef struct igStandardQueue {
     unsigned int _maxCapacity;                     /* +40   igUnsignedIntMetaField */
 } igStandardQueue;
 
+#ifdef __cplusplus
+typedef struct igStatisticsItem : public igObject {
+#else
 /* handle 0x58c708, 15 field(s), sizeof 60 (registered instance size) */
 typedef struct igStatisticsItem {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     float _value;                                  /* +12   igFloatMetaField */
     float _maximumValue;                           /* +16   igFloatMetaField */
@@ -14576,19 +18312,27 @@ typedef struct igStatisticsItem {
     int _otherId;                                  /* +56   igIntMetaField */
 } igStatisticsItem;
 
+#ifdef __cplusplus
+typedef struct igStatisticsItemList : public igObject {
+#else
 /* handle 0x58c700, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igStatisticsItemList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igStatisticsItemList;
 
+#ifdef __cplusplus
+typedef struct igStencilFunctionAttr : public igObject {
+#else
 /* handle 0x55ee50, 11 field(s), sizeof 40 (registered instance size) */
 typedef struct igStencilFunctionAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned int _refVal;                          /* +12   igUnsignedIntMetaField */
@@ -14600,20 +18344,28 @@ typedef struct igStencilFunctionAttr {
     int _stenPassZFailOp;                          /* +36   igEnumMetaField */
 } igStencilFunctionAttr;
 
+#ifdef __cplusplus
+typedef struct igStencilStateAttr : public igObject {
+#else
 /* handle 0x55ee40, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igStencilStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igStencilStateAttr;
 
+#ifdef __cplusplus
+typedef struct igStringArrayMetaField : public igObject {
+#else
 /* handle 0x585930, 24 field(s), sizeof 64 (registered instance size) */
 typedef struct igStringArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -14642,10 +18394,14 @@ typedef struct igStringArrayMetaField {
     int _num;                                      /* +60   igIntMetaField */
 } igStringArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igStringMetaField : public igObject {
+#else
 /* handle 0x585908, 23 field(s), sizeof 60 (registered instance size) */
 typedef struct igStringMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -14673,55 +18429,79 @@ typedef struct igStringMetaField {
     char _pad57[3];
 } igStringMetaField;
 
+#ifdef __cplusplus
+typedef struct igStringObj : public igObject {
+#else
 /* handle 0x5858f0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igStringObj {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _buffer;                                   /* +8    igMemoryRefMetaField */
     unsigned int _length;                          /* +12   igUnsignedIntMetaField */
 } igStringObj;
 
+#ifdef __cplusplus
+typedef struct igStringObjList : public igObject {
+#else
 /* handle 0x5858e8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igStringObjList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igStringObjList;
 
+#ifdef __cplusplus
+typedef struct igStringRefList : public igObject {
+#else
 /* handle 0x5858d8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igStringRefList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igStringRefList;
 
+#ifdef __cplusplus
+typedef struct igStringRefListList : public igObject {
+#else
 /* handle 0x5867a8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igStringRefListList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igStringRefListList;
 
+#ifdef __cplusplus
+typedef struct igStringTable : public igObject {
+#else
 /* handle 0x5858b0, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igStringTable {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _capacity;                                 /* +8    igIntMetaField */
     int _hashCapacity;                             /* +12   igIntMetaField */
     int _strings;                                  /* +16   igObjectRefMetaField */
     int _hashIndex;                                /* +20   igObjectRefMetaField */
 } igStringTable;
 
+#ifdef __cplusplus
+typedef struct igStructMetaField : public igObject {
+#else
 /* handle 0x585880, 23 field(s), sizeof 64 (registered instance size) */
 typedef struct igStructMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -14747,10 +18527,14 @@ typedef struct igStructMetaField {
     int _cppDestructor;                            /* +60   igRawRefMetaField */
 } igStructMetaField;
 
+#ifdef __cplusplus
+typedef struct igSwitch : public igObject {
+#else
 /* handle 0x561308, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igSwitch {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -14760,10 +18544,14 @@ typedef struct igSwitch {
     int _childMask;                                /* +32   igObjectRefMetaField */
 } igSwitch;
 
+#ifdef __cplusplus
+typedef struct igSymbolTable : public igObject {
+#else
 /* handle 0x585830, 11 field(s), sizeof 44 (registered instance size) */
 typedef struct igSymbolTable {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _capacity;                                 /* +8    igIntMetaField */
     int _hashCapacity;                             /* +12   igIntMetaField */
     unsigned int _lowAddress;                      /* +16   igUnsignedIntMetaField */
@@ -14775,20 +18563,28 @@ typedef struct igSymbolTable {
     int _sourceFileNames;                          /* +40   igObjectRefMetaField */
 } igSymbolTable;
 
+#ifdef __cplusplus
+typedef struct igTexGenMatrixAttr : public igObject {
+#else
 /* handle 0x55ee28, 6 field(s), sizeof 80 (registered instance size) */
 typedef struct igTexGenMatrixAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     float m[16];                                   /* +12   igMatrix44fMetaField */
     int _unitID;                                   /* +76   igIntMetaField */
 } igTexGenMatrixAttr;
 
+#ifdef __cplusplus
+typedef struct igTextElement : public igObject {
+#else
 /* handle 0x58c1d0, 9 field(s), sizeof 56 (registered instance size) */
 typedef struct igTextElement {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _geometry;                                 /* +8    igObjectRefMetaField */
     float _defaultSize[3];                         /* +12   igVec3fMetaField */
     float _color[4];                               /* +24   igVec4fMetaField */
@@ -14798,10 +18594,14 @@ typedef struct igTextElement {
     int _text;                                     /* +52   igStringMetaField */
 } igTextElement;
 
+#ifdef __cplusplus
+typedef struct igTextureAttr : public igObject {
+#else
 /* handle 0x55eda0, 19 field(s), sizeof 72 (registered instance size) */
 typedef struct igTextureAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _vc;                                       /* +12   igObjectRefMetaField */
@@ -14822,29 +18622,41 @@ typedef struct igTextureAttr {
     int _videoBuffer;                              /* +68   igRawRefMetaField */
 } igTextureAttr;
 
+#ifdef __cplusplus
+typedef struct igTextureBindAttr : public igObject {
+#else
 /* handle 0x55ed88, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igTextureBindAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _texture;                                  /* +12   igObjectRefMetaField */
     int _unitID;                                   /* +16   igIntMetaField */
 } igTextureBindAttr;
 
+#ifdef __cplusplus
+typedef struct igTextureBindAttrList : public igObject {
+#else
 /* handle 0x587798, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igTextureBindAttrList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igTextureBindAttrList;
 
+#ifdef __cplusplus
+typedef struct igTextureCoordSourceAttr : public igObject {
+#else
 /* handle 0x55ed68, 7 field(s), sizeof 24 (registered instance size) */
 typedef struct igTextureCoordSourceAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _mode;                                     /* +12   igEnumMetaField */
@@ -14852,10 +18664,14 @@ typedef struct igTextureCoordSourceAttr {
     int _unitID;                                   /* +20   igIntMetaField */
 } igTextureCoordSourceAttr;
 
+#ifdef __cplusplus
+typedef struct igTextureCubeAttr : public igObject {
+#else
 /* handle 0x55ed48, 22 field(s), sizeof 104 (registered instance size) */
 typedef struct igTextureCubeAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _vc;                                       /* +12   igObjectRefMetaField */
@@ -14879,10 +18695,14 @@ typedef struct igTextureCubeAttr {
     int _unused;                                   /* +100  igIntMetaField */
 } igTextureCubeAttr;
 
+#ifdef __cplusplus
+typedef struct igTextureFunctionAttr : public igObject {
+#else
 /* handle 0x55ed00, 11 field(s), sizeof 40 (registered instance size) */
 typedef struct igTextureFunctionAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _mode;                                     /* +12   igEnumMetaField */
@@ -14895,19 +18715,27 @@ typedef struct igTextureFunctionAttr {
     int _functionType;                             /* +36   igEnumMetaField */
 } igTextureFunctionAttr;
 
+#ifdef __cplusplus
+typedef struct igTextureList : public igObject {
+#else
 /* handle 0x55f418, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igTextureList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igTextureList;
 
+#ifdef __cplusplus
+typedef struct igTextureMatrixAttr : public igObject {
+#else
 /* handle 0x55ecd8, 8 field(s), sizeof 84 (registered instance size) */
 typedef struct igTextureMatrixAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     float _m[16];                                  /* +12   igMatrix44fMetaField */
@@ -14917,10 +18745,14 @@ typedef struct igTextureMatrixAttr {
     char _pad83[1];
 } igTextureMatrixAttr;
 
+#ifdef __cplusplus
+typedef struct igTextureMatrixAttrPool : public igObject {
+#else
 /* handle 0x561588, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igTextureMatrixAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -14930,10 +18762,14 @@ typedef struct igTextureMatrixAttrPool {
     char _pad29[3];
 } igTextureMatrixAttrPool;
 
+#ifdef __cplusplus
+typedef struct igTextureMatrixStateAttr : public igObject {
+#else
 /* handle 0x55ecc0, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igTextureMatrixStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
@@ -14941,10 +18777,14 @@ typedef struct igTextureMatrixStateAttr {
     int _unitID;                                   /* +16   igIntMetaField */
 } igTextureMatrixStateAttr;
 
+#ifdef __cplusplus
+typedef struct igTextureStateAttr : public igObject {
+#else
 /* handle 0x55eca8, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igTextureStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
@@ -14952,20 +18792,28 @@ typedef struct igTextureStateAttr {
     int _unitID;                                   /* +16   igIntMetaField */
 } igTextureStateAttr;
 
+#ifdef __cplusplus
+typedef struct igTextureUnloadAttr : public igObject {
+#else
 /* handle 0x55ec90, 6 field(s), sizeof 20 (registered instance size) */
 typedef struct igTextureUnloadAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _texture;                                  /* +12   igObjectRefMetaField */
     int _unitID;                                   /* +16   igIntMetaField */
 } igTextureUnloadAttr;
 
+#ifdef __cplusplus
+typedef struct igTgaLoader : public igObject {
+#else
 /* handle 0x55ff10, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct igTgaLoader {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _file;                                     /* +8    igObjectRefMetaField */
     int _palette;                                  /* +12   igMemoryRefMetaField */
     int _tempMap;                                  /* +16   igMemoryRefMetaField */
@@ -14978,10 +18826,14 @@ typedef struct igTgaLoader {
     int _sbpr;                                     /* +44   igIntMetaField */
 } igTgaLoader;
 
+#ifdef __cplusplus
+typedef struct igThread : public igObject {
+#else
 /* handle 0x5857c8, 13 field(s), sizeof 48 (registered instance size) */
 typedef struct igThread {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _type;                                     /* +12   igEnumMetaField */
     int _scope;                                    /* +16   igEnumMetaField */
@@ -14996,37 +18848,53 @@ typedef struct igThread {
     char _pad46[2];
 } igThread;
 
+#ifdef __cplusplus
+typedef struct igThreadList : public igObject {
+#else
 /* handle 0x585828, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igThreadList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igThreadList;
 
+#ifdef __cplusplus
+typedef struct igThreadManager : public igObject {
+#else
 /* handle 0x585790, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igThreadManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _threadList;                               /* +8    igObjectRefMetaField */
     int _sema;                                     /* +12   igObjectRefMetaField */
 } igThreadManager;
 
+#ifdef __cplusplus
+typedef struct igTimeAttr : public igObject {
+#else
 /* handle 0x55ec80, 5 field(s), sizeof 24 (registered instance size) */
 typedef struct igTimeAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     char _pad12[4];
     long long _time;                               /* +16   igLongMetaField */
 } igTimeAttr;
 
+#ifdef __cplusplus
+typedef struct igTimeAttrPool : public igObject {
+#else
 /* handle 0x5615b0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igTimeAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -15036,10 +18904,14 @@ typedef struct igTimeAttrPool {
     char _pad29[3];
 } igTimeAttrPool;
 
+#ifdef __cplusplus
+typedef struct igTrackedElementMetaField : public igObject {
+#else
 /* handle 0x55fe38, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igTrackedElementMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15063,10 +18935,14 @@ typedef struct igTrackedElementMetaField {
     int _fieldList;                                /* +52   igObjectRefMetaField */
 } igTrackedElementMetaField;
 
+#ifdef __cplusplus
+typedef struct igTransform : public igObject {
+#else
 /* handle 0x5612b0, 12 field(s), sizeof 108 (registered instance size) */
 typedef struct igTransform {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -15079,28 +18955,40 @@ typedef struct igTransform {
     int _transformInput;                           /* +104  igObjectRefMetaField */
 } igTransform;
 
+#ifdef __cplusplus
+typedef struct igTransformFunctionList : public igObject {
+#else
 /* handle 0x561030, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igTransformFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igTransformFunctionList;
 
+#ifdef __cplusplus
+typedef struct igTransformList : public igObject {
+#else
 /* handle 0x5612a0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igTransformList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igTransformList;
 
+#ifdef __cplusplus
+typedef struct igTransformRecorder : public igObject {
+#else
 /* handle 0x561280, 10 field(s), sizeof 160 (registered instance size) */
 typedef struct igTransformRecorder {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _bound;                                    /* +12   igObjectRefMetaField */
     int _parentList;                               /* +16   igObjectRefMetaField */
@@ -15111,10 +18999,14 @@ typedef struct igTransformRecorder {
     float _mvm[16];                                /* +96   igMatrix44fMetaField */
 } igTransformRecorder;
 
+#ifdef __cplusplus
+typedef struct igTransformSequence : public igObject {
+#else
 /* handle 0x561230, 11 field(s), sizeof 56 (registered instance size) */
 typedef struct igTransformSequence {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _xlateList;                                /* +8    igObjectRefMetaField */
     int _quatList;                                 /* +12   igObjectRefMetaField */
     int _scaleList;                                /* +16   igObjectRefMetaField */
@@ -15127,10 +19019,14 @@ typedef struct igTransformSequence {
     float _centerOfRotation[3];                    /* +44   igVec3fMetaField */
 } igTransformSequence;
 
+#ifdef __cplusplus
+typedef struct igTransformSequence1_5 : public igObject {
+#else
 /* handle 0x5611d8, 20 field(s), sizeof 104 (registered instance size) */
 typedef struct igTransformSequence1_5 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _xlateList;                                /* +8    igObjectRefMetaField */
     int _quatList;                                 /* +12   igObjectRefMetaField */
     int _scaleList;                                /* +16   igObjectRefMetaField */
@@ -15153,29 +19049,41 @@ typedef struct igTransformSequence1_5 {
     char _pad100[4];
 } igTransformSequence1_5;
 
+#ifdef __cplusplus
+typedef struct igTransformStack : public igObject {
+#else
 /* handle 0x5612a8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igTransformStack {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igTransformStack;
 
+#ifdef __cplusplus
+typedef struct igTransientShaderData : public igObject {
+#else
 /* handle 0x5611a8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igTransientShaderData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _attrPushLists;                            /* +8    igObjectRefMetaField */
     int _attrPopLists;                             /* +12   igObjectRefMetaField */
     int _dataPumps;                                /* +16   igObjectRefMetaField */
     int _childLists;                               /* +20   igObjectRefMetaField */
 } igTransientShaderData;
 
+#ifdef __cplusplus
+typedef struct igTraversal : public igObject {
+#else
 /* handle 0x561178, 7 field(s), sizeof 32 (registered instance size) */
 typedef struct igTraversal {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _nodeSelectProcEnabled;          /* +8    igBoolMetaField */
     char _pad9[3];
     int _nodeSelectProc;                           /* +12   igRawRefMetaField */
@@ -15185,19 +19093,27 @@ typedef struct igTraversal {
     int _travProcs;                                /* +28   igObjectRefMetaField */
 } igTraversal;
 
+#ifdef __cplusplus
+typedef struct igTraversalFunctionList : public igObject {
+#else
 /* handle 0x5615c8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igTraversalFunctionList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igTraversalFunctionList;
 
+#ifdef __cplusplus
+typedef struct igUnsignedCharArrayMetaField : public igObject {
+#else
 /* handle 0x585770, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igUnsignedCharArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15221,19 +19137,27 @@ typedef struct igUnsignedCharArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igUnsignedCharArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igUnsignedCharList : public igObject {
+#else
 /* handle 0x586818, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igUnsignedCharList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igUnsignedCharList;
 
+#ifdef __cplusplus
+typedef struct igUnsignedCharMetaField : public igObject {
+#else
 /* handle 0x585760, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igUnsignedCharMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15256,10 +19180,14 @@ typedef struct igUnsignedCharMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igUnsignedCharMetaField;
 
+#ifdef __cplusplus
+typedef struct igUnsignedIntArrayMetaField : public igObject {
+#else
 /* handle 0x585748, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igUnsignedIntArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15283,28 +19211,40 @@ typedef struct igUnsignedIntArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igUnsignedIntArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igUnsignedIntList : public igObject {
+#else
 /* handle 0x586858, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igUnsignedIntList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igUnsignedIntList;
 
+#ifdef __cplusplus
+typedef struct igUnsignedIntListNoClean : public igObject {
+#else
 /* handle 0x586850, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igUnsignedIntListNoClean {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igUnsignedIntListNoClean;
 
+#ifdef __cplusplus
+typedef struct igUnsignedIntMetaField : public igObject {
+#else
 /* handle 0x585738, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igUnsignedIntMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15327,10 +19267,14 @@ typedef struct igUnsignedIntMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igUnsignedIntMetaField;
 
+#ifdef __cplusplus
+typedef struct igUnsignedLongArrayMetaField : public igObject {
+#else
 /* handle 0x585720, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igUnsignedLongArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15354,10 +19298,14 @@ typedef struct igUnsignedLongArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igUnsignedLongArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igUnsignedLongMetaField : public igObject {
+#else
 /* handle 0x585710, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igUnsignedLongMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15380,10 +19328,14 @@ typedef struct igUnsignedLongMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igUnsignedLongMetaField;
 
+#ifdef __cplusplus
+typedef struct igUnsignedShortArrayMetaField : public igObject {
+#else
 /* handle 0x5856f8, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igUnsignedShortArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15407,19 +19359,27 @@ typedef struct igUnsignedShortArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igUnsignedShortArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igUnsignedShortList : public igObject {
+#else
 /* handle 0x586840, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igUnsignedShortList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igUnsignedShortList;
 
+#ifdef __cplusplus
+typedef struct igUnsignedShortMetaField : public igObject {
+#else
 /* handle 0x5856e8, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igUnsignedShortMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15442,28 +19402,40 @@ typedef struct igUnsignedShortMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igUnsignedShortMetaField;
 
+#ifdef __cplusplus
+typedef struct igUserUCodeExt : public igObject {
+#else
 /* handle 0x55faf0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igUserUCodeExt {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
 } igUserUCodeExt;
 
+#ifdef __cplusplus
+typedef struct igVec2fList : public igObject {
+#else
 /* handle 0x5610c8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igVec2fList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igVec2fList;
 
+#ifdef __cplusplus
+typedef struct igVec2fMetaField : public igObject {
+#else
 /* handle 0x560f88, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igVec2fMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15486,19 +19458,27 @@ typedef struct igVec2fMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igVec2fMetaField;
 
+#ifdef __cplusplus
+typedef struct igVec3fList : public igObject {
+#else
 /* handle 0x5610b8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igVec3fList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igVec3fList;
 
+#ifdef __cplusplus
+typedef struct igVec3fMetaField : public igObject {
+#else
 /* handle 0x560f70, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igVec3fMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15521,10 +19501,14 @@ typedef struct igVec3fMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igVec3fMetaField;
 
+#ifdef __cplusplus
+typedef struct igVec4fArrayMetaField : public igObject {
+#else
 /* handle 0x560f48, 21 field(s), sizeof 56 (registered instance size) */
 typedef struct igVec4fArrayMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15548,10 +19532,14 @@ typedef struct igVec4fArrayMetaField {
     int _num;                                      /* +52   igIntMetaField */
 } igVec4fArrayMetaField;
 
+#ifdef __cplusplus
+typedef struct igVec4fMetaField : public igObject {
+#else
 /* handle 0x560f38, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igVec4fMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15574,19 +19562,27 @@ typedef struct igVec4fMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igVec4fMetaField;
 
+#ifdef __cplusplus
+typedef struct igVec4ucList : public igObject {
+#else
 /* handle 0x561098, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igVec4ucList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igVec4ucList;
 
+#ifdef __cplusplus
+typedef struct igVec4ucMetaField : public igObject {
+#else
 /* handle 0x560f28, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igVec4ucMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -15609,20 +19605,28 @@ typedef struct igVec4ucMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igVec4ucMetaField;
 
+#ifdef __cplusplus
+typedef struct igVertexArray : public igObject {
+#else
 /* handle 0x55fac8, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igVertexArray {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _vdata;                                    /* +8    igMemoryRefMetaField */
     unsigned int _numVerts;                        /* +12   igUnsignedIntMetaField */
     unsigned int _vtype;                           /* +16   igUnsignedIntMetaField */
     unsigned int _usageFlags;                      /* +20   igUnsignedIntMetaField */
 } igVertexArray;
 
+#ifdef __cplusplus
+typedef struct igVertexArray1_1 : public igObject {
+#else
 /* handle 0x55fa90, 12 field(s), sizeof 48 (registered instance size) */
 typedef struct igVertexArray1_1 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _vdata;                                    /* +8    igMemoryRefMetaField */
     unsigned int _numVerts;                        /* +12   igUnsignedIntMetaField */
     unsigned int _vtype;                           /* +16   igUnsignedIntMetaField */
@@ -15635,28 +19639,40 @@ typedef struct igVertexArray1_1 {
     int _pointSpriteSize;                          /* +44   igMemoryRefMetaField */
 } igVertexArray1_1;
 
+#ifdef __cplusplus
+typedef struct igVertexArray2 : public igObject {
+#else
 /* handle 0x55f9e0, 6 field(s), sizeof 24 (registered instance size) */
 typedef struct igVertexArray2 {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _internalBuffer;                           /* +12   igObjectRefMetaField */
     int _objList;                                  /* +16   igObjectRefMetaField */
     int _vertexStream;                             /* +20   igObjectRefMetaField */
 } igVertexArray2;
 
+#ifdef __cplusplus
+typedef struct igVertexArray2Helper : public igObject {
+#else
 /* handle 0x55f9d0, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igVertexArray2Helper {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _vertexArray;                              /* +12   igObjectRefMetaField */
 } igVertexArray2Helper;
 
+#ifdef __cplusplus
+typedef struct igVertexBlendMatrixAttr : public igObject {
+#else
 /* handle 0x55ec68, 6 field(s), sizeof 80 (registered instance size) */
 typedef struct igVertexBlendMatrixAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     float _m[16];                                  /* +12   igMatrix44fMetaField */
@@ -15664,10 +19680,14 @@ typedef struct igVertexBlendMatrixAttr {
     char _pad78[2];
 } igVertexBlendMatrixAttr;
 
+#ifdef __cplusplus
+typedef struct igVertexBlendMatrixAttrPool : public igObject {
+#else
 /* handle 0x5615a0, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igVertexBlendMatrixAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -15677,10 +19697,14 @@ typedef struct igVertexBlendMatrixAttrPool {
     char _pad29[3];
 } igVertexBlendMatrixAttrPool;
 
+#ifdef __cplusplus
+typedef struct igVertexBlendMatrixListAttr : public igObject {
+#else
 /* handle 0x55ec28, 11 field(s), sizeof 156 (registered instance size) */
 typedef struct igVertexBlendMatrixListAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _isSkeletonTransformIdentity;    /* +12   igBoolMetaField */
@@ -15693,10 +19717,14 @@ typedef struct igVertexBlendMatrixListAttr {
     float _skeletonInverseTransform[16];           /* +92   igMatrix44fMetaField */
 } igVertexBlendMatrixListAttr;
 
+#ifdef __cplusplus
+typedef struct igVertexBlendMatrixListAttrPool : public igObject {
+#else
 /* handle 0x561598, 8 field(s), sizeof 32 (registered instance size) */
 typedef struct igVertexBlendMatrixListAttrPool {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
@@ -15706,20 +19734,28 @@ typedef struct igVertexBlendMatrixListAttrPool {
     char _pad29[3];
 } igVertexBlendMatrixListAttrPool;
 
+#ifdef __cplusplus
+typedef struct igVertexBlendStateAttr : public igObject {
+#else
 /* handle 0x55ec18, 5 field(s), sizeof 16 (registered instance size) */
 typedef struct igVertexBlendStateAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned char _enabled;                        /* +12   igBoolMetaField */
     char _pad13[3];
 } igVertexBlendStateAttr;
 
+#ifdef __cplusplus
+typedef struct igVertexData : public igObject {
+#else
 /* handle 0x55fa58, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igVertexData {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _data;                                     /* +12   igObjectRefMetaField */
     int _componentType;                            /* +16   igEnumMetaField */
@@ -15729,19 +19765,27 @@ typedef struct igVertexData {
     unsigned int _componentFraction;               /* +32   igUnsignedIntMetaField */
 } igVertexData;
 
+#ifdef __cplusplus
+typedef struct igVertexDataList : public igObject {
+#else
 /* handle 0x55fa48, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igVertexDataList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igVertexDataList;
 
+#ifdef __cplusplus
+typedef struct igVertexStream : public igObject {
+#else
 /* handle 0x55fa10, 9 field(s), sizeof 36 (registered instance size) */
 typedef struct igVertexStream {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _stream;                                   /* +12   igRawRefMetaField */
     unsigned char _isConfigured;                   /* +16   igBoolMetaField */
@@ -15752,44 +19796,64 @@ typedef struct igVertexStream {
     int _streamMode;                               /* +32   igEnumMetaField */
 } igVertexStream;
 
+#ifdef __cplusplus
+typedef struct igView : public igObject {
+#else
 /* handle 0x58c1c0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igView {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
 } igView;
 
+#ifdef __cplusplus
+typedef struct igViewList : public igObject {
+#else
 /* handle 0x58c1b8, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igViewList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igViewList;
 
+#ifdef __cplusplus
+typedef struct igViewManager : public igObject {
+#else
 /* handle 0x58cd08, 6 field(s), sizeof 84 (registered instance size) */
 typedef struct igViewManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _viewMode;                                 /* +8    igObjectRefMetaField */
     int _viewModel;                                /* +12   igObjectRefMetaField */
     int _synchronizers;                            /* +16   igObjectRefMetaField */
     float _homeMatrix[16];                         /* +20   igMatrix44fMetaField */
 } igViewManager;
 
+#ifdef __cplusplus
+typedef struct igViewMode : public igObject {
+#else
 /* handle 0x58ccf8, 4 field(s), sizeof 76 (registered instance size) */
 typedef struct igViewMode {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     float _inverseMatrix[16];                      /* +12   igMatrix44fMetaField */
 } igViewMode;
 
+#ifdef __cplusplus
+typedef struct igViewModel : public igObject {
+#else
 /* handle 0x58cd30, 16 field(s), sizeof 176 (registered instance size) */
 typedef struct igViewModel {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
     float _viewMatrix[16];                         /* +12   igMatrix44fMetaField */
     float _ratio;                                  /* +76   igFloatMetaField */
@@ -15806,28 +19870,40 @@ typedef struct igViewModel {
     float _selectedLength;                         /* +172  igFloatMetaField */
 } igViewModel;
 
+#ifdef __cplusplus
+typedef struct igViewerAction : public igObject {
+#else
 /* handle 0x58c770, 4 field(s), sizeof 24 (registered instance size) */
 typedef struct igViewerAction {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _ref;                                      /* +8    igObjectRefMetaField */
     int _function;                                 /* +12   igStructMetaField */
     char _pad16[8];
 } igViewerAction;
 
+#ifdef __cplusplus
+typedef struct igViewerDataPumpManager : public igObject {
+#else
 /* handle 0x58cb70, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igViewerDataPumpManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _dataPumpManager;                          /* +16   igObjectRefMetaField */
 } igViewerDataPumpManager;
 
+#ifdef __cplusplus
+typedef struct igViewerGuiFactory : public igObject {
+#else
 /* handle 0x58cb28, 10 field(s), sizeof 40 (registered instance size) */
 typedef struct igViewerGuiFactory {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _menuBackColor;                            /* +8    igObjectRefMetaField */
     int _menuItemForeColor;                        /* +12   igObjectRefMetaField */
     int _menuMarkColor;                            /* +16   igObjectRefMetaField */
@@ -15838,28 +19914,40 @@ typedef struct igViewerGuiFactory {
     int _font;                                     /* +36   igObjectRefMetaField */
 } igViewerGuiFactory;
 
+#ifdef __cplusplus
+typedef struct igViewerLoadingFileMessage : public igObject {
+#else
 /* handle 0x58c910, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igViewerLoadingFileMessage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _current;                        /* +8    igBoolMetaField */
     char _pad9[3];
     int _filename;                                 /* +12   igStringMetaField */
 } igViewerLoadingFileMessage;
 
+#ifdef __cplusplus
+typedef struct igViewerModeChangeMessage : public igObject {
+#else
 /* handle 0x58c8f8, 4 field(s), sizeof 16 (registered instance size) */
 typedef struct igViewerModeChangeMessage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     unsigned char _state;                          /* +8    igBoolMetaField */
     char _pad9[3];
     int _mode;                                     /* +12   igStringMetaField */
 } igViewerModeChangeMessage;
 
+#ifdef __cplusplus
+typedef struct igViewerParameters : public igObject {
+#else
 /* handle 0x58c9e8, 42 field(s), sizeof 264 (registered instance size) */
 typedef struct igViewerParameters {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _views;                                    /* +8    igObjectRefMetaField */
     int _scene;                                    /* +12   igObjectRefMetaField */
     float _upVector[3];                            /* +16   igVec3fMetaField */
@@ -15905,10 +19993,14 @@ typedef struct igViewerParameters {
     float _cursorPosition[2];                      /* +256  igVec2fMetaField */
 } igViewerParameters;
 
+#ifdef __cplusplus
+typedef struct igViewerRenderer : public igObject {
+#else
 /* handle 0x58c940, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct igViewerRenderer {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
     int _parameters;                               /* +12   igObjectRefMetaField */
     int _backFaceCullingAttr;                      /* +16   igObjectRefMetaField */
@@ -15933,10 +20025,14 @@ typedef struct igViewerRenderer {
     int _disableExtension;                         /* +88   igObjectRefMetaField */
 } igViewerRenderer;
 
+#ifdef __cplusplus
+typedef struct igViewerSceneInfoManager : public igObject {
+#else
 /* handle 0x58c790, 47 field(s), sizeof 200 (registered instance size) */
 typedef struct igViewerSceneInfoManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _name;                                     /* +8    igStringMetaField */
     int _insight;                                  /* +12   igObjectRefMetaField */
     int _applicationController;                    /* +16   igObjectRefMetaField */
@@ -15987,19 +20083,27 @@ typedef struct igViewerSceneInfoManager {
     char _pad196[4];
 } igViewerSceneInfoManager;
 
+#ifdef __cplusplus
+typedef struct igViewerSceneInfoManagerController : public igObject {
+#else
 /* handle 0x58c928, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igViewerSceneInfoManagerController {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _application;                              /* +12   igObjectRefMetaField */
     int _viewerRenderer;                           /* +16   igObjectRefMetaField */
 } igViewerSceneInfoManagerController;
 
+#ifdef __cplusplus
+typedef struct igViewerStatisticsManager : public igObject {
+#else
 /* handle 0x58c680, 17 field(s), sizeof 72 (registered instance size) */
 typedef struct igViewerStatisticsManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _items;                                    /* +8    igObjectRefMetaField */
     int _visualContext;                            /* +12   igObjectRefMetaField */
     int _guiFactory;                               /* +16   igObjectRefMetaField */
@@ -16019,10 +20123,14 @@ typedef struct igViewerStatisticsManager {
     char _pad68[4];
 } igViewerStatisticsManager;
 
+#ifdef __cplusplus
+typedef struct igViewportAttr : public igObject {
+#else
 /* handle 0x55ebd8, 11 field(s), sizeof 40 (registered instance size) */
 typedef struct igViewportAttr {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _x;                                        /* +12   igIntMetaField */
@@ -16034,18 +20142,26 @@ typedef struct igViewportAttr {
     float _farZ;                                   /* +36   igFloatMetaField */
 } igViewportAttr;
 
+#ifdef __cplusplus
+typedef struct igViewportResizedMessage : public igObject {
+#else
 /* handle 0x56dc10, 4 field(s), sizeof 24 (registered instance size) */
 typedef struct igViewportResizedMessage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     float _origin[2];                              /* +8    igVec2fMetaField */
     float _size[2];                                /* +16   igVec2fMetaField */
 } igViewportResizedMessage;
 
+#ifdef __cplusplus
+typedef struct igVirtualCFuncMetaField : public igObject {
+#else
 /* handle 0x5856d8, 20 field(s), sizeof 52 (registered instance size) */
 typedef struct igVirtualCFuncMetaField {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _offset;                                   /* +8    igIntMetaField */
     int _fieldName;                                /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
@@ -16068,18 +20184,26 @@ typedef struct igVirtualCFuncMetaField {
     int _invarianceFunction;                       /* +48   igRawRefMetaField */
 } igVirtualCFuncMetaField;
 
+#ifdef __cplusplus
+typedef struct igVisualAttribute : public igObject {
+#else
 /* handle 0x55ebd0, 4 field(s), sizeof 12 (registered instance size) */
 typedef struct igVisualAttribute {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
 } igVisualAttribute;
 
+#ifdef __cplusplus
+typedef struct igVisualContext : public igObject {
+#else
 /* handle 0x55f8e8, 33 field(s), sizeof 320 (registered instance size) */
 typedef struct igVisualContext {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _pExtList;                                 /* +8    igObjectRefMetaField */
     int _iNumExts;                                 /* +12   igIntMetaField */
     int _pExtInstances;                            /* +16   igObjectRefMetaField */
@@ -16117,56 +20241,84 @@ typedef struct igVisualContext {
     char _pad313[7];
 } igVisualContext;
 
+#ifdef __cplusplus
+typedef struct igVisualContextAttrDefaultManager : public igObject {
+#else
 /* handle 0x55ebc0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igVisualContextAttrDefaultManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
 } igVisualContextAttrDefaultManager;
 
+#ifdef __cplusplus
+typedef struct igVisualContextCapabilityManager : public igObject {
+#else
 /* handle 0x55f8d0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igVisualContextCapabilityManager {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _visualContext;                            /* +8    igObjectRefMetaField */
 } igVisualContextCapabilityManager;
 
+#ifdef __cplusplus
+typedef struct igVisualContextList : public igObject {
+#else
 /* handle 0x55f8e0, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igVisualContextList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igVisualContextList;
 
+#ifdef __cplusplus
+typedef struct igVolumeList : public igObject {
+#else
 /* handle 0x560f10, 5 field(s), sizeof 20 (registered instance size) */
 typedef struct igVolumeList {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
     int _data;                                     /* +16   igMemoryRefMetaField */
 } igVolumeList;
 
+#ifdef __cplusplus
+typedef struct igWindowResizeEventReceiver : public igObject {
+#else
 /* handle 0x56dc00, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igWindowResizeEventReceiver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _insightCore;                              /* +8    igObjectRefMetaField */
 } igWindowResizeEventReceiver;
 
+#ifdef __cplusplus
+typedef struct igWindowSizeObserver : public igObject {
+#else
 /* handle 0x58c3c0, 3 field(s), sizeof 12 (registered instance size) */
 typedef struct igWindowSizeObserver {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _model;                                    /* +8    igObjectRefMetaField */
 } igWindowSizeObserver;
 
+#ifdef __cplusplus
+typedef struct libBecRuntimePlugin : public igObject {
+#else
 /* handle 0x5878e0, 41 field(s), sizeof 164 (registered instance size) */
 typedef struct libBecRuntimePlugin {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _particleCtrl2;                            /* +8    igObjectRefMetaField */
     int _luaManager;                               /* +12   igObjectRefMetaField */
     int _matCtrl;                                  /* +16   igObjectRefMetaField */
@@ -16208,10 +20360,14 @@ typedef struct libBecRuntimePlugin {
     int _memory;                                   /* +160  igObjectRefMetaField */
 } libBecRuntimePlugin;
 
+#ifdef __cplusplus
+typedef struct libNdmwRuntimePlugin : public igObject {
+#else
 /* handle 0x58a8f8, 23 field(s), sizeof 92 (registered instance size) */
 typedef struct libNdmwRuntimePlugin {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#endif
     int _afsSetup;                                 /* +8    igObjectRefMetaField */
     int _stageCtl;                                 /* +12   igObjectRefMetaField */
     int _panelWaza;                                /* +16   igObjectRefMetaField */

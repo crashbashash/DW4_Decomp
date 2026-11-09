@@ -1,16 +1,15 @@
-#include "dw4/reflected.h"
 /* Publishes a model-control event to the Lua side. arg0 is the beModelCtrl (_luaManager), arg1 a
  * beBaseInfoRam (_ramNo, _dataList = the property list, created lazily and installed through an
  * owning stack reference). The event arguments are staged in a fixed block, the chunk name is
  * formatted from arg2/arg4 and run; the second cell of the property is refreshed from the block
  * afterwards when the chunk left it untouched. */
+#include "dw4/igSmartPointer.h"
 typedef struct Cell { char pad12[12]; int value; } Cell;
 typedef struct PropData { char pad8[8]; Cell *first; Cell *second; int third; } PropData;
 typedef struct Prop { char pad16[16]; int base; PropData *data; } Prop;
 extern "C" {
 igObject *beBaseInfoDataList_Create(...);
 int Memory_GetAllocatorBySelector(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 Prop *igProperty_FindByName(...);
 int sprintf(...);
@@ -38,12 +37,7 @@ void FUN_00394400(beModelCtrl *arg0, beBaseInfoRam *arg1, int arg2, int arg3, in
 }
 /* Owning stack reference to the freshly created property list; released on scope exit once the ram
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_00394400(beModelCtrl *arg0, beBaseInfoRam *arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9) {
     int spA0[11];
     int t;

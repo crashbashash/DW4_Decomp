@@ -312,7 +312,8 @@ def main():
             continue
         seen.add(o["class"])
         classes.append((o["class"], int(handle, 16), fields))
-    classes.sort(key=lambda c: c[0])
+    # igObject comes first: under C++ every other class derives from it.
+    classes.sort(key=lambda c: (c[0] != "igObject", c[0]))
     inst_sizes = load_instance_sizes(args.asm, [c[0] for c in classes])
 
     lines = [
@@ -394,9 +395,22 @@ def main():
             size_note = "sizeof %d (from the fields; %s)" % (
                 struct_size, "no registrar found" if inst_size is None
                 else "registered %d is smaller" % inst_size)
+        # Under C++ a class holding igObject's two words derives from it, so a smart pointer can
+        # convert T * to igObject * implicitly. The layout is the same, and C keeps the flat view.
+        derives = name != "igObject" and [f["name"] for f in fields[:2]] == ["_vtable", "_refCount"] \
+            and len(body) >= 2
+        if derives:
+            lines.append("#ifdef __cplusplus")
+            lines.append("typedef struct %s : public igObject {" % name)
+            lines.append("#else")
         lines.append("/* handle 0x%06x, %d field(s), %s */" % (handle, len(fields), size_note))
         lines.append("typedef struct %s {" % name)
-        lines.extend(body)
+        if derives:
+            lines.extend(body[:2])
+            lines.append("#endif")
+            lines.extend(body[2:])
+        else:
+            lines.extend(body)
         lines.append("} %s;" % name)
         lines.append("")
 

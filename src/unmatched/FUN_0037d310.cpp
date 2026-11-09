@@ -1,28 +1,18 @@
+#include "dw4/igSmartPointer.h"
+
 extern "C" {
 extern int DAT_00587108[4];
 extern unsigned char GPR_00554c14;
-struct Obj { int w0; unsigned refs; int w8; int w12; };
+struct Obj : public igObject { int w8; int w12; };
 extern void *FUN_00366910(int);
 extern int FUN_0037d4a0(int);
 extern int FUN_003a6950(int, int);
 extern int Memory_GetAllocatorBySelector(int);
 extern int ObjectList_AppendRetained(void *, void *);
 extern int igNamedObject_SetName(void *, int);
-extern int igObject_Destroy(void *);
 extern int igObject_GetAllocator(int);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(void *q) { p = (T *)q; }
-    operator T *() { return p; }
-    ~igSmartPointer() {
-        T *q = p;
-        if (q != 0) {
-            q->refs = q->refs - 1;
-            if ((q->refs & 0x7fffff) == 0) igObject_Destroy(q);
-        }
-    }
-};
+
 #define LIST(a) (*(void **)((a) + 40))
 extern "C" void FUN_0037d310(int arg0) {
     int i;
@@ -32,7 +22,7 @@ extern "C" void FUN_0037d310(int arg0) {
         {
         int a = igObject_GetAllocator(arg0);
         a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587108[0]);
-        igSmartPointer<Obj> r(FUN_00366910(a));
+        igSmartPointer<Obj> r((Obj *)FUN_00366910(a));
         FUN_003a6950(r.p->w12, 1);
         igNamedObject_SetName(r, 0);
         ObjectList_AppendRetained(LIST(arg0), r);
@@ -44,7 +34,7 @@ extern "C" void FUN_0037d310(int arg0) {
         {
         int a = igObject_GetAllocator(arg0);
         a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587108[0]);
-        igSmartPointer<Obj> r(FUN_00366910(a));
+        igSmartPointer<Obj> r((Obj *)FUN_00366910(a));
         FUN_003a6950(r.p->w12, -1);
         igNamedObject_SetName(r, 0);
         ObjectList_AppendRetained(LIST(arg0), r);

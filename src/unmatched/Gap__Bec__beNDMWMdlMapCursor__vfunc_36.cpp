@@ -2,9 +2,8 @@
  * fresh value object (FUN_00350020) replaces the named property's value, and when the messenger
  * carries a reply the value takes the interned string and the integer from it; FUN_00396740 then
  * refreshes the model. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-int igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
 int Memory_GetAllocatorBySelector(int);
 int StringChunk_ReleaseHeader(int, int *);
@@ -35,12 +34,7 @@ struct RefCount { static inline void addref(igObject *o) { if (o != 0) o->_refCo
  static inline void release(igObject *o) { if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } } };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the new property value object; released on scope exit. */
 class ValueRef {
 public:
@@ -50,9 +44,7 @@ public:
 };
 /* Inlined helper shared by the model-controller "apply ram" methods: a ram without a data list gets a
  * fresh beBaseInfoDataList (allocator chosen by the global selector flag).  Being an inlined callee, its
- * list reference is laid out after the caller's own value reference (+0x58 below +0x5c), as retail does.
- * matching construct: inline_depth(2) lets the list reference's destructor inline inside the inlined
- * helper (the default depth leaves an out-of-line call to __dt__9ObjectRefFv). */
+ * list reference is laid out after the caller's own value reference (+0x58 below +0x5c), as retail does. */
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int al = igObject_GetAllocator(ram);

@@ -1,7 +1,7 @@
-#include "dw4/reflected.h"
 /* The request record is the cue's beSoundData: _type, _fnameIdx, _memoryIdx (-1 for an ADX file),
  * _volume, _priority. */
 
+#include "dw4/igSmartPointer.h"
 #define SLOTS ((igObjectList *)self->_hdSEs)
 #define ENTS ((igObjectList *)self->_lsBinObjs)
 extern "C" {
@@ -15,13 +15,12 @@ int FUN_0030b3c0(igNamedObject *, char *);
 int FUN_0030ba20(igNamedObject *);
 int FUN_0030b5c0(igNamedObject *);
 int strcmp(char *, char *);
-void igObject_Destroy(void *);
 void igNamedObject_SetName(void *, char *);
 extern char DAT_004e0858[16];
 extern char *DAT_004c22f0[4];
 long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req);
 }
-template <class T> struct igSmartPointer { T *p; ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+
 long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
     beCriSfpData *e0;
     beCriAudio *vc0;
@@ -66,11 +65,9 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
         }
     } else {
         if (ENTS->_count <= 0) return 0;
-        igSmartPointer<igNamedObject> h;
         src = (char *)((igNamedObject **)lst->_data)[req->_fnameIdx]->_name;
         nm = src != 0 ? src : DAT_004e0858;
-        h.p = (igNamedObject *)((beSystem *)self->_system)->_globalStrObj;
-        if (h.p != 0) h.p->_refCount = h.p->_refCount + 1;
+        igSmartPointer<igNamedObject> h((igNamedObject *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
         FUN_0030b3c0(h.p, nm);
         FUN_0030ba20(h.p);
         FUN_0030b5c0(h.p);

@@ -1,13 +1,12 @@
+#include "dw4/igSmartPointer.h"
 extern "C" {
 void *FUN_002ba650(...);
-void igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
 extern int DAT_004fb410[4];
 }
 struct R { int v; R() {} R(int x) { v = x; } };
-class Rc {
+class Rc : public igVirtualObject {
 public:
-    virtual void d0();
     virtual void d1();
     virtual void d2();
     virtual void d3();
@@ -39,52 +38,9 @@ public:
     virtual void d29();
     virtual void d30();
     virtual R v132(int);
-    unsigned int refCount;
+    
 };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    igSmartPointer(const igSmartPointer &other) : p(other.p) {
-        if (p != 0) {
-            p->refCount = p->refCount + 1;
-        }
-    }
-    ~igSmartPointer() {
-        T *o;
-        if ((o = p) != 0) {
-            o->refCount = o->refCount - 1;
-            if ((o->refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    void clear() {
-        T *old = p;
-        if (old != 0) {
-            old->refCount = old->refCount - 1;
-            if ((old->refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
-        p = 0;
-    }
-    igSmartPointer &operator=(const igSmartPointer &other) {
-        T *object = other.p;
-        T *old;
-        if (object != 0) {
-            object->refCount = object->refCount + 1;
-        }
-        old = p;
-        if (old != 0) {
-            old->refCount = old->refCount - 1;
-            if ((old->refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
-        p = object;
-        return *this;
-    }
-};
+
 struct OB { char pad[116]; igSmartPointer<Rc> lock; };
 extern "C" {
 R Gap__Core__igMallocMemoryPool__vfunc_34(OB *arg1, unsigned char arg2) {

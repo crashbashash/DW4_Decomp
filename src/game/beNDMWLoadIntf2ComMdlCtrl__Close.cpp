@@ -1,10 +1,9 @@
 /* Sends the MODELCTRL message "<infoName> <ramNo> <sequence>" through the controller's messenger
  * and, when `trackClose` is 1, also remembers the request as a beLoadIntf2ComMdlData record on the
  * close list, which Poll later visits until each entry's ISRUN check finishes. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 /* String handles are 4-byte reference fields; the casts give the typed views. */
 extern "C" {
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 int Memory_GetAllocatorBySelector(...);
 void *beLoadIntf2ComMdlData__Create(...);
@@ -26,12 +25,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
 /* Owning stack reference to the new close record: constructed from the creating call and released
  * on scope exit once the close list holds its own reference (reference count in the low 23 bits of
  * _refCount). Its destructor is emitted out of line. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* drop one reference on an interned string token; its header (owner, refCount) sits just before the text */
 #define RELEASE_STR(s) { int *q = (int *)(s); if (q) { int *h = q - 2; int c = q[-1] - 1; q[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*h, h); } }
 void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSequence, unsigned char trackClose) {

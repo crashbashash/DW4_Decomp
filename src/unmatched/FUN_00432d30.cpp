@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int beMessenger_SelectGroup(int, int *);
 int beMessenger_AppendInt(int, int);
@@ -10,7 +10,6 @@ int igObject_GetAllocator(void *);
 int Memory_GetAllocatorBySelector(int);
 void *FUN_002caa70(int);
 int List_Resize(void *, int, int);
-int igObject_Destroy(void *);
 extern int DAT_0051b398[4];
 extern int DAT_0051b3e8[4];
 extern int DAT_0051bac0[4];
@@ -22,22 +21,11 @@ extern unsigned char GPR_00554c14;
 }
 typedef struct { char pad[12]; int f12; } Rec2;
 #define CNT(x) ((x)->_count)
-#define REL(t) if ((t) != 0) { (t)->_refCount = (t)->_refCount - 1; if (((unsigned long long)((long long)(int)(t)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(t); }
+#define REL(t) if ((t) != 0) { (t)->_refCount = (t)->_refCount - 1; if (((t)->_refCount & 0x7FFFFF) == 0) igObject_Destroy(t); }
 
 /* Working list reference held across the List_Resize call. */
 static inline int count(const igIntList *list) { return list->_count; }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *x) { p = x; }
-    ~igSmartPointer() {
-        T *o;
-        /* matching construct: (o = p) != 0 shares the load of the held pointer with the loop reads, as retail */
-        if ((o = p) != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
-        }
-    }
-};
+
 extern "C" int FUN_00432d30(beNDMWShopCtrlDigilabo *arg0) {
     int cn;
     int v1;

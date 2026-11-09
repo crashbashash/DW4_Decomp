@@ -1,28 +1,13 @@
-struct Counted { int vtable; int references; };
-struct ObjectList : Counted { int count; int capacity; Counted **data; };
+#include "dw4/igSmartPointer.h"
+struct ObjectList : igObject { int count; int capacity; igObject **data; };
 struct Owner { char pad[8]; ObjectList *children; };
 extern "C" {
 ObjectList *FUN_002bd680(int);
-int FUN_002d6f50(Owner *, Counted *, int);
+int FUN_002d6f50(Owner *, igObject *, int);
 int ObjectList_AppendRetainedList(ObjectList *, ObjectList *);
-void igObject_Destroy(Counted *);
 int igObject_GetAllocator(Owner *);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *list) : p(list) {}
-    ~igSmartPointer() {
-        Counted *object = p;
-        if (object != 0) {
-            object->references = object->references - 1;
-            if ((object->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
-    }
-    T *operator->() const { return p; }
-    operator T *() const { return p; }
-};
+
 extern "C" void FUN_002d7130(Owner *owner) {
     igSmartPointer<ObjectList> copy(FUN_002bd680(igObject_GetAllocator(owner)));
     ObjectList_AppendRetainedList(copy, owner->children);
@@ -30,10 +15,10 @@ extern "C" void FUN_002d7130(Owner *owner) {
     int count = children->count;
     int i;
     for (i = 0; i < count; i++) {
-        Counted *child = children->data[i];
+        igObject *child = children->data[i];
         if (child != 0) {
-            child->references = child->references - 1;
-            if ((child->references & 0x7FFFFF) == 0) {
+            child->_refCount = child->_refCount - 1;
+            if ((child->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(child);
             }
         }

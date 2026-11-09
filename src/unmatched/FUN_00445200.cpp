@@ -1,11 +1,10 @@
-#include "dw4/reflected.h"
 /* matching construct: MessengerVirt carries 33 dummy virtuals so vX() dispatches through the same vtable slot as retail; the receiver is reached as a beNDMWMdlPEBase and cast only for that one call */
+#include "dw4/igSmartPointer.h"
 extern "C" {
 igObject *beBaseInfoDataList_Create(...);
 int FUN_003a8580(...);
 void *Memory_GetAllocatorBySelector(...);
 int beMessenger_SendNamed(...);
-int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
 void *igProperty_FindByName(...);
 int strcmp(...);
@@ -34,12 +33,6 @@ class MessengerVirt { public: virtual void d0(); virtual void d1(); virtual void
 
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
 
 #define SETI(L, I, V) if ((L)->_count != 0 && (I) >= 0 && (I) < (L)->_count) ((int *)(L)->_data)[I] = (V);
 #define SETB(L, I, V) if ((L)->_count != 0 && (I) >= 0 && (I) < (L)->_count) ((unsigned char *)(L)->_data)[I] = (V);

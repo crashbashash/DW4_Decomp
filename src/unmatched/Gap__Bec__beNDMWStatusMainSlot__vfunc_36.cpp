@@ -1,7 +1,7 @@
 /* BeNDMWStatusMainSlot vfunc 36: creates the D0 status sub-window (held across its binding, the
  * sub-window append and the kind-list push) and marks it as the ability-type variant with
  * equipment and unknown entries disabled. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 static inline int countOf(const igIntList *l) { return l->_count; }
 extern "C" {
 beNDMWStatusCtrlD0 *FUN_003baf10(int);
@@ -9,7 +9,6 @@ int List_Resize(igIntList *, int, int);
 int Memory_GetAllocatorBySelector(int);
 int ObjectList_AppendRetained(int, beNDMWStatusCtrlD0 *);
 int beNDMWWindow_BindContext(beNDMWStatusCtrlD0 *, beNDMWStatusMainSlot *, int, int, int);
-void igObject_Destroy(igObject *);
 int igObject_GetAllocator(beNDMWStatusMainSlot *);
 extern int DAT_004cf6e8[4];
 extern int DAT_00587110[4];
@@ -17,12 +16,7 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the new sub-window, released on scope exit (reference count in the low
  * 23 bits of the igObject header's _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_36(beNDMWStatusMainSlot *arg0) {
     int al;
     int c;

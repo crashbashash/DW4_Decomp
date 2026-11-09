@@ -1,6 +1,5 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(void *);
 int strcmp(...);
 struct Ob { char p[28]; float x; float y; float z; };
 struct Ent { int name; int val; int val2; };
@@ -22,11 +21,7 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *o) { p = o; }
-    ~igSmartPointer() { T *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 #define DEGI(bk, pl, i) \
     ((beNDMWDegiData *)((int *)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)((beNDMWLoadSavePlWork *)((int *)((beNDMWLoadSavePlWorkList *)(bk)->_flagWork)->_data)[pl])->_haveSaveData)->_saveDataList)->_data)[i])
 unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {

@@ -1,8 +1,9 @@
+#include "dw4/igSmartPointer.h"
 struct igResult { int w0; igResult() {} igResult(const igResult &o) { w0 = o.w0; } bool operator==(const igResult &o) const { return w0 == o.w0; } };
 extern "C" {
 #include "dw4/reflected.h"
 
-typedef struct Ref { int vt; unsigned rc; } Ref;
+typedef struct Ref : public igObject { } Ref;
 typedef struct Msg {
     char _pad0[8];
     int number;            /* +8  player number */
@@ -14,7 +15,6 @@ typedef struct Msg {
 void *igObject_GetAllocator(Msg *);
 void *Memory_GetAllocatorBySelector(int);
 Ref *beBaseInfoDataList_Create(void *);
-void igObject_Destroy(Ref *);
 struct PropertyRecord { char header[20]; beNDMWMdlPlayerInfoWork *value; };
 PropertyRecord *igProperty_FindByName(Ref *, int, const char *);
 int strcmp(int, const char *);
@@ -33,7 +33,7 @@ void FUN_00445200(void *, Msg *);
 extern unsigned char GPR_00554c14;
 extern char DAT_004e0858[], DAT_00516110[], DAT_00516148[], DAT_00516228[], DAT_00516290[], DAT_005164b0[], DAT_005164b8[], DAT_005164c8[], DAT_005164d8[];
 }
-template <class T> struct igSmartPointer { T *p; igSmartPointer(T *q) : p(q) {} ~igSmartPointer() { T *q = p; if (q) { q->rc--; if ((q->rc & 0x7fffff) == 0) igObject_Destroy(q); } } };
+
 extern int DAT_00587110[4], DAT_00585be0[4];
 extern "C" igResult DAT_004fb410;
 
@@ -49,11 +49,11 @@ static inline void ensureCache(Msg *msg)
         }
         igSmartPointer<Ref> t(beBaseInfoDataList_Create(al2));
         Ref *r = t.p;
-        if (r) r->rc++;
+        if (r) r->_refCount++;
         Ref *old = msg->cache;
         if (old) {
-            old->rc--;
-            if ((old->rc & 0x7fffff) == 0) igObject_Destroy(old);
+            old->_refCount--;
+            if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
         }
         msg->cache = r;
     }

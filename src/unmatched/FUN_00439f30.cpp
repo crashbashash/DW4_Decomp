@@ -1,4 +1,4 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 struct Rec { char pad[12]; int f12; };
 int FUN_0043a450(void *, igObjectList *, igObject *, igObjectList *, igObject *);
@@ -10,7 +10,6 @@ int beMessenger_DispatchSelected(...);
 int beMessenger_GetObject(...);
 int beMessenger_SelectGroup(...);
 int beMessenger_SelectReceivers(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 Rec *igProperty_GetRecordFolder(...);
 extern int DAT_0051b398[4];
@@ -34,12 +33,7 @@ struct ShopAlloc {
 
 /* Owning stack reference to one scratch object; released on scope exit (reference count in the low
  * 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 extern "C" void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1);
 void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1) {
     int obj;

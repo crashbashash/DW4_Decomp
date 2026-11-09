@@ -3,7 +3,7 @@
  * window (one row per item, at least one) with its own close texts and message script, and queues
  * the model; state 1 waits for the window and reacts to the cursor; state 2 closes everything;
  * state 3 waits for the close and clears _isRun. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 static inline int countOf(const igIntList *l) { return l->_count; }
 extern "C" {
 int FUN_002eb010(int);
@@ -25,7 +25,6 @@ int beNDMWWindow_PollCloseComplete(...);
 int beNDMWWindow_PresentModelAtOrigin(...);
 int beNDMWWindow_RequestChildrenClose(...);
 int beNDMWWindow_RunMessageScript(...);
-void igObject_Destroy(void *);
 int igObject_GetAllocator(void *);
 int *igProperty_GetRecordArray(...);
 extern int *DAT_004cf670[4];
@@ -62,12 +61,7 @@ public:
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 /* Owning stack reference to the list window created here, released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *w) : p(w) {}
-    ~igSmartPointer() { T *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
-};
+
 struct Str { static inline int *intern(int *s) {
     int *ref;
     if (s == 0) {

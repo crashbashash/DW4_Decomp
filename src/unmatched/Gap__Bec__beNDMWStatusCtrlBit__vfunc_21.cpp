@@ -1,3 +1,4 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 struct ChildWindow;
 extern "C" {
@@ -21,7 +22,6 @@ int beNDMWWindow_PlayQueuedModelClose(beNDMWStatusCtrlBit *);
 int beNDMWWindow_PollCloseComplete(beNDMWStatusCtrlBit *);
 int beNDMWWindow_RequestChildrenClose(beNDMWStatusCtrlBit *);
 int beNDMWWindow_RunMessageScript(beNDMWStatusCtrlBit *, int *, int);
-void igObject_Destroy(struct ChildWindow *);
 int igObject_GetAllocator(beNDMWStatusCtrlBit *);
 int igProperty_GetRecord(int, int *);
 void *igProperty_GetRecordByte(int, int *);
@@ -38,7 +38,7 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 typedef struct PropertyRecord { char p[12]; unsigned char f12; } PropertyRecord;
-typedef struct ChildWindow { int w0; int refs; char p8[52]; int f60; int f64; char p68[24]; int f92; } ChildWindow;
+typedef struct ChildWindow : public igObject { char p8[52]; int f60; int f64; char p68[24]; int f92; } ChildWindow;
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
 static inline int count(const igIntList *list) { return list->_count; }
@@ -50,20 +50,15 @@ public:
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 /* Owning stack reference to the first sub-window while it is set up, released on scope exit
- * (reference count in the low 23 bits of refs). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *w) : p(w) {}
-    ~igSmartPointer() { T *w = p; if (w != 0) { --w->refs; if ((w->refs & 0x7fffff) == 0) igObject_Destroy(w); } }
-};
+ * (reference count in the low 23 bits of _refCount). */
+
 /* Owning stack reference to the player-select sub-window (receives the player-number list) while
  * it is set up. */
 class SelectWindowRef {
 public:
     ChildWindow *p;
     SelectWindowRef(ChildWindow *w) : p(w) {}
-    ~SelectWindowRef() { ChildWindow *w = p; if (w != 0) { --w->refs; if ((w->refs & 0x7fffff) == 0) igObject_Destroy(w); } }
+    ~SelectWindowRef() { ChildWindow *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
 struct Str { static inline int *intern(int *s) {
     int *tok;
@@ -169,8 +164,8 @@ void Gap__Bec__beNDMWStatusCtrlBit__vfunc_21(beNDMWStatusCtrlBit *arg0) {
                         if (lst != 0) lst->_refCount = lst->_refCount + 1;
                         old = (ChildWindow *)w->f92;
                         if (old != 0) {
-                            old->refs = old->refs - 1;
-                            if (((unsigned long long)((long long)old->refs << 0x29) >> 0x29) == 0) igObject_Destroy(old);
+                            old->_refCount = old->_refCount - 1;
+                            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
                         }
                         w->f92 = (int)lst;
                     }

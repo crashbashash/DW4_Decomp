@@ -390,19 +390,15 @@ Retail shapes that only one spelling reproduces:
   by `const &` to an inline helper takes its address, which is what keeps it in memory:
 
   ```cpp
-  template <class T> struct igSmartPointer {
-      T *p;
-      igSmartPointer(T *object) : p(object) {}
-      ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { /* release */ } }
-      T *get() const { return p; }
-  };
+  #include "dw4/igSmartPointer.h"
 
   igSmartPointer<igProbe> held(create());
   setField(owner, held);   // static inline, takes const igSmartPointer<igProbe> &
   ```
 
-  The name is the game's own: the executable holds the string `::~igSmartPointer<`. Each file defines the template
-  with the members it needs, since no one definition has yet been shown to serve them all.
+  The name is the game's own: the executable holds the string `::~igSmartPointer<`. One definition serves every
+  holder. Whether an inlined release reloads depends on the holder: an unnamed temporary does, a named holder built
+  directly does not ([emitted functions](emitted-functions.md#one-reference-holder)).
 
   It is the non-empty destructor that keeps the local in memory: without one the compiler holds it in a register, and
   no `const &` is needed for the reload. Related shapes:
@@ -412,7 +408,7 @@ Retail shapes that only one spelling reproduces:
   * Frame slots go holders first, then expression temporaries, then the locals of inlined helpers. A returned object
     used only inside an expression has to be a temporary, not a named local.
   * Reading `ref.p` inside a helper that takes `const Ref &` settles register ties; going through `get()` there can
-    change them. An `o = get()` destructor shares its load with an earlier `get()`, where `o = p` reloads.
+    change them.
 
   * A `sb zero,N(sp)` just before a factory call, on a byte nothing reads, is an empty class passed by value, with one
     temporary for each call: `Ref a(create(0), Tag());`.

@@ -1,20 +1,6 @@
-#include "dw4/reflected.h"
-extern "C" int igObject_Destroy(void *);
+#include "dw4/igSmartPointer.h"
 struct Vec3 { int x; int y; int z; };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 struct Node : igObject { int fc_pad; igObject *child; };
 extern "C" {
 igObject *FUN_0018a660(int);

@@ -1,8 +1,7 @@
-#include "dw4/reflected.h"
 /* _bound stays a 4-byte handle, so it is cast to igAABox *; _min and _max are float[3] and are
  * copied as floats. */
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(igAABox *);
 igAABox *FUN_0018a660(...);
 int FUN_0018ac80(...);
 int Memory_GetAllocatorBySelector(...);
@@ -20,12 +19,7 @@ struct Rel { static inline void go(igAABox *object) {
 } };
 /* Owning stack reference to the freshly created bound box; released on scope exit once the node
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void FUN_00396940(beModelCtrl *arg0, beModelCtrlNode2 *arg1, igAABox *arg2) {
     igAABox *s0;
     s0 = (igAABox *)arg1->_bound;

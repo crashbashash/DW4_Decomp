@@ -1,6 +1,5 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
-void igObject_Destroy(igObject *);
 igObject *beBaseInfoDataList_Create(int);
 igObject *FUN_003bfc80(int);
 int Memory_GetAllocatorBySelector(...);
@@ -91,12 +90,7 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the slot's new data list; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 /* Owning stack reference to the new player info work; released on scope exit. */
 class InfoWorkRef {
 public:
@@ -109,7 +103,7 @@ class IntListRef {
 public:
     igIntList *p;
     IntListRef(igIntList *l) : p(l) {}
-    ~IntListRef() { igIntList *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
+    ~IntListRef() { igIntList *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
@@ -126,7 +120,9 @@ struct Slot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPo
     if (t != 0) t->_refCount = t->_refCount + 1;
     ReleaseRefInline::go((igObject *)ram->_dataList);
     ram->_dataList = (int)t;
-} };
+}
+static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); setDataList(ram, list); }
+};
 struct ParentInfoRef { char header[8]; int *name; };
 struct SystemObjectView { char p[56]; int f56; };
 extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *arg1);
@@ -150,7 +146,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         igObject *created = beBaseInfoDataList_Create(a);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named references, as retail's +0x100 does) */
-        Slot::setDataList(arg1, igSmartPointer<igObject>(created));
+        Slot::adopt(arg1, created);
     }
     s3 = igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], DAT_00516110);
     {

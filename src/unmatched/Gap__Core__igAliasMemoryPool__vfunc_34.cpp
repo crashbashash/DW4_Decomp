@@ -1,41 +1,22 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
 void *FUN_002ba650(...);
-int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 extern int DAT_004fb410[4];
 }
 struct LockStatus { int v; LockStatus() {} LockStatus(int x) { v = x; } };
-class Lock { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual LockStatus open(); virtual LockStatus close(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual LockStatus wait(int); int references; };
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *lock) : p(lock) {}
-    ~igSmartPointer() {
-        T *lock = p;
-        if (lock != 0) {
-            lock->references = lock->references - 1;
-            if ((lock->references & 0x7FFFFF) == 0) {
-                igObject_Destroy(lock);
-            }
-        }
-    }
-    void retain() const {
-        T *lock = p;
-        if (lock != 0) {
-            lock->references = lock->references + 1;
-        }
-    }
-    T *get() const { return p; }
-};
+class Lock : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual LockStatus open(); virtual LockStatus close(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual LockStatus wait(int); };
+
 static inline void setLock(igAliasMemoryPool *pool, Lock *lock) {
     Lock *previous;
     if (lock != 0) {
-        lock->references = lock->references + 1;
+        lock->_refCount = lock->_refCount + 1;
     }
     previous = (Lock *)pool->_allocationLock;
     if (previous != 0) {
-        previous->references = previous->references - 1;
-        if ((previous->references & 0x7FFFFF) == 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }

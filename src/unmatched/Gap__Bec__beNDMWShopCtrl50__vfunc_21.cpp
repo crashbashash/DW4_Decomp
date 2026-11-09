@@ -1,5 +1,5 @@
 /* `retCode != -1` is spelled as a switch (default first, then case -1). */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 int FUN_002eb010(...);
 int FUN_003b4410(...);
@@ -33,7 +33,6 @@ int beNDMWWindow_PresentModel(...);
 int beNDMWWindow_PresentModelAtOrigin(...);
 int beNDMWWindow_RequestChildrenClose(...);
 int beNDMWWindow_RunMessageScript(...);
-int igObject_Destroy(...);
 void *igObject_GetAllocator(...);
 int igProperty_GetRecord(...);
 struct Item { int p[3]; int f12; int p16; int f20; };
@@ -108,12 +107,7 @@ extern "C" int StringList_AppendRetained(int, const StringRef &);
 
 /* Owning stack references to the sub-windows while their set-up runs; each releases its object on
  * scope exit (reference count in the low 23 bits of _refCount). One class per destructor copy. */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 class SelectE1Ref {
 public:
     igObject *p;
@@ -138,7 +132,7 @@ public:
     MenuRef(igObject *o) : p(o) {}
     ~MenuRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
+#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 
 #define VCNT(l) ((l)->_count)
 #define SUBCNT(s) (((beNDMWWindowList *)(s)->_subWindow)->_count)

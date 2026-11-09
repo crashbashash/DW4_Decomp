@@ -5,7 +5,7 @@
  * tier chains are else-if chains; row8 is declared before the loop counters; each item holder is
  * constructed at its use site from the new object and released by its destructor at scope exit;
  * the dispatch switches list their arms in ascending order. */
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 struct Rec { int p[3]; int f12; };
 struct RecB { char p[12]; unsigned char f12; };
@@ -32,7 +32,6 @@ int beMessenger_SelectGroup(...);
 int beMessenger_SendGroup(...);
 int beMessenger_SendNamed(...);
 int beDataBase_GetRecordInt(...);
-int igObject_Destroy(...);
 Rec *igProperty_GetRecord(...);
 RecB *igProperty_GetRecordByte(...);
 IRec *FUN_003a9250(...);
@@ -60,11 +59,11 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram);
 }
 /* Owning reference to a freshly created object: the destructor drops one reference and destroys at
  * zero. Every item kind is its own class, so the compiler emits one destructor per kind. */
-template <class T> struct igSmartPointer { T *p; igSmartPointer(T *o) : p(o) {} ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+
 template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct U { static inline void Reserve(const igObjectList *l) { if (l->_count < 37) List_Reserve(l, 36, 4); } };
 #define WL(f) ((igObjectList *)work->f)
-#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
+#define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define ALLOC(a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel); }
 #define ITEM4(K, sp, fac, init, lst, id) { ALLOC(alloc, DAT_00587108[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id, owner, level); ObjectList_AppendRetained(lst, sp.p); }
 #define ITEM2(K, sp, fac, init, lst, id) { ALLOC(alloc, DAT_00587108[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id); ObjectList_AppendRetained(lst, sp.p); }

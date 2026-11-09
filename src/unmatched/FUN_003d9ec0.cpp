@@ -1,3 +1,4 @@
+#include "dw4/igSmartPointer.h"
 #include "dw4/reflected.h"
 extern "C" {
 beUnicodeObj *FUN_003614f0(int);
@@ -10,7 +11,6 @@ int Memory_GetAllocatorBySelector(...);
 int *beDataBase_GetRecordString(...);
 int beMessenger_GetObject(...);
 int beMessenger_SendNamed(...);
-void igObject_Destroy(igObject *);
 int igObject_GetAllocator(...);
 int strcmp(...);
 typedef struct SlotEnt { int name; int val; int val2; } SlotEnt;
@@ -34,12 +34,6 @@ struct SlotBackend { char p[36]; igObjectList *ownDisplays; igObjectList *areas;
 struct SlotPanel { char p0[8]; int messenger; char p1[4]; int textCtrl; SlotBackend *backend; int player; int side; char p2[8]; int source; int index; };
 /* Owning stack reference to the slot's text object; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
-};
 
 extern "C" void FUN_003d9ec0(SlotPanel *arg0) {
     SlotBackend *v1 = arg0->backend;

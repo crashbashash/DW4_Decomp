@@ -1,7 +1,6 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 extern "C" {
 /* igObject header: the reference count at +4 is not a reflected field */
-void igObject_Destroy(igObject *);
 igObject *beBaseInfoDataList_Create(int);
 int Memory_GetAllocatorBySelector(...);
 int beMessenger_SendNamed(...);
@@ -27,12 +26,7 @@ struct Rel { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the freshly created property list; released on scope exit once the ram
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-template <class T> class igSmartPointer {
-public:
-    T *p;
-    igSmartPointer(T *o) : p(o) {}
-    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
+
 void Gap__Bec__beNDMWMdlPlayer__vfunc_42(beNDMWMdlPlayer *arg0, beBaseInfoRam *arg1) {
     igObject *s0;
     if (((igObject *)arg1->_dataList) == 0) {

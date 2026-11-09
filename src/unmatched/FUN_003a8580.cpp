@@ -1,17 +1,16 @@
-#include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
 #include "dw4/igTDataList.h"
 extern "C" {
 void *igObject_GetAllocator(void *);
 void *Memory_GetAllocatorBySelector(int);
 igObject *beBaseInfoDataList_Create(void *);
-void igObject_Destroy(void *);
 igObject *igProperty_FindByName(void *, int, char *);
 void List_RemoveWordAt(void *, int);
 extern int DAT_00585be0[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-template <class T> struct igSmartPointer { T *p; igSmartPointer(T *x) { p = x; } ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+
 extern "C" void FUN_003a8580(beBaseInfoRam *self, char *name) {
     igTDataList<igObject *> *l1;
     int idx;

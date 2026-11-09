@@ -1,4 +1,6 @@
-struct R { int pad0; unsigned rc; };
+#include "dw4/igSmartPointer.h"
+
+struct R : public igObject { };
 extern "C" {
 extern int sscanf(int, int *, void *);
 extern R *FUN_002b9500(int);
@@ -8,25 +10,11 @@ extern int FUN_002dc0a0(int, int, float, float);
 extern int FUN_002dc120(int, int, int, int);
 extern int FUN_0030b3c0(R *, int);
 extern int FUN_0030b670(R *, unsigned char *);
-extern int igObject_Destroy(R *);
 extern int igObject_GetAllocator();
 extern int DAT_004f9730[4];
 extern int DAT_004f9738[4];
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *object) : p(object) {}
-    ~igSmartPointer() {
-        T *o = p;
-        if (o != 0) {
-            o->rc = o->rc - 1;
-            if ((o->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 extern "C" unsigned char FUN_002dbd10(int arg0, int arg1, int arg2, int arg3, int arg4) {
     unsigned char r;
     switch (arg1) {

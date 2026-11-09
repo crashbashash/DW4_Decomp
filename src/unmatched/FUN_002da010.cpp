@@ -1,4 +1,6 @@
-struct ConfigPlatformText { int vt; unsigned int _refCount; char *text; };
+#include "dw4/igSmartPointer.h"
+
+struct ConfigPlatformText : public igObject { char *text; };
 class ConfigPlatformSource {
 public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
@@ -8,7 +10,7 @@ public:
     virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24();
     virtual void Describe(void *target);
 };
-struct ConfigPlatformSourceList { int vt; int rc; int count; int capacity; ConfigPlatformSource **data; };
+struct ConfigPlatformSourceList : public igObject { int count; int capacity; ConfigPlatformSource **data; };
 extern "C" {
 void *igObject_GetAllocator(void *);
 ConfigPlatformText *FUN_002b9500(void *);
@@ -16,24 +18,10 @@ void FUN_002d96f0(void *, int, char *);
 int FUN_002dac30(ConfigPlatformText *);
 int FUN_002dac60(ConfigPlatformText *);
 int FUN_002dac90(ConfigPlatformText *);
-void igObject_Destroy(ConfigPlatformText *);
 extern char *DAT_004c22f0[4];
 void FUN_002da010(void *self, ConfigPlatformSourceList *list);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *text) : p(text) {}
-    ~igSmartPointer() {
-        T *text = p;
-        if (text != 0) {
-            text->_refCount = text->_refCount - 1;
-            if ((text->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(text);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 static inline char *textOf(const igSmartPointer<ConfigPlatformText> &ref) {
     char *s = ref.get()->text;
     s = (s == 0) ? DAT_004c22f0[0] : s;

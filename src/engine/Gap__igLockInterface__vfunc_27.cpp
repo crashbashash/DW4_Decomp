@@ -1,5 +1,7 @@
-struct Rc { int w0; int refs; };
-class Lock { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int tryLock(int); int w4; };
+#include "dw4/igSmartPointer.h"
+
+struct Rc : public igObject { };
+class Lock : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int tryLock(int); };
 extern "C" {
 Rc *FUN_002279d0(int);
 int igLockBase_GetMetaObject();
@@ -8,37 +10,23 @@ Lock *FUN_0022a950(Rc *);
 int FUN_0022a9d0(Rc *);
 int FUN_002fd610(Lock **, Lock *);
 int FUN_002295b0(int, Lock *);
-int igObject_Destroy(void *);
 int Gap__igLockInterface__vfunc_27(int self, int mode);
 }
-template <class T> struct igSmartPointer {
-    T *p;
-    igSmartPointer(T *iterator) : p(iterator) {}
-    ~igSmartPointer() {
-        T *iterator = get();
-        if (iterator != 0) {
-            iterator->refs = iterator->refs - 1;
-            if ((iterator->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy(iterator);
-            }
-        }
-    }
-    T *get() const { return p; }
-};
+
 struct LockRef {
     Lock *p;
     LockRef() {}
     void attach(Lock *lock) {
         p = lock;
         if (p != 0) {
-            p->w4 = p->w4 + 1;
+            p->_refCount = p->_refCount + 1;
         }
     }
     ~LockRef() {
         Lock *lock = get();
         if (lock != 0) {
-            lock->w4 = lock->w4 - 1;
-            if ((lock->w4 & 0x7FFFFF) == 0) {
+            lock->_refCount = lock->_refCount - 1;
+            if ((lock->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(lock);
             }
         }
@@ -65,8 +53,8 @@ int Gap__igLockInterface__vfunc_27(int self, int mode) {
         FUN_002fd610(&created, found);
         lock.attach(created);
         if (created != 0) {
-            created->w4 = created->w4 - 1;
-            if ((created->w4 & 0x7FFFFF) == 0) {
+            created->_refCount = created->_refCount - 1;
+            if ((created->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(created);
             }
         }
