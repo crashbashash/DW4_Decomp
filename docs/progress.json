@@ -230,7 +230,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 86478
+    "value": 87000
    },
    "inline_asm.other": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 5963
+    "value": 5964
    },
    "mismatch.bytes": {
     "reason": null,
@@ -310,11 +310,11 @@
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 696052
+    "value": 693344
    },
    "unmatched.functions": {
-    "reason": null,
-    "value": 891
+    "reason": "356 functions without source joined the symbol table: the unsymbolled code below the VU1 microcode now has symbols (rule 6 and reviewed start rows)",
+    "value": 1208
    }
   },
   "counters": {

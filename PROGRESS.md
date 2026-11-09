@@ -82,14 +82,14 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
-| `unmatched.functions` | 891 | 1,208 | **+317** | functions in the layout with no definition in src/ |
-| `unmatched.bytes` | 696,052 | 693,344 | -2708 | bytes of those |
+| `unmatched.functions` | 1,208 | 1,208 | 0 | functions in the layout with no definition in src/ — increase recorded: 356 functions without source joined the symbol table: the unsymbolled code below the VU1 microcode now has symbols (rule 6 and reviewed start rows) |
+| `unmatched.bytes` | 693,344 | 693,344 | 0 | bytes of those |
 | `struct.a` | 134 | 134 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 157 | 157 | 0 | struct-report groups: receiver view disagrees with the reflected class |
 | `struct.c` | 285 | 285 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 5,963 | 5,964 | **+1** | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `m2c_idiom.units` | 5,964 | 5,964 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 359 | 359 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 86,478 | 87,000 | **+522** | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 87,000 | 87,000 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 18 | 18 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 776 | 776 | 0 | bytes of those |
 | `unapproved.functions` | 80 | 80 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
