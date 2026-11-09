@@ -101,7 +101,9 @@ make it read well. Either can be done alone.
   bodies.
 - **No asm bodies.** A function without C has no file in `src/`: it links from the retail image and reads
   from the generated `asm/`. Its retail instructions wrapped in an `asm` function recover nothing and are
-  not committed; `make check` files any that appear as `asm-body`, counted in no figure
+  not committed; `make check` files any that appear as `asm-body`, counted in no figure. The exception is a
+  function the original source wrote as an MWCC `asm` function, which takes an owner's `asm-function` row
+  in `config/source-approvals.tsv`
   ([asm-body matches](docs/engine/asm-body-matches.md)). The work queue is every symbol without a
   definition in `src/`: `python3 tools/m2c_batch.py` drafts them (gcc target for Sony EE GCC units;
   `--write` adds a draft only when the C verifies). When a compiler is added, re-attempt the functions in

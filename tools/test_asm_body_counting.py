@@ -38,8 +38,9 @@ class AsmBodyNames(unittest.TestCase):
         self.assertEqual(unitprofiles.asm_body_names(path), frozenset())
         self.assertFalse(unitprofiles.asm_body_source(path))
 
-    def test_no_pragma_no_body(self):
-        self.assertEqual(unitprofiles.asm_body_names(self.write(BODY.split("\n", 1)[1])), frozenset())
+    def test_an_asm_function_is_a_body_without_the_pragma(self):
+        # an asm function without the pragma still recovers nothing, so it is never plain C
+        self.assertEqual(unitprofiles.asm_body_names(self.write(BODY.split("\n", 1)[1])), {"FUN_00100000"})
 
 
 class Categories(unittest.TestCase):

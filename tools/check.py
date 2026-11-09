@@ -360,7 +360,13 @@ def main(argv=None):
     cands = [(va, sz, nm, src_index[nm]) for va, sz, nm in syms if nm in src_index]
     by_name = {nm: va for va, _, nm in syms}
     asm_bodies = {nm for _, _, nm, path in cands if nm in unitprofiles.asm_body_names(path)}
-    assembly = asmsources.approved_names({nm: path for _, _, nm, path in cands})
+    approvals = sourceapprovals.load()
+    # an MWCC `asm` function the owner approved (an `asm-function` row) was written in assembly in the
+    # original source: it is counted with the hand-written assembly sources, not as an asm body
+    asm_functions = {nm for _, _, nm, path in cands
+                     if nm in asm_bodies and sourceapprovals.approved_asm_function(path, nm, approvals)}
+    asm_bodies -= asm_functions
+    assembly = asmsources.approved_names({nm: path for _, _, nm, path in cands}) | asm_functions
     decompiled = [nm for _, _, nm, _ in cands if nm not in asm_bodies and nm not in assembly]
     if a.cover_limit:
         cands = cands[:a.cover_limit]
@@ -405,7 +411,6 @@ def main(argv=None):
             cover_store.put(key, {"category": kind, "exc": exc, "diagnostic": diagnostic, "override": override})
         return (nm, kind, exc, diagnostic, override)
 
-    approvals = sourceapprovals.load()
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
         for nm, kind, exc, diagnostic, override in ex.map(cover_one, cands):
             if nm in asm_bodies and kind not in ("mismatch", "compile"):

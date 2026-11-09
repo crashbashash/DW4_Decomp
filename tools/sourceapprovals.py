@@ -7,8 +7,10 @@ counts as matched only once the project owner has reviewed the evidence and adde
 config/source-approvals.tsv. Until then `make check` files it as `unapproved`: its source stays and
 links byte-identically, but it counts in no matched figure (docs/engine/source-approvals.md).
 
-A row is `kind <TAB> symbol <TAB> count <TAB> evidence`: `asm` or `volatile`, the function, how many
-uses reach it, and the anchor of the evidence in docs/engine/source-approvals.md. The count voids the
+A row is `kind <TAB> symbol <TAB> count <TAB> evidence`: `asm`, `volatile` or `asm-function`, the function,
+how many uses reach it, and the anchor of the evidence in docs/engine/source-approvals.md. `asm-function`
+approves a whole MWCC `asm` function, written in assembly in the original source (its count is 1); without
+the row such a function is an asm body, which counts in no matched figure. The count voids the
 approval when another use appears. `sync` and `ei` need no row, since C cannot spell them, and stock
 source under src/third_party/ is out of scope, as it is for tools/inline_asm.py.
 
@@ -26,10 +28,11 @@ sys.path.insert(0, HERE)
 import asmsources  # noqa: E402
 import inline_asm  # noqa: E402
 import units  # noqa: E402
+import unitprofiles  # noqa: E402
 
 TABLE = os.path.join(ROOT, "config", "source-approvals.tsv")
 INCLUDE = os.path.join(ROOT, "include")
-KINDS = ("asm", "volatile")
+KINDS = ("asm", "volatile", "asm-function")
 _STRING = re.compile(r'"(?:\\.|[^"\\\n])*"')
 _VOLATILE = re.compile(r"\b(?:__volatile__|volatile)\b")
 _INCLUDE = re.compile(r'^\s*#\s*include\s*"([^"]+)"', re.M)
@@ -142,11 +145,18 @@ def _header_counts(includes, seen):
 def uses(path, name):
     """{"asm": n, "volatile": n} reaching function `name` as defined in `path`."""
     if not in_scope(path):
-        return {"asm": 0, "volatile": 0}
+        return {"asm": 0, "volatile": 0, "asm-function": 0}
     text = _read(path)
     a, v = _count(_reachable_text(text, name)) if _USE_WORD.search(text) else (0, 0)
     a2, v2 = _header_counts(_includes(text, os.path.dirname(os.path.abspath(path))), set())
-    return {"asm": a + a2, "volatile": v + v2}
+    return {"asm": a + a2, "volatile": v + v2, "asm-function": int(name in unitprofiles.asm_body_names(path))}
+
+
+def approved_asm_function(path, name, rows=None):
+    """Whether `name` is an MWCC `asm` function in `path` with a current `asm-function` row."""
+    rows = load() if rows is None else rows
+    row = rows.get(("asm-function", name))
+    return row is not None and row[0] == 1 and name in unitprofiles.asm_body_names(path)
 
 
 def problem(path, name, rows=None):

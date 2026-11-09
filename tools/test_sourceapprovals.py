@@ -70,6 +70,21 @@ class SourceApprovals(unittest.TestCase):
         rows = {("asm", "f"): (1, "#x"), ("asm", "g"): (1, "#x")}
         self.assertEqual({path for path, _start in sa.approved_statements(paths, rows)}, {header})
 
+    def test_an_asm_function_needs_an_asm_function_row(self):
+        path = self.write("a.cpp", "asm void f(void) {\n    jr ra\n    nop\n}\n")
+        self.assertEqual(sa.uses(path, "f")["asm-function"], 1)
+        self.assertFalse(sa.approved_asm_function(path, "f", {}))
+        self.assertTrue(sa.approved_asm_function(path, "f", {("asm-function", "f"): (1, "#x")}))
+
+    def test_an_asm_function_row_does_not_approve_c(self):
+        path = self.write("a.c", "int f(int a) { return a; }\n")
+        self.assertEqual(sa.uses(path, "f")["asm-function"], 0)
+        self.assertFalse(sa.approved_asm_function(path, "f", {("asm-function", "f"): (1, "#x")}))
+
+    def test_an_asm_function_is_found_without_the_pragma(self):
+        path = self.write("a.cpp", "asm void f(void) {\n    nop\n}\n")
+        self.assertIn("f", sa.unitprofiles.asm_body_names(path))
+
     def test_comments_and_strings_do_not_count(self):
         path = self.write("a.c", '/* volatile */ char *f(void) { return "volatile"; } // asm("nop")\n')
         self.assertIsNone(sa.problem(path, "f", {}))

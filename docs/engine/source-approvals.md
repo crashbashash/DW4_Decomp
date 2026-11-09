@@ -7,8 +7,10 @@ counts as matched only once the project owner has approved that use. This is the
 
 ## The approval rule
 
-Each approved use has a row in `config/source-approvals.tsv`: `kind` (`asm` or `volatile`), `symbol`,
-`count` and the anchor of its evidence below. Only the owner approves a row. An agent may write one only
+Each approved use has a row in `config/source-approvals.tsv`: `kind` (`asm`, `volatile` or `asm-function`),
+`symbol`, `count` and the anchor of its evidence below. An `asm-function` row approves a whole MWCC `asm`
+function, one written in assembly in the original source; its count is 1. Without it, such a function is
+an asm body ([asm-body matches](asm-body-matches.md)), which counts in no matched figure. Only the owner approves a row. An agent may write one only
 when the owner has explicitly told it to add that function, after reviewing its evidence. It never adds
 one on its own initiative or as part of a broader request. The table is one of the oracle's own files
 (`.githooks/oracle-files.txt`).

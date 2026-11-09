@@ -45,6 +45,7 @@ import units
 import inline_asm
 from unitprofiles import asm_body_names
 import asmsources
+import sourceapprovals
 import datamap
 import re
 import statistics
@@ -237,11 +238,16 @@ def pct(part, whole):
 def collect():
     syms = load_symbols()
     paths = have_src_paths()
-    asm_body = [s for s in syms if s[2] in paths and is_asm_body(s[2], paths[s[2]])]
+    approvals = sourceapprovals.load()
+    asm_functions = {s[2] for s in syms if s[2] in paths and is_asm_body(s[2], paths[s[2]])
+                     and sourceapprovals.approved_asm_function(paths[s[2]], s[2], approvals)}
+    asm_body = [s for s in syms if s[2] in paths and is_asm_body(s[2], paths[s[2]])
+                and s[2] not in asm_functions]
     asm_body_names_set = {s[2] for s in asm_body}
-    # an owner-approved assembly source (tools/asmsources.py) is matched, but it is not C: it stays
-    # out of `matched` and the other C/C++ figures
-    assembly = [s for s in syms if s[2] in paths and asmsources.is_assembly(paths[s[2]])]
+    # an owner-approved assembly source (tools/asmsources.py), or an MWCC `asm` function with an
+    # `asm-function` row, is matched, but it is not C: it stays out of `matched` and the C/C++ figures
+    assembly = [s for s in syms if s[2] in paths and (asmsources.is_assembly(paths[s[2]])
+                                                       or s[2] in asm_functions)]
     have = set(paths) - asm_body_names_set - {s[2] for s in assembly}
     matched = [s for s in syms if s[2] in have]
     cats = categorise(matched + asm_body + assembly)

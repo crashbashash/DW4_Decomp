@@ -21,10 +21,18 @@ C/C++ stays the goal. When a new compiler or compiler version is wired into the 
 EE GCC was for the SDK/CRI blocks), the functions without source in the blocks that compiler plausibly
 built are re-attempted as C first.
 
+## An `asm` function the original was written as
+
+Where the original source itself is an MWCC `asm` function, as some of the compiler's own runtime is, the
+function is written that way and approved with an `asm-function` row in `config/source-approvals.tsv`
+([source approvals](source-approvals.md)). The evidence has to show the original was written in
+assembly, as for a [hand-written assembly source](assembly-sources.md). An approved one counts with the
+hand-written assembly sources; one without a row is an asm body, as below.
+
 ## If an asm body appears in `src/`
 
 It does not pass review. The tools still recognise one by its **content** (an
-`asm void NAME(void) { … }` definition in a file carrying `#pragma optimization_level 0`, wherever the
+`asm void NAME(void) { … }` definition, with or without `#pragma optimization_level 0`, wherever the
 file lives): `make check` files it under the `asm-body` category, `tools/progress.py` reports it on a
 line of its own (`code_bytes.asm_body` / `functions_asm_body`), and no decompiled, verified or matched
 figure counts it. An asm body reproduces whatever bytes its symbol extent covers, so it "matches" even

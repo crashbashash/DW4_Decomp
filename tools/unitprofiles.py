@@ -174,7 +174,7 @@ _ASM_CACHE = {}
 
 def asm_body_names(path):
     """The functions `path` defines as asm bodies (decided by content, never by folder): an
-    `asm <type> name(` definition in a file that carries the pragma. A C function with an inline
+    `asm <type> name(` definition, with or without the pragma. A C function with an inline
     `asm { sync }` statement is not an asm body."""
     try:
         stamp = os.stat(path).st_mtime_ns
@@ -186,7 +186,7 @@ def asm_body_names(path):
             text = open(path, errors="replace").read()
         except OSError:
             return frozenset()
-        names = frozenset(ASM_DEF_RE.findall(text)) if ASM_PRAGMA in text else frozenset()
+        names = frozenset(ASM_DEF_RE.findall(text)) if "asm" in text else frozenset()
         hit = (stamp, names)
         _ASM_CACHE[path] = hit
     return hit[1]
