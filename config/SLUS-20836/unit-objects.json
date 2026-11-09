@@ -6836,5 +6836,166 @@
     "externals": {
       "__dl__FPv": "0x00100610"
     }
+  },
+  "0x00160cb0": {
+    "duplicates": {
+      "__dt__35igSmartPointer<17VertexArrayFormat>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00155340": {
+    "duplicates": {
+      "__dt__32igSmartPointer<14FieldTypeEntry>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001560b0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__28igSmartPointer<10KeyedEntry>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00175860": {
+    "duplicates": {
+      "__dt__32igSmartPointer<14ParticleFormat>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0017ccb0": {
+    "duplicates": {
+      "__dt__26igSmartPointer<9ClutImage>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00236260": {
+    "duplicates": {
+      "__dt__26igSmartPointer<9TextValue>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e7390": {
+    "duplicates": {
+      "__dt__31igSmartPointer<13SectionObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0023b430": {
+    "duplicates": {
+      "__dt__33igSmartPointer<15igCollisionCell>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00463c90": {
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002ef2a0": {
+    "duplicates": {
+      "__dt__26igSmartPointer<9EntryList>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00301130": {
+    "duplicates": {
+      "__dt__26igSmartPointer<9EntryList>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e79a0": {
+    "duplicates": {
+      "__dt__31igSmartPointer<13SectionObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00234ee0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__36igSmartPointer<18InternedStringList>Fv": "0x0025a230",
+      "__dt__28igSmartPointer<10TextBuffer>Fv": "0x0025a2b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001cfc70": {
+    "duplicates": {
+      "__dt__30igSmartPointer<12BoundsObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002379e0": {
+    "duplicates": {
+      "__dt__31igSmartPointer<13MessageFilter>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0023f830": {
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "duplicates": {
+      "__dt__13BindingCursorFv": "0x00240390"
+    },
+    "stripped": [
+      "__dt__16BindingTableLockFv"
+    ]
+  },
+  "0x0023fb30": {
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "duplicates": {
+      "__dt__10TypeCursorFv": "0x00240390"
+    },
+    "stripped": [
+      "__dt__13TypeTableLockFv"
+    ]
+  },
+  "0x003332b0": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00166de0": {
+    "duplicates": {
+      "__dt__26igSmartPointer<9igIntList>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
   }
 }
