@@ -54,8 +54,14 @@ Hardware is the exception to the first case. A register access can match without
 merge or drop it, but the source would then misstate what the code addresses, so it keeps the keyword and goes
 to the owner.
 
-The `lui`, `addiu`, `lw 0` address form is no evidence for a `volatile` global under GCC. A `volatile` access
-does compile that way, but so do many accesses in functions that match without one.
+The `lui`, `addiu`, `lw 0` address form is not evidence for a `volatile` global by itself under GCC: functions that
+match without one have it too, nearly always because the address register has a second use. Under ee-gcc 2.96 a
+single-use access in that form, with no call or block boundary before it, has no plain spelling that has been found.
+That points to a `volatile`-qualified access, not to state shared between contexts, so it does not make a case alone.
+
+Shared state does not make a case alone either. A loop containing a call reloads with or without the keyword, so a
+proven writer on another thread says nothing about whether the source needed the qualifier. What the strip test shows
+is what counts: a load retail keeps and a plain spelling drops.
 
 ## What counts as evidence
 
@@ -92,6 +98,48 @@ the statement back in the counter. `python3 tools/inline_asm.py` prints the appr
 * C does not reproduce it. A `long long` multiply changes the size of all four routines. Splitting the
   low and high halves keeps the size but leaves 3 to 6 words different, because the compiler adds a
   three-operand multiply beside the `multu`.
+
+### stream-slot-state
+
+The 7-bit state field at +70 of a stream slot.
+
+* Thread code sets the field and queues a callback. DMA interrupt handlers registered with `AddDmacHandler` walk that
+  queue, and the callbacks write the field, so an interrupt changes it while thread code reads it.
+* Retail reads it repeatedly in one condition with no call between. Without the keyword the reads merge and the
+  function comes out shorter.
+
+### adxm-thread-ids
+
+The ADX manager's thread id words, written at thread creation and cleared at shutdown, and read by lock callbacks,
+event callbacks and thread bodies.
+
+* Retail keeps loads a plain spelling drops: a load right after the store with its result unused, or a second read
+  with no call between. The functions come out shorter without the keyword.
+
+### svm-lock-counts
+
+The SVM lock's nesting count and type are globals changed around the lock and unlock callbacks. Retail stores the
+count and immediately loads it back, which a plain spelling forwards from the register.
+
+### srd-server-words
+
+A word read by the SRD server thread. Retail stores it and loads it straight back for the next store, which a plain
+spelling forwards.
+
+### srd-spin-counter
+
+A wait on a flag the SRD server writes, counting passes in a global with a timeout. Only the waiting function touches
+the counter, so it is not shared state. Retail stores it and loads it back on every pass, which is what a `volatile` delay
+counter does, and a plain spelling keeps it in a register.
+
+### build-string-reads
+
+A function reads a word holding the address of a build string, such as `"\nSRD/PS2EE Ver.2.22 Build:..."`, and never uses
+the value.
+
+* This is not shared state. The evidence is the mechanism: the word is the string's only reference, none of the GCC
+  functions that match with no keyword has a load whose result goes unused, and every plain spelling tried drops it.
+* That the source reads the word to keep the string linked is inference. The owner accepted these on that basis.
 
 ### sony-hardware-registers
 
