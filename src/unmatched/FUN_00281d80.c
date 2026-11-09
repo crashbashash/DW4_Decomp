@@ -28,6 +28,6 @@ void FUN_00281d80(struct Message00281d80 *message) {
     }
     DAT_00571700 = 0;
     /* asm-body: reason=EE sync/ei have no C spelling tried=n/a (two privileged instructions only) */
-    __asm__ volatile ("sync");
-    __asm__ volatile ("ei");
+    __asm__ ("sync");
+    __asm__ ("ei");
 }

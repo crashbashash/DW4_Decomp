@@ -1,6 +1,6 @@
 int memmove();
 int Memory_ReallocateBuffer();
-struct S { char pad[4]; volatile unsigned cnt; unsigned f8; int f12; char *f16; };
+struct S { char pad[4]; unsigned cnt; unsigned f8; int f12; char *f16; };
 
 void StringTable_InsertAt(struct S *arg0, int arg1, int arg2) {
     int temp_v1;

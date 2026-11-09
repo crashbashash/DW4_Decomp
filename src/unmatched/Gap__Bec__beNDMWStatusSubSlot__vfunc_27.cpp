@@ -64,8 +64,8 @@ extern "C" void Gap__Bec__beNDMWStatusSubSlot__vfunc_27(beNDMWStatusSubSlot *arg
     if (t->_count > 0 && ((int *)t->_data)[arg0->_kindListPos] != 0) fl = true;
     APPEND(0)
     APPEND(fl)
-    l0 = *(igBoolList * volatile *)&flags.p; /* matching construct: pinned reads keep the s1/s2 colouring */
-    w = *(beNDMWStatusSelectE0 * volatile *)&win.p;
+    l0 = *(igBoolList **)&flags.p;
+    w = win.p;
     if (l0 != 0) {
         l0->_refCount = l0->_refCount + 1;
     }

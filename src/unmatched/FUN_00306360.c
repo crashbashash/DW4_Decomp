@@ -29,7 +29,7 @@ int FUN_00306360(IniSectionsView *self, char *name, int create) {
         }
     }
     if (create != 0) {
-        *(IniNameText *volatile *)&s = FUN_002b9500(igObject_GetAllocator(self));
+        *(IniNameText **)&s = FUN_002b9500(igObject_GetAllocator(self));
         FUN_0030b3c0(s, name);
         held = s;
         ObjectList_AppendRetained(self->sections, held);

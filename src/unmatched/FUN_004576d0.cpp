@@ -17,7 +17,7 @@ void FUN_004576d0(igContext *arg0, VC *arg1) {
     key = 0;
     l = (igObjectList *)arg0->_pExtList;
     k = key;
-    cnt = *(volatile int *)&l->_count;
+    cnt = *(int *)&l->_count;
     for (i = 0; i < cnt; i++) {
         if (k == (*(int **)&l->_data)[i]) {
             r = i;

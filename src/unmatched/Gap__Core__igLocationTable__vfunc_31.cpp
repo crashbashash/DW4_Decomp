@@ -15,7 +15,7 @@ extern "C" int Gap__Core__igLocationTable__vfunc_31(LocationHashTable *self, int
         do {
             if (data[i] == -1) {
                 int n = t->count;
-                if (n != 0 && i >= 0 && n > i) { ((volatile LocationHashWords *)t)->data[i] = value; }
+                if (n != 0 && i >= 0 && n > i) { ((LocationHashWords *)t)->data[i] = value; }
                 goto done;
             }
             i++;

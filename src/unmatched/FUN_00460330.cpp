@@ -35,7 +35,7 @@ void FUN_00460330(A *arg0);
     l->count = 0; }
 void FUN_00460330(A *arg0) {
     Obj * volatile sp7C;
-    Obj * volatile sp78;
+    Obj * sp78;
     volatile char sp74[1];
     Hold *a1;
     List *v1;

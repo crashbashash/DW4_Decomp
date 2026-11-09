@@ -28,7 +28,7 @@ extern "C" void Gap__Bec__beNDMWStatusPowerSocket__vfunc_24(S *arg0) {
     beNDMWWindow_RunMessageScript(arg0, DAT_00519b90, 0x88);
     beNDMWWindow_RunMessageScript(arg0, DAT_00519b90, 0x26);
     int i = 0;
-    if (0 < (*(L *volatile *)&arg0->l100)->count) {
+    if (0 < (*(L **)&arg0->l100)->count) {
         int item;
         int *name;
         int off;

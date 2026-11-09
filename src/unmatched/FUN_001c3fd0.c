@@ -2,9 +2,9 @@ int FUN_001c3fd0(float *v) {
     float a[3];
     int r = -1;
     int i;
-    a[0] = *(volatile float *)&v[0];
-    a[1] = *(volatile float *)&v[1];
-    a[2] = *(volatile float *)&v[2];
+    a[0] = *(float *)&v[0];
+    a[1] = *(float *)&v[1];
+    a[2] = *(float *)&v[2];
     for (i = 0; i < 3; i++) {
         if (a[i] < 0.0f) {
             a[i] = a[i] * -1.0f;

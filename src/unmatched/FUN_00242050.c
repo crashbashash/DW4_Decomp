@@ -31,7 +31,7 @@ int FUN_00240de0();
 
 struct Lst2 { int pad0[2]; int count; int pad1; int *data; };
 struct Lst { int pad0[2]; int count; int pad1; int *data; };
-extern struct Lst * volatile DAT_0056de38[4];
+extern struct Lst * DAT_0056de38[4];
 
 
 void FUN_00242050(int *self, int ctx) {

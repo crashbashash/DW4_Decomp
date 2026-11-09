@@ -7,7 +7,7 @@
  *    StringRef: the player-name string), each built at its use site so the cleanup range
  *    starts there; the string holder lives in an inline helper (H::SendName) so its slot is allocated after the holders, and
  *    `#pragma inline_depth(8)` keeps that helper's destructor inline (otherwise a jal __dt__ appears).
- *  - found-window search: for loop over the list with a volatile re-read of _subWindow in the body and a cast-self-assign then arm.
+ *  - found-window search: for loop over the list with a re-read of _subWindow in the body and a cast-self-assign then arm.
  *  - window header stores go through a float pointer for +88..+96 (the base pointer is reloaded once after the first store).
  *  - list-owner assignment (hl into hw+108) uses int locals declared in the block; the powerSocket slot swap is a switch on
  *    _retCode (case 0/1/2) with locals declared a,b,ps,pos,off and 'b' read before 'a'.
@@ -91,7 +91,7 @@ extern "C" StringRef StringList_CopyRetained(int, int);
 #define SUBCOUNT (((igObjectList *)p->_subWindow)->_count)
 #define PUSHB(LP, B) { int n_; igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); n_ = l_->_count; if (n_ < l_->_capacity) { l_->_count = n_ + 1; } else { List_Resize(l_, n_ + 1, 1); } ((unsigned char *)l_->_data)[n_] = (B); }
 #define SETB(LP, IDX, B) { igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); if (l_->_count != 0 && (IDX) >= 0 && (IDX) < l_->_count) { ((unsigned char *)l_->_data)[(IDX)] = (B); } }
-#define SWV(h) ((igObjectList *)*(volatile int *)&(h))
+#define SWV(h) ((igObjectList *)*(int *)&(h))
 #define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && igObject_IsKindOf((W), DAT_0058af98[0])) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
 #define SETSLOT(L, IDX, V_) { Obj *v_ = (V_); Obj *old_; if (v_ != 0) { v_->_refCount = v_->_refCount + 1; } old_ = ((Obj **)(L)->_data)[(IDX)]; if (old_ != 0) { --old_->_refCount; if (((unsigned long long)(long long)(int)old_->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old_); } if ((L)->_count != 0 && (IDX) >= 0 && (IDX) < (L)->_count) { ((Obj **)(L)->_data)[(IDX)] = v_; } }
 #define V(p) ((VC *)(p))

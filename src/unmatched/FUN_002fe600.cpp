@@ -33,5 +33,5 @@ int FUN_002fe600(L *arg0, M *arg1) {
         arg1 = arg1->parent;
         i = indexOf(arg0, K((int)arg1));
     }
-    return *(volatile int *)&arg0->count - 1;
+    return *(int *)&arg0->count - 1;
 }

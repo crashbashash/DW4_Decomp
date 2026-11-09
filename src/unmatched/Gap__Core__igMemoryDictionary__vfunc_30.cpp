@@ -37,7 +37,7 @@ void Gap__Core__igMemoryDictionary__vfunc_30(int *arg0, D *arg1, int arg2, int *
         }
         idx++;
         if (idx >= n) {
-            e = *(E *volatile *)&s->f10;
+            e = *(E **)&s->f10;
             idx = 0;
         } else {
             e++;

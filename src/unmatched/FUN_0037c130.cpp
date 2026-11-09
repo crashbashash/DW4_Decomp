@@ -22,7 +22,7 @@ int FUN_0037c130(beCri *arg0, unsigned char arg1, long long arg2) {
     int flag2;
     long long rk;
     list = (beCriHandleList *)arg0->_hdSEs;
-    n = *(volatile int *)&list->_count;
+    n = *(int *)&list->_count;
     i = 0;
     if (0 < n) {
         off = 0;
@@ -34,7 +34,7 @@ int FUN_0037c130(beCri *arg0, unsigned char arg1, long long arg2) {
                 if (e->_playID == 0) return i;
             }
             i += 1; off += 4;
-            if (!(i < *(volatile int *)&list->_count)) break;
+            if (!(i < list->_count)) break;
         }
     }
     bestKey = arg0->_request;
@@ -55,7 +55,7 @@ int FUN_0037c130(beCri *arg0, unsigned char arg1, long long arg2) {
                 }
             }
             i += 1; off2 += 4;
-            if (!(i < *(volatile int *)&list->_count)) break;
+            if (!(i < list->_count)) break;
         }
     }
     if (best != -1) FUN_0037caf0(arg0, ((int *)list->_data)[best]);

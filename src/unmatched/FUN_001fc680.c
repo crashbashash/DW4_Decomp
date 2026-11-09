@@ -18,7 +18,7 @@ int FUN_001fc680(void) {
         unsigned b1 = (w >> 1) & 1;
         unsigned b10 = (w >> 10) & 1;
         if (b1 && b10) {
-            volatile int *p = (volatile int *)((char *)DAT_0056c020 + off);
+            volatile int *p = (int *)((char *)DAT_0056c020 + off);
             switch (*p) {
             case 0:
             case 1:

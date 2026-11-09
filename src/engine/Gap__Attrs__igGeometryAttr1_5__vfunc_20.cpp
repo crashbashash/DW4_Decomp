@@ -31,8 +31,8 @@ extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S *arg0, int arg1) {
             old->refs = old->refs - 1;
             if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy(old);
         }
-        *(Rc *volatile *)&sp3C = (Rc *)FUN_0014bff0(igObject_GetAllocator(arg0));
-        s0 = *(Rc *volatile *)&sp3C;
+        sp3C = (Rc *)FUN_0014bff0(igObject_GetAllocator(arg0));
+        s0 = *(Rc **)&sp3C;
         if (s0 != 0) s0->refs = s0->refs + 1;
         old = arg0->f48;
         if (old != 0) {

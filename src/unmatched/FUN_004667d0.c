@@ -27,7 +27,7 @@ void FUN_004667d0(igPickMode *arg0) {
     l = (igIntList *)q->_intersectFaceType;
     n = *(volatile int *)&l->_count;
     if (n < l->_capacity) {
-        *(volatile int *)&l->_count = *(volatile int *)&l->_count + 1;
+        l->_count = l->_count + 1;
     } else {
         List_Resize(l, n + 1, 4);
     }

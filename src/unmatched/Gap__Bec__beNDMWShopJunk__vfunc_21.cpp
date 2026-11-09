@@ -82,7 +82,7 @@ extern "C" void Gap__Bec__beNDMWShopJunk__vfunc_21(beNDMWShopJunk *arg0) {
             arg0->_junkItemList = (int)o;
             arg0->_totalGift = beMessenger_GetInt(arg0->_messenger, 1);
         }
-        arg0->_st0 = ((volatile beNDMWShopJunk *)arg0)->_st0 + 1;
+        arg0->_st0 = arg0->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
         arg0->_st1 = 0;

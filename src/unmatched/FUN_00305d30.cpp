@@ -72,7 +72,7 @@ static inline int tryPath(IniReaderView *self, IniPathObject *base, char *name) 
     IniPathObject *held = joined.p;
     if (held != 0) {
         held->_refCount = held->_refCount - 1;
-        held = *(IniPathObject *volatile *)&joined.p;
+        held = joined.p;
         if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(held); }
     }
     return found;
@@ -89,7 +89,7 @@ extern "C" bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
     } else {
         interned = StringPool_Intern(pool(), name);
     }
-    *(char *volatile *)&held = interned;
+    *(char **)&held = interned;
     if (held == 0 || strlen(held) == 0) {
         assign(&held, DAT_004f9478);
     }
@@ -99,14 +99,14 @@ extern "C" bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
             dir = FUN_002d1c20(DAT_00586dc8);
         }
         if (dir != 0 && strlen(dir) != 0) {
-            *(IniPathObject *volatile *)&base = FUN_002c43b0(igObject_GetAllocator(self));
+            *(IniPathObject **)&base = FUN_002c43b0(igObject_GetAllocator(self));
             setText(base, dir);
             found = tryPath(self, base, held);
             dropPath(base);
         }
     }
     if (found == 0) {
-        *(IniPathObject *volatile *)&other = FUN_002c43b0(igObject_GetAllocator(self));
+        *(IniPathObject **)&other = FUN_002c43b0(igObject_GetAllocator(self));
         second = FUN_002d1c30(DAT_00586dc8);
         setText(other, second);
         found = tryPath(self, other, held);

@@ -23,7 +23,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1
     acc.cnt = 0;
     arg0->f12->v108(&acc, 0);
     for (i = 0; i < acc.cnt; i++) {
-        p = (volatile float *)(acc.data + i * acc.stride);
+        p = (float *)(acc.data + i * acc.stride);
         t = p[0];
         if (!(mx <= t)) { mx = t; }
         t = p[1];

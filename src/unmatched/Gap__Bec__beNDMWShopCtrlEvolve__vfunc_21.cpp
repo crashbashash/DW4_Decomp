@@ -268,7 +268,7 @@ void Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21(beNDMWShopCtrlEvolve *self) {
                     int *obj;
                     if (0 < SUB(self)->_count) {
                         do {
-                            obj = (int *)((int *)((igObjectList *)*(volatile int *)&self->_subWindow)->_data)[i];
+                            obj = (int *)((int *)((igObjectList *)*(int *)&self->_subWindow)->_data)[i];
                             if ((obj != 0) && (igObject_IsKindOf(obj, DAT_0058abd8[0]) != 0)) {
                                 found = obj;
                             } else {

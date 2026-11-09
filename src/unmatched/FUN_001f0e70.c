@@ -20,7 +20,7 @@ void FUN_001f0e70(unsigned int arg0, short *arg1, int arg2, char * volatile *arg
     *arg3 = p + 4;
     *(int *)p = D_00490e00[0];
     for (; i < arg0; i++) {
-        *(*(short * volatile *)arg3)++ = *src++;
+        *(*(short **)arg3)++ = *src++;
     }
     while ((int)*arg3 & 3) {
         p = *arg3;

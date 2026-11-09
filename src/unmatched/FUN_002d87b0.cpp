@@ -37,7 +37,7 @@ int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user)
 }
 int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user) {
     FieldLinkRecord * volatile tmp; 
-    FieldLinkRecord * volatile held;
+    FieldLinkRecord * held;
     int index = 0;
     FieldLinkRecord *r;
     FieldLinkInfo *info;

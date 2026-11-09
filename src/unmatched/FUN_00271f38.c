@@ -20,7 +20,7 @@ typedef struct SrdHost {
 } SrdHost;
 
 extern volatile int D_004a92e0;
-extern volatile int D_004a92e4;
+extern int D_004a92e4;
 
 extern void FUN_002725a0(int marker);
 extern void FUN_00271998(SrdHost *srd);

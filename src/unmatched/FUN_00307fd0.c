@@ -36,9 +36,9 @@ void FUN_00307fd0(void *self, IniIncludeFile *file, char *line, int lineNo, int 
     }
 if (open != '"' && open != '<') return; if ((open == '"' && close != '"') || (open == '<' && close != '>')) return;     if (DAT_005871c0 < 12) {
         DAT_005871c0 += 1;
-        *(IniIncludeObject *volatile *)&include = FUN_002baff0(igObject_GetAllocator(self));
+        *(IniIncludeObject **)&include = FUN_002baff0(igObject_GetAllocator(self));
         found = 0;
-        *(IniIncludeText *volatile *)&dir = FUN_002b9500(igObject_GetAllocator(self));
+        *(IniIncludeText **)&dir = FUN_002b9500(igObject_GetAllocator(self));
         FUN_0030b3c0(dir, file->dir);
         FUN_0030b980(dir);
         if (dir->length != 0) {

@@ -35,7 +35,7 @@ extern int DAT_0058caf8[4];
 void Gap__Viewer__igViewerSceneInfoManager__vfunc_28(A *arg0) {
     Hold *s2;
     int s0;
-    Obj *volatile spAC;
+    Obj *spAC;
     Obj *t;
     Q q1, q2, q3, q4;
     s2 = (Hold *)((X *)arg0->f20)->f12;

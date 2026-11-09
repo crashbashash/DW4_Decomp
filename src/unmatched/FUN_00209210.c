@@ -7,7 +7,7 @@ extern P *DAT_0056ad80[4];
 extern long long DAT_0056ae48[4];
 void FUN_00209210(int arg0, int arg1, int arg2, long long arg3, long long arg4, int arg5, int arg6) {
     int temp_a2;
-    volatile R *q;
+    R *q;
     long long temp_a1;
     if (DAT_00569330[0] == 0) {
         DAT_0056ad80[0]->fl = arg6;

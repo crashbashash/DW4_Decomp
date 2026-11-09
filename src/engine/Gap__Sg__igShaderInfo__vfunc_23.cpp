@@ -19,7 +19,7 @@ extern "C" int Gap__Sg__igShaderInfo__vfunc_23(O *arg0, int arg1, int arg2) {
     if (idx == -1) {
         return 0;
     }
-    temp_a0 = (I *)(*(L * volatile *)&arg0->list)->items[idx];
+    temp_a0 = (I *)(*(L **)&arg0->list)->items[idx];
     if (temp_a0->f20 == 2) {
         return 0;
     }

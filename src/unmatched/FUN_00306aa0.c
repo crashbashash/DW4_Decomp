@@ -72,17 +72,17 @@ int FUN_00306aa0(void *self, int section, int key, SL *list, int create) {
     int saved;
     int i; Pair *p; int n; int j; Str *c; char *s2; Str *held; Str *c2; int at; int at2;
 
-    *(int volatile *)&saved = key;
+    saved = key;
     p = FUN_00307c10(self, section, key, 0);
     if (p != 0) {
         FUN_0030bce0(p->value, 0x2C, list);
-        *(Str *volatile *)&a = FUN_002b9500(igObject_GetAllocator(self));
+        *(Str **)&a = FUN_002b9500(igObject_GetAllocator(self));
         for (i = 0; i < list->count; i++) {
             StringList_CopyRetained(&r1, list, i);
             FUN_0030b3c0(a, r1);
             releaseRef(r1);
             FUN_0030bee0(a);
-            *(int *volatile *)&tmp = intern(text(a));
+            *(int **)&tmp = intern(text(a));
             setAt(list, i, &tmp);
             releaseRef(tmp);
         }
@@ -94,7 +94,7 @@ int FUN_00306aa0(void *self, int section, int key, SL *list, int create) {
             }
         }
     } else if (create != 0) {
-        *(Str *volatile *)&b = FUN_002b9500(igObject_GetAllocator(self));
+        *(Str **)&b = FUN_002b9500(igObject_GetAllocator(self));
         n = list->count;
         if (n != 0) {
             StringList_CopyRetained(&r2, list, 0);

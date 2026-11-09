@@ -9,7 +9,7 @@ void FUN_00303cd0(Dir *self, int name, void *object) {
     Obj *entry;
     Obj *held;
 
-    *(Obj *volatile *)&entry = FUN_002be270(igObject_GetAllocator());
+    *(Obj **)&entry = FUN_002be270(igObject_GetAllocator());
     igNamedObject_SetName(entry, name);
     ObjectList_AppendRetained(self->names, entry);
     ObjectList_AppendRetained(self->objects, object);

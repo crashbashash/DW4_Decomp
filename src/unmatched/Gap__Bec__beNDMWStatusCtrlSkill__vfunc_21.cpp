@@ -6,8 +6,7 @@
  *  - ternary chain in Scale (delay slot filled from the branch target); `> 1` / `> 8` compares give slti at
  *  - bool ok (daddiu s1,zero,1); cast-self-assign empty then arm; unsigned reload of the record count
  *  - switch (_nowPage) / switch (_skillMenu) with default first: case alignment nops
- *  - Clr::ClearList loops: ref = Intern(pool, 0) before old = *slot
- *  - volatile read of _subWindow for the found-window search body (the list pointer is reloaded) */
+ *  - Clr::ClearList loops: ref = Intern(pool, 0) before old = *slot */
 #include "dw4/reflected.h"
 
 extern "C" {
@@ -154,7 +153,7 @@ static inline int Scale(int v)
 }
 
 };
-#define SWV(h) ((igObjectList *)*(volatile int *)&(h))
+#define SWV(h) ((igObjectList *)*(int *)&(h))
 #define SW(h) ((igObjectList *)(h))
 
 void Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21(beNDMWStatusCtrlSkill *self)

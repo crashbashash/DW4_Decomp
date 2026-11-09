@@ -218,7 +218,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
                 i = 0;
                 if (0 < SUBN(self)) {
                     do {
-                        igObject *e = (igObject *)((int *)((igObjectList *)(*(volatile int *)&self->_subWindow) /* matching construct: forces the reload retail makes */)->_data)[i];
+                        igObject *e = (igObject *)((int *)((igObjectList *)(*(int *)&self->_subWindow))->_data)[i];
                         if (e != 0 && igObject_IsKindOf(e, DAT_0058ab68[0]) != 0) {
                             found = e;
                         } else {

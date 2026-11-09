@@ -19,7 +19,7 @@ class P { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 
 extern "C" int Gap__Core__igMemoryPoolInfo__vfunc_25(int *arg0, P *arg1, int arg2, char *arg3);
 extern "C" int Gap__Core__igMemoryPoolInfo__vfunc_25(int *arg0, P *arg1, int arg2, char *arg3) {
-    Rc *volatile sp5C;
+    Rc *sp5C;
     int *pp;
     int a;
     int s0;

@@ -350,12 +350,12 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, &j_startlogo[0]) & 0xFF) != 1) {
                     beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_startlogo[0], &SQ_OPEN_2[0], 1);
                 }
-                ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
                 if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
-                    ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+                    ctrl->_st1 = ctrl->_st1 + 1;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
                     goto done;
@@ -369,11 +369,11 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 switch (ctrl->_st3) {
                 case 0:
                     beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_startmenu01[0], &SQ_OPEN_2[0], 1);
-                    ctrl->_st3 = (*(volatile int *)&ctrl->_st3) + 1;
+                    ctrl->_st3 = ctrl->_st3 + 1;
                     goto done;
                 case 1:
                     if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
-                        ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                        ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                         goto done;
                     }
@@ -426,7 +426,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 switch (ctrl->_st3) {
                 case 0:
                     beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_startmenu01[0], &SQ_LINEON00_2[0], 1);
-                    ctrl->_st3 = (*(volatile int *)&ctrl->_st3) + 1;
+                    ctrl->_st3 = ctrl->_st3 + 1;
                     goto done;
                 case 1:
                     if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
@@ -452,12 +452,12 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             switch (ctrl->_st2) {
             case 0:
                 beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_startmenu02[0], &SQ_OPEN_2[0], 1);
-                ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
                 if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
-                    ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+                    ctrl->_st1 = ctrl->_st1 + 1;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
                     goto done;
@@ -470,7 +470,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             case 0:
                 ctrl->_gameMenuCnt = 0;
                 ctrl->_gameMenuNext = 0;
-                ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
@@ -479,7 +479,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         ctrl->_gameMenuCnt = 0;
                         beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_startmenu02[0], &SQ_LINEUP00_2[0], 1);
                     }
-                    ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                    ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
                     goto done;
                 }
@@ -488,7 +488,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         ctrl->_gameMenuCnt = 1;
                         beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_startmenu02[0], &SQ_LINEDW01_2[0], 1);
                     }
-                    ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                    ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
                     goto done;
                 }
@@ -500,7 +500,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_startmenu02[0], &SQ_LINEON01_2[0], 1);
                         ctrl->_gameMenuNext = 2;
                     }
-                    ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                    ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
                     goto done;
                 }
@@ -523,7 +523,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         case 1:
                         case 2:
                             beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_startlogo[0], &SQ_CLOSE_2[0], 1);
-                            ctrl->_st3 = (*(volatile int *)&ctrl->_st3) + 1;
+                            ctrl->_st3 = ctrl->_st3 + 1;
                             goto done;
                         case 3:
                             ctrl->_st0 = TitleStateLogo;
@@ -604,7 +604,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_optioncursor12[0], &SQ_OPEN_2[0], 1);
                 option->_ctrlPos = 0;
                 option->_isOK = 0U;
-                ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
@@ -646,7 +646,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                     } else {
                         beNDMWLoadIntf2TextOrder_PublishIdLines(text, 0xF0005, 0);
                     }
-                    ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+                    ctrl->_st1 = ctrl->_st1 + 1;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
                     goto done;
@@ -665,12 +665,12 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         if (rowUp == OptionRowOk) {
                             rowUp = OptionRowLight;
                             beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
-                            ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                            ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                         } else if (rowUp != 0) {
                             rowUp = 0;
                             beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
-                            ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                            ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                         }
                         break;
@@ -681,7 +681,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             rowUp = 0;
                         } else {
                             beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
-                            ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                            ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                         }
                         break;
@@ -697,7 +697,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         if ((rowDown + 1) == 2) {
                             rowDown = OptionRowOk;
                             beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
-                            ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                            ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                             break;
                         }
@@ -708,7 +708,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             rowDown = OptionRowOk;
                         } else {
                             beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
-                            ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                            ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                         }
                         break;
@@ -725,7 +725,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             nextComConf = 0;
                         }
                         option->_dispComConf = nextComConf;
-                        ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                        ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowLight:
@@ -735,7 +735,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             nextLightConf = 0;
                         }
                         option->_dispLightConf = nextLightConf;
-                        ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                        ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowCountry:
@@ -756,7 +756,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             option->_dispCountryConf = (int)((unsigned int)nextCountryLang2);
                             break;
                         }
-                        ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                        ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowOk:
@@ -771,7 +771,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             prevComConf = 1;
                         }
                         option->_dispComConf = prevComConf;
-                        ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                        ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowLight:
@@ -781,7 +781,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             prevLightConf = 1;
                         }
                         option->_dispLightConf = prevLightConf;
-                        ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                        ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowCountry:
@@ -802,7 +802,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             option->_dispCountryConf = (int)((unsigned int)prevCountryLang2);
                             break;
                         }
-                        ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                        ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowOk:
@@ -813,7 +813,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         switch (option->_ctrlPos) {
                         case OptionRowOk:
                             option->_isOK = 1U;
-                            ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+                            ctrl->_st1 = ctrl->_st1 + 1;
                             ctrl->_st3 = 0;
                             ctrl->_st2 = 0;
                             goto done;
@@ -822,7 +822,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                     }
                     if (pressed & ButtonCircle) {
                         option->_isOK = 1U;
-                        ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+                        ctrl->_st1 = ctrl->_st1 + 1;
                         ctrl->_st3 = 0;
                         ctrl->_st2 = 0;
                         goto done;
@@ -951,19 +951,19 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 }
                 TextOrder_PublishLineListOnly(text, 0xF0002);
                 TextOrder_PublishLineListOnly(text, 0xF0005);
-                ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
                 if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
-                    ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                    ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
                     goto done;
                 }
                 break;
             case 2:
                 beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optionwin02[0], &SQ_CLOSE_2[0], 1);
-                ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
             case 3:
@@ -978,7 +978,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         ctrl->_st2 = 0;
                         goto done;
                     }
-                    ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+                    ctrl->_st1 = ctrl->_st1 + 1;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
                     goto done;
@@ -990,7 +990,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             switch (ctrl->_st2) {
             case 0:
                 beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_startlogo[0], &SQ_OPEN_2[0], 1);
-                ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
@@ -1055,7 +1055,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
         case 0:
             beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &i_fadewn01[0], &SQ_WTOUT60[0], 1);
             beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_startback[0], &SQ_CLOSE_2[0], 1);
-            ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+            ctrl->_st1 = ctrl->_st1 + 1;
             ctrl->_st3 = 0;
             ctrl->_st2 = 0;
             goto done;
@@ -1086,7 +1086,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             beMessenger_AppendInt(self->_messenger, cameraMode);
             beMessenger_AppendInt(self->_messenger, lightMode);
             beMessenger_DispatchSelected(self->_messenger, &GENERATE_TITLE[0]);
-            ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+            ctrl->_st1 = ctrl->_st1 + 1;
             ctrl->_st3 = 0;
             ctrl->_st2 = 0;
             break;

@@ -21,7 +21,7 @@ void Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21(beModelCtrlInfoRideOn3 *self, vo
     d.x = d.x - t.x;
     d.y = d.y - t.y;
     d.z = d.z - t.z;
-    y = ((volatile Vec3Float *)&d)->y; x = d.x; z = ((volatile Vec3Float *)&d)->z; /* matching construct: volatile spill slot reproduces the retail stack traffic */
+    y = ((Vec3Float *)&d)->y; x = d.x; z = ((Vec3Float *)&d)->z;
     len = sqrtf(x * x + y * y + z * z);
     inv = 1.0f / len;
     d.x = d.x * inv;

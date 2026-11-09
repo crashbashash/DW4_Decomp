@@ -8,7 +8,7 @@ int ObjectList_RemoveFirstRetained();
 int igObject_Destroy();
 
 int FUN_00460c80(R *arg0, A *arg1) {
-    R *volatile sp3C;
+    R *sp3C;
     R *volatile sp38;
     int sp34;
     int temp_v0;

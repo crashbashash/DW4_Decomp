@@ -32,7 +32,7 @@ typedef struct Request_269ff0 {
 
 extern volatile int DAT_004a7f00;
 extern Request_269ff0 DAT_004a7f10[40];
-int FUN_0027eca8(volatile int *flag);
+int FUN_0027eca8(int *flag);
 void FUN_0026a728(Request_269ff0 *entry);
 
 void FUN_0026a908(void) {

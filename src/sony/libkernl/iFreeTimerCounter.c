@@ -14,11 +14,11 @@ typedef struct {
     int f0;
     int f4;
     int f8;
-    volatile int f12;
+    int f12;
     int f16;
     Timer *free;
     int f24;
-    volatile int current;
+    int current;
 } KState;
 extern KState DAT_00483508;
 void FUN_00114d88(Timer *t);

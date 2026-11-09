@@ -219,7 +219,7 @@
   "beNDMWShopCtrlSell": 95,
   "beNDMWShopCtrlXdataChip": 213,
   "beNDMWShopDevice": 59,
-  "beNDMWShopJunk": 131,
+  "beNDMWShopJunk": 132,
   "beNDMWShopSelect00": 27,
   "beNDMWShopSelect01": 29,
   "beNDMWShopSelect02": 43,
@@ -239,7 +239,7 @@
   "beNDMWStatusCtrlDisk": 229,
   "beNDMWStatusCtrlEquip": 85,
   "beNDMWStatusCtrlFlag": 65,
-  "beNDMWStatusCtrlFolder": 129,
+  "beNDMWStatusCtrlFolder": 130,
   "beNDMWStatusCtrlSendBit": 121,
   "beNDMWStatusCtrlSkill": 205,
   "beNDMWStatusInfoRam": 20,
@@ -692,18 +692,18 @@
   },
   "unmatched": {
    "files": 12206,
-   "offset_casts": 6079,
-   "other_members": 12929,
-   "recovered": 20479,
+   "offset_casts": 6078,
+   "other_members": 12932,
+   "recovered": 20481,
    "recovered_pct": 42.44,
-   "synthetic": 8768,
-   "total": 48255
+   "synthetic": 8773,
+   "total": 48264
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6826,
- "recovered": 24879,
- "synthetic": 10221,
- "total": 62144,
+ "offset_casts": 6825,
+ "recovered": 24881,
+ "synthetic": 10226,
+ "total": 62153,
  "typeable": 366
 }

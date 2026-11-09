@@ -28,7 +28,7 @@ extern "C" int FUN_00394920(beModelCtrl *arg0, beModelCtrlInfo *arg1, beBaseInfo
     name = (int *)arg4->_name;
     name = name != 0 ? name : &DAT_004e0858[0];
     prop = (beModelCtrlAIMap *)igProperty_FindByName(lst, DAT_00585be0[0], name);
-    beModelCtrlAIMap *volatile key = prop;
+    beModelCtrlAIMap *key = prop;
     cnt = lst->_count;
     for (i = 0; i < cnt; i++) { if (*(beModelCtrlAIMap **)&key == ((beModelCtrlAIMap **)lst->_data)[i]) { idx = i; goto found; } }
     idx = -1;

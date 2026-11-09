@@ -37,7 +37,7 @@ extern void *DAT_005619b0[4];
 extern void *DAT_005858f0[4];
 extern int DAT_004e47a8[2];
 }
-#define SLOT(T, x) (*(T *volatile *)&(x))
+#define SLOT(T, x) (*(T **)&(x))
 #define ADD(o) do { if (o != 0) { o->_refCount = o->_refCount + 1; } } while (0)
 #define DROP(T, x) \
     do { \

@@ -63,7 +63,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram);
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct U { static inline void Reserve(volatile igObjectList *l) { if (l->_count < 37) List_Reserve(l, 36, 4); } };
-#define WL(f) ((volatile igObjectList *)work->f)
+#define WL(f) ((igObjectList *)work->f)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 #define ALLOC(a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel); }
 #define ITEM4(K, sp, fac, init, lst, id) { ALLOC(alloc, DAT_00587108[0]) ItemRef<K> sp((igObject *)fac(alloc)); init(sp.p, id, owner, level); ObjectList_AppendRetained(lst, sp.p); }

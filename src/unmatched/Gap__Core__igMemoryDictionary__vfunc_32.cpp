@@ -1,4 +1,4 @@
-/* The success tail is shared by goto, the table base is re-read through a volatile access, and the
+/* The success tail is shared by goto, and the
  * locals are declared in the order e, next, t. */
 extern "C" {
 extern int DAT_004fb410[4];
@@ -28,7 +28,7 @@ R Gap__Core__igMemoryDictionary__vfunc_32(Dict *arg1, int arg2) {
             idx += 1;
             next = e + 1;
             if (idx >= half) {
-                next = *(Ent *volatile *)&t->ents;
+                next = *(Ent **)&t->ents;
                 idx = 0;
             }
             if (e->key == arg2) {

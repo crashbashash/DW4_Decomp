@@ -17,7 +17,7 @@ void FUN_002d6c60(int, int, int);
 int FUN_001e07a0(AttrTraversalView *, AttrSetView *);
 }
 static inline AttrView *attrAt(AttrStack *l, int i) { return l->_data[i]; }
-static inline void pushAttr(AttrStack *l, AttrView *volatile &v) {
+static inline void pushAttr(AttrStack *l, AttrView *&v) {
     int n = l->_count;
     if (n < l->_capacity) {
         l->_count++;

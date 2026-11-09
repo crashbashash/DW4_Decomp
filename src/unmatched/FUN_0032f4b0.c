@@ -13,7 +13,7 @@ extern int DAT_004ffdb8[4];
 extern char DAT_70000000[];
 extern char DAT_00004000[];
 void FUN_0032f4b0(int arg0, int arg1) {
-    struct O * volatile sp2C;
+    struct O * sp2C;
     struct O *v;
 
     FUN_0032a5f0(arg0);

@@ -13,7 +13,7 @@ int FUN_002d8d00(Lst *list, int key, int name, int val);
 }
 int FUN_002d8d00(Lst *list, int key, int name, int val) {
     R * volatile sp6C;
-    R * volatile sp68;
+    R * sp68;
     R *t;
     int idx, cnt, r;
     if (key == 0) {

@@ -91,7 +91,7 @@ extern "C" void FUN_00383420(beFont *self, Layout *layout, Source *src, int idx)
                 l = gl;
                 i++;
                 off += 4;
-            } while (i < *(volatile int *)&l->_count);
+            } while (i < *(int *)&l->_count);
         }
     }
     int fid = cur.p->_buffer;

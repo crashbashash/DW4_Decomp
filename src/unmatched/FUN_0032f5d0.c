@@ -17,7 +17,7 @@ extern char DAT_00546fb0[];
 extern char DAT_00554974[];
 extern char DAT_0000050d[];
 void FUN_0032f5d0(int arg0, int arg1) {
-    struct O * volatile sp3C;
+    struct O * sp3C;
     struct O *v;
     char *mid;
 

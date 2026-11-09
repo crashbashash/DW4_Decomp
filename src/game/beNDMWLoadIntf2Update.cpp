@@ -2136,7 +2136,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 ((beSystem *)self->_system_)->_isSResetEnable = 0;
               }
               ((beSystem *)self->_system_)->_isResetEnable = 0;
-              cardWork->_sysStat2 = (*(volatile int *)&cardWork->_sysStat2 + 1);
+              cardWork->_sysStat2 = (cardWork->_sysStat2 + 1);
               cardWork->_sysStat3 = 0;
               break;
             case 1:
@@ -2247,7 +2247,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 ((beSystem *)self->_system_)->_isSResetEnable = 0;
               }
               ((beSystem *)self->_system_)->_isResetEnable = 0;
-              cardWork->_sysStat2 = (*(volatile int *)&cardWork->_sysStat2 + 1);
+              cardWork->_sysStat2 = (cardWork->_sysStat2 + 1);
               cardWork->_sysStat3 = 0;
               break;
             case 1:
@@ -2296,7 +2296,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             slotPlayer = (beNDMWLoadSlotPlayer *)(0);
             listIndex = 0;
             if (0 < ((beNDMWLoadSlotPlayerList *)*(
-                         void *volatile *)&common->_slotSaveData)
+                         void **)&common->_slotSaveData)
                         ->_count) {
             findSlotPlayer:
               {
@@ -2311,7 +2311,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
                 } else {
                   listIndex += 1;
                   if (listIndex < ((beNDMWLoadSlotPlayerList *)*(
-                                       void *volatile *)&common->_slotSaveData)
+                                       void **)&common->_slotSaveData)
                                       ->_count) {
                     goto findSlotPlayer;
                   }

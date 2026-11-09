@@ -13,7 +13,7 @@ extern "C" void FUN_0030b8a0(O *o) {
         e = DAT_004c22f0[0];
         for (; i != 0; i--) {
             if (pick(base, e)[i] == '.') {
-                t = ((volatile O *)o)->s; FUN_0030b3c0(o, (t == 0 ? e : t) + i);
+                t = ((O *)o)->s; FUN_0030b3c0(o, (t == 0 ? e : t) + i);
                 return;
             }
             if (pick(base, e)[i] == '/' || pick(base, e)[i] == '\\') break;

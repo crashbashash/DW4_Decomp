@@ -4,7 +4,7 @@ struct Res {
     int v;
     Res() {}
     Res(const Res &o) { v = o.v; }
-    bool operator==(const volatile Res &o) const { return v == o.v; }
+    bool operator==(const Res &o) const { return v == o.v; }
 };
 class Dev {
 public:

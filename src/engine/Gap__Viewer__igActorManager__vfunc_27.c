@@ -1,10 +1,10 @@
-/* The list pointer is re-read (volatile) in the body and in the loop test, with a `0 < n` guard. */
+/* The list pointer is re-read in the body and in the loop test, with a `0 < n` guard. */
 typedef struct L { char pad[8]; int n; int p; int *arr; } L;
 typedef struct A { char pad[24]; L *f24; } A;
 int igObject_IsKindOf(A *, int);
 int FUN_00467030(int, int);
 int igActorInfo_GetMetaObject(void);
-#define F24 (*(L * volatile *)&arg1->f24)
+#define F24 (*(L **)&arg1->f24)
 int Gap__Viewer__igActorManager__vfunc_27(int arg0, A *arg1) {
     int i;
     int off;

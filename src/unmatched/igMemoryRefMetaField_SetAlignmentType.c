@@ -22,7 +22,7 @@ void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name)
         self->alignmentType = -1;
         return;
     }
-    *(AlignmentNameList *volatile *)&names = *(AlignmentNameList **)(DAT_00586dd0 + 44);
+    *(AlignmentNameList **)&names = *(AlignmentNameList **)(DAT_00586dd0 + 44);
     held = names;
     if (held != 0) { held->_refCount = held->_refCount + 1; }
     n = countOf(names);

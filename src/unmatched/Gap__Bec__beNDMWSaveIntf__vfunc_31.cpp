@@ -1966,10 +1966,10 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_31(beNDMWSaveIntf *arg0, SaveHost *arg1) {
                 break;
             case 5:
                 var_s2_4 = (void *)(0);
-                for (var_s5_6 = 0; var_s5_6 < ((beNDMWLoadSlotPlayerList *)(*(volatile int *)&temp_s0->_slotSaveData))->_count; var_s5_6++) {
-                    beNDMWLoadSlotPlayer *elem_ = (beNDMWLoadSlotPlayer *)ObjectList_GetAt_003e9260((*(volatile int *)&temp_s0->_slotSaveData), var_s5_6);
+                for (var_s5_6 = 0; var_s5_6 < ((beNDMWLoadSlotPlayerList *)(*(int *)&temp_s0->_slotSaveData))->_count; var_s5_6++) {
+                    beNDMWLoadSlotPlayer *elem_ = (beNDMWLoadSlotPlayer *)ObjectList_GetAt_003e9260((temp_s0->_slotSaveData), var_s5_6);
                     if (elem_->_connectNO == temp_s1->_mcSelPoint) {
-                        var_s2_4 = (void *)(ObjectList_GetAt_003e9260((*(volatile int *)&temp_s0->_slotSaveData), var_s5_6));
+                        var_s2_4 = (void *)(ObjectList_GetAt_003e9260((temp_s0->_slotSaveData), var_s5_6));
                         break;
                     }
                 }
@@ -2175,7 +2175,7 @@ void Gap__Bec__beNDMWSaveIntf__vfunc_31(beNDMWSaveIntf *arg0, SaveHost *arg1) {
                         List_Resize(temp_s1_3, temp_s4_2 + 1, 4);
                     }
                     ((int *)DataList_GetData_003e9090(temp_s1_3))[temp_s4_2] = temp_s2_2;
-                    ObjectList_AppendRetained((*(volatile int *)&temp_s0->_slotSaveData), sp11C.value);
+                    ObjectList_AppendRetained((temp_s0->_slotSaveData), sp11C.value);
                     temp_v0_18->_haveSaveData = (int)(sp11C.value);
                     }
                     temp_v0_18->_utilReturn = 0;

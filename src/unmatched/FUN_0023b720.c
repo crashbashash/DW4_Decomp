@@ -3,7 +3,7 @@ typedef struct G { char pad[16]; int nx, ny, nz; char pad2[28]; B *box; float sx
 void FUN_0023b720(G *g, float *p, int *ox, int *oy, int *oz) {
     float x = p[0], y = p[1], z = p[2];
     B *b = g->box;
-    volatile float *v = b->v;
+    float *v = b->v;
     float *nv = b->v;
     float t;
     t = b->v[0]; if (x < t) x = t;

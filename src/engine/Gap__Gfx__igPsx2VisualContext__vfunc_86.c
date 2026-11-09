@@ -1,7 +1,7 @@
 int FUN_00171690();
 extern int DAT_005608d4[4];
 typedef struct { float x; float y; float z; float w; } V4;
-typedef struct { char pad[48]; V4 v; char pad2[44]; volatile int flags; } E;
+typedef struct { char pad[48]; V4 v; char pad2[44]; int flags; } E;
 typedef struct { char pad[16]; char *f10; } Tab;
 typedef struct { char pad[1336]; Tab *f538; } A;
 void Gap__Gfx__igPsx2VisualContext__vfunc_86(A *arg0, int arg1, V4 *arg2) {

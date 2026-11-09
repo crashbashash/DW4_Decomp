@@ -60,7 +60,7 @@ static inline void releaseString(char *s) {
 extern "C" int FUN_001ca6c0(ShaderObject **out, ShaderProcessorView *self, char *name, unsigned char flag) {
     unsigned char cached;
     char *text;
-    ShaderObject *volatile object;
+    ShaderObject *object;
     ShaderNameList *names;
     char *key;
     int section;
@@ -95,7 +95,7 @@ extern "C" int FUN_001ca6c0(ShaderObject **out, ShaderProcessorView *self, char 
         releaseString(text);
         return 0;
     }
-    *(ShaderNameList *volatile *)&names = FUN_002b90e0(igObject_GetAllocator(self));
+    *(ShaderNameList **)&names = FUN_002b90e0(igObject_GetAllocator(self));
     FUN_00306aa0(self->ini, section, DAT_004e4700, names, 0);
     count = names->count;
     for (i = 0; i < count; i++) {

@@ -15,8 +15,8 @@ struct Info { char pad[12]; unsigned int f12; };
 int Gap__Gfx__igPsx2VertexArray2__vfunc_23(igVertexArray2 *arg0, int arg1, int arg2, Info *arg3, Disp *arg4) {
     Rc * volatile sp7C;
     Rc * volatile sp78;
-    Rc * volatile sp74;
-    Rc * volatile sp70;
+    Rc * sp74;
+    Rc * sp70;
     igVertexStream *s5;
     int s0;
     int s3 = arg1;

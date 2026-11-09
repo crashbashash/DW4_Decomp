@@ -1,6 +1,6 @@
 /* Copy a saved-record block (arg0->saved) into the property tree arg1.
  * Matching constructs: the held item/chunk objects are RAII holders (ChunkRef, ItemRef) so the unwind
- * table names the right destructors; the sp184 slot is volatile so each use reloads from the stack;
+ * table names the right destructors;
  * the list-empty test reads `count` through a volatile int so the loop-bound load stays separate. */
 #include "dw4/reflected.h"
 extern "C" {
@@ -161,7 +161,7 @@ extern "C" void beNDMWDegiData__StoreToProperties(Host *arg0, void *arg1, int ar
         a = Memory_GetAllocatorBySelector(DAT_00587108[0]);
     {
     ChunkRef sp188((Obj *)FUN_003614f0(a));
-    Obj * volatile sp184;
+    Obj * sp184;
     beUnicodeObj_AllocateBuffer((Chunk *)sp188.p, 8);
     unsigned short *dst = ((Chunk *)sp188.p)->chars;
     Saved::Str16 *q = &s->nm;

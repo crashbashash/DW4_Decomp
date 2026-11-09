@@ -30,14 +30,14 @@ extern unsigned char GPR_00554c14;
  * (reference count in the low 23 bits of _refCount). */
 class WindowRef {
 public:
-    beNDMWStatusSelectE0 *volatile p; /* matching construct: volatile member keeps every use a reload from the frame slot (register colouring) */
+    beNDMWStatusSelectE0 *p;
     WindowRef(beNDMWStatusSelectE0 *w) : p(w) {}
     ~WindowRef() { beNDMWStatusSelectE0 *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
 /* Owning stack reference to the window's new decide list; released on scope exit. */
 class BoolListRef {
 public:
-    igBoolList *volatile p; /* matching construct: as above */
+    igBoolList *volatile p; /* matching construct: volatile member keeps every use a reload from the frame slot (register colouring) */
     BoolListRef(igBoolList *l) : p(l) {}
     ~BoolListRef() { igBoolList *l = p; if (l != 0) { --l->_refCount; if ((l->_refCount & 0x7fffff) == 0) igObject_Destroy(l); } }
 };

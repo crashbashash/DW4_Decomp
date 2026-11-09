@@ -131,7 +131,7 @@ extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, 
         }
         {
         StringRef sp90(v);
-        n = *(volatile int *)&l36->_count;
+        n = l36->_count;
         if (n != 0 && idx >= 0 && idx < n) {
             slot = &((int *)l36->_data)[idx];
             s = sp90.p;
@@ -158,7 +158,7 @@ extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, 
         }
         {
         StringRef sp8C(v);
-        n = *(volatile int *)&l40->_count;
+        n = l40->_count;
         if (n != 0 && idx >= 0 && idx < n) {
             slot = &((int *)l40->_data)[idx];
             s = sp8C.p;
@@ -173,7 +173,7 @@ extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, 
             *slot = sp8C.p;
         }
         }
-        n = *(volatile int *)&l44->_count;
+        n = l44->_count;
         if (n != 0 && idx >= 0 && idx < n) {
             ((int *)l44->_data)[idx] = DAT_004c8fa8[0];
         }
@@ -208,7 +208,7 @@ extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, 
         }
         k = *(volatile int *)&l44->_count;
         if (k < l44->_capacity) {
-            *(volatile int *)&l44->_count = *(volatile int *)&l44->_count + 1;
+            l44->_count = l44->_count + 1;
         } else {
             List_Resize(l44, k + 1, 4);
         }

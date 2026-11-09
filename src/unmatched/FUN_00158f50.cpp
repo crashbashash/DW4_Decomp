@@ -24,7 +24,7 @@ int FUN_00158f50(S *arg0, int arg1) {
     int sp5C, sp58, sp54, sp50, sp4C, sp48, sp44;
     VStream * volatile sp40;
     int sp3C;
-    int * volatile sp38;
+    int * sp38;
     int a0;
     int *var_v0;
     int v;

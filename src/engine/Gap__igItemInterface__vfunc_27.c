@@ -6,8 +6,8 @@ int StringChunk_ReleaseHeader();
 int igObject_Destroy();
 int Gap__igItemInterface__vfunc_27(X **arg0, int arg1, char **arg2, int arg3) {
     X *volatile sp4C;
-    char *volatile sp48;
-    X *volatile sp44;
+    char *sp48;
+    X *sp44;
     char *s;
     X *t;
     int *hd;

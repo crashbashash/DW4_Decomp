@@ -22,7 +22,7 @@ typedef struct Srd {
 
 extern char D_004efca8[];
 extern volatile int D_004a92dc;
-extern volatile int D_004a92e0;
+extern int D_004a92e0;
 extern volatile int D_004a92e4;
 extern int D_004a9300;
 extern unsigned char D_004a9304;

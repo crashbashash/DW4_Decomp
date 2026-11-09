@@ -53,7 +53,7 @@ void FUN_0042e9e0(beNDMWShopCtrlA1 *arg0) {
             var_s1 += 4;
         } while (var_s2 < var_a1->_count);
     }
-    temp_s5 = *(volatile int *)&var_a1->_count;
+    temp_s5 = *(int *)&var_a1->_count;
     l2 = (igDataList *)var_a1;
     var_s4 = 0;
     if (0 < temp_s5) {

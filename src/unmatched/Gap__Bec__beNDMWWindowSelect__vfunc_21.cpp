@@ -44,8 +44,7 @@ void Gap__Bec__beNDMWWindowSelect__vfunc_21(beNDMWWindowSelectVTable *arg0) {
         if (s->_isNoCancel != 0) {
             beMessenger_AppendString(s->_messenger, DAT_0051a928);
         }
-        /* matching construct: volatile read keeps the retail reload of the list pointer around every callback. */
-        t = *(igDataList *volatile *)&s->_decideList;
+        t = *(igDataList **)&s->_decideList;
         if (t != 0) {
             i = 0;
             if (0 < t->_count) {
@@ -87,8 +86,7 @@ void Gap__Bec__beNDMWWindowSelect__vfunc_21(beNDMWWindowSelectVTable *arg0) {
         if (beNDMWWindowSelect_CanRequestFO2TOP(arg0) != 0) {
             beMessenger_SelectReceivers(s->_messenger, DAT_0051a918, s->_infoName, s->_playerNo);
             beMessenger_AppendInt(s->_messenger, s->_selectMax);
-            /* matching construct: volatile read keeps the retail reload of the list pointer around every callback. */
-        t = *(igDataList *volatile *)&s->_decideList;
+            t = *(igDataList **)&s->_decideList;
             if (t != 0) {
                 i = 0;
                 if (0 < t->_count) {

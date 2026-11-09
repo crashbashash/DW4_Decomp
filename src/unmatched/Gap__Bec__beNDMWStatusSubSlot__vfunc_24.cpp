@@ -27,7 +27,7 @@ extern "C" void Gap__Bec__beNDMWStatusSubSlot__vfunc_24(S *arg0) {
     beNDMWWindow_RunMessageScript(arg0, DAT_00519b90, 0x89);
     beNDMWWindow_RunMessageScript(arg0, DAT_00519b90, 0x2A);
     int i = 0;
-    if (0 < (*(L *volatile *)&arg0->l100)->count) {
+    if (0 < (*(L **)&arg0->l100)->count) {
         int item;
         int *name;
         int off;

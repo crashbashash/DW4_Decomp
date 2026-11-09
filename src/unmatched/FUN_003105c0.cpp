@@ -31,7 +31,7 @@ extern unsigned char GPR_00554ca4;
 extern unsigned char GPR_00554ca8;
 extern unsigned char GPR_00554cac;
 }
-static inline int isFreeChunk2(ArenaChunkBytes *h) { if (((volatile ArenaChunkBytes *)h)->big == 1) { return h->free; } return 0; }
+static inline int isFreeChunk2(ArenaChunkBytes *h) { if (((ArenaChunkBytes *)h)->big == 1) { return h->free; } return 0; }
 static inline int isFreeChunk(ArenaChunkBytes *h) { if (h->big == 1) { return h->free; } return 0; }
 extern "C" void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested) {
     ArenaCheckState *state;

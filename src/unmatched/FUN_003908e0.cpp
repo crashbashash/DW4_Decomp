@@ -76,7 +76,7 @@ igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int
                 int a;
                 if (GPR_00554c14 != 0) a = alloc; else a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
                 AABoxRef ob(FUN_0018a660(a));
-                { igAABox *t = ob.p; igAABoxList *ol = (igAABoxList *)*(volatile int *)&arg0->_AABoxList; ObjectList_AppendRetained(ol, t); }
+                { igAABox *t = ob.p; igAABoxList *ol = (igAABoxList *)arg0->_AABoxList; ObjectList_AppendRetained(ol, t); }
             }
         }
         arg0->_isFirst = 0;

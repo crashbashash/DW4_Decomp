@@ -1,4 +1,3 @@
-/* The owner pointer is read volatile so the slot list is reloaded on each use. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_003f1490(int);
@@ -12,8 +11,8 @@ void FUN_003ecc60(beNDMWLoadCtrl2CommonIntf *arg0) {
     ((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)arg0->_flagWork)->_data)[1]->_isCutConnect = 0;
     ((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)arg0->_flagWork)->_data)[2]->_isCutConnect = 0;
     ((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)arg0->_flagWork)->_data)[3]->_isCutConnect = 0;
-    for (i = 0; i < ((beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)*(volatile int *)&arg0->_mcUtilCtrl)->_slot)->_count; i++) {
-        if (((beNDMWMcSlotPS2 **)((beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)*(volatile int *)&arg0->_mcUtilCtrl)->_slot)->_data)[i]->_isConnect == 0) {
+    for (i = 0; i < ((beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)*(int *)&arg0->_mcUtilCtrl)->_slot)->_count; i++) {
+        if (((beNDMWMcSlotPS2 **)((beNDMWMcSlotList *)((beNDMWMcUtilCtrl *)arg0->_mcUtilCtrl)->_slot)->_data)[i]->_isConnect == 0) {
             for (j = 0; j < ((beNDMWLoadSlotPlayerList *)arg0->_slotSaveData)->_count; j++) {
                 if (i == ((beNDMWLoadSlotPlayer **)((beNDMWLoadSlotPlayerList *)arg0->_slotSaveData)->_data)[j]->_connectNO) {
                     il = (igIntList *)((beNDMWLoadSlotPlayer **)((beNDMWLoadSlotPlayerList *)arg0->_slotSaveData)->_data)[j]->_accessPlList;

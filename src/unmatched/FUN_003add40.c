@@ -35,16 +35,16 @@ int FUN_003add40(int *arg0, A *arg1) {
         off = 0;
         p = &DAT_0058a810[0];
         do {
-            c = *(volatile int *)&a4->n;
+            c = *(int *)&a4->n;
             if (c != 0 && i >= 0 && i < c) {
                 *(int *)((char *)a4->d + off) = *p;
             }
             if (*p == 1) {
-                c = *(volatile int *)&a3->n;
+                c = a3->n;
                 if (c != 0 && i >= 0 && i < c) {
                     *(int *)((char *)a3->d + off) = arg0[16];
                 }
-                c = *(volatile int *)&a2->n;
+                c = a2->n;
                 if (c != 0 && i >= 0 && i < c) {
                     *(int *)((char *)a2->d + off) = arg0[24];
                 }

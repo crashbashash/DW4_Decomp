@@ -14,7 +14,7 @@ int FUN_001b24d0(int arg0, int arg1) {
     V3 sp48;
     V3 sp38;
     X *volatile sp5C;
-    X *volatile sp58;
+    X *sp58;
     X *t;
     int temp_s0;
 

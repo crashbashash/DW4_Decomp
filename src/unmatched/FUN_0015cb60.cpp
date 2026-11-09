@@ -17,7 +17,7 @@ extern "C" int FUN_0015cb60(O *arg0, A1 *arg1, int *arg2, unsigned int arg3, int
 extern "C" int FUN_0015cb60(O *arg0, A1 *arg1, int *arg2, unsigned int arg3, int arg4) {
     Rc *a0;
     V2 sp90;
-    volatile int sp9C;
+    int sp9C;
     V2 sp88;
     V2 sp80;
     int s5;

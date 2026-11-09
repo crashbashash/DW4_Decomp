@@ -119,7 +119,7 @@ extern "C" void FUN_003f7310(beNDMWGameRam *arg0, int arg1) {
         if (ta->_count > 960)
             ((unsigned char *)ta->_data)[960] = GPR_005549e8;
     }
-    s2 = *(igObject * volatile *)&data.p; /* matching construct: pinned read keeps the s1/s2 colouring of the player list */
+    s2 = *(igObject **)&data.p;
     pl = (igObjectList *)arg0->_playerDataListList;
     if (s2 != 0) s2->_refCount = s2->_refCount + 1;
     o = ((igObject **)pl->_data)[arg1];

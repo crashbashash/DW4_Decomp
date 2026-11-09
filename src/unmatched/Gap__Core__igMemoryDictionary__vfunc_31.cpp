@@ -34,7 +34,7 @@ R Gap__Core__igMemoryDictionary__vfunc_31(D *arg1, int key, int val) {
             }
             idx++;
             if (idx >= cap) {
-                e = *(E *volatile *)&s->f10;
+                e = *(E **)&s->f10;
                 idx = 0;
             } else {
                 e++;

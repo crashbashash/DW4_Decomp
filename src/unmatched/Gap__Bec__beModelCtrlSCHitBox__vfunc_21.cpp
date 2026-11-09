@@ -58,7 +58,7 @@ struct DataListInit { static inline void go(beBaseInfoRam *arg1, const ObjectRef
 } };
 extern "C" int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInfoRam *arg1);
 int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInfoRam *arg1) {
-    volatile V3 c98;
+    V3 c98;
     V4 sp80;
     igObject *s0;
     PropertyRecord *s2;
@@ -160,10 +160,10 @@ L3:
     { float sx = ((float *)arg0->_boxSize)[0];
       t->mn[0] = c98.x - sx / 2.0f;
       float x2 = c98.x; t = spAC.p; t->mx[0] = sx / 2.0f + x2; }
-    { t = spAC.p; float y = *(volatile float *)((char *)&c98 + 4); float h = ((float *)arg0->_boxSize)[1] / 2.0f;
+    { t = spAC.p; float y = *(float *)((char *)&c98 + 4); float h = ((float *)arg0->_boxSize)[1] / 2.0f;
       t->mn[1] = y - h;
       t = spAC.p; t->mx[1] = h + y; }
-    { t = spAC.p; float z = *(volatile float *)((char *)&c98 + 8); float h = ((float *)arg0->_boxSize)[2] / 2.0f;
+    { t = spAC.p; float z = *(float *)((char *)&c98 + 8); float h = ((float *)arg0->_boxSize)[2] / 2.0f;
       t->mn[2] = z - h;
       t = spAC.p; t->mx[2] = h + z; }
     goto L1b;

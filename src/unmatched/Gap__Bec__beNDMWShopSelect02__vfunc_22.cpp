@@ -1,6 +1,6 @@
 /* Matches retail only with the same build settings as the neighbouring ShopSelect00/A0/B0 vfunc_22
  * units: the content-pinned alternate compiler with -O3,p; an 0x0043dc10 entry is needed in both
- * tables. Matching constructs: `a`/`b` are volatile (the retail refs live in stack slots that are
+ * tables. Matching constructs: `a` is volatile (the retail ref lives in a stack slot that is
  * stored and reloaded); the loop keeps explicit p/off induction variables; the declaration order
  * fixes the saved-register assignment. */
 #include "dw4/reflected.h"
@@ -76,7 +76,7 @@ static inline void release(int ref) {
 extern "C" void Gap__Bec__beNDMWShopSelect02__vfunc_22(beNDMWShopSelect02 *arg0);
 void Gap__Bec__beNDMWShopSelect02__vfunc_22(beNDMWShopSelect02 *arg0) {
     volatile int a;
-    volatile int b;
+    int b;
     int slot1;
     int slot2;
     int slot3;

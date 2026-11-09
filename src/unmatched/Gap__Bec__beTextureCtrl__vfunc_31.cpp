@@ -29,7 +29,7 @@ public:
     ~ObjectRef() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1) {
-    struct { volatile int spA0; int pad[5]; } sa; /* matching construct: volatile spill slot reproduces the retail stack traffic */
+    struct { int spA0; int pad[5]; } sa;
 
     beTextureCtrlAttr *s1;
     int s4;

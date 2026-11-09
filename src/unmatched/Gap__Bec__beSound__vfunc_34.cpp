@@ -5,8 +5,7 @@
  * playing-SE list); command 20 gathers the sound names of the stage record into a string list. The
  * playing-SE search loop keeps separate index / byte-offset inductions and the hoisted data
  * pointer only through the loop-carried re-read `pl2 = pl` and the explicit `offv`; a direct
- * `list->data[i]` is turned into one pointer induction by this compiler. The list count is
- * volatile like the engine's other list classes. Null fallbacks: a ternary for the constant
+ * `list->data[i]` is turned into one pointer induction by this compiler. Null fallbacks: a ternary for the constant
  * default; `if (bn == 0) bn2 = G; else bn2 = bn;` with a separate variable for the global default
  * (the empty else arm and the deleted jump keep the join unpadded). The first compare argument
  * (info->_dataType) is read before the test. Counts are compared as `> 1` (slti at) and `0 < n`
@@ -209,7 +208,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
             pl = (bePlaySEList *)self->_playSEs;
             i = 0;
             pl2 = pl;
-            if (0 < *(volatile int *)&pl->_count) {
+            if (0 < *(int *)&pl->_count) {
                 offv = 0;
                 do {
                     dse = *(bePlaySE **)((char *)pl2->_data + offv);
@@ -221,7 +220,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
                     i += 1;
                     offv += 4;
                     pl2 = pl;
-                } while (i < *(volatile int *)&pl->_count);
+                } while (i < pl->_count);
             }
             k = FUN_0037c4c0(self->_cri, info->_fnameList, e, i);
             beMessenger_AppendInt(self->_messenger, e->_type);

@@ -63,7 +63,7 @@ extern "C" void Gap__Bec__beNDMWStatusPowerSocket__vfunc_33(Sh *arg0) {
     }
     WindowRef win((Win *)FUN_003b51b0((void *)alloc));
     beNDMWWindow_BindContext(win.p, arg0, arg0->f8, arg0->f20, 0);
-    { Win *t = win.p; ObjectList_AppendRetained(*(volatile int *)&arg0->f52, t); }
+    { Win *t = win.p; ObjectList_AppendRetained(arg0->f52, t); }
     INTERN_APPEND(win.p->f60, DAT_00519b50)
     INTERN_APPEND(win.p->f64, DAT_00519d98)
     beNDMWWindow_RunMessageScript(win.p, DAT_00519b90, 0x8A);

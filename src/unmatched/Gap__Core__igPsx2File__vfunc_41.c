@@ -3,7 +3,7 @@ int FUN_0032c240();
 int StringChunk_ReleaseHeader();
 
 int *Gap__Core__igPsx2File__vfunc_41(F *arg0, int arg1) {
-    int *volatile sp2C;
+    int *sp2C;
     int *t;
     int *s;
     int *p;

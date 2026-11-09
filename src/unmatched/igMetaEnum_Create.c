@@ -83,7 +83,7 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
         } else {
             v = StringPool_Intern(pool(), entry);
         }
-        *(char *volatile *)&held = v;
+        *(char **)&held = v;
         nl = e->names;
         if (nl->count != 0 && i >= 0 && i < nl->count) {
             slot = &nl->data[i];

@@ -39,7 +39,7 @@ extern "C" int StringList_AppendRetained(int, const StringRef &);
         if (DAT_00586f20[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) { pool = StringPool_Construct(pool); } DAT_00586f20[0] = pool; } \
         tok = StringPool_Intern(DAT_00586f20[0], (text)); } \
     StringList_AppendRetained(field, StringRef(tok)); }
-/* matching construct: every (DecideFlagList * volatile *)&arg0->_decideList read keeps the field volatile so each use reloads it, as retail does */
+/* matching construct: the (DecideFlagList * volatile *)&arg0->_decideList read reloads the field, as retail does */
 void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
     int tv1;
     int s1;
@@ -56,13 +56,13 @@ void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
     INTERN_APPEND(arg0->_textCloseTypeList, &DAT_0051c488[0])
     INTERN_APPEND(arg0->_textCloseNameList, &DAT_0051c4c0[0])
     beNDMWWindow_RunMessageScript(arg0, &DAT_0051c4a0[0], 0x625);
-    if (*(DecideFlagList * volatile *)&arg0->_decideList != 0) {
+    if (arg0->_decideList != 0) {
         IntPair labels = DAT_004cfb30[0];
         s0 = (int *)&labels;
         s1 = 0;
         if (0 < (*(DecideFlagList * volatile *)&arg0->_decideList)->count) {
             do {
-                if ((*(DecideFlagList * volatile *)&arg0->_decideList)->data[s1] != 0) {
+                if ((*(DecideFlagList **)&arg0->_decideList)->data[s1] != 0) {
                     s3 = &DAT_0051c700[0];
                 } else {
                     s3 = &DAT_0051c848[0];
@@ -73,7 +73,7 @@ void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
                 beMessenger_DispatchSelected(arg0->_messenger, s3);
                 s1 = s1 + 1;
                 s0 = s0 + 1;
-            } while (s1 < (*(DecideFlagList * volatile *)&arg0->_decideList)->count);
+            } while (s1 < (*(DecideFlagList **)&arg0->_decideList)->count);
         }
     }
     if (DAT_00586f20[0] == 0) {

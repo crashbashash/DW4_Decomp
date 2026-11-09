@@ -30,7 +30,7 @@ unsigned igPageMemoryPool_GetBlockSize(Pool *self, unsigned addr) {
     }
     if ((v & 0xAAAAAAAA) != 0) {
         for (; end != 0; end <<= 2) {
-            if (end & *(volatile unsigned *)w) {
+            if (end & *(unsigned *)w) {
                 return size;
             }
             size += 4096;
@@ -55,7 +55,7 @@ unsigned igPageMemoryPool_GetBlockSize(Pool *self, unsigned addr) {
         v = *w;
         if ((v & 0xAAAAAAAA) != 0) {
             for (mask = 2; mask != 0; mask <<= 2) {
-                if (mask & *(volatile unsigned *)w) {
+                if (mask & *(unsigned *)w) {
                     return size;
                 }
                 size += 4096;

@@ -19,7 +19,7 @@ extern "C" igResult igArenaMemoryPool_CheckHeap(Pool *self) {
     int i;
     int r;
 
-    result.w0 = *(volatile int *)&DAT_004fb410.w0;
+    result.w0 = DAT_004fb410.w0;
     if (arena->count == 0) {
         return ok;
     }

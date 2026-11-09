@@ -8,7 +8,7 @@ int StringPool_Intern(int, int);
 int StringChunk_ReleaseHeader(int, int *);
 void igObject_Destroy(void *);
 int FUN_001c6520(O *arg0, int arg1) {
-    Ob *volatile sp3C;
+    Ob *sp3C;
     Ob *a0;
     Ob *s0;
     int s0i;

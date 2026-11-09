@@ -55,7 +55,7 @@ void FUN_00304b10(void *self) {
             if (FUN_00306510(ini, section, i, &key) == 0) {
                 dropKey(key);
             } else {
-                *(IniValueList *volatile *)&values = FUN_002b90e0(igObject_GetAllocator(self));
+                *(IniValueList **)&values = FUN_002b90e0(igObject_GetAllocator(self));
                 held = values;
                 if (FUN_00306aa0(ini, section, keyText(key), held, 0) == 0) {
                     dropValues(values);

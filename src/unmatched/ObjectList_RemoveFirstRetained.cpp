@@ -21,7 +21,7 @@ static inline void release(ObjectListItem *o) { if (o != 0) { o->_refCount = o->
 extern "C" igResult ObjectList_RemoveFirstRetained(ObjectListView *self, ObjectListItem *value, int start) {
     ObjectListItem *v;
     int i;
-    *(ObjectListItem *volatile *)&v = value;
+    *(ObjectListItem **)&v = value;
     i = find(self, &v, start);
     if (i >= 0) {
         ObjectListItem *o = self->data[i];

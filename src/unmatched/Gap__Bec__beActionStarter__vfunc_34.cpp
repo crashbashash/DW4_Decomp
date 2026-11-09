@@ -1,4 +1,4 @@
-/* The volatile guard read keeps the second count load, and the flag is declared before the loop
+/* The flag is declared before the loop
  * index. Compiled as C++ for the real virtual call (20 dummy slots). */
 #include "dw4/reflected.h"
 extern "C" {
@@ -50,8 +50,7 @@ int Gap__Bec__beActionStarter__vfunc_34(beActionStarter *arg0, beActionStarterIn
     int a1;
     igDataList *a0 = (igDataList *)s7->_modelList;
     a1 = 0;
-    /* matching construct: volatile read so the loop bound is re-read (retail reloads the count in the loop) */
-    if (0 < *(volatile int *)&a0->_count) {
+    if (0 < *(int *)&a0->_count) {
         int **v1 = (int **)a0->_data;
         do {
             int *v0 = (int *)(*v1)[2];

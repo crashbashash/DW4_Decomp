@@ -60,8 +60,7 @@ extern "C" void FUN_003a8580(beBaseInfoRam *self, char *name) {
             PropSlot hp;
             hp.p = found;
             idx = ListOps::IndexOf(l1, hp);
-            /* matching construct: volatile read -- retail reloads the list handle after the search (not CSE'd with the first read) */
-            l1 = (igObjectList *)*(volatile int *)&self->_dataList;
+            l1 = (igObjectList *)*(int *)&self->_dataList;
             obj = ((igObject **)l1->_data)[idx];
             if (obj != 0) { obj->_refCount = obj->_refCount - 1; if ((obj->_refCount & 0x7fffff) == 0) igObject_Destroy(obj); }
             List_RemoveWordAt(l1, idx);

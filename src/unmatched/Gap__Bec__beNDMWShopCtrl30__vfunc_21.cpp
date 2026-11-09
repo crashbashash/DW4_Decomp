@@ -1,9 +1,7 @@
 /* Bank deposit/withdraw update: four-level state machine on _st0 (open / run / close / wait-
  * close), _st1 (sub-state 0..6), _st2 (step) and _st3 (timer); _bankMenu is the deposit/withdraw
  * mode (0/1), _retCode the child window's result. The st0 increment of case 0 reads _st0 through a
- * volatile lvalue (else the switch scrutinee register is reused); the window-search body reads
- * _subWindow through a volatile lvalue in st1 2/3 step 3 (else the list pointer is shared with the
- * count test); the folder list pointers are loaded after the second folder lookup; function-level
+ * volatile lvalue (else the switch scrutinee register is reused); the folder list pointers are loaded after the second folder lookup; function-level
  * locals pl/x/y are declared in the order amt, pl, x, y to fix the saved-register order. _refCount
  * is read as a signed int (lwu otherwise). Rec/Fld stay local views of the igProperty records. */
 #include "dw4/reflected.h"
@@ -52,7 +50,7 @@ struct Fld { int pad[3]; igObjectList *f12; };
 #define LCNT(l) (((igObjectList *)(l))->_count)
 #define LDAT(l) ((int *)((igObjectList *)(l))->_data)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { *(int *)&rr->_refCount = *(int *)&rr->_refCount - 1; if (((unsigned long long)((long long)*(int *)&rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-#define FINDWINV(w, i) { w = 0; i = 0; if (0 < LCNT(arg0->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)((int *)((igObjectList *)*(volatile int *)&arg0->_subWindow)->_data)[i]; if (c != 0 && igObject_IsKindOf(c, DAT_0058af98[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
+#define FINDWINV(w, i) { w = 0; i = 0; if (0 < LCNT(arg0->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)((int *)((igObjectList *)*(int *)&arg0->_subWindow)->_data)[i]; if (c != 0 && igObject_IsKindOf(c, DAT_0058af98[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
 #define FINDWIN(w, i) { w = 0; i = 0; if (0 < LCNT(((beNDMWShopCtrl30 *)arg0)->_subWindow)) { do { beNDMWStatusCtrlD0 *c = (beNDMWStatusCtrlD0 *)LDAT(arg0->_subWindow)[i]; if (c != 0 && igObject_IsKindOf(c, DAT_0058af98[0]) != 0) { w = c; } else { w = 0; } if (w != 0) break; i++; } while (i < LCNT(arg0->_subWindow)); } }
 /* matching construct: the move between the two folder lists is an inline function; its address-taken out-count local is then allocated after the window references (stack 100/96 in retail), as written in the function body it would take the top slots */
 struct Transfer {

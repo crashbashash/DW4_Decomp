@@ -30,7 +30,7 @@ void beAction2FADESET_Update(void *arg0, beAction2InfoRam *arg1) {
             *pw = c->_fadeValue + dt * c->_fadeAddValue;
             ((DummyVirtualComponent *)c->_colorAttr)->vX(&v);
             c->_fadeValue = *pw;
-            lim = *(volatile float *)&c->_fadeLimitValue;
+            lim = *(float *)&c->_fadeLimitValue;
             if (!(*pw < lim)) {
                 list = ((beModelCtrlNode2 *)arg1->_node)->_overrideAttrList;
                 if (c->_textureStateAttr == 0) {

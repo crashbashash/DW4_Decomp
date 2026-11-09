@@ -74,7 +74,7 @@ struct RowOps {
  * to the list insert. Its constructor reads its stored word back through a laundered pointer and
  * fetches the delay-stack handle between that read and the null test. */
 struct Ref {
-    igObject * volatile value;
+    igObject * value;
     Ref(igObject *p, beMessenger *m, int &out) : value(p) {
         Ref *s = (Ref *)(int)this;
         igObject *v = s->value;
@@ -84,7 +84,7 @@ struct Ref {
         (void)r;
     }
     static void release(igObject *o) { RELEASE_OBJ(o) }
-    static void assign(igObject * volatile *dest, igObject *incoming) {
+    static void assign(igObject **dest, igObject *incoming) {
         igObject *outgoing;
         if (incoming) ++incoming->_refCount;
         outgoing = *dest;
@@ -112,7 +112,7 @@ extern "C" void beMessenger_EnqueueSelected(beMessenger *self, const char *text,
         SavedRef saved(0);
         saved = (igObject *)self->_argData;
         beMessengerDelay *r = (beMessengerDelay *)row.p;
-        Ref::assign((igObject * volatile *)&self->_argData, (igObject *)r->_argData);
+        Ref::assign((igObject **)&self->_argData, (igObject *)r->_argData);
         r = (beMessengerDelay *)row.p;
         RowOps::SetArg(r, saved.p);
     }

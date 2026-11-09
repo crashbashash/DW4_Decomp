@@ -234,7 +234,7 @@ extern "C" void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                                 int *obj;
                                 int idx;
                                 for (idx = 0; idx < ((igObjectList *)arg0->_subWindow)->_count; idx++) {
-                                    obj = (int *)((int *)((igObjectList *)(*(volatile int *)&arg0->_subWindow) /* matching construct: forces the reload retail makes */)->_data)[idx];
+                                    obj = (int *)((int *)((igObjectList *)(*(int *)&arg0->_subWindow))->_data)[idx];
                                     if ((obj != 0) && (igObject_IsKindOf(obj, DAT_0058ab68[0]) != 0)) {
                                         found = obj;
                                     } else {

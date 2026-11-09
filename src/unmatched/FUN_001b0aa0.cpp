@@ -14,7 +14,7 @@ public:
     AttrRec *_light;
 };
 typedef void (*AttrPopProc)(AttrRec *, int);
-struct LightKeyList { char pad[8]; volatile int _count; int _capacity; unsigned int *_data; };
+struct LightKeyList { char pad[8]; int _count; int _capacity; unsigned int *_data; };
 struct LightSlotList { char pad[8]; volatile int _count; int _capacity; AttrRec **_data; int pad20; int _cachedOverride; AttrPopProc _popProc; };
 struct IntWordList { char pad[8]; int _count; int _capacity; int *_data; };
 struct LightStackList { char pad[16]; LightSlotList **_data; };

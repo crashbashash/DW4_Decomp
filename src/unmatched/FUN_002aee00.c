@@ -6,19 +6,17 @@ int FUN_002a0dd8();
 int FUN_002ada78();
 
 /* The block at +3368 (0xD28) of the owning object. Retail re-reads the counters and never merges or
- * reorders their accesses, so they are volatile here (FUN_002ae458, FUN_002ae500, FUN_002ae528,
- * FUN_002af998); making the plain members volatile breaks FUN_002ae528 and FUN_002aee00.
- * matching construct: manual — volatile on the counter members */
+ * reorders their accesses. */
 struct Block0D28 {
     char pad[680];
-    volatile int f680;                    /* counter advanced by f684 (FUN_002ae458) */
-    volatile int f684;                    /* step */
+    int f680;                    /* counter advanced by f684 (FUN_002ae458) */
+    int f684;                    /* step */
     char pad688[716 - 688];
-    volatile int f716;                    /* counter advanced by f684; -1 = off, negative = due (FUN_002af998) */
+    int f716;                    /* counter advanced by f684; -1 = off, negative = due (FUN_002af998) */
     int f720;
     int f724;                             /* enable value (FUN_002aee00) */
     char pad728[732 - 728];
-    volatile int f732;
+    int f732;
     char pad736[740 - 736];
     int f740;
     int f744;

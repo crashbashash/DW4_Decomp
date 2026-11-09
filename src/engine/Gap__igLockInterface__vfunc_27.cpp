@@ -13,7 +13,7 @@ int Gap__igLockInterface__vfunc_27(int arg0, int arg1);
 int Gap__igLockInterface__vfunc_27(int arg0, int arg1) {
     Rc *volatile sp4C;
     O *volatile sp48;
-    O *volatile sp44;
+    O *sp44;
     volatile char sp40[4];
     O *v;
     O *a1;

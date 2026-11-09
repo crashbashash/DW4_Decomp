@@ -46,8 +46,8 @@ void FUN_00309fe0(int arg0) {
                     Rc *t;
                     Fld *f1, *f2, *f3;
                     void *l;
-                    *(Rc * volatile *)&sp5C = (Rc *)igMetaObject_CreateInstanceDefault(s1m);
-                    t = *(Rc * volatile *)&sp5C;
+                    sp5C = (Rc *)igMetaObject_CreateInstanceDefault(s1m);
+                    t = *(Rc **)&sp5C;
                     if (t) t->refs = t->refs + 1;
                     {
                         Rc *u = sp5C;

@@ -1,7 +1,7 @@
 extern int DAT_004850c0;
 extern int DAT_00484740;
 extern int DAT_0048356c;
-extern volatile int DAT_00483598;
+extern int DAT_00483598;
 int FUN_0010af00(int sema);
 int FUN_00116d90(int cmd);
 void sceSifWriteBackDCache(void *p, int size);

@@ -12,7 +12,7 @@ typedef struct O { char pad[972]; St *s972; St *s976; St *s980; St *s984; St *s9
     int n1; \
     if (n == 0) { \
         n1 = n + 1; \
-        if (n < s->cap) ((volatile St *)s)->n = ((volatile St *)s)->n + 1; \
+        if (n < s->cap) s->n = ((volatile St *)s)->n + 1; \
         else List_Resize(s, n1, 0x40); \
         Matrix44_Copy(s->data + (n << 6), m); \
     } else { \
@@ -25,7 +25,7 @@ typedef struct O { char pad[972]; St *s972; St *s976; St *s980; St *s984; St *s9
     n = s->n; \
     if (n == 0) { \
         n1 = n + 1; \
-        if (n < s->cap) ((volatile St *)s)->n = ((volatile St *)s)->n + 1; \
+        if (n < s->cap) s->n = ((volatile St *)s)->n + 1; \
         else List_Resize(s, n1, 0x40); \
         Matrix44_Copy(s->data + (n << 6), m); \
     } else { \

@@ -1,7 +1,7 @@
 typedef struct Timer {
     struct Timer *next;
     int f4;
-    volatile int id;
+    int id;
     int flags;
     long long start;
     long long now;
@@ -14,7 +14,7 @@ typedef struct {
     int f0;
     int f4;
     int f8;
-    volatile int f12;
+    int f12;
     int f16;
     Timer *free;
     int f24;

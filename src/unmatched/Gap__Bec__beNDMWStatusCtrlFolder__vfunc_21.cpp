@@ -57,7 +57,7 @@ template <int kind> struct RP {
 /* matching construct: inline type-checked cast; its early return gives the retail empty-arm branch. */
 struct FolderHelpers {
 static beNDMWStatusCtrlD0 *CastTo(beNDMWStatusCtrlD0 *p) { if (p != 0) { if (igObject_IsKindOf(p, DAT_0058af98[0]) != 0) { return p; } } return 0; }
-static beNDMWStatusCtrlD0 *FindSub(beNDMWStatusCtrlFolder *w) { beNDMWStatusCtrlD0 *f = 0; int fi = 0; if (0 < (*(igDataList *volatile *)&w->_subWindow)->_count) { L:  f = CastTo(((beNDMWStatusCtrlD0 **)(*(igDataList *volatile *)&w->_subWindow)->_data)[fi]); if (f == 0) { fi++; if (fi < (*(igDataList *volatile *)&w->_subWindow)->_count) goto L; } } return f; }
+static beNDMWStatusCtrlD0 *FindSub(beNDMWStatusCtrlFolder *w) { beNDMWStatusCtrlD0 *f = 0; int fi = 0; if (0 < (*(igDataList *volatile *)&w->_subWindow)->_count) { L:  f = CastTo(((beNDMWStatusCtrlD0 **)(*(igDataList **)&w->_subWindow)->_data)[fi]); if (f == 0) { fi++; if (fi < (*(igDataList **)&w->_subWindow)->_count) goto L; } } return f; }
 };
 #define MSG() { beMessenger_SelectGroup(arg0->_messenger, DAT_00519c28); beMessenger_AppendString(arg0->_messenger, DAT_00519b50); beMessenger_AppendString(arg0->_messenger, DAT_00519d98); beMessenger_AppendString(arg0->_messenger, DAT_00519b00); beMessenger_DispatchSelected(arg0->_messenger, DAT_00519b08); }
 #define CLEAR(lst) { igDataList *l = (igDataList *)(lst); int n = l->_count; int i; int *slot; int *nw; int o; int *old; if (0 < n) { i = 0; o = 0; do { slot = (int *)(l->_data + o); if (DAT_00586f20[0] == 0) { int v = FUN_002eb010(0x10); if (v != 0) { v = StringPool_Construct(v); } DAT_00586f20[0] = v; } nw = (int *)StringPool_Intern(DAT_00586f20[0], 0); old = (int *)*slot; if (old != 0) { int *hd = old - 2; int c = old[-1] - 1; old[-1] = c; if (c == 0) { StringChunk_ReleaseHeader(*hd, hd); } } i++; *slot = (int)nw; o += 4; } while (i < n); } l->_count = 0; }
@@ -73,7 +73,7 @@ void Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21(beNDMWStatusCtrlFolder *arg0) {
         ObjectList_AppendRetained(arg0->_subWindow, sp9C);
         }
         arg0->_folderMenu = 0;
-        arg0->_st0 = ((volatile beNDMWStatusCtrlFolder *)arg0)->_st0 + 1;
+        arg0->_st0 = arg0->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
         arg0->_st1 = 0;

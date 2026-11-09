@@ -55,7 +55,7 @@ extern int DAT_0056c164[4];
 extern int DAT_0056c168[4];
 extern int DAT_0056c16c[4];
 void FUN_001f6f50(void *arg0) {
-    volatile int sp2C;
+    int sp2C;
     int temp_a1;
 
     *(long long *)((char *)arg0 + 0) = DAT_00569250[0];

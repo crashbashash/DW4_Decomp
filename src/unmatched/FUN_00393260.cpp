@@ -49,16 +49,14 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
 
 
 /* Owning references live across calls (retail exception table 0x543a8c): DataListRef is the ObjectRef copy at
- * 0x33e9c0 (slot 152), MoveRef the copy emitted behind this function at 0x393aa0 (slot 156).
- * matching construct: `volatile` pointer members keep the reference in its frame slot (retail stores and reloads
- * it around each use) and keep the allocator/`p` registers in retail's order. */
+ * 0x33e9c0 (slot 152), MoveRef the copy emitted behind this function at 0x393aa0 (slot 156). */
 struct DataListRef {
-    igObject *volatile p;
+    igObject *p;
     DataListRef(igObject *x) { p = x; }
     ~DataListRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 struct MoveRef {
-    igObject *volatile p;
+    igObject *p;
     MoveRef() { p = 0; }
     ~MoveRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
@@ -115,22 +113,22 @@ extern "C" unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, be
         o = sp9C.p;
         if (o != 0) { RC(o) = RC(o) - 1; if (((unsigned long long)((long long)RC(o) << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
         sp9C.p = (igObject *)FUN_00352940(al);
-        { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList *volatile *)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
+        { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
         ALLOC(al, arg0);
         o = sp9C.p;
         if (o != 0) { RC(o) = RC(o) - 1; if (((unsigned long long)((long long)RC(o) << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
         sp9C.p = (igObject *)FUN_00352940(al);
-        { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList *volatile *)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
+        { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
         ALLOC(al, arg0);
         o = sp9C.p;
         if (o != 0) { RC(o) = RC(o) - 1; if (((unsigned long long)((long long)RC(o) << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
         sp9C.p = (igObject *)FUN_00352940(al);
-        { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList *volatile *)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
+        { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
         ALLOC(al, arg0);
         o = sp9C.p;
         if (o != 0) { RC(o) = RC(o) - 1; if (((unsigned long long)((long long)RC(o) << 0x29) >> 0x29) == 0) igObject_Destroy(o); }
         sp9C.p = (igObject *)FUN_00352940(al);
-        { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList *volatile *)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
+        { igObject *q_ = sp9C.p; beModelCtrlMoveObjectList *l_ = *(beModelCtrlMoveObjectList **)&arg2->_moveObjectList; ObjectList_AppendRetained(l_, q_); }
     }
     k = DAT_00588dd8[0];
     if (k == arg3->vX()) {

@@ -43,11 +43,11 @@ void FUN_00309c90(igDirectory *arg0, int arg1, int arg2)
                 if (o != 0 && igObject_IsKindOf((igObject *)o->_ref, s4) != 0) {
                     igObject *t;
                     if (s3 == 0) return;
-                    *(igObject * volatile *)&spAC = (igObject *)o->_ref;
-                    t = *(igObject * volatile *)&spAC;
+                    spAC = (igObject *)o->_ref;
+                    t = *(igObject **)&spAC;
                     if (t) t->_refCount = t->_refCount + 1;
-                    *(igObject * volatile *)&spA8 = (igObject *)igMetaObject_CreateInstanceDefault(s3);
-                    t = *(igObject * volatile *)&spA8;
+                    spA8 = (igObject *)igMetaObject_CreateInstanceDefault(s3);
+                    t = *(igObject **)&spA8;
                     if (t) t->_refCount = t->_refCount + 1;
                     {
                         igObject *u = spA8;
@@ -61,11 +61,11 @@ void FUN_00309c90(igDirectory *arg0, int arg1, int arg2)
                         igMetaField *g = (igMetaField *)igMetaObject_FindFieldByName(s3, f->_fieldName);
                         if (g != 0) { bool ok = igObject_IsKindOf(g, ((MetaFieldVirtual *)f)->vX()) != 0; bool nok = ok ^ true; if (!nok) { igMetaField_ShallowCopy(f, (char *)spA8 + g->_offset - f->_offset, spAC); } }
                     }
-                    *(igObject * volatile *)&spA4 = spAC;
-                    t = *(igObject * volatile *)&spA4;
+                    spA4 = spAC;
+                    t = *(igObject **)&spA4;
                     if (t) t->_refCount = t->_refCount + 1;
-                    *(igObject * volatile *)&spA0 = spA8;
-                    t = *(igObject * volatile *)&spA0;
+                    spA0 = spA8;
+                    t = *(igObject **)&spA0;
                     if (t) t->_refCount = t->_refCount + 1;
                     FUN_002d7f10(arg0, &spA4, &spA0);
                     if (spA0 != 0) {

@@ -30,8 +30,8 @@ typedef struct Request_269ff0 {
     char pad88[4];
     int f92;            /* 0x5c */
 } Request_269ff0;    /* 0x60 bytes: the DAT_004a7f10 entry stride */
-extern volatile int DAT_004a7f00;
-int FUN_0027eca8(volatile int *flag);
+extern int DAT_004a7f00;
+int FUN_0027eca8(int *flag);
 void FUN_0026a728(Request_269ff0 *request);
 
 void FUN_0026abb0(Request_269ff0 *request) {

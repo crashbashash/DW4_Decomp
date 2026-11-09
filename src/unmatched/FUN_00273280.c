@@ -1,7 +1,7 @@
 /* Test RPC reply: fills the reply buffer with 0xAA bytes, then writes "Hello from EE (%d)" with
  * the running counter 0x004a9b24 and advances the counter. */
 extern int sprintf(char *buffer, const char *format, ...);
-extern volatile int DAT_004a9b24;
+extern int DAT_004a9b24;
 extern const char Hello_from_EE_d[];
 
 void FUN_00273280(int unused, char *buffer, int size) {

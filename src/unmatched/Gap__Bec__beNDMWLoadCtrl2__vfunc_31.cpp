@@ -121,11 +121,11 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
             arg1->f40 = o;
         }
         ci = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(arg1->f40, DAT_00585be0[0], &DAT_00518138[0]);
-        switch (*(volatile int *)&st->_st0) {
+        switch (st->_st0) {
         case 0:
             break;
         case 1:
-            switch (*(volatile int *)&st->_st1) {
+            switch (st->_st1) {
             case 0:
                 FUN_003f1270(ci->_mcUtilCtrl, 3, 2);
                 st->_st1 = (int)((int) (st->_st1 + 1));
@@ -152,7 +152,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
                 st->_st2 = 0;
                 break;
             case 1:
-                switch (*(volatile int *)&st->_st2) {
+                switch (st->_st2) {
                 case 0:
                     beMessenger_SelectReceivers(arg0->_messenger, &DAT_00517a48[0], &DAT_00518148[0], 0);
                     beMessenger_AppendString(arg0->_messenger, &DAT_00518158[0]);
@@ -193,7 +193,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
                 st->_st2 = 0;
                 break;
             case 3:
-                switch (*(volatile int *)&ci->_intfStat) {
+                switch (ci->_intfStat) {
                 case 0:
                     FUN_003ecc60(ci, 3, 2);
                     break;
@@ -207,7 +207,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
                 }
                 break;
             case 4:
-                switch (*(volatile int *)&st->_st2) {
+                switch (*(int *)&st->_st2) {
                 case 0:
                     i = 0;
                     do {
@@ -288,7 +288,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
             }
             break;
         case 3:
-            switch (*(volatile int *)&st->_st1) {
+            switch (st->_st1) {
             case 0:
                 FUN_003f1380(ci->_mcUtilCtrl, 3);
                 st->_st1 = (int)((int) (st->_st1 + 1));

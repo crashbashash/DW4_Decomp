@@ -37,10 +37,9 @@ extern int DAT_0051b948[4];
 extern int DAT_00586f20[4];
 }
 /* Owning string reference (count at p[-1], header at p[-2]); one class for all four retail holders, whose destructor
- * is the shared copy at 0x130720.  Str::intern already hands out a retained string, so the constructor adopts it.
- * matching construct: `volatile` keeps the reference in its frame slot (retail stores and reloads it around each use). */
+ * is the shared copy at 0x130720.  Str::intern already hands out a retained string, so the constructor adopts it. */
 struct StringRef {
-    volatile int p;
+    int p;
     StringRef() {}
     StringRef(int s) { p = s; }
     ~StringRef() { int s = p; if (s != 0) { int *hd = (int *)s - 2; int cnt = ((int *)s)[-1] - 1; ((int *)s)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }

@@ -1,7 +1,7 @@
 #include "dw4/reflected.h"
 struct AttrObj { void **_vtable; unsigned int _refCount; int _id; };
 struct AttrVolatileRef {
-    AttrObj *volatile p;
+    AttrObj *p;
     AttrVolatileRef(const AttrVolatileRef &o);
 };
 struct AttrStackRec;

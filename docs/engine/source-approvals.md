@@ -35,6 +35,24 @@ Three things need no row:
 * Stock source under `src/third_party/`, which is never edited.
 * `.S` sources, which have their own table.
 
+## Testing a `volatile`
+
+Remove the keyword and verify the function again. What the bytes do says what the keyword was doing:
+
+* **They still match.** The keyword did nothing, so it goes. Remove keywords one at a time and repeat until
+  none falls, as one can depend on another.
+* **Same size, the same instructions in another order or other registers.** It only steers scheduling or
+  colouring, which is never approved. Look for the spelling.
+* **Fewer instructions.** It keeps a memory access that retail really has. That is the reload a case needs, but
+  it does not show how the original source kept it.
+
+Hardware is the exception to the first case. A register access can match without the keyword when nothing would
+merge or drop it, but the source would then misstate what the code addresses, so it keeps the keyword and goes
+to the owner.
+
+The `lui`, `addiu`, `lw 0` address form is no evidence for a `volatile` global under GCC. A `volatile` access
+does compile that way, but so do many accesses in functions that match without one.
+
 ## What counts as evidence
 
 The evidence has to show that **the original source used it**. Strongest first:

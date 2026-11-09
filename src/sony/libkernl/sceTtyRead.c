@@ -1,5 +1,5 @@
 typedef struct { int size; volatile int count; char *rd; char *wr; } Q;
-typedef struct { volatile int id; int a; int b; int c; unsigned int tx; unsigned int rx; Q *q; } D;
+typedef struct { int id; int a; int b; int c; unsigned int tx; unsigned int rx; Q *q; } D;
 extern D DAT_00555bd0;
 void FUN_0010c2d0(Q *);
 int sceTtyRead(char *buf, int n) {

@@ -54,7 +54,7 @@ typedef igObjectList List;
 /* A second reader of the info name; the first load is not reused for the null-handling comparison,
  * and this access path does not either. */
 struct WorkOps {
-static inline char *InfoName2(Work *w) { return (char *)((volatile Work *)w)->_infoName; }
+static inline char *InfoName2(Work *w) { return (char *)((Work *)w)->_infoName; }
 static inline char *Intern(char *text) {
     POOL();
     return StringPool_Intern(DAT_00586f20[0], text);
@@ -71,7 +71,7 @@ typedef beMessenger Messenger;
  * a laundered pointer and fetches the work-stack handle between that read and the null test; that
  * shape makes the address register, delay slot and stack layout come out. */
 struct RefTmp {
-    Obj * volatile value;
+    Obj * value;
     RefTmp(Obj *p, Messenger *m, int &out) : value(p) {
         RefTmp *s = (RefTmp *)(int)this;
         Obj *v = s->value;

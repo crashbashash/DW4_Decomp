@@ -12,7 +12,7 @@ typedef struct {
     unsigned long long count;
     int handler;
     int pad0;
-    volatile int active;
+    int active;
     Alarm *free_list;
     Alarm *head;
 } AlarmState;

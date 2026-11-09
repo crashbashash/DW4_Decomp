@@ -8,7 +8,7 @@ void FUN_00176a50(O *arg0, V96 *arg1, int *arg2, int arg3, int arg4);
 }
 struct R { int w0; int rc; };
 void FUN_00176a50(O *arg0, V96 *arg1, int *arg2, int arg3, int arg4) {
-    volatile int sp6C;
+    int sp6C;
     int temp_v1;
     R *a0;
 
