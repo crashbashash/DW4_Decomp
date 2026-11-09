@@ -141,6 +141,19 @@ the value.
   functions that match with no keyword has a load whose result goes unused, and every plain spelling tried drops it.
 * That the source reads the word to keep the string linked is inference. The owner accepted these on that basis.
 
+### sony-libkernl-cop0-and-syscall
+
+Sony libkernl functions written in C with instructions C has no spelling for: reads and writes of COP0 registers
+(`mfc0`, `mtc0`), `cache` operations, `di`, `sync.p`, and system calls made from inside a C file.
+
+* Sony's own build shows they are C: each sits in an SDK 3.0.3 `libkernl.a` member that carries the compiler's
+  markers and records a `.c` source, and the cache, interrupt, thread, heap and TLB functions are byte-identical to
+  those members with relocated words masked.
+* The system calls in these files are local functions of C members, not part of the assembled stub file, so each
+  is a C function holding one `syscall`.
+* The `volatile` on each `__asm__` keeps the statement from being moved or dropped, which it must not be.
+* One TLB function keeps a counter in a fixed register across calls, which only a register variable gives.
+
 ### sony-hardware-registers
 
 Accesses to EE and GS registers in Sony's libraries, and in the CRI code that drives the same registers. Each
