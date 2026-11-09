@@ -11,11 +11,11 @@ int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 extern int DAT_00586f20[4];
 }
-struct RepositoryRef {
-    igPluginRepository *p;
-    RepositoryRef(igPluginRepository *object) : p(object) {}
-    ~RepositoryRef() {
-        igPluginRepository *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->_refCount = object->_refCount - 1;
             if ((object->_refCount & 0x7FFFFF) == 0) igObject_Destroy(object);
@@ -27,7 +27,7 @@ extern "C" void FUN_00304720(igPluginHelper *helper, int name, int location, int
     char *text;
     igPluginRepository *target;
     char *old;
-    RepositoryRef repository(FUN_002bc930(igObject_GetAllocator(helper)));
+    igSmartPointer<igPluginRepository> repository(FUN_002bc930(igObject_GetAllocator(helper)));
     igNamedObject_SetName(repository.p, name);
     target = repository.p;
     if (DAT_00586f20[0] == 0) {

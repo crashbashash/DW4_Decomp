@@ -28,11 +28,11 @@ struct Slot { char p0[24]; int f24; };
 /* Element-buffer list header: buffer pointer at +16. */
 struct SlotList { char p[16]; Slot **arr; };
 /* Retained share of the system's global string object. */
-struct GlobalStrRef {
-    RefCountedHeader *p;
-    GlobalStrRef(RefCountedHeader *o) : p(o) { if (p != 0) p->references = p->references + 1; }
-    ~GlobalStrRef() {
-        RefCountedHeader *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *o) : p(o) { if (p != 0) p->references = p->references + 1; }
+    ~igSmartPointer() {
+        T *o;
         /* matching construct: (o = p) != 0 shares the load of the held pointer with the string reads, as retail */
         if ((o = p) != 0) {
             o->references = o->references - 1;
@@ -57,7 +57,7 @@ void Gap__Bec__beNDMWStatusMainSlot__vfunc_26(beNDMWStatusMainSlot *a) {
         buf[1] = 0;
         buf[0] = s2->f24 + 0x30;
         {
-        GlobalStrRef sp48((RefCountedHeader *)*(int *)((char *)FUN_00236f80(a->_insight, DAT_00587d08[0]) + 72));
+        igSmartPointer<RefCountedHeader> sp48((RefCountedHeader *)*(int *)((char *)FUN_00236f80(a->_insight, DAT_00587d08[0]) + 72));
         FUN_0030b3c0(sp48.p, temp);
         q = sp48.p;
         temp = q->w12;

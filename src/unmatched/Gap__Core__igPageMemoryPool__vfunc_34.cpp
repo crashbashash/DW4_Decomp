@@ -7,30 +7,30 @@ extern int DAT_004fb410[4];
 }
 struct R4 { int v; R4() {} R4(int x) { v = x; } };
 class Ob { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual R4 a92(); virtual R4 a96(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual R4 a132(int); int pad4; };
-struct ObRef {
-    Ob *p;
-    ObRef(Ob *object) : p(object) {}
-    ObRef(const ObRef &other) : p(other.p) {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    igSmartPointer(const igSmartPointer &other) : p(other.p) {
         if (p != 0) p->pad4 = p->pad4 + 1;
     }
-    ~ObRef() {
-        Ob *o;
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->pad4 = o->pad4 - 1;
             if ((o->pad4 & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
     void clear() {
-        Ob *o;
+        T *o;
         if ((o = p) != 0) {
             o->pad4 = o->pad4 - 1;
             if ((o->pad4 & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
         p = 0;
     }
-    ObRef &operator=(const ObRef &other) {
-        Ob *next = other.p;
-        Ob *o;
+    igSmartPointer &operator=(const igSmartPointer &other) {
+        T *next = other.p;
+        T *o;
         if (next != 0) next->pad4 = next->pad4 + 1;
         if ((o = p) != 0) {
             o->pad4 = o->pad4 - 1;
@@ -40,7 +40,7 @@ struct ObRef {
         return *this;
     }
 };
-struct Pool { char pad[116]; ObRef f116; char p2[20]; int f140; };
+struct Pool { char pad[116]; igSmartPointer<Ob> f116; char p2[20]; int f140; };
 extern "C" R4 Gap__Core__igPageMemoryPool__vfunc_34(Pool *arg1, int arg2) {
     int a1;
     if (arg2 != 0) {
@@ -50,7 +50,7 @@ extern "C" R4 Gap__Core__igPageMemoryPool__vfunc_34(Pool *arg1, int arg2) {
     }
     FUN_00326330(arg1, a1);
     if ((arg2 & 0xFF) == 0) {
-        ObRef held(arg1->f116);
+        igSmartPointer<Ob> held(arg1->f116);
         arg1->f116.clear();
         if (held.p != 0) {
             held.p->a132(1);
@@ -60,7 +60,7 @@ extern "C" R4 Gap__Core__igPageMemoryPool__vfunc_34(Pool *arg1, int arg2) {
         if (arg1->f116.p != 0) {
             return DAT_004fb410[0];
         }
-        ObRef created((Ob *)FUN_002ba650(igObject_GetAllocator(arg1)));
+        igSmartPointer<Ob> created((Ob *)FUN_002ba650(igObject_GetAllocator(arg1)));
         created.p->a92();
         arg1->f116 = created;
     }

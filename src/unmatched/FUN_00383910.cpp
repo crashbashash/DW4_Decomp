@@ -13,14 +13,14 @@ void FUN_00383910(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3);
 }
 /* Owning stack reference to a vertex array: first the attribute's current array, then the newly
  * created one (reference count in the low 23 bits of _refCount); released on scope exit. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igVertexArray *p;
-    ObjectRef(igVertexArray *o) : p(o) {}
-    ~ObjectRef() { igVertexArray *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_00383910(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3) {
-    ObjectRef va((igVertexArray *)arg1->_vertexArray); /* matching construct: declared first so it takes the retail slot above sp68 */
+    igSmartPointer<igVertexArray> va((igVertexArray *)arg1->_vertexArray); /* matching construct: declared first so it takes the retail slot above sp68 */
     unsigned sp68;
     void *al;
     igVertexArray *t;

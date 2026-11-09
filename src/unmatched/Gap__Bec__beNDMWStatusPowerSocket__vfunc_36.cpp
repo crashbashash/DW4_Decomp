@@ -15,11 +15,11 @@ struct UnidentifiedChildWindow { int word0; int references; char p8[92]; igDataL
 extern "C" UnidentifiedChildWindow *FUN_003baf10(...);
 /* Owning stack reference to the new child window; released on scope exit (reference count in the
  * low 23 bits of references). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    UnidentifiedChildWindow *p;
-    ObjectRef(UnidentifiedChildWindow *o) : p(o) {}
-    ~ObjectRef() { UnidentifiedChildWindow *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
 };
 extern "C" void Gap__Bec__beNDMWStatusPowerSocket__vfunc_36(beNDMWStatusPowerSocket *arg0);
 void Gap__Bec__beNDMWStatusPowerSocket__vfunc_36(beNDMWStatusPowerSocket *arg0) {
@@ -33,7 +33,7 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_36(beNDMWStatusPowerSocket *arg0) 
     } else {
         a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
     }
-    ObjectRef child(FUN_003baf10(a));
+    igSmartPointer<UnidentifiedChildWindow> child(FUN_003baf10(a));
     beNDMWWindow_BindContext(child.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained(arg0->_subWindow, child.p);
     s0 = child.p->list;

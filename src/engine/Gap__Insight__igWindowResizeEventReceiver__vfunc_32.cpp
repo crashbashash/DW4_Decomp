@@ -7,11 +7,11 @@ int igObject_GetAllocator(...);
 extern float DAT_004e0fa0[4];
 extern float DAT_004e0fa4[4];
 }
-struct ResizeEventRef {
-    ResizeEvent *p;
-    ResizeEventRef(ResizeEvent *event) : p(event) {}
-    ~ResizeEventRef() {
-        ResizeEvent *event = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *event) : p(event) {}
+    ~igSmartPointer() {
+        T *event = p;
         if (event != 0) {
             --event->references;
             if ((event->references & 0x7FFFFF) == 0) {
@@ -19,14 +19,14 @@ struct ResizeEventRef {
             }
         }
     }
-    ResizeEvent *operator->() const { return p; }
-    ResizeEvent *get() const { return p; }
+    T *operator->() const { return p; }
+    T *get() const { return p; }
 };
 struct WindowInfo { char p[40]; int f40; };
 struct Receiver { char p[8]; WindowInfo *f8; };
 extern "C" int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int width, int height);
 int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int width, int height) {
-    ResizeEventRef event(FUN_002332b0(igObject_GetAllocator()));
+    igSmartPointer<ResizeEvent> event(FUN_002332b0(igObject_GetAllocator()));
     {
         ResizeEvent *e = event.get();
         e->origin[0] = DAT_004e0fa0[0];

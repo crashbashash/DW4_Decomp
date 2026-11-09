@@ -21,7 +21,7 @@ extern char DAT_004e0858[16];
 extern char *DAT_004c22f0[4];
 long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req);
 }
-struct RP { igNamedObject *p; ~RP() { igNamedObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <class T> struct igSmartPointer { T *p; ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
     beCriSfpData *e0;
     beCriAudio *vc0;
@@ -66,7 +66,7 @@ long long FUN_0037c4c0(beCri *self, igObjectList *lst, beSoundData *req) {
         }
     } else {
         if (ENTS->_count <= 0) return 0;
-        RP h;
+        igSmartPointer<igNamedObject> h;
         src = (char *)((igNamedObject **)lst->_data)[req->_fnameIdx]->_name;
         nm = src != 0 ? src : DAT_004e0858;
         h.p = (igNamedObject *)((beSystem *)self->_system)->_globalStrObj;

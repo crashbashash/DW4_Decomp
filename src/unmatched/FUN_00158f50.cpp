@@ -15,11 +15,11 @@ void *igObject_GetAllocator(...);
 extern int DAT_004de6c0[4];
 extern int DAT_00586f20[4];
 }
-struct VStreamRef {
-    VStream *p;
-    VStreamRef(VStream *object) : p(object) {}
-    ~VStreamRef() {
-        VStream *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->refs = o->refs - 1;
             if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
@@ -79,7 +79,7 @@ extern "C" int FUN_00158f50(S *arg0, int arg1) {
         }
         return 1;
     }
-    VStreamRef sp40((VStream *)FUN_002c4ca0(igObject_GetAllocator(arg0)));
+    igSmartPointer<VStream> sp40((VStream *)FUN_002c4ca0(igObject_GetAllocator(arg0)));
     int sp3C;
     if (sp40.p->v23(arg1, &DAT_004de6c0[0]) == 0) {
         return 0;

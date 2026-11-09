@@ -37,11 +37,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack references while the controller list is wired up; each releases its object on scope
  * exit. */
-class DataListRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    DataListRef(igObject *o) : p(o) {}
-    ~DataListRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 class CtrlDataRef {
 public:
@@ -97,7 +97,7 @@ extern "C" int Gap__Bec__beNDMWLoadCtrl2__vfunc_34(beNDMWLoadCtrl2 *arg0, beBase
             int a;
             ALLOC(a, arg0);
             {
-            DataListRef list(beBaseInfoDataList_Create(a));
+            igSmartPointer<igObject> list(beBaseInfoDataList_Create(a));
             igObject *t = list.p;
             if (t != 0) t->_refCount++;
             Rel::go((igObject *)arg1->_dataList);
@@ -173,7 +173,7 @@ extern "C" int Gap__Bec__beNDMWLoadCtrl2__vfunc_34(beNDMWLoadCtrl2 *arg0, beBase
         int a;
         ALLOC(a, arg1);
         {
-        DataListRef fresh(beBaseInfoDataList_Create(a));
+        igSmartPointer<igObject> fresh(beBaseInfoDataList_Create(a));
         igObject *t = fresh.p;
         if (t != 0) t->_refCount++;
         Rel::go((igObject *)arg1->_dataList);
@@ -190,7 +190,7 @@ extern "C" int Gap__Bec__beNDMWLoadCtrl2__vfunc_34(beNDMWLoadCtrl2 *arg0, beBase
                 int a;
                 ALLOC(a, arg1);
                 {
-                DataListRef fresh(beBaseInfoDataList_Create(a));
+                igSmartPointer<igObject> fresh(beBaseInfoDataList_Create(a));
                 igObject *t = fresh.p;
                 if (t != 0) t->_refCount++;
                 Rel::go((igObject *)arg1->_dataList);

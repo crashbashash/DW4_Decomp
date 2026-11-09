@@ -15,11 +15,11 @@ int FUN_003a7d80(beBaseInfoRam *arg0, int arg1);
 }
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 int FUN_003a7d80(beBaseInfoRam *arg0, int arg1) {
     int t;
@@ -35,7 +35,7 @@ int FUN_003a7d80(beBaseInfoRam *arg0, int arg1) {
             var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
         {
-            ObjectRef r(beBaseInfoDataList_Create(var_v0));
+            igSmartPointer<igObject> r(beBaseInfoDataList_Create(var_v0));
             p = r.p;
             if (p != 0) {
                 p->_refCount = p->_refCount + 1;

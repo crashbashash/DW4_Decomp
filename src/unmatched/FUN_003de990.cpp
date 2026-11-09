@@ -20,13 +20,13 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to a slot's value object; released on scope exit (reference count in the
  * low 23 bits of refs). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    Obj *p;
-    ObjectRef(Obj *o) : p(o) {}
-    ~ObjectRef() { Obj *o = p; if (o != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-#define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); ObjectRef r(FUN_003614f0(a)); beUnicodeObj_AllocateBuffer(r.p, 1); *r.p->f12 = arg0->t.name[I]; FUN_003ec120(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
+#define BIND(P, I, F) do { int a = igObject_GetAllocator(arg0); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); igSmartPointer<Obj> r(FUN_003614f0(a)); beUnicodeObj_AllocateBuffer(r.p, 1); *r.p->f12 = arg0->t.name[I]; FUN_003ec120(arg0->n._textOrder, P, arg0->n._ramNo, I, r.p, 1, F); } while (0)
 extern "C" void FUN_003de990(NameSelRam *arg0, int arg1) {
     int i;
     int j;

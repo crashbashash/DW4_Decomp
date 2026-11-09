@@ -34,11 +34,11 @@ typedef struct StringTokenHeader {
 /* Owning stack reference to the new open-request record: constructed from the object and released
  * on scope exit, after the open list has retained it (reference count in the low 23 bits of
  * _refCount). Its destructor is emitted out of line. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beLoadIntf2ComMdlData *p;
-    ObjectRef(beLoadIntf2ComMdlData *o) : p(o) {}
-    ~ObjectRef() { beLoadIntf2ComMdlData *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 /* Ask the MODELCTRL receivers named (infoName, ramNo) to GENERATE at `position`, then send them
@@ -71,7 +71,7 @@ extern "C" void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *se
     if ((recordOpen & 0xFF) == 1) {
         int objectAllocator = igObject_GetAllocator(self);
         if (GPR_00554c14 != 0) { allocator = objectAllocator; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-        ObjectRef newRecord(beLoadIntf2ComMdlData__Create(allocator));
+        igSmartPointer<beLoadIntf2ComMdlData> newRecord(beLoadIntf2ComMdlData__Create(allocator));
         newRecord.p->_ramNo = ramNo;
         record = newRecord.p;
         if (g_stringPool[0] == 0) {

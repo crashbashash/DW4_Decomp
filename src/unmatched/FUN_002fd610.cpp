@@ -16,13 +16,13 @@ static inline void release(Instance *object) {
         }
     }
 }
-struct InstanceRef {
-    Instance *p;
-    InstanceRef(Instance *object) : p(object) { retain(p); }
-    ~InstanceRef() { release(p); }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) { retain(p); }
+    ~igSmartPointer() { release(p); }
 };
 extern "C" int FUN_002fd610(Instance **out, int meta) {
-    InstanceRef created(igMetaObject_CreateInstanceDefault(meta));
+    igSmartPointer<Instance> created(igMetaObject_CreateInstanceDefault(meta));
     release(created.p);
     *out = created.p;
     retain(*out);

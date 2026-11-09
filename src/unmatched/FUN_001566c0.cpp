@@ -25,14 +25,14 @@ static inline void release(T *object) {
         }
     }
 }
-struct TRef {
+template <class T> struct igSmartPointer {
     T *p;
-    TRef(T *object) : p(object) {}
-    ~TRef() { release(p); }
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() { release(p); }
 };
 extern "C" void FUN_001566c0(S *arg0, S *arg1, int arg2, int arg3, int arg4, int arg5) {
-    TRef converted(0);
-    TRef spare(FUN_0014db20(igObject_GetAllocator(arg0)));
+    igSmartPointer<T> converted(0);
+    igSmartPointer<T> spare(FUN_0014db20(igObject_GetAllocator(arg0)));
     int spA4;
     int spA0;
     int sp9C;

@@ -10,12 +10,12 @@ int StringPool_Construct(int);
 int StringPool_Intern(int, int);
 extern int DAT_00586f20[4];
 }
-struct Ref {
-    igObject *p;
-    ~Ref() { igObject *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    ~igSmartPointer() { T *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 struct Util {
-    static inline void assign(Ref &r, igObject *n) {
+    static inline void assign(igSmartPointer<igObject> &r, igObject *n) {
         igObject *o;
         if (n != 0) ++n->_refCount;
         if ((o = r.p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); }
@@ -31,8 +31,8 @@ struct Util {
     }
 };
 extern "C" int FUN_002d9cf0(igDriverDatabase *arg0, int arg1, int arg2) {
-    Ref sp5C;
-    Ref sp58;
+    igSmartPointer<igObject> sp5C;
+    igSmartPointer<igObject> sp58;
     int sp54, sp50;
     igObject *x;
     int idx;

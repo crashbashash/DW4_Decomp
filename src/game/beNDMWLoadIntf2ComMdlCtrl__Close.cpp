@@ -26,11 +26,11 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
 /* Owning stack reference to the new close record: constructed from the creating call and released
  * on scope exit once the close list holds its own reference (reference count in the low 23 bits of
  * _refCount). Its destructor is emitted out of line. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beLoadIntf2ComMdlData *p;
-    ObjectRef(beLoadIntf2ComMdlData *o) : p(o) {}
-    ~ObjectRef() { beLoadIntf2ComMdlData *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* drop one reference on an interned string token; its header (owner, refCount) sits just before the text */
 #define RELEASE_STR(s) { int *q = (int *)(s); if (q) { int *h = q - 2; int c = q[-1] - 1; q[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*h, h); } }
@@ -44,7 +44,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
         const char *openSequenceToken;
         beLoadIntf2ComMdlData *sequenceOwner;
         if (GPR_00554c14 != 0) { allocator = base; } else { allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]); }
-        ObjectRef record((beLoadIntf2ComMdlData *)beLoadIntf2ComMdlData__Create(allocator));
+        igSmartPointer<beLoadIntf2ComMdlData> record((beLoadIntf2ComMdlData *)beLoadIntf2ComMdlData__Create(allocator));
         record.p->_ramNo = ramNo;
         infoOwner = record.p;
         if (g_stringPool[0] == 0) {

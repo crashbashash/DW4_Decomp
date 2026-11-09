@@ -11,10 +11,10 @@ extern unsigned char GPR_00554988;
 }
 struct Src { char pad[20]; int f20; };
 struct Self { char pad[44]; Src *f44; igFloatList *f48; igFloatList *f52; igUnsignedCharList *f56; };
-struct FloatListRef {
-    igFloatList *p;
-    FloatListRef(igFloatList *object) : p(object) {}
-    ~FloatListRef() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
         if (p != 0) {
             p->_refCount = p->_refCount - 1;
             if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy(p);
@@ -31,7 +31,7 @@ struct ByteListRef {
         }
     }
 };
-static inline void setFloats(igFloatList *&field, const FloatListRef &value) {
+static inline void setFloats(igFloatList *&field, const igSmartPointer<igFloatList> &value) {
     igFloatList *held = value.p;
     igFloatList *old;
     if (held) held->_refCount = held->_refCount + 1;
@@ -61,11 +61,11 @@ extern "C" bool FUN_001d08d0(Self *arg0, int arg1) {
     if (arg0->f48 == 0) {
         n = arg0->f44->f20;
         {
-            FloatListRef first((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0)));
+            igSmartPointer<igFloatList> first((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0)));
             setFloats(arg0->f48, first);
         }
         {
-            FloatListRef second((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0)));
+            igSmartPointer<igFloatList> second((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0)));
             setFloats(arg0->f52, second);
         }
         {

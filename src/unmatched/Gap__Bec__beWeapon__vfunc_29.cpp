@@ -16,11 +16,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the new attach-data list, released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-class ListRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ListRef(igObject *o) : p(o) {}
-    ~ListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to one new attach-data element, released at the end of each loop pass. */
 class ObjectRef {
@@ -37,7 +37,7 @@ extern "C" void Gap__Bec__beWeapon__vfunc_29(beWeapon *arg0, int arg1) {
     if (arg0->_attachDataList == 0) {
         var_v0 = igObject_GetAllocator();
         var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ListRef list(FUN_0033f8b0(var_v0));
+        igSmartPointer<igObject> list(FUN_0033f8b0(var_v0));
         t = list.p;
         if (t != 0) {
             t->_refCount = t->_refCount + 1;

@@ -198,11 +198,11 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1);
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
     int sp27C;
@@ -224,7 +224,7 @@ void Gap__Core__igObject__vfunc_31(beModelCtrl *arg0, beBaseInfoRam *arg1) {
         igObject *o;
         igObject *old;
         if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
-        ObjectRef ref(beBaseInfoDataList_Create(a));
+        igSmartPointer<igObject> ref(beBaseInfoDataList_Create(a));
         o = ref.p;
         if (o != 0) o->_refCount = o->_refCount + 1;
         old = (igObject *)arg1->_dataList;

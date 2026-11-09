@@ -1,5 +1,5 @@
 /* Per-frame lobby player update. Two owning references are live across calls: the lobby property
- * list built by CreateProps (PropsRef) and the sub-command object (NamedRef); the unreferenced result
+ * list built by CreateProps (igSmartPointer<RefHdr>) and the sub-command object (NamedRef); the unreferenced result
  * slot of the view transform sits between them. Frame-slot order is a compiler constraint, see the
  * "matching construct" notes below. PlayerArg, IntList, RefHdr and PropRec project only the offsets
  * used here. */
@@ -86,10 +86,10 @@ extern unsigned char GPR_00554c14;
 
 }
 
-struct PropsRef {
-    RefHdr *p;
-    PropsRef(RefHdr *x) { p = x; }
-    ~PropsRef() { igObject *o = (igObject *)p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *x) { p = x; }
+    ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 struct NamedRef {
     RefHdr *p;
@@ -99,7 +99,7 @@ struct NamedRef {
 
 /* matching construct: slot order.  NamedRef (slot 252) is a block local of the caller; the locals of a
  * static inline member are allocated below the caller's, and `obj` (244) must sit under the view-transform
- * result (248), which is therefore a by-reference temporary (Scratch).  inline_depth(8) keeps PropsRef's
+ * result (248), which is therefore a by-reference temporary (Scratch).  inline_depth(8) keeps igSmartPointer<RefHdr>'s
  * destructor inline inside the inlined helper.  Found by trial (no permuter). */
 struct Scratch { int w; Scratch() { } };
 struct Locals {
@@ -110,7 +110,7 @@ struct Locals {
         alloc = igObject_GetAllocator(arg1);
         alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
         {
-            PropsRef obj((RefHdr *)beBaseInfoDataList_Create(alloc));
+            igSmartPointer<RefHdr> obj((RefHdr *)beBaseInfoDataList_Create(alloc));
             rr = obj.p;
             if (rr != 0) rr->refs = rr->refs + 1;
             old = arg1->props;

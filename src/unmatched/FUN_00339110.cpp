@@ -6,10 +6,10 @@ int igObject_Destroy(...);
 void FUN_00339110(igMovieManager *arg0, igObject **arg1);
 }
 /* Retained share of an engine object held across the codec call. */
-struct ObjectShare {
-    igObject *p;
-    ObjectShare(igObject *o) : p(o) { if (p != 0) p->_refCount = p->_refCount + 1; }
-    ~ObjectShare() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *o) : p(o) { if (p != 0) p->_refCount = p->_refCount + 1; }
+    ~igSmartPointer() {
 /* matching construct: retail kept the out-of-line copy 0x00130140 from a translation unit built without exceptions (single load of the
          * held pointer), while this exceptions-on unit releases with a reload of the pointer after the count store.  One class, two
          * spellings, selected by the exception mode the verifier compiles each part under. */
@@ -19,7 +19,7 @@ struct ObjectShare {
             if ((p->_refCount & 0x7fffff) == 0) igObject_Destroy(p);
         }
 #else
-        igObject *o = p;
+        T *o = p;
         if (o != 0) {
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
@@ -37,7 +37,7 @@ void FUN_00339110(igMovieManager *arg0, igObject **arg1) {
         do {
             temp_a1 = *(igMovieInfo **)(var_a0->_data + var_s0);
             {
-            ObjectShare held(*arg1);
+            igSmartPointer<igObject> held(*arg1);
             ((VC *)temp_a1->_codec)->vX(temp_a1, &held.p);
             }
             var_a0 = (igMovieInfoList *)arg0->_movieList;

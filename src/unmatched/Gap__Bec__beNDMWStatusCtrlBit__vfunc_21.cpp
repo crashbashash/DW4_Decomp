@@ -51,11 +51,11 @@ public:
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 /* Owning stack reference to the first sub-window while it is set up, released on scope exit
  * (reference count in the low 23 bits of refs). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    ChildWindow *p;
-    WindowRef(ChildWindow *w) : p(w) {}
-    ~WindowRef() { ChildWindow *w = p; if (w != 0) { --w->refs; if ((w->refs & 0x7fffff) == 0) igObject_Destroy(w); } }
+    T *p;
+    igSmartPointer(T *w) : p(w) {}
+    ~igSmartPointer() { T *w = p; if (w != 0) { --w->refs; if ((w->refs & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
 /* Owning stack reference to the player-select sub-window (receives the player-number list) while
  * it is set up. */
@@ -131,7 +131,7 @@ void Gap__Bec__beNDMWStatusCtrlBit__vfunc_21(beNDMWStatusCtrlBit *arg0) {
                 al = igObject_GetAllocator(arg0);
                 al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
                 {
-                    WindowRef win((ChildWindow *)FUN_003b4f50(al));
+                    igSmartPointer<ChildWindow> win((ChildWindow *)FUN_003b4f50(al));
                     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
                     ObjectList_AppendRetained((unsigned)arg0->_subWindow, win.p);
                     INTERN_APPEND(((beNDMWWindow *)win.p)->_textCloseTypeList, &DAT_00519b50[0])

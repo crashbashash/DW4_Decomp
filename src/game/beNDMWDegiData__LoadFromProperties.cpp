@@ -72,10 +72,10 @@ extern int DAT_00517fb0[4];
 extern int DAT_00517fc0[4];
 /* matching construct: volatile keeps the search key memory-resident (retail spills it); no destructor, so no cleanup record */
 struct KeyHolder { volatile int v; };
-struct RP {
-    StrObj *p;
-    RP(StrObj *x) { p = x; }
-    ~RP() { StrObj *r = p; if (r != 0) { r->references = r->references - 1; if ((r->references & 0x7fffff) == 0) igObject_Destroy(r); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *x) { p = x; }
+    ~igSmartPointer() { T *r = p; if (r != 0) { r->references = r->references - 1; if ((r->references & 0x7fffff) == 0) igObject_Destroy(r); } }
 };
 #define IDS(DST, REC, CAP, RESIZE) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; int i; if (RESIZE) { if (l->_count > CAP) ObjectList_ResizeRetained(l, CAP); } i = 0; if (0 < l->_count) { do { DST[i] = ((IdObject **)l->_data)[i]->GetId(); i++; } while (i < l->_count); } if (i < CAP) { do { DST[i] = -1; i++; } while (i < CAP); } }
 #define BYTES(DST, FN, REC) { igUnsignedCharList *l = FN(arg1, REC)->v; int i = 0; if (0 < l->_count) { do { DST[i] = (*(unsigned char **)&l->_data)[i]; i++; } while (i < l->_count); } }
@@ -96,7 +96,7 @@ void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *arg0, int arg1) {
     {
         igStringObjList *sl = (igStringObjList *)igProperty_GetRecordFolder(arg1, &DAT_00517e90[0])->v;
         if (sl->_count != 0) {
-            RP s(((StrObj **)sl->_data)[0]);
+            igSmartPointer<StrObj> s(((StrObj **)sl->_data)[0]);
             if (s.p != 0) s.p->references = s.p->references + 1;
             {
                 unsigned short *src;

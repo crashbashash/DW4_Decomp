@@ -20,11 +20,11 @@ struct Rel { static inline void go(igAABox *object) {
 } };
 /* Owning stack reference to the freshly created bound box; released on scope exit once the node
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igAABox *p;
-    ObjectRef(igAABox *o) : p(o) {}
-    ~ObjectRef() { igAABox *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_00396940(beModelCtrl *arg0, beModelCtrlNode2 *arg1, igAABox *arg2) {
     igAABox *s0;
@@ -37,7 +37,7 @@ void FUN_00396940(beModelCtrl *arg0, beModelCtrlNode2 *arg1, igAABox *arg2) {
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        ObjectRef created(FUN_0018a660(a));
+        igSmartPointer<igAABox> created(FUN_0018a660(a));
         s0 = created.p;
         if (s0 != 0) {
             s0->_refCount++;

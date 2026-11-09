@@ -16,11 +16,11 @@ void FUN_0039a500(A *arg0, S *arg1);
 }
 /* Owning stack reference to the new record, released on scope exit (reference count in the low 23
  * bits of refs). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    R *p;
-    ObjectRef(R *o) : p(o) {}
-    ~ObjectRef() { R *o = p; if (o != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_0039a500(A *arg0, S *arg1) {
     int v;
@@ -31,7 +31,7 @@ void FUN_0039a500(A *arg0, S *arg1) {
 
     v = igObject_GetAllocator(arg0);
     v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-    ObjectRef rec((R *)FUN_0034f6f0(v));
+    igSmartPointer<R> rec((R *)FUN_0034f6f0(v));
     rec.p->f16 = arg1->f16;
     e = arg1->f20;
     if (e == -1.0f) {

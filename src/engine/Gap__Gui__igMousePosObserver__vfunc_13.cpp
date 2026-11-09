@@ -12,10 +12,10 @@ struct ObserverModelView { char pad[40]; ObserverRefView *ref; int flags; int fn
 struct MousePosObserverView { char pad[16]; ObserverModelView *m; int f20; };
 ObserverEventView *FUN_0019e680(...);
 static inline int count_of(const ObserverIntListView *list) { return list->cnt; }
-struct ObserverEventRef {
-    ObserverEventView *p;
-    ObserverEventRef(ObserverEventView *event) : p(event) {}
-    ~ObserverEventRef() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *event) : p(event) {}
+    ~igSmartPointer() {
         ObserverRefView *object = p;
         if (object != 0) {
             object->rc = object->rc - 1;
@@ -24,9 +24,9 @@ struct ObserverEventRef {
             }
         }
     }
-    ObserverEventView *get() const { return p; }
+    T *get() const { return p; }
 };
-static inline void setEvent(MousePosObserverView *self, const ObserverEventRef &event) {
+static inline void setEvent(MousePosObserverView *self, const igSmartPointer<ObserverEventView> &event) {
     ObserverRefView *retained = event.get();
     ObserverModelView *model = self->m;
     ObserverRefView *previous;
@@ -47,7 +47,7 @@ void Gap__Gui__igMousePosObserver__vfunc_13(MousePosObserverView *self) {
     ObserverIntListView *list;
     int top;
     Gap__Core__igObject__vfunc_11(self);
-    ObserverEventRef event(FUN_0019e680(igObject_GetAllocator(self)));
+    igSmartPointer<ObserverEventView> event(FUN_0019e680(igObject_GetAllocator(self)));
     created = event.get();
     ObjectList_AppendRetained(created->a, self->f20);
     list = created->list;

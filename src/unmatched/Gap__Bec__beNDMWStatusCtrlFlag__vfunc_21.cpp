@@ -62,11 +62,11 @@ public:
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 /* Owning stack reference to the list window created here, released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    beNDMWWindowSelect *p;
-    WindowRef(beNDMWWindowSelect *w) : p(w) {}
-    ~WindowRef() { beNDMWWindowSelect *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
+    T *p;
+    igSmartPointer(T *w) : p(w) {}
+    ~igSmartPointer() { T *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
 struct Str { static inline int *intern(int *s) {
     int *ref;
@@ -135,7 +135,7 @@ void Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21(beNDMWStatusCtrlFlag *arg0) {
         {
         /* the list window is owned by the stack reference while it is bound, listed and set up; its
          * share is released at the block end */
-        WindowRef win(FUN_003b51b0(al));
+        igSmartPointer<beNDMWWindowSelect> win(FUN_003b51b0(al));
         beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
         /* matching construct: (unsigned) cast on the reference steers retail operand order */
         ObjectList_AppendRetained((unsigned)arg0->_subWindow, win.p);

@@ -24,16 +24,16 @@ void *igMetaObject_FindFieldByName(igMetaObject *, const char *);
 int sprintf(char *, const char *, ...);
 int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject *obj);
 }
-struct AnimDbRef {
-    AnimDbObject *p;
-    AnimDbRef(AnimDbObject *object) : p(object) {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {
         if (p != 0) {
             p->_refCount = p->_refCount + 1;
         }
     }
-    AnimDbObject *get() const { return p; }
-    ~AnimDbRef() {
-        AnimDbObject *object = get();
+    T *get() const { return p; }
+    ~igSmartPointer() {
+        T *object = get();
         if (object != 0) {
             object->_refCount = object->_refCount - 1;
             if ((object->_refCount & 0x7FFFFF) == 0) {
@@ -74,8 +74,8 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
     if ((unsigned char)FUN_001aedd0(db, db->_combinerList, file, obj) == 1) {
         return 1;
     }
-    AnimDbRef held(obj);
-    AnimDbRef skel(castSkeleton(held.p));
+    igSmartPointer<AnimDbObject> held(obj);
+    igSmartPointer<AnimDbObject> skel(castSkeleton(held.p));
     if (skel.p != 0 && FUN_002d86b0(db->_directory, DAT_00586730, obj) < db->_directory->_count) {
         int i;
         int n;
@@ -88,8 +88,8 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
             int total;
             AnimDbList *list;
             AnimDbObject *target;
-            AnimDbRef skin(db->_animationList->_data[i]);
-            AnimDbRef app(castBoolList(*(AnimDbObject **)((char *)skin.p + DAT_00562568->_offset)));
+            igSmartPointer<AnimDbObject> skin(db->_animationList->_data[i]);
+            igSmartPointer<AnimDbObject> app(castBoolList(*(AnimDbObject **)((char *)skin.p + DAT_00562568->_offset)));
             list = (AnimDbList *)app.get();
             target = skel.get();
             total = list->_count;

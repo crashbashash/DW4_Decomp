@@ -2,17 +2,17 @@ extern "C" {
 struct T { int word0; int references; };
 void igObject_Destroy(T *);
 }
-struct ItemRef {
+template <class T> struct igSmartPointer {
     T *p;
-    ItemRef() : p(0) {}
-    ~ItemRef() {
+    igSmartPointer() : p(0) {}
+    ~igSmartPointer() {
         T *o;
         if ((o = p) != 0) {
             --o->references;
             if ((o->references & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
-    ItemRef &operator=(T *next) {
+    igSmartPointer &operator=(T *next) {
         T *o;
         if (next) ++next->references;
         if ((o = p) != 0) {
@@ -34,11 +34,11 @@ public:
     virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
     virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
     virtual void d25();
-    virtual bool v26(ItemRef &);
+    virtual bool v26(igSmartPointer<T> &);
     virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
     virtual int v31(T *);
 };
-static inline void storeHeld(Lst *list, int index, const ItemRef &value) {
+static inline void storeHeld(Lst *list, int index, const igSmartPointer<T> &value) {
     T *held = value.p;
     Item *it = list->data[index];
     T *old;
@@ -62,7 +62,7 @@ extern "C" bool FUN_0022b910(Own *arg0, V *arg1) {
     l = arg0->f28;
     n = l->count;
     for (i = 0; i < n; i++) {
-        ItemRef held;
+        igSmartPointer<T> held;
         t = l->data[i]->held;
         held = t;
         if (arg1->v31(held.p)) {

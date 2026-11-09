@@ -26,11 +26,11 @@ typedef struct { char pad[12]; int f12; } Rec2;
 
 /* Working list reference held across the List_Resize call. */
 static inline int count(const igIntList *list) { return list->_count; }
-struct ListRef {
-    igIntList *p;
-    ListRef(igIntList *x) { p = x; }
-    ~ListRef() {
-        igIntList *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *x) { p = x; }
+    ~igSmartPointer() {
+        T *o;
         /* matching construct: (o = p) != 0 shares the load of the held pointer with the loop reads, as retail */
         if ((o = p) != 0) {
             o->_refCount = o->_refCount - 1;
@@ -88,7 +88,7 @@ extern "C" int FUN_00432d30(beNDMWShopCtrlDigilabo *arg0) {
                     al2 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
                 }
                 {
-                ListRef sp((igIntList *)FUN_002caa70(al2));
+                igSmartPointer<igIntList> sp((igIntList *)FUN_002caa70(al2));
                 v0 = 0;
                 if (0 < list->_count) {
                     o2 = 0;

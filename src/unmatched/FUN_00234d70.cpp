@@ -42,11 +42,11 @@ struct StringRef {
     }
 };
 int StringList_AppendRetained(InternedStringList *, StringRef *);
-struct StringListRef {
-    InternedStringList *p;
-    StringListRef(InternedStringList *list) : p(list) {}
-    ~StringListRef() {
-        InternedStringList *list = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *list) : p(list) {}
+    ~igSmartPointer() {
+        T *list = p;
         if (list != 0) {
             --list->references;
             if ((list->references & 0x7FFFFF) == 0) {
@@ -54,7 +54,7 @@ struct StringListRef {
             }
         }
     }
-    InternedStringList *get() const { return p; }
+    T *get() const { return p; }
 };
 void FUN_00234d70(int self, int count, int *names) {
     int allocator;
@@ -64,7 +64,7 @@ void FUN_00234d70(int self, int count, int *names) {
     } else {
         allocator = Memory_GetAllocatorBySelector(DAT_00587060[0]);
     }
-    StringListRef list(FUN_002b90e0(allocator));
+    igSmartPointer<InternedStringList> list(FUN_002b90e0(allocator));
     for (i = 0; i < count; i++) {
         int text = names[i];
         StringRef name(text);

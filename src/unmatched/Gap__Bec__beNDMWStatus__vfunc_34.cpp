@@ -101,11 +101,11 @@ extern int DAT_00516b18[4];
 
 /* Owning stack reference to the first record of the selected folder: constructed from the object
  * (then retained) and released on scope exit (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 struct MsgArg { int pad[5]; int f20; };
 
@@ -196,7 +196,7 @@ int Gap__Bec__beNDMWStatus__vfunc_34(beNDMWStatus *arg0, beNDMWStatusInfoRam *ar
         beMessenger_AppendInt(M, s3);
         DSP(&DAT_00516850[0]);
         obj = beMessenger_GetObject(M, 0);
-        ObjectRef ref(((igObject **)igProperty_GetRecordFolder(obj, &DAT_00516928[0])->list->_data)[0]);
+        igSmartPointer<igObject> ref(((igObject **)igProperty_GetRecordFolder(obj, &DAT_00516928[0])->list->_data)[0]);
         if (ref.p != 0) ref.p->_refCount = ref.p->_refCount + 1;
         SEL(&DAT_00516938[0]);
         APS(&DAT_00516940[0]);

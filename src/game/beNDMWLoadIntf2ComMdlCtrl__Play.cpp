@@ -27,11 +27,11 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
 /* Owning stack reference to the tracked entry: constructed from the object and released on scope
  * exit (reference count in the low 23 bits of _refCount); the open list owns the entry afterwards.
  * Its destructor is emitted out of line. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beLoadIntf2ComMdlData *p;
-    ObjectRef(beLoadIntf2ComMdlData *o) : p(o) {}
-    ~ObjectRef() { beLoadIntf2ComMdlData *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, int *modelName, int *sequenceName, int wait) {
     int *interned;
@@ -50,7 +50,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
         } else {
             allocator = Memory_GetAllocatorBySelector(g_defaultAllocatorSelector[0]);
         }
-        ObjectRef trackedEntry((beLoadIntf2ComMdlData *)beLoadIntf2ComMdlData__Create(allocator));
+        igSmartPointer<beLoadIntf2ComMdlData> trackedEntry((beLoadIntf2ComMdlData *)beLoadIntf2ComMdlData__Create(allocator));
         trackedEntry.p->_ramNo = slot;
         entry = trackedEntry.p;
         /* Lazily create the shared string pool, intern the model name and

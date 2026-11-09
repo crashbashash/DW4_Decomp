@@ -32,7 +32,7 @@ extern int DAT_00585be0[4];
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-struct RP { igObject *p; RP(igObject *x) { p = x; } ~RP() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <class T> struct igSmartPointer { T *p; igSmartPointer(T *x) { p = x; } ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 /* Stack slot that keeps the looked-up property addressable; it holds no reference, so it needs no
  * cleanup. */
 extern "C" void FUN_003a8580(beBaseInfoRam *self, char *name) {
@@ -47,7 +47,7 @@ extern "C" void FUN_003a8580(beBaseInfoRam *self, char *name) {
         if (self->_dataList == 0) {
             alloc = igObject_GetAllocator(self);
             alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-            RP h(beBaseInfoDataList_Create(alloc));
+            igSmartPointer<igObject> h(beBaseInfoDataList_Create(alloc));
             cur = h.p;
             if (cur != 0) cur->_refCount = cur->_refCount + 1;
             old = (igObject *)self->_dataList;

@@ -25,11 +25,11 @@ extern unsigned char GPR_00554c14;
 /* Owning stack reference to the receiver group: holds the found (retained) or freshly created
  * group for the duration of the registration and releases it on scope exit (reference count in the
  * low 23 bits of _refCount). */
-class GroupRef {
+template <class T> class igSmartPointer {
 public:
-    beMessengerGroup *p;
-    GroupRef(beMessengerGroup *g) : p(g) {}
-    ~GroupRef() { beMessengerGroup *g = p; if (g != 0) { --g->_refCount; if ((g->_refCount & 0x7fffff) == 0) igObject_Destroy(g); } }
+    T *p;
+    igSmartPointer(T *g) : p(g) {}
+    ~igSmartPointer() { T *g = p; if (g != 0) { --g->_refCount; if ((g->_refCount & 0x7fffff) == 0) igObject_Destroy(g); } }
 };
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
@@ -60,7 +60,7 @@ extern "C" void beMessenger_RegisterReceiver(beMessenger *self, void *recv, cons
     igIntList *l;
     int n;
 
-    GroupRef grp((beMessengerGroup *)igProperty_FindByName((void *)self->_groupList, DAT_00585be0[0]));
+    igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)igProperty_FindByName((void *)self->_groupList, DAT_00585be0[0]));
     RETAIN_REF((igObject *)grp.p)
     if (grp.p == 0) {
         allocator = igObject_GetAllocator(self);

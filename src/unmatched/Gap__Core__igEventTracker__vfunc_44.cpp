@@ -10,11 +10,11 @@ Al *igObject_GetAllocator(Tk *);
 extern int DAT_004c1ed8[4];
 }
 static inline bool hasFlag(const Tk *tracker, unsigned mask) { return (tracker->flags & mask) != 0; }
-struct RunRef {
-    Ob *p;
-    RunRef(Ob *object) : p(object) {}
-    ~RunRef() {
-        Ob *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->references = o->references - 1;
             if ((o->references & 0x7FFFFF) == 0) igObject_Destroy(o);
@@ -35,7 +35,7 @@ extern "C" R Gap__Core__igEventTracker__vfunc_44(Tk *arg1, int arg2) {
         arg1->v180();
     }
     {
-    RunRef sp7C(FUN_002c37e0(igObject_GetAllocator(arg1)));
+    igSmartPointer<Ob> sp7C(FUN_002c37e0(igObject_GetAllocator(arg1)));
     a = igObject_GetAllocator(arg1);
     o = sp7C.p;
     if (a != 0) a->references = a->references + 1;

@@ -27,11 +27,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the item page window created here, released on scope exit (reference
  * count in the low 23 bits of _refCount). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    beNDMWStatusCtrlD0 *p;
-    WindowRef(beNDMWStatusCtrlD0 *w) : p(w) {}
-    ~WindowRef() { beNDMWStatusCtrlD0 *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
+    T *p;
+    igSmartPointer(T *w) : p(w) {}
+    ~igSmartPointer() { T *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
@@ -64,7 +64,7 @@ void Gap__Bec__beNDMWStatusMainSlot__vfunc_29(beNDMWStatusMainSlot *arg0) {
 
     al = igObject_GetAllocator(arg0);
     al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-    WindowRef win(FUN_003baf10(al));
+    igSmartPointer<beNDMWStatusCtrlD0> win(FUN_003baf10(al));
     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained(arg0->_subWindow, win.p);
     { int *tok = Str::intern(&DAT_00519b50[0]); StringList_AppendRetained(win.p->_textCloseTypeList, StringRef(tok)); }

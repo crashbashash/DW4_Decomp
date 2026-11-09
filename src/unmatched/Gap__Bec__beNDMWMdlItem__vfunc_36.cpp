@@ -46,7 +46,7 @@ extern unsigned char GPR_00554c14;
 
 #define HOLDER_BODY { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() HOLDER_BODY };
-struct WorkRef { beNDMWMdlItemInfoWork *p; WorkRef(beNDMWMdlItemInfoWork *o) : p(o) {} ~WorkRef() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <class T> struct igSmartPointer { T *p; igSmartPointer(T *o) : p(o) {} ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() HOLDER_BODY };
 struct ItemRefB { igObject *p; ItemRefB(igObject *o) : p(o) {} ~ItemRefB() HOLDER_BODY };
 struct ItemRefC { igObject *p; ItemRefC(igObject *o) : p(o) {} ~ItemRefC() HOLDER_BODY };
@@ -54,7 +54,7 @@ template <int K> struct ItemRefK { igObject *p; ItemRefK(igObject *o) : p(o) {} 
 #define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel[0]); }
 #define ALLOC(a, sel) ALLOC_OF(self, a, sel)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-template <class Ref> static inline void storeItem(const WorkRef &work, const Ref &item) {
+template <class Ref> static inline void storeItem(const igSmartPointer<beNDMWMdlItemInfoWork> &work, const Ref &item) {
     igObject *held2 = item.p;
     beNDMWMdlItemInfoWork *w2 = work.p;
     if (held2 != 0) held2->_refCount = held2->_refCount + 1;
@@ -88,7 +88,7 @@ void Gap__Bec__beNDMWMdlItem__vfunc_36(beNDMWMdlItem *self, beBaseInfoRam *info)
     prop = igProperty_FindByName((void *)info->_dataList, DAT_00585be0[0], &DAT_0051cf58[0]);
     ALLOC(alloc, DAT_00587110)
     {
-    WorkRef work((beNDMWMdlItemInfoWork *)FUN_003c13f0(alloc));
+    igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)FUN_003c13f0(alloc));
     held = (igObject *)work.p;
     if (held != 0) held->_refCount = held->_refCount + 1;
     REL(prop->f20)

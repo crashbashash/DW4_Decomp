@@ -100,11 +100,11 @@ extern "C" int StringList_AppendRetained(int, const StringRef &);
 /* Owning stack references to the sub-windows and the decide list while their set-up runs; each
  * releases its object on scope exit (reference count in the low 23 bits of _refCount). One class
  * per destructor copy. */
-class SelectE1Ref {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    SelectE1Ref(igObject *o) : p(o) {}
-    ~SelectE1Ref() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 class DecideListRef {
 public:
@@ -211,7 +211,7 @@ void Gap__Bec__beNDMWShopCtrlDiskSell__vfunc_21(beNDMWShopCtrlDiskSell *self) {
                 FUN_00435250(self->_mother, -1);
                 ALLOC(alloc, self)
                 {
-                SelectE1Ref spBC((igObject *)FUN_003b51b0(alloc));
+                igSmartPointer<igObject> spBC((igObject *)FUN_003b51b0(alloc));
                 self->_retCode = self->_cursor;
                 beNDMWWindow_BindContext(spBC.p, self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained(self->_subWindow, spBC.p);

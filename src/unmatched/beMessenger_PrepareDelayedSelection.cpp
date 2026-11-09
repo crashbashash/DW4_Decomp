@@ -1,4 +1,4 @@
-/* The record handle is an owning stack reference (ObjectRef) whose accesses are reloaded around
+/* The record handle is an owning stack reference (igSmartPointer<igObject>) whose accesses are reloaded around
  * calls; its destructor releases the record on scope exit. The padding nops and register choices
  * come out of the compiler; no inline assembly is used. The 4-byte handles are cast at the use
  * sites. */
@@ -27,11 +27,11 @@ extern unsigned char GPR_00554c14;
 
 /* Owning stack reference to the delay record; released on scope exit (reference count in the low
  * 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 #define SET_STRING(field, text) { \
@@ -62,7 +62,7 @@ extern "C" void beMessenger_PrepareDelayedSelection(beMessenger *self, const cha
         beMessengerArgData_Clear(self->_argData);
     stack = (beMessengerDelayList *)self->_delayStack;
     last = stack->_count - 1;
-    ObjectRef row(((igObject **)stack->_data)[last]);
+    igSmartPointer<igObject> row(((igObject **)stack->_data)[last]);
     RETAIN_REF(row.p)
     if (((beMessengerDelay *)row.p)->_isUse) {
         allocator = igObject_GetAllocator(self);

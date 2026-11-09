@@ -15,14 +15,14 @@ int MDLisSeqName(char *arg0);
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
     /* matching construct: accessor read — reading the member through `this` (not `ref.p`) keeps the
      * ram pointer in s0 and the new list in s1 as retail; a direct member read swaps them. */
-    igObject *get() const { return p; }
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *get() const { return p; }
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 int MDLisSeqName(char *arg0) {
     beBaseInfoRam *h = DAT_0058a1e0[0];
@@ -31,7 +31,7 @@ int MDLisSeqName(char *arg0) {
         igObject *o;
         al = igObject_GetAllocator(h);
         al = GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ObjectRef ref(beBaseInfoDataList_Create(al));
+        igSmartPointer<igObject> ref(beBaseInfoDataList_Create(al));
         igObject *s0 = ref.get();
         if (s0 != 0) {
             s0->_refCount = s0->_refCount + 1;

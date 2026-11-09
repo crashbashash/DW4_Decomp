@@ -40,14 +40,14 @@ static inline T *castToKind(T *object) {
     }
     return 0;
 }
-struct TRef {
+template <class T> struct igSmartPointer {
     T *p;
-    TRef(T *object) : p(object) {
+    igSmartPointer(T *object) : p(object) {
         if (p != 0) {
             p->refs = p->refs + 1;
         }
     }
-    ~TRef() {
+    ~igSmartPointer() {
         T *object = p;
         if (object != 0) {
             object->refs = object->refs - 1;
@@ -79,7 +79,7 @@ extern "C" int igIGBFile_ReadObject(T **out, C *file) {
     if (file->f168 != 0) {
         ((MF *)igIntMetaField_GetDefaultDescriptor())->vX(&metaIndex, 1);
     }
-    TRef object(castToKind((T *)igMetaObject_CreateInstanceWithPool(*(int *)(*(int *)((char *)file->f192 + 16) + metaIndex * 4), file->f280)));
+    igSmartPointer<T> object(castToKind((T *)igMetaObject_CreateInstanceWithPool(*(int *)(*(int *)((char *)file->f192 + 16) + metaIndex * 4), file->f280)));
     object->release();
     igObject_RegisterInstance(object.p, 0);
     int read;

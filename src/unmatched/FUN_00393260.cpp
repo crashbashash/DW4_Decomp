@@ -48,12 +48,12 @@ unsigned char FUN_00393260(beModelCtrl *arg0, beBaseInfoRam *arg1, beModelCtrlIn
 }
 
 
-/* Owning references live across calls (retail exception table 0x543a8c): DataListRef is the ObjectRef copy at
+/* Owning references live across calls (retail exception table 0x543a8c): igSmartPointer<igObject> is the ObjectRef copy at
  * 0x33e9c0 (slot 152), MoveRef the copy emitted behind this function at 0x393aa0 (slot 156). */
-struct DataListRef {
-    igObject *p;
-    DataListRef(igObject *x) { p = x; }
-    ~DataListRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *x) { p = x; }
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 struct MoveRef {
     igObject *p;
@@ -72,7 +72,7 @@ struct Locals {
     static inline void CreateDataList(beBaseInfoRam *arg1, int &al, igObject *&p, igObject *&old) {
         ALLOC(al, arg1);
         {
-            DataListRef sp98((igObject *)beBaseInfoDataList_Create(al));
+            igSmartPointer<igObject> sp98((igObject *)beBaseInfoDataList_Create(al));
             p = sp98.p;
             if (p != 0) RC(p) = RC(p) + 1;
             old = (igObject *)arg1->_dataList;

@@ -479,8 +479,8 @@
     "functions": 10608
    },
    "types": {
-    "bytes": 878420,
-    "functions": 3534
+    "bytes": 877600,
+    "functions": 3536
    },
    "virtuals": {
     "bytes": 378316,
@@ -623,10 +623,10 @@
  "typed": {
   "error": null,
   "offset_casts": 6811,
-  "pct": 40.17,
-  "recovered": 25004,
-  "synthetic": 10092,
-  "total": 62252,
+  "pct": 40.13,
+  "recovered": 24982,
+  "synthetic": 10032,
+  "total": 62251,
   "typeable": 360,
   "typeable_pct": 0.58
  }

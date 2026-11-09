@@ -6,7 +6,7 @@
  * they end. State 2 closes the sub-windows, state 3 waits for the close to finish and clears _isRun.
  * Matching constructs: the state switch reads _st0 through a const accessor so case 0 reloads it;
  * `case 1: case 2:` in that order gives the 2-then-1 compare chain; the decide-list pointers live in
- * stack WindowRef/ListRef holders and are re-read per use; hasDevice/hasDisk are bool. */
+ * stack WindowRef/igSmartPointer<igObject> holders and are re-read per use; hasDevice/hasDisk are bool. */
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
 extern "C" {
@@ -52,16 +52,16 @@ extern unsigned char GPR_00554c14;
 void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self);
 }
 /* Owning stack references: kind 0..4 one per window class created here (0 chooser, 1 device sell,
- * 2 disk sell, 4 item window), ListRef the bool decide lists. */
+ * 2 disk sell, 4 item window), igSmartPointer<igObject> the bool decide lists. */
 template <int kind> struct WindowRef {
     igObject *p;
     WindowRef(igObject *w) : p(w) {}
     ~WindowRef() { igObject *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
-struct ListRef {
-    igObject *p;
-    ListRef(igObject *l) : p(l) {}
-    ~ListRef() { igObject *l = p; if (l != 0) { --l->_refCount; if ((l->_refCount & 0x7fffff) == 0) igObject_Destroy(l); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *l) : p(l) {}
+    ~igSmartPointer() { T *l = p; if (l != 0) { --l->_refCount; if ((l->_refCount & 0x7fffff) == 0) igObject_Destroy(l); } }
 };
 
 #define ALLOC(a, self) { \
@@ -135,7 +135,7 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
                 switch (self->_st3) {
                 case 1: {
                     ALLOC(alloc, self)
-                    ListRef sp58((igObject *)FUN_002cb0d0(alloc));
+                    igSmartPointer<igObject> sp58((igObject *)FUN_002cb0d0(alloc));
                     { igBoolList *l = (igBoolList *)sp58.p; PUSH_BOOL(l, GPR_00554a50) }
                     { igBoolList *l = (igBoolList *)sp58.p; PUSH_BOOL(l, GPR_00554a54) }
                     {
@@ -154,7 +154,7 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
                 }
                 case 2: {
                     ALLOC(alloc, self)
-                    ListRef sp54((igObject *)FUN_002cb0d0(alloc));
+                    igSmartPointer<igObject> sp54((igObject *)FUN_002cb0d0(alloc));
                     { igBoolList *l = (igBoolList *)sp54.p; PUSH_BOOL(l, GPR_00554a58) }
                     { igBoolList *l = (igBoolList *)sp54.p; PUSH_BOOL(l, GPR_00554a5c) }
                     {

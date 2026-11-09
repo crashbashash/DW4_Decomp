@@ -27,11 +27,11 @@ struct Rel { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the freshly created property list; released on scope exit once the ram
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void Gap__Bec__beNDMWMdlPlayer__vfunc_42(beNDMWMdlPlayer *arg0, beBaseInfoRam *arg1) {
     igObject *s0;
@@ -43,7 +43,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_42(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        ObjectRef created(beBaseInfoDataList_Create(a));
+        igSmartPointer<igObject> created(beBaseInfoDataList_Create(a));
         s0 = created.p;
         if (s0 != 0) {
             s0->_refCount++;

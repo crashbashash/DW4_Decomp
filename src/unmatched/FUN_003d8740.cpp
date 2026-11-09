@@ -60,7 +60,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram);
 }
 /* Owning reference to a freshly created object: the destructor drops one reference and destroys at
  * zero. Every item kind is its own class, so the compiler emits one destructor per kind. */
-struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <class T> struct igSmartPointer { T *p; igSmartPointer(T *o) : p(o) {} ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct U { static inline void Reserve(const igObjectList *l) { if (l->_count < 37) List_Reserve(l, 36, 4); } };
 #define WL(f) ((igObjectList *)work->f)
@@ -96,7 +96,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
     work = (beNDMWStatusInfoWork *)ram->_work;
     if (work == 0) {
         ALLOC(alloc, DAT_00587110[0])
-        ObjectRef spWork((igObject *)FUN_003b5ec0(alloc));
+        igSmartPointer<igObject> spWork((igObject *)FUN_003b5ec0(alloc));
         igObject *w = spWork.p;
         if (w != 0) w->_refCount = w->_refCount + 1;
         { igObject *old = (igObject *)ram->_work; REL(old) }

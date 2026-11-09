@@ -35,11 +35,11 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *, beNDMWPanelWazaInfoRa
 }
 /* Owning stack reference to the freshly created panel work; released on scope exit (reference
  * count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 #define RET(o) { igObject *rt = (o); if (rt != 0) rt->_refCount = rt->_refCount + 1; }
@@ -58,7 +58,7 @@ int Gap__Bec__beNDMWPanelWaza__vfunc_34(beNDMWPanelWaza *self, beNDMWPanelWazaIn
     if (work == 0) {
         alloc = igObject_GetAllocator(self);
         alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ObjectRef created((igObject *)FUN_003bdb10(alloc));
+        igSmartPointer<igObject> created((igObject *)FUN_003bdb10(alloc));
         { igObject *n = created.p; RET(n) { igObject *o = (igObject *)ram->_work; REL(o) } ram->_work = (int)n; }
         work = (beNDMWPanelWazaInfoWork *)created.p;
         HOOK(beNDMWPanelObjectWaza, work->_panelWaza)

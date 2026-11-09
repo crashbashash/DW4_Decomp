@@ -36,11 +36,11 @@ extern unsigned char GPR_00554c14;
 
 /* Owning stack reference to the sub-window being created: starts empty, takes the window the
  * creator returns and releases it on scope exit (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beNDMWWindow *p;
-    ObjectRef(beNDMWWindow *o) : p(o) {}
-    ~ObjectRef() { beNDMWWindow *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 #define RELEASE_WIN(p_) { beNDMWWindow *rw = (p_); if (rw) { --rw->_refCount; if (!(rw->_refCount & 0x7fffff)) igObject_Destroy(rw); } }
@@ -61,7 +61,7 @@ void Gap__Bec__beNDMWStatus__vfunc_31(beNDMWStatus *self, beNDMWStatusInfoRam *i
         beMessenger_AppendString(self->_messenger, DAT_005167a0);
         beMessenger_DispatchSelected(self->_messenger, DAT_005167a8);
         {
-        ObjectRef w(0);
+        igSmartPointer<beNDMWWindow> w(0);
         switch (self->_subWndNo) {
         case 0:
             beMessenger_SelectGroup(self->_messenger, DAT_005167b8);

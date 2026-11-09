@@ -20,7 +20,7 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 static inline int count(const igIntList *list) { return list->_count; }
-struct RPA { igObject *p; RPA() { p = 0; } ~RPA() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <class T> struct igSmartPointer { T *p; igSmartPointer() { p = 0; } ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct RPB { igObject *p; RPB() { p = 0; } ~RPB() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 /* Interned-string holder: count at p[-1], header at p[-2]. */
 struct StringRef { int p; StringRef(int x) { p = x; } ~StringRef() { int s = p; if (s != 0) { int *hd = (int *)(s - 8); int c = *(int *)(s - 4) - 1; *(int *)(s - 4) = c; if (c == 0) StringChunk_ReleaseHeader(*hd, hd); } } };
@@ -38,7 +38,7 @@ extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, 
     l44 = (igIntList *)a2->_labelOffsetList;
     if (l36 == 0) {
         RPB sp9C;
-        RPA sp98;
+        igSmartPointer<igObject> sp98;
         al0 = igObject_GetAllocator(a0);
         if (GPR_00554c14 != 0) {
             al = al0;

@@ -33,7 +33,7 @@ void FUN_00445200(void *, Msg *);
 extern unsigned char GPR_00554c14;
 extern char DAT_004e0858[], DAT_00516110[], DAT_00516148[], DAT_00516228[], DAT_00516290[], DAT_005164b0[], DAT_005164b8[], DAT_005164c8[], DAT_005164d8[];
 }
-struct Tmp { Ref *p; Tmp(Ref *q) : p(q) {} ~Tmp() { Ref *q = p; if (q) { q->rc--; if ((q->rc & 0x7fffff) == 0) igObject_Destroy(q); } } };
+template <class T> struct igSmartPointer { T *p; igSmartPointer(T *q) : p(q) {} ~igSmartPointer() { T *q = p; if (q) { q->rc--; if ((q->rc & 0x7fffff) == 0) igObject_Destroy(q); } } };
 extern int DAT_00587110[4], DAT_00585be0[4];
 extern "C" igResult DAT_004fb410;
 
@@ -47,7 +47,7 @@ static inline void ensureCache(Msg *msg)
         } else {
             al2 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        Tmp t(beBaseInfoDataList_Create(al2));
+        igSmartPointer<Ref> t(beBaseInfoDataList_Create(al2));
         Ref *r = t.p;
         if (r) r->rc++;
         Ref *old = msg->cache;

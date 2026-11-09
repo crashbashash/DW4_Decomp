@@ -20,18 +20,18 @@ struct PropertyRecord *igProperty_FindByName(igObject *, int, int *);
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_40(beNDMWMdlPlayer *arg0, struct UnidentifiedArg1Object *arg1) {
     struct PropertyPayload *q;
 
     if (arg1->f40 == 0) {
         int al = igObject_GetAllocator(arg1);
-        ObjectRef created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        igSmartPointer<igObject> created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0])));
         igObject *t = created.p;
         if (t != 0) {
             t->_refCount = t->_refCount + 1;

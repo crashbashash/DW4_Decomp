@@ -5,21 +5,21 @@ int igObject_Destroy(struct Rc *);
 struct Rc { int vt; int rc; int n; int cap; int *data; };
 struct E { int p0; int p4; int n; int p12; int *data; int def; int idx; int p28; int p32; int p36; char flag; };
 struct B { int p0; int p4; int p8; int p12; struct E **data; };
-struct RcRef {
-    Rc *p;
-    RcRef(const RcRef &other) : p(other.p) {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(const igSmartPointer &other) : p(other.p) {
         if (p != 0) p->rc = p->rc + 1;
     }
-    ~RcRef() {
-        Rc *o;
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->rc = o->rc - 1;
             if ((o->rc & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
-    RcRef &operator=(const RcRef &other) {
-        Rc *next = other.p;
-        Rc *o;
+    igSmartPointer &operator=(const igSmartPointer &other) {
+        T *next = other.p;
+        T *o;
         if (next != 0) next->rc = next->rc + 1;
         if ((o = p) != 0) {
             o->rc = o->rc - 1;
@@ -29,7 +29,7 @@ struct RcRef {
         return *this;
     }
 };
-struct A { int p0; int p4; char f8; int p12; struct B *f16; int p20; int p24; RcRef f28; RcRef f32; };
+struct A { int p0; int p4; char f8; int p12; struct B *f16; int p20; int p24; igSmartPointer<Rc> f28; igSmartPointer<Rc> f32; };
 extern "C" void FUN_001b0450(A *arg0, Rc *arg1) {
     Rc *a;
     int n, j;
@@ -75,7 +75,7 @@ extern "C" void FUN_001b0450(A *arg0, Rc *arg1) {
         if (j <= a->cap) a->n = j; else List_Resize(a, j, 4);
     }
     {
-        RcRef swapped(arg0->f32);
+        igSmartPointer<Rc> swapped(arg0->f32);
         arg0->f32 = arg0->f28;
         arg0->f28 = swapped;
     }

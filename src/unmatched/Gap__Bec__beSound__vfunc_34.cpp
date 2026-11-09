@@ -79,14 +79,14 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, struct Arg2 
 }
 struct Arg2 { int p[5]; int f20; };
 struct SubE { int p[5]; igObjectList *f20; };
-/* Owning stack references of the sound manager's message handler. PlaySERef holds a freshly
+/* Owning stack references of the sound manager's message handler. igSmartPointer<igObject> holds a freshly
  * created playing-SE record while it is listed, NameListRef the string list built by command 20,
  * GlobalStrRef a retained share of the system's global string object and StringRef a share of an
  * interned text. */
-struct PlaySERef {
-    igObject *p;
-    PlaySERef(igObject *o) : p(o) {}
-    ~PlaySERef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 struct NameListRef {
     igObject *p;
@@ -227,7 +227,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
             beMessenger_AppendLong(self->_messenger, k);
             if (k > 0) {
                 ALLOC(alloc, self)
-                PlaySERef playSE((igObject *)FUN_003447c0(alloc));
+                igSmartPointer<igObject> playSE((igObject *)FUN_003447c0(alloc));
                 ((bePlaySE *)playSE.p)->_id = idx;
                 ((bePlaySE *)playSE.p)->_time = now + 0x2FAF07E;
                 ObjectList_AppendRetained(self->_playSEs, playSE.p);

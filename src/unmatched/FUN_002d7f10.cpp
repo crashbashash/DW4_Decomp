@@ -65,15 +65,15 @@ static inline void setSlot(FieldBindSlotList *l, int i, FieldBindRefCounted *v) 
         l->data[i] = (FieldBindTarget *)v;
     }
 }
-struct SourceRef {
-    FieldBindTarget *p;
-    SourceRef(FieldBindTarget *source) : p(source) {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *source) : p(source) {
         if (p != 0) {
             p->_refCount = p->_refCount + 1;
         }
     }
-    ~SourceRef() {
-        FieldBindTarget *source = p;
+    ~igSmartPointer() {
+        T *source = p;
         if (source != 0) {
             source->_refCount = source->_refCount - 1;
             if ((source->_refCount & 0x7FFFFF) == 0) {
@@ -81,7 +81,7 @@ struct SourceRef {
             }
         }
     }
-    FieldBindTarget *get() const { return p; }
+    T *get() const { return p; }
 };
 int FUN_002d7f10(FieldBindSet *self, FieldBindRefCounted **field, FieldBindRefCounted **value) {
     int changed = 0;
@@ -106,7 +106,7 @@ int FUN_002d7f10(FieldBindSet *self, FieldBindRefCounted **field, FieldBindRefCo
         }
         item = castBinding(FUN_002d7e90(self, i));
         if (item != 0) {
-            SourceRef source(item->source);
+            igSmartPointer<FieldBindTarget> source(item->source);
             if (source.get() == 0) {
                 continue;
             }

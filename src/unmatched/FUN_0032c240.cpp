@@ -17,11 +17,11 @@ extern char DAT_004ffbf0[];
 extern int DAT_00586f20[4];
 extern int DAT_00587048[4];
 }
-struct TextRef {
-    Text *p;
-    TextRef(Text *text) : p(text) {}
-    ~TextRef() {
-        Text *text = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *text) : p(text) {}
+    ~igSmartPointer() {
+        T *text = p;
         if (text != 0) {
             text->references = text->references - 1;
             if ((text->references & 0x7FFFFF) == 0) {
@@ -29,7 +29,7 @@ struct TextRef {
             }
         }
     }
-    Text *get() const { return p; }
+    T *get() const { return p; }
 };
 struct StringRef {
     char *p;
@@ -66,7 +66,7 @@ struct StringRef {
         }
     }
 };
-static inline void append(const TextRef &ref, char *chars) {
+static inline void append(const igSmartPointer<Text> &ref, char *chars) {
     Text *text = ref.p;
     int length = text->length;
     FUN_0030b460(text, chars, length, strlen(chars));
@@ -75,7 +75,7 @@ extern "C" StringRef FUN_0032c240(char *prefix, char *path) {
     char *chars;
     int limit, i;
     char c;
-    TextRef text(FUN_002b9500(Memory_GetAllocatorBySelector(DAT_00587048[0])));
+    igSmartPointer<Text> text(FUN_002b9500(Memory_GetAllocatorBySelector(DAT_00587048[0])));
     if (prefix == 0) {
         FUN_0030b3c0(text.get(), path);
     } else if (*prefix == 0x63) {

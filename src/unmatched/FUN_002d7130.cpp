@@ -8,10 +8,10 @@ int ObjectList_AppendRetainedList(ObjectList *, ObjectList *);
 void igObject_Destroy(Counted *);
 int igObject_GetAllocator(Owner *);
 }
-struct ListRef {
-    ObjectList *p;
-    ListRef(ObjectList *list) : p(list) {}
-    ~ListRef() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *list) : p(list) {}
+    ~igSmartPointer() {
         Counted *object = p;
         if (object != 0) {
             object->references = object->references - 1;
@@ -20,11 +20,11 @@ struct ListRef {
             }
         }
     }
-    ObjectList *operator->() const { return p; }
-    operator ObjectList *() const { return p; }
+    T *operator->() const { return p; }
+    operator T *() const { return p; }
 };
 extern "C" void FUN_002d7130(Owner *owner) {
-    ListRef copy(FUN_002bd680(igObject_GetAllocator(owner)));
+    igSmartPointer<ObjectList> copy(FUN_002bd680(igObject_GetAllocator(owner)));
     ObjectList_AppendRetainedList(copy, owner->children);
     ObjectList *children = owner->children;
     int count = children->count;

@@ -10,11 +10,11 @@ extern "C" int FUN_0022c150(int, B *, Rc *, int, Ent *, A *);
 extern "C" int igObject_Destroy(Rc *);
 extern char DAT_004e7ea8[16];
 struct AdoptReference { };
-struct NameBufferRef {
-    Rc *p;
-    NameBufferRef(Rc *object, AdoptReference) : p(object) {}
-    ~NameBufferRef() {
-        Rc *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object, AdoptReference) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->refs = o->refs - 1;
             if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
@@ -28,7 +28,7 @@ extern "C" int FUN_0022c7f0(A *arg0, int arg1, B *arg2, int arg3) {
     unsigned int i;
     char *nm;
     Ent *e;
-    NameBufferRef buffer(FUN_002b9500(0), AdoptReference());
+    igSmartPointer<Rc> buffer(FUN_002b9500(0), AdoptReference());
     l = arg0->getObj()->lst;
     found = 0;
     i = 0;

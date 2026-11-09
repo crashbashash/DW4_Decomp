@@ -15,11 +15,11 @@ int FUN_003a7e90(beAction2InfoRam *arg0, int arg1);
 }
 /* Owning stack reference to the freshly created property list; released on scope exit once the ram
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* matching construct: the (igObject *)/(int) casts on _dataList stand in for a 4-byte reference field */
 int FUN_003a7e90(beAction2InfoRam *arg0, int arg1) {
@@ -28,7 +28,7 @@ int FUN_003a7e90(beAction2InfoRam *arg0, int arg1) {
         igObject *o;
         al = igObject_GetAllocator(arg0);
         al = GPR_00554c14 != 0 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ObjectRef created(beBaseInfoDataList_Create(al));
+        igSmartPointer<igObject> created(beBaseInfoDataList_Create(al));
         igObject *s0 = created.p;
         if (s0 != 0) {
             s0->_refCount = s0->_refCount + 1;

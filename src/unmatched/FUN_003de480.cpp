@@ -18,11 +18,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the slot's text object; released on scope exit (reference count in the
  * low 23 bits of refs). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    Obj *p;
-    ObjectRef(Obj *o) : p(o) {}
-    ~ObjectRef() { Obj *o = p; if (o != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
     int s0;
@@ -39,7 +39,7 @@ extern "C" void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         if (s0 < arg0->_tateMin) s0 = arg0->_tateMax - 1;
         a = igObject_GetAllocator(arg0);
         a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ObjectRef r0(FUN_003614f0(a));
+        igSmartPointer<Obj> r0(FUN_003614f0(a));
         beUnicodeObj_AllocateBuffer(r0.p, 1);
         *r0.p->f12 = DAT_004cc860[s0].v[0];
         FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 0, r0.p, 1, 0);
@@ -48,7 +48,7 @@ extern "C" void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         s0 = arg0->_tatePoint;
         a = igObject_GetAllocator(arg0);
         a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ObjectRef r1(FUN_003614f0(a));
+        igSmartPointer<Obj> r1(FUN_003614f0(a));
         beUnicodeObj_AllocateBuffer(r1.p, 1);
         *r1.p->f12 = DAT_004cc860[s0].v[0];
         FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 1, r1.p, 1, 0);
@@ -58,7 +58,7 @@ extern "C" void FUN_003de480(beNDMWLoadIntf2NameSel *arg0, int arg1) {
         if (n >= arg0->_tateMax) s0 = arg0->_tateMin; else s0 = n;
         a = igObject_GetAllocator(arg0);
         a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ObjectRef r2(FUN_003614f0(a));
+        igSmartPointer<Obj> r2(FUN_003614f0(a));
         beUnicodeObj_AllocateBuffer(r2.p, 1);
         *r2.p->f12 = DAT_004cc860[s0].v[0];
         FUN_003ec120(arg0->_textOrder, DAT_00516f10, arg0->_ramNo, 2, r2.p, 1, 0);

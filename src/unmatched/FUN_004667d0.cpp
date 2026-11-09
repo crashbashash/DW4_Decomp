@@ -9,10 +9,10 @@ int igObject_Destroy(...);
 int FUN_004665e0(...);
 igProbe *FUN_0019e680(int);
 static inline int count_of(const igIntList *list) { return list->_count; }
-struct ProbeRef {
-    igProbe *p;
-    ProbeRef(igProbe *object) : p(object) {}
-    ~ProbeRef() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
         igObject *object = (igObject *)p;
         if (object != 0) {
             object->_refCount = object->_refCount - 1;
@@ -21,9 +21,9 @@ struct ProbeRef {
             }
         }
     }
-    igProbe *get() const { return p; }
+    T *get() const { return p; }
 };
-static inline void setProbe(igPickMode *pickMode, const ProbeRef &probe) {
+static inline void setProbe(igPickMode *pickMode, const igSmartPointer<igProbe> &probe) {
     igObject *retained = (igObject *)probe.get();
     igIntersectTraversal *traversal = (igIntersectTraversal *)pickMode->_intersectTraversal;
     igObject *previous;
@@ -49,7 +49,7 @@ void FUN_004667d0(igPickMode *pickMode) {
     igObject *cursor;
     FUN_00191f30(&unprojected.w, pickMode->_inverseProjectionMatrix, pickMode->_parameters + 0x2C);
     unprojected.b = 0;
-    ProbeRef probe(FUN_0019e680(0));
+    igSmartPointer<igProbe> probe(FUN_0019e680(0));
     created = probe.get();
     ObjectList_AppendRetained(created->_rays, pickMode->_ray);
     faceTypes = (igIntList *)created->_intersectFaceType;

@@ -22,11 +22,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" void FUN_00396740(beModelCtrl *arg0, beBaseInfoRam *arg1);
 void FUN_00396740(beModelCtrl *arg0, beBaseInfoRam *arg1) {
@@ -46,7 +46,7 @@ void FUN_00396740(beModelCtrl *arg0, beBaseInfoRam *arg1) {
             var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
         {
-            ObjectRef r(beBaseInfoDataList_Create(var_v0));
+            igSmartPointer<igObject> r(beBaseInfoDataList_Create(var_v0));
             s1 = r.p;
             if (s1 != 0) {
                 s1->_refCount = s1->_refCount + 1;

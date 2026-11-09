@@ -198,7 +198,7 @@
   },
   "0x003de7a0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003832d0"
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "exceptions": {
       "index": "0x005534d8",
@@ -211,7 +211,7 @@
   },
   "0x002da990": {
     "duplicates": {
-      "__dt__3RefFv": "0x003d9bd0"
+      "__dt__20igSmartPointer<3Obj>Fv": "0x003d9bd0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -266,7 +266,7 @@
   "0x0017fe50": {
     "emitted": {},
     "duplicates": {
-      "__dt__3RefFv": "0x00130140"
+      "__dt__20igSmartPointer<3Obj>Fv": "0x00130140"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -275,7 +275,7 @@
   "0x00324840": {
     "emitted": {},
     "duplicates": {
-      "__dt__3RefFv": "0x0038c410"
+      "__dt__18igSmartPointer<1V>Fv": "0x0038c410"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -284,7 +284,7 @@
   "0x0037d310": {
     "emitted": {},
     "duplicates": {
-      "__dt__3RefFv": "0x00367a20"
+      "__dt__20igSmartPointer<3Obj>Fv": "0x00367a20"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -346,7 +346,7 @@
   },
   "0x00308860": {
     "duplicates": {
-      "__dt__7NameRefFv": "0x0025a230"
+      "__dt__20igSmartPointer<3Obj>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -367,7 +367,7 @@
   "0x00154f30": {
     "emitted": {},
     "duplicates": {
-      "__dt__3RefFv": "0x003d9bd0"
+      "__dt__29igSmartPointer<11DW4VC_100_2>Fv": "0x003d9bd0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -376,7 +376,7 @@
   "0x0044b290": {
     "duplicates": {
       "__dt__8ValueRefFv": "0x00352fc0",
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005547d4",
@@ -408,8 +408,8 @@
   },
   "0x003d1960": {
     "duplicates": {
-      "__dt__11DataListRefFv": "0x0033e9c0",
-      "__dt__11InfoWorkRefFv": "0x003d1c60"
+      "__dt__11InfoWorkRefFv": "0x003d1c60",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00553280",
@@ -435,7 +435,7 @@
   },
   "0x002d9cf0": {
     "duplicates": {
-      "__dt__3RefFv": "0x003d9bd0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x003d9bd0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -488,9 +488,9 @@
   },
   "0x00462fb0": {
     "duplicates": {
-      "__dt__16ViewRef<6Camera>Fv": "0x0025a2b0",
-      "__dt__16ViewRef<6Effect>Fv": "0x00333760",
-      "__dt__17ViewRef<7Binding>Fv": "0x0025a230"
+      "__dt__23igSmartPointer<6Camera>Fv": "0x0025a2b0",
+      "__dt__23igSmartPointer<6Effect>Fv": "0x00333760",
+      "__dt__24igSmartPointer<7Binding>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -539,8 +539,8 @@
   "0x002da1c0": {
     "duplicates": {
       "__dt__3MemFv": "0x0025a2b0",
-      "__dt__4TRefFv": "0x0025a230",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__18igSmartPointer<1T>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -549,7 +549,7 @@
   "0x002d10b0": {
     "emitted": {},
     "duplicates": {
-      "__dt__3RefFv": "0x0038c410"
+      "__dt__18igSmartPointer<1V>Fv": "0x0038c410"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -558,7 +558,7 @@
   "0x003d4390": {
     "emitted": {},
     "duplicates": {
-      "__dt__3TmpFv": "0x0033e9c0"
+      "__dt__20igSmartPointer<3Ref>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -625,8 +625,8 @@
   "0x003993e0": {
     "emitted": {},
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0",
-      "__dt__3RefFv": "0x00198190"
+      "__dt__3RefFv": "0x00198190",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -700,9 +700,9 @@
   },
   "0x0041f190": {
     "duplicates": {
-      "__dt__4RefAFv": "0x0040f620",
       "__dt__4RefBFv": "0x00411100",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0040f620"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -753,11 +753,11 @@
     "emitted": {},
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__11SelectE1RefFv": "0x00411100",
       "__dt__13DecideListRefFv": "0x00226990",
       "__dt__11QuantityRefFv": "0x0041d240",
       "__dt__10ConfirmRefFv": "0x00411080",
-      "__dt__9ResultRefFv": "0x00428710"
+      "__dt__9ResultRefFv": "0x00428710",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00411100"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -765,7 +765,7 @@
   },
   "0x003a8580": {
     "duplicates": {
-      "__dt__2RPFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -773,7 +773,7 @@
   },
   "0x003e42a0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003e3d80"
+      "__dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv": "0x003e3d80"
     },
     "exceptions": {
       "index": "0x00553580",
@@ -786,7 +786,7 @@
   },
   "0x003f96e0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003832d0"
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "exceptions": {
       "index": "0x00553ac0",
@@ -799,7 +799,7 @@
   },
   "0x003de480": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003832d0"
+      "__dt__20igSmartPointer<3Obj>Fv": "0x003832d0"
     },
     "exceptions": {
       "index": "0x005534cc",
@@ -812,7 +812,7 @@
   },
   "0x00382eb0": {
     "duplicates": {
-      "__dt__3RefFv": "0x003832d0"
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -820,7 +820,7 @@
   },
   "0x003dd6d0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003832d0"
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "exceptions": {
       "index": "0x005534b4",
@@ -843,7 +843,7 @@
   "0x003dc590": {
     "emitted": {},
     "duplicates": {
-      "__dt__3RefFv": "0x003832d0"
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -856,7 +856,7 @@
   },
   "0x00439f30": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003b6090"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x003b6090"
     },
     "exceptions": {
       "index": "0x00554408",
@@ -870,8 +870,8 @@
   "0x00390f80": {
     "emitted": {},
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -879,7 +879,7 @@
   },
   "0x003db060": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003832d0"
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "exceptions": {
       "index": "0x00553448",
@@ -892,7 +892,7 @@
   },
   "0x003d9ec0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003832d0"
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "exceptions": {
       "index": "0x00553424",
@@ -905,7 +905,7 @@
   },
   "0x00418ac0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x001489a0"
+      "__dt__29igSmartPointer<11igStringObj>Fv": "0x001489a0"
     },
     "exceptions": {
       "index": "0x00553f94",
@@ -918,7 +918,7 @@
   },
   "0x003d59b0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003b2f30"
+      "__dt__30igSmartPointer<12beNDMWWindow>Fv": "0x003b2f30"
     },
     "exceptions": {
       "index": "0x005533d0",
@@ -945,7 +945,7 @@
   },
   "0x003d0bc0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003bd940"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x003bd940"
     },
     "exceptions": {
       "index": "0x0055322c",
@@ -980,7 +980,7 @@
   },
   "0x0039ec10": {
     "emitted": {
-      "__dt__9PlaySERefFv": "0x0039fae0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0039fae0"
     },
     "duplicates": {
       "__dt__11NameListRefFv": "0x001c6460",
@@ -999,7 +999,7 @@
       "__dt__10ItemRef<4>Fv": "0x003d9bd0"
     },
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003b5cf0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x003b5cf0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1038,7 +1038,7 @@
   },
   "0x003d60e0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x001363f0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x001363f0"
     },
     "exceptions": {
       "index": "0x005533dc",
@@ -1060,7 +1060,7 @@
   },
   "0x003ee6d0": {
     "duplicates": {
-      "__dt__2RPFv": "0x0033e9c0"
+      "__dt__23igSmartPointer<6StrObj>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1069,7 +1069,7 @@
   "0x0042eb80": {
     "duplicates": {
       "__dt__12SubWindowRefFv": "0x0042d350",
-      "__dt__9WindowRefFv": "0x0042de70"
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0042de70"
     },
     "exceptions": {
       "index": "0x005542a0",
@@ -1120,7 +1120,7 @@
   },
   "0x003de990": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003832d0"
+      "__dt__20igSmartPointer<3Obj>Fv": "0x003832d0"
     },
     "exceptions": {
       "index": "0x005534e4",
@@ -1133,7 +1133,7 @@
   },
   "0x004432a0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x00443540"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00443540"
     },
     "exceptions": {
       "index": "0x005545b8",
@@ -1146,7 +1146,7 @@
   },
   "0x004329d0": {
     "duplicates": {
-      "__dt__2RPFv": "0x00150eb0"
+      "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0"
     },
     "exceptions": {
       "index": "0x005542f4",
@@ -1212,8 +1212,8 @@
       "__dt__11SelectE1RefFv": "0x00411100",
       "__dt__11QuantityRefFv": "0x0041d240",
       "__dt__10ConfirmRefFv": "0x00411080",
-      "__dt__9ResultRefFv": "0x00428710",
-      "__dt__7MenuRefFv": "0x0042b800"
+      "__dt__7MenuRefFv": "0x0042b800",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00428710"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1245,7 +1245,7 @@
       "__dt__11StatDataRefFv": "0x003eb580",
       "__dt__10DataSelRefFv": "0x003eb500",
       "__dt__10DiffSelRefFv": "0x003eb480",
-      "__dt__11DataListRefFv": "0x0033e9c0"
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1254,14 +1254,14 @@
   "0x00396a80": {
     "emitted": {},
     "duplicates": {
-      "__dt__3RefFv": "0x0033e9c0",
       "__dt__3StrFv": "0x00130720",
       "__dt__9ObjRef<0>Fv": "0x00350c10",
       "__dt__9ObjRef<1>Fv": "0x00350e10",
       "__dt__9ObjRef<2>Fv": "0x00398d20",
       "__dt__9ObjRef<3>Fv": "0x00398ca0",
       "__dt__9ObjRef<4>Fv": "0x00398c20",
-      "__dt__9ObjRef<5>Fv": "0x0034c1b0"
+      "__dt__9ObjRef<5>Fv": "0x0034c1b0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1294,7 +1294,7 @@
   "0x00432d30": {
     "emitted": {},
     "duplicates": {
-      "__dt__7ListRefFv": "0x00150eb0"
+      "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1343,7 +1343,7 @@
   "0x0037e3a0": {
     "emitted": {},
     "duplicates": {
-      "__dt__2RPFv": "0x0037e250"
+      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1383,7 +1383,7 @@
   },
   "0x00436060": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x001489a0"
+      "__dt__29igSmartPointer<11igStringObj>Fv": "0x001489a0"
     },
     "exceptions": {
       "index": "0x00554384",
@@ -1397,9 +1397,9 @@
   "0x00393c80": {
     "emitted": {},
     "duplicates": {
-      "__dt__3RPAFv": "0x00150eb0",
       "__dt__3RPBFv": "0x001c6460",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00150eb0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1408,7 +1408,7 @@
   "0x0037c4c0": {
     "emitted": {},
     "duplicates": {
-      "__dt__2RPFv": "0x001489a0"
+      "__dt__31igSmartPointer<13igNamedObject>Fv": "0x001489a0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1477,7 +1477,7 @@
   "0x003392a0": {
     "emitted": {},
     "duplicates": {
-      "__dt__2RPFv": "0x00336440"
+      "__dt__19igSmartPointer<2RC>Fv": "0x00336440"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1504,8 +1504,8 @@
       "__dt__12WindowRef<0>Fv": "0x004351d0"
     },
     "duplicates": {
-      "__dt__7ListRefFv": "0x00226990",
-      "__dt__12WindowRef<4>Fv": "0x00411080"
+      "__dt__12WindowRef<4>Fv": "0x00411080",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00226990"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1524,8 +1524,8 @@
     "emitted": {},
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__11NameListRefFv": "0x001c6460",
-      "__dt__10IntListRefFv": "0x00150eb0"
+      "__dt__10IntListRefFv": "0x00150eb0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x001c6460"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1543,7 +1543,7 @@
   },
   "0x0037e180": {
     "duplicates": {
-      "__dt__10KeepMesRefFv": "0x0037e250"
+      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1556,7 +1556,7 @@
   },
   "0x0037e2d0": {
     "duplicates": {
-      "__dt__10KeepMesRefFv": "0x0037e250"
+      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1569,7 +1569,7 @@
   },
   "0x0037e6e0": {
     "duplicates": {
-      "__dt__10KeepMesRefFv": "0x0037e250"
+      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1582,7 +1582,7 @@
   },
   "0x0037e890": {
     "duplicates": {
-      "__dt__10KeepMesRefFv": "0x0037e250"
+      "__dt__31igSmartPointer<13beDemoKeepMes>Fv": "0x0037e250"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -1621,7 +1621,7 @@
   },
   "0x003742e0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054e2e8",
@@ -1634,7 +1634,7 @@
   },
   "0x00383910": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x001338d0"
+      "__dt__31igSmartPointer<13igVertexArray>Fv": "0x001338d0"
     },
     "exceptions": {
       "index": "0x0054e930",
@@ -1647,7 +1647,7 @@
   },
   "0x00383ab0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x001338d0"
+      "__dt__31igSmartPointer<13igVertexArray>Fv": "0x001338d0"
     },
     "exceptions": {
       "index": "0x0054e93c",
@@ -1660,7 +1660,7 @@
   },
   "0x00388f00": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0019e3c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0019e3c0"
     },
     "exceptions": {
       "index": "0x0054ea74",
@@ -1673,8 +1673,8 @@
   },
   "0x0038a6e0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0038abf0",
-      "__dt__9ReaderRefFv": "0x0038ab70"
+      "__dt__9ReaderRefFv": "0x0038ab70",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0038abf0"
     },
     "exceptions": {
       "index": "0x0054eb4c",
@@ -1687,8 +1687,8 @@
   },
   "0x0038d560": {
     "duplicates": {
-      "__dt__8GroupRefFv": "0x0038d7a0",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__34igSmartPointer<16beMessengerGroup>Fv": "0x0038d7a0"
     },
     "exceptions": {
       "index": "0x0054ec48",
@@ -1714,7 +1714,7 @@
   },
   "0x003908e0": {
     "duplicates": {
-      "__dt__8AABoxRefFv": "0x00198190"
+      "__dt__24igSmartPointer<7igAABox>Fv": "0x00198190"
     },
     "exceptions": {
       "index": "0x0054ee04",
@@ -1727,7 +1727,7 @@
   },
   "0x00391b40": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054ee58",
@@ -1740,7 +1740,7 @@
   },
   "0x00392fa0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054eedc",
@@ -1753,7 +1753,7 @@
   },
   "0x00394400": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054ef24",
@@ -1766,7 +1766,7 @@
   },
   "0x003956e0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__20igSmartPointer<3Ref>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054ef9c",
@@ -1779,7 +1779,7 @@
   },
   "0x00395b50": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054efa8",
@@ -1805,7 +1805,7 @@
   },
   "0x00396740": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054efcc",
@@ -1818,7 +1818,7 @@
   },
   "0x00396940": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x00198190"
+      "__dt__24igSmartPointer<7igAABox>Fv": "0x00198190"
     },
     "exceptions": {
       "index": "0x0054efd8",
@@ -1831,7 +1831,7 @@
   },
   "0x00399940": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054f05c",
@@ -1844,7 +1844,7 @@
   },
   "0x0039a250": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0039a480"
+      "__dt__37igSmartPointer<19beModelCtrlSCEffect>Fv": "0x0039a480"
     },
     "exceptions": {
       "index": "0x0054f0bc",
@@ -1857,7 +1857,7 @@
   },
   "0x0039a500": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0039a6d0"
+      "__dt__18igSmartPointer<1R>Fv": "0x0039a6d0"
     },
     "exceptions": {
       "index": "0x0054f0d4",
@@ -1870,7 +1870,7 @@
   },
   "0x0039a750": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0039a880"
+      "__dt__36igSmartPointer<18beModelCtrlSCSound>Fv": "0x0039a880"
     },
     "exceptions": {
       "index": "0x0054f0ec",
@@ -1883,7 +1883,7 @@
   },
   "0x0039bca0": {
     "duplicates": {
-      "__dt__7WorkRefFv": "0x0034be40"
+      "__dt__41igSmartPointer<23beParticleCtrl2InfoWork>Fv": "0x0034be40"
     },
     "exceptions": {
       "index": "0x0054f200",
@@ -1896,7 +1896,7 @@
   },
   "0x0039cbf0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054f290",
@@ -1910,8 +1910,8 @@
   "0x0039d720": {
     "duplicates": {
       "__dt__11BoolListRefFv": "0x00226990",
-      "__dt__7ListRefFv": "0x0033e9c0",
-      "__dt__7WorkRefFv": "0x00345410"
+      "__dt__7WorkRefFv": "0x00345410",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054f29c",
@@ -1924,8 +1924,8 @@
   },
   "0x003a1830": {
     "duplicates": {
-      "__dt__7ListRefFv": "0x0033f6d0",
-      "__dt__9ObjectRefFv": "0x003a19d0"
+      "__dt__9ObjectRefFv": "0x003a19d0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033f6d0"
     },
     "exceptions": {
       "index": "0x0054f3e0",
@@ -1938,7 +1938,7 @@
   },
   "0x003a7d80": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054f668",
@@ -1951,7 +1951,7 @@
   },
   "0x003a7e90": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054f674",
@@ -1964,7 +1964,7 @@
   },
   "0x003a82f0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0054f698",
@@ -1977,7 +1977,7 @@
   },
   "0x003b02c0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0019aa10"
+      "__dt__34igSmartPointer<16NewObjectVirtual>Fv": "0x0019aa10"
     },
     "exceptions": {
       "index": "0x0054fa88",
@@ -2004,7 +2004,7 @@
   "0x003d14c0": {
     "duplicates": {
       "__dt__8ValueRefFv": "0x00352fc0",
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00553244",
@@ -2017,8 +2017,8 @@
   },
   "0x003d1700": {
     "duplicates": {
-      "__dt__7ListRefFv": "0x0033e9c0",
-      "__dt__9EffectRefFv": "0x00352fc0"
+      "__dt__9EffectRefFv": "0x00352fc0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0055325c",
@@ -2032,7 +2032,7 @@
   "0x003d2030": {
     "duplicates": {
       "__dt__8ValueRefFv": "0x00352fc0",
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005532c8",
@@ -2045,7 +2045,7 @@
   },
   "0x003d31f0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00553310",
@@ -2059,9 +2059,9 @@
   "0x003d3640": {
     "duplicates": {
       "__dt__10IntListRefFv": "0x00150eb0",
-      "__dt__11DataListRefFv": "0x0033e9c0",
       "__dt__11InfoWorkRefFv": "0x003bde80",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0055331c",
@@ -2074,7 +2074,7 @@
   },
   "0x003d40f0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00553328",
@@ -2087,7 +2087,7 @@
   },
   "0x003d4240": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00553334",
@@ -2100,7 +2100,7 @@
   },
   "0x003d45f0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x0055334c",
@@ -2113,7 +2113,7 @@
   },
   "0x003d4820": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00553358",
@@ -2126,8 +2126,8 @@
   },
   "0x003d4a20": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "emitted": {
       "__dt__8ValueRefFv": "0x003d4e20"
@@ -2143,7 +2143,7 @@
   },
   "0x003d4ea0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005533a0",
@@ -2156,7 +2156,7 @@
   },
   "0x003dcc60": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003832d0"
+      "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
     },
     "exceptions": {
       "index": "0x00553490",
@@ -2169,7 +2169,7 @@
   },
   "0x003e3e00": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003e3d80"
+      "__dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv": "0x003e3d80"
     },
     "exceptions": {
       "index": "0x0055355c",
@@ -2182,7 +2182,7 @@
   },
   "0x003e4030": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003e3d80"
+      "__dt__39igSmartPointer<21beLoadIntf2ComMdlData>Fv": "0x003e3d80"
     },
     "exceptions": {
       "index": "0x00553568",
@@ -2210,7 +2210,7 @@
   },
   "0x003f1a80": {
     "duplicates": {
-      "__dt__7ListRefFv": "0x0033e9c0"
+      "__dt__22igSmartPointer<5S_ref>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00553880",
@@ -2262,8 +2262,8 @@
   },
   "0x003f7310": {
     "duplicates": {
-      "__dt__13PlayerDataRefFv": "0x003ba350",
-      "__dt__7ItemRefFv": "0x003b9ba0"
+      "__dt__7ItemRefFv": "0x003b9ba0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x003ba350"
     },
     "exceptions": {
       "index": "0x00553a18",
@@ -2276,8 +2276,8 @@
   },
   "0x003f77b0": {
     "duplicates": {
-      "__dt__17CommonDataListRefFv": "0x003ba350",
-      "__dt__21PlayerDataListListRefFv": "0x003c9ef0"
+      "__dt__21PlayerDataListListRefFv": "0x003c9ef0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x003ba350"
     },
     "exceptions": {
       "index": "0x00553a24",
@@ -2291,7 +2291,7 @@
   "0x003f7e40": {
     "duplicates": {
       "__dt__6RamRefFv": "0x003f7fd0",
-      "__dt__7InfoRefFv": "0x003f8050"
+      "__dt__35igSmartPointer<17beNDMWGameRamInfo>Fv": "0x003f8050"
     },
     "exceptions": {
       "index": "0x00553a48",
@@ -2344,7 +2344,7 @@
   "0x004141a0": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__9WindowRefFv": "0x00414420"
+      "__dt__36igSmartPointer<18beNDMWStatusCtrlD0>Fv": "0x00414420"
     },
     "exceptions": {
       "index": "0x00553db4",
@@ -2358,7 +2358,7 @@
   "0x00414670": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__9WindowRefFv": "0x00411100"
+      "__dt__20igSmartPointer<3Win>Fv": "0x00411100"
     },
     "exceptions": {
       "index": "0x00553dfc",
@@ -2371,7 +2371,7 @@
   },
   "0x00414d10": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x00414420"
+      "__dt__41igSmartPointer<23UnidentifiedChildWindow>Fv": "0x00414420"
     },
     "exceptions": {
       "index": "0x00553e20",
@@ -2385,7 +2385,7 @@
   "0x00416250": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__9WindowRefFv": "0x00414420"
+      "__dt__36igSmartPointer<18beNDMWStatusCtrlD0>Fv": "0x00414420"
     },
     "exceptions": {
       "index": "0x00553e8c",
@@ -2399,7 +2399,7 @@
   "0x00416c80": {
     "duplicates": {
       "__dt__11BoolListRefFv": "0x00226990",
-      "__dt__9WindowRefFv": "0x00413fd0"
+      "__dt__38igSmartPointer<20beNDMWStatusSelectE0>Fv": "0x00413fd0"
     },
     "exceptions": {
       "index": "0x00553ee0",
@@ -2412,7 +2412,7 @@
   },
   "0x00416f90": {
     "duplicates": {
-      "__dt__9WindowRefFv": "0x00414420"
+      "__dt__36igSmartPointer<18beNDMWStatusCtrlD0>Fv": "0x00414420"
     },
     "exceptions": {
       "index": "0x00553eec",
@@ -2426,7 +2426,7 @@
   "0x00417880": {
     "duplicates": {
       "__dt__11BoolListRefFv": "0x00226990",
-      "__dt__9WindowRefFv": "0x00413fd0"
+      "__dt__38igSmartPointer<20beNDMWStatusSelectE0>Fv": "0x00413fd0"
     },
     "exceptions": {
       "index": "0x00553f40",
@@ -2440,7 +2440,7 @@
   "0x00417cc0": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__9WindowRefFv": "0x00414420"
+      "__dt__30igSmartPointer<12WindowObject>Fv": "0x00414420"
     },
     "exceptions": {
       "index": "0x00553f58",
@@ -2454,7 +2454,7 @@
   "0x0041a400": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__9WindowRefFv": "0x00411100"
+      "__dt__36igSmartPointer<18beNDMWWindowSelect>Fv": "0x00411100"
     },
     "exceptions": {
       "index": "0x00553fc4",
@@ -2469,7 +2469,7 @@
     "duplicates": {
       "__dt__15SelectWindowRefFv": "0x0041ddc0",
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__9WindowRefFv": "0x00411080"
+      "__dt__29igSmartPointer<11ChildWindow>Fv": "0x00411080"
     },
     "exceptions": {
       "index": "0x00554024",
@@ -2482,7 +2482,7 @@
   },
   "0x00422c00": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x003b6090"
+      "__dt__21igSmartPointer<4List>Fv": "0x003b6090"
     },
     "exceptions": {
       "index": "0x00554078",
@@ -2586,7 +2586,7 @@
   },
   "0x00433120": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0040ed60"
+      "__dt__30igSmartPointer<12beNDMWWindow>Fv": "0x0040ed60"
     },
     "exceptions": {
       "index": "0x00554318",
@@ -2690,7 +2690,7 @@
   },
   "0x004429d0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00554588",
@@ -2703,7 +2703,7 @@
   },
   "0x00442d10": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005545a0",
@@ -2716,7 +2716,7 @@
   },
   "0x00443900": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005545dc",
@@ -2729,7 +2729,7 @@
   },
   "0x00443bd0": {
     "duplicates": {
-      "__dt__7ListRefFv": "0x0033e9c0"
+      "__dt__21igSmartPointer<4List>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005545e8",
@@ -2742,7 +2742,7 @@
   },
   "0x00445200": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005545f4",
@@ -2755,7 +2755,7 @@
   },
   "0x004456c0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x00150eb0"
+      "__dt__21igSmartPointer<4List>Fv": "0x00150eb0"
     },
     "exceptions": {
       "index": "0x00554600",
@@ -2768,7 +2768,7 @@
   },
   "0x00445990": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x00150eb0"
+      "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0"
     },
     "exceptions": {
       "index": "0x0055460c",
@@ -2783,7 +2783,7 @@
     "duplicates": {
       "__dt__10IntListRefFv": "0x00150eb0",
       "__dt__11BoolListRefFv": "0x00226990",
-      "__dt__7ListRefFv": "0x0033e9c0"
+      "__dt__21igSmartPointer<4List>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x00554624",
@@ -2796,8 +2796,8 @@
   },
   "0x0044acc0": {
     "duplicates": {
-      "__dt__11DataListRefFv": "0x0033e9c0",
-      "__dt__11InfoWorkRefFv": "0x00352fc0"
+      "__dt__11InfoWorkRefFv": "0x00352fc0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005547b0",
@@ -2810,7 +2810,7 @@
   },
   "0x0044af50": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005547bc",
@@ -2823,7 +2823,7 @@
   },
   "0x0044b520": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "exceptions": {
       "index": "0x005547e0",
@@ -2862,7 +2862,7 @@
   },
   "0x0038e6b0": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0038c390"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0038c390"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -2875,9 +2875,9 @@
   },
   "0x0038bee0": {
     "duplicates": {
-      "__dt__10ArgDataRefFv": "0x00357a90",
       "__dt__7WorkRefFv": "0x0038c410",
-      "__dt__8DelayRefFv": "0x0038c390"
+      "__dt__8DelayRefFv": "0x0038c390",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00357a90"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -2927,7 +2927,7 @@
   },
   "0x0033bd30": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x00130140"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
     },
     "exceptions": {
       "index": "0x00547bb0",
@@ -2962,7 +2962,7 @@
       "__dt__10ItemRef<2>Fv": "0x003d9cd0",
       "__dt__10ItemRef<3>Fv": "0x003d9c50",
       "__dt__10ItemRef<4>Fv": "0x003d9bd0",
-      "__dt__11ItemRefLastFv": "0x003b9ba0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x003b9ba0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -2992,7 +2992,7 @@
     "emitted": {
       "__dt__8ItemRefCFv": "0x00441f10",
       "__dt__8ItemRefBFv": "0x00441f90",
-      "__dt__7WorkRefFv": "0x00442010"
+      "__dt__39igSmartPointer<21beNDMWMdlItemInfoWork>Fv": "0x00442010"
     },
     "duplicates": {
       "__dt__9ObjectRefFv": "0x0033e9c0",
@@ -3013,17 +3013,17 @@
   },
   "0x003f6620": {
     "emitted": {
-      "__dt__29DataRef<18beDataObjFloatList>Fv": "0x003f6f90",
-      "__dt__30DataRef<19beDataObjObjectList>Fv": "0x003f7010",
-      "__dt__30DataRef<19beDataObjStringList>Fv": "0x003f7090",
-      "__dt__26DataRef<15beDataObjString>Fv": "0x003f7110",
-      "__dt__28DataRef<17beDataObjBoolList>Fv": "0x003f7190",
-      "__dt__24DataRef<13beDataObjBool>Fv": "0x003f7210",
-      "__dt__27DataRef<16beDataObjIntList>Fv": "0x003f7290"
+      "__dt__36igSmartPointer<18beDataObjFloatList>Fv": "0x003f6f90",
+      "__dt__37igSmartPointer<19beDataObjObjectList>Fv": "0x003f7010",
+      "__dt__37igSmartPointer<19beDataObjStringList>Fv": "0x003f7090",
+      "__dt__33igSmartPointer<15beDataObjString>Fv": "0x003f7110",
+      "__dt__35igSmartPointer<17beDataObjBoolList>Fv": "0x003f7190",
+      "__dt__31igSmartPointer<13beDataObjBool>Fv": "0x003f7210",
+      "__dt__34igSmartPointer<16beDataObjIntList>Fv": "0x003f7290"
     },
     "duplicates": {
-      "__dt__23DataRef<12beDataObjInt>Fv": "0x00350b10",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__30igSmartPointer<12beDataObjInt>Fv": "0x00350b10"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -3041,8 +3041,8 @@
       "__dt__11FlagWorkRefFv": "0x003f2bc0"
     },
     "duplicates": {
-      "__dt__11DataListRefFv": "0x0033e9c0",
-      "__dt__11DegiDataRefFv": "0x003e9010"
+      "__dt__11DegiDataRefFv": "0x003e9010",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -3053,10 +3053,10 @@
       "__dt__15SaveCtrlDataRefFv": "0x00408070"
     },
     "duplicates": {
-      "__dt__11DataListRefFv": "0x0033e9c0",
       "__dt__13CommonIntfRefFv": "0x003f2c40",
       "__dt__11DegiDataRefFv": "0x003e9010",
-      "__dt__11FlagWorkRefFv": "0x003f2bc0"
+      "__dt__11FlagWorkRefFv": "0x003f2bc0",
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -3066,7 +3066,7 @@
     "emitted": {},
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
-      "__dt__12GlobalStrRefFv": "0x001489a0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x001489a0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -3077,7 +3077,7 @@
       "__dt__8NamedRefFv": "0x003d3170"
     },
     "duplicates": {
-      "__dt__8PropsRefFv": "0x0033e9c0"
+      "__dt__23igSmartPointer<6RefHdr>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -3093,7 +3093,7 @@
       "__dt__7MoveRefFv": "0x00393aa0"
     },
     "duplicates": {
-      "__dt__11DataListRefFv": "0x0033e9c0"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -3121,7 +3121,7 @@
   "0x00413480": {
     "emitted": {},
     "duplicates": {
-      "__dt__12GlobalStrRefFv": "0x001489a0"
+      "__dt__20igSmartPointer<3Str>Fv": "0x001489a0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -3130,7 +3130,7 @@
   "0x00415680": {
     "emitted": {},
     "duplicates": {
-      "__dt__12GlobalStrRefFv": "0x001489a0"
+      "__dt__34igSmartPointer<16RefCountedHeader>Fv": "0x001489a0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -3139,7 +3139,7 @@
   "0x00339110": {
     "emitted": {},
     "duplicates": {
-      "__dt__11ObjectShareFv": "0x00130140"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5609,7 +5609,7 @@
   },
   "0x004667d0": {
     "duplicates": {
-      "__dt__8ProbeRefFv": "0x0025a230"
+      "__dt__24igSmartPointer<7igProbe>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5617,7 +5617,7 @@
   },
   "0x00140610": {
     "duplicates": {
-      "__dt__8ImageRefFv": "0x0025a230"
+      "__dt__22igSmartPointer<5Image>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5625,7 +5625,7 @@
   },
   "0x002e3950": {
     "duplicates": {
-      "__dt__13FolderItemRefFv": "0x0025a230"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5633,10 +5633,10 @@
   },
   "0x0016e660": {
     "duplicates": {
-      "__dt__7NameRefFv": "0x00164870",
       "__dt__9LoaderRefFv": "0x001648f0",
       "__dt__9ReaderRefFv": "0x00164970",
-      "__dt__8PathTextFv": "0x00130720"
+      "__dt__8PathTextFv": "0x00130720",
+      "__dt__19igSmartPointer<2O0>Fv": "0x00164870"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5644,7 +5644,7 @@
   },
   "0x0016eab0": {
     "duplicates": {
-      "__dt__17ConvertedImageRefFv": "0x0025a230"
+      "__dt__32igSmartPointer<14ConvertedImage>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5652,7 +5652,7 @@
   },
   "0x0017f2b0": {
     "duplicates": {
-      "__dt__5RcRefFv": "0x0025a230"
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5660,7 +5660,7 @@
   },
   "0x00455c30": {
     "duplicates": {
-      "__dt__16ObserverEventRefFv": "0x0025a230"
+      "__dt__35igSmartPointer<17ObserverEventView>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5668,7 +5668,7 @@
   },
   "0x002369e0": {
     "duplicates": {
-      "__dt__14ResizeEventRefFv": "0x0025a230"
+      "__dt__29igSmartPointer<11ResizeEvent>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5676,7 +5676,7 @@
   },
   "0x001485c0": {
     "duplicates": {
-      "__dt__13ControllerRefFv": "0x0025a230"
+      "__dt__34igSmartPointer<16igPsx2Controller>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5684,8 +5684,8 @@
   },
   "0x00155f10": {
     "duplicates": {
-      "__dt__8EntryRefFv": "0x0025a230",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__22igSmartPointer<5Entry>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5693,7 +5693,7 @@
   },
   "0x001566c0": {
     "duplicates": {
-      "__dt__4TRefFv": "0x0025a230"
+      "__dt__18igSmartPointer<1T>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5701,8 +5701,8 @@
   },
   "0x00158f50": {
     "duplicates": {
-      "__dt__10VStreamRefFv": "0x0025a230",
-      "__dt__9ImageNameFv": "0x00130720"
+      "__dt__9ImageNameFv": "0x00130720",
+      "__dt__24igSmartPointer<7VStream>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5710,7 +5710,7 @@
   },
   "0x0015ed00": {
     "duplicates": {
-      "__dt__4VRefFv": "0x0025a230"
+      "__dt__18igSmartPointer<1V>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5718,8 +5718,8 @@
   },
   "0x0018f760": {
     "duplicates": {
-      "__dt__11InstanceRefFv": "0x0025a230",
-      "__dt__15InstanceListRefFv": "0x0025a2b0"
+      "__dt__15InstanceListRefFv": "0x0025a2b0",
+      "__dt__30igSmartPointer<12InstanceNode>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5727,8 +5727,8 @@
   },
   "0x001afc90": {
     "duplicates": {
-      "__dt__19RefHolder<7AttrObj>Fv": "0x0025a230",
-      "__dt__25RefHolder<12AttrStackRec>Fv": "0x0025a2b0"
+      "__dt__24igSmartPointer<7AttrObj>Fv": "0x0025a230",
+      "__dt__30igSmartPointer<12AttrStackRec>Fv": "0x0025a2b0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5736,7 +5736,7 @@
   },
   "0x001b0450": {
     "duplicates": {
-      "__dt__5RcRefFv": "0x0025a230"
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5744,7 +5744,7 @@
   },
   "0x001bb090": {
     "duplicates": {
-      "__dt__9LookupRefFv": "0x0025a230"
+      "__dt__18igSmartPointer<1T>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5752,7 +5752,7 @@
   },
   "0x001cb010": {
     "duplicates": {
-      "__dt__10IniTextRefFv": "0x0025a230"
+      "__dt__32igSmartPointer<14IniValueObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5760,10 +5760,10 @@
   },
   "0x001cb340": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x001c6460",
       "__dt__7TextRefFv": "0x0025a230",
       "__dt__7ListRefFv": "0x001489a0",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__25igSmartPointer<8SrObject>Fv": "0x001c6460"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5784,7 +5784,7 @@
     "duplicates": {
       "__dt__12IniStringRefFv": "0x00333760",
       "__dt__15StringObjectRefFv": "0x0025a2b0",
-      "__dt__7FileRefFv": "0x0025a230"
+      "__dt__31igSmartPointer<13IniFileObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5792,13 +5792,13 @@
   },
   "0x001d08d0": {
     "stripped": [
-      "__dt__12FloatListRefFv",
+      "__dt__29igSmartPointer<11igFloatList>Fv",
       "__dt__11ByteListRefFv"
     ]
   },
   "0x001d6410": {
     "duplicates": {
-      "__dt__12PathEntryRefFv": "0x0025a230"
+      "__dt__26igSmartPointer<9PathEntry>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5806,7 +5806,7 @@
   },
   "0x001d6700": {
     "duplicates": {
-      "__dt__14ChildObjectRefFv": "0x0025a230"
+      "__dt__29igSmartPointer<11ChildObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5814,7 +5814,7 @@
   },
   "0x001d6900": {
     "duplicates": {
-      "__dt__12PrimitiveRefFv": "0x0025a230"
+      "__dt__26igSmartPointer<9Primitive>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5822,7 +5822,7 @@
   },
   "0x001e6490": {
     "duplicates": {
-      "__dt__8ValueRefFv": "0x0025a230"
+      "__dt__22igSmartPointer<5Value>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5830,7 +5830,7 @@
   },
   "0x0022b910": {
     "duplicates": {
-      "__dt__7ItemRefFv": "0x0025a230"
+      "__dt__18igSmartPointer<1T>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5838,8 +5838,8 @@
   },
   "0x00234d70": {
     "duplicates": {
-      "__dt__13StringListRefFv": "0x0025a230",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__36igSmartPointer<18InternedStringList>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5847,7 +5847,7 @@
   },
   "0x00236140": {
     "duplicates": {
-      "__dt__14NamedObjectRefFv": "0x0025a230"
+      "__dt__29igSmartPointer<11NamedObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5855,7 +5855,7 @@
   },
   "0x00236ca0": {
     "duplicates": {
-      "__dt__9PluginRefFv": "0x00333760"
+      "__dt__25igSmartPointer<8Instance>Fv": "0x00333760"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5863,7 +5863,7 @@
   },
   "0x002d7130": {
     "duplicates": {
-      "__dt__7ListRefFv": "0x0025a230"
+      "__dt__28igSmartPointer<10ObjectList>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5871,7 +5871,7 @@
   },
   "0x002d7f10": {
     "duplicates": {
-      "__dt__9SourceRefFv": "0x0025a230"
+      "__dt__33igSmartPointer<15FieldBindTarget>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5879,7 +5879,7 @@
   },
   "0x002da010": {
     "duplicates": {
-      "__dt__21ConfigPlatformTextRefFv": "0x0025a230"
+      "__dt__36igSmartPointer<18ConfigPlatformText>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5887,7 +5887,7 @@
   },
   "0x002dcaa0": {
     "duplicates": {
-      "__dt__7PoolRefFv": "0x0025a230"
+      "__dt__24igSmartPointer<7RefPool>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5895,7 +5895,7 @@
   },
   "0x002fd610": {
     "duplicates": {
-      "__dt__11InstanceRefFv": "0x0025a230"
+      "__dt__25igSmartPointer<8Instance>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5911,7 +5911,7 @@
   },
   "0x00304720": {
     "duplicates": {
-      "__dt__13RepositoryRefFv": "0x0025a230"
+      "__dt__36igSmartPointer<18igPluginRepository>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5919,7 +5919,7 @@
   },
   "0x003061c0": {
     "duplicates": {
-      "__dt__10IniPairRefFv": "0x0025a230"
+      "__dt__30igSmartPointer<12IniPairEntry>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5927,13 +5927,13 @@
   },
   "0x00308a90": {
     "stripped": [
-      "__dt__5ObRefFv"
+      "__dt__19igSmartPointer<2Ob>Fv"
     ]
   },
   "0x0032c240": {
     "duplicates": {
-      "__dt__7TextRefFv": "0x0025a230",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__21igSmartPointer<4Text>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5941,12 +5941,12 @@
   },
   "0x00455f50": {
     "stripped": [
-      "__dt__6ObjRefFv"
+      "__dt__20igSmartPointer<3Obj>Fv"
     ]
   },
   "0x004573f0": {
     "duplicates": {
-      "__dt__8EntryRefFv": "0x0025a230"
+      "__dt__22igSmartPointer<5Entry>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5954,8 +5954,8 @@
   },
   "0x00453860": {
     "duplicates": {
-      "__dt__20LayerRef<9FillLayer>Fv": "0x0025a230",
-      "__dt__24LayerRef<12OutlineLayer>Fv": "0x0025a2b0"
+      "__dt__26igSmartPointer<9FillLayer>Fv": "0x0025a230",
+      "__dt__30igSmartPointer<12OutlineLayer>Fv": "0x0025a2b0"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5963,7 +5963,7 @@
   },
   "0x002d06c0": {
     "duplicates": {
-      "__dt__7LockRefFv": "0x0025a230"
+      "__dt__21igSmartPointer<4Lock>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5979,7 +5979,7 @@
   },
   "0x002e1bb0": {
     "duplicates": {
-      "__dt__6RunRefFv": "0x0025a230"
+      "__dt__19igSmartPointer<2Ob>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5987,7 +5987,7 @@
   },
   "0x00325d70": {
     "duplicates": {
-      "__dt__5ObRefFv": "0x0025a230"
+      "__dt__19igSmartPointer<2Ob>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5995,7 +5995,7 @@
   },
   "0x001aefe0": {
     "duplicates": {
-      "__dt__9AnimDbRefFv": "0x0025a230"
+      "__dt__30igSmartPointer<12AnimDbObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6003,7 +6003,7 @@
   },
   "0x001bb880": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0025a230"
+      "__dt__18igSmartPointer<1T>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6011,7 +6011,7 @@
   },
   "0x00304840": {
     "duplicates": {
-      "__dt__13RepositoryRefFv": "0x0025a230"
+      "__dt__36igSmartPointer<18igPluginRepository>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6019,7 +6019,7 @@
   },
   "0x0032d220": {
     "duplicates": {
-      "__dt__4ORefFv": "0x0025a230"
+      "__dt__18igSmartPointer<1O>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6027,7 +6027,7 @@
   },
   "0x002e7100": {
     "duplicates": {
-      "__dt__4TRefFv": "0x0025a230"
+      "__dt__18igSmartPointer<1T>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6035,7 +6035,7 @@
   },
   "0x0045fd70": {
     "duplicates": {
-      "__dt__9ObjectRefFv": "0x0025a230"
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6043,8 +6043,8 @@
   },
   "0x0022a7b0": {
     "duplicates": {
-      "__dt__11IteratorRefFv": "0x0025a230",
-      "__dt__9StringRefFv": "0x00130720"
+      "__dt__9StringRefFv": "0x00130720",
+      "__dt__25igSmartPointer<8Iterator>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6052,8 +6052,8 @@
   },
   "0x0022b1a0": {
     "duplicates": {
-      "__dt__11IteratorRefFv": "0x0025a230",
-      "__dt__7LockRefFv": "0x0025a2b0"
+      "__dt__7LockRefFv": "0x0025a2b0",
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6061,7 +6061,7 @@
   },
   "0x001805a0": {
     "duplicates": {
-      "__dt__11ResourceRefFv": "0x0025a230"
+      "__dt__31igSmartPointer<13BuildResource>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6069,7 +6069,7 @@
   },
   "0x001e6de0": {
     "duplicates": {
-      "__dt__12FormattedRefFv": "0x0025a230"
+      "__dt__33igSmartPointer<15FormattedObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6077,7 +6077,7 @@
   },
   "0x001e6f10": {
     "duplicates": {
-      "__dt__12QuadNamedRefFv": "0x0025a230"
+      "__dt__26igSmartPointer<9QuadNamed>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6085,7 +6085,7 @@
   },
   "0x0022c7f0": {
     "duplicates": {
-      "__dt__13NameBufferRefFv": "0x0025a230"
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6093,7 +6093,7 @@
   },
   "0x0023c250": {
     "duplicates": {
-      "__dt__5RcRefFv": "0x0025a230"
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6101,7 +6101,7 @@
   },
   "0x00246b30": {
     "duplicates": {
-      "__dt__13ScriptFileRefFv": "0x0025a230"
+      "__dt__28igSmartPointer<10ScriptFile>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6110,7 +6110,7 @@
   "0x00460330": {
     "duplicates": {
       "__dt__10RemovedRefFv": "0x0025a2b0",
-      "__dt__7ItemRefFv": "0x0025a230"
+      "__dt__20igSmartPointer<3Obj>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"

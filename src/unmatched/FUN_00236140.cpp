@@ -17,12 +17,12 @@ extern int DAT_00586f20[4];
 }
 struct G { char p[76]; int f76; };
 extern G *DAT_00586dc8[4];
-struct NamedObjectRef {
-    NamedObject *p;
-    NamedObjectRef(NamedObject *object) : p(object) {}
-    ~NamedObjectRef() { NamedObject *o = p; if (o != 0) { o->references = o->references - 1; if ((o->references & 0x7FFFFF) == 0) igObject_Destroy(o); } }
-    NamedObject *get() const { return p; }
-    NamedObject *operator->() const { return p; }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->references = o->references - 1; if ((o->references & 0x7FFFFF) == 0) igObject_Destroy(o); } }
+    T *get() const { return p; }
+    T *operator->() const { return p; }
 };
 static inline int internedPool(void) {
     if (DAT_00586f20[0] == 0) {
@@ -33,7 +33,7 @@ static inline int internedPool(void) {
     return DAT_00586f20[0];
 }
 extern "C" void FUN_00236140(void) {
-    NamedObjectRef r(FUN_002c43b0(Memory_GetAllocatorBySelector(DAT_00587038[0])));
+    igSmartPointer<NamedObject> r(FUN_002c43b0(Memory_GetAllocatorBySelector(DAT_00587038[0])));
     NamedObject *s0 = r.get();
     int *s1 = (int *)StringPool_Intern(internedPool(), &DAT_004e9740[0]);
     int *old = (int *)s0->name;

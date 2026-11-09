@@ -19,11 +19,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the new name text; released on scope exit, after the name list has
  * retained it (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beUnicodeObj *p;
-    ObjectRef(beUnicodeObj *o) : p(o) {}
-    ~ObjectRef() { beUnicodeObj *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg3) {
     int s0;
@@ -39,7 +39,7 @@ extern "C" void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg
     s0 = ((int *)(((igObjectList *)arg0->_playerDataListList)->_data))[arg1];
     al = igObject_GetAllocator(arg0);
     al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587108[0]);
-    ObjectRef rb(FUN_003614f0(al));
+    igSmartPointer<beUnicodeObj> rb(FUN_003614f0(al));
     beUnicodeObj_AllocateBuffer(rb.p, 8);
     {
         /* The looked-up name is an out-parameter the lookup retains; it is released by hand rather

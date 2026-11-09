@@ -33,11 +33,11 @@ public:
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 /* Owning stack reference to the new item-page window; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    beNDMWStatusCtrlD0 *p;
-    WindowRef(beNDMWStatusCtrlD0 *w) : p(w) {}
-    ~WindowRef() { beNDMWStatusCtrlD0 *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)w); } }
+    T *p;
+    igSmartPointer(T *w) : p(w) {}
+    ~igSmartPointer() { T *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)w); } }
 };
 struct Str { static inline int *intern(const char *s) {
     int *token;
@@ -66,7 +66,7 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_29(beNDMWStatusPowerSocket *arg0) 
     } else {
         a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
     }
-    WindowRef win(FUN_003baf10(a));
+    igSmartPointer<beNDMWStatusCtrlD0> win(FUN_003baf10(a));
     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained(arg0->_subWindow, win.p);
     { int *tok = Str::intern((const char *)&DAT_00519b50[0]); StringList_AppendRetained(win.p->_textCloseTypeList, StringRef(tok)); }

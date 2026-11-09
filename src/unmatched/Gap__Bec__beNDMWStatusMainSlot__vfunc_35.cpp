@@ -28,11 +28,11 @@ extern unsigned char GPR_00554c14;
 
 /* Owning stack reference to the E0 select sub-window created here; released on scope exit
  * (reference count in the low 23 bits of _refCount). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    beNDMWStatusSelectE0 *p;
-    WindowRef(beNDMWStatusSelectE0 *w) : p(w) {}
-    ~WindowRef() { beNDMWStatusSelectE0 *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
+    T *p;
+    igSmartPointer(T *w) : p(w) {}
+    ~igSmartPointer() { T *w = p; if (w != 0) { --w->_refCount; if ((w->_refCount & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
 /* Owning stack reference to the window's new decide list; released on scope exit. */
 class BoolListRef {
@@ -53,7 +53,7 @@ static inline void append(const BoolListRef &list, const unsigned char &value) {
     }
     ((unsigned char *)l->_data)[n] = value;
 }
-static inline void setDecideList(const WindowRef &win, const BoolListRef &list) {
+static inline void setDecideList(const igSmartPointer<beNDMWStatusSelectE0> &win, const BoolListRef &list) {
     igBoolList *l0 = list.p;
     beNDMWStatusSelectE0 *w = win.p;
     if (l0 != 0) {
@@ -68,7 +68,7 @@ extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_35(beNDMWStatusMainSlot *a
 
     a = igObject_GetAllocator(arg0);
     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-    WindowRef win(FUN_003b5370(a));
+    igSmartPointer<beNDMWStatusSelectE0> win(FUN_003b5370(a));
     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained((unsigned int)arg0->_subWindow, win.p);
     win.p->_selectMax = 2;

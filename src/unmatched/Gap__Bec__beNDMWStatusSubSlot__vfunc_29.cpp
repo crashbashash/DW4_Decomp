@@ -32,11 +32,11 @@ public:
 };
 /* Owning stack reference to the sub-window created here; released on scope exit (reference count
  * in the low 23 bits of references). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    WindowObject *p;
-    WindowRef(WindowObject *w) : p(w) {}
-    ~WindowRef() { WindowObject *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy((RefCountedHeader *)w); } }
+    T *p;
+    igSmartPointer(T *w) : p(w) {}
+    ~igSmartPointer() { T *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy((RefCountedHeader *)w); } }
 };
 extern "C" int StringList_AppendRetained(int, const StringRef &);
 #include "dw4/reflected.h"
@@ -66,7 +66,7 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_29(beNDMWStatusSubSlot *arg0) {
     } else {
         a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
     }
-    WindowRef win(FUN_003baf10(a));
+    igSmartPointer<WindowObject> win(FUN_003baf10(a));
     beNDMWWindow_BindContext(win.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained(arg0->_subWindow, win.p);
     INTERN_APPEND(((beNDMWWindow *)win.p)->_textCloseTypeList, DAT_00519b50)

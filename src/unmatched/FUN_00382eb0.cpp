@@ -14,12 +14,12 @@ extern const Table DAT_004c8880;
 extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
-struct Ref {
-    beUnicodeObj *p;
-    Ref(beUnicodeObj *x) { p = x; }
-    ~Ref() { beUnicodeObj *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *x) { p = x; }
+    ~igSmartPointer() { T *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-extern "C" int FUN_00382eb0(Ref *out, beFont *self, const char *str) {
+extern "C" int FUN_00382eb0(igSmartPointer<beUnicodeObj> *out, beFont *self, const char *str) {
     Table t = DAT_004c8880;
     char c0;
     char c1;
@@ -70,7 +70,7 @@ extern "C" int FUN_00382eb0(Ref *out, beFont *self, const char *str) {
     }
     a = igObject_GetAllocator(self);
     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-    Ref r(FUN_003614f0(a));
+    igSmartPointer<beUnicodeObj> r(FUN_003614f0(a));
     beUnicodeObj_AllocateBuffer(r.p, n);
     unsigned short *buf = (unsigned short *)r.p->_buffer;
     int m = 0;

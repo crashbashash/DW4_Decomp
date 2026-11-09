@@ -25,11 +25,11 @@ extern int DAT_0058b028[4];
 void Gap__Bec__beNDMWStatusPowerSocket__vfunc_26(beNDMWStatusPowerSocket *a);
 }
 /* Retained share of the system's global string object. */
-struct GlobalStrRef {
-    Str *p;
-    GlobalStrRef(Str *o) : p(o) { if (p != 0) p->refs = p->refs + 1; }
-    ~GlobalStrRef() {
-        Str *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *o) : p(o) { if (p != 0) p->refs = p->refs + 1; }
+    ~igSmartPointer() {
+        T *o;
         /* matching construct: (o = p) != 0 shares the load of the held pointer with the string reads, as retail */
         if ((o = p) != 0) {
             o->refs = o->refs - 1;
@@ -59,7 +59,7 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_26(beNDMWStatusPowerSocket *a) {
         sp4C[1] = 0;
         sp4C[0] = *(int *)(var_s1 + 24) + 0x30;
         {
-        GlobalStrRef sp48((Str *)((beSystem *)FUN_00236f80(a->_insight, DAT_00587d08[0]))->_globalStrObj);
+        igSmartPointer<Str> sp48((Str *)((beSystem *)FUN_00236f80(a->_insight, DAT_00587d08[0]))->_globalStrObj);
         FUN_0030b3c0(sp48.p, temp_v0);
         t2 = sp48.p;
         temp_v0 = t2->len;

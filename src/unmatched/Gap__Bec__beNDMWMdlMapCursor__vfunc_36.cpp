@@ -35,11 +35,11 @@ struct RefCount { static inline void addref(igObject *o) { if (o != 0) o->_refCo
  static inline void release(igObject *o) { if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } } };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to the new property value object; released on scope exit. */
 class ValueRef {
@@ -57,7 +57,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
         int al = igObject_GetAllocator(ram);
         al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ObjectRef list(beBaseInfoDataList_Create(al));
+        igSmartPointer<igObject> list(beBaseInfoDataList_Create(al));
         igObject *t = list.p;
         RefCount::addref(t);
         RefCount::release((igObject *)ram->_dataList);

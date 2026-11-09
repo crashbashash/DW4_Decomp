@@ -6,11 +6,11 @@ ChildObject *FUN_002c72c0(...);
 int FUN_002d8620(...);
 void igObject_Destroy(ChildObject *);
 int igObject_GetAllocator(...);
-struct ChildObjectRef {
-    ChildObject *p;
-    ChildObjectRef(ChildObject *object) : p(object) {}
-    ~ChildObjectRef() {
-        ChildObject *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             --object->references;
             if ((object->references & 0x7FFFFF) == 0) {
@@ -18,10 +18,10 @@ struct ChildObjectRef {
             }
         }
     }
-    ChildObject *get() const { return p; }
+    T *get() const { return p; }
 };
 void FUN_001d6700(ChildOwner *self) {
-    ChildObjectRef created(FUN_002c72c0(igObject_GetAllocator(self)));
+    igSmartPointer<ChildObject> created(FUN_002c72c0(igObject_GetAllocator(self)));
     FUN_002d8620(created.get(), self->f20, 0, 0);
     FUN_001d6790(self, created.get());
 }

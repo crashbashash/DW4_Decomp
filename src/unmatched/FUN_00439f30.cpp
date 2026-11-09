@@ -34,11 +34,11 @@ struct ShopAlloc {
 
 /* Owning stack reference to one scratch object; released on scope exit (reference count in the low
  * 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1);
 void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1) {
@@ -66,8 +66,8 @@ void FUN_00439f30(beNDMWShopCtrlSales *arg0, int arg1) {
         l1 = (igObjectList *)igProperty_GetRecordFolder(obj, &DAT_0051bb78[0])->f12;
         m1 = (igObjectList *)igProperty_GetRecordFolder(obj, &DAT_0051bba0[0])->f12;
         l2 = (igObjectList *)igProperty_GetRecordFolder(obj, &DAT_0051bb88[0])->f12;
-        ObjectRef a((igObject *)FUN_003c90f0(ShopAlloc::Pool(arg0)));
-        ObjectRef b((igObject *)FUN_003c90f0(ShopAlloc::Pool(arg0)));
+        igSmartPointer<igObject> a((igObject *)FUN_003c90f0(ShopAlloc::Pool(arg0)));
+        igSmartPointer<igObject> b((igObject *)FUN_003c90f0(ShopAlloc::Pool(arg0)));
         kind = item->_kindNo;
         if (kind == 0) {
             FUN_0043a450(arg0, l0, a.p, m0, b.p);

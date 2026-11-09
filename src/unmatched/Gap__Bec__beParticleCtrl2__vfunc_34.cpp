@@ -43,11 +43,11 @@ struct Rel { static inline void go(igObject *object) {
 struct V3 { float x; float y; float z; };
 /* Owning stack reference to the new particle work record; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class WorkRef {
+template <class T> class igSmartPointer {
 public:
-    beParticleCtrl2InfoWork *p;
-    WorkRef(beParticleCtrl2InfoWork *o) : p(o) {}
-    ~WorkRef() { beParticleCtrl2InfoWork *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* matching construct: dummy virtual slots so t() dispatches through retail vtable slot 22 (the beSystem _random source) */
 struct Clk {
@@ -149,7 +149,7 @@ extern "C" int Gap__Bec__beParticleCtrl2__vfunc_34(beParticleCtrl2 *arg0, bePart
                 } else {
                     a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
                 }
-                WorkRef work((beParticleCtrl2InfoWork *)FUN_0034c040(a));
+                igSmartPointer<beParticleCtrl2InfoWork> work((beParticleCtrl2InfoWork *)FUN_0034c040(a));
                 igObject *o = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);
                 beParticleCtrl2InfoWork *r = work.p;
                 if (o != 0) {

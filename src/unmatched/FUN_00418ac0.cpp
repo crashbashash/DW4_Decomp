@@ -49,13 +49,13 @@ void FUN_00418ac0(beNDMWStatusCtrlD0 *p0, int arg1, int arg2);
 struct RecordFolder { int w0; int w4; int w8; igDataList *list; };
 /* Owning stack reference to the shared name-string object; retained, and released on scope exit
  * (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igStringObj *p;
-    ObjectRef(igStringObj *o) : p(o) {}
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
     /* matching construct: accessor read — the string calls take the held pointer through `this`. */
-    operator igStringObj *() { return p; }
-    ~ObjectRef() { igStringObj *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    operator T *() { return p; }
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_00418ac0(beNDMWStatusCtrlD0 *p0, int arg1, int arg2) {
     beNDMWStatusCtrlD0 *self;
@@ -89,7 +89,7 @@ void FUN_00418ac0(beNDMWStatusCtrlD0 *p0, int arg1, int arg2) {
         folder = t2->list;
     }
     ctx = FUN_00236f80(self->_insight, DAT_0058b028[0]);
-    ObjectRef sp((igStringObj *)((int *)FUN_00236f80(self->_insight, DAT_00587d08[0]))[18]);
+    igSmartPointer<igStringObj> sp((igStringObj *)((int *)FUN_00236f80(self->_insight, DAT_00587d08[0]))[18]);
     /* matching construct: the text buffers are declared after the holder so they lie below it in the frame as retail. */
     char buf1[2];
     char buf2[2];

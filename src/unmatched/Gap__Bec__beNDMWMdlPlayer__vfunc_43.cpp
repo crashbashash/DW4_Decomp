@@ -40,11 +40,11 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 struct RamInfoArg { char p0[8]; int f8; char p1[28]; igObject *m40; };
 extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_43(beNDMWMdlPlayer *arg0, RamInfoArg *arg1);
@@ -61,7 +61,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_43(beNDMWMdlPlayer *arg0, RamInfoArg *arg1
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
         {
-            ObjectRef r(beBaseInfoDataList_Create(a));
+            igSmartPointer<igObject> r(beBaseInfoDataList_Create(a));
             s0 = r.p;
             if (s0 != 0) {
                 s0->_refCount++;

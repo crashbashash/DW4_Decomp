@@ -108,11 +108,11 @@ extern "C" int StringList_AppendRetained(int, const StringRef &);
 
 /* Owning stack references to the sub-windows while their set-up runs; each releases its object on
  * scope exit (reference count in the low 23 bits of _refCount). One class per destructor copy. */
-class ResultRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ResultRef(igObject *o) : p(o) {}
-    ~ResultRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 class SelectE1Ref {
 public:
@@ -219,7 +219,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
             case 0:
                 ALLOC(alloc, self)
                 {
-                ResultRef spCC((igObject *)FUN_003b4d90(alloc));
+                igSmartPointer<igObject> spCC((igObject *)FUN_003b4d90(alloc));
                 beNDMWWindow_BindContext(spCC.p, self, self->_insight, self->_playerNo, 0x60E);
                 ObjectList_AppendRetained(self->_subWindow, spCC.p);
                 }
@@ -452,7 +452,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                 if (SUBCNT(self) != self->_nowProcKazu) {
                     ALLOC(alloc, self)
                     {
-                    ResultRef spBC((igObject *)FUN_003b4d90(alloc));
+                    igSmartPointer<igObject> spBC((igObject *)FUN_003b4d90(alloc));
                     beNDMWWindow_BindContext(spBC.p, self, self->_insight, self->_playerNo, 0x614);
                     ObjectList_AppendRetained(self->_subWindow, spBC.p);
                     }

@@ -37,11 +37,11 @@ public:
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int v31(int);
   int refs;
 };
-struct NameRef {
-    O0 *p;
-    NameRef(O0 *object) : p(object) {}
-    ~NameRef() {
-        O0 *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->refs = o->refs - 1;
             if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
@@ -109,7 +109,7 @@ extern "C" int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
     }
 block_4:
     {
-      NameRef name((O0 *)FUN_002b9500(igObject_GetAllocator(arg0)));
+      igSmartPointer<O0> name((O0 *)FUN_002b9500(igObject_GetAllocator(arg0)));
       FUN_0030b3c0(name.p, arg1);
       LoaderRef loader((O1 *)FUN_00150060(igObject_GetAllocator(arg0)));
       var_s0 = loader.p->v21(name.p, arg0) & 0xFF;

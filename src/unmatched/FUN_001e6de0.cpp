@@ -12,11 +12,11 @@ extern int DAT_004c22f0[16];
 extern int DAT_00586f20[16];
 }
 struct AdoptReference { };
-struct FormattedRef {
-    FormattedObject *p;
-    FormattedRef(FormattedObject *object, AdoptReference) : p(object) {}
-    ~FormattedRef() {
-        FormattedObject *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object, AdoptReference) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->refs = object->refs - 1;
             if ((object->refs & 0x7FFFFF) == 0) igObject_Destroy(object);
@@ -46,7 +46,7 @@ struct InternedText {
     }
 };
 extern "C" InternedText FUN_001e6de0(Vector3f *value, int format) {
-    FormattedRef formatted(FUN_002b9500(0), AdoptReference());
+    igSmartPointer<FormattedObject> formatted(FUN_002b9500(0), AdoptReference());
     int x = fptodp(value->x);
     int y = fptodp(value->y);
     FUN_0030b7e0(formatted.p, format, x, y, fptodp(value->z));

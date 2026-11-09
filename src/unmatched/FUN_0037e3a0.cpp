@@ -15,7 +15,7 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 /* Owning reference to the new message; the destructor drops one reference and destroys at zero. */
-struct RP { beDemoKeepMes *p; ~RP() { beDemoKeepMes *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <class T> struct igSmartPointer { T *p; ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 #define POOL(v) if (DAT_00586f20[0] == 0) { v = FUN_002eb010(16); if (v != 0) v = StringPool_Construct(v); DAT_00586f20[0] = v; }
 #define SETSTR(fld, arg) { int *nw; beDemoKeepMes *c = e.p; POOL(v) nw = (int *)StringPool_Intern(DAT_00586f20[0], arg); old = (int *)c->fld; if (old != 0) { hd = old - 2; r = old[-1] - 1; old[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*hd, hd); } c->fld = (int)nw; }
 extern "C" void FUN_0037e3a0(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, int t2, long long t3);
@@ -42,7 +42,7 @@ void FUN_0037e3a0(beDemoManager *self, int a1, int a2, int a3, int t0, int t1, i
     v = (GPR_00554c14 != 0) ? v : Memory_GetAllocatorBySelector(DAT_00587110[0]);
     /* matching construct: the holder is declared after the allocation call returns, so retail's protected range starts after the allocator and not at it */
     beDemoKeepMes *k = (beDemoKeepMes *)FUN_00363c20(v);
-    RP e;
+    igSmartPointer<beDemoKeepMes> e;
     e.p = k;
     e.p->_kind = a1;
     e.p->_sendTime = t3;

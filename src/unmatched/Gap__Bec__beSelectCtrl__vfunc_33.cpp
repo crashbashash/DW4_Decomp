@@ -36,11 +36,11 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
 }
 /* Owning stack reference to the freshly created property data list, released at the end of the
  * full expression that stores it (reference count in the low 23 bits of _refCount). */
-class ListRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ListRef(igObject *o) : p(o) {}
-    ~ListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to the select work created on start, released on scope exit. */
 class WorkRef {
@@ -59,7 +59,7 @@ public:
 /* Store a freshly created data list in the ram, taking the ram's share and dropping the previous list;
  * the caller passes the list as a temporary holder that gives up the creating share at the end of the
  * full expression (matching construct: a temporary takes its frame slot after the named locals). */
-struct DataList { static inline void store(beBaseInfoRam *ram, const ListRef &list) {
+struct DataList { static inline void store(beBaseInfoRam *ram, const igSmartPointer<igObject> &list) {
     igObject *created = list.p;
     if (created != 0) created->_refCount = (int)created->_refCount + 1;
     REL(ram->_dataList)
@@ -84,7 +84,7 @@ int Gap__Bec__beSelectCtrl__vfunc_33(beSelectCtrl *arg0, beBaseInfoRam *arg1, in
     if (arg1->_dataList == 0) {
         a = igObject_GetAllocator(arg1);
         a = (GPR_00554c14 != 0) ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        DataList::store(arg1, ListRef((igObject *)beBaseInfoDataList_Create(a)));
+        DataList::store(arg1, igSmartPointer<igObject>((igObject *)beBaseInfoDataList_Create(a)));
     }
     s3 = (beSelectCtrlInfoRamData *)igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0050f800);
     s2 = (beSelectCtrlInfoWork *)s3->_work;

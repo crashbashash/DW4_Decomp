@@ -8,10 +8,10 @@ int igObject_Destroy(Instance *);
 int FUN_00236dd0(int, Instance *);
 int FUN_002fd6e0(Instance **, int, int);
 }
-struct PluginRef {
-    Instance *p;
-    PluginRef(int type, int allocator) {
-        Instance *created;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(int type, int allocator) {
+        T *created;
         FUN_002fd6e0(&created, type, allocator);
         p = created;
         if (p != 0) {
@@ -24,8 +24,8 @@ struct PluginRef {
             }
         }
     }
-    ~PluginRef() {
-        Instance *object = p;
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->rc = object->rc - 1;
             if ((object->rc & 0x7FFFFF) == 0) {
@@ -33,7 +33,7 @@ struct PluginRef {
             }
         }
     }
-    Instance *get() const { return p; }
+    T *get() const { return p; }
 };
 extern "C" void FUN_00236ca0(int self) {
     int meta;
@@ -42,7 +42,7 @@ extern "C" void FUN_00236ca0(int self) {
     count = igMetaObject_CountTree(meta = igInsightPlugin_GetMetaObject());
     for (i = 0; i < count; i++) {
         int type = FUN_002fe300(meta, i);
-        PluginRef plugin(type, igObject_GetAllocator(self));
+        igSmartPointer<Instance> plugin(type, igObject_GetAllocator(self));
         if (plugin.get()) {
             FUN_00236dd0(self, plugin.get());
         }

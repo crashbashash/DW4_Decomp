@@ -8,18 +8,18 @@ int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 void FUN_00455f50(Z *arg0, Y *arg1);
 }
-struct ObjRef {
-    Obj *p;
-    ObjRef(Obj *object) : p(object) {}
-    ~ObjRef() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
         if (p != 0) {
             p->refs = p->refs - 1;
             if ((p->refs & 0x7FFFFF) == 0) igObject_Destroy(p);
         }
     }
-    Obj *get() const { return p; }
+    T *get() const { return p; }
 };
-static inline void setPick(Z *z, const ObjRef &value) {
+static inline void setPick(Z *z, const igSmartPointer<Obj> &value) {
     Obj *held = value.get();
     Obj *old;
     if (held != 0) held->refs = held->refs + 1;
@@ -36,7 +36,7 @@ void FUN_00455f50(Z *arg0, Y *arg1) {
         arg0->f28 = 1;
         arg0->f24 = arg1->f20;
         {
-            ObjRef made(FUN_0019f630(igObject_GetAllocator(arg0)));
+            igSmartPointer<Obj> made(FUN_0019f630(igObject_GetAllocator(arg0)));
             setPick(arg0, made);
         }
         FUN_001c5790(arg0->f32, s1);

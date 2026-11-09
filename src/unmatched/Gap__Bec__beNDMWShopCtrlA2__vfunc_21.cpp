@@ -80,14 +80,14 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0);
 struct Rc { int w0; int references; };
 /* Owning stack reference to a shop select window while it is set up; released on scope exit
  * (reference count in the low 23 bits of references). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    Rc *p;
-    WindowRef(Rc *w) : p(w) {}
+    T *p;
+    igSmartPointer(T *w) : p(w) {}
     /* matching construct: an argument read through the conversion is evaluated before the call
      * arguments that follow it (retail keeps the window in a saved register across them) */
-    operator Rc *() const { return p; }
-    ~WindowRef() { Rc *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy(w); } }
+    operator T *() const { return p; }
+    ~igSmartPointer() { T *w = p; if (w != 0) { --w->references; if ((w->references & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
 /* Same role for the result sub-window. */
 class SubWindowRef {
@@ -141,7 +141,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
                 {
-                    WindowRef win((Rc *)FUN_003b4950(alloc));
+                    igSmartPointer<Rc> win((Rc *)FUN_003b4950(alloc));
                     beNDMWWindow_BindContext(win, arg0, arg0->_insight, arg0->_playerNo, 0x7DD);
                     ObjectList_AppendRetained(arg0->_subWindow, win);
                 }
@@ -202,7 +202,7 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                 alloc = igObject_GetAllocator(arg0);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
                 {
-                WindowRef win((Rc *)FUN_003b4950(alloc));
+                igSmartPointer<Rc> win((Rc *)FUN_003b4950(alloc));
                 beNDMWWindow_BindContext(win, arg0, arg0->_insight, arg0->_playerNo, 0);
                 ObjectList_AppendRetained(arg0->_subWindow, win);
                 beMessenger_SelectGroup(arg0->_messenger, DAT_0051b398);

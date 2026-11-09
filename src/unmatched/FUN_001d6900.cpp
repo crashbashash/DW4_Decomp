@@ -17,11 +17,11 @@ Primitive *FUN_00137810(int);
 int FUN_002f8a20(void);
 int igObject_Destroy(Primitive *);
 }
-struct PrimitiveRef {
-    Primitive *p;
-    PrimitiveRef(Primitive *object) : p(object) {}
-    ~PrimitiveRef() {
-        Primitive *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->references = object->references - 1;
             if ((object->references & 0x7FFFFF) == 0) {
@@ -29,11 +29,11 @@ struct PrimitiveRef {
             }
         }
     }
-    Primitive *operator->() const { return p; }
+    T *operator->() const { return p; }
 };
 extern "C" int FUN_001d6900(Primitive **out) {
     float v[18];
-    PrimitiveRef quad(FUN_00137810(FUN_002f8a20()));
+    igSmartPointer<Primitive> quad(FUN_00137810(FUN_002f8a20()));
     VertexFormat format;
     int i;
     format.flags = 0;

@@ -10,11 +10,11 @@ int StringPool_Intern(int, int);
 int igObject_Destroy(QuadNamed *);
 extern int DAT_004c22f0[16];
 extern int DAT_00586f20[16];
-struct QuadNamedRef {
-    QuadNamed *p;
-    QuadNamedRef(QuadNamed *object) : p(object) {}
-    ~QuadNamedRef() {
-        QuadNamed *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->refs = object->refs - 1;
             if ((object->refs & 0x7FFFFF) == 0) {
@@ -22,7 +22,7 @@ struct QuadNamedRef {
             }
         }
     }
-    QuadNamed *get() const { return p; }
+    T *get() const { return p; }
 };
 struct Tag { };
 int FUN_001e6f10(int *result, Quad *quad, int kind) {
@@ -31,7 +31,7 @@ int FUN_001e6f10(int *result, Quad *quad, int kind) {
     int res;
     int obj;
     Tag tag = Tag();
-    QuadNamedRef named(FUN_002b9500(0));
+    igSmartPointer<QuadNamed> named(FUN_002b9500(0));
     s3 = fptodp(quad->x);
     s2 = fptodp(quad->y);
     s1 = fptodp(quad->z);

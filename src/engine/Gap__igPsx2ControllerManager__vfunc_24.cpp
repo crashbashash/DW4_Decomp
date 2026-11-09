@@ -37,10 +37,10 @@ extern unsigned char GPR_00554b18;
 extern unsigned char GPR_00554c14;
 }
 struct PropertyText : igObject { char *chars; };
-struct ControllerRef {
-    igPsx2Controller *p;
-    ControllerRef(igPsx2Controller *controller) : p(controller) {}
-    ~ControllerRef() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *controller) : p(controller) {}
+    ~igSmartPointer() {
         igObject *object = (igObject *)p;
         if (object != 0) {
             object->_refCount = object->_refCount - 1;
@@ -49,7 +49,7 @@ struct ControllerRef {
             }
         }
     }
-    igPsx2Controller *get() const { return p; }
+    T *get() const { return p; }
 };
 extern "C" void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int arg1);
 void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int arg1) {
@@ -124,7 +124,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                 if (scePadPortOpen(s3, s1, mem) != 1) {
                     Memory_FreeBuffer(mem);
                 } else {
-                    ControllerRef controller((igPsx2Controller *)FUN_00147090(igObject_GetAllocator(arg0)));
+                    igSmartPointer<igPsx2Controller> controller((igPsx2Controller *)FUN_00147090(igObject_GetAllocator(arg0)));
                     controller.get()->_port = s3;
                     controller.get()->_slot = s1;
                     ((Pd *)controller.get())->vX((s3 | (s1 * 2)) & 0xFFFF);

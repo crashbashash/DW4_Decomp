@@ -18,10 +18,10 @@ int FUN_00465260(Effect *, int);
 int igObject_Destroy(ViewObject *);
 void FUN_00462fb0(ViewSelector *self);
 }
-template <class T> struct ViewRef {
+template <class T> struct igSmartPointer {
     T *p;
-    ViewRef(T *object) : p(object) {}
-    ~ViewRef() {
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
         ViewObject *object = p;
         if (object != 0) {
             object->references = object->references - 1;
@@ -48,7 +48,7 @@ static inline Effect *create45cc40() {
     Tag tag = Tag();
     return FUN_0045cc40(0);
 }
-static inline void takeValue(const ViewRef<Binding> &ref, const Fetched &fetched) {
+static inline void takeValue(const igSmartPointer<Binding> &ref, const Fetched &fetched) {
     ViewObject *value = fetched.object;
     Binding *owner = ref.p;
     ViewObject *previous;
@@ -70,7 +70,7 @@ static inline void takeValue(const ViewRef<Binding> &ref, const Fetched &fetched
         }
     }
 }
-static inline void setSource(const ViewRef<Binding> &ref, ViewObject *value) {
+static inline void setSource(const igSmartPointer<Binding> &ref, ViewObject *value) {
     Binding *owner = ref.p;
     ViewObject *previous;
     if (value != 0) {
@@ -85,7 +85,7 @@ static inline void setSource(const ViewRef<Binding> &ref, ViewObject *value) {
     }
     owner->source = value;
 }
-static inline void setTarget(const ViewRef<Binding> &ref, ViewObject *value) {
+static inline void setTarget(const igSmartPointer<Binding> &ref, ViewObject *value) {
     Binding *owner = ref.p;
     ViewObject *previous;
     if (value != 0) {
@@ -100,7 +100,7 @@ static inline void setTarget(const ViewRef<Binding> &ref, ViewObject *value) {
     }
     owner->target = value;
 }
-static inline void setObject(const ViewRef<Camera> &ref, ViewObject *value) {
+static inline void setObject(const igSmartPointer<Camera> &ref, ViewObject *value) {
     Camera *owner = ref.p;
     ViewObject *previous;
     if (value != 0) {
@@ -120,7 +120,7 @@ extern "C" void FUN_00462fb0(ViewSelector *self) {
     int mode = s->f212;
     switch (mode) {
     case 0: {
-        ViewRef<Binding> binding(create45c170());
+        igSmartPointer<Binding> binding(create45c170());
         takeValue(binding, FUN_0045eda0(self->f48, 1));
         setSource(binding, self->f20);
         setTarget(binding, self->f44);
@@ -128,18 +128,18 @@ extern "C" void FUN_00462fb0(ViewSelector *self) {
         break;
     }
     case 2: {
-        ViewRef<Camera> camera(create45c8e0());
+        igSmartPointer<Camera> camera(create45c8e0());
         setObject(camera, self->f12->f20);
         FUN_00463fd0(self->f136, camera.p);
         break;
     }
     case 1: {
-        ViewRef<Camera> camera(create45c5a0());
+        igSmartPointer<Camera> camera(create45c5a0());
         FUN_00463fd0(self->f136, camera.p);
         break;
     }
     case 3: {
-        ViewRef<Camera> camera(create45c5a0());
+        igSmartPointer<Camera> camera(create45c5a0());
         camera.p->follow = 1;
         FUN_00463fd0(self->f136, camera.p);
         break;
@@ -148,7 +148,7 @@ extern "C" void FUN_00462fb0(ViewSelector *self) {
         int first = s->f216;
         if (mode >= first) {
                 first = mode - first;
-            ViewRef<Effect> effect(create45cc40());
+            igSmartPointer<Effect> effect(create45cc40());
             FUN_00465260(effect.p, self->f20->f220->f16[first]);
             FUN_00463fd0(self->f136, effect.p);
             self->f40 = self->f12->f52 + 1;

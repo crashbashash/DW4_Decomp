@@ -22,11 +22,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the per-slot working box (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-class AABoxRef {
+template <class T> class igSmartPointer {
 public:
-    igAABox *p;
-    AABoxRef(igAABox *o) : p(o) {}
-    ~AABoxRef() { igAABox *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int arg2, long long arg3);
 igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int arg2, long long arg3) {
@@ -75,7 +75,7 @@ igAABoxList *FUN_003908e0(beModelCtrlInfoHitBody *arg0, beBaseInfoRam *arg1, int
                 int alloc = igObject_GetAllocator(arg0);
                 int a;
                 if (GPR_00554c14 != 0) a = alloc; else a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
-                AABoxRef ob(FUN_0018a660(a));
+                igSmartPointer<igAABox> ob(FUN_0018a660(a));
                 { igAABox *t = ob.p; igAABoxList *ol = (igAABoxList *)arg0->_AABoxList; ObjectList_AppendRetained(ol, t); }
             }
         }

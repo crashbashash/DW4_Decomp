@@ -20,11 +20,11 @@ void FUN_0039a750(beModelCtrlSubCom *arg0, int arg1, float fparg0);
 }
 /* Owning stack reference to the new sound command, released on scope exit once the list holds its
  * own reference (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beModelCtrlSCSound *p;
-    ObjectRef(beModelCtrlSCSound *o) : p(o) {}
-    ~ObjectRef() { beModelCtrlSCSound *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_0039a750(beModelCtrlSubCom *arg0, int arg1, float fparg0) {
     int *temp_a1;
@@ -42,7 +42,7 @@ void FUN_0039a750(beModelCtrlSubCom *arg0, int arg1, float fparg0) {
     } else {
         var_v0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
     }
-    ObjectRef cmd(FUN_0034f4a0(var_v0));
+    igSmartPointer<beModelCtrlSCSound> cmd(FUN_0034f4a0(var_v0));
     s1 = cmd.p;
     if (DAT_00586f20[0] == 0) {
         var_v0_2 = FUN_002eb010(0x10);

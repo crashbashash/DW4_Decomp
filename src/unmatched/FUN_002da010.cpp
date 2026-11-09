@@ -20,11 +20,11 @@ void igObject_Destroy(ConfigPlatformText *);
 extern char *DAT_004c22f0[4];
 void FUN_002da010(void *self, ConfigPlatformSourceList *list);
 }
-struct ConfigPlatformTextRef {
-    ConfigPlatformText *p;
-    ConfigPlatformTextRef(ConfigPlatformText *text) : p(text) {}
-    ~ConfigPlatformTextRef() {
-        ConfigPlatformText *text = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *text) : p(text) {}
+    ~igSmartPointer() {
+        T *text = p;
         if (text != 0) {
             text->_refCount = text->_refCount - 1;
             if ((text->_refCount & 0x7FFFFF) == 0) {
@@ -32,16 +32,16 @@ struct ConfigPlatformTextRef {
             }
         }
     }
-    ConfigPlatformText *get() const { return p; }
+    T *get() const { return p; }
 };
-static inline char *textOf(const ConfigPlatformTextRef &ref) {
+static inline char *textOf(const igSmartPointer<ConfigPlatformText> &ref) {
     char *s = ref.get()->text;
     s = (s == 0) ? DAT_004c22f0[0] : s;
     return s;
 }
 void FUN_002da010(void *self, ConfigPlatformSourceList *list) {
     int i;
-    ConfigPlatformTextRef text(FUN_002b9500(igObject_GetAllocator(self)));
+    igSmartPointer<ConfigPlatformText> text(FUN_002b9500(igObject_GetAllocator(self)));
     if (FUN_002dac30(text.get()) != 0) {
         FUN_002d96f0(self, 0, textOf(text));
     }

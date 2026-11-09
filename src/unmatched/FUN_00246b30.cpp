@@ -7,11 +7,11 @@ int igObject_Destroy(ScriptFile *);
 extern int DAT_004eaab0[4];
 }
 struct AdoptReference { };
-struct ScriptFileRef {
-    ScriptFile *p;
-    ScriptFileRef(ScriptFile *object, AdoptReference) : p(object) {}
-    ~ScriptFileRef() {
-        ScriptFile *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object, AdoptReference) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->refs = o->refs - 1;
             if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
@@ -19,7 +19,7 @@ struct ScriptFileRef {
     }
 };
 extern "C" int FUN_00246b30(int state, int path) {
-    ScriptFileRef file(FUN_002c4ca0(0), AdoptReference());
+    igSmartPointer<ScriptFile> file(FUN_002c4ca0(0), AdoptReference());
     int size;
     int buffer;
     int result;

@@ -27,11 +27,11 @@ class V { public:
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual int v17(int); virtual int v18(int); virtual void d19(); virtual void d20(); virtual void d21(); virtual int v22(int, unsigned int, int, int); virtual int v23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual int v45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual int v59();
  int refs; int f8; unsigned int f12; char p16[8]; RcRef f24; int f28; int f32; int f36; int f40;
 };
-struct VRef {
-    V *p;
-    VRef(V *object) : p(object) {}
-    ~VRef() {
-        V *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->refs = o->refs - 1;
             if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o);
@@ -39,7 +39,7 @@ struct VRef {
     }
 };
 extern "C" int FUN_0015ed00(V *arg0, int arg1, unsigned int arg2, int arg3, int arg4) {
-    VRef resized((V *)FUN_0014b680(igObject_GetAllocator()));
+    igSmartPointer<V> resized((V *)FUN_0014b680(igObject_GetAllocator()));
     unsigned int n;
     int sp88;
     int r;

@@ -11,10 +11,10 @@ class Layer { public: virtual void d0(); virtual void d1(); virtual void d2(); v
 class FillLayer : public Layer {};
 class OutlineLayer : public Layer {};
 struct FontImage { char pad[20]; int layers; int state; char pad3[4]; int base; };
-template <class T> struct LayerRef {
+template <class T> struct igSmartPointer {
     T *p;
-    LayerRef(void *layer) : p((T *)layer) {}
-    ~LayerRef() {
+    igSmartPointer(void *layer) : p((T *)layer) {}
+    ~igSmartPointer() {
         T *layer = p;
         if (layer != 0) {
             layer->rc = layer->rc - 1;
@@ -29,10 +29,10 @@ extern "C" void Gap__Bec__beFontImage__vfunc_11(FontImage *self, int enable) {
     Gap__Core__igObject__vfunc_11(self);
     if (enable != 0) {
         ObjectList_AppendRetained((unsigned)self->layers, (void *)self->base);
-        LayerRef<FillLayer> first(FUN_00139600(igObject_GetAllocator(self)));
+        igSmartPointer<FillLayer> first(FUN_00139600(igObject_GetAllocator(self)));
         first.get()->setEnabled(1);
         ObjectList_AppendRetained((unsigned)self->layers, first.get());
-        LayerRef<OutlineLayer> second(FUN_00131390(igObject_GetAllocator(self)));
+        igSmartPointer<OutlineLayer> second(FUN_00131390(igObject_GetAllocator(self)));
         second.get()->setEnabled(1);
         ObjectList_AppendRetained((unsigned)self->layers, second.get());
         self->state = 0x10001;

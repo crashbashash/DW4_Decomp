@@ -97,11 +97,11 @@ extern unsigned char GPR_00554c14;
 int Gap__Bec__beModelCtrl__vfunc_33(beModelCtrl *self, beBaseInfoRam *ent, const char *msgname);
 }
 
-/* matching construct: RAII holder; its mangled destructor name pins the class name Ref */
-struct Ref {
-    igObject *p;
-    Ref(igObject *q) : p(q) {}
-    ~Ref() { igObject *x = p; if (x) { --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); } }
+/* matching construct: RAII holder; its mangled destructor name pins the class name igSmartPointer<igObject> */
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *q) : p(q) {}
+    ~igSmartPointer() { T *x = p; if (x) { --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); } }
 };
 
 /* Owning stack references to the objects this handler creates before binding them: kind 0 the AI
@@ -185,7 +185,7 @@ struct Hp {
         if (e->_dataList == 0) {
             int a = igObject_GetAllocator(e);
             a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-            Ref r((igObject *)beBaseInfoDataList_Create(a));
+            igSmartPointer<igObject> r((igObject *)beBaseInfoDataList_Create(a));
             s = (beModelCtrlInfoRideOn *)r.p;
             RET(s)
             REL(e->_dataList)

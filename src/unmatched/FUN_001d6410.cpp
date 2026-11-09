@@ -13,11 +13,11 @@ int igObject_GetAllocator(TraversedNode *);
 extern int DAT_005619f8[16];
 extern int DAT_00561ea0[16];
 }
-struct PathEntryRef {
-    PathEntry *p;
-    PathEntryRef(PathEntry *object) : p(object) {}
-    ~PathEntryRef() {
-        PathEntry *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->refs = object->refs - 1;
             if ((object->refs & 0x7FFFFF) == 0) igObject_Destroy(object);
@@ -44,7 +44,7 @@ extern "C" void FUN_001d6410(TraversedNode *collector, TraversedNode *node, int 
             }
         }
         if (igObject_IsKindOf(node, DAT_00561ea0[0]) != 0) {
-            PathEntryRef entry(FUN_0019f630(igObject_GetAllocator(collector)));
+            igSmartPointer<PathEntry> entry(FUN_0019f630(igObject_GetAllocator(collector)));
             FUN_001c5740(entry.p, path);
             ObjectList_AppendRetained(collector->children, entry.p);
         }

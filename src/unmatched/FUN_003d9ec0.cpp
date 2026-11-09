@@ -34,11 +34,11 @@ struct SlotBackend { char p[36]; igObjectList *ownDisplays; igObjectList *areas;
 struct SlotPanel { char p0[8]; int messenger; char p1[4]; int textCtrl; SlotBackend *backend; int player; int side; char p2[8]; int source; int index; };
 /* Owning stack reference to the slot's text object; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beUnicodeObj *p;
-    ObjectRef(beUnicodeObj *o) : p(o) {}
-    ~ObjectRef() { beUnicodeObj *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
 };
 
 extern "C" void FUN_003d9ec0(SlotPanel *arg0) {
@@ -57,7 +57,7 @@ extern "C" void FUN_003d9ec0(SlotPanel *arg0) {
             SlotEnt *s2;
             a = igObject_GetAllocator(arg0);
             {
-                ObjectRef text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+                igSmartPointer<beUnicodeObj> text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
                 beUnicodeObj_AllocateBuffer(text.p, 8);
                 srcA = (unsigned short *)((char *)s0 + 8);
                 iA = 0;
@@ -112,7 +112,7 @@ extern "C" void FUN_003d9ec0(SlotPanel *arg0) {
             SlotEnt *s2;
             a = igObject_GetAllocator(arg0);
             {
-                ObjectRef text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+                igSmartPointer<beUnicodeObj> text(FUN_003614f0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
                 beUnicodeObj_AllocateBuffer(text.p, 8);
                 srcB = (unsigned short *)((char *)s0 + 8);
                 iB = 0;

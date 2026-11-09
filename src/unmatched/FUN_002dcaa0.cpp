@@ -10,11 +10,11 @@ class RefPool { public:
     int references;
 };
 extern "C" RefPool *FUN_002ba650(...);
-struct PoolRef {
-    RefPool *p;
-    PoolRef(RefPool *pool) : p(pool) {}
-    ~PoolRef() {
-        RefPool *pool = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *pool) : p(pool) {}
+    ~igSmartPointer() {
+        T *pool = p;
         if (pool != 0) {
             pool->references = pool->references - 1;
             if ((pool->references & 0x7FFFFF) == 0) {
@@ -23,12 +23,12 @@ struct PoolRef {
         }
     }
     void retain() const {
-        RefPool *pool = p;
+        T *pool = p;
         if (pool != 0) {
             pool->references = pool->references + 1;
         }
     }
-    RefPool *get() const { return p; }
+    T *get() const { return p; }
 };
 struct PoolOwner { char p[8]; RefPool *pool; };
 static inline void setPool(PoolOwner *self, RefPool *pool) {
@@ -48,13 +48,13 @@ static inline void setPool(PoolOwner *self, RefPool *pool) {
 extern "C" void FUN_002dcaa0(PoolOwner *self, int open) {
     if (open != 0) {
         if (self->pool == 0) {
-            PoolRef created(FUN_002ba650(igObject_GetAllocator(self)));
+            igSmartPointer<RefPool> created(FUN_002ba650(igObject_GetAllocator(self)));
             created.get()->open();
             setPool(self, created.get());
         }
     } else {
         if (self->pool != 0) {
-            PoolRef kept(self->pool);
+            igSmartPointer<RefPool> kept(self->pool);
             kept.retain();
             setPool(self, 0);
             if (kept.get() != 0) {

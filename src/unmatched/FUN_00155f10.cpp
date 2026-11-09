@@ -19,15 +19,15 @@ struct StringRef {
         }
     }
 };
-struct EntryRef {
-    Entry *p;
-    EntryRef(Entry *object) : p(object) {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {
         if (p != 0) {
             p->references = p->references + 1;
         }
     }
-    ~EntryRef() {
-        Entry *object = p;
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->references = object->references - 1;
             if ((object->references & 0x7FFFFF) == 0) {
@@ -42,7 +42,7 @@ extern "C" int FUN_00155f10(Table *table) {
     int i = 0;
     if (table->entries->count > 0) {
         for (; i < table->entries->count; i++) {
-            EntryRef entry(table->entries->data[i]);
+            igSmartPointer<Entry> entry(table->entries->data[i]);
             if (entry.p == 0) {
                 continue;
             }

@@ -22,11 +22,11 @@ void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, str
 }
 /* Owning stack reference to the new effect record, released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beModelCtrlSCEffect *p;
-    ObjectRef(beModelCtrlSCEffect *o) : p(o) {}
-    ~ObjectRef() { beModelCtrlSCEffect *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, struct V *vb, char c1, char c2, float f) {
     int a;
@@ -37,7 +37,7 @@ void FUN_0039a250(beModelCtrlSubCom *self, int str1, int str2, struct V *va, str
     int r;
     beModelCtrlSCEffect *e;
     a = igObject_GetAllocator();
-    ObjectRef effect(FUN_0034f8e0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+    igSmartPointer<beModelCtrlSCEffect> effect(FUN_0034f8e0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
     e = effect.p;
     if (DAT_00586f20[0] == 0) {
         v = FUN_002eb010(0x10);

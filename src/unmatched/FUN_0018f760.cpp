@@ -9,10 +9,10 @@ int FUN_002fd6e0(InstanceNode **, int, int);
 extern int DAT_00560f08[4];
 }
 struct NodeList : InstanceNode { int count; int capacity; InstanceNode **data; };
-struct InstanceRef {
-    InstanceNode *p;
-    InstanceRef(int type, int allocator) {
-        InstanceNode *created;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(int type, int allocator) {
+        T *created;
         FUN_002fd6e0(&created, type, allocator);
         p = created;
         if (p != 0) {
@@ -25,8 +25,8 @@ struct InstanceRef {
             }
         }
     }
-    ~InstanceRef() {
-        InstanceNode *node = p;
+    ~igSmartPointer() {
+        T *node = p;
         if (node != 0) {
             node->references = node->references - 1;
             if ((node->references & 0x7FFFFF) == 0) {
@@ -53,7 +53,7 @@ struct InstanceListRef {
         }
     }
 };
-static inline void setElement(const InstanceListRef &list, int index, const InstanceRef &element) {
+static inline void setElement(const InstanceListRef &list, int index, const igSmartPointer<InstanceNode> &element) {
     InstanceNode *value = element.p;
     NodeList *l = list.p;
     InstanceNode *previous;
@@ -78,7 +78,7 @@ extern "C" InstanceListRef FUN_0018f760(int allocator) {
     InstanceListRef list((NodeList *)FUN_00186c00(allocator));
     FUN_00301ee0(list.p, count);
     for (i = 0; i < count; i++) {
-        InstanceRef element(FUN_002fe2e0(meta, i), allocator);
+        igSmartPointer<InstanceNode> element(FUN_002fe2e0(meta, i), allocator);
         setElement(list, i, element);
     }
     return list;

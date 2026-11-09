@@ -26,11 +26,11 @@ void FUN_00445990(beNDMWMdlPEBase *arg0, void *arg1, beNDMWMdlPEBaseInfoWork *ar
 }
 /* Owning stack reference to the freshly created list, released on scope exit once the work record
  * holds its own reference (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igIntList *p;
-    ObjectRef(igIntList *o) : p(o) {}
-    ~ObjectRef() { igIntList *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_00445990(beNDMWMdlPEBase *arg0, void *arg1, beNDMWMdlPEBaseInfoWork *arg2) {
     void *al;
@@ -61,7 +61,7 @@ void FUN_00445990(beNDMWMdlPEBase *arg0, void *arg1, beNDMWMdlPEBaseInfoWork *ar
     } else {
         al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
     }
-    ObjectRef created(FUN_002caa70(al));
+    igSmartPointer<igIntList> created(FUN_002caa70(al));
     a = created.p;
     if (a->_count < 8) List_Reserve(a, 7, 4);
     a = created.p;

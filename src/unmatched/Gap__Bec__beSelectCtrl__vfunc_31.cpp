@@ -1,5 +1,5 @@
 /* Bool flags use daddiu, ram->_ramNo and ram->_svSeqName are hoisted into locals before the NAME
- * ternary, switch(st3) has case 0 and default, info is declared first, the on-demand data list is held by an ObjectRef, and the decide-list
+ * ternary, switch(st3) has case 0 and default, info is declared first, the on-demand data list is held by an igSmartPointer<igObject>, and the decide-list
  * byte test uses an unsigned index. */
 #include "dw4/reflected.h"
 static inline int st2Of(const beBaseInfoRam *r) { return r->_st2; }
@@ -48,11 +48,11 @@ extern unsigned char GPR_00554c14;
 typedef struct DecideList { char pad[16]; unsigned char *data; } DecideList;
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 extern "C" void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoRam *ram) {
@@ -89,7 +89,7 @@ extern "C" void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoR
         igObject *o;
         allocator = igObject_GetAllocator(ram);
         allocator = GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        ObjectRef ref(beBaseInfoDataList_Create(allocator));
+        igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
         s3 = ref.p;
         if (s3 != 0) s3->_refCount = s3->_refCount + 1;
         o = (igObject *)ram->_dataList;

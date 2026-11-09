@@ -25,11 +25,11 @@ struct ReleaseRef { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the freshly created property data list; released at the end of the
  * full expression that stores it (reference count in the low 23 bits of _refCount). */
-class ListRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ListRef(igObject *o) : p(o) {}
-    ~ListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to the effect work object created here; released on scope exit. */
 class EffectRef {
@@ -38,7 +38,7 @@ public:
     EffectRef(igObject *o) : p(o) {}
     ~EffectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-struct DataList { static inline void store(beBaseInfoRam *ram, const ListRef &list) {
+struct DataList { static inline void store(beBaseInfoRam *ram, const igSmartPointer<igObject> &list) {
     igObject *created = list.p;
     igObject *old;
     if (created != 0) {
@@ -67,7 +67,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        DataList::store(arg1, ListRef(beBaseInfoDataList_Create(a)));
+        DataList::store(arg1, igSmartPointer<igObject>(beBaseInfoDataList_Create(a)));
     }
     s1 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_00515db8);
     alloc = igObject_GetAllocator(arg0);

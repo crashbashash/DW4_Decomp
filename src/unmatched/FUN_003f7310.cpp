@@ -35,11 +35,11 @@ extern unsigned char GPR_00554c14;
 /* Owning stack reference to the new player data object, released on scope exit (reference count in
  * the low 23 bits of _refCount). */
 static inline int count(const igObjectList *list) { return list->_count; }
-class PlayerDataRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    PlayerDataRef(igObject *o) : p(o) {}
-    ~PlayerDataRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to one new item record, released at the end of each loop pass. */
 class ItemRef {
@@ -48,7 +48,7 @@ public:
     ItemRef(igObject *o) : p(o) {}
     ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-static inline void storePlayerData(beNDMWGameRam *self, int index, const PlayerDataRef &value) {
+static inline void storePlayerData(beNDMWGameRam *self, int index, const igSmartPointer<igObject> &value) {
     igObject *s2 = value.p;
     igObjectList *pl = (igObjectList *)self->_playerDataListList;
     igObject *o;
@@ -99,7 +99,7 @@ extern "C" void FUN_003f7310(beNDMWGameRam *arg0, int arg1) {
     } else {
         a0 = Memory_GetAllocatorBySelector(DAT_00587108[0]);
     }
-    PlayerDataRef data(FUN_00364050(a0));
+    igSmartPointer<igObject> data(FUN_00364050(a0));
     FUN_003f6620(arg0, data.p, &DAT_004cedf0[0]);
     for (c = 0; c < 16; c++) {
         recs = (igObjectList *)((igObject **)FUN_003a9250(data.p, &DAT_00518b30[0]))[3];

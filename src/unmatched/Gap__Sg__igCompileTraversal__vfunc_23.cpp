@@ -18,10 +18,10 @@ extern G *DAT_0055f308[4];
 }
 class VC104 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(int, int); };
 class VC128L { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int vX(long long); };
-struct ObjectRef {
+template <class T> struct igSmartPointer {
     T *p;
-    ObjectRef(void *object) : p((T *)object) {}
-    ~ObjectRef() {
+    igSmartPointer(void *object) : p((T *)object) {}
+    ~igSmartPointer() {
         T *object = p;
         if (object != 0) {
             --object->references;
@@ -39,8 +39,8 @@ extern "C" void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, 
         ((VC104 *)(stack->f16->f16[stack->f68[DAT_0055f308[0]->f8]]->f20))->vX(a1, (int)stack);
     }
     {
-    ObjectRef matrix(FUN_001356b0(igObject_GetAllocator(self)));
-    ObjectRef info(FUN_001a3590(igObject_GetAllocator(self)));
+    igSmartPointer<T> matrix(FUN_001356b0(igObject_GetAllocator(self)));
+    igSmartPointer<T> info(FUN_001a3590(igObject_GetAllocator(self)));
     T **slot = &info->f12;
     T *old = *slot;
     if (old != 0) {

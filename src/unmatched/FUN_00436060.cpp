@@ -49,11 +49,11 @@ struct RecordFolder { int w0; int w4; int w8; igDataList *list; };
 struct V3 { float x, y, z; };
 /* Owning stack reference to the system's shared string object; retained while the shop labels are
  * built and released on scope exit (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igStringObj *p;
-    ObjectRef(igStringObj *o) : p(o) {}
-    ~ObjectRef() { igStringObj *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
@@ -62,7 +62,7 @@ void FUN_00436060(beNDMWShopCtrlDeviceSell *self, int full, unsigned char sel)
     beMessenger_AppendInt(self->_messenger, self->_playerNo);
     beMessenger_DispatchSelected(self->_messenger, &DAT_0051b3e8[0]);
     igDataList *folder = ((RecordFolder *)igProperty_GetRecordFolder(beMessenger_GetObject(self->_messenger, 0), &DAT_0051b528[0]))->list;
-    ObjectRef str((igStringObj *)((int *)FUN_00236f80(self->_insight, DAT_00587d08[0]))[18]);
+    igSmartPointer<igStringObj> str((igStringObj *)((int *)FUN_00236f80(self->_insight, DAT_00587d08[0]))[18]);
     if (str.p != 0) str.p->_refCount = str.p->_refCount + 1;
     char numbuf[2];
     char nb2[2];

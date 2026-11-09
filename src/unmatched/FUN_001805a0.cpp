@@ -17,20 +17,20 @@ int igObject_Destroy(BuildResource *);
 }
 #define RELEASE(x) { BuildResource *q = (x); if (q != 0) { q->references = q->references - 1; if ((q->references & 0x7FFFFF) == 0) igObject_Destroy(q); } }
 struct AdoptReference { };
-struct ResourceRef {
-    BuildResource *p;
-    ResourceRef(BuildResource *object) : p(object) {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {
         if (p != 0) p->references = p->references + 1;
     }
-    ResourceRef(BuildResource *object, AdoptReference) : p(object) {}
-    ~ResourceRef() {
-        BuildResource *o;
+    igSmartPointer(T *object, AdoptReference) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->references = o->references - 1;
             if ((o->references & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
-    void assign(BuildResource *next) {
+    void assign(T *next) {
         if (next != 0) next->references = next->references + 1;
         RELEASE(p);
         p = next;
@@ -40,7 +40,7 @@ struct ResourceRef {
         p = FUN_0014b390(0);
     }
 };
-static inline void setMember(const ResourceRef &owner, const ResourceRef &value) {
+static inline void setMember(const igSmartPointer<BuildResource> &owner, const igSmartPointer<BuildResource> &value) {
     BuildResource *held = value.p;
     BuildResource *target = owner.p;
     BuildResource *old;
@@ -61,15 +61,15 @@ int s0;
 BuildResource *s7;
     s0 = arg1->f20;
     s2 = 0;
-    ResourceRef first((BuildResource *)0);
-    ResourceRef second((BuildResource *)0);
+    igSmartPointer<BuildResource> first((BuildResource *)0);
+    igSmartPointer<BuildResource> second((BuildResource *)0);
     s7 = FUN_0015f4a0(s0, 5, 0);
     s1 = FUN_0015f4a0(s0, 6, 0);
     if (arg0->f1340 != 0 || arg0->f644 == 2) {
         if (arg0->f1424 != 0) FUN_00180060(arg0);
         second.assign(FUN_0015f510(s0, 3, 0, 0x7734));
         if (second.p == 0) {
-            ResourceRef values(FUN_0018a060(0), AdoptReference());
+            igSmartPointer<BuildResource> values(FUN_0018a060(0), AdoptReference());
             ll = (ResourceList *)values.p;
             if (arg2 >= 0) {
                 if (arg2 <= ll->cap) ll->count = arg2;
@@ -88,7 +88,7 @@ BuildResource *s7;
     }
     first.assign(FUN_0015f510(s0, 1, 0, 0x7734));
     if (first.p == 0) {
-        ResourceRef values(FUN_0018a060(0), AdoptReference());
+        igSmartPointer<BuildResource> values(FUN_0018a060(0), AdoptReference());
         ll = (ResourceList *)values.p;
         if (arg2 >= 0) {
             if (arg2 <= ll->cap) ll->count = arg2;

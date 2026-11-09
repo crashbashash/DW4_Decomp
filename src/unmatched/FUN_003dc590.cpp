@@ -22,10 +22,10 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1);
 }
-struct Ref {
-    beUnicodeObj *p;
-    Ref(beUnicodeObj *o) { p = o; }
-    ~Ref() { beUnicodeObj *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *o) { p = o; }
+    ~igSmartPointer() { T *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 #define DEGI(bk, pl, i) \
     ((beNDMWDegiData *)((int *)((beNDMWDegiDataList *)((beNDMWLoadSlotPlayer *)((beNDMWLoadSavePlWork *)((int *)((beNDMWLoadSavePlWorkList *)(bk)->_flagWork)->_data)[pl])->_haveSaveData)->_saveDataList)->_data)[i])
@@ -83,7 +83,7 @@ unsigned char FUN_003dc590(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
                 if (it->_isUse == 1) {
                     int a = igObject_GetAllocator(arg0);
                     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-                    Ref rp(FUN_003614f0(a));
+                    igSmartPointer<beUnicodeObj> rp(FUN_003614f0(a));
                     beUnicodeObj_AllocateBuffer(rp.p, 8);
                     unsigned short *dst = (unsigned short *)rp.p->_buffer;
                     unsigned short *src = (unsigned short *)it->_dmNameUni;

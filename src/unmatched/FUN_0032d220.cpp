@@ -27,11 +27,11 @@ extern int DAT_00587338[4];
 extern int DAT_00587358[4];
 extern unsigned char GPR_00554c14;
 }
-struct ORef {
-    O *p;
-    ORef(O *object) : p(object) {}
-    ~ORef() {
-        O *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->references = object->references - 1;
             if ((object->references & 0x7FFFFF) == 0) {
@@ -39,7 +39,7 @@ struct ORef {
             }
         }
     }
-    O *operator->() const { return p; }
+    T *operator->() const { return p; }
 };
 static inline int internPool(void) {
     if (DAT_00586f20[0] == 0) {
@@ -73,8 +73,8 @@ extern "C" void FUN_0032d220(void) {
     if (enabled != 0) {
         FUN_00304350(0);
         FUN_003043c0(0);
-        ORef first((O *)FUN_002d01a0(fileAllocator()));
-        ORef second((O *)FUN_002d01a0(fileAllocator()));
+        igSmartPointer<O> first((O *)FUN_002d01a0(fileAllocator()));
+        igSmartPointer<O> second((O *)FUN_002d01a0(fileAllocator()));
         if (DAT_00587338[0] != 0) {
             setName(first.p, DAT_00587358[0]);
             setName(second.p, DAT_00587358[0]);

@@ -33,10 +33,10 @@ struct Entry { unsigned type; int count; int name; };
 
 /* matching construct: one RAII holder per retail destructor copy. The cleanup table at 0x544e60 names eight release
  * copies (0x350b10 for the int node, the seven emitted behind this function for the others) and the string holder 0x130720. */
-template <class T> struct DataRef {
+template <class T> struct igSmartPointer {
     T *p;
-    DataRef(T *o) : p(o) {}
-    ~DataRef() { T *o = p; if (o) { --o->_refCount; if (!(o->_refCount & 0x7fffff)) igObject_Destroy((igObject *)o); } }
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o) { --o->_refCount; if (!(o->_refCount & 0x7fffff)) igObject_Destroy((igObject *)o); } }
 };
 struct StringRef {
     int *p;
@@ -82,14 +82,14 @@ void FUN_003f6620(void *arg0, void *arg1, void *arg2)
         switch (e->type + 1) {
         case 1: {
             ALLOC(alloc)
-            DataRef<beDataObjInt> s0((beDataObjInt *)FUN_00365510(alloc));
+            igSmartPointer<beDataObjInt> s0((beDataObjInt *)FUN_00365510(alloc));
             igNamedObject_SetName(s0.p, e->name);
             ObjectList_AppendRetained(out, s0.p);
             break;
         }
         case 2: {
             ALLOC(alloc)
-            DataRef<beDataObjIntList> s1((beDataObjIntList *)FUN_00365240(alloc));
+            igSmartPointer<beDataObjIntList> s1((beDataObjIntList *)FUN_00365240(alloc));
             igNamedObject_SetName(s1.p, e->name);
             RESERVE(igIntList, s1.p, 4)
             RESIZE(igIntList, s1.p, 4)
@@ -104,14 +104,14 @@ void FUN_003f6620(void *arg0, void *arg1, void *arg2)
         }
         case 3: {
             ALLOC(alloc)
-            DataRef<beDataObjBool> s2((beDataObjBool *)FUN_00365000(alloc));
+            igSmartPointer<beDataObjBool> s2((beDataObjBool *)FUN_00365000(alloc));
             igNamedObject_SetName(s2.p, e->name);
             ObjectList_AppendRetained(out, s2.p);
             break;
         }
         case 4: {
             ALLOC(alloc)
-            DataRef<beDataObjBoolList> s3((beDataObjBoolList *)FUN_00364d30(alloc));
+            igSmartPointer<beDataObjBoolList> s3((beDataObjBoolList *)FUN_00364d30(alloc));
             igNamedObject_SetName(s3.p, e->name);
             RESERVE(igBoolList, s3.p, 1)
             RESIZE(igBoolList, s3.p, 1)
@@ -126,14 +126,14 @@ void FUN_003f6620(void *arg0, void *arg1, void *arg2)
         }
         case 5: {
             ALLOC(alloc)
-            DataRef<beDataObjString> s4((beDataObjString *)FUN_00364a90(alloc));
+            igSmartPointer<beDataObjString> s4((beDataObjString *)FUN_00364a90(alloc));
             igNamedObject_SetName(s4.p, e->name);
             ObjectList_AppendRetained(out, s4.p);
             break;
         }
         case 6: {
             ALLOC(alloc)
-            DataRef<beDataObjStringList> s5((beDataObjStringList *)FUN_003647c0(alloc));
+            igSmartPointer<beDataObjStringList> s5((beDataObjStringList *)FUN_003647c0(alloc));
             igNamedObject_SetName(s5.p, e->name);
             RESERVE(igStringRefList, s5.p, 4)
             StringList_Resize((void *)s5.p->_data, e->count);
@@ -143,7 +143,7 @@ void FUN_003f6620(void *arg0, void *arg1, void *arg2)
         }
         case 7: {
             ALLOC(alloc)
-            DataRef<beDataObjObjectList> s6((beDataObjObjectList *)FUN_003644f0(alloc));
+            igSmartPointer<beDataObjObjectList> s6((beDataObjObjectList *)FUN_003644f0(alloc));
             igNamedObject_SetName(s6.p, e->name);
             RESERVE(igObjectList, s6.p, 4)
             ObjectList_ResizeRetained((void *)s6.p->_data, e->count);
@@ -153,7 +153,7 @@ void FUN_003f6620(void *arg0, void *arg1, void *arg2)
         }
         case 8: {
             ALLOC(alloc)
-            DataRef<beDataObjFloatList> s7((beDataObjFloatList *)FUN_00364220(alloc));
+            igSmartPointer<beDataObjFloatList> s7((beDataObjFloatList *)FUN_00364220(alloc));
             igNamedObject_SetName(s7.p, e->name);
             RESERVE(igFloatList, s7.p, 4)
             RESIZE(igFloatList, s7.p, 4)

@@ -31,11 +31,11 @@ public:
 };
 /* Owning stack reference to the sub-window created here; released on scope exit (reference count
  * in the low 23 bits of refs). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    Win *p;
-    WindowRef(Win *w) : p(w) {}
-    ~WindowRef() { Win *w = p; if (w != 0) { --w->refs; if ((w->refs & 0x7fffff) == 0) igObject_Destroy(w); } }
+    T *p;
+    igSmartPointer(T *w) : p(w) {}
+    ~igSmartPointer() { T *w = p; if (w != 0) { --w->refs; if ((w->refs & 0x7fffff) == 0) igObject_Destroy(w); } }
 };
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
@@ -61,7 +61,7 @@ extern "C" void Gap__Bec__beNDMWStatusPowerSocket__vfunc_33(Sh *arg0) {
     } else {
         alloc = (int)Memory_GetAllocatorBySelector(DAT_00587110[0]);
     }
-    WindowRef win((Win *)FUN_003b51b0((void *)alloc));
+    igSmartPointer<Win> win((Win *)FUN_003b51b0((void *)alloc));
     beNDMWWindow_BindContext(win.p, arg0, arg0->f8, arg0->f20, 0);
     { Win *t = win.p; ObjectList_AppendRetained(arg0->f52, t); }
     INTERN_APPEND(win.p->f60, DAT_00519b50)

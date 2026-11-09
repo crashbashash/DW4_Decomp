@@ -16,17 +16,17 @@ int StringChunk_ReleaseHeader(int, int *);
 void igObject_Destroy(void *);
 int FUN_00308850(O *, Hd *);
 }
-struct ObRef {
-    Ob *p;
-    ObRef(Ob *object) : p(object) {}
-    ~ObRef() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
         if (p != 0) {
             p->refs = p->refs - 1;
             if ((p->refs & 0x7fffff) == 0) igObject_Destroy(p);
         }
     }
 };
-static inline void setHeader(O *owner, const ObRef &value) {
+static inline void setHeader(O *owner, const igSmartPointer<Ob> &value) {
     Ob *held = value.p;
     Ob *old;
     if (held != 0) held->refs = held->refs + 1;
@@ -45,7 +45,7 @@ extern "C" Hd *FUN_00308a90(O *arg0) {
         Hd *s0;
         int old;
         {
-            ObRef created(FUN_002c72c0(FUN_00301000()));
+            igSmartPointer<Ob> created(FUN_002c72c0(FUN_00301000()));
             setHeader(arg0, created);
         }
         s0 = arg0->f12;

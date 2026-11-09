@@ -48,7 +48,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 12,960 | 1,665,260 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 13,474 | 2,063,656 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,534 | 878,420 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,536 | 877,600 |
 | it sits in its class or module file, not `src/unmatched/` | 12,083 | 1,861,200 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 10,608 | 1,917,524 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,914 | 1,227,232 |
@@ -179,7 +179,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 204 tables, 4,123 entries, in 167 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 25,004 of 62,252 (40.17 %) |
+| field accesses using a **recovered** type (not an offset cast) | 24,982 of 62,251 (40.13 %) |
 | functions in the retail split (`asm/`, generated) | 20,214 |
 
 ## How these numbers are produced

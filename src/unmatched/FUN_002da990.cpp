@@ -11,12 +11,12 @@ int FUN_002db040(Owner *, int, Obj *, int);
 int FUN_003061c0(int, Obj *, int);
 int igObject_GetAllocator();
 }
-struct Ref {
-    Obj *p;
-    ~Ref() { Obj *o; if ((o = p) != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
+template <class T> struct igSmartPointer {
+    T *p;
+    ~igSmartPointer() { T *o; if ((o = p) != 0) { --o->refs; if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" int FUN_002da990(Owner *arg0, int arg1, int arg2, int arg3) {
-    Ref sp7C;
+    igSmartPointer<Obj> sp7C;
     int r;
     Arr *a;
     int i;

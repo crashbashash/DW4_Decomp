@@ -23,11 +23,11 @@ struct ReleaseRef { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the new common data list, released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-class CommonDataListRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    CommonDataListRef(igObject *o) : p(o) {}
-    ~CommonDataListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to the new per-player data-list list, released the same way. */
 class PlayerDataListListRef {
@@ -53,7 +53,7 @@ void Gap__Bec__beNDMWGameRam__vfunc_23(beNDMWGameRam *arg0) {
     {
         /* The new list is owned by the stack reference while it is retained into the field and the old
          * list is released; the reference's own release runs at the block end. */
-        CommonDataListRef common(FUN_00364050(var_v0));
+        igSmartPointer<igObject> common(FUN_00364050(var_v0));
         s0 = common.p;
         if (s0 != 0) {
             s0->_refCount = s0->_refCount + 1;

@@ -28,10 +28,10 @@ static inline void release(T *object) {
         }
     }
 }
-struct TRef {
+template <class T> struct igSmartPointer {
     T *p;
-    TRef(T *object) : p(object) {}
-    ~TRef() {
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
         T *object = p;
         if (object != 0) {
             object->references = object->references - 1;
@@ -68,7 +68,7 @@ static inline int openPath(igDriverDatabase *database, const Mem &path) {
 }
 #define POOL() { if (DAT_00586f20[0] == 0) { void *pool = FUN_002eb010(0x10); if (pool != 0) pool = StringPool_Construct(pool); DAT_00586f20[0] = pool; } }
 #define BLOCK(ctor, strsrc) { \
-    TRef candidate(ctor(igObject_GetAllocator(arg0))); \
+    igSmartPointer<T> candidate(ctor(igObject_GetAllocator(arg0))); \
     const char *src = strsrc; \
     T *o = candidate.p; \
     POOL() \

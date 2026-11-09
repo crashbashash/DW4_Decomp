@@ -14,10 +14,10 @@ extern int DAT_00587020[4];
 class Allocator { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual int allocate(int n); };
 extern "C" Allocator *Memory_GetAllocatorBySelector(int s);
 static inline void retain(Image *o) { if (o != 0) { o->references = o->references + 1; } }
-struct ImageRef {
-    Image *p;
-    ImageRef(Image *o) : p(o) { retain(p); }
-    ~ImageRef() { Image *o = p; if (o != 0) { o->references = o->references - 1; if ((o->references & 0x7FFFFF) == 0) { igObject_Destroy(o); } } }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *o) : p(o) { retain(p); }
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->references = o->references - 1; if ((o->references & 0x7FFFFF) == 0) { igObject_Destroy(o); } } }
 };
 static inline unsigned magFilter(const TextureAttr *a) { return a->magFilter; }
 static inline unsigned minFilter(const TextureAttr *a) { return a->minFilter; }
@@ -28,7 +28,7 @@ extern "C" int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused
     if (allocator == 0) {
         allocator = Memory_GetAllocatorBySelector(DAT_00587020[0]);
     }
-    ImageRef image(FUN_00140c00(attr, 0));
+    igSmartPointer<Image> image(FUN_00140c00(attr, 0));
     int *name = &DAT_004d5df8[0];
     if (image.p != 0) {
         if (image.p->name != 0) {

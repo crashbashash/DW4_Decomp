@@ -39,10 +39,10 @@ static inline void release(Obj *object) {
         }
     }
 }
-struct ItemRef {
-    Obj *p;
-    ItemRef(Obj *object) : p(object) {}
-    ~ItemRef() { release(p); }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() { release(p); }
 };
 struct RemovedRef {
     Obj *p;
@@ -83,7 +83,7 @@ extern "C" void FUN_00460330(A *arg0) {
         s0 = 0;
         do {
             {
-            ItemRef item(createItem(ItemType()));
+            igSmartPointer<Obj> item(createItem(ItemType()));
             s3 = *(Obj **)((char *)arg0->f60->data + s0);
             s2 = (Mk *)item.p;
             if (s3 != 0) s3->references = s3->references + 1;

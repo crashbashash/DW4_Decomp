@@ -11,11 +11,11 @@ void *igObject_GetAllocator(void *);
 struct Obj { int vt; int rc; };
 struct List { int pad0; int pad1; int count; int cap; int *data; };
 static inline int countOf(const List *list) { return list->count; }
-struct NameRef {
-    Obj *p;
-    NameRef() {}
-    ~NameRef() {
-        Obj *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer() {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->rc = o->rc - 1;
             if ((o->rc & 0x7FFFFF) == 0) igObject_Destroy(o);
@@ -56,7 +56,7 @@ static inline void setValues(Self *self, const MemberRef &value) {
     self->values = (List *)held;
 }
 extern "C" void FUN_00308860(Self *self, int name, int value) {
-    NameRef entry;
+    igSmartPointer<Obj> entry;
     if (self->names == 0) {
         {
             MemberRef names((Obj *)FUN_002b9350(igObject_GetAllocator(self)));

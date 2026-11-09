@@ -17,11 +17,11 @@ void FUN_004432a0(beNDMWShinkaCtrl *self);
 }
 /* Owning stack reference to the evolution entry under construction; released on scope exit
  * (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 #pragma opt_loop_invariants off
@@ -66,7 +66,7 @@ void FUN_004432a0(beNDMWShinkaCtrl *self) {
             } else {
                 alloc = Memory_GetAllocatorBySelector(DAT_00587110[0]);
             }
-            ObjectRef entry(FUN_003c99a0(alloc));
+            igSmartPointer<igObject> entry(FUN_003c99a0(alloc));
             igObject *slotB;
             FUN_004435c0(entry.p, self->_gameRam, self->_playerNo, idx);
             if (idx == 3) {

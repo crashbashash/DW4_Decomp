@@ -61,7 +61,7 @@ public:
     virtual int v15(...); virtual int v16(...); virtual int v17(...); virtual int v18(...); virtual int v19(...);
     virtual int v20(...); virtual int v21(...); virtual R4 s22();
 };
-struct RP { RC *p; ~RP() { RC *o = p; if (o != 0) { o->rc = o->rc - 1; if ((o->rc & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <class T> struct igSmartPointer { T *p; ~igSmartPointer() { T *o = p; if (o != 0) { o->rc = o->rc - 1; if ((o->rc & 0x7fffff) == 0) igObject_Destroy(o); } } };
 struct ListHead {
     int a; int b; int count; int cap; int *data;
     /* matching construct: reading the search key through a pointer keeps it in a stack slot, as retail does */
@@ -98,7 +98,7 @@ int Gap__igMovieManager__vfunc_25(igMovieManager *self, void *arg1) {
     if (movies != 0) {
         if (movies->indexOf((RC *)movie) != -1) return 0;
     }
-    RP codec;
+    igSmartPointer<RC> codec;
     codec.p = 0;
     if (codec.p != 0) codec.p->rc = codec.p->rc + 1;
     if (self->_codecList != 0) {

@@ -3,11 +3,11 @@ extern "C" int igObject_Destroy(void *);
 struct AttrRefHeader { void **_vtable; unsigned int _refCount; };
 struct AttrObj : AttrRefHeader { int _id; };
 struct AttrStackRec;
-template <class T> struct RefHolder {
+template <class T> struct igSmartPointer {
     T *p;
-    RefHolder(T *object) : p(object) {}
-    RefHolder(const RefHolder &o);
-    ~RefHolder() {
+    igSmartPointer(T *object) : p(object) {}
+    igSmartPointer(const igSmartPointer &o);
+    ~igSmartPointer() {
         AttrRefHeader *object = p;
         if (object != 0) {
             object->_refCount = object->_refCount - 1;
@@ -24,7 +24,7 @@ public:
     virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
     virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
     virtual void s20();
-    virtual RefHolder<AttrObj> getDefault(void *meta, int unit);
+    virtual igSmartPointer<AttrObj> getDefault(void *meta, int unit);
 };
 class AttrCaps {
 public:
@@ -102,7 +102,7 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         }
         units = FUN_001d8270(meta);
         if (units <= 0) {
-            RefHolder<AttrObj> def = m->_defaultManager->getDefault(meta, 0);
+            igSmartPointer<AttrObj> def = m->_defaultManager->getDefault(meta, 0);
             units = ((AttrCaps *)def.p)->unitCount((void *)m->_capabilityManager);
             if (units <= 0) {
                 units = 1;
@@ -115,8 +115,8 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         m->_attrStackIndexTable[id] = first;
         m->_numAttrStacks = end;
         for (i = 0; i < units; i++, first++) {
-            RefHolder<AttrObj> def = m->_defaultManager->getDefault(meta, i);
-            RefHolder<AttrStackRec> stack((AttrStackRec *)FUN_001a5a70(igObject_GetAllocator(m)));
+            igSmartPointer<AttrObj> def = m->_defaultManager->getDefault(meta, i);
+            igSmartPointer<AttrStackRec> stack((AttrStackRec *)FUN_001a5a70(igObject_GetAllocator(m)));
             AttrObj **slot;
             AttrObj *value;
             slot = &stack.p->_default;

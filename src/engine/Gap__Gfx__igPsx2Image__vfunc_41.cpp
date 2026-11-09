@@ -16,11 +16,11 @@ int igObject_GetAllocator(igPsx2Image *);
 ConvertedImage *FUN_0014df70(int);
 int FUN_0015a380(ConvertedImage *);
 }
-struct ConvertedImageRef {
-    ConvertedImage *p;
-    ConvertedImageRef(ConvertedImage *object) : p(object) {}
-    ~ConvertedImageRef() {
-        ConvertedImage *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->references = object->references - 1;
             if ((object->references & 0x7FFFFF) == 0) {
@@ -28,10 +28,10 @@ struct ConvertedImageRef {
             }
         }
     }
-    ConvertedImage *operator->() const { return p; }
+    T *operator->() const { return p; }
 };
 extern "C" int Gap__Gfx__igPsx2Image__vfunc_41(igPsx2Image *image, Stream *stream) {
-    ConvertedImageRef converted(FUN_0014df70(igObject_GetAllocator(image)));
+    igSmartPointer<ConvertedImage> converted(FUN_0014df70(igObject_GetAllocator(image)));
     int word;
     int masks;
     converted->convert(image, 1);

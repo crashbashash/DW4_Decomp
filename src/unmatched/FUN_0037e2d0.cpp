@@ -15,12 +15,12 @@ void FUN_0037e2d0(beDemoManager *a0, int ramNo);
 
 /* Owning stack reference to a keep-message; its destructor releases the object (reference count in
  * the low 23 bits of _refCount). */
-class KeepMesRef {
+template <class T> class igSmartPointer {
 public:
-    beDemoKeepMes *p;
-    KeepMesRef(beDemoKeepMes *o) : p(o) {}
-    ~KeepMesRef() {
-        beDemoKeepMes *o = p;
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() {
+        T *o = p;
         if (o != 0) {
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) {
@@ -38,7 +38,7 @@ void FUN_0037e2d0(beDemoManager *a0, int ramNo) {
     if ((l != 0) && (a0->_turningOK != 0)) {
         al = igObject_GetAllocator(a0);
         al = GPR_00554c14 ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        KeepMesRef mes(FUN_00363c20(al));
+        igSmartPointer<beDemoKeepMes> mes(FUN_00363c20(al));
         mes.p->_kind = 4;
         mes.p->_ramNo = ramNo;
         ObjectList_AppendRetained(l->_keepMesList, mes.p);

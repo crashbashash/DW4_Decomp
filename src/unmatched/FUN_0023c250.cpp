@@ -10,10 +10,10 @@ int igObject_Destroy(Rc *);
 }
 /* Selects the constructor that takes over the factory's reference. */
 struct AdoptReference { };
-struct RcRef { Rc *p; RcRef(Rc *o, AdoptReference) : p(o) {} ~RcRef() { Rc *o = p; if (o) { o->refs = o->refs - 1; if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o); } } Rc *get() const { return p; } };
-extern "C" void FUN_0023c250(int *arg0) {    RcRef a(FUN_002c37e0(0), AdoptReference());
+template <class T> struct igSmartPointer { T *p; igSmartPointer(T *o, AdoptReference) : p(o) {} ~igSmartPointer() { T *o = p; if (o) { o->refs = o->refs - 1; if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o); } } T *get() const { return p; } };
+extern "C" void FUN_0023c250(int *arg0) {    igSmartPointer<Rc> a(FUN_002c37e0(0), AdoptReference());
     FUN_002d8fe0(a.get(), arg0[13]);
-    RcRef b(FUN_002397a0(0), AdoptReference());
+    igSmartPointer<Rc> b(FUN_002397a0(0), AdoptReference());
     {
     Rc *s1 = (Rc *)arg0[14];
     Inst *s0 = (Inst *)b.get();

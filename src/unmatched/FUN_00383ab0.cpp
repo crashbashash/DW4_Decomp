@@ -14,11 +14,11 @@ void FUN_00383ab0(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3);
 }
 /* Owning stack reference to the attribute's vertex array (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igVertexArray *p;
-    ObjectRef(igVertexArray *o) : p(o) {}
-    ~ObjectRef() { igVertexArray *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_00383ab0(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3) {
     int v;
@@ -33,7 +33,7 @@ void FUN_00383ab0(beFont *arg0, igGeometryAttr *arg1, int arg2, int arg3) {
     }
     ((GeomAttrVirtual *)arg1)->Configure(3, v, 0);
     {
-        ObjectRef va((igVertexArray *)arg1->_vertexArray);
+        igSmartPointer<igVertexArray> va((igVertexArray *)arg1->_vertexArray);
         t = va.p;
         if (t != 0) {
             t->_refCount = t->_refCount + 1;

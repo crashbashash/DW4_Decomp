@@ -11,18 +11,18 @@ typedef struct IniPairList { char pad[8]; int count; int cap; IniPairEntry **dat
 typedef struct IniIncludeView { char pad[8]; IniPairList *pairs; } IniIncludeView;
 }
 static inline char *textOf(IniPairText *s) { char *t = s->text; if (t == 0) { return DAT_004c22f0[0]; } return t; }
-struct IniPairRef {
-    IniPairEntry *p;
-    IniPairRef() : p(0) {}
-    ~IniPairRef() {
-        IniPairEntry *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer() : p(0) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
-    IniPairRef &operator=(IniPairEntry *next) {
-        IniPairEntry *o;
+    igSmartPointer &operator=(T *next) {
+        T *o;
         if (next != 0) next->_refCount = next->_refCount + 1;
         if ((o = p) != 0) {
             o->_refCount = o->_refCount - 1;
@@ -34,7 +34,7 @@ struct IniPairRef {
 };
 extern "C" int FUN_003061c0(void *self, IniIncludeView *inc, int overwrite) {
     int i = 0;
-    IniPairRef cur;
+    igSmartPointer<IniPairEntry> cur;
     for (; i < inc->pairs->count; i++) {
         cur = inc->pairs->data[i];
         if (cur.p != 0) {

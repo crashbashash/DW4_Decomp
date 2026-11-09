@@ -11,11 +11,11 @@ int FUN_002295b0(int, Lock *);
 int igObject_Destroy(void *);
 int Gap__igLockInterface__vfunc_27(int self, int mode);
 }
-struct IteratorRef {
-    Rc *p;
-    IteratorRef(Rc *iterator) : p(iterator) {}
-    ~IteratorRef() {
-        Rc *iterator = get();
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *iterator) : p(iterator) {}
+    ~igSmartPointer() {
+        T *iterator = get();
         if (iterator != 0) {
             iterator->refs = iterator->refs - 1;
             if ((iterator->refs & 0x7FFFFF) == 0) {
@@ -23,7 +23,7 @@ struct IteratorRef {
             }
         }
     }
-    Rc *get() const { return p; }
+    T *get() const { return p; }
 };
 struct LockRef {
     Lock *p;
@@ -52,7 +52,7 @@ static inline Rc *createIterator() {
 }
 int Gap__igLockInterface__vfunc_27(int self, int mode) {
     Lock *found;
-    IteratorRef iterator(createIterator());
+    igSmartPointer<Rc> iterator(createIterator());
     FUN_0022a8d0(iterator.p, igLockBase_GetMetaObject());
     for (;;) {
         found = FUN_0022a950(iterator.p);

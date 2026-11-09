@@ -34,11 +34,11 @@ class MessengerVirt { public: virtual void d0(); virtual void d1(); virtual void
 
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 #define SETI(L, I, V) if ((L)->_count != 0 && (I) >= 0 && (I) < (L)->_count) ((int *)(L)->_data)[I] = (V);
@@ -55,7 +55,7 @@ extern "C" void FUN_00445200(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1) {
         } else {
             al = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        ObjectRef ref(beBaseInfoDataList_Create(al));
+        igSmartPointer<igObject> ref(beBaseInfoDataList_Create(al));
         s1 = ref.p;
         if (s1 != 0) s1->_refCount = s1->_refCount + 1;
         old = (igObject *)arg1->_dataList;

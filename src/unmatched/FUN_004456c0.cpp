@@ -28,11 +28,11 @@ void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInf
 }
 /* Owning stack reference to the freshly created down-data list, released on scope exit (reference
  * count in the low 23 bits of references). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    List *p;
-    ObjectRef(List *o) : p(o) {}
-    ~ObjectRef() { List *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInfoWork *arg2) {
@@ -63,7 +63,7 @@ void FUN_004456c0(beNDMWMdlPEBase *arg0, beBaseInfoRam *arg1, beNDMWMdlPEBaseInf
         Rc *old;
         alloc = igObject_GetAllocator(); /* matching construct: a0 still holds arg0, retail passes it without a move */
         /* The six-entry list is owned by the stack reference until the work record has taken its own. */
-        ObjectRef created((List *)FUN_002caa70(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        igSmartPointer<List> created((List *)FUN_002caa70(GPR_00554c14 != 0 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0])));
         if (created.p->size < 7) List_Reserve(created.p, 6, 4);
         if (created.p->cap >= 6) created.p->size = 6;
         else List_Resize(created.p, 6, 4);

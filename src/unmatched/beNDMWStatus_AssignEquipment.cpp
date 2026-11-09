@@ -61,11 +61,11 @@ extern "C" StringRef StringList_CopyRetained(void *list, int index);
 /* Owning stack references to the equipment-category name list and the scratch int list of the
  * unequip pass; each releases its object on scope exit (reference count in the low 23 bits of
  * _refCount). */
-class NameListRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    NameListRef(igObject *o) : p(o) {}
-    ~NameListRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 class IntListRef {
 public:
@@ -148,7 +148,7 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                 alloc = igObject_GetAllocator(self);
                 alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
                 {
-                NameListRef names((igObject *)FUN_002b90e0(alloc));
+                igSmartPointer<igObject> names((igObject *)FUN_002b90e0(alloc));
                 INTERN_APPEND(names.p, DAT_00519de0)
                 INTERN_APPEND(names.p, DAT_00519de8)
                 INTERN_APPEND(names.p, DAT_00519df8)

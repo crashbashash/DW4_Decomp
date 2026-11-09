@@ -30,11 +30,11 @@ extern Frame *DAT_0056dc50[4];
 int FUN_0045f200(...);
 void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0);
 }
-struct ObjectRef {
-    igObject *p;
-    ObjectRef(void *object) : p((igObject *)object) {}
-    ~ObjectRef() {
-        igObject *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(void *object) : p((T *)object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->_refCount = object->_refCount - 1;
             if ((object->_refCount & 0x7FFFFF) == 0) {
@@ -61,7 +61,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     float sp58[3];
     Frame *s0;
     igObject *t;
-    ObjectRef first(createFirst());
+    igSmartPointer<igObject> first(createFirst());
     sp40.a = 1.0f; sp40.b = 1.0f; sp40.c = 1.0f; sp40.d = 1.0f;
     ((A *)first.p)->vX(&sp40);
     if (DAT_0056dc50[0] == 0) {
@@ -71,7 +71,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     }
     DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
     s0 = DAT_0056dc50[0];
-    ObjectRef second(createSecond());
+    igSmartPointer<igObject> second(createSecond());
     ((B *)second.p)->v128(4);
     ((B *)second.p)->v132(s0->range);
     arg0->f36->v128(s0->eye);
@@ -144,7 +144,7 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     arg0->f72->b8 = 1;
     arg0->f72->f12 = (int)&FUN_0045f200;
     arg0->f72->b24 = 1;
-    ObjectRef third(createThird());
+    igSmartPointer<igObject> third(createThird());
     ((Y *)third.p)->b24 = 1;
     FUN_001c5160(third.p, 1.1f);
     t = third.p;

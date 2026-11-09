@@ -25,11 +25,11 @@ void FUN_00422c00(void *arg0, Holder *arg1);
 #define RELEASE(o) { if ((o) != 0) { (o)->_refCount = (o)->_refCount - 1; if (((unsigned long long)((long long)(int)(o)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o); } }
 /* Owning stack reference to the scratch list the sort builds into, released on scope exit
  * (reference count in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    List *p;
-    ObjectRef(List *o) : p(o) {}
-    ~ObjectRef() { List *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((beNDMWItemBase *)o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((beNDMWItemBase *)o); } }
 };
 
 void FUN_00422c00(void *arg0, Holder *arg1) {
@@ -53,7 +53,7 @@ void FUN_00422c00(void *arg0, Holder *arg1) {
     List *l3;
     al = igObject_GetAllocator(arg0);
     al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-    ObjectRef sorted((List *)FUN_003c90f0(al));
+    igSmartPointer<List> sorted((List *)FUN_003c90f0(al));
     int sp68; /* matching construct: declared after the reference so it takes the slot below it */
     l = arg1->list;
     if (l->count > 0) {

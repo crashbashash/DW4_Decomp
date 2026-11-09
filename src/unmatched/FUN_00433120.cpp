@@ -15,11 +15,11 @@ void FUN_00433120(beNDMWWindow *arg0, int arg1);
 }
 /* Owning stack reference to the new sub-window, released on scope exit (reference count in the low
  * 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beNDMWWindow *p;
-    ObjectRef(beNDMWWindow *o) : p(o) {}
-    ~ObjectRef() { beNDMWWindow *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
 };
 void FUN_00433120(beNDMWWindow *arg0, int arg1) {
     beNDMWWindow *var_s2;
@@ -53,7 +53,7 @@ void FUN_00433120(beNDMWWindow *arg0, int arg1) {
             w = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
         /* The new window is owned by the stack reference until the sub-window list has taken its own. */
-        ObjectRef created((beNDMWWindow *)FUN_003b3ac0(w));
+        igSmartPointer<beNDMWWindow> created((beNDMWWindow *)FUN_003b3ac0(w));
         beNDMWWindow_BindContext(created.p, arg0, arg0->_insight, arg1, 1);
         ObjectList_AppendRetained(arg0->_subWindow, (igObject *)created.p);
     } else {

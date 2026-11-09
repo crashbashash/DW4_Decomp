@@ -57,11 +57,11 @@ struct Rc { int w0; int references; };
 /* Owning stack references to the freshly created controller objects while the list is wired up;
  * each releases its object on scope exit (reference count in the low 23 bits of references). Each
  * object kind has its own class, one per destructor copy. */
-class DataListRef {
+template <class T> class igSmartPointer {
 public:
-    Rc *p;
-    DataListRef(Rc *o) : p(o) {}
-    ~DataListRef() { Rc *o = p; if (o != 0) { o->references = o->references - 1; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { o->references = o->references - 1; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 class CtrlDataRef {
 public:
@@ -137,13 +137,13 @@ struct Rec { char p[40]; Arr *f40; };
 
 #define ALLOC(a, o) { a = igObject_GetAllocator(o); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]); }
 #define REL(o) { Rc *rr = (o); if (rr != 0) { rr->references = rr->references - 1; if (((unsigned long long)((long long)rr->references << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
-struct ListInstall { static inline void go(Ctx *o, const DataListRef &fresh) {
+struct ListInstall { static inline void go(Ctx *o, const igSmartPointer<Rc> &fresh) {
     Rc *n = fresh.p;
     if (n != 0) n->references = n->references + 1;
     REL(o->list)
     o->list = n;
 } };
-#define ENSURE(o) { void *al; ALLOC(al, o) ListInstall::go(o, DataListRef((Rc *)beBaseInfoDataList_Create(al))); }
+#define ENSURE(o) { void *al; ALLOC(al, o) ListInstall::go(o, igSmartPointer<Rc>((Rc *)beBaseInfoDataList_Create(al))); }
 #define FIND(n) igProperty_FindByName(a1->list, DAT_00585be0[0], &n[0])
 
 #pragma opt_propagation off
@@ -168,7 +168,7 @@ int Gap__Bec__beNDMWLoadIntf2__vfunc_34(beNDMWLoadIntf2 *self, void *ctx, void *
         if (a1->list == 0) {
             ALLOC(al, self)
             {
-            DataListRef spFC((Rc *)beBaseInfoDataList_Create(al));
+            igSmartPointer<Rc> spFC((Rc *)beBaseInfoDataList_Create(al));
             { Rc *n = spFC.p; if (n != 0) n->references = n->references + 1; REL(a1->list) a1->list = n; }
             self->_system_ = FUN_00236f80(self->_insight, DAT_00587d08[0]);
             ALLOC(al, self)

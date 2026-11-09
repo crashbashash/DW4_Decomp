@@ -147,22 +147,22 @@ inline TextRef::~TextRef() {
         if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
     }
 }
-struct ObjectRef {
-    SrObject *p;
-    ObjectRef() : p(0) {}
-    SrObject *get() const { return p; }
-    ObjectRef(SrObject *object) : p(object) {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer() : p(0) {}
+    T *get() const { return p; }
+    igSmartPointer(T *object) : p(object) {
         if (p != 0) p->_refCount = p->_refCount + 1;
     }
-    ~ObjectRef() {
-        SrObject *o = p;
+    ~igSmartPointer() {
+        T *o = p;
         if (o != 0) {
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
-    void set(SrObject *held) {
-        SrObject *o;
+    void set(T *held) {
+        T *o;
         if (held != 0) held->_refCount = held->_refCount + 1;
         if ((o = p) != 0) {
             o->_refCount = o->_refCount - 1;
@@ -171,8 +171,8 @@ struct ObjectRef {
         p = held;
     }
     void operator=(const ReturnedRef &other) {
-        SrObject *held = other.p;
-        SrObject *o;
+        T *held = other.p;
+        T *o;
         if (held != 0) held->_refCount = held->_refCount + 1;
         if ((o = p) != 0) {
             o->_refCount = o->_refCount - 1;
@@ -235,7 +235,7 @@ extern "C" int FUN_001cb340(SrProcessor *self, SrTarget *target, int arg) {
         return 0;
     }
     StringRef infoName((char *)0);
-    ObjectRef info;
+    igSmartPointer<SrObject> info;
     ListRef keys(FUN_002b90e0(igObject_GetAllocator(self)));
     ListRef values(FUN_002b90e0(igObject_GetAllocator(self)));
     count = names.p->count;
@@ -325,10 +325,10 @@ extern "C" int FUN_001cb340(SrProcessor *self, SrTarget *target, int arg) {
         if (pass == -1) {
             return 0;
         }
-        ObjectRef primary((SrObject *)0);
-        ObjectRef second((SrObject *)0);
-        ObjectRef third((SrObject *)0);
-        ObjectRef found((SrObject *)0);
+        igSmartPointer<SrObject> primary((SrObject *)0);
+        igSmartPointer<SrObject> second((SrObject *)0);
+        igSmartPointer<SrObject> third((SrObject *)0);
+        igSmartPointer<SrObject> found((SrObject *)0);
         found = FUN_001c8c80(self, pass, DAT_004e4778, DAT_0055f460[0], shared.p);
         held = found.p;
         if (held != 0) {

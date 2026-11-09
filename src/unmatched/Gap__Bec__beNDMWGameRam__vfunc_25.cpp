@@ -18,11 +18,11 @@ int Gap__Bec__beNDMWGameRam__vfunc_25(beNDMWGameRam *arg0);
 }
 /* Owning stack reference to the game-ram info created here, released on scope exit (reference
  * count in the low 23 bits of _refCount). */
-class InfoRef {
+template <class T> class igSmartPointer {
 public:
-    beNDMWGameRamInfo *p;
-    InfoRef(beNDMWGameRamInfo *o) : p(o) {}
-    ~InfoRef() { beNDMWGameRamInfo *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to the info's ram object created here, released on scope exit. */
 class RamRef {
@@ -41,7 +41,7 @@ int Gap__Bec__beNDMWGameRam__vfunc_25(beNDMWGameRam *arg0) {
     if (infos->_count == 0) {
         var_v0 = igObject_GetAllocator(arg0);
         var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-        InfoRef info(FUN_003ca380(var_v0));
+        igSmartPointer<beNDMWGameRamInfo> info(FUN_003ca380(var_v0));
         var_v0 = igObject_GetAllocator(arg0);
         var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
         RamRef ram(FUN_003ca1a0(var_v0));

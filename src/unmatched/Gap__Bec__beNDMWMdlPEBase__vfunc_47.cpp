@@ -44,11 +44,11 @@ class VC140 { public: virtual void d0(); virtual void d1(); virtual void d2(); v
 #define GI(i) beMessenger_GetInt(self->_messenger, i)
 /* Owning stack reference to the freshly created property data list; released at the end of the
  * full expression that stores it (reference count in the low 23 bits of references). */
-class ListRef {
+template <class T> class igSmartPointer {
 public:
-    List *p;
-    ListRef(List *o) : p(o) {}
-    ~ListRef() { List *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->references; if ((o->references & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference that carries each new int list of the work while it is sized and filled:
  * starts empty, is handed one created list after another (MKLIST drops the previous one first) and
@@ -69,7 +69,7 @@ public:
 /* Store a freshly created data list in the model, taking the model's share and dropping the previous
  * list; the caller passes the list as a temporary holder that gives up the creating share at the end of
  * the full expression (matching construct: a temporary takes its frame slot after the named locals). */
-struct DataList { static inline void store(Model *obj, const ListRef &list) {
+struct DataList { static inline void store(Model *obj, const igSmartPointer<List> &list) {
     List *created = list.p;
     List *old;
     if (created != 0) created->references = created->references + 1;
@@ -87,7 +87,7 @@ static inline void ensureProps(Model *obj)
 {
     if (obj->props == 0) {
         int allocator = igObject_GetAllocator(obj);
-        ListRef holder((List *)beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        igSmartPointer<List> holder((List *)beBaseInfoDataList_Create(GPR_00554c14 != 0 ? allocator : Memory_GetAllocatorBySelector(DAT_00587110[0])));
         List *created = holder.p;
         if (created != 0) created->references = created->references + 1;
         List *old = obj->props;

@@ -18,11 +18,11 @@ void beMessenger_InitializeMemory(beMessenger *arg0);
 #define RELEASE_REF(q) { igObject *rr = (q); \
     if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
 
-class ArgDataRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ArgDataRef(igObject *o) : p(o) {}
-    ~ArgDataRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 class WorkRef {
 public:
@@ -66,7 +66,7 @@ void beMessenger_InitializeMemory(beMessenger *arg0)
 
     ALLOC(alloc0)
     {
-        ArgDataRef argData(beMessengerArgData_Create(alloc0));
+        igSmartPointer<igObject> argData(beMessengerArgData_Create(alloc0));
         igObject *cur0 = argData.p;
         RETAIN_REF(cur0)
         RELEASE_REF((igObject *)arg0->_argData)
@@ -74,7 +74,7 @@ void beMessenger_InitializeMemory(beMessenger *arg0)
     }
     GROUP(_workStack, 0x40, beMessengerWork_Create, WorkRef)
     GROUP(_delayStack, 0x20, beMessengerDelay_Create, DelayRef)
-    GROUP(_pushPopStack, 4, beMessengerArgData_Create, ArgDataRef)
+    GROUP(_pushPopStack, 4, beMessengerArgData_Create, igSmartPointer<igObject>)
     arg0->_pushPopCount = 0;
     arg0->_isMemoryAssign = 1;
 }

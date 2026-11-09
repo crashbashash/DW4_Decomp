@@ -35,11 +35,11 @@ void FUN_004329d0(beNDMWShopCtrlDigilabo *self);
 }
 /* Owning stack reference to the new weapon-number list; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-class RP {
+template <class T> class igSmartPointer {
 public:
-    igIntList *p;
-    RP(igIntList *o) : p(o) {}
-    ~RP() { igIntList *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
     void *obj;
@@ -88,7 +88,7 @@ void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
             fold = igProperty_GetRecordFolder(obj, &DAT_0051bc48[0])->f12;
             alloc = igObject_GetAllocator(self);
             alloc = GPR_00554c14 ? alloc : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-            RP lst((igIntList *)FUN_002caa70(alloc));
+            igSmartPointer<igIntList> lst((igIntList *)FUN_002caa70(alloc));
             j = 0;
             if (0 < fold->_count) {
                 idx = 0;

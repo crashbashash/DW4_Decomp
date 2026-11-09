@@ -42,13 +42,13 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
     }
 } };
 /* Owning reference to the freshly created data list. */
-struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() { igObject *object = p; if (object) { --object->_refCount; if ((object->_refCount & 0x7fffff) == 0) igObject_Destroy(object); } } };
+template <class T> struct igSmartPointer { T *p; igSmartPointer(T *o) : p(o) {} ~igSmartPointer() { T *object = p; if (object) { --object->_refCount; if ((object->_refCount & 0x7fffff) == 0) igObject_Destroy(object); } } };
 /* Owning reference to the working box. */
 struct Ref { BoxF *p; Ref(BoxF *o) : p(o) {} ~Ref() { igObject *object = (igObject *)p; if (object) { --object->_refCount; if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 
 /* matching construct: expression temporary -- the freshly created data list is held by a temporary passed to an
    inline helper, so its frame slot (168) sorts below the box reference (172); a named local took 172 instead. */
-struct DataListInit { static inline void go(beBaseInfoRam *arg1, const ObjectRef &tmp) {
+struct DataListInit { static inline void go(beBaseInfoRam *arg1, const igSmartPointer<igObject> &tmp) {
         igObject *s0 = tmp.p;
         if (s0 != 0) {
             s0->_refCount++;
@@ -74,7 +74,7 @@ int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *arg0, beBaseInf
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        DataListInit::go(arg1, ObjectRef(beBaseInfoDataList_Create(a)));
+        DataListInit::go(arg1, igSmartPointer<igObject>(beBaseInfoDataList_Create(a)));
     }
     s2 = igProperty_FindByName(arg1->_dataList, DAT_00585be0[0], DAT_0050f410);
     s1 = s2->q;

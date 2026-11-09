@@ -383,16 +383,19 @@ Retail shapes that only one spelling reproduces:
   by `const &` to an inline helper takes its address, which is what keeps it in memory:
 
   ```cpp
-  struct ObjectRef {
+  template <class T> struct igSmartPointer {
       T *p;
-      ObjectRef(T *object) : p(object) {}
-      ~ObjectRef() { igObject *o = (igObject *)p; if (o != 0) { /* release */ } }
+      igSmartPointer(T *object) : p(object) {}
+      ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { /* release */ } }
       T *get() const { return p; }
   };
 
-  ObjectRef held(create());
-  setField(owner, held);   // static inline, takes const ObjectRef &
+  igSmartPointer<igProbe> held(create());
+  setField(owner, held);   // static inline, takes const igSmartPointer<igProbe> &
   ```
+
+  The name is the game's own: the executable holds the string `::~igSmartPointer<`. Each file defines the template
+  with the members it needs, since no one definition has yet been shown to serve them all.
 
   It is the non-empty destructor that keeps the local in memory: without one the compiler holds it in a register, and
   no `const &` is needed for the reload. Related shapes:

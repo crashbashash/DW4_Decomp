@@ -23,11 +23,11 @@ extern unsigned char GPR_00554c14;
 struct V3 { float x, y, z; };
 /* Owning stack reference to the area's text object; released on scope exit (reference count in the
  * low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    beUnicodeObj *p;
-    ObjectRef(beUnicodeObj *o) : p(o) {}
-    ~ObjectRef() { beUnicodeObj *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1) {
     beNDMWLoadCtrl2CommonIntf *spF0;
@@ -102,7 +102,7 @@ extern "C" unsigned char FUN_003dcc60(beNDMWLoadIntf2DataSelIntf *arg0, int arg1
                 if (it->_isUse == 1) {
                     al = igObject_GetAllocator(arg0, arg0->_plNo);
                     if (GPR_00554c14 != 0) a0 = al; else a0 = Memory_GetAllocatorBySelector(DAT_00587110[0]);
-                    ObjectRef rcs((beUnicodeObj *)FUN_003614f0(a0));
+                    igSmartPointer<beUnicodeObj> rcs((beUnicodeObj *)FUN_003614f0(a0));
                     beUnicodeObj_AllocateBuffer(rcs.p, 8);
                     src = (unsigned short *)it->_dmNameUni;
                     n = 0;

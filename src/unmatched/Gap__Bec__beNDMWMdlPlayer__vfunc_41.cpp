@@ -18,11 +18,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" void Gap__Bec__beNDMWMdlPlayer__vfunc_41(beNDMWMdlPlayer *arg0, beBaseInfoRam *arg1);
 void Gap__Bec__beNDMWMdlPlayer__vfunc_41(beNDMWMdlPlayer *arg0, beBaseInfoRam *arg1) {
@@ -36,7 +36,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_41(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         } else {
             a = Memory_GetAllocatorBySelector(DAT_00587110[0]);
         }
-        ObjectRef ref(beBaseInfoDataList_Create(a));
+        igSmartPointer<igObject> ref(beBaseInfoDataList_Create(a));
         s0 = ref.p;
         if (s0 != 0) {
             s0->_refCount++;

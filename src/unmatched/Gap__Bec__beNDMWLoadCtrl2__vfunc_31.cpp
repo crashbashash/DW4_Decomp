@@ -63,11 +63,11 @@ struct Host { char pad40[40]; S_ref *f40; };
 /* Owning stack reference to a freshly created property data list, released on scope exit
  * (reference count in the low 23 bits of f4). */
 static inline int st1(const beNDMWLoadCtrl2CtrlData *data) { return data->_st1; }
-class ListRef {
+template <class T> class igSmartPointer {
 public:
-    S_ref *p;
-    ListRef(S_ref *o) : p(o) {}
-    ~ListRef() { S_ref *o = p; if (o != 0) { --o->f4; if ((o->f4 & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->f4; if ((o->f4 & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
 extern "C" void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1);
@@ -90,7 +90,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
             int base = igObject_GetAllocator(arg1);
             int a;
             if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
-            ListRef list((S_ref *)beBaseInfoDataList_Create(a));
+            igSmartPointer<S_ref> list((S_ref *)beBaseInfoDataList_Create(a));
             o = list.p;
             if (o != 0) o->f4 = (int)((int) (o->f4 + 1));
             old = arg1->f40;
@@ -109,7 +109,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
             int base = igObject_GetAllocator(arg1);
             int a;
             if (GPR_00554c14 != 0) { a = base; } else { a = Memory_GetAllocatorBySelector(DAT_00587110[0]); }
-            ListRef list((S_ref *)beBaseInfoDataList_Create(a));
+            igSmartPointer<S_ref> list((S_ref *)beBaseInfoDataList_Create(a));
             o = list.p;
             if (o != 0) o->f4 = (int)((int) (o->f4 + 1));
             old = arg1->f40;

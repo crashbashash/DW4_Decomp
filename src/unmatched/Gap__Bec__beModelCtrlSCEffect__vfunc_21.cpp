@@ -31,11 +31,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *arg0, beBaseInfoRam *arg1) {
     beBaseInfo *s2;
@@ -58,7 +58,7 @@ extern "C" int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *arg0
     beMessenger_AppendString(s1->_messenger, arg0->_seqName);
     if (arg1->_dataList == 0) {
         int a = igObject_GetAllocator(arg1);
-        ObjectRef created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
+        igSmartPointer<igObject> created(beBaseInfoDataList_Create(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0])));
         igObject *t = created.p;
         if (t != 0) t->_refCount = t->_refCount + 1;
         igObject *old = (igObject *)arg1->_dataList;

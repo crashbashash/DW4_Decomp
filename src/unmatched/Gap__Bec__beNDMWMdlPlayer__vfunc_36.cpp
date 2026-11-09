@@ -91,11 +91,11 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
 } };
 /* Owning stack reference to the slot's new data list; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-class DataListRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    DataListRef(igObject *o) : p(o) {}
-    ~DataListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to the new player info work; released on scope exit. */
 class InfoWorkRef {
@@ -121,7 +121,7 @@ public:
 };
 /* The retained copy of a list entry is returned through a hidden return pointer. */
 extern "C" StringRef StringList_CopyRetained(igStringObjList *, int);
-struct Slot { static inline void setDataList(beBaseInfoRam *ram, const DataListRef &r) {
+struct Slot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPointer<igObject> &r) {
     igObject *t = r.p;
     if (t != 0) t->_refCount = t->_refCount + 1;
     ReleaseRefInline::go((igObject *)ram->_dataList);
@@ -150,7 +150,7 @@ void Gap__Bec__beNDMWMdlPlayer__vfunc_36(beNDMWMdlPlayer *arg0, beBaseInfoRam *a
         igObject *created = beBaseInfoDataList_Create(a);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named references, as retail's +0x100 does) */
-        Slot::setDataList(arg1, DataListRef(created));
+        Slot::setDataList(arg1, igSmartPointer<igObject>(created));
     }
     s3 = igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], DAT_00516110);
     {

@@ -44,11 +44,11 @@ extern int DAT_00587048[4];
 extern int DAT_00587060[4];
 extern unsigned char GPR_00554c14;
 }
-struct FileRef {
-    IniFileObject *p;
-    FileRef(IniFileObject *object) : p(object) {}
-    ~FileRef() {
-        IniFileObject *object = p;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *object = p;
         if (object != 0) {
             object->_refCount = object->_refCount - 1;
             if ((object->_refCount & 0x7FFFFF) == 0) {
@@ -56,7 +56,7 @@ struct FileRef {
             }
         }
     }
-    IniFileObject *operator->() const { return p; }
+    T *operator->() const { return p; }
 };
 static inline void retain(IniStringObject *object) {
     if (object != 0) {
@@ -84,7 +84,7 @@ extern "C" int FUN_001ce400(IniStringObject **out, char *path) {
         return;
     }
     void *allocator = GPR_00554c14 != 0 ? Memory_GetAllocatorBySelector(DAT_00587028[0]) : Memory_GetAllocatorBySelector(DAT_00587060[0]);
-    FileRef file(FUN_002c4ca0(allocator));
+    igSmartPointer<IniFileObject> file(FUN_002c4ca0(allocator));
     StringObjectRef result(0);
     int opened;
     {

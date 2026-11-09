@@ -20,11 +20,11 @@ extern char *DAT_004c22f0[4];
 extern int DAT_004e4710[2];
 extern int DAT_004e4718[2];
 }
-struct IniTextRef {
-    IniValueObject *p;
-    IniTextRef(IniValueObject *object) : p(object) {}
-    ~IniTextRef() {
-        IniValueObject *o;
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
         if ((o = p) != 0) {
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
@@ -35,7 +35,7 @@ extern "C" void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *l
     int i;
     IniValueObject *value;
     char *s;
-    IniTextRef text(FUN_002b9500(igObject_GetAllocator(self)));
+    igSmartPointer<IniValueObject> text(FUN_002b9500(igObject_GetAllocator(self)));
     for (i = 0; i < FUN_00303e50(list); i++) {
         value = FUN_00303e60(list, i);
         if (igObject_IsKindOf(value, FUN_001e4e30()) != 0) {

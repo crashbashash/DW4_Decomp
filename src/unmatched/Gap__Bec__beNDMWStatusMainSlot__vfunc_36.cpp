@@ -17,11 +17,11 @@ extern unsigned char GPR_00554c14;
 }
 /* Owning stack reference to the new sub-window, released on scope exit (reference count in the low
  * 23 bits of the igObject header's _refCount). */
-class WindowRef {
+template <class T> class igSmartPointer {
 public:
-    beNDMWStatusCtrlD0 *p;
-    WindowRef(beNDMWStatusCtrlD0 *o) : p(o) {}
-    ~WindowRef() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_36(beNDMWStatusMainSlot *arg0) {
     int al;
@@ -31,7 +31,7 @@ extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_36(beNDMWStatusMainSlot *a
 
     al = igObject_GetAllocator(arg0);
     al = (GPR_00554c14 != 0) ? al : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-    WindowRef window(FUN_003baf10(al));
+    igSmartPointer<beNDMWStatusCtrlD0> window(FUN_003baf10(al));
     beNDMWWindow_BindContext(window.p, arg0, arg0->_insight, arg0->_playerNo, 0);
     ObjectList_AppendRetained(arg0->_subWindow, window.p);
     w = window.p;

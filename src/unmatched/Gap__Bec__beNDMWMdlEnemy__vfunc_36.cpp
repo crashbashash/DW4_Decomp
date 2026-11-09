@@ -42,11 +42,11 @@ struct Rel {
 };
 /* Owning stack reference to the slot's new data list; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
-class DataListRef {
+template <class T> class igSmartPointer {
 public:
-    igObject *p;
-    DataListRef(igObject *o) : p(o) {}
-    ~DataListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { T *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Owning stack reference to the new enemy info work; released on scope exit. */
 class InfoWorkRef {
@@ -55,7 +55,7 @@ public:
     InfoWorkRef(igObject *o) : p(o) {}
     ~InfoWorkRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-struct Slot { static inline void setDataList(beBaseInfoRam *ram, const DataListRef &r) {
+struct Slot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPointer<igObject> &r) {
     igObject *t = r.p;
     if (t != 0) t->_refCount = t->_refCount + 1;
     Rel::go((igObject *)ram->_dataList);
@@ -73,7 +73,7 @@ extern "C" void Gap__Bec__beNDMWMdlEnemy__vfunc_36(beNDMWMdlEnemy *arg0, beBaseI
         igObject *created = (igObject *)beBaseInfoDataList_Create(a);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
          * takes the stack slot below the named info-work reference, as retail's +0x68 does) */
-        Slot::setDataList(arg1, DataListRef(created));
+        Slot::setDataList(arg1, igSmartPointer<igObject>(created));
     }
     s4 = (Holder *)igProperty_FindByName((void *)arg1->_dataList, DAT_00585be0[0], &DAT_00515e30[0]);
     {

@@ -9,10 +9,10 @@ Entry *FUN_0044dc20(int);
 int ObjectList_AppendRetained(int, Entry *);
 }
 struct AttrEntryOwner { char pad[8]; int entries; };
-struct EntryRef {
-    Entry *p;
-    EntryRef(Entry *object) : p(object) {}
-    ~EntryRef() {
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
         Counted *object = p;
         if (object != 0) {
             object->references = object->references - 1;
@@ -21,8 +21,8 @@ struct EntryRef {
             }
         }
     }
-    Entry *operator->() const { return p; }
-    operator Entry *() const { return p; }
+    T *operator->() const { return p; }
+    operator T *() const { return p; }
 };
 static inline void assign(Counted **slot, Counted *value) {
     Counted *old;
@@ -39,7 +39,7 @@ static inline void assign(Counted **slot, Counted *value) {
     *slot = value;
 }
 extern "C" void FUN_004573f0(AttrEntryOwner *owner, int a, int b, Counted *value) {
-    EntryRef entry(FUN_0044dc20(igObject_GetAllocator(owner)));
+    igSmartPointer<Entry> entry(FUN_0044dc20(igObject_GetAllocator(owner)));
     entry->a = a;
     entry->b = b;
     assign(&entry->value, value);

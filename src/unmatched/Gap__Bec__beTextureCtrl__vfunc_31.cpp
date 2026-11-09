@@ -22,11 +22,11 @@ void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1)
 /* Owning stack reference to the texture attribute object created per matching property; released
  * on scope exit, after the attribute set has retained it (reference count in the low 23 bits of
  * _refCount). */
-class ObjectRef {
+template <class T> class igSmartPointer {
 public:
-    NewObjectVirtual *p;
-    ObjectRef(NewObjectVirtual *o) : p(o) {}
-    ~ObjectRef() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    T *p;
+    igSmartPointer(T *o) : p(o) {}
+    ~igSmartPointer() { igObject *o = (igObject *)p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1) {
     struct { int spA0; int pad[5]; } sa;
@@ -63,7 +63,7 @@ void Gap__Bec__beTextureCtrl__vfunc_31(beTextureCtrl *arg0, beBaseInfoRam *arg1)
                     if (p != 0) {
                         var_v0 = igObject_GetAllocator(arg0);
                         var_v0 = GPR_00554c14 ? var_v0 : Memory_GetAllocatorBySelector(DAT_00587110[0]);
-                        ObjectRef attr(FUN_00132810(var_v0));
+                        igSmartPointer<NewObjectVirtual> attr(FUN_00132810(var_v0));
                         attr.p->v132(p->f12);
                         s3 = (igAttrSet *)s1->_attrSet;
                         s6 = ((igAttrList *)s3->_attributes)->_count;
