@@ -14,3 +14,4 @@ __adddf3	0x002306d0
 __muldf3	0x00230790
 __divdf3	0x00230a18
 __floatsidf	0x00230cc8
+_d_ulltod	0x00100240

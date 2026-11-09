@@ -536,7 +536,7 @@
   "igPsx2VertexArray2": 5,
   "igPsx2VisualContext": 102,
   "igPsx2Window": 39,
-  "igQuaternionfList": 6,
+  "igQuaternionfList": 9,
   "igRadioGroup": 6,
   "igRadioGroupModel": 4,
   "igRadioGroupSelectedObserver": 1,
@@ -719,19 +719,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 12611,
-   "offset_casts": 6082,
-   "other_members": 14153,
-   "recovered": 21545,
-   "recovered_pct": 42.88,
+   "files": 12679,
+   "offset_casts": 6083,
+   "other_members": 14579,
+   "recovered": 21548,
+   "recovered_pct": 42.52,
    "synthetic": 8463,
-   "total": 50243
+   "total": 50673
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6816,
- "recovered": 25963,
+ "offset_casts": 6817,
+ "recovered": 25966,
  "synthetic": 9857,
- "total": 63983,
+ "total": 64413,
  "typeable": 359
 }

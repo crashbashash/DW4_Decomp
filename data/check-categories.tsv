@@ -115,6 +115,7 @@
 00109368	FUN_00109368	match	-
 00109378	FUN_00109378	match	-
 00109388	_sceMpegAlalcAlloc	match	-
+00109410	FUN_00109410	match	jump table 0x4d22b0: 5 entries, 20 bytes, matches retail
 001095c8	FUN_001095c8	match	-
 001096e8	FUN_001096e8	match	-
 00109730	FUN_00109730	match	-
@@ -262,6 +263,7 @@
 0010c7b0	FUN_0010c7b0	match	-
 0010c7f0	deci2Putchar	match	-
 0010c8a0	FUN_0010c8a0	match	-
+0010c970	FUN_0010c970	match	jump table 0x4d24c0: 12 entries, 48 bytes, matches retail
 0010d0d0	FUN_0010d0d0	match	-
 0010d108	FUN_0010d108	match	-
 0010d168	FUN_0010d168	match	-
@@ -5430,6 +5432,7 @@
 001e5d60	thunk_igBoolObject_GetMetaObject	match	-
 001e5d70	igBoolObject_InitFields	match	-
 001e5de0	FUN_001e5de0	match	-
+001e6130	FUN_001e6130	match	-
 001e6230	FUN_001e6230	match	-
 001e6410	FUN_001e6410	match	-
 001e6490	FUN_001e6490	match	DEFERRED duplicate 0x25a230 __dt__22igSmartPointer<5Value>Fv 128B (compared under the profile of its retail unit)
@@ -6586,6 +6589,7 @@
 0023d0b0	FUN_0023d0b0	match	-
 0023d110	FUN_0023d110	match	-
 0023d300	FUN_0023d300	match	-
+0023d9d0	FUN_0023d9d0	match	jump table 0x4ea340: 13 entries, 52 bytes, matches retail
 0023e160	FUN_0023e160	match	-
 0023ec50	FUN_0023ec50	match	-
 0023ee00	FUN_0023ee00	match	-
@@ -8025,6 +8029,7 @@
 0027b710	FUN_0027b710	match	-
 0027b768	FUN_0027b768	match	-
 0027b7b0	FUN_0027b7b0	match	-
+0027b810	FUN_0027b810	match	-
 0027b8e0	FUN_0027b8e0	match	-
 0027b930	FUN_0027b930	match	-
 0027b9c0	FUN_0027b9c0	match	-
@@ -8166,6 +8171,7 @@
 002800d0	FUN_002800d0	match	-
 00280240	FUN_00280240	match	-
 00280250	thunk_FUN_00280a00	match	-
+00280330	FUN_00280330	match	jump table 0x4f2700: 8 entries, 32 bytes, matches retail
 00280810	FUN_00280810	match	-
 00280840	FUN_00280840	match	-
 00280890	FUN_00280890	match	-
@@ -8505,6 +8511,7 @@
 002958a0	FUN_002958a0	match	-
 00295908	FUN_00295908	match	-
 00295a28	FUN_00295a28	match	-
+00295ab8	FUN_00295ab8	match	jump table 0x4f38f0: 2 entries, 8 bytes, matches retail
 00295b10	FUN_00295b10	match	-
 00295b68	FUN_00295b68	match	-
 00295be0	FUN_00295be0	match	-

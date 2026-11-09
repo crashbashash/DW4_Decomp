@@ -304,3 +304,7 @@
 # FUN_001e6130 is a block of an earlier function (its `j 0x1e5fe0` lands inside FUN_001e5f00, finding in
 # the archived note `near-miss-shapes-extents.md`); the dump's extent ran over FUN_001e6230. Ends at its own `j` + delay slot.
 0x001e6130	248	FUN_001e6130
+0x00109410	436	FUN_00109410
+0x0027b810	204	FUN_0027b810
+0x0010d890	176	sceSifWriteBackDCache
+0x001e5f00	212	FUN_001e5f00	cut
