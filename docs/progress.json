@@ -3,8 +3,8 @@
   {
    "hi": 32,
    "lo": 1,
-   "matched": 6533,
-   "matched_bytes": 102364,
+   "matched": 6599,
+   "matched_bytes": 103420,
    "total": 6626,
    "total_bytes": 103952
   },
@@ -72,8 +72,8 @@
     "functions": 0
    },
    "assembly": {
-    "bytes": 4112,
-    "functions": 15
+    "bytes": 5168,
+    "functions": 81
    },
    "code-only": {
     "bytes": 9952,
@@ -128,8 +128,8 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2605668,
-   "functions": 18734
+   "bytes": 2606724,
+   "functions": 18800
   },
   "fully_verified": {
    "bytes": 2601556,
@@ -141,11 +141,11 @@
  },
  "code_bytes": {
   "asm_body": 0,
-  "assembly": 4112,
-  "fully_matched": 2605668,
+  "assembly": 5168,
+  "fully_matched": 2606724,
   "fully_verified": 2601556,
   "functions_asm_body": 0,
-  "functions_assembly": 15,
+  "functions_assembly": 81,
   "matched": 2663192,
   "total": 3464132
  },
@@ -354,12 +354,12 @@
    "struct.c": 285,
    "unapproved.bytes": 50908,
    "unapproved.functions": 80,
-   "unmatched.bytes": 796828,
-   "unmatched.functions": 1372
+   "unmatched.bytes": 795772,
+   "unmatched.functions": 1306
   }
  },
  "functions": {
-  "fully_matched": 18734,
+  "fully_matched": 18800,
   "fully_verified": 18719,
   "matched": 18827,
   "named": 9646,
@@ -420,12 +420,12 @@
   }
  ],
  "link": {
-  "asm_bytes": 796828,
+  "asm_bytes": 795772,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
-  "from_assembly_bytes": 4112,
-  "from_assembly_units": 15,
+  "from_assembly_bytes": 5168,
+  "from_assembly_units": 81,
   "from_c_bytes": 2675832,
   "from_c_pct": 58.92,
   "from_c_units": 18827,
@@ -436,7 +436,7 @@
  },
  "median_size": {
   "matched": 72,
-  "unmatched": 288
+  "unmatched": 312
  },
  "metadata": {
   "asm_units": 20214,
@@ -452,11 +452,11 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 383392,
+  "bytes": 384400,
   "failing": {
    "addresses": {
-    "bytes": 2109604,
-    "functions": 13602
+    "bytes": 2109652,
+    "functions": 13605
    },
    "fields": {
     "bytes": 754536,
@@ -467,8 +467,8 @@
     "functions": 5953
    },
    "name": {
-    "bytes": 1710616,
-    "functions": 13141
+    "bytes": 1710632,
+    "functions": 13142
    },
    "placed": {
     "bytes": 1898828,
@@ -487,8 +487,8 @@
     "functions": 1297
    }
   },
-  "functions": 2197,
-  "matched_functions": 18734
+  "functions": 2260,
+  "matched_functions": 18800
  },
  "regions": [
   {

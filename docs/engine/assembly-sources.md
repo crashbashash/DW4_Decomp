@@ -37,6 +37,19 @@ upstream file) per file, and spells instructions as mnemonics, never `.word`.
 
 ## Approved
 
+### libkernl syscall stubs
+
+The system-call stubs of Sony's libkernl: `src/sony/libkernl/klib.S`, each `li $3,N; syscall; jr $31; nop`.
+
+* Sony's own build records it. The SDK 3.0.3 `libkernl.a` holds them in one member, `klib.o`, whose file symbols
+  name `klib.s` and which has none of the compiler markers its C siblings carry. Its whole `.text` appears once in
+  the executable, byte for byte, and its syscall numbers agree with `config/SLUS-20836/syscalls.txt`. The
+  executable's library string is `PsIIlibkernl2800`, the 2.8 release of the same file.
+* The file was generated from the member's symbol names and the executable's numbers; nothing of Sony's text is in
+  it. It is assembled in `noreorder` mode, as the member was, so the delay slots stay explicit `nop`s.
+* The member holds 138 stubs. Only those with a symbol in `config/SLUS-20836/symbols.txt` are in the file; the
+  executable keeps the others in ranges the layout treats as data.
+
 ### setjmp and longjmp
 
 `setjmp` (`0x129880`, 88 bytes) and `longjmp` (`0x1298d8`, 100 bytes): `src/newlib/setjmp.S`.
