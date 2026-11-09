@@ -286,6 +286,20 @@ def accesses(text):
     return out
 
 
+TEMPLATE_RE = re.compile(r"template\s*<\s*(?:class|typename)\s+(\w+)\s*>\s*(?:struct|class)\s+(\w+)")
+
+
+def template_arguments(text):
+    """{parameter: [types the file instantiates it with]}, so a member read through a template
+    parameter counts as a member of the class the template holds. `igSmartPointer<igProbe>`
+    makes `T *o; o->_refCount` a read of `igProbe`."""
+    found = {}
+    for param, name in TEMPLATE_RE.findall(text):
+        args = re.findall(r"\b%s\s*<\s*(?:struct\s+)?(\w+)\s*\*?\s*>" % re.escape(name), text)
+        found.setdefault(param, []).extend(a for a in args if a != param)
+    return found
+
+
 def measure(reflection="data/reflection.json", src="src"):
     """The two numbers, plus what could be converted and where.
 
@@ -318,6 +332,7 @@ def measure(reflection="data/reflection.json", src="src"):
                          other_members=0, files=0))
         ff["files"] += 1
         synth_structs = synthetic_structs(text)
+        template_args = template_arguments(text)
         fns = split_functions(text)
         if fns:
             stats["parsed"] += 1
@@ -326,6 +341,9 @@ def measure(reflection="data/reflection.json", src="src"):
             cls = class_of(name)
             rec = classes.get(cls) if cls else None
             decls = {var: t for t, var in DECL_RE.findall(body)}
+            for var, declared in list(decls.items()):
+                if declared in template_args:
+                    decls[var] = next((a for a in template_args[declared] if a in classes), declared)
             fc = collections.Counter()
             stats["per_function"][(path, name)] = fc
             for kind, ctype, offset, base, span in accesses(body):
