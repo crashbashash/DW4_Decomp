@@ -143,6 +143,20 @@ the value.
   functions that match with no keyword has a load whose result goes unused, and every plain spelling tried drops it.
 * That the source reads the word to keep the string linked is inference. The owner accepted these on that basis.
 
+### metrowerks-runtime-asm-functions
+
+`__ptmf_scall` and `__TransferControl`, from the Metrowerks C++ runtime: `src/runtime/__ptmf.c` and
+`src/runtime/ExceptionHandlerTS.c`.
+
+* Metrowerks' own runtime source, shipped with CodeWarrior for PlayStation 2 R3.04, writes both as MWCC `asm`
+  functions: the pointer-to-member call in `__ptmf.c`, the restore of a catcher's registers in
+  `ExceptionHandlerTS.cp`. The executable's instructions follow that source one for one.
+* The sources here are written from the runtime's data layouts (`PTMF`, `ThrowContext`) and its instructions,
+  with no comments or other text of Metrowerks' copied. `__TransferControl` starts with `.set reorder`, as the
+  original does, so the assembler moves the final stack adjustment into the jump's delay slot.
+* No C can write either: one takes its argument in `t9` and leaves through a jump on it, and the other loads
+  another frame's saved registers and returns into it.
+
 ### sony-libkernl-cop0-and-syscall
 
 Sony libkernl functions written in C with instructions C has no spelling for: reads and writes of COP0 registers

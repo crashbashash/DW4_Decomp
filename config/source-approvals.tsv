@@ -135,3 +135,5 @@ asm	_sceSDC	4	#sony-libkernl-cop0-and-syscall
 volatile	_sceSDC	5	#sony-libkernl-cop0-and-syscall
 asm	sbrk	5	#sony-libkernl-cop0-and-syscall
 volatile	sbrk	6	#sony-libkernl-cop0-and-syscall
+asm-function	__ptmf_scall	1	#metrowerks-runtime-asm-functions
+asm-function	__TransferControl	1	#metrowerks-runtime-asm-functions

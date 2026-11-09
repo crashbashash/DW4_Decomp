@@ -11,16 +11,16 @@
   {
    "hi": 64,
    "lo": 33,
-   "matched": 2282,
-   "matched_bytes": 117348,
+   "matched": 2283,
+   "matched_bytes": 117400,
    "total": 2327,
    "total_bytes": 119584
   },
   {
    "hi": 128,
    "lo": 65,
-   "matched": 5565,
-   "matched_bytes": 529888,
+   "matched": 5566,
+   "matched_bytes": 529988,
    "total": 5717,
    "total_bytes": 544696
   },
@@ -72,8 +72,8 @@
     "functions": 0
    },
    "assembly": {
-    "bytes": 5168,
-    "functions": 81
+    "bytes": 5320,
+    "functions": 83
    },
    "code-only": {
     "bytes": 9952,
@@ -128,8 +128,8 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2608852,
-   "functions": 18827
+   "bytes": 2609004,
+   "functions": 18829
   },
   "fully_verified": {
    "bytes": 2603684,
@@ -141,11 +141,11 @@
  },
  "code_bytes": {
   "asm_body": 0,
-  "assembly": 5168,
-  "fully_matched": 2608852,
+  "assembly": 5320,
+  "fully_matched": 2609004,
   "fully_verified": 2603684,
   "functions_asm_body": 0,
-  "functions_assembly": 81,
+  "functions_assembly": 83,
   "matched": 2665320,
   "total": 3464132
  },
@@ -354,16 +354,16 @@
    "struct.c": 285,
    "unapproved.bytes": 50908,
    "unapproved.functions": 80,
-   "unmatched.bytes": 793644,
-   "unmatched.functions": 1279
+   "unmatched.bytes": 793492,
+   "unmatched.functions": 1277
   }
  },
  "functions": {
-  "fully_matched": 18827,
+  "fully_matched": 18829,
   "fully_verified": 18746,
   "matched": 18854,
-  "named": 9646,
-  "named_semantic": 1969,
+  "named": 9647,
+  "named_semantic": 1970,
   "named_semantic_matched": 1826,
   "total": 20214
  },
@@ -420,12 +420,12 @@
   }
  ],
  "link": {
-  "asm_bytes": 793644,
+  "asm_bytes": 793492,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
-  "from_assembly_bytes": 5168,
-  "from_assembly_units": 81,
+  "from_assembly_bytes": 5320,
+  "from_assembly_units": 83,
   "from_c_bytes": 2677960,
   "from_c_pct": 58.97,
   "from_c_units": 18854,
@@ -452,7 +452,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 384776,
+  "bytes": 384928,
   "failing": {
    "addresses": {
     "bytes": 2111404,
@@ -487,8 +487,8 @@
     "functions": 1297
    }
   },
-  "functions": 2265,
-  "matched_functions": 18827
+  "functions": 2267,
+  "matched_functions": 18829
  },
  "regions": [
   {

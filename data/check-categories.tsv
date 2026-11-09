@@ -24,11 +24,13 @@
 00100bc0	FUN_00100bc0	match	exception index 0x547058: matches retail (packed)
 00100c20	FUN_00100c20	match	-
 00100c50	FUN_00100c50	match	exception index 0x547064: matches retail (packed)
+00100cb0	__ptmf_scall	assembly	-
 00100cf0	FUN_00100cf0	match	-
 00100da0	FUN_00100da0	match	-
 00100e50	FUN_00100e50	match	exception index 0x547070: matches retail (packed)
 00101590	FUN_00101590	match	exception index 0x5470a0: matches retail (packed)
 001024d0	FUN_001024d0	match	-
+001024e0	__TransferControl	assembly	-
 001025d0	FUN_001025d0	match	exception index 0x5470dc: matches retail (packed)
 00102620	FUN_00102620	match	-
 00102640	FUN_00102640	match	exception index 0x5470e8: matches retail (packed)

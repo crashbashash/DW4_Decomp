@@ -25,7 +25,7 @@ Run commands from the repository root. Game data and toolchains are never commit
 | Sony SDK | 96 KB | 61.5 % | 2.2 % |
 | newlib | 84 KB | 100.0 % | 100.0 % |
 | libgcc | 11 KB | 100.0 % | 100.0 % |
-| Metrowerks runtime | 10 KB | 29.0 % | 0.0 % |
+| Metrowerks runtime | 10 KB | 30.5 % | 1.5 % |
 | Static initialisers | 10 KB | 41.5 % | 0.0 % |
 | **Total** | **3383 KB** | **75.3 %** | **11.1 %** |
 

@@ -1,2 +1,3 @@
 # MWCC runtime helpers. __ptmf_scall: virtual-or-direct call through a pointer-to-member-function (t9 = PTMF {adj, vtable-index, offset}); called by compiled (obj->*pmf)() sites such as FUN_00237940 and FUN_00463410. __umoddi3: unsigned 64-bit remainder runtime helper (0x568 bytes), called by compiled long long % sites such as FUN_00221870.
 0x00100cb0	__ptmf_scall	engine
+0x001024e0	__TransferControl	engine

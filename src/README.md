@@ -10,6 +10,7 @@ proves it, and `make link` proves the relinked image is byte-identical.
 | `audio/`, `movie/`, `menu/` | The ADX audio, CRI movie and GUI middleware classes |
 | `lua/` | The Lua native API (`api.c`), the combat and material helpers it calls, and the Lua functions the game rewrote |
 | `newlib/`, `libgcc/`, `sony/` | The C and maths library, GCC's runtime and Sony's runtime libraries, one file per archive object where the archive is known |
+| `runtime/` | The Metrowerks C++ runtime's routines written as MWCC `asm` functions, each with an `asm-function` row |
 | `third_party/` | Stock zlib, libpng and Lua, byte-identical to upstream and compiled whole; see its [README](third_party/README.md) |
 | `unmatched/` | Matched units that are not **named** yet — every file here compiles to the retail bytes like everything else (`make check` proves it), but the function is still called `FUN_<va>` or `Class::vfunc_NN`. A unit leaves this folder when it gets a semantic name and a module (`tools/place_named.py`) |
 
