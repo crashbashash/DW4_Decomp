@@ -1,13 +1,14 @@
+#include "dw4/igTDataList.h"
+typedef igTDataList<void *> RemapIndexList;
 struct RemapObject {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
     virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
     virtual int getMeta();
     unsigned int _refCount;
     char _pad8[16];
-    struct RemapIndexList *_indices;
+    RemapIndexList *_indices;
 };
 struct RemapObjectList { int _vtable; unsigned int _refCount; int _count; int _capacity; RemapObject **_data; };
-struct RemapIndexList { int _vtable; unsigned int _refCount; int _count; int _capacity; int *_data; };
 struct RemapTable { int _vtable; unsigned int _refCount; int _pad8; void *_storage; int *_data; int _count; unsigned int _capacity; };
 struct RemapEntry { int _vtable; unsigned int _refCount; void *_target; RemapObject **_slot; };
 struct RemapContext { char _pad0[480]; RemapIndexList *_pool; };
@@ -50,17 +51,6 @@ static inline void setAt(RemapObjectList *l, int i, RemapObject *v) {
         l->_data[i] = v;
     }
 }
-static inline int indexOf(RemapIndexList *l, const volatile int &v) {
-    int n = l->_count;
-    int x = v;
-    int i;
-    for (i = 0; i < n; i++) {
-        if (x == l->_data[i]) {
-            return i;
-        }
-    }
-    return -1;
-}
 static inline void setCount(RemapTable *t, unsigned int n) {
     if (t->_capacity < n) {
         if (t->_storage != 0) {
@@ -94,8 +84,7 @@ extern "C" int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
             n = item->_indices->_count;
             setCount(t, n);
             for (j = 0; j < (int)n; j++) {
-                volatile int key = item->_indices->_data[j];
-                int r = indexOf(ctx->_pool, key);
+                int r = ctx->_pool->find(item->_indices->_data[j]);
                 if (r == -1) {
                     r = 0;
                 }

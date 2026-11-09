@@ -1,77 +1,51 @@
 #include "dw4/reflected.h"
-struct AnimDbRecordView { int _vtable; unsigned int _refCount; int _name; };
-struct AnimDbList { char pad[8]; int _count; int _capacity; AnimDbRecordView **_data; };
+struct AnimDbRecord { int vtable; unsigned int references; const char *name; };
 extern igMetaObject *DAT_00585bd8;
 extern char DAT_004e0858[];
 extern "C" {
-int igObject_IsKindOf(AnimDbRecordView *, igMetaObject *);
-int igObject_Destroy(AnimDbRecordView *);
-int FUN_002e2d30(int, void *, const char *, AnimDbRecordView *);
-int FUN_001aedd0(void *self, AnimDbList *list, int file, AnimDbRecordView *obj);
+int igObject_IsKindOf(AnimDbRecord *, igMetaObject *);
+int igObject_Destroy(AnimDbRecord *);
+int FUN_002e2d30(int, void *, const char *, AnimDbRecord *);
 }
-struct AnimDbRef {
-    AnimDbRecordView *volatile p;
-    inline void set(AnimDbRecordView *o) { p = o; AnimDbRecordView *q = p; if (q != 0) q->_refCount = q->_refCount + 1; }
-    inline void release() {
-        AnimDbRecordView *q = p;
-        if (q != 0) {
-            q->_refCount = q->_refCount - 1;
-            if (((unsigned long long)((long long)(int)q->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q);
+struct RecordRef {
+    AnimDbRecord *p;
+    RecordRef(AnimDbRecord *object) : p(object) {
+        if (p != 0) {
+            p->references = p->references + 1;
+        }
+    }
+    ~RecordRef() {
+        AnimDbRecord *object = p;
+        if (object != 0) {
+            object->references = object->references - 1;
+            if ((object->references & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
             }
         }
     }
 };
-static inline AnimDbRecordView *castToNamed(AnimDbRecordView *o) {
-    if (o != 0 && igObject_IsKindOf(o, DAT_00585bd8) != 0) {
-        return o;
+static inline AnimDbRecord *castToNamed(AnimDbRecord *object) {
+    if (object != 0 && igObject_IsKindOf(object, DAT_00585bd8) != 0) {
+        return object;
     }
     return 0;
 }
-static inline const char *nameOf(AnimDbRecordView *o) {
-    const char *n = (const char *)o->_name;
-    if (n != 0) {
-        return n;
+static inline const char *nameOf(AnimDbRecord *object) {
+    const char *name = object->name;
+    if (name != 0) {
+        return name;
     }
     return DAT_004e0858;
 }
-static inline int indexOf(AnimDbList *list, AnimDbRecordView *const volatile &key) {
-    int n = list->_count;
-    AnimDbRecordView *k = key;
-    int i;
-    for (i = 0; i < n; i++) {
-        if (k == list->_data[i]) {
-            return i;
+#include "dw4/igTDataList.h"
+extern "C" int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDbRecord *object) {
+    RecordRef held(object);
+    AnimDbRecord *current = held.p;
+    if (list->find(current) != -1) {
+        RecordRef named(castToNamed(current));
+        if (named.p != 0) {
+            return (unsigned char)FUN_002e2d30(file, self, nameOf(named.p), object);
         }
     }
-    return -1;
-}
-int FUN_001aedd0(void *self, AnimDbList *list, int file, AnimDbRecordView *obj) {
-    AnimDbRef held;
-    AnimDbRef named;
-    AnimDbRecordView *volatile key;
-    AnimDbRecordView *o;
-    held.set(obj);
-    o = held.p;
-    key = o;
-    if (indexOf(list, key) != -1) {
-        named.set(castToNamed(o));
-        AnimDbRecordView *got = named.p;
-        if (got != 0) {
-            const char *name = nameOf(got);
-            int result;
-            result = (unsigned char)FUN_002e2d30(file, self, name, obj);
-            named.release();
-            held.release();
-            return result;
-        }
-        if (got != 0) {
-            got->_refCount = got->_refCount - 1;
-            if (((unsigned long long)((long long)(int)got->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(got);
-            }
-        }
-    }
-    held.release();
     return 0;
 }

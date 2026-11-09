@@ -97,15 +97,6 @@
       "FUN_002ed5c0": "0x002ed5c0"
     }
   },
-  "0x00303dc0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__1KFv": "0x002e2300"
-    },
-    "externals": {
-      "FUN_002ed5c0": "0x002ed5c0"
-    }
-  },
   "0x00454930": {
     "emitted": {},
     "duplicates": {
@@ -6111,6 +6102,14 @@
     "duplicates": {
       "__dt__10RemovedRefFv": "0x0025a2b0",
       "__dt__20igSmartPointer<3Obj>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001aedd0": {
+    "duplicates": {
+      "__dt__9RecordRefFv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"

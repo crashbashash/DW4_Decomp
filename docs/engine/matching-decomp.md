@@ -378,6 +378,12 @@ Retail shapes that only one spelling reproduces:
   A cast that only retypes the read, such as `*(const int *)&x` or `((const T *)p)->f`, forces the same bytes but is
   unlikely to be source. It does not make a match: the function keeps its `volatile` and stays `unapproved` until
   a spelling with a reason turns up.
+* **A list search stores its key (`b52`).** `sw a1,60(sp)` with the key loaded back before a search loop is
+  `igTDataList<T>::find` in `include/dw4/igTDataList.h`, which takes the key by value. The address of that parameter is
+  what keeps the key in memory: a reference, or a read of the value itself, folds it into a register. Why the source
+  took that address is not known. The executable holds the template's name, as `Gap::Core::igTDataList<...>`.
+  Where the key's store comes before the read of the list, assign the list in the call: `(list = owner->_list)->find(key)`.
+  `T` has to be a pointer: with `int` the store goes away.
 * **A local that lives in memory because it is an object (`b52`).** A reference held in a stack slot, reloaded before
   a store and released at the end of the function, is a smart-pointer object with a real inline destructor. Passing it
   by `const &` to an inline helper takes its address, which is what keeps it in memory:

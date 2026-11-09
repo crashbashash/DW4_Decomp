@@ -4,8 +4,8 @@ A snapshot of how much of `game.elf` has been rebuilt as matching source. Regene
 
 ```
 fully matched (C/C++ and approved assembly)
-  functions  ██████████████████████░░  91.7 %   18,542 / 20,214
-  code bytes ██████████████████░░░░░░  73.8 %   2,556,648 / 3,464,132   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
+  functions  ██████████████████████░░  91.8 %   18,561 / 20,214
+  code bytes ██████████████████░░░░░░  74.0 %   2,565,068 / 3,464,132   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
 code bytes identical (verification debt included — see below)
   functions  ██████████████████████░░  92.8 %   18,753 / 20,214
   code bytes ██████████████████░░░░░░  76.9 %   2,665,380 / 3,464,132
@@ -23,10 +23,10 @@ The function count is flattered by small functions: the ones done have a median 
 
 | category | functions | code bytes | % of code bytes | meaning |
 | --- | ---: | ---: | ---: | --- |
-| **`match`** | 18,527 | 2,552,536 | 73.7 | code bytes, exception metadata and symbol rules all pass — fully verified |
+| **`match`** | 18,546 | 2,560,956 | 73.9 | code bytes, exception metadata and symbol rules all pass — fully verified |
 | `code-only` | 10 | 9,952 | 0.3 | code bytes identical; exception metadata not reproduced (compile mode or cleanup scope) |
 | `foreign-profile` | 18 | 776 | 0.0 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
-| `unapproved` | 183 | 98,004 | 2.8 | code bytes identical, but the source uses inline `asm` or `volatile` the owner has not approved (config/source-approvals.tsv; docs/engine/source-approvals.md) |
+| `unapproved` | 164 | 89,584 | 2.6 | code bytes identical, but the source uses inline `asm` or `volatile` the owner has not approved (config/source-approvals.tsv; docs/engine/source-approvals.md) |
 | `assembly` | 15 | 4,112 | 0.1 | an owner-approved hand-written assembly source (config/assembly-sources.tsv), byte-identical: the original was written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md) |
 
 The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
@@ -42,18 +42,18 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it.
 
-**2,196** of the 18,542 matched functions are readable: **383,200** code bytes, **11.1 %** of the code.
+**2,197** of the 18,561 matched functions are readable: **383,392** code bytes, **11.1 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 12,960 | 1,665,260 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 13,474 | 2,063,656 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 12,975 | 1,670,220 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 13,486 | 2,070,532 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,536 | 877,600 |
-| it sits in its class or module file, not `src/unmatched/` | 12,083 | 1,861,200 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 10,608 | 1,917,524 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,914 | 1,227,232 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,423 | 731,860 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,213 | 378,316 |
+| it sits in its class or module file, not `src/unmatched/` | 12,096 | 1,865,664 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 10,616 | 1,923,288 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,919 | 1,231,204 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,424 | 734,684 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,214 | 378,592 |
 
 ## Debt
 
@@ -84,16 +84,16 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
 | `unmatched.functions` | 1,461 | 1,461 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 798,752 | 798,752 | 0 | bytes of those |
-| `struct.a` | 139 | 139 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 300 | 300 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: owner naming filed Gap__Gui__igModel__vfunc_10 under igModel; the report reads its view of the list held at +8 as the class, whose registered size is 12. Also 5 matching-quality views in files named for a class (igActor, igSkeleton, igTransformSequence1_5, igPsx2EnvironmentMapShader, beNDMWMdlPEBaseInfoWork) disagree with the reflected layout; most describe argument objects. Readability pass. Also Gap__Gui__igOnOffColorChanger__vfunc_23's view of its igOnOffModel argument, which matches only with bool members. |
+| `struct.a` | 138 | 138 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `struct.b` | 299 | 299 | 0 | struct-report groups: receiver view disagrees with the reflected class |
 | `struct.c` | 286 | 286 | 0 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 5,974 | 5,974 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 360 | 360 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 83,226 | 83,226 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `m2c_idiom.units` | 5,968 | 5,968 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `raw_casts.reflected` | 359 | 359 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
+| `fun_dat_refs` | 83,224 | 83,224 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 18 | 18 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 776 | 776 | 0 | bytes of those |
-| `unapproved.functions` | 183 | 183 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
-| `unapproved.bytes` | 98,004 | 98,004 | 0 | bytes of those |
+| `unapproved.functions` | 164 | 164 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
+| `unapproved.bytes` | 89,584 | 89,584 | 0 | bytes of those |
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 10,528 | 10,528 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 | `profile_split.units` | 13 | 13 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
@@ -179,7 +179,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 204 tables, 4,123 entries, in 167 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 25,007 of 62,251 (40.17 %) |
+| field accesses using a **recovered** type (not an offset cast) | 24,994 of 62,221 (40.17 %) |
 | functions in the retail split (`asm/`, generated) | 20,214 |
 
 ## How these numbers are produced

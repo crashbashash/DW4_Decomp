@@ -1,26 +1,5 @@
 #include "dw4/reflected.h"
-/* Receiver beBaseInfoRam: _dataList at +40 is a 4-byte handle to an igObjectList of refcounted
- * igProperty records; _data is the igMemoryRef element array. */
-/* matching construct: volatile stack slot -- retail keeps the looked-up property in a frame slot (sw 72(sp)) that
- * holds no reference, so it has no cleanup action; the slot is read once, after the empty-list guard, and the read
- * is hoisted out of the search loop (lw 72(sp) before the loop head). */
-struct PropSlot { igObject *volatile p; };
-struct ListOps {
-    static int IndexOf(igObjectList *l, PropSlot &key) {
-        int c = l->_count;
-        int i = 0;
-        if (0 < c) {
-            igObject **d = (igObject **)l->_data;
-            igObject *x = key.p;
-            do {
-                if (x == *d) return i;
-                i++;
-                d++;
-            } while (i < c);
-        }
-        return -1;
-    }
-};
+#include "dw4/igTDataList.h"
 extern "C" {
 void *igObject_GetAllocator(void *);
 void *Memory_GetAllocatorBySelector(int);
@@ -33,10 +12,8 @@ extern int DAT_00587110[4];
 extern unsigned char GPR_00554c14;
 }
 template <class T> struct igSmartPointer { T *p; igSmartPointer(T *x) { p = x; } ~igSmartPointer() { T *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
-/* Stack slot that keeps the looked-up property addressable; it holds no reference, so it needs no
- * cleanup. */
 extern "C" void FUN_003a8580(beBaseInfoRam *self, char *name) {
-    igObjectList *l1;
+    igTDataList<igObject *> *l1;
     int idx;
     igObject *found;
     igObject *obj;
@@ -56,15 +33,13 @@ extern "C" void FUN_003a8580(beBaseInfoRam *self, char *name) {
         }
         found = igProperty_FindByName((void *)self->_dataList, DAT_00585be0[0], name);
         if (found != 0) {
-            l1 = (igObjectList *)self->_dataList;
-            PropSlot hp;
-            hp.p = found;
-            idx = ListOps::IndexOf(l1, hp);
-            l1 = (igObjectList *)*(int *)&self->_dataList;
-            obj = ((igObject **)l1->_data)[idx];
+            l1 = (igTDataList<igObject *> *)self->_dataList;
+            idx = l1->find(found);
+            l1 = (igTDataList<igObject *> *)self->_dataList;
+            obj = l1->_data[idx];
             if (obj != 0) { obj->_refCount = obj->_refCount - 1; if ((obj->_refCount & 0x7fffff) == 0) igObject_Destroy(obj); }
             List_RemoveWordAt(l1, idx);
-            ((igObject **)l1->_data)[l1->_count] = 0;
+            l1->_data[l1->_count] = 0;
         }
     }
 }

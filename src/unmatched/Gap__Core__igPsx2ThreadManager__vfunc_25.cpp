@@ -1,34 +1,21 @@
 extern "C" {
 int ChangeThreadPriority(int, int);
 int GetThreadId();
-int List_RemoveWordAt(void *, int, int, int);
-void Gap__Core__igPsx2ThreadManager__vfunc_25(void *arg0, int arg1);
+int List_RemoveWordAt(void *, int);
 }
-struct L {
-    char p[8]; int n; char q[4]; int *d;
-    int FindIdx(int key) {
-        int i;
-        for (i = 0; i < n; i++) {
-            if (key == d[i]) return i;
-        }
-        return -1;
-    }
-};
-void Gap__Core__igPsx2ThreadManager__vfunc_25(void *arg0, int arg1) {
-    volatile int sp4C;
-    int key;
+#include "dw4/igTDataList.h"
+struct ManagedThread;
+struct Psx2ThreadTable { char pad[8]; igTDataList<ManagedThread *> *_threads; };
+extern "C" void Gap__Core__igPsx2ThreadManager__vfunc_25(Psx2ThreadTable *self, ManagedThread *thread) {
     int i;
     int old;
-    L *list;
+    igTDataList<ManagedThread *> *list;
     int tid;
     tid = GetThreadId();
     old = ChangeThreadPriority(tid, 1);
-    sp4C = arg1;
-    list = *(L **)((char *)arg0 + 8);
-    key = sp4C;
-    i = list->FindIdx(key);
+    i = (list = self->_threads)->find(thread);
     if (i >= 0) {
-        List_RemoveWordAt(list, i, key, list->n);
+        List_RemoveWordAt(list, i);
     }
     ChangeThreadPriority(tid, old);
 }

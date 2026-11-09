@@ -11,35 +11,22 @@
 /* Index returned by beDataBase_FindRecordValueIndex when the key has no column. */
 #define BEDATABASE_NO_INDEX (-1)
 
+struct igProperty;
+#include "dw4/igTDataList.h"
+typedef igTDataList<igProperty *> ColumnList;
 /* C++ with exceptions on; the C-ABI names stay unmangled through this block. */
 extern "C" {
 extern int g_beDataBase_metaObject[4];
 int igProperty_FindByName(void *, void *, const char *);
 /* Descriptor of the property record's name member. */
 extern int g_propertyNameField[4];
-static inline int findColumn(igDataList *columns, const volatile int &name) {
-    int i = 0;
-    int count = columns->_count;
-    if (i < count) {
-        int *entry = (int *)columns->_data;
-        int wanted = name;
-        do {
-            if (wanted == *entry) {
-                return i;
-            }
-            i++;
-            entry++;
-        } while (i < count);
-    }
-    return -1;
-}
-static inline int columnsOf(igDataList *list) { return list->_count; }
+
 
 /* Empty string returned for a null string cell. */
 extern char emptyString[];
 
 int Gap__Bec__beDataBase__vfunc_20(void);
-int beDataBase_FindRecordValueIndex(beDataBase *, int, const char *, igDataList *);
+int beDataBase_FindRecordValueIndex(beDataBase *, int, const char *, ColumnList *);
 long long beDataBase_GetRecordInt(beDataBase *, int, const char *);
 /* Boolean cell (one byte) for (record, key). The index is used unchecked, as in retail, so the key
  * must name a bool column. */
@@ -57,11 +44,9 @@ int Gap__Bec__beDataBase__vfunc_20(void) { return g_beDataBase_metaObject[0]; }
  * among the list entries; the result is columnCount * record + columnPosition, or -1 when the list
  * has no columns or does not contain the key. */
 int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *key,
-                                    igDataList *columns) {
+                                    ColumnList *columns) {
     int found;
-    /* matching construct: retail keeps the found name in a stack slot */
-    volatile int cell;
-    int columnCount = columnsOf(columns);
+    int columnCount = columns->count();
 
     if (!columnCount) {
         return -1;
@@ -70,8 +55,7 @@ int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *ke
     if (!found) {
         return -1;
     }
-    cell = found;
-    int column = findColumn(columns, cell);
+    int column = columns->find((igProperty *)found);
     return column + columnCount * record;
 }
 
@@ -80,15 +64,15 @@ int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *ke
 long long beDataBase_GetRecordInt(beDataBase *self, int record, const char *key) {
     long long result;
     int index =
-        beDataBase_FindRecordValueIndex(self, record, key, (igDataList *)self->_charOffsetList);
+        beDataBase_FindRecordValueIndex(self, record, key, (ColumnList *)self->_charOffsetList);
     if (index != BEDATABASE_NO_INDEX)
         return *(signed char *)(((igDataList *)self->_charData)->_data + index);
     index =
-        beDataBase_FindRecordValueIndex(self, record, key, (igDataList *)self->_shortOffsetList);
+        beDataBase_FindRecordValueIndex(self, record, key, (ColumnList *)self->_shortOffsetList);
     if (index != BEDATABASE_NO_INDEX)
         return *(short *)(((igDataList *)self->_shortData)->_data + index * 2);
     index =
-        beDataBase_FindRecordValueIndex(self, record, key, (igDataList *)self->_intOffsetList);
+        beDataBase_FindRecordValueIndex(self, record, key, (ColumnList *)self->_intOffsetList);
     if (index != BEDATABASE_NO_INDEX)
         result = *(int *)(((igDataList *)self->_intData)->_data + index * 4);
     else
@@ -101,7 +85,7 @@ long long beDataBase_GetRecordInt(beDataBase *self, int record, const char *key)
  * must name a bool column. */
 unsigned long long beDataBase_GetRecordBool(beDataBase *self, int record, const char *key) {
     int index = (int)beDataBase_FindRecordValueIndex(self, record, key,
-                                                     (igDataList *)self->_boolOffsetList);
+                                                     (ColumnList *)self->_boolOffsetList);
     return *(unsigned char *)(((igDataList *)self->_boolData)->_data + index);
 }
 
@@ -109,7 +93,7 @@ unsigned long long beDataBase_GetRecordBool(beDataBase *self, int record, const 
  * the cell is null. */
 char *beDataBase_GetRecordString(beDataBase *self, int record, const char *key) {
     int index = (int)beDataBase_FindRecordValueIndex(self, record, key,
-                                                     (igDataList *)self->_stringOffsetList);
+                                                     (ColumnList *)self->_stringOffsetList);
     char *text = (char *)((igStringObj *)*(int *)(((igDataList *)self->_stringData)->_data + index * 4))->_buffer;
     return text ? text : emptyString;
 }
