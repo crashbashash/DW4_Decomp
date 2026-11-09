@@ -45,8 +45,9 @@ extern "C" void FUN_003f96e0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg
         /* The looked-up name is an out-parameter the lookup retains; it is released by hand rather
          * than by a destructor. */
         beUnicodeObj *ra;
-        int sel = *(volatile int *)arg3;
-        FUN_00382eb0(&ra, FUN_00236f80(arg0->_insight, DAT_00589678[0]), sel);
+        int sel = *arg3;
+        int table = FUN_00236f80(arg0->_insight, DAT_00589678[0]);
+        FUN_00382eb0(&ra, table, sel);
         k = 0;
         src = (unsigned short *)ra->_buffer;
         base = (unsigned short *)rb.p->_buffer;

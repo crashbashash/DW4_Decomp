@@ -40,10 +40,11 @@ extern int DAT_0058cad0[4];
 extern unsigned char GPR_00554bf0;
 void FUN_0025a8c0(App *arg0);
 }
+struct TimerType {};
+static inline Tm *createTimer(TimerType) { return FUN_002b79d0(0); }
 struct Ref {
     Tm *p;
-    /* matching construct: layout — the write-only state byte lives in the inlined ctor so its frame slot (168) falls below the holder's (172) and the byte store precedes the call, as in retail; the range then starts after the first member call. */
-    Ref(int a) { volatile char spA8[1]; spA8[0] = 0; p = FUN_002b79d0(a); }
+    Ref(Tm *object) : p(object) {}
     ~Ref() {
         Tm *object = p;
         if (object) {
@@ -131,7 +132,7 @@ void FUN_0025a8c0(App *arg0) {
             } while (s4 < s2);
         }
         FUN_00463bc0(arg0);
-        Ref sp(0);
+        Ref sp(createTimer(TimerType()));
         sp.p->vC();
         i = 0;
         if (0 < s1 - 1) {

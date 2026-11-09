@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
 struct V4 { float a, b, c, d; };
-struct Frame { void *f0; char pad[228]; int f232; void *f236; };
+struct Frame { void *f0; char pad4[96]; float eye[8]; float center[10]; float range; char pad176[56]; int f232; void *f236; };
 class A { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(V4 *); };
 class B { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void v128(int); virtual void v132(float); };
 class C { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void v128(void *); virtual void v132(void *); virtual void v136(void *); virtual void d33(); virtual void v144(void *); char pad[8]; int f12; char pad2[128]; char b144; };
@@ -30,21 +30,40 @@ extern Frame *DAT_0056dc50[4];
 int FUN_0045f200(...);
 void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0);
 }
+struct ObjectRef {
+    igObject *p;
+    ObjectRef(void *object) : p((igObject *)object) {}
+    ~ObjectRef() {
+        igObject *object = p;
+        if (object != 0) {
+            object->_refCount = object->_refCount - 1;
+            if ((object->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
+            }
+        }
+    }
+};
+struct Tag { };
+static inline void *createFirst() {
+    Tag tag = Tag();
+    return FUN_00138ee0(0);
+}
+static inline void *createSecond() {
+    Tag tag = Tag();
+    return FUN_0013b490(0);
+}
+static inline void *createThird() {
+    Tag tag = Tag();
+    return FUN_0019fde0(0, 1);
+}
 void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
-    igObject *volatile sp7C;
-    igObject *volatile sp78;
-    igObject *volatile sp74;
-    volatile char sp70[4];
-    volatile char sp6C[4];
-    volatile char sp68[4];
     V4 sp40;
     float sp58[3];
     Frame *s0;
     igObject *t;
-    sp70[0] = 0;
-    sp7C = (igObject *)FUN_00138ee0(0);
+    ObjectRef first(createFirst());
     sp40.a = 1.0f; sp40.b = 1.0f; sp40.c = 1.0f; sp40.d = 1.0f;
-    ((A *)sp7C)->vX(&sp40);
+    ((A *)first.p)->vX(&sp40);
     if (DAT_0056dc50[0] == 0) {
         Frame *f = (Frame *)FUN_001007e0(240);
         if (f != 0) f = (Frame *)FUN_00238110(f);
@@ -52,13 +71,12 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     }
     DAT_0056dc50[0]->f232 = DAT_0056dc50[0]->f232 + 1;
     s0 = DAT_0056dc50[0];
-    sp6C[0] = 0;
-    sp78 = (igObject *)FUN_0013b490(0);
-    ((B *)sp78)->v128(4);
-    ((B *)sp78)->v132(*(float *)((char *)s0 + 172));
-    arg0->f36->v128((char *)s0 + 100);
+    ObjectRef second(createSecond());
+    ((B *)second.p)->v128(4);
+    ((B *)second.p)->v132(s0->range);
+    arg0->f36->v128(s0->eye);
     arg0->f36->v136(&DAT_004e1170[0]);
-    arg0->f36->v132((char *)s0 + 132);
+    arg0->f36->v132(s0->center);
     sp58[0] = -DAT_004e1098[0];
     sp58[1] = -DAT_004e109c[0];
     sp58[2] = -DAT_004e10a0[0];
@@ -69,17 +87,17 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
         c->b144 = 1;
     }
     {
-        C *s1 = arg0->f36;
+        igObject *s1 = (igObject *)arg0->f36;
         Q *s0b = arg0->f40;
         if (s1 != 0) {
-            ((igObject *)s1)->_refCount = ((igObject *)s1)->_refCount + 1;
+            s1->_refCount = s1->_refCount + 1;
         }
         t = s0b->f16;
         if (t) {
             t->_refCount = t->_refCount - 1;
-            if (((unsigned long long)(long long)(int)t->_refCount & 0x7fffffULL) == 0) igObject_Destroy(t);
+            if ((t->_refCount & 0x7FFFFF) == 0) igObject_Destroy(t);
         }
-        s0b->f16 = (igObject *)s1;
+        s0b->f16 = s1;
     }
     if (DAT_0056dc50[0] != 0) {
         if (--DAT_0056dc50[0]->f232 <= 0) {
@@ -112,8 +130,8 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
             DAT_0056dc50[0] = 0;
         }
     }
-    FUN_00460e00(arg0, sp7C);
-    FUN_00460e00(arg0, sp78);
+    FUN_00460e00(arg0, first.p);
+    FUN_00460e00(arg0, second.p);
     FUN_00460e00(arg0, arg0->f16);
     FUN_00460e00(arg0, arg0->f20);
     FUN_00460e00(arg0, arg0->f24);
@@ -126,33 +144,17 @@ void Gap__Viewer__igViewerRenderer__vfunc_13(P *arg0) {
     arg0->f72->b8 = 1;
     arg0->f72->f12 = (int)&FUN_0045f200;
     arg0->f72->b24 = 1;
-    sp68[0] = 0;
-    sp74 = (igObject *)FUN_0019fde0(0, 1);
-    ((Y *)sp74)->b24 = 1;
-    FUN_001c5160(sp74, 1.1f);
-    t = sp74;
+    ObjectRef third(createThird());
+    ((Y *)third.p)->b24 = 1;
+    FUN_001c5160(third.p, 1.1f);
+    t = third.p;
     if (t) t->_refCount = t->_refCount + 1;
     {
         igObject *o = arg0->f80;
         if (o) {
             o->_refCount = o->_refCount - 1;
-            if (((unsigned long long)(long long)(int)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o);
+            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
         }
     }
     arg0->f80 = t;
-    t = sp74;
-    if (t) {
-        t->_refCount = t->_refCount - 1;
-        if (((unsigned long long)(long long)(int)t->_refCount & 0x7fffffULL) == 0) igObject_Destroy(t);
-    }
-    t = sp78;
-    if (t) {
-        t->_refCount = t->_refCount - 1;
-        if (((unsigned long long)(long long)(int)t->_refCount & 0x7fffffULL) == 0) igObject_Destroy(t);
-    }
-    t = sp7C;
-    if (t) {
-        t->_refCount = t->_refCount - 1;
-        if (((unsigned long long)(long long)(int)t->_refCount & 0x7fffffULL) == 0) igObject_Destroy(t);
-    }
 }

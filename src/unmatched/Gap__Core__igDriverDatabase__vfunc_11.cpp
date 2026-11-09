@@ -10,39 +10,45 @@ struct G { char p[56]; int f56; };
 extern int DAT_004f9680[4];
 extern G *DAT_00586dc8[4];
 }
-struct Rel { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
+static inline void release(igObject *object) {
+    if (object != 0) {
+        object->_refCount = object->_refCount - 1;
+        if ((object->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(object);
+        }
     }
-} };
-extern "C" void Gap__Core__igDriverDatabase__vfunc_11(igDriverDatabase *arg0);
-void Gap__Core__igDriverDatabase__vfunc_11(igDriverDatabase *arg0) {
-    unsigned char sp6F;
-    igObject * volatile sp68;
+}
+struct PropertyRef;
+static inline void setAt(igDriverDatabase *database, int index, const PropertyRef &value);
+struct PropertyRef {
+    igObject *p;
+    PropertyRef(igObject *object) : p(object) {}
+    ~PropertyRef() { release(p); }
+};
+static inline void setAt(igDriverDatabase *database, int index, const PropertyRef &value) {
+    igObject *retained = value.p;
+    igObjectList *list = (igObjectList *)database->_currentProperties;
+    if (retained != 0) {
+        retained->_refCount++;
+    }
+    release(((igObject **)list->_data)[index]);
+    if (list->_count != 0 && index >= 0 && index < list->_count) {
+        ((igObject **)list->_data)[index] = retained;
+    }
+}
+extern "C" void Gap__Core__igDriverDatabase__vfunc_11(igDriverDatabase *database) {
+    unsigned char verbose;
     int i;
-    igObject *s2;
-    igObjectList *s1;
     Gap__Core__igObject__vfunc_09();
-    FUN_00306e50(DAT_00586dc8[0]->f56, 2, DAT_004f9680, &sp6F, arg0->_verbose, 1);
-    arg0->_verbose = sp6F;
-    ObjectList_ResizeRetained(arg0->_currentProperties, 13);
-    ObjectList_ResizeRetained(arg0->_subPropertyNames, 13);
-    ObjectList_ResizeRetained(arg0->_subPropertyValues, 13);
+    FUN_00306e50(DAT_00586dc8[0]->f56, 2, DAT_004f9680, &verbose, database->_verbose, 1);
+    database->_verbose = verbose;
+    ObjectList_ResizeRetained(database->_currentProperties, 13);
+    ObjectList_ResizeRetained(database->_subPropertyNames, 13);
+    ObjectList_ResizeRetained(database->_subPropertyValues, 13);
     i = 0;
-    do {
-        sp68 = FUN_002b9500(igObject_GetAllocator(arg0));
-        s2 = sp68;
-        s1 = (igObjectList *)arg0->_currentProperties;
-        if (s2 != 0) {
-            s2->_refCount++;
-        }
-        Rel::go(((igObject **)s1->_data)[i]);
-        if (s1->_count != 0 && i >= 0 && i < s1->_count) {
-            ((igObject **)s1->_data)[i] = s2;
-        }
-        { igObject *t = sp68; Rel::go(t); }
-        i++;
+    do { {
+        PropertyRef property(FUN_002b9500(igObject_GetAllocator(database)));
+        setAt(database, i, property);
+        } i++;
     } while (i < 13);
 }

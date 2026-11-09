@@ -10,44 +10,44 @@ int igNamedObject_SetName(...);
 int igObject_Destroy(...);
 int igObject_GetAllocator(...);
 extern int DAT_00586f20[4];
-void FUN_00304720(igPluginHelper *arg0, int arg1, int arg2, int arg3);
 }
-void FUN_00304720(igPluginHelper *arg0, int arg1, int arg2, int arg3) {
-    igPluginRepository *volatile sp5C;
-    int var_v0;
-    char *str;
-    igPluginRepository *nm;
+struct RepositoryRef {
+    igPluginRepository *p;
+    RepositoryRef(igPluginRepository *object) : p(object) {}
+    ~RepositoryRef() {
+        igPluginRepository *object = p;
+        if (object != 0) {
+            object->_refCount = object->_refCount - 1;
+            if ((object->_refCount & 0x7FFFFF) == 0) igObject_Destroy(object);
+        }
+    }
+};
+extern "C" void FUN_00304720(igPluginHelper *helper, int name, int location, int locationType) {
+    int pool;
+    char *text;
+    igPluginRepository *target;
     char *old;
-    sp5C = FUN_002bc930(igObject_GetAllocator(arg0));
-    igNamedObject_SetName(sp5C, arg1);
-    nm = sp5C;
+    RepositoryRef repository(FUN_002bc930(igObject_GetAllocator(helper)));
+    igNamedObject_SetName(repository.p, name);
+    target = repository.p;
     if (DAT_00586f20[0] == 0) {
-        var_v0 = FUN_002eb010(0x10);
-        if (var_v0 != 0) {
-            var_v0 = StringPool_Construct(var_v0);
+        pool = FUN_002eb010(0x10);
+        if (pool != 0) {
+            pool = StringPool_Construct(pool);
         }
-        DAT_00586f20[0] = var_v0;
+        DAT_00586f20[0] = pool;
     }
-    str = StringPool_Intern(DAT_00586f20[0], arg2);
-    old = (char *)nm->_location;
+    text = StringPool_Intern(DAT_00586f20[0], location);
+    old = (char *)target->_location;
     if (old != 0) {
-        int *hdr = (int *)(old - 8);
-        int c = *(int *)(old - 4) - 1;
-        *(int *)(old - 4) = c;
-        if (c == 0) {
-            StringChunk_ReleaseHeader(*hdr, hdr);
+        int *header = (int *)(old - 8);
+        int count = *(int *)(old - 4) - 1;
+        *(int *)(old - 4) = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader(*header, header);
         }
     }
-    nm->_location = (int)str;
-    sp5C->_locationType = arg3;
-    ObjectList_AppendRetained(arg0->_repositoryList, sp5C);
-    {
-        igPluginRepository *q = sp5C;
-        if (q != 0) {
-            q->_refCount = q->_refCount - 1;
-            if ((q->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(q);
-            }
-        }
-    }
+    target->_location = (int)text;
+    repository.p->_locationType = locationType;
+    ObjectList_AppendRetained(helper->_repositoryList, repository.p);
 }

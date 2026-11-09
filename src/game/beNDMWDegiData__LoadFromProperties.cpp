@@ -1,7 +1,7 @@
 /* Property-record loader. Copies the scalar, string, id-list and index-list records of the property
  * set arg1 into the data block of the beNDMWDegiData arg0 (its _data field, +28), then calls
  * beNDMWDegiData__UpdateFieldsFromData(arg0). PropDest is a private view of that block.
- * Matching constructs: KeyHolder is a struct so the search key is spilled to a stack slot; the
+ * Matching constructs: KeyHolder is a volatile int so the search key is spilled to a stack slot; the
  * SEARCH/FIND* macros are one search loop spelled with explicit induction locals because their
  * register order (key < constant -1; count < offset < pointer < data pointer) is decided by
  * declaration order. */
@@ -70,8 +70,8 @@ extern int DAT_00517f90[4];
 extern int DAT_00517fa0[4];
 extern int DAT_00517fb0[4];
 extern int DAT_00517fc0[4];
-/* matching construct: a struct keeps the search key memory-resident (retail spills it); no destructor, so no cleanup record */
-struct KeyHolder { int v; };
+/* matching construct: volatile keeps the search key memory-resident (retail spills it); no destructor, so no cleanup record */
+struct KeyHolder { volatile int v; };
 struct RP {
     StrObj *p;
     RP(StrObj *x) { p = x; }
@@ -79,7 +79,7 @@ struct RP {
 };
 #define IDS(DST, REC, CAP, RESIZE) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; int i; if (RESIZE) { if (l->_count > CAP) ObjectList_ResizeRetained(l, CAP); } i = 0; if (0 < l->_count) { do { DST[i] = ((IdObject **)l->_data)[i]->GetId(); i++; } while (i < l->_count); } if (i < CAP) { do { DST[i] = -1; i++; } while (i < CAP); } }
 #define BYTES(DST, FN, REC) { igUnsignedCharList *l = FN(arg1, REC)->v; int i = 0; if (0 < l->_count) { do { DST[i] = (*(unsigned char **)&l->_data)[i]; i++; } while (i < l->_count); } }
-#define SEARCH(OUT, LBL) { if (0 < n) { q = (int *)t->_data; kv = ((const KeyHolder *)&kk)->v; do { if (kv == *q) { r = j; goto LBL; } j++; q++; } while (j < n); } r = -1; LBL: OUT = r; }
+#define SEARCH(OUT, LBL) { if (0 < n) { q = (int *)t->_data; kv = kk.v; do { if (kv == *q) { r = j; goto LBL; } j++; q++; } while (j < n); } r = -1; LBL: OUT = r; }
 #define FINDN(DST, REC, N, OFF, LBL) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; igIntList *t = (igIntList *)igProperty_GetRecordFolder(arg1, &DAT_00517ec0[0])->v; int a; int j; int r; int n; int o; char *pp; int *q; int kv; KeyHolder kk; a = 0; o = 0; pp = (char *)d; do { int v = *(int *)(l->_data + o); if (v == 0) *(int *)(pp + OFF) = -1; else { kk.v = v; j = 0; n = t->_count; SEARCH(*(int *)(pp + OFF), LBL) } a++; o += 4; pp += 4; } while (a < N); }
 #define FIND1(DSTV, REC, LBL) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; igIntList *t = (igIntList *)igProperty_GetRecordFolder(arg1, &DAT_00517ec0[0])->v; int j; int r; int n; int *q; int kv; KeyHolder kk; int v = (int)((IdObject **)l->_data)[0]; if (v == 0) DSTV = -1; else { kk.v = v; j = 0; n = t->_count; SEARCH(DSTV, LBL) } }
 #define FINDV(DST, REC, OFF, LBL) { igObjectList *l = igProperty_GetRecordFolder(arg1, REC)->v; igIntList *t = (igIntList *)igProperty_GetRecordFolder(arg1, &DAT_00517ec0[0])->v; int a; int j; int r; int n; int o; char *pp; int *q; int kv; KeyHolder kk; if (0 < l->_count) { a = 0; o = 0; pp = (char *)d; do { int v = *(int *)(l->_data + o); if (v == 0) *(int *)(pp + OFF) = -1; else { kk.v = v; j = 0; n = t->_count; SEARCH(*(int *)(pp + OFF), LBL) } a++; o += 4; pp += 4; } while (a < l->_count); } }

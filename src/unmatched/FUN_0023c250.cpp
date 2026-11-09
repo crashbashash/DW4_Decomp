@@ -7,39 +7,21 @@ Rc *FUN_002397a0(int);
 int FUN_002d8fe0(Rc *, int);
 int FUN_002d8310(Rc *, Rc *);
 int igObject_Destroy(Rc *);
-void FUN_0023c250(int *arg0);
-void FUN_0023c250(int *arg0) {
-    Rc * volatile sp4C;
-    Rc * volatile sp48;
-    volatile char sp44[4];
-    volatile char sp40[4];
-    Rc *t, *s1;
-    Inst *s0;
-    sp44[0] = 0;
-    sp4C = FUN_002c37e0(0);
-    FUN_002d8fe0(sp4C, arg0[13]);
-    sp40[0] = 0;
-    sp48 = (Rc *)FUN_002397a0(0);
-    s1 = (Rc *)arg0[14];
-    s0 = (Inst *)sp48;
-    if (s1) s1->refs = s1->refs + 1;
-    t = s0->f20;
-    if (t) {
-        t->refs = t->refs - 1;
-        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
-    }
-    s0->f20 = s1;
-    { Rc *b = sp48; FUN_002d8310(sp4C, b); }
-    ((Obj *)sp4C)->vX(arg0[13]);
-    t = sp48;
-    if (t) {
-        t->refs = t->refs - 1;
-        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
-    }
-    t = sp4C;
-    if (t) {
-        t->refs = t->refs - 1;
-        if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
-    }
 }
+/* Selects the constructor that takes over the factory's reference. */
+struct AdoptReference { };
+struct RcRef { Rc *p; RcRef(Rc *o, AdoptReference) : p(o) {} ~RcRef() { Rc *o = p; if (o) { o->refs = o->refs - 1; if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o); } } Rc *get() const { return p; } };
+extern "C" void FUN_0023c250(int *arg0) {    RcRef a(FUN_002c37e0(0), AdoptReference());
+    FUN_002d8fe0(a.get(), arg0[13]);
+    RcRef b(FUN_002397a0(0), AdoptReference());
+    {
+    Rc *s1 = (Rc *)arg0[14];
+    Inst *s0 = (Inst *)b.get();
+    if (s1) s1->refs = s1->refs + 1;
+    Rc *t = s0->f20;
+    if (t) { t->refs = t->refs - 1; if ((t->refs & 0x7FFFFF) == 0) igObject_Destroy(t); }
+    s0->f20 = s1;
+    }
+    FUN_002d8310(a.get(), b.get());
+    ((Obj *)a.get())->vX(arg0[13]);
 }

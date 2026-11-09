@@ -210,10 +210,9 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
                 beMessenger_DispatchSelected(arg0->_messenger, DAT_0051b3e8);
                 obj = beMessenger_GetObject(arg0->_messenger, 0);
                 {
-                    igDataList *a = igProperty_GetRecordFolder(obj, DAT_0051b6c0)->f12;
+                    const igDataList *a = igProperty_GetRecordFolder(obj, DAT_0051b6c0)->f12;
                     int j = 0;
-                    /* matching construct: volatile count keeps the retail per-iteration reload of the list size (no loop-invariant hoist). */
-                    while (j < *(volatile int *)&a->_count) {
+                    while (j < a->_count) {
                         Item *it = ((Item **)a->_data)[j];
                         if (it != 0 && it->f12 == 10) {
                             if (it->f20 > 0) it->f20 = it->f20 - 1;

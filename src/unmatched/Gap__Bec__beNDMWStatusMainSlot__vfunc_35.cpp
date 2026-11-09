@@ -37,17 +37,34 @@ public:
 /* Owning stack reference to the window's new decide list; released on scope exit. */
 class BoolListRef {
 public:
-    igBoolList *volatile p; /* matching construct: volatile member keeps every use a reload from the frame slot (register colouring) */
+    igBoolList *p;
     BoolListRef(igBoolList *l) : p(l) {}
+    igBoolList *get() const { return p; }
     ~BoolListRef() { igBoolList *l = p; if (l != 0) { --l->_refCount; if ((l->_refCount & 0x7fffff) == 0) igObject_Destroy(l); } }
 };
 #define REL(P) { igObject *q = (P); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7fffffU) == 0) { igObject_Destroy(q); } } }
-#define APPEND(V) { igBoolList *l = decide.p; int n = l->_count; if (n < l->_capacity) { l->_count = n + 1; } else { List_Resize(l, n + 1, 1); } ((unsigned char *)l->_data)[n] = (V); }
+static inline void append(const BoolListRef &list, const unsigned char &value) {
+    igBoolList *l = list.p;
+    int n = l->_count;
+    if (n < l->_capacity) {
+        l->_count = n + 1;
+    } else {
+        List_Resize(l, n + 1, 1);
+    }
+    ((unsigned char *)l->_data)[n] = value;
+}
+static inline void setDecideList(const WindowRef &win, const BoolListRef &list) {
+    igBoolList *l0 = list.p;
+    beNDMWStatusSelectE0 *w = win.p;
+    if (l0 != 0) {
+        l0->_refCount = l0->_refCount + 1;
+    }
+    REL((igObject *)w->_decideList)
+    w->_decideList = (int)l0;
+}
 extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_35(beNDMWStatusMainSlot *arg0);
 extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_35(beNDMWStatusMainSlot *arg0) {
     int a;
-    igBoolList *l0;
-    beNDMWStatusSelectE0 *w;
 
     a = igObject_GetAllocator(arg0);
     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
@@ -60,18 +77,12 @@ extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_35(beNDMWStatusMainSlot *a
     a = igObject_GetAllocator(arg0);
     a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(DAT_00587110[0]);
     BoolListRef decide(FUN_002cb0d0(a));
-    l0 = decide.p;
-    w = win.p;
-    if (l0 != 0) {
-        l0->_refCount = l0->_refCount + 1;
-    }
-    REL((igObject *)w->_decideList)
-    w->_decideList = (int)l0;
-    APPEND(GPR_00554a20)
+    setDecideList(win, decide);
+    append(decide, GPR_00554a20);
     if (((int *)((beNDMWItemBaseList *)arg0->_apuPocket)->_data)[arg0->_pocketPos] != 0) {
-        APPEND(GPR_00554a24)
+        append(decide, GPR_00554a24);
     } else {
-        APPEND(GPR_00554a28)
+        append(decide, GPR_00554a28);
         beMessenger_SelectGroup(arg0->_messenger, &DAT_00519c28[0]);
         beMessenger_AppendString(arg0->_messenger, &DAT_00519b50[0]);
         beMessenger_AppendString(arg0->_messenger, &DAT_005199e8[0]);

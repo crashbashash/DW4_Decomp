@@ -1,6 +1,6 @@
+extern "C" {
 typedef struct Ob { int w0; unsigned refs; int w2; } Ob;
 typedef struct Hd { int w[5]; int f20; int w6[2]; Ob *f32; } Hd;
-typedef struct Pn { Hd h; } Pn;
 typedef struct O { int w[3]; Hd *f12; } O;
 typedef struct Gl { int w[2]; int f8; } Gl;
 extern int DAT_00586f20[4];
@@ -15,36 +15,38 @@ int StringPool_Intern(int, char *);
 int StringChunk_ReleaseHeader(int, int *);
 void igObject_Destroy(void *);
 int FUN_00308850(O *, Hd *);
-Hd *FUN_00308a90(O *arg0) {
-    Ob *volatile sp4C;
-    int *hd;
-    Ob *t;
-    Ob *a0;
-    int v;
-    int s2;
-    Hd *s0;
-    int old;
+}
+struct ObRef {
+    Ob *p;
+    ObRef(Ob *object) : p(object) {}
+    ~ObRef() {
+        if (p != 0) {
+            p->refs = p->refs - 1;
+            if ((p->refs & 0x7fffff) == 0) igObject_Destroy(p);
+        }
+    }
+};
+static inline void setHeader(O *owner, const ObRef &value) {
+    Ob *held = value.p;
+    Ob *old;
+    if (held != 0) held->refs = held->refs + 1;
+    old = (Ob *)owner->f12;
+    if (old != 0) {
+        old->refs = old->refs - 1;
+        if ((old->refs & 0x7fffff) == 0) igObject_Destroy(old);
+    }
+    owner->f12 = (Hd *)held;
+}
+extern "C" Hd *FUN_00308a90(O *arg0) {
     if (arg0->f12 == 0) {
-        sp4C = FUN_002c72c0(FUN_00301000());
-        t = sp4C;
-        if (0 != t) {
-            t->refs = 1 + t->refs;
-        }
-        a0 = (Ob *)arg0->f12;
-        if (a0 != 0) {
-            a0->refs = a0->refs - 1;
-            if ((a0->refs & 0x7fffff) == 0) {
-                igObject_Destroy(a0);
-            }
-        }
-        arg0->f12 = (Hd *)t;
-        t = sp4C;
-        if (t != 0) {
-            t->refs = t->refs - 1;
-            a0 = sp4C;
-            if ((0x7fffff & a0->refs) == 0) {
-                igObject_Destroy(a0);
-            }
+        int *hd;
+        int v;
+        int s2;
+        Hd *s0;
+        int old;
+        {
+            ObRef created(FUN_002c72c0(FUN_00301000()));
+            setHeader(arg0, created);
         }
         s0 = arg0->f12;
         if (0 == DAT_00586f20[0]) {

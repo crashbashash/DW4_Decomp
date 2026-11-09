@@ -22,6 +22,7 @@ class FieldBindTarget { public:
     virtual void s19();
     virtual FieldBindMeta *GetMeta();
     virtual void Assign(void *value);
+    unsigned int _refCount;
 };
 struct FieldBindRefCounted { int vt; unsigned int _refCount; };
 struct FieldBindSlotList { int vt; int rc; int count; int capacity; FieldBindTarget **data; };
@@ -64,6 +65,24 @@ static inline void setSlot(FieldBindSlotList *l, int i, FieldBindRefCounted *v) 
         l->data[i] = (FieldBindTarget *)v;
     }
 }
+struct SourceRef {
+    FieldBindTarget *p;
+    SourceRef(FieldBindTarget *source) : p(source) {
+        if (p != 0) {
+            p->_refCount = p->_refCount + 1;
+        }
+    }
+    ~SourceRef() {
+        FieldBindTarget *source = p;
+        if (source != 0) {
+            source->_refCount = source->_refCount - 1;
+            if ((source->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(source);
+            }
+        }
+    }
+    FieldBindTarget *get() const { return p; }
+};
 int FUN_002d7f10(FieldBindSet *self, FieldBindRefCounted **field, FieldBindRefCounted **value) {
     int changed = 0;
     int i;
@@ -71,8 +90,6 @@ int FUN_002d7f10(FieldBindSet *self, FieldBindRefCounted **field, FieldBindRefCo
     int n;
     FieldBindRefCounted *current;
     FieldBindItem *item;
-    FieldBindTarget * volatile source;
-    FieldBindTarget *held;
     for (i = 0; i < self->count; i++) {
         current = *field;
         if (FUN_002d7d60(self, i) == (FieldBindTarget *)current) {
@@ -89,32 +106,21 @@ int FUN_002d7f10(FieldBindSet *self, FieldBindRefCounted **field, FieldBindRefCo
         }
         item = castBinding(FUN_002d7e90(self, i));
         if (item != 0) {
-            source = item->source;
-            held = source;
-            if (held != 0) {
-                ((FieldBindRefCounted *)held)->_refCount = ((FieldBindRefCounted *)held)->_refCount + 1;
-            }
-            held = source;
-            if (held == 0) {
-                held = source;
-                releaseBound((FieldBindRefCounted *)held);
+            SourceRef source(item->source);
+            if (source.get() == 0) {
                 continue;
             }
-            n = igMetaObject_GetFieldCount(held->GetMeta());
+            n = igMetaObject_GetFieldCount(source.get()->GetMeta());
             for (j = 0; j < n; j++) {
                 FieldBindItem *f;
-                held = source;
-                f = castRefField(igMetaObject_GetFieldAt(held->GetMeta(), j));
+                f = castRefField(igMetaObject_GetFieldAt(source.get()->GetMeta(), j));
                 if (f != 0) {
-                    held = source;
-                    if (*(FieldBindRefCounted **)((char *)held + f->offset) == *field) {
-                        igObjectRefMetaField_Assign(f, held, *value);
+                    if (*(FieldBindRefCounted **)((char *)source.get() + f->offset) == *field) {
+                        igObjectRefMetaField_Assign(f, source.get(), *value);
                         changed++;
                     }
                 }
             }
-            held = source;
-            releaseBound((FieldBindRefCounted *)held);
         }
     }
     return changed;

@@ -5,7 +5,7 @@ int strcmp(char *, int);
 extern int DAT_004fb410[4];
 }
 struct R { int a; inline int Code() { return a; } };
-struct Ev { int type; int pad[2]; int val; int pad2[8]; char *str; int rest[26]; };
+struct Ev { int type; int pad[2]; int val; int pad2[8]; char *str; int rest[26]; int getVal() const { return val; } };
 struct T {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
@@ -46,11 +46,11 @@ extern "C" void Gap__Core__igEventTracker__vfunc_33(T *arg0, int arg1, int arg2,
             switch (ev.type) {
             case 6:
                 *arg4 += 1;
-                *arg6 = *arg6 + ((volatile Ev &)ev).val;
+                *arg6 = *arg6 + ev.getVal();
                 break;
             case 8:
                 *arg5 += 1;
-                *arg7 = *arg7 + ((volatile Ev &)ev).val;
+                *arg7 = *arg7 + ev.getVal();
                 break;
             }
         }

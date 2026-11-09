@@ -1,13 +1,22 @@
 struct R { int w0; R() {} R(const R &o) { w0 = o.w0; } bool operator==(const R &o) const { return w0 == o.w0; } };
-struct T { int w0; int refs; };
+extern "C" int igObject_Destroy(...);
+struct T {
+    int w0;
+    int refs;
+    void release() {
+        refs = refs - 1;
+        if ((refs & 0x7FFFFF) == 0) {
+            igObject_Destroy(this);
+        }
+    }
+};
 struct C { char p0[80]; int f80; int f84; char p88[12]; int f100; char p104[64]; unsigned char f168; char p169[23]; int f192; char p196[20]; int f216; char p220[40]; int f260; int f264; char p268[12]; int f280; };
 extern "C" {
 int FUN_002e3a10(...);
-int FUN_002e7030(R *, C *);
+R FUN_002e7030(C *);
 int FUN_002fff90(T*, int*, C*, int, unsigned char);
 int FUN_00300250(T*, int*, C*, int, unsigned char);
 int igObject_IsKindOf(...);
-int igObject_Destroy(...);
 int igObject_RegisterInstance(...);
 extern R DAT_004fb418[2];
 extern int DAT_00586710[4];
@@ -24,64 +33,69 @@ public:
 extern "C" {
 void *igIntMetaField_GetDefaultDescriptor(...);
 void *igMetaObject_CreateInstanceWithPool(...);
-int igIGBFile_ReadObject(T **arg0, C *arg1);
 }
-int igIGBFile_ReadObject(T **arg0, C *arg1)
-{
-  int sp5C;
-  T * volatile sp58;
-  int *s0;
-  T *s3, *r2;
-  T *t;
-  int v;
-  int r;
-  R sp54;
-  int o = arg1->f80;
-  int ea = arg1->f264 + o;
-  int t0;
-  if (o > arg1->f260 - 9 || (t0 = arg1->f216 * 4 + (arg1->f80 + FUN_002e3a10(arg1, ea)), arg1->f260 < t0)) {
-    r = FUN_002e7030(&sp54, arg1);
-    if (*(R *)(int)&sp54 == DAT_004fb418[0]) {
-      *arg0 = 0;
-      t = *arg0;
-      if (t != 0) t->refs = t->refs + 1;
-      return r;
+static inline T *castToKind(T *object) {
+    if (object != 0 && igObject_IsKindOf(object, DAT_00586710[0]) != 0) {
+        return object;
     }
-  }
-  s0 = (int *)((char *)arg1->f264 + arg1->f80);
-  sp5C = *s0;
-  if (arg1->f168 != 0) {
-    ((MF *)igIntMetaField_GetDefaultDescriptor())->vX(&sp5C, 1);
-  }
-  s3 = (T *)igMetaObject_CreateInstanceWithPool(*(int *)(*(int *)((char *)arg1->f192 + 16) + sp5C * 4), arg1->f280);
-  if (s3 != 0 && igObject_IsKindOf(s3, DAT_00586710[0]) != 0) {
-    r2 = s3;
-  } else {
-    r2 = 0;
-  }
-  sp58 = r2;
-  t = sp58;
-  if (t != 0) t->refs = t->refs + 1;
-  t = sp58;
-  t->refs = t->refs - 1;
-  if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
-  igObject_RegisterInstance(sp58, 0);
-  if (arg1->f100 < 4) {
-    v = FUN_002fff90(sp58, s0, arg1, arg1->f192, arg1->f168);
-  } else {
-    v = FUN_00300250(sp58, s0, arg1, arg1->f192, arg1->f168);
-  }
-  arg1->f80 = arg1->f80 + v;
-  arg1->f84 = arg1->f84 + v;
-  arg1->f80 = arg1->f80 + arg1->f216 * 4;
-  arg1->f84 = arg1->f84 + arg1->f216 * 4;
-  *arg0 = sp58;
-  t = *arg0;
-  if (t != 0) t->refs = t->refs + 1;
-  t = sp58;
-  if (t != 0) {
-    t->refs = t->refs - 1;
-    if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy(t);
-  }
-  return 0;
+    return 0;
+}
+struct TRef {
+    T *p;
+    TRef(T *object) : p(object) {
+        if (p != 0) {
+            p->refs = p->refs + 1;
+        }
+    }
+    ~TRef() {
+        T *object = p;
+        if (object != 0) {
+            object->refs = object->refs - 1;
+            if ((object->refs & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
+            }
+        }
+    }
+    T *operator->() const { return p; }
+};
+extern "C" int igIGBFile_ReadObject(T **out, C *file) {
+    int metaIndex;
+    int *record;
+    int end = file->f264 + file->f80;
+    int position = file->f80;
+    int t0;
+    if (position > file->f260 - 9 || (t0 = file->f216 * 4 + (file->f80 + FUN_002e3a10(file, end)), file->f260 < t0)) {
+        if (FUN_002e7030(file) == DAT_004fb418[0]) {
+            *out = 0;
+            T *null = *out;
+            if (null != 0) {
+                null->refs = null->refs + 1;
+            }
+            return;
+        }
+    }
+    record = (int *)((char *)file->f264 + file->f80);
+    metaIndex = *record;
+    if (file->f168 != 0) {
+        ((MF *)igIntMetaField_GetDefaultDescriptor())->vX(&metaIndex, 1);
+    }
+    TRef object(castToKind((T *)igMetaObject_CreateInstanceWithPool(*(int *)(*(int *)((char *)file->f192 + 16) + metaIndex * 4), file->f280)));
+    object->release();
+    igObject_RegisterInstance(object.p, 0);
+    int read;
+    if (file->f100 < 4) {
+        read = FUN_002fff90(object.p, record, file, file->f192, file->f168);
+    } else {
+        read = FUN_00300250(object.p, record, file, file->f192, file->f168);
+    }
+    file->f80 = file->f80 + read;
+    file->f84 = file->f84 + read;
+    file->f80 = file->f80 + file->f216 * 4;
+    file->f84 = file->f84 + file->f216 * 4;
+    *out = object.p;
+    T *retained = *out;
+    if (retained != 0) {
+        retained->refs = retained->refs + 1;
+    }
+    return 0;
 }

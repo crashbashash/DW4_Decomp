@@ -20,41 +20,41 @@ void igObject_Destroy(ConfigPlatformText *);
 extern char *DAT_004c22f0[4];
 void FUN_002da010(void *self, ConfigPlatformSourceList *list);
 }
-static inline void releaseText(ConfigPlatformText *t) {
-    if (t != 0) {
-        t->_refCount = (int)t->_refCount - 1;
-        if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(t);
+struct ConfigPlatformTextRef {
+    ConfigPlatformText *p;
+    ConfigPlatformTextRef(ConfigPlatformText *text) : p(text) {}
+    ~ConfigPlatformTextRef() {
+        ConfigPlatformText *text = p;
+        if (text != 0) {
+            text->_refCount = text->_refCount - 1;
+            if ((text->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(text);
+            }
         }
     }
-}
-static inline char *textOf(ConfigPlatformText *t) {
-    char *s = t->text;
+    ConfigPlatformText *get() const { return p; }
+};
+static inline char *textOf(const ConfigPlatformTextRef &ref) {
+    char *s = ref.get()->text;
     s = (s == 0) ? DAT_004c22f0[0] : s;
     return s;
 }
 void FUN_002da010(void *self, ConfigPlatformSourceList *list) {
-    ConfigPlatformText * volatile tmp;
-    ConfigPlatformText *held;
     int i;
-    tmp = FUN_002b9500(igObject_GetAllocator(self));
-    if (FUN_002dac30(tmp) != 0) {
-        FUN_002d96f0(self, 0, textOf(tmp));
+    ConfigPlatformTextRef text(FUN_002b9500(igObject_GetAllocator(self)));
+    if (FUN_002dac30(text.get()) != 0) {
+        FUN_002d96f0(self, 0, textOf(text));
     }
-    if (FUN_002dac60(tmp) != 0) {
-        FUN_002d96f0(self, 6, textOf(tmp));
+    if (FUN_002dac60(text.get()) != 0) {
+        FUN_002d96f0(self, 6, textOf(text));
     }
-    if (FUN_002dac90(tmp) != 0) {
-        FUN_002d96f0(self, 7, textOf(tmp));
+    if (FUN_002dac90(text.get()) != 0) {
+        FUN_002d96f0(self, 7, textOf(text));
     }
     if (list == 0 || list->count == 0) {
-        held = tmp;
-        releaseText(held);
         return;
     }
     for (i = 0; i < list->count; i++) {
         list->data[i]->Describe(self);
     }
-    held = tmp;
-    releaseText(held);
 }

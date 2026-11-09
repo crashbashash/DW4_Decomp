@@ -20,38 +20,39 @@ extern char *DAT_004c22f0[4];
 extern int DAT_004e4710[2];
 extern int DAT_004e4718[2];
 }
+struct IniTextRef {
+    IniValueObject *p;
+    IniTextRef(IniValueObject *object) : p(object) {}
+    ~IniTextRef() {
+        IniValueObject *o;
+        if ((o = p) != 0) {
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
+        }
+    }
+};
 extern "C" void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list) {
-    IniValueObject *volatile text;
     int i;
     IniValueObject *value;
     char *s;
-    text = FUN_002b9500(igObject_GetAllocator(self));
+    IniTextRef text(FUN_002b9500(igObject_GetAllocator(self)));
     for (i = 0; i < FUN_00303e50(list); i++) {
         value = FUN_00303e60(list, i);
         if (igObject_IsKindOf(value, FUN_001e4e30()) != 0) {
-            FUN_0030b720(text, value->value.i, DAT_004e4710);
-            s = text->value.s;
+            FUN_0030b720(text.p, value->value.i, DAT_004e4710);
+            s = text.p->value.s;
             s = (s == 0) ? DAT_004c22f0[0] : s;
             FUN_002d9740(target, 10, FUN_00303e80(list, i), s);
         } else if (igObject_IsKindOf(value, FUN_001e4fc0()) != 0) {
-            FUN_0030b730(text, DAT_004e4718, value->value.f);
-            s = text->value.s;
+            FUN_0030b730(text.p, DAT_004e4718, value->value.f);
+            s = text.p->value.s;
             s = (s == 0) ? DAT_004c22f0[0] : s;
             FUN_002d9740(target, 11, FUN_00303e80(list, i), s);
         } else if (igObject_IsKindOf(value, FUN_001e5c50()) != 0) {
-            FUN_0030b770(text, value->value.b, 0);
-            s = text->value.s;
+            FUN_0030b770(text.p, value->value.b, 0);
+            s = text.p->value.s;
             s = (s == 0) ? DAT_004c22f0[0] : s;
             FUN_002d9740(target, 12, FUN_00303e80(list, i), s);
-        }
-    }
-    {
-        IniValueObject *o = text;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
-            }
         }
     }
 }

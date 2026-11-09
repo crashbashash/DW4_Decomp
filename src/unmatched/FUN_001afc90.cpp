@@ -1,14 +1,21 @@
 #include "dw4/reflected.h"
-struct AttrObj { void **_vtable; unsigned int _refCount; int _id; };
-struct AttrVolatileRef {
-    AttrObj *p;
-    AttrVolatileRef(const AttrVolatileRef &o);
-};
+extern "C" int igObject_Destroy(void *);
+struct AttrRefHeader { void **_vtable; unsigned int _refCount; };
+struct AttrObj : AttrRefHeader { int _id; };
 struct AttrStackRec;
-struct AttrStackHolder { AttrStackRec *volatile p; };
-struct AttrRef {
-    AttrObj *p;
-    AttrRef(const AttrRef &o);
+template <class T> struct RefHolder {
+    T *p;
+    RefHolder(T *object) : p(object) {}
+    RefHolder(const RefHolder &o);
+    ~RefHolder() {
+        AttrRefHeader *object = p;
+        if (object != 0) {
+            object->_refCount = object->_refCount - 1;
+            if ((object->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
+            }
+        }
+    }
 };
 class AttrDefaultManager {
 public:
@@ -17,7 +24,7 @@ public:
     virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
     virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
     virtual void s20();
-    virtual AttrVolatileRef getDefault(void *meta, int unit);
+    virtual RefHolder<AttrObj> getDefault(void *meta, int unit);
 };
 class AttrCaps {
 public:
@@ -31,8 +38,8 @@ public:
     virtual void s30();
     virtual void onDefault(int v);
 };
-struct AttrStackRec { void **_vtable; unsigned int _refCount; int _count; int _capacity; int _data; AttrObj *_default; int _cachedOverride; int _popProc; int pad32; AttrObj *_lastIncrementalFlushedAttr; };
-struct AttrList { char pad[8]; int _count; int _capacity; AttrObj **_data; };
+struct AttrStackRec : AttrRefHeader { int _count; int _capacity; int _data; AttrObj *_default; int _cachedOverride; int _popProc; int pad32; AttrObj *_lastIncrementalFlushedAttr; };
+struct AttrList { char pad[8]; int _count; int _capacity; AttrRefHeader **_data; };
 struct AttrManagerRec {
     void **_vtable; unsigned int _refCount; int pad8;
     int _numAttrStacks;
@@ -45,23 +52,20 @@ struct AttrManagerRec {
     int *_attrStackIndexTable;
     int _attrStackIndexTableSize;
 };
-extern "C" {
-int igObject_Destroy(void *);
-}
-static inline void attrRelease(AttrObj *o) {
+static inline void attrRelease(AttrRefHeader *o) {
     if (o != 0) {
         o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
+        if ((o->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(o);
         }
     }
 }
-static inline void attrRetain(AttrObj *o) {
+static inline void attrRetain(AttrRefHeader *o) {
     if (o != 0) {
         o->_refCount = o->_refCount + 1;
     }
 }
-static inline void attrListSet(AttrList *l, int i, AttrObj *o) {
+static inline void attrListSet(AttrList *l, int i, AttrRefHeader *o) {
     attrRetain(o);
     attrRelease(l->_data[i]);
     {
@@ -98,12 +102,11 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         }
         units = FUN_001d8270(meta);
         if (units <= 0) {
-            AttrVolatileRef def = m->_defaultManager->getDefault(meta, 0);
+            RefHolder<AttrObj> def = m->_defaultManager->getDefault(meta, 0);
             units = ((AttrCaps *)def.p)->unitCount((void *)m->_capabilityManager);
             if (units <= 0) {
                 units = 1;
             }
-            { AttrObj *held = def.p; attrRelease(held); }
         }
         first = m->_numAttrStacks;
         end = first + units;
@@ -111,12 +114,11 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         ObjectList_ResizeRetained(m->_attrStacks, end);
         m->_attrStackIndexTable[id] = first;
         m->_numAttrStacks = end;
-        for (i = 0; i < units;) {
-            AttrVolatileRef def = m->_defaultManager->getDefault(meta, i);
-            AttrStackHolder stack;
+        for (i = 0; i < units; i++, first++) {
+            RefHolder<AttrObj> def = m->_defaultManager->getDefault(meta, i);
+            RefHolder<AttrStackRec> stack((AttrStackRec *)FUN_001a5a70(igObject_GetAllocator(m)));
             AttrObj **slot;
             AttrObj *value;
-            stack.p = (AttrStackRec *)FUN_001a5a70(igObject_GetAllocator(m));
             slot = &stack.p->_default;
             value = def.p;
             attrFieldSet(slot, value);
@@ -125,14 +127,12 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
                 AttrObj *d = def.p;
                 stack.p->_lastIncrementalFlushedAttr = d;
             }
-            value = (AttrObj *)stack.p;
-            attrListSet(m->_attrStacks, first, value);
-            value = def.p;
-            attrListSet(m->_attrDefaults, first, value);
-            { AttrObj *held = (AttrObj *)stack.p; attrRelease(held); }
-            { AttrObj *held = def.p; attrRelease(held); }
-            i++;
-            first++;
+            {
+                AttrRefHeader *entry = stack.p;
+                attrListSet(m->_attrStacks, first, entry);
+                entry = def.p;
+                attrListSet(m->_attrDefaults, first, entry);
+            }
         }
     }
 }

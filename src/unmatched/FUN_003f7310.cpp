@@ -48,6 +48,19 @@ public:
     ItemRef(igObject *o) : p(o) {}
     ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
+static inline void storePlayerData(beNDMWGameRam *self, int index, const PlayerDataRef &value) {
+    igObject *s2 = value.p;
+    igObjectList *pl = (igObjectList *)self->_playerDataListList;
+    igObject *o;
+    if (s2 != 0) s2->_refCount = s2->_refCount + 1;
+    o = ((igObject **)pl->_data)[index];
+    if (o != 0) {
+        o->_refCount = o->_refCount - 1;
+        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
+    }
+    if (pl->_count != 0 && index >= 0 && index < pl->_count)
+        ((igObject **)pl->_data)[index] = s2;
+}
 extern "C" void FUN_003f7310(beNDMWGameRam *arg0, int arg1) {
     igObjectList *common;
     igObjectList *ta;
@@ -111,22 +124,14 @@ extern "C" void FUN_003f7310(beNDMWGameRam *arg0, int arg1) {
         ItemRef item(FUN_003c85b0(a1));
         FUN_00448710(item.p, f);
         p7 = data.p;
-        s1 = *(igObject * volatile *)&item.p; /* matching construct: the element pointer is read before the folder lookup, as retail */
-        ObjectList_AppendRetained(((igObject **)igProperty_GetRecordFolder(p7, &DAT_00518a50[0]))[3], s1);
+        s1 = item.p;
+        igObject **folder = (igObject **)igProperty_GetRecordFolder(p7, &DAT_00518a50[0]);
+        ObjectList_AppendRetained(folder[3], s1);
     }
     ta = (igObjectList *)((igObject **)igProperty_GetRecordArray(data.p, &DAT_00518ae8[0]))[3];
     if (ta->_count != 0) {
         if (ta->_count > 960)
             ((unsigned char *)ta->_data)[960] = GPR_005549e8;
     }
-    s2 = *(igObject **)&data.p;
-    pl = (igObjectList *)arg0->_playerDataListList;
-    if (s2 != 0) s2->_refCount = s2->_refCount + 1;
-    o = ((igObject **)pl->_data)[arg1];
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-    }
-    if (pl->_count != 0 && arg1 >= 0 && arg1 < pl->_count)
-        ((igObject **)pl->_data)[arg1] = s2;
+    storePlayerData(arg0, arg1, data);
 }

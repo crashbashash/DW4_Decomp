@@ -1,116 +1,157 @@
-typedef struct O { int w0; int references; } O;
-typedef struct P { char pad0[20]; O *f20; char pad24[20]; O *f44; } P;
-#define REL(o) if ((o) != 0) { (o)->references = (o)->references - 1; if (((unsigned long long)(long long)(o)->references & 0x7fffffULL) == 0) igObject_Destroy(o); }
-typedef struct Q { char pad[20]; int f20; } Q;
-typedef struct X { char p0[76]; O *f76; O *f80; O *f84; char p1[48]; O *f136; } X;
-typedef struct Y { char p0[117]; char f117; char p1[18]; O *f136; } Y;
-typedef struct T { char p0[12]; struct T2 *f12; int pad; struct S *f20; } T;
-struct T2 { char p[20]; O *f20; char q[28]; int f52; };
-struct Cfg { char p[16]; int *f16; };
-struct S { char p[212]; int f212; int f216; struct Cfg *f220; };
-struct A0;
-typedef struct A0 { char p0[12]; struct T2 *f12; int pad16; struct S *f20; char p1[16]; int f40; O *f44; int f48; char p2[84]; int f136; } A0;
+struct ViewObject { int w0; int references; };
+struct Binding : ViewObject { char p0[68]; ViewObject *source; ViewObject *target; ViewObject *value; };
+struct Camera : ViewObject { char p0[109]; char follow; char p1[18]; ViewObject *object; };
+struct Effect : ViewObject { };
+struct ViewSource { char p[20]; ViewObject *f20; char q[28]; int f52; };
+struct ViewConfig { char p[16]; int *f16; };
+struct ViewState : ViewObject { char p[204]; int f212; int f216; ViewConfig *f220; };
+struct ViewSelector { char p0[12]; ViewSource *f12; int pad16; ViewState *f20; char p1[16]; int f40; ViewObject *f44; int f48; char p2[84]; int f136; };
+struct Fetched { ViewObject *object; };
 extern "C" {
-void *FUN_0045c170(int);
-void *FUN_0045c5a0(int);
-void *FUN_0045c8e0(int);
-void *FUN_0045cc40(int);
-int FUN_0045eda0(void *, int, int);
-int FUN_00463fd0(int, void *);
-int FUN_00465260(void *, int);
-int igObject_Destroy(void *);
-void FUN_00462fb0(struct A0 *arg0);
+Binding *FUN_0045c170(int);
+Camera *FUN_0045c5a0(int);
+Camera *FUN_0045c8e0(int);
+Effect *FUN_0045cc40(int);
+Fetched FUN_0045eda0(int, int);
+int FUN_00463fd0(int, ViewObject *);
+int FUN_00465260(Effect *, int);
+int igObject_Destroy(ViewObject *);
+void FUN_00462fb0(ViewSelector *self);
 }
-struct Mem { O *p; ~Mem() {} };
-
-extern "C" void FUN_00462fb0(A0 *arg0) {
-    X * volatile sp6C;
-    Y * volatile sp68;
-    O * volatile sp64;
-    Y * volatile sp60;
-    Mem sp5C;
-    O * volatile sp58;
-    volatile char sp54[1]; volatile char sp50[1]; volatile char sp4C[1]; volatile char sp48[1]; volatile char sp44[1];
-    int a1;
-    struct S *s = arg0->f20;
-    a1 = s->f212;
-    switch (a1) {
+template <class T> struct ViewRef {
+    T *p;
+    ViewRef(T *object) : p(object) {}
+    ~ViewRef() {
+        ViewObject *object = p;
+        if (object != 0) {
+            object->references = object->references - 1;
+            if ((object->references & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
+            }
+        }
+    }
+};
+struct Tag { };
+static inline Binding *create45c170() {
+    Tag tag = Tag();
+    return FUN_0045c170(0);
+}
+static inline Camera *create45c8e0() {
+    Tag tag = Tag();
+    return FUN_0045c8e0(0);
+}
+static inline Camera *create45c5a0() {
+    Tag tag = Tag();
+    return FUN_0045c5a0(0);
+}
+static inline Effect *create45cc40() {
+    Tag tag = Tag();
+    return FUN_0045cc40(0);
+}
+static inline void takeValue(const ViewRef<Binding> &ref, const Fetched &fetched) {
+    ViewObject *value = fetched.object;
+    Binding *owner = ref.p;
+    ViewObject *previous;
+    if (value != 0) {
+        value->references = value->references + 1;
+    }
+    previous = owner->value;
+    if (previous != 0) {
+        previous->references = previous->references - 1;
+        if ((previous->references & 0x7FFFFF) == 0) {
+            igObject_Destroy(previous);
+        }
+    }
+    owner->value = value;
+    if (fetched.object != 0) {
+        fetched.object->references = fetched.object->references - 1;
+        if ((fetched.object->references & 0x7FFFFF) == 0) {
+            igObject_Destroy(fetched.object);
+        }
+    }
+}
+static inline void setSource(const ViewRef<Binding> &ref, ViewObject *value) {
+    Binding *owner = ref.p;
+    ViewObject *previous;
+    if (value != 0) {
+        value->references = value->references + 1;
+    }
+    previous = owner->source;
+    if (previous != 0) {
+        previous->references = previous->references - 1;
+        if ((previous->references & 0x7FFFFF) == 0) {
+            igObject_Destroy(previous);
+        }
+    }
+    owner->source = value;
+}
+static inline void setTarget(const ViewRef<Binding> &ref, ViewObject *value) {
+    Binding *owner = ref.p;
+    ViewObject *previous;
+    if (value != 0) {
+        value->references = value->references + 1;
+    }
+    previous = owner->target;
+    if (previous != 0) {
+        previous->references = previous->references - 1;
+        if ((previous->references & 0x7FFFFF) == 0) {
+            igObject_Destroy(previous);
+        }
+    }
+    owner->target = value;
+}
+static inline void setObject(const ViewRef<Camera> &ref, ViewObject *value) {
+    Camera *owner = ref.p;
+    ViewObject *previous;
+    if (value != 0) {
+        value->references = value->references + 1;
+    }
+    previous = owner->object;
+    if (previous != 0) {
+        previous->references = previous->references - 1;
+        if ((previous->references & 0x7FFFFF) == 0) {
+            igObject_Destroy(previous);
+        }
+    }
+    owner->object = value;
+}
+extern "C" void FUN_00462fb0(ViewSelector *self) {
+    ViewState *s = self->f20;
+    int mode = s->f212;
+    switch (mode) {
     case 0: {
-        O *t, *u; X *x;
-        sp54[0] = 0;
-        sp6C = (X *)FUN_0045c170(0);
-        FUN_0045eda0((void *)&sp58, arg0->f48, 1);
-        t = sp58;
-        x = sp6C;
-        if (t != 0) t->references = t->references + 1;
-        u = x->f84;
-        REL(u);
-        x->f84 = t;
-        t = sp58;
-        if (t != 0) { t->references = t->references - 1; u = sp58; if (((unsigned long long)(long long)u->references & 0x7fffffULL) == 0) igObject_Destroy(u); }
-        t = (O *)arg0->f20;
-        x = sp6C;
-        if (t != 0) t->references = t->references + 1;
-        u = x->f76;
-        REL(u);
-        x->f76 = t;
-        t = arg0->f44;
-        x = sp6C;
-        if (t != 0) t->references = t->references + 1;
-        u = x->f80;
-        REL(u);
-        x->f80 = t;
-        FUN_00463fd0(arg0->f136, (void *)sp6C);
-        t = (O *)sp6C;
-        REL(t);
+        ViewRef<Binding> binding(create45c170());
+        takeValue(binding, FUN_0045eda0(self->f48, 1));
+        setSource(binding, self->f20);
+        setTarget(binding, self->f44);
+        FUN_00463fd0(self->f136, binding.p);
         break;
     }
     case 2: {
-        O *t, *u; Y *y;
-        sp50[0] = 0;
-        sp68 = (Y *)FUN_0045c8e0(0);
-        t = arg0->f12->f20;
-        y = sp68;
-        if (t != 0) t->references = t->references + 1;
-        u = y->f136;
-        REL(u);
-        y->f136 = t;
-        FUN_00463fd0(arg0->f136, (void *)sp68);
-        t = (O *)sp68;
-        REL(t);
+        ViewRef<Camera> camera(create45c8e0());
+        setObject(camera, self->f12->f20);
+        FUN_00463fd0(self->f136, camera.p);
         break;
     }
     case 1: {
-        O *t;
-        sp4C[0] = 0;
-        sp64 = (O *)FUN_0045c5a0(0);
-        FUN_00463fd0(arg0->f136, (void *)sp64);
-        t = sp64;
-        REL(t);
+        ViewRef<Camera> camera(create45c5a0());
+        FUN_00463fd0(self->f136, camera.p);
         break;
     }
     case 3: {
-        O *t;
-        sp48[0] = 0;
-        sp60 = (Y *)FUN_0045c5a0(0);
-        sp60->f117 = 1;
-        FUN_00463fd0(arg0->f136, (void *)sp60);
-        t = (O *)sp60;
-        REL(t);
+        ViewRef<Camera> camera(create45c5a0());
+        camera.p->follow = 1;
+        FUN_00463fd0(self->f136, camera.p);
         break;
     }
     default: {
-        int a0 = s->f216;
-        if (a1 >= a0) {
-            O *t;
-            sp44[0] = 0;
-            a0 = a1 - a0;
-            sp5C.p = (O *)FUN_0045cc40(0);
-            FUN_00465260((void *)sp5C.p, ((int *)arg0->f20->f220->f16)[a0]);
-            FUN_00463fd0(arg0->f136, (void *)sp5C.p);
-            arg0->f40 = arg0->f12->f52 + 1;
-            t = sp5C.p;
-            REL(t);
+        int first = s->f216;
+        if (mode >= first) {
+                first = mode - first;
+            ViewRef<Effect> effect(create45cc40());
+            FUN_00465260(effect.p, self->f20->f220->f16[first]);
+            FUN_00463fd0(self->f136, effect.p);
+            self->f40 = self->f12->f52 + 1;
         }
         break;
     }

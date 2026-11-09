@@ -9,29 +9,69 @@ extern float DAT_0048da38[4];
 extern float DAT_0048da40[4];
 extern unsigned char GPR_00554988;
 }
-struct Self { char pad[44]; igObject *f44; igFloatList *f48; igFloatList *f52; igUnsignedCharList *f56; };
 struct Src { char pad[20]; int f20; };
-#define REL3(p) { igObject *t = p; if (t) { t->_refCount = t->_refCount - 1; igObject *u = p; if (((unsigned long long)((long long)(int)u->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(u); } }
-#define ASSIGN(field, src) { igObject *s0 = (src); if (s0) s0->_refCount = s0->_refCount + 1; igObject *old = (field); if (old) { old->_refCount = old->_refCount - 1; if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); } (field) = s0; }
+struct Self { char pad[44]; Src *f44; igFloatList *f48; igFloatList *f52; igUnsignedCharList *f56; };
+struct FloatListRef {
+    igFloatList *p;
+    FloatListRef(igFloatList *object) : p(object) {}
+    ~FloatListRef() {
+        if (p != 0) {
+            p->_refCount = p->_refCount - 1;
+            if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy(p);
+        }
+    }
+};
+struct ByteListRef {
+    igUnsignedCharList *p;
+    ByteListRef(igUnsignedCharList *object) : p(object) {}
+    ~ByteListRef() {
+        if (p != 0) {
+            p->_refCount = p->_refCount - 1;
+            if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy(p);
+        }
+    }
+};
+static inline void setFloats(igFloatList *&field, const FloatListRef &value) {
+    igFloatList *held = value.p;
+    igFloatList *old;
+    if (held) held->_refCount = held->_refCount + 1;
+    old = field;
+    if (old) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
+    }
+    field = held;
+}
+static inline void setBytes(igUnsignedCharList *&field, const ByteListRef &value) {
+    igUnsignedCharList *held = value.p;
+    igUnsignedCharList *old;
+    if (held) held->_refCount = held->_refCount + 1;
+    old = field;
+    if (old) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
+    }
+    field = held;
+}
 extern "C" bool FUN_001d08d0(Self *arg0, int arg1) {
-    igObject *volatile sp6C;
-    igObject *volatile sp68;
-    igObject *volatile sp64;
     bool r = false;
     int n;
     int i;
     int j;
     if (arg0->f48 == 0) {
-        n = ((Src *)arg0->f44)->f20;
-        sp6C = (igObject *)FUN_002c9740(igObject_GetAllocator(arg0));
-        ASSIGN(*(igObject **)&arg0->f48, sp6C);
-        REL3(sp6C);
-        sp68 = (igObject *)FUN_002c9740(igObject_GetAllocator(arg0));
-        ASSIGN(*(igObject **)&arg0->f52, sp68);
-        REL3(sp68);
-        sp64 = (igObject *)FUN_002c99b0(igObject_GetAllocator(arg0));
-        ASSIGN(*(igObject **)&arg0->f56, sp64);
-        REL3(sp64);
+        n = arg0->f44->f20;
+        {
+            FloatListRef first((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0)));
+            setFloats(arg0->f48, first);
+        }
+        {
+            FloatListRef second((igFloatList *)FUN_002c9740(igObject_GetAllocator(arg0)));
+            setFloats(arg0->f52, second);
+        }
+        {
+            ByteListRef flags((igUnsignedCharList *)FUN_002c99b0(igObject_GetAllocator(arg0)));
+            setBytes(arg0->f56, flags);
+        }
         { igFloatList *l = arg0->f48; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, 4); } }
         { igFloatList *l = arg0->f52; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, 4); } }
         { igUnsignedCharList *l = arg0->f56; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, 1); } }

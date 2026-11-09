@@ -5,6 +5,7 @@ int FUN_00154b80();
 int FUN_00154e40();
 int FUN_00300db0();
 int FUN_00300f50();
+static inline unsigned int clutSize(const struct S *c) { return c->f24; }
 int Gap__Gfx__igClut__vfunc_25(struct S *arg0, int arg1, int arg2, int arg3) {
     int sp5C;
     int sp58;
@@ -22,9 +23,9 @@ int Gap__Gfx__igClut__vfunc_25(struct S *arg0, int arg1, int arg2, int arg3) {
     arg0->f16 = sp58;
     arg0->f20 = FUN_00300db0(arg0, arg0->f24, 0x80);
     if (arg3 != 0) {
-        memcpy(arg0->f20, arg3, *(volatile int *)&arg0->f24);
+        memcpy(arg0->f20, arg3, clutSize(arg0));
     } else {
-        memset(arg0->f20, 0, *(volatile int *)&arg0->f24);
+        memset(arg0->f20, 0, clutSize(arg0));
     }
     return 1;
 }

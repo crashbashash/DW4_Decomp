@@ -26,89 +26,64 @@ extern int DAT_00587038[4];
 extern int DAT_00587338[4];
 extern int DAT_00587358[4];
 extern unsigned char GPR_00554c14;
-void FUN_0032d220(void);
 }
-
-void FUN_0032d220(void) {
-    unsigned char sp3F;
-    struct O * volatile sp38;
-    struct O * volatile sp34;
-    int a;
-    int s;
-    int *p;
-    int t;
-    struct O *o;
-    int *pool;
-    struct O *o2;
-    int s2;
-
-    FUN_00306e50(*(int *)((char *)(DAT_00586dc8[0]) + 56), 2, &DAT_004ffcf0[0], &sp3F, 1, 0);
-    if (sp3F != 0) {
+struct ORef {
+    O *p;
+    ORef(O *object) : p(object) {}
+    ~ORef() {
+        O *object = p;
+        if (object != 0) {
+            object->references = object->references - 1;
+            if ((object->references & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
+            }
+        }
+    }
+    O *operator->() const { return p; }
+};
+static inline int internPool(void) {
+    if (DAT_00586f20[0] == 0) {
+        int a = FUN_002eb010(0x10);
+        if (a != 0) {
+            a = StringPool_Construct(a);
+        }
+        DAT_00586f20[0] = a;
+    }
+    return DAT_00586f20[0];
+}
+static inline void setName(O *object, int name) {
+    int *interned = (int *)StringPool_Intern(internPool(), name);
+    if (object->f72 != 0) {
+        int *header = (int *)object->f72 - 2;
+        int count = ((int *)object->f72)[-1] - 1;
+        ((int *)object->f72)[-1] = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader(*header, header);
+        }
+    }
+    object->f72 = interned;
+}
+static inline int fileAllocator(void) {
+    int a = FUN_002f8a20();
+    return GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587038[0]);
+}
+extern "C" void FUN_0032d220(void) {
+    unsigned char enabled;
+    FUN_00306e50(*(int *)((char *)(DAT_00586dc8[0]) + 56), 2, &DAT_004ffcf0[0], &enabled, 1, 0);
+    if (enabled != 0) {
         FUN_00304350(0);
         FUN_003043c0(0);
-        a = FUN_002f8a20();
-        sp38 = (struct O *)FUN_002d01a0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587038[0]));
-        a = FUN_002f8a20();
-        sp34 = (struct O *)FUN_002d01a0(GPR_00554c14 != 0 ? a : Memory_GetAllocatorBySelector(DAT_00587038[0]));
+        ORef first((O *)FUN_002d01a0(fileAllocator()));
+        ORef second((O *)FUN_002d01a0(fileAllocator()));
         if (DAT_00587338[0] != 0) {
-            s = DAT_00587358[0];
-            o = sp38;
-            if (DAT_00586f20[0] == 0) {
-                a = FUN_002eb010(0x10);
-                if (a != 0) {
-                    a = StringPool_Construct(a);
-                }
-                DAT_00586f20[0] = a;
-            }
-            p = (int *)StringPool_Intern(DAT_00586f20[0], s);
-            if (o->f72 != 0) {
-                int *h = (int *)o->f72 - 2;
-                t = ((int *)o->f72)[-1] - 1;
-                ((int *)o->f72)[-1] = t;
-                if (t == 0) {
-                    StringChunk_ReleaseHeader(*h, h);
-                }
-            }
-            o->f72 = p;
-            s2 = DAT_00587358[0];
-            o2 = sp34;
-            if (DAT_00586f20[0] == 0) {
-                a = FUN_002eb010(0x10);
-                if (a != 0) {
-                    a = StringPool_Construct(a);
-                }
-                DAT_00586f20[0] = a;
-            }
-            p = (int *)StringPool_Intern(DAT_00586f20[0], s2);
-            if (o2->f72 != 0) {
-                int *h = (int *)o2->f72 - 2;
-                t = ((int *)o2->f72)[-1] - 1;
-                ((int *)o2->f72)[-1] = t;
-                if (t == 0) {
-                    StringChunk_ReleaseHeader(*h, h);
-                }
-            }
-            o2->f72 = p;
+            setName(first.p, DAT_00587358[0]);
+            setName(second.p, DAT_00587358[0]);
         }
-        if (sp38->v23(&DAT_004ffd08[0], &DAT_004f9c50[0]) != 0) {
-            FUN_00304350(sp38);
+        if (first->v23(&DAT_004ffd08[0], &DAT_004f9c50[0]) != 0) {
+            FUN_00304350(first.p);
         }
-        if (sp34->v23(&DAT_004ffd18[0], &DAT_004f9c50[0]) != 0) {
-            FUN_003043c0(sp34);
-        }
-        o = sp34;
-        if (o != 0) {
-            o->references = o->references - 1;
-            if (((unsigned long long)(long long)o->references & 0x7fffffULL) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-        o = sp38;
-        if (o != 0) {
-            o->references = o->references - 1;
-            if (((unsigned long long)(long long)o->references & 0x7fffffULL) == 0) {
-                igObject_Destroy(o);
-            }
+        if (second->v23(&DAT_004ffd18[0], &DAT_004f9c50[0]) != 0) {
+            FUN_003043c0(second.p);
         }
     }
 }

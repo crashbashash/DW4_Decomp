@@ -263,6 +263,9 @@ remains the integration oracle.
 
 ## Open questions
 
+- **What the empty tag objects were.** The `sb zero` beside a factory call shows an empty class passed by value. Its
+  purpose is not shown: it may have selected a constructor, or been a default argument or an allocator. Names such as
+  `AdoptReference` and `DriverType` are best guesses and need more evidence.
 - **When the inlined release reloads.** Unproven: retail's inlined reference release reloads the holder
   pointer between the decrement store and the zero test only when the holder's address escaped to a call,
   not for register-held holders (seen at `0x33bd30`, `0x339110`, `0x43dc10`, `0x25ac60`). In one compile the

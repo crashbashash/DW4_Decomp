@@ -345,13 +345,15 @@
     }
   },
   "0x00308860": {
-    "emitted": {},
     "duplicates": {
-      "__dt__4Ref2Fv": "0x001363f0"
+      "__dt__7NameRefFv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
-    }
+    },
+    "stripped": [
+      "__dt__9MemberRefFv"
+    ]
   },
   "0x002d5df0": {
     "emitted": {},
@@ -485,12 +487,13 @@
     }
   },
   "0x00462fb0": {
-    "emitted": {},
     "duplicates": {
-      "__dt__3MemFv": "0x002e2300"
+      "__dt__16ViewRef<6Camera>Fv": "0x0025a2b0",
+      "__dt__16ViewRef<6Effect>Fv": "0x00333760",
+      "__dt__17ViewRef<7Binding>Fv": "0x0025a230"
     },
     "externals": {
-      "__dl__FPv": "0x002ed5c0"
+      "__dl__FPv": "0x00100610"
     }
   },
   "0x0020b280": {
@@ -534,12 +537,13 @@
     }
   },
   "0x002da1c0": {
-    "emitted": {},
     "duplicates": {
-      "__dt__3MemFv": "0x002e2300"
+      "__dt__3MemFv": "0x0025a2b0",
+      "__dt__4TRefFv": "0x0025a230",
+      "__dt__9StringRefFv": "0x00130720"
     },
     "externals": {
-      "__dl__FPv": "0x002ed5c0"
+      "__dl__FPv": "0x00100610"
     }
   },
   "0x002d10b0": {
@@ -5601,6 +5605,515 @@
     },
     "data": {
       "_impure_ptr": "0x004854a0"
+    }
+  },
+  "0x004667d0": {
+    "duplicates": {
+      "__dt__8ProbeRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00140610": {
+    "duplicates": {
+      "__dt__8ImageRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e3950": {
+    "duplicates": {
+      "__dt__13FolderItemRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0016e660": {
+    "duplicates": {
+      "__dt__7NameRefFv": "0x00164870",
+      "__dt__9LoaderRefFv": "0x001648f0",
+      "__dt__9ReaderRefFv": "0x00164970",
+      "__dt__8PathTextFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0016eab0": {
+    "duplicates": {
+      "__dt__17ConvertedImageRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0017f2b0": {
+    "duplicates": {
+      "__dt__5RcRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00455c30": {
+    "duplicates": {
+      "__dt__16ObserverEventRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002369e0": {
+    "duplicates": {
+      "__dt__14ResizeEventRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001485c0": {
+    "duplicates": {
+      "__dt__13ControllerRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00155f10": {
+    "duplicates": {
+      "__dt__8EntryRefFv": "0x0025a230",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001566c0": {
+    "duplicates": {
+      "__dt__4TRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00158f50": {
+    "duplicates": {
+      "__dt__10VStreamRefFv": "0x0025a230",
+      "__dt__9ImageNameFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0015ed00": {
+    "duplicates": {
+      "__dt__4VRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0018f760": {
+    "duplicates": {
+      "__dt__11InstanceRefFv": "0x0025a230",
+      "__dt__15InstanceListRefFv": "0x0025a2b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001afc90": {
+    "duplicates": {
+      "__dt__19RefHolder<7AttrObj>Fv": "0x0025a230",
+      "__dt__25RefHolder<12AttrStackRec>Fv": "0x0025a2b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001b0450": {
+    "duplicates": {
+      "__dt__5RcRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001bb090": {
+    "duplicates": {
+      "__dt__9LookupRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001cb010": {
+    "duplicates": {
+      "__dt__10IniTextRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001cb340": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x001c6460",
+      "__dt__7TextRefFv": "0x0025a230",
+      "__dt__7ListRefFv": "0x001489a0",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "stripped": [
+      "__dt__11ReturnedRefFv"
+    ]
+  },
+  "0x001cd9f0": {
+    "duplicates": {
+      "__dt__10SectionRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001ce400": {
+    "duplicates": {
+      "__dt__12IniStringRefFv": "0x00333760",
+      "__dt__15StringObjectRefFv": "0x0025a2b0",
+      "__dt__7FileRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001d08d0": {
+    "stripped": [
+      "__dt__12FloatListRefFv",
+      "__dt__11ByteListRefFv"
+    ]
+  },
+  "0x001d6410": {
+    "duplicates": {
+      "__dt__12PathEntryRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001d6700": {
+    "duplicates": {
+      "__dt__14ChildObjectRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001d6900": {
+    "duplicates": {
+      "__dt__12PrimitiveRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001e6490": {
+    "duplicates": {
+      "__dt__8ValueRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0022b910": {
+    "duplicates": {
+      "__dt__7ItemRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00234d70": {
+    "duplicates": {
+      "__dt__13StringListRefFv": "0x0025a230",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00236140": {
+    "duplicates": {
+      "__dt__14NamedObjectRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00236ca0": {
+    "duplicates": {
+      "__dt__9PluginRefFv": "0x00333760"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d7130": {
+    "duplicates": {
+      "__dt__7ListRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d7f10": {
+    "duplicates": {
+      "__dt__9SourceRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002da010": {
+    "duplicates": {
+      "__dt__21ConfigPlatformTextRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002dcaa0": {
+    "duplicates": {
+      "__dt__7PoolRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002fd610": {
+    "duplicates": {
+      "__dt__11InstanceRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002fd6e0": {
+    "duplicates": {
+      "__dt__10CreatedRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00304720": {
+    "duplicates": {
+      "__dt__13RepositoryRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003061c0": {
+    "duplicates": {
+      "__dt__10IniPairRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00308a90": {
+    "stripped": [
+      "__dt__5ObRefFv"
+    ]
+  },
+  "0x0032c240": {
+    "duplicates": {
+      "__dt__7TextRefFv": "0x0025a230",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00455f50": {
+    "stripped": [
+      "__dt__6ObjRefFv"
+    ]
+  },
+  "0x004573f0": {
+    "duplicates": {
+      "__dt__8EntryRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00453860": {
+    "duplicates": {
+      "__dt__20LayerRef<9FillLayer>Fv": "0x0025a230",
+      "__dt__24LayerRef<12OutlineLayer>Fv": "0x0025a2b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d06c0": {
+    "duplicates": {
+      "__dt__7LockRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d9540": {
+    "duplicates": {
+      "__dt__11PropertyRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e1bb0": {
+    "duplicates": {
+      "__dt__6RunRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00325d70": {
+    "duplicates": {
+      "__dt__5ObRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001aefe0": {
+    "duplicates": {
+      "__dt__9AnimDbRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001bb880": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00304840": {
+    "duplicates": {
+      "__dt__13RepositoryRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0032d220": {
+    "duplicates": {
+      "__dt__4ORefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e7100": {
+    "duplicates": {
+      "__dt__4TRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0045fd70": {
+    "duplicates": {
+      "__dt__9ObjectRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0022a7b0": {
+    "duplicates": {
+      "__dt__11IteratorRefFv": "0x0025a230",
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0022b1a0": {
+    "duplicates": {
+      "__dt__11IteratorRefFv": "0x0025a230",
+      "__dt__7LockRefFv": "0x0025a2b0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001805a0": {
+    "duplicates": {
+      "__dt__11ResourceRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001e6de0": {
+    "duplicates": {
+      "__dt__12FormattedRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001e6f10": {
+    "duplicates": {
+      "__dt__12QuadNamedRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0022c7f0": {
+    "duplicates": {
+      "__dt__13NameBufferRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0023c250": {
+    "duplicates": {
+      "__dt__5RcRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00246b30": {
+    "duplicates": {
+      "__dt__13ScriptFileRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00460330": {
+    "duplicates": {
+      "__dt__10RemovedRefFv": "0x0025a2b0",
+      "__dt__7ItemRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
     }
   }
 }

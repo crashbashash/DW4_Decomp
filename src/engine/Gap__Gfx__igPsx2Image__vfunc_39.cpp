@@ -1,7 +1,6 @@
 extern "C" {
 int FUN_00150060(...);
 int FUN_00150390(...);
-int FUN_00156340(...);
 int FUN_0015ad50(...);
 int FUN_002b9500(...);
 int FUN_002eb010(...);
@@ -38,20 +37,70 @@ public:
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int v31(int);
   int refs;
 };
+struct NameRef {
+    O0 *p;
+    NameRef(O0 *object) : p(object) {}
+    ~NameRef() {
+        O0 *o;
+        if ((o = p) != 0) {
+            o->refs = o->refs - 1;
+            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
+        }
+    }
+};
+struct LoaderRef {
+    O1 *p;
+    LoaderRef(O1 *object) : p(object) {}
+    ~LoaderRef() {
+        O1 *o;
+        if ((o = p) != 0) {
+            o->refs = o->refs - 1;
+            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
+        }
+    }
+};
+struct ReaderRef {
+    O2 *p;
+    ReaderRef(O2 *object) : p(object) {}
+    ~ReaderRef() {
+        O2 *o;
+        if ((o = p) != 0) {
+            o->refs = o->refs - 1;
+            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
+        }
+    }
+};
+struct PathText;
+struct PathText {
+    int text;
+    PathText(int path) {
+        int a;
+        if (path == 0) {
+            a = 0;
+        } else {
+            if (DAT_00586f20[0] == 0) {
+                int t = FUN_002eb010(0x10);
+                if (t != 0) t = StringPool_Construct(t);
+                DAT_00586f20[0] = t;
+            }
+            a = (int)StringPool_Intern(DAT_00586f20[0], path);
+        }
+        text = a;
+    }
+    ~PathText() {
+        if (text != 0) {
+            int *h = (int *)text - 2;
+            int t = ((int *)text)[-1] - 1;
+            ((int *)text)[-1] = t;
+            if (t == 0) StringChunk_ReleaseHeader(*h, h);
+        }
+    }
+};
+extern "C" int FUN_00156340(G *, const PathText &);
 extern "C" int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
 {
-  O0 * volatile sp5C;
-  O1 * volatile sp58;
-  O2 * volatile sp54;
-  int sp50;
   int var_s0 = 0;
   int s;
-  int a;
-  int *h;
-  int t;
-  O0 *o;
-  O1 *o1;
-  O2 *o2;
   s = FUN_0015ad50(arg1);
   if (s != 0) {
     if (strcmp(s, &DAT_004df5b8[0]) != 0) {
@@ -59,37 +108,12 @@ extern "C" int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
       goto block_22;
     }
 block_4:
-    sp5C = (O0 *)FUN_002b9500(igObject_GetAllocator(arg0));
-    FUN_0030b3c0(sp5C, arg1);
-    sp58 = (O1 *)FUN_00150060(igObject_GetAllocator(arg0));
-    var_s0 = sp58->v21(sp5C, arg0) & 0xFF;
-    if (arg1 == 0) {
-      a = 0;
-    } else {
-      if (DAT_00586f20[0] == 0) {
-        t = FUN_002eb010(0x10);
-        if (t != 0) t = StringPool_Construct(t);
-        DAT_00586f20[0] = t;
-      }
-      a = (int)StringPool_Intern(DAT_00586f20[0], arg1);
-    }
-    sp50 = a;
-    FUN_00156340(arg0, &sp50);
-    if (sp50 != 0) {
-      h = (int *)sp50 - 2;
-      t = ((int *)sp50)[-1] - 1;
-      ((int *)sp50)[-1] = t;
-      if (t == 0) StringChunk_ReleaseHeader(*h, h);
-    }
-    o1 = sp58;
-    if (o1 != 0) {
-      o1->refs = o1->refs - 1;
-      if (((unsigned long long)(long long)o1->refs & 0x7fffffULL) == 0) igObject_Destroy(o1);
-    }
-    o = sp5C;
-    if (o != 0) {
-      o->refs = o->refs - 1;
-      if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) igObject_Destroy(o);
+    {
+      NameRef name((O0 *)FUN_002b9500(igObject_GetAllocator(arg0)));
+      FUN_0030b3c0(name.p, arg1);
+      LoaderRef loader((O1 *)FUN_00150060(igObject_GetAllocator(arg0)));
+      var_s0 = loader.p->v21(name.p, arg0) & 0xFF;
+      FUN_00156340(arg0, PathText(arg1));
     }
     return var_s0;
   }
@@ -99,15 +123,10 @@ block_22:
       if (strcmp(s, &DAT_004df5d0[0]) == 0) goto block_26;
     } else {
 block_26:
-      sp54 = (O2 *)FUN_00150390(igObject_GetAllocator(arg0));
-      var_s0 = sp54->v31(arg1) & 0xFF;
+      ReaderRef reader((O2 *)FUN_00150390(igObject_GetAllocator(arg0)));
+      var_s0 = reader.p->v31(arg1) & 0xFF;
       if (var_s0 != 0) {
-        arg0->v21(sp54, 1);
-      }
-      o2 = sp54;
-      if (o2 != 0) {
-        o2->refs = o2->refs - 1;
-        if (((unsigned long long)(long long)o2->refs & 0x7fffffULL) == 0) igObject_Destroy(o2);
+        arg0->v21(reader.p, 1);
       }
     }
   }

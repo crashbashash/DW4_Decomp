@@ -38,6 +38,7 @@ void *igObject_GetAllocator(...);
 int igProperty_GetRecord(...);
 struct Item { int p[3]; int f12; int p16; int f20; };
 struct Rec { int p[3]; igObjectList *f12; };
+static inline int f20Of(const Item *item) { return item->f20; }
 Rec *igProperty_GetRecordFolder(...);
 extern char *DAT_004cf8a0[];
 extern int DAT_0051b308[4];
@@ -139,8 +140,7 @@ public:
 };
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 
-/* matching construct: the folder-list count is read through a volatile lvalue (as the original igObjectList-shaped record declared it) */
-#define VCNT(l) (*(volatile int *)&(l)->_count)
+#define VCNT(l) ((l)->_count)
 #define SUBCNT(s) (((beNDMWWindowList *)(s)->_subWindow)->_count)
 #define W(p, off) (*(int *)((int)(p) + (off)))
 
@@ -173,7 +173,7 @@ public:
 void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
     int vA[3];
     int vB[3];
-    igObjectList *fa;
+    const igObjectList *fa;
     void *alloc;
     int obj;
     int i;
@@ -184,7 +184,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
     int j;
     int money;
     int rec2;
-    igObjectList *fb;
+    const igObjectList *fb;
     int jb;
     Item *it;
     Item *ib;
@@ -484,7 +484,7 @@ void Gap__Bec__beNDMWShopCtrl50__vfunc_21(beNDMWShopCtrl50 *self) {
                             do {
                                 ib = ((Item **)fb->_data)[jb];
                                 if (ib != 0 && self->_conItemNo == ib->f12) {
-                                    ib->f20 = self->_kazu + *(volatile int *)&ib->f20; /* matching construct: volatile read gives retail addu operand order */
+                                    ib->f20 = self->_kazu + f20Of(ib);
                                     break;
                                 }
                                 jb += 1;

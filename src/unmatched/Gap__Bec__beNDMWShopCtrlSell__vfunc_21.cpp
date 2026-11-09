@@ -5,7 +5,6 @@
  * selects branch 1 (device sell sub-window) or 2 (disk sell sub-window), which return to state 0 when
  * they end. State 2 closes the sub-windows, state 3 waits for the close to finish and clears _isRun.
  * Matching constructs: the state switch reads _st0 through a const accessor so case 0 reloads it;
- * the disk-scan count is read through a volatile access so every iteration re-reads it;
  * `case 1: case 2:` in that order gives the 2-then-1 compare chain; the decide-list pointers live in
  * stack WindowRef/ListRef holders and are re-read per use; hasDevice/hasDisk are bool. */
 #include "dw4/reflected.h"
@@ -78,7 +77,7 @@ struct ListRef {
 void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
     void *alloc;
     igObjectList *devices;
-    igObjectList *disks;
+    const igObjectList *disks;
     Item *item;
     bool hasDevice;
     bool hasDisk;
@@ -102,7 +101,7 @@ void Gap__Bec__beNDMWShopCtrlSell__vfunc_21(beNDMWShopCtrlSell *self) {
             hasDevice = 1;
         }
         hasDisk = 0;
-        for (i = 0; i < *(volatile int *)&disks->_count; i++) {
+        for (i = 0; i < disks->_count; i++) {
             item = ((Item **)disks->_data)[i];
             if (item != 0 && item->f20 > 0) {
                 hasDisk = 1;

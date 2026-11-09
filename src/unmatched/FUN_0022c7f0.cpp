@@ -9,18 +9,26 @@ extern "C" int FUN_0030b3c0(Rc *, char *);
 extern "C" int FUN_0022c150(int, B *, Rc *, int, Ent *, A *);
 extern "C" int igObject_Destroy(Rc *);
 extern char DAT_004e7ea8[16];
+struct AdoptReference { };
+struct NameBufferRef {
+    Rc *p;
+    NameBufferRef(Rc *object, AdoptReference) : p(object) {}
+    ~NameBufferRef() {
+        Rc *o;
+        if ((o = p) != 0) {
+            o->refs = o->refs - 1;
+            if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
+        }
+    }
+};
 extern "C" int FUN_0022c7f0(A *arg0, int arg1, B *arg2, int arg3) {
     bool found;
-    Rc *volatile spBC;
     Lst *l;
     unsigned int n;
     unsigned int i;
-    volatile char spB8[4];
-    Rc *t;
-    spB8[0] = 0;
     char *nm;
     Ent *e;
-    spBC = FUN_002b9500(0);
+    NameBufferRef buffer(FUN_002b9500(0), AdoptReference());
     l = arg0->getObj()->lst;
     found = 0;
     i = 0;
@@ -28,19 +36,14 @@ extern "C" int FUN_0022c7f0(A *arg0, int arg1, B *arg2, int arg3) {
     for (; i < n; i++) {
         e = l->arr[i];
         nm = e->name;
-        FUN_0030b3c0(spBC, nm);
-        if (FUN_0022c150(arg1, arg2, spBC, arg3, e, arg0) != 0) {
+        FUN_0030b3c0(buffer.p, nm);
+        if (FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0) != 0) {
             found = 1;
         } else if (*nm == 0x5f) {
-            FUN_0030b3c0(spBC, e->name + 1);
-            if (0 != FUN_0022c150(arg1, arg2, spBC, arg3, e, arg0)) found = 1;
+            FUN_0030b3c0(buffer.p, e->name + 1);
+            if (0 != FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0)) found = 1;
         }
     }
     if (found) arg2->put(DAT_004e7ea8);
-    t = spBC;
-    if (t) {
-        t->refs -= 1;
-        if (0 == (t->refs & 0x7fffff)) igObject_Destroy(t);
-    }
     return 1;
 }

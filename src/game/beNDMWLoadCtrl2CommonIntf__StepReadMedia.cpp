@@ -41,6 +41,7 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, in
 /* Owning stack reference to the new slot player: constructed from the creating call and released
  * on scope exit (reference count in the low 23 bits of _refCount). Its destructor is emitted out
  * of line. */
+static inline int countOf(const igIntList *list) { return list->_count; }
 class SlotPlayerRef {
 public:
     Rc *p;
@@ -59,31 +60,31 @@ public:
 
 int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, int idx, int unused, int val, int mode) {
     int ret;
-    int st;
+    int state;
     void *alloc;
     int n;
-    igIntList *il;
+    igIntList *accessList;
     int i;
     int j;
-    Node *nd;
-    unsigned short *src;
-    int a1;
-    int r;
-    unsigned short *nsrc;
+    Node *node;
+    unsigned short *unicodeText;
+    int charIndex;
+    int nextState;
+    unsigned short *digimonName;
 
     ret = 0;
-    st = 0;
+    state = 0;
     switch (mode) {
-    case 0: st = NODE(self, idx)->st0; break;
-    case 1: st = NODE(self, idx)->st1; break;
-    case 2: st = NODE(self, idx)->st2; break;
-    case 3: st = NODE(self, idx)->st3; break;
+    case 0: state = NODE(self, idx)->st0; break;
+    case 1: state = NODE(self, idx)->st1; break;
+    case 2: state = NODE(self, idx)->st2; break;
+    case 3: state = NODE(self, idx)->st3; break;
     }
-    switch (st) {
+    switch (state) {
     case 0:
         FUN_003f1460(self->_mcUtilCtrl, 4, val);
-        r = st + 1;
-        goto E;
+        nextState = state + 1;
+        goto storeState;
     case 1:
         if (CFG(self)->_isResult == 1) {
             ret = 2;
@@ -99,28 +100,31 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, in
                 }
                 FUN_003f0e30(grp.p, ((Meta *)CFG(self)->_svData)->f8);
                 GRP(grp.p)->_connectNO = val;
-                il = (igIntList *)GRP(grp.p)->_accessPlList;
-                n = il->_count;
-                if (n < il->_capacity) il->_count = *(volatile int *)&il->_count + 1;
-                else List_Resize(il, n + 1, 4);
-                ((int *)il->_data)[n] = idx;
+                accessList = (igIntList *)GRP(grp.p)->_accessPlList;
+                n = accessList->_count;
+                if (n < accessList->_capacity) accessList->_count = countOf(accessList) + 1;
+                else List_Resize(accessList, n + 1, 4);
+                ((int *)accessList->_data)[n] = idx;
                 ObjectList_AppendRetained(self->_slotSaveData, grp.p);
                 for (j = 0; j < 4; j++) {
                     DegiDataRef el((Rc *)((beNDMWDegiData **)((igObjectList *)GRP(grp.p)->_saveDataList)->_data)[j]);
                     if (el.p != 0) REFS(el.p) = REFS(el.p) + 1;
                     if (DD(el.p)->_isUse == 1 && DNAME(DD(el.p))[0] != 0xFFFF) {
                         Rc *str; /* the unicode text FUN_00382eb0 hands back (declared here: its slot sits below the record reference) */
-                        nsrc = *(unsigned short * volatile *)&DD(el.p)->_dmName;
-                        FUN_00382eb0(&str, FUN_00236f80(self->_insight, DAT_00589678[0]), nsrc);
-                        src = (unsigned short *)((beUnicodeObj *)str)->_buffer;
-                        for (a1 = 0; ; ) {
-                            ((unsigned short *)DD(el.p) + 5)[a1] /* matching construct: object-based index keeps the addu operand order */ = src[a1];
-                            if (src[a1] == 0) break;
-                            a1++;
-                            if (a1 >= 8) break;
+                        digimonName = (unsigned short *)DD(el.p)->_dmName;
+                        {
+                            int insightEntry = FUN_00236f80(self->_insight, DAT_00589678[0]);
+                            FUN_00382eb0(&str, insightEntry, digimonName);
                         }
-                        for (; a1 < 8; a1++) {
-                            ((unsigned short *)DD(el.p) + 5)[a1] = 0;
+                        unicodeText = (unsigned short *)((beUnicodeObj *)str)->_buffer;
+                        for (charIndex = 0; ; ) {
+                            ((unsigned short *)DD(el.p) + 5)[charIndex] /* matching construct: object-based index keeps the addu operand order */ = unicodeText[charIndex];
+                            if (unicodeText[charIndex] == 0) break;
+                            charIndex++;
+                            if (charIndex >= 8) break;
+                        }
+                        for (; charIndex < 8; charIndex++) {
+                            ((unsigned short *)DD(el.p) + 5)[charIndex] = 0;
                         }
                         DNAME(DD(el.p))[0] = 0xFFFF;
                         REL(str);
@@ -130,37 +134,37 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *self, in
                 /* matching construct: leaving the block through this jump to the state store releases the slot
                  * player on the jump path, which keeps retail's branch after the release; falling out of the
                  * switch folds it away */
-                r = st;
-                goto E;
+                nextState = state;
+                goto storeState;
             }
             }
         }
         break;
     }
-    r = st;
-E:
-    st = r;
+    nextState = state;
+storeState:
+    state = nextState;
     switch (mode) {
     case 0:
-        nd = NODE(self, idx);
-        nd->st0 = st;
-        nd->st3 = 0;
-        nd->st2 = 0;
-        nd->st1 = 0;
+        node = NODE(self, idx);
+        node->st0 = state;
+        node->st3 = 0;
+        node->st2 = 0;
+        node->st1 = 0;
         break;
     case 1:
-        nd = NODE(self, idx);
-        nd->st1 = st;
-        nd->st3 = 0;
-        nd->st2 = 0;
+        node = NODE(self, idx);
+        node->st1 = state;
+        node->st3 = 0;
+        node->st2 = 0;
         break;
     case 2:
-        nd = NODE(self, idx);
-        nd->st2 = st;
-        nd->st3 = 0;
+        node = NODE(self, idx);
+        node->st2 = state;
+        node->st3 = 0;
         break;
     case 3:
-        NODE(self, idx)->st3 = st;
+        NODE(self, idx)->st3 = state;
         break;
     }
     return ret;

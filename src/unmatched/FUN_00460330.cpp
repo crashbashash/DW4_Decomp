@@ -8,11 +8,9 @@ typedef struct A { char pad[12]; X *f12; char pad2[32]; Hold *f48; char pad3[8];
 extern "C" {
 Obj *FUN_001361b0(int);
 int FUN_001c5d10(Hold *, int);
-int FUN_001c5eb0(Obj **, Hold *, int);
 int FUN_00460790(A *, int);
 int ObjectList_AppendRetained(int, int);
 int igObject_Destroy(Obj *);
-void FUN_00460330(A *arg0);
 }
 #define CLEAR(src) { \
     List *l = (src); \
@@ -33,35 +31,45 @@ void FUN_00460330(A *arg0);
         l->data[j] = 0; \
     } \
     l->count = 0; }
-void FUN_00460330(A *arg0) {
-    Obj * volatile sp7C;
-    Obj * sp78;
-    volatile char sp74[1];
-    Hold *a1;
-    List *v1;
-    int var_v1;
-    Obj *t;
+static inline void release(Obj *object) {
+    if (object != 0) {
+        object->references = object->references - 1;
+        if ((object->references & 0x7FFFFF) == 0) {
+            igObject_Destroy(object);
+        }
+    }
+}
+struct ItemRef {
+    Obj *p;
+    ItemRef(Obj *object) : p(object) {}
+    ~ItemRef() { release(p); }
+};
+struct RemovedRef {
+    Obj *p;
+    RemovedRef(const RemovedRef &);
+    ~RemovedRef() {
+        release(p);
+    }
+};
+extern "C" RemovedRef FUN_001c5eb0(Hold *, int);
+struct ItemType {};
+static inline Obj *createItem(ItemType) { return FUN_001361b0(0); }
+extern "C" void FUN_00460330(A *arg0) {
     int s5;
     int n3;
     Obj *s3;
     Mk *s2;
     int s0;
-    Obj *tq;
-    a1 = arg0->f48;
-    v1 = a1->l28;
+    Hold *a1 = arg0->f48;
+    List *v1 = a1->l28;
+    int var_v1;
     if (v1 != 0) {
         var_v1 = v1->count;
     } else {
         var_v1 = 0;
     }
     if (var_v1 > 0) {
-        FUN_001c5eb0((Obj **)&sp78, a1, 0);
-        t = sp78;
-        if (t != 0) {
-            t->references = t->references - 1;
-            t = sp78;
-            if (((unsigned long long)((long long)t->references << 0x29) >> 0x29) == 0) igObject_Destroy(t);
-        }
+        FUN_001c5eb0(a1, 0);
     }
     CLEAR(arg0->f64)
     CLEAR(arg0->f60)
@@ -74,32 +82,20 @@ void FUN_00460330(A *arg0) {
     if (0 < n3) {
         s0 = 0;
         do {
-            sp74[0] = 0;
-            sp7C = FUN_001361b0(0);
+            {
+            ItemRef item(createItem(ItemType()));
             s3 = *(Obj **)((char *)arg0->f60->data + s0);
-            s2 = (Mk *)sp7C;
+            s2 = (Mk *)item.p;
             if (s3 != 0) s3->references = s3->references + 1;
-            tq = s2->f16;
-            if (tq != 0) {
-                tq->references = tq->references - 1;
-                if (((unsigned long long)((long long)tq->references << 0x29) >> 0x29) == 0) igObject_Destroy(tq);
-            }
+            release(s2->f16);
             s2->f16 = s3;
-            ((Ob *)sp7C)->v128(0);
-            ObjectList_AppendRetained((int)arg0->f64, (int)sp7C);
-            t = sp7C;
-            if (t != 0) {
-                t->references = t->references - 1;
-                if (((unsigned long long)((long long)t->references << 0x29) >> 0x29) == 0) igObject_Destroy(t);
+            ((Ob *)item.p)->v128(0);
+            ObjectList_AppendRetained((int)arg0->f64, (int)item.p);
             }
             s5 += 1;
             s0 += 4;
         } while (s5 < n3);
     }
-    t = arg0->f84;
-    if (t != 0) {
-        t->references = t->references - 1;
-        if (((unsigned long long)((long long)t->references << 0x29) >> 0x29) == 0) igObject_Destroy(t);
-    }
+    release(arg0->f84);
     arg0->f84 = 0;
 }

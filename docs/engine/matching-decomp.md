@@ -352,9 +352,8 @@ Retail shapes that only one spelling reproduces:
 * **An inline destructor always emits its out-of-line copy.** Its body must be spelled as retail's copy is, and the
   function needs a `duplicates` row in `unit-objects.json`, which the verifier checks against retail's bytes.
 * **A field reloaded where the compiler would reuse an earlier load (`b52`).** Common-subexpression elimination
-  merges two loads only when their types agree, and a `const` difference counts. So a second read at another type
-  stays a load: `a->list->count` followed by `(*(L * const *)&a->list)->data[i]` reads `list` twice, with no `volatile`.
-  Inline `const` accessors give the same bytes with no cast, and are the likelier original spelling:
+  merges two loads only when their types agree, and a `const` difference counts. Inline `const` accessors are the
+  source shape this comes from:
 
   ```cpp
   L *list() const { return f8; }
@@ -371,11 +370,48 @@ Retail shapes that only one spelling reproduces:
     `static inline int countOf(const List *l) { return l->_count; }` for a shared class. If the accessor on the first
     read gives other bytes, read plainly there and put it on the later read: `n = l->count; ... l->count = countOf(l) + 1`.
   * A `const T *view = p;` declared at function level, where an accessor changes the bytes.
-  * `(*(const int *)&x)` only when none of those matches, as for a value held in a stack-resident struct.
 
   The same difference moves a load the scheduler would otherwise place later: a field declared `unsigned` and read
   plainly, or an accessor returning `unsigned`, loads in source order, where a `const` read does not. Rewriting the
   increment itself as `l->n++`, `+= 1` or `1 + l->n`, or changing `p[0]` to `*p`, does not separate the loads.
+
+  A cast that only retypes the read, such as `*(const int *)&x` or `((const T *)p)->f`, forces the same bytes but is
+  unlikely to be source. It does not make a match: the function keeps its `volatile` and stays `unapproved` until
+  a spelling with a reason turns up.
+* **A local that lives in memory because it is an object (`b52`).** A reference held in a stack slot, reloaded before
+  a store and released at the end of the function, is a smart-pointer object with a real inline destructor. Passing it
+  by `const &` to an inline helper takes its address, which is what keeps it in memory:
+
+  ```cpp
+  struct ObjectRef {
+      T *p;
+      ObjectRef(T *object) : p(object) {}
+      ~ObjectRef() { igObject *o = (igObject *)p; if (o != 0) { /* release */ } }
+      T *get() const { return p; }
+  };
+
+  ObjectRef held(create());
+  setField(owner, held);   // static inline, takes const ObjectRef &
+  ```
+
+  It is the non-empty destructor that keeps the local in memory: without one the compiler holds it in a register, and
+  no `const &` is needed for the reload. Related shapes:
+
+  * A hidden result pointer with `move v0,zero` is a class returned by value, and copy-constructing `*out` is the retain.
+  * A release with no store before it is a retaining constructor followed by dropping the factory's reference.
+  * Frame slots go holders first, then expression temporaries, then the locals of inlined helpers. A returned object
+    used only inside an expression has to be a temporary, not a named local.
+  * Reading `ref.p` inside a helper that takes `const Ref &` settles register ties; going through `get()` there can
+    change them. An `o = get()` destructor shares its load with an earlier `get()`, where `o = p` reloads.
+
+  * A `sb zero,N(sp)` just before a factory call, on a byte nothing reads, is an empty class passed by value, with one
+    temporary for each call: `Ref a(create(0), Tag());`.
+
+  The destructor's out-of-line copy often exists in retail: when the verifier reports one, name it as a `duplicates`
+  row in `unit-objects.json`, with `__dl__FPv` in `externals`. Hundreds of retail copies are word-identical, so the
+  address shows that the bytes exist, not which class a copy belongs to. A helper that only takes an address, a store through
+  `*(void **)&slot`, or a union read at another type forces the same bytes but has no reason to exist, so none of
+  them makes a match.
 * **A value spilled and reloaded before every use.** A local declared `volatile` reproduces this, as
   `RT * volatile sp6C`, where a plain local adds a saved register. Read it once into
   a plain local for the final release so the object stays in `a0`. It is not a finished spelling: the

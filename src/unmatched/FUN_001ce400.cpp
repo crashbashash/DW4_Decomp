@@ -1,10 +1,20 @@
 #include "dw4/igobject_release.h"
+extern "C" void igObject_Destroy(void *);
 struct IniStringObject { int pad0; int _refCount; char *text; };
+static inline void drop(IniStringObject *object) {
+    if (object != 0) {
+        object->_refCount = object->_refCount - 1;
+        if ((object->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(object);
+        }
+    }
+}
 class IniStringRef {
 public:
     IniStringObject *p;
     IniStringRef() {}
     IniStringRef(const IniStringRef &o);
+    ~IniStringRef() { drop(p); }
 };
 class IniPathResolver {
 public:
@@ -34,86 +44,64 @@ extern int DAT_00587048[4];
 extern int DAT_00587060[4];
 extern unsigned char GPR_00554c14;
 }
+struct FileRef {
+    IniFileObject *p;
+    FileRef(IniFileObject *object) : p(object) {}
+    ~FileRef() {
+        IniFileObject *object = p;
+        if (object != 0) {
+            object->_refCount = object->_refCount - 1;
+            if ((object->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
+            }
+        }
+    }
+    IniFileObject *operator->() const { return p; }
+};
+static inline void retain(IniStringObject *object) {
+    if (object != 0) {
+        object->_refCount = object->_refCount + 1;
+    }
+}
+static inline void release(IniStringObject *object) {
+    if (object != 0) {
+        object->_refCount = object->_refCount - 1;
+        if ((object->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(object);
+        }
+    }
+}
+struct StringObjectRef {
+    IniStringObject *p;
+    StringObjectRef(IniStringObject *object) : p(object) { retain(p); }
+    ~StringObjectRef() { release(p); }
+};
 extern "C" int FUN_001ce400(IniStringObject **out, char *path) {
-    IniFileObject *volatile file;
-    IniStringObject *volatile result;
     IniPathResolver *resolver = DAT_00562788[0];
     if (resolver == 0) {
         *out = 0;
-        {
-            IniStringObject *o = *out;
-            if (o != 0) {
-                o->_refCount = o->_refCount + 1;
-            }
-        }
+        retain(*out);
         return;
-    } else {
-        void *allocator;
-        int opened;
-        char *text;
-        allocator = GPR_00554c14 != 0 ? Memory_GetAllocatorBySelector(DAT_00587028[0]) : Memory_GetAllocatorBySelector(DAT_00587060[0]);
-        {
-            IniFileObject *created = FUN_002c4ca0(allocator);
-            IniStringObject *o;
-            result = 0;
-            o = result;
-            file = created;
-            if (o != 0) {
-                o->_refCount = o->_refCount + 1;
-            }
-        }
-        {
-            IniStringRef name = resolver->resolve(path);
-            IniFileObject *f;
-            text = name.p->text;
-            f = file;
-            text = (text == 0) ? DAT_004c22f0[0] : text;
-            opened = f->open(text, DAT_004e47b0);
-            IG_OBJECT_RELEASE(name.p);
-        }
-        if (opened != 0) {
-            void *stringAllocator = Memory_GetAllocatorBySelector(DAT_00587048[0]);
-            {
-                IniStringObject *o = result;
-                if (o != 0) {
-                    o->_refCount = o->_refCount - 1;
-                    if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(o);
-                    }
-                }
-            }
-            result = FUN_002b9500(stringAllocator);
-            {
-                int handle = file->handle;
-                FUN_0030b3c0(result, handle);
-            }
-            file->close();
-        }
-        *out = result;
-        {
-            IniStringObject *o = *out;
-            if (o != 0) {
-                o->_refCount = o->_refCount + 1;
-            }
-        }
-        {
-            IniStringObject *o = result;
-            if (o != 0) {
-                o->_refCount = o->_refCount - 1;
-                if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(o);
-                }
-            }
-        }
-        {
-            IniFileObject *o = file;
-            if (o != 0) {
-                o->_refCount = o->_refCount - 1;
-                if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(o);
-                }
-            }
-        }
-        return 0;
     }
+    void *allocator = GPR_00554c14 != 0 ? Memory_GetAllocatorBySelector(DAT_00587028[0]) : Memory_GetAllocatorBySelector(DAT_00587060[0]);
+    FileRef file(FUN_002c4ca0(allocator));
+    StringObjectRef result(0);
+    int opened;
+    {
+        IniStringRef name = resolver->resolve(path);
+        char *text = name.p->text;
+        IniFileObject *opener = file.p;
+        text = (text == 0) ? DAT_004c22f0[0] : text;
+        opened = opener->open(text, DAT_004e47b0);
+    }
+    if (opened != 0) {
+        void *stringAllocator = Memory_GetAllocatorBySelector(DAT_00587048[0]);
+        release(result.p);
+        result.p = FUN_002b9500(stringAllocator);
+        FUN_0030b3c0(result.p, file->handle);
+        file->close();
+    }
+    *out = result.p;
+    retain(*out);
+    return 0;
 }
