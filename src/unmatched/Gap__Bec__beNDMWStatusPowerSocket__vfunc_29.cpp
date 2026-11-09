@@ -74,8 +74,8 @@ void Gap__Bec__beNDMWStatusPowerSocket__vfunc_29(beNDMWStatusPowerSocket *arg0) 
     s0 = (igIntList *)win.p->_kindList;
     s1 = s0->_count;
     if (s1 < s0->_capacity) {
-        /* matching construct: volatile reload of the count before the increment */
-        s0->_count = ((volatile igIntList *)s0)->_count + 1;
+        /* matching construct: const reload of the count before the increment */
+        s0->_count = ((const igIntList *)s0)->_count + 1;
     } else {
         List_Resize(s0, s1 + 1, 4);
     }

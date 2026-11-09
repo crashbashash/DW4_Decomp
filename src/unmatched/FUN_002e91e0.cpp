@@ -18,7 +18,7 @@ struct NameHeader { int size; int count; };
 struct IgbNameReader { char p0[104]; IgbStream *stream; char p108[60]; unsigned char swapped; char p169[35]; IgbSwapper *swapper; char p208[72]; IgbPool *pool; char p284[20]; IgbNameList *names; };
 static inline void addName(IgbNameList *l, const int &v) {
     int idx = l->count;
-    if (l->cap > idx) { ++*(volatile int *)&l->count; } else { List_Resize(l, idx + 1, 4); }
+    if (l->cap > idx) { l->count = *(const int *)&l->count + 1; } else { List_Resize(l, idx + 1, 4); }
     l->data[idx] = v;
 }
 extern "C" igResult FUN_002e91e0(IgbNameReader *self) {
@@ -47,7 +47,7 @@ extern "C" igResult FUN_002e91e0(IgbNameReader *self) {
     }
     for (; i < 46; i++) {
         int idx; IgbNameList *l; l = self->names; idx = l->count;
-        if (l->cap > idx) { ++*(volatile int *)&l->count; } else { List_Resize(l, idx + 1, 4); }
+        if (l->cap > idx) { l->count = *(const int *)&l->count + 1; } else { List_Resize(l, idx + 1, 4); }
         l->data[idx] = DAT_004c2140[0];
     }
     self->pool->release(buf);

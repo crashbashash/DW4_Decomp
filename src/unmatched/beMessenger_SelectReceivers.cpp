@@ -176,9 +176,9 @@ extern "C" void beMessenger_SelectReceivers(Messenger *self, char *category, cha
                     src = &LDATA((List *)g->_ramNoList)[k];
                     l = (List *)work->_findRamNoList;
                     c = l->_count;
-                    /* The volatile read keeps the count increment from
+                    /* The const read keeps the count increment from
                      * being folded into the earlier load. */
-                    if (c < l->_capacity) l->_count = ((volatile List *)l)->_count + 1;
+                    if (c < l->_capacity) l->_count = ((const List *)l)->_count + 1;
                     else List_Resize(l, c + 1, 4);
                     LDATA(l)[c] = *src;
                     ObjectList_AppendRetained((void *)work->_findRamList, LDATA((List *)g->_ramList)[k]);

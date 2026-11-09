@@ -1,5 +1,5 @@
 /* Bool flags use daddiu, ram->_ramNo and ram->_svSeqName are hoisted into locals before the NAME
- * ternary, switch(st3) has case 0 and default, ram->_st2 is re-read volatile in the `< 16` test,
+ * ternary, switch(st3) has case 0 and default, ram->_st2 is re-read const in the `< 16` test,
  * info is declared first, the on-demand data list is held by an ObjectRef, and the decide-list
  * byte test uses an unsigned index. */
 #include "dw4/reflected.h"
@@ -269,7 +269,7 @@ extern "C" void Gap__Bec__beSelectCtrl__vfunc_31(beSelectCtrl *self, beBaseInfoR
             }
             break;
         case 2:
-            if (*(volatile int *)&ram->_st2 < 0x10) {
+            if (*(const int *)&ram->_st2 < 0x10) {
                 ram->_st2 = ram->_st2 + 1;
                 ram->_st3 = 0;
                 return;

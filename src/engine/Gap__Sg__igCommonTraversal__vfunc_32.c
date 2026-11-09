@@ -7,7 +7,7 @@ void Gap__Sg__igCommonTraversal__vfunc_32(void *arg0, long long arg1) {
     temp_s1 = *(struct L **)((char *)arg0 + 240);
     temp_s2 = temp_s1->size;
     if (temp_s2 < temp_s1->cap) {
-        *(volatile int *)&temp_s1->size += 1;
+        temp_s1->size = *(const int *)&temp_s1->size + 1;
     } else {
         List_Resize(temp_s1, temp_s2 + 1, 8);
     }

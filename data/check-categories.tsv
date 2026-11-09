@@ -1148,7 +1148,7 @@
 0013b570	igAlphaFunctionAttr_Register	match	-
 0013b5e0	thunk_igAlphaFunctionAttr_GetMetaObject	match	-
 0013b5f0	igAlphaFunctionAttr_InitFields	match	-
-0013b6a0	Gap__Attrs__igAlphaFunctionAttr__vfunc_24	unapproved	unapproved: 1 volatile without an approval row
+0013b6a0	Gap__Attrs__igAlphaFunctionAttr__vfunc_24	match	-
 0013b6f0	Gap__Attrs__igAlphaFunctionAttr__vfunc_26	match	-
 0013b770	Gap__Attrs__igAlphaFunctionAttr__vfunc_33	match	-
 0013b780	Gap__Attrs__igAlphaFunctionAttr__vfunc_32	match	-
@@ -1211,7 +1211,7 @@
 0013cc20	Gap__Attrs__igDepthWriteStateAttr__vfunc_32	match	-
 0013cc30	Gap__Attrs__igDisplayListAttr__vfunc_24	match	-
 0013cca0	Gap__Attrs__igDisplayListAttr__vfunc_29	match	-
-0013cd20	Gap__Attrs__igFogAttr__vfunc_24	unapproved	unapproved: 1 volatile without an approval row
+0013cd20	Gap__Attrs__igFogAttr__vfunc_24	match	-
 0013cd90	Gap__Attrs__igFogAttr__vfunc_26	match	-
 0013ce50	Gap__Attrs__igFogStateAttr__vfunc_24	match	-
 0013ce60	Gap__Attrs__igFogStateAttr__vfunc_26	match	-
@@ -1260,7 +1260,7 @@
 0013f040	Gap__Attrs__igLightingStateAttr__vfunc_26	match	-
 0013f090	Gap__Attrs__igLightingStateAttr__vfunc_32	match	-
 0013f0a0	Gap__Attrs__igMaterialAttr__vfunc_32	match	-
-0013f0b0	Gap__Attrs__igMaterialAttr__vfunc_33	unapproved	unapproved: 2 volatile without an approval row
+0013f0b0	Gap__Attrs__igMaterialAttr__vfunc_33	match	-
 0013f1c0	Gap__Attrs__igMaterialAttr__vfunc_36	match	-
 0013f3e0	Gap__Attrs__igMaterialAttr__vfunc_34	match	-
 0013f4f0	Gap__Attrs__igMaterialAttr__vfunc_24	match	-
@@ -1334,7 +1334,7 @@
 00140e80	Gap__Attrs__igTextureBindAttr__vfunc_25	match	-
 00140e90	FUN_00140e90	match	-
 00140f40	FUN_00140f40	match	-
-00140f90	Gap__Attrs__igTextureCoordSourceAttr__vfunc_24	unapproved	unapproved: 1 volatile without an approval row
+00140f90	Gap__Attrs__igTextureCoordSourceAttr__vfunc_24	match	-
 00140fd0	FUN_00140fd0	match	-
 00140fe0	Gap__Attrs__igTextureCoordSourceAttr__vfunc_17	match	-
 00141010	Gap__Attrs__igTextureCoordSourceAttr__vfunc_25	match	-
@@ -2199,7 +2199,7 @@
 00154a80	Gap__Gfx__igClut__vfunc_24	match	-
 00154b40	FUN_00154b40	match	-
 00154b80	FUN_00154b80	match	-
-00154c90	FUN_00154c90	unapproved	unapproved: 1 volatile without an approval row
+00154c90	FUN_00154c90	match	-
 00154d40	FUN_00154d40	match	-
 00154e00	Gap__Gfx__igClut__vfunc_12	match	-
 00154e40	FUN_00154e40	match	-
@@ -2250,7 +2250,7 @@
 0015a280	FUN_0015a280	match	-
 0015a300	FUN_0015a300	match	-
 0015a380	FUN_0015a380	match	-
-0015a420	FUN_0015a420	unapproved	unapproved: 1 volatile without an approval row
+0015a420	FUN_0015a420	match	-
 0015a500	FUN_0015a500	match	-
 0015a510	FUN_0015a510	match	-
 0015a520	FUN_0015a520	match	-
@@ -2288,10 +2288,10 @@
 0015c790	Gap__Bec__ParticleArray__vfunc_28	match	-
 0015c830	Gap__Bec__ParticleArray__vfunc_30	match	-
 0015c840	Gap__Bec__ParticleArray__vfunc_29	match	-
-0015c850	Gap__Bec__ParticleArray__vfunc_10	unapproved	unapproved: 1 volatile without an approval row
+0015c850	Gap__Bec__ParticleArray__vfunc_10	match	-
 0015c8f0	Gap__Gfx__igParticleArray__vfunc_13	match	-
 0015c900	Gap__Bec__ParticleArray__vfunc_15	match	-
-0015ca40	Gap__Bec__ParticleArray__vfunc_36	unapproved	unapproved: 1 volatile without an approval row
+0015ca40	Gap__Bec__ParticleArray__vfunc_36	match	-
 0015cb50	FUN_0015cb50	match	-
 0015cb60	FUN_0015cb60	match	-
 0015ce90	FUN_0015ce90	match	-
@@ -2506,7 +2506,7 @@
 0016caf0	Gap__Gfx__igPsx2VisualContext__vfunc_195	match	-
 0016cb40	Gap__Gfx__igPsx2VisualContext__vfunc_196	match	-
 0016cc50	FUN_0016cc50	match	-
-0016cc60	FUN_0016cc60	unapproved	unapproved: 1 volatile without an approval row
+0016cc60	FUN_0016cc60	match	-
 0016cd10	FUN_0016cd10	match	-
 0016cd40	Gap__Gfx__igPsx2VisualContext__vfunc_27	match	-
 0016cdd0	FUN_0016cdd0	match	-
@@ -2609,13 +2609,13 @@
 00172330	FUN_00172330	match	-
 00172370	Gap__Gfx__igPsx2VisualContext__vfunc_199	match	-
 00172550	Gap__Gfx__igPsx2VisualContext__vfunc_200	match	-
-00172600	Gap__Gfx__igPsx2VisualContext__vfunc_201	unapproved	unapproved: 1 volatile without an approval row
+00172600	Gap__Gfx__igPsx2VisualContext__vfunc_201	match	-
 00172910	Gap__Gfx__igPsx2VisualContext__vfunc_202	match	-
-00172b00	Gap__Gfx__igPsx2VisualContext__vfunc_203	unapproved	unapproved: 4 volatile without an approval row
+00172b00	Gap__Gfx__igPsx2VisualContext__vfunc_203	match	-
 00173900	Gap__Gfx__igPsx2VisualContext__vfunc_206	match	-
 00173b30	Gap__Gfx__igPsx2VisualContext__vfunc_207	match	-
 00173d60	Gap__Gfx__igPsx2VisualContext__vfunc_208	match	-
-00173ed0	FUN_00173ed0	unapproved	unapproved: 1 volatile without an approval row
+00173ed0	FUN_00173ed0	match	-
 00173fd0	FUN_00173fd0	match	-
 00174030	Gap__Gfx__igPsx2VisualContext__vfunc_209	match	-
 00174090	FUN_00174090	match	-
@@ -2786,7 +2786,7 @@
 0017d8f0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_52	match	-
 0017d910	Gap__Gfx__igPsx2VertexArray1_1__vfunc_57	match	-
 0017da20	Gap__Gfx__igPsx2VertexArray1_1__vfunc_58	match	-
-0017da90	Gap__Gfx__igPsx2VertexArray1_1__vfunc_27	unapproved	unapproved: 1 volatile without an approval row
+0017da90	Gap__Gfx__igPsx2VertexArray1_1__vfunc_27	match	jump table 0x4e0820: 10 entries, 40 bytes, matches retail
 0017dd20	Gap__Gfx__igPsx2VertexArray1_1__vfunc_28	match	-
 0017dd30	Gap__Gfx__igPsx2VertexArray1_1__vfunc_19	match	-
 0017dde0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_20	match	-
@@ -4330,7 +4330,7 @@
 001ab6c0	FUN_001ab6c0	match	-
 001ab770	FUN_001ab770	match	-
 001ab8b0	FUN_001ab8b0	match	-
-001ab920	FUN_001ab920	unapproved	unapproved: 1 volatile without an approval row
+001ab920	FUN_001ab920	match	-
 001ab990	Gap__Sg__igTransformSequence1_5__vfunc_68	match	-
 001aba00	Gap__Sg__igTransformSequence1_5__vfunc_50	match	-
 001aba30	Gap__Sg__igTransformSequence1_5__vfunc_67	match	-
@@ -4383,7 +4383,7 @@
 001af7e0	Gap__Sg__igAttrSet__vfunc_31	match	-
 001af860	FUN_001af860	match	-
 001af890	Gap__Sg__igAttrStackManager__vfunc_23	match	-
-001af920	Gap__Sg__igAttrStackManager__vfunc_09	unapproved	unapproved: 1 volatile without an approval row
+001af920	Gap__Sg__igAttrStackManager__vfunc_09	match	-
 001afa30	Gap__Sg__igAttrStackManager__vfunc_10	match	-
 001afb00	FUN_001afb00	match	-
 001afb60	FUN_001afb60	match	-
@@ -4401,7 +4401,7 @@
 001b1250	FUN_001b1250	match	-
 001b12f0	FUN_001b12f0	unapproved	unapproved: 2 volatile without an approval row
 001b13d0	FUN_001b13d0	match	-
-001b1490	FUN_001b1490	unapproved	unapproved: 2 volatile without an approval row
+001b1490	FUN_001b1490	match	-
 001b1cf0	FUN_001b1cf0	match	jump table 0x4e4540: 17 entries, 68 bytes, matches retail
 001b1dc0	FUN_001b1dc0	match	jump table 0x4e4590: 17 entries, 68 bytes, matches retail
 001b1e50	FUN_001b1e50	match	-
@@ -4443,12 +4443,12 @@
 001b7330	FUN_001b7330	match	-
 001b73d0	FUN_001b73d0	match	-
 001b73e0	Gap__Sg__igCommonTraversal__vfunc_23	unapproved	unapproved: 2 volatile without an approval row
-001b75b0	Gap__Sg__igCommonTraversal__vfunc_32	unapproved	unapproved: 1 volatile without an approval row
+001b75b0	Gap__Sg__igCommonTraversal__vfunc_32	match	-
 001b7630	Gap__Sg__igCommonTraversal__vfunc_24	match	-
 001b7720	Gap__Sg__igCommonTraversal__vfunc_33	match	-
 001b7740	FUN_001b7740	match	-
 001b7770	FUN_001b7770	match	-
-001b7920	FUN_001b7920	unapproved	unapproved: 1 volatile without an approval row
+001b7920	FUN_001b7920	match	-
 001b7af0	FUN_001b7af0	match	-
 001b7b90	FUN_001b7b90	match	-
 001b7c70	FUN_001b7c70	match	-
@@ -4460,7 +4460,7 @@
 001b89b0	FUN_001b89b0	match	-
 001b8a00	FUN_001b8a00	match	-
 001b8a10	FUN_001b8a10	match	-
-001b8a20	FUN_001b8a20	unapproved	unapproved: 3 volatile without an approval row
+001b8a20	FUN_001b8a20	match	-
 001b8ba0	FUN_001b8ba0	match	-
 001b8c80	FUN_001b8c80	match	-
 001b8cf0	FUN_001b8cf0	match	-
@@ -4500,7 +4500,7 @@
 001bba70	Gap__Sg__igCompileTraversal__vfunc_24	match	-
 001bbae0	FUN_001bbae0	match	-
 001bc050	FUN_001bc050	unapproved	unapproved: 2 volatile without an approval row
-001bc0e0	FUN_001bc0e0	unapproved	unapproved: 1 volatile without an approval row
+001bc0e0	FUN_001bc0e0	match	-
 001bcd60	FUN_001bcd60	match	-
 001bcd70	FUN_001bcd70	match	-
 001bcd80	FUN_001bcd80	match	-
@@ -4516,7 +4516,7 @@
 001bd0e0	FUN_001bd0e0	match	-
 001bd150	FUN_001bd150	match	-
 001bd160	FUN_001bd160	match	-
-001bd170	FUN_001bd170	unapproved	unapproved: 1 volatile without an approval row
+001bd170	FUN_001bd170	match	-
 001bd6b0	FUN_001bd6b0	unapproved	unapproved: 3 volatile without an approval row
 001bd890	FUN_001bd890	unapproved	unapproved: 2 volatile without an approval row
 001bf020	FUN_001bf020	match	-
@@ -4551,7 +4551,7 @@
 001c0e50	Gap__Sg__igEnbayaAnimationSource__vfunc_28	match	-
 001c0e70	Gap__Sg__igEnbayaAnimationSource__vfunc_17	match	-
 001c0ea0	FUN_001c0ea0	match	-
-001c0f00	FUN_001c0f00	unapproved	unapproved: 1 volatile without an approval row
+001c0f00	FUN_001c0f00	match	-
 001c10e0	FUN_001c10e0	match	-
 001c10f0	FUN_001c10f0	match	-
 001c1100	FUN_001c1100	match	-
@@ -4563,7 +4563,7 @@
 001c12d0	Gap__Sg__igEnbayaContextPool__vfunc_13	match	-
 001c1450	Gap__Sg__igEnbayaContextPool__vfunc_04	match	-
 001c1560	FUN_001c1560	match	-
-001c17e0	FUN_001c17e0	unapproved	unapproved: 1 volatile without an approval row
+001c17e0	FUN_001c17e0	match	DEFERRED duplicate 0x2e2300 __dt__14PoolListHolderFv 68B (compared under the profile of its retail unit)
 001c1a80	FUN_001c1a80	match	-
 001c1b50	Gap__Sg__igEnbayaTransformSource__vfunc_23	match	-
 001c1b80	Gap__Sg__igEnbayaTransformSource__vfunc_24	match	-
@@ -4615,7 +4615,7 @@
 001c5740	FUN_001c5740	match	-
 001c5790	FUN_001c5790	match	-
 001c5870	FUN_001c5870	match	-
-001c58c0	FUN_001c58c0	unapproved	unapproved: 1 volatile without an approval row
+001c58c0	FUN_001c58c0	match	-
 001c5990	FUN_001c5990	match	-
 001c59b0	FUN_001c59b0	match	-
 001c59e0	FUN_001c59e0	match	-
@@ -4626,8 +4626,8 @@
 001c5d10	FUN_001c5d10	match	-
 001c5d70	FUN_001c5d70	match	-
 001c5e20	FUN_001c5e20	match	-
-001c5eb0	FUN_001c5eb0	unapproved	unapproved: 1 volatile without an approval row
-001c6050	FUN_001c6050	unapproved	unapproved: 1 volatile without an approval row
+001c5eb0	FUN_001c5eb0	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
+001c6050	FUN_001c6050	match	-
 001c6110	FUN_001c6110	match	-
 001c6230	FUN_001c6230	match	-
 001c6260	Gap__Sg__igGroup__vfunc_26	match	-
@@ -4674,7 +4674,7 @@
 001ce740	FUN_001ce740	match	-
 001ce790	FUN_001ce790	match	-
 001ce890	Gap__Bec__beHitLandModelTraversal__vfunc_11	match	-
-001ce970	FUN_001ce970	unapproved	unapproved: 1 volatile without an approval row
+001ce970	FUN_001ce970	match	-
 001cea90	Gap__Bec__beHitLandModelTraversal__vfunc_21	match	-
 001ceaa0	Gap__Bec__beHitLandModelTraversal__vfunc_22	match	-
 001ceab0	FUN_001ceab0	match	-
@@ -4696,7 +4696,7 @@
 001d0890	Gap__Sg__igLod__vfunc_27	match	-
 001d08d0	FUN_001d08d0	unapproved	unapproved: 3 volatile without an approval row
 001d1550	FUN_001d1550	match	-
-001d15a0	FUN_001d15a0	unapproved	unapproved: 1 volatile without an approval row
+001d15a0	FUN_001d15a0	match	-
 001d1760	FUN_001d1760	match	-
 001d17a0	FUN_001d17a0	match	-
 001d18a0	FUN_001d18a0	match	-
@@ -4708,7 +4708,7 @@
 001d3110	FUN_001d3110	match	-
 001d3190	FUN_001d3190	match	-
 001d31b0	FUN_001d31b0	match	-
-001d31d0	FUN_001d31d0	unapproved	unapproved: 1 volatile without an approval row
+001d31d0	FUN_001d31d0	match	-
 001d3250	Gap__Core__igObject__vfunc_32	unapproved	unapproved: 2 volatile without an approval row
 001d32f0	FUN_001d32f0	match	-
 001d3390	Gap__Core__igObject__vfunc_08__001d3390	match	-
@@ -4796,12 +4796,12 @@
 001d9a30	FUN_001d9a30	match	-
 001d9ac0	FUN_001d9ac0	match	-
 001d9bb0	FUN_001d9bb0	match	-
-001da6e0	FUN_001da6e0	unapproved	unapproved: 2 volatile without an approval row
-001da790	FUN_001da790	unapproved	unapproved: 1 volatile without an approval row
-001da8b0	Gap__Sg__igSorter__vfunc_09	unapproved	unapproved: 1 volatile without an approval row
-001db500	FUN_001db500	unapproved	unapproved: 1 volatile without an approval row
+001da6e0	FUN_001da6e0	match	-
+001da790	FUN_001da790	match	-
+001da8b0	Gap__Sg__igSorter__vfunc_09	match	-
+001db500	FUN_001db500	match	-
 001db5d0	Gap__Sg__igSorter__vfunc_24	match	-
-001dc400	FUN_001dc400	unapproved	unapproved: 1 volatile without an approval row
+001dc400	FUN_001dc400	match	-
 001dc500	FUN_001dc500	match	-
 001dc820	FUN_001dc820	match	-
 001dc870	FUN_001dc870	match	-
@@ -4810,7 +4810,7 @@
 001dc8e0	FUN_001dc8e0	match	-
 001dc940	Gap__Sg__igSwitch__vfunc_35	match	-
 001dc9a0	FUN_001dc9a0	match	-
-001dca40	FUN_001dca40	unapproved	unapproved: 1 volatile without an approval row
+001dca40	FUN_001dca40	match	-
 001dcb80	FUN_001dcb80	unapproved	unapproved: 1 volatile without an approval row
 001dcc80	FUN_001dcc80	match	-
 001dce70	FUN_001dce70	match	-
@@ -4927,7 +4927,7 @@
 001e31d0	Gap__Sg__igGroup__vfunc_22	match	-
 001e31e0	Gap__Sg__igFrustCullTraversal__vfunc_22	match	-
 001e31f0	Gap__Sg__igCommonTraversal__vfunc_29	match	-
-001e3270	Gap__Sg__igCommonTraversal__vfunc_27	unapproved	unapproved: 1 volatile without an approval row
+001e3270	Gap__Sg__igCommonTraversal__vfunc_27	match	-
 001e32b0	Gap__Sg__igEnbayaTransformSource__vfunc_22	match	-
 001e32c0	Gap__Sg__igEnbayaContextPool__vfunc_22	match	-
 001e32d0	Gap__Sg__igEnbayaAnimationState__vfunc_22	match	-
@@ -5194,8 +5194,8 @@
 001e67a0	FUN_001e67a0	match	-
 001e6820	FUN_001e6820	match	-
 001e68a0	FUN_001e68a0	match	-
-001e68e0	FUN_001e68e0	unapproved	unapproved: 2 volatile without an approval row
-001e69e0	FUN_001e69e0	unapproved	unapproved: 1 volatile without an approval row
+001e68e0	FUN_001e68e0	match	-
+001e69e0	FUN_001e69e0	match	-
 001e6ae0	FUN_001e6ae0	match	-
 001e6b00	FUN_001e6b00	match	-
 001e6b80	Gap__igMersenneTwisterRandomNumber__vfunc_13	match	-
@@ -5310,7 +5310,7 @@
 001f0090	FUN_001f0090	match	-
 001f0310	FUN_001f0310	match	-
 001f0390	FUN_001f0390	match	-
-001f03a0	FUN_001f03a0	unapproved	unapproved: 1 volatile without an approval row
+001f03a0	FUN_001f03a0	match	-
 001f0410	FUN_001f0410	match	-
 001f0490	FUN_001f0490	match	-
 001f04b0	FUN_001f04b0	match	-
@@ -5372,7 +5372,7 @@
 001fc350	FUN_001fc350	match	-
 001fc430	FUN_001fc430	match	-
 001fc510	FUN_001fc510	match	-
-001fc680	FUN_001fc680	unapproved	unapproved: 1 volatile without an approval row
+001fc680	FUN_001fc680	match	-
 001fc770	FUN_001fc770	match	-
 001fca50	FUN_001fca50	match	-
 001fd5a0	FUN_001fd5a0	match	-
@@ -5426,7 +5426,7 @@
 0020b280	FUN_0020b280	match	-
 0020b650	FUN_0020b650	unapproved	unapproved: 1 volatile without an approval row
 0020b7f0	FUN_0020b7f0	match	-
-0020b9d0	FUN_0020b9d0	unapproved	unapproved: 1 volatile without an approval row
+0020b9d0	FUN_0020b9d0	match	-
 0020c7b0	FUN_0020c7b0	match	-
 0020c7f0	FUN_0020c7f0	match	-
 0020c800	FUN_0020c800	unapproved	unapproved: 1 volatile without an approval row
@@ -5826,7 +5826,7 @@
 0022a9e0	FUN_0022a9e0	match	-
 0022aa60	FUN_0022aa60	match	-
 0022aab0	FUN_0022aab0	match	-
-0022aac0	FUN_0022aac0	unapproved	unapproved: 1 volatile without an approval row
+0022aac0	FUN_0022aac0	match	-
 0022ab90	FUN_0022ab90	match	-
 0022ac00	FUN_0022ac00	match	-
 0022ac40	FUN_0022ac40	match	-
@@ -5914,7 +5914,7 @@
 0022e0a0	FUN_0022e0a0	match	-
 0022e160	FUN_0022e160	match	-
 0022e220	Gap__igItemDataBaseList__vfunc_18	match	-
-0022e2a0	Gap__igItemDataBaseList__vfunc_04	unapproved	unapproved: 1 volatile without an approval row
+0022e2a0	Gap__igItemDataBaseList__vfunc_04	match	-
 0022e3c0	FUN_0022e3c0	match	-
 0022e4b8	__divdi3	match	-
 0022eb50	__moddi3	match	-
@@ -6133,7 +6133,7 @@
 00237730	FUN_00237730	match	-
 002377c0	FUN_002377c0	match	-
 00237940	Gap__Insight__igMessageDefaultReceiver__vfunc_23	match	-
-00237990	FUN_00237990	unapproved	unapproved: 1 volatile without an approval row
+00237990	FUN_00237990	match	-
 00237b50	Gap__Insight__igFilterMessageDispatcher__vfunc_28	match	-
 00237c40	Gap__Insight__igMessageFilter__vfunc_23	match	-
 00237ce0	Gap__Insight__igFilterMessageDispatcher__vfunc_24	match	-
@@ -6875,7 +6875,7 @@
 00259bf0	Gap__Core__igPsx2Thread__vfunc_39	match	exception index 0x54713c: matches retail (packed)
 00259d10	FUN_00259d10	match	exception index 0x547154: matches retail (packed)
 00259d40	FUN_00259d40	match	exception index 0x547160: matches retail (packed)
-00259dc0	FUN_00259dc0	unapproved	unapproved: 2 volatile without an approval row
+00259dc0	FUN_00259dc0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00259f80	FUN_00259f80	match	-
 00259f90	FUN_00259f90	match	exception index 0x547178: matches retail (packed)
 0025a070	FUN_0025a070	code-only	exception metadata: retail record at 0x547184 is table 0x542b98 84 bytes, the object emits 0 .exception section(s); orphan 12 bytes
@@ -10549,7 +10549,7 @@
 002d6cf0	List_RemoveWordAt	match	-
 002d6d70	List_BinarySearchWords	match	-
 002d6e60	FUN_002d6e60	match	-
-002d7090	FUN_002d7090	unapproved	unapproved: 1 volatile without an approval row
+002d7090	FUN_002d7090	match	-
 002d7130	FUN_002d7130	unapproved	unapproved: 1 volatile without an approval row
 002d7690	FUN_002d7690	match	-
 002d7750	FUN_002d7750	match	-
@@ -10625,7 +10625,7 @@
 002da1c0	FUN_002da1c0	unapproved	unapproved: 3 volatile without an approval row
 002da710	FUN_002da710	match	-
 002da770	FUN_002da770	match	-
-002da780	FUN_002da780	unapproved	unapproved: 1 volatile without an approval row
+002da780	FUN_002da780	match	-
 002da850	FUN_002da850	match	-
 002da940	FUN_002da940	match	-
 002da990	FUN_002da990	match	DEFERRED duplicate 0x3d9bd0 __dt__3RefFv 128B (compared under the profile of its retail unit)
@@ -10645,8 +10645,8 @@
 002db540	FUN_002db540	match	-
 002db5e0	FUN_002db5e0	match	-
 002db690	FUN_002db690	match	-
-002db750	FUN_002db750	unapproved	unapproved: 1 volatile without an approval row
-002dba50	FUN_002dba50	unapproved	unapproved: 1 volatile without an approval row
+002db750	FUN_002db750	match	-
+002dba50	FUN_002dba50	match	-
 002dbc10	FUN_002dbc10	match	-
 002dbca0	FUN_002dbca0	match	-
 002dbd10	FUN_002dbd10	unapproved	unapproved: 1 volatile without an approval row
@@ -10681,7 +10681,7 @@
 002dcc60	FUN_002dcc60	unapproved	unapproved: 2 volatile without an approval row
 002dcd70	FUN_002dcd70	unapproved	unapproved: 2 volatile without an approval row
 002dce80	Gap__Core__igEventTracker__vfunc_23	match	-
-002dd000	Gap__Core__igEventTracker__vfunc_24	unapproved	unapproved: 1 volatile without an approval row
+002dd000	Gap__Core__igEventTracker__vfunc_24	match	-
 002dd0f0	Gap__Core__igEventTracker__vfunc_25	unapproved	unapproved: 1 volatile without an approval row
 002df050	Gap__Core__igEventTracker__vfunc_28	match	-
 002df0c0	Gap__Core__igEventTracker__vfunc_29	match	-
@@ -10703,7 +10703,7 @@
 002e18f0	Gap__Core__igEventTracker__vfunc_41	match	-
 002e1a40	Gap__Core__igEventTracker__vfunc_42	match	-
 002e1bb0	Gap__Core__igEventTracker__vfunc_44	unapproved	unapproved: 3 volatile without an approval row
-002e1df0	Gap__Core__igEventTracker__vfunc_45	unapproved	unapproved: 1 volatile without an approval row
+002e1df0	Gap__Core__igEventTracker__vfunc_45	match	-
 002e1f50	Gap__Core__igEventTracker__vfunc_13	match	-
 002e2130	FUN_002e2130	match	-
 002e2160	FUN_002e2160	match	-
@@ -10766,7 +10766,7 @@
 002e4e60	FUN_002e4e60	match	-
 002e5110	FUN_002e5110	match	-
 002e53f0	FUN_002e53f0	match	-
-002e54e0	FUN_002e54e0	unapproved	unapproved: 1 volatile without an approval row
+002e54e0	FUN_002e54e0	match	-
 002e5590	FUN_002e5590	match	-
 002e56f0	FUN_002e56f0	match	-
 002e5950	FUN_002e5950	match	-
@@ -10787,7 +10787,7 @@
 002e7ed0	FUN_002e7ed0	match	-
 002e7f20	FUN_002e7f20	match	-
 002e8170	Gap__Core__igIGBFile__vfunc_13	match	-
-002e82a0	FUN_002e82a0	unapproved	unapproved: 1 volatile without an approval row
+002e82a0	FUN_002e82a0	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
 002e8670	FUN_002e8670	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
 002e8880	FUN_002e8880	match	-
 002e8a10	FUN_002e8a10	match	-
@@ -10795,7 +10795,7 @@
 002e8c40	Gap__Core__igIGBFile__vfunc_04	match	-
 002e8d40	FUN_002e8d40	match	-
 002e8e50	FUN_002e8e50	match	-
-002e91e0	FUN_002e91e0	unapproved	unapproved: 2 volatile without an approval row
+002e91e0	FUN_002e91e0	match	-
 002e9470	FUN_002e9470	match	-
 002e94b0	FUN_002e94b0	match	-
 002e9560	FUN_002e9560	match	-
@@ -10881,13 +10881,13 @@
 002ec7d0	Gap__Core__igMediaFile__vfunc_29	match	-
 002ec900	Gap__Core__igMediaFile__vfunc_32	match	-
 002ecc50	Gap__Core__igMediaFile__vfunc_31	match	-
-002ecd30	Gap__Core__igMediaFile__vfunc_33	unapproved	unapproved: 1 volatile without an approval row
+002ecd30	Gap__Core__igMediaFile__vfunc_33	match	-
 002ecdc0	Gap__Core__igMediaFile__vfunc_34	match	-
 002ece20	Gap__Core__igMediaFile__vfunc_35	match	-
 002ecea0	Gap__Core__igMediaFile__vfunc_36	match	-
 002ecf50	Gap__Core__igMediaFile__vfunc_37	match	-
 002ed000	Gap__Core__igMediaFile__vfunc_38	match	-
-002ed170	Gap__Core__igMediaFile__vfunc_39	unapproved	unapproved: 1 volatile without an approval row
+002ed170	Gap__Core__igMediaFile__vfunc_39	match	-
 002ed1c0	Memory_AllocateBufferViaSharedTail	match	-
 002ed200	Memory_AllocateDefaultBuffer	match	-
 002ed260	FUN_002ed260	match	-
@@ -11124,7 +11124,7 @@
 002fb9a0	igMemoryRefMetaField_CopyConstruct	match	-
 002fba20	igMemoryRefMetaField_Destruct	match	-
 002fba30	igMetaEnum_GetValueByName	match	-
-002fbb40	igMetaEnum_GetNameByValue	unapproved	unapproved: 1 volatile without an approval row
+002fbb40	igMetaEnum_GetNameByValue	match	-
 002fbbc0	igMetaEnum_GetNameCount	match	-
 002fbbd0	igMetaEnum_GetNameAt	match	-
 002fbc20	igMetaEnum_GetValueAt	match	-
@@ -11603,7 +11603,7 @@
 0030df60	Gap__Core__igSymbolTable__vfunc_28	match	-
 0030e140	Gap__Core__igSymbolTable__vfunc_30	match	-
 0030e190	Gap__Core__igSymbolTable__vfunc_31	match	-
-0030e2a0	Gap__Core__igSymbolTable__vfunc_32	unapproved	unapproved: 1 volatile without an approval row
+0030e2a0	Gap__Core__igSymbolTable__vfunc_32	match	-
 0030e430	FUN_0030e430	match	-
 0030e450	Gap__Core__igPsx2ThreadManager__vfunc_11	match	-
 0030e480	FUN_0030e480	unapproved	unapproved: 1 volatile without an approval row
@@ -11964,9 +11964,9 @@
 0032ae00	FUN_0032ae00	match	-
 0032ae70	FUN_0032ae70	match	-
 0032aea0	FUN_0032aea0	match	-
-0032aed0	Gap__Core__igPsx2CallStackTracer__vfunc_24	unapproved	unapproved: 1 volatile without an approval row
+0032aed0	Gap__Core__igPsx2CallStackTracer__vfunc_24	match	-
 0032af40	thunk_Gap__Core__igCallStackTracer__vfunc_25	match	-
-0032af50	Gap__Core__igPsx2CallStackTracer__vfunc_31	unapproved	unapproved: 1 volatile without an approval row
+0032af50	Gap__Core__igPsx2CallStackTracer__vfunc_31	match	-
 0032afc0	Gap__Core__igPsx2File__vfunc_23	unapproved	unapproved: 1 volatile without an approval row
 0032b2e0	Gap__Core__igPsx2File__vfunc_24	match	-
 0032b350	Gap__Core__igPsx2File__vfunc_25	match	-
@@ -12053,12 +12053,12 @@
 0032f9a0	Gap__Core__igPsx2Thread__vfunc_25	match	-
 0032fa00	Gap__Core__igPsx2Thread__vfunc_26	match	-
 0032fa30	Gap__Core__igPsx2Thread__vfunc_29	match	-
-0032fa60	Gap__Core__igPsx2Thread__vfunc_44	unapproved	unapproved: 1 volatile without an approval row
+0032fa60	Gap__Core__igPsx2Thread__vfunc_44	match	-
 0032fba0	Gap__Core__igPsx2Thread__vfunc_27	match	-
 0032fbf0	Gap__Core__igPsx2Thread__vfunc_46	match	-
 0032fc40	Gap__Core__igPsx2Thread__vfunc_48	match	-
 0032fc90	Gap__Core__igPsx2Thread__vfunc_50	match	-
-0032fd50	Gap__Core__igPsx2Thread__vfunc_45	unapproved	unapproved: 1 volatile without an approval row
+0032fd50	Gap__Core__igPsx2Thread__vfunc_45	match	-
 0032fe90	Gap__Core__igPsx2Thread__vfunc_28	match	-
 0032fee0	Gap__Core__igPsx2Thread__vfunc_47	match	-
 0032ff30	Gap__Core__igPsx2Thread__vfunc_49	match	-
@@ -12074,7 +12074,7 @@
 00330440	FUN_00330440	match	-
 00330460	Gap__Core__igPsx2ThreadManager__vfunc_23	match	-
 003304e0	FUN_003304e0	match	-
-00330570	Gap__Core__igPsx2ThreadManager__vfunc_24	unapproved	unapproved: 1 volatile without an approval row
+00330570	Gap__Core__igPsx2ThreadManager__vfunc_24	match	-
 00330630	Gap__Core__igPsx2ThreadManager__vfunc_25	unapproved	unapproved: 1 volatile without an approval row
 003306f0	FUN_003306f0	match	-
 00330730	FUN_00330730	match	-
@@ -14941,7 +14941,7 @@
 0036f960	Gap__Bec__beNumVerData__vfunc_20	match	-
 0036f970	Gap__Bec__beNumVerData__vfunc_07	match	-
 0036fa60	FUN_0036fa60	match	exception index 0x54ded4: matches retail (packed)
-0036fae0	Gap__Bec__beNumVerData__vfunc_08	unapproved	unapproved: 1 volatile without an approval row
+0036fae0	Gap__Bec__beNumVerData__vfunc_08	match	exception index 0x54dee0: matches retail (packed)
 0036fc80	Gap__Bec__beNumVerDataList__vfunc_20	match	-
 0036fc90	Gap__Bec__beNumberCtrlInfoRam__vfunc_20	match	-
 0036fca0	Gap__Bec__beNumberCtrlInfoWork__vfunc_20	match	-
@@ -15211,11 +15211,11 @@
 00376930	beAction2FADESET_Start	match	DEFERRED duplicate 0x19ab10 __dt__6Ref<0>Fv 128B (compared under the profile of its retail unit)
 00376de0	beAction2JOINTSET_Update	match	exception index 0x54e4a4: matches retail (packed)
 00376f40	beAction2JOINTSET_Start	match	exception index 0x54e4b0: matches retail (packed)
-00377090	beAction2MOTIONSET_Update	unapproved	unapproved: 1 volatile without an approval row
+00377090	beAction2MOTIONSET_Update	match	exception index 0x54e4bc: matches retail (table 0x5434ac 8 bytes)
 00377340	beAction2MOTIONSET_Start	match	exception index 0x54e4c8: matches retail (table 0x5434b4 8 bytes)
 00377700	beAction2_StartComponents	match	exception index 0x54e4d4: matches retail (table 0x5434bc 8 bytes)
 003778d0	Gap__Bec__beAction2__vfunc_31	match	exception index 0x54e4e0: matches retail (packed)
-00377990	Gap__Bec__beAction2__vfunc_33	unapproved	unapproved: 3 volatile without an approval row
+00377990	Gap__Bec__beAction2__vfunc_33	unapproved	unapproved: 1 volatile without an approval row
 003783f0	Gap__Bec__beAction2__vfunc_20	match	-
 00378400	Gap__Core__igObject__vfunc_28	match	-
 00378410	Gap__Core__igObject__vfunc_34	match	-
@@ -15325,19 +15325,19 @@
 003819a0	Gap__Bec__beFont__vfunc_23	match	exception index 0x54e8ac: matches retail (packed)
 003819c0	Gap__Bec__beFont__vfunc_24	match	exception index 0x54e8b8: matches retail (packed)
 00381b40	Gap__Bec__beFont__vfunc_29	match	exception index 0x54e8c4: matches retail (packed)
-00381b70	Gap__Bec__beFont__vfunc_32	unapproved	unapproved: 1 volatile without an approval row
+00381b70	Gap__Bec__beFont__vfunc_32	match	exception index 0x54e8d0: matches retail (packed)
 00381d50	Gap__Bec__beFont__vfunc_30	match	-
 00381d60	Gap__Bec__beFont__vfunc_31	match	-
 00381d70	Gap__Bec__beFont__vfunc_34	match	DEFERRED duplicate 0x1353b0 __dt__5RP<1>Fv 128B (compared under the profile of its retail unit)
 00382d70	FUN_00382d70	match	exception index 0x54e8e8: matches retail (packed)
-00382df0	FUN_00382df0	unapproved	unapproved: 1 volatile without an approval row
+00382df0	FUN_00382df0	match	exception index 0x54e8f4: matches retail (packed)
 00382eb0	FUN_00382eb0	match	-
 003832d0	FUN_003832d0	match	exception index 0x54e90c: matches retail (packed)
 00383350	FUN_00383350	match	exception index 0x54e918: matches retail (packed)
 00383420	FUN_00383420	match	-
 00383910	FUN_00383910	match	DEFERRED duplicate 0x1338d0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 00383ab0	FUN_00383ab0	match	DEFERRED duplicate 0x1338d0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-00383bf0	FUN_00383bf0	unapproved	unapproved: 4 volatile without an approval row
+00383bf0	FUN_00383bf0	match	exception index 0x54e948: matches retail (table 0x5437ac 8 bytes)
 00383ed0	FUN_00383ed0	code-only	exception metadata: retail keeps an index record at 0x54e954 (packed) that the object does not produce (its unit was C++ with exceptions on)
 00384010	FUN_00384010	match	exception index 0x54e960: matches retail (packed)
 003840a0	FUN_003840a0	match	exception index 0x54e96c: matches retail (packed)
@@ -15411,7 +15411,7 @@
 0038bed0	Gap__Bec__beMatCtrl__vfunc_20	match	-
 0038bee0	beMessenger_InitializeMemory	unapproved	unapproved: 3 volatile without an approval row
 0038c390	FUN_0038c390	match	-
-0038c410	FUN_0038c410	unapproved	unapproved: 1 volatile without an approval row
+0038c410	FUN_0038c410	match	-
 0038c490	beMessenger_ResetMemory	match	exception index 0x54ebdc: matches retail (packed)
 0038ca40	beMessengerArgData_Clear	match	exception index 0x54ebe8: matches retail (table 0x543900 8 bytes)
 0038ce70	beMessengerDelay_Clear	match	exception index 0x54ebf4: matches retail (packed)
@@ -15423,12 +15423,12 @@
 0038d080	Gap__Bec__beMessenger__vfunc_26	match	exception index 0x54ec24: matches retail (packed)
 0038d470	beMessenger_SetFreezeTime	match	-
 0038d4a0	beMessenger_ResolveEnumValue	match	exception index 0x54ec3c: matches retail (packed)
-0038d560	beMessenger_RegisterReceiver	unapproved	unapproved: 1 volatile without an approval row
+0038d560	beMessenger_RegisterReceiver	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0038d7a0	FUN_0038d7a0	match	exception index 0x54ec54: matches retail (packed)
 0038d820	beMessenger_RegisterReceiverFromInfo	match	exception index 0x54ec60: matches retail (packed)
-0038d860	beMessenger_SelectReceivers	unapproved	unapproved: 1 volatile without an approval row
-0038e060	beMessenger_DispatchSelected	unapproved	unapproved: 2 volatile without an approval row
-0038e530	FUN_0038e530	unapproved	unapproved: 2 volatile without an approval row
+0038d860	beMessenger_SelectReceivers	match	-
+0038e060	beMessenger_DispatchSelected	match	-
+0038e530	FUN_0038e530	match	-
 0038e5b0	beMessenger_SelectGroupRam	match	exception index 0x54ec90: matches retail (packed)
 0038e5d0	beMessenger_SelectGroup	match	exception index 0x54ec9c: matches retail (packed)
 0038e5f0	beMessenger_SendNamed	match	exception index 0x54eca8: matches retail (packed)
@@ -15449,12 +15449,12 @@
 0038f1e0	beMessenger_SetBool	match	-
 0038f220	beMessenger_GetBool	match	-
 0038f240	beMessenger_GetIntCount	match	-
-0038f250	beMessenger_AppendInt	unapproved	unapproved: 1 volatile without an approval row
+0038f250	beMessenger_AppendInt	match	exception index 0x54ed38: matches retail (packed)
 0038f2d0	beMessenger_ClearInt	match	-
 0038f2e0	beMessenger_SetInt	match	-
 0038f320	beMessenger_GetInt	match	-
 0038f340	beMessenger_GetFloatCount	match	-
-0038f350	beMessenger_AppendFloat	unapproved	unapproved: 1 volatile without an approval row
+0038f350	beMessenger_AppendFloat	match	exception index 0x54ed44: matches retail (table 0x5439c8 8 bytes)
 0038f3d0	beMessenger_GetFloat	match	-
 0038f3f0	beMessenger_GetLongCount	match	-
 0038f400	beMessenger_AppendLong	match	exception index 0x54ed50: matches retail (packed)
@@ -15504,8 +15504,8 @@
 00392fa0	FUN_00392fa0	match	-
 00393260	FUN_00393260	match	-
 00393aa0	FUN_00393aa0	match	-
-00393b20	FUN_00393b20	unapproved	unapproved: 1 volatile without an approval row
-00393c80	FUN_00393c80	unapproved	unapproved: 1 volatile without an approval row
+00393b20	FUN_00393b20	match	exception index 0x54ef00: matches retail (packed)
+00393c80	FUN_00393c80	match	DEFERRED duplicate 0x150eb0 __dt__3RPAFv 128B (compared under the profile of its retail unit)
 003943c0	FUN_003943c0	match	exception index 0x54ef18: matches retail (packed)
 00394400	FUN_00394400	match	-
 00394640	FUN_00394640	match	exception index 0x54ef30: matches retail (table 0x543b10 8 bytes)
@@ -15518,7 +15518,7 @@
 00394fa0	FUN_00394fa0	match	exception index 0x54ef6c: matches retail (packed)
 00395070	FUN_00395070	match	exception index 0x54ef78: matches retail (packed)
 003951e0	FUN_003951e0	match	exception index 0x54ef84: matches retail (table 0x543b20 8 bytes)
-00395250	FUN_00395250	unapproved	unapproved: 1 volatile without an approval row
+00395250	FUN_00395250	match	exception index 0x54ef90: matches retail (table 0x543b28 8 bytes)
 003956e0	FUN_003956e0	match	-
 00395b50	Gap__Core__igObject__vfunc_31	match	-
 003960e0	Gap__Core__igObject__vfunc_46	match	-
@@ -15574,7 +15574,7 @@
 0039af10	FUN_0039af10	match	-
 0039af90	FUN_0039af90	match	exception index 0x54f170: matches retail (packed)
 0039b050	FUN_0039b050	match	exception index 0x54f17c: matches retail (packed)
-0039b110	FUN_0039b110	unapproved	unapproved: 1 volatile without an approval row
+0039b110	FUN_0039b110	match	exception index 0x54f188: matches retail (table 0x543ca4 8 bytes)
 0039b2d0	Gap__Bec__bePadData__vfunc_20	match	-
 0039b2e0	Gap__Bec__bePadManager__vfunc_21	match	exception index 0x54f194: matches retail (packed)
 0039b300	Gap__Bec__bePadManager__vfunc_22	match	exception index 0x54f1a0: matches retail (packed)
@@ -15609,7 +15609,7 @@
 0039cb70	beSelectCtrl_EnsurePadManager	match	exception index 0x54f278: matches retail (packed)
 0039cbb0	Gap__Bec__beSelectCtrl__vfunc_30	match	-
 0039cbc0	beSelectCtrl_RegisterReceiver	match	exception index 0x54f284: matches retail (packed)
-0039cbf0	Gap__Bec__beSelectCtrl__vfunc_31	unapproved	unapproved: 1 volatile without an approval row
+0039cbf0	Gap__Bec__beSelectCtrl__vfunc_31	match	-
 0039d720	Gap__Bec__beSelectCtrl__vfunc_33	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
 0039ded0	Gap__Bec__beSelectCtrl__vfunc_20	match	-
 0039dee0	Gap__Bec__beShadow01__vfunc_32	match	exception index 0x54f2a8: matches retail (packed)
@@ -15693,7 +15693,7 @@
 003a5a70	Gap__Bec__beTargetObj__vfunc_25	match	-
 003a5a80	Gap__Bec__beTargetObj__vfunc_26	match	exception index 0x54f518: matches retail (packed)
 003a5b20	Gap__Bec__beTargetObj__vfunc_27	match	-
-003a5b40	FUN_003a5b40	unapproved	unapproved: 1 volatile without an approval row
+003a5b40	FUN_003a5b40	match	exception index 0x54f524: matches retail (table 0x543e2c 8 bytes)
 003a5cc0	FUN_003a5cc0	match	-
 003a5d70	FUN_003a5d70	match	exception index 0x54f530: matches retail (table 0x543e34 8 bytes)
 003a5f60	FUN_003a5f60	match	exception index 0x54f53c: matches retail (packed)
@@ -15734,7 +15734,7 @@
 003a82f0	FUN_003a82f0	match	-
 003a84a0	FUN_003a84a0	match	exception index 0x54f6a4: matches retail (table 0x543ed4 8 bytes)
 003a8580	FUN_003a8580	unapproved	unapproved: 1 volatile without an approval row
-003a8760	FUN_003a8760	unapproved	unapproved: 1 volatile without an approval row
+003a8760	FUN_003a8760	match	exception index 0x54f6bc: matches retail (packed)
 003a8880	Gap__Bec__beMovie__vfunc_32	match	exception index 0x54f6c8: matches retail (packed)
 003a8910	Gap__Bec__beMovie__vfunc_29	match	exception index 0x54f6d4: matches retail (packed)
 003a8940	Gap__Bec__beMovie__vfunc_30	match	-
@@ -15776,7 +15776,7 @@
 003abd80	Gap__Bec__beSvUseCheckApi__vfunc_22	match	exception index 0x54f824: matches retail (packed)
 003abfa0	Gap__Bec__beSvUseCheckApi__vfunc_23	match	-
 003ac910	Gap__Bec__beSvReadMediaApi__vfunc_23	match	-
-003aca70	Gap__Bec__beSvWriteMediaApi__vfunc_22	unapproved	unapproved: 2 volatile without an approval row
+003aca70	Gap__Bec__beSvWriteMediaApi__vfunc_22	match	jump table 0x5103f0: 6 entries, 24 bytes, matches retail
 003ad220	Gap__Bec__beSvWriteMediaApi__vfunc_23	match	-
 003ad240	Gap__Bec__beSvGetFreeSizeApi__vfunc_21	match	-
 003ad280	Gap__Bec__beSvGetFreeSizeApi__vfunc_22	match	exception index 0x54f860: matches retail (packed)
@@ -15811,7 +15811,7 @@
 003ae210	Gap__Bec__beSvWriteMediaApi__vfunc_08	match	exception index 0x54f920: matches retail (packed)
 003ae280	Gap__Bec__beSvReadMediaApi__vfunc_20	match	-
 003ae290	Gap__Bec__beSvReadMediaApi__vfunc_07	match	exception index 0x54f92c: matches retail (packed)
-003ae2f0	Gap__Bec__beSvReadMediaApi__vfunc_08	unapproved	unapproved: 1 volatile without an approval row
+003ae2f0	Gap__Bec__beSvReadMediaApi__vfunc_08	match	exception index 0x54f938: matches retail (packed)
 003ae470	Gap__Bec__beSvUseCheckApi__vfunc_20	match	-
 003ae480	Gap__Bec__beSvUseCheckApi__vfunc_08	match	exception index 0x54f944: matches retail (packed)
 003ae4a0	FUN_003ae4a0	match	exception index 0x54f950: matches retail (packed)
@@ -17069,7 +17069,7 @@
 003cb410	Gap__Bec__beNDMWDegiDataList__vfunc_20	match	-
 003cb420	Gap__Bec__beNDMWLoadSlotPlayer__vfunc_20	match	-
 003cb430	Gap__Bec__beNDMWLoadSlotPlayer__vfunc_07	match	exception index 0x553064: matches retail (packed)
-003cb470	Gap__Bec__beNDMWLoadSlotPlayer__vfunc_08	unapproved	unapproved: 1 volatile without an approval row
+003cb470	Gap__Bec__beNDMWLoadSlotPlayer__vfunc_08	match	exception index 0x553070: matches retail (packed)
 003cb630	Gap__Bec__beNDMWLoadSlotPlayerList__vfunc_20	match	-
 003cb640	Gap__Bec__beNDMWMcSlotPS2__vfunc_20	match	-
 003cb650	Gap__Bec__beNDMWMcSlotGC__vfunc_20	match	-
@@ -17081,7 +17081,7 @@
 003cb6b0	Gap__Bec__beNDMWMcUtilCtrl__vfunc_07	match	exception index 0x55307c: matches retail (packed)
 003cb700	Gap__Bec__beNDMWMcUtilCtrl__vfunc_08	match	exception index 0x553088: matches retail (packed)
 003cb750	Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_20	match	-
-003cb760	Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08	unapproved	unapproved: 2 volatile without an approval row
+003cb760	Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08	match	exception index 0x553094: matches retail (packed)
 003cba20	Gap__Bec__beNDMWLoadCtrl2Info__vfunc_20	match	-
 003cba30	Gap__Bec__beNDMWLoadIntf2CtrlData__vfunc_20	match	-
 003cba40	Gap__Bec__beNDMWLoadIntf2MakeChr__vfunc_20	match	-
@@ -17168,12 +17168,12 @@
 003ce700	FUN_003ce700	match	exception index 0x553184: matches retail (packed)
 003ce7e0	FUN_003ce7e0	match	exception index 0x553190: matches retail (packed)
 003ce890	FUN_003ce890	match	exception index 0x55319c: matches retail (packed)
-003ce960	Gap__Bec__beNDMWPanelObjectWaza__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
+003ce960	Gap__Bec__beNDMWPanelObjectWaza__vfunc_21	match	exception index 0x5531a8: matches retail (table 0x5444b8 8 bytes)
 003ceed0	Gap__Bec__beNDMWPanelObjectWaza__vfunc_22	match	exception index 0x5531b4: matches retail (packed)
 003cfdc0	Gap__Bec__beNDMWPanelWaza__vfunc_32	match	exception index 0x5531e4: matches retail (packed)
 003cfe00	Gap__Bec__beNDMWPanelWaza__vfunc_30	match	-
 003cfe10	Gap__Bec__beNDMWPanelWaza__vfunc_29	match	exception index 0x5531f0: matches retail (packed)
-003cfe50	Gap__Bec__beNDMWPanelWaza__vfunc_31	unapproved	unapproved: 1 volatile without an approval row
+003cfe50	Gap__Bec__beNDMWPanelWaza__vfunc_31	match	-
 003d0760	FUN_003d0760	match	exception index 0x553208: matches retail (packed)
 003d08f0	FUN_003d08f0	match	exception index 0x553214: matches retail (table 0x5444e8 8 bytes)
 003d0a90	FUN_003d0a90	match	exception index 0x553220: matches retail (packed)
@@ -17229,12 +17229,12 @@
 003d5950	Gap__Bec__beNDMWStatus__vfunc_30	match	-
 003d5960	Gap__Bec__beNDMWStatus__vfunc_29	match	exception index 0x5533c4: matches retail (packed)
 003d59b0	Gap__Bec__beNDMWStatus__vfunc_31	match	-
-003d60e0	Gap__Bec__beNDMWStatus__vfunc_34	unapproved	unapproved: 2 volatile without an approval row
-003d8740	FUN_003d8740	unapproved	unapproved: 1 volatile without an approval row
-003d9bd0	ObjectRef_Destruct_003d9bd0	unapproved	unapproved: 1 volatile without an approval row
-003d9c50	ObjectRef_Destruct_003d9c50	unapproved	unapproved: 1 volatile without an approval row
-003d9cd0	ObjectRef_Destruct_003d9cd0	unapproved	unapproved: 1 volatile without an approval row
-003d9d50	ObjectRef_Destruct_003d9d50	unapproved	unapproved: 1 volatile without an approval row
+003d60e0	Gap__Bec__beNDMWStatus__vfunc_34	match	DEFERRED duplicate 0x1363f0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+003d8740	FUN_003d8740	match	-
+003d9bd0	ObjectRef_Destruct_003d9bd0	match	-
+003d9c50	ObjectRef_Destruct_003d9c50	match	-
+003d9cd0	ObjectRef_Destruct_003d9cd0	match	-
+003d9d50	ObjectRef_Destruct_003d9d50	match	-
 003d9dd0	Gap__Bec__beNDMWStatus__vfunc_20	match	-
 003d9de0	FUN_003d9de0	match	-
 003d9e10	FUN_003d9e10	match	-
@@ -17281,7 +17281,7 @@
 003e44d0	beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty	match	-
 003e44f0	beNDMWLoadIntf2ComMdlCtrl__Poll	match	exception index 0x553598: matches retail (packed)
 003e46b0	Gap__Bec__beNDMWLoadIntf2__vfunc_32	match	exception index 0x5535a4: matches retail (packed)
-003e4750	Gap__Bec__beNDMWLoadIntf2__vfunc_31	unapproved	unapproved: 6 volatile without an approval row
+003e4750	Gap__Bec__beNDMWLoadIntf2__vfunc_31	unapproved	unapproved: 5 volatile without an approval row
 003e9010	ObjectRef_Destruct_003e9010	match	exception index 0x5535bc: matches retail (packed)
 003e9090	DataList_GetData_003e9090	match	-
 003e90a0	beNDMWLoadSavePlWork__SetIsCtrl	match	-
@@ -17349,10 +17349,10 @@
 003ee320	beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer	match	exception index 0x55379c: matches retail (packed)
 003ee490	FUN_003ee490	match	exception index 0x5537a8: matches retail (packed)
 003ee4d0	beNDMWDegiData__UpdateFieldsFromData	match	exception index 0x5537b4: matches retail (packed)
-003ee690	FUN_003ee690	unapproved	unapproved: 1 volatile without an approval row
-003ee6d0	beNDMWDegiData__LoadFromProperties	unapproved	unapproved: 1 volatile without an approval row
+003ee690	FUN_003ee690	match	exception index 0x5537c0: matches retail (packed)
+003ee6d0	beNDMWDegiData__LoadFromProperties	match	-
 003ef1e0	FUN_003ef1e0	match	-
-003ef5d0	beNDMWDegiData__StoreToProperties	unapproved	unapproved: 1 volatile without an approval row
+003ef5d0	beNDMWDegiData__StoreToProperties	match	DEFERRED duplicate 0x1363f0 __dt__7ItemRefFv 128B (compared under the profile of its retail unit)
 003f0d60	FUN_003f0d60	match	exception index 0x5537f0: matches retail (table 0x544cc8 8 bytes)
 003f0e30	FUN_003f0e30	match	exception index 0x5537fc: matches retail (packed)
 003f0ed0	FUN_003f0ed0	match	-
@@ -17364,9 +17364,9 @@
 003f1380	FUN_003f1380	match	exception index 0x553850: matches retail (packed)
 003f13d0	FUN_003f13d0	match	exception index 0x55385c: matches retail (packed)
 003f1460	FUN_003f1460	match	-
-003f1490	FUN_003f1490	unapproved	unapproved: 1 volatile without an approval row
+003f1490	FUN_003f1490	match	jump table 0x518110: 8 entries, 32 bytes, matches retail
 003f19e0	Gap__Bec__beNDMWLoadCtrl2__vfunc_32	match	exception index 0x553874: matches retail (packed)
-003f1a80	Gap__Bec__beNDMWLoadCtrl2__vfunc_31	unapproved	unapproved: 1 volatile without an approval row
+003f1a80	Gap__Bec__beNDMWLoadCtrl2__vfunc_31	match	-
 003f2450	Gap__Bec__beNDMWLoadCtrl2__vfunc_30	match	-
 003f2460	Gap__Bec__beNDMWLoadCtrl2__vfunc_29	match	exception index 0x55388c: matches retail (packed)
 003f2490	Gap__Bec__beNDMWLoadCtrl2__vfunc_34	match	-
@@ -17376,7 +17376,7 @@
 003f2d40	Gap__Bec__beNDMWLoadCtrl2__vfunc_20	match	-
 003f2d50	beNDMWTitle2Option_InitSettings	match	exception index 0x5538c8: matches retail (packed)
 003f2e00	Gap__Bec__beNDMWTitle2__vfunc_32	match	exception index 0x5538d4: matches retail (packed)
-003f2ef0	Gap__Bec__beNDMWTitle2__vfunc_31	unapproved	unapproved: 2 volatile without an approval row
+003f2ef0	Gap__Bec__beNDMWTitle2__vfunc_31	match	-
 003f5210	FUN_003f5210	match	exception index 0x5538ec: matches retail (packed)
 003f5290	FUN_003f5290	match	exception index 0x5538f8: matches retail (packed)
 003f5310	Gap__Bec__beNDMWTitle2__vfunc_30	match	-
@@ -17389,7 +17389,7 @@
 003f5920	beNDMWWindow_RunMessageScript	match	exception index 0x553940: matches retail (packed)
 003f59b0	beNDMWWindow_ClearTextElement	match	exception index 0x55394c: matches retail (packed)
 003f5a40	beNDMWWindow_ClearQueuedText	match	exception index 0x553958: matches retail (table 0x544e2c 8 bytes)
-003f5c90	beNDMWWindow_PresentModel	unapproved	unapproved: 1 volatile without an approval row
+003f5c90	beNDMWWindow_PresentModel	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f5f00	beNDMWWindow_PresentModelAtOrigin	match	exception index 0x553970: matches retail (packed)
 003f5f40	beNDMWWindow_SendModelSequence	match	exception index 0x55397c: matches retail (packed)
 003f5f80	beNDMWWindow_PlayQueuedModelClose	match	exception index 0x553988: matches retail (table 0x544e50 8 bytes)
@@ -17397,15 +17397,15 @@
 003f6350	beNDMWWindow_RequestChildrenClose	match	-
 003f63c0	beNDMWWindow_BindContext	match	exception index 0x5539a0: matches retail (packed)
 003f6490	beNDMWWindow_UpdateTree	match	exception index 0x5539ac: matches retail (packed)
-003f6620	FUN_003f6620	unapproved	unapproved: 1 volatile without an approval row
-003f6f90	FUN_003f6f90	unapproved	unapproved: 1 volatile without an approval row
-003f7010	FUN_003f7010	unapproved	unapproved: 1 volatile without an approval row
-003f7090	FUN_003f7090	unapproved	unapproved: 1 volatile without an approval row
-003f7110	FUN_003f7110	unapproved	unapproved: 1 volatile without an approval row
-003f7190	FUN_003f7190	unapproved	unapproved: 1 volatile without an approval row
-003f7210	FUN_003f7210	unapproved	unapproved: 1 volatile without an approval row
-003f7290	FUN_003f7290	unapproved	unapproved: 1 volatile without an approval row
-003f7310	FUN_003f7310	unapproved	unapproved: 2 volatile without an approval row
+003f6620	FUN_003f6620	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f6f90	FUN_003f6f90	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f7010	FUN_003f7010	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f7090	FUN_003f7090	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f7110	FUN_003f7110	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f7190	FUN_003f7190	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f7210	FUN_003f7210	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f7290	FUN_003f7290	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+003f7310	FUN_003f7310	unapproved	unapproved: 1 volatile without an approval row
 003f77b0	Gap__Bec__beNDMWGameRam__vfunc_23	match	-
 003f7980	Gap__Bec__beNDMWGameRam__vfunc_24	match	exception index 0x553a30: matches retail (packed)
 003f7c50	Gap__Bec__beNDMWGameRam__vfunc_32	match	exception index 0x553a3c: matches retail (packed)
@@ -17420,14 +17420,14 @@
 003f8c90	FUN_003f8c90	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 003f93c0	FUN_003f93c0	match	exception index 0x553aa8: matches retail (table 0x544f64 8 bytes)
 003f9570	FUN_003f9570	match	exception index 0x553ab4: matches retail (packed)
-003f96e0	FUN_003f96e0	unapproved	unapproved: 2 volatile without an approval row
-003f99f0	FUN_003f99f0	unapproved	unapproved: 1 volatile without an approval row
+003f96e0	FUN_003f96e0	unapproved	unapproved: 1 volatile without an approval row
+003f99f0	FUN_003f99f0	match	exception index 0x553acc: matches retail (packed)
 003f9bb0	FUN_003f9bb0	match	exception index 0x553ad8: matches retail (packed)
 003f9c80	FUN_003f9c80	match	exception index 0x553ae4: matches retail (table 0x544f7c 8 bytes)
 003f9e20	FUN_003f9e20	match	exception index 0x553af0: matches retail (packed)
 003f9f80	FUN_003f9f80	match	exception index 0x553afc: matches retail (packed)
 003fa040	FUN_003fa040	match	exception index 0x553b08: matches retail (table 0x544f84 8 bytes)
-003fa120	FUN_003fa120	unapproved	unapproved: 1 volatile without an approval row
+003fa120	FUN_003fa120	match	exception index 0x553b14: matches retail (packed)
 003fa1e0	FUN_003fa1e0	match	exception index 0x553b20: matches retail (table 0x544f8c 8 bytes)
 003fa2c0	FUN_003fa2c0	match	exception index 0x553b2c: matches retail (packed)
 003fa3b0	FUN_003fa3b0	match	exception index 0x553b38: matches retail (table 0x544f94 8 bytes)
@@ -17436,7 +17436,7 @@
 003fc670	ObjectRef_Destruct_003fc670	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
 003fc6f0	beNDMWGameRam_FindTechniqueRow	match	exception index 0x553b68: matches retail (packed)
 003fc780	beNDMWGameRam_CollectNearbyNonzeroHp	match	DEFERRED duplicate 0x150eb0 __dt__13NearbyListRefFv 128B (compared under the profile of its retail unit)
-003fca10	Gap__Bec__beNDMWGameRam__vfunc_34	unapproved	unapproved: 1 volatile without an approval row
+003fca10	Gap__Bec__beNDMWGameRam__vfunc_34	match	DEFERRED duplicate 0x1363f0 __dt__14RecoveryRef<0>Fv 128B (compared under the profile of its retail unit)
 00406da0	FUN_00406da0	match	-
 00406db0	FUN_00406db0	match	-
 00406dc0	FUN_00406dc0	match	-
@@ -17472,7 +17472,7 @@
 00408070	FUN_00408070	match	-
 004080f0	Gap__Bec__beNDMWSaveCtrl__vfunc_20	match	-
 00408100	Gap__Bec__beNDMWSaveIntf__vfunc_32	match	exception index 0x553c04: matches retail (packed)
-004081a0	Gap__Bec__beNDMWSaveIntf__vfunc_31	unapproved	unapproved: 1 volatile without an approval row
+004081a0	Gap__Bec__beNDMWSaveIntf__vfunc_31	match	-
 0040c180	FUN_0040c180	match	exception index 0x553c1c: matches retail (packed)
 0040c1b0	Gap__Bec__beNDMWSaveIntf__vfunc_30	match	-
 0040c1c0	Gap__Bec__beNDMWSaveIntf__vfunc_29	match	exception index 0x553c28: matches retail (packed)
@@ -17506,7 +17506,7 @@
 00413670	Gap__Bec__beNDMWStatusPowerSocket__vfunc_25	match	-
 00413fd0	FUN_00413fd0	match	exception index 0x553d9c: matches retail (packed)
 00414050	Gap__Bec__beNDMWStatusPowerSocket__vfunc_28	match	exception index 0x553da8: matches retail (packed)
-004141a0	Gap__Bec__beNDMWStatusPowerSocket__vfunc_29	unapproved	unapproved: 1 volatile without an approval row
+004141a0	Gap__Bec__beNDMWStatusPowerSocket__vfunc_29	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00414420	FUN_00414420	match	exception index 0x553dc0: matches retail (packed)
 004144a0	Gap__Bec__beNDMWStatusPowerSocket__vfunc_30	match	exception index 0x553dcc: matches retail (packed)
 004145b0	Gap__Bec__beNDMWStatusPowerSocket__vfunc_31	match	exception index 0x553dd8: matches retail (packed)
@@ -17514,20 +17514,20 @@
 00414640	Gap__Bec__beNDMWStatusPowerSocket__vfunc_32	match	exception index 0x553df0: matches retail (packed)
 00414670	Gap__Bec__beNDMWStatusPowerSocket__vfunc_33	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 004148d0	Gap__Bec__beNDMWStatusPowerSocket__vfunc_34	match	exception index 0x553e08: matches retail (packed)
-00414d10	Gap__Bec__beNDMWStatusPowerSocket__vfunc_36	unapproved	unapproved: 1 volatile without an approval row
+00414d10	Gap__Bec__beNDMWStatusPowerSocket__vfunc_36	match	-
 00414e40	Gap__Bec__beNDMWStatusPowerSocket__vfunc_37	match	exception index 0x553e2c: matches retail (packed)
-00414e70	Gap__Bec__beNDMWStatusPowerSocket__vfunc_38	unapproved	unapproved: 1 volatile without an approval row
+00414e70	Gap__Bec__beNDMWStatusPowerSocket__vfunc_38	match	exception index 0x553e38: matches retail (packed)
 00415440	Gap__Bec__beNDMWStatusMainSlot__vfunc_24	match	exception index 0x553e50: matches retail (table 0x545784 8 bytes)
 00415680	Gap__Bec__beNDMWStatusMainSlot__vfunc_26	match	DEFERRED duplicate 0x1489a0 __dt__12GlobalStrRefFv 128B (compared under the profile of its retail unit)
 00415870	Gap__Bec__beNDMWStatusMainSlot__vfunc_25	match	-
 00416130	Gap__Bec__beNDMWStatusMainSlot__vfunc_28	match	exception index 0x553e80: matches retail (packed)
-00416250	Gap__Bec__beNDMWStatusMainSlot__vfunc_29	unapproved	unapproved: 1 volatile without an approval row
+00416250	Gap__Bec__beNDMWStatusMainSlot__vfunc_29	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 004164d0	Gap__Bec__beNDMWStatusMainSlot__vfunc_30	match	exception index 0x553e98: matches retail (packed)
 00416550	Gap__Bec__beNDMWStatusMainSlot__vfunc_31	match	exception index 0x553ea4: matches retail (packed)
 004165a0	Gap__Bec__beNDMWStatusMainSlot__vfunc_39	match	exception index 0x553eb0: matches retail (packed)
 00416b50	Gap__Bec__beNDMWStatusMainSlot__vfunc_34	match	exception index 0x553ed4: matches retail (packed)
 00416c80	Gap__Bec__beNDMWStatusMainSlot__vfunc_35	unapproved	unapproved: 1 volatile without an approval row
-00416f90	Gap__Bec__beNDMWStatusMainSlot__vfunc_36	unapproved	unapproved: 1 volatile without an approval row
+00416f90	Gap__Bec__beNDMWStatusMainSlot__vfunc_36	match	-
 004170c0	Gap__Bec__beNDMWStatusMainSlot__vfunc_37	match	exception index 0x553ef8: matches retail (packed)
 004170f0	Gap__Bec__beNDMWStatusMainSlot__vfunc_38	match	exception index 0x553f04: matches retail (packed)
 00417160	Gap__Bec__beNDMWStatusSubSlot__vfunc_23	match	exception index 0x553f10: matches retail (table 0x545864 8 bytes)
@@ -17536,7 +17536,7 @@
 004176b0	Gap__Bec__beNDMWStatusSubSlot__vfunc_25	match	-
 00417880	Gap__Bec__beNDMWStatusSubSlot__vfunc_27	match	DEFERRED duplicate 0x226990 __dt__11BoolListRefFv 128B (compared under the profile of its retail unit)
 00417ba0	Gap__Bec__beNDMWStatusSubSlot__vfunc_28	match	exception index 0x553f4c: matches retail (packed)
-00417cc0	Gap__Bec__beNDMWStatusSubSlot__vfunc_29	unapproved	unapproved: 1 volatile without an approval row
+00417cc0	Gap__Bec__beNDMWStatusSubSlot__vfunc_29	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00417f40	Gap__Bec__beNDMWStatusSubSlot__vfunc_30	match	exception index 0x553f64: matches retail (packed)
 00417fc0	Gap__Bec__beNDMWStatusSubSlot__vfunc_31	match	exception index 0x553f70: matches retail (packed)
 00417ff0	Gap__Bec__beNDMWStatusSubSlot__vfunc_39	match	-
@@ -17551,24 +17551,24 @@
 00418ac0	FUN_00418ac0	match	DEFERRED duplicate 0x1489a0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
 004191f0	FUN_004191f0	match	exception index 0x553fa0: matches retail (table 0x545904 8 bytes)
 00419680	FUN_00419680	match	-
-004196c0	Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
+004196c0	Gap__Bec__beNDMWStatusCtrlFolder__vfunc_21	match	-
 0041a380	FUN_0041a380	match	exception index 0x553fb8: matches retail (packed)
-0041a400	Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
+0041a400	Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0041aaa0	FUN_0041aaa0	match	exception index 0x553fd0: matches retail (table 0x545994 8 bytes)
-0041acf0	Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21	unapproved	unapproved: 2 volatile without an approval row
+0041acf0	Gap__Bec__beNDMWStatusCtrlDisk__vfunc_21	match	DEFERRED duplicate 0x226990 __dt__13DecideListRefFv 128B (compared under the profile of its retail unit)
 0041d240	FUN_0041d240	match	exception index 0x553fe8: matches retail (packed)
 0041d2c0	FUN_0041d2c0	match	exception index 0x553ff4: matches retail (packed)
 0041d3b0	FUN_0041d3b0	match	-
 0041d3f0	FUN_0041d3f0	match	exception index 0x554000: matches retail (packed)
 0041d490	FUN_0041d490	match	exception index 0x55400c: matches retail (packed)
 0041d510	FUN_0041d510	match	exception index 0x554018: matches retail (table 0x545b2c 8 bytes)
-0041d810	Gap__Bec__beNDMWStatusCtrlBit__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
+0041d810	Gap__Bec__beNDMWStatusCtrlBit__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0041ddc0	FUN_0041ddc0	match	exception index 0x554030: matches retail (packed)
 0041de40	Gap__Bec__beNDMWStatusCtrlSendBit__vfunc_21	match	DEFERRED duplicate 0x1363f0 __dt__4RefXFv 128B (compared under the profile of its retail unit)
 0041f110	FUN_0041f110	match	DEFERRED duplicate 0x1363f0 __dt__4RefXFv 128B (compared under the profile of its retail unit)
 0041f190	Gap__Bec__beNDMWStatusCtrlSkill__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00420230	FUN_00420230	match	exception index 0x554060: matches retail (table 0x545c38 8 bytes)
-004207a0	Gap__Bec__beNDMWStatusSubMenu__vfunc_21	unapproved	unapproved: 2 volatile without an approval row
+004207a0	Gap__Bec__beNDMWStatusSubMenu__vfunc_21	match	DEFERRED duplicate 0x1363f0 __dt__9DeviceRefFv 128B (compared under the profile of its retail unit)
 00422c00	FUN_00422c00	unapproved	unapproved: 1 volatile without an approval row
 00423000	FUN_00423000	unapproved	unapproved: 1 volatile without an approval row
 00423300	Gap__Bec__beNDMWStatusSubMenu__vfunc_20	match	-
@@ -17615,12 +17615,12 @@
 004267b0	Gap__Bec__beNDMWShopCtrl00__vfunc_21	match	-
 00426fa0	FUN_00426fa0	match	exception index 0x55415c: matches retail (packed)
 00427020	FUN_00427020	match	exception index 0x554168: matches retail (packed)
-004270a0	Gap__Bec__beNDMWShopCtrl10__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
+004270a0	Gap__Bec__beNDMWShopCtrl10__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00428610	FUN_00428610	match	exception index 0x554180: matches retail (packed)
 00428690	FUN_00428690	match	exception index 0x55418c: matches retail (packed)
 00428710	FUN_00428710	match	exception index 0x554198: matches retail (packed)
-00428790	Gap__Bec__beNDMWShopCtrl30__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
-004295b0	FUN_004295b0	unapproved	unapproved: 1 volatile without an approval row
+00428790	Gap__Bec__beNDMWShopCtrl30__vfunc_21	match	-
+004295b0	FUN_004295b0	match	-
 00429630	Gap__Bec__beNDMWShopCtrl40__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0042a2e0	Gap__Bec__beNDMWShopCtrl50__vfunc_21	unapproved	unapproved: 2 volatile without an approval row
 0042b800	FUN_0042b800	match	exception index 0x5541d4: matches retail (packed)
@@ -17629,34 +17629,34 @@
 0042bae0	FUN_0042bae0	match	exception index 0x5541f8: matches retail (packed)
 0042bc70	Gap__Bec__beNDMWShopJunk__vfunc_21	match	DEFERRED duplicate 0x226990 __dt__5RP<1>Fv 128B (compared under the profile of its retail unit)
 0042c790	FUN_0042c790	match	exception index 0x554210: matches retail (packed)
-0042c810	Gap__Bec__beNDMWShopCtrlA0__vfunc_21	unapproved	unapproved: 2 volatile without an approval row
+0042c810	Gap__Bec__beNDMWShopCtrlA0__vfunc_21	match	-
 0042d2d0	FUN_0042d2d0	match	exception index 0x554228: matches retail (packed)
 0042d350	FUN_0042d350	match	exception index 0x554234: matches retail (packed)
 0042d3d0	FUN_0042d3d0	match	exception index 0x554240: matches retail (packed)
-0042d450	Gap__Bec__beNDMWShopCtrlA1__vfunc_21	unapproved	unapproved: 2 volatile without an approval row
+0042d450	Gap__Bec__beNDMWShopCtrlA1__vfunc_21	match	-
 0042ddf0	FUN_0042ddf0	match	exception index 0x554258: matches retail (packed)
 0042de70	FUN_0042de70	match	exception index 0x554264: matches retail (packed)
 0042def0	FUN_0042def0	match	exception index 0x554270: matches retail (packed)
-0042df70	FUN_0042df70	unapproved	unapproved: 2 volatile without an approval row
+0042df70	FUN_0042df70	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0042e330	FUN_0042e330	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 0042e9e0	FUN_0042e9e0	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-0042eb80	Gap__Bec__beNDMWShopCtrlA2__vfunc_21	unapproved	unapproved: 2 volatile without an approval row
+0042eb80	Gap__Bec__beNDMWShopCtrlA2__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
 0042f710	Gap__Bec__beNDMWShopCtrlEvolve__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00430d20	FUN_00430d20	match	exception index 0x5542b8: matches retail (table 0x5464e0 8 bytes)
 004313b0	FUN_004313b0	match	exception index 0x5542c4: matches retail (packed)
 00431670	FUN_00431670	match	exception index 0x5542d0: matches retail (packed)
-00431760	Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
+00431760	Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00432950	FUN_00432950	match	exception index 0x5542e8: matches retail (packed)
-004329d0	FUN_004329d0	unapproved	unapproved: 3 volatile without an approval row
+004329d0	FUN_004329d0	match	DEFERRED duplicate 0x150eb0 __dt__2RPFv 128B (compared under the profile of its retail unit)
 00432c90	FUN_00432c90	match	exception index 0x554300: matches retail (packed)
-00432d30	FUN_00432d30	unapproved	unapproved: 1 volatile without an approval row
+00432d30	FUN_00432d30	match	DEFERRED duplicate 0x150eb0 __dt__7ListRefFv 128B (compared under the profile of its retail unit)
 00433120	FUN_00433120	match	-
 00433290	FUN_00433290	match	exception index 0x554324: matches retail (packed)
-004332d0	Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
-00434790	Gap__Bec__beNDMWShopCtrlSell__vfunc_21	unapproved	unapproved: 2 volatile without an approval row
-004350d0	FUN_004350d0	unapproved	unapproved: 2 volatile without an approval row
-00435150	FUN_00435150	unapproved	unapproved: 2 volatile without an approval row
-004351d0	FUN_004351d0	unapproved	unapproved: 2 volatile without an approval row
+004332d0	Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00434790	Gap__Bec__beNDMWShopCtrlSell__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
+004350d0	FUN_004350d0	unapproved	unapproved: 1 volatile without an approval row
+00435150	FUN_00435150	unapproved	unapproved: 1 volatile without an approval row
+004351d0	FUN_004351d0	unapproved	unapproved: 1 volatile without an approval row
 00435250	FUN_00435250	match	exception index 0x55436c: matches retail (packed)
 004353e0	Gap__Bec__beNDMWShopCtrlDeviceSell__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
 00436060	FUN_00436060	match	DEFERRED duplicate 0x1489a0 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
@@ -17676,7 +17676,7 @@
 0043aae0	Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_21	match	DEFERRED duplicate 0x1c6460 __dt__11NameListRefFv 128B (compared under the profile of its retail unit)
 0043c720	beNDMWShopCtrlXdataChip_UpdatePageCount	match	-
 0043c7f0	beNDMWShopCtrlXdataChip_RefreshText	match	exception index 0x554444: matches retail (table 0x546a58 8 bytes)
-0043cc20	Gap__Bec__beNDMWShopDevice__vfunc_21	unapproved	unapproved: 1 volatile without an approval row
+0043cc20	Gap__Bec__beNDMWShopDevice__vfunc_21	match	-
 0043d0b0	Gap__Bec__beNDMWShopDevice__vfunc_20	match	-
 0043d0c0	Gap__Bec__beNDMWShopCtrlXdataChip__vfunc_20	match	-
 0043d0d0	Gap__Bec__beNDMWShopCtrlSales__vfunc_20	match	-
@@ -17706,7 +17706,7 @@
 004402e0	FUN_004402e0	match	jump table 0x51c7d0: 8 entries, 32 bytes, matches retail
 004405c0	Gap__Bec__beNDMWShopSelect52__vfunc_22	match	exception index 0x5544c8: matches retail (packed)
 00440670	Gap__Bec__beNDMWShopSelectA0__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00440a20	Gap__Bec__beNDMWShopSelectB0__vfunc_22	unapproved	unapproved: 1 volatile without an approval row
+00440a20	Gap__Bec__beNDMWShopSelectB0__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00440f40	Gap__Bec__beNDMWShopSelectB0__vfunc_20	match	-
 00440f50	Gap__Bec__beNDMWShopSelectA0__vfunc_20	match	-
 00440f60	Gap__Bec__beNDMWShopSelect52__vfunc_20	match	-

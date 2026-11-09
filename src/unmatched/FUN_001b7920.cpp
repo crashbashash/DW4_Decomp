@@ -1,5 +1,5 @@
 #include "dw4/reflected.h"
-struct SegmentStackList { char pad8[8]; volatile int _count; int _capacity; igObject **_data; };
+struct SegmentStackList { char pad8[8]; int _count; int _capacity; igObject **_data; };
 extern "C" {
 int FUN_0030bfa0(SegmentStackList *, int, void *);
 int List_RemoveWordAt(SegmentStackList *, int);
@@ -29,7 +29,7 @@ igObject *FUN_001b7920(igCommonTraversal *self, int name) {
     }
     stack = ((SegmentStackList **)((SegmentStackList *)self->_segmentOverrideStacks)->_data)[index];
     {
-        int i = stack->_count - 1;
+        int i = (*(int const *)&stack->_count) - 1;
         top = stack->_data[i];
     }
     last = stack->_count - 1;

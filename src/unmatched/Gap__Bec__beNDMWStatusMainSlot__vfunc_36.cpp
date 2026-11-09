@@ -37,8 +37,8 @@ extern "C" void Gap__Bec__beNDMWStatusMainSlot__vfunc_36(beNDMWStatusMainSlot *a
     l = (igIntList *)w->_kindList;
     c = l->_count;
     if (c < l->_capacity) {
-        /* matching construct: volatile re-read of the count */
-        l->_count = *(volatile int *)&l->_count + 1;
+        /* matching construct: const re-read of the count */
+        l->_count = *(const int *)&l->_count + 1;
     } else {
         List_Resize(l, c + 1, 4);
     }

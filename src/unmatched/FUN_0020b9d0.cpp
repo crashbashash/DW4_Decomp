@@ -44,7 +44,7 @@ void FUN_0020b9d0(void *arg0) {
             FUN_001effc0(1, &FUN_00208430, n->f36);
         }
         while (var_s0 != 0) {
-            if (((long long)*(volatile char *)((char *)var_s0 + 70) << 57 >> 57) != 1) {
+            if (((long long)*(const char *)((char *)var_s0 + 70) << 57 >> 57) != 1) {
                 var_s0->Set();
             }
             var_s0 = var_s0->f32;

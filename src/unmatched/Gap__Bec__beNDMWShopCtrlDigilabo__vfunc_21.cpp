@@ -347,7 +347,7 @@ void Gap__Bec__beNDMWShopCtrlDigilabo__vfunc_21(beNDMWShopCtrlDigilabo *self) {
                             l = (igIntList *)((beNDMWShopSelect02 *)sp88.p)->_playerNoList;
                             idx = l->_count;
                             if (idx < l->_capacity) {
-                                (*(volatile int *)&l->_count)++; /* matching construct: retail reloads the count */
+                                l->_count = *(const int *)&l->_count + 1; /* matching construct: retail reloads the count */
                             } else {
                                 List_Resize(l, idx + 1, 4);
                             }

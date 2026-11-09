@@ -1,6 +1,6 @@
 #include "dw4/reflected.h"
-/* The count is volatile so it is reloaded. */
-struct L { char p0[8]; volatile int cnt; int cap; int *data; };
+/* The count is const so it is reloaded. */
+struct L { char p0[8]; int cnt; int cap; int *data; };
 struct LA { char p0[12]; struct L *l; };
 extern igMetaObject *DAT_0055efe8[4];
 int List_Resize();
@@ -18,7 +18,7 @@ void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2) {
         v = *(int *)((char *)e->_data + (e->_count - 1) * 4);
     }
     l = ((struct LA *)arg0->_lightAttrs)->l;
-    n = l->cnt;
+    n = (*(int const *)&l->cnt);
     if (n < l->cap) {
         l->cnt = l->cnt + 1;
     } else {

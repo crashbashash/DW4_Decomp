@@ -1,4 +1,4 @@
-/* The volatile read of _st2 in jump-table case 4 keeps the compiler from reusing the switch value. */
+/* The const read of _st2 in jump-table case 4 keeps the compiler from reusing the switch value. */
 #include "dw4/reflected.h"
 extern "C" {
 int sprintf(...);
@@ -321,7 +321,7 @@ void Gap__Bec__beNDMWShopCtrlEditBit__vfunc_21(beNDMWShopCtrlEditBit *self) {
         case 4:
             if (((igObjectList *)self->_subWindow)->_count != self->_nowProcKazu) {
                 if (self->_entCode == 2) {
-                    self->_st2 = *(volatile int *)&self->_st2 + 1;
+                    self->_st2 = *(const int *)&self->_st2 + 1;
                     self->_st3 = 0;
                     return;
                 }

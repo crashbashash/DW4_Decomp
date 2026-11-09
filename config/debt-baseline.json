@@ -37,8 +37,8 @@
    "value": 300
   },
   "struct.c": 287,
-  "unapproved.bytes": 357272,
-  "unapproved.functions": 407,
+  "unapproved.bytes": 159832,
+  "unapproved.functions": 271,
   "unmatched.bytes": 798752,
   "unmatched.functions": 1461
  },

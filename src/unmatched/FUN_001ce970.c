@@ -1,6 +1,6 @@
 typedef struct MatrixStackEntry { float f[16]; } MatrixStackEntry;
 typedef struct ReleasableList { int pad0, pad4; int n; int cap; int *data; } ReleasableList;
-typedef struct MatrixStackList { int pad0, pad4; volatile int n; int cap; MatrixStackEntry *data; } MatrixStackList;
+typedef struct MatrixStackList { int pad0, pad4; int n; int cap; MatrixStackEntry *data; } MatrixStackList;
 typedef struct CountedObject { int vt; int rc; } CountedObject;
 typedef struct TraversalMatrixState { int p[8]; MatrixStackList *mats; ReleasableList *objs; } TraversalMatrixState;
 int List_Resize(void *, int, int);
@@ -17,7 +17,7 @@ void FUN_001ce970(TraversalMatrixState *self) {
     int i;
     self->mats->n = 0;
     m = self->mats;
-    idx = m->n;
+    idx = (*(int const *)&m->n);
     if (idx < m->cap) {
         m->n = m->n + 1;
     } else {

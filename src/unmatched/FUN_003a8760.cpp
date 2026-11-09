@@ -48,7 +48,7 @@ void FUN_003a8760(beBaseInfoRam *arg0) {
         }
         temp_a0_3 = ((igObjectList *)arg0->_dataList);
         temp_a1 = temp_a0_3->_count;
-        if (temp_a1 >= *(volatile int *)&temp_a0_3->_count) {
+        if (temp_a1 >= *(const int *)&temp_a0_3->_count) {
             List_Reserve(temp_a0_3, temp_a1, 4);
         }
     }

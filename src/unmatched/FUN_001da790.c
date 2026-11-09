@@ -30,7 +30,7 @@ void FUN_001da790(SorterOpaqueView *o) {
                 if (c != 0 && i >= 0 && c > i) {
                     j = i - 1;
                     if (j >= 0 && c > j) {
-                        int t = *(volatile int *)p;
+                        int t = *(const int *)p;
                         *p = p[-1];
                         p[-1] = t;
                     }

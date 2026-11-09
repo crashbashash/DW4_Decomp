@@ -8,7 +8,7 @@ struct CompileTraversalView {
 extern AttrMeta *DAT_0055efe8[4];
 extern "C" int FUN_001bbae0(CompileTraversalView *, int);
 struct AttrKey {
-    volatile int value;
+    int value;
     AttrKey(int v) { value = v; }
     AttrKey(const AttrKey &o) { value = o.value; }
 };
@@ -20,7 +20,7 @@ static inline int lastOf(AttrIntList *l) {
 }
 static inline int indexOf(AttrIntList *l, const AttrKey &v) {
     int n = l->_count;
-    int key = v.value;
+    int key = (*(int const *)&v.value);
     int i;
     for (i = 0; i < n; i++) {
         if (key == l->_data[i]) return i;

@@ -6,7 +6,7 @@ struct KindMatchObject {
     virtual int v20();
 };
 struct KindMatchList { char p[8]; int n; char q[4]; KindMatchObject **arr; };
-struct KindMatchSource { char p[20]; KindMatchList * volatile list; };
+struct KindMatchSource { char p[20]; KindMatchList * list; };
 struct KindMatchTarget { char p[36]; int f36; };
 extern "C" int FUN_00301e30(int, void *);
 extern "C" int DAT_00589658[4];
@@ -14,7 +14,7 @@ static inline int count(KindMatchList *l) { return l->n; }
 static inline KindMatchObject *at(KindMatchList *l, int i) { return l->arr[i]; }
 extern "C" void FUN_00382df0(KindMatchTarget *arg0, KindMatchSource *arg1) {
     int i;
-    for (i = 0; i < count(arg1->list); i++) {
+    for (i = 0; i < count((*(KindMatchList * const *)&arg1->list)); i++) {
         KindMatchObject *o = at(arg1->list, i);
         int g = DAT_00589658[0];
         if (g == o->v20()) {

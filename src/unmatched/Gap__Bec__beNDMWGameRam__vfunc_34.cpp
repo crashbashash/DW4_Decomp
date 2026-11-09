@@ -312,8 +312,8 @@ struct DW4StrListOps { static void SetAt(igStringRefList *list, int idx, const R
   Header *h = (Header *)list;
   int index = h->count;
   if (index < h->capacity) {
-   volatile int *count = &h->count;
-   *count = *count + 1;
+   int *count = &h->count;
+   *count = *((const int *)count) + 1;
   } else {
    List_Resize(list, index + 1, 4);
   }

@@ -119,8 +119,8 @@ struct MsgArg { int pad[5]; int f20; };
 #define APS(s) beMessenger_AppendString(M, s)
 #define DSP(d) beMessenger_DispatchSelected(M, d)
 #define REC(o, s) (igProperty_GetRecord(o, &s[0])[3])
-#define APPENDL(val) { igIntList *lst = (igIntList *)work->_parameter; idx = lst->_count; if (idx < lst->_capacity) lst->_count = *(volatile int *)&lst->_count + 1; else List_Resize(lst, idx + 1, 4); ((int *)lst->_data)[idx] = (val); }
-#define APPEND(val) { int idx; igIntList *lst = (igIntList *)work->_parameter; idx = lst->_count; if (idx < lst->_capacity) lst->_count = *(volatile int *)&lst->_count + 1; else List_Resize(lst, idx + 1, 4); ((int *)lst->_data)[idx] = (val); }
+#define APPENDL(val) { igIntList *lst = (igIntList *)work->_parameter; idx = lst->_count; if (idx < lst->_capacity) lst->_count = *(const int *)&lst->_count + 1; else List_Resize(lst, idx + 1, 4); ((int *)lst->_data)[idx] = (val); }
+#define APPEND(val) { int idx; igIntList *lst = (igIntList *)work->_parameter; idx = lst->_count; if (idx < lst->_capacity) lst->_count = *(const int *)&lst->_count + 1; else List_Resize(lst, idx + 1, 4); ((int *)lst->_data)[idx] = (val); }
 #define LISTDATA(i) (((int *)((igIntList *)work->_parameter)->_data)[i])
 #define COLOR(a, ref) { if (a == ref) { r = 0.9f; g = 0.9f; b = 0.9f; } else if (a < ref) { r = 0.94f; g = 0.4f; b = 0.25f; } else { g = 0.96f; b = 1.0f; r = 0.0f; } }
 

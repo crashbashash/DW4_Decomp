@@ -179,7 +179,7 @@ public:
 #define INTERNP_APPEND(field, ptr) { const char *tok_; INTERNP(tok_, ptr) StringList_AppendRetained(field, StringRef(tok_)); }
 #define INTERN_APPEND(field, text) { const char *tok_; INTERN(tok_, text) StringList_AppendRetained(field, StringRef(tok_)); }
 #define LIST_ADD(lst, val) { int n_ = ((igDataList *)(lst))->_count; igDataList *l_ = (igDataList *)(lst); \
-    if (n_ < l_->_capacity) l_->_count = *(volatile int *)&l_->_count + 1; else List_Resize(l_, n_ + 1, 4); \
+    if (n_ < l_->_capacity) l_->_count = *(const int *)&l_->_count + 1; else List_Resize(l_, n_ + 1, 4); \
     ((int *)l_->_data)[n_] = (val); }
 #define LIST_REMOVE(lst, idx) { igObjectList *l_ = (igObjectList *)(lst); int ix_ = (idx); \
     ObjectRef_Release_003e9110(ObjectList_GetAt_003e9260(l_, ix_)); FUN_00406f20(l_, ix_); \
@@ -399,7 +399,7 @@ void Gap__Bec__beNDMWStatusSubMenu__vfunc_21(beNDMWStatusSubMenu *self)
                     MSG_SELECT_INT(i)
                     if (((unsigned char *)igProperty_GetRecordByte(beMessenger_GetObject(self->_messenger, 0), DAT_0051a1a0))[12] != 0 && i != self->_playerNo) {
                         nN = ((igDataList *)(self->_playerNoList))->_count; lL = (igDataList *)(self->_playerNoList);
-                        if (nN < lL->_capacity) lL->_count = *(volatile int *)&lL->_count + 1; else List_Resize(lL, nN + 1, 4);
+                        if (nN < lL->_capacity) lL->_count = *(const int *)&lL->_count + 1; else List_Resize(lL, nN + 1, 4);
                         ((int *)lL->_data)[nN] = i;
                     }
                 }

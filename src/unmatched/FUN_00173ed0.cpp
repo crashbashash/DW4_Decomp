@@ -3,7 +3,7 @@ void List_Resize(...);
 void Matrix44_Copy(...);
 void FUN_001fbce0(...);
 }
-struct List { int pad0; int pad1; volatile int count; int cap; char *data; };
+struct List { int pad0; int pad1; int count; int cap; char *data; };
 struct Obj {
     virtual void d0();
     virtual void d1();
@@ -216,7 +216,7 @@ extern "C" void FUN_00173ed0(Obj *self, int op, void *m) {
     switch (op) {
     case 14:
         l = self->list;
-        n = l->count;
+        n = (*(int const *)&l->count);
         if (n == 0) {
             if (n < l->cap) l->count = l->count + 1;
             else List_Resize(l, n + 1, 64);

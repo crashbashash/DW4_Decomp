@@ -41,8 +41,8 @@ void Gap__Bec__beNDMWLoadSlotPlayer__vfunc_08(Obj *arg0) {
     beNDMWLoadSlotPlayer *self = (beNDMWLoadSlotPlayer *)arg0;
     beNDMWDegiDataList *l = (beNDMWDegiDataList *)self->_saveDataList;
     int n;
-    /* matching construct: volatile read forces the early count load */
-    if (((volatile beNDMWDegiDataList *)l)->_count > 0) {
+    /* matching construct: const read forces the early count load */
+    if (((const beNDMWDegiDataList *)l)->_count > 0) {
     n = l->_count;
     int i = 0;
     int off;

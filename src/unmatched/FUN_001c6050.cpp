@@ -1,7 +1,7 @@
 extern "C" {
 struct Ref { char pad0[4]; int f4; };
 struct L { char pad0[8]; unsigned cnt; char pad12[4]; int *data; };
-struct S { char pad0[28]; L * volatile f28; };
+struct S { char pad0[28]; L * f28; };
 int FUN_001c5eb0(Ref **, S *, unsigned, unsigned);
 int igObject_Destroy(Ref *);
 unsigned FUN_001c6050(S *arg0, int arg1);
@@ -13,7 +13,7 @@ unsigned FUN_001c6050(S *arg0, int arg1) {
     bool found;
     Ref *t;
     Ref *u;
-    l = arg0->f28;
+    l = (*(L * const *)&arg0->f28);
     n = 0;
     if (l != 0) {
         n = l->cnt;

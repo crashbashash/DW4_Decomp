@@ -67,7 +67,7 @@ extern "C" void Gap__Bec__beNDMWPanelObjectWaza__vfunc_21(beNDMWPanelObjectWaza 
     int cnt = ((igObjectList *)arg0->_listFolder)->_count;
     igIntList *d = (igIntList *)arg0->_listColor;
     if (d->_count < cnt) {
-        if (!(cnt < *(volatile int *)&d->_count)) List_Reserve(d, cnt, 4);
+        if (!(cnt < *(const int *)&d->_count)) List_Reserve(d, cnt, 4);
     }
     d = (igIntList *)arg0->_listColor;
     if (cnt >= 0) {

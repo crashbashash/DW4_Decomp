@@ -1,4 +1,4 @@
-typedef struct FL { char pad[8]; volatile int n; int cap; float *data; } FL;
+typedef struct FL { char pad[8]; int n; int cap; float *data; } FL;
 typedef struct A2 { char pad[72]; FL *list; } A2;
 typedef struct A3 { char pad[8]; char *name; float f12; float f16; } A3;
 extern "C" {
@@ -26,7 +26,7 @@ int FUN_00393b20(int a0, int a1, A2 *arg2, A3 *arg3) {
     if (l->n == 0) {
         for (i = 0; i < 4; i++) {
             l = arg2->list;
-            k = l->n;
+            k = (*(int const *)&l->n);
             if (k < l->cap) {
                 l->n = l->n + 1;
             } else {

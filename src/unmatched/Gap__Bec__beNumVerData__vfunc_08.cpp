@@ -41,7 +41,7 @@ extern "C" void Gap__Bec__beNumVerData__vfunc_08(Obj *arg0);
 void Gap__Bec__beNumVerData__vfunc_08(Obj *arg0) {
     beNumVerDataList *l = (beNumVerDataList *)((beNumVerData *)arg0)->_verDataList;
     int n;
-    if (/* matching construct: volatile read forces the second load of _count */ *(volatile int *)&l->_count > 0) {
+    if (/* matching construct: const read forces the second load of _count */ *(const int *)&l->_count > 0) {
     n = l->_count;
     int i = 0;
     int off;

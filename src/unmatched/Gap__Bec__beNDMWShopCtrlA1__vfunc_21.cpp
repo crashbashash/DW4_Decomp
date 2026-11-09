@@ -27,7 +27,7 @@ int beNDMWWindow_RunMessageScript(void *, void *, int);
 void igObject_Destroy(void *);
 void *igObject_GetAllocator(void *);
 struct Item { int p[3]; int f12; int p16; int f20; };
-/* matching construct: the volatile list pointer keeps the retail per-iteration reload of the list size (no loop-invariant hoist). */
+/* matching construct: the const list pointer keeps the retail per-iteration reload of the list size (no loop-invariant hoist). */
 struct Rec { int p[3]; igObjectList *f12; };
 Rec *igProperty_GetRecordFolder(int, void *);
 extern void *DAT_004cf8a8[4];
@@ -78,14 +78,14 @@ void Gap__Bec__beNDMWShopCtrlA1__vfunc_21(beNDMWShopCtrlA1 *arg0) {
     void *alloc;
     float sp40[3];
     float sp30[3];
-    volatile igObjectList *a;
+    const igObjectList *a;
     int s0;
     int i;
     Item *it;
     switch (arg0->_st0) {
     case 0:
-        /* matching construct: volatile read reloads the state word after the dispatch. */
-        arg0->_st0 = ((volatile beNDMWShopCtrlA1 *)arg0)->_st0 + 1;
+        /* matching construct: const read reloads the state word after the dispatch. */
+        arg0->_st0 = ((const beNDMWShopCtrlA1 *)arg0)->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
         arg0->_st1 = 0;

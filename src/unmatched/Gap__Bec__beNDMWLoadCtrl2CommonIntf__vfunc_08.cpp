@@ -5,8 +5,8 @@ int igObject_Destroy(igObject *);
 void Gap__Core__igObject__vfunc_08__002ff0f0(beNDMWLoadCtrl2CommonIntf *);
 void Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08(beNDMWLoadCtrl2CommonIntf *arg0) {
     beNDMWDegiDataList *l = (beNDMWDegiDataList *)arg0->_gameUseData;
-    /* matching construct: volatile read forces the early count load */
-    if (((volatile beNDMWDegiDataList *)l)->_count > 0) {
+    /* matching construct: const read forces the early count load */
+    if (((const beNDMWDegiDataList *)l)->_count > 0) {
         int n = l->_count;
         int i;
         igObject *o;
@@ -30,8 +30,8 @@ void Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08(beNDMWLoadCtrl2CommonIntf *ar
     }
     {
     beNDMWLoadSavePlWorkList *l2 = (beNDMWLoadSavePlWorkList *)arg0->_flagWork;
-    /* matching construct: volatile read forces the early count load */
-    if (((volatile beNDMWLoadSavePlWorkList *)l2)->_count > 0) {
+    /* matching construct: const read forces the early count load */
+    if (((const beNDMWLoadSavePlWorkList *)l2)->_count > 0) {
         int n = l2->_count;
         int i;
         igObject *o;

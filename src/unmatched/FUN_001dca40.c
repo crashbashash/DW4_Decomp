@@ -1,4 +1,4 @@
-/* The count is read volatile so it is loaded before f24. */
+/* The count is read const so it is loaded before f24. */
 typedef struct Obj Obj;
 struct Obj { int w0; int references; };
 typedef struct List List;
@@ -14,7 +14,7 @@ void FUN_001dca40(List *arg0, Obj *(*arg1)(int)) {
     Obj *o;
     Obj *old;
     int off;
-    c = *(volatile int *)&arg0->count;
+    c = *(const int *)&arg0->count;
     n = arg0->f24 + c;
     ObjectList_ResizeRetained(arg0, n);
     alloc = igObject_GetAllocator(arg0);

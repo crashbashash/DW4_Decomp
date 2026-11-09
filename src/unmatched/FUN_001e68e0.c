@@ -11,13 +11,13 @@ int FUN_001e68e0(Lst *arg0, int arg1) {
     var_s0 = arg0->count;
     if (var_s0 == 0) {
         if (var_s0 < arg0->cap) {
-            arg0->count = *(volatile int *)&arg0->count + 1;
+            arg0->count = *(const int *)&arg0->count + 1;
         } else {
             List_Resize(arg0, var_s0 + 1, 0x40);
         }
         Matrix44_Copy(arg0->data + var_s0, arg1);
     } else {
-        temp_v1 = *(volatile int *)&arg0->count;
+        temp_v1 = *(const int *)&arg0->count;
         if (temp_v1 == 0) {
             var_s0 = 0;
         } else {

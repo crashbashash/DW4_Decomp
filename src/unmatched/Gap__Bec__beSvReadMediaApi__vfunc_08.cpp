@@ -8,8 +8,8 @@ void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *arg0);
 }
 void Gap__Bec__beSvReadMediaApi__vfunc_08(beSvReadMediaApi *arg0) {
     igObjectList *l = (igObjectList *)arg0->_loadWorkList;
-    /* matching construct: volatile read forces the early count load */
-    if (((volatile igObjectList *)l)->_count != 0) {
+    /* matching construct: const read forces the early count load */
+    if (((const igObjectList *)l)->_count != 0) {
         int n = l->_count;
         int i;
         igObject *t;

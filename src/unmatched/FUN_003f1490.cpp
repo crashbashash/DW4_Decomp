@@ -83,7 +83,7 @@ void FUN_003f1490(beNDMWMcUtilCtrl *op) {
             case 0:
                 switch (op->_kind) {
                 case 0:
-                    memset(((beSaveDataDeliver *)op->_svData)->_data, 0, *(volatile int *)&((beSaveDataDeliver *)op->_svData)->_size);
+                    memset(((beSaveDataDeliver *)op->_svData)->_data, 0, *(unsigned int *)&((beSaveDataDeliver *)op->_svData)->_size);
                     beMessenger_SelectReceivers(op->_messenger, &DAT_00517fd0[0], 0, -1);
                     beMessenger_AppendInt(op->_messenger, op->_tgCon);
                     beMessenger_AppendObject(op->_messenger, op->_svData);

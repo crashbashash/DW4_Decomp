@@ -6,8 +6,8 @@
  * Matching constructs:
  *  - TitleRef<Tag> reproduces the five reference wrappers and their exception cleanup; the tags only
  *    keep otherwise identical destructors apart.
- *  - Local declaration order, the bool direction flags and the volatile state-field re-reads
- *    (`ctrl->_stN = (*(volatile int *)&ctrl->_stN) + 1`) fix register allocation and reload points.
+ *  - Local declaration order, the bool direction flags and the const state-field re-reads
+ *    (`ctrl->_stN = (*(const int *)&ctrl->_stN) + 1`) fix register allocation and reload points.
  *  - The two language locals (Up and Down handlers) are kept separate; merging them changes the
  *    register colouring. */
 #include "dw4/reflected.h"
@@ -340,7 +340,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
     case TitleStateLogo: /* Logo, Press START and the attract-loop handoff. */
         switch (ctrl->_st1) {
         case 0:
-            ctrl->_st1 = (*(volatile int *)&ctrl->_st1) + 1;
+            ctrl->_st1 = (*(const int *)&ctrl->_st1) + 1;
             ctrl->_st3 = 0;
             ctrl->_st2 = 0;
             goto done;
@@ -384,7 +384,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 switch (ctrl->_st3) {
                 case 0x0:
                     if (pressed & ButtonStart) {
-                        ctrl->_st2 = (*(volatile int *)&ctrl->_st2) + 1;
+                        ctrl->_st2 = (*(const int *)&ctrl->_st2) + 1;
                         ctrl->_st3 = 0;
                         goto done;
                     }

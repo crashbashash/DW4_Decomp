@@ -173,6 +173,6 @@ void FUN_003f6620(void *arg0, void *arg1, void *arg2)
     } while (done == 0);
     {
         int n = out->_count;
-        if (!(n < ((volatile igObjectList *)out)->_count)) List_Reserve(out, n, 4);
+        if (!(n < ((const igObjectList *)out)->_count)) List_Reserve(out, n, 4);
     }
 }

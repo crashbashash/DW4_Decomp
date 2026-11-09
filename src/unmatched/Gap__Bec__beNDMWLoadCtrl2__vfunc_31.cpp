@@ -143,7 +143,7 @@ void Gap__Bec__beNDMWLoadCtrl2__vfunc_31(beNDMWLoadCtrl2 *arg0, Host *arg1) {
             }
             break;
         case 2:
-            switch (*(volatile int *)&st->_st1) {
+            switch (*(const int *)&st->_st1) {
             case 0:
                 beMessenger_SendNamed(arg0->_messenger, &DAT_00517a48[0], &DAT_00518148[0], 0, &DAT_00517fe0[0]);
                 beMessenger_SendNamed(arg0->_messenger, &DAT_00517a48[0], &DAT_00518148[0], 0, &DAT_00518158[0]);

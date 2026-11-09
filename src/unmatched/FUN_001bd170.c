@@ -19,7 +19,7 @@ void FUN_001bd170(struct A *arg0, struct B *arg1) {
             o = arg0->out;
             idx = o->n;
             if (idx < o->cap) {
-                o->n = ((volatile struct Arr *)o)->n + 1;
+                o->n = ((const struct Arr *)o)->n + 1;
             } else {
                 List_Resize(o, idx + 1, 4);
             }

@@ -18,7 +18,7 @@ void FUN_003f99f0(beNDMWGameRam *arg0, int arg1, void *arg2, int *arg3) {
     FUN_003f9570(arg0);
     w = (struct W *)FUN_003a9340(((int *)(((igObjectList *)arg0->_playerDataListList)->_data))[arg1], DAT_00518828);
     l = w->f12;
-    if (*(volatile int *)&l->_count != 0) {
+    if (*(const int *)&l->_count != 0) {
         n = l->_count;
         for (i = 0; i < n; i++) {
             p = ((igObject **)l->_data)[i];

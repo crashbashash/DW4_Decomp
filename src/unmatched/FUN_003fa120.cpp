@@ -1,4 +1,4 @@
-/* The +20 read is volatile: it is created before the *out reload so the register colouring puts
+/* The +20 read is const: it is created before the *out reload so the register colouring puts
  * the field in a0 and the running total in v1. */
 #include "dw4/reflected.h"
 extern "C" {
@@ -13,7 +13,7 @@ void FUN_003fa120(beNDMWGameRam *gameram, void *player, int *out, const char *na
         if (item != 0) {
             *out += beNDMWItemBase_GetRecordInt(item, gameram, name);
             if (with_flat != 0) {
-                *out += *(volatile int *)((char *)item + 20);
+                *out += *(const int *)((char *)item + 20);
             }
         }
     }

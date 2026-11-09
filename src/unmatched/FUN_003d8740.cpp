@@ -1,6 +1,6 @@
 /* SUBWND service-menu work creation, BIT/XDATA caps and shop-stock list preparation. owner is
  * beNDMWStatus (the SUBWND manager) and ram is its beNDMWStatusInfoRam; _subWndNo 6..9 selects
- * weapon / armor / chip / junk stock (WPU / APU / CHIP / JUNK). Lst::count is volatile so it is
+ * weapon / armor / chip / junk stock (WPU / APU / CHIP / JUNK). Lst::count is const so it is
  * re-read for the reserve test; the caps use '>' compares and a separate record local; the level
  * tier chains are else-if chains; row8 is declared before the loop counters; each item holder is
  * constructed at its use site from the new object and released by its destructor at scope exit;
@@ -62,7 +62,7 @@ void FUN_003d8740(beNDMWStatus *owner, beNDMWStatusInfoRam *ram);
  * zero. Every item kind is its own class, so the compiler emits one destructor per kind. */
 struct ObjectRef { igObject *p; ObjectRef(igObject *o) : p(o) {} ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
-struct U { static inline void Reserve(volatile igObjectList *l) { if (l->_count < 37) List_Reserve(l, 36, 4); } };
+struct U { static inline void Reserve(const igObjectList *l) { if (l->_count < 37) List_Reserve(l, 36, 4); } };
 #define WL(f) ((igObjectList *)work->f)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if (((unsigned long long)((long long)(int)rr->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(rr); } } }
 #define ALLOC(a, sel) { a = igObject_GetAllocator(owner); a = GPR_00554c14 ? a : Memory_GetAllocatorBySelector(sel); }

@@ -36,7 +36,7 @@ void Gap__Core__igPsx2Thread__vfunc_45(int *arg0, O *arg1) {
         FUN_00330440(arg1, 0);
     }
     DAT_005871d0[0]->vX(arg1);
-    temp_s1 = *(volatile int *)&arg1->f60;
+    temp_s1 = *(const int *)&arg1->f60;
     temp_s0_2 = TerminateThread(arg1->f60);
     arg1->f60 = -1;
     sp5C = arg1->f48->vX();

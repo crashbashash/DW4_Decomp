@@ -32,7 +32,7 @@ void FUN_00395250(int arg0, int arg1, int arg2, beModelCtrlInfoWork *arg3);
 }
 extern "C" void FUN_00395250(int arg0, int arg1, int arg2, beModelCtrlInfoWork *arg3) {
     int s7;
-    volatile beModelCtrlData *spA0;
+    const beModelCtrlData *spA0;
     int s2;
     unsigned char s1;
     VO *s0;

@@ -59,7 +59,7 @@ void beNDMWWindow_PresentModel(beNDMWWindow *arg0, const char *arg1, int arg2, c
         {
             int n; igDataList *l = (igDataList *)arg0->_modelCloseRamNoList;
             n = l->_count;
-            if (n < l->_capacity) l->_count = /* matching construct: volatile reload of _count */ *(volatile int *)&l->_count + 1; else List_Resize(l, n + 1, 4);
+            if (n < l->_capacity) l->_count = /* matching construct: const reload of _count */ *(const int *)&l->_count + 1; else List_Resize(l, n + 1, 4);
             ((int *)l->_data)[n] = arg2;
         }
         INTERN_APPEND(arg0->_modelCloseSeqNameList, arg4)

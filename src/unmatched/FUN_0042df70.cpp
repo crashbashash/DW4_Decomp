@@ -95,7 +95,7 @@ void FUN_0042df70(beNDMWShopCtrlA1 *arg0) {
                 l = (igIntList *)arg0->_cardRamNoList;
                 c = l->_count;
                 if (c < l->_capacity) {
-                    l->_count = *(volatile int *)&l->_count + 1;
+                    l->_count = *(const int *)&l->_count + 1;
                 } else {
                     List_Resize(l, c + 1, 4);
                 }
@@ -106,7 +106,7 @@ void FUN_0042df70(beNDMWShopCtrlA1 *arg0) {
                 l2 = (igIntList *)arg0->_cardRamNoList;
                 c2 = l2->_count;
                 if (c2 < l2->_capacity) {
-                    l2->_count = *(volatile int *)&l2->_count + 1;
+                    l2->_count = *(const int *)&l2->_count + 1;
                 } else {
                     List_Resize(l2, c2 + 1, 4);
                 }

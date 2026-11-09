@@ -1,6 +1,6 @@
 extern "C" {
 typedef struct PoolObject { int _vtable; int _refCount; } PoolObject;
-typedef struct EnbayaIntList { int _pad0[2]; volatile int _count; int _capacity; int *_data; } EnbayaIntList;
+typedef struct EnbayaIntList { int _pad0[2]; int _count; int _capacity; int *_data; } EnbayaIntList;
 typedef struct EnbayaContextPoolView { int _pad0[2]; int _poolList; EnbayaIntList *_boneCountList; EnbayaIntList *_freeIndexList; } EnbayaContextPoolView;
 extern PoolObject *FUN_002c9130(int);
 extern void List_Resize(EnbayaIntList *, int, int);
@@ -33,7 +33,7 @@ extern "C" void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
         list.p = FUN_002c9130(igObject_GetAllocator(o));
         ObjectList_AppendRetained(o->_poolList, list.p);
         l1 = o->_boneCountList;
-        n1 = l1->_count;
+        n1 = (*(int const *)&l1->_count);
         if (n1 < l1->_capacity) {
             l1->_count++;
         } else {
@@ -41,7 +41,7 @@ extern "C" void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
         }
         l1->_data[n1] = boneCount;
         l2 = o->_freeIndexList;
-        n2 = l2->_count;
+        n2 = (*(int const *)&l2->_count);
         if (n2 < l2->_capacity) {
             l2->_count++;
         } else {

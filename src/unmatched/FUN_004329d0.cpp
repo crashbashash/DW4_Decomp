@@ -65,7 +65,7 @@ void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
                 igIntList *l = (igIntList *)self->_playerNoList;
                 idx = l->_count;
                 if (idx < l->_capacity) {
-                    l->_count = *(volatile int *)&l->_count + 1;
+                    l->_count = *(const int *)&l->_count + 1;
                 } else {
                     List_Resize(l, idx + 1, 4);
                 }
@@ -78,7 +78,7 @@ void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
                 l = (igIntList *)self->_digimonNoList;
                 idx2 = l->_count;
                 if (idx2 < l->_capacity) {
-                    l->_count = *(volatile int *)&l->_count + 1;
+                    l->_count = *(const int *)&l->_count + 1;
                 } else {
                     List_Resize(l, idx2 + 1, 4);
                 }
@@ -99,7 +99,7 @@ void FUN_004329d0(beNDMWShopCtrlDigilabo *self) {
                         val = it->f12;
                         idx3 = l->_count;
                         if (idx3 < l->_capacity) {
-                            l->_count = *(volatile int *)&l->_count + 1;
+                            l->_count = *(const int *)&l->_count + 1;
                         } else {
                             List_Resize(l, idx3 + 1, 4);
                         }

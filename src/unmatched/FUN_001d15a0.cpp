@@ -1,5 +1,5 @@
 struct KeyFloatList { char pad0[8]; unsigned int count; char pad1[4]; float *data; };
-struct KeyIndexList { char pad0[8]; volatile int count; int capacity; int *data; };
+struct KeyIndexList { char pad0[8]; int count; int capacity; int *data; };
 typedef union KeyFloatBits { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } KeyFloatBits;
 class KeyChannel {
 public:
@@ -42,7 +42,7 @@ extern "C" void FUN_001d15a0(KeyReducer *self) {
         u.b.sign = 0;
         if (u.f > 4.99999999e-07f) {
             list = self->kept;
-            at = list->count;
+            at = (*(int const *)&list->count);
             if (list->capacity > at) {
                 list->count = list->count + 1;
             } else {

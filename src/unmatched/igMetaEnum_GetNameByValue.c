@@ -1,7 +1,7 @@
-/* The list pointer member is volatile so it is reloaded per iteration, the loop is tested at the
+/* The list pointer member is const so it is reloaded per iteration, the loop is tested at the
  * bottom via goto, and the locals are declared in the order a4, n, i. */
 struct L { char pad0[8]; int cnt; char pad12[4]; int *data; };
-struct E { char pad0[12]; int f12; struct L * volatile f16; };
+struct E { char pad0[12]; int f12; struct L * f16; };
 int StringList_CopyRetained();
 void igMetaEnum_GetNameByValue(int *arg0, struct E *arg1, int arg2) {
     int i;
@@ -9,7 +9,7 @@ void igMetaEnum_GetNameByValue(int *arg0, struct E *arg1, int arg2) {
     int a4;
     a4 = arg1->f12;
     if (a4 != 0) {
-        n = arg1->f16->cnt;
+        n = (*(struct L * const *)&arg1->f16)->cnt;
         i = 0;
         goto test;
 body:

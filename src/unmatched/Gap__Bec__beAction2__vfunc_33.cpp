@@ -75,7 +75,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
     ramNo = arg1->_ramNo;
     switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0036dcd0(), arg2)) {
     case 1:
-        { int r = arg1->_isRun; int m = *(volatile int *)&arg0->_messenger; beMessenger_AppendBool(m, r); }
+        { int r = arg1->_isRun; int m = *(unsigned int *)&arg0->_messenger; beMessenger_AppendBool(m, r); }
         break;
     case 0: {
         beAction2InfoWork *ww = (beAction2InfoWork *)spBC.p;
@@ -130,7 +130,7 @@ int Gap__Bec__beAction2__vfunc_33(beAction2 *arg0, beAction2InfoRam *arg1, void 
             tt = (int)(((igInsightCore *)arg0->_insight)->_worldTime >> 0x12);
             nd = (beModelCtrlNode2 *)arg1->_node;
             f20 = (float)(unsigned int)tt;
-            { long long r = __fixsfdi(f20 * nd->_timeScale); long long o = *(volatile long long *)&nd->_timeBias; nd->_timeBias = (r << 0x12) + o; }
+            { long long r = __fixsfdi(f20 * nd->_timeScale); long long o = *(const long long *)&nd->_timeBias; nd->_timeBias = (r << 0x12) + o; }
             nd->_timeBias = nd->_timeBias - (__fixsfdi(f20 * k) << 0x12);
             nd->_timeScale = k;
             ((beAction2InfoWork *)spBC.p)->_isFreeze = 1;

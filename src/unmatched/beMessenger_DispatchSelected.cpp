@@ -1,6 +1,6 @@
 /* Several spellings are kept on purpose for the register assignment: the per-call locals of the
  * four list appends (the inlined AppendBool/AppendInt bodies, the int one re-reading the count
- * through a volatile cast), and the first loop, which reads the element once into `have` and once
+ * through a const cast), and the first loop, which reads the element once into `have` and once
  * more inline (the second read keeps the data pointer load inside the loop and settles the
  * temporary registers). */
 #include "dw4/reflected.h"
@@ -135,7 +135,7 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
                 ((char *)bla->_data)[na] = GPR_005549d4;
                 il = (igIntList *)((beMessengerArgData *)self->_argData)->_intList;
                 n = il->_count;
-                if (n < il->_capacity) il->_count = *(volatile int *)&il->_count /* matching construct: volatile re-read of the count */ + 1; else List_Resize(il, n + 1, 4);
+                if (n < il->_capacity) il->_count = *(const int *)&il->_count /* matching construct: const re-read of the count */ + 1; else List_Resize(il, n + 1, 4);
                 ((int *)il->_data)[n] = matches;
             } else {
                 igBoolList *blc = (igBoolList *)((beMessengerArgData *)self->_argData)->_boolList;
@@ -144,7 +144,7 @@ void beMessenger_DispatchSelected(beMessenger *self, int name)
                 ((char *)blc->_data)[n] = GPR_005549d8;
                 il = (igIntList *)((beMessengerArgData *)self->_argData)->_intList;
                 int nd = il->_count;
-                if (nd < il->_capacity) il->_count = *(volatile int *)&il->_count /* matching construct: volatile re-read of the count */ + 1; else List_Resize(il, nd + 1, 4);
+                if (nd < il->_capacity) il->_count = *(const int *)&il->_count /* matching construct: const re-read of the count */ + 1; else List_Resize(il, nd + 1, 4);
                 ((int *)il->_data)[nd] = DAT_004c8f88[0];
             }
         }

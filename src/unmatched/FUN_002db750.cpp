@@ -77,7 +77,7 @@ int FUN_002db750(ConfigTextParser *self, ConfigSettingsRecord *out) {
         list = out->entries;
         index = list->count;
         if (index < list->capacity) {
-            list->count = *(volatile int *)&list->count + 1;
+            list->count = *(const int *)&list->count + 1;
         } else {
             List_Resize(list, index + 1, 4);
         }

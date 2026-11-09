@@ -1,7 +1,7 @@
 int FUN_001904f0();
 int List_Resize();
 int Matrix44_Copy();
-struct S { char pad[8]; volatile int f8; int f12; char *f16; };
+struct S { char pad[8]; int f8; int f12; char *f16; };
 
 int FUN_001e69e0(struct S *arg0, int arg1) {
     char *temp_a0;
@@ -9,7 +9,7 @@ int FUN_001e69e0(struct S *arg0, int arg1) {
     int temp_v1;
     int var_s0;
 
-    var_s0 = arg0->f8;
+    var_s0 = (*(int const *)&arg0->f8);
     if (var_s0 == 0) {
         if (var_s0 < arg0->f12) {
             arg0->f8 = arg0->f8 + 1;

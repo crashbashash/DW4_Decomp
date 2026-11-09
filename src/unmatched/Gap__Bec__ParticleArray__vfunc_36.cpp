@@ -21,8 +21,8 @@ void Gap__Bec__ParticleArray__vfunc_36(ParticleArray *arg0) {
     s0 = (PointSpriteView *)arg0->_pointSpriteInterface;
     if (s0 != 0) {
         if ((DW4VC_236 *)s0->f24 == (DW4VC_236 *)arg0->_internalVertexArray) {
-            /* matching construct: volatile re-read of the reference before its release */
-            t = *(igObject * volatile *)&s0->f24;
+            /* matching construct: const re-read of the reference before its release */
+            t = *(igObject * const *)&s0->f24;
             if (t != 0) {
                 t->_refCount = t->_refCount - 1;
                 if ((t->_refCount & 0x7FFFFF) == 0) {

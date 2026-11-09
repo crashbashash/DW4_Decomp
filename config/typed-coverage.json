@@ -382,7 +382,7 @@
   "igControllerManager": 5,
   "igCriMovieData": 7,
   "igCullFaceAttr": 2,
-  "igDataList": 407,
+  "igDataList": 408,
   "igDataPump": 10,
   "igDataPumpList": 13,
   "igDataPumpManager": 1,
@@ -431,7 +431,7 @@
   "igInfoManagerOrderedList": 2,
   "igInsightCore": 30,
   "igIntArrayMetaField": 15,
-  "igIntList": 323,
+  "igIntList": 324,
   "igIntMetaField": 14,
   "igInterface": 2,
   "igIntersectTraversal": 7,
@@ -615,8 +615,8 @@
    "other_members": 2267,
    "recovered": 1889,
    "recovered_pct": 30.52,
-   "synthetic": 1355,
-   "total": 6189
+   "synthetic": 1356,
+   "total": 6190
   },
   "game": {
    "files": 1590,
@@ -673,13 +673,13 @@
    "total": 570
   },
   "sony": {
-   "files": 129,
+   "files": 133,
    "offset_casts": 10,
-   "other_members": 285,
+   "other_members": 293,
    "recovered": 0,
    "recovered_pct": 0.0,
    "synthetic": 0,
-   "total": 295
+   "total": 303
   },
   "third_party": {
    "files": 40,
@@ -693,17 +693,17 @@
   "unmatched": {
    "files": 12206,
    "offset_casts": 6078,
-   "other_members": 12932,
-   "recovered": 20481,
-   "recovered_pct": 42.44,
-   "synthetic": 8773,
-   "total": 48264
+   "other_members": 12921,
+   "recovered": 20483,
+   "recovered_pct": 42.43,
+   "synthetic": 8788,
+   "total": 48270
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 6825,
- "recovered": 24881,
- "synthetic": 10226,
- "total": 62153,
+ "recovered": 24883,
+ "synthetic": 10242,
+ "total": 62168,
  "typeable": 366
 }

@@ -19,7 +19,7 @@ void Gap__igItemDataBaseList__vfunc_04(S *arg0) {
     if (!(0 > arg0->fC)) {
         arg0->f8 = 0;
     } else {
-        int c = *(volatile int *)&arg0->f8;
+        int c = *(const int *)&arg0->f8;
         neg = -c;
         if (c == 0) {
             cap = 0x400;

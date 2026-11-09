@@ -39,7 +39,7 @@ extern "C" int StringList_AppendRetained(int, const StringRef &);
         if (DAT_00586f20[0] == 0) { int pool = FUN_002eb010(0x10); if (pool != 0) { pool = StringPool_Construct(pool); } DAT_00586f20[0] = pool; } \
         tok = StringPool_Intern(DAT_00586f20[0], (text)); } \
     StringList_AppendRetained(field, StringRef(tok)); }
-/* matching construct: the (DecideFlagList * volatile *)&arg0->_decideList read reloads the field, as retail does */
+/* matching construct: the (DecideFlagList * signed *)&arg0->_decideList read reloads the field, as retail does */
 void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
     int tv1;
     int s1;
@@ -60,7 +60,7 @@ void Gap__Bec__beNDMWShopSelectB0__vfunc_22(beNDMWShopSelectB0 *arg0) {
         IntPair labels = DAT_004cfb30[0];
         s0 = (int *)&labels;
         s1 = 0;
-        if (0 < (*(DecideFlagList * volatile *)&arg0->_decideList)->count) {
+        if (0 < ((DecideFlagList *)*(int *)&arg0->_decideList)->count) {
             do {
                 if ((*(DecideFlagList **)&arg0->_decideList)->data[s1] != 0) {
                     s3 = &DAT_0051c700[0];

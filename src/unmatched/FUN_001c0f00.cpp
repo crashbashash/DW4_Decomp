@@ -7,7 +7,7 @@ void *igEnbayaContextPool_Create(...);
 int igObject_Destroy(...);
 }
 struct List {
-    char p0[8]; volatile int count; char p12[4]; Ref **data;
+    char p0[8]; int count; char p12[4]; Ref **data;
     void clear() {
         int n = count;
         for (int i = 0; i < n; i++) {
@@ -35,7 +35,7 @@ extern "C" void FUN_001c0f00(int mode) {
         int saved = 0;
         List *list = DAT_00562540[0];
         if (list != 0) {
-            saved = list->count;
+            saved = (*(int const *)&list->count);
             list->clear();
         }
         if (mode != 0) {

@@ -351,6 +351,21 @@ Retail shapes that only one spelling reproduces:
 * **`daddiu reg,zero,N`** is a constant assigned to a `bool`, `short` or `char` variable.
 * **An inline destructor always emits its out-of-line copy.** Its body must be spelled as retail's copy is, and the
   function needs a `duplicates` row in `unit-objects.json`, which the verifier checks against retail's bytes.
+* **A field reloaded where the compiler would reuse an earlier load (`b52`).** Common-subexpression elimination
+  merges two loads only when their types agree, and a `const` difference counts. So a second read at another type
+  stays a load: `a->list->count` followed by `(*(L * const *)&a->list)->data[i]` reads `list` twice, with no `volatile`.
+  Inline `const` accessors give the same bytes with no cast, and are the likelier original spelling:
+
+  ```cpp
+  L *list() const { return f8; }
+  int count() const { return f8; }
+
+  n = a->list()->count();
+  e = a->list()->get(i);   // lw v0,8(a0) again on each pass of the loop
+  ```
+
+  The same difference moves a load the scheduler would otherwise place later: a field declared `unsigned` and passed
+  as `int`, or an `*(unsigned int *)` read, loads in source order. An increment that reloads is `x = *(const int *)&x + 1`.
 * **A value spilled and reloaded before every use.** A local declared `volatile` reproduces this, as
   `RT * volatile sp6C`, where a plain local adds a saved register. Read it once into
   a plain local for the final release so the object stays in `a0`. It is not a finished spelling: the

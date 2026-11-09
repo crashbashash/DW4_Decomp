@@ -75,7 +75,7 @@ void Gap__Bec__beNDMWStatusSubSlot__vfunc_29(beNDMWStatusSubSlot *arg0) {
     s0 = win.p->list;
     s1 = s0->n;
     if (s1 < s0->cap) {
-        s0->n = ((volatile ElementBufferList *)s0)->n + 1;
+        s0->n = ((const ElementBufferList *)s0)->n + 1;
     } else {
         List_Resize(s0, s1 + 1, 4);
     }

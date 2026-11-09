@@ -22,9 +22,9 @@ void FUN_001da6e0(igSorter *arg0) {
         b = p->b;
         arr = DAT_005629f8[0]->arr;
         if (arr[b]->key < arr[p->a]->key) {
-            m = *(volatile int *)&h->_count;
+            m = *(const int *)&h->_count;
             if (m != 0 && 0 < m && m > 1) {
-                t = *(volatile int *)&p->a;
+                t = *(const int *)&p->a;
                 p->a = b;
                 p->b = t;
             }

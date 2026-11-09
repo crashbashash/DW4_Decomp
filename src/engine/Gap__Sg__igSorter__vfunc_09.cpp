@@ -1,4 +1,4 @@
-/* The list count is read volatile so it is reloaded for the increment. */
+/* The list count is read const so it is reloaded for the increment. */
 extern "C" {
 int FUN_001db500();
 int List_Resize(...);
@@ -57,7 +57,7 @@ extern "C" void Gap__Sg__igSorter__vfunc_09(SorterState *o, int arg1) {
         o->c->f31(1);
         o->l80->cap = o->l80->count;
         s2 = o->l84;
-        s3 = *(volatile int *)&s2->count;
+        s3 = *(const int *)&s2->count;
         s0 = o->l80;
         if (s3 < s2->cap) {
             s2->count = s2->count + 1;

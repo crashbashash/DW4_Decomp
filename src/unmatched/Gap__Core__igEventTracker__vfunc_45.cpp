@@ -14,7 +14,7 @@ extern "C" void Gap__Core__igEventTracker__vfunc_45(EventTrackerRunner *self) {
     count = self->table->rowCount();
     a = 0;
     b = 0;
-    wasSet = (*(volatile int *)&self->flags & 2) != 0;
+    wasSet = (*(const int *)&self->flags & 2) != 0;
     self->flags |= 2;
     row = self->table->rows(0);
     if (row != 0) {

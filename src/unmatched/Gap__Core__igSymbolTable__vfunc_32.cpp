@@ -42,7 +42,7 @@ extern "C" void Gap__Core__igSymbolTable__vfunc_32(Table *self, int n) {
     begin = (Entry *)l->data;
     end = begin + l->count / 4;
     for (e = begin; e < end; e++) {
-        int bb = *(volatile int *)&e->b; if (self->vX(e->a, bb, e - begin) == 0) {
+        int bb = *(unsigned int *)&e->b; if (self->vX(e->a, bb, e - begin) == 0) {
             break;
         }
     }

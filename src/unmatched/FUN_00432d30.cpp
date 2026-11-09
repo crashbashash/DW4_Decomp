@@ -96,7 +96,7 @@ extern "C" int FUN_00432d30(beNDMWShopCtrlDigilabo *arg0) {
                         l = sp.p;
                         c = l->_count;
                         if (c < l->_capacity) {
-                            l->_count = *(volatile int *)&l->_count + 1;
+                            l->_count = *(const int *)&l->_count + 1;
                         } else {
                             List_Resize(l, c + 1, 4);
                         }

@@ -46,6 +46,10 @@ Remove the keyword and verify the function again. What the bytes do says what th
 * **Fewer instructions.** It keeps a memory access that retail really has. That is the reload a case needs, but
   it does not show how the original source kept it.
 
+Before taking either of the last two to the owner, read the value at another type, as under `b52` that is often
+all the keyword was doing: [matching decomp](matching-decomp.md) has the shapes. Swap `volatile` for `const` first,
+then try another same-sized type.
+
 Hardware is the exception to the first case. A register access can match without the keyword when nothing would
 merge or drop it, but the source would then misstate what the code addresses, so it keeps the keyword and goes
 to the owner.
@@ -130,13 +134,6 @@ also uses.
   bytes for these functions, and to different bytes once the qualifiers are removed.
 * The functions are also byte-identical to objects in the SDK's archives.
 
-## Open questions
-
-* **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores
-  to the stack and reads back. Locals, structs, arrays,
-  references and conversion temporaries all fold the slot away or load a wider value, so what keeps the
-  slot in the original is not known.
-
 ### sony-vu-and-gp-asm
 
 `sceGsResetPath` and `sceSdRemote` hold statements C has no spelling for.
@@ -151,3 +148,10 @@ also uses.
 * `sceSdRemote`'s two `volatile` keywords belong to these statements. Sony writes them, and neither can go: without the
   one on the read the registers differ, and without both the function comes out 164 bytes short.
   `sceGsResetPath`'s statements have no outputs, so its `__volatile__` changes nothing and is left out.
+
+## Open questions
+
+* **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores
+  to the stack and reads back. Locals, structs, arrays,
+  references and conversion temporaries all fold the slot away or load a wider value, so what keeps the
+  slot in the original is not known.

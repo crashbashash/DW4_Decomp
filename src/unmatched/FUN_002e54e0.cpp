@@ -6,7 +6,7 @@ struct O { char pad[8]; int n; char pad2[136]; int f148; char pad3[28]; int f180
 extern "C" void FUN_002e54e0(int *out, O *o) {
     int i;
     int n;
-    A *p = o->f280; int x = *(volatile int *)&o->f148;
+    A *p = o->f280; int x = *(unsigned int *)&o->f148;
     o->f180 = p->a(x, 16);
     o->f252 = o->f180;
     n = o->n;

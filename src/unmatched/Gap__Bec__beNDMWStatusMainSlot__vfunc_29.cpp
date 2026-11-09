@@ -72,7 +72,7 @@ void Gap__Bec__beNDMWStatusMainSlot__vfunc_29(beNDMWStatusMainSlot *arg0) {
     l = (igDataList *)win.p->_kindList;
     c = l->_count;
     if (c < l->_capacity) {
-        l->_count = /* matching construct: volatile reload of _count */ *(volatile int *)&l->_count + 1;
+        l->_count = /* matching construct: const reload of _count */ *(const int *)&l->_count + 1;
     } else {
         List_Resize(l, c + 1, 4);
     }

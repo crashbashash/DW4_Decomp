@@ -1,7 +1,7 @@
 /* Copy a saved-record block (arg0->saved) into the property tree arg1.
  * Matching constructs: the held item/chunk objects are RAII holders (ChunkRef, ItemRef) so the unwind
  * table names the right destructors;
- * the list-empty test reads `count` through a volatile int so the loop-bound load stays separate. */
+ * the list-empty test reads `count` through a const int so the loop-bound load stays separate. */
 #include "dw4/reflected.h"
 extern "C" {
 struct Obj { int word0; int references; };
@@ -32,7 +32,7 @@ struct Lst {
             ((Obj **)l->_data)[j] = 0;
     }
     static inline void Clear(igObjectList *l) {
-        if (*(volatile int *)&l->_count > 0) {
+        if (*(const int *)&l->_count > 0) {
             ReleaseAll(l);
             ZeroAll(l);
             l->_count = 0;

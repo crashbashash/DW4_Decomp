@@ -4,7 +4,7 @@
  * interned before the old one is read and released. PanelVt/WorkVt are dummy-virtual classes so
  * the calls go through t9. `ramState = (T *)(int)ram` is a deliberate type-laundering copy:
  * without it the incoming register is propagated into every use and the pre-call loads use s4
- * instead of a1. The `< 2` test of _st3 reads through a volatile lvalue so the increment reloads
+ * instead of a1. The `< 2` test of _st3 reads through a const lvalue so the increment reloads
  * the field. Local declaration order and the exact condition spellings (blocked == 0 / blocked, if
  * (confirm), if (show)) select the register colouring and the bool tests. Raw offset casts remain
  * only for the player-work chain (+200 -> +8/+16 -> +4 -> +8), which has no reflected field. */
@@ -252,7 +252,7 @@ void Gap__Bec__beNDMWPanelWaza__vfunc_31(beNDMWPanelWaza *self, beNDMWPanelWazaI
                             beMessenger_DispatchSelected(self->_messenger, &DAT_005159d8[0]);
                         }
                     }
-                    if (*(volatile int *)&ramState->_st3 < 2) {
+                    if (*(const int *)&ramState->_st3 < 2) {
                         ramState->_st3 = ramState->_st3 + 1;
                     }
                 }

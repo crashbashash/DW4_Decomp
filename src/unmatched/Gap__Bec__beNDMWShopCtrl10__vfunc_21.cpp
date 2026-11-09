@@ -84,7 +84,7 @@ void Gap__Bec__beNDMWShopCtrl10__vfunc_21(beNDMWShopCtrl10 *self)
     default:
         return;
     case 0:
-        self->_st0 = ((volatile beNDMWShopCtrl10 *)self)->_st0 + 1;
+        self->_st0 = ((const beNDMWShopCtrl10 *)self)->_st0 + 1;
         self->_st3 = 0;
         self->_st2 = 0;
         self->_st1 = 0;

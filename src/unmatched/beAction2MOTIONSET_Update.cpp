@@ -5,7 +5,7 @@ typedef struct Clock { char p[80]; long long time; } Clock;
 typedef struct Node { char p[120]; float scale; } Node;
 typedef struct Work { char p[20]; int state; } Work;
 typedef struct Owner { char p[12]; Clock *clock; } Owner;
-typedef struct Piece { char p[28]; char flag; char q[27]; float rate; char r[4]; volatile long long pos; } Piece;
+typedef struct Piece { char p[28]; char flag; char q[27]; float rate; char r[4]; long long pos; } Piece;
 typedef struct Pieces { char p[8]; int count; char q[4]; Piece **items; } Pieces;
 typedef struct Track { char p[56]; Pieces *pieces; } Track;
 typedef struct Tracks { char p[16]; Track **items; } Tracks;
@@ -53,7 +53,7 @@ extern "C" void beAction2MOTIONSET_Update(Owner *arg0, Act *arg1) {
                 first = pieces->items[0];
                 f = (float)(unsigned int)(int)(v >> 18);
                 d = __fixsfdi(f * first->rate);
-                p = first->pos;
+                p = (*(long long const *)&first->pos);
                 first->pos = (d << 18) + p;
                 first->pos = first->pos - (__fixsfdi(f * rate) << 18);
                 first->rate = rate;

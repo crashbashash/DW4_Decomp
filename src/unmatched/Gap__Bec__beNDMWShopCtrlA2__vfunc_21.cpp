@@ -112,8 +112,8 @@ void Gap__Bec__beNDMWShopCtrlA2__vfunc_21(beNDMWShopCtrlA2 *arg0) {
     int i;
     switch (arg0->_st0) {
     case 0:
-        /* matching construct: volatile read reloads the state word after the dispatch. */
-        arg0->_st0 = ((volatile beNDMWShopCtrlA2 *)arg0)->_st0 + 1;
+        /* matching construct: const read reloads the state word after the dispatch. */
+        arg0->_st0 = ((const beNDMWShopCtrlA2 *)arg0)->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
         arg0->_st1 = 0;

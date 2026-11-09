@@ -30,7 +30,7 @@ extern "C" void Gap__Bec__beNDMWShopDevice__vfunc_21(S *arg0) {
     void *alloc;
     switch (arg0->_st0) {
     case 0:
-        arg0->_st0 = ((volatile S *)arg0)->_st0 + 1;
+        arg0->_st0 = ((const S *)arg0)->_st0 + 1;
         arg0->_st3 = 0;
         arg0->_st2 = 0;
         arg0->_st1 = 0;

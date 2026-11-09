@@ -106,8 +106,8 @@ void Gap__Bec__beNDMWStatusCtrlFlag__vfunc_21(beNDMWStatusCtrlFlag *arg0) {
                     l4 = (igIntList *)arg0->_impItems;
                     s1 = l4->_count;
                     if (s1 < l4->_capacity) {
-                        /* matching construct: volatile re-read of the count */
-                        l4->_count = ((volatile igIntList *)l4)->_count + 1;
+                        /* matching construct: const re-read of the count */
+                        l4->_count = ((const igIntList *)l4)->_count + 1;
                     } else {
                         List_Resize(l4, s1 + 1, 4);
                     }

@@ -1,4 +1,4 @@
-/* The busy flag is read through a volatile access into a boolean local; the spellings `0 <= cap`
+/* The busy flag is read through a const access into a boolean local; the spellings `0 <= cap`
  * and `!(0 < cnt)` give the slt at / slt v0 forms. */
 extern "C" {
 int FUN_002d3950(int);
@@ -13,7 +13,7 @@ struct L { int a0, a4, cnt, cap; };
 struct E { int vt, a4, a8, flags; char p[36]; int f52, f56, f60, f64, f68, f72, f76; L *f80; int f84, f88; VT *f92; };
 extern "C" {
 void Gap__Core__igEventTracker__vfunc_24(E *arg0) {
-    int busy = (*(volatile int *)&arg0->flags & 2) != 0;
+    int busy = (*(const int *)&arg0->flags & 2) != 0;
     if (!busy) {
         arg0->flags = arg0->flags | 2;
         FUN_0030cfa0(arg0->f52);

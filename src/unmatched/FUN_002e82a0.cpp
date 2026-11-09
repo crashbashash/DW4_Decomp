@@ -37,7 +37,7 @@ static inline void assignTypes(IgbTypeReader *self, const TypeListHolder &h) {
 static inline void addType(ReflectedTypeList *l, int v) {
     int idx;
     idx = l->count;
-    if (l->cap > idx) { ++*(volatile int *)&l->count; } else { List_Resize(l, idx + 1, 4); }
+    if (l->cap > idx) { l->count = *(const int *)&l->count + 1; } else { List_Resize(l, idx + 1, 4); }
     l->data[idx] = v;
 }
 extern "C" igResult FUN_002e82a0(IgbTypeReader *self) {

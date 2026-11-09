@@ -2344,7 +2344,7 @@ extern "C" void Gap__Bec__beNDMWLoadIntf2__vfunc_31(beNDMWLoadIntf2 *self,
             cardStat2_2 = cardWork->_sysStat2;
             switch ((unsigned int)cardStat2_2) {
             case 0:
-              cardWork->_sysStat2 = (*(volatile int *)&cardWork->_sysStat2 + 1);
+              cardWork->_sysStat2 = (*(const int *)&cardWork->_sysStat2 + 1);
               cardWork->_sysStat3 = 0;
               break;
             case 1:

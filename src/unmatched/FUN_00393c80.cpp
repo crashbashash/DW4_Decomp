@@ -206,7 +206,7 @@ extern "C" void FUN_00393c80(int a0, int a1, beModelCtrlInfoWork *a2, int name, 
             StringRef sp84(v);
             FUN_001ca620(l40, &sp84.p);
         }
-        k = *(volatile int *)&l44->_count;
+        k = *(const int *)&l44->_count;
         if (k < l44->_capacity) {
             l44->_count = l44->_count + 1;
         } else {

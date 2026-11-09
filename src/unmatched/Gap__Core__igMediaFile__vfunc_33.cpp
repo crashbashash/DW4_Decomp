@@ -6,7 +6,7 @@ int Gap__Core__igMediaFile__vfunc_33(S *arg0) {
     int sp1C;
     int t;
     if (arg0->f44 != 0) {
-        int a = *(volatile int *)&arg0->f24;
+        int a = *(unsigned int *)&arg0->f24;
         V *v = arg0->f64;
         if (v->v112(a, &sp1C, 1) != 0) {
             return sp1C;

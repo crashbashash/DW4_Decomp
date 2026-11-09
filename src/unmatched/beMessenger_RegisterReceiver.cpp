@@ -76,7 +76,7 @@ extern "C" void beMessenger_RegisterReceiver(beMessenger *self, void *recv, cons
     }
     l = (igIntList *)grp.p->_ramNoList;
     n = l->_count;
-    if (n < l->_capacity) l->_count = *(volatile int *)&l->_count + 1;
+    if (n < l->_capacity) l->_count = *(const int *)&l->_count + 1;
     else List_Resize(l, n + 1, 4);
     ((int *)l->_data)[n] = value;
 }

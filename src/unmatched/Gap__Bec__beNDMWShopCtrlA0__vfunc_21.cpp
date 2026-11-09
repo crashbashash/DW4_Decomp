@@ -121,7 +121,7 @@ extern "C" void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                         l = (igIntList *)arg0->_playerNoList;
                         c = l->_count;
                         if (c < l->_capacity) {
-                            l->_count = *(volatile int *)&l->_count + 1;
+                            l->_count = *(const int *)&l->_count + 1;
                         } else {
                             List_Resize(l, c + 1, 4);
                         }
@@ -208,7 +208,7 @@ extern "C" void Gap__Bec__beNDMWShopCtrlA0__vfunc_21(beNDMWShopCtrlA0 *arg0) {
                         l = ((S_obj *)r6.p)->f112;
                         c = l->_count;
                         if (c < l->_capacity) {
-                            l->_count = *(volatile int *)&l->_count + 1;
+                            l->_count = *(const int *)&l->_count + 1;
                         } else {
                             List_Resize(l, c + 1, 4);
                         }

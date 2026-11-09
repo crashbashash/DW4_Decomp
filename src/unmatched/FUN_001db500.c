@@ -1,6 +1,6 @@
 int List_Resize();
 
-typedef struct L { char pad[8]; volatile int count; int cap; int *data; } L;
+typedef struct L { char pad[8]; int count; int cap; int *data; } L;
 typedef struct B { char pad[12]; L *f12; } B;
 typedef struct A { char pad[8]; B *f8; char pad12[24]; int f36; int f40; } A;
 
@@ -14,7 +14,7 @@ void FUN_001db500(A *arg0) {
 
     temp_s0 = arg0->f36;
     temp_s2 = arg0->f8->f12;
-    temp_s3 = temp_s2->count;
+    temp_s3 = (*(int const *)&temp_s2->count);
     if (temp_s3 < temp_s2->cap) {
         temp_s2->count = temp_s2->count + 1;
     } else {
@@ -23,7 +23,7 @@ void FUN_001db500(A *arg0) {
     temp_s2->data[temp_s3] = temp_s0;
     temp_s0_2 = arg0->f40;
     temp_s1 = arg0->f8->f12;
-    temp_s2_2 = temp_s1->count;
+    temp_s2_2 = (*(int const *)&temp_s1->count);
     if (temp_s2_2 < temp_s1->cap) {
         temp_s1->count = temp_s1->count + 1;
     } else {

@@ -12,19 +12,19 @@ void FUN_001b8a20(Src *arg0, Dst *arg1) {
     if (arg0->f121 != 0) a = arg0->f36; else a = arg0->f32->g108();
     l1 = arg1->l248;
     c1 = l1->count;
-    if (c1 < l1->cap) l1->count = *(volatile int *)&l1->count + 1;
+    if (c1 < l1->cap) l1->count = *(const int *)&l1->count + 1;
     else List_Resize(l1, c1 + 1, 4);
     l1->items[c1] = a;
     c = ((Sub *)((Mid *)arg0->f32)->f12)->g100();
     if (arg0->f121 != 0) b = arg0->f40; else b = arg0->f32->g116();
     l2 = arg1->l252;
     c2 = l2->count;
-    if (c2 < l2->cap) l2->count = *(volatile int *)&l2->count + 1;
+    if (c2 < l2->cap) l2->count = *(const int *)&l2->count + 1;
     else List_Resize(l2, c2 + 1, 4);
     l2->items[c2] = b;
     l3 = arg1->l256;
     c3 = l3->count;
-    if (c3 < l3->cap) l3->count = *(volatile int *)&l3->count + 1;
+    if (c3 < l3->cap) l3->count = *(const int *)&l3->count + 1;
     else List_Resize(l3, c3 + 1, 4);
     l3->items[c3] = c;
 }

@@ -23,7 +23,7 @@ struct L *FUN_002da780(struct S *s) {
         if (r != 0) {
             cnt = l->n;
             if (cnt < l->cap) {
-                l->n = *(volatile int *)&l->n + 1;
+                l->n = *(const int *)&l->n + 1;
             } else {
                 List_Resize(l, cnt + 1, 4);
             }

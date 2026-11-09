@@ -1,6 +1,6 @@
-/* The descriptor index is re-read volatile in the plain cases so the early copy is not reused, and
+/* The descriptor index is re-read const in the plain cases so the early copy is not reused, and
  * the base pointer of case 4 is added last. */
-#define RD *(volatile int *)&arg1->f8
+#define RD *(const int *)&arg1->f8
 extern "C" int FUN_001f05a0(...);
 struct P { int f0; int f4; int f8; int pad[12]; int f60; int pad2[1]; int f68; int f72; };
 struct VA {

@@ -24,8 +24,8 @@ void Gap__Bec__beFont__vfunc_32(beFont *arg0) {
     }
     arg0->_root = 0;
     l = (beFontGeomAttrPairList *)arg0->_gaPairList;
-    /* matching construct: volatile re-read of the count */
-    if (*(volatile int *)&l->_count > 0) {
+    /* matching construct: const re-read of the count */
+    if (*(const int *)&l->_count > 0) {
         n = l->_count;
         for (i = 0; i < n; i++) {
             p = ((igObject **)l->_data)[i];

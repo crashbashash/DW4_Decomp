@@ -1,4 +1,4 @@
-struct L { char pad8[8]; volatile int n; int cap; int *data; };
+struct L { char pad8[8]; int n; int cap; int *data; };
 struct Z { char pad56[56]; int f56; };
 int Gap__Core__igObject__vfunc_07(void *);
 int igObject_GetAllocator(void *);
@@ -22,7 +22,7 @@ void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
             DAT_00562580[0] = FUN_001a51d0(al);
         }
         l = DAT_00562580[0];
-        idx = l->n;
+        idx = (*(int const *)&l->n);
         if (idx < l->cap) { l->n = l->n + 1; } else { List_Resize(l, idx + 1, 4); }
         l->data[idx] = (int)arg0;
         z = DAT_00586dc8[0]->f56;

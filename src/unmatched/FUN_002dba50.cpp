@@ -17,7 +17,7 @@ int FUN_002dba50(ConfigTextParser *self, ConfigSectionRecord *out);
 static inline void append(ConfigChildList *l, int v) {
     int i = l->count;
     if (i < l->capacity) {
-        l->count = *(volatile int *)&l->count + 1;
+        l->count = *(const int *)&l->count + 1;
     } else {
         List_Resize(l, i + 1, 4);
     }
