@@ -631,7 +631,9 @@ def main(argv=None):
                     print(f"linkgen: {extra} has no compiled table section for 0x{table_va:x}", file=sys.stderr)
                     return 2
                 got = section_size(owner_obj, section)
-                if got != table_size:
+                # a literal pool may end inside its last recorded word (a 2-byte string): the
+                # linker's zero fill gives the rest, and linkcheck compares it with retail
+                if not table_size - 4 < got <= table_size:
                     print(f"linkgen: {extra} jump table at 0x{table_va:x}: object .rodata is "
                           f"{got} bytes, layout says {table_size}", file=sys.stderr)
                     return 2

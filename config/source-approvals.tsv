@@ -170,3 +170,5 @@ volatile	FUN_00263c78	1	#adxm-thread-flags
 volatile	FUN_00263eb8	6	#adxm-thread-flags
 volatile	FUN_00263fc0	6	#adxm-thread-flags
 volatile	FUN_002641d8	5	#adxm-thread-flags
+asm	sceSifWriteBackDCache	1	#sony-libkernl-cop0-and-syscall
+volatile	sceSifWriteBackDCache	1	#sony-libkernl-cop0-and-syscall

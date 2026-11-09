@@ -463,8 +463,11 @@ def _sweep_extent(img, va, bound, strong=()):
             end = _rs(w) in (31, 25)                 # jr ra / jr t9; `jr v0` is a switch dispatch
         elif _is_j(w):
             t = _j_target(o, w)
+            # a `j` over nothing but zero padding leaves the function for the next one: an internal
+            # jump never skips alignment words
+            over_padding = t > o + 8 and not any(_word(img, a) for a in range(o + 8, t, 4))
             if va <= t < bound and t > o and not _is_prologue(_word(img, t)) \
-                    and not _in_sorted(strong, t):
+                    and not _in_sorted(strong, t) and not over_padding:
                 max_tgt = max(max_tgt, t)
             else:
                 end = True

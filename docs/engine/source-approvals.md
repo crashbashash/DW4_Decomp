@@ -171,6 +171,9 @@ Sony libkernl functions written in C with instructions C has no spelling for: re
   is a C function holding one `syscall`.
 * The `volatile` on each `__asm__` keeps the statement from being moved or dropped, which it must not be.
 * One TLB function keeps a counter in a fixed register across calls, which only a register variable gives.
+* The SIF's data-cache write-back is one `asm` block: a loop of `cache 0x18` with `sync`, carrying its own return. It
+  sets `.set noreorder` and leaves it on, so the compiler's closing `jr ra` gets no delay-slot `nop`, as in Sony's
+  member and the executable.
 
 ### sony-gp-and-syscall-asm
 

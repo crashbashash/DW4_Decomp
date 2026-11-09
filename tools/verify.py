@@ -469,7 +469,9 @@ def jump_table_sections(obj, tables):
                          % (len(sections), len(tables)))
     result = []
     for (index, size), (address, count) in zip(sections, tables):
-        if size != count * 4:
+        # A literal pool shorter than a whole word (a 2-byte string such as "/") is recorded as the
+        # words it occupies; the rest of its last word is retail padding, which the caller checks.
+        if not count * 4 - 4 < size <= count * 4:
             raise ValueError("jump table 0x%x: section %d has %d bytes, expected %d"
                              % (address, index, size, count * 4))
         result.append((index, address, size))
@@ -1756,10 +1758,15 @@ def _verify_standalone(obj, va, name, size, retail, img, by_name, symbols, tabs,
         got, _, unres2 = apply_relocs(rodata, tbl_rel, resolve, gp)
         got = got if got is not None else b""
         retail_tbl = va_bytes(img, table_address, want)
-        good = len(got) == want and got == retail_tbl and not unres2
+        # a pool shorter than its recorded words: the rest of its last word must be zero padding
+        padding = va_bytes(img, table_address + want, -want % 4)
+        good = len(got) == want and got == retail_tbl and not unres2 and not any(padding)
+        if any(padding):
+            tbl_report.append("   jump table 0x%06x: the %d bytes after the section are not padding"
+                              % (table_address, len(padding)))
         if good:
-            tbl_report.append("   jump table 0x%06x: %d entries, %d bytes, matches retail"
-                              % (table_address, want // 4, want))
+            tbl_report.append("   jump table 0x%06x: %d words, %d bytes, matches retail"
+                              % (table_address, -(-want // 4), want))
         else:
             ok = False
             tbl_report.append("   jump table 0x%06x differs (section %d)"
