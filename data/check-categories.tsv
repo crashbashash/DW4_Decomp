@@ -130,8 +130,8 @@
 0010a440	FUN_0010a440	match	-
 0010a468	setD3_CHCR	match	-
 0010a4e0	FUN_0010a4e0	match	-
-0010a558	sceIpuStopDMA	unapproved	unapproved: 1 volatile without an approval row
-0010a640	sceIpuRestartDMA	unapproved	unapproved: 1 volatile without an approval row
+0010a558	sceIpuStopDMA	match	-
+0010a640	sceIpuRestartDMA	match	-
 0010a7f8	FUN_0010a7f8	match	-
 0010b360	FUN_0010b360	match	-
 0010b4a8	write	match	-
@@ -285,21 +285,21 @@
 00114800	FUN_00114800	match	-
 00114810	FUN_00114810	match	-
 00114820	InitTimer	match	-
-00114978	EndTimer	unapproved	unapproved: 1 volatile without an approval row
+00114978	EndTimer	match	-
 00114a60	StartTimerSystemTime	match	-
 00114af0	StopTimerSystemTime	match	-
 00114d00	InsertAlarm	match	-
 00114d88	FUN_00114d88	match	-
 001151a0	AllocTimerCounter	match	-
-001151e8	iFreeTimerCounter	unapproved	unapproved: 1 volatile without an approval row
+001151e8	iFreeTimerCounter	match	-
 00115288	FUN_00115288	match	-
-001152d8	iGetTimerUsedUnusedCounters	unapproved	unapproved: 1 volatile without an approval row
+001152d8	iGetTimerUsedUnusedCounters	match	-
 00115328	GetTimerUsedUnusedCounters	match	-
-00115388	iStartTimerCounter	unapproved	unapproved: 1 volatile without an approval row
+00115388	iStartTimerCounter	match	-
 00115438	FUN_00115438	match	-
-00115488	iStopTimerCounter	unapproved	unapproved: 1 volatile without an approval row
+00115488	iStopTimerCounter	match	-
 00115550	FUN_00115550	match	-
-001155a0	SetTimerCount	unapproved	unapproved: 1 volatile without an approval row
+001155a0	SetTimerCount	match	-
 00115670	isceTimerGetBaseTime	match	-
 001156b8	FUN_001156b8	match	-
 00115708	iGetTimerCount	match	-
@@ -309,11 +309,11 @@
 001159e8	sceTimerUSec2BusClock	match	-
 00115a58	sceTimerBusClock2Freq	match	-
 00115ae8	_sceTimerAlarmInit	match	-
-00115b38	AlarmHandler	unapproved	unapproved: 1 volatile without an approval row
-00115b98	SetTimerAlarm	unapproved	unapproved: 1 volatile without an approval row
-00115cc8	iSetTimerAlarm	unapproved	unapproved: 1 volatile without an approval row
-00115db8	ReleaseTimerAlarm	unapproved	unapproved: 1 volatile without an approval row
-00115e60	iReleaseTimerAlarm	unapproved	unapproved: 1 volatile without an approval row
+00115b38	AlarmHandler	match	-
+00115b98	SetTimerAlarm	match	-
+00115cc8	iSetTimerAlarm	match	-
+00115db8	ReleaseTimerAlarm	match	-
+00115e60	iReleaseTimerAlarm	match	-
 00115ed8	FUN_00115ed8	match	-
 00115f00	sceSifSetRebootNotifyBuffer	match	-
 00116310	FUN_00116310	match	-

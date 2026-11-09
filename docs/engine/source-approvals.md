@@ -103,6 +103,25 @@ keyword is on a fixed register address, or for the DMA channels on a register re
 
 DW4's libraries are SDK release 2.8.0, which is not available, so the text compared is from a later release.
 
+### sony-alarm-id
+
+The timer alarm functions declare the id member of their alarm record `volatile`.
+
+* The Timer Library's `alarm.c` in SDK 3.0.3 declares that member `volatile`. Its function bodies, given only
+  retail's symbol names and the library's constants, compile to retail's bytes for all of these functions, and to
+  different bytes once the qualifier is removed.
+* The functions are also byte-identical to objects in the SDK's archives.
+
+### sony-timer-state
+
+The timer functions declare `volatile` the members of the timer state and counter records that its interrupt handler
+also uses.
+
+* The Timer Library's `libtimer.c` in SDK 3.0.3 declares those members `volatile`. Its function bodies, given only
+  retail's symbol names, the library's constants and retail's helpers for the timer registers, compile to retail's
+  bytes for these functions, and to different bytes once the qualifiers are removed.
+* The functions are also byte-identical to objects in the SDK's archives.
+
 ## Open questions
 
 * **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores

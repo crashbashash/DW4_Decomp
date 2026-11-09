@@ -42,3 +42,16 @@ volatile	StopTimerSystemTime	1	#sony-hardware-registers
 volatile	FUN_002a8ba0	3	#sony-hardware-registers
 volatile	FUN_002a8c08	3	#sony-hardware-registers
 volatile	FUN_002a9628	3	#sony-hardware-registers
+volatile	sceIpuStopDMA	1	#sony-hardware-registers
+volatile	sceIpuRestartDMA	1	#sony-hardware-registers
+volatile	AlarmHandler	1	#sony-alarm-id
+volatile	SetTimerAlarm	1	#sony-alarm-id
+volatile	iSetTimerAlarm	1	#sony-alarm-id
+volatile	ReleaseTimerAlarm	1	#sony-alarm-id
+volatile	iReleaseTimerAlarm	1	#sony-alarm-id
+volatile	EndTimer	1	#sony-timer-state
+volatile	iFreeTimerCounter	1	#sony-timer-state
+volatile	iStartTimerCounter	1	#sony-timer-state
+volatile	iStopTimerCounter	1	#sony-timer-state
+volatile	SetTimerCount	1	#sony-timer-state
+volatile	iGetTimerUsedUnusedCounters	1	#sony-timer-state

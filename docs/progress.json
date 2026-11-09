@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2289160,
-    "functions": 18286
+    "bytes": 2291640,
+    "functions": 18299
    },
    "mismatch": {
     "bytes": 0,
@@ -104,8 +104,8 @@
     "functions": 0
    },
    "unapproved": {
-    "bytes": 359752,
-    "functions": 420
+    "bytes": 357272,
+    "functions": 407
    }
   },
   "code_only_by_exc": {
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2293272,
-   "functions": 18301
+   "bytes": 2295752,
+   "functions": 18314
   },
   "fully_verified": {
-   "bytes": 2289160,
-   "functions": 18286
+   "bytes": 2291640,
+   "functions": 18299
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,8 +142,8 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 4112,
-  "fully_matched": 2293272,
-  "fully_verified": 2289160,
+  "fully_matched": 2295752,
+  "fully_verified": 2291640,
   "functions_asm_body": 0,
   "functions_assembly": 15,
   "matched": 2659640,
@@ -357,15 +357,15 @@
    "struct.a": 139,
    "struct.b": 300,
    "struct.c": 287,
-   "unapproved.bytes": 359752,
-   "unapproved.functions": 420,
+   "unapproved.bytes": 357272,
+   "unapproved.functions": 407,
    "unmatched.bytes": 800380,
    "unmatched.functions": 1465
   }
  },
  "functions": {
-  "fully_matched": 18301,
-  "fully_verified": 18286,
+  "fully_matched": 18314,
+  "fully_verified": 18299,
   "matched": 18734,
   "named": 9646,
   "named_semantic": 1969,
@@ -460,12 +460,12 @@
   "bytes": 382960,
   "failing": {
    "addresses": {
-    "bytes": 1804364,
-    "functions": 13251
+    "bytes": 1806844,
+    "functions": 13264
    },
    "fields": {
-    "bytes": 599660,
-    "functions": 3319
+    "bytes": 599900,
+    "functions": 3321
    },
    "idioms": {
     "bytes": 1058912,
@@ -480,8 +480,8 @@
     "functions": 11891
    },
    "references": {
-    "bytes": 1665444,
-    "functions": 10410
+    "bytes": 1667924,
+    "functions": 10423
    },
    "types": {
     "bytes": 729528,
@@ -493,7 +493,7 @@
    }
   },
   "functions": 2194,
-  "matched_functions": 18301
+  "matched_functions": 18314
  },
  "regions": [
   {

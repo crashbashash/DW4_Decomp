@@ -3,9 +3,9 @@ typedef struct {
     int f4;
     int f8;
     int f12;
-    int f16;
+    volatile int f16;
 } KState;
-extern volatile KState DAT_00483508;
+extern KState DAT_00483508;
 int iGetTimerUsedUnusedCounters(int *used, int *left) {
     if (DAT_00483508.f8 < 0) return 0x80008001;
     if (used) *used = DAT_00483508.f16;
