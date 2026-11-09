@@ -1,4 +1,4 @@
-struct R { int f0; int f4; };
+struct R { int f0; unsigned int f4; };
 struct G { char pad[56]; int f38; };
 struct Res {
     int v;
@@ -42,40 +42,39 @@ extern G *DAT_00586dc8[4];
 int FUN_00306360(int, char *, int);
 void igObject_Destroy(void *);
 }
-#define REL2(p) { R *t = p; if (t) { t->f4 = t->f4 - 1; if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) igObject_Destroy(t); } }
-
-extern "C" int Gap__Core__igMemoryPoolContextInfo__vfunc_25(Res *arg0, Dev *arg1, int arg2, char *arg3) {
-    R *volatile sp4C;
-    int temp_v0;
-    char *var_a1;
-    sp4C = 0;
-
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer() : p(0) {}
+    ~igSmartPointer() {
+        T *o;
+        if ((o = p) != 0) {
+            o->f4 = o->f4 - 1;
+            if ((o->f4 & 0x7FFFFF) == 0) {
+                igObject_Destroy(o);
+            }
+        }
+    }
+};
+extern "C" Res Gap__Core__igMemoryPoolContextInfo__vfunc_25(Dev *arg1, int arg2, char *arg3) {
+    igSmartPointer<R> unused;
+    int index;
+    char *name;
     if (arg2 == 0) {
         arg2 = DAT_00586dc8[0]->f38;
     }
     if (arg2 == 0) {
-        *arg0 = DAT_004fb418[0];
-        REL2(sp4C);
-        return 0;
+        return DAT_004fb418[0];
     }
-    if ((arg3 == 0) || (var_a1 = arg3, (*arg3 == 0))) {
+    if ((arg3 == 0) || (name = arg3, (*arg3 == 0))) {
         arg3 = DAT_004c2228[0];
-        var_a1 = arg3;
+        name = arg3;
     }
-    temp_v0 = FUN_00306360(arg2, var_a1, 0);
-    if (temp_v0 == -1) {
-        *arg0 = DAT_004fb418[0];
-        REL2(sp4C);
-        return 0;
+    index = FUN_00306360(arg2, name, 0);
+    if (index == -1) {
+        return DAT_004fb418[0];
     }
-    Res &sp48 = *(Res *)&arg1->get(arg2, temp_v0);
-    int ok = DAT_004fb410[0].v;
-    if (sp48 == DAT_004fb410[0]) {
-        arg0->v = ok;
-        REL2(sp4C);
-        return 0;
+    if (arg1->get(arg2, index) == DAT_004fb410[0]) {
+        return DAT_004fb410[0];
     }
-    *arg0 = DAT_004fb418[0];
-    REL2(sp4C);
-    return 0;
+    return DAT_004fb418[0];
 }

@@ -1,17 +1,3 @@
-/* Message handler of the sound manager: resolves the message selector against the class enum and
- * dispatches over commands 1..22; the default entry returns 0, every other path returns 1.
- * Commands 2 and 3 look a sound entry up in the parent info's data list and play it (entry types 1
- * and 2 go through the delayed message queue, other types register an expiring record in the
- * playing-SE list); command 20 gathers the sound names of the stage record into a string list. The
- * playing-SE search loop keeps separate index / byte-offset inductions and the hoisted data
- * pointer only through the loop-carried re-read `pl2 = pl` and the explicit `offv`; a direct
- * `list->data[i]` is turned into one pointer induction by this compiler. Null fallbacks: a ternary for the constant
- * default; `if (bn == 0) bn2 = G; else bn2 = bn;` with a separate variable for the global default
- * (the empty else arm and the deleted jump keep the join unpadded). The first compare argument
- * (info->_dataType) is read before the test. Counts are compared as `> 1` (slti at) and `0 < n`
- * (slt at,zero); the declaration order of the locals decides the s-register colouring. The union
- * at spD0 is a volatile float / sign-bit pair: the otherwise dead difference of the first two
- * floats of command 10 is stored into that slot with the sign bit cleared before the call. */
 #include "dw4/reflected.h"
 extern "C" {
 int FUN_002eb010(...);
@@ -79,10 +65,6 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, struct Arg2 
 }
 struct Arg2 { int p[5]; int f20; };
 struct SubE { int p[5]; igObjectList *f20; };
-/* Owning stack references of the sound manager's message handler. igSmartPointer<igObject> holds a freshly
- * created playing-SE record while it is listed, NameListRef the string list built by command 20,
- * GlobalStrRef a retained share of the system's global string object and StringRef a share of an
- * interned text. */
 template <class T> struct igSmartPointer {
     T *p;
     igSmartPointer(T *o) : p(o) {}
@@ -104,17 +86,14 @@ struct StringRef {
     StringRef(char *s) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { char *s = p; if (s != 0) { int *hd = (int *)s - 2; int cnt = ((int *)s)[-1] - 1; ((int *)s)[-1] = cnt; if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 };
-/* the list hands out a retained share of entry `index` by value (hidden result pointer) */
 extern "C" int StringList_AppendRetained(void *list, const StringRef &text);
 extern "C" StringRef StringList_CopyRetained(void *list, int index);
 
-/* matching construct: retail stores the (otherwise dead) difference of the first two floats of command 10 into a stack slot with the sign bit cleared;
- * kept as an inline function so the slot is allocated after the references above. */
-struct Dead { static inline void Difference(float a, float b) {
-    volatile union { float f; struct { unsigned m : 31; unsigned s : 1; } b; } slot;
-    slot.f = a - b;
-    slot.b.s = 0;
-} };
+struct FloatBits { unsigned mantissa : 31; unsigned sign : 1; };
+static inline float Abs(float value) {
+    ((FloatBits *)&value)->sign = 0;
+    return value;
+}
 struct U { static inline char *Intern(char *text) {
     if (DAT_00586f20[0] == 0) {
         int pool = FUN_002eb010(0x10);
@@ -272,7 +251,7 @@ int Gap__Bec__beSound__vfunc_34(beSound *self, beBaseInfoRam *arg1, Arg2 *arg2) 
         fa = beMessenger_GetFloat(self->_messenger, 0);
         fb = beMessenger_GetFloat(self->_messenger, 1);
         fc = beMessenger_GetFloat(self->_messenger, 2);
-        Dead::Difference(fa, fb);
+        Abs(fa - fb);
         FUN_0037cf30(self->_cri, s1, fa, fb, fc);
         break;
     case 6:

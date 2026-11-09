@@ -9,42 +9,46 @@ class Buf { public:
  int f4_pad[0];
 };
 struct R { int w0; int refs; int w8; unsigned cap; };
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        if (p != 0) {
+            p->refs = p->refs - 1;
+            if ((p->refs & 0x7FFFFF) == 0) {
+                igObject_Destroy(p);
+            }
+        }
+    }
+    T *get() const { return p; }
+};
 class T { public:
  char pad0[4]; char pad1[16]; int f20; unsigned f24; int f28; char pad2[16]; Buf *f48; int dummy;
+ void setBuffer(const igSmartPointer<R> &buffer);
 };
-extern "C" int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T *arg0, int arg1, unsigned arg2, int arg3);
-int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T *arg0, int arg1, unsigned arg2, int arg3) {
-    R *volatile sp4C;
-    R *s0;
-    R *a;
-    R *b;
+inline void T::setBuffer(const igSmartPointer<R> &buffer) {
+    R *held = buffer.get();
+    if (held != 0) {
+        held->refs = held->refs + 1;
+    }
+    R *previous = (R *)f48;
+    if (previous != 0) {
+        previous->refs = previous->refs - 1;
+        if ((previous->refs & 0x7FFFFF) == 0) {
+            igObject_Destroy(previous);
+        }
+    }
+    f48 = (Buf *)held;
+}
+extern "C" int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T *arg0, int arg1, unsigned arg2, int arg3) {
     arg0->f20 = arg1;
     arg0->f24 = arg2;
     arg0->f28 = arg3;
     int t = arg0->f20;
     if ((unsigned)(t - 4) <= 1U || t == 2) {
         if (arg0->f48 == 0) {
-            sp4C = (R *)FUN_0014bff0(igObject_GetAllocator(arg0));
-            s0 = sp4C;
-            if (s0 != 0) {
-                s0->refs = s0->refs + 1;
-            }
-            a = (R *)arg0->f48;
-            if (a != 0) {
-                a->refs = a->refs - 1;
-                if (((unsigned long long)((long long)a->refs << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(a);
-                }
-            }
-            arg0->f48 = (Buf *)s0;
-            b = sp4C;
-            if (b != 0) {
-                b->refs = b->refs - 1;
-                b = sp4C;
-                if (((unsigned long long)((long long)b->refs << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(b);
-                }
-            }
+            igSmartPointer<R> buffer((R *)FUN_0014bff0(igObject_GetAllocator(arg0)));
+            arg0->setBuffer(buffer);
         }
         if (((R *)arg0->f48)->cap < arg2) {
             arg0->f48->v92(arg2, 0x20, 0);

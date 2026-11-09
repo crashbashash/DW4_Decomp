@@ -2,13 +2,12 @@
  * value' is parsed into `opts` and echoed into the block `opts->applied` points at. '--help'
  * prints the usage text and exits, '--' or '-n' ends the option scan, any other '-x' token is
  * reported as unrecognised. The second loop collects the remaining tokens as model files, each
- * with its '-n N' repeat count. The re-read of the list count in the in-capacity increment is
- * spelled with a volatile read (the count is loaded a second time instead of reusing the index).
- * `modelFile` lives in memory (its stack slot is the highest), hence volatile. */
+ * with its '-n N' repeat count. */
 
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
 
+extern "C" {
 typedef struct StringList {
     int _unk00[2];
     int count;      /* +0x08 number of tokens */
@@ -166,9 +165,28 @@ extern const char allocateVisualContextInScratchpad[16];
  * so it is read once), then released with the shared sequence. */
 #define ReleaseObject(obj) do { igObject *held = (obj); IG_OBJECT_RELEASE(held); } while (0)
 
+struct StringRef {
+    char *p;
+    StringRef() : p(0) {}
+    StringRef(const StringRef &other) : p(other.p) {
+        if (p != 0) {
+            ((int *)p)[-1]++;
+        }
+    }
+    ~StringRef() {
+        char *s = p;
+        if (s != 0) {
+            StringHeader *header = (StringHeader *)s - 1;
+            int count = ((int *)s)[-1] - 1;
+            ((int *)s)[-1] = count;
+            if (count == 0) StringChunk_ReleaseHeader(header->owner, header);
+        }
+    }
+};
+static inline int countOf(const IntList *list) { return list->count; }
 void FUN_00235370(ViewerOptions *opts, StringList *args)
 {
-    char * volatile modelFile;
+    StringRef modelFile;
     int repeat;
     int index;
     /* Each smart-pointer temporary of the original has its own stack slot. */
@@ -177,13 +195,11 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
     char *printRef;
     char *helpRef2;
     char *currentRef;
-    char *argumentRef;
     int argc;
     ViewerOptions *applied;
     int slot;
     IntList *repeats;
 
-    modelFile = 0;
     repeat = 1;
     argc = args->count;
     index = 1;
@@ -367,19 +383,17 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
             if (currentRef != 0) {
                 ((int *)currentRef)[-1]++;
             }
-            ReleaseString(modelFile);
-            modelFile = currentRef;
+            ReleaseString(modelFile.p);
+            modelFile.p = currentRef;
             ReleaseString(currentRef);
-            argumentRef = modelFile;
-            if (argumentRef != 0) {
-                ((int *)argumentRef)[-1]++;
+            {
+                StringRef argument(modelFile);
+                StringList_AppendRetained((StringList *)opts->stringList, &argument.p);
             }
-            StringList_AppendRetained((StringList *)opts->stringList, &argumentRef);
-            ReleaseString(argumentRef);
             repeats = (IntList *)opts->intList;
             slot = repeats->count;
             if (slot < repeats->capacity) {
-                repeats->count = *(volatile int *)&repeats->count + 1;
+                repeats->count = countOf(repeats) + 1;
             } else {
                 List_Resize(repeats, slot + 1, 4);
             }
@@ -388,5 +402,5 @@ void FUN_00235370(ViewerOptions *opts, StringList *args)
             index = index + 1;
         }
     }
-    ReleaseString(modelFile);
+}
 }

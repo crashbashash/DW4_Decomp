@@ -383,7 +383,8 @@ Retail shapes that only one spelling reproduces:
   what keeps the key in memory: a reference, or a read of the value itself, folds it into a register. Why the source
   took that address is not known. The executable holds the template's name, as `Gap::Core::igTDataList<...>`.
   Where the key's store comes before the read of the list, assign the list in the call: `(list = owner->_list)->find(key)`.
-  `T` has to be a pointer: with `int` the store goes away.
+  `T` has to be a pointer: with `int` the store goes away. An append that stores its value to the stack before reading
+  the count, and loads it back for the store, takes it the same way: `void append(T v) { /* grow */ const T *p = &v; _data[n] = *p; }`.
 * **A local that lives in memory because it is an object (`b52`).** A reference held in a stack slot, reloaded before
   a store and released at the end of the function, is a smart-pointer object with a real inline destructor. Passing it
   by `const &` to an inline helper takes its address, which is what keeps it in memory:

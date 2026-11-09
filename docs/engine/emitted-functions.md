@@ -263,6 +263,9 @@ remains the integration oracle.
 
 ## Open questions
 
+- **Why `igTDataList` takes its parameter's address.** `find` and `append` take the value by value and read it through
+  `const T *p = &v`, which is what keeps it on the stack. A plain read or a reference folds it into a register. The
+  bytes show the store, not the reason, and nothing yet shows why the source would write this.
 - **What the empty tag objects were.** The `sb zero` beside a factory call shows an empty class passed by value. Its
   purpose is not shown: it may have selected a constructor, or been a default argument or an allocator. Names such as
   `AdoptReference` and `DriverType` are best guesses and need more evidence.

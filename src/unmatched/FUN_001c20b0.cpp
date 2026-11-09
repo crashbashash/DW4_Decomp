@@ -1,15 +1,3 @@
-/* Build the helper objects of a controller on its first update. Reads the stored enable flag from
- * the property set (global 0x586dc8, +56; name at 0x4e4600), then creates up to eight owned helper
- * objects in the fields at +76..+108, each from the controller's own allocator, configures them
- * through their virtual methods (slots at +100 / +128 / +132) and drops the temporary reference.
- * Every store is the reference-counted assignment idiom: retain the new object, release the old
- * one, publish. Evidence: asm/FUN_001c20b0.s; the same idiom in
- * src/unmatched/igIGBFile_ReadObject.cpp. Matching constructs: each new object lives in a volatile
- * stack slot (the retail code reloads it from the stack for the retain and for the final release);
- * the dummy virtual class supplies the slot offsets (offset = 8 + 4 * index); the two arms that
- * publish into +96 each carry their own store, and `flag` is assigned just before the call. Build:
- * local/mwcps2/combat/mwccps2.exe (sha256
- * acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a), -O3 -Iinclude. */
 class Obj;
 struct PropertySet { char pad[56]; int props; };
 extern "C" {
@@ -19,7 +7,7 @@ Obj *FUN_00132810(int);
 Obj *FUN_001325a0(int);
 Obj *FUN_00131c60(int);
 int thunk_FUN_00306e50(int, int, char *, unsigned char *, int, int);
-extern char DAT_004e4600[];            /* property name of the flag */
+extern char DAT_004e4600[];          
 extern PropertySet *DAT_00586dc8[4];
 extern Obj *DAT_00562738[4];
 extern Obj *DAT_00562740[4];
@@ -37,24 +25,34 @@ public:
   int field12;
 };
 
-struct RefOps {
-  static inline void release(Obj *o) {
-    if (o != 0) {
-      o->refs = o->refs - 1;
-      if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+template <class T> struct igSmartPointer {
+  T *p;
+  igSmartPointer(T *object) : p(object) {}
+  ~igSmartPointer() {
+    if (p != 0) {
+      p->refs = p->refs - 1;
+      if ((p->refs & 0x7FFFFF) == 0) igObject_Destroy(p);
     }
   }
-  /* release a reference held in a (volatile) stack slot; the slot is reloaded for the zero test */
-  static inline void releaseSlot(Obj *volatile &slot) {
-    Obj *o = slot;
-    if (o != 0) {
-      o->refs = o->refs - 1;
-      o = slot;
-      if (((unsigned long long)((long long)o->refs << 0x29) >> 0x29) == 0) igObject_Destroy(o);
-    }
-  }
+  T *get() const { return p; }
 };
-
+static inline void release(Obj *o) {
+  if (o != 0) {
+    o->refs = o->refs - 1;
+    if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy(o);
+  }
+}
+static inline void assign(Obj *&field, Obj *value) {
+  if (value) value->refs = value->refs + 1;
+  release(field);
+  field = value;
+}
+static inline void assign(Obj *&field, const igSmartPointer<Obj> &value) {
+  Obj *held = value.get();
+  if (held) held->refs = held->refs + 1;
+  release(field);
+  field = held;
+}
 struct Controller {
   char pad0[32];
   int a32;
@@ -72,99 +70,52 @@ struct Controller {
 };
 
 extern "C" void FUN_001c20b0(Controller *self) {
-  Obj *volatile t58, *volatile t54, *volatile t50, *volatile t4c, *volatile t48, *volatile t44, *volatile t40, *volatile t3c;
   unsigned char flag;
   Obj *s1;
   int props = DAT_00586dc8[0]->props;
   flag = 1;
   thunk_FUN_00306e50(props, 7, DAT_004e4600, &flag, 1, 1);
   self->enabled = flag;
-  t58 = FUN_00132810(igObject_GetAllocator(self));
-  s1 = t58;
-  if (s1) s1->refs = s1->refs + 1;
-  RefOps::release(self->f76);
-  self->f76 = s1;
-  RefOps::releaseSlot(t58);
+  assign(self->f76, igSmartPointer<Obj>(FUN_00132810(igObject_GetAllocator(self))));
   self->f76->setValue(self->a32);
   self->f76->configure(0);
-  t54 = FUN_001325a0(igObject_GetAllocator(self));
-  s1 = t54;
-  if (s1) s1->refs = s1->refs + 1;
-  RefOps::release(self->f80);
-  self->f80 = s1;
-  RefOps::releaseSlot(t54);
+  assign(self->f80, igSmartPointer<Obj>(FUN_001325a0(igObject_GetAllocator(self))));
   self->f80->setKind(2);
   self->f80->configure(0);
-  t50 = FUN_00131c60(igObject_GetAllocator(self));
-  s1 = t50;
-  if (s1) s1->refs = s1->refs + 1;
-  RefOps::release(self->f84);
-  self->f84 = s1;
-  RefOps::releaseSlot(t50);
+  assign(self->f84, igSmartPointer<Obj>(FUN_00131c60(igObject_GetAllocator(self))));
   self->f84->field12 = 2;
   self->f84->configure(0);
   if (self->p36 != 0) {
     self->p36->configure(0);
-    t4c = FUN_001325a0(igObject_GetAllocator(self));
-    s1 = t4c;
-    if (s1) s1->refs = s1->refs + 1;
-    RefOps::release(self->f88);
-    self->f88 = s1;
-    RefOps::releaseSlot(t4c);
+    assign(self->f88, igSmartPointer<Obj>(FUN_001325a0(igObject_GetAllocator(self))));
     self->f88->setKind(0);
     self->f88->configure(0);
     self->f88->setValue(self->a40);
-    t48 = FUN_00131c60(igObject_GetAllocator(self));
-    s1 = t48;
-    if (s1) s1->refs = s1->refs + 1;
-    RefOps::release(self->f92);
-    self->f92 = s1;
-    RefOps::releaseSlot(t48);
+    assign(self->f92, igSmartPointer<Obj>(FUN_00131c60(igObject_GetAllocator(self))));
     self->f92->field12 = 1;
     self->f92->configure(0);
     if (self->flag48) {
       s1 = DAT_00562738[0];
-      if (s1) s1->refs = s1->refs + 1;
-      RefOps::release(self->f96);
-      self->f96 = s1;
+      assign(self->f96, s1);
     } else {
       s1 = DAT_00562740[0];
-      if (s1) s1->refs = s1->refs + 1;
-      RefOps::release(self->f96);
-      self->f96 = s1;
+      assign(self->f96, s1);
     }
   }
   if (self->a52 != 0) {
-    t44 = FUN_00132810(igObject_GetAllocator(self));
-    s1 = t44;
-    if (s1) s1->refs = s1->refs + 1;
-    RefOps::release(self->f100);
-    self->f100 = s1;
-    RefOps::releaseSlot(t44);
+    assign(self->f100, igSmartPointer<Obj>(FUN_00132810(igObject_GetAllocator(self))));
     self->f100->setValue(self->a52);
     self->f100->configure(0);
     s1 = self->f88;
     if (s1 != 0 && self->a56 == self->a40) {
-      if (s1) s1->refs = s1->refs + 1;
-      RefOps::release(self->f104);
-      self->f104 = s1;
+      assign(self->f104, s1);
     } else {
-      t40 = FUN_001325a0(igObject_GetAllocator(self));
-      s1 = t40;
-      if (s1) s1->refs = s1->refs + 1;
-      RefOps::release(self->f104);
-      self->f104 = s1;
-      RefOps::releaseSlot(t40);
+      assign(self->f104, igSmartPointer<Obj>(FUN_001325a0(igObject_GetAllocator(self))));
       self->f104->setKind(0);
       self->f104->configure(0);
       self->f104->setValue(self->a56);
     }
-    t3c = FUN_00131c60(igObject_GetAllocator(self));
-    s1 = t3c;
-    if (s1) s1->refs = s1->refs + 1;
-    RefOps::release(self->f108);
-    self->f108 = s1;
-    RefOps::releaseSlot(t3c);
+    assign(self->f108, igSmartPointer<Obj>(FUN_00131c60(igObject_GetAllocator(self))));
     self->f108->field12 = 0;
     self->f108->configure(0);
   }

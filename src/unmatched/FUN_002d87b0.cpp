@@ -16,7 +16,7 @@ class FieldLinkObject { public:
     virtual int Classify(void *pool);
 };
 struct FieldLinkInfo { char pad[64]; int (*poolFor)(); };
-struct FieldLinkRecord : FieldLinkObject { int rc; int pad8; int index; int user; int extra; };
+struct FieldLinkRecord : FieldLinkObject { unsigned int rc; int pad8; int index; int user; int extra; };
 struct FieldLinkSet { int vt; int rc; int count; char pad12[44]; char reset; char pad57[7]; unsigned char mode; unsigned char tracks; unsigned char namedPools; };
 extern "C" {
 int FUN_002d86b0(FieldLinkSet *, int, FieldLinkObject *);
@@ -35,11 +35,30 @@ extern int DAT_00586730;
 extern int DAT_00586140;
 int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user);
 }
+template <class T> struct RetainedWord {
+    T *p;
+    RetainedWord(T *object) : p(object) {
+        if (p != 0) {
+            p->rc = p->rc + 1;
+        }
+    }
+};
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
+        if ((o = p) != 0) {
+            o->rc = o->rc - 1;
+            if ((o->rc & 0x7FFFFF) == 0) {
+                igObject_Destroy(o);
+            }
+        }
+    }
+    T *get() const { return p; }
+};
 int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user) {
-    FieldLinkRecord * volatile tmp; 
-    FieldLinkRecord * held;
     int index = 0;
-    FieldLinkRecord *r;
     FieldLinkInfo *info;
     void *pool;
     int mode;
@@ -68,20 +87,16 @@ int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user)
             }
         }
     }
-    tmp = FUN_002bd8f0(igObject_GetAllocator(self));
-    tmp->index = index;
-    held = tmp;
-    r = held;
-    if (r != 0) {
-        r->rc = r->rc + 1;
-    }
-    List_InsertWords(self, index, 1, (void *)&held);
+    igSmartPointer<FieldLinkRecord> record(FUN_002bd8f0(igObject_GetAllocator(self)));
+    record.get()->index = index;
+    RetainedWord<FieldLinkRecord> inserted(record.get());
+    List_InsertWords(self, index, 1, &inserted);
     if (name != 0) {
-        igNamedObject_SetName(tmp, name);
+        igNamedObject_SetName(record.get(), name);
     }
-    tmp->user = user;
-    tmp->extra = 0;
-    tmp->Assign(obj);
+    record.get()->user = user;
+    record.get()->extra = 0;
+    record.get()->Assign(obj);
     if (self->tracks != 0) {
         info = obj->GetMeta();
         pool = 0;
@@ -96,19 +111,11 @@ int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user)
             if (mode == 1 || mode == 2) {
                 mode = -1;
             }
-            tmp->SetContext(mode);
+            record.get()->SetContext(mode);
         }
     }
     if (obj != 0) {
-        r = tmp;
-        FUN_00301590(r, obj->GetMeta());
-    }
-    r = tmp;
-    if (r != 0) {
-        r->rc = r->rc - 1;
-        if (((unsigned long long)((long long)(int)r->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(r);
-        }
+        FUN_00301590(record.get(), obj->GetMeta());
     }
     return index;
 }

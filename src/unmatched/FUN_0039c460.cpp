@@ -6,13 +6,13 @@
  * it and the attribute is pushed on the time attribute stack. After the children both attributes
  * are popped again and the time is restored; the result is 2 only when the children asked for it. */
 #include "dw4/reflected.h"
+#include "dw4/igTDataList.h"
 extern "C" {
 void igMatrix44f_SetIdentity(float *);
 void Matrix44_Copy(float *, float *);
 void Matrix44_GetTranslation(float *, float *);
 void Matrix44_SetTranslation(float *, float *);
 void FUN_001dca40(igObjectPool *, void (*)(void));         /* pool growth, takes the instance factory */
-void List_Resize(void *, int, int);
 void FUN_001b1490(igAttrStackManager *, igAttrStack *, int); /* marks the attribute stack changed */
 int FUN_001e07a0(igCommonTraversal *, beResetNode *);         /* traverse the children, 2 = stop */
 void FUN_001356b0(void);                                      /* igModelViewMatrixAttr factory. */
@@ -28,11 +28,18 @@ struct AttrStackOps {
         return ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[((int *)mgr->_attrStackIndexTable)[index]];
     }
 };
+struct AttrList : igTDataList<igAttr *> {
+    void append(igAttr *value) {
+        int n = count();
+        if (n < _capacity)
+            _count = _count + 1;
+        else
+            List_Resize(this, n + 1, 4);
+        igAttr *const *p = &value;
+        _data[n] = *p;
+    }
+};
 int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
-    /* matching construct: the pushed attribute is written through a volatile slot (the retail code spills it to the frame and
-     * reloads it for the store into the stack); the declaration order of the locals sets the frame layout */
-    igAttr *volatile timeItem;
-    igAttr *volatile matItem;
     float t[3];
     long long time;
     float m[16];
@@ -69,25 +76,13 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
         /* push timeAttr on the attribute stack of its class (stack = index table[attr id] + attr unit) */
         int idx = timeAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[timeAttr->_cachedAttrIndex];
         igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[idx];
-        timeItem = (igAttr *)timeAttr;
-        int n = st->_count;
-        if (n < st->_capacity)
-            st->_count = *(volatile int *)&st->_count + 1; /* The count is re-read because the list header is volatile. */
-        else
-            List_Resize(st, n + 1, 4);
-        ((igAttr **)st->_data)[n] = timeItem;
+        ((AttrList *)st)->append((igAttr *)timeAttr);
         FUN_001b1490(mgr, st, idx);
     }
     if (node->_isResetRotAndScale) {
         int idx = matAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[matAttr->_cachedAttrIndex];
         igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[idx];
-        matItem = (igAttr *)matAttr;
-        int n = st->_count;
-        if (n < st->_capacity)
-            st->_count = *(volatile int *)&st->_count + 1;
-        else
-            List_Resize(st, n + 1, 4);
-        ((igAttr **)st->_data)[n] = matItem;
+        ((AttrList *)st)->append((igAttr *)matAttr);
         FUN_001b1490(mgr, st, idx);
     }
     int r = FUN_001e07a0(trav, node);

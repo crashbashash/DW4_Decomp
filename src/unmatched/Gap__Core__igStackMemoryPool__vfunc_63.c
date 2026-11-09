@@ -1,6 +1,6 @@
 typedef struct StackPoolFields {
     char pad0[112];
-    volatile unsigned short alignment;
+    unsigned short alignment;
     char pad1[18];
     unsigned top;
     unsigned *end;
@@ -8,8 +8,7 @@ typedef struct StackPoolFields {
 extern int DAT_004fb410;
 extern int DAT_004fb418;
 static inline unsigned short effectiveAlign(StackPoolFields *pool, unsigned short wanted) {
-    unsigned short base = pool->alignment;
-    return wanted > base ? wanted : base;
+    return wanted > pool->alignment ? wanted : pool->alignment;
 }
 void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, int n, unsigned *sizes, unsigned *out, unsigned short *aligns) {
     unsigned total = 0;

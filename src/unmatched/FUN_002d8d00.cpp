@@ -11,11 +11,30 @@ int igObject_GetAllocator(...);
 extern int DAT_00586730[4];
 int FUN_002d8d00(Lst *list, int key, int name, int val);
 }
+template <class T> struct igSmartPointer {
+    T *p;
+    igSmartPointer(T *object) : p(object) {}
+    ~igSmartPointer() {
+        T *o;
+        if ((o = p) != 0) {
+            o->rc = o->rc - 1;
+            if ((o->rc & 0x7FFFFF) == 0) {
+                igObject_Destroy(o);
+            }
+        }
+    }
+    T *get() const { return p; }
+};
+struct Retained {
+    R *p;
+    Retained(R *object) : p(object) {
+        if (p != 0) {
+            p->rc = p->rc + 1;
+        }
+    }
+};
 int FUN_002d8d00(Lst *list, int key, int name, int val) {
-    R * volatile sp6C;
-    R * sp68;
-    R *t;
-    int idx, cnt, r;
+    int idx, cnt;
     if (key == 0) {
         return -1;
     }
@@ -27,25 +46,13 @@ int FUN_002d8d00(Lst *list, int key, int name, int val) {
             if (f == key) return -1;
         }
     }
-    sp6C = (R *)FUN_002c77e0(igObject_GetAllocator(list));
-    igNamedObject_SetName(sp6C, name);
-    sp6C->f16 = val;
-    sp6C->f20 = 2;
-    sp6C->vX(key);
-    sp6C->f12 = idx;
-    sp68 = sp6C;
-    t = sp68;
-    if (t != 0) {
-        t->rc = t->rc + 1;
-    }
-    List_InsertWords(list, idx, 1, &sp68);
-    t = sp6C;
-    r = t->f12;
-    if (t != 0) {
-        t->rc = t->rc - 1;
-        if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(t);
-        }
-    }
-    return r;
+    igSmartPointer<R> entry((R *)FUN_002c77e0(igObject_GetAllocator(list)));
+    igNamedObject_SetName(entry.get(), name);
+    entry.get()->f16 = val;
+    entry.get()->f20 = 2;
+    entry.get()->vX(key);
+    entry.get()->f12 = idx;
+    Retained retained(entry.get());
+    List_InsertWords(list, idx, 1, &retained);
+    return entry.get()->f12;
 }

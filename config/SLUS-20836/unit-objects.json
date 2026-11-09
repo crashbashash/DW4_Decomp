@@ -5268,15 +5268,6 @@
     },
     "symbol": "errormessage__FP9lua_State"
   },
-  "0x002fe600": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__1KFv": "0x002e2300"
-    },
-    "externals": {
-      "FUN_002ed5c0": "0x002ed5c0"
-    }
-  },
   "0x002eedd0": {
     "emitted": {},
     "duplicates": {
@@ -6110,6 +6101,290 @@
   "0x001aedd0": {
     "duplicates": {
       "__dt__9RecordRefFv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002dd0f0": {
+    "emitted": {},
+    "stripped": [
+      "__dt__22EventTrackerScopedLockFv"
+    ]
+  },
+  "0x00246130": {
+    "emitted": {},
+    "stripped": [
+      "__dt__10ScopedLockFv"
+    ]
+  },
+  "0x00466a10": {
+    "emitted": {},
+    "stripped": [
+      "__dt__23igSmartPointer<6Marker>Fv"
+    ]
+  },
+  "0x001d65e0": {
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001b24d0": {
+    "duplicates": {
+      "__dt__30igSmartPointer<12BoundsObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d8d00": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1R>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002eeae0": {
+    "duplicates": {
+      "__dt__20igSmartPointer<3Tbl>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001c20b0": {
+    "emitted": {},
+    "stripped": [
+      "__dt__20igSmartPointer<3Obj>Fv"
+    ]
+  },
+  "0x001d8980": {
+    "duplicates": {
+      "__dt__21igSmartPointer<4Attr>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x004559f0": {
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0013d460": {
+    "emitted": {},
+    "stripped": [
+      "__dt__18igSmartPointer<1R>Fv"
+    ]
+  },
+  "0x00456780": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1R>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001c70d0": {
+    "duplicates": {
+      "__dt__30igSmartPointer<12ShaderObject>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00140190": {
+    "stripped": [
+      "__dt__29igSmartPointer<11Destination>Fv"
+    ]
+  },
+  "0x001e6640": {
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002fd320": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1X>Fv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e2950": {
+    "duplicates": {
+      "__dt__20igSmartPointer<3Obj>Fv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d8460": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1R>Fv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002dcc60": {
+    "stripped": [
+      "__dt__10ScopedLockFv"
+    ]
+  },
+  "0x0023b270": {
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002e27d0": {
+    "duplicates": {
+      "__dt__20igSmartPointer<3Obj>Fv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d1c40": {
+    "duplicates": {
+      "__dt__8igStringFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00309a60": {
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002dbd10": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1R>Fv": "0x00130140"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002fca80": {
+    "duplicates": {
+      "__dt__8igStringFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x0030e480": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1R>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00301010": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1X>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001b23e0": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1X>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001554a0": {
+    "duplicates": {
+      "__dt__20igSmartPointer<3Ref>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x003224c0": {
+    "duplicates": {
+      "__dt__19igSmartPointer<2Rc>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d8a80": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1E>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x002d87b0": {
+    "duplicates": {
+      "__dt__33igSmartPointer<15FieldLinkRecord>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00235370": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00308c80": {
+    "emitted": {},
+    "stripped": [
+      "__dt__19igSmartPointer<2RO>Fv"
+    ]
+  },
+  "0x002dcd70": {
+    "emitted": {},
+    "stripped": [
+      "__dt__10ScopedLockFv"
+    ]
+  },
+  "0x002f8e10": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1R>Fv": "0x0025a230"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x00237300": {
+    "duplicates": {
+      "__dt__9StringRefFv": "0x00130720"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    }
+  },
+  "0x001b7010": {
+    "duplicates": {
+      "__dt__18igSmartPointer<1R>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
