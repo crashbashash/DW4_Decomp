@@ -91,7 +91,8 @@ def apply_function_extents(fns, path):
 
 
 def load_extent_overrides(path):
-    """config/SLUS-20836/extent-overrides.tsv -> {va: (size, name, kind)}; kind is "", "cut" or "merge"."""
+    """config/SLUS-20836/extent-overrides.tsv -> {va: (size, name, kind)}; kind is "", "cut", "merge"
+    or "start"."""
     rows = {}
     if not path or not os.path.exists(path):
         return rows
@@ -103,7 +104,7 @@ def load_extent_overrides(path):
             va, size = int(p[0], 0), int(p[1])
             name = p[2] if len(p) > 2 else None
             kind = p[3] if len(p) > 3 else ""
-            if va in rows or size <= 0 or size % 4 or kind not in ("", "cut", "merge"):
+            if va in rows or size <= 0 or size % 4 or kind not in ("", "cut", "merge", "start"):
                 raise ValueError("invalid/duplicate extent override at %#x" % va)
             rows[va] = (size, name, kind)
     return rows
@@ -129,6 +130,8 @@ def apply_extent_overrides(fns, img, path):
     rows = load_extent_overrides(path)
     if not rows:
         return fns, []
+    fns = add_reviewed_starts(fns, img, {va: r for va, r in rows.items() if r[2] == "start"})
+    rows = {va: r for va, r in rows.items() if r[2] != "start"}
     # merges first: they delete dump entries, so sizes and neighbours are settled before the cuts
     merged = set()
     for va, (size, name, kind) in rows.items():
@@ -162,6 +165,26 @@ def apply_extent_overrides(fns, img, path):
     if rows:
         raise ValueError("extent override has no function: %s" % sorted(hex(v) for v in rows))
     return out, cuts
+
+
+def add_reviewed_starts(fns, img, rows):
+    """The `start` rows: a function no rule can find, because its body ends in no transfer the
+    sweep accepts (`eret`, a `syscall` that does not return, an idle loop, a `jr` through a
+    register) or carries a constant inline. Each row is checked against the bytes: the function
+    lies in a gap of the code, nothing falls into its first word, and that word is not padding."""
+    starts = sorted(f[0] for f in fns)
+    ends = {f[0]: f[0] + f[1] for f in fns}
+    out = list(fns)
+    for va, (size, name, _kind) in sorted(rows.items()):
+        k = bisect.bisect_right(starts, va) - 1
+        nxt = starts[k + 1] if k + 1 < len(starts) else CODE_HI
+        if va >= CODE_HI or (k >= 0 and va < ends[starts[k]]) or va + size > nxt:
+            raise ValueError("start row at %#x is not inside a gap of the code" % va)
+        if not _word(img, va) or not _fresh_start(img, va):
+            raise ValueError("start row at %#x does not begin a body" % va)
+        out.append((va, size, name or "FUN_%08x" % va, None))
+    out.sort(key=lambda f: f[0])
+    return out
 
 
 def check_cuts(fns, img, cuts):
@@ -292,6 +315,7 @@ def _is_prologue(word):
 # states the rules in prose.
 
 SECTION_HI = 0x554B00          # end of the loadable section (tools/layout.py SECTION_HI)
+CODE_HI = 0x467120             # end of the compiled code: the VU1 microcode follows (regions.tsv)
 
 # SPECIAL function codes the EE core has (R5900 lacks dmult/dmultu/ddiv/ddivu and movci)
 _SPECIAL_OK = frozenset([0x00, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
@@ -743,6 +767,29 @@ def promote_framed_bodies(fns, img, strong, strong_data):
         prev_end = max(prev_end, va + sz)
     return _promote_in_gaps(fns, img, cands, strong, strong_data,
                             lambda va, size: _framed(img, va, size), min_size=16)
+
+
+def promote_code_bodies(fns, img, strong, strong_data):
+    """Rule 6 — any self-contained body in a gap of the compiled code.
+
+    Below `CODE_HI` the image holds nothing but functions, their padding and constants inside
+    their bodies: there is no rodata for a sweep to mistake for code, so a body nothing
+    references (a static function the linker kept, a getter reached only through a table the
+    scan cannot form, a syscall stub) needs no other evidence than its shape. Candidates are
+    every non-zero gap word below `CODE_HI`; `_promote_in_gaps` keeps the fresh starts whose
+    sweep ends cleanly, so a body that runs into data or the next function is left alone."""
+    cands = []
+    prev_end = VADDR_BASE
+    for va, sz, *_ in fns + [(CODE_HI, 0)]:
+        if va > CODE_HI:
+            break
+        o = max(prev_end, VADDR_BASE + 8)
+        while o + 8 <= va:
+            if _word(img, o):
+                cands.append(o)
+            o += 4
+        prev_end = max(prev_end, va + sz)
+    return _promote_in_gaps(fns, img, cands, strong, strong_data, lambda va, size: True)
 
 
 def _is_end_word(word):
@@ -1343,7 +1390,7 @@ def main(argv=None):
     # body rule 3 adds forms literals that rule 4 needs. They run to a fixpoint, each round
     # recomputing the reference set from every function known so far; the rounds are a pure
     # function of the inputs, so the replay is unchanged by the iteration.
-    cadded, radded, fadded = [], [], []
+    cadded, radded, fadded, badded = [], [], [], []
     while True:
         before = len(fns)
         strong, strong_data = strong_reference_starts(img, fns, lit, exclude)
@@ -1352,11 +1399,17 @@ def main(argv=None):
         fns, f = promote_framed_bodies(fns, img, strong, strong_data)
         cadded, radded, fadded = cadded + c, radded + r, fadded + f
         if len(fns) == before:
-            break
+            # rule 6 runs once the evidence-driven rules are done, so it never takes a body
+            # they would have bounded or named differently; what it adds feeds another round
+            fns, b = promote_code_bodies(fns, img, strong, strong_data)
+            badded += b
+            if not b:
+                break
         lit = lit | literal_code_addresses(img, fns)
     summary("3 jal/j target without a symbol", cadded)
     summary("4 table/literal-referenced start", radded)
     summary("5 unreferenced framed body", fadded)
+    summary("6 unreferenced body in the code", badded)
     check_cuts(fns, img, cuts)
     if a.region:
         lo, hi = (int(x, 0) for x in a.region.split(","))

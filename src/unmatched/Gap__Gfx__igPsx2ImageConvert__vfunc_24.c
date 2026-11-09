@@ -4,18 +4,18 @@ void FUN_0015aaf0(void);
 void FUN_0015ab50(void);
 void FUN_0015ab70(void);
 void FUN_0015ab90(void);
-void DAT_0016f690(void);
+void FUN_0016f690(void);
 void FUN_0016f700(void);
 void FUN_0016f780(void);
 void FUN_0016f7f0(void);
 void FUN_0016f8a0(void);
-void DAT_0016f930(void);
+void FUN_0016f930(void);
 void FUN_0016f9b0(void);
 void FUN_0016fa10(void);
-void DAT_0016fa60(void);
+void FUN_0016fa60(void);
 void FUN_0016fae0(void);
 void FUN_0016fb60(void);
-void DAT_0016fbd0(void);
+void FUN_0016fbd0(void);
 void FUN_0016fc20(void);
 void FUN_0016fc80(void);
 void FUN_0016fcd0(void);
@@ -38,7 +38,7 @@ ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_24(void *self, int srcFormat, in
     case 0x10000:
         switch (to) {
         case 0x10001: return FUN_0015aaf0;
-        case 7: return DAT_0016f690;
+        case 7: return FUN_0016f690;
         case 0x10000: break;
         }
         break;
@@ -69,7 +69,7 @@ ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_24(void *self, int srcFormat, in
     case 5:
         switch (to) {
         case 7: return FUN_0016f8a0;
-        case 8: return DAT_0016f930;
+        case 8: return FUN_0016f930;
         case 10: return FUN_0016f9b0;
         case 5: break;
         }
@@ -77,7 +77,7 @@ ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_24(void *self, int srcFormat, in
     case 7:
         switch (to) {
         case 5: return FUN_0016fa10;
-        case 8: return DAT_0016fa60;
+        case 8: return FUN_0016fa60;
         case 9: return FUN_0016fae0;
         case 7: break;
         }
@@ -100,7 +100,7 @@ ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_24(void *self, int srcFormat, in
     case 3:
         switch (to) {
         case 7: return FUN_0016fc20;
-        case 2: return DAT_0016fbd0;
+        case 2: return FUN_0016fbd0;
         case 0x10000: return FUN_0016fc80;
         case 0x10001: return FUN_0016fcd0;
         case 3: break;

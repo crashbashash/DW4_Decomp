@@ -115,7 +115,7 @@
 00109368	FUN_00109368	match	-
 00109378	FUN_00109378	match	-
 00109388	_sceMpegAlalcAlloc	match	-
-00109410	FUN_00109410	match	jump table 0x4d22b0: 5 words, 20 bytes, matches retail
+00109410	FUN_00109410	match	jump table 0x4d22b0: 5 entries, 20 bytes, matches retail
 001095c8	FUN_001095c8	match	-
 001096e8	FUN_001096e8	match	-
 00109730	FUN_00109730	match	-
@@ -263,7 +263,7 @@
 0010c7b0	FUN_0010c7b0	match	-
 0010c7f0	deci2Putchar	match	-
 0010c8a0	FUN_0010c8a0	match	-
-0010c970	FUN_0010c970	match	jump table 0x4d24c0: 12 words, 48 bytes, matches retail
+0010c970	FUN_0010c970	match	jump table 0x4d24c0: 12 entries, 48 bytes, matches retail
 0010d0d0	FUN_0010d0d0	match	-
 0010d108	FUN_0010d108	match	-
 0010d168	FUN_0010d168	match	-
@@ -507,33 +507,33 @@
 0011a980	FUN_0011a980	match	-
 0011aae0	FUN_0011aae0	match	-
 0011abb0	FUN_0011abb0	match	-
-0011acc0	__ieee754_acos	match	jump table 0x4d2b58: 100 words, 400 bytes, matches retail
-0011b3e8	__ieee754_asin	match	jump table 0x4d2ce8: 84 words, 336 bytes, matches retail
-0011ba40	__ieee754_atan2	match	jump table 0x4d2e68: 32 words, 128 bytes, matches retail
-0011bd80	__ieee754_exp	match	jump table 0x4d2ee8: 56 words, 224 bytes, matches retail
+0011acc0	__ieee754_acos	match	jump table 0x4d2b58: 100 entries, 400 bytes, matches retail
+0011b3e8	__ieee754_asin	match	jump table 0x4d2ce8: 84 entries, 336 bytes, matches retail
+0011ba40	__ieee754_atan2	match	jump table 0x4d2e68: 32 entries, 128 bytes, matches retail
+0011bd80	__ieee754_exp	match	jump table 0x4d2ee8: 56 entries, 224 bytes, matches retail
 0011c220	__ieee754_fmod	match	-
-0011c640	__ieee754_log	match	jump table 0x4d2fe0: 56 words, 224 bytes, matches retail
-0011cc48	__ieee754_log10	match	jump table 0x4d30c0: 18 words, 72 bytes, matches retail
-0011cdf8	__ieee754_pow	match	jump table 0x4d3108: 116 words, 464 bytes, matches retail
-0011dd48	__ieee754_rem_pio2	match	jump table 0x4d32d8: 148 words, 592 bytes, matches retail
+0011c640	__ieee754_log	match	jump table 0x4d2fe0: 56 entries, 224 bytes, matches retail
+0011cc48	__ieee754_log10	match	jump table 0x4d30c0: 18 entries, 72 bytes, matches retail
+0011cdf8	__ieee754_pow	match	jump table 0x4d3108: 116 entries, 464 bytes, matches retail
+0011dd48	__ieee754_rem_pio2	match	jump table 0x4d32d8: 148 entries, 592 bytes, matches retail
 0011e300	__ieee754_sqrt	match	-
 0011e620	__ieee754_acosf	match	-
 0011ea48	__ieee754_asinf	match	-
 0011ede8	__ieee754_atan2f	match	-
-0011efc8	__ieee754_fmodf	match	jump table 0x4d3528: 4 words, 16 bytes, matches retail
-0011f198	__ieee754_logf	match	jump table 0x4d3538: 12 words, 48 bytes, matches retail
-0011f478	__ieee754_log10f	match	jump table 0x4d3568: 6 words, 24 bytes, matches retail
-0011f560	__ieee754_rem_pio2f	match	jump table 0x4d3580: 240 words, 960 bytes, matches retail
+0011efc8	__ieee754_fmodf	match	jump table 0x4d3528: 4 entries, 16 bytes, matches retail
+0011f198	__ieee754_logf	match	jump table 0x4d3538: 12 entries, 48 bytes, matches retail
+0011f478	__ieee754_log10f	match	jump table 0x4d3568: 6 entries, 24 bytes, matches retail
+0011f560	__ieee754_rem_pio2f	match	jump table 0x4d3580: 240 entries, 960 bytes, matches retail
 0011f910	__ieee754_sqrtf	match	-
-0011f9e0	__kernel_cos	match	jump table 0x4d3978: 12 words, 48 bytes, matches retail
-0011fcb8	__kernel_rem_pio2	match	jump table 0x4d39a8: 28 words, 112 bytes, matches retail
-00120808	__kernel_sin	match	jump table 0x4d3a50: 14 words, 56 bytes, matches retail
-00120a40	__kernel_tan	match	jump table 0x4d3aa0: 30 words, 120 bytes, matches retail
+0011f9e0	__kernel_cos	match	jump table 0x4d3978: 12 entries, 48 bytes, matches retail
+0011fcb8	__kernel_rem_pio2	match	jump table 0x4d39a8: 28 entries, 112 bytes, matches retail
+00120808	__kernel_sin	match	jump table 0x4d3a50: 14 entries, 56 bytes, matches retail
+00120a40	__kernel_tan	match	jump table 0x4d3aa0: 30 entries, 120 bytes, matches retail
 00120fa8	__kernel_cosf	match	-
-001210f8	__kernel_rem_pio2f	match	jump table 0x4d3b18: 19 words, 76 bytes, matches retail
+001210f8	__kernel_rem_pio2f	match	jump table 0x4d3b18: 19 entries, 76 bytes, matches retail
 00121960	__kernel_sinf	match	-
-00121a68	__kernel_tanf	match	jump table 0x4d3b68: 17 words, 68 bytes, matches retail
-00121cf0	atan	match	jump table 0x4d3bb0: 44 words, 176 bytes, matches retail
+00121a68	__kernel_tanf	match	jump table 0x4d3b68: 17 entries, 68 bytes, matches retail
+00121cf0	atan	match	jump table 0x4d3bb0: 44 entries, 176 bytes, matches retail
 001221b8	ceil	match	-
 001223c8	copysign	match	-
 00122410	cos	match	-
@@ -544,10 +544,10 @@
 00122890	isinf	match	-
 001228d8	isnan	match	-
 00122918	ldexp	match	-
-001229c8	scalbn	match	jump table 0x4d3c88: 12 words, 48 bytes, matches retail
+001229c8	scalbn	match	jump table 0x4d3c88: 12 entries, 48 bytes, matches retail
 00122bb0	sin	match	-
 00122ce8	tan	match	-
-00122d90	atanf	match	jump table 0x4d3cb8: 21 words, 84 bytes, matches retail
+00122d90	atanf	match	jump table 0x4d3cb8: 21 entries, 84 bytes, matches retail
 00123020	ceilf	match	-
 001230f8	copysignf	match	-
 00123138	cosf	match	-
@@ -580,7 +580,7 @@
 00123798	_calloc_r	match	-
 00123850	_close_r	match	-
 001238a8	quorem	match	-
-00123ad8	_dtoa_r	match	jump table 0x4d3e20: 22 words, 88 bytes, matches retail
+00123ad8	_dtoa_r	match	jump table 0x4d3e20: 22 entries, 88 bytes, matches retail
 00124d40	__env_lock	match	-
 00124d48	__env_unlock	match	-
 00124d50	__errno	match	-
@@ -698,7 +698,7 @@
 0012af18	strpbrk	match	-
 0012afa0	strrchr	match	-
 0012aff0	strstr	match	-
-0012b078	_strtod_r	match	jump table 0x4d4080: 52 words, 208 bytes, matches retail
+0012b078	_strtod_r	match	jump table 0x4d4080: 52 entries, 208 bytes, matches retail
 0012bf90	strtod	match	-
 0012bfb8	strtodf	match	-
 0012bfe0	_strtol_r	match	-
@@ -712,14 +712,14 @@
 0012c758	__sprint_vfiprintf	match	-
 0012c7a0	__sbprintf_vfiprintf	match	-
 0012c858	vfiprintf	match	-
-0012c8d0	_vfiprintf_r	match	jump table 0x4d4150: 121 words, 484 bytes, matches retail
+0012c8d0	_vfiprintf_r	match	jump table 0x4d4150: 121 entries, 484 bytes, matches retail
 0012d4c8	__sprint	match	-
 0012d510	__sbprintf	match	-
 0012d5c8	vfprintf	match	-
-0012d640	_vfprintf_r	match	jump table 0x4d4340: 129 words, 516 bytes, matches retail
+0012d640	_vfprintf_r	match	jump table 0x4d4340: 129 entries, 516 bytes, matches retail
 0012ecb0	cvt	match	-
 0012ee70	exponent	match	-
-0012ef50	__svfscanf	match	jump table 0x4d4580: 271 words, 1084 bytes, matches retail
+0012ef50	__svfscanf	match	jump table 0x4d4580: 271 entries, 1084 bytes, matches retail
 0012fbe0	__sccl	match	-
 0012fce0	vprintf	match	-
 0012fd08	vsnprintf	match	-
@@ -1837,10 +1837,10 @@
 00147a50	Gap__igPsx2Controller__vfunc_11	match	-
 00147a80	Gap__igPsx2Controller__vfunc_12	match	-
 00147ad0	Gap__igPsx2Controller__vfunc_31	match	-
-00147b00	Gap__igPsx2Controller__vfunc_23	match	jump table 0x4d6fa0: 7 words, 28 bytes, matches retail
+00147b00	Gap__igPsx2Controller__vfunc_23	match	jump table 0x4d6fa0: 7 entries, 28 bytes, matches retail
 00147f60	Gap__igPsx2Controller__vfunc_37	match	-
-00147ff0	FUN_00147ff0	match	jump table 0x4d6fc0: 11 words, 44 bytes, matches retail
-001480a0	FUN_001480a0	match	jump table 0x4d6ff0: 12 words, 48 bytes, matches retail
+00147ff0	FUN_00147ff0	match	jump table 0x4d6fc0: 11 entries, 44 bytes, matches retail
+001480a0	FUN_001480a0	match	jump table 0x4d6ff0: 12 entries, 48 bytes, matches retail
 001485c0	Gap__igPsx2ControllerManager__vfunc_24	match	DEFERRED duplicate 0x25a230 __dt__34igSmartPointer<16igPsx2Controller>Fv 128B (compared under the profile of its retail unit)
 001489a0	FUN_001489a0	match	-
 00148a20	Gap__igPsx2Controller__vfunc_36	match	-
@@ -2580,7 +2580,7 @@
 00164ca0	FUN_00164ca0	match	-
 00164cd0	FUN_00164cd0	match	-
 00164d50	FUN_00164d50	match	-
-00164d60	FUN_00164d60	match	jump table 0x4df070: 11 words, 44 bytes, matches retail
+00164d60	FUN_00164d60	match	jump table 0x4df070: 11 entries, 44 bytes, matches retail
 00164f50	FUN_00164f50	match	-
 00165a80	FUN_00165a80	match	-
 00165bb0	FUN_00165bb0	match	-
@@ -2638,7 +2638,7 @@
 00168400	FUN_00168400	match	-
 00168420	FUN_00168420	match	-
 00168480	FUN_00168480	match	-
-00168570	FUN_00168570	match	jump table 0x4df2d0: 13 words, 52 bytes, matches retail
+00168570	FUN_00168570	match	jump table 0x4df2d0: 13 entries, 52 bytes, matches retail
 001690d0	FUN_001690d0	match	-
 00169260	FUN_00169260	match	-
 00169480	Gap__Gfx__igPsx2VisualContext__vfunc_46	match	-
@@ -2684,7 +2684,7 @@
 0016b2d0	thunk_FUN_00164f50	match	-
 0016b8f0	Gap__Gfx__igPsx2VisualContext__vfunc_10	match	-
 0016c4a0	Gap__Gfx__igPsx2VisualContext__vfunc_35	match	-
-0016c570	Gap__Gfx__igPsx2VisualContext__vfunc_37	match	jump table 0x4df490: 29 words, 116 bytes, matches retail
+0016c570	Gap__Gfx__igPsx2VisualContext__vfunc_37	match	jump table 0x4df490: 29 entries, 116 bytes, matches retail
 0016c650	FUN_0016c650	match	-
 0016c790	Gap__Gfx__igPsx2VisualContext__vfunc_192	match	-
 0016c8f0	Gap__Gfx__igPsx2VisualContext__vfunc_193	match	-
@@ -2698,8 +2698,8 @@
 0016cdd0	FUN_0016cdd0	match	-
 0016cde0	FUN_0016cde0	match	-
 0016cdf0	Gap__Gfx__igPsx2DisableExt__vfunc_29	match	-
-0016ce00	Gap__Gfx__igPsx2DisableExt__vfunc_30	match	jump table 0x4df520: 13 words, 52 bytes, matches retail
-0016ce90	Gap__Gfx__igPsx2DisableExt__vfunc_31	match	jump table 0x4df560: 13 words, 52 bytes, matches retail
+0016ce00	Gap__Gfx__igPsx2DisableExt__vfunc_30	match	jump table 0x4df520: 13 entries, 52 bytes, matches retail
+0016ce90	Gap__Gfx__igPsx2DisableExt__vfunc_31	match	jump table 0x4df560: 13 entries, 52 bytes, matches retail
 0016cf20	Gap__Gfx__igPsx2VisualContext__vfunc_65	match	-
 0016cfb0	Gap__Gfx__igPsx2VisualContext__vfunc_66	match	-
 0016d010	Gap__Gfx__igPsx2VisualContext__vfunc_67	match	-
@@ -2764,7 +2764,7 @@
 0016fe50	Gap__Gfx__igPsx2MultiTextureExt__vfunc_30	match	-
 0016fe80	Gap__Gfx__igPsx2MultiTextureExt__vfunc_31	match	-
 0016fe90	Gap__Gfx__igPsx2MultiTextureExt__vfunc_32	match	-
-0016fea0	FUN_0016fea0	match	jump table 0x4df600: 12 words, 48 bytes, matches retail
+0016fea0	FUN_0016fea0	match	jump table 0x4df600: 12 entries, 48 bytes, matches retail
 001700e0	Gap__Gfx__igPsx2ScissorExt__vfunc_29	match	-
 001700f0	Gap__Gfx__igPsx2ScissorExt__vfunc_30	match	-
 001701a0	Gap__Gfx__igPsx2ScissorExt__vfunc_31	match	-
@@ -2808,7 +2808,7 @@
 00171cd0	Gap__Gfx__igPsx2VisualContext__vfunc_112	match	-
 001720d0	FUN_001720d0	match	-
 00172100	Gap__Gfx__igPsx2VisualContext__vfunc_110	match	-
-00172130	Gap__Gfx__igPsx2VisualContext__vfunc_100	match	jump table 0x4df650: 6 words, 24 bytes, matches retail
+00172130	Gap__Gfx__igPsx2VisualContext__vfunc_100	match	jump table 0x4df650: 6 entries, 24 bytes, matches retail
 00172220	Gap__Gfx__igPsx2VisualContext__vfunc_101	match	-
 00172230	Gap__Gfx__igPsx2VisualContext__vfunc_115	match	-
 00172300	Gap__Gfx__igPsx2VisualContext__vfunc_116	match	-
@@ -2870,7 +2870,7 @@
 00174e90	Gap__Gfx__igPsx2VisualContext__vfunc_160	match	-
 00174ea0	Gap__Gfx__igPsx2VisualContext__vfunc_161	match	-
 00174ed0	Gap__Gfx__igPsx2VisualContext__vfunc_162	match	-
-00174ee0	Gap__Gfx__igPsx2VisualContext__vfunc_163	match	jump table 0x4df670: 8 words, 32 bytes, matches retail
+00174ee0	Gap__Gfx__igPsx2VisualContext__vfunc_163	match	jump table 0x4df670: 8 entries, 32 bytes, matches retail
 00174f90	Gap__Gfx__igPsx2VisualContext__vfunc_164	match	-
 00174fa0	Gap__Gfx__igPsx2VisualContext__vfunc_165	match	-
 00174fb0	Gap__Gfx__igPsx2VisualContext__vfunc_166	match	-
@@ -2936,7 +2936,7 @@
 00176f70	FUN_00176f70	match	-
 00176fc0	FUN_00176fc0	match	-
 001778e0	Gap__Gfx__igPsx2VisualContext__vfunc_256	match	-
-001778f0	Gap__Gfx__igPsx2VisualContext__vfunc_257	match	jump table 0x4df6d0: 191 words, 764 bytes, matches retail
+001778f0	Gap__Gfx__igPsx2VisualContext__vfunc_257	match	jump table 0x4df6d0: 191 entries, 764 bytes, matches retail
 001779e0	Gap__Gfx__igPsx2VisualContext__vfunc_258	match	-
 00177de0	Gap__Gfx__igPsx2VisualContext__vfunc_259	match	-
 001788a0	FUN_001788a0	match	-
@@ -3003,7 +3003,7 @@
 0017d8f0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_52	match	-
 0017d910	Gap__Gfx__igPsx2VertexArray1_1__vfunc_57	match	-
 0017da20	Gap__Gfx__igPsx2VertexArray1_1__vfunc_58	match	-
-0017da90	Gap__Gfx__igPsx2VertexArray1_1__vfunc_27	match	jump table 0x4e0820: 10 words, 40 bytes, matches retail
+0017da90	Gap__Gfx__igPsx2VertexArray1_1__vfunc_27	match	jump table 0x4e0820: 10 entries, 40 bytes, matches retail
 0017dd20	Gap__Gfx__igPsx2VertexArray1_1__vfunc_28	match	-
 0017dd30	Gap__Gfx__igPsx2VertexArray1_1__vfunc_19	match	-
 0017dde0	Gap__Gfx__igPsx2VertexArray1_1__vfunc_20	match	-
@@ -3383,7 +3383,7 @@
 0018a8e0	thunk_FUN_0018a8f0	match	-
 0018a8f0	FUN_0018a8f0	match	-
 0018aaa0	FUN_0018aaa0	match	-
-0018ab70	FUN_0018ab70	match	jump table 0x4e0d20: 8 words, 32 bytes, matches retail
+0018ab70	FUN_0018ab70	match	jump table 0x4e0d20: 8 entries, 32 bytes, matches retail
 0018afa0	FUN_0018afa0	match	-
 0018b050	FUN_0018b050	match	-
 0018b110	FUN_0018b110	match	-
@@ -3535,8 +3535,8 @@
 00192f50	FUN_00192f50	match	-
 00192fc0	FUN_00192fc0	match	-
 001930f0	FUN_001930f0	match	-
-001931b0	FUN_001931b0	match	jump table 0x4e11d0: 7 words, 28 bytes, matches retail
-00193540	FUN_00193540	match	jump table 0x4e11f0: 7 words, 28 bytes, matches retail
+001931b0	FUN_001931b0	match	jump table 0x4e11d0: 7 entries, 28 bytes, matches retail
+00193540	FUN_00193540	match	jump table 0x4e11f0: 7 entries, 28 bytes, matches retail
 00193c50	FUN_00193c50	match	-
 00193d00	Gap__igVec4ucMetaField__vfunc_22	match	-
 00193d10	Gap__igVec4ucMetaField__vfunc_23	match	-
@@ -4650,8 +4650,8 @@
 001b12f0	FUN_001b12f0	match	-
 001b13d0	FUN_001b13d0	match	-
 001b1490	FUN_001b1490	match	-
-001b1cf0	FUN_001b1cf0	match	jump table 0x4e4540: 17 words, 68 bytes, matches retail
-001b1dc0	FUN_001b1dc0	match	jump table 0x4e4590: 17 words, 68 bytes, matches retail
+001b1cf0	FUN_001b1cf0	match	jump table 0x4e4540: 17 entries, 68 bytes, matches retail
+001b1dc0	FUN_001b1dc0	match	jump table 0x4e4590: 17 entries, 68 bytes, matches retail
 001b1e50	FUN_001b1e50	match	-
 001b21d0	FUN_001b21d0	match	-
 001b23b0	FUN_001b23b0	match	-
@@ -5649,10 +5649,10 @@
 00202fa0	FUN_00202fa0	match	-
 00203500	FUN_00203500	match	-
 00204100	FUN_00204100	match	-
-00204150	FUN_00204150	match	jump table 0x4e5230: 14 words, 56 bytes, matches retail
-00204840	FUN_00204840	match	jump table 0x4e52b0: 14 words, 56 bytes, matches retail
+00204150	FUN_00204150	match	jump table 0x4e5230: 14 entries, 56 bytes, matches retail
+00204840	FUN_00204840	match	jump table 0x4e52b0: 14 entries, 56 bytes, matches retail
 00204910	FUN_00204910	match	-
-00204950	FUN_00204950	match	jump table 0x4e52f0: 14 words, 56 bytes, matches retail
+00204950	FUN_00204950	match	jump table 0x4e52f0: 14 entries, 56 bytes, matches retail
 00204e30	FUN_00204e30	match	-
 00206540	FUN_00206540	match	-
 00206570	FUN_00206570	match	-
@@ -6583,14 +6583,14 @@
 0023c8e0	FUN_0023c8e0	match	-
 0023c920	FUN_0023c920	match	-
 0023cb40	FUN_0023cb40	match	-
-0023cd00	FUN_0023cd00	match	jump table 0x4ea200: 13 words, 52 bytes, matches retail
+0023cd00	FUN_0023cd00	match	jump table 0x4ea200: 13 entries, 52 bytes, matches retail
 0023cd40	FUN_0023cd40	match	-
 0023cf10	FUN_0023cf10	match	-
 0023d070	FUN_0023d070	match	-
 0023d0b0	FUN_0023d0b0	match	-
 0023d110	FUN_0023d110	match	-
 0023d300	FUN_0023d300	match	-
-0023d9d0	FUN_0023d9d0	match	jump table 0x4ea340: 13 words, 52 bytes, matches retail
+0023d9d0	FUN_0023d9d0	match	jump table 0x4ea340: 13 entries, 52 bytes, matches retail
 0023e160	FUN_0023e160	match	-
 0023ec50	FUN_0023ec50	match	-
 0023ee00	FUN_0023ee00	match	-
@@ -7707,7 +7707,7 @@
 0026e8b0	FUN_0026e8b0	match	-
 0026e8b8	FUN_0026e8b8	match	-
 0026ebf8	FUN_0026ebf8	match	-
-0026ec78	FUN_0026ec78	match	jump table 0x4eee40: 5 words, 20 bytes, matches retail
+0026ec78	FUN_0026ec78	match	jump table 0x4eee40: 5 entries, 20 bytes, matches retail
 0026ee48	FUN_0026ee48	match	-
 0026ee70	FUN_0026ee70	match	-
 0026ee98	FUN_0026ee98	match	-
@@ -7828,7 +7828,7 @@
 00273988	FUN_00273988	match	-
 002739b8	FUN_002739b8	match	-
 002739e8	FUN_002739e8	match	-
-00273a90	FUN_00273a90	match	jump table 0x4f01c0: 10 words, 40 bytes, matches retail
+00273a90	FUN_00273a90	match	jump table 0x4f01c0: 10 entries, 40 bytes, matches retail
 00273b58	FUN_00273b58	match	-
 00273bd0	FUN_00273bd0	match	-
 00273c60	FUN_00273c60	match	-
@@ -7866,7 +7866,7 @@
 00275090	FUN_00275090	match	-
 002751d8	FUN_002751d8	match	-
 00275200	FUN_00275200	match	-
-00275220	FUN_00275220	match	jump table 0x4f03d0: 1 words, 2 bytes, matches retail
+00275220	FUN_00275220	match	jump table 0x4f03d0: 1 entries, 2 bytes, matches retail
 002752f8	FUN_002752f8	match	-
 00275310	FUN_00275310	match	-
 00275328	FUN_00275328	match	-
@@ -7878,7 +7878,7 @@
 00275408	FUN_00275408	match	-
 00275458	FUN_00275458	match	-
 002754c0	FUN_002754c0	match	-
-00275520	FUN_00275520	match	jump table 0x4f05d0: 10 words, 40 bytes, matches retail
+00275520	FUN_00275520	match	jump table 0x4f05d0: 10 entries, 40 bytes, matches retail
 002755e8	FUN_002755e8	match	-
 00275660	FUN_00275660	match	-
 00275678	FUN_00275678	match	-
@@ -7914,7 +7914,7 @@
 00276b68	FUN_00276b68	match	-
 00276cc0	FUN_00276cc0	match	-
 00276ce8	FUN_00276ce8	match	-
-00276d18	FUN_00276d18	match	jump table 0x4f08f0: 1 words, 2 bytes, matches retail
+00276d18	FUN_00276d18	match	jump table 0x4f08f0: 1 entries, 2 bytes, matches retail
 00276e30	FUN_00276e30	match	-
 00276e50	FUN_00276e50	match	-
 00276eb0	FUN_00276eb0	match	-
@@ -8213,7 +8213,7 @@
 002800d0	FUN_002800d0	match	-
 00280240	FUN_00280240	match	-
 00280250	thunk_FUN_00280a00	match	-
-00280330	FUN_00280330	match	jump table 0x4f2700: 8 words, 32 bytes, matches retail
+00280330	FUN_00280330	match	jump table 0x4f2700: 8 entries, 32 bytes, matches retail
 00280810	FUN_00280810	match	-
 00280840	FUN_00280840	match	-
 00280890	FUN_00280890	match	-
@@ -8327,7 +8327,7 @@
 00286958	FUN_00286958	match	-
 00286b70	FUN_00286b70	match	-
 00286ce8	FUN_00286ce8	match	-
-00286d28	FUN_00286d28	match	jump table 0x4f28d0: 10 words, 40 bytes, matches retail
+00286d28	FUN_00286d28	match	jump table 0x4f28d0: 10 entries, 40 bytes, matches retail
 0028a958	FUN_0028a958	match	-
 0028ab00	FUN_0028ab00	match	-
 0028ab10	FUN_0028ab10	match	-
@@ -8462,7 +8462,7 @@
 00291c28	FUN_00291c28	match	-
 00291c80	FUN_00291c80	match	-
 00291e00	FUN_00291e00	match	-
-00292790	FUN_00292790	match	jump table 0x4f2c80: 6 words, 24 bytes, matches retail
+00292790	FUN_00292790	match	jump table 0x4f2c80: 6 entries, 24 bytes, matches retail
 002927f8	FUN_002927f8	match	-
 00292958	FUN_00292958	match	-
 002929a0	FUN_002929a0	match	-
@@ -8510,7 +8510,7 @@
 00294348	FUN_00294348	match	-
 00294360	FUN_00294360	match	-
 002944b0	FUN_002944b0	match	-
-002944f0	FUN_002944f0	match	jump table 0x4f32b0: 9 words, 36 bytes, matches retail
+002944f0	FUN_002944f0	match	jump table 0x4f32b0: 9 entries, 36 bytes, matches retail
 00294568	FUN_00294568	match	-
 00294598	FUN_00294598	match	-
 002945c8	FUN_002945c8	match	-
@@ -8553,7 +8553,7 @@
 002958a0	FUN_002958a0	match	-
 00295908	FUN_00295908	match	-
 00295a28	FUN_00295a28	match	-
-00295ab8	FUN_00295ab8	match	jump table 0x4f38f0: 2 words, 8 bytes, matches retail
+00295ab8	FUN_00295ab8	match	jump table 0x4f38f0: 2 entries, 8 bytes, matches retail
 00295b10	FUN_00295b10	match	-
 00295b68	FUN_00295b68	match	-
 00295be0	FUN_00295be0	match	-
@@ -8814,7 +8814,7 @@
 0029a690	FUN_0029a690	match	-
 0029a718	FUN_0029a718	match	-
 0029a7d8	FUN_0029a7d8	match	-
-0029a868	FUN_0029a868	match	jump table 0x4f4aa0: 5 words, 20 bytes, matches retail
+0029a868	FUN_0029a868	match	jump table 0x4f4aa0: 5 entries, 20 bytes, matches retail
 0029a8e0	FUN_0029a8e0	match	-
 0029a948	FUN_0029a948	match	-
 0029a990	FUN_0029a990	match	-
@@ -9549,7 +9549,7 @@
 002b2c10	FUN_002b2c10	match	-
 002b2c98	FUN_002b2c98	match	-
 002b2d20	FUN_002b2d20	match	-
-002b2db0	FUN_002b2db0	match	jump table 0x4f5390: 8 words, 32 bytes, matches retail
+002b2db0	FUN_002b2db0	match	jump table 0x4f5390: 8 entries, 32 bytes, matches retail
 002b2e20	FUN_002b2e20	match	-
 002b2e60	FUN_002b2e60	match	-
 002b2ea0	FUN_002b2ea0	match	-
@@ -9569,8 +9569,8 @@
 002b3148	FUN_002b3148	match	-
 002b3168	FUN_002b3168	match	-
 002b3300	FUN_002b3300	match	-
-002b3318	FUN_002b3318	match	jump table 0x4f5420: 101 words, 404 bytes, matches retail
-002b3490	FUN_002b3490	match	jump table 0x4f55c0: 101 words, 404 bytes, matches retail
+002b3318	FUN_002b3318	match	jump table 0x4f5420: 101 entries, 404 bytes, matches retail
+002b3490	FUN_002b3490	match	jump table 0x4f55c0: 101 entries, 404 bytes, matches retail
 002b3510	FUN_002b3510	match	-
 002b3530	FUN_002b3530	match	-
 002b3548	FUN_002b3548	match	-
@@ -11417,7 +11417,7 @@
 002ed5a0	FUN_002ed5a0	match	-
 002ed5c0	Memory_FreeBufferAliasB	match	-
 002ed5d0	Memory_FreeOwnedBufferUnchecked	match	-
-002ed610	FUN_002ed610	match	jump table 0x4f9d00: 8 words, 32 bytes, matches retail
+002ed610	FUN_002ed610	match	jump table 0x4f9d00: 8 entries, 32 bytes, matches retail
 002ee430	FUN_002ee430	match	-
 002ee4a0	FUN_002ee4a0	match	-
 002ee510	Gap__Core__igMemoryDictionary__vfunc_23	match	-
@@ -11449,7 +11449,7 @@
 002ef9d0	FUN_002ef9d0	match	-
 002efa20	FUN_002efa20	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
 002efae0	FUN_002efae0	match	-
-002efb50	Gap__Core__igMemoryFile__vfunc_23	match	jump table 0x4f9d20: 7 words, 28 bytes, matches retail
+002efb50	Gap__Core__igMemoryFile__vfunc_23	match	jump table 0x4f9d20: 7 entries, 28 bytes, matches retail
 002efc40	Gap__Core__igMemoryFile__vfunc_24	match	-
 002efc50	Gap__Core__igMemoryFile__vfunc_25	match	-
 002efd30	Gap__Core__igMemoryFile__vfunc_26	match	-
@@ -11988,7 +11988,7 @@
 003082b0	FUN_003082b0	match	-
 00308320	FUN_00308320	match	-
 00308390	FUN_00308390	match	-
-00308400	FUN_00308400	match	jump table 0x4fb330: 7 words, 28 bytes, matches retail
+00308400	FUN_00308400	match	jump table 0x4fb330: 7 entries, 28 bytes, matches retail
 00308540	FUN_00308540	match	-
 003085c0	FUN_003085c0	match	-
 00308770	FUN_00308770	match	-
@@ -12578,7 +12578,7 @@
 0032df20	Gap__Core__igPsx2Media__vfunc_23	match	-
 0032e060	Gap__Core__igPsx2Media__vfunc_24	match	-
 0032e130	FUN_0032e130	match	-
-0032e4d0	Gap__Core__igPsx2Media__vfunc_25	match	jump table 0x4ffd70: 9 words, 36 bytes, matches retail
+0032e4d0	Gap__Core__igPsx2Media__vfunc_25	match	jump table 0x4ffd70: 9 entries, 36 bytes, matches retail
 0032e690	Gap__Core__igPsx2Media__vfunc_26	match	-
 0032e720	Gap__Core__igPsx2Media__vfunc_27	match	-
 0032e950	FUN_0032e950	match	-
@@ -12945,7 +12945,7 @@
 00333990	FUN_00333990	match	exception index 0x5473c4: matches retail (packed)
 00333a40	FUN_00333a40	match	-
 00333a50	FUN_00333a50	match	-
-00333a60	Gap__igAdxFile__vfunc_21	match	jump table 0x500040: 7 words, 28 bytes, matches retail
+00333a60	Gap__igAdxFile__vfunc_21	match	jump table 0x500040: 7 entries, 28 bytes, matches retail
 00333c50	Gap__igAdxFile__vfunc_22	match	exception index 0x5473dc: matches retail (packed)
 00333c90	Gap__igAdxFile__vfunc_23	match	exception index 0x5473e8: matches retail (packed)
 00333d70	Gap__igAdxFile__vfunc_24	match	exception index 0x5473f4: matches retail (packed)
@@ -15637,7 +15637,7 @@
 00370750	Gap__Bec__beBaseInfoRamList__vfunc_22	match	-
 00370760	Gap__Bec__beBaseInfoList__vfunc_22	match	-
 00370770	Gap__Bec__beBaseInfoDataList__vfunc_22	match	-
-00370780	LuaAPI_Dispatch	match	jump table 0x50d620: 116 words, 464 bytes, matches retail
+00370780	LuaAPI_Dispatch	match	jump table 0x50d620: 116 entries, 464 bytes, matches retail
 003717e0	FUN_003717e0	match	exception index 0x54df64: matches retail (packed)
 00371840	FUN_00371840	match	-
 003718d0	FUN_003718d0	match	exception index 0x54df7c: matches retail (packed)
@@ -15886,7 +15886,7 @@
 0037eb60	Gap__Bec__beDemoManager__vfunc_24	match	-
 0037eb70	Gap__Bec__beDemoManager__vfunc_25	match	-
 0037eb80	Gap__Bec__beDemoManager__vfunc_26	match	exception index 0x54e828: matches retail (packed)
-0037ed70	Gap__Bec__beDemoManager__vfunc_27	match	jump table 0x50e4f0: 8 words, 32 bytes, matches retail
+0037ed70	Gap__Bec__beDemoManager__vfunc_27	match	jump table 0x50e4f0: 8 entries, 32 bytes, matches retail
 0037f1a0	Gap__Bec__beDemoManager__vfunc_20	match	-
 0037f1b0	FUN_0037f1b0	match	exception index 0x54e840: matches retail (packed)
 0037f220	Gap__Bec__beFileListInfoManager__vfunc_21	match	exception index 0x54e84c: matches retail (packed)
@@ -15986,7 +15986,7 @@
 0038b040	Gap__Bec__beMatCtrl__vfunc_30	match	-
 0038b050	Gap__Bec__beMatCtrl__vfunc_29	match	exception index 0x54eb88: matches retail (packed)
 0038b080	FUN_0038b080	match	exception index 0x54eb94: matches retail (table 0x543888 8 bytes)
-0038bdf0	Gap__Bec__beMatCtrl__vfunc_34	match	jump table 0x50eda0: 6 words, 24 bytes, matches retail
+0038bdf0	Gap__Bec__beMatCtrl__vfunc_34	match	jump table 0x50eda0: 6 entries, 24 bytes, matches retail
 0038bed0	Gap__Bec__beMatCtrl__vfunc_20	match	-
 0038bee0	beMessenger_InitializeMemory	match	-
 0038c390	FUN_0038c390	match	-
@@ -16056,7 +16056,7 @@
 0038f960	Gap__Bec__beMeterCtrl__vfunc_32	match	-
 0038f970	Gap__Bec__beMeterCtrl__vfunc_30	match	-
 0038f980	Gap__Bec__beMeterCtrl__vfunc_29	match	exception index 0x54edb0: matches retail (packed)
-0038ff40	Gap__Bec__beMeterCtrl__vfunc_33	match	jump table 0x50eea0: 8 words, 32 bytes, matches retail
+0038ff40	Gap__Bec__beMeterCtrl__vfunc_33	match	jump table 0x50eea0: 8 entries, 32 bytes, matches retail
 003902e0	Gap__Bec__beMeterCtrl__vfunc_20	match	-
 003902f0	FUN_003902f0	match	exception index 0x54ede0: matches retail (packed)
 00390890	FUN_00390890	match	exception index 0x54edf8: matches retail (packed)
@@ -16077,10 +16077,10 @@
 00392200	Gap__Bec__beModelCtrlInfoRideOn2__vfunc_21	match	exception index 0x54ee94: matches retail (packed)
 00392240	Gap__Bec__beModelCtrlInfoRideOn3__vfunc_21	match	exception index 0x54eea0: matches retail (packed)
 003926d0	FUN_003926d0	match	-
-00392be0	FUN_00392be0	match	jump table 0x50f080: 6 words, 24 bytes, matches retail
+00392be0	FUN_00392be0	match	jump table 0x50f080: 6 entries, 24 bytes, matches retail
 00392d20	FUN_00392d20	match	-
 00392d90	FUN_00392d90	match	exception index 0x54eec4: matches retail (packed)
-00392e10	FUN_00392e10	match	jump table 0x50f0a0: 6 words, 24 bytes, matches retail
+00392e10	FUN_00392e10	match	jump table 0x50f0a0: 6 entries, 24 bytes, matches retail
 00392fa0	FUN_00392fa0	match	-
 00393260	FUN_00393260	match	-
 00393aa0	FUN_00393aa0	match	-
@@ -16179,7 +16179,7 @@
 0039c180	Gap__Bec__bePoint01__vfunc_29	match	exception index 0x54f20c: matches retail (packed)
 0039c1b0	Gap__Bec__bePoint01__vfunc_31	match	-
 0039c1c0	FUN_0039c1c0	match	exception index 0x54f218: matches retail (packed)
-0039c260	Gap__Bec__bePoint01__vfunc_34	match	jump table 0x50f6f0: 7 words, 28 bytes, matches retail
+0039c260	Gap__Bec__bePoint01__vfunc_34	match	jump table 0x50f6f0: 7 entries, 28 bytes, matches retail
 0039c420	Gap__Bec__bePoint01__vfunc_20	match	-
 0039c430	FUN_0039c430	match	exception index 0x54f230: matches retail (packed)
 0039c460	FUN_0039c460	match	exception index 0x54f23c: matches retail (table 0x543ce8 8 bytes)
@@ -16300,7 +16300,7 @@
 003a6ce0	FUN_003a6ce0	match	exception index 0x54f5c0: matches retail (packed)
 003a6e00	FUN_003a6e00	match	exception index 0x54f5cc: matches retail (packed)
 003a6f70	FUN_003a6f70	match	exception index 0x54f5d8: matches retail (packed)
-003a70c0	FUN_003a70c0	match	jump table 0x5101e0: 7 words, 28 bytes, matches retail
+003a70c0	FUN_003a70c0	match	jump table 0x5101e0: 7 entries, 28 bytes, matches retail
 003a7260	FUN_003a7260	match	exception index 0x54f5f0: matches retail (packed)
 003a7300	FUN_003a7300	match	exception index 0x54f5fc: matches retail (packed)
 003a73b0	FUN_003a73b0	match	exception index 0x54f608: matches retail (packed)
@@ -16361,7 +16361,7 @@
 003abd80	Gap__Bec__beSvUseCheckApi__vfunc_22	match	exception index 0x54f824: matches retail (packed)
 003abfa0	Gap__Bec__beSvUseCheckApi__vfunc_23	match	-
 003ac910	Gap__Bec__beSvReadMediaApi__vfunc_23	match	-
-003aca70	Gap__Bec__beSvWriteMediaApi__vfunc_22	match	jump table 0x5103f0: 6 words, 24 bytes, matches retail
+003aca70	Gap__Bec__beSvWriteMediaApi__vfunc_22	match	jump table 0x5103f0: 6 entries, 24 bytes, matches retail
 003ad220	Gap__Bec__beSvWriteMediaApi__vfunc_23	match	-
 003ad240	Gap__Bec__beSvGetFreeSizeApi__vfunc_21	match	-
 003ad280	Gap__Bec__beSvGetFreeSizeApi__vfunc_22	match	exception index 0x54f860: matches retail (packed)
@@ -17736,7 +17736,7 @@
 003cd4b0	Gap__Bec__beNDMWStageCtl__vfunc_32	match	-
 003cd4c0	Gap__Bec__beNDMWStageCtl__vfunc_29	match	exception index 0x55310c: matches retail (packed)
 003cd4f0	Gap__Bec__beNDMWStageCtl__vfunc_30	match	-
-003cd500	Gap__Bec__beNDMWStageCtl__vfunc_31	match	jump table 0x515680: 6 words, 24 bytes, matches retail
+003cd500	Gap__Bec__beNDMWStageCtl__vfunc_31	match	jump table 0x515680: 6 entries, 24 bytes, matches retail
 003cd810	Gap__Bec__beNDMWStageCtl__vfunc_34	match	DEFERRED duplicate 0x1489a0 __dt__3RefFv 128B (compared under the profile of its retail unit)
 003cdaf0	Gap__Bec__beNDMWStageCtl__vfunc_20	match	-
 003cdb00	Gap__Bec__beNDMWAfsSetup__vfunc_21	match	-
@@ -17836,7 +17836,7 @@
 003dafb0	FUN_003dafb0	match	-
 003daff0	beNDMWLoadIntf2DataSelIntf__ClearStatesFrom	match	-
 003db060	FUN_003db060	match	-
-003db780	beNDMWLoadIntf2DataSelIntf__UpdateSelection	match	jump table 0x516e50: 7 words, 28 bytes, matches retail
+003db780	beNDMWLoadIntf2DataSelIntf__UpdateSelection	match	jump table 0x516e50: 7 entries, 28 bytes, matches retail
 003dbf90	FUN_003dbf90	match	exception index 0x553460: matches retail (table 0x544774 8 bytes)
 003dc2e0	FUN_003dc2e0	match	exception index 0x55346c: matches retail (table 0x54477c 8 bytes)
 003dc590	FUN_003dc590	match	-
@@ -17852,7 +17852,7 @@
 003de7a0	FUN_003de7a0	match	-
 003de990	FUN_003de990	match	-
 003def70	beNDMWLoadIntf2NameSel__SetAnswer	match	-
-003def80	beNDMWLoadIntf2NameSel__Update	match	jump table 0x517080: 6 words, 24 bytes, matches retail
+003def80	beNDMWLoadIntf2NameSel__Update	match	jump table 0x517080: 6 entries, 24 bytes, matches retail
 003e0b80	FUN_003e0b80	match	-
 003e0bb0	beNDMWLoadIntf2SelSlot__Init	match	exception index 0x5534fc: matches retail (packed)
 003e0c40	beNDMWLoadIntf2SelSlot__Open	match	exception index 0x553508: matches retail (table 0x544834 8 bytes)
@@ -17954,7 +17954,7 @@
 003f1380	FUN_003f1380	match	exception index 0x553850: matches retail (packed)
 003f13d0	FUN_003f13d0	match	exception index 0x55385c: matches retail (packed)
 003f1460	FUN_003f1460	match	-
-003f1490	FUN_003f1490	match	jump table 0x518110: 8 words, 32 bytes, matches retail
+003f1490	FUN_003f1490	match	jump table 0x518110: 8 entries, 32 bytes, matches retail
 003f19e0	Gap__Bec__beNDMWLoadCtrl2__vfunc_32	match	exception index 0x553874: matches retail (packed)
 003f1a80	Gap__Bec__beNDMWLoadCtrl2__vfunc_31	match	-
 003f2450	Gap__Bec__beNDMWLoadCtrl2__vfunc_30	match	-
@@ -18302,7 +18302,7 @@
 0043fb70	beNDMWShopSelect11_RefreshStatCosts	match	exception index 0x554498: matches retail (table 0x546d10 8 bytes)
 0043fe30	Gap__Bec__beNDMWShopSelect34__vfunc_22	match	exception index 0x5544a4: matches retail (packed)
 00440110	FUN_00440110	match	exception index 0x5544b0: matches retail (packed)
-004402e0	FUN_004402e0	match	jump table 0x51c7d0: 8 words, 32 bytes, matches retail
+004402e0	FUN_004402e0	match	jump table 0x51c7d0: 8 entries, 32 bytes, matches retail
 004405c0	Gap__Bec__beNDMWShopSelect52__vfunc_22	match	exception index 0x5544c8: matches retail (packed)
 00440670	Gap__Bec__beNDMWShopSelectA0__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 00440a20	Gap__Bec__beNDMWShopSelectB0__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
@@ -18385,7 +18385,7 @@
 004487a0	Gap__Bec__beNDMWItemDisk__vfunc_22	match	exception index 0x554708: matches retail (packed)
 00448ab0	Gap__Bec__beNDMWItemInstant__vfunc_21	match	exception index 0x554714: matches retail (packed)
 00448ad0	FUN_00448ad0	match	-
-00448ae0	Gap__Bec__beNDMWItemInstant__vfunc_22	match	jump table 0x51d6a0: 22 words, 88 bytes, matches retail
+00448ae0	Gap__Bec__beNDMWItemInstant__vfunc_22	match	jump table 0x51d6a0: 22 entries, 88 bytes, matches retail
 00448ee0	Gap__Bec__beNDMWItemImportant__vfunc_21	match	exception index 0x55472c: matches retail (packed)
 00448f00	FUN_00448f00	match	-
 00448f10	Gap__Bec__beNDMWItemWaza__vfunc_21	match	exception index 0x554738: matches retail (packed)
@@ -18864,7 +18864,7 @@
 00457170	Gap__Gui__igGuiSystem__vfunc_32	match	-
 004571d0	Gap__Gui__igGuiSystem__vfunc_34	match	-
 00457220	Gap__Gui__igGuiSystem__vfunc_25	match	-
-004572a0	Gap__Gui__igGuiSystem__vfunc_27	match	jump table 0x51e810: 10 words, 40 bytes, matches retail
+004572a0	Gap__Gui__igGuiSystem__vfunc_27	match	jump table 0x51e810: 10 entries, 40 bytes, matches retail
 004573b0	Gap__Gui__igGuiSystem__vfunc_26	match	-
 004573c0	FUN_004573c0	match	-
 004573d0	FUN_004573d0	match	-

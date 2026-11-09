@@ -1,4 +1,4 @@
-extern char DAT_001cf980[];
+void FUN_001cf980(void);
 int igTransform_GetMetaObject();
 int igNode_GetMetaObject();
 int igGroup_GetMetaObject();
@@ -25,6 +25,6 @@ void FUN_001ce790(int arg0, int arg1) {
             FUN_001e06c0(arg0, arg1, &FUN_001cf990);
             return;
         }
-        FUN_001e06c0(arg0, arg1, (int *)DAT_001cf980);
+        FUN_001e06c0(arg0, arg1, (int *)FUN_001cf980);
     }
 }

@@ -5,40 +5,40 @@
    "lo": 1,
    "matched": 6624,
    "matched_bytes": 103860,
-   "total": 6627,
-   "total_bytes": 103944
+   "total": 6911,
+   "total_bytes": 107792
   },
   {
    "hi": 64,
    "lo": 33,
    "matched": 2314,
    "matched_bytes": 118900,
-   "total": 2327,
-   "total_bytes": 119584
+   "total": 2365,
+   "total_bytes": 121400
   },
   {
    "hi": 128,
    "lo": 65,
    "matched": 5636,
    "matched_bytes": 536576,
-   "total": 5717,
-   "total_bytes": 544696
+   "total": 5732,
+   "total_bytes": 546136
   },
   {
    "hi": 256,
    "lo": 129,
    "matched": 2752,
    "matched_bytes": 495652,
-   "total": 2916,
-   "total_bytes": 528156
+   "total": 2930,
+   "total_bytes": 530740
   },
   {
    "hi": 512,
    "lo": 257,
    "matched": 1266,
    "matched_bytes": 444600,
-   "total": 1487,
-   "total_bytes": 526892
+   "total": 1492,
+   "total_bytes": 528604
   },
   {
    "hi": 1024,
@@ -147,20 +147,20 @@
   "functions_asm_body": 0,
   "functions_assembly": 83,
   "matched": 2776844,
-  "total": 3464108
+  "total": 3475508
  },
  "data_bytes": {
   "identified": 303514,
   "kinds": {
-   "?": 1004858,
-   "code": 3464108,
+   "?": 993458,
+   "code": 3475508,
    "handle": 4300,
    "jtbl": 16824,
    "str": 231710,
    "vtable": 50680
   },
-  "pct": 23.2,
-  "total": 1308372
+  "pct": 23.4,
+  "total": 1296972
  },
  "debt": {
   "baseline": {
@@ -238,7 +238,7 @@
    },
    "inventory.unsymbolised_bytes": {
     "reason": null,
-    "value": 10528
+    "value": 1020
    },
    "inventory_gap.bytes": {
     "reason": null,
@@ -334,9 +334,9 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 776,
    "foreign_profile.functions": 18,
-   "fun_dat_refs": 86996,
+   "fun_dat_refs": 87000,
    "inline_asm.other": 0,
-   "inventory.unsymbolised_bytes": 10528,
+   "inventory.unsymbolised_bytes": 1020,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
    "m2c_idiom.units": 5964,
@@ -354,8 +354,8 @@
    "struct.c": 285,
    "unapproved.bytes": 50908,
    "unapproved.functions": 80,
-   "unmatched.bytes": 681944,
-   "unmatched.functions": 852
+   "unmatched.bytes": 693344,
+   "unmatched.functions": 1208
   }
  },
  "functions": {
@@ -365,7 +365,7 @@
   "named": 9647,
   "named_semantic": 1970,
   "named_semantic_matched": 1850,
-  "total": 20216
+  "total": 20572
  },
  "largest": [
   {
@@ -420,7 +420,7 @@
   }
  ],
  "link": {
-  "asm_bytes": 681944,
+  "asm_bytes": 693344,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
@@ -436,10 +436,10 @@
  },
  "median_size": {
   "matched": 72,
-  "unmatched": 428
+  "unmatched": 256
  },
  "metadata": {
-  "asm_units": 20216,
+  "asm_units": 20572,
   "classes_with_fields": 659,
   "fields": 3680,
   "lua_chunks": 5291,
@@ -475,8 +475,8 @@
     "functions": 12678
    },
    "references": {
-    "bytes": 2056012,
-    "functions": 11036
+    "bytes": 2056108,
+    "functions": 11037
    },
    "types": {
     "bytes": 903720,
@@ -496,32 +496,32 @@
    "lo": 1048576,
    "matched": 1641,
    "matched_bytes": 224956,
-   "total": 1820,
-   "total_bytes": 271980
+   "total": 1943,
+   "total_bytes": 275788
   },
   {
    "hi": 1616224,
    "lo": 1332400,
    "matched": 1659,
    "matched_bytes": 199372,
-   "total": 1732,
-   "total_bytes": 272184
+   "total": 1736,
+   "total_bytes": 272604
   },
   {
    "hi": 1900048,
    "lo": 1616224,
    "matched": 1548,
    "matched_bytes": 204716,
-   "total": 1610,
-   "total_bytes": 274552
+   "total": 1615,
+   "total_bytes": 274704
   },
   {
    "hi": 2183872,
    "lo": 1900048,
    "matched": 853,
    "matched_bytes": 151548,
-   "total": 971,
-   "total_bytes": 280032
+   "total": 972,
+   "total_bytes": 280040
   },
   {
    "hi": 2467696,
@@ -536,16 +536,16 @@
    "lo": 2467696,
    "matched": 1827,
    "matched_bytes": 176992,
-   "total": 2045,
-   "total_bytes": 273452
+   "total": 2229,
+   "total_bytes": 279204
   },
   {
    "hi": 3035344,
    "lo": 2751520,
    "matched": 2266,
    "matched_bytes": 216668,
-   "total": 2378,
-   "total_bytes": 269828
+   "total": 2409,
+   "total_bytes": 271020
   },
   {
    "hi": 3319168,
@@ -592,8 +592,8 @@
    "lo": 4454464,
    "matched": 1051,
    "matched_bytes": 134980,
-   "total": 1085,
-   "total_bytes": 157332
+   "total": 1093,
+   "total_bytes": 157400
   },
   {
    "hi": 5022112,

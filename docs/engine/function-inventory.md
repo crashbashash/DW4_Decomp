@@ -62,9 +62,15 @@ a switch dispatch owns the data words that point into it (its own jump table).
 | 3 | `jal`/`j` targets of known functions with no symbol | `_sweep_extent`, any shape | the call | 100 |
 | 4 | table-context data words and literals in gaps | `_sweep_extent`, any shape | the table or literal | 481 |
 | 5 | gap words that open a frame, referenced by nothing | `_sweep_extent`; the final transfer restores exactly the frame it opened | the symmetric frame | 111 |
+| 6 | every non-zero gap word below `CODE_HI` (`0x467120`, where the VU1 microcode starts) | `_sweep_extent`, any shape | the code range: below it the image holds only functions, their padding and constants inside their bodies | 349 |
 
 Rules 3–5 feed each other (a body rule 5 finds calls a stub only rule 3 can see), so they run to a
-fixpoint; each round recomputes the reference set from every function known so far. The gap after
+fixpoint; each round recomputes the reference set from every function known so far. Rule 6 runs
+only when a round of rules 3–5 adds nothing, so it never takes a body those rules would bound or name
+differently, and what it adds feeds another round. It needs no reference because the compiled code
+holds no rodata: the decoded-rodata risk that rules 2–5 guard against lies above `CODE_HI`, where
+rule 6 does not look. Its bodies are unreferenced static functions the linker kept, getters reached
+only through tables the scan cannot form, and the syscall stubs between the named ones. The gap after
 the last function (the global constructor at `0x521790`, 2.7 KB) is scanned like every other.
 
 What changed against the earlier rules: rule 1 bounded a candidate at the next label *of any kind*
@@ -87,6 +93,8 @@ Two keywords go further, each reviewed against the bytes:
   rule, and `check_cuts` fails the run otherwise, so a cut never orphans code.
 - `merge` — the function absorbs every dump function that starts inside its new extent and takes
   the row's name.
+- `start` — a function no rule can walk, added at the row's address and size. The row must lie in a
+  gap of the code below `CODE_HI`, start at a fresh start and not begin with padding.
 
 The rows this pass added, by evidence class:
 
@@ -98,6 +106,7 @@ The rows this pass added, by evidence class:
 | `cut`: span reached a referenced leaf | 5 (`Gap__Core__igCallStackTable__vfunc_28`, `FUN_00155340`, `FUN_00159320`, `igMemoryFile::vfunc_23`, `FUN_004657b0`) | `data/function-extents.json` ran to a vtable-referenced leaf after the function's own `jr ra` |
 | `cut`: verifier extent corrections | `FUN_001b4c40` (7296 → 7276: `DAT_001b68b0` is a 16-byte wrapper, `move a1,a0; lui; j 0x1b68c0; lw`, after the function's `jr ra` and a nop — `FUN_001a44d0` now passes it as a function pointer), `FUN_00267438` (96 → 88: `FUN_00267490` is the 8-byte getter `jr ra; lw v0,152(a0)` that `FUN_0026c3c8` calls), `FUN_00453a20` (8-byte `j` wrapper + referenced 12-byte leaf at `0x453a30`) | the inner address is a fresh start after the container's return |
 | `merge` | `FUN_002fe290` (44 bytes) | `thunk_FUN_002fe2ac` (`b 0x2fe2ac; nop`) was the entry of a list-search loop whose other half Ghidra called `FUN_002fe2ac`; one leaf, its callers now name `FUN_002fe290` |
+| `start` | `FUN_00100230` (8), `FUN_001051c8` (96), `FUN_00113bc0` (284), `FUN_00113d00` (244), `FUN_00113e00` (288), `FUN_001c5130` (36), `FUN_00265d30` (52) | bodies the sweep cannot end: a thread entry whose `syscall` (ExitThread) does not return; an MMI clamp loop that a `j` from `FUN_00104258` enters, with its 16-byte `lq` constant inline (each word writes `$zero`, so falling through is harmless) before `jr ra`; three kernel exception handlers ending in `eret`, `syscall` and `break` (the syscall table at `0x4822a8` installs `0x113d00` as call 0x54); a tail call through `jr v0`; an error call followed by an idle `b` loop |
 | plain shrink | `FUN_00108078` (312 → 272), `FUN_001e6130` (584 → 248) | the dump's extent ran into the next symbol; both now end at their own transfer. `FUN_001e6130` remains a block of an earlier function (its `j 0x1e5fe0` lands inside `FUN_001e5f00`), a matter for the EE GCC blocks |
 
 `FUN_0029a210` (56 → 20) is not a row: it is a rule-1 promotion whose walk now stops at its tail
@@ -122,34 +131,26 @@ symbol: **A** continuation of the preceding symbol, **B** `jal` target, **C** da
 `inventory.unsymbolised_bytes` (`tools/progress.py --debt-check`), and `make inventory-check` fails
 when the table is stale or the total exceeds `config/debt-baseline.json`.
 
-Residual after this pass: **363 bodies, 10,528 bytes** — all G or H but 12 bodies (168 bytes) of
-class C, which a lone data word (no table context) points at:
-
-- **G, 263 bodies, 9,656 bytes**: unreferenced, unlabelled leaf bodies. The largest are the EE GCC
-  blocks' unreferenced helpers (`0x29e408`/`0x29e5b0`/`0x29e6a8`/`0x29e858`, 240–432 bytes, each
-  with calls) and `0x118650` (284); no frame, so rule 5 cannot vouch for them, and nothing names
-  them. A reference-free leaf rule would promote decoded rodata along with them, so they wait for
-  evidence (a caller matched in C, a name, or a Ghidra label).
-- **H, 88 bodies, 704 bytes**: 8-byte `jr ra; <op>` stubs nothing references — the weakest shape.
-- **C, 12 bodies, 168 bytes**: stubs a single data word names (`0x462d00`…`0x462e80`: eight 8-byte
-  getters a descriptor at `0x4d1ad0`+ points at; `0x1ba6b0`/`0x1ba850`, 40-byte bodies). Rule 4
-  demands table context so that a coincidental word in rodata cannot seed a function; these are
-  candidates for a reviewed promotion once the referencing structure is named.
+Residual: **14 bodies, 1,020 bytes**, all class G and all in the Sony kernel-mode block
+(`0x4820d0..0x4833c8`, `config/SLUS-20836/regions.tsv`). That code runs at another address, so its calls and
+literals point outside the image and nothing in the image references its pieces; it lies above
+`CODE_HI`, so rule 6 does not reach it. Below `CODE_HI` every non-zero word belongs to a symbol; the
+`data` units left there are zero padding.
 
 ## 5. Before and after
 
 | | before (`ed33b3b4d`) | after |
 | --- | --- | --- |
-| functions in `config/SLUS-20836/symbols.txt` | 19,293 | 20,214 |
-| code bytes in `config/SLUS-20836/symbols.txt` | 3,377,884 | 3,464,192 |
-| code bytes laid out (`config/SLUS-20836/layout.txt`) | 3,377,372 in 19,293 units | 3,464,192 in 20,214 units |
+| functions in `config/SLUS-20836/symbols.txt` | 19,293 | 20,572 |
+| code bytes in `config/SLUS-20836/symbols.txt` | 3,377,884 | 3,475,508 |
+| code bytes laid out (`config/SLUS-20836/layout.txt`) | 3,377,372 in 19,293 units | 3,475,508 in 20,572 units |
 | truncated layout units (symbol overlapping the next) | 4 | 0 |
 | symbols ending without a return (audit) | 167 | 1 (`abort`, non-returning callee) |
 | symbols holding two functions (audit + the `j`-to-fresh-start scan) | 11 + 26 | 0 |
-| unsymbolised instruction-shaped bytes (scan, same tool on both trees) | 88,352 in 1,348 bodies | 10,528 in 363 bodies |
+| unsymbolised instruction-shaped bytes (scan, same tool on both trees) | 88,352 in 1,348 bodies | 1,020 in 14 bodies |
 | `inventory-gap` units | 33 | see the `make check` summary in the commit |
 
-Net: 927 functions added (93,016 bytes), 6 removed (`FUN_002fe2ac` merged; `FUN_00172184`,
+Net: 1,283 functions added (104,416 bytes), 6 removed (`FUN_002fe2ac` merged; `FUN_00172184`,
 `FUN_0016c598`, `FUN_0016ce28`, `FUN_0016ceb4`, `FUN_00177918` were switch case bodies the leaf
 rule had mistaken for functions — their switch functions now own them), 203 resized, 4 renamed.
 The denominator grew by the code that was always there; no byte moved.

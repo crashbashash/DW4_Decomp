@@ -6,15 +6,17 @@
 # tools/split.py `_sweep_extent`, checked against the retail bytes by tools/verify.py). split.py
 # accepts a row only when it never cuts into another function: a growth must stop at the next
 # function; a plain shrink must leave nothing but zero words (alignment nops) before the next
-# function. Two reviewed keywords in the fourth column go further (docs/engine/function-inventory.md):
+# function. Three reviewed keywords in the fourth column go further (docs/engine/function-inventory.md):
 #
 #   cut    the shrink leaves code behind — the dump glued a second function onto this one. The
 #          remainder is claimed by a promotion rule (a `j`/`jal` target, a referenced start or a framed
 #          body); split.py refuses the run if nothing claims it, so a cut never orphans code.
 #   merge  the function at <va> takes <size> and the row's name, absorbing every dump function that
 #          starts inside that extent (Ghidra split one 40-byte leaf into a `thunk_` and a fragment).
+#   start  a function no rule can walk (it ends in `eret`, a `syscall` that does not return, an idle
+#          loop or a `jr` through a register): added at <va> with <size>, inside a gap of the code.
 #
-# <va>	<size>	<function>	[cut|merge]
+# <va>	<size>	<function>	[cut|merge|start]
 #
 # --- EE GCC sizes verified by the matching C source (tools/verify.py) ---------------------------
 0x00262900	52	FUN_00262900
@@ -308,3 +310,12 @@
 0x0027b810	204	FUN_0027b810
 0x0010d890	176	sceSifWriteBackDCache
 0x001e5f00	212	FUN_001e5f00	cut
+#
+# --- start: functions no rule can walk (docs/engine/function-inventory.md section 3) ------------
+0x00100230	8	FUN_00100230	start
+0x001051c8	96	FUN_001051c8	start
+0x00113bc0	284	FUN_00113bc0	start
+0x00113d00	244	FUN_00113d00	start
+0x00113e00	288	FUN_00113e00	start
+0x001c5130	36	FUN_001c5130	start
+0x00265d30	52	FUN_00265d30	start
