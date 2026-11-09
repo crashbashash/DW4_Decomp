@@ -32,10 +32,7 @@
   "profile_split.units": 13,
   "raw_casts.reflected": 359,
   "struct.a": 134,
-  "struct.b": {
-   "reason": "struct.b: igMemoryPoolInfoList_Allocate and _Delete are static wrappers that read a global object's allocator; the report takes that object's view for the class named in the function struct.b: game files' local views of other objects (slot kinds, hit records, error hooks) are attributed to the class each function is named for",
-   "value": 302
-  },
+  "struct.b": 157,
   "struct.c": 285,
   "unapproved.bytes": 50908,
   "unapproved.functions": 80,

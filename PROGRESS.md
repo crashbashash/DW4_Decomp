@@ -85,7 +85,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `unmatched.functions` | 1,105 | 1,105 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 760,688 | 760,688 | 0 | bytes of those |
 | `struct.a` | 134 | 134 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
-| `struct.b` | 302 | 302 | 0 | struct-report groups: receiver view disagrees with the reflected class — increase recorded: struct.b: igMemoryPoolInfoList_Allocate and _Delete are static wrappers that read a global object's allocator; the report takes that object's view for the class named in the function struct.b: game files' local views of other objects (slot kinds, hit records, error hooks) are attributed to the class each function is named for |
+| `struct.b` | 157 | 157 | 0 | struct-report groups: receiver view disagrees with the reflected class |
 | `struct.c` | 285 | 285 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 5,958 | 5,958 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 359 | 359 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |

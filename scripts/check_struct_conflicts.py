@@ -10,9 +10,11 @@ each member's offset and size, and reports:
 
   (a) the same non-generic name defined in several units with members that clash at the same
       offset (different size, or one straddling another) or with different total sizes;
-  (b) a view in a unit named for a reflected class (`<Class>_<Method>`, `Gap__*__<Class>__vfunc_N`)
+  (b) the receiver view of a unit named for a reflected class (`<Class>_<Method>`, `Gap__*__<Class>__vfunc_N`)
       whose member at an offset disagrees in size with the reflected field there, or lies beyond
-      the registered instance size;
+      the registered instance size. The receiver is the view named for the class or taken as a function's
+      first parameter, or any view of a `_GetVTable` or `_Construct` unit; other local views describe
+      other objects;
   (c) an offset-named member (`fNN`, `wNN`, `pNN`, `_NN`, ...) whose NN is not the member's
       decimal offset (hex spellings `f0x1c` / `f_1c` are accepted when they match).
 
@@ -298,13 +300,36 @@ def report_a(views, out):
     return groups
 
 
+# The first parameter of a function definition, when it is a pointer or reference to a named type: the
+# receiver of a unit named `<Class>_<Method>` or `Gap__*__<Class>__vfunc_N`.
+RECEIVER_RE = re.compile(r"\b\w+\s*\(\s*(?:const\s+)?(?:struct\s+|class\s+)?(\w+)\s*(?:const\s*)?[*&]"
+                         r"[^;{}()]*(?:\([^;{}()]*\)[^;{}()]*)*\)\s*(?:const\s*)?\{")
+_receivers = {}
+
+
+def receivers(path):
+    """The type names a file's function definitions take as their first, receiving parameter."""
+    if path not in _receivers:
+        text = strip_comments(open(path, errors="replace").read())
+        _receivers[path] = set(RECEIVER_RE.findall(text))
+    return _receivers[path]
+
+
+def _builds_instance(path):
+    return os.path.splitext(os.path.basename(path))[0].endswith(("_GetVTable", "_Construct"))
+
+
 def report_b(views, reflected, out):
-    """A receiver view in a unit named for a reflected class vs the recovered layout."""
+    """A receiver view in a unit named for a reflected class vs the recovered layout. A view counts
+    as the receiver when it is named for the class or a function of the unit takes it as its first
+    parameter; another local struct of the file describes some other object. A `<Class>_GetVTable` or
+    `<Class>_Construct` unit builds an instance of the class itself, so every view there counts."""
     groups = 0
     by_class = collections.defaultdict(list)
     for v in views:
         cls = class_of_unit(v.file)
-        if cls in reflected and v.members and v.kind != "union" and "reflected.h" not in v.file:
+        if cls in reflected and v.members and v.kind != "union" and "reflected.h" not in v.file \
+                and (v.name == cls or v.name in receivers(v.file) or _builds_instance(v.file)):
             by_class[cls].append(v)
     for cls in sorted(by_class):
         ref = reflected[cls]
