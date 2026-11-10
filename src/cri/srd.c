@@ -93,7 +93,7 @@ void FUN_00272688(void);
 void FUN_002726c0(void);
 long FUN_00272780(int fd, long offset, int whence);
 int FUN_00272838(int fd, int cmd, int *result);
-long FUN_00272970(int fd, void *buf, int size);
+int FUN_00272970(int fd, void *buf, int size);
 
 void FUN_00271640(void)
 {
@@ -721,7 +721,7 @@ int FUN_00272918(int fd)
     return ret;
 }
 
-long FUN_00272970(int fd, void *buf, int size)
+int FUN_00272970(int fd, void *buf, int size)
 {
     int ret;
 

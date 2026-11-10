@@ -127,8 +127,13 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [Register allocation](register-allocation.md): how the pinned MWCC colours registers (simplify/select, vreg ids from declaration order), the trace/replay tools, and the source forms that move a colour.
 - [beNDMWMdlPlayer::vfunc_44 recovery](near-miss-shapes-player-vfunc44.md): the idle player-number-badge handler, typed, and the 5-word cluster its C leaves different.
 - [CRI cvFs](cri-cvfs.md): CRI's file-system layer — its extent, the device vtbl, handle and volume-request layouts, the owner-approved `int`-typed slots and the condition they meet, and the open questions about names.
+- [CRI ADXB](cri-adxb.md): the ADX decoder core — its extent, the 260-byte handle, why it compiles whole, and what is still unknown.
 - [CRI conversion-job table](cri-convjobs.md): the 16-entry job table between ADXT and CRI CFG — its extent, the job layout, why it compiles as one file, and what is still unknown about its library and names.
 - [CRI SRD](cri-srd.md): CRI's sector read driver under cvFs — its extent, the request object and module words, which words are `volatile`, and what is still unknown.
+- [CRI HTCI](cri-htci.md): the host-file device — its extent, why its messages are literals, the handle and file-list layouts, the owner-approved `int`-typed list pointer, and what is still unknown.
+- [CRI MFCI](cri-mfci.md): the memory-file device — its extent, the `address.size` file names, the handle layout, and what is still unknown.
+- [CRI MPEG start-code scanner](cri-startcode.md): the Sofdec file that classifies and finds MPEG start codes — its extent, why it compiles whole, and what is still unknown.
+- [CRI MWSFD frame conversion over SFX](cri-mwsfsfx.md): the Sofdec player's front end over CRI SFX — its extent, why it compiles whole, the enum-typed chroma values, and what is still unknown.
 - [sd-prologue](sd-prologue.md): the `sd` callee-saved prologue is Sony EE GCC output (the SDK and CRI blocks); census, evidence, and how the Sony compiler builds these units.
 - [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold — the measured MWCC wall behind the 983 accessors, what was tried, and the family's generators.
 - [assembly-sources](assembly-sources.md): hand-written `.S` routines the owner approved (`config/assembly-sources.tsv`), the evidence each needs, and the candidates still open.
