@@ -534,7 +534,7 @@
   "igPsx2ThreadManager": 2,
   "igPsx2VertexArray1_1": 30,
   "igPsx2VertexArray2": 5,
-  "igPsx2VisualContext": 102,
+  "igPsx2VisualContext": 111,
   "igPsx2Window": 39,
   "igQuaternionfList": 9,
   "igRadioGroup": 6,
@@ -602,7 +602,7 @@
   "igVertexArray": 16,
   "igVertexArray1_1": 22,
   "igVertexArray2": 8,
-  "igVertexArray2Helper": 26,
+  "igVertexArray2Helper": 33,
   "igVertexBlendStateAttr": 1,
   "igVertexData": 8,
   "igVertexStream": 6,
@@ -638,13 +638,13 @@
    "total": 3043
   },
   "engine": {
-   "files": 3263,
-   "offset_casts": 846,
-   "other_members": 2923,
-   "recovered": 1993,
-   "recovered_pct": 26.92,
-   "synthetic": 1641,
-   "total": 7403
+   "files": 3204,
+   "offset_casts": 853,
+   "other_members": 3205,
+   "recovered": 2017,
+   "recovered_pct": 25.22,
+   "synthetic": 1923,
+   "total": 7998
   },
   "game": {
    "files": 1590,
@@ -728,19 +728,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 11293,
-   "offset_casts": 5511,
-   "other_members": 12956,
-   "recovered": 21440,
-   "recovered_pct": 44.84,
-   "synthetic": 7907,
-   "total": 47814
+   "files": 11252,
+   "offset_casts": 5504,
+   "other_members": 12729,
+   "recovered": 21432,
+   "recovered_pct": 45.2,
+   "synthetic": 7755,
+   "total": 47420
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 6467,
- "recovered": 25989,
- "synthetic": 10079,
- "total": 66051,
+ "recovered": 26005,
+ "synthetic": 10209,
+ "total": 66252,
  "typeable": 359
 }

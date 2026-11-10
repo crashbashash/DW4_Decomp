@@ -1362,15 +1362,6 @@
       "table_size": "0xc0"
     }
   },
-  "0x0015ff10": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__2RPFv": "0x002e2300"
-    },
-    "externals": {
-      "__dl__FPv": "0x002ed5c0"
-    }
-  },
   "0x003af150": {
     "emitted": {
       "__dt__5RP<0>Fv": "0x003afdf0",
@@ -6729,14 +6720,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00160cb0": {
-    "duplicates": {
-      "__dt__35igSmartPointer<17VertexArrayFormat>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00155340": {
     "duplicates": {
       "__dt__32igSmartPointer<14FieldTypeEntry>Fv": "0x0025a230"
@@ -10143,5 +10126,178 @@
       "FUN_00312140": "0x00312140"
     },
     "symbol": "Gap__Core__igMallocMemoryPool__vfunc_45"
+  },
+  "0x0015ff10": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Gfx__igVertexArray2Helper__vfunc_26": "0x00160cb0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_27": "0x00160dc0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_28": "0x00160e00",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_29": "0x00160ec0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_30": "0x00160f60",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_31": "0x00160fe0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_32": "0x001610a0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_33": "0x00161140",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_34": "0x001611c0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_35": "0x00161280",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_36": "0x00161320",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_37": "0x001613a0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_38": "0x00161460",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_39": "0x00161500",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_40": "0x00161580",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_41": "0x00161690",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_42": "0x001617c0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_43": "0x00161880",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_44": "0x00161960",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_45": "0x00161bc0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_46": "0x00161d70",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_47": "0x00161f50",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_48": "0x001620a0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_49": "0x00162150",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_50": "0x001621e0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_51": "0x00162250",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_52": "0x001622f0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_53": "0x00162370",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_54": "0x00162420",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_24": "0x001624b0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_25": "0x001624e0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_56": "0x00162510",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_57": "0x00162870",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_58": "0x00162880",
+      "FUN_00162b50": "0x00162b50",
+      "FUN_00162ca0": "0x00162ca0",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_59": "0x00162d50",
+      "Gap__Gfx__igVertexArray2Helper__vfunc_60": "0x00163260",
+      "FUN_00163770": "0x00163770",
+      "FUN_00163800": "0x00163800"
+    },
+    "data": {
+      "@1739": "0x005548e8",
+      "@1740": "0x004df010",
+      "@2053": "0x005548e4",
+      "@2054": "0x004df040",
+      "DAT_00561098": "0x00561098",
+      "DAT_005610a8": "0x005610a8",
+      "DAT_005610b0": "0x005610b0",
+      "DAT_005610b8": "0x005610b8",
+      "DAT_005610c8": "0x005610c8",
+      "DAT_00586808": "0x00586808",
+      "DAT_00586818": "0x00586818",
+      "DAT_00586830": "0x00586830",
+      "DAT_00586840": "0x00586840",
+      "DAT_00586858": "0x00586858",
+      "DAT_00586898": "0x00586898"
+    },
+    "stripped": [
+      "__dt__2RPFv",
+      "__dt__35igSmartPointer<17VertexArrayFormat>Fv"
+    ],
+    "externals": {
+      "FUN_00300cd0": "0x00300cd0"
+    },
+    "symbol": "Gap__Gfx__igVertexArray2Helper__vfunc_23"
+  },
+  "0x00169480": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Gfx__igPsx2VisualContext__vfunc_47": "0x00169610",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_48": "0x00169700",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_49": "0x00169840",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_53": "0x00169b30",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_52": "0x00169b70",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_50": "0x00169bb0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_51": "0x00169bc0",
+      "FUN_00169be0": "0x00169be0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_176": "0x00169c20",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_171": "0x00169c50",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_172": "0x00169e30",
+      "FUN_00169e40": "0x00169e40",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_185": "0x0016a050",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_186": "0x0016a100",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_187": "0x0016a130",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_177": "0x0016a170",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_178": "0x0016a300",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_180": "0x0016a330",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_179": "0x0016a370",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_181": "0x0016a380",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_182": "0x0016a450",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_183": "0x0016a460",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_184": "0x0016a470",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_54": "0x0016a480",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_55": "0x0016a4a0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_56": "0x0016a4c0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_57": "0x0016a4e0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_58": "0x0016a500",
+      "FUN_0016a520": "0x0016a520",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_188": "0x0016a780",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_189": "0x0016a7c0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_190": "0x0016a7f0",
+      "FUN_0016a800": "0x0016a800",
+      "FUN_0016a860": "0x0016a860",
+      "FUN_0016a9f0": "0x0016a9f0",
+      "FUN_0016ab80": "0x0016ab80",
+      "FUN_0016ad20": "0x0016ad20",
+      "FUN_0016aea0": "0x0016aea0",
+      "FUN_0016af30": "0x0016af30",
+      "FUN_0016b090": "0x0016b090",
+      "FUN_0016b1d0": "0x0016b1d0",
+      "thunk_FUN_00164f50": "0x0016b2d0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_10": "0x0016b8f0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_35": "0x0016c4a0",
+      "Gap__Gfx__igPsx2VisualContext__vfunc_37": "0x0016c570"
+    },
+    "data": {
+      "@1047": "0x004df490",
+      "DAT_0048a4e0": "0x0048a4e0",
+      "DAT_0048a4ec": "0x0048a4ec",
+      "DAT_0048acd0": "0x0048acd0",
+      "DAT_004df370": "0x004df370",
+      "DAT_00586dc8": "0x00586dc8",
+      "DAT_00586f20": "0x00586f20"
+    },
+    "externals": {
+      "FUN_002ed5c0": "0x002ed5c0"
+    }
+  },
+  "0x0027ede0": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0027ee00": "0x0027ee00",
+      "FUN_0027eed0": "0x0027eed0",
+      "FUN_0027ef50": "0x0027ef50",
+      "FUN_0027f1c0": "0x0027f1c0",
+      "FUN_0027f200": "0x0027f200",
+      "FUN_0027f240": "0x0027f240",
+      "FUN_0027f280": "0x0027f280",
+      "FUN_0027f2d0": "0x0027f2d0",
+      "FUN_0027f310": "0x0027f310",
+      "FUN_0027f350": "0x0027f350",
+      "FUN_0027f3b0": "0x0027f3b0",
+      "FUN_0027f5c0": "0x0027f5c0",
+      "FUN_0027fa60": "0x0027fa60",
+      "FUN_0027fb50": "0x0027fb50",
+      "FUN_0027fc70": "0x0027fc70",
+      "FUN_0027fe90": "0x0027fe90",
+      "FUN_002800c0": "0x002800c0",
+      "FUN_002800d0": "0x002800d0",
+      "FUN_002800e0": "0x002800e0",
+      "FUN_00280240": "0x00280240",
+      "thunk_FUN_00280a00": "0x00280250",
+      "FUN_00280260": "0x00280260",
+      "FUN_00280330": "0x00280330",
+      "FUN_002805a0": "0x002805a0"
+    },
+    "data": {
+      "@304": "0x00554930",
+      "@305": "0x00554934",
+      "@656": "0x004f2700",
+      "@709": "0x004f2720",
+      "DAT_004bb0c0": "0x004bb0c0",
+      "DAT_004bb0d0": "0x004bb0d0",
+      "DAT_004bb0e0": "0x004bb0e0",
+      "DAT_004bb0f0": "0x004bb0f0",
+      "DAT_004f2740": "0x004f2740",
+      "DAT_004f2750": "0x004f2750"
+    }
   }
 }
