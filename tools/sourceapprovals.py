@@ -82,7 +82,7 @@ def _reachable_text(text, name):
     """The text of function `name` with every other top-level definition blanked, except the inline
     helpers it reaches by name: those are compiled into it. A file-scope declaration holding a `volatile`
     stays only when the function or a kept helper names something it declares, directly or through
-    another declaration it reaches (C keywords aside, so a shared type name keeps it): a `volatile`
+    a type definition or macro it reaches (C keywords aside, so a shared type name keeps it): a `volatile`
     global reaches the functions that use it, and a `volatile` member the functions that reach its type."""
     defs = units.definitions(text)
     if not defs:
@@ -114,10 +114,11 @@ def _reachable_text(text, name):
     reached, grew = set(), True
     while grew:
         grew = False
-        for k, (_s, _e, words) in enumerate(statements):
+        for k, (s, _e, words) in enumerate(statements):
             if k not in reached and words & used:
                 reached.add(k)
-                used |= words
+                if _PROPAGATES.match(text, s):
+                    used |= words
                 grew = True
     for k, (s, e, _words) in enumerate(statements):
         if k not in reached and _VOLATILE.search(_blank(text[s:e])):
@@ -133,6 +134,9 @@ _C_KEYWORDS = frozenset(
     "__volatile__ __inline__ __inline __attribute__ __restrict__ __extension__ bool class "
     "define undef include ifdef ifndef elif endif pragma defined".split())
 _NAME = re.compile(r"(?<![\w])[A-Za-z_]\w*")
+# a reached type definition or macro passes on the names it uses (a member's type, a nested macro); a
+# variable or function declaration does not, so its parameter names link nothing
+_PROPAGATES = re.compile(r"\s*(?:#\s*define\b|typedef\b|struct\b|union\b|enum\b)")
 
 
 def _spaced(text):

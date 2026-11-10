@@ -130,6 +130,9 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [CRI ADXT-side files](cri-adxt-files.md): the ADX header, ADXT init, seamless-entry, message and ADXRNA files — their extents and open questions.
 - [CRI DTR and DTX](cri-dtr-dtx.md): the EE–IOP data-transfer modules — their extents, objects and open questions.
 - [CRI DVCI](cri-dvci.md): the disc-file device — its extent, why its messages are literals, the owner-approved `int`-typed list pointer, and open questions.
+- [CRI ADX decode, ADXERR and ADXF](cri-adxf-files.md): the ADPCM decode, error and AFS-file modules — their extents and open questions.
+- [CRI SNDF and CFT](cri-sndf-cft.md): the sound driver's EE side and the colour-conversion tables — their extents and open questions.
+- [CRI SFX and SUD](cri-sfx-sud.md): the frame-conversion and user-data/timer modules — their extents, the owner-approved `int`-typed plane address, and open questions.
 - [CRI ADXB](cri-adxb.md): the ADX decoder core — its extent, the 260-byte handle, why it compiles whole, and what is still unknown.
 - [CRI ADXENC](cri-adxenc.md): the ADX encoder — its extent, the encoder, predictor and filter tables, why it compiles whole, and what is still unknown.
 - [CRI conversion-job table](cri-convjobs.md): the 16-entry job table between ADXT and CRI CFG — its extent, the job layout, why it compiles as one file, and what is still unknown about its library and names.

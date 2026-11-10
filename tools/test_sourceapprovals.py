@@ -130,6 +130,11 @@ class SourceApprovals(unittest.TestCase):
         self.assertIn("1 volatile", sa.problem(path, "f", {}))
         self.assertIn("2 volatile", sa.problem(path, "g", {}))
 
+    def test_a_parameter_name_links_nothing(self):
+        path = self.write("a.c", "extern volatile int header;\nvoid g(char *header);\n"
+                                 "int f(char *header) { return header[0]; }\nint h(void) { g(0); return 0; }\n")
+        self.assertIsNone(sa.problem(path, "h", {}))
+
     def test_a_shared_keyword_is_not_a_use(self):
         path = self.write("a.c", "extern volatile unsigned int a;\nunsigned int g(unsigned int x) { return x; }\n")
         self.assertIsNone(sa.problem(path, "g", {}))
