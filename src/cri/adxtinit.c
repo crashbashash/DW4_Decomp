@@ -27,7 +27,7 @@ extern int DAT_0049c8d8;
 extern int DAT_0049c8e0;
 extern int DAT_0049c8e4;
 extern int DAT_0049c8ec;
-extern int DAT_0049c8f0;
+extern volatile int DAT_0049c8f0;
 extern char DAT_0049d538[];
 extern char DAT_0049d938[];
 extern int DAT_004a9b1c;
@@ -63,6 +63,28 @@ void FUN_00269498(AdxEnc *enc);
 Sj *FUN_0027bd48(void *buf, int size, int f8);
 Sj *FUN_0027b408(void *buf, int size);
 
+extern char *volatile DAT_0056dfa8;
+extern char DAT_004ee080[];
+extern int DAT_0049c8e8;
+extern char DAT_0049c8f8[];
+void *memset(void *dst, int value, unsigned int size);
+int FUN_0025f2c0();
+int FUN_0027c798();
+int FUN_0027bc58();
+int FUN_0027b318();
+int FUN_00260750();
+int FUN_00269c60();
+int FUN_00265f58();
+int FUN_00260a60();
+int FUN_00265c00();
+int FUN_00277898();
+int FUN_0027ec10();
+int FUN_00265c30();
+int FUN_002777d0();
+int FUN_002648e8();
+int FUN_0027e748();
+int FUN_0027e600();
+int FUN_0026c798();
 void FUN_002631c8(int value) {
     DAT_0049c8e4 = value;
 }
@@ -103,6 +125,40 @@ int FUN_00263280(void *arg) {
 int FUN_002632a0(void *arg) {
     FUN_00262950();
     return 0;
+}
+
+void FUN_002632c0(void)
+{
+    DAT_0056dfa8 = DAT_004ee080;
+    if (DAT_0049c8d8 == 0) {
+        FUN_0025f2c0();
+        FUN_0025f2d0();
+        FUN_0027c798();
+        FUN_0027bc58();
+        FUN_0027b318();
+        FUN_00260750();
+        FUN_00269c60();
+        FUN_00265f58();
+        FUN_00260a60();
+        FUN_00265c00();
+        FUN_00277898();
+        FUN_0027ec10();
+        FUN_00265c30(FUN_002631d8, 0);
+        FUN_002777d0(FUN_002631f0, 0);
+        memset(DAT_0049c8f8, 0, 3136);
+        if (FUN_002648e8() == 1 && DAT_0049c8e4 == 1) {
+            FUN_0027e748(2, 1, FUN_00263280, 0);
+            DAT_0049c8ec = FUN_0027e600(4, FUN_002632a0, 0);
+            DAT_0049c8e0 = FUN_0027e600(5, FUN_00263230, 0);
+        } else {
+            DAT_0049c8e0 = FUN_0027e600(5, FUN_00263250, 0);
+        }
+        DAT_0049c8f0 = 0;
+        DAT_0049c8e8 = 0;
+        FUN_0026c798(60);
+        FUN_0025f2e8();
+    }
+    DAT_0049c8d8++;
 }
 
 void FUN_00263450(void) {

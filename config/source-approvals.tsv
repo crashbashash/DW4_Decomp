@@ -191,3 +191,5 @@ volatile	FUN_002725c0	1	#srd-module-words
 volatile	FUN_002b5848	8	#sud-timer
 volatile	FUN_002b59a0	2	#sud-timer
 volatile	FUN_002b5a10	7	#sud-timer
+volatile	FUN_002632c0	2	#adxt-ready-count
+volatile	FUN_00263208	1	#adxt-ready-count

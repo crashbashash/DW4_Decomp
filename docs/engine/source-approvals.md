@@ -183,9 +183,19 @@ clock pointer (`0x5856d0`), the nesting count (`0x5856d4`), and the two tables o
 
 A module's init stores the address of its version string in a word that nothing else reads or points to, in the
 `lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. It is the write-side
-counterpart of a build-string read. The owner approved it for ADXT's init (`0x56dfa8`), which also needs a
-second word that is not approved, so that function has no source yet; the same store in other modules' inits
-awaits review.
+counterpart of a build-string read. The owner approved it for ADXT's init (`0x56dfa8`); the same store in other modules' inits awaits
+review.
+
+### adxt-ready-count
+
+ADXT's tick count at `0x49c8f0`, which the init file declares `volatile`.
+
+* It is shared with a thread: ADXT's init clears it, the server entry and ADXPS2's manager-thread callback
+  increment it, and the handle code copies it into a handle as a start time.
+* The same statement, a handle's start time set from the count, compiles in the `lui`, `addiu`, `0(reg)` form
+  in one ADXT file and folded into `%lo` in another, which one declaration cannot give: the original declared
+  the word `volatile` in some files and plain in others. The init's single store has the first form, and no
+  plain spelling tried reproduces it.
 
 ### build-string-reads
 
