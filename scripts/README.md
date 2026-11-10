@@ -22,6 +22,7 @@ regression tests live in `testing/`.
 | Shared list and reference recovery | [seed_names_list_services.py](seed_names_list_services.py) names verified [list operations](../docs/engine/list-services.md), preserving the unresolved shared default's generic name |
 | Pooled strings and ordered table | [seed_names_string_pool.py](seed_names_string_pool.py) names fifteen verified [pool/table operations](../docs/engine/string-pool.md) |
 | Packed string chunks | [seed_names_string_chunks.py](seed_names_string_chunks.py) names twelve verified [allocation/coalescing operations](../docs/engine/string-chunks.md) |
+| Same-file evidence for MWCC whole-file units | [same_file_calls.py](same_file_calls.py) lists retail calls whose caller keeps a caller-saved register across the call, which only a callee compiled earlier in the same file allows; [whole-file units](../docs/engine/emitted-functions.md#whole-file-units) |
 | Model and texture evidence | [livedump.py](livedump.py), [extract_live_models.py](extract_live_models.py), [name_live_models.py](name_live_models.py), [capture_scene.py](capture_scene.py) |
 | GS and rendering analysis | [gsdump.py](gsdump.py), `gs_*.py`, [pack_inline_tex.py](pack_inline_tex.py), [pack_lights.py](pack_lights.py) |
 | Save-format and item-ID probes | [ps2mc_extract.py](ps2mc_extract.py), [probe_items.py](probe_items.py), [probe_items2.py](probe_items2.py), [save_probe.py](save_probe.py), [diff_story.py](diff_story.py); [save format](../docs/systems/save-format.md) |

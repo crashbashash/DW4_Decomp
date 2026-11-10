@@ -8,7 +8,10 @@ unit's profile, then:
   members    each `.text` function is found in the retail range by its bytes, relocated fields
              masked; a name symbols.txt already places wins, and a `--at name=va` settles a
              function that fits more than one retail start
-  stripped   a compiled function with no retail copy: the retail linker dropped it
+  duplicates a compiled function outside the range that a member still calls or names in its
+             exception table: the retail linker kept another file's copy, found at the address
+             the retail call or table word holds
+  stripped   any other compiled function with no retail copy: the retail linker dropped it
   data       each referenced datum's address, read back from the retail relocation fields
   externals  each call out of the file, read from the retail `jal`
 
@@ -16,12 +19,14 @@ A retail function in the range that no compiled function reproduces stops the ru
 the compile is wrong, and writing rows would hide it behind `stripped`. A source file that is still
 being recovered (`--partial`) lacks some of its functions: a retail function in the range that no
 compiled function reproduces is then reported and keeps linking from the retail image, provided
-the file defines nothing of that name.
+the file defines nothing of that name; one such file's units.tsv row covers the whole range, so the
+functions at its edges keep the file's profile.
 
 A C++ file (`--cxx`) keeps its mangled names in the rows and writes the plain ones to `--names`,
-and cross-file references stay externals. `--drop` strips a function that fits a start another
-function owns: stock `lua_dofile` and `lua_dobuffer` fit one retail start, and only a call target
-tells them apart.
+and cross-file references stay externals. `--drop` keeps a function out of the range when it fits
+a start another function owns: stock `lua_dofile` and `lua_dobuffer` fit one retail start, and only
+a call target tells them apart; two inline destructors of one shape do too, and the one a member
+still reaches becomes a duplicate.
 
 The rows go to stdout as JSON. `--write` merges them into unit-objects.json and replaces the
 units.tsv rows inside the range with one per file. `--names` writes a `.tsv` for
@@ -43,6 +48,7 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cc
+import exceptions
 import verify
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -108,6 +114,9 @@ def locate(functions, retail, starts, placed, dropped=()):
         if name in dropped:
             continue
         if name in placed:
+            if not function.fits(retail, placed[name]):
+                sys.exit("%s does not reproduce its retail copy at 0x%x: fix the compile"
+                         % (name, placed[name]))
             found[name] = placed[name]
             continue
         hits = [va for va in starts if function.fits(retail, va)]
@@ -181,6 +190,38 @@ def data_rows(function_at, retail, syms, headers, obj, functions, names, hi):
     return data, externals
 
 
+def duplicate_rows(function_at, retail, syms, headers, obj, functions, records):
+    """{name: va} for the compiled functions outside the file's retail range that a placed member
+    still reaches: an inline destructor or helper the retail linker kept from another file.
+    The address is read from the retail field that reaches it, a `jal` of a placed body or a
+    word of the member's retail exception table, and the body must fit there."""
+    compiled = {name: (function_at.get(name), f.section, len(f.raw)) for name, f in functions.items()}
+    fields = [(va, functions[name].section) for name, va in function_at.items()]
+    for name, (_index, table) in verify.group_exception_sections(obj, headers, syms, compiled).items():
+        if (table is not None and name in function_at and function_at[name] in records
+                and records[function_at[name]][1]):
+            fields.append((records[function_at[name]][1], table))
+    out = {}
+    for base, section in fields:
+        raw = verify.object_section(obj, headers[section][0], section)
+        for _section, offset, kind, name, _addend in verify.object_relocs(obj, target_section=section):
+            if name not in functions or name in function_at:
+                continue
+            field = retail.word(base + offset)
+            if kind == R_26:
+                address = (base & 0xf0000000) | ((field & 0x3ffffff) << 2)
+            elif kind == R_32:
+                address = (field - struct.unpack_from("<I", raw, offset)[0]) & 0xffffffff
+            else:
+                continue
+            if out.get(name, address) != address:
+                sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, out[name], address))
+            if not functions[name].fits(retail, address):
+                sys.exit("%s: %s is reached at 0x%x, which holds other code" % (obj, name, address))
+            out[name] = address
+    return out
+
+
 def unrecovered(missing, defined):
     """The names of the retail functions a partial file has no source for, or None when the file
     defines one of them: a definition that reproduces no retail copy is a wrong compile, not a
@@ -231,7 +272,7 @@ def main(argv=None):
     ap.add_argument("--unit", required=True, help="unit name prefix, `<unit>_<file>`")
     ap.add_argument("--at", action="append", default=[], metavar="NAME=VA")
     ap.add_argument("--drop", action="append", default=[], metavar="NAME",
-                    help="a function that fits a retail start another owns: it is stripped")
+                    help="a function that fits a retail start another owns: a duplicate when reached, else stripped")
     ap.add_argument("--config", default=os.path.join(ROOT, "config", "SLUS-20836"))
     ap.add_argument("--elf", default=os.path.join(ROOT, "orig", "SLUS-20836", "SLUS_208.36"))
     ap.add_argument("--wibo", default=os.path.join(ROOT, "local", "wibo"))
@@ -249,6 +290,7 @@ def main(argv=None):
     compiler = os.path.join(ROOT, compilers[a.compiler])
     by_name, by_va = verify.load_symbols(os.path.join(a.config, "symbols.txt"))
     retail = Retail(a.elf)
+    records = exceptions.load(exceptions.config_path(os.path.join(a.config, "symbols.txt")))
     starts = sorted(va for va in by_va if lo <= va < hi)
     forced = {n: int(v, 0) for n, v in (item.split("=") for item in a.at)}
     placed = {n: by_name[n][0] for n in by_name if lo <= by_name[n][0] < hi}
@@ -283,11 +325,14 @@ def main(argv=None):
                 print("%-10s no retail function: the linker dropped the file" % stem, file=sys.stderr)
                 continue
             data, externals = data_rows(at, retail, syms, headers, obj, functions, known, hi)
+            duplicates = duplicate_rows(at, retail, syms, headers, obj, functions, records)
             members = sorted((va, name) for name, va in at.items())
             row = {"whole_file": True,
                    "emitted": {name: "0x%08x" % va for va, name in members[1:]},
                    "data": {k: "0x%08x" % v for k, v in sorted(data.items())}}
-            stripped = sorted(n for n in functions if n not in at)
+            if duplicates:
+                row["duplicates"] = {k: "0x%08x" % v for k, v in sorted(duplicates.items())}
+            stripped = sorted(n for n in functions if n not in at and n not in duplicates)
             if stripped:
                 row["stripped"] = stripped
             if externals:
@@ -298,9 +343,13 @@ def main(argv=None):
             last = members[-1]
             spans.append((members[0][0], last[0] + len(functions[last[1]].raw), stem))
             names.update({name: va for va, name in members})
-            print("%-10s members %3d stripped %3d data %3d externals %3d"
-                  % (stem, len(members), len(stripped), len(data), len(externals)), file=sys.stderr)
+            print("%-10s members %3d duplicates %3d stripped %3d data %3d externals %3d"
+                  % (stem, len(members), len(duplicates), len(stripped), len(data), len(externals)),
+                  file=sys.stderr)
 
+    if a.partial and len(spans) == 1:
+        # one file still being recovered owns its whole range, the edges it has no source for too
+        spans = [(lo, hi, spans[0][2])]
     print(json.dumps(rows, indent=1))
     if a.names:
         with open(a.names, "w") as fh:

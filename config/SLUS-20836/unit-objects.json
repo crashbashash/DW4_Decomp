@@ -168,25 +168,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00320aa0": {
-    "emitted": {},
-    "duplicates": {
-      "FUN_00320930": "0x00320930",
-      "FUN_00320960": "0x00320960"
-    }
-  },
-  "0x00320a20": {
-    "emitted": {},
-    "duplicates": {
-      "FUN_00320960": "0x00320960"
-    }
-  },
-  "0x00464b70": {
-    "emitted": {},
-    "duplicates": {
-      "FUN_00464af0": "0x00464af0"
-    }
-  },
   "0x003de7a0": {
     "duplicates": {
       "__dt__30igSmartPointer<12beUnicodeObj>Fv": "0x003832d0"
@@ -215,25 +196,6 @@
     },
     "externals": {
       "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0015f4a0": {
-    "emitted": {},
-    "duplicates": {
-      "FUN_0015f430": "0x0015f430"
-    }
-  },
-  "0x0015f510": {
-    "emitted": {},
-    "duplicates": {
-      "FUN_0015f460": "0x0015f460"
-    }
-  },
-  "0x003209a0": {
-    "emitted": {},
-    "duplicates": {
-      "FUN_00320930": "0x00320930",
-      "FUN_00320960": "0x00320960"
     }
   },
   "0x0036f970": {
@@ -485,12 +447,6 @@
     },
     "externals": {
       "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x0020b280": {
-    "emitted": {},
-    "duplicates": {
-      "FUN_002082b0": "0x002082b0"
     }
   },
   "0x001e1ac0": {
@@ -1908,20 +1864,6 @@
       "index": "0x0054f29c",
       "table": "0x00543d08",
       "table_size": "0x000034"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x003a1830": {
-    "duplicates": {
-      "__dt__9ObjectRefFv": "0x003a19d0",
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033f6d0"
-    },
-    "exceptions": {
-      "index": "0x0054f3e0",
-      "table": "0x00543dc4",
-      "table_size": "0x00001c"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -5420,12 +5362,6 @@
     },
     "externals": {
       "__dl__FPv": "0x002ed5c0"
-    }
-  },
-  "0x001c0ba0": {
-    "emitted": {},
-    "duplicates": {
-      "FUN_001c0ae0": "0x001c0ae0"
     }
   },
   "0x003c0640": {
@@ -9087,6 +9023,273 @@
       "DAT_004a9b1c": "0x004a9b1c",
       "DAT_004ee080": "0x004ee080",
       "DAT_0056dfa8": "0x0056dfa8"
+    }
+  },
+  "0x003a0570": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_003a0bc0": "0x003a0bc0",
+      "Gap__Bec__beWaterPlain__vfunc_32": "0x003a1470",
+      "Gap__Bec__beWaterPlain__vfunc_30": "0x003a1680",
+      "Gap__Bec__beWaterPlain__vfunc_29": "0x003a1690",
+      "Gap__Bec__beWaterPlain__vfunc_34": "0x003a16c0",
+      "Gap__Bec__beWaterPlain__vfunc_20": "0x003a17b0"
+    },
+    "data": {
+      "DAT_0050fb88": "0x0050fb88",
+      "DAT_0058c790": "0x0058c790",
+      "g_beWaterPlainInfo_metaObject": "0x00587be0",
+      "g_beWaterPlain_metaObject": "0x00587bf8"
+    },
+    "symbol": "FUN_003a0570"
+  },
+  "0x003a17c0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beWeapon__vfunc_30": "0x003a1820",
+      "Gap__Bec__beWeapon__vfunc_29": "0x003a1830",
+      "__dt__9ObjectRefFv": "0x003a19d0",
+      "Gap__Bec__beWeapon__vfunc_31": "0x003a1a50",
+      "Gap__Bec__beWeapon__vfunc_20": "0x003a2120"
+    },
+    "data": {
+      "DAT_0050fbf0": "0x0050fbf0",
+      "DAT_00587110": "0x00587110",
+      "GPR_00554c14": "0x00554c14",
+      "g_beWeaponInfo_metaObject": "0x00587a28",
+      "g_beWeapon_metaObject": "0x00587a68"
+    },
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x0033f6d0"
+    },
+    "externals": {
+      "__dl__FPv": "0x00100610"
+    },
+    "symbol": "Gap__Bec__beWeapon__vfunc_32"
+  },
+  "0x0015f430": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0015f460": "0x0015f460",
+      "FUN_0015f4a0": "0x0015f4a0",
+      "FUN_0015f510": "0x0015f510",
+      "igVertexArray2__FindVertexData": "0x0015f580"
+    },
+    "data": {
+      "DAT_0055fa58": "0x0055fa58"
+    },
+    "externals": {
+      "FUN_00300cd0": "0x00300cd0"
+    }
+  },
+  "0x001c07f0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Sg__igEnbayaAnimationSource__vfunc_23": "0x001c0810",
+      "Gap__Sg__igEnbayaAnimationSource__vfunc_24": "0x001c0880",
+      "Gap__Sg__igEnbayaAnimationSource__vfunc_25": "0x001c08a0",
+      "FUN_001c0ae0": "0x001c0ae0",
+      "Gap__Sg__igEnbayaAnimationSource__vfunc_26": "0x001c0b80",
+      "Gap__Sg__igEnbayaAnimationSource__vfunc_27": "0x001c0ba0",
+      "Gap__Sg__igEnbayaAnimationSource__vfunc_28": "0x001c0e50"
+    },
+    "data": {
+      "@83": "0x00554924",
+      "@84": "0x00554928",
+      "@85": "0x0055492c",
+      "DAT_005626e0": "0x005626e0",
+      "DAT_005626e8": "0x005626e8",
+      "DAT_005626f0": "0x005626f0",
+      "DAT_005626f8": "0x005626f8",
+      "DAT_00562700": "0x00562700",
+      "DAT_00562720": "0x00562720"
+    }
+  },
+  "0x003208d0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Core__igArenaMemoryPool__vfunc_110": "0x00320900",
+      "FUN_00320930": "0x00320930",
+      "FUN_00320960": "0x00320960",
+      "FUN_003209a0": "0x003209a0",
+      "FUN_00320a20": "0x00320a20",
+      "FUN_00320aa0": "0x00320aa0",
+      "Gap__Core__igElfFile__vfunc_23": "0x00320af0"
+    },
+    "data": {}
+  },
+  "0x00464af0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Viewer__igViewManager__vfunc_26": "0x00464b70",
+      "Gap__Viewer__igViewManager__vfunc_27": "0x00464bd0",
+      "Gap__Viewer__igViewManager__vfunc_32": "0x00464c00",
+      "FUN_00464c60": "0x00464c60",
+      "Gap__Viewer__igViewManager__vfunc_13": "0x00464f70",
+      "Gap__Viewer__igViewManager__vfunc_22": "0x00464f80"
+    },
+    "data": {
+      "@68": "0x0051fbf0",
+      "@69": "0x0051fc70",
+      "DAT_0058cd08": "0x0058cd08",
+      "DAT_0058cd40": "0x0058cd40",
+      "GPR_00554e7c": "0x00554e7c",
+      "GPR_00554e80": "0x00554e80"
+    }
+  },
+  "0x001efe70": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_001efec0": "0x001efec0",
+      "FUN_001eff40": "0x001eff40",
+      "FUN_001eff60": "0x001eff60",
+      "FUN_001f0090": "0x001f0090",
+      "FUN_001f0310": "0x001f0310",
+      "FUN_001f0390": "0x001f0390",
+      "FUN_001f03a0": "0x001f03a0",
+      "FUN_001f0410": "0x001f0410",
+      "FUN_001f0470": "0x001f0470",
+      "FUN_001f0490": "0x001f0490",
+      "FUN_001f04b0": "0x001f04b0",
+      "FUN_001f0500": "0x001f0500",
+      "FUN_001f0520": "0x001f0520",
+      "FUN_001f0560": "0x001f0560",
+      "FUN_001f0710": "0x001f0710",
+      "FUN_001f0730": "0x001f0730"
+    },
+    "data": {
+      "DAT_00490cc0": "0x00490cc0",
+      "DAT_00568f00": "0x00568f00",
+      "DAT_00568f04": "0x00568f04",
+      "DAT_00568f34": "0x00568f34",
+      "DAT_00568f60": "0x00568f60",
+      "DAT_00568f90": "0x00568f90",
+      "DAT_00568fe0": "0x00568fe0",
+      "DAT_00568fe8": "0x00568fe8",
+      "DAT_00568ff0": "0x00568ff0",
+      "DAT_00569030": "0x00569030",
+      "DAT_00569040": "0x00569040",
+      "DAT_005690b8": "0x005690b8",
+      "DAT_00569120": "0x00569120",
+      "DAT_005691b8": "0x005691b8",
+      "DAT_005691c0": "0x005691c0",
+      "DAT_005691d0": "0x005691d0",
+      "DAT_0056bf38": "0x0056bf38",
+      "GPR_00554bbc": "0x00554bbc"
+    }
+  },
+  "0x00337410": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00337480": "0x00337480",
+      "FUN_003374e0": "0x003374e0",
+      "FUN_00337520": "0x00337520",
+      "FUN_00337570": "0x00337570",
+      "FUN_003375c0": "0x003375c0",
+      "FUN_00337600": "0x00337600",
+      "FUN_003378e0": "0x003378e0"
+    },
+    "data": {}
+  },
+  "0x00207e70": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00207f30": "0x00207f30",
+      "FUN_00207fa0": "0x00207fa0",
+      "FUN_002080b0": "0x002080b0",
+      "FUN_00208120": "0x00208120",
+      "FUN_00208170": "0x00208170",
+      "FUN_00208200": "0x00208200",
+      "FUN_00208210": "0x00208210",
+      "FUN_002082b0": "0x002082b0",
+      "FUN_002082f0": "0x002082f0",
+      "FUN_00208430": "0x00208430",
+      "FUN_002084a0": "0x002084a0",
+      "FUN_002084e0": "0x002084e0",
+      "FUN_00208f20": "0x00208f20",
+      "FUN_00208f70": "0x00208f70",
+      "FUN_00209090": "0x00209090",
+      "FUN_00209210": "0x00209210",
+      "FUN_002094c0": "0x002094c0",
+      "FUN_00209650": "0x00209650",
+      "FUN_00209780": "0x00209780",
+      "FUN_00209cc0": "0x00209cc0",
+      "FUN_0020a590": "0x0020a590",
+      "FUN_0020a990": "0x0020a990",
+      "FUN_0020ad60": "0x0020ad60",
+      "FUN_0020b110": "0x0020b110",
+      "FUN_0020b270": "0x0020b270",
+      "FUN_0020b280": "0x0020b280",
+      "FUN_0020b650": "0x0020b650",
+      "FUN_0020b7f0": "0x0020b7f0",
+      "FUN_0020b9d0": "0x0020b9d0",
+      "p2LoadTexture": "0x0020c270",
+      "FUN_0020c7b0": "0x0020c7b0",
+      "FUN_0020c7f0": "0x0020c7f0",
+      "FUN_0020c800": "0x0020c800",
+      "FUN_0020c840": "0x0020c840",
+      "FUN_0020c880": "0x0020c880",
+      "FUN_0020c8b0": "0x0020c8b0",
+      "FUN_0020c9e0": "0x0020c9e0",
+      "FUN_0020c9f0": "0x0020c9f0"
+    },
+    "data": {
+      "@864": "0x004e53f0",
+      "@870": "0x004e5430",
+      "DAT_00490b60": "0x00490b60",
+      "DAT_00491478": "0x00491478",
+      "DAT_00491730": "0x00491730",
+      "DAT_004917b0": "0x004917b0",
+      "DAT_00491860": "0x00491860",
+      "DAT_00491870": "0x00491870",
+      "DAT_00491880": "0x00491880",
+      "DAT_00491890": "0x00491890",
+      "DAT_004918a0": "0x004918a0",
+      "DAT_004918b0": "0x004918b0",
+      "DAT_004e5370": "0x004e5370",
+      "DAT_004e5390": "0x004e5390",
+      "DAT_00562c70": "0x00562c70",
+      "DAT_00568e08": "0x00568e08",
+      "DAT_00568e0a": "0x00568e0a",
+      "DAT_00568e12": "0x00568e12",
+      "DAT_00568e1c": "0x00568e1c",
+      "DAT_00568e22": "0x00568e22",
+      "DAT_00568e24": "0x00568e24",
+      "DAT_00568e28": "0x00568e28",
+      "DAT_00568e30": "0x00568e30",
+      "DAT_00568ed0": "0x00568ed0",
+      "DAT_00568f04": "0x00568f04",
+      "DAT_00568f08": "0x00568f08",
+      "DAT_00569330": "0x00569330",
+      "DAT_0056ad80": "0x0056ad80",
+      "DAT_0056ae48": "0x0056ae48",
+      "DAT_0056b020": "0x0056b020",
+      "DAT_0056bf40": "0x0056bf40",
+      "DAT_0056bf48": "0x0056bf48",
+      "DAT_0056bf50": "0x0056bf50",
+      "DAT_0056bf80": "0x0056bf80",
+      "DAT_0056bfb8": "0x0056bfb8",
+      "DAT_0056bfc0": "0x0056bfc0",
+      "DAT_0056bfd8": "0x0056bfd8",
+      "DAT_0056c010": "0x0056c010",
+      "DAT_0056c020": "0x0056c020",
+      "DAT_0056c060": "0x0056c060",
+      "DAT_0056c068": "0x0056c068",
+      "DAT_0056c078": "0x0056c078",
+      "DAT_0056c080": "0x0056c080",
+      "DAT_0056c0c0": "0x0056c0c0",
+      "DAT_0056c0c8": "0x0056c0c8",
+      "DAT_0056c0d0": "0x0056c0d0",
+      "DAT_0056c0d8": "0x0056c0d8",
+      "DAT_0056c0e0": "0x0056c0e0",
+      "DAT_0056c128": "0x0056c128",
+      "DAT_0056c130": "0x0056c130",
+      "DAT_0056c138": "0x0056c138",
+      "DAT_0056c140": "0x0056c140",
+      "DAT_0056c148": "0x0056c148",
+      "DAT_0056c164": "0x0056c164",
+      "DAT_0056d670": "0x0056d670",
+      "DAT_0056d678": "0x0056d678"
     }
   }
 }

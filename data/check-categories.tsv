@@ -5687,12 +5687,15 @@
 00209780	FUN_00209780	match	-
 00209cc0	FUN_00209cc0	match	-
 0020a590	FUN_0020a590	match	-
+0020a990	FUN_0020a990	match	-
+0020ad60	FUN_0020ad60	match	-
 0020b110	FUN_0020b110	match	-
 0020b270	FUN_0020b270	match	-
 0020b280	FUN_0020b280	match	-
 0020b650	FUN_0020b650	match	-
 0020b7f0	FUN_0020b7f0	match	-
 0020b9d0	FUN_0020b9d0	match	-
+0020c270	p2LoadTexture	match	-
 0020c7b0	FUN_0020c7b0	match	-
 0020c7f0	FUN_0020c7f0	match	-
 0020c800	FUN_0020c800	match	-
@@ -5700,6 +5703,7 @@
 0020c880	FUN_0020c880	match	-
 0020c8b0	FUN_0020c8b0	match	-
 0020c9e0	FUN_0020c9e0	match	-
+0020c9f0	FUN_0020c9f0	match	-
 0020cc10	FUN_0020cc10	match	-
 0020cc50	FUN_0020cc50	match	-
 0020ccd0	FUN_0020ccd0	match	-
@@ -13290,8 +13294,11 @@
 00337410	FUN_00337410	match	-
 00337480	FUN_00337480	match	-
 003374e0	FUN_003374e0	match	-
-00337600	FUN_00337600	match	exception index 0x547a48: matches retail (packed)
-003378e0	FUN_003378e0	match	exception index 0x547a60: matches retail (packed)
+00337520	FUN_00337520	match	-
+00337570	FUN_00337570	match	-
+003375c0	FUN_003375c0	match	-
+00337600	FUN_00337600	match	-
+003378e0	FUN_003378e0	match	-
 00337920	Gap__igCriMovieCodec__vfunc_28	match	exception index 0x547a6c: matches retail (packed)
 00337a50	Gap__igCriMovieCodec__vfunc_29	match	exception index 0x547a78: matches retail (packed)
 00337aa0	FUN_00337aa0	match	exception index 0x547a84: matches retail (packed)
@@ -16404,18 +16411,18 @@
 003a0020	Gap__Bec__beSystem__vfunc_27	match	exception index 0x54f35c: matches retail (packed)
 003a0540	FUN_003a0540	match	-
 003a0560	Gap__Bec__beSystem__vfunc_20	match	-
-003a0570	FUN_003a0570	match	exception index 0x54f368: matches retail (table 0x543d98 8 bytes)
+003a0570	FUN_003a0570	match	-
 003a0bc0	FUN_003a0bc0	match	-
 003a0d40	FUN_003a0d40	code-only	exception metadata: retail keeps an index record at 0x54f38c (packed) that the object does not produce (its unit was C++ with exceptions on)
 003a1470	Gap__Bec__beWaterPlain__vfunc_32	match	-
 003a1680	Gap__Bec__beWaterPlain__vfunc_30	match	-
-003a1690	Gap__Bec__beWaterPlain__vfunc_29	match	exception index 0x54f3bc: matches retail (packed)
-003a16c0	Gap__Bec__beWaterPlain__vfunc_34	match	exception index 0x54f3c8: matches retail (packed)
+003a1690	Gap__Bec__beWaterPlain__vfunc_29	match	-
+003a16c0	Gap__Bec__beWaterPlain__vfunc_34	match	-
 003a17b0	Gap__Bec__beWaterPlain__vfunc_20	match	-
-003a17c0	Gap__Bec__beWeapon__vfunc_32	match	exception index 0x54f3d4: matches retail (packed)
+003a17c0	Gap__Bec__beWeapon__vfunc_32	match	-
 003a1820	Gap__Bec__beWeapon__vfunc_30	match	-
 003a1830	Gap__Bec__beWeapon__vfunc_29	match	-
-003a19d0	FUN_003a19d0	match	exception index 0x54f3ec: matches retail (packed)
+003a19d0	FUN_003a19d0	match	-
 003a1a50	Gap__Bec__beWeapon__vfunc_31	match	-
 003a2120	Gap__Bec__beWeapon__vfunc_20	match	-
 003a2130	Gap__Bec__libBecRuntimePlugin__vfunc_21	match	exception index 0x54f404: matches retail (packed)
@@ -19478,6 +19485,7 @@
 00464b70	Gap__Viewer__igViewManager__vfunc_26	match	-
 00464bd0	Gap__Viewer__igViewManager__vfunc_27	match	-
 00464c00	Gap__Viewer__igViewManager__vfunc_32	match	-
+00464c60	FUN_00464c60	match	-
 00464f70	Gap__Viewer__igViewManager__vfunc_13	match	-
 00464f80	Gap__Viewer__igViewManager__vfunc_22	match	-
 00464f90	Gap__Bec__beCameraMode__vfunc_21	match	-

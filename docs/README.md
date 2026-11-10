@@ -138,6 +138,7 @@ retail. Both take `--help`.
 | `flag_xref.py`, `flag_meanings.py` | Every flag operation in the decompiled Lua → `systems/flags/` |
 | `dw4_rng.py`, `p2s_ram.py` | MT19937 identification and draw sites; reading a savestate's RAM without the emulator |
 | `match_func.py` | One-off matching harness: compile a candidate, diff it against the target |
+| `same_file_calls.py` | Retail calls that keep a caller-saved register across the call: the callee was compiled earlier in the caller's file, so both belong in one [whole-file unit](engine/emitted-functions.md#whole-file-units) |
 | `sync_data.sh` | Refresh the committed `../data/` snapshot |
 | `progress.py` | Count what is committed (symbols vs `../src/`) into `../PROGRESS.md`, `progress.json` and the block at the top of `../README.md`; run by `make progress` and by CI on every push |
 | `datamap.py` | Classify the image's data bytes (jump tables, RTTI vtables, strings, class handles, unclassified) for the data half of the progress numbers — see [`engine/progress-metrics.md`](engine/progress-metrics.md) |

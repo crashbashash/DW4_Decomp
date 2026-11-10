@@ -131,13 +131,44 @@ measures the rows from retail and stops if a retail function in its range has no
 docstring gives the command, and [`src/third_party/`](../../src/third_party/README.md) holds the
 sources. A recovered source file that still lacks some of its functions is measured with `--partial`:
 the retail functions it does not define keep linking from the retail image between its members, and
-each gains its place in the file when its C is written. Compiling the file whole is what the original
-build did, and under EE GCC 2.96 it decides code: a call to a function compiled earlier in the same
-file is known not to throw, which changes how delay slots are filled, so a member can match only when
-the functions before it in the file are present. A C++ file's object names are mangled while `symbols.txt` keeps the plain names its source
+each gains its place in the file when its C is written. Recovered files of both compilers are
+whole-file units: the CRI middleware under EE GCC in `src/cri/`, and game classes under MWCC, such
+as `src/game/`'s, in C++ with exceptions on.
+
+Compiling the file whole is what the original build did, and under both compilers it decides code,
+so a member can match only when the functions before it in the file are present:
+
+- **EE GCC 2.96.** A call to a function compiled earlier in the same file is known not to throw,
+  which changes how delay slots are filled.
+- **MWCC.** The compiler knows which registers a `static` function compiled earlier in the same
+  file writes, and the caller keeps a value in a caller-saved register the callee leaves alone
+  instead of saving it in an `s` register first. An external function gets no such knowledge even
+  when it is defined above the caller, so the callee keeps its `static`. `return helper(a) +
+  other(a);`, where `helper` only reads `a0`:
+
+  ```
+  # helper only declared, or external  # static helper defined earlier
+  sq    s0,0(sp)                       jal   helper
+  jal   helper                         sq    s0,0(sp)
+  move  s0,a0                          jal   other
+  move  a0,s0                          move  s0,v0
+  jal   other
+  move  s0,v0
+  ```
+
+  The knowledge also moves registers before the call: a value the caller is done with goes in a
+  temporary the callee writes anyway rather than in `v0`.
+
+  Neither inline expansion nor anything else changes under the game's profiles (`-inline` without
+  `auto` inlines only functions declared `inline`). The retail effect is visible: a read of `a0`-`a3`,
+  `t0`-`t9`, `v1` or `$f2`-`$f19` after a `jal`, with no write in between. `scripts/same_file_calls.py`
+  lists every such call. It is evidence that the callee was `static` and compiled first, so every
+  function that calls it belongs to the same file.
+
+A C++ file's object names are mangled while `symbols.txt` keeps the plain names its source
 and callers use, so `emitted` and `externals` carry the mangled names and `symbol` gives the owner's.
 Two stock files may each keep a `static` of one name: the row that places the name says which is the
-retail function. Three things differ from an ordinary group:
+retail function. Four things differ from an ordinary group:
 
 - **The source is never split.** `tools/units.py` hands the file to the compiler unchanged, so its
   statics and macros stay in place. K&R definitions are read as definitions.
@@ -150,6 +181,16 @@ retail function. Three things differ from an ordinary group:
   only references. Each defined section is compared byte for byte with retail, relocations applied,
   and references resolve to the row. Switch tables are `data` rows here too, since they belong to a
   member rather than the owner, and their retail `jtbl` units stay.
+- **`duplicates` are read from retail.** An inline destructor or helper the file emits whose kept
+  copy is in another file is a duplicate when a member still calls it or names it in its exception
+  table: its address is the one the retail `jal` or table word holds, and its body must fit there.
+  Two inline destructors of one shape fit the same start; `--drop` names the one that is not the
+  file's own.
+
+With exceptions on, each member's index record and table are compared as in an ordinary group, and
+the object has one verdict. A member whose record retail keeps but the file does not produce makes
+the whole file `code-only`, and a member whose bytes differ makes it a mismatch, so such a function
+stays out of the file under `--partial` until it reproduces.
 
 A data section no placed body or declared datum reaches went with the functions the retail linker
 dropped, so it needs no row and is not linked. A section a placed body does reach must have a row,

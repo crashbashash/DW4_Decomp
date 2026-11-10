@@ -8,7 +8,10 @@ import subprocess
 import tempfile
 import unittest
 
+import cc
+import exceptions
 import unitobjects
+import unitprofiles
 import units
 import verify
 import whole_file_rows
@@ -231,6 +234,10 @@ class Rows(unittest.TestCase):
         placed = whole_file_rows.locate(functions, retail, sorted(retail), {"b": 0x120})
         self.assertEqual(placed, {"a": 0x100, "b": 0x120})
 
+    def test_a_named_function_must_fit_its_start(self):
+        with self.assertRaisesRegex(SystemExit, "does not reproduce its retail copy at 0x100"):
+            whole_file_rows.locate({"a": self.Function(2)}, {0x100: 1}, [0x100], {"a": 0x100})
+
     def test_byte_identical_twin_is_stripped(self):
         retail = {0x100: 1}
         functions = {"kept": self.Function(1), "twin": self.Function(1)}
@@ -265,6 +272,43 @@ class CxxRows(unittest.TestCase):
             self.addCleanup(unitobjects.load.cache_clear)
             group, = unitobjects.load(str(overlay))
         self.assertEqual(group.symbol, "first__FPv")
+
+
+class ExceptionsOn(unittest.TestCase):
+    """A recovered MWCC C++ file with exceptions on, checked against retail: each member's record
+    and table are kept, and a destructor the retail linker kept from another file is a duplicate."""
+    OWNER = 0x3a17c0
+    SOURCE = Path(verify.ROOT) / "src/game/beWeapon.cpp"
+
+    def setUp(self):
+        self.elf = Path(verify.ROOT) / "orig/SLUS-20836/SLUS_208.36"
+        if not all(Path(p).exists() for p in (verify.WIBO_DEFAULT, self.elf, self.SOURCE)):
+            self.skipTest("private compiler or retail image unavailable")
+        unitobjects.load.cache_clear()
+        self.group = unitobjects.group_for(self.OWNER)
+        self.profile = unitprofiles.resolve(self.OWNER, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT).profile
+        temp = tempfile.TemporaryDirectory(prefix="dw4-whole-file-exc-")
+        self.addCleanup(temp.cleanup)
+        self.obj = Path(temp.name) / "unit.o"
+        subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, self.profile.compiler,
+                                       unitprofiles.command_flags(self.profile), str(self.SOURCE),
+                                       str(self.obj)), cwd=verify.ROOT, check=True, capture_output=True)
+
+    def test_members_keep_their_exception_records(self):
+        self.assertEqual(self.profile.exceptions, "on")
+        ok, report, records = verify.verify_emitted_object(
+            str(self.obj), self.group, str(self.elf), os.path.join(verify.ROOT, "config/SLUS-20836/symbols.txt"))
+        self.assertTrue(ok, report)
+        self.assertIn("exc=ok cat=match", report.splitlines()[0])
+        self.assertTrue(records.exception_placements)
+
+    def test_a_reached_copy_elsewhere_is_a_duplicate(self):
+        syms, headers, functions = whole_file_rows.text_functions(str(self.obj))
+        placed = {name: address for name, address in ((self.group.symbol, self.OWNER),) + self.group.emitted}
+        found = whole_file_rows.duplicate_rows(
+            placed, whole_file_rows.Retail(str(self.elf)), syms, headers, str(self.obj), functions,
+            exceptions.load())
+        self.assertEqual(found, dict(self.group.duplicates))
 
 
 class SharedStatics(unittest.TestCase):

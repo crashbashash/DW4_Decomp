@@ -32,7 +32,8 @@ because the exception mode is not a recorded setting at all. The unit table is w
   unit in the sweep); nothing is passed for `on` (the compiler default) or for the Sony
   EE GCC, which has no such switch. The mode is read from retail: MWCC emits a 12-byte
   exception index record for every function with a stack frame or a call when
-  exceptions are on, so a unit with any recorded function (`config/SLUS-20836/exceptions.txt`) is
+  exceptions are on, and for a frameless leaf that inlined a member function (an
+  inlined free function gives none), so a unit with any recorded function (`config/SLUS-20836/exceptions.txt`) is
   `on`; a unit whose non-leaf functions have no record is `off`; a unit of nothing but
   frameless leaves decides nothing and is recorded `off` with the reason in `source`.
 * `status`: `-`, or `provisional` when the members' evidence has no common profile

@@ -1110,7 +1110,10 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         exc_sections = {name: pair for name, pair in exc_all.items() if name not in stripped}
         dropped = set(stripped.values()) | {i for name in stripped for i in exc_all.get(name, ())
                                             if i is not None}
-        dead = dead_data(obj, headers, syms, sections, data_sections) if group.whole_file else set()
+        # a placed member's exception record and table point at it, not the other way round
+        exc_live = {i for pair in exc_sections.values() for i in pair if i is not None}
+        dead = (dead_data(obj, headers, syms, sections, set(data_sections) | exc_live)
+                if group.whole_file else set())
         dropped |= dead
         unreferenced(obj, headers, set(stripped), dropped)
         exc_expected = expected_exception_records(group, symbols)

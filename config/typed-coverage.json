@@ -491,7 +491,7 @@
   "igNamedObjectInfo": 3,
   "igNode": 3,
   "igNodeList": 5,
-  "igObject": 1233,
+  "igObject": 1235,
   "igObjectDirEntry": 25,
   "igObjectList": 704,
   "igObjectListList": 4,
@@ -606,8 +606,8 @@
   "igVertexBlendStateAttr": 1,
   "igVertexData": 8,
   "igVertexStream": 6,
-  "igViewManager": 2,
-  "igViewModel": 9,
+  "igViewManager": 4,
+  "igViewModel": 11,
   "igViewerDataPumpManager": 2,
   "igViewerParameters": 49,
   "igViewerRenderer": 20,
@@ -628,23 +628,32 @@
    "synthetic": 0,
    "total": 3
   },
+  "cri": {
+   "files": 38,
+   "offset_casts": 36,
+   "other_members": 2581,
+   "recovered": 0,
+   "recovered_pct": 0.0,
+   "synthetic": 426,
+   "total": 3043
+  },
   "engine": {
-   "files": 3341,
-   "offset_casts": 663,
-   "other_members": 2154,
-   "recovered": 1899,
-   "recovered_pct": 31.62,
-   "synthetic": 1290,
-   "total": 6006
+   "files": 3338,
+   "offset_casts": 686,
+   "other_members": 2479,
+   "recovered": 1909,
+   "recovered_pct": 29.73,
+   "synthetic": 1348,
+   "total": 6422
   },
   "game": {
    "files": 1590,
-   "offset_casts": 55,
-   "other_members": 270,
-   "recovered": 2511,
-   "recovered_pct": 85.55,
-   "synthetic": 99,
-   "total": 2935
+   "offset_casts": 58,
+   "other_members": 286,
+   "recovered": 2533,
+   "recovered_pct": 85.09,
+   "synthetic": 100,
+   "total": 2977
   },
   "libgcc": {
    "files": 7,
@@ -701,7 +710,7 @@
    "total": 0
   },
   "sony": {
-   "files": 160,
+   "files": 161,
    "offset_casts": 10,
    "other_members": 293,
    "recovered": 0,
@@ -719,19 +728,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 12679,
-   "offset_casts": 6083,
-   "other_members": 14579,
-   "recovered": 21548,
-   "recovered_pct": 42.52,
-   "synthetic": 8463,
-   "total": 50673
+   "files": 11441,
+   "offset_casts": 5643,
+   "other_members": 13278,
+   "recovered": 21522,
+   "recovered_pct": 44.39,
+   "synthetic": 8040,
+   "total": 48483
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6817,
- "recovered": 25966,
- "synthetic": 9857,
- "total": 64413,
+ "offset_casts": 6439,
+ "recovered": 25972,
+ "synthetic": 9919,
+ "total": 65724,
  "typeable": 359
 }
