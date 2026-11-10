@@ -42,6 +42,13 @@ class AsmBodyNames(unittest.TestCase):
         # an asm function without the pragma still recovers nothing, so it is never plain C
         self.assertEqual(unitprofiles.asm_body_names(self.write(BODY.split("\n", 1)[1])), {"FUN_00100000"})
 
+    def test_a_storage_class_does_not_hide_an_asm_function(self):
+        # a whole-file unit's static asm callee is still an asm function, never plain C
+        for prefix in ("static ", 'extern "C" ', "static inline "):
+            path = self.write("int other(void) { return 0; }\n" + prefix + BODY.split("\n", 2)[2])
+            self.assertEqual(unitprofiles.asm_body_names(path), {"FUN_00100000"}, prefix)
+            self.assertTrue(progress.is_asm_body("FUN_00100000", path), prefix)
+
 
 class Categories(unittest.TestCase):
     def test_asm_body_row_is_not_fully_verified(self):

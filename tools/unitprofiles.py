@@ -168,13 +168,13 @@ def command_flags(profile):
 # its bytes, and only MWCC parses it. It links from `src/` but recovers nothing, so `make check`
 # files it under its own category and no matched figure counts it.
 ASM_PRAGMA = "#pragma optimization_level 0"
-ASM_DEF_RE = re.compile(r"^\s*asm\s+[^;{()]*?\b(\w+)\s*\(", re.M)
+ASM_DEF_RE = re.compile(r'^\s*(?:(?:static|extern|inline)\s+(?:"C"\s+)?)*asm\s+[^;{()]*?\b(\w+)\s*\(', re.M)
 _ASM_CACHE = {}
 
 
 def asm_body_names(path):
     """The functions `path` defines as asm bodies (decided by content, never by folder): an
-    `asm <type> name(` definition, with or without the pragma. A C function with an inline
+    `asm <type> name(` definition, after any `static`, `extern "C"` or `inline`, with or without the pragma. A C function with an inline
     `asm { sync }` statement is not an asm body."""
     try:
         stamp = os.stat(path).st_mtime_ns

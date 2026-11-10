@@ -196,3 +196,8 @@ volatile	FUN_00263208	1	#adxt-ready-count
 volatile	FUN_002b50e8	1	#build-string-stores
 volatile	FUN_002b3788	1	#build-string-stores
 volatile	FUN_00283058	1	#build-string-stores
+asm	FUN_001efd90	1	#dma-channel-cop0
+volatile	FUN_001efd90	1	#dma-channel-cop0
+asm	FUN_001effc0	1	#dma-channel-cop0
+volatile	FUN_001effc0	1	#dma-channel-cop0
+asm-function	FUN_001f0930	1	#dma-channel-cop0

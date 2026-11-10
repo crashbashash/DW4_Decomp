@@ -1,8 +1,9 @@
-int FUN_001efd90();
 int FUN_001efec0();
 void FUN_001f00e0(int);
 int FUN_001f0390(void);
 int FUN_00204240();
+int FUN_00113f20();
+int FUN_00113f78();
 int iReferSemaStatus();
 int iSignalSema();
 
@@ -37,6 +38,32 @@ int FUN_00204100(int);
 int FUN_00330770();
 typedef struct ChanView { long long v; char pad0[24]; int w32; char pad1[12]; int w48; char pad2[12]; unsigned char b0:1; unsigned char b1:1; unsigned char b2:1; unsigned char b3:1; unsigned char b4:1; unsigned char b5:1; unsigned char b6:1; unsigned char b7:1; } ChanView;
 typedef struct Desc { char p0[16]; int f16; char p1[8]; void *f28; char p2[20]; struct Desc *next; char p3[8]; unsigned char lo : 4; unsigned char flag : 1; unsigned char hi : 3; } Desc;
+
+void FUN_001efd90(int channel, int (*callback)(long long), long long data) {
+    N *c = ((N **)DAT_00568f00)[channel];
+    N *n;
+    unsigned int status;
+    if (DAT_005691b8[0] == 0) {
+        FUN_00204240(7, &DAT_005691b8[0]);
+    }
+    __asm__ volatile("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
+    if (status & 1) {
+        FUN_00113f20();
+        n = (N *)DAT_005691b8[0];
+        DAT_005691b8[0] = n->f12;
+        FUN_00113f78();
+    } else {
+        n = (N *)DAT_005691b8[0];
+        DAT_005691b8[0] = n->f12;
+    }
+    n->f16 = (int)callback;
+    *(long long *)n = data;
+    n->f12 = c->f16;
+    if (c->f16 == 0) {
+        c->f20 = n;
+    }
+    c->f16 = (int)n;
+}
 
 static void FUN_001efe70(int arg0) {
     N *temp_a1;
@@ -77,6 +104,31 @@ void FUN_001eff60(int arg0) {
     }
 }
 
+typedef struct Slot { int pad0; struct Slot *next; int f8; int f12; } Slot;
+
+void FUN_001effc0(int channel, int value, int data) {
+    char *c = ((char **)DAT_00568f00)[channel];
+    Slot *n;
+    unsigned int status;
+    if (DAT_005691c0[0] == 0) {
+        FUN_00204240(8, &DAT_005691c0[0]);
+    }
+    __asm__ volatile("mfc0 %0, $12\n\tsrl $6, %0, 16\n\tand %0, %0, $6" : "=r"(status) : : "$6");
+    if (status & 1) {
+        FUN_00113f20();
+        n = (Slot *)DAT_005691c0[0];
+        DAT_005691c0[0] = n->next;
+        FUN_00113f78();
+    } else {
+        n = (Slot *)DAT_005691c0[0];
+        DAT_005691c0[0] = n->next;
+    }
+    n->f8 = value;
+    n->f12 = data;
+    n->next = *(Slot **)(c + 24);
+    *(Slot **)(c + 24) = n;
+}
+
 void FUN_001f0090(int arg0) {
     PoolNode *temp_a2;
     PoolNode *var_a1;
@@ -112,7 +164,7 @@ long long FUN_001f03a0(void) {
     if (b1_of(s) != 1) {
         t = *(unsigned char *)((char *)s + 64);
         s->b1 = 1;
-        FUN_001efd90(1, FUN_001f0390, 0, t);
+        FUN_001efd90(1, (int (*)(long long))FUN_001f0390, 0);
     }
     return s->f0;
 }
@@ -226,4 +278,18 @@ void FUN_001f0730(void) {
         i++;
         *(int *)((char *)DAT_00568f60 + o) = 0;
     } while (i <= 2);
+}
+
+static asm void FUN_001f0930(void)
+{
+wait:
+    nop
+    nop
+    nop
+    nop
+    nop
+    bc0f    wait
+    nop
+    jr      ra
+    nop
 }

@@ -324,6 +324,23 @@ also uses.
   one on the read the registers differ, and without both the function comes out 164 bytes short.
   `sceGsResetPath`'s statements have no outputs, so its `__volatile__` changes nothing and is left out.
 
+### dma-channel-cop0
+
+The engine's DMA channel queues in `src/engine/dmaChannel.c`, an MWCC file. Two functions read the COP0 Status
+register before taking a node from a shared pool, and one waits on the COP0 condition.
+
+* C has no spelling for a COP0 register read or for a branch on the COP0 condition (`bc0f`).
+* Both pool functions test the interrupt-enable bits (IE and EIE, bits 0 and 16) together, and disable interrupts
+  around the pool update only when both are set. In every MWCC copy of this test in the executable, five
+  functions in all, the shift goes into `a2` and the `and` writes back into whichever register the read used.
+  The compiler picks that register and never picks `a2` by itself, so the shift and the `and` were text of the
+  statement, with `a2` named and clobbered: `mfc0 %0,$12; srl $6,%0,16; and %0,%0,$6`. Reading the register alone
+  and testing it in C gives the same instructions with other registers.
+* The `volatile` on each `__asm__` keeps the read from being moved or merged.
+* The wait is five `nop`s and a `bc0f` back to its start, then a return, with no frame: an MWCC `asm` function.
+  The function after it keeps argument registers live across calls to it, which needs the callee to be a
+  `static` defined earlier in the same file.
+
 ## Open questions
 
 * **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores
