@@ -10,6 +10,7 @@ docs/engine/arena-allocator.md
 docs/engine/camera.md
 docs/engine/chip-controller.md
 docs/engine/common-model-controller.md
+docs/engine/cri-cvfs.md
 docs/engine/data-regions.md
 docs/engine/engine-boot.md
 docs/engine/exception-unwind.md

@@ -1,5 +1,5 @@
-int FUN_00270280();
+int cvFsGetStat();
 
 void FUN_0026aa20(void *arg0, int *arg1) {
-    *arg1 = FUN_00270280(*(int *)((char *)(arg0) + 8));
+    *arg1 = cvFsGetStat(*(int *)((char *)(arg0) + 8));
 }

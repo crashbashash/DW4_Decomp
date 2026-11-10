@@ -79,7 +79,7 @@ volatile	FUN_00273988	1	#build-string-reads
 volatile	FUN_00275370	1	#build-string-reads
 volatile	FUN_00277898	1	#build-string-reads
 volatile	FUN_0027db18	1	#build-string-reads
-volatile	FUN_0026f728	1	#build-string-reads
+volatile	cvFsAddDev	1	#build-string-reads
 volatile	FUN_00272228	1	#srd-spin-counter
 asm	DelayThread	1	#sony-libkernl-cop0-and-syscall
 volatile	DelayThread	1	#sony-libkernl-cop0-and-syscall

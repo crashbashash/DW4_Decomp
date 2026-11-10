@@ -1,7 +1,7 @@
-/* Stores FUN_002702e8(object) in *out and returns 1. */
-int FUN_002702e8(void *object);
+/* Stores cvFsGetFileSize(object) in *out and returns 1. */
+int cvFsGetFileSize(void *object);
 
 int FUN_0026aab8(void *object, int *out) {
-    *out = FUN_002702e8(object);
+    *out = cvFsGetFileSize(object);
     return 1;
 }
