@@ -8387,7 +8387,7 @@
 00283028	FUN_00283028	match	-
 00283038	FUN_00283038	match	-
 00283048	FUN_00283048	match	-
-00283058	FUN_00283058	unapproved	unapproved: 1 volatile without an approval row
+00283058	FUN_00283058	match	-
 00283090	FUN_00283090	match	-
 00283098	FUN_00283098	match	-
 002830a8	FUN_002830a8	match	-
@@ -9741,7 +9741,7 @@
 002b3690	FUN_002b3690	match	-
 002b3708	FUN_002b3708	match	-
 002b3780	FUN_002b3780	match	-
-002b3788	FUN_002b3788	unapproved	unapproved: 1 volatile without an approval row
+002b3788	FUN_002b3788	match	-
 002b37f8	FUN_002b37f8	match	-
 002b3808	FUN_002b3808	match	-
 002b3858	FUN_002b3858	match	-
@@ -9840,7 +9840,7 @@
 002b5068	FUN_002b5068	match	-
 002b50c8	FUN_002b50c8	match	-
 002b50d8	FUN_002b50d8	match	-
-002b50e8	FUN_002b50e8	unapproved	unapproved: 1 volatile without an approval row
+002b50e8	FUN_002b50e8	match	-
 002b5138	FUN_002b5138	match	-
 002b5148	FUN_002b5148	match	-
 002b5168	FUN_002b5168	match	-

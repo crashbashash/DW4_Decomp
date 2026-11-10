@@ -183,8 +183,8 @@ clock pointer (`0x5856d0`), the nesting count (`0x5856d4`), and the two tables o
 
 A module's init stores the address of its version string in a word that nothing else reads or points to, in the
 `lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. It is the write-side
-counterpart of a build-string read. The owner approved it for ADXT's init (`0x56dfa8`); the same store in other modules' inits awaits
-review.
+counterpart of a build-string read. The owner approved it for the four inits that do it: ADXT (`0x56dfa8`), SUD (`0x5856a8`), SFX
+(`0x5856a0`) and CFT (`0x573ea8`). In each the store is the word's only access in the executable.
 
 ### adxt-ready-count
 

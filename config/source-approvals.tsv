@@ -193,3 +193,6 @@ volatile	FUN_002b59a0	2	#sud-timer
 volatile	FUN_002b5a10	7	#sud-timer
 volatile	FUN_002632c0	2	#adxt-ready-count
 volatile	FUN_00263208	1	#adxt-ready-count
+volatile	FUN_002b50e8	1	#build-string-stores
+volatile	FUN_002b3788	1	#build-string-stores
+volatile	FUN_00283058	1	#build-string-stores

@@ -10,7 +10,8 @@ The last CRI files of the Sofdec block, each compiled as one whole file with Son
 | `src/cri/sud.c` | `cri_sud` | `0x2b50e8` up to `0x2b5d50` | SUD (`CRI SUD/PS2EE Ver.0.05`): user-data headers and the EE timer | its init returns the version string at `0x4f59c0`; its messages and tables follow SFX's; its data at `0x4bf280` |
 
 SUD's timer words and the timer-register tables are declared `volatile`, as the owner approved
-([source approvals](source-approvals.md#sud-timer)). The two SFX files share `include/dw4/cri/sfx.h`. A plane's address (`SfxPlane.addr`) is declared `int` and
+([source approvals](source-approvals.md#sud-timer)); SFX's and SUD's inits store their version strings in
+`volatile` words ([build-string stores](source-approvals.md#build-string-stores)). The two SFX files share `include/dw4/cri/sfx.h`. A plane's address (`SfxPlane.addr`) is declared `int` and
 cast at use, as the owner approved for the cvFs, HTCI and DVCI pointers on the same condition
 ([CRI cvFs](cri-cvfs.md#integer-typed-slots)).
 
@@ -19,6 +20,3 @@ cast at use, as the owner approved for the cvFs, HTCI and DVCI pointers on the s
 - Whether the function at `0x2b3780` (returns 17) starts the SFX file or ends the conversion file before it.
 - The free-handle searches at `0x2b39e0` and `0x2b42c8` leave a delay slot empty that plain C fills; with a
   `volatile` read of the in-use field the loop matches but its set-up still differs.
-- SUD's init stores its version string's address the way a `volatile` store compiles
-  ([build-string stores](source-approvals.md#build-string-stores)); it has no approval yet and stays
-  `unapproved`.

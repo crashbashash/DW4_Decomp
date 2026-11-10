@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2744320,
-    "functions": 19375
+    "bytes": 2744560,
+    "functions": 19378
    },
    "mismatch": {
     "bytes": 0,
@@ -104,8 +104,8 @@
     "functions": 0
    },
    "unapproved": {
-    "bytes": 48548,
-    "functions": 64
+    "bytes": 48308,
+    "functions": 61
    }
   },
   "code_only_by_exc": {
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2749640,
-   "functions": 19458
+   "bytes": 2749880,
+   "functions": 19461
   },
   "fully_verified": {
-   "bytes": 2744320,
-   "functions": 19375
+   "bytes": 2744560,
+   "functions": 19378
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,8 +142,8 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 5320,
-  "fully_matched": 2749640,
-  "fully_verified": 2744320,
+  "fully_matched": 2749880,
+  "fully_verified": 2744560,
   "functions_asm_body": 0,
   "functions_assembly": 83,
   "matched": 2803444,
@@ -352,15 +352,15 @@
    "struct.a": 110,
    "struct.b": 157,
    "struct.c": 284,
-   "unapproved.bytes": 48548,
-   "unapproved.functions": 64,
+   "unapproved.bytes": 48308,
+   "unapproved.functions": 61,
    "unmatched.bytes": 666744,
    "unmatched.functions": 1028
   }
  },
  "functions": {
-  "fully_matched": 19458,
-  "fully_verified": 19375,
+  "fully_matched": 19461,
+  "fully_verified": 19378,
   "matched": 19461,
   "named": 9704,
   "named_semantic": 2027,
@@ -455,8 +455,8 @@
   "bytes": 392124,
   "failing": {
    "addresses": {
-    "bytes": 2241276,
-    "functions": 14189
+    "bytes": 2241516,
+    "functions": 14192
    },
    "fields": {
     "bytes": 771080,
@@ -467,16 +467,16 @@
     "functions": 5699
    },
    "name": {
-    "bytes": 1837668,
-    "functions": 13704
+    "bytes": 1837908,
+    "functions": 13707
    },
    "placed": {
     "bytes": 1905912,
     "functions": 11521
    },
    "references": {
-    "bytes": 2069592,
-    "functions": 11109
+    "bytes": 2069832,
+    "functions": 11112
    },
    "types": {
     "bytes": 893900,
@@ -488,7 +488,7 @@
    }
   },
   "functions": 2318,
-  "matched_functions": 19458
+  "matched_functions": 19461
  },
  "regions": [
   {

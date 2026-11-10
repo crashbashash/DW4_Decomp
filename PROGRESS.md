@@ -4,8 +4,8 @@ A snapshot of how much of `game.elf` has been rebuilt as matching source. Regene
 
 ```
 fully matched (C/C++ and approved assembly)
-  functions  ███████████████████████░  94.6 %   19,458 / 20,572
-  code bytes ███████████████████░░░░░  79.1 %   2,749,640 / 3,475,508   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
+  functions  ███████████████████████░  94.6 %   19,461 / 20,572
+  code bytes ███████████████████░░░░░  79.1 %   2,749,880 / 3,475,508   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
 code bytes identical (verification debt included — see below)
   functions  ███████████████████████░  95.0 %   19,544 / 20,572
   code bytes ███████████████████░░░░░  80.8 %   2,808,764 / 3,475,508
@@ -23,10 +23,10 @@ The function count is flattered by small functions: the ones done have a median 
 
 | category | functions | code bytes | % of code bytes | meaning |
 | --- | ---: | ---: | ---: | --- |
-| **`match`** | 19,375 | 2,744,320 | 79.0 | code bytes, exception metadata and symbol rules all pass — fully verified |
+| **`match`** | 19,378 | 2,744,560 | 79.0 | code bytes, exception metadata and symbol rules all pass — fully verified |
 | `code-only` | 10 | 9,952 | 0.3 | code bytes identical; exception metadata not reproduced (compile mode or cleanup scope) |
 | `foreign-profile` | 12 | 624 | 0.0 | code bytes identical only under a provisional per-function override whose compiler, flags or exception mode differ from the unit's profile (config/SLUS-20836/units.tsv; docs/engine/build-profiles.md) |
-| `unapproved` | 64 | 48,548 | 1.4 | code bytes identical, but the source uses inline `asm` or `volatile` the owner has not approved (config/source-approvals.tsv; docs/engine/source-approvals.md) |
+| `unapproved` | 61 | 48,308 | 1.4 | code bytes identical, but the source uses inline `asm` or `volatile` the owner has not approved (config/source-approvals.tsv; docs/engine/source-approvals.md) |
 | `assembly` | 83 | 5,320 | 0.2 | an owner-approved hand-written assembly source (config/assembly-sources.tsv), byte-identical: the original was written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md) |
 
 The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
@@ -42,15 +42,15 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it.
 
-**2,318** of the 19,458 matched functions are readable: **392,124** code bytes, **11.3 %** of the code.
+**2,318** of the 19,461 matched functions are readable: **392,124** code bytes, **11.3 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,704 | 1,837,668 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 14,189 | 2,241,276 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 13,707 | 1,837,908 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 14,192 | 2,241,516 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 3,488 | 893,900 |
 | it sits in its class or module file, not `src/unmatched/` | 11,521 | 1,905,912 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 11,109 | 2,069,592 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 11,112 | 2,069,832 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 5,699 | 1,241,304 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 3,403 | 771,080 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,307 | 394,372 |
@@ -92,8 +92,8 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `fun_dat_refs` | 87,000 | 85,186 | -1814 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 18 | 12 | -6 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 776 | 624 | -152 | bytes of those |
-| `unapproved.functions` | 80 | 64 | -16 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
-| `unapproved.bytes` | 50,908 | 48,548 | -2360 | bytes of those |
+| `unapproved.functions` | 80 | 61 | -19 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
+| `unapproved.bytes` | 50,908 | 48,308 | -2600 | bytes of those |
 | `orphan.bytes` | 32 | 32 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 1,020 | 1,020 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 | `profile_split.units` | 13 | 13 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build) |
