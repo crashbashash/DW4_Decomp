@@ -13,7 +13,10 @@ unit's profile, then:
   externals  each call out of the file, read from the retail `jal`
 
 A retail function in the range that no compiled function reproduces stops the run with its name:
-the compile is wrong, and writing rows would hide it behind `stripped`.
+the compile is wrong, and writing rows would hide it behind `stripped`. A source file that is still
+being recovered (`--partial`) lacks some of its functions: a retail function in the range that no
+compiled function reproduces is then reported and keeps linking from the retail image, provided
+the file defines nothing of that name.
 
 A C++ file (`--cxx`) keeps its mangled names in the rows and writes the plain ones to `--names`,
 and cross-file references stay externals. `--drop` strips a function that fits a start another
@@ -178,6 +181,16 @@ def data_rows(function_at, retail, syms, headers, obj, functions, names, hi):
     return data, externals
 
 
+def unrecovered(missing, defined):
+    """The names of the retail functions a partial file has no source for, or None when the file
+    defines one of them: a definition that reproduces no retail copy is a wrong compile, not a
+    function still to be written."""
+    names = [m[0] if isinstance(m, tuple) else m for m in missing]
+    if any(name in defined for name in names):
+        return None
+    return names
+
+
 def units_rows(path, lo, hi, rows):
     """units.tsv with `rows` in place of everything inside [lo, hi); a row across `lo` is cut."""
     out, placed = [], False
@@ -223,6 +236,8 @@ def main(argv=None):
     ap.add_argument("--elf", default=os.path.join(ROOT, "orig", "SLUS-20836", "SLUS_208.36"))
     ap.add_argument("--wibo", default=os.path.join(ROOT, "local", "wibo"))
     ap.add_argument("--cxx", action="store_true", help="the object's names are mangled: keep symbols.txt plain")
+    ap.add_argument("--partial", action="store_true",
+                    help="the file is still being recovered: retail functions it lacks link from retail")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--names", help="write the name rows for tools/apply_names.py here")
     a = ap.parse_args(argv)
@@ -252,6 +267,11 @@ def main(argv=None):
             owned.update({va: name for name, va in at.items()})
             compiled.append((stem, obj, syms, headers, functions, at))
         missing = [by_va[v] for v in starts if v not in owned]
+        lacking = unrecovered(missing, {n for c in compiled for n in c[4]}) if a.partial else None
+        if lacking:
+            print("partial: %d retail functions without source link from retail: %s"
+                  % (len(lacking), ", ".join(lacking)), file=sys.stderr)
+            missing = []
         if missing:
             sys.exit("no compiled function reproduces %s: fix the compile, the range or the extents"
                      % ", ".join(str(m) for m in missing))

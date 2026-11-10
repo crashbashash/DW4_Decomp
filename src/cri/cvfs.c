@@ -33,6 +33,8 @@ extern char cvFsStopTr_2_vtbl_error[];
 extern char cvFsGetStat_1_handle_error[];
 extern char cvFsGetStat_2_vtbl_error[];
 extern char cvFsGetFileSizeByHndl_1_illegal_file_handle[];
+extern char cvFsGetFreeSize_5_device_not_found[];
+extern char cvFsGetFreeSize_6_vtbl_error[];
 extern char cvFsGetSctLen_1_handle_error[];
 extern char cvFsGetSctLen_2_vtbl_error[];
 extern char cvFsSetSctLen_3_handle_error[];
@@ -164,6 +166,21 @@ CvFsVtbl *getDevice(const char *devname)
         }
     }
     return 0;
+}
+
+void toUpperStr(char *str)
+{
+    unsigned int len;
+    unsigned int i;
+    int c;
+
+    len = strlen(str);
+    for (i = 0; i < len + 1; i++) {
+        c = ((unsigned char *)str)[i];
+        if (c >= 'a' && c <= 'z') {
+            str[i] = c - ('a' - 'A');
+        }
+    }
 }
 
 void cvFsDelDev(const char *devname)
@@ -310,6 +327,36 @@ void releaseCvFsHdl(CvFsHandle *hdl)
     hdl->vtbl = 0;
 }
 
+void splitPath(char *devname, char *fname, const char *path)
+{
+    int i;
+    int j;
+
+    if (path == 0) {
+        return;
+    }
+    for (i = 0; i < CVFS_PATH_SIZE - 7 && path[i] != ':' && path[i] != 0; i++) {
+        devname[i] = path[i];
+    }
+    if (path[i] == 0) {
+        devname[i] = 0;
+        memcpy(fname, devname, strlen(devname) + 1);
+        devname[0] = 0;
+        return;
+    }
+    devname[i] = 0;
+    i++;
+    if (i == 2) {
+        devname[0] = 0;
+        i = 0;
+    }
+    for (j = i; j < CVFS_PATH_SIZE - 7 && path[j] != 0; j++) {
+        fname[j - i] = path[j];
+    }
+    fname[j - i] = 0;
+    toUpperStr(devname);
+}
+
 void getDefDev(char *devname)
 {
     unsigned int len = strlen(cvfs_defdev);
@@ -453,6 +500,45 @@ int cvFsGetFileSizeByHndl(CvFsHandle *hdl)
     size = 0x7FFFFFFF;
     if (hdl->vtbl->opt_fn1 != 0) {
         size = ((int (*)(int, int, int, int))hdl->vtbl->opt_fn1)(hdl->fd, CVFS_OPT_FILE_SIZE_BY_HNDL, 0, 0);
+    }
+    return size;
+}
+
+int cvFsGetFreeSize(const char *devname)
+{
+    char name[CVFS_PATH_SIZE];
+    CvFsVtbl *vtbl;
+    int len;
+    int i;
+    int size;
+
+    size = 0;
+    if (devname == 0 || devname[0] == 0) {
+        getDefDev(name);
+        if (name[0] == 0) {
+            cvFsError(cvFsGetFreeSize_5_device_not_found);
+            return 0;
+        }
+    } else {
+        memcpy(name, devname, strlen(devname) + 1);
+    }
+    len = strlen(name);
+    if (len <= 0) {
+        cvFsError(cvFsGetFreeSize_5_device_not_found);
+        return 0;
+    }
+    for (i = 0; i < CVFS_MAX_DEVICES; i++) {
+        if (strncmp(name, cvfs_devices[i].name, len) == 0) {
+            vtbl = cvfs_devices[i].vtbl;
+            if (vtbl != 0) {
+                if (vtbl->get_free_size != 0) {
+                    size = ((int (*)(void))vtbl->get_free_size)();
+                }
+            } else {
+                cvFsError(cvFsGetFreeSize_6_vtbl_error);
+                return 0;
+            }
+        }
     }
     return size;
 }
@@ -676,6 +762,11 @@ int cvFsSetCurVolume(const char *devname, void *image)
         return ((int (*)(CvFsVolumeArg *, int, int, int))vtbl->opt_fn1)(&arg, CVFS_OPT_SET_CUR_VOLUME, 0, 0);
     }
     return -1;
+}
+
+int FUN_00270f68(void)
+{
+    return 0;
 }
 
 int cvFsAddVolumeEx(const char *devname, const char *volume, void *image, int option)

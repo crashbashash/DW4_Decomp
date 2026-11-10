@@ -3622,6 +3622,8 @@
 0x004ef210	cvFsGetStat_1_handle_error	string-literal
 0x004ef230	cvFsGetStat_2_vtbl_error	string-literal
 0x004ef388	cvFsGetFileSizeByHndl_1_illegal_file_handle	string-literal
+0x004ef3b8	cvFsGetFreeSize_5_device_not_found	string-literal
+0x004ef3e0	cvFsGetFreeSize_6_vtbl_error	string-literal
 0x004ef400	cvFsGetSctLen_1_handle_error	string-literal
 0x004ef420	cvFsGetSctLen_2_vtbl_error	string-literal
 0x004ef440	cvFsSetSctLen_3_handle_error	string-literal

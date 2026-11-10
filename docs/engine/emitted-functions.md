@@ -129,7 +129,12 @@ The owner is the file's first retail function and `emitted` names the others; th
 `config/SLUS-20836/units.tsv` row, so every member shares its profile. `tools/whole_file_rows.py`
 measures the rows from retail and stops if a retail function in its range has no compiled copy; its
 docstring gives the command, and [`src/third_party/`](../../src/third_party/README.md) holds the
-sources. A C++ file's object names are mangled while `symbols.txt` keeps the plain names its source
+sources. A recovered source file that still lacks some of its functions is measured with `--partial`:
+the retail functions it does not define keep linking from the retail image between its members, and
+each gains its place in the file when its C is written. Compiling the file whole is what the original
+build did, and under EE GCC 2.96 it decides code: a call to a function compiled earlier in the same
+file is known not to throw, which changes how delay slots are filled, so a member can match only when
+the functions before it in the file are present. A C++ file's object names are mangled while `symbols.txt` keeps the plain names its source
 and callers use, so `emitted` and `externals` carry the mangled names and `symbol` gives the owner's.
 Two stock files may each keep a `static` of one name: the row that places the name says which is the
 retail function. Three things differ from an ordinary group:

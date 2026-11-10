@@ -5,7 +5,7 @@ and the other CRI libraries open, read and query files only through its API; a d
 driver, the host file system, a volume image) registers a table of entry points under a name, and every
 cvFs call looks the device up by the name prefix of a path (`dev:file`) or uses the default device.
 The source is `src/cri/cvfs.c` with the shared types in `include/dw4/cri/cvfs.h`. It builds with Sony
-EE GCC 2.96 at `-O2 -G0` like the rest of the CRI blocks ([sd-prologue](sd-prologue.md)).
+EE GCC 2.96 at `-O2 -G0` like the rest of the CRI blocks, as one whole file ([sd-prologue](sd-prologue.md)).
 
 ## Extent
 
@@ -15,10 +15,14 @@ EE GCC 2.96 at `-O2 -G0` like the rest of the CRI blocks ([sd-prologue](sd-prolo
 | strings | `0x4eeed8` up to `0x4efb60` | the version string, then each API function's numbered error messages in code order |
 | data | `0x4a9278..0x4a9287`, `0x56e0e0` up to `0x56e580` | referenced only by module functions: the build-string pointer, the error callback and its object, the init count; the 40 handles, the 32 device entries, the default device name and the path work buffer |
 
-Code outside the module calls only the API functions, never the helpers. The three `units.tsv` units
-that cover this range today (`cri-adx_26e478`, `cri-adx_26f620`, `cri-adx_270f70`) do not follow the module:
-the first starts before it and the last runs on into SRD. All three share one profile, so this does not
-change any function's build; the cuts move when the CRI source files are compiled whole.
+Code outside the module calls only the API functions, never the helpers. The module is one
+whole-file unit (`cri_cvfs` in `units.tsv`, its rows in `unit-objects.json`;
+[whole-file units](emitted-functions.md#whole-file-units)): the file compiles as one object with
+`-ffunction-sections`, and each function is checked and placed at its retail address. The functions it
+does not define yet link from the retail image between its members. Compiling the file whole matters
+here: `splitPath` matches only with `toUpperStr` compiled before it, because a call to a function GCC
+has already compiled is known not to throw and that changes how its delay slots are filled, and
+`cvFsGetFreeSize` matches only when the file is compiled whole (alone, one branch takes the likely form).
 
 ## Layout
 
@@ -55,7 +59,7 @@ which happens only when both accesses are `int`.
 
 The owner approved this typing on the condition that it describes the types rather than one call site: one
 declaration, used by every function that touches the table or the block, with every one of them matching
-and none needing the pointer form. That holds for all 47 functions of the module that have source.
+and none needing the pointer form. That holds for every function of the module that has source.
 
 ## Open questions
 

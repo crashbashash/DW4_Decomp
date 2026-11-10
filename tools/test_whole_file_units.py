@@ -215,6 +215,14 @@ class Rows(unittest.TestCase):
         def fits(self, retail, va):
             return retail[va] == self.word
 
+    def test_a_partial_file_lets_its_missing_functions_link_from_retail(self):
+        self.assertEqual(whole_file_rows.unrecovered([("cvFsInit", 196), ("cvFsMakeDir", 188)],
+                                                     {"cvFsError", "splitPath"}),
+                         ["cvFsInit", "cvFsMakeDir"])
+
+    def test_a_partial_file_may_not_define_a_function_it_fails_to_reproduce(self):
+        self.assertIsNone(whole_file_rows.unrecovered([("cvFsMakeDir", 188)], {"cvFsMakeDir"}))
+
     def test_unique_and_ambiguous_starts(self):
         retail = {0x100: 1, 0x110: 2, 0x120: 2}
         functions = {"a": self.Function(1), "b": self.Function(2), "gone": self.Function(9)}
