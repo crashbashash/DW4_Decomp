@@ -139,7 +139,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [CRI SRD](cri-srd.md): CRI's sector read driver under cvFs — its extent, the request object and module words, which words are `volatile`, and what is still unknown.
 - [CRI HTCI](cri-htci.md): the host-file device — its extent, why its messages are literals, the handle and file-list layouts, the owner-approved `int`-typed list pointer, and what is still unknown.
 - [CRI MFCI](cri-mfci.md): the memory-file device — its extent, the `address.size` file names, the handle layout, and what is still unknown.
-- [CRI SFD files](cri-sfd-files.md): the Sofdec player library's nine whole files — their extents and evidence, the shared types, and open questions.
+- [CRI SFD files](cri-sfd-files.md): the Sofdec player library's twelve whole files — their extents and evidence, the shared types, and open questions.
 - [CRI MPEG start-code scanner](cri-startcode.md): the Sofdec file that classifies and finds MPEG start codes — its extent, why it compiles whole, and what is still unknown.
 - [CRI MWSFD frame conversion over SFX](cri-mwsfsfx.md): the Sofdec player's front end over CRI SFX — its extent, why it compiles whole, the enum-typed chroma values, and what is still unknown.
 - [sd-prologue](sd-prologue.md): the `sd` callee-saved prologue is Sony EE GCC output (the SDK and CRI blocks); census, evidence, and how the Sony compiler builds these units.
