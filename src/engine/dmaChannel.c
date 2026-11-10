@@ -228,6 +228,47 @@ long long FUN_001f0560(void) {
     return r;
 }
 
+extern int DAT_00568ed0[4];
+extern int DAT_0056c15c[4];
+int WaitSema(int);
+int FUN_00208120(void);
+void FUN_0020d270(long long *);
+extern volatile int DAT_0056d670[4];
+void FUN_001f05a0(int ch, long long seq) {
+    int wait;
+    long long *done;
+    long long t1;
+    long long t0;
+
+    FUN_00113f20();
+    wait = 0;
+    if (DAT_00568fe0[ch] < seq) {
+        wait = 1;
+        DAT_00569040[ch] = seq;
+    }
+    FUN_00113f78();
+    if (wait) {
+        FUN_00113f20();
+        DAT_0056d670[0] |= 2;
+        FUN_00113f78();
+        FUN_00208120();
+        done = (long long *)((char *)DAT_00568fe0 + ch * 8);
+        while (seq > *done) {
+            FUN_0020d270(&t1);
+            DAT_00568ed0[0] = *(volatile int *)DAT_00569030;
+            WaitSema(*(volatile int *)DAT_00569030);
+            DAT_00568ed0[0] = -1;
+            FUN_0020d270(&t0);
+            DAT_0056c15c[0] += (int)(t0 - t1);
+        }
+        FUN_00113f20();
+        DAT_0056d670[0] &= ~2;
+        DAT_0056d670[2] &= ~2;
+        FUN_00113f78();
+        DAT_00569040[ch] = 0;
+    }
+}
+
 int FUN_001f0710(int arg0, long long arg1) {
     return DAT_00568fe0[arg0] >= arg1;
 }

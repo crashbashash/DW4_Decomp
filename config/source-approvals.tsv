@@ -201,3 +201,5 @@ volatile	FUN_001efd90	1	#dma-channel-cop0
 asm	FUN_001effc0	1	#dma-channel-cop0
 volatile	FUN_001effc0	1	#dma-channel-cop0
 asm-function	FUN_001f0930	1	#dma-channel-cop0
+volatile	FUN_001f05a0	3	#dma-channel-shared-words
+volatile	FUN_001ef4c0	2	#dma-channel-shared-words

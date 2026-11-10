@@ -341,6 +341,21 @@ register before taking a node from a shared pool, and one waits on the COP0 cond
   The function after it keeps argument registers live across calls to it, which needs the callee to be a
   `static` defined earlier in the same file.
 
+### dma-channel-shared-words
+
+Words of the engine's DMA channel code that thread code and a DMA interrupt handler both reach: the two flag
+words at `0x56d670` and `0x56d678`, and the semaphore id at `0x569030` the wait loop reads.
+
+* The handler is registered with `AddDmacHandler` and ends with `sync` and `ei`. It clears a bit in both flag
+  words, while thread code sets and clears another bit in them between disabling and enabling interrupts.
+* Thread code clears its bit in the first word and then in the second, and retail stores the first before it
+  loads the second. Through a plain array, a struct or two separate words the compiler knows the two cannot
+  overlap and loads the second word first; only a `volatile` declaration keeps the order, which the interrupt
+  sharing makes the source's own.
+* The wait loop reads the semaphore id twice, once to record it and once to wait on it, with no write between;
+  retail loads it twice. Without the keyword the two reads merge.
+* The handler's two uses are the same flag words, declared `volatile` in its file.
+
 ## Open questions
 
 * **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores

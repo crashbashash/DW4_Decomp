@@ -5553,7 +5553,7 @@
 001eee40	FUN_001eee40	match	-
 001eeed0	FUN_001eeed0	match	-
 001eef20	FUN_001eef20	match	-
-001ef4c0	FUN_001ef4c0	unapproved	unapproved: 2 volatile without an approval row
+001ef4c0	FUN_001ef4c0	match	-
 001ef9b0	FUN_001ef9b0	match	-
 001efb40	FUN_001efb40	match	-
 001efce0	FUN_001efce0	match	-
@@ -5575,6 +5575,7 @@
 001f0500	FUN_001f0500	match	-
 001f0520	FUN_001f0520	match	-
 001f0560	FUN_001f0560	match	-
+001f05a0	FUN_001f05a0	match	-
 001f0710	FUN_001f0710	match	-
 001f0730	FUN_001f0730	match	-
 001f0930	FUN_001f0930	assembly	-
