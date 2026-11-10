@@ -27,9 +27,13 @@ python3 tools/sourceapprovals.py --stale   # rows that no longer describe their 
 ## What reaches a function
 
 `tools/sourceapprovals.py` counts the uses in the function's own definition, the inline helpers it reaches
-by name, what the file declares outside any function, and the project headers the file includes. A struct
-member declared `volatile` at file scope therefore reaches every function in that file. The count voids an
-approval when another use appears, which files the function as `unapproved` again.
+by name, the file-scope declarations it reaches, and the project headers the file includes. A file-scope
+declaration is reached when the function or one of those helpers names something it declares, directly or
+through another declaration it reaches; C keywords are not names, but a type name is. So a `volatile` global
+reaches the functions that use it, and a struct member declared `volatile` reaches the functions that name
+the struct or a type built on it. A whole-file source declares its module's words once, and each function
+answers only for the ones it touches. The count voids an approval when another use appears, which files the
+function as `unapproved` again.
 
 Three things need no row:
 
@@ -135,6 +139,30 @@ spelling forwards.
 A wait on a flag the SRD server writes, counting passes in a global with a timeout. Only the waiting function touches
 the counter, so it is not shared state. Retail stores it and loads it back on every pass, which is what a `volatile` delay
 counter does, and a plain spelling keeps it in a register.
+
+### srd-module-words
+
+The SRD module's server words at `0x4a92c8` up to `0x4a92f8`, which its whole-file source declares `volatile`:
+the lock switches (`0x4a92c8`, `0x4a92cc`, `0x4a92d0`), the error-check switch (`0x4a92d4`), the wait counter
+(`0x4a92d8`), the error-query flag (`0x4a92dc`), the read, completion and create counts (`0x4a92e0`, `0x4a92e4`,
+`0x4a92e8`) and the previous and current trace markers (`0x4a92f0`, `0x4a92f4`). The destroy count at
+`0x4a92ec` stays plain: nothing in the code tells the two spellings apart.
+
+* Every retail access to these words, in every function, uses the `lui`, `addiu`, `0(reg)` form. The words
+  either side (`0x4a92c4`, and `0x4a92f8` onward) use the folded `%lo` form at every single-use access. Within
+  one function a single read of an error-query flag takes the first form and a single read of a configuration
+  word the second.
+* Compiled as one file with one word's `volatile` removed at a time, each word but the destroy count breaks a
+  function that matches with it: a getter or setter whose single access folds, a store loaded straight back, or a
+  counter reloaded on each pass.
+* They are shared state: the module's server step runs under CRI's lock and test-and-set routines, and the words
+  it writes are read by setters, getters and the module's debug summary.
+* The create count is touched only by its own increment, and its keyword changes only how a delay slot is filled:
+  without it, the delay-slot pass moves a later register copy into the slot of the call before the increment;
+  with it, the pass stops at the count's load and leaves a `nop`, as retail does. Hand variants and a
+  decomp-permuter search barred from adding qualifiers found no plain spelling. The owner approved it on the
+  declaration context: the module declares its data in file order, and the count sits in a run of four counts of
+  the same role whose read ones are proven `volatile`, followed by a proven `volatile` word.
 
 ### build-string-reads
 

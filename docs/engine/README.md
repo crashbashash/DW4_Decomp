@@ -128,6 +128,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [beNDMWMdlPlayer::vfunc_44 recovery](near-miss-shapes-player-vfunc44.md): the idle player-number-badge handler, typed, and the 5-word cluster its C leaves different.
 - [CRI cvFs](cri-cvfs.md): CRI's file-system layer — its extent, the device vtbl, handle and volume-request layouts, the owner-approved `int`-typed slots and the condition they meet, and the open questions about names.
 - [CRI conversion-job table](cri-convjobs.md): the 16-entry job table between ADXT and CRI CFG — its extent, the job layout, why it compiles as one file, and what is still unknown about its library and names.
+- [CRI SRD](cri-srd.md): CRI's sector read driver under cvFs — its extent, the request object and module words, which words are `volatile`, and what is still unknown.
 - [sd-prologue](sd-prologue.md): the `sd` callee-saved prologue is Sony EE GCC output (the SDK and CRI blocks); census, evidence, and how the Sony compiler builds these units.
 - [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold — the measured MWCC wall behind the 983 accessors, what was tried, and the family's generators.
 - [assembly-sources](assembly-sources.md): hand-written `.S` routines the owner approved (`config/assembly-sources.tsv`), the evidence each needs, and the candidates still open.

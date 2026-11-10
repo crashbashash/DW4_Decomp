@@ -79,9 +79,12 @@ def _count(text):
 
 def _reachable_text(text, name):
     """The text of function `name` with every other top-level definition blanked, except the inline
-    helpers it reaches by name: those are compiled into it."""
+    helpers it reaches by name: those are compiled into it. A file-scope declaration holding a `volatile`
+    stays only when the function or a kept helper names something it declares, directly or through
+    another declaration it reaches (C keywords aside, so a shared type name keeps it): a `volatile`
+    global reaches the functions that use it, and a `volatile` member the functions that reach its type."""
     defs = units.definitions(text)
-    if len(defs) <= 1:
+    if not defs:
         return text
     bodies = {nm: (s, e) for nm, s, e in defs}
     if name not in bodies:
@@ -101,7 +104,82 @@ def _reachable_text(text, name):
             for k in range(s, e):
                 if out[k] != "\n":
                     out[k] = " "
+    kept = [bodies[nm] for nm in keep]
+    used = set()
+    for s, e in kept:
+        used.update(_WORD.findall(_blank(text[s:e])))
+    statements = [(s, e, set(_WORD.findall(_blank(text[s:e]))) - _C_KEYWORDS)
+                  for s, e in _file_scope_statements(text, [(s, e) for _nm, s, e in defs])]
+    reached, grew = set(), True
+    while grew:
+        grew = False
+        for k, (_s, _e, words) in enumerate(statements):
+            if k not in reached and words & used:
+                reached.add(k)
+                used |= words
+                grew = True
+    for k, (s, e, _words) in enumerate(statements):
+        if k not in reached and _VOLATILE.search(_blank(text[s:e])):
+            for j in range(s, e):
+                if out[j] != "\n":
+                    out[j] = " "
     return "".join(out)
+
+
+_C_KEYWORDS = frozenset(
+    "auto break case char const continue default do double else enum extern float for goto if inline int long "
+    "register restrict return short signed sizeof static struct switch typedef union unsigned void volatile while "
+    "__volatile__ __inline__ __inline __attribute__ __restrict__ __extension__ bool class".split())
+
+
+def _spaced(text):
+    """The text with comments and string contents spaced out, so offsets still index the original."""
+    return _STRING.sub(lambda m: '"' + " " * (len(m.group(0)) - 2) + '"', inline_asm.blank_comments(text))
+
+
+def _file_scope_statements(text, kept):
+    """[(start, end)] of the declarations a file makes outside its definitions (`kept`): each runs to its
+    `;` at brace and parenthesis depth 0, and a preprocessor line, continuations included, is one statement.
+    A file-scope `volatile` reaches a function only through a name the function uses, so the text of the
+    other statements is what `_reachable_text` may blank."""
+    clean = _spaced(text)
+    inside = sorted(kept)
+    out, i, n, start, depth = [], 0, len(clean), None, 0
+    while i < n:
+        hit = next(((s, e) for s, e in inside if s <= i < e), None)
+        if hit:
+            if start is not None and depth == 0:
+                out.append((start, i))
+            start = None
+            i = hit[1]
+            continue
+        c = clean[i]
+        if start is None and c == "#" and not clean[clean.rfind("\n", 0, i) + 1:i].strip():
+            end = i
+            while True:
+                end = clean.find("\n", end)
+                if end < 0:
+                    end = n
+                    break
+                if clean[end - 1] != "\\":
+                    break
+                end += 1
+            out.append((i, end))
+            i = end
+            continue
+        if start is None and not c.isspace():
+            start = i
+        if c in "{(":
+            depth += 1
+        elif c in "})":
+            depth -= 1
+        elif c == ";" and depth == 0 and start is not None:
+            out.append((start, i + 1))
+            start = None
+        i += 1
+    if start is not None:
+        out.append((start, n))
+    return out
 
 
 def _read(path):

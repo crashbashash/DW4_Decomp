@@ -7785,7 +7785,8 @@
 00271520	cvFsGetFileSizeEx64	match	-
 002715e0	cvFsGetFsys64Info	match	-
 00271640	FUN_00271640	match	-
-00271670	FUN_00271670	unapproved	unapproved: 1 volatile without an approval row
+00271670	FUN_00271670	match	-
+002716f8	FUN_002716f8	match	-
 00271798	FUN_00271798	match	-
 00271888	FUN_00271888	match	-
 00271938	FUN_00271938	match	-
@@ -7795,19 +7796,31 @@
 00271a68	FUN_00271a68	match	-
 00271b78	FUN_00271b78	match	-
 00271b98	FUN_00271b98	match	-
-00271d50	FUN_00271d50	unapproved	unapproved: 2 volatile without an approval row
-00271f38	FUN_00271f38	unapproved	unapproved: 1 volatile without an approval row
+00271c00	FUN_00271c00	match	-
+00271d10	FUN_00271d10	match	-
+00271d20	FUN_00271d20	match	-
+00271d30	FUN_00271d30	match	-
+00271d40	FUN_00271d40	match	-
+00271d50	FUN_00271d50	match	-
+00271f38	FUN_00271f38	match	-
+00272108	FUN_00272108	match	-
 00272118	FUN_00272118	match	-
+00272208	FUN_00272208	match	-
+00272218	FUN_00272218	match	-
 00272228	FUN_00272228	match	-
-00272290	FUN_00272290	unapproved	unapproved: 1 volatile without an approval row
-002722c8	FUN_002722c8	unapproved	unapproved: 1 volatile without an approval row
-00272300	FUN_00272300	unapproved	unapproved: 1 volatile without an approval row
-00272338	FUN_00272338	unapproved	unapproved: 1 volatile without an approval row
+00272290	FUN_00272290	match	-
+002722c8	FUN_002722c8	match	-
+00272300	FUN_00272300	match	-
+00272338	FUN_00272338	match	-
+00272370	FUN_00272370	match	-
 00272380	FUN_00272380	match	-
 002723c0	FUN_002723c0	match	-
 00272460	FUN_00272460	match	-
-002724b0	FUN_002724b0	unapproved	unapproved: 1 volatile without an approval row
-002725a0	FUN_002725a0	unapproved	unapproved: 2 volatile without an approval row
+002724b0	FUN_002724b0	match	-
+00272580	FUN_00272580	match	-
+00272590	FUN_00272590	match	-
+002725a0	FUN_002725a0	match	-
+002725c0	FUN_002725c0	match	-
 002725d0	FUN_002725d0	match	-
 00272610	FUN_00272610	match	-
 00272620	FUN_00272620	match	-

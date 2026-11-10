@@ -100,9 +100,38 @@ class SourceApprovals(unittest.TestCase):
         self.assertIn("volatile", sa.problem(path, "f", {}))
         self.assertIsNone(sa.problem(path, "g", {}))
 
-    def test_file_scope_declaration_reaches_every_function(self):
+    def test_file_scope_declaration_reaches_the_functions_that_use_it(self):
         path = self.write("a.c", "struct S { volatile int v; };\nint f(struct S *s) { return s->v; }\nint g(void) { return 1; }\n")
-        self.assertIn("volatile", sa.problem(path, "g", {}))
+        self.assertIn("1 volatile", sa.problem(path, "f", {}))
+        self.assertIsNone(sa.problem(path, "g", {}))
+
+    def test_a_volatile_global_reaches_only_its_users(self):
+        path = self.write("a.c", "extern volatile int a;\nextern volatile int b;\nextern int c;\n"
+                                 "int f(void) { return a + b; }\nint g(void) { return c; }\n"
+                                 "int h(void) { return a; }\n")
+        self.assertIn("2 volatile", sa.problem(path, "f", {}))
+        self.assertIsNone(sa.problem(path, "g", {}))
+        self.assertIn("1 volatile", sa.problem(path, "h", {}))
+
+    def test_a_type_reached_through_another_type_counts(self):
+        path = self.write("a.c", "typedef struct { volatile int n; } Q;\ntypedef struct { Q *q; } D;\n"
+                                 "int f(D *d) { return d->q->n; }\nint g(void) { return 0; }\n")
+        self.assertIn("1 volatile", sa.problem(path, "f", {}))
+        self.assertIsNone(sa.problem(path, "g", {}))
+
+    def test_a_shared_keyword_is_not_a_use(self):
+        path = self.write("a.c", "extern volatile unsigned int a;\nunsigned int g(unsigned int x) { return x; }\n")
+        self.assertIsNone(sa.problem(path, "g", {}))
+
+    def test_a_single_function_file_follows_the_same_rule(self):
+        path = self.write("a.c", "extern volatile int a;\nint g(int x) { return x; }\n")
+        self.assertIsNone(sa.problem(path, "g", {}))
+
+    def test_strings_do_not_shift_the_statements(self):
+        path = self.write("a.c", 'char *s = "a;b{c";\nextern volatile int a;\nint f(void) { return a; }\n'
+                                 "int g(void) { return 0; }\n")
+        self.assertIn("1 volatile", sa.problem(path, "f", {}))
+        self.assertIsNone(sa.problem(path, "g", {}))
 
     def test_project_header_counts(self):
         self.write("h.h", '#define M(x) asm("multu %1,%1" : : "d"(x))\n')
