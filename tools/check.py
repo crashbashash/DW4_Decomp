@@ -420,6 +420,9 @@ def main(argv=None):
             elif kind == "match":
                 # read after the cache: approving a row changes the category, not the compile
                 owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
+                if owner != nm and sourceapprovals.defines(src_index[nm], nm):
+                    # a whole-file member is its own definition: it answers for its own uses
+                    owner = nm
                 why = sourceapprovals.problem(src_index[nm], owner, approvals)
                 if why:
                     kind, diagnostic = "unapproved", "unapproved: " + why

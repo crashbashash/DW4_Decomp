@@ -119,6 +119,11 @@ class SourceApprovals(unittest.TestCase):
         self.assertIn("1 volatile", sa.problem(path, "f", {}))
         self.assertIsNone(sa.problem(path, "g", {}))
 
+    def test_defines_tells_a_member_from_an_emitted_copy(self):
+        path = self.write("a.c", "int f(void) { return 0; }\nint g(void) { return 1; }\n")
+        self.assertTrue(sa.defines(path, "g"))
+        self.assertFalse(sa.defines(path, "h"))
+
     def test_a_shared_keyword_is_not_a_use(self):
         path = self.write("a.c", "extern volatile unsigned int a;\nunsigned int g(unsigned int x) { return x; }\n")
         self.assertIsNone(sa.problem(path, "g", {}))

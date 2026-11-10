@@ -39,6 +39,7 @@ _INCLUDE = re.compile(r'^\s*#\s*include\s*"([^"]+)"', re.M)
 _WORD = re.compile(r"[A-Za-z_]\w*")
 _USE_WORD = re.compile(r"asm|volatile")
 _header_cache = {}
+_defined_cache = {}
 
 
 def load(path=TABLE):
@@ -218,6 +219,14 @@ def _header_counts(includes, seen):
         a2, v2 = _header_counts(nested, seen)
         asm, vol = asm + a + a2, vol + v + v2
     return asm, vol
+
+
+def defines(path, name):
+    """Whether `path` holds a top-level definition of `name`: a whole-file member does, while a
+    function the compiler emits from another definition (an out-of-line copy) does not."""
+    if path not in _defined_cache:
+        _defined_cache[path] = {nm for nm, _s, _e in units.definitions(_read(path))}
+    return name in _defined_cache[path]
 
 
 def uses(path, name):

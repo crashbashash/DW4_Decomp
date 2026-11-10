@@ -127,6 +127,9 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [Register allocation](register-allocation.md): how the pinned MWCC colours registers (simplify/select, vreg ids from declaration order), the trace/replay tools, and the source forms that move a colour.
 - [beNDMWMdlPlayer::vfunc_44 recovery](near-miss-shapes-player-vfunc44.md): the idle player-number-badge handler, typed, and the 5-word cluster its C leaves different.
 - [CRI cvFs](cri-cvfs.md): CRI's file-system layer — its extent, the device vtbl, handle and volume-request layouts, the owner-approved `int`-typed slots and the condition they meet, and the open questions about names.
+- [CRI ADXT-side files](cri-adxt-files.md): the ADX header, ADXT init, seamless-entry, message and ADXRNA files — their extents and open questions.
+- [CRI DTR and DTX](cri-dtr-dtx.md): the EE–IOP data-transfer modules — their extents, objects and open questions.
+- [CRI DVCI](cri-dvci.md): the disc-file device — its extent, why its messages are literals, the owner-approved `int`-typed list pointer, and open questions.
 - [CRI ADXB](cri-adxb.md): the ADX decoder core — its extent, the 260-byte handle, why it compiles whole, and what is still unknown.
 - [CRI ADXENC](cri-adxenc.md): the ADX encoder — its extent, the encoder, predictor and filter tables, why it compiles whole, and what is still unknown.
 - [CRI conversion-job table](cri-convjobs.md): the 16-entry job table between ADXT and CRI CFG — its extent, the job layout, why it compiles as one file, and what is still unknown about its library and names.
