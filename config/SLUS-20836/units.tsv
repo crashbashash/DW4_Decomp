@@ -383,7 +383,7 @@
 0x00143600	0x00143704	igPsx2AudioSourceList	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	alchemy-audio region (regions.tsv)
 0x00143710	0x00143718	unlabeled_143710	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	alchemy-audio region (regions.tsv)
 0x00143720	0x0014372c	igDataList_143720	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	alchemy-audio region (regions.tsv)
-0x00143730	0x001451c4	igPsx2AudioContext_143730	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	alchemy-audio region (regions.tsv)
+0x00143730	0x001451c4	engine_igPsx2AudioContext	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	whole file
 0x001451d0	0x0014523c	igPsx2Thread	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	alchemy-audio region (regions.tsv)
 0x00145240	0x001452ac	igPsx2Thread_145240	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	alchemy-audio region (regions.tsv)
 0x001452b0	0x00145c08	igPsx2AudioContext_1452b0	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	alchemy-audio region (regions.tsv)
@@ -2304,7 +2304,7 @@
 0x002f2340	0x002f244c	unlabeled_2f2340	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; combat -O3 -Iinclude reproduces 1/1 members
 0x002f2450	0x002f25b4	unlabeled_2f2450	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; default -O3 -Iinclude reproduces 1/1 members
 0x002f25c0	0x002f25d0	igStackMemoryPool_2f25c0	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	class run of 1 labeled members; exceptions undetermined (every function is a frameless leaf, which carries no record either way): off; default -O3 -Iinclude reproduces 1/1 members
-0x002f25d0	0x002f8870	igMemoryPoolContextInfo_2f25d0	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	class run of 17 labeled members, 39 unlabeled functions inside; exceptions off: none of 47 non-leaf functions has a retail index record; pins 38×combat -O3 -Iinclude, 7×default -O3 -Iinclude; combat -O3 -Iinclude reproduces 42/45 members; 3.0.3 -O3 -Iinclude 27/45; default -O3 -Iinclude 23/45; 3 member(s) keep a provisional override
+0x002f25d0	0x002f8870	engine_igMemoryPoolContextInfo	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	whole file
 0x002f8870	0x002f8b1c	unlabeled_2f8870	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 9 non-leaf functions has a retail index record; default -O3 -Iinclude reproduces 13/13 members
 0x002f8b20	0x002f96b8	igMemoryPoolContextInfo_2f8b20	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	unlabeled run, no boundary evidence: cut where the retail exception evidence or the pins change; exceptions off: none of 6 non-leaf functions has a retail index record; combat -O3 -Iinclude reproduces 4/4 members
 0x002f96c0	0x002fa4cc	igMemoryPoolInfo_2f96c0	b52	-O4,s -sdatathreshold 2 -Iinclude	off	-	class run of 4 labeled members; exceptions off: none of 4 non-leaf functions has a retail index record; combat -O3 -Iinclude reproduces 4/4 members
