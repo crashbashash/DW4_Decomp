@@ -109,18 +109,28 @@ def _reachable_text(text, name):
     used = set()
     for s, e in kept:
         used.update(_NAME.findall(_blank(text[s:e])))
-    statements = [(s, e, set(_NAME.findall(_blank(text[s:e]))) - _C_KEYWORDS)
-                  for s, e in _file_scope_statements(text, [(s, e) for _nm, s, e in defs])]
+    statements = []
+    for s, e in _file_scope_statements(text, [(s, e) for _nm, s, e in defs]):
+        body = _blank(text[s:e])
+        words = set(_NAME.findall(body)) - _C_KEYWORDS
+        # a type definition is reached by its tag or typedef name, not by a member's name
+        if _TYPE_DEF.match(body):
+            keys, passes = set(_NAME.findall(_unnest(body, "{}"))) - _C_KEYWORDS, words
+        elif _PROPAGATES.match(body):
+            keys, passes = words, words
+        else:
+            # a variable or function declaration passes on its type names, not its parameter names
+            keys, passes = words, set(_NAME.findall(_unnest(body, "()"))) - _C_KEYWORDS
+        statements.append((s, e, keys, passes))
     reached, grew = set(), True
     while grew:
         grew = False
-        for k, (s, _e, words) in enumerate(statements):
-            if k not in reached and words & used:
+        for k, (_s, _e, keys, passes) in enumerate(statements):
+            if k not in reached and keys & used:
                 reached.add(k)
-                if _PROPAGATES.match(text, s):
-                    used |= words
+                used |= passes
                 grew = True
-    for k, (s, e, _words) in enumerate(statements):
+    for k, (s, e, _keys, _passes) in enumerate(statements):
         if k not in reached and _VOLATILE.search(_blank(text[s:e])):
             for j in range(s, e):
                 if out[j] != "\n":
@@ -134,9 +144,24 @@ _C_KEYWORDS = frozenset(
     "__volatile__ __inline__ __inline __attribute__ __restrict__ __extension__ bool class "
     "define undef include ifdef ifndef elif endif pragma defined".split())
 _NAME = re.compile(r"(?<![\w])[A-Za-z_]\w*")
-# a reached type definition or macro passes on the names it uses (a member's type, a nested macro); a
-# variable or function declaration does not, so its parameter names link nothing
-_PROPAGATES = re.compile(r"\s*(?:#\s*define\b|typedef\b|struct\b|union\b|enum\b)")
+# A type definition is reached by its tag or typedef name and passes on every name it uses (a member's
+# type); a macro is reached by and passes on its names; a variable or function declaration is reached
+# by its names and passes on only those outside parentheses, so a parameter's name links nothing.
+_TYPE_DEF = re.compile(r"\s*(?:typedef\b|struct\b|union\b|enum\b)")
+_PROPAGATES = re.compile(r"\s*#\s*define\b")
+
+
+def _unnest(text, pair):
+    """The text with every bracketed span of `pair`, and what it holds, spaced out."""
+    opening, closing = pair
+    out, depth = [], 0
+    for c in text:
+        if c == opening:
+            depth += 1
+        out.append(" " if depth else c)
+        if c == closing and depth:
+            depth -= 1
+    return "".join(out)
 
 
 def _spaced(text):

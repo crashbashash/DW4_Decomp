@@ -9858,7 +9858,9 @@
 002b5758	FUN_002b5758	match	-
 002b5770	FUN_002b5770	match	-
 002b5838	FUN_002b5838	match	-
-002b59a0	FUN_002b59a0	unapproved	unapproved: 1 volatile without an approval row
+002b5848	FUN_002b5848	match	-
+002b59a0	FUN_002b59a0	match	-
+002b5a10	FUN_002b5a10	match	-
 002b5b38	FUN_002b5b38	match	-
 002b5b68	FUN_002b5b68	match	-
 002b5b80	FUN_002b5b80	match	-

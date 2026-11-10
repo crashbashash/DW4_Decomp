@@ -135,6 +135,12 @@ class SourceApprovals(unittest.TestCase):
                                  "int f(char *header) { return header[0]; }\nint h(void) { g(0); return 0; }\n")
         self.assertIsNone(sa.problem(path, "h", {}))
 
+    def test_a_member_name_does_not_reach_its_type(self):
+        path = self.write("a.c", "typedef struct C { long long base; } C;\nextern volatile C clock;\n"
+                                 "int f(char *base) { return base[0]; }\nint g(void) { return (int)clock.base; }\n")
+        self.assertIsNone(sa.problem(path, "f", {}))
+        self.assertIn("1 volatile", sa.problem(path, "g", {}))
+
     def test_a_shared_keyword_is_not_a_use(self):
         path = self.write("a.c", "extern volatile unsigned int a;\nunsigned int g(unsigned int x) { return x; }\n")
         self.assertIsNone(sa.problem(path, "g", {}))

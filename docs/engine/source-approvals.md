@@ -164,6 +164,29 @@ the lock switches (`0x4a92c8`, `0x4a92cc`, `0x4a92d0`), the error-check switch (
   declaration context: the module declares its data in file order, and the count sits in a run of four counts of
   the same role whose read ones are proven `volatile`, followed by a proven `volatile` word.
 
+### sud-timer
+
+CRI SUD's EE-timer words: the tick count (`0x4bf290`), the clock and its saved copy (`0x5856b0`, `0x5856c0`), the
+clock pointer (`0x5856d0`), the nesting count (`0x5856d4`), and the two tables of timer-register addresses
+(`0x4f5a70`, `0x4f5a80`) whose targets are declared `volatile`.
+
+* The tables hold the EE timers' MODE and COUNT registers (`0x10000010`, `0x10000000` and the other channels).
+  Retail reads the count register full-width and masks it, where a plain spelling narrows the load.
+* The tick decrements its count and loads it straight back after the store, then loads it again to clear it when
+  negative; the read increments the nesting count and loads it straight back, and re-reads the clock after
+  storing it. These are reloads a plain spelling forwards.
+* Every access to the RAM words, in every function, uses the `lui`, `addiu`, `0(reg)` form, and nothing outside
+  the timer functions touches them. Compiled as one file with any one `volatile` removed, the timer init or the
+  timer read no longer matches.
+
+### build-string-stores
+
+A module's init stores the address of its version string in a word that nothing else reads or points to, in the
+`lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. It is the write-side
+counterpart of a build-string read. The owner approved it for ADXT's init (`0x56dfa8`), which also needs a
+second word that is not approved, so that function has no source yet; the same store in other modules' inits
+awaits review.
+
 ### build-string-reads
 
 A function reads a word holding the address of a build string, such as `"\nSRD/PS2EE Ver.2.22 Build:..."`, and never uses
