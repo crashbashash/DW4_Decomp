@@ -124,6 +124,12 @@ class SourceApprovals(unittest.TestCase):
         self.assertTrue(sa.defines(path, "g"))
         self.assertFalse(sa.defines(path, "h"))
 
+    def test_each_register_macro_reaches_only_its_users(self):
+        path = self.write("a.c", "#define A ((volatile int *)0x1000F520)\n#define B ((volatile int *)0x1000F590)\n"
+                                 "int f(void) { return *A; }\nint g(void) { return *A + *B; }\n")
+        self.assertIn("1 volatile", sa.problem(path, "f", {}))
+        self.assertIn("2 volatile", sa.problem(path, "g", {}))
+
     def test_a_shared_keyword_is_not_a_use(self):
         path = self.write("a.c", "extern volatile unsigned int a;\nunsigned int g(unsigned int x) { return x; }\n")
         self.assertIsNone(sa.problem(path, "g", {}))

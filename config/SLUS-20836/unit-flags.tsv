@@ -13,9 +13,6 @@
 0x0028dbd0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_28d6e8 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x0029b088	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_29a428 profile ee-gcc -O2 -G0 exceptions off does not reproduce it
 0x002a0928	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_29e960 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
-0x002a84d0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2a7e30 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
-0x002ae010	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2ace48 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
-0x002ae290	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2ace48 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x002b5148	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-sofdec_2b50e8 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x002fede0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igNamedObjectInfo_2fed50 profile default -O3 -Iinclude exceptions off does not reproduce it
 0x004831a0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit sony-kernel_4820d0 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it

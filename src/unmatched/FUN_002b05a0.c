@@ -1,3 +1,0 @@
-void FUN_002b05a0(void *arg0, int arg1) {
-    *(int *)((char *)(arg0) + 4) = arg1;
-}

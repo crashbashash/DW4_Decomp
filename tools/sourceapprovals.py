@@ -108,8 +108,8 @@ def _reachable_text(text, name):
     kept = [bodies[nm] for nm in keep]
     used = set()
     for s, e in kept:
-        used.update(_WORD.findall(_blank(text[s:e])))
-    statements = [(s, e, set(_WORD.findall(_blank(text[s:e]))) - _C_KEYWORDS)
+        used.update(_NAME.findall(_blank(text[s:e])))
+    statements = [(s, e, set(_NAME.findall(_blank(text[s:e]))) - _C_KEYWORDS)
                   for s, e in _file_scope_statements(text, [(s, e) for _nm, s, e in defs])]
     reached, grew = set(), True
     while grew:
@@ -130,7 +130,9 @@ def _reachable_text(text, name):
 _C_KEYWORDS = frozenset(
     "auto break case char const continue default do double else enum extern float for goto if inline int long "
     "register restrict return short signed sizeof static struct switch typedef union unsigned void volatile while "
-    "__volatile__ __inline__ __inline __attribute__ __restrict__ __extension__ bool class".split())
+    "__volatile__ __inline__ __inline __attribute__ __restrict__ __extension__ bool class "
+    "define undef include ifdef ifndef elif endif pragma defined".split())
+_NAME = re.compile(r"(?<![\w])[A-Za-z_]\w*")
 
 
 def _spaced(text):
