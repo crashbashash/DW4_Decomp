@@ -343,8 +343,9 @@ register before taking a node from a shared pool, and one waits on the COP0 cond
 
 ### dma-channel-shared-words
 
-Words of the engine's DMA channel code that thread code and a DMA interrupt handler both reach: the two flag
-words at `0x56d670` and `0x56d678`, and the semaphore id at `0x569030` the wait loop reads.
+Words of the engine's DMA channel and frame code that thread code and an interrupt handler or another thread
+both reach: the two flag words at `0x56d670` and `0x56d678`, the semaphore ids at `0x569030` and `0x56bf90`, the
+frame count at `0x56bf70` and the watchdog's tick counter at `0x56d680`.
 
 * The handler is registered with `AddDmacHandler` and ends with `sync` and `ei`. It clears a bit in both flag
   words, while thread code sets and clears another bit in them between disabling and enabling interrupts.
@@ -355,6 +356,17 @@ words at `0x56d670` and `0x56d678`, and the semaphore id at `0x569030` the wait 
 * The wait loop reads the semaphore id twice, once to record it and once to wait on it, with no write between;
   retail loads it twice. Without the keyword the two reads merge.
 * The handler's two uses are the same flag words, declared `volatile` in its file.
+* The frame-wait function that sets and clears another bit in the flag words also waits on a semaphore at
+  `0x56bf90`, read twice as above (without the keyword it loses a load), and polls a 64-bit count at
+  `0x56bf70` until it passes a target. A GS interrupt handler, registered with `AddIntcHandler`, advances that
+  count. The loop calls a function, so it reloads with or without the keyword; the keyword keeps the order of
+  the accesses, and the interrupt writer makes it the source's own.
+* A watchdog thread, whose entry, 4 KB stack and `gp` sit in a thread parameter block at `0x4965d4`, copies the
+  first flag word into the second on each tick and aborts if the bits it copied last time are still set: the
+  DMA handler clears them when the work completes. It reads the second word twice, and retail loads it twice.
+  It also counts ticks at `0x56d680`, which ordinary code resets from about forty places, and aborts after 60;
+  that counter is shared with other threads and polled in the loop, where the keyword keeps the order of its
+  accesses.
 
 ## Open questions
 

@@ -5667,7 +5667,7 @@
 00207440	FUN_00207440	match	-
 00207450	FUN_00207450	match	-
 00207470	FUN_00207470	match	-
-00207560	FUN_00207560	unapproved	unapproved: 4 volatile without an approval row
+00207560	FUN_00207560	match	-
 00207d70	FUN_00207d70	match	-
 00207e70	FUN_00207e70	match	-
 00207f30	FUN_00207f30	match	-
@@ -5731,7 +5731,7 @@
 0020e3f0	FUN_0020e3f0	match	-
 0020e400	FUN_0020e400	match	-
 0020e4a0	FUN_0020e4a0	match	-
-0020e6a0	FUN_0020e6a0	unapproved	unapproved: 2 volatile without an approval row
+0020e6a0	FUN_0020e6a0	match	-
 0020e750	png_set_sig_bytes	match	-
 0020e7b0	png_sig_cmp	match	-
 0020e840	png_zalloc	match	-
