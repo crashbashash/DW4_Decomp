@@ -225,15 +225,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00324840": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__18igSmartPointer<1V>Fv": "0x0038c410"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0037d310": {
     "emitted": {},
     "duplicates": {
@@ -6249,14 +6240,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x003224c0": {
-    "duplicates": {
-      "__dt__19igSmartPointer<2Rc>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x002d8a80": {
     "duplicates": {
       "__dt__18igSmartPointer<1E>Fv": "0x0025a230"
@@ -10055,5 +10038,110 @@
       "g_beWaterPlainInfo_metaObject": "0x00587be0",
       "g_beWaterPlain_metaObject": "0x00587bf8"
     }
+  },
+  "0x0016f290": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Gfx__igPsx2ImageConvert__vfunc_23": "0x0016f5b0",
+      "FUN_0016f690": "0x0016f690",
+      "FUN_0016f700": "0x0016f700",
+      "FUN_0016f780": "0x0016f780",
+      "FUN_0016f8a0": "0x0016f8a0",
+      "FUN_0016f930": "0x0016f930",
+      "FUN_0016f9b0": "0x0016f9b0",
+      "FUN_0016fa10": "0x0016fa10",
+      "FUN_0016fa60": "0x0016fa60",
+      "FUN_0016fae0": "0x0016fae0",
+      "FUN_0016fb60": "0x0016fb60",
+      "FUN_0016fbd0": "0x0016fbd0",
+      "FUN_0016fc20": "0x0016fc20",
+      "FUN_0016fc80": "0x0016fc80",
+      "FUN_0016fcd0": "0x0016fcd0",
+      "thunk_memcpy": "0x0016fd40",
+      "FUN_0016fd50": "0x0016fd50",
+      "FUN_0016fdb0": "0x0016fdb0",
+      "FUN_0016fe00": "0x0016fe00",
+      "FUN_0016fe20": "0x0016fe20"
+    },
+    "data": {}
+  },
+  "0x003223d0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Core__igMallocMemoryPool__vfunc_30": "0x003224b0",
+      "Gap__Core__igMallocMemoryPool__vfunc_34": "0x003224c0",
+      "Gap__Core__igMallocMemoryPool__vfunc_35": "0x003226e0",
+      "Gap__Core__igMallocMemoryPool__vfunc_36": "0x00322700",
+      "Gap__Core__igMallocMemoryPool__vfunc_41": "0x00322710",
+      "Gap__Core__igMallocMemoryPool__vfunc_42": "0x00322730",
+      "Gap__Core__igMallocMemoryPool__vfunc_37": "0x00322740",
+      "Gap__Core__igMallocMemoryPool__vfunc_38": "0x00322760",
+      "Gap__Core__igMallocMemoryPool__vfunc_39": "0x00322770",
+      "Gap__Core__igMallocMemoryPool__vfunc_40": "0x00322790",
+      "Gap__Core__igMallocMemoryPool__vfunc_46": "0x003227a0",
+      "Gap__Core__igMallocMemoryPool__vfunc_47": "0x003227b0",
+      "Gap__Core__igMallocMemoryPool__vfunc_48": "0x003227c0",
+      "Gap__Core__igMallocMemoryPool__vfunc_99": "0x003227d0",
+      "Gap__Core__igMallocMemoryPool__vfunc_100": "0x003227e0",
+      "Gap__Core__igMallocMemoryPool__vfunc_49": "0x003227f0",
+      "Gap__Core__igMallocMemoryPool__vfunc_53": "0x00322800",
+      "FUN_00322820": "0x00322820",
+      "FUN_00322860": "0x00322860",
+      "FUN_00322890": "0x00322890",
+      "Gap__Core__igMallocMemoryPool__vfunc_54": "0x003228d0",
+      "Gap__Core__igMallocMemoryPool__vfunc_55": "0x003228f0",
+      "Gap__Core__igMallocMemoryPool__vfunc_56": "0x00322910",
+      "Gap__Core__igMallocMemoryPool__vfunc_57": "0x003229b0",
+      "Gap__Core__igMallocMemoryPool__vfunc_58": "0x00322a40",
+      "Gap__Core__igMallocMemoryPool__vfunc_59": "0x00322a60",
+      "Gap__Core__igMallocMemoryPool__vfunc_63": "0x00323400",
+      "Gap__Core__igMallocMemoryPool__vfunc_64": "0x00323410",
+      "Gap__Core__igMallocMemoryPool__vfunc_13": "0x00323490",
+      "Gap__Core__igMallocMemoryPool__vfunc_97": "0x003234c0",
+      "FUN_003235c0": "0x003235c0",
+      "FUN_00323600": "0x00323600",
+      "Gap__Core__igMallocMemoryPool__vfunc_02": "0x00323640",
+      "Gap__Core__igMallocMemoryPool__vfunc_66": "0x00323680",
+      "Gap__Core__igMallocMemoryPool__vfunc_85": "0x003244c0",
+      "Gap__Core__igMallocMemoryPool__vfunc_83": "0x00324560",
+      "Gap__Core__igMallocMemoryPool__vfunc_84": "0x00324570",
+      "Gap__Core__igMallocMemoryPool__vfunc_87": "0x003245f0",
+      "Gap__Core__igMallocMemoryPool__vfunc_89": "0x003247a0",
+      "Gap__Core__igMallocMemoryPool__vfunc_90": "0x003247b0",
+      "igMallocMemoryPool_Dump": "0x00324840",
+      "Gap__Core__igMallocMemoryPool__vfunc_91": "0x003249a0",
+      "Gap__Core__igMallocMemoryPool__vfunc_92": "0x003249b0",
+      "Gap__Core__igMallocMemoryPool__vfunc_93": "0x003249c0",
+      "Gap__Core__igMallocMemoryPool__vfunc_94": "0x00324ae0",
+      "Gap__Core__igMallocMemoryPool__vfunc_95": "0x00324b50",
+      "Gap__Core__igMallocMemoryPool__vfunc_33": "0x00324bd0"
+    },
+    "data": {
+      "DAT_004f7910": "0x004f7910",
+      "DAT_004f90b0": "0x004f90b0",
+      "DAT_004f92f0": "0x004f92f0",
+      "DAT_004fb410": "0x004fb410",
+      "DAT_004fb418": "0x004fb418",
+      "DAT_004fd3c8": "0x004fd3c8",
+      "DAT_004fd3d8": "0x004fd3d8",
+      "DAT_004fd3f0": "0x004fd3f0",
+      "DAT_004fd400": "0x004fd400",
+      "DAT_004fef30": "0x004fef30",
+      "DAT_004ff1b0": "0x004ff1b0",
+      "DAT_004ff1f0": "0x004ff1f0",
+      "DAT_00530e90": "0x00530e90",
+      "DAT_00586dc8": "0x00586dc8",
+      "GPR_00554dbc": "0x00554dbc",
+      "g_poolOptionFlagsDefault_004c25f8": "0x004c25f8",
+      "g_statusSucceeded": "0x004fb410"
+    },
+    "stripped": [
+      "__dt__18igSmartPointer<1V>Fv",
+      "__dt__19igSmartPointer<2Rc>Fv"
+    ],
+    "externals": {
+      "FUN_00312140": "0x00312140"
+    },
+    "symbol": "Gap__Core__igMallocMemoryPool__vfunc_45"
   }
 }
