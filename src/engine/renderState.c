@@ -216,6 +216,115 @@ void FUN_001ff3b0(int arg0) {
     }
 }
 
+typedef struct GsPacketBuffer { char pad0[40]; unsigned int *end; unsigned int pad44; unsigned int *cursor; } GsPacketBuffer;
+typedef union VifCode { unsigned int word; unsigned short imm; } VifCode;
+typedef struct GifTag {
+    unsigned long long NLOOP:15;
+    unsigned long long EOP:1;
+    unsigned long long pad16:16;
+    unsigned long long id:14;
+    unsigned long long PRE:1;
+    unsigned long long PRIM:11;
+    unsigned long long FLG:2;
+    unsigned long long NREG:4;
+    unsigned long long REGS;
+} GifTag;
+extern GsPacketBuffer *DAT_00568f04;
+void FUN_001ee600();
+void FUN_001eef70();
+extern int DAT_00491480;
+extern int DAT_00490d38;
+extern int DAT_00569308;
+extern int DAT_00569330;
+extern char *DAT_0056ad80;
+extern unsigned int DAT_004914f0, DAT_004914f4, DAT_004914f8, DAT_004914fc;
+extern VifCode DAT_00491500;
+extern GifTag DAT_00491510, DAT_00491520, DAT_00491530;
+extern __int128 DAT_0056b760, DAT_0056b770;
+
+static inline int remap(int prim) {
+    if (prim == 9) {
+        return 3;
+    } else if (prim == 8) {
+        return 4;
+    } else if (prim == 7) {
+        return 4;
+    }
+    return prim;
+}
+
+void FUN_001ffcf0(void) {
+    int texPrim;
+    int prim;
+    unsigned int *p;
+    int flag;
+    GifTag *tag;
+    int bits;
+
+    p = DAT_00568f04->cursor;
+    prim = DAT_00491480;
+    if (prim == 0) {
+        texPrim = 0;
+        prim = 0;
+    } else if (prim == 1 || prim == 2) {
+        texPrim = 1;
+    } else if (prim == 6) {
+        if (DAT_00569308 != 0) {
+            prim = 3;
+            texPrim = 5;
+        } else {
+            texPrim = 6;
+            prim = 6;
+        }
+    } else if (DAT_00490d38 == 0) {
+        texPrim = 0;
+        prim = 0;
+    } else if (DAT_00490d38 == 1) {
+        texPrim = 2;
+        prim = 2;
+    } else {
+        prim = remap(prim);
+        texPrim = 5;
+    }
+    flag = (DAT_00562c70[DAT_00569330] >> 23) & 1;
+    DAT_00491500.imm = 24;
+    if (DAT_0056b490[0] & 0x100) {
+        tag = &DAT_00491520;
+    } else {
+        tag = &DAT_00491530;
+    }
+    if (flag) {
+        bits = *(int *)(DAT_0056ad80 + 160) & 0x7F8;
+        texPrim |= bits;
+        prim |= bits;
+    }
+    DAT_00491510.PRIM = texPrim;
+    tag->PRIM = prim;
+    p[0] = DAT_004914f0;
+    p[1] = DAT_004914f4;
+    p[2] = DAT_004914f8;
+    p[3] = DAT_004914fc;
+    p[4] = DAT_00491500.word;
+    p[5] = ((unsigned int *)tag)[0];
+    p[6] = ((unsigned int *)tag)[1];
+    p[7] = ((unsigned int *)tag)[2];
+    DAT_00491500.imm++;
+    p[8] = DAT_00491500.word;
+    p[9] = ((unsigned int *)&DAT_00491510)[0];
+    p[10] = ((unsigned int *)&DAT_00491510)[1];
+    p[11] = ((unsigned int *)&DAT_00491510)[2];
+    DAT_0056b760 = ((__int128 *)p)[1];
+    DAT_0056b770 = ((__int128 *)p)[2];
+    DAT_00568f04->cursor = p + 12;
+    if (DAT_00568f04->cursor >= DAT_00568f04->end) {
+        if (DAT_00568e50[0] != 0) {
+            FUN_001ee600();
+        } else {
+            FUN_001eef70(1);
+        }
+    }
+}
+
 int FUN_00200830(struct P *p, long long *out) {
     extern struct E DAT_0056b4a0[16];
     int res = 0;
