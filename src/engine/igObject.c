@@ -11,11 +11,6 @@ int Gap__Core__igObject__vfunc_21(void)
     return 4;
 }
 
-int Gap__Core__igObject__vfunc_08()
-{
-    return Gap__Core__igObject__vfunc_08__002ff0f0();
-}
-
 /* Second copy of the slot 8 forwarder. */
 int Gap__Core__igObject__vfunc_08__001ce700()
 {

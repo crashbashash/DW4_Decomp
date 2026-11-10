@@ -117,4 +117,31 @@ class CompileError(unittest.TestCase):
     def test_silence_is_reported(self):
         self.assertEqual(verify.compile_error(""),"no output")
 
+class SplitAddend(unittest.TestCase):
+    """REL HI16/LO16: the addend is (AHI << 16) + sign-extended ALO, as GNU ld reads it."""
+    LUI, ADDIU = 0x3c020000, 0x24420000          # lui v0,AHI / addiu v0,v0,ALO
+
+    def apply(self, ahi, alo, target=0x490000):
+        text = struct.pack("<2I", self.LUI | ahi, self.ADDIU | alo)
+        relocs = [(".text", 0, verify.R_HI16, "table", 0), (".text", 4, verify.R_LO16, "table", 0)]
+        patched, _, unresolved = verify.apply_relocs(text, relocs, lambda name: target, None)
+        self.assertEqual(unresolved, [])
+        hi, lo = struct.unpack("<2I", patched)
+        return ((hi & 0xffff) << 16) + ((lo & 0xffff) ^ 0x8000) - 0x8000
+
+    def test_a_high_addend_is_part_of_the_value(self):
+        # table[i - 0x10000] of 4-byte entries: MWCC writes -0x40000 as AHI 0xfffc
+        self.assertEqual(self.apply(0xfffc, 0x0010), 0x490000 - 0x40000 + 0x10)
+
+    def test_the_low_half_alone_still_works(self):
+        self.assertEqual(self.apply(0, 0xfff0), 0x490000 - 0x10)
+
+    def test_halves_that_disagree_are_unresolved(self):
+        text = struct.pack("<3I", self.LUI | 1, self.LUI | 2, self.ADDIU)
+        relocs = [(".text", 0, verify.R_HI16, "t", 0), (".text", 4, verify.R_HI16, "t", 0),
+                  (".text", 8, verify.R_LO16, "t", 0)]
+        _, _, unresolved = verify.apply_relocs(text, relocs, lambda name: 0x490000, None)
+        self.assertEqual(sorted(o for o, _ in unresolved), [0, 4, 8])
+
+
 if __name__=='__main__':unittest.main()

@@ -1,0 +1,1582 @@
+#include "dw4/reflected.h"
+
+/* Status word: the comparison form keeps the copy as one word. */
+struct igResult {
+    int w0;
+    igResult() {}
+    igResult(const igResult &o) { w0 = o.w0; }
+    igResult &operator=(const igResult &o) { w0 = o.w0; return *this; }
+    bool operator==(const igResult &o) const { return w0 == o.w0; }
+    bool operator!=(const igResult &o) const { return w0 != o.w0; }
+};
+struct DW4SR4 { int w0; };
+struct RefObject { int word0; int references; };
+struct TagByte { unsigned char lo:7; unsigned char flag:1; };
+class SetFlagsPool;
+
+extern "C" {
+int FUN_002f8870(...);
+int FUN_003081d0(...);
+int FUN_00308320(...);
+int memset(...);
+void *memcpy(void *, void *, int);
+int igObject_Destroy(...);
+void *igObject_GetAllocator(...);
+int FUN_00318b40(...);
+void FUN_00314510(void *, int, int);
+void igArenaMemoryPool_SetPoolOptionFlags(SetFlagsPool *, int);
+extern int g_statusSucceeded[4];
+extern int g_allocatorFailureStatus[4];
+extern igResult DAT_004fb410;
+extern igResult DAT_004fb418;
+extern int DAT_004fd640[4];
+extern int DAT_00587200[4];
+extern int DAT_00531030[4];
+}
+
+/* System allocator singleton: slot 2 allocates, slot 4 allocates aligned, slot 7 frees. */
+class SystemAllocator { public:
+    virtual void d0();
+    virtual void d1();
+    virtual void *Alloc(int);
+    virtual void d3();
+    virtual void *AllocAligned(int, int);
+    virtual void d5();
+    virtual void d6();
+    virtual int Free(int);
+};
+extern SystemAllocator *DAT_00587218[4];
+
+extern "C" {
+extern char DAT_004fc400[];
+extern char DAT_004fc440[];
+extern unsigned char GPR_00554cec;
+extern unsigned char GPR_00554cf0;
+}
+struct CheckHeapArena { char pad[2020]; int *blocks; int capacity; int count; };
+struct CheckHeapPool { char pad[112]; CheckHeapArena *arena; char pad2[72]; int verbosity; };
+class HeapBoundsPool;
+extern "C" igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end);
+extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
+    CheckHeapArena *arena = self->arena;
+    igResult ok = DAT_004fb410;
+    igResult result;
+    int i;
+    int r;
+
+    result.w0 = DAT_004fb410.w0;
+    if (arena->count == 0) {
+        return ok;
+    }
+    if (arena->blocks == 0 || arena->capacity == 0) {
+        if (self->verbosity > 0) {
+            FUN_002f8870(0, self);
+            if (GPR_00554cec == 0) {
+                r = FUN_003081d0(DAT_004fc400);
+                if (r == 1) {
+                } else if (r == 2) {
+                    GPR_00554cec = 1;
+                }
+            }
+        }
+        result = DAT_004fb418;
+    }
+    if (arena->count < 0 || arena->capacity < 0 || arena->count > arena->capacity) {
+        if (self->verbosity >= 3 && GPR_00554cf0 == 0) {
+            r = FUN_003081d0(DAT_004fc440);
+            if (r == 1) {
+            } else if (r == 2) {
+                GPR_00554cf0 = 1;
+            }
+        }
+        return DAT_004fb418;
+    }
+    for (i = 0; i < arena->count; i += 2) {
+        int *p = &arena->blocks[i];
+        if (FUN_00312790((HeapBoundsPool *)self, i, (char *)p[0], (char *)p[1]) == DAT_004fb418) {
+            result = DAT_004fb418;
+            break;
+        }
+    }
+    return result;
+}
+
+extern "C" {
+extern char DAT_004fc490[];
+extern char DAT_004fc500[];
+extern char DAT_004fc570[];
+extern char DAT_004fc5e0[];
+extern char DAT_004fc660[];
+extern unsigned char GPR_00554cf4;
+extern unsigned char GPR_00554cf8;
+extern unsigned char GPR_00554cfc;
+extern unsigned char GPR_00554d00;
+extern unsigned char GPR_00554d04;
+}
+/* Arena block header: in-use bit, alignment padding in words, size (low 19 bits, high 12 bits in
+ * the third word when `big` is set). */
+struct ArenaBlockHeader {
+    unsigned used : 1;
+    unsigned padWords : 4;
+    unsigned size : 19;
+    unsigned mid : 7;
+    unsigned big : 1;
+    unsigned w1;
+    unsigned sizeHigh : 12;
+    unsigned rest : 20;
+};
+class HeapBoundsPool { public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
+    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
+    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
+    virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
+    virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49();
+    virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59();
+    virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69();
+    virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79();
+    virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89();
+    virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99();
+    virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106();
+    virtual char *HeapStart();
+    virtual char *HeapEnd();
+    char pad4[184]; int messageLevel; char pad192[8]; int minBlockSize;
+};
+extern "C" igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
+    ArenaBlockHeader *n;  /* matching construct: declaration-order walk — `n` declared first */
+    char *hi;
+    char *lo;
+    unsigned int size;
+    int count;
+    bool ok;
+    int r;
+    ArenaBlockHeader *h;
+    unsigned int sz;
+    unsigned int nsz;
+    int min;
+    hi = self->HeapEnd();
+    lo = self->HeapStart();
+    size = 0;
+    count = 0;
+    ok = false;
+    if (cur < lo || hi < cur) {
+        if (self->messageLevel > 0) {
+            FUN_002f8870(0, self);
+            if (GPR_00554cf4 == 0) {
+                r = FUN_003081d0(DAT_004fc490, index, cur, lo, hi);
+                if (r != 1 && r == 2) {
+                    GPR_00554cf4 = 1;
+                }
+            }
+        }
+        return DAT_004fb418;
+    }
+    if (end < lo || hi < end) {
+        if (self->messageLevel > 0) {
+            FUN_002f8870(0, self);
+            if (GPR_00554cf8 == 0) {
+                r = FUN_003081d0(DAT_004fc500, index, end, lo, hi);
+                if (r != 1 && r == 2) {
+                    GPR_00554cf8 = 1;
+                }
+            }
+        }
+        return DAT_004fb418;
+    }
+    if (end < cur) {
+        if (self->messageLevel > 0) {
+            FUN_002f8870(0, self);
+            if (GPR_00554cfc == 0) {
+                r = FUN_003081d0(DAT_004fc570, index, end, cur);
+                if (r != 1 && r == 2) {
+                    GPR_00554cfc = 1;
+                }
+            }
+        }
+        return DAT_004fb418;
+    }
+    if (!((ArenaBlockHeader *)cur)->used) {
+        if (self->messageLevel > 0) {
+            FUN_002f8870(0, self);
+            if (GPR_00554d00 == 0) {
+                r = FUN_003081d0(DAT_004fc5e0);
+                if (r != 1 && r == 2) {
+                    GPR_00554d00 = 1;
+                }
+            }
+        }
+        return DAT_004fb418;
+    }
+    while (cur < end) {
+        h = (ArenaBlockHeader *)cur;
+        sz = h->size;
+        if (h->big == 1) {
+            sz += h->sizeHigh << 19;
+        }
+        sz = (sz + 3) & ~3;
+        size = sz + (h->padWords + 1) * 4;
+        min = self->minBlockSize;
+        n = (ArenaBlockHeader *)(cur + size);
+        if (size < min) {
+            if (end - cur <= min) {
+                ok = true;
+                break;
+            }
+            if (n->big == 0) {
+                nsz = n->size;
+            } else {
+                nsz = n->size + (n->sizeHigh << 19);
+            }
+            if (nsz < min) {
+                if (end - (char *)n <= min * 2) {
+                    ok = true;
+                    break;
+                }
+            }
+            goto bad;
+        }
+        if ((char *)n > end || (char *)n < cur) {
+            goto bad;
+        }
+        cur = (char *)n;
+        count++;
+    }
+    if (cur != end && !ok) {
+bad:
+        if (self->messageLevel > 0) {
+            FUN_002f8870(0, self);
+            if (GPR_00554d04 == 0) {
+                r = FUN_003081d0(DAT_004fc660, cur, index, count, size);
+                if (r != 1 && r == 2) {
+                    GPR_00554d04 = 1;
+                }
+            }
+        }
+        return DAT_004fb418;
+    }
+    return DAT_004fb410;
+}
+
+extern "C" {
+
+extern unsigned char GPR_00554d1c;
+extern int DAT_004fcbc0[4];
+}
+struct TrimArena { char p0[1992]; int top; char p1[24]; int *blocks; int capacity; int count; };
+struct TrimPool { char p0[112]; TrimArena *arena; char p1[44]; long long locked; char p2[20]; int debug; };
+extern "C" igResult igArenaMemoryPool_TrimArenaBlock(TrimPool *, int, int, int);
+extern "C" bool igArenaMemoryPool_Trim(TrimPool *self, int pad) {
+    int count;
+    int cap;
+    TrimArena *a;
+    int i;
+    bool trimmed;
+    a = self->arena;
+    trimmed = false;
+    FUN_00318b40(self);
+    if (self->locked != 0) {
+        return false;
+    }
+    count = a->count;
+    if (count < 0 || (cap = a->capacity) < 0 || count > cap) {
+        if (self->debug >= 3) {
+            if (GPR_00554d1c == 0) {
+                int r = FUN_003081d0(DAT_004fcbc0);
+                if (r != 1 && r == 2) {
+                    GPR_00554d1c = 1;
+                }
+            }
+        }
+        return false;
+    }
+    for (i = a->count - 2; i >= 0; i -= 2) {
+        if (igArenaMemoryPool_TrimArenaBlock(self, i, a->blocks[i], a->blocks[i + 1]) == DAT_004fb410) {
+            if (i < a->count - 2) {
+                memcpy(a->blocks + i, a->blocks + (i + 2), (a->count - (i + 2)) * 4);
+            }
+            trimmed = true;
+            a->blocks[a->count - 1] = 0;
+            a->blocks[a->count - 2] = 0;
+            a->count = a->count - 2;
+        }
+    }
+    FUN_00314510(self, a->top, pad);
+    return trimmed;
+}
+
+extern "C" {
+/* The link pair sits at +4 or +12 depending on the top bit of the node's byte 3; `b7 == 0 ? 4 :
+ * 12` gives the movn form. */
+struct LinkByte { char pad[3]; unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
+#define OFF(p) (((struct LinkByte *)(p))->b7 == 0 ? 4 : 12)
+#define NEXT(p) (*(int *)((char *)(p) + OFF(p) + 4))
+#define PREV(p) (*(int *)((char *)(p) + OFF(p)))
+void FUN_00315050(int *arg0, igArenaMemoryPool *arg1, unsigned int arg2, unsigned int arg3) {
+    char *base;
+    int i;
+    char *head;
+    unsigned int cur;
+    int prev;
+    base = (char *)arg1->_arenaState;
+    head = base + 72;
+    for (i = 1; i < 96; i++, head += 20) {
+        cur = NEXT(head);
+        while (cur != (unsigned)head) {
+            if (cur >= arg2 && cur < arg3) {
+                prev = PREV(cur);
+                cur = NEXT(cur);
+                NEXT(prev) = cur;
+                PREV(cur) = prev;
+            } else {
+                cur = NEXT(cur);
+            }
+        }
+    }
+    cur = *(unsigned *)(base + 48);
+    if (cur != 0 && cur >= arg2 && cur < arg3) {
+        *(int *)(base + 48) = 0;
+    }
+    *arg0 = g_statusSucceeded[0];
+}
+
+}
+extern "C" {
+struct PoolRequest { char pad0[60]; char *options; char pad64[4]; char *integrityCheck; char pad72[4]; char *messages; };
+struct CoreGlobals { char pad0[48]; igArenaMemoryPool *defaultPool; };
+char *strstr(const char *, const char *);
+void FUN_002f0880(int *status);
+extern struct CoreGlobals *DAT_00586dc8[4];
+extern char DAT_004fd2f8[];
+extern char DAT_004fd300[];
+extern char DAT_004fd308[];
+extern char DAT_004fd318[];
+extern char DAT_004fd328[];
+extern char DAT_004fd340[];
+extern char DAT_004fd358[];
+extern char DAT_004fd368[];
+extern char DAT_004fd378[];
+extern char DAT_004fd388[];
+extern char DAT_004fd3a0[];
+extern char DAT_004fd3b8[];
+extern char DAT_004fd3c8[];
+extern char DAT_004fd3d8[];
+extern char DAT_004fd3f0[];
+extern char DAT_004fd400[];
+void Gap__Core__igArenaMemoryPool__vfunc_45(int *out, igArenaMemoryPool *pool, struct PoolRequest *request) {
+    char *options;
+    int flags;
+    char *integrityCheck;
+    char *messages;
+    int result;
+    int status;
+    FUN_002f0880(&status);
+    result = status;
+    options = request->options;
+    integrityCheck = request->integrityCheck;
+    messages = request->messages;
+    if (options) {
+        flags = 0;
+        if (strstr(options, DAT_004fd2f8)) flags |= 2;
+        if (strstr(options, DAT_004fd300)) flags |= 4;
+        if (strstr(options, DAT_004fd308)) flags |= 1;
+        if (strstr(options, DAT_004fd318)) flags |= 0x10;
+        if (strstr(options, DAT_004fd328)) flags |= 8;
+        if (strstr(options, DAT_004fd340)) flags |= 0x80;
+        if (strstr(options, DAT_004fd358)) flags |= 0x40;
+        if (strstr(options, DAT_004fd368)) flags |= 0x20;
+        if (pool == DAT_00586dc8[0]->defaultPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
+            flags ^= 1;
+        }
+        igArenaMemoryPool_SetPoolOptionFlags((SetFlagsPool *)pool, flags);
+    }
+    if (integrityCheck) {
+        int level = pool->_heapIntegrityCheckLevel;
+        if (strstr(integrityCheck, DAT_004fd378)) {
+            level = 0;
+        } else if (strstr(integrityCheck, DAT_004fd388)) {
+            level = 1;
+        } else if (strstr(integrityCheck, DAT_004fd3a0)) {
+            level = 2;
+        } else if (strstr(integrityCheck, DAT_004fd3b8)) {
+            level = 3;
+        }
+        pool->_heapIntegrityCheckLevel = level;
+    }
+    if (messages) {
+        int level = pool->_messageLevel;
+        if (strstr(messages, DAT_004fd3c8)) {
+            level = 0;
+        } else if (strstr(messages, DAT_004fd3d8)) {
+            level = 1;
+        } else if (strstr(messages, DAT_004fd3f0)) {
+            level = 2;
+        } else if (strstr(messages, DAT_004fd400)) {
+            level = 3;
+        }
+        pool->_messageLevel = level;
+    }
+    *out = result;
+}
+
+}
+class Pool30 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual DW4SR4 v136(int); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void v204(); virtual void d50(); virtual void d51(); virtual int v216(int); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void v264(int); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69();
+ char p4[112]; unsigned char f116; char p5[19]; long long f136; char p6[24]; int f168; char p7[20]; int f192; int f196; };
+extern "C" {
+void Gap__Core__igArenaMemoryPool__vfunc_30(Pool30 *arg0);
+void Gap__Core__igArenaMemoryPool__vfunc_30(Pool30 *arg0) {
+    DW4SR4 sp2C;
+    if (arg0->f116 == 0) {
+        arg0->v204();
+        arg0->f136 = 0;
+        arg0->f116 = 1;
+        arg0->f196 = 0;
+        if (arg0->f192 & 8) {
+            sp2C = arg0->v136(1);
+        }
+        if (arg0->f168 != 0) {
+            arg0->v264(arg0->v216(0x10));
+        }
+    }
+}
+}
+
+/* Pool teardown/reset step. A pool that has a size (_size at +160) calls the virtual at vtable
+ * byte offset 204, clears _systemAllocated and zeroes the 0x814-byte arena state block if one is
+ * attached; a pool with no size instead calls the virtual at vtable byte offset 108 with 1. The
+ * two vtable calls are spelled through the dummy classes below (one per distinct vtable offset; dN
+ * are placeholder virtuals that only position vX). */
+extern "C" {
+void Gap__Core__igArenaMemoryPool__vfunc_31(igArenaMemoryPool *self);
+}
+class DW4VC_108_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int); };
+class DW4VC_204_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual int vX(); };
+void Gap__Core__igArenaMemoryPool__vfunc_31(igArenaMemoryPool *self) {
+    int arenaState;
+
+    if (self->_size != 0) {
+        ((DW4VC_204_0 *)self)->vX();
+        self->_systemAllocated = 0;
+        arenaState = self->_arenaState;
+        if (arenaState != 0) {
+            memset(arenaState, 0, 0x814);
+        }
+    } else {
+        ((DW4VC_108_1 *)self)->vX(1);
+    }
+}
+
+extern "C" {
+void Gap__Core__igArenaMemoryPool__vfunc_32(void *arg0);
+}
+class Pool32 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual int vX(); char pad[116-4]; unsigned char f116; };
+void Gap__Core__igArenaMemoryPool__vfunc_32(void *arg0) {
+    Pool32 *p = (Pool32 *)arg0;
+    if (p->f116 != 0) {
+        p->f116 = 0;
+        p->vX();
+    }
+}
+
+extern "C" {
+/* Getter for the reflected `_isActive` member (igBoolMetaField at +116). */
+
+unsigned char Gap__Core__igArenaMemoryPool__vfunc_33(igArenaMemoryPool *self) {
+    return self->_isActive;
+}
+
+}
+extern "C" {
+/* IgArenaMemoryPool slot 26, returns the reflected _rawMemory block pointer (+124). */
+int Gap__Core__igArenaMemoryPool__vfunc_26(igArenaMemoryPool *self) {
+    return self->_rawMemory;
+}
+
+}
+struct Buf24 { char pad[2036]; int f2036; int pad2; int f2044; int f2048; int pad3; int f2056; };
+class Pool24 { public:
+virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void v51();
+    char pad0[105 - 4]; char f105; char pad1[6]; Buf24 *buf; unsigned char busy; char pad3[7]; int f124; char f128; char pad4[7]; long long f136; char pad5[16]; long long f160;
+};
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_24(int *out, Pool24 *p, int a2, long long a3, char t0) {
+    if (p->busy == 0) {
+        p->f124 = a2;
+        p->buf->f2036 = a2;
+        unsigned long long m = a3 & 0xFFFFFFFFFFFFFFFCULL;
+        p->f160 = m;
+        p->f128 = t0;
+        p->buf->f2044 = (int)m;
+        p->buf->f2048 = (int)m;
+        p->buf->f2056 = (int)m;
+        p->v51();
+        p->f136 = 0;
+        p->f105 = t0;
+        *out = g_statusSucceeded[0];
+    } else {
+        *out = g_allocatorFailureStatus[0];
+    }
+}
+
+extern "C" {
+/* Getter for the reflected `_isAlchemyMemory` member (igBoolMetaField at +128). */
+
+unsigned char Gap__Core__igArenaMemoryPool__vfunc_25(igArenaMemoryPool *self) {
+    return self->_isAlchemyMemory;
+}
+
+}
+extern "C" {
+/* igMemoryPool slot 29 (vtable +116): constant 0 for the arena pool. This is the predicate
+ * igAllocator_EncodeIndex calls on an allocator: zero selects the primary allocator list (even
+ * encoded index), nonzero the secondary list. igMallocMemoryPool also returns 0; igPageMemoryPool
+ * and igStackMemoryPool return 1. The receiver is not read. */
+int Gap__Core__igArenaMemoryPool__vfunc_29(void) {
+    return 0;
+}
+
+}
+extern "C" {
+void *FUN_002ba650(...);
+}
+class Tracker34 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();  virtual DW4SR4 v21(); virtual DW4SR4 v22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();  virtual DW4SR4 v31(int); int rc; };
+struct Pool34 {
+    char p[120]; Tracker34 *f120; char q[68]; int f192;
+    inline void relp() { Tracker34 *x = f120; if (x) { x->rc = x->rc - 1; if (((unsigned long long)((long long)x->rc << 0x29) >> 0x29) == 0) igObject_Destroy(x); } }
+};
+struct Ref {
+    Tracker34 *o;
+    ~Ref() {
+        Tracker34 *object = o;
+        if (object) {
+            --object->rc;
+            if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
+        }
+    }
+};
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_34(int *ret, Pool34 *p, int flag) {
+    int fl;
+    if (flag != 0) {
+        fl = p->f192 | 8;
+    } else {
+        fl = p->f192 & ~8;
+    }
+    igArenaMemoryPool_SetPoolOptionFlags((SetFlagsPool *)p, fl);
+    if ((unsigned char)flag == 0) {
+        Ref a;
+        a.o = p->f120;
+        if (a.o) a.o->rc = a.o->rc + 1;
+        p->relp();
+        p->f120 = 0;
+        if (a.o != 0) {
+            a.o->v31(1);
+            a.o->v22();
+        }
+    } else if ((unsigned char)flag == 1) {
+        if (p->f120 != 0) { *ret = g_statusSucceeded[0]; return; }
+        Ref b;
+        b.o = (Tracker34 *)FUN_002ba650(igObject_GetAllocator(p));
+        b.o->v21();
+        Tracker34 *t = b.o;
+        if (t) t->rc = t->rc + 1;
+        p->relp();
+        p->f120 = t;
+    }
+    *ret = g_statusSucceeded[0];
+}
+
+extern "C" {
+/* igArenaMemoryPool vtable slot 35: status leaf. Ignores the pool and writes the engine's failure-
+ * status word (set to 1 by the engine init) through the output-first argument; same leaf as
+ * FUN_002f0620 and igMallocMemoryPool slot 24. */
+void Gap__Core__igArenaMemoryPool__vfunc_35(int *statusOut) {
+    *statusOut = g_allocatorFailureStatus[0];
+}
+
+}
+extern "C" {
+long long Gap__Core__igArenaMemoryPool__vfunc_36(igArenaMemoryPool *arg0) {
+    long long temp_v0;
+
+    temp_v0 = arg0->_size;
+    if (temp_v0 != 0) {
+        return temp_v0;
+    }
+    return arg0->_systemAllocated;
+}
+
+}
+extern "C" {
+/* The comparison is written `arg2 <= lim`, not `lim >= arg2`, and the store is repeated in both
+ * arms. */
+void Gap__Core__igArenaMemoryPool__vfunc_41(int *arg0, char *arg1, unsigned long long arg2) {
+    unsigned long long lim = *(unsigned long long *)(arg1 + 160);
+    if (lim == 0 || arg2 <= lim) {
+        *(unsigned long long *)(arg1 + 152) = arg2;
+        *arg0 = g_statusSucceeded[0];
+    } else {
+        *arg0 = g_allocatorFailureStatus[0];
+    }
+}
+
+}
+extern "C" {
+
+/* Accessor: the arena's reflected _maxSize field (igUnsignedLongMetaField, +152). */
+long long Gap__Core__igArenaMemoryPool__vfunc_42(igArenaMemoryPool *self) {
+    return self->_maxSize;
+}
+
+}
+extern "C" {
+void Gap__Core__igArenaMemoryPool__vfunc_43(int *arg0, void *arg1, int arg2);
+}
+class DW4VC_132_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int vX(); };
+class DW4VC_216_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual int vX(int); };
+class DW4VC_264_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual int vX(int); };
+void Gap__Core__igArenaMemoryPool__vfunc_43(int *arg0, void *arg1, int arg2) {
+    *(int *)((char *)(arg1) + 168) = arg2;
+    *(int *)((char *)(arg1) + 196) = 0;
+    if (((DW4VC_132_0 *)(((char *)(arg1) + 0)))->vX() != 0) {
+        ((DW4VC_264_1 *)(((char *)(arg1) + 0)))->vX((int)(((DW4VC_216_1 *)(((char *)(arg1) + 0)))->vX((int)(0x10))));
+    }
+    *arg0 = g_statusSucceeded[0];
+}
+
+extern "C" {
+/* IgArenaMemoryPool virtual getter 44. Returns the reflected `_preSize` field
+ * (igUnsignedIntMetaField, +168). */
+int Gap__Core__igArenaMemoryPool__vfunc_44(igArenaMemoryPool *self) {
+    return self->_preSize;
+}
+
+}
+extern "C" {
+/* Setter for the pool's _alignment (a 16-bit field at +172). It reports through a status word,
+ * always the "succeeded" one. */
+/* Status word reported on success; array form keeps the load absolute (lui/lw). */
+void Gap__Core__igArenaMemoryPool__vfunc_37(int *outStatus, igArenaMemoryPool *self, short alignment) {
+    self->_alignment = alignment;
+    *outStatus = g_statusSucceeded[0];
+}
+
+}
+extern "C" {
+/* Getter for the reflected `_alignment` member (igUnsignedShortMetaField at +172). */
+
+unsigned short Gap__Core__igArenaMemoryPool__vfunc_38(igArenaMemoryPool *self) {
+    return self->_alignment;
+}
+
+}
+extern "C" {
+/* Setter for the pool's _elementSize (+144). It reports through a status word, always the
+ * "succeeded" one. */
+/* Status word reported on success; array form keeps the load absolute (lui/lw). */
+void Gap__Core__igArenaMemoryPool__vfunc_39(int *outStatus, igArenaMemoryPool *self, int elementSize) {
+    self->_elementSize = elementSize;
+    *outStatus = g_statusSucceeded[0];
+}
+
+}
+extern "C" {
+/* IgArenaMemoryPool slot 40, returns the reflected _elementSize (+144). */
+int Gap__Core__igArenaMemoryPool__vfunc_40(igArenaMemoryPool *self) {
+    return self->_elementSize;
+}
+
+}
+extern "C" {
+long long Gap__Core__igArenaMemoryPool__vfunc_46(igArenaMemoryPool *arg0) {
+    return arg0->_maxSize - arg0->_localNetAllocatedWithOverhead;
+}
+
+}
+extern "C" {
+
+/* Accessor: the arena's reflected _localNetAllocated statistic (igLongMetaField, +24). */
+long long Gap__Core__igArenaMemoryPool__vfunc_47(igArenaMemoryPool *self) {
+    return self->_localNetAllocated;
+}
+
+}
+extern "C" {
+
+/* Accessor: the arena's reflected _localNetAllocatedWithOverhead statistic (igLongMetaField, +56). */
+long long Gap__Core__igArenaMemoryPool__vfunc_48(igArenaMemoryPool *self) {
+    return self->_localNetAllocatedWithOverhead;
+}
+
+}
+extern "C" {
+long long Gap__Core__igArenaMemoryPool__vfunc_99(void *arg0) {
+    return *(long long *)((char *)arg0 + 32);
+}
+
+}
+extern "C" {
+long long Gap__Core__igArenaMemoryPool__vfunc_100(void *arg0) {
+    return *(long long *)((char *)arg0 + 64);
+}
+
+}
+extern "C" {
+int FUN_0031d370(void *arg0) {
+    int temp_v1;
+    int var_v0;
+
+    temp_v1 = *(int *)((char *)(*(int *)((char *)(arg0) + 112)) + 2028);
+    var_v0 = temp_v1 >> 1;
+    if (temp_v1 < 0) {
+        var_v0 = (int) (temp_v1 + 1) >> 1;
+    }
+    return var_v0;
+}
+
+}
+extern "C" {
+int FUN_0031d390(void *arg0) {
+    return *(int *)((char *)(*(int *)((char *)(arg0) + 112)) + 2032);
+}
+
+}
+extern "C" {
+long long Gap__Core__igArenaMemoryPool__vfunc_101(void *arg0) {
+    long long temp_v0;
+
+    temp_v0 = *(long long *)((char *)(arg0) + 160);
+    if (temp_v0 != 0) {
+        return temp_v0;
+    }
+    return *(long long *)((char *)(arg0) + 136);
+}
+
+}
+extern "C" {
+long long Gap__Core__igArenaMemoryPool__vfunc_49(igArenaMemoryPool *arg0) {
+    return arg0->_maxSize - arg0->_localNetAllocatedWithOverhead;
+}
+
+}
+class igArenaMemoryPoolView {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
+    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
+    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
+    virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
+    virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47();
+    virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51();
+    virtual void *Allocate(unsigned int size);
+    virtual void d53(); virtual void d54(); virtual void d55();
+    virtual void *Reallocate(void *block, unsigned int size);
+    virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63();
+    virtual void Free(void *block);
+    virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72();
+    virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80();
+    virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88();
+    virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96();
+    virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101();
+    virtual void *MemoryOperation(void *block, int size, unsigned int alignment);
+    unsigned int _refCount;
+    char _pad8[136];
+    unsigned int _elementSize;
+    char _pad148[24];
+    unsigned short _alignment;
+};
+
+extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_53(igArenaMemoryPoolView *self)
+{
+    return self->Allocate(self->_elementSize);
+}
+
+extern "C" {
+
+void FUN_0031d3f0(void *arg0);
+}
+class DW4VCSR_132_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual DW4SR4 vX(int); };
+void FUN_0031d3f0(void *arg0) {
+    DW4SR4 sp1C;
+    void **temp_a1;
+
+    temp_a1 = (void **)(*(int *)((char *)(arg0) + 120));
+    if (temp_a1 != 0) {
+        sp1C = ((DW4VCSR_132_1 *)(temp_a1))->vX((int)(1));
+    }
+}
+
+extern "C" {
+
+void FUN_0031d430(void *arg0);
+}
+class DW4VCSR_124_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual DW4SR4 vX(); };
+void FUN_0031d430(void *arg0) {
+    DW4SR4 sp1C;
+    void **temp_a1;
+
+    temp_a1 = (void **)(*(int *)((char *)(arg0) + 120));
+    if (temp_a1 != 0) {
+        sp1C = ((DW4VCSR_124_0 *)(temp_a1))->vX();
+    }
+}
+
+extern "C" {
+
+int FUN_0031d460(void *arg0, int arg1);
+}
+int FUN_0031d460(void *arg0, int arg1) {
+    DW4SR4 sp2C;
+    void **temp_a1;
+
+    temp_a1 = (void **)(*(int *)((char *)(arg0) + 120));
+    if (temp_a1 != 0) {
+        sp2C = ((DW4VCSR_124_0 *)(temp_a1))->vX();
+    }
+    return arg1;
+}
+
+
+extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_54(igArenaMemoryPoolView *self, unsigned int size)
+{
+    return self->MemoryOperation(0, size, self->_alignment);
+}
+
+
+extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_55(igArenaMemoryPoolView *self, unsigned int size, unsigned int alignment)
+{
+    return self->MemoryOperation(0, size, alignment);
+}
+
+class Pool56 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void *Alloc(int, int, int); };
+struct ArenaPoolFlags { void *vt; char pad[168]; unsigned short align; char pad2[18]; unsigned flags; };
+static inline int flag2(ArenaPoolFlags *p) { return (p->flags & 2) != 0; }
+static inline int flag4(ArenaPoolFlags *p) { return (p->flags & 4) != 0; }
+extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_56(Pool56 *self, int count, int size) {
+    int total = count * size;
+    void *p = self->Alloc(0, total, ((ArenaPoolFlags *)self)->align);
+    if (p != 0) {
+        if (total != 0) {
+            if (flag2((ArenaPoolFlags *)self) || !flag4((ArenaPoolFlags *)self)) {
+                memset(p, 0, total);
+            }
+        }
+    }
+    return p;
+}
+
+class Pool57 {
+public:
+    virtual void d0();
+    virtual void d1();
+    virtual void d2();
+    virtual void d3();
+    virtual void d4();
+    virtual void d5();
+    virtual void d6();
+    virtual void d7();
+    virtual void d8();
+    virtual void d9();
+    virtual void d10();
+    virtual void d11();
+    virtual void d12();
+    virtual void d13();
+    virtual void d14();
+    virtual void d15();
+    virtual void d16();
+    virtual void d17();
+    virtual void d18();
+    virtual void d19();
+    virtual void d20();
+    virtual void d21();
+    virtual void d22();
+    virtual void d23();
+    virtual void d24();
+    virtual void d25();
+    virtual void d26();
+    virtual void d27();
+    virtual void d28();
+    virtual void d29();
+    virtual void d30();
+    virtual void d31();
+    virtual void d32();
+    virtual void d33();
+    virtual void d34();
+    virtual void d35();
+    virtual void d36();
+    virtual void d37();
+    virtual void d38();
+    virtual void d39();
+    virtual void d40();
+    virtual void d41();
+    virtual void d42();
+    virtual void d43();
+    virtual void d44();
+    virtual void d45();
+    virtual void d46();
+    virtual void d47();
+    virtual void d48();
+    virtual void d49();
+    virtual void d50();
+    virtual void d51();
+    virtual void d52();
+    virtual void d53();
+    virtual void d54();
+    virtual void d55();
+    virtual void d56();
+    virtual void d57();
+    virtual void d58();
+    virtual void d59();
+    virtual void d60();
+    virtual void d61();
+    virtual void d62();
+    virtual void d63();
+    virtual void d64();
+    virtual void d65();
+    virtual void d66();
+    virtual void d67();
+    virtual void d68();
+    virtual void d69();
+    virtual void d70();
+    virtual void d71();
+    virtual void d72();
+    virtual void d73();
+    virtual void d74();
+    virtual void d75();
+    virtual void d76();
+    virtual void d77();
+    virtual void d78();
+    virtual void d79();
+    virtual void d80();
+    virtual void d81();
+    virtual void d82();
+    virtual void d83();
+    virtual void d84();
+    virtual void d85();
+    virtual void d86();
+    virtual void d87();
+    virtual void d88();
+    virtual void d89();
+    virtual void d90();
+    virtual void d91();
+    virtual void d92();
+    virtual void d93();
+    virtual void d94();
+    virtual void d95();
+    virtual void d96();
+    virtual void d97();
+    virtual void d98();
+    virtual void d99();
+    virtual void d100();
+    virtual void d101();
+    virtual int vX(int, int);
+};
+struct Flags57 { char pad[192]; int f192; };
+extern "C" int Gap__Core__igArenaMemoryPool__vfunc_57(Flags57 *t, int n, int m) {
+    int total = n * m;
+    int p = ((Pool57 *)t)->vX(0, total);
+    if (p != 0) {
+        if (total != 0) {
+            int f = t->f192;
+            if (((f & 2) ? 1 : 0) || !((f & 4) ? 1 : 0)) {
+                memset(p, 0, total);
+            }
+        }
+    }
+    return p;
+}
+
+
+extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_58(igArenaMemoryPoolView *self, void *block, unsigned int size)
+{
+    return self->MemoryOperation(block, size, self->_alignment);
+}
+
+
+extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_59(igArenaMemoryPoolView *self, void *block, int size, unsigned int alignment)
+{
+    return self->MemoryOperation(block, size, alignment);
+}
+
+extern "C" {
+void Gap__Core__igArenaMemoryPool__vfunc_63(int *arg0) {
+    *arg0 = g_allocatorFailureStatus[0];
+}
+
+}
+extern "C" {
+int FUN_002f2260(...);
+extern int DAT_004c2370[4];
+extern unsigned char GPR_00554d64;
+extern unsigned char GPR_00554d68;
+}
+struct Rel { static inline void go(RefObject *object) {
+    if (object) {
+        --object->references;
+        if (((unsigned long long)((long long)object->references << 0x29) >> 0x29) == 0)
+            igObject_Destroy(object);
+    }
+} };
+struct Arena97 { char p[2020]; int f2020; int f2024; int f2028; int f2032; char q[24]; int f2060; int f2064; };
+struct Bits { unsigned refs : 23; unsigned rest : 9; };
+class Pool97 { public:
+    virtual void d0();
+    virtual void d1();
+    virtual void d2();
+    virtual void d3();
+    virtual void d4();
+    virtual void d5();
+    virtual void d6();
+    virtual void d7();
+    virtual void d8();
+    virtual void d9();
+    virtual void d10();
+    virtual void d11();
+    virtual void d12();
+    virtual void d13();
+    virtual void d14();
+    virtual void d15();
+    virtual void d16();
+    virtual void d17();
+    virtual void d18();
+    virtual void d19();
+    virtual void d20();
+    virtual void d21();
+    virtual void d22();
+    virtual void d23();
+    virtual void d24();
+    virtual void d25();
+    virtual void d26();
+    virtual void d27();
+    virtual void d28();
+    virtual void d29();
+    virtual void d30();
+    virtual void d31();
+    virtual void d32();
+    virtual void d33();
+    virtual void d34();
+    virtual void d35();
+    virtual void d36();
+    virtual void d37();
+    virtual void d38();
+    virtual void d39();
+    virtual void d40();
+    virtual void d41();
+    virtual void d42();
+    virtual void d43();
+    virtual void d44();
+    virtual void d45();
+    virtual void d46();
+    virtual void d47();
+    virtual void d48();
+    virtual void v49();
+    int w4;
+    char pad8[104];
+    Arena97 *arena;
+    unsigned char isActive;
+    char pad117[3];
+    RefObject *lock;
+    int raw;
+    unsigned char alch;
+    char pad129[7];
+    unsigned long long sysAlloc;
+    unsigned int elemSize;
+    char pad148[4];
+    unsigned long long maxSize;
+    unsigned long long size;
+    unsigned int preSize;
+    unsigned short alignment;
+    char pad174[2];
+    RefObject *tracker;
+    int poolIndex;
+    int heapLevel;
+    int msgLevel;
+    int optFlags;
+    int preSized;
+    unsigned int smallest;
+};
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self);
+void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
+    int v;
+    FUN_002f2260(self);
+    self->w4 = 0;
+    ((Bits *)&self->w4)->refs = 1;
+    ((char *)self)[7] = 0;
+    self->arena = (Arena97 *)DAT_00587218[0]->Alloc(0x814);
+    if (self->arena == 0 && GPR_00554d64 == 0) {
+        v = FUN_00308320(&DAT_004fd640[0]);
+        if (v != 1) {
+            if (v == 2)
+                GPR_00554d64 = 1;
+        }
+    }
+    memset(self->arena, 0, 0x814);
+    self->raw = 0;
+    self->alch = 0;
+    self->sysAlloc = 0;
+    self->v49();
+    self->maxSize = 0xFFFFFFFFFFFFFFFFULL;
+    self->size = 0;
+    self->preSize = 0;
+    self->alignment = 1;
+    Rel::go(self->tracker);
+    self->tracker = 0;
+    self->isActive = 0;
+    DAT_00587200[0] = DAT_00587200[0] + 1;
+    Rel::go(self->lock);
+    self->lock = 0;
+    self->poolIndex = 0;
+    self->heapLevel = 0;
+    self->msgLevel = 1;
+    self->optFlags = DAT_004c2370[0] & ~8;
+    self->preSized = 0;
+    self->smallest = 16;
+    if (self->arena->f2020 == 0) {
+        self->arena->f2020 = (int)DAT_00587218[0]->AllocAligned(0x200, 4);
+        if (self->arena->f2020 == 0 && GPR_00554d68 == 0) {
+            v = FUN_00308320(&DAT_004fd640[0]);
+            if (v != 1) {
+                if (v == 2)
+                    GPR_00554d68 = 1;
+            }
+        }
+        self->arena->f2024 = 0x200;
+        self->arena->f2028 = 0;
+        self->arena->f2032 = 0;
+        self->arena->f2060 = -1;
+        self->arena->f2064 = 0;
+    }
+}
+
+extern "C" {
+int *FUN_002f89a0(...);
+extern int DAT_004f7910[4];
+extern int DAT_004fd670[4];
+extern int DAT_004fd6d0[4];
+extern int DAT_004fd730[4];
+extern unsigned int DAT_00587208[4];
+extern unsigned int DAT_00587210[4];
+extern unsigned char GPR_00554d6c;
+extern unsigned char GPR_00554d70;
+extern unsigned char GPR_00554d74;
+}
+struct igResult98 { int v; igResult98() {} };
+struct Arena98 { char pad[2020]; int f2020; int f2024; int f2028; int f2032; };
+class Pool98 { public:
+ virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int v25(int); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual int v86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual igResult98 v100();
+ char p4[20]; long long f24; char p32[24]; int f56; char p60[28]; long long f88; char p96[16]; Arena98 * f112; char p116[44]; long long f160; char p168[12]; int f180; char p184[4]; int f188; unsigned int f192;
+};
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_98(Pool98 *arg0);
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_98(Pool98 *arg0) {
+    int *name;
+    int r;
+    Arena98 *temp_v1;
+    int temp_a1;
+
+    if (arg0->f160 == 0) {
+        FUN_00318b40();
+    }
+    if ((int)arg0->f24 != 0) {
+        name = FUN_002f89a0(arg0);
+        arg0->v100();
+        if ((arg0->f188 >= 3) && (GPR_00554d6c == 0)) {
+            long long k24 = arg0->f24;
+            name = name ? name : &DAT_004f7910[0];
+            r = FUN_003081d0(&DAT_004fd670[0], name, arg0->f180, (int)k24);
+            if ((r != 1) && (r == 2)) {
+                GPR_00554d6c = 1;
+            }
+        }
+        arg0->v86();
+    } else if (arg0->f88 != 0) {
+        name = FUN_002f89a0(arg0);
+        if ((arg0->f188 >= 3) && (GPR_00554d70 == 0)) {
+            long long k88 = arg0->f88;
+            name = name ? name : &DAT_004f7910[0];
+            r = FUN_003081d0(&DAT_004fd6d0[0], name, arg0->f180, (int)k88);
+            if ((r != 1) && (r == 2)) {
+                GPR_00554d70 = 1;
+            }
+        }
+        arg0->v86();
+    }
+    int t = (arg0->f192 & 0x200) != 0;
+    if (!t && FUN_0031d390(arg0) > 1U) {
+        name = FUN_002f89a0(arg0);
+        if ((arg0->f188 >= 3) && (GPR_00554d74 == 0)) {
+            name = name ? name : &DAT_004f7910[0];
+            r = FUN_003081d0(&DAT_004fd730[0], name, arg0->f180, FUN_0031d390(arg0));
+            if ((r != 1) && (r == 2)) {
+                GPR_00554d74 = 1;
+            }
+        }
+    }
+    DAT_00587208[0] += (int)arg0->f24;
+    DAT_00587210[0] += arg0->f56;
+    if (arg0->f160 == 0) {
+        arg0->v25(0);
+    }
+    temp_v1 = arg0->f112;
+    if (temp_v1 != 0) {
+        temp_a1 = temp_v1->f2020;
+        if (temp_a1 != 0) {
+            DAT_00587218[0]->Free(temp_a1);
+            arg0->f112->f2024 = 0;
+            arg0->f112->f2028 = 0;
+            arg0->f112->f2032 = 0;
+        }
+        DAT_00587218[0]->Free((int)arg0->f112);
+        arg0->f112 = 0;
+    }
+    arg0->f112 = 0;
+    DAT_00587200[0] -= 1;
+}
+
+extern "C" {
+int igMemoryPool_Initialize();
+void *FUN_0031eb90(igArenaMemoryPool *arg0) {
+    igMemoryPool_Initialize();
+    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00531030[0]);
+    arg0->_allocationLock = 0;
+    arg0->_eventTracker = 0;
+    return arg0;
+}
+
+}
+extern "C" {
+int FUN_002effb0();
+void *FUN_0031ebd0(igArenaMemoryPool *arg0) {
+    FUN_002effb0();
+    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00531030[0]);
+    arg0->_allocationLock = 0;
+    arg0->_eventTracker = 0;
+    if (arg0 != 0) {
+        FUN_0031eb90(arg0);
+    }
+    return arg0;
+}
+
+}
+extern "C" {
+int igMemoryPool_CopyConstruct();
+void *FUN_0031ec20(igArenaMemoryPool *arg0) {
+    igMemoryPool_CopyConstruct();
+    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00531030[0]);
+    arg0->_allocationLock = 0;
+    arg0->_eventTracker = 0;
+    return arg0;
+}
+
+}
+/* call the virtual at vtable offset 392, then the igObject slot-0 base step. The DW4VC_392_0
+ * stand-in class has 96 dummy virtuals so vX() lands at that offset (offset = 8 + 4 * preceding
+ * virtuals). */
+extern "C" {
+int Gap__Core__igObject__vfunc_00(...);
+void Gap__Core__igArenaMemoryPool__vfunc_02(void **self);
+}
+class DW4VC_392_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual int vX(); };
+void Gap__Core__igArenaMemoryPool__vfunc_02(void **self) {
+    ((DW4VC_392_0 *)(self))->vX();
+    Gap__Core__igObject__vfunc_00(self);
+}
+
+
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_66(igArenaMemoryPoolView *self, void *block)
+{
+    self->MemoryOperation(block, -1, self->_alignment);
+}
+
+extern "C" {
+struct Header85 { unsigned sz:24; unsigned idx:5; unsigned mid:2; unsigned big:1; unsigned pad4; unsigned rest:12; unsigned ext:12; unsigned top:8; };
+void *igAllocator_ResolveEncodedIndex(int);
+int Gap__Core__igArenaMemoryPool__vfunc_85(void *self, unsigned char *p) {
+    struct Header85 *h;
+    unsigned off;
+    unsigned idx;
+    if (p == 0) {
+        return 0;
+    }
+    if (*(unsigned int *)(p - 4) == 0xAAAAAAAF) {
+        off = *(unsigned int *)(p - 8);
+        if (off < 0x100011) {
+            p = p - off;
+        } else {
+            return 0;
+        }
+    }
+    h = (struct Header85 *)(p - 4);
+    if (((struct TagByte *)(p - 1))->flag == 1) {
+        h = (struct Header85 *)(p - 12);
+    }
+    if (h == 0) {
+        return 0;
+    }
+    if (h->big == 0) {
+        idx = h->idx;
+    } else {
+        idx = h->idx + (h->ext << 5);
+    }
+    return igAllocator_ResolveEncodedIndex(idx * 2) == self;
+}
+
+}
+extern "C" {
+int Gap__Core__igArenaMemoryPool__vfunc_83(void) {
+    return 1;
+}
+
+}
+extern "C" {
+struct Header84 { unsigned lo:5; unsigned sz:19; unsigned mid:7; unsigned big:1; unsigned pad4; unsigned ext:12; unsigned rest:20; };
+int Gap__Core__igArenaMemoryPool__vfunc_84(int arg0, unsigned char *p) {
+    unsigned int off;
+    unsigned int v;
+    struct Header84 *h;
+    if (*(unsigned int *)(p - 4) == 0xAAAAAAAF) {
+        off = *(unsigned int *)(p - 8);
+        p = p - off;
+        h = (struct Header84 *)(p - 4);
+        if (((struct TagByte *)(p - 1))->flag == 1) {
+            h = (struct Header84 *)(p - 12);
+        }
+        if (h == 0) {
+            return 0;
+        }
+        if (h->big == 0) {
+            v = h->sz;
+        } else {
+            v = h->sz + (h->ext << 19);
+        }
+        return v - (off + 4);
+    }
+    h = (struct Header84 *)(p - 4);
+    if (((struct TagByte *)(p - 1))->flag == 1) {
+        h = (struct Header84 *)(p - 12);
+    }
+    if (h == 0) {
+        return 0;
+    }
+    if (h->big == 0) {
+        return h->sz;
+    }
+    return h->sz + (h->ext << 19);
+}
+
+}
+extern "C" {
+extern int DAT_004fd7a0[4];
+extern unsigned char GPR_00554d78;
+}
+class SetFlagsPool { public:
+virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();  virtual int vX(int);
+ char pad[184]; int cnt; int flags; };
+extern "C" void igArenaMemoryPool_SetPoolOptionFlags(SetFlagsPool *p, int f) {
+    int r;
+    if ((f & 1) != (p->flags & 1)) {
+        if (p->vX(f & 1) != 0) {
+            if (p->cnt > 0) {
+                FUN_002f8870(0, p);
+                if (GPR_00554d78 == 0) {
+                    r = FUN_003081d0(DAT_004fd7a0);
+                    if (r != 1) { if (r == 2) { GPR_00554d78 = 1; } }
+                }
+            }
+            return;
+        }
+    }
+    p->flags = f;
+}
+
+extern "C" {
+int Gap__Core__igArenaMemoryPool__vfunc_89(void *arg0) {
+    return *(int *)((char *)(arg0) + 176);
+}
+
+}
+extern "C" {
+typedef struct Obj { int w0; unsigned refs; } Obj;
+void Gap__Core__igArenaMemoryPool__vfunc_90(int *arg0, Obj *arg1) {
+    Obj *o;
+    if (arg1 == 0 || (int *)igObject_GetAllocator(arg1) != arg0) {
+        if (arg1 != 0) {
+            arg1->refs++;
+        }
+        o = (Obj *)arg0[44];
+        if (o != 0) {
+            --o->refs;
+            if ((o->refs & 0x7fffff) == 0) {
+                igObject_Destroy(o);
+            }
+        }
+        arg0[44] = (int)arg1;
+    }
+}
+
+}
+extern "C" {
+void Gap__Core__igArenaMemoryPool__vfunc_86(void) {
+
+}
+
+}
+extern "C" {
+int Gap__Core__igArenaMemoryPool__vfunc_91(void *arg0) {
+    return *(int *)((char *)(arg0) + 180);
+}
+
+}
+extern "C" {
+void Gap__Core__igArenaMemoryPool__vfunc_92(void *arg0, int arg1) {
+    *(int *)((char *)(arg0) + 180) = arg1;
+    if (*(int *)((char *)(arg0) + 180) >= 0x40) {
+        *(int *)((char *)(arg0) + 200) = 0x18;
+    } else {
+        *(int *)((char *)(arg0) + 200) = 0x10;
+    }
+}
+
+}
+extern "C" {
+}
+typedef struct Header93 { char p0[3]; unsigned char lo : 5; unsigned char mid : 2; unsigned char flag : 1; char p1[4]; unsigned int pad : 12; unsigned int ext : 12; unsigned int rest : 8; } Header93;
+typedef struct TagByte93 { unsigned char b : 7; unsigned char flag : 1; } TagByte93;
+typedef struct Pool93 { char p[180]; int f180; inline int Chk(int y) { if (f180 < 64 && y >= 64) return 0; return 1; } } Pool93;
+
+class DW4VC_364_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual int vX(); };
+
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_93(int *arg0, Pool93 *arg1, char *arg2, DW4VC_364_0 *arg3) {
+    int v = arg3->vX();
+    int ok;
+    Header93 *h;
+    int a;
+    ok = arg1->Chk(v);
+    if (ok != 0) {
+        if (*(unsigned int *)(arg2 - 4) == 0xAAAAAAAF) {
+            unsigned int off = *(unsigned int *)(arg2 - 8);
+            if (off < 0x100011) {
+                arg2 = arg2 - off;
+            } else {
+                *arg0 = g_allocatorFailureStatus[0];
+                return;
+            }
+        }
+        h = (Header93 *)(arg2 - 4);
+        if (((TagByte93 *)(arg2 - 1))->flag == 1) {
+            h = (Header93 *)(arg2 - 12);
+        }
+        a = arg3->vX() >> 1;
+        h->lo = a;
+        if (h->flag == 1) {
+            h->ext = a >> 5;
+        }
+        *arg0 = g_statusSucceeded[0];
+    } else {
+        *arg0 = g_allocatorFailureStatus[0];
+    }
+}
+
+extern "C" {
+
+int Gap__Core__igArenaMemoryPool__vfunc_94(void *arg0, void **arg1);
+}
+int Gap__Core__igArenaMemoryPool__vfunc_94(void *arg0, void **arg1) {
+    int temp_v0;
+    int var_v0;
+
+    temp_v0 = ((DW4VC_364_0 *)(arg1))->vX();
+    if ((*(int *)((char *)(arg0) + 180) < 0x40) && (temp_v0 >= 0x40)) {
+        var_v0 = 0;
+    } else {
+        var_v0 = 1;
+    }
+    if (var_v0 != 0) {
+        return 1;
+    }
+    return 0;
+}
+
+extern "C" {
+struct Header95 { char pad[3]; unsigned char sz:5; unsigned char mid:2; unsigned char big:1; char pad2[4]; unsigned int u0:12; unsigned int ext:12; unsigned int u1:8; };
+int Gap__Core__igArenaMemoryPool__vfunc_95(int arg0, unsigned char *p) {
+    struct Header95 *a0; unsigned int off, v;
+    if (p == 0) return -1;
+    if (*(unsigned int *)(p - 4) == 0xAAAAAAAF) {
+        off = *(unsigned int *)(p - 8);
+        if (off < 0x100011) { p = p - off; } else { return -1; }
+    }
+    a0 = (struct Header95 *)(p - 4);
+    if (((struct TagByte *)(p - 1))->flag == 1) { a0 = (struct Header95 *)(p - 12); }
+    if (a0 == 0) return -1;
+    if (a0->big == 0) { v = a0->sz; } else { v = a0->sz + (a0->ext << 5); }
+    return v * 2;
+}
+
+}
+extern "C" {
+int Gap__Core__igObject__vfunc_01(...);
+struct Arena03 { char pad[2020]; void *f7e4; int f7e8; int f7ec; int f7f0; char pad2[24]; int f80c; int f810; };
+struct Pool03 { char pad[112]; Arena03 *f70; };
+extern unsigned char GPR_00554d7c;
+}
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_03(Pool03 *arg0, int arg1);
+void Gap__Core__igArenaMemoryPool__vfunc_03(Pool03 *arg0, int arg1) {
+    int t;
+    arg0->f70 = (Arena03 *)DAT_00587218[0]->Alloc(0x814);
+    memset(arg0->f70, 0, 0x814);
+    if (arg0->f70->f7e4 == 0) {
+        arg0->f70->f7e4 = DAT_00587218[0]->AllocAligned(0x200, 4);
+        if (arg0->f70->f7e4 == 0 && GPR_00554d7c == 0) {
+            t = FUN_00308320(&DAT_004fd640[0]);
+            if (t != 1 && t == 2) {
+                GPR_00554d7c = 1;
+            }
+        }
+        arg0->f70->f7e8 = 0x200;
+        arg0->f70->f7ec = 0;
+        arg0->f70->f7f0 = 0;
+        arg0->f70->f80c = -1;
+        arg0->f70->f810 = 0;
+    }
+    DAT_00587200[0] += 1;
+    Gap__Core__igObject__vfunc_01(arg0, arg1);
+}
+
+/* Pool hook: runs the class's virtual slot 392 on the receiver, then the igObject default for this
+ * slot (an empty stub). */
+extern "C" {
+int Gap__Core__igObject__vfunc_02(...);
+void Gap__Core__igArenaMemoryPool__vfunc_04(igArenaMemoryPool *self);
+}
+/* ABI dispatch view of virtual slot 392 (96 leading virtuals); never instantiated. */
+class ArenaPoolSlot392View { public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
+    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
+    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
+    virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
+    virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47();
+    virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55();
+    virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63();
+    virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71();
+    virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79();
+    virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87();
+    virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95();
+    virtual void Slot392();
+};
+
+void Gap__Core__igArenaMemoryPool__vfunc_04(igArenaMemoryPool *self) {
+    ((ArenaPoolSlot392View *)self)->Slot392();
+    Gap__Core__igObject__vfunc_02(self);
+}
+
+extern "C" {
+/* Reset the pool after the base-class reset, restoring _poolOptionFlags to the default registered
+ * for that field in igArenaMemoryPool_InitFields (the igMallocMemoryPool counterpart is
+ * Gap__Core__igMallocMemoryPool__vfunc_13). */
+int Gap__Core__igObject__vfunc_11();
+extern int g_poolOptionFlagsDefault_004c2370[4];
+
+void Gap__Core__igArenaMemoryPool__vfunc_13(igArenaMemoryPool *self) {
+    Gap__Core__igObject__vfunc_11();
+    self->_poolOptionFlags = (int) g_poolOptionFlagsDefault_004c2370[0];
+}
+
+}

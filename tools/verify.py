@@ -713,17 +713,25 @@ def apply_relocs(text, relocs, resolve, gp):
                 pend_hi = []
             continue
         if rtype == R_LO16:
-            # the LO instruction's own immediate carries the addend
+            # REL: the addend is split over the pair, (AHI << 16) + sign-extended ALO. MWCC
+            # leaves AHI nonzero when it folds a large offset into the `lui` (table[i - 0x10000]).
             raw = struct.unpack_from("<I", buf, off)[0] & 0xffff
-            a = addend + (raw - 0x10000 if raw & 0x8000 else raw)
-            s = target + a
+            low = addend + (raw - 0x10000 if raw & 0x8000 else raw)
+            pairs = [hoff for hoff, hname in pend_hi if hname == name]
+            highs = {struct.unpack_from("<I", buf, hoff)[0] & 0xffff for hoff in pairs}
+            if len(highs) > 1:
+                # halves that disagree on the addend have no one value to compare: unresolved
+                unresolved.extend([(hoff, name) for hoff in pairs] + [(off, name)])
+                pend_hi = [(o, n) for o, n in pend_hi if n != name]
+                continue
+            ahi = highs.pop() if highs else 0
+            s = target + (ahi << 16) + low
             patch(off, s & 0xffff, 0xffff, 0)
             lo = s & 0xffff
             lo_signed = lo - 0x10000 if lo & 0x8000 else lo
             hi = ((s - lo_signed) >> 16) & 0xffff
-            for hoff, hname in pend_hi:
-                if hname == name:
-                    patch(hoff, hi, 0xffff, 0)
+            for hoff in pairs:
+                patch(hoff, hi, 0xffff, 0)
             pend_hi = [(o, n) for o, n in pend_hi if n != name]
         elif rtype == R_26:
             w = struct.unpack_from("<I", buf, off)[0]
