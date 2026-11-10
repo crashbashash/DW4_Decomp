@@ -205,3 +205,4 @@ volatile	FUN_001f05a0	3	#dma-channel-shared-words
 volatile	FUN_001ef4c0	2	#dma-channel-shared-words
 volatile	FUN_00207560	4	#dma-channel-shared-words
 volatile	FUN_0020e6a0	2	#dma-channel-shared-words
+volatile	FUN_001f7530	2	#gs-interrupt-sync-ei

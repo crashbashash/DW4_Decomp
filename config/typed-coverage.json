@@ -329,7 +329,7 @@
   "beTransformSync": 2,
   "beUnicodeObj": 19,
   "beWaterPlain": 4,
-  "beWaterPlainInfoRam": 2,
+  "beWaterPlainInfoRam": 17,
   "beWeapon": 7,
   "beXboxImage24k": 2,
   "igAABox": 112,
@@ -638,22 +638,22 @@
    "total": 3043
   },
   "engine": {
-   "files": 3338,
-   "offset_casts": 686,
-   "other_members": 2479,
-   "recovered": 1909,
-   "recovered_pct": 29.73,
-   "synthetic": 1348,
-   "total": 6422
+   "files": 3289,
+   "offset_casts": 839,
+   "other_members": 2874,
+   "recovered": 1978,
+   "recovered_pct": 27.0,
+   "synthetic": 1636,
+   "total": 7327
   },
   "game": {
    "files": 1590,
    "offset_casts": 58,
    "other_members": 286,
-   "recovered": 2533,
-   "recovered_pct": 85.09,
+   "recovered": 2548,
+   "recovered_pct": 85.16,
    "synthetic": 100,
-   "total": 2977
+   "total": 2992
   },
   "libgcc": {
    "files": 7,
@@ -728,19 +728,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 11441,
-   "offset_casts": 5643,
-   "other_members": 13278,
-   "recovered": 21522,
-   "recovered_pct": 44.39,
-   "synthetic": 8040,
-   "total": 48483
+   "files": 11328,
+   "offset_casts": 5516,
+   "other_members": 12994,
+   "recovered": 21453,
+   "recovered_pct": 44.81,
+   "synthetic": 7912,
+   "total": 47875
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 6439,
- "recovered": 25972,
- "synthetic": 9919,
- "total": 65724,
+ "offset_casts": 6465,
+ "recovered": 25987,
+ "synthetic": 10079,
+ "total": 66036,
  "typeable": 359
 }

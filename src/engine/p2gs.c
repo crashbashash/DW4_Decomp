@@ -303,6 +303,69 @@ void FUN_001f7500(void *arg0) {
     }
 }
 
+void FUN_001f8190(int registerIndex);
+void FUN_00207d70(void);
+void FUN_00207920(void);
+void FUN_002080b0(void);
+
+typedef struct {
+    unsigned long long SIGNAL:1;
+    unsigned long long FINISH:1;
+    unsigned long long HSINT:1;
+    unsigned long long VSINT:1;
+    unsigned long long EDWINT:1;
+    unsigned long long ZERO1:1;
+    unsigned long long ZERO2:1;
+    unsigned long long pad1:1;
+    unsigned long long FLUSH:1;
+    unsigned long long RESET:1;
+    unsigned long long p0:2;
+    unsigned long long NFIELD:1;
+    unsigned long long FIELD:1;
+    unsigned long long FIFO:2;
+    unsigned long long REV:8;
+    unsigned long long ID:8;
+    unsigned long long p1:32;
+} tGS_CSR;
+
+extern tGS_CSR DAT_0056ada0;
+extern long long DAT_0056ade0;
+extern int DAT_0056ae90;
+extern int DAT_00568e38;
+extern int DAT_0056ae30;
+extern int DAT_0056ae28;
+
+int FUN_001f7530(int cause) {
+    long long status;
+
+    DAT_0056ade0 = -1;
+    FUN_001f8190(0x41);
+    status = p2readGSPrivRegister(0x40);
+    DAT_0056ae90++;
+    DAT_0056ada0.FINISH = (status & 2) ? 1 : 0;
+    DAT_0056ada0.VSINT = (status & 8) ? 1 : 0;
+    DAT_0056ada0.SIGNAL = (status & 1) ? 1 : 0;
+    FUN_001f8190(0x40);
+    if (DAT_00568e38 == 0) {
+        if (status & 2) {
+            FUN_00207d70();
+        }
+        if (status & 8) {
+            FUN_00207920();
+            DAT_0056ae30++;
+        }
+        if (status & 1) {
+            FUN_002080b0();
+            DAT_0056ae28++;
+        }
+    }
+    DAT_0056ade0 = -0xB01;
+    FUN_001f8190(0x41);
+    __asm__ volatile("sync");
+    __asm__ volatile("ei");
+    return 0;
+}
+
 void FUN_001f76c0(int arg0) {
     int sp1C;
 

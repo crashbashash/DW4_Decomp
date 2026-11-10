@@ -3,6 +3,7 @@
 struct Mx { float f[16]; };
 struct T { char p[44]; float f[16]; };
 struct O { char p[12]; int f12; };
+struct igVec3f { float _v[3]; float operator[](int i) const { return _v[i]; } };
 
 extern "C" {
 void *FUN_00236f80(int, int);
@@ -73,6 +74,24 @@ void FUN_003a0bc0(int arg0, void *arg1, void *arg2, int arg3, int arg4, float fp
             *(float *)(*(int *)((char *)(arg2) + 16) + (temp_a0 * 4)) = fparg0;
         }
     }
+}
+
+bool FUN_003a0d40(beWaterPlain *self, beWaterPlainInfoRam *ram, float *p) {
+    const igVec3f &areaMax = *(const igVec3f *)ram->_areaMax;
+    bool res = false;
+    float r = ram->_cellSize;
+    float y = p[1];
+    float ax = ram->_pos[0];
+    float x1 = ax + (ram->_areaMin[0] + r);
+    float x2 = ax + (areaMax[0] - r);
+    float z1 = ram->_pos[2] + (ram->_areaMin[2] + r);
+    float z2 = ram->_pos[2] + (areaMax[2] - r);
+    if ((!(ram->_pos[1] + ram->_shallmin < y) && (ram->_pos[1] + ram->_shallmax < y)) || (!(ram->_pos[1] + ram->_deepmin < y) && (ram->_pos[1] + ram->_deepmax < y))) {
+        if (x1 <= p[0] && !(x2 < p[0])) {
+            if (z1 <= p[2] && !(z2 < p[2])) res = true;
+        }
+    }
+    return res;
 }
 
 void Gap__Bec__beWaterPlain__vfunc_32(void)

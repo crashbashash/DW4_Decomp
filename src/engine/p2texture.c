@@ -560,12 +560,6 @@ void FUN_00209780(char arg0, char arg1, int arg2) {
     DAT_0056ae48[0] |= 0x08000000;
 }
 
-int FUN_00209cc0(int a) {
-    int n;
-    for (n = 0; (a >>= 1) != 0; n++) {}
-    return n;
-}
-
 struct G_20a590 {
     char p0[355]; unsigned char x355:6; char p1[12];
     unsigned short x368:9; char p2[14];
@@ -575,6 +569,138 @@ struct G_20a590 {
     unsigned short x400:12; char p4[2];
     unsigned short x404:12; char p5[2]; unsigned char x408:2;
 };
+typedef union { int w[4]; long long d[2]; } QW_2097f0;
+typedef union { struct { unsigned short nloop : 15; unsigned short eop : 1; } b; long long d[2]; } GifTag_2097f0;
+typedef union { struct { unsigned short qwc; short p2; unsigned int addr : 31; unsigned int last : 1; } b; int w[4]; } Img_2097f0;
+struct Node_2097f0 { char p0[12]; struct Node_2097f0 *next; };
+struct Ch_2097f0 {
+    long long tag;
+    long long seq;
+    struct Node_2097f0 *head;
+    struct Node_2097f0 *tail;
+    char p24[16];
+    unsigned int end;
+    char p44[4];
+    unsigned int cur;
+    char p52[12];
+    unsigned char busy : 1;
+};
+struct Tex_2097f0 { long long tag; char p8[40]; int addr; char p52[4]; int tbp; unsigned short width; unsigned short height; char p64[2]; unsigned short format; };
+void FUN_002097f0(struct Tex_2097f0 **list, int count) {
+    int FUN_001f04b0();
+    int FUN_001f7e90();
+    int FUN_001effc0();
+    void FUN_002084a0();
+    extern struct G_20a590 *DAT_0056ad80[4];
+    extern struct Ch_2097f0 *DAT_00568f08[4];
+    extern struct Ch_2097f0 *DAT_00568f38[4];
+    extern int DAT_00569128[4];
+    extern long long DAT_00569168[4];
+    extern unsigned int DAT_00491730[];
+    extern unsigned int DAT_00491770[];
+    extern int DAT_00491820[];
+    extern QW_2097f0 DAT_004917f0;
+    extern Img_2097f0 DAT_00491800;
+    extern GifTag_2097f0 DAT_00491810;
+    struct Tex_2097f0 *t;
+    struct Node_2097f0 *n;
+    QW_2097f0 *q;
+    int fmt;
+    int w;
+    long long seq;
+    int rows;
+    int y;
+    int max;
+    int h;
+    int addr;
+    unsigned int qwc;
+
+    FUN_00113f20();
+    if (FUN_001f04b0(2, DAT_00568f38[0]) != 0) {
+        seq = DAT_00568f08[0]->seq;
+        if (seq >= 0 && DAT_00568f38[0]->seq >= seq && DAT_00568f38[0]->cur < DAT_00568f38[0]->end) {
+            n = DAT_00568f08[0]->head;
+            DAT_00568f38[0]->busy = 0;
+            DAT_00568f08[0]->seq = -1;
+            if (n != 0) {
+                DAT_00568f08[0]->head = 0;
+                DAT_00568f08[0]->tail = 0;
+                n->next = DAT_00568f38[0]->head;
+                if (DAT_00568f38[0]->head == 0) {
+                    DAT_00568f38[0]->tail = n;
+                }
+                DAT_00568f38[0]->head = n;
+            }
+            DAT_00569128[0]++;
+            DAT_00568f08[0] = DAT_00568f38[0];
+            DAT_00569168[0]--;
+        }
+    }
+    FUN_00113f78();
+    do {
+        DAT_0056ad80[0]->x391 = DAT_004917b0[(*list)->format];
+        DAT_0056ad80[0]->x390 = ((*list)->width + 63) / 64;
+        DAT_0056ad80[0]->x400 = (*list)->width;
+        DAT_0056ad80[0]->x408 = 0;
+        t = *list;
+        fmt = t->format;
+        w = t->width;
+        addr = t->addr;
+        rows = t->height;
+        max = 0xfffe0 / (w * DAT_00491730[fmt]);
+        y = 0;
+        while (rows > 0) {
+            h = rows < max ? rows : max;
+            /* matching construct: permuter — qwc computed before the transfer-register stores */
+            qwc = (DAT_00491730[fmt] * (w * h) + 31) >> 5;
+            DAT_0056ad80[0]->x388 = t->tbp;
+            DAT_0056ad80[0]->x396 = 0;
+            DAT_0056ad80[0]->x398 = y;
+            DAT_0056ad80[0]->x404 = h;
+            FUN_001f7e90(4, DAT_00491820, 0);
+            /* matching construct: statement-order search — y += h placed before the GIF tag NLOOP store */
+            y += h;
+            DAT_00491810.b.nloop = qwc;
+            rows -= h;
+            DAT_00491800.b.qwc = DAT_00491810.b.nloop;
+            q = (QW_2097f0 *)DAT_00568f08[0]->cur;
+            DAT_00491800.b.addr = addr;
+            q->w[0] = DAT_004917f0.w[0];
+            q->w[1] = DAT_004917f0.w[1];
+            q->w[2] = DAT_004917f0.w[2];
+            q->w[3] = DAT_004917f0.w[3];
+            q++;
+            q->d[0] = DAT_00491810.d[0];
+            q->d[1] = DAT_00491810.d[1];
+            q++;
+            q->w[0] = DAT_00491800.w[0];
+            q->w[1] = DAT_00491800.w[1];
+            q->w[2] = DAT_00491800.w[2];
+            q->w[3] = DAT_00491800.w[3];
+            q++;
+            DAT_00568f08[0]->cur = (unsigned int)q;
+            t = *list;
+            fmt = t->format;
+            w = t->width;
+            addr += (DAT_00491770[fmt] * (w * h)) >> 1;
+        }
+        t->tag = DAT_00568f08[0]->tag;
+        FUN_001effc0(2, FUN_002084a0, *list);
+        count--;
+        list++;
+        if (count != 0 && DAT_00568f08[0]->cur > DAT_00568f08[0]->end) {
+            FUN_001eef70(2);
+        }
+    } while (count != 0);
+    FUN_001eef70(2);
+}
+
+int FUN_00209cc0(int a) {
+    int n;
+    for (n = 0; (a >>= 1) != 0; n++) {}
+    return n;
+}
+
 struct A0_20a590 { char p0[56]; int f56; unsigned short f60; char p1[4]; unsigned short f66; char p2[2]; signed char f70:7; char p3; char f72; };
 void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
     int FUN_0020b7f0();

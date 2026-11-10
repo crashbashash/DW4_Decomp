@@ -368,6 +368,20 @@ frame count at `0x56bf70` and the watchdog's tick counter at `0x56d680`.
   that counter is shared with other threads and polled in the loop, where the keyword keeps the order of its
   accesses.
 
+### gs-interrupt-sync-ei
+
+The GS interrupt handler in `src/engine/p2gs.c`, an MWCC file registered with `AddIntcHandler`, ends with `sync`
+and `ei`, each written `__asm__ volatile`. `sync` and `ei` need no row; the row is for the keyword on the statement.
+
+* Under MWCC an `__asm__ volatile` statement turns the global optimiser off for the whole function. Retail has
+  the unoptimised shape: a branch for each status bit with the test recomputed from the saved status each time.
+  With the optimiser on, the three tests become `sltu` results kept in saved registers, the frame doubles and
+  the body is 12 instructions shorter.
+* The other spellings of the two instructions leave the optimiser on: an MWCC `asm { }` block and a plain
+  `__asm__ ("sync")` both give the optimised shape.
+* The keyword marks no datum, so there is no strip test of a load; what it changes is the compile of the
+  function, and only it reproduces the retail code.
+
 ## Open questions
 
 * **The stack slot `volatile` stands in for.** Some inlined list searches take a value that retail stores
