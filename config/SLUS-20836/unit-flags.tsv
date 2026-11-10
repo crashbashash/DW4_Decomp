@@ -5,7 +5,6 @@
 # va	flags	status	reason
 0x001090b0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit sony-sdk_107f00 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x001300b0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit igVisualContextAttrDefaultManager profile default -O3 -Iinclude exceptions off does not reproduce it
-0x00269630	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-adx_268008 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x0026a160	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-adx_269c60 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x0027e8e0	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-adx_27e0d0 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it
 0x0027e8f8	-O3 -Iinclude -Cpp_exceptions on	provisional	unit cri-adx_27e0d0 profile ee-gcc -O2 -G0 -Iinclude exceptions off does not reproduce it

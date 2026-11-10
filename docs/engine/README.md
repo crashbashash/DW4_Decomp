@@ -128,6 +128,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [beNDMWMdlPlayer::vfunc_44 recovery](near-miss-shapes-player-vfunc44.md): the idle player-number-badge handler, typed, and the 5-word cluster its C leaves different.
 - [CRI cvFs](cri-cvfs.md): CRI's file-system layer — its extent, the device vtbl, handle and volume-request layouts, the owner-approved `int`-typed slots and the condition they meet, and the open questions about names.
 - [CRI ADXB](cri-adxb.md): the ADX decoder core — its extent, the 260-byte handle, why it compiles whole, and what is still unknown.
+- [CRI ADXENC](cri-adxenc.md): the ADX encoder — its extent, the encoder, predictor and filter tables, why it compiles whole, and what is still unknown.
 - [CRI conversion-job table](cri-convjobs.md): the 16-entry job table between ADXT and CRI CFG — its extent, the job layout, why it compiles as one file, and what is still unknown about its library and names.
 - [CRI SRD](cri-srd.md): CRI's sector read driver under cvFs — its extent, the request object and module words, which words are `volatile`, and what is still unknown.
 - [CRI HTCI](cri-htci.md): the host-file device — its extent, why its messages are literals, the handle and file-list layouts, the owner-approved `int`-typed list pointer, and what is still unknown.
