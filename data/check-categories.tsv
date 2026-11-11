@@ -6413,15 +6413,15 @@
 00234d70	FUN_00234d70	match	-
 00235370	FUN_00235370	match	-
 00236120	Gap__Insight__igFlushRenderer__vfunc_26	match	-
-00236140	FUN_00236140	match	DEFERRED duplicate 0x25a230 __dt__29igSmartPointer<11NamedObject>Fv 128B (compared under the profile of its retail unit)
-00236260	FUN_00236260	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9TextValue>Fv 128B (compared under the profile of its retail unit)
+00236140	FUN_00236140	match	-
+00236260	FUN_00236260	match	-
 002364e0	FUN_002364e0	unapproved	unapproved: 2 volatile without an approval row
-002369e0	Gap__Insight__igWindowResizeEventReceiver__vfunc_32	match	DEFERRED duplicate 0x25a230 __dt__29igSmartPointer<11ResizeEvent>Fv 128B (compared under the profile of its retail unit)
+002369e0	Gap__Insight__igWindowResizeEventReceiver__vfunc_32	match	-
 00236ab0	FUN_00236ab0	match	-
 00236b10	FUN_00236b10	match	-
 00236be0	FUN_00236be0	match	-
 00236c40	FUN_00236c40	match	-
-00236ca0	FUN_00236ca0	match	DEFERRED duplicate 0x333760 __dt__25igSmartPointer<8Instance>Fv 128B (compared under the profile of its retail unit)
+00236ca0	FUN_00236ca0	match	-
 00236dd0	FUN_00236dd0	match	-
 00236e20	FUN_00236e20	match	-
 00236e80	FUN_00236e80	match	-
@@ -6441,10 +6441,10 @@
 002377c0	FUN_002377c0	match	-
 00237940	Gap__Insight__igMessageDefaultReceiver__vfunc_23	match	-
 00237990	FUN_00237990	match	-
-002379e0	FUN_002379e0	match	DEFERRED duplicate 0x25a230 __dt__31igSmartPointer<13MessageFilter>Fv 128B (compared under the profile of its retail unit)
+002379e0	FUN_002379e0	match	-
 00237b50	Gap__Insight__igFilterMessageDispatcher__vfunc_28	match	-
 00237c40	Gap__Insight__igMessageFilter__vfunc_23	match	-
-00237c50	Gap__Insight__igFilterMessageDispatcher__vfunc_23	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00237c50	Gap__Insight__igFilterMessageDispatcher__vfunc_23	match	-
 00237ce0	Gap__Insight__igFilterMessageDispatcher__vfunc_24	match	-
 00237d20	Gap__Insight__igFilterMessageDispatcher__vfunc_26	match	-
 00237d80	Gap__Insight__igFilterMessageDispatcher__vfunc_25	match	-
