@@ -222,15 +222,15 @@
    },
    "foreign_profile.bytes": {
     "reason": null,
-    "value": 624
+    "value": 428
    },
    "foreign_profile.functions": {
     "reason": null,
-    "value": 12
+    "value": 11
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 82609
+    "value": 67109
    },
    "inline_asm.other": {
     "reason": null,
@@ -250,7 +250,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 4519
+    "value": 3274
    },
    "mismatch.bytes": {
     "reason": null,
@@ -278,27 +278,27 @@
    },
    "profile_split.bytes": {
     "reason": null,
-    "value": 42396
+    "value": 41636
    },
    "profile_split.units": {
     "reason": null,
-    "value": 12
+    "value": 11
    },
    "raw_casts.reflected": {
     "reason": null,
-    "value": 359
+    "value": 363
    },
    "struct.a": {
     "reason": null,
-    "value": 116
+    "value": 92
    },
    "struct.b": {
     "reason": null,
-    "value": 135
+    "value": 117
    },
    "struct.c": {
     "reason": null,
-    "value": 284
+    "value": 200
    },
    "unapproved.bytes": {
     "reason": null,
@@ -346,8 +346,8 @@
    "name_defect.functions": 0,
    "opt_pragma.statements": 11,
    "orphan.bytes": 32,
-   "profile_split.bytes": 41512,
-   "profile_split.units": 10,
+   "profile_split.bytes": 41636,
+   "profile_split.units": 11,
    "raw_casts.reflected": 363,
    "struct.a": 92,
    "struct.b": 117,
