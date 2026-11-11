@@ -403,16 +403,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00462fb0": {
-    "duplicates": {
-      "__dt__23igSmartPointer<6Camera>Fv": "0x0025a2b0",
-      "__dt__23igSmartPointer<6Effect>Fv": "0x00333760",
-      "__dt__24igSmartPointer<7Binding>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x001e1ac0": {
     "emitted": {},
     "duplicates": {
@@ -5406,14 +5396,6 @@
       "_impure_ptr": "0x004854a0"
     }
   },
-  "0x004667d0": {
-    "duplicates": {
-      "__dt__24igSmartPointer<7igProbe>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x00140610": {
     "duplicates": {
       "__dt__22igSmartPointer<5Image>Fv": "0x0025a230"
@@ -5740,14 +5722,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x0045fd70": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x0022a7b0": {
     "duplicates": {
       "__dt__9StringRefFv": "0x00130720",
@@ -5814,15 +5788,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00460330": {
-    "duplicates": {
-      "__dt__10RemovedRefFv": "0x0025a2b0",
-      "__dt__20igSmartPointer<3Obj>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x001aedd0": {
     "duplicates": {
       "__dt__9RecordRefFv": "0x0025a230"
@@ -5842,15 +5807,6 @@
     "stripped": [
       "__dt__10ScopedLockFv"
     ]
-  },
-  "0x00466a10": {
-    "duplicates": {
-      "__dt__23igSmartPointer<6Marker>Fv": "0x25a230"
-    },
-    "emitted": {},
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
   },
   "0x001d65e0": {
     "duplicates": {
@@ -6097,14 +6053,6 @@
     "duplicates": {
       "__dt__20igSmartPointer<3Obj>Fv": "0x00130140",
       "__dt__20igSmartPointer<3Res>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00460c80": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -6496,14 +6444,6 @@
   "0x0023b430": {
     "duplicates": {
       "__dt__33igSmartPointer<15igCollisionCell>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
-  "0x00463c90": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0025a230"
     },
     "externals": {
       "__dl__FPv": "0x00100610"
@@ -8726,38 +8666,6 @@
       "FUN_00320a20": "0x00320a20",
       "FUN_00320aa0": "0x00320aa0",
       "Gap__Core__igElfFile__vfunc_23": "0x00320af0"
-    },
-    "data": {}
-  },
-  "0x00464af0": {
-    "whole_file": true,
-    "emitted": {
-      "Gap__Viewer__igViewManager__vfunc_26": "0x00464b70",
-      "Gap__Viewer__igViewManager__vfunc_27": "0x00464bd0",
-      "Gap__Viewer__igViewManager__vfunc_32": "0x00464c00",
-      "FUN_00464c60": "0x00464c60",
-      "Gap__Viewer__igViewManager__vfunc_13": "0x00464f70",
-      "Gap__Viewer__igViewManager__vfunc_22": "0x00464f80"
-    },
-    "data": {
-      "@68": "0x0051fbf0",
-      "@69": "0x0051fc70",
-      "DAT_0058cd08": "0x0058cd08",
-      "DAT_0058cd40": "0x0058cd40",
-      "GPR_00554e7c": "0x00554e7c",
-      "GPR_00554e80": "0x00554e80"
-    }
-  },
-  "0x00337410": {
-    "whole_file": true,
-    "emitted": {
-      "FUN_00337480": "0x00337480",
-      "FUN_003374e0": "0x003374e0",
-      "FUN_00337520": "0x00337520",
-      "FUN_00337570": "0x00337570",
-      "FUN_003375c0": "0x003375c0",
-      "FUN_00337600": "0x00337600",
-      "FUN_003378e0": "0x003378e0"
     },
     "data": {}
   },
@@ -13581,5 +13489,467 @@
       "igViewerStatisticsManager_className": "0x0051e840"
     },
     "symbol": "FUN_004586a0"
+  },
+  "0x0045e9a0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Viewer__igLogoRenderer__vfunc_25": "0x0045e9b0",
+      "Gap__Viewer__igLogoRenderer__vfunc_26": "0x0045e9c0",
+      "Gap__Viewer__igLogoRenderer__vfunc_22": "0x0045e9d0",
+      "Gap__Viewer__igLogoRenderer__vfunc_24": "0x0045e9e0"
+    },
+    "data": {
+      "DAT_0058cdf0": "0x0058cdf0"
+    }
+  },
+  "0x0045e9f0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Viewer__igNormalsRenderer__vfunc_25": "0x0045ea00",
+      "Gap__Viewer__igNormalsRenderer__vfunc_26": "0x0045ea10",
+      "Gap__Viewer__igNormalsRenderer__vfunc_22": "0x0045ea20",
+      "Gap__Viewer__igNormalsRenderer__vfunc_24": "0x0045ea30"
+    },
+    "data": {
+      "DAT_0058cda0": "0x0058cda0"
+    }
+  },
+  "0x0045ea40": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Viewer__igViewerDataPumpManager__vfunc_28": "0x0045eab0",
+      "Gap__Viewer__igViewerDataPumpManager__vfunc_29": "0x0045ec30",
+      "Gap__Viewer__igViewerDataPumpManager__vfunc_22": "0x0045ec40",
+      "Gap__Viewer__igViewerDataPumpManager__vfunc_25": "0x0045ec50",
+      "Gap__Viewer__igViewerDataPumpManager__vfunc_26": "0x0045ec60",
+      "Gap__Viewer__igViewerDataPumpManager__vfunc_23": "0x0045ec70",
+      "Gap__Viewer__igViewerDataPumpManager__vfunc_24": "0x0045ec80"
+    },
+    "data": {
+      "DAT_00562c10": "0x00562c10",
+      "DAT_0058cb70": "0x0058cb70"
+    }
+  },
+  "0x0045eda0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Viewer__igViewerGuiFactory__vfunc_13": "0x0045edd0",
+      "Gap__Viewer__igViewerGuiFactory__vfunc_22": "0x0045f1d0",
+      "FUN_0045f1e0": "0x0045f1e0",
+      "FUN_0045f1f0": "0x0045f1f0"
+    },
+    "data": {
+      "DAT_0058cb28": "0x0058cb28",
+      "DAT_0058d0e4": "0x0058d0e4",
+      "DAT_0058d0f4": "0x0058d0f4",
+      "DAT_0058d104": "0x0058d104",
+      "DAT_0058d114": "0x0058d114",
+      "DAT_0058d124": "0x0058d124",
+      "DAT_0058d154": "0x0058d154",
+      "DAT_0058d164": "0x0058d164"
+    }
+  },
+  "0x0045f200": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0045f2b0": "0x0045f2b0",
+      "FUN_0045f370": "0x0045f370",
+      "Gap__Viewer__igViewerRenderer__vfunc_25": "0x0045f430",
+      "Gap__Viewer__igViewerRenderer__vfunc_23": "0x0045f690",
+      "FUN_0045f930": "0x0045f930",
+      "Gap__Viewer__igViewerRenderer__vfunc_13": "0x0045fd70",
+      "FUN_004601c0": "0x004601c0",
+      "FUN_004601e0": "0x004601e0",
+      "FUN_00460260": "0x00460260",
+      "FUN_004602c0": "0x004602c0",
+      "FUN_00460330": "0x00460330",
+      "FUN_00460790": "0x00460790",
+      "FUN_004608a0": "0x004608a0",
+      "FUN_00460ac0": "0x00460ac0",
+      "FUN_00460be0": "0x00460be0",
+      "FUN_00460c80": "0x00460c80",
+      "FUN_00460d90": "0x00460d90",
+      "FUN_00460e00": "0x00460e00",
+      "FUN_00460f20": "0x00460f20",
+      "Gap__Viewer__igViewerRenderer__vfunc_22": "0x00460f70",
+      "Gap__Viewer__igViewerRenderer__vfunc_24": "0x00460f80"
+    },
+    "data": {
+      "DAT_004e1098": "0x004e1098",
+      "DAT_004e109c": "0x004e109c",
+      "DAT_004e10a0": "0x004e10a0",
+      "DAT_004e1170": "0x004e1170",
+      "DAT_0051faa8": "0x0051faa8",
+      "DAT_0051fab8": "0x0051fab8",
+      "DAT_0055ebd8": "0x0055ebd8",
+      "DAT_0055f468": "0x0055f468",
+      "DAT_005612b0": "0x005612b0",
+      "DAT_005618e8": "0x005618e8",
+      "DAT_005619f8": "0x005619f8",
+      "DAT_0056dc50": "0x0056dc50",
+      "DAT_00585b20": "0x00585b20",
+      "DAT_0058c940": "0x0058c940",
+      "DAT_0058ca20": "0x0058ca20",
+      "DAT_0058ca38": "0x0058ca38",
+      "DAT_0058ca40": "0x0058ca40",
+      "DAT_0058ca48": "0x0058ca48",
+      "DAT_0058ca50": "0x0058ca50",
+      "DAT_0058ca58": "0x0058ca58",
+      "DAT_0058ca60": "0x0058ca60",
+      "DAT_0058ca68": "0x0058ca68",
+      "DAT_0058ca70": "0x0058ca70",
+      "DAT_0058ca78": "0x0058ca78",
+      "DAT_0058ca80": "0x0058ca80",
+      "DAT_0058ca88": "0x0058ca88",
+      "DAT_0058ca90": "0x0058ca90",
+      "DAT_0058ca98": "0x0058ca98",
+      "DAT_0058caa0": "0x0058caa0",
+      "DAT_0058caa8": "0x0058caa8"
+    },
+    "stripped": [
+      "__dt__10RemovedRefFv",
+      "__dt__20igSmartPointer<3Obj>Fv",
+      "__dt__25igSmartPointer<8igObject>Fv"
+    ]
+  },
+  "0x00460f90": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_004612a0": "0x004612a0",
+      "FUN_004612b0": "0x004612b0",
+      "Gap__Viewer__igViewerSceneInfoManager__vfunc_13": "0x004614b0",
+      "Gap__Viewer__igViewerSceneInfoManager__vfunc_24": "0x00462090",
+      "FUN_00462100": "0x00462100",
+      "FUN_00462200": "0x00462200",
+      "Gap__Viewer__igViewerSceneInfoManager__vfunc_29": "0x00462240",
+      "Gap__Viewer__igViewerSceneInfoManager__vfunc_28": "0x004622a0",
+      "Gap__Viewer__igViewerSceneInfoManager__vfunc_27": "0x00462670",
+      "FUN_004629c0": "0x004629c0",
+      "FUN_00462a10": "0x00462a10",
+      "FUN_00462a20": "0x00462a20",
+      "FUN_00462a30": "0x00462a30",
+      "FUN_00462a40": "0x00462a40",
+      "FUN_00462a50": "0x00462a50",
+      "FUN_00462ac0": "0x00462ac0",
+      "FUN_00462cf0": "0x00462cf0",
+      "FUN_00462d00": "0x00462d00",
+      "FUN_00462d10": "0x00462d10",
+      "FUN_00462d20": "0x00462d20",
+      "FUN_00462d30": "0x00462d30",
+      "FUN_00462d80": "0x00462d80",
+      "FUN_00462dc0": "0x00462dc0",
+      "FUN_00462e10": "0x00462e10",
+      "FUN_00462e20": "0x00462e20",
+      "FUN_00462e30": "0x00462e30",
+      "FUN_00462e40": "0x00462e40",
+      "FUN_00462e50": "0x00462e50",
+      "FUN_00462e60": "0x00462e60",
+      "FUN_00462e70": "0x00462e70",
+      "FUN_00462e80": "0x00462e80",
+      "FUN_00462e90": "0x00462e90",
+      "FUN_00462fa0": "0x00462fa0",
+      "FUN_00462fb0": "0x00462fb0",
+      "Gap__Viewer__igViewerSceneInfoManager__vfunc_25": "0x004633d0",
+      "Gap__Viewer__igViewerSceneInfoManager__vfunc_26": "0x004633e0",
+      "FUN_004633f0": "0x004633f0",
+      "FUN_00463400": "0x00463400",
+      "Gap__Viewer__igViewerAction__vfunc_23": "0x00463410",
+      "Gap__Viewer__igViewerAction__vfunc_22": "0x00463450",
+      "Gap__Viewer__igViewerSceneInfoManager__vfunc_22": "0x00463460",
+      "Gap__Viewer__igViewerSceneInfoManagerController__vfunc_22": "0x00463470",
+      "Gap__Viewer__igViewerSceneInfoManagerController__vfunc_23": "0x00463480",
+      "Gap__Viewer__igStatisticsItem__vfunc_24": "0x00463490",
+      "Gap__Viewer__igViewerStatisticsManager__vfunc_03": "0x004634a0",
+      "Gap__Viewer__igViewerStatisticsManager__vfunc_04": "0x004634b0",
+      "Gap__Viewer__igViewerStatisticsManager__vfunc_23": "0x004634c0",
+      "Gap__Viewer__igViewerStatisticsManager__vfunc_25": "0x004634d0",
+      "Gap__Viewer__igViewerStatisticsManager__vfunc_27": "0x004634e0",
+      "Gap__Viewer__igViewerStatisticsManager__vfunc_24": "0x004634f0",
+      "Gap__Viewer__igViewerStatisticsManager__vfunc_26": "0x00463500",
+      "Gap__Viewer__igViewerStatisticsManager__vfunc_22": "0x00463510",
+      "Gap__Viewer__igStatisticsItem__vfunc_22": "0x00463520",
+      "Gap__Viewer__igStatisticsItem__vfunc_23": "0x00463530"
+    },
+    "data": {
+      "DAT_004d1ac8": "0x004d1ac8",
+      "DAT_004d1ad8": "0x004d1ad8",
+      "DAT_004d1ae8": "0x004d1ae8",
+      "DAT_004d1af8": "0x004d1af8",
+      "DAT_004d1b08": "0x004d1b08",
+      "DAT_004d1b18": "0x004d1b18",
+      "DAT_004d1b28": "0x004d1b28",
+      "DAT_004d1b38": "0x004d1b38",
+      "DAT_004d1b48": "0x004d1b48",
+      "DAT_004d1b58": "0x004d1b58",
+      "DAT_004d1b68": "0x004d1b68",
+      "DAT_004d1b78": "0x004d1b78",
+      "DAT_004d1b88": "0x004d1b88",
+      "DAT_004e1058": "0x004e1058",
+      "DAT_004e105c": "0x004e105c",
+      "DAT_004e1060": "0x004e1060",
+      "DAT_0055ef80": "0x0055ef80",
+      "DAT_0055f170": "0x0055f170",
+      "DAT_0055f208": "0x0055f208",
+      "DAT_0056dc50": "0x0056dc50",
+      "DAT_0058c680": "0x0058c680",
+      "DAT_0058c708": "0x0058c708",
+      "DAT_0058c770": "0x0058c770",
+      "DAT_0058c790": "0x0058c790",
+      "DAT_0058c928": "0x0058c928",
+      "DAT_0058c9e8": "0x0058c9e8",
+      "DAT_0058c9f0": "0x0058c9f0",
+      "DAT_0058c9f8": "0x0058c9f8",
+      "DAT_0058ca00": "0x0058ca00",
+      "DAT_0058ca08": "0x0058ca08",
+      "DAT_0058ca10": "0x0058ca10",
+      "DAT_0058ca18": "0x0058ca18",
+      "DAT_0058ca28": "0x0058ca28",
+      "DAT_0058ca30": "0x0058ca30",
+      "DAT_0058ca38": "0x0058ca38",
+      "DAT_0058ca40": "0x0058ca40",
+      "DAT_0058ca48": "0x0058ca48",
+      "DAT_0058ca50": "0x0058ca50",
+      "DAT_0058ca58": "0x0058ca58",
+      "DAT_0058ca60": "0x0058ca60",
+      "DAT_0058ca68": "0x0058ca68",
+      "DAT_0058ca70": "0x0058ca70",
+      "DAT_0058ca78": "0x0058ca78",
+      "DAT_0058ca80": "0x0058ca80",
+      "DAT_0058ca88": "0x0058ca88",
+      "DAT_0058ca90": "0x0058ca90",
+      "DAT_0058ca98": "0x0058ca98",
+      "DAT_0058caa0": "0x0058caa0",
+      "DAT_0058caa8": "0x0058caa8",
+      "DAT_0058cab0": "0x0058cab0",
+      "DAT_0058cab8": "0x0058cab8",
+      "DAT_0058cac0": "0x0058cac0",
+      "DAT_0058cac8": "0x0058cac8",
+      "DAT_0058cad0": "0x0058cad0",
+      "DAT_0058cad8": "0x0058cad8",
+      "DAT_0058cae8": "0x0058cae8",
+      "DAT_0058caf0": "0x0058caf0",
+      "DAT_0058caf8": "0x0058caf8",
+      "DAT_0058cb00": "0x0058cb00",
+      "DAT_0058cb08": "0x0058cb08",
+      "DAT_0058cb18": "0x0058cb18"
+    },
+    "stripped": [
+      "__dt__23igSmartPointer<6Camera>Fv",
+      "__dt__23igSmartPointer<6Effect>Fv",
+      "__dt__24igSmartPointer<7Binding>Fv"
+    ]
+  },
+  "0x00463910": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00463b30": "0x00463b30",
+      "FUN_00463b70": "0x00463b70",
+      "FUN_00463bb0": "0x00463bb0",
+      "FUN_00463bc0": "0x00463bc0",
+      "FUN_00463c70": "0x00463c70",
+      "FUN_00463c80": "0x00463c80",
+      "FUN_00463fd0": "0x00463fd0",
+      "FUN_00464080": "0x00464080",
+      "FUN_00464100": "0x00464100",
+      "FUN_00464110": "0x00464110",
+      "Gap__Viewer__igViewManager__vfunc_23": "0x00464370",
+      "FUN_00464540": "0x00464540",
+      "Gap__Viewer__igViewManager__vfunc_24": "0x00464a90",
+      "Gap__Viewer__igViewManager__vfunc_25": "0x00464ac0",
+      "FUN_00464af0": "0x00464af0",
+      "Gap__Viewer__igViewManager__vfunc_26": "0x00464b70",
+      "Gap__Viewer__igViewManager__vfunc_27": "0x00464bd0",
+      "Gap__Viewer__igViewManager__vfunc_32": "0x00464c00",
+      "FUN_00464c60": "0x00464c60",
+      "Gap__Viewer__igViewManager__vfunc_13": "0x00464f70",
+      "Gap__Viewer__igViewManager__vfunc_22": "0x00464f80"
+    },
+    "data": {
+      "@285": "0x0051fbf0",
+      "@286": "0x0051fc70",
+      "DAT_0056dc50": "0x0056dc50",
+      "DAT_0058cd08": "0x0058cd08",
+      "DAT_0058cd40": "0x0058cd40",
+      "DAT_0058cd48": "0x0058cd48",
+      "DAT_0058cd50": "0x0058cd50",
+      "DAT_0058cd58": "0x0058cd58",
+      "DAT_0058cd80": "0x0058cd80",
+      "GPR_00554e7c": "0x00554e7c",
+      "GPR_00554e80": "0x00554e80"
+    }
+  },
+  "0x00464f90": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Bec__beCameraMode__vfunc_22": "0x00464fa0",
+      "FUN_00465080": "0x00465080",
+      "FUN_00465090": "0x00465090",
+      "FUN_004650a0": "0x004650a0",
+      "FUN_004650d0": "0x004650d0",
+      "FUN_004651e0": "0x004651e0",
+      "FUN_00465260": "0x00465260",
+      "FUN_00465380": "0x00465380",
+      "FUN_004653c0": "0x004653c0",
+      "FUN_004654d0": "0x004654d0",
+      "FUN_004655a0": "0x004655a0",
+      "FUN_004657b0": "0x004657b0",
+      "FUN_00465870": "0x00465870",
+      "FUN_00465880": "0x00465880",
+      "FUN_004658c0": "0x004658c0",
+      "FUN_00465cc0": "0x00465cc0",
+      "FUN_00465d40": "0x00465d40",
+      "FUN_00465dc0": "0x00465dc0",
+      "FUN_00465df0": "0x00465df0",
+      "FUN_00465e40": "0x00465e40",
+      "FUN_004660f0": "0x004660f0",
+      "FUN_004661e0": "0x004661e0",
+      "FUN_00466220": "0x00466220",
+      "FUN_004665e0": "0x004665e0",
+      "FUN_004666c0": "0x004666c0",
+      "FUN_004666e0": "0x004666e0",
+      "FUN_004667a0": "0x004667a0",
+      "FUN_004667d0": "0x004667d0",
+      "FUN_004669d0": "0x004669d0",
+      "FUN_00466a10": "0x00466a10",
+      "FUN_00466b20": "0x00466b20",
+      "FUN_00466cb0": "0x00466cb0",
+      "FUN_00466cc0": "0x00466cc0",
+      "FUN_00466cd0": "0x00466cd0",
+      "FUN_00466ce0": "0x00466ce0",
+      "FUN_00466cf0": "0x00466cf0"
+    },
+    "data": {
+      "DAT_004e1058": "0x004e1058",
+      "DAT_004e1078": "0x004e1078",
+      "DAT_004e1098": "0x004e1098",
+      "DAT_00561EA0": "0x00561ea0",
+      "DAT_0058cb00": "0x0058cb00",
+      "DAT_0058cbf8": "0x0058cbf8",
+      "DAT_0058cc80": "0x0058cc80",
+      "DAT_0058cce0": "0x0058cce0",
+      "DAT_0058ccf8": "0x0058ccf8",
+      "DAT_0058cd30": "0x0058cd30",
+      "DAT_0058cd38": "0x0058cd38",
+      "DAT_0058cd48": "0x0058cd48",
+      "DAT_0058cd50": "0x0058cd50",
+      "DAT_0058cd58": "0x0058cd58",
+      "DAT_0058cd60": "0x0058cd60",
+      "DAT_0058cd68": "0x0058cd68",
+      "DAT_0058cd70": "0x0058cd70",
+      "DAT_0058cd78": "0x0058cd78",
+      "DAT_0058d240": "0x0058d240",
+      "g_igPickMode_metaObject": "0x0058cb88",
+      "g_vec3Zero": "0x004e1058"
+    },
+    "stripped": [
+      "__dt__23igSmartPointer<6Marker>Fv",
+      "__dt__24igSmartPointer<7igProbe>Fv"
+    ]
+  },
+  "0x00466d00": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Viewer__igActorManager__vfunc_26": "0x00466df0",
+      "Gap__Viewer__igActorManager__vfunc_23": "0x00466e00",
+      "Gap__Viewer__igActorManager__vfunc_24": "0x00466e10",
+      "Gap__Viewer__igActorManager__vfunc_27": "0x00466f80",
+      "FUN_00467030": "0x00467030",
+      "Gap__Viewer__igActorManager__vfunc_29": "0x004670b0",
+      "Gap__Viewer__igActorManager__vfunc_22": "0x004670c0"
+    },
+    "data": {
+      "DAT_0058c790": "0x0058c790",
+      "g_igActorManager_metaObject": "0x0058ce60"
+    }
+  },
+  "0x004670d0": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__Viewer__igBoundingBoxRenderer__vfunc_23": "0x004670e0",
+      "Gap__Viewer__igBoundingBoxRenderer__vfunc_24": "0x004670f0",
+      "Gap__Viewer__igBoundingBoxRenderer__vfunc_26": "0x00467100",
+      "Gap__Viewer__igBoundingBoxRenderer__vfunc_22": "0x00467110"
+    },
+    "data": {
+      "DAT_0058ce18": "0x0058ce18"
+    }
+  },
+  "0x00337410": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00337480": "0x00337480",
+      "FUN_003374e0": "0x003374e0",
+      "FUN_00337520": "0x00337520",
+      "FUN_00337570": "0x00337570",
+      "FUN_003375c0": "0x003375c0",
+      "FUN_00337600": "0x00337600",
+      "FUN_003378e0": "0x003378e0",
+      "Gap__igCriMovieCodec__vfunc_28": "0x00337920",
+      "Gap__igCriMovieCodec__vfunc_29": "0x00337a50",
+      "FUN_00337aa0": "0x00337aa0",
+      "Gap__igCriMovieData__vfunc_11": "0x00337b80",
+      "Gap__igCriMovieCodec__vfunc_01": "0x00337bb0",
+      "Gap__igCriMovieCodec__vfunc_02": "0x00337bf0",
+      "Gap__igCriMovieCodec__vfunc_21": "0x00337c10",
+      "FUN_003387d0": "0x003387d0",
+      "Gap__igCriMovieCodec__vfunc_24": "0x00338850",
+      "Gap__igCriMovieCodec__vfunc_25": "0x00338920",
+      "Gap__igCriMovieCodec__vfunc_26": "0x00338a00",
+      "Gap__igCriMovieCodec__vfunc_30": "0x00338ae0",
+      "FUN_00338d60": "0x00338d60",
+      "FUN_00338da0": "0x00338da0",
+      "FUN_00338df0": "0x00338df0",
+      "Gap__igCriMovieCodec__vfunc_20": "0x00338e30",
+      "Gap__igCriMovieData__vfunc_20": "0x00338e40"
+    },
+    "data": {
+      "DAT_00500d70": "0x00500d70",
+      "DAT_0055ff88": "0x0055ff88",
+      "DAT_00587108": "0x00587108",
+      "DAT_00587760": "0x00587760",
+      "DAT_005878b8": "0x005878b8",
+      "DAT_005878c0": "0x005878c0",
+      "DAT_005878d8": "0x005878d8",
+      "GPR_00554c14": "0x00554c14",
+      "GPR_00554e00": "0x00554e00",
+      "g_igCriMovieCodec_metaObject": "0x00587740",
+      "g_igCriMovieData_metaObject": "0x00587760"
+    },
+    "externals": {
+      "FUN_00300cd0": "0x00300cd0"
+    },
+    "symbol": "FUN_00337410"
+  },
+  "0x00338e50": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__igMovieCodec__vfunc_21": "0x00338ed0",
+      "Gap__igMovieCodec__vfunc_22": "0x00338ee0",
+      "Gap__igMovieCodec__vfunc_23": "0x00338ef0",
+      "Gap__igMovieCodec__vfunc_24": "0x00338f00",
+      "Gap__igMovieCodec__vfunc_25": "0x00338f10",
+      "Gap__igMovieCodec__vfunc_26": "0x00338f20",
+      "Gap__igMovieCodec__vfunc_27": "0x00338f30",
+      "Gap__igMovieCodec__vfunc_28": "0x00338f40",
+      "Gap__igMovieCodec__vfunc_29": "0x00338f50",
+      "Gap__igMovieCodec__vfunc_20": "0x00338f60"
+    },
+    "data": {
+      "g_igMovieCodec_metaObject": "0x00587738"
+    },
+    "symbol": "FUN_00338e50"
+  },
+  "0x0033be60": {
+    "whole_file": true,
+    "emitted": {
+      "Gap__igMoviePlugin__vfunc_22": "0x0033bf10",
+      "Gap__igMoviePlugin__vfunc_20": "0x0033bf40"
+    },
+    "data": {
+      "DAT_00587108": "0x00587108",
+      "GPR_00554c14": "0x00554c14",
+      "g_igMoviePlugin_metaObject": "0x005878a8"
+    },
+    "symbol": "Gap__igMoviePlugin__vfunc_21"
   }
 }

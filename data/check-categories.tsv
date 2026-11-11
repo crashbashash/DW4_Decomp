@@ -13343,24 +13343,24 @@
 003375c0	FUN_003375c0	match	-
 00337600	FUN_00337600	match	-
 003378e0	FUN_003378e0	match	-
-00337920	Gap__igCriMovieCodec__vfunc_28	match	exception index 0x547a6c: matches retail (packed)
-00337a50	Gap__igCriMovieCodec__vfunc_29	match	exception index 0x547a78: matches retail (packed)
-00337aa0	FUN_00337aa0	match	exception index 0x547a84: matches retail (packed)
-00337b80	Gap__igCriMovieData__vfunc_11	match	exception index 0x547a90: matches retail (packed)
-00337bb0	Gap__igCriMovieCodec__vfunc_01	match	exception index 0x547a9c: matches retail (packed)
-00337bf0	Gap__igCriMovieCodec__vfunc_02	match	exception index 0x547aa8: matches retail (packed)
+00337920	Gap__igCriMovieCodec__vfunc_28	match	-
+00337a50	Gap__igCriMovieCodec__vfunc_29	match	-
+00337aa0	FUN_00337aa0	match	-
+00337b80	Gap__igCriMovieData__vfunc_11	match	-
+00337bb0	Gap__igCriMovieCodec__vfunc_01	match	-
+00337bf0	Gap__igCriMovieCodec__vfunc_02	match	-
 00337c10	Gap__igCriMovieCodec__vfunc_21	match	-
-003387d0	FUN_003387d0	match	exception index 0x547acc: matches retail (packed)
-00338850	Gap__igCriMovieCodec__vfunc_24	match	exception index 0x547ad8: matches retail (packed)
-00338920	Gap__igCriMovieCodec__vfunc_25	match	exception index 0x547ae4: matches retail (packed)
-00338a00	Gap__igCriMovieCodec__vfunc_26	match	exception index 0x547af0: matches retail (packed)
-00338ae0	Gap__igCriMovieCodec__vfunc_30	match	exception index 0x547afc: matches retail (packed)
-00338d60	FUN_00338d60	match	exception index 0x547b14: matches retail (packed)
-00338da0	FUN_00338da0	match	exception index 0x547b20: matches retail (packed)
-00338df0	FUN_00338df0	match	exception index 0x547b2c: matches retail (packed)
+003387d0	FUN_003387d0	match	-
+00338850	Gap__igCriMovieCodec__vfunc_24	match	-
+00338920	Gap__igCriMovieCodec__vfunc_25	match	-
+00338a00	Gap__igCriMovieCodec__vfunc_26	match	-
+00338ae0	Gap__igCriMovieCodec__vfunc_30	match	-
+00338d60	FUN_00338d60	match	-
+00338da0	FUN_00338da0	match	-
+00338df0	FUN_00338df0	match	-
 00338e30	Gap__igCriMovieCodec__vfunc_20	match	-
 00338e40	Gap__igCriMovieData__vfunc_20	match	-
-00338e50	FUN_00338e50	match	exception index 0x547b38: matches retail (packed)
+00338e50	FUN_00338e50	match	-
 00338ed0	Gap__igMovieCodec__vfunc_21	match	-
 00338ee0	Gap__igMovieCodec__vfunc_22	match	-
 00338ef0	Gap__igMovieCodec__vfunc_23	match	-
@@ -13389,8 +13389,8 @@
 0033be20	Gap__igMovieRenderer__vfunc_22	match	exception index 0x547bc8: matches retail (packed)
 0033be40	Gap__igMovieRenderer__vfunc_20	match	-
 0033be50	Gap__igMovieManager__vfunc_20	match	-
-0033be60	Gap__igMoviePlugin__vfunc_21	match	exception index 0x547bd4: matches retail (packed)
-0033bf10	Gap__igMoviePlugin__vfunc_22	match	exception index 0x547be0: matches retail (packed)
+0033be60	Gap__igMoviePlugin__vfunc_21	match	-
+0033bf10	Gap__igMoviePlugin__vfunc_22	match	-
 0033bf40	Gap__igMoviePlugin__vfunc_20	match	-
 0033bf50	FUN_0033bf50	match	exception index 0x547bec: matches retail (packed)
 0033c8e0	BecLibrary_MarkRegistered	match	-
@@ -19447,17 +19447,17 @@
 0045f430	Gap__Viewer__igViewerRenderer__vfunc_25	match	-
 0045f690	Gap__Viewer__igViewerRenderer__vfunc_23	match	-
 0045f930	FUN_0045f930	match	-
-0045fd70	Gap__Viewer__igViewerRenderer__vfunc_13	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0045fd70	Gap__Viewer__igViewerRenderer__vfunc_13	match	-
 004601c0	FUN_004601c0	match	-
 004601e0	FUN_004601e0	match	-
 00460260	FUN_00460260	match	-
 004602c0	FUN_004602c0	match	-
-00460330	FUN_00460330	match	DEFERRED duplicate 0x25a2b0 __dt__10RemovedRefFv 128B (compared under the profile of its retail unit)
+00460330	FUN_00460330	match	-
 00460790	FUN_00460790	match	-
 004608a0	FUN_004608a0	match	-
 00460ac0	FUN_00460ac0	match	-
 00460be0	FUN_00460be0	match	-
-00460c80	FUN_00460c80	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00460c80	FUN_00460c80	match	-
 00460d90	FUN_00460d90	match	-
 00460e00	FUN_00460e00	match	-
 00460f20	FUN_00460f20	match	-
@@ -19481,15 +19481,23 @@
 00462a50	FUN_00462a50	match	-
 00462ac0	FUN_00462ac0	match	-
 00462cf0	FUN_00462cf0	match	-
+00462d00	FUN_00462d00	match	-
 00462d10	FUN_00462d10	match	-
 00462d20	FUN_00462d20	match	-
 00462d30	FUN_00462d30	match	-
 00462d80	FUN_00462d80	match	-
 00462dc0	FUN_00462dc0	match	-
+00462e10	FUN_00462e10	match	-
+00462e20	FUN_00462e20	match	-
+00462e30	FUN_00462e30	match	-
+00462e40	FUN_00462e40	match	-
 00462e50	FUN_00462e50	match	-
+00462e60	FUN_00462e60	match	-
+00462e70	FUN_00462e70	match	-
+00462e80	FUN_00462e80	match	-
 00462e90	FUN_00462e90	match	-
 00462fa0	FUN_00462fa0	match	-
-00462fb0	FUN_00462fb0	match	DEFERRED duplicate 0x25a2b0 __dt__23igSmartPointer<6Camera>Fv 128B (compared under the profile of its retail unit)
+00462fb0	FUN_00462fb0	match	-
 004633d0	Gap__Viewer__igViewerSceneInfoManager__vfunc_25	match	-
 004633e0	Gap__Viewer__igViewerSceneInfoManager__vfunc_26	match	-
 004633f0	FUN_004633f0	match	-
@@ -19549,6 +19557,7 @@
 00465880	FUN_00465880	match	-
 004658c0	FUN_004658c0	match	-
 00465cc0	FUN_00465cc0	match	-
+00465d40	FUN_00465d40	match	-
 00465dc0	FUN_00465dc0	match	-
 00465df0	FUN_00465df0	match	-
 00465e40	FUN_00465e40	match	-
@@ -19559,9 +19568,9 @@
 004666c0	FUN_004666c0	match	-
 004666e0	FUN_004666e0	match	-
 004667a0	FUN_004667a0	match	-
-004667d0	FUN_004667d0	match	DEFERRED duplicate 0x25a230 __dt__24igSmartPointer<7igProbe>Fv 128B (compared under the profile of its retail unit)
+004667d0	FUN_004667d0	match	-
 004669d0	FUN_004669d0	match	-
-00466a10	FUN_00466a10	match	DEFERRED duplicate 0x25a230 __dt__23igSmartPointer<6Marker>Fv 128B (compared under the profile of its retail unit)
+00466a10	FUN_00466a10	match	-
 00466b20	FUN_00466b20	match	-
 00466cb0	FUN_00466cb0	match	-
 00466cc0	FUN_00466cc0	match	-
