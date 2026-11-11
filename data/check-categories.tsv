@@ -5451,11 +5451,13 @@
 001e5d60	thunk_igBoolObject_GetMetaObject	match	-
 001e5d70	igBoolObject_InitFields	match	-
 001e5de0	FUN_001e5de0	match	-
+001e5f00	FUN_001e5f00	match	-
+001e5fe0	FUN_001e5fe0	match	-
 001e6130	FUN_001e6130	match	-
 001e6230	FUN_001e6230	match	-
 001e6410	FUN_001e6410	match	-
-001e6490	FUN_001e6490	match	DEFERRED duplicate 0x25a230 __dt__22igSmartPointer<5Value>Fv 128B (compared under the profile of its retail unit)
-001e6640	Gap__igDataPump__vfunc_17	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+001e6490	FUN_001e6490	match	-
+001e6640	Gap__igDataPump__vfunc_17	match	-
 001e6760	Gap__igDataPump__vfunc_14	match	-
 001e6770	FUN_001e6770	match	-
 001e6780	FUN_001e6780	match	-
@@ -5468,10 +5470,11 @@
 001e6b00	FUN_001e6b00	match	-
 001e6b20	Gap__igMersenneTwisterRandomNumber__vfunc_23	match	-
 001e6b80	Gap__igMersenneTwisterRandomNumber__vfunc_13	match	-
+001e6bc0	FUN_001e6bc0	match	-
 001e6d30	FUN_001e6d30	match	-
 001e6d80	FUN_001e6d80	match	-
-001e6de0	FUN_001e6de0	match	DEFERRED duplicate 0x25a230 __dt__33igSmartPointer<15FormattedObject>Fv 128B (compared under the profile of its retail unit)
-001e6f10	FUN_001e6f10	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9QuadNamed>Fv 128B (compared under the profile of its retail unit)
+001e6de0	FUN_001e6de0	match	-
+001e6f10	FUN_001e6f10	match	-
 001e7050	thunk_FUN_003065f0	match	-
 001e7060	thunk_FUN_003066b0	match	-
 001e7070	thunk_FUN_00306770	match	-
@@ -6576,10 +6579,10 @@
 0023ab90	igBoundingSphereMaker_InitFields	match	-
 0023b110	FUN_0023b110	match	-
 0023b140	FUN_0023b140	match	-
-0023b270	FUN_0023b270	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+0023b270	FUN_0023b270	match	-
 0023b3b0	FUN_0023b3b0	match	-
 0023b410	FUN_0023b410	match	-
-0023b430	FUN_0023b430	match	DEFERRED duplicate 0x25a230 __dt__33igSmartPointer<15igCollisionCell>Fv 128B (compared under the profile of its retail unit)
+0023b430	FUN_0023b430	match	-
 0023b720	FUN_0023b720	match	-
 0023b820	FUN_0023b820	match	-
 0023b9f0	Gap__igCollisionGrid__vfunc_23	match	-
@@ -6587,7 +6590,7 @@
 0023bc30	FUN_0023bc30	match	-
 0023bc90	Gap__igCreateCollisionDatabase__vfunc_31	match	-
 0023c240	Gap__igCreateCollisionDatabase__vfunc_33	match	-
-0023c250	FUN_0023c250	match	DEFERRED duplicate 0x25a230 __dt__19igSmartPointer<2Rc>Fv 128B (compared under the profile of its retail unit)
+0023c250	FUN_0023c250	match	-
 0023c390	Gap__igCreateCollisionDatabase__vfunc_22	match	-
 0023c3a0	Gap__igCollisionGrid__vfunc_22	match	-
 0023c3b0	Gap__igBoundingSphereMaker__vfunc_22	match	-
@@ -19000,8 +19003,9 @@
 004534f0	Gap__Bec__beFontImage__vfunc_22	match	-
 004535d0	FUN_004535d0	match	-
 00453830	FUN_00453830	match	-
-00453860	Gap__Bec__beFontImage__vfunc_11	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9FillLayer>Fv 128B (compared under the profile of its retail unit)
+00453860	Gap__Bec__beFontImage__vfunc_11	match	-
 00453980	FUN_00453980	match	-
+00453990	FUN_00453990	match	-
 00453a20	FUN_00453a20	match	-
 00453a30	Gap__Gui__igColorChanger__vfunc_23	match	-
 00453a40	FUN_00453a40	match	-
@@ -19037,7 +19041,7 @@
 004550b0	Gap__Gui__igEventDispatcher__vfunc_41	match	-
 00455150	Gap__Gui__igFieldChangeView__vfunc_24	match	-
 004551a0	FUN_004551a0	match	-
-004551f0	FUN_004551f0	match	DEFERRED duplicate 0x130140 __dt__3RefFv 128B (compared under the profile of its retail unit)
+004551f0	FUN_004551f0	match	-
 004552e0	FUN_004552e0	match	-
 00455370	FUN_00455370	match	-
 004553e0	FUN_004553e0	match	-
@@ -19067,20 +19071,22 @@
 00455900	FUN_00455900	match	-
 00455950	FUN_00455950	match	-
 004559a0	FUN_004559a0	match	-
-004559f0	Gap__Gui__igGuiComponentNode__vfunc_13	match	DEFERRED duplicate 0x25a230 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+004559f0	Gap__Gui__igGuiComponentNode__vfunc_13	match	-
 00455ad0	FUN_00455ad0	match	-
 00455b00	Gap__Gui__igGuiSystemModel__vfunc_13	match	-
 00455b90	Gap__Gui__igWindowSizeObserver__vfunc_24	match	-
-00455c30	Gap__Gui__igMousePosObserver__vfunc_13	match	DEFERRED duplicate 0x25a230 __dt__35igSmartPointer<17ObserverEventView>Fv 128B (compared under the profile of its retail unit)
-00455f50	FUN_00455f50	match	DEFERRED duplicate 0x130140 __dt__20igSmartPointer<3Obj>Fv 128B (compared under the profile of its retail unit)
+00455c30	Gap__Gui__igMousePosObserver__vfunc_13	match	-
+00455d80	Gap__Gui__igMousePosObserver__vfunc_24	match	-
+00455f50	FUN_00455f50	match	-
 00456050	FUN_00456050	match	-
+004561e0	Gap__Gui__igActiveComponentsObserver__vfunc_24	match	-
 00456540	FUN_00456540	match	-
 004565c0	FUN_004565c0	match	-
 00456610	Gap__Gui__igGuiSystemRenderer__vfunc_23	match	-
 00456660	Gap__Gui__igGuiSystemRenderer__vfunc_24	match	-
 00456670	Gap__Gui__igGuiSystemRenderer__vfunc_25	match	-
 00456730	Gap__Gui__igGuiSystemRenderer__vfunc_26	match	-
-00456780	Gap__Gui__igGuiSystem__vfunc_13	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
+00456780	Gap__Gui__igGuiSystem__vfunc_13	match	-
 004569c0	FUN_004569c0	match	-
 00456a60	FUN_00456a60	match	-
 00456b80	FUN_00456b80	match	-
@@ -19095,11 +19101,11 @@
 00457170	Gap__Gui__igGuiSystem__vfunc_32	match	-
 004571d0	Gap__Gui__igGuiSystem__vfunc_34	match	-
 00457220	Gap__Gui__igGuiSystem__vfunc_25	match	-
-004572a0	Gap__Gui__igGuiSystem__vfunc_27	match	jump table 0x51e810: 10 entries, 40 bytes, matches retail
+004572a0	Gap__Gui__igGuiSystem__vfunc_27	match	-
 004573b0	Gap__Gui__igGuiSystem__vfunc_26	match	-
 004573c0	FUN_004573c0	match	-
 004573d0	FUN_004573d0	match	-
-004573f0	FUN_004573f0	match	DEFERRED duplicate 0x25a230 __dt__22igSmartPointer<5Entry>Fv 128B (compared under the profile of its retail unit)
+004573f0	FUN_004573f0	match	-
 004574f0	FUN_004574f0	match	-
 004575d0	Gap__Gui__igHotKeyEventReceiver__vfunc_23	match	-
 00457650	Gap__Gui__igHotKeyEventReceiver__vfunc_27	match	-

@@ -334,6 +334,7 @@
   "beXboxImage24k": 2,
   "igAABox": 112,
   "igAABoxList": 4,
+  "igActiveComponentsObserver": 21,
   "igActor": 5,
   "igActorManager": 5,
   "igAdxAudio": 1,
@@ -375,7 +376,7 @@
   "igClearRenderer": 2,
   "igClippingStateAttr": 1,
   "igClut": 21,
-  "igCollisionCell": 4,
+  "igCollisionCell": 2,
   "igCollisionGrid": 35,
   "igCollisionGroup": 12,
   "igColorAttr": 6,
@@ -435,7 +436,7 @@
   "igGuiComponentController": 1,
   "igGuiComponentModel": 4,
   "igGuiSystem": 6,
-  "igGuiSystemModel": 10,
+  "igGuiSystemModel": 28,
   "igIGBFile": 45,
   "igImage": 19,
   "igInfo": 2,
@@ -473,7 +474,7 @@
   "igMemoryPoolInfo": 23,
   "igMemoryRefArrayMetaField": 2,
   "igMemoryRefMetaField": 205,
-  "igMersenneTwisterRandomNumber": 3,
+  "igMersenneTwisterRandomNumber": 19,
   "igMessageInterface": 1,
   "igMetaEnum": 8,
   "igMetaField": 407,
@@ -481,7 +482,7 @@
   "igMetaObject": 718,
   "igModel": 1,
   "igModelViewMatrixAttr": 4,
-  "igMousePosObserver": 18,
+  "igMousePosObserver": 23,
   "igMovieInfo": 4,
   "igMovieInfoList": 3,
   "igMovieManager": 48,
@@ -491,7 +492,7 @@
   "igNamedObjectInfo": 3,
   "igNode": 3,
   "igNodeList": 5,
-  "igObject": 1235,
+  "igObject": 1236,
   "igObjectDirEntry": 25,
   "igObjectList": 704,
   "igObjectListList": 4,
@@ -536,7 +537,7 @@
   "igPsx2VertexArray2": 5,
   "igPsx2VisualContext": 166,
   "igPsx2Window": 39,
-  "igQuaternionfList": 9,
+  "igQuaternionfList": 11,
   "igRadioGroup": 6,
   "igRadioGroupModel": 4,
   "igRadioGroupSelectedObserver": 1,
@@ -638,22 +639,22 @@
    "total": 3043
   },
   "engine": {
-   "files": 2546,
-   "offset_casts": 1625,
-   "other_members": 5282,
-   "recovered": 3115,
-   "recovered_pct": 22.57,
-   "synthetic": 3782,
-   "total": 13804
+   "files": 2200,
+   "offset_casts": 1865,
+   "other_members": 5547,
+   "recovered": 3497,
+   "recovered_pct": 23.48,
+   "synthetic": 3984,
+   "total": 14893
   },
   "game": {
-   "files": 1590,
+   "files": 1589,
    "offset_casts": 58,
    "other_members": 286,
-   "recovered": 2548,
+   "recovered": 2547,
    "recovered_pct": 85.16,
    "synthetic": 100,
-   "total": 2992
+   "total": 2991
   },
   "libgcc": {
    "files": 7,
@@ -674,13 +675,13 @@
    "total": 57
   },
   "menu": {
-   "files": 3,
+   "files": 1,
    "offset_casts": 0,
    "other_members": 0,
-   "recovered": 1,
-   "recovered_pct": 100.0,
+   "recovered": 0,
+   "recovered_pct": 0.0,
    "synthetic": 0,
-   "total": 1
+   "total": 0
   },
   "movie": {
    "files": 27,
@@ -728,19 +729,19 @@
    "total": 3776
   },
   "unmatched": {
-   "files": 10029,
-   "offset_casts": 4741,
-   "other_members": 10792,
-   "recovered": 20380,
-   "recovered_pct": 48.62,
-   "synthetic": 6006,
-   "total": 41919
+   "files": 9605,
+   "offset_casts": 4501,
+   "other_members": 10531,
+   "recovered": 20061,
+   "recovered_pct": 49.04,
+   "synthetic": 5814,
+   "total": 40907
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 6480,
- "recovered": 26058,
- "synthetic": 10332,
- "total": 66619,
+ "recovered": 26119,
+ "synthetic": 10342,
+ "total": 66694,
  "typeable": 359
 }

@@ -165,6 +165,18 @@ so a member can match only when the functions before it in the file are present:
   lists every such call. It is evidence that the callee was `static` and compiled first, so every
   function that calls it belongs to the same file.
 
+Most Alchemy libraries compiled as one translation unit each, not one per class. MWCC emits a class's
+inline virtual functions after the last ordinary function of the unit, so every class's slot-20
+metaobject getter lands in one run at the end of the library's code, in the order of the library's
+vtable block in `.data`; a library compiled per file instead ends each file with its own short run.
+The run also holds the inline methods of classes whose only other code is in the registration block at
+the library's front, and a function emitted in the run is a getter or an empty slot named after
+whichever vtable a disassembler scanned last, not after its owner. A unit's `.rodata` strings run in
+code order across all its classes. A library-sized unit is built and measured like any whole file: one
+row over the library's range, its members in retail order. Two things argue against one unit: a member
+that matches only under another profile, and two equal float literals read from two different
+addresses, since MWCC merges equal literals within one unit.
+
 A C++ file's object names are mangled while `symbols.txt` keeps the plain names its source
 and callers use, so `emitted` and `externals` carry the mangled names and `symbol` gives the owner's.
 Two stock files may each keep a `static` of one name: the row that places the name says which is the
