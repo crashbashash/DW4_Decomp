@@ -9345,7 +9345,7 @@
       "address": 1049128,
       "name": "_exit",
       "size": 8,
-      "source": "src/unmatched/_exit.c",
+      "source": "src/sony/libkernl/_exit.c",
       "direct": [
         {
           "site": 1049128,
@@ -9447,7 +9447,7 @@
       "address": 1092352,
       "name": "_Exit",
       "size": 16,
-      "source": null,
+      "source": "src/sony/libkernl/klib.S",
       "direct": [],
       "indirect": []
     },
@@ -9455,7 +9455,7 @@
       "address": 1093072,
       "name": "GetThreadId",
       "size": 16,
-      "source": null,
+      "source": "src/sony/libkernl/klib.S",
       "direct": [],
       "indirect": []
     },
@@ -9463,7 +9463,7 @@
       "address": 1093312,
       "name": "EndOfHeap",
       "size": 16,
-      "source": null,
+      "source": "src/sony/libkernl/klib.S",
       "direct": [],
       "indirect": []
     },
@@ -9471,7 +9471,7 @@
       "address": 1093376,
       "name": "SignalSema",
       "size": 16,
-      "source": null,
+      "source": "src/sony/libkernl/klib.S",
       "direct": [],
       "indirect": []
     },
@@ -9479,7 +9479,7 @@
       "address": 1093408,
       "name": "WaitSema",
       "size": 16,
-      "source": null,
+      "source": "src/sony/libkernl/klib.S",
       "direct": [],
       "indirect": []
     },
@@ -9487,7 +9487,7 @@
       "address": 1094464,
       "name": "GetMemorySize",
       "size": 16,
-      "source": null,
+      "source": "src/sony/libkernl/klib.S",
       "direct": [],
       "indirect": []
     },
@@ -9495,7 +9495,7 @@
       "address": 1094480,
       "name": "_InitTLB",
       "size": 16,
-      "source": null,
+      "source": "src/sony/libkernl/klib.S",
       "direct": [],
       "indirect": []
     },
@@ -9503,7 +9503,7 @@
       "address": 1095136,
       "name": "sbrk",
       "size": 172,
-      "source": null,
+      "source": "src/sony/libkernl/sbrk.c",
       "direct": [
         {
           "site": 1095216,
@@ -9524,7 +9524,7 @@
       "address": 1095312,
       "name": "isatty",
       "size": 8,
-      "source": "src/unmatched/isatty.c",
+      "source": "src/sony/libkernl/isatty.c",
       "direct": [],
       "indirect": []
     },
@@ -9532,7 +9532,7 @@
       "address": 1095320,
       "name": "fstat",
       "size": 20,
-      "source": "src/unmatched/fstat.c",
+      "source": "src/sony/libkernl/fstat.c",
       "direct": [],
       "indirect": []
     },
@@ -9548,7 +9548,7 @@
       "address": 1100144,
       "name": "FUN_0010c970",
       "size": 360,
-      "source": null,
+      "source": "src/unmatched/FUN_0010c970.c",
       "direct": [
         {
           "site": 1100176,
@@ -9806,7 +9806,7 @@
       "address": 1128624,
       "name": "RFU086_WaitEvnetFlag",
       "size": 16,
-      "source": null,
+      "source": "src/sony/libkernl/RFU086_WaitEvnetFlag.c",
       "direct": [],
       "indirect": []
     },
@@ -9841,7 +9841,7 @@
       "address": 1128848,
       "name": "InitTLB32MB",
       "size": 500,
-      "source": null,
+      "source": "src/sony/libkernl/InitTLB32MB.c",
       "direct": [
         {
           "site": 1128920,
@@ -9924,7 +9924,7 @@
       "address": 1130360,
       "name": "FUN_00113f78",
       "size": 24,
-      "source": null,
+      "source": "src/sony/libkernl/FUN_00113f78.c",
       "direct": [],
       "indirect": []
     },
@@ -9968,7 +9968,7 @@
       "address": 1175016,
       "name": "__ieee754_atan2f",
       "size": 480,
-      "source": "src/unmatched/__ieee754_atan2f.c",
+      "source": "src/newlib/ef_atan2.c",
       "direct": [
         {
           "site": 1175072,
@@ -9995,7 +9995,7 @@
       "address": 1190032,
       "name": "isinf",
       "size": 72,
-      "source": "src/unmatched/isinf.c",
+      "source": "src/newlib/s_isinf.c",
       "direct": [],
       "indirect": []
     },
@@ -10003,7 +10003,7 @@
       "address": 1190104,
       "name": "isnan",
       "size": 60,
-      "source": "src/unmatched/isnan.c",
+      "source": "src/newlib/s_isnan.c",
       "direct": [],
       "indirect": []
     },
@@ -10011,7 +10011,7 @@
       "address": 1191312,
       "name": "atanf",
       "size": 652,
-      "source": "src/unmatched/atanf.c",
+      "source": "src/newlib/sf_atan.c",
       "direct": [
         {
           "site": 1191496,
@@ -10026,7 +10026,7 @@
       "address": 1192464,
       "name": "fabsf",
       "size": 40,
-      "source": "src/unmatched/fabsf.c",
+      "source": "src/newlib/sf_fabs.c",
       "direct": [],
       "indirect": []
     },
@@ -10034,7 +10034,7 @@
       "address": 1193536,
       "name": "atan2f",
       "size": 20,
-      "source": "src/unmatched/atan2f.c",
+      "source": "src/newlib/wf_atan2.c",
       "direct": [
         {
           "site": 1193548,
@@ -10049,7 +10049,7 @@
       "address": 1193680,
       "name": "atof",
       "size": 24,
-      "source": "src/unmatched/atof.c",
+      "source": "src/newlib/atof.c",
       "direct": [
         {
           "site": 1193696,
@@ -10064,7 +10064,7 @@
       "address": 1193744,
       "name": "atol",
       "size": 28,
-      "source": "src/unmatched/atol.c",
+      "source": "src/newlib/atol.c",
       "direct": [
         {
           "site": 1193764,
@@ -10079,7 +10079,7 @@
       "address": 1193880,
       "name": "_calloc_r",
       "size": 180,
-      "source": "src/unmatched/_calloc_r.c",
+      "source": "src/newlib/callocr.c",
       "direct": [
         {
           "site": 1193892,
@@ -10100,7 +10100,7 @@
       "address": 1194152,
       "name": "quorem",
       "size": 556,
-      "source": "src/unmatched/quorem.c",
+      "source": "src/newlib/dtoa.c",
       "direct": [
         {
           "site": 1194460,
@@ -10115,7 +10115,7 @@
       "address": 1194712,
       "name": "_dtoa_r",
       "size": 4708,
-      "source": "src/unmatched/_dtoa_r.c",
+      "source": "src/newlib/dtoa.c",
       "direct": [
         {
           "site": 1194816,
@@ -10736,7 +10736,7 @@
       "address": 1199440,
       "name": "__errno",
       "size": 12,
-      "source": "src/unmatched/__errno.c",
+      "source": "src/newlib/errno.c",
       "direct": [],
       "indirect": []
     },
@@ -10744,7 +10744,7 @@
       "address": 1199456,
       "name": "exit",
       "size": 172,
-      "source": "src/unmatched/exit.c",
+      "source": "src/newlib/exit.c",
       "direct": [
         {
           "site": 1199620,
@@ -10770,7 +10770,7 @@
       "address": 1199632,
       "name": "fflush",
       "size": 276,
-      "source": "src/unmatched/fflush.c",
+      "source": "src/newlib/fflush.c",
       "direct": [
         {
           "site": 1199692,
@@ -10797,7 +10797,7 @@
       "address": 1199912,
       "name": "std",
       "size": 92,
-      "source": "src/unmatched/std.c",
+      "source": "src/newlib/findfp.c",
       "direct": [],
       "indirect": []
     },
@@ -10805,7 +10805,7 @@
       "address": 1200440,
       "name": "__sinit",
       "size": 140,
-      "source": "src/unmatched/__sinit.c",
+      "source": "src/newlib/findfp.c",
       "direct": [
         {
           "site": 1200496,
@@ -10832,7 +10832,7 @@
       "address": 1200840,
       "name": "fread",
       "size": 284,
-      "source": "src/unmatched/fread.c",
+      "source": "src/newlib/fread.c",
       "direct": [
         {
           "site": 1200984,
@@ -10859,7 +10859,7 @@
       "address": 1201128,
       "name": "_free_r",
       "size": 756,
-      "source": "src/unmatched/_free_r.c",
+      "source": "src/newlib/freer.c",
       "direct": [
         {
           "site": 1201156,
@@ -10892,7 +10892,7 @@
       "address": 1201888,
       "name": "_malloc_trim_r",
       "size": 364,
-      "source": "src/unmatched/_malloc_trim_r.c",
+      "source": "src/newlib/freer.c",
       "direct": [
         {
           "site": 1201928,
@@ -10937,7 +10937,7 @@
       "address": 1202256,
       "name": "_fstat_r",
       "size": 92,
-      "source": "src/unmatched/_fstat_r.c",
+      "source": "src/newlib/fstatr.c",
       "direct": [
         {
           "site": 1202292,
@@ -10952,7 +10952,7 @@
       "address": 1202352,
       "name": "__sfvwrite",
       "size": 992,
-      "source": "src/unmatched/__sfvwrite.c",
+      "source": "src/newlib/fvwrite.c",
       "direct": [
         {
           "site": 1202440,
@@ -11037,7 +11037,7 @@
       "address": 1203344,
       "name": "_fwalk",
       "size": 148,
-      "source": "src/unmatched/_fwalk.c",
+      "source": "src/newlib/fwalk.c",
       "direct": [],
       "indirect": [
         {
@@ -11051,7 +11051,7 @@
       "address": 1204080,
       "name": "_localeconv_r",
       "size": 12,
-      "source": "src/unmatched/_localeconv_r.c",
+      "source": "src/newlib/locale.c",
       "direct": [],
       "indirect": []
     },
@@ -11059,7 +11059,7 @@
       "address": 1204136,
       "name": "localeconv",
       "size": 28,
-      "source": "src/unmatched/localeconv.c",
+      "source": "src/newlib/locale.c",
       "direct": [
         {
           "site": 1204156,
@@ -11074,7 +11074,7 @@
       "address": 1204264,
       "name": "__smakebuf",
       "size": 340,
-      "source": "src/unmatched/__smakebuf.c",
+      "source": "src/newlib/makebuf.c",
       "direct": [
         {
           "site": 1204344,
@@ -11101,7 +11101,7 @@
       "address": 1205160,
       "name": "malloc_extend_top",
       "size": 600,
-      "source": "src/unmatched/malloc_extend_top.c",
+      "source": "src/newlib/mallocr.c",
       "direct": [
         {
           "site": 1205316,
@@ -11128,7 +11128,7 @@
       "address": 1205760,
       "name": "_malloc_r",
       "size": 1832,
-      "source": "src/unmatched/_malloc_r.c",
+      "source": "src/newlib/mallocr.c",
       "direct": [
         {
           "site": 1205820,
@@ -11161,7 +11161,7 @@
       "address": 1208048,
       "name": "_mbtowc_r",
       "size": 52,
-      "source": "src/unmatched/_mbtowc_r.c",
+      "source": "src/newlib/mbtowc_r.c",
       "direct": [],
       "indirect": []
     },
@@ -11209,7 +11209,7 @@
       "address": 1209104,
       "name": "__malloc_lock",
       "size": 124,
-      "source": "src/unmatched/__malloc_lock.c",
+      "source": "src/newlib/mlock.c",
       "direct": [
         {
           "site": 1209120,
@@ -11230,7 +11230,7 @@
       "address": 1209232,
       "name": "__malloc_unlock",
       "size": 76,
-      "source": "src/unmatched/__malloc_unlock.c",
+      "source": "src/newlib/mlock.c",
       "direct": [
         {
           "site": 1209288,
@@ -11552,7 +11552,7 @@
       "address": 1216720,
       "name": "_realloc_r",
       "size": 1440,
-      "source": "src/unmatched/_realloc_r.c",
+      "source": "src/newlib/reallocr.c",
       "direct": [
         {
           "site": 1216824,
@@ -11627,7 +11627,7 @@
       "address": 1218216,
       "name": "__srefill",
       "size": 380,
-      "source": "src/unmatched/__srefill.c",
+      "source": "src/newlib/refill.c",
       "direct": [
         {
           "site": 1218272,
@@ -11672,7 +11672,7 @@
       "address": 1218600,
       "name": "_sbrk_r",
       "size": 88,
-      "source": "src/unmatched/_sbrk_r.c",
+      "source": "src/newlib/sbrkr.c",
       "direct": [
         {
           "site": 1218632,
@@ -11695,7 +11695,7 @@
       "address": 1220192,
       "name": "sprintf",
       "size": 144,
-      "source": "src/unmatched/sprintf.c",
+      "source": "src/newlib/sprintf.c",
       "direct": [
         {
           "site": 1220308,
@@ -11710,7 +11710,7 @@
       "address": 1220344,
       "name": "sscanf",
       "size": 168,
-      "source": "src/unmatched/sscanf.c",
+      "source": "src/newlib/sscanf.c",
       "direct": [
         {
           "site": 1220432,
@@ -11762,7 +11762,7 @@
       "address": 1224824,
       "name": "_strtod_r",
       "size": 3860,
-      "source": "src/unmatched/_strtod_r.c",
+      "source": "src/newlib/strtod.c",
       "direct": [
         {
           "site": 1225888,
@@ -12215,7 +12215,7 @@
       "address": 1228688,
       "name": "strtod",
       "size": 36,
-      "source": "src/unmatched/strtod.c",
+      "source": "src/newlib/strtod.c",
       "direct": [
         {
           "site": 1228716,
@@ -12230,7 +12230,7 @@
       "address": 1228768,
       "name": "_strtol_r",
       "size": 568,
-      "source": "src/unmatched/_strtol_r.c",
+      "source": "src/newlib/strtol.c",
       "direct": [
         {
           "site": 1229028,
@@ -12257,7 +12257,7 @@
       "address": 1229336,
       "name": "strtol",
       "size": 44,
-      "source": "src/unmatched/strtol.c",
+      "source": "src/newlib/strtol.c",
       "direct": [
         {
           "site": 1229372,
@@ -12272,7 +12272,7 @@
       "address": 1230056,
       "name": "__submore",
       "size": 232,
-      "source": "src/unmatched/stdio_ungetc.c",
+      "source": "src/newlib/ungetc.c",
       "direct": [
         {
           "site": 1230108,
@@ -12299,7 +12299,7 @@
       "address": 1230288,
       "name": "ungetc",
       "size": 392,
-      "source": "src/unmatched/stdio_ungetc.c",
+      "source": "src/newlib/ungetc.c",
       "direct": [
         {
           "site": 1230360,
@@ -12326,7 +12326,7 @@
       "address": 1234120,
       "name": "__sprint",
       "size": 72,
-      "source": "src/unmatched/stdio_vfprintf.c",
+      "source": "src/newlib/vfprintf.c",
       "direct": [
         {
           "site": 1234160,
@@ -12341,7 +12341,7 @@
       "address": 1234192,
       "name": "__sbprintf",
       "size": 180,
-      "source": "src/unmatched/stdio_vfprintf.c",
+      "source": "src/newlib/vfprintf.c",
       "direct": [
         {
           "site": 1234284,
@@ -12362,7 +12362,7 @@
       "address": 1234376,
       "name": "vfprintf",
       "size": 116,
-      "source": "src/unmatched/stdio_vfprintf.c",
+      "source": "src/newlib/vfprintf.c",
       "direct": [
         {
           "site": 1234444,
@@ -12383,7 +12383,7 @@
       "address": 1234496,
       "name": "_vfprintf_r",
       "size": 5744,
-      "source": "src/unmatched/stdio_vfprintf.c",
+      "source": "src/newlib/vfprintf.c",
       "direct": [
         {
           "site": 1234552,
@@ -12692,7 +12692,7 @@
       "address": 1240240,
       "name": "cvt",
       "size": 448,
-      "source": "src/unmatched/stdio_vfprintf.c",
+      "source": "src/newlib/vfprintf.c",
       "direct": [
         {
           "site": 1240380,
@@ -12725,7 +12725,7 @@
       "address": 1240688,
       "name": "exponent",
       "size": 220,
-      "source": "src/unmatched/stdio_vfprintf.c",
+      "source": "src/newlib/vfprintf.c",
       "direct": [],
       "indirect": []
     },
@@ -12733,7 +12733,7 @@
       "address": 1240912,
       "name": "__svfscanf",
       "size": 3212,
-      "source": "src/unmatched/stdio_vfscanf.c",
+      "source": "src/newlib/vfscanf.c",
       "direct": [
         {
           "site": 1241084,
@@ -12900,7 +12900,7 @@
       "address": 1244128,
       "name": "__sccl",
       "size": 256,
-      "source": "src/unmatched/stdio_vfscanf.c",
+      "source": "src/newlib/vfscanf.c",
       "direct": [],
       "indirect": []
     },
@@ -12908,7 +12908,7 @@
       "address": 1244640,
       "name": "vsprintf",
       "size": 84,
-      "source": "src/unmatched/vsprintf.c",
+      "source": "src/newlib/vsprintf.c",
       "direct": [
         {
           "site": 1244696,
@@ -12923,7 +12923,7 @@
       "address": 1244912,
       "name": "__swsetup",
       "size": 268,
-      "source": "src/unmatched/__swsetup.c",
+      "source": "src/newlib/wsetup.c",
       "direct": [
         {
           "site": 1244968,
@@ -13052,7 +13052,7 @@
       "address": 1994032,
       "name": "FUN_001e6d30",
       "size": 80,
-      "source": "src/unmatched/FUN_001e6d30.c",
+      "source": "src/engine/datapump/DataPumpLibrary.cpp",
       "direct": [
         {
           "site": 1994060,
@@ -13071,7 +13071,7 @@
     },
     {
       "address": 2286656,
-      "name": "FUN_0022e440",
+      "name": "__muldi3",
       "size": 116,
       "source": null,
       "direct": [],
@@ -13081,7 +13081,7 @@
       "address": 2286776,
       "name": "__divdi3",
       "size": 1684,
-      "source": "src/unmatched/__divdi3.c",
+      "source": "src/libgcc/divdi3.c",
       "direct": [],
       "indirect": []
     },
@@ -13089,15 +13089,15 @@
       "address": 2288464,
       "name": "__moddi3",
       "size": 1680,
-      "source": "src/unmatched/__moddi3.c",
+      "source": "src/libgcc/moddi3.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2290144,
-      "name": "FUN_0022f1e0",
+      "name": "__udivdi3",
       "size": 1404,
-      "source": "src/unmatched/FUN_0022f1e0.c",
+      "source": "src/libgcc/udivdi3.c",
       "direct": [],
       "indirect": []
     },
@@ -13105,7 +13105,7 @@
       "address": 2291552,
       "name": "__umoddi3",
       "size": 1384,
-      "source": "src/unmatched/__umoddi3.c",
+      "source": "src/libgcc/umoddi3.c",
       "direct": [],
       "indirect": []
     },
@@ -13113,7 +13113,7 @@
       "address": 2292936,
       "name": "__floatdidf",
       "size": 168,
-      "source": "src/unmatched/__floatdidf.c",
+      "source": "src/libgcc/libgcc2.c",
       "direct": [
         {
           "site": 2292968,
@@ -13156,9 +13156,9 @@
     },
     {
       "address": 2293336,
-      "name": "FUN_0022fe58",
+      "name": "__fixunsdfdi",
       "size": 280,
-      "source": "src/unmatched/FUN_0022fe58.c",
+      "source": "src/libgcc/libgcc2.c",
       "direct": [
         {
           "site": 2293364,
@@ -13231,9 +13231,9 @@
     },
     {
       "address": 2293616,
-      "name": "FUN_0022ff70",
+      "name": "__fixdfdi",
       "size": 120,
-      "source": "src/unmatched/FUN_0022ff70.c",
+      "source": "src/libgcc/libgcc2.c",
       "direct": [
         {
           "site": 2293644,
@@ -13264,25 +13264,25 @@
     },
     {
       "address": 2294096,
-      "name": "FUN_00230150",
+      "name": "__pack_f",
       "size": 180,
-      "source": "src/unmatched/FUN_00230150.c",
+      "source": "src/libgcc/fp_bit.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2294280,
-      "name": "FUN_00230208",
+      "name": "__unpack_f",
       "size": 92,
-      "source": "src/unmatched/FUN_00230208.c",
+      "source": "src/libgcc/fp_bit.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2294376,
-      "name": "FUN_00230268",
+      "name": "__make_fp",
       "size": 44,
-      "source": "src/unmatched/FUN_00230268.c",
+      "source": "src/libgcc/fp_bit.c",
       "direct": [
         {
           "site": 2294400,
@@ -13295,9 +13295,9 @@
     },
     {
       "address": 2294424,
-      "name": "FUN_00230298",
+      "name": "fptodp",
       "size": 60,
-      "source": "src/unmatched/FUN_00230298.c",
+      "source": "src/libgcc/fp_bit.c",
       "direct": [
         {
           "site": 2294440,
@@ -13316,33 +13316,33 @@
     },
     {
       "address": 2294488,
-      "name": "pack_d",
+      "name": "__pack_d",
       "size": 216,
-      "source": "src/unmatched/pack_d.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2294704,
-      "name": "unpack_d",
+      "name": "__unpack_d",
       "size": 188,
-      "source": "src/unmatched/unpack_d.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2294896,
-      "name": "FUN_00230470",
+      "name": "_fpadd_parts",
       "size": 604,
-      "source": "src/unmatched/FUN_00230470.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2295504,
-      "name": "__adddf3",
+      "name": "dpadd",
       "size": 88,
-      "source": "src/unmatched/__adddf3.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2295528,
@@ -13373,9 +13373,9 @@
     },
     {
       "address": 2295592,
-      "name": "FUN_00230728",
+      "name": "dpsub",
       "size": 100,
-      "source": "src/unmatched/FUN_00230728.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2295616,
@@ -13406,9 +13406,9 @@
     },
     {
       "address": 2295696,
-      "name": "__muldf3",
+      "name": "dpmul",
       "size": 644,
-      "source": "src/unmatched/__muldf3.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2295744,
@@ -13457,9 +13457,9 @@
     },
     {
       "address": 2296344,
-      "name": "__divdf3",
+      "name": "dpdiv",
       "size": 320,
-      "source": "src/unmatched/__divdf3.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2296368,
@@ -13484,17 +13484,17 @@
     },
     {
       "address": 2296664,
-      "name": "FUN_00230b58",
+      "name": "__fpcmp_parts_d",
       "size": 288,
-      "source": "src/unmatched/FUN_00230b58.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 2296952,
-      "name": "FUN_00230c78",
+      "name": "dpcmp",
       "size": 76,
-      "source": "src/unmatched/FUN_00230c78.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2296976,
@@ -13519,9 +13519,9 @@
     },
     {
       "address": 2297032,
-      "name": "__floatsidf",
+      "name": "litodp",
       "size": 184,
-      "source": "src/unmatched/__floatsidf.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2297196,
@@ -13534,9 +13534,9 @@
     },
     {
       "address": 2297216,
-      "name": "FUN_00230d80",
+      "name": "dptoli",
       "size": 156,
-      "source": "src/unmatched/FUN_00230d80.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2297232,
@@ -13549,9 +13549,9 @@
     },
     {
       "address": 2297376,
-      "name": "FUN_00230e20",
+      "name": "__make_dp",
       "size": 44,
-      "source": "src/unmatched/FUN_00230e20.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2297400,
@@ -13564,9 +13564,9 @@
     },
     {
       "address": 2297424,
-      "name": "FUN_00230e50",
+      "name": "dptofp",
       "size": 84,
-      "source": "src/unmatched/FUN_00230e50.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2297440,
@@ -13585,9 +13585,9 @@
     },
     {
       "address": 2297512,
-      "name": "FUN_00230ea8",
+      "name": "dptoul",
       "size": 160,
-      "source": "src/unmatched/FUN_00230ea8.c",
+      "source": "src/libgcc/dp_bit.c",
       "direct": [
         {
           "site": 2297528,
@@ -13714,7 +13714,7 @@
       "address": 2356464,
       "name": "FUN_0023f4f0",
       "size": 428,
-      "source": null,
+      "source": "src/unmatched/FUN_0023f4f0.c",
       "direct": [
         {
           "site": 2356580,
@@ -16554,7 +16554,7 @@
       "address": 2856192,
       "name": "FUN_002b9500",
       "size": 52,
-      "source": "src/unmatched/FUN_002b9500.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2856204,
@@ -16575,7 +16575,7 @@
       "address": 2856480,
       "name": "FUN_002b9620",
       "size": 12,
-      "source": "src/unmatched/FUN_002b9620.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2856484,
@@ -16590,7 +16590,7 @@
       "address": 2961520,
       "name": "igObjectSystem_FindMetaByName",
       "size": 60,
-      "source": "src/engine/igObjectSystem_FindMetaByName.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2961548,
@@ -16605,7 +16605,7 @@
       "address": 2962464,
       "name": "igArray_Destruct",
       "size": 96,
-      "source": "src/engine/init-callback-array.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2962504,
@@ -16626,7 +16626,7 @@
       "address": 2975360,
       "name": "List_Reserve",
       "size": 264,
-      "source": "src/unmatched/List_Reserve.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2975408,
@@ -16682,7 +16682,7 @@
       "address": 2975632,
       "name": "List_Resize",
       "size": 120,
-      "source": "src/unmatched/List_Resize.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2975720,
@@ -16697,7 +16697,7 @@
       "address": 2976544,
       "name": "List_AppendWord",
       "size": 84,
-      "source": "src/engine/list-services.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2976580,
@@ -16739,7 +16739,7 @@
       "address": 2977008,
       "name": "List_RemoveWordAt",
       "size": 124,
-      "source": "src/unmatched/List_RemoveWordAt.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2977096,
@@ -16754,7 +16754,7 @@
       "address": 3057296,
       "name": "ObjectPointerList_EnsureIndex",
       "size": 232,
-      "source": "src/unmatched/ObjectPointerList_EnsureIndex.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3057344,
@@ -16787,7 +16787,7 @@
       "address": 3057536,
       "name": "ObjectPointerList_FindByStringField",
       "size": 160,
-      "source": "src/engine/list-string-field-find.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3057612,
@@ -16802,7 +16802,7 @@
       "address": 3057696,
       "name": "ObjectPointerList_FindIndex",
       "size": 68,
-      "source": "src/unmatched/ObjectPointerList_FindIndex.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -16810,7 +16810,7 @@
       "address": 3058176,
       "name": "ObjectPointerList_EraseAt",
       "size": 84,
-      "source": "src/engine/internal-list-operations.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -16818,7 +16818,7 @@
       "address": 3058272,
       "name": "ObjectPointerList_Append",
       "size": 136,
-      "source": "src/engine/internal-list-operations.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3058320,
@@ -16839,7 +16839,7 @@
       "address": 3059184,
       "name": "StringPool_Construct",
       "size": 196,
-      "source": "src/unmatched/StringPool_Construct.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3059244,
@@ -16884,7 +16884,7 @@
       "address": 3059552,
       "name": "StringPool_Intern",
       "size": 172,
-      "source": "src/unmatched/StringPool_Intern.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3059600,
@@ -16923,7 +16923,7 @@
       "address": 3059728,
       "name": "FUN_002eb010",
       "size": 64,
-      "source": "src/unmatched/FUN_002eb010.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3059748,
@@ -16944,7 +16944,7 @@
       "address": 3068416,
       "name": "Memory_AllocateDefaultBuffer",
       "size": 56,
-      "source": "src/engine/Memory_AllocateDefaultBuffer.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3068428,
@@ -16965,7 +16965,7 @@
       "address": 3068480,
       "name": "Memory_AllocateBufferDirect",
       "size": 28,
-      "source": null,
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -16979,7 +16979,7 @@
       "address": 3068720,
       "name": "Memory_ReallocateBuffer",
       "size": 116,
-      "source": "src/engine/Memory_ReallocateBuffer.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3068748,
@@ -17006,7 +17006,7 @@
       "address": 3068992,
       "name": "thunk_Memory_ReallocateBuffer",
       "size": 8,
-      "source": "src/engine/thunk_Memory_ReallocateBuffer.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3068992,
@@ -17021,7 +17021,7 @@
       "address": 3069024,
       "name": "Memory_FreeBuffer",
       "size": 76,
-      "source": "src/engine/Memory_FreeBuffer.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3069048,
@@ -17042,7 +17042,7 @@
       "address": 3069104,
       "name": "Memory_FreeBufferAliasA",
       "size": 8,
-      "source": "src/engine/Memory_FreeBufferAliasA.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3069104,
@@ -17057,7 +17057,7 @@
       "address": 3069152,
       "name": "Memory_GetBufferSize",
       "size": 56,
-      "source": "src/engine/Memory_GetBufferSize.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3069164,
@@ -17078,7 +17078,7 @@
       "address": 3069376,
       "name": "Memory_FreeBufferAliasB",
       "size": 8,
-      "source": "src/engine/Memory_FreeBufferAliasB.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3069376,
@@ -17093,7 +17093,7 @@
       "address": 3080400,
       "name": "Memory_GetDefaultAllocator",
       "size": 8,
-      "source": "src/engine/Memory_GetDefaultAllocator.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3080400,
@@ -17108,7 +17108,7 @@
       "address": 3081456,
       "name": "Memory_FindOwningAllocator",
       "size": 292,
-      "source": "src/unmatched/Memory_FindOwningAllocator.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17145,7 +17145,7 @@
       "address": 3114624,
       "name": "Memory_GetCurrentContext",
       "size": 84,
-      "source": "src/unmatched/Memory_GetCurrentContext.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -17153,7 +17153,7 @@
       "address": 3115216,
       "name": "Memory_GetCurrentContextAlias",
       "size": 8,
-      "source": "src/engine/Memory_GetCurrentContextAlias.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3115216,
@@ -17168,7 +17168,7 @@
       "address": 3115232,
       "name": "Memory_GetAllocatorBySelector",
       "size": 56,
-      "source": "src/engine/Memory_GetAllocatorBySelector.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3115244,
@@ -17189,7 +17189,7 @@
       "address": 3115296,
       "name": "Memory_GetAllocatorByName",
       "size": 56,
-      "source": "src/engine/Memory_GetAllocatorByName.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3115308,
@@ -17210,7 +17210,7 @@
       "address": 3125648,
       "name": "igMetaField_AllocateArray",
       "size": 228,
-      "source": "src/engine/array-allocation.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3125792,
@@ -17247,7 +17247,7 @@
       "address": 3130624,
       "name": "igMetaField_Reset",
       "size": 124,
-      "source": "src/engine/string-field-dispatch.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17271,7 +17271,7 @@
       "address": 3136064,
       "name": "igMetaObject_CreateInstance",
       "size": 244,
-      "source": "src/unmatched/igMetaObject_CreateInstance.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3136184,
@@ -17315,7 +17315,7 @@
       "address": 3137280,
       "name": "igMetaObject_GetFieldAt",
       "size": 24,
-      "source": "src/engine/igMetaObject_GetFieldAt.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -17323,7 +17323,7 @@
       "address": 3138656,
       "name": "igObjectSystem_FindMetaByNameDefault",
       "size": 16,
-      "source": "src/engine/allocator-meta-lookup.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3138664,
@@ -17338,7 +17338,7 @@
       "address": 3139904,
       "name": "igMetaObject_RunStaticInit",
       "size": 120,
-      "source": "src/unmatched/igMetaObject_RunStaticInit.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3139992,
@@ -17364,7 +17364,7 @@
       "address": 3142096,
       "name": "igObject_Construct",
       "size": 276,
-      "source": "src/unmatched/igObject_Construct.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3142188,
@@ -17430,7 +17430,7 @@
       "address": 3143712,
       "name": "igObject_Destroy",
       "size": 268,
-      "source": "src/engine/igObject_Destroy.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3143804,
@@ -17517,7 +17517,7 @@
       "address": 3143984,
       "name": "igObject_ZeroFields",
       "size": 200,
-      "source": "src/unmatched/igObject_ZeroFields.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17536,7 +17536,7 @@
       "address": 3144192,
       "name": "igObject_ConstructFields",
       "size": 164,
-      "source": "src/unmatched/igObject_ConstructFields.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17560,7 +17560,7 @@
       "address": 3144528,
       "name": "igObject_ResetUnconstructedFields",
       "size": 188,
-      "source": "src/unmatched/igObject_ResetUnconstructedFields.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3144640,
@@ -17591,7 +17591,7 @@
       "address": 3144720,
       "name": "igObject_DestructFieldValues",
       "size": 160,
-      "source": "src/unmatched/igObject_DestructFieldValues.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17615,7 +17615,7 @@
       "address": 3144880,
       "name": "igObject_ClearFieldValues",
       "size": 144,
-      "source": "src/unmatched/igObject_ClearFieldValues.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17634,7 +17634,7 @@
       "address": 3149008,
       "name": "igObject_IsKindOf",
       "size": 84,
-      "source": "src/engine/igObject_IsKindOf.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17648,7 +17648,7 @@
       "address": 3149104,
       "name": "igObject_GetAllocationBase",
       "size": 52,
-      "source": "src/engine/object-allocation-base.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -17662,7 +17662,7 @@
       "address": 3149168,
       "name": "igObject_AllocateStorage",
       "size": 56,
-      "source": "src/engine/object-storage-dispatch.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3149180,
@@ -17683,7 +17683,7 @@
       "address": 3149392,
       "name": "FUN_00300e50",
       "size": 72,
-      "source": "src/engine/object-storage-dispatch.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3149412,
@@ -17704,7 +17704,7 @@
       "address": 3149648,
       "name": "FUN_00300f50",
       "size": 68,
-      "source": "src/engine/object-storage-dispatch.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3149672,
@@ -17725,7 +17725,7 @@
       "address": 3149824,
       "name": "igObject_GetAllocator",
       "size": 8,
-      "source": "src/engine/igObject_GetAllocator.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3149824,
@@ -17740,7 +17740,7 @@
       "address": 3153456,
       "name": "ObjectList_AppendRetained",
       "size": 88,
-      "source": "src/engine/list-services.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3153524,
@@ -17755,7 +17755,7 @@
       "address": 3153632,
       "name": "ObjectList_ResizeRetained",
       "size": 276,
-      "source": "src/unmatched/ObjectList_ResizeRetained.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3153740,
@@ -17782,7 +17782,7 @@
       "address": 3154624,
       "name": "igProperty_FindByName",
       "size": 188,
-      "source": "src/unmatched/igProperty_FindByName.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3154736,
@@ -17797,7 +17797,7 @@
       "address": 3191584,
       "name": "FUN_0030b320",
       "size": 152,
-      "source": "src/unmatched/FUN_0030b320.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3191648,
@@ -17824,7 +17824,7 @@
       "address": 3191744,
       "name": "FUN_0030b3c0",
       "size": 88,
-      "source": "src/unmatched/FUN_0030b3c0.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3191772,
@@ -17851,7 +17851,7 @@
       "address": 3191840,
       "name": "FUN_0030b420",
       "size": 56,
-      "source": "src/unmatched/FUN_0030b420.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3191864,
@@ -17866,7 +17866,7 @@
       "address": 3191904,
       "name": "FUN_0030b460",
       "size": 352,
-      "source": "src/unmatched/FUN_0030b460.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3191984,
@@ -17935,7 +17935,7 @@
       "address": 3192368,
       "name": "FUN_0030b630",
       "size": 60,
-      "source": "src/unmatched/FUN_0030b630.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3192400,
@@ -17950,7 +17950,7 @@
       "address": 3193840,
       "name": "FUN_0030bbf0",
       "size": 232,
-      "source": "src/unmatched/FUN_0030bbf0.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3193908,
@@ -17995,7 +17995,7 @@
       "address": 3195072,
       "name": "StringTable_Construct",
       "size": 84,
-      "source": "src/unmatched/StringTable_Construct.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -18009,7 +18009,7 @@
       "address": 3195456,
       "name": "StringTable_Find",
       "size": 140,
-      "source": "src/unmatched/StringTable_Find.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3195532,
@@ -18035,7 +18035,7 @@
       "address": 3195600,
       "name": "StringTable_Register",
       "size": 192,
-      "source": "src/unmatched/StringTable_Register.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3195704,
@@ -18067,7 +18067,7 @@
       "address": 3195792,
       "name": "StringTable_RemoveHeader",
       "size": 148,
-      "source": "src/unmatched/StringTable_RemoveHeader.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3195868,
@@ -18099,7 +18099,7 @@
       "address": 3195952,
       "name": "StringTable_NotifyEmptyChunk",
       "size": 208,
-      "source": "src/unmatched/StringTable_NotifyEmptyChunk.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3196084,
@@ -18125,7 +18125,7 @@
       "address": 3196160,
       "name": "StringTable_SearchRetained",
       "size": 244,
-      "source": "src/unmatched/StringTable_SearchRetained.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3196276,
@@ -18140,7 +18140,7 @@
       "address": 3196416,
       "name": "StringTable_EraseAt",
       "size": 104,
-      "source": "src/engine/string-pool.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3196468,
@@ -18155,7 +18155,7 @@
       "address": 3196528,
       "name": "StringTable_InsertAt",
       "size": 204,
-      "source": "src/unmatched/StringTable_InsertAt.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3196584,
@@ -18176,7 +18176,7 @@
       "address": 3196736,
       "name": "StringTable_AllocateObject",
       "size": 28,
-      "source": null,
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -18190,7 +18190,7 @@
       "address": 3196784,
       "name": "StringChunk_Construct",
       "size": 84,
-      "source": "src/engine/string-chunks.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3196840,
@@ -18205,7 +18205,7 @@
       "address": 3196880,
       "name": "StringChunk_Destroy",
       "size": 84,
-      "source": "src/engine/string-chunks.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3196908,
@@ -18226,7 +18226,7 @@
       "address": 3196976,
       "name": "StringChunk_AllocateToken",
       "size": 264,
-      "source": "src/unmatched/StringChunk_AllocateToken.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3197072,
@@ -18253,7 +18253,7 @@
       "address": 3197248,
       "name": "StringChunk_ReleaseHeader",
       "size": 100,
-      "source": "src/engine/string-pool.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3197272,
@@ -18286,7 +18286,7 @@
       "address": 3197360,
       "name": "StringChunk_InitializeStorage",
       "size": 116,
-      "source": "src/engine/string-chunks.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -18300,7 +18300,7 @@
       "address": 3197488,
       "name": "StringChunk_FreeStorage",
       "size": 8,
-      "source": "src/engine/string-chunks.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3197488,
@@ -18315,7 +18315,7 @@
       "address": 3197504,
       "name": "StringChunk_TakeBlock",
       "size": 236,
-      "source": "src/unmatched/StringChunk_TakeBlock.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -18323,7 +18323,7 @@
       "address": 3197744,
       "name": "StringChunk_MergeBlocks",
       "size": 68,
-      "source": "src/engine/string-chunks.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -18352,7 +18352,7 @@
       "address": 3198176,
       "name": "StringChunk_AllocateObject",
       "size": 28,
-      "source": null,
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": [
         {
@@ -18366,7 +18366,7 @@
       "address": 3198208,
       "name": "StringChunk_DeleteObject",
       "size": 8,
-      "source": "src/engine/string-chunks.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3198208,
@@ -18381,7 +18381,7 @@
       "address": 3198448,
       "name": "StringList_Resize",
       "size": 300,
-      "source": "src/unmatched/StringList_Resize.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3198528,

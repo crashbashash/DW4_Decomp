@@ -1,0 +1,577 @@
+void Gap__Core__igObjectRefMetaField__vfunc_12(int arg0) {
+    FUN_00303460((igObjectRefMetaField *)arg0, 0);
+    Gap__Core__igObject__vfunc_10(arg0);
+}
+
+void igObjectRefMetaField_InitDefaults(void **self) {
+    Gap__Core__igObject__vfunc_09((int)self);
+    ((igObjectSlot33 *)self)->vfunc_33(0);
+}
+
+void igObjectRefMetaField_Assign(igObjectRefMetaField *field,void *object,igObject *value){
+    igObject *old=*(igObject **)((char *)object+field->_offset);
+    if(field->_refCounted||field->_destruct){
+        if(value)++value->_refCount;
+        if(old){--old->_refCount;if(!(old->_refCount&0x7fffff))igObject_Destroy(old);}
+    }
+    *(igObject **)((char *)object+field->_offset)=value;
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_24(int a0, int a1, int a2) {
+    igObjectRefMetaField_Assign((igObjectRefMetaField *)a0, (void *)a1, (igObject *)*(int *)((char *)a2 + 0));
+}
+
+int igObjectRefMetaField_GetTypeSize(igObjectRefMetaField *) { return 4; }
+
+void FUN_00303460(igObjectRefMetaField *arg0, igObject *arg1) {
+    igObject **temp_s0;
+    igObject *temp_a0;
+
+    temp_s0 = (igObject **)(arg0->_default);
+    if (arg1 != 0) {
+        arg1->_refCount = (int)((int) (arg1->_refCount + 1));
+    }
+    temp_a0 = (igObject *)(*temp_s0);
+    if (temp_a0 != 0) {
+        temp_a0->_refCount = (int)((int) (temp_a0->_refCount - 1));
+        if (((unsigned long long) ((long long) (int) temp_a0->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(temp_a0);
+        }
+    }
+    *temp_s0 = arg1;
+}
+
+int Gap__Core__igObjectRefMetaField__vfunc_51(igObjectRefMetaField *self, igObject **valueSlot, int extra2, int extra3, int extra4) {
+    igObject *object;
+
+    igRefMetaField_ReadRawFieldMem((void *)self, (int)valueSlot, (int *)extra2, extra3, extra4);
+    if ((self->_refCounted != 0) || (self->_destruct != 0)) {
+        object = *valueSlot;
+        if (object != 0) {
+            object->_refCount = object->_refCount + 1;
+        }
+    }
+}
+
+void igObjectRefMetaField_ConstructValue(igObjectRefMetaField *field,void *object){
+    void *allocator;
+    if(!field->_construct)return;
+    const char *name=(const char *)field->_poolName;
+    if(name&&*name){allocator=Memory_GetAllocatorByName((int)name);if(!allocator)allocator=((void *)igObject_GetAllocator((int)object));}
+    else allocator=((void *)igObject_GetAllocator((int)object));
+    igObject *child=(igObject *)igMetaObject_CreateInstance((CreateMeta *)((void *)field->_metaObject), (MemoryPool *)allocator);
+    igObjectRefMetaField_Assign(field,object,child);
+    if((field->_refCounted||field->_destruct)&&child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}
+}
+
+void igObjectRefMetaField_DestructValue(igObjectRefMetaField *field,void *object){
+    if(field->_destruct){igObject *child=*(igObject **)((char *)object+field->_offset);
+        if(child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}}
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_34(igObjectRefMetaField *field,void *object){
+    if(field->_refCounted){igObject *child=*(igObject **)((char *)object+field->_offset);
+        if(child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}}
+    igRefMetaField_ClearValue((igMetaField *)field,object);
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_28(void *arg0, int arg1) {
+    int temp_a0;
+
+    temp_a0 = *(int *)(arg1 + *(int *)((char *)arg0 + 8));
+    if (temp_a0 != 0) {
+        igObject_ResetFields((void **)temp_a0);
+    }
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_30(char *arg0, int arg1) {
+    igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)**(int **)(arg0 + 32));
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_37(int arg0, int arg1, int arg2) {
+    igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)*(int *)((char *)((arg2 + *(int *)((char *)(arg0) + 8))) + 0));
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_36(igObjectRefMetaField *self, char *dst, char *src) {
+    CopyableObject *to;
+    CopyableObject *from;
+    CopyableObject *copy;
+
+    to = *(CopyableObject **)(dst + self->_offset);
+    from = *(CopyableObject **)(src + self->_offset);
+    if (to != 0 || from != 0) {
+        if (to != 0 && from != 0) {
+            from->prepareCopy();
+            FUN_003006a0((void **)to, (void **)from);
+            return;
+        }
+        if (to == 0) {
+            from->prepareCopy();
+            copy = from->duplicate(1);
+            igObjectRefMetaField_Assign(self, dst, (igObject *)copy);
+            if (self->_destruct == 0 && copy != 0) {
+                copy->_refCount = copy->_refCount - 1;
+                if ((copy->_refCount & 0x7FFFFF) == 0) {
+                    igObject_Destroy(copy);
+                }
+            }
+        } else if (from == 0) {
+            igObjectRefMetaField_Assign(self, dst, 0);
+        }
+    }
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_38(M_303320 *arg0, int arg1, int arg2) {
+    int temp_a0;
+    VC_84_1 *temp_a1;
+    R_303320 *temp_v0;
+    int off;
+
+    off = arg0->f8;
+    temp_a0 = *(int *)(arg1 + off);
+    temp_a1 = *(VC_84_1 **)(arg2 + off);
+    if ((temp_a0 != 0) || (temp_a1 != 0)) {
+        if ((temp_a0 != 0) && (temp_a1 != 0)) {
+            FUN_00300770((ShallowObject *)temp_a0, (int)temp_a1);
+            return;
+        }
+        if (temp_a0 == 0) {
+            temp_v0 = (R_303320 *)temp_a1->vX(0);
+            igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)temp_v0);
+            if ((arg0->f53 == 0) && (temp_v0 != 0)) {
+                temp_v0->f4 = temp_v0->f4 - 1;
+                if (((unsigned long long) ((long long) temp_v0->f4 << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(temp_v0);
+                }
+            }
+        } else if (temp_a1 == 0) {
+            igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, 0);
+        }
+    }
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_39(igObjectRefMetaField *self, int instance) {
+    int object;
+
+    object = *(int *)(instance + self->_offset);
+    if (object != 0) {
+        igObject_ResetFields((void **)object);
+    }
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_42(igObjectRefMetaField *arg0, int arg1, int arg2, int arg3) {
+    int temp_a0;
+
+    temp_a0 = *(int *)(arg1 + arg0->_offset);
+    if (temp_a0 != 0) {
+        igObject_VisitFields((VisitorObjectView *)temp_a0, (int (*)(void *, void *, void *))arg2, (void *)arg3);
+    }
+}
+
+int Gap__Core__igObjectRefMetaField__vfunc_44(igObjectRefMetaField *arg0, int arg1, int arg2) {
+    int temp_v0;
+
+    temp_v0 = arg0->_offset;
+    return *(int *)(arg1 + temp_v0) - *(int *)(arg2 + temp_v0);
+}
+
+int Gap__Core__igObjectRefMetaField__vfunc_45(igObjectRefMetaField *self, int objectA, int objectB) {
+    int refA;
+    int refB;
+    int fieldOffset;
+
+    fieldOffset = self->_offset;
+    refA = *(int *)(objectA + fieldOffset);
+    refB = *(int *)(objectB + fieldOffset);
+    if (refA == refB) {
+        return 1;
+    }
+    if ((refA == 0) || (refB == 0)) {
+        return 0;
+    }
+    return igObject_IsAlikeExactly((void *)refA, (void *)refB);
+}
+
+int Gap__Core__igObjectRefMetaField__vfunc_46(igObjectRefMetaField *self, int objectA, int objectB) {
+    int refA;
+    int refB;
+    int fieldOffset;
+
+    fieldOffset = self->_offset;
+    refA = *(int *)(objectA + fieldOffset);
+    refB = *(int *)(objectB + fieldOffset);
+    if (refA == refB) {
+        return 1;
+    }
+    if ((refA == 0) || (refB == 0)) {
+        return 0;
+    }
+    return igObject_IsAlikeDeep((DeepObject *)refA, (DeepObject *)refB);
+}
+
+int Gap__Core__igObjectRefMetaField__vfunc_47(igObjectRefMetaField *self, int objectA, int objectB) {
+    int refA;
+    int refB;
+    int fieldOffset;
+
+    fieldOffset = self->_offset;
+    refA = *(int *)(objectA + fieldOffset);
+    refB = *(int *)(objectB + fieldOffset);
+    if (refA == refB) {
+        return 1;
+    }
+    if ((refA == 0) || (refB == 0)) {
+        return 0;
+    }
+    return igObject_IsAlikeShallow((V_2fef20 *)refA, (V_2fef20 *)refB);
+}
+
+void *igObjectRefMetaField_Construct(igObjectRefMetaField *self, int extra1) {
+    igRefMetaField_Construct((igRefMetaField *)self);
+    self->_vtable = (int)g_igObjectRefMetaField_vtable;
+    self->_poolName = 0;
+    if (self) {
+        igObjectRefMetaField_Init(self);
+    }
+    return self;
+}
+
+void *igObjectRefMetaField_Init(igObjectRefMetaField *self) {
+    igRefMetaField_Init((igRefMetaField *)self);
+    self->_vtable = (int)g_igObjectRefMetaField_vtable;
+    self->_poolName = 0;
+    self->_refCounted = 1;
+    self->_metaObject = 0;
+    return self;
+}
+
+void *FUN_00303c60(igObjectRefMetaField *arg0, void *arg1) {
+    igRefMetaField_CopyConstruct((igRefMetaField *)arg0, (igRefMetaField *)arg1);
+    *(int *)((char *)(arg0) + 0) = (int)(&g_igObjectRefMetaField_vtable[0]);
+    arg0->_poolName = 0;
+    arg0->_refCounted = (unsigned char) *(unsigned char *)((char *)(arg1) + 60);
+    arg0->_metaObject = (int)((int) *(int *)((char *)(arg1) + 56));
+    return arg0;
+}
+
+void Gap__Core__igObjectRefMetaField__vfunc_02(void) {
+    igRefMetaField_Destruct();
+}
+
+void FUN_00303cd0(Dir *self, int name, void *object) {
+    Obj_303cd0 *entry;
+    Obj_303cd0 *held;
+
+    *(Obj_303cd0 **)&entry = (Obj_303cd0 *)(FUN_002be270(((int)igObject_GetAllocator((int)self))));
+    igNamedObject_SetName((N_2fecb0 *)entry, name);
+    ObjectList_AppendRetained((igObjectList *)self->names, (igObject *)entry);
+    ObjectList_AppendRetained((igObjectList *)self->objects, (igObject *)object);
+    held = entry;
+    if (held != 0) {
+        held->_refCount = held->_refCount - 1;
+        if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(held);
+        }
+    }
+}
+
+int FUN_00303d70(void *arg0, int extra1) {
+    int temp_v0;
+
+    temp_v0 = FUN_00303dc0((FieldTable *)arg0, extra1);
+    if (temp_v0 == -1) {
+        return 0;
+    }
+    return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 16) + (temp_v0 * 4));
+}
+
+int FUN_00303dc0(FieldTable *table, int name) {
+    igObject *field = ((igObject *)igProperty_FindByName((struct L_3022c0 *)table->fields, (struct P_3022c0 *)DAT_00585be0[0], name));
+    if (field == 0) {
+        return -1;
+    }
+    FieldList *fields = table->fields;
+    return fields->find(field);
+}
+
+int FUN_00303e50(void *arg0) {
+    return *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8);
+}
+
+int FUN_00303e60(void *arg0, int arg1) {
+    return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 16) + (arg1 * 4));
+}
+
+int *FUN_00303e80(void *arg0, int arg1) {
+    int *temp_v0;
+    void *temp_v0_2;
+
+    temp_v0_2 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 16) + (arg1 * 4)));
+    if (temp_v0_2 == 0) {
+        return 0;
+    }
+    temp_v0 = (int *)(*(int *)((char *)(temp_v0_2) + 8));
+    if (temp_v0 != 0) {
+        return temp_v0;
+    }
+    return &DAT_004e0858[0];
+}
+
+void FUN_00303ed0(Owner_303ed0 *o) {
+    List_303ed0 *l = o->a;
+    int n = l->count;
+    int i;
+    for (i = 0; i < n; i++) {
+        Obj_303ed0 *p = l->data[i];
+        if (p) {
+            p->refs = p->refs - 1;
+            if ((((unsigned long long)(long long)p->refs) & 0x7fffffULL) == 0) igObject_Destroy((void *)p);
+        }
+    }
+    { int m = l->count; for (i = 0; i < m; i++) l->data[i] = 0; }
+    l->count = 0;
+    l = o->b;
+    n = l->count;
+    for (i = 0; i < n; i++) {
+        Obj_303ed0 *p = l->data[i];
+        if (p) {
+            p->refs = p->refs - 1;
+            if ((((unsigned long long)(long long)p->refs) & 0x7fffffULL) == 0) igObject_Destroy((void *)p);
+        }
+    }
+    { int m = l->count; for (i = 0; i < m; i++) l->data[i] = 0; }
+    l->count = 0;
+}
+
+void FUN_00304030(S_304030 *arg0, int arg1) {
+    /*D*/
+    igObject *o;
+    igObjectList *l2;
+    int c2;
+    igObjectList *l6;
+    int c1;
+    igObjectList *l3;
+    int idx;
+    igObject *s6b;
+    igObject *s6;
+    igObjectList *l4;
+    igObjectList *l1;
+    int s4;
+    igObjectList *l5;
+    int a4;
+    /*E*/
+    idx = FUN_00303e50((void *)arg0);
+    l1 = arg0->l12;
+    s4 = 4 * idx;
+    s6 = ((igObject **)((char *)l1->_data + s4 - 4))[0];
+    if (s6) { s6->_refCount = 1 + (int)s6->_refCount; }
+    a4 = 4 * arg1;
+    o = ((igObject **)((char *)l1->_data + a4))[0];
+    REL(o)
+    if (l1->_count && arg1 >= 0 && arg1 < l1->_count) { ((igObject **)((char *)l1->_data + a4))[0] = s6; }
+    l2 = arg0->l12;
+    o = ((igObject **)(s4 + (char *)l2->_data - 4))[0];
+    REL(o)
+    if (l2->_count && idx - 1 >= 0 && idx - 1 < l2->_count) { ((igObject **)((char *)(s4 + (int)(igObject **)l2->_data) - 4))[0] = 0; }
+    l3 = arg0->l12;
+    c1 = l3->_count - 1;
+    o = ((igObject **)(l3->_data + c1 * 4))[0];
+    REL(o)
+    List_RemoveWordAt((L_2d6cf0 *)l3, c1);
+    ((igObject **)(l3->_data + 4 * l3->_count))[0] = 0;
+    l4 = arg0->l8;
+    s6b = ((igObject **)(s4 + (char *)l4->_data - 4))[0];
+    if (s6b) { s6b->_refCount = 1 + (int)s6b->_refCount; }
+    o = ((igObject **)((char *)l4->_data + a4))[0];
+    REL(o)
+    if (l4->_count && arg1 >= 0 && arg1 < l4->_count) { ((igObject **)(a4 + (char *)l4->_data))[0] = s6b; }
+    l5 = arg0->l8;
+    o = ((igObject **)((char *)l5->_data + s4 - 4))[0];
+    REL(o)
+    if (l5->_count && idx - 1 >= 0 && idx - 1 < l5->_count) { ((igObject **)((char *)(s4 + (int)(igObject **)l5->_data) - 4))[0] = 0; }
+    l6 = arg0->l8;
+    c2 = l6->_count - 1;
+    o = ((igObject **)(l6->_data + 4 * c2))[0];
+    REL(o)
+    List_RemoveWordAt((L_2d6cf0 *)l6, c2);
+    ((igObject **)(l6->_data + l6->_count * 4))[0] = 0;
+}
+
+void FUN_00304350(Q_304350 *arg0) {
+    Q_304350 *p;
+
+    p = DAT_005871b0[0];
+    if (p != 0) {
+        p->f4 -= 1;
+        if ((p->f4 & 0x7fffff) == 0) {
+            igObject_Destroy(p);
+        }
+    }
+    if (arg0 != 0) {
+        arg0->f4 += 1;
+    }
+    DAT_005871b0[0] = arg0;
+}
+
+void FUN_003043c0(R_3043c0 *arg0) {
+    R_3043c0 *p;
+    int rc;
+    p = DAT_005871b8[0];
+    if (p != 0) {
+        rc = p->f4 - 1;
+        p->f4 = rc;
+        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(p);
+        }
+    }
+    if (arg0 != 0) {
+        arg0->f4 = arg0->f4 + 1;
+    }
+    DAT_005871b8[0] = arg0;
+}
+
+void FUN_00304430(const char *arg0, ...) {
+    int n = __builtin_args_info(2);
+    int off;
+    if (n >= 8) off = 0; else off = (8 - n) * 8;
+    FUN_003044a0(arg0, (int)((char*)__builtin_next_arg(arg0) - off));
+}
+
+void FUN_003044a0(const char *arg0, int arg1) {
+    char sp10[4096];
+    int var_v0;
+
+    if ((((VC_3044a0 * *)DAT_005871b0)[0] != 0) && (GPR_00554998 != 0)) {
+        var_v0 = vsnprintf(&sp10[0], 0x1000, arg0, arg1);
+        if ((var_v0 < 0) || (var_v0 >= 0x1000)) {
+            sp10[4095] = 0;
+            var_v0 = 0x1000;
+        }
+        ((VC_3044a0 * *)DAT_005871b0)[0]->vX(&sp10[0], var_v0, 1);
+        if (GPR_0055499c != 0) {
+            printf(&DAT_004f95a0[0], &sp10[0]);
+        }
+    } else if (GPR_0055499c != 0) {
+        vprintf(arg0, arg1);
+    }
+}
+
+int FUN_00304550(int arg0, ...) { 
+    int n = __builtin_args_info(2);
+    int off;
+    if (n >= 8) off = 0; else off = (8 - n) * 8;
+    return FUN_003045c0(arg0, (int)((char*)__builtin_next_arg(arg0) - off)); }
+
+int FUN_003045c0(int arg0, int arg1) {
+    char buf[4096];
+    int var_v0;
+
+    if ((((Out * *)DAT_005871b8)[0] != 0) && (GPR_005549a4 != 0)) {
+        var_v0 = vsnprintf(buf, 0x1000, arg0, arg1);
+        if ((var_v0 < 0) || (var_v0 >= 0x1000)) {
+            buf[4095] = 0;
+            var_v0 = 0x1000;
+        }
+        ((Out * *)DAT_005871b8)[0]->vX(buf, var_v0, 1);
+        if (GPR_005549a8 != 0) {
+            fprintf(*(int *)((char *)(((int *)_impure_ptr)[0]) + 12), &DAT_004f95a0[0], buf);
+        }
+    } else if (GPR_005549a8 != 0) {
+        vfprintf(*(int *)((char *)(((int *)_impure_ptr)[0]) + 12), arg0, arg1);
+    }
+}
+
+void FUN_00304680(void) {
+    if (((void ** *)DAT_005871b0)[0] != 0) {
+        ((DW4VC_128_0 *)(((void ** *)DAT_005871b0)[0]))->vX();
+    }
+    fflush(*(int *)((char *)(((void * *)_impure_ptr)[0]) + 8));
+}
+
+void FUN_003046d0(void) {
+    if (((void ** *)DAT_005871b8)[0] != 0) {
+        ((DW4VC_128_0 *)(((void ** *)DAT_005871b8)[0]))->vX();
+    }
+    fflush(*(int *)((char *)(((void * *)_impure_ptr)[0]) + 12));
+}
+
+void FUN_00304720(igPluginHelper *helper, int name, int location, int locationType) {
+    int pool;
+    char *text;
+    igPluginRepository *target;
+    char *old;
+    igSmartPointer<igPluginRepository> repository(((igPluginRepository *)FUN_002bc930(((int)igObject_GetAllocator((int)helper)))));
+    igNamedObject_SetName((N_2fecb0 *)repository.p, name);
+    target = repository.p;
+    if (DAT_00586f20[0] == 0) {
+        pool = ((int)FUN_002eb010(0x10));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
+        }
+        DAT_00586f20[0] = pool;
+    }
+    text = ((char *)StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)location));
+    old = (char *)target->_location;
+    if (old != 0) {
+        int *header = (int *)(old - 8);
+        int count = *(int *)(old - 4) - 1;
+        *(int *)(old - 4) = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+        }
+    }
+    target->_location = (int)text;
+    repository.p->_locationType = locationType;
+    ObjectList_AppendRetained((igObjectList *)helper->_repositoryList, (igObject *)repository.p);
+}
+
+static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, int path, const int &skip) {
+    igPluginRepository *repository = ref.p;
+    int interned, left;
+    int old;
+    int *header;
+    if (DAT_00586f20[0] == 0) {
+        int pool = ((int)FUN_002eb010(16));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
+        }
+        DAT_00586f20[0] = pool;
+    }
+    interned = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)((char *)(path + skip)));
+    old = repository->_location;
+    if (old != 0) {
+        header = (int *)(old - 8);
+        left = *(int *)(old - 4) - 1;
+        *(int *)(old - 4) = left;
+        if (left == 0) {
+            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+        }
+    }
+    repository->_location = interned;
+}
+
+static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, char *location) {
+    igPluginRepository *repository = ref.p;
+    int interned, left;
+    int old;
+    int *header;
+    if (DAT_00586f20[0] == 0) {
+        int pool = ((int)FUN_002eb010(16));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
+        }
+        DAT_00586f20[0] = pool;
+    }
+    interned = StringPool_Intern((StringPool *)DAT_00586f20[0], (const char *)location);
+    old = repository->_location;
+    if (old != 0) {
+        header = (int *)(old - 8);
+        left = *(int *)(old - 4) - 1;
+        *(int *)(old - 4) = left;
+        if (left == 0) {
+            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+        }
+    }
+    repository->_location = interned;
+}
+

@@ -17,7 +17,7 @@ are not automatically attributed to the hub.
 
 **49 bound APIs**, plus registration/dispatch, reach
 **508 functions / 117,380 bytes** through known direct edges.
-**27 functions / 6,636 bytes** lack source definitions.
+**11 functions / 4,940 bytes** lack source definitions.
 The reached bodies contain **110 unresolved register-transfer sites**.
 
 SD receiver methods, callbacks, model/AI programs, named-chunk ownership,
@@ -34,30 +34,14 @@ Exact script call-site references, message arguments, API roots and native edges
 
 | Address | Symbol | Bytes | Indirect sites |
 | --- | --- | ---: | ---: |
-| `0x0010ab00` | `_Exit` | 16 | 0 |
-| `0x0010add0` | `GetThreadId` | 16 | 0 |
-| `0x0010aec0` | `EndOfHeap` | 16 | 0 |
-| `0x0010af00` | `SignalSema` | 16 | 0 |
-| `0x0010af20` | `WaitSema` | 16 | 0 |
-| `0x0010b340` | `GetMemorySize` | 16 | 0 |
-| `0x0010b350` | `_InitTLB` | 16 | 0 |
-| `0x0010b5e0` | `sbrk` | 172 | 0 |
 | `0x0010c8d8` | `FUN_0010c8d8` | 148 | 0 |
-| `0x0010c970` | `FUN_0010c970` | 360 | 1 |
 | `0x0010cad8` | `FUN_0010cad8` | 1524 | 16 |
-| `0x001138b0` | `RFU086_WaitEvnetFlag` | 16 | 0 |
-| `0x00113990` | `InitTLB32MB` | 500 | 0 |
 | `0x00113f20` | `FUN_00113f20` | 84 | 0 |
-| `0x00113f78` | `FUN_00113f78` | 24 | 0 |
 | `0x0018be80` | `FUN_0018be80` | 1340 | 0 |
 | `0x001908f0` | `Matrix44_Copy` | 188 | 0 |
 | `0x00190a50` | `Matrix44_TranslateLocal` | 212 | 0 |
 | `0x0022e440` | `__muldi3` | 116 | 0 |
 | `0x0023c9a0` | `FUN_0023c9a0` | 416 | 0 |
-| `0x0023f4f0` | `FUN_0023f4f0` | 428 | 0 |
 | `0x002413f0` | `FUN_002413f0` | 352 | 0 |
 | `0x002d6b80` | `List_InsertWords` | 220 | 0 |
-| `0x002ed240` | `Memory_AllocateBufferDirect` | 28 | 1 |
-| `0x0030c740` | `StringTable_AllocateObject` | 28 | 1 |
 | `0x0030cb80` | `StringChunk_ReturnBlock` | 340 | 0 |
-| `0x0030cce0` | `StringChunk_AllocateObject` | 28 | 1 |

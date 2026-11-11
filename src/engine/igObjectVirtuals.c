@@ -4,7 +4,6 @@
 
 #include "dw4/reflected.h"
 extern int g_beModelCtrlInfo_metaObject[4];
-int Gap__Core__igObject__vfunc_00__002ff0a0();
 int Gap__Core__igObject__vfunc_08__002ff0f0();
 
 /* Default slot 21: constant 4. */
@@ -31,10 +30,6 @@ void Gap__Core__igObject__vfunc_36(igTransform *self, int target)
     self->_target = target;
 }
 
-int Gap__Core__igObject__vfunc_00()
-{
-    return Gap__Core__igObject__vfunc_00__002ff0a0();
-}
 /* Slot 28 default: empty. */
 void Gap__Core__igObject__vfunc_28(void)
 {

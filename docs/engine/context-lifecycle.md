@@ -3,7 +3,7 @@
 Seven bodies /1,928 bytes: constructor152,
 destructor188, name initialization116, retained slot setter184, allocation delete64,
 and the contiguous special delegate668/removal556 pair. All seven are in the context class's
-whole file, [igMemoryPoolContextInfo.cpp](../../src/engine/igMemoryPoolContextInfo.cpp).
+run of the Core library unit, [igMemoryPoolContextInfo_tail.inc](../../src/engine/core/igMemoryPoolContextInfo_tail.inc).
 
 Six body-derived names are applied; the setter retains its evidenced generated
 class/slot name. ABI projections describe observed layout and are not claims of

@@ -10,12 +10,12 @@ construction/destruction/reset, shared zero/clear helpers, construct-flag and
 metadata count/index getters.
 
 Eight reference-field bodies (748 bytes): the object-reference assign, size, construct,
-destruct and slot-34 bodies are in [igObjectRefMetaField.cpp](../../src/engine/igObjectRefMetaField.cpp),
+destruct and slot-34 bodies are in [igObjectRefMetaField_tail.inc](../../src/engine/core/igObjectRefMetaField_tail.inc),
 and the plain reference zero, clear and construct-test bodies in
-[ref-field-lifecycle.cpp](../../src/engine/ref-field-lifecycle.cpp), both
+[igRefMetaField_tail.inc](../../src/engine/core/igRefMetaField_tail.inc), both
 using reflected receiver fields and explicitly documented header/virtual-slot ABI
 views. The metadata count and
-index getters, in [igMetaObject.cpp](../../src/engine/igMetaObject.cpp), are 36 bytes.
+index getters, in [igMetaObject_tail.inc](../../src/engine/core/igMetaObject_tail.inc), are 36 bytes.
 The four generic cleanup/persistence bodies, `2ffc10`, `2ffcb0`, `2ffd40` and
 `igObject_WritePersistentFields` (`2ffe10`, 384 bytes), are in one-function files
 under `src/unmatched/`.

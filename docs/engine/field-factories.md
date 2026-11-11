@@ -4,18 +4,16 @@ Eighteen complete bodies / 1,752 code bytes. They cover the three
 factory kinds referenced by Work's original field table, their constructor and
 initializer chains, object header construction, raw allocation and the two concrete
 post-construction default hooks. Header initialization at `2fef20` (76 bytes) opens
-[igObject.cpp](../../src/engine/igObject.cpp), the object class's whole file.
+[igObject_tail2.inc](../../src/engine/core/igObject_tail2.inc), the object class's run of the Core library unit.
 
 Among them are `igMetaField_Init` (252),
 `igObject_ConstructHeader` (140) and `igObject_AllocateRawStorage` (112).
-The constructor/initializer pairs of the reference, string and unsigned-int fields are in
-[field-descriptor-constructors.c](../../src/engine/field-descriptor-constructors.c)
-with recovered receiver fields and explicit forwarded receivers; the int and object-reference
-pairs are in their classes' whole files, [igIntMetaField.cpp](../../src/engine/igIntMetaField.cpp)
-and [igObjectRefMetaField.cpp](../../src/engine/igObjectRefMetaField.cpp). The three factories
-and the string default hook are in
-[field-descriptor-factories.cpp](../../src/engine/field-descriptor-factories.cpp); the
-object-reference default hook is in its class file.
+The constructor/initializer pairs of the reference, string, unsigned-int, int and object-reference
+fields are in their classes' runs of the Core library unit
+([CoreLibrary.cpp](../../src/engine/core/CoreLibrary.cpp)), with recovered receiver fields and
+explicit forwarded receivers: [igIntMetaField_tail.inc](../../src/engine/core/igIntMetaField_tail.inc) and [igObjectRefMetaField_tail.inc](../../src/engine/core/igObjectRefMetaField_tail.inc)
+hold the int and object-reference pairs. The three factories and the string default hook are in
+their classes' first runs; the object-reference default hook is with the object-reference pair.
 Virtual classes there are ABI projections and must not be instantiated.
 
 ## Factory modes and original table

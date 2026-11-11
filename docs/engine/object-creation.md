@@ -10,8 +10,8 @@ wrappers (336), default creation (48), instance registration (180), the
 static initializer runner (120), full object destruction (268) and
 field zeroing `2ff930` (200). Sources are one-function files under `src/unmatched/`,
 [beMessengerFactories.cpp](../../src/game/beMessengerFactories.cpp),
-[igMetaObject.cpp](../../src/engine/igMetaObject.cpp), and the
-the object class file, [igObject.cpp](../../src/engine/igObject.cpp).
+[igMetaObject_tail.inc](../../src/engine/core/igMetaObject_tail.inc), and the
+the object class run, [igObject_tail2.inc](../../src/engine/core/igObject_tail2.inc).
 Explicit allocator/return signatures preserve the retail bytes.
 
 ## Factory and creation behavior
@@ -104,7 +104,7 @@ allocation through `300d30`, and frees that allocation. Metadata/list helpers an
 those cleanup bodies remain explicit dependencies. Slot dispatch reloads the
 vtable after each callback.
 
-The destruction source in [igObject.cpp](../../src/engine/igObject.cpp) now
+The destruction source in [igObject_tail2.inc](../../src/engine/core/igObject_tail2.inc) now
 reproduces all67 instruction words and9 relocations. It uses a single C++
 dispatch view with numbered virtual slots (an ABI projection, not an original
 class declaration) and reflected `_instanceCount`44 / `_instances`48 fields.

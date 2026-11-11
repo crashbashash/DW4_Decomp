@@ -2,7 +2,7 @@ int FUN_00307750();
 struct M { char pad[12]; int f12; };
 struct M *FUN_00307c10();
 int FUN_0030b670();
-unsigned char FUN_00306e50(int arg0, int arg1, int arg2, char *arg3, int arg4, int arg5) {
+unsigned char FUN_00306e50(int arg0, int arg1, const char *arg2, char *arg3, int arg4, int arg5) {
     unsigned char var_s0;
     struct M *temp_v0;
 

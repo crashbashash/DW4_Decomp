@@ -218,7 +218,7 @@
       "address": "0x002d6790",
       "name": "List_Resize",
       "size": 120,
-      "source": "src/unmatched/List_Resize.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "sites": [
         "0x00405dd8",
         "0x00406448",
@@ -229,7 +229,7 @@
       "address": "0x002eaf60",
       "name": "StringPool_Intern",
       "size": 172,
-      "source": "src/unmatched/StringPool_Intern.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "sites": [
         "0x003fde5c",
         "0x003fff1c",
@@ -244,7 +244,7 @@
       "address": "0x002fba30",
       "name": "igMetaEnum_GetValueByName",
       "size": 260,
-      "source": "src/unmatched/igMetaEnum_GetValueByName.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "sites": [
         "0x003fde84"
       ]
@@ -253,7 +253,7 @@
       "address": "0x00301000",
       "name": "igObject_GetAllocator",
       "size": 8,
-      "source": "src/engine/igObject_GetAllocator.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "sites": [
         "0x00403124"
       ]

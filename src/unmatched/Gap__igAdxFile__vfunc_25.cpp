@@ -20,11 +20,11 @@ int FUN_002620d8(void *, int, char *);
 int FUN_00262510(void *);
 int FUN_00262540(void *);
 char *FUN_002ed2b0(int, int, void *);
-int FUN_00304430(int *);
+int FUN_00304430(const char *, ...);
 int FUN_00304680();
 int FUN_00333990(F *);
 void *igObject_GetAllocator(F *);
-extern int DAT_00500070[4];
+extern char DAT_00500070[];
 int Gap__igAdxFile__vfunc_25(F *arg0, char *arg1, int arg2, int arg3) {
     int total;
     int n;

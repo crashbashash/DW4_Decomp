@@ -3,8 +3,8 @@
  * manager (FUN_00339110) through a counted reference that this call releases afterwards. */
 #include "dw4/igSmartPointer.h"
 extern "C" {
-int FUN_00308320(int *);
-extern int DAT_005012f0[4];
+int FUN_00308320(const char *, ...);
+extern char DAT_005012f0[];
 extern unsigned char GPR_00554e4c;
 void igMovieRenderer_InitializeDrawing(igMovieRenderer *arg0);
 }

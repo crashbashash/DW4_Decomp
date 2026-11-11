@@ -1,8 +1,8 @@
 # Array allocation and named alignment selection
 
 Two complete bodies / 564 bytes. The 228-byte allocator
-is in [array-allocation.cpp](../../src/engine/array-allocation.cpp); the adjacent
-336-byte alignment selector is `src/unmatched/igMemoryRefMetaField_SetAlignmentType.c`.
+is in [igMetaField_tail.inc](../../src/engine/core/igMetaField_tail.inc); the adjacent
+336-byte alignment selector is `src/engine/core/igMemoryRefMetaField_tail2.inc`.
 These routines are storage services, with no element constructor loop.
 
 ## Aligned array allocation (`2fb190`)

@@ -1,0 +1,192 @@
+FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
+    FolderEntryWide entry;
+    int handle = sceDopen(self->path);
+    if (handle < 0) {
+        return FolderObjectRef(0);
+    }
+    FolderObjectRef list;
+    list.obj = ((FolderObject *)FUN_002b90e0(((int)igObject_GetAllocator((int)self))));
+    while (FUN_00110d60(handle, &entry) != 0) {
+        char *name = (entry.bytes + 64);
+        char *interned;
+        if (name == 0) {
+            interned = 0;
+        } else {
+            if ((*(int *)DAT_00586f20) == 0) {
+                int v = ((int)FUN_002eb010(16));
+                if (v != 0) {
+                    v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
+                }
+                (*(int *)DAT_00586f20) = v;
+            }
+            interned = ((char *)StringPool_Intern((StringPool *)((*(int *)DAT_00586f20)), (const char *)name));
+        }
+        FolderStringRef text(interned);
+        StringList_AppendRetained(list.obj, &text);
+    }
+    FUN_00110bf8(handle);
+    return list;
+}
+
+void FUN_0032cac0(struct S_32cac0 *arg0) {
+    int i;
+    char *s;
+    int c;
+
+    s = arg0->f8;
+    if (s == 0) {
+        s = DAT_004c22f0[0];
+    }
+    i = strlen(s) - 1;
+    while ((c = s[i]) == 0x20 || c == 9) {
+        i--;
+    }
+    if (c != 0x5C) {
+        if (c != 0x2F) {
+            i += 1;
+        }
+    }
+    s[i] = 0;
+}
+
+static inline FolderAllocator *currentAllocator(void) {
+    if (GPR_00554c14 != 0) {
+        return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)DAT_00587028)));
+    }
+    return ((FolderAllocator *)Memory_GetAllocatorBySelector((*(int *)DAT_00587060)));
+}
+
+int FUN_0032cf50(int a, int b, int c, int d, int e) {
+    int sp1C;
+    return FUN_0032cf70((int *)a, b, c, d, e, &sp1C);
+}
+
+int FUN_0032cf70(int *arg0, int arg1, int arg2, int arg3, int arg4, int *arg5) {
+    int var_v0;
+    char *temp_v0;
+
+    if (arg3 > 0xFB) {
+        *arg0 = DAT_004fb418.v;
+        return;
+    }
+    temp_v0 = FUN_0032cb50((char *)arg1, arg2);
+    if (temp_v0 == 0) {
+        *arg0 = DAT_004fb418.v;
+        return;
+    }
+    if (*temp_v0 == 0x63) {
+        do {
+            var_v0 = FUN_00113038(temp_v0, arg3, arg4);
+        } while (var_v0 < 0);
+    } else {
+        var_v0 = FUN_00113038(temp_v0, arg3, arg4);
+    }
+    if (var_v0 < 0) {
+        Memory_FreeBufferAliasA(temp_v0);
+        *arg0 = DAT_004fb418.v;
+        return;
+    }
+    *arg5 = var_v0;
+    Memory_FreeBufferAliasA(temp_v0);
+    *arg0 = DAT_004fb410.v;
+}
+
+void FUN_0032d070(void)
+{
+}
+
+void FUN_0032d080(void) {
+    int n;
+    int v;
+    sceDmaReset(1);
+    if (DAT_00587340[0] != 0) {
+        sceSifInitRpc(0);
+        if (DAT_00587338[0] != 0) {
+            FUN_00116fb0(0);
+        }
+        if (DAT_00587348[0] != 0) {
+            while (FUN_00113038(DAT_00587348[0], 0, 0) < 0) {
+            }
+        }
+        while (((sceSifRebootIop(DAT_00587340[0]) != 0) ^ 1)) {
+        }
+        while (((sceSifSyncIop() != 0) ^ 1)) {
+        }
+        DAT_005549b8 = 1;
+    }
+    if (DAT_005549b8 != 0) {
+        sceSifInitRpc(0);
+        if (DAT_00587348[0] != 0) {
+            FUN_001127c8();
+        }
+        FUN_0010f2f8();
+        v = DAT_00587338[0];
+        if (v == 1 || v == 0) {
+            FUN_00116fb0(0);
+            sceCdMmode(1);
+        } else if (v == 2) {
+            FUN_00116fb0(0);
+            sceCdMmode(2);
+        }
+        sceSifInitCmd();
+        n = DAT_004c2628[0];
+        FUN_0010d498(((int)FUN_002ee430(n * 12)), n);
+    }
+}
+
+void FUN_0032d1f0(void) {
+    FUN_0032d070();
+    FUN_0032d080();
+}
+
+static inline int internPool(void) {
+    if (DAT_00586f20[0] == 0) {
+        int a = ((int)FUN_002eb010(0x10));
+        if (a != 0) {
+            a = ((int)StringPool_Construct((S_2eadf0 *)a));
+        }
+        DAT_00586f20[0] = a;
+    }
+    return DAT_00586f20[0];
+}
+
+static inline void setName(O_32d220 *object, int name) {
+    int *interned = (int *)((void *)StringPool_Intern((StringPool *)(internPool()), (const char *)name));
+    if (object->f72 != 0) {
+        int *header = (int *)object->f72 - 2;
+        int count = ((int *)object->f72)[-1] - 1;
+        ((int *)object->f72)[-1] = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+        }
+    }
+    object->f72 = interned;
+}
+
+static inline int fileAllocator(void) {
+    int a = ((int)FUN_002f8a20());
+    return GPR_00554c14 != 0 ? a : ((int)Memory_GetAllocatorBySelector(DAT_00587038[0]));
+}
+
+void FUN_0032d4b0(int *arg0, char *arg1) {
+    int temp_s1;
+    int var_v1;
+    char *var_a0;
+
+    if ((arg1 != 0) && (strncasecmp(arg1, &DAT_004ffd28[0], 7) == 0)) {
+        var_a0 = arg1 + 7;
+        do {
+            var_a0 += 1;
+        } while (*var_a0 != 0x2C);
+        temp_s1 = (var_a0 - arg1) + 1;
+        DAT_00587358[0] = ((int)FUN_002ee430(temp_s1 + 1));
+        strncpy(DAT_00587358[0], arg1, temp_s1);
+        *(char *)(DAT_00587358[0] + temp_s1) = 0;
+        DAT_00587330[0] = DAT_00587358[0];
+        FUN_0032ded0(DAT_00587358[0]);
+        *arg0 = DAT_004fb410.v;
+    } else {
+        *arg0 = DAT_004fb418.v;
+    }
+}
+

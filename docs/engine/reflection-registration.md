@@ -6,13 +6,13 @@ default storage and the original Work registrar/field adder.
 
 The builders are inheritance 208, creation (`2fdf40`) 184, naming (`2fe000`) 208, default
 storage 144 and descriptor finalization 128; inheritance is in
-[igMetaObject.cpp](../../src/engine/igMetaObject.cpp), and default storage and
-descriptor finalization are igMetaField methods in [igMetaField.cpp](../../src/engine/igMetaField.cpp). Of the five ownership/binding
+[igMetaObject_tail.inc](../../src/engine/core/igMetaObject_tail.inc), and default storage and
+descriptor finalization are igMetaField methods in [igMetaField_tail2.inc](../../src/engine/core/igMetaField_tail2.inc). Of the five ownership/binding
 bodies (452 bytes), the field adder is in
-[igMetaObject.cpp](../../src/engine/igMetaObject.cpp) and the field configuration,
-default and name setters are in [igMetaField.cpp](../../src/engine/igMetaField.cpp). The Work
+[igMetaObject_tail.inc](../../src/engine/core/igMetaObject_tail.inc) and the field configuration,
+default and name setters are in [igMetaField_tail2.inc](../../src/engine/core/igMetaField_tail2.inc). The Work
 registrar/adder is 300 bytes. Layout finalization
-(444) is in [igMetaObject.cpp](../../src/engine/igMetaObject.cpp); main
+(444) is in [igMetaObject_tail.inc](../../src/engine/core/igMetaObject_tail.inc); main
 registration (`2fe9c0`) is 744. ABI/virtual-slot views are observed projections,
 not original C++ type declarations, and must not be instantiated.
 

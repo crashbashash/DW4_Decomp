@@ -4,8 +4,8 @@ Four public pool bodies, the complete ten-body ordered-table run at
 `0x30c0c0..0x30c73c`, and the string-header release bridge at `0x30c940`
 form this family. These fifteen bodies account for 2,228 code bytes. Four bodies
 (pool/table destruction, table erase and header release, 384 bytes) and the other eleven
-(1,844 bytes) are in two whole files: the pool in [StringPool.cpp](../../src/engine/StringPool.cpp)
-and the table and its chunks in [StringTable.cpp](../../src/engine/StringTable.cpp).
+(1,844 bytes) are in two runs of the Core library unit: the pool in [StringPool.inc](../../src/engine/core/StringPool.inc)
+and the table and its chunks in [StringTable.inc](../../src/engine/core/StringTable.inc).
 
 The combat unwind table also identifies the complete 116-byte
 [deleting string-wrapper cleanup](../../src/engine/StringRef_Destruct_00130720.c):
@@ -89,7 +89,7 @@ objects releases every concrete owned name is not established, nor is hardware
 concurrency.
 
 `StringTable_EraseAt` is **104 code bytes**, in
-[StringTable.cpp](../../src/engine/StringTable.cpp). A 24-byte target ABI view exposes
+[StringTable.inc](../../src/engine/core/StringTable.inc). A 24-byte target ABI view exposes
 the recovered count, search step and pointer-array fields; a size assertion
 protects its layout. The matching C projection retains an unspecified-parameter
 byte-move declaration. The observed call still supplies destination, source and

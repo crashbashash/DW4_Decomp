@@ -4,7 +4,7 @@ The twelve allocation/chunk bodies surrounding the separately recovered header
 release bridge account for 1,272 code bytes: adjacent-block merge, storage initialization,
 `StringChunk_AllocateToken` (`0x30c830`, 264 bytes), TakeBlock (`0x30ca40`, 236 bytes), the table and
 chunk allocation wrappers (`0x30c740`, `0x30cce0`) and ReturnBlock (`0x30cb80`). They belong to the
-string table's file, [StringTable.cpp](../../src/engine/StringTable.cpp), with the table methods they serve. Names come
+string table's run of the Core library unit, [StringTable.inc](../../src/engine/core/StringTable.inc), with the table methods they serve. Names come
 from [the semantic generator](../../scripts/seed_names_string_chunks.py), not
 assertions about original C++ method spelling.
 

@@ -5,9 +5,9 @@ owner/selector run, its list-search and default-getter dependencies, and three
 allocation wrappers. They include the 140-byte
 encoder, the 72-byte index search, the 56-byte default
 allocation wrapper, which uses an explicit allocator ABI view, and
-the 292-byte owner lookup in `src/unmatched/Memory_FindOwningAllocator.cpp`.
-The shared-tail wrapper `Memory_AllocateBufferViaSharedTail` opens the memory API's whole file,
-[igMemory.cpp](../../src/engine/igMemory.cpp). Its shared tail is `FUN_002ed1e0`;
+the 292-byte owner lookup in `src/engine/core/igObject_tail.inc`.
+The shared-tail wrapper `Memory_AllocateBufferViaSharedTail` opens the memory API's run of the Core library unit,
+[igMemory.inc](../../src/engine/core/igMemory.inc). Its shared tail is `FUN_002ed1e0`;
 the 28-byte direct tail is `Memory_AllocateBufferDirect` (`2ed240`).
 
 Seven names in `config/SLUS-20836/names/AllocatorRegistry.tsv` describe observed operations.

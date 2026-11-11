@@ -2,9 +2,9 @@
 
 The twelve-body shared primitive run at `0x2d6670..0x2d6e60` (1,956 code bytes)
 and four retained-reference bridges (584 bytes) are covered here.
-Three bodies are folded in [list-services.c](../../src/engine/list-services.c);
-the eight-byte -1 default keeps its generic name. Ten further bodies are
-per-function files under `src/unmatched/`. The two range insertions are
+Two bodies are in [list-services.inc](../../src/engine/core/list-services.inc) and [list-services_tail.inc](../../src/engine/core/list-services_tail.inc) of the Core library unit, and the
+string-list bridge stays in [list-services.c](../../src/engine/list-services.c);
+the eight-byte -1 default keeps its generic name. The other bodies are in the unit's list runs. The two range insertions are
 `List_InsertBytes` (`0x2d6810`, 232 bytes) and `List_InsertWords`
 (`0x2d6b80`, 220 bytes).
 

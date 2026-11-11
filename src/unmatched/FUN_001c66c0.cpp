@@ -16,7 +16,7 @@ struct Obj {
         int w;
         struct { unsigned cnt : 23; unsigned f : 9; } b;
     } u;
-    int f8;
+    const char *f8;
 };
 
 struct RP { Obj *p; ~RP() {} };
@@ -39,11 +39,11 @@ extern int FUN_00306360(Obj *, char *, int);
 extern unsigned char FUN_00306910(Obj *, int, void *, char **, void *, int);
 extern int StringPool_Construct(int);
 extern char *StringPool_Intern(int, int);
-extern int thunk_strcasecmp(int, int);
+extern int thunk_strcasecmp(const char *, const char *);
 extern void igObject_Destroy(Obj *);
 extern void StringChunk_ReleaseHeader(int, int *);
 extern int DAT_00586f20[4];
-extern int DAT_004c22f0[4];
+extern char *DAT_004c22f0[4];
 extern int DAT_004e4660[4];
 extern int DAT_004e4668[4];
 extern int DAT_004e4678[4];
@@ -70,8 +70,8 @@ int FUN_001c66c0(Node *self, int force)
     int idx;
     char *s;
     char *t;
-    int a;
-    int b;
+    const char *a;
+    const char *b;
 
     if (force == 0 && self->f32 != 0) {
         return 1;

@@ -6,10 +6,8 @@ and common reset/write dispatchers (`2fc500`, `2fc6f0`). Some shared methods ret
 canonical derived `igStringArrayMetaField::vfunc_*` names; this recovery establishes
 their scalar-value behavior, not complete string-array behavior.
 
-Source is in
-[string-field-values.c](../../src/engine/string-field-values.c),
-[string-field-dispatch.cpp](../../src/engine/string-field-dispatch.cpp) and
-one-function files under `src/unmatched/`, including raw encode (`30add0`,
+Source is in the string field's runs of the Core library unit, chiefly
+[igStringMetaField_tail.inc](../../src/engine/core/igStringMetaField_tail.inc), including raw encode (`30add0`,
 184 bytes). Generic reset is 124 bytes, the three equality methods 288 and raw
 decode (`30ab20`) 676. The 72-byte write dispatcher explicitly receives/forwards all
 five physical arguments.

@@ -11,9 +11,9 @@ original source.
 
 | Address | Bytes | Function | Source |
 | --- | ---: | --- | --- |
-| `0x002d6790` | 120 | `List_Resize` (grow capacity: min 4, double below 1024, then +1024) | `src/unmatched/List_Resize.c` (stock flags) |
-| `0x002eaf60` | 172 | `StringPool_Intern` | `src/engine/StringPool.cpp` |
-| `0x002fba30` | 260 | `igMetaEnum_GetValueByName` | `src/unmatched/igMetaEnum_GetValueByName.c` |
+| `0x002d6790` | 120 | `List_Resize` (grow capacity: min 4, double below 1024, then +1024) | `src/engine/core/igDataList_tail.inc` |
+| `0x002eaf60` | 172 | `StringPool_Intern` | `src/engine/core/StringPool.inc` |
+| `0x002fba30` | 260 | `igMetaEnum_GetValueByName` | `src/engine/core/igMetaEnum_tail.inc` |
 | `0x0038d860` | 2036 | `beMessenger_SelectReceivers` (+ emitted destructor `0x0038c410`, 128) | `src/unmatched/beMessenger_SelectReceivers.cpp` |
 | `0x0038e6b0` | 576 | `beMessenger_PrepareDelayedSelection` | `src/unmatched/beMessenger_PrepareDelayedSelection.cpp` |
 | `0x0038ed70` | 476 | `beMessenger_PushArgContext` | `src/unmatched/beMessenger_PushArgContext.cpp` |

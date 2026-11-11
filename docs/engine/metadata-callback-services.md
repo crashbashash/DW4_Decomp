@@ -22,7 +22,7 @@ the selected object pointer is re-read after comparison callbacks. It does not
 retain its result.
 
 The 160-byte routine is in
-[internalNonRefCountedObjectList.cpp](../../src/engine/internalNonRefCountedObjectList.cpp).
+[internalNonRefCountedObjectList.inc](../../src/engine/core/internalNonRefCountedObjectList.inc).
 
 `igMetaObject_FinalizeAndReplaceField` (`2fdea0`, 80) finalizes the incoming
 descriptor, then invokes retaining replacement in the current metadata field list.

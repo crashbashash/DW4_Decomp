@@ -84,7 +84,7 @@ stores definite results in `build/cache/` (untracked), keyed by content:
 ## Translation units
 
 `src/` holds **translation units**, the way the original source was built: `src/lua/api.cpp`
-defines 47 functions, `src/engine/igObject.cpp` the `igObject` class in retail order, `src/game/*.c` a
+defines 47 functions, `src/engine/core/CoreLibrary.cpp` the Core library in retail order, one fragment per class run, `src/game/*.c` a
 `be*` class each. Unnamed functions stay in `src/unmatched/`; named ones are grouped and folded
 there by `tools/place_named.py` (see [`naming.md`](naming.md)). A unit's functions are
 written in retail address order, because MWCC emits a unit's functions in source order — so
