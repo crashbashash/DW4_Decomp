@@ -262,7 +262,10 @@ from per-function pins. In the oracle:
 * **Cache keys.** `buildcache.unit_profile_sha` digests the unit row (compiler
   path and content digest, flags, exception mode, status), the override rows and the
   resolved profiles for the owner, the members and the duplicates of a compiler
-  unit, so editing one unit's row recomputes exactly that unit's functions.
+  unit, so editing one unit's row recomputes exactly that unit's functions. The digest
+  is the group's, whichever member asks, so it is computed once per group and loaded
+  tables: a library-sized unit has thousands of members, and digesting them all for
+  each member made a cached `make check` quadratic in the unit's size.
 * **Outside every unit** (regional targets, fixtures) the per-function rows remain
   the whole profile; the regional build options and the fixture tests rely on
   that.

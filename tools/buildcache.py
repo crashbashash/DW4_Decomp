@@ -129,12 +129,35 @@ def unit_profile_sha(va, flags_default, mwcc_default, unit_objects=None, units=N
     bodies, externals, duplicates, exception tables) and, for the owner and every member and duplicate of that group, the
     unit profile row of config/SLUS-20836/units.tsv (compiler path and content digest, flags, exception mode, status), the per-function
     override rows and what they resolve to. Mirrors what tools/verify.py and tools/linkgen.py look up by address
-    (tools/unitprofiles.resolve); a resolution error is part of the digest too."""
+    (tools/unitprofiles.resolve); a resolution error is part of the digest too.
+
+    The digest depends on the group, not on which member asks, so it is computed once per group and set of loaded
+    tables: a library-sized group has thousands of members, and resolving every member for each of them is quadratic."""
     import unitobjects
     import unitprofiles
     group = unitobjects.group_for(va, unit_objects)
-    owner = group.owner if group else va
-    members = set(group.members) | {address for _name, address in group.duplicates} if group else {va}
+    if group is None:
+        return _profile_sha(None, va, flags_default, mwcc_default, units, unit_flags, unit_compilers, symbols)
+    # the tables resolve() reads; a reloaded table (the tests clear the caches) is a new object, so a new key
+    tables = (unitprofiles.load(units) if units is not None
+              else unitprofiles.load(unitprofiles.units_path(symbols) or "/nonexistent/units.tsv"),
+              unitprofiles.unitflags.load_rows(unit_flags or unitprofiles.unitflags.DEFAULT_PATH),
+              unitprofiles.unitcompilers.load_rows(unit_compilers or unitprofiles.unitcompilers.DEFAULT_PATH))
+    key = ("g", id(group), tuple(map(id, tables)), flags_default, mwcc_default, units, unit_flags, unit_compilers, symbols)
+    with _memo_lock:
+        hit = _memo.get(key)
+    # the held objects keep their ids from being reused while the entry lives
+    if hit is not None and hit[0] is group and all(a is b for a, b in zip(hit[1], tables)):
+        return hit[2]
+    digest = _profile_sha(group, group.owner, flags_default, mwcc_default, units, unit_flags, unit_compilers, symbols)
+    with _memo_lock:
+        _memo[key] = (group, tables, digest)
+    return digest
+
+
+def _profile_sha(group, owner, flags_default, mwcc_default, units, unit_flags, unit_compilers, symbols):
+    import unitprofiles
+    members = set(group.members) | {address for _name, address in group.duplicates} if group else {owner}
     parts = [repr(group)]
     for m in sorted(members | {owner}):
         parts.append("%x %s" % (m, unitprofiles.profile_key(m, flags_default, mwcc_default, units=units,

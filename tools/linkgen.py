@@ -470,6 +470,8 @@ def main(argv=None):
                 # bodies, jump tables or a declared row differ: the unit cannot be linked honestly
                 return va, {"fatal": report}
             shutil.copyfile(verified, stage)
+            # members of one unit share the verified object; its tables are read once for all of them
+            shared = verified if unit_key is not None else None
             if unit_key is None:
                 os.remove(verified)
             head = report.partition("\n")[0]
@@ -490,7 +492,7 @@ def main(argv=None):
                 # rest (`make check` reports the unit as exc=... / code-only)
                 count(found.group(1))
             try:
-                verify.isolate_emitted_body(stage, va, records_, group, a.symbols)
+                verify.isolate_emitted_body(stage, va, records_, group, a.symbols, source=shared)
             except (ValueError, subprocess.CalledProcessError) as error:
                 os.remove(stage)
                 return va, {"fatal": f"{name}: {error}"}

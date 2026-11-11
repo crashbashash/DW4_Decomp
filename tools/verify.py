@@ -765,15 +765,16 @@ def jump_table_sections(obj, tables):
     return result
 
 
-def rename_object_sections(obj, names):
+def rename_object_sections(obj, names, headers=None):
     """Rename generated object sections by index, preserving bytes and ownership.
 
     objcopy's name-based selection cannot distinguish duplicate .rodata names.
     Append a replacement section-name string table and change only sh_name and
     its string table's file offset/size. Symbol indices and relocation sh_info
-    remain unchanged, so GNU ld can place the tables independently.
+    remain unchanged, so GNU ld can place the tables independently. `headers` are the object's
+    section headers when the caller already holds them.
     """
-    headers = elf_section_headers(obj)
+    headers = headers if headers is not None else elf_section_headers(obj)
     with open(obj, "rb") as fh:
         data = bytearray(fh.read())
     shoff, = struct.unpack_from("<I", data, 0x20)
@@ -1746,21 +1747,24 @@ def unshared_renames(renames):
     return {old: new for old, new in renames.items() if old == new or shared[new] == 1}
 
 
-def isolate_emitted_body(obj, requested, records, group, symbols):
+def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     """Select one already-verified member; every other member has its own unit.
 
     Only symbol/section metadata changes. Retained instructions and relocations
     are preserved, and references to other owned members become external calls.
+    `source`, when given, is the verified object `obj` is a byte copy of: its tables are
+    read once for every member of a unit instead of once per copy.
     """
     _, by_va = load_symbols(symbols)
+    src = source or obj
     selected = next(name for name, (address, _, _) in records.items() if address == requested)
     selected_section = records[selected][1]
-    payload = object_section(obj, ".text", selected_section)
-    relocations = object_relocs(obj, target_section=selected_section)
-    headers = elf_section_headers(obj)
+    payload = object_section(src, ".text", selected_section)
+    relocations = object_relocs(src, target_section=selected_section)
+    headers = elf_section_headers(src)
     # stripped bodies (verified unreferenced by verify_emitted_object) are removed with
     # the siblings; their symbols become undefined and nothing relocates against them
-    defined, _ = object_syms(obj)
+    defined, _ = object_syms(src)
     stripped_sections = {defined[name][0] for name in group.stripped
                          if name in defined and isinstance(defined[name][0], int)}
     # a whole-file unit's data stays retail's: the object keeps references to it, not copies
@@ -1812,7 +1816,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols):
     rename_object_sections(obj, {**{section: ".text" if section == selected_section
                                     else f".text.owned_{section}"
                                     for _, section, _ in records.values()},
-                                 **{i: f".text.owned_{i}" for i in discarded}, **kept})
+                                 **{i: f".text.owned_{i}" for i in discarded}, **kept}, headers=headers)
     # Removing the verified siblings preserves undefined symbols in MWCC
     # objects; objcopy's --only-section path incorrectly drops some of them.
     arguments = ["mipsel-linux-gnu-objcopy", "--remove-section=.text.owned_*",

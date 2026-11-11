@@ -42,6 +42,7 @@ _WORD = re.compile(r"[A-Za-z_]\w*")
 _USE_WORD = re.compile(r"asm|volatile")
 _header_cache = {}
 _defined_cache = {}
+_source_cache = {}
 
 
 def load(path=TABLE):
@@ -274,13 +275,25 @@ def uses(path, name):
     """{"asm": n, "volatile": n} reaching function `name` as defined in `path`."""
     if not in_scope(path):
         return {"asm": 0, "volatile": 0, "asm-function": 0}
-    text = _read(path)
+    text, counted, a2, v2 = _source(path)
     # blanking only removes text, so a source with nothing to count has nothing to count for any of its
     # functions; a whole library unit holds thousands, and its reachable text is costly to build
-    a, v = _count(_reachable_text(text, name)) if _USE_WORD.search(text) and _text_count(text) != (0, 0) \
-        else (0, 0)
-    a2, v2 = _header_counts(_includes(text, os.path.dirname(os.path.abspath(path))), set())
+    a, v = _count(_reachable_text(text, name)) if counted else (0, 0)
     return {"asm": a + a2, "volatile": v + v2, "asm-function": int(name in unitprofiles.asm_body_names(path))}
+
+
+def _source(path):
+    """(text, whether it has anything to count, asm and volatile its project headers bring) of one source, read
+    once per version of the file: a library unit's thousands of members would each expand and scan it again."""
+    st = os.stat(path)
+    stamp = (st.st_mtime_ns, st.st_size)
+    hit = _source_cache.get(path)
+    if hit is None or hit[0] != stamp:
+        text = _read(path)
+        counted = bool(_USE_WORD.search(text)) and _text_count(text) != (0, 0)
+        a2, v2 = _header_counts(_includes(text, os.path.dirname(os.path.abspath(path))), set())
+        hit = _source_cache[path] = (stamp, (text, counted, a2, v2))
+    return hit[1]
 
 
 def approved_asm_function(path, name, rows=None):
