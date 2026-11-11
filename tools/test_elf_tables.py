@@ -247,5 +247,19 @@ class UnitResults(unittest.TestCase):
         self.assertEqual(len(calls), 1)
 
 
+class SharedRenameTargets(unittest.TestCase):
+    """objcopy cannot redefine two symbols to one name: aliases of one address keep their own."""
+
+    def test_aliases_of_one_address_keep_their_names(self):
+        renames = {"X0_0014d010": "DAT_0014d010", "X1_0014d010": "DAT_0014d010",
+                   "@12=DAT": "DAT_004df070", "FUN_0015f430__FPviii": "FUN_0015f430", "same": "same"}
+        self.assertEqual(verify.unshared_renames(renames),
+                         {"@12=DAT": "DAT_004df070", "FUN_0015f430__FPviii": "FUN_0015f430", "same": "same"})
+
+    def test_single_rename_is_kept(self):
+        self.assertEqual(verify.unshared_renames({"a": "b"}), {"a": "b"})
+
+
 if __name__ == "__main__":
     unittest.main()
+

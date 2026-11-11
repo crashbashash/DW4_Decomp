@@ -32,6 +32,7 @@ Exit status: 0 match, 1 mismatch, 2 error.
 """
 import argparse
 import bisect
+import collections
 import os
 import re
 import struct
@@ -1732,6 +1733,19 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
         records if (records is not None and twins_ok) else None
 
 
+def unshared_renames(renames):
+    """`renames` without the entries whose target several names share.
+
+    A unit can reach one retail address through several local names (separately declared
+    aliases make the compiler materialise the address once per use, as retail does).
+    objcopy cannot redefine two symbols to one name, so those keep their own names: each is
+    address-bearing and resolves through `sym_address` at link, and the relocation
+    comparison reads the same map, so they are still checked.
+    """
+    shared = collections.Counter(new for old, new in renames.items() if old != new)
+    return {old: new for old, new in renames.items() if old == new or shared[new] == 1}
+
+
 def isolate_emitted_body(obj, requested, records, group, symbols):
     """Select one already-verified member; every other member has its own unit.
 
@@ -1806,6 +1820,7 @@ def isolate_emitted_body(obj, requested, records, group, symbols):
     renames = {name: by_va[address][0] for name, (address, _, _) in records.items()}
     renames.update({name: by_va[address][0] for name, address in group.externals})
     renames.update({name: "DAT_%08x" % address for name, address in group.data})
+    renames = unshared_renames(renames)
     for old, new in renames.items():
         if old != new:
             arguments += ["--redefine-sym", f"{old}={new}"]
