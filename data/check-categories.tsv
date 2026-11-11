@@ -3486,7 +3486,7 @@
 0018ec10	FUN_0018ec10	match	-
 0018ec40	FUN_0018ec40	match	-
 0018f4a0	FUN_0018f4a0	match	-
-0018f760	FUN_0018f760	match	DEFERRED duplicate 0x25a2b0 __dt__15InstanceListRefFv 128B (compared under the profile of its retail unit)
+0018f760	FUN_0018f760	match	-
 0018f980	FUN_0018f980	match	-
 0018fa00	FUN_0018fa00	match	-
 0018fa80	FUN_0018fa80	match	-
@@ -12050,7 +12050,7 @@
 00301000	igObject_GetAllocator	match	-
 00301010	FUN_00301010	match	-
 003010f0	Gap__Core__igObjectDirEntry__vfunc_12	match	-
-00301130	Gap__Core__igObjectDirEntry__vfunc_26	match	DEFERRED duplicate 0x25a230 __dt__26igSmartPointer<9EntryList>Fv 128B (compared under the profile of its retail unit)
+00301130	Gap__Core__igObjectDirEntry__vfunc_26	match	-
 00301520	Gap__Core__igObjectDirEntry__vfunc_22	match	-
 00301530	Gap__Core__igObjectDirEntry__vfunc_27	match	-
 00301550	Gap__Core__igObjectDirEntry__vfunc_28	match	-
