@@ -5864,14 +5864,6 @@
       "__dl__FPv": "0x00100610"
     }
   },
-  "0x00325d70": {
-    "duplicates": {
-      "__dt__19igSmartPointer<2Ob>Fv": "0x0025a230"
-    },
-    "externals": {
-      "__dl__FPv": "0x00100610"
-    }
-  },
   "0x001aefe0": {
     "duplicates": {
       "__dt__30igSmartPointer<12AnimDbObject>Fv": "0x0025a230"
@@ -10515,5 +10507,196 @@
       "g_memoryContextNames": "0x004c2170",
       "g_objectSystem": "0x00586dc8"
     }
+  },
+  "0x0030c0c0": {
+    "whole_file": true,
+    "emitted": {
+      "StringTable_Destroy": "0x0030c120",
+      "StringTable_SetSynchronization": "0x0030c180",
+      "StringTable_Find": "0x0030c240",
+      "StringTable_Register": "0x0030c2d0",
+      "StringTable_RemoveHeader": "0x0030c390",
+      "StringTable_NotifyEmptyChunk": "0x0030c430",
+      "StringTable_SearchRetained": "0x0030c500",
+      "StringTable_EraseAt": "0x0030c600",
+      "StringTable_InsertAt": "0x0030c670",
+      "StringTable_AllocateObject": "0x0030c740",
+      "StringTable_DeleteObject": "0x0030c760",
+      "StringChunk_Construct": "0x0030c770",
+      "StringChunk_Destroy": "0x0030c7d0",
+      "StringChunk_AllocateToken": "0x0030c830",
+      "StringChunk_ReleaseHeader": "0x0030c940",
+      "StringChunk_InitializeStorage": "0x0030c9b0",
+      "StringChunk_FreeStorage": "0x0030ca30",
+      "StringChunk_TakeBlock": "0x0030ca40",
+      "StringChunk_MergeBlocks": "0x0030cb30",
+      "StringChunk_AllocateObject": "0x0030cce0",
+      "StringChunk_DeleteObject": "0x0030cd00"
+    },
+    "data": {
+      "DAT_00587038": "0x00587038",
+      "DAT_005871c8": "0x005871c8",
+      "GPR_00554c14": "0x00554c14"
+    },
+    "symbol": "StringTable_Construct"
+  },
+  "0x0030cd10": {
+    "whole_file": true,
+    "emitted": {
+      "StringList_Resize": "0x0030cdf0"
+    },
+    "data": {
+      "DAT_00586f20": "0x00586f20"
+    }
+  },
+  "0x0030cf20": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_0030cf30": "0x0030cf30",
+      "FUN_0030cf40": "0x0030cf40",
+      "FUN_0030cfa0": "0x0030cfa0",
+      "FUN_0030d050": "0x0030d050",
+      "FUN_0030d080": "0x0030d080",
+      "FUN_0030d0d0": "0x0030d0d0",
+      "FUN_0030d1d0": "0x0030d1d0",
+      "FUN_0030d230": "0x0030d230",
+      "FUN_0030d300": "0x0030d300",
+      "FUN_0030d350": "0x0030d350",
+      "FUN_0030d4a0": "0x0030d4a0",
+      "Gap__Core__igStringTable__vfunc_23": "0x0030d500",
+      "Gap__Core__igStringTable__vfunc_24": "0x0030d580",
+      "Gap__Core__igStringTable__vfunc_25": "0x0030d690"
+    },
+    "data": {
+      "DAT_004c22f8": "0x004c22f8",
+      "DAT_004fb410": "0x004fb410",
+      "DAT_004fb418": "0x004fb418"
+    },
+    "symbol": "FUN_0030cf20"
+  },
+  "0x001767c0": {
+    "whole_file": true,
+    "emitted": {
+      "FUN_00176800": "0x00176800",
+      "FUN_00176900": "0x00176900",
+      "FUN_00176920": "0x00176920",
+      "FUN_001769f0": "0x001769f0",
+      "FUN_00176a50": "0x00176a50",
+      "FUN_00176ba0": "0x00176ba0",
+      "FUN_00176bb0": "0x00176bb0",
+      "FUN_00176c00": "0x00176c00",
+      "FUN_00176c50": "0x00176c50",
+      "FUN_00176ca0": "0x00176ca0",
+      "FUN_00176cf0": "0x00176cf0",
+      "FUN_00176d40": "0x00176d40",
+      "FUN_00176d90": "0x00176d90",
+      "FUN_00176ed0": "0x00176ed0",
+      "FUN_00176f20": "0x00176f20",
+      "FUN_00176f70": "0x00176f70",
+      "FUN_00176fc0": "0x00176fc0",
+      "FUN_00177010": "0x00177010",
+      "FUN_001774c0": "0x001774c0"
+    },
+    "data": {
+      "DAT_004df6b0": "0x004df6b0",
+      "DAT_00561098": "0x00561098",
+      "DAT_005610b0": "0x005610b0",
+      "DAT_00586818": "0x00586818",
+      "DAT_00586830": "0x00586830",
+      "DAT_00586840": "0x00586840",
+      "DAT_00586898": "0x00586898",
+      "GPR_00554b6c": "0x00554b6c"
+    },
+    "symbol": "FUN_001767c0"
+  },
+  "0x00325850": {
+    "whole_file": true,
+    "emitted": {
+      "thunk_Gap__Core__igObject__vfunc_01": "0x00325860",
+      "Gap__Core__igPageMemoryPool__vfunc_04": "0x00325870",
+      "Gap__Core__igPageMemoryPool__vfunc_13": "0x00325900",
+      "Gap__Core__igPageMemoryPool__vfunc_45": "0x00325940",
+      "Gap__Core__igPageMemoryPool__vfunc_30": "0x00325b10",
+      "Gap__Core__igPageMemoryPool__vfunc_31": "0x00325b80",
+      "Gap__Core__igPageMemoryPool__vfunc_32": "0x00325c10",
+      "Gap__Core__igPageMemoryPool__vfunc_33": "0x00325d20",
+      "Gap__Core__igPageMemoryPool__vfunc_26": "0x00325d30",
+      "Gap__Core__igPageMemoryPool__vfunc_24": "0x00325d40",
+      "Gap__Core__igPageMemoryPool__vfunc_25": "0x00325d50",
+      "Gap__Core__igPageMemoryPool__vfunc_29": "0x00325d60",
+      "Gap__Core__igPageMemoryPool__vfunc_34": "0x00325d70",
+      "Gap__Core__igPageMemoryPool__vfunc_35": "0x00325f80",
+      "Gap__Core__igPageMemoryPool__vfunc_36": "0x00325f90",
+      "Gap__Core__igPageMemoryPool__vfunc_41": "0x00325fa0",
+      "Gap__Core__igPageMemoryPool__vfunc_42": "0x00325fc0",
+      "Gap__Core__igPageMemoryPool__vfunc_37": "0x00325fd0",
+      "Gap__Core__igPageMemoryPool__vfunc_38": "0x00325fe0",
+      "Gap__Core__igPageMemoryPool__vfunc_39": "0x00325ff0",
+      "Gap__Core__igPageMemoryPool__vfunc_40": "0x00326000",
+      "Gap__Core__igPageMemoryPool__vfunc_46": "0x00326010",
+      "Gap__Core__igPageMemoryPool__vfunc_47": "0x00326020",
+      "Gap__Core__igPageMemoryPool__vfunc_48": "0x00326030",
+      "Gap__Core__igPageMemoryPool__vfunc_99": "0x00326040",
+      "Gap__Core__igPageMemoryPool__vfunc_100": "0x00326050",
+      "Gap__Core__igPageMemoryPool__vfunc_101": "0x00326060",
+      "Gap__Core__igPageMemoryPool__vfunc_49": "0x00326070",
+      "Gap__Core__igPageMemoryPool__vfunc_53": "0x00326080",
+      "FUN_00326090": "0x00326090",
+      "FUN_003260d0": "0x003260d0",
+      "Gap__Core__igPageMemoryPool__vfunc_54": "0x00326110",
+      "Gap__Core__igPageMemoryPool__vfunc_55": "0x00326130",
+      "Gap__Core__igPageMemoryPool__vfunc_56": "0x00326150",
+      "Gap__Core__igPageMemoryPool__vfunc_57": "0x003261f0",
+      "Gap__Core__igPageMemoryPool__vfunc_58": "0x00326280",
+      "Gap__Core__igPageMemoryPool__vfunc_59": "0x003262a0",
+      "Gap__Core__igPageMemoryPool__vfunc_62": "0x003262b0",
+      "Gap__Core__igPageMemoryPool__vfunc_63": "0x003262c0",
+      "Gap__Core__igPageMemoryPool__vfunc_64": "0x003262d0",
+      "Gap__Core__igPageMemoryPool__vfunc_66": "0x003262e0",
+      "Gap__Core__igPageMemoryPool__vfunc_85": "0x00326300",
+      "Gap__Core__igPageMemoryPool__vfunc_83": "0x00326310",
+      "Gap__Core__igPageMemoryPool__vfunc_84": "0x00326320",
+      "FUN_00326330": "0x00326330",
+      "Gap__Core__igPageMemoryPool__vfunc_89": "0x00326340",
+      "Gap__Core__igPageMemoryPool__vfunc_90": "0x00326350",
+      "Gap__Core__igPageMemoryPool__vfunc_86": "0x003263e0",
+      "Gap__Core__igPageMemoryPool__vfunc_91": "0x003263f0",
+      "Gap__Core__igPageMemoryPool__vfunc_92": "0x00326400",
+      "FUN_00326920": "0x00326920",
+      "FUN_003269d0": "0x003269d0",
+      "FUN_00326a80": "0x00326a80",
+      "FUN_00326b80": "0x00326b80",
+      "Gap__Core__igPageMemoryPool__vfunc_103": "0x00326c30",
+      "Gap__Core__igPageMemoryPool__vfunc_104": "0x00326c90",
+      "igPageMemoryPool_GetBlockSize": "0x00326e30"
+    },
+    "data": {
+      "DAT_004fb410": "0x004fb410",
+      "DAT_004fb418": "0x004fb418",
+      "DAT_004fd2f8": "0x004fd2f8",
+      "DAT_004fd300": "0x004fd300",
+      "DAT_004fd328": "0x004fd328",
+      "DAT_004fd340": "0x004fd340",
+      "DAT_004fd368": "0x004fd368",
+      "DAT_004fd3c8": "0x004fd3c8",
+      "DAT_004fd3d8": "0x004fd3d8",
+      "DAT_004fd3f0": "0x004fd3f0",
+      "DAT_004fd400": "0x004fd400",
+      "DAT_004ff230": "0x004ff230",
+      "DAT_004ff240": "0x004ff240",
+      "DAT_004ff2a0": "0x004ff2a0",
+      "DAT_004ff4b0": "0x004ff4b0",
+      "DAT_00587218": "0x00587218",
+      "GPR_00554dc0": "0x00554dc0",
+      "GPR_00554dc4": "0x00554dc4",
+      "GPR_00554dd8": "0x00554dd8",
+      "g_allocatorFailureStatus": "0x004fb418",
+      "g_igPageMemoryPool_defaultPoolOptionFlags": "0x004c2608",
+      "g_statusSucceeded": "0x004fb410"
+    },
+    "stripped": [
+      "__dt__19igSmartPointer<2Ob>Fv"
+    ],
+    "symbol": "Gap__Core__igPageMemoryPool__vfunc_02"
   }
 }

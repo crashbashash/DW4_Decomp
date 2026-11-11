@@ -2,12 +2,8 @@
 
 Seven bodies /1,928 bytes: constructor152,
 destructor188, name initialization116, retained slot setter184, allocation delete64,
-and the contiguous special delegate668/removal556 pair. Destructor188/setter184 are in
-[context-slot-lifetime.cpp](../../src/engine/context-slot-lifetime.cpp), the
-constructor in
-`src/unmatched/igMemoryPoolContextInfo_Construct.cpp` and the delegation/removal pair in
-`src/unmatched/MemoryContext_BuildAndAttachEventTracker.cpp` and
-`src/unmatched/MemoryContext_RemoveAllocator.cpp`.
+and the contiguous special delegate668/removal556 pair. All seven are in the context class's
+whole file, [igMemoryPoolContextInfo.cpp](../../src/engine/igMemoryPoolContextInfo.cpp).
 
 Six body-derived names are applied; the setter retains its evidenced generated
 class/slot name. ABI projections describe observed layout and are not claims of

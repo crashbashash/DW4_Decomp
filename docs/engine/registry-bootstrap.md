@@ -4,16 +4,15 @@
 registry-list methods, global registry initialization/shutdown, current context and
 five adjacent context dispatch wrappers, and two concrete record-lookup methods.
 List init104/release116/append168
-and concrete named lookup156 total 544 bytes. Current-context getter84 is in
-[Memory_GetCurrentContext.c](../../src/unmatched/Memory_GetCurrentContext.c) and concrete selector244 in
-[FUN_002f2730.cpp](../../src/unmatched/FUN_002f2730.cpp).
+and concrete named lookup156 total 544 bytes. Current-context getter84 and concrete selector244 are in
+[igMemoryPoolContextInfo.cpp](../../src/engine/igMemoryPoolContextInfo.cpp).
 List allocate/delete are 32 bytes each.
 
 Six body-derived names are applied through `config/SLUS-20836/names/RegistryBootstrap.tsv`.
 Concrete methods retain their generated, evidenced class/virtual-slot names;
 unknown dispatch roles are not assigned speculative semantic names.
 [registry-list.cpp](../../src/engine/registry-list.cpp) and
-[context-record-name.cpp](../../src/engine/context-record-name.cpp) use observed
+[igMemoryPoolContextInfo.cpp](../../src/engine/igMemoryPoolContextInfo.cpp) use observed
 ABI projections rather than claiming original C++ declarations. The subsequent [context lifecycle recovery](context-lifecycle.md) establishes
 the128-byte name buffer and corrects the earlier constructor label.
 

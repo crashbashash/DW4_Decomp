@@ -2,8 +2,8 @@
 
 The complete 2,064-byte context slot 204 builder (`2f5cd0`), plus its active
 object-system metadata-name lookup60 and default-system wrapper16: three bodies /
-2,140 bytes. The builder is
-`src/unmatched/MemoryContext_BuildAllocator.cpp`; the two lookup helpers /76 bytes
+2,140 bytes. The builder is in
+[igMemoryPoolContextInfo.cpp](../../src/engine/igMemoryPoolContextInfo.cpp); the two lookup helpers /76 bytes
 include the default wrapper's16 bytes.
 
 This is the allocator construction *dispatcher*. Concrete allocator classes,

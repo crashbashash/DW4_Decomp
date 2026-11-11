@@ -8,7 +8,7 @@ Edges come from retail instructions, including
 direct tail transfers. Interior targets retain their entry offsets in the JSON.
 
 The direct closure contains **986 functions / 240,956 code bytes**;
-**943 functions / 223,940 bytes** have source definitions in `src/`.
+**964 functions / 226,268 bytes** have source definitions in `src/`.
 Source presence is not a fresh byte-verification result: run `make check` and `make link`.
 
 There are **337 unresolved register-transfer sites** and

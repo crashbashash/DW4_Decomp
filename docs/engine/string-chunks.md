@@ -1,15 +1,10 @@
 # Packed pooled-string chunk allocator
 
 The twelve allocation/chunk bodies surrounding the separately recovered header
-release bridge account for 1,272 code bytes. Seven bodies (376 bytes) are in
-[string-chunks.c](../../src/engine/string-chunks.c) and
-[string-chunks.cpp](../../src/engine/string-chunks.cpp), including adjacent-block merge
-and storage initialization. `StringChunk_AllocateToken` (`0x30c830`, 264 bytes) is in
-[StringChunk_AllocateToken.c](../../src/unmatched/StringChunk_AllocateToken.c) and TakeBlock
-(`0x30ca40`, 236 bytes) in
-[StringChunk_TakeBlock.c](../../src/unmatched/StringChunk_TakeBlock.c). The other three bodies (396 bytes)
-are the table and chunk allocation wrappers (`0x30c740`, `0x30cce0`)
-and ReturnBlock (`0x30cb80`). Names come
+release bridge account for 1,272 code bytes: adjacent-block merge, storage initialization,
+`StringChunk_AllocateToken` (`0x30c830`, 264 bytes), TakeBlock (`0x30ca40`, 236 bytes), the table and
+chunk allocation wrappers (`0x30c740`, `0x30cce0`) and ReturnBlock (`0x30cb80`). They belong to the
+string table's file, [StringTable.cpp](../../src/engine/StringTable.cpp), with the table methods they serve. Names come
 from [the semantic generator](../../scripts/seed_names_string_chunks.py), not
 assertions about original C++ method spelling.
 
