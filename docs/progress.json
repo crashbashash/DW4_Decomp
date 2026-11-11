@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2772408,
-    "functions": 19445
+    "bytes": 2780060,
+    "functions": 19448
    },
    "mismatch": {
     "bytes": 0,
@@ -104,8 +104,8 @@
     "functions": 0
    },
    "unapproved": {
-    "bytes": 54744,
-    "functions": 61
+    "bytes": 47092,
+    "functions": 58
    }
   },
   "code_only_by_exc": {
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 32,
   "fully_matched": {
-   "bytes": 2777764,
-   "functions": 19529
+   "bytes": 2785416,
+   "functions": 19532
   },
   "fully_verified": {
-   "bytes": 2772408,
-   "functions": 19445
+   "bytes": 2780060,
+   "functions": 19448
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,8 +142,8 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 5356,
-  "fully_matched": 2777764,
-  "fully_verified": 2772408,
+  "fully_matched": 2785416,
+  "fully_verified": 2780060,
   "functions_asm_body": 0,
   "functions_assembly": 84,
   "matched": 2837504,
@@ -301,12 +301,12 @@
     "value": 284
    },
    "unapproved.bytes": {
-    "reason": "include expansion lets the approval check see a volatile in src/game/beNDMWGameRam_CollectNearbyNonzeroHp.inc that the including file hid: FUN_003fab90, ObjectRef_Destruct_003fc670 and beNDMWGameRam_CollectNearbyNonzeroHp move to unapproved until respelled",
-    "value": 54744
+    "reason": null,
+    "value": 47092
    },
    "unapproved.functions": {
     "reason": null,
-    "value": 61
+    "value": 58
    },
    "unmatched.bytes": {
     "reason": null,
@@ -352,15 +352,15 @@
    "struct.a": 116,
    "struct.b": 135,
    "struct.c": 284,
-   "unapproved.bytes": 54744,
-   "unapproved.functions": 61,
+   "unapproved.bytes": 47092,
+   "unapproved.functions": 58,
    "unmatched.bytes": 632648,
    "unmatched.functions": 961
   }
  },
  "functions": {
-  "fully_matched": 19529,
-  "fully_verified": 19445,
+  "fully_matched": 19532,
+  "fully_verified": 19448,
   "matched": 19527,
   "named": 9704,
   "named_semantic": 2027,
@@ -455,8 +455,8 @@
   "bytes": 393620,
   "failing": {
    "addresses": {
-    "bytes": 2267268,
-    "functions": 14242
+    "bytes": 2274920,
+    "functions": 14245
    },
    "fields": {
     "bytes": 784660,
@@ -467,16 +467,16 @@
     "functions": 5723
    },
    "name": {
-    "bytes": 1865236,
-    "functions": 13776
+    "bytes": 1872108,
+    "functions": 13777
    },
    "placed": {
-    "bytes": 1613776,
-    "functions": 9604
+    "bytes": 1621428,
+    "functions": 9607
    },
    "references": {
-    "bytes": 2087100,
-    "functions": 11113
+    "bytes": 2094752,
+    "functions": 11116
    },
    "types": {
     "bytes": 891228,
@@ -488,7 +488,7 @@
    }
   },
   "functions": 2335,
-  "matched_functions": 19529
+  "matched_functions": 19532
  },
  "regions": [
   {
