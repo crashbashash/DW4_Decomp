@@ -18,6 +18,7 @@ source under src/third_party/ is out of scope, as it is for tools/inline_asm.py.
   python3 tools/sourceapprovals.py --stale    # rows whose function no longer uses what they approve
 """
 import argparse
+import functools
 import srctext
 import os
 import re
@@ -77,6 +78,12 @@ def _count(text):
     """(asm statements C could spell, volatile keywords) in a source text."""
     asm = sum(1 for _s, _e, body in inline_asm.statements(text) if not inline_asm.is_hardware(body))
     return asm, len(_VOLATILE.findall(_blank(text)))
+
+
+@functools.lru_cache(maxsize=64)
+def _text_count(text):
+    """`_count` of a whole source text, kept per text."""
+    return _count(text)
 
 
 def _reachable_text(text, name):
@@ -178,8 +185,11 @@ def _file_scope_statements(text, kept):
     clean = _spaced(text)
     inside = sorted(kept)
     out, i, n, start, depth = [], 0, len(clean), None, 0
+    at = 0   # the definitions are sorted and disjoint, and `i` only grows: the first one not yet behind it
     while i < n:
-        hit = next(((s, e) for s, e in inside if s <= i < e), None)
+        while at < len(inside) and inside[at][1] <= i:
+            at += 1
+        hit = inside[at] if at < len(inside) and inside[at][0] <= i else None
         if hit:
             if start is not None and depth == 0:
                 out.append((start, i))
@@ -265,7 +275,10 @@ def uses(path, name):
     if not in_scope(path):
         return {"asm": 0, "volatile": 0, "asm-function": 0}
     text = _read(path)
-    a, v = _count(_reachable_text(text, name)) if _USE_WORD.search(text) else (0, 0)
+    # blanking only removes text, so a source with nothing to count has nothing to count for any of its
+    # functions; a whole library unit holds thousands, and its reachable text is costly to build
+    a, v = _count(_reachable_text(text, name)) if _USE_WORD.search(text) and _text_count(text) != (0, 0) \
+        else (0, 0)
     a2, v2 = _header_counts(_includes(text, os.path.dirname(os.path.abspath(path))), set())
     return {"asm": a + a2, "volatile": v + v2, "asm-function": int(name in unitprofiles.asm_body_names(path))}
 
