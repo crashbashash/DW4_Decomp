@@ -10,32 +10,15 @@ igMetaField *igMetaField_Init(igMetaField *);
 void *igMetaField_Construct(igMetaField *);
 void *igRefMetaField_Construct(igRefMetaField *);
 void *igRefMetaField_Init(igRefMetaField *);
-void *igIntMetaField_Init(igMetaField *);
 void *igObjectRefMetaField_Init(igObjectRefMetaField *);
 void *igStringMetaField_Init(igStringMetaField *);
 void *igUnsignedIntMetaField_Init(igMetaField *self);
 /* class vtables, named after the <Class>_Init that stamps each one */
 extern int g_igMetaField_vtable[4];
 extern int g_igRefMetaField_vtable[4];
-extern int g_igIntMetaField_vtable[4];
 extern int g_igObjectRefMetaField_vtable[4];
 extern int g_igStringMetaField_vtable[4];
 extern int g_igUnsignedIntMetaField_vtable[4];
-
-void *igIntMetaField_Construct(igMetaField *self) {
-    igMetaField_Construct(self);
-    self->_vtable = (int)g_igIntMetaField_vtable;
-    if (self) {
-        igIntMetaField_Init(self);
-    }
-    return self;
-}
-
-void *igIntMetaField_Init(igMetaField *self) {
-    igMetaField_Init(self);
-    self->_vtable = (int)g_igIntMetaField_vtable;
-    return self;
-}
 void *igObjectRefMetaField_Construct(igObjectRefMetaField *self) {
     igRefMetaField_Construct((igRefMetaField *)self);
     self->_vtable = (int)g_igObjectRefMetaField_vtable;

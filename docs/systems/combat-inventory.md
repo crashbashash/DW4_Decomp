@@ -83,7 +83,7 @@ their own recovery. Source presence does not substitute for `make check`.
 | `0x001908f0` | `Matrix44_Copy` | 188 | assembly only |
 | `0x00190a30` | `Matrix44_GetTranslation` | 28 | [src/engine/matrix-primitives.c](../../src/engine/matrix-primitives.c) |
 | `0x002d6790` | `List_Resize` | 120 | [src/unmatched/List_Resize.c](../../src/unmatched/List_Resize.c) |
-| `0x002eaf60` | `StringPool_Intern` | 172 | [src/unmatched/StringPool_Intern.c](../../src/unmatched/StringPool_Intern.c) |
+| `0x002eaf60` | `StringPool_Intern` | 172 | [src/engine/StringPool.cpp](../../src/engine/StringPool.cpp) |
 | `0x002fba30` | `igMetaEnum_GetValueByName` | 260 | [src/unmatched/igMetaEnum_GetValueByName.c](../../src/unmatched/igMetaEnum_GetValueByName.c) |
 | `0x00301000` | `igObject_GetAllocator` | 8 | [src/engine/igObject.cpp](../../src/engine/igObject.cpp) |
 | `0x0033e9c0` | `ObjectRef_Destruct_0033e9c0` | 128 | [src/engine/ObjectRef_Destruct_0033e9c0.cpp](../../src/engine/ObjectRef_Destruct_0033e9c0.cpp) |

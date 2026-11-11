@@ -3,8 +3,8 @@
 **22 complete bodies / 2,324 code bytes**: the full contiguous
 raw/retaining list run `2ea4f0..2eade8` and factory `2c2670`. Sizes include copy 160,
 slack clearing 104, insertion 188, erase 84, append 136, retained destruction 48
-and retained resize 164. Growth 232 and pointer-index lookup 68 are in
-`src/unmatched/ObjectPointerList_EnsureIndex.cpp` and `src/unmatched/ObjectPointerList_FindIndex.c`; the string-field
+and retained resize 164. Growth 232 and pointer-index lookup 68 are in the list's whole file,
+[internalNonRefCountedObjectList.cpp](../../src/engine/internalNonRefCountedObjectList.cpp); the string-field
 lookup is 160 bytes.
 
 `ObjectPointerList` names describe recovered roles and a 16-byte ABI projection,

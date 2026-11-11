@@ -12211,7 +12211,7 @@
       "address": 3056608,
       "name": "igIntMetaField_Construct",
       "size": 64,
-      "source": "src/engine/field-descriptor-constructors.c",
+      "source": "src/engine/igIntMetaField.cpp",
       "direct": [
         {
           "site": 3056620,
@@ -12232,7 +12232,7 @@
       "address": 3056672,
       "name": "igIntMetaField_Init",
       "size": 52,
-      "source": "src/engine/field-descriptor-constructors.c",
+      "source": "src/engine/igIntMetaField.cpp",
       "direct": [
         {
           "site": 3056684,
@@ -12247,7 +12247,7 @@
       "address": 3056880,
       "name": "ObjectPointerList_Construct",
       "size": 96,
-      "source": "src/engine/internal-list-dispatch.cpp",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [
         {
           "site": 3056892,
@@ -12280,7 +12280,7 @@
       "address": 3056976,
       "name": "ObjectPointerList_Init",
       "size": 60,
-      "source": "src/engine/internal-list-lifecycle.c",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [
         {
           "site": 3056988,
@@ -12295,7 +12295,7 @@
       "address": 3057200,
       "name": "ObjectPointerList_Destruct",
       "size": 84,
-      "source": "src/engine/internal-list-dispatch.cpp",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [
         {
           "site": 3057228,
@@ -12322,7 +12322,7 @@
       "address": 3057296,
       "name": "ObjectPointerList_EnsureIndex",
       "size": 232,
-      "source": "src/unmatched/ObjectPointerList_EnsureIndex.cpp",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [
         {
           "site": 3057344,
@@ -12355,7 +12355,7 @@
       "address": 3057536,
       "name": "ObjectPointerList_FindByStringField",
       "size": 160,
-      "source": "src/engine/list-string-field-find.c",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [
         {
           "site": 3057612,
@@ -12370,7 +12370,7 @@
       "address": 3057696,
       "name": "ObjectPointerList_FindIndex",
       "size": 68,
-      "source": "src/unmatched/ObjectPointerList_FindIndex.c",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [],
       "indirect": []
     },
@@ -12378,7 +12378,7 @@
       "address": 3058080,
       "name": "ObjectPointerList_SetCount",
       "size": 96,
-      "source": "src/engine/internal-list-lifecycle.c",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [
         {
           "site": 3058120,
@@ -12399,7 +12399,7 @@
       "address": 3058176,
       "name": "ObjectPointerList_EraseAt",
       "size": 84,
-      "source": "src/engine/internal-list-operations.c",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [],
       "indirect": []
     },
@@ -12407,7 +12407,7 @@
       "address": 3058272,
       "name": "ObjectPointerList_Append",
       "size": 136,
-      "source": "src/engine/internal-list-operations.c",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [
         {
           "site": 3058320,
@@ -12428,7 +12428,7 @@
       "address": 3058416,
       "name": "ObjectPointerList_SetAt",
       "size": 120,
-      "source": "src/engine/internal-list-lifecycle.c",
+      "source": "src/engine/internalNonRefCountedObjectList.cpp",
       "direct": [
         {
           "site": 3058464,
@@ -12449,7 +12449,7 @@
       "address": 3058544,
       "name": "InternalObjectList_Construct",
       "size": 52,
-      "source": "src/engine/internal-list-lifecycle.c",
+      "source": "src/engine/internalObjectList.cpp",
       "direct": [
         {
           "site": 3058556,
@@ -12464,7 +12464,7 @@
       "address": 3058736,
       "name": "InternalObjectList_Destruct",
       "size": 48,
-      "source": "src/engine/internal-list-operations.c",
+      "source": "src/engine/internalObjectList.cpp",
       "direct": [
         {
           "site": 3058752,
@@ -12485,7 +12485,7 @@
       "address": 3058816,
       "name": "InternalObjectList_SetCount",
       "size": 164,
-      "source": "src/engine/internal-list-operations.c",
+      "source": "src/engine/internalObjectList.cpp",
       "direct": [
         {
           "site": 3058920,
@@ -12506,7 +12506,7 @@
       "address": 3058992,
       "name": "MetaRefList_AppendRetained",
       "size": 28,
-      "source": "src/engine/internal-list-lifecycle.c",
+      "source": "src/engine/internalObjectList.cpp",
       "direct": [
         {
           "site": 3059012,
@@ -12521,7 +12521,7 @@
       "address": 3059024,
       "name": "InternalObjectList_SetAtRetained",
       "size": 152,
-      "source": "src/engine/internal-list-lifecycle.c",
+      "source": "src/engine/internalObjectList.cpp",
       "direct": [
         {
           "site": 3059128,
@@ -12542,7 +12542,7 @@
       "address": 3059184,
       "name": "StringPool_Construct",
       "size": 196,
-      "source": "src/unmatched/StringPool_Construct.c",
+      "source": "src/engine/StringPool.cpp",
       "direct": [
         {
           "site": 3059244,
@@ -12587,7 +12587,7 @@
       "address": 3059552,
       "name": "StringPool_Intern",
       "size": 172,
-      "source": "src/unmatched/StringPool_Intern.c",
+      "source": "src/engine/StringPool.cpp",
       "direct": [
         {
           "site": 3059600,
@@ -12626,7 +12626,7 @@
       "address": 3059728,
       "name": "FUN_002eb010",
       "size": 64,
-      "source": "src/unmatched/FUN_002eb010.cpp",
+      "source": "src/engine/StringPool.cpp",
       "direct": [
         {
           "site": 3059748,
@@ -12647,7 +12647,7 @@
       "address": 3068352,
       "name": "Memory_AllocateBufferViaSharedTail",
       "size": 20,
-      "source": "src/unmatched/Memory_AllocateBufferViaSharedTail.c",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3068364,
@@ -12662,7 +12662,7 @@
       "address": 3068384,
       "name": "FUN_002ed1e0",
       "size": 20,
-      "source": "src/unmatched/FUN_002ed1e0.cpp",
+      "source": "src/engine/igMemory.cpp",
       "direct": [],
       "indirect": [
         {
@@ -12676,7 +12676,7 @@
       "address": 3068416,
       "name": "Memory_AllocateDefaultBuffer",
       "size": 56,
-      "source": "src/engine/Memory_AllocateDefaultBuffer.cpp",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3068428,
@@ -12697,7 +12697,7 @@
       "address": 3068480,
       "name": "Memory_AllocateBufferDirect",
       "size": 28,
-      "source": "src/unmatched/Memory_AllocateBufferDirect.cpp",
+      "source": "src/engine/igMemory.cpp",
       "direct": [],
       "indirect": [
         {
@@ -12711,7 +12711,7 @@
       "address": 3068720,
       "name": "Memory_ReallocateBuffer",
       "size": 116,
-      "source": "src/engine/Memory_ReallocateBuffer.cpp",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3068748,
@@ -12738,7 +12738,7 @@
       "address": 3068992,
       "name": "thunk_Memory_ReallocateBuffer",
       "size": 8,
-      "source": "src/engine/thunk_Memory_ReallocateBuffer.c",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3068992,
@@ -12753,7 +12753,7 @@
       "address": 3069024,
       "name": "Memory_FreeBuffer",
       "size": 76,
-      "source": "src/engine/Memory_FreeBuffer.cpp",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3069048,
@@ -12774,7 +12774,7 @@
       "address": 3069104,
       "name": "Memory_FreeBufferAliasA",
       "size": 8,
-      "source": "src/engine/Memory_FreeBufferAliasA.c",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3069104,
@@ -12789,7 +12789,7 @@
       "address": 3069152,
       "name": "Memory_GetBufferSize",
       "size": 56,
-      "source": "src/engine/Memory_GetBufferSize.cpp",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3069164,
@@ -12810,7 +12810,7 @@
       "address": 3069216,
       "name": "Memory_FindBufferOwner",
       "size": 8,
-      "source": "src/engine/Memory_FindBufferOwner.c",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3069216,
@@ -12825,7 +12825,7 @@
       "address": 3069232,
       "name": "Memory_DuplicateBuffer",
       "size": 100,
-      "source": "src/engine/Memory_DuplicateBuffer.c",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3069248,
@@ -12864,7 +12864,7 @@
       "address": 3069376,
       "name": "Memory_FreeBufferAliasB",
       "size": 8,
-      "source": "src/engine/Memory_FreeBufferAliasB.c",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3069376,
@@ -12879,7 +12879,7 @@
       "address": 3069392,
       "name": "Memory_FreeOwnedBufferUnchecked",
       "size": 56,
-      "source": "src/engine/Memory_FreeOwnedBufferUnchecked.cpp",
+      "source": "src/engine/igMemory.cpp",
       "direct": [
         {
           "site": 3069404,

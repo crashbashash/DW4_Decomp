@@ -11638,7 +11638,7 @@
 002ed5a0	FUN_002ed5a0	match	-
 002ed5c0	Memory_FreeBufferAliasB	match	-
 002ed5d0	Memory_FreeOwnedBufferUnchecked	match	-
-002ed610	FUN_002ed610	match	jump table 0x4f9d00: 8 entries, 32 bytes, matches retail
+002ed610	FUN_002ed610	match	-
 002ee430	FUN_002ee430	match	-
 002ee4a0	FUN_002ee4a0	match	-
 002ee510	Gap__Core__igMemoryDictionary__vfunc_23	match	-
